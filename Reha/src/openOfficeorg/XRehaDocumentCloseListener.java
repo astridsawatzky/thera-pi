@@ -33,7 +33,7 @@ package openOfficeorg;
  ****************************************************************************/
 
 /*
- * Last changes made by $Author: steinhilber $, $Date: 2009/05/20 10:02:39 $
+ * Last changes made by $Author: steinhilber $, $Date: 2010/03/14 15:38:35 $
  */
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -93,8 +93,8 @@ public class XRehaDocumentCloseListener implements ICloseListener {
 	public void notifyClosing(ICloseEvent closeEvent) {
 		/*try {
 			//officeAplication.deactivate(); // this is really necessary
-			System.out.println("Office application deactivated.");
-			System.out.println(closeEvent.getSourceObject());
+			//System.out.println("Office application deactivated.");
+			//System.out.println(closeEvent.getSourceObject());
 		}/* 	 
 		catch (OfficeApplicationException exception) {
 			System.err.println("Error closing office application!");
