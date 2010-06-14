@@ -1,4 +1,4 @@
-package terminKalender;
+package Tools;
 import java.util.*;
 import java.text.DateFormat;
 import java.util.Date;
@@ -7,8 +7,6 @@ import java.util.Calendar;
 import java.text.SimpleDateFormat;
 //import java.text.ParseException;
 //import javax.swing.JFormattedTextField;
-
-import javax.swing.JOptionPane;
 
 public class DatFunk {
 
@@ -20,29 +18,19 @@ public class DatFunk {
 		if(sJavaDat==null){
 			return "  .  .    ";
 		}
-		if(sJavaDat.trim().length() != 10 ){
-			return "  .  .    ";
-		}
+		//if(sJavaDat.length() != 10){
+		//	return "  .  .    ";
+		//}
 		String[] splittArray = sJavaDat.split("-");
-		try{
-			return splittArray[2]+"."+splittArray[1]+"."+splittArray[0];
-		}catch(Exception ex){
-			JOptionPane.showMessageDialog(null, "Fehler in der Datumsumwandlung -> Datumsformat = deutsches Datumsformat");
-		}
-		return null;
+		return splittArray[2]+"."+splittArray[1]+"."+splittArray[0];
 	}
 	
 	public static String sDatInSQL(String sDeutschDat){
 		//String sDatumSQL= new String();
 		String[] splittArray = sDeutschDat.split("\\.");
 		//sDatumSQL = splittArray[2]+"-"+splittArray[1]+"-"+splittArray[0]; 
-		////System.out.println(sDatumSQL);
-		try{
-			return  splittArray[2]+"-"+splittArray[1]+"-"+splittArray[0];
-		}catch(Exception ex){
-			JOptionPane.showMessageDialog(null, "Fehler in der Datumsumwandlung -> Datumsformat = Sql-Datumsformat");
-		}
-		return null;
+		//System.out.println(sDatumSQL);
+		return  splittArray[2]+"-"+splittArray[1]+"-"+splittArray[0];
 	}
 
 	public static String sHeute(){
@@ -60,9 +48,6 @@ public class DatFunk {
 		long anz_milli_2 = 0;
 		long anz_milli_3 = 0;
 		//boolean deutsch = false;
-		if(Tage==0){
-			return datum;
-		}
 		String[] datsplit = datum.split("\\."); 
 		Date dDatum;
 		String s;
@@ -79,8 +64,7 @@ public class DatFunk {
 					Locale.GERMANY);
 
 		if (anz_milli_2==0){
-			//dDatum = new Date();
-			dDatum = new Date(DatFunk.DatumsWert(datum));
+			dDatum = new Date();
 		}else{
 			dDatum = new Date(anz_milli_3);
 		}
@@ -223,15 +207,6 @@ public class DatFunk {
 		s = s.substring(0,s.indexOf( ' ' )); 
 	    return s;
 	}
-	public static String datumOk(String datum){
-		if(datum==null){
-			return null;
-		}
-		if(datum.trim().equals("") || datum.trim().equals(".  .") || datum.trim().equals("-  -")){
-			return null;
-		}
-		return DatFunk.sDatInDeutsch(datum);
-	}
 	
 	public static boolean GeradeWoche(String sdatum){
 		return ((KalenderWoche(sdatum) % 2)!= 0 ? false : true);
@@ -249,24 +224,24 @@ public class DatFunk {
 	
 	public static boolean Schaltjahr(int jahr) {
 		if( jahr == 0 ) {
-		    ////System.out.println("Es gibt kein Jahr 0!");
+		    //System.out.println("Es gibt kein Jahr 0!");
 			return false;
 		} else {
 			if( jahr % 4 == 0 ) {
 				if( jahr % 100 == 0 ) {
 					if( jahr % 400 == 0 ) {
-						////System.out.println("Schaltjahr!");
+						//System.out.println("Schaltjahr!");
 						return true;
 					} else {
-						////System.out.println("Kein Schaltjahr!");
+						//System.out.println("Kein Schaltjahr!");
 						return false;
 					}
 				} else {
-			    ////System.out.println("Schaltjahr!");
+			    //System.out.println("Schaltjahr!");
 				return true;
 				}
 			} else {
-				////System.out.println("Kein Schaltjahr!");
+				//System.out.println("Kein Schaltjahr!");
 				return false;
 			}
 		}
@@ -297,7 +272,7 @@ long timeFrueher = frueher.getTime();
 //Millisekunden --> Tage
 long diff = (timeSpaeter - timeFrueher) / 24 / 60 / 60 / 1000;
 
-//System.out.println("Vergangen: " + diff + " Tage !");
+System.out.println("Vergangen: " + diff + " Tage !");
 //-----------------------------------------
 
 *
