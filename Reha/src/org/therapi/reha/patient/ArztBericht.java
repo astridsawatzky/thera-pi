@@ -676,11 +676,12 @@ public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,
 		}
 		//id holen
 		int berichtnr = SqlInfo.erzeugeNummer("bericht");
+		
 		if(berichtnr < 0){
 			JOptionPane.showMessageDialog(null,"Schwerwiegender Fehler beim Bezug einer neuen Berichts-ID!");
 			return false;
 		}
-
+		this.berichtid = berichtnr;
 		if(this.aufrufvon == 0){
 			Reha.thisClass.patpanel.vecaktrez.set(54,Integer.toString(berichtnr));
 			Reha.thisClass.patpanel.rezlabs[7].setForeground(Color.BLACK);
@@ -758,6 +759,7 @@ public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,
 					//System.out.println("BerichtNr - "+xberichtnr+" - wurde in verordn und lza gespeichert");
 					Reha.thisClass.patpanel.berichte.holeBerichte(Reha.thisClass.patpanel.patDaten.get(29), "");
 					//return null;
+					this.neu = false;
 					return true;
 				}
 				if(aufrufvon==1){
@@ -777,6 +779,7 @@ public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,
 					//System.out.println("BerichtNr - "+xberichtnr+" - wurde nur in lza gespeichert");
 					Reha.thisClass.patpanel.berichte.holeBerichte(Reha.thisClass.patpanel.patDaten.get(29), "");
 					//return null;
+					this.neu = false;
 					return true;
 				}
 
