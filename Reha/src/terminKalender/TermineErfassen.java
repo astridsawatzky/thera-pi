@@ -310,8 +310,11 @@ public class TermineErfassen implements Runnable {
 				//System.out.println("Untersuche Terminspalte "+Integer.toString(i+1));
 				int bloecke = ((Vector)alleterm.get(0)).size();
 				int belegt = Integer.parseInt( (String) ((Vector)alleterm.get(i)).get(bloecke-6) );
-				
-				isKG = ParameterLaden.getAbteilung(getKollegenInt((String) ((Vector)alleterm.get(i)).get(bloecke-4)) ).equals("KG");
+				try{
+					isKG = ParameterLaden.getAbteilung(getKollegenInt((String) ((Vector)alleterm.get(i)).get(bloecke-4)) ).equals("KG");
+				}catch(Exception ex){
+					isKG = false;
+				}
 				//System.out.println(getKollegenInt((String) ((Vector)alleterm.get(i)).get(bloecke-4))+" - Abteilung: "+ParameterLaden.getAbteilung(getKollegenInt((String) ((Vector)alleterm.get(i)).get(bloecke-4))) );
 				for(y=0;y<belegt;y++){
 					//System.out.println("Untersuche Block "+Integer.toString(y+1)+" von "+Integer.toString(belegt));

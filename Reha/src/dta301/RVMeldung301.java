@@ -82,6 +82,7 @@ public class RVMeldung301 {
 	boolean shouldBreak = false;
 	boolean imtest = false;
 	
+	
 	public RVMeldung301(int art, String id,int lfdNr){
 		
 		/*

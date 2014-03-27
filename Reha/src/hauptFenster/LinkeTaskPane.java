@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -479,7 +480,31 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.addActionListener(this);
 		//jxLink.setEnabled(false);
 		tp5.add(jxLink);
-
+		File f = new File(Reha.proghome+"QMHandbuch.jar");
+		if(f.exists()){
+			jxLink = new JXHyperlink();
+			jxLink.setText("QM-Handbuch");
+			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+			img = new ImageIcon(Reha.proghome+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+			jxLink.setIcon(new ImageIcon(img));
+			jxLink.setActionCommand("piQM");
+			jxLink.addActionListener(this);
+			//jxLink.setEnabled(false);
+			tp5.add(jxLink);
+		}
+		f = new File(Reha.proghome+"QMAuswertung.jar");
+		if(f.exists()){
+			jxLink = new JXHyperlink();
+			jxLink.setText("QM-Auswertungen");
+			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+			img = new ImageIcon(Reha.proghome+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+			jxLink.setIcon(new ImageIcon(img));
+			jxLink.setActionCommand("piAW");
+			jxLink.addActionListener(this);
+			//jxLink.setEnabled(false);
+			tp5.add(jxLink);
+		}
+		
 		tp5.setCollapsed(SystemConfig.taskPaneCollapsed[3]);
 		return tp5;
 	}
@@ -881,6 +906,54 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 			if (cmd.equals("piIcd10")){
 				new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+			}
+			if (cmd.equals("piQM")){
+				new Thread(){
+					public void run(){
+						new LadeProg(Reha.proghome+"QMHandbuch.jar");		
+					}
+				}.start();
+				new SwingWorker<Void,Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						RehaSplash rspl = new RehaSplash(null,"QM-Handbuch laden....dieser Vorgang kann einige Sekunden dauern...");
+						long zeit = System.currentTimeMillis();
+						while(true){
+							Thread.sleep(20);
+							if(System.currentTimeMillis()-zeit > 4000){
+								break;
+							}
+						}
+						rspl.dispose();
+						return null;
+					}
+					
+				}.execute();				
+				
+			}
+			if (cmd.equals("piAW")){
+				new Thread(){
+					public void run(){
+						new LadeProg(Reha.proghome+"QMAuswertung.jar"+" "+Reha.proghome+" "+Reha.aktIK);		
+					}
+				}.start();
+				new SwingWorker<Void,Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						RehaSplash rspl = new RehaSplash(null,"QM-Auswertung laden....dieser Vorgang kann einige Sekunden dauern...");
+						long zeit = System.currentTimeMillis();
+						while(true){
+							Thread.sleep(20);
+							if(System.currentTimeMillis()-zeit > 4000){
+								break;
+							}
+						}
+						rspl.dispose();
+						return null;
+					}
+					
+				}.execute();				
+				
 			}
 			
 			

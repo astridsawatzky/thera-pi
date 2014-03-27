@@ -192,6 +192,7 @@ public static void Init(){
 		 	}else{
 		 		aKollegen.add(Integer.toString(itest));
 		 	}
+		 	//System.out.println("************ Max KalZeile = "+maxKalZeile);
 		 	//aKollegen.add(itest);		 	
 		 	vKollegen.add((ArrayList)aKollegen.clone());
 		 	vKKollegen.add(new Kollegen(rs.getString("Matchcode"),

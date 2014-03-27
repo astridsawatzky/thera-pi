@@ -7,6 +7,7 @@ import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.InputStream;
+import java.security.cert.X509Certificate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,12 +24,16 @@ import javax.swing.JOptionPane;
 
 
 
+
+import org.thera_pi.nebraska.crypto.NebraskaKeystore;
+
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.RehaEvent;
 
 import com.mysql.jdbc.PreparedStatement;
+
 
 
 
@@ -245,6 +250,7 @@ public class SystemConfig {
 	final public static int certWillExpire = 1;
 	final public static int certIsExpired = 2;
 	final public static int certNotFound = 3;
+	public static boolean certHash256 = false;
 	                     
 	public SystemConfig(){
 	
@@ -1491,6 +1497,7 @@ public class SystemConfig {
 					pw = inif.getStringProperty("KeyStores", "KeyStorePw"+Integer.toString(i+1));
 					decrypted = man.decrypt(pw);
 					hmAbrechnung.put("hmkeystorepw", decrypted);
+					/***********************/
 					break;
 				}
 			}
@@ -1498,6 +1505,7 @@ public class SystemConfig {
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Zertifikatsdatenbank nicht vorhanden oder fehlerhaft.\nAbrechnung nach § 302 kann nicht durchgeführt werden.");
 			SystemConfig.certState = SystemConfig.certNotFound;
+			ex.printStackTrace();
 		}
 		//System.out.println("Keystore-Passwort = "+hmAbrechnung.get("hmkeystorepw"));
 	}
@@ -1631,7 +1639,7 @@ public class SystemConfig {
 					hmSysIcons.put(bilder[i], new ImageIcon(Reha.proghome+"icons/"+inif.getStringProperty("Icons", bilder[i])));
 				}
 			}catch(Exception ex){
-				System.out.println("Fehler!!!!!!!!! bei Bild: "+bilder[i]+". Fehler->Bilddatei existiert nicht");
+				System.out.println("Fehler!!!!!!!!! bei Bild: "+bilder[i]+". Fehler->Bilddatei existiert nicht, oder ist nicht in icons.ini vermerkt");
 				//ex.printStackTrace();
 			}
 			ico = null;

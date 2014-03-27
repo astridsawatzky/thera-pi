@@ -3107,6 +3107,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				if(Reha.toolsDlgRueckgabe==0){
 					tDlg = null;
 					if(!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)){return;}
+					RezTools.constructRawHMap();
 					rezeptGebuehr();
 					return;
 				}else if(Reha.toolsDlgRueckgabe==1){

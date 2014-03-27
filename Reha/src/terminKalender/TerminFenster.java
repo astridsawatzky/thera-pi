@@ -2667,6 +2667,9 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	protected void macheStatement(String sstmt,int ansicht) {
 		Statement stmt = null;
 		ResultSet rs = null;
+		//Reha.startmillis = System.currentTimeMillis();
+		//Reha.datecounts = 0;
+		
 		try {
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
@@ -2708,6 +2711,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						v4.addElement(rs.getString(i+3));
 						v5.addElement(rs.getString(i+4));					
 						durchlauf = durchlauf+1;
+						//Reha.datecounts++;
 					}
 				}else{ // ADS
 					for(i=1;i<ende;i=i+5){
@@ -2785,9 +2789,13 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	}
 /******************************/
 	private void maskenStatement(String sstmt){
+		
+		
+		
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
+			
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
@@ -2835,6 +2843,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						v4.addElement(rs.getString(i+3));
 						v5.addElement(rs.getString(i+4));					
 						durchlauf = durchlauf+1;
+						
+						
 					}
 				}
 
@@ -2910,6 +2920,14 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 					oSpalten[4].datenZeichnen(vTerm,belegung[4]);
 					oSpalten[5].datenZeichnen(vTerm,belegung[5]);		
 					oSpalten[6].datenZeichnen(vTerm,belegung[6]);
+					/**
+					 * 
+					 * nur für Tests
+					 * 
+					 */
+					//System.out.println("feddisch nach "+(System.currentTimeMillis()-Reha.startmillis)+" Millisekunden");
+					//System.out.println("Anzahl verarbeitete Termine "+Reha.datecounts);
+					
 				}
 				}); 	   
 				

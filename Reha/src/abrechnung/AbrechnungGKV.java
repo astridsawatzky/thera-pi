@@ -776,22 +776,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		abrDateiName = "";
 		annahmeAdresseOk = false;
 		/**********************************/
-		aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
-		if(abrechnungsModus.equals(ABR_MODE_302)){
-			aktEsol = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("esol", 999)), "0", true, 3);	
-		}
-	    /************************************************/
-		hmKostentraeger.put("aktesol",String.valueOf(aktEsol));
-		/************************************************/
-		aktDfue = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("dfue", 99999)), "0", true, 5);
-		if(aktRechnung.equals("-1")){
-			Reha.thisClass.progressStarten(false);
-			abrDlg.setVisible(false);
-			abrDlg.dispose();
-			abrDlg = null;
-			JOptionPane.showMessageDialog(null, "Fehler - Rechnungsnummer kann nicht bezogen werden");
-			return;
-		}
+
 		abzurechnendeKassenID = getAktKTraeger();
 		String preisgr = getPreisgruppenKuerzel(aktDisziplin);
 		String cmd = "select ik_kasse,ik_kostent,ik_nutzer,ik_physika,ik_papier,"+preisgr+" from kass_adr where ik_kasse='"+abzurechnendeKassenID+"' LIMIT 1";
@@ -888,9 +873,28 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		int anfrage = JOptionPane.showConfirmDialog(null,test , "Die Abrechnung mit diesen Parametern starten?", JOptionPane.YES_NO_OPTION);
 		if(anfrage != JOptionPane.YES_OPTION){
 			doDlgAbort();
-			SqlInfo.sqlAusfuehren("update nummern set rnr='"+aktRechnung+"' where mandant='"+Reha.aktIK+"' LIMIT 1");
+			//SqlInfo.sqlAusfuehren("update nummern set rnr='"+aktRechnung+"' where mandant='"+Reha.aktIK+"' LIMIT 1");
 			return;
 		}
+		/***********hier erst die Nummer erzeugen **************/
+		aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
+		if(abrechnungsModus.equals(ABR_MODE_302)){
+			aktEsol = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("esol", 999)), "0", true, 3);	
+		}
+	    /************************************************/
+		hmKostentraeger.put("aktesol",String.valueOf(aktEsol));
+		/************************************************/
+		aktDfue = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("dfue", 99999)), "0", true, 5);
+		if(aktRechnung.equals("-1")){
+			Reha.thisClass.progressStarten(false);
+			abrDlg.setVisible(false);
+			abrDlg.dispose();
+			abrDlg = null;
+			JOptionPane.showMessageDialog(null, "Fehler - Rechnungsnummer kann nicht bezogen werden");
+			return;
+		}
+		
+		
 		/*****************************************/
 		if(abrechnungsModus.equals(ABR_MODE_302)){
 			if(ik_email.trim().equals("")){

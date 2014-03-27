@@ -313,7 +313,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2014-01-18-DB=";
+	public static String aktuelleVersion = "2014-03-27-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -354,7 +354,15 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public SqlInfo sqlInfo = null;
 	public static int nachladenDB = 0;
 	public static int dbLoadError = 1;
-
+	
+	/*
+	 * Einschalten für Geschwindigkeitstests
+	 * zusätzlich in der Terminkalender.java die Zeilen
+	 * 2670, 2671,2714,2928,2929
+	public static int datecounts = 0;
+	public static long startmillis = 0;
+	*/
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void main(String[] args) {
 		String prog = java.lang.System.getProperty("user.dir");

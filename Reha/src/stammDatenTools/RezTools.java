@@ -1151,11 +1151,11 @@ public class RezTools {
 						SystemConfig.hmAdrRDaten.put("<Ranzahl"+(i+1)+">", (String)Reha.thisClass.patpanel.vecaktrez.get(3+i) );
 						SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( ((BigDecimal)BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">"))).multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Rpreis"+(i+1)+">").replace(",","."))))).doubleValue() ));
 						if(!id.equals("0")){
-							SystemConfig.hmAdrRDaten.put("<Rkuerzel"+(i+1)+">", RezTools.getKurzformFromID(id, SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
-							SystemConfig.hmAdrRDaten.put("<Rlangtext"+(i+1)+">", RezTools.getLangtextFromID(id, "", SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
+							SystemConfig.hmAdrRDaten.put("<Rkurz"+(i+1)+">", RezTools.getKurzformFromID(id, SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
+							SystemConfig.hmAdrRDaten.put("<Rlang"+(i+1)+">", RezTools.getLangtextFromID(id, "", SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
 						}else{
-							SystemConfig.hmAdrRDaten.put("<Rkuerzel"+(i+1)+">", "");
-							SystemConfig.hmAdrRDaten.put("<Rlangtext"+(i+1)+">", "");
+							SystemConfig.hmAdrRDaten.put("<Rkurz"+(i+1)+">", "----");
+							SystemConfig.hmAdrRDaten.put("<Rlang"+(i+1)+">", "----");
 						}
 					}
 					//Hausbesuche

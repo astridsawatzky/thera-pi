@@ -294,16 +294,16 @@ public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListe
 		}
 		
 		try{
-		for (int i = 0; i < placeholders.length; i++) {
-			String placeholderDisplayText = placeholders[i].getDisplayText();
-			if(placeholderDisplayText.startsWith("<R")){
-				placeholders[i].getTextRange().setText(SystemConfig.hmAdrRDaten.get(placeholderDisplayText));	
-			}else if(placeholderDisplayText.startsWith("<P")){
-				placeholders[i].getTextRange().setText(SystemConfig.hmAdrPDaten.get(placeholderDisplayText));
-			}else{
-				placeholders[i].getTextRange().setText("\b");
+			for (int i = 0; i < placeholders.length; i++) {
+				String placeholderDisplayText = placeholders[i].getDisplayText();
+				if(placeholderDisplayText.startsWith("<R")){
+					placeholders[i].getTextRange().setText(SystemConfig.hmAdrRDaten.get(placeholderDisplayText));	
+				}else if(placeholderDisplayText.startsWith("<P")){
+					placeholders[i].getTextRange().setText(SystemConfig.hmAdrPDaten.get(placeholderDisplayText));
+				}else{
+					placeholders[i].getTextRange().setText("\b");
+				}
 			}
-		}
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
