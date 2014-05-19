@@ -313,7 +313,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2014-03-27-DB=";
+	public static String aktuelleVersion = "2014-05-19-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -354,6 +354,13 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public SqlInfo sqlInfo = null;
 	public static int nachladenDB = 0;
 	public static int dbLoadError = 1;
+	
+	public static String lastCommId = "";
+	public static String lastCommAction = "";
+	public boolean  lastCommActionConfirmed = true;
+	
+	public RehaCommServer rehaCommServer = null;
+	public static boolean phoneOk = false;
 	
 	/*
 	 * Einschalten für Geschwindigkeitstests
@@ -621,8 +628,15 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    			Reha.thisClass.rehaIOServer = new RehaIOServer(6000);
 			    			System.out.println("RehaIOServer wurde initialisiert");
 							SystemConfig.AktiviereLog();
+							try{
+								if(SystemConfig.activateSMS){
+									Reha.thisClass.rehaCommServer = new RehaCommServer(Integer.parseInt(SystemConfig.hmSMS.get("COMM")));
+								}
+							}catch(NullPointerException ex){
+								Reha.thisClass.rehaCommServer = null;
+							}
 			    		}catch(NullPointerException ex){
-			    			System.out.println("RehaIOServer = null");
+			    			System.out.println("RehaCommServer = null");
 			    		}
 			    	}
 			    });
@@ -703,6 +717,14 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			try {
 				rehaIOServer.serv.close();
 				System.out.println("RehaIO-SocketServer geschlossen");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(rehaCommServer != null){
+			try {
+				rehaCommServer.serv.close();
+				System.out.println("RehaComm-SocketServer geschlossen");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -2000,6 +2022,15 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 								e2.printStackTrace();
 							}
 						}
+						if(rehaCommServer != null){
+							try {
+								rehaCommServer.serv.close();
+								System.out.println("RehaComm-SocketServer geschlossen");
+							} catch (IOException e3) {
+								e3.printStackTrace();
+							}
+						}
+
 						if(SystemConfig.sReaderAktiv.equals("1") && Reha.thisClass.ocKVK != null){
 							try{
 							Reha.thisClass.ocKVK.TerminalDeaktivieren();
@@ -2607,6 +2638,14 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				try {
 					rehaIOServer.serv.close();
 					System.out.println("RehaIO-SocketServer geschlossen");					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(rehaCommServer != null){
+				try {
+					rehaCommServer.serv.close();
+					System.out.println("RehaComm-SocketServer geschlossen");
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

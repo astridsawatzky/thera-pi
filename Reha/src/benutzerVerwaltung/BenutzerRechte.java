@@ -1002,6 +1002,7 @@ public class BenutzerRechte extends JXPanel{
 					tt.getTreeSelectionModel().setSelectionPaths(selpaths);
 					
 					TreePath tp = tt.getTreeSelectionModel().getSelectionPath();
+					if(tp==null){return;}
 					aktNode =  (JXRechteTreeTableNode) tp.getLastPathComponent();//selpaths[selpaths.length-1].getLastPathComponent();
 					new SwingWorker<Void,Void>(){
 						protected Void doInBackground() throws Exception {
