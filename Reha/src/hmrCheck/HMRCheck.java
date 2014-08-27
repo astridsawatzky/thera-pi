@@ -47,7 +47,7 @@ public class HMRCheck {
 
 	String[] keinefolgevo = {"EX1a","EX1b","EX1c","WS1a","WS1b","WS1c","WS1d","WS1e",
 			"AT1a","AT1b","AT1c","SB4","ST3"};
-	String[] nurunter18 = {"ZN1a","ZN1b","ZN1c","EN1","PS1"};
+	String[] nurunter18 = {"ZN1a","ZN1b","ZN1c","EN1","PS1","EX4a"};
 	String[] nurueber18 = {"ZN2a","ZN2b","ZN2c","EN2"};
 	
 	public HMRCheck(String indi,int idiszi,Vector<Integer> vecanzahl,Vector<String>vecpositionen,
