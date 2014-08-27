@@ -35,6 +35,7 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 //import org.jdesktop.swingx.decorator.SortOrder;
 
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -43,6 +44,7 @@ import CommonTools.SqlInfo;
 import systemEinstellungen.SystemConfig;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
+import CommonTools.StringTools;
 import systemTools.Verschluesseln;
 import systemTools.WinNum;
 import dialoge.PinPanel;
@@ -461,7 +463,7 @@ public void maskenEintragen(){
 				  nummer = ((String)((Vector) list.get(1)).get(i));
 			  }
 
-			sret = sret + "T"+ (i+1) + "='" + ((Vector) list.get(0)).get(i) + "', " ;
+			sret = sret + "T"+ (i+1) + "='" + StringTools.Escaped(((Vector) list.get(0)).get(i).toString()) + "', " ;
 			sret = sret + "N"+ (i+1) + "='" + nummer + "', "; 
 			sret = sret + "TS"+ (i+1) + "='" + ((Vector) list.get(2)).get(i) + "', ";			
 			sret = sret + "TD"+ (i+1) + "='" + ((Vector) list.get(3)).get(i) + "', ";			

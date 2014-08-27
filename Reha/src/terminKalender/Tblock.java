@@ -902,7 +902,7 @@ class KalenderBeschreiben extends Thread implements Runnable{
 				  backtest = split[0];
 				  //System.out.println(backtest);
 				}else{
-					JOptionPane.showMessageDialog(null, "Die Rezeptnummer ist fehlerhaft. Bitte überprüfen sie die Rezeptnummer");
+					JOptionPane.showMessageDialog(null, "Die Rezeptnummer von Termin Nummer "+Integer.toString(i+1)+" ist fehlerhaft!\nBitte überprüfen sie die Rezeptnummer");
 				}
 			  }
 			  buff.append("T" + Integer.toString(i+1) + "='" +StringTools.Escaped(vKalDaten.getFeld(iKoll,0,i).trim())+"', " );
