@@ -2063,7 +2063,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				}
 				
 				}catch(Exception ex){
-					ex.printStackTrace();
+					//ex.printStackTrace();
 				}
 				return null;
 			}

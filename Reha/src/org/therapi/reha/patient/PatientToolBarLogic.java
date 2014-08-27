@@ -25,10 +25,18 @@ import javax.swing.JOptionPane;
 
 
 
+
+
+import javax.swing.SwingUtilities;
+
+import org.jdesktop.swingworker.SwingWorker;
+
 import CommonTools.StringTools;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
+import dialoge.KuerzelNeu;
+import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
 
 
@@ -165,6 +173,12 @@ public class PatientToolBarLogic {
 			if(Reha.thisClass.patpanel.aktRezept.tabaktrez.getRowCount() > 0){
 				srez_nr = Reha.thisClass.patpanel.vecaktrez.get(1);
 			}
+			if(srez_nr.isEmpty() || (!srez_nr.startsWith("RH"))){
+				try{
+					srez_nr = Reha.thisClass.patpanel.vecakthistor.get(1);	
+				}catch(Exception ex){srez_nr = "-1";}
+				
+			}
 			final String spat_intern = patientHauptPanel.patDaten.get(29);
 			final String xsrez_nr = srez_nr;
 			new Thread(){
@@ -176,6 +190,48 @@ public class PatientToolBarLogic {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+	}
+	
+	public void doSMS(){
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				try{
+					//nur wenn SMS-Service aktiviert ist
+					if(SystemConfig.activateSMS && (!patientHauptPanel.aktPatID.equals(""))  && (SystemConfig.hmSMS.get("SMS").equals("1")) ){
+						//nur wenn einen Mobilfunknummer eingetragen ist
+						if(!patientHauptPanel.patDaten.get(20).isEmpty()){
+							Point pt = patientHauptPanel.jbut[4].getLocationOnScreen();
+							String stitel = ("SMS für Patient erstellen"); 
+							final SMSDialog smsDlg = new SMSDialog(Reha.thisFrame,stitel,PatientToolBarLogic.this,true,"SMS über "+SystemConfig.hmSMS.get("NAME")+" an "+patientHauptPanel.patDaten.get(20),patientHauptPanel.patDaten.get(20));
+							smsDlg.setPreferredSize(new Dimension(475,200));
+							smsDlg.setLocation(pt.x-350,pt.y+100);
+							smsDlg.pack();
+							SwingUtilities.invokeLater(new Runnable(){
+								public void run(){
+									smsDlg.setTextCursor(0);		
+								}
+							});
+							
+							smsDlg.setVisible(true);
+							SwingUtilities.invokeLater(new Runnable(){
+								public void run(){
+									smsDlg.setTextCursor(0);		
+								}
+							});
+						}else{
+							JOptionPane.showMessageDialog(null,"Keine Mobilfunknummer im Patientenstamm hinterlegt");
+						}
+						
+					}			
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+
+				return null;
+			}
+			
+		}.execute();
 	}
 	class ToolsDlgPatient{
 		public ToolsDlgPatient(String command,Point pt){
@@ -212,7 +268,7 @@ public class PatientToolBarLogic {
 				if(!Rechte.hatRecht(Rechte.Patient_sms, true)){
 					return;
 				}
-				//new SMS(null);
+				doSMS();
 				break;
 			case 3:
 				doPatFragebogen();

@@ -6,13 +6,20 @@ import hauptFenster.Reha;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -25,6 +32,17 @@ import javax.swing.JOptionPane;
 
 
 
+
+
+
+
+
+
+
+
+
+
+import org.jdesktop.swingworker.SwingWorker;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 
 import CommonTools.FireRehaError;
@@ -37,7 +55,18 @@ import com.mysql.jdbc.PreparedStatement;
 
 
 
+
+
+
+
+
+
+
+
+
+
 import CommonTools.SqlInfo;
+import socketClients.SMSClient;
 import stammDatenTools.RezTools;
 import CommonTools.FileTools;
 import systemTools.Verschluesseln;
@@ -102,6 +131,7 @@ public class SystemConfig {
 	private static INIFile ini; 
 	private static INIFile colini;
 	public static java.net.InetAddress dieseMaschine = null;
+	public static String dieseCallbackIP = null;
 	public static String PDFformularPfad;
 	public static String wissenURL = null;
 	public static String homeDir = null;
@@ -136,6 +166,8 @@ public class SystemConfig {
 	public static HashMap<String,String> hmAdrHMRDaten = null;
 	public static HashMap<String,String> hmEBerichtDaten = new HashMap<String,String>();
 	public static HashMap<String,String> hmRgkDaten = new HashMap<String,String>();
+	
+	
 	/*
 	public static List<String> lAdrKDaten = null;
 	public static List<String> lAdrADaten = null;
@@ -251,7 +283,11 @@ public class SystemConfig {
 	final public static int certIsExpired = 2;
 	final public static int certNotFound = 3;
 	public static boolean certHash256 = false;
-	                     
+	
+	public static HashMap<String,String> hmSMS = new HashMap<String,String>();
+	public static boolean activateSMS = false;
+	public static boolean phoneAvailable = false; 
+	
 	public SystemConfig(){
 	
 	}
@@ -262,8 +298,11 @@ public class SystemConfig {
 			dieseMaschine = java.net.InetAddress.getLocalHost();
 		}
 		catch (java.net.UnknownHostException uhe) {
-			//System.out.println(uhe);
+			
 		}
+		
+		
+		
 		
 	}
 	public void SystemInit(int i){
@@ -355,6 +394,88 @@ public class SystemConfig {
 			vDatenBank.add( (ArrayList<String>) aKontakt.clone());
 			aKontakt.clear();
 		}
+		
+		/*********************************/
+		File f = new File(Reha.proghome+"ini/"+Reha.aktIK+"/", "phoneservice.ini");
+		if(f.exists()){
+			INIFile phservice = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "phoneservice.ini");
+			if(phservice.getStringProperty("SMSDienste","SmartPhoneSms") != null){
+				try{
+					hmSMS.put("SMS",phservice.getStringProperty("SMSDienste","SmartPhoneSms") );
+					hmSMS.put("DIAL",phservice.getStringProperty("SMSDienste","SmartPhoneDialer") );
+					hmSMS.put("IP",phservice.getStringProperty("SMSDienste","SmartPhoneIP") );
+					hmSMS.put("NAME",phservice.getStringProperty("SMSDienste","SmartPhoneName") );
+					hmSMS.put("PORT",phservice.getStringProperty("SMSDienste","SmartPhonePort") );
+					hmSMS.put("COMM",phservice.getStringProperty("SMSDienste","TheraPiSMSPort") );
+					activateSMS = true;
+					new Thread(){
+						public void run(){
+							try {
+								boolean loopback = false;
+								boolean sitelocal = false;
+								boolean reachable = false;
+								
+								Enumeration<NetworkInterface> netInter = NetworkInterface.getNetworkInterfaces();
+								int n = 0;
+
+								while ( netInter.hasMoreElements() )
+								{
+								  NetworkInterface ni = netInter.nextElement();
+								  if(ni != null){
+									  //System.out.println( "NetworkInterface " + n++ + ": " + ni.getDisplayName() );
+
+									  for ( InetAddress iaddress : Collections.list(ni.getInetAddresses()) )
+									  {
+										  loopback = iaddress.isLoopbackAddress();
+										  sitelocal = iaddress.isSiteLocalAddress();
+										  reachable = InetAddress.getByName( iaddress.getHostAddress() ).isReachable( 2000 );
+										  //System.out.println(iaddress.getHostAddress()+": "+loopback+" - "+sitelocal+" - "+reachable);
+										  if(!loopback && sitelocal && reachable){
+											  dieseCallbackIP = iaddress.getHostAddress();
+											  if(dieseCallbackIP.toString().contains(hmSMS.get("IP").substring(0,hmSMS.get("IP").lastIndexOf(".")))){
+												  System.out.println("Callback-IP: "+dieseCallbackIP);  
+												  return;
+											  }
+										  }
+									  }
+								  }
+								}
+
+							} catch (SocketException e) {
+								e.printStackTrace();
+							} catch (UnknownHostException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							
+							try{
+								new SMSClient().setzeNachricht("PHONE-CONNECTABLE");
+							}catch(Exception ex){
+								
+							}
+
+							return;
+							
+						}
+					}.start();
+
+					
+					System.out.println(hmSMS);
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+				}else{
+					System.out.println("Dienste Autodialer/SMS nicht verfügbar");
+				}
+			
+		}else{
+			System.out.println("SmartPhone-Service ist nicht installiert");
+		}
+		
+			
+			/********************************************************/
+
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -422,8 +543,6 @@ public class SystemConfig {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-		//homeDir = ini.getStringProperty("Application","HeimatVerzeichnis");
-		////System.out.println("HomeDir = "+homeDir);
 		return;
 	}
 	private static boolean pfadOk(String pfad){

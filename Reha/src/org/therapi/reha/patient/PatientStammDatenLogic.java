@@ -10,6 +10,7 @@ public class PatientStammDatenLogic {
 		this. patientStammDatenPanel = patStammPanel; 
 	}
 	public void reactOnHyperlink(HyperlinkEvent arg0){
+
 	    if (arg0.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 			if( extractFieldName(arg0.getURL().toString()).equals("FOTO") ){
 				patHauptPanel.getLogic().doPatFoto();

@@ -5,6 +5,7 @@ import hauptFenster.SuchenDialog;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -15,13 +16,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 
@@ -33,14 +37,13 @@ import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-
 import patientenFenster.PatNeuanlage;
 import rechteTools.Rechte;
 import CommonTools.SqlInfo;
+import socketClients.SMSClient;
 import stammDatenTools.ArztTools;
 import stammDatenTools.KasseTools;
 import stammDatenTools.PatTools;
-
 import systemEinstellungen.SystemConfig;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
@@ -64,6 +67,11 @@ public class PatientHauptLogic {
 	private PatNeuDlg neuPat;
 	public PatNeuanlage pneu;
 	public int lastrow = -1;
+	List<String> teles = Arrays.asList("TELEFONP","TELEFONG","TELEFONM");
+	List<String> vecpos = Arrays.asList("18","19","20");
+	String sdialnr = "";
+	String xfeldname = "";
+	int idialnr = -1;
 	public PatientHauptLogic(PatientHauptPanel patHauptPanel){
 		
 		this.patientHauptPanel = patHauptPanel;
@@ -238,7 +246,13 @@ public class PatientHauptLogic {
 	        }	            
 	        if(e.getActionCommand().equals("b")){
 	        	patStarteFormulare();
-	        }	            
+	        }
+	        if(e.getActionCommand().equals("waehlen")){
+	        	dialOut(sdialnr);
+	        }
+	        if(e.getActionCommand().equals("korrigieren")){
+	        	neuanlagePatient(false, xfeldname);
+	        }	
 	    }
 	}
 	
@@ -263,16 +277,98 @@ public class PatientHauptLogic {
 		}
 	}
 	public void editFeld(String feldname) {
+		//List<String> teles = Arrays.asList("TELEFONP","TELEFONG","TELEFONM");
+		//List<String> vecpos = Arrays.asList("18","19","20");
+		//System.out.println(feldname);
+		this.xfeldname="";
+		this.idialnr = -1;
+		this.sdialnr = "";
 		if(Rechte.hatRecht(Rechte.Patient_editteil, false) ||
 				Rechte.hatRecht(Rechte.Patient_editvoll, false)){
 			if(! patientHauptPanel.aktPatID.equals("")){
-				neuanlagePatient(false, feldname);		
+				//hier die Dialexistenz
+				if(SystemConfig.activateSMS && (teles.contains(feldname) )){
+					//hier die Dialberechtigung 
+					if(SystemConfig.hmSMS.get("DIAL").equals("1")){
+						//nur wenn berechtigt Popup zeigen
+						//Hierher Popupaufruf
+						this.idialnr = Integer.parseInt(vecpos.get(teles.indexOf(feldname)));
+						if(! (this.sdialnr=patientHauptPanel.patDaten.get(this.idialnr)).equals("")){
+							this.xfeldname = feldname;
+							new SwingWorker<Void,Void>(){
+								@Override
+								protected Void doInBackground()
+										throws Exception {
+									ZeigePopupMenu(sdialnr,MouseInfo.getPointerInfo().getLocation());
+									return null;
+								}
+								
+							}.execute();
+						}else{
+							neuanlagePatient(false, feldname);
+						}
+					}else{
+						neuanlagePatient(false, feldname);
+					}
+				}else{
+					neuanlagePatient(false, feldname);	
+				}
+						
 			}
 		}else{
 			Rechte.hatRecht(Rechte.Patient_editvoll, true);
 		}
 	}
 	
+	public void dialOut(String number){
+		String b = ":++:";
+		final StringBuffer buf = new StringBuffer();
+		Reha.lastCommId = Long.toString(System.currentTimeMillis());
+		Reha.lastCommAction = "DIAL-OUT:TO:"+number+":"; 
+		buf.append(Reha.lastCommId);
+		buf.append(b);
+		buf.append(SystemConfig.dieseMaschine);
+		buf.append(b);
+		buf.append("DIAL-OUT");
+		buf.append(b);
+		buf.append("---");
+		buf.append(b);
+		buf.append(number);
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				try{
+					new SMSClient().setzeNachricht(buf.toString());
+				}catch(Exception ex){
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(null,"<html><b>Kontakt mit "+SystemConfig.hmSMS.get("NAME")+" konnte nicht aufgebaut werden</b></html>");
+				}
+				return null;
+			}
+		}.execute();		
+	}
+	
+	private void ZeigePopupMenu(String nummer,Point p){
+		JPopupMenu jPop = getPhonePopupMenu(nummer);
+		jPop.show( Reha.thisFrame, (int)p.getX()+25, (int)p.getY() ); 
+	}
+	
+	private JPopupMenu getPhonePopupMenu(String nummer){
+		JPopupMenu jPopupMenu = new JPopupMenu();
+
+		JMenuItem item = new JMenuItem("Telefonat -> "+nummer+" <- starten");
+		item.setActionCommand("waehlen");
+		item.addActionListener(new PatientAction());
+		jPopupMenu.add(item);
+		jPopupMenu.addSeparator();
+		
+		item = new JMenuItem("Patientenstamm editieren");
+		item.setActionCommand("korrigieren");
+		item.addActionListener(new PatientAction());
+		jPopupMenu.add(item);
+	
+		return jPopupMenu;
+	}
 	public void patDelete(){
 		if(! Rechte.hatRecht(Rechte.Patient_delete, true)){
 			return;
