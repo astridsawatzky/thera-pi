@@ -69,7 +69,7 @@ public class FortschrittDlg extends JXDialog{
 	}
 	public void setzeLabel(String labelText){
 		textlab.setText(labelText);
-		//textlab.getParent().validate();
+		////textlab.getParent().validate();
 	}
 
 }

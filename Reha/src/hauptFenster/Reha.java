@@ -313,7 +313,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2014-08-27-DB=";
+	public static String aktuelleVersion = "2014-09-09-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;

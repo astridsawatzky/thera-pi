@@ -434,7 +434,8 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 				String frage = "Bitte beachten Sie!\n\n"+
 								"1. Stellen Sie sicher, dass Sie zum Zeitpunkt der Kalenderanlage möglichst der einzige Benutzer im Netzwerk sind\n"+
 								"2. Wurde die Kalenderanlage gestartet, brechen Sie den Vorgang bitte keinesfalls ab\n"+
-								"3. Die Kalenderanlage kann einige Zeit in Anspruch nehmen. Sie sehen den Fortschritt anhand des 'Laufbalkens'\n\n"+
+								"3. Die Kalenderanlage kann einige Zeit in Anspruch nehmen. Sie sehen den Fortschritt anhand des 'Laufbalkens'\n"+
+								"4. Verlassen Sie diese Seite nicht, bus das Kalenderjahr vollständig angelegt wurde\n\n"+
 								"Wollen Sie jetzt das Kalenderjahr wie folgt anlegen:\n"+
 								"angelegt wird das Jahr -> "+KalMake.getText()+" <- \n"+
 								"automatische Übernahme der Wochenarbeitszeit -> "+(AZPlan.isSelected() ? "JA" : "NEIN")+" <-" ;
@@ -761,9 +762,20 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 		Vector vec = SqlInfo.holeFelder("select min(datum),max(datum) from flexkc");
 		Reha.kalMin = DatFunk.sDatInDeutsch( ((String)((Vector)vec.get(0)).get(0)) );
 		Reha.kalMax = DatFunk.sDatInDeutsch( ((String)((Vector)vec.get(0)).get(1)) );
+		//long anztage = DatFunk.TageDifferenz(Reha.k, sneudatum)
+		//kalTage
+		int testanzahl = 0;
+		try{
+			testanzahl = Integer.parseInt(SqlInfo.holeEinzelFeld("select count(*) from flexkc where datum >='"+DatFunk.sDatInSQL("01.01."+KalMake.getText())+"' and datum <= '"+ 
+					DatFunk.sDatInSQL("31.12."+KalMake.getText())  ) );
+			
+		}catch(Exception ex){
+		}
 		SysUtilKalenderanlegen.anzahlLastDate = Integer.parseInt(SqlInfo.holeEinzelFeld("select count(*) from flexkc where datum = '"+((String)((Vector)vec.get(0)).get(1))+"'"));
-		if( (!Reha.kalMax.startsWith("31.12.")) || SysUtilKalenderanlegen.anzahlLastDate != 99){
+		if( (!Reha.kalMax.startsWith("31.12.")) || (SysUtilKalenderanlegen.anzahlLastDate != 99) || (testanzahl != kalTage*99) ){
 			JOptionPane.showMessageDialog(null,"Achtung Ihr Kalender wurde nicht korrekt angelegt!\nBitte melden Sie sich im Anwenderforum und fragen Sie nach Unterstützung");
+		}else{
+			JOptionPane.showMessageDialog(null,"Der Kalender wurde korrekt angelegt, frohes Schaffen und gute Geschäfte.");
 		}
 		//System.out.println("Kalenderspanne = von "+Reha.kalMin+" bis "+Reha.kalMax);		
 //			}
