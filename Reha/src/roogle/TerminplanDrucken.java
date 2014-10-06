@@ -361,14 +361,21 @@ SuchenSeite eltern;
 					e.printStackTrace();
 				}
 			}else{
+				
 				exporturl = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+				File f = new File(exporturl);
+				if(f.exists()){
+					f.delete();
+				}
 				try {
 					Thread.sleep(50);
 					textDocument.getPersistenceService().export(exporturl, new PDFFilter());
 				} catch (DocumentException e) {
 					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Fehler bei der Aufbereitung des Terminplanes als PDF für Emailversand\nFehler: "+e.getMessage());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Fehler bei der Aufbereitung des Terminplanes als PDF für Emailversand\nFehler: "+e.getMessage());
 				}			
 			}
 			// Anschließend die Vorlagendatei schließen
@@ -380,13 +387,16 @@ SuchenSeite eltern;
 					protected Void doInBackground()
 							throws Exception {
 						try {
-							Thread.sleep(50);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+								Thread.sleep(50);
+								xdoc.close();
+								sendeEmail();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+								JOptionPane.showMessageDialog(null, "Fehler beim Senden und Schließen des Terminplanes\nFehler: "+e.getMessage());
+							} catch(Exception ex){
+								JOptionPane.showMessageDialog(null, "Fehler beim Senden und Schließen des Terminplanes\nFehler: "+ex.getMessage());
+							}
 						//textDocument.close();
-						xdoc.close();
-						sendeEmail();
 
 						return null;
 					}
@@ -403,7 +413,7 @@ SuchenSeite eltern;
 	private void sendeEmail(){
 		String emailaddy=null,pat_intern=null;
 		if(this.rezept.trim().equals("")){
-			emailaddy = JOptionPane.showInputDialog (null, "Bitte geben Sie eine g�ltige Email-Adresse ein");
+			emailaddy = JOptionPane.showInputDialog (null, "Bitte geben Sie eine gültige Email-Adresse ein");
 			try{
 				if(emailaddy.equals("")){
 					return;

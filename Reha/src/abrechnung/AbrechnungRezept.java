@@ -29,6 +29,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
@@ -271,6 +273,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	JRtaTextField[] aKasse = {new JRtaTextField("nix",false),
 			new JRtaTextField("nix",false),
 			new JRtaTextField("nix",false)};
+	
+	boolean ohneDrecksPauschale = false;
 	
 	public AbrechnungRezept(AbrechnungGKV xeltern){
 		eltern = xeltern;
@@ -717,7 +721,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 							
 						}.execute();
 					}else{
-						if(macheEDIFACT()){
+						if(macheEDIFACT(true)){
 							jXTreeTable.setEditable(false);
 							rezeptFertig = true;
 							new SwingWorker<Void,Void>(){
@@ -758,12 +762,18 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							Reha.thisClass.progressStarten(true);
-							eltern.abrDlg = new AbrechnungDlg();
-							eltern.abrDlg.pack();
-							eltern.abrDlg.setLocationRelativeTo(eltern.getInstance());
-							eltern.abrDlg.setzeLabel("starte Heilmittelabrechnung");
-							eltern.starteAbrechnung();
+							try{
+								tbbuts[3].setEnabled(false);
+								Reha.thisClass.progressStarten(true);
+								eltern.abrDlg = new AbrechnungDlg();
+								eltern.abrDlg.pack();
+								eltern.abrDlg.setLocationRelativeTo(eltern.getInstance());
+								eltern.abrDlg.setzeLabel("starte Heilmittelabrechnung");
+								eltern.starteAbrechnung();
+							}catch(NullPointerException ex){
+								
+							}
+							tbbuts[3].setEnabled(true);
 							return null;
 						}
 					}.execute();
@@ -3575,7 +3585,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	}
 	/************************************************************************/
 
-	private boolean macheEDIFACT(){
+	private boolean macheEDIFACT(boolean normal){
 		boolean ret = true;
 		double gesamt = 0.00;
 		double rez = 0.00;
@@ -3690,17 +3700,32 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		}
 		//an dieser Stelle müssen Daten zur Bewilligung eingebaut werden sofern vorhanden
 		//SKZ+....
+
+		
 		edibuf.append("BES+");
 		edibuf.append(dfx.format(gesamt)+plus);
 		edibuf.append(dfx.format(rez+pauschal)+plus);
 		edibuf.append(dfx.format(rez)+plus);
 		edibuf.append(dfx.format(pauschal)+EOL);
 		
-
 		String kopfzeile = "PG="+preisgruppe+":PATINTERN="+vec_rez.get(0).get(0).trim()+":REZNUM="+vec_rez.get(0).get(1)+
 			":GESAMT="+dfx.format(gesamt)+":REZGEB="+dfx.format(rez+pauschal)+
 			":REZANTEIL="+dfx.format(rez)+":REZPAUSCHL="+dfx.format(pauschal)+":KASSENID="+vec_rez.get(0).get(37)+
 			":ARZTID="+vec_rez.get(0).get(16)+":PATIENT="+vec_pat.get(0).get(0)+", "+vec_pat.get(0).get(1)+":STATUS="+vec_pat.get(0).get(7)+":HB="+hausbesuch+":ZZINDEX="+zuZahlungsIndex+"\n";
+		
+		/*
+		edibuf.append("BES+");
+		edibuf.append(dfx.format(gesamt)+plus);
+		edibuf.append(dfx.format(rez)+plus);
+		edibuf.append(dfx.format(rez)+plus);
+		edibuf.append("0,00"+EOL);
+
+		String kopfzeile = "PG="+preisgruppe+":PATINTERN="+vec_rez.get(0).get(0).trim()+":REZNUM="+vec_rez.get(0).get(1)+
+				":GESAMT="+dfx.format(gesamt)+":REZGEB="+dfx.format(rez)+
+				":REZANTEIL="+dfx.format(rez)+":REZPAUSCHL=0,00"+":KASSENID="+vec_rez.get(0).get(37)+
+				":ARZTID="+vec_rez.get(0).get(16)+":PATIENT="+vec_pat.get(0).get(0)+", "+vec_pat.get(0).get(1)+":STATUS="+vec_pat.get(0).get(7)+":HB="+hausbesuch+":ZZINDEX="+zuZahlungsIndex+"\n";
+		*/
+		
 
 		edibuf.insert(0,vec_poskuerzel.toString()+"\n");
 		edibuf.insert(0,vec_posanzahl.toString()+"\n");
@@ -3758,12 +3783,38 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		
 		String[] zeilen = edibuf.toString().split("\n");
 		String[] positionen = zeilen[0].split(":");
-		//System.out.println(zeilen[  (zeilen[zeilen.length-2].startsWith("DIA+") ? zeilen.length-3 : zeilen.length-2) ] );
+		
+		int basis = zeilen.length-2;
+		
+		basis = basis - countWords(edibuf.toString(),"DIA+");
+		basis = basis - countWords(edibuf.toString(),"SKZ+");
+		/*
+		if(edibuf.toString().indexOf("DIA+") >= 0){
+			basis = basis-1;
+		}
+		*/
+		/*
+		if(edibuf.toString().indexOf("SKZ+") >= 0){
+			basis = basis-1;
+		}
+		*/
+
+
+		/*// original bis 05.09.2014
 		if(zeilen[ (zeilen[zeilen.length-2].startsWith("DIA+") ? zeilen.length-3 : zeilen.length-2) ].split("\\+").length < 5){
 			JOptionPane.showMessageDialog(null,"Fehler in holeEDIFACT, falsche Länge im Segment ZHE");
 			return false;
 		}
+		*/
+		if(zeilen[ basis ].split("\\+").length < 5){
+			JOptionPane.showMessageDialog(null,"Fehler in holeEDIFACT, falsche Länge im Segment ZHE");
+			return false;
+		}
+		/* original bis 05.09.2014
 		zuZahlungsPos = zeilen[ (zeilen[zeilen.length-2].startsWith("DIA+") ? zeilen.length-3 : zeilen.length-2) ].split("\\+")[4];
+		*/
+		zuZahlungsPos = zeilen[ basis ].split("\\+")[4];
+		
 		zuZahlungsIndex = zzpflicht[Integer.parseInt(zuZahlungsPos)];
 		this.preisgruppe = positionen[0].split("=")[1];
 		this.mitPauschale = (Double.parseDouble(zeilen[zeilen.length-1].split("\\+")[4].replace(",", ".").replace("'", "")) > Double.parseDouble("0.00") ? true : false);
@@ -3849,6 +3900,13 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		
 		return ret;
 	}
+    public static int countWords(String text, String word){
+        int count=0;
+        Pattern pat = Pattern.compile(Pattern.quote(word));
+        Matcher m;
+        for(m = pat.matcher(text); m.find(); count++);
+        return count;
+    }
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void macheVector(Vector vec, String svec,int type){

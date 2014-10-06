@@ -311,7 +311,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 		builder.add(BuLand, cc.xy(4,31));
 		
 		builder.addLabel("Kalenderjahr auswählen", cc.xyw(2, 33,2));
-		String[] jahr = {"2008","2009","2010","2011","2012","2013","2014","2015"};
+		String[] jahr = {"2008","2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"};
 		FJahr = new JComboBox(jahr);
 		FJahr.setSelectedIndex(0);
 		FJahr.setActionCommand("jahr");
@@ -435,7 +435,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 								"1. Stellen Sie sicher, dass Sie zum Zeitpunkt der Kalenderanlage möglichst der einzige Benutzer im Netzwerk sind\n"+
 								"2. Wurde die Kalenderanlage gestartet, brechen Sie den Vorgang bitte keinesfalls ab\n"+
 								"3. Die Kalenderanlage kann einige Zeit in Anspruch nehmen. Sie sehen den Fortschritt anhand des 'Laufbalkens'\n"+
-								"4. Verlassen Sie diese Seite nicht, bus das Kalenderjahr vollständig angelegt wurde\n\n"+
+								"4. Verlassen Sie diese Seite nicht, bis das Kalenderjahr vollständig angelegt wurde\n\n"+
 								"Wollen Sie jetzt das Kalenderjahr wie folgt anlegen:\n"+
 								"angelegt wird das Jahr -> "+KalMake.getText()+" <- \n"+
 								"automatische Übernahme der Wochenarbeitszeit -> "+(AZPlan.isSelected() ? "JA" : "NEIN")+" <-" ;
@@ -699,11 +699,13 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 			dblaeuft = false;
 			return;
 		}
+		
+		/*
 		kalTage = (DatFunk.Schaltjahr( Integer.valueOf(KalMake.getText())) ? (366) : (365));
 		Fortschritt.setMinimum(1);
 		Fortschritt.setMaximum(kalTage*99  );
 		Fortschritt.setStringPainted(true);
-
+		*/
 		String starttag = "01.01."+KalMake.getText();
 		String stoptag 	= "31.12."+KalMake.getText();
 		
@@ -715,11 +717,19 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 			if(frage==JOptionPane.YES_OPTION){
 				starttag = repairDateStart;
 				stoptag = repairDateEnd;
+				KalMake.setText(stoptag.substring(6));
 			}else if(frage == JOptionPane.CANCEL_OPTION){
 				dblaeuft = false;
 				return;
 			}
 		}
+		
+		kalTage = (DatFunk.Schaltjahr( Integer.valueOf(KalMake.getText())) ? (366) : (365));
+		Fortschritt.setMinimum(1);
+		Fortschritt.setMaximum(kalTage*99  );
+		Fortschritt.setStringPainted(true);
+
+		
 		//String stoptag 	= "02.01."+KalMake.getText();
 		String akttag =  String.valueOf(starttag);
 		progress = 0;
@@ -766,10 +776,16 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 		//kalTage
 		int testanzahl = 0;
 		try{
-			testanzahl = Integer.parseInt(SqlInfo.holeEinzelFeld("select count(*) from flexkc where datum >='"+DatFunk.sDatInSQL("01.01."+KalMake.getText())+"' and datum <= '"+ 
-					DatFunk.sDatInSQL("31.12."+KalMake.getText())  ) );
+			 
+			String sstmt = "select count(*) from flexkc where datum >='"+DatFunk.sDatInSQL("01.01."+KalMake.getText())+"' and datum <= '"+ 
+					DatFunk.sDatInSQL("31.12."+KalMake.getText())+"'" ;
+			String sanzahl = SqlInfo.holeEinzelFeld(sstmt);
+			//System.out.println("sstmt = "+sstmt);
+			//System.out.println("sanzahl = "+sanzahl);
+			testanzahl = Integer.parseInt(sanzahl);
 			
 		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 		SysUtilKalenderanlegen.anzahlLastDate = Integer.parseInt(SqlInfo.holeEinzelFeld("select count(*) from flexkc where datum = '"+((String)((Vector)vec.get(0)).get(1))+"'"));
 		if( (!Reha.kalMax.startsWith("31.12.")) || (SysUtilKalenderanlegen.anzahlLastDate != 99) || (testanzahl != kalTage*99) ){
@@ -777,6 +793,14 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 		}else{
 			JOptionPane.showMessageDialog(null,"Der Kalender wurde korrekt angelegt, frohes Schaffen und gute Geschäfte.");
 		}
+		/*
+		System.out.println("Reha.kalMax = "+Reha.kalMax);
+		System.out.println("SysUtioKalenderanlegen.anzahlLastDate = "+SysUtilKalenderanlegen.anzahlLastDate);
+		System.out.println("testeanzhl = "+testanzahl);
+		System.out.println("kalTage*99 = "+(kalTage*99));
+		System.out.println("kalTage = "+(kalTage));
+		System.out.println("KalMake.getText() = "+KalMake.getText());
+		*/
 		//System.out.println("Kalenderspanne = von "+Reha.kalMin+" bis "+Reha.kalMax);		
 //			}
 //		}.start();
@@ -860,30 +884,38 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 	}
 
 	private void starteSession(String land,String jahr) throws IOException{
-		String urltext = "http://www.feiertage.net/csvfile.php?state="+land+"&year="+jahr+"&type=csv";
-		String text = null;
-		//ftm.getDataVector().clear();
-		ftm.setRowCount(0);
-		FreiTage.validate();
-		URL url = new URL(urltext);
-		   
-		      URLConnection conn = url.openConnection();
-		      ////System.out.println(conn.getContentEncoding());
-		      
+		String urltext = null;
+		try{
+			urltext = "http://www.feiertage.net/csvfile.php?state="+land+"&year="+jahr+"&type=csv";
+			//System.out.println("Öffne Seite: "+urltext);
+			String text = null;
+			//ftm.getDataVector().clear();
+			ftm.setRowCount(0);
+			FreiTage.validate();
+			URL url = new URL(urltext);
+			   
+			      URLConnection conn = url.openConnection();
+			      ////System.out.println(conn.getContentEncoding());
+			      
 
-		      BufferedReader inS = new BufferedReader( new InputStreamReader( conn.getInputStream() ));
-		      int durchlauf = 0;
-		      while ( (text  = inS.readLine())!= null ) {
-		    	  String s = makeUTF8(text);
-		          String [] spl = s.split(";");
-		          if(durchlauf > 0){
-		        	  Vector reihe = new Vector(Arrays.asList(spl));
-		        	  ftm.addRow((Vector)reihe.clone());
-		        	  FreiTage.setRowSelectionInterval(0, 0);
-		          }
-		          ++durchlauf;
-		      }
-		inS.close();
+			      BufferedReader inS = new BufferedReader( new InputStreamReader( conn.getInputStream() ));
+			      int durchlauf = 0;
+			      while ( (text  = inS.readLine())!= null ) {
+			    	  String s = makeUTF8(text);
+			    	  //System.out.println(s);
+			          String [] spl = s.split(";");
+			          if(durchlauf > 0){
+			        	  Vector reihe = new Vector(Arrays.asList(spl));
+			        	  ftm.addRow((Vector)reihe.clone());
+			        	  FreiTage.setRowSelectionInterval(0, 0);
+			          }
+			          ++durchlauf;
+			      }
+			inS.close();
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(null,"Fehler bei der Auswertung von "+urltext+"\nFehlertext: "+ex.getMessage());
+			ex.printStackTrace();
+		}
 		
 	}
 	public static String makeUTF8(final String toConvert){

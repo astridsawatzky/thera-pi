@@ -7,8 +7,14 @@ import hauptFenster.UIFSplitPane;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -72,7 +78,7 @@ import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.PatStammEventListener;
 
-public class AbrechnungGKV extends JXPanel implements PatStammEventListener,ActionListener,TreeSelectionListener{
+public class AbrechnungGKV extends JXPanel implements PatStammEventListener,ActionListener,TreeSelectionListener, MouseListener{
 	/**
 	 * 
 	 */
@@ -276,6 +282,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		treeKasse.setName("kassentree");
 		treeKasse.getSelectionModel().addTreeSelectionListener(this);
 		treeKasse.setCellRenderer(new MyRenderer(SystemConfig.hmSysIcons.get("zuzahlok")));
+		treeKasse.addMouseListener(this);
 		JScrollPane jscrk = JCompTools.getTransparentScrollPane(treeKasse);
 		jscrk.validate();
 		pb.add(jscrk,cc.xy(2, 6));
@@ -1961,6 +1968,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		public String entschluessel;
 		public String ikkasse;
 		public String preisgruppe;
+		public String ohnepauschale;
+		public boolean langfrist;
+		public String langfristaz;
 		
 		public KnotenObjekt(String titel,String rez_num,boolean fertig,String ikkasse,String preisgruppe){
 			this.titel = titel;
@@ -2076,6 +2086,64 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		
 	}
 	private void rechnungAnlegen(){
+		
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		if(e.getButton()==3){
+			TreePath tp =  treeKasse.getSelectionPath();
+			
+			kontrollierteRezepte = 0;
+			if(tp==null){
+				return;
+			}
+			JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
+			String rez_nr = ((JXTTreeNode)node).knotenObjekt.rez_num;
+			if(!rez_nr.trim().equals("")){
+				if(node.knotenObjekt.fertig){
+					String msg = "<html>Achtung Sie editieren im Anschluß den EDIFACT-Code!<br>"+
+							"Wenn Sie den Code in unzulässiger Weise manipulieren<br>wird <b>der gesamte Abrechnungslauf unbrauchbar</b><br><br>"+
+							"<b>Rufen Sie diese Funktion nur dann auf wenn Sie genau wissen was Sie tun!!!</b><br><br>"+
+							"Soll die Funktion jetzt aufgerufen werden?<br></html>";
+					int frage = JOptionPane.showConfirmDialog(null,msg,"Achtung wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
+					if(frage != JOptionPane.YES_OPTION){
+						return;
+					}
+					PointerInfo info = MouseInfo.getPointerInfo();
+		    	    Point location = info.getLocation();
+					EditEdifact editEdifact = new EditEdifact(Reha.thisFrame,"EDIFACT - editieren",rez_nr.trim());
+					editEdifact.getContentPane().setPreferredSize(new Dimension(600,500));
+					editEdifact.setLocation(e.getXOnScreen()-50,e.getYOnScreen()-50);
+					//editEdifact.setLocation(location.x-50,location.y-50);
+					editEdifact.pack();
+					editEdifact.setVisible(true);
+					this.abrRez.setNewRez(rez_nr,node.knotenObjekt.fertig,aktDisziplin);
+				}else{
+					JOptionPane.showMessageDialog(null,"Abrechnungsdaten im Edifact-Format kann nur\nbei bereits markierten Rezepten manipuliert werden!");
+				}
+				
+			}
+		}
+		
+	}
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 
