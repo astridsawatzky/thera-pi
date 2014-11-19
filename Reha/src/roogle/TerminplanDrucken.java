@@ -389,6 +389,11 @@ SuchenSeite eltern;
 						try {
 								Thread.sleep(50);
 								xdoc.close();
+								File f = new File(exporturl);
+								if(!f.exists()){
+									JOptionPane.showMessageDialog(null, "Fehler bei der Aufbereitung des Terminplanes als PDF Datei existiert nicht");
+									return null;
+								}
 								sendeEmail();
 							} catch (InterruptedException e) {
 								e.printStackTrace();
@@ -465,6 +470,7 @@ SuchenSeite eltern;
 		String password = SystemConfig.hmEmailExtern.get("Password");
 		String senderAddress =SystemConfig.hmEmailExtern.get("SenderAdresse");
 		String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
+		String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
 		String recipientsAddress = emailaddy;
 		String subject = "Ihre Behandlungstermine";
 		boolean authx = (SystemConfig.hmEmailExtern.get("SmtpAuth").equals("0") ? false : true);
@@ -507,7 +513,7 @@ SuchenSeite eltern;
 		
 		EmailSendenExtern oMail = new EmailSendenExtern();
 		try{
-		oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure);
+		oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure,useport);
 		oMail = null;
 		eltern.cursorWait(false);
 		JOptionPane.showMessageDialog (null, "Die Terminliste wurde aufbereitet und per Email versandt\n");

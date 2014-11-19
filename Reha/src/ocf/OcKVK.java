@@ -242,6 +242,7 @@ public class OcKVK {
 			        	
 			        	
 			        	in = new ByteArrayInputStream(resultpd); 
+			        	//System.out.println(new String(resultpd));
 			        	InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKpd.zip",resultpd);
 			        	out = Unzip("",in);
 			        	in.close();

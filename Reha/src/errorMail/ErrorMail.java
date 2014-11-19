@@ -33,6 +33,7 @@ public class ErrorMail extends Thread{
 		   EmailSendenExtern oMail = new EmailSendenExtern();
 			String smtphost = SystemConfig.hmEmailIntern.get("SmtpHost");
 			String authent = SystemConfig.hmEmailIntern.get("SmtpAuth");
+			String useport = SystemConfig.hmEmailIntern.get("SmtpPort");
 			String benutzer = SystemConfig.hmEmailIntern.get("Username") ;				
 			String pass1 = SystemConfig.hmEmailIntern.get("Password");
 			String sender = SystemConfig.hmEmailIntern.get("SenderAdresse"); 
@@ -45,7 +46,7 @@ public class ErrorMail extends Thread{
 			"eingeloggter Benutzer: "+this.benutzer+"\n"+
 			"Absenderadresse: "+this.sender;
 			try {
-				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, titel, emailtext,attachments,authx,bestaetigen,SystemConfig.hmEmailIntern.get("SmtpSecure"));
+				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, titel, emailtext,attachments,authx,bestaetigen,SystemConfig.hmEmailIntern.get("SmtpSecure"),useport);
 			} catch (AddressException e) {
 				e.printStackTrace();
 			} catch (MessagingException e) {
