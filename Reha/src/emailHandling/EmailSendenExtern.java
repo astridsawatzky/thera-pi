@@ -37,7 +37,7 @@ import com.sun.mail.util.MailSSLSocketFactory;
 
 @SuppressWarnings("unused")
 public class EmailSendenExtern {
-    public boolean sendMail(String smtpHost,String username,String password,String senderAddress,String recipientsAddress,String subject,String text,ArrayList<String[]>attachments,boolean authx,boolean bestaetigen,String secure ) throws AddressException, MessagingException, Exception{
+    public boolean sendMail(String smtpHost,String username,String password,String senderAddress,String recipientsAddress,String subject,String text,ArrayList<String[]>attachments,boolean authx,boolean bestaetigen,String secure,String useport ) throws AddressException, MessagingException, Exception{
     	
     	Session session = null;
     	Properties properties = null;
@@ -68,7 +68,7 @@ public class EmailSendenExtern {
             properties.put("mail.smtp.host", smtpHost);
         	properties.put("mail.smtp.ssl.trust", smtpHost);            
             properties.put("mail.smtp.starttls.enable", "true");
-            properties.put("mail.smtp.port", "587");
+            properties.put("mail.smtp.port", useport);
 
             if(authx){
             	properties.put("mail.smtp.auth", "true");
@@ -96,7 +96,7 @@ public class EmailSendenExtern {
         	properties.put("mail.smtp.ssl.socketFactory", sf);
  
 
-        	properties.put("mail.smtp.socketFactory.port", "465");
+        	properties.put("mail.smtp.socketFactory.port", useport);
         	properties.put("mail.smtp.socketFactory.class",
     				"javax.net.ssl.SSLSocketFactory");
            	properties.put("mail.smtp.ssl.trust", smtpHost);
@@ -105,7 +105,7 @@ public class EmailSendenExtern {
             } else {
             	properties.put("mail.smtp.auth", "false");
             }
-            properties.put("mail.smtp.port", "465");
+            properties.put("mail.smtp.port", useport);
     		final String xusername = username;
     		final String xpassword = password;
     		session = Session.getDefaultInstance(properties,
