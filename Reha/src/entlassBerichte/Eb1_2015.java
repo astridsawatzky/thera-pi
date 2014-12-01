@@ -72,7 +72,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 			{null,null},{null,null,null},
 			{null,null},{null},
 			{null},{null},
-			{null},{null},
+			{null},{null,null},
 			{null},{null},
 			{null,null},{null,null,null},
 			{null,null}
@@ -97,9 +97,9 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	public String[][] stitelneu = {{"Diagnostische","Klärung"},{"Kontrolle Laborwerte/","Medikamente"},
 			{"Stat.Behandlung / OP"},{"Suchtberatung"},
 			{"Psychol. Beratung /","Psychotherapie"},{"Heil- und Hilfsmittel","inkl. Physiotherapie","und Ergotherapie"},
-			{"Übungen selbständig","fortführen"},{"Sport und Bewegung"},
+			{"Sonstige","Empfehlung"},{"Sport und Bewegung"},
 			{"Gewichtsreduktion",""},{"Nikotinkarenz"},
-			{"Alkoholkarenz",""},{"Selbsthilfegruppe"},
+			{"Alkoholkarenz",""},{"Selbsthilfe-","gruppe"},
 			{"Rehabilitationssport"},{"Funktionstraining"},
 			{"stufenweise","Wiedereingliederung"},{"Leistungen zur","Teilhabe am","Arbeitsleben prüfen"},
 			{"Reha-Nachsorge (z.B.","IRENA oder ASP"}
@@ -127,33 +127,50 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 			
 			@Override
 			protected Void doInBackground() throws Exception {
-				pan.add(constructSeite(),BorderLayout.CENTER);
-				for(int i = 0; i < 25;i++){
-					eltern.btf[i].setFont(fontcourier);
-					eltern.btf[i].setForeground(Color.BLUE);
-				}
-				AbstractDocument doc = null; 
-
-				for(int i = 0; i < 7;i++){
-					if(i < 5){
-						eltern.bta[i].setRows(3);
-						eltern.bta[i].setColumns(40);
-						doc = (AbstractDocument)eltern.bta[i].getDocument();
-				        doc.setDocumentFilter(new DocumentLineLengthFilter(40,i));
-						//((DiagDoc)eltern.bta[i].getDocument()).setArea(eltern.bta[i]);
-					}else{
-							
+				try{
+					pan.add(constructSeite(),BorderLayout.CENTER);
+					for(int i = 0; i < 25;i++){
+						eltern.btf[i].setFont(fontcourier);
+						eltern.btf[i].setForeground(Color.BLUE);
 					}
-					eltern.bta[i].setFont(fontcourier);					
-					eltern.bta[i].setForeground(Color.BLUE);
-					eltern.bta[i].setLineWrap(true);
-					eltern.bta[i].setWrapStyleWord(true);
-					
+					AbstractDocument doc = null; 
 
-					eltern.bta[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					for(int i = 0; i < 7;i++){
+						if(i < 5){
+							eltern.bta[i].setRows(3);
+							eltern.bta[i].setColumns(40);
+							doc = (AbstractDocument)eltern.bta[i].getDocument();
+					        doc.setDocumentFilter(new DocumentLineLengthFilter(40,i));
+							//((DiagDoc)eltern.bta[i].getDocument()).setArea(eltern.bta[i]);
+						}else{
+								
+						}
+						eltern.bta[i].setFont(fontcourier);					
+						eltern.bta[i].setForeground(Color.BLUE);
+						eltern.bta[i].setLineWrap(true);
+						eltern.bta[i].setWrapStyleWord(true);
+						
+
+						eltern.bta[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					}
+					/******die neue Diagnose gesonder behandeln*******/
+					eltern.bta[10].setRows(3);
+					eltern.bta[10].setColumns(70);
+					doc = (AbstractDocument)eltern.bta[10].getDocument();
+			        doc.setDocumentFilter(new DocumentLineLengthFilter(70,10));
+
+					eltern.bta[10].setFont(fontcourier);					
+					eltern.bta[10].setForeground(Color.BLUE);
+					eltern.bta[10].setLineWrap(true);
+					eltern.bta[10].setWrapStyleWord(true);
+					eltern.bta[10].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+					
+					pan.validate();
+					pan.setVisible(true);
+					
+				}catch(Exception ex){
+					ex.printStackTrace();
 				}
-				pan.validate();
-				pan.setVisible(true);
 				SwingUtilities.invokeLater(new Runnable(){
 				 	   public  void run(){
 				 		if(!eltern.neu){
@@ -214,35 +231,42 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	}
 
 	private void laden(){
-		//"bericht2","freitext","berichtid='"+eltern.berichtid+"'");
-		String berichtid = Integer.toString(eltern.berichtid);
-		StringBuffer buf = new StringBuffer();
-		buf.append("select ");
-		for(int i = 0; i < 25;i++){
-			buf.append(eltern.btf[i].getName()+",");
-		}
-		buf.append(eltern.btf[27].getName()+",");
+		try{
+			//"bericht2","freitext","berichtid='"+eltern.berichtid+"'");
+			String berichtid = Integer.toString(eltern.berichtid);
+			StringBuffer buf = new StringBuffer();
+			buf.append("select ");
+			for(int i = 0; i < 25;i++){
+				buf.append(eltern.btf[i].getName()+",");
+			}
+			buf.append(eltern.btf[27].getName()+",");
 
-		for(int i = 0; i < 20;i++){
-			buf.append(eltern.bcmb[i].getName()+",");
+			for(int i = 0; i < 22;i++){
+				//System.out.println((eltern.bcmb[i]!=null ? Integer.toString(i)+" = nicht null" : Integer.toString(i)+" = null!!!!!") );
+				buf.append(eltern.bcmb[i].getName()+",");
+			}
+			for(int i = 0; i < 17;i++){
+				buf.append(eltern.bchb[i].getName()+",");
+			}
+			for(int i = 0; i < 7;i++){
+				buf.append(eltern.bta[i].getName()+",");
+			}
+			buf.append(eltern.bta[10].getName()+",");
+			buf.append("ARZT1,ARZT2,ARZT3,");
+			buf.append("UNTDAT from bericht2 where berichtid='"+berichtid+"'");
+			////System.out.println(buf.toString());
+			holeSatz(buf);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		for(int i = 0; i < 17;i++){
-			buf.append(eltern.bchb[i].getName()+",");
-		}
-		for(int i = 0; i < 7;i++){
-			buf.append(eltern.bta[i].getName()+",");
-		}
-		buf.append("ARZT1,ARZT2,ARZT3,");
-		buf.append("UNTDAT from bericht2 where berichtid='"+berichtid+"'");
-		////System.out.println(buf.toString());
-		holeSatz(buf);
 	}
 	
 	private void ladeDatenAusVorbericht(int vorbericht){
 		String cmd = "select vnummer,aigr,namevor,geboren,strasse,plz,ort,msnr,"+
 		"diag1,diag2,diag3,diag4,diag5,"+
 		"F_74,F_79,F_80,F_81,F_82,F_87,F_88,F_89,F_90,F_95,F_96,F_97,F_98,F_103,F_104,F_105,"+
-		"F_106,F_111,F_112,F_113 from bericht2 where berichtid='"+Integer.toString(vorbericht)+"' LIMIT 1";
+		"F_106,F_111,F_112,F_113,diag6 from bericht2 where berichtid='"+Integer.toString(vorbericht)+"' LIMIT 1";
 		Vector<Vector<String>> vec = SqlInfo.holeFelder(cmd);
 		//System.out.println(vec);
 		if(vec.size() > 0){
@@ -260,6 +284,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 				for(int i = 0; i < 5;i++){
 					eltern.bta[i].setText(vec.get(0).get(i+8));
 				}
+				eltern.bta[10].setText(vec.get(0).get(vec.get(0).size()-1));
 				for(int i = 0; i < 5;i++){
 					eltern.btf[i+17].setText(vec.get(0).get(i+13+(i*3)));
 				}
@@ -305,6 +330,8 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 						}
 					}
 				}
+				//Diagnose 6
+				eltern.bta[10].setText( (rs.getString(eltern.bta[10].getName())==null  ? "" :  rs.getString(eltern.bta[10].getName())) ) ;
 				for(int i = 0; i < 25;i++){
 					if("AUFDAT3ENTDAT3UNTDATGEBOREN".contains(eltern.btf[i].getName())){
 						eltern.btf[i].setText( (rs.getString(eltern.btf[i].getName())==null  ? "  .  .    " :  DatFunk.sDatInDeutsch(rs.getString(eltern.btf[i].getName())) ) );	
@@ -317,7 +344,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 					//eltern.bchb[i].setSelected( ( rs.getString(eltern.bchb[i].getName()).equals("1") ? true : false) );
 					eltern.bchb[i].setSelected( test.equals("1") ? true : false );
 				}
-				for(int i = 0; i < 20;i++){
+				for(int i = 0; i < 22;i++){
 					eltern.bcmb[i].setSelectedItem( (rs.getString(eltern.bcmb[i].getName())==null  ? "" :  rs.getString(eltern.bcmb[i].getName())) );
 				}
 
@@ -344,6 +371,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 				}
 			}
 		}catch(SQLException ev){
+			ev.printStackTrace();
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
@@ -667,86 +695,92 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		labsheadline[1].setFont(fontarialfett);
 		titm.add(labsheadline[1],cctitl.xyw(1,1,7,CellConstraints.FILL,CellConstraints.TOP));
 		/****/
-		lab = getLabel("127");
+		lab = getLabel("140");
 		lab.setForeground(Color.RED);
 		titm.add(lab,cctitl.xy(1,2));
 		eltern.bchb[6] = new JRtaCheckBox("");
-		eltern.bchb[6].setName("F_127");
+		eltern.bchb[6].setName("F_140");
 		titm.add(eltern.bchb[6],cctitl.xy(1,3));
+		labs = new FormLayout("p","p,p,p");
+		ltitl = new PanelBuilder(labs);
+		ltitl.getPanel().setOpaque(false);
+		cclabs = new CellConstraints();
+		ltitl.add((labstitel[11][0] = getLabel(stitelneu[11][0])),cclabs.xy(1, 1));
+		ltitl.add((labstitel[11][1] = getLabel(stitelneu[11][1])),cclabs.xy(1, 2));
+		titm.add(ltitl.getPanel(),cctitl.xy(3,3,CellConstraints.DEFAULT,CellConstraints.CENTER));
+		/***/
+		lab = getLabel("127");
+		lab.setForeground(Color.RED);
+		titm.add(lab,cctitl.xy(1,5));
+		eltern.bchb[7] = new JRtaCheckBox("");
+		eltern.bchb[7].setName("F_127");
+		titm.add(eltern.bchb[7],cctitl.xy(1,6));
 		labs = new FormLayout("p","p,p,p");
 		ltitl = new PanelBuilder(labs);
 		ltitl.getPanel().setOpaque(false);
 		cclabs = new CellConstraints();
 		ltitl.add((labstitel[6][0] = getLabel(stitelneu[6][0])),cclabs.xy(1, 1));
 		ltitl.add((labstitel[6][1] = getLabel(stitelneu[6][1])),cclabs.xy(1, 2));
-		titm.add(ltitl.getPanel(),cctitl.xy(3,3,CellConstraints.DEFAULT,CellConstraints.CENTER));
-		/***/
-		lab = getLabel("128");
-		lab.setForeground(Color.RED);
-		titm.add(lab,cctitl.xy(5,2));
-		eltern.bchb[7] = new JRtaCheckBox("");
-		eltern.bchb[7].setName("F_128");
-		titm.add(eltern.bchb[7],cctitl.xy(5,3));
-		labs = new FormLayout("p","p,p,p");
-		ltitl = new PanelBuilder(labs);
-		ltitl.getPanel().setOpaque(false);
-		cclabs = new CellConstraints();
-		ltitl.add((labstitel[7][0] = getLabel(stitelneu[7][0])),cclabs.xy(1, 1));
-		titm.add(ltitl.getPanel(),cctitl.xy(7,3,CellConstraints.DEFAULT,CellConstraints.CENTER));
-		/***/
-		lab = getLabel("133");
-		lab.setForeground(Color.RED);
-		titm.add(lab,cctitl.xy(1,5));
-		eltern.bchb[8] = new JRtaCheckBox("");
-		eltern.bchb[8].setName("F_133");
-		titm.add(eltern.bchb[8],cctitl.xy(1,6));
-		labs = new FormLayout("p","p,p,p");
-		ltitl = new PanelBuilder(labs);
-		ltitl.getPanel().setOpaque(false);
-		cclabs = new CellConstraints();
-		ltitl.add((labstitel[8][0] = getLabel(stitelneu[8][0])),cclabs.xy(1, 1));
 		titm.add(ltitl.getPanel(),cctitl.xy(3,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
 		/***/
-		lab = getLabel("134");
-		lab.setForeground(Color.RED);
-		titm.add(lab,cctitl.xy(5,5));
+		//lab = getLabel("133");
+		//lab.setForeground(Color.RED);
+		//titm.add(lab,cctitl.xy(1,5));
+		eltern.bchb[8] = new JRtaCheckBox("");
+		eltern.bchb[8].setName("F_133");
+		//titm.add(eltern.bchb[8],cctitl.xy(1,6));
+		//labs = new FormLayout("p","p,p,p");
+		//ltitl = new PanelBuilder(labs);
+		//ltitl.getPanel().setOpaque(false);
+		//cclabs = new CellConstraints();
+		labstitel[8][0] = getLabel(stitelneu[8][0]);
+		//ltitl.add((labstitel[8][0] = getLabel(stitelneu[8][0])),cclabs.xy(1, 1));
+		//titm.add(ltitl.getPanel(),cctitl.xy(3,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
+		/***/
+		//lab = getLabel("134");
+		//lab.setForeground(Color.RED);
+		//titm.add(lab,cctitl.xy(5,5));
 		eltern.bchb[9] = new JRtaCheckBox("");
 		eltern.bchb[9].setName("F_134");
-		titm.add(eltern.bchb[9],cctitl.xy(5,6));
-		labs = new FormLayout("p","p,p,p");
-		ltitl = new PanelBuilder(labs);
-		ltitl.getPanel().setOpaque(false);
-		cclabs = new CellConstraints();
-		ltitl.add((labstitel[9][0] = getLabel(stitelneu[9][0])),cclabs.xy(1, 1));
-		titm.add(ltitl.getPanel(),cctitl.xy(7,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
+		//titm.add(eltern.bchb[9],cctitl.xy(5,6));
+		//labs = new FormLayout("p","p,p,p");
+		//ltitl = new PanelBuilder(labs);
+		//ltitl.getPanel().setOpaque(false);
+		//cclabs = new CellConstraints();
+		labstitel[9][0] = getLabel(stitelneu[9][0]);
+		//ltitl.add((labstitel[9][0] = getLabel(stitelneu[9][0])),cclabs.xy(1, 1));
+		//titm.add(ltitl.getPanel(),cctitl.xy(7,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
 		/***/
-		lab = getLabel("139");
-		lab.setForeground(Color.RED);
-		titm.add(lab,cctitl.xy(1,9));
+		//lab = getLabel("139");
+		//lab.setForeground(Color.RED);
+		//titm.add(lab,cctitl.xy(1,9));
 		eltern.bchb[10] = new JRtaCheckBox("");
 		eltern.bchb[10].setName("F_139");
-		titm.add(eltern.bchb[10],cctitl.xy(1,10));
-		labs = new FormLayout("p","p,p,p");
-		ltitl = new PanelBuilder(labs);
-		ltitl.getPanel().setOpaque(false);
-		cclabs = new CellConstraints();
-		ltitl.add((labstitel[10][0] = getLabel(stitelneu[10][0])),cclabs.xy(1, 1));
-		titm.add(ltitl.getPanel(),cctitl.xy(3,10,CellConstraints.DEFAULT,CellConstraints.CENTER));
+		//titm.add(eltern.bchb[10],cctitl.xy(1,10));
+		//labs = new FormLayout("p","p,p,p");
+		//ltitl = new PanelBuilder(labs);
+		//ltitl.getPanel().setOpaque(false);
+		//cclabs = new CellConstraints();
+		labstitel[10][0] = getLabel(stitelneu[10][0]);
+		//ltitl.add((labstitel[10][0] = getLabel(stitelneu[10][0])),cclabs.xy(1, 1));
+		//titm.add(ltitl.getPanel(),cctitl.xy(3,10,CellConstraints.DEFAULT,CellConstraints.CENTER));
 		/***/
-		lab = getLabel("140");
-		lab.setForeground(Color.RED);
-		titm.add(lab,cctitl.xy(5,9));
+		//lab = getLabel("140");
+		//lab.setForeground(Color.RED);
+		//titm.add(lab,cctitl.xy(1,2));
 		eltern.bchb[11] = new JRtaCheckBox("");
-		eltern.bchb[11].setName("F_140");
-		titm.add(eltern.bchb[11],cctitl.xy(5,10));
-		labs = new FormLayout("p","p,p,p");
-		ltitl = new PanelBuilder(labs);
-		ltitl.getPanel().setOpaque(false);
-		cclabs = new CellConstraints();
-		ltitl.add((labstitel[11][0] = getLabel(stitelneu[11][0])),cclabs.xy(1, 1));
-		titm.add(ltitl.getPanel(),cctitl.xy(7,10,CellConstraints.DEFAULT,CellConstraints.CENTER));
+		eltern.bchb[11].setName("F_128");
+		//titm.add(eltern.bchb[11],cctitl.xy(1,3));
+		//labs = new FormLayout("p","p,p,p");
+		//ltitl = new PanelBuilder(labs);
+		//ltitl.getPanel().setOpaque(false);
+		//cclabs = new CellConstraints();
+		labstitel[7][0] = getLabel(stitelneu[7][0]);
+		//ltitl.add((labstitel[11][0] = getLabel(stitelneu[7][0])),cclabs.xy(1, 1));
+		//titm.add(ltitl.getPanel(),cctitl.xy(7,10,CellConstraints.DEFAULT,CellConstraints.CENTER));
 		
-		tit.add(titm.getPanel(),cctit.xy(5,2,CellConstraints.FILL,CellConstraints.FILL));
+		titm.getPanel().validate();
+		tit.add(titm.getPanel(),cctit.xy(8,2,CellConstraints.FILL,CellConstraints.FILL));
 		/*********************************/
 		/*
 		 * Hochkanntstriche
@@ -766,53 +800,27 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		labsheadline[2] = new JLabel(headlineneu[2]);
 		labsheadline[2].setFont(fontarialfett);
 		titr.add(labsheadline[2],cctitl.xyw(1,1,7,CellConstraints.FILL,CellConstraints.TOP));
-		/****/
-		lab = getLabel("129");
+		/***/
+		lab = getLabel("135");//Wechsel mit 129
 		lab.setForeground(Color.RED);
 		titr.add(lab,cctitl.xy(1,2));
-		eltern.bchb[12] = new JRtaCheckBox("");
-		eltern.bchb[12].setName("F_129");
-		titr.add(eltern.bchb[12],cctitl.xy(1,3));
-		labs = new FormLayout("p","p,p,p");
-		ltitl = new PanelBuilder(labs);
-		ltitl.getPanel().setOpaque(false);
-		cclabs = new CellConstraints();
-		ltitl.add((labstitel[12][0] = getLabel(stitelneu[12][0])),cclabs.xy(1, 1));
-		titr.add(ltitl.getPanel(),cctitl.xy(3,3,CellConstraints.DEFAULT,CellConstraints.CENTER));
-		/***/
-		lab = getLabel("130");
-		lab.setForeground(Color.RED);
-		titr.add(lab,cctitl.xy(5,2));
-		eltern.bchb[13] = new JRtaCheckBox("");
-		eltern.bchb[13].setName("F_130");
-		titr.add(eltern.bchb[13],cctitl.xy(5,3));
-		labs = new FormLayout("p","p,p,p");
-		ltitl = new PanelBuilder(labs);
-		ltitl.getPanel().setOpaque(false);
-		cclabs = new CellConstraints();
-		ltitl.add((labstitel[13][0] = getLabel(stitelneu[13][0])),cclabs.xy(1, 1));
-		titr.add(ltitl.getPanel(),cctitl.xy(7,3,CellConstraints.DEFAULT,CellConstraints.CENTER));
-		/***/
-		lab = getLabel("135");
-		lab.setForeground(Color.RED);
-		titr.add(lab,cctitl.xy(1,5));
 		eltern.bchb[14] = new JRtaCheckBox("");
 		eltern.bchb[14].setName("F_135");
-		titr.add(eltern.bchb[14],cctitl.xy(1,6));
+		titr.add(eltern.bchb[14],cctitl.xy(1,3));
 		labs = new FormLayout("p","p,p,p");
 		ltitl = new PanelBuilder(labs);
 		ltitl.getPanel().setOpaque(false);
 		cclabs = new CellConstraints();
 		ltitl.add((labstitel[14][0] = getLabel(stitelneu[14][0])),cclabs.xy(1, 1));
 		ltitl.add((labstitel[14][1] = getLabel(stitelneu[14][1])),cclabs.xy(1, 2));		
-		titr.add(ltitl.getPanel(),cctitl.xy(3,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
+		titr.add(ltitl.getPanel(),cctitl.xy(3,3,CellConstraints.DEFAULT,CellConstraints.CENTER));
 		/***/
 		lab = getLabel("136");
 		lab.setForeground(Color.RED);
-		titr.add(lab,cctitl.xy(5,5));
+		titr.add(lab,cctitl.xy(5,2));
 		eltern.bchb[15] = new JRtaCheckBox("");
 		eltern.bchb[15].setName("F_136");
-		titr.add(eltern.bchb[15],cctitl.xy(5,6));
+		titr.add(eltern.bchb[15],cctitl.xy(5,3));
 		labs = new FormLayout("p","p,p,p");
 		ltitl = new PanelBuilder(labs);
 		ltitl.getPanel().setOpaque(false);
@@ -821,7 +829,33 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		ltitl.add((labstitel[15][1] = getLabel(stitelneu[15][1])),cclabs.xy(1, 2));
 		ltitl.add((labstitel[15][2] = getLabel(stitelneu[15][2])),cclabs.xy(1, 3));	
 		//titr.add(ltitl.getPanel(),cctitl.xy(7,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
-		titr.add(ltitl.getPanel(),cctitl.xywh(7,5,1,3,CellConstraints.DEFAULT,CellConstraints.BOTTOM));
+		titr.add(ltitl.getPanel(),cctitl.xywh(7,2,1,3,CellConstraints.DEFAULT,CellConstraints.TOP));
+		/****/
+		lab = getLabel("129");
+		lab.setForeground(Color.RED);
+		titr.add(lab,cctitl.xy(1,5));//Wechsel mit 135
+		eltern.bchb[12] = new JRtaCheckBox("");
+		eltern.bchb[12].setName("F_129");
+		titr.add(eltern.bchb[12],cctitl.xy(1,6));
+		labs = new FormLayout("p","p,p,p");
+		ltitl = new PanelBuilder(labs);
+		ltitl.getPanel().setOpaque(false);
+		cclabs = new CellConstraints();
+		ltitl.add((labstitel[12][0] = getLabel(stitelneu[12][0])),cclabs.xy(1, 1));
+		titr.add(ltitl.getPanel(),cctitl.xy(3,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
+		/***/
+		lab = getLabel("130");
+		lab.setForeground(Color.RED);
+		titr.add(lab,cctitl.xy(5,5));
+		eltern.bchb[13] = new JRtaCheckBox("");
+		eltern.bchb[13].setName("F_130");
+		titr.add(eltern.bchb[13],cctitl.xy(5,6));
+		labs = new FormLayout("p","p,p,p");
+		ltitl = new PanelBuilder(labs);
+		ltitl.getPanel().setOpaque(false);
+		cclabs = new CellConstraints();
+		ltitl.add((labstitel[13][0] = getLabel(stitelneu[13][0])),cclabs.xy(1, 1));
+		titr.add(ltitl.getPanel(),cctitl.xy(7,6,CellConstraints.DEFAULT,CellConstraints.CENTER));
 		/***/
 		lab = getLabel("141");
 		lab.setForeground(Color.RED);
@@ -838,7 +872,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		titr.add(ltitl.getPanel(),cctitl.xy(3,10,CellConstraints.DEFAULT,CellConstraints.CENTER));
 		/***/
 		titr.getPanel().validate();
-		tit.add(titr.getPanel(),cctit.xy(8,2,CellConstraints.FILL,CellConstraints.FILL));
+		tit.add(titr.getPanel(),cctit.xy(5,2,CellConstraints.FILL,CellConstraints.FILL));
 		// 1  2   3    4   5  6     7   8  9     10 //xyw(2,y,7);	
 	// "4dlu,p:g,4dlu,4dlu,p,30dlu,4dlu,p,30dlu,4dlu");
 		lab = getLabel("ERLÄUTERUNGEN");
@@ -877,7 +911,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		tit.getPanel().validate();
 		return tit.getPanel();
 	}
-	private JPanel getBlock4Komplett(){
+	private JPanel getBlock4Komplett_X(){
 		//insgesamt 610                      1    2     3   4     5      6    7   8   9     10   11  12  13    14   15   16  17
 		FormLayout laytit = new FormLayout("4dlu,25dlu,2dlu,p,  35dlu, 25dlu,2dlu,p, 20dlu,25dlu,2dlu,p,20dlu,25dlu,2dlu,p:g,20dlu",
 				//           dia1            dia2            dia3             dia4            dia5
@@ -1026,14 +1060,211 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		tit.add(ent.getPanel(),cctit.xywh(16,2,1,6,CellConstraints.FILL,CellConstraints.TOP));
 		return tit.getPanel();
 	}
+
+	/*************************************************/
+	private JPanel getBlock4Komplett(){
+		//insgesamt 610                      1    2     3   4     5      6    7   8   9     10   11  12  13    14   15   16  17
+		FormLayout laytit = new FormLayout("4dlu,25dlu,2dlu,p,  35dlu, 25dlu,2dlu,p, 20dlu,25dlu,2dlu,p,20dlu,25dlu,2dlu,p:g,20dlu",
+				//           dia1            dia2            dia3             dia4            dia5
+				// 1  2   3      4     5    6     7    8  
+				"4dlu,p, 5dlu,   p,  5dlu,  p, 0dlu:g,4dlu");
+				//"4dlu,p, 5dlu,   p,  5dlu,  p, 0dlu:g, 2dlu, p, 30dlu, 2dlu, p,  30dlu, 2dlu, p ,30dlu,4dlu");
+		PanelBuilder tit = new PanelBuilder(laytit);
+		//tit.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		tit.setOpaque(false);               
+		CellConstraints cctit = new CellConstraints();
+		tit.getPanel().validate();
+		
+		FormLayout entlay = new FormLayout("55dlu","p,p");
+		PanelBuilder ent = new PanelBuilder(entlay);
+		ent.getPanel().setOpaque(false);
+		CellConstraints ccent = new CellConstraints();
+		JLabel lab = getLabel ("");
+
+		eltern.btf[22] = new JRtaTextField("ZAHLEN",false);
+		eltern.btf[22].setName("F_114");
+		eltern.btf[23] = new JRtaTextField("ZAHLEN",false);
+		eltern.btf[23].setName("F_117");		
+		eltern.btf[24] = new JRtaTextField("ZAHLEN",false);
+		eltern.btf[24].setName("F_120");
+		
+		eltern.bcmb[17] = new JRtaComboBox(ursache);
+		eltern.bcmb[17].setName("F_123");
+		
+		tit.add(eltern.bcmb[17],cctit.xy(2,2));
+		//                                  1 2 3 4 5 6 7 8 9 10 11 12 
+		entlay = new FormLayout("p,2dlu,p","p,p,p,p,p,p,p,p,p,p, p, p");
+		ent = new PanelBuilder(entlay);
+		ent.getPanel().setOpaque(false);
+		ccent = new CellConstraints();
+		lab = getLabel ("URSACHE DER");
+		lab.setForeground(Color.RED);
+		ent.add(lab,ccent.xyw(1, 1,3));
+		lab = getLabel("ERKRANKUNG");
+		lab.setForeground(Color.RED);
+		ent.add(lab,ccent.xyw(1, 2,3));
+		ent.add(getLabel("(1.Diagnose)"),ccent.xyw(1,3,3 ));
+		ent.add(getLabel("0 = "),ccent.xy(1,4 ));
+		ent.add(getLabel("1 - 5 trifft nicht zu"),ccent.xy(3,4,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("1 = "),ccent.xy(1,5 ));
+		ent.add(getLabel("Arbeitsunfall einschl."),ccent.xy(3,5,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("Wegeunfall"),ccent.xy(3,6,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("2 = "),ccent.xy(1,7 ));
+		ent.add(getLabel("Berufserkrankung"),ccent.xy(3,7,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("3 = "),ccent.xy(1,8 ));
+		ent.add(getLabel("Schädigung durch"),ccent.xy(3,8,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("Einwirkung Dritter"),ccent.xy(3,9,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("4 = "),ccent.xy(1,10 ));
+		ent.add(getLabel("Folge von Kriegs-, Zivil-"),ccent.xy(3,10,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("oder Whrdienst"),ccent.xy(3,11,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("5 = "),ccent.xy(1,12 ));
+		ent.add(getLabel("Meldepflichtige Erkrankung"),ccent.xy(3,12,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.getPanel().validate();
+		//tit.add(ent.getPanel(),cctit.xy(4,2,CellConstraints.FILL,CellConstraints.TOP));
+		tit.add(ent.getPanel(),cctit.xywh(4,2,1,6,CellConstraints.LEFT,CellConstraints.TOP));
+		
+		/***************************/
+		
+
+		eltern.bcmb[0] = new JRtaComboBox(new String[] {"","1","2","3","4","5","6","7","9"});
+		eltern.bcmb[0].setName("ENTFORM");
+		tit.add(eltern.bcmb[0],cctit.xy(6, 2));
+		//										       1 2 3 4 5 6 7 8 9 10 11 12
+		entlay = new FormLayout("p,2dlu,p","p,p,p,p,p,p,p,p,p,p, p, p, p");
+		ent = new PanelBuilder(entlay);
+		ent.getPanel().setOpaque(false);
+		ccent = new CellConstraints();
+		lab = getLabel("ENTLASSFORM");
+		lab.setForeground(Color.RED);
+		ent.add(lab,ccent.xyw(1,1,3));
+		ent.add(getLabel("1 = "),ccent.xy(1,2));
+		ent.add(getLabel("regulär"),ccent.xy(3,2));
+		ent.add(getLabel("2 = "),ccent.xy(1,3));
+		ent.add(getLabel("vorzeitig auf ärztl. Veranlassung"),ccent.xy(3,3));
+		ent.add(getLabel("3 = "),ccent.xy(1,4));
+		ent.add(getLabel("vorzeitig mit ärztl. Einverständnis"),ccent.xy(3,4));
+		ent.add(getLabel("4 = "),ccent.xy(1,5));
+		ent.add(getLabel("vorzeitig ohne ärztl. Einverständnis"),ccent.xy(3,5));
+		ent.add(getLabel("5 = "),ccent.xy(1,6));
+		ent.add(getLabel("disziplinarisch"),ccent.xy(3,6));
+		ent.add(getLabel("6 = "),ccent.xy(1,7));
+		ent.add(getLabel("verlegt"),ccent.xy(3,7));
+		ent.add(getLabel("7 = "),ccent.xy(1,8));
+		ent.add(getLabel("Wechsel zu ambulanter, ganztägig"),ccent.xy(3,8));
+		ent.add(getLabel("ambulanter, stationärer Reha"),ccent.xy(3,9));
+		ent.add(getLabel("9 = "),ccent.xy(1,10));
+		ent.add(getLabel("gestorben"),ccent.xy(3,10));
+		
+		tit.add(ent.getPanel(),cctit.xywh(8,2,1,6));
+		/****************************/
+
+		eltern.bcmb[1] = new JRtaComboBox(new String[] {"","0","1","3","4","5","9"});
+		eltern.bcmb[1].setName("ARBFAE");
+		tit.add(eltern.bcmb[1],cctit.xy(10, 2));
+		
+		entlay = new FormLayout("p,2dlu,p","p,p,p,p,p,p,p,p,p, p, p, p,p,p");
+		ent = new PanelBuilder(entlay);
+		ent.getPanel().setOpaque(false);
+		ccent = new CellConstraints();
+		lab = getLabel("ARBEITS-");
+		lab.setForeground(Color.RED);
+		ent.add(lab,ccent.xyw(1, 1,3));
+		lab = getLabel("FÄHIGKEIT");
+		lab.setForeground(Color.RED);
+		ent.add(lab,ccent.xyw(1, 2,3));
+		ent.add(getLabel("0 = "),ccent.xy(1,3));
+		ent.add(getLabel("Maßnahme nicht ordnungsg."),ccent.xy(3,3));
+		ent.add(getLabel("abgeschlossen, gestorben"),ccent.xy(3,4));
+		ent.add(getLabel("1 = "),ccent.xy(1,5));
+		ent.add(getLabel("arbeitsfähig"),ccent.xy(3,5));
+		ent.add(getLabel("3 = "),ccent.xy(1,6));
+		ent.add(getLabel("arbeitsunfähig"),ccent.xy(3,6));
+		ent.add(getLabel("4 = "),ccent.xy(1,7));
+		ent.add(getLabel("Kinder-Reha"),ccent.xy(3,7));
+		ent.add(getLabel("5 = "),ccent.xy(1,8));
+		ent.add(getLabel("Hausfrau/Hausmann"),ccent.xy(3,8));
+		ent.add(getLabel("9 = "),ccent.xy(1,9));
+		ent.add(getLabel("Beurteilung nicht erforderlich"),ccent.xy(3,9));
+		ent.add(getLabel("(Altersrente, Angehörige)"),ccent.xy(3,10));
+		tit.add(ent.getPanel(),cctit.xywh(12,2,1,6));
+		
+		/***************************/
+		//                                     1    2    3
+		FormLayout lay2015 = new FormLayout("25dlu,2dlu,p:g",
+
+				// 1  2   3      4     5    6     7    8  
+				"p, 10dlu,p");
+				//"4dlu,p, 5dlu,   p,  5dlu,  p, 0dlu:g, 2dlu, p, 30dlu, 2dlu, p,  30dlu, 2dlu, p ,30dlu,4dlu");
+		PanelBuilder tit2015 = new PanelBuilder(lay2015);
+		//tit.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		tit2015.setOpaque(false);               
+		CellConstraints cctit2015 = new CellConstraints();
+		tit2015.getPanel().validate();		
+		eltern.bcmb[18] = new JRtaComboBox(vorherau);
+		eltern.bcmb[18].setName("F_124");
+		//tit.add(eltern.bcmb[18],cctit.xy(14,2));
+		tit2015.add(eltern.bcmb[18],cctit2015.xy(1,1,CellConstraints.DEFAULT,CellConstraints.TOP));
+		//                                                 1 2 3 4 5 6 7 8  
+		entlay = new FormLayout("p,2dlu,fill:0:grow(1.0)","p,p,p,p,p,p,p,p");
+		ent = new PanelBuilder(entlay);
+		ent.getPanel().setOpaque(false);
+		ccent = new CellConstraints();
+		lab = getLabel ("AU-ZEITEN");
+		lab.setForeground(Color.RED);
+		ent.add(lab,ccent.xyw(1, 1,3));
+		ent.add(getLabel("innerhalb der letzten"),ccent.xyw(1,2,3 ));
+		ent.add(getLabel("12 Monate vor Aufnahme"),ccent.xyw(1,3,3 ));
+		ent.add(getLabel("0 = "),ccent.xy(1,4 ));
+		ent.add(getLabel("keine"),ccent.xy(3,4,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("1 = "),ccent.xy(1,5 ));
+		ent.add(getLabel("bis unter 3 Monate"),ccent.xy(3,5,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("2 = "),ccent.xy(1,6 ));
+		ent.add(getLabel("3 bis unter 6 Monate"),ccent.xy(3,6,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("3 = "),ccent.xy(1,7 ));
+		ent.add(getLabel("6 und mehr Monate"),ccent.xy(3,7,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("9 = "),ccent.xy(1,8 ));
+		ent.add(getLabel("nicht erwerbstätig"),ccent.xy(3,8,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.getPanel().validate();
+		tit2015.add(ent.getPanel(),cctit2015.xy(3,1));
+		
+		
+		//tit.add(tit2015.getPanel(),cctit.xywh(14,2,2,6,CellConstraints.LEFT,CellConstraints.TOP));		
+		
+		eltern.bcmb[19] = new JRtaComboBox(new String[] {"","1","2"});
+		eltern.bcmb[19].setName("DMP");
+		tit2015.add(eltern.bcmb[19],cctit2015.xy(1,3,CellConstraints.DEFAULT,CellConstraints.TOP));
+		//                                                 1 2 3 4 5 6 7 8 9 
+		entlay = new FormLayout("p,2dlu,fill:0:grow(1.0)","p,p,p,p,p,p,p,p,p");
+		ent = new PanelBuilder(entlay);
+		ent.getPanel().setOpaque(false);
+		ccent = new CellConstraints();
+		lab = getLabel ("AU bei AUFNAHME");
+		lab.setForeground(Color.RED);
+		ent.add(lab,ccent.xyw(1, 1,3));
+		ent.add(getLabel("1 = "),ccent.xy(1,2 ));
+		ent.add(getLabel("ja"),ccent.xy(3,2,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.add(getLabel("2 = "),ccent.xy(1,3 ));
+		ent.add(getLabel("nein"),ccent.xy(3,3,CellConstraints.LEFT,CellConstraints.DEFAULT ));
+		ent.getPanel().validate();
+		tit2015.add(ent.getPanel(),cctit2015.xy(3,3));
+		
+		tit2015.getPanel().validate();
+		tit.add(tit2015.getPanel(),cctit.xywh(14,2,2,6,CellConstraints.LEFT,CellConstraints.TOP));
+		
+		
+		//tit.add(ent.getPanel(),cctit.xywh(16,2,1,6,CellConstraints.FILL,CellConstraints.TOP));
+		return tit.getPanel();
+	}
 	
+	
+	/*************************************************/
 	
 	private JPanel getBlock3Komplett(){  
 		//insgesamt 610                      1   diag    3   icd-10  5     Seite    7    Sicher  9    Ergeb. 11   Y-Label
 		FormLayout laytit = new FormLayout("4dlu,230dlu,5dlu,55dlu, 10dlu, 40dlu, 5dlu, 40dlu, 5dlu,40dlu,10dlu,140dlu,4dlu",
 				//           dia1            dia2            dia3             dia4            dia5
-				// 1  2  3    4     5    6     7    8    9   10     11   12    13    14   15   16   17
-				"4dlu,p, p,  30dlu, 2dlu,p, 30dlu, 2dlu, p, 30dlu, 2dlu, p,  30dlu, 2dlu, p ,30dlu,4dlu");
+				// 1  2  3    4     5    6     7    8    9   10     11   12    13    14   15   16   17   18   19
+				"4dlu,p, p,  30dlu, 2dlu,p, 30dlu, 2dlu, p, 30dlu, 2dlu, p,  30dlu, 2dlu, p ,30dlu,4dlu, p, 30dlu,4dlu");
 		PanelBuilder tit = new PanelBuilder(laytit);
 		tit.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		tit.setOpaque(false);               
@@ -1381,6 +1612,15 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		ent.add(getLabel("2 = unverändert"),ccent.xy(1,15));
 		ent.add(getLabel("3 = verschlechtert"),ccent.xy(1,16));
 		tit.add(ent.getPanel(),cctit.xywh(12, 4,1,14,CellConstraints.LEFT,CellConstraints.TOP));
+	
+		/**********Diagnose 6**********************/
+		lab = getLabel("6. (Diagnose 6 = weitere Diagnose ohne Verschlüsselung)");
+		lab.setForeground(Color.RED);
+		tit.add(lab,cctit.xy(2,18));
+		eltern.bta[10] = new JTextArea();
+		eltern.bta[10].setName("DIAG6");
+		tit.add(eltern.bta[10],cctit.xyw(2, 19,9,CellConstraints.FILL,CellConstraints.FILL));
+
 		
 		return tit.getPanel();
 	}
@@ -1422,12 +1662,18 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		eltern.btf[16] = new JRtaTextField("DATUM",false);
 		eltern.btf[16].setName("ENTDAT3");
 		eltern.btf[16].setEnabled(true);
+
+		tit.add(eltern.btf[15],cctit.xy(2,3));
+		tit.add(eltern.btf[16],cctit.xy(4,3));
+
+		/*
 		tit.add(eltern.btf[11],cctit.xy(2,3));
 		tit.add(eltern.btf[12],cctit.xy(4,3));
 		tit.add(eltern.btf[13],cctit.xy(2,7));
 		tit.add(eltern.btf[14],cctit.xy(4,7));
 		tit.add(eltern.btf[15],cctit.xy(2,5));
 		tit.add(eltern.btf[16],cctit.xy(4,5));
+		
 		lab = getLabel("stationär");
 		lab.setForeground(Color.RED);
 		tit.add(lab,cctit.xy(6,3));
@@ -1436,9 +1682,12 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		tit.add(lab,cctit.xy(6,5));
 		lab =  getLabel("ambulant");
 		lab.setForeground(Color.RED);
-		tit.add(lab,cctit.xy(6,7));		
+		tit.add(lab,cctit.xy(6,7));	
+		*/	
 		return tit.getPanel();
 	}
+	/***************************************************/	
+	/***********************************************/
 	/***************************************************/	
 	private JPanel getBlock2Rechts(){       //1    2     3    4       5    6    7    8      9
 		FormLayout laytit = new FormLayout("0dlu,25dlu,2dlu,140dlu,20dlu,25dlu,2dlu,140dlu,4dlu",
@@ -1454,70 +1703,63 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		tit.setOpaque(false);               
 		CellConstraints cctit = new CellConstraints();
 		
-		JLabel lab = getLabel("ENTLASSFORM");
+		JLabel lab = getLabel("ART DER DURCHFÜHRUNG");
 		lab.setForeground(Color.RED);
 		tit.add(lab,cctit.xy(4, 2));
 		
-		lab = getLabel("ARBEITSFÄHIGKEIT");
+		lab = getLabel("BESONDERE BEHANDLUNGSFORMEN");
 		lab.setForeground(Color.RED);
 		tit.add(lab,cctit.xy(8, 2));
 
-		eltern.bcmb[0] = new JRtaComboBox(new String[] {"","1","2","3","4","5","6","7","9"});
-		eltern.bcmb[0].setName("ENTFORM");
-		tit.add(eltern.bcmb[0],cctit.xy(2, 4));
+		eltern.bcmb[20] = new JRtaComboBox(new String[] {"","1","2","3"});
+		eltern.bcmb[20].setName("F_114");
+		tit.add(eltern.bcmb[20],cctit.xy(2, 4));
 		//										       1 2 3 4 5 6 7 8 9 10 11 12
 		FormLayout entlay = new FormLayout("p,2dlu,p","p,p,p,p,p,p,p,p,p, p, p, p");
 		PanelBuilder ent = new PanelBuilder(entlay);
 		ent.getPanel().setOpaque(false);
 		CellConstraints ccent = new CellConstraints();
 		ent.add(getLabel("1 = "),ccent.xy(1,1));
-		ent.add(getLabel("regulär"),ccent.xy(3,1));
+		ent.add(getLabel("stationär"),ccent.xy(3,1));
 		ent.add(getLabel("2 = "),ccent.xy(1,2));
-		ent.add(getLabel("vorzeitig auf ärztl. Veranlassung"),ccent.xy(3,2));
+		ent.add(getLabel("ganztägig ambulant"),ccent.xy(3,2));
 		ent.add(getLabel("3 = "),ccent.xy(1,3));
-		ent.add(getLabel("vorzeitig mit ärztl. Einverständnis"),ccent.xy(3,3));
-		ent.add(getLabel("4 = "),ccent.xy(1,4));
-		ent.add(getLabel("vorzeitig ohne ärztl. Einverständnis"),ccent.xy(3,4));
-		ent.add(getLabel("5 = "),ccent.xy(1,5));
-		ent.add(getLabel("disziplinarisch"),ccent.xy(3,5));
-		ent.add(getLabel("6 = "),ccent.xy(1,6));
-		ent.add(getLabel("verlegt"),ccent.xy(3,6));
-		ent.add(getLabel("7 = "),ccent.xy(1,7));
-		ent.add(getLabel("Wechsel zu ambulanter"),ccent.xy(3,7));
-		ent.add(getLabel("teilstationärer, stationärer Reha"),ccent.xy(3,8));
-		ent.add(getLabel("9 = "),ccent.xy(1,9));
-		ent.add(getLabel("gestorben"),ccent.xy(3,9));
+		ent.add(getLabel("ambulant"),ccent.xy(3,3));
+		
 		
 		tit.add(ent.getPanel(),cctit.xywh(4,4,1,2));
 		
-		eltern.bcmb[1] = new JRtaComboBox(new String[] {"","0","1","3","4","5","9"});
-		eltern.bcmb[1].setName("ARBFAE");
-		tit.add(eltern.bcmb[1],cctit.xy(6, 4));
+		eltern.bcmb[21] = new JRtaComboBox(new String[] {"","0","1","2","3","9"});
+		eltern.bcmb[21].setName("F_117");
+		tit.add(eltern.bcmb[21],cctit.xy(6, 4));
 		
 		entlay = new FormLayout("p,2dlu,p","p,p,p,p,p,p,p,p,p, p, p, p");
 		ent = new PanelBuilder(entlay);
 		ent.getPanel().setOpaque(false);
 		ccent = new CellConstraints();
 		ent.add(getLabel("0 = "),ccent.xy(1,1));
-		ent.add(getLabel("Maßnahme nicht ordnungsgemäß"),ccent.xy(3,1));
-		ent.add(getLabel("abgeschlosse, gestorben"),ccent.xy(3,2));
-		ent.add(getLabel("1 = "),ccent.xy(1,3));
-		ent.add(getLabel("arbeitsfähig"),ccent.xy(3,3));
+		ent.add(getLabel("keine"),ccent.xy(3,1));
+		ent.add(getLabel("1 = "),ccent.xy(1,2));
+		ent.add(getLabel("MBOR"),ccent.xy(3,2));
+		ent.add(getLabel("2 = "),ccent.xy(1,3));
+		ent.add(getLabel("VMO"),ccent.xy(3,3));
 		ent.add(getLabel("3 = "),ccent.xy(1,4));
-		ent.add(getLabel("arbeitsunfähig"),ccent.xy(3,4));
-		ent.add(getLabel("4 = "),ccent.xy(1,5));
-		ent.add(getLabel("Kinder-HB"),ccent.xy(3,5));
-		ent.add(getLabel("5 = "),ccent.xy(1,6));
-		ent.add(getLabel("Hausfrau/Hausmann"),ccent.xy(3,6));
+		ent.add(getLabel("VOR"),ccent.xy(3,4));
+		ent.add(getLabel("9 = "),ccent.xy(1,5));
+		ent.add(getLabel("Sonstige"),ccent.xy(3,5));
+		/*
 		ent.add(getLabel("9 = "),ccent.xy(1,7));
 		ent.add(getLabel("Beurteilung nicht erforderlich"),ccent.xy(3,7));
 		ent.add(getLabel("(Altersrente, Angehörige)"),ccent.xy(3,8));
+		*/
 		tit.add(ent.getPanel(),cctit.xywh(8,4,1,2));
+		
 		
 		return tit.getPanel();
 	}
 	
 	/***********************************************/
+	
 	private JPanel getBlock1Links(){       //1    2     3    4       5     6    7   8
 		FormLayout laytit = new FormLayout("4dlu,55dlu,2dlu,80dlu,40dlu,50dlu,4dlu,4dlu",
 				//     3=Vnr.  5=Name 7=geb 9=stras
@@ -1742,29 +1984,36 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	}
 	public void testeObAlt(){
 		if( ((String)eltern.cbktraeger.getSelectedItem()).contains("GKV") ){
-			System.out.println("In alte Labels");
+			//System.out.println("In alte Labels");
 			setzeNeueLabels(false);
 			eltern.ebt.getTab1().pan.revalidate();
 			eltern.bcmb[19].setEnabled(false);
 			eltern.bta[6].setEnabled(true);
 		}else{
 			// Hier noch das RV - Entlassdatum einbauen ggfls. ebenfalls alte labels zeigen
-			if(eltern.btf[15].getText().length()==10){
-				try{
-					if(DatFunk.TageDifferenz("31.12.2007",eltern.btf[15].getText() ) < 0){
-						setzeNeueLabels(false);
-					}else{
+			if(EBerichtPanel.UseNeueRvVariante){
+				setzeNeueLabels(true);
+				eltern.ebt.getTab1_2015().pan.revalidate();
+				eltern.bcmb[19].setEnabled(true);
+				eltern.bta[6].setEnabled(false);				
+			}else{
+				if(eltern.btf[15].getText().length()==10){
+					try{
+						if(DatFunk.TageDifferenz("31.12.2007",eltern.btf[15].getText() ) < 0){
+							setzeNeueLabels(false);
+						}else{
+							setzeNeueLabels(true);
+						}
+					}catch(Exception ex){
 						setzeNeueLabels(true);
 					}
-				}catch(Exception ex){
+				}else{
 					setzeNeueLabels(true);
 				}
-			}else{
-				setzeNeueLabels(true);
+				eltern.ebt.getTab1().pan.revalidate();
+				eltern.bcmb[19].setEnabled(true);
+				eltern.bta[6].setEnabled(false);				
 			}
-			eltern.ebt.getTab1().pan.revalidate();
-			eltern.bcmb[19].setEnabled(true);
-			eltern.bta[6].setEnabled(false);				
 		}
 	}
 	public void testeIK(){
@@ -1777,8 +2026,10 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		//System.out.println("Setze neue Labels");
 		for(int i = 0; i < 17; i++){
 			for(int t = 0; t < labstitel[i].length; t++){
+				//System.out.println("Durchlauf "+i);
 				if(neu){
 					if(t < 3){labsheadline[t].setText(headlineneu[t]);}
+					//System.out.println(stitelneu[i][t]);
 					labstitel[i][t].setText(stitelneu[i][t]);
 					if(t == 16){  ((JComponent)labstitel[i][t].getParent()).revalidate() ; }
 				}else{
