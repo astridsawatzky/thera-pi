@@ -549,9 +549,10 @@ public void run(){
 	jtable = DruckFenster.getTable();
 	
 	oOTermine = getTermine();
+	
 	if(oOTermine.size()==0){
 		JOptionPane.showMessageDialog (null, "In der Terminliste sind keine Termine vorhanden.\n"+
-				"Nicht vorhandene Termine k�nne nur sehr schwer (in diesem Fall gar nicht) ausgedrucket werden...\n\n"+
+				"Nicht vorhandene Termine könne nur sehr schwer (in diesem Fall gar nicht) ausgedrucket werden...\n\n"+
 				"Oh Herr schmeiß Hirn ra.....");
 				DruckFenster.OOoFertig = 0;
 				DruckFenster.buttonsEinschalten();
@@ -627,7 +628,7 @@ public void run(){
 				try {
 					placeholders = textFieldService.getPlaceholderFields();
 				} catch (TextException e) {
-					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 					e.printStackTrace();
 				}
 				for (int i = 0; i < placeholders.length; i++) {
@@ -678,6 +679,7 @@ public void run(){
 					textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertDocument(url) ;
 				} catch (NOAException e) {
 					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 					e.printStackTrace();
 				}
 				tbl = textDocument.getTextTableService().getTextTables();
@@ -724,6 +726,7 @@ public void run(){
 							placeholders = textFieldService.getPlaceholderFields();
 						} catch (TextException e) {
 							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 							e.printStackTrace();
 						}
 						for (int i = 0; i < placeholders.length; i++) {
@@ -742,6 +745,7 @@ public void run(){
 					textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
 				} catch (TextException e) {
 					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 					e.printStackTrace();
 				}
 				////System.out.println("textTable gesetzt*************");
@@ -787,10 +791,16 @@ public void run(){
 			}
 
 		}else{
-			exporturl = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
-			//exporturl = SystemConfig.hmVerzeichnisse.get("Temp")+"Terminplan.pdf";
-			////System.out.println("ExportURL = "+exporturl);
-			textDocument.getPersistenceService().export(exporturl, new PDFFilter());
+			try{
+				exporturl = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+				File f = new File(exporturl);
+				if(f.exists()){
+					f.delete();
+				}
+				textDocument.getPersistenceService().export(exporturl, new PDFFilter());
+			}catch(Exception ex){
+				JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung der PDF-Datei (Termine)");
+			}
 			textDocument.close();
 		}		
 		// Anschlie�end die Vorlagendatei schlie�en
@@ -809,24 +819,29 @@ public void run(){
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		DruckFenster.OOoFertig = 0;
-		DruckFenster.buttonsEinschalten();		
+		DruckFenster.buttonsEinschalten();
+		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (DocumentException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		DruckFenster.OOoFertig = 0;
 		DruckFenster.buttonsEinschalten();
+		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (NOAException e) {
 		// TODO Auto-generated catch block
 		DruckFenster.OOoFertig = 0;
+		DruckFenster.buttonsEinschalten();
 		e.printStackTrace();
+		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (TextException e) {
 		// TODO Auto-generated catch block
 		DruckFenster.OOoFertig = 0;
 		e.printStackTrace();
 		DruckFenster.buttonsEinschalten();
+		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	}
 	DruckFenster.OOoFertig = 1;
@@ -857,23 +872,27 @@ final class sendeTermine extends Thread implements Runnable{
 			try{
 				if(emailaddy.equals("")){
 					DruckFenster.buttonsEinschalten();
+					JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 1");
 					return;
 				}
 			}catch(java.lang.NullPointerException ex){
+				JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 2");
 				DruckFenster.buttonsEinschalten();
 				return;
 			}
 		}else{
 			pat_intern = holeAusDB("select PAT_INTERN from verordn where REZ_NR ='"+oOTermine.get(0).get(9)+"'");
 			if(pat_intern.equals("")){
-				emailaddy = JOptionPane.showInputDialog (null, "Bitte geben Sie eine g�ltige Email-Adresse ein");
+				emailaddy = JOptionPane.showInputDialog (null, "Bitte geben Sie eine gültige Email-Adresse ein");
 				try{
 					if(emailaddy.equals("")){
 						DruckFenster.buttonsEinschalten();
+						JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 3");
 						return;
 					}
 				}catch(java.lang.NullPointerException ex){
 					DruckFenster.buttonsEinschalten();
+					JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 4");
 					return;
 				}
 			}else{
@@ -883,10 +902,12 @@ final class sendeTermine extends Thread implements Runnable{
 					try{
 						if(emailaddy.equals("")){
 						DruckFenster.buttonsEinschalten();
+						JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 5");
 						return;
 						}
 					}catch(java.lang.NullPointerException ex){
 						DruckFenster.buttonsEinschalten();
+						JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 6");
 						return;
 					}
 				}
@@ -912,11 +933,18 @@ final class sendeTermine extends Thread implements Runnable{
 		anhang[0] = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
 		attachments.add(anhang.clone());
+		File f = new File(anhang[0]);
+		if(!f.exists()){
+			JOptionPane.showMessageDialog (null, "PDF-Emailanhang konnte nicht erzeugt werden, Aktion wird abgebrochen");
+			DruckFenster.buttonsEinschalten();
+			return;
+		}
 
 		String username = SystemConfig.hmEmailExtern.get("Username");
 		String password = SystemConfig.hmEmailExtern.get("Password");
 		String senderAddress =SystemConfig.hmEmailExtern.get("SenderAdresse");
 		String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
+		String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
 		////System.out.println("Empf�ngeradresse = "+emailaddy);
 		String recipientsAddress = emailaddy;
 		String subject = "Ihre Behandlungstermine";
@@ -961,7 +989,7 @@ final class sendeTermine extends Thread implements Runnable{
 		
 		EmailSendenExtern oMail = new EmailSendenExtern();
 		try{
-		oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure);
+		oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure,useport);
 		DruckFenster.thisClass.cursorWait(false);
 		JOptionPane.showMessageDialog (null, "Die Terminliste wurde aufbereitet und per Email versandt\n");
 		}catch(Exception e){

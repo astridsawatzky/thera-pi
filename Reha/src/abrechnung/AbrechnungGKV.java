@@ -1109,6 +1109,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			String pass1 = SystemConfig.hmEmailExtern.get("Password");
 			String sender = SystemConfig.hmEmailExtern.get("SenderAdresse"); 
 			String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
+			String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
 			//String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
 			String recipient = ik_email+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
 			String text = "";
@@ -1123,7 +1124,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			EmailSendenExtern oMail = new EmailSendenExtern();
 			try{
 				////System.out.println("Starte Emailversand.....");
-				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, Reha.aktIK, text,attachments,authx,bestaetigen,secure);
+				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, Reha.aktIK, text,attachments,authx,bestaetigen,secure,useport);
 				oMail = null;
 				////System.out.println("Emailversand beendet.....");
 				

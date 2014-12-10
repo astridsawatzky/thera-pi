@@ -118,6 +118,472 @@ public class RVMeldung301 {
 	}
 	/************************************************************/
 	public boolean doEbericht(EBerichtPanel epanel){
+		boolean is2015 = EBerichtPanel.UseNeueRvVariante;
+		epanel.abrDlg.setzeLabel("erzeuge Blatt 1");
+		holeVector();
+		int zeilen = 1;
+		shouldBreak = false;
+		String test = "";
+		String seite = "";
+		String diagtext = "";
+		Vector<String> flvec = new Vector<String>();
+		String aktunh = StringTools.fuelleMitZeichen(Integer.toString(aktUnh), "0", true, 5);
+		if(is2015){
+			buf301Body.append("UNH+"+aktunh+"+MEDR03:D:15A:KR:97B'"+NEWLINE);zeilen++;
+		}else{
+			buf301Body.append("UNH+"+aktunh+"+MEDR03:D:08A:KR:97B'"+NEWLINE);zeilen++;	
+		}
+		buf301Body.append("BGM+21++10'"+NEWLINE);zeilen++; 
+		buf301Body.append("DTM+137:"+DATUM10+":102'"+NEWLINE);zeilen++;
+		buf301Body.append("RFF+ACD:01'"+NEWLINE);zeilen++; //Hier die Datenbank untersuchen
+		//buf301Body.append("PNA+MS++"+Reha.aktIK+EOL+NEWLINE);zeilen++;
+		buf301Body.append("PNA+MS++"+vecdta.get(0).get(4).toString()+EOL+NEWLINE);zeilen++;
+		buf301Body.append("PNA+MR++"+(EMPFAENGERIK = vecdta.get(0).get(3).toString())+EOL+NEWLINE);zeilen++;
+		buf301Body.append("PNA+BY++"+(KOSTENTRAEGER = vecdta.get(0).get(6).toString())+EOL+NEWLINE);zeilen++;
+		buf301Body.append(springeAufUndHole("CTA+BEA+","CTA+BEA+")+EOL+NEWLINE);zeilen++;
+		buf301Body.append(springeAufUndHole("RFF+FI:","RFF+FI:")+EOL+NEWLINE);zeilen++;
+		buf301Body.append("PNA+MT++"+vecdta.get(0).get(4).toString()+EOL+NEWLINE);zeilen++; //Hier die div. IK's einbauen
+		buf301Body.append("ADR+2++"+SystemConfig.hmFirmenDaten.get("Ort")+EOL+NEWLINE);zeilen++; //Ort der Unterschriften
+		buf301Body.append("CTA+ABT+2300"+EOL+NEWLINE);zeilen++; //hier nach Inikationsgruppen untersuchen
+		//Arzt 1
+		buf301Body.append("CTA+DRL"+(epanel.barzttf[0].getText().trim().equals("")?"":"+:"+epanel.barzttf[0].getText().trim())+EOL+NEWLINE);zeilen++;
+		buf301Body.append("CTA+DRS"+(epanel.barzttf[2].getText().trim().equals("")?"":"+:"+epanel.barzttf[2].getText().trim())+EOL+NEWLINE);zeilen++;
+		buf301Body.append("CTA+DRO"+(epanel.barzttf[1].getText().trim().equals("")?"":"+:"+epanel.barzttf[1].getText().trim())+EOL+NEWLINE);zeilen++;
+		buf301Body.append("RFF+AES:"+(REHANUMMER =vecdta.get(0).get(2).toString()) +EOL+NEWLINE);zeilen++;
+		buf301Body.append("DTM+242:"+(epanel.btf[27].getText().trim().length() < 10
+				? this.mache10erDatum(DatFunk.sHeute())+":102" :
+				mache10erDatum(epanel.btf[27].getText().trim())+":102")+EOL+NEWLINE);zeilen++;
+		if( ! (test =  springeAufUndHole("PNA+AB+","PNA+AB+")).equals("")){
+			buf301Body.append(test+EOL+NEWLINE);zeilen++;
+			if( ! (test =  springeAufUndHole("PNA+AB+","CTA+BEA+")).equals("")){
+				buf301Body.append(test+EOL+NEWLINE);zeilen++;
+			}
+			if( ! (test =  springeAufUndHole("PNA+AB+","RFF+AHN:")).equals("")){
+				buf301Body.append(test+EOL+NEWLINE);zeilen++;
+			}
+		}
+		buf301Body.append(springeAufUndHole("AGR+BY:","AGR+BY:")+EOL+NEWLINE);zeilen++;
+		buf301Body.append("FCA+MD'"+NEWLINE);zeilen++;
+		buf301Body.append(springeAufUndHole("PNA+BM+","PNA+BM+")+EOL+NEWLINE);zeilen++;
+		buf301Body.append(springeAufUndHole("PNA+BM+","RFF+AGU:")+EOL+NEWLINE);zeilen++;
+		buf301Body.append(springeAufUndHole("PNA+BM+","RFF+AGF:")+EOL+NEWLINE);zeilen++;
+		buf301Body.append(springeAufUndHole("PNA+BM+","RFF+ADE:")+EOL+NEWLINE);zeilen++;
+		buf301Body.append(springeAufUndHole("PNA+BM+","RFF+AEN:")+EOL+NEWLINE);zeilen++;
+		if( ! (test =  springeAufUndHole("PNA+BM+","RFF+ALX:")).equals("")){
+			buf301Body.append(test+EOL+NEWLINE);zeilen++;
+		}
+		buf301Body.append(springeAufUndHole("PNA+BM+","DTM+329:")+EOL+NEWLINE);zeilen++;
+		/*******
+		 * ab hier die eigentlichen Berichtsdatn
+		 * 
+		 */
+		//Version
+		if(is2015){
+			buf301Body.append("PRC+BL1:::04"+EOL+NEWLINE);zeilen++;				
+		}else{
+			buf301Body.append("PRC+BL1:::03"+EOL+NEWLINE);zeilen++;
+		}
+		//Entlassform, regulär etc.
+		test = epanel.bcmb[0].getSelectedItem().toString();
+		if(test.trim().equals("")){shouldBreak=true;}
+		buf301Body.append("IMD+++"+test+":B06"+EOL+NEWLINE);zeilen++;
+
+		//Arbeitsfähigkeit bei Entlassung
+		test = epanel.bcmb[1].getSelectedItem().toString();
+		if(test.trim().equals("")){shouldBreak=true;}
+		buf301Body.append("IMD+++"+test+":B01"+EOL+NEWLINE);zeilen++;
+		
+		//Ursache der Erkrankung
+		test = epanel.bcmb[17].getSelectedItem().toString();
+		if(test.trim().equals("")){shouldBreak=true;}
+		buf301Body.append("IMD+++"+test+":B10"+EOL+NEWLINE);zeilen++;
+		
+		//AU-Zeiten der letzten 12 Monate
+		test = epanel.bcmb[18].getSelectedItem().toString();
+		if(test.trim().equals("")){shouldBreak=true;}
+		buf301Body.append("IMD+++"+test+":B03"+EOL+NEWLINE);zeilen++;
+		
+		if(is2015){
+			//Besondere Behandlungsform
+			test = epanel.bcmb[21].getSelectedItem().toString();
+			if(test.trim().equals("")){shouldBreak=true;}
+			buf301Body.append("IMD+++"+test+":B14"+EOL+NEWLINE);zeilen++;
+			
+			//AU bei Aufnahme
+			test = epanel.bcmb[19].getSelectedItem().toString();
+			if(test.trim().equals("")){shouldBreak=true;}
+			buf301Body.append("IMD+++"+test+":B15"+EOL+NEWLINE);zeilen++;
+		}else{
+			//DMP
+			test = epanel.bcmb[19].getSelectedItem().toString();
+			if(test.trim().equals("")){shouldBreak=true;}
+			buf301Body.append("IMD+++"+test+":B13"+EOL+NEWLINE);zeilen++;
+		}
+		
+		int[] iseite = {2,5,8,11,14};
+		int[] isicher = {3,6,9,12,15};
+		int[] ierfolg = {4,7,10,13,16};
+		for(int i = 0;i < 5;i++){
+			test = epanel.btf[17+i].getText().trim();
+			if(!test.equals("")){
+				seite = ( ! epanel.bcmb[iseite[i]].getSelectedItem().toString().trim().equals("")
+						? epanel.bcmb[iseite[i]].getSelectedItem().toString()
+						: "");
+				seite = seite+"+";
+				seite = seite+ ( ! epanel.bcmb[isicher[i]].getSelectedItem().toString().trim().equals("")
+						? epanel.bcmb[isicher[i]].getSelectedItem().toString()
+						: "");
+				seite = seite+":::";
+				seite = seite+( ! epanel.bcmb[ierfolg[i]].getSelectedItem().toString().trim().equals("")
+						? epanel.bcmb[ierfolg[i]].getSelectedItem().toString()
+								: "");
+				//Hier evtl für BfA anstall 10R I10 einfügen
+				buf301Body.append("CIN+DIA+"+test+":10R::"+seite+EOL+NEWLINE);zeilen++;	
+			}
+		}
+		if(!is2015){
+			buf301Body.append("RFF+AEA:99999"+EOL+NEWLINE);zeilen++;	
+		}
+		
+		//Bezeichnung der Tätigkeit
+		flvec = StringTools.fliessTextZerhacken(StringTools.do301String(epanel.btf[25].getText().trim()), 55, "\n");
+		if(flvec.size() > 1 ){
+			buf301Body.append("FTX+BRF+++B:"+flvec.get(0)+EOL+NEWLINE);zeilen++;
+			buf301Body.append("FTX+BRF+++B:"+flvec.get(1)+EOL+NEWLINE);zeilen++;
+		}else{
+			buf301Body.append("FTX+BRF+++B:"+flvec.get(0)+EOL+NEWLINE);zeilen++;
+		}
+		
+		if(!is2015){
+			//Aufnahme- Abschlußgewicht und Größe
+			test = Integer.toString(IntegerTools.trailNullAndRetInt(epanel.btf[22].getText()));
+			buf301Body.append("QTY+AGW:"+test+":KG"+EOL+NEWLINE);zeilen++;
+			test = Integer.toString(IntegerTools.trailNullAndRetInt(epanel.btf[23].getText()));
+			buf301Body.append("QTY+EGW:"+test+":KG"+EOL+NEWLINE);zeilen++;
+			test = Integer.toString(IntegerTools.trailNullAndRetInt(epanel.btf[24].getText()));
+			buf301Body.append("QTY+GRO:"+test+":CM"+EOL+NEWLINE);zeilen++;
+		}
+		
+		//Art der Durchführung stationär, ambulant
+		buf301Body.append("PAS+2"+EOL+NEWLINE);zeilen++;
+		
+		//Aufnahme- und Entlassdatum zusammengesetzt
+		test = mache10erDatum(epanel.btf[15].getText())+mache10erDatum(epanel.btf[16].getText());
+		buf301Body.append("DTM+322:"+test+":711"+EOL+NEWLINE);zeilen++;
+
+		if(is2015){
+			//Vorschläge für nachfolgende Maßnahmen
+			int[] cmbs = {0,1,2,3,4,5,14,15,12,13,16,6,7};
+			for(int i = 0; i < 13; i++){
+				if(epanel.bchb[cmbs[i]].isSelected()){
+					test = StringTools.fuelleMitZeichen(Integer.toString(i+1), "0", true, 2);
+					buf301Body.append("CLI+VMS+"+test+":MSN"+EOL+NEWLINE);zeilen++;
+				}
+			}
+		}else{
+			//Vorschläge für nachfolgende Maßnahmen
+			for(int i = 0; i < 17; i++){
+				if(epanel.bchb[i].isSelected()){
+					test = StringTools.fuelleMitZeichen(Integer.toString(i+1), "0", true, 2);
+					buf301Body.append("CLI+VMS+"+test+":MSN"+EOL+NEWLINE);zeilen++;
+				}
+			}
+		}
+		
+		epanel.abrDlg.setzeLabel("erzeuge Blatt 1b Sozialmedizin");
+
+		//Version des E-Berichtes Blatt 1 
+		if(is2015){
+			buf301Body.append("PRC+B1X:::04"+EOL+NEWLINE);zeilen++;
+		}else{
+			buf301Body.append("PRC+B1X:::03"+EOL+NEWLINE);zeilen++;	
+		}
+		
+		//Klinischer Eingriff nachfolgend Diagnosetexte
+		buf301Body.append("CLI+DTX"+EOL+NEWLINE);zeilen++;
+		/************Diagnosetexte******/
+		for(int i = 0;i < 5;i++){
+			test = epanel.btf[17+i].getText();
+			if(!test.equals("")){
+				if(test.trim().length() > 120){
+					JOptionPane.showMessageDialog(null,"Achtung: Diagnosetext:"+Integer.toString(i+1)+" ist größer als 120 Zeichen");
+				}
+				diagtext = StringTools.do301String(epanel.bta[i].getText()).trim().replace("\n"," ").replace("\r", " ").replace("\t", " ");
+				flvec = StringTools.fliessTextZerhacken(diagtext, 41, "\n");
+				test = "FTX+TXT+++B:";
+				for(int i2 = 0;i2 < flvec.size();i2++){
+					test = test+flvec.get(i2);
+					if(i2 >= 3){
+						JOptionPane.showMessageDialog(null,"Achtung mehr als 3 Zeilen Diagnosetext bei Diagnose "+Integer.toString(i+1)+"\n\n"+
+								"Manueller Eingriff in die Edifakt-Nachricht notwendig");
+					}
+					if(i2 == (flvec.size()-1) ){
+						break;
+					}
+					test=test+":"+NEWLINE;
+				}
+				buf301Body.append(test+EOL+NEWLINE);zeilen++;
+			}
+		}
+		
+		
+		if(is2015){
+			//Weitere Diagnosen
+			test = epanel.bta[10].getText().trim();
+			if(!test.equals("")){
+				
+				//Klinischer Eingriff, Kennzeichner weitere Diagnosen
+				buf301Body.append("CLI+WTX"+EOL+NEWLINE);zeilen++;
+				if(test.trim().length() > 210){
+					JOptionPane.showMessageDialog(null,"Achtung: Diagnosetext 6: ist größer als 210 Zeichen");
+				}
+				flvec = StringTools.fliessTextZerhacken(StringTools.do301String(epanel.bta[10].getText().trim()), 70, "\n");
+				if(flvec.size()<=0){
+					buf301Body.append("FTX+TXT+++B"+EOL+NEWLINE);zeilen++;
+				}else{
+					for(int i = 0; i < flvec.size();i++){
+						buf301Body.append("FTX+TXT+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;
+					}
+				}
+			}			
+		}
+		
+		//Erläuterung der Vorschläße
+		buf301Body.append("CLI+MAS"+EOL+NEWLINE);zeilen++;
+		flvec = StringTools.fliessTextZerhacken(StringTools.do301String(epanel.bta[5].getText().trim()), 70, "\n");
+		if(flvec.size()<=0){
+			buf301Body.append("FTX+TXT+++B"+EOL+NEWLINE);zeilen++;
+		}else{
+			for(int i = 0; i < flvec.size();i++){
+				buf301Body.append("FTX+TXT+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;
+			}
+		}
+		
+		//Version Blatt 1a Sozialmedizin 
+		if(is2015){
+			buf301Body.append("PRC+B1a:::03"+EOL+NEWLINE);zeilen++;
+		}else{
+			buf301Body.append("PRC+B1a:::02"+EOL+NEWLINE);zeilen++;			
+		}
+
+		if(is2015){
+			//alle Checkboxen Seite Bl1a in 2015 mit anderer Sortierung
+			int[] checks = {5,6,4,1,3,2,7,8,9,11,12,13,14,15,16,17};
+			for(int i = 0;i < checks.length;i++){
+				buf301Body.append("CIN+SML+"+getSMLResult(epanel,checks[i])+":C"+StringTools.fuelleMitZeichen(Integer.toString(checks[i]), "0", true, 2)+EOL+NEWLINE);zeilen++;
+			}
+			
+			//2015 = Bescheibung der Einschränkung und sozialmedizinische Epikrise
+			test = StringTools.do301String(epanel.bta[7].getText().trim());
+			flvec = StringTools.fliessTextZerhacken(test,70,"\n");
+			if(flvec.size() > 68){
+				JOptionPane.showMessageDialog(null,"Achtung: mehr 68 Zeilen sind in der Epikrise nicht erlaubt");
+				shouldBreak=true;
+			}
+			if(flvec.size() <= 15){
+				for(int i = 0; i < flvec.size();i++){
+					buf301Body.append("FTX+SMX+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;				
+				}
+			}else{
+				for(int i = 0; i < 15;i++){
+					buf301Body.append("FTX+SMX+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;				
+				}
+				buf301Body.append("PRC+Ba2:::01"+EOL+NEWLINE);zeilen++;
+				for(int i = 15; i < flvec.size();i++){
+					buf301Body.append("FTX+TXT+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;				
+				}
+			}
+
+		}else{
+			//alle Checkboxen Seite Bl1a
+			for(int i = 1;i < 15;i++){
+				buf301Body.append("CIN+SML+"+getSMLResult(epanel,i)+":C"+StringTools.fuelleMitZeichen(Integer.toString(i), "0", true, 2)+EOL+NEWLINE);zeilen++;	
+			}
+			
+			//Beschreibung der Einschränkungen gemäß postivem / negativem Leistungsbild
+			test = StringTools.do301String(epanel.bta[7].getText().trim());
+			if(!test.equals("")){
+				flvec = StringTools.fliessTextZerhacken(test,70,"\n");
+				for(int i = 0; i < flvec.size();i++){
+					buf301Body.append("FTX+SMX+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;				
+				}
+			}else{
+				buf301Body.append("FTX+SMX+++B"+EOL+NEWLINE);zeilen++;
+			}
+			
+		}
+
+		
+		//KTL
+		epanel.abrDlg.setzeLabel("untersuche KTL-Codes");
+		buf301Body.append("PRC+Bb1:::02"+EOL+NEWLINE);zeilen++;
+		//
+		test = StringTools.do301String(epanel.bta[8].getText().trim()); 
+		if(!test.equals("")){
+			flvec = StringTools.fliessTextZerhacken(test,70,"\n");
+			for(int i = 0; i < flvec.size();i++){
+				buf301Body.append("FTX+FTX+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;				
+			}
+		}else{
+			buf301Body.append("FTX+TXT+++B"+EOL+NEWLINE);zeilen++;
+		}
+		//KTL-Seite1 (1-25)
+		boolean wenigerAls25 = false;
+		String ktlcode="",ktldauer="",ktlanzahl="",ktlfehler="",ktltext="";
+		for(int i = 0; i < 25;i++){
+			if(epanel.ktlcmb[i].getSelectedIndex()>0){
+				ktlcode = epanel.ktltfc[i].getText().trim();
+				ktldauer = epanel.ktltfd[i].getText().trim();
+				ktlanzahl = epanel.ktltfa[i].getText().trim();
+				ktltext = StringTools.do301String(epanel.ktlcmb[i].getSelectedItem().toString().trim());
+				if(ktlcode.equals("") || ktldauer.equals("") || ktlanzahl.equals("") || ktltext.equals("") ){
+					ktlfehler = "Fehlerhafter KTL auf KTL-Blatt 1, Maßnahmenummer "+Integer.toString(i+1);
+					JOptionPane.showMessageDialog(null,ktlfehler);
+					shouldBreak = true;
+				}
+				buf301Body.append("CLI+KTL+"+ktlcode+ktldauer+":KTL"+EOL+NEWLINE);zeilen++;
+				buf301Body.append("IMD+++"+Integer.toString(i+1)+EOL+NEWLINE);zeilen++;
+				flvec = StringTools.fliessTextZerhacken(ktltext,54,"\n");
+				for(int i2 = 0; i2 < flvec.size();i2++){
+					buf301Body.append("FTX+TXT+++B:"+flvec.get(i2)+EOL+NEWLINE);zeilen++;
+					if(i2 == 1){break;} // mehr als 2 Zeilen sind nicht erlaubt
+				}
+				buf301Body.append("QTY+3:"+ktlanzahl+EOL+NEWLINE);zeilen++;
+			}else{
+				wenigerAls25 = true;
+				break;
+			}
+		}
+		//KTL-Seite 2 (1-25) wird erforderlich
+		if(!wenigerAls25 && epanel.ktlcmb[25].getSelectedIndex()>0){
+			buf301Body.append("PRC+Bb2:::02"+EOL+NEWLINE);zeilen++;
+			test = StringTools.do301String(epanel.bta[9].getText().trim()); 
+			if(!test.equals("")){
+				flvec = StringTools.fliessTextZerhacken(test,70,"\n");
+				for(int i = 0; i < flvec.size();i++){
+					buf301Body.append("FTX+TXT+++B:"+flvec.get(i)+EOL+NEWLINE);zeilen++;				
+				}
+			}else{
+				buf301Body.append("FTX+TXT+++B"+EOL+NEWLINE);zeilen++;
+			}
+			for(int i = 0; i < 25;i++){
+				if(epanel.ktlcmb[i+25].getSelectedIndex()>0){
+					ktlcode = epanel.ktltfc[i+25].getText().trim();
+					ktldauer = epanel.ktltfd[i+25].getText().trim();
+					ktlanzahl = epanel.ktltfa[i+25].getText().trim();
+					ktltext = StringTools.do301String(epanel.ktlcmb[i+25].getSelectedItem().toString().trim());
+					if(ktlcode.equals("") || ktldauer.equals("") || ktlanzahl.equals("") || ktltext.equals("") ){
+						ktlfehler = "Fehlerhafter KTL auf KTL-Blatt 2, Maßnahmenummer "+Integer.toString(i+1);
+						JOptionPane.showMessageDialog(null,ktlfehler);
+						shouldBreak = true;
+					}
+					buf301Body.append("CLI+KTL+"+ktlcode+ktldauer+":KTL"+EOL+NEWLINE);zeilen++;
+					buf301Body.append("IMD+++"+Integer.toString(i+1)+EOL+NEWLINE);zeilen++;
+					flvec = StringTools.fliessTextZerhacken(ktltext,54,"\n");
+					for(int i2 = 0; i2 < flvec.size();i2++){
+						buf301Body.append("FTX+TXT+++B:"+flvec.get(i2)+EOL+NEWLINE);zeilen++;
+						if(i2 == 1){break;} // mehr als 2 Zeilen sind nicht erlaubt
+					}
+					buf301Body.append("QTY+3:"+ktlanzahl+EOL+NEWLINE);zeilen++;
+				}else{
+					break;
+				}
+			}
+			
+		}
+		epanel.abrDlg.setzeLabel("erzeuge Freitext");
+		
+		buf301Body.append("PRC+BER:::01"+EOL+NEWLINE);zeilen++;
+		//Jetzt den Freitext holen und aufbereiten - der größte Scheiß aller Zeiten!!!
+		test = StringTools.do301String(epanel.document.getTextService().getText().getText());
+		flvec = StringTools.fliessTextZerhacken(test, 70, "\n");
+		int seiten = flvec.size()/53;
+		if( (flvec.size() % 53) > 0){seiten++;}
+		buf301Body.append("QTY+3:"+Integer.toString(seiten)+EOL+NEWLINE);zeilen++;
+		int aktuellezeile = -1;
+		//System.out.println("Seitenanzahl = "+seiten);
+		for(int i = 0; i < seiten;i++){
+			buf301Body.append("CLI+LDT"+EOL+NEWLINE);zeilen++;
+			buf301Body.append("IMD+++5:B05"+EOL+NEWLINE);zeilen++;
+			for(int i2=0; i2 < 53; i2++){
+				aktuellezeile = (i*53 )+i2;
+				test = flvec.get(aktuellezeile);
+				if(test.trim().equals("")){
+					buf301Body.append("FTX+LTX+++B"+EOL+NEWLINE);zeilen++;
+				}else{
+					buf301Body.append("FTX+LTX+++"+(Dta301CodeListen.mussFettDruck(test) ? "F:" : "B:")
+							+test+EOL+NEWLINE);zeilen++;
+				}
+				if(aktuellezeile==(flvec.size()-1)){
+					break;
+				}
+			}
+		}
+		//String aktunh = StringTools.fuelleMitZeichen(Integer.toString(aktUnh), "0", true, 5);
+		buf301Body.append("UNT+"+
+				StringTools.fuelleMitZeichen(Integer.toString(zeilen),"0",true,5)+"+"+aktunh+
+				EOL+NEWLINE);zeilen++;
+		if(this.shouldBreak){
+			JOptionPane.showMessageDialog(null, "In der Erstellung des E-Berichtes nach §301 ist ein Fehler aufgetreten.\nVersand findet nicht statt!!!");
+			return false;
+		}
+		doKopfDaten();
+		doFussDaten();
+		anzahlUnhs++;
+		gesamtbuf.append(buf301Header.toString());
+		gesamtbuf.append(buf301Body.toString());
+		gesamtbuf.append(buf301Footer.toString());
+		intAktEREH = SqlInfo.erzeugeNummerMitMax("esol", 999);
+		strAktEREH = "0"+StringTools.fuelleMitZeichen(Integer.toString(intAktEREH), "0", true, 3);
+
+		/*
+		 * Nur währen der Testphase
+		 * 
+		 */
+		/*
+		if(EBerichtPanel.UseNeueRvVariante){
+			String cmd = "insert into dtafall set nachrichttyp='7', nachrichtart='7', pat_intern='"+
+			vecdta.get(0).get(1).toString()+"', rez_nr='"+vecdta.get(0).get(2).toString()+"', "+
+			"nachrichtdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"', nachrichtorg='"+
+			StringTools.EscapedDouble(gesamtbuf.toString())+"',"+
+			"nachrichtauf='"+
+			StringTools.Escaped(auftragsBuf.toString())+"', bearbeiter='"+Reha.aktUser+"', "+
+			"esolname='"+(imtest ? "T" : "E")+"REH"+strAktEREH+"', "+
+			"icr='"+LFDNUMMER+"'";
+			SqlInfo.sqlAusfuehren(cmd);
+			return true;
+		}
+		*/
+		/*
+		 * 
+		 * nur während der Testphase
+		 * 
+		 */
+		
+		
+		epanel.abrDlg.setzeLabel("E-Bericht verschlüsseln");
+		if(doKeyStoreAktion(true)){
+			//Mail Versenden
+			epanel.abrDlg.setzeLabel("E-Bericht versenden");
+			//In neue Tabelle schreiben
+			String cmd = "insert into dtafall set nachrichttyp='7', nachrichtart='7', pat_intern='"+
+			vecdta.get(0).get(1).toString()+"', rez_nr='"+vecdta.get(0).get(2).toString()+"', "+
+			"nachrichtdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"', nachrichtorg='"+
+			StringTools.EscapedDouble(gesamtbuf.toString())+"',"+
+			"nachrichtauf='"+
+			StringTools.Escaped(auftragsBuf.toString())+"', bearbeiter='"+Reha.aktUser+"', "+
+			"esolname='"+(imtest ? "T" : "E")+"REH"+strAktEREH+"', "+
+			"icr='"+LFDNUMMER+"'";
+			SqlInfo.sqlAusfuehren(cmd);
+			return true;
+		}
+		return false;
+	}
+
+	
+	
+	/************************************************************/
+	public boolean doEbericht_Alt(EBerichtPanel epanel){
 		epanel.abrDlg.setzeLabel("erzeuge Blatt 1");
 		holeVector();
 		int zeilen = 1;
@@ -919,8 +1385,11 @@ public class RVMeldung301 {
 			shouldBreak = false;
 			String test = "";
 			String aktunh = StringTools.fuelleMitZeichen(Integer.toString(aktUnh), "0", true, 5);
-			
-			buf301Body.append("UNH+"+aktunh+"+MEDR03:D:08A:KR:97B'"+NEWLINE);zeilen++;
+			if(DatFunk.TageDifferenz(EBerichtPanel.NeueRvVarianteAb, erstDatum) > 0){
+				buf301Body.append("UNH+"+aktunh+"+MEDR03:D:15A:KR:97B'"+NEWLINE);zeilen++;
+			}else{
+				buf301Body.append("UNH+"+aktunh+"+MEDR03:D:08A:KR:97B'"+NEWLINE);zeilen++;				
+			}
 			buf301Body.append("BGM+04++10'"+NEWLINE);zeilen++; 
 			buf301Body.append("DTM+137:"+DATUM10+":102'"+NEWLINE);zeilen++;
 			buf301Body.append("RFF+ACD:01'"+NEWLINE);zeilen++; //Hier die Datenbank untersuchen
@@ -1474,46 +1943,77 @@ public class RVMeldung301 {
 		case 9: //Nachtschicht
 			if(epanel.bchb[35].isSelected()){return "J";}
 			return "N";
-		case 10: //Keine wesentlichen Einschränkungen
-			if(epanel.bchb[36].isSelected() && (!epanel.bta[7].getText().trim().equals(""))){
-				JOptionPane.showMessageDialog(null,"Keine Einschränkung angekreuzt aber Einschränkungen im Text benannt -> nicht möglch");
-				shouldBreak = true;
-				return "J";
+		case 10: //Keine wesentlichen Einschränkungen  /Existiert in 2015 nicht mehr!!!
+			if(!EBerichtPanel.UseNeueRvVariante){
+				if(epanel.bchb[36].isSelected() && (!epanel.bta[7].getText().trim().equals(""))){
+					JOptionPane.showMessageDialog(null,"Keine Einschränkung angekreuzt aber Einschränkungen im Text benannt -> nicht möglch");
+					shouldBreak = true;
+					return "J";
+				}
+				if(epanel.bchb[36].isSelected()){return "J";}
+				return "N";
+			}else{
+				return "N";
 			}
-			if(epanel.bchb[36].isSelected()){return "J";}
-			return "N";
-		case 11: //Balastbarkeit (geistig/psychisch)
-			if(epanel.bchb[37].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
-				JOptionPane.showMessageDialog(null,"174 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
-				shouldBreak = true;
-				return "J";
+		case 11: //Balastbarkeit (geistig/psychisch) / 2015=Psychomentale Funktionen
+			if(!EBerichtPanel.UseNeueRvVariante){
+				if(epanel.bchb[37].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
+					JOptionPane.showMessageDialog(null,"174 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
+					shouldBreak = true;
+					return "J";
+				}
 			}
 			if(epanel.bchb[37].isSelected()){return "J";}
 			return "N";
-		case 12: //Sinnesorgane
-			if(epanel.bchb[38].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
-				JOptionPane.showMessageDialog(null,"175 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
-				shouldBreak = true;
-				return "J";
+		case 12: //Sinnesorgane / 2015=Sinnesfunktionen
+			if(!EBerichtPanel.UseNeueRvVariante){
+				if(epanel.bchb[38].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
+					JOptionPane.showMessageDialog(null,"175 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
+					shouldBreak = true;
+					return "J";
+				}
 			}
 			if(epanel.bchb[38].isSelected()){return "J";}
 			return "N";
-		case 13: //Bewegungs-/Haltungsapparat
-			if(epanel.bchb[39].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
-				JOptionPane.showMessageDialog(null,"176 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
-				shouldBreak = true;
-				return "J";
+		case 13: //Bewegungs-/Haltungsapparat / 2015 = Bewegunsbezogene Funktionen
+			if(!EBerichtPanel.UseNeueRvVariante){
+				if(epanel.bchb[39].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
+					JOptionPane.showMessageDialog(null,"176 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
+					shouldBreak = true;
+					return "J";
+				}
 			}
 			if(epanel.bchb[39].isSelected()){return "J";}
 			return "N";
-		case 14: //Gefährdungs- und Belastungsfaktoren
-			if(epanel.bchb[40].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
-				JOptionPane.showMessageDialog(null,"177 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
-				shouldBreak = true;
-				return "J";
+		case 14: //Gefährdungs- und Belastungsfaktoren / 2015 = relevante Gefährdungs- und Belastungsfaktoren
+			if(!EBerichtPanel.UseNeueRvVariante){
+				if(epanel.bchb[40].isSelected() && (epanel.bta[7].getText().trim().equals(""))){
+					JOptionPane.showMessageDialog(null,"177 angekreuzt aber Einschränkungen im Text nicht benannt -> nicht möglch");
+					shouldBreak = true;
+					return "J";
+				}
+				if(epanel.bchb[40].isSelected()){
+					return "J";
+				}else{
+					return "N";
+				}
+
 			}
-			if(epanel.bchb[40].isSelected()){return "J";}
+			//für 2015 neuer Objektindex bchb / 2015 = relevante Gefährdungs-/Belastungsfaktoren
+			if(epanel.bchb[36].isSelected()){return "J";}
 			return "N";
+
+		case 15: //Beschäftigung besteht nur in 2015-Variante
+			if(epanel.bchb[44].isSelected()){return "J";}
+			return "N";			
+		
+		case 16: //Kardio-pulmonale Funktionen nur in 2015-Variante
+		if(epanel.bchb[40].isSelected()){return "J";}
+		return "N";			
+
+		case 17: //Sonstige Einschränkungen nur in 2015-Variante
+		if(epanel.bchb[45].isSelected()){return "J";}
+		return "N";			
 
 		}
 		

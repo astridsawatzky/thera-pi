@@ -48,6 +48,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+
 public class Eb1 implements ActionListener,ComponentListener {
 	JXPanel pan = null;
 	EBerichtPanel eltern = null;

@@ -7,6 +7,34 @@ import CommonTools.StringTools;
 
 public class Dta301CodeListen {
 	private static List<String> fettListe = Arrays.asList(new String[] {
+			//Gliederung ab 2015-Variante
+			StringTools.do301String("1. Anamnese"),
+			StringTools.do301String("1.1 Jetzige Beschwerden"),
+			StringTools.do301String("1.2 Bisheriger Verlauf der reha-relevanten Beeinträchtigung"),
+			StringTools.do301String("1.3 Weitere reha-relevante Erkrankungen/Operationen/Unfälle"),
+			StringTools.do301String("1.4 Biographische Anamnese"),
+			StringTools.do301String("1.5 Vegetative Anamnese"),
+			StringTools.do301String("2. Sozialmidizinische Anamnese"),
+			StringTools.do301String("2.1 Sozialanamnese mit Kontextfaktoren"),
+			StringTools.do301String("2.2 Arbeitsanamnese mit Kontextfaktoren"),
+			StringTools.do301String("2.3 Subjektive Beeinträchtigungen der Aktivitäten und Teilhabe"),
+			StringTools.do301String("3. Aufnahmebefund, Diagnostik während der Rehabilitation"),
+			StringTools.do301String("3.1 Allgemeiner körperlicher Befund"),
+			StringTools.do301String("3.2 Allgemeiner psychischer Befund"),
+			StringTools.do301String("3.3 Fachspezifischer Befund"),
+			StringTools.do301String("3.4 Diagnostik"),
+			StringTools.do301String("4. Reha-Prozess und - Ergebnis"),
+			StringTools.do301String("4.1 Individuelle Reha-Ziele"),
+			StringTools.do301String("4.2 Besonderheiten des Reha-Verlaufs"),
+			StringTools.do301String("4.3 Abschlussbefundung und Reha-Ergebnis"),
+			StringTools.do301String("5. Empfehlungen für weiterführende Maßnahmen"),
+			StringTools.do301String("Weiterbehandlung"),
+			StringTools.do301String("Reha-Nachsorge"),
+			StringTools.do301String("Stufenweise Wiedereingliederung"),
+			StringTools.do301String("Leistungen zur Teilhabe am Arbeitsleben"),
+			StringTools.do301String("Selbsthilfe(-gruppen)"),
+			StringTools.do301String("Sonstige Empfehlungen"),
+			StringTools.do301String("Letzte Medikation"),
 			/*****1.*******/
 			StringTools.do301String("1. Allgemeine und klinische Anamnese:"),
 			StringTools.do301String("Familienanamnese:"),
@@ -206,7 +234,21 @@ public class Dta301CodeListen {
 		{"5","Asthma bronchiale / COPD"},
 		{"6","mehrere DMP's"},
 		{"7","andere DMP's"},
-	};	
+	};
+	//Besondere Behandlungsformen
+	private static String[][] codeB14 = {
+		{"0","1-4 trifft nicht zu"},
+		{"1","MBOR"},
+		{"2","VMO"},
+		{"3","VOR"},
+		{"9","Sonstige"}
+	};
+	//AU bei Aufnahme
+	private static String[][] codeB15 = {
+		{"1","JA"},
+		{"2","NEIN"}
+	};		
+	
 	/***********
 	 * 
 	 * Es folgen die A-CodeListen
@@ -438,6 +480,21 @@ public class Dta301CodeListen {
 		{"J","JA"},
 		{"N","NEIN"}
 	};
+	//Beschäftigung besteht
+	private static String[][] codeC15 = {
+		{"J","JA"},
+		{"N","NEIN"}
+	};
+	//kardio-pulmonal
+	private static String[][] codeC16 = {
+		{"J","JA"},
+		{"N","NEIN"}
+	};
+	//sonstige Einschränkung
+	private static String[][] codeC17 = {
+		{"J","JA"},
+		{"N","NEIN"}
+	};
 
 
 	public static String[][] getCodeListe(String codeListe){
@@ -455,6 +512,8 @@ public class Dta301CodeListen {
 		if(codeListe.equals("B11")){return codeB11;}
 		if(codeListe.equals("B12")){return codeB12;}
 		if(codeListe.equals("B13")){return codeB13;}
+		if(codeListe.equals("B14")){return codeB14;}
+		if(codeListe.equals("B15")){return codeB15;}
 		/****************/
 		if(codeListe.equals("A01")){return codeA01;}
 		if(codeListe.equals("A02")){return codeA02;}
@@ -485,6 +544,9 @@ public class Dta301CodeListen {
 		if(codeListe.equals("C12")){return codeC12;}
 		if(codeListe.equals("C13")){return codeC13;}
 		if(codeListe.equals("C14")){return codeC14;}
+		if(codeListe.equals("C15")){return codeC15;}
+		if(codeListe.equals("C16")){return codeC16;}
+		if(codeListe.equals("C17")){return codeC17;}
 
 		return ret;
 	}

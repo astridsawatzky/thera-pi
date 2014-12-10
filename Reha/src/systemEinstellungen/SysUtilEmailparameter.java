@@ -60,6 +60,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 	JRtaTextField POPhost = null;
 	JCheckBox Authent = null;
 	JComboBox Secure = null;
+	JRtaTextField UsePort = null;
 	HashMap<String,String> hmEmail = new HashMap<String,String>();
 	public SysUtilEmailparameter(){
 		super(new GridLayout(1,1));
@@ -123,6 +124,8 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 			SystemConfig.hmEmailExtern.put("SmtpSecure","keine");
 		}
 		Secure.setSelectedItem(SystemConfig.hmEmailExtern.get("SmtpSecure"));
+		UsePort = new JRtaTextField("ZAHLEN", true);
+		UsePort.setText(SystemConfig.hmEmailExtern.get("SmtpPort"));
 /*
 			hmEmailExtern = new HashMap<String,String>();
 			hmEmailExtern.put("SmtpHost",String.valueOf(ini.getStringProperty("EmailExtern","SmtpHost")));
@@ -145,7 +148,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 		FormLayout lay = new FormLayout("right:max(60dlu;p), 10dlu, 140dlu, right:p",
 				    //, 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu",
 	   //1.   2.  3.   4.   5.   6.  7.  8.    9.  10.  11.  12.  13. 14.  15. 16.  17. 18. 19. 20.  21.  22.  23.  24.  25   26   27   28   29  30   31   32  33    34  35  36     37
-		"p, 5dlu, p, 10dlu, p, 2dlu, p, 10dlu, p, 10dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 5dlu");
+		"p, 5dlu, p, 10dlu, p, 2dlu, p, 10dlu, p, 10dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu,  p, 2dlu,  p, 5dlu");
 	//	"p, 5dlu, p, 10dlu, p, 2dlu, p, 10dlu, p, 10dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 10dlu, p, 10dlu, p, 10dlu, p, 10dlu, p");
 		
 		
@@ -188,6 +191,9 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 		/*******Hier die Verschlüsselung rein*******/
 		builder.addLabel("Sicherheitsstufe", cc.xy(1,23));
 		builder.add(Secure, cc.xyw(3, 23, 2));
+		
+		builder.addLabel("Verwendeter Port", cc.xy(1,25));
+		builder.add(UsePort, cc.xyw(3, 25, 2));
 		
 		/*******************************************/
 		//builder.addSeparator("", cc.xyw(1, 23, 4));
@@ -289,6 +295,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 			String smtphost = SMTPhost.getText().trim();
 			String pophost = POPhost.getText().trim();
 			String authent = ( Authent.isSelected() ? "1" : "0");
+			String useport = UsePort.getText();
 			mailmap.put("SenderAdresse", sender);
 			mailmap.put("Bestaetigen", bestaetigung); 
 			mailmap.put("Username", benutzer);
@@ -297,6 +304,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 			mailmap.put("Pop3Host", pophost);
 			mailmap.put("SmtpAuth", authent);		
 			mailmap.put("SmtpSecure", Secure.getSelectedItem().toString());
+			mailmap.put("SmtpPort", useport);
 			INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "email.ini");
 			ini.setStringProperty(postfach, "SenderAdresse", sender, null);
 			ini.setStringProperty(postfach, "EmpfangBestaetigen", bestaetigung, null);	
@@ -306,6 +314,8 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 			ini.setStringProperty(postfach, "Pop3Host",pophost , null);		
 			ini.setStringProperty(postfach, "SmtpAuth",authent , null);	
 			ini.setStringProperty(postfach, "SmtpSecure",Secure.getSelectedItem().toString(),null);
+			ini.setStringProperty(postfach, "SmtpPort",authent , null);
+			
 			INITool.saveIni(ini);
 			JOptionPane.showMessageDialog(null, "Emailparameter für --> "+Postfach.getSelectedItem().toString()+" <-- wurden erfolgreich gespeichert");
 		}catch(Exception ex){
@@ -336,6 +346,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 		POPhost.setText(hmEmail.get("Pop3Host"));
 		Authent.setSelected((hmEmail.get("SmtpAuth").equals("0") ? false : true));
 		Secure.setSelectedItem(hmEmail.get("SmtpSecure"));
+		UsePort.setText(hmEmail.get("SmtpPort"));
 	}
 
 	private void testeEmail(){
@@ -349,6 +360,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 			return;
 		}
 		String smtphost = SMTPhost.getText().trim();
+		String useport = UsePort.getText().trim();
 		//String pophost = POPhost.getText().trim();
 		String authent = ( Authent.isSelected() ? "1" : "0");
 		String text = "Herzlichen Glückwunsch Ihr Postfach (Emailausgang) ist perfekt konfiguriert\n\n"+
@@ -357,13 +369,13 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 		boolean bestaetigen = (bestaetigung.equals("0") ? false : true);
 		String smtpport=null,popport=null;
 		if(Secure.getSelectedItem().toString().equals("keine")){
-			smtpport = "25";
+			smtpport = useport;
 			popport = "110";
 		}else if(Secure.getSelectedItem().toString().equals("TLS/STARTTLS")){
-			smtpport = "587";
+			smtpport = useport;
 			popport = "995";
 		}else if(Secure.getSelectedItem().toString().equals("SSL")){
-			smtpport = "465";
+			smtpport = useport;
 			popport = "995";
 		}else{
 			smtpport = "keine oder falsche Werte";
@@ -371,17 +383,18 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 		}
 		ArrayList<String[]> attachments = new ArrayList<String[]>();
 		String meldung = "Hostname (Mailausgang) = "+smtphost+"\n"+
-		"SMTP-Port = "+smtpport+"\n"+
+		"SMTP-Port = "+UsePort.getText()+"\n"+
 		"Hostname (Maileingang) = "+POPhost.getText()+"\n"+
 		"Pop(3)-Port = "+popport+"\n"+
 		"Benutzername = "+benutzer+"\n"+
 		"Emailadresse = "+sender+"\n"+
 		"PasswortAuthent. = "+(authx ? "JA" : "NEIN")+"\n"+
-		"Sicherheitsstufe = "+Secure.getSelectedItem().toString();
+		"Sicherheitsstufe = "+Secure.getSelectedItem().toString()+"\n";
+		
 		JOptionPane.showMessageDialog(null,"Gestestet wird mit folgenden Einstellungen:\n\n"+meldung+"\n");
 		EmailSendenExtern oMail = new EmailSendenExtern();
 		try{
-			boolean success = oMail.sendMail(smtphost, benutzer, pass1, sender, sender, "Test der Emailkonfiguration", text+"\n\n"+meldung,attachments,authx,bestaetigen,Secure.getSelectedItem().toString());
+			boolean success = oMail.sendMail(smtphost, benutzer, pass1, sender, sender, "Test der Emailkonfiguration", text+"\n\n"+meldung,attachments,authx,bestaetigen,Secure.getSelectedItem().toString(),useport);
 			
 	        if(success){
 	        	JOptionPane.showMessageDialog(null,"Der Email-Account wurde korrekt konfiguriert!\n\n"+

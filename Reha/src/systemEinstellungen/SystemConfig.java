@@ -687,6 +687,21 @@ public class SystemConfig {
 		}else{
 			hmEmailExtern.put("SmtpSecure", emailini.getStringProperty("EmailExtern","SmtpSecure"));
 		}
+		if(emailini.getStringProperty("EmailExtern","SmtpPort")==null){
+			if(hmEmailExtern.get("SmtpSecure").equals("keine")){
+				hmEmailExtern.put("SmtpPort", "25");	
+				emailini.setStringProperty("EmailExtern","SmtpPort","25",null);
+			}else if(hmEmailExtern.get("SmtpSecure").equals("TLS/STARTTLS")){
+				hmEmailExtern.put("SmtpPort", "587");	
+				emailini.setStringProperty("EmailExtern","SmtpPort","587",null);
+			}else if(hmEmailExtern.get("SmtpSecure").equals("SSL")){
+				hmEmailExtern.put("SmtpPort", "465");	
+				emailini.setStringProperty("EmailExtern","SmtpPort","465",null);
+			}
+			mustsave = true;			
+		}else{
+			hmEmailExtern.put("SmtpPort", emailini.getStringProperty("EmailExtern","SmtpPort"));
+		}
 		/********************/
 		hmEmailIntern = new HashMap<String,String>();
 		hmEmailIntern.put("SmtpHost",emailini.getStringProperty("EmailIntern","SmtpHost"));
@@ -708,6 +723,22 @@ public class SystemConfig {
 		}else{
 			hmEmailIntern.put("SmtpSecure", emailini.getStringProperty("EmailIntern","SmtpSecure"));
 		}
+		if(emailini.getStringProperty("EmailIntern","SmtpPort")==null){
+			if(hmEmailIntern.get("SmtpSecure").equals("keine")){
+				hmEmailIntern.put("SmtpPort", "25");	
+				emailini.setStringProperty("EmailIntern","SmtpPort","25",null);
+			}else if(hmEmailIntern.get("SmtpSecure").equals("TLS/STARTTLS")){
+				hmEmailIntern.put("SmtpPort", "587");	
+				emailini.setStringProperty("EmailIntern","SmtpPort","587",null);
+			}else if(hmEmailIntern.get("SmtpSecure").equals("SSL")){
+				hmEmailIntern.put("SmtpPort", "465");	
+				emailini.setStringProperty("EmailIntern","SmtpPort","465",null);
+			}
+			mustsave = true;			
+		}else{
+			hmEmailIntern.put("SmtpPort", emailini.getStringProperty("EmailIntern","SmtpPort"));
+		}
+
 
 		if(mustsave){
 			INITool.saveIni(emailini);
