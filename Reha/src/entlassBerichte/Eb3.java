@@ -360,7 +360,12 @@ public class Eb3 implements RehaEventListener  {
         		nativeView.setPreferredSize(new Dimension(parent.getWidth(),parent.getHeight()-5));
         		parent.getLayout().layoutContainer(parent);
         		//parent.repaint();
-        		eltern.ebt.getTab1().refreshSize();
+        		if(EBerichtPanel.UseNeueRvVariante){
+        			eltern.ebt.getTab1_2015().refreshSize();
+        		}else{
+        			eltern.ebt.getTab1().refreshSize();	
+        		}
+        		
 	        }  
 	        public void componentHidden(ComponentEvent e) {
 	            ////System.out.println(e.getComponent().getClass().getName() + " --- Hidden");

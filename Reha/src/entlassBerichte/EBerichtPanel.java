@@ -155,7 +155,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 									null,null,null,null,null,null,null,null,null,null,
 									null,null,null,null,null,null,null,null,null,null
 	};
-	public JTextArea[] 	  bta = {  null,null,null,null,null,null,null,null,null,null};
+	public JTextArea[] 	  bta = {  null,null,null,null,null,null,null,null,null,null,null};
 
 	public JRtaComboBox[] ktlcmb={  null,null,null,null,null,null,null,null,null,null,
 									null,null,null,null,null,null,null,null,null,null,
@@ -222,7 +222,11 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			"^Seine/Ihre^",//27
 			"^seine/ihre^",//28
 			"^Der/Die 99-jährige^",//29
-			"^der/die 99-jährige^"//30
+			"^der/die 99-jährige^",//30
+			"^seiner/ihrer^",//31
+			"^des/der Rehab.^",//32
+			"^zum/zur^",//33,
+			"vom Vers./von der Vers."//34
 
 			};
 	/*
@@ -233,6 +237,9 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	*/
 	public List<String> sysVarList = null;
 	public List<String> sysVarInhalt = null;
+	
+	public static String NeueRvVarianteAb = "01.01.2014";
+	public static boolean UseNeueRvVariante = false;
 	
 
 	public EBerichtPanel(JGutachtenInternal xjry,String xpat_intern,int xberichtid,String xberichttyp,boolean xneu,String xempfaenger,int xuebernahmeid ){
@@ -281,11 +288,37 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 		if(berichttyp.contains("E-Bericht") || berichttyp.contains("LVA-A") || berichttyp.contains("BfA-A") 
 				|| berichttyp.contains("GKV-A")){
+			
+			try{
+				//nur wenn RV
+				if(!berichttyp.contains("GKV-A")){
+					//Testen ob 2015 angewendet werden soll
+					String stmt = "select aufdat3 from bericht2 where berichtid = '"+Integer.toString(berichtid)+"' LIMIT 1" ;
+					//System.out.println(stmt);
+					String aufnahmedat =   SqlInfo.holeEinzelFeld(stmt).trim();
+					if(this.neu && DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()) >= 0){
+						UseNeueRvVariante = true;
+					}else if(!this.neu){
+						if(aufnahmedat.length() == 10){
+							if(DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sDatInDeutsch(aufnahmedat)) >= 0) {
+								UseNeueRvVariante = true;
+							}
+						}else if(DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()) >= 0){
+							UseNeueRvVariante = true;
+						}
+					}
+					//System.out.println("Tage Differenz = "+DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()));
+					
+				}
+			}catch(Exception ex){
+				JOptionPane.showMessageDialog(null,"Fehler im Test: Bericht 2015\nFehlermeldung: "+ex.getMessage());
+			}
+			//System.out.println("Bericht 2015 wird verwendet = "+UseNeueRvVariante);
 			cbktraeger = new JRtaComboBox(SystemConfig.vGutachtenEmpfaenger);
 			
 			UIManager.put("TabbedPane.tabsOpaque", Boolean.FALSE);
 			UIManager.put("TabbedPane.contentOpaque", Boolean.FALSE);
-			
+			//hier der Test auf 2015
 			ebtab = getEBerichtTab();
 			ebtab.setSelectedIndex(0);
 			add(ebtab,BorderLayout.CENTER);
@@ -750,14 +783,20 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		for(int i = 0; i < 3;i++){
 			buf.append(barzttf[i].getName()+"='"+StringTools.Escaped(barzttf[i].getText())+"', ");
 		}
-		for(int i = 0; i < 44;i++){
+		int maxobj = (EBerichtPanel.UseNeueRvVariante ? 46 : 44);
+		for(int i = 0; i < maxobj;i++){
 			buf.append(bchb[i].getName()+"='"+(bchb[i].isSelected() ? "1" : "0")+"', ");
 		}
-		for(int i = 0; i < 8;i++){
+		maxobj = 8;
+		for(int i = 0; i < maxobj ;i++){
 			buf.append(bta[i].getName()+"='"+StringTools.Escaped(bta[i].getText())+"', ");
 		}
-		for(int i = 0; i < 20;i++){
-			if(i < 19){
+		if(EBerichtPanel.UseNeueRvVariante){
+			buf.append(bta[10].getName()+"='"+StringTools.Escaped(bta[10].getText())+"', ");	
+		}
+		maxobj = (EBerichtPanel.UseNeueRvVariante ? 22 : 20);
+		for(int i = 0; i < maxobj;i++){
+			if(i < (maxobj-1)){
 				buf.append(bcmb[i].getName()+"='"+bcmb[i].getSelectedItem()+"', ");				
 			}else{
 				buf.append(bcmb[i].getName()+"='"+bcmb[i].getSelectedItem()+"' ");
@@ -1151,16 +1190,24 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		if(this.berichtart.equals("entlassbericht")){
 			Component com;
 			try{
-			com = ebt.getTab1().getSeite();
-			ListenerTools.removeListeners(com);
-			com = null;
+				if(EBerichtPanel.UseNeueRvVariante){
+					com = ebt.getTab1_2015().getSeite();
+				}else{
+					com = ebt.getTab1().getSeite();		
+				}
+				ListenerTools.removeListeners(com);
+				com = null;
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
 			try{
-			com = ebt.getTab2().getSeite();
-			ListenerTools.removeListeners(com);
-			com = null;
+				if(EBerichtPanel.UseNeueRvVariante){
+					com = ebt.getTab2_2015().getSeite();
+				}else{
+					com = ebt.getTab2().getSeite();
+				}
+				ListenerTools.removeListeners(com);
+				com = null;
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
@@ -1178,11 +1225,17 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
-
-			ebt.seite1.stitelalt = null;
-			ebt.seite1.stitelneu = null;
-			ebt.seite1.eltern = null;
-			ebt.seite2.eltern = null;
+			if(EBerichtPanel.UseNeueRvVariante){
+				ebt.getTab1_2015().stitelalt = null;
+				ebt.getTab1_2015().stitelneu = null;
+				ebt.getTab1_2015().eltern = null;
+				ebt.getTab2_2015().eltern = null;
+			}else{
+				ebt.seite1.stitelalt = null;
+				ebt.seite1.stitelneu = null;
+				ebt.seite1.eltern = null;
+				ebt.seite2.eltern = null;
+			}
 			ebt.seite3.eltern = null;
 			ebt.seite4.eltern = null;
 			ebt.eltern = null;
@@ -1322,7 +1375,10 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 					"^seine/ihre^",//28
 					"^Der/Die 99-jährige^",//29
 					"^der/die 99-jährige^",//30
-					"^seine/ihre^",//31
+					"^seiner/ihrer^",//31
+					"^des/der Rehab.^",//32
+					"^zum/zur^",//33
+					"vom Vers./von der Vers."//34
 					};
 			*/	
 
@@ -1359,7 +1415,10 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 						"Die "+SystemConfig.hmAdrPDaten.get("<Palter>")+"-jährige Patientin"), //29
 					(isherr ? "der "+SystemConfig.hmAdrPDaten.get("<Palter>")+"-jährige Patient" : 
 						"die "+SystemConfig.hmAdrPDaten.get("<Palter>")+"-jährige Patientin"), //30
-
+					(isherr ? "seiner" : "ihrer"), //31
+					(isherr ? "des Rehabilitanden" : "der Rehabilitandin"), //32
+					(isherr ? "zum" : "zur"), //33
+					(isherr ? "vom Versicherten" : "von der Versicherten"), //34					
 			};
 			sysVarInhalt = Arrays.asList(dummy);
 		}catch(Exception ex){
@@ -1462,6 +1521,14 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		}.execute();
 	}
 	
+	/******************************************************************************************************
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	public Object[] ebTest(){
 		Object[] oret = {(Integer)0,(Integer)0,null};
 		int ifehler = 0;
@@ -1513,6 +1580,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Ort</td><td class=\"spalte1\">fehlt</td></tr>");
 		}
 		//Aufnahme-/Enlassdatum
+		//ToDo hier noch testen ob Unterschriftsdatum vor Entlassdatum!!!!!
 		boolean nochaktuell = (SqlInfo.holeEinzelFeld("select id from verordn where pat_intern = '"+this.pat_intern+"' and rez_nr like'RH%' Limit 1").trim().equals("") ? false : true);
 		if(btf[15].getText().trim().length() < 10){
 			ifehler++;
@@ -1547,6 +1615,18 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 					ifehler++;
 				}
 			}
+			if(btf[27].getText().trim().length() == 10){
+				datvergleich = DatFunk.TageDifferenz(btf[16].getText().trim(),btf[27].getText().trim());
+				//System.out.println(datvergleich);
+				if(datvergleich < 0){
+					buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b>Fehler:</b></td><td class=\"spalte3\">Unterschriftsdatum ist vor(!) dem Entlassdatum: </td><td class=\"spalte1\">Unteschr.:"+btf[27].getText().trim()+ " vs. Entl.:"+btf[16].getText().trim()+"</td></tr>");
+					ifehler++;
+				}
+				if(datvergleich > 14){
+					buf.append("<tr><td class=\"spalte4\" valign=\"top\"><b>Prüfen:</b></td><td class=\"spalte3\">Unterschriftsdatum ist "+Long.toString(datvergleich)+" Tage nach Entlassdatum: </td><td class=\"spalte1\">Unterschr.:"+btf[27].getText().trim()+ " vs. Entl.:"+btf[16].getText().trim()+"</td></tr>");
+					iwarnung++;
+				}
+			}
 		}
 		
 		if(btf[15].getText().trim().length() == 10 && btf[16].getText().trim().length() == 10){
@@ -1568,6 +1648,17 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			ifehler++;
 			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Arbeitsfähigkeit</td><td class=\"spalte1\">fehlt</td></tr>");
 		}
+		if(EBerichtPanel.UseNeueRvVariante){
+			if(bcmb[20].getSelectedItem().toString().trim().equals("")){
+				ifehler++;
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Angabe stationär oder ganztägig ambulant</td><td class=\"spalte1\">fehlt</td></tr>");
+			}
+			if(bcmb[21].getSelectedItem().toString().trim().equals("")){
+				ifehler++;
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Angabe besondere Behandlungsformen</td><td class=\"spalte1\">fehlt</td></tr>");
+			}
+		}
+
 		int diagnosen = 0;
 		int zeilen = 0;
 		String icdcode = "";
@@ -1624,19 +1715,21 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				ifehler++;
 			}
 		}
-		
-		//Gewicht, Größe etc.
-		if(btf[22].getText().trim().equals("")){
-			ifehler++;
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Aufnahmegewicht</td><td class=\"spalte1\">fehlt</td></tr>");
-		}
-		if(btf[23].getText().trim().equals("")){
-			ifehler++;
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Entlassgewicht</td><td class=\"spalte1\">fehlt</td></tr>");
-		}
-		if(btf[24].getText().trim().equals("")){
-			ifehler++;
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Körpergröße</td><td class=\"spalte1\">fehlt</td></tr>");
+
+		if(!EBerichtPanel.UseNeueRvVariante){
+			//Gewicht, Größe etc.
+			if(btf[22].getText().trim().equals("")){
+				ifehler++;
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Aufnahmegewicht</td><td class=\"spalte1\">fehlt</td></tr>");
+			}
+			if(btf[23].getText().trim().equals("")){
+				ifehler++;
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Entlassgewicht</td><td class=\"spalte1\">fehlt</td></tr>");
+			}
+			if(btf[24].getText().trim().equals("")){
+				ifehler++;
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Körpergröße</td><td class=\"spalte1\">fehlt</td></tr>");
+			}
 		}
 		//ursache der AU-Zeiten, DMP
 		if(bcmb[17].getSelectedItem().toString().trim().equals("")){
@@ -1649,7 +1742,11 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		}
 		if(bcmb[19].getSelectedItem().toString().trim().equals("")){
 			ifehler++;
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Angabe zu DMP</td><td class=\"spalte1\">fehlt</td></tr>");
+			if(EBerichtPanel.UseNeueRvVariante){
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">AU bei Aufnahme</td><td class=\"spalte1\">fehlt</td></tr>");
+			}else{
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Angabe zu DMP</td><td class=\"spalte1\">fehlt</td></tr>");				
+			}
 		}
 		//Jetzt Empfehlungen
 		int tips = 0;
@@ -1705,7 +1802,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		}
 		//Beruf
 		if(btf[25].getText().trim().equals("")){
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Bezeicnung der Tätigkeit</td><td class=\"spalte1\">fehlt</td></tr>");
+			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Bezeichnung der Tätigkeit</td><td class=\"spalte1\">fehlt</td></tr>");
 			ifehler++;
 		}
 		int hittest = 0;
@@ -1775,21 +1872,23 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				hittest++;
 			}
 		}
-		if(nolimits && hittest> 0){
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Keine Einschränkung angekreuzt und<br>negatives Leistungsbild angekreuzt (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
-			ifehler++;
-		}
-		if(!nolimits && hittest <= 0){
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Keine Einschränkung nicht(!!) angekreuzt und kein<br>negatives Leistungsbild spezifiziert (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
-			ifehler++;
-		}
-		if(nolimits && bta[7].getText().trim().length() > 0){
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Keine Einschränkung angekreuzt aber negatives<br>Leistungsbeschreibung spezifieziert (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
-			ifehler++;
-		}
-		if(hittest > 0 && bta[7].getText().trim().length() <= 0){
-			buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Einschränkungen angekreuzt aber keine Beschreibung des<br>negativen Leistungsbildes spezifieziert (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
-			ifehler++;
+		if(!EBerichtPanel.UseNeueRvVariante){
+			if(nolimits && hittest> 0){
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Keine Einschränkung angekreuzt und<br>negatives Leistungsbild angekreuzt (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
+				ifehler++;
+			}
+			if(!nolimits && hittest <= 0){
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Keine Einschränkung nicht(!!) angekreuzt und kein<br>negatives Leistungsbild spezifiziert (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
+				ifehler++;
+			}
+			if(nolimits && bta[7].getText().trim().length() > 0){
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Keine Einschränkung angekreuzt aber negatives<br>Leistungsbeschreibung spezifieziert (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
+				ifehler++;
+			}
+			if(hittest > 0 && bta[7].getText().trim().length() <= 0){
+				buf.append("<tr><td class=\"spalte2\" valign=\"top\"><b><u>Fehler:</u></b></td><td class=\"spalte3\">Einschränkungen angekreuzt aber keine Beschreibung des<br>negativen Leistungsbildes spezifieziert (geht gar nicht!!)</td><td class=\"spalte1\">fehlt</td></tr>");
+				ifehler++;
+			}
 		}
 		hittest = 0;
 		for(int i = 41 ; i < 44 ;i++){
@@ -1802,6 +1901,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			ifehler++;
 		}
 		hittest = 0;
+		//hier noch die Sozialmedizinische Epikrise rein!
 		for(int i = 0; i < 50; i++){
 			if(ktlcmb[i].getSelectedIndex() > 0){
 				hittest++;

@@ -18,6 +18,9 @@ public class EBerichtTab {
 	Eb3 seite3 = null;
 	Eb4 seite4 = null;
 
+	Eb1_2015 seite1_2015 = null;
+	Eb2_2015 seite2_2015 = null;
+	
 	public EBerichtTab(EBerichtPanel xeltern){
 		eltern = xeltern;
 		tab = new JTabbedPane();
@@ -28,17 +31,28 @@ public class EBerichtTab {
 		}
 		try{
 			//System.out.println("Starte Seite 1");
-			seite1 = new Eb1(eltern);
-			tab.addTab("E-Bericht Seite-1", seite1.getSeite());
+			if(EBerichtPanel.UseNeueRvVariante){
+				seite1_2015 = new Eb1_2015(eltern);
+				tab.addTab("E-Bericht Seite-1", seite1_2015.getSeite());
+			}else{
+				seite1 = new Eb1(eltern);
+				tab.addTab("E-Bericht Seite-1", seite1.getSeite());
+			}
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
 		
 		try{
 			//System.out.println("Starte Seite 2");
-			seite2 = new Eb2(eltern);
-			JScrollPane jscr = JCompTools.getTransparentScrollPane(seite2.getSeite());		
-			tab.addTab("E-Bericht Seite-2", jscr);
+			if(EBerichtPanel.UseNeueRvVariante){
+				seite2_2015 = new Eb2_2015(eltern);
+				JScrollPane jscr = JCompTools.getTransparentScrollPane(seite2_2015.getSeite());
+				tab.addTab("E-Bericht Seite-2",jscr );
+			}else{
+				seite2 = new Eb2(eltern);
+				JScrollPane jscr = JCompTools.getTransparentScrollPane(seite2.getSeite());		
+				tab.addTab("E-Bericht Seite-2", jscr);
+			}
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -59,19 +73,7 @@ public class EBerichtTab {
 			ex.printStackTrace();
 		}
 
-		/*
-		String bisher = eltern.jry.getTitle();
-		//System.out.println("Bisheriger Titel = "+bisher);
-		bisher = bisher.replaceAll("</html>", "");
-		bisher = bisher.replaceAll("<html>", "");
-		String titel = "<html>";
-		titel = titel+ bisher;
-		titel = titel+"<b><font color='#ff0000'> [Patient: "+PatGrundPanel.thisClass.patDaten.get(2)+", "+
-		PatGrundPanel.thisClass.patDaten.get(3)+" geb. am:"+
-		datFunk.sDatInDeutsch(PatGrundPanel.thisClass.patDaten.get(4))+ 
-		(eltern.neu ? " (Neuanlage)]</font></b></html>" : " (Bericht-ID:"+eltern.berichtid+")]</font></b></html>");
-		eltern.jry.setTitle(titel);
-		*/
+		
 		String bisher = eltern.jry.getTitle();
 		//System.out.println("Bisheriger Titel = "+bisher);
 		bisher = bisher.replaceAll("</html>", "");
@@ -101,6 +103,12 @@ public class EBerichtTab {
 	}
 	public Eb4 getTab4(){
 		return seite4;
+	}
+	public Eb1_2015 getTab1_2015(){
+		return seite1_2015;
+	}
+	public Eb2_2015 getTab2_2015(){
+		return seite2_2015;
 	}
 
 }

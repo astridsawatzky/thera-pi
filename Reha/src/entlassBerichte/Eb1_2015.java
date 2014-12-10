@@ -140,7 +140,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 							eltern.bta[i].setRows(3);
 							eltern.bta[i].setColumns(40);
 							doc = (AbstractDocument)eltern.bta[i].getDocument();
-					        doc.setDocumentFilter(new DocumentLineLengthFilter(40,i));
+					        doc.setDocumentFilter(new DocumentLineLengthFilter(40,3,i));
 							//((DiagDoc)eltern.bta[i].getDocument()).setArea(eltern.bta[i]);
 						}else{
 								
@@ -157,7 +157,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 					eltern.bta[10].setRows(3);
 					eltern.bta[10].setColumns(70);
 					doc = (AbstractDocument)eltern.bta[10].getDocument();
-			        doc.setDocumentFilter(new DocumentLineLengthFilter(70,10));
+			        doc.setDocumentFilter(new DocumentLineLengthFilter(70,3,10));
 
 					eltern.bta[10].setFont(fontcourier);					
 					eltern.bta[10].setForeground(Color.BLUE);
@@ -909,155 +909,6 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		lab.setFont(fontarialnormal);
 		tit.add(lab,cctit.xy(4,2));
 		tit.getPanel().validate();
-		return tit.getPanel();
-	}
-	private JPanel getBlock4Komplett_X(){
-		//insgesamt 610                      1    2     3   4     5      6    7   8   9     10   11  12  13    14   15   16  17
-		FormLayout laytit = new FormLayout("4dlu,25dlu,2dlu,p,  35dlu, 25dlu,2dlu,p, 20dlu,25dlu,2dlu,p,20dlu,25dlu,2dlu,p:g,20dlu",
-				//           dia1            dia2            dia3             dia4            dia5
-				// 1  2   3      4     5    6     7    8  
-				"4dlu,p, 5dlu,   p,  5dlu,  p, 0dlu:g,4dlu");
-				//"4dlu,p, 5dlu,   p,  5dlu,  p, 0dlu:g, 2dlu, p, 30dlu, 2dlu, p,  30dlu, 2dlu, p ,30dlu,4dlu");
-		PanelBuilder tit = new PanelBuilder(laytit);
-		//tit.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		tit.setOpaque(false);               
-		CellConstraints cctit = new CellConstraints();
-		tit.getPanel().validate();
-		eltern.btf[22] = new JRtaTextField("ZAHLEN",false);
-		eltern.btf[22].setName("F_114");
-		tit.add(eltern.btf[22],cctit.xy(2,2));
-		FormLayout entlay = new FormLayout("55dlu","p,p");
-		PanelBuilder ent = new PanelBuilder(entlay);
-		ent.getPanel().setOpaque(false);
-		CellConstraints ccent = new CellConstraints();
-		JLabel lab = getLabel ("Aufnahmegewicht");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xy(1, 1));
-		lab = getLabel("(ganze kg)");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xy(1, 2));
-		tit.add(ent.getPanel(),cctit.xy(4,2,CellConstraints.FILL,CellConstraints.TOP));		
-		
-		
-		eltern.btf[23] = new JRtaTextField("ZAHLEN",false);
-		eltern.btf[23].setName("F_117");		
-		tit.add(eltern.btf[23],cctit.xy(2,4));
-		entlay = new FormLayout("55dlu","p,p");
-		ent = new PanelBuilder(entlay);
-		ent.getPanel().setOpaque(false);
-		ccent = new CellConstraints();
-		lab = getLabel ("Entlassungsgewicht");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xy(1, 1));
-		lab = getLabel("(ganze kg)");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xy(1, 2));
-		tit.add(ent.getPanel(),cctit.xy(4,4,CellConstraints.FILL,CellConstraints.TOP));
-		
-		
-		eltern.btf[24] = new JRtaTextField("ZAHLEN",false);
-		tit.add(eltern.btf[24],cctit.xy(2,6));
-		eltern.btf[24].setName("F_120");
-		entlay = new FormLayout("55dlu","p,p");
-		ent = new PanelBuilder(entlay);
-		ent.getPanel().setOpaque(false);
-		ccent = new CellConstraints();
-		lab = getLabel ("Körpergröße");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xy(1, 1));
-		lab = getLabel("(ganze cm)");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xy(1, 2));
-		tit.add(ent.getPanel(),cctit.xy(4,6,CellConstraints.FILL,CellConstraints.TOP));
-		
-		eltern.bcmb[17] = new JRtaComboBox(ursache);
-		eltern.bcmb[17].setName("F_123");
-		tit.add(eltern.bcmb[17],cctit.xy(6,2));
-		//                                  1 2 3 4 5 6 7 8 9 10 11 12 
-		entlay = new FormLayout("p,2dlu,p","p,p,p,p,p,p,p,p,p,p, p, p");
-		ent = new PanelBuilder(entlay);
-		ent.getPanel().setOpaque(false);
-		ccent = new CellConstraints();
-		lab = getLabel ("URSACHE DER");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xyw(1, 1,3));
-		lab = getLabel("ERKRANKUNG");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xyw(1, 2,3));
-		ent.add(getLabel("(1.Diagnose)"),ccent.xyw(1,3,3 ));
-		ent.add(getLabel("0 = "),ccent.xy(1,4 ));
-		ent.add(getLabel("1 - 4 trifft nicht zu"),ccent.xy(3,4,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("1 = "),ccent.xy(1,5 ));
-		ent.add(getLabel("Arbeitsunfall einschl."),ccent.xy(3,5,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("Wegeunfall"),ccent.xy(3,6,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("2 = "),ccent.xy(1,7 ));
-		ent.add(getLabel("Berufserkrankung"),ccent.xy(3,7,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("3 = "),ccent.xy(1,8 ));
-		ent.add(getLabel("Schädigung durch"),ccent.xy(3,8,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("Einwirkung Dritter"),ccent.xy(3,9,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("4 = "),ccent.xy(1,10 ));
-		ent.add(getLabel("Folge von Kriegs-, Zivil-"),ccent.xy(3,10,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("oder Whrdienst"),ccent.xy(3,11,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("5 = "),ccent.xy(1,12 ));
-		ent.add(getLabel("Meldepflichtige Erkrankung"),ccent.xy(3,12,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.getPanel().validate();
-		tit.add(ent.getPanel(),cctit.xywh(8,2,1,6,CellConstraints.LEFT,CellConstraints.TOP));
-		
-		eltern.bcmb[18] = new JRtaComboBox(vorherau);
-		eltern.bcmb[18].setName("F_124");
-		tit.add(eltern.bcmb[18],cctit.xy(10,2));
-		//                                                 1 2 3 4 5 6 7 8  
-		entlay = new FormLayout("p,2dlu,fill:0:grow(1.0)","p,p,p,p,p,p,p,p");
-		ent = new PanelBuilder(entlay);
-		ent.getPanel().setOpaque(false);
-		ccent = new CellConstraints();
-		lab = getLabel ("ARBEITSUNFÄHIGKEITSZEITEN");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xyw(1, 1,3));
-		ent.add(getLabel("innerhalb der letzten"),ccent.xyw(1,2,3 ));
-		ent.add(getLabel("12 Monate vor Aufnahme"),ccent.xyw(1,3,3 ));
-		ent.add(getLabel("0 = "),ccent.xy(1,4 ));
-		ent.add(getLabel("keine"),ccent.xy(3,4,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("1 = "),ccent.xy(1,5 ));
-		ent.add(getLabel("bis unter 3 Monate"),ccent.xy(3,5,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("2 = "),ccent.xy(1,6 ));
-		ent.add(getLabel("3 bis unter 6 Monate"),ccent.xy(3,6,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("3 = "),ccent.xy(1,7 ));
-		ent.add(getLabel("6 und mehr Monate"),ccent.xy(3,7,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("9 = "),ccent.xy(1,8 ));
-		ent.add(getLabel("nicht erwerbstätig"),ccent.xy(3,8,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.getPanel().validate();
-		tit.add(ent.getPanel(),cctit.xywh(12,2,1,6,CellConstraints.LEFT,CellConstraints.TOP));		
-		
-		eltern.bcmb[19] = new JRtaComboBox(dmp);
-		eltern.bcmb[19].setName("DMP");
-		tit.add(eltern.bcmb[19],cctit.xy(14,2));
-		//                                                 1 2 3 4 5 6 7 8 9 
-		entlay = new FormLayout("p,2dlu,fill:0:grow(1.0)","p,p,p,p,p,p,p,p,p");
-		ent = new PanelBuilder(entlay);
-		ent.getPanel().setOpaque(false);
-		ccent = new CellConstraints();
-		lab = getLabel ("DMP-Patient");
-		lab.setForeground(Color.RED);
-		ent.add(lab,ccent.xyw(1, 1,3));
-		ent.add(getLabel("0 = "),ccent.xy(1,2 ));
-		ent.add(getLabel("kein DMP-Patient"),ccent.xy(3,2,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("1 = "),ccent.xy(1,3 ));
-		ent.add(getLabel("Diabetes mellitus Typ 1"),ccent.xy(3,3,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("2 = "),ccent.xy(1,4 ));
-		ent.add(getLabel("Diabetes mellitus Typ 2"),ccent.xy(3,4,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("3 = "),ccent.xy(1,5 ));
-		ent.add(getLabel("Brustkrebs"),ccent.xy(3,5,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("4 = "),ccent.xy(1,6 ));
-		ent.add(getLabel("KHK"),ccent.xy(3,6,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("5 = "),ccent.xy(1,7 ));
-		ent.add(getLabel("Asthma bronchiale / COPD"),ccent.xy(3,7,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("6 = "),ccent.xy(1,8 ));
-		ent.add(getLabel("mehrere DMP"),ccent.xy(3,8,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.add(getLabel("7 = "),ccent.xy(1,9 ));
-		ent.add(getLabel("andere DMP"),ccent.xy(3,9,CellConstraints.LEFT,CellConstraints.DEFAULT ));
-		ent.getPanel().validate();
-		tit.add(ent.getPanel(),cctit.xywh(16,2,1,6,CellConstraints.FILL,CellConstraints.TOP));
 		return tit.getPanel();
 	}
 
@@ -2079,17 +1930,18 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	class DocumentLineLengthFilter extends DocumentFilter
 
 	{
-
+		int maxLines;
 	    int maxLineLen;
 	    int bta;
 
 
 
-	    public DocumentLineLengthFilter(int maxLineLen,int bta)
+	    public DocumentLineLengthFilter(int maxLineLen,int maxLines, int bta)
 
 	    {
 
 	        this.maxLineLen = maxLineLen;
+	        this.maxLines = maxLines;
 	        this.bta = bta;
 
 	    }
@@ -2149,7 +2001,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	            count++;
 
 	        }
-	        if(count >=3){
+	        if(count > maxLines){
 	        	eltern.bta[bta].setForeground(Color.RED);
 	        }
 	        return true;
@@ -2206,6 +2058,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	        if (validOperation(fb.getDocument(), offset, 0, str))
 
 	        {
+	        	
 
 	            //System.out.println("Inserting "+str+" at "+offset+ " is OK");
 	            eltern.bta[bta].setForeground(Color.BLUE);
@@ -2236,6 +2089,10 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	        if (validOperation(fb.getDocument(), offset, length, str))
 
 	        {
+	        	
+	        	 if (eltern.bta[bta].getLineCount() == maxLines && str.contains("\n")) {
+	        		 return;
+	        	 }
 
 	            //System.out.println("Replacing with "+str+" at "+offset+" is OK");
 	            eltern.bta[bta].setForeground(Color.BLUE);
@@ -2247,6 +2104,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 	        else
 
 	        {
+	        	
 
 	        	if(str.length() > 1 || str.equals("\n")){
 	        		super.insertString(fb, offset, str, a);

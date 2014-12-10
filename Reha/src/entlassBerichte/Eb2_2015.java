@@ -6,19 +6,34 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
+
+
+
+
+import javax.swing.text.BadLocationException;
 
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
@@ -26,7 +41,9 @@ import org.jdesktop.swingx.JXPanel;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
+import CommonTools.StringTools;
 import systemTools.SetMaxText;
+import ag.ion.bion.officelayer.text.IText;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -45,6 +62,10 @@ public class Eb2_2015 {
 	JScrollPane jscr = null;
 	Vector<String> ktl = new Vector<String>();
 	String[] sktl = null;
+	JLabel bta7status = null;
+	
+	int btazeilen = 0;
+	
 	public Eb2_2015(EBerichtPanel xeltern){
 		pan = new JXPanel(new BorderLayout());
 		pan.setOpaque(false);
@@ -73,6 +94,44 @@ public class Eb2_2015 {
 				eltern.bta[7].setWrapStyleWord(true);
 				eltern.bta[7].setLineWrap(true);
 				eltern.bta[7].setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				eltern.bta[7].addKeyListener(new KeyListener(){
+					@Override
+					public void keyTyped(KeyEvent e) {
+					}
+					@Override
+					public void keyPressed(KeyEvent e) {
+						if(e.getKeyCode()==KeyEvent.VK_ENTER){
+							generiereText(eltern.bta[7].getText(),true);
+						} 
+					}
+					@Override
+					public void keyReleased(KeyEvent e) {
+						if(e.getKeyCode()==KeyEvent.VK_DELETE){
+							generiereText(eltern.bta[7].getText(),true);
+						}
+					}
+				});
+				eltern.bta[7].addMouseListener(new MouseListener(){
+
+					@Override
+					public void mouseClicked(MouseEvent e) {
+					}
+					@Override
+					public void mousePressed(MouseEvent e) {
+						if(e.getButton() == 3){
+							zeigePopUp(e);
+						}
+					}
+					@Override
+					public void mouseReleased(MouseEvent e) {
+					}
+					@Override
+					public void mouseEntered(MouseEvent e) {
+					}
+					@Override
+					public void mouseExited(MouseEvent e) {
+					}
+				});
 				
 				pan.validate();
 				pan.setVisible(true);
@@ -109,6 +168,123 @@ public class Eb2_2015 {
 			
 		}.execute();
 	}
+	
+	private boolean sucheNachPlatzhalter(){
+		String stext = eltern.bta[7].getText();
+		int start = 0;
+		//int end = 0;
+		String dummy;
+		int vars = 0;
+		int sysvar = -1;
+		boolean noendfound = false;
+
+
+		 
+		while ((start = stext.indexOf("^")) >= 0){
+			noendfound = true;
+			for(int i = 1;i < 150;i++){
+				if(stext.substring(start+i,start+(i+1)).equals("^")){
+					dummy = stext.substring(start,start+(i+1));
+					////System.out.println("Variable gefunden - Variablenname = "+dummy);
+					//********stext = stext.replace(dummy,"ersetzte Variable "+vars);
+					if((sysvar=isSysVar(dummy)) >= 0){
+						stext = stext.replace(dummy, eltern.sysVarInhalt.get(sysvar));
+						//*******sucheErsetze(dummy,eltern.sysVarInhalt.get(sysvar),true);
+						
+					}else{
+						String sanweisung = dummy.toString().replace("^", "");
+						Object ret = JOptionPane.showInputDialog(null,"<html>Bitte Wert für eingeben für: --\u003E<b> "+sanweisung+" </b> &nbsp; </html>","Platzhalter ersetzen", 1);						
+						//Object ret = JOptionPane.showInputDialog(this,"Bitte Wert für eingeben für: --> "+sanweisung+" <-- ","Baustein: "+titel, 1);
+						if(ret==null){
+							return true;
+							//sucheErsetze(dummy,"");
+						}else{
+							stext = stext.replaceFirst(dummy,(String)ret);
+							//******sucheErsetze(dummy,((String)ret).trim(),false);
+						}
+					}
+					noendfound = false;
+					vars++;
+					break;
+				}
+			}
+			if(noendfound){
+				JOptionPane.showMessageDialog(null,"Der Baustein ist fehlerhaft, eine Übernahme deshalb nicht möglich"+
+						"\n\nVermutete Ursache des Fehlers: es wurde ein Start-/Endezeichen '^' für Variable vergessen\n");
+				return false;
+			}
+		}
+		//System.out.println(stext);
+		final String xtext= stext;
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				int pos = eltern.bta[7].getCaretPosition(); 
+				generiereText(xtext,true);
+				eltern.bta[7].setCaretPosition(pos);
+				eltern.bta[7].requestFocus();
+			}
+		});
+		return true;
+	}
+	
+	private int isSysVar(String svar){
+		return eltern.sysVarList.indexOf(svar);
+	}
+	
+	
+	@SuppressWarnings("deprecation")
+	public void zeigePopUp(MouseEvent e){
+		JPopupMenu jPopupMenu = new JPopupMenu();
+		// Lemmi 20101231: Icon zugefügt
+		JMenuItem item = new JMenuItem("vorhandene Platzhalter füllen", new ImageIcon(Reha.proghome+"icons/frei.png"));
+		item.setActionCommand("fuellen");
+		item.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getActionCommand().equals("fuellen")){
+					sucheNachPlatzhalter();
+				}
+				
+			}
+			
+		});
+		jPopupMenu.add(item);
+		jPopupMenu.setLocation(e.getXOnScreen(), e.getYOnScreen());
+		jPopupMenu.show(e.getComponent(),e.getX()-10, e.getY()+5);
+	}
+	
+	public Vector<String> generiereText(String xtext,boolean zuweisen){
+		StringBuffer buf = new StringBuffer();
+		int zeilen = 0;
+		int pos = 0;
+		if(zuweisen){
+			pos = eltern.bta[7].getCaretPosition();
+		}
+		Vector<String> vec = null;
+		vec = StringTools.fliessTextZerhacken(xtext, 70, "\n");
+		for(int i = 0; i < vec.size();i++){
+			if(i <= 67 ){
+				buf.append(vec.get(i)+(i < (vec.size()-1) || zuweisen ? "\n" : ""));
+				zeilen++;
+			}else{
+				if(zuweisen){
+					JOptionPane.showMessageDialog(null,"Text zu lange, Zeile "+Integer.toString(i)+ "wird abgeschnitten.\nZeileninhalt="+vec.get(i));	
+				}
+			}
+		}
+		btazeilen = zeilen;
+		if(zuweisen){
+			eltern.bta[7].setText(buf.toString());
+			bta7status.setText("Zeilen: "+Integer.toString(zeilen));
+			try{
+				eltern.bta[7].setCaretPosition(pos);	
+			}catch(Exception ex){
+				
+			}
+		}
+		return (Vector<String>)vec.clone();
+		
+	}	
 	private void laden(){
 		String berichtid = Integer.toString(eltern.berichtid);
 		StringBuffer buf = new StringBuffer();
@@ -138,7 +314,8 @@ public class Eb2_2015 {
 			rs = stmt.executeQuery(buf.toString());
 			String test = "";
 			if(rs.next()){
-				eltern.bta[7].setText( (rs.getString(eltern.bta[7].getName())==null  ? "" :  rs.getString(eltern.bta[7].getName())) ) ;
+				generiereText((rs.getString(eltern.bta[7].getName())==null  ? "" :  rs.getString(eltern.bta[7].getName())),true);
+				//eltern.bta[7].setText( (rs.getString(eltern.bta[7].getName())==null  ? "" :  rs.getString(eltern.bta[7].getName())) ) ;
 				for(int i = 25; i < 27;i++){
 						eltern.btf[i].setText( (rs.getString(eltern.btf[i].getName())==null  ? "" :  rs.getString(eltern.btf[i].getName()))  );
 				}
@@ -383,7 +560,7 @@ public class Eb2_2015 {
 		/***********************/
 		eltern.bta[7] = new JTextArea();
 		eltern.bta[7].setName("LEISTBI");
-		eltern.bta[7].setColumns(70);
+		//eltern.bta[7].setColumns(70);
 		eltern.bta[7].setLineWrap(true);
 		eltern.bta[7].setWrapStyleWord(true);
 		eltern.bta[7].invalidate();
@@ -1131,7 +1308,7 @@ public class Eb2_2015 {
 		return tit.getPanel();		
 	}
 	private JPanel getTitel4(){
-		FormLayout laytit = new FormLayout("20dlu,p,2dlu,p",
+		FormLayout laytit = new FormLayout("20dlu,p,2dlu,p,3dlu,p",
 		"4dlu,p,0dlu,p,2dlu");
 		PanelBuilder tit = new PanelBuilder(laytit);
 		//tit.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -1143,10 +1320,13 @@ public class Eb2_2015 {
 		lab = new JLabel("Sozialmedizinische Epikrise");
 		lab.setFont(fontarialfett);
 		tit.add(lab,cctit.xy(2, 2));
-		lab = new JLabel("(Begründung der Leistungsbeurteilung)");
+		lab = new JLabel("(Begründung der Leistungsbeurteilung) Vorgabe: max. 68 Zeilen, max. 70 Zeichen pro Zeile | ");
 		lab.setFont(fontarialnormal);
 		tit.add(lab,cctit.xy(4, 2));
+		bta7status = new JLabel("Zeilen: 0");
+		bta7status.setFont(fontarialfett);
 		//tit.add(lab,cctit.xyw(2, 4,3,CellConstraints.FILL,CellConstraints.DEFAULT));
+		tit.add(bta7status,cctit.xy(6, 2));
 		tit.getPanel().validate();
 		return tit.getPanel();		
 	}
