@@ -524,6 +524,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						break;
 					}
 					if ( (e.getKeyCode()==76) && (e.isControlDown()) && (ansicht < MASKEN_ANSICHT) ){
+						shiftGedrueckt = false;
+						e.consume();
 						terminListe();
 						break;
 					}
@@ -1046,6 +1048,15 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						/*****************/
 						/**********************************************/
 						if ( (e.getKeyCode()==76) && (e.isControlDown()) ){
+							/****Neu seit 10.10.2014*****/
+							e.consume();
+							shiftGedrueckt = false;
+							gruppierenAktiv = false;
+							gruppierenBloecke[0] = -1;
+							gruppierenBloecke[1] = -1;	
+							oSpalten[gruppierenSpalte].setInGruppierung(false);
+							oSpalten[tspalte].requestFocus();
+							/****Ende Neu****/
 							terminListe();
 							break;
 						}

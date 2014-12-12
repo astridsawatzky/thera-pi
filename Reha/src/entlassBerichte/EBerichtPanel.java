@@ -226,7 +226,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			"^seiner/ihrer^",//31
 			"^des/der Rehab.^",//32
 			"^zum/zur^",//33,
-			"vom Vers./von der Vers."//34
+			"^vom Vers./von der Vers.^"//34
 
 			};
 	/*
@@ -238,7 +238,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public List<String> sysVarList = null;
 	public List<String> sysVarInhalt = null;
 	
-	public static String NeueRvVarianteAb = "01.01.2014";
+	public static String NeueRvVarianteAb = "01.01.2015";
 	public static boolean UseNeueRvVariante = false;
 	
 

@@ -14,7 +14,7 @@ public class Dta301CodeListen {
 			StringTools.do301String("1.3 Weitere reha-relevante Erkrankungen/Operationen/Unfälle"),
 			StringTools.do301String("1.4 Biographische Anamnese"),
 			StringTools.do301String("1.5 Vegetative Anamnese"),
-			StringTools.do301String("2. Sozialmidizinische Anamnese"),
+			StringTools.do301String("2. Sozialmedizinische Anamnese"),
 			StringTools.do301String("2.1 Sozialanamnese mit Kontextfaktoren"),
 			StringTools.do301String("2.2 Arbeitsanamnese mit Kontextfaktoren"),
 			StringTools.do301String("2.3 Subjektive Beeinträchtigungen der Aktivitäten und Teilhabe"),

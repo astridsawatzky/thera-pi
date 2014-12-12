@@ -89,7 +89,8 @@ public class Eb2_2015 {
 					eltern.btf[i].setForeground(Color.BLUE);
 				}
 
-				eltern.bta[7].setFont(fontcourier);
+				//eltern.bta[7].setFont(fontcourier);
+				eltern.bta[7].setFont(new Font("Courier New",Font.PLAIN,16));
 				eltern.bta[7].setForeground(Color.BLUE);
 				eltern.bta[7].setWrapStyleWord(true);
 				eltern.bta[7].setLineWrap(true);
@@ -220,7 +221,12 @@ public class Eb2_2015 {
 			public void run(){
 				int pos = eltern.bta[7].getCaretPosition(); 
 				generiereText(xtext,true);
-				eltern.bta[7].setCaretPosition(pos);
+				if(pos >= 0){
+					try{
+						eltern.bta[7].setCaretPosition(pos);						
+					}catch(Exception ex){
+					}
+				}
 				eltern.bta[7].requestFocus();
 			}
 		});
