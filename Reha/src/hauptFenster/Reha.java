@@ -310,10 +310,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	/**************************/
 	public JXPanel desktop = null;
 	public ProgLoader progLoader =null;
+	
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2014-12-12-DB=";
+	public static String aktuelleVersion = "2014-12-16-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
