@@ -267,7 +267,8 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 		buf.append("roffen='"+hmRezgeb.get("<rggesamt>").replace(",",".")+"', ");
 		buf.append("rgbetrag='"+hmRezgeb.get("<rgbetrag>").replace(",",".")+"', ");
 		buf.append("rpbetrag='"+hmRezgeb.get("<rgpauschale>").replace(",",".")+"', ");		
-		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"'");
+		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"',");
+		buf.append("ik='"+Reha.aktIK+"'");
 		SqlInfo.sqlAusfuehren(buf.toString());		
 		
 		// vvv Lemmi 20101220: Eintrag der RGR auch in Tabelle "rliste"
@@ -363,7 +364,8 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 		buf.append("roffen='"+hmRezgeb.get("<rggesamt>").replace(",",".")+"', ");
 		buf.append("rgbetrag='"+hmRezgeb.get("<rgbetrag>").replace(",",".")+"', ");
 		buf.append("rpbetrag='"+hmRezgeb.get("<rgpauschale>").replace(",",".")+"', ");		
-		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"'");
+		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"',");
+		buf.append("ik='"+Reha.aktIK+"'");
 		buf.append(" where rnr='"+hmRezgeb.get("<rgnr>")+"' LIMIT 1");
 		SqlInfo.sqlAusfuehren(buf.toString());		
 	}

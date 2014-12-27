@@ -284,7 +284,8 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		buf.append("pat_intern='"+(String)Reha.thisClass.patpanel.vecaktrez.get(0)+"', ");
 		buf.append("rgesamt='"+(String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("roffen='"+(String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
-		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"'");
+		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"',");
+		buf.append("ik='"+Reha.aktIK+"'");
 		SqlInfo.sqlAusfuehren(buf.toString());
 	}
 	private void macheMemoEintrag(){

@@ -1,5 +1,7 @@
 package verkauf.model;
 
+import hauptFenster.Reha;
+
 import java.text.DecimalFormat;
 import java.util.Vector;
 
@@ -68,8 +70,8 @@ public class Artikel {
 	void verkaufeArtikel(double anzahl, String vnummer, Double vpreis, int patid) {
 		this.lagerstand = this.lagerstand - anzahl;
 		this.update();
-		String sql = "INSERT INTO verkfaktura (verkfakturaID, v_nummer, art_id, art_beschreibung, art_einzelpreis, art_mwst, anzahl, pat_id) " +
-				"VALUES (NULL, '"+ vnummer +"', '"+ this.id +"', '"+ this.getBeschreibung() +"', '"+ vpreis +"', '"+ this.mwst +"', '"+ anzahl +"', '"+ patid +"')";
+		String sql = "INSERT INTO verkfaktura (verkfakturaID, v_nummer, art_id, art_beschreibung, art_einzelpreis, art_mwst, anzahl, pat_id, ik) " +
+				"VALUES (NULL, '"+ vnummer +"', '"+ this.id +"', '"+ this.getBeschreibung() +"', '"+ vpreis +"', '"+ this.mwst +"', '"+ anzahl +"', '"+ patid+"', '"+Reha.aktIK +"')";
 		SqlInfo.sqlAusfuehren(sql);
 	}
 	
