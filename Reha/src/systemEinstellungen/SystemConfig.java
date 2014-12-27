@@ -276,6 +276,7 @@ public class SystemConfig {
 	public static HashMap<String,String> hmHmPosIndex = new HashMap<String,String>();
 	
 	public static Vector <Vector<String>> vOwnDokuTemplate = new Vector <Vector<String>>();
+	public static HashMap<String,String> hmDokuSortMode = new HashMap<String,String>();
 	
 	public static int certState = 0;
 	final public static int certOK = 0;
@@ -1302,6 +1303,7 @@ public class SystemConfig {
 			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "eigenedoku.ini");
 			String dokus = null;
 			vOwnDokuTemplate.clear();
+			hmDokuSortMode.clear();
 			boolean mustsave = false;
 			// Prüfung auf Existenz
 			if ( (dokus = inif.getStringProperty("EigeneDokus", "DokuAnzahl")) == null ){
@@ -1317,6 +1319,17 @@ public class SystemConfig {
 					vdummy.add( inif.getStringProperty("EigeneDokus", "DokuDatei"+Integer.toString(i+1)));
 					vOwnDokuTemplate.add((Vector<String>)vdummy.clone());
 				}
+			}
+			if ( (dokus = inif.getStringProperty("EigeneDokus", "SortByDate")) == null ){
+				inif.setStringProperty("EigeneDokus", "SortByDate","0",null);
+				inif.setStringProperty("EigeneDokus", "SortAsc","0",null);
+				hmDokuSortMode.put("sortmode", "0");
+				hmDokuSortMode.put("sortasc", "0" );
+				
+				mustsave = true;
+			}else{
+				hmDokuSortMode.put("sortmode", inif.getStringProperty("EigeneDokus", "SortByDate") );
+				hmDokuSortMode.put("sortasc", inif.getStringProperty("EigeneDokus", "SortAsc") );
 			}
 			if(mustsave){
 				INITool.saveIni(inif);

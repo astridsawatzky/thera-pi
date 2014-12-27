@@ -2002,10 +2002,12 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				try{
 		//{"Doku-Id","Doku-Art","Titel","erfa�t am","von","",""};
 				//String sstmt = "select * from verordn where PAT_INTERN ='"+xpatint+"' ORDER BY REZ_DATUM";
-				Vector<Vector<String>> vec = SqlInfo.holeSaetze("doku1", 
-						"dokuid,format,dokutitel,DATE_FORMAT(datum,'%d.%m.%Y') AS dokudatum," +
-						"benutzer,pat_intern,id,datei", 
-						"pat_intern='"+xpatint+"' ORDER BY dokuid DESC", Arrays.asList(new String[]{}));
+				String sortmode = (SystemConfig.hmDokuSortMode.get("sortmode").equals("0") ? " dokuid " : " datum ");	
+				String sortasc = (SystemConfig.hmDokuSortMode.get("sortasc").equals("0") ? "DESC" : "ASC");
+				String cmd = "dokuid,format,dokutitel,DATE_FORMAT(datum,'%d.%m.%Y') AS dokudatum," +
+						"benutzer,pat_intern,id,datei";
+				String wherecl = "pat_intern='"+xpatint+"' ORDER BY"+sortmode+sortasc; 
+				Vector<Vector<String>> vec = SqlInfo.holeSaetze("doku1",cmd,wherecl ,Arrays.asList(new String[]{}));
 
 				int anz = vec.size();
 
