@@ -547,7 +547,8 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 			writeBuf.append("kassid='"+Reha.thisClass.patpanel.vecaktrez.get(37)+"', ");
 			writeBuf.append("arztid='"+Reha.thisClass.patpanel.vecaktrez.get(16)+"', ");
 			writeBuf.append("disziplin='"+Reha.thisClass.patpanel.vecaktrez.get(1).trim().substring(0,2)+"', ");
-			writeBuf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"'");
+			writeBuf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"',");
+			writeBuf.append("ik='"+Reha.aktIK+"'");
 			SqlInfo.sqlAusfuehren(writeBuf.toString());
 			////System.out.println(writeBuf.toString());
 		}
@@ -572,7 +573,8 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 		rechnungBuf.append("r_offen='"+dcf.format(rechnungGesamt.doubleValue()).replace(",", ".")+"', ");
 		rechnungBuf.append("r_zuzahl='0.00', ");
 		rechnungBuf.append("ikktraeger='"+Reha.thisClass.patpanel.vecaktrez.get(37)+"',");
-		rechnungBuf.append("pat_intern='"+Reha.thisClass.patpanel.vecaktrez.get(0)+"'");
+		rechnungBuf.append("pat_intern='"+Reha.thisClass.patpanel.vecaktrez.get(0)+"',");
+		rechnungBuf.append("ik='"+Reha.aktIK+"'");
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());		
 	}
 	private void doUebertrag(){

@@ -1602,7 +1602,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		rechnungBuf.append("r_betrag='"+dfx.format(preis00[0]).replace(",", ".")+"', ");
 		rechnungBuf.append("r_offen='"+dfx.format(preis00[0]).replace(",", ".")+"', ");
 		rechnungBuf.append("r_zuzahl='"+dfx.format(preis00[2]).replace(",", ".")+"', ");
-		rechnungBuf.append("ikktraeger='"+ik_kostent+"'");
+		rechnungBuf.append("ikktraeger='"+ik_kostent+"',");
+		rechnungBuf.append("ik='"+Reha.aktIK+"'");
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 	}
 	
@@ -1833,7 +1834,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				rechnungBuf.append("preisdiff='"+  (preisUmstellung ? "T" : "F") +"', ");
 				rechnungBuf.append("zuzahldiff='"+  (zuzahlUmstellung ? "T" : "F") +"', ");
 				rechnungBuf.append("disziplin='"+  kopf[2].split("=")[1].subSequence(0, 2) +"', ");
-				rechnungBuf.append("rdatum='"+  DatFunk.sDatInSQL(DatFunk.sHeute()) +"'");
+				rechnungBuf.append("rdatum='"+  DatFunk.sDatInSQL(DatFunk.sHeute()) +"',");
+				rechnungBuf.append("ik='"+  Reha.aktIK +"'");
 				SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 			}
 		

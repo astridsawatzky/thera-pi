@@ -816,7 +816,8 @@ public class AbrechnungReha extends JXPanel{
 			rechnungBuf.append("kassid='"+rehavec.get(0).get(37)+"', ");
 			rechnungBuf.append("arztid='"+rehavec.get(0).get(16)+"', ");
 			rechnungBuf.append("disziplin='"+  "RH" +"', ");
-			rechnungBuf.append("rdatum='"+  DatFunk.sDatInSQL(DatFunk.sHeute()) +"'");
+			rechnungBuf.append("rdatum='"+  DatFunk.sDatInSQL(DatFunk.sHeute()) +"',");
+			rechnungBuf.append("ik='"+  Reha.aktIK +"'");
 			SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 			try {
 				Thread.sleep(50);
@@ -847,7 +848,8 @@ public class AbrechnungReha extends JXPanel{
 		if(istprivat){
 			rechnungBuf.append("pat_intern='"+rehavec.get(0).get(0)+"', ");
 		}
-		rechnungBuf.append("ikktraeger='"+kassvec.get(0).get(6)+"'");
+		rechnungBuf.append("ikktraeger='"+kassvec.get(0).get(6)+"',");
+		rechnungBuf.append("ik='"+Reha.aktIK+"'");
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 		
 	}
