@@ -964,6 +964,21 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					JOptionPane.showMessageDialog(null,"So so...,Sie haben zwar nix gewählt wollen es aber schon mal drucken - das NIX....\nOh Herr schmeiß Hirn ra!");
 					return;
 				}
+				if(vecWahl.size()==0){
+					String fragestring = "Achtung Sie schreiben keinerlei Daten in den Kalender!!!!!!\n"+
+							"Sie erstellen lediglich einen PDF-Terminplan für den Emailversand mit Ihrer derzeitigen Auswahl\n\n"+
+							"Wollen Sie den Vorgang fortsetzen ?";
+					int anfrage = JOptionPane.showConfirmDialog(null, fragestring, "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION); 
+					if(anfrage == JOptionPane.NO_OPTION){
+						sucheWeiter.setEnabled(false);
+						return;
+					}
+					try{
+						druckVectorInit();	
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(null,"Fehler bei der Aufbereitung des Druckvectors für Email");
+					}
+				}
 				cursorWait(true);
 				SwingUtilities.invokeLater(new Runnable(){
 					public  void run(){

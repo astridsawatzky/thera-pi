@@ -256,7 +256,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		
 		evt = new RehaEventClass();
 		evt.addRehaEventListener((RehaEventListener) this);
-
+		UseNeueRvVariante = false;
 		addFocusListener(this);
 	    setBackgroundPainter(Reha.thisClass.compoundPainter.get("EBerichtPanel"));
 		setLayout(new BorderLayout());
@@ -291,19 +291,22 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			
 			try{
 				//nur wenn RV
-				if(!berichttyp.contains("GKV-A")){
+				if(!berichttyp.contains("GKV E-Bericht")){
 					//Testen ob 2015 angewendet werden soll
 					String stmt = "select aufdat3 from bericht2 where berichtid = '"+Integer.toString(berichtid)+"' LIMIT 1" ;
 					//System.out.println(stmt);
 					String aufnahmedat =   SqlInfo.holeEinzelFeld(stmt).trim();
 					if(this.neu && DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()) >= 0){
+						//System.out.println("Variante 1 Tage = "+DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()));
 						UseNeueRvVariante = true;
 					}else if(!this.neu){
 						if(aufnahmedat.length() == 10){
 							if(DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sDatInDeutsch(aufnahmedat)) >= 0) {
+								//System.out.println("Variante 2 Tage = "+DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sDatInDeutsch(aufnahmedat)));
 								UseNeueRvVariante = true;
 							}
 						}else if(DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()) >= 0){
+							//System.out.println("Variante 3 Tage = "+DatFunk.TageDifferenz(NeueRvVarianteAb,DatFunk.sHeute()));
 							UseNeueRvVariante = true;
 						}
 					}

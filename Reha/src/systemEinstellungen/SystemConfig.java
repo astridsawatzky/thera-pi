@@ -897,6 +897,20 @@ public class SystemConfig {
 			typen[2] = dbtini.getStringProperty("Datenbanktypen", "Typ"+(i+1)+"Port");
 			DBTypen.add(typen.clone());
 		}
+		/*
+		System.out.println("*******************Mandanten-Konfiguration*****************************");
+		//Testen welches IK gerade aktiv ist und dessen DB-Verbindung speichern.
+		//dann alle IK's durchlaufen und überprüfen ob über die selbe DB-Verbindung zugegriffen wird.
+		//sofern ja, in einem Vector ik, name, und DB-Parameter merken.
+		for(int i = 0; i < Mandanten.size();i++){
+			System.out.println(Mandanten.get(i)[0]+" - "+Mandanten.get(i)[1]);
+			System.out.println(hmDBMandant.get(Mandanten.get(i)[1]));
+		}
+		System.out.println("**********************************************************************");
+		*/
+	}
+	public static void GleicheDBMandanten(String sik){
+		
 	}
 
 	public static void InetSeitenEinlesen(){

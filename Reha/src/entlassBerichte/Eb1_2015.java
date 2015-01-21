@@ -208,6 +208,8 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 				 			eltern.meldeInitOk(0);
 				 			JOptionPane.showMessageDialog(null,"Bitte stellen Sie als erstes den Empfäger des Gutachtens ein (Berichttyp).");
 				 			doKopfNeu();
+				 			//ambulant Voreinstellung
+				 			eltern.bcmb[20].setSelectedItem("2");
 							eltern.doSysVars();
 				 			testeObAlt();
 				 		}

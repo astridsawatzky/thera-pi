@@ -1,8 +1,6 @@
 package org.therapi.reha.patient;
 
 
-
-
 import generalSplash.RehaSplash;
 import geraeteInit.ScannerUtil;
 import hauptFenster.Reha;
