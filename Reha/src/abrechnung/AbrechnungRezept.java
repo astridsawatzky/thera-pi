@@ -2612,6 +2612,11 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		hmRezgeb.put("<rgort>",adressParams[3]);
 		hmRezgeb.put("<rgbanrede>",adressParams[4]);
 		hmRezgeb.put("<rgpatintern>",vec_rez.get(0).get(0));
+		//Hier müssen noch Patienten Namen
+		//hmRezgeb.put("<rgpatintern>",vec_rez.get(0).get(0));
+		hmRezgeb.put("<rgpatnname>", StringTools.EGross(vec_pat.get(0).get(0)));
+		hmRezgeb.put("<rgpatvname>", StringTools.EGross(vec_pat.get(0).get(1)));
+		hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(vec_pat.get(0).get(2)));
 		RezeptGebuehrRechnung rgeb = new RezeptGebuehrRechnung(Reha.thisFrame,"Nachberechnung Rezeptgebühren",rueckgabe,hmRezgeb,buchen);
 		rgeb.setSize(new Dimension(250,300));
 		rgeb.setLocation(location.x-50,location.y-50);

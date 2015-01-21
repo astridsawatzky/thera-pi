@@ -912,7 +912,7 @@ public class RezTools {
 						}
 						
 					}else{// gemischte Termine
-						//System.out.println("2 -Termine aus dem Vorjahr(frei) = "+obj[1]+" Termine aus diesem Jahr(Zuzahlung) = "+obj[2]);
+						//System.out.println("2 -Termine aus dem Vorjahr(frei) = "+obj[1]+" Termine aus diesem Jahr(Zuzahlung) = "+obj[2]+" - obj[0]="+obj[0]);
 						zm.allefrei = false;
 						zm.allezuzahl = false;
 						zm.anfangfrei = true;
