@@ -38,16 +38,20 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import Tools.ButtonTools;
-import Tools.DatFunk;
-import Tools.JCompTools;
-import Tools.JRtaCheckBox;
-import Tools.JRtaRadioButton;
-import Tools.JRtaTextField;
-import Tools.OOTools;
-import Tools.SqlInfo;
-import Tools.StringTools;
-import Tools.TableTool;
+import CommonTools.ButtonTools;
+import CommonTools.DatFunk;
+import CommonTools.DateTableCellEditor;
+import CommonTools.DblCellEditor;
+import CommonTools.DoubleTableCellRenderer;
+import CommonTools.JCompTools;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaRadioButton;
+import CommonTools.JRtaTextField;
+import CommonTools.MitteRenderer;
+import CommonTools.OOTools;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import CommonTools.TableTool;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -168,18 +172,18 @@ public class OpRgafMahnungen extends JXPanel{
 		tab = new JXTable(tabmod);
 		tab.setHorizontalScrollEnabled(true);
 		DateTableCellEditor tble = new DateTableCellEditor();
-		tab.getColumn(1).setCellRenderer(new Tools.MitteRenderer());
+		tab.getColumn(1).setCellRenderer(new MitteRenderer());
 		
 		tab.getColumn(2).setCellEditor(tble);
 		
-		tab.getColumn(3).setCellRenderer(new Tools.DoubleTableCellRenderer());
-		tab.getColumn(3).setCellEditor(new Tools.DblCellEditor());
+		tab.getColumn(3).setCellRenderer(new DoubleTableCellRenderer());
+		tab.getColumn(3).setCellEditor(new DblCellEditor());
 		
-		tab.getColumn(4).setCellRenderer(new Tools.DoubleTableCellRenderer());
-		tab.getColumn(4).setCellEditor(new Tools.DblCellEditor());
+		tab.getColumn(4).setCellRenderer(new DoubleTableCellRenderer());
+		tab.getColumn(4).setCellEditor(new DblCellEditor());
 
-		tab.getColumn(5).setCellRenderer(new Tools.DoubleTableCellRenderer());
-		tab.getColumn(5).setCellEditor(new Tools.DblCellEditor());
+		tab.getColumn(5).setCellRenderer(new DoubleTableCellRenderer());
+		tab.getColumn(5).setCellEditor(new DblCellEditor());
 
 		tab.getColumn(6).setCellEditor(tble);
 		tab.getColumn(7).setCellEditor(tble);
@@ -848,7 +852,7 @@ public class OpRgafMahnungen extends JXPanel{
 			e.printStackTrace();
 		}
 		textDocument = (ITextDocument)document;
-		Tools.OOTools.druckerSetzen(textDocument, (String)OpRgaf.mahnParameter.get("drucker"));
+		OOTools.druckerSetzen(textDocument, (String)OpRgaf.mahnParameter.get("drucker"));
 		ITextFieldService textFieldService = textDocument.getTextFieldService();
 		ITextField[] placeholders = null;
 		try {

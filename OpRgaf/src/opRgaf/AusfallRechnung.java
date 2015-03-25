@@ -36,11 +36,11 @@ import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 
-import Tools.DatFunk;
-import Tools.JRtaCheckBox;
-import Tools.LeistungTools;
-import Tools.OOTools;
-import Tools.SqlInfo;
+import CommonTools.DatFunk;
+import CommonTools.JRtaCheckBox;
+import CommonTools.LeistungTools;
+import CommonTools.OOTools;
+import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -300,7 +300,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 				sart = (String)vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(vecaktrez.get(41));		
-				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
+				inpos = LeistungTools.getLeistungRaw(sart, spos,preisgruppe);
 				InitHashMaps.hmAdrAFRDaten.put(maplang,String.valueOf(inpos[0]));
 				InitHashMaps.hmAdrAFRDaten.put(mapkurz,String.valueOf(inpos[1]));
 				////System.out.println(inpos[0]);
@@ -315,7 +315,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 					inpos[0] = "";
 					inpos[1] = "";
 				}else{
-					inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
+					inpos = LeistungTools.getLeistungRaw(sart, spos,preisgruppe);	
 				}
 				InitHashMaps.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				InitHashMaps.hmAdrAFRDaten.put(mappreis,"0,00");

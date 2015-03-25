@@ -9,8 +9,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import Tools.DatFunk;
-import Tools.StringTools;
+import CommonTools.DatFunk;
+import CommonTools.StringTools;
 
 
 public class InitHashMaps {

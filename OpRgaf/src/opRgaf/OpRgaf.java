@@ -10,7 +10,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -20,22 +19,15 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
 
-
-
-
-
+import CommonTools.INIFile;
+import CommonTools.SqlInfo;
+import CommonTools.StartOOApplication;
+import CommonTools.Verschluesseln;
 import RehaIO.RehaIOMessages;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
-import Tools.INIFile;
-import Tools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.ITerminateEvent;
-import ag.ion.bion.officelayer.event.VetoTerminateListener;
 
 
 
@@ -103,11 +95,12 @@ public class OpRgaf implements WindowListener{
 	public static boolean xportOk = false;
 	public RehaReverseServer rehaReverseServer = null;
 	public static int rehaReversePort = -1;
+	public SqlInfo sqlInfo;
 	
 	public static void main(String[] args) {
 		OpRgaf application = new OpRgaf();
 		application.getInstance();
-		
+		application.getInstance().sqlInfo = new SqlInfo();
 		if(args.length > 0 || testcase){
 			if(!testcase){
 				System.out.println("hole daten aus INI-Datei "+args[0]);
@@ -139,10 +132,35 @@ public class OpRgaf implements WindowListener{
 				mahnParameter.put("exemplare", (Integer) inif.getIntegerProperty("General","MahnungExemplare") );
 				mahnParameter.put("inofficestarten", (Boolean) (inif.getIntegerProperty("General","InOfficeStarten").equals("1") ? Boolean.TRUE : Boolean.FALSE) );
 				mahnParameter.put("erstsuchenab", (String) inif.getStringProperty("General","AuswahlErstAb") );
-				mahnParameter.put("formular1", (String) inif.getStringProperty("General","FormularMahnung1")  );
-				mahnParameter.put("formular2", (String) inif.getStringProperty("General","FormularMahnung2")  );
-				mahnParameter.put("formular3", (String) inif.getStringProperty("General","FormularMahnung3")  );
-				mahnParameter.put("formular4", (String) inif.getStringProperty("General","FormularMahnung4")  );
+				/***/
+				String forms = inif.getStringProperty("General","FormularMahnung1") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular1", (String) progHome+"vorlagen/"+aktIK+"/"+forms );
+				/***/
+				forms = inif.getStringProperty("General","FormularMahnung2") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular2", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				/***/
+				forms = inif.getStringProperty("General","FormularMahnung3") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular3", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				/***/
+				forms = inif.getStringProperty("General","FormularMahnung4") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular4", (String) progHome+"vorlagen/"+aktIK+"/"+forms   );
+				/***/
+				//System.out.println(mahnParameter.get("formular1"));
+				//System.out.println(mahnParameter.get("formular2"));
+				//System.out.println(mahnParameter.get("formular3"));
+				//System.out.println(mahnParameter.get("formular4"));
 				mahnParameter.put("diralterechnungen", (String) inif.getStringProperty("General","DirAlteRechnungen")  );
 				mahnParameter.put("inkasse", (String) inif.getStringProperty("General","WohinBuchen")  );
 				AbrechnungParameter(progHome);
@@ -160,10 +178,35 @@ public class OpRgaf implements WindowListener{
 				mahnParameter.put("exemplare", (Integer) inif.getIntegerProperty("General","MahnungExemplare") );
 				mahnParameter.put("inofficestarten", (Boolean) (inif.getIntegerProperty("General","InOfficeStarten").equals("1") ? Boolean.TRUE : Boolean.FALSE) );
 				mahnParameter.put("erstsuchenab", (String) inif.getStringProperty("General","AuswahlErstAb") );
-				mahnParameter.put("formular1", (String) inif.getStringProperty("General","FormularMahnung1")  );
-				mahnParameter.put("formular2", (String) inif.getStringProperty("General","FormularMahnung2")  );
-				mahnParameter.put("formular3", (String) inif.getStringProperty("General","FormularMahnung3")  );
-				mahnParameter.put("formular4", (String) inif.getStringProperty("General","FormularMahnung4")  );
+				/***/
+				String forms = inif.getStringProperty("General","FormularMahnung1") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular1", (String) progHome+"vorlagen/"+aktIK+"/"+forms );
+				/***/
+				forms = inif.getStringProperty("General","FormularMahnung2") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular2", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				/***/
+				forms = inif.getStringProperty("General","FormularMahnung3") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular3", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				/***/
+				forms = inif.getStringProperty("General","FormularMahnung4") ;
+				if(forms.indexOf("/") > 0){
+					forms = forms.substring(forms.lastIndexOf("/")+1);
+				}
+				mahnParameter.put("formular4", (String) progHome+"vorlagen/"+aktIK+"/"+forms   );
+				/***/
+				//System.out.println(mahnParameter.get("formular1"));
+				//System.out.println(mahnParameter.get("formular2"));
+				//System.out.println(mahnParameter.get("formular3"));
+				//System.out.println(mahnParameter.get("formular4"));
 				mahnParameter.put("diralterechnungen", (String) inif.getStringProperty("General","DirAlteRechnungen")  );
 				mahnParameter.put("inkasse", (String) inif.getStringProperty("General","InKasseBuchen")  );
 				AbrechnungParameter(progHome);
@@ -186,7 +229,7 @@ public class OpRgaf implements WindowListener{
 					while(! DbOk){
 						try {
 							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 5000){
+							if(System.currentTimeMillis()-zeit > 10000){
 								System.exit(0);
 							}
 						} catch (InterruptedException e) {
@@ -274,7 +317,7 @@ public class OpRgaf implements WindowListener{
 		}catch(Exception ex){
 			rehaReverseServer = null;
 		}
-
+		sqlInfo.setFrame(jFrame);
 		jFrame.addWindowListener(this);
 		jFrame.setSize(1000,675);
 		jFrame.setTitle("Thera-Pi  Rezeptgebührrechnung/Ausfallrechnung/Mahnwesen  [IK: "+aktIK+"] "+"[Server-IP: "+dbIpAndName+"]");
@@ -293,7 +336,11 @@ public class OpRgaf implements WindowListener{
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null, "Fehler in der Socketkommunikation");
 		}
-
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				otab.opRgafPanel.setzeFocus();		
+			}
+		});
 		return jFrame;
 	}
 	
@@ -358,6 +405,7 @@ public class OpRgaf implements WindowListener{
         		
    				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName+"?jdbcCompliantTruncation=false"
    						,dbUser,dbPassword);
+   				OpRgaf.thisClass.sqlInfo.setConnection(obj.conn);
 				OpRgaf.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
         	} 
@@ -515,7 +563,13 @@ public class OpRgaf implements WindowListener{
 	/***************************/
 	
     public static void starteOfficeApplication(){ 
-
+    	try {
+			officeapplication = (IOfficeApplication)new StartOOApplication(OpRgaf.officeProgrammPfad,OpRgaf.officeNativePfad).start(false);
+			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
+		} catch (OfficeApplicationException e1) {
+			e1.printStackTrace();
+		}
+		/*
     	final String OPEN_OFFICE_ORG_PATH = OpRgaf.officeProgrammPfad;
 
         try
@@ -549,6 +603,7 @@ public class OpRgaf implements WindowListener{
         catch (OfficeApplicationException e) {
             e.printStackTrace();
         }
+        */
     }
 	
 

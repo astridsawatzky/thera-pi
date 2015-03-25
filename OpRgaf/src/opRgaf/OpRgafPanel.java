@@ -43,21 +43,20 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-
-
-
-
-
 import RehaIO.RehaIOMessages;
 import RehaIO.SocketClient;
-import Tools.ButtonTools;
-import Tools.DatFunk;
-import Tools.JCompTools;
-import Tools.JRtaCheckBox;
-import Tools.JRtaComboBox;
-import Tools.JRtaTextField;
-import Tools.SqlInfo;
-
+import CommonTools.ButtonTools;
+import CommonTools.DatFunk;
+import CommonTools.DateTableCellEditor;
+import CommonTools.DblCellEditor;
+import CommonTools.DoubleTableCellRenderer;
+import CommonTools.JCompTools;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.MitteRenderer;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -104,6 +103,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 	BigDecimal suchOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
 	BigDecimal suchGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
 	DecimalFormat dcf = new DecimalFormat("###0.00");
+	
+	int ccount = -2;
 	
 	private HashMap<String,String> hmRezgeb = new HashMap<String,String>();
 	/*
@@ -213,18 +214,18 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		
 		//tab.getColumn(1).setCellEditor();
 		DateTableCellEditor tble = new DateTableCellEditor();
-		tab.getColumn(1).setCellRenderer(new Tools.MitteRenderer());
+		tab.getColumn(1).setCellRenderer(new MitteRenderer());
 		
 		tab.getColumn(2).setCellEditor(tble);
 		
-		tab.getColumn(3).setCellRenderer(new Tools.DoubleTableCellRenderer());
-		tab.getColumn(3).setCellEditor(new Tools.DblCellEditor());
+		tab.getColumn(3).setCellRenderer(new DoubleTableCellRenderer());
+		tab.getColumn(3).setCellEditor(new DblCellEditor());
 		
-		tab.getColumn(4).setCellRenderer(new Tools.DoubleTableCellRenderer());
-		tab.getColumn(4).setCellEditor(new Tools.DblCellEditor());
+		tab.getColumn(4).setCellRenderer(new DoubleTableCellRenderer());
+		tab.getColumn(4).setCellEditor(new DblCellEditor());
 
-		tab.getColumn(5).setCellRenderer(new Tools.DoubleTableCellRenderer());
-		tab.getColumn(5).setCellEditor(new Tools.DblCellEditor());
+		tab.getColumn(5).setCellRenderer(new DoubleTableCellRenderer());
+		tab.getColumn(5).setCellEditor(new DblCellEditor());
 
 		tab.getColumn(6).setCellEditor(tble);
 		tab.getColumn(7).setCellEditor(tble);
@@ -398,7 +399,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 
 				}catch(Exception ex){
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null,"Fehler beim einlesen der Datens�tze");
+					JOptionPane.showMessageDialog(null,"Fehler beim einlesen der Datensätze");
 					OpRgaf.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					setzeFocus();
 					suchen.setEnabled(true);
@@ -436,20 +437,31 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		//gesamtOffen = gesamtOffen.add( BigDecimal.valueOf(Double.parseDouble(tfs[0].getText().replace(",", ".")) ) );
 
 		String cmd = "";
-		if(OpRgaf.mahnParameter.get("inkasse").equals("Kasse")){
+		//einen größeren Schwachsinn für den praktische Einsatz kann man sich schwerlich vorstellen.
+		//Der logische Wert muß über die CheckBox bar.isSelected() bestimmt werden alles andere ist völlig Scheiße
+		//ich habe mich dafür bereits mehrfach(!!) in den Arsch gebissen
+		//if(OpRgaf.mahnParameter.get("inkasse").equals("Kasse")){
+		String rgaf_reznum = tabmod.getValueAt(tab.convertRowIndexToModel(row), 10).toString(); 
+		String rgaf_rechnum = tabmod.getValueAt(tab.convertRowIndexToModel(row), 1).toString();
+		if(bar.isSelected()){
 			//BigDecimal einnahme = BigDecimal.valueOf((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 4));
 			//einnahme = einnahme.subtract(BigDecimal.valueOf(Double.parseDouble(tfs[0].getText().replace(",", ".")) ));
 			cmd = "insert into kasse set einnahme='"+dcf.format(eingang).replace(",", ".")+"', datum='"+
 			DatFunk.sDatInSQL(DatFunk.sHeute())+"', ktext='"+
-			tabmod.getValueAt(tab.convertRowIndexToModel(row), 1)+","+
+			rgaf_rechnum+","+
 			tabmod.getValueAt(tab.convertRowIndexToModel(row), 0)+"',"+
-			"rez_nr='"+tabmod.getValueAt(tab.convertRowIndexToModel(row), 10)+"'";
+			"rez_nr='"+rgaf_reznum+"'";
 			//System.out.println(cmd);
 			SqlInfo.sqlAusfuehren(cmd);
 		}
-		
 		tabmod.setValueAt(new Date(), tab.convertRowIndexToModel(row), 6);		
 		tabmod.setValueAt((Double)restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 4);
+		//
+
+		if(rgaf_rechnum.startsWith("RGR-")){
+			SqlInfo.sqlAusfuehren("update verordn set zzstatus='1' where rez_nr = '"+rgaf_reznum+"' LIMIT 1");
+			SqlInfo.sqlAusfuehren("update lza set zzstatus='1' where rez_nr = '"+rgaf_reznum+"' LIMIT 1");
+		}
 
 
 
@@ -694,8 +706,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				vec.add(rs.getInt(16));//id
 				*/
 				
-				suchOffen = suchOffen.add(rs.getBigDecimal(4));
-				suchGesamt = suchGesamt.add(rs.getBigDecimal(5));
+				suchOffen = suchOffen.add(rs.getBigDecimal(5));
+				suchGesamt = suchGesamt.add(rs.getBigDecimal(4));
 				tabmod.addRow( (Vector<?>) vec.clone());
 				if(durchlauf>200){
 					try {
@@ -895,6 +907,11 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		hmRezgeb.put("<rgbanrede>",adressParams[4]);
 		hmRezgeb.put("<rgorigdatum>", DatFunk.sDatInDeutsch(rdatum));
 		hmRezgeb.put("<rgnr>", rgnr);
+		
+		hmRezgeb.put("<rgpatnname>", StringTools.EGross(SqlInfo.holeEinzelFeld("select n_name from pat5 where pat_intern='"+pat_intern+"' LIMIT 1") ));
+		hmRezgeb.put("<rgpatvname>", StringTools.EGross(SqlInfo.holeEinzelFeld("select v_name from pat5 where pat_intern='"+pat_intern+"' LIMIT 1") ));
+		hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='"+pat_intern+"' LIMIT 1")) );
+
 		//System.out.println(hmRezgeb);
 		String url = OpRgaf.progHome+"vorlagen/"+OpRgaf.aktIK+"/RezeptgebuehrRechnung.ott.Kopie.ott";
 		try {
@@ -996,6 +1013,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			textDocument = null;
 		}
 		*/
+			
+			OpRgaf.thisFrame.setCursor(OpRgaf.thisClass.normalCursor);
 		
 		
 	}

@@ -1,6 +1,6 @@
 package opRgaf;
 
-import Tools.StringTools;
+import CommonTools.StringTools;
 
 public class AdressTools {
 	public static String[] machePrivatAdresse(Object[] oin,boolean egross){
