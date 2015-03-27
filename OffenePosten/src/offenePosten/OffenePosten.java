@@ -159,12 +159,37 @@ public class OffenePosten implements WindowListener{
 						mahnParameter.put("exemplare", (Integer) oinif.getIntegerProperty("General","MahnungExemplare") );
 						mahnParameter.put("inofficestarten", (Boolean) (oinif.getIntegerProperty("General","InOfficeStarten") == 1 ? Boolean.TRUE : Boolean.FALSE) );
 						mahnParameter.put("erstsuchenab", (String) oinif.getStringProperty("General","AuswahlErstAb") );
-						mahnParameter.put("formular1", (String) oinif.getStringProperty("General","FormularMahnung1")  );
-						mahnParameter.put("formular2", (String) oinif.getStringProperty("General","FormularMahnung2")  );
-						mahnParameter.put("formular3", (String) oinif.getStringProperty("General","FormularMahnung3")  );
-						mahnParameter.put("formular4", (String) oinif.getStringProperty("General","FormularMahnung4")  );
+						/***/
+						String forms = oinif.getStringProperty("General","FormularMahnung1") ;
+						if(forms.indexOf("/") > 0){
+							forms = forms.substring(forms.lastIndexOf("/")+1);
+						}
+						mahnParameter.put("formular1", (String) progHome+"vorlagen/"+aktIK+"/"+forms );
+						/***/
+						forms = oinif.getStringProperty("General","FormularMahnung2") ;
+						if(forms.indexOf("/") > 0){
+							forms = forms.substring(forms.lastIndexOf("/")+1);
+						}
+						mahnParameter.put("formular2", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+						/***/
+						forms = oinif.getStringProperty("General","FormularMahnung3") ;
+						if(forms.indexOf("/") > 0){
+							forms = forms.substring(forms.lastIndexOf("/")+1);
+						}
+						mahnParameter.put("formular3", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+						/***/
+						forms = oinif.getStringProperty("General","FormularMahnung4") ;
+						if(forms.indexOf("/") > 0){
+							forms = forms.substring(forms.lastIndexOf("/")+1);
+						}
+						mahnParameter.put("formular4", (String) progHome+"vorlagen/"+aktIK+"/"+forms   );
+						/***/
+						//System.out.println(mahnParameter.get("formular1"));
+						//System.out.println(mahnParameter.get("formular2"));
+						//System.out.println(mahnParameter.get("formular3"));
+						//System.out.println(mahnParameter.get("formular4"));
 						mahnParameter.put("diralterechnungen", (String) oinif.getStringProperty("General","DirAlteRechnungen")  );
-						System.out.println(mahnParameter);
+						//System.out.println(mahnParameter);
 						AbrechnungParameter(progHome);
 						FirmenDaten(progHome);
 						

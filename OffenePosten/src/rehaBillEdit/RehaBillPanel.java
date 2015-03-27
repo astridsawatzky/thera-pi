@@ -134,6 +134,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 	int patKilometer = 0;	
 	
 	int gkvForm;
+	int ccount = -2;
 
 	JCheckBox[] check = {null,null};
 	
@@ -415,7 +416,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 	}
 	private void doAbbrechen(){
 		for(int i = 0; i < tabmod.getRowCount();i++){
-			if( ((Integer)tabmod.getValueAt(i, tabmod.getColumnCount()-1)) == -1){
+			if( ((Integer)tabmod.getValueAt(i, tabmod.getColumnCount()+ccount)) == -1){
 				int tabrow = tab.convertRowIndexToView(i);
 				tab.setRowSelectionInterval(tabrow,tabrow);
 				TableTool.loescheRowAusModel(tab, i);
@@ -436,7 +437,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 			if(row < 0){
 				return;
 			}
-			String id =tabmod.getValueAt(tab.convertRowIndexToModel(row),tabmod.getColumnCount()-1).toString().replace(".", "");
+			String id =tabmod.getValueAt(tab.convertRowIndexToModel(row),tabmod.getColumnCount()+ccount).toString().replace(".", "");
 			String cmd = "delete from faktura where id='"+id+"' LIMIT 1";
 			//System.out.println(cmd);
 			SqlInfo.sqlAusfuehren(cmd);
@@ -464,13 +465,13 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		Vector<Vector<Object>> vec = (Vector<Vector<Object>>) tabmod.getDataVector();
 		tabmod.addRow( (Vector<?>) vec.get(modvec).clone());
 		tabmod.setValueAt(tabmod.getRowCount()-1, tabmod.getRowCount()-1, 5);
-		tabmod.setValueAt(-1, tabmod.getRowCount()-1, tabmod.getColumnCount()-1);
+		tabmod.setValueAt(-1, tabmod.getRowCount()-1, tabmod.getColumnCount()+ccount);
 		rechneNeu(false);
 	}
 	private void doInDbSpeichern(){
 		String cmd = "";
 		for(int i = 0; i < tab.getRowCount();i++){
-			if( ((Integer)tab.getValueAt(i, tab.getColumnCount()-1))  < 0 ){
+			if( ((Integer)tab.getValueAt(i, tab.getColumnCount()+ccount))  < 0 ){
 				cmd = neuFaktura(i);
 			}else{
 				cmd = altFaktura(i);
@@ -512,7 +513,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 				buf.append(", "+feldNamen.get(i).get(0)+"='"+retWert(row,i)+"'");
 			}
 		}
-		buf.append(" where id='"+retWert(row,tabmod.getColumnCount()-1)+"' LIMIT 1");
+		buf.append(" where id='"+retWert(row,tabmod.getColumnCount()+ccount)+"' LIMIT 1");
 		return buf.toString();
 		
 	}
@@ -602,6 +603,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 			}
 		   return String.class;
 	    }
+		
 
 		public boolean isCellEditable(int row, int col) {
 			if(is302er && col > 4){
@@ -653,7 +655,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 				
 				String colname = tabmod.getColumnName(col).toString();
 				String value = "";
-				String id = Integer.toString((Integer)tabmod.getValueAt(row,tabmod.getColumnCount()-1));
+				String id = Integer.toString((Integer)tabmod.getValueAt(row,tabmod.getColumnCount()+ccount));
 				
 				if( tabmod.getColumnClass(col) == Boolean.class){
 					value = (tabmod.getValueAt(row,col) == Boolean.FALSE ? "F" : "T");
@@ -812,62 +814,67 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		
 	}
 	private void rechneNeu(boolean inDBschreiben){
-		tabmod.removeTableModelListener(this);
-		BigDecimal reiheEinzel = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		BigDecimal reiheGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		BigDecimal reiheNetto = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		BigDecimal reiheRezgeb = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		BigDecimal reihePauschale = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		BigDecimal rechnungPauschale = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		rechnungGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		BigDecimal reiheAnzahl = BigDecimal.valueOf(Double.parseDouble("0.00"));
-		String cmd= "";
-		String id = "";
-		String aktrezept = "";
-		
-		for(int i = 0; i < tabmod.getRowCount();i++){
-			reihePauschale = BigDecimal.valueOf(Double.parseDouble("0.00"));
-			if( (!tabmod.getValueAt(i, 19).toString().trim().equals(aktrezept)) &&
-					(((Integer)tabmod.getValueAt(i, 5))==0 )){
-				reihePauschale = BigDecimal.valueOf((Double)tabmod.getValueAt(i,20));
-				aktrezept = tabmod.getValueAt(0,19).toString();
+		try{
+			tabmod.removeTableModelListener(this);
+			BigDecimal reiheEinzel = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			BigDecimal reiheGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			BigDecimal reiheNetto = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			BigDecimal reiheRezgeb = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			BigDecimal reihePauschale = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			BigDecimal rechnungPauschale = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			rechnungGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			BigDecimal reiheAnzahl = BigDecimal.valueOf(Double.parseDouble("0.00"));
+			String cmd= "";
+			String id = "";
+			String aktrezept = "";
+			
+			for(int i = 0; i < tabmod.getRowCount();i++){
+				reihePauschale = BigDecimal.valueOf(Double.parseDouble("0.00"));
+				if( (!tabmod.getValueAt(i, 19).toString().trim().equals(aktrezept)) &&
+						(((Integer)tabmod.getValueAt(i, 5))==0 )){
+					reihePauschale = BigDecimal.valueOf((Double)tabmod.getValueAt(i,20));
+					aktrezept = tabmod.getValueAt(0,19).toString();
+				}
+
+				id = tabmod.getValueAt(i,tabmod.getColumnCount()+ccount).toString().replace(".","");
+				reiheAnzahl = BigDecimal.valueOf(Double.parseDouble( tabmod.getValueAt(i,11).toString()  ));
+				reiheEinzel = BigDecimal.valueOf( (Double) tabmod.getValueAt(i,12) );
+				reiheGesamt = reiheAnzahl.multiply(reiheEinzel);
+				reiheRezgeb = BigDecimal.valueOf(Double.parseDouble( tabmod.getValueAt(i,16).toString()  ));
+				reiheNetto = reiheGesamt.subtract(reiheRezgeb);
+
+				rechnungGesamt = rechnungGesamt.add(reiheNetto);
+				tabmod.setValueAt(reiheGesamt.doubleValue(),i,14);
+				tabmod.setValueAt(reiheNetto.doubleValue(),i,17);
+				rechnungPauschale = rechnungPauschale.add(reihePauschale);
+				if(inDBschreiben){
+					cmd = "update faktura set anzahl='"+
+					Integer.toString(reiheAnzahl.intValue())+"', preis='"+
+					dcf.format(reiheEinzel).replace(",", ".")+"', gesamt='"+
+					dcf.format(reiheGesamt).replace(",", ".")+"', netto='"+
+					dcf.format(reiheNetto).replace(",", ".")+"', zzbetrag='"+
+					dcf.format(reiheRezgeb).replace(",", ".")+"', pauschale='"+
+					dcf.format(reihePauschale).replace(",", ".")+
+					"' where id='"+id+"' LIMIT 1";
+					//System.out.println(cmd);
+					SqlInfo.sqlAusfuehren(cmd);
+				}
 			}
-
-			id = tabmod.getValueAt(i,tabmod.getColumnCount()-1).toString().replace(".","");
-			reiheAnzahl = BigDecimal.valueOf(Double.parseDouble( tabmod.getValueAt(i,11).toString()  ));
-			reiheEinzel = BigDecimal.valueOf( (Double) tabmod.getValueAt(i,12) );
-			reiheGesamt = reiheAnzahl.multiply(reiheEinzel);
-			reiheRezgeb = BigDecimal.valueOf(Double.parseDouble( tabmod.getValueAt(i,16).toString()  ));
-			reiheNetto = reiheGesamt.subtract(reiheRezgeb);
-
-			rechnungGesamt = rechnungGesamt.add(reiheNetto);
-			tabmod.setValueAt(reiheGesamt.doubleValue(),i,14);
-			tabmod.setValueAt(reiheNetto.doubleValue(),i,17);
-			rechnungPauschale = rechnungPauschale.add(reihePauschale);
+			//System.out.println("Pauschalen insgesamt = "+rechnungPauschale);
+			//System.out.println("Rechnung gesamt = "+rechnungGesamt);
+			rbetragNeu.setText(dcf.format(rechnungGesamt.subtract(rechnungPauschale)));
 			if(inDBschreiben){
-				cmd = "update faktura set anzahl='"+
-				Integer.toString(reiheAnzahl.intValue())+"', preis='"+
-				dcf.format(reiheEinzel).replace(",", ".")+"', gesamt='"+
-				dcf.format(reiheGesamt).replace(",", ".")+"', netto='"+
-				dcf.format(reiheNetto).replace(",", ".")+"', zzbetrag='"+
-				dcf.format(reiheRezgeb).replace(",", ".")+"', pauschale='"+
-				dcf.format(reihePauschale).replace(",", ".")+
-				"' where id='"+id+"' LIMIT 1";
-				//System.out.println(cmd);
-				SqlInfo.sqlAusfuehren(cmd);
+				cmd = "update rliste set r_betrag='"+dcf.format(rechnungGesamt).replace(",",".")+"', r_offen='"+dcf.format(rechnungGesamt).replace(",",".")+"' where r_nummer='"+rnummerAlt.getText().trim()+"' LIMIT 1";
+//				cmd = "update rliste set r_betrag='"+dcf.format(rechnungGesamt).replace(",", ".")+"' where r_nummer='"+
+//				rnummerAlt.getText().trim()+"' LIMIT 1";
+//				System.out.println(cmd);
+//				SqlInfo.sqlAusfuehren(cmd);
 			}
+			tabmod.addTableModelListener(this);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		//System.out.println("Pauschalen insgesamt = "+rechnungPauschale);
-		//System.out.println("Rechnung gesamt = "+rechnungGesamt);
-		rbetragNeu.setText(dcf.format(rechnungGesamt.subtract(rechnungPauschale)));
-		if(inDBschreiben){
-			cmd = "update rliste set r_betrag='"+dcf.format(rechnungGesamt).replace(",",".")+"', r_offen='"+dcf.format(rechnungGesamt).replace(",",".")+"' where r_nummer='"+rnummerAlt.getText().trim()+"' LIMIT 1";
-//			cmd = "update rliste set r_betrag='"+dcf.format(rechnungGesamt).replace(",", ".")+"' where r_nummer='"+
-//			rnummerAlt.getText().trim()+"' LIMIT 1";
-//			System.out.println(cmd);
-//			SqlInfo.sqlAusfuehren(cmd);
-		}
-		tabmod.addTableModelListener(this);
 	}
 	
 	private void starteDrucken(){

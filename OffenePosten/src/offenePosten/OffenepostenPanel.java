@@ -121,7 +121,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 				"Noch offen =","Noch offen >=","Noch offen <=",
 				"R_Kasse =","R_Kasse enthalten in",
 				"R_Name =","R_Name enthalten in",
-				"Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <="};
+				"Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <=","Rezeptnummer ="};
 
 		combo = new JRtaComboBox(args);
 		content.add(combo,cc.xy(4,2));
@@ -461,6 +461,9 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 			break;
 		case 15:
 			cmd = "select * from rliste where r_datum <='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
+			break;
+		case 16:
+			cmd = "select * from rliste where r_nummer = (select rnummer from faktura where rez_nr = '"+suchen.getText().trim()+"'  LIMIT 1)";
 			break;
 
 		}
