@@ -6,8 +6,6 @@ import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -16,18 +14,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
 
+import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import CommonTools.INIFile;
 import CommonTools.Verschluesseln;
-import ag.ion.bion.officelayer.application.ILazyApplicationInfo;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.ITerminateEvent;
-import ag.ion.bion.officelayer.event.VetoTerminateListener;
 
 public class RehaKassenbuch implements WindowListener {
 
@@ -112,14 +104,19 @@ public class RehaKassenbuch implements WindowListener {
 						try {
 							Thread.sleep(20);
 							if(System.currentTimeMillis()-zeit > 10000){
-								System.exit(0);
+								JOptionPane.showMessageDialog(null, "Datenbank konnte nicht geöffnet werden!\nTimeout nach 10 Sekunden Wartezeit!\nReha-Kassenbuch kann nicht gestartet werden");
+								break;
+								//System.exit(0);
 							}
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					}
 					if(!DbOk){
-						JOptionPane.showMessageDialog(null, "Datenbank konnte nicht ge�ffnet werden!\nReha-Statistik kann nicht gestartet werden");				
+						
+						JOptionPane.showMessageDialog(null, "Datenbank konnte nicht geöffnet werden!\nReha-Kassenbuch wird beendet");
+						System.exit(0);
+						
 					}
 					RehaKassenbuch.starteOfficeApplication();
 					return null;
@@ -128,7 +125,7 @@ public class RehaKassenbuch implements WindowListener {
 			}.execute();
 			application.getJFrame();
 		}else{
-			JOptionPane.showMessageDialog(null, "Keine Datenbankparameter �bergeben!\nReha-Statistik kann nicht gestartet werden");
+			JOptionPane.showMessageDialog(null, "Keine Datenbankparameter übergeben!\nReha-Kassenbuch kann nicht gestartet werden");
 			System.exit(0);
 		}
 		
@@ -174,8 +171,12 @@ public class RehaKassenbuch implements WindowListener {
 	/*******************/
 	
 	public void starteDB(){
-		DatenbankStarten dbstart = new DatenbankStarten();
-		dbstart.run(); 			
+		new Thread(){
+			public void run(){
+				DatenbankStarten dbstart = new DatenbankStarten();
+				dbstart.run(); 			
+			}
+		}.start();
 	}
 	
 	/*******************/

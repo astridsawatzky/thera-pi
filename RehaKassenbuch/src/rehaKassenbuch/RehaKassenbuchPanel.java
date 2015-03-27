@@ -89,7 +89,7 @@ public class RehaKassenbuchPanel extends JXPanel{
 				long zeit = System.currentTimeMillis();
 				while(!RehaKassenbuch.DbOk){
 					Thread.sleep(50);
-					if(System.currentTimeMillis()-zeit > 5000){
+					if(System.currentTimeMillis()-zeit > 10000){
 						break;
 					}
 				}
@@ -184,7 +184,7 @@ public class RehaKassenbuchPanel extends JXPanel{
 		buf.append("EINNAHME decimal(12,2) DEFAULT NULL,");
 		buf.append("AUSGABE decimal(12,2) DEFAULT NULL,");
 		buf.append("DATUM date DEFAULT NULL,");
-		buf.append("KTEXT varchar(35) DEFAULT NULL,");
+		buf.append("KTEXT varchar(50) DEFAULT NULL,");
 		buf.append("KTO varchar(20) DEFAULT NULL,");
 		buf.append("KSTAND decimal(12,2) DEFAULT NULL,");
 		buf.append("id int(11) NOT NULL AUTO_INCREMENT,");
@@ -203,6 +203,7 @@ public class RehaKassenbuchPanel extends JXPanel{
 		SqlInfo.sqlAusfuehren(cmd2);
 		SqlInfo.sqlAusfuehren("ALTER TABLE "+tabelle+" ADD PRIMARY KEY (ID)"); 
 		SqlInfo.sqlAusfuehren("ALTER TABLE "+tabelle+" CHANGE ID ID INT( 11 ) NOT NULL AUTO_INCREMENT");
+		SqlInfo.sqlAusfuehren("ALTER TABLE "+tabelle+" CHANGE KTEXT KTEXT VARCHAR(50) NULL DEFAULT NULL");
 
 	}
 }
