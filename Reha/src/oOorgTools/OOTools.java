@@ -37,8 +37,10 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.ITextRange;
+import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.ITextTableCell;
 import ag.ion.bion.officelayer.text.ITextTableCellProperties;
+import ag.ion.bion.officelayer.text.ITextTableRow;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
@@ -830,6 +832,12 @@ public class OOTools{
 		int vars = 0;
 		//int sysvar = -1;
 		boolean noendfound = false;
+		/*
+		ITextTable[] tbs = null;
+		ITextTableRow[] tbr = null;
+		ITextTableCell[] tbc = null;
+		IText it = null;
+		*/
 		while ((start = stext.indexOf("^")) >= 0){
 			noendfound = true;
 			for(int i = 1;i < 150;i++){
@@ -841,8 +849,27 @@ public class OOTools{
 						return true;
 							//sucheErsetze(dummy,"");
 					}else{
-						sucheErsetze(document,dummy,((String)ret).trim(),false);
+						//sucheErsetze(document,dummy,((String)ret).trim(),false);
+						sucheErsetze(document,dummy,((String)ret).trim(),true);
 						stext = text.getText();
+						//nachsehen ob die Variable in einer Tabelle zu finden sind
+						/*
+						try{
+							tbs = document.getTextTableService().getTextTables();
+							for(int t = 0; t < tbs.length;t++){
+								tbr = tbs[t].getRows();
+								for(int r = 0; r < tbr.length;r++){
+									tbc = tbr[r].getCells();
+									for(int c = 0; c < tbc.length;c++){
+										it = tbc[c].getTextService().getText();
+										it.setText(it.getText().replace(dummy, ((String)ret).trim()));
+									}
+								}
+							}
+						}catch(NullPointerException ex){
+							JOptionPane.showMessageDialog(null,"Fehler in der Suche nach Tabellen");
+						}
+						*/
 					}
 					noendfound = false;
 					vars++;
@@ -855,6 +882,7 @@ public class OOTools{
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	private static void sucheErsetze(ITextDocument document,String suchenach,String ersetzemit,boolean alle){

@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import org.jdesktop.swingworker.SwingWorker;
 
 import systemEinstellungen.SystemConfig;
+import terminKalender.DruckFenster;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -460,10 +461,32 @@ SuchenSeite eltern;
 			}
 		}
 		/*****************bis hierher lediglich Emailadressen gewurschtel**************************/
-		ArrayList<String[]> attachments = new ArrayList<String[]>();		
 		String[] anhang = {null,null};
 		anhang[0] = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
+		
+		File f = new File(anhang[0]);
+		long zeit = System.currentTimeMillis();
+		while(!f.exists()){
+			if(System.currentTimeMillis()-zeit > 2000){
+				break;
+			}
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			f = new File(anhang[0]);
+			
+		}
+		if(!f.exists()){
+			JOptionPane.showMessageDialog (null, "PDF-Emailanhang konnte nicht erzeugt werden, Aktion wird abgebrochen");
+			return;
+		}
+		
+		ArrayList<String[]> attachments = new ArrayList<String[]>();		
+		
+		
 		attachments.add(anhang.clone());
 		
 		String username = SystemConfig.hmEmailExtern.get("Username");
@@ -513,10 +536,17 @@ SuchenSeite eltern;
 		
 		EmailSendenExtern oMail = new EmailSendenExtern();
 		try{
-		oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure,useport);
-		oMail = null;
-		eltern.cursorWait(false);
-		JOptionPane.showMessageDialog (null, "Die Terminliste wurde aufbereitet und per Email versandt\n");
+			oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure,useport);
+			oMail = null;
+			eltern.cursorWait(false);
+			f = new File(anhang[0]);
+			if(f.exists()){
+				f.delete();
+				JOptionPane.showMessageDialog (null, "Die Terminliste wurde aufbereitet und per Email versandt\n");
+			}else{
+				JOptionPane.showMessageDialog (null, "Die Terminliste konnte nicht als PDF aufbereitet werden\n");
+			}
+		
 		}catch(Exception e){
 			eltern.cursorWait(false);
 			JOptionPane.showMessageDialog (null, "Der Emailversand der Terminliste ist fehlgeschlagen!!!!!\n");

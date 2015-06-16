@@ -742,7 +742,11 @@ public class PatientHauptLogic {
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							patientHauptPanel.historie.holeRezepte(xpatint,"");
+							try{
+								patientHauptPanel.historie.holeRezepte(xpatint,"");
+							}catch(Exception ex){
+								//ex.printStackTrace();
+							}
 							return null;
 						}
 					}.execute();
@@ -754,7 +758,11 @@ public class PatientHauptLogic {
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							patientHauptPanel.berichte.holeBerichte(xpatint,"");
+							try{
+								patientHauptPanel.berichte.holeBerichte(xpatint,"");								
+							}catch(Exception ex){
+								//ex.printStackTrace();
+							}
 							return null;
 						}
 					}.execute();
@@ -766,7 +774,11 @@ public class PatientHauptLogic {
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							patientHauptPanel.dokumentation.holeDokus(xpatint,"");
+							try{
+								patientHauptPanel.dokumentation.holeDokus(xpatint,"");
+							}catch(Exception ex){
+								//ex.printStackTrace();
+							}	
 							return null;
 						}
 					}.execute();
@@ -778,17 +790,40 @@ public class PatientHauptLogic {
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							patientHauptPanel.gutachten.holeGutachten(xpatint,"");
+							try{
+								patientHauptPanel.gutachten.holeGutachten(xpatint,"");	
+							}catch(Exception ex){
+								//ex.printStackTrace();
+							}	
 							return null;
 						}
 					}.execute();
 				}
 			}.start();
-
+			/*
+			//auf offene RGR-Prüfen
+			new Thread(){
+				public void run(){		
+					new SwingWorker<Void,Void>(){
+						@Override
+						protected Void doInBackground() throws Exception {
+							try{
+								patientHauptPanel.holeWichtigeInfos(xpatint,"");								
+							}catch(Exception ex){
+								ex.printStackTrace();
+							}
+							return null;
+						}
+					}.execute();
+				}
+			}.start();
+			*/
+			/*
 			int i = patientHauptPanel.multiTab.getTabCount();
 			for(int y = 0;y < i;y++){
 				////System.out.println("Tabtitel von "+y+" = "+jtab.getTitleAt(y));
 			}
+			*/
 		}
 		if(evt.getDetails()[0].equals("#SUCHENBEENDEN")){
 			if(((SuchenDialog) patientHauptPanel.sucheComponent) != null){
@@ -866,6 +901,13 @@ public class PatientHauptLogic {
 		try{
 			Reha.thisClass.patpanel.patDatenOk = false;
 			Reha.thisClass.patpanel.patDaten = SqlInfo.holeSatz("pat5"," * ", "PAT_INTERN ='"+patint+"'", Arrays.asList(new String[] {}) );
+			String stmt = "select id from rgaffaktura where roffen > '0' and pat_intern = '"+patint+"' LIMIT 1";
+			
+			if(SqlInfo.holeFelder(stmt).size() > 0){
+				Reha.bRGAFoffen = true;
+			}else{
+				Reha.bRGAFoffen = false;
+			}
 			//System.out.println("Größe der Daten = "+Reha.thisClass.patpanel.patDaten.size());
 			if(Reha.thisClass.patpanel.patDaten.size() >= 71){
 				if(Reha.thisClass.patpanel.patDaten.get(65).equals("")){

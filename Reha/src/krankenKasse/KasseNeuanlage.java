@@ -419,7 +419,14 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 		kkBuffer.append("pger ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"', ");
 		kkBuffer.append("pglo ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"', ");
 		kkBuffer.append("pgrh ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"', ");
-		kkBuffer.append("pgpo ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"' ");
+		if(SystemConfig.mitRs){
+			kkBuffer.append("pgpo ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"', ");
+			kkBuffer.append("pgrs ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"', ");
+			kkBuffer.append("pgft ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"' ");
+		}else{
+			kkBuffer.append("pgpo ='"+ Integer.toString(this.tarifGruppe.getSelectedIndex()+1)+"' ");	
+		}
+		
 		kkBuffer.append("where id='"+dbid+"' LIMIT 1");
 
 		SqlInfo.sqlAusfuehren(kkBuffer.toString());

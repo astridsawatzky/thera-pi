@@ -624,6 +624,7 @@ public class RezTools {
 	}
 
 	public static Vector<Vector<String>> holePreisVector(String disziplin,int preisgruppe){
+		try{
 		if(disziplin.startsWith("KG")){
 			//return  (Vector<Vector<String>>)ParameterLaden.vKGPreise;
 			return SystemPreislisten.hmPreise.get("Physio").get(preisgruppe);			
@@ -642,6 +643,15 @@ public class RezTools {
 		}else if(disziplin.startsWith("PO")){
 			//return  (Vector<Vector<String>>)ParameterLaden.vRHPreise;
 			return SystemPreislisten.hmPreise.get("Podo").get(preisgruppe);
+		}else if(disziplin.startsWith("RS")){
+			//return  (Vector<Vector<String>>)ParameterLaden.vRHPreise;
+			return SystemPreislisten.hmPreise.get("Rsport").get(preisgruppe);
+		}else if(disziplin.startsWith("FT")){
+			//return  (Vector<Vector<String>>)ParameterLaden.vRHPreise;
+			return SystemPreislisten.hmPreise.get("Ftrain").get(preisgruppe);
+		}
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(null,"Fehler im Preislistenbezug!\n\nVermutete Ursache:\nSie haben eine oder mehrere Tarifgruppen gelöscht!\nSelbst Schuld, sowas sollte man nicht machen");
 		}
 		return null;
 	}
@@ -1434,6 +1444,10 @@ public class RezTools {
 			return "Reha";
 		}else if(reznr.startsWith("PO")){
 			return "Podo";
+		}else if(reznr.startsWith("RS")){
+			return "Rsport";
+		}else if(reznr.startsWith("FT")){
+			return "Ftrain";
 		}
 		return "Physio";
 	}

@@ -101,7 +101,12 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 	}
 	/************** Beginn der Methode f�r die Objekterstellung und -platzierung *********/
 	private JPanel getVorlagenSeite(){
-		String[] dummydiszi = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+		String[] dummydiszi = null;
+		if(SystemConfig.mitRs){
+			dummydiszi = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
+		}else{
+			dummydiszi = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+		}
 		disziplin = new JRtaComboBox(dummydiszi);
 		disziplin.setActionCommand("disziplin");
 
@@ -428,12 +433,24 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		int lang = tarife.getRowCount();
 		String diszi = (String)disziplin.getSelectedItem();
 		//String[] disziindex = {"2","1","5","3","8","7"};
-		String[] disziindex = {SystemConfig.hmHmPosIndex.get("KG"),
-				SystemConfig.hmHmPosIndex.get("MA"),
-				SystemConfig.hmHmPosIndex.get("ER"),
-				SystemConfig.hmHmPosIndex.get("LO"),
-				SystemConfig.hmHmPosIndex.get("RH"),
-				SystemConfig.hmHmPosIndex.get("PO")	};
+		String[] disziindex = null;
+		if(SystemConfig.mitRs){
+			disziindex = new String[] {SystemConfig.hmHmPosIndex.get("KG"),
+					SystemConfig.hmHmPosIndex.get("MA"),
+					SystemConfig.hmHmPosIndex.get("ER"),
+					SystemConfig.hmHmPosIndex.get("LO"),
+					SystemConfig.hmHmPosIndex.get("RH"),
+					SystemConfig.hmHmPosIndex.get("PO"),
+					SystemConfig.hmHmPosIndex.get("RS"),
+					SystemConfig.hmHmPosIndex.get("FT")};
+		}else{
+			disziindex = new String[] {SystemConfig.hmHmPosIndex.get("KG"),
+					SystemConfig.hmHmPosIndex.get("MA"),
+					SystemConfig.hmHmPosIndex.get("ER"),
+					SystemConfig.hmHmPosIndex.get("LO"),
+					SystemConfig.hmHmPosIndex.get("RH"),
+					SystemConfig.hmHmPosIndex.get("PO")};
+		}
 		
 		int idiszi = disziplin.getSelectedIndex();
 		String swert = "";
@@ -727,6 +744,14 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 			if(isAktiv("Podo")){
 				SystemPreislisten.ladePreise("Podo");
 			}
+			if(SystemConfig.mitRs){
+				if(isAktiv("Rsport")){
+					SystemPreislisten.ladePreise("Rsport");
+				}
+				if(isAktiv("Ftrain")){
+					SystemPreislisten.ladePreise("Ftrain");
+				}
+			}
 			SystemPreislisten.ladePreise("Common");
 			
 			fuelleMitWerten(disziplin.getSelectedIndex());
@@ -749,7 +774,13 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 			inif.setStringProperty("PreisGruppen_Common", "PGName"+Integer.toString(position), commonname, null);
 			inif.setStringProperty("PreisGruppen_Common", "PGBereich"+Integer.toString(position), "00", null);
 			inif.setStringProperty("PreisGruppen_Common", "PGBesonderheit"+Integer.toString(position), "000", null);
-			String[] diszis = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+			String[] diszis = null;
+			if(SystemConfig.mitRs){
+				diszis = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};	
+			}else{
+				diszis = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+			}
+			
 			for(int i = 0; i < diszis.length;i++){
 				try{
 				inif.setIntegerProperty("PreisGruppen_"+diszis[i], "AnzahlPreisGruppen", position, null);
@@ -781,7 +812,13 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		}
 	}
 	private void macheNeuePreistabelle(){
-		String[] tabName = {"kgtarif","matarif","ertarif","lotarif","rhtarif","potarif"};
+		String[] tabName = null;
+		if(SystemConfig.mitRs){
+			tabName = new String[] {"kgtarif","matarif","ertarif","lotarif","rhtarif","potarif","rstarif","fttarif"};
+		}else{
+			tabName = new String[] {"kgtarif","matarif","ertarif","lotarif","rhtarif","potarif"};	
+		}
+		
 		int anzahltarife = tarife.getRowCount()+1;
 		for(int i = 0; i < tabName.length; i++){
 			new MachePreisListe(tabName[i]+Integer.toString(anzahltarife));

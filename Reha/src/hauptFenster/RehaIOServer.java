@@ -8,8 +8,10 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingworker.SwingWorker;
+
 
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -220,6 +222,13 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 			rehaHMKIsActive = false;
 			rehaHMKreversePort = -1;
 			return;
+		}else if(op.split("#")[1].equals(RehaIOMessages.NEED_AKTUSER)){
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.NEED_AKTUSER+"#"+Reha.aktUser);
+				}
+			});
+
 		}
 	}	
 	/*************

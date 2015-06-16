@@ -300,6 +300,10 @@ public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,
 		//System.out.println("Rückgabe des JPanels");
 		return pb.getPanel();
 	}
+	
+	public static String stripLFV(String string){
+		return string.substring(string.indexOf("$$LFV$$"),string.lastIndexOf("$$")+2);
+	}
 
 	private JScrollPane getFunktionsPanel(){
 
@@ -395,12 +399,18 @@ public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,
 					xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"+
 							Integer.toString(this.berichtid)+"' LIMIT 1");
 				}
+				if(xdiagnose.indexOf("$$LFV$$") >= 0){
+					xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
+				}				
 				diagnose.setText(xdiagnose);	
 			}else if((!this.reznr.equals("")) && (this.aufrufvon == 1)){
 				xdiagnose = (String)Reha.thisClass.patpanel.vecakthistor.get(23);
 				if(xdiagnose.equals("") ){
 					xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"+
 							Integer.toString(this.berichtid)+"' LIMIT 1");
+				}
+				if(xdiagnose.indexOf("$$LFV$$") >= 0){
+					xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
 				}
 				diagnose.setText(xdiagnose);	
 				
@@ -418,10 +428,17 @@ public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,
 						ex.printStackTrace();
 						diagnose.setText("Diagnose kann nicht ermittelt werden bitte von Originalrezept übernehmen!!!!!!!!!");
 					}
+					if(xdiagnose.indexOf("$$LFV$$") >= 0){
+						xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
+					}
 					diagnose.setText(xdiagnose);
 				}else{
 					vec = SqlInfo.holeSatz("lza", "diagnose", "rez_nr='"+this.reznr+"'", Arrays.asList(new String[] {}));
 					if(vec.size()>0){
+						xdiagnose = (String)vec.get(0); 
+						if(xdiagnose.indexOf("$$LFV$$") >= 0){
+							xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
+						}
 						diagnose.setText((String)vec.get(0));	
 					}else{
 						diagnose.setText("Diagnose kann nicht ermittelt werden bitte von Originalrezept übernehmen!!!!!!!!!");

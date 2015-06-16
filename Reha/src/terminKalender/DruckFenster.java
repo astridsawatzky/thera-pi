@@ -40,6 +40,8 @@ import org.jdesktop.swingx.JXTitledPanel;
 
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
+import CommonTools.StringTools;
+import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -379,12 +381,16 @@ public void actionPerformed(ActionEvent arg0) {
 		}
 		if(cmd.equals("Email senden")){
 			if(pliste.getRowCount()> 0){
-				jb1.setEnabled(false);
-				jb2.setEnabled(false);
-				jb3.setEnabled(false);
-				jb4.setEnabled(false);			
-				cursorWait(true);
-				new Thread(new sendeTermine()).start();
+				try{
+					jb1.setEnabled(false);
+					jb2.setEnabled(false);
+					jb3.setEnabled(false);
+					jb4.setEnabled(false);			
+					cursorWait(true);
+					new Thread(new sendeTermine()).start();
+				}catch(Exception ex){
+					JOptionPane.showMessageDialog(null,"Fehler in der Funktion Terminplan per Email senden.\nFehlertext:"+ex.getLocalizedMessage());
+				}
 			}
 			break;
 		}
@@ -798,6 +804,7 @@ public void run(){
 					f.delete();
 				}
 				textDocument.getPersistenceService().export(exporturl, new PDFFilter());
+				//Thread.sleep(50);
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung der PDF-Datei (Termine)");
 			}
@@ -865,6 +872,7 @@ final class sendeTermine extends Thread implements Runnable{
 					"Nicht vorhandene Termine können nur sehr schwer (in diesem Fall gar nicht) per Email versandt werden...\n\n"+
 					"Oh Herr schmeiß Hirn ra.....");
 			DruckFenster.buttonsEinschalten();
+			cursorWait(false);
 			return;
 		}
 		if(oOTermine.get(0).get(9).equals("")){
@@ -873,26 +881,30 @@ final class sendeTermine extends Thread implements Runnable{
 				if(emailaddy.equals("")){
 					DruckFenster.buttonsEinschalten();
 					JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 1");
+					cursorWait(false);
 					return;
 				}
 			}catch(java.lang.NullPointerException ex){
 				JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 2");
+				cursorWait(false);
 				DruckFenster.buttonsEinschalten();
 				return;
 			}
 		}else{
-			pat_intern = holeAusDB("select PAT_INTERN from verordn where REZ_NR ='"+oOTermine.get(0).get(9)+"'");
+			pat_intern = holeAusDB("select PAT_INTERN from verordn where REZ_NR ='"+StringTools.richteNummer(oOTermine.get(0).get(9))+"'");
 			if(pat_intern.equals("")){
 				emailaddy = JOptionPane.showInputDialog (null, "Bitte geben Sie eine gültige Email-Adresse ein");
 				try{
 					if(emailaddy.equals("")){
 						DruckFenster.buttonsEinschalten();
 						JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 3");
+						cursorWait(false);
 						return;
 					}
 				}catch(java.lang.NullPointerException ex){
 					DruckFenster.buttonsEinschalten();
 					JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 4");
+					cursorWait(false);
 					return;
 				}
 			}else{
@@ -903,22 +915,44 @@ final class sendeTermine extends Thread implements Runnable{
 						if(emailaddy.equals("")){
 						DruckFenster.buttonsEinschalten();
 						JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 5");
+						cursorWait(false);
 						return;
 						}
 					}catch(java.lang.NullPointerException ex){
 						DruckFenster.buttonsEinschalten();
 						JOptionPane.showMessageDialog (null, "Emailadresse ungültig - Abbruchposition 6");
+						cursorWait(false);
 						return;
 					}
 				}
 			}
+		}
+		try{
+			File f = new File(Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf"); 
+			if(f.exists()){
+				f.delete();
+			}
+
+			int frage = JOptionPane.showConfirmDialog(null,"Terminplan versenden an:\n\nEmailadresse = "+emailaddy+"\nPatient = "+
+					StringTools.EGross(SqlInfo.holeEinzelFeld("select n_name from pat5 where pat_intern='"+pat_intern+"' LIMIT 1"))+", "+
+					StringTools.EGross(SqlInfo.holeEinzelFeld("select v_name from pat5 where pat_intern='"+pat_intern+"' LIMIT 1"))+"\n"+
+					"Rezept = "+StringTools.richteNummer(oOTermine.get(0).get(9))+"\n",
+					"Benutzeranfrage",
+					JOptionPane.YES_NO_OPTION);
+					if(frage != JOptionPane.YES_OPTION){
+						DruckFenster.buttonsEinschalten();
+						cursorWait(false);
+						return;
+					}
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 	
 		bestueckeOOo xbestueckeOOo = new bestueckeOOo();
 		xbestueckeOOo.DruckenOderEmail("Email");
 		while(DruckFenster.OOoFertig < 0){
 			try {
-				Thread.sleep(20);
+				Thread.sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -934,6 +968,20 @@ final class sendeTermine extends Thread implements Runnable{
 		anhang[1] = "Terminplan.pdf";
 		attachments.add(anhang.clone());
 		File f = new File(anhang[0]);
+		long zeit = System.currentTimeMillis();
+		while(!f.exists()){
+			if(System.currentTimeMillis()-zeit > 2000){
+				break;
+			}
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			f = new File(anhang[0]);
+			
+		}
 		if(!f.exists()){
 			JOptionPane.showMessageDialog (null, "PDF-Emailanhang konnte nicht erzeugt werden, Aktion wird abgebrochen");
 			DruckFenster.buttonsEinschalten();
@@ -946,7 +994,7 @@ final class sendeTermine extends Thread implements Runnable{
 		String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
 		String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
 		////System.out.println("Empf�ngeradresse = "+emailaddy);
-		String recipientsAddress = emailaddy;
+		String recipientsAddress = emailaddy+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
 		String subject = "Ihre Behandlungstermine";
 		boolean authx = (SystemConfig.hmEmailExtern.get("SmtpAuth").equals("0") ? false : true);
 		boolean bestaetigen = (SystemConfig.hmEmailExtern.get("Bestaetigen").equals("0") ? false : true);
@@ -996,7 +1044,7 @@ final class sendeTermine extends Thread implements Runnable{
 			JOptionPane.showMessageDialog (null, "Emailversand der Terminliste fehlgeschlagen!!!!\n");
 			e.printStackTrace( );
 		}
-		
+		f.delete();
 		DruckFenster.buttonsEinschalten();
 	}
 	

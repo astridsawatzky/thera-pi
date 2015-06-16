@@ -620,7 +620,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 			if(! fdatum.trim().equals("")){
 				sqldat = DatFunk.sDatInSQL(fdatum);
 				sret = "Update flexkc set ";
-				sret = sret + "T1='"+ftext.trim().toUpperCase()+"', N1='@FREI', TS1='"+tstart+"', TD1='"+tdauer+"', TE1='"+tend+"',";
+				sret = sret + "T1='"+"FTG "+ftext.trim().toUpperCase()+"', N1='@FREI', TS1='"+tstart+"', TD1='"+tdauer+"', TE1='"+tend+"',";
 				sret = sret + "BELEGT='1' Where DATUM='"+sqldat+"'";
 				////System.out.println(sret);
 				SchreibeNeuenKalender snk = new SchreibeNeuenKalender();

@@ -69,6 +69,24 @@ public class PatientToolBarLogic {
 					patientHauptPanel.patientLogic.starteSuche();
 				}
 			}
+		}else if(e.getKeyCode() == KeyEvent.VK_F1 && (!patientHauptPanel.aktPatID.equals("")) ){
+			if(Reha.bRGAFoffen){
+				new Thread(){
+					public void run(){		
+						new SwingWorker<Void,Void>(){
+							@Override
+							protected Void doInBackground() throws Exception {
+								try{
+									patientHauptPanel.holeWichtigeInfos(patientHauptPanel.aktPatID,"");								
+								}catch(Exception ex){
+									ex.printStackTrace();
+								}
+								return null;
+							}
+						}.execute();
+					}
+				}.start();				
+			}
 		}
 	}
 	

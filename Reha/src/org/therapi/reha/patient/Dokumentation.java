@@ -2240,7 +2240,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 		}else if(art==2){
 			String src = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+".odt";
+			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".odt";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
@@ -2252,7 +2252,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}		
 		}else if(art==3){
 			String src = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+".ods";
+			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".ods";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);
@@ -2264,6 +2264,21 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 		}
 		
+	}
+/**************************************************/
+	private String testName(String string){
+		int i = 0;
+		int doubletten = 0;
+		int len = tabdokus.getRowCount();
+		for(i = 0; i < len;i++){
+			if(tabdokus.getValueAt(i, 2).toString().trim().startsWith(string)){
+				doubletten++;
+			}
+		}
+		if(doubletten > 0){
+			return "-"+Integer.toString(doubletten);
+		}
+		return "";
 	}
 /**************************************************/
 	private void pdfSpeichernDoku(){

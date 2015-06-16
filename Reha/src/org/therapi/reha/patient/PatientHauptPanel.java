@@ -22,10 +22,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
@@ -33,10 +35,12 @@ import org.jdesktop.swingx.JXPanel;
 import rehaInternalFrame.JPatientInternal;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import dialoge.InfoDialog;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.PatStammEventListener;
@@ -134,6 +138,9 @@ public class PatientHauptPanel extends JXPanel{
 
 	//Bezug zum unterliegenden JInternalFrame
 	JPatientInternal patientInternal = null;
+	
+	
+	InfoDialog infoDlg = null;
 	/*******************************************************/
 	public PatientHauptPanel(String name,JPatientInternal internal){
 		super();
@@ -381,6 +388,22 @@ public class PatientHauptPanel extends JXPanel{
 	
 	public void setzeFocus(){
 		patientLogic.setzeFocus();
+	}
+	public void holeWichtigeInfos(String xpatint, String string) {
+		String stmt = "select t1.rdatum,t1.rnr,t1.roffen,t1.pat_intern from rgaffaktura as t1 join pat5 as t2 on (t1.pat_intern=t2.pat_intern) where t1.roffen > '0' and t1.pat_intern = '"+xpatint+"' order by t1.rdatum";
+		Vector<Vector<String>> vecoffen = SqlInfo.holeFelder(stmt);
+		if(vecoffen.size() > 0){
+			infoDlg = new InfoDialog(xpatint,"offenRGAF",vecoffen);
+			infoDlg.pack();
+			infoDlg.setLocationRelativeTo(this);
+			infoDlg.setVisible(true);
+			infoDlg = null;
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					tfsuchen.requestFocus();		
+				}
+			});
+		}
 	}
 }
 /***********Inner-Class JPatTextField*************/

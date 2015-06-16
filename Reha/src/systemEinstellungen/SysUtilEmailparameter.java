@@ -314,7 +314,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 			ini.setStringProperty(postfach, "Pop3Host",pophost , null);		
 			ini.setStringProperty(postfach, "SmtpAuth",authent , null);	
 			ini.setStringProperty(postfach, "SmtpSecure",Secure.getSelectedItem().toString(),null);
-			ini.setStringProperty(postfach, "SmtpPort",authent , null);
+			ini.setStringProperty(postfach, "SmtpPort",useport , null);
 			
 			INITool.saveIni(ini);
 			JOptionPane.showMessageDialog(null, "Emailparameter für --> "+Postfach.getSelectedItem().toString()+" <-- wurden erfolgreich gespeichert");

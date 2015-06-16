@@ -174,8 +174,14 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 					}
 					Vector<Vector<String>> preisvec = null;
 					
-
-					preisvec = SystemPreislisten.hmPreise.get(diszi).get(prgruppe);
+					try{
+						preisvec = SystemPreislisten.hmPreise.get(diszi).get(prgruppe);	
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(null, "Achtung Fehler beim Bezug der Preislisteninformation!\nKlasse: RezeptDaten");
+						RezeptDaten.feddisch = true;
+						return;
+					}
+					
 					SwingUtilities.invokeLater(new Runnable(){
 						public  void run(){
 							int farbcode = StringTools.ZahlTest((String)Reha.thisClass.patpanel.vecaktrez.get(57));

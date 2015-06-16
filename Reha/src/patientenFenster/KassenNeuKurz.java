@@ -110,7 +110,14 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 					kkBuffer.append("pger ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"', ");
 					kkBuffer.append("pglo ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"', ");
 					kkBuffer.append("pgrh ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"', ");
-					kkBuffer.append("pgpo ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"' ");
+					if(SystemConfig.mitRs){
+						kkBuffer.append("pgpo ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"', ");
+						kkBuffer.append("pgrs ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"', ");
+						kkBuffer.append("pgft ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"' ");
+					}else{
+						kkBuffer.append("pgpo ='"+ Integer.toString(tarifGruppe.getSelectedIndex()+1)+"' ");	
+					}
+					
 					kkBuffer.append(" where id ='"+Integer.toString(iid)+"'");
 
 					SqlInfo.sqlAusfuehren(kkBuffer.toString());

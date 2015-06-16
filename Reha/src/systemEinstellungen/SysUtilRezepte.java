@@ -65,7 +65,7 @@ import com.jgoodies.forms.layout.FormLayout;
 public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListener {
 	
 	JButton[] button = {null,null,null,null,null,null,null};
-	JRtaCheckBox[] heilmittel = {null,null,null,null,null,null};
+	JRtaCheckBox[] heilmittel = {null,null,null,null,null,null,null,null};
 	JRtaCheckBox angelegtVonUser = null;
 	JRtaCheckBox warnungBeiRezGeb = null;
 	JRtaComboBox voreinstellung = null;
@@ -119,17 +119,30 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 	private void fuelleMitWerten(){
 		int aktiv;
 		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/","rezept.ini");
-		
-		for(int i = 0;i < 6;i++){
-			aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString());
-			if(aktiv > 0){
-				heilmittel[i].setSelected(true);
-			}else{
-				heilmittel[i].setSelected(false);
+		if(SystemConfig.mitRs){
+			for(int i = 0;i < 8;i++){
+				aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString());
+				if(aktiv > 0){
+					heilmittel[i].setSelected(true);
+				}else{
+					heilmittel[i].setSelected(false);
+				}
+				
 			}
-			
+		}else{
+			for(int i = 0;i < 6;i++){
+				aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString());
+				if(aktiv > 0){
+					heilmittel[i].setSelected(true);
+				}else{
+					heilmittel[i].setSelected(false);
+				}
+			}
+			heilmittel[6].setEnabled(false);
+			heilmittel[7].setEnabled(false);
+
 		}
-		
+
 		angelegtVonUser.setSelected(SystemConfig.AngelegtVonUser);
 		
 		warnungBeiRezGeb.setSelected(SystemConfig.RezGebWarnung);
@@ -152,7 +165,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 	/************** Beginn der Methode f�r die Objekterstellung und -platzierung *********/
 	private JPanel getVorlagenSeite(){
 
-		for(int i = 0; i<6;i++){
+		for(int i = 0; i<8;i++){
 			heilmittel[i] = new JRtaCheckBox();
 		}
 		voreinstellung = new JRtaComboBox(SystemConfig.rezeptKlassen);
@@ -160,7 +173,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		//                                      1.             2.     3.     4.     5.     6.    7. 
 		FormLayout lay = new FormLayout("right:max(120dlu;p), 20dlu, 40dlu, 70dlu, 4dlu, 10dlu,0dlu",
        //1.    2. 3.   4.   5.   6.  7.   8.  9.  10.  11. 12.  13.  14.  15. 16.   17. 18.   19.   20.  21. 22.     23. 24     25
-		"p, 2dlu, p,  2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p  ,10dlu, p, 10dlu, p, 10dlu, p, 10dlu, p,  10dlu ,  p, 10dlu,  p," +
+		"p, 2dlu, p,  2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p  ,2dlu, p  ,2dlu, p  ,10dlu, p, 10dlu, p, 10dlu, p, 10dlu, p,  10dlu ,  p, 10dlu,  p," +
        //26    27  28   29   30   31  32  33 34    35  36   37   38  39   40
 		"10dlu,p,10dlu,80dlu,2dlu,p ,2dlu,p, 2dlu, p, 10dlu, p, 2dlu, p, 10dlu");
 		
@@ -182,33 +195,38 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		builder.addLabel("Podologische-Praxis", cc.xyw(4, 13, 2));
 		builder.add(heilmittel[5], cc.xy(6, 13, CellConstraints.RIGHT, CellConstraints.BOTTOM));
 		
-		builder.addSeparator("Voreinstellung bei Rezeptanlage", cc.xyw(1, 15, 6));
+		builder.addLabel("Rehasport", cc.xyw(4, 15, 2));
+		builder.add(heilmittel[6], cc.xy(6, 15, CellConstraints.RIGHT, CellConstraints.BOTTOM));
+		builder.addLabel("Funktionstraining", cc.xyw(4, 17, 2));
+		builder.add(heilmittel[7], cc.xy(6, 17, CellConstraints.RIGHT, CellConstraints.BOTTOM));
 
-		builder.addLabel("Rezeptklasse", cc.xy(1, 17));
-		builder.add(voreinstellung,cc.xyw(3,17,4));
+		builder.addSeparator("Voreinstellung bei Rezeptanlage", cc.xyw(1, 19, 6));
+
+		builder.addLabel("Rezeptklasse", cc.xy(1, 21));
+		builder.add(voreinstellung,cc.xyw(3,21,4));
 		
-		builder.addSeparator("Quittungsdrucker f. Rezeptgebühren", cc.xyw(1, 19, 6));
+		builder.addSeparator("Quittungsdrucker f. Rezeptgebühren", cc.xyw(1, 23, 6));
 		
-		builder.addLabel("Drucker auswählen", cc.xy(1, 21));
+		builder.addLabel("Drucker auswählen", cc.xy(1, 25));
 		druckername = new JComboBox(drucker);
 		if(SystemConfig.rezGebDrucker.trim().equals("")){
 			druckername.setSelectedIndex(0);
 		}else{
 			druckername.setSelectedItem(SystemConfig.rezGebDrucker.trim());
 		}
-		builder.add(druckername,cc.xyw(3, 21,4));
+		builder.add(druckername,cc.xyw(3, 25,4));
 		
-		builder.addSeparator("Barcodedrucker (nur sofern Sie Barcode verwenden)", cc.xyw(1, 23, 6));
-		builder.addLabel("Drucker auswählen", cc.xy(1, 25));
+		builder.addSeparator("Barcodedrucker (nur sofern Sie Barcode verwenden)", cc.xyw(1, 27, 6));
+		builder.addLabel("Drucker auswählen", cc.xy(1, 29));
 		barcodedrucker = new JComboBox(drucker);
 		if(SystemConfig.rezBarcodeDrucker.trim().equals("")){
 			barcodedrucker.setSelectedIndex(0);
 		}else{
 			barcodedrucker.setSelectedItem(SystemConfig.rezBarcodeDrucker.trim());
 		}		
-		builder.add(barcodedrucker,cc.xyw(3, 25,4));
+		builder.add(barcodedrucker,cc.xyw(3, 30,4));
 		
-		builder.addSeparator("Vorlagen - Verwaltung", cc.xyw(1, 27, 6));
+		builder.addSeparator("Vorlagen - Verwaltung", cc.xyw(1, 31, 6));
 		
 		modvorl = new MyVorlagenTableModel();
 		modvorl.setColumnIdentifiers(new String[] {"Titel der Vorlage","Vorlagendatei"});
@@ -237,7 +255,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(vorlagen);
 		jscr.validate();
-		builder.add(jscr,cc.xyw(1, 29,6));
+		builder.add(jscr,cc.xyw(1, 33,6));
 		
 		JPanel butPan = JCompTools.getEmptyJXPanel();
 		butPan.setOpaque(false);
@@ -255,17 +273,17 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		butPan.add(new JLabel("neue Vorlagendatei hinzufügen"), cc2.xy(2, 3));
 		butPan.add(button[2], cc2.xy(4, 3));
 		butPan.validate();
-		builder.add(butPan, cc.xyw(1,33,6));
+		builder.add(butPan, cc.xyw(1,37,6));
 		
-		builder.addSeparator("Sonstiges", cc.xyw(1, 35, 6));
-		builder.addLabel("Angelegt von = aktueller User", cc.xy(1, 37));
+		builder.addSeparator("Sonstiges", cc.xyw(1, 39, 6));
+		builder.addLabel("Angelegt von = aktueller User", cc.xy(1, 41));
 		
 		angelegtVonUser = new JRtaCheckBox();
-		builder.add(angelegtVonUser, cc.xy(6, 37));
+		builder.add(angelegtVonUser, cc.xy(6, 41));
 		
-		builder.addLabel("Signalton bei nicht bezahlten Rezeptgebühren", cc.xy(1, 39));
+		builder.addLabel("Signalton bei nicht bezahlten Rezeptgebühren", cc.xy(1, 43));
 		warnungBeiRezGeb = new JRtaCheckBox();
-		builder.add(warnungBeiRezGeb, cc.xy(6, 39));
+		builder.add(warnungBeiRezGeb, cc.xy(6, 43));
 		
 		return builder.getPanel();
 	}
@@ -435,10 +453,18 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		int iwert;
 		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rezept.ini");
 		inif.setStringProperty("RezeptKlassen", "InitKlasse",(String)voreinstellung.getSelectedItem(),null);
-		for(int i = 0; i < 6;i++){
-			iwert = (heilmittel[i].isSelected() ? 1 : 0);
-			inif.setIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString(),iwert,null);
-			
+		if(!SystemConfig.mitRs){
+			for(int i = 0; i < 6;i++){
+				iwert = (heilmittel[i].isSelected() ? 1 : 0);
+				inif.setIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString(),iwert,null);
+				
+			}
+		}else{
+			for(int i = 0; i < 8;i++){
+				iwert = (heilmittel[i].isSelected() ? 1 : 0);
+				inif.setIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString(),iwert,null);
+				
+			}
 		}
 		inif.setStringProperty("DruckOptionen", "RezGebDrucker",(String)druckername.getSelectedItem(),null);
 		inif.setStringProperty("DruckOptionen", "BarCodeDrucker",(String)barcodedrucker.getSelectedItem(),null);

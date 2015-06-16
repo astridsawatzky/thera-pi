@@ -79,6 +79,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.therapi.reha.patient.AktuelleRezepte;
 
+import dialoge.InfoDialog;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import CommonTools.SqlInfo;
@@ -234,6 +235,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	public boolean setFromMouse = false;
 	public boolean terminBreak = false;
 	public JRehaInternal eltern;
+	
+	public InfoDialog infoDlg = null;
 	
 	public static String[] dayname = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
 	public static String[] tooltip = {"","","","","","",""};
@@ -1272,10 +1275,34 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 							setUpdateVerbot(false);
 							break;
 						}
+						if(e.getKeyCode()==KeyEvent.VK_F1 && (!e.isControlDown()) && (!e.isShiftDown())){
+							if(infoDlg != null || aktiveSpalte[2]< 0 || aktiveSpalte[0] < 0){
+								return;
+							}
+							String reznummer = "";
+							//TerminInfo aufrufen
+							if(ansicht == NORMAL_ANSICHT){
+								//xaktBehandler = belegung[aktiveSpalte[2]];
+								reznummer = (String) ((Vector)((ArrayList)vTerm.get(belegung[aktiveSpalte[2]])).get(1)).get(aktiveSpalte[0]);
+							}else  if(ansicht == WOCHEN_ANSICHT){
+								//xaktBehandler = aktiveSpalte[2];
+								reznummer = (String) ((Vector)((ArrayList)vTerm.get(aktiveSpalte[2])).get(1)).get(aktiveSpalte[0]);
+							}
+							//String reznummer = (String) ((Vector)((ArrayList)vTerm.get(belegung[aktiveSpalte[2]])).get(1)).get(aktiveSpalte[0]);
+							infoDlg = new InfoDialog(reznummer,"terminInfo",null);
+							infoDlg.pack();
+							infoDlg.setLocationRelativeTo(TerminFlaeche);
+							infoDlg.setVisible(true);
+							infoDlg = null;
+							oSpalten[tspalte].requestFocus();	
+
+							break;
+						}
 						oSpalten[tspalte].requestFocus();				
 					}
 				}
 				public void keyReleased(java.awt.event.KeyEvent e) {
+					
 					if (e.getKeyCode()==17){
 						ctrlGedrueckt=false;
 					}

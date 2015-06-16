@@ -475,7 +475,7 @@ public void maskenEintragen(){
 	private String macheFeiertag(String sqldat, int position){
 		String sret = null;
 		sret = "Update flexkc set ";
-		sret = sret + "T1='"+feiertagName.get(position).toUpperCase()+ "', " ;
+		sret = sret + "T1='FTG "+feiertagName.get(position).toUpperCase()+ "', " ;
 		sret = sret + "N1='@FREI', ";
 		sret = sret + "TS1='"+SystemConfig.KalenderUmfang[0]+"', ";
 		sret = sret + "TD1='"+Long.toString(ZeitFunk.ZeitDifferenzInMinuten(SystemConfig.KalenderUmfang[0],SystemConfig.KalenderUmfang[1]))+"', ";

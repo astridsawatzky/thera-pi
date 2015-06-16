@@ -501,7 +501,14 @@ public class KVKRohDaten extends RehaSmartDialog implements ActionListener{
 				buf.append("pger='"+pg+"', ");
 				buf.append("pglo='"+pg+"', ");
 				buf.append("pgrh='"+pg+"', ");
-				buf.append("pgpo='"+pg+"' ");
+				if(SystemConfig.mitRs){
+					buf.append("pgpo='"+pg+"', ");
+					buf.append("pgrs='"+pg+"', ");
+					buf.append("pgft='"+pg+"' ");
+				}else{
+					buf.append("pgpo='"+pg+"' ");	
+				}
+				
 				
 				buf.append("where id='"+Integer.toString(id)+"' LIMIT 1");
 				/*

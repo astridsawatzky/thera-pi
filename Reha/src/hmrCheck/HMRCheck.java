@@ -80,16 +80,22 @@ public class HMRCheck {
 	 * 
 	 */
 	public boolean check(){
-		
+		if(reznummer.startsWith("RS") || reznummer.startsWith("FT") ){
+			return true;
+		}
 		AdRrezept = (rezeptart==2);
 		folgerezept = (rezeptart==1);
 		
 		Vector<Vector<String>> vec = SqlInfo.holeFelder("select * from hmrcheck where indischluessel='"+
 				indischluessel+"' LIMIT 1");
 
-		if(vec.size() <= 0 || indischluessel.equals("")){
+		if( (vec.size() <= 0 || indischluessel.equals("")) && (!indischluessel.equals("k.A.")) ){
 			JOptionPane.showMessageDialog(null,"Indikationsschlüssel "+indischluessel+" unbekannt oder nicht angegeben!"); 
 			return false;
+		}else if(indischluessel.equals("k.A.")){
+			JOptionPane.showMessageDialog(null,"Indikationsschlüssel "+indischluessel+" (keine Angaben) wurde gewählt, HMR-Check wird abgebrochen.\n"+
+		"Bitte stellen Sie selbst sicher daß alle übrigen Pflichtangaben vorhanden sind");
+			return true;
 		}
 
 		int maxprorezept = Integer.parseInt(vec.get(0).get(2));
@@ -228,6 +234,16 @@ public class HMRCheck {
 						Long.toString(differenz)+" Tage </font><br>" +
 						"</b><br><br>";
 						testok = false;
+					}
+					//Test auf Anregung von Michael Schütt
+					Vector<String> vtagetest = RezTools.holeEinzelTermineAusRezept(null, termine);
+					for(int i = 0; i < vtagetest.size();i++){
+						if( (differenz = DatFunk.TageDifferenz(vtagetest.get(i),DatFunk.sHeute())) < 0 ){
+							fehlertext = fehlertext+(fehlertext.length() <= 0 ? "<html>" : "")+"<br><b><font color='#ff0000'>Behandlungsdatum "+vtagetest.get(i)+" ist kritisch!</font><br><br>"+"Das Behandlungsdatum <font color='#ff0000'></font> liegt in der Zukunft<br> <font color='#ff0000'>"+
+									"um "+Long.toString(differenz*-1)+" Tage </font><br>" +
+									"</b><br><br>";
+									testok = false;
+						}
 					}
 
 				}

@@ -102,6 +102,7 @@ import org.jdesktop.swingx.table.TableColumnExt;
 import org.therapi.reha.patient.LadeProg;
 
 
+
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import CommonTools.Colors;
@@ -111,13 +112,14 @@ import CommonTools.StringTools;
 import terminKalender.ParameterLaden;
 import terminKalender.DatFunk;
 import terminKalender.ZeitFunk;
-
 import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import dialoge.InfoDialog;
 @SuppressWarnings({ "unchecked", "unused" })
 public class SuchenSeite extends JXPanel implements TableModelListener,FocusListener, ActionListener,PropertyChangeListener, KeyListener{
 	/**
@@ -186,8 +188,12 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	public String schichtbeginn;
 	public RoogleFenster eltern;
 	public boolean nachfolgerloeschen = false;
+	
+	public InfoDialog infoDlg = null;
+	public KeyListener kl = null;
 	SuchenSeite(RoogleFenster xeltern){
 		super();
+		activateKl();
 		setBorder(null);
 		setLayout(new GridBagLayout());
 		erstelleGridBag();
@@ -354,6 +360,38 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		}else{
 			this.setCursor(Reha.thisClass.wartenCursor);
 		}
+	}
+	
+	private void activateKl(){
+		kl = new KeyListener(){
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_F1){
+					if(infoDlg != null){
+						return;
+					}
+					int row = jxSucheTable.getSelectedRow();
+					if(row < 0){
+						return;
+					}
+					String reznummer = InfoDialog.macheNummer(jxSucheTable.getValueAt(row, 9).toString());
+					if(reznummer.equals("")){
+						return;
+					}
+					infoDlg = new InfoDialog(reznummer,"terminInfo",null);
+					infoDlg.pack();
+					infoDlg.setLocationRelativeTo(null);
+					infoDlg.setVisible(true);
+					infoDlg = null;							
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+		};
 	}
 
 	
@@ -661,6 +699,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				}
 			}
 		});
+		jxSucheTable.addKeyListener(kl);
 		/*
 		jxSucheTable.addKeyListener(new KeyListener(){
 			@Override
@@ -669,9 +708,12 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					//arg0.consume();
 					SwingUtilities.invokeLater(new Runnable(){
 						public void run(){
-							int row = jxSucheTable.getSelectedRow();
-							int col = jxSucheTable.getSelectedColumn();
-							startCellEditing(jxSucheTable,row,col);
+							String reznummer = (String) ((Vector)((ArrayList)vTerm.get(belegung[aktiveSpalte[2]])).get(1)).get(aktiveSpalte[0]);
+							infoDlg = new InfoDialog(reznummer,"terminInfo");
+							infoDlg.pack();
+							infoDlg.setLocationRelativeTo(TerminFlaeche);
+							infoDlg.setVisible(true);
+							infoDlg = null;							
 						}
 					});
 				}

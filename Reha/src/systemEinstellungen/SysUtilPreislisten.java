@@ -96,15 +96,14 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 	JRtaCheckBox bezeich = null;
 	JRtaCheckBox neuaufalt = null;
 	Vector<String> delvec = new Vector<String>();
-	String[] dbtarife = {"kgtarif","matarif","ertarif","lotarif","rhtarif","potarif"};	
+	String[] dbtarife = {"kgtarif","matarif","ertarif","lotarif","rhtarif","potarif","rstarif","fttarif"};	
 	String[] zzart = new String[] {"nicht relevant","erste Behandlung >=","Rezeptdatum >=","beliebige Behandlung >=","Rezept splitten"};
-	String[] disziplin = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+	String[] disziplin = {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
  	JRtaComboBox kuerzelcombo = new JRtaComboBox();
 	KeyListener kl = null;
 	
 	public SysUtilPreislisten(){
 		super(new BorderLayout());
-		//System.out.println("Aufruf SysUtilPreislisten");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
 		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
@@ -148,10 +147,9 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 		jcmb[0].addActionListener(this);
 		builder.add(jcmb[0],cc.xyw(3,1,7));
 		
-		String[] xkuerzel = {"KG","MA","ER","LO","RH","PO"};
+		String[] xkuerzel = {"KG","MA","ER","LO","RH","PO","RS","FT"};
 		Vector<String> xvec = SqlInfo.holeFeld("select kuerzel from kuerzel where disziplin='"+xkuerzel[jcmb[0].getSelectedIndex()]+"' order by kuerzel" );
 		if(xvec.size() > 0){
-			//System.out.println(xvec);
 			kuerzelcombo.setDataVector(xvec);
 		}
 
@@ -319,7 +317,6 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			if (actionCmd.equals("Enter")) {
 				int row = preislisten.getSelectedRow();
 				int col = preislisten.getSelectedColumn();
-				//System.out.println(row+" / "+col);
 				preislisten.getCellEditor(row, col).stopCellEditing();
 				if(col== preislisten.getColumnCount()-1){
 					col=0;
@@ -381,27 +378,30 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			delvec.clear();
 			tabelleRegeln();
 			if(SystemPreislisten.hmNeuePreiseRegel.get(disziplin[jcmb[0].getSelectedIndex()])==null){return;}
-			
-			//int einstellung = ((Integer) ((Vector)SystemConfig.vNeuePreiseRegel.get(jcmb[0].getSelectedIndex())).get( jcmb[1].getSelectedIndex()) );
-			int einstellung = ((Integer) SystemPreislisten.hmNeuePreiseRegel.get(disziplin[jcmb[0].getSelectedIndex()]).get(jcmb[1].getSelectedIndex()));
-			jcmb[2].setSelectedIndex(einstellung);
-			String[] xkuerzel = {"KG","MA","ER","LO","RH","PO"};
-			kuerzelcombo.setDataVector(SqlInfo.holeFeld("select kuerzel from kuerzel where disziplin='"+xkuerzel[jcmb[0].getSelectedIndex()]+"'" ));
-			
+			try{
+				//int einstellung = ((Integer) ((Vector)SystemConfig.vNeuePreiseRegel.get(jcmb[0].getSelectedIndex())).get( jcmb[1].getSelectedIndex()) );
+				//System.out.println("Diziplin = "+disziplin[jcmb[0].getSelectedIndex()]);
+				//System.out.println(jcmb[1].getSelectedIndex());
+				int einstellung = ((Integer) SystemPreislisten.hmNeuePreiseRegel.get(disziplin[jcmb[0].getSelectedIndex()]).get(jcmb[1].getSelectedIndex()));
+				jcmb[2].setSelectedIndex(einstellung);
+				String[] xkuerzel = {"KG","MA","ER","LO","RH","PO","RS","FT"};
+				kuerzelcombo.setDataVector(SqlInfo.holeFeld("select kuerzel from kuerzel where disziplin='"+xkuerzel[jcmb[0].getSelectedIndex()]+"'" ));
+				
 
-			if(((JComponent)e.getSource()).getName().equals("rezeptklassen")){
-				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
-						jcmb[1].removeActionListener(getInstance());
-						int aktuell = jcmb[1].getSelectedIndex();
-						jcmb[1].setDataVector(SystemPreislisten.hmPreisGruppen.get(disziplin[jcmb[0].getSelectedIndex()]));
-						jcmb[1].setSelectedIndex(aktuell);
-						jcmb[1].addActionListener(getInstance());
-					}
-				});
+				if(((JComponent)e.getSource()).getName().equals("rezeptklassen")){
+					SwingUtilities.invokeLater(new Runnable(){
+						public void run(){
+							jcmb[1].removeActionListener(getInstance());
+							int aktuell = jcmb[1].getSelectedIndex();
+							jcmb[1].setDataVector(SystemPreislisten.hmPreisGruppen.get(disziplin[jcmb[0].getSelectedIndex()]));
+							jcmb[1].setSelectedIndex(aktuell);
+							jcmb[1].addActionListener(getInstance());
+						}
+					});
+				}
+			}catch(Exception ex){
+				ex.printStackTrace();
 			}
-
-			
 		}
 		if(cmd.equals("plUpdate")){
 			SwingUtilities.invokeLater(new Runnable(){
@@ -411,7 +411,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			 				   "Wir übernehmen aber keinerlei Garantie dafür, daß dies zu jedem Zeitpunkt\n"+
 			 				   "der Fall ist.\n\nBitte kontrollieren Sie nach jedem Preislistenimport die Daten auf\n"+
 			 				   "Vollständigkeit und Richtigkeit der einzelnen Preise und Positionen.\n\n Herzlichen Dank dafür!");
-						String[] lists = {"Physio","Massage","Ergo","Logo","REHA","Podo"};
+						String[] lists = {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
 						plEinlesen.setText("<html>Verfügbare Preislisten für <b><font color='#ff0000'>"+lists[jcmb[0].getSelectedIndex()]+"</font></b> ermitteln");
 						jcmb[3].removeAllItems();
 						jcmb[3].addItem((String) jcmb[1].getSelectedItem());
@@ -431,7 +431,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			doZurueck();
 		}
 		if(cmd.equals("pleinlesen")){
-			String[] lists = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+			String[] lists = {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
 			testeAllepreise(lists[jcmb[0].getSelectedIndex()]);
 		}
 		if(cmd.equals("plwahl")){
@@ -575,7 +575,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				xgueltig = "";
 			}
 			
-			String[] diszis = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+			String[] diszis = {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
 			String dis = diszis[jcmb[0].getSelectedIndex()]; 
 			int diswelche = jcmb[1].getSelectedIndex()+1;
 
@@ -592,7 +592,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				for(int i = 0;i < delvec.size();i++){
 					cmd = "delete from "+sdb+Integer.toString(igruppe)+" where id='"+delvec.get(i)+"'";
 					SqlInfo.sqlAusfuehren(cmd);
-					System.out.println("Löschen mit Kommando = "+cmd);
+					//System.out.println("Löschen mit Kommando = "+cmd);
 				}
 			}
 			//String[] diszi = {"KG","MA","ER","LO","RH"};
@@ -636,7 +636,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				// dummer Spruch			
 				return;
 			}
-			String[] lists = {"Physio","Massage","Ergo","Logo","REHA","Podo"};
+			String[] lists = {"Physio","Massage","Ergo","Logo","REHA","Podo","Rsport","Ftrain"};
 			String msg = "<html><b><font color='#ff0000' size=+2>Bitte sorgfältig lesen!!!!</font></b><br><br><br>"+
 			"Die von Ihnen ausgewählte Disziplin ist: <b><font color='#ff0000'> "+lists[jcmb[0].getSelectedIndex()]+"</font></b><br><br>"+
 			"Die von Ihnen ausgewählte Tarifgruppe ist: <b><font color='#ff0000'> "+(String)jcmb[1].getSelectedItem()+"</font></b><br><br>"+
@@ -753,7 +753,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 		Vector<Vector<String>> vec = PLServerAuslesen.holeFelder(cmd);
 		plServ.schliessePLConnection();
 		//System.out.println("Statement = "+cmd);
-		System.out.println("Vector-Größe = "+vec.size());
+		//System.out.println("Vector-Größe = "+vec.size());
 		return (Vector<?>) vec.clone();
 		
 	}
@@ -928,7 +928,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 		
 		int anzahl = preisvec.size();
 		
-		String[] diszi = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+		String[] diszi = {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
 		//String disziplin = jcmb[0].getSelectedItem().toString();
 		int preisgruppe = jcmb[1].getSelectedIndex();
 		int idisziplin = jcmb[0].getSelectedIndex();
@@ -975,16 +975,24 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 	}
  
 	private Vector holePreisVec(){
-		String[] diszi = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
+		String[] diszi = null;
+		if(SystemConfig.mitRs){
+			diszi = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
+		}else{
+			diszi = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo"};			
+		}
+		
 		int pgs = jcmb[0].getSelectedIndex();
 		try{
 			
 			int pgGruppe = jcmb[1].getSelectedIndex();
 			//String[] diszi = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
 			setCursor(Reha.thisClass.normalCursor);
+			//System.out.println("Disziplin = "+diszi[pgs]+" Preisgruppe = "+pgGruppe);
+			
 			return (SystemPreislisten.hmPreise.get(diszi[pgs]).get(pgGruppe) != null ? SystemPreislisten.hmPreise.get(diszi[pgs]).get(pgGruppe) : null) ;
 		}catch(Exception ex){
-			//ex.printStackTrace();
+			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null,"Diese Preisliste existiert nicht, oder Sie verfügen nicht über die Disziplin -> "+diszi[pgs]);
 		}
 		return null;
