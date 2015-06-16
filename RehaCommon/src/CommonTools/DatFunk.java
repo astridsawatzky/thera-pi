@@ -154,9 +154,9 @@ public class DatFunk {
 		tag   = cal1.get(Calendar.DATE);
 		monat = cal1.get(Calendar.MONTH)+1;
 		jahr  = cal1.get(Calendar.YEAR);
-		String a = (new Integer(tag)).toString();
+		String a = (Integer.valueOf(tag)).toString();
 		a= (a.length()<2 ? "0"+a : a);
-		String b = (new Integer(monat)).toString();
+		String b = (Integer.valueOf(monat)).toString();
 		b= (b.length()<2 ? "0"+b : b);
 		return a+"."+b+"."+Integer.toString(jahr);
 	}
@@ -237,7 +237,7 @@ public class DatFunk {
 	
 	public static boolean Unter18(String bezugdat,String geburtstag){
 		String[] datsplit = bezugdat.split("\\.");
-		int jahr = new Integer(datsplit[2]) - 18;
+		int jahr = Integer.valueOf(datsplit[2]) - 18;
 		String testdatum = datsplit[0]+"."+datsplit[1]+"."+Integer.toString(jahr);
 		if(DatumsWert(testdatum) < DatumsWert(geburtstag)){
 			return true;
@@ -272,8 +272,8 @@ public class DatFunk {
 	}
 
 	public static int JahreDifferenz(String sAktuellesJahr,String sInputJahr) {
-		int aktuell = new Integer(sAktuellesJahr.substring(6));
-		int input = new Integer(sInputJahr.substring(6));
+		int aktuell = Integer.valueOf(sAktuellesJahr.substring(6));
+		int input = Integer.valueOf(sInputJahr.substring(6));
 		return (aktuell-input);
 	}
 

@@ -54,24 +54,28 @@ public class DblCellEditor extends AbstractCellEditor implements KeyListener,Tab
     // This method is called when a cell value is edited by the user.
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         // Configure the component with the specified value
-    	if(!mitMaus){
-            ((JFormattedTextField)component).setText(String.valueOf(value));
-            ((JFormattedTextField)component).selectAll();
-            ((JFormattedTextField)component).setHorizontalAlignment(SwingConstants.RIGHT);
-            ((JFormattedTextField)component).setBackground(Color.YELLOW);
+    	try{
+        	if(!mitMaus){
+                ((JFormattedTextField)component).setText(String.valueOf(value));
+                ((JFormattedTextField)component).selectAll();
+                ((JFormattedTextField)component).setHorizontalAlignment(SwingConstants.RIGHT);
+                ((JFormattedTextField)component).setBackground(Color.YELLOW);
 
-    	}else{
-    		final String xvalue = String.valueOf(value);
-    		SwingUtilities.invokeLater(new Runnable(){
-    			public void run(){
-    	    		((JFormattedTextField)component).setText(String.valueOf(xvalue).replace(".", ","));
-    	            ((JFormattedTextField)component).selectAll();
-    	            ((JFormattedTextField)component).setBackground(Color.YELLOW);
-    	            ((JFormattedTextField)component).setHorizontalAlignment(SwingConstants.RIGHT);
-    	            ((JFormattedTextField)component).setCaretPosition(0);
-    			}
-    		});
-                		
+        	}else{
+        		final String xvalue = String.valueOf(value);
+        		SwingUtilities.invokeLater(new Runnable(){
+        			public void run(){
+        	    		((JFormattedTextField)component).setText(String.valueOf(xvalue).replace(".", ","));
+        	            ((JFormattedTextField)component).selectAll();
+        	            ((JFormattedTextField)component).setBackground(Color.YELLOW);
+        	            ((JFormattedTextField)component).setHorizontalAlignment(SwingConstants.RIGHT);
+        	            ((JFormattedTextField)component).setCaretPosition(0);
+        			}
+        		});
+                    		
+        	}
+    	}catch(Exception ex){
+    		ex.printStackTrace();
     	}
 
         

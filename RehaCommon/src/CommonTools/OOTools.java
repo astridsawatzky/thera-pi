@@ -254,7 +254,8 @@ public class OOTools{
 						return true;
 							//sucheErsetze(dummy,"");
 					}else{
-						sucheErsetze(document,dummy,((String)ret).trim(),false);
+						//sucheErsetze(document,dummy,((String)ret).trim(),false);
+						sucheErsetze(document,dummy,((String)ret).trim(),true);
 						stext = text.getText();
 					}
 					noendfound = false;

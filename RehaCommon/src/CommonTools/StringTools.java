@@ -363,6 +363,10 @@ public class StringTools {
 			return "Reha";
 		}else if(reznr.startsWith("PO")){
 			return "Podo";
+		}else if(reznr.startsWith("RS")){
+			return "Rsport";
+		}else if(reznr.startsWith("FT")){
+			return "Ftrain";
 		}
 		return "Physio";
 	}
@@ -533,5 +537,25 @@ public class StringTools {
 		return ret;
 	}
 	
-
+	public static String richteNummer(String nummer){
+		try{
+			if(nummer.equals("")){
+				return "";
+			}
+			if(nummer.length()<3){
+				return "";
+			}
+			if(! ("KGMAERLORHPORSFT").contains(nummer.substring(0,2))){
+				return "";
+			}
+			if(nummer.indexOf("\\") >= 0){
+				return nummer.substring(0,nummer.indexOf("\\"));
+			}
+			return nummer;
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return "";
+   }
 }
