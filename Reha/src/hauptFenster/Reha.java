@@ -314,7 +314,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2015-01-20-DB=";
+	public static String aktuelleVersion = "2015-06-16-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -362,6 +362,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	
 	public RehaCommServer rehaCommServer = null;
 	public static boolean phoneOk = false;
+	
+	public static Vector<Vector<String>> vRGAFoffen;
+	public static boolean bRGAFoffen;
 	
 	/*
 	 * Einschalten für Geschwindigkeitstests
@@ -3584,6 +3587,10 @@ final class PreisListenLaden implements Runnable{
 		ParameterLaden.PreiseEinlesen("LO");
 
 		ParameterLaden.PreiseEinlesen("RH");
+		
+		ParameterLaden.PreiseEinlesen("RS");
+		
+		ParameterLaden.PreiseEinlesen("FT");
 
 		MachePreisListe.preiseFuellenNeu();	
 		
@@ -3628,6 +3635,17 @@ final class PreisListenLaden implements Runnable{
 			new SocketClient().setzeInitStand("Preisliste Podologie einlesen");
 			SystemPreislisten.ladePreise("Podo");
 		}
+		if(SystemConfig.mitRs){
+			if(isAktiv("Rsport")){
+				new SocketClient().setzeInitStand("Preisliste Rehasport einlesen");
+				SystemPreislisten.ladePreise("Rsport");
+			}
+			if(isAktiv("Ftrain")){
+				new SocketClient().setzeInitStand("Preisliste Funktionstraining einlesen");
+				SystemPreislisten.ladePreise("Ftrain");
+			}
+		}
+		
 		SystemPreislisten.ladePreise("Common");
 		new SocketClient().setzeInitStand("System-Init abgeschlossen!");
 		Reha.thisClass.setzeInitEnde();
@@ -3640,7 +3658,8 @@ final class PreisListenLaden implements Runnable{
 	public boolean isAktiv(String disziplin){
 
 		for(int i = 0; i < SystemConfig.rezeptKlassenAktiv.size();i++){
-			if(SystemConfig.rezeptKlassenAktiv.get(i).get(0).toLowerCase().startsWith(disziplin.toLowerCase())){
+			if(SystemConfig.rezeptKlassenAktiv.get(i).get(0).toLowerCase().startsWith(disziplin.toLowerCase()) || (disziplin.equals("Rsport") && SystemConfig.rezeptKlassenAktiv.get(i).get(0).toLowerCase().startsWith("rehasport")) ||
+					(disziplin.equals("Ftrain") && SystemConfig.rezeptKlassenAktiv.get(i).get(0).toLowerCase().startsWith("funktionstrai"))){
 				return true;
 			}
 		}

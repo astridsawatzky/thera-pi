@@ -96,7 +96,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	String aktDfue;
 	String aktRechnung;
 	String aktDisziplin = "";
-	String[] diszis = {"KG","MA","ER","LO","PO"};
+	String[] diszis = {"KG","MA","ER","LO","PO","RS","FT"};
 	
 	boolean annahmeAdresseOk = false;
 	/*******Controls für die linke Seite*********/
@@ -260,7 +260,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		pb.getPanel().setBackground(Color.WHITE);
 		//pb.add(getIVPanel(),cc.xy(2,1));
 		pb.addLabel("Heilmittel auswählen",cc.xy(2,2));
-		cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept"});
+		if(SystemConfig.mitRs){
+			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept","Rehasport-Rezept","Funktionstraining-Rezept"});			
+		}else{
+			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept"});			
+		}
+		
+
 		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
 		cmbDiszi.setActionCommand("einlesen");
 		
@@ -365,7 +371,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		if(cmd.equals("einlesen")){
 			//rootKasse.removeAllChildren();
 			//String[] reznr = {"KG","MA","ER","LO"};
-			String[] diszis = {"Physio","Massage","Ergo","Logo","Podo"};
+			String[] diszis = null;
+			if(SystemConfig.mitRs){
+				diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
+			}else{
+				diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
+			}
+ 
 			aktDisziplin = diszis[cmbDiszi.getSelectedIndex()];
 			//abrRez.setKuerzelVec(reznr[cmbDiszi.getSelectedIndex()]);
 			if(abrRez.rezeptSichtbar){
@@ -380,11 +392,23 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		}
 	}
 	private String getDiszis(){
-		String[] diszis = {"Physio","Massage","Ergo","Logo","Podo"};
+		String[] diszis = null;
+		if(SystemConfig.mitRs){
+			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
+		}else{
+			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
+		}
+
 		return String.valueOf(diszis[cmbDiszi.getSelectedIndex()]);
 	}
 	public void einlesenErneuern(){
-		String[] diszis = {"Physio","Massage","Ergo","Logo","Podo"};
+		String[] diszis = null;
+		if(SystemConfig.mitRs){
+			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
+		}else{
+			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
+		}
+
 		aktDisziplin = diszis[cmbDiszi.getSelectedIndex()];
 		//abrRez.setKuerzelVec(reznr[cmbDiszi.getSelectedIndex()]);
 		if(abrRez.rezeptSichtbar){
@@ -1133,14 +1157,14 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				JOptionPane.showMessageDialog(null, "Emailversand fehlgeschlagen\n\n"+
 	        			"Mögliche Ursachen:\n"+
 	        			"- falsche Angaben zu Ihrem Emailpostfach und/oder dem Provider\n"+
-	        			"- Sie haben keinen Kontakt zum Internet");
+	        			"- Sie haben keinen Kontakt zum Internet"+"\n\nFehlertext:"+e.getLocalizedMessage());
 			}
 		}catch(Exception ex){
 				ex.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Emailversand fehlgeschlagen\n\n"+
 	        			"Mögliche Ursachen:\n"+
 	        			"- falsche Angaben zu Ihrem Emailpostfach und/oder dem Provider\n"+
-	        			"- Sie haben keinen Kontakt zum Internet - Fehlermeldung:\n"+ex.getMessage());
+	        			"- Sie haben keinen Kontakt zum Internet - Fehlermeldung:\n\n"+ex.getLocalizedMessage());
 		}
 	}
 	/********************************************************************/
@@ -1364,9 +1388,17 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			}
 		}.execute();
 		//////System.out.println(aktEsol + "  - "+aktDfue);
+		String sgruppe = null;
+		if(this.aktDisziplin.equals("Rsport")){
+			sgruppe = "H";
+		}else if(this.aktDisziplin.equals("Ftrain")){
+			sgruppe = "I";
+		}else{
+			sgruppe = "B";
+		}
 		unbBuf.append("UNB+UNOC:3+"+Reha.aktIK+plus+ik_nutzer+plus);
 		unbBuf.append(getEdiDatumFromDeutsch(DatFunk.sHeute())+":"+getEdiTimeString(false)+plus);
-		unbBuf.append(aktDfue+plus+"B"+plus);
+		unbBuf.append(aktDfue+plus+sgruppe+plus);
 		abrDateiName = "SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat();
 		unbBuf.append(abrDateiName+plus);
 		unbBuf.append("2"+EOL);
@@ -1381,13 +1413,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		unbBuf.append("GES"+plus+"31"+plus+dfx.format(preis31[0])+plus+dfx.format(preis31[1])+plus+dfx.format(preis31[2])+EOL);
 		unbBuf.append("GES"+plus+"51"+plus+dfx.format(preis51[0])+plus+dfx.format(preis51[1])+plus+dfx.format(preis51[2])+EOL);
 		unbBuf.append("NAM"+plus+
-				(SystemConfig.hmFirmenDaten.get("Ikbezeichnung").length() > 30 ?
-						SystemConfig.hmFirmenDaten.get("Ikbezeichnung").substring(0,30) :
-						SystemConfig.hmFirmenDaten.get("Ikbezeichnung")	)+plus+
-				SystemConfig.hmFirmenDaten.get("Anrede").trim()+" "+
-				(SystemConfig.hmFirmenDaten.get("Nachname").trim().length() > 25 ?
-				SystemConfig.hmFirmenDaten.get("Nachname").trim().substring(0,25) :
-				SystemConfig.hmFirmenDaten.get("Nachname").trim()	)+
+				(abrRez.hochKomma(SystemConfig.hmFirmenDaten.get("Ikbezeichnung")).length() > 30 ?
+						abrRez.hochKomma(SystemConfig.hmFirmenDaten.get("Ikbezeichnung")).substring(0,30) :
+							abrRez.hochKomma(SystemConfig.hmFirmenDaten.get("Ikbezeichnung"))	)+plus+
+				abrRez.hochKomma(SystemConfig.hmFirmenDaten.get("Anrede")).trim()+" "+
+				(abrRez.hochKomma(SystemConfig.hmFirmenDaten.get("Nachname")).trim().length() > 25 ?
+						abrRez.hochKomma(SystemConfig.hmFirmenDaten.get("Nachname")).trim().substring(0,25) :
+							abrRez.hochKomma(SystemConfig.hmFirmenDaten.get("Nachname")).trim()	)+
 				plus+SystemConfig.hmFirmenDaten.get("Telefon")+EOL);
 		unbBuf.append("UNT+000010+00001"+EOL);
 		unbBuf.append("UNH+00002+SLLA:"+SllaVersion+":0:0"+EOL);
@@ -1627,19 +1659,23 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		String[] woerter;
 		String dummy;
 		int pos = 0;
+		int zugabe = 0;
 		for(int i = 0; i < zeilen.length;i++){
-			if(zeilen[i].startsWith("EHE+")){
+			if(zeilen[i].startsWith("EHE+") || zeilen[i].startsWith("ENF++") ){
+				if(zeilen[i].startsWith("ENF++")){
+					zugabe = 1;
+				}
 				woerter = zeilen[i].split("\\+");
-				if(!position.contains(woerter[2])){
-					position.add(woerter[2]);
-					bdAnzahl = BigDecimal.valueOf(Double.valueOf(woerter[3].replace(",", ".")));
+				if(!position.contains(woerter[2+zugabe])){
+					position.add(woerter[2+zugabe]);
+					bdAnzahl = BigDecimal.valueOf(Double.valueOf(woerter[3+zugabe].replace(",", ".")));
 					anzahl.add(bdAnzahl);
 					abrtage.add(BigDecimal.valueOf(Double.valueOf("1.00")));
-					preis.add(BigDecimal.valueOf(Double.valueOf(woerter[4].replace(",", "."))).multiply(
+					preis.add(BigDecimal.valueOf(Double.valueOf(woerter[4+zugabe].replace(",", "."))).multiply(
 							bdAnzahl ));
-					if(woerter.length==7){
+					if(woerter.length==(7+zugabe)){
 						//Einstieg2 für Kilometer
-						dummy = woerter[6].replace("'", "").replace(",", ".");
+						dummy = woerter[6+zugabe].replace("'", "").replace(",", ".");
 						if(zuzahlModusDefault){
 							rezgeb.add(BigDecimal.valueOf(Double.valueOf(dummy)));
 							einzelzuzahlung.add(BigDecimal.valueOf(Double.valueOf(dummy)));
@@ -1658,22 +1694,22 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 						einzelzuzahlung.add(BigDecimal.valueOf(Double.valueOf("0.00")));						
 					}
 					
-					einzelpreis.add(BigDecimal.valueOf(Double.valueOf(woerter[4].replace(",", "."))));
+					einzelpreis.add(BigDecimal.valueOf(Double.valueOf(woerter[4+zugabe].replace(",", "."))));
 					
 				}else{
-					pos = position.indexOf(woerter[2]);
-					einzelPreisTest = BigDecimal.valueOf(Double.valueOf(woerter[4].replace(",", ".")));
+					pos = position.indexOf(woerter[2+zugabe]);
+					einzelPreisTest = BigDecimal.valueOf(Double.valueOf(woerter[4+zugabe].replace(",", ".")));
 					if(!einzelPreisTest.equals(einzelpreis.get(pos))){
 						preisUmstellung = true;
 					}
-					bdAnzahl = BigDecimal.valueOf(Double.valueOf(woerter[3].replace(",", ".")));
-					anzahl.set(pos, anzahl.get(pos).add(BigDecimal.valueOf(Double.valueOf(woerter[3].replace(",", ".")))));
-					preis.set(pos, preis.get(pos).add(BigDecimal.valueOf(Double.valueOf(woerter[4].replace(",", "."))).multiply(
+					bdAnzahl = BigDecimal.valueOf(Double.valueOf(woerter[3+zugabe].replace(",", ".")));
+					anzahl.set(pos, anzahl.get(pos).add(BigDecimal.valueOf(Double.valueOf(woerter[3+zugabe].replace(",", ".")))));
+					preis.set(pos, preis.get(pos).add(BigDecimal.valueOf(Double.valueOf(woerter[4+zugabe].replace(",", "."))).multiply(
 							bdAnzahl)));
 					abrtage.set(pos,abrtage.get(pos).add(BigDecimal.valueOf(Double.valueOf("1.00"))));
-					if(woerter.length==7){
+					if(woerter.length==(7+zugabe)){
 						//Einstieg3 für Kilometer
-						dummy = woerter[6].replace("'", "").replace(",", ".");
+						dummy = woerter[6+zugabe].replace("'", "").replace(",", ".");
 						if(zuzahlModusDefault){
 							rezgeb.set(pos,rezgeb.get(pos).add(BigDecimal.valueOf(Double.valueOf(dummy))));
 							if(! BigDecimal.valueOf(Double.valueOf(dummy)).equals(einzelzuzahlung.get(pos))){
@@ -1928,6 +1964,10 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			return "pgrh";
 		}else if(disziplin.equals("Podo")){
 			return "pgpo";
+		}else if(disziplin.equals("Rsport")){
+			return "pgrs";
+		}else if(disziplin.equals("Ftrain")){
+			return "pgft";
 		}else{
 			return "pgkg";
 		}
@@ -2101,7 +2141,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		if(e.getButton()==3){
 			TreePath tp =  treeKasse.getSelectionPath();
 			
-			kontrollierteRezepte = 0;
+			//kontrollierteRezepte = 0;
 			if(tp==null){
 				return;
 			}
@@ -2126,6 +2166,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					editEdifact.pack();
 					editEdifact.setVisible(true);
 					this.abrRez.setNewRez(rez_nr,node.knotenObjekt.fertig,aktDisziplin);
+					
+		    		//doKassenTreeAuswerten(aktuellerKnoten.knotenObjekt);
+
 				}else{
 					JOptionPane.showMessageDialog(null,"Abrechnungsdaten im Edifact-Format kann nur\nbei bereits markierten Rezepten manipuliert werden!");
 				}

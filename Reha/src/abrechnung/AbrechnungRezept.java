@@ -92,6 +92,7 @@ import org.jdesktop.swingx.treetable.TreeTableNode;
 import org.therapi.reha.patient.AktuelleRezepte;
 
 import patientenFenster.KassenAuswahl;
+import patientenFenster.RezNeuanlage;
 import CommonTools.SqlInfo;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
@@ -276,6 +277,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	
 	boolean ohneDrecksPauschale = false;
 	
+	boolean inParseHtml = false;
+	
 	public AbrechnungRezept(AbrechnungGKV xeltern){
 		eltern = xeltern;
 		setLayout(new BorderLayout());
@@ -368,6 +371,22 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			disziplinGruppe = SystemConfig.hmHmPraefix.get("PO");
 			preisregelIndex = 5;
 			aktDisziplin = "Podo";
+		}else if(xreznummer.startsWith("RS")){
+			preisvec = (Vector<Vector<String>>)RezTools.holePreisVector("RS", Integer.parseInt(preisgr.trim())-1);
+			//disziplinIndex = "7";
+			disziplinIndex = SystemConfig.hmHmPosIndex.get("RS");
+			//disziplinGruppe = "71";
+			disziplinGruppe = SystemConfig.hmHmPraefix.get("RS");
+			preisregelIndex = 6;
+			aktDisziplin = "Rsport";
+		}else if(xreznummer.startsWith("FT")){
+			preisvec = (Vector<Vector<String>>)RezTools.holePreisVector("FT", Integer.parseInt(preisgr.trim())-1);
+			//disziplinIndex = "7";
+			disziplinIndex = SystemConfig.hmHmPosIndex.get("FT");
+			//disziplinGruppe = "71";
+			disziplinGruppe = SystemConfig.hmHmPraefix.get("FT");
+			preisregelIndex = 7;
+			aktDisziplin = "Ftrain";
 		}
 		vec_kuerzel.clear();
 		int idpos = preisvec.get(0).size()-1;
@@ -446,8 +465,15 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					doTreeRezeptWertermitteln();
 					
 					regleAbrechnungsModus();
-					
+					while(inParseHtml){
+						try {
+							Thread.sleep(25);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 					parseHTML(rez.trim());
+					
 					doPositionenErmitteln();
 				}else{
 					JOptionPane.showMessageDialog(null,"Fehler im EDIFACT dieses Rezeptes");
@@ -554,7 +580,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				getVectorFromNodes();					
 				doTreeRezeptWertermitteln();
 //				doPositionenErmitteln();
-				parseHTML(vec_rez.get(0).get(1).trim());
+				while(inParseHtml){
+					try {
+						Thread.sleep(25);
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+				}
+				parseHTML(vec_rez.get(0).get(1).trim());	
+
+				
 
 			}
 			@Override
@@ -632,7 +667,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		jXTreeTable.repaint();
 		//aktualisiereTree();
 		doTreeRezeptWertermitteln();
-		parseHTML(vec_rez.get(0).get(1).trim());
+		while(inParseHtml){
+			try {
+				Thread.sleep(25);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}
+		parseHTML(vec_rez.get(0).get(1).trim());	
+		
+		
 	}
 
 	public void ZeigePopupMenu(int x, int y, int x2,int y2){
@@ -1002,7 +1046,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			if(this.jXTreeTable.getRowCount() > 0){
 				String ivkasse = vec_rez.get(0).get(37);
 				macheHashMapIV(ivkasse);
-				parseHTML(vec_rez.get(0).get(1).trim());
+				while(inParseHtml){
+					try {
+						Thread.sleep(25);
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+				}
+				parseHTML(vec_rez.get(0).get(1).trim());	
+
+				
 			}
 			if(SystemConfig.certState > 0){
 				tbbuts[3].setEnabled(true);
@@ -1014,7 +1067,15 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			//eltern.hmAlternativeKasse.clear();
 			if(this.jXTreeTable.getRowCount() > 0){
 				addiereKassenWahl(false);
-				parseHTML(vec_rez.get(0).get(1).trim());
+				while(inParseHtml){
+					try {
+						Thread.sleep(25);
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+				}				
+				parseHTML(vec_rez.get(0).get(1).trim());	
+				
 			}
 			if(SystemConfig.certState > 0){
 				tbbuts[3].setEnabled(false);
@@ -1157,7 +1218,17 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		}
 		doPositionenErmitteln();
 		doTreeRezeptWertermitteln();
-		parseHTML(rez_nr.trim());
+		while(inParseHtml){
+			try {
+				Thread.sleep(25);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}
+		
+		parseHTML(rez_nr.trim());	
+		
+		
 		
 	}
 	private void doTherapieBericht(String berichtsposition){
@@ -1308,6 +1379,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			////System.out.println("keine Zuzahlung bei dieser Kasse");
 			zuZahlungsIndex = zzpflicht[0];
 			zuZahlungsPos = "0";
+			mitPauschale = false;
+			doTreeFreiAb(0,nodes,false);
+			doTarifWechselCheck();
+			arschGeigenCheck();
+			return;
+		}
+		if(aktRezNum.getText().startsWith("RS") || aktRezNum.getText().startsWith("FT") ){
+			zuZahlungsIndex = zzpflicht[0];
+			zuZahlungsPos = "0";
+			mitPauschale = false;
 			doTreeFreiAb(0,nodes,false);
 			doTarifWechselCheck();
 			arschGeigenCheck();
@@ -2228,168 +2309,176 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	}
 	
 	private void parseHTML(String rez_nr){
-		if(rez_nr==null){
-			return;
-		}
-
-		//String dummy="";
-		//String text =
-		buf1.setLength(0);
-		buf1.trimToSize();
-		
-		buf1.append("<html><head>");
-		buf1.append("<STYLE TYPE=\"text/css\">");
-		buf1.append("<!--");
-		buf1.append("A{text-decoration:none;background-color:transparent;border:none}");
-		buf1.append("TD{font-family: Arial; font-size: 12pt; padding-left:5px;padding-right:30px}");
-		buf1.append(".spalte1{color:#0000FF;}");
-		buf1.append(".spalte2{color:#333333;}");
-		buf1.append(".spalte2{color:#333333;}");
-		buf1.append("--->");
-		buf1.append("</STYLE>");
-		buf1.append("</head>");
-		buf1.append("<div style=margin-left:30px;>");
-		buf1.append("<font face=\"Tahoma\"><style=margin-left=30px;>");
-		buf1.append("<br>");
-		buf1.append("<table>");
-		/*****Rezept****/
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<th rowspan=\"4\"><a href=\"http://rezedit.de\"><img src='file:///"+Reha.proghome+"icons/Rezept.png' border=0></a></th>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Ausstellungsdatum");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append(DatFunk.sDatInDeutsch(vec_rez.get(0).get(2)));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Verordnungsart");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append(voArt[Integer.parseInt(vec_rez.get(0).get(27))]);
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Indikationsschlüssel / ICD-10");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append((vec_rez.get(0).get(44).startsWith("kein Indi") ? "<b><font color=#FF0000>"+vec_rez.get(0).get(44)+"</font></b>" : vec_rez.get(0).get(44))+
-				(vec_rez.get(0).get(71).trim().equals("") ? " / <b>n.a.</b>" : " / <b>"+vec_rez.get(0).get(71).trim()+"</b>"));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		boolean hb = (vec_rez.get(0).get(43).equals("T"));
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append( (hb ? "<b><font color=#FF0000>Hausbesuch</font></b>" : "Hausbesuch" ));
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append( (hb ? "<b><font color=#FF0000>JA</font></b>" : "NEIN"));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		buf1.append(getHTMLPositionen());
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td>&nbsp;");
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/********Patient********/
-		buf1.append("<tr>");
-		buf1.append("<th rowspan=\"5\" valign=\"top\"><a href=\"http://patedit.de\"><img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=52 height=52 border=0></a></th>" );
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Patient");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append(StringTools.EGross(vec_pat.get(0).get(0))+", ");
-		buf1.append(StringTools.EGross(vec_pat.get(0).get(1))+", geb.am "+DatFunk.sDatInDeutsch(vec_pat.get(0).get(2)));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Adresse");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append(StringTools.EGross(vec_pat.get(0).get(3))+", ");
-		buf1.append(vec_pat.get(0).get(4)+" ");
-		buf1.append(StringTools.EGross(vec_pat.get(0).get(5)));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Versicherten-Status");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append(vec_pat.get(0).get(7));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Mitgliedsnummer");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append(vec_pat.get(0).get(6));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Zuzahlungs-Status");
-		buf1.append("</td><td class=\"spalte2\" id=\"zzpflicht\" align=\"left\">");
-		buf1.append((zuZahlungsIndex.equals("Zuzahlungspflichtig") ? "" : "<b><font color=#FF0000>"));
-		buf1.append(zuZahlungsIndex);
-		buf1.append((zuZahlungsIndex.equals("Zuzahlungspflichtig") ? "" : "</font></b>"));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td>&nbsp;");
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/********Arzt********/
-		buf1.append("<tr>");
-		buf1.append("<th rowspan=\"3\" valign=\"top\"><a href=\"http://arztedit.de\"><img src='file:///"+Reha.proghome+"icons/system-users.png' width=52 height=52 border=0></a></th>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("verordnender Arzt");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append(StringTools.EGross(vec_pat.get(0).get(13)));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("Betriebsstätte");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append((vec_pat.get(0).get(14).trim().equals("") ? "999999999" : vec_pat.get(0).get(14).trim()));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		buf1.append("<tr>");
-		buf1.append("<td class=\"spalte1\" align=\"right\">");
-		buf1.append("LANR");
-		buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-		buf1.append((vec_pat.get(0).get(15).trim().equals("") ? "999999999" : vec_pat.get(0).get(15).trim()));
-		buf1.append("</td>");
-		buf1.append("</tr>");
-		/*******/
-		if(eltern.abrechnungsModus.equals(eltern.ABR_MODE_IV)){
-			buf1.append(getIVKassenAdresse());
-			//this.htmlPane.add(this.cbtagedrucken);
-		}
-//Double rezeptWert;
-//Double zuzahlungWert;
-		buf1.append("</table>");
-		buf1.append("</font>");
-		buf1.append("</div>");
-		buf1.append("</html>");
-		this.htmlPane.setText(buf1.toString());
-		((JScrollPane)this.htmlPane.getParent().getParent()).validate();
-		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				JViewport vp = ((JScrollPane)htmlPane.getParent().getParent()).getViewport();
-				vp.setViewPosition(new Point(0,0));
-				((JScrollPane)htmlPane.getParent().getParent()).validate();
+		inParseHtml = true;
+		try{
+			if(rez_nr==null){
+				inParseHtml = false;
+				return;
 			}
-		});
+			
+			//String dummy="";
+			//String text =
+			buf1.setLength(0);
+			buf1.trimToSize();
+			
+			buf1.append("<html><head>");
+			buf1.append("<STYLE TYPE=\"text/css\">");
+			buf1.append("<!--");
+			buf1.append("A{text-decoration:none;background-color:transparent;border:none}");
+			buf1.append("TD{font-family: Arial; font-size: 12pt; padding-left:5px;padding-right:30px}");
+			buf1.append(".spalte1{color:#0000FF;}");
+			buf1.append(".spalte2{color:#333333;}");
+			buf1.append(".spalte2{color:#333333;}");
+			buf1.append("--->");
+			buf1.append("</STYLE>");
+			buf1.append("</head>");
+			buf1.append("<div style=margin-left:30px;>");
+			buf1.append("<font face=\"Tahoma\"><style=margin-left=30px;>");
+			buf1.append("<br>");
+			buf1.append("<table>");
+			/*****Rezept****/
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<th rowspan=\"4\"><a href=\"http://rezedit.de\"><img src='file:///"+Reha.proghome+"icons/Rezept.png' border=0></a></th>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Ausstellungsdatum");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append(DatFunk.sDatInDeutsch(vec_rez.get(0).get(2)));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Verordnungsart");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append(voArt[Integer.parseInt(vec_rez.get(0).get(27))]);
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Indikationsschlüssel / ICD-10");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append((vec_rez.get(0).get(44).startsWith("kein Indi") ? "<b><font color=#FF0000>"+vec_rez.get(0).get(44)+"</font></b>" : vec_rez.get(0).get(44))+
+					(vec_rez.get(0).get(71).trim().equals("") ? " / <b>n.a.</b>" : " / <b>"+vec_rez.get(0).get(71).trim()+"</b>"));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			boolean hb = (vec_rez.get(0).get(43).equals("T"));
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append( (hb ? "<b><font color=#FF0000>Hausbesuch</font></b>" : "Hausbesuch" ));
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append( (hb ? "<b><font color=#FF0000>JA</font></b>" : "NEIN"));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/***********************************************/
+			buf1.append(getHTMLPositionen());
+			/***********************************************/
+			buf1.append("<tr>");
+			buf1.append("<td>&nbsp;");
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/********Patient********/
+			buf1.append("<tr>");
+			buf1.append("<th rowspan=\"5\" valign=\"top\"><a href=\"http://patedit.de\"><img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=52 height=52 border=0></a></th>" );
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Patient");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append(StringTools.EGross(vec_pat.get(0).get(0))+", ");
+			buf1.append(StringTools.EGross(vec_pat.get(0).get(1))+", geb.am "+DatFunk.sDatInDeutsch(vec_pat.get(0).get(2)));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Adresse");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append(StringTools.EGross(vec_pat.get(0).get(3))+", ");
+			buf1.append(vec_pat.get(0).get(4)+" ");
+			buf1.append(StringTools.EGross(vec_pat.get(0).get(5)));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Versicherten-Status");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append(vec_pat.get(0).get(7));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Mitgliedsnummer");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append(vec_pat.get(0).get(6));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Zuzahlungs-Status");
+			buf1.append("</td><td class=\"spalte2\" id=\"zzpflicht\" align=\"left\">");
+			buf1.append((zuZahlungsIndex.equals("Zuzahlungspflichtig") ? "" : "<b><font color=#FF0000>"));
+			buf1.append(zuZahlungsIndex);
+			buf1.append((zuZahlungsIndex.equals("Zuzahlungspflichtig") ? "" : "</font></b>"));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td>&nbsp;");
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/********Arzt********/
+			buf1.append("<tr>");
+			buf1.append("<th rowspan=\"3\" valign=\"top\"><a href=\"http://arztedit.de\"><img src='file:///"+Reha.proghome+"icons/system-users.png' width=52 height=52 border=0></a></th>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("verordnender Arzt");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append(StringTools.EGross(vec_pat.get(0).get(13)));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("Betriebsstätte");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append((vec_pat.get(0).get(14).trim().equals("") ? "999999999" : vec_pat.get(0).get(14).trim()));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			buf1.append("<tr>");
+			buf1.append("<td class=\"spalte1\" align=\"right\">");
+			buf1.append("LANR");
+			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
+			buf1.append((vec_pat.get(0).get(15).trim().equals("") ? "999999999" : vec_pat.get(0).get(15).trim()));
+			buf1.append("</td>");
+			buf1.append("</tr>");
+			/*******/
+			if(eltern.abrechnungsModus.equals(eltern.ABR_MODE_IV)){
+				buf1.append(getIVKassenAdresse());
+				//this.htmlPane.add(this.cbtagedrucken);
+			}
+	//Double rezeptWert;
+	//Double zuzahlungWert;
+			buf1.append("</table>");
+			buf1.append("</font>");
+			buf1.append("</div>");
+			buf1.append("</html>");
+			this.htmlPane.setText(buf1.toString());
+			((JScrollPane)this.htmlPane.getParent().getParent()).validate();
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					JViewport vp = ((JScrollPane)htmlPane.getParent().getParent()).getViewport();
+					vp.setViewPosition(new Point(0,0));
+					((JScrollPane)htmlPane.getParent().getParent()).validate();
+				}
+			});
+		}catch(NullPointerException ex){
+			JOptionPane.showMessageDialog(null,"Fehler in der Aufbereitung des HTML-Textes\nFehlertext: "+ex.getLocalizedMessage());
+		}
+		inParseHtml = false;
 	}
 	private String getIVKassenAdresse(){
 		buf3.setLength(0);
@@ -2447,8 +2536,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		
 		return buf3.toString();
 	}
-	private String getNoZuZahl(){
-		return "<b><font color=#FF0000><a href=\"http://nozz.de\">"+dfx.format(zuzahlungWert)+" (nicht bezahlt!)</a></font></b>";
+	private String getNoZuZahl(int variante,Vector<Vector<String>> vnozuz){
+		String sret = "";
+		if(variante == 1){
+			sret = "<b><font color=#FF0000><a href=\"http://nozz.de\">"+dfx.format(zuzahlungWert)+"<br>(nicht bar bezahlt und keine RGR erstellt!)</a></font></b>";	
+		}else if(variante == 2){
+			htmlposbuf.append("<b><font color=#FF0000>"+dfx.format(zuzahlungWert)+" "+vnozuz.get(0).get(0)+"<br>vom "+DatFunk.sDatInDeutsch(vnozuz.get(0).get(2))+"<br>"+
+			"noch offen: "+vnozuz.get(0).get(1).replace(".", ",")+" EUR</font></b>");
+			
+		}
+		return sret;
 	}
 	private String getHTMLPositionen(){
 		
@@ -2481,7 +2578,35 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		htmlposbuf.append("<td class=\"spalte1\" align=\"right\">");
 		htmlposbuf.append("Zuzahlung");
 		htmlposbuf.append("</td><td class=\"spalte2\" align=\"left\">");
-		htmlposbuf.append((zuzahlungWert > 0 && vec_rez.get(0).get(14).equals("F") ? getNoZuZahl() : "<b>"+dfx.format(zuzahlungWert)+"</b>"));
+		//Hier muß überprüft werden ob Geld in der Kasse oder Rechnung geschreiben wurde
+
+
+		if(vec_rez.get(0).get(14).equals("T") && (SqlInfo.holeEinzelFeld("select id from kasse where rez_nr ='"+vec_rez.get(0).get(1)+"' LIMIT 1").length() > 0)){
+			//Rezept auf bezahlt gesetzt und Geld in der Kasse
+			htmlposbuf.append("<b>"+dfx.format(zuzahlungWert)+"</b>");
+		}else if(zuzahlungWert <= 0){
+			htmlposbuf.append("<b>"+dfx.format(zuzahlungWert)+"</b>");
+		}else{
+			//ist eine Rechnung erstellt worden?
+			Vector<Vector<String>> xrgaf = SqlInfo.holeFelder("select rnr,roffen,rdatum from rgaffaktura where reznr='"+vec_rez.get(0).get(1)+"' and rnr like 'RGR-%' LIMIT 1");
+			//System.out.println("select rnr,roffen,rdatum from rgaffaktura where reznr='"+vec_rez.get(0).get(1)+"' and rnr like 'RGR-%' LIMIT 1");
+			//System.out.println(xrgaf);
+			if(xrgaf.size() <= 0){
+				//nein es wurde auch keine rechnung erstellt.
+				htmlposbuf.append(getNoZuZahl(1,null)); 
+			}else{
+				if(xrgaf.get(0).get(1).equals("0.00")){
+					//Rechnung erstellt und bereits bezahlt
+					htmlposbuf.append("<b>"+dfx.format(zuzahlungWert)+"</b> "+xrgaf.get(0).get(0)+" vom "+DatFunk.sDatInDeutsch(xrgaf.get(0).get(2))+"<br>"+
+					"bereits bezahlt");
+				}else{
+					//Rechnung gestellt aber noch nicht bezahlt
+					htmlposbuf.append(getNoZuZahl(2,xrgaf));
+				}
+			}
+		}
+		
+		//htmlposbuf.append((zuzahlungWert > 0 && vec_rez.get(0).get(14).equals("F") ? getNoZuZahl() : "<b>"+dfx.format(zuzahlungWert)+"</b>"));
 		htmlposbuf.append("</td>");
 		htmlposbuf.append("</tr>");
 
@@ -2514,11 +2639,25 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	    	if(event.getURL().toString().contains("tagedrucken.de")){
 	    		if(!this.tagedrucken){
 	    			this.tagedrucken = true;
+	    			while(inParseHtml){
+						try {
+							Thread.sleep(25);
+						} catch (InterruptedException ex) {
+							ex.printStackTrace();
+						}
+					}
 	    			parseHTML(vec_rez.get(0).get(1).trim());
 	    			htmlPaneScrollToEnd();
 	    			return;
 	    		}
 	    		this.tagedrucken = false;
+	    		while(inParseHtml){
+					try {
+						Thread.sleep(25);
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+				}
 	    		parseHTML(vec_rez.get(0).get(1).trim());
 	    		htmlPaneScrollToEnd();
 	    		return;
@@ -2559,6 +2698,13 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		if(!aKasse[2].getText().trim().equals(suchegleichnach[1]) && !aKasse[2].getText().trim().equals("")){
 			////System.out.println("Es wurde eine neue Kasse gewählt");
 			macheHashMapIV(aKasse[2].getText().trim());
+			while(inParseHtml){
+				try {
+					Thread.sleep(25);
+				} catch (InterruptedException ex) {
+					ex.printStackTrace();
+				}
+			}
 			parseHTML(vec_rez.get(0).get(1).trim());
 
 		}else{
@@ -2622,6 +2768,14 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		rgeb.setLocation(location.x-50,location.y-50);
 		rgeb.pack();
 		rgeb.setVisible(true);
+		while(inParseHtml){
+			try {
+				Thread.sleep(25);
+			} catch (InterruptedException ex) {
+				ex.printStackTrace();
+			}
+		}		
+		parseHTML(aktRezNum.getText());
 
 		//this.aktRezNum.getText()
 		//Positionenvec_poskuerzel.get(i)
@@ -3000,6 +3154,13 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					getVectorFromNodes();					
 					doTreeRezeptWertermitteln();
 					doPositionenErmitteln();
+					while(inParseHtml){
+						try {
+							Thread.sleep(25);
+						} catch (InterruptedException ex) {
+							ex.printStackTrace();
+						}
+					}
 					parseHTML(vec_rez.get(0).get(1).trim());
 				}
 			});
@@ -3022,6 +3183,13 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					if(aktRow < 0){return;}
 					doAkttarif((String) ((JRtaComboBox)arg0X.getSource()).getSelectedItem());
 					doTreeRezeptWertermitteln();
+					while(inParseHtml){
+						try {
+							Thread.sleep(25);
+						} catch (InterruptedException ex) {
+							ex.printStackTrace();
+						}
+					}					
 					parseHTML(vec_rez.get(0).get(1).trim());
 
 				}
@@ -3206,6 +3374,13 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				doTitelRepair();
 				jXTreeTable.repaint();
 				doPositionenErmitteln();
+				while(inParseHtml){
+					try {
+						Thread.sleep(25);
+					} catch (InterruptedException ex) {
+						ex.printStackTrace();
+					}
+				}
 				parseHTML(vec_rez.get(0).get(1).trim());
 				
 				return null;
@@ -3640,10 +3815,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			node = holeNode(i);
 			//Notwendig wg. BKK-Gesundheit Tarifwechsel
 			if(!node.abr.tarifwechsel){
-				edibuf.append("EHE+"+disziplinGruppe+":"+SystemPreislisten.hmPreisBereich.get(aktDisziplin).get(Integer.parseInt(preisgruppe)-1)+
+				edibuf.append(( disziplinGruppe.equals("61") || disziplinGruppe.equals("62") ? "ENF++" : "EHE+" )+disziplinGruppe+":"+SystemPreislisten.hmPreisBereich.get(aktDisziplin).get(Integer.parseInt(preisgruppe)-1)+
 						SystemPreislisten.hmPreisBesonderheit.get(aktDisziplin).get(Integer.parseInt(preisgruppe)-1)+plus);				
 			}else{
-				edibuf.append("EHE+"+disziplinGruppe+":"+node.abr.tarifkennzeichen+"000"+plus);
+				edibuf.append(( disziplinGruppe.equals("61") || disziplinGruppe.equals("62") ? "ENF++" : "EHE+" )+disziplinGruppe+":"+node.abr.tarifkennzeichen+"000"+plus);
 			}
 			edibuf.append(RezTools.getPosFromID(node.abr.preisid, preisgruppe, preisvec)+plus);
 			edibuf.append(dfx.format(node.abr.anzahl)+plus);
@@ -3669,34 +3844,61 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			}
 			
 		}
-		edibuf.append("ZHE+");
-		test = vec_pat.get(0).get(14).trim();
-		if( test.length() != 9 ){
-			//Betriebsstätte
-			test = "999999999";
+		if( disziplinGruppe.equals("61") || disziplinGruppe.equals("62") ){
+			edibuf.append("ZUV+");
+			test = vec_pat.get(0).get(14).trim();
+			if( test.length() != 9 ){
+				//Betriebsstätte
+				test = "999999999";
+			}
+			if(! testeZahl(test)){
+				test = "999999999";
+			}
+			edibuf.append(test+plus);
+			test = vec_pat.get(0).get(15).trim();
+			if( test.length() != 9 ){
+				//LANR
+				test = "999999999";
+			}
+			if(! testeZahl(test)){
+				test = "999999999";
+			}
+			edibuf.append(test+plus);	
+			edibuf.append(ediDatumFromSql(vec_rez.get(0).get(2))+plus); 
+			edibuf.append(zuZahlungsPos+EOL);
+			
+		}else{
+			edibuf.append("ZHE+");
+			test = vec_pat.get(0).get(14).trim();
+			if( test.length() != 9 ){
+				//Betriebsstätte
+				test = "999999999";
+			}
+			if(! testeZahl(test)){
+				test = "999999999";
+			}
+			edibuf.append(test+plus);
+			test = vec_pat.get(0).get(15).trim();
+			if( test.length() != 9 ){
+				//LANR
+				test = "999999999";
+			}
+			if(! testeZahl(test)){
+				test = "999999999";
+			}
+			edibuf.append(test+plus);
+			edibuf.append(ediDatumFromSql(vec_rez.get(0).get(2))+plus); 
+			edibuf.append(zuZahlungsPos+plus);
+			test = vec_rez.get(0).get(44).trim();
+			if(test.startsWith("kein Indi")){
+				JOptionPane.showMessageDialog(null,"Kein Indikationsschlüssel angegeben");
+				return false;			
+			}else if(test.equals("k.A.")){
+				test = "9999";
+			}
+			edibuf.append(test.replace(" ", "")+plus);
+			edibuf.append(voIndex[Integer.parseInt(vec_rez.get(0).get(27))]+EOL);
 		}
-		if(! testeZahl(test)){
-			test = "999999999";
-		}
-		edibuf.append(test+plus);
-		test = vec_pat.get(0).get(15).trim();
-		if( test.length() != 9 ){
-			//LANR
-			test = "999999999";
-		}
-		if(! testeZahl(test)){
-			test = "999999999";
-		}
-		edibuf.append(test+plus);
-		edibuf.append(ediDatumFromSql(vec_rez.get(0).get(2))+plus); 
-		edibuf.append(zuZahlungsPos+plus);
-		test = vec_rez.get(0).get(44).trim();
-		if(test.startsWith("kein Indi")){
-			JOptionPane.showMessageDialog(null,"Kein Indikationsschlüssel angegeben");
-			return false;			
-		}
-		edibuf.append(test.replace(" ", "")+plus);
-		edibuf.append(voIndex[Integer.parseInt(vec_rez.get(0).get(27))]+EOL);
 		
 		//an dieser Stelle muß der ICD-10 eingebaut werden, sofern vorhanden
 		//DIA+....
@@ -3705,7 +3907,51 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		}
 		//an dieser Stelle müssen Daten zur Bewilligung eingebaut werden sofern vorhanden
 		//SKZ+....
+		
+		//Ramsch mit der Genehmigung von LFV und Rehasport/Funktionstraining
 
+		String[] genehmigung = RezNeuanlage.holeLFV("diagnose", "verordn", "rez_nr",vec_rez.get(0).get(1) , vec_rez.get(0).get(1).substring(0,2).toUpperCase());
+		String[] skz = {"","","","","","",""};
+		if( disziplinGruppe.equals("61") || disziplinGruppe.equals("62")){
+			//String genehmigung = SqlInfo.holeEinzelFeld("select diagnose from verordn wehere rez_nr = '"+vec_rez.get(0).get(1)+"' Limit 1").trim();
+			if(!genehmigung[0].equals("")){
+				try{
+					skz = genehmigung[0].split(Pattern.quote("$$"));
+					if(skz[3].trim().equals("")){
+						skz[3]= vec_pat.get(0).get(6);
+					}
+					edibuf.append("SKZ"+plus+hochKomma(skz[3])+plus+DatFunk.sDatInSQL(skz[4]).replace("-", "") +plus+(disziplinGruppe.equals("61") ? "H1" : "I1")+EOL );	
+				}catch(NullPointerException ex){
+					edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(vec_rez.get(0).get(2))+plus+(disziplinGruppe.equals("61") ? "H1" : "I1")+EOL );	
+					JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+				}catch(ArrayIndexOutOfBoundsException aex){
+					edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(vec_rez.get(0).get(2))+plus+(disziplinGruppe.equals("61") ? "H1" : "I1")+EOL );
+					JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+				}
+			}else{
+				JOptionPane.showMessageDialog(null,"Achtung für Rehasport und/oder Funktionstraining muß eine Genehmigung vermerkt sein.\nRezept bitte nicht abrechnen!!!!!");
+			}
+		}else{
+			if(!genehmigung[0].equals("")){
+				try{
+					skz = genehmigung[0].split(Pattern.quote("$$"));
+					if(skz[3].trim().equals("")){
+						skz[3]= vec_pat.get(0).get(6);
+					}
+					//System.out.println("SKZ[4]="+skz[4]);
+					//System.out.println("SKZ[3]="+skz[3]);
+					edibuf.append("SKZ+"+hochKomma(skz[3])+plus+DatFunk.sDatInSQL(skz[4]).replace("-", "") +plus+"B2"+EOL );
+				}catch(NullPointerException ex){
+					ex.printStackTrace();
+					edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(vec_rez.get(0).get(2))+plus+"B2"+EOL );
+					JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+				}catch(ArrayIndexOutOfBoundsException aex){
+					aex.printStackTrace();
+					edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(vec_rez.get(0).get(2))+plus+"B2"+EOL );
+					JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+				}
+			}
+		}
 		
 		edibuf.append("BES+");
 		edibuf.append(dfx.format(gesamt)+plus);
@@ -3764,7 +4010,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		return deutschDat.substring(6)+"."+deutschDat.substring(4,6)+"."+deutschDat.substring(0,4);
 	}
 
-	private String hochKomma(String string){
+	public String hochKomma(String string){
 		String str = string.replace("?", "??");
 		str = string.replace("'", "?'");
 		str = str.replace(":", "?:");
@@ -3775,7 +4021,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	/************************************************************************/
 	@SuppressWarnings("unchecked")
 	private boolean holeEDIFACT(String rez_nr){
-
+		int zugabe = 0;
 		boolean ret = true;
 		edibuf.setLength(0);
 		edibuf.trimToSize();
@@ -3791,8 +4037,12 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		
 		int basis = zeilen.length-2;
 		
-		basis = basis - countWords(edibuf.toString(),"DIA+");
-		basis = basis - countWords(edibuf.toString(),"SKZ+");
+		//basis = basis - countWords(edibuf.toString(),"DIA+");
+		//basis = basis - countWords(edibuf.toString(),"SKZ+");
+		
+		basis = basis - countWordsFromRowStart(zeilen,"DIA+");
+		basis = basis - countWordsFromRowStart(zeilen,"SKZ+");
+		
 		/*
 		if(edibuf.toString().indexOf("DIA+") >= 0){
 			basis = basis-1;
@@ -3811,6 +4061,20 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			return false;
 		}
 		*/
+		/*
+		System.out.println("Zeilenlänge insgesamt:"+zeilen.length);
+		System.out.println("Anzahl DIA+ Segmente:"+countWords(edibuf.toString(),"DIA+"));
+		System.out.println("Anzahl SKZ+ Segmente:"+countWords(edibuf.toString(),"SKZ+"));
+		System.out.println("Anzahl DIA+ Segmente:"+countWordsFromRowStart(zeilen,"DIA+"));
+		System.out.println("Anzahl SKZ+ Segmente:"+countWordsFromRowStart(zeilen,"SKZ+"));
+		*/
+		
+		//System.out.println("Basis = "+basis);
+		/*
+		for(int i = 0; i < zeilen[ basis ].split("\\+").length ;i++ ){
+			System.out.println(zeilen[ basis ].split("\\+")[i]);
+		}
+		*/
 		if(zeilen[ basis ].split("\\+").length < 5){
 			JOptionPane.showMessageDialog(null,"Fehler in holeEDIFACT, falsche Länge im Segment ZHE");
 			return false;
@@ -3818,7 +4082,11 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		/* original bis 05.09.2014
 		zuZahlungsPos = zeilen[ (zeilen[zeilen.length-2].startsWith("DIA+") ? zeilen.length-3 : zeilen.length-2) ].split("\\+")[4];
 		*/
-		zuZahlungsPos = zeilen[ basis ].split("\\+")[4];
+		
+		//System.out.println("Zeile-Basis = "+zeilen[basis]);
+		
+		zuZahlungsPos = zeilen[ basis ].replace("'", "").split("\\+")[4];
+		
 		
 		zuZahlungsIndex = zzpflicht[Integer.parseInt(zuZahlungsPos)];
 		this.preisgruppe = positionen[0].split("=")[1];
@@ -3855,23 +4123,26 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		//String aktuell;
 		for(int i = 4; i < lang;i++){
 			pos = zeilen[i].split("\\+");
-			if(pos[0].equals("EHE")){
-				datum = datumFromEdiDeutsch(pos[5]).replace("'", "");
+			if(pos[0].equals("EHE") || pos[0].equals("ENF")){
+				if(pos[0].equals("ENF")){
+					zugabe = 1;
+				}
+				datum = datumFromEdiDeutsch(pos[5+zugabe]).replace("'", "");
 				vecdummy.add( (String) datum );
-				id = RezTools.getIDFromPos(pos[2], preisgruppe, preisvec);
+				id = RezTools.getIDFromPos(pos[2+zugabe], preisgruppe, preisvec);
 				vecdummy.add((String) RezTools.getKurzformFromID(id, preisvec) );
-				vecdummy.add((Double) Double.valueOf(pos[3].replace(",", ".")));
-				vecdummy.add((Double) Double.valueOf(pos[4].replace(",", ".")));
+				vecdummy.add((Double) Double.valueOf(pos[3+zugabe].replace(",", ".")));
+				vecdummy.add((Double) Double.valueOf(pos[4+zugabe].replace(",", ".")));
 				//Hier ganz wichtig die Multiplikation mit der Anzahl
-				if(pos.length==7){
+				if(pos.length==(7+zugabe)){
 					vecdummy.add((boolean) Boolean.valueOf(true));
 					////System.out.println("2. Zuzahlmodus = "+(eltern.zuzahlModusDefault ? "Normal" : "Bayrisch"));
 					if(eltern.zuzahlModusDefault){
-						vecdummy.add((Double) Double.valueOf(pos[6].replace(",", ".").replace("'", "")));	
+						vecdummy.add((Double) Double.valueOf(pos[6+zugabe].replace(",", ".").replace("'", "")));	
 					}else{ //bayrischer Modus
 						//Herr Lehmann: nächste 2 Zeilen müssen freigeschaltet werden für Einzelkilometer
-						vecdummy.add((Double) Double.valueOf(pos[6].replace(",", ".").replace("'", "")) *
-								Double.valueOf(pos[3].replace(",", ".")) );
+						vecdummy.add((Double) Double.valueOf(pos[6+zugabe].replace(",", ".").replace("'", "")) *
+								Double.valueOf(pos[3+zugabe].replace(",", ".")) );
 					}
 				}else{
 					vecdummy.add((boolean) Boolean.valueOf(false));
@@ -3886,7 +4157,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				}else{
 					vecdummy.add( (String) "");
 				}
-				if( (RezTools.getPreisAktFromID(id, preisgruppe, preisvec).trim().replace(".", ",")).equals(pos[4].trim()) ){
+				if( (RezTools.getPreisAktFromID(id, preisgruppe, preisvec).trim().replace(".", ",")).equals(pos[4+zugabe].trim()) ){
 					vecdummy.add( (String) "aktuell");
 				}else{
 					vecdummy.add( (String) "alt");
@@ -3904,6 +4175,15 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		}
 		
 		return ret;
+	}
+	public static int countWordsFromRowStart(String[] zeilen,String word){
+		int count=0;
+		for(int i = 0; i < zeilen.length;i++){
+			if(zeilen[i].startsWith(word)){
+				count++;
+			}
+		}
+		return count;
 	}
     public static int countWords(String text, String word){
         int count=0;

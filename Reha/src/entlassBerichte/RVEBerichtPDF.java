@@ -112,6 +112,7 @@ public class RVEBerichtPDF {
 	 * 
 	 */
 	private void doRVVorschau(boolean vorschau,int[] versionen){
+		//System.out.println("Vorschau = "+vorschau);
 		boolean geklappt = false;
 		Reha.thisClass.progressStarten(true);
 		File ft = new File(tempPfad+"EBfliesstext.pdf");
@@ -1752,6 +1753,13 @@ public class RVEBerichtPDF {
 				}
 				if(blatt[1]> 0 ){
 					macheGedoense(cop,1,empftext,empfbereich);
+					/************************/
+					PdfReader rvorlage = new PdfReader(tempDateien[1][0]);
+					int ktls = rvorlage.getNumberOfPages();
+					for(int k = 2; k <= ktls;k++){
+						cop.addPage(cop.getImportedPage(rvorlage, k));
+					}
+					rvorlage.close();					
 				}
 				if(blatt[2]> 0){
 					PdfReader rvorlage = new PdfReader(tempDateien[2][0]);

@@ -85,6 +85,9 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 			//System.out.println("Derzeitiger Besitzer = "+e.currentOwner);
 			return;
 			//JOptionPane.showMessageDialog(null, "Port f�r Barcode-Scanner "+port+" konnte nicht ge�ffnet werden.\n\nBereits bele?");
+		} catch (NullPointerException ex){
+			System.out.println("Fehler beim Öffnen des seriellen Ports");
+			return;
 		}
 		
 
@@ -193,7 +196,7 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 		    	////System.out.println("String2 = "+outString);
 		    	byteArrayOutputStream.close();
 				if(outString.length()>= 2){
-					if("KGMAERLORHPO".contains(outString.substring(0,2))){
+					if("KGMAERLORHPORSFT".contains(outString.substring(0,2))){
 						@SuppressWarnings("rawtypes")
 						Vector tvec = null;
 						JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");

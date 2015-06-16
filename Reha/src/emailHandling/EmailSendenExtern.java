@@ -99,6 +99,7 @@ public class EmailSendenExtern {
         	properties.put("mail.smtp.socketFactory.port", useport);
         	properties.put("mail.smtp.socketFactory.class",
     				"javax.net.ssl.SSLSocketFactory");
+        	
            	properties.put("mail.smtp.ssl.trust", smtpHost);
             if(authx){
             	properties.put("mail.smtp.auth", "true");
