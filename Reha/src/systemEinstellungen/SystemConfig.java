@@ -1106,10 +1106,13 @@ public class SystemConfig {
 				if(mustupdate){
 					INITool.saveIni(inif);
 				}
+	
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung von INI-Dateien , Mehode:DesktopLesen!\nFehlertext: "+ex.getMessage());
 			}
 		}
+		//System.out.println("Fensterkonfig="+hmContainer);
+		//System.out.println("INI's wurden updated="+mustupdate);
 	}
 	public static void PatientLesen(){
 		try{

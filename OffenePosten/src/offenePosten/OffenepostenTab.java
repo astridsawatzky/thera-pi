@@ -89,37 +89,43 @@ public class OffenepostenTab extends JXPanel implements ChangeListener{
 	
 	private void doHeader(){
 		ImageIcon ico;
-        String ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"nebraska_scale.jpg";
+        String ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"hauptbuch.jpg";
         ico = new ImageIcon(ss);
 		vectitel.add("Bezahlte Rechnungen ausbuchen / Teilzahlungen buchen");
-		vecdescript.add("<html>Hier haben Sie die Möglichkeit Rechnungen nach verschiedenen Kriterien zu suchen.<br>" +
-                "Wenn Sie die Rechnung die Sie suchen gefunden haben und die Rechnung <b>vollständig</b> bezahlt wurde,<br>" +
-                "genügt es völlig über Alt+A den Vorgang ausbuchen zu aktivieren.<br><br>"+
-                "Wurde lediglich eine Teilzahlung geleistet, muß zuvor die noch bestehende Restforderung im Textfeld <b>noch offen</b> eingetragen werden.</html>");
+		vecdescript.add("<html>Hier haben Sie die Möglichkeit Rechnungen nach verschiedenen Kriterien zu suchen.<br><br>" +
+                "Wenn Sie die Rechnung, die Sie suchen, gefunden haben und die Rechnung <b>vollständig</b> bezahlt wurde,<br>" +
+                 "genügt es völlig über Alt+A den Vorgang ausbuchen zu aktivieren.<br><br>"+
+                 "Wurde lediglich eine Teilzahlung geleistet, muß zuvor die noch bestehende Restforderung im Textfeld <b>noch offen</b> eingetragen werden.</html>");
 		vecimg.add(ico);
 		
 		
-		vectitel.add("Zertifikate auswerten");
-		vecdescript.add("....Hier können Sie die Zertifikatskette einsehen\n" +
-                "Neue Zertifikate einlesen (neue Datenannahmestellen)\n" +
-                "und schlußendlich überpüfen wie lange welches Zertifikat gültig ist");
+		vectitel.add("Rechnung korrigieren / Kopie erstellen");
+		vecdescript.add("Hier können Sie die Details der gewählten Rechnung einsehen,\n" +
+                "Rechnungsdaten korrigieren (bei Abrechnungen nach §302 nur eingeschränkt)\n" +
+                "und Kopien der Rechnung drucken.");
 		vecimg.add(ico);
 		
-		vectitel.add("Manuell verschlüsseln");
-		vecdescript.add("....Hier können Sie Dateien manuell verschlüsseln\n" +
-                "Weshalb auch immer....");
+		vectitel.add("Mahnwesen");
+		vecdescript.add("<html>Hier erzeugen Sie Mahnungen für noch nicht bezahlte Rechnungen.<br><br>" +
+				"Button <b>[los..]</b> listet die Rechnungen, bei denen noch ein Betrag offen ist und<br>" +
+				"die in der eingestellten Mahnstufe noch nicht gemahnt wurden.</html>");
+		ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"Mahnung.png";
+		ico = new ImageIcon(ss);
 		vecimg.add(ico);
 
-		vectitel.add("Test- und Experimentierpanel");
-		vecdescript.add("....Diese Seite ist bislang noch Bodo und Jürgen vorbehalten (leider).\n" +
-                "Hier werden die Funktionen die später Nebraska zu dem machen was Nebraske ist\n"+
-                "entwickelt und getestet");
+		vectitel.add("Voreinstellungen für das Mahnwesen");
+		vecdescript.add("Hier sind die Grundeinstellungen\n" +
+               "der Mahnfunktion zu finden.");
+		ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"einstellungen.jpg";
+		ico = new ImageIcon(ss);
 		vecimg.add(ico);
+		/*
 		vectitel.add("Rezeptgebührrechungen / Ausfallrechnungen");
 		vecdescript.add("....Experimentierpanal von Bodo und Jürgen.\n" +
                 "Hier werden die Funktionen die später Nebraska zu dem machen was Nebraske ist\n"+
                 "entwickelt und getestet");
 		vecimg.add(ico);
+		*/
 
 	}
 
