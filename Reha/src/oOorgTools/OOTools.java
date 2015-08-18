@@ -210,6 +210,7 @@ public class OOTools{
 	 		      XEnumerationAccess xEnumerationAccess = xTextFieldsSupplier.getTextFields();
 	 		      Thread.sleep(millis);
 	 		      XEnumeration xEnumeration = xEnumerationAccess.createEnumeration();
+
 	 		      while(xEnumeration.hasMoreElements()) {
 	 		        Object object = xEnumeration.nextElement();
 	 		        Thread.sleep(millis);

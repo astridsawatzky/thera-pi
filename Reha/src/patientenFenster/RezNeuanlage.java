@@ -1543,7 +1543,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(jtf[cKASID].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null,"Achtung - kann Preisgruppe nicht ermitteln - Rezept kann später nicht abgerechnet werden!");
 		}
-		jtf[cARZT].setText(Reha.thisClass.patpanel.patDaten.get(25));
+		jtf[cARZT].setText(Reha.thisClass.patpanel.patDaten.get(25)+ " - "+Reha.thisClass.patpanel.patDaten.get(26));
 		// einbauen A-Name +" - " +LANR;
 		jtf[cARZTID].setText(Reha.thisClass.patpanel.patDaten.get(67)); //arztid					
 		//tests = Reha.thisClass.patpanel.patDaten.get(31);		// bef_dat = Datum der Befreiung

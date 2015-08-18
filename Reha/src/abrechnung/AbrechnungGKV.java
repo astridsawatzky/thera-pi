@@ -202,13 +202,14 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			Vector<X509Certificate> certs = store.getAllCerts();
 			String[] dn = null;
 			String ik;
+			long tage;
 			for(int i = 0; i < certs.size();i++){
 				dn=certs.get(i).getSubjectDN().toString().split(",");
 				if(dn.length==5){
 					ik = (String)dn[3].split("=")[1];
 					if(ik.equals(alias)){
 						String verfall = certs.get(i).getNotAfter().toLocaleString().split(" ")[0].trim();
-						long tage = DatFunk.TageDifferenz(DatFunk.sHeute(),verfall); 
+						tage = DatFunk.TageDifferenz(DatFunk.sHeute(),verfall); 
 						if( tage <= 0){
 							JOptionPane.showMessageDialog(null,"Ihr Zertifikat ist abgelaufen.\nEine Verschlüsselung mit diesem Zertifikat ist nicht mehr möglich");
 							return SystemConfig.certIsExpired;
@@ -216,6 +217,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 							JOptionPane.showMessageDialog(null,"Achtung!!!\nIhr Zertifikat läuft in "+Long.toString(tage)+" Tage(n) ab.\nBitte rechtzeitig neues Zertifikat beantragen");
 						}
 						return SystemConfig.certOK;
+					}else{
+						String verfall = certs.get(i).getNotAfter().toLocaleString().split(" ")[0].trim();
+						tage = DatFunk.TageDifferenz(DatFunk.sHeute(),verfall); 
+						if( tage <= 0){
+							JOptionPane.showMessageDialog(null,"Mindestens ein Zertifikat im Keystore ist abgelaufen.\nVerschlüsselung und damit die 302-er Abrechnung wird daher gesperrt");
+							return SystemConfig.certIsExpired;
+						}
 					}
 				}
 			}
@@ -878,6 +886,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		
 		String test = "";
 		if(abrechnungsModus.equals(ABR_MODE_302)){
+			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			//Einbau Test ob Zertifikat abgelaufen
 			test = "IK der Krankenkasse: "+ik_kasse+"\n"+
 			"IK des Kostenträgers: "+ik_kostent+"\n"+ 
 			"IK des Nutzer mit EntschlüsselungsbefungnisKostenträgers: "+ik_nutzer+"\n"+

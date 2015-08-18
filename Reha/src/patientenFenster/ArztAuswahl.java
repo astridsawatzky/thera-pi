@@ -317,7 +317,7 @@ private RehaTPEventClass rtp = null;
 		int i = arztwahltbl.getSelectedRow();
 		if(i >= 0){
 			int model = arztwahltbl.convertRowIndexToModel(i);
-			elterntfs[0].setText((String)arztwahlmod.getValueAt(model, this.cNachname));			
+			elterntfs[0].setText((String)arztwahlmod.getValueAt(model, this.cNachname)+" - "+(String)arztwahlmod.getValueAt(model, this.cArztnum));			
 			elterntfs[1].setText((String)arztwahlmod.getValueAt(model, this.cArztnum));	
 			elterntfs[2].setText((String)arztwahlmod.getValueAt(model, this.cId));
 			if(rtp != null){
