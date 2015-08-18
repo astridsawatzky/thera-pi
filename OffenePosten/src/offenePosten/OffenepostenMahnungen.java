@@ -66,6 +66,9 @@ import com.hexiong.jdbf.DBFReader;
 import com.hexiong.jdbf.JDBFException;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.sun.star.text.XTextFieldsSupplier;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XRefreshable;
 
 public class OffenepostenMahnungen extends JXPanel{
 
@@ -889,6 +892,15 @@ public class OffenepostenMahnungen extends JXPanel{
 		    /*****************/
 		}
 		
+		XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier)UnoRuntime.queryInterface(XTextFieldsSupplier.class, textDocument.getXTextDocument());
+		XRefreshable xUp = UnoRuntime.queryInterface(XRefreshable.class, xTextFieldsSupplier.getTextFields());
+        xUp.refresh();
+        textDocument.getXTextDocument().reformat();
+        try {
+			Thread.sleep(80);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 
 	}
 }
