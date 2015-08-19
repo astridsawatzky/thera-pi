@@ -1137,26 +1137,32 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		jcheck[2] = new JRtaCheckBox(SystemConfig.vPatMerker.get(0));
 		jcheck[2].setOpaque(false);
 		jcheck[2].setName("merk1");
+		jcheck[2].setToolTipText(SystemConfig.vPatMerker.get(0));
 
 		jcheck[3] = new JRtaCheckBox(SystemConfig.vPatMerker.get(1));
 		jcheck[3].setOpaque(false);
 		jcheck[3].setName("merk2");
+		jcheck[3].setToolTipText(SystemConfig.vPatMerker.get(1));
 
 		jcheck[4] = new JRtaCheckBox(SystemConfig.vPatMerker.get(2));
 		jcheck[4].setOpaque(false);
 		jcheck[4].setName("merk3");
+		jcheck[4].setToolTipText(SystemConfig.vPatMerker.get(2));
 
 		jcheck[5] = new JRtaCheckBox(SystemConfig.vPatMerker.get(3));
 		jcheck[5].setOpaque(false);
 		jcheck[5].setName("merk4");
+		jcheck[5].setToolTipText(SystemConfig.vPatMerker.get(3));
 
 		jcheck[6] = new JRtaCheckBox(SystemConfig.vPatMerker.get(4));
 		jcheck[6].setOpaque(false);
 		jcheck[6].setName("merk5");
+		jcheck[6].setToolTipText(SystemConfig.vPatMerker.get(4));
 
 		jcheck[7] = new JRtaCheckBox(SystemConfig.vPatMerker.get(5));
 		jcheck[7].setOpaque(false);
 		jcheck[7].setName("merk6");
+		jcheck[7].setToolTipText(SystemConfig.vPatMerker.get(5));
 
 		// die Labeltexte merk2 bis merk7 aus Datenbank/SysINI einlesen?
 		docmod = new MyDocTableModel();

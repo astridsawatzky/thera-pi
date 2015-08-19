@@ -908,8 +908,16 @@ public class PatientHauptLogic {
 			}else{
 				Reha.bRGAFoffen = false;
 			}
+			
 			//System.out.println("Größe der Daten = "+Reha.thisClass.patpanel.patDaten.size());
 			if(Reha.thisClass.patpanel.patDaten.size() >= 71){
+				if( (Reha.thisClass.patpanel.patDaten.get(57)+Reha.thisClass.patpanel.patDaten.get(58)+Reha.thisClass.patpanel.patDaten.get(59)+
+						Reha.thisClass.patpanel.patDaten.get(60)+Reha.thisClass.patpanel.patDaten.get(61)+Reha.thisClass.patpanel.patDaten.get(62)).contains("T")){
+					Reha.bHatMerkmale=true;
+				}else{
+					Reha.bHatMerkmale=false;					
+				}
+				
 				if(Reha.thisClass.patpanel.patDaten.get(65).equals("")){
 					Reha.thisClass.patpanel.pmemo[0].setText("");
 				}else{
@@ -924,7 +932,8 @@ public class PatientHauptLogic {
 				Reha.thisClass.patpanel.aid = StringTools.ZahlTest(Reha.thisClass.patpanel.patDaten.get(67));
 				Reha.thisClass.patpanel.kid = StringTools.ZahlTest(Reha.thisClass.patpanel.patDaten.get(68));
 				Reha.thisClass.patpanel.patDatenOk = true;
-				Reha.thisClass.patpanel.getStammDaten().parseHTML(true);			
+				Reha.thisClass.patpanel.getStammDaten().parseHTML(true);
+				
 			}else{
 				JOptionPane.showMessageDialog(null, "Fehler beim Einlesen der Patientendaten");
 				Reha.thisClass.patpanel.patDatenOk = false;

@@ -189,7 +189,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 				sico = "";
 			}else{
 				sico = inif.getStringProperty("Kriterien","Image"+(i+1));
-				kritlab[0].setIcon(SystemConfig.vPatMerkerIcon.get(i));
+				kritlab[i].setIcon(SystemConfig.vPatMerkerIcon.get(i));
 			}
 			icon[i].setText(sico);
 			icon[i].setEditable(false);
@@ -498,6 +498,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 				wert = icon[i].getText();
 				inif.setStringProperty("Kriterien", "Image"+(i+1),icon[i].getText() , null);
 				SystemConfig.vPatMerkerIcon.set(i, (wert.equals("") ? null : new ImageIcon(Reha.proghome+"icons/"+wert)));
+				SystemConfig.vPatMerkerIconFile.set(i, (wert.equals("") ? null : Reha.proghome+"icons/"+wert));
 				
 			}
 			INITool.saveIni(inif);

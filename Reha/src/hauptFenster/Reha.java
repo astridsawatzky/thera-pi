@@ -314,7 +314,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2015-08-18-DB=";
+	public static String aktuelleVersion = "2015-08-19-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -365,6 +365,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	
 	public static Vector<Vector<String>> vRGAFoffen;
 	public static boolean bRGAFoffen;
+	public static boolean bHatMerkmale;
 	
 	/*
 	 * Einschalten für Geschwindigkeitstests

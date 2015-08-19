@@ -191,6 +191,7 @@ public class SystemConfig {
 	
 	public static Vector<String> vPatMerker = null;
 	public static Vector<ImageIcon> vPatMerkerIcon = null;
+	public static Vector<String> vPatMerkerIconFile = null;
 	
 	public static HashMap<String,String> hmKVKDaten = null;
 	public static String sReaderName = null;
@@ -1118,17 +1119,21 @@ public class SystemConfig {
 		try{
 			vPatMerker = new Vector<String>();
 			vPatMerkerIcon = new Vector<ImageIcon>();
+			vPatMerkerIconFile = new Vector<String>();
 			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "patient.ini");
 			for(int i = 1; i < 7;i++){
 				vPatMerker.add(inif.getStringProperty("Kriterien", "Krit"+i));
 				String simg = inif.getStringProperty("Kriterien", "Image"+i);
-				if(simg.equals("")){
+				if(simg.equals("") || simg==null){
 					vPatMerkerIcon.add(null);
+					vPatMerkerIconFile.add(null);
 				}else{
 					vPatMerkerIcon.add(new ImageIcon(Reha.proghome+"icons/"+simg));
+					vPatMerkerIconFile.add(Reha.proghome+"icons/"+simg);
 				}
 			}
 		}catch(Exception es){
+			es.printStackTrace();
 			JOptionPane.showMessageDialog(null,"Fehler bei der Auswertung der Patientenkriterien (patient.ini).\nFehlertext: "+es.getMessage());
 		}
 	}

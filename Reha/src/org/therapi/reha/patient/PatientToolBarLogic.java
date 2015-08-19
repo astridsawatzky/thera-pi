@@ -70,7 +70,7 @@ public class PatientToolBarLogic {
 				}
 			}
 		}else if(e.getKeyCode() == KeyEvent.VK_F1 && (!patientHauptPanel.aktPatID.equals("")) ){
-			if(Reha.bRGAFoffen){
+			if(Reha.bRGAFoffen || Reha.bHatMerkmale){
 				new Thread(){
 					public void run(){		
 						new SwingWorker<Void,Void>(){
