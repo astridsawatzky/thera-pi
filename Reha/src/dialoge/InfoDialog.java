@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -129,7 +130,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		jpan.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		FormLayout lay = new FormLayout("5dlu,fill:0:grow(0.5),p,fill:0:grow(0.5),5dlu",
-				"5dlu,p,5dlu,p,p,max(350dlu;p),0dlu,100dlu,5dlu");
+				"5dlu,p,5dlu,p,p,250dlu,5dlu,150dlu:g,5dlu");
 		jpan.setLayout(lay);
 		CellConstraints cc = new CellConstraints();
 		bildlab = new JLabel(" ");
@@ -153,8 +154,11 @@ public class InfoDialog extends JDialog implements WindowListener{
         scr2 = JCompTools.getTransparentScrollPane(htmlPane2);
         scr2.validate();	
         jpan.add(scr2,cc.xyw(2,8,2));		
-		jpan.validate();
+
 		holeOffeneRechnungen(vdata);
+		scr1.validate();
+		scr2.validate();
+		jpan.revalidate();
 		return jpan;
 	}	
 
@@ -581,7 +585,28 @@ public class InfoDialog extends JDialog implements WindowListener{
 		bdata.trimToSize();
 		complete = "";
 		complete = ladehead();
-		bdata.append("<span "+getSpanStyle("12","")+"Angegebene Merkmale für diesen Patient</span><br>\n");
+		bdata.append("<span "+getSpanStyle("14","")+"Merkmale für diesen Patient</span><br>\n");
+		int durchlauf = 0;
+		for(int i = 62; i > 56;i--){
+			if(Reha.thisClass.patpanel.patDaten.get(i).equals("T")){
+				/*
+				vPatMerker.add(inif.getStringProperty("Kriterien", "Krit"+i));
+				String simg = inif.getStringProperty("Kriterien", "Image"+i);
+				if(simg.equals("")){
+					vPatMerkerIcon.add(null);
+				}else{
+					vPatMerkerIcon.add(new ImageIcon(Reha.proghome+"icons/"+simg));
+				}*/
+				if(SystemConfig.vPatMerkerIconFile.get(durchlauf) != null){
+					bdata.append("<img src='file:///"+SystemConfig.vPatMerkerIconFile.get(durchlauf)+"'>&nbsp;&nbsp;");	
+				}
+				
+				bdata.append("<span "+getSpanStyle("12","#FF0000")+SystemConfig.vPatMerker.get(durchlauf)+"</span><br>\n");
+				
+				
+			}
+			durchlauf++;
+		}
 		complete = complete+bdata.toString()+ladeend();
 		htmlPane2.setText(complete);
 		 
