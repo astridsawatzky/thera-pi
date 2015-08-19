@@ -569,7 +569,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					infoDlg.pack();
 					infoDlg.setLocationRelativeTo(null);
 					infoDlg.setVisible(true);
-					infoDlg = null;								
+					infoDlg = null;		
+					
 				}
 
 			}

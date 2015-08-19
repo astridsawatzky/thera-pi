@@ -2,6 +2,7 @@ package dialoge;
 
 import hauptFenster.Reha;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -51,6 +52,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 	
 	Vector <Vector<String>> vecResult = null;
 	Vector<String> tage = null;
+	Vector<Vector<String>> tageplus = null;
 	boolean historie = false;
 	boolean notfound = false;
 	String endhinweis = "";
@@ -71,7 +73,10 @@ public class InfoDialog extends JDialog implements WindowListener{
 		this.arg1 = arg1;
 		this.infoArt = infoArt;
 		activateListener();
+		this.setLayout(new BorderLayout());
 		if(this.infoArt.equals("terminInfo")){
+			//this.getContentPane().setLayout(new BorderLayout());
+			//this.add(getTerminInfoContent());
 			this.setContentPane(getTerminInfoContent());
 		}else if(this.infoArt.equals("offenRGAF")){
 			this.setContentPane(getOffeneRechnungenInfoContent(data));
@@ -81,7 +86,8 @@ public class InfoDialog extends JDialog implements WindowListener{
 		
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.addKeyListener(kl);
-		validate();
+		//validate();
+		this.getContentPane().validate();
 	}
 	
 	public JXPanel getTerminInfoContent(){
@@ -90,23 +96,25 @@ public class InfoDialog extends JDialog implements WindowListener{
 		//jpan.setPreferredSize(new Dimension(400,100));
 		jpan.setBackground(Color.WHITE);
 		jpan.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-		FormLayout lay = new FormLayout("5dlu,fill:0:grow(0.5),p,fill:0:grow(0.5),5dlu",
+		//jpan.setPreferredSize(new Dimension(1000,750));
+		FormLayout lay = new FormLayout("5dlu,p:g,p,p:g,5dlu",
 				"5dlu,p,5dlu,p,p,max(350dlu;p),0dlu,100dlu,5dlu");
 		jpan.setLayout(lay);
 		CellConstraints cc = new CellConstraints();
 		bildlab = new JLabel(" ");
 		bildlab.setIcon(SystemConfig.hmSysIcons.get("tporgklein"));
-		jpan.add(bildlab,cc.xy(3, 2));
+		jpan.add(bildlab,cc.xy(3, 2,CellConstraints.FILL,CellConstraints.DEFAULT));
 		htmlPane1 = new JEditorPane(/*initialURL*/);
         htmlPane1.setContentType("text/html");
         htmlPane1.setEditable(false);
         htmlPane1.setOpaque(false);
         htmlPane1.addKeyListener(kl);
+        //htmlPane1.setPreferredSize(new Dimension(1000,750));
         //htmlPane.addHyperlinkListener(this);
         scr1 = JCompTools.getTransparentScrollPane(htmlPane1);
+        
         scr1.validate();	
-        jpan.add(scr1,cc.xywh(2,4,2, 3));
+        jpan.add(scr1,cc.xywh(2,4,3, 3,CellConstraints.FILL,CellConstraints.FILL));
 
 		htmlPane2 = new JEditorPane(/*initialURL*/);
         htmlPane2.setContentType("text/html");
@@ -115,7 +123,7 @@ public class InfoDialog extends JDialog implements WindowListener{
         htmlPane2.addKeyListener(kl);
         scr2 = JCompTools.getTransparentScrollPane(htmlPane2);
         scr2.validate();	
-        jpan.add(scr2,cc.xyw(2,8,2));
+        jpan.add(scr2,cc.xyw(2,8,3,CellConstraints.FILL,CellConstraints.FILL));
         
         holeTerminInfo();
 		jpan.validate();
@@ -130,7 +138,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		jpan.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		FormLayout lay = new FormLayout("5dlu,fill:0:grow(0.5),p,fill:0:grow(0.5),5dlu",
-				"5dlu,p,5dlu,p,p,250dlu,5dlu,150dlu:g,5dlu");
+				"5dlu,p,5dlu,p,p,250dlu,5dlu,2dlu,150dlu:g,5dlu");
 		jpan.setLayout(lay);
 		CellConstraints cc = new CellConstraints();
 		bildlab = new JLabel(" ");
@@ -144,7 +152,7 @@ public class InfoDialog extends JDialog implements WindowListener{
         //htmlPane.addHyperlinkListener(this);
         scr1 = JCompTools.getTransparentScrollPane(htmlPane1);
         scr1.validate();	
-        jpan.add(scr1,cc.xywh(2,4,2, 3));
+        jpan.add(scr1,cc.xywh(2,4,3, 4));
 
 		htmlPane2 = new JEditorPane(/*initialURL*/);
         htmlPane2.setContentType("text/html");
@@ -153,7 +161,7 @@ public class InfoDialog extends JDialog implements WindowListener{
         htmlPane2.addKeyListener(kl);
         scr2 = JCompTools.getTransparentScrollPane(htmlPane2);
         scr2.validate();	
-        jpan.add(scr2,cc.xyw(2,8,2));		
+        jpan.add(scr2,cc.xywh(2,8,3,2));		
 
 		holeOffeneRechnungen(vdata);
 		scr1.validate();
@@ -364,10 +372,11 @@ public class InfoDialog extends JDialog implements WindowListener{
 		StringBuffer  mitte = new StringBuffer();
 		boolean zuzahl = (vecResult.get(0).get(14).equals("0") ? false : true);
 		tage =  RezTools.holeEinzelTermineAusRezept("",vecResult.get(0).get(1)) ;
+		tageplus = RezTools.holeTermineUndBehandlerAusRezept("", vecResult.get(0).get(1));
 		Object[] otest = {null,null};
 		/**********************/
-		if(tage.size() > 0){
-			last12Wo = DatFunk.sDatPlusTage(tage.get(0), (12*7)-1);	
+		if(tageplus.size()/*tage.size()*/ > 0){
+			last12Wo = DatFunk.sDatPlusTage(tageplus.get(0).get(0)/*tage.get(0)*/, (12*7)-1);	
 		}else{
 			last12Wo = DatFunk.sDatPlusTage(DatFunk.sDatInDeutsch(vecResult.get(0).get(0)), (12*7)-1);
 		}
@@ -396,7 +405,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				mitte.append("<span "+getSpanStyle("10","")+"Arztbericht: </span><span "+getSpanStyle("10","#008000")+ "<b>bereits angelegt</b>"+"</span>"+"<br>\n");
 			}
 		}
-		mitte.append("<span "+getSpanStyle("10","")+"Bislang durchgeführt: <b>"+Integer.toString(tage.size())+" von "+vecResult.get(0).get(5)+"</b></span>"+"<br>\n");
+		mitte.append("<span "+getSpanStyle("10","")+"Bislang durchgeführt: <b>"+Integer.toString(tageplus.size()/*tage.size()*/)+" von "+vecResult.get(0).get(5)+"</b></span>"+"<br>\n");
 		mitte.append("<span "+getSpanStyle("10","")+"Rezeptdatum: <b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(16))+"</b></span>"+"<br>\n");
 		mitte.append("<span "+getSpanStyle("10","")+"Spätester Behandlungsbeginn: <b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(0))+"</b></span>"+"<br><br>\n");	
 		
@@ -411,38 +420,50 @@ public class InfoDialog extends JDialog implements WindowListener{
 		long diff = 0;
 		long diff1 = 0;
 		
-		for(int i = 0; i < tage.size();i++){
+		for(int i = 0; i < tageplus.size()/*tage.size()*/;i++){
 			mitte.append("<tr>\n");
 			mitte.append("<td class='itemkleinodd'>"+Integer.toString(i+1)+"</td>\n");
-			mitte.append("<td class='itemkleinodd'>"+tage.get(i)+"</td>\n");
+			mitte.append("<td class='itemkleinodd'>"+tageplus.get(i).get(0)/*tage.get(i)*/+"</td>\n");
 			
 			if(i==0){
 				//zuerst testen ob vor dem Rezeptdatum begonnen wurde
-				if( (diff1=DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(16)), tage.get(i))) < 0){
+				if( (diff1=DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(16)), tageplus.get(i).get(0)/*tage.get(i)*/)) < 0){
 					mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+" < Rezeptdatum<br>"+Long.toString(diff1)+" Tage"+"</td>\n");
+					mitte.append("<td>&nbsp;</td>\n");
+					//mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+"</td>\n");
+					//mitte.append("<td>"+" < Rezeptdatum<br>"+Long.toString(diff1)+" Tage"+"</td>\n");
 				}else{
-					if( (diff = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(0)), tage.get(i))) > 0){
+					if( (diff = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(0)), tageplus.get(i).get(0)/*tage.get(i)*/)) > 0){
 						mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
-						otest = Wochen12Test(last12Wo,tage.get(i));
+						//mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+"</td>\n");
+						//mitte.append("<td> > "+Long.toString(diff)+" Tage</td>\n");
+						otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 						if( ((Boolean)otest[0]) == (Boolean) true){
 							mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 						}else{
 							mitte.append("<td><img src='file:///"+Reha.proghome+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+							//mitte.append("<td><img src='file:///"+Reha.proghome+"icons/ok.gif"+"'>"+"</td>\n");
+							//mitte.append("<td>"+" 12 Wo."+"</td>\n");
 						}
 					}else{
 						mitte.append("<td><img src='file:///"+Reha.proghome+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
-						otest = Wochen12Test(last12Wo,tage.get(i));
+						otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 						if( ((Boolean)otest[0]) == (Boolean) true){
 							mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+							//mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+"</td>\n");
+							//mitte.append("<td>"+" 12 Wo."+"</td>\n");
 						}else{
 							mitte.append("<td><img src='file:///"+Reha.proghome+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+							//mitte.append("<td><img src='file:///"+Reha.proghome+"icons/ok.gif"+"'>"+"</td>\n");
+							//mitte.append("<td>"+" 12 Wo."+"</td>\n");
 						}
 					}
 				}
+				mitte.append("<td>"+tageplus.get(i).get(1)+"</td>\n");
 			}else if(i > 0 ){
-				if( (diff = DatFunk.TageDifferenz(tage.get(i-1), tage.get(i))) > tagebreak){
+				if( (diff = DatFunk.TageDifferenz(tageplus.get(i-1).get(0)/*tage.get(i-1)*/,tageplus.get(i).get(0)/*tage.get(i)*/)) > tagebreak){
 					mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
-					otest = Wochen12Test(last12Wo,tage.get(i));
+					otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 					if( ((Boolean)otest[0]) == (Boolean) true){
 						mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}else{
@@ -451,7 +472,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 
 				}else{
 					mitte.append("<td><img src='file:///"+Reha.proghome+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
-					otest = Wochen12Test(last12Wo,tage.get(i));
+					otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 					if( ((Boolean)otest[0]) == (Boolean) true){
 						mitte.append("<td><img src='file:///"+Reha.proghome+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}else{
@@ -459,12 +480,14 @@ public class InfoDialog extends JDialog implements WindowListener{
 					}
 
 				}
-				mitte.append("<td>&nbsp;</td>\n");
+				mitte.append("<td style='white-space: nowrap;'>"+tageplus.get(i).get(1)+"</td>\n");
+				//mitte.append("<td style='white-space: nowrap;'>&nbsp;</td>\n");
 			}
 			
 			mitte.append("</tr>\n");
 		}
-		/***********************************************************************************/		
+		/***********************************************************************************/
+		mitte.append("<tr><td>&nbsp;</td></tr>\n");
 		mitte.append("</table>\n");
 
 		return mitte.toString();
@@ -508,7 +531,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		bufhead.append("A{text-decoration:none;background-color:transparent;border:none}\n");
 		bufhead.append("A.even{text-decoration:underline;color: #000000; background-color:transparent;border:none}\n");
 		bufhead.append("A.odd{text-decoration:underline;color: #FFFFFF;background-color:transparent;border:none}\n");
-		bufhead.append("TD{font-family: Arial; font-size: 12pt; vertical-align: top;}\n");
+		bufhead.append("TD{font-family: Arial; font-size: 12pt; vertical-align: top;white-space: nowrap;}\n");
 		bufhead.append("TD.inhalt {font-family: Arial, Helvetica, sans-serif; font-size: 20px;background-color: #7356AC;color: #FFFFFF;}\n");
 		bufhead.append("TD.inhaltinfo {font-family: Arial, Helvetica, sans-serif; font-size: 20px;background-color: #DACFE7; color: #1E0F87;}\n");
 		bufhead.append("TD.headline1 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #EADFF7; color: #000000;}\n");
@@ -543,7 +566,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 	public void holeOffeneRechnungen(Vector<Vector<String>> data){
 		String complete = ladehead();
 		StringBuffer bdata = new StringBuffer();
-		bdata.append("<span "+getSpanStyle("12","")+"Offene RGR-/AFR-Rechnungen</span><br>\n");
+		bdata.append("<span "+getSpanStyle("14","")+"Offene RGR-/AFR-Rechnungen</span><br>\n");
 		bdata.append("<table width='100%'>\n"); 
 		Double gesamt = 0.00;
 		//String stmt = "select t1.rdatum,t1.rnr,t1.roffen,t1.pat_intern from rgaffaktura as t1 join pat5 as t2 on (t1.pat_intern=t2.pat_intern) where t1.roffen > '0' and t1.pat_intern = '"+xpatint+"' order by t1.rdatum";

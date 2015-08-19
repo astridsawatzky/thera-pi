@@ -374,6 +374,54 @@ public class RezTools {
 		Collections.sort(retvec,comparator);
 		return (Vector<String>)retvec.clone();
 	}
+	@SuppressWarnings("unchecked")
+	public static Vector<Vector<String>> holeTermineUndBehandlerAusRezept(String xreznr,String termine){
+		Vector<String> xvec = null;
+		Vector<String> retvec = new Vector<String>();
+		Vector<Vector<String>> retbeides = new Vector<Vector<String>>(); 
+		String terms = null;
+		if(termine.equals("")){
+			xvec = SqlInfo.holeSatz("verordn", "termine,pat_intern", "rez_nr='"+xreznr+"'", Arrays.asList(new String[] {}));			
+			if(xvec.size()==0){
+				return (Vector<Vector<String>>)retbeides.clone();
+			}else{
+				terms = (String) xvec.get(0);	
+			}
+		}else{
+			terms = termine;
+		}
+		if(terms==null){
+			return (Vector<Vector<String>>)retbeides.clone();
+		}
+		if(terms.equals("")){
+			return (Vector<Vector<String>>)retbeides.clone();
+		}
+		String[] tlines = terms.split("\n");
+		int lines = tlines.length;
+		String[] terdat = null;
+		for(int i = 0;i<lines;i++){
+			retvec.clear();
+			terdat = tlines[i].split("@");
+			//int ieinzel = terdat.length;
+			retvec.add((terdat[0].trim().equals("") ? "  .  .    " : String.valueOf(terdat[0])));
+			retvec.add((terdat[1].trim().equals("") ? "k.A." : String.valueOf(terdat[1])));
+			retbeides.add((Vector)retvec.clone());
+			
+		}
+		Comparator<Vector> comparator = new Comparator<Vector>() {
+			@Override
+			public int compare(Vector o1, Vector o2) {
+				// TODO Auto-generated method stub
+				String s1 = DatFunk.sDatInSQL((String)o1.get(0));
+				String s2 = DatFunk.sDatInSQL((String)o2.get(0));
+				return s1.compareTo(s2);
+			}
+		};
+		Collections.sort(retbeides,comparator);
+		
+		return (Vector<Vector<String>>)retbeides.clone();
+	}
+	
 	public static String holePosAusIdUndRezNr(String id,String reznr){
 		String diszi = RezTools.putRezNrGetDisziplin(reznr);
 		String preisgruppe = SqlInfo.holeEinzelFeld("select preisgruppe from verordn where rez_nr='"+reznr+"' LIMIT 1");
