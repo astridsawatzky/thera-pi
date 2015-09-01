@@ -94,8 +94,8 @@ public class OffenepostenTab extends JXPanel implements ChangeListener{
 		vectitel.add("Bezahlte Rechnungen ausbuchen / Teilzahlungen buchen");
 		vecdescript.add("<html>Hier haben Sie die Möglichkeit Rechnungen nach verschiedenen Kriterien zu suchen.<br><br>" +
                 "Wenn Sie die Rechnung, die Sie suchen, gefunden haben und die Rechnung <b>vollständig</b> bezahlt wurde,<br>" +
-                 "genügt es völlig über Alt+A den Vorgang ausbuchen zu aktivieren.<br><br>"+
-                 "Wurde lediglich eine Teilzahlung geleistet, muß zuvor die noch bestehende Restforderung im Textfeld <b>noch offen</b> eingetragen werden.</html>");
+                "genügt es völlig über Alt+A den Vorgang ausbuchen zu aktivieren.<br><br>"+
+                "Wurde lediglich eine Teilzahlung geleistet, muß diese zuvor im Textfeld <b>Geldeingang</b> eingetragen werden.</html>");
 		vecimg.add(ico);
 		
 		
@@ -107,7 +107,7 @@ public class OffenepostenTab extends JXPanel implements ChangeListener{
 		
 		vectitel.add("Mahnwesen");
 		vecdescript.add("<html>Hier erzeugen Sie Mahnungen für noch nicht bezahlte Rechnungen.<br><br>" +
-				"Button <b>[los..]</b> listet die Rechnungen, bei denen noch ein Betrag offen ist und<br>" +
+                "Button <b>[los..]</b> listet die Rechnungen, bei denen noch ein Betrag offen ist und<br>" +
 				"die in der eingestellten Mahnstufe noch nicht gemahnt wurden.</html>");
 		ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"Mahnung.png";
 		ico = new ImageIcon(ss);
@@ -115,7 +115,7 @@ public class OffenepostenTab extends JXPanel implements ChangeListener{
 
 		vectitel.add("Voreinstellungen für das Mahnwesen");
 		vecdescript.add("Hier sind die Grundeinstellungen\n" +
-               "der Mahnfunktion zu finden.");
+                "der Mahnfunktion zu finden.");
 		ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"einstellungen.jpg";
 		ico = new ImageIcon(ss);
 		vecimg.add(ico);

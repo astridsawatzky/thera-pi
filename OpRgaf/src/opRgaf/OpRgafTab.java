@@ -75,20 +75,22 @@ public class OpRgafTab extends JXPanel implements ChangeListener{
 	
 	private void doHeader(){
 		ImageIcon ico;
-        String ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"nebraska_scale.jpg";
+        String ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"hauptbuch.jpg";
         ico = new ImageIcon(ss);
-		vectitel.add("Bezahlte Rezeptgebührrechnungen oder Ausfallrechnungen ausbuchen / Teilzahlungen buchen");
-		vecdescript.add("<html>Hier haben Sie die Möglichkeit Rechnungen nach verschiedenen Kriterien zu suchen.<br>" +
+		vectitel.add("Bezahlte Rezeptgebühr- oder Ausfallrechnungen ausbuchen / Teilzahlungen buchen");
+		vecdescript.add("<html>Hier haben Sie die Möglichkeit Rechnungen nach verschiedenen Kriterien zu suchen.<br><br>" +
                 "Wenn Sie die Rechnung die Sie suchen gefunden haben und die Rechnung <b>vollständig</b> bezahlt wurde,<br>" +
                 "genügt es völlig über Alt+A den Vorgang ausbuchen zu aktivieren.<br><br>"+
-                "Wurde lediglich eine Teilzahlung geleistet, muß zuvor die noch bestehende Restforderung im Textfeld <b>noch offen</b> eingetragen werden.</html>");
+                "Wurde lediglich eine Teilzahlung geleistet, muß diese zuvor im Textfeld <b>Geldeingang</b> eingetragen werden.</html>");
 		vecimg.add(ico);
 		
 		
-		vectitel.add("Zertifikate auswerten");
-		vecdescript.add("....Hier können Sie die Zertifikatskette einsehen\n" +
-                "Neue Zertifikate einlesen (neue Datenannahmestellen)\n" +
-                "und schlußendlich überpüfen wie lange welches Zertifikat gültig ist");
+		vectitel.add("Mahnwesen");
+		vecdescript.add("<html>Hier erzeugen Sie Mahnungen für noch nicht bezahlte Rechnungen.<br><br>" +
+                "Button <b>[los..]</b> listet die Rechnungen der gewählten Kategorie, bei denen noch <br>" +
+				"ein Betrag offen ist und die in der eingestellten Mahnstufe noch nicht gemahnt wurden.</html>");
+		ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"Mahnung.png";
+		ico = new ImageIcon(ss);
 		vecimg.add(ico);
 		
 		vectitel.add("Manuell verschlüsseln");
