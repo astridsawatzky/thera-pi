@@ -15,12 +15,18 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 
 import org.jdesktop.swingx.JXPanel;
 
@@ -121,11 +127,32 @@ public class InfoDialog extends JDialog implements WindowListener{
         htmlPane2.setEditable(false);
         htmlPane2.setOpaque(false);
         htmlPane2.addKeyListener(kl);
+        
+
         scr2 = JCompTools.getTransparentScrollPane(htmlPane2);
         scr2.validate();	
         jpan.add(scr2,cc.xyw(2,8,3,CellConstraints.FILL,CellConstraints.FILL));
         
         holeTerminInfo();
+       
+        htmlPane1.addHyperlinkListener(new HyperlinkListener() {
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED){
+					if( extractFieldName(e.getURL().toString()).equals("weiteretermine") ){
+						System.err.println(e.getURL().toString());
+						htmlPane1.requestFocus();
+						//hier muß der Suchendialog gestartet werden
+						JOptionPane.showMessageDialog(null,"Hier erscheint der Suchendialog");
+						return;
+					}
+				}
+			}
+			private String extractFieldName(String url){
+				String ext = url.substring(7);
+				return ext.replace(".de", "");
+			}
+	    });
+        
 		jpan.validate();
 		return jpan;
 	}
@@ -313,6 +340,9 @@ public class InfoDialog extends JDialog implements WindowListener{
 					}
 				}
 			});
+			
+			
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -364,6 +394,9 @@ public class InfoDialog extends JDialog implements WindowListener{
 				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");
 			}
 		}
+		
+		
+
 		
 		return ergebnis.toString();
 	}	
@@ -423,7 +456,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		for(int i = 0; i < tageplus.size()/*tage.size()*/;i++){
 			mitte.append("<tr>\n");
 			mitte.append("<td class='itemkleinodd'>"+Integer.toString(i+1)+"</td>\n");
-			mitte.append("<td class='itemkleinodd'>"+tageplus.get(i).get(0)/*tage.get(i)*/+"</td>\n");
+			mitte.append("<td class='itemkleinodd' align=\"center\">"+tageplus.get(i).get(0)/*tage.get(i)*/+"</td>\n");
 			
 			if(i==0){
 				//zuerst testen ob vor dem Rezeptdatum begonnen wurde
@@ -487,12 +520,24 @@ public class InfoDialog extends JDialog implements WindowListener{
 			mitte.append("</tr>\n");
 		}
 		/***********************************************************************************/
-		mitte.append("<tr><td>&nbsp;</td></tr>\n");
+		mitte.append("<tr><td>&nbsp;</td>\n");
+		mitte.append("<td align=\"center\">"+makeLink("fragezeichen.png","weiteretermine")+"</td></tr>");
 		mitte.append("</table>\n");
+		/*
+		mitte.append("<br>");
+		mitte.append("<form action='http://fakeurl.com:1'><input type='submit' value=' Folgetermine ? ' /></form>");
+		*/
+//		mitte.append("<object classid=\"javax.swing.JButton\" label=\" Folgetermine ?\"></object>");
 
 		return mitte.toString();
 	}
 	/***************************************************/
+	private String makeLink(String ico, String url){
+		String linktext = "<img src='file:///"+Reha.proghome+"icons/"+ico+"'  border=0>";
+		linktext = "<a href=\"http://"+url+".de\">"+linktext+"</a>\n";
+		return linktext;
+		
+	}
 	private Object[] Tage28Test(String datumalt,String datumneu){
 		Object[] oret = {null,null};
 		long wert = 0;
