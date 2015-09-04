@@ -6,11 +6,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -24,22 +32,33 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 
 import org.jdesktop.swingx.JXPanel;
+import org.jdesktop.swingx.JXTable;
 
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
+import systemTools.ListenerTools;
+import terminKalender.ParameterLaden;
+import terminKalender.SchnellSuche;
+import utils.ButtonTools;
 import utils.DatFunk;
+import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import events.RehaTPEvent;
+import events.RehaTPEventClass;
+import events.RehaTPEventListener;
 
 public class InfoDialog extends JDialog implements WindowListener{
 	/**
@@ -71,6 +90,8 @@ public class InfoDialog extends JDialog implements WindowListener{
 	int tagebreak = 0;
 	
 	DecimalFormat df = new DecimalFormat( "0.00" );
+	
+	boolean muststop = false;
 	
 	public InfoDialog(String arg1,String infoArt,Vector<Vector<String>> data) {
 		super();
@@ -139,10 +160,11 @@ public class InfoDialog extends JDialog implements WindowListener{
 			public void hyperlinkUpdate(HyperlinkEvent e) {
 				if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED){
 					if( extractFieldName(e.getURL().toString()).equals("weiteretermine") ){
-						System.err.println(e.getURL().toString());
+						//System.err.println(e.getURL().toString());
 						htmlPane1.requestFocus();
 						//hier muß der Suchendialog gestartet werden
-						JOptionPane.showMessageDialog(null,"Hier erscheint der Suchendialog");
+						starteFolgeTermine();
+						
 						return;
 					}
 				}
@@ -679,7 +701,353 @@ public class InfoDialog extends JDialog implements WindowListener{
 		htmlPane2.setText(complete);
 		 
 	}
+	
+	private void starteFolgeTermine(){
+		FolgeTermine folgeTermine = new FolgeTermine();
+		PinPanel pinPanel = new PinPanel();
+		pinPanel.setName("FolgeTermine");
+		pinPanel.getGruen().setVisible(false);
+		folgeTermine.getSmartTitledPanel().setTitle("<html><b>Folgetermine suchen</b></html>");
+		folgeTermine.setSize(500,800);
+		folgeTermine.setPreferredSize(new Dimension(580+Reha.zugabex,350+Reha.zugabey));
+		folgeTermine.getSmartTitledPanel().setPreferredSize(new Dimension (580,350)); //Original 630
+		folgeTermine.setPinPanel(pinPanel);
+		folgeTermine.getSmartTitledPanel().setContentContainer( new FolgeTermineSuchen() );
+		folgeTermine.getSmartTitledPanel().getContentContainer().setName("FolgeTermine");
+		folgeTermine.setName("FolgeTermine");
+		folgeTermine.setModal(true);
+		//folgeTermine.setLocationRelativeTo(this);
+		folgeTermine.setLocation(this.getLocation().x+150, this.getLocation().y+250);
+		folgeTermine.pack();
+		folgeTermine.setVisible(true);
+		folgeTermine.dispose();
+		
+	}
+	
+	/***************************************/
+	class FolgeTermine extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private RehaTPEventClass rtp = null;
+		public FolgeTermine(){
+			super(null,"FolgeTermine");
+			this.setName("FolgeTermine");
+			//super.getPinPanel().setName("RezeptNeuanlage");
+			rtp = new RehaTPEventClass();
+			rtp.addRehaTPEventListener((RehaTPEventListener) this);
+
+		}
+		public void rehaTPEventOccurred(RehaTPEvent evt) {
+
+			try{
+
+				if(evt.getDetails()[0] != null){
+					if(evt.getDetails()[0].equals(this.getName())){
+						this.setVisible(false);
+						this.dispose();
+						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp = null;
+						ListenerTools.removeListeners(this);					
+						super.dispose();
+					}
+				}else{
+					//System.out.println("Details == null");
+				}
+			}catch(NullPointerException ne){
+				ne.printStackTrace();
+				//System.out.println("In FolgeTermine " +evt);
+			}catch(Exception ex){
+				
+			}
+		}	
+		
+		public void windowClosed(WindowEvent arg0) {
+			if(rtp != null){
+				this.setVisible(false);			
+				rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+				rtp = null;
+				dispose();
+				ListenerTools.removeListeners(this);
+				super.dispose();
+				//System.out.println("****************Rezept Neu/ändern -> Listener entfernt (Closed)**********");
+			}
+		}
+	}
+	/**************************************************/
+	class FolgeTermineSuchen extends JXPanel implements KeyListener,FocusListener,RehaTPEventListener{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private RehaTPEventClass rtp = null;
+		MyFolgeTermineTableModel mod = new MyFolgeTermineTableModel();
+		JXTable tab;
+		JRtaTextField tfstart;
+		JRtaTextField tfsuche;
+		JLabel lbstart;
+		JLabel lbaktuell;
+		JButton[] buts = {null,null,null};
+		String suchkrit;
+		String startdate;
+		String aktdate;
+		ActionListener al;
+		public FolgeTermineSuchen(){
+//			public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname, boolean bCtrlPressed){
+				super();
+				rtp = new RehaTPEventClass();
+				rtp.addRehaTPEventListener((RehaTPEventListener) this);
+				al = new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String action = e.getActionCommand();
+						if(action.equals("start")){
+							muststop = false;
+							new SuchenInTagen().setzeStatement(lbaktuell, startdate, tfsuche.getText().split(" "), mod);
+						}else if(action.equals("stop")){
+							muststop = true;
+							
+						}else if(action.equals("close")){
+							muststop = true;
+							dispose();
+						}
+						
+					}
+					
+				};
+				//           1   2  3    4     5   6  7    8     9   10 11   12
+				String x = "5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,0dlu:g,5dlu";
+				//           1   2  3   4  5    6  
+				String y = "5dlu,p,5dlu,p,5dlu,30dlu:g,5dlu";
+				FormLayout lay = new FormLayout(x , y);
+				CellConstraints cc = new CellConstraints();
+				
+				setLayout(lay);
+				add(new JLabel("suche nach"),cc.xy(2, 2));
+				add((tfsuche= new JRtaTextField("GROSS",true)),cc.xy(4, 2));
+				add(new JLabel("starte bei"),cc.xy(6, 2));
+				add((tfstart = new JRtaTextField("DATUM",true)),cc.xy(8, 2));
+				add(new JLabel("aktuell bei"),cc.xy(10, 2));
+				add( (lbaktuell = new JLabel("")) ,cc.xy(12, 2));
+				lbaktuell.setForeground(Color.RED);
+				String[] column = {"Tag","Datum","Uhrzeit","Name","Rez.Nummer","Therapeut","Tage diff."};
+				mod.setColumnIdentifiers(column);
+
+				tab = new JXTable(mod);
+				JScrollPane scr = JCompTools.getTransparentScrollPane(tab);
+				scr.validate();
+				add(scr,cc.xyw(2,6,12));
+				//add( ButtonTools.macheBut("start","start", al),cc.xy(4,4));
+				add( ButtonTools.macheBut("stop","stop", al),cc.xy(4,4));
+				//add( ButtonTools.macheBut("schliessen","close", al),cc.xy(8,4));
+				validate();
+				if(tageplus.size() <= 0){
+					startdate = DatFunk.sHeute();
+				}else{
+					startdate = DatFunk.sDatPlusTage(tageplus.get(tageplus.size()-1).get(0),1); 
+				}
+				tfstart.setText(startdate);
+				suchkrit = vecResult.get(0).get(2) +" "+arg1;
+				tfsuche.setText(suchkrit);
+				lbaktuell.setText(startdate);
+				starteSuche();
+				
+		}		
+		@Override
+		public void rehaTPEventOccurred(RehaTPEvent evt) {
+			try{
+				if(evt.getDetails()[0] != null){
+					if(evt.getDetails()[0].equals(this.getName())){
+						this.setVisible(false);
+						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp = null;
+						//aufraeumen();
+					}
+				}
+			}catch(NullPointerException ne){
+				JOptionPane.showMessageDialog(null, "Fehler beim abhängen des Listeners Rezept-Neuanlage\n"+
+						"Bitte informieren Sie den Administrator über diese Fehlermeldung");
+			}
+			
+		}
+		@Override
+		public void focusGained(FocusEvent e) {
+		}
+		@Override
+		public void focusLost(FocusEvent e) {
+		}
+		@Override
+		public void keyTyped(KeyEvent e) {
+		}
+		@Override
+		public void keyPressed(KeyEvent e) {
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {
+		}
+		public void starteSuche(){
+			new SuchenInTagen().setzeStatement(lbaktuell, startdate, tfsuche.getText().split(" "), mod);
+		}
+		
+		
+	}
+/*****************************************************/
+	class MyFolgeTermineTableModel extends DefaultTableModel{
+		   /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 
+		public Class<?> getColumnClass(int columnIndex) {
+			   if(columnIndex==0){return String.class;}
+			  /* if(columnIndex==1){return JLabel.class;}*/
+			   else{return String.class;}
+	  //return (columnIndex == 0) ? Boolean.class : String.class;
+	}
+
+		    public boolean isCellEditable(int row, int col) {
+		        //Note that the data/cell address is constant,
+		        //no matter where the cell appears onscreen.
+		    	return false;
+		      }
+
+			public Object getValueAt(int rowIndex, int columnIndex) {
+				String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
+				Object result = null;
+				//result = theData.toUpperCase();
+				result = theData;
+				return result;
+			}
+		    
+		   
+	}
+/*****************************************************/
+	final class SuchenInTagen extends Thread implements Runnable{
+		Statement stmt = null;
+		ResultSet rs = null;
+		String sergebnis = "";
+		int belegt = 0;
+		String anzeigedatum;
+		String[] suchkrit = null;
+		JLabel lbaktuell;
+		String startdat;
+		MyFolgeTermineTableModel mod;
+		Vector<String> atermine = new Vector<String>(); 
+		public void setzeStatement(JLabel lbaktuell, String startdat, String[] suchkrit,MyFolgeTermineTableModel mod){
+			this.lbaktuell = lbaktuell;
+			this.startdat = startdat;
+			this.mod = mod;
+			anzeigedatum = lbaktuell.getText();
+			this.suchkrit = suchkrit;
+			start();
+		}
+		public void run(){
+			Vector treadVect = new Vector();
+			try {
+				stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+	                    ResultSet.CONCUR_UPDATABLE );
+				while(!muststop){
+					try{
+						rs = (ResultSet) stmt.executeQuery("select * from flexkc where datum = '"+DatFunk.sDatInSQL(anzeigedatum)+"' LIMIT "+Integer.toString(ParameterLaden.maxKalZeile) ) ;
+						////System.out.println("Nach for..."+exStatement[i]);
+						//SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
+						while(rs.next()){
+							try{
+								/*in Spalte 301 steht die Anzahl der belegten Bl�cke*/ 
+								belegt = rs.getInt(301);
+								//SchnellSuche.thisClass.setLabelDatum(DatFunk.sDatInDeutsch(rs.getString(305)));
+								String name = "";
+								String nummer = "";
+								String termin = "";
+								String sdatum = "";
+								String sorigdatum = "";
+								String uhrzeit = "";
+								String skollege = "";
+								int ikollege = 0;
+								for(int ii = 0;ii < belegt;ii++){
+									name = rs.getString("T"+(ii+1)); 
+									nummer = rs.getString("N"+(ii+1));
+									skollege = rs.getString(303).substring(0,2);
+									if( skollege.substring(0,1).equals("0") ){
+										ikollege = Integer.parseInt(skollege.substring(1,2));
+									}else{
+										ikollege = Integer.parseInt(skollege);								
+									}
+									if(name.contains(suchkrit[0]) || nummer.contains(suchkrit[1]) ){
+										uhrzeit = rs.getString("TS"+(ii+1));
+										sorigdatum = rs.getString(305); 
+										sdatum = DatFunk.sDatInDeutsch(sorigdatum);
+										skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+										//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
+										
+										termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
+										"  -  "+name +" - "+nummer+" - "+skollege;
+										//SchnellSuche.thisClass.setTextAreaText(termin);
+										atermine.add(DatFunk.WochenTag(sdatum));
+										atermine.add(sdatum);
+										atermine.add(uhrzeit.substring(0,5));
+										atermine.add(name);
+										atermine.add(nummer);								
+										atermine.add(skollege);								
+										atermine.add(sorigdatum+uhrzeit.substring(0,5));	
+										mod.addRow((Vector)atermine.clone());
+										//treadVect.addElement(atermine.clone());
+										//SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
+										atermine.clear();
+									}
+								}
+							}catch(Exception ex){
+								ex.printStackTrace();
+							}
+						}
+						
+					}catch(SQLException ev){
+						//System.out.println("SQLException: " + ev.getMessage());
+						//System.out.println("SQLState: " + ev.getSQLState());
+						//System.out.println("VendorError: " + ev.getErrorCode());
+					}
+					anzeigedatum = DatFunk.sDatPlusTage(anzeigedatum, 1);
+					if(DatFunk.TageDifferenz(startdat, anzeigedatum) > 90){
+						muststop = true;
+					}else{
+						this.lbaktuell.setText(anzeigedatum);	
+					}
+					
+				}
+
+				
+				
+				//SchnellSuche.thisClass.setTerminTable((Vector) treadVect.clone());
+			}catch(SQLException ex) {
+				//System.out.println("von stmt -SQLState: " + ex.getSQLState());
+			}
+
+			finally {
+				if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException sqlEx) { // ignore }
+					rs = null;
+				}
+				if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException sqlEx) { // ignore }
+					stmt = null;
+				}
+				}
+				}
+			}
+			 
+		}
+		
+	}
+	
+/*****************************************************/
+/*****************************************************/
 }
 
