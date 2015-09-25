@@ -41,12 +41,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.DefaultCellEditor;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -103,12 +105,21 @@ import org.therapi.reha.patient.LadeProg;
 
 
 
+
+
+
+
+
+
+
 import rechteTools.Rechte;
+import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import CommonTools.Colors;
 import systemTools.IntegerTools;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
+import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
 import terminKalender.DatFunk;
 import terminKalender.ZeitFunk;
@@ -120,6 +131,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import dialoge.InfoDialog;
+import emailHandling.EmailSendenExtern;
 @SuppressWarnings({ "unchecked", "unused" })
 public class SuchenSeite extends JXPanel implements TableModelListener,FocusListener, ActionListener,PropertyChangeListener, KeyListener{
 	/**
@@ -1229,9 +1241,157 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		}else if(exportart.getText().equals("fahrdienstliste")){
 			if(fahrdienstExport());
 			JOptionPane.showMessageDialog(null, "Daten für Fahrdienstliste wurden erfolgreich exportiert");
+		}else if(exportart.getText().equals("ical")){
+			if(icalExport()){
+				JOptionPane.showMessageDialog(null, "Daten für iCal wurden exportiert und per Email versendet");	
+			}
 		}
 		cursorWait(false);
-	}	
+	}
+	/********
+	 * 
+	 * 
+	 * 
+	 * @return
+	 */
+	
+	private boolean icalExport(){
+		try{
+			exportVectorInit();
+			int lang = vecWahl.size();
+			if(lang <=0){
+				JOptionPane.showMessageDialog(null, "Keine Termine zum iCal-Export und Versand ausgewählt");
+				return false;
+			}
+			 
+			Vector<Vector<String>> icalVec = new Vector<Vector<String>>();
+			Vector<String> icalDummy = new Vector<String>();
+			String emailaddy = "";
+			String emaildummy = "";
+			boolean datewarning = true;
+			String stmt = "select t2.emaila from pat5 as t2 join verordn as t1 on (t2.pat_intern = t1.pat_intern) where t1.rez_nr = '";
+			List x0diszis = Arrays.asList(new String[] {"KG","MA","ER","LO","RH","PO","FT","RS"});
+			List x1diszis = Arrays.asList(new String[] {"Physiotherapie","Massage/LD","Ergotherapie","Logopädie","Reha","Podologie","Funktionstraining","Rehasport"});
+			String xtitel;
+			int xindex;
+			int xpos;
+			//macheVevent(String datum, String start, String end, String titel, String beschreibung){
+			for(int i = 0; i < lang;i++){
+				icalDummy.clear();
+				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(15)).replace("-", "") );
+				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(3)).replace(":", "")+"00" );
+				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(4)).replace(":", "")+"00" );
+				if( (xtitel=((String)((Vector<Object>)vecWahl.get(i)).get(9))).length() >= 2){
+					if( (xindex=x0diszis.indexOf((String)xtitel.substring(0,2))) < 0 ){
+						icalDummy.add("Therapie-Termin");
+					}else{
+						icalDummy.add((String)x1diszis.get(xindex));
+					}
+				}else{
+					icalDummy.add("Therapie-Termin");
+				}
+				if(emailaddy.equals("") && !xtitel.equals("")){
+					xpos = xtitel.indexOf("\\");
+					if(xpos < 0){
+						emailaddy = SqlInfo.holeEinzelFeld(stmt+xtitel+"' LIMIT 1");	
+						//System.out.println(emailaddy);
+					}else{
+						emailaddy = SqlInfo.holeEinzelFeld(stmt+xtitel.substring(0,xpos)+"' LIMIT 1");
+						//System.out.println(emailaddy);
+					}
+				}
+				icalDummy.add("Hinweise:CRLF-Bitte bringen Sie für Physio und Massage ein Handtuch mitCRLF-Terminabsagen sind nur bis 24 Stunden vor dem Termin möglichCRLFdanach müssen wir Ihnen den Termin in Rechnung stellenCRLF-Bitte denken Sie an die Bezahlung der Rezeptgebühren, sofern SieCRLFrezeptgebührpflichtig sind");
+				icalVec.add((Vector)icalDummy.clone());
+			}
+			if(emailaddy.equals("")){
+				
+			}
+			StringBuffer buf = new StringBuffer();
+			buf.append(ICalGenerator.macheKopf());
+			for(int i = 0;i<icalVec.size();i++){
+				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4)));
+			}
+			buf.append(ICalGenerator.macheEnd());
+			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/TherapieTermine.ics");
+            //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
+            OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
+			BufferedWriter bw = null;
+			String drzeit = "";
+			bw = new BufferedWriter(out);
+			bw.write(buf.toString());
+			bw.flush();
+			bw.close();
+			out.close();
+			outputFile.close();
+			
+ 			JTextField tField = new JTextField(25);
+ 			tField.setText(emailaddy);
+      		JCheckBox  cField = new JCheckBox("1 Stunde vor Termin warnen");
+      		cField.setSelected(true);
+      		JPanel myPanel = new JPanel();
+      		myPanel.add(new JLabel("Emailadresse:"));
+      		myPanel.add(tField);
+      		myPanel.add(Box.createVerticalStrut(25)); // a spacer
+      		myPanel.add(new JLabel("Terminwarnung:"));
+      		myPanel.add(cField); 
+			int result = JOptionPane.showConfirmDialog(null, myPanel,"Bitte Eingaben überprüfen", JOptionPane.OK_CANCEL_OPTION);
+			if(result == JOptionPane.OK_OPTION){
+				emailaddy = tField.getText();
+				datewarning = cField.isSelected();
+			}else{
+				return false;
+			}
+			
+			
+			//emailaddy = JOptionPane.showInputDialog(null,"Diese Email-Adresse verwenden:" , emailaddy);
+			try{
+				if(emailaddy.equals("")){
+				return false;
+				}
+			}catch(java.lang.NullPointerException ex){
+				return false;
+			}
+			String smtphost = SystemConfig.hmEmailExtern.get("SmtpHost");
+			String authent = SystemConfig.hmEmailExtern.get("SmtpAuth");
+			String benutzer = SystemConfig.hmEmailExtern.get("Username") ;				
+			String pass1 = SystemConfig.hmEmailExtern.get("Password");
+			String sender = SystemConfig.hmEmailExtern.get("SenderAdresse"); 
+			String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
+			String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
+			//String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
+			String recipient = emailaddy+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
+			String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
+			boolean authx = (authent.equals("0") ? false : true);
+			boolean bestaetigen = false;
+			String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/TherapieTermine.ics","TherapieTermine.ics"};
+			ArrayList<String[]> attachments = new ArrayList<String[]>();
+			attachments.add(aufDat);
+			EmailSendenExtern oMail = new EmailSendenExtern();
+			try{
+				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, "Behandlungstermine", text,attachments,authx,bestaetigen,secure,useport);
+				oMail = null;
+			}catch(Exception e){
+				e.printStackTrace( );
+				JOptionPane.showMessageDialog(null, "Emailversand fehlgeschlagen\n\n"+
+	        			"Mögliche Ursachen:\n"+
+	        			"- falsche Angaben zu Ihrem Emailpostfach und/oder dem Provider\n"+
+	        			"- Sie haben keinen Kontakt zum Internet"+"\n\nFehlertext:"+e.getLocalizedMessage());
+				return false;
+			}			
+			return true;
+			
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(null, "Fehler beim iCal-Export und Versand");
+		}
+		return false;
+	}
+	/*****
+	 * 
+	 * 
+	 * 
+	 * 
+	 * @return
+	 */
 	private boolean fahrdienstExport(){
 		try{
 			exportVectorInit();
@@ -1447,7 +1607,8 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				}else{
 					termtext = ((String)((Vector<Object>)vecWahl.get(i)).get(10));
 				}
-				vec.add(new TermObjekt(tag,druckzeit,termtext,sorter));
+				//erweitert um die Dauer;
+				vec.add(new TermObjekt(tag,druckzeit,termtext,sorter,((String)((Vector<Object>)vecWahl.get(i)).get(5))));
 				
 
 				
@@ -1633,8 +1794,26 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(11, (String) dtblm.getValueAt(i,11));
 				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(6, (String) dtblm.getValueAt(i,6));		
 			}
+		}
+	}
+	/*
+	private void icsExportVectorInit(){
+		int lang = dtblm.getRowCount(),i;
+		int durchlauf = 0;
+		//Vector vec = null;
+		String name,nummer;
+		vecWahl.clear();
+		for(i=0;i<lang;i++){
+			if((Boolean)dtblm.getValueAt(i,0)){
+				setFortschrittSetzen(durchlauf++);
+				vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)));
+				//vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)).clone());
+				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(11, (String) dtblm.getValueAt(i,11));
+				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(6, (String) dtblm.getValueAt(i,6));		
+			}
 		}	
 	}
+	*/
 	
 	/********************************************************/
 	class SchreibeAuswahl extends SwingWorker<Void,Void>{
@@ -3757,12 +3936,14 @@ class TermObjekt implements Comparable<TermObjekt>{
 	public String beginn;
 	public String termtext;
 	public String sorter;
+	public String dauer;
 	
-	public TermObjekt(String xtag,String xbeginn,String xtermtext,String xsorter){
+	public TermObjekt(String xtag,String xbeginn,String xtermtext,String xsorter,String xdauer){
 		this.tag = xtag;
 		this.beginn = xbeginn;
 		this.termtext =xtermtext;
 		this.sorter =  xsorter;
+		this.dauer = xdauer;
 		
 	}
 
