@@ -779,15 +779,23 @@ public class SystemConfig {
 		try{
 			INIFile icalini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "icalendar.ini");
 			hmIcalSettings.put("warnen",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnen").equals("0") ? false : true) );
-			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "Textzeilen"));
+			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "TextzeilenAnzahl"));
 			String beschreibung = "";
 			for(int i = 0; i < zeilen; i++){
 				beschreibung = beschreibung + icalini.getStringProperty("Terminbeschreibung", "Textzeile"+Integer.toString(i+1))+( i < (zeilen-1) ? "\n" : "");
 			}
-			hmIcalSettings.put("beschreibung",(String)beschreibung);
+			hmIcalSettings.put("beschreibung",String.valueOf((String)beschreibung));
+			zeilen = Integer.parseInt(icalini.getStringProperty("Emailtext", "TextzeilenAnzahl"));
+			beschreibung = "";
+			for(int i = 0; i < zeilen; i++){
+				beschreibung = beschreibung + icalini.getStringProperty("Emailtext", "Textzeile"+Integer.toString(i+1))+( i < (zeilen-1) ? "\n" : "");
+			}
+			hmIcalSettings.put("emailtext",String.valueOf((String)beschreibung));
+			hmIcalSettings.put("betreff", (String)icalini.getStringProperty("Emailtext", "Betreff"));
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der icalendar.ini, Mehode:Verzeichnisse!\nFehlertext: "+ex.getMessage());
 		}
+		//System.out.println(hmIcalSettings);
 	}
 	
 	private void Verzeichnisse(){

@@ -37,7 +37,7 @@ public class ICalGenerator {
 				;
 	}
 	
-	public static String macheVevent(String datum, String start, String end, String titel, String beschreibung){
+	public static String macheVevent(String datum, String start, String end, String titel, String beschreibung,boolean warnen){
 		StringBuffer buf = new StringBuffer();
 		buf.append("BEGIN:VEVENT"+System.getProperty("line.separator"));
 		buf.append("UID:"+macheUID()+System.getProperty("line.separator"));
@@ -50,6 +50,9 @@ public class ICalGenerator {
 		buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
 		buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
 		buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
+		if(warnen){
+			buf.append(macheWarnung("1H"));
+		}
 		buf.append("END:VEVENT"+System.getProperty("line.separator"));
 		return buf.toString();
 	}

@@ -1300,34 +1300,18 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 						//System.out.println(emailaddy);
 					}
 				}
-				icalDummy.add("Hinweise:CRLF-Bitte bringen Sie für Physio und Massage ein Handtuch mitCRLF-Terminabsagen sind nur bis 24 Stunden vor dem Termin möglichCRLFdanach müssen wir Ihnen den Termin in Rechnung stellenCRLF-Bitte denken Sie an die Bezahlung der Rezeptgebühren, sofern SieCRLFrezeptgebührpflichtig sind");
+				icalDummy.add(((String)SystemConfig.hmIcalSettings.get("beschreibung")).replace("\n","CRLF"));
+				//"Hinweise:CRLF-Bitte bringen Sie für Physio und Massage ein Handtuch mitCRLF-Terminabsagen sind nur bis 24 Stunden vor dem Termin möglichCRLFdanach müssen wir Ihnen den Termin in Rechnung stellenCRLF-Bitte denken Sie an die Bezahlung der Rezeptgebühren, sofern SieCRLFrezeptgebührpflichtig sind"
 				icalVec.add((Vector)icalDummy.clone());
 			}
 			if(emailaddy.equals("")){
 				
 			}
-			StringBuffer buf = new StringBuffer();
-			buf.append(ICalGenerator.macheKopf());
-			for(int i = 0;i<icalVec.size();i++){
-				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4)));
-			}
-			buf.append(ICalGenerator.macheEnd());
-			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/TherapieTermine.ics");
-            //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
-            OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
-			BufferedWriter bw = null;
-			String drzeit = "";
-			bw = new BufferedWriter(out);
-			bw.write(buf.toString());
-			bw.flush();
-			bw.close();
-			out.close();
-			outputFile.close();
-			
- 			JTextField tField = new JTextField(25);
+			/*****************************/
+			JTextField tField = new JTextField(25);
  			tField.setText(emailaddy);
       		JCheckBox  cField = new JCheckBox("1 Stunde vor Termin warnen");
-      		cField.setSelected(true);
+      		cField.setSelected((Boolean) SystemConfig.hmIcalSettings.get("warnen"));
       		JPanel myPanel = new JPanel();
       		FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,5dlu,p,2dlu,p,15dlu");
       		CellConstraints cc = new CellConstraints();
@@ -1343,6 +1327,27 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			}else{
 				return false;
 			}
+			
+			/*****************************/
+			StringBuffer buf = new StringBuffer();
+			buf.append(ICalGenerator.macheKopf());
+			for(int i = 0;i<icalVec.size();i++){
+				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4),datewarning));
+			}
+			buf.append(ICalGenerator.macheEnd());
+			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/TherapieTermine.ics");
+            //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
+            OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
+			BufferedWriter bw = null;
+			String drzeit = "";
+			bw = new BufferedWriter(out);
+			bw.write(buf.toString());
+			bw.flush();
+			bw.close();
+			out.close();
+			outputFile.close();
+			
+ 			
 			
 			
 			//emailaddy = JOptionPane.showInputDialog(null,"Diese Email-Adresse verwenden:" , emailaddy);
@@ -1362,7 +1367,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
 			//String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
 			String recipient = emailaddy+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
-			String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
+			//String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;
 			String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/TherapieTermine.ics","TherapieTermine.ics"};
@@ -1370,7 +1375,8 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			attachments.add(aufDat);
 			EmailSendenExtern oMail = new EmailSendenExtern();
 			try{
-				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, "Behandlungstermine", text,attachments,authx,bestaetigen,secure,useport);
+				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, (String)SystemConfig.hmIcalSettings.get("betreff"),
+						(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,authx,bestaetigen,secure,useport);
 				oMail = null;
 			}catch(Exception e){
 				e.printStackTrace( );
