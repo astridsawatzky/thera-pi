@@ -1329,11 +1329,13 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
       		JCheckBox  cField = new JCheckBox("1 Stunde vor Termin warnen");
       		cField.setSelected(true);
       		JPanel myPanel = new JPanel();
-      		myPanel.add(new JLabel("Emailadresse:"));
-      		myPanel.add(tField);
-      		myPanel.add(Box.createVerticalStrut(25)); // a spacer
-      		myPanel.add(new JLabel("Terminwarnung:"));
-      		myPanel.add(cField); 
+      		FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,2dlu,p,2dlu,p,5dlu");
+      		CellConstraints cc = new CellConstraints();
+      		myPanel.setLayout(fm);
+      		myPanel.add(new JLabel("Emailadresse:"),cc.xy(2, 2));
+      		myPanel.add(tField, cc.xy(4,2));
+      		myPanel.add(new JLabel("Terminwarnung:"),cc.xy(4,2));
+      		myPanel.add(cField,cc.xy(4,4)); 
 			int result = JOptionPane.showConfirmDialog(null, myPanel,"Bitte Eingaben überprüfen", JOptionPane.OK_CANCEL_OPTION);
 			if(result == JOptionPane.OK_OPTION){
 				emailaddy = tField.getText();
