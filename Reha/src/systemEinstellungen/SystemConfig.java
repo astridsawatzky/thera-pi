@@ -280,6 +280,8 @@ public class SystemConfig {
 	public static Vector <Vector<String>> vOwnDokuTemplate = new Vector <Vector<String>>();
 	public static HashMap<String,String> hmDokuSortMode = new HashMap<String,String>();
 	
+	public static HashMap<String,Object> hmIcalSettings = new HashMap<String,Object>();
+	
 	public static int certState = 0;
 	final public static int certOK = 0;
 	final public static int certWillExpire = 1;
@@ -773,6 +775,20 @@ public class SystemConfig {
 		}
 
 	}	
+	public static void IcalSettings(){
+		try{
+			INIFile icalini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "icalendar.ini");
+			hmIcalSettings.put("warnen",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnen").equals("0") ? false : true) );
+			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "Textzeilen"));
+			String beschreibung = "";
+			for(int i = 0; i < zeilen; i++){
+				beschreibung = beschreibung + icalini.getStringProperty("Terminbeschreibung", "Textzeile"+Integer.toString(i+1))+( i < (zeilen-1) ? "\n" : "");
+			}
+			hmIcalSettings.put("beschreibung",(String)beschreibung);
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der icalendar.ini, Mehode:Verzeichnisse!\nFehlertext: "+ex.getMessage());
+		}
+	}
 	
 	private void Verzeichnisse(){
 		try{

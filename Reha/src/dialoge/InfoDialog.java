@@ -2,10 +2,12 @@ package dialoge;
 
 import hauptFenster.Reha;
 
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -93,8 +95,17 @@ public class InfoDialog extends JDialog implements WindowListener{
 	
 	boolean muststop = false;
 	
+	boolean isF1Released = false;
+	
+	JButton[] buts = {null,null,null};
+	
 	public InfoDialog(String arg1,String infoArt,Vector<Vector<String>> data) {
 		super();
+		/*
+		System.out.println(arg1);
+		System.out.println(infoArt);
+		System.out.println(data);
+		*/
 		setUndecorated(true);
 		setModal(true);
 		this.arg1 = arg1;
@@ -102,8 +113,6 @@ public class InfoDialog extends JDialog implements WindowListener{
 		activateListener();
 		this.setLayout(new BorderLayout());
 		if(this.infoArt.equals("terminInfo")){
-			//this.getContentPane().setLayout(new BorderLayout());
-			//this.add(getTerminInfoContent());
 			this.setContentPane(getTerminInfoContent());
 		}else if(this.infoArt.equals("offenRGAF")){
 			this.setContentPane(getOffeneRechnungenInfoContent(data));
@@ -721,6 +730,14 @@ public class InfoDialog extends JDialog implements WindowListener{
 		folgeTermine.pack();
 		folgeTermine.setVisible(true);
 		folgeTermine.dispose();
+		muststop = true;
+		Robot rob;
+		try {
+			rob = new Robot();
+			rob.keyRelease(KeyEvent.VK_F1 );
+		} catch (AWTException e) {
+			e.printStackTrace();
+		}		
 		
 	}
 	
@@ -750,7 +767,8 @@ public class InfoDialog extends JDialog implements WindowListener{
 						this.dispose();
 						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
 						rtp = null;
-						ListenerTools.removeListeners(this);					
+						ListenerTools.removeListeners(this);
+						muststop = true;
 						super.dispose();
 					}
 				}else{
@@ -789,7 +807,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		JRtaTextField tfsuche;
 		JLabel lbstart;
 		JLabel lbaktuell;
-		JButton[] buts = {null,null,null};
+		
 		String suchkrit;
 		String startdate;
 		String aktdate;
@@ -806,10 +824,18 @@ public class InfoDialog extends JDialog implements WindowListener{
 						String action = e.getActionCommand();
 						if(action.equals("start")){
 							muststop = false;
-							new SuchenInTagen().setzeStatement(lbaktuell, startdate, tfsuche.getText().split(" "), mod);
+							buts[0].setEnabled(false);
+							buts[1].setEnabled(true);
+							lbaktuell.setText(tfstart.getText());
+							startdate = tfstart.getText();
+							mod.setRowCount(0);
+							tab.validate();
+							starteSuche();
+							//new SuchenInTagen().setzeStatement(lbaktuell, startdate, tfsuche.getText().split(" "), mod);
 						}else if(action.equals("stop")){
 							muststop = true;
-							
+							buts[1].setEnabled(false);
+							buts[0].setEnabled(true);
 						}else if(action.equals("close")){
 							muststop = true;
 							dispose();
@@ -818,6 +844,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 					}
 					
 				};
+				addKeyListener(this);
 				//           1   2  3    4     5   6  7    8     9   10 11   12
 				String x = "5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,0dlu:g,5dlu";
 				//           1   2  3   4  5    6  
@@ -833,15 +860,18 @@ public class InfoDialog extends JDialog implements WindowListener{
 				add(new JLabel("aktuell bei"),cc.xy(10, 2));
 				add( (lbaktuell = new JLabel("")) ,cc.xy(12, 2));
 				lbaktuell.setForeground(Color.RED);
-				String[] column = {"Tag","Datum","Uhrzeit","Name","Rez.Nummer","Therapeut","Tage diff."};
+				String[] column = {"lfd.","Tag","Datum","Uhrzeit","Name","Rez.Nummer","Therapeut","Tage diff."};
 				mod.setColumnIdentifiers(column);
 
 				tab = new JXTable(mod);
+				tab.getColumn(0).setMaxWidth(20);
+				tab.getColumn(7).setMaxWidth(30);
 				JScrollPane scr = JCompTools.getTransparentScrollPane(tab);
 				scr.validate();
 				add(scr,cc.xyw(2,6,12));
-				//add( ButtonTools.macheBut("start","start", al),cc.xy(4,4));
-				add( ButtonTools.macheBut("stop","stop", al),cc.xy(4,4));
+				add(buts[0]= ButtonTools.macheBut("start","start", al),cc.xy(8,4));
+				add(buts[1]=  ButtonTools.macheBut("stop","stop", al),cc.xy(4,4));
+				buts[0].setEnabled(false);
 				//add( ButtonTools.macheBut("schliessen","close", al),cc.xy(8,4));
 				validate();
 				if(tageplus.size() <= 0){
@@ -864,6 +894,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 						this.setVisible(false);
 						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
 						rtp = null;
+						muststop = true;
 						//aufraeumen();
 					}
 				}
@@ -887,8 +918,13 @@ public class InfoDialog extends JDialog implements WindowListener{
 		}
 		@Override
 		public void keyReleased(KeyEvent e) {
+			if(e.getKeyCode()==KeyEvent.VK_F1){
+				isF1Released = true;
+				//System.out.println("F1 wurde losgelassen");
+			}
 		}
 		public void starteSuche(){
+			muststop = false;
 			new SuchenInTagen().setzeStatement(lbaktuell, startdate, tfsuche.getText().split(" "), mod);
 		}
 		
@@ -937,6 +973,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		String startdat;
 		MyFolgeTermineTableModel mod;
 		Vector<String> atermine = new Vector<String>(); 
+		int treffer = 1;
 		public void setzeStatement(JLabel lbaktuell, String startdat, String[] suchkrit,MyFolgeTermineTableModel mod){
 			this.lbaktuell = lbaktuell;
 			this.startdat = startdat;
@@ -946,16 +983,22 @@ public class InfoDialog extends JDialog implements WindowListener{
 			start();
 		}
 		public void run(){
-			Vector treadVect = new Vector();
+
 			try {
 				stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                    ResultSet.CONCUR_UPDATABLE );
+				/*
+				for(int i = 0; i < suchkrit.length;i++){
+					System.out.println(suchkrit[i]);
+				}
+				*/
 				while(!muststop){
 					try{
 						rs = (ResultSet) stmt.executeQuery("select * from flexkc where datum = '"+DatFunk.sDatInSQL(anzeigedatum)+"' LIMIT "+Integer.toString(ParameterLaden.maxKalZeile) ) ;
 						////System.out.println("Nach for..."+exStatement[i]);
 						//SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
-						while(rs.next()){
+						
+						while(rs.next() && !muststop){
 							try{
 								/*in Spalte 301 steht die Anzahl der belegten Bl�cke*/ 
 								belegt = rs.getInt(301);
@@ -977,27 +1020,59 @@ public class InfoDialog extends JDialog implements WindowListener{
 									}else{
 										ikollege = Integer.parseInt(skollege);								
 									}
-									if(name.contains(suchkrit[0]) || nummer.contains(suchkrit[1]) ){
-										uhrzeit = rs.getString("TS"+(ii+1));
-										sorigdatum = rs.getString(305); 
-										sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-										skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
-										//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
+									if(suchkrit.length > 1){
+										if(name.contains(suchkrit[0]) || nummer.contains(suchkrit[1]) ){
+											uhrzeit = rs.getString("TS"+(ii+1));
+											sorigdatum = rs.getString(305); 
+											sdatum = DatFunk.sDatInDeutsch(sorigdatum);
+											skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+											//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
+											
+											termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
+											"  -  "+name +" - "+nummer+" - "+skollege;
+											//SchnellSuche.thisClass.setTextAreaText(termin);
+											atermine.add(Integer.toString(treffer));
+											atermine.add(DatFunk.WochenTag(sdatum));
+											atermine.add(sdatum);
+											atermine.add(uhrzeit.substring(0,5));
+											atermine.add(name);
+											atermine.add(nummer);								
+											atermine.add(skollege);
+											atermine.add("k.A.");
+											//atermine.add(sorigdatum+uhrzeit.substring(0,5));	
+											mod.addRow((Vector)atermine.clone());
+											treffer++;
+											//treadVect.addElement(atermine.clone());
+											//SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
+											atermine.clear();
+										}
+									}else{
+										if(name.contains(suchkrit[0]) || nummer.contains(suchkrit[0]) ){
+											uhrzeit = rs.getString("TS"+(ii+1));
+											sorigdatum = rs.getString(305); 
+											sdatum = DatFunk.sDatInDeutsch(sorigdatum);
+											skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+											//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
+											
+											termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
+											"  -  "+name +" - "+nummer+" - "+skollege;
+											//SchnellSuche.thisClass.setTextAreaText(termin);
+											atermine.add(Integer.toString(treffer));
+											atermine.add(DatFunk.WochenTag(sdatum));
+											atermine.add(sdatum);
+											atermine.add(uhrzeit.substring(0,5));
+											atermine.add(name);
+											atermine.add(nummer);								
+											atermine.add(skollege);
+											atermine.add("k.A.");
+											//atermine.add(sorigdatum+uhrzeit.substring(0,5));	
+											mod.addRow((Vector)atermine.clone());
+											treffer++;
+											//treadVect.addElement(atermine.clone());
+											//SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
+											atermine.clear();
+										}
 										
-										termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
-										"  -  "+name +" - "+nummer+" - "+skollege;
-										//SchnellSuche.thisClass.setTextAreaText(termin);
-										atermine.add(DatFunk.WochenTag(sdatum));
-										atermine.add(sdatum);
-										atermine.add(uhrzeit.substring(0,5));
-										atermine.add(name);
-										atermine.add(nummer);								
-										atermine.add(skollege);								
-										atermine.add(sorigdatum+uhrzeit.substring(0,5));	
-										mod.addRow((Vector)atermine.clone());
-										//treadVect.addElement(atermine.clone());
-										//SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
-										atermine.clear();
 									}
 								}
 							}catch(Exception ex){
@@ -1019,7 +1094,9 @@ public class InfoDialog extends JDialog implements WindowListener{
 					
 				}
 
-				
+				buts[1].setEnabled(false);
+				buts[0].setEnabled(true);
+
 				
 				//SchnellSuche.thisClass.setTerminTable((Vector) treadVect.clone());
 			}catch(SQLException ex) {

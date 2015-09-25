@@ -3388,6 +3388,8 @@ final class DatenbankStarten implements Runnable{
 
 				SystemConfig.EigeneDokuvorlagenLesen();
 				
+				SystemConfig.IcalSettings();
+				
 				new Thread(new PreisListenLaden()).start();
 				
 				if(SystemConfig.sWebCamActive.equals("1")){
