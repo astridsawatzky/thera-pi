@@ -60,7 +60,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 	
 	JRtaTextField exportArt = null;
 	ButtonGroup bg = new ButtonGroup();
-	JRadioButton[] rbut = {null,null};
+	JRadioButton[] rbut = {null,null,null};
 	JButton[] but = {null,null};
 	
 	
@@ -80,8 +80,8 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		getSmartTitledPanel().setTitle(xtitel);
 
 		setSize(300,180);
-		setPreferredSize(new Dimension(250,180));
-		getSmartTitledPanel().setPreferredSize(new Dimension (250,180));
+		setPreferredSize(new Dimension(270,220));
+		getSmartTitledPanel().setPreferredSize(new Dimension (270,220));
 		setPinPanel(pinPanel);
 		rgb = new GutachtenWahlHintergrund();
 		rgb.setLayout(new BorderLayout());
@@ -137,7 +137,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 	private JPanel getGutachten(){     // 1        2             3        4            5  
 		FormLayout lay = new FormLayout("15dlu,fill:0:grow(0.50),p,fill:0:grow(0.50),10dlu",
 									//     1               2  3    4  5    6  7                 8     9   10  
-										"20dlu,p,10dlu,p,15dlu,p,fill:0:grow(0.50),5dlu:g,p,20dlu");
+										"20dlu,p,10dlu,p,10dlu,p,15dlu,p,fill:0:grow(0.50),5dlu:g,p,20dlu");
 		PanelBuilder pb = new PanelBuilder(lay);
 		CellConstraints cc = new CellConstraints();
 
@@ -150,9 +150,17 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		rbut[1] = new JRadioButton("Daten für Fahrdienstliste exportieren");
 		rbut[1].setOpaque(false);
 		rbut[1].addKeyListener(this);
-		rbut[0].setName("fahrdienstliste");
+		//von 0 auf 1 geändert am 21.09.2015
+		rbut[1].setName("fahrdienstliste");
+		rbut[2] = new JRadioButton("Daten als iCal-Export und Emailversand");
+		rbut[2].setOpaque(false);
+		rbut[2].addKeyListener(this);
+		//von 0 auf 1 geändert am 21.09.2015
+		rbut[2].setName("ical");
+		
 		bg.add(rbut[0]);
 		bg.add(rbut[1]);
+		bg.add(rbut[2]);
 		rbut[0].setSelected(true);
 		but[0] = new JButton("übernehmen");
 		but[0].setName("uebernahme");
@@ -166,7 +174,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		but[1].addActionListener(this);
 		pb.add(rbut[0],cc.xy(3,2));
 		pb.add(rbut[1],cc.xy(3,4));
-		
+		pb.add(rbut[2],cc.xy(3,6));
 		FormLayout lay2 = new FormLayout("fill:0:grow(0.33),60dlu,fill:0:grow(0.33),60dlu,fill:0:grow(0.33)",
 				"p");
 		PanelBuilder pb2 = new PanelBuilder(lay2);
@@ -175,7 +183,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		pb2.add(but[0],cc2.xy(2,1));
 		pb2.add(but[1],cc2.xy(4,1));
 		pb2.getPanel().validate();
-		pb.add(pb2.getPanel(),cc.xyw(1, 9, 5));
+		pb.add(pb2.getPanel(),cc.xyw(1, 11, 5));
 		
 		pb.getPanel().validate();
 		return pb.getPanel();
@@ -192,6 +200,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 					rtp = null;
 					ListenerTools.removeListeners(rbut[0]);
 					ListenerTools.removeListeners(rbut[1]);
+					ListenerTools.removeListeners(rbut[2]);
 					ListenerTools.removeListeners(but[0]);
 					ListenerTools.removeListeners(but[1]);
 					super.dispose();
@@ -211,6 +220,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 			rtp = null;
 			ListenerTools.removeListeners(rbut[0]);
 			ListenerTools.removeListeners(rbut[1]);
+			ListenerTools.removeListeners(rbut[2]);
 			ListenerTools.removeListeners(but[0]);
 			ListenerTools.removeListeners(but[1]);
 			super.dispose();
@@ -232,8 +242,10 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 					//System.out.println("In SwingWorker");
 					if(rbut[0].isSelected()){
 						exportArt.setText("rehaplan");	
-					}else{
+					}else if(rbut[1].isSelected()){
 						exportArt.setText("fahrdienstliste");
+					}else{
+						exportArt.setText("ical");
 					}
 					dispose();
 					return null;
@@ -295,11 +307,15 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 				this.dispose();
 			}
 			if( ((JComponent)event.getSource()).getName().equals("rehaplan") ||
-					((JComponent)event.getSource()).getName().equals("fahrdienstliste")	){
+					((JComponent)event.getSource()).getName().equals("fahrdienstliste") ||
+					((JComponent)event.getSource()).getName().equals("ical")
+					){
 				if(rbut[0].isSelected()){
 					exportArt.setText("rehaplan");	
-				}else{
+				}else if(rbut[1].isSelected()){
 					exportArt.setText("fahrdienstliste");
+				}else{
+					exportArt.setText("ical");
 				}
 			}
 		}

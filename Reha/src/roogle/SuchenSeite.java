@@ -1329,7 +1329,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
       		JCheckBox  cField = new JCheckBox("1 Stunde vor Termin warnen");
       		cField.setSelected(true);
       		JPanel myPanel = new JPanel();
-      		FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,2dlu,p,2dlu,p,5dlu");
+      		FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,5dlu,p,2dlu,p,15dlu");
       		CellConstraints cc = new CellConstraints();
       		myPanel.setLayout(fm);
       		myPanel.add(new JLabel("Emailadresse:"),cc.xy(2, 2));
