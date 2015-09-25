@@ -528,8 +528,8 @@ SuchenSeite eltern;
 		/*********/
 	      if (text.equals("")){
 	    	  text = "Sehr geehrte Damen und Herren,\n"+
-					"im Dateianhang finden Sie die von Ihnen gew�nschten Behandlungstermine.\n\n"+
-					"Termine die Sie nicht einhalten bzw. wahrnehmen k�nnen, m��en 24 Stunden vorher\n"+
+					"im Dateianhang finden Sie die von Ihnen gewünschten Behandlungstermine.\n\n"+
+					"Termine die Sie nicht einhalten bzw. wahrnehmen können, müssen 24 Stunden vorher\n"+
 					"abgesagt werden.\n\nIhr Planungs-Team vom RTA";
 	      }
 		String smtpHost = SystemConfig.hmEmailExtern.get("SmtpHost");
