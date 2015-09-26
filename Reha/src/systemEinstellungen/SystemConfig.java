@@ -793,7 +793,7 @@ public class SystemConfig {
 			hmIcalSettings.put("emailtext",String.valueOf((String)beschreibung));
 			hmIcalSettings.put("betreff", (String)icalini.getStringProperty("Emailtext", "Betreff"));
 		}catch(Exception ex){
-			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der icalendar.ini, Mehode:Verzeichnisse!\nFehlertext: "+ex.getMessage());
+			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der icalendar.ini, Mehode:ICalSettingns!\nFehlertext: "+ex.getMessage());
 		}
 		//System.out.println(hmIcalSettings);
 	}
