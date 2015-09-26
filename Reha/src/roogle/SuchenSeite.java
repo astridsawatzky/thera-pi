@@ -1007,6 +1007,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					public  void run(){
 						new Thread(){
 							public void run(){
+								//26.09.2015 /st.
 								druckVectorInit();
 								auswahlDrucken(true);								
 							}
