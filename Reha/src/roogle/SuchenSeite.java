@@ -1318,7 +1318,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
       		myPanel.setLayout(fm);
       		myPanel.add(new JLabel("Emailadresse:"),cc.xy(2, 2));
       		myPanel.add(tField, cc.xy(4,2));
-      		myPanel.add(new JLabel("Benachrichtigung:"),cc.xy(4,2));
+      		//myPanel.add(new JLabel("Benachrichtigung:"),cc.xy(4,2));
       		myPanel.add(cField,cc.xy(4,4)); 
 			int result = JOptionPane.showConfirmDialog(null, myPanel,"Bitte Eingaben überprüfen", JOptionPane.OK_CANCEL_OPTION);
 			if(result == JOptionPane.OK_OPTION){
