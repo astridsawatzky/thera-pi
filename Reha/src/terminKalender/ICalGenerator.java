@@ -10,8 +10,8 @@ import systemEinstellungen.SystemConfig;
 
 public class ICalGenerator {
 	static String CLRF = "=0D=0A";
-	static String ort = SystemConfig.hmFirmenDaten.get("Firma1")+" "+SystemConfig.hmFirmenDaten.get("Firma2")+"CRLF"+
-			SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+"CRLF"+
+	static String ort = SystemConfig.hmFirmenDaten.get("Firma1")+(!SystemConfig.hmFirmenDaten.get("Firma2").equals("") ? " "+SystemConfig.hmFirmenDaten.get("Firma2")+", CRLF" : ", CRLF")+
+			SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+", CRLF"+
 			"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon");
 	
 	public static String macheKopf(){

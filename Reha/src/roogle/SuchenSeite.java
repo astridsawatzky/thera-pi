@@ -704,9 +704,12 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					return;
 				}
 				if(arg0.getClickCount()==1){
-					int row = jxSucheTable.getSelectedRow();
-					int col = jxSucheTable.getSelectedColumn();
-					jxSucheTable.setRowSelectionInterval(row, row);
+					try{
+						int row = jxSucheTable.getSelectedRow();
+						int col = jxSucheTable.getSelectedColumn();
+						jxSucheTable.setRowSelectionInterval(row, row);
+					}catch(Exception ex){
+					}
 					return;
 				}
 			}
