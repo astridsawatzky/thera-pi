@@ -47,10 +47,10 @@ public class ICalGenerator {
 			buf.append("UID:"+macheUID()+System.getProperty("line.separator"));
 			//buf.append("CREATED:"+getUTC()+System.getProperty("line.separator"));
 			//buf.append("LAST-MODIFIED:"+getUTC()+System.getProperty("line.separator"));
-			//buf.append("DTSTAMP:"+getUTC()+System.getProperty("line.separator"));
+			buf.append("DTSTAMP:"+getUTC()+System.getProperty("line.separator"));
 			buf.append("ORGANIZER;CN=\""+(String)SystemConfig.hmIcalSettings.get("organisatorname")+", "+"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon")+
 					"\":MAILTO:"+(String)SystemConfig.hmIcalSettings.get("organisatoremail")+System.getProperty("line.separator"));
-			buf.append("SUMMARY:"+titel+System.getProperty("line.separator"));
+			buf.append("SUMMARY:"+( !((String)SystemConfig.hmIcalSettings.get("praefix")).equals("") ?  (String)SystemConfig.hmIcalSettings.get("praefix")+" "+titel : titel) +System.getProperty("line.separator"));
 			buf.append("DTSTART;TZID=Europe/Berlin:"+datum+"T"+start+System.getProperty("line.separator"));
 			buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
 			buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
@@ -91,7 +91,7 @@ public class ICalGenerator {
 		return "END:VCALENDAR"+System.getProperty("line.separator");
 	}
 	public static String getUTC(){
-		final SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
+		final SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
         f.setTimeZone(TimeZone.getTimeZone("UTC"));
         return f.format(new Date())+"Z";
 	}
