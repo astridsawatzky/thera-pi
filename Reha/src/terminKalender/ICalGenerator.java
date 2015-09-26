@@ -10,9 +10,12 @@ import systemEinstellungen.SystemConfig;
 
 public class ICalGenerator {
 	static String CLRF = "=0D=0A";
+	/*
 	static String ort = SystemConfig.hmFirmenDaten.get("Firma1")+(!SystemConfig.hmFirmenDaten.get("Firma2").equals("") ? " "+SystemConfig.hmFirmenDaten.get("Firma2")+", CRLF" : ", CRLF")+
 			SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+", CRLF"+
 			"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon");
+			*/
+	static String ort = SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort");
 	
 	public static String macheKopf(){
 		return "BEGIN:VCALENDAR"+System.getProperty("line.separator")+
@@ -39,33 +42,43 @@ public class ICalGenerator {
 	
 	public static String macheVevent(String datum, String start, String end, String titel, String beschreibung,boolean warnen){
 		StringBuffer buf = new StringBuffer();
-		buf.append("BEGIN:VEVENT"+System.getProperty("line.separator"));
-		buf.append("UID:"+macheUID()+System.getProperty("line.separator"));
-		//buf.append("CREATED:"+getUTC()+System.getProperty("line.separator"));
-		//buf.append("LAST-MODIFIED:"+getUTC()+System.getProperty("line.separator"));
-		//buf.append("DTSTAMP:"+getUTC()+System.getProperty("line.separator"));
-		buf.append("SUMMARY:"+titel+System.getProperty("line.separator"));
-		buf.append("DTSTART;TZID=Europe/Berlin:"+datum+"T"+start+System.getProperty("line.separator"));
-		buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
-		buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
-		//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
-		buf.append("LOCATION:"+ort.replace("CRLF", "\\ " )+System.getProperty("line.separator"));
-		buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
-		if(warnen){
-			buf.append(macheWarnung((String) SystemConfig.hmIcalSettings.get("warnzeitpunkt")));
+		try{
+			buf.append("BEGIN:VEVENT"+System.getProperty("line.separator"));
+			buf.append("UID:"+macheUID()+System.getProperty("line.separator"));
+			//buf.append("CREATED:"+getUTC()+System.getProperty("line.separator"));
+			//buf.append("LAST-MODIFIED:"+getUTC()+System.getProperty("line.separator"));
+			//buf.append("DTSTAMP:"+getUTC()+System.getProperty("line.separator"));
+			buf.append("ORGANIZER;CN=\""+(String)SystemConfig.hmIcalSettings.get("organisatorname")+", "+"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon")+
+					"\":MAILTO:"+(String)SystemConfig.hmIcalSettings.get("organisatoremail")+System.getProperty("line.separator"));
+			buf.append("SUMMARY:"+titel+System.getProperty("line.separator"));
+			buf.append("DTSTART;TZID=Europe/Berlin:"+datum+"T"+start+System.getProperty("line.separator"));
+			buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
+			buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
+			//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
+			buf.append("LOCATION:"+ort.replace("CRLF", "\\ " )+System.getProperty("line.separator"));
+			buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
+			if(warnen){
+				buf.append(macheWarnung((String) SystemConfig.hmIcalSettings.get("warnzeitpunkt")));
+			}
+			buf.append("END:VEVENT"+System.getProperty("line.separator"));	
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		buf.append("END:VEVENT"+System.getProperty("line.separator"));
 		return buf.toString();
 	}
 	
 	public static String macheWarnung(String warnung){
 		StringBuffer buf = new StringBuffer();
-		buf.append("BEGIN:VALARM"+System.getProperty("line.separator"));
-		buf.append("ACTION:DISPLAY"+System.getProperty("line.separator"));
-		//buf.append("TRIGGER;VALUE=DURATION:-PT"+warnung+System.getProperty("line.separator"));
-		buf.append("TRIGGER:"+warnung+System.getProperty("line.separator"));
-		buf.append("DESCRIPTION:Erinnerung Therapie Termin"+System.getProperty("line.separator"));
-		buf.append("END:VALARM"+System.getProperty("line.separator"));
+		try{
+			buf.append("BEGIN:VALARM"+System.getProperty("line.separator"));
+			buf.append("ACTION:DISPLAY"+System.getProperty("line.separator"));
+			//buf.append("TRIGGER;VALUE=DURATION:-PT"+warnung+System.getProperty("line.separator"));
+			buf.append("TRIGGER:"+warnung+System.getProperty("line.separator"));
+			buf.append("DESCRIPTION:Erinnerung Therapie Termin"+System.getProperty("line.separator"));
+			buf.append("END:VALARM"+System.getProperty("line.separator"));			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 		return buf.toString();
 	}
 	
