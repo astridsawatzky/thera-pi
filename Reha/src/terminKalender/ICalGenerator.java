@@ -11,7 +11,7 @@ import systemEinstellungen.SystemConfig;
 public class ICalGenerator {
 	static String CLRF = "=0D=0A";
 	static String ort = SystemConfig.hmFirmenDaten.get("Firma1")+" "+SystemConfig.hmFirmenDaten.get("Firma2")+"CRLF"+
-			SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+", "+SystemConfig.hmFirmenDaten.get("Ort")+"CRLF"+
+			SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+"CRLF"+
 			"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon");
 	
 	public static String macheKopf(){
@@ -49,7 +49,7 @@ public class ICalGenerator {
 		buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
 		buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
 		//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
-		buf.append("LOCATION:"+ort.replace("CRLF", "\\" )+System.getProperty("line.separator"));
+		buf.append("LOCATION:"+ort.replace("CRLF", "\\ " )+System.getProperty("line.separator"));
 		buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
 		if(warnen){
 			buf.append(macheWarnung((String) SystemConfig.hmIcalSettings.get("warnzeitpunkt")));
