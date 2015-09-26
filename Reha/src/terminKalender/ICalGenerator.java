@@ -48,10 +48,11 @@ public class ICalGenerator {
 		buf.append("DTSTART;TZID=Europe/Berlin:"+datum+"T"+start+System.getProperty("line.separator"));
 		buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
 		buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
-		buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
+		//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
+		buf.append("LOCATION:"+ort.replace("CRLF", "\\" )+System.getProperty("line.separator"));
 		buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
 		if(warnen){
-			buf.append(macheWarnung("1H"));
+			buf.append(macheWarnung((String) SystemConfig.hmIcalSettings.get("warnzeitpunkt")));
 		}
 		buf.append("END:VEVENT"+System.getProperty("line.separator"));
 		return buf.toString();
@@ -61,7 +62,8 @@ public class ICalGenerator {
 		StringBuffer buf = new StringBuffer();
 		buf.append("BEGIN:VALARM"+System.getProperty("line.separator"));
 		buf.append("ACTION:DISPLAY"+System.getProperty("line.separator"));
-		buf.append("TRIGGER;VALUE=DURATION:-PT"+warnung+System.getProperty("line.separator"));
+		//buf.append("TRIGGER;VALUE=DURATION:-PT"+warnung+System.getProperty("line.separator"));
+		buf.append("TRIGGER:"+warnung+System.getProperty("line.separator"));
 		buf.append("DESCRIPTION:Erinnerung Therapie Termin"+System.getProperty("line.separator"));
 		buf.append("END:VALARM"+System.getProperty("line.separator"));
 		return buf.toString();
