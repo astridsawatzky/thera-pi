@@ -1310,7 +1310,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			/*****************************/
 			JTextField tField = new JTextField(25);
  			tField.setText(emailaddy);
-      		JCheckBox  cField = new JCheckBox("1 Stunde vor Termin warnen");
+      		JCheckBox  cField = new JCheckBox("1 Stunde vor Termin benachrichtigen");
       		cField.setSelected((Boolean) SystemConfig.hmIcalSettings.get("warnen"));
       		JPanel myPanel = new JPanel();
       		FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,5dlu,p,2dlu,p,15dlu");
@@ -1318,7 +1318,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
       		myPanel.setLayout(fm);
       		myPanel.add(new JLabel("Emailadresse:"),cc.xy(2, 2));
       		myPanel.add(tField, cc.xy(4,2));
-      		myPanel.add(new JLabel("Terminwarnung:"),cc.xy(4,2));
+      		myPanel.add(new JLabel("Benachrichtigung:"),cc.xy(4,2));
       		myPanel.add(cField,cc.xy(4,4)); 
 			int result = JOptionPane.showConfirmDialog(null, myPanel,"Bitte Eingaben überprüfen", JOptionPane.OK_CANCEL_OPTION);
 			if(result == JOptionPane.OK_OPTION){
