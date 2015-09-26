@@ -1370,7 +1370,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
 			String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
 			//String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
-			String recipient = emailaddy+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
+			String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
 			//String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;

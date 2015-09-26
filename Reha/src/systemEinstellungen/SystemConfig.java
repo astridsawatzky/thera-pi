@@ -780,6 +780,10 @@ public class SystemConfig {
 			INIFile icalini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "icalendar.ini");
 			hmIcalSettings.put("warnen",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnen").equals("0") ? false : true) );
 			hmIcalSettings.put("warnzeitpunkt", (String)icalini.getStringProperty("ICalendar", "Warnzeitpunkt"));
+			hmIcalSettings.put("organisatorname", (String)icalini.getStringProperty("ICalendar", "Organisatorname"));
+			hmIcalSettings.put("organisatoremail", (String)icalini.getStringProperty("ICalendar", "Organisatoremail"));
+			hmIcalSettings.put("praefix", (String)icalini.getStringProperty("ICalendar", "Praefixvorterminl"));
+			hmIcalSettings.put("aufeigeneemail",(Boolean)  (icalini.getStringProperty("ICalendar", "Aufeigeneemail").equals("0") ? false : true) );
 			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "TextzeilenAnzahl"));
 			String beschreibung = "";
 			for(int i = 0; i < zeilen; i++){
