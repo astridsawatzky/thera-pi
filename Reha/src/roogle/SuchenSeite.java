@@ -1249,8 +1249,25 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			if(icalExport()){
 				JOptionPane.showMessageDialog(null, "Daten für iCal wurden exportiert und per Email versendet");	
 			}
+		}else if(exportart.getText().equals("icalreha")){
+			if(icalRehaExport()){
+				JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");	
+			}
 		}
 		cursorWait(false);
+	}
+	
+	/********
+	 * 
+	 * 
+	 */
+	public static boolean icalRehaExport(){
+		Vector<Vector<String>> icalVec = new Vector<Vector<String>>();
+		Vector<String> icalDummy = new Vector<String>();
+		String emailaddy = "";
+		String emaildummy = "";
+		boolean datewarning = true;
+		return false;
 	}
 	/********
 	 * 
