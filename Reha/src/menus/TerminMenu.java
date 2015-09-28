@@ -11,7 +11,9 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+
 import systemEinstellungen.SystemConfig;
+import terminKalender.iCalRehaExporter;
 
 public class TerminMenu {
 
@@ -34,6 +36,8 @@ public class TerminMenu {
 			jMenu.add(getRoogleStart());
 			jMenu.addSeparator();
 			jMenu.add(getWochenArbeitszeit());
+			jMenu.addSeparator();
+			jMenu.add(getRehaplanToIcal());
 		}
 		return jMenu;
 	}
@@ -98,5 +102,19 @@ public class TerminMenu {
 
 		return waz;
 	}
+	private JMenuItem getRehaplanToIcal() {
+		JMenuItem ical = new JMenuItem();
+		ical.setText("Rehaplandaten -> iCalendar");
+		ical.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent e) {
+				try{
+					new iCalRehaExporter();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+		});
+		return ical;
+	}	
 
 }
