@@ -785,6 +785,7 @@ public class SystemConfig {
 			hmIcalSettings.put("praefix", (String)icalini.getStringProperty("ICalendar", "Praefixvortermin"));
 			hmIcalSettings.put("aufeigeneemail",(Boolean)  (icalini.getStringProperty("ICalendar", "Aufeigeneemail").equals("0") ? false : true) );
 			hmIcalSettings.put("praefixbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Praefixbeireha").equals("0") ? false : true) );
+			hmIcalSettings.put("warnenbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnenbeireha").equals("0") ? false : true) );
 			hmIcalSettings.put("rehaplanverzeichnis", (String)icalini.getStringProperty("ICalendar", "Rehaplanverzeichnis"));
 			
 			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "TextzeilenAnzahl"));
