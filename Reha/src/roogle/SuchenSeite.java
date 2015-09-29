@@ -1326,7 +1326,10 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				icalVec.add((Vector)icalDummy.clone());
 			}
 			if(emailaddy.equals("")){
-				
+				if(schreibeNummer.getText().trim().length() > 2){
+					String schreibereznr = (schreibeNummer.getText().indexOf("\\") < 0 ? schreibeNummer.getText() : schreibeNummer.getText().substring(0,schreibeNummer.getText().indexOf("\\") )  );
+					emailaddy = SqlInfo.holeEinzelFeld(stmt+schreibereznr+"' LIMIT 1");	
+				}
 			}
 			/*****************************/
 			JTextField tField = new JTextField(25);

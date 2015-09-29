@@ -26,21 +26,39 @@ public class iCalRehaExporter {
 			 if( (veczeilen = plandateiEinlesen()).size() <= 0 ){
 				 JOptionPane.showMessageDialog(null,"Die Datei "+plandatei+" ist keine gültige Rehaplan-Datei");
 			 }else{
-				 
+				 erzeugeIcs();
 			 }
 		}
 	}
 	
+	private boolean erzeugeIcs(){
+		//{"08.10.2015",4,40,"12:00",720,15,"Blutdruckmessung 3.OG",0,{89,239,39},{0,0,0},8}
+		//macheRehaVevent(String datum, String start, String end, String titel, String beschreibung,boolean warnen)
+		StringBuffer buf = new StringBuffer();
+		buf.append(ICalGenerator.macheKopf());
+		for(int i = 0; i < veczeilen.size(); i++){
+			
+			
+		}
+		buf.append(ICalGenerator.macheEnd());
+		return false;
+	}
+	
+	private String giveMePart(String[] string, int part){
+		return string[part];
+	}
+	
 	private Vector<String> plandateiEinlesen(){
 		Vector<String> vecz = new Vector<String>();
-		/*
-		System.out.println(plandatei);
 		BufferedReader in = null;
 		try {
 			in = new BufferedReader(new FileReader(plandatei));
 			String zeile = null;
 			while ((zeile = in.readLine()) != null) {
-				System.out.println("Gelesene Zeile: " + zeile);
+				if(zeile.startsWith("{\"")){
+					vecz.add(zeile);	
+				}
+				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -52,6 +70,11 @@ public class iCalRehaExporter {
 				}
 			}	
 		} 
+		/*
+		System.out.println("Elemente = "+vecz.size());
+		for(int i = 0; i < vecz.size();i++){
+			System.out.println("Element "+i+" = "+vecz.get(i));
+		}
 		*/
 		return (Vector<String>)vecz.clone();
 	}
@@ -84,7 +107,7 @@ public class iCalRehaExporter {
             if(inputVerzFile.getName().trim().equals("")){
             	sret = "";
             }else{
-            	sret = inputVerzFile.getName().trim();	
+            	sret = inputVerzFile.getPath().trim().replace("\\", "/");	
             }
         }else{
         	sret = ""; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);

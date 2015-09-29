@@ -67,6 +67,33 @@ public class ICalGenerator {
 		return buf.toString();
 	}
 	
+	public static String macheRehaVevent(String datum, String start, String end, String titel, String beschreibung,boolean warnen){
+		StringBuffer buf = new StringBuffer();
+		try{
+			buf.append("BEGIN:VEVENT"+System.getProperty("line.separator"));
+			buf.append("UID:"+macheUID()+System.getProperty("line.separator"));
+			//buf.append("CREATED:"+getUTC()+System.getProperty("line.separator"));
+			//buf.append("LAST-MODIFIED:"+getUTC()+System.getProperty("line.separator"));
+			buf.append("DTSTAMP:"+getUTC()+System.getProperty("line.separator"));
+			buf.append("ORGANIZER;CN=\""+(String)SystemConfig.hmIcalSettings.get("organisatorname")+", "+"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon")+
+					"\":MAILTO:"+(String)SystemConfig.hmIcalSettings.get("organisatoremail")+System.getProperty("line.separator"));
+			buf.append("SUMMARY:"+( !((String)SystemConfig.hmIcalSettings.get("praefix")).equals("") ?  (String)SystemConfig.hmIcalSettings.get("praefix")+" "+titel : titel) +System.getProperty("line.separator"));
+			buf.append("DTSTART;TZID=Europe/Berlin:"+datum+"T"+start+System.getProperty("line.separator"));
+			buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
+			buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
+			//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
+			buf.append("LOCATION:"+ort.replace("CRLF", "\\ " )+System.getProperty("line.separator"));
+			buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
+			if(warnen){
+				buf.append(macheWarnung((String) SystemConfig.hmIcalSettings.get("warnzeitpunkt")));
+			}
+			buf.append("END:VEVENT"+System.getProperty("line.separator"));	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return buf.toString();
+	}
+	
 	public static String macheWarnung(String warnung){
 		StringBuffer buf = new StringBuffer();
 		try{
