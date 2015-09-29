@@ -36,8 +36,8 @@ public class TerminMenu {
 			jMenu.add(getRoogleStart());
 			jMenu.addSeparator();
 			jMenu.add(getWochenArbeitszeit());
-			jMenu.addSeparator();
-			jMenu.add(getRehaplanToIcal());
+			//jMenu.addSeparator();
+			//jMenu.add(getRehaplanToIcal());
 		}
 		return jMenu;
 	}
