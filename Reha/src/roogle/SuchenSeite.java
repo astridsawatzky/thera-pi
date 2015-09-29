@@ -1331,7 +1331,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			/*****************************/
 			JTextField tField = new JTextField(25);
  			tField.setText(emailaddy);
-      		JCheckBox  cField = new JCheckBox("1 Stunde vor Termin benachrichtigen");
+      		JCheckBox  cField = new JCheckBox("mit Benachrichtigung vor dem Termin");
       		cField.setSelected((Boolean) SystemConfig.hmIcalSettings.get("warnen"));
       		JPanel myPanel = new JPanel();
       		FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,5dlu,p,2dlu,p,15dlu");

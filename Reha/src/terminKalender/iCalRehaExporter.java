@@ -4,7 +4,10 @@ import hauptFenster.Reha;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.JFileChooser;
@@ -30,7 +33,26 @@ public class iCalRehaExporter {
 	
 	private Vector<String> plandateiEinlesen(){
 		Vector<String> vecz = new Vector<String>();
-		
+		/*
+		System.out.println(plandatei);
+		BufferedReader in = null;
+		try {
+			in = new BufferedReader(new FileReader(plandatei));
+			String zeile = null;
+			while ((zeile = in.readLine()) != null) {
+				System.out.println("Gelesene Zeile: " + zeile);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null){
+				try {
+					in.close();
+				} catch (IOException e) {
+				}
+			}	
+		} 
+		*/
 		return (Vector<String>)vecz.clone();
 	}
 	
