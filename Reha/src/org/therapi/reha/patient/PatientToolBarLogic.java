@@ -35,6 +35,7 @@ import CommonTools.StringTools;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
+import terminKalender.iCalRehaExporter;
 import dialoge.KuerzelNeu;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
@@ -257,12 +258,14 @@ public class PatientToolBarLogic {
 			icons.put("Patientenbezogene Nachricht erstellen",SystemConfig.hmSysIcons.get("patnachrichten"));
 			icons.put("(e)Mail für Patient erstellen (Alt+M)",SystemConfig.hmSysIcons.get("email"));
 			icons.put("SMS für Patient erstellen (Alt+S)",SystemConfig.hmSysIcons.get("sms"));
-			icons.put("Zusatzinformationen zum aktuellen Patient (Alt+I)",SystemConfig.hmSysIcons.get("info"));
+			icons.put("Zusatz-Info zum aktuellen Patient (Alt+I)",SystemConfig.hmSysIcons.get("info"));
+			icons.put("Rehaplandatei -> iCalendar per Email",SystemConfig.hmSysIcons.get("email"));
 			// create a list with some test data
 			JList list = new JList(	new Object[] {"Patientenbezogene Nachricht erstellen",
 					"(e)Mail für Patient erstellen (Alt+M)", 
 					"SMS für Patient erstellen (Alt+S)", 
-					"Zusatzinformationen zum aktuellen Patient (Alt+I)"});
+					"Zusatz-Info zum aktuellen Patient (Alt+I)",
+					"Rehaplandatei -> iCalendar per Email"});
 			list.setCellRenderer(new IconListRenderer(icons));	
 			Reha.toolsDlgRueckgabe = -1;
 			ToolsDialog tDlg = new ToolsDialog(Reha.thisFrame,"Werkzeuge: aktueller Patient",list);
@@ -296,6 +299,7 @@ public class PatientToolBarLogic {
 				}
 				break;
 			case 4:
+				new iCalRehaExporter();
 				break;
 				
 			}
