@@ -985,7 +985,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					public  void run(){
 						new Thread(){
 							public void run(){
-								auswahlDrucken(true);								
+								auswahlDrucken(true,true);								
 							}
 						}.start();
 
@@ -1014,7 +1014,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 							public void run(){
 								//26.09.2015 /st.
 								druckVectorInit();
-								auswahlDrucken(true);								
+								auswahlDrucken(true,true);								
 							}
 						}.start();
 					}
@@ -1047,7 +1047,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					public  void run(){
 						new Thread(){
 							public void run(){
-								auswahlDrucken(false);								
+								auswahlDrucken(false,true);								
 							}
 						}.start();
 
@@ -1405,6 +1405,12 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(aufDat);
+			//Einbauen wenn der User auch eine PDF möchte muß sowohl in INI als auch in SystemConfig
+			if((Boolean) SystemConfig.hmIcalSettings.get("pdfbeilegen")){
+				//druckVectorInit();	
+				auswahlDrucken(false,false);
+				attachments.add(new String[] {Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf","Terminplan.pdf"});
+			}
 			//(JXFrame owner,String titel,String recipients, String betreff, String mailtext,ArrayList<String[]> attachments,int postfach, boolean direktsenden) {
 			EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"ICS-Datei der Behandlungstermin",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
 					(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
@@ -1441,6 +1447,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			return true;
 			*/
 		}catch(Exception ex){
+			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Fehler beim iCal-Export und Versand");
 		}
 		return false;
@@ -1601,7 +1608,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		return sret;
 	}
 
-	private void auswahlDrucken(boolean drucken){
+	private void auswahlDrucken(boolean drucken,boolean direktsenden){
 		int lang,i;
 		TermObjekt termin = null;
 		Vector<TermObjekt> vec = new Vector<TermObjekt>();
@@ -1674,7 +1681,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				
 			}
 			Collections.sort(vec);
-			new TerminplanDrucken().init((Vector<TermObjekt>)vec, drucken,schreibeName.getText().trim(),schreibeNummer.getText().trim(),getInstance());
+			new TerminplanDrucken().init((Vector<TermObjekt>)vec, drucken,schreibeName.getText().trim(),schreibeNummer.getText().trim(),getInstance(),direktsenden);
 		}
 		
 	}

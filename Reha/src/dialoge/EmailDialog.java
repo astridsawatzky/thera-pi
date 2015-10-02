@@ -14,6 +14,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +34,7 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
+import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
@@ -435,7 +439,26 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 			if(test.endsWith(".ics")){
 				Runtime.getRuntime().exec("C:/Windows/notepad.exe "+attachments.get(wahl)[0].replace("\\", "/"));
 			}else if(test.endsWith(".pdf")){
-				
+				final String xdatei = attachments.get(wahl)[0].replace("\\", "/");
+				new SwingWorker<Void,Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						Process process = new ProcessBuilder(SystemConfig.hmFremdProgs.get("AcrobatReader"),"",xdatei).start();
+					       InputStream is = process.getInputStream();
+					       InputStreamReader isr = new InputStreamReader(is);
+					       BufferedReader br = new BufferedReader(isr);
+					       //String line;
+					       while ((br.readLine()) != null) {
+					         //System.out.println(line);
+					       }
+					       is.close();
+					       isr.close();
+					       br.close();
+
+						return null;
+					}
+					
+				}.execute();				
 			}else if(test.endsWith(".odt")){
 				
 			}else{

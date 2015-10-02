@@ -797,6 +797,11 @@ public class SystemConfig {
 			}else{
 				hmIcalSettings.put("postfach",(Integer)  Integer.parseInt((String)icalini.getStringProperty("ICalendar", "Postfach")) );
 			}
+			if( icalini.getStringProperty("ICalendar", "Pdfbeilegen") == null ){
+				hmIcalSettings.put("pdfbeilegen",false);
+			}else{
+				hmIcalSettings.put("pdfbeilegen",(Boolean)  (icalini.getStringProperty("ICalendar", "Pdfbeilegen").equals("0") ? false : true) );
+			}
 			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "TextzeilenAnzahl"));
 			String beschreibung = "";
 			for(int i = 0; i < zeilen; i++){

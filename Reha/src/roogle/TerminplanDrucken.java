@@ -49,11 +49,12 @@ TerminplanDrucken thisDruck = null;
 String[] tabName; 
 static String exporturl = "";
 SuchenSeite eltern;
-	public void init(Vector<TermObjekt> termdat,boolean drucken,String patName,String rezNr,SuchenSeite xeltern){
+	public void init(Vector<TermObjekt> termdat,boolean drucken,String patName,String rezNr,SuchenSeite xeltern,boolean ldirektsenden){
 		this.termindat = termdat;
 		this.ldrucken = drucken;
 		this.patient = patName;
 		this.rezept = rezNr;
+		this.ldirektsenden = ldirektsenden;
 		eltern = xeltern;
 		thisDruck = this;
 		start();
@@ -80,12 +81,14 @@ SuchenSeite eltern;
 	        patname = patname+rez;
 	        
 	        /**********/
-	        eltern.getFortschritt().setStringPainted(true);
-	        //eltern.getFortschritt().setIndeterminate(true);
-	        eltern.setFortschrittZeigen(true);
-	        eltern.setFortschrittRang(0, Long.valueOf(Integer.toString(termindat.size())));
-	        eltern.setFortschrittSetzen(0);
-	        //eltern.setFortschrittZeigen(true);
+	        if(ldirektsenden){
+		        eltern.getFortschritt().setStringPainted(true);
+		        //eltern.getFortschritt().setIndeterminate(true);
+		        eltern.setFortschrittZeigen(true);
+		        eltern.setFortschrittRang(0, Long.valueOf(Integer.toString(termindat.size())));
+		        eltern.setFortschrittSetzen(0);
+		        //eltern.setFortschrittZeigen(true);	        	
+	        }
 	        /**********/
 	        
 	        IDocumentService documentService = null;;
@@ -120,7 +123,9 @@ SuchenSeite eltern;
 			if(tbl.length != AnzahlTabellen){
 				JOptionPane.showMessageDialog (null, "Anzahl Tabellen stimmt nicht mit der Vorlagen.ini überein.\nDruck nicht m�glich");
 				textDocument.close();
-				eltern.cursorWait(false);
+		        if(ldirektsenden){
+		        	eltern.cursorWait(false);
+		        }
 				return;
 			}
 			tabName = new String[AnzahlTabellen];
@@ -195,7 +200,9 @@ SuchenSeite eltern;
 
 				aktTerminInTabelle = aktTerminInTabelle+1;
 				aktTermin = aktTermin+1;
-				eltern.setFortschrittSetzen(aktTermin);				
+		        if(ldirektsenden){
+		        	eltern.setFortschrittSetzen(aktTermin);	
+		        }
 				if(aktTermin >= anzahl){
 					break;
 				}
@@ -344,16 +351,20 @@ SuchenSeite eltern;
 								}
 							}.execute();
 							*/
-							eltern.setFortschrittSetzen(termindat.size());
-							eltern.setFortschrittZeigen(false);
-					        eltern.getFortschritt().setStringPainted(true);
+							if(ldirektsenden){
+								eltern.setFortschrittSetzen(termindat.size());
+								eltern.setFortschrittZeigen(false);
+						        eltern.getFortschritt().setStringPainted(true);
+								eltern.cursorWait(false);	
+							}
 							this.termindat = null;
-							eltern.cursorWait(false);
 						}else{
-							eltern.cursorWait(false);
-							eltern.setFortschrittZeigen(false);
-					        eltern.getFortschritt().setStringPainted(true);
-							this.termindat = null;
+							if(ldirektsenden){
+								eltern.cursorWait(false);
+								eltern.setFortschrittZeigen(false);
+						        eltern.getFortschritt().setStringPainted(true);
+							}
+							this.termindat = null;		
 							document.getFrame().getXFrame().getContainerWindow().setVisible(true);
 							
 						}
@@ -396,7 +407,9 @@ SuchenSeite eltern;
 									JOptionPane.showMessageDialog(null, "Fehler bei der Aufbereitung des Terminplanes als PDF Datei existiert nicht");
 									return null;
 								}
-								sendeEmail();
+								if(ldirektsenden){
+									sendeEmail();	
+								}
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 								JOptionPane.showMessageDialog(null, "Fehler beim Senden und Schließen des Terminplanes\nFehler: "+e.getMessage());
@@ -408,13 +421,15 @@ SuchenSeite eltern;
 						return null;
 					}
 				}.execute();
-				
-				eltern.setFortschrittZeigen(false);
-		        eltern.getFortschritt().setStringPainted(true);
+				if(ldirektsenden){
+					eltern.setFortschrittZeigen(false);
+			        eltern.getFortschritt().setStringPainted(true);				
+				}
 				this.termindat = null;
 			}
-	
-			eltern.cursorWait(false);
+			if(ldirektsenden){
+				eltern.cursorWait(false);	
+			}
 		}
 	
 	private void sendeEmail(){
@@ -539,7 +554,10 @@ SuchenSeite eltern;
 		try{
 			oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure,useport);
 			oMail = null;
-			eltern.cursorWait(false);
+			if(ldirektsenden){
+				eltern.cursorWait(false);
+			}
+			
 			f = new File(anhang[0]);
 			if(f.exists()){
 				f.delete();
@@ -549,7 +567,9 @@ SuchenSeite eltern;
 			}
 		
 		}catch(Exception e){
-			eltern.cursorWait(false);
+			if(ldirektsenden){
+				eltern.cursorWait(false);
+			}
 			JOptionPane.showMessageDialog (null, "Der Emailversand der Terminliste ist fehlgeschlagen!!!!!\n");
 			e.printStackTrace( );
 		}
