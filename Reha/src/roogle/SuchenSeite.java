@@ -86,6 +86,7 @@ import jxTableTools.ZeitCancelCellEditor;
 import jxTableTools.ZeitTableCellEditor;
 
 import org.jdesktop.swingworker.SwingWorker;
+import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.ColorHighlighter;
@@ -102,6 +103,9 @@ import org.jdesktop.swingx.renderer.StringValue;
 import org.jdesktop.swingx.renderer.StringValues;
 import org.jdesktop.swingx.table.TableColumnExt;
 import org.therapi.reha.patient.LadeProg;
+
+
+
 
 
 
@@ -130,6 +134,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import dialoge.EmailDialog;
 import dialoge.InfoDialog;
 import emailHandling.EmailSendenExtern;
 @SuppressWarnings({ "unchecked", "unused" })
@@ -1332,6 +1337,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				}
 			}
 			/*****************************/
+			/*
 			JTextField tField = new JTextField(25);
  			tField.setText(emailaddy);
       		JCheckBox  cField = new JCheckBox("mit Benachrichtigung vor dem Termin");
@@ -1351,6 +1357,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			}else{
 				return false;
 			}
+			*/
 			
 			/*****************************/
 			StringBuffer buf = new StringBuffer();
@@ -1359,7 +1366,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4),datewarning));
 			}
 			buf.append(ICalGenerator.macheEnd());
-			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/TherapieTermine.ics");
+			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
             //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
             OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
 			BufferedWriter bw = null;
@@ -1375,13 +1382,14 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			
 			
 			//emailaddy = JOptionPane.showInputDialog(null,"Diese Email-Adresse verwenden:" , emailaddy);
+			/*
 			try{
 				if(emailaddy.equals("")){
 				return false;
 				}
 			}catch(java.lang.NullPointerException ex){
 				return false;
-			}
+			}*/
 			String smtphost = SystemConfig.hmEmailExtern.get("SmtpHost");
 			String authent = SystemConfig.hmEmailExtern.get("SmtpAuth");
 			String benutzer = SystemConfig.hmEmailExtern.get("Username") ;				
@@ -1394,9 +1402,29 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			//String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;
-			String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/TherapieTermine.ics","TherapieTermine.ics"};
+			String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(aufDat);
+			//(JXFrame owner,String titel,String recipients, String betreff, String mailtext,ArrayList<String[]> attachments,int postfach, boolean direktsenden) {
+			EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"ICS-Datei der Behandlungstermin",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
+					(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
+			emlDlg.setPreferredSize(new Dimension(575,370));
+			emlDlg.setLocationRelativeTo(null);
+			//emlDlg.setLocation(pt.x-350,pt.y+100);
+			emlDlg.pack();
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					//emlDlg.setTextCursor(0);		
+				}
+			});
+			
+			emlDlg.setVisible(true);
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					//emlDlg.setTextCursor(0);		
+				}
+			});
+			/*
 			EmailSendenExtern oMail = new EmailSendenExtern();
 			try{
 				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, (String)SystemConfig.hmIcalSettings.get("betreff"),
@@ -1411,7 +1439,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				return false;
 			}			
 			return true;
-			
+			*/
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null, "Fehler beim iCal-Export und Versand");
 		}

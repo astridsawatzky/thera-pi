@@ -15,7 +15,7 @@ public class ICalGenerator {
 			SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+", CRLF"+
 			"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon");
 			*/
-	static String ort = SystemConfig.hmFirmenDaten.get("Strasse")+", "+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort");
+	static String ort = SystemConfig.hmFirmenDaten.get("Strasse")+" CRLF"+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort");
 	
 	public static String macheKopf(){
 		return "BEGIN:VCALENDAR"+System.getProperty("line.separator")+
@@ -55,7 +55,7 @@ public class ICalGenerator {
 			buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
 			buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
 			//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
-			buf.append("LOCATION:"+ort.replace("CRLF", "\\ " )+System.getProperty("line.separator"));
+			buf.append("LOCATION:"+ort.replace("CRLF", "\\n" )+System.getProperty("line.separator"));
 			buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
 			if(warnen){
 				buf.append(macheWarnung((String) SystemConfig.hmIcalSettings.get("warnzeitpunkt")));

@@ -2,6 +2,7 @@ package terminKalender;
 
 import hauptFenster.Reha;
 
+import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
@@ -29,6 +30,7 @@ import javax.swing.SwingUtilities;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import dialoge.EmailDialog;
 import emailHandling.EmailSendenExtern;
 import systemEinstellungen.SystemConfig;
 
@@ -61,7 +63,7 @@ public class iCalRehaExporter {
 					 }
 					 erzeugeIcs(); 
 					 String emailaddy = Reha.thisClass.patpanel.patDaten.get(50);
-					 
+					 /*
 					 JTextField tField = new JTextField(25);
 					 tField.setText(emailaddy);
 			      		
@@ -80,6 +82,7 @@ public class iCalRehaExporter {
 					 }
 					 
 					 Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+					 */
 					 
 					 String smtphost = SystemConfig.hmEmailExtern.get("SmtpHost");
 					 String authent = SystemConfig.hmEmailExtern.get("SmtpAuth");
@@ -93,9 +96,11 @@ public class iCalRehaExporter {
 					 //String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
 					 boolean authx = (authent.equals("0") ? false : true);
 					 boolean bestaetigen = false;
-					 String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/RehaTermine.ics","RehaTermine.ics"};
+					 String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-RehaTermine.ics","iCal-RehaTermine.ics"};
 					 ArrayList<String[]> attachments = new ArrayList<String[]>();
 					 attachments.add(aufDat);
+					 
+					 /*
 					 EmailSendenExtern oMail = new EmailSendenExtern();
 					 try{
 						 String mailtext = SystemConfig.hmAdrPDaten.get("<Pbanrede>")+
@@ -113,6 +118,27 @@ public class iCalRehaExporter {
 					 }
 					 Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 					 JOptionPane.showMessageDialog(null, "ICS-Datei wurde per Email erfolgreich versendet");
+					 */
+					 Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+					 EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"Ihre Reha-Termine als ICS Datei",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
+								(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
+						emlDlg.setPreferredSize(new Dimension(575,370));
+						emlDlg.setLocationRelativeTo(null);
+						//emlDlg.setLocation(pt.x-350,pt.y+100);
+						emlDlg.pack();
+						SwingUtilities.invokeLater(new Runnable(){
+							public void run(){
+								//emlDlg.setTextCursor(0);		
+							}
+						});
+						
+						emlDlg.setVisible(true);
+						SwingUtilities.invokeLater(new Runnable(){
+							public void run(){
+								//emlDlg.setTextCursor(0);		
+							}
+						});
+					 
 				 }catch(Exception ex){
 					 Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 					 JOptionPane.showMessageDialog(null,"Es ist ein Fehler beim ICS-Export aufgetreten");
@@ -145,7 +171,7 @@ public class iCalRehaExporter {
 		buf.append(ICalGenerator.macheEnd());
 		FileOutputStream outputFile;
 		try {
-			outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/RehaTermine.ics");
+			outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/iCal-RehaTermine.ics");
 	        OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
 			BufferedWriter bw = null;
 			bw = new BufferedWriter(out);

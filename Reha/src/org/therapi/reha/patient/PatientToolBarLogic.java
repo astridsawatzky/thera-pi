@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,7 @@ import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 import terminKalender.iCalRehaExporter;
+import dialoge.EmailDialog;
 import dialoge.KuerzelNeu;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
@@ -252,6 +254,49 @@ public class PatientToolBarLogic {
 			
 		}.execute();
 	}
+	public void doEmail(){
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				try{
+					//nur wenn SMS-Service aktiviert ist
+					
+					//nur wenn einen Mobilfunknummer eingetragen ist
+					if(patientHauptPanel.patDaten.size() > 0){
+						Point pt = patientHauptPanel.jbut[4].getLocationOnScreen();
+						String stitel = ("SMS für Patient erstellen"); 
+						
+						final EmailDialog emlDlg = 
+								new EmailDialog(Reha.thisFrame,stitel,"Reha-ICS","Betreff","Emailtext",new ArrayList<String[]>(),0,false);
+						emlDlg.setPreferredSize(new Dimension(575,370));
+						emlDlg.setLocation(pt.x-350,pt.y+100);
+						emlDlg.pack();
+						SwingUtilities.invokeLater(new Runnable(){
+							public void run(){
+								//emlDlg.setTextCursor(0);		
+							}
+						});
+						
+						emlDlg.setVisible(true);
+						SwingUtilities.invokeLater(new Runnable(){
+							public void run(){
+								//emlDlg.setTextCursor(0);		
+							}
+						});
+					}else{
+						JOptionPane.showMessageDialog(null,"Keine Mobilfunknummer im Patientenstamm hinterlegt");
+					}
+						
+								
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+
+				return null;
+			}
+			
+		}.execute();
+	}
 	class ToolsDlgPatient{
 		public ToolsDlgPatient(String command,Point pt){
 			Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
@@ -299,6 +344,7 @@ public class PatientToolBarLogic {
 				}
 				break;
 			case 4:
+				//doEmail();
 				new iCalRehaExporter();
 				break;
 				

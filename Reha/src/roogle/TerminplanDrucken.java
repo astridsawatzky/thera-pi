@@ -41,6 +41,7 @@ import emailHandling.EmailSendenExtern;
 public class TerminplanDrucken extends Thread implements Runnable {
 private Vector<TermObjekt> termindat = null;
 private boolean ldrucken; 
+private boolean ldirektsenden;
 private String patient;
 private String rezept;
 public int  seiten = 1;

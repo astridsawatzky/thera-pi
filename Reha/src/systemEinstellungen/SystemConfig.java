@@ -787,7 +787,16 @@ public class SystemConfig {
 			hmIcalSettings.put("praefixbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Praefixbeireha").equals("0") ? false : true) );
 			hmIcalSettings.put("warnenbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnenbeireha").equals("0") ? false : true) );
 			hmIcalSettings.put("rehaplanverzeichnis", (String)icalini.getStringProperty("ICalendar", "Rehaplanverzeichnis"));
-			
+			if( icalini.getStringProperty("ICalendar", "Direktsenden") == null ){
+				hmIcalSettings.put("direktsenden",false);
+			}else{
+				hmIcalSettings.put("direktsenden",(Boolean)  (icalini.getStringProperty("ICalendar", "Direktsenden").equals("0") ? false : true) );
+			}
+			if( icalini.getStringProperty("ICalendar", "Postfach") == null ){
+				hmIcalSettings.put("postfach",0);
+			}else{
+				hmIcalSettings.put("postfach",(Integer)  Integer.parseInt((String)icalini.getStringProperty("ICalendar", "Postfach")) );
+			}
 			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "TextzeilenAnzahl"));
 			String beschreibung = "";
 			for(int i = 0; i < zeilen; i++){
