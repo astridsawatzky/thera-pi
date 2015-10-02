@@ -89,6 +89,33 @@ public static String MinutenZuZeit(int minuten){
 return sret;	
 }
 
+public static String ZeitPlusMinuten(String zeit,String minuten){
+	long lmin1 = ZeitFunk.MinutenSeitMitternacht(zeit);
+	long lmin2 = StoL(minuten);
+	return ZeitFunk.MinutenZuZeit(LtoI(lmin1+lmin2)).substring(0,5);
+}
+public static String ZeitMinusMinuten(String zeit,String minuten){
+	long lmin1 = ZeitFunk.MinutenSeitMitternacht(zeit);
+	long lmin2 = StoL(minuten);
+	return ZeitFunk.MinutenZuZeit(LtoI(lmin1-lmin2)).substring(0,5);
+}
+
+public static int LtoI(long l){
+	return Integer.parseInt(Long.toString(l));
+}
+public static int StoI(String s){
+	return Integer.parseInt(s);
+}
+public static long ItoL(int i){
+	return Long.parseLong(Integer.toString(i));
+}
+public static long StoL(String s){
+	return Long.parseLong(s);
+}
+public static String LtoS(long l){
+	return Long.toString(l);
+}
+
 public static void main(String[] argv){
 	/*
 	long differenz = 0;
