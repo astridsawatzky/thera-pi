@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
@@ -34,6 +36,7 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
+import org.therapi.reha.patient.LadeProg;
 import org.therapi.reha.patient.PatientToolBarLogic;
 
 import systemEinstellungen.SystemConfig;
@@ -225,7 +228,36 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		content.add(span,cc.xywh(2,8,5,2));
 		
 		content.add(new JLabel("Dateianhang:"),cc.xy(8,6));
-		jList = new JList();	
+		jList = new JList();
+		jList.addMouseListener(new MouseListener(){
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getButton()==1 && e.getClickCount()==2){
+					starteAnhang(jList.getSelectedIndex());
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+			}
+			
+		});
 		
 		//jList.setListData(new String[]{"Datei 1","Datei 2"});
 		span = JCompTools.getTransparentScrollPane(jList);
@@ -394,6 +426,26 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	public void windowOpened(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	private void starteAnhang(int wahl){
+		try{
+			String test = attachments.get(wahl)[1].toLowerCase();
+			System.out.println(attachments.get(wahl)[0].replace("\\", "/"));
+			if(test.endsWith(".ics")){
+				Runtime.getRuntime().exec("C:/Windows/notepad.exe "+attachments.get(wahl)[0].replace("\\", "/"));
+			}else if(test.endsWith(".pdf")){
+				
+			}else if(test.endsWith(".odt")){
+				
+			}else{
+					
+			}
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+
 	}
 
 }

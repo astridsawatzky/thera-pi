@@ -85,7 +85,7 @@ public class ICalGenerator {
 			buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
 			buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
 			//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
-			buf.append("LOCATION:"+ort.replace("CRLF", "\\ " )+System.getProperty("line.separator"));
+			buf.append("LOCATION:"+ort.replace("CRLF", "\\n" )+System.getProperty("line.separator"));
 			buf.append("DESCRIPTION:"+beschreibung.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
 			if(warnen){
 				buf.append(macheWarnung((String) SystemConfig.hmIcalSettings.get("warnzeitpunkt")));
