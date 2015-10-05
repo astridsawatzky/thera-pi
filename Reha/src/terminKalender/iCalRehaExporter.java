@@ -63,65 +63,20 @@ public class iCalRehaExporter {
 					 }
 					 erzeugeIcs(); 
 					 String emailaddy = Reha.thisClass.patpanel.patDaten.get(50);
-					 /*
-					 JTextField tField = new JTextField(25);
-					 tField.setText(emailaddy);
-			      		
-					 JPanel myPanel = new JPanel();
-					 FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,5dlu,p,2dlu,p,15dlu");
-					 CellConstraints cc = new CellConstraints();
-					 myPanel.setLayout(fm);
-					 myPanel.add(new JLabel("Emailadresse:"),cc.xy(2, 2));
-					 myPanel.add(tField, cc.xy(4,2));
-			      		
-					 int result = JOptionPane.showConfirmDialog(null, myPanel,"Bitte Eingaben überprüfen", JOptionPane.OK_CANCEL_OPTION);
-					 if(result == JOptionPane.OK_OPTION){
-						 emailaddy = tField.getText();
-					 }else{
-						 return;
-					 }
+					
 					 
-					 Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
-					 */
-					 
-					 String smtphost = SystemConfig.hmEmailExtern.get("SmtpHost");
-					 String authent = SystemConfig.hmEmailExtern.get("SmtpAuth");
-					 String benutzer = SystemConfig.hmEmailExtern.get("Username") ;				
-					 String pass1 = SystemConfig.hmEmailExtern.get("Password");
-					 String sender = SystemConfig.hmEmailExtern.get("SenderAdresse"); 
-					 String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
-					 String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
-					 //String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
 					 String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
-					 //String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
-					 boolean authx = (authent.equals("0") ? false : true);
-					 boolean bestaetigen = false;
+										 
 					 String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-RehaTermine.ics","iCal-RehaTermine.ics"};
 					 ArrayList<String[]> attachments = new ArrayList<String[]>();
 					 attachments.add(aufDat);
+					 String mailtext = SystemConfig.hmAdrPDaten.get("<Pbanrede>")+
+							 ",\nwie gewünscht senden wir Ihnen hiermit Ihre Reha-Termine im RTA\n\nMit freundlichen Grüßen\nIhr Planungsteam im RTA ";
 					 
-					 /*
-					 EmailSendenExtern oMail = new EmailSendenExtern();
-					 try{
-						 String mailtext = SystemConfig.hmAdrPDaten.get("<Pbanrede>")+
-								 ",\nwie gewünscht senden wir Ihnen hiermit Ihre Reha-Termine im RTA\n\nMit freundlichen Grüßen\nIhr Planungsteam im RTA ";
-						 oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, "Ihre Reha-Termine als ICS Datei",
-								 mailtext,attachments,authx,bestaetigen,secure,useport);
-						 oMail = null;
-					 }catch(Exception e){
-						 e.printStackTrace( );
-						 Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
-						 JOptionPane.showMessageDialog(null, "Emailversand fehlgeschlagen\n\n"+
-				        			"Mögliche Ursachen:\n"+
-				        			"- falsche Angaben zu Ihrem Emailpostfach und/oder dem Provider\n"+
-				        			"- Sie haben keinen Kontakt zum Internet"+"\n\nFehlertext:"+e.getLocalizedMessage());
-					 }
-					 Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
-					 JOptionPane.showMessageDialog(null, "ICS-Datei wurde per Email erfolgreich versendet");
-					 */
+					 
 					 Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 					 EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"Ihre Reha-Termine als ICS Datei",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
-								(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
+								mailtext,attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
 						emlDlg.setPreferredSize(new Dimension(575,370));
 						emlDlg.setLocationRelativeTo(null);
 						//emlDlg.setLocation(pt.x-350,pt.y+100);

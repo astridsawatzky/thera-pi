@@ -116,6 +116,8 @@ import org.therapi.reha.patient.LadeProg;
 
 
 
+
+
 import rechteTools.Rechte;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
@@ -129,6 +131,7 @@ import terminKalender.DatFunk;
 import terminKalender.ZeitFunk;
 import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
+import abrechnung.AbrechnungDlg;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -208,6 +211,9 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	
 	public InfoDialog infoDlg = null;
 	public KeyListener kl = null;
+	
+	public AbrechnungDlg abrDlg = null;
+	
 	SuchenSeite(RoogleFenster xeltern){
 		super();
 		activateKl();
@@ -1283,13 +1289,16 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	
 	private boolean icalExport(){
 		try{
+			
 			exportVectorInit();
 			int lang = vecWahl.size();
 			if(lang <=0){
 				JOptionPane.showMessageDialog(null, "Keine Termine zum iCal-Export und Versand ausgewählt");
 				return false;
 			}
-			 
+			
+			
+			
 			Vector<Vector<String>> icalVec = new Vector<Vector<String>>();
 			Vector<String> icalDummy = new Vector<String>();
 			String emailaddy = "";
@@ -1337,27 +1346,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				}
 			}
 			/*****************************/
-			/*
-			JTextField tField = new JTextField(25);
- 			tField.setText(emailaddy);
-      		JCheckBox  cField = new JCheckBox("mit Benachrichtigung vor dem Termin");
-      		cField.setSelected((Boolean) SystemConfig.hmIcalSettings.get("warnen"));
-      		JPanel myPanel = new JPanel();
-      		FormLayout fm = new FormLayout("5dlu,p,5dlu,p:g,5dlu","5dlu,p,5dlu,p,2dlu,p,15dlu");
-      		CellConstraints cc = new CellConstraints();
-      		myPanel.setLayout(fm);
-      		myPanel.add(new JLabel("Emailadresse:"),cc.xy(2, 2));
-      		myPanel.add(tField, cc.xy(4,2));
-      		//myPanel.add(new JLabel("Benachrichtigung:"),cc.xy(4,2));
-      		myPanel.add(cField,cc.xy(4,4)); 
-			int result = JOptionPane.showConfirmDialog(null, myPanel,"Bitte Eingaben überprüfen", JOptionPane.OK_CANCEL_OPTION);
-			if(result == JOptionPane.OK_OPTION){
-				emailaddy = tField.getText();
-				datewarning = cField.isSelected();
-			}else{
-				return false;
-			}
-			*/
+			
 			
 			/*****************************/
 			StringBuffer buf = new StringBuffer();
@@ -1377,78 +1366,61 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			bw.close();
 			out.close();
 			outputFile.close();
-			
- 			
-			
-			
-			//emailaddy = JOptionPane.showInputDialog(null,"Diese Email-Adresse verwenden:" , emailaddy);
-			/*
-			try{
-				if(emailaddy.equals("")){
-				return false;
-				}
-			}catch(java.lang.NullPointerException ex){
-				return false;
-			}*/
-			String smtphost = SystemConfig.hmEmailExtern.get("SmtpHost");
-			String authent = SystemConfig.hmEmailExtern.get("SmtpAuth");
-			String benutzer = SystemConfig.hmEmailExtern.get("Username") ;				
-			String pass1 = SystemConfig.hmEmailExtern.get("Password");
-			String sender = SystemConfig.hmEmailExtern.get("SenderAdresse"); 
-			String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
-			String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
-			//String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
+
 			String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
-			//String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
-			boolean authx = (authent.equals("0") ? false : true);
-			boolean bestaetigen = false;
 			String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(aufDat);
-			//Einbauen wenn der User auch eine PDF möchte muß sowohl in INI als auch in SystemConfig
 			if((Boolean) SystemConfig.hmIcalSettings.get("pdfbeilegen")){
-				//druckVectorInit();	
 				auswahlDrucken(false,false);
 				attachments.add(new String[] {Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf","Terminplan.pdf"});
 			}
-			//(JXFrame owner,String titel,String recipients, String betreff, String mailtext,ArrayList<String[]> attachments,int postfach, boolean direktsenden) {
 			EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"ICS-Datei der Behandlungstermin",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
 					(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
 			emlDlg.setPreferredSize(new Dimension(575,370));
 			emlDlg.setLocationRelativeTo(null);
 			//emlDlg.setLocation(pt.x-350,pt.y+100);
 			emlDlg.pack();
-			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
-					//emlDlg.setTextCursor(0);		
-				}
-			});
+			final EmailDialog femlDlg = emlDlg;
 			
-			emlDlg.setVisible(true);
-			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
-					//emlDlg.setTextCursor(0);		
-				}
-			});
-			/*
-			EmailSendenExtern oMail = new EmailSendenExtern();
-			try{
-				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, (String)SystemConfig.hmIcalSettings.get("betreff"),
-						(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,authx,bestaetigen,secure,useport);
-				oMail = null;
-			}catch(Exception e){
-				e.printStackTrace( );
-				JOptionPane.showMessageDialog(null, "Emailversand fehlgeschlagen\n\n"+
-	        			"Mögliche Ursachen:\n"+
-	        			"- falsche Angaben zu Ihrem Emailpostfach und/oder dem Provider\n"+
-	        			"- Sie haben keinen Kontakt zum Internet"+"\n\nFehlertext:"+e.getLocalizedMessage());
-				return false;
-			}			
-			return true;
-			*/
+			if((Boolean) SystemConfig.hmIcalSettings.get("direktsenden")){
+				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+				new SwingWorker<Void,Void>(){
+					@Override
+					protected Void doInBackground() throws Exception {
+						abrDlg = new AbrechnungDlg();
+						abrDlg.pack();
+						abrDlg.setzeLabel("starte Aufbereitung Termin-Email");
+						abrDlg.setVisible(true);
+						return null;
+					}
+					
+				}.execute();
+				SwingUtilities.invokeLater(new Runnable(){
+					public void run(){
+						try{
+							femlDlg.senden();
+							if(abrDlg != null){
+								abrDlg.setVisible(false);
+								abrDlg.dispose();
+								abrDlg = null;								
+							}
+							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+							JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");
+						}catch(Exception ex){
+							ex.printStackTrace();
+						}
+					}
+				});
+				
+			}else{
+				femlDlg.setVisible(true);				
+			}
+			
 		}catch(Exception ex){
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Fehler beim iCal-Export und Versand");
+			return false;
 		}
 		return false;
 	}

@@ -5,6 +5,7 @@ import hauptFenster.Reha;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -34,6 +35,8 @@ import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
+import oOorgTools.OOTools;
+
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
@@ -45,6 +48,7 @@ import org.therapi.reha.patient.PatientToolBarLogic;
 
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
+import abrechnung.AbrechnungDlg;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -85,6 +89,8 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	ArrayList<String[]> attachments;
 	//private String info = null;
 	private String nummer = "";
+	
+	public AbrechnungDlg abrDlg = null;
 
 	public EmailDialog(JXFrame owner,String titel,String recipients, String betreff, String mailtext,ArrayList<String[]> attachments,int postfach, boolean direktsenden) {
 		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
@@ -147,46 +153,76 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		if(test.endsWith(".ics")){
 			reticon = (ImageIcon) SystemConfig.hmSysIcons.get("patnachrichten");
 		}else if(test.endsWith(".pdf")){
-			reticon = (ImageIcon) SystemConfig.hmSysIcons.get("patnachrichten");
+			reticon = (ImageIcon) new ImageIcon(SystemConfig.hmSysIcons.get("pdf").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
 		}else if(test.endsWith(".odt")){
-			reticon = (ImageIcon) SystemConfig.hmSysIcons.get("patnachrichten");
+			reticon = (ImageIcon) new ImageIcon(SystemConfig.hmSysIcons.get("ooowriter").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
+		}else if(test.endsWith(".ods")){
+			reticon = (ImageIcon) new ImageIcon(SystemConfig.hmSysIcons.get("ooocalc").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
 		}else{
 			reticon = (ImageIcon) SystemConfig.hmSysIcons.get("patnachrichten");	
 		}
 		return reticon;
 	}
 	
-	private void senden(){
+	public void senden(){
+		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		this.setCursor(Reha.thisClass.wartenCursor);
+
+		HashMap<String,String> hmPostfach = null;
+		if(postfach==0){
+			hmPostfach = (HashMap<String,String>) SystemConfig.hmEmailExtern.clone();
+		}else{
+			hmPostfach = (HashMap<String,String>) SystemConfig.hmEmailIntern.clone();
+		}
 		String emailaddy = "";
-		String smtphost = SystemConfig.hmEmailExtern.get("SmtpHost");
-		String authent = SystemConfig.hmEmailExtern.get("SmtpAuth");
+		String smtphost = hmPostfach.get("SmtpHost");
+		String authent = hmPostfach.get("SmtpAuth");
 		String benutzer = SystemConfig.hmEmailExtern.get("Username") ;				
-		String pass1 = SystemConfig.hmEmailExtern.get("Password");
-		String sender = SystemConfig.hmEmailExtern.get("SenderAdresse"); 
-		String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
-		String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
+		String pass1 = hmPostfach.get("Password");
+		String sender = hmPostfach.get("SenderAdresse"); 
+		String secure = hmPostfach.get("SmtpSecure");
+		String useport = hmPostfach.get("SmtpPort");
 		//String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
 		String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
 		//String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
 		boolean authx = (authent.equals("0") ? false : true);
 		boolean bestaetigen = false;
-		String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/RehaTermine.ics","RehaTermine.ics"};
-		ArrayList<String[]> attachments = new ArrayList<String[]>();
-		attachments.add(aufDat);
+
 		EmailSendenExtern oMail = new EmailSendenExtern();
 		try{
+			/*
 			 String mailtext = SystemConfig.hmAdrPDaten.get("<Pbanrede>")+
-					 ",\nwie gewünscht senden wir Ihnen hiermit Ihre Reha-Termine im RTA\n\nMit freundlichen Grüßen\nIhr Planungsteam im RTA ";
-			 oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, "Ihre Reha-Termine als ICS Datei",
-					 mailtext,attachments,authx,bestaetigen,secure,useport);
+					 ",\nwie gewünscht senden wir Ihnen hiermit Ihre Reha-Termine im RTA\n\nMit freundlichen Grüßen\nIhr Planungsteam im RTA ";*/
+			 oMail.sendMail(smtphost, benutzer, pass1, sender, tf[0].getText(), tf[1].getText(),
+					 jta.getText(),attachments,authx,bestaetigen,secure,useport);
 			 oMail = null;
 		}catch(Exception e){
 			 e.printStackTrace( );
 			 Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			 if(abrDlg != null){
+				 abrDlg.setVisible(false);
+				 abrDlg.dispose();
+				 abrDlg = null;				 
+			 }
 			 JOptionPane.showMessageDialog(null, "Emailversand fehlgeschlagen\n\n"+
 	        			"Mögliche Ursachen:\n"+
 	        			"- falsche Angaben zu Ihrem Emailpostfach und/oder dem Provider\n"+
 	        			"- Sie haben keinen Kontakt zum Internet"+"\n\nFehlertext:"+e.getLocalizedMessage());
+		}
+		if(!(Boolean) SystemConfig.hmIcalSettings.get("direktsenden")){
+			if(abrDlg != null){
+				abrDlg.setVisible(false);
+				abrDlg.dispose();
+				abrDlg = null;				
+			}
+			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			int frage = JOptionPane.showConfirmDialog(null,"Versand erfolgreich abgeschlossen.\n\nWollen Sie den Email-Dialog jetzt schließen?","Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
+			if(frage == JOptionPane.YES_OPTION){
+				FensterSchliessen("dieses");
+			}			
+		}else{
+			FensterSchliessen("dieses");
+			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 		}
 	}
 	
@@ -325,7 +361,9 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		return content;		
 	
 	}
-
+	public EmailDialog getInstance(){
+		return this;
+	}
 	
 	private void installListener(){
 		al = new ActionListener(){
@@ -333,15 +371,25 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 			public void actionPerformed(ActionEvent arg0) {
 				String cmd = arg0.getActionCommand();
 				if(cmd.equals("senden")){
-					//doSenden();
-					return;
+					new SwingWorker<Void,Void>(){
+						@Override
+						protected Void doInBackground() throws Exception {
+							abrDlg = new AbrechnungDlg();
+							abrDlg.pack();
+							abrDlg.setLocationRelativeTo(getInstance());
+							abrDlg.setzeLabel("starte Aufbereitung Termin-Email");
+							abrDlg.setVisible(true);
+							return null;
+						}
+					}.execute();
+					senden();
 				}else if(cmd.equals("abbrechen")){
 					FensterSchliessen("dieses");
 					return;
 				}else if(cmd.equals("attachneu")){
-					
+					JOptionPane.showMessageDialog(null, "Funktion nicht nicht aktiv");
 				}else if(cmd.equals("attachdelete")){
-					
+					JOptionPane.showMessageDialog(null, "Funktion nicht nicht aktiv");
 				}
 				
 			}
@@ -435,7 +483,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	private void starteAnhang(int wahl){
 		try{
 			String test = attachments.get(wahl)[1].toLowerCase();
-			System.out.println(attachments.get(wahl)[0].replace("\\", "/"));
+			//System.out.println(attachments.get(wahl)[0].replace("\\", "/"));
 			if(test.endsWith(".ics")){
 				Runtime.getRuntime().exec("C:/Windows/notepad.exe "+attachments.get(wahl)[0].replace("\\", "/"));
 			}else if(test.endsWith(".pdf")){
@@ -460,9 +508,11 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 					
 				}.execute();				
 			}else if(test.endsWith(".odt")){
-				
+				OOTools.starteStandardFormular(attachments.get(wahl)[0].replace("\\", "/"), null);
+			}else if(test.endsWith(".ods")){
+				OOTools.starteStandardFormular(test, null);
 			}else{
-					
+				Runtime.getRuntime().exec("C:/Windows/notepad.exe "+attachments.get(wahl)[0].replace("\\", "/"));	
 			}
 			
 		}catch(Exception ex){
