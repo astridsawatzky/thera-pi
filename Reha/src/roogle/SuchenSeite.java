@@ -1385,6 +1385,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			
 			if((Boolean) SystemConfig.hmIcalSettings.get("direktsenden")){
 				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+				/*
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -1396,15 +1397,19 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					}
 					
 				}.execute();
+				*/
+				
 				SwingUtilities.invokeLater(new Runnable(){
 					public void run(){
 						try{
 							femlDlg.senden();
+							/*
 							if(abrDlg != null){
 								abrDlg.setVisible(false);
 								abrDlg.dispose();
 								abrDlg = null;								
 							}
+							*/
 							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 							JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");
 						}catch(Exception ex){

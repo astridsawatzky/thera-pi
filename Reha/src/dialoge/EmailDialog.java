@@ -15,17 +15,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -131,20 +136,26 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		regleJList(0);
 	}
 	private void regleJList(int selection){
-		if(attachments.size() > 0){
-			Object[] result = new Object[attachments.size()];
-			Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
-			for(int i = 0; i < attachments.size(); i++){
-				icons.put(attachments.get(i)[1], (ImageIcon)findIcon(attachments.get(i)[1]));
+		try{
+			if(attachments.size() > 0){
+				Object[] result = new Object[attachments.size()];
+				Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
+				for(int i = 0; i < attachments.size(); i++){
+					icons.put(attachments.get(i)[1], (ImageIcon)findIcon(attachments.get(i)[1]));
+				}
+				for(int i = 0; i < attachments.size(); i++){
+					result[i] = attachments.get(i)[1];
+				}
+				jList.setCellRenderer(new IconListRenderer(icons));	
+				jList.setListData(result);
+				jList.setSelectedIndex(selection);
+			}else{
+				jList.setModel(new DefaultListModel());
+				jList.repaint();
 			}
-			for(int i = 0; i < attachments.size(); i++){
-				result[i] = attachments.get(i)[1];
-			}
-			jList.setCellRenderer(new IconListRenderer(icons));	
-			jList.setListData(result);
-			jList.setSelectedIndex(selection);
-		}else{
 			
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 	}
 	private ImageIcon findIcon(String datei){
@@ -371,6 +382,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 			public void actionPerformed(ActionEvent arg0) {
 				String cmd = arg0.getActionCommand();
 				if(cmd.equals("senden")){
+					/*
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -382,19 +394,72 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 							return null;
 						}
 					}.execute();
+					*/
 					senden();
 				}else if(cmd.equals("abbrechen")){
 					FensterSchliessen("dieses");
 					return;
 				}else if(cmd.equals("attachneu")){
-					JOptionPane.showMessageDialog(null, "Funktion noch nicht aktiv");
+					//JOptionPane.showMessageDialog(null, "Funktion noch nicht aktiv");
+					regleAttachNeu();
 				}else if(cmd.equals("attachdelete")){
-					JOptionPane.showMessageDialog(null, "Funktion noch nicht aktiv");
+					//JOptionPane.showMessageDialog(null, "Funktion noch nicht aktiv");
+					regleAttachDelete();
 				}
 				
 			}
 			
 		};
+	}
+	private void regleAttachDelete(){
+		try{
+			int selected = jList.getSelectedIndex();
+			if(selected >= 0){
+				attachments.remove(selected);
+				attachments.trimToSize();
+				if(attachments.size() > 0){
+					regleJList(attachments.size()-1);
+				}else{
+					regleJList(-1);
+				}
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	private void regleAttachNeu(){
+		String[] sret = {null,null};
+		final JFileChooser chooser = new JFileChooser("Dateianhang wählen");
+        chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        final File file = new File(Reha.proghome);
+        chooser.setCurrentDirectory(file);
+        chooser.addPropertyChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent e) {
+                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
+                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
+                    final File f = (File) e.getNewValue();
+                }
+            }
+        });
+        chooser.setVisible(true);
+        setCursor(Reha.thisClass.normalCursor);
+        final int result = chooser.showOpenDialog(null);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File inputVerzFile = chooser.getSelectedFile();
+            if(inputVerzFile.getName().trim().equals("")){
+            	//sret = "";
+            }else{
+            	sret[1] = inputVerzFile.getName().trim();
+            	sret[0] = inputVerzFile.getPath();
+            	attachments.add(sret.clone());
+            	regleJList(attachments.size()-1);
+            }
+        }else{
+        	//sret = "";
+        }
+        chooser.setVisible(false); 
 	}
 	
 	
@@ -507,10 +572,10 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 					}
 					
 				}.execute();				
-			}else if(test.endsWith(".odt")){
-				OOTools.starteStandardFormular(attachments.get(wahl)[0].replace("\\", "/"), null);
-			}else if(test.endsWith(".ods")){
-				OOTools.starteStandardFormular(attachments.get(wahl)[0].replace("\\", "/"), null);
+			}else if(test.endsWith(".odt") || test.endsWith(".ott")){
+				new OOTools().starteWriterMitDatei(attachments.get(wahl)[0].replace("\\", "/"));
+			}else if(test.endsWith(".ods") || test.endsWith(".ots") ){
+				new OOTools().starteCalcMitDatei(attachments.get(wahl)[0].replace("\\", "/"));
 			}else{
 				Runtime.getRuntime().exec("C:/Windows/notepad.exe "+attachments.get(wahl)[0].replace("\\", "/"));	
 			}
