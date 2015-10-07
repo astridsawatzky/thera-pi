@@ -266,7 +266,14 @@ public class PatientToolBarLogic {
 						Point pt = patientHauptPanel.jbut[4].getLocationOnScreen();
 						String stitel = (""); 
 						String mailtext = SystemConfig.hmAdrPDaten.get("<Pbanrede>")+
-								 ",\n";
+								 ",\n\n\nMit freundlichen Grüßen\n\n\n"+
+								 SystemConfig.hmFirmenDaten.get("Firma1")+"\n"+
+								 SystemConfig.hmFirmenDaten.get("Strasse")+"\n"+
+								 SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+"\n"+
+								 "Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon")+"\n"+
+								 "Telefax: "+SystemConfig.hmFirmenDaten.get("Telefax")+"\n"+
+								 "Internet: "+SystemConfig.hmFirmenDaten.get("Internet")
+								 ;
 						final EmailDialog emlDlg = 
 								new EmailDialog(Reha.thisFrame,stitel,Reha.thisClass.patpanel.patDaten.get(50),"",mailtext,new ArrayList<String[]>(),
 										(Integer)SystemConfig.hmIcalSettings.get("postfach"),false);
