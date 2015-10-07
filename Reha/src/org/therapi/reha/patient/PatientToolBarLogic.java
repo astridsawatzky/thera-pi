@@ -264,27 +264,18 @@ public class PatientToolBarLogic {
 					//nur wenn einen Mobilfunknummer eingetragen ist
 					if(patientHauptPanel.patDaten.size() > 0){
 						Point pt = patientHauptPanel.jbut[4].getLocationOnScreen();
-						String stitel = ("SMS für Patient erstellen"); 
-						
+						String stitel = (""); 
+						String mailtext = SystemConfig.hmAdrPDaten.get("<Pbanrede>")+
+								 ",\n";
 						final EmailDialog emlDlg = 
-								new EmailDialog(Reha.thisFrame,stitel,"Reha-ICS","Betreff","Emailtext",new ArrayList<String[]>(),0,false);
+								new EmailDialog(Reha.thisFrame,stitel,Reha.thisClass.patpanel.patDaten.get(50),"",mailtext,new ArrayList<String[]>(),
+										(Integer)SystemConfig.hmIcalSettings.get("postfach"),false);
 						emlDlg.setPreferredSize(new Dimension(575,370));
 						emlDlg.setLocation(pt.x-350,pt.y+100);
 						emlDlg.pack();
-						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
-								//emlDlg.setTextCursor(0);		
-							}
-						});
-						
 						emlDlg.setVisible(true);
-						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
-								//emlDlg.setTextCursor(0);		
-							}
-						});
 					}else{
-						JOptionPane.showMessageDialog(null,"Keine Mobilfunknummer im Patientenstamm hinterlegt");
+						JOptionPane.showMessageDialog(null,"Kein Patient ausgewählt");
 					}
 						
 								
@@ -329,6 +320,7 @@ public class PatientToolBarLogic {
 				if(!Rechte.hatRecht(Rechte.Patient_email, true)){
 					return;
 				}
+				doEmail();
 				break;
 			case 2:
 				if(!Rechte.hatRecht(Rechte.Patient_sms, true)){
@@ -344,7 +336,6 @@ public class PatientToolBarLogic {
 				}
 				break;
 			case 4:
-				//doEmail();
 				new iCalRehaExporter();
 				break;
 				

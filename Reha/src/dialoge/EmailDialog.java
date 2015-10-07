@@ -37,6 +37,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
@@ -178,7 +179,24 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	public void senden(){
 		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		this.setCursor(Reha.thisClass.wartenCursor);
-
+		if(tf[0].getText().trim().equals("")){
+			JOptionPane.showMessageDialog(null,"Keine Empfängeradresse angegeben");
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					tf[0].requestFocus();
+				}
+			});
+			return;
+		}
+		if(tf[1].getText().trim().equals("")){
+			JOptionPane.showMessageDialog(null,"Keine Betreff angegeben");
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					tf[1].requestFocus();
+				}
+			});
+			return;
+		}
 		HashMap<String,String> hmPostfach = null;
 		if(postfach==0){
 			hmPostfach = (HashMap<String,String>) SystemConfig.hmEmailExtern.clone();
@@ -188,13 +206,13 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		String emailaddy = "";
 		String smtphost = hmPostfach.get("SmtpHost");
 		String authent = hmPostfach.get("SmtpAuth");
-		String benutzer = SystemConfig.hmEmailExtern.get("Username") ;				
+		String benutzer = hmPostfach.get("Username") ;				
 		String pass1 = hmPostfach.get("Password");
 		String sender = hmPostfach.get("SenderAdresse"); 
 		String secure = hmPostfach.get("SmtpSecure");
 		String useport = hmPostfach.get("SmtpPort");
 		//String recipient = "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
-		String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
+		String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+hmPostfach.get("SenderAdresse") : "");
 		//String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
 		boolean authx = (authent.equals("0") ? false : true);
 		boolean bestaetigen = false;
