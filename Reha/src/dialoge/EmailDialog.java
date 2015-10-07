@@ -387,9 +387,9 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 					FensterSchliessen("dieses");
 					return;
 				}else if(cmd.equals("attachneu")){
-					JOptionPane.showMessageDialog(null, "Funktion nicht nicht aktiv");
+					JOptionPane.showMessageDialog(null, "Funktion noch nicht aktiv");
 				}else if(cmd.equals("attachdelete")){
-					JOptionPane.showMessageDialog(null, "Funktion nicht nicht aktiv");
+					JOptionPane.showMessageDialog(null, "Funktion noch nicht aktiv");
 				}
 				
 			}
@@ -510,7 +510,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 			}else if(test.endsWith(".odt")){
 				OOTools.starteStandardFormular(attachments.get(wahl)[0].replace("\\", "/"), null);
 			}else if(test.endsWith(".ods")){
-				OOTools.starteStandardFormular(test, null);
+				OOTools.starteStandardFormular(attachments.get(wahl)[0].replace("\\", "/"), null);
 			}else{
 				Runtime.getRuntime().exec("C:/Windows/notepad.exe "+attachments.get(wahl)[0].replace("\\", "/"));	
 			}

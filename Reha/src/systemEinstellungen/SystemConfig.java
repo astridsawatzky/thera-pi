@@ -788,7 +788,7 @@ public class SystemConfig {
 			hmIcalSettings.put("warnenbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnenbeireha").equals("0") ? false : true) );
 			hmIcalSettings.put("rehaplanverzeichnis", (String)icalini.getStringProperty("ICalendar", "Rehaplanverzeichnis"));
 			if( icalini.getStringProperty("ICalendar", "Direktsenden") == null ){
-				hmIcalSettings.put("direktsenden",false);
+				hmIcalSettings.put("direktsenden",true);
 			}else{
 				hmIcalSettings.put("direktsenden",(Boolean)  (icalini.getStringProperty("ICalendar", "Direktsenden").equals("0") ? false : true) );
 			}
