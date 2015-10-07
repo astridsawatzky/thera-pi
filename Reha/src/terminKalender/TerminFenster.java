@@ -4439,6 +4439,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 							break;
 						}
 					}
+					
 
 				}catch(Exception ex){ex.printStackTrace();}
 				if(altaktiveSpalte[2] >= 0){
