@@ -274,8 +274,10 @@ public class PatientToolBarLogic {
 								 "Telefax: "+SystemConfig.hmFirmenDaten.get("Telefax")+"\n"+
 								 "Internet: "+SystemConfig.hmFirmenDaten.get("Internet")
 								 ;
+						String recipient = Reha.thisClass.patpanel.patDaten.get(50);
+								//+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
 						final EmailDialog emlDlg = 
-								new EmailDialog(Reha.thisFrame,stitel,Reha.thisClass.patpanel.patDaten.get(50),"",mailtext,new ArrayList<String[]>(),
+								new EmailDialog(Reha.thisFrame,stitel,recipient,"",mailtext,new ArrayList<String[]>(),
 										(Integer)SystemConfig.hmIcalSettings.get("postfach"),false);
 						emlDlg.setPreferredSize(new Dimension(575,370));
 						emlDlg.setLocation(pt.x-350,pt.y+100);

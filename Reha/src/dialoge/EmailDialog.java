@@ -105,6 +105,11 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		this.setName("EMAILDlg");	
 		this.titel = titel;
 		this.recipients = recipients;
+		if(postfach==0){
+			this.recipients = this.recipients + ((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
+		}else{
+			this.recipients = this.recipients + ((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailIntern.get("SenderAdresse") : "");
+		}
 		this.betreff = betreff;
 		this.mailtext = mailtext;
 		this.attachments = attachments;
@@ -179,7 +184,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	public void senden(){
 		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		this.setCursor(Reha.thisClass.wartenCursor);
-		if(tf[0].getText().trim().equals("")){
+		if(tf[0].getText().trim().equals("") || tf[0].getText().trim().startsWith(",") ){
 			JOptionPane.showMessageDialog(null,"Keine Empfängeradresse angegeben");
 			SwingUtilities.invokeLater(new Runnable(){
 				public void run(){
