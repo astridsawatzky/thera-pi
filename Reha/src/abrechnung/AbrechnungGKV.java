@@ -168,6 +168,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	public String SllaVersion = null;
 	public boolean zuzahlModusDefault = true;
 	
+	public static String zertifikatVon = Reha.aktIK;
+	public static String originalTitel = "";
+	
 	public AbrechnungGKV(JAbrechnungInternal xjry){
 		super();
 		this.setJry(xjry);
@@ -194,6 +197,14 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				return null;
 			}
 		}.execute();
+		originalTitel = this.jry.getTitel();
+		setEncryptTitle();
+		
+		
+	}
+	public void setEncryptTitle(){
+		this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon+"]");
+		this.jry.repaint();
 	}
 	public static int checkCert(String alias){
 		try{

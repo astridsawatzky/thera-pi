@@ -236,6 +236,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 
 	public void setTitel(String titel){
 		this.titel = titel;
+		this.title = titel;
 		this.repaint();
 	}
 
