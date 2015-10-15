@@ -1,6 +1,7 @@
 package terminKalender;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
@@ -17,8 +18,13 @@ public class ICalGenerator {
 			*/
 	static String ort = SystemConfig.hmFirmenDaten.get("Strasse")+" CRLF"+SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort");
 	
+	static final SimpleDateFormat futc = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+	
 	public static String macheKopf(){
 		return "BEGIN:VCALENDAR"+System.getProperty("line.separator")+
+				"CALSCALE:GREGORIAN"+System.getProperty("line.separator")+
+				"METHOD:PUBLISH"+System.getProperty("line.separator")+
+				"PRODID:-//Thera-Pi 1.0//Carpe diem//DE"+System.getProperty("line.separator")+
 				"VERSION:2.0"+System.getProperty("line.separator")+
 				"BEGIN:VTIMEZONE"+System.getProperty("line.separator")+
 				"TZID:Europe/Berlin"+System.getProperty("line.separator")+
@@ -49,10 +55,10 @@ public class ICalGenerator {
 			//buf.append("LAST-MODIFIED:"+getUTC()+System.getProperty("line.separator"));
 			buf.append("DTSTAMP:"+getUTC()+System.getProperty("line.separator"));
 			buf.append("ORGANIZER;CN=\""+(String)SystemConfig.hmIcalSettings.get("organisatorname")+", "+"Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon")+
-					"\":MAILTO:"+(String)SystemConfig.hmIcalSettings.get("organisatoremail")+System.getProperty("line.separator"));
+					" \":MAILTO:"+(String)SystemConfig.hmIcalSettings.get("organisatoremail")+System.getProperty("line.separator"));
 			buf.append("SUMMARY:"+( (!((String)SystemConfig.hmIcalSettings.get("praefix")).equals("")) ?  (String)SystemConfig.hmIcalSettings.get("praefix")+" "+titel : titel) +System.getProperty("line.separator"));
-			buf.append("DTSTART;TZID=Europe/Berlin:"+datum+"T"+start+System.getProperty("line.separator"));
-			buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
+			buf.append("DTSTART:"/*;TZID=Europe/Berlin:"*/+setUtcTime(datum+"T"+start)+System.getProperty("line.separator"));
+			buf.append("DTEND:"/*;TZID=Europe/Berlin:"*/+setUtcTime(datum+"T"+end)+System.getProperty("line.separator"));
 			buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
 			//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
 			buf.append("LOCATION:"+ort.replace("CRLF", "\\n" )+System.getProperty("line.separator"));
@@ -81,8 +87,8 @@ public class ICalGenerator {
 			//buf.append("SUMMARY:"+( !((String)SystemConfig.hmIcalSettings.get("praefix")).equals("") ?  (String)SystemConfig.hmIcalSettings.get("praefix")+" "+titel : titel) +System.getProperty("line.separator"));
 			buf.append("SUMMARY:"+titel +System.getProperty("line.separator"));
 			
-			buf.append("DTSTART;TZID=Europe/Berlin:"+datum+"T"+start+System.getProperty("line.separator"));
-			buf.append("DTEND;TZID=Europe/Berlin:"+datum+"T"+end+System.getProperty("line.separator"));
+			buf.append("DTSTART:"/*;TZID=Europe/Berlin:"*/+setUtcTime(datum+"T"+start)+System.getProperty("line.separator"));
+			buf.append("DTEND:"/*;TZID=Europe/Berlin:"*/+setUtcTime(datum+"T"+end)+System.getProperty("line.separator"));
 			buf.append("TRANSP:OPAQUE"+System.getProperty("line.separator"));
 			//buf.append("LOCATION:"+ort.replace("CRLF", (System.getProperty("os.name").contains("Windows") ? "\\n" : "\\r\\n" ) )+System.getProperty("line.separator"));
 			buf.append("LOCATION:"+ort.replace("CRLF", "\\n" )+System.getProperty("line.separator"));
@@ -132,6 +138,26 @@ public class ICalGenerator {
 			"Steuernummer","Hrb","Logodatei","Zusatz1","Zusatz2","Zusatz3","Zusatz4","Bundesland"};
 	hmFirmenDaten = new HashMap<String,String>();
 	*/
+	
+	public static String setUtcTime(String datumkomplett){
+		String ret = "";
+		try{
+			int year = Integer.parseInt(datumkomplett.substring(0, 4)); //jahr
+			int month = (datumkomplett.substring(4,6).startsWith("0") ? Integer.parseInt(datumkomplett.substring(5,6)) : Integer.parseInt(datumkomplett.substring(4,6)) ) -1;
+			int day = (datumkomplett.substring(6,8).startsWith("0") ? Integer.parseInt(datumkomplett.substring(7,8)) : Integer.parseInt(datumkomplett.substring(6,8)) ) ;
+			int hour = (datumkomplett.substring(9,11).startsWith("0") ? Integer.parseInt(datumkomplett.substring(10,11)) : Integer.parseInt(datumkomplett.substring(9,11)) ) ;
+			int minute = (datumkomplett.substring(11,13).startsWith("0") ? Integer.parseInt(datumkomplett.substring(12,13)) : Integer.parseInt(datumkomplett.substring(11,13)) ) ;
+			int second = (datumkomplett.substring(13,15).startsWith("0") ? Integer.parseInt(datumkomplett.substring(14,15)) : Integer.parseInt(datumkomplett.substring(13,15)) ) ;
+			Calendar cal = Calendar.getInstance();
+			cal.set(year,month,day,hour,minute,second);
+	        futc.setTimeZone(TimeZone.getTimeZone("UTC"));
+	        ret = futc.format(cal.getTime())+"Z";
+	        //System.out.println(f.format(cal.getTime())+"Z");
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return ret;
+	}
 	
 
 }

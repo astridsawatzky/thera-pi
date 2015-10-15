@@ -42,6 +42,7 @@ import javax.swing.JOptionPane;
 
 
 
+
 import org.jdesktop.swingworker.SwingWorker;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 
@@ -65,12 +66,14 @@ import com.mysql.jdbc.PreparedStatement;
 
 
 
+
 import CommonTools.SqlInfo;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;
 import CommonTools.FileTools;
 import systemTools.Verschluesseln;
 import terminKalender.DatFunk;
+import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
 import terminKalender.ZeitFunk;
 
@@ -788,7 +791,7 @@ public class SystemConfig {
 			hmIcalSettings.put("warnenbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnenbeireha").equals("0") ? false : true) );
 			hmIcalSettings.put("rehaplanverzeichnis", (String)icalini.getStringProperty("ICalendar", "Rehaplanverzeichnis"));
 			if( icalini.getStringProperty("ICalendar", "Direktsenden") == null ){
-				hmIcalSettings.put("direktsenden",true);
+				hmIcalSettings.put("direktsenden",false);
 			}else{
 				hmIcalSettings.put("direktsenden",(Boolean)  (icalini.getStringProperty("ICalendar", "Direktsenden").equals("0") ? false : true) );
 			}
@@ -815,6 +818,8 @@ public class SystemConfig {
 			}
 			hmIcalSettings.put("emailtext",String.valueOf((String)beschreibung));
 			hmIcalSettings.put("betreff", (String)icalini.getStringProperty("Emailtext", "Betreff"));
+			//ICalGenerator.setUtcTime("20151022T113000");
+			//ICalGenerator.setUtcTime("20151029T113000");
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der icalendar.ini, Mehode:ICalSettingns!\nFehlertext: "+ex.getMessage());
 		}

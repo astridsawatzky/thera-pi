@@ -992,7 +992,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			
 			return (SystemPreislisten.hmPreise.get(diszi[pgs]).get(pgGruppe) != null ? SystemPreislisten.hmPreise.get(diszi[pgs]).get(pgGruppe) : null) ;
 		}catch(Exception ex){
-			ex.printStackTrace();
+			//ex.printStackTrace();
 			JOptionPane.showMessageDialog(null,"Diese Preisliste existiert nicht, oder Sie verfügen nicht über die Disziplin -> "+diszi[pgs]);
 		}
 		return null;

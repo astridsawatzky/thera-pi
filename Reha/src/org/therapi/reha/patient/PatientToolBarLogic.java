@@ -271,8 +271,8 @@ public class PatientToolBarLogic {
 								 SystemConfig.hmFirmenDaten.get("Strasse")+"\n"+
 								 SystemConfig.hmFirmenDaten.get("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+"\n"+
 								 "Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon")+"\n"+
-								 "Telefax: "+SystemConfig.hmFirmenDaten.get("Telefax")+"\n"+
-								 "Internet: "+SystemConfig.hmFirmenDaten.get("Internet")
+								 (SystemConfig.hmFirmenDaten.get("Telefax").equals("") ? "" :  "Telefax: "+SystemConfig.hmFirmenDaten.get("Telefax")+"\n")+
+								 (SystemConfig.hmFirmenDaten.get("Internet").equals("") ? "" : "Internet: "+SystemConfig.hmFirmenDaten.get("Internet"))
 								 ;
 						String recipient = Reha.thisClass.patpanel.patDaten.get(50);
 								//+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");

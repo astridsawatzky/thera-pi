@@ -279,6 +279,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		content.add(tf[0],cc.xy(4,2));
 		content.add(new JLabel("Absender:"),cc.xy(6,2));
 		cmb = new JRtaComboBox(new String[] {SystemConfig.hmEmailExtern.get("Username"),SystemConfig.hmEmailIntern.get("Username")});
+		cmb.setSelectedIndex(this.postfach);
 		content.add(cmb, cc.xy(8,2));
 		content.add(new JLabel("Betreff:"),cc.xy(2,4));
 		tf[1] = new JRtaTextField("normal",false);

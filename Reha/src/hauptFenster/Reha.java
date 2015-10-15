@@ -314,7 +314,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2015-10-08-DB=";
+	public static String aktuelleVersion = "2015-10-14-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -3650,13 +3650,19 @@ final class PreisListenLaden implements Runnable{
 		}
 		
 		SystemPreislisten.ladePreise("Common");
-		new SocketClient().setzeInitStand("System-Init abgeschlossen!");
-		Reha.thisClass.setzeInitEnde();
-		Reha.thisClass.initok = true;
+		
 		System.out.println("Preislisten einlesen abgeschlossen");
 		}catch(NullPointerException ex){
 			ex.printStackTrace();
 		}
+		try{
+			new SocketClient().setzeInitStand("System-Init abgeschlossen!");
+			Reha.thisClass.setzeInitEnde();
+			Reha.thisClass.initok = true;
+		}catch(NullPointerException ex){
+			ex.printStackTrace();
+		}
+		
 	}
 	public boolean isAktiv(String disziplin){
 
