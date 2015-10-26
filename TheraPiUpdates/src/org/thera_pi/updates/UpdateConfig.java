@@ -39,28 +39,33 @@ public class UpdateConfig {
 	}
 	
 	private void readIniFile(){
-		INIFile ini = new INIFile(proghome + "/ini/tpupdate.ini");
-		
-		//System.out.println(proghome+"update.ini");
+		try{
+			
+			INIFile ini = new INIFile(proghome + "/ini/tpupdate.ini");
+			
+			//System.out.println(proghome+"update.ini");
 
-		updateHost = ini.getStringProperty("TheraPiUpdates", "UpdateFTP");
-		updateDir = ini.getStringProperty("TheraPiUpdates", "UpdateVerzeichnis");
-		updateUser = ini.getStringProperty("TheraPiUpdates", "UpdateUser");
+			updateHost = ini.getStringProperty("TheraPiUpdates", "UpdateFTP");
+			updateDir = ini.getStringProperty("TheraPiUpdates", "UpdateVerzeichnis");
+			updateUser = ini.getStringProperty("TheraPiUpdates", "UpdateUser");
 
-		String pw = ""; 
-		pw = ini.getStringProperty("TheraPiUpdates", "UpdatePasswd");
-		Verschluesseln man = Verschluesseln.getInstance();
-		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
-		if(pw.length() <= 20){
-			ini.setStringProperty("TheraPiUpdates", "UpdatePasswd", man.encrypt(String.valueOf(pw)),null);
-			ini.save();
-			updatePasswd = String.valueOf(pw);
-		}else{
-			updatePasswd = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdatePasswd"));
+			String pw = ""; 
+			pw = ini.getStringProperty("TheraPiUpdates", "UpdatePasswd");
+			Verschluesseln man = Verschluesseln.getInstance();
+			man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
+			if(pw.length() <= 20){
+				ini.setStringProperty("TheraPiUpdates", "UpdatePasswd", man.encrypt(String.valueOf(pw)),null);
+				ini.save();
+				updatePasswd = String.valueOf(pw);
+			}else{
+				updatePasswd = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdatePasswd"));
+			}
+			developerMode = ("1".equals(ini.getStringProperty("TheraPiUpdates", "UpdateEntwickler")) ? true : false);
+			useActiveMode = ("1".equals(ini.getStringProperty("TheraPiUpdates", "UseFtpActiveMode")) ? true : false);
+			checkUpdates = ("0".equals(ini.getStringProperty("TheraPiUpdates", "UpdateChecken")) ? false : true);
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
-		developerMode = ("1".equals(ini.getStringProperty("TheraPiUpdates", "UpdateEntwickler")) ? true : false);
-		useActiveMode = ("1".equals(ini.getStringProperty("TheraPiUpdates", "UseFtpActiveMode")) ? true : false);
-		checkUpdates = ("0".equals(ini.getStringProperty("TheraPiUpdates", "UpdateChecken")) ? false : true);
 	}
 
 

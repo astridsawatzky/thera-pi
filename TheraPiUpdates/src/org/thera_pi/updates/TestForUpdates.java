@@ -30,9 +30,14 @@ public class TestForUpdates {
 	
 	/*******************/
 	private void doHoleUpdateConfSilent(){
-		FTPTools ftpt = new FTPTools();
-		ftpt.holeDateiSilent("update.files", UpdateConfig.getProghome(), false);
-		updateCheck(UpdateConfig.getProghome() + "update.files");
+		try{
+			
+			FTPTools ftpt = new FTPTools();
+			ftpt.holeDateiSilent("update.files", UpdateConfig.getProghome(), false);
+			updateCheck(UpdateConfig.getProghome() + "update.files");
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	
