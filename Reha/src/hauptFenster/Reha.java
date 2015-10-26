@@ -3176,9 +3176,14 @@ final class DatenbankStarten implements Runnable{
 					
 
 				Reha.DbOk = true;
-				Reha.testeNummernKreis();
-			    Reha.testeStrictMode();
-			    Reha.testeMaxAllowed();
+				try{
+					Reha.testeNummernKreis();
+				    Reha.testeStrictMode();
+				    Reha.testeMaxAllowed();
+					
+				}catch(java.lang.ArrayIndexOutOfBoundsException ex){
+					ex.printStackTrace();
+				}
 
 		}catch (final SQLException ex) {
 			System.out.println("SQLException: " + ex.getMessage());
