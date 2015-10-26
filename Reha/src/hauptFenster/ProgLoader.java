@@ -365,6 +365,7 @@ public void AbrechnungFenster(int setPos) {
 		}
 		return;
 	}
+	//neuer Titel eingebaut
 	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 	String name = "Abrechnung"+WinNum.NeueNummer();
 	int containerNr = setPos;
