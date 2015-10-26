@@ -339,30 +339,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 		}.execute();
 	}
 	private void holePrivat(){
-		/*
-		String cmd = "select abwadress,id from pat5 where pat_intern='"+vec_rez.get(0).get(0)+"' LIMIT 1";
-		Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
-		String[] adressParams = null;
-		if(adrvec.get(0).get(0).equals("T")){
-			adressParams = holeAbweichendeAdresse(adrvec.get(0).get(1));
-		}else{
-			adressParams = getAdressParams(adrvec.get(0).get(1));
-		}
-		//System.out.println("Zuzhlungwert = "+zuzahlungWert);
-		hmRezgeb.put("<rgreznum>",aktRezNum.getText());
-		hmRezgeb.put("<rgbehandlung>",behandl);
-		hmRezgeb.put("<rgdatum>",DatFunk.sDatInDeutsch(vec_rez.get(0).get(2)));
-		hmRezgeb.put("<rgbetrag>",dfx.format(zuzahlungWert));
-		hmRezgeb.put("<rgpauschale>","5,00");
-		hmRezgeb.put("<rggesamt>","0,00");
-		hmRezgeb.put("<rganrede>",adressParams[0]);
-		hmRezgeb.put("<rgname>",adressParams[1]);
-		hmRezgeb.put("<rgstrasse>",adressParams[2]);
-		hmRezgeb.put("<rgort>",adressParams[3]);
-		hmRezgeb.put("<rgbanrede>",adressParams[4]);
-		hmRezgeb.put("<rgpatintern>",vec_rez.get(0).get(0));
- 
-		 */
+
 		if(! Reha.thisClass.patpanel.patDaten.get(5).equals("T")){
 			hmAdresse.put("<pri1>",SystemConfig.hmAdrPDaten.get("<Panrede>") );
 			hmAdresse.put("<pri2>",SystemConfig.hmAdrPDaten.get("<Padr1>") );

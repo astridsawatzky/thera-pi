@@ -68,10 +68,15 @@ public class SystemPreislisten {
 		if(treffer < 0){
 			return;
 		}
+		int tarife = -1;
+		try{
+			inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "preisgruppen.ini");
+			tarife = inif.getIntegerProperty("PreisGruppen_"+diszis[treffer], "AnzahlPreisGruppen");
+			fristenini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "fristen.ini");		
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 
-		inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "preisgruppen.ini");
-		int tarife = inif.getIntegerProperty("PreisGruppen_"+diszis[treffer], "AnzahlPreisGruppen");
-		fristenini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "fristen.ini");
 		
 		
 

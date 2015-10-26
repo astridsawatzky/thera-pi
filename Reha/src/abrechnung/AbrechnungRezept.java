@@ -2750,7 +2750,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		hmRezgeb.put("<rgbehandlung>",behandl);
 		hmRezgeb.put("<rgdatum>",DatFunk.sDatInDeutsch(vec_rez.get(0).get(2)));
 		hmRezgeb.put("<rgbetrag>",dfx.format(zuzahlungWert));
-		hmRezgeb.put("<rgpauschale>","5,00");
+		//hmRezgeb.put("<rgpauschale>","5,00");
+		hmRezgeb.put("<rgpauschale>",SystemConfig.hmAbrechnung.get("rgrpauschale"));
 		hmRezgeb.put("<rggesamt>","0,00");
 		hmRezgeb.put("<rganrede>",adressParams[0]);
 		hmRezgeb.put("<rgname>",adressParams[1]);

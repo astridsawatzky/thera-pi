@@ -68,13 +68,11 @@ import rehaInternalFrame.JKasseInternal;
 import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
 import stammDatenTools.KasseTools;
-
 import systemEinstellungen.SystemConfig;
 import CommonTools.Colors;
 import CommonTools.FileTools;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
-
 import CommonTools.INIFile;
 import CommonTools.INITool;
 
@@ -1080,8 +1078,12 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             	return;
             }
             String datei = Reha.proghome+"edifact/"+Reha.aktIK+"/"+testHm.get("kassen_ik");
-            
-            String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+            if(!SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").equals(SystemConfig.hmAbrechnung.get("hmkeystorealias"))){
+            	JOptionPane.showMessageDialog(null,"Für die Verschlüsselung wird das Zertifikat von\nIK "+
+            			SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", "")+ " verwendet!");
+            }
+           	String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
+            //String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
             File f = new File(keystore);
             if(! f.exists()){
             	JOptionPane.showMessageDialog(null,"Kein Keystore für den aktuellen Mandanten vorhanden");
@@ -1139,8 +1141,10 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	private int[] doVerschluesseln(String datei,HashMap<String,String> hmap){
 		int[] retint = {-1,-1};
 		try {
-			String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
+			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", ""));
 			//NebraskaKeystore store = new NebraskaKeystore(keystore, "123456","123456", Reha.aktIK);
 			NebraskaEncryptor encryptor = store.getEncryptor(hmap.get("decode_ik"));
 			

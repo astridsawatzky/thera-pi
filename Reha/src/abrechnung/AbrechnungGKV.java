@@ -168,8 +168,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	public String SllaVersion = null;
 	public boolean zuzahlModusDefault = true;
 	
-	public static String zertifikatVon = Reha.aktIK;
+	public static String zertifikatVon = SystemConfig.hmAbrechnung.get("hmkeystoreusecertof");
 	public static String originalTitel = "";
+	public static boolean lOwnCert = (SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").equals(SystemConfig.hmAbrechnung.get("hmkeystorealias")) ? true : false);
 	
 	public AbrechnungGKV(JAbrechnungInternal xjry){
 		super();
@@ -187,13 +188,16 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		mandantenCheck();
 		SlgaVersion = ( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
 		SllaVersion = ( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
+		
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				SystemConfig.certState = checkCert("IK"+Reha.aktIK);
+				SystemConfig.certState = checkCert(zertifikatVon/*"IK"+Reha.aktIK*/);
 				if(SystemConfig.certState > 0){
 					abrRez.tbbuts[3].setEnabled(false);
 				}
+				//System.out.println(SystemConfig.hmAbrechnung);
+				//System.out.println("CertState = "+SystemConfig.certState);
 				return null;
 			}
 		}.execute();
@@ -208,8 +212,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	}
 	public static int checkCert(String alias){
 		try{
-			String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");//Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", ""));
 			Vector<X509Certificate> certs = store.getAllCerts();
 			String[] dn = null;
 			String ik;
@@ -1170,7 +1175,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			EmailSendenExtern oMail = new EmailSendenExtern();
 			try{
 				////System.out.println("Starte Emailversand.....");
-				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, Reha.aktIK, text,attachments,authx,bestaetigen,secure,useport);
+				oMail.sendMail(smtphost, benutzer, pass1, sender, recipient, zertifikatVon.replace("IK", "")/*Reha.aktIK*/, text,attachments,authx,bestaetigen,secure,useport);
 				oMail = null;
 				////System.out.println("Emailversand beendet.....");
 				
@@ -1306,10 +1311,12 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	/***************************************************************/	
 	private int doVerschluesseln(String datei){
 		try {
-			String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
+			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+
+			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", zertifikatVon.replace("IK", ""));
 			
-			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, "123456","123456", Reha.aktIK);
 			NebraskaEncryptor encryptor = store.getEncryptor(ik_nutzer);
 			String inFile = Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
 			long size = encryptor.encrypt(inFile, inFile.replace(".org", ""));
@@ -1328,8 +1335,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		auftragsBuf.append("500000"+"01"+"00000348"+"000");
 		auftragsBuf.append("ESOL0"+aktEsol);
 		auftragsBuf.append("     ");
-		auftragsBuf.append(StringTools.fuelleMitZeichen(Reha.aktIK, " ", false, 15));
-		auftragsBuf.append(StringTools.fuelleMitZeichen(Reha.aktIK, " ", false, 15));
+		auftragsBuf.append(StringTools.fuelleMitZeichen(zertifikatVon.replace("IK", "")/*Reha.aktIK*/, " ", false, 15));
+		auftragsBuf.append(StringTools.fuelleMitZeichen(zertifikatVon.replace("IK", "")/*Reha.aktIK*/, " ", false, 15));
 		auftragsBuf.append(StringTools.fuelleMitZeichen(ik_nutzer, " ", false, 15));
 		auftragsBuf.append(StringTools.fuelleMitZeichen(ik_physika, " ", false, 15));
 		auftragsBuf.append("000000");
@@ -1418,17 +1425,18 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		}else{
 			sgruppe = "B";
 		}
-		unbBuf.append("UNB+UNOC:3+"+Reha.aktIK+plus+ik_nutzer+plus);
+		
+		unbBuf.append("UNB+UNOC:3+"+zertifikatVon.replace("IK", "")/*Reha.aktIK*/+plus+ik_nutzer+plus);
 		unbBuf.append(getEdiDatumFromDeutsch(DatFunk.sHeute())+":"+getEdiTimeString(false)+plus);
 		unbBuf.append(aktDfue+plus+sgruppe+plus);
-		abrDateiName = "SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat();
+		abrDateiName = "SL"+zertifikatVon.replace("IK", "").substring(2,8)/*Reha.aktIK.substring(2,8)*/+"S"+getEdiMonat();
 		unbBuf.append(abrDateiName+plus);
 		unbBuf.append("2"+EOL);
 		//unbBuf.append(aktDfue+plus+"B"+plus+"SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat()+plus+"2"+EOL);
 		
 		unbBuf.append("UNH+00001+SLGA:"+SlgaVersion+":0:0"+EOL);
-		unbBuf.append("FKT+01"+plus+plus+Reha.aktIK+plus+ik_kostent+plus+ik_kasse+plus+Reha.aktIK+EOL);
-		unbBuf.append("REC"+plus+aktRechnung+":0"+plus+getEdiDatumFromDeutsch(DatFunk.sHeute())+plus+"1"+EOL);
+		unbBuf.append("FKT+01"+plus+plus+Reha.aktIK+plus+ik_kostent+plus+ik_kasse+plus+zertifikatVon.replace("IK", "")/*Reha.aktIK*/+EOL);
+		unbBuf.append("REC"+plus+aktRechnung+":0"+plus+getEdiDatumFromDeutsch(DatFunk.sHeute())+plus+(lOwnCert ? "1" : "2")+EOL);
 		unbBuf.append("UST"+plus+SystemConfig.hmFirmenDaten.get("Steuernummer")+plus+"J"+EOL);
 		unbBuf.append("GES"+plus+"00"+plus+dfx.format(preis00[0])+plus+dfx.format(preis00[1])+plus+dfx.format(preis00[2])+EOL);
 		unbBuf.append("GES"+plus+"11"+plus+dfx.format(preis11[0])+plus+dfx.format(preis11[1])+plus+dfx.format(preis11[2])+EOL);
@@ -1446,7 +1454,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		unbBuf.append("UNT+000010+00001"+EOL);
 		unbBuf.append("UNH+00002+SLLA:"+SllaVersion+":0:0"+EOL);
 		unbBuf.append("FKT+01"+plus+plus+Reha.aktIK+plus+ik_kostent+plus+ik_kasse+EOL);
-		unbBuf.append("REC"+plus+aktRechnung+":0"+plus+getEdiDatumFromDeutsch(DatFunk.sHeute())+plus+"1"+EOL);
+		unbBuf.append("REC"+plus+aktRechnung+":0"+plus+getEdiDatumFromDeutsch(DatFunk.sHeute())+plus+(lOwnCert ? "1" : "2")+EOL);
 		getEdiTimeString(false);
 	}
 

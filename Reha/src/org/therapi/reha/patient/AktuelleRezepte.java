@@ -3085,8 +3085,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		hmRezgeb.put("<rgdatum>",DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)));
 	
 		hmRezgeb.put("<rgbetrag>",strZuzahlung); 
-		
-		hmRezgeb.put("<rgpauschale>","5,00");
+		//hmRezgeb.put("<rgpauschale>","5,00");
+		hmRezgeb.put("<rgpauschale>",SystemConfig.hmAbrechnung.get("rgrpauschale"));
 		hmRezgeb.put("<rggesamt>","0,00");
 		hmRezgeb.put("<rganrede>",adressParams[0]);
 		hmRezgeb.put("<rgname>",adressParams[1]);
