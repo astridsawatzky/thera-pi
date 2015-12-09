@@ -28,6 +28,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -275,9 +276,16 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 									dtblm.addRow((Vector<?>)vec.get(i));							
 								}
 							}
+							
 							anz = dtblm.getRowCount();
+							final int fanz = anz;
 							try{
-								Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(anz,"Gutachten"));
+								SwingUtilities.invokeLater(new Runnable(){
+									public void run(){
+										Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(fanz,"Gutachten"));	
+									}
+								});
+								//Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(anz,"Gutachten"));
 							}catch(Exception extiming){
 								System.out.println("Timingprobleme beim setzen des Reitertitels - Reiter: Gutachten");
 							}

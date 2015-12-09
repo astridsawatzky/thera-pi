@@ -314,7 +314,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2015-10-14-DB=";
+	public static String aktuelleVersion = "2015-12-08-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -2112,7 +2112,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
         try
         {
 			officeapplication = (IOfficeApplication)new StartOOApplication(SystemConfig.OpenOfficePfad,SystemConfig.OpenOfficeNativePfad).start(false);
-			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
+			 System.out.println("OpenOffice ist gestartet und aktiv = "+officeapplication.isActive());
 			 Reha.thisClass.Rehaprogress.setIndeterminate(false);
         }catch (OfficeApplicationException e) {
             e.printStackTrace();
@@ -3117,6 +3117,7 @@ public void mustReloadDb(){
  */
 
 final class DatenbankStarten implements Runnable{
+
 	private void StarteDB(){
 		final Reha obj = Reha.thisClass;
 

@@ -38,7 +38,10 @@ import java.util.Vector;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -47,9 +50,12 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -59,6 +65,14 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
+
+
+
+
+
+
+
 
 import jxTableTools.MyTableStringDatePicker;
 import jxTableTools.TableTool;
@@ -82,6 +96,7 @@ import patientenFenster.RezTestPanel;
 import patientenFenster.RezeptGebuehren;
 import patientenFenster.RezeptVorlage;
 import rechteTools.Rechte;
+import CommonTools.DateTableCellEditor;
 import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
 import stammDatenTools.KasseTools;
@@ -700,16 +715,19 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		dtermm.addTableModelListener(this);
 		String[] column = 	{"Beh.Datum","Behandler","Text","Beh.Art",""};
 		dtermm.setColumnIdentifiers(column);
+		if(SystemConfig.behdatumTippen){
+			tabaktterm = new JXTable(dtermm);			
+		}else{
+			
 		tabaktterm = new JXTable(dtermm){
 			/**
 			 * 
 			 */
-
+			
 			private static final long serialVersionUID = 1L;
 			@Override
 			public boolean editCellAt(int row, int column, EventObject e) {
-				////System.out.println("edit! in Zeile: "+row+" Spalte: "+column);
-				////System.out.println("Event = "+e);
+		
 				if (e == null) {
 					return false;
 					////System.out.println("edit! in Zeile: "+row+" Spalte: "+column);
@@ -717,22 +735,38 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				if (e instanceof MouseEvent) {
 					MouseEvent mouseEvent = (MouseEvent) e;
 					if (mouseEvent.getClickCount() > 1) {
-						//System.out.println("edit!");
 						return super.editCellAt(row, column, e);
+					}
+				}else if (e instanceof ActionEvent) {
+					ActionEvent aktionEvent = (ActionEvent) e;
+					/*
+					System.out.println("Row="+row+" / Col="+column);
+					System.out.println((aktionEvent.getActionCommand()==null));
+					System.out.println(aktionEvent.getActionCommand().toString().length());
+					*/
+					if(aktionEvent.getActionCommand().toString().length()==1){
+						return super.editCellAt(row, column, e);	
 					}
 				}else if (e instanceof KeyEvent) {
 					KeyEvent keyEvent = (KeyEvent) e;
-					if (keyEvent.getKeyChar()==10) {
-						//System.out.println("edit!");
-						return super.editCellAt(row, column, e);
+					if (keyEvent.getKeyCode()==KeyEvent.VK_ENTER && ! keyEvent.isControlDown()) {
+						//System.out.println("edit mit Return!");
+						if(super.editCellAt(row, column, e)){
+							return true;
+						}else{
+							return false;
+						}
+						
 					}
+				}else{
+					//System.out.println("Klasse 1 = "+e.getClass());
 				}
-
 				return false;
 				
 			}
 		};
-
+		}
+		
 		//abaktterm.setSurrendersFocusOnKeystroke(false);
 		//tabaktterm.setVerifyInputWhenFocusTarget(true);
 
@@ -746,18 +780,15 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		tabaktterm.setSelectionMode(0);
 		tabaktterm.setHorizontalScrollEnabled(true);
 
-
-		//tbl = new DateTableCellEditor();
-		//tabaktterm.getColumnModel().getColumn(0).setCellEditor(tbl);
-		//tabaktterm.getColumnModel().getColumn(0).setCellEditor(tbl);
-
-		MyTableStringDatePicker pic = new MyTableStringDatePicker();
-		tabaktterm.getColumnModel().getColumn(0).setCellEditor(pic);
+		if(SystemConfig.behdatumTippen){
+			tbl = new DateTableCellEditor();
+			tabaktterm.getColumnModel().getColumn(0).setCellEditor(tbl);
+			
+		}else{
+			MyTableStringDatePicker pic = new MyTableStringDatePicker();
+			tabaktterm.getColumnModel().getColumn(0).setCellEditor(pic);
+		}
 		
-		//tabaktterm.getColumn(0).setCellEditor(new DatumTableCellEditor(new JFormattedTextField()));
-		//tabaktterm.getColumnModel().getColumn(0).setCellEditor(new DatumTableCellEditor(new JFormattedTextField()));
-		//tabaktterm.getColumn(0).setCellEditor(new MyDateEditor(new SimpleDateFormat("dd.mm.yyyyy")));
-		tabaktterm.setAutoStartEditOnKeyStroke(true);
 		tabaktterm.getColumn(0).setMinWidth(40);
 		
 		// vvv Lemmi 20110105: Layout etwas dynamischer gestaltet
@@ -771,7 +802,28 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		tabaktterm.getColumn(4).setMinWidth(0);
 		tabaktterm.getColumn(4).setMaxWidth(0);
 		tabaktterm.setOpaque(true);
-		tabaktterm.setAutoStartEditOnKeyStroke(false);
+		
+		if(SystemConfig.behdatumTippen){
+				//tabaktterm.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "startEditing");
+				
+				/*
+                Object[] obi = tabaktterm.getActionMap().allKeys();
+                for(int i=0;i<obi.length;i++){
+                	
+                	System.out.println(obi[i]);
+                }
+                obi = tabaktterm.getInputMap().allKeys();
+                for(int i=0;i<obi.length;i++){
+                	
+                	System.out.println(obi[i]);
+                }
+               */
+			//tabaktterm.setAutoStartEditOnKeyStroke(false);
+		}else{
+			tabaktterm.setAutoStartEditOnKeyStroke(false);			
+		}
+	
+
 		tabaktterm.addMouseListener(new MouseAdapter(){
 			
 			public void mousePressed(MouseEvent arg0){
@@ -823,35 +875,52 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 			}
 		});
+		/*
 		tabaktterm.addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent arg0) {
-				// TODO Auto-generated method stub
-				////System.out.println("keypressed in Editor");
-				if(arg0.getKeyCode()==10){
-					//arg0.consume();
-					//tbl.stopCellEditing();
-				}else if(arg0.getKeyCode()==27){
-				
-					////System.out.println("cancel in tabelle");
-					tbl.cancelCellEditing();
-				}else{/*
-					   int row = tabaktterm.getSelectedRow();
-					   int col = tabaktterm.getSelectedColumn();
-					    boolean success = tabaktterm.editCellAt(row, col);
-					    if (success) {
-					        // Select cell
-					        boolean toggle = false;
-					        boolean extend = false;
-					        tabaktterm.changeSelection(row, col, toggle, extend);
-					    } else {
-					        // Cell could not be edited
-					    }
-					    */
+				try{
+					if(arg0.getKeyCode()==10){
+						System.out.println("Tippen = "+SystemConfig.behdatumTippen);
+						if(SystemConfig.behdatumTippen){
+							arg0.consume();
+							tabaktterm.setRowSelectionInterval(tabaktterm.getSelectedRow(), tabaktterm.getSelectedRow());
+							tabaktterm.setColumnSelectionInterval(tabaktterm.getSelectedColumn(), tabaktterm.getSelectedColumn());
+							SwingUtilities.invokeLater(new Runnable(){
+								public void run(){
+									int row = tabaktterm.getSelectedRow();
+									int col = tabaktterm.getSelectedColumn();
+									if(row >= 0){
+										startCellEditing(tabaktterm,row,col);								
+									}
+								}
+							});
+						}
+					}else if(arg0.getKeyCode()==27){
+						tbl.cancelCellEditing();
+					}else{
+						System.out.println("Taste "+arg0.getKeyCode()+" gedrückt");
+						if(SystemConfig.behdatumTippen){
+							int row = tabaktterm.getSelectedRow();
+							int col = tabaktterm.getSelectedColumn();
+							   
+							boolean success = tabaktterm.editCellAt(row, col);
+							if (success) {
+								// Select cell
+								boolean toggle = false;
+								boolean extend = false;
+								tabaktterm.changeSelection(row, col, toggle, extend);
+							} else {
+							}
+						}
+					}				
+				}catch(NullPointerException ex){
 					
 				}
+
 			}
 			
 		});
+		*/
 		tabaktterm.validate();
 		tabaktterm.setName("AktTerm");
 		//tabaktterm.setPreferredSize(new Dimension(300,300));
@@ -2441,26 +2510,29 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				if(ktagebreak){
 					//System.out.println("Kalendertage zwischen den Behandlungen = "+DatFunk.TageDifferenz(vglalt, vglneu)+"\n"+
 							//"erlaubt sind "+fristbreak);
-					if( (DatFunk.TageDifferenz(vglalt, vglneu) >  fristbreak) && (kommentar.trim().equals("")) ){
-						ret = rezUnterbrechung(true,"",i+1);// Unterbrechungsgrund
-						if(ret.equals("")){
-							return false;
-						}else{
-							dtermm.setValueAt(ret,i,2);
-						}
+					if(!"RSFT".contains(Reha.thisClass.patpanel.vecaktrez.get(1).substring(0,2))){
+						if( (DatFunk.TageDifferenz(vglalt, vglneu) >  fristbreak) && (kommentar.trim().equals("")) ){
+							ret = rezUnterbrechung(true,"",i+1);// Unterbrechungsgrund
+							if(ret.equals("")){
+								return false;
+							}else{
+								dtermm.setValueAt(ret,i,2);
+							}
+						}					
 					}
 				}else{
 					//System.out.println("Differenz zwischen dem letzt möglichen und dem tatsächlichen Zeitaum\n"+
 							//HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag));
-					if(HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag) > 0 && kommentar.trim().equals("")){	
-						ret = rezUnterbrechung(true,"",i+1);// Unterbrechungsgrund
-						if(ret.equals("")){
-							return false;
-						}else{
-							dtermm.setValueAt(ret,i,2);
-						}
+					if(!"RSFT".contains(Reha.thisClass.patpanel.vecaktrez.get(1).substring(0,2))){
+						if(HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag) > 0 && kommentar.trim().equals("")){	
+							ret = rezUnterbrechung(true,"",i+1);// Unterbrechungsgrund
+							if(ret.equals("")){
+								return false;
+							}else{
+								dtermm.setValueAt(ret,i,2);
+							}
+						}						
 					}
-					
 				}
 			}else{
 				/*
