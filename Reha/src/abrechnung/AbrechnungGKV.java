@@ -203,7 +203,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		}.execute();
 		originalTitel = this.jry.getTitel();
 		setEncryptTitle();
-		
+		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
 		
 	}
 	public void setEncryptTitle(){
@@ -290,9 +290,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept"});			
 		}
 		
-
-		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
 		cmbDiszi.setActionCommand("einlesen");
+		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
 		
 		pb.add(cmbDiszi,cc.xy(2,4));
 		/*
@@ -325,7 +324,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			
 		}.execute();
 		
-		doEinlesen(null);
+		//doEinlesen(null);
 		
 		htmlPane = new JEditorPane(/*initialURL*/);
         htmlPane.setContentType("text/html");
@@ -340,6 +339,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(pb.getPanel());
 		jscr.validate();
 		cmbDiszi.addActionListener(this);
+		
+		
+		//cmbDiszi.setSelectedIndex(cmbDiszi.getSelectedIndex());
 		return jscr;
 	}
 	/*
@@ -403,11 +405,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			}
  
 			aktDisziplin = diszis[cmbDiszi.getSelectedIndex()];
+			//System.out.println("aktDisziplin = "+aktDisziplin);
 			//abrRez.setKuerzelVec(reznr[cmbDiszi.getSelectedIndex()]);
 			if(abrRez.rezeptSichtbar){
 				abrRez.setRechtsAufNull();
 	    		aktuellerPat = "";
 			}
+			this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon+"] [Disziplin: "+aktDisziplin+"]");
 			doEinlesen(null);
 			//setPreisVec(cmbDiszi.getSelectedIndex());
 		}
@@ -1050,7 +1054,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				abrDlg.setzeLabel("Rechnungsdatei verschlüsseln");
 			    int originalSize = Integer.parseInt(Long.toString(f.length()));
 			    int encryptedSize = originalSize;
-				String skeystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+			    String skeystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
+				//String skeystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
 				File fkeystore = new File(skeystore);
 				if(! fkeystore.exists()){
 					abrDlg.setzeLabel("Rechnungsdatei verschlüsseln - fehlgeschlagen!!!");
