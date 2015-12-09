@@ -4488,21 +4488,47 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			gruppeAusschalten();
 			return;
 		}
+		
+		
+		
+		
 		if (ansicht == WOCHEN_ANSICHT){
-			JOptionPane.showMessageDialog(null,"Behandlungsbestätigung ist nur für den aktuellen Tag in der -> Normalansicht <- möglich");
-			gruppeAusschalten();
-			return;
+			//JOptionPane.showMessageDialog(null,"Behandlungsbestätigung ist nur für den aktuellen Tag in der -> Normalansicht <- möglich");
+			//gruppeAusschalten();
+			if(!DatFunk.sHeute().equals(DatFunk.sDatPlusTage(wocheErster,aktiveSpalte[2]))){
+				if(!Rechte.hatRecht(Rechte.Kalender_terminconfirminpast, true)){
+					gruppeAusschalten();
+					return;
+				}
+			}
+			/*
+			DatFunk.sDatPlusTage(wocheErster,aktiveSpalte[2]);
+			xaktBehandler = wochenbelegung-1;
+			String sname = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).get(aktiveSpalte[0]));
+			String sreznum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(1)).get(aktiveSpalte[0]));
+			String sorigreznum = sreznum;
+			String sbeginn = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(2)).get(aktiveSpalte[0]));
+			String sende = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(4)).get(aktiveSpalte[0]));
+			String sdatum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(5)).get(4));
+			System.out.println(sname+" / "+sreznum+" / "+sorigreznum+" / "+sbeginn+" / "+sende+" / "+sdatum);
+			*/
+			//return;
 		}
+		/***************************************************************/
+		
+		/***************************************************************/
 		String pat_int;
-		int xaktBehandler= 0;
+		
 		if(aktiveSpalte[0] < 0){
 			gruppeAusschalten();
 			return;
 		}
+		int xaktBehandler= 0;
 		if(ansicht == NORMAL_ANSICHT){
 			xaktBehandler = belegung[aktiveSpalte[2]];
+			//System.out.println("Tagesansicht xaktbehandler = "+ belegung[aktiveSpalte[2]] );
 		}else  if(ansicht == WOCHEN_ANSICHT){
-			xaktBehandler = aktiveSpalte[2]; 
+			xaktBehandler = wochenbelegung-1;
 		}else  if(ansicht == MASKEN_ANSICHT){
 			JOptionPane.showMessageDialog(null,"Terminaufnahme in Definition der Wochenarbeitszeit nicht möglich");
 			gruppeAusschalten();
@@ -4512,13 +4538,35 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			gruppeAusschalten();
 			return;
 		}
+		
+		
+		String sname,sreznum,sorigreznum,sbeginn,sende,sdatum;
+		/*
 		String sname = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(0)).get(aktiveSpalte[0]));
 		String sreznum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(1)).get(aktiveSpalte[0]));
 		String sorigreznum = sreznum;
 		String sbeginn = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(2)).get(aktiveSpalte[0]));
 		String sende = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(4)).get(aktiveSpalte[0]));
-
 		String sdatum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(5)).get(4));
+		 */
+		if(ansicht == NORMAL_ANSICHT){
+			sname = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(0)).get(aktiveSpalte[0]));
+			sreznum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(1)).get(aktiveSpalte[0]));
+			sorigreznum = sreznum;
+			sbeginn = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(2)).get(aktiveSpalte[0]));
+			sende = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(4)).get(aktiveSpalte[0]));
+			sdatum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(xaktBehandler)).get(5)).get(4));
+		}else{
+			sname = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).get(aktiveSpalte[0]));
+			sreznum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(1)).get(aktiveSpalte[0]));
+			sorigreznum = sreznum;
+			sbeginn = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(2)).get(aktiveSpalte[0]));
+			sende = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(4)).get(aktiveSpalte[0]));
+			sdatum = ((String) ((Vector<?>)((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(5)).get(4));			
+		}
+
+		
+		
 		int occur = -1;
 		if( (occur = sreznum.indexOf("\\")) > -1){
 			sorigreznum = sreznum.replace("\\", "\\\\"); 
@@ -4674,7 +4722,13 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 								toupdate,
 								towhere);
 						/**********Ende Datenbank beschreiben*************/
-						((ArrayList<Vector<String>>) vTerm.get(swbehandler)).get(0).set(aktiveSpalte[0],copyright+swname);
+						/**** hier müßte noch zwischen Wochen- und Normalansicht differenziert werden ***/
+						if(ansicht == NORMAL_ANSICHT){
+							((ArrayList<Vector<String>>) vTerm.get(swbehandler)).get(0).set(aktiveSpalte[0],copyright+swname);	
+						}else{
+							((ArrayList<Vector<String>>) vTerm.get(aktiveSpalte[2])).get(0).set(aktiveSpalte[0],copyright+swname);
+						}
+						
 						oSpalten[aktiveSpalte[2]].repaint();
 						JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 						if(patient != null){
