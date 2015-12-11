@@ -207,7 +207,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		
 	}
 	public void setEncryptTitle(){
-		this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon+"]");
+		this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"]");
 		this.jry.repaint();
 	}
 	public static int checkCert(String alias){
@@ -411,7 +411,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				abrRez.setRechtsAufNull();
 	    		aktuellerPat = "";
 			}
-			this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon+"] [Disziplin: "+aktDisziplin+"]");
+			this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"] [Disziplin: "+aktDisziplin+"]");
 			doEinlesen(null);
 			//setPreisVec(cmbDiszi.getSelectedIndex());
 		}

@@ -283,6 +283,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 		builder.addLabel("Arbeitszeitpläne berücksichtigen? (empfohlen)", cc.xyw(2,19,2));
 		AZPlan.setSelected(true);
 		builder.add(AZPlan, cc.xy(4,19));
+		AZPlan.setEnabled(false);
 		
 		builder.addLabel("Datenbank wird angelegt für das Jahr ", cc.xyw(2, 21,2));
 		KalMake.setText("");

@@ -4156,15 +4156,24 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		 	   }
 			});   
 	}
+	public TerminFenster getTerminFensterInstance(){
+		return this;
+	}
+	public int getAktiveSpalte(int index){
+		return aktiveSpalte[index];
+	}
 	public void schnellSuche(){
 		SwingUtilities.invokeLater(new Runnable(){
 		 	   public  void run()
 		 	   {
-		 			sf = new SchnellSuche(Reha.thisFrame);
-				 	sf.setSize(new Dimension(720,400));
-		 			sf.setLocation(new Point(250,200));
-		 			sf.setVisible(true);
-		 			
+		 		   try{
+			 			sf = new SchnellSuche(Reha.thisFrame,getTerminFensterInstance());
+					 	sf.setSize(new Dimension(720,400));
+			 			sf.setLocation(new Point(250,200));
+			 			sf.setVisible(true);		 			   
+		 		   }catch(Exception ex){
+		 			   
+		 		   }
 		 	   }
 			});   
 	}

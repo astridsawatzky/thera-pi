@@ -44,11 +44,15 @@ import org.jdesktop.swingx.JXTitledPanel;
 
 
 
+
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import rechteTools.Rechte;
 import rehaContainer.RehaTP;
 import CommonTools.JRtaTextField;
+import systemEinstellungen.SystemConfig;
 import systemTools.RezeptFahnder;
 import systemTools.Verschluesseln;
 import dialoge.PinPanel;
@@ -87,17 +91,19 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 	public String startdatum = DatFunk.sHeute();
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 	Date newStart = null;
-	
+	TerminFenster eltern;
 	public JXDatePicker datePicker = null;
 	SchnellSucheListSelectionHandler ssucheselect = new SchnellSucheListSelectionHandler();
 	
-	public SchnellSuche(JXFrame owner){
+	public SchnellSuche(JXFrame owner,TerminFenster eltern){
 		//super(frame, titlePanel());
 		super(owner,"SchnellSuche");
 		dieserName = "SchnellSuche";
 		setName(dieserName);
 		getSmartTitledPanel().setName(dieserName);
-
+		
+		this.eltern = eltern;
+		
 		this.setModal(true);
 		this.setUndecorated(true);
 		this.setContentPanel(titlePanel() );
@@ -208,9 +214,20 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
                 			}
                 		}
         				if(Reha.thisClass.terminpanel != null){
-        					Reha.thisClass.terminpanel.setzeTerminAktuell(ttbl.getValueAt(ttbl.getSelectedRow(), 1).toString(),
-        							ttbl.getValueAt(ttbl.getSelectedRow(), 2).toString(),
-        							ttbl.getValueAt(ttbl.getSelectedRow(), 5).toString());
+        					try{
+               					Reha.thisClass.terminpanel.setzeTerminAktuell(ttbl.getValueAt(ttbl.getSelectedRow(), 1).toString(),
+            							ttbl.getValueAt(ttbl.getSelectedRow(), 2).toString(),
+            							ttbl.getValueAt(ttbl.getSelectedRow(), 5).toString());
+               					/*
+            					System.out.println(eltern.getAktiveSpalte(0));
+            					System.out.println(eltern.getAktiveSpalte(1));
+            					System.out.println(eltern.getAktiveSpalte(2));
+            					*/
+            					//eltern.terminBestaetigen(eltern.getAktiveSpalte(2),false);    						
+        					}catch(Exception ex){
+        						
+        					}
+ 
         				}
                         break;
                     }
@@ -466,7 +483,7 @@ public void keyPressed(KeyEvent arg0) {
 		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
 		FensterSchliessen(null);
 	}
-	if(arg0.getKeyCode() == 10){
+	if(arg0.getKeyCode() == 10 && (!arg0.isControlDown())){
 		if(arg0.getComponent().getName() != null){
 			if(arg0.getComponent().getName().equals("SucheFeld")){
 				vTdata.clear();
@@ -476,6 +493,24 @@ public void keyPressed(KeyEvent arg0) {
 			}
 		}
 
+	}
+	if(arg0.getKeyCode() == 10 && (arg0.isControlDown())){
+		int selrow = -1;
+		if((selrow=ttbl.getSelectedRow()) < 0){
+			return;
+		}
+		if(! Rechte.hatRecht(Rechte.Kalender_terminconfirminpast, true)){
+			return;
+		}
+		int frage = JOptionPane.showConfirmDialog(null,"Termin für - "+ttbl.getValueAt(selrow, 4).toString()+" - als behandelt bestätigen?","Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
+		if(frage==JOptionPane.YES_OPTION){
+			eltern.terminBestaetigen(eltern.getAktiveSpalte(2),false);
+			SwingUtilities.invokeLater(new Runnable(){
+				public void run(){
+					ttbl.requestFocus();
+				}
+			});
+		}
 	}
 
 	
@@ -563,6 +598,33 @@ final class SuchenInTagen extends Thread implements Runnable{
 								treadVect.addElement(atermine.clone());
 								//SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
 								atermine.clear();
+							}else if(suchkrit.equals("!®") && (!SystemConfig.isAndi)){
+								try{
+									String extraktnummer = (nummer.indexOf("\\") >= 0 ? nummer.substring(0,nummer.indexOf("\\")) : nummer);
+									if(extraktnummer.length() > 2 && (!name.startsWith("®")) && (!nummer.equals("@FREI"))){
+										uhrzeit = rs.getString("TS"+(ii+1));
+										sorigdatum = rs.getString(305); 
+										sdatum = DatFunk.sDatInDeutsch(sorigdatum);
+										skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+										//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
+										
+										termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
+										"  -  "+name +" - "+nummer+" - "+skollege;
+										//SchnellSuche.thisClass.setTextAreaText(termin);
+										atermine.add(DatFunk.WochenTag(sdatum));
+										atermine.add(sdatum);
+										atermine.add(uhrzeit.substring(0,5));
+										atermine.add(name);
+										atermine.add(nummer);								
+										atermine.add(skollege);								
+										atermine.add(sorigdatum+uhrzeit.substring(0,5));								
+										treadVect.addElement(atermine.clone());
+										atermine.clear();
+									}									
+								}catch(Exception ex){
+									
+								}
+
 							}
 						}
 					}

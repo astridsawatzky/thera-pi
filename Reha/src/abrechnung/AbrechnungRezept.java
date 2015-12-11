@@ -750,6 +750,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 						JOptionPane.showMessageDialog(null, "Kein Rezept zum Auf-/Abschließen ausgewählt");
 						return;
 					}
+					
 
 					if(rezeptFertig){
 						jXTreeTable.setEditable(true);
@@ -765,6 +766,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 							
 						}.execute();
 					}else{
+						if(rezeptWert <= zuzahlungWert){
+							JOptionPane.showMessageDialog(null, "<html><b>Glückwunsch zum größten -> D E P P E N  (des Jahres "+SystemConfig.aktJahr+")</b></html>");
+							return;
+						}
 						if(macheEDIFACT(true)){
 							jXTreeTable.setEditable(false);
 							rezeptFertig = true;
@@ -1227,6 +1232,23 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		}
 		
 		parseHTML(rez_nr.trim());	
+		try{
+			
+			if(rezeptWert <= zuzahlungWert){
+				String deppenAnsage = "<html><font color=#FF0000><b>Achtung, Achtung, Achtung !</b></font><br><br>"+
+						"Der Rezeptwert ist <b>geringer oder gleich hoch</b> wie die Zuzahlung des Patienten.<br>"+
+						"Die Abrechnung dieses Rezeptes würde demzufolge zur Ablehnung der gesamten<br>"+
+						"Rechnung führen.<br>Insofern ist die Abrechnung dieses Rezeptes <b>nicht empfehlenswert!</b><br><br>"+
+						"Rezeptwert = "+dfx.format(rezeptWert)+"<br>"+
+						"Rezeptgebühr = "+dfx.format(zuzahlungWert)+"<br><br>"+
+						"Ihre Forderung an die Kasse wäre demzufolge: <font color=#FF0000><b>"+dfx.format(rezeptWert-zuzahlungWert)+" EUR</b></font>"+
+						
+						"<br><br></html>";
+				JOptionPane.showMessageDialog(null, deppenAnsage);
+			}
+		}catch(NullPointerException ex){
+			
+		}
 		
 		
 		
