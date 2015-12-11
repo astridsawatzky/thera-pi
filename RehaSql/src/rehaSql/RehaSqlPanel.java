@@ -945,6 +945,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 								}
 							}else if(colTypeName.get(i).toUpperCase().startsWith("TINYINT")){
 								vec.add(rs.getInt(i+1));
+							}else if(colTypeName.get(i).toUpperCase().startsWith("SMALLINT")){
+								vec.add(rs.getInt(i+1));
 							}else if(colTypeName.get(i).startsWith("BIGINT")){
 								vec.add(rs.getLong(i+1));
 							}else if(colTypeName.get(i).startsWith("INT")){
@@ -1104,6 +1106,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 							}
 						}else if(obj instanceof Long){
 							OOTools.doCellValue(cellCursor, y, i+1, (Long) obj);
+						}else if(obj instanceof Short){
+							OOTools.doCellValue(cellCursor, y, i+1, (Integer) obj);
 						}else{
 							OOTools.doCellValue(cellCursor, y, i+1, (String) obj);
 						}

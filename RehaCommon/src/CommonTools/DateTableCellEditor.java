@@ -69,6 +69,8 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
 		        		(ftf.getText().trim().length()==7) ||(ftf.getText().trim().length()==9)){
 		        	////System.out.println("Verifyer in ActionEvent "+ftf.getText());
 		        	ftf.setText("  .  .    ");
+		        	
+		        	ftf.setCaretColor(Color.BLACK);
 		        	ftf.setCaretPosition(0);
 		        	ftf.postActionEvent();
 		        }else{
