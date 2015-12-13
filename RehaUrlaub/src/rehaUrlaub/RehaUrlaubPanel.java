@@ -149,7 +149,7 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 	String[] tooltips = { "Normaler Arbeitstag ", "voller Urlaubstag ",
 			"voller Feiertag ", "voller Krankheitstag ","halber Urlaubstag und halber Feiertag", "halber Urlaubstag und halber normaler Arbeitstag",
 			"halber Feiertag und halber normaler Arbeitstag ","halber Krankheitstag und halber normaler Arbeitstag ",
-			"Krankheitstag unklar!!!! ","Urlaubstag unklar!!!!"};
+			"Krankheitstag unklar!!!! ","Urlaubstag unklar!!!!","Feiertag unklar!!"};
 	
 	String[][] tageart = {{"----","----"},{"UuUu","UuUu"},{"FfFf","FfFf"},{"KkKk","KkKk"},
 			{"UuFf","UuFf"},{"Uu--","Uu--"},{"Ff--","Ff--"},
@@ -780,10 +780,31 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 						status1.validate();
 						((JComponent)status1.getParent()).validate();
 						int durchlauf = 0;
+						String matchcode = "unbelegt";
 						
+						/*
+						try{
+							matchcode = elternTab.vecKalUser.get(behandler-1).get(1);
+						}catch(Exception ex){
+							JOptionPane.showMessageDialog(null,"Fehler bei der Zuordnung des Behandlers mit Kalenderzeile = "+Integer.toString(behandler)+"!!");
+						}
+						*/
+						try{
+							for(int beh = 0; beh < elternTab.vecKalUser.size(); beh++){
+								if(elternTab.vecKalUser.get(beh).get(0).equals(Integer.toString(behandler))){
+									matchcode = elternTab.vecKalUser.get(beh).get(1);
+									break;
+								}
+							}
+						}catch(Exception ex){
+							JOptionPane.showMessageDialog(null,"Fehler bei der Zuordnung des Behandlers mit Kalenderzeile = "+Integer.toString(behandler)+"!!");
+						}
+						/*
 						String matchcode = 
+							// hier muß die Korrektur rein !	
+								//vecKalUser = SqlInfo.holeFelder("select kalzeile,matchcode from kollegen2 order by kalzeile");	
 							(behandler <= elternTab.vecKalUser.size() ? elternTab.vecKalUser.get(behandler-1).get(1) : "unbelegt");
-						
+						*/
 						for(int i = startWoche; i <= letzteWoche;i++){
 							status2.setText("KW: "+Integer.toString(i));
 							status2.validate();
@@ -1025,8 +1046,10 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 		int bloecke = -1;
 		boolean krank = false;
 		boolean urlaub = false;
+		boolean feiertag = false;
 		int ikrank = 0;
-		int iurlaub = 0;
+		int iurlaub = 0; 
+		int ifeiertag = 0;
 		
 		BigDecimal tagdauer = BigDecimal.valueOf(Double.parseDouble("0.000"));
 		BigDecimal wochendauer = BigDecimal.valueOf(Double.parseDouble("0.000"));
@@ -1039,6 +1062,7 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 			bloecke = Integer.parseInt( termine.get(i).get(termine.get(i).size()-6) );
 			krank = false;
 			urlaub = false;
+			feiertag = false;
 			
 			tagdauer = BigDecimal.valueOf(Double.parseDouble("0.000"));
 				
@@ -1056,10 +1080,7 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 						ausfalldauer = ausfalldauer.add( BigDecimal.valueOf( 
 								Double.parseDouble(termine.get(i).get( (b*5)+3 )+".000"  )  )  );
 					}
-					
-					
 				}
-				
 				if(termine.get(i).get( (b*5)+1 ).equalsIgnoreCase("@FREI") && 
 						termine.get(i).get(b*5).toUpperCase().startsWith("KRANK")){
 					krank = true;
@@ -1070,6 +1091,14 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 					urlaub = true;
 					iurlaub++;
 				}
+				if(termine.get(i).get( (b*5)+1 ).equalsIgnoreCase("@FREI") && 
+						termine.get(i).get( b*5 ).toUpperCase().startsWith("FTG ")){
+					//System.out.print("Feiertag erfasst! - ");
+					//System.out.println(termine.get(i).get( b*5 ).toUpperCase());
+					feiertag = true;
+					ifeiertag++;
+				}
+				
 			}
 			//Ende des Tages
 			//
@@ -1086,7 +1115,10 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 			if(urlaub){
 				tabmod.setValueAt("U???",row,( (i*2)+3 ) );	
 			}
-			if( (!urlaub) && (!krank) ){
+			if(feiertag){
+				tabmod.setValueAt("F???",row,( (i*2)+3 ) );	
+			}
+			if( (!urlaub) && (!krank) && !feiertag){
 				tabmod.setValueAt("----",row,( (i*2)+3 ) );	
 			}
 			//System.out.println("Tag Nr."+i+" hat insgesamt "+tagdauer+"minuten");

@@ -249,7 +249,7 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
 					SwingUtilities.invokeLater(new Runnable(){
 						public void run(){
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
-							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","");
+							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","",false);
 						}
 					});
 					return;
@@ -287,14 +287,14 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
 							}
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
 							new NewMail("Anwort auf Mail von: "+aktAbsender,false,new Point(pt.x+50,pt.y+50),
-									out,aktAbsender,aktBetreff);
+									out,aktAbsender,aktBetreff,false);
 						}
 					});
 					return;
 				}
 				if(cmd.equals("loeschen")){
 					if(! Rechte.hatRecht(RehaMail.Sonstiges_NachrichtenLoeschen, false)){
-						JOptionPane.showMessageDialog(null, "Keine Berechtigung zum L�schen der Nachricht");
+						JOptionPane.showMessageDialog(null, "Keine Berechtigung zum Löschen der Nachricht");
 						return;
 					}
 					if(! Rechte.hatRecht(RehaMail.Sonstiges_NachrichtenLoeschen, false)){
@@ -523,12 +523,12 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
 			stmt = "select absender,"+
 			"gelesen,versanddatum,gelesendatum,betreff,id from pimail where empfaenger_person='"+
 			RehaMail.mailUser+"' or empfaenger_gruppe like'%"+
-			RehaMail.mailUser+"%' order by gelesen DESC,versanddatum DESC";
+			RehaMail.mailUser+"%' order by gelesen DESC,id DESC,versanddatum DESC";
 		}else{
 			stmt = "select absender,"+
 			"gelesen,versanddatum,gelesendatum,betreff,id from pimail where empfaenger_person='"+
 			RehaMail.mailUser+"' or empfaenger_gruppe like'%"+
-			RehaMail.mailUser+"%' and gelesen = 'F' order by gelesen DESC,versanddatum DESC";
+			RehaMail.mailUser+"%' and gelesen = 'F' order by gelesen DESC,id DESC,versanddatum DESC";
 		}
 		//System.out.println(stmt);
 		doStatementAuswerten(stmt,all);

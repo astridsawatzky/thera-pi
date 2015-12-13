@@ -13,9 +13,11 @@ package rehaMail;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -64,6 +66,9 @@ public class RehaMail implements WindowListener {
 	public static IOfficeApplication officeapplication;
 	
 	public String dieseMaschine = null;
+	public static boolean inPatMessage = false;
+	public static String sidPatMessage = "-1";
+	public static String sidRezMessage = "-1";
 	/*
 	public static String dbIpAndName = null;
 	public static String dbUser = null;
@@ -77,16 +82,18 @@ public class RehaMail implements WindowListener {
 	public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
 	public static String dbUser = "rtauser";
 	public static String dbPassword = "rtacurie";
-	public static String officeProgrammPfad = "C:/Program Files (x86)/LibreOffice 3";
+	public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
 	//public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
 	public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
 	public static String progHome = "C:/RehaVerwaltung/";
 	public static String aktIK = "510841109";
 	
+	/*
 	public static String hmRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 	public static String hmRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 	public static String rhRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 	public static String rhRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
+	*/
 	/*
 	public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
 	public static String dbUser = "rtauser";
@@ -198,13 +205,23 @@ public class RehaMail implements WindowListener {
 					mailUser = args[3].replace("#", " ");
 				}
 				inif = INITool.openIni(args[0]+"ini/"+args[1]+"/","nachrichten.ini");
-				
-				timerdelay = inif.getLongProperty("RehaNachrichten", "NachrichtenTimer");
-				timerpopup = (inif.getIntegerProperty("RehaNachrichten", "NachrichtenPopUp") <= 0 ? false : true);
-				timerprogressbar = (inif.getIntegerProperty("RehaNachrichten", "NachrichtenProgressbar") <= 0 ? false : true);
-				inif = INITool.openIni(args[0]+"ini/"+args[1]+"/","fremdprog.ini");
-
-				pdfReader = inif.getStringProperty("FestProg", "FestProgPfad1");
+				try{
+					timerdelay = Long.parseLong(inif.getStringProperty("RehaNachrichten", "NachrichtenTimer"));
+					timerpopup = (Integer.parseInt(inif.getStringProperty("RehaNachrichten", "NachrichtenPopUp")) <= 0 ? false : true);
+					timerprogressbar = (Integer.parseInt(inif.getStringProperty("RehaNachrichten", "NachrichtenProgressbar")) <= 0 ? false : true);
+				}catch(Exception ex){
+					JOptionPane.showMessageDialog(null,"Fehler in der nachrichten.ini\nEs wird versucht die ini neu zu schreiben.\nStarten Sie im Anschluß Thera-Pi Nachrichten erneut");
+					inif.setStringProperty("RehaNachrichten", "NachrichtenTimer","600000",null);
+					inif.setStringProperty("RehaNachrichten", "NachrichtenPopUp","1",null);
+					inif.setStringProperty("RehaNachrichten", "NachrichtenProgressbar","1",null);
+					System.exit(0);
+				}
+				try{
+					inif = INITool.openIni(args[0]+"ini/"+args[1]+"/","fremdprog.ini");
+					pdfReader = inif.getStringProperty("FestProg", "FestProgPfad1");
+				}catch(Exception ex){
+					JOptionPane.showMessageDialog(null,"Fehler in der fremdprog.ini");
+				}
 				
 			}
 			
@@ -274,6 +291,7 @@ public class RehaMail implements WindowListener {
 				}
 				
 			}.execute();
+			
 			new Thread(){
 				public void run(){
 					try {
@@ -283,7 +301,7 @@ public class RehaMail implements WindowListener {
 					}		
 				}
 			}.start();
-
+			
 			
 
 			
@@ -688,13 +706,35 @@ public class RehaMail implements WindowListener {
 	@Override
 	public void windowOpened(WindowEvent arg0) {
 	}
-	
+	public void doPatNachricht(String nachricht){
+		final String xnachricht = nachricht;
+		if(inPatMessage){
+			JOptionPane.showMessageDialog(null,"Es ist bereits ein  Dialog für neue Nachricht geöffnet!\n\nEine zusätzliche patientenbezogene Nachricht kann deshalb nicht erstellt werden\n");
+			return;
+		}
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				try{
+					//("Erstellt in Thera-Pi Nachrichten:\n"+xnachricht.split("#")[4]).getBytes()
+					inPatMessage = true;
+					sidPatMessage = xnachricht.split("#")[2];
+					sidRezMessage = xnachricht.split("#")[3];
+					Point pt = RehaMail.thisFrame.getLocationOnScreen();
+					new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"",xnachricht.split("#")[4],true);
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+		});
+		
+	}
 	/**
 	 * @throws Throwable *************************/
 	
     public static void starteOfficeApplication() throws OfficeApplicationException{ 
 
     	try {
+    		System.out.println(RehaMail.officeProgrammPfad+" / "+RehaMail.officeNativePfad);
 			officeapplication = (IOfficeApplication)new StartOOApplication(RehaMail.officeProgrammPfad,RehaMail.officeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {

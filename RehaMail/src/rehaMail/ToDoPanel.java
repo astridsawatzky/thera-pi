@@ -14,12 +14,17 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,11 +32,15 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -59,11 +68,14 @@ import CommonTools.DatFunk;
 import CommonTools.DateTableCellRenderer;
 import CommonTools.DblCellEditor;
 import CommonTools.DoubleTableCellRenderer;
+import CommonTools.IconListRenderer;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
+import CommonTools.ReaderStart;
 import Tools.OOTools;
 import Tools.Rechte;
+import Tools.ToolsDialog;
 import CommonTools.SqlInfo;
 import Tools.UIFSplitPane;
 
@@ -366,7 +378,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 					SwingUtilities.invokeLater(new Runnable(){
 						public void run(){
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
-							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","");
+							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","",false);
+							
 						}
 					});
 					return;
@@ -404,7 +417,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 							}
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
 							new NewMail("Anwort auf Mail von: "+aktAbsender,false,new Point(pt.x+50,pt.y+50),
-									out,aktAbsender,aktBetreff);
+									out,aktAbsender,aktBetreff,false);
 						}
 					});
 					return;
@@ -440,7 +453,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 					return;
 				}
 				if(cmd.equals("attachments")){
-					//new ToolsDlgAktuelleRezepte(null,buts[4].getLocationOnScreen());
+					new ToolsDlgAktuelleRezepte(null,buts[4].getLocationOnScreen());
 					return;
 				}
 				if(cmd.equals("speichern")){
@@ -595,7 +608,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		bins = null;
 		
 		ins = (ByteArrayInputStream)SqlInfo.holeStream("todo", "emailtext", "id='"+aktId+"'");
-		System.out.println(ins);
+		//System.out.println(ins);
 		try {
 			rtfEditor.editorArea.getDocument().remove(0, rtfEditor.editorArea.getDocument().getLength());
 			rtfEditor.editorArea.getEditorKit().read(ins, rtfEditor.editorArea.getDocument(),0);
@@ -665,7 +678,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		todomod.setValueAt(Boolean.TRUE,todotab.convertRowIndexToModel(todotab.getSelectedRow()),1 );
 		gelesen = true;
 		if(RehaMail.testcase){
-			JOptionPane.showMessageDialog(null,"Zeitstempel f�r gelesen gesetzt!");
+			JOptionPane.showMessageDialog(null,"Zeitstempel für gelesen gesetzt!");
 		}
 	}
 	
@@ -680,7 +693,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 					if(!gelesen){
 						holeNeueMail();
 						holeAttachments();
-						setzeGelesen();
+						//setzeGelesen();
 					}
 				}
 			}	
@@ -879,6 +892,153 @@ private void doStatementAuswerten(final String stat,boolean all){
 	
 	
 }
+
+/********
+ * 
+ * 
+ * @param ts
+ * @return
+ */
+
+class ToolsDlgAktuelleRezepte{
+	public ToolsDlgAktuelleRezepte(String command,Point pt){
+		//boolean testcase = true;
+		Object[] obi  = new Object[attachmentFileName.size()];
+		Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
+		for(int i = 0; i < attachmentFileName.size();i++){
+			icons.put(attachmentFileName.get(i),testDatei(attachmentFileName.get(i)));	
+			obi[i] = attachmentFileName.get(i);
+		}
+		JList list = new JList(obi);
+		list.setCellRenderer(new IconListRenderer(icons));	
+		RehaMail.toolsDlgRueckgabe = -1;
+		ToolsDialog tDlg = new ToolsDialog(RehaMail.thisFrame,"Dateianhänge",list);
+		tDlg.setPreferredSize(new Dimension(200, 60+(attachmentFileName.size()*28)));
+		tDlg.setLocation(pt.x-70,pt.y+30);
+		tDlg.pack();
+		tDlg.setModal(true);
+		tDlg.activateListener();
+		tDlg.setVisible(true);	
+		
+		if(RehaMail.toolsDlgRueckgabe == -1){return;}
+		String komplett = RehaMail.progHome+"temp/"+RehaMail.aktIK+"/"+attachmentFileName.get(RehaMail.toolsDlgRueckgabe);
+
+		if(RehaMail.toolsDlgRueckgabe < 0){return;}
+		 if(komplett.toUpperCase().endsWith(".PDF") || komplett.toUpperCase().endsWith(".ODT")
+				 || komplett.toUpperCase().endsWith(".OTT") || komplett.toUpperCase().endsWith(".ODS")){
+				if(!speichereDatei(new String[] {null,RehaMail.progHome+"temp/"+RehaMail.aktIK},
+						attachmentFileName.get(RehaMail.toolsDlgRueckgabe),
+						Integer.toString(RehaMail.toolsDlgRueckgabe+1))){
+					return;
+				}
+			 
+			 if(komplett.toUpperCase().endsWith(".PDF")){
+				 new ReaderStart(komplett,RehaMail.pdfReader);
+			 }else if(komplett.toUpperCase().endsWith(".ODT") ||komplett.toUpperCase().endsWith(".ODT")  ){
+				Tools.OOTools.starteWriterMitDatei(komplett.replace("//", "/")); 
+			 }else if(komplett.toUpperCase().endsWith(".ODS")){
+				 Tools.OOTools.starteCalcMitDatei(komplett); 
+			 }
+		 }else{
+				String[] indatei = dateiDialog(attachmentFileName.get(RehaMail.toolsDlgRueckgabe));
+				if(indatei[0]==null){return;}
+				if(speichereDatei(indatei,
+						attachmentFileName.get(RehaMail.toolsDlgRueckgabe),
+						Integer.toString(RehaMail.toolsDlgRueckgabe+1))){
+					JOptionPane.showMessageDialog(null, "Datei "+attachmentFileName.get(RehaMail.toolsDlgRueckgabe)+" erfolgreich gespeichert!\n\n"+
+							"Verzeichnis: --> "+indatei[1].replace("\\", "/"));
+
+				}
+			 
+		 }
+		
+	}
+	private ImageIcon testDatei(String filename){
+		if(filename.toUpperCase().endsWith(".PDF")){
+			return RehaMail.attachmentIco[0];
+		}else if(filename.toUpperCase().endsWith(".ODT") || filename.toUpperCase().endsWith(".OTT")){
+			return RehaMail.attachmentIco[1];
+		}else if(filename.toUpperCase().endsWith(".ODS")){
+			return RehaMail.attachmentIco[2];
+		}
+		return RehaMail.attachmentIco[4];
+	}
+}/*********************************************/
+private boolean speichereDatei(String[] pfade,String datei,String attachnumber){
+	boolean success = true;
+	//System.out.println(pfade[0]);
+	//System.out.println(pfade[1]);
+	String komplett = pfade[1].replace("\\", "/")+"/"+datei;
+	  try{
+		  RehaMail.thisFrame.setCursor(RehaMail.WAIT_CURSOR);
+		  File f=new File(komplett);
+		  InputStream inputStream= SqlInfo.holeStream("todo", "attach"+attachnumber, "id='"+aktId+"'");
+		  OutputStream out=new FileOutputStream(f);
+		  byte buf[]=new byte[1024];
+		  int len;
+		  while((len=inputStream.read(buf))>0){
+			  out.write(buf,0,len);  
+		  }
+		  out.close();
+		  inputStream.close();
+		  RehaMail.thisFrame.setCursor(RehaMail.DEFAULT_CURSOR);
+	  }catch (IOException e){
+		  RehaMail.thisFrame.setCursor(RehaMail.DEFAULT_CURSOR);
+			JOptionPane.showMessageDialog(null, "Speichern der Datei "+datei+" fehlgeschlagen" );
+
+		  return false;
+	  }
+	return success;
+		
+}	
+
+
+private String[] dateiDialog(String pfad){
+	//String sret = "";
+	String[] sret ={null,null};
+	//System.out.println("Speichern in "+pfad);
+	final JFileChooser chooser = new JFileChooser("Verzeichnis auswählen");
+    chooser.setDialogType(JFileChooser.SAVE_DIALOG);
+    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+    final File file = new File(pfad);
+
+    chooser.setCurrentDirectory(new File(RehaMail.progHome));
+    chooser.setSelectedFile(file);
+    chooser.addPropertyChangeListener(new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent e) {
+            if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
+                    || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
+                //final File f = (File) e.getNewValue();
+            }
+        }
+
+    });
+    chooser.setVisible(true);
+    setCursor(RehaMail.thisClass.normalCursor);
+    final int result = chooser.showSaveDialog(null);
+
+    if (result == JFileChooser.APPROVE_OPTION) {
+        File inputVerzFile = chooser.getSelectedFile();
+        String inputVerzStr = inputVerzFile.getPath();
+        
+
+        if(inputVerzFile.getName().trim().equals("")){
+        	
+        	//sret = "";
+        }else{
+        	sret[0] = inputVerzFile.getName().trim();
+        	sret[1] = inputVerzStr;
+        }
+    }else{
+    	//sret = ""; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
+    }
+    chooser.setVisible(false); 
+
+    return sret;
+}
+
+
 private String getTimestampString(String ts){
 	try{
 		return DatFunk.sDatInDeutsch(ts.split(" ")[0].trim())+"-"+ts.split(" ")[1].trim().substring(0,8);
@@ -927,6 +1087,8 @@ private String getTimestampString(String ts){
 		}
 		
 	}
+	
+	
 	public void doSpeichernNewTodo(
 		String empfaenger,
 		String betreff,

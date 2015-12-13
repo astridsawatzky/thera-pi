@@ -53,6 +53,9 @@ public class RehaReverseServer extends SwingWorker<Void,Void>{
 			RehaMail.thisClass.getMTab().getToDoPanel().checkForNewToDo(true);
 			RehaMail.updateTitle(RehaMail.mailUser);
 			RehaMail.setRechte();
+		}else if(op.split("#")[1].equals(RehaIOMessages.WANT_PATMESSAGE)){
+			RehaMail.thisClass.doPatNachricht(op);
+			
 		}
 	}
 	@Override

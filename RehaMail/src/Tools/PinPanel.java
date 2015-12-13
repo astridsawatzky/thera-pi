@@ -105,7 +105,7 @@ public class PinPanel extends JXPanel implements ActionListener{
 			rEvt.setRehaEvent("PinPanelEvent");
 			rEvt.setDetails(sEvent,"GRUEN") ;
 			//System.outprintln("*****************************************");
-			//System.outprintln("*****abgefeuert von GRÜN****"+sEvent);
+			//System.outprintln("*****abgefeuert von GR�N****"+sEvent);
 			//System.outprintln("*****************************************");
 			RehaTPEventClass.fireRehaTPEvent(rEvt);
 			return;
@@ -124,7 +124,7 @@ public class PinPanel extends JXPanel implements ActionListener{
 				Component comp = null;
 				for(int i = 0; i < comps;i++){
 					comp = this.getComponent(i);
-					ListenerTools.removeListeners(comp);
+					CommonTools.ListenerTools.removeListeners(comp);
 				}
 				img1 = null;
 				img2 = null;

@@ -212,7 +212,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		listenerAusschalten();
 		doStatementAuswerten("select empfaenger_person,"+
 				"gelesen,versanddatum,gelesendatum,betreff,id from pimail where absender='"+
-				RehaMail.mailUser+"' order by gelesen DESC,versanddatum DESC");
+				RehaMail.mailUser+"' order by gelesen DESC,versanddatum DESC,gelesendatum DESC");
 		for(int i = 0; i < 4; i++){
 			if(buts[i] != null){
 				buts[i].setEnabled(true);	
@@ -304,7 +304,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 					SwingUtilities.invokeLater(new Runnable(){
 						public void run(){
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
-							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","");
+							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","",false);
 						}
 					});
 					return;

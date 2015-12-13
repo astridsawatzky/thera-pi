@@ -433,7 +433,7 @@ class RehaStarter extends SwingWorker<Integer,Void>{
 		*/
 		
 		//String start = new String("java -jar "+memsizemin+memsizemax+memsizethread+TheraPi.proghome+"Reha.jar "+TheraPi.StartMandant /*+" > "+TheraPi.proghome+TheraPi.StartMandant.split("@")[0]+".log" */);
-		String start = new String("java -jar "+memsizemin+memsizemax+TheraPi.proghome+"Reha.jar "+TheraPi.StartMandant );
+		String start = new String("java -jar -Djava.net.preferIPv4Stack=true "+memsizemin+memsizemax+TheraPi.proghome+"Reha.jar "+TheraPi.StartMandant );
 		//String start = new String("cmd.exe /C start "+TheraPi.proghome.replace("/",File.separator)+"runtherapi.bat "+TheraPi.StartMandant+" "+TheraPi.StartMandant.split("@")[0]+".log");
 		
 		System.out.println("Kommando ist "+start);

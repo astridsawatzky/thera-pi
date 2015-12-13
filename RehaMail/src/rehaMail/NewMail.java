@@ -68,10 +68,18 @@ import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 
 
+
+
+
+
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import RehaIO.RehaIOMessages;
+import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.NativeView;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.desktop.IFrame;
@@ -116,16 +124,20 @@ public class NewMail extends JFrame  implements WindowListener  {
 	JRtaTextField empfaenger = null;
 	JRtaTextField attachments = null;
 	String aktAbsender = "";
+	private boolean fromOutside = false;
+	private String outBetreff = "";
 	
 	RTFEditorPanel rtfEditor= null;
 	ObjectInputStream ois = null;
 	ByteArrayInputStream in = null;
 	Vector<Vector<String>> vecAttachments = new Vector<Vector<String>>(); 
 	ByteArrayOutputStream out;
-	public NewMail(String title,boolean neu,Point pt,ByteArrayOutputStream out,String absender,String sbetreff){
+	public NewMail(String title,boolean neu,Point pt,ByteArrayOutputStream out,String absender,String sbetreff,boolean fromOutside){
 		super();
 		this.neu = neu;
 		this.out = out;
+		this.fromOutside = fromOutside;
+		this.outBetreff = sbetreff;
 		/*
 		xdescript = new DocumentDescriptor();
 		xdescript.setReadOnly(true);
@@ -173,7 +185,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 			}
 		});
 		if(out != null){
-			System.out.println("es ist eine Reply");
+			//System.out.println("es ist eine Reply");
 			bisherigeNachricht(absender);
 		}
 		pack();
@@ -290,7 +302,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		vec.add(String.valueOf(ret[1].replace("\\", "/")) );
 		vecAttachments.add( (Vector<String>)vec.clone()  );
 		regleAttachments();
-		System.out.println(vecAttachments);
+		//System.out.println(vecAttachments);
 
 	}
 	private void regleAttachments(){
@@ -356,12 +368,32 @@ public class NewMail extends JFrame  implements WindowListener  {
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
 		}
+		
 		//document.getPersistenceService().export(out,OpenDocumentFilter.FILTER);
 		try {
 			ByteArrayInputStream ins = null;
 			out.flush();
 			RehaMail.thisClass.getMTab().sendPanel.listenerAusschalten();
 			RehaMail.nachrichtenInBearbeitung = true;
+			if(this.fromOutside && RehaMail.inPatMessage){
+				frage = JOptionPane.showConfirmDialog(null,"Wollen Sie den Text dieser Nachricht zusätzlich in den Patientenstamm übertragen?","Benutzeranfrage", JOptionPane.YES_NO_OPTION);
+				if(frage == JOptionPane.YES_OPTION){
+					String xtext = SqlInfo.holeEinzelFeld("select anamnese from pat5 where pat_intern = '"+RehaMail.sidPatMessage+"' LIMIT 1");
+					xtext = "Quelle: Thera-Pi - Nachrichten, Autor: "+RehaMail.mailUser+", Datum: "+DatFunk.sHeute()+"\n"+
+					rtfEditor.editorArea.getDocument().getText(0, rtfEditor.editorArea.getDocument().getLength())+
+					"\n"+"***********Ende der Nachricht**************\n"+
+					xtext;
+					
+					String xstmt = "update pat5 set anamnese = '"+StringTools.EscapedDouble(xtext)+"' where pat_intern = '"+ RehaMail.sidPatMessage+"' LIMIT 1";
+					SqlInfo.sqlAusfuehren(xstmt);
+					if(RehaMail.sidRezMessage.equals("-1")){
+						new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"RehaMail#"+RehaIOMessages.MUST_PATFIND+"#"+RehaMail.sidPatMessage);
+					}else{
+						new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"RehaMail#"+RehaIOMessages.MUST_PATANDREZFIND+"#"+RehaMail.sidPatMessage+"#"+RehaMail.sidRezMessage);	
+					}
+				}
+			}
+			
 			for(int i = 0; i < versand.size();i++){
 				try {
 					doSpeichernMail(
@@ -512,6 +544,9 @@ public class NewMail extends JFrame  implements WindowListener  {
 		
 		betreff = new JRtaTextField("nix",true);
 		betreff.setFont(new Font("Courier New",12,12));
+		if(!outBetreff.equals("")){
+			betreff.setText(outBetreff);
+		}
 		pan.add(betreff,cc.xyw(3,3,3));
 		pan.validate();
 		
@@ -672,6 +707,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
+		RehaMail.inPatMessage = false;
 		if(document != null){
 			document.close();
 			System.out.println("Dokument wurde geschlossen");
@@ -680,6 +716,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
+		RehaMail.inPatMessage = false;
 		if(document != null){
 			document.close();
 			System.out.println("Dokument wurde geschlossen");
