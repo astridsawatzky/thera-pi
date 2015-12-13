@@ -1,39 +1,32 @@
 package org.thera_pi.updates;
 
+
+
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
-public class Verschluesseln {
+public class VerschluesselnDB {
 
-  final private transient static String password = (TheraPiUpdates.isrta ? "jeLaengerJeBesserPasswortRehaVerwaltung" : "NurFuerRegistrierteUserjeLaengerJeBesserPasswortRehaVerwaltung") ;
+  final private transient static String password = "jeLaengerJeBesserPasswortRehaVerwaltung";
   final private transient byte [] salt = { (byte) 0xc9, (byte) 0xc9,(byte) 0xc9,(byte) 0xc9,(byte) 0xc9,(byte) 0xc9,(byte) 0xc9,(byte) 0xc9};
   private final int iterations = 3;
 
-  protected Verschluesseln() {
+  protected VerschluesselnDB() {
 //    java.security.Security.addProvider(new com.sun.crypto.provider.SunJCE()); // implizit bereits erledigt!
-	  if(TheraPiUpdates.isrta){
-		  //System.out.println("Kurzer Algo");
-	  }else{
-		  //System.out.println("Langer  Algo");
-	  }
   }
 
   /** instance */
-  private static Verschluesseln instance;
+  private static VerschluesselnDB instance;
 
   /** Singleton Factory
    * @return instance
    */
-  public static Verschluesseln getInstance () {
+  public static VerschluesselnDB getInstance () {
     if (instance == null) {
-      instance = new Verschluesseln ();
+      instance = new VerschluesselnDB ();
     }
     return instance;
 
-  }
-  
-  public static void setInstanceNull(){
-	  instance = null;
   }
 
 
@@ -111,9 +104,9 @@ public class Verschluesseln {
     Verschluesseln man = Verschluesseln.getInstance();
     man.init(man.password.toCharArray(), man.salt, man.iterations);
     final String encrypted = man.encrypt("Bastie");
-    System.out.println ("Verschl�sselt :"+encrypted);
+    //System.out.println ("Verschl�sselt :"+encrypted);
     final String decrypted = man.decrypt (encrypted);
-    System.out.println("Entschl�sselt :"+decrypted);
+    //System.out.println("Entschl�sselt :"+decrypted);
   }
   */
 

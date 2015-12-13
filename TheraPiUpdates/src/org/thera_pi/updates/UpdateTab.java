@@ -26,7 +26,7 @@ public class UpdateTab  extends JXPanel implements ChangeListener{
 	JTabbedPane updateTab = null;
 	public JXTitledPanel jxTitel;
 	public JXHeader jxh;
-	JXPanel tab1 = null;
+	UpdatePanel tab1 = null;
 	JXPanel tab2 = null;
 	JXPanel tab3 = null;
 	JXPanel tab4 = null;
@@ -46,6 +46,11 @@ public class UpdateTab  extends JXPanel implements ChangeListener{
 		
 		add(updateTab,BorderLayout.CENTER);
 		validate();
+	}
+	
+	public void starteFTP(){
+		tab1.starteFTP();
+		
 	}
 	public void activateUpdateCheck(){
 		((UpdatePanel)tab1).doUpdateCheck();

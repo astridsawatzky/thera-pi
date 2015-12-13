@@ -37,10 +37,16 @@ public class FTPTools {
 	private UpdateConfig updateConfig;
     
 	public FTPTools(){
-		updateConfig = UpdateConfig.getInstance();
-		ftpClient = new FTPClient();
+		try{
+			updateConfig = UpdateConfig.getInstance();
+			ftpClient = new FTPClient();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		/*
 		ftpClient.addProtocolCommandListener((ProtocolCommandListener) new PrintCommandListener(
                 new PrintWriter(System.out)));
+        */        
 	}
 	
 	public FTPFile[] holeDatNamen(){
@@ -218,11 +224,11 @@ public class FTPTools {
 			return false;
 		}
 		if(!ftpClient.isConnected()){
-			System.out.println("nicht connected");
+			//System.out.println("nicht connected");
 			if(!nurConnect()){
 				return false;				
 			}
-			System.out.println("connected");
+			//System.out.println("connected");
 
 		}
 
@@ -316,14 +322,14 @@ public class FTPTools {
 				fos.flush();
 				fos.close();
 				ins.close();
-				System.out.println(ftpClient.getReplyString());
+				//System.out.println(ftpClient.getReplyString());
 				if(!ftpClient.completePendingCommand()) {
 					ftpClient.logout();
 					ftpClient.disconnect();
 					JOptionPane.showMessageDialog(null, "Die Puffer des belämmerten FTP's konnten nicht vollständig geschrieben werden!!!!(Ich krieg die Krise)");
 					System.err.println("Die Puffer des belämmerten FTP's konnten nicht vollständig geschrieben werden!!!!(Ich krieg die Krise)");
 				 }
-				System.out.println(ftpClient.getReplyString());			
+				//System.out.println(ftpClient.getReplyString());			
 				ins = null;
 				fos = null;
 				if(progresszeigen){
@@ -390,19 +396,23 @@ public class FTPTools {
 
 	/*****************************************************/
 	public boolean holeDateiSilent(String datfern,String vznah,boolean doprogress){
-		if(ftpClient == null){
-			return false;
-		}
-		if(!ftpClient.isConnected()){
-			if(!nurConnect()){
-				return false;				
+		try{
+			if(ftpClient == null){
+				return false;
 			}
+			if(!ftpClient.isConnected()){
+				if(!nurConnect()){
+					return false;				
+				}
 
-		}
-		if(updateConfig.isUseActiveMode()){
-			ftpClient.enterLocalActiveMode();					
-		}else{
-			ftpClient.enterLocalPassiveMode();	
+			}
+			if(updateConfig.isUseActiveMode()){
+				ftpClient.enterLocalActiveMode();					
+			}else{
+				ftpClient.enterLocalPassiveMode();	
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 
 		try {
@@ -513,7 +523,7 @@ public class FTPTools {
 			/*********************************/
 			
 			ftpClient.setSendBufferSize(1024*8);
-			System.out.println(ftpClient.getReplyString());
+			//System.out.println(ftpClient.getReplyString());
 			
 			OutputStream fos = ftpClient.storeFileStream(datfern);
 			if(!FTPReply.isPositiveIntermediate(ftpClient.getReplyCode())) {
@@ -574,14 +584,14 @@ public class FTPTools {
 			fos.flush();
 			fos.close();
 			ins.close();
-			System.out.println(ftpClient.getReplyString());
+			//System.out.println(ftpClient.getReplyString());
 			if(!ftpClient.completePendingCommand()) {
 				ftpClient.logout();
 				ftpClient.disconnect();
 				JOptionPane.showMessageDialog(null, "Die Puffer des belämmerten FTP's konnten nicht vollständig geschrieben werden!!!!(Ich krieg die Krise)");
 				System.err.println("Die Puffer des belämmerten FTP's konnten nicht vollständig geschrieben werden!!!!(Ich krieg die Krise)");
 			 }
-			System.out.println(ftpClient.getReplyString());			
+			//System.out.println(ftpClient.getReplyString());			
 			ins = null;
 			fos = null;
 			if(progresszeigen){
@@ -598,7 +608,7 @@ public class FTPTools {
 			
 			//ftpClient.appendFile(remote, local)
 			ftpClient.logout();
-			System.out.println(ftpClient.getReplyString());
+			//System.out.println(ftpClient.getReplyString());
 			ftpClient.disconnect();
 
 
@@ -656,7 +666,7 @@ public class FTPTools {
 			/*********************************/
 			
 			ftpClient.setSendBufferSize(1024*8);
-			System.out.println(ftpClient.getReplyString());
+			//System.out.println(ftpClient.getReplyString());
 
 
 			OutputStream fos = ftpClient.storeFileStream(datfern);
@@ -714,7 +724,7 @@ public class FTPTools {
 			fos.flush();
 			fos.close();
 			ins.close();
-			System.out.println(ftpClient.getReplyString());
+			//System.out.println(ftpClient.getReplyString());
 			if(!ftpClient.completePendingCommand()) {
 				ftpClient.logout();
 				ftpClient.disconnect();

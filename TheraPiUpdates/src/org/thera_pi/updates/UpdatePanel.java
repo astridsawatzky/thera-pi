@@ -74,6 +74,8 @@ public class UpdatePanel extends JXPanel{
 	
 	DecimalFormat dcf = new DecimalFormat("##########0.00");
 	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy  HH:mm:ss"); //Konv.
+	SimpleDateFormat dformatter = new SimpleDateFormat("yyyy-MM-dd");
+	Date currentTime = new Date();
 
 	public static Vector<Vector<String>> updatefiles = new Vector<Vector<String>>();
 	public static Vector<String[]> mandvec = new Vector<String[]>();
@@ -100,19 +102,25 @@ public class UpdatePanel extends JXPanel{
 	public Connection conn;
 	private JFrame jFrame;
 	
+	//Verschluesseln man = Verschluesseln.getInstance();
+	
+
 	UpdatePanel(TheraPiUpdates xeltern,JFrame jFrame, UpdateTab xupdateTab){
 	
 		
 		super();
 		eltern = xeltern;
 		this.jFrame = jFrame;
-		
+		//man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		if(xupdateTab != null){
 			updateTab = xupdateTab;
 		}
 		setLayout(new BorderLayout());
 		add(getHeader(),BorderLayout.NORTH);
 		add(getContent(),BorderLayout.CENTER);
+		//doUpdateCheck();
+	}
+	public void starteFTP(){
 		doUpdateCheck();
 	}
 	public void doUpdateCheck(){
@@ -134,7 +142,7 @@ public class UpdatePanel extends JXPanel{
 	}
 	private JXHeader getHeader(){
 		JXHeader head = new JXHeader();
-		String titel = "<html><font size='5'><font color='e77817'>Thera-Pi</font>&nbsp;&nbsp; Update-Explorer</font></html>";
+		String titel = "<html><font size='5'><font color='e77817'>Thera-Pi</font>&nbsp;&nbsp; Update-Explorer (Vers. 2015-01)</font></html>";
         head.setTitle(titel);
         String description = "<html>Ein rotes "+
         "<img src='file:///"+UpdateConfig.getProghome()+"icons/application-exit.png' width='16' height='16' align=\"bottom\">"+ 
@@ -163,6 +171,12 @@ public class UpdatePanel extends JXPanel{
 		tab.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent evt){
 				if(evt.getClickCount()==2){
+					if(!TheraPiUpdates.updateallowed){
+						JOptionPane.showMessageDialog(null,"Keine gültigen Zugangsdaten eingegeben!\nUpdates können nicht heruntergeladen werden!");
+						//jFrame.dispose();
+						//System.exit(0);
+						return;
+					}
 					testeObUpdate(tab.getSelectedRow());
 				}
 			}
@@ -270,7 +284,24 @@ public class UpdatePanel extends JXPanel{
 							pbar.setValue(0);
 							SwingUtilities.invokeLater(new Runnable(){
 								public void run(){
-									TheraPiUpdates.RunAjax("http://www.thera-pi.org/html/updates.php", "updated.txt", xupdate);
+									/*
+									for(int i = 0; i < 6;i++){
+										System.out.println(i+" Divisionsrest = "+(eltern.userdaten.get(i).length() % 8));
+									}
+									*/
+									String stmt = "insert into updated set ik='"+
+									eltern.userdaten.get(0)+"', datei='"+
+									xupdate+"', userid='"+
+									eltern.userdaten.get(6)+"', datum='"+
+									dformatter.format(currentTime)+"', "+
+									"mac='"+eltern.strMACAdr+"'";
+									try {
+										SqlInfo.sqlAusfuehren(TheraPiUpdates.conn, stmt);
+									} catch (SQLException e) {
+										e.printStackTrace();
+									}
+									
+									//TheraPiUpdates.RunAjax("http://www.thera-pi.org/html/updates.php", "updated.txt", xupdate);
 								}
 							});
 							
@@ -612,23 +643,30 @@ public class UpdatePanel extends JXPanel{
 	    	});
 
 			for(int i = 0; i < mandvec.size();i++){
-				
 				ik = mandvec.get(i)[0];
-				holeDBZugang(UpdateConfig.getProghome()+"ini/"+ik+"/rehajava.ini");
-				System.out.println("Mandant "+UpdateConfig.getProghome()+"ini/"+ik+"/rehajava.ini");
-				StarteDB();
-				for(int x = 0; x < vecstmt.size();x++){
-					try {
-						SqlInfo.sqlAusfuehren(conn, vecstmt.get(x));
-						System.out.println("Execute = "+vecstmt.get(x));
-						//System.out.println("Warnings = "+conn.getWarnings().getSQLState());
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null,"Fehler beim anlegen der Tabelle\nDer Fehlertext lautet:\n"+e.getMessage()); 
-						//JOptionPane.showMessageDialog(null, "Fehler in der Ausführung des Sql-Statements\n"+vecstmt.get(x));
-						e.printStackTrace();
+				int frage = JOptionPane.showConfirmDialog(null, "Wollen Sie die Tabellen der Datenbank für IK ->"+ik+" jetzt anpassen","Achtung wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
+				if(frage==JOptionPane.YES_OPTION){
+					try{
+						holeDBZugang(UpdateConfig.getProghome()+"ini/"+ik+"/rehajava.ini");
+						System.out.println("Mandant "+UpdateConfig.getProghome()+"ini/"+ik+"/rehajava.ini");
+						StarteDB();
+						for(int x = 0; x < vecstmt.size();x++){
+							try {
+								SqlInfo.sqlAusfuehren(conn, vecstmt.get(x));
+								System.out.println("Execute = "+vecstmt.get(x));
+								//System.out.println("Warnings = "+conn.getWarnings().getSQLState());
+							} catch (Exception e) {
+								JOptionPane.showMessageDialog(null,"Fehler beim anlegen der Tabelle\nBetroffene IK: "+ik+"\nDer Fehlertext lautet: "+e.getMessage()+"\n\nStatement: "+vecstmt.get(x)); 
+								//JOptionPane.showMessageDialog(null, "Fehler in der Ausführung des Sql-Statements\n"+vecstmt.get(x));
+								e.printStackTrace();
+							}
+						}
+
+						StopeDB();
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(null,"Fehler beim öffnen der Datenbank\nBetroffene IK: "+ik+"\nFehlertext: "+(ex.getMessage()==null ? "nicht verfügbar" : ex.getMessage()) );
 					}
 				}
-				StopeDB();
 			}
 	    	SwingUtilities.invokeLater(new Runnable(){
 	    		public void run(){
@@ -696,10 +734,14 @@ public class UpdatePanel extends JXPanel{
 			dbUser = inif.getStringProperty("DatenBank","DBBenutzer1");
 			String pw = inif.getStringProperty("DatenBank","DBPasswort1");
 			String decrypted = null;
+			
 			if(pw != null){
-				Verschluesseln man = Verschluesseln.getInstance();
-				man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
+				
+				TheraPiUpdates.isrta = true;
+				VerschluesselnDB man = VerschluesselnDB.getInstance();
+				man.init(VerschluesselnDB.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 				decrypted = man.decrypt (pw);
+				TheraPiUpdates.isrta = false;
 			}else{
 				decrypted = new String("");
 			}

@@ -1,4 +1,4 @@
-package org.thera_pi.updates;
+ package org.thera_pi.updates;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,7 +21,11 @@ public class TestForUpdates {
 	private static Vector<String[]> mandvec = new Vector<String[]>();
 
 	public TestForUpdates(){
-		doHoleUpdateConfSilent();
+		try{
+			doHoleUpdateConfSilent();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	
@@ -30,6 +34,21 @@ public class TestForUpdates {
 	
 	/*******************/
 	private void doHoleUpdateConfSilent(){
+
+		try{
+			
+			FTPTools ftpt = new FTPTools();
+			
+			ftpt.holeDateiSilent("update.files", UpdateConfig.getProghome(), false);
+
+			updateCheck(UpdateConfig.getProghome() + "update.files");
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
+		/*
+
 		try{
 			
 			FTPTools ftpt = new FTPTools();
@@ -38,12 +57,14 @@ public class TestForUpdates {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
+		*/
+
 	}
 	
 	
 	public boolean doFtpTest(){
 		//System.out.println("doFtpTest");
-
+		
 		FTPTools ftpt = new FTPTools();
 		FTPFile[] ffile = ftpt.holeDatNamen();
 		for(int i = 0; i < ffile.length;i++){
@@ -96,7 +117,7 @@ public class TestForUpdates {
 	
 	/************************************************************************/
 	private void updateCheck(String xupdatefile){
-		
+
 		String updatedir = "";
 		String zeile = "";
 		FileReader reader = null;
@@ -104,12 +125,17 @@ public class TestForUpdates {
 		
 		/************************/
 		INIFile inif = new INIFile(UpdateConfig.getProghome() + "ini/mandanten.ini");
-		int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
-		for(int i = 0; i < AnzahlMandanten;i++){
-			String[] mand = {null,null};
-			mand[0] = new String(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+(i+1)));
-			mand[1] = new String(inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+(i+1)));
-			mandvec.add(mand);
+		try{
+			int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
+			for(int i = 0; i < AnzahlMandanten;i++){
+				String[] mand = {null,null};
+				mand[0] = new String(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+(i+1)));
+				mand[1] = new String(inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+(i+1)));
+				mandvec.add(mand);
+			}
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 		
 		
