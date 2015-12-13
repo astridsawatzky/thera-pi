@@ -52,6 +52,7 @@ public class CreatePKCS7 {
 		  CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
 		  generator.addSigner(getPrivateKey(), (X509Certificate) getCertificate(),
 		      CMSSignedDataGenerator.DIGEST_SHA1);
+		  
 
 		  generator.addCertificatesAndCRLs(getCertStore());
 		  CMSProcessable content = new CMSProcessableByteArray(data);

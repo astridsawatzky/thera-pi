@@ -38,7 +38,7 @@ import org.jdesktop.swingx.JXPanel;
 import pdfDrucker.PDFDrucker;
 
 import utils.DatFunk;
-import utils.INIFile;
+import CommonTools.INIFile;
 import utils.JCompTools;
 import utils.JRtaCheckBox;
 import utils.JRtaRadioButton;

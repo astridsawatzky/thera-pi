@@ -12,8 +12,8 @@ public class Constants {
 	public static String INI_FILE = null;
 	public static String CRYPTO_FILES_DIR = null;
 	public static String KEYSTORE_DIR = null;
-	public static String OPENOFFICE_HOME = null;
-	public static String OPENOFFICE_JARS = null;
+	//public static String OPENOFFICE_HOME = null;
+	//public static String OPENOFFICE_JARS = null;
 
 	public static String PRAXIS_CE = null;
 	public static String PRAXIS_OU_FIRMA = null;
@@ -32,6 +32,7 @@ public class Constants {
 	public static String REAL_CA_O = null;
 	
 	public Constants(){
+		/*
 		if(System.getProperty("os.name").contains("Windows")){
 			INI_FILE = System.getProperty("user.dir")+ File.separator +"nebraska_windows.conf";
 		}else if(System.getProperty("os.name").contains("Linux")){
@@ -66,6 +67,8 @@ public class Constants {
 		TEST_CA_KS_PW = inif.getStringProperty("TestCA","TEST_CA_KS_PW"  ); 
 		System.out.println(OPENOFFICE_HOME);
 		
+		*/
+		
 	}
 	
 	
@@ -75,8 +78,10 @@ public class Constants {
 	public static final String CIPHER_AND_PADDING = "DESEDE/CBC/PKCS7PADDING";
 	public static final String CIPHER_AND_PADDING_OLD = "DES/CBC/PKCS7Padding";
 	public static final String HASH_ALGORITHM_SHA_1 = "SHA-1";
+	public static final String HASH_ALGORITHM_SHA_256 = "SHA-256";
 	public static final String HASH_ALGORITHM_MD5 = "MD5";
-	public static final String HASH_ALGORITHM = HASH_ALGORITHM_SHA_1;
+	public static final String HASH_ALGORITHM_OLD = HASH_ALGORITHM_SHA_1;
+	public static final String HASH_ALGORITHM_NEW = HASH_ALGORITHM_SHA_256;
 	public static final String KEYSTORE_PASSWORD = "196205";
 	public static final String KEYSTORE_PASSWORD2 = KEYSTORE_PASSWORD;
 	public static final String KEYSTORE_TYPE = "BCPKCS12";
@@ -87,7 +92,15 @@ public class Constants {
 	public static final String SECRET_KEY_ALGORITHM_DES = "DES";
 	public static final String SECURITY_PROVIDER = "BC";
 	public static final String SHA1WITH_RSA = "SHA1withRSA";
-	public static final String SIGNATURE_ALGORITHM = "SHA1WithRSAEncryption";
+	public static final String SHA256WITH_RSA = "SHA256withRSA";
+	public static final String SIGNATURE_ALGORITHM_OLD = "SHA1WithRSAEncryption";
+	public static final String SIGNATURE_ALGORITHM_NEW = "SHA256WithRSAEncryption";
 	public static final String SIGNATURE_ALGORITHM_SHORT = "SHA1WithRSA";
 	public static final String SIGNATURE_ALGORITHM_SHA256 = "SHA256WithRSAEncryption";
+	
+	public static String  HASH_ALGORITHM_SHA_USED;
+	public static String  HASH_ALGORITHM_USED;
+	public static String  SHAWITH_RSA_USED;
+	public static String  SIGNATURE_ALGORITHM_USED;
+	public static String  SIGNATURE_ALGORITHM_SIZE_USED;
 }

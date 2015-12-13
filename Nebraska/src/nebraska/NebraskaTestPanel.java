@@ -114,7 +114,7 @@ import pdfDrucker.PDFDrucker;
 
 import sun.security.krb5.EncryptionKey;
 import utils.DatFunk;
-import utils.INIFile;
+import CommonTools.INIFile;
 import utils.JCompTools;
 import utils.JLabelRenderer;
 import utils.MitteRenderer;
@@ -219,7 +219,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				//doFuelleTabelle(false);
+				doFuelleTabelle(false);
 				return null;
 			}
 		}.execute();

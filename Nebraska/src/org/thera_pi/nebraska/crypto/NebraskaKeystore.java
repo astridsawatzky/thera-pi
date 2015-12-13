@@ -40,7 +40,9 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Vector;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -78,6 +80,8 @@ public class NebraskaKeystore {
 	 * Alias for a officially certified key. 
 	 */
 	private String keyCertAlias;
+	
+	private boolean useSHA256;
 
 	/**
 	 * Initialize key store for specified principal using specified file.
@@ -92,11 +96,21 @@ public class NebraskaKeystore {
 	 * @throws NebraskaCryptoException on cryptography related errors
 	 * @throws NebraskaFileException on I/O related errors
 	 */
+	/*
 	public NebraskaKeystore(String keystoreFileName, String keystorePassword, String keyPassword, String IK)
 	throws NebraskaCryptoException, NebraskaFileException
 	{
 		this(keystoreFileName, keystorePassword, keyPassword, IK, null, null);
+		initSecurityProvider();
 	}
+	*/
+	public NebraskaKeystore(String keystoreFileName, String keystorePassword, String keyPassword, String IK)
+	throws NebraskaCryptoException, NebraskaFileException
+	{
+		this(keystoreFileName, keystorePassword, keyPassword, IK, null, null);
+		initSecurityProvider();
+	}
+	
 
 	/**
 	 * Initialize key store for specified principal using specified file.
@@ -128,7 +142,20 @@ public class NebraskaKeystore {
 		initKeystore();
 
 	}
-
+	public void set256Algorithm(boolean use256){
+		this.useSHA256 = use256;
+		if(this.useSHA256){
+			NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_NEW;
+			NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_NEW;
+		}else{
+			NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_OLD;
+			NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_OLD;
+		}
+		 
+	}
+	public boolean is256Algorithm(){
+		return this.useSHA256;
+	}
 	/**
 	 * Switch to a different institution as sender/signer.
 	 * 
@@ -177,12 +204,16 @@ public class NebraskaKeystore {
 	private void initSecurityProvider()
 	{
 		Provider provBC = Security.getProvider(NebraskaConstants.SECURITY_PROVIDER);
+			 
+		
 		if(provBC==null){
 			bcProvider = new BouncyCastleProvider();
 			Security.addProvider(bcProvider);			 
 		} else {
 			bcProvider = (BouncyCastleProvider) provBC;
 		}
+		
+
 	}
 
 	/**
@@ -211,6 +242,9 @@ public class NebraskaKeystore {
 				keyStore.load(null, null);
 				saveKeystore();
 			}
+
+			set256Algorithm(getAlgorithm());
+
 		} catch (KeyStoreException e) {
 			throw new NebraskaCryptoException(e);
 		} catch (NoSuchProviderException e) {
@@ -236,6 +270,7 @@ public class NebraskaKeystore {
 		try {
 			// keystoreFile.createNewFile();
 			FileOutputStream keystoreStream = new FileOutputStream(keystoreFile);
+			//System.out.println("Sichere Keystorefile "+keystoreFile);
 			keyStore.store(keystoreStream, keystorePassword.toCharArray());
 		} catch (KeyStoreException e) {
 			throw new NebraskaCryptoException(e);
@@ -247,6 +282,8 @@ public class NebraskaKeystore {
 			throw new NebraskaFileException(e);
 		} catch (IOException e) {
 			throw new NebraskaFileException(e);
+		} catch (NullPointerException e){
+			e.printStackTrace();
 		}
 	}
 	
@@ -427,7 +464,7 @@ public class NebraskaKeystore {
 		certGen.setNotAfter(NebraskaUtil.certificateEnd(now));
 		certGen.setSubjectDN(new X500Principal(subjectDN));
 		certGen.setPublicKey(keyPair.getPublic());
-		certGen.setSignatureAlgorithm(NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM);
+		certGen.setSignatureAlgorithm(NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_USED);
 
 		X509Certificate cert;
 		try {
@@ -496,7 +533,7 @@ public class NebraskaKeystore {
 		PKCS10CertificationRequest request;
 		try {
 			request = new PKCS10CertificationRequest(
-					NebraskaConstants.CRQ_SIGNATURE_ALGORITHM,
+					NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED,
 					new X500Principal(getSubjectDN()),
 					publicKey,
 					null,
@@ -615,21 +652,26 @@ public class NebraskaKeystore {
 		boolean matches = false;
 		ArrayList<X509Certificate> certs = new ArrayList<X509Certificate>();
 		// TODO rearrange certificates if they are not in the correct order
+		String certIK = "";
 		for (Iterator<?> certIt = certColl.iterator(); certIt.hasNext(); ) {
 			X509Certificate cert = (X509Certificate) certIt.next();
 			X500Principal subject = cert.getSubjectX500Principal();
-			String certIK = new NebraskaPrincipal(subject.getName()).getInstitutionID();
-			if(certIK != null && certIK.equals(this.institutionID))
+			certIK = new NebraskaPrincipal(subject.getName()).getInstitutionID();
+			//System.out.println("ZertIK = "+certIK+" InstitutionID = "+this.institutionID);
+			if(certIK != null && certIK.contains(this.institutionID))
 			{
 				// FIXME check if certificate matches private key
 				matches = true;
 			}
 			certs.add(cert);
 		}
+		
 		if(!matches)
 		{
+			//System.out.println("ZertIK = "+certIK+" InstitutionID = "+this.institutionID);
 			throw new NebraskaCryptoException(new Exception("certificate does not match my institution ID"));
 		}
+		
 		X509Certificate[] chain = new X509Certificate[certs.size()];
 		chain = certs.toArray(chain);
 
@@ -647,6 +689,11 @@ public class NebraskaKeystore {
 
 		// save changes to file
 		saveKeystore();
+		try {
+			certStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -657,6 +704,7 @@ public class NebraskaKeystore {
 	 * @throws NebraskaCryptoException on cryptography related errors
 	 */
 	public void importReceiverCertificates(String fileName) throws NebraskaFileException, NebraskaCryptoException {
+		System.out.println("Importiere Zertifikate von "+fileName);
 		final String certHeader = "-----BEGIN CERTIFICATE-----";
 		final String certTrailer = "-----END CERTIFICATE-----";
 		final String separator = System.getProperty("line.separator");
@@ -855,7 +903,7 @@ public class NebraskaKeystore {
 	 * @throws NebraskaNotInitializedException if institution ID, institution name 
 	 * or person name is not initialized
 	 */
-	private KeyStore.PrivateKeyEntry getPrivateKeyEntry()
+	public KeyStore.PrivateKeyEntry getPrivateKeyEntry()
 			throws NebraskaCryptoException, NebraskaNotInitializedException {
 		KeyStore.Entry keyEntry;
 		try {
@@ -882,7 +930,7 @@ public class NebraskaKeystore {
 		return privateKeyEntry;
 	}
 
-	PrivateKey getSenderKey() throws NebraskaCryptoException, NebraskaNotInitializedException {
+	public PrivateKey getSenderKey() throws NebraskaCryptoException, NebraskaNotInitializedException {
 		KeyStore.PrivateKeyEntry entry = getPrivateKeyEntry();
 		return entry.getPrivateKey();
 	}
@@ -981,4 +1029,273 @@ public class NebraskaKeystore {
 	{
 		return new NebraskaDecryptor(this);
 	}
+	
+	public void deleteAllCerts(){
+		try {
+			Enumeration<?> en = keyStore.aliases();
+			en = keyStore.aliases();
+			String aliases = null;
+			while (en.hasMoreElements()){
+				aliases = (String)en.nextElement();
+				if(aliases != null){
+					if(keyStore.isCertificateEntry(aliases)){
+						keyStore.deleteEntry(aliases);
+					}else{
+						keyStore.deleteEntry(aliases);
+					}
+				}
+			}
+			saveKeystore();
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		} catch (NebraskaCryptoException e) {
+			e.printStackTrace();
+		} catch (NebraskaFileException e) {
+			e.printStackTrace();
+		} catch (Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	public void keystoreSichern(){
+		try {
+			saveKeystore();
+		} catch (NebraskaCryptoException e) {
+			e.printStackTrace();
+		} catch (NebraskaFileException e) {
+			e.printStackTrace();
+		}		
+	}
+	public boolean deleteCertByAlias(String alias){
+		try {
+			Enumeration<?> en = keyStore.aliases();
+			en = keyStore.aliases();
+			String aliases = null;
+			while (en.hasMoreElements()){
+				aliases = (String)en.nextElement();
+				if(aliases != null && aliases.equals(alias)){
+					if(keyStore.isCertificateEntry(aliases)){
+						keyStore.deleteEntry(aliases);
+						return true;
+					}else{
+						keyStore.deleteEntry(aliases);
+						return true;
+					}
+				}
+			}
+
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public Vector<X509Certificate> getAllCerts(){
+		
+		Vector<X509Certificate> certs = new Vector<X509Certificate>();
+		try {
+			Enumeration<?> en = keyStore.aliases();
+
+			en = keyStore.aliases();
+			while (en.hasMoreElements()){
+				String aliases = (String)en.nextElement();
+				if(aliases != null){
+					
+					if(keyStore.isCertificateEntry(aliases)){
+						certs.add((X509Certificate)keyStore.getCertificate(aliases));
+						//keyStore.deleteEntry(aliases);
+					}else{
+						//keyStore.deleteEntry(aliases);
+						certs.add((X509Certificate)keyStore.getCertificate(aliases));
+					}
+				}
+			}
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		}		
+		return certs;
+	}
+	public X509Certificate getCertByAlias(String alias){
+		X509Certificate cert = null;
+		try {
+			Enumeration<?> en = keyStore.aliases();
+			en = keyStore.aliases();
+			String aliases = null;
+			while (en.hasMoreElements()){
+				aliases = (String)en.nextElement();
+				if(aliases != null){
+					if(aliases.endsWith(alias)){
+						cert = (X509Certificate)keyStore.getCertificate(aliases);
+						break;
+					}
+				}
+			}
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		}		
+		return cert;
+	}
+
+	public int countCerts(){
+		int iret = 0;
+		try {
+			Enumeration<?> en = keyStore.aliases();
+			en = keyStore.aliases();
+			while (en.hasMoreElements()){
+				String aliases = (String)en.nextElement();
+				if(aliases != null){
+					iret++;
+				}
+			}
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		}		
+		return iret;		
+	}
+	public boolean doesCertExist(String alias){
+		
+		Vector<X509Certificate> certs = new Vector<X509Certificate>();
+		try {
+			Enumeration<?> en = keyStore.aliases();
+			en = keyStore.aliases();
+			while (en.hasMoreElements()){
+				String aliases = (String)en.nextElement();
+				if(aliases != null){
+					if(aliases.equals(alias)){
+						return true;
+					}
+				}
+			}
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		}		
+		return false;
+	}
+	
+	public PKCS10CertificationRequest getCertificateRequest() throws NebraskaCryptoException, NebraskaFileException, NebraskaNotInitializedException {
+		if((institutionName == null) || (personName == null)) {
+			readNameFromCert();
+		}
+		
+		KeyStore.PrivateKeyEntry privateKeyEntry = getPrivateKeyEntry();
+		
+		X509Certificate selfsignedCert;
+		RSAPrivateKey privateKey;
+		RSAPublicKey publicKey;
+		try {
+			privateKey = (RSAPrivateKey) privateKeyEntry.getPrivateKey();
+			selfsignedCert = (X509Certificate) privateKeyEntry.getCertificate();
+			publicKey = (RSAPublicKey) selfsignedCert.getPublicKey(); 
+		} catch(ClassCastException e) {
+			throw new NebraskaCryptoException(e);
+		}
+
+		
+		PKCS10CertificationRequest request;
+		try {
+			request = new PKCS10CertificationRequest(
+					NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED,
+					new X500Principal(getSubjectDN()),
+					publicKey,
+					null,
+					privateKey);
+		} catch (InvalidKeyException e) {
+			throw new NebraskaCryptoException(e);
+		} catch (NoSuchAlgorithmException e) {
+			throw new NebraskaCryptoException(e);
+		} catch (NoSuchProviderException e) {
+			throw new NebraskaCryptoException(e);
+		} catch (SignatureException e) {
+			throw new NebraskaCryptoException(e);
+		}
+		return request;
+		
+	}
+	public boolean getAlgorithm(){
+		boolean bret = false;
+		X509Certificate cert;
+		if( countCerts() > 0 && (cert=getCertByAlias(this.institutionID)) != null ){
+			bret = (cert.getSigAlgName().toUpperCase().startsWith("SHA256WITHRSA") ? true : false);	
+			//System.out.println("SHA-256 = "+bret);
+		}
+		return bret;
+	}
+	public X509Certificate getKeyCert(){
+		try {
+			return this.getSenderCertificate();
+		} catch (NebraskaCryptoException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	public String getIK(){
+		return institutionID;
+	}
+	public String getCompanyName(){
+		return institutionName;		
+	}
+	public String getCEO(){
+		return personName;		
+	}
+	public void importNewCertFromReply(String fileName,String ikToAdd) throws NebraskaFileException, NebraskaCryptoException, NebraskaNotInitializedException {
+		String realIkToAdd = (ikToAdd.startsWith("IK") ? ikToAdd : "IK"+ikToAdd );
+		/*
+		// we must already have the private key
+		if(!hasPrivateKey())
+		{
+			throw new NebraskaCryptoException(new Exception("private key must be present when importing certificate"));
+		}
+		*/
+		// read certificate collection from file
+		File certFile = new File(fileName);
+		InputStream certStream;
+		try {
+			certStream = new FileInputStream(certFile);
+		} catch (FileNotFoundException e) {
+			throw new NebraskaFileException(e);
+		}
+		Collection<?> certColl;
+		try {
+			CertificateFactory certFactory = CertificateFactory.getInstance(NebraskaConstants.CERTIFICATE_TYPE, NebraskaConstants.SECURITY_PROVIDER);
+			certColl = certFactory.generateCertificates(certStream);
+		} catch (CertificateException e) {
+			throw new NebraskaCryptoException(e);
+		} catch (NoSuchProviderException e) {
+			throw new NebraskaCryptoException(e);
+		}
+		int i = 1;
+		for (Iterator<?> certIt = certColl.iterator(); certIt.hasNext(); ) {
+			X509Certificate cert = (X509Certificate) certIt.next();
+			X500Principal subject = cert.getSubjectX500Principal();
+			String certIK = "IK"+new NebraskaPrincipal(subject.getName()).getInstitutionID();
+			System.out.println("Durchlauf "+i+" - "+realIkToAdd);
+			System.out.println("certzIK "+i+" - "+certIK);
+			
+			i++;
+			if(certIK != null && certIK.equals(realIkToAdd))
+			{
+				System.out.println("In Funktion AddCert");
+				// FIXME check if certificate matches private key
+				try{
+					System.out.println("Die gewünschte IK "+realIkToAdd+" ist in der Datei enthalten");
+					storeCertificate(cert);
+				} catch (IllegalStateException e) {
+					throw new NebraskaCryptoException(e);
+				}
+				
+			}
+			//certs.add(cert);
+		}
+		
+		try {
+			saveKeystore();
+			certStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+	}
+	
+	
+
 }

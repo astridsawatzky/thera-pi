@@ -350,7 +350,7 @@ public class Reha301 implements WindowListener  {
 			if (obj.conn != null){
 				try{
 				obj.conn.close();}
-				catch(final SQLException e){}
+				catch(final SQLException e){e.printStackTrace();}
 			}
 			try{
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -377,6 +377,7 @@ public class Reha301 implements WindowListener  {
 				Reha301.DbOk = true;
         	} 
         	catch (final SQLException ex) {
+        		ex.printStackTrace();
         		//System.out.println("SQLException: " + ex.getMessage());
         		//System.out.println("SQLState: " + ex.getSQLState());
         		//System.out.println("VendorError: " + ex.getErrorCode());

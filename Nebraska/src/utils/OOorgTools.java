@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import org.thera_pi.nebraska.gui.NebraskaMain;
+
 import nebraska.Nebraska;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -43,10 +45,10 @@ public class OOorgTools {
 	}
 	public static void starteStandardFormular(String url,String drucker) throws Exception{
 		IDocumentService documentService = null;;
-		Nebraska.jf.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+		NebraskaMain.jf.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		System.out.println("Starte Datei -> "+url);
 
-		documentService = Nebraska.officeapplication.getDocumentService();
+		documentService = NebraskaMain.officeapplication.getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
        	docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
@@ -95,11 +97,17 @@ public class OOorgTools {
 		    }
 		    /*****************/
 		}
-		Nebraska.jf.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		NebraskaMain.jf.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
 		viewCursor.getPageCursor().jumpToFirstPage();
 		textDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 		textDocument.getFrame().setFocus();
+		try{
+			textDocument.getPersistenceService().store(url.replace(".ott", "-"+DatFunk.sHeute()+".odt"));	
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
 	}
 
 }

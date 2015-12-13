@@ -41,6 +41,10 @@ import org.jdesktop.swingx.JXPanel;
 
 import pdfDrucker.PDFDrucker;
 
+import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
+import org.thera_pi.nebraska.crypto.NebraskaFileException;
+import org.thera_pi.nebraska.crypto.NebraskaKeystore;
+import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 import org.thera_pi.nebraska.gui.utils.DatFunk;
 import org.thera_pi.nebraska.gui.utils.INIFile;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
@@ -84,12 +88,12 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 	
 	boolean antragprint = false;
 	boolean importiert = false;
-	String therapidir = "";
-
+	String therapidir = java.lang.System.getProperty("user.dir");
+	public NebraskaJTabbedPaneOrganizer elternTab;
 	
-	public NebraskaZertAntrag(){
+	public NebraskaZertAntrag(NebraskaJTabbedPaneOrganizer xelternTab){
 		super();
-			
+			this.elternTab = xelternTab;
 			setOpaque(false);
 			JPanel jpan = new JPanel(new BorderLayout());
 			jpan.setOpaque(false);
@@ -207,6 +211,11 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 		nrdlg.setVisible(true);
 	}
 	private void doReplyEinlesen(){
+		NebraskaReplyEinlesen nrdlg = new NebraskaReplyEinlesen(this);
+		nrdlg.setPreferredSize(new Dimension(800,400));
+		nrdlg.pack();
+		nrdlg.setLocationRelativeTo(null);
+		nrdlg.setVisible(true);
 		
 	}
 	/******
@@ -235,7 +244,11 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 		a1.add((jbut[1]=macheBut("Zert-Antrag drucken","antragprint")),c1.xy(4,3));
 		a1.add((jbut[2]=macheBut("Zert-Request erzeugen","requestmachen")),c1.xy(6,3));
 		a1.add((jbut[3]=macheBut("Zert-Reply einlesen","replyeinlesen")),c1.xy(8,3));
-		a1.add((jbut[4]=macheBut("Annahmest. einlesen","annahmeeinlesen")),c1.xy(10,3));
+		a1.add((jbut[4]=macheBut("zusätzl. IK einlesen f. §301","neuesIkEinlesen")),c1.xy(10,3));
+		jbut[1].setEnabled(false);
+		jbut[2].setEnabled(false);
+		jbut[3].setEnabled(false);
+		jbut[4].setEnabled(false);
 		a1.getPanel().validate();
 		return a1.getPanel();
 	}
@@ -360,7 +373,7 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 		jrb[2].setName("Kontrollkaestchen3");
 		a2.add(jrb[2],c3.xy(3,5));
         
-		jrb[3] =  new JRtaRadioButton("per E-Mail,(ITSG-CRQ@ATOSORIGN.COM)");
+		jrb[3] =  new JRtaRadioButton("per E-Mail,(crq@itsg-trust.de)");
 		//jrb[0].setActionCommand("");
 		jrb[3].setSelected(false);
 		jrb[3].addActionListener(this);
@@ -474,71 +487,185 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 			doReplyEinlesen();
 			return;
 		}
-		
-	}
-	private void doTheraPiImport(){
-		String ik = "";
-		String ikPfad = "";
-
-		String pfad = FileStatics.dirChooser("","Bitte wählen Sie das Programmverzeichnis Ihrer Thera-Pi Installation");
-		System.out.println(pfad);
-		if(pfad.equals("")){return;}
-		File f = new File( (pfad+File.separator+"ini"+File.separator+"mandanten.ini").replace("\\\\", "/"));
-		if(! f.exists()){
-			JOptionPane.showMessageDialog(null, "Das ausgewählte Verzeichnis ist kein Thera-Pi Verzeichnis.\n"+
-					"Oder das Thera-Pi Verzeichnis ist inkonsistent.\n\nDatenimport fehlgeschlagen!!");
+		if(cmd.equals("replyeinlesen")){
+			doReplyEinlesen();
 			return;
 		}
-		INIFile inif = new INIFile(f.getAbsolutePath());
-		int mandantenAnzahl = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
-		if(mandantenAnzahl==1){
-			ik = inif.getStringProperty("TheraPiMandanten", "MAND-IK"+Integer.toString(mandantenAnzahl));
-			ikPfad = pfad+File.separator+"ini"+File.separator+ik+File.separator+"firmen.ini";
-			mandantLesen(ikPfad);
-		}else{
-			String[] mandanten = new String[mandantenAnzahl];
-			for(int i = 0; i < mandantenAnzahl;i++){
-				mandanten[i] = inif.getStringProperty("TheraPiMandanten", "MAND-IK"+Integer.toString(i+1));
-			}
-		   String retwert = (String) JOptionPane.showInputDialog(
-			                   null,
-			                   "Bitte wählen Sie den entsprechenden Mandanten aus",
-			                   "Sie haben mehrere Mandaten in Ihrem System installiert",
-			                   JOptionPane.QUESTION_MESSAGE,
-			                   null,
-			                   mandanten,  
-			                   mandanten[0]);
-		   if(retwert==null){
-			   importiert = false;
-			   therapidir = "";
-			   return;
-		   }
-		   ik = mandanten[Arrays.asList(mandanten).indexOf(retwert)];
-		   ikPfad = pfad+File.separator+"ini"+File.separator+ik+File.separator+"firmen.ini";
-		   mandantLesen(ikPfad.replace("\\", "/"));
-		   importiert = true;
-		   therapidir = pfad;
+		if(cmd.equals("neuesIkEinlesen")){
+			try{
+				String kfile = "";
+				String pw = "";
+				String aliasIk = "";
+				String institution = "";
+				String person = "";
+				NebraskaZertExplorer explorer = elternTab.getZertExplorer();
+				int index = explorer.jcombo.getSelectedIndex();
+				if(index==0){
+					return;
+				}else{
+					System.out.println("Vector-Element-0 = "+NebraskaMain.keyStoreParameter.get(index-1).get(0));
+					System.out.println("Vector-Element-1 = "+NebraskaMain.keyStoreParameter.get(index-1).get(1));
+					System.out.println("Vector-Element-2 = "+NebraskaMain.keyStoreParameter.get(index-1).get(2));
+					System.out.println("Vector-Element-3 = "+NebraskaMain.keyStoreParameter.get(index-1).get(3));
+					System.out.println("getInstitution() = "+getInstitution());
+					System.out.println("getPerson()      = "+getPerson());
+					kfile = NebraskaMain.keyStoreParameter.get(index-1).get(0);
+					pw = NebraskaMain.keyStoreParameter.get(index-1).get(1);
+					aliasIk = NebraskaMain.keyStoreParameter.get(index-1).get(2);
+					institution = getInstitution();
+					person = getPerson();
+				}
+				try {
 
+					Object ret = JOptionPane.showInputDialog(null, "Geben Sie bitte das (9-stellige) IK der neuen  Annahmestelle ein", "");
+					if(ret==null){
+						return;
+					}
+					if(ret.equals("")){
+						return;
+					}
+					NebraskaKeystore nebraskastore = new NebraskaKeystore(kfile,(String) pw,"abc",aliasIk,institution,person);
+					String pfad = this.therapidir+"keystore";
+					String source = FileStatics.dirChooser(pfad, "p7c.Datei auswählen");
+					if(!source.equals("")){
+						pfad = String.valueOf(source.replace("\\", "/"));
+					}else{
+						return;
+					}
+
+					nebraskastore.importNewCertFromReply(pfad, (String)ret);
+					explorer.jcombo.setSelectedIndex(index);
+
+				} catch (NebraskaCryptoException e) {
+					e.printStackTrace();
+				} catch (NebraskaFileException e) {
+					e.printStackTrace();
+				} catch (NebraskaNotInitializedException e) {
+					e.printStackTrace();
+				} catch (Exception ex){
+					ex.printStackTrace();
+				}
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			return;
 		}
+
+
+	}
+	private void doTheraPiImport(){
+		try{
+			String ik = "";
+			String ikPfad = "";
+			String pfad = java.lang.System.getProperty("user.dir")+"/ini/mandanten.ini";
+			File f = new File(pfad);
+			if(! f.exists()){
+				pfad = FileStatics.dirChooser(java.lang.System.getProperty("user.dir")+"/ini/","Bitte wählen Sie die Datei mandanten.ini aus Ihrer Thera-Pi Installation");			
+			}
+			System.out.println(pfad);
+
+			if(pfad.equals("")){return;}
+			if(!pfad.endsWith("mandanten.ini")){
+				JOptionPane.showMessageDialog(null, "Das ausgewählte Verzeichnis ist keine Thera-Pi mandanten.ini,\n"+
+				"Oder das Thera-Pi Verzeichnis ist inkonsistent.\n\nDatenimport fehlgeschlagen!!");
+				return;
+			}
+			pfad = pfad.replace("\\", "/");
+			System.out.println("Pfad = "+pfad);
+			therapidir = pfad.substring(0,pfad.lastIndexOf("/"));
+			therapidir = therapidir.substring(0,therapidir.lastIndexOf("/"));
+			System.out.println("TherapiDir = "+therapidir);
+			INIFile inif = new INIFile(pfad);
+			int mandantenAnzahl = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
+			if(mandantenAnzahl==1){
+				ik = inif.getStringProperty("TheraPiMandanten", "MAND-IK"+Integer.toString(mandantenAnzahl));
+				ikPfad = therapidir+File.separator+"ini"+File.separator+ik+File.separator+"firmen.ini";
+				mandantLesen(ikPfad);
+				importiert = true;
+				jbut[1].setEnabled(true);
+				jbut[2].setEnabled(true);
+				jbut[3].setEnabled(true);
+				jbut[4].setEnabled(true);				
+			}else if(mandantenAnzahl > 1){
+				String[] mandanten = new String[mandantenAnzahl];
+				for(int i = 0; i < mandantenAnzahl;i++){
+					mandanten[i] = inif.getStringProperty("TheraPiMandanten", "MAND-IK"+Integer.toString(i+1));
+				}
+			   String retwert = (String) JOptionPane.showInputDialog(
+				                   null,
+				                   "Bitte wählen Sie den entsprechenden Mandanten aus",
+				                   "Sie haben mehrere Mandaten in Ihrem System installiert",
+				                   JOptionPane.QUESTION_MESSAGE,
+				                   null,
+				                   mandanten,  
+				                   mandanten[0]);
+			   if(retwert==null){
+				   importiert = false;
+				   therapidir = "";
+				   return;
+			   }
+			   try{
+				   for(int x = 0; x < NebraskaMain.keyStoreParameter.size();x++){
+					   if(NebraskaMain.keyStoreParameter.get(x).get(2).equals("IK"+retwert.trim())){
+						   elternTab.zertExplorer.jcombo.setSelectedItem("IK"+retwert);
+						   break;
+					   }
+				   }
+			   }catch(Exception ex){
+				   ex.printStackTrace();
+			   }
+			   ik = mandanten[Arrays.asList(mandanten).indexOf(retwert)];
+			   //ikPfad = (pfad.replace("mandanten.ini/", "")+File.separator+"ini"+File.separator+ik+File.separator+"firmen.ini").replace("\\", "/");
+			   ikPfad = therapidir+"/ini/"+ik+"/firmen.ini";
+			   System.out.println("Pfad zu der Firmendatei = "+ikPfad);
+			   mandantLesen(ikPfad);
+			   importiert = true;
+			   jbut[1].setEnabled(true);
+			   jbut[2].setEnabled(true);
+			   jbut[3].setEnabled(true);
+			   jbut[4].setEnabled(true);
+			}else if(mandantenAnzahl == 1){
+				   jbut[1].setEnabled(true);
+				   jbut[2].setEnabled(true);
+				   jbut[3].setEnabled(true);
+				   jbut[4].setEnabled(true);				
+			}
+		
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+
+
+		
 		tf[0].requestFocus();
 	}
 	private void mandantLesen(String ikPfad){
 		INIFile inif = new INIFile(ikPfad);
-		System.out.println(inif.getStringProperty("Firma", "Ik"));
-		tf[0].setText(inif.getStringProperty("Firma", "Ik"));
-		tf[1].setText(inif.getStringProperty("Firma", "Firma1"));
+		System.out.println(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Ik")));
+		tf[0].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Ik")));
+		tf[1].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Firma1")));
 		tf[1].setCaretPosition(0);
-		tf[2].setText( (inif.getStringProperty("Firma", "Vorname")+" "+inif.getStringProperty("Firma", "Nachname")) );
-		tf[3].setText(inif.getStringProperty("Firma", "Strasse"));
-		tf[4].setText(inif.getStringProperty("Firma", "Plz"));
-		tf[5].setText(inif.getStringProperty("Firma", "Ort"));
-		tf[7].setText(inif.getStringProperty("Firma", "Telefon"));
-		tf[8].setText(inif.getStringProperty("Firma", "Telefax"));
-		tf[9].setText(inif.getStringProperty("Firma", "Email"));
+		tf[2].setText( (ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Vorname"))+" "+ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Nachname"))) );
+		tf[3].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Strasse")));
+		tf[4].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Plz")));
+		tf[5].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Ort")));
+		tf[7].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Telefon")));
+		tf[8].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Telefax")));
+		tf[9].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Email")));
 		jrb[0].setSelected(true);
 		tf[10].setText("./. entfällt");
 		tf[11].setText("Thera-Pi / Nebraska");
 		jrb[3].setSelected(true);
+	}
+	
+	private String ersetzteUnerlaubtes(String instring){
+		if(instring==null){return "";}
+		String result = instring;
+		result = result.replaceAll("ä", "ae").replaceAll("ö", "oe").replaceAll("ü", "ue");
+		result = result.replaceAll("Ä",	"AE").replaceAll("Ö", "OE").replaceAll("Ü", "UE");
+		result = result.replaceAll("ß",	"ss").replaceAll("&", "und");
+		return result;
+		
 	}
  
 	private void doAntragPrint(){
@@ -593,8 +720,19 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 	@SuppressWarnings("unchecked")
 	private void doPdfFuellen() throws Exception{
 		String outFile = null;
-		PdfReader reader = new PdfReader(Constants.KEYSTORE_DIR+File.separator+"vorlagen"+File.separator+"Zertifizierungsantrag.pdf");
-		outFile = Constants.KEYSTORE_DIR+File.separator+"vorlagen"+File.separator+"Zertifizierungsantrag"+DatFunk.sHeute()+".pdf"; 
+		String vorlage = therapidir+File.separator+"defaults/vorlagen/"+"Zertifizierungsantrag.pdf";
+		File f = new File(vorlage);
+
+		if (!f.exists()){
+			vorlage = FileStatics.dirChooser(therapidir+File.separator+"defaults/vorlagen/", "Bitte wählen Sie die Vorlage aus (Standard = Zertifizierungsantrag.pdf)");
+			if(vorlage.equals("")){
+				JOptionPane.showMessageDialog(null,"Na dann eben nicht");
+				return;
+			}
+		}
+		try{
+		PdfReader reader = new PdfReader(vorlage);
+		outFile = vorlage+DatFunk.sHeute()+".pdf"; 
 		FileOutputStream out = new FileOutputStream(outFile);
 		PdfStamper stamper = new PdfStamper(reader, out);
 		AcroFields form = stamper.getAcroFields();
@@ -620,6 +758,10 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
         if(frage == JOptionPane.YES_OPTION){
         	PDFDrucker.setup(outFile);
         }
+		}catch(Exception ex){
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Keine Vorlagendatei, oder Datei beschädigt");
+		}
 	}
 
 

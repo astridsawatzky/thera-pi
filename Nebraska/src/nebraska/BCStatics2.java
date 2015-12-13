@@ -607,6 +607,21 @@ public class BCStatics2 {
 			}
 			return NUtils.toHex(dig);
 	 }
+	 
+ 	public static String getSHA256fromByte(byte[] b){
+	 	byte[] dig = null;;
+		try {
+			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256","BC");
+			messageDigest.update(b);
+			dig = messageDigest.digest();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (NoSuchProviderException e) {
+			e.printStackTrace();
+		}
+		return NUtils.toHex(dig);
+	}
+
 
 	 public static String getMD5(X509Certificate cert){
 		 	byte[] encryptCert;
@@ -948,10 +963,12 @@ public class BCStatics2 {
 		 String zeile = "";
 		 String ganzerString = "";
 		 int bytes = hexstring.length()/2;
+		 
 		 int zeilen = bytes/zeilenlaenge;
+		 
 		 if(bytes <= zeilenlaenge){
 			 zeilen = 1;
-		 }else if( (((bytes / zeilen) % 2) != 0)  && (bytes>zeilenlaenge) ){
+		 }else if( (((Double.parseDouble(Integer.toString(bytes)) / Double.parseDouble(Integer.toString(zeilenlaenge))) % 2.0) != 0)  && (bytes>zeilenlaenge) ){
 			 zeilen = zeilen+1;
 		 }
 		 int stelle;

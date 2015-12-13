@@ -2,7 +2,7 @@ package nebraska;
 
 import java.io.File;
 
-import utils.INIFile;
+import CommonTools.INIFile;
 
 public class Constants {
 //	public static final String CRYPTO_FILES_DIR = "C:/Lost+Found/verschluesselung";

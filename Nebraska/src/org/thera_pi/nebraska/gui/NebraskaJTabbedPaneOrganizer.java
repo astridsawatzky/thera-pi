@@ -10,6 +10,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
@@ -26,17 +27,26 @@ public class NebraskaJTabbedPaneOrganizer extends JXPanel implements ChangeListe
 	private Vector<String> vectitel = new Vector<String>();
 	private Vector<String> vecdescript = new Vector<String>();
 	private Vector<ImageIcon> vecimg = new Vector<ImageIcon>();
-	private NebraskaZertAntrag zertAntrag;
+	public NebraskaZertAntrag zertAntrag;
+	public NebraskaZertExplorer zertExplorer;
+	public NebraskaToolPanel toolPanel;
 	public NebraskaJTabbedPaneOrganizer(){
 		super();
+		try{
 		setOpaque(false);
 		setLayout(new BorderLayout());
 		jtb = new JTabbedPane();
 		doHeader();
-		zertAntrag = new NebraskaZertAntrag();
+		
+		zertExplorer = new NebraskaZertExplorer();
+		jtb.addTab("Zertifikate auswerten / manuell Verschlüsseln", zertExplorer);
+		
+		zertAntrag = new NebraskaZertAntrag(this);
 		jtb.addTab("Zertifikats-Antrag stellen",zertAntrag );
-		jtb.addTab("Zertifikate auswerten", new JXPanel());
-		jtb.addTab("Manuell verschlüsseln", new JXPanel());
+		
+		toolPanel = new NebraskaToolPanel(this);
+		jtb.addTab("Nebraska Tools",toolPanel );
+		//jtb.addTab("Manuell verschlüsseln", new JXPanel());
 		//jtb.addTab("Test- und Experimentierpanel", new NebraskaTestPanel());
 		jtb.addChangeListener(this);
         jxh = new JXHeader();
@@ -48,8 +58,14 @@ public class NebraskaJTabbedPaneOrganizer extends JXPanel implements ChangeListe
         jtb.validate();
 		validate();
 		zertAntrag.setzeFocus();
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 
 
+	}
+	public NebraskaZertExplorer getZertExplorer(){
+		return zertExplorer;
 	}
 	public void setHeader(int header){
         jxh.setTitle(vectitel.get(header));
@@ -66,28 +82,54 @@ public class NebraskaJTabbedPaneOrganizer extends JXPanel implements ChangeListe
         jxh.setIcon(vecimg.get(sel));   
 
 	}
+	public void erstTest(){
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				try{
+					zertExplorer.erstTest();	
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+				return null;
+			}
+		}.execute();
+		
+	}
+	public void setAlgText(String text){
+		int sel = jtb.getSelectedIndex();
+		if(sel==0){
+			jxh.setDescription(vecdescript.get(sel)+"\n\n"+text);
+			jxh.validate();
+		}
+		
+	}
 	private void doHeader(){
 		ImageIcon ico;
         String ss = System.getProperty("user.dir")+File.separator+"icons"+File.separator+"nebraska_scale.jpg";
         ico = new ImageIcon(ss);
-		vectitel.add("Antrag auf Zertifizierung bei der ITSG stellen");
-		vecdescript.add("....Geben Sie hier bitte Ihre Stammdaten ein\n" +
-                "Wenn die Angaben komplett sind können Sie den Antrag ausdrucken, unterzeichnen und anschließend per FAX\n" +
-                "an die ITSG senden. (FAX-Nr. der ITSG finden Sie auf dem Antrag).\n\n"+
-                "Wenn Sie die Schaltfläche 'Request-erzeugen' drücken, wird für Sie ein Schlüsselpaar erzeugt und automatisiert per E-Mail an die ITSG versandt.");
-		vecimg.add(ico);
-		
-		
-		vectitel.add("Zertifikate auswerten");
-		vecdescript.add("....Hier können Sie die Zertifikatskette einsehen\n" +
-                "Neue Zertifikate einlesen (neue Datenannahmestellen)\n" +
-                "und schlußendlich überpüfen wie lange welches Zertifikat gültig ist");
-		vecimg.add(ico);
-		
+        
 		vectitel.add("Manuell verschlüsseln");
 		vecdescript.add("....Hier können Sie Dateien manuell verschlüsseln\n" +
                 "Weshalb auch immer....");
 		vecimg.add(ico);
+
+		vectitel.add("Antrag auf Zertifizierung bei der ITSG stellen");
+		vecdescript.add("....Geben Sie hier bitte Ihre Stammdaten ein\n" +
+				"Achtung: keine Umlaute und kein 'ß' verwenden, ansonsten wird Ihr Antrag von der ITSG abgelehnt!!!\n"+
+                "Wenn die Angaben komplett sind können Sie den Antrag ausdrucken, unterzeichnen und anschließend per FAX\n" +
+                "an die ITSG senden. (FAX-Nr. der ITSG finden Sie auf dem Antrag).\n\n"+
+                "Wenn Sie die Schaltfläche 'Request-erzeugen' drücken, wird für Sie ein Schlüsselpaar sowie ein Zertifikatsrequest erzeugt den Sie dann per E-Mail an die ITSG versenden können.");
+		vecimg.add(ico);
+		
+		
+		vectitel.add("Werkzeuge für Ihren Keystore - wählen Sie zuerst auf der Seite Zertifikate auswerten einen Mandanten (IK) aus");
+		vecdescript.add("....Wenn Sie eine oder mehrere Funktionen dieser Seite\n" +
+                "ausführen wollen, müssen Sie schon sehr genau wissen was Sie tun !\n\n" +
+                "Bevor Sie mit irgendwelchen Aktionen starten, fertigen Sie bitte zuerst eine Sicherungskopie\n"+
+                "Ihes Keystore-Verzeichnisses an !");
+		vecimg.add(ico);
+		
 
 		vectitel.add("Test- und Experimentierpanel");
 		vecdescript.add("....Diese Seite ist bislang noch Bodo und Jürgen vorbehalten (leider).\n" +

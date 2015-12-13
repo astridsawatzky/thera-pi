@@ -26,24 +26,28 @@ public class TestMain {
 	 */
 	public static void main(String[] args) {
 		try {
-			String basedir = "/home/bodo/thera-pi/test/";
-			NebraskaKeystore nebraskaKeystore = new NebraskaKeystore(basedir + "keystore.p12", "123456", "abcdef", "540840108", "Reutlinger Therapie- und Analysezentrum GmbH", "Juergen Steinhilber");
+			String basedir = "C:/tests/";
+			
+			NebraskaKeystore nebraskaKeystore = new NebraskaKeystore(basedir + "keystore.p12", "123456", "abcdef", "540840108");
+			//NebraskaKeystore nebraskaKeystore = new NebraskaKeystore(basedir + "keystore.p12", "123456", "abcdef", "540840108", "Reutlinger Therapie- und Analysezentrum GmbH", "Juergen Steinhilber");
 			nebraskaKeystore.importKeyPair(basedir + "540840108.prv");
 			nebraskaKeystore.importCertificateReply(basedir + "540840108.p7c");
-			nebraskaKeystore.importReceiverCertificates("annahme-pkcs.key");
+			nebraskaKeystore.importReceiverCertificates(basedir +"annahme-pkcs.key");
 			nebraskaKeystore.exportKey(basedir + "private-key.pem", "abcdef");
+			
+			System.out.println(nebraskaKeystore.getPublicKeyMD5());
 			FileInputStream inStream;
 			FileOutputStream outStream;
-			String inFileName = basedir + "plain.txt";
+			String inFileName = basedir + "TSOL0021.org";
 			String outFileName = basedir + "encrypted.dat";
 			inStream = new FileInputStream(inFileName);
 			outStream = new FileOutputStream(outFileName);
 			NebraskaEncryptor encryptor = nebraskaKeystore.getEncryptor("109900019");
-			encryptor.setEncryptToSelf(true);
+			//encryptor.setEncryptToSelf(true);
 			encryptor.encrypt(inStream, outStream);
 			inStream.close();
 			outStream.close();
-			
+
 			long size = encryptor.encrypt(inFileName, outFileName);
 			System.out.println("output file " + outFileName + " size " + size);
 			inStream = new FileInputStream(outFileName);

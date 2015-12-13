@@ -19,8 +19,8 @@ public class FileStatics {
 	        long length = file.length();
 	    
 	        if (length > Integer.MAX_VALUE) {
-	      System.out.println("Sorry! Your given file is too large.");
-	      System.exit(0);
+	      System.out.println("Datei zu groß zum einlesen");
+	      	return null;
 	        }
 
 	        byte[] bytes = new byte[(int)length];
@@ -31,7 +31,7 @@ public class FileStatics {
 	            offset += numRead;
 	        }
 	        if (offset < bytes.length) {
-	            throw new IOException("Could not completely read file "
+	            throw new IOException("Datei konnte nicht komplett gelesen werden "
 	                                + file.getName());
 	        }
 	        is.close();

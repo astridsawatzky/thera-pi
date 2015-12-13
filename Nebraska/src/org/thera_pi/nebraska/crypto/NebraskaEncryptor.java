@@ -11,6 +11,8 @@ import java.io.OutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.PrivateKey;
+import java.security.Provider;
+import java.security.Security;
 import java.security.cert.CertStore;
 import java.security.cert.CertStoreException;
 import java.security.cert.X509Certificate;
@@ -22,6 +24,7 @@ import org.bouncycastle.cms.CMSProcessable;
 import org.bouncycastle.cms.CMSProcessableByteArray;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.CMSSignedDataGenerator;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * This object can be used to encrypt data with the certificate of a specified receiver.
@@ -38,6 +41,7 @@ public class NebraskaEncryptor {
 	private PrivateKey senderKey;
 	private CertStore certificateChain;
 	private boolean encryptToSelf;
+	private boolean use256Hash;
 	
 	public boolean isEncryptToSelf() {
 		return encryptToSelf;
@@ -61,6 +65,7 @@ public class NebraskaEncryptor {
 		senderKey = nebraskaKeystore.getSenderKey();
 		senderCert = nebraskaKeystore.getSenderCertificate();
 		certificateChain = nebraskaKeystore.getSenderCertChain();
+		use256Hash = nebraskaKeystore.is256Algorithm();
 	}
 
 	/**
@@ -108,6 +113,16 @@ public class NebraskaEncryptor {
 		 * To get the input as byte array we copy all data to a 
 		 * ByteArrayOutputStream and retrieve the byte array from it.
 		 */
+		Provider provBC = Security.getProvider(NebraskaConstants.SECURITY_PROVIDER);
+		Provider bcProvider = null;
+		
+		if(provBC==null){
+			bcProvider = new BouncyCastleProvider();
+			Security.addProvider(bcProvider);			 
+		} else {
+			bcProvider = (BouncyCastleProvider) provBC;
+		}
+
 		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
 		CMSProcessable plainContent;
 		try {
@@ -130,7 +145,8 @@ public class NebraskaEncryptor {
 		
 		CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
 		generator.addSigner(senderKey, (X509Certificate)senderCert,
-			      CMSSignedDataGenerator.DIGEST_SHA1);
+				(use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1)  );
+
 		try {
 			generator.addCertificatesAndCRLs(certificateChain);
 		} catch (CertStoreException e) {
