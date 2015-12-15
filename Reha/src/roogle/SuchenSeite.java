@@ -973,10 +973,15 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				}
 				SwingUtilities.invokeLater(new Runnable(){
 					public  void run(){
-						SchreibeAuswahl sa = new SchreibeAuswahl();
-						sa.execute();
-						knopfGedoense(new int[]  {0,0,0,0,1,1,1,0,0,1});
-						//auswahlSchreiben();
+						try{
+							SchreibeAuswahl sa = new SchreibeAuswahl();
+							sa.execute();
+							knopfGedoense(new int[]  {0,0,0,0,1,1,1,0,0,1});
+							//auswahlSchreiben();						
+						}catch(Exception ex){
+							JOptionPane.showMessageDialog(null,"Achtung - Fehler!!!!!\n\nBei der Übernahme der Termine ist ein Fehler aufgetreten!\nBitte kontrollieren Sie ob die Termine wirklich\nvollständig und korrekt in den Terminkalender übertragen wurden.\n");
+						}
+
 					}
 				});	
 				break;
@@ -1878,7 +1883,12 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					return null;
 				}
 			}
-			auswahlSchreiben();
+			try{
+				auswahlSchreiben();
+			}catch(Exception ex){
+				JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion auswahlSchreiben() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
+			}
+			
 			if(  (schreibeName.getText().trim().equals("")) && (schreibeNummer.getText().trim().equals(""))){
 				//roogleZuruecksetzen();
 			}
@@ -1949,6 +1959,8 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 									schreibeLoeschen(vec,i,name,nummer);
 								} catch (SQLException e) {
 									e.printStackTrace();
+									JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion schreibeLoeschen() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
+									JOptionPane.showMessageDialog(null, "SQL-Fehler:\n"+e.getMessage());
 								}
 								break;
 							}else{
@@ -1960,6 +1972,9 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 									schreibeZeile(stmt);
 								} catch (SQLException e) {
 									e.printStackTrace();
+									JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion schreibeZeile() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
+									JOptionPane.showMessageDialog(null, "Betroffenes Statement:\n"+stmt);
+									JOptionPane.showMessageDialog(null, "SQL-Fehler:\n"+e.getMessage());
 								}
 								break;
 							}
@@ -1969,6 +1984,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 								vec = sucheZeile(i);
 							} catch (SQLException e) {
 								e.printStackTrace();
+								JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion sucheZeile() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
 							}
 							if((name.equals("")) &&	(nummer.equals(""))){
 								JOptionPane.showMessageDialog(null,"Das löschen eines Termin und gleichzeitiges verändern der Startzeit \n"+
@@ -2006,6 +2022,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion Thread.sleep() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
 					}
 			}
 		}
@@ -2176,6 +2193,8 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					schreibeZeile(stmt);
 				} catch (SQLException e) {
 					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Fehler - betroffenes Statement:\n"+stmt);
+					JOptionPane.showMessageDialog(null, "SQL-Fehler:\n"+e.getMessage());
 				}
 				break;
 			}
@@ -2354,6 +2373,8 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Fehler - betroffenes Statement:\n"+stmt);
+				JOptionPane.showMessageDialog(null, "SQL-Fehler:\n"+e.getMessage());
 			}
 		}else{
 			//
