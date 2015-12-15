@@ -32,6 +32,7 @@ public static long ZeitDifferenzInMinuten(String szeit1,String szeit2){
 	c1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(szeit1.substring(0,2)));
 	c1.set(Calendar.MINUTE,Integer.parseInt(szeit1.substring(3,5)));
 	c1.set(Calendar.SECOND,0);
+	c1.set(Calendar.MILLISECOND, 0);
 
 	Calendar c2 = Calendar.getInstance();
 	c2.set(Calendar.MONTH, 1);
@@ -39,6 +40,7 @@ public static long ZeitDifferenzInMinuten(String szeit1,String szeit2){
 	c2.set(Calendar.HOUR_OF_DAY,Integer.parseInt(szeit2.substring(0,2)));
 	c2.set(Calendar.MINUTE,Integer.parseInt(szeit2.substring(3,5)));
 	c2.set(Calendar.SECOND,0);
+	c2.set(Calendar.MILLISECOND, 0);
 
 	return (((c2.getTimeInMillis())-c1.getTimeInMillis())/(1000*60));
 
@@ -52,6 +54,7 @@ public static long MinutenSeitMitternacht(String szeit1){
 	c1.set(Calendar.HOUR_OF_DAY,Integer.parseInt(szeit1.substring(0,2)));
 	c1.set(Calendar.MINUTE,Integer.parseInt(szeit1.substring(3,5)));
 	c1.set(Calendar.SECOND,0);
+	c1.set(Calendar.MILLISECOND, 0);
 
 	Calendar c2 = Calendar.getInstance();
 	c2.set(Calendar.MONTH, 1);
@@ -59,6 +62,7 @@ public static long MinutenSeitMitternacht(String szeit1){
 	c2.set(Calendar.HOUR_OF_DAY,0);
 	c2.set(Calendar.MINUTE,0);
 	c2.set(Calendar.SECOND,0);
+	c2.set(Calendar.MILLISECOND, 0);
 
 	return (((c1.getTimeInMillis())-c2.getTimeInMillis())/(1000*60));
 }
