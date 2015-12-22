@@ -67,7 +67,8 @@ public class EBerichtTab {
 		try{
 			//System.out.println("Starte Seite 4");
 			seite4 = new Eb4(eltern);
-			JScrollPane jscr = JCompTools.getTransparentScrollPane(seite4.getSeite());		
+			JScrollPane jscr = JCompTools.getTransparentScrollPane(seite4.getSeite());	
+			jscr.validate();
 			tab.addTab("E-Bericht KTL", jscr);
 		}catch(Exception ex){
 			ex.printStackTrace();

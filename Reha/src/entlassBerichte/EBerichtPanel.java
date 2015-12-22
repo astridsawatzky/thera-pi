@@ -240,6 +240,10 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	
 	public static String NeueRvVarianteAb = "01.01.2015";
 	public static boolean UseNeueRvVariante = false;
+
+	public static String UseKTL2015Untdat = "31.12.2015";
+	public static String UseKTL2015Ab = "31.12.2015";
+	public static boolean UseKTL2015 = false;
 	
 
 	public EBerichtPanel(JGutachtenInternal xjry,String xpat_intern,int xberichtid,String xberichttyp,boolean xneu,String xempfaenger,int xuebernahmeid ){
@@ -293,28 +297,64 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				//nur wenn RV
 				if(!berichttyp.contains("GKV E-Bericht")){
 					//Testen ob 2015 angewendet werden soll
-					String stmt = "select aufdat3 from bericht2 where berichtid = '"+Integer.toString(berichtid)+"' LIMIT 1" ;
+					String stmt = "select aufdat3,untdat from bericht2 where berichtid = '"+Integer.toString(berichtid)+"' LIMIT 1" ;
 					//System.out.println(stmt);
-					String aufnahmedat =   SqlInfo.holeEinzelFeld(stmt).trim();
+					//String aufnahmedat =   SqlInfo.holeEinzelFeld(stmt).trim();
+					Vector<Vector<String>> datwerte = SqlInfo.holeFelder(stmt);
 					if(this.neu && DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()) >= 0){
 						//System.out.println("Variante 1 Tage = "+DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()));
 						UseNeueRvVariante = true;
+						if(DatFunk.TageDifferenz(EBerichtPanel.UseKTL2015Ab, DatFunk.sHeute()) >= 0){
+							UseKTL2015 = true;
+						}
+					//vorhandener Ebericht	
 					}else if(!this.neu){
-						if(aufnahmedat.length() == 10){
-							if(DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sDatInDeutsch(aufnahmedat)) >= 0) {
+						if(datwerte.get(0).get(0).trim().length() == 10){
+							if(DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sDatInDeutsch(datwerte.get(0).get(0))) >= 0) {
 								//System.out.println("Variante 2 Tage = "+DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sDatInDeutsch(aufnahmedat)));
 								UseNeueRvVariante = true;
+								//Wenn Rehabeginn nach oder am Starttag von KTL2015 liegt
+								if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(datwerte.get(0).get(0)), UseKTL2015Ab) >= 0){
+									UseKTL2015 = true;
+								}
 							}
 						}else if(DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()) >= 0){
 							//System.out.println("Variante 3 Tage = "+DatFunk.TageDifferenz(NeueRvVarianteAb,DatFunk.sHeute()));
 							UseNeueRvVariante = true;
+							if(DatFunk.TageDifferenz(UseKTL2015Ab, DatFunk.sHeute()) >= 0){
+								UseKTL2015 = true;
+							}
 						}
+						//KTL2015
+						//Unterschriftsdatum bereits eingetragen
+						if(datwerte.get(0).get(1).trim().length() == 10){
+							if(DatFunk.TageDifferenz(UseKTL2015Ab, DatFunk.sDatInDeutsch(datwerte.get(0).get(1))) >= 0){
+								UseKTL2015 = true;
+							}else{
+								UseKTL2015 = false;
+							}
+						}else{
+							if(DatFunk.TageDifferenz(UseKTL2015Ab, DatFunk.sHeute()) >= 0){
+								UseKTL2015 = true;
+							}
+						}
+						/*
+						if(datwerte.get(0).get(1).trim().length() == 10){
+							if(DatFunk.TageDifferenz(UseKTL2015Ab, DatFunk.sDatInDeutsch(datwerte.get(0).get(1))) >= 0) {
+								UseKTL2015 = true;
+							}
+						}else if(DatFunk.TageDifferenz(UseKTL2015Untdat, DatFunk.sHeute()) >= 0){
+							UseKTL2015 = true;
+						}*/
+						
+						
 					}
 					//System.out.println("Tage Differenz = "+DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()));
 					
 				}
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler im Test: Bericht 2015\nFehlermeldung: "+ex.getMessage());
+				ex.printStackTrace();
 			}
 			//System.out.println("Bericht 2015 wird verwendet = "+UseNeueRvVariante);
 			cbktraeger = new JRtaComboBox(SystemConfig.vGutachtenEmpfaenger);

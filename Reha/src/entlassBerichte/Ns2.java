@@ -563,9 +563,9 @@ public class Ns2 implements ActionListener {
 	private void laden(boolean lneu){
 		Vector<Vector<String>> vec = null;
 		if(lneu){
-			holeKTL(true);
+			holeKTL(true,(DatFunk.DatumsWert(DatFunk.sHeute()) >= DatFunk.DatumsWert(EBerichtPanel.UseKTL2015Ab)));
 		}else{
-			vec = SqlInfo.holeFelder("select entdat3 from bericht2 where berichtid='"+
+			vec = SqlInfo.holeFelder("select entdat3,untdat from bericht2 where berichtid='"+
 					Integer.toString(eltern.berichtid)+"' LIMIT 1" );
 			if(vec.size() <= 0){
 				JOptionPane.showMessageDialog(null,"Achtung - kann KTL-Leistungen nicht laden");
@@ -576,15 +576,15 @@ public class Ns2 implements ActionListener {
 				if(! vec.get(0).get(0).trim().equals("")){
 					String entdat = DatFunk.sDatInDeutsch(vec.get(0).get(0));
 					if(DatFunk.DatumsWert(entdat) < DatFunk.DatumsWert("01.01.2007")){
-						holeKTL(false);
+						holeKTL(false,false);
 					}else{
-						holeKTL(true);
+						holeKTL(true,(DatFunk.DatumsWert(entdat) >= DatFunk.DatumsWert(EBerichtPanel.UseKTL2015Ab)));
 					}
 				}else{
-					holeKTL(true);
+					holeKTL(true,(DatFunk.DatumsWert(DatFunk.sHeute()) >= DatFunk.DatumsWert(EBerichtPanel.UseKTL2015Ab)));
 				}
 			}else{
-				holeKTL(true);
+				holeKTL(true,(DatFunk.DatumsWert(DatFunk.sHeute()) >= DatFunk.DatumsWert(EBerichtPanel.UseKTL2015Ab)));
 			}
 		}
 		if(!eltern.neu){
@@ -687,19 +687,27 @@ public class Ns2 implements ActionListener {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private void holeKTL(boolean ktlneu){
+	private void holeKTL(boolean ktlneu,boolean useKTL2015){
 		Vector<Vector<String>> vec = null;
 		String ktltabelle = "";
 		if(ktlneu){
-			ktltabelle = "masntex2";
+			if(useKTL2015){
+				ktltabelle = "masntex3";
+			}else{
+				ktltabelle = "masntex2";
+			}
 		}else{
 			ktltabelle = "masntext";
 		}
+		System.out.println("Nachsorge - verwende "+ktltabelle);
+		/*
 		StringBuffer buf = new StringBuffer();
 		buf.append("select ");
+		
 		for(int i = 0; i < 10;i++){
 			
 		}
+		*/
 		vec = SqlInfo.holeFelder("select * from "+ktltabelle);
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 		    @SuppressWarnings("unused")

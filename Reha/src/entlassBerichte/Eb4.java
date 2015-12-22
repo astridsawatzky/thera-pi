@@ -42,6 +42,7 @@ public class Eb4 implements ActionListener {
 	Font fontarialfettgross = null;
 	JScrollPane jscr = null;
 	boolean inGuiInit = true;
+	boolean ktl2015 = (DatFunk.TageDifferenz("12.12.2015", DatFunk.sHeute()) >= 0);
 	public Eb4(EBerichtPanel xeltern){
 		pan = new JXPanel(new BorderLayout());
 		pan.setOpaque(false);
@@ -379,10 +380,15 @@ public class Eb4 implements ActionListener {
 		Vector<Vector<String>> vec = null;
 		String ktltabelle = "";
 		if(ktlneu){
-			ktltabelle = "masntex2";
+			if(!EBerichtPanel.UseKTL2015){
+				ktltabelle = "masntex2";	
+			}else{
+				ktltabelle = "masntex3";
+			}
 		}else{
 			ktltabelle = "masntext";
 		}
+		System.out.println("EBericht verwende KTL-Tabelle "+ktltabelle);
 		vec = SqlInfo.holeFelder("select * from "+ktltabelle);
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 		    @SuppressWarnings("unused")
