@@ -2299,9 +2299,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				
 				String[] diszis = null;
 				if(SystemConfig.mitRs){
-					diszis = new String[] {"Physio","Massage","Ergo","Logo","Reha","Rsport","Ftrain"};
+					diszis = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
 				}else{
-					diszis = new String[] {"Physio","Massage","Ergo","Logo","Reha"};
+					diszis = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo"};
 				}
 				
 				List<String> list = Arrays.asList(diszis);

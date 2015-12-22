@@ -4510,6 +4510,10 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 					return;
 				}
 			}
+			if(SystemConfig.isAndi){
+				gruppeAusschalten();
+				return;				
+			}
 			/*
 			DatFunk.sDatPlusTage(wocheErster,aktiveSpalte[2]);
 			xaktBehandler = wochenbelegung-1;

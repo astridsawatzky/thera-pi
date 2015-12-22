@@ -1070,7 +1070,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		}
 		if(hmpositionen.size() > 0){
 			String[] idiszi = {"Physio-Rezept","Massage/Lymphdrainage-Rezept",
-					"Ergotherapie-Rezept","Logopädie-Rezept","REHA-Verordnung"};  // Lemmi Fehler: Wa ist die Podologie ? Warum müssen diese "Standard-Strings immer neu aufgeführt werden? (genau EINAML an zentraler Stelle reicht! dt. für die 2-Buchstaben-Kürzel !
+					"Ergotherapie-Rezept","Logopädie-Rezept","REHA-Verordnung","Podologie-Rezept"};  // Lemmi Fehler: Wa ist die Podologie ? Warum müssen diese "Standard-Strings immer neu aufgeführt werden? (genau EINAML an zentraler Stelle reicht! dt. für die 2-Buchstaben-Kürzel !
 			String letztbeginn =  jtf[cBEGINDAT].getText().trim();
 			if(letztbeginn.equals(".  .")){
 				//Preisgruppe holen

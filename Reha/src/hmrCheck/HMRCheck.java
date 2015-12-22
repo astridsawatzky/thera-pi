@@ -23,7 +23,7 @@ public class HMRCheck {
 	Vector<String> positionen = null;
 	Vector<Vector<String>> preisvec = null;
 	String indischluessel = null;
-	String diszis[] = {"2","1","5","3","8"};
+	String diszis[] = {"2","1","5","3","8","7"};
 	//RezNeuanlage rezanlage = null;
 	int disziplin;
 	int preisgruppe;
@@ -67,6 +67,7 @@ public class HMRCheck {
 		}
 		rezdatum = xrezdatum;
 		letztbeginn = xletztbeginn;
+		//System.out.println("IDdiszi = "+idiszi);
 		//aktualisiereHMRs();
 	}
 	/*
@@ -97,7 +98,7 @@ public class HMRCheck {
 		"Bitte stellen Sie selbst sicher daß alle übrigen Pflichtangaben vorhanden sind");
 			return true;
 		}
-
+		//System.out.println(vec);
 		int maxprorezept = Integer.parseInt(vec.get(0).get(2));
 		String[] vorrangig = vec.get(0).get(3).split("@");
 		String[] ergaenzend = vec.get(0).get(5).split("@");

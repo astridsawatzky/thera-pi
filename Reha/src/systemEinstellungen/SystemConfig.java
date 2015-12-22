@@ -296,6 +296,9 @@ public class SystemConfig {
 	public static boolean activateSMS = false;
 	public static boolean phoneAvailable = false; 
 	
+	public static boolean behdatumTippen = false;
+	public static boolean isAndi = false;
+	
 	public SystemConfig(){
 	
 	}
@@ -1346,6 +1349,11 @@ public class SystemConfig {
 			}else{
 				RezGebWarnung =  (inif.getStringProperty("Sonstiges", "RezGebWarnung").equals("0") ? false : true);
 			}
+			dummy = inif.getStringProperty("Sonstiges", "BehDatumTippen");
+			if(dummy != null){
+				behdatumTippen = (inif.getStringProperty("Sonstiges", "BehDatumTippen").equals("0") ? false : true);
+			}
+			
 			String[] hmPraefixArt =  {"KG","MA","ER","LO","RH","PO","RS","FT"};
 			String[] hmPraefixZahl = {"22","21","26","23","67","71","61","62"};
 			String[] hmIndexZahl = 	 {"2", "1", "5", "3", "6", "7","6","7"};
@@ -1771,6 +1779,17 @@ public class SystemConfig {
 			mustsave=true;
 		}
 		hmAbrechnung.put("hmaskforemail", inif.getStringProperty("GemeinsameParameter", "FragenVorEmail"));
+		
+		if(hmFirmenDaten.get("Firma1").toLowerCase().contains("andi") && hmFirmenDaten.get("Ort").toLowerCase().contains("hamburg")){
+			hmAbrechnung.put("rgrpauschale","50,00");
+			isAndi = true;
+		}else{
+			if(inif.getStringProperty("RGRParameter", "RGRPauschale") == null){
+				hmAbrechnung.put("rgrpauschale","5,00");
+			}else{
+				hmAbrechnung.put("rgrpauschale",inif.getStringProperty("RGRParameter", "RGRPauschale"));
+			}
+		}
 		sask = inif.getStringProperty("GKVTaxierung", "AnzahlVorlagen");
 		if(sask==null){
 			System.out.println("Erstelle Parameter 'AnzahlVorlagen'");
@@ -1815,13 +1834,33 @@ public class SystemConfig {
 					pw = inif.getStringProperty("KeyStores", "KeyStorePw"+Integer.toString(i+1));
 					decrypted = man.decrypt(pw);
 					hmAbrechnung.put("hmkeystorepw", decrypted);
+					hmAbrechnung.put("hmkeystorefile", inif.getStringProperty("KeyStores", "KeyStoreFile"+Integer.toString(i+1)) );
+					hmAbrechnung.put("hmkeystorealias", inif.getStringProperty("KeyStores", "KeyStoreAlias"+Integer.toString(i+1)) );
 					/***********************/
+					//KeyStoreUseCert1
+					if(hmFirmenDaten.get("Firma1").toLowerCase().contains("andi") && hmFirmenDaten.get("Ort").toLowerCase().contains("hamburg")){
+							hmAbrechnung.put("hmkeystoreusecertof", "IK"+Reha.aktIK);
+							isAndi = true;
+					}else{
+							if(inif.getStringProperty("KeyStores", "KeyStoreUseCertOf"+Integer.toString(i+1))==null){
+								hmAbrechnung.put("hmkeystoreusecertof", "IK"+Reha.aktIK);
+							}else{
+								hmAbrechnung.put("hmkeystoreusecertof", inif.getStringProperty("KeyStores", "KeyStoreUseCertOf"+Integer.toString(i+1)) );
+							}					
+					}
 					break;
 				}
 			}
-
+			if(hmAbrechnung.get("hmkeystoreusecertof")==null){
+				hmAbrechnung.put("hmkeystoreusecertof","Owner nicht vorhanden");
+				hmAbrechnung.put("hmkeystorealias","Alias nicht vorhanden");				
+			}
+			System.out.println("Alias="+hmAbrechnung.get("hmkeystorealias"));
+			System.out.println("Owner="+hmAbrechnung.get("hmkeystoreusecertof"));
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Zertifikatsdatenbank nicht vorhanden oder fehlerhaft.\nAbrechnung nach § 302 kann nicht durchgeführt werden.");
+			hmAbrechnung.put("hmkeystoreusecertof","Alias nicht vorhanden");
+			hmAbrechnung.put("hmkeystorealias","Owner nicht vorhanden");
 			SystemConfig.certState = SystemConfig.certNotFound;
 			ex.printStackTrace();
 		}
