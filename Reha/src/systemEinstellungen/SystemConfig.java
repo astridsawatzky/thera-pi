@@ -1779,17 +1779,17 @@ public class SystemConfig {
 			mustsave=true;
 		}
 		hmAbrechnung.put("hmaskforemail", inif.getStringProperty("GemeinsameParameter", "FragenVorEmail"));
-		
+		/*
 		if(hmFirmenDaten.get("Firma1").toLowerCase().contains("andi") && hmFirmenDaten.get("Ort").toLowerCase().contains("hamburg")){
 			hmAbrechnung.put("rgrpauschale","50,00");
 			isAndi = true;
-		}else{
+		}else{*/
 			if(inif.getStringProperty("RGRParameter", "RGRPauschale") == null){
 				hmAbrechnung.put("rgrpauschale","5,00");
 			}else{
 				hmAbrechnung.put("rgrpauschale",inif.getStringProperty("RGRParameter", "RGRPauschale"));
 			}
-		}
+		/*}*/
 		sask = inif.getStringProperty("GKVTaxierung", "AnzahlVorlagen");
 		if(sask==null){
 			System.out.println("Erstelle Parameter 'AnzahlVorlagen'");
@@ -1838,16 +1838,17 @@ public class SystemConfig {
 					hmAbrechnung.put("hmkeystorealias", inif.getStringProperty("KeyStores", "KeyStoreAlias"+Integer.toString(i+1)) );
 					/***********************/
 					//KeyStoreUseCert1
+					/*
 					if(hmFirmenDaten.get("Firma1").toLowerCase().contains("andi") && hmFirmenDaten.get("Ort").toLowerCase().contains("hamburg")){
 							hmAbrechnung.put("hmkeystoreusecertof", "IK"+Reha.aktIK);
 							isAndi = true;
-					}else{
+					}else{*/
 							if(inif.getStringProperty("KeyStores", "KeyStoreUseCertOf"+Integer.toString(i+1))==null){
 								hmAbrechnung.put("hmkeystoreusecertof", "IK"+Reha.aktIK);
 							}else{
 								hmAbrechnung.put("hmkeystoreusecertof", inif.getStringProperty("KeyStores", "KeyStoreUseCertOf"+Integer.toString(i+1)) );
 							}					
-					}
+					/*}*/
 					break;
 				}
 			}
