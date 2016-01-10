@@ -3,13 +3,10 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. -->
-<project basedir="." default="build" name="Nebraska">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Nebraska">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
-    <property name="Reha.location" value="../Reha"/>
     <property name="Reha301.location" value="../Reha301"/>
-    <property name="ECLIPSE_HOME" value="../../../../usr/lib/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.6"/>
     <property name="source" value="1.6"/>
@@ -43,7 +40,6 @@
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
-                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -56,20 +52,14 @@
     <target name="build-subprojects"/>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
             <classpath refid="Nebraska.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
-        <ant antfile="${Reha.location}/build.xml" dir="${Reha.location}" inheritAll="false" target="clean"/>
-        <ant antfile="${Reha.location}/build.xml" dir="${Reha.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="${Reha301.location}/build.xml" dir="${Reha301.location}" inheritAll="false" target="clean"/>
-        <ant antfile="${Reha301.location}/build.xml" dir="${Reha301.location}" inheritAll="false" target="build">
+        <ant antfile="build.xml" dir="${Reha301.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${Reha301.location}" inheritAll="false" target="build">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>

@@ -17,6 +17,7 @@
 	<!-- common targets for all projects -->
 	<import file="../Build/build-common.xml"/>
 	
+	<!-- copy 'foreign' libs from collection to distribution tree -->
 	<target name="copylibs">
 		<mkdir dir="${dir.dist.lib}"/>
 		<copy todir="${dir.dist.lib}">

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <project name="common" default="default">
 
 	<!-- add compiler argument to use UTF-8 encoding for all source files 
@@ -21,6 +21,7 @@
 
 	<target name="jar-prepare">
 		<path id="path.classpath.build.thirdparty" refid="${ant.project.name}.classpath"/>
+		<echo message="${ant.project.name}.classpath: ${toString:path.classpath.build.thirdparty}"/>
 		
 		<pathconvert property="dir.libraries.basedir">
 			<path>
@@ -35,13 +36,17 @@
 			<mapper>
 				<!-- this should catch all JARs built by other projects
 				     (path.classpath.build.project) -->
-				<globmapper from="${basedir}/*.jar" to="*.jar"/>
+				<globmapper from="${basedir}${file.separator}*.jar" to="*.jar"/>
 				<!-- this should catch all thirdparty JARs -->
-				<globmapper from="${dir.libraries.basedir}/*" to="Libraries/*"/>
+				<globmapper from="${dir.libraries.basedir}${file.separator}*" to="Libraries${file.separator}*"/>
 			</mapper>
 		</pathconvert>
 					
         <mkdir dir="${dir.dist.jar}"/>
+        <mkdir dir="${dir.dist.icons}"/>
+        <copy includeemptydirs="false" todir="${dir.dist.icons}" failonerror="false">
+            <fileset dir="icons" includes="**"/>
+        </copy>
 	</target>
 		
 	<target name="jar-main" if="jar.main.class">
