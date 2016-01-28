@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.security.cert.X509Certificate;
 import java.sql.SQLException;
@@ -171,6 +172,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	public static String zertifikatVon = SystemConfig.hmAbrechnung.get("hmkeystoreusecertof");
 	public static String originalTitel = "";
 	public static boolean lOwnCert = (SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").equals(SystemConfig.hmAbrechnung.get("hmkeystorealias")) ? true : false);
+	
+	public static boolean directCall = false;
 	
 	public AbrechnungGKV(JAbrechnungInternal xjry){
 		super();
@@ -412,7 +415,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	    		aktuellerPat = "";
 			}
 			this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"] [Disziplin: "+aktDisziplin+"]");
-			doEinlesen(null);
+			doEinlesen(null,null);
 			//setPreisVec(cmbDiszi.getSelectedIndex());
 		}
 		if(cmd.equals("alternativeadresse")){
@@ -429,7 +432,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 
 		return String.valueOf(diszis[cmbDiszi.getSelectedIndex()]);
 	}
-	public void einlesenErneuern(){
+	public void einlesenErneuern(String neueReznr){
+		directCall = false;
 		String[] diszis = null;
 		if(SystemConfig.mitRs){
 			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
@@ -443,7 +447,32 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			abrRez.setRechtsAufNull();
     		aktuellerPat = "";
 		}
-		doEinlesen(null);
+		//System.out.println("aktDisziplin");
+		//System.out.println(RezTools.putRezNrGetDisziplin(neueReznr));
+		if(neueReznr != null){
+			if( ! aktDisziplin.equals(RezTools.putRezNrGetDisziplin(neueReznr)) ){
+				doEinlesen(null,neueReznr);
+			}else{
+				directCall = true;
+				//treeKasse.getSelectionModel().removeTreeSelectionListener(this);
+				final int xindex = doEinlesenEinzeln(neueReznr);
+				SwingUtilities.invokeLater(new Runnable(){
+					public void run(){
+						try{
+							//System.out.println("rechne Kasse neu");
+							treeKasse.clearSelection();
+							treeKasse.setSelectionInterval(xindex, xindex);
+						}catch(Exception ex){
+							ex.printStackTrace();
+						}
+					}
+				});
+				//treeKasse.getSelectionModel().addTreeSelectionListener(this);
+			}
+		}else{
+			doEinlesen(null,neueReznr);
+		}
+		
 	}
 	/*
 	private void setPreisVec(int pos){
@@ -452,11 +481,109 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		JOptionPane.showMessageDialog(null, "Aufruf von setPreisVec in AbrechnungGKV");
 	}
 	*/
+	public int doEinlesenEinzeln(String neueReznr){
+		String cmd = "select name1,ikktraeger,ikkasse,id from fertige where rez_nr='"+neueReznr+"' Limit 1";
+		Vector <Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
+		treeKasse.setEnabled(true);
+		String kas = vecKassen.get(0).get(0).trim().toUpperCase();
+		String ktraeger = vecKassen.get(0).get(1).trim();
+		String ikkasse = vecKassen.get(0).get(2).trim();
+		int aeste = rootKasse.getChildCount();
+		int aktuellerAst = 0;
+		boolean neuerKnoten = true;
+		JXTTreeNode node = null;
+		int treeindex = 0;
+		for(int i = 0; i < aeste; i++){
+			if(((JXTTreeNode)rootKasse.getChildAt(i)).knotenObjekt.ktraeger.equals(ktraeger)){
+				neuerKnoten = false;
+				node = ((JXTTreeNode)rootKasse.getChildAt(i));
+				aktuellerAst = i;
+				break;
+			}
+		}
+		if(neuerKnoten){
+			KnotenObjekt knoten = new KnotenObjekt(kas,"",false,"","");
+			knoten.ktraeger = ktraeger;
+			knoten.ikkasse = ikkasse;
+			node = new JXTTreeNode(knoten,true);
+			treeModelKasse.insertNodeInto(node, rootKasse, rootKasse.getChildCount());
+			treeKasse.validate();
+			aktuellerAst = aeste;
+		}
+		
+		cmd = "select rez_nr,pat_intern,ediok,ikkasse from fertige where rez_nr='"+neueReznr+"' Limit 1";
+		vecKassen = SqlInfo.holeFelder(cmd);
+		JXTTreeNode meinitem = null;
+		for(int i = 0;i<vecKassen.size();i++){
+			//System.out.println("Durchlaufen: "+i+" von "+vecKassen.size());
+			try{
+				cmd = "select n_name from pat5 where pat_intern='"+
+				vecKassen.get(i).get(1)+"' LIMIT 1";
+
+				String name = SqlInfo.holeFelder(cmd).get(0).get(0);
+				cmd = "select preisgruppe from verordn where rez_nr='"+vecKassen.get(i).get(0)+"' LIMIT 1";;
+				////System.out.println(cmd);
+				String preisgr = SqlInfo.holeEinzelFeld(cmd); 
+				////System.out.println("Preisgruppe="+preisgr);
+
+				KnotenObjekt rezeptknoten = new KnotenObjekt(vecKassen.get(i).get(0)+"-"+name,
+						vecKassen.get(i).get(0),
+						(vecKassen.get(i).get(2).equals("T")? true : false),
+						vecKassen.get(i).get(3),
+						preisgr);
+				rezeptknoten.ktraeger = ktraeger;
+				rezeptknoten.pat_intern = vecKassen.get(i).get(1);
+				meinitem = new JXTTreeNode(rezeptknoten,true);
+
+				treeModelKasse.insertNodeInto(meinitem,node,node.getChildCount());
+				treeKasse.validate();
+				
+				
+				aeste = rootKasse.getChildCount();
+				treeKasse.updateUI();
+				treeKasse.expandPath(new TreePath(((JXTTreeNode)node).getPath() ) );
+				treeKasse.scrollPathToVisible(new TreePath(((JXTTreeNode)meinitem).getPath() ));
+				for(int i2 = 0; i2 < aeste; i2++){
+					if(treeKasse.isCollapsed(  new TreePath(((JXTTreeNode)rootKasse.getChildAt(i2)).getPath() ) ) ){
+						//System.out.println("geschlossen "+i2+" - "+((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.titel);
+						treeindex += 1;
+					}else{
+						//System.out.println("expanded "+i2+" - "+((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.titel);
+						treeindex += ((JXTTreeNode)rootKasse.getChildAt(i2)).getChildCount()+1;
+					}
+					if(((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.ktraeger.equals(ktraeger)){
+						break;
+					}
+				}
+				
+				treeKasse.expandPath(new TreePath(node));
+				/*
+				System.out.println("****** TreeIndex: "+treeindex);
+				System.out.println("Root-Childs "+rootKasse.getChildCount());
+				System.out.println("GetIndex "+rootKasse.getIndex(meinitem));
+				System.out.println("IndexOfChild = "+treeModelKasse.getIndexOfChild(node,meinitem));
+				*/
+				
+				treeKasse.setSelectionPath(new TreePath(meinitem));
+				treeKasse.setSelectionInterval(treeindex, treeindex);
+				if(treeKasse.getSelectionPath() != null){
+					abrRez.actionAbschluss();
+				}
+				
+				
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
+		}	
+		return treeindex;
+	}
 	
 	/*********
 	 * Einlesen der abrechnungsdaten
 	 */
-	public void doEinlesen(JXTTreeNode aktKassenNode ){
+	public void doEinlesen(JXTTreeNode aktKassenNode,String neueReznr ){
+		directCall = false;
 		//final JXTTreeNode xaktKassenNode = aktKassenNode;
 		new SwingWorker<Void,Void>(){
 			@Override
@@ -491,6 +618,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					int aeste = 0;					
 					astAnhaengen(kas,ktraeger,ikkasse);
 					rezepteAnhaengen(0);
+					/*
+					System.out.println(ktraeger);
+					System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.titel);
+					System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.rez_num);
+					*/
 					aeste++;
 					
 					
@@ -505,6 +637,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 							existiertschon.add(ktraeger);
 							astAnhaengen(kas,ktraeger,ikkasse);
 							rezepteAnhaengen(aeste);
+							/*
+							System.out.println(ktraeger);
+							System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.titel);
+							System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.rez_num);
+							*/
 							aeste++;
 
 							treeKasse.repaint();

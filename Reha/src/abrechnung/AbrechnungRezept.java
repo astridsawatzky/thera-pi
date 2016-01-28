@@ -90,6 +90,7 @@ import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableModel;
 import org.jdesktop.swingx.treetable.TreeTableNode;
 import org.therapi.reha.patient.AktuelleRezepte;
+import org.therapi.reha.patient.Historie;
 
 import patientenFenster.KassenAuswahl;
 import patientenFenster.RezNeuanlage;
@@ -735,6 +736,61 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		mv.setShowingWeekNumber(true);
 		return mv;
 	}
+	public void actionAbschluss(){
+		if(!eltern.isRezeptSelected()){
+			JOptionPane.showMessageDialog(null, "Kein Rezept zum Auf-/Abschließen ausgewählt");
+			return;
+		}
+		
+
+		if(rezeptFertig){
+			jXTreeTable.setEditable(true);
+			rezeptFertig = false;
+			new SwingWorker<Void,Void>(){
+				@Override
+				protected Void doInBackground()
+						throws Exception {
+					SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"+vec_rez.get(0).get(1)+"' LIMIT 1");
+					eltern.setKassenUmsatzNeu();								
+					return null;
+				}
+				
+			}.execute();
+		}else{
+			if(rezeptWert <= zuzahlungWert){
+				JOptionPane.showMessageDialog(null, "<html><b>Glückwunsch zum größten -> D E P P E N  (des Jahres "+SystemConfig.aktJahr+")</b></html>");
+				return;
+			}
+			if(macheEDIFACT(true)){
+				jXTreeTable.setEditable(false);
+				rezeptFertig = true;
+				new SwingWorker<Void,Void>(){
+					@Override
+					protected Void doInBackground()
+							throws Exception {
+						SqlInfo.sqlAusfuehren("update fertige set ediok='T',edifact='"+StringTools.Escaped(edibuf.toString())+"' where rez_nr='"+vec_rez.get(0).get(1)+"' LIMIT 1");
+						eltern.setKassenUmsatzNeu();
+						return null;
+					}
+					
+				}.execute();
+			}else{
+				jXTreeTable.setEditable(false);
+				rezeptFertig = false;
+				new SwingWorker<Void,Void>(){
+					@Override
+					protected Void doInBackground()
+							throws Exception {
+						SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"+vec_rez.get(0).get(1)+"' LIMIT 1");
+						return null;
+					}
+					
+				}.execute();
+			}
+			//hier den Edifact einbauen
+		}
+		eltern.setRezeptOk(rezeptFertig);		
+	}
 	private JToolBar getToolbar(){
 		JToolBar jtb = new JToolBar();
 		jtb.setOpaque(false);
@@ -746,60 +802,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			public void actionPerformed(ActionEvent arg0) {
 				String cmd = arg0.getActionCommand();
 				if(cmd.equals("abschliessen")){
-					if(!eltern.isRezeptSelected()){
-						JOptionPane.showMessageDialog(null, "Kein Rezept zum Auf-/Abschließen ausgewählt");
-						return;
-					}
-					
-
-					if(rezeptFertig){
-						jXTreeTable.setEditable(true);
-						rezeptFertig = false;
-						new SwingWorker<Void,Void>(){
-							@Override
-							protected Void doInBackground()
-									throws Exception {
-								SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"+vec_rez.get(0).get(1)+"' LIMIT 1");
-								eltern.setKassenUmsatzNeu();								
-								return null;
-							}
-							
-						}.execute();
-					}else{
-						if(rezeptWert <= zuzahlungWert){
-							JOptionPane.showMessageDialog(null, "<html><b>Glückwunsch zum größten -> D E P P E N  (des Jahres "+SystemConfig.aktJahr+")</b></html>");
-							return;
-						}
-						if(macheEDIFACT(true)){
-							jXTreeTable.setEditable(false);
-							rezeptFertig = true;
-							new SwingWorker<Void,Void>(){
-								@Override
-								protected Void doInBackground()
-										throws Exception {
-									SqlInfo.sqlAusfuehren("update fertige set ediok='T',edifact='"+StringTools.Escaped(edibuf.toString())+"' where rez_nr='"+vec_rez.get(0).get(1)+"' LIMIT 1");
-									eltern.setKassenUmsatzNeu();
-									return null;
-								}
-								
-							}.execute();
-						}else{
-							jXTreeTable.setEditable(false);
-							rezeptFertig = false;
-							new SwingWorker<Void,Void>(){
-								@Override
-								protected Void doInBackground()
-										throws Exception {
-									SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"+vec_rez.get(0).get(1)+"' LIMIT 1");
-									return null;
-								}
-								
-							}.execute();
-						}
-						
-						//hier den Edifact einbauen
-					}
-					eltern.setRezeptOk(rezeptFertig);
+					actionAbschluss();
 				}
 				if(cmd.equals("scannen")){
 
@@ -1144,6 +1147,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		htmlPane.setText(text);
 	}
 	private void setWerte(String rez_nr){
+		if(AbrechnungGKV.directCall){
+			AbrechnungGKV.directCall = false;
+			return;
+		}
 
 		String cmd = "select * from verordn where rez_nr='"+rez_nr.trim()+"' LIMIT 1";
 		//////System.out.println("Kommando = "+cmd);
@@ -1211,14 +1218,22 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				//54 == Berichtid;
 				//55 == "T" = Arztbericht
 				String berichtid = vec_rez.get(0).get(54);
-				//String arztbericht = vec_rez.get(0).get(55);x
-				String dlgcmd = "<html>Für dieses Rezept wurde ein Therapiebericht angefordert!<br>"+
-				(berichtid.equals("") ? "Es wurde aber <b><font color=#FF0000>kein</font> Therapiebericht erstellt</b>" :	"Der Therapiebericht wurde <b>bereits erstellt</b>")+
-					"<br><br>Position Therapiebericht wird an den letzten Behandlungstag angehängt</html>";
-				JOptionPane.showMessageDialog(null, dlgcmd);
-				doTherapieBericht(therapiebericht);
-				this.getVectorFromNodes();
-				doTarifWechselCheck();
+				//String arztbericht = vec_rez.get(0).get(55);
+				if(!AbrechnungGKV.directCall){
+					String dlgcmd = "<html>Für dieses Rezept wurde ein Therapiebericht angefordert!<br>"+
+							(berichtid.equals("") ? "Es wurde aber <b><font color=#FF0000>kein</font> Therapiebericht erstellt</b>" :	"Der Therapiebericht wurde <b>bereits erstellt</b>")+
+								"<br><br>Position Therapiebericht wird an den letzten Behandlungstag angehängt</html>";
+							JOptionPane.showMessageDialog(null, dlgcmd);
+							doTherapieBericht(therapiebericht);
+							this.getVectorFromNodes();
+							doTarifWechselCheck();
+							if(berichtid.equals("")){
+								setToClipboard(rez_nr.trim());
+							}
+				}else{
+					AbrechnungGKV.directCall = false;
+					return;
+				}
 			}
 		}
 		doPositionenErmitteln();
@@ -1251,6 +1266,26 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		}
 		
 		
+		
+	}
+	private void setToClipboard(final String xcrez ){
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws java.lang.Exception {
+				String cmd = "select rez_nr,Substring_index(Substring_index(Substring_index(Substring_index(termine, '\n',-4),'\n',1),'@',-4),'@',1 )as reststring "
+						+ "from verordn where rez_nr = '"+xcrez+"' LIMIT 1";
+		
+						
+				Vector<Vector<String>> xvec = SqlInfo.holeFelder(cmd);
+				//System.out.println(xvec);
+				if(xvec.size() > 0){
+					Historie.copyToClipboard(xvec.get(0).get(0)+"\t"+xvec.get(0).get(1)+"\n");
+				}
+				
+				return null;
+			}
+			
+		}.execute();
 		
 	}
 	private void doTherapieBericht(String berichtsposition){
@@ -1397,7 +1432,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		boolean jahresWechsel = false;
 		zuZahlungsPos = "3";
 		////System.out.println("Einsprung 2 in doGebuehren");
-		if(SystemPreislisten.hmZuzahlRegeln.get(aktDisziplin).get(Integer.valueOf(preisgruppe)-1).equals("0")){
+		//if(SystemPreislisten.hmZuzahlRegeln.get(aktDisziplin).get(Integer.valueOf(preisgruppe)-1).equals("0")){
+		if(SystemPreislisten.hmZuzahlRegeln.get(aktDisziplin).get(Integer.valueOf(preisgruppe)-1) <= 0){
 			////System.out.println("keine Zuzahlung bei dieser Kasse");
 			zuZahlungsIndex = zzpflicht[0];
 			zuZahlungsPos = "0";

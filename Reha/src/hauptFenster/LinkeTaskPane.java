@@ -5,6 +5,7 @@ package hauptFenster;
 import generalSplash.RehaSplash;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -126,17 +127,18 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxTPcontainer =	new JXTaskPaneContainer();
 		jxTPcontainer.setBackground(new Color(106,130,218));
 		//jxTPcontainer.setPreferredSize(new Dimension(250,0));
-
-		jxTPcontainer.add(getPatientenStamm());
-
-		jxTPcontainer.add(getTerminKalender());
 		
-		jxTPcontainer.add(getOpenOfficeOrg());
 		
-		jxTPcontainer.add(getNuetzliches());		
+		jxTPcontainer.add( (Component) getPatientenStamm());
 		
-		jxTPcontainer.add(getSystemEinstellungen());
-		jxTPcontainer.add(getMonatsUebersicht());
+		jxTPcontainer.add( (Component) getTerminKalender());
+		
+		jxTPcontainer.add( (Component) getOpenOfficeOrg());
+		
+		jxTPcontainer.add( (Component) getNuetzliches());		
+		
+		jxTPcontainer.add( (Component) getSystemEinstellungen());
+		jxTPcontainer.add( (Component) getMonatsUebersicht());
 		/**
 		 * dann f�gen wir den TaskpaneContainer der ScrollPane hinzu
 		 */

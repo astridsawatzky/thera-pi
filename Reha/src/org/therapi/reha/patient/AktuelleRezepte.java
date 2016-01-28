@@ -2123,10 +2123,18 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};	
 				}
 				
-				String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
-				if(RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){
-					Reha.thisClass.abrechnungpanel.einlesenErneuern();
-				}
+				int currow = tabaktrez.getSelectedRow();
+				if(currow < 0){return;}
+					if(dtblm.getValueAt(currow,5)==null){
+						Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+					}else{
+						String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+						if(RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){
+							Reha.thisClass.abrechnungpanel.einlesenErneuern(Reha.thisClass.patpanel.vecaktrez.get(1));
+						}else{
+							Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+						}
+					}
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -2166,6 +2174,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		if(currow < 0){return;}
 			if(dtblm.getValueAt(currow,5)==null){
 				// derzeit offen also abschliessen
+				//System.out.println("In Abschließen");
 				if(!Rechte.hatRecht(Rechte.Rezept_lock, true)){
 					return;
 				}
@@ -2379,17 +2388,20 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				String cmd = "insert into fertige set ikktraeger='"+ikkost+"', ikkasse='"+ikkass+"', "+
 				"name1='"+kname+"', rez_nr='"+rnr+"', pat_intern='"+patint+"', rezklasse='"+rnr.substring(0,2)+"'";
 				SqlInfo.sqlAusfuehren(cmd);
-				JComponent abrech1 = AktiveFenster.getFensterAlle("Abrechnung-1");
+				
+				//JComponent abrech1 = AktiveFenster.getFensterAlle("Abrechnung-1");
 				/********************************************************************************/				
  
-				if(abrech1 != null){
-					Reha.thisClass.abrechnungpanel.doEinlesen(Reha.thisClass.abrechnungpanel.getaktuellerKassenKnoten());
-				}
+				//if(abrech1 != null){
+					//Hier umbauen so daß der Rezeptbaun nicht ständig neu aufgebaut wird.
+					//Reha.thisClass.abrechnungpanel.doEinlesen(Reha.thisClass.abrechnungpanel.getaktuellerKassenKnoten(),Reha.thisClass.patpanel.vecaktrez.get(1));
+				//}
 				
 			}else{
 				if(!Rechte.hatRecht(Rechte.Rezept_unlock, true)){
 					return;
 				}
+				//System.out.println("In Aufschließen");
 				// bereits abgeschlossen muß geöffnet werden
 				dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[0],currow,5);
 				doAufschliessen();
@@ -2402,7 +2414,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				SqlInfo.sqlAusfuehren(cmd);
 				JComponent abrech1 = AktiveFenster.getFensterAlle("Abrechnung-1");
 				if(abrech1 != null){
-					Reha.thisClass.abrechnungpanel.doEinlesen(Reha.thisClass.abrechnungpanel.getaktuellerKassenKnoten());
+					Reha.thisClass.abrechnungpanel.doEinlesen(Reha.thisClass.abrechnungpanel.getaktuellerKassenKnoten(),null);
 				}
 			}
 	}
@@ -2505,14 +2517,14 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				
 				kommentar = (String) dtermm.getValueAt(i,2);
-				
+				long utage = 0;
 				//Wenn nach Kalendertagen ermittelt werden soll
 				if(ktagebreak){
 					//System.out.println("Kalendertage zwischen den Behandlungen = "+DatFunk.TageDifferenz(vglalt, vglneu)+"\n"+
 							//"erlaubt sind "+fristbreak);
 					if(!"RSFT".contains(Reha.thisClass.patpanel.vecaktrez.get(1).substring(0,2))){
-						if( (DatFunk.TageDifferenz(vglalt, vglneu) >  fristbreak) && (kommentar.trim().equals("")) ){
-							ret = rezUnterbrechung(true,"",i+1);// Unterbrechungsgrund
+						if( ( (utage=DatFunk.TageDifferenz(vglalt, vglneu)) >  fristbreak) && (kommentar.trim().equals("")) ){
+							ret = rezUnterbrechung(true,"",i+1,Long.toString(utage));// Unterbrechungsgrund
 							if(ret.equals("")){
 								return false;
 							}else{
@@ -2524,8 +2536,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					//System.out.println("Differenz zwischen dem letzt möglichen und dem tatsächlichen Zeitaum\n"+
 							//HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag));
 					if(!"RSFT".contains(Reha.thisClass.patpanel.vecaktrez.get(1).substring(0,2))){
-						if(HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag) > 0 && kommentar.trim().equals("")){	
-							ret = rezUnterbrechung(true,"",i+1);// Unterbrechungsgrund
+						if( (utage=HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag)) > 0 && kommentar.trim().equals("")){	
+							ret = rezUnterbrechung(true,"",i+1,Long.toString(utage));// Unterbrechungsgrund
 							if(ret.equals("")){
 								return false;
 							}else{
@@ -2789,7 +2801,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		OOTools.starteBacrodeFormular(Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+url,SystemConfig.rezBarcodeDrucker);
 		
 	}
-	public String rezUnterbrechung(boolean lneu,String feldname,int behandlung){
+	public String rezUnterbrechung(boolean lneu,String feldname,int behandlung,String utage){
 		if(neuDlgOffen){return "";}
 		try{
 			neuDlgOffen = true;
@@ -2798,17 +2810,17 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			PinPanel pinPanel = new PinPanel();
 			pinPanel.setName("RezeptTest");
 			pinPanel.getGruen().setVisible(false);
-			rezTest.setSize(200,200);
-			rezTest.setPreferredSize(new Dimension(250,200));
+			rezTest.setSize(300,200);
+			rezTest.setPreferredSize(new Dimension(300,200));
 			rezTest.getSmartTitledPanel().setPreferredSize(new Dimension (250,200));
 			rezTest.setPinPanel(pinPanel);
 			RezTestPanel testPan =  new RezTestPanel((dummyLabel = new JLabel()));
 			rezTest.getSmartTitledPanel().setContentContainer(testPan );
-			rezTest.getSmartTitledPanel().setTitle("Unterbrechung bei der "+behandlung+". Behandlung");
+			rezTest.getSmartTitledPanel().setTitle("Unterbr. bei der "+behandlung+". Behandlung - "+utage+" Tage");
 			rezTest.setName("RezeptTest");
 			rezTest.setModal(true);
 			Point pt = tabaktterm.getLocationOnScreen();
-			pt.x= pt.x-250;
+			pt.x= pt.x-300;
 			pt.y= pt.y-15;
 			rezTest.setLocation(pt);
 			rezTest.pack();
@@ -2956,6 +2968,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			SqlInfo.sqlAusfuehren("delete from verordn where rez_nr='"+rez_nr+"'");
 			Reha.thisClass.patpanel.aktRezept.holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
 			final String xrez_nr = String.valueOf(rez_nr);
+			
 			SwingUtilities.invokeLater(new Runnable(){
 				public void run(){
 					Reha.thisClass.patpanel.historie.holeRezepte(Reha.thisClass.patpanel.patDaten.get(29), "");
@@ -2970,7 +2983,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						}
 						String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
 						if(RezTools.putRezNrGetDisziplin(xrez_nr).equals(aktDisziplin)){
-							Reha.thisClass.abrechnungpanel.einlesenErneuern();
+							Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
 						}
 					}
 					

@@ -241,8 +241,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public static String NeueRvVarianteAb = "01.01.2015";
 	public static boolean UseNeueRvVariante = false;
 
-	public static String UseKTL2015Untdat = "31.12.2015";
-	public static String UseKTL2015Ab = "31.12.2015";
+	public static String UseKTL2015Untdat = "27.12.2015";
+	public static String UseKTL2015Ab = "27.12.2015";
 	public static boolean UseKTL2015 = false;
 	
 
@@ -292,7 +292,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 		if(berichttyp.contains("E-Bericht") || berichttyp.contains("LVA-A") || berichttyp.contains("BfA-A") 
 				|| berichttyp.contains("GKV-A")){
-			
+			System.out.println("Berichttyp = "+berichttyp);
 			try{
 				//nur wenn RV
 				if(!berichttyp.contains("GKV E-Bericht")){
@@ -351,6 +351,43 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 					}
 					//System.out.println("Tage Differenz = "+DatFunk.TageDifferenz(NeueRvVarianteAb, DatFunk.sHeute()));
 					
+				}else{
+					//Nur GKV
+				
+					System.out.println("in GKV-Bericht");
+					String stmt = "select entdat3,untdat,aufdat3 from bericht2 where berichtid = '"+Integer.toString(berichtid)+"' LIMIT 1" ;
+					Vector<Vector<String>> datwerte = SqlInfo.holeFelder(stmt);
+					UseKTL2015 = false;
+					if(this.neu && DatFunk.TageDifferenz(EBerichtPanel.UseKTL2015Ab, DatFunk.sHeute()) >= 0){
+						UseKTL2015 = true;
+					}else if(!this.neu){
+						if(datwerte.get(0).get(0).trim().length() == 10){
+							if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(datwerte.get(0).get(0)), UseKTL2015Ab) >= 0){
+								System.out.println("In Variante 2 "+DatFunk.sDatInDeutsch(datwerte.get(0).get(0))+" - "+UseKTL2015Ab+ " differenz "+Long.toString(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(datwerte.get(0).get(0)), UseKTL2015Ab)));
+								UseKTL2015 = false;
+							}else{
+								UseKTL2015 = true;
+							}
+						}else{
+							if(DatFunk.TageDifferenz(EBerichtPanel.UseKTL2015Ab, DatFunk.sHeute()) >= 0){
+								UseKTL2015 = true;
+							}	
+						}
+						if(datwerte.get(0).get(1).trim().length() == 10){
+							if(DatFunk.TageDifferenz(UseKTL2015Ab, DatFunk.sDatInDeutsch(datwerte.get(0).get(1))) >= 0){
+								System.out.println("In Variante 3");
+								UseKTL2015 = true;
+							}else{
+								System.out.println("In Variante 4");
+								UseKTL2015 = false;
+							}
+						}else{
+							System.out.println("In Variante 5");
+							//Hier evtl. eine Abfrage ob neue oder alte KTL verwendet werden sollen
+						}
+					}
+					
+			
 				}
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler im Test: Bericht 2015\nFehlermeldung: "+ex.getMessage());

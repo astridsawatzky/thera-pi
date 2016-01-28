@@ -578,9 +578,10 @@ public class Ns2 implements ActionListener {
 					if(DatFunk.DatumsWert(entdat) < DatFunk.DatumsWert("01.01.2007")){
 						holeKTL(false,false);
 					}else{
-						holeKTL(true,(DatFunk.DatumsWert(entdat) >= DatFunk.DatumsWert(EBerichtPanel.UseKTL2015Ab)));
+						holeKTL(true,(DatFunk.DatumsWert(entdat) >= DatFunk.DatumsWert(  DatFunk.sDatPlusTage(EBerichtPanel.UseKTL2015Ab,-5) )));
 					}
 				}else{
+					
 					holeKTL(true,(DatFunk.DatumsWert(DatFunk.sHeute()) >= DatFunk.DatumsWert(EBerichtPanel.UseKTL2015Ab)));
 				}
 			}else{
@@ -699,7 +700,7 @@ public class Ns2 implements ActionListener {
 		}else{
 			ktltabelle = "masntext";
 		}
-		System.out.println("Nachsorge - verwende "+ktltabelle);
+		//System.out.println("Nachsorge - verwende "+ktltabelle);
 		/*
 		StringBuffer buf = new StringBuffer();
 		buf.append("select ");

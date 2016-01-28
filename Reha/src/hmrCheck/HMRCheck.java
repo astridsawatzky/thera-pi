@@ -86,7 +86,17 @@ public class HMRCheck {
 		}
 		AdRrezept = (rezeptart==2);
 		folgerezept = (rezeptart==1);
-		
+		if(reznummer.startsWith("PO") && rezeptart==0){
+			try{
+				 if(Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(3)) > 3){
+					 JOptionPane.showMessageDialog(null,"Fehler!\nAnzahl der Behandlungen bei Erstverordnung Podologie sind maximal 3 erlaubt!"); 
+					 return false;
+				 }				
+			}catch(Exception ex){
+				 JOptionPane.showMessageDialog(null,"Fehler bei der Mengenermittlung Podologie-Rezept und Erstverordnung!"); 
+				return false;
+			}
+		}
 		Vector<Vector<String>> vec = SqlInfo.holeFelder("select * from hmrcheck where indischluessel='"+
 				indischluessel+"' LIMIT 1");
 
