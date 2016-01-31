@@ -599,7 +599,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					existiertschon.clear();
 					String dsz = diszis[cmbDiszi.getSelectedIndex()];
 					
-					String cmd = "select name1,ikktraeger,ikkasse,id from fertige where rezklasse='"+dsz+"' ORDER BY ikktraeger , id";
+					//String cmd = "select name1,ikktraeger,ikkasse,id from fertige where rezklasse='"+dsz+"' ORDER BY ikktraeger , id";
+					// das Gleiche sortiert nach Papierannahmestellen:
+					String cmd = "SELECT t1.name1,t1.ikktraeger,t1.ikkasse,t1.id,t2.ik_papier " +
+								 "FROM fertige AS t1 LEFT JOIN kass_adr AS t2 ON t1.ikkasse = t2.ik_kasse " +
+								 "WHERE rezklasse='"+dsz+"' ORDER BY t2.ik_papier, t1.name1, t1.ikktraeger, t1.id";
 
 					Vector <Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
 
@@ -1048,7 +1052,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			//Einbau Test ob Zertifikat abgelaufen
 			test = "IK der Krankenkasse: "+ik_kasse+"\n"+
 			"IK des Kostenträgers: "+ik_kostent+"\n"+ 
-			"IK des Nutzer mit EntschlüsselungsbefungnisKostenträgers: "+ik_nutzer+"\n"+
+			"IK des Nutzer mit Entschlüsselungsbefungnis: "+ik_nutzer+"\n"+
 			"IK der Datenannahmestelle: "+ik_physika+"\n"+
 			"IK der Papierannahmestelle: "+ik_papier+"\n"+
 			"Emailadresse der Datenannahmestelle: "+ik_email+"\n"+
@@ -1111,7 +1115,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				return;
 			}
 			if(ik_nutzer.trim().equals("")){
-				JOptionPane.showMessageDialog(null, "Dieser Kasse ist keine Nutzer mit Entschlüsselungsbefugnis zugewiesen\n"+
+				JOptionPane.showMessageDialog(null, "Dieser Kasse ist kein Nutzer mit Entschlüsselungsbefugnis zugewiesen\n"+
 				"Abrechnung nach §302 ist nicht möglich!");
 				SqlInfo.sqlAusfuehren("update nummern set rnr='"+aktRechnung+"' where mandant='"+Reha.aktIK+"' LIMIT 1");
 				doDlgAbort();
@@ -1641,7 +1645,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		name_kostent = holeNameKostentraeger();
 		String test = "IK der Krankenkasse: "+ik_kasse+"\n"+
 		"IK des Kostenträgers: "+ik_kostent+"\n"+ 
-		"IK des Nutzer mit EntschlüsselungsbefungnisKostenträgers: "+ik_nutzer+"\n"+
+		"IK des Nutzer mit Entschlüsselungsbefungnis: "+ik_nutzer+"\n"+
 		"IK der Datenannahmestelle: "+ik_physika+"\n"+
 		"IK der Papierannahmestelle: "+ik_papier+"\n"+
 		"Emailadresse der Datenannahmestelle: "+ik_email+"\n"+
