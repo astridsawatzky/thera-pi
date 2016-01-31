@@ -228,8 +228,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				//und genau das ist Murks in einer View die einem einen schnellen Gesamtüberblick verschaffen soll!
 				//Steinhilber	
 				
-					//FormLayout vplay = new FormLayout("fill:0:grow(0.6),5dlu,fill:0:grow(0.4),5dlu",
-					//								  "13dlu,53dlu,5dlu,fill:0:grow(1.00),0dlu");
+					//FormLayout vplay = new FormLayout("fill:0:grow(0.6),5dlu,fill:0:grow(0.4),5dlu","13dlu,53dlu,5dlu,fill:0:grow(1.00),0dlu");
 					CellConstraints vpcc = new CellConstraints();
 					vollPanel.setLayout(vplay);
 					vollPanel.setOpaque(false);
@@ -2724,7 +2723,6 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		// ^^^ Lemmi 20101218: Prüfung, ob es eine RGR-RECHNUNG bereits gibt, falls ja, geht hier gar nix !
 		
 		
-		// noch zu erledigen
 		// erst prüfen ob Zuzahlstatus = 0, wenn ja zurück;
 		// dann prüfen ob bereits bezahlt wenn ja fragen ob Kopie erstellt werden soll;
 		if( (boolean)Reha.thisClass.patpanel.vecaktrez.get(39).equals("0") ){

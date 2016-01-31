@@ -612,7 +612,8 @@ public void BarkassenFenster(int setPos,String sparam) {
 	////System.out.println("Neues Barkassenfenster = "+name);
 	int containerNr = setPos;
 	containerHandling(containerNr);
-	barkassenjry = new JBarkassenInternal("thera-\u03C0  - Barkasse abrechnen ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
+	//barkassenjry = new JBarkassenInternal("thera-\u03C0  - Barkasse abrechnen ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
+	barkassenjry = new JBarkassenInternal("thera-\u03C0  - Barkasse abrechnen ",SystemConfig.hmSysIcons.get("BarKasse"),1) ;
 	AktiveFenster.setNeuesFenster(name,(JComponent)barkassenjry,1,(Container)barkassenjry.getContentPane());
 	barkassenjry.setName(name);
 	barkassenjry.setSize(new Dimension(500,370));
