@@ -28,6 +28,12 @@ public class INITool {
 			dbInis = new String[] {"nix"};
 		}
 	}
+	/**
+	 * liefert INIFile Objekt mit aktuell verwandter ini, unabhaengig ob die eine lokale Datei oder in der DB abgelegt ist
+	 * @param path Pfad zu lokaler ini
+	 * @param iniToOpen Name der ini-Datei
+	 * @return INIFile Objekt
+	 */
 	public static INIFile openIni(String path,String iniToOpen){
 		INIFile inif = null;
 		try{
@@ -35,6 +41,23 @@ public class INITool {
 				InputStream stream = SqlInfo.liesIniAusTabelle(iniToOpen);
 				inif = new INIFile(stream,iniToOpen);
 			}else{
+				inif = new INIFile(path+iniToOpen);
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return inif;
+	}
+	/**
+	 * liefert INIFile Objekt mit lokaler ini-Datei, falls die ini in der DB abgelegt ist, sonst null
+	 * @param path Pfad zu lokaler ini
+	 * @param iniToOpen Name der ini-Datei
+	 * @return INIFile Objekt
+	 */
+	public static INIFile openIniFallback(String path,String iniToOpen){
+		INIFile inif = null;
+		try{
+			if(Arrays.asList(dbInis).contains(iniToOpen)){
 				inif = new INIFile(path+iniToOpen);
 			}
 		}catch(Exception ex){
