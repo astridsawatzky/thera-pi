@@ -93,9 +93,9 @@ public class OffenepostenTab extends JXPanel implements ChangeListener{
         ico = new ImageIcon(ss);
 		vectitel.add("Bezahlte Rechnungen ausbuchen / Teilzahlungen buchen");
 		vecdescript.add("<html>Hier haben Sie die Möglichkeit Rechnungen nach verschiedenen Kriterien zu suchen.<br><br>" +
-                "Wenn Sie die Rechnung, die Sie suchen, gefunden haben und die Rechnung <b>vollständig</b> bezahlt wurde,<br>" +
-                "genügt es völlig über Alt+A den Vorgang ausbuchen zu aktivieren.<br><br>"+
-                "Wurde lediglich eine Teilzahlung geleistet, muß diese zuvor im Textfeld <b>Geldeingang</b> eingetragen werden.</html>");
+                "Wenn Sie die Rechnung, die Sie suchen, gefunden haben und die Rechnung <b>vollständig bezahlt</b> wurde,<br>" +
+                "genügt es völlig über <b>Alt+A</b> den Vorgang <b>Ausbuchen</b> zu aktivieren.<br><br>"+
+                "Wurde lediglich eine <b>Teilzahlung</b> geleistet, muß diese zuvor im Textfeld <b>Geldeingang</b> eingetragen werden.</html>");
 		vecimg.add(ico);
 		
 		

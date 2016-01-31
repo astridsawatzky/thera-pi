@@ -48,7 +48,6 @@ import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
-import CommonTools.StringTools;
 import CommonTools.TableTool;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -63,7 +62,6 @@ import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
 
 import com.hexiong.jdbf.DBFReader;
-import com.hexiong.jdbf.JDBFException;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.text.XTextFieldsSupplier;
@@ -532,7 +530,6 @@ public class OffenepostenMahnungen extends JXPanel{
 			stmt =  OffenePosten.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try{
@@ -706,16 +703,6 @@ public class OffenepostenMahnungen extends JXPanel{
 		}else{
 			JOptionPane.showMessageDialog(null,"Für die Rechnungsnummer "+rnr+" sind keine Positionen in der Tabelle faktura vorhanden");
 			return;
-			/*
-			OffenePosten.thisFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-			try{
-				doDbfGedoense(rnr,row);
-			}catch(Exception ex){
-				ex.printStackTrace();
-				JOptionPane.showMessageDialog(null,"Fehler beim Bezug der Rechnungsdaten (alt)");
-			}
-			OffenePosten.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			*/
 		}
 	}
 	private void doFakturaGedoense(String rnr,int row){
@@ -766,71 +753,7 @@ public class OffenepostenMahnungen extends JXPanel{
 
 		
 	}
-	private void doDbfGedoense(String rnr, int row){
-		String rdatei = ((String)OffenePosten.mahnParameter.get("diralterechnungen"))+rnr+".dbf";
-		f = new File(rdatei);
-		if(! f.exists()){
-			JOptionPane.showMessageDialog(null,"Die 'ehemalige' Rechnungsdatei -> "+rdatei+" <- existiert nicht!\n"+
-					"Maschinelle Mahnung ist deshalb nicht möglich");
-			return;
-		}
-		try {
-			dbfreader = new DBFReader(rdatei);
-			if(dbfreader.hasNextRecord()){
-				Object aobj[] = dbfreader.nextRecord();
-				try{
-					rtfs[0].setText( StringTools.EGross((String) aobj[0]) );
-					rtfs[1].setText( StringTools.EGross((String) aobj[1]) );
-					rtfs[2].setText( StringTools.EGross((String) aobj[2]) );
-					rtfs[3].setText( ((String) aobj[3])+" "+StringTools.EGross((String) aobj[4]) );
-					dbfreader.close();
-					dbfreader = null;
-				}catch(Exception ex){
-					ex.printStackTrace();
-					JOptionPane.showConfirmDialog(null,"Keine verwertbaren Adesssdaten vorhanden in 'ehemaliger' Rechnungsdatei "+rdatei);					
-				}
-				rtfs[4].setText( tabmod.getValueAt(tab.convertRowIndexToModel(row), 0).toString() );
-				rtfs[5].setText( DatFunk.sDatInDeutsch(tabmod.getValueAt(tab.convertRowIndexToModel(row), 1).toString()) );
-				rtfs[6].setText( dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 5) ) );
-				rtfs[7].setText( dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 6) ) );
-				
-				Date test = (Date)tabmod.getValueAt(tab.convertRowIndexToModel(row), 9);
-				if(test==null){
-					rtfs[8].setText("  .  .    ");
-				}else if(test.toString().trim().length() != 10){
-					rtfs[8].setText("  .  .    ");	
-				}else{
-					rtfs[8].setText(DatFunk.sDatInDeutsch(test.toString()));
-				}
-				
-				test = (Date)tabmod.getValueAt(tab.convertRowIndexToModel(row), 10);
-				if(test==null){
-					rtfs[9].setText("  .  .    ");
-				}else if(test.toString().trim().length() != 10){
-					rtfs[9].setText("  .  .    ");	
-				}else{
-					rtfs[9].setText(DatFunk.sDatInDeutsch(test.toString()));
-				}
-				test = (Date)tabmod.getValueAt(tab.convertRowIndexToModel(row), 11);
-				if(test==null){
-					rtfs[10].setText("  .  .    ");
-				}else if(test.toString().trim().length() != 10){
-					rtfs[10].setText("  .  .    ");
-				}else{
-					rtfs[10].setText(DatFunk.sDatInDeutsch(test.toString()));
-				}
-				cbMahnsperre.setSelected( (Boolean)tabmod.getValueAt(tab.convertRowIndexToModel(row), 12) );
-				
-			}else{
-				JOptionPane.showConfirmDialog(null,"Keine verwertbaren Adesssdaten vorhanden in 'ehemaliger' Rechnungsdatei "+rdatei);
-			}
-			
-			
-		} catch (JDBFException e) {
-			e.printStackTrace();
-		}
-		
-	}
+
 	/*******************************/
 	@SuppressWarnings("rawtypes")
 	private void starteMahnDruck(String url){
@@ -843,7 +766,7 @@ public class OffenepostenMahnungen extends JXPanel{
 			documentService = OffenePosten.officeapplication.getDocumentService();
 		} catch (OfficeApplicationException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Fehler im OpenOffice-System - Ausfallrechnung kann nicht erstellt werden");
+			JOptionPane.showMessageDialog(null, "Fehler im OpenOffice-System - Mahnung kann nicht erstellt werden");
 			return;
 		}
 		
@@ -865,7 +788,6 @@ public class OffenepostenMahnungen extends JXPanel{
 		try {
 			placeholders = textFieldService.getPlaceholderFields();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		for (int i = 0; i < placeholders.length; i++) {

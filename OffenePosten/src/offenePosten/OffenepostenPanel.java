@@ -1,8 +1,5 @@
 package offenePosten;
 
-
-
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -15,7 +12,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -81,7 +81,10 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 	BigDecimal suchGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
 	DecimalFormat dcf = new DecimalFormat("###0.00");
 	int gefunden;
+	String[] spalten = {"Rechn.Nr.","R.Datum","Kasse","Name/Notiz","Sparte","Gesamtbetrag","Offen","bezahlt am","Zuzahlung","1.Mahnung","2.Mahnung","3.Mahnung","Mahnsperre","Pat.Nr.","IK Kostentr.","id","IK"};
+	String[] colnamen ={"r_nummer","r_datum","r_kasse","r_name","r_klasse","r_betrag","r_offen","r_bezdatum","r_zuzahl","r_mahndat1","r_mahndat2","r_mahndat3","mahnsperr","pat_intern","ikktraeger","id","ik"};
 	OffenepostenTab eltern = null;
+	
 	public OffenepostenPanel(OffenepostenTab xeltern){
 		super();
 		this.eltern = xeltern;
@@ -119,11 +122,14 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		String[] args = {"Rechnungsnummer =","Rechnungsnummer >=","Rechnungsnummer <=",
 				"Rechnungsbetrag =","Rechnungsbetrag >=","Rechnungsbetrag <=",
 				"Noch offen =","Noch offen >=","Noch offen <=",
-				"R_Kasse =","R_Kasse enthalten in",
-				"R_Name =","R_Name enthalten in",
-				"Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <=","Rezeptnummer ="};
+				"Kasse enthält",
+				"Name enthält",
+				"Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <=",
+				"Rezeptnummer ="};
 
+		int vorauswahl =  Arrays.asList(args).indexOf("Noch offen >=");
 		combo = new JRtaComboBox(args);
+		combo.setSelectedIndex( vorauswahl ); 
 		content.add(combo,cc.xy(4,2));
 		
 		lab = new JLabel("finde:");
@@ -156,11 +162,13 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 			
 		}
 		tabmod = new MyOffenePostenTableModel();
+		/*
 		Vector<Vector<String>> felder = SqlInfo.holeFelder("describe rliste");
 		String[] spalten = new String[felder.size()];
 		for(int i= 0; i < felder.size();i++){
 			spalten[i] = felder.get(i).get(0);
 		}
+		*/
 		tabmod.setColumnIdentifiers(spalten);
 		tab = new JXTable(tabmod);
 		tab.setHorizontalScrollEnabled(true);
@@ -319,49 +327,32 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		tfs[0].setText(dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(i), 6)));
 	}
 	private void doAusbuchen(){
-
 		
 		int row = tab.getSelectedRow();
+		String sTmp = tfs[0].getText();
+		int iDot = sTmp.indexOf('.'), iComma = sTmp.indexOf(',');
 		if(row < 0){
 			JOptionPane.showMessageDialog(null, "Keine Rechnung zum Ausbuchen ausgewählt");
 			return;
 		}
 		BigDecimal nochoffen = BigDecimal.valueOf((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 6));
-		BigDecimal eingang = BigDecimal.valueOf(Double.parseDouble(tfs[0].getText().replace(",", ".")) );
+		if ((iDot > -1) && (iComma > -1) && iDot < iComma){		// Eintrag enthält 1000er-Trennung (z.B. Kopie aus Browser)
+			sTmp = sTmp.replace(".", "");
+		}
+		BigDecimal eingang = BigDecimal.valueOf(Double.parseDouble(sTmp.replace(",", ".")) );
 		BigDecimal restbetrag = nochoffen.subtract(eingang);
 
 
-		/*String offeninTabelle = dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 6));
-		if(offeninTabelle.equals("0,00") && tfs[0].getText().equals("0,00")){
-			JOptionPane.showMessageDialog(null,"Diese Rechnung ist bereits auf bezahlt gesetzt");
-			return;
-		}*/
 		if(nochoffen.equals(BigDecimal.valueOf(Double.parseDouble("0.0")))){
 			JOptionPane.showMessageDialog(null,"Diese Rechnung ist bereits auf bezahlt gesetzt");
 			return;
 		}
-		/*
-		suchOffen = suchOffen.subtract( BigDecimal.valueOf((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 6)) );
-		suchOffen = suchOffen.add( BigDecimal.valueOf(Double.parseDouble(tfs[0].getText().replace(",", ".")) ) );
-
-		
-		gesamtOffen = gesamtOffen.subtract( BigDecimal.valueOf((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 6)) );
-		gesamtOffen = gesamtOffen.add( BigDecimal.valueOf(Double.parseDouble(tfs[0].getText().replace(",", ".")) ) );
-		
-		
-		tabmod.setValueAt(Double.parseDouble(tfs[0].getText().replace(",", ".")), tab.convertRowIndexToModel(row), 6);
-		*/
 		suchOffen = suchOffen.subtract( eingang );
-		//suchOffen = suchOffen.add( restbetrag );
-
 		
 		gesamtOffen = gesamtOffen.subtract( eingang );
-		//gesamtOffen = gesamtOffen.add( restbetrag );
-		
 		
 		tabmod.setValueAt((Double)restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 6);
 		tabmod.setValueAt((Date)new Date(), tab.convertRowIndexToModel(row), 7);
-
 		
 		int id = (Integer) tabmod.getValueAt(tab.convertRowIndexToModel(row), 15);
 		String cmd = "update rliste set r_offen='"+Double.toString(restbetrag.doubleValue()).replace(",", ".")+"', r_bezdatum='"+
@@ -389,80 +380,57 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		summeGesamtOffen.setText( dcf.format(gesamtOffen) );
 	}
 	
-	
-
-	
 	private void doSuchen(){
 		if(suchen.getText().trim().equals("")){
 			return;
 		}
 		int suchart = combo.getSelectedIndex();
 		String cmd = "";
-		/*
-						//  0                     1                  2
-		String[] args = {"Rechnungsnummer =","Rechnungsnummer >","Rechnungsnummer <",
-				//     3                  4                  5
-				"Rechnungsbetrag =","Rechnungsbetrag >","Rechnungsbetrag <",
-				//   6               7            8
-				"Noch offen =","Noch offen >","Noch offen <",
-				//    9                  10
-				"Feld-Kasse =","Feld-Kasse enthalten in",
-				//    11                  12
-				"Feld-Name =","Feld-Name enthalten in",
-				//    13                  14                15
-				"Rechnungsdatum =","Rechnungsdatum >","Rechnungsdatum <"};
-		*/		
 		try{
 		switch(suchart){
-		case 0:
+		case 0:					// Rechnungsnummer =
 			cmd = "select * from rliste where r_nummer ='"+suchen.getText().trim()+"'";
 			break;
-		case 1:
+		case 1:					//  >=
 			cmd = "select * from rliste where r_nummer >='"+suchen.getText().trim()+"'";
 			break;
-		case 2:
+		case 2:					//  <=
 			cmd = "select * from rliste where r_nummer <='"+suchen.getText().trim()+"'";
 			break;
-		case 3:
+		case 3:					// Rechnungsbetrag =
 			cmd = "select * from rliste where r_betrag ='"+suchen.getText().trim().replace(",", ".")+"'";
 			break;
-		case 4:
+		case 4:					//  >=
 			cmd = "select * from rliste where r_betrag >='"+suchen.getText().trim().replace(",", ".")+"'";
 			break;
-		case 5:
+		case 5:					//  <=
 			cmd = "select * from rliste where r_betrag <='"+suchen.getText().trim().replace(",", ".")+"'";
 			break;
-		case 6:
+		case 6:					// offen =
 			cmd = "select * from rliste where r_offen ='"+suchen.getText().trim().replace(",", ".")+"'";
 			break;
-		case 7:
+		case 7:					// offen >=
 			cmd = "select * from rliste where r_offen >='"+suchen.getText().trim().replace(",", ".")+"'";
 			break;
-		case 8:
+		case 8:					// offen <=
 			cmd = "select * from rliste where r_offen <='"+suchen.getText().trim().replace(",", ".")+"'";
 			break;
-		case 9:
-			cmd = "select * from rliste where r_kasse ='"+suchen.getText().trim()+"'";
-			break;
-		case 10:
+		case 9:					// Kasse enthält
 			cmd = "select * from rliste where r_kasse like'%"+suchen.getText()+"%'";
 			break;
-		case 11:
-			cmd = "select * from rliste where r_name ='"+suchen.getText().trim()+"'";
-			break;
-		case 12:
+		case 10:				// Name enthält
 			cmd = "select * from rliste where r_name like'%"+suchen.getText().trim()+"%'";
 			break;
-		case 13:
+		case 11:				// Rechnungsdatum = 
 			cmd = "select * from rliste where r_datum ='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 14:
+		case 12:				// Rechnungsdatum >= 
 			cmd = "select * from rliste where r_datum >='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 15:
+		case 13:				// Rechnungsdatum <= 
 			cmd = "select * from rliste where r_datum <='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 16:
+		case 14:				// Rezeptnummer =
 			cmd = "select * from rliste where r_nummer = (select rnummer from faktura where rez_nr = '"+suchen.getText().trim()+"'  LIMIT 1)";
 			break;
 
@@ -518,37 +486,26 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		public Class<?> getColumnClass(int columnIndex) {
 			switch(columnIndex){
 			case 0:
+			case 15:
 				return Integer.class;
 			case 1:
-				return Date.class;				
-			case 2:
-				return String.class;
-			case 3:
-				return String.class;				
-			case 4:
-				return String.class;
-			case 5:
-				return Double.class;				
-			case 6:
-				return Double.class;
 			case 7:
-				return Date.class;				
-			case 8:
-				return Double.class;				
 			case 9:
-				return Date.class;
 			case 10:
-				return Date.class;				
 			case 11:
 				return Date.class;				
+			case 2:
+			case 3:
+			case 4:
+			case 13:
+			case 14:
+				return String.class;
+			case 5:
+			case 6:
+			case 8:
+				return Double.class;				
 			case 12:
 				return Boolean.class;				
-			case 13:
-				return String.class;				
-			case 14:
-				return String.class;				
-			case 15:
-				return Integer.class;				
 
 			}
 		   return String.class;
@@ -692,7 +649,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 			try{
 				int col = arg0.getColumn();
 				int row = arg0.getFirstRow();
-				String colname = tabmod.getColumnName(col).toString();
+				//String colname = tabmod.getColumnName(col).toString();
+				String colname = colnamen[col].toString();
 				String value = "";
 				String id = Integer.toString((Integer)tabmod.getValueAt(row,15));
 				if( tabmod.getColumnClass(col) == Boolean.class){

@@ -1,8 +1,10 @@
 package offenePosten;
 
 import java.awt.Cursor;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -306,6 +308,7 @@ public class OffenePosten implements WindowListener{
 		otab.setHeader(0);
 		
 		jFrame.getContentPane().add (otab);
+		jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( System.getProperty("user.dir")+File.separator+"icons"+File.separator+"hauptbuch_I.jpg" ) );
 		jFrame.setVisible(true);
 		thisFrame = jFrame;
 		

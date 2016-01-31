@@ -4,8 +4,10 @@ package opRgaf;
 
 
 import java.awt.Cursor;
+import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -328,6 +330,8 @@ public class OpRgaf implements WindowListener{
 		otab.setFirstFocus();
 		
 		jFrame.getContentPane().add (otab);
+		//jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( OpRgaf.progHome+"icons/Guldiner_I.png" ) );
+		jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( System.getProperty("user.dir")+File.separator+"icons"+File.separator+"Guldiner_I.png" ) );
 		jFrame.setVisible(true);
 		thisFrame = jFrame;
 		try{
@@ -569,41 +573,6 @@ public class OpRgaf implements WindowListener{
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();
 		}
-		/*
-    	final String OPEN_OFFICE_ORG_PATH = OpRgaf.officeProgrammPfad;
-
-        try
-        {
-        	//System.out.println("**********Open-Office wird gestartet***************");
-            String path = OPEN_OFFICE_ORG_PATH;
-            Map <String, String>config = new HashMap<String, String>();
-            config.put(IOfficeApplication.APPLICATION_HOME_KEY, path);
-            config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH,OpRgaf.officeNativePfad);
-            officeapplication = OfficeApplicationRuntime.getApplication(config);
-            officeapplication.activate();
-            officeapplication.getDesktopService().addTerminateListener(new VetoTerminateListener() {
-            	  public void queryTermination(ITerminateEvent terminateEvent) {
-            	    super.queryTermination(terminateEvent);
-            	    try {
-            	      IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();
-            	      if (docs.length == 1) { 
-            	        docs[0].close();
-            	        //System.out.println("Letztes Dokument wurde geschlossen");
-            	      }
-            	    }
-            	    catch (DocumentException e) {
-            	    	e.printStackTrace();
-            	    } catch (OfficeApplicationException e) {
-						e.printStackTrace();
-					}
-            	  }
-            	});
-        }
-        catch (OfficeApplicationException e) {
-            e.printStackTrace();
-        }
-        */
     }
 	
 

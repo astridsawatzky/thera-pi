@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -107,19 +108,13 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 	int ccount = -2;
 	
 	private HashMap<String,String> hmRezgeb = new HashMap<String,String>();
-	/*
-	final String stmtString = 
-		"select concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(geboren,'%d.%m.%Y'))," +
-		"t1.rnr,t1.rdatum,t1.rgesamt,t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t1.id "+
-		"from rgaffaktura as t1 inner join pat5 as t2 on (t1.pat_intern = t2.pat_intern)";
-	*/
 	final String stmtString = 
 		"select concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(geboren,'%d.%m.%Y'))," +
 		"t1.rnr,t1.rdatum,t1.rgesamt,t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t3.kassen_nam1,t1.reznr,t1.id "+
 		"from rgaffaktura as t1 inner join pat5 as t2 on (t1.pat_intern = t2.pat_intern) "+
 		"left join kass_adr as t3 ON ( t2.kassenid = t3.id )";
 	int gefunden;
-	String[] spalten = {"Name,Vorname,Geburtstag","Rechn.Nr.","Rechn.Datum","Gesamtbetrag","Offen","Bearb.Gebühr","Bezahldatum","Mahndatum1","Mahndatum2","Krankenkasse","RezeptNr.","id"};
+	String[] spalten = {"Name,Vorname,Geburtstag","Rechn.Nr.","Rechn.Datum","Gesamtbetrag","Offen","Bearb.Gebühr","bezahlt am","1.Mahnung","2.Mahnung","Krankenkasse","RezeptNr.","id"};
 	String[] colnamen ={"nix","rnr","rdatum","rgesamt","roffen","rpbetrag","rbezdatum","rmahndat1","rmahndat2","nix","nix","id"};
 	OpRgafTab eltern = null;
 	public OpRgafPanel(OpRgafTab xeltern){
@@ -156,14 +151,17 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		
 		JLabel lab = new JLabel("Suchkriterium");
 		content.add(lab,cc.xy(2,2));
-		String[] args = {"Rechnungsnummer =","Rechnungsnummer enhalten in",
-				"Rechnungsbetrag =","Rechnungsbetrag >","Rechnungsbetrag <",
-				"Noch offen =","Noch offen >","Noch offen <",
-				"Pat. Nachname =","Pat. Nachname beginnt mit",
+		String[] args = {"Rechnungsnummer enthält",
+				"Rechnungsbetrag =","Rechnungsbetrag >=","Rechnungsbetrag <=",
+				"Noch offen =","Noch offen >=","Noch offen <=",
+				"Pat. Nachname beginnt mit",
 				"Rezeptnummer =",
-				"Rechnungsdatum =","Rechnungsdatum >","Rechnungsdatum <","Krankenkasse beginnt mit","Freie Bedingung"};
+				"Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <=",
+				"Krankenkasse enthält"};
 
+		int vorauswahl =  Arrays.asList(args).indexOf("Noch offen >=");
 		combo = new JRtaComboBox(args);
+		combo.setSelectedIndex( vorauswahl ); 
 		content.add(combo,cc.xy(4,2));
 		
 		lab = new JLabel("finde:");
@@ -271,7 +269,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		anzahlSaetze.setForeground(Color.BLUE);
 		auswertung.add(anzahlSaetze,cc2.xy(4,8));
 		
-		auswertung.add(ButtonTools.macheButton("Kopie erstellen", "kopie", al),cc2.xy(6,2));
+		auswertung.add(ButtonTools.macheButton("Rechnungskopie", "kopie", al),cc2.xy(6,2));
 		content.add(auswertung,cc.xyw(1,6,17));
 		content.validate();
 		new SwingWorker<Void,Void>(){
@@ -509,71 +507,47 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		//tab.setRowSorter(null);
 		int suchart = combo.getSelectedIndex();
 		String cmd = "";
-		/*
-						//  0                     1                  2
-		String[] args = {"Rechnungsnummer =","Rechnungsnummer >","Rechnungsnummer <",
-				//     3                  4                  5
-				"Rechnungsbetrag =","Rechnungsbetrag >","Rechnungsbetrag <",
-				//   6               7            8
-				"Noch offen =","Noch offen >","Noch offen <",
-				//    9                  10
-				"Feld-Kasse =","Feld-Kasse enthalten in",
-				//    11                  12
-				"Feld-Name =","Feld-Name enthalten in",
-				//    13                  14                15
-				"Rechnungsdatum =","Rechnungsdatum >","Rechnungsdatum <"};
-		*/		
 		try{
 		switch(suchart){
-		case 0:
-			cmd = stmtString+" where rnr ='"+suchen.getText().trim()+"' order by t1.id";
-			break;
-		case 1:
+		case 0:					// Rechnungsnummer enthält
 			cmd = stmtString+" where rnr like'%"+suchen.getText().trim()+"%' order by t1.id";
 			break;
-		case 2:
+		case 1:					// Rechnungsbetrag =
 			cmd = stmtString+" where rgesamt ='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 3:
-			cmd = stmtString+" where rgesamt >'"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
+		case 2:					//  >=
+			cmd = stmtString+" where rgesamt >='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 4:
-			cmd = stmtString+" where rgesamt <'"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
+		case 3:					//  <=
+			cmd = stmtString+" where rgesamt <='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 5:
+		case 4:					// Noch offen =
 			cmd = stmtString+" where roffen ='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 6:
-			cmd = stmtString+" where roffen >'"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
+		case 5:					//  >=
+			cmd = stmtString+" where roffen >='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 7:
-			cmd = stmtString+" where roffen <'"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
+		case 6:					//  <=
+			cmd = stmtString+" where roffen <='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 8:
-			cmd = stmtString+" where t2.n_name ='"+suchen.getText().trim()+"' order by t1.id";
-			break;
-		case 9:
+		case 7:					// Nachname beginnt mit
 			cmd = stmtString+" where t2.n_name like'"+suchen.getText().trim()+"%' order by t1.id";
 			break;
-		case 10:
+		case 8:					// Rezeptnummer =
 			cmd = stmtString+" where t1.reznr ='"+suchen.getText().trim()+"'";
 			break;
-		case 11:
+		case 9:					// Rechnungsdatum =
 			cmd = stmtString+" where rdatum ='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 12:
-			cmd = stmtString+" where rdatum >'"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
+		case 10:				//  >=
+			cmd = stmtString+" where rdatum >='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 13:
-			cmd = stmtString+" where rdatum <'"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
+		case 11:				//  <=
+			cmd = stmtString+" where rdatum <='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 14:
-			cmd = stmtString+" where t3.kassen_nam1 like'"+suchen.getText().trim()+"%'";
+		case 12:				// Krankenkasse enthält
+			cmd = stmtString+" where t3.kassen_nam1 like'%"+suchen.getText().trim()+"%'";
 			break;
-		case 15:
-			cmd = stmtString+" where "+suchen.getText().trim();
-			break;
-
 		}
 		
 		}catch(Exception ex){
@@ -608,27 +582,19 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		public Class<?> getColumnClass(int columnIndex) {
 			switch(columnIndex){
 			case 0:
-				return String.class;
 			case 1:
-				return String.class;				
-			case 2:
-				return Date.class;
-			case 3:
-				return Double.class;				
-			case 4:
-				return Double.class;
-			case 5:
-				return Double.class;
-			case 6:
-				return Date.class;
-			case 7:
-				return Date.class;
-			case 8:
-				return Date.class;
 			case 9:
-				return String.class;				
 			case 10:
 				return String.class;				
+			case 2:
+			case 6:
+			case 7:
+			case 8:
+				return Date.class;
+			case 3:
+			case 4:
+			case 5:
+				return Double.class;
 			case 11:
 				return Integer.class;				
 			}
