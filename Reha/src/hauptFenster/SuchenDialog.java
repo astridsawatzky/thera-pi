@@ -773,7 +773,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as geboren,pat_intern from pat5 where telefonp LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
 		}else if(suchart==4){// Telefon geschäftilich
 			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefong) as geboren,pat_intern from pat5 where telefong LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
-		}else if(suchart==5){// Telefon geschäftilich
+		}else if(suchart==5){// Telefon mobil
 			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as geboren,pat_intern from pat5 where telefonm LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
 		}else if(suchart==6){ // In Notitzen
 			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";

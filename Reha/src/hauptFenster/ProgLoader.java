@@ -616,8 +616,8 @@ public void BarkassenFenster(int setPos,String sparam) {
 	barkassenjry = new JBarkassenInternal("thera-\u03C0  - Barkasse abrechnen ",SystemConfig.hmSysIcons.get("BarKasse"),1) ;
 	AktiveFenster.setNeuesFenster(name,(JComponent)barkassenjry,1,(Container)barkassenjry.getContentPane());
 	barkassenjry.setName(name);
-	barkassenjry.setSize(new Dimension(500,370));
-	barkassenjry.setPreferredSize(new Dimension(500,370));
+	barkassenjry.setSize(new Dimension(500,400));
+	barkassenjry.setPreferredSize(new Dimension(500,400));
 	Reha.thisClass.barkassenpanel = new Barkasse(barkassenjry); 
 	barkassenjry.setContent(Reha.thisClass.barkassenpanel);	
 	barkassenjry.addComponentListener(Reha.thisClass);
