@@ -772,10 +772,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}else if(suchart==3){ // Telfon privat
 			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as geboren,pat_intern from pat5 where telefonp LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
 		}else if(suchart==4){// Telefon geschäftilich
-			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as geboren,pat_intern from pat5 where telefong LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
-		}else if(suchart==5){ // In Notitzen
+			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefong) as geboren,pat_intern from pat5 where telefong LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
+		}else if(suchart==5){// Telefon geschäftilich
+			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as geboren,pat_intern from pat5 where telefonm LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
+		}else if(suchart==6){ // In Notitzen
 			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
-		}else if(suchart==6){    		// Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
+		}else if(suchart==7){    		// Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
 //			sstmt = "select p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, r.rez_nr from pat5 as p INNER JOIN verordn as r ON p.pat_intern = r.pat_intern ORDER BY p.n_name asc, r.rez_nr asc";
 			sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, GROUP_CONCAT(r.rez_nr ORDER BY r.rez_nr ASC SEPARATOR ', ') FROM verordn AS r INNER JOIN pat5 AS p where p.pat_intern = r.pat_intern GROUP BY p.pat_intern ORDER BY p.n_name";
 		}else{
