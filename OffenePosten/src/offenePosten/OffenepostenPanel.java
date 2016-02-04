@@ -127,7 +127,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 				"Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <=",
 				"Rezeptnummer ="};
 
-		int vorauswahl =  Arrays.asList(args).indexOf("Noch offen >=");
+		//int vorauswahl =  Arrays.asList(args).indexOf("Noch offen >=");
+		int vorauswahl = 0;
 		combo = new JRtaComboBox(args);
 		combo.setSelectedIndex( vorauswahl ); 
 		content.add(combo,cc.xy(4,2));

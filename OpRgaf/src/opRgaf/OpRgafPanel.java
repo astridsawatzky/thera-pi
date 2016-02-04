@@ -151,7 +151,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		
 		JLabel lab = new JLabel("Suchkriterium");
 		content.add(lab,cc.xy(2,2));
-		String[] args = {"Rechnungsnummer enthält",
+		
+		String[] args = {"Rechnungsnummer =","Rechnungsnummer enthält",
 				"Rechnungsbetrag =","Rechnungsbetrag >=","Rechnungsbetrag <=",
 				"Noch offen =","Noch offen >=","Noch offen <=",
 				"Pat. Nachname beginnt mit",
@@ -159,7 +160,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				"Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <=",
 				"Krankenkasse enthält"};
 
-		int vorauswahl =  Arrays.asList(args).indexOf("Noch offen >=");
+		//int vorauswahl =  Arrays.asList(args).indexOf("Noch offen >=");
+		int vorauswahl =  0;
 		combo = new JRtaComboBox(args);
 		combo.setSelectedIndex( vorauswahl ); 
 		content.add(combo,cc.xy(4,2));
@@ -509,43 +511,46 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		String cmd = "";
 		try{
 		switch(suchart){
-		case 0:					// Rechnungsnummer enthält
+		case 0:
+			cmd = stmtString+" where rnr ='"+suchen.getText().trim()+"'";
+			break;
+		case 1:					// Rechnungsnummer enthält
 			cmd = stmtString+" where rnr like'%"+suchen.getText().trim()+"%' order by t1.id";
 			break;
-		case 1:					// Rechnungsbetrag =
+		case 2:					// Rechnungsbetrag =
 			cmd = stmtString+" where rgesamt ='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 2:					//  >=
+		case 3:					//  >=
 			cmd = stmtString+" where rgesamt >='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 3:					//  <=
+		case 4:					//  <=
 			cmd = stmtString+" where rgesamt <='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 4:					// Noch offen =
+		case 5:					// Noch offen =
 			cmd = stmtString+" where roffen ='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 5:					//  >=
+		case 6:					//  >=
 			cmd = stmtString+" where roffen >='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 6:					//  <=
+		case 7:					//  <=
 			cmd = stmtString+" where roffen <='"+suchen.getText().trim().replace(",", ".")+"' order by t1.id";
 			break;
-		case 7:					// Nachname beginnt mit
+		case 8:					// Nachname beginnt mit
 			cmd = stmtString+" where t2.n_name like'"+suchen.getText().trim()+"%' order by t1.id";
 			break;
-		case 8:					// Rezeptnummer =
+		case 9:					// Rezeptnummer =
 			cmd = stmtString+" where t1.reznr ='"+suchen.getText().trim()+"'";
 			break;
-		case 9:					// Rechnungsdatum =
+		case 10:					// Rechnungsdatum =
 			cmd = stmtString+" where rdatum ='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 10:				//  >=
+		case 11:				//  >=
 			cmd = stmtString+" where rdatum >='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 11:				//  <=
+		case 12:				//  <=
 			cmd = stmtString+" where rdatum <='"+DatFunk.sDatInSQL(suchen.getText().trim())+"'";
 			break;
-		case 12:				// Krankenkasse enthält
+		case 13:				// Krankenkasse enthält
 			cmd = stmtString+" where t3.kassen_nam1 like'%"+suchen.getText().trim()+"%'";
 			break;
 		}
