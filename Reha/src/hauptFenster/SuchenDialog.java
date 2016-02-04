@@ -236,12 +236,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jp1.setBorder(null);
 			
 			// Lemmi 20101212: Das Labelfeld für einen Hinweis auf aktuelle Rezepte "mißbraucht"
-			JLabel jlb = new JLabel( suchart==6 ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: ");  // Lemmi 20101212: Prompt für die Eingabe eines Suchkriteriums
+			JLabel jlb = new JLabel( suchart==7 ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: ");  // Lemmi 20101212: Prompt für die Eingabe eines Suchkriteriums
 			jp1.add(jlb);
 			
 			jtext = getJTextField();
 			// Lemmi 20101212: Das Such-Eingabefeld unsichtbar gemacht - wird hier nicht benötigt
-			if(suchart==6){
+			if(suchart==7){
 				jtext.setPreferredSize(new Dimension(0,0));
 			} else{
 				jtext.setPreferredSize(new Dimension(100,20));
@@ -308,7 +308,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			reiheVector.addElement("Vorname");
 			reiheVector.addElement("Geboren");
 			reiheVector.addElement("Pat-Nr.");
-			if(suchart==6){   // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
+			if(suchart==7){   // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
 				reiheVector.addElement("Rezepte");			
 			}
 			tblDataModel = new DefaultTableModel();
@@ -319,7 +319,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			this.jtable.getColumn(3).setMaxWidth(0);	// Breite der Spalte pat_intern
 			
 			// Lemmi 20101212: Einige maximale Spaltenbreiten fixiert
-			if(suchart==6) {  // Spielereine, funktioniert alles
+			if(suchart==7) {  // Spielereine, funktioniert alles
 //				this.jtable.getColumn(0).setWidth(200);  // Nachname
 //				this.jtable.getColumn(1).setMaxWidth(250);  // Vorname
 //				this.jtable.getColumn(1).setPreferredWidth(200);  // Vorname
@@ -381,7 +381,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jtp.validate();
 			jContentPane.add(jtp, BorderLayout.CENTER);
 			
-			if(suchart==6){
+			if(suchart==7){
 				// NOTHING to do
 				// Lemmi 20101212: bei Suchart 3 brauchen wir kein Suchwert-Eingabefeld im Ergebnisdialog
 				jtext.setText("");
@@ -436,7 +436,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			
 			// Lemmi 20101212: Erweitert um "Patienten mit aktuellen Rezepten"
 			String kriterium[]={"Nachname Vorname","Patienten-ID","Vorname Nachname",
-					"Telefon privat","Telefon geschäftl.","Notitzen", "Nur Patienten mit aktuellen Rezepten"};
+					"Telefon privat","Telefon geschäftl.","Telefon mobil","Notitzen", "Nur Patienten mit aktuellen Rezepten"};
 			
 			jXTitledPanel.setTitle("Suche Patient..."+this.fname+" nach "+kriterium[suchart]);
 			jXTitledPanel.setTitleForeground(Color.WHITE);
@@ -783,6 +783,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}else{
 			return;
 		}
+		System.out.println(sstmt);
 		try {
 			
 			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -790,7 +791,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			try{
 				rs = stmt.executeQuery(sstmt);
 				Vector<String> rowVector = new Vector<String>();
-				int reihen = (suchart == 6 ? 5 : 4 );
+				int reihen = (suchart == 7 ? 5 : 4 );
 				while( rs.next()){
 					rowVector.clear();
 					//for(int i = 1; i <= 4; i++)
