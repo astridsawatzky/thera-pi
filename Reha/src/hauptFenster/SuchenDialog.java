@@ -783,7 +783,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}else{
 			return;
 		}
-		System.out.println(sstmt);
+		//System.out.println(sstmt);
 		try {
 			
 			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
