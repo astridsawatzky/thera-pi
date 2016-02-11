@@ -287,10 +287,14 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 		}
 		if(e.getActionCommand().equals("neuedisziplin")){
 			if(lasttarif >= 0){
-				cmbtarife.removeActionListener(getInstance());
-				cmbtarife.setDataVector(SystemPreislisten.hmPreisGruppen.get(xdisziplin[cmbdiszi.getSelectedIndex()]));
-				cmbtarife.setSelectedIndex(lasttarif);
-				cmbtarife.addActionListener(getInstance());
+				try{
+					cmbtarife.removeActionListener(getInstance());
+					cmbtarife.setDataVector(SystemPreislisten.hmPreisGruppen.get(xdisziplin[cmbdiszi.getSelectedIndex()]));
+					cmbtarife.setSelectedIndex(lasttarif);
+					cmbtarife.addActionListener(getInstance());					
+				}catch(Exception ex){
+					JOptionPane.showMessageDialog(null,"Fehler beim einstellen der Preisgruppe\n->"+xdisziplin[cmbdiszi.getSelectedIndex()]);
+				}
 			}
 		}
 		werteEinlesen();

@@ -2490,8 +2490,11 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		int fristbeginn = (Integer)((Vector<?>)SystemPreislisten.hmFristen.get(disziplin).get(0)).get(preisgruppe);
 		//Frist zwischen den Behjandlungen
 		int fristbreak = (Integer)((Vector<?>)SystemPreislisten.hmFristen.get(disziplin).get(2)).get(preisgruppe);
+		
 		if(fristbreak > 14){
-			fristbreak = 14;
+			if(!disziplin.equals("Podo")){
+				fristbreak = 14;
+			}
 		}
 		//Beginn-Berechnung nach Kalendertagen
 		boolean ktagebeginn = (Boolean)((Vector<?>)SystemPreislisten.hmFristen.get(disziplin).get(1)).get(preisgruppe);

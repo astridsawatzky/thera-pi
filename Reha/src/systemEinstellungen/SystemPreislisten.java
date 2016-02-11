@@ -54,6 +54,7 @@ public class SystemPreislisten {
 	private static Vector<Integer> modusdummy = new Vector<Integer>();
 	public static HashMap<String,Vector<Object>> hmFristen = new HashMap<String,Vector<Object>>();
 	private static Vector<Object> odummy = new Vector<Object>(); 
+	
 
 	static INIFile fristenini = null;
 	static INIFile inif = null;

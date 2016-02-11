@@ -1856,13 +1856,18 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 								if(Reha.thisClass.patpanel.aktRezept.tabaktterm.getRowCount() > 0){
 									// es sind bereits Tage verzeichnet.
 									String ersterTag = Reha.thisClass.patpanel.aktRezept.tabaktterm.getValueAt(0, 0).toString();
-									if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(41)), ersterTag) >= 0){
-										//Behandlung liegt nach befr_ab
-										szzstatus = "0";
-									}else{
-										//Behandlung liegt vor befr_ab
-										szzstatus = "2";
+									try{
+										if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(41)), ersterTag) >= 0){
+											//Behandlung liegt nach befr_ab
+											szzstatus = "0";
+										}else{
+											//Behandlung liegt vor befr_ab
+											szzstatus = "2";
+										}
+									}catch(Exception ex){
+										JOptionPane.showMessageDialog(null,"Fehler:\nBefreit ab, im Patientenstamm nicht oder falsch eingetragen");
 									}
+									
 								}else{
 									//es sind noch keine Sätze verzeichnet
 									if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(41)), DatFunk.sHeute()) >= 0){
