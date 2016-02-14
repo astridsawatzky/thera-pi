@@ -82,6 +82,7 @@ import org.therapi.reha.patient.AktuelleRezepte;
 import dialoge.InfoDialog;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
+
 import CommonTools.SqlInfo;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
@@ -239,6 +240,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	public InfoDialog infoDlg = null;
 	
 	public static String[] dayname = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
+	public static String[] dayshortname = {"Mo-","Di-","Mi-","Do-","Fr-","Sa-","So-"};
 	public static String[] tooltip = {"","","","","","",""};
 	FinalGlassPane fgp = null;
 	
@@ -714,13 +716,16 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	public void setCombos(){
 		int von = 0;
 		int bis = ParameterLaden.vKKollegen.size();
+	
+		//String cwert = null;
 		for(von=0; von < bis; von++){
+			//cwert = ParameterLaden.vKKollegen.get(von).Matchcode;
 			oCombo[0].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
 			oCombo[1].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
-			oCombo[2].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);			
+			oCombo[2].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
 			oCombo[3].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
 			oCombo[4].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
-			oCombo[5].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);			
+			oCombo[5].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);		
 			oCombo[6].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
 		}
 		if(this.ansicht < MASKEN_ANSICHT){
@@ -1889,6 +1894,13 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				oCombo[6].setSelectedItem(sbelegung[6]);oCombo[6].setEnabled(true);
 				
 				ansicht = NORMAL_ANSICHT;
+				
+				try{
+					showDaysInWeekView(ansicht);	
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+				
 				aktiveSpalte[0]=0;
 				aktiveSpalte[1]=0;						
 				aktiveSpalte[2]=0;						
@@ -1936,13 +1948,20 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			ansicht = WOCHEN_ANSICHT;
 
 			oCombo[0].setSelectedItem(oCombo[aktiveSpalte[2]].getSelectedItem());
+			
+			try{
+				showDaysInWeekView(ansicht);	
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
 			oCombo[1].setSelectedIndex(0);
 			oCombo[2].setSelectedIndex(0);
 			oCombo[3].setSelectedIndex(0);
 			oCombo[4].setSelectedIndex(0);
 			oCombo[5].setSelectedIndex(0);
 			oCombo[6].setSelectedIndex(0);
-
+			
 			oCombo[1].setEnabled(false);
 			oCombo[2].setEnabled(false);
 			oCombo[3].setEnabled(false);
@@ -1965,7 +1984,24 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				
 			}
 		}
-/**************************************/			
+/**************************************/	
+		public void showDaysInWeekView(int ansicht){
+			//System.out.println("ShowDays in Ansicht "+ansicht+" - WocheErster = "+wocheErster);
+			for(int i = 1; i < 7; i++){
+				if(!oCombo[i].getItemAt(0).toString().equals("./.")){
+					oCombo[i].removeItemAt(0);
+					if(ansicht != WOCHEN_ANSICHT){
+						continue;
+					}
+				}
+				if(ansicht == WOCHEN_ANSICHT){
+					oCombo[i].insertItemAt((String)dayshortname[i]+DatFunk.sDatPlusTage(wocheErster,i),0);
+					oCombo[i].setSelectedIndex(0);
+				}
+			}
+			return;
+		}
+		
 		public int[] getGruppierenClipBoard(){
 			return gruppierenClipBoard;
 		}
@@ -3880,7 +3916,14 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		//tagBlaettern((int)DatFunk.TageDifferenz(this.aktuellerTag,datum));
 		datGewaehlt = datum;
 		if(ansicht == WOCHEN_ANSICHT){
-			this.wocheAktuellerTag = DatFunk.WocheErster(datum);	
+			this.wocheAktuellerTag = DatFunk.WocheErster(datum);
+			this.wocheErster = this.wocheAktuellerTag;
+			setDayForToolTip();
+			try{
+				showDaysInWeekView(ansicht);	
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
 		}
 		suchSchonMal();
 		//tagSprung(datum,(int)DatFunk.TageDifferenz(this.aktuellerTag,datum));
@@ -3911,6 +3954,11 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				dragLab[aktiveSpalte[2]].setText("");
 	        	String sstmt = 	ansichtStatement(this.ansicht,this.wocheAktuellerTag);
 				setDayForToolTip();
+				try{
+					showDaysInWeekView(ansicht);	
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
 	        }
     	SetzeLabel();
 	}
@@ -3935,6 +3983,11 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         	this.wocheAktuellerTag = DatFunk.sDatPlusTage(this.wocheAktuellerTag,+(richtung*7));
         	String sstmt = 	ansichtStatement(this.ansicht,this.wocheAktuellerTag);
 			setDayForToolTip();
+			try{
+				showDaysInWeekView(ansicht);	
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
         }
 	}
 	private void testeObAusmustern(){
