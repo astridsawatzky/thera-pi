@@ -240,7 +240,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	public InfoDialog infoDlg = null;
 	
 	public static String[] dayname = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
-	public static String[] dayshortname = {"Mo-","Di-","Mi-","Do-","Fr-","Sa-","So-"};
+	public static String[] dayshortname = {"Mo - ","Di - ","Mi - ","Do - ","Fr - ","Sa - ","So - "};
 	public static String[] tooltip = {"","","","","","",""};
 	FinalGlassPane fgp = null;
 	
@@ -1949,6 +1949,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
 			oCombo[0].setSelectedItem(oCombo[aktiveSpalte[2]].getSelectedItem());
 			
+			this.wocheErster = DatFunk.WocheErster(aktuellerTag);
 			try{
 				showDaysInWeekView(ansicht);	
 			}catch(Exception ex){
@@ -3950,6 +3951,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	        		this.wocheAktuellerTag = this.aktuellerTag;
 	        	}
 	        	this.wocheAktuellerTag = DatFunk.sDatPlusTage(this.wocheAktuellerTag,(7*sprung));
+	        	this.wocheErster = DatFunk.WocheErster(this.wocheAktuellerTag);
 				dragLab[aktiveSpalte[2]].setIcon(null);
 				dragLab[aktiveSpalte[2]].setText("");
 	        	String sstmt = 	ansichtStatement(this.ansicht,this.wocheAktuellerTag);
@@ -3981,6 +3983,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         		this.wocheAktuellerTag = this.aktuellerTag;
         	}
         	this.wocheAktuellerTag = DatFunk.sDatPlusTage(this.wocheAktuellerTag,+(richtung*7));
+        	this.wocheErster = DatFunk.WocheErster(this.wocheAktuellerTag);
         	String sstmt = 	ansichtStatement(this.ansicht,this.wocheAktuellerTag);
 			setDayForToolTip();
 			try{
