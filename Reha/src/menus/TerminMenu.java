@@ -76,10 +76,10 @@ public class TerminMenu {
 	private JMenuItem getRoogleStart() {
 		RoogleStart = new JMenuItem();
 		RoogleStart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Event.CTRL_MASK, false));
-		RoogleStart.setText("Roogle - die Suchmaschine für Termine");
+		RoogleStart.setText("Ru:gl - die Suchmaschine für Termine");
 		RoogleStart.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				//System.out.println("Roogle"); // TODO Auto-generated Event stub actionPerformed()
+				//System.out.println("Ru:gl"); // TODO Auto-generated Event stub actionPerformed()
 				Reha.thisClass.messageLabel.setText("Roogle");
 				Reha.thisClass.progLoader.ProgRoogleFenster(0,null);
 				//ProgLoader.ProgRoogleFenster(0,null);
@@ -93,7 +93,7 @@ public class TerminMenu {
 		waz.setText("Wochenarbeitszeit definieren");
 		waz.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent e) {
-				//System.out.println("Roogle"); // TODO Auto-generated Event stub actionPerformed()
+				//System.out.println("Ru:gl"); // TODO Auto-generated Event stub actionPerformed()
 				Reha.thisClass.messageLabel.setText("Wochenarbeitszeit definieren");
 				//ProgLoader.ProgTerminFenster(0,2);
 				Reha.thisClass.progLoader.ProgTerminFenster(0, 2);
