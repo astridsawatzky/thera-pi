@@ -784,6 +784,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(e.getActionCommand().equals("verordnungsart") && klassenReady){
 			if(jcmb[cVERORD].getSelectedIndex()==2){
 				jcb[cBEGRADR].setEnabled(true);
+				testeGenehmigung(jtf[cKASID].getText());
 			}else{
 				jcb[cBEGRADR].setSelected(false);
 				jcb[cBEGRADR].setEnabled(false);				
@@ -923,7 +924,27 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		}
 	}
 	
-	
+	private void testeGenehmigung(final String kassenid){
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				try{
+					//System.out.println("kassenID = "+kassenid);
+					String test = SqlInfo.holeEinzelFeld("select id from adrgenehmigung where ik = (select ik_kostent from kass_adr where id = '"+kassenid+"') LIMIT 1" );
+					if(!test.isEmpty()){
+						String meldung = "<html><b>Achtung!</b><br><br>Sie haben Verordnung außerhalb des Regelfalles gewählt!<br><br>Die Krankenkasse des Patienten besteht auf eine <br>"+
+								"<b>Genehmigung für Verordnungen außerhalb des Regelfalles</b><br><br></html>";
+						JOptionPane.showMessageDialog(null,meldung);
+					}				
+					//System.out.println("Rückgabe von test = "+test);
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+				return null;
+			}
+		}.execute();
+		
+	}
 	/* Lemmi 20101231: diese Routine ersetzt durch nachfolgenden Routine, weil diese Routine ein "Scheck" gegen die Zukunft ist!
 	private boolean anzahlTest(){
 		int itest;

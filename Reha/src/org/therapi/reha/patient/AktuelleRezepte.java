@@ -2787,7 +2787,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		/*int art = */RezTools.testeRezGebArt(true,false,(String)Reha.thisClass.patpanel.vecaktrez.get(1),(String)Reha.thisClass.patpanel.vecaktrez.get(34));
 		//String ik = "510884019";
 		SystemConfig.hmAdrRDaten.put("<Bcik>",Reha.aktIK);
-		SystemConfig.hmAdrRDaten.put("<Bcode>","*"+(String)Reha.thisClass.patpanel.vecaktrez.get(1)+"*");
+		String bcreznr = Reha.thisClass.patpanel.vecaktrez.get(1).toString();
+		if(bcreznr.startsWith("RS") || bcreznr.startsWith("FT")){
+			if(bcreznr.length() < 6){
+				bcreznr = StringTools.fuelleMitZeichen(bcreznr,"_", false, 6);
+			}
+		}
+		SystemConfig.hmAdrRDaten.put("<Bcode>","*"+bcreznr+"*");
 		//SystemConfig.hmAdrRDaten.put("<Bcode>","*"+"KG500000"+"*");
 		int iurl = Integer.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(46));
 		String url = SystemConfig.rezBarCodForm.get((iurl < 0 ? 0 : iurl));

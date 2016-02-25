@@ -954,6 +954,8 @@ public static void PasswortDialog(int setPos) {
 
 	rSmart.setAlwaysOnTop(false);
 	rSmart.setSize(new Dimension(700,300));
+	//Dimension ssize = Toolkit.getDefaultToolkit().getScreenSize();
+	//rSmart.setSize(new Dimension(ssize.width,ssize.height));
 	rSmart.setModal(true);
 
 	//rSmart.getTitledPanel().setTitle("Passwort-Eingabe");
