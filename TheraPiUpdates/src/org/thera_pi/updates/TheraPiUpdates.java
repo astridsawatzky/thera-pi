@@ -1,6 +1,7 @@
 package org.thera_pi.updates;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,6 +31,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -41,6 +43,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
+
 
 
 
@@ -80,7 +83,7 @@ public class TheraPiUpdates implements WindowListener {
 	public String pw;
 	public static boolean dbok = false;
 	public static String devcomputer = "";
-	
+	public static Image imgtporg;
 	public static void main(String[] args) {
 		if(args.length > 0){
 			starteTheraPi = true;
@@ -311,6 +314,7 @@ public class TheraPiUpdates implements WindowListener {
 	    			//System.out.println(strMACAdr+" = "+dec.decrypt(macAdr.trim()));
 	    			showpwdlg = false;
 	    		}
+	    		imgtporg = new ImageIcon(UpdateConfig.getProghome() + "icons/TPorgKlein.png").getImage().getScaledInstance(246,35, Image.SCALE_SMOOTH);
 	    		
 	    	} catch (Exception e) {
 	    		e.printStackTrace();
@@ -619,6 +623,8 @@ public class TheraPiUpdates implements WindowListener {
 			//System.out.println(vec);
 			//System.out.println("Email = "+email+" / Passwort = "+pw);
 			userdaten = SqlInfo.holeSatz(TheraPiUpdates.conn, "regtpuser", " * ", "email='"+email+"' and pw='"+pw+"'");
+			//System.out.println(vec);
+			//System.out.println(userdaten);
 			//System.out.println(userdaten);
 			if(userdaten.size() > 0){
 				return true;

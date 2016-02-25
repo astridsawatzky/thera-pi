@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.SocketException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
@@ -85,7 +86,7 @@ public class FTPTools {
 	}
 	
 	/*****************************************************/
-	public boolean holeDatei(String datfern,String vznah,boolean doprogress,UpdatePanel eltern,long groesse){
+	public boolean holeDatei(String datfern,String vznah,boolean doprogress,final UpdatePanel eltern,long groesse){
 		try{
 		if(ftpClient == null){
 			return false;
@@ -102,6 +103,9 @@ public class FTPTools {
 		}else{
 			ftpClient.enterLocalPassiveMode();	
 		}
+		//System.out.println("Entering Active-Mode = "+updateConfig.isUseActiveMode());
+
+        ftpClient.setUseEPSVwithIPv4(true);
 
 		//System.out.println("Beziehe Daten über Port "+ftpClient.getLocalPort());
 		try {
@@ -141,7 +145,7 @@ public class FTPTools {
 			//System.out.println("**********************available**********************  "+max+" Bytes");
 			
 			FileOutputStream fos = null;;
-			fos = new FileOutputStream(vznah+datfern);
+			fos = new FileOutputStream(vznah+/*"test/"+*/datfern);
 
 			int n = 0;
 			byte[] buf = new byte[BUFFER_SIZE];
@@ -157,11 +161,25 @@ public class FTPTools {
 				gesamt = gesamt + n;
 				fos.write(buf,0,n);
 				if(doprogress){
-					eltern.pbar.setValue(gesamt);
+					final int xgesamt = gesamt;
+					SwingUtilities.invokeLater(new Runnable(){
+						public void run(){
+							eltern.pbar.setValue(xgesamt);
+						}
+					});
+					
 				}
 			}
+			if(doprogress){
+				SwingUtilities.invokeLater(new Runnable(){
+					public void run(){
+						//eltern.pbar.setValue(0);
+						eltern.setDoneIcon();
+					}
+				});
+			}
 
-			//System.out.println("Datei "+datfern+" wurde erfolgreich übertragen");
+			System.out.println("Datei "+datfern+" wurde erfolgreich übertragen");
 			fos.flush();
 			fos.close();		
 			uis.close();
@@ -171,10 +189,12 @@ public class FTPTools {
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null,"Bezug der Datei "+datfern+" fehlgeschlagen!\nBitte starten Sie einen neuen Versuch");
 			e1.printStackTrace();
 			return false;
 		}
 		}catch(Exception ex){
+			JOptionPane.showMessageDialog(null,"Bezug der Datei "+datfern+" fehlgeschlagen!\nBitte starten Sie einen neuen Versuch");
 			ex.printStackTrace();
 			return false;
 		}
@@ -184,12 +204,13 @@ public class FTPTools {
 	
 	/*****************************************************/
 	public String holeLogDateiSilent(String datfern){
+		try{
 		if(ftpClient == null){
-			return "Fehler im Bezug der Log-Datei";
+			return "Fehler beim Bezug der Log-Datei, ftpClient == null";
 		}
 		if(!ftpClient.isConnected()){
 			if(!nurConnect()){
-				return "Fehler im Bezug der Log-Datei";				
+				return "Fehler beim Bezug der Log-Datei, ftpClient == nicht connected\nBitte starten Sie einen neuen Versuch";					
 			}
 		}
 		if(updateConfig.isUseActiveMode()){
@@ -197,6 +218,9 @@ public class FTPTools {
 		}else{
 			ftpClient.enterLocalPassiveMode();	
 		}
+		//System.out.println("Remote-System ist " + ftpClient.getSystemType());
+		ftpClient.setUseEPSVwithIPv4(true);
+		ftpClient.getReplyStrings();
 
 		try {
 			InputStream uis = null;
@@ -206,6 +230,7 @@ public class FTPTools {
 			uis.close();
 			uis = null;
 			//System.out.println("Nach Logout = "+reply);
+			ftpClient.getReplyStrings();
 			ftpClient.logout();
 			//System.out.println("Nach Disconnect = "+reply);
 			ftpClient.disconnect();
@@ -215,7 +240,10 @@ public class FTPTools {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "Fehler im Bezug der Log-Datei";
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(null,"Fehler beim Bezug der Updatebeschreibung, bitte versuchen Sie es erneut");
+		}
+		return "Fehler beim Bezug der Log-Datei";
 	}
 	
 	public boolean ftpTransferString(String datfern,String string,JProgressBar jprog ){
@@ -375,13 +403,22 @@ public class FTPTools {
 	
 	private boolean nurConnect(){
 		try {
-			ftpClient.connect(updateConfig.getUpdateHost());
+			if(!ftpClient.isConnected() && ftpClient != null){
+				ftpClient.connect(updateConfig.getUpdateHost());
 
-			ftpClient.login(updateConfig.getUpdateUser(), updateConfig.getUpdatePasswd());
+				ftpClient.login(updateConfig.getUpdateUser(), updateConfig.getUpdatePasswd());
 
-			ftpClient.changeWorkingDirectory("."+updateConfig.getUpdateDir());
+				ftpClient.changeWorkingDirectory("."+updateConfig.getUpdateDir());
+				//ftpClient.setFileType(FTP.ASCII_FILE_TYPE);
+				ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+			}else{
+				if(ftpClient == null){
+					System.out.println("ftpClient == null");
+				}else if(ftpClient.isConnected()){
+					System.out.println("ftpClient == bereits connected");
+				}
+			}
 
-			ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 
 
 		} catch (SocketException e) {

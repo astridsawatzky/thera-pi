@@ -7,6 +7,7 @@ package org.thera_pi.updates;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -71,6 +72,7 @@ public class UpdatePanel extends JXPanel{
 	public JProgressBar pbar = null;
 	
 	public JTextArea ta = null;
+	public AbrechnungDlg abrdlg;
 	
 	DecimalFormat dcf = new DecimalFormat("##########0.00");
 	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy  HH:mm:ss"); //Konv.
@@ -101,6 +103,8 @@ public class UpdatePanel extends JXPanel{
 	public static boolean DbOk;
 	public Connection conn;
 	private JFrame jFrame;
+	
+	private int xaktrow;
 	
 	//Verschluesseln man = Verschluesseln.getInstance();
 	
@@ -142,7 +146,7 @@ public class UpdatePanel extends JXPanel{
 	}
 	private JXHeader getHeader(){
 		JXHeader head = new JXHeader();
-		String titel = "<html><font size='5'><font color='e77817'>Thera-Pi</font>&nbsp;&nbsp; Update-Explorer (Vers. 2015-01)</font></html>";
+		String titel = "<html><font size='5'><font color='e77817'>Thera-Pi</font>&nbsp;&nbsp; Update-Explorer (Vers. 2016-01)</font></html>";
         head.setTitle(titel);
         String description = "<html>Ein rotes "+
         "<img src='file:///"+UpdateConfig.getProghome()+"icons/application-exit.png' width='16' height='16' align=\"bottom\">"+ 
@@ -261,51 +265,78 @@ public class UpdatePanel extends JXPanel{
 					final String xupdate = upddatei;
 					final long xgross = gross;
 					final int xrow = row;
+					
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							pbar.setValue(0);
-							String nurvz = updatefiles.get(ix).get(1).substring(0,updatefiles.get(ix).get(1).lastIndexOf("/")+1);
-							System.out.println(updatefiles.get(ix).get(1));
-							System.out.println(updatefiles.get(ix).get(0));
-							System.out.println(nurvz);
+						
 							try{
-								if(updatefiles.get(ix).get(1).endsWith(".ini")){
-									File f = new File(updatefiles.get(ix).get(1));
-									f.renameTo(new File(updatefiles.get(ix).get(1).replace(".ini", ".bak")));
+								pbar.setValue(0);
+								String nurvz = updatefiles.get(ix).get(1).substring(0,updatefiles.get(ix).get(1).lastIndexOf("/")+1);
+								System.out.println(updatefiles.get(ix).get(1));
+								System.out.println(updatefiles.get(ix).get(0));
+								System.out.println(nurvz);
+								try{
+									if(updatefiles.get(ix).get(1).endsWith(".ini")){
+										File f = new File(updatefiles.get(ix).get(1));
+										f.renameTo(new File(updatefiles.get(ix).get(1).replace(".ini", ".bak")));
+									}
+								}catch(Exception ex){
+									JOptionPane.showMessageDialog(null, "Fehler beim Umbenennen der Datei "+updatefiles.get(ix).get(1));
 								}
-							}catch(Exception ex){
-								JOptionPane.showMessageDialog(null, "Fehler beim Umbenennen der Datei "+updatefiles.get(ix).get(1));
-							}
-							System.out.println("hole Datei -> "+updatefiles.get(ix).get(1)+" Schleifendurchlauf -> "+ix);
-							ftpt = new FTPTools();
-							ftpt.holeDatei(xupdate, nurvz, true, getInstance(),xgross);
-							ftpt = null;
-							pbar.setValue(0);
-							SwingUtilities.invokeLater(new Runnable(){
-								public void run(){
-									/*
-									for(int i = 0; i < 6;i++){
-										System.out.println(i+" Divisionsrest = "+(eltern.userdaten.get(i).length() % 8));
-									}
-									*/
-									String stmt = "insert into updated set ik='"+
-									eltern.userdaten.get(0)+"', datei='"+
-									xupdate+"', userid='"+
-									eltern.userdaten.get(6)+"', datum='"+
-									dformatter.format(currentTime)+"', "+
-									"mac='"+eltern.strMACAdr+"'";
-									try {
-										SqlInfo.sqlAusfuehren(TheraPiUpdates.conn, stmt);
-									} catch (SQLException e) {
-										e.printStackTrace();
-									}
+								System.out.println("hole Datei -> "+updatefiles.get(ix).get(1)+" Schleifendurchlauf -> "+ix);
+								xaktrow = xrow;
+								try{
+									ftpt = new FTPTools();
+									ftpt.holeDatei(xupdate, nurvz, true, getInstance(),xgross);
+								}catch(Exception ex){
+									JOptionPane.showMessageDialog(null,"Bezug der Datei "+xupdate+" fehlgeschlagen!\nBitte starten Sie einen neuen Versuch");
+									ftpt = null;
+									pbar.setValue(0);
+									//return null;
+									return null;
+								}
+								ftpt = null;
+								//pbar.setValue(0);
+								SwingUtilities.invokeLater(new Runnable(){
+									public void run(){
+										/*
+										for(int i = 0; i < 6;i++){
+											System.out.println(i+" Divisionsrest = "+(eltern.userdaten.get(i).length() % 8));
+										}
+										*/
+										try{
+											if(eltern.userdaten != null){
+												//System.out.println(eltern.userdaten);
+												String stmt = "insert into updated set ik='"+
+												eltern.userdaten.get(0)+"', datei='"+
+												xupdate+"', userid='"+
+												eltern.userdaten.get(6)+"', datum='"+
+												dformatter.format(currentTime)+"', "+
+												"mac='"+eltern.strMACAdr+"'";
+												try {
+													SqlInfo.sqlAusfuehren(TheraPiUpdates.conn, stmt);
+												} catch (SQLException e) {
+													e.printStackTrace();
+												}
+											}										
+											
+										}catch(Exception ex){
+											
+										}
+										
+									}	
+										//TheraPiUpdates.RunAjax("http://www.thera-pi.org/html/updates.php", "updated.txt", xupdate);
 									
-									//TheraPiUpdates.RunAjax("http://www.thera-pi.org/html/updates.php", "updated.txt", xupdate);
-								}
-							});
+								});
+								
+								//tabmod.setValueAt((ImageIcon) icokeinupdate,xrow, 3);
+								//x
+							}catch(Exception ex2){
+								
+							}
 							
-							tabmod.setValueAt((ImageIcon) icokeinupdate,xrow, 3);
+						
 							return null;
 						}
 
@@ -320,6 +351,9 @@ public class UpdatePanel extends JXPanel{
 			//tabmod.setValueAt((ImageIcon) this.icokeinupdate,row, 3);	
 		}
 		
+	}
+	public void setDoneIcon(){
+		tabmod.setValueAt((ImageIcon) icokeinupdate,xaktrow, 3);
 	}
 	private UpdatePanel getInstance(){
 		return this;
@@ -652,13 +686,14 @@ public class UpdatePanel extends JXPanel{
 						StarteDB();
 						for(int x = 0; x < vecstmt.size();x++){
 							try {
+								System.out.println("Execute = "+vecstmt.get(x));
 								SqlInfo.sqlAusfuehren(conn, vecstmt.get(x));
 								System.out.println("Execute = "+vecstmt.get(x));
 								//System.out.println("Warnings = "+conn.getWarnings().getSQLState());
 							} catch (Exception e) {
-								JOptionPane.showMessageDialog(null,"Fehler beim anlegen der Tabelle\nBetroffene IK: "+ik+"\nDer Fehlertext lautet: "+e.getMessage()+"\n\nStatement: "+vecstmt.get(x)); 
+								//JOptionPane.showMessageDialog(null,"Fehler beim anlegen der Tabelle\nBetroffene IK: "+ik+"\nDer Fehlertext lautet: "+e.getMessage()+"\n\nStatement: "+vecstmt.get(x)); 
 								//JOptionPane.showMessageDialog(null, "Fehler in der Ausführung des Sql-Statements\n"+vecstmt.get(x));
-								e.printStackTrace();
+								//e.printStackTrace();
 							}
 						}
 
@@ -806,24 +841,57 @@ public class UpdatePanel extends JXPanel{
 							protected Void doInBackground() throws Exception {
 								try{
 									int modi = tab.convertRowIndexToModel(ix);
+									pbar.setValue(0);
 									if(testeObLogVorhanden(tabmod.getValueAt(modi,0).toString())){
 										jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+										final int imodi = modi;
+										new SwingWorker<Void,Void>(){
+
+											@Override
+											protected Void doInBackground()
+													throws Exception {
+												//System.out.println("Starte AbrDlg");
+												abrdlg =new AbrechnungDlg();
+												abrdlg.setzeLabel("<html>Beziehe Log-Datei für "+tabmod.getValueAt(imodi,0).toString()+"<br><br>Bitte warten....<br></html>");
+												abrdlg.setModal(true);
+												//abrdlg.setPreferredSize(new Dimension(200,200));
+												abrdlg.setAlwaysOnTop(true);
+												
+												abrdlg.pack();
+												abrdlg.setLocationRelativeTo(null);
+												abrdlg.setVisible(true);	
+												return null;
+											}
+											
+										}.execute();
+	
+										
 										try{
 											ta.setForeground(Color.BLUE);	
 											ta.setText(holeLogText( tabmod.getValueAt(modi,0).toString()+".log" ));
+											if(ta.getText().equals("Fehler beim Bezug der Log-Datei, ftpClient == nicht connected\nBitte starten Sie einen neuen Versuch")){
+												tab.clearSelection();
+												tab.setRowSelectionInterval(modi,modi);
+											}
 										}catch(Exception ex){
 											ex.printStackTrace();
 											ta.setText("Fehler beim Bezug der Log-Datei");
 										}
 										jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+										
 									}else{
 										ta.setForeground(Color.RED);
 										ta.setText("Für diese Update-Datei ist kein ChangeLog verfügbar");
+										
 									}
 								}catch(Exception ex){
 									ex.printStackTrace();
 								}
-
+								//System.out.println("Beende AbrDlg");
+								if(abrdlg != null){
+									abrdlg.setVisible(false);
+									abrdlg = null;
+								}
 	    						return null;
 							}
 	                		
