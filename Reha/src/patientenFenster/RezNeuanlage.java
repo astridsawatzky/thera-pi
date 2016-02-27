@@ -938,6 +938,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					}				
 					//System.out.println("Rückgabe von test = "+test);
 				}catch(Exception ex){
+					JOptionPane.showMessageDialog(null,"Fehler!!!\n\nVermutlich haben Sie eines der letzten Updates verpaßt.\nFehlt zufällig die Tabelle adrgenehmigung?");
 					ex.printStackTrace();
 				}
 				return null;

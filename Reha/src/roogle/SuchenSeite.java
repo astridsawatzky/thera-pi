@@ -128,7 +128,7 @@ import CommonTools.StringTools;
 import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
 import terminKalender.DatFunk;
-import terminKalender.ZeitFunk;
+import CommonTools.ZeitFunk;
 import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
 import abrechnung.AbrechnungDlg;
@@ -1315,12 +1315,41 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			String xtitel;
 			int xindex;
 			int xpos;
+			/*
+Vector mit Normal-Termin
+[0-true, 
+1-offen, 
+2-Fr-04.06.2010, 
+3-12:30, 
+4-12:55, 
+5-25, 
+6-12:30, 
+7-25, 
+8-H-MUSTERMANN,HANNES, 
+9-KG60004, 
+10-Holger Physio,
+11- ,(== Druckzeit)
+12- ,
+13-01BEHANDLER, 
+14-04.06.2010, 
+15-2010-06-04, 
+16-4, 
+17-208531, 
+18-6, 
+19-false]			 
+			 */
+			
 			//macheVevent(String datum, String start, String end, String titel, String beschreibung){
+			String endzeit = "";
 			for(int i = 0; i < lang;i++){
+				//System.out.println(vecWahl.get(i));
 				icalDummy.clear();
 				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(15)).replace("-", "") );
-				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(3)).replace(":", "")+"00" );
-				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(4)).replace(":", "")+"00" );
+				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(6)).replace(":", "")+"00" );
+				//icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(4)).replace(":", "")+"00" );
+				endzeit = ZeitFunk.ZeitPlusMinuten(((String)((Vector<Object>)vecWahl.get(i)).get(6)) , ((String)((Vector<Object>)vecWahl.get(i)).get(7)));
+				//System.out.println(endzeit);
+				icalDummy.add( endzeit.replace(":", "")+"00" );
 				if( (xtitel=((String)((Vector<Object>)vecWahl.get(i)).get(9))).length() >= 2){
 					if( (xindex=x0diszis.indexOf((String)xtitel.substring(0,2))) < 0 ){
 						icalDummy.add("Therapie-Termin");
@@ -3544,7 +3573,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		machevec.add(skollege);
 		String drzeit = (String)vecgruppe.get(2);
 		machevec.add((drzeit.trim().equals("00:00") ? "--:--" : vecgruppe.get(2)));								
-		machevec.add((xgruppe ? skollege : ""));  //fr�her sorter
+		machevec.add((xgruppe ? skollege : ""));  //früher sorter
 		machevec.add(rs.getString("BEHANDLER"));		
 		machevec.add(sdatum);
 		machevec.add(sorigdatum);
