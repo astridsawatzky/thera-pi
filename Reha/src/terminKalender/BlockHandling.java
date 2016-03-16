@@ -2,16 +2,35 @@ package terminKalender;
 
 import hauptFenster.Reha;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
+
+import CommonTools.StringTools;
+import CommonTools.ZeitFunk;
 import systemEinstellungen.SystemConfig;
 
 
 
+
 public class BlockHandling {
+	
+	final int T_NAME = 0;
+	final int T_NUMMER = 1;
+	final int T_START = 2;
+	final int T_DAUER = 3;
+	final int T_END = 4;
+	final int T_CONTROL = 5;
+	
+	
 	int ret = -1;
 	int wasTun = -1;
-	Vector<String> vterm = null;
+	Vector<?> vterm = null;
 	int kollege;
 	int spalte;
 	int block;
@@ -19,7 +38,7 @@ public class BlockHandling {
 	int dbBehandler;
 	String[] daten = null;
 	Felder datenfeld = new Felder();
-	BlockHandling(int wasTun ,Vector<String> vterm ,int kollege ,int spalte, int block,
+	BlockHandling(int wasTun ,Vector<?> vterm ,int kollege ,int spalte, int block,
 			String[] datum,int dbBehandler,String[] daten){
 		this.wasTun = wasTun;
 		this.vterm = vterm;
@@ -30,8 +49,74 @@ public class BlockHandling {
 		this.dbBehandler = dbBehandler;
 		this.daten = daten;
 
+		debugTermin();
+		
 		datenfeld.Init(vterm);
 
+	}
+	
+	public void debugTermin(){
+		try{
+			String s = "";
+			String[] tAlt = {"","","","",""};
+			String[] tNeu = daten.clone();
+			String[] tCont = {"","","","","",""};
+			
+			int xkoll = StringTools.holeZahlVorneNullen(((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_CONTROL)).get(2)).substring(0,2));
+			tCont[0] = ParameterLaden.getKollegenUeberDBZeile(xkoll);
+			tCont[1] = datum[spalte];
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			tCont[2] = sdf.format(new Date());
+			tCont[3] = DatFunk.sHeute();
+			tCont[4] = Reha.aktUser;
+					
+			
+			tAlt[0] = (((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NAME)).get(block)).equals("") ? "<leer>" : ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NAME)).get(block)));
+			tAlt[1] = (((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NUMMER)).get(block)).equals("") ? "<leer>" : ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NUMMER)).get(block)));
+			tAlt[2] = ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_START)).get(block)).substring(0,5);
+			tAlt[3] = ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_DAUER)).get(block));
+			tAlt[4] = ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_END)).get(block)).substring(0,5);
+
+			if(wasTun == 11){
+				//Daten löschen
+				tNeu[0]="<F8-gelöscht>"; tNeu[1] = "";tNeu[2] = "";tNeu[3] = "";tNeu[4] = "";
+				tCont[5] = "F8";
+			}else if(wasTun == 2 || wasTun == 5){
+				//oben anschließen oder manuelle Eingabe
+				tNeu[4] = ZeitFunk.ZeitPlusMinuten(tNeu[2], tNeu[3]).substring(0,5); tNeu[2] = tNeu[2].substring(0,5);
+				tCont[5] = "F2";
+			}else if(wasTun == 3){
+				//unten anschließen
+				tNeu[2] = ZeitFunk.ZeitMinusMinuten(tNeu[4], tNeu[3]).substring(0,5); tNeu[4] = tNeu[4].substring(0,5);
+				tCont[5] = "F2";
+			}else if(wasTun == 10){
+				//@FREI setzen
+				tNeu[0] = (tAlt[0].equals("") ? "<leer>" : tAlt[0]);
+				tNeu[1] = "@FREI";
+				tNeu[2] = "";
+				tNeu[3] = "";
+				tNeu[4] = "";
+				tCont[5] = "F9";
+			}else{
+				tNeu[2] = tNeu[2].substring(0,5);
+				tNeu[4] = tNeu[4].substring(0,5);
+				tCont[5] = "F2";
+			}
+			//String neu = tNeu[0]+" - "+tNeu[1]+" - "+tNeu[2]+" - "+tNeu[3]+" - "+tNeu[4];
+			Vector<List<String>> vec = new Vector<List<String>>();
+			vec.add(Arrays.asList(tCont));
+			vec.add(Arrays.asList(tAlt));
+			vec.add(Arrays.asList(tNeu));
+
+			Reha.terminLookup.add(0, vec);
+			if(Reha.terminLookup.size() >= 21){
+				Reha.terminLookup.remove(20);
+			}
+			//System.out.println(Reha.terminLookup);
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	public int init(){

@@ -8,7 +8,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 
 import terminKalender.DatFunk;
-import terminKalender.ZeitFunk;
+import CommonTools.ZeitFunk;
 
 public class GruppenEinlesen{
 	//public Vector gruppenParam = null;

@@ -75,7 +75,7 @@ import systemTools.Verschluesseln;
 import terminKalender.DatFunk;
 import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
-import terminKalender.ZeitFunk;
+import CommonTools.ZeitFunk;
 
 
 public class SystemConfig {

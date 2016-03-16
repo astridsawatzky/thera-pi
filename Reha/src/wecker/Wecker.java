@@ -39,7 +39,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
-import terminKalender.ZeitFunk;
+import CommonTools.ZeitFunk;
 
 
 import com.jgoodies.forms.layout.CellConstraints;

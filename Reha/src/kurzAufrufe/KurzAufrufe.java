@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import org.jdesktop.swingworker.SwingWorker;
 
 import oOorgTools.OOTools;
+import CommonTools.Colors;
 import CommonTools.SqlInfo;
 import terminKalender.DatFunk;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -22,6 +23,8 @@ import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.internal.text.TextTableColumn;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextTable;
+import ag.ion.bion.officelayer.text.ITextTableCellRange;
+import ag.ion.bion.officelayer.text.ITextTableColumn;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 
@@ -30,6 +33,7 @@ import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.uno.UnoRuntime;
 
 public class KurzAufrufe {
 	public static void starteFunktion(String funktion, Object obj1,Object obj2){
@@ -48,6 +52,13 @@ public class KurzAufrufe {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		if(funktion.equals("RettungsAnker")){
+			try {
+				new F2RettungsAnker();
+			} catch (TextException e) {
+				e.printStackTrace();
+			}			
 		}
 	}
 }
@@ -213,7 +224,6 @@ class AkutListe{
 				textTable.getCell(4, i).getCharacterProperties().setFontSize(10.f);
 				textTable.getCell(4, i).getCharacterProperties().setFontBold((i==0 ? true : false));
 				textTable.getCell(4, i).getCharacterProperties().setFontColor(rot);
-
 			}
 			final IDocument xdoc = document;
 			new SwingWorker<Void,Void>(){
@@ -437,6 +447,191 @@ class TelefonListe{
 		}
 		
 	}
+}
+
+class F2RettungsAnker{
+	public F2RettungsAnker() throws TextException{
+		IDocumentService documentService = null;
+		try {
+			if(!Reha.officeapplication.isActive()){
+				Reha.starteOfficeApplication();
+			}
+			documentService = Reha.officeapplication.getDocumentService();
+		} catch (OfficeApplicationException e) {
+			if(documentService==null){
+				//System.out.println("Die Java-Access-Bridge ist zusammengebrochen...");
+			}
+			e.printStackTrace();
+		}
+		IDocument document = null;
+		try {
+			DocumentDescriptor docdecript = new DocumentDescriptor();
+			docdecript.setHidden(true);
+			document = documentService.constructNewDocument(IDocument.WRITER, docdecript);
+
+			//document = documentService.constructNewDocument(IDocument.WRITER, DocumentDescriptor.DEFAULT);
+		} catch (NOAException e) {
+			e.printStackTrace();
+		}
+		
+		ITextDocument textDocument = (ITextDocument)document;
+		/*
+		IParagraph paragraph = 
+	  		textDocument.getTextService().getTextContentService().constructNewParagraph();	  	
+		*/
+		try {
+			OOTools.setzePapierFormat(textDocument, 21000, 29700);
+			OOTools.setzeRaender(textDocument, 1000, 1000, 1000, 1000);
+		} catch (NoSuchElementException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (WrappedTargetException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnknownPropertyException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (PropertyVetoException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IllegalArgumentException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		/*
+		 * Saichtext basteln und einsetzen
+		 */
+		ITextTable textTable = null;
+		try {
+			textTable = textDocument.getTextTableService().constructTextTable(Reha.terminLookup.size()+1, 5);
+			
+			
+		} catch (TextException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			
+			textDocument.getTextService().getTextContentService().insertTextContent(textTable);
 	
+		} catch (TextException e) {
+			e.printStackTrace();
+		}
+		try {
+			textTable.getCell(0,0).getTextService().getText().setText("lfNr.");
+			textTable.getCell(1,0).getTextService().getText().setText("durchgeführt von/am");
+			textTable.getCell(2,0).getTextService().getText().setText("was/wo/wann");			
+			textTable.getCell(3,0).getTextService().getText().setText("Termindaten vor Aktion");
+			textTable.getCell(4,0).getTextService().getText().setText("Termindaten nach Aktion");
+			for(int i = 1; i < Reha.terminLookup.size()+1;i++){
+				textTable.getCell(0,i).getTextService().getText().setText(Integer.toString(i));
+				textTable.getCell(1,i).getTextService().getText().setText(
+						"User:\r"+Reha.terminLookup.get(i-1).get(0).get(4)+"\r\r"+
+						"Aktion vom:\r"+Reha.terminLookup.get(i-1).get(0).get(3)+"\r\r"+
+						"Uhrzeit:\r"+Reha.terminLookup.get(i-1).get(0).get(2)
+						);
+				textTable.getCell(2,i).getTextService().getText().setText(
+						"Funktion =\r"+Reha.terminLookup.get(i-1).get(0).get(5)+"\r\r"+
+						"Spalte von =\r"+Reha.terminLookup.get(i-1).get(0).get(0)+"\r\r"+
+						"Kalendertag =\r"+Reha.terminLookup.get(i-1).get(0).get(1)
+						);
+				textTable.getCell(3,i).getTextService().getText().setText(
+						"Name:\r"+Reha.terminLookup.get(i-1).get(1).get(0)+"\r\r"+
+						"RezNr.: "+Reha.terminLookup.get(i-1).get(1).get(1)+"\r"+
+						" Start: "+Reha.terminLookup.get(i-1).get(1).get(2)+"\r"+	
+						"  Ende: "+Reha.terminLookup.get(i-1).get(1).get(4)+"\r"+	
+						" Dauer: "+Reha.terminLookup.get(i-1).get(1).get(3)
+						);
+				textTable.getCell(4,i).getTextService().getText().setText(
+						"Name:\r"+Reha.terminLookup.get(i-1).get(2).get(0)+"\r\r"+
+						"RezNr.: "+Reha.terminLookup.get(i-1).get(2).get(1)+"\r"+
+						" Start: "+Reha.terminLookup.get(i-1).get(2).get(2)+"\r"+	
+						"  Ende: "+Reha.terminLookup.get(i-1).get(2).get(4)+"\r"+	
+						" Dauer: "+Reha.terminLookup.get(i-1).get(2).get(3)
+						);				
+				
+			}
+			//textTable.getCell(4,1).getTextService().getText().setText(Reha.terminLookup.toString());
+
+		} 
+		  catch (TextException exception) {
+		  	exception.printStackTrace();
+		}
+		
+		TextTableColumn[] tbc = (TextTableColumn[]) textTable.getColumns();
+		/*
+		int width = 0;
+		for(int i = 0; i < tbc.length;i++){
+			width += (int)tbc[i].getWidth();
+		}
+		System.out.println(width);
+		*/
+		tbc[0].setWidth((short) 500);
+		tbc[1].setWidth((short) 2375);
+		tbc[2].setWidth((short) 2375);
+		tbc[3].setWidth((short) 2375);	
+		tbc[4].setWidth((short) 2375);
+		
+		int rows = textTable.getRowCount();
+		int rot = Color.RED.getRGB();
+		int blau = Color.BLUE.getRGB();
+		int magenta = Color.MAGENTA.getRGB();
+		int irgendwas = new Color(231,120,23).getRGB();
+		for (int i = 0; i < rows; i++) {
+			textTable.getCell(0, i).getCharacterProperties().setFontName("Courier New");
+			textTable.getCell(0, i).getCharacterProperties().setFontSize(9.f);
+			textTable.getCell(0, i).getCharacterProperties().setFontBold((i==0 ? true : false));
+			textTable.getCell(0, i).getCharacterProperties().setFontColor(magenta);				
+			textTable.getCell(1, i).getCharacterProperties().setFontName("Courier New");
+			textTable.getCell(1, i).getCharacterProperties().setFontSize(9.f);
+			textTable.getCell(1, i).getCharacterProperties().setFontColor(blau);
+			textTable.getCell(1, i).getCharacterProperties().setFontBold((i==0 ? true : false));
+			textTable.getCell(2, i).getCharacterProperties().setFontName("Courier New");
+			textTable.getCell(2, i).getCharacterProperties().setFontSize(9.f);
+			textTable.getCell(2, i).getCharacterProperties().setFontBold((i==0 ? true : false));
+			textTable.getCell(3, i).getCharacterProperties().setFontName("Courier New");
+			textTable.getCell(3, i).getCharacterProperties().setFontSize(9.f);
+			textTable.getCell(3, i).getCharacterProperties().setFontBold((i==0 ? true : false));
+			textTable.getCell(3, i).getCharacterProperties().setFontColor(irgendwas);
+			textTable.getCell(4, i).getCharacterProperties().setFontName("Courier New");
+			textTable.getCell(4, i).getCharacterProperties().setFontSize(9.f);
+			textTable.getCell(4, i).getCharacterProperties().setFontBold((i==0 ? true : false));
+			textTable.getCell(4, i).getCharacterProperties().setFontColor(rot);
+		}
+		
+		final IDocument xdoc = document;
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws Exception {
+				xdoc.getFrame().getXFrame().getContainerWindow().setVisible(true);
+				return null;
+			}
+			
+		}.execute();
+	}
+	public void propSet(ITextTableCellRange range){
+		try {
+			com.sun.star.beans.XPropertySet xPropSet = null;
+			Object aColumnObj = null;
+			aColumnObj = range.getCell(0,0);
+			xPropSet = (com.sun.star.beans.XPropertySet)
+			UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
+			xPropSet.setPropertyValue("HoriJustify", 0);
+		} catch (UnknownPropertyException e) {
+			e.printStackTrace();
+		} catch (PropertyVetoException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (WrappedTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TextException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }
 

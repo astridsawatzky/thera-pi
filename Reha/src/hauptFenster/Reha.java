@@ -65,6 +65,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.TimerTask;
 import java.util.TooManyListenersException;
 import java.util.Vector;
@@ -102,6 +103,7 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
 import krankenKasse.KassenPanel;
+import kurzAufrufe.KurzAufrufe;
 import menus.TerminMenu;
 import oOorgTools.OOTools;
 import ocf.OcKVK;
@@ -150,6 +152,7 @@ import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.text.TextException;
 import anmeldungUmsatz.Anmeldungen;
 import anmeldungUmsatz.Umsaetze;
 import arztFenster.ArztPanel;
@@ -205,6 +208,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	private JMenu helpMenu = null;
 	private JMenuItem exitMenuItem = null;
 	private JMenuItem aboutMenuItem = null;
+	private JMenuItem aboutF2RescueMenuItem = null;
 	public JXStatusBar jXStatusBar = null;
 	private int dividerLocLR = 0; 
 	public JLabel shiftLabel = null;
@@ -314,7 +318,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2016-02-25-DB=";
+	public static String aktuelleVersion = "2016-03-16-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -366,6 +370,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static Vector<Vector<String>> vRGAFoffen;
 	public static boolean bRGAFoffen;
 	public static boolean bHatMerkmale;
+	
+	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
 	
 	/*
 	 * Einschalten für Geschwindigkeitstests
@@ -1981,6 +1987,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			helpMenu = new JMenu();
 			helpMenu.setFont(new Font("Dialog", Font.PLAIN, 12));
 			helpMenu.setText("Hilfe");
+			helpMenu.add(getF2RescueMenuItem());
+			helpMenu.addSeparator();
 			helpMenu.add(getAboutMenuItem());
 		}
 		return helpMenu;
@@ -2079,9 +2087,20 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	private JMenuItem getAboutMenuItem() {
 		if (aboutMenuItem == null) {
 			aboutMenuItem = new JMenuItem();
-			aboutMenuItem.setText("About");
+			aboutMenuItem.setText("über Thera-\u03C0");
+			aboutMenuItem.setActionCommand("ueberTheraPi");
+			aboutMenuItem.addActionListener(this);
 		}
 		return aboutMenuItem;
+	}
+	private JMenuItem getF2RescueMenuItem() {
+		if (aboutF2RescueMenuItem == null) {
+			aboutF2RescueMenuItem = new JMenuItem();
+			aboutF2RescueMenuItem.setText("F2 - Rettungsanker");
+			aboutF2RescueMenuItem.setActionCommand("f2Rescue");
+			aboutF2RescueMenuItem.addActionListener(this);
+		}
+		return aboutF2RescueMenuItem;
 	}
 
 	public void setzeUi(String sUI,JScrollPane panel){
@@ -2835,6 +2854,28 @@ public static void testeNummernKreis(){
 @Override
 public void actionPerformed(ActionEvent arg0) {
 	String cmd = arg0.getActionCommand();
+	if(cmd.equals("ueberTheraPi")){
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws java.lang.Exception {
+				//ZeigeUeber();
+				return null;
+			}
+		}.execute();			
+	}
+	if(cmd.equals("f2Rescue")){
+		new SwingWorker<Void,Void>(){
+			@Override
+			protected Void doInBackground() throws java.lang.Exception {
+				if(Reha.terminLookup.size() <= 0){
+					JOptionPane.showMessageDialog(null,"Bislang sind noch keine F3 / F2-Termine aufgezeichnet");
+					return null;
+				}
+				KurzAufrufe.starteFunktion("RettungsAnker",null,null);	
+				return null;
+			}
+		}.execute();		
+	}
 	if(cmd.equals("testeFango")){
 		new SwingWorker<Void,Void>(){
 			@Override
@@ -3011,13 +3052,18 @@ public void actionPerformed(ActionEvent arg0) {
 		if(RehaIOServer.rehaHMKIsActive){
 			SwingUtilities.invokeLater(new Runnable(){
 				public void run(){
-					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );		
+					String searchrez = (Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "");
+					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );
+					if(!searchrez.isEmpty()){
+						new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.MUST_REZFIND+"#"+searchrez );	
+					}
 				}
 			});
 			return;
 		}
 		new LadeProg(Reha.proghome+"RehaHMK.jar "+
-				" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "") );
+		//System.out.println("Übergebe Rezeptnummer: "+SystemConfig.hmAdrRDaten.get("Rnummer"));
 		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		return;
 	}
@@ -3038,6 +3084,7 @@ public void actionPerformed(ActionEvent arg0) {
 	
 	
 }
+/****************/
 /***************/
 public void activateWebCam(){
 	

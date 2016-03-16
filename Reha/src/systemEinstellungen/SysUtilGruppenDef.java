@@ -44,7 +44,7 @@ import org.jdesktop.swingx.table.TableColumnExt;
 
 import CommonTools.JRtaTextField;
 import terminKalender.DatFunk;
-import terminKalender.ZeitFunk;
+import CommonTools.ZeitFunk;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
