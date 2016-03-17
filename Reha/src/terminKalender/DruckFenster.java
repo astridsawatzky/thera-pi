@@ -957,12 +957,17 @@ final class sendeTermine extends Thread implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		//hier der Einstieg für den iCal-Export;
+		//iCal-Kopf
+		//durch die Tabelle iterieren
+		//iCal-Ende
+		//feddisch
 		if(DruckFenster.OOoFertig == 0){
 			DruckFenster.buttonsEinschalten();
 			return;
 		}
 		ArrayList<String[]> attachments = new ArrayList<String[]>();
-		String[] anhang = {null,null};
+		String[] anhang = {null,null};//zwei weitere Elemente für iCal-Datei erforderlich
 
 		anhang[0] = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
