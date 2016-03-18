@@ -12,16 +12,21 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -42,6 +47,7 @@ import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
 import CommonTools.StringTools;
 import CommonTools.SqlInfo;
+import CommonTools.ZeitFunk;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -957,6 +963,7 @@ final class sendeTermine extends Thread implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		boolean success = doIcalExport();
 		//hier der Einstieg für den iCal-Export;
 		//iCal-Kopf
 		//durch die Tabelle iterieren
@@ -972,6 +979,9 @@ final class sendeTermine extends Thread implements Runnable{
 		anhang[0] = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
 		attachments.add(anhang.clone());
+		if(success){
+			attachments.add(new String[] {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"});
+		}
 		File f = new File(anhang[0]);
 		long zeit = System.currentTimeMillis();
 		while(!f.exists()){
@@ -1034,7 +1044,9 @@ final class sendeTermine extends Thread implements Runnable{
 		/*********/
 	      if (text.equals("")){
 	    	  text = "Sehr geehrte Damen und Herren,\n"+
-					"im Dateianhang finden Sie die von Ihnen gewünschten Behandlungstermine.\n\n"+
+					"im Dateianhang finden Sie die PDF-Datei mit den von Ihnen gewünschten Behandlungsterminen.\n"+
+	    			"Die Termine der ebenfalls beigelegten ICS-Datei, können in die elektronischen Kalender der meisten\n"+
+					"mobilen Systemen wie Smartphone oder Tablet importiert werden.\n\n"+
 					"Termine die Sie nicht einhalten bzw. wahrnehmen können, müssenen 24 Stunden vorher\n"+
 					"abgesagt werden.\n\nIhr Planungs-Team vom RTA";
 	      }
@@ -1052,7 +1064,74 @@ final class sendeTermine extends Thread implements Runnable{
 		f.delete();
 		DruckFenster.buttonsEinschalten();
 	}
+	/*****************************************************************************************************/
+	private boolean doIcalExport(){
+		boolean success = false;
+		try{
+			boolean datewarning = (Boolean)SystemConfig.hmIcalSettings.get("warnen");
+			List<String> x0diszis = Arrays.asList(new String[] {"KG","MA","ER","LO","RH","PO","FT","RS"});
+			List<String> x1diszis = Arrays.asList(new String[] {"Physiotherapie","Massage/LD","Ergotherapie","Logopädie","Reha","Podologie","Funktionstraining","Rehasport"});
+			Vector<Vector<String>> icalVec = new Vector<Vector<String>>();
+			Vector<String> icalDummy = new Vector<String>();
+			String xtitel;
+			int xindex;
+			String endzeit = "";
+			int lang = pliste.getRowCount(); 
+			for(int i = 0; i < lang;i++){
+				icalDummy.clear();
+				//Datum
+				icalDummy.add(DatFunk.sDatInSQL(pliste.getValueAt(i, 1).toString()).replace("-", ""));
+				//Beginn
+				icalDummy.add(pliste.getValueAt(i, 2).toString().replace(":", ""));
+				//Ende
+				/*
+				System.out.println(pliste.getValueAt(i, 1).toString());
+				System.out.println(pliste.getValueAt(i, 2).toString());
+				System.out.println(pliste.getValueAt(i, 4).toString());
+				System.out.println(pliste.getValueAt(i, 9).toString());
+				*/
+				endzeit = ZeitFunk.ZeitPlusMinuten(pliste.getValueAt(i, 2).toString(), pliste.getValueAt(i, 4).toString());
+				icalDummy.add(endzeit.replace(":", "")+"00");
+				//Terminart (Physio, Logo etc.)
+				if( (xtitel=pliste.getValueAt(i, 9).toString()).trim().length() >= 2){
+					if( (xindex=x0diszis.indexOf((String)xtitel.substring(0,2))) < 0 ){
+						icalDummy.add("Therapie-Termin");
+					}else{
+						icalDummy.add((String)x1diszis.get(xindex));
+					}
+				}else{
+					icalDummy.add("Therapie-Termin");
+				}
+				//Terminbeschreibung
+				icalDummy.add(((String)SystemConfig.hmIcalSettings.get("beschreibung")).replace("\n","CRLF"));
+				
+				icalVec.add((Vector)icalDummy.clone());
+			}
+			StringBuffer buf = new StringBuffer();
+			buf.append(ICalGenerator.macheKopf());
+			for(int i = 0;i<icalVec.size();i++){
+				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4),datewarning));
+			}
+			buf.append(ICalGenerator.macheEnd());
+			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
+            //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
+            OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
+			BufferedWriter bw = null;
+			bw = new BufferedWriter(out);
+			bw.write(buf.toString());
+			bw.flush();
+			bw.close();
+			out.close();
+			outputFile.close();			
+			return true;
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		return success;
+	}
 	
+	
+	/*****************************************************************************************************/
 	private String holeAusDB(String exStatement){
 		Statement stmt = null;
 		ResultSet rs = null;

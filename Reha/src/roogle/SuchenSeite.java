@@ -1308,7 +1308,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			Vector<String> icalDummy = new Vector<String>();
 			String emailaddy = "";
 			String emaildummy = "";
-			boolean datewarning = true;
+			boolean datewarning = (Boolean)SystemConfig.hmIcalSettings.get("warnen");
 			String stmt = "select t2.emaila from pat5 as t2 join verordn as t1 on (t2.pat_intern = t1.pat_intern) where t1.rez_nr = '";
 			List x0diszis = Arrays.asList(new String[] {"KG","MA","ER","LO","RH","PO","FT","RS"});
 			List x1diszis = Arrays.asList(new String[] {"Physiotherapie","Massage/LD","Ergotherapie","Logopädie","Reha","Podologie","Funktionstraining","Rehasport"});
