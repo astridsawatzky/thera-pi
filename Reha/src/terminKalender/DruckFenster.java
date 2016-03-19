@@ -251,11 +251,13 @@ private JXPanel buttonPanel(){
 	JXPanel bpanel = new JXPanel(new GridLayout(1,4));
 	bpanel.setPreferredSize(new Dimension(0,25));
 	jb1 = new JButton("Termine drucken");
+	jb1.setMnemonic('T');
 	jb1.setPreferredSize(new Dimension(30,15));
 	jb1.addActionListener(this);
 	jb1.addKeyListener(this);
 	bpanel.add(jb1);
 	jb2 = new JButton("Email senden");
+	jb2.setMnemonic('E');
 	jb2.setPreferredSize(new Dimension(30,15));
 	jb2.addActionListener(this);
 	jb2.addKeyListener(this);	
@@ -1057,6 +1059,11 @@ final class sendeTermine extends Thread implements Runnable{
 		oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure,useport);
 		DruckFenster.thisClass.cursorWait(false);
 		JOptionPane.showMessageDialog (null, "Die Terminliste wurde aufbereitet und per Email versandt\n");
+		SwingUtilities.invokeLater(new Runnable(){
+			public void run(){
+				DruckFenster.jtp.requestFocus();
+			}
+		});
 		}catch(Exception e){
 			JOptionPane.showMessageDialog (null, "Emailversand der Terminliste fehlgeschlagen!!!!\n");
 			e.printStackTrace( );
