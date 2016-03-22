@@ -481,7 +481,7 @@ class F2RettungsAnker{
 		*/
 		try {
 			OOTools.setzePapierFormat(textDocument, 21000, 29700);
-			OOTools.setzeRaender(textDocument, 1000, 1000, 1000, 1000);
+			OOTools.setzeRaender(textDocument, 500, 500, 500, 500);
 		} catch (NoSuchElementException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -519,35 +519,35 @@ class F2RettungsAnker{
 		}
 		try {
 			textTable.getCell(0,0).getTextService().getText().setText("lfNr.");
-			textTable.getCell(1,0).getTextService().getText().setText("durchgeführt von/am");
+			textTable.getCell(1,0).getTextService().getText().setText("durchgeführt von/am/um");
 			textTable.getCell(2,0).getTextService().getText().setText("was/wo/wann");			
 			textTable.getCell(3,0).getTextService().getText().setText("Termindaten vor Aktion");
 			textTable.getCell(4,0).getTextService().getText().setText("Termindaten nach Aktion");
 			for(int i = 1; i < Reha.terminLookup.size()+1;i++){
 				textTable.getCell(0,i).getTextService().getText().setText(Integer.toString(i));
 				textTable.getCell(1,i).getTextService().getText().setText(
-						"User:\r"+Reha.terminLookup.get(i-1).get(0).get(4)+"\r\r"+
-						"Aktion vom:\r"+Reha.terminLookup.get(i-1).get(0).get(3)+"\r\r"+
-						"Uhrzeit:\r"+Reha.terminLookup.get(i-1).get(0).get(2)
+						Reha.terminLookup.get(i-1).get(0).get(4)+"\r"+
+						Reha.terminLookup.get(i-1).get(0).get(3)+" - "+
+						Reha.terminLookup.get(i-1).get(0).get(2)
 						);
 				textTable.getCell(2,i).getTextService().getText().setText(
-						"Funktion =\r"+Reha.terminLookup.get(i-1).get(0).get(5)+"\r\r"+
-						"Spalte von =\r"+Reha.terminLookup.get(i-1).get(0).get(0)+"\r\r"+
-						"Kalendertag =\r"+Reha.terminLookup.get(i-1).get(0).get(1)
+						"Funktion = "+Reha.terminLookup.get(i-1).get(0).get(5)+"\r"+
+						"Spalte von = "+Reha.terminLookup.get(i-1).get(0).get(0)+"\r"+
+						"Kalendertag = "+Reha.terminLookup.get(i-1).get(0).get(1)
 						);
 				textTable.getCell(3,i).getTextService().getText().setText(
-						"Name:\r"+Reha.terminLookup.get(i-1).get(1).get(0)+"\r\r"+
-						"RezNr.: "+Reha.terminLookup.get(i-1).get(1).get(1)+"\r"+
-						" Start: "+Reha.terminLookup.get(i-1).get(1).get(2)+"\r"+	
-						"  Ende: "+Reha.terminLookup.get(i-1).get(1).get(4)+"\r"+	
-						" Dauer: "+Reha.terminLookup.get(i-1).get(1).get(3)
+						" Name: "+Reha.terminLookup.get(i-1).get(1).get(0)+"\r"+
+						"RezNr: "+Reha.terminLookup.get(i-1).get(1).get(1)+"\r"+
+						"Start: "+Reha.terminLookup.get(i-1).get(1).get(2)+"\r"+	
+						" Ende: "+Reha.terminLookup.get(i-1).get(1).get(4)+"\r"+	
+						"Dauer: "+Reha.terminLookup.get(i-1).get(1).get(3)
 						);
 				textTable.getCell(4,i).getTextService().getText().setText(
-						"Name:\r"+Reha.terminLookup.get(i-1).get(2).get(0)+"\r\r"+
-						"RezNr.: "+Reha.terminLookup.get(i-1).get(2).get(1)+"\r"+
-						" Start: "+Reha.terminLookup.get(i-1).get(2).get(2)+"\r"+	
-						"  Ende: "+Reha.terminLookup.get(i-1).get(2).get(4)+"\r"+	
-						" Dauer: "+Reha.terminLookup.get(i-1).get(2).get(3)
+						" Name: "+Reha.terminLookup.get(i-1).get(2).get(0)+"\r"+
+						"RezNr: "+Reha.terminLookup.get(i-1).get(2).get(1)+"\r"+
+						"Start: "+Reha.terminLookup.get(i-1).get(2).get(2)+"\r"+	
+						" Ende: "+Reha.terminLookup.get(i-1).get(2).get(4)+"\r"+	
+						"Dauer: "+Reha.terminLookup.get(i-1).get(2).get(3)
 						);				
 				
 			}
