@@ -1075,8 +1075,10 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		}
 		int anfrage = JOptionPane.showConfirmDialog(null,test , "Die Abrechnung mit diesen Parametern starten?", JOptionPane.YES_NO_OPTION);
 		if(anfrage != JOptionPane.YES_OPTION){
-			doDlgAbort();
-			//SqlInfo.sqlAusfuehren("update nummern set rnr='"+aktRechnung+"' where mandant='"+Reha.aktIK+"' LIMIT 1");
+			try{
+				doDlgAbort();				
+			}catch(Exception ex){
+			}
 			return;
 		}
 		/***********hier erst die Nummer erzeugen **************/
@@ -1096,8 +1098,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			JOptionPane.showMessageDialog(null, "Fehler - Rechnungsnummer kann nicht bezogen werden");
 			return;
 		}
-		
-		
 		/*****************************************/
 		if(abrechnungsModus.equals(ABR_MODE_302)){
 			if(ik_email.trim().equals("")){

@@ -1699,6 +1699,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			this.mitTarifWechsel = false;
 			for(int i = 0; i < SystemConfig.vArschgeigenDaten.size();i++){
 				if( SystemConfig.vArschgeigenDaten.get(i).indexOf(eltern.getAktKTraeger()) >= 0){
+					//System.out.println("ArschgeigenCheck - Tarifwechsel");
 					setTarifWechsel(i);
 					return;
 				}
@@ -1731,6 +1732,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					this.neueTarifgruppe = welcher;
 					this.mitTarifWechsel = true;
 					abr.tarifkennzeichen = SystemPreislisten.hmPreisBereich.get(aktDisziplin).get(tarifneu);
+					//System.out.println("Arschgeigencheck - Tarif: "+abr.preis);
 				}else{
 					alterpreis = true;
 				}
