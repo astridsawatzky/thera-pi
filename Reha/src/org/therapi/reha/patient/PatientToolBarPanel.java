@@ -8,6 +8,8 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.TooManyListenersException;
 
 import javax.swing.BorderFactory;
@@ -33,7 +35,46 @@ public class PatientToolBarPanel extends JXPanel{
 	PatientHauptPanel patientHauptPanel = null;
 	PatientToolBarLogic patToolLogic = null;
 	public JLabel sucheLabel = null;
+	private String kriterium[]={"Nachname Vorname","Patienten-ID","Vorname Nachname",
+			"Telefon privat","Telefon geschäftl.","Telefon mobil","Notizen", "Patienten mit aktuellen Rezepten"};;
+
+	public String getKritAsString(int idx){
+		return 	kriterium[idx];
+	}
 	
+	public int getNnVnIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Nachname Vorname");
+	}
+
+	public int getPatIdIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Patienten-ID");
+	}
+
+	public int getVnNnIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Vorname Nachname");
+	}
+
+	public int getTelPIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Telefon privat");
+	}
+
+	public int getTelGIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Telefon geschäftl.");
+	}
+
+	public int getTelMIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Telefon mobil");
+	}
+
+	public int getNoteIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Notizen");
+	}
+
+	public int getAktRezIdx(){
+		return 	Arrays.asList(kriterium).indexOf("Patienten mit aktuellen Rezepten");
+	}
+
+
 	@SuppressWarnings("rawtypes")
 	public PatientToolBarPanel(PatientHauptPanel patHauptPanel){
 		super();
@@ -53,19 +94,15 @@ public class PatientToolBarPanel extends JXPanel{
 		add(lbl,cc.xy(2,2));
 		
 		// Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
-		patientHauptPanel.jcom = new JComboBox(new String[] {"Name Vorname","Patienten-ID",
-				"Vorname Name","Telefon privat",
-				"Telefon geschäftlich","Telefon mobil","Text enthalten in Notitzen",
-				"Nur Patienten mit aktuellen Rezepten"});
+		patientHauptPanel.jcom = new JComboBox(kriterium);
 			
 		// Lemmi 20101212: Die letzte benutzte Suchart aus der INI-Datei holen und wieder setzen
 		int suchart = SystemConfig.hmPatientenSuchenDlgIni.get("suchart");
-
 		patientHauptPanel.jcom.setSelectedIndex(suchart);
 		
 		patientHauptPanel.jcom.setBackground(new Color(247,209,176));
-		add(patientHauptPanel.jcom,cc.xyw(15, 2, 3));
 		add(patientHauptPanel.jcom,cc.xyw(4,2,8));
+		patientHauptPanel.jcom.addActionListener(patientHauptPanel.toolBarAction);
 		
 		sucheLabel = new JLabel("finde Pat. -->");
 		sucheLabel.setName("Suchen");
@@ -158,28 +195,6 @@ public class PatientToolBarPanel extends JXPanel{
 		patientHauptPanel.jbut[4].addActionListener(patientHauptPanel.toolBarAction);
 		jtb.add(patientHauptPanel.jbut[4]);
 		
-		/*
-		patientHauptPanel.jbut[4] = new JButton();
-		patientHauptPanel.jbut[4].setIcon(SystemConfig.hmSysIcons.get("email"));
-		patientHauptPanel.jbut[4].setToolTipText("(e)Mail für Patient erstellen (Alt+M)");
-		patientHauptPanel.jbut[4].setActionCommand("email");
-		patientHauptPanel.jbut[4].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[4]);
-
-		patientHauptPanel.jbut[5] = new JButton();
-		patientHauptPanel.jbut[5].setIcon(SystemConfig.hmSysIcons.get("sms"));
-		patientHauptPanel.jbut[5].setToolTipText("SMS für Patient erstellen (Alt+S)");
-		patientHauptPanel.jbut[5].setActionCommand("sms");
-		patientHauptPanel.jbut[5].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[5]);
-		
-		patientHauptPanel.jbut[6] = new JButton();
-		patientHauptPanel.jbut[6].setIcon(SystemConfig.hmSysIcons.get("info"));
-		patientHauptPanel.jbut[6].setToolTipText("Zusatzinformationen zum aktuellen Patient (Alt+I)");
-		patientHauptPanel.jbut[6].setActionCommand("zusatzinfo");
-		patientHauptPanel.jbut[6].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[6]);
-		*/
 		add(jtb,cc.xyw(20,2,8));
 	}
 	public PatientToolBarLogic getLogic(){
@@ -188,3 +203,5 @@ public class PatientToolBarPanel extends JXPanel{
 	
 
 }
+
+

@@ -62,7 +62,7 @@ public class PatientHauptPanel extends JXPanel{
 	public Object sucheComponent = null;
 	
 	//ToolBar-Controls & Listener
-	public JButton[] jbut = {null,null,null,null,null,null,null};
+	public JButton[] jbut = {null,null,null,null,null};
 	public JFormattedTextField tfsuchen;
 	public JComboBox jcom;
 	public ActionListener toolBarAction;
@@ -117,7 +117,7 @@ public class PatientHauptPanel extends JXPanel{
 	private PatStammEventClass ptp = null;
 	
 	//Instanz-Variable für die einzelnen Panels
-	private PatientToolBarPanel patToolBarPanel = null;
+	public PatientToolBarPanel patToolBarPanel = null;
 	private PatientStammDatenPanel stammDatenPanel = null;
 	private PatientMemoPanel patMemoPanel = null;
 	private PatientMultiFunctionPanel patMultiFunctionPanel = null;

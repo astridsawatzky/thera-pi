@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.InputMap;
@@ -35,6 +36,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.therapi.reha.patient.PatientHauptLogic;
+import org.therapi.reha.patient.PatientToolBarPanel;
 
 import systemEinstellungen.SystemConfig;
 import CommonTools.StringTools;
@@ -71,17 +73,6 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	private Cursor cesize = Reha.thisClass.cesize;	
 	private Cursor cdefault = Reha.thisClass.cdefault;
 
-	//private Cursor cmove = new Cursor(Cursor.MOVE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor cnsize = new Cursor(Cursor.N_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor cnwsize = new Cursor(Cursor.NW_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor cnesize = new Cursor(Cursor.NE_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor cswsize = new Cursor(Cursor.SW_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor cwsize = new Cursor(Cursor.W_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor csesize = new Cursor(Cursor.SE_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor cssize = new Cursor(Cursor.S_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	//private Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR);  //  @jve:decl-index=0:	
-	//private Cursor cdefault = Reha.thisClass.normalCursor;  //  @jve:decl-index=0:
-
 	private boolean insize;
 	private int[] orgbounds = {0,0};
 	private int sizeart;
@@ -92,6 +83,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	public DefaultTableModel tblDataModel;
 	public boolean jumpok = false;
 	public  int suchart = 0;
+	private PatientToolBarPanel toolBar;
+	
 	/**
 	 * @param 
 	 */
@@ -102,6 +95,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		this.fname = (String) (fname.equals("") ? "" : fname);
 		this.suchart = art;
 		this.aufrufer = xaufrufer;
+		toolBar = aufrufer.patientHauptPanel.patToolBarPanel;
 		initialize();
 		jTextField.setText(fname);
 		new suchePatient().init(tblDataModel);
@@ -109,8 +103,6 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				setzeFocus();
-				
-				
 			}
 		});
 	}
@@ -127,22 +119,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		jtable.validate();
 		
 	}
-	/*
-	public void	setzeZeile(int row){
-		
-		try{
-			jtable.setRowSelectionInterval(row, row);
-			jtable.scrollRowToVisible(row);
-			jtable.repaint();
-			jtable.validate();			
-		}catch(Exception ex){
-			ex.printStackTrace();
-			jtable.repaint();
-			jtable.validate();	
-		}
 
-	}
-	*/
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
 
 		try{
@@ -153,9 +130,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			}
 		}catch(NullPointerException ne){
 
-		}
 	}	
 	
+	}
 
 	public void suchDasDing(String suchkrit){
 		jTextField.setText(suchkrit);
@@ -182,13 +159,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		this.setUndecorated(true);
 		this.setTitle("Dialog-Test");
 		this.setContentPane(getJContentPane());
-		/*
-		SuchenDialog.this.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				////System.out.println("Weshalb windowClosing()"); // TODO Auto-generated Event stub windowClosing()
-			}
-		});
-		*/
+
 		this.setName("PatSuchen");
 		this.setModal(false);
 		this.setResizable(true);
@@ -236,12 +207,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jp1.setBorder(null);
 			
 			// Lemmi 20101212: Das Labelfeld für einen Hinweis auf aktuelle Rezepte "mißbraucht"
-			JLabel jlb = new JLabel( suchart==7 ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: ");  // Lemmi 20101212: Prompt für die Eingabe eines Suchkriteriums
+			JLabel jlb = new JLabel( suchart == toolBar.getAktRezIdx() ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: ");  // Lemmi 20101212: Prompt für die Eingabe eines Suchkriteriums
 			jp1.add(jlb);
 			
 			jtext = getJTextField();
 			// Lemmi 20101212: Das Such-Eingabefeld unsichtbar gemacht - wird hier nicht benötigt
-			if(suchart==7){
+			if(suchart == toolBar.getAktRezIdx()){
 				jtext.setPreferredSize(new Dimension(0,0));
 			} else{
 				jtext.setPreferredSize(new Dimension(100,20));
@@ -308,23 +279,21 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			reiheVector.addElement("Vorname");
 			reiheVector.addElement("Geboren");
 			reiheVector.addElement("Pat-Nr.");
-			if(suchart==7){   // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
+			if(suchart==toolBar.getAktRezIdx()){   // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
 				reiheVector.addElement("Rezepte");			
 			}
 			tblDataModel = new DefaultTableModel();
 			tblDataModel.setColumnIdentifiers(reiheVector);
 			jtable = new JXTable(tblDataModel);
 			this.jtable.getColumnModel().getColumn(0).setPreferredWidth(100);
-			this.jtable.getColumn(3).setMinWidth(0);	// Breite der Spalte pat_intern
+			this.jtable.getColumn(3).setMinWidth(0);	// Spalte pat_intern ausblenden
 			this.jtable.getColumn(3).setMaxWidth(0);	// Breite der Spalte pat_intern
 			
 			// Lemmi 20101212: Einige maximale Spaltenbreiten fixiert
-			if(suchart==7) {  // Spielereine, funktioniert alles
-//				this.jtable.getColumn(0).setWidth(200);  // Nachname
-//				this.jtable.getColumn(1).setMaxWidth(250);  // Vorname
-//				this.jtable.getColumn(1).setPreferredWidth(200);  // Vorname
-				this.jtable.getColumn(2).setPreferredWidth(80);  // Geboren
-				this.jtable.getColumn(2).setMaxWidth(100);  // Geboren
+			if(suchart == toolBar.getAktRezIdx()) {  // Spielereine, funktioniert alles
+				this.jtable.getColumn(2).setPreferredWidth(80);  	// Geboren
+				this.jtable.getColumn(2).setMaxWidth(100);  		// Geboren
+				this.jtable.getColumn(4).setPreferredWidth(100);  	// Rezepte
 //				this.jtable.setGridColor(Color.red);
 			}
 			
@@ -338,19 +307,19 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 
 			jtable.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyPressed(java.awt.event.KeyEvent e) {
-					if (e.getKeyCode() == 10){
+					if (e.getKeyCode() == 10){								// ENTER
 						aufrufer.setLastRow(jtable.getSelectedRow());
 						sucheAbfeuern();
 						e.consume();	
 						setVisible(false);
 					}
-					if (e.getKeyCode() == 40 ||e.getKeyCode() == 38){
+					if (e.getKeyCode() == 40 ||e.getKeyCode() == 38){		// ArrDwn, ArrUp
 						//sucheAbfeuern();
 					}
-					if (e.getKeyCode() == KeyEvent.VK_F && e.isAltDown()){
+					if (e.getKeyCode() == KeyEvent.VK_F && e.isAltDown()){	// [Taste-??]
 						jTextField.requestFocus();
 					}
-					if (e.getKeyCode() == 27){
+					if (e.getKeyCode() == 27){								// ESC
 						e.consume();
 						setVisible(false);
 						sucheBeenden();						
@@ -381,9 +350,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jtp.validate();
 			jContentPane.add(jtp, BorderLayout.CENTER);
 			
-			if(suchart==7){
+			if(suchart == toolBar.getAktRezIdx()){
 				// NOTHING to do
-				// Lemmi 20101212: bei Suchart 3 brauchen wir kein Suchwert-Eingabefeld im Ergebnisdialog
+				// Lemmi 20101212: wir brauchen kein Suchwert-Eingabefeld im Ergebnisdialog
 				jtext.setText("");
 			}
 			else {
@@ -393,8 +362,6 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		return jContentPane;
 	}
 	public void sucheAbfeuern(){
-		// Lemmi 20101212 speichere Position und Dimension und Suchart in der INI-Datei für nächsten Aufruf
-		PatSuchenDlgIniSave();
 		String s1 = String.valueOf("#PATSUCHEN");
 		String s2 = (String) jtable.getValueAt(jtable.getSelectedRow(), 3);
 		setDetails(s1,s2) ;
@@ -405,6 +372,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		Reha.thisClass.lastSelectedPat = jtable.getSelectedRow();
 	}
 	public void sucheBeenden(){
+		PatSuchenDlgIniSave();
 		String s1 = String.valueOf("#SUCHENBEENDEN");
 		String s2 = (String) "";
 		setDetails(s1,s2) ;
@@ -422,6 +390,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		SystemConfig.hmPatientenSuchenDlgIni.put("fensterbreite", dim.width);
 		SystemConfig.hmPatientenSuchenDlgIni.put("fensterhoehe", dim.height);
 		SystemConfig.hmPatientenSuchenDlgIni.put("suchart", suchart);
+		
+		// !! Werte landen erstmal nur in der HashMap; in der ini nur bei Speichern der 'Einstellungen -> Bedienung'!!
 	}
 	
 
@@ -434,11 +404,21 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		if (jXTitledPanel == null) {
 			jXTitledPanel = new JXTitledPanel();
 			
+			/*
 			// Lemmi 20101212: Erweitert um "Patienten mit aktuellen Rezepten"
 			String kriterium[]={"Nachname Vorname","Patienten-ID","Vorname Nachname",
-					"Telefon privat","Telefon geschäftl.","Telefon mobil","Notitzen", "Nur Patienten mit aktuellen Rezepten"};
+					"Telefon privat","Telefon geschäftl.","Telefon mobil","Notizen", "Nur Patienten mit aktuellen Rezepten"};
 			
 			jXTitledPanel.setTitle("Suche Patient..."+this.fname+" nach "+kriterium[suchart]);
+			*/
+			String titel = "Suche ";
+			String kriterium = toolBar.getKritAsString(suchart);
+			if (suchart == toolBar.getAktRezIdx()){		// "Nur Patienten mit aktuellen Rezepten"
+				titel = titel + kriterium;
+			}else{
+				titel = titel + "Patient..."+this.fname+" nach "+kriterium;
+			};
+			jXTitledPanel.setTitle(titel);
 			jXTitledPanel.setTitleForeground(Color.WHITE);
 			jXTitledPanel.setName("PatSuchen");
 			JXButton jb2 = new JXButton();
@@ -447,7 +427,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jb2.setPreferredSize(new Dimension(16,16));
 			jb2.setIcon(SystemConfig.hmSysIcons.get("rot"));
 			jb2.addMouseListener(new java.awt.event.MouseAdapter(){
-				public void mouseClicked(java.awt.event.MouseEvent e) {
+				public void mouseClicked(java.awt.event.MouseEvent e) {		// <- Window-Close-Button
 					e.consume();
 					setVisible(false);
 					sucheBeenden();
@@ -687,6 +667,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 
 					aufrufer.setLastRow(-1);
 					SuchenDialog.this.dispose();
+					sucheBeenden();						
 				}
 			});
 		}
@@ -709,75 +690,120 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		
 	DefaultTableModel tblDataModel;
 	
+	public String ADS_Date(){
+		if (!SystemConfig.vDatenBank.get(0).get(2).equals("ADS")){
+			return "DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren";
+		}else{ //ADS
+			return "geboren";
+		}
+	}
+
+	/**
+	 * Erzeugt für jeden, im Suchstring gefundenen, Umlaut einen weiteren Suchstring mit der Umschreibung des Umlautes (u. vice-versa).
+	 * Vokale am Ende des Suchstrings werden als möglicher Beginn einer Umlaut-Umschreibung angesehen
+	 * 
+	 * @param fieldname Tabellenspalte, in der gesucht wird
+	 * @param val eingegebener Suchbegriff (Anfang des Namens, Vornamens)
+	 * @return gibt die ODER-Verknüpfung der Suchstrings zurück (SQL-Syntax)
+	 */
+	public String SucheKlang(String fieldname, String val){
+		ArrayList<String> sSuchPattern = new ArrayList<String>();
+		String sTmp="";
+		int i;
+
+		sTmp=val.toLowerCase();
+		sSuchPattern.add(val.toLowerCase());		// Original merken
+/*
+		// ---- könnte Ende Teil einer Umlaut-Umschreibung sein?
+		if (sTmp.endsWith("a")){sSuchPattern.add(sTmp.concat("e"));} else	
+		if (sTmp.endsWith("o")){sSuchPattern.add(sTmp.concat("e"));} else
+		if (sTmp.endsWith("u")){sSuchPattern.add(sTmp.concat("e"));} else
+		if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("s"));} else
+		if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("z"));}; 
+		i = sSuchPattern.size();
+		// ---- ersetzt Umlaut <-> Umschreibung
+		for (int k=0; k<i; k++){			
+			sTmp=sSuchPattern.get(k);
+			if (sTmp.indexOf("ä") >= 0){
+				sSuchPattern.add(sTmp.replace("ä", "ae"));	// Umschreibung
+				sSuchPattern.add(sTmp.replace("ä", "a"));	// ohne Umlaut geschrieben
+			} 
+			if (sTmp.indexOf("ö") >= 0){
+				sSuchPattern.add(sTmp.replace("ö", "oe"));
+				sSuchPattern.add(sTmp.replace("ö", "o"));
+			} 
+			if (sTmp.indexOf("ü") >= 0){
+				sSuchPattern.add(sTmp.replace("ü", "ue"));
+				sSuchPattern.add(sTmp.replace("ü", "u"));
+			} 
+			if (sTmp.indexOf("ß") >= 0){
+				sSuchPattern.add(sTmp.replace("ß", "ss"));
+				sSuchPattern.add(sTmp.replace("ß", "sz"));
+			} 
+			if (sTmp.indexOf("ae") >= 0){sSuchPattern.add(sTmp.replace("ae", "ä"));} 
+			if (sTmp.indexOf("oe") >= 0){sSuchPattern.add(sTmp.replace("oe", "ö"));} 
+			if (sTmp.indexOf("ue") >= 0){sSuchPattern.add(sTmp.replace("ue", "ü"));} 
+			if (sTmp.indexOf("ss") >= 0){sSuchPattern.add(sTmp.replace("ss", "ß"));} 
+			if (sTmp.indexOf("sz") >= 0){sSuchPattern.add(sTmp.replace("sz", "ß"));};
+		}
+*/
+		// ---- Suchstring zusammensetzen
+		sTmp = "";
+		for (String c: sSuchPattern){
+			if (sTmp.isEmpty()){
+				sTmp = fieldname+" LIKE '"+c+"%'";	
+			}else{
+				sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
+			}
+		}
+		return sTmp;
+	}
+
+	
 	@SuppressWarnings("unchecked")
 	private void suchePatienten(){
 		Statement stmt = null;
 		ResultSet rs = null;
-		String sstmt = "";
-		//Vector <Vector<String[]>>dataVector = new Vector<Vector<String[]>>();
+		String sstmt = "", eingabe = "";
 		
-		// Lemmi 20101212: AUSKOMMENTIERT, da hier nicht verwendet !!!
-/*		Vector<String> reiheVector = new Vector<String>();
-		reiheVector.addElement("Nachname");
-		reiheVector.addElement("Nachname");
-		reiheVector.addElement("Geboren");
-		reiheVector.addElement("Patientennummer");
-*/		
-		String[] suche;
+		String[] suche = {null};
 		setCursor(Reha.thisClass.wartenCursor);	
 		
-		if(suchart == 0){  // "Name Vorname" 
+		eingabe = jTextField.getText().trim();
+		while  (eingabe.contains("  ") ){
+			eingabe = eingabe.replace("  ", " ");
+		}
+		suche = eingabe.split(" ");	 
 		
-			if (jTextField.getText().trim().contains(" ") ){
-				suche = jTextField.getText().split(" ");
-				if (!SystemConfig.vDatenBank.get(0).get(2).equals("ADS")){
-					sstmt = "Select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern  from pat5 where n_name LIKE '"+
-					StringTools.Escaped(suche[0].trim()) +"%' AND v_name LIKE '"+StringTools.Escaped(suche[1].trim())+"%' order by n_name,v_name";
-				}else{ //ADS
-					sstmt = "Select n_name,v_name,geboren,pat_intern  from pat5 where n_name LIKE UPPER('"+
-					suche[0].trim() + "%') AND v_name LIKE UPPER('" + StringTools.Escaped(suche[1].trim()) +"%') order by n_name,v_name";
-				}
+		if(suchart == toolBar.getNnVnIdx()){  // "Name Vorname" 
+			// 2015-08 McM auf Suche nach Umlaut-Umschreibung erweitert
+			//         (besser mit tmp-var für Eingabe (dann reicht 1x trim ...))
+			if (eingabe.contains(" ") ){
+				// sstmt = "Select n_name,v_name,ADS_Date(geboren),pat_intern  from pat5 where n_name LIKE '"+StringTools.Escaped(suche[0].trim()) +"%' AND v_name LIKE '"+StringTools.Escaped(suche[1].trim())+"%' order by n_name,v_name";
+				sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern  from pat5 where ("+SucheKlang("n_name",suche[0])+") AND ("+SucheKlang("v_name",suche[1])+") order by n_name,v_name";
 			}else{
-				if (!SystemConfig.vDatenBank.get(0).get(2).equals("ADS")){
-					sstmt = "Select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where n_name LIKE '"+
-					StringTools.Escaped(jTextField.getText().trim()) +"%'  order by n_name,v_name,geboren";
-				}else{ //ADS
-					sstmt = "Select n_name,v_name,geboren,pat_intern from pat5 where n_name LIKE UPPER('"+
-					StringTools.Escaped(jTextField.getText().trim()) +"%') order by n_name,v_name,geboren";
-				}
+				sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern from pat5 where ("+SucheKlang("n_name",suche[0])+") order by n_name,v_name,geboren";
 			}
 		
-		}else if(suchart == 1){    // "Patienten-ID"
-			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where pat_intern = '"+jTextField.getText().trim()+"' LIMIT 1";
-		}else if(suchart == 2){  // "Vorname Name"  (Erweiterung von Drud)
+		}else if(suchart == toolBar.getPatIdIdx()){    // "Patienten-ID"
+			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where pat_intern = '"+suche[0]+"' LIMIT 1";
+		}else if(suchart == toolBar.getVnNnIdx()){  // "Vorname Name"  (Erweiterung von Drud) + Umlaut-Suche (McM)
 			
-			if (jTextField.getText().trim().contains(" ") ){
-				suche = jTextField.getText().split(" ");
-				if (!SystemConfig.vDatenBank.get(0).get(2).equals("ADS")){
-					sstmt = "Select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern  from pat5 where v_name LIKE '"+
-					StringTools.Escaped(suche[0].trim()) +"%' AND n_name LIKE '"+StringTools.Escaped(suche[1].trim())+"%' order by n_name,v_name";
-				}else{ //ADS
-					sstmt = "Select n_name,v_name,geboren,pat_intern  from pat5 where v_name LIKE UPPER('"+
-					suche[0].trim() + "%') AND n_name LIKE UPPER('" + StringTools.Escaped(suche[1].trim()) +"%') order by n_name,v_name";
-				}
+			if (eingabe.contains(" ") ){
+				sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern  from pat5 where ("+SucheKlang("v_name",suche[0])+") AND ("+SucheKlang("n_name",suche[1])+") order by n_name,v_name";
 			}else{
-				if (!SystemConfig.vDatenBank.get(0).get(2).equals("ADS")){
-					sstmt = "Select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where v_name LIKE '"+
-					StringTools.Escaped(jTextField.getText().trim()) +"%'  order by n_name,v_name,geboren";
-				}else{ //ADS
-					sstmt = "Select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where v_name LIKE UPPER('"+
-					StringTools.Escaped(jTextField.getText().trim()) +"%') order by n_name,v_name,geboren";
-				}
+				sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern from pat5 where ("+SucheKlang("v_name",suche[0])+") order by n_name,v_name,geboren";
 			}
-		}else if(suchart==3){ // Telfon privat
-			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as geboren,pat_intern from pat5 where telefonp LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
-		}else if(suchart==4){// Telefon geschäftilich
-			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefong) as geboren,pat_intern from pat5 where telefong LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
-		}else if(suchart==5){// Telefon mobil
-			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as geboren,pat_intern from pat5 where telefonm LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
-		}else if(suchart==6){ // In Notitzen
-			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+jTextField.getText().trim()+"%' ORDER BY n_name,v_name,geboren";
-		}else if(suchart==7){    		// Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
+
+		}else if(suchart == toolBar.getTelPIdx()){ // Telfon privat
+			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as geboren,pat_intern from pat5 where telefonp LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
+		}else if(suchart == toolBar.getTelGIdx()){// Telefon geschäftilich
+			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefong) as geboren,pat_intern from pat5 where telefong LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
+		}else if(suchart == toolBar.getTelMIdx()){// Telefon mobil
+			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as geboren,pat_intern from pat5 where telefonm LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
+		}else if(suchart == toolBar.getNoteIdx()){ // In Notitzen
+			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
+		}else if(suchart == toolBar.getAktRezIdx()){    		// Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
 //			sstmt = "select p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, r.rez_nr from pat5 as p INNER JOIN verordn as r ON p.pat_intern = r.pat_intern ORDER BY p.n_name asc, r.rez_nr asc";
 			sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, GROUP_CONCAT(r.rez_nr ORDER BY r.rez_nr ASC SEPARATOR ', ') FROM verordn AS r INNER JOIN pat5 AS p where p.pat_intern = r.pat_intern GROUP BY p.pat_intern ORDER BY p.n_name";
 		}else{
@@ -791,7 +817,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			try{
 				rs = stmt.executeQuery(sstmt);
 				Vector<String> rowVector = new Vector<String>();
-				int reihen = (suchart == 7 ? 5 : 4 );
+				int reihen = (suchart == toolBar.getAktRezIdx() ? 5 : 4 );
 				while( rs.next()){
 					rowVector.clear();
 					//for(int i = 1; i <= 4; i++)

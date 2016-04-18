@@ -135,57 +135,60 @@ public class PatientHauptLogic {
 		
 		if(patientHauptPanel.tfsuchen.getText().trim().equals("")){  // Wenn keine Suchvorgaben eingetippt worden sind:
 			
-			// Lemmi 20101212: Anzahl der zu erwartenden Datensätze eingebaut, Unterscheidung von suchart = 3
+			// Lemmi 20101212: Anzahl der zu erwartenden Datensätze eingebaut
 			int suchart = patientHauptPanel.jcom.getSelectedIndex();
-			if(suchart==6){
-				sstmt = "SELECT COUNT(*) from verordn";
+			//if(suchart==6){
+			if(suchart==patientHauptPanel.patToolBarPanel.getAktRezIdx()){
+				/* - lädt eh ALLE Patienten mit akt. Rezept -> brauch 'mer also auch nich meckern...
+				//sstmt = "SELECT COUNT(*) from verordn";			// err: listet Anz. der akt. Rezepte
+				sstmt = "SELECT COUNT(*) FROM (SELECT * FROM verordn GROUP BY pat_intern) AS t1";	// ok: Anz. der Pat. mit akt. Rezept
 				strStamm = "aktiven Rezeptstamm";
+				*/
 			}else{
 				sstmt = "SELECT COUNT(*) from pat5";
 				strStamm = "Patientenstamm";
-			}
-			
-			// Lemmi 20101212: Anzahl der zu erwartenden Datensätze ermitteln via DB-Abfrage
-			try {
-				stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-	                    ResultSet.CONCUR_UPDATABLE );
-				try{
-					rs = stmt.executeQuery(sstmt);
-					rs.absolute(1); // moves the cursor to the 1st row of rs
-					strAnzahl = rs.getString(1);
-//					setCursor(Reha.thisClass.normalCursor);
-				}catch(SQLException ev){
-				}	
-			}catch(SQLException ex) {
-			}
+				
+				// Lemmi 20101212: Anzahl der zu erwartenden Datensätze ermitteln via DB-Abfrage
+				try {
+					stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+		                    ResultSet.CONCUR_UPDATABLE );
+					try{
+						rs = stmt.executeQuery(sstmt);
+						rs.absolute(1); // moves the cursor to the 1st row of rs
+						strAnzahl = rs.getString(1);
+					}catch(SQLException ev){
+					}	
+				}catch(SQLException ex) {
+				}
 
-			finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					} catch (SQLException sqlEx) { // ignore }
-						rs = null;
+				finally {
+					if (rs != null) {
+						try {
+							rs.close();
+						} catch (SQLException sqlEx) { // ignore }
+							rs = null;
+						}
+					}
+					if (stmt != null) {
+						try {
+							stmt.close();
+						} catch (SQLException sqlEx) { // ignore }
+							stmt = null;
+						}
 					}
 				}
-				if (stmt != null) {
-					try {
-						stmt.close();
-					} catch (SQLException sqlEx) { // ignore }
-						stmt = null;
-					}
+				
+				// Lemmi 20101212: Erstellung der Meldung mit Anzahl der Datensätze
+				cmd = "<html>Sie haben <b>kein</b> Suchkriterium eingegeben.<br>"+
+				"Das bedeutet Sie laden den <b>kompletten " + strStamm + "!!!</b><br><br>"+
+				"Es sind <b>" + strAnzahl + " </b>Datensätze zu erwarten.<br>"+
+				"<b>Wollen Sie das wirklich?</b>";
+				
+				// Abfrage-Dialog anzeigen und Ergebnis der User-Eingabe abfragen
+				int anfrage = JOptionPane.showConfirmDialog(null, cmd,"Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
+				if(anfrage == JOptionPane.NO_OPTION){
+					return;
 				}
-			}
-			
-			// Lemmi 20101212: Erstellung der Meldung mit Anzahl der Datensätze
-			cmd = "<html>Sie haben <b>kein</b> Suchkriterium eingegeben.<br>"+
-			"Das bedeutet Sie laden den <b>kompletten " + strStamm + "!!!</b><br><br>"+
-			"Es sind <b>" + strAnzahl + " </b>Datensätze zu erwarten.<br>"+
-			"<b>Wollen Sie das wirklich?</b>";
-			
-			// Abfrage-Dialog anzeigen und Ergebnis der User-Eingabe abfragen
-			int anfrage = JOptionPane.showConfirmDialog(null, cmd,"Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
-			if(anfrage == JOptionPane.NO_OPTION){
-				return;
 			}
 		}
 		if (patientHauptPanel.sucheComponent != null){

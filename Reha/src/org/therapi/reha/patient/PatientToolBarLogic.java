@@ -6,6 +6,7 @@ import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;
 import hauptFenster.ReverseSocket;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -21,13 +22,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
-
-
-
-
-
-
-
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingworker.SwingWorker;
@@ -66,7 +60,7 @@ public class PatientToolBarLogic {
 	}
 	
 	public void reactOnKeyPressed(KeyEvent e){
-		if(e.getKeyCode() == 10){
+		if(e.getKeyCode() == 10){							// ENTER im Suchfeld
 			if(((JComponent)e.getSource()).getName() != null){
 				if( ((JComponent) e.getSource()).getName().equals("suchenach") ){
 					patientHauptPanel.patientLogic.starteSuche();
@@ -147,6 +141,23 @@ public class PatientToolBarLogic {
 		if(cmd.equals("werkzeuge")){
 			new ToolsDlgPatient("",patientHauptPanel.jbut[4].getLocationOnScreen());
 			//patientHauptPanel.getLogic().setzeFocus();
+		}
+		if(cmd.equals("comboBoxChanged")){
+			if (patientHauptPanel.jcom.getSelectedIndex() == patientHauptPanel.patToolBarPanel.getAktRezIdx()){
+				// Eingabe sperren
+//				patientHauptPanel.tfsuchen.setDisabledTextColor(Color.red);
+				patientHauptPanel.tfsuchen.setBackground(Color.lightGray);
+				patientHauptPanel.tfsuchen.setForeground(Color.red);
+				patientHauptPanel.tfsuchen.setOpaque(true);
+//				patientHauptPanel.tfsuchen.setEnabled(false);
+				patientHauptPanel.tfsuchen.setEditable(false);
+			}else{
+				// Eingabe freigeben
+				patientHauptPanel.tfsuchen.setForeground(Color.gray);
+				patientHauptPanel.tfsuchen.setOpaque(false);
+//				patientHauptPanel.tfsuchen.setEnabled(true);
+				patientHauptPanel.tfsuchen.setEditable(true);
+			}
 		}
 	}
 	public void doPatNachricht(){
