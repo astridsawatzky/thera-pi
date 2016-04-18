@@ -566,10 +566,10 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				
 				treeKasse.setSelectionPath(new TreePath(meinitem));
 				treeKasse.setSelectionInterval(treeindex, treeindex);
-				if(treeKasse.getSelectionPath() != null){
+/*				if(treeKasse.getSelectionPath() != null){
 					abrRez.actionAbschluss();
 				}
-				
+*/				
 				
 			}catch(Exception ex){
 				ex.printStackTrace();

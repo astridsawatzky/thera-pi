@@ -2124,16 +2124,17 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				
 				int currow = tabaktrez.getSelectedRow();
 				if(currow < 0){return;}
-					if(dtblm.getValueAt(currow,5)==null){
-						Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+				if(dtblm.getValueAt(currow,5)==null){		// kein Status-Icon gesetzt 
+					Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+				}else{
+					String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+					if(RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){ 
+						// Rezept gehört zu der Sparte, zur Sparte, die gerade im Abrechnungspanel geöffnet ist
+						Reha.thisClass.abrechnungpanel.einlesenErneuern(Reha.thisClass.patpanel.vecaktrez.get(1));
 					}else{
-						String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
-						if(RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){
-							Reha.thisClass.abrechnungpanel.einlesenErneuern(Reha.thisClass.patpanel.vecaktrez.get(1));
-						}else{
-							Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
-						}
+						Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
 					}
+				}
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -2366,7 +2367,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				/*********************/
 				/********************************************************************************/
-				dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[1],currow,5);
+				dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[1],currow,5);		// Icon Rezepstatus -> abgeschlossen 
 				doAbschliessen();
 				String xcmd = "update verordn set abschluss='T' where id='"+Reha.thisClass.patpanel.vecaktrez.get(35)+"' LIMIT 1";
 				SqlInfo.sqlAusfuehren(xcmd);
