@@ -7,15 +7,10 @@ import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.security.cert.X509Certificate;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,53 +23,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import org.jdesktop.swingworker.SwingWorker;
-import org.thera_pi.nebraska.crypto.NebraskaKeystore;
-
+import socketClients.SMSClient;
+import stammDatenTools.RezTools;
+import systemTools.Verschluesseln;
+import terminKalender.DatFunk;
+import terminKalender.ParameterLaden;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
-import CommonTools.RehaEvent;
-
-import com.mysql.jdbc.PreparedStatement;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import CommonTools.SqlInfo;
-import socketClients.SMSClient;
-import stammDatenTools.RezTools;
-import CommonTools.FileTools;
-import systemTools.Verschluesseln;
-import terminKalender.DatFunk;
-import terminKalender.ICalGenerator;
-import terminKalender.ParameterLaden;
 import CommonTools.ZeitFunk;
 
 
@@ -1771,7 +1728,13 @@ public class SystemConfig {
 		hmAbrechnung.put("rehapriik", inif.getStringProperty("RehaPRIRechnung", "RehaPRIik"));
 		
 		hmAbrechnung.put("hmallinoffice", inif.getStringProperty("GemeinsameParameter", "InOfficeStarten"));
-		
+
+		if ( inif.getStringProperty("HMGKVRechnung", "AutoOKwenn302offen") == null ){			// kein Eintrag in ini -> default anlegen
+			inif.setStringProperty("HMGKVRechnung", "AutoOKwenn302offen","0","Rezept bekommt automatisch Haekchen wenn beim Abschliessen auch das 302-er Panel offen ist");
+			mustsave=true;
+		}
+		hmAbrechnung.put("autoOk302", inif.getStringProperty("HMGKVRechnung", "AutoOKwenn302offen"));
+
 		String sask = inif.getStringProperty("GemeinsameParameter", "FragenVorEmail");
 		if(sask==null){
 			System.out.println("Erstelle Parameter 'FrageVorEmail'");

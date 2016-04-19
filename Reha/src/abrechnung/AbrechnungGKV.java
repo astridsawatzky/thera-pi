@@ -19,7 +19,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.security.cert.X509Certificate;
 import java.sql.SQLException;
@@ -58,16 +57,16 @@ import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 
 import rehaInternalFrame.JAbrechnungInternal;
-import CommonTools.SqlInfo;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
+import terminKalender.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import terminKalender.DatFunk;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -566,10 +565,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				
 				treeKasse.setSelectionPath(new TreePath(meinitem));
 				treeKasse.setSelectionInterval(treeindex, treeindex);
-/*				if(treeKasse.getSelectionPath() != null){
-					abrRez.actionAbschluss();
+				if(treeKasse.getSelectionPath() != null){
+					if (! SystemConfig.hmAbrechnung.get("autoOk302").equals("0")) {
+						System.out.println("autoOk302: markiere Rezept "+neueReznr+" fertig zur Abrechnung");
+						abrRez.actionAbschluss();
+					}
 				}
-*/				
+				
 				
 			}catch(Exception ex){
 				ex.printStackTrace();
