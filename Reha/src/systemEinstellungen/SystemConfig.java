@@ -7,10 +7,15 @@ import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.security.cert.X509Certificate;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,15 +28,53 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import socketClients.SMSClient;
-import stammDatenTools.RezTools;
-import systemTools.Verschluesseln;
-import terminKalender.DatFunk;
-import terminKalender.ParameterLaden;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import org.jdesktop.swingworker.SwingWorker;
+import org.thera_pi.nebraska.crypto.NebraskaKeystore;
+
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import CommonTools.RehaEvent;
+
+import com.mysql.jdbc.PreparedStatement;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import CommonTools.SqlInfo;
+import socketClients.SMSClient;
+import stammDatenTools.RezTools;
+import CommonTools.FileTools;
+import systemTools.Verschluesseln;
+import terminKalender.DatFunk;
+import terminKalender.ICalGenerator;
+import terminKalender.ParameterLaden;
 import CommonTools.ZeitFunk;
 
 
@@ -255,6 +298,8 @@ public class SystemConfig {
 	
 	public static boolean behdatumTippen = false;
 	public static boolean isAndi = false;
+	
+	public static boolean fullSizePwDialog = false;
 	
 	public SystemConfig(){
 	
@@ -1502,6 +1547,14 @@ public class SystemConfig {
 			}else{
 				hmTerminBestaetigen.put("dlgdiffzeigen",false);
 				inif.setStringProperty("Termine", "HMDialogDiffZeigen","0",null);
+				mustsave = true;
+			}
+			if ( inif.getStringProperty("PwDialog", "PWVollbild") != null ){
+				fullSizePwDialog = ((Integer)inif.getIntegerProperty("PwDialog", "PWVollbild") == 1 ? true : false);
+
+			}else{
+				fullSizePwDialog = false;
+				inif.setStringProperty("PwDialog", "PWVollbild","0",null);
 				mustsave = true;
 			}
 
