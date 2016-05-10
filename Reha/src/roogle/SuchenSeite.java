@@ -118,6 +118,7 @@ import org.therapi.reha.patient.LadeProg;
 
 
 
+
 import rechteTools.Rechte;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
@@ -128,6 +129,7 @@ import CommonTools.StringTools;
 import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
 import terminKalender.DatFunk;
+import CommonTools.FileTools;
 import CommonTools.ZeitFunk;
 import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
@@ -1338,6 +1340,12 @@ Vector mit Normal-Termin
 18-6, 
 19-false]			 
 			 */
+			try{
+				FileTools.deleteAllFiles(new File(Reha.proghome+"temp/"+Reha.aktIK));
+			}catch(Exception ex2){
+				JOptionPane.showMessageDialog(null,"Fehler beim löschen der temporären Dateien");
+				return false;
+			}
 			
 			//macheVevent(String datum, String start, String end, String titel, String beschreibung){
 			String endzeit = "";
@@ -1381,7 +1389,7 @@ Vector mit Normal-Termin
 			}
 			/*****************************/
 			
-			
+						
 			/*****************************/
 			StringBuffer buf = new StringBuffer();
 			buf.append(ICalGenerator.macheKopf());
@@ -1446,6 +1454,12 @@ Vector mit Normal-Termin
 							*/
 							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 							JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");
+							try{
+								FileTools.deleteAllFiles(new File(Reha.proghome+"temp/"+Reha.aktIK));
+							}catch(Exception ex2){
+								JOptionPane.showMessageDialog(null,"Fehler beim löschen der temporären Dateien");
+								return;
+							}
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -1453,8 +1467,15 @@ Vector mit Normal-Termin
 				});
 				
 			}else{
-				femlDlg.setVisible(true);				
+				femlDlg.setVisible(true);
+				try{
+					FileTools.deleteAllFiles(new File(Reha.proghome+"temp/"+Reha.aktIK));
+				}catch(Exception ex2){
+					JOptionPane.showMessageDialog(null,"Fehler beim löschen der temporären Dateien");
+					return false;
+				}
 			}
+			
 			
 		}catch(Exception ex){
 			ex.printStackTrace();

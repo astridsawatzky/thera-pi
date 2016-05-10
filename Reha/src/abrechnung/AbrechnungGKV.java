@@ -57,16 +57,16 @@ import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 
 import rehaInternalFrame.JAbrechnungInternal;
+import CommonTools.SqlInfo;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
-import terminKalender.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
-import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import terminKalender.DatFunk;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -567,7 +567,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				treeKasse.setSelectionInterval(treeindex, treeindex);
 				if(treeKasse.getSelectionPath() != null){
 					if (! SystemConfig.hmAbrechnung.get("autoOk302").equals("0")) {
-						System.out.println("autoOk302: markiere Rezept "+neueReznr+" fertig zur Abrechnung");
+						//System.out.println("autoOk302: markiere Rezept "+neueReznr+" fertig zur Abrechnung");
 						abrRez.actionAbschluss();
 					}
 				}
@@ -1305,7 +1305,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			abrDlg = null;
 		}
 	}
-	
 	private void doEmail(){
 		try{
 			////System.out.println("Erstelle Emailparameter.....");	
