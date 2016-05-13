@@ -725,15 +725,34 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		jscr.getVerticalScrollBar().setUnitIncrement(15);
 		
 		if(this.neu){
-			this.holePreisGruppe(Reha.thisClass.patpanel.patDaten.get(68).trim());
-			this.ladePreisliste(jcmb[cRKLASSE].getSelectedItem().toString().trim(), preisgruppen[jcmb[cRKLASSE].getSelectedIndex()]);
-			this.fuelleIndis(jcmb[cRKLASSE].getSelectedItem().toString().trim());
+			if(this.neu && vec.size() <= 0){
+				this.holePreisGruppe(Reha.thisClass.patpanel.patDaten.get(68).trim());
+				this.ladePreisliste(jcmb[cRKLASSE].getSelectedItem().toString().trim(), preisgruppen[jcmb[cRKLASSE].getSelectedIndex()]);
+				this.fuelleIndis(jcmb[cRKLASSE].getSelectedItem().toString().trim());
+				ladeZusatzDatenNeu();				
+			}else if ( this.neu && vec.size() > 0 ){
+				// Lemmi 20110101: bCtrlPressed zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
+			  // das muß auch als Voraussetzung für doKopiereLetztesRezeptDesPatienten gemacht werden
+				try{
+					String xkasse = String.valueOf(vec.get(37));
+					String[] xartdbeh = new String[] {String.valueOf(vec.get(65)),String.valueOf(vec.get(66)),String.valueOf(vec.get(67)),String.valueOf(vec.get(68))};
+					ladeZusatzDatenNeu();
+					doKopiereLetztesRezeptDesPatienten();  // hier drin wird auch "ladeZusatzDatenNeu()" aufgerufen
+					this.holePreisGruppe(xkasse);
+					this.ladePreisliste(jcmb[cRKLASSE].getSelectedItem().toString().trim(), preisgruppen[jcmb[cRKLASSE].getSelectedIndex()]);
+					this.fuelleIndis(jcmb[cRKLASSE].getSelectedItem().toString().trim());
+					for (int i = 0; i < 4; i++){
+						if(xartdbeh[i].equals("")){
+							jcmb[cLEIST1+i].setSelectedIndex(0);
+						}else{
+							jcmb[cLEIST1+i].setSelectedVecIndex(1, xartdbeh[i]);
+						}
+					}
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
 
-			// Lemmi 20110101: bCtrlPressed zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-			ladeZusatzDatenNeu();  // das muß auch als Voraussetzung für doKopiereLetztesRezeptDesPatienten gemacht werden
-			if ( this.neu && vec.size() > 0 )
-				doKopiereLetztesRezeptDesPatienten();  // hier drin wird auch "ladeZusatzDatenNeu()" aufgerufen
-			
+			}
 		}else{
 			this.holePreisGruppe(this.vec.get(37));
 			this.ladePreisliste(jcmb[cRKLASSE].getSelectedItem().toString().trim(), preisgruppen[jcmb[cRKLASSE].getSelectedIndex()]);
@@ -1196,69 +1215,73 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		return true;
 	}
 	private void ladePreisliste(String item,int preisgruppe){
-		String[] artdbeh=null;
-		if(!this.neu && jcmb[cLEIST1].getItemCount()>0){
-			artdbeh = new String[]{
-					String.valueOf(jcmb[cLEIST1].getValueAt(1)),String.valueOf(jcmb[cLEIST2].getValueAt(1)),
-					String.valueOf(jcmb[cLEIST3].getValueAt(1)),String.valueOf(jcmb[cLEIST4].getValueAt(1))};
-		}
-		jcmb[cLEIST1].removeAllItems();
-		jcmb[cLEIST2].removeAllItems();
-		jcmb[cLEIST3].removeAllItems();
-		jcmb[cLEIST4].removeAllItems();
-		
-		if(item.toLowerCase().contains("physio") ){
-			aktuelleDisziplin = "Physio";
-			nummer = "kg";
-		}else if(item.toLowerCase().contains("massage")){
-			aktuelleDisziplin = "Massage";
-			nummer = "ma";
-		}else if(item.toLowerCase().contains("ergo")){
-			aktuelleDisziplin = "Ergo";
-			nummer = "er";
-		}else if(item.toLowerCase().contains("logo")){
-			aktuelleDisziplin = "Logo";
-			nummer = "lo";
-		}else if(item.toLowerCase().contains("rehasport")){
-			aktuelleDisziplin = "Rsport";
-			nummer = "rs";
-		}else if(item.toLowerCase().contains("funktions")){
-			aktuelleDisziplin = "Ftrain";
-			nummer = "ft";
-		}else if(item.toLowerCase().contains("reha") && (!item.toLowerCase().contains("rehasport")) ){
-			aktuelleDisziplin = "Reha";
-			nummer = "rh";
-		}else if(item.toLowerCase().contains("podo")){
-			aktuelleDisziplin = "Podo";
-			nummer = "po";
-		}
-		
-		preisvec = SystemPreislisten.hmPreise.get(aktuelleDisziplin).get(preisgruppe);
-		
-		//System.out.println("Aktuelle Disziplin = "+aktuelleDisziplin);
-		//System.out.println("Preisvektor  = "+preisvec);
-		
-		if(artdbeh!=null){
-			ladePreise(artdbeh);	
-		}else{
-			ladePreise(null);
-		}
-		if(this.neu && SystemPreislisten.hmHMRAbrechnung.get(aktuelleDisziplin).get(preisgruppe) == 1){
-			if(aktuelleDisziplin.equals("Physio") || aktuelleDisziplin.equals("Massage") || aktuelleDisziplin.equals("Ergo")){
-				jcmb[cBARCOD].setSelectedItem("Muster 13/18");
-			}else if(aktuelleDisziplin.equals("Logo")){
-				jcmb[cBARCOD].setSelectedItem("Muster 14");
-			}else if(aktuelleDisziplin.equals("Reha")){
+		try{
+			String[] artdbeh=null;
+			if(!this.neu && jcmb[cLEIST1].getItemCount()>0){
+				artdbeh = new String[]{
+						String.valueOf(jcmb[cLEIST1].getValueAt(1)),String.valueOf(jcmb[cLEIST2].getValueAt(1)),
+						String.valueOf(jcmb[cLEIST3].getValueAt(1)),String.valueOf(jcmb[cLEIST4].getValueAt(1))};
+			}
+			jcmb[cLEIST1].removeAllItems();
+			jcmb[cLEIST2].removeAllItems();
+			jcmb[cLEIST3].removeAllItems();
+			jcmb[cLEIST4].removeAllItems();
+			
+			if(item.toLowerCase().contains("physio") ){
+				aktuelleDisziplin = "Physio";
+				nummer = "kg";
+			}else if(item.toLowerCase().contains("massage")){
+				aktuelleDisziplin = "Massage";
+				nummer = "ma";
+			}else if(item.toLowerCase().contains("ergo")){
+				aktuelleDisziplin = "Ergo";
+				nummer = "er";
+			}else if(item.toLowerCase().contains("logo")){
+				aktuelleDisziplin = "Logo";
+				nummer = "lo";
+			}else if(item.toLowerCase().contains("rehasport")){
+				aktuelleDisziplin = "Rsport";
+				nummer = "rs";
+			}else if(item.toLowerCase().contains("funktions")){
+				aktuelleDisziplin = "Ftrain";
+				nummer = "ft";
+			}else if(item.toLowerCase().contains("reha") && (!item.toLowerCase().contains("rehasport")) ){
+				aktuelleDisziplin = "Reha";
+				nummer = "rh";
+			}else if(item.toLowerCase().contains("podo")){
+				aktuelleDisziplin = "Podo";
+				nummer = "po";
+			}
+			
+			preisvec = SystemPreislisten.hmPreise.get(aktuelleDisziplin).get(preisgruppe);
+			
+			//System.out.println("Aktuelle Disziplin = "+aktuelleDisziplin);
+			//System.out.println("Preisvektor  = "+preisvec);
+			
+			if(artdbeh!=null){
+				ladePreise(artdbeh);	
+			}else{
+				ladePreise(null);
+			}
+			if(this.neu && SystemPreislisten.hmHMRAbrechnung.get(aktuelleDisziplin).get(preisgruppe) == 1){
+				if(aktuelleDisziplin.equals("Physio") || aktuelleDisziplin.equals("Massage") || aktuelleDisziplin.equals("Ergo")){
+					jcmb[cBARCOD].setSelectedItem("Muster 13/18");
+				}else if(aktuelleDisziplin.equals("Logo")){
+					jcmb[cBARCOD].setSelectedItem("Muster 14");
+				}else if(aktuelleDisziplin.equals("Reha")){
+					jcmb[cBARCOD].setSelectedItem("DIN A4 (REHA)");
+				}else{
+					jcmb[cBARCOD].setSelectedItem("Muster 13/18");
+				}
+			}else if(this.neu && aktuelleDisziplin.equals("Reha")){
 				jcmb[cBARCOD].setSelectedItem("DIN A4 (REHA)");
 			}else{
-				jcmb[cBARCOD].setSelectedItem("Muster 13/18");
+				if(this.neu){
+					jcmb[cBARCOD].setSelectedItem("Muster 13/18");
+				}
 			}
-		}else if(this.neu && aktuelleDisziplin.equals("Reha")){
-			jcmb[cBARCOD].setSelectedItem("DIN A4 (REHA)");
-		}else{
-			if(this.neu){
-				jcmb[cBARCOD].setSelectedItem("Muster 13/18");
-			}
+		}catch(Exception ex){
+			ex.printStackTrace();
 		}
 		
 	}
@@ -1560,8 +1583,14 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	// Lemmi Doku: holt Daten aus dem aktuellen Patienten und trägt sie im Rezept ein
 	private void ladeZusatzDatenNeu(){
 		//String tests = "";
-		jtf[cKTRAEG].setText(Reha.thisClass.patpanel.patDaten.get(13));
-		jtf[cKASID].setText(Reha.thisClass.patpanel.patDaten.get(68)); //kassenid
+		if(vec.size() <= 0){
+			jtf[cKTRAEG].setText(Reha.thisClass.patpanel.patDaten.get(13));
+			jtf[cKASID].setText(Reha.thisClass.patpanel.patDaten.get(68)); //kassenid			
+		}else{
+			jtf[cKTRAEG].setText(vec.get(36));
+			jtf[cKASID].setText(vec.get(37)); //kassenid						
+		}
+
 		if(jtf[cKASID].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null,"Achtung - kann Preisgruppe nicht ermitteln - Rezept kann später nicht abgerechnet werden!");
 		}
@@ -2369,18 +2398,22 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
 			vec.set(cVAR_BEZAHLT, "F" );    // Das kann noch nicht bezahlt sein (Rezeptgebühr)
 			
+			jtf[cKTRAEG].setText(vec.get(36)); //ktraeger
+			jtf[cKASID].setText(vec.get(37)); //kassenid
+			preisgruppe = Integer.parseInt(vec.get(41));
+			
 			ladeZusatzDatenAlt();  // Eintragen von vec in die Dialog-Felder
 			
 			ladeZusatzDatenNeu();  // Hier nochmals die neuen Daten ermitteln - schließlich haben wir ein neues Rezept !
 
-			jtf[cKTRAEG].setText(vec.get(36)); //ktraeger
-			jtf[cKASID].setText(vec.get(37)); //kassenid
+			//jtf[cKTRAEG].setText(vec.get(36)); //ktraeger
+			//jtf[cKASID].setText(vec.get(37)); //kassenid
 			jtf[cARZT].setText(vec.get(15)); //arzt
 			jtf[cARZTID].setText(vec.get(16)); //arztid
 			
 			jtf[cICD10].setText(vec.get(71)); //icd10
 			
-			preisgruppe = Integer.parseInt(vec.get(41));
+			//preisgruppe = Integer.parseInt(vec.get(41));
 			
 			// Lemmi 20110106: Lieber Hr. Steinhilber: Das fkt. nicht, weil hier nicht alle Disziplinen aktiv sein müssen !
 			//erneuter Aufruf damit die korrekte Preisgruppe genommen wird GKV vs. BGE etc.
