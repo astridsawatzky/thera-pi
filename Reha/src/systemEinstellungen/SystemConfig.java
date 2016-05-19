@@ -7,15 +7,10 @@ import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.security.cert.X509Certificate;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,53 +23,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import org.jdesktop.swingworker.SwingWorker;
-import org.thera_pi.nebraska.crypto.NebraskaKeystore;
-
+import socketClients.SMSClient;
+import stammDatenTools.RezTools;
+import systemTools.Verschluesseln;
+import terminKalender.DatFunk;
+import terminKalender.ParameterLaden;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
-import CommonTools.RehaEvent;
-
-import com.mysql.jdbc.PreparedStatement;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import CommonTools.SqlInfo;
-import socketClients.SMSClient;
-import stammDatenTools.RezTools;
-import CommonTools.FileTools;
-import systemTools.Verschluesseln;
-import terminKalender.DatFunk;
-import terminKalender.ICalGenerator;
-import terminKalender.ParameterLaden;
 import CommonTools.ZeitFunk;
 
 
@@ -1569,6 +1526,12 @@ public class SystemConfig {
 					hmPatientenSuchenDlgIni.put("fensterbreite", inif.getIntegerProperty("PatientenSuche", "SuchFensterBreite"));
 				if ( inif.getStringProperty("PatientenSuche", "SuchFensterHoehe") != null )  // Prüfung auf Existenz
 					hmPatientenSuchenDlgIni.put("fensterhoehe", inif.getIntegerProperty("PatientenSuche", "SuchFensterHoehe"));
+				if ( inif.getStringProperty("PatientenSuche", "erweiterteUmlautSuche") != null ){	
+					hmPatientenSuchenDlgIni.put("erweiterteUmlautSuche", inif.getIntegerProperty("PatientenSuche", "erweiterteUmlautSuche"));					
+				} else {
+					hmPatientenSuchenDlgIni.put("erweiterteUmlautSuche", 0);	// kein Eintrag -> Voreinstellung: abgeschaltet
+					mustsave = true;
+				}
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Die Datei 'bedienung.ini' zur aktuellen IK-Nummer kann nicht gelesen werden.");
 			}
@@ -1593,6 +1556,7 @@ public class SystemConfig {
 		inif.setIntegerProperty("PatientenSuche", "SuchFensterBreite", hmPatientenSuchenDlgIni.get("fensterbreite"), " letzte Breite des Suchfensters");
 		inif.setIntegerProperty("PatientenSuche", "SuchFensterHoehe", hmPatientenSuchenDlgIni.get("fensterhoehe"), " letzte Höhe des Suchfensters");
 		inif.setIntegerProperty("PatientenSuche", "Suchart", hmPatientenSuchenDlgIni.get("suchart"), " letzte angewählte Suchart Suchfensters");
+		inif.setIntegerProperty("PatientenSuche", "erweiterteUmlautSuche", hmPatientenSuchenDlgIni.get("erweiterteUmlautSuche"), " berücksichtigt bei dt. Umlauten versch. Schreibweisen");
 
 		// Lemmi 20110116: Abfrage Abbruch bei Rezeptänderungen mit Warnung
 		inif.setIntegerProperty("Rezept", "RezeptAenderungAbbruchWarnung", (Boolean)hmRezeptDlgIni.get("RezAendAbbruchWarn") ? 1 : 0, " Abfrage Abbruch bei Rezeptänderungen mit Warnung");
@@ -2105,11 +2069,12 @@ public class SystemConfig {
 	*/
 
 /*******************************************************************************/
-/*******************************************************************************/	
-/*******************************************************************************/	
-/*******************************************************************************/	
-/*******************************************************************************/
-	
+	public static boolean searchExtended (){
+		if (hmPatientenSuchenDlgIni.get("erweiterteUmlautSuche") == 0){
+			return false;
+		}
+		return  true;
+	}
 	
 }
 

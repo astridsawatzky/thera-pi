@@ -713,40 +713,40 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 
 		sTmp=val.toLowerCase();
 		sSuchPattern.add(val.toLowerCase());		// Original merken
-/*
-		// ---- könnte Ende Teil einer Umlaut-Umschreibung sein?
-		if (sTmp.endsWith("a")){sSuchPattern.add(sTmp.concat("e"));} else	
-		if (sTmp.endsWith("o")){sSuchPattern.add(sTmp.concat("e"));} else
-		if (sTmp.endsWith("u")){sSuchPattern.add(sTmp.concat("e"));} else
-		if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("s"));} else
-		if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("z"));}; 
-		i = sSuchPattern.size();
-		// ---- ersetzt Umlaut <-> Umschreibung
-		for (int k=0; k<i; k++){			
-			sTmp=sSuchPattern.get(k);
-			if (sTmp.indexOf("ä") >= 0){
-				sSuchPattern.add(sTmp.replace("ä", "ae"));	// Umschreibung
-				sSuchPattern.add(sTmp.replace("ä", "a"));	// ohne Umlaut geschrieben
-			} 
-			if (sTmp.indexOf("ö") >= 0){
-				sSuchPattern.add(sTmp.replace("ö", "oe"));
-				sSuchPattern.add(sTmp.replace("ö", "o"));
-			} 
-			if (sTmp.indexOf("ü") >= 0){
-				sSuchPattern.add(sTmp.replace("ü", "ue"));
-				sSuchPattern.add(sTmp.replace("ü", "u"));
-			} 
-			if (sTmp.indexOf("ß") >= 0){
-				sSuchPattern.add(sTmp.replace("ß", "ss"));
-				sSuchPattern.add(sTmp.replace("ß", "sz"));
-			} 
-			if (sTmp.indexOf("ae") >= 0){sSuchPattern.add(sTmp.replace("ae", "ä"));} 
-			if (sTmp.indexOf("oe") >= 0){sSuchPattern.add(sTmp.replace("oe", "ö"));} 
-			if (sTmp.indexOf("ue") >= 0){sSuchPattern.add(sTmp.replace("ue", "ü"));} 
-			if (sTmp.indexOf("ss") >= 0){sSuchPattern.add(sTmp.replace("ss", "ß"));} 
-			if (sTmp.indexOf("sz") >= 0){sSuchPattern.add(sTmp.replace("sz", "ß"));};
+		if (systemEinstellungen.SystemConfig.searchExtended()){
+			// ---- könnte Ende Teil einer Umlaut-Umschreibung sein?
+			if (sTmp.endsWith("a")){sSuchPattern.add(sTmp.concat("e"));} else	
+			if (sTmp.endsWith("o")){sSuchPattern.add(sTmp.concat("e"));} else
+			if (sTmp.endsWith("u")){sSuchPattern.add(sTmp.concat("e"));} else
+			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("s"));} else
+			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("z"));}; 
+			i = sSuchPattern.size();
+			// ---- ersetzt Umlaut <-> Umschreibung
+			for (int k=0; k<i; k++){			
+				sTmp=sSuchPattern.get(k);
+				if (sTmp.indexOf("ä") >= 0){
+					sSuchPattern.add(sTmp.replace("ä", "ae"));	// Umschreibung
+					sSuchPattern.add(sTmp.replace("ä", "a"));	// ohne Umlaut geschrieben
+				} 
+				if (sTmp.indexOf("ö") >= 0){
+					sSuchPattern.add(sTmp.replace("ö", "oe"));
+					sSuchPattern.add(sTmp.replace("ö", "o"));
+				} 
+				if (sTmp.indexOf("ü") >= 0){
+					sSuchPattern.add(sTmp.replace("ü", "ue"));
+					sSuchPattern.add(sTmp.replace("ü", "u"));
+				} 
+				if (sTmp.indexOf("ß") >= 0){
+					sSuchPattern.add(sTmp.replace("ß", "ss"));
+					sSuchPattern.add(sTmp.replace("ß", "sz"));
+				} 
+				if (sTmp.indexOf("ae") >= 0){sSuchPattern.add(sTmp.replace("ae", "ä"));} 
+				if (sTmp.indexOf("oe") >= 0){sSuchPattern.add(sTmp.replace("oe", "ö"));} 
+				if (sTmp.indexOf("ue") >= 0){sSuchPattern.add(sTmp.replace("ue", "ü"));} 
+				if (sTmp.indexOf("ss") >= 0){sSuchPattern.add(sTmp.replace("ss", "ß"));} 
+				if (sTmp.indexOf("sz") >= 0){sSuchPattern.add(sTmp.replace("sz", "ß"));};
+			}
 		}
-*/
 		// ---- Suchstring zusammensetzen
 		sTmp = "";
 		for (String c: sSuchPattern){
@@ -756,6 +756,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
 			}
 		}
+		System.out.println("Suchstring: "+sTmp);
 		return sTmp;
 	}
 
