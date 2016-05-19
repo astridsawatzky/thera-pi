@@ -22,12 +22,14 @@ import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.JXPanel;
-import org.thera_pi.nebraska.gui.utils.JCompTools;
+
+
 
 import CommonTools.JRtaTextField;
 import systemTools.Verschluesseln;
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import CommonTools.JCompTools;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
