@@ -36,6 +36,7 @@ public class RezTools {
 	public static final int DIALOG_OK = 0;
 	public static int DIALOG_WERT = 0;
 	
+	
 	public static boolean mitJahresWechsel(String datum){
 		boolean ret = false;
 		try{

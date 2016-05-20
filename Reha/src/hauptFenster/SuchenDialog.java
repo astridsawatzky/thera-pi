@@ -756,7 +756,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
 			}
 		}
-		System.out.println("Suchstring: "+sTmp);
+		//System.out.println("Suchstring: "+sTmp);
 		return sTmp;
 	}
 
