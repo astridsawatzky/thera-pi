@@ -1529,7 +1529,7 @@ public class SystemConfig {
 				if ( inif.getStringProperty("PatientenSuche", "erweiterteUmlautSuche") != null ){	
 					hmPatientenSuchenDlgIni.put("erweiterteUmlautSuche", inif.getIntegerProperty("PatientenSuche", "erweiterteUmlautSuche"));					
 				} else {
-					inif.setIntegerProperty("PatientenSuche", "erweiterteUmlautSuche", 0, null);
+					inif.setIntegerProperty("PatientenSuche", "erweiterteUmlautSuche", 0, " berücksichtigt bei dt. Umlauten versch. Schreibweisen");
 					hmPatientenSuchenDlgIni.put("erweiterteUmlautSuche", 0);	// kein Eintrag -> Voreinstellung: abgeschaltet
 					mustsave = true;
 				}
