@@ -36,6 +36,7 @@ public class RehaUrlaubTab extends JXPanel{
 	
 	RehaUrlaubPanel urlaubPanel = null;
 	RehaUrlaubTabelle urlaubTabelle = null;
+	RehaAUZeiten auZeiten = null;
 	//AltImport altimportPanel = null;
 	
 	//RehaUrlaubTabelle = urlaubTabelle = null;
@@ -58,9 +59,10 @@ public class RehaUrlaubTab extends JXPanel{
 		billEditTab.add("alten RTA-Urlaub importieren",altimportPanel);
 		*/
 		
-		urlaubTabelle = new RehaUrlaubTabelle(this);
-		billEditTab.add("Urlaubtabelle",urlaubTabelle);
-		
+		//urlaubTabelle = new RehaUrlaubTabelle(this);
+		//billEditTab.add("Urlaubtabelle",urlaubTabelle);
+		auZeiten = new RehaAUZeiten(this);
+		billEditTab.add("Au-Zeiten",auZeiten);
 		jxh = new JXHeader();
         ((JLabel)jxh.getComponent(1)).setVerticalAlignment(JLabel.NORTH);
         add(jxh, BorderLayout.NORTH);
