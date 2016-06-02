@@ -4001,7 +4001,19 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					}
 					//System.out.println("SKZ[4]="+skz[4]);
 					//System.out.println("SKZ[3]="+skz[3]);
-					edibuf.append("SKZ+"+hochKomma(skz[3])+plus+DatFunk.sDatInSQL(skz[4]).replace("-", "") +plus+"B2"+EOL );
+					// Prüfen will Kasse normale VOAdR genehmigen ja/nein?
+					boolean genehmigungADR = false;
+					try{
+						String saftladen = SqlInfo.holeEinzelFeld("select id from adrgenehmigung where ik = '"+eltern.ik_kasse+"' LIMIT 1");
+						if(!saftladen.isEmpty()){
+							int anfrage = JOptionPane.showConfirmDialog(null,test , "Handelt es sich hier um eine Langfristverordnung außerhalb des Regelfalles?\n\nJa = Langfristverordnung außerhalb des Regelfalles\nNein = Einzelverordnung außerhalb des Regelfalles\n", JOptionPane.YES_NO_OPTION);
+							if(anfrage != JOptionPane.YES_OPTION){
+								genehmigungADR = true;
+							}
+						}
+					}catch(NullPointerException ex){
+					}
+					edibuf.append("SKZ+"+hochKomma(skz[3])+plus+DatFunk.sDatInSQL(skz[4]).replace("-", "") +plus+(genehmigungADR ? "B1" : "B2")+EOL );
 				}catch(NullPointerException ex){
 					ex.printStackTrace();
 					edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(vec_rez.get(0).get(2))+plus+"B2"+EOL );
@@ -4013,7 +4025,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				}
 			}
 		}
-		
 		edibuf.append("BES+");
 		edibuf.append(dfx.format(gesamt)+plus);
 		edibuf.append(dfx.format(rez+pauschal)+plus);
