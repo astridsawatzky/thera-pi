@@ -174,11 +174,11 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 		////System.out.println(arg0.getSource());
 		String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
 		for (int i = 0 ; i < 1 ; i++){
-			if( (sAktion =="Termin auf verf�gbare Dauer k�rzen")){
+			if( (sAktion =="Termin auf verfügbare Dauer kürzen")){
 				iAktion = 1;
 				break;
 			}
-			if( (sAktion== "Nachfolgenden Termin k�rzen")){
+			if( (sAktion== "Nachfolgenden Termin kürzen")){
 				iAktion = 2;
 				break;
 			}
@@ -206,11 +206,11 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 			((AbstractButton) arg0.getSource()).setSelected(true);
 			String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
 			for (int i = 0 ; i < 1 ; i++){
-				if( (sAktion =="Termin auf verf�gbare Dauer k�rzen")){
+				if( (sAktion =="Termin auf verfügbare Dauer kürzen")){
 					iAktion = 1;
 					break;
 				}
-				if( (sAktion== "Nachfolgenden Termin k�rzen")){
+				if( (sAktion== "Nachfolgenden Termin kürzen")){
 					iAktion = 2;
 					break;
 				}

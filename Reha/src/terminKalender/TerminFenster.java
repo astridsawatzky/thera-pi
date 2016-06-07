@@ -3416,6 +3416,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 * Übergabe = 13 Block tauschen mit nachfolger (nach unten)
 */
 		private void blockSetzen(int wohin){
+			//System.out.println("Block-Handling: "+wohin);
 			int gesperrt=0;
 			gesperrt = lockVorbereiten();
 			setzeRueckgabe();
