@@ -240,12 +240,12 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 			System.out.println("Keine Reihe ausgewählt");
 			return ret;
 		}
-		aktuelleID = tblkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), this.I_ID).toString();
+		aktuelleID = modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), this.I_ID).toString();
 		aktuelleRow = row;
-		ret[0] = tblkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 0).toString();
-		ret[1] = tblkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 1).toString();
-		ret[2] = ((Boolean) tblkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 3));
-		ret[3] = ((Boolean) tblkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 4));
+		ret[0] = modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 0).toString();
+		ret[1] = modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 1).toString();
+		ret[2] = ((Boolean) modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 3));
+		ret[3] = ((Boolean) modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 4));
 		return ret;
 	}
 	public void updateKuerzel(String kurz,String lang,Boolean vorrang,Boolean separat){

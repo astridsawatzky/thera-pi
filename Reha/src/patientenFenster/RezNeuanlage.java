@@ -734,6 +734,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				// Lemmi 20110101: bCtrlPressed zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
 			  // das muß auch als Voraussetzung für doKopiereLetztesRezeptDesPatienten gemacht werden
 				try{
+					String sindi = String.valueOf(vec.get(44));
 					String xkasse = String.valueOf(vec.get(37));
 					String[] xartdbeh = new String[] {String.valueOf(vec.get(65)),String.valueOf(vec.get(66)),String.valueOf(vec.get(67)),String.valueOf(vec.get(68))};
 					ladeZusatzDatenNeu();
@@ -748,6 +749,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 							jcmb[cLEIST1+i].setSelectedVecIndex(1, xartdbeh[i]);
 						}
 					}
+					jcmb[cINDI].setSelectedItem(sindi);
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
