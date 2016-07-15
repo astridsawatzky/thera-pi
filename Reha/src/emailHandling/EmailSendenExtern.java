@@ -168,7 +168,7 @@ public class EmailSendenExtern {
             }
             msg.setContent(multipart);
 /*********************/            
-            // Hier lassen sich HEADER-Informationen hinzuf�gen
+            // Hier lassen sich HEADER-Informationen hinzufügen
             //msg.setHeader("Test", "Test");
             if(bestaetigen){
             	msg.addHeader("Return-Receipt-To", senderAddress);	

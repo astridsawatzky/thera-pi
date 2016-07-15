@@ -69,6 +69,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.sheet.XSheetCellCursor;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheetDocument;
@@ -89,6 +90,7 @@ import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.XRefreshable;
 import com.sun.star.view.XLineCursor;
 
 public class OOTools{
@@ -399,6 +401,12 @@ public class OOTools{
 		
 		sucheNachPlatzhalter(textDocument);
 		
+		try {
+			refreshTextFields(textDocument.getXTextDocument());
+		} catch (java.lang.Exception e) {
+			e.printStackTrace();
+		}
+		
 		IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
 		viewCursor.getPageCursor().jumpToFirstPage();
 		final ITextDocument xtextDocument = textDocument;
@@ -409,8 +417,29 @@ public class OOTools{
 				xtextDocument.getFrame().setFocus();
 			}
 		});
+		
 
 
+	}
+	public static void refresh(XTextDocument xTextDocument){
+        XRefreshable xRefreshable = (XRefreshable) UnoRuntime.queryInterface(XRefreshable.class, xTextDocument);
+        xRefreshable.refresh();
+    }
+	public static void refreshTables(final com.sun.star.sdbc.XConnection _connection)
+    {
+        final XTablesSupplier suppTables = (XTablesSupplier) UnoRuntime.queryInterface(
+                XTablesSupplier.class, _connection);
+        final XRefreshable refreshTables = (XRefreshable) UnoRuntime.queryInterface(
+                XRefreshable.class, suppTables.getTables());
+        refreshTables.refresh();
+    }
+	public static void refreshTextFields(XTextDocument xTextDocument){
+		XTextFieldsSupplier tfSupplier = (XTextFieldsSupplier) 
+		        UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument); 
+		XRefreshable refreshable = (XRefreshable) 
+		        UnoRuntime.queryInterface(XRefreshable.class, tfSupplier.getTextFields()); 
+		refreshable.refresh(); 
+		
 	}
 	/**************************************************************************************/
 	public static void erstzeNurPlatzhalter(ITextDocument textDocument) {
