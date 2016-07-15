@@ -598,24 +598,26 @@ public class Ns2 implements ActionListener {
 						int pos = 0;
 						vec = SqlInfo.holeFelder("select * from bericht2ktl where berichtid='"+
 								Integer.toString(eltern.berichtid)+"' LIMIT 1" );
-						for(int i = 1;i<=10;i++){
-							pos = (i*4);
-							////System.out.println(Integer.valueOf(i).toString()+". Massnahmennummer = "+vec.get(0).get(pos));
-							if(vec.get(0).get(pos).equals("0")){
-								istnull++;
-								if(istnull > 3){
-									break;
+						if(vec.size() > 0){
+							for(int i = 1;i<=10;i++){
+								pos = (i*4);
+								//System.out.println(Integer.valueOf(i).toString()+". Massnahmennummer = "+vec.get(0).get(pos));
+								if(vec.get(0).get(pos).equals("0")){
+									istnull++;
+									if(istnull > 3){
+										break;
+									}
+								}else{
+									eltern.ktlcmb[i-1].setSelectedVecIndex(3,
+											(vec.get(0).get(pos).trim().equals("") ? "0" : vec.get(0).get(pos) ));
+									//eltern.ktlcmb[i-1].setSelectedIndex(massnahme);
+									eltern.ktltfc[i-1].setText(vec.get(0).get(pos+1));
+									eltern.ktltfd[i-1].setText(vec.get(0).get(pos+2));
+									eltern.ktltfa[i-1].setText(vec.get(0).get(pos+3));
 								}
-							}else{
-								eltern.ktlcmb[i-1].setSelectedVecIndex(3,
-										(vec.get(0).get(pos).trim().equals("") ? "0" : vec.get(0).get(pos) ));
-								//eltern.ktlcmb[i-1].setSelectedIndex(massnahme);
-								eltern.ktltfc[i-1].setText(vec.get(0).get(pos+1));
-								eltern.ktltfd[i-1].setText(vec.get(0).get(pos+2));
-								eltern.ktltfa[i-1].setText(vec.get(0).get(pos+3));
-							}
-							
+								
 
+							}
 						}
 						StringBuffer buf = new StringBuffer();
 						buf.append("select ");

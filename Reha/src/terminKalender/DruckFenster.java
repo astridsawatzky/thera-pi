@@ -442,7 +442,7 @@ public void actionPerformed(ActionEvent arg0) {
 					
 					//terminAusmustern(tagundstart,altdauer,altbehandler,altname,altrezept);					
 				}else{
-					JOptionPane.showMessageDialog(null,"Die Kalenderspalte ist momentan gesperrt und kann deshalb nicht gel�scht werden!");
+					JOptionPane.showMessageDialog(null,"Die Kalenderspalte ist momentan gesperrt und kann deshalb nicht gelöscht werden!");
 					return;
 				}
 			}else{

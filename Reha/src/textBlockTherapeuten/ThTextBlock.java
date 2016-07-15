@@ -521,7 +521,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			String cmd = test;
 			cmd = String.valueOf(cmd.replaceAll("   ", " "));
 			cmd = String.valueOf(cmd.replaceAll("  ", " "));
-			// wer jetzt immer noch Leerzeichen in der Suchbedingung hat ist selbst schuld da� er nix finder!!!
+			// wer jetzt immer noch Leerzeichen in der Suchbedingung hat ist selbst schuld daß er nix finder!!!
 			String[] felder = suchein;
 			String[] split = cmd.split(" ");
 			if(split.length==1){

@@ -642,7 +642,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
     			
     		}
  
-    		//System.out.println("Es wurde Formular "+iformular+" gew�hlt");
+    		//System.out.println("Es wurde Formular "+iformular+" gewählt");
         	
 		}else{
 			String mes = "\nWenn man einen Arzt anschreiben möchte, empfiehlt es sich\n"+ 

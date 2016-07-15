@@ -1000,7 +1000,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 						
 						while(rs.next() && !muststop){
 							try{
-								/*in Spalte 301 steht die Anzahl der belegten Bl�cke*/ 
+								/*in Spalte 301 steht die Anzahl der belegten Blöcke*/ 
 								belegt = rs.getInt(301);
 								//SchnellSuche.thisClass.setLabelDatum(DatFunk.sDatInDeutsch(rs.getString(305)));
 								String name = "";

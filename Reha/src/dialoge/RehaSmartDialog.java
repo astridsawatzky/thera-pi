@@ -236,7 +236,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 	}
 	
 	public void ListenerSchliessen(){
-		////System.out.println("In ListenerSchlie�en - Basisklasse");
+		////System.out.println("In ListenerSchließen - Basisklasse");
 		if(xEvent != null){
 			xEvent.removeRehaTPEventListener(this);
 			xEvent = null;
@@ -264,7 +264,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		////System.out.println("In SmartDialog evt = "+evt);
 		try{
 				if(evt.getDetails()[1].equals("ROT")){ 
-					////System.out.println("RehaSmartDialog hat EventListener gel�scht");
+					////System.out.println("RehaSmartDialog hat EventListener gelöscht");
 					xEvent.removeRehaTPEventListener((RehaTPEventListener)this);
 					xEvent = null;
 					this.dispose();
@@ -462,7 +462,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					setCursor(Reha.thisClass.cnsize);
 					break;
 				}	
-				if(sizeart==4){ //s�d-west
+				if(sizeart==4){ //süd-west
 					dim.width = (oX > orgbounds[0] ? dim.width-(oX-orgbounds[0]) : dim.width+(orgbounds[0]-oX));
 					dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
 					dim.width = (dim.width < 185 ? 185 : dim.width);
@@ -485,7 +485,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					setCursor(Reha.thisClass.cwsize);
 					break;
 				}
-				if(sizeart==6){ //s�d-ost
+				if(sizeart==6){ //süd-ost
 					dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
 					dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
 					dim.width = (dim.width < 185 ? 185 : dim.width);
@@ -497,7 +497,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					setCursor(Reha.thisClass.cwsize);
 					break;
 				}
-				if(sizeart==7){ //s�d
+				if(sizeart==7){ //süd
 					dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
 					dim.width = (dim.width < 185 ? 185 : dim.width);
 					dim.height = (dim.height < 125 ? 125 : dim.height);
