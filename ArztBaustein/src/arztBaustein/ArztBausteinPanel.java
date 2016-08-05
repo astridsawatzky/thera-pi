@@ -109,7 +109,13 @@ public class ArztBausteinPanel extends JXPanel {
 	JRtaTextField[] jtfs = {null,null,null};
 	JRtaTextField suchenach = null;
 	
-	String[] rubriken = {" ","01.Allgem. u. klin. Anamnese","02.Jetzige Beschwerden u...",
+	String[] rubriken = {" ","1. Anamnese-2015",
+				"2. Sozialmedizinische Anamnese-2015",
+				"3. Aufnahmebefund, Diagnostik während der Rehabilitation-2015",
+				"4. Reha-Prozess und - Ergebnis-2015",
+				"5. Empfehlungen für weiterführende Maßnahmen-2015",
+				"Sozialmedizinische Epikrise-2015",
+				"01.Allgem. u. klin. Anamnese","02.Jetzige Beschwerden u...",
 				"03.Gegenwärtige Therapie","04.Allgem. Sozialanamnese","05.Arbeits- u. Berufsanamnese",						
 				"06.Aufnahme, Vorbefunde...","07.Rehabilitationsdiagnosen",						
 				"08.Rehabilitationsverlauf","09.Rehabilitationsergebnis",												
