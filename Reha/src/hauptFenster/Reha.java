@@ -318,7 +318,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2016-07-15-DB=";
+	public static String aktuelleVersion = "2016-08-18-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -373,6 +373,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	
 	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
 	
+	public static boolean isLinux = false;
+	
 	/*
 	 * Einschalten für Geschwindigkeitstests
 	 * zusätzlich in der Terminkalender.java die Zeilen
@@ -388,9 +390,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		osVersion = System.getProperty("os.name");
 		if(osVersion.contains("Linux")){
 			proghome = "/opt/RehaVerwaltung/";
+			isLinux = true;
 		}else if(osVersion.contains("Windows")){
 			proghome = prog.substring(0, 2)+"/RehaVerwaltung/";
 		}else if(osVersion.contains("Mac OS X")){
+			//welcher Rückgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhänger ermittelt werden
 			System.out.println("Vermutlich MAC, Output = "+osVersion);
 			proghome = homedir+"/RehaVerwaltung/";
 		}
