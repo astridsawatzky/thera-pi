@@ -749,6 +749,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}
 		// ---- Suchstring zusammensetzen
 		sTmp = "";
+		/*
 		for (String c: sSuchPattern){
 			if (sTmp.isEmpty()){
 				sTmp = fieldname+" LIKE '"+c+"%'";	
@@ -756,6 +757,19 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
 			}
 		}
+		*/
+		for (int i2 = 0; i2 < sSuchPattern.size();i2++){
+			if(i2 == 2){
+				//steht lediglich ein Vokal was zu einer größeren Menge nicht gewünschter Datensätze führt
+				break;
+			}
+			if (sTmp.isEmpty()){
+				sTmp = fieldname+" LIKE '"+sSuchPattern.get(i2)+"%'";	
+			}else{
+				sTmp = sTmp+" OR "+fieldname+" LIKE '"+sSuchPattern.get(i2)+"%'";
+			}
+		}
+
 		//System.out.println("Suchstring: "+sTmp);
 		return sTmp;
 	}
@@ -803,14 +817,23 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}else if(suchart == toolBar.getTelMIdx()){// Telefon mobil
 			sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as geboren,pat_intern from pat5 where telefonm LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
 		}else if(suchart == toolBar.getNoteIdx()){ // In Notitzen
-			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
+			if(suche.length > 1){
+				//Umbuen zur oder bzw. und Suche
+				if(suche[1].contains("|")){
+					sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' OR anamnese LIKE '%"+suche[1].replace("|","")+ "%' ORDER BY n_name,v_name,geboren";
+				}else{
+					sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' AND anamnese LIKE '%"+suche[1]+ "%' ORDER BY n_name,v_name,geboren";
+				}
+			}else{
+				sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
+			}
 		}else if(suchart == toolBar.getAktRezIdx()){    		// Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
 //			sstmt = "select p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, r.rez_nr from pat5 as p INNER JOIN verordn as r ON p.pat_intern = r.pat_intern ORDER BY p.n_name asc, r.rez_nr asc";
 			sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, GROUP_CONCAT(r.rez_nr ORDER BY r.rez_nr ASC SEPARATOR ', ') FROM verordn AS r INNER JOIN pat5 AS p where p.pat_intern = r.pat_intern GROUP BY p.pat_intern ORDER BY p.n_name";
 		}else{
 			return;
 		}
-		//System.out.println(sstmt);
+		System.out.println(sstmt);
 		try {
 			
 			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
