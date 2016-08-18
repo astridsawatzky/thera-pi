@@ -3003,11 +3003,14 @@ public void actionPerformed(ActionEvent arg0) {
 	}
 	/*****************************/
 	if(cmd.equals("sqlmodul")){
+		
 		if(!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)){
 			return;
 		}
+		
 		if(!RehaIOServer.rehaSqlIsActive){
-			new LadeProg(Reha.proghome+"RehaSql.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)));	
+			new LadeProg(Reha.proghome+"RehaSql.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+
+					String.valueOf(Integer.toString(Reha.xport))+ (!Rechte.hatRecht(Rechte.BenutzerSuper_user,false) ? " readonly" : " full"));	
 		}else{
 			new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );			
 		}

@@ -225,8 +225,10 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		alletabletab.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent me){
 				if(me.getClickCount()==2){
-					sqlstatement.setText("describe "+alletabletab.getValueAt(alletabletab.getSelectedRow(), 0).toString());
-					doStatementAuswerten();
+					if(!RehaSql.isReadOnly){
+						sqlstatement.setText("describe "+alletabletab.getValueAt(alletabletab.getSelectedRow(), 0).toString());
+						doStatementAuswerten();
+					}
 				}
 			}
 		});
@@ -246,11 +248,13 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 					}
 				}
 				Vector<Vector<String>> vec = SqlInfo.holeFelder("show tables");
-				for(int i = 0;i<vec.size();i++){
-					alletablemod.addRow(vec.get(i));
-				}
-				if(vec.size() > 0){
-					alletabletab.setRowSelectionInterval(0, 0);
+				if(!RehaSql.isReadOnly){
+					for(int i = 0;i<vec.size();i++){
+						alletablemod.addRow(vec.get(i));	
+					}
+					if(vec.size() > 0){
+						alletabletab.setRowSelectionInterval(0, 0);
+					}
 				}
 				return null;
 			}
@@ -287,6 +291,9 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		sqlstatement.setName("sqlstatement");
 		sqlstatement.setFont(new Font("Courier New",Font.PLAIN,12));
 		sqlstatement.addKeyListener(kl);
+		if(RehaSql.isReadOnly){
+			sqlstatement.setEditable(false);
+		}
 		JScrollPane scrstmt = JCompTools.getTransparentScrollPane(sqlstatement);
 		scrstmt.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		scrstmt.validate();
@@ -390,7 +397,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			}
 		}
 		try{
-			INIFile inif =INITool.openIni(RehaSql.progHome+"ini/"+RehaSql.aktIK+"/", "sqlmodul.ini");
+			String iniFile = (RehaSql.isReadOnly ? "sqlmodulro.ini" : "sqlmodul.ini"); 
+			INIFile inif =INITool.openIni(RehaSql.progHome+"ini/"+RehaSql.aktIK+"/", iniFile);
 			Vector<String> vecstmts = new Vector<String>();
 			int anzahl = inif.getIntegerProperty("SqlStatements", "StatementsAnzahl");
 			for(int i = 0; i < anzahl;i++){
@@ -738,8 +746,6 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	private void doExecuteOnly(){
 		Statement stmt = null;
 		//ToDo auf delete und update testen und wenn ja auf Limit 1 testen und wenn nein SuperUser-Passwort anfordern
-
-
 		try {
 			textArea.setText("Ihr Statement: ["+sqlstatement.getText().trim()+"]\n"+textArea.getText());
 			stmt =  RehaSql.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -759,8 +765,6 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 				}
 			}
 		}
-
-		
 	}	
 	private void doExecuteStatement(){
 		Statement stmt = null;
@@ -770,7 +774,6 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			if(!sqlstatement.getText().toLowerCase().contains("limit")){
 				//hier Super-User-Paswort abfragen
 			}
-			
 		}
 
 		try {
@@ -792,8 +795,6 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 				}
 			}
 		}
-
-		
 	}
 	private void doOnlySuperUserExecuteStatement(){
 		Statement stmt = null;
@@ -817,8 +818,6 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 				}
 			}
 		}
-
-		
 	}
 
 	private void doStatementAuswerten(){

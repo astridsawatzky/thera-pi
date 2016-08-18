@@ -97,6 +97,7 @@ public class RehaSql implements WindowListener {
 	public static int rehaReversePort = -1;
 	public boolean isLibreOffice;
 	SqlInfo sqlInfo = null;
+	public static boolean isReadOnly = true;
 	
 	public static void main(String[] args) {
 		RehaSql application = new RehaSql();
@@ -127,6 +128,10 @@ public class RehaSql implements WindowListener {
 				if(args.length >= 3){
 					rehaReversePort = Integer.parseInt(args[2]);
 				}
+				if(args.length >= 4){
+					isReadOnly = (args[3].equals("full") ? false : true);
+				}
+
 			}
 
 			final RehaSql xapplication = application;
