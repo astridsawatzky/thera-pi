@@ -50,7 +50,7 @@ public class RezTestPanel extends JXPanel implements ActionListener,KeyListener,
 		jrb[0].setOpaque(false);
 		add(jrb[0],cc.xy(2,3));
 		jrbg.add(jrb[0]);
-		jrb[1] = new JRtaRadioButton("F = Urlaub (Pat./Therap.)");
+		jrb[1] = new JRtaRadioButton("F = Ferien/Urlaub (Pat./Therap.)");
 		jrb[1].setOpaque(false);
 		add(jrb[1],cc.xy(2,5));
 		jrbg.add(jrb[1]);
