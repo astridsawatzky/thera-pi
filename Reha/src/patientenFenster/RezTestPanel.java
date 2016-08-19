@@ -50,11 +50,11 @@ public class RezTestPanel extends JXPanel implements ActionListener,KeyListener,
 		jrb[0].setOpaque(false);
 		add(jrb[0],cc.xy(2,3));
 		jrbg.add(jrb[0]);
-		jrb[1] = new JRtaRadioButton("U = Urlaub (Pat./Therap.)");
+		jrb[1] = new JRtaRadioButton("F = Urlaub (Pat./Therap.)");
 		jrb[1].setOpaque(false);
 		add(jrb[1],cc.xy(2,5));
 		jrbg.add(jrb[1]);
-		jrb[2] = new JRtaRadioButton("A = Abbruch der Therapie");
+		jrb[2] = new JRtaRadioButton("A = Abbruch (veraltet)");
 		jrb[2].setOpaque(false);
 		add(jrb[2],cc.xy(2,7));
 		jrbg.add(jrb[2]);
@@ -105,7 +105,7 @@ public class RezTestPanel extends JXPanel implements ActionListener,KeyListener,
 		}
 	}
 	private void doUebernahme(){
-		String[] rueck = {"K","U","A","T"};
+		String[] rueck = {"K","F","A","T"};
 		for(int i = 0; i < 4; i++){
 			if(jrb[i].isSelected()){
 				dummylab.setText(rueck[i]);

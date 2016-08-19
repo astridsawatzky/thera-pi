@@ -228,7 +228,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	private String[] voArt = {"Erstverordnung","Folgeverordnung","Folgeverordn. außerhalb d. Regelf."};
 	private String[] voIndex = {"01","02","10"};  
 
-	private String[] voBreak = {"","K","U","T","A"};
+	private String[] voBreak = {"","K","F","T","A"};
 	//private String[] voPreis = {"akt. Tarif","alter Tarif"};
 	JEditorPane htmlPane = null;
 	JScrollPane scrHtml = null;
