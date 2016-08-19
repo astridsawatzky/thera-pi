@@ -1202,13 +1202,18 @@ public class RezTools {
 					SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
 					SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)) );
 					SystemConfig.hmAdrRDaten.put("<Rdiagnose>",(String)Reha.thisClass.patpanel.vecaktrez.get(23) );
+					
+					BigDecimal dummyproz = null;
+					BigDecimal roundproz = null;
 					for(int i = 0;i<4;i++){
 						id = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
 						SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">",(String)Reha.thisClass.patpanel.vecaktrez.get(48+i));
 						SystemConfig.hmAdrRDaten.put("<Rpreis"+(i+1)+">", (String)Reha.thisClass.patpanel.vecaktrez.get(18+i).replace(".",",") );
 						SystemConfig.hmAdrRDaten.put("<Ranzahl"+(i+1)+">", (String)Reha.thisClass.patpanel.vecaktrez.get(3+i) );
-//						SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( ((BigDecimal)BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">"))).multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Rpreis"+(i+1)+">").replace(",","."))))).doubleValue() ));
-						SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( ((BigDecimal)BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">"))).multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Rproz"+(i+1)+">").replace(",","."))))).doubleValue() ));
+						//SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( ((BigDecimal)BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">"))).multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Rpreis"+(i+1)+">").replace(",","."))))).doubleValue() ));
+						dummyproz = BigDecimal.valueOf(Double.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(18+i))).divide(BigDecimal.valueOf(new Double(10.000)));
+						roundproz = dummyproz.setScale(2, BigDecimal.ROUND_HALF_UP);
+						SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( ((BigDecimal)roundproz.multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">"))))).doubleValue()) );
 						if(!id.equals("0")){
 							SystemConfig.hmAdrRDaten.put("<Rkuerzel"+(i+1)+">", RezTools.getKurzformFromID(id, SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
 							SystemConfig.hmAdrRDaten.put("<Rlangtext"+(i+1)+">", RezTools.getLangtextFromID(id, "", SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
@@ -1236,6 +1241,7 @@ public class RezTools {
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
+				//System.out.println(SystemConfig.hmAdrRDaten);
 				return null;
 			}
 		}.execute();
