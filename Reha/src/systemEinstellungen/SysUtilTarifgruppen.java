@@ -73,7 +73,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 	String[] bereich_lang = null;
 	String[] bereich_kurz = null;
 	String[] janein = {"  - JA -  ","  - NEIN -  "};
-	String[] hbmehrereart = {"nicht abrechenbar","x9902 Mehrere o. Wegegeld","x9934 Mehrere incl. Wegegeld","x9935 Mehrere incl. Wg 1.Person","8602 BG (Einzel) o. Wegegeld","53 Beih. (Einzel) o. Wegegeld"};
+	String[] hbmehrereart = {"nicht abrechenbar","x9902 Mehrere o. Wegegeld","x9933 Mehrere incl. Wegegeld","x9934 Mehrere incl. Wegegeld","x9935 Mehrere incl. Wg 1.Person","8602 BG (Einzel) o. Wegegeld","53 Beih. (Einzel) o. Wegegeld"};
 	String[] hbeinzelart = {"nicht abrechenbar","x9901 Einzel o. Wegegeld","x9933 Einzel incl. Wegegeld","8602 BG Einzel o. Wegegeld","53 Beih. Einzel o. Wegegeld"};
 	String[] wgkm = {"nicht abrechenbar","x9907 (teilw.GKV u.teilw.BG)","8603 (teilw. BG)","54 (Beihilfe)"};
 	String[] wgpausch = {"nicht abrechenbar","x9903 (teilw. GKV)","x9906 (teilw. GKV)"};
@@ -373,6 +373,8 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				vec.add("nicht abrechenbar");
 			}else if(wert.trim().contains("9902")){
 				vec.add("x9902 Mehrere o. Wegegeld");
+			}else if(wert.trim().contains("9933")){
+				vec.add("x9933 Mehrere incl. Wegegeld");
 			}else if(wert.trim().contains("9934")){
 				vec.add("x9934 Mehrere incl. Wegegeld");
 			}else if(wert.trim().contains("9935")){
