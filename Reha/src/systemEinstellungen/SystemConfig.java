@@ -1772,12 +1772,12 @@ public class SystemConfig {
 			}else{
 				hmAbrechnung.put("rgrpauschale",inif.getStringProperty("RGRParameter", "RGRPauschale"));
 			}
-			if(inif.getStringProperty("RGRParameter", "RGRDruckAnzahl") == null){
+			if(inif.getStringProperty("RGRParameter", "RGRexemplare") == null){
 				hmAbrechnung.put("rgrdruckanzahl","2");
-				inif.setStringProperty("RGRParameter", "RGRDruckAnzahl", "2", "Voreinstellung Anzahl Ausdrucke RGR-Rechnungen");
+				inif.setStringProperty("RGRParameter", "RGRexemplare", "2", "Voreinstellung Anzahl Ausdrucke RGR-Rechnungen");
 				mustsave = true;
 			}else{
-				hmAbrechnung.put("rgrdruckanzahl",inif.getStringProperty("RGRParameter", "RGRDruckAnzahl"));
+				hmAbrechnung.put("rgrdruckanzahl",inif.getStringProperty("RGRParameter", "RGRexemplare"));
 			}			
 		/*}*/
 		sask = inif.getStringProperty("GKVTaxierung", "AnzahlVorlagen");
