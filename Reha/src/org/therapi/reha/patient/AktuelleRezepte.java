@@ -3198,6 +3198,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		rgeb.setLocation(location.x-50,location.y-50);
 		rgeb.pack();
 		rgeb.setVisible(true);
+		
 	}
 	
 /**********************************************/

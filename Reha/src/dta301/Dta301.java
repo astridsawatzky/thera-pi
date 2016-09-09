@@ -51,7 +51,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
-import terminKalender.DatFunk;
+import CommonTools.DatFunk;
 
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.IViewCursor;

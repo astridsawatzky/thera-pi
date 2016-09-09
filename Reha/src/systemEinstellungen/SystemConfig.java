@@ -1767,9 +1767,18 @@ public class SystemConfig {
 		}else{*/
 			if(inif.getStringProperty("RGRParameter", "RGRPauschale") == null){
 				hmAbrechnung.put("rgrpauschale","5,00");
+				inif.setStringProperty("RGRParameter", "RGRPauschale", "5,00", "Voreinstellung Bearbeitungsgebühr");
+				mustsave = true;
 			}else{
 				hmAbrechnung.put("rgrpauschale",inif.getStringProperty("RGRParameter", "RGRPauschale"));
 			}
+			if(inif.getStringProperty("RGRParameter", "RGRDruckAnzahl") == null){
+				hmAbrechnung.put("rgrdruckanzahl","2");
+				inif.setStringProperty("RGRParameter", "RGRDruckAnzahl", "2", "Voreinstellung Anzahl Ausdrucke RGR-Rechnungen");
+				mustsave = true;
+			}else{
+				hmAbrechnung.put("rgrdruckanzahl",inif.getStringProperty("RGRParameter", "RGRDruckAnzahl"));
+			}			
 		/*}*/
 		sask = inif.getStringProperty("GKVTaxierung", "AnzahlVorlagen");
 		if(sask==null){

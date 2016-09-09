@@ -393,16 +393,24 @@ public class PatientHauptPanel extends JXPanel{
 		String stmt = "select t1.rdatum,t1.rnr,t1.roffen,t1.pat_intern from rgaffaktura as t1 join pat5 as t2 on (t1.pat_intern=t2.pat_intern) where t1.roffen > '0' and t1.pat_intern = '"+xpatint+"' order by t1.rdatum";
 		Vector<Vector<String>> vecoffen = SqlInfo.holeFelder(stmt);
 		if(vecoffen.size() > 0 || Reha.bHatMerkmale){
-			infoDlg = new InfoDialog(xpatint,"offenRGAF",vecoffen);
-			infoDlg.pack();
-			infoDlg.setLocationRelativeTo(this);
-			infoDlg.setVisible(true);
-			infoDlg = null;
-			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
-					tfsuchen.requestFocus();		
+			try{
+				infoDlg = new InfoDialog(xpatint,"offenRGAF",vecoffen);
+				infoDlg.pack();
+				infoDlg.setLocationRelativeTo(this);
+				infoDlg.setVisible(true);
+				infoDlg = null;
+				SwingUtilities.invokeLater(new Runnable(){
+					public void run(){
+						tfsuchen.requestFocus();		
+					}
+				});			
+			}catch(Exception ex){
+				if(infoDlg != null){
+					infoDlg.dispose();
+					infoDlg = null;
 				}
-			});
+			}
+
 		}
 	}
 }

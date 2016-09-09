@@ -419,7 +419,13 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 		if(SystemConfig.hmAbrechnung.get("hmallinoffice").equals("1")){
 			textDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 		}else{
-			PrintProperties printprop = new PrintProperties ((short) 2 ,null);
+			int exemplare = 2;
+			try{
+				exemplare = Integer.parseInt(SystemConfig.hmAbrechnung.get("rgrdruckanzahl"));
+			}catch(Exception ex){
+				exemplare = 2;
+			}
+			PrintProperties printprop = new PrintProperties ((short) /*2*/ exemplare ,null);
 			textDocument.getPrintService().print(printprop);
 			try {
 				Thread.sleep(500);
