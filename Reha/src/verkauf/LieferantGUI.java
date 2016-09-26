@@ -15,6 +15,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
 
+
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import verkauf.model.Artikel;
@@ -100,7 +101,16 @@ public class LieferantGUI extends JXPanel{
 			}
 			
 		});
-		this.setzeTabDaten(Lieferant.liefereLieferantenDaten());
+		new SwingWorker<Void,Void>(){
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				setzeTabDaten(Lieferant.liefereLieferantenDaten());
+				return null;
+			}
+			
+		}.execute();
+		
 		jscr = JCompTools.getTransparentScrollPane(lftab);
 		jscr.validate();
 		pane.add(jscr, cc.xy(2, 4, CellConstraints.FILL, CellConstraints.FILL));

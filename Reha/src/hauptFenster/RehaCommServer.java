@@ -27,8 +27,9 @@ public class RehaCommServer  extends SwingWorker<Void,Void>{
 	protected Void doInBackground() throws Exception {
 		try{
 		System.out.println("Versuche IO-CommServer auf Port "+xport);	
-
+		
 		serv = new ServerSocket(xport);
+		serv.setReuseAddress(true);
 		System.out.println("IO-CommServer installiert auf Port: "+xport);
 		Socket client = null;
 		while(true){

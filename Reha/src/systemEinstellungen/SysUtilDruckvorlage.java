@@ -72,6 +72,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 	
 	JCheckBox patname = null;
 	JCheckBox spaltenkopf = null;
+	JCheckBox endlos = null;
 
 
 	JComboBox spalte1 = null;
@@ -169,6 +170,10 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		spaltenkopf = new JCheckBox();
 		spaltenkopf.setSelected( (SystemConfig.oTerminListe.MitUeberschrift==0 ? false : true ));
 		
+		endlos = new JCheckBox();
+		endlos.setSelected(SystemConfig.oTerminListe.EndlosDruck);
+		endlos.setOpaque(false);
+		
 		druckername = new JComboBox(drucker);
 		if(SystemConfig.oTerminListe.NameTerminDrucker.trim().equals("")){
 			druckername.setSelectedIndex(0);
@@ -212,7 +217,8 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		builder.add(druckername, cc.xy(3,1));
 		builder.add(druckername, cc.xyw(3,1,3));
 		
-		builder.addLabel("Papierformat/-einzug in der Vorlage einstellen!", cc.xyw(1, 3, 3));
+		builder.addLabel("Endlosdrucker", cc.xyw(1, 3, 3));
+		builder.add(endlos, cc.xy(5,3,CellConstraints.RIGHT, CellConstraints.BOTTOM));
 		
 		builder.addLabel("Terminliste direkt drucken", cc.xy(1, 5));
 		builder.add(ddruck, cc.xy(5, 5, CellConstraints.RIGHT, CellConstraints.BOTTOM));
@@ -417,6 +423,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 					"nicht abgespeichert!");
 			return;
 		}
+		try{
 		
 		INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "terminliste.ini");
 		ini.setStringProperty("TerminListe1", "AnzahlTabellen", Integer.valueOf( test1).toString(), null);
@@ -458,8 +465,16 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 			ini.setStringProperty("TerminListe1", "DirektDruck", "0", null);
 			SystemConfig.oTerminListe.DirektDruck = false;			
 		}
+		ini.setStringProperty("TerminListe1", "EndlosDruck", (endlos.isSelected() ? "1" : "0"), null);
+		SystemConfig.oTerminListe.EndlosDruck = endlos.isSelected();
+		
 		INITool.saveIni(ini);
 		thisClass.setCursor(Reha.thisClass.normalCursor);
+		JOptionPane.showMessageDialog(null,"Definition der Terminliste erfolgreich gespeichert");
+		}catch(Exception ex){
+			thisClass.setCursor(Reha.thisClass.normalCursor);
+			JOptionPane.showMessageDialog(null,"Fehler beim Abspeichern der Terminlisten-Definition\nFehlertext: "+ex.getMessage());
+		}
 	}
 	/*
 	private void speichernKonfig(){
@@ -801,7 +816,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 			}
 
 			/************Wenn die aktuelle Seite voll ist******************/
-			if(aktTermin >= maxTermineProSeite && aktTerminInTabelle==maxTermineProTabelle){
+			if(aktTermin >= maxTermineProSeite && aktTerminInTabelle==maxTermineProTabelle && (!endlos.isSelected())){
 
 				textDocument.getViewCursorService().getViewCursor().getPageCursor().jumpToEndOfPage();
 				try {
@@ -877,6 +892,15 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 			public String sorter;
 			*/
 			//**************/Hier die Zellen*************//
+			if(endlos.isSelected()){
+				if(aktTermin > 0){
+					try {
+						textTable.addRow(1);
+					} catch (TextException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 			if(spaltenNamen.contains("Wochentag")){
 				int zelle = spaltenNamen.indexOf("Wochentag");
 				

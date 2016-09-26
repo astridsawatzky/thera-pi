@@ -19,6 +19,7 @@ public class TerminListe{
 	public int PatNameDrucken;
 	public int MitUeberschrift;
 	public boolean DirektDruck;
+	public boolean EndlosDruck = false;
 	public TerminListe init(){
 		AnzahlTerminTabellen = Integer.valueOf(RWJedeIni.leseIniDatei(iniPfad,iniName, "TerminListe1", "AnzahlTabellen"));
 		AnzahlSpaltenProTabellen = Integer.valueOf(RWJedeIni.leseIniDatei(iniPfad,iniName, "TerminListe1", "AnzahlSpaltenProTabellen"));
@@ -32,6 +33,17 @@ public class TerminListe{
 		PatNamenPlatzhalter = RWJedeIni.leseIniDatei(iniPfad,iniName, "TerminListe1", "PatNamePlatzhalter");
 		MitUeberschrift = Integer.valueOf(RWJedeIni.leseIniDatei(iniPfad,iniName, "TerminListe1", "MitSpaltenUeberschrift"));
 		DirektDruck = (RWJedeIni.leseIniDatei(iniPfad,iniName, "TerminListe1", "DirektDruck").trim().equals("0") ? false : true);
+		try{
+			if(RWJedeIni.leseIniDatei(iniPfad,iniName, "TerminListe1", "EndlosDruck") == null){
+				RWJedeIni.schreibeIniDatei(iniPfad, iniName, "TerminListe1", "EndlosDruck", "0");
+				EndlosDruck = false;
+			}else{
+				EndlosDruck = (RWJedeIni.leseIniDatei(iniPfad,iniName, "TerminListe1", "EndlosDruck").trim().equals("0") ? false : true);	
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+		}
+		
 		//System.out.println(AnzahlTerminTabellen);
 		////System.out.println(NameTabelle);
 		//System.out.println(AnzahlTermineProTabelle);		

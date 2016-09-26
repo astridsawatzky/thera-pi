@@ -110,7 +110,9 @@ public class VerkaufGUI extends JXPanel{
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
-				edits[0].requestFocus();
+				if(edits[0] != null){
+					edits[0].requestFocus();	
+				}
 			}
 		});
 	}
@@ -279,7 +281,7 @@ public class VerkaufGUI extends JXPanel{
 		rbuts[0].setSelected(true);
 		/*************/
 		pan.validate();
-		edits[0].requestFocus();
+		//edits[0].requestFocus();
 		return pan;
 	}
 	

@@ -19,6 +19,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -805,6 +807,24 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					actionAbschluss();
 				}
 				if(cmd.equals("scannen")){
+					new Thread(){
+						public void run(){
+							try {
+								File f = new File(Reha.proghome+"scanrun.bat");
+								if(!f.exists()){
+									JOptionPane.showMessageDialog(null,"Datei scanrun.bat existiert nicht");
+								}else{
+									if(aktRezNum.getText().equals("")){
+										JOptionPane.showMessageDialog(null, "Kein Rezept zum Scannen ausgewählt");
+										return;
+									}
+									Runtime.getRuntime().exec(Reha.proghome+"scanrun.bat "+aktRezNum.getText());
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}.start();
 
 				}
 				if(cmd.equals("taxieren")){

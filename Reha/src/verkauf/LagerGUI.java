@@ -16,6 +16,8 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
 
+
+
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import verkauf.model.Artikel;
@@ -79,7 +81,16 @@ public class LagerGUI extends JXPanel {
 		lgtab.getColumn(7).setMinWidth(0);
 		lgtab.getColumn(7).setMaxWidth(0);
 		lgtab.setEditable(false);
-		this.setzeTabDaten(Artikel.liefereArtikelDaten());
+		new SwingWorker<Void,Void>(){
+
+			@Override
+			protected Void doInBackground() throws Exception {
+				setzeTabDaten(Artikel.liefereArtikelDaten());
+				return null;
+			}
+			
+		}.execute();
+		
 		lgtab.addMouseListener(new MouseListener() {
 			
 			public void mouseClicked(MouseEvent arg0) {
@@ -140,12 +151,24 @@ public class LagerGUI extends JXPanel {
 			this.setzeTabDaten(Artikel.sucheArtikelDaten(this.sucheText.getText()));
 			this.setLastRowSelected();
 		} else if(befehl == VerkaufTab.reload) {
+			new SwingWorker<Void,Void>(){
+
+				@Override
+				protected Void doInBackground() throws Exception {
+					setzeTabDaten(Artikel.liefereArtikelDaten());	
+					setLastRowSelected();
+					return null;
+				}
+				
+			}.execute();
+			/*
 			SwingUtilities.invokeLater(new Runnable(){
 				public void run(){
 					setzeTabDaten(Artikel.liefereArtikelDaten());	
 					setLastRowSelected();
 				}
 			});
+			*/
 		}
 	}
 	

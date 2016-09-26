@@ -318,7 +318,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2016-09-09-DB=";
+	public static String aktuelleVersion = "2016-09-26-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -702,6 +702,14 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",(Object)(LinkeTaskPane.tp6.isCollapsed() ? "1" : "0"),null );
 		}catch(NullPointerException ex){
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
+		}
+		if(rehaCommServer != null){
+			try {
+				rehaCommServer.serv.close();
+				System.out.println("RehaComm-SocketServer geschlossen");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		System.exit(0);
 	}
@@ -3199,7 +3207,7 @@ final class DatenbankStarten implements Runnable{
 				
 				//obj.conn = (Connection) DriverManager.getConnection("jdbc:mysql://194.168.1.8:3306/dbf","entwickler","entwickler");
 				new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-				obj.conn = (Connection) DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull",
+				obj.conn = (Connection) DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
 						SystemConfig.vDatenBank.get(0).get(3),SystemConfig.vDatenBank.get(0).get(4));
 				}	
 				int nurmaschine = SystemConfig.dieseMaschine.toString().lastIndexOf("/");

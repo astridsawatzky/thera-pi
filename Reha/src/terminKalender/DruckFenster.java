@@ -588,6 +588,7 @@ public void run(){
 		Vector<String> spaltenNamen = SystemConfig.oTerminListe.NamenSpalten;
 		int ipatdrucken = SystemConfig.oTerminListe.PatNameDrucken;
 		int iheader = SystemConfig.oTerminListe.MitUeberschrift;
+		boolean lendlos = SystemConfig.oTerminListe.EndlosDruck;
 		//String patplatzhalter = SystemConfig.oTerminListe.PatNamenPlatzhalter;
 		////System.out.println("Platzhalter = "+patplatzhalter);
 		//
@@ -677,117 +678,127 @@ public void run(){
 			}
 			
 			/***********Wenn die Spalte voll ist und die aktuelle Tabelle nicht die letzte ist*/
-			if(aktTerminInTabelle >= maxTermineProTabelle && aktTabelle < AnzahlTabellen-1  ){
-				aktTabelle = aktTabelle+1;
-				textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
-				aktTerminInTabelle = 0;
-				////System.out.println("Spaltenwechsel nach Spalte"+aktTabelle);
-			}
-
-			/************Wenn die aktuelle Seite voll ist******************/
-			if(aktTermin >= maxTermineProSeite && aktTerminInTabelle==maxTermineProTabelle){
-
-				textDocument.getViewCursorService().getViewCursor().getPageCursor().jumpToEndOfPage();
-				try {
-					textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertPageBreak();
-					textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertDocument(url) ;
-				} catch (NOAException e) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
-					e.printStackTrace();
-				}
-				tbl = textDocument.getTextTableService().getTextTables();
-				x = 0;
-				for(int i=AnzahlTabellen;i>0;i--){
-					tabName[x] = tbl[(tbl.length-1)-x].getName(); 
-					////System.out.println(tabName[x]);
-					x++;
-				}
-				
-				if(ipatdrucken  > 0){
-					/*
-					searchResult = textDocument.getSearchService().findFirst(searchDescriptor);
-					if(!searchResult.isEmpty()) {
-						ITextRange[] textRanges = searchResult.getTextRanges();
-				        try {
-							textDocument.setSelection(new TextRangeSelection(textRanges[0]));
-						} catch (NOAException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				        textRanges[0].setText(patname);
-					}
-					//System.out.println("Suche ersetze durchgef�hrt*************");
-					*/
-					/*
-					ITextService textService = textDocument.getTextService();
-					IBookmarkService bookmarkService = textService.getBookmarkService();
-				      IBookmark bookmark = bookmarkService.getBookmark("^Name^"+(++aktseiten));
-				      if(bookmark != null){
-				      String name = bookmark.getName();
-				      bookmark.setText(patname);
-				      try {
-							textDocument.getTextFieldService().refresh();
-						} catch (TextException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-				      }
-				      */
-				      ITextFieldService textFieldService = textDocument.getTextFieldService();
-				      ITextField[] placeholders = null;
-						try {
-							placeholders = textFieldService.getPlaceholderFields();
-						} catch (TextException e) {
-							// TODO Auto-generated catch block
-							JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
-							e.printStackTrace();
-						}
-						for (int i = 0; i < placeholders.length; i++) {
-							String placeholderDisplayText = placeholders[i].getDisplayText();
-							////System.out.println("Platzhalter-Name = "+placeholderDisplayText);
-							if(placeholderDisplayText.equals("<^Name^>")){
-								placeholders[i].getTextRange().setText(patname);
-							}	
-						}
-
-				}
-				aktTabelle = 0;
-				aktTerminInTabelle = 0;
-
-				try {
+			if(!lendlos){
+				if(aktTerminInTabelle >= maxTermineProTabelle && aktTabelle < AnzahlTabellen-1  ){
+					aktTabelle = aktTabelle+1;
 					textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
-				} catch (TextException e) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
-					e.printStackTrace();
+					aktTerminInTabelle = 0;
+					////System.out.println("Spaltenwechsel nach Spalte"+aktTabelle);
 				}
-				////System.out.println("textTable gesetzt*************");
-				////System.out.println("Druck wird fortgesetzt bei Termin Nr.:"+aktTermin);
+			
+				/************Wenn die aktuelle Seite voll ist******************/
+				if(aktTermin >= maxTermineProSeite && aktTerminInTabelle==maxTermineProTabelle){
+
+					textDocument.getViewCursorService().getViewCursor().getPageCursor().jumpToEndOfPage();
+					try {
+						textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertPageBreak();
+						textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertDocument(url) ;
+					} catch (NOAException e) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
+						e.printStackTrace();
+					}
+					tbl = textDocument.getTextTableService().getTextTables();
+					x = 0;
+					for(int i=AnzahlTabellen;i>0;i--){
+						tabName[x] = tbl[(tbl.length-1)-x].getName(); 
+						////System.out.println(tabName[x]);
+						x++;
+					}
+					
+					if(ipatdrucken  > 0){
+					      ITextFieldService textFieldService = textDocument.getTextFieldService();
+					      ITextField[] placeholders = null;
+							try {
+								placeholders = textFieldService.getPlaceholderFields();
+							} catch (TextException e) {
+								// TODO Auto-generated catch block
+								JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
+								e.printStackTrace();
+							}
+							for (int i = 0; i < placeholders.length; i++) {
+								String placeholderDisplayText = placeholders[i].getDisplayText();
+								////System.out.println("Platzhalter-Name = "+placeholderDisplayText);
+								if(placeholderDisplayText.equals("<^Name^>")){
+									placeholders[i].getTextRange().setText(patname);
+								}	
+							}
+
+					}
+					aktTabelle = 0;
+					aktTerminInTabelle = 0;
+
+					try {
+						textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
+					} catch (TextException e) {
+						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
+						e.printStackTrace();
+					}
+					////System.out.println("textTable gesetzt*************");
+					////System.out.println("Druck wird fortgesetzt bei Termin Nr.:"+aktTermin);
+				}
 			}
 			/********************/
-			if(spaltenNamen.contains("Wochentag")){
-				int zelle = spaltenNamen.indexOf("Wochentag");
-				druckDatum = jtable.getStringAt(aktTermin,0);
-				if(aktTerminInTabelle > 0){
-					if(! druckDatum.equals(jtable.getStringAt(aktTermin-1,0))){
-						textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );					
+			if(!lendlos){
+				if(spaltenNamen.contains("Wochentag")){
+					int zelle = spaltenNamen.indexOf("Wochentag");
+					druckDatum = jtable.getStringAt(aktTermin,0);
+					if(aktTerminInTabelle > 0){
+						if(! druckDatum.equals(jtable.getStringAt(aktTermin-1,0))){
+							textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );					
+						}
+					}else{
+						textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );
 					}
-				}else{
-					textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );
 				}
-			}
-			if(spaltenNamen.indexOf("Datum") > 0){
-				int zelle = spaltenNamen.indexOf("Datum");
-				textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,1) );
-			}
-			if(spaltenNamen.indexOf("Uhrzeit") > 0){
-				int zelle = spaltenNamen.indexOf("Uhrzeit");
-				textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,2).substring(0,5) );
-			}
-			if(spaltenNamen.indexOf("Behandler") > 0){
-				int zelle = spaltenNamen.indexOf("Behandler");						
-				textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,5) );
+				if(spaltenNamen.indexOf("Datum") > 0){
+					int zelle = spaltenNamen.indexOf("Datum");
+					textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,1) );
+				}
+				if(spaltenNamen.indexOf("Uhrzeit") > 0){
+					int zelle = spaltenNamen.indexOf("Uhrzeit");
+					textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,2).substring(0,5) );
+				}
+				if(spaltenNamen.indexOf("Behandler") > 0){
+					int zelle = spaltenNamen.indexOf("Behandler");						
+					textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,5) );
+				}
+				
+			}else{
+				/**** hier die Endlosdruckfunktion ****/
+				if(aktTermin > 0){
+					textTable.addRow(1);
+				}
+				if(spaltenNamen.contains("Wochentag")){
+					int zelle = spaltenNamen.indexOf("Wochentag");
+					druckDatum = jtable.getStringAt(aktTermin,0);
+					if(aktTermin > 0){
+						if(! druckDatum.equals(jtable.getStringAt(aktTermin-1,0))){
+							//textTable.getCell(zelle,aktTermin+iheader).getCharacterProperties().setFontSize(9.f);
+							textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );					
+						}
+					}else{
+						//textTable.getCell(zelle,aktTermin+iheader).getCharacterProperties().setFontSize(9.f);
+						textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );
+					}
+				}
+				if(spaltenNamen.indexOf("Datum") > 0){
+					int zelle = spaltenNamen.indexOf("Datum");
+					//textTable.getCell(zelle,aktTermin+iheader).getCharacterProperties().setFontSize(9.f);
+					textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,1) );
+				}
+				if(spaltenNamen.indexOf("Uhrzeit") > 0){
+					int zelle = spaltenNamen.indexOf("Uhrzeit");
+					//textTable.getCell(zelle,aktTermin+iheader).getCharacterProperties().setFontSize(9.f);
+					textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,2).substring(0,5) );
+				}
+				if(spaltenNamen.indexOf("Behandler") > 0){
+					int zelle = spaltenNamen.indexOf("Behandler");						
+					//textTable.getCell(zelle,aktTermin+iheader).getCharacterProperties().setFontSize(9.f);
+					textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(jtable.getStringAt(aktTermin,5) );
+				}
+				
 			}
 
 			/********************/
