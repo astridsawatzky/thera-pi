@@ -21,7 +21,7 @@ import systemEinstellungen.SystemConfig;
 public class TermineErfassen implements Runnable {
 	String scanrez = null;
 	Vector alleterm;
-	Vector vec = null;
+	Vector<String> vec = null;
 	Vector vec2 = null;
 	String copyright = null;
 	String heute = null;
@@ -48,7 +48,36 @@ public class TermineErfassen implements Runnable {
 		copyright = "\u00AE"  ;
 		int ret = -1;
 		try {
-			// Zunächst testen ob der Tab bereits erfaßt war
+			//Sonderfall Rehasport und Funktionstraining // ohne Nutzung des TK
+			if( (scanrez.startsWith("RS") || scanrez.startsWith("FT")) && SystemConfig.RsFtOhneKalender){
+				scanrez = scanrez.replace("_", "");
+				if((ret = testeVerordnung()) == 0){
+					// die Daten liegen im Vector vec
+					//                                    0     1    2    3    4     5       6        7         8           9          10     11                   
+					//vec = SqlInfo.holeSatz("verordn","termine,pos1,pos2,pos3,pos4,hausbes,unter18,jahrfrei,pat_intern,preisgruppe,zzregel,anzahl1,anzahl2,anzahl3,anzahl4,preisgruppe"," rez_nr='"+scanrez+"'",Arrays.asList(new String[]{}));
+					//public static String macheNeuTermin2(String pos1,String pos2,String pos3,String pos4,String xkollege,String datum)
+					String terminNeu = vec.get(0)+macheNeuTermin2(vec.get(1),vec.get(2),vec.get(3),vec.get(4),Reha.aktUser,DatFunk.sHeute());
+					SqlInfo.sqlAusfuehren("update verordn set termine = '"+terminNeu+"' where rez_nr = '"+scanrez+"' LIMIT 1");
+					JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
+					if(patient != null){
+						//System.out.println("in aktualisierung");
+						//System.out.println("angezeigt wird aktuell "+Reha.thisClass.patpanel.aktRezept.rezAngezeigt);
+						if(Reha.thisClass.patpanel.aktRezept.rezAngezeigt.equalsIgnoreCase(scanrez.trim())){
+							try{
+								//System.out.println("Ansicht ist gleich aktuellem Rezept");
+								Reha.thisClass.patpanel.aktRezept.updateEinzelTermine(sbuftermine.toString());								
+							}catch(Exception ex){
+								JOptionPane.showMessageDialog(null,"Fehler bei der Aktualisierung der Rezeptansicht");
+								ex.printStackTrace();
+							}
+						}
+					}
+				}else{
+					// evtl. JOptionPane zeigen
+				}
+				return;
+			}
+			// Zunächst testen ob der Tag bereits erfaßt war
 			if( (ret = testeVerordnung()) == 0){
 				
 				//termok liefert false wenn der Termin bereits mit dem "copyright"-Zeichen im Terminkalender steht.
@@ -74,8 +103,6 @@ public class TermineErfassen implements Runnable {
 								JOptionPane.showMessageDialog(null,"Fehler bei der Aktualisierung der Rezeptansicht");
 								ex.printStackTrace();
 							}
-
-						
 						}
 					}
 					

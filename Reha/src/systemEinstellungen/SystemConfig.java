@@ -162,6 +162,7 @@ public class SystemConfig {
 	public static String sBarcodeScanner = null;
 	public static String sBarcodeAktiv = null;
 	public static String sBarcodeCom = null;
+	public static boolean RsFtOhneKalender = false;
 	public static String[] arztGruppen = null;
 	public static String[] rezeptKlassen = null;
 	public static Vector<Vector<String>> rezeptKlassenAktiv = null;
@@ -1200,6 +1201,9 @@ public class SystemConfig {
 				sBarcodeScanner = inif.getStringProperty("BarcodeScanner", "BarcodeScannerName");
 				sBarcodeAktiv = inif.getStringProperty("BarcodeScanner", "BarcodeScannerAktivieren");
 				sBarcodeCom = inif.getStringProperty("BarcodeScanner", "BarcodeScannerAnschluss");
+				if(inif.getStringProperty("BarcodeScanner", "RsFtOhneKalender") != null){
+					RsFtOhneKalender = (inif.getIntegerProperty("BarcodeScanner", "RsFtOhneKalender") == 0 ? false : true);
+				}
 			}else{
 				sBarcodeScanner = "";
 				sBarcodeAktiv = "0";

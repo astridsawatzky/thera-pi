@@ -224,7 +224,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		}else{
 			barcodedrucker.setSelectedItem(SystemConfig.rezBarcodeDrucker.trim());
 		}		
-		builder.add(barcodedrucker,cc.xyw(3, 30,4));
+		builder.add(barcodedrucker,cc.xyw(3, 29,4));
 		
 		builder.addSeparator("Vorlagen - Verwaltung", cc.xyw(1, 31, 6));
 		
