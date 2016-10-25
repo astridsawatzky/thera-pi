@@ -65,7 +65,7 @@ public class TermineErfassen implements Runnable {
 						if(Reha.thisClass.patpanel.aktRezept.rezAngezeigt.equalsIgnoreCase(scanrez.trim())){
 							try{
 								//System.out.println("Ansicht ist gleich aktuellem Rezept");
-								Reha.thisClass.patpanel.aktRezept.updateEinzelTermine(sbuftermine.toString());								
+								Reha.thisClass.patpanel.aktRezept.updateEinzelTermine(terminNeu);								
 							}catch(Exception ex){
 								JOptionPane.showMessageDialog(null,"Fehler bei der Aktualisierung der Rezeptansicht");
 								ex.printStackTrace();
