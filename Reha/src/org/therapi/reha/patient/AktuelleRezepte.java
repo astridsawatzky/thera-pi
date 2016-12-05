@@ -74,6 +74,7 @@ import javax.swing.table.TableCellRenderer;
 
 
 
+
 import jxTableTools.MyTableStringDatePicker;
 import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;
@@ -2272,22 +2273,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				if(Reha.thisClass.patpanel.vecaktrez.get(71).trim().length() > 0){
 					//für die Suche alles entfernen das nicht in der icd10-Tabelle aufgeführt sein kann
-					//String suchenach = Reha.thisClass.patpanel.vecaktrez.get(71).trim();
-					String String1 = Reha.thisClass.patpanel.vecaktrez.get(71).trim().substring(0,1).toUpperCase();
-					String String2 = Reha.thisClass.patpanel.vecaktrez.get(71).trim().substring(1).toUpperCase().replace(" ", "").replace("*", "").replace("!", "").replace("+","").replace("R", "").replace("L","").replace("B","").replace("G","").replace("V","").replace("Z","");;
-					String suchenach = String1+String2;
-					//suchenach = suchenach.replace(" ", "").replace("*", "").replace("!", "").replace("R", "").replace("L","").replace("B","").replace("G","").replace("V","").replace("Z","");
+					String suchenach = RezNeuanlage.macheIcdString(Reha.thisClass.patpanel.vecaktrez.get(71));
 					if(SqlInfo.holeEinzelFeld("select id from icd10 where schluessel1 like '"+suchenach+"%' LIMIT 1").equals("")){
-						//if(SqlInfo.holeEinzelFeld("select id from icd10 where schluessel1 like '"+suchenach+"%' LIMIT 1").equals("")){
-						/*
-						int frage = JOptionPane.showConfirmDialog(null, "<html>Achtung!!<br><br>Der ICD-10 Code <b>"+jtf[cICD10].getText().trim()+
-								"</b> existiert nicht!<br>"+
-								"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
-						if(frage==JOptionPane.YES_OPTION){
-							new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
-						}
-						*/
-						int frage = JOptionPane.showConfirmDialog(null, "<html><b>Der eingetragene ICD-10-Code ist falsch: <font color='#ff0000'>"+
+						int frage = JOptionPane.showConfirmDialog(null, "<html><b>Der eingetragene 1. ICD-10-Code ist falsch: <font color='#ff0000'>"+
 								Reha.thisClass.patpanel.vecaktrez.get(71).trim()+"</font></b><br>"+
 								"HMR-Check nicht möglich!<br><br>"+
 								"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
@@ -2295,7 +2283,22 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 							new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
 						}
 						return;
+
 					}
+					if(Reha.thisClass.patpanel.vecaktrez.get(72).trim().length() > 0){
+						suchenach = RezNeuanlage.macheIcdString(Reha.thisClass.patpanel.vecaktrez.get(72));
+						if(SqlInfo.holeEinzelFeld("select id from icd10 where schluessel1 like '"+suchenach+"%' LIMIT 1").equals("")){
+							int frage = JOptionPane.showConfirmDialog(null, "<html><b>Der eingetragene 2. ICD-10-Code ist falsch: <font color='#ff0000'>"+
+									Reha.thisClass.patpanel.vecaktrez.get(71).trim()+"</font></b><br>"+
+									"HMR-Check nicht möglich!<br><br>"+
+									"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
+							if(frage==JOptionPane.YES_OPTION){
+								new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+							}
+							return;
+						}
+					}
+
 				}else{
 					JOptionPane.showMessageDialog(null, "<html><b><font color='#ff0000'>Kein ICD-10 Code angegeben!</font></b></html>");					
 				}

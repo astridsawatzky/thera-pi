@@ -248,7 +248,9 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 					}
 					
 					if( (stest = StringTools.NullTest((String)Reha.thisClass.patpanel.vecaktrez.get(71))).trim().length() > 0){
-						Reha.thisClass.patpanel.rezdiag.setText("ICD-10: "+stest+"\n"+StringTools.NullTest((String)Reha.thisClass.patpanel.vecaktrez.get(23)));
+						stest = "1.ICD-10: "+stest +( StringTools.NullTest((String)Reha.thisClass.patpanel.vecaktrez.get(72)).trim().length() > 0 ? 
+								"  -  2.ICD-10: "+(String)Reha.thisClass.patpanel.vecaktrez.get(72) : ""); 
+						Reha.thisClass.patpanel.rezdiag.setText(stest+"\n"+StringTools.NullTest((String)Reha.thisClass.patpanel.vecaktrez.get(23)));
 					}else{
 						Reha.thisClass.patpanel.rezdiag.setText(StringTools.NullTest((String)Reha.thisClass.patpanel.vecaktrez.get(23)));	
 					}

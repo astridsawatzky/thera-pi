@@ -3986,6 +3986,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		if(vec_rez.get(0).get(71).trim().length() > 0){
 			edibuf.append( "DIA+" + hochKomma(vec_rez.get(0).get(71).trim()) + EOL);
 		}
+		if(vec_rez.get(0).get(72).trim().length() > 0){
+			edibuf.append( "DIA+" + hochKomma(vec_rez.get(0).get(72).trim()) + EOL);
+		}
+
 		//an dieser Stelle müssen Daten zur Bewilligung eingebaut werden sofern vorhanden
 		//SKZ+....
 		

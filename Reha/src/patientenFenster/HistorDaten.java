@@ -25,7 +25,6 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import CommonTools.JCompTools;
-
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
 
@@ -245,7 +244,10 @@ public class HistorDaten extends JXPanel{
 				}
 				
 				if( (stest = StringTools.NullTest((String)vecaktrez.get(71))).trim().length() > 0){
-					rezdiag.setText("ICD-10: "+stest+"\n"+StringTools.NullTest((String)vecaktrez.get(23)));
+					stest = "1.ICD-10: "+stest +( StringTools.NullTest((String)vecaktrez.get(72)).trim().length() > 0 ? 
+							"  -  2.ICD-10: "+(String)vecaktrez.get(72) : ""); 
+
+					rezdiag.setText(stest+"\n"+StringTools.NullTest((String)vecaktrez.get(23)));
 				}else{
 					rezdiag.setText(StringTools.NullTest((String)vecaktrez.get(23)));	
 				}

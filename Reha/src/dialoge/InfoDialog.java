@@ -416,7 +416,16 @@ public class InfoDialog extends JDialog implements WindowListener{
 			}else{
 				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+" VO-AdR</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am  "+lastdate+" (12 Wochenfrist)</span>\n");
 			}
-		}else if(!vecResult.get(0).get(13).equals("2") && Integer.parseInt(vecResult.get(0).get(5)) >= 10){
+		/*}else if(!vecResult.get(0).get(13).equals("2") && Integer.parseInt(vecResult.get(0).get(5)) >= 10){
+			String lastdate = DatFunk.sDatPlusTage(tage.get(0), (12*7)-1);
+			long diff = DatFunk.TageDifferenz(lastdate, DatFunk.sHeute());
+			if(diff > 0){
+				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");	
+			}else{
+				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");
+			}
+		} alle einbeziehen auf Wunsch von Bea*/
+		}else if(!vecResult.get(0).get(13).equals("2") && tage.size() > 0){
 			String lastdate = DatFunk.sDatPlusTage(tage.get(0), (12*7)-1);
 			long diff = DatFunk.TageDifferenz(lastdate, DatFunk.sHeute());
 			if(diff > 0){

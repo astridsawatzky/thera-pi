@@ -1198,11 +1198,15 @@ public class SystemConfig {
 				sReaderCtApiLib = inif.getStringProperty("KartenLeser", "KartenLeserCTAPILib");			
 			}
 			if(inif.getIntegerProperty("BarcodeScanner", "BarcodeScannerAktivieren") > 0){
-				sBarcodeScanner = inif.getStringProperty("BarcodeScanner", "BarcodeScannerName");
-				sBarcodeAktiv = inif.getStringProperty("BarcodeScanner", "BarcodeScannerAktivieren");
-				sBarcodeCom = inif.getStringProperty("BarcodeScanner", "BarcodeScannerAnschluss");
-				if(inif.getStringProperty("BarcodeScanner", "RsFtOhneKalender") != null){
-					RsFtOhneKalender = (inif.getIntegerProperty("BarcodeScanner", "RsFtOhneKalender") == 0 ? false : true);
+				try{
+					sBarcodeScanner = inif.getStringProperty("BarcodeScanner", "BarcodeScannerName");
+					sBarcodeAktiv = inif.getStringProperty("BarcodeScanner", "BarcodeScannerAktivieren");
+					sBarcodeCom = inif.getStringProperty("BarcodeScanner", "BarcodeScannerAnschluss");
+					if(inif.getStringProperty("BarcodeScanner", "RsFtOhneKalender") != null){
+						RsFtOhneKalender = (inif.getIntegerProperty("BarcodeScanner", "RsFtOhneKalender") == 0 ? false : true);
+					}
+				}catch(Exception ex){
+					ex.printStackTrace();
 				}
 			}else{
 				sBarcodeScanner = "";
@@ -1225,9 +1229,11 @@ public class SystemConfig {
 				hmDokuScanner.put("seiten", "---");
 				hmDokuScanner.put("dialog", "---");
 			}
+			
 			if(mustsave){
 				INITool.saveIni(inif);
 			}
+			System.out.println("RsFtOhneKalender = "+RsFtOhneKalender);
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der geraete.ini, Mehode:GeraeteInit!\nFehlertext: "+ex.getMessage());
 		}
