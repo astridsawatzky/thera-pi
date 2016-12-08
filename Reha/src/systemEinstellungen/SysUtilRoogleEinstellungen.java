@@ -59,7 +59,7 @@ public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, 
 	}
 	/************** Beginn der Methode f�r die Objekterstellung und -platzierung *********/
 	private JPanel getVorlagenSeite(){
-		String[] string = {"10","15","20","25","30","35","40","45","50","55","60","90","120"};
+		String[] string = {"10","15","20","25","30","35","40","45","50","55","60","65","70","75","80","85","90","95","100","105","110","115","120"};
 		montag = new JCheckBox();
 		tage[0] = montag;
 		dienstag = new JCheckBox();

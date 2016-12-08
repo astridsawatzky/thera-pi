@@ -647,8 +647,8 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		gruppenCheck[4] = jb;
 		builder.add(jb,cc.xy(2,11));
 		
-
-		String[] xstring = {"10","15","20","25","30","35","40","45","50","55","60","90","120"};
+		String[] xstring = {"10","15","20","25","30","35","40","45","50","55","60","65","70","75","80","85","90","95","100","105","110","115","120"};
+		//String[] xstring = {"10","15","20","25","30","35","40","45","50","55","60","90","120"};
 		JComboBox jc = null;
 		try{
 			jc = new JComboBox(xstring);
