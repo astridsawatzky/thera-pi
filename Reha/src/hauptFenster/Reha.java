@@ -119,6 +119,7 @@ import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.thera_pi.updates.TestForUpdates;
+import org.thera_pi.updates.UpdateConfig;
 import org.therapi.reha.patient.LadeProg;
 import org.therapi.reha.patient.PatientHauptPanel;
 
@@ -126,13 +127,9 @@ import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
 import roogle.RoogleFenster;
-import CommonTools.ExUndHop;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
 import systemEinstellungen.SystemPreislisten;
-import CommonTools.Colors;
-import CommonTools.FileTools;
-import CommonTools.JRtaTextField;
 import systemTools.RehaPainters;
 import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
@@ -143,16 +140,22 @@ import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
 import wecker.Wecker;
+import CommonTools.Colors;
+import CommonTools.ExUndHop;
+import CommonTools.FileTools;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import CommonTools.JRtaTextField;
+import CommonTools.RehaEvent;
+import CommonTools.RehaEventClass;
+import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.text.TextException;
 import anmeldungUmsatz.Anmeldungen;
 import anmeldungUmsatz.Umsaetze;
 import arztFenster.ArztPanel;
@@ -165,12 +168,10 @@ import com.jgoodies.looks.HeaderStyle;
 import com.jgoodies.looks.Options;
 import com.sun.star.uno.Exception;
 
+import dialoge.AboutDialog;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
-import CommonTools.RehaEvent;
-import CommonTools.RehaEventClass;
-import CommonTools.RehaEventListener;
 import geraeteInit.BarCodeScanner;
 
 public class Reha implements FocusListener,ComponentListener,ContainerListener,MouseListener,MouseMotionListener,KeyListener,RehaEventListener, WindowListener, WindowStateListener, ActionListener  {
@@ -714,6 +715,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		System.exit(0);
 	}
 	public void beendeSofort(){
+		doCloseEverything();
+		System.exit(0);
+	}
+
+	private void doCloseEverything(){
 		this.jFrame.removeWindowListener(this);
 		if(Reha.thisClass.conn != null){
 			try {
@@ -745,16 +751,16 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			try {
 				rehaIOServer.serv.close();
 				System.out.println("RehaIO-SocketServer geschlossen");
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException e2) {
+				e2.printStackTrace();
 			}
 		}
 		if(rehaCommServer != null){
 			try {
 				rehaCommServer.serv.close();
 				System.out.println("RehaComm-SocketServer geschlossen");
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (IOException e3) {
+				e3.printStackTrace();
 			}
 		}
 		if(SystemConfig.sReaderAktiv.equals("1") && Reha.thisClass.ocKVK != null){
@@ -778,7 +784,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}catch(NullPointerException ex){
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
 		}
-		System.exit(0);
+
 	}
 	
 	private void doCompoundPainter(){
@@ -1155,7 +1161,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	@SuppressWarnings("rawtypes")
 	private JXFrame getJFrame() {
 		if (jFrame == null) {
-			jFrame = new JXFrame();/*{
+			jFrame = new JXFrame();
+			/*{
 				
 				private static final long serialVersionUID = 1L;
 
@@ -2012,88 +2019,36 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			exitMenuItem.setText("Thera-Pi beenden");
 			exitMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					Runtime r = Runtime.getRuntime();
-				    r.gc();
-					if(JOptionPane.showConfirmDialog(null, "thera-\u03C0 wirklich schließen?", "Bitte bestätigen", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION ) {
-						if(Reha.DbOk &&  (Reha.thisClass.conn != null) ){
-							Date zeit = new Date();
-							String stx = "Insert into eingeloggt set comp='"+SystemConfig.dieseMaschine+"', zeit='"+zeit.toString()+"', einaus='aus'";
-							SqlInfo.sqlAusfuehren(stx);	
-						}
-						if(Reha.thisClass.conn != null){
-							try {
-								Reha.thisClass.conn.close();
-								System.out.println("Datenbankverbindung geschlossen");
-							} catch (SQLException e1) {
-								e1.printStackTrace();
-							}
-						}
-						if(Reha.barcodeScanner != null){
-							try{
-								BarCodeScanner.serialPort.close();
-								Reha.barcodeScanner = null;
-								System.out.println("Serielle-Schnittstelle geschlossen");
-							}catch(NullPointerException ex){
-								
-							}
-						}
-						if(Reha.timerLaeuft){
-							Reha.fangoTimer.stop();
-							Reha.timerLaeuft = false;
-						}
-						if(Reha.nachrichtenTimer != null){
-							Reha.nachrichtenTimer.cancel();
-							Reha.nachrichtenLaeuft = false;
-							Reha.nachrichtenTimer = null;
-							
-						}						
-						if(rehaIOServer != null){
-							try {
-								rehaIOServer.serv.close();
-								System.out.println("RehaIO-SocketServer geschlossen");
-							} catch (IOException e2) {
-								e2.printStackTrace();
-							}
-						}
-						if(rehaCommServer != null){
-							try {
-								rehaCommServer.serv.close();
-								System.out.println("RehaComm-SocketServer geschlossen");
-							} catch (IOException e3) {
-								e3.printStackTrace();
-							}
-						}
-
-						if(SystemConfig.sReaderAktiv.equals("1") && Reha.thisClass.ocKVK != null){
-							try{
-							Reha.thisClass.ocKVK.TerminalDeaktivieren();
-							System.out.println("Card-Terminal deaktiviert");
-							}catch(NullPointerException ex){
-								
-							}
-						}
-						try{
-							INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rehajava.ini");
-							SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",(Object)jSplitLR.getDividerLocation(),null );
-							SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",(Object)jSplitRechtsOU.getDividerLocation(),null );
-							SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",(Object)(LinkeTaskPane.tp1.isCollapsed() ? "1" : "0"),null );
-							SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",(Object)(LinkeTaskPane.tp4.isCollapsed() ? "1" : "0"),null );
-							SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",(Object)(LinkeTaskPane.tp3.isCollapsed() ? "1" : "0"),null );
-							SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",(Object)(LinkeTaskPane.tp5.isCollapsed() ? "1" : "0"),null );
-							SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",(Object)(LinkeTaskPane.tp2.isCollapsed() ? "1" : "0"),null );
-							SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",(Object)(LinkeTaskPane.tp6.isCollapsed() ? "1" : "0"),null );
-						}catch(NullPointerException ex){
-							JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
-						}
-						System.exit(0);
-					}else{
-						return;
-					}
-				    
+					askCloseOrRestart();
 				}
 			});
 		}
 		return exitMenuItem;
+	}
+
+	protected void askCloseOrRestart() {
+		Runtime r = Runtime.getRuntime();
+	    r.gc();
+		switch (JOptionPane.showOptionDialog(null, "thera-\u03C0 wirklich schließen?", "Bitte bestätigen", 
+				JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new String[]{"Ja", "Nein", "Restart"}, "Ja")){
+		case JOptionPane.YES_OPTION:		// schließen
+			if(Reha.DbOk &&  (Reha.thisClass.conn != null) ){
+				Date zeit = new Date();
+				String stx = "Insert into eingeloggt set comp='"+SystemConfig.dieseMaschine+"', zeit='"+zeit.toString()+"', einaus='aus'";
+				SqlInfo.sqlAusfuehren(stx);	
+			}
+			beendeSofort();
+			break;
+		case JOptionPane.CANCEL_OPTION:		// restart
+			doCloseEverything();
+			try {
+				Runtime.getRuntime().exec("java -jar "+Reha.proghome+"TheraPi.jar");		// restart einleiten
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.exit(0);
+			break;
+		}
 	}
 
 	private JMenuItem getAboutMenuItem() {
@@ -2638,96 +2593,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		if(JOptionPane.showConfirmDialog(null, "thera-\u03C0 wirklich schließen?", "Bitte bestätigen", JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION ) {
-			if(Reha.DbOk &&  (Reha.thisClass.conn != null) ){
-				Date zeit = new Date();
-				String stx = "Insert into eingeloggt set comp='"+SystemConfig.dieseMaschine+"', zeit='"+zeit.toString()+"', einaus='aus'";
-				SqlInfo.sqlAusfuehren(stx);
-			}
-
-			JInternalFrame[] frame = desktops[0].getAllFrames();
-			for(int i = 0; i < frame.length;i++){
-				frame[i].dispose();
-				frame[i] = null;
-			}
-			frame = desktops[1].getAllFrames();
-			for(int i = 0; i < frame.length;i++){
-				frame[i].dispose();
-				frame[i] = null;
-			}
-			if(Reha.thisClass.conn != null){
-				try {
-					Reha.thisClass.conn.close();
-					Reha.thisClass.conn = null;
-					System.out.println("Datenbankverbindung wurde geschlossen");
-				} catch (SQLException e) {
-					e.printStackTrace();
-					System.exit(0);
-				}
-			}
-			if(Reha.barcodeScanner != null){
-				try{
-				BarCodeScanner.serialPort.close();
-				Reha.barcodeScanner = null;
-				System.out.println("Serielle Schnittstelle wurde geschlossen");
-				}catch(NullPointerException ex){
-					System.exit(0);
-				}
-			}
-			if(Reha.officeapplication != null){
-			}
-			if(Reha.timerLaeuft){
-				Reha.fangoTimer.stop();
-				Reha.timerLaeuft = false;
-			}
-			if(rehaIOServer != null){
-				try {
-					rehaIOServer.serv.close();
-					System.out.println("RehaIO-SocketServer geschlossen");					
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if(rehaCommServer != null){
-				try {
-					rehaCommServer.serv.close();
-					System.out.println("RehaComm-SocketServer geschlossen");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if(Reha.nachrichtenTimer != null){
-				Reha.nachrichtenTimer.cancel();
-				Reha.nachrichtenLaeuft = false;
-				Reha.nachrichtenTimer = null;
-			}
-			if(SystemConfig.sReaderAktiv.equals("1") && Reha.thisClass.ocKVK != null){
-				try{
-				Reha.thisClass.ocKVK.TerminalDeaktivieren();
-				System.out.println("Card-Terminal deaktiviert");
-				}catch(NullPointerException ex){
-					
-				}
-			}
-
-			try{
-				INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rehajava.ini");
-				SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",(Object)jSplitLR.getDividerLocation(),null );
-				SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",(Object)jSplitRechtsOU.getDividerLocation(),null );
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",(Object)(LinkeTaskPane.tp1.isCollapsed() ? "1" : "0"),null );
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",(Object)(LinkeTaskPane.tp4.isCollapsed() ? "1" : "0"),null );
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",(Object)(LinkeTaskPane.tp3.isCollapsed() ? "1" : "0"),null );
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",(Object)(LinkeTaskPane.tp5.isCollapsed() ? "1" : "0"),null );
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",(Object)(LinkeTaskPane.tp2.isCollapsed() ? "1" : "0"),null );
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",(Object)(LinkeTaskPane.tp6.isCollapsed() ? "1" : "0"),null );
-				
-			}catch(NullPointerException ex){
-				JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");	
-			}
-			System.exit(0);
-		}else{
-			return;
-		}
+		askCloseOrRestart();
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
@@ -2870,10 +2736,12 @@ public void actionPerformed(ActionEvent arg0) {
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws java.lang.Exception {
-				//ZeigeUeber();
+				AboutDialog aboutFenster = new AboutDialog(jFrame,aboutMenuItem.getText());
+				aboutFenster.setVisible(true);
+				aboutFenster.setFocus();
 				return null;
 			}
-		}.execute();			
+		}.execute();
 	}
 	if(cmd.equals("f2Rescue")){
 		new SwingWorker<Void,Void>(){
@@ -3149,7 +3017,8 @@ public void activateWebCam(){
 	}.execute();
 }
 public void mustReloadDb(){
-	Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.thisFrame,"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?","Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
+	Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.thisFrame,"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?",
+			"Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
 	/*
 	new SwingWorker<Void,Void>(){
 		@Override

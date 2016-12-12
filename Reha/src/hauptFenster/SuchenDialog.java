@@ -749,7 +749,6 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}
 		// ---- Suchstring zusammensetzen
 		sTmp = "";
-		/*
 		for (String c: sSuchPattern){
 			if (sTmp.isEmpty()){
 				sTmp = fieldname+" LIKE '"+c+"%'";	
@@ -757,10 +756,14 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
 			}
 		}
-		*/
+		/*
 		for (int i2 = 0; i2 < sSuchPattern.size();i2++){
 			if(i2 == 2){
 				//steht lediglich ein Vokal was zu einer größeren Menge nicht gewünschter Datensätze führt
+				// ... damit fallen die Pat. unter den Tisch, die mit Umlaut in der DB stehen, aber nach Kassenwechsel wieder die Umschreibung auf der GK haben:
+				//   st jü -> [jü, jue, ju] => v_name LIKE 'jü%' OR v_name LIKE 'jue%'		<- hier bringt's was
+				//   st ju -> [ju, jue, jü] => v_name LIKE 'ju%' OR v_name LIKE 'jue%'		<- hier werden die entscheidenden Treffer ausgeschlossen :-(
+
 				break;
 			}
 			if (sTmp.isEmpty()){
@@ -769,6 +772,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+sSuchPattern.get(i2)+"%'";
 			}
 		}
+		*/
 
 		//System.out.println("Suchstring: "+sTmp);
 		return sTmp;
