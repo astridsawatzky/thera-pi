@@ -50,6 +50,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
 	private HashMap<String,String> htitel = new HashMap<String,String>();
 	private HashMap<String,String> hdescription = new HashMap<String,String>();
 	private HashMap<String,ImageIcon> hicon = new HashMap<String,ImageIcon>();
+	private String defaultTitel = "SystemIni";
 	public DefaultMutableTreeNode root;
 	public DefaultTreeModel treeModel;
 	public JTree tree;
@@ -60,7 +61,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
 		super();
 		setLayout(new BorderLayout());
 		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
-		
+/*
         String ss = Reha.proghome+"icons/header-image.png"; //"icons/header-image.png";
         header = new JXHeader("Mit der Systeminitialisierung....",
                 "....erstellen bzw. ändern Sie die Systemeinstellungen auf Ihre inividuelle Bedürfnisse hin.\n" +
@@ -68,6 +69,15 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
                 "Systemparameter die ein gewisses Maß an Computer-Kenntnisse voraussetzen haben wir mit einem roten Ausrufezeichen versehen.\n\n"+
                 "Sie schließen dieses Fenster über den roten Punkt rechts oben, oder mit der Taste >>ESC<<.",
                 new ImageIcon(ss));
+ */
+        header = new JXHeader(null,null,null);
+        addHeaderEntry(defaultTitel, "Mit der Systeminitialisierung....", 		// den ersten legen wir gleich an; Rest im Hintergrund
+                "....erstellen bzw. ändern Sie die Systemeinstellungen auf Ihre inividuelle Bedürfnisse hin.\n" +
+                "Von den Behandlersets des Terminkalender, Aktualisierungszyklen bis hin zu Pfadangaben und Emailparameter.\n" +
+                "Systemparameter die ein gewisses Maß an Computer-Kenntnisse voraussetzen haben wir mit einem roten Ausrufezeichen versehen.\n\n"+
+                "Sie schließen dieses Fenster über den roten Punkt rechts oben, oder mit der Taste >>ESC<<.",
+                null);
+        setHeader(defaultTitel);
         header.setPreferredSize(new Dimension(0,150));
         header.setBackground(Color.WHITE);
         ((JLabel)header.getComponent(1)).setVerticalAlignment(JLabel.NORTH);
@@ -129,7 +139,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
 
 		 	  	}
 			});			
-			
+	        setHeader(defaultTitel);
 			
 	}		    
 /*******************************************************/			
@@ -445,6 +455,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Druckvorlage Terminliste")){
@@ -483,7 +494,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Firmenangaben Mandanten")){
@@ -496,7 +507,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Patient")){
@@ -522,7 +533,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Krankenkasse")){
@@ -535,7 +546,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Rezepte")){
@@ -548,7 +559,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("angeschlossene Geraete")){
@@ -561,7 +572,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Anschlüsse")){
@@ -574,7 +585,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Fremdprogramme")){
@@ -587,7 +598,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Preise bearbeiten/importieren")){
@@ -600,7 +611,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Anwendungsregeln bearbeiten")){
@@ -609,7 +620,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Tarifgruppen bearbeiten")){
@@ -622,7 +633,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
-			setHeader("RoogleGrundeinstellungen");
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Kostenträgerdatei einlesen")){
@@ -635,6 +646,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Nebraska / Zertifikatshandling")){
@@ -666,6 +678,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Fortlaufender Nummernkreis")){
@@ -678,6 +691,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Positionskürzel anlegen")){
@@ -690,6 +704,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Software-Updateservice")){
@@ -728,6 +743,7 @@ private void auswertenSysUtil(String util){
 			new LadeProg(Reha.proghome+"RehaIniedit.jar "+
 					" "+Reha.proghome+" "+Reha.aktIK );
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Befreiungen zurücksetzen/Jahreswechsel")){
@@ -754,6 +770,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 
@@ -768,6 +785,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Gruppendefinition Thera-Pi-Nachrichten")){
@@ -780,6 +798,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Fristen und 302-er Einstellungen")){
@@ -792,6 +811,7 @@ private void auswertenSysUtil(String util){
 			jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
 		if(util.equals("Verkauf")) {
@@ -802,12 +822,9 @@ private void auswertenSysUtil(String util){
 			System.out.println("jxInhaltRechts:"+getWidth()+"/"+getHeight());
 			jxRechts.revalidate();
 			cursorWait(false);
+			setHeader("dummy");
 			break;
 		}
-		
-		
-
-		
 
 		
 		if(SystemConfig.hmSysIcons.get("werkzeuge") == null){
@@ -817,6 +834,7 @@ private void auswertenSysUtil(String util){
 		jxInhaltRechts.setVisible(true);
 		jxRechts.add(jxInhaltRechts,BorderLayout.CENTER);
 		cursorWait(false);
+		setHeader("dummy");
 		jxRechts.revalidate();
 
 	}
@@ -842,11 +860,10 @@ private void cursorWait(boolean ein){
 }
 @Override
 public void valueChanged(TreeSelectionEvent e) {
-	// TODO Auto-generated method stub
 	//System.out.println(e);
 	TreePath path = e.getNewLeadSelectionPath(); 
     String[] split = path.toString().split(",");
-    auswertenSysUtil(split[split.length-1].replaceAll("\\]","").trim());
+    auswertenSysUtil(split[split.length-1].replaceAll("\\[","").replaceAll("\\]","").trim());
 }
 
 public static void abbrechen(){
@@ -858,16 +875,28 @@ public static void abbrechen(){
 //private HashMap<String,ImageIcon> hicon = new HashMap();
 
 private void setHeader(String shm){
-	header.setTitle(htitel.get(shm));
-	header.setDescription(hdescription.get(shm));
-	header.setIcon(hicon.get(shm));
+	String key = shm;
+	if (htitel.get(key) == null){key = defaultTitel;}	// Falls für eine Seite kein Hilfetext vorhanden ist, den Default-Text setzen
+	header.setTitle(htitel.get(key));
+	header.setDescription(hdescription.get(key));
+	header.setIcon(hicon.get(key));
+}
+
+private void addHeaderEntry(String key, String titel, String text, String icon){
+    String iconPath = Reha.proghome + "icons/"; 
+    if (icon == null){iconPath = iconPath + "header-image.png";}
+    	else{iconPath = iconPath + icon;}
+	htitel.put(key, titel);
+	hdescription.put(key, text);
+	hicon.put(key,new ImageIcon(iconPath));
 }
 
 private void headerInfos(){
-	String sdummy = null;
-	ImageIcon icodummy = null;
+//	String sdummy = null;
+//	ImageIcon icodummy = null;
 	/***********Numero uno***********/
-	sdummy = "Terminkalender-Grundeinstellungen";
+/*
+    sdummy = "Terminkalender-Grundeinstellungen";
 	htitel.put("TKGrundeinstellungen", sdummy);
 	sdummy = "Die Grundeinstellungen beeinflussen die Struktur und die Funktionen der Kalenderdatenbank. Änderungen von Tagesbeginn \n"+
 	"oder -ende führen zur Neudefinition ALLER bestehenden Datenbanken. Dieser Vorgang benötigt viel Rechenkapazität und dauert daher\n"+
@@ -877,9 +906,17 @@ private void headerInfos(){
 	hdescription.put("TKGrundeinstellungen", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("TKGrundeinstellungen", icodummy);
-
+ */
+    addHeaderEntry("TKGrundeinstellungen", "Terminkalender-Grundeinstellungen", 
+    		"Die Grundeinstellungen beeinflussen die Struktur und die Funktionen der Kalenderdatenbank. Änderungen von Tagesbeginn \n"+
+    				"oder -ende führen zur Neudefinition ALLER bestehenden Datenbanken. Dieser Vorgang benötigt viel Rechenkapazität und dauert daher\n"+
+    				"entsprechend lange.\n"+
+    				"Der Refreshtakt definiert, in welchem Zyklus die Bildschirmanzeige mit der Datenbank abgeglichen wird. Einzelplatzinstallationen\n "+
+    				"arbeiten dabei ohne zeitliche Verzögerung.",
+            null);
 	/***********Numero due***********/
-	sdummy = "Kalenderbenutzer verwalten";
+/*
+    sdummy = "Kalenderbenutzer verwalten";
 	htitel.put("Kalenderbenutzer", sdummy);
 	sdummy = "'Kalenderbenutzer' kann ein Behandler, sonstige Mitarbeiter oder auch eine besondere Ressource sein.\n\n"+
 	"Der Matchcode ist die dargestellte Überschrift bzw. der in der Terminsuche verwendete Begriff. Er kann frei vergeben werden\n"+
@@ -887,9 +924,15 @@ private void headerInfos(){
 	hdescription.put("Kalenderbenutzer", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("Kalenderbenutzer", icodummy);
-
+ */
+    addHeaderEntry("Kalenderbenutzer", "Kalenderbenutzer verwalten", 
+    		"'Kalenderbenutzer' kann ein Behandler, sonstige Mitarbeiter oder auch eine besondere Ressource sein.\n\n"+
+    				"Der Matchcode ist die dargestellte Überschrift bzw. der in der Terminsuche verwendete Begriff. Er kann frei vergeben werden\n"+
+    				"und ist der Form nicht festgelegt. 'Peter', 'Müller Martina' oder 'Gewürzgurke007' - Alles erlaubt!",
+            null);
 	/***********Numero tre***********/
-	sdummy = "Behandlersets definieren";
+/*
+    sdummy = "Behandlersets definieren";
 	htitel.put("Behandlersets", sdummy);
 	sdummy = "In Behandlersets werden bis zu 7 Kalenderbenutzer gruppiert, die im Terminkalender gleichzeitig\n"+
 	"nebeneinander dargestellt werden sollen. Im Terminkalender kann über F12 schnell zwischen den verschiedenen Sets\n"+
@@ -897,18 +940,29 @@ private void headerInfos(){
 	hdescription.put("Behandlersets", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("Behandlersets", icodummy);
-	
+ */
+    addHeaderEntry("Behandlersets", "Behandlersets definieren", 
+    		"In Behandlersets werden bis zu 7 Kalenderbenutzer gruppiert, die im Terminkalender gleichzeitig\n"+
+    				"nebeneinander dargestellt werden sollen. Im Terminkalender kann über F12 schnell zwischen den verschiedenen Sets\n"+
+    				"umgeschaltet werden.",
+            null);
 	/***********Numero tre bi***********/
-	sdummy = "Terminkalender Startoptionen";
+/*
+    sdummy = "Terminkalender Startoptionen";
 	htitel.put("Ansichtsoptionen", sdummy);
 	sdummy = "Der Terminkalender startet standardmäßig in der Normalansicht ohne vordefiniertem Behandlerset.\n"+
 	"Hier können Sie die Ansichtsoptionen festlegen die beim starten des Terminkalenders angewendet werden.\n";
 	hdescription.put("Ansichtsoptionen", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("Ansichtsoptionen", icodummy);
-	
+ */	
+    addHeaderEntry("Ansichtsoptionen", "Terminkalender Startoptionen", 
+    		"Der Terminkalender startet standardmäßig in der Normalansicht ohne vordefiniertem Behandlerset.\n"+
+    				"Hier können Sie die Ansichtsoptionen festlegen die beim starten des Terminkalenders angewendet werden.\n",
+            null);
 	/***********Numero vier***********/
-	sdummy = "Druckvorlage";
+/*
+    sdummy = "Druckvorlage";
 	htitel.put("DruckvorlageTerminliste", sdummy);
 	sdummy = "In diesem Fenster können für jeden angeschlossenen Rechner Vorgaben zum Druck der Terminliste\n"+
 	"gemacht werden. \n"+
@@ -918,9 +972,17 @@ private void headerInfos(){
 	hdescription.put("DruckvorlageTerminliste", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("DruckvorlageTerminliste", icodummy);
-
+ */
+    addHeaderEntry("DruckvorlageTerminliste", "Druckvorlage", 
+    		"In diesem Fenster können für jeden angeschlossenen Rechner Vorgaben zum Druck der Terminliste\n"+
+    				"gemacht werden. \n"+
+    				"Wenn Sie die Druckvorlagendatei hinsichtlich der Tabellen-, Zeilen- oder Spaltenzahl verändern, müssen diese\n"+
+    				"Strukturparameter unbedingt hier ebenfalls angepasst werden, da die Daten sonst nicht korrekt übergeben werden können."+
+    				"Angaben zu Papierformat und verwendetem Druckereinzug werden in der Vorlagendatei mit OpenOffice eingestellt.",
+            null);
 	/***********Numero fünef***********/
-	sdummy = "Kalenderfarben definieren";
+/*
+    sdummy = "Kalenderfarben definieren";
 	htitel.put("Kalenderfarben", sdummy);
 	sdummy = "Die farbliche Darstellung der Termine im Kalender ist eine sehr effiziente Signalsprache. \n"+
 	"Sie können zwischen 4 vordefinierten Farbkombinationen wählen oder für die jeweilige Bedeutung eine eigene\n"+
@@ -931,9 +993,18 @@ private void headerInfos(){
 	hdescription.put("Kalenderfarben", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("Kalenderfarben", icodummy);
-
+ */
+    addHeaderEntry("Kalenderfarben", "Kalenderfarben definieren", 
+    		"Die farbliche Darstellung der Termine im Kalender ist eine sehr effiziente Signalsprache. \n"+
+    				"Sie können zwischen 4 vordefinierten Farbkombinationen wählen oder für die jeweilige Bedeutung eine eigene\n"+
+    				"Kombination vergeben.\n"+
+    				"Besondere Bedeutung haben die Codes 'A' bis 'H', die mit einer Bedeutung frei verknüpft werden können.\n"+
+    				"Diese Codes können dann wie in der Tabelle angegeben in den Terminen hinter der Rezeptnummer eingetragen werden\n"+
+    				"und bestimmen die Farbgebung (der Code für die Behandlungszeit wird dann nachrangig).",
+            null);
 	/***********Numero sex***********/
-	sdummy = "Gruppentermine definieren";
+/*
+    sdummy = "Gruppentermine definieren";
 	htitel.put("Gruppentermine", sdummy);
 	sdummy = "Gruppentermine ist was für den Spezialisten\n"+
 	"Der wird dann auch den Text schreiben....\n"+
@@ -941,9 +1012,15 @@ private void headerInfos(){
 	hdescription.put("Gruppentermine", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("Gruppentermine", icodummy);
-
+ */
+    addHeaderEntry("Gruppentermine", "Gruppentermine definieren", 
+    		"Gruppentermine ist was für den Spezialisten\n"+
+    				"Der wird dann auch den Text schreiben....\n"+
+    				"...und beim Hilfetext richtig ins Zeugs legen!",
+            null);
 	/***********Numero siebene***********/
-	sdummy = "Kalenderjahr anlegen";
+/*
+    sdummy = "Kalenderjahr anlegen";
 	htitel.put("Kalenderjahranlegen", sdummy);
 	sdummy = "Hier wird die Kalenderdatenbank um ein weiteres Jahr verlängert. Sinnvoll ist dies, wenn zuvor\n"+
 	"die Arbeitszeitpläne inklusive der Dauertermine auf den aktuellen Stand gebracht wurden (sofern gewünscht). \n"+
@@ -951,28 +1028,40 @@ private void headerInfos(){
 	hdescription.put("Kalenderjahranlegen", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("Kalenderjahranlegen", icodummy);
-
+ */
+    addHeaderEntry("Kalenderjahranlegen", "Kalenderjahr anlegen", 
+    		"Hier wird die Kalenderdatenbank um ein weiteres Jahr verlängert. Sinnvoll ist dies, wenn zuvor\n"+
+    				"die Arbeitszeitpläne inklusive der Dauertermine auf den aktuellen Stand gebracht wurden (sofern gewünscht). \n"+
+    				"Die Feiertagsliste kann importiert werden und durch eigene Daten (z.B. Betriebsausflug, -ferien) ergänzt werden.",
+            null);
 	/***********Numero achte***********/
-	sdummy = "Ru:gl - Grundeinstellungen";
+/*
+    sdummy = "Ru:gl - Grundeinstellungen";
 	htitel.put("RoogleGrundeinstellungen", sdummy);
 	sdummy = "Die Grundeinstellungen für die Terminsuchmaschine [Ru:gl] legen die Vorgaben fest, mit denen\n"+
 	"Ru:gl startet. Sie können natürlich für jeden Suchvorgang im Ru:gl-Fenster 'individueller Zeitraum' angepasst werden.\n";
 	hdescription.put("RoogleGrundeinstellungen", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
 	hicon.put("RoogleGrundeinstellungen", icodummy);
-
+ */
+    addHeaderEntry("RoogleGrundeinstellungen", "Ru:gl - Grundeinstellungen", 
+    		"Die Grundeinstellungen für die Terminsuchmaschine [Ru:gl] legen die Vorgaben fest, mit denen\n"+
+    				"Ru:gl startet. Sie können natürlich für jeden Suchvorgang im Ru:gl-Fenster 'individueller Zeitraum' angepasst werden.\n",
+            null);
 	/***********Numero neune***********/
-	sdummy = "Stammdaten - Patienten";
+/*
+    sdummy = "Stammdaten - Patienten";
 	htitel.put("PatientStammdaten", sdummy);
 	sdummy = "Hier legen Sie fest in welchem Container das Patientenfenster erscheinen soll.\n"+
 	"Sie können Textvorlagen definieren, und individuelle Merkmale aufnehmen, die Sie später dem Patienten zuordnen.\n";
 	hdescription.put("PatientStammdaten", sdummy);
 	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("PatientStammdaten", icodummy);	
+	hicon.put("PatientStammdaten", icodummy);
+ */
+    addHeaderEntry("PatientStammdaten", "Stammdaten - Patienten", 
+    		"Hier legen Sie fest in welchem Container das Patientenfenster erscheinen soll.\n"+
+    				"Sie können Textvorlagen definieren, und individuelle Merkmale aufnehmen, die Sie später dem Patienten zuordnen.\n",
+            null);
 	}
-
-/******************************************/
-
-		
 }	
 
