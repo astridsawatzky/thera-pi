@@ -130,7 +130,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 		//dialogArea.setBackground(Color.yellow);
 		GridBagConstraints gbc = new GridBagConstraints();
 
-        ImageIcon icon = new ImageIcon("C:/RehaVerwaltung/icons/Pi_1_0_64x64.png");
+        ImageIcon icon = new ImageIcon(Reha.proghome+"icons/Pi_1_0_64x64.png");
 		JLabel imgLbl = new JLabel(icon);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
