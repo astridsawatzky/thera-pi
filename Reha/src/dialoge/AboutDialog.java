@@ -3,6 +3,7 @@ package dialoge;
 import hauptFenster.Reha;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -115,8 +116,8 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 		
 		//JPanel lower = (JPanel)builder.add(new JPanel(), cc.xy(colCnt,++rowCnt));
 		JPanel lower = getButtonRow();
-		builder.add(lower, cc.xy(colCnt,++rowCnt));									// 2,4
-
+		builder.add(lower, cc.xy(colCnt,++rowCnt,CellConstraints.FILL,CellConstraints.FILL));									// 2,4
+		builder.getPanel().validate();
 	    DialogFrame = builder.getPanel(); 
 
 		return DialogFrame;
@@ -169,7 +170,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 		strBuf.setLength(0);
 		strBuf.trimToSize();
 		strBuf.append("<html>");
-		strBuf.append("Thera-\u03C0 v1.0 vom "+Reha.aktuelleVersion.replace("-DB=", "")+"<br> Idee u. &copy; by Jürgen Steinhilber<br><br>");
+		strBuf.append("Thera-\u03C0 v1.0 vom "+Reha.aktuelleVersion.replace("-DB=", "")+"<br> Idee von Jürgen Steinhilber<br><br>");
 
 		// insert credits here:
 /*
@@ -286,6 +287,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 
 		scroller = new JScrollPane(htmlPane);
 		scroller.setBorder(null);			// keine Umrandung
+		scroller.validate();
 		//scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		md5Table.add(scroller, gbc);		// scrollen fkt noch nicht!
 
@@ -358,12 +360,14 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 				JPanel newContent = (showMD5());
 //				currInstance.add(new JPanel());
 //				JPanel newContent = showMD5();
-				instJar.add(newContent,gbc);			// neuen Inhalt in Frame einsetzen ...
-				instJar.pack();							// ... und Größe anpassen
-				
+				instJar.setContentPane(newContent);
+				//instJar.add(newContent,gbc);			// neuen Inhalt in Frame einsetzen ...
+				instJar.pack();		
+				instJar.setSize(new Dimension(instJar.getPreferredSize().height-200,instJar.getPreferredSize().width));// ... und Größe anpassen
+				instJar.addKeyListener(this);
 				instJar.setLocationRelativeTo(null); 	// center on screen
 				instJar.setVisible(true);
-				instJar.addKeyListener(this);
+				
 			}
 			return;
 		}
