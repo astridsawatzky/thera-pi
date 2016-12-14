@@ -322,13 +322,16 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		modtarife.setRowCount(0);
 		//int lang = SystemConfig.vPreisGruppen.size();
 		String diszi = (String)disziplin.getSelectedItem();
-		if(SystemPreislisten.hmPreisGruppen.get(diszi)==null){return;}
+		
+		if(SystemPreislisten.hmPreisGruppen.get(diszi)==null){
+			return;
+		}
 		int lang = SystemPreislisten.hmPreisGruppen.get(diszi).size();
 		Vector<String> vec = new Vector<String>();
 		String wert = "";
 		for(int i = 0;i < lang;i++){
+			try{
 			vec.clear();
-
 			/*********************************/
 			wert = SystemPreislisten.hmPreisGruppen.get(diszi).get(i);
 			vec.add(wert);
@@ -422,6 +425,9 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 			wert = SystemPreislisten.hmPreisBesonderheit.get(diszi).get(i);
 			vec.add(wert);
 			modtarife.addRow((Vector<?>)vec.clone());
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
 		}
 		tarife.validate();
 		tarife.repaint();
@@ -430,7 +436,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 	
 	private void doSpeichern(){
 		//String wert = "";
-		
+		try{
 		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/","preisgruppen.ini");
 
 		//int lang = SystemConfig.vPreisGruppen.size();
@@ -617,7 +623,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				 *  
 				 */
 				if( i > ((Vector<?>)SystemPreislisten.hmFristen.get(diszi).get(0)).size() ){
-					System.out.println("Erstelle Parameter für Disziplin="+diszi+" Preisgruppe="+Integer.toString(i+1));
+					//System.out.println("Erstelle Parameter für Disziplin="+diszi+" Preisgruppe="+Integer.toString(i+1));
 					SystemPreislisten.fristenini.setIntegerProperty("Fristen_"+diszi, "FristBeginn"+Integer.toString(i+1),14,null);
 					SystemPreislisten.fristenini.setIntegerProperty("Fristen_"+diszi, "BeginnKalendertage"+Integer.toString(i+1),1,null);
 					SystemPreislisten.fristenini.setIntegerProperty("Fristen_"+diszi, "FristUnterbrechung"+Integer.toString(i+1),14,null);
@@ -635,6 +641,9 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		}else{
 			INITool.saveIni(inif);
 			JOptionPane.showMessageDialog(null,"Konfiguration für -> "+diszi+" <- wurde erfolgreich gespeichert");
+		}
+		}catch(Exception ex2){
+			ex2.printStackTrace();
 		}
 	}
 	private int stringPosErmitteln(String[] str,String vergleich){
@@ -707,11 +716,20 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		return ret;
 	}
 	private void doNeueGruppe(){
-		String message = "<html><b>In der Folge wird eine neue Tarifgruppe angelegt,<br>gültig für die Disziplinen<br><br>"+
-		"<font color='#0000ff'>Physio<br>Massage<br>Ergo<br>Logo<br>Reha<br>Podo</font><br><br>"+
-		"Wollen Sie die Tarifgruppe jetzt anlegen<b><br></html>";
+		String message = "";
+		if(SystemConfig.mitRs){
+			message = "<html><b>In der Folge wird eine neue Tarifgruppe angelegt,<br>gültig für die Disziplinen<br><br>"+
+					"<font color='#0000ff'>Physio<br>Massage<br>Ergo<br>Logo<br>Reha<br>Podo<br>Rsport<br>Ftrain</font><br><br>"+
+					"Wollen Sie die Tarifgruppe jetzt anlegen<b><br></html>";
+			
+		}else{
+			message = "<html><b>In der Folge wird eine neue Tarifgruppe angelegt,<br>gültig für die Disziplinen<br><br>"+
+					"<font color='#0000ff'>Physio<br>Massage<br>Ergo<br>Logo<br>Reha<br>Podo</font><br><br>"+
+					"Wollen Sie die Tarifgruppe jetzt anlegen<b><br></html>";			
+		}
 		int anfrage = JOptionPane.showConfirmDialog(null, message, "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 		if(anfrage == JOptionPane.YES_OPTION){
+			try{
 			Object ret = JOptionPane.showInputDialog(null, "Geben Sie bitte einen gemeinsamen Namen für die neue Preisgruppe ein", "gemeinsamer Name");
 			if(ret == null){
 				return;
@@ -743,23 +761,25 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 			if(isAktiv("Logo")){
 				SystemPreislisten.ladePreise("Logo");
 			}
-			if(isAktiv("Reha")){
+			if(isAktiv("Reha-Ver")){
 				SystemPreislisten.ladePreise("Reha");
 			}
 			if(isAktiv("Podo")){
 				SystemPreislisten.ladePreise("Podo");
 			}
 			if(SystemConfig.mitRs){
-				if(isAktiv("Rsport")){
+				if(isAktiv("Rehasport")){
 					SystemPreislisten.ladePreise("Rsport");
 				}
-				if(isAktiv("Ftrain")){
+				if(isAktiv("Funktions")){
 					SystemPreislisten.ladePreise("Ftrain");
 				}
 			}
 			SystemPreislisten.ladePreise("Common");
-			
 			fuelleMitWerten(disziplin.getSelectedIndex());
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
 		}
 	}
 	public boolean isAktiv(String disziplin){

@@ -90,7 +90,7 @@ public class SystemPreislisten {
 				return s1.compareTo(s2);
 			}
 		};
-
+		
 		if(treffer==0){
 			vKGPreise.clear();
 			for(int i = 0; i < tarife;i++){
