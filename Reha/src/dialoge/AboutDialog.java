@@ -170,7 +170,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 		strBuf.setLength(0);
 		strBuf.trimToSize();
 		strBuf.append("<html>");
-		strBuf.append("Thera-\u03C0 v1.0 vom "+Reha.aktuelleVersion.replace("-DB=", "")+"<br> Idee von Jürgen Steinhilber<br><br>");
+		strBuf.append("Thera-\u03C0 v1.0 vom "+Reha.aktuelleVersion.replace("-DB=", "")+"<br>nach einer Idee von Jürgen Steinhilber<br><br>");
 
 		// insert credits here:
 /*
@@ -287,6 +287,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 
 		scroller = new JScrollPane(htmlPane);
 		scroller.setBorder(null);			// keine Umrandung
+		scroller.getVerticalScrollBar().setUnitIncrement(15);
 		scroller.validate();
 		//scroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		md5Table.add(scroller, gbc);		// scrollen fkt noch nicht!
