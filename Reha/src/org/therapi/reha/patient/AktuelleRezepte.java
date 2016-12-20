@@ -1571,7 +1571,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				"WS1 a","WS1 b","WS1 c","WS1 d","WS1 e",
 				"WS2 a","WS2 b","WS2 c","WS2 d","WS2 e","WS2 f","WS2 g",
 				"ZN1 a","ZN1 b","ZN1 c",
-				"ZN2 a","ZN2 b","ZN2 c","k.A."
+				"ZN2 a","ZN2 b","ZN2 c",
+				"CD1 a","CD1 b","CD1 c","CD1 d",
+				"CD2 a","CD2 b","CD2 c","CD2 d",
+				"ZNSZ",
+				"CSZ a","CSZ b","CSZ c",
+				"LYZ1","LYZ2",
+				"k.A."
 		};
 		
 		indergo =  new String[] {
@@ -1586,7 +1592,11 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				"SC1","SC2",
 				"SF",
 				"SP1","SP2","SP3","SP4","SP5","SP6",
-				"ST1","ST2","ST3","ST4","k.A."
+				"ST1","ST2","ST3","ST4",
+				"SPZ",
+				"SCZ",
+				"OFZ",
+				"k.A."
 		};
 		indpodo = new String[] {
 				"kein IndiSchl.",
