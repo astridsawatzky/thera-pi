@@ -259,6 +259,7 @@ public class SystemConfig {
 	
 	public static boolean fullSizePwDialog = false;
 	
+	
 	public SystemConfig(){
 	
 	}

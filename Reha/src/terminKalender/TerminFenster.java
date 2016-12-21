@@ -1141,7 +1141,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 							//F7
 							break;
 						}
-						if ( (e.getKeyCode()==119) || (e.getKeyCode()==127 && e.isShiftDown()) || (e.getKeyCode()==KeyEvent.VK_X && e.isControlDown()) ) {
+						if ( (e.getKeyCode()==119) || (e.getKeyCode()==127 && e.isShiftDown()) || (e.getKeyCode()==KeyEvent.VK_X && e.isControlDown() && (!e.isAltDown())) ) {
 							//F8 / Shift-Entf / Strg-X
 							if((!Rechte.hatRecht(Rechte.Kalender_termindelete, true))){
 								//getAktTestTermin("name").equals(""))
