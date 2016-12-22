@@ -749,6 +749,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}
 		// ---- Suchstring zusammensetzen
 		sTmp = "";
+		/*
+		// ergibt ein absolut "ungewöhnliches" Ergebnis. 
 		for (String c: sSuchPattern){
 			if (sTmp.isEmpty()){
 				sTmp = fieldname+" LIKE '"+c+"%'";	
@@ -756,7 +758,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
 			}
 		}
-		/*
+		*/
+		
 		for (int i2 = 0; i2 < sSuchPattern.size();i2++){
 			if(i2 == 2){
 				//steht lediglich ein Vokal was zu einer größeren Menge nicht gewünschter Datensätze führt
@@ -772,7 +775,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+sSuchPattern.get(i2)+"%'";
 			}
 		}
-		*/
+		
 
 		//System.out.println("Suchstring: "+sTmp);
 		return sTmp;

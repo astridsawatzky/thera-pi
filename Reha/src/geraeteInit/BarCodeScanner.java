@@ -44,6 +44,7 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 	   //static String port;
 	   int baud,bits,stopbit,parity ;
 	   final byte[] fbuffer = new byte[50];
+	   
 	public BarCodeScanner(String port) throws Exception{
 		portList = CommPortIdentifier.getPortIdentifiers();
 		while (portList.hasMoreElements()) {
