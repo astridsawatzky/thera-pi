@@ -1,4 +1,4 @@
-package systemEinstellungen;
+﻿package systemEinstellungen;
 
 
 import hauptFenster.Reha;
@@ -33,6 +33,10 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
+import CommonTools.FireRehaError;
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.SqlInfo;
 
 
 public class SystemConfig {
@@ -1991,7 +1995,7 @@ public class SystemConfig {
 				"rechts","abbruch","pdf","euro","einzeltage","info2","bild","patbild","bunker","camera","oofiles",
 				"kleinehilfe","achtung","vorschau","patstamm","arztstamm","kassenstamm","drvlogo","personen16",
 				"forward","wecker16","mond","roogle","scannergross","rot","gruen","inaktiv","buttonrot","buttongruen",
-				"statusoffen","statuszu","statusset","abschliessen","bombe","openoffice26","tporgklein","information","undo","redo",
+				"statusoffen","statuszu","statusset","abschliessen","bombe","bomb24","openoffice26","tporgklein","information","undo","redo",
 				"abrdreizwei","abriv","att","close","confirm","copy","cut","day","dayselect","down","left","minimize","paste","patsearch",
 				"quicksearch","refresh","right","search","tellist","termin","upw","week","abrdreieins","ebcheck","hbmehrere","verkaufArtikel",
 				"verkaufLieferant", "verkaufTuten","patnachrichten","ocr","BarKasse"};

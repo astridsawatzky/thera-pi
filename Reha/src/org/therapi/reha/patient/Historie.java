@@ -795,6 +795,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 				SqlInfo.sqlAusfuehren("delete from faktura where rez_nr='"+rez_nr+"'");
 				SqlInfo.sqlAusfuehren("delete from fertige where rez_nr='"+rez_nr+"'");
 				if(Reha.thisClass.abrechnungpanel != null){
+					/*
 					String[] diszis = null;
 					if(SystemConfig.mitRs){
 						diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
@@ -803,6 +804,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 					}
 					
 					String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+					*/
+					String aktDisziplin = Reha.thisClass.abrechnungpanel.disziSelect.getCurrDiszi();
 					if(RezTools.putRezNrGetDisziplin(rez_nr).equals(aktDisziplin)){
 						Reha.thisClass.abrechnungpanel.einlesenErneuern(rez_nr);
 					}

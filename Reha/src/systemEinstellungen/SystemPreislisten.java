@@ -54,7 +54,6 @@ public class SystemPreislisten {
 	private static Vector<Integer> modusdummy = new Vector<Integer>();
 	public static HashMap<String,Vector<Object>> hmFristen = new HashMap<String,Vector<Object>>();
 	private static Vector<Object> odummy = new Vector<Object>(); 
-	
 
 	static INIFile fristenini = null;
 	static INIFile inif = null;
@@ -90,7 +89,7 @@ public class SystemPreislisten {
 				return s1.compareTo(s2);
 			}
 		};
-		
+
 		if(treffer==0){
 			vKGPreise.clear();
 			for(int i = 0; i < tarife;i++){
@@ -551,7 +550,7 @@ public class SystemPreislisten {
 			INITool.saveIni(f);
 		}
 	}
-	public static void getHMRAbrechnung(INIFile f,String disziplin,int tarife){
+	public static void getHMRAbrechnung(INIFile f,String disziplin,int tarife){		// $302-Abrechnung Ja/nein
 		for(int i = 0; i < tarife;i++){
 			intdummy.add(f.getIntegerProperty("HMRAbrechnung_"+disziplin, "HMRAbrechnung"+Integer.toString(i+1)));
 		}

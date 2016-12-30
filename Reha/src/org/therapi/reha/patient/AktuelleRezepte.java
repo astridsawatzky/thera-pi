@@ -100,6 +100,7 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import abrechnung.AbrechnungPrivat;
 import abrechnung.AbrechnungRezept;
+import abrechnung.Disziplinen;
 import abrechnung.RezeptGebuehrRechnung;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -2128,26 +2129,29 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			}
 			doAbschlussTest();
 			if(Reha.thisClass.abrechnungpanel != null){
+				/*
 				String[] diszis = null;
 				if(SystemConfig.mitRs){
 					diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
 				}else{
 					diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};	
 				}
-				
+				*/
+
 				int currow = tabaktrez.getSelectedRow();
 				if(currow < 0){return;}
-					if(dtblm.getValueAt(currow,5)==null){		// kein Status-Icon gesetzt 
-						Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+				if(dtblm.getValueAt(currow,5)==null){		// kein Status-Icon gesetzt 
+					Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+				}else{
+//					String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+					String aktDisziplin = Reha.thisClass.abrechnungpanel.disziSelect.getCurrDiszi();
+					if(RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){ 
+						// Rezept gehört zu der Sparte, zur Sparte, die gerade im Abrechnungspanel geöffnet ist
+						Reha.thisClass.abrechnungpanel.einlesenErneuern(Reha.thisClass.patpanel.vecaktrez.get(1));
 					}else{
-						String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
-						if(RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){
-							// Rezept gehört zu der Sparte, die gerade im Abrechnungspanel geöffnet ist
-							Reha.thisClass.abrechnungpanel.einlesenErneuern(Reha.thisClass.patpanel.vecaktrez.get(1));
-						}else{
-							Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
-						}
+						Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
 					}
+				}
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -2320,6 +2324,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				
 				String position = "";
 				
+				/*
 				String[] diszis = null;
 				if(SystemConfig.mitRs){
 					diszis = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
@@ -2328,6 +2333,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				
 				List<String> list = Arrays.asList(diszis);
+				*/
+				Disziplinen disziSelect = new Disziplinen();
+
 				for(int i = 2;i <= 5;i++ ){
 					try{
 						idtest = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(6+i));	
@@ -2359,7 +2367,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				if(hmpositionen.size() > 0){
 					boolean checkok = new HMRCheck(
 							indi,
-							list.indexOf(diszi),
+//							list.indexOf(diszi),
+							disziSelect.getIndex(diszi),
 							anzahlen,hmpositionen,
 							Integer.parseInt(preisgruppe)-1,
 							SystemPreislisten.hmPreise.get(diszi).get(Integer.parseInt(preisgruppe)-1),
@@ -3028,13 +3037,17 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					SqlInfo.sqlAusfuehren("delete from fertige where rez_nr='"+xrez_nr+"'");
 					RezTools.loescheRezAusVolleTabelle(xrez_nr);
 					if(Reha.thisClass.abrechnungpanel != null){
+						/*
 						String[] diszis = null;
 						if(SystemConfig.mitRs){
 							diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
 						}else{
-							diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
+							diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};	
 						}
+						
 						String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+						*/
+						String aktDisziplin = Reha.thisClass.abrechnungpanel.disziSelect.getCurrDiszi();
 						if(RezTools.putRezNrGetDisziplin(xrez_nr).equals(aktDisziplin)){
 							Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
 						}

@@ -1,4 +1,4 @@
-package dialoge;
+﻿package dialoge;
 
 import hauptFenster.Reha;
 
@@ -361,11 +361,13 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 				JPanel newContent = (showMD5());
 //				currInstance.add(new JPanel());
 //				JPanel newContent = showMD5();
-				instJar.setContentPane(newContent);
 				//instJar.add(newContent,gbc);			// neuen Inhalt in Frame einsetzen ...
+				instJar.setContentPane(newContent);
 				instJar.pack();		
-				instJar.setSize(new Dimension(instJar.getPreferredSize().height-200,instJar.getPreferredSize().width));// ... und Größe anpassen
+				//instJar.setSize(new Dimension(instJar.getPreferredSize().height-200,instJar.getPreferredSize().width));// ... und Größe anpassen
+				instJar.setSize(30+newContent.getWidth(), 40+newContent.getHeight());
 				instJar.addKeyListener(this);
+
 				instJar.setLocationRelativeTo(null); 	// center on screen
 				instJar.setVisible(true);
 				

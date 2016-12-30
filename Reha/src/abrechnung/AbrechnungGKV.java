@@ -1,4 +1,4 @@
-package abrechnung;
+﻿package abrechnung;
 
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
@@ -96,14 +96,14 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	String aktDfue;
 	String aktRechnung;
 	String aktDisziplin = "";
-	String[] diszis = {"KG","MA","ER","LO","PO","RS","FT"};
+//	String[] diszis = {"KG","MA","ER","LO","PO","RS","FT"};		// McM: weg
 	
 	boolean annahmeAdresseOk = false;
 	/*******Controls für die linke Seite*********/
 	ButtonGroup bg = new ButtonGroup();
 	JRtaRadioButton[] rbLinks = {null,null,null,null};
 	JButton[] butLinks = {null,null,null,null};
-	public JRtaComboBox cmbDiszi = null;
+	private JRtaComboBox cmbDiszi = null;
 	JXTree treeKasse = null;
 	File f;
 	FileWriter fw;
@@ -141,6 +141,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	DecimalFormat dfx = new DecimalFormat( "0.00" );	
 	
 	Vector<String> existiertschon = new Vector<String>();
+	Vector<String> customIconList = new Vector<String>();
+	int toggleIcons;
 	Vector<Vector<String>> kassenIKs = new Vector<Vector<String>>(); 
 	/*******Controls für die rechte Seite*********/
 	AbrechnungRezept abrRez = null;
@@ -174,10 +176,17 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	
 	public static boolean directCall = false;
 	
+	public Disziplinen disziSelect = null;
+	
 	public AbrechnungGKV(JAbrechnungInternal xjry){
 		super();
 		this.setJry(xjry);
 		setLayout(new BorderLayout());
+		if (disziSelect == null) {
+			disziSelect = new Disziplinen();
+		}
+		cmbDiszi = disziSelect.getComboBox();
+
 		jSplitLR =  UIFSplitPane.createStrippedSplitPane(JSplitPane.HORIZONTAL_SPLIT,
         		getLeft(),
         		getRight()); 
@@ -205,7 +214,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		}.execute();
 		originalTitel = this.jry.getTitel();
 		setEncryptTitle();
-		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
+		//cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
+		disziSelect.setCurrDiszi(SystemConfig.initRezeptKlasse);	// Kassentree füllen
 		
 	}
 	public void setEncryptTitle(){
@@ -286,25 +296,16 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		pb.getPanel().setBackground(Color.WHITE);
 		//pb.add(getIVPanel(),cc.xy(2,1));
 		pb.addLabel("Heilmittel auswählen",cc.xy(2,2));
-		if(SystemConfig.mitRs){
-			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept","Rehasport-Rezept","Funktionstraining-Rezept"});			
-		}else{
-			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept"});			
-		}
+//		if(SystemConfig.mitRs){
+//			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept","Rehasport-Rezept","Funktionstraining-Rezept"});			
+//		}else{
+//			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept"});			
+//		}
 		
 		cmbDiszi.setActionCommand("einlesen");
-		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
-		
+//		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
 		pb.add(cmbDiszi,cc.xy(2,4));
-		/*
-		butLinks[0] = new JButton("Abrechnungsdaten einlesen");
-		butLinks[0].setActionCommand("einlesen");
-		butLinks[0].addActionListener(this);
-		pb.addLabel("",cc.xy(2,6));
-		pb.add(butLinks[0],cc.xy(2,8));
-		*/
-		//rootKasse = new DefaultMutableTreeNode( "Abrechnung für Kasse..." );
-		//rootKasse = new DefaultMutableTreeNode( "Abrechnung für Kasse..." );
+
 		rootKasse = new JXTTreeNode(new KnotenObjekt("Abrechnung für Kasse...","",false,"",""),true);
 		treeModelKasse = new KassenTreeModel((JXTTreeNode) rootKasse);
 
@@ -398,17 +399,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		String cmd = arg0.getActionCommand();
 		if(cmd.equals("einlesen")){
 			//rootKasse.removeAllChildren();
-			//String[] reznr = {"KG","MA","ER","LO"};
-			String[] diszis = null;
-			if(SystemConfig.mitRs){
-				diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
-			}else{
-				diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
-			}
- 
-			aktDisziplin = diszis[cmbDiszi.getSelectedIndex()];
+//			aktDisziplin = getCurrDiszi();
+			aktDisziplin = disziSelect.getCurrDiszi();
 			//System.out.println("aktDisziplin = "+aktDisziplin);
-			//abrRez.setKuerzelVec(reznr[cmbDiszi.getSelectedIndex()]);
 			if(abrRez.rezeptSichtbar){
 				abrRez.setRechtsAufNull();
 	    		aktuellerPat = "";
@@ -421,26 +414,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			
 		}
 	}
-	private String getDiszis(){
-		String[] diszis = null;
-		if(SystemConfig.mitRs){
-			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
-		}else{
-			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
-		}
 
-		return String.valueOf(diszis[cmbDiszi.getSelectedIndex()]);
-	}
 	public void einlesenErneuern(String neueReznr){
 		directCall = false;
-		String[] diszis = null;
-		if(SystemConfig.mitRs){
-			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"};
-		}else{
-			diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
-		}
-
-		aktDisziplin = diszis[cmbDiszi.getSelectedIndex()];
+//		aktDisziplin = getCurrDiszi();
+		aktDisziplin = disziSelect.getCurrDiszi();
 		//abrRez.setKuerzelVec(reznr[cmbDiszi.getSelectedIndex()]);
 		if(abrRez.rezeptSichtbar){
 			abrRez.setRechtsAufNull();
@@ -603,27 +581,32 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 						}
 					}.execute();
 					existiertschon.clear();
-					String dsz = diszis[cmbDiszi.getSelectedIndex()];
+					customIconList.clear();
+//					String dsz = diszis[cmbDiszi.getSelectedIndex()];		// McM: kann weg (OK)
+					String dsz = disziSelect.getCurrRezClass();
 					
 					//String cmd = "select name1,ikktraeger,ikkasse,id from fertige where rezklasse='"+dsz+"' ORDER BY ikktraeger , id";
-					// das Gleiche sortiert nach Papierannahmestellen:
+					// McM: das Gleiche sortiert nach Papierannahmestellen:
 					String cmd = "SELECT t1.name1,t1.ikktraeger,t1.ikkasse,t1.id,t2.ik_papier " +
 								 "FROM fertige AS t1 LEFT JOIN kass_adr AS t2 ON t1.ikkasse = t2.ik_kasse " +
 								 "WHERE rezklasse='"+dsz+"' ORDER BY t2.ik_papier, t1.name1, t1.ikktraeger, t1.id";
 
 					Vector <Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
 
+					kassenBaumLoeschen();
 					if(vecKassen.size() <= 0){
-						kassenBaumLoeschen();
 						Reha.thisClass.progressStarten(false);
 						return null;
 					}
-					kassenBaumLoeschen();
 					treeKasse.setEnabled(true);
 					String kas = vecKassen.get(0).get(0).trim().toUpperCase();
 					String ktraeger = vecKassen.get(0).get(1).trim();
 					String ikkasse = vecKassen.get(0).get(2).trim();
+					String ikpapier = vecKassen.get(0).get(4).trim();
 					existiertschon.add(ktraeger);
+					//customIconList.add(ktraeger); neee, der erste bleibt 'original'
+					toggleIcons = 0;
+					KeepIkPap myIkPap = new KeepIkPap(ikpapier);
 
 					int aeste = 0;					
 					astAnhaengen(kas,ktraeger,ikkasse);
@@ -634,19 +617,27 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.rez_num);
 					*/
 					aeste++;
-					
-					
-
-
 
 					for(int i = 0; i < vecKassen.size();i++){
 						if(! existiertschon.contains(vecKassen.get(i).get(1).trim().toUpperCase())){
 							kas = vecKassen.get(i).get(0).trim().toUpperCase();
 							ktraeger = vecKassen.get(i).get(1);
 							ikkasse = vecKassen.get(i).get(2);
+							ikpapier = vecKassen.get(i).get(4).trim();
 							existiertschon.add(ktraeger);
 							astAnhaengen(kas,ktraeger,ikkasse);
 							rezepteAnhaengen(aeste);
+							if (myIkPap.newIkPap(ikpapier)){
+								// Hintergrund- oder Icon-Farbe ändern
+								toggleIcons = (++toggleIcons)&1;
+								/*
+								System.out.println("Wechsel IK-Papier: "+ikpapier+" Hintergrund oder Icon-Farbe ändern @: "+
+								((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.titel);
+								*/
+							};
+							if (toggleIcons == 1 ){
+								customIconList.add(ktraeger);								
+							}
 							/*
 							System.out.println(ktraeger);
 							System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.titel);
@@ -675,7 +666,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	}
 	private void rezepteAnhaengen(int knoten){
 		String ktraeger = ((JXTTreeNode)rootKasse.getChildAt(knoten)).knotenObjekt.ktraeger;
-		String dsz = diszis[cmbDiszi.getSelectedIndex()];
+//		String dsz = diszis[cmbDiszi.getSelectedIndex()];		// McM: kann weg (OK)
+		String dsz = disziSelect.getCurrRezClass();
 		String cmd = "select rez_nr,pat_intern,ediok,ikkasse from fertige where rezklasse='"+dsz+"' AND ikktraeger='"+
 		ktraeger+"' ORDER BY id,pat_intern";
 
@@ -812,8 +804,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
     		if(! ((JXTTreeNode)node).knotenObjekt.preisgruppe.trim().equals("")){
     			////System.out.println("Aktuelle Disziplin = "+getDiszis()+" / Aktuelle Preisgruppe = "+pgr);
     			pgr = Integer.parseInt(((JXTTreeNode)node).knotenObjekt.preisgruppe.trim());
-    			zuzahlModusDefault = (SystemPreislisten.hmZuzahlModus.get(getDiszis()).get(pgr-1)==1 ? true : false);
-    		}
+    			zuzahlModusDefault = (SystemPreislisten.hmZuzahlModus.get(disziSelect.getCurrDiszi()).get(pgr-1)==1 ? true : false);
+    		} 
     		if(pgr < 0){
     			JOptionPane.showMessageDialog(null,"Achtung Preisgruppe kann nicht ermittelt werden!\nBitte dieses Rezept nicht abrechnen!");
     		}
@@ -1048,7 +1040,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				ik_email = String.valueOf(ret);
 			}
 		}
-		preisVector = RezTools.holePreisVector(diszis[cmbDiszi.getSelectedIndex()],Integer.parseInt(kassenIKs.get(0).get(5))-1);
+		//preisVector = RezTools.holePreisVector(diszis[cmbDiszi.getSelectedIndex()],Integer.parseInt(kassenIKs.get(0).get(5))-1);		// McM: kann weg (OK)
+		preisVector = RezTools.holePreisVector(disziSelect.getCurrRezClass(),Integer.parseInt(kassenIKs.get(0).get(5))-1);
 		name_kostent = holeNameKostentraeger();
 		
 		String test = "";
@@ -1800,7 +1793,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			////System.out.println("  abger. Nettovolumen  = "+preis00[0]);
 			////System.out.println("Name der abger. Kasse  = "+name_kostent);
 			////System.out.println("       IK-Kostenträger = "+ik_kostent);
-			////System.out.println("             Disziplin = "+diszis[cmbDiszi.getSelectedIndex()]);
+			//////System.out.println("             Disziplin = "+diszis[cmbDiszi.getSelectedIndex()]);		// McM: weg
+			////System.out.println("             Disziplin = "+disziSelect.getCurrRezClass());
 			////System.out.println("          Rechnung Nr. = "+aktRechnung);
 			if(Reha.vollbetrieb){
 				anlegenOP();				
@@ -1819,7 +1813,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		rechnungBuf.append("r_nummer='"+aktRechnung+"', ");
 		rechnungBuf.append("r_datum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"', ");
 		rechnungBuf.append("r_kasse='"+hmKostentraeger.get("name1")+", "+"esol0"+hmKostentraeger.get("aktesol")+"', ");
-		rechnungBuf.append("r_klasse='"+diszis[cmbDiszi.getSelectedIndex()]+"', ");
+//		rechnungBuf.append("r_klasse='"+diszis[cmbDiszi.getSelectedIndex()]+"', ");		// McM: weg
+		rechnungBuf.append("r_klasse='"+disziSelect.getCurrRezClass()+"', ");
 		rechnungBuf.append("r_betrag='"+dfx.format(preis00[0]).replace(",", ".")+"', ");
 		rechnungBuf.append("r_offen='"+dfx.format(preis00[0]).replace(",", ".")+"', ");
 		rechnungBuf.append("r_zuzahl='"+dfx.format(preis00[2]).replace(",", ".")+"', ");
@@ -2140,7 +2135,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
     	}
     	treeKasse.repaint();
 	}
-	public String getPreisgruppenKuerzel(String disziplin){
+	public String getPreisgruppenKuerzel(String disziplin){		// nach 'Disziplinen' verschieben?
 		if(disziplin.equals("Physio")){
 			return "pgkg";
 		}else if(disziplin.equals("Massage")){
@@ -2266,6 +2261,27 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	      }      
 	}
 	/*****************************************/
+	private class KeepIkPap  {
+		/**
+		 * Vergleich, ob sich IK_Papier (bei Wechsel der Kasse) geändert hat
+		 */
+		String lastIkPap;
+
+		public KeepIkPap(String ik) {
+			lastIkPap = ik;
+		}
+
+		public boolean newIkPap(String ik) {
+			if (lastIkPap.equals(ik)){
+				return false;
+			}else{
+				lastIkPap = ik;
+				return true;
+			}
+		}
+	}
+	
+	/*****************************************/
 	private class MyRenderer extends DefaultTreeCellRenderer {
 		/**
 		 * 
@@ -2298,6 +2314,14 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		} else {
 			setToolTipText(null);
 			this.setText(o.titel);
+		}
+		if (!leaf){
+			// set Icon according to (change of) ik_papier;
+			if (customIconList.contains(o.ktraeger)){	
+				setIcon(getDisabledIcon());
+			}else{
+				setIcon(getIcon());
+			}
 		}
 		return this;
 		}	
