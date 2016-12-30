@@ -502,7 +502,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListe
 						"Fehler-Mail");
 			}
 			try{
-				aktuelleRezepte.setZuzahlImage(1);
+				aktuelleRezepte.setZuzahlImage(1);	// zuzahlok
 			}catch(Exception ex3){
 				JOptionPane.showMessageDialog(null,"Der Zuzahlungsstatus im Rezeptstamm konnte nicht korrekt gesetzt werden.\n+" +
 					"Bitte notieren Sie den Namen des Patienten und die Rezeptnummer und verständigen\n"+

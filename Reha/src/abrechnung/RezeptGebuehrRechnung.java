@@ -35,6 +35,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
 import CommonTools.SqlInfo;
+import stammDatenTools.ZuzahlTools.ZZStat;
 import systemEinstellungen.SystemConfig;
 import CommonTools.JRtaTextField;
 import terminKalender.DatFunk;
@@ -254,6 +255,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 			buchungUpdaten();
 		}
 		FensterSchliessen("dieses");
+		org.therapi.reha.patient.AktuelleRezepte.setZuzahlImageActRow(ZZStat.ZUZAHLRGR);
 	}
 	
 	private void buchungStarten(){

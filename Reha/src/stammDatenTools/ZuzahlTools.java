@@ -4,20 +4,23 @@ import hauptFenster.Reha;
 
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-
-
-
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import terminKalender.DatFunk;
+import CommonTools.ExUndHop;
+import CommonTools.SqlInfo;
 
 public class ZuzahlTools {
+	/** EnumMap anlegen, mit ZuZahlStatus als key, Icon als value **/	
+	public enum ZZStat { ZUZAHLFREI,ZUZAHLOK,ZUZAHLNICHTOK,ZUZAHLRGR,ZUZAHLNOTSET }
+	static EnumMap<ZZStat, ImageIcon> zzIcon = new EnumMap<ZZStat, ImageIcon>(ZZStat.class);	// ersetzt das imgzuzahl[] Array
+
 	public static boolean zzStatusEdit(String pat_int,String geboren, String rez_nr,String frei, String kassid){
 		//String preisgrp = "";
 		String zzid = "";
@@ -249,6 +252,86 @@ public class ZuzahlTools {
 			
 		}
 		return new int[] {0,-1};
+	}
+
+	/**
+	* füllt die EnumMap: ZuZahlStatus als key, Icon als value
+	* 
+	* @author McM
+	*/ 
+	public static void setZzIcons(){
+		zzIcon.put(ZZStat.ZUZAHLFREI, SystemConfig.hmSysIcons.get("zuzahlfrei"));
+		zzIcon.put(ZZStat.ZUZAHLOK, SystemConfig.hmSysIcons.get("zuzahlok"));
+		zzIcon.put(ZZStat.ZUZAHLNICHTOK, SystemConfig.hmSysIcons.get("zuzahlnichtok"));
+		zzIcon.put(ZZStat.ZUZAHLRGR, SystemConfig.hmSysIcons.get("zuzahlRGR"));
+		zzIcon.put(ZZStat.ZUZAHLNOTSET, SystemConfig.hmSysIcons.get("kleinehilfe"));
+		return;
+	}
+	/**
+	* liefert Icon passend zum (ZZStat-)Key
+	* @param Zuzahlstatus
+	* @return das zugehörige Icon
+	* 
+	* @author McM
+	*/ 
+	public static ImageIcon getZzIcon (ZZStat key){
+		return zzIcon.get(key);
+	}
+	/**
+	 * liefert zum bisher verwandten Integer-Index den passenden ZZStat
+	 * @param oldIdx
+	 * @param rezNr
+	 * @return
+	 */
+	public static ZZStat getIconKey (int oldIdx, String rezNr){
+		ZZStat iconKey;
+		switch (oldIdx){
+		case 0:
+			iconKey = ZZStat.ZUZAHLFREI;
+			break;
+		case 1:
+			iconKey = ZZStat.ZUZAHLOK;
+			break;
+		case 2:
+			if(existsRGR( rezNr )){					// Prüfen, ob RGR existiert. Falls ja, Icon entspr. setzen! 
+				iconKey = ZZStat.ZUZAHLRGR;
+			}else{
+				iconKey = ZZStat.ZUZAHLNICHTOK;								
+			}
+			break;
+		default:
+			iconKey = ZZStat.ZUZAHLNOTSET;
+		}
+		return iconKey;
+	}
+	/**
+	 * Prüfung, ob es zum Rezept bereits eine RG-Rechnung gibt
+	 * 
+	 * @param String Rezeptnummer
+	 * @return true/false
+	 * 
+	 * @author McM
+	 */
+	public static boolean existsRGR(String rezNb) {
+		Vector<Vector<String>> testvec = SqlInfo.holeFelder("select rnr from rgaffaktura where reznr='"+rezNb+"' AND rnr LIKE 'RGR-%' LIMIT 1");
+		if(testvec.size() > 0){
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Prüfung, ob eine RG-Rechnung bar bezahlt wurde
+	 * @param xreznr
+	 * @return true/false
+	 * 
+	 * @author McM
+	 */
+	public static boolean existsRgrBarInKasse(String rezNb) {
+		Vector<Vector<String>> testvec = SqlInfo.holeFelder("select einnahme,datum,ktext from kasse where rez_nr='"+rezNb+"' AND ktext LIKE 'RGR-%' LIMIT 1");
+		if(testvec.size() > 0){
+			return true;
+		}
+		return false;
 	}
 
 }

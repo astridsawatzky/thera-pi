@@ -44,6 +44,7 @@ import socketClients.SMSClient;
 import stammDatenTools.ArztTools;
 import stammDatenTools.KasseTools;
 import stammDatenTools.PatTools;
+import stammDatenTools.ZuzahlTools;
 import systemEinstellungen.SystemConfig;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
@@ -79,10 +80,12 @@ public class PatientHauptLogic {
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
+					ZuzahlTools.setZzIcons(); // soll peu-a-peu 'die da' ersetzen:
 					patientHauptPanel.imgzuzahl[0] = SystemConfig.hmSysIcons.get("zuzahlfrei");
 					patientHauptPanel.imgzuzahl[1] = SystemConfig.hmSysIcons.get("zuzahlok");			
 					patientHauptPanel.imgzuzahl[2] = SystemConfig.hmSysIcons.get("zuzahlnichtok");
 					patientHauptPanel.imgzuzahl[3] = SystemConfig.hmSysIcons.get("kleinehilfe");
+
 					//imgrezstatus[0] = SystemConfig.hmSysIcons.get("statusoffen");
 					patientHauptPanel.imgrezstatus[0] = null;
 					patientHauptPanel.imgrezstatus[1] = SystemConfig.hmSysIcons.get("statuszu");

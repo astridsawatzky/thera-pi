@@ -263,14 +263,17 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 						zzbild = 0;
 						ex.printStackTrace();
 					}
-					
 					int row = Reha.thisClass.patpanel.aktRezept.tabaktrez.getSelectedRow();
 					if(row >= 0){
 						if(Reha.thisClass.patpanel.aktRezept.dtblm.getValueAt(row,1) != Reha.thisClass.patpanel.imgzuzahl[zzbild]){
+							/*
 							Reha.thisClass.patpanel.aktRezept.dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[zzbild],row,1);
 							Reha.thisClass.patpanel.aktRezept.tabaktrez.validate();
+							 */					
+							org.therapi.reha.patient.AktuelleRezepte.setZuzahlImage(zzbild);
 						}
 					}
+
 
 					new SwingWorker<Void,Void>(){
 						@Override

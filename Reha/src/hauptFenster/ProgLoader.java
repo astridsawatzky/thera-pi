@@ -370,7 +370,7 @@ public void AbrechnungFenster(int setPos) {
 	String name = "Abrechnung"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
-	abrechjry = new JAbrechnungInternal("thera-\u03C0  - Kassen-Abrechnung nach §302 ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
+	abrechjry = new JAbrechnungInternal("thera-\u03C0  - Kassen-Abrechnung nach §302 ",SystemConfig.hmSysIcons.get("bomb24"),1) ;
 	AktiveFenster.setNeuesFenster(name,(JComponent)abrechjry,1,(Container)abrechjry.getContentPane());
 	abrechjry.setName(name);
 	abrechjry.setSize(new Dimension(850,700));
