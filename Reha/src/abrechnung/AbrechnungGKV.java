@@ -568,7 +568,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				if(treeKasse.getSelectionPath() != null){
 					if (! SystemConfig.hmAbrechnung.get("autoOk302").equals("0")) {
 						//System.out.println("autoOk302: markiere Rezept "+neueReznr+" fertig zur Abrechnung");
-						abrRez.actionAbschluss();
+						SwingUtilities.invokeLater(new Runnable(){
+							public void run(){
+								abrRez.actionAbschluss();		
+							}
+						});
 					}
 				}
 				
