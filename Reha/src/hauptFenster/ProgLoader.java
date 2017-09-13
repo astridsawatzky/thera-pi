@@ -1,4 +1,4 @@
-﻿package hauptFenster;
+package hauptFenster;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 
 import krankenKasse.KassenPanel;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.therapi.reha.patient.PatientHauptPanel;
 
 import rechteTools.Rechte;

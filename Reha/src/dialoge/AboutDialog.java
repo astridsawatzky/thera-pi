@@ -1,4 +1,4 @@
-﻿package dialoge;
+package dialoge;
 
 import hauptFenster.Reha;
 
@@ -36,7 +36,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import CommonTools.ButtonTools;
 
