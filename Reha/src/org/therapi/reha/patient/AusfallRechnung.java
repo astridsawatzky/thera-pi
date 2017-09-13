@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.SqlInfo;

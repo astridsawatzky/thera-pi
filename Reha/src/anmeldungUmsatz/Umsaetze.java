@@ -19,7 +19,7 @@ import javax.swing.SwingUtilities;
 
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import rehaInternalFrame.JUmsaetzeInternal;

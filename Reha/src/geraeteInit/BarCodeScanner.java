@@ -21,7 +21,7 @@ import javax.comm.UnsupportedCommOperationException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import systemEinstellungen.SystemConfig;
 import terminKalender.DatFunk;

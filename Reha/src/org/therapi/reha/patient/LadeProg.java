@@ -13,7 +13,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import events.PatStammEvent;
 import events.PatStammEventClass;

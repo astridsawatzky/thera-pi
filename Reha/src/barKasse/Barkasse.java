@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;

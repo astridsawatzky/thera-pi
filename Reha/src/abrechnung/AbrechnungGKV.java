@@ -1,4 +1,4 @@
-﻿package abrechnung;
+package abrechnung;
 
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
@@ -47,7 +47,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTree;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
@@ -103,7 +103,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	ButtonGroup bg = new ButtonGroup();
 	JRtaRadioButton[] rbLinks = {null,null,null,null};
 	JButton[] butLinks = {null,null,null,null};
-	private JRtaComboBox cmbDiszi = null;
+	public JRtaComboBox cmbDiszi = null;
 	JXTree treeKasse = null;
 	File f;
 	FileWriter fw;
@@ -197,8 +197,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		jSplitLR.setDividerLocation(230);
 		add(jSplitLR,BorderLayout.CENTER);
 		mandantenCheck();
-		SlgaVersion = ( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
-		SllaVersion = ( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
+		SlgaVersion = "10";//( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
+		SllaVersion = "10";//( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
 		
 		new SwingWorker<Void,Void>(){
 			@Override

@@ -35,7 +35,7 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.ExUndHop;

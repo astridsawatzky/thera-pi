@@ -22,7 +22,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import rechteTools.Rechte;
@@ -274,7 +274,17 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 						}
 					}
 
-
+					
+					try{
+						RezTools.constructVirginHMap();
+						ArztTools.constructArztHMap((String)Reha.thisClass.patpanel.vecaktrez.get(16));
+						KasseTools.constructKasseHMap((String)Reha.thisClass.patpanel.vecaktrez.get(37));
+						RezeptDaten.feddisch = true;
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(null, "Fehler in ConstructHashMap (Modul:RezeptDaten)\nBitte verständigen Sie den Administrator und notieren Sie zuvor die Fehlermeldung");
+						RezeptDaten.feddisch = true;
+					}
+					/*
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -290,6 +300,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 							return null;
 						}
 					}.execute();
+					*/
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}

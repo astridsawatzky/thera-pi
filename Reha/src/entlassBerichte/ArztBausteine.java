@@ -43,7 +43,7 @@ import javax.swing.table.DefaultTableModel;
 
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;

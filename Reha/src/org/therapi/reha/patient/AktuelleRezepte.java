@@ -63,7 +63,7 @@ import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -267,14 +267,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		
 		
 	}
-/* McM scheint unbenutzt:	
 	public void getAktDates(){
 		
 	}
 	public void setDtblmValues(ImageIcon ico,int row,int col){
 		dtblm.setValueAt(ico,row,col);
 	}
-*/
+
 	public void formulareAuswerten(){
 		int row = tabaktrez.getSelectedRow(); 
 		if(row >= 0){
@@ -439,38 +438,60 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		tabaktrez.setDoubleBuffered(true);
 		tabaktrez.setEditable(false);
 		tabaktrez.setSortable(false);
-
-		TableCellRenderer renderer = new DefaultTableRenderer(new MappedValue(StringValues.EMPTY, IconValues.ICON), JLabel.CENTER);
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
-
 		tabaktrez.getColumn(0).setMaxWidth(75);
+		TableCellRenderer renderer = new DefaultTableRenderer(new MappedValue(StringValues.EMPTY, IconValues.ICON), JLabel.CENTER);
+		tabaktrez.getColumn(1).setCellRenderer(renderer);
 		tabaktrez.getColumn(1).setMaxWidth(45);
 		tabaktrez.getColumn(3).setMaxWidth(75);
 		tabaktrez.getColumn(5).setMaxWidth(45);
-		
+		tabaktrez.getColumn(5).setCellRenderer(renderer);
+
 		//tabaktrez.getColumn(4).setMaxWidth(70);
-		tabaktrez.getColumn(6).setMinWidth(0);				// Pat-Nr.
+		tabaktrez.getColumn(6).setMinWidth(0);
 		tabaktrez.getColumn(6).setMaxWidth(0);		
-		tabaktrez.getColumn(idInTable).setMinWidth(0);		// verordn->id
+		tabaktrez.getColumn(idInTable).setMinWidth(0);
 		tabaktrez.getColumn(idInTable).setMaxWidth(0);			
-        for(int i=0;i<column.length;i++){
-			switch (i){
-			case 1:				// Icons
-			case 5:
-				tabaktrez.getColumn(i).setCellRenderer(renderer);
-				break;
-			default:			// Text
-				tabaktrez.getColumn(i).setCellRenderer(centerRenderer);
-			}
-        }
+		/*
+		tabaktrez.getColumn(1).setCellRenderer(renderer);
+		tabaktrez.getColumn(1).setMaxWidth(45);
+		tabaktrez.getColumn(3).setMaxWidth(75);
+		
+		// Lemmi 20110105: Maximal Spaltenbreite dieser Datumsangaben auch begrenzen
+		tabaktrez.getColumn(2).setMaxWidth(75);
+		tabaktrez.getColumn(4).setMaxWidth(75);
+		
+		tabaktrez.getColumn(5).setMaxWidth(45);
+		tabaktrez.getColumn(5).setCellRenderer(renderer);
+
+		//tabaktrez.getColumn(4).setMaxWidth(70);
+		tabaktrez.getColumn(6).setMinWidth(0);
+		tabaktrez.getColumn(6).setMaxWidth(0);		
+		tabaktrez.getColumn(7).setMinWidth(0);
+		tabaktrez.getColumn(7).setMaxWidth(0);	
+		tabaktrez.getColumn(0).setMaxWidth(75);
+		
+		tabaktrez.getColumn(1).setCellRenderer(renderer);
+		tabaktrez.getColumn(1).setMaxWidth(45);
+		tabaktrez.getColumn(3).setMaxWidth(75);
+		tabaktrez.getColumn(5).setMaxWidth(45);
+		tabaktrez.getColumn(5).setCellRenderer(renderer);
+	
+		//tabaktrez.getColumn(4).setMaxWidth(70);
+		tabaktrez.getColumn(6).setMinWidth(0);
+		tabaktrez.getColumn(6).setMaxWidth(0);		
+		tabaktrez.getColumn(7).setMinWidth(0);
+		tabaktrez.getColumn(7).setMaxWidth(0);
+		*/		
 		tabaktrez.validate();
 		tabaktrez.setName("AktRez");
 		tabaktrez.setSelectionMode(0);
 		//tabaktrez.addPropertyChangeListener(this);
+		
 		tabaktrez.getSelectionModel().addListSelectionListener( new RezepteListSelectionHandler());
+
 		tabaktrez.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent arg0) {
+				// TODO Auto-generated method stub
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					//while(inRezeptDaten && !RezeptDaten.feddisch){					
 					long zeit = System.currentTimeMillis();
@@ -1098,7 +1119,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				}catch(Exception ex){
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(null,"Fehler in der Funktion holeRezepte()");
+					JOptionPane.showMessageDialog(null,"Fehler in der Funktion holeRezepte()\n"+ex.getMessage());
 					inEinzelTermine = false;
 				}
 				return null;
@@ -1456,6 +1477,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 	                if (lsm.isSelectedIndex(i)) {
 	                	RezeptDaten.feddisch = false;
 	                	final int ix = i;
+	                	/*
 	                	new SwingWorker<Void,Void>(){
 							@Override
 							protected Void doInBackground() throws Exception {
@@ -1511,16 +1533,81 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 									inEinzelTermine = false;
 									//JOptionPane.showMessageDialog(null, "Fehler im ListSelection-Listener aktuelle Rezepte");
 								}
+								//System.gc();
+								//System.runFinalization ();
 								return null;
 							}
 	                		
 	                	}.execute();
+	                	*/
+	                	datenHolenUndEinstellen();
 	                    break;
 	                }
 	            }
 	        }
 	        ////System.out.println(output.toString());
 	    }
+	}
+	
+	public boolean datenHolenUndEinstellen(){
+		try{
+			if(suchePatUeberRez){
+				suchePatUeberRez = false;
+				return false;
+			}
+			int ix = tabaktrez.getSelectedRow();
+			setCursor(Reha.thisClass.wartenCursor);
+			if(!inEinzelTermine ){
+				try{
+					inEinzelTermine = true;
+		
+					try{
+						holeEinzelTermineAusRezept("",aktTerminBuffer.get(ix));		                						
+					}catch(Exception ex){
+						ex.printStackTrace();
+					}
+					aktuellAngezeigt = tabaktrez.getSelectedRow();
+					inEinzelTermine = false;
+
+				}catch(Exception ex){
+					inEinzelTermine = false;
+				}
+			}
+			Reha.thisClass.patpanel.vecaktrez = ((Vector<String>)SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(ix, idInTable)+"'", Arrays.asList(new String[] {}) ));
+			Reha.thisClass.patpanel.aktRezept.rezAngezeigt = (String)tabaktrez.getValueAt(ix, 0);
+			rezDatenPanel.setRezeptDaten((String)tabaktrez.getValueAt(ix, 0),(String)tabaktrez.getValueAt(ix, idInTable));
+			setCursor(Reha.thisClass.normalCursor);
+			final String testreznum = (String)tabaktrez.getValueAt(ix, 0).toString();
+			//System.out.println("**********"+testreznum+" "+Reha.thisClass.dta301panel);
+			
+			try{
+				if( (testreznum.startsWith("RH")) && (Reha.thisClass.dta301panel != null) ){
+					Reha.thisClass.dta301panel.aktualisieren(testreznum);
+				}
+				//RezTools.constructRawHMap();
+			}catch(Exception ex){
+				ex.printStackTrace();
+			}
+			
+		}catch(Exception ex){
+			setCursor(Reha.thisClass.normalCursor);
+			ex.printStackTrace();
+			inEinzelTermine = false;
+			//JOptionPane.showMessageDialog(null, "Fehler im ListSelection-Listener aktuelle Rezepte");
+		}
+		return true;
+	}
+	
+	public static boolean isDentist(String sindi){
+		String[] aindi = {"CD1 a","CD1 b","CD1 c","CD1 d",
+				"CD2 a","CD2 b","CD2 c","CD2 d",
+				"ZNSZ",
+				"CSZ a","CSZ b","CSZ c",
+				"LYZ1","LYZ2",
+				"SPZ",
+				"SCZ",
+				"OFZ"};
+		return Arrays.asList(aindi).indexOf(sindi) >= 0;
 	}
 
 	public void indiSchluessel(){
@@ -1659,7 +1746,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		
 		String cmd = arg0.getActionCommand();
 		
-		for(int i = 0; i < 1; i++){					// McM: hu?
+		for(int i = 0; i < 1; i++){
 			if(cmd.equals("terminplus")){
 				if(rezGeschlossen()){return;}
 				try{
@@ -1963,44 +2050,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				String xreznr;
 				if(currow >=0){
 					xreznr = (String)tabaktrez.getValueAt(currow,0);
-					//String xcmd = "update verordn set zzstatus='"+2+"', befr='F', rez_geb='0.00',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1"; 
-					//dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[2],currow,1);
-					//doVectorAktualisieren(new int[]{12,13,14,39},new String[] {"F","0.00","F","2"});	// befr,rez_geb, rez_bez,zzstatus (zuzahlnichtok)
-
-					// McM: sollte der Dialog vom Befreiungs-Status nicht besser die Finger lassen?
-					// (wenn nicht, dann sollte die $302-Abrechnung den gesetzten Status auch verwenden. Bisher ist das nicht der Fall...)
-					// zumindest aber den Status (wieder) setzen wie bei Anlage des Rezeptes (also entsprechend Befreiungsstatus des Patienten)
-					doVectorAktualisieren(new int[]{13,14,39},new String[] {"0.00","F","2"});	//rez_geb, rez_bez,zzstatus (zuzahlnichtok)
-					String xcmd = "update verordn set zzstatus='"+2+"', rez_geb='0.00',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1"; 
+					String xcmd = "update verordn set zzstatus='"+2+"', befr='F', rez_geb='0.00',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1"; 
 					SqlInfo.sqlAusfuehren(xcmd);
-					
-					if(stammDatenTools.ZuzahlTools.existsRGR(xreznr)){
-						//SqlInfo.sqlAusfuehren("delete from rgaffaktura where reznr='"+xreznr+"' LIMIT 1");	// löscht RGR
-						/**
-						 * McM: stellt 'storno_' vor Rechnungs- u. hängt 'S' an Rezeptnummer an, dadurch wird record bei der Suche nach Rezeptnummer nicht mehr gefunden
-						 * <roffen> wird nicht 0 gesetzt, falls schon eine Teilzahlung gebucht wurde o.ä. - in OP taucht er deshalb noch auf
-						 */
-						xcmd = "UPDATE rgaffaktura SET rnr=CONCAT('storno_',rnr), reznr=CONCAT(reznr,'S') where reznr='"+xreznr+"' AND rnr like 'RGR-%' LIMIT 1"; 
-						SqlInfo.sqlAusfuehren(xcmd);															// storniert RGR in 'rgaffaktura'
-						// storno auch in 'kasse' (falls RGR schon bar bezahlt wurde)
-						// auf einnahme = 0 u. 'storno_RGR...' ändern (da Kassenabrechnung nach 'RGR-%' sucht)
-						if (stammDatenTools.ZuzahlTools.existsRgrBarInKasse(xreznr)){
-							// TODO ?? user & IK auf den stornierenden ändern?
-							xcmd = "UPDATE kasse SET einnahme='0.00', ktext=CONCAT('storno_',ktext) where rez_nr='"+xreznr+"' AND ktext like 'RGR-%' LIMIT 1"; 
-							SqlInfo.sqlAusfuehren(xcmd);														// storniert RGR in 'kasse'							
-						}
-					}else{
-						//SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");			// löscht Bar-Zuzahlung	(besser: stornieren)			
-						xcmd = "UPDATE kasse SET einnahme='0.00', ktext=CONCAT('storno_',ktext) where rez_nr='"+xreznr+"' LIMIT 1"; 
-						SqlInfo.sqlAusfuehren(xcmd);															// storniert Bar-Zuzahlung in 'kasse'							
-					}
-					//SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");				// löscht Bar-Zuzahlung	_und_ bar bez. RGR
-					//SqlInfo.sqlAusfuehren("delete from rgaffaktura where reznr='"+xreznr+"' and rnr like 'RGR-%' LIMIT 1");
-
-					// ZZ-Icon in akt. Zeile setzen
-//					dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(zzIcon), currow, 1);						
-//					tabaktrez.validate();
-					setZuzahlImageActRow(ZZStat.ZUZAHLNICHTOK);
+					dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[2],currow,1);
+					tabaktrez.validate();
+					doVectorAktualisieren(new int[]{12,13,14,39},new String[] {"F","0.00","F","2"});
+					SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");
+					SqlInfo.sqlAusfuehren("delete from rgaffaktura where reznr='"+xreznr+"' and rnr like 'RGR-%' LIMIT 1");
 				}
 				
 			}
@@ -2748,7 +2804,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		String rgrNr = SqlInfo.holeEinzelFeld("select rnr from rgaffaktura where reznr='"+
 				reznr+"' AND rnr LIKE 'RGR-%' LIMIT 1");		
 
-		if(stammDatenTools.ZuzahlTools.existsRGR(reznr)){
+		if(! rgrNr.equals("")){
 			JOptionPane.showMessageDialog(null, "<html>Für dieses Rezept  <b>" + (String)Reha.thisClass.patpanel.vecaktrez.get(1) 
 											  + "</b>  wurde bereits eine Rezeptgebühren-Rechnung <b>" + rgrNr + "</b> angelegt!<br>" 
 											  + "Eine Barzahlungs-Quittung kann nicht mehr erstellt werden.</html>", 
@@ -2816,6 +2872,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[imageno], row, 1);
 		tabaktrez.repaint();
  */
+
 		String rezNr = tabaktrez.getValueAt(tabaktrez.getSelectedRow(), 0).toString();
 		ZZStat iconKey = stammDatenTools.ZuzahlTools.getIconKey (imageno, rezNr);
 		setZuzahlImageActRow(iconKey);
@@ -2897,123 +2954,129 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 	// Lemmi 20110101: bCtrlPressed zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
 //	public void neuanlageRezept( boolean lneu, String feldname ) { 
 	public void neuanlageRezept( boolean lneu, String feldname, String strModus ){
-
-		if(Reha.thisClass.patpanel.aid < 0 || Reha.thisClass.patpanel.kid < 0){
-			String meldung = "Hausarzt und/oder Krankenkasse im Patientenstamm sind nicht verwertbar.\n"+
-			"Die jeweils ungültigen Angaben sind -> kursiv <- dargestellt.\n\n"+
-			"Bitte korrigieren Sie die entsprechenden Angaben";
-			JOptionPane.showMessageDialog(null, meldung);
-			return;	
-		}		
-		if(neuDlgOffen){
-			JOptionPane.showMessageDialog(null, "neuDlgOffen hat den wert true");
-			return;
-		}
 		try{
-		neuDlgOffen = true;
-		RezNeuDlg neuRez = new RezNeuDlg();
-		PinPanel pinPanel = new PinPanel();
-		pinPanel.setName("RezeptNeuanlage");
-		pinPanel.getGruen().setVisible(false);
-		if(lneu){
-			neuRez.getSmartTitledPanel().setTitle("Rezept Neuanlage");
-		}
-		neuRez.setSize(500,800);
-		neuRez.setPreferredSize(new Dimension(490+Reha.zugabex,690+Reha.zugabey));
-		neuRez.getSmartTitledPanel().setPreferredSize(new Dimension (490,800)); //Original 630
-		neuRez.setPinPanel(pinPanel);
-		if(lneu){
-			// vvv Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-			Vector<String> vecKopiervorlage = new Vector<String>();
-			if ( strModus.equals("KopiereLetztes") ) {
-				RezeptVorlage vorlage = new RezeptVorlage(aktrbut[0].getLocationOnScreen());
-				if ( !vorlage.bHasSelfDisposed ) {  // wenn es nur eine Disziplin gibt, hat sich der Auswahl-Dialog bereits selbst disposed !
-					vorlage.setModal(true);
-					vorlage.toFront();
-					vorlage.setVisible(true);
-				}
-				//String strKopierDiszi = vorlage.strSelectedDiszi;
-				// Die Rezept-Kopiervorlage steht jetzt in vorlage.vecResult oder es wurde nichts gefunden !
-				vecKopiervorlage = vorlage.vecResult;
-				
-				if ( !vorlage.bHasSelfDisposed ) {  // wenn es nur eine Disziplin gibt, hat sich der Auswahl-Dialog bereits selbst disposed !
-					vorlage.dispose();
-				}
-				vorlage= null;
+			if(Reha.thisClass.patpanel.aid < 0 || Reha.thisClass.patpanel.kid < 0){
+				String meldung = "Hausarzt und/oder Krankenkasse im Patientenstamm sind nicht verwertbar.\n"+
+				"Die jeweils ungültigen Angaben sind -> kursiv <- dargestellt.\n\n"+
+				"Bitte korrigieren Sie die entsprechenden Angaben";
+				JOptionPane.showMessageDialog(null, meldung);
+				return;	
+			}		
+			if(neuDlgOffen){
+				JOptionPane.showMessageDialog(null, "neuDlgOffen hat den wert true");
+				return;
 			}
-			if ( strModus.equals("KopiereAngewaehltes") ) {  // Vorschlag von J. Steinhilber integriert: Kopiere das angewählte Rezept
-				String rezToCopy = AktuelleRezepte.getActiveRezNr();
-				vecKopiervorlage = ((Vector<String>)SqlInfo.holeSatz( "verordn", " * ", "REZ_NR = '" +
-									rezToCopy + "'", Arrays.asList(new String[] {}) ));
-
-			}
-			if ( strModus.equals("KopiereHistorienRezept") ) { 
-				String rezToCopy = Historie.getActiveRezNr();
-				vecKopiervorlage = ((Vector<String>)SqlInfo.holeSatz( "lza", " * ", "REZ_NR = '" +
-						rezToCopy + "'", Arrays.asList(new String[] {}) ));
-			}
-			// ^^^ Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-			@SuppressWarnings("unchecked")
-			RezNeuanlage rezNeuAn = new RezNeuanlage((Vector<String>)vecKopiervorlage.clone(),lneu,feldname);
-			neuRez.getSmartTitledPanel().setContentContainer( rezNeuAn );
-			//if ( rezNeuAn.strKopiervorlage.isEmpty() )
-			if ( vecKopiervorlage.size() < 1 )
+			try{
+			neuDlgOffen = true;
+			RezNeuDlg neuRez = new RezNeuDlg();
+			PinPanel pinPanel = new PinPanel();
+			pinPanel.setName("RezeptNeuanlage");
+			pinPanel.getGruen().setVisible(false);
+			if(lneu){
 				neuRez.getSmartTitledPanel().setTitle("Rezept Neuanlage");
-			else 			// Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-				neuRez.getSmartTitledPanel().setTitle("Rezept Neuanlage als Kopie von <-- " + vecKopiervorlage.get(1) );
+			}
+			neuRez.setSize(500,800);
+			neuRez.setPreferredSize(new Dimension(490+Reha.zugabex,690+Reha.zugabey));
+			neuRez.getSmartTitledPanel().setPreferredSize(new Dimension (490,800)); //Original 630
+			neuRez.setPinPanel(pinPanel);
+			if(lneu){
+				// vvv Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
+				Vector<String> vecKopiervorlage = new Vector<String>();
+				if ( strModus.equals("KopiereLetztes") ) {
+					RezeptVorlage vorlage = new RezeptVorlage(aktrbut[0].getLocationOnScreen());
+					if ( !vorlage.bHasSelfDisposed ) {  // wenn es nur eine Disziplin gibt, hat sich der Auswahl-Dialog bereits selbst disposed !
+						vorlage.setModal(true);
+						vorlage.toFront();
+						vorlage.setVisible(true);
+					}
+					//String strKopierDiszi = vorlage.strSelectedDiszi;
+					// Die Rezept-Kopiervorlage steht jetzt in vorlage.vecResult oder es wurde nichts gefunden !
+					vecKopiervorlage = vorlage.vecResult;
+					
+					if ( !vorlage.bHasSelfDisposed ) {  // wenn es nur eine Disziplin gibt, hat sich der Auswahl-Dialog bereits selbst disposed !
+						vorlage.dispose();
+					}
+					vorlage= null;
+				}
+				if ( strModus.equals("KopiereAngewaehltes") ) {  // Vorschlag von J. Steinhilber integriert: Kopiere das angewählte Rezept
+					String rezToCopy = AktuelleRezepte.getActiveRezNr();
+					vecKopiervorlage = ((Vector<String>)SqlInfo.holeSatz( "verordn", " * ", "REZ_NR = '" +
+										rezToCopy + "'", Arrays.asList(new String[] {}) ));
+
+				}
+				if ( strModus.equals("KopiereHistorienRezept") ) { 
+					String rezToCopy = Historie.getActiveRezNr();
+					vecKopiervorlage = ((Vector<String>)SqlInfo.holeSatz( "lza", " * ", "REZ_NR = '" +
+							rezToCopy + "'", Arrays.asList(new String[] {}) ));
+				}
+				// ^^^ Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
+				@SuppressWarnings("unchecked")
+				RezNeuanlage rezNeuAn = new RezNeuanlage((Vector<String>)vecKopiervorlage.clone(),lneu,feldname);
+				neuRez.getSmartTitledPanel().setContentContainer( rezNeuAn );
+				//if ( rezNeuAn.strKopiervorlage.isEmpty() )
+				if ( vecKopiervorlage.size() < 1 )
+					neuRez.getSmartTitledPanel().setTitle("Rezept Neuanlage");
+				else 			// Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
+					neuRez.getSmartTitledPanel().setTitle("Rezept Neuanlage als Kopie von <-- " + vecKopiervorlage.get(1) );
+				
+			}else{  // Lemmi Doku: Hier wird ein existierendes Rezept mittels Doppelklick geöffnet:
+				neuRez.getSmartTitledPanel().setContentContainer(new RezNeuanlage(Reha.thisClass.patpanel.vecaktrez,lneu,feldname));
+				neuRez.getSmartTitledPanel().setTitle("editieren Rezept ---> "+Reha.thisClass.patpanel.vecaktrez.get(1));
+			}
+			neuRez.getSmartTitledPanel().getContentContainer().setName("RezeptNeuanlage");
+			neuRez.setName("RezeptNeuanlage");
+			neuRez.setModal(true);
+			neuRez.setLocationRelativeTo(null);
+			neuRez.pack();
+			neuRez.setVisible(true);
 			
-		}else{  // Lemmi Doku: Hier wird ein existierendes Rezept mittels Doppelklick geöffnet:
-			neuRez.getSmartTitledPanel().setContentContainer(new RezNeuanlage(Reha.thisClass.patpanel.vecaktrez,lneu,feldname));
-			neuRez.getSmartTitledPanel().setTitle("editieren Rezept ---> "+Reha.thisClass.patpanel.vecaktrez.get(1));
-		}
-		neuRez.getSmartTitledPanel().getContentContainer().setName("RezeptNeuanlage");
-		neuRez.setName("RezeptNeuanlage");
-		neuRez.setModal(true);
-		neuRez.setLocationRelativeTo(null);
-		neuRez.pack();
-		neuRez.setVisible(true);
-		
-		neuRez.dispose();
-		neuRez = null;
-		pinPanel = null;
-		if(!lneu){
-			if(tabaktrez.getRowCount()>0){
-				try{
-				RezeptDaten.feddisch = false;
-				//System.out.println("rufe Rezeptnummer "+(String)tabaktrez.getValueAt(tabaktrez.getSelectedRow(), 7));
-				aktualisiereVector((String)tabaktrez.getValueAt(tabaktrez.getSelectedRow(), idInTable));
+			neuRez.dispose();
+			neuRez = null;
+			pinPanel = null;
+			if(!lneu){
+				if(tabaktrez.getRowCount()>0){
+					try{
+						RezeptDaten.feddisch = false;
+						//System.out.println("rufe Rezeptnummer "+(String)tabaktrez.getValueAt(tabaktrez.getSelectedRow(), 7));
+						aktualisiereVector((String)tabaktrez.getValueAt(tabaktrez.getSelectedRow(), idInTable));
 
-				//Icon setzen
-//				dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(39))], 
-//								tabaktrez.getSelectedRow(),1);
+						//Icon	
+//						dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(39))], 
+//											tabaktrez.getSelectedRow(),1);
+						int iZzStat = Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(39));
+						String sRezNr = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+						ZZStat iconKey =  stammDatenTools.ZuzahlTools.getIconKey (iZzStat, sRezNr);
+						setZuzahlImageActRow(iconKey);
 
-				// falls typ des zzstatus (@idx 39) im vecaktrez auf typ ZZStat umgestellt wird, oder get-Methoden erstellt werden, 
-				// sind die beiden Hilfsvariablen obsolet:
-				int iZzStat = Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(39));
-				String sRezNr = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
-				ZZStat iconKey =  stammDatenTools.ZuzahlTools.getIconKey (iZzStat, sRezNr);
-				setZuzahlImageActRow(iconKey);
-
-				//IndiSchlüssel
-				dtblm.setValueAt(Reha.thisClass.patpanel.vecaktrez.get(44), tabaktrez.getSelectedRow(), 7);
-				tabaktrez.validate();
-				tabaktrez.repaint();
-				}catch(Exception ex){
-					JOptionPane.showMessageDialog(null,"Fehler in der Darstellung eines abgespeicherten Rezeptes");
-					ex.printStackTrace();
+						//IndiSchlüssel
+						dtblm.setValueAt(Reha.thisClass.patpanel.vecaktrez.get(44), tabaktrez.getSelectedRow(), 7);
+						tabaktrez.validate();
+						tabaktrez.repaint();
+					}catch(Exception ex){
+						JOptionPane.showMessageDialog(null,"Fehler in der Darstellung eines abgespeicherten Rezeptes");
+						ex.printStackTrace();
+					}
+				}
+			}else{
+				if(aktPanel.equals("leerPanel")){
+					try{
+						holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
+					}catch(Exception ex){
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Fehler in holeRezepte\n"+ex.getMessage());
+					}
 				}
 			}
-		}else{
-			if(aktPanel.equals("leerPanel")){
-				holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
+			}catch(Exception ex){
+				ex.printStackTrace();
+				JOptionPane.showMessageDialog(null, "Fehler beim Öffnen des Rezeptfensters");
 			}
-		}
+			////System.out.println("Pat Neu/Andern ist disposed");
+			neuDlgOffen = false;
+			
 		}catch(Exception ex){
-			ex.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Fehler beim Öffnen des Rezeptfensters");
+			JOptionPane.showMessageDialog(null,"Fehler bei der Rezeptneuanlage\n"+ex.getMessage().toString());
 		}
-		////System.out.println("Pat Neu/Andern ist disposed");
-		neuDlgOffen = false;
 
 	}
 	@SuppressWarnings("unchecked")
@@ -3268,23 +3331,19 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			icons.put("Behandlungstage in Clipboard",SystemConfig.hmSysIcons.get("einzeltage"));
 			icons.put("Transfer in Historie",SystemConfig.hmSysIcons.get("redo"));
 			// Lemmi 20101218: angehängt  Rezeptgebühr-Rechnung aus dem Rezept heraus erzeugen
-			//icons.put("Rezeptgebühr-Rechnung erstellen",SystemConfig.hmSysIcons.get("privatrechnung"));
-			// McM: 'thematisch einsortiert' u. mit eigenem Icon:
-			icons.put("Rezeptgebühr-Rechnung erstellen",SystemConfig.hmSysIcons.get("rezeptgebuehrrechnung"));
+			icons.put("Rezeptgebühr-Rechnung erstellen",SystemConfig.hmSysIcons.get("privatrechnung"));
 			icons.put("§301 Reha-Fallsteuerung",SystemConfig.hmSysIcons.get("abrdreieins"));
 			
-			// create a list with menu items
-			// Lemmi 20101218: eingefügt  Rezeptgebühr-Rechnung aus dem Rezept heraus erzeugen
-			JList list = new JList(	new Object[] {"Rezeptgebühren kassieren",  
-												  "BarCode auf Rezept drucken", "Ausfallrechnung drucken", 
+			// create a list with some test data
+			JList list = new JList(	new Object[] {"Rezeptgebühren kassieren",     "BarCode auf Rezept drucken", "Ausfallrechnung drucken", 
 												  "Rezept ab-/aufschließen",      "Privat-/BG-/Nachsorge-Rechnung erstellen",
 												  "Behandlungstage in Clipboard", "Transfer in Historie", 
 												  "Rezeptgebühr-Rechnung erstellen",
-												  "§301 Reha-Fallsteuerung" });   
-			list.setCellRenderer(new IconListRenderer(icons));		// add icons to list
+												  "§301 Reha-Fallsteuerung" });   // Lemmi 20101218: eingefügt  Rezeptgebühr-Rechnung aus dem Rezept heraus erzeugen
+			list.setCellRenderer(new IconListRenderer(icons));	
 			Reha.toolsDlgRueckgabe = -1;
 			ToolsDialog tDlg = new ToolsDialog(Reha.thisFrame,"Werkzeuge: aktuelle Rezepte",list);
-			tDlg.setPreferredSize(new Dimension(275, (255+28) +		// Lemmi: Breite, Höhe des Werkzeug-Dialogs
+			tDlg.setPreferredSize(new Dimension(275, (255+28) +   // Lemmi: Breite, Höhe des Werkzeug-Dialogs
 					((Boolean)SystemConfig.hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton") ? 25 : 0) ));
 			tDlg.setLocation(pt.x-70,pt.y+30);
 			tDlg.pack();

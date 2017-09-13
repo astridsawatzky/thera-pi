@@ -77,7 +77,7 @@ import jxTableTools.MyTableCheckBox;
 import jxTableTools.MyTableComboBox;
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
@@ -281,6 +281,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	boolean ohneDrecksPauschale = false;
 	
 	boolean inParseHtml = false;
+	
+	boolean kannAbhaken = false;
 	
 	public AbrechnungRezept(AbrechnungGKV xeltern){
 		eltern = xeltern;
@@ -759,6 +761,14 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				
 			}.execute();
 		}else{
+			/*
+			 * hier muß die RgebKontrolle rein
+			 * 
+			 */
+			if(!kannAbhaken){
+				JOptionPane.showMessageDialog(null, "Rezeptgebühren nicht bezahlt und keine Rechnung erstellt!!!");
+				return;
+			}
 			if(rezeptWert <= zuzahlungWert){
 				JOptionPane.showMessageDialog(null, "<html><b>Glückwunsch zum größten -> D E P P E N  (des Jahres "+SystemConfig.aktJahr+")</b></html>");
 				return;
@@ -804,6 +814,13 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			public void actionPerformed(ActionEvent arg0) {
 				String cmd = arg0.getActionCommand();
 				if(cmd.equals("abschliessen")){
+					/*
+					if(kannAbhaken){
+						actionAbschluss();	
+					}else{
+						JOptionPane.showMessageDialog(null, "Rezeptgebühren nicht bezahlt!!!");
+					}
+					*/
 					actionAbschluss();
 				}
 				if(cmd.equals("scannen")){
@@ -2664,8 +2681,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		if(vec_rez.get(0).get(14).equals("T") && (SqlInfo.holeEinzelFeld("select id from kasse where rez_nr ='"+vec_rez.get(0).get(1)+"' LIMIT 1").length() > 0)){
 			//Rezept auf bezahlt gesetzt und Geld in der Kasse
 			htmlposbuf.append("<b>"+dfx.format(zuzahlungWert)+"</b>");
+			kannAbhaken = true;
 		}else if(zuzahlungWert <= 0){
 			htmlposbuf.append("<b>"+dfx.format(zuzahlungWert)+"</b>");
+			kannAbhaken = true;
 		}else{
 			//ist eine Rechnung erstellt worden?
 			Vector<Vector<String>> xrgaf = SqlInfo.holeFelder("select rnr,roffen,rdatum from rgaffaktura where reznr='"+vec_rez.get(0).get(1)+"' and rnr like 'RGR-%' LIMIT 1");
@@ -2674,7 +2693,9 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			if(xrgaf.size() <= 0){
 				//nein es wurde auch keine rechnung erstellt.
 				htmlposbuf.append(getNoZuZahl(1,null)); 
+				kannAbhaken = false;
 			}else{
+				kannAbhaken = true;
 				if(xrgaf.get(0).get(1).equals("0.00")){
 					//Rechnung erstellt und bereits bezahlt
 					htmlposbuf.append("<b>"+dfx.format(zuzahlungWert)+"</b> "+xrgaf.get(0).get(0)+" vom "+DatFunk.sDatInDeutsch(xrgaf.get(0).get(2))+"<br>"+
@@ -3977,8 +3998,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			}else if(test.equals("k.A.")){
 				test = "9999";
 			}
+			
 			edibuf.append(test.replace(" ", "")+plus);
-			edibuf.append(voIndex[Integer.parseInt(vec_rez.get(0).get(27))]+EOL);
+			/************************************************/
+			if(AktuelleRezepte.isDentist(test)){
+				edibuf.append(voIndex[Integer.parseInt(vec_rez.get(0).get(27))]+plus);
+				edibuf.append("1"+EOL);
+				System.out.println("Zahnarztverordnung");
+			}else{
+				edibuf.append(voIndex[Integer.parseInt(vec_rez.get(0).get(27))]+EOL);	
+			}
 		}
 		
 		//an dieser Stelle muß der ICD-10 eingebaut werden, sofern vorhanden

@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import CommonTools.SqlInfo;
 import stammDatenTools.RezTools;

@@ -10,7 +10,7 @@ import java.net.SocketException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 
 import events.PatStammEvent;

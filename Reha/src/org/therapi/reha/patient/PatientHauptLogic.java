@@ -32,7 +32,7 @@ import javax.swing.SwingUtilities;
 import krankenKasse.KassenFormulare;
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.INIFile;
@@ -686,7 +686,12 @@ public class PatientHauptLogic {
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							datenHolen(xpatint);
+							try{
+								datenHolen(xpatint);	
+							}catch(Exception ex){
+								ex.printStackTrace();
+							}
+							
 							SwingUtilities.invokeLater(new Runnable(){
 							 	   public  void run()
 							 	   {

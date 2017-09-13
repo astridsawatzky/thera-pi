@@ -3,7 +3,7 @@ package hauptFenster;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;

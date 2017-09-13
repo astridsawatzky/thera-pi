@@ -35,7 +35,7 @@ import javax.swing.SwingUtilities;
 
 import javax.swing.text.BadLocationException;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.JCompTools;

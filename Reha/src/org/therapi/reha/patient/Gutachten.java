@@ -35,7 +35,7 @@ import javax.swing.table.DefaultTableModel;
 
 import jxTableTools.TableTool;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 

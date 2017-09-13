@@ -43,7 +43,8 @@ import javax.swing.UIManager;
 import kurzAufrufe.KurzAufrufe;
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
@@ -56,6 +57,8 @@ import org.therapi.reha.patient.LadeProg;
 
 import rechteTools.Rechte;
 import CommonTools.ExUndHop;
+import CommonTools.INIFile;
+import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import systemEinstellungen.SystemConfig;
 import systemTools.TestePatStamm;
@@ -79,6 +82,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	public static JXTaskPane tp4 = null;	
 	public static JXTaskPane tp5 = null;
 	public static JXTaskPane tp6 = null;
+	public static JXTaskPane tp7 = null;
 	private JXHyperlink oo1 = null;
 	private JXHyperlink oo2 = null;
 	public static boolean OOok = true;
@@ -88,9 +92,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	private String aktTag = "x";
 	private String wahlTag = "y";
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+	private static boolean mitUserTask = false;
 	public LinkeTaskPane(){
 		super();
-
+		mitUserTask = testUserTask();
 		this.setBorder(null);
 		this.setBackground(Color.WHITE);
 		//this.eltern = Reha.thisClass;
@@ -139,6 +144,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		
 		jxTPcontainer.add( (Component) getSystemEinstellungen());
 		jxTPcontainer.add( (Component) getMonatsUebersicht());
+		
+		if(mitUserTask){
+			jxTPcontainer.add( (Component) getUserTasks());
+		}
 		/**
 		 * dann f�gen wir den TaskpaneContainer der ScrollPane hinzu
 		 */
@@ -604,6 +613,33 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		  tp6.setCollapsed(SystemConfig.taskPaneCollapsed[5]);
 		return tp6;
 	}
+	
+	private JXTaskPane getUserTasks(){
+		tp7 = new JXTaskPane();
+		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
+		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
+		UIManager.put("TaskPane.background",new Color(214,223,247));
+		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+		tp7.setUI(wui);
+		tp7.setTitle("Benutzer-Tasks");
+		Image img = null;
+		//img = new ImageIcon("bildle").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		//tp7.setIcon(new ImageIcon(img));	
+		for(int i = 0; i < SystemConfig.vUserTasks.size();i++){
+			JXHyperlink jxLink = new JXHyperlink();
+			jxLink.setText(SystemConfig.vUserTasks.get(i).get(0));
+			img = new ImageIcon(SystemConfig.vUserTasks.get(i).get(1)).getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+			jxLink.setIcon(new ImageIcon(img));
+			jxLink.setActionCommand("UserTask-"+Integer.toString(i));
+			jxLink.addActionListener(this);
+			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+			jxLink.setEnabled(true);	
+			tp7.add(jxLink);
+		}
+		tp7.setCollapsed(false);
+		return tp7;
+	}	
 
 	
 	public static void UpdateUI(){
@@ -1001,8 +1037,17 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				wecker.pack();
 				wecker.setVisible(true);
 				wecker = null;
+				break;
 			}
-
+			if(cmd.startsWith("UserTask-")){
+				try{
+					int taskNummer = Integer.parseInt(cmd.toString().split("-")[1]);
+					Runtime.getRuntime().exec(SystemConfig.vUserTasks.get(taskNummer).get(2));
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+				break;
+			}
 
 		}
 		
@@ -1028,6 +1073,31 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	public void componentShown(ComponentEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	private boolean testUserTask(){
+		File f = new File(Reha.proghome+"ini/"+Reha.aktIK+"/usertask.ini");
+		if(! f.exists()){
+			return false;
+		}
+		try{
+			INIFile utask = new INIFile(Reha.proghome+"ini/"+Reha.aktIK+"/usertask.ini");
+			int tasks = Integer.parseInt(utask.getStringProperty("UserTasks", "AnzahlUserTasks"));
+			if(tasks == 0){
+				return false;
+			}
+			Vector<String> dummy = new Vector<String>();
+			for( int i = 0; i < tasks; i++){
+				dummy.clear();
+				dummy.add(utask.getStringProperty("UserTasks", "UserTaskTitel"+Integer.toString(i+1)) );
+				dummy.add(utask.getStringProperty("UserTasks", "UserIcon"+Integer.toString(i+1)) );
+				dummy.add(utask.getStringProperty("UserTasks", "UserTaskExecute"+Integer.toString(i+1)) );
+				SystemConfig.vUserTasks.add((Vector<String>)dummy.clone());
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	public static void OoOk(){
 		//LinkeTaskPane.thisClass.oo1.setEnabled(true);
