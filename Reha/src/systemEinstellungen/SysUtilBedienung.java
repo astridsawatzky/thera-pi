@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.JRtaComboBox;

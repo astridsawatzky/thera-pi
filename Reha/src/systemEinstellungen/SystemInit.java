@@ -24,7 +24,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.therapi.reha.patient.LadeProg;

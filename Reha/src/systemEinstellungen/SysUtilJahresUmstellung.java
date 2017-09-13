@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 

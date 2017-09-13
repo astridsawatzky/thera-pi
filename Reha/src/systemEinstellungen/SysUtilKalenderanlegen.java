@@ -53,7 +53,7 @@ import javax.swing.JTable;
 import javax.swing.JViewport;
 import javax.swing.ListCellRenderer;
 import javax.swing.SwingUtilities;
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.table.DefaultTableModel;
@@ -64,9 +64,11 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 
+
 //import roogle.SuchenSeite;
 import CommonTools.SqlInfo;
 import CommonTools.JRtaTextField;
+import CommonTools.StringTools;
 import terminKalender.ParameterLaden;
 //import terminKalender.TerminFenster;
 import terminKalender.DatFunk;
@@ -827,8 +829,8 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 					  nummer = ((String)((Vector) list.get(1)).get(i));
 				  }
 
-				sret = sret + "T"+ (i+1) + "='" + ((Vector) list.get(0)).get(i) + "', " ;
-				sret = sret + "N"+ (i+1) + "='" + nummer + "', "; 
+				sret = sret + "T"+ (i+1) + "='" + StringTools.Escaped((String)((Vector) list.get(0)).get(i)) + "', " ;
+				sret = sret + "N"+ (i+1) + "='" + StringTools.Escaped(nummer) + "', "; 
 				sret = sret + "TS"+ (i+1) + "='" + ((Vector) list.get(2)).get(i) + "', ";			
 				sret = sret + "TD"+ (i+1) + "='" + ((Vector) list.get(3)).get(i) + "', ";			
 				sret = sret + "TE"+ (i+1) + "='" + ((Vector) list.get(4)).get(i) + "', ";

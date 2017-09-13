@@ -24,7 +24,7 @@ import javax.swing.JScrollPane;
 
 import ocf.OcKVK;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import uk.co.mmscomputing.device.scanner.Scanner;

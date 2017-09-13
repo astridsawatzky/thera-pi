@@ -33,10 +33,6 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
-import CommonTools.FireRehaError;
-import CommonTools.INIFile;
-import CommonTools.INITool;
-import CommonTools.SqlInfo;
 
 
 public class SystemConfig {
@@ -262,6 +258,8 @@ public class SystemConfig {
 	public static boolean isAndi = false;
 	
 	public static boolean fullSizePwDialog = false;
+	
+	public static Vector<Vector<String>> vUserTasks = new Vector <Vector<String>>();
 	
 	
 	public SystemConfig(){
@@ -1802,6 +1800,7 @@ public class SystemConfig {
 			inif.setStringProperty("GKVTaxierung", "Vorlage1","",null);
 			mustsave=true;
 		}
+		vecTaxierung.clear();
 		vecTaxierung.add("TaxierungA5.ott");
 		vecTaxierung.add("TaxierungA4.ott");
 		try{
