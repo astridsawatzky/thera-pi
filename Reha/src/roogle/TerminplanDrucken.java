@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import systemEinstellungen.SystemConfig;
 import terminKalender.DruckFenster;

@@ -15,7 +15,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 import systemEinstellungen.SystemConfig;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;

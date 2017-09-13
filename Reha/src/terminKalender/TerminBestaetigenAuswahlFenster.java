@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
 
 import javax.swing.WindowConstants;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXLabel;

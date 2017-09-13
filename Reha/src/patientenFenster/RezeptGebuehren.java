@@ -29,7 +29,7 @@ import javax.swing.SwingUtilities;
 
 import oOorgTools.OOTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.therapi.reha.patient.AktuelleRezepte;

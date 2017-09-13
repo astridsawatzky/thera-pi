@@ -28,7 +28,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
@@ -170,86 +170,113 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname){
 //	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname, boolean bCtrlPressed){
 		super();
-		this.neu = neu;
-		this.feldname = sfeldname;
-		this.vec = vec;  // Lemmi 20110106  Wird auch für das Kopieren verwendet !!!!
-//		this.bCtrlPressed = bCtrlPressed;
-		
-		if( vec.size() > 0 && this.neu ) {
-			// Lemmi 20110106: Lieber Hr. Steinhilber: Diese Funktion an andere Stelle verlegt, weil Architekturänderung
-			//rezToCopy = AktuelleRezepte.getActiveRezNr();
-			//aktuelleDisziplin = RezTools.putRezNrGetDisziplin(rezToCopy);
-			aktuelleDisziplin = RezTools.putRezNrGetDisziplin(vec.get(1) );
-		}
-
-		
-		setName("RezeptNeuanlage");
-		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
-
-
-		addKeyListener(this);
-		
-		setLayout(new BorderLayout());
-		setOpaque(true);
-		setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-		add(getDatenPanel(),BorderLayout.CENTER);
-		add(getButtonPanel(),BorderLayout.SOUTH);
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezNeuanlage"));
-		validate();
-		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
-		 	   {
-		 			setzeFocus();		 		   
-		 	   }
-		});	
-		initReady = true;
-		if(!neu){
-			if(!Rechte.hatRecht(Rechte.Rezept_editvoll, false)){  // Lemmi Doku: Das sieht aus wie der Read-Only-Modus für das Rezept
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception { 
-						for(int i = 0; i < jtf.length; i++){  // Lemmi Doku: alle Textfelder unbedienbar machen
-							if(jtf[i] != null){
-								jtf[i].setEnabled(false);
-							}
-						}
-						for(int i = 0; i < jcb.length;i++){  // Lemmi Doku: alle CheckBoxen unbedienbar machen
-							if(jcb[i] != null){
-								jcb[i].setEnabled(false);
-							}
-						}
-						for(int i = 0; i < jcmb.length;i++){ // Lemmi Doku: alle ComboBoxen unbedienbar machen
-							if(jcmb[i] != null){
-								jcmb[i].setEnabled(false);
-							}
-						}
-						return null;
-					}
-					
-				}.execute();
+		try{
+			this.neu = neu;
+			this.feldname = sfeldname;
+			this.vec = vec;  // Lemmi 20110106  Wird auch für das Kopieren verwendet !!!!
+//			this.bCtrlPressed = bCtrlPressed;
+			
+			if( vec.size() > 0 && this.neu ) {
+				// Lemmi 20110106: Lieber Hr. Steinhilber: Diese Funktion an andere Stelle verlegt, weil Architekturänderung
+				//rezToCopy = AktuelleRezepte.getActiveRezNr();
+				//aktuelleDisziplin = RezTools.putRezNrGetDisziplin(rezToCopy);
+				aktuelleDisziplin = RezTools.putRezNrGetDisziplin(vec.get(1) );
 			}
+
+			
+			setName("RezeptNeuanlage");
+			rtp = new RehaTPEventClass();
+			rtp.addRehaTPEventListener((RehaTPEventListener) this);
+
+
+			addKeyListener(this);
+			
+			setLayout(new BorderLayout());
+			setOpaque(true);
+			setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+			add(getDatenPanel(),BorderLayout.CENTER);
+			add(getButtonPanel(),BorderLayout.SOUTH);
+			setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezNeuanlage"));
+			validate();
+			SwingUtilities.invokeLater(new Runnable(){
+			 	   public  void run()
+			 	   {
+			 			setzeFocus();		 		   
+			 	   }
+			});	
+			initReady = true;
+			if(!neu){
+				if(!Rechte.hatRecht(Rechte.Rezept_editvoll, false)){  // Lemmi Doku: Das sieht aus wie der Read-Only-Modus für das Rezept
+					for(int i = 0; i < jtf.length; i++){  // Lemmi Doku: alle Textfelder unbedienbar machen
+						if(jtf[i] != null){
+							jtf[i].setEnabled(false);
+						}
+					}
+					for(int i = 0; i < jcb.length;i++){  // Lemmi Doku: alle CheckBoxen unbedienbar machen
+						if(jcb[i] != null){
+							jcb[i].setEnabled(false);
+						}
+					}
+					for(int i = 0; i < jcmb.length;i++){ // Lemmi Doku: alle ComboBoxen unbedienbar machen
+						if(jcmb[i] != null){
+							jcmb[i].setEnabled(false);
+						}
+					}
+					/*
+					new SwingWorker<Void,Void>(){
+						@Override
+						protected Void doInBackground() throws Exception { 
+							for(int i = 0; i < jtf.length; i++){  // Lemmi Doku: alle Textfelder unbedienbar machen
+								if(jtf[i] != null){
+									jtf[i].setEnabled(false);
+								}
+							}
+							for(int i = 0; i < jcb.length;i++){  // Lemmi Doku: alle CheckBoxen unbedienbar machen
+								if(jcb[i] != null){
+									jcb[i].setEnabled(false);
+								}
+							}
+							for(int i = 0; i < jcmb.length;i++){ // Lemmi Doku: alle ComboBoxen unbedienbar machen
+								if(jcmb[i] != null){
+									jcmb[i].setEnabled(false);
+								}
+							}
+							return null;
+						}
+						
+					}.execute(); */
+				}
+			}
+			
+		}catch(Exception ex){
+			JOptionPane.showMessageDialog(null,"Fehler im Konstruktor RezNeuanlage\n"+RezNeuanlage.makeStacktraceToString(ex));
 		}
 
 	}
 
 	public void macheFarbcodes(){
-		farbcodes[0] = "kein Farbcode";
-		jcmb[cFARBCOD].addItem(farbcodes[0]);
-		
-		for (int i = 0;i < 9;i++){
-			farbcodes[i+1] = SystemConfig.vSysColsBedeut.get(i+14);
-			jcmb[cFARBCOD].addItem(farbcodes[i+1]);
-		}
-		if(! this.neu){
-			int itest = StringTools.ZahlTest(this.vec.get(57));
-			if(itest >= 0){
-				jcmb[cFARBCOD].setSelectedItem( (String)SystemConfig.vSysColsBedeut.get(itest) );			
-			}else{
-				jcmb[cFARBCOD].setSelectedIndex(0);
+		try{
+			farbcodes[0] = "kein Farbcode";
+			jcmb[cFARBCOD].addItem(farbcodes[0]);
+			
+			for (int i = 0;i < 9;i++){
+				farbcodes[i+1] = SystemConfig.vSysColsBedeut.get(i+14);
+				jcmb[cFARBCOD].addItem(farbcodes[i+1]);
 			}
-		}else{
-			jcmb[cFARBCOD].setSelectedIndex(0);			
+			if(! this.neu){
+				int itest = StringTools.ZahlTest(this.vec.get(57));
+				if(itest >= 0){
+					jcmb[cFARBCOD].setSelectedItem( (String)SystemConfig.vSysColsBedeut.get(itest) );			
+				}else{
+					jcmb[cFARBCOD].setSelectedIndex(0);
+				}
+			}else{
+				jcmb[cFARBCOD].setSelectedIndex(0);			
+			}
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Fehler bei Farbcodes erstellen\n"+ex.getMessage());
 		}
 		
 	}
@@ -445,9 +472,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		PanelBuilder jpan = new PanelBuilder(lay);
 		jpan.setDefaultDialogBorder();
 		jpan.getPanel().setOpaque(false);
+		JScrollPane jscr = null;
 		//String ywerte = "";
 	
-
+		try{
 		// Lemmi 20101231: Harte Index-Zahlen für "jtf" durch sprechende Konstanten ersetzt ! 
 		jtf[cKTRAEG] = new JRtaTextField("NIX",false); // kasse/kostenträger
 		jtf[cARZT]   = new JRtaTextField("NIX",false); // arzt
@@ -690,6 +718,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
 		jpan.addLabel("FarbCode im TK",cc.xy(1, 33));
 		jcmb[cFARBCOD] = new JRtaComboBox();
+		macheFarbcodes();
+		/*
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -697,7 +727,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				return null;
 			}
 		}.execute();
-
+		*/
 		jpan.add(jcmb[cFARBCOD],cc.xy(3, 33));
 		jpan.addLabel("Angelegt von",cc.xy(5, 33));
 		jpan.add(jtf[cANGEL],cc.xy(7, 33));
@@ -725,7 +755,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		JScrollPane span = JCompTools.getTransparentScrollPane(jta);
 		span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
 		jpan.add(span,cc.xywh(1, 41,7,2));
-		JScrollPane jscr = JCompTools.getTransparentScrollPane(jpan.getPanel());
+		jscr = JCompTools.getTransparentScrollPane(jpan.getPanel());
 		jscr.getVerticalScrollBar().setUnitIncrement(15);
 		
 		if(this.neu){
@@ -767,6 +797,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		}
 
 		jscr.validate();
+		}catch(Exception ex){
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Fehler in der Erstellung des Rezeptfensters\n"+ex.getMessage());
+		}
 
 		// Lemmi 20101231: Merken der Originalwerte der eingelesenen Textfelder
 		SaveChangeStatus();
@@ -824,6 +858,25 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		}
 		/*********************/		
 		if(e.getActionCommand().equals("speichern") ){
+			SwingUtilities.invokeLater(new Runnable(){
+			 	   public  void run()
+			 	   {
+						try{
+							if(! anzahlTest()){
+								return;
+							}
+							if(getInstance().neu){
+								doSpeichernNeu();
+							}else{
+								doSpeichernAlt();
+							}
+						}catch(Exception ex){
+							ex.printStackTrace();
+						}
+						 		   
+			 	   }
+			});	
+			/*
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
@@ -843,6 +896,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				}
 				
 			}.execute();
+			*/
 			return;
 		}
 		/*********************/
@@ -1306,32 +1360,39 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
 	// Lemmi-Doku: Holt die passenden Inikationsschlüssel gemäß aktiver Disziplin
 	private void fuelleIndis(String item){
-		if(jcmb[cINDI].getItemCount() > 0){
-			jcmb[cINDI].removeAllItems();
-		}
-		if(item.toLowerCase().contains("reha") && (!item.toLowerCase().startsWith("rehasport")) ){
-			return;
-		}
-		int anz = 0;
-		String[] indis = null;
-		if(    item.toLowerCase().contains("physio") 
-			|| item.toLowerCase().contains("massage")
-			|| item.toLowerCase().contains("rehasport")
-			|| item.toLowerCase().contains("funktions")){
-			anz = Reha.thisClass.patpanel.aktRezept.indphysio.length;
-			indis = Reha.thisClass.patpanel.aktRezept.indphysio; 
-		}else if(item.toLowerCase().contains("ergo")){
-			anz = Reha.thisClass.patpanel.aktRezept.indergo.length;
-			indis = Reha.thisClass.patpanel.aktRezept.indergo; 
-		}else if(item.toLowerCase().contains("logo")){
-			anz = Reha.thisClass.patpanel.aktRezept.indlogo.length;
-			indis = Reha.thisClass.patpanel.aktRezept.indlogo; 
-		}else if(item.toLowerCase().contains("podo")){
-			anz = Reha.thisClass.patpanel.aktRezept.indpodo.length;
-			indis = Reha.thisClass.patpanel.aktRezept.indpodo; 
-		}
-		for(int i = 0; i < anz; i++){
-			jcmb[cINDI].addItem(indis[i]);
+		try{
+			if(jcmb[cINDI].getItemCount() > 0){
+				jcmb[cINDI].removeAllItems();
+			}
+			if(item.toLowerCase().contains("reha") && (!item.toLowerCase().startsWith("rehasport")) ){
+				return;
+			}
+			int anz = 0;
+			String[] indis = null;
+			if(    item.toLowerCase().contains("physio") 
+				|| item.toLowerCase().contains("massage")
+				|| item.toLowerCase().contains("rehasport")
+				|| item.toLowerCase().contains("funktions")){
+				anz = Reha.thisClass.patpanel.aktRezept.indphysio.length;
+				indis = Reha.thisClass.patpanel.aktRezept.indphysio; 
+			}else if(item.toLowerCase().contains("ergo")){
+				anz = Reha.thisClass.patpanel.aktRezept.indergo.length;
+				indis = Reha.thisClass.patpanel.aktRezept.indergo; 
+			}else if(item.toLowerCase().contains("logo")){
+				anz = Reha.thisClass.patpanel.aktRezept.indlogo.length;
+				indis = Reha.thisClass.patpanel.aktRezept.indlogo; 
+			}else if(item.toLowerCase().contains("podo")){
+				anz = Reha.thisClass.patpanel.aktRezept.indpodo.length;
+				indis = Reha.thisClass.patpanel.aktRezept.indpodo; 
+			}
+			for(int i = 0; i < anz; i++){
+				jcmb[cINDI].addItem(indis[i]);
+			}
+			
+		}catch(Exception ex){
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Fehler bei füller Inikat.schlüssel\n"+ex.getMessage());
+					
 		}
 		
 		return;
@@ -2307,9 +2368,21 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			setCursor(Reha.thisClass.cdefault);
 			JOptionPane.showMessageDialog(null, "Fehler beim Abspeichern dieses Rezeptes.\n"+
 					"Bitte notieren Sie den Namen des Patienten und die Rezeptnummer\n"+
-					"und informieren Sie umgehend den Administrator");
+					"und informieren Sie umgehend den Administrator\n"+makeStacktraceToString(ex));
 		}
 		
+	}
+	public static String makeStacktraceToString(Exception ex){
+		String string = "";
+		try{
+			StackTraceElement[] se = ex.getStackTrace();
+			for(int i = 0; i < se.length; i++){
+				string = string+se[i].toString()+"\n";
+			}
+		}catch(Exception ex2){
+			
+		}
+		return string;
 	}
 	
 	// Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage

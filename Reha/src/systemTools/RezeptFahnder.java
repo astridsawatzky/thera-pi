@@ -6,7 +6,7 @@ import hauptFenster.Reha;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.therapi.reha.patient.AktuelleRezepte;
 
 import events.PatStammEvent;

@@ -1,6 +1,6 @@
 package roogle;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 
 public class OptiSuche extends SwingWorker<Void,Void>{
 	SuchenSeite thisSuche;

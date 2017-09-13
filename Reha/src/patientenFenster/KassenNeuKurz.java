@@ -29,7 +29,7 @@ import javax.swing.text.MaskFormatter;
 
 import krankenKasse.KTraegerTools;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.SqlInfo;

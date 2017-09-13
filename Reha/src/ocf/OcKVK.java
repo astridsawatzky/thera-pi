@@ -17,8 +17,17 @@ import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 
 import javax.swing.JOptionPane;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
-import org.jdesktop.swingworker.SwingWorker;
+import javax.swing.SwingWorker;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import opencard.core.OpenCardException;
 import opencard.core.event.CTListener;
@@ -35,6 +44,7 @@ import opencard.core.terminal.CommandAPDU;
 import opencard.core.terminal.ResponseAPDU;
 import opencard.opt.util.PassThruCardService;
 import systemEinstellungen.SystemConfig;
+import CommonTools.FileTools;
 import CommonTools.StringTools;
 
 
@@ -243,24 +253,42 @@ public class OcKVK {
 			        	
 			        	in = new ByteArrayInputStream(resultpd); 
 			        	//System.out.println(new String(resultpd));
+			        	/*****ausschalten nach Test******/
 			        	InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKpd.zip",resultpd);
 			        	out = Unzip("",in);
 			        	in.close();
 			        	out.flush();
 			        	out.close();
-			        	resultString = new String(out.toByteArray());
+			        	resultString = new String(out.toByteArray()).replace("vsd:", "");
+			        	//System.out.println(resultString);
+			        	/*************
+			        	 * 
+			        	 * 
+			        	 */
+			        	SystemConfig.hmKVKDaten.clear();
+			        	XML_PD_Parser();
+	
+			        	
+			        	/************
+			        	 * 
+			        	 * 
+			        	 */
+			    		/*
 			        	if(mustdebug){
 			        		System.out.println("**************** PD - Daten **********************");
 			        		System.out.println(resultString);
 			        	}
-				       	/**********HashMap leeren**********/ 
 				       	SystemConfig.hmKVKDaten.clear();
-					    if(resultString.indexOf("\n") >= 0){
+				       	if( countChar(resultString, '\n' ) >= 21 ){
 					    	if(mustdebug){
 					    		System.out.println("*************Daten enthalten Zeilenumbrüche ************");
 					    	}	
 					    	readAndParseXML(new ByteArrayInputStream(resultString.getBytes()),0);
 			        	}else{
+			        		if(resultString.indexOf("\n") >= 0){
+			        			//elende Arschgeigen
+			        			resultString = resultString.replace("\n", "");
+			        		}
 			        		if( createLineBrake(resultString) ){
 						    	if(mustdebug){
 						    		System.out.println("*************Daten enthalten keine(!!!) Zeilenumbrüche ************");
@@ -273,6 +301,7 @@ public class OcKVK {
 						    	}	
 			        		}
 			        	}
+			        	*/
 			        }catch(Exception ex){
 			       	 	ex.printStackTrace();
 			       	 	SystemConfig.hmKVKDaten.clear();
@@ -317,23 +346,98 @@ public class OcKVK {
 			        }
 			        try{
 			        	in = new ByteArrayInputStream(resultvd); 
+			        	/*****ausschalten nach Test******/
 			        	InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKvd.zip",resultvd);
 			        	out = Unzip("",in);
 			        	in.close();
 			        	out.flush();
 			        	out.close();
-					    resultString = new String(out.toByteArray());
+					    resultString = new String(out.toByteArray()).replace("vsd:", "");
+					   
+					    
+					    DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+						domFactory.setValidating(false);
+						DocumentBuilder builder = null;
+						try {
+							builder = domFactory.newDocumentBuilder();
+							builder.setErrorHandler(new ErrorHandler() {
+							    @Override
+							    public void error(SAXParseException exception) throws SAXException {
+							        exception.printStackTrace();
+							    }
+							    @Override
+							    public void fatalError(SAXParseException exception) throws SAXException {
+							        exception.printStackTrace();
+							    }
+
+							    @Override
+							    public void warning(SAXParseException exception) throws SAXException {
+							        exception.printStackTrace();
+							    }
+								
+							});
+							//Die beiden Dateien aufteilen
+							String rs1 = resultString.substring(0,resultString.lastIndexOf("<?xml version"));
+							String rs2 = resultString.substring(resultString.lastIndexOf("<?xml version"));
+							if(mustdebug){
+								InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKvd",rs1.getBytes());
+								InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKzd",rs2.getBytes());
+							}
+
+							org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(rs1.getBytes()));
+							
+							//wird nicht gebraucht
+							NodeList list = doc.getElementsByTagName("Beginn");
+							
+							list = doc.getElementsByTagName("Kostentraegerkennung");
+							ikktraeger = list.item(0).getTextContent().toString().substring(2);
+							SystemConfig.hmKVKDaten.put("Kassennummer",list.item(1).getTextContent().toString().substring(2));
+							
+							list = doc.getElementsByTagName("Name");
+							namektraeger = list.item(0).getTextContent();
+							SystemConfig.hmKVKDaten.put("Krankenkasse",list.item(1).getTextContent());									
+								
+							list = doc.getElementsByTagName("Versichertenart");
+							SystemConfig.hmKVKDaten.put("Status",list.item(0).getTextContent());
+							
+							//element wird nicht von jeder Kasse angegeben
+							list = doc.getElementsByTagName("Ende");
+							if(list != null){
+								try{
+									String ende = list.item(0).getTextContent().trim();
+									SystemConfig.hmKVKDaten.put("Gueltigkeit",ende.substring(4,6)+
+											ende.substring(2,4));
+								}catch(Exception ex){
+								}
+							}
+							//wird nicht gebraucht
+							//list = doc.getElementsByTagName("WOP");
+
+	
+						} catch (ParserConfigurationException e1) {
+							e1.printStackTrace();
+						} catch (SAXException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}		
+					   
+					    /*
 			        	if(mustdebug){
 			        		System.out.println("**************** VD - Daten **********************");
 			        		System.out.println(resultString);
 			        	}
 					    
-			        	if(resultString.indexOf("\n") >= 0){
+			        	if( countChar(resultString, '\n' ) >= 36 ){
 					    	if(mustdebug){
 					    		System.out.println("*************Daten enthalten Zeilenumbrüche ************");
 					    	}	
 			        		readAndParseXML(new ByteArrayInputStream(resultString.getBytes()),1);
 			        	}else{
+			        		if(resultString.indexOf("\n") >= 0 ){
+			        			//die Arschgeigen halten sich wieder mal an nix, alles löschen
+			        			resultString = resultString.replace("\n","");
+			        		}
 			        		if( createLineBrake(resultString) ){
 						    	if(mustdebug){
 						    		System.out.println("*************Daten enthalten keine(!!!) Zeilenumbrüche ************");
@@ -346,6 +450,7 @@ public class OcKVK {
 						    	}	
 			        		}
 			        	}
+			        	*/
 			        }catch(Exception ex){
 			         	ex.printStackTrace();
 			         	SystemConfig.hmKVKDaten.clear();
@@ -364,6 +469,84 @@ public class OcKVK {
 		    sc.close();
 		    return ret;    
 		}
+	
+	private void XML_PD_Parser(){
+		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+		domFactory.setValidating(false);
+		DocumentBuilder builder = null;
+		try {
+			builder = domFactory.newDocumentBuilder();
+			builder.setErrorHandler(new ErrorHandler() {
+			    @Override
+			    public void error(SAXParseException exception) throws SAXException {
+			        exception.printStackTrace();
+			    }
+			    @Override
+			    public void fatalError(SAXParseException exception) throws SAXException {
+			        exception.printStackTrace();
+			    }
+
+			    @Override
+			    public void warning(SAXParseException exception) throws SAXException {
+			        exception.printStackTrace();
+			    }
+				
+			});
+			org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(resultString.getBytes()));
+			Node node = doc.getLastChild();
+			NodeList nodeList = node.getChildNodes();
+			NodeList subNodeList = null;
+			int basic = 0;
+			for(basic = 0; basic < nodeList.getLength(); basic++){
+				if(nodeList.item(basic).getNodeName().toString().equalsIgnoreCase("Versicherter")){
+					subNodeList = nodeList.item(basic).getChildNodes();
+					break;
+				}
+			}
+			for(int x = 0;x < subNodeList.getLength();x++){
+				if(subNodeList.item(x).hasChildNodes() && subNodeList.item(x).getChildNodes().getLength() != 1){
+					NodeList subNodeList2 = subNodeList.item(x).getChildNodes();
+					for(int i = 0; i < subNodeList2.getLength();i++){
+						if(subNodeList2.item(i).hasChildNodes()  && subNodeList2.item(i).getChildNodes().getLength() != 1){
+							NodeList subNodeList3 = subNodeList2.item(i).getChildNodes();
+							for(int y = 0; y < subNodeList3.getLength();y++){
+								if(subNodeList3.item(y).hasChildNodes()  && subNodeList3.item(y).getChildNodes().getLength() != 1){
+									NodeList subNodeList4 = subNodeList3.item(y).getChildNodes();
+									for(int y1 = 0; y1 < subNodeList3.getLength();y1++){
+										try{
+											testePD2(subNodeList4.item(y1).getNodeName(),subNodeList4.item(y1).getTextContent());	
+										}catch(Exception ex){
+										}
+									}
+								}else{
+									testePD2(subNodeList3.item(y).getNodeName(),subNodeList3.item(y).getTextContent());										
+									
+								}
+							}
+						}else{
+							testePD2(subNodeList2.item(i).getNodeName(),subNodeList2.item(i).getTextContent());								
+						}
+					}
+				}else{
+					testePD2(subNodeList.item(x).getNodeName(),subNodeList.item(x).getTextContent());						
+				}
+			}
+		} catch (ParserConfigurationException e1) {
+			e1.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+	private static int countChar(String input, char toCount){
+        int counter = 0;
+        for(char c: input.toCharArray()){
+            if(c==toCount)
+                counter++;
+        }
+        return counter;
+    } 
 	private void InDatei(String datei, byte[] bytes){
 		   
 	     try{
@@ -437,6 +620,7 @@ public class OcKVK {
 	}
 	private void readAndParseXML(ByteArrayInputStream in,int datenart){
 		InputStreamReader inread = new InputStreamReader(in);
+		
 		try {
 		BufferedReader br = new BufferedReader(inread);
 		String s;
@@ -560,11 +744,68 @@ public class OcKVK {
 	}
 	/**********
 	 * 
+	 * 
+	 * 
+	 * 
+	 */
+	private void testePD2(String key,String value){
+		//System.out.println(key + " = " + value);
+		try{
+			if(key.equals("Versicherten_ID")){
+				SystemConfig.hmKVKDaten.put("Versichertennummer",value);
+				return;
+			}else if(key.equals("Geburtsdatum")){
+				
+				SystemConfig.hmKVKDaten.put("Geboren",value.substring(6)+
+						value.substring(4,6)+
+						value.substring(0,4));
+				return;
+			}else if(key.equals("Vorname")){
+				SystemConfig.hmKVKDaten.put("Vorname",value);
+				return;
+			}else if(key.equals("Nachname")){
+				SystemConfig.hmKVKDaten.put("Nachname",value);
+				return;
+			}else if(key.equals("Titel")){
+				SystemConfig.hmKVKDaten.put("Titel",value);
+				return;
+			}else if(key.equals("Namenszusatz")){
+				SystemConfig.hmKVKDaten.put("Namenszusatz",value);
+				return;
+			}else if(key.equals("Postleitzahl")){
+				SystemConfig.hmKVKDaten.put("Plz",value);
+				return;
+			}else if(key.equals("Ort")){
+				SystemConfig.hmKVKDaten.put("Ort",value);
+				return;
+			}else if(key.equals("Geschlecht")){
+				SystemConfig.hmKVKDaten.put("Anrede",(value.equals("M") ? "HERR" : "FRAU"));
+				return;
+			}else if(key.equals("Strasse")){
+				SystemConfig.hmKVKDaten.put("Strasse",value);
+				return;
+			}else if(key.equals("Hausnummer")){
+				SystemConfig.hmKVKDaten.put("Strasse", SystemConfig.hmKVKDaten.get("Strasse")+" "+value);
+				return;
+			}
+		}catch(Exception ex){
+		}
+	}
+	private void testeVD2(String key,String value){
+		try{
+			
+		}catch(Exception ex){
+			
+		}
+		
+	}
+	/**********
 	 * @param zeile
 	 * @param first
 	 * @param last
 	 * @param durchlauf
 	 */
+	
 	private void testeVD(String zeile,int first,int last,int durchlauf){
 		String dummy = zeile.substring(first+1,last).trim();
 		if(dummy.startsWith("/")) return;
@@ -599,6 +840,7 @@ public class OcKVK {
 		"Ort","Gueltigkeit","Checksumme","Anrede"};
 		
 		 */
+		//System.out.println("Wert blockIKKasse: "+this.blockIKKasse+" | dummy: "+dummy+" | zeile: "+zeile);
 		if(dummy.equals("Kostentraegerkennung") && (!this.blockIKKasse) ){
 			String ik = zeile.substring(last+1,dataend);
 			ikktraeger = ik.substring(2);
