@@ -61,7 +61,7 @@ public class SystemConfig {
 	public static int RoogleZeitraum;
 	public static HashMap<String,String> RoogleZeiten = null;
 	
-	public static boolean[] taskPaneCollapsed = {false,false,true,true,false,true};
+	public static boolean[] taskPaneCollapsed = {false,false,true,true,false,true,false};
 	/**
 	 * nachfolgende static's sind notwendig für den Einsatz des Terminkalenders
 	 */
@@ -478,7 +478,11 @@ public class SystemConfig {
 				
 			}
 			if ( ini.getStringProperty("HauptFenster", "TP1Offen") != null ){
-				for(int i = 1; i < 7; i++){
+				if ( ini.getStringProperty("HauptFenster", "TP7Offen") == null ){
+					ini.setStringProperty("HauptFenster", "TP7Offen","1",null);
+					mustsave = true;
+				}
+				for(int i = 1; i < 8; i++){
 					taskPaneCollapsed[i-1] = (ini.getStringProperty("HauptFenster", "TP"+Integer.toString(i)+"Offen").equals("1") ? true : false);
 				}
 			}else{
@@ -488,6 +492,7 @@ public class SystemConfig {
 				ini.setStringProperty("HauptFenster", "TP4Offen","1",null);
 				ini.setStringProperty("HauptFenster", "TP5Offen","0",null);
 				ini.setStringProperty("HauptFenster", "TP6Offen","1",null);
+				ini.setStringProperty("HauptFenster", "TP7Offen","1",null);
 				mustsave = true;
 			}
 			if(mustsave){
