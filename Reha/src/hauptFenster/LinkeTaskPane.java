@@ -92,7 +92,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	private String aktTag = "x";
 	private String wahlTag = "y";
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-	private static boolean mitUserTask = false;
+	public static boolean mitUserTask = false;
 	public LinkeTaskPane(){
 		super();
 		mitUserTask = testUserTask();
@@ -634,10 +634,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			jxLink.setActionCommand("UserTask-"+Integer.toString(i));
 			jxLink.addActionListener(this);
 			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-			jxLink.setEnabled(true);	
+			//jxLink.setEnabled();	
 			tp7.add(jxLink);
 		}
-		tp7.setCollapsed(false);
+		tp7.setCollapsed(SystemConfig.taskPaneCollapsed[6]);
 		return tp7;
 	}	
 

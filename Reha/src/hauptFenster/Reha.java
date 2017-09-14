@@ -319,7 +319,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2017-09-07-DB=";
+	public static String aktuelleVersion = "2017-09-13-DB=";
 	
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
@@ -701,6 +701,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",(Object)(LinkeTaskPane.tp5.isCollapsed() ? "1" : "0"),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",(Object)(LinkeTaskPane.tp2.isCollapsed() ? "1" : "0"),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",(Object)(LinkeTaskPane.tp6.isCollapsed() ? "1" : "0"),null );
+			if(LinkeTaskPane.mitUserTask){
+				SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",(Object)(LinkeTaskPane.tp7.isCollapsed() ? "1" : "0"),null );				
+			}
 		}catch(NullPointerException ex){
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
 		}
@@ -781,6 +784,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",(Object)(LinkeTaskPane.tp5.isCollapsed() ? "1" : "0"),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",(Object)(LinkeTaskPane.tp2.isCollapsed() ? "1" : "0"),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",(Object)(LinkeTaskPane.tp6.isCollapsed() ? "1" : "0"),null );
+			if(LinkeTaskPane.mitUserTask){
+				SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",(Object)(LinkeTaskPane.tp7.isCollapsed() ? "1" : "0"),null );				
+			}
 		}catch(NullPointerException ex){
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
 		}
