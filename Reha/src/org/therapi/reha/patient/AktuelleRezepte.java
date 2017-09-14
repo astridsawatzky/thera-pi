@@ -160,6 +160,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 	AbrechnungRezept abrRez = null;
 
 	InfoDialog infoDlg = null;	
+	String sRezNumNeu = "";
 	//public boolean lneu = false;
 	public AktuelleRezepte(PatientHauptPanel eltern){
 		super();
@@ -943,11 +944,14 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		*/
 		return ret;
 	}
+	public void setzeRezeptNummerNeu(String nummer){
+		this.sRezNumNeu = nummer;
+	}
 	
 	public void holeRezepte(String patint,String rez_nr){
 		final String xpatint = patint;
 		final String xrez_nr = rez_nr;
-
+		//System.out.println("Eintritt in die Funktion");
 		new SwingWorker<Void,Void>(){
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -961,7 +965,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						"DATE_FORMAT(lastdate,'%d.%m.%Y') AS datum,abschluss,pat_intern,indikatschl,id,termine", 
 						"pat_intern='"+xpatint+"' ORDER BY rez_datum", Arrays.asList(new String[]{}));
 				int anz = vec.size();
-				
+				//System.out.println("Anzahl Rezepte: "+anz);
 				for(int i = 0; i < anz;i++){
 					if(i==0){
 						dtblm.setRowCount(0);						
@@ -2849,15 +2853,22 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		//System.out.println(SystemConfig.hmAdrRDaten);
 		new RezeptGebuehren(this,bereitsbezahlt,false,pt);
 	}
-	public static void setZuzahlImageActRow(ZZStat key){
-		int row = tabaktrez.getSelectedRow();
-		if(row < 0){
+	public static void setZuzahlImageActRow(ZZStat key, String reznr){
+		try{
+			if(tabaktrez == null){
+				return;
+			}
+			int row = tabaktrez.getSelectedRow();
+			if(row >= 0){
+				if(dtblm.getValueAt(row, 0).toString().equals(reznr)){
+					dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(key), row, 1);				
+				}
+			}
+		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Achtung kann Icon für korrekte Zuzahlung nicht setzen.\n"+
 					"Bitte notieren Sie den Namen des Patienten und die Rezeptnummer und verständigen\n"+
-					"Sie den Administrator");
-			return;
+					"Sie den Administrator");			
 		}
-		dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(key), row, 1);
 		//tabaktrez.repaint();
 	}
 	public static void setZuzahlImage(int imageno){
@@ -2875,7 +2886,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 		String rezNr = tabaktrez.getValueAt(tabaktrez.getSelectedRow(), 0).toString();
 		ZZStat iconKey = stammDatenTools.ZuzahlTools.getIconKey (imageno, rezNr);
-		setZuzahlImageActRow(iconKey);
+		setZuzahlImageActRow(iconKey,rezNr);
 	}
 	private void doBarcode(){
 		SystemConfig.hmAdrRDaten.put("<Rhbpos>","----");
@@ -3046,7 +3057,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						int iZzStat = Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(39));
 						String sRezNr = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
 						ZZStat iconKey =  stammDatenTools.ZuzahlTools.getIconKey (iZzStat, sRezNr);
-						setZuzahlImageActRow(iconKey);
+						setZuzahlImageActRow(iconKey,sRezNr);
 
 						//IndiSchlüssel
 						dtblm.setValueAt(Reha.thisClass.patpanel.vecaktrez.get(44), tabaktrez.getSelectedRow(), 7);
@@ -3061,6 +3072,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				if(aktPanel.equals("leerPanel")){
 					try{
 						holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
+					}catch(Exception ex){
+						ex.printStackTrace();
+						JOptionPane.showMessageDialog(null,"Fehler in holeRezepte\n"+ex.getMessage());
+					}
+				}else{
+					try{
+						holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),this.sRezNumNeu);
 					}catch(Exception ex){
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(null,"Fehler in holeRezepte\n"+ex.getMessage());

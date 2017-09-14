@@ -2358,7 +2358,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			sbuf.append("where id='"+Integer.toString(rezidneu)+"'  LIMIT 1");
 			SqlInfo.sqlAusfuehren(sbuf.toString());
 			//System.out.println("Rezept wurde mit Preisgruppe "+jtf[cPREISGR].getText()+" gespeichert");
-			Reha.thisClass.patpanel.aktRezept.holeRezepte(jtf[cPATINT].getText(),nummer.toUpperCase()+Integer.toString(reznr));
+			Reha.thisClass.patpanel.aktRezept.setzeRezeptNummerNeu(nummer.toUpperCase()+Integer.toString(reznr));
+			//Reha.thisClass.patpanel.aktRezept.holeRezepte(jtf[cPATINT].getText(),nummer.toUpperCase()+Integer.toString(reznr));
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).setVisible(false);
 			aufraeumen();
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).dispose();

@@ -255,7 +255,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 			buchungUpdaten();
 		}
 		FensterSchliessen("dieses");
-		org.therapi.reha.patient.AktuelleRezepte.setZuzahlImageActRow(ZZStat.ZUZAHLRGR);
+		org.therapi.reha.patient.AktuelleRezepte.setZuzahlImageActRow(ZZStat.ZUZAHLRGR,hmRezgeb.get("<rgreznum>"));
 	}
 	
 	private void buchungStarten(){
