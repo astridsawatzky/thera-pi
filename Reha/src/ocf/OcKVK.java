@@ -259,7 +259,7 @@ public class OcKVK {
 			        	in.close();
 			        	out.flush();
 			        	out.close();
-			        	resultString = new String(out.toByteArray()).replace("vsd:", "");
+			        	resultString = new String(out.toByteArray()).replace("vsdp:", "").replace("vsda:", "").replace("vsdg:", "").replace("vsd:", "");
 			        	//System.out.println(resultString);
 			        	/*************
 			        	 * 
@@ -306,6 +306,13 @@ public class OcKVK {
 			       	 	ex.printStackTrace();
 			       	 	SystemConfig.hmKVKDaten.clear();
 			       	 	sc.close();
+			       	 	try {
+							in.close();
+				        	out.flush();
+				        	out.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 			       	 	return -1;
 			        }
 			        /*******************************VD-Daten**************************
@@ -352,7 +359,7 @@ public class OcKVK {
 			        	in.close();
 			        	out.flush();
 			        	out.close();
-					    resultString = new String(out.toByteArray()).replace("vsd:", "");
+					    resultString = new String(out.toByteArray()).replace("vsdp:", "").replace("vsda:", "").replace("vsdg:", "").replace("vsd:", "");
 					   
 					    
 					    DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -408,6 +415,7 @@ public class OcKVK {
 									SystemConfig.hmKVKDaten.put("Gueltigkeit",ende.substring(4,6)+
 											ende.substring(2,4));
 								}catch(Exception ex){
+									//System.out.println("1\n"+SystemConfig.hmKVKDaten+"\nFehler bei Ende der Gültigkeit");
 								}
 							}
 							//wird nicht gebraucht
@@ -416,10 +424,13 @@ public class OcKVK {
 	
 						} catch (ParserConfigurationException e1) {
 							e1.printStackTrace();
+							System.out.println("2\n"+SystemConfig.hmKVKDaten);
 						} catch (SAXException e) {
 							e.printStackTrace();
+							System.out.println("3\n"+SystemConfig.hmKVKDaten);
 						} catch (IOException e) {
 							e.printStackTrace();
+							System.out.println("4\n"+SystemConfig.hmKVKDaten);
 						}		
 					   
 					    /*
@@ -455,6 +466,13 @@ public class OcKVK {
 			         	ex.printStackTrace();
 			         	SystemConfig.hmKVKDaten.clear();
 			         	sc.close();
+			         	try {
+							in.close();
+				        	out.flush();
+				        	out.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 				    	return -1;
 			        }
 			        sc.close(); 
@@ -462,6 +480,13 @@ public class OcKVK {
 			    	//es ist auch keine eGK;
 			    	ret = -1;
 			    	sc.close();
+			    	try {
+						in.close();
+			        	out.flush();
+			        	out.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 			    	return -1;
 			    }
 		    	
