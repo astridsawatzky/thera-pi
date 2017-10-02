@@ -1739,6 +1739,21 @@ public class SystemConfig {
 		hmAbrechnung.put("hmgkvbegleitzettel", inif.getStringProperty("HMGKVRechnung", "Begleitzettel"));
 		hmAbrechnung.put("hmgkvrauchdrucken", inif.getStringProperty("HMGKVRechnung", "Rauchdrucken"));
 		hmAbrechnung.put("hmgkvrexemplare", inif.getStringProperty("HMGKVRechnung", "Rexemplare"));
+		if(inif.getStringProperty("HMGKVRechnung", "FreigabeErzwingen") == null){
+			hmAbrechnung.put("hmgkvfreigabeerzwingen","0");
+			inif.setStringProperty("HMGKVRechnung", "FreigabeErzwingen", "0", null);
+			mustsave=true;
+		}else{
+			if(inif.getStringProperty("HMGKVRechnung", "FreigabeErzwingen").trim().equals("0")){
+				hmAbrechnung.put("hmgkvfreigabeerzwingen","0");
+				
+			}else if(inif.getStringProperty("HMGKVRechnung", "FreigabeErzwingen").trim().equals("1")){
+				hmAbrechnung.put("hmgkvfreigabeerzwingen","1");
+			}else{
+				hmAbrechnung.put("hmgkvfreigabeerzwingen","0");
+			}
+		}
+		hmAbrechnung.put("hmgkvfreigabeerzwingen", inif.getStringProperty("HMGKVRechnung", "FreigabeErzwingen"));
 
 		hmAbrechnung.put("hmpriformular", inif.getStringProperty("HMPRIRechnung", "Pformular"));
 		hmAbrechnung.put("hmpridrucker", inif.getStringProperty("HMPRIRechnung", "Pdrucker"));
