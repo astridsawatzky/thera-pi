@@ -2693,7 +2693,12 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			if(xrgaf.size() <= 0){
 				//nein es wurde auch keine rechnung erstellt.
 				htmlposbuf.append(getNoZuZahl(1,null)); 
-				kannAbhaken = false;
+				//Abrechnung trotz unbezahlter Rezeptgebühren und keine Rechnung erstellt?
+				if(SystemConfig.hmAbrechnung.get("hmgkvfreigabeerzwingen").equals("1")){
+					kannAbhaken = true;
+				}else{
+					kannAbhaken = false;	
+				}
 			}else{
 				kannAbhaken = true;
 				if(xrgaf.get(0).get(1).equals("0.00")){
