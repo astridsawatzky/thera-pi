@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -28,12 +29,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 
 import CommonTools.JRtaTextField;
+import CommonTools.StringTools;
 import terminKalender.ParameterLaden;
 import terminKalender.TerminFenster;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -378,10 +381,10 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 
 			lneueZeile = testObNeueKalZeile();
 			if(lneueZeile){
-				statement = "Insert into kollegen2 set Anrede='"+anrede.getText()+"', "+
-											"Vorname='"+vorname.getText()+"', "+
-											"Nachname='"+nachname.getText()+"', "+
-											"Matchcode='"+matchcode.getText()+"', "+
+				statement = "Insert into kollegen2 set Anrede='"+StringTools.Escaped(anrede.getText().trim())+"', "+
+											"Vorname='"+StringTools.Escaped(vorname.getText().trim())+"', "+
+											"Nachname='"+StringTools.Escaped(nachname.getText().trim())+"', "+
+											"Matchcode='"+StringTools.Escaped(matchcode.getText().trim())+"', "+
 											"Astunden='"+arbstd.getText().trim().replace(",", ".")+"', "+
 											"Abteilung='"+abteilung.getSelectedItem()+"', "+											
 											"Deftakt='"+(deftakt.getText().trim().equals("") ? "0" : deftakt.getText())+"', "+
