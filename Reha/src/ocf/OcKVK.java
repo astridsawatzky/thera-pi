@@ -76,6 +76,8 @@ public class OcKVK {
 	final int[] tags = { 0x60,0x80,0x81,0x8F,0x82,0x83,0x90,0x84,0x85,
 			0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E};
 	private boolean mustdebug = false;
+	
+	String vsdPraefix = "";
 	//Integer Tag-Identifier
 	//String (Thera-Pi interner)
 	//Tag-Name
@@ -494,6 +496,18 @@ public class OcKVK {
 		    sc.close();
 		    return ret;    
 		}
+	private void setVsdPraefix(String string){
+		//resultString = new String(out.toByteArray()).replace("vsdp:", "").replace("vsda:", "").replace("vsdg:", "").replace("vsd:", "");
+		if(string.indexOf("vsdp:") >= 0){
+			vsdPraefix = "vsdp:";
+		}else if(string.indexOf("vsda:") >= 0){
+			vsdPraefix = "vsda:";
+		}else if(string.indexOf("vsdg:") >= 0){
+			vsdPraefix = "vsdg:";
+		}else if(string.indexOf("vsd:") >= 0){
+			vsdPraefix = "vsd:";
+		}
+	}
 	
 	private void XML_PD_Parser(){
 		DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
