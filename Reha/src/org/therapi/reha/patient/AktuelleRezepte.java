@@ -268,13 +268,14 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		
 		
 	}
+	
 	public void getAktDates(){
 		
 	}
 	public void setDtblmValues(ImageIcon ico,int row,int col){
 		dtblm.setValueAt(ico,row,col);
 	}
-
+ 
 	public void formulareAuswerten(){
 		int row = tabaktrez.getSelectedRow(); 
 		if(row >= 0){
@@ -439,62 +440,40 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		tabaktrez.setDoubleBuffered(true);
 		tabaktrez.setEditable(false);
 		tabaktrez.setSortable(false);
-		tabaktrez.getColumn(0).setMaxWidth(75);
+
 		TableCellRenderer renderer = new DefaultTableRenderer(new MappedValue(StringValues.EMPTY, IconValues.ICON), JLabel.CENTER);
-		tabaktrez.getColumn(1).setCellRenderer(renderer);
-		tabaktrez.getColumn(1).setMaxWidth(45);
-		tabaktrez.getColumn(3).setMaxWidth(75);
-		tabaktrez.getColumn(5).setMaxWidth(45);
-		tabaktrez.getColumn(5).setCellRenderer(renderer);
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment( JLabel.CENTER );
 
-		//tabaktrez.getColumn(4).setMaxWidth(70);
-		tabaktrez.getColumn(6).setMinWidth(0);
-		tabaktrez.getColumn(6).setMaxWidth(0);		
-		tabaktrez.getColumn(idInTable).setMinWidth(0);
-		tabaktrez.getColumn(idInTable).setMaxWidth(0);			
-		/*
-		tabaktrez.getColumn(1).setCellRenderer(renderer);
-		tabaktrez.getColumn(1).setMaxWidth(45);
-		tabaktrez.getColumn(3).setMaxWidth(75);
-		
-		// Lemmi 20110105: Maximal Spaltenbreite dieser Datumsangaben auch begrenzen
-		tabaktrez.getColumn(2).setMaxWidth(75);
-		tabaktrez.getColumn(4).setMaxWidth(75);
-		
-		tabaktrez.getColumn(5).setMaxWidth(45);
-		tabaktrez.getColumn(5).setCellRenderer(renderer);
-
-		//tabaktrez.getColumn(4).setMaxWidth(70);
-		tabaktrez.getColumn(6).setMinWidth(0);
-		tabaktrez.getColumn(6).setMaxWidth(0);		
-		tabaktrez.getColumn(7).setMinWidth(0);
-		tabaktrez.getColumn(7).setMaxWidth(0);	
-		tabaktrez.getColumn(0).setMaxWidth(75);
-		
-		tabaktrez.getColumn(1).setCellRenderer(renderer);
 		tabaktrez.getColumn(1).setMaxWidth(45);
 		tabaktrez.getColumn(3).setMaxWidth(75);
 		tabaktrez.getColumn(5).setMaxWidth(45);
-		tabaktrez.getColumn(5).setCellRenderer(renderer);
 	
 		//tabaktrez.getColumn(4).setMaxWidth(70);
-		tabaktrez.getColumn(6).setMinWidth(0);
-		tabaktrez.getColumn(6).setMaxWidth(0);		
-		tabaktrez.getColumn(7).setMinWidth(0);
-		tabaktrez.getColumn(7).setMaxWidth(0);
-		*/		
+		tabaktrez.getColumn(6).setMinWidth(0);			// Pat-Nr.
+		tabaktrez.getColumn(6).setMaxWidth(0);
+
+		tabaktrez.getColumn(idInTable).setMinWidth(0);	// verordn->id
+		tabaktrez.getColumn(idInTable).setMaxWidth(0);			
+        for(int i=0;i<column.length;i++){
+			switch (i){
+			case 1:				// Icons
+			case 5:
+				tabaktrez.getColumn(i).setCellRenderer(renderer);
+				break;
+			default:			// Text
+				tabaktrez.getColumn(i).setCellRenderer(centerRenderer);
+			}
+        }
 		tabaktrez.validate();
 		tabaktrez.setName("AktRez");
 		tabaktrez.setSelectionMode(0);
 		//tabaktrez.addPropertyChangeListener(this);
 		
 		tabaktrez.getSelectionModel().addListSelectionListener( new RezepteListSelectionHandler());
-
 		tabaktrez.addMouseListener(new MouseAdapter(){
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
-					//while(inRezeptDaten && !RezeptDaten.feddisch){					
 					long zeit = System.currentTimeMillis();
 					while(!RezeptDaten.feddisch){
 						try {
@@ -611,7 +590,6 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		item.addActionListener(this);
 		jPopupMenu.add(item);				// McM 2016-01	keine Auswirkung auf Abrechnung; RTA intern benutzt
 		// Lemmi 20101231: Icon zugefügt
-		//item = new JMenuItem("... auf nicht befreit und nicht bezahlt", new ImageIcon(Reha.proghome+"icons/Kreuz.png"));
 		item = new JMenuItem("... auf nicht bezahlt setzen", new ImageIcon(Reha.proghome+"icons/Kreuz.png"));
 		item.setActionCommand("statusnichtbezahlt");
 		item.addActionListener(this);
@@ -637,7 +615,6 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		item.setActionCommand("RezeptTeilen");
 		item.addActionListener(this);
 		jPopupMenu.add(item);
-		
 		
 		return jPopupMenu;
 	}
@@ -985,14 +962,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						rezstatus = 1;		// ToDo: open/closed
 					}
 					
-					dtblm.addRow((Vector)vec.get(i));				// Rezept in Tabelleeintragen
+					dtblm.addRow((Vector)vec.get(i));				// Rezept in Tabelle eintragen
 					
 					// Icons in akt. Zeile setzen
 					dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(iconKey), i, 1);						
 					dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[rezstatus],i,5);
 					
 					if(vec.get(i).get(0).startsWith("RH") && Reha.thisClass.dta301panel != null){
-//						final String testreznum = String.valueOf(vec.get(i).get(0)); 	// s.o.
 						new SwingWorker<Void,Void>(){
 							@Override
 							protected Void doInBackground()
@@ -3356,7 +3332,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			icons.put("Behandlungstage in Clipboard",SystemConfig.hmSysIcons.get("einzeltage"));
 			icons.put("Transfer in Historie",SystemConfig.hmSysIcons.get("redo"));
 			// Lemmi 20101218: angehängt  Rezeptgebühr-Rechnung aus dem Rezept heraus erzeugen
-			icons.put("Rezeptgebühr-Rechnung erstellen",SystemConfig.hmSysIcons.get("privatrechnung"));
+			//icons.put("Rezeptgebühr-Rechnung erstellen",SystemConfig.hmSysIcons.get("privatrechnung"));
+			// McM: mit eigenem Icon (match mit Anzeige in Rezeptliste):
+			icons.put("Rezeptgebühr-Rechnung erstellen",SystemConfig.hmSysIcons.get("rezeptgebuehrrechnung"));
 			icons.put("§301 Reha-Fallsteuerung",SystemConfig.hmSysIcons.get("abrdreieins"));
 			
 			// create a list with some test data
