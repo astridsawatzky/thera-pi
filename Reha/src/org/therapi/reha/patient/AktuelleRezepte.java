@@ -1877,9 +1877,11 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				//RezNeuanlage.java nicht
 				boolean bCtrlPressed = ( (arg0.getModifiers() & KeyEvent.CTRL_MASK) == KeyEvent.CTRL_MASK );
 				boolean bShiftPressed = ( (arg0.getModifiers() & KeyEvent.SHIFT_MASK) == KeyEvent.SHIFT_MASK );
+				boolean bAltPressed = ( (arg0.getModifiers() & KeyEvent.ALT_MASK) == KeyEvent.ALT_MASK );
 				String strModus = "";
 				if ( bCtrlPressed ) strModus = "KopiereLetztes";
 				else if ( bShiftPressed ) strModus = "KopiereAngewaehltes";
+				else if ( bAltPressed ) strModus = "KopiereHistorienRezept";
 				neuanlageRezept( true,"", strModus );
 				
 				break;
@@ -3016,9 +3018,14 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 				}
 				if ( strModus.equals("KopiereHistorienRezept") ) { 
-					String rezToCopy = Historie.getActiveRezNr();
-					vecKopiervorlage = ((Vector<String>)SqlInfo.holeSatz( "lza", " * ", "REZ_NR = '" +
-							rezToCopy + "'", Arrays.asList(new String[] {}) ));
+					String rezToCopy = null;
+					if( (rezToCopy = Historie.getActiveRezNr()) != null){
+						vecKopiervorlage = ((Vector<String>)SqlInfo.holeSatz( "lza", " * ", "REZ_NR = '" +
+								rezToCopy + "'", Arrays.asList(new String[] {}) ));
+						
+					}else{
+						JOptionPane.showMessageDialog(null, "Kein Rezept in der Historie ausgewählt");
+					}
 				}
 				// ^^^ Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
 				@SuppressWarnings("unchecked")
