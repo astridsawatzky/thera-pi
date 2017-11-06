@@ -184,20 +184,34 @@ public class HMRCheck {
 			// jetzt haben wir schon einmal die Doppelbehandlung
 			// dann testen ob die Positionsnummer überhaupt ein zugelassenes vorrangiges Heilmittel ist.
 			
-			for(int i = 0; i < positionen.size();i++){
+			int posGesamt = positionen.size();
+			for(int i = 0; i < posGesamt;i++){
 				//Hier Doppelbehandlung einbauen start
+				String currPos = positionen.get(i);
+				boolean isOptional = Arrays.asList(ergaenzend).contains(currPos);
 				if(i==0){
-					if(! Arrays.asList(vorrangig).contains(positionen.get(i))){
-						fehlertext = fehlertext+String.valueOf(
-								getDialogText(true,getHeilmittel(positionen.get(i)),positionen.get(i),vorrangig));
-						testok = false;
+					if(! Arrays.asList(vorrangig).contains(currPos)){
+						// kein vorrangiges HM -> Test, ob 'ergänzend, aber einzeln erlaubt'!
+						boolean isoliertErlaubt = false;
+						for(int j = 0; j < preisvec.size();j++){
+							if (currPos == preisvec.get(j).get(2)){
+								boolean[] vorrUisoliert = stammDatenTools.RezTools.isVorrangigAndExtra(preisvec.get(j).get(1), reznummer);
+								isoliertErlaubt = vorrUisoliert[1];							}
+						}
+						if (isOptional && isoliertErlaubt && (posGesamt == 1)){
+							// ergänzendes HM darf isoliert verordnet werden (betrifft ET,EST,US)
+						}else{
+							fehlertext = fehlertext+String.valueOf(
+									getDialogText(true,getHeilmittel(currPos),currPos,vorrangig));
+							testok = false;							
+						}
 					}
 				}else if(i==1 && doppelbehandlung){
 					
 				}else{
-					if(! Arrays.asList(ergaenzend).contains(positionen.get(i))){
+					if(! isOptional){
 						fehlertext = fehlertext+String.valueOf(
-								getDialogText(false,getHeilmittel(positionen.get(i)),positionen.get(i),ergaenzend));
+								getDialogText(false,getHeilmittel(currPos),currPos,ergaenzend));
 						testok = false;
 					}
 				}
