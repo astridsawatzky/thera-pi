@@ -320,6 +320,34 @@ public class ZuzahlTools {
 		return false;
 	}
 	/**
+	 * Nummer der RG-Rechnung zu einem Rezept ermitteln
+	 * @param xreznr
+	 * @return Rechnungsnummer
+	 * 
+	 * @author McM
+	 */
+	public static String getRgr(String rezNb) {
+		String rnr = SqlInfo.holeEinzelFeld("select rnr from rgaffaktura where reznr='"+rezNb+"' AND rnr LIKE 'RGR-%' LIMIT 1");
+		if(rnr.length() > 0){
+			return rnr;
+		}
+		return "";
+	}
+	/**
+	 * Vorhandensein der RG-Rechnung zu einem Rezept bestätigen
+	 * @param xreznr
+	 * @return OK-String (enthält HTML-Tags!)
+	 * 
+	 * @author McM
+	 */
+	public static String rgrOK(String rezNb) {
+		String rgrNr = getRgr(rezNb);
+		if(rgrNr.length() > 0){
+			return "Für dieses Rezept wurde bereits eine Rezeptgebührrechnung <b>" + rgrNr + "</b> angelegt!";
+		}
+		return "Fehler: rgrOK()";
+	}
+	/**
 	 * Prüfung, ob eine RG-Rechnung bar bezahlt wurde
 	 * @param xreznr
 	 * @return true/false
@@ -329,6 +357,36 @@ public class ZuzahlTools {
 	public static boolean existsRgrBarInKasse(String rezNb) {
 		Vector<Vector<String>> testvec = SqlInfo.holeFelder("select einnahme,datum,ktext from kasse where rez_nr='"+rezNb+"' AND ktext LIKE 'RGR-%' LIMIT 1");
 		if(testvec.size() > 0){
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Prüfung, ob die Zuzahlung für ein Rezept bar bezahlt wurde
+	 * @param xreznr
+	 * @return true/false
+	 * 
+	 * @author McM
+	 */
+	public static boolean existsBarQuittung(String rezNb) {
+		// ktext hat das Format 'NachnamePatient,rezNb'
+		String patId = SqlInfo.holeEinzelFeld("select pat_intern from verordn where rez_nr='"+rezNb+"' LIMIT 1");
+		String patNN = SqlInfo.holeEinzelFeld("select n_name from pat5 where pat_intern='"+patId+"' LIMIT 1");
+		Vector<Vector<String>> testvec = SqlInfo.holeFelder("select einnahme,datum,ktext from kasse where rez_nr='"+rezNb+"' AND ktext LIKE '"+patNN+","+rezNb+"' LIMIT 1");
+		if(testvec.size() > 0){
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Prüfung, ob die Zuzahlung für ein Rezept kassiert oder eine RGR erstellt wurde
+	 * @param xreznr
+	 * @return true/false
+	 * 
+	 * @author McM
+	 */
+	public static boolean bereitsBezahlt(String rezNb) {
+		if(existsBarQuittung(rezNb) || existsRgrBarInKasse(rezNb)){
 			return true;
 		}
 		return false;

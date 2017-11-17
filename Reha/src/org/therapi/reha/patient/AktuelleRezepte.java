@@ -1,5 +1,4 @@
-﻿package org.therapi.reha.patient;
-
+package org.therapi.reha.patient;
 
 
 import hauptFenster.AktiveFenster;
@@ -956,7 +955,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						iZuZahlStat = Integer.parseInt( ((Vector)vec.get(i)).get(1).toString() );
 					}
 					final String testreznum = String.valueOf(vec.get(i).get(0)); 
-					iconKey = stammDatenTools.ZuzahlTools.getIconKey(iZuZahlStat, testreznum);
+					iconKey = ZuzahlTools.getIconKey(iZuZahlStat, testreznum);
 
 					if(((Vector)vec.get(i)).get(5).equals("T")){
 						rezstatus = 1;		// ToDo: open/closed
@@ -965,7 +964,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					dtblm.addRow((Vector)vec.get(i));				// Rezept in Tabelle eintragen
 					
 					// Icons in akt. Zeile setzen
-					dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(iconKey), i, 1);						
+					dtblm.setValueAt(ZuzahlTools.getZzIcon(iconKey), i, 1);						
 					dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[rezstatus],i,5);
 					
 					if(vec.get(i).get(0).startsWith("RH") && Reha.thisClass.dta301panel != null){
@@ -2783,14 +2782,10 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		
 		// vvv Lemmi 20101218: Prüfung, ob es eine RGR-RECHNUNG bereits gibt, falls ja, geht hier gar nix !
 		String reznr = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
-		String rgrNr = SqlInfo.holeEinzelFeld("select rnr from rgaffaktura where reznr='"+
-				reznr+"' AND rnr LIKE 'RGR-%' LIMIT 1");		
 
-		if(! rgrNr.equals("")){
-			JOptionPane.showMessageDialog(null, "<html>Für dieses Rezept  <b>" + (String)Reha.thisClass.patpanel.vecaktrez.get(1) 
-											  + "</b>  wurde bereits eine Rezeptgebühren-Rechnung <b>" + rgrNr + "</b> angelegt!<br>" 
-											  + "Eine Barzahlungs-Quittung kann nicht mehr erstellt werden.</html>", 
-											  "Bar-Quittung nicht mehr möglich", JOptionPane.WARNING_MESSAGE, null);
+		if(ZuzahlTools.existsRGR(reznr)){
+			JOptionPane.showMessageDialog(null, "<html>"+ZuzahlTools.rgrOK(reznr) + "<br>"
+					+"Eine Barzahlungs-Quittung kann nicht mehr erstellt werden.</html>", "Bar-Quittung nicht mehr möglich", JOptionPane.WARNING_MESSAGE, null);
 				return;				
 		}
 		// ^^^ Lemmi 20101218: Prüfung, ob es eine RGR-RECHNUNG bereits gibt, falls ja, geht hier gar nix !
@@ -2807,8 +2802,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			return;
 		}
 
-		if( (boolean)Reha.thisClass.patpanel.vecaktrez.get(39).equals("1") || 
-				(Double.parseDouble((String)Reha.thisClass.patpanel.vecaktrez.get(13)) > 0.00) ){
+		if(ZuzahlTools.bereitsBezahlt(reznr)){
+//			if( (boolean)Reha.thisClass.patpanel.vecaktrez.get(39).equals("1") || 
+//					(Double.parseDouble((String)Reha.thisClass.patpanel.vecaktrez.get(13)) > 0.00) ){
 			int frage = JOptionPane.showConfirmDialog(null,"<html>Zuzahlung für Rezept <b>" + reznr + "</b> bereits in bar geleistet!<br><br> Wollen Sie eine Kopie erstellen?</html>",
 														   "Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 			if(frage == JOptionPane.NO_OPTION){
@@ -2839,7 +2835,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			int row = tabaktrez.getSelectedRow();
 			if(row >= 0){
 				if(dtblm.getValueAt(row, 0).toString().equals(reznr)){
-					dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(key), row, 1);				
+					dtblm.setValueAt(ZuzahlTools.getZzIcon(key), row, 1);				
 				}
 			}
 		}catch(Exception ex){
@@ -2863,7 +2859,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
  */
 
 		String rezNr = tabaktrez.getValueAt(tabaktrez.getSelectedRow(), 0).toString();
-		ZZStat iconKey = stammDatenTools.ZuzahlTools.getIconKey (imageno, rezNr);
+		ZZStat iconKey = ZuzahlTools.getIconKey (imageno, rezNr);
 		setZuzahlImageActRow(iconKey,rezNr);
 	}
 	private void doBarcode(){
@@ -3039,7 +3035,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 //											tabaktrez.getSelectedRow(),1);
 						int iZzStat = Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(39));
 						String sRezNr = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
-						ZZStat iconKey =  stammDatenTools.ZuzahlTools.getIconKey (iZzStat, sRezNr);
+						ZZStat iconKey =  ZuzahlTools.getIconKey (iZzStat, sRezNr);
 						setZuzahlImageActRow(iconKey,sRezNr);
 
 						//IndiSchlüssel
@@ -3187,9 +3183,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		DecimalFormat dfx = new DecimalFormat( "0.00" );
 		
 		String sRezNr = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
-		if(stammDatenTools.ZuzahlTools.existsRGR( sRezNr )){
-			int anfrage = JOptionPane.showConfirmDialog(null, "Für dieses Rezept wurde bereits eine Rezeptgebührrechnung angelegt!"+
-					"Wollen Sie eine Kopie erstellen?", "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
+		if(ZuzahlTools.existsRGR( sRezNr )){
+			int anfrage = JOptionPane.showConfirmDialog(null, "<html>"+ZuzahlTools.rgrOK(sRezNr) + "<br><br>"
+					+"Wollen Sie eine Kopie erstellen?</html>", "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 			if(anfrage != JOptionPane.YES_OPTION){
 				return;				
 			}
@@ -3204,7 +3200,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				JOptionPane.showMessageDialog(null,"Stand heute ist der Patient noch nicht Volljährig - Zuzahlung deshalb (bislang) noch nicht erforderlich");
 				return;
 			}
-			if(stammDatenTools.ZuzahlTools.existsRgrBarInKasse(sRezNr)){
+			if(ZuzahlTools.existsBarQuittung(sRezNr)){
 //			if( (boolean)Reha.thisClass.patpanel.vecaktrez.get(39).equals("1") || 
 //					(Double.parseDouble((String)Reha.thisClass.patpanel.vecaktrez.get(13)) > 0.00) ){
 				JOptionPane.showMessageDialog(null, "<html>Zuzahlung für Rezept  <b>" + sRezNr
