@@ -28,8 +28,13 @@ core
 # CVS default ignores end
 
 # ignores from old projectdir begin
+# erzeugte  binaries nicht versionieren ...
 bin
 *.jar
+# ... aber die benutzten Libs, wenn sich da was ändert
+!/Libraries/
+!/Libraries/lib/
+!/Libraries/lib/**
 
 *.old
 *.log
@@ -44,4 +49,6 @@ bin
 #510841109
 dist
 stash
+.gitignore
+
 # ignores from old projectdir end

@@ -21,6 +21,6 @@ Class-Path: Libraries/lib/sql/jpmdbc.jar
  Libraries/lib/swingx/swing-layout.jar 
  Libraries/lib/swingx/swing-worker.jar 
  Libraries/lib/swingx/swingx-1.6.jar 
- Libraries/lib/apachecommons/commons-net-2.0.jar 
+ Libraries/lib/apachecommons/commons-net-3.4.jar 
 
 
