@@ -197,8 +197,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		jSplitLR.setDividerLocation(230);
 		add(jSplitLR,BorderLayout.CENTER);
 		mandantenCheck();
-		SlgaVersion = "10";//( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
-		SllaVersion = "10";//( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
+		SlgaVersion = "11";//( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
+		SllaVersion = "11";//( DatFunk.TageDifferenz("30.09.2013",DatFunk.sHeute()) <= 0 ? "08" : "09");
 		
 		new SwingWorker<Void,Void>(){
 			@Override
