@@ -24,6 +24,7 @@ public class HMRCheck {
 	Vector<Vector<String>> preisvec = null;
 	String indischluessel = null;
 	String diszis[] = {"2","1","5","3","8","7"};
+	String diszikurz[] = {"KG","MA","ER","LO","RH","PO"}; 
 	//RezNeuanlage rezanlage = null;
 	int disziplin;
 	int preisgruppe;
@@ -49,6 +50,9 @@ public class HMRCheck {
 			"AT1a","AT1b","AT1c","SB4","ST3"};
 	String[] nurunter18 = {"ZN1a","ZN1b","ZN1c","EN1","PS1","EX4a"};
 	String[] nurueber18 = {"ZN2a","ZN2b","ZN2c","EN2"};
+	
+	int maxprorezept = 0;
+	int maxprofall = 0;
 	
 	public HMRCheck(String indi,int idiszi,Vector<Integer> vecanzahl,Vector<String>vecpositionen,
 			int xpreisgruppe,Vector<Vector<String>> xpreisvec,int xrezeptart,String xreznr,String xrezdatum,String xletztbeginn){
@@ -109,7 +113,8 @@ public class HMRCheck {
 			return true;
 		}
 		//System.out.println(vec);
-		int maxprorezept = Integer.parseInt(vec.get(0).get(2));
+		maxprorezept = Integer.parseInt(vec.get(0).get(2));
+		maxprofall = Integer.parseInt(vec.get(0).get(1));
 		String[] vorrangig = vec.get(0).get(3).split("@");
 		String[] ergaenzend = vec.get(0).get(5).split("@");
 		for(int i = 0; i < vorrangig.length;i++){
@@ -142,6 +147,10 @@ public class HMRCheck {
 					rezarten[rezeptart]+
 					"</font> erlaubt!!</b><br><br>");
 			testok = false;
+		}
+		// Hier den Folgeverordnungstest einbauen, bzw. testen ob Höchstverordnungsmenge überschritten wird und deshalb VoAdr fällig ist
+		if(this.folgerezept){
+			testok = checkeFolgeVo();
 		}
 		//Hier der Check ob für Kinder ein Erwachsenen-Indischlüssel verwendet wurde z.B. ZN2a
 		if( (unter18) && (Arrays.asList(nurueber18).contains(indischluessel)) ){
@@ -428,6 +437,116 @@ public class HMRCheck {
 		return false;
 	}
 	
+	
+	public boolean checkeFolgeVo(){
+		//variable für höchstverordnungsmenge
+		//maxprofall
+		//indischluessel
+		//anzahl.get(0);
+		String patintern = null;
+		String aktindischl = indischluessel;
+		String stmtzusatz = null;
+		int index = 0;
+		String startdatum_neu = null;
+		String enddatum_alt = null;
+		long therapiepause = 12*7;
+		long tagedifferenz = 0;
+		try{
+		
+		if( "abcdef".indexOf( indischluessel.substring(indischluessel.length()-1,indischluessel.length())) >= 0)   {
+			aktindischl = indischluessel.substring(0,indischluessel.length()-1)+" "+indischluessel.substring(indischluessel.length()-1);
+			//System.out.println(aktindischl);
+		}
+		
+		if(Reha.thisClass.patpanel != null){
+			patintern = Reha.thisClass.patpanel.patDaten.get(29);
+			String stmt = "(select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from verordn  where pat_intern = '"+patintern+"'"+
+						" and rez_nr like '"+diszikurz[disziplin]+"%' and indikatschl = '"+aktindischl+"')"+
+			" union "+ 
+						"(select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from lza where pat_intern = '"+patintern+"'"+
+						" and rez_nr like '"+diszikurz[disziplin]+"%' and indikatschl = '"+aktindischl+"')"+
+			" order by rez_datum DESC, indikatschl";
+			Vector<Vector<String>> testvec = SqlInfo.holeFelder(stmt);
+
+			boolean zaehlen = false;
+			int gesamt = 0;
+			int aktanzahl = 0;
+			if(testvec.size() == 1 && neurezept ){
+				//Höchstverordnungsmenge kann noch nicht überschritten sein
+				return true;
+			}else if(testvec.size() == 1 && (!neurezept)){
+				//müßte dann erstverordnung sein
+				fehlertext = fehlertext+(fehlertext.length() <= 0 ? "<html>" : "")+"<br>Verordnung müsste<b><font color='#ff0000'> Erstverordnung sein</font><br><br>"+
+						"</b><br><br>";
+				return false;
+			}else if(testvec.size() == 0 && neurezept ){
+				// müßte dann erstverordnung sein
+				fehlertext = fehlertext+(fehlertext.length() <= 0 ? "<html>" : "")+"<br>Verordnung müsste<b><font color='#ff0000'> Erstverordnung sein</font><br><br>"+
+						"</b><br><br>";
+				return false;
+			}
+			
+			
+			//  0         1       2       3        4            5       6
+			//rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern
+			boolean neudummy = Boolean.valueOf(neurezept);
+			for(int i = 0; i < testvec.size();i++){
+				if(testvec.get(i).get(1).equals(reznummer) || zaehlen || neudummy){
+					zaehlen = true;
+					if(neudummy){
+						aktanzahl = anzahl.get(0);
+					}else{
+						aktanzahl = Integer.parseInt(testvec.get(i).get(3));
+					}
+					//erst prüfen ob zwischen letzter behandlung des alten Rezeptes und dem ersten Termin der
+					//neuen VO 12 Wochen Therapiepause lagen, sofern nicht summieren
+					if(i+1 <= testvec.size()){
+						if(neudummy){
+							startdatum_neu = DatFunk.sHeute();
+							neudummy = false;
+						}else{
+							startdatum_neu = (testvec.get(i).get(5).length() > 0 ? RezTools.holeErstenTermin(null, testvec.get(i).get(5)) : DatFunk.sHeute() );
+						}
+						if( (i+1) < testvec.size()){
+							enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(i+1).get(5));
+						}else{
+							enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(i).get(5));
+						}
+						//System.out.println("Startdatum: "+startdatum_neu);
+						
+						//System.out.println("Enddatum: "+enddatum_alt);
+						
+						tagedifferenz = DatFunk.TageDifferenz(enddatum_alt, startdatum_neu);
+						if(tagedifferenz < therapiepause){
+							gesamt = gesamt + aktanzahl;							
+						}else{
+							return true;
+						}
+						//System.out.println("Gesamt: "+gesamt);
+						//System.out.println(startdatum_neu+" - "+ enddatum_alt+" - "+Long.toString(tagedifferenz));
+						if(gesamt > maxprofall){
+							fehlertext = fehlertext+(fehlertext.length() <= 0 ? "<html>" : "")+"<br><b><font color='#ff0000'>Höchstverordnungsmenge ist überschritten -> "+Integer.toString(gesamt)+" Behandlungen"+
+									"</font><br>Wechsel auf <font color='#ff0000'>außerhalb des Regelfalles</font> ist erforderlich<br>"+
+									"Höchstverordnungsmenge im Regelfall ist<br>bei <font color='#ff0000'>"+aktindischl+ " = "+Integer.toString(maxprofall)+"</font> Behandlungen<br>" +
+									"</b><br><br>";
+									testok = false;
+							return false;
+						}
+					}
+
+				}else{
+					//System.out.println("Nicht mitgezählt: "+testvec.get(i).get(1)+" - Anzahl: "+Integer.parseInt(testvec.get(i).get(3)));
+					//gesamt = gesamt + Integer.parseInt(testvec.get(i).get(3));
+				}
+			}
+		}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(null,"Fehler  in der Prüfung auf Folgerezepte\n\nBitte Informieren Sie den Systemadministrator");
+		}
+		// true damit die restliche Prüfung durchlaufen wird.
+		return true;		
+	}
 	/*
 	private void aktualisiereHMRs(){
 		Vector<Vector<String>> vec = SqlInfo.holeFelder("select ergaenzend,maxergaenzend,id from hmrcheck  where ergaenzend LIKE '%1508%'");

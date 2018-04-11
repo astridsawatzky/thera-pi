@@ -97,8 +97,8 @@ public class Beteiligung  extends JXPanel{
 	String sheetName;
 	
 	String[] kopfzeile = {"Patient","PG","Pos1","Pos2","Pos3","Pos4","HB","WG",
-			"Preis1","Preis2","Preis3","Preis4","HB-Pr.","WG-Pr.","Summe","A","FK"};
-	String[] cols = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q"};
+			"Preis1","Preis2","Preis3","Preis4","HB-Pr.","WG-Pr.","Summe","A","FK","Min"};
+	String[] cols = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R"};
 
 	
 	
@@ -216,6 +216,7 @@ public class Beteiligung  extends JXPanel{
 			if( (!reznum.contains("@FREI")) && (!reznum.contains("@INTERN")) ){
 				if( (reznum.trim().equals("")) && (!tag.get((i*5)).trim().equals("")) ){
 					doKeineZuordnung("ohne Zuordnung: "+tag.get((i*5)),false);
+					doZeitKeineZuordnung(tag.get( (i*5)+3));
 					anzahlTagesBehandlungen++;
 				}else{
 					if((reznum.length()>2)){
@@ -486,11 +487,12 @@ public class Beteiligung  extends JXPanel{
 		OOTools.doColWidth(spreadsheetDocument,sheetName,8,14,1500);
 		OOTools.doColTextAlign(spreadsheetDocument,sheetName,8,14,3);
 
-		OOTools.doColWidth(spreadsheetDocument,sheetName,15,16,1200);
-		OOTools.doColTextAlign(spreadsheetDocument,sheetName,15,16,2);
+		OOTools.doColWidth(spreadsheetDocument,sheetName,15,17,1200);
+		OOTools.doColTextAlign(spreadsheetDocument,sheetName,15,17,2);
 		
 		OOTools.doColNumberFormat(spreadsheetDocument,sheetName,8,14,2);
-
+		
+		OOTools.doColNumberFormat(spreadsheetDocument,sheetName,17,17,1);
 	}
 	private void doTagesKopf(String tag) throws IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException{
 		OOTools.doCellFontBold(cellCursor, 0, calcrow);
@@ -515,6 +517,23 @@ public class Beteiligung  extends JXPanel{
 			}
 			OOTools.doCellFormula(cellCursor, 14,calcrow, "=sum(I"+Integer.toString(calcrow+1)+":N"+Integer.toString(calcrow+1)+")");
 			calcrow++;
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+		} catch (UnknownPropertyException e) {
+			e.printStackTrace();
+		} catch (PropertyVetoException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (WrappedTargetException e) {
+			e.printStackTrace();
+		}
+	}
+	private void doZeitKeineZuordnung(String dauer ){
+		try {
+			OOTools.doCellColor(cellCursor, 17, calcrow-1, 0xff0000);
+			OOTools.doCellFormula(cellCursor, 17,calcrow-1, "="+dauer);
+			
 		} catch (IndexOutOfBoundsException e) {
 			e.printStackTrace();
 		} catch (UnknownPropertyException e) {
@@ -568,6 +587,11 @@ public class Beteiligung  extends JXPanel{
 			String formel = "=sum(O"+Integer.toString(summenPos.get(tag)[0])+":O"+Integer.toString(summenPos.get(tag)[1])+")";
 			OOTools.doCellColor(cellCursor, 14, calcrow, 0xff0000);
 			OOTools.doCellFormula(cellCursor, 14, calcrow, formel);
+			
+			formel = "=sum(R"+Integer.toString(summenPos.get(tag)[0])+":R"+Integer.toString(summenPos.get(tag)[1])+")";
+			OOTools.doCellColor(cellCursor, 17, calcrow, 0xff0000);
+			OOTools.doCellFormula(cellCursor, 17, calcrow, formel);
+			
 		} catch (IndexOutOfBoundsException e) {
 			e.printStackTrace();
 		} catch (UnknownPropertyException e) {
@@ -588,12 +612,15 @@ public class Beteiligung  extends JXPanel{
 			OOTools.doCellValue(cellCursor, 0, calcrow, "Gesamtsumme");
 			OOTools.doCellColor(cellCursor, 14, calcrow, 0xff0000);
 			OOTools.doCellFontBold(cellCursor, 14, calcrow);
+			OOTools.doCellColor(cellCursor, 17, calcrow, 0xff0000);
 			String formula = "=";
-			
+			String formula2 = "=";
 			for(int i = 0;i < summenPos.size();i++){
 				formula = formula+"O"+Integer.toString(summenPos.get(i)[1]+1)+(i < (summenPos.size()-1) ? "+" : "");
+				formula2 = formula2+"R"+Integer.toString(summenPos.get(i)[1]+1)+(i < (summenPos.size()-1) ? "+" : "");
 			}
 			OOTools.doCellFormula(cellCursor, 14, calcrow, formula);
+			OOTools.doCellFormula(cellCursor, 17, calcrow, formula2);
 			
 			calcrow += 2;
 			OOTools.doCellColor(cellCursor,0,calcrow,0xff0000);
