@@ -7,8 +7,8 @@
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
     <import file="build-user.xml"/>
     <path id="TheraPiHilfe.classpath">
         <pathelement location="bin"/>
@@ -33,7 +33,7 @@
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/openofficeorg/ag.ion.noa_2.2.3.jar"/>
         <pathelement location="${Libraries.location}/lib/sql/jpmdbc.jar"/>
-        <pathelement location="../Libraries/lib/apachecommons/commons-net-3.4.jar"/>
+        <pathelement location="${Libraries.location}/lib/apachecommons/commons-net-3.4.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>

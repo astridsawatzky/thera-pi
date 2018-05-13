@@ -7,8 +7,8 @@
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
     <import file="build-user.xml"/>
     <path id="TheraPi.classpath">
         <pathelement location="bin"/>
@@ -50,11 +50,5 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
-    </target>
-    <target name="TheraPi">
-        <java classname="theraPi.TheraPi" failonerror="true" fork="yes">
-            <arg line="&quot;000999000@KG-Praxis Test&quot;"/>
-            <classpath refid="TheraPi.classpath"/>
-        </java>
     </target>
 </project>

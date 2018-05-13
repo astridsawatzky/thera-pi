@@ -8,10 +8,11 @@
     <property name="Libraries.location" value="../Libraries"/>
     <property name="Reha.location" value="../Reha"/>
     <property name="Reha301.location" value="../Reha301"/>
+    <property name="junit.output.dir" value="junit"/>
     <property name="RehaCommon.location" value="../RehaCommon"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
     <import file="build-user.xml"/>
     <path id="RehaCommon.classpath">
         <pathelement location="${RehaCommon.location}/bin"/>
@@ -114,5 +115,26 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
+    </target>
+    <target name="NebraskaKeystoreTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="org.thera_pi.nebraska.crypto.test.NebraskaKeystoreTest" todir="${junit.output.dir}"/>
+            <classpath refid="Nebraska.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMain">
+        <java classname="org.thera_pi.nebraska.crypto.test.TestMain" failonerror="true" fork="yes">
+            <classpath refid="Nebraska.classpath"/>
+        </java>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
     </target>
 </project>
