@@ -1,9 +1,5 @@
 package rehaInternalFrame;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.FrameSave;
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.PropertyVetoException;
@@ -18,6 +14,9 @@ import javax.swing.event.InternalFrameEvent;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
+import hauptFenster.AktiveFenster;
+import hauptFenster.FrameSave;
+import hauptFenster.Reha;
 
 public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 	/**

@@ -1,6 +1,4 @@
 package terminKalender;
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
@@ -19,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
 
+import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 public class kalenderPanel extends JXPanel{

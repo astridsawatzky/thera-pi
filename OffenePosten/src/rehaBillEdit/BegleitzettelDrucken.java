@@ -4,13 +4,6 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import offenePosten.OffenePosten;
-
-
-
-
-
-
 import CommonTools.OOTools;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -20,6 +13,7 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
+import offenePosten.OffenePosten;
 
 public class BegleitzettelDrucken {
 	ITextDocument textDocument = null;

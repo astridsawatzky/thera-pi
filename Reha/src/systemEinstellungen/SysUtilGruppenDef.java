@@ -1,8 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-import hilfsFenster.NeueGruppe;
-
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -35,23 +32,23 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
-import jxTableTools.ZeitTableCellEditor;
-
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.table.TableColumnExt;
 
-import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
-import CommonTools.ZeitFunk;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaTextField;
+import CommonTools.ZeitFunk;
+import hauptFenster.Reha;
+import hilfsFenster.NeueGruppe;
+import jxTableTools.ZeitTableCellEditor;
+import terminKalender.DatFunk;
 
 public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionListener {
 	/**

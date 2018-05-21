@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -40,30 +38,27 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.therapi.reha.patient.LadeProg;
 
-import rechteTools.Rechte;
-import rehaInternalFrame.JGutachtenInternal;
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
+import com.mysql.jdbc.PreparedStatement;
+
 import CommonTools.FileTools;
-import systemTools.IconListRenderer;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
+import CommonTools.RehaEvent;
+import CommonTools.RehaEventClass;
+import CommonTools.RehaEventListener;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import terminKalender.DatFunk;
 import abrechnung.AbrechnungDlg;
 import ag.ion.bion.officelayer.desktop.IFrame;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -74,20 +69,22 @@ import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.filter.OpenOfficeFilter;
-
-import com.mysql.jdbc.PreparedStatement;
-
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import dialoge.ToolsDialog;
 import dta301.RVMeldung301;
 import errorMail.ErrorMail;
-import CommonTools.RehaEvent;
-import CommonTools.RehaEventClass;
-import CommonTools.RehaEventListener;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import rechteTools.Rechte;
+import rehaInternalFrame.JGutachtenInternal;
+import systemEinstellungen.SystemConfig;
+import systemTools.IconListRenderer;
+import systemTools.ListenerTools;
+import terminKalender.DatFunk;
 
 public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventListener,PropertyChangeListener,TableModelListener,KeyListener,FocusListener,ActionListener, MouseListener{
 	/**

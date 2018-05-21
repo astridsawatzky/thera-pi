@@ -1,7 +1,5 @@
 package patientenFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -23,27 +21,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import CommonTools.SqlInfo;
-import CommonTools.Colors;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Colors;
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
 
 public class ArztAuswahl extends RehaSmartDialog{
 /**

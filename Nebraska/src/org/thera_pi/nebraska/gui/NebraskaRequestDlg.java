@@ -16,9 +16,6 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.cert.X509Certificate;
 import java.util.Vector;
 
@@ -27,11 +24,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
-import nebraska.BCStatics2;
-import nebraska.Constants;
-import nebraska.FileStatics;
-import nebraska.Nebraska;
 
 import org.bouncycastle.asn1.ASN1Object;
 import org.bouncycastle.asn1.ASN1Sequence;
@@ -52,15 +44,14 @@ import org.thera_pi.nebraska.gui.utils.JRtaComboBox;
 import org.thera_pi.nebraska.gui.utils.JRtaTextField;
 import org.thera_pi.nebraska.gui.utils.MultiLineLabel;
 
-
-
-
-import utils.NUtils;
-import utils.OOorgTools;
-import CommonTools.INIFile;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import nebraska.BCStatics2;
+import nebraska.FileStatics;
+import nebraska.Nebraska;
+import utils.OOorgTools;
 
 public class NebraskaRequestDlg extends JDialog{
 

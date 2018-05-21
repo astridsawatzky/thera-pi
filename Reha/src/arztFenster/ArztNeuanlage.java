@@ -1,12 +1,9 @@
 package arztFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -33,21 +30,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
-
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.ExUndHop;
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener,FocusListener{
 	/**

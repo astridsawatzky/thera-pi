@@ -1,16 +1,11 @@
 package systemEinstellungen;
 
 
-import org.jdesktop.swingx.JXPanel;
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -20,24 +15,21 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
-
-
-import CommonTools.SqlInfo;
-import systemTools.ButtonTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import systemTools.ButtonTools;
 
 // Lemmi 20101228 neue Klasse in der System-Inititalisierung
 public class SysUtilOpMahnung extends JXPanel implements KeyListener, ActionListener {

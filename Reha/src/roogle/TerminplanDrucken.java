@@ -1,7 +1,5 @@
 package roogle;
 
-import hauptFenster.Reha;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,11 +11,8 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
-
 import javax.swing.SwingWorker;
 
-import systemEinstellungen.SystemConfig;
-import terminKalender.DruckFenster;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -33,6 +28,8 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.printing.IPrinter;
 import emailHandling.EmailSendenExtern;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 
 

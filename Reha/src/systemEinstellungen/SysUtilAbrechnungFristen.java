@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,15 +22,16 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
 
-import systemTools.ButtonTools;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import hauptFenster.Reha;
+import systemTools.ButtonTools;
 
 public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, ActionListener, FocusListener {
 	

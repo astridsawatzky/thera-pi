@@ -1,18 +1,16 @@
 package systemTools;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-
 import javax.swing.SwingWorker;
+
 import org.therapi.reha.patient.AktuelleRezepte;
 
+import CommonTools.SqlInfo;
 import events.PatStammEvent;
 import events.PatStammEventClass;
-
-import CommonTools.SqlInfo;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 
 public class RezeptFahnder {
 	public RezeptFahnder(boolean showDialog){

@@ -1,9 +1,6 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.print.PrinterJob;
@@ -23,18 +20,16 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-
-import CommonTools.ButtonTools;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaTextField;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.ButtonTools;
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
 
 public class SysUtilVerkauf extends JXPanel {
 

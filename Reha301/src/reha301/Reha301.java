@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -21,13 +20,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
 
-import reha301Panels.RehaIOMessages;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
 import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import reha301Panels.RehaIOMessages;
 
 public class Reha301 implements WindowListener  {
 	public static boolean DbOk;

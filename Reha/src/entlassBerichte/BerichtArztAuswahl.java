@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Font;
@@ -25,16 +23,17 @@ import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import patientenFenster.ArztAuswahl;
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaTextField;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.ExUndHop;
+import CommonTools.JCompTools;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import patientenFenster.ArztAuswahl;
 
 public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyListener,FocusListener  {
 	/**

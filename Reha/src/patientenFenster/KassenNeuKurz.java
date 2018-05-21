@@ -24,24 +24,23 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
-import krankenKasse.KTraegerTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import krankenKasse.KTraegerTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
 
 public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener,FocusListener{
 

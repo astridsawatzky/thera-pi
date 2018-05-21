@@ -19,11 +19,10 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaTextField;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;

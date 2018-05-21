@@ -15,19 +15,6 @@ import javax.swing.SwingUtilities;
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
-
-
-
-
-
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.document.IDocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocumentService;
-import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
-import ag.ion.noa.NOAException;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -46,6 +33,13 @@ import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.document.DocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocument;
+import ag.ion.bion.officelayer.document.IDocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocumentService;
+import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
+import ag.ion.noa.NOAException;
 
 public class RehaAUZeiten extends JXPanel{
 	

@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,7 +13,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -23,19 +20,17 @@ import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.JXPanel;
 
-
-
-import CommonTools.JRtaTextField;
-import systemTools.Verschluesseln;
-import CommonTools.INIFile;
-import CommonTools.INITool;
-import CommonTools.JCompTools;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
 import emailHandling.EmailSendenExtern;
+import hauptFenster.Reha;
+import systemTools.Verschluesseln;
 
 
 

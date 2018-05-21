@@ -12,15 +12,15 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.swingx.JXPanel;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class OffenepostenEinstellungen extends JXPanel{
 

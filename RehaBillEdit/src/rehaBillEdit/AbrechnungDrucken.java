@@ -5,22 +5,13 @@ package rehaBillEdit;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-
-
-import org.jdesktop.swingworker.SwingWorker;
-
-
-
+import com.sun.star.beans.XPropertySet;
 
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
@@ -31,10 +22,6 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.ITextTableCell;
 import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.TextException;
-import ag.ion.noa.NOAException;
-import ag.ion.noa.internal.printing.PrintProperties;
-
-import com.sun.star.beans.XPropertySet;
 
 @SuppressWarnings("unused")
 public class AbrechnungDrucken {

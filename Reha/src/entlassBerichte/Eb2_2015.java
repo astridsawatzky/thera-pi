@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -28,26 +26,20 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
-
-
-
-
-
-import javax.swing.text.BadLocationException;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
+import hauptFenster.Reha;
 import systemTools.SetMaxText;
-import ag.ion.bion.officelayer.text.IText;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class Eb2_2015 {
 	EBerichtPanel eltern = null;

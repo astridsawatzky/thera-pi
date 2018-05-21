@@ -19,16 +19,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.JRtaTextField;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaTextField;
 
 public class TbEingabeNeu extends JXPanel implements ActionListener,KeyListener,FocusListener{
 	/**

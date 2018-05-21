@@ -3,9 +3,6 @@ package systemTools;
 
 
 
-import grad.GradientPainter;
-import grad.GradientSegment;
-
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.LinearGradientPaint;
@@ -18,6 +15,8 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 
 import CommonTools.Colors;
+import grad.GradientPainter;
+import grad.GradientSegment;
 
 public final class RehaPainters {
 

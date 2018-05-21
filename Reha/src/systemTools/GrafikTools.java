@@ -6,11 +6,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import sun.awt.image.ImageFormatException;
-
-
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
+import sun.awt.image.ImageFormatException;
 
 public class GrafikTools {
 	 public static byte[] bufferedImageToByteArray(BufferedImage img) throws ImageFormatException, IOException{

@@ -1,7 +1,5 @@
 package systemTools;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -23,13 +21,13 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 
-import terminKalender.ParameterLaden;
-
 import com.sun.star.awt.KeyModifier;
 
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
+import hauptFenster.Reha;
+import terminKalender.ParameterLaden;
 
 public class PassWort extends JXPanel implements KeyListener, ActionListener{
 

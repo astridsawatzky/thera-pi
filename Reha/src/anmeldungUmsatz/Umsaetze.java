@@ -1,7 +1,5 @@
 package anmeldungUmsatz;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -16,26 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.SwingUtilities;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import rehaInternalFrame.JUmsaetzeInternal;
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemTools.ButtonTools;
-import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
-import terminKalender.ParameterLaden;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.document.IDocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocumentService;
-import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
-import ag.ion.noa.NOAException;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -52,6 +33,23 @@ import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XText;
 import com.sun.star.uno.UnoRuntime;
+
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.document.DocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocument;
+import ag.ion.bion.officelayer.document.IDocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocumentService;
+import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
+import ag.ion.noa.NOAException;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import rehaInternalFrame.JUmsaetzeInternal;
+import stammDatenTools.RezTools;
+import systemTools.ButtonTools;
+import terminKalender.DatFunk;
+import terminKalender.ParameterLaden;
 
 public class Umsaetze extends JXPanel{
 

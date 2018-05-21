@@ -1,7 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -22,25 +20,25 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.TransferHandler;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.ExUndHop;
+import CommonTools.JCompTools;
+import CommonTools.JRtaLabel;
+import CommonTools.JRtaTextField;
+import CommonTools.StringTools;
+import hauptFenster.Reha;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
 import stammDatenTools.KasseTools;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
-import CommonTools.StringTools;
 import terminKalender.TerminFenster;
-import CommonTools.ExUndHop;
-import CommonTools.JCompTools;
-import CommonTools.JRtaLabel;
-import CommonTools.JRtaTextField;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class RezeptDaten extends JXPanel implements ActionListener{
 	/**

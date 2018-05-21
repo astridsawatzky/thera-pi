@@ -1,8 +1,5 @@
 package rehaInternalFrame;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.beans.PropertyVetoException;
 
 import javax.swing.ImageIcon;
@@ -12,6 +9,8 @@ import javax.swing.event.InternalFrameEvent;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 
 public class JDta301Internal extends JRehaInternal implements RehaEventListener{
 	/**

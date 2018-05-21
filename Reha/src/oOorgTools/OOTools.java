@@ -1,7 +1,5 @@
 package oOorgTools;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,40 +12,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
-
-import systemEinstellungen.SystemConfig;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.desktop.IFrame;
-import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.document.IDocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocumentService;
-import ag.ion.bion.officelayer.event.IDocumentEvent;
-import ag.ion.bion.officelayer.event.IDocumentListener;
-import ag.ion.bion.officelayer.event.IEvent;
-import ag.ion.bion.officelayer.filter.RTFFilter;
-import ag.ion.bion.officelayer.presentation.IPresentationDocument;
-import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
-import ag.ion.bion.officelayer.text.IText;
-import ag.ion.bion.officelayer.text.ITextCursor;
-import ag.ion.bion.officelayer.text.ITextDocument;
-import ag.ion.bion.officelayer.text.ITextField;
-import ag.ion.bion.officelayer.text.ITextFieldService;
-import ag.ion.bion.officelayer.text.ITextRange;
-import ag.ion.bion.officelayer.text.ITextTable;
-import ag.ion.bion.officelayer.text.ITextTableCell;
-import ag.ion.bion.officelayer.text.ITextTableCellProperties;
-import ag.ion.bion.officelayer.text.ITextTableRow;
-import ag.ion.bion.officelayer.text.IViewCursor;
-import ag.ion.bion.officelayer.text.TextException;
-import ag.ion.noa.NOAException;
-import ag.ion.noa.internal.printing.PrintProperties;
-import ag.ion.noa.printing.IPrinter;
-import ag.ion.noa.search.ISearchResult;
-import ag.ion.noa.search.SearchDescriptor;
 
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.beans.PropertyVetoException;
@@ -92,6 +57,37 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XRefreshable;
 import com.sun.star.view.XLineCursor;
+
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.desktop.IFrame;
+import ag.ion.bion.officelayer.document.DocumentDescriptor;
+import ag.ion.bion.officelayer.document.DocumentException;
+import ag.ion.bion.officelayer.document.IDocument;
+import ag.ion.bion.officelayer.document.IDocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocumentService;
+import ag.ion.bion.officelayer.event.IDocumentEvent;
+import ag.ion.bion.officelayer.event.IDocumentListener;
+import ag.ion.bion.officelayer.event.IEvent;
+import ag.ion.bion.officelayer.filter.RTFFilter;
+import ag.ion.bion.officelayer.presentation.IPresentationDocument;
+import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
+import ag.ion.bion.officelayer.text.IText;
+import ag.ion.bion.officelayer.text.ITextCursor;
+import ag.ion.bion.officelayer.text.ITextDocument;
+import ag.ion.bion.officelayer.text.ITextField;
+import ag.ion.bion.officelayer.text.ITextFieldService;
+import ag.ion.bion.officelayer.text.ITextRange;
+import ag.ion.bion.officelayer.text.ITextTableCell;
+import ag.ion.bion.officelayer.text.ITextTableCellProperties;
+import ag.ion.bion.officelayer.text.IViewCursor;
+import ag.ion.bion.officelayer.text.TextException;
+import ag.ion.noa.NOAException;
+import ag.ion.noa.internal.printing.PrintProperties;
+import ag.ion.noa.printing.IPrinter;
+import ag.ion.noa.search.ISearchResult;
+import ag.ion.noa.search.SearchDescriptor;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class OOTools{
 	public OOTools(){

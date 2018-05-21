@@ -8,7 +8,6 @@ import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.cert.CertStore;
 import java.security.cert.CertStoreException;
@@ -20,8 +19,6 @@ import java.util.Iterator;
 
 import javax.security.auth.x500.X500Principal;
 
-import nebraska.NebraskaTestPanel;
-
 import org.bouncycastle.cms.CMSEnvelopedDataParser;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSSignedDataParser;
@@ -31,7 +28,10 @@ import org.bouncycastle.cms.RecipientInformation;
 import org.bouncycastle.cms.RecipientInformationStore;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
-import org.bouncycastle.jce.X509Principal;
+import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
+import org.thera_pi.nebraska.crypto.NebraskaFileException;
+
+import nebraska.NebraskaTestPanel;
 
 public class BodosDecryptor {
 

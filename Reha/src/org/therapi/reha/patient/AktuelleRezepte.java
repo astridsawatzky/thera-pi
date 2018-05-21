@@ -1,10 +1,6 @@
 package org.therapi.reha.patient;
 
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-import hmrCheck.HMRCheck;
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -30,7 +26,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.EventObject;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -46,6 +41,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -57,12 +53,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import jxTableTools.MyTableStringDatePicker;
-import jxTableTools.TableTool;
-import krankenKasse.KassenFormulare;
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -72,6 +62,37 @@ import org.jdesktop.swingx.renderer.IconValues;
 import org.jdesktop.swingx.renderer.MappedValue;
 import org.jdesktop.swingx.renderer.StringValues;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.Colors;
+import CommonTools.DateTableCellEditor;
+import CommonTools.ExUndHop;
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import abrechnung.AbrechnungPrivat;
+import abrechnung.AbrechnungRezept;
+import abrechnung.Disziplinen;
+import abrechnung.RezeptGebuehrRechnung;
+import dialoge.InfoDialog;
+import dialoge.PinPanel;
+import dialoge.RehaSmartDialog;
+import dialoge.ToolsDialog;
+import events.RehaTPEvent;
+import events.RehaTPEventClass;
+import events.RehaTPEventListener;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import hmrCheck.HMRCheck;
+import jxTableTools.MyTableStringDatePicker;
+import jxTableTools.TableTool;
+import krankenKasse.KassenFormulare;
+import oOorgTools.OOTools;
 import patientenFenster.KeinRezept;
 import patientenFenster.RezNeuanlage;
 import patientenFenster.RezTest;
@@ -88,31 +109,6 @@ import systemEinstellungen.SystemPreislisten;
 import systemTools.IconListRenderer;
 import systemTools.ListenerTools;
 import terminKalender.DatFunk;
-import CommonTools.Colors;
-import CommonTools.DateTableCellEditor;
-import CommonTools.ExUndHop;
-import CommonTools.INIFile;
-import CommonTools.INITool;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-import CommonTools.SqlInfo;
-import CommonTools.StringTools;
-import abrechnung.AbrechnungPrivat;
-import abrechnung.AbrechnungRezept;
-import abrechnung.Disziplinen;
-import abrechnung.RezeptGebuehrRechnung;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
-import dialoge.InfoDialog;
-import dialoge.PinPanel;
-import dialoge.RehaSmartDialog;
-import dialoge.ToolsDialog;
-import events.RehaTPEvent;
-import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 
 
 public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,TableModelListener,TableColumnModelExtListener,PropertyChangeListener, ActionListener{

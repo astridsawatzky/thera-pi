@@ -13,9 +13,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -27,7 +25,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -44,24 +41,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
-import de.root1.jpmdbc.network.ConnectionInfo;
 
 
 

@@ -1,14 +1,13 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import CommonTools.JCompTools;
-import terminKalender.DatFunk;
-
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
+
+import CommonTools.JCompTools;
+import hauptFenster.Reha;
+import terminKalender.DatFunk;
 
 public class EBerichtTab {
 	EBerichtPanel eltern = null;

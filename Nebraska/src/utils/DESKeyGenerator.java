@@ -8,9 +8,9 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.security.Security;
 
-import nebraska.Constants;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+
+import nebraska.Constants;
 
 public class DESKeyGenerator {
     

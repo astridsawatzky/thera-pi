@@ -14,17 +14,16 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-import verkauf.model.Lieferant;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaTextField;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import verkauf.model.Lieferant;
 
 public class LieferantDialog extends RehaSmartDialog {
 

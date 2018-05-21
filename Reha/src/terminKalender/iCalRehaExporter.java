@@ -1,7 +1,5 @@
 package terminKalender;
 
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,21 +15,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import CommonTools.ZeitFunk;
-
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
+import CommonTools.ZeitFunk;
 import dialoge.EmailDialog;
-import emailHandling.EmailSendenExtern;
+import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 public class iCalRehaExporter {

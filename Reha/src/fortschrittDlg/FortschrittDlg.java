@@ -1,7 +1,5 @@
 package fortschrittDlg;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -14,10 +12,11 @@ import javax.swing.JProgressBar;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 
-import systemEinstellungen.SystemConfig;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class FortschrittDlg extends JXDialog{
 	/**

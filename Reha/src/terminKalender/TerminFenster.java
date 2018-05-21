@@ -4,15 +4,8 @@ package terminKalender;
 
 
 
-import generalSplash.RehaSplash;
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-import hilfsFenster.TerminEinpassen;
-import hilfsFenster.TerminObenUntenAnschliessen;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,13 +30,10 @@ import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.beans.PropertyVetoException;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -68,31 +58,32 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
-import javax.swing.TransferHandler;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
-
-import kurzAufrufe.KurzAufrufe;
-
 import javax.swing.SwingWorker;
+import javax.swing.TransferHandler;
+
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.therapi.reha.patient.AktuelleRezepte;
 
-import dialoge.InfoDialog;
-import rechteTools.Rechte;
-import rehaInternalFrame.JRehaInternal;
-
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
 import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
+import CommonTools.SqlInfo;
+import dialoge.InfoDialog;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import generalSplash.RehaSplash;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import hilfsFenster.TerminEinpassen;
+import hilfsFenster.TerminObenUntenAnschliessen;
+import kurzAufrufe.KurzAufrufe;
+import rechteTools.Rechte;
+import rehaInternalFrame.JRehaInternal;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemTools.ListenerTools;
 
 
 public class TerminFenster extends Observable implements RehaTPEventListener, ActionListener,DropTargetListener,DragSourceListener,DragGestureListener{

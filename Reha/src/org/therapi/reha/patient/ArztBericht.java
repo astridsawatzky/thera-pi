@@ -1,12 +1,9 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.LinearGradientPaint;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -31,44 +28,39 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
-
-import patientenFenster.ArztAuswahl;
-
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import systemTools.AdressTools;
-import CommonTools.Colors;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import CommonTools.StringTools;
-import terminKalender.DatFunk;
-import terminKalender.ParameterLaden;
-import textBlockTherapeuten.ThTextBlock;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Colors;
+import CommonTools.ExUndHop;
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import patientenFenster.ArztAuswahl;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.AdressTools;
+import terminKalender.DatFunk;
+import terminKalender.ParameterLaden;
+import textBlockTherapeuten.ThTextBlock;
 
 @SuppressWarnings("unused")
 public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{

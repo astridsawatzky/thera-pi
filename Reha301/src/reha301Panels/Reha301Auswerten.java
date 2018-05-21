@@ -48,11 +48,8 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 
-import reha301.Dta301Model;
-import reha301.Reha301;
-import reha301.Reha301Tab;
-import reha301.SocketClient;
-
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
 import CommonTools.Colors;
@@ -65,19 +62,16 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import Tools.OOTools;
 import Tools.RezTools;
-
 import Tools.SystemPreislisten;
 import Tools.WartenAufDB;
-
-
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.TextException;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import dialoge.ArztAuswahl;
 import dialoge.KassenAuswahl;
+import reha301.Dta301Model;
+import reha301.Reha301;
+import reha301.Reha301Tab;
+import reha301.SocketClient;
 
 public class Reha301Auswerten extends JXPanel{
 

@@ -1,7 +1,5 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -28,11 +26,11 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import systemEinstellungen.SystemConfig;
-
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class ToolsDialog extends JXDialog implements FocusListener, ActionListener, MouseListener, WindowListener, KeyListener,RehaTPEventListener{
 

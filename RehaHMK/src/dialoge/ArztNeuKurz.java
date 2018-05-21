@@ -21,19 +21,15 @@ import javax.swing.SwingUtilities;
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
-import rehaHMK.RehaHMK;
-
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import rehaHMK.RehaHMK;
 
 public class ArztNeuKurz extends JXPanel implements ActionListener,KeyListener,FocusListener{
 	/**

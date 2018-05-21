@@ -1,19 +1,17 @@
 package rehaInternalFrame;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.beans.PropertyVetoException;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameEvent;
 
-import anmeldungUmsatz.Anmeldungen;
-
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
+import anmeldungUmsatz.Anmeldungen;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 
 public class JAnmeldungenInternal extends JRehaInternal implements RehaEventListener{
 	/**

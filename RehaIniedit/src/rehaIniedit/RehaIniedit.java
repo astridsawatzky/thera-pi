@@ -1,7 +1,6 @@
 package rehaIniedit;
 
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
@@ -13,9 +12,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-
-
-
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;

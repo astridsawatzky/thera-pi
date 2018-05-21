@@ -1,9 +1,5 @@
 package abrechnung;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-import hauptFenster.UIFSplitPane;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -55,6 +51,7 @@ import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.HyperlinkEvent;
@@ -70,14 +67,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import jxTableTools.DblCellEditor;
-import jxTableTools.DoubleTableCellRenderer;
-import jxTableTools.MitteRenderer;
-import jxTableTools.MyTableCheckBox;
-import jxTableTools.MyTableComboBox;
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
@@ -94,31 +83,39 @@ import org.jdesktop.swingx.treetable.TreeTableNode;
 import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.Historie;
 
-import patientenFenster.KassenAuswahl;
-import patientenFenster.RezNeuanlage;
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import systemTools.AdressTools;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
-import CommonTools.StringTools;
-import terminKalender.DatFunk;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.text.TextException;
-import ag.ion.noa.NOAException;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.uno.Exception;
 
+import CommonTools.JCompTools;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.document.DocumentException;
+import ag.ion.bion.officelayer.text.TextException;
+import ag.ion.noa.NOAException;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import hauptFenster.UIFSplitPane;
+import jxTableTools.DblCellEditor;
+import jxTableTools.DoubleTableCellRenderer;
+import jxTableTools.MitteRenderer;
+import jxTableTools.MyTableCheckBox;
+import jxTableTools.MyTableComboBox;
+import oOorgTools.OOTools;
+import patientenFenster.KassenAuswahl;
+import patientenFenster.RezNeuanlage;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.AdressTools;
+import systemTools.ListenerTools;
+import terminKalender.DatFunk;
 
 
 

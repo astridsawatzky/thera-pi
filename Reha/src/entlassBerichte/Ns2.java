@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -20,20 +18,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.SqlInfo;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import terminKalender.DatFunk;
 
 public class Ns2 implements ActionListener {
 	EBerichtPanel eltern = null;

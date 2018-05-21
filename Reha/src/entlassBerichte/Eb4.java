@@ -16,19 +16,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.SqlInfo;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import terminKalender.DatFunk;
 
 public class Eb4 implements ActionListener {
 	EBerichtPanel eltern = null;

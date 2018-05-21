@@ -1,8 +1,6 @@
 
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -12,7 +10,6 @@ import java.awt.event.KeyListener;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,21 +18,20 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import ocf.OcKVK;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
-
-import uk.co.mmscomputing.device.scanner.Scanner;
-import uk.co.mmscomputing.device.scanner.ScannerIOException;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import hauptFenster.Reha;
+import ocf.OcKVK;
+import uk.co.mmscomputing.device.scanner.Scanner;
+import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
 public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListener {
 	/**

@@ -1,8 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
-
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -31,29 +28,28 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
-import jxTableTools.DateTableCellEditor;
-import jxTableTools.MitteRenderer;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
-
-import preisListenHandling.MachePreisListe;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import hauptFenster.Reha;
+import jxTableTools.DateTableCellEditor;
+import jxTableTools.MitteRenderer;
+import preisListenHandling.MachePreisListe;
 
 public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionListener {
 	/**

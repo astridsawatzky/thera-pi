@@ -1,8 +1,6 @@
 ﻿package systemEinstellungen;
 
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
@@ -23,16 +21,17 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import socketClients.SMSClient;
-import stammDatenTools.RezTools;
-import systemTools.Verschluesseln;
-import terminKalender.DatFunk;
-import terminKalender.ParameterLaden;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
+import hauptFenster.Reha;
+import socketClients.SMSClient;
+import stammDatenTools.RezTools;
+import systemTools.Verschluesseln;
+import terminKalender.DatFunk;
+import terminKalender.ParameterLaden;
 
 
 public class SystemConfig {

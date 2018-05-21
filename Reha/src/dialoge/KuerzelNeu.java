@@ -1,7 +1,5 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,18 +21,17 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-
-import systemEinstellungen.SysUtilKuerzel;
-import systemTools.ButtonTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaTextField;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaTextField;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import systemEinstellungen.SysUtilKuerzel;
+import systemTools.ButtonTools;
 
 public class KuerzelNeu extends JXDialog implements  WindowListener, KeyListener,RehaTPEventListener{
 

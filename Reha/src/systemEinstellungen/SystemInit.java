@@ -1,8 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-import hauptFenster.UIFSplitPane;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
@@ -24,11 +22,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.therapi.reha.patient.LadeProg;
 
+import hauptFenster.Reha;
+import hauptFenster.UIFSplitPane;
 import rechteTools.Rechte;
 import rehaInternalFrame.JSysteminitInternal;
 

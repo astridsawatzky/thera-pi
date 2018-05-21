@@ -1,8 +1,5 @@
 package rehaInternalFrame;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
@@ -12,11 +9,13 @@ import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameEvent;
 
-import systemTools.ListenerTools;
-import entlassBerichte.EBerichtPanel;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
+import entlassBerichte.EBerichtPanel;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import systemTools.ListenerTools;
 
 public class JGutachtenInternal extends JRehaInternal implements RehaEventListener {
 	/**

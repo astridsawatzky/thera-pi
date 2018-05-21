@@ -19,14 +19,13 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import rehaContainer.RehaTP;
-import terminKalender.TerminFenster;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import dialoge.RehaSmartDialog;
+import rehaContainer.RehaTP;
+import terminKalender.TerminFenster;
 
 public class TerminEinpassen implements KeyListener, ActionListener, FocusListener{
 

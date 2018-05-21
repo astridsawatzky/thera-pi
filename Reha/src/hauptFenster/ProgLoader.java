@@ -13,11 +13,21 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import krankenKasse.KassenPanel;
-
-import javax.swing.SwingWorker;
 import org.therapi.reha.patient.PatientHauptPanel;
 
+import abrechnung.AbrechnungGKV;
+import abrechnung.AbrechnungReha;
+import anmeldungUmsatz.Anmeldungen;
+import anmeldungUmsatz.Umsaetze;
+import arztFenster.ArztPanel;
+import barKasse.Barkasse;
+import benutzerVerwaltung.BenutzerRechte;
+import dialoge.PinPanel;
+import dialoge.RehaSmartDialog;
+import dta301.Dta301;
+import entlassBerichte.EBerichtPanel;
+import events.RehaTPEvent;
+import krankenKasse.KassenPanel;
 import rechteTools.Rechte;
 import rehaContainer.RehaTP;
 import rehaInternalFrame.JAbrechnungInternal;
@@ -47,18 +57,6 @@ import terminKalender.TerminFenster;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
-import abrechnung.AbrechnungGKV;
-import abrechnung.AbrechnungReha;
-import anmeldungUmsatz.Anmeldungen;
-import anmeldungUmsatz.Umsaetze;
-import arztFenster.ArztPanel;
-import barKasse.Barkasse;
-import benutzerVerwaltung.BenutzerRechte;
-import dialoge.PinPanel;
-import dialoge.RehaSmartDialog;
-import dta301.Dta301;
-import entlassBerichte.EBerichtPanel;
-import events.RehaTPEvent;
 
 public class ProgLoader {
 public JPatientInternal patjry = null; 

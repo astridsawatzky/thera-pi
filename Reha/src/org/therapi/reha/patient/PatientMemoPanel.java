@@ -1,11 +1,7 @@
 package org.therapi.reha.patient;
 
-import floskeln.Floskeln;
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -22,19 +18,18 @@ import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.StringTools;
-import terminKalender.DatFunk;
-
-
-
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
+
+import CommonTools.ExUndHop;
+import CommonTools.JCompTools;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import floskeln.Floskeln;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 public class PatientMemoPanel extends JXPanel{
 

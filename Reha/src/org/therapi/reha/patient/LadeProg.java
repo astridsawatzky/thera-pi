@@ -1,7 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.Reha;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +10,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-
 import javax.swing.SwingWorker;
 
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.Reha;
 
 public class LadeProg {
 	public LadeProg(String prog){

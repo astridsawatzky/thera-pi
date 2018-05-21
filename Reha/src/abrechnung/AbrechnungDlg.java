@@ -10,10 +10,10 @@ import javax.swing.JLabel;
 
 import org.jdesktop.swingx.JXPanel;
 
-import systemEinstellungen.SystemConfig;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import systemEinstellungen.SystemConfig;
 
 
 public class AbrechnungDlg extends JDialog{

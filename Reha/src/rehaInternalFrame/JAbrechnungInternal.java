@@ -1,8 +1,5 @@
 package rehaInternalFrame;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.event.FocusListener;
 import java.beans.PropertyVetoException;
 
@@ -14,6 +11,8 @@ import javax.swing.event.InternalFrameEvent;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 
 public class JAbrechnungInternal extends JRehaInternal implements FocusListener, RehaEventListener{
 		/**

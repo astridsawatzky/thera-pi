@@ -1,8 +1,5 @@
 package patientenFenster;
 
-import hauptFenster.Reha;
-import hmrCheck.HMRCheck;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -27,34 +24,35 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.therapi.reha.patient.LadeProg;
 
-import rechteTools.Rechte;
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.Colors;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import terminKalender.DatFunk;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import hmrCheck.HMRCheck;
+import rechteTools.Rechte;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.ListenerTools;
+import terminKalender.DatFunk;
 
 public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener,FocusListener,RehaTPEventListener{
 

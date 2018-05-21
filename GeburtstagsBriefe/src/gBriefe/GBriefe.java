@@ -21,10 +21,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -32,7 +30,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
-
 
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;

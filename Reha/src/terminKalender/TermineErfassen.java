@@ -1,8 +1,5 @@
 package terminKalender;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +11,8 @@ import javax.swing.JOptionPane;
 
 import CommonTools.IntegerTools;
 import CommonTools.SqlInfo;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 

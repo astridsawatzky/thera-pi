@@ -6,7 +6,6 @@ import javax.swing.JOptionPane;
 
 import CommonTools.DatFunk;
 import CommonTools.StringTools;
-
 import offenePosten.OffenePosten;
 
 

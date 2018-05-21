@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -24,8 +23,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-
-import nebraska.FileStatics;
 
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
@@ -41,14 +38,11 @@ import org.thera_pi.nebraska.gui.utils.JRtaCheckBox;
 import org.thera_pi.nebraska.gui.utils.JRtaComboBox;
 import org.thera_pi.nebraska.gui.utils.JRtaTextField;
 
-
-
-
-import utils.JCompTools;
-import CommonTools.SqlInfo;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import nebraska.FileStatics;
+import utils.JCompTools;
 
 public class NebraskaZertExplorer  extends JXPanel implements ListSelectionListener, ActionListener {
 	/**

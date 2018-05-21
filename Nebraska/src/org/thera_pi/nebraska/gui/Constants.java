@@ -1,9 +1,5 @@
 package org.thera_pi.nebraska.gui;
 
-import java.io.File;
-
-import org.thera_pi.nebraska.gui.utils.INIFile;
-
 public class Constants {
 //	public static final String CRYPTO_FILES_DIR = "C:/Lost+Found/verschluesselung";
 //	public static final String KEYSTORE_DIR = "C:/Nebraska/";

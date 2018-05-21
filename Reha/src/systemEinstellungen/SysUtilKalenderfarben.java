@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -26,20 +24,20 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 
-import jxTableTools.ColorEditor;
-import jxTableTools.ColorRenderer;
-import jxTableTools.JLabelRenderer;
-
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
-
-import terminKalender.TerminFenster;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import hauptFenster.Reha;
+import jxTableTools.ColorEditor;
+import jxTableTools.ColorRenderer;
+import jxTableTools.JLabelRenderer;
+import terminKalender.TerminFenster;
 
 public class SysUtilKalenderfarben extends JXPanel implements KeyListener, ActionListener, CellEditorListener {
 	

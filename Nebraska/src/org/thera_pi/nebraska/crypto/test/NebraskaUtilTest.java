@@ -1,8 +1,8 @@
 package org.thera_pi.nebraska.crypto.test;
 
-import junit.framework.TestCase;
-
 import org.thera_pi.nebraska.crypto.NebraskaUtil;
+
+import junit.framework.TestCase;
 
 public class NebraskaUtilTest extends TestCase {
 

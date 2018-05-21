@@ -11,11 +11,9 @@ import javax.swing.ImageIcon;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXPanel;
 
+import CommonTools.ListenerTools;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-
-import CommonTools.ListenerTools;
-
 import reha301.Reha301;
 
 

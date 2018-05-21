@@ -1,7 +1,5 @@
 package hilfsFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,14 +28,14 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import rehaContainer.RehaTP;
-import systemEinstellungen.SysUtilDruckvorlage;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import dialoge.RehaSmartDialog;
+import hauptFenster.Reha;
+import rehaContainer.RehaTP;
+import systemEinstellungen.SysUtilDruckvorlage;
 
 public class EmailText implements KeyListener, ActionListener, FocusListener{
 

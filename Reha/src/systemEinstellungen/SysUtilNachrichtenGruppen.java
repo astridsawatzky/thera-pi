@@ -1,14 +1,11 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -23,13 +20,14 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import CommonTools.SqlInfo;
-import CommonTools.JRtaTextField;
-import terminKalender.ParameterLaden;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import terminKalender.ParameterLaden;
 
 public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener,KeyListener{
 	/**

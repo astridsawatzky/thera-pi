@@ -14,12 +14,12 @@ import javax.swing.JLabel;
 
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaRadioButton;
-import systemTools.ListenerTools;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaRadioButton;
+import systemTools.ListenerTools;
 
 public class RezTestPanel extends JXPanel implements ActionListener,KeyListener,FocusListener{
 	/**

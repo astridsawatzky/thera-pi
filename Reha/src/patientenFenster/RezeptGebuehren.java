@@ -1,7 +1,5 @@
 package patientenFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -26,18 +24,18 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.therapi.reha.patient.AktuelleRezepte;
 
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
+import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -49,17 +47,16 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import errorMail.ErrorMail;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
 	/**

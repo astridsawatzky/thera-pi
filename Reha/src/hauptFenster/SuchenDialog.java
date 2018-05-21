@@ -25,10 +25,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
@@ -38,14 +38,13 @@ import org.jdesktop.swingx.JXTitledPanel;
 import org.therapi.reha.patient.PatientHauptLogic;
 import org.therapi.reha.patient.PatientToolBarPanel;
 
-import systemEinstellungen.SystemConfig;
-import CommonTools.StringTools;
-import events.PatStammEvent;
-import events.PatStammEventClass;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
+import events.PatStammEvent;
+import events.PatStammEventClass;
 import events.RehaTPEvent;
 import events.RehaTPEventListener;
+import systemEinstellungen.SystemConfig;
 
 public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 

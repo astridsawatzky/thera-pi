@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -37,22 +35,31 @@ import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XLayoutManager;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.ui.XUIElement;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.view.DocumentZoomType;
+
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import CommonTools.TopWindow;
 import ag.ion.bion.officelayer.NativeView;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -70,18 +77,9 @@ import ag.ion.noa.NOAException;
 import ag.ion.noa.frame.ILayoutManager;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XLayoutManager;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.ui.XUIElement;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.view.DocumentZoomType;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import systemEinstellungen.SystemConfig;
 
 public class ArztBausteine extends JDialog implements WindowListener{
 

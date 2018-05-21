@@ -2,6 +2,9 @@ package nebraska;
 
 
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1OutputStream;
 import org.bouncycastle.asn1.ASN1Set;
@@ -18,9 +21,6 @@ import org.bouncycastle.util.encoders.Base64;
 import org.bouncycastle.util.test.SimpleTestResult;
 import org.bouncycastle.util.test.Test;
 import org.bouncycastle.util.test.TestResult;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 
 public class CMSTest
     implements Test

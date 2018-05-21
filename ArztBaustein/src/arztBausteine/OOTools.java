@@ -1,7 +1,5 @@
 package arztBausteine;
 
-import ag.ion.bion.officelayer.text.ITextDocument;
-
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
@@ -13,6 +11,8 @@ import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
+
+import ag.ion.bion.officelayer.text.ITextDocument;
 
 public class OOTools {
 	public static void setzePapierFormat(ITextDocument textDocument,int hoch,int breit) throws NoSuchElementException, WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{

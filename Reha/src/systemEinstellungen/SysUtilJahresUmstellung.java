@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -21,19 +19,19 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
-
-
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemTools.ButtonTools;
-import terminKalender.DatFunk;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import stammDatenTools.RezTools;
+import systemTools.ButtonTools;
+import terminKalender.DatFunk;
 
 public class SysUtilJahresUmstellung extends JXPanel implements KeyListener, ActionListener  {
 	

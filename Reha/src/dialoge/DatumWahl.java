@@ -1,7 +1,5 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -21,6 +19,7 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
 
+import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import terminKalender.TerminFenster;
 

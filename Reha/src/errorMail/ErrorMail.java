@@ -8,8 +8,8 @@ import javax.mail.internet.AddressException;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import emailHandling.EmailSendenExtern;
-import systemEinstellungen.SystemConfig;
 import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class ErrorMail extends Thread{
 	String fehlertext = null;

@@ -6,9 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -21,14 +19,11 @@ import java.net.Socket;
 
 import javax.swing.BorderFactory;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-
 import org.jdesktop.swingworker.SwingWorker;
-import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 
 public class RehaxSwing implements WindowListener,KeyListener{

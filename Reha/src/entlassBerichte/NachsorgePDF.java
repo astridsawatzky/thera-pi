@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -9,11 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.SwingWorker;
-
-
-
-import systemEinstellungen.SystemConfig;
-import systemTools.ReaderStart;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -27,6 +20,10 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfCopy;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
+
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import systemTools.ReaderStart;
 
 public class NachsorgePDF {
 	public EBerichtPanel eltern = null;

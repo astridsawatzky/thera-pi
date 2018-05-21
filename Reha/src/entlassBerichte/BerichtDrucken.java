@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,12 +22,13 @@ import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 
-import systemEinstellungen.SystemConfig;
-import CommonTools.JRtaCheckBox;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaCheckBox;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class BerichtDrucken extends JXPanel implements ActionListener, KeyListener,FocusListener  {
 	/**

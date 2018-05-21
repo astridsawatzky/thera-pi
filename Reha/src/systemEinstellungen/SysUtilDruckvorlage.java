@@ -1,8 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-import hilfsFenster.EmailText;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -33,9 +30,13 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import CommonTools.JRtaTextField;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -49,10 +50,8 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.printing.IPrinter;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import hauptFenster.Reha;
+import hilfsFenster.EmailText;
 
 
 

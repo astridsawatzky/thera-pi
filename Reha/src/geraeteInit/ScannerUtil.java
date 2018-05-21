@@ -20,21 +20,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
-import systemEinstellungen.SystemConfig;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaComboBox;
-import systemTools.LeistungTools;
-import uk.co.mmscomputing.device.scanner.Scanner;
-import uk.co.mmscomputing.device.scanner.ScannerIOException;
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaComboBox;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -45,17 +42,17 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import systemEinstellungen.SystemConfig;
+import systemTools.LeistungTools;
+import uk.co.mmscomputing.device.scanner.Scanner;
+import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
 public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
 	/**

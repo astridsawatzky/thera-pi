@@ -1,13 +1,7 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
-import java.awt.GridLayout;
-import java.awt.LinearGradientPaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -15,19 +9,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.text.ParseException;
 import java.util.EventObject;
 import java.util.Vector;
 
-import javax.swing.AbstractButton;
 import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.CellEditor;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -40,33 +30,26 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
-import javax.swing.text.DefaultFormatterFactory;
-
-import jxTableTools.TableTool;
-import jxTableTools.ZeitTableCellEditor;
-import kvKarte.KVKWrapper;
 
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
-
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import jxTableTools.TableTool;
 
 public class SysUtilPatient extends JXPanel implements KeyListener, ActionListener, CellEditorListener {
 	

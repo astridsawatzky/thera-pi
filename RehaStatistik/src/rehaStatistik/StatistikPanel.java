@@ -19,24 +19,8 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-
-
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.ButtonTools;
-import CommonTools.DatFunk;
-import CommonTools.OOTools;
-import CommonTools.SqlInfo;
-import Tools.SystemPreislisten;
-
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.document.IDocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocumentService;
-import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
-import ag.ion.noa.NOAException;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -50,6 +34,19 @@ import com.sun.star.sheet.XSheetCellCursor;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.uno.UnoRuntime;
+
+import CommonTools.ButtonTools;
+import CommonTools.DatFunk;
+import CommonTools.OOTools;
+import CommonTools.SqlInfo;
+import Tools.SystemPreislisten;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.document.DocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocument;
+import ag.ion.bion.officelayer.document.IDocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocumentService;
+import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
+import ag.ion.noa.NOAException;
 
 public class StatistikPanel extends JXPanel implements ListSelectionListener, ActionListener  {
 	

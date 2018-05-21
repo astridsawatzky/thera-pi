@@ -1,8 +1,5 @@
 package geraeteInit;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,13 +17,14 @@ import javax.comm.SerialPortEventListener;
 import javax.comm.UnsupportedCommOperationException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-
 import javax.swing.SwingWorker;
 
+import dialoge.SchluesselDialog;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import terminKalender.DatFunk;
 import terminKalender.TermineErfassen;
-import dialoge.SchluesselDialog;
 
 
 

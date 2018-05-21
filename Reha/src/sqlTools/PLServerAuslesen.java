@@ -1,7 +1,5 @@
 package sqlTools;
 
-import hauptFenster.Reha;
-
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -14,6 +12,8 @@ import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
+
+import hauptFenster.Reha;
 
 
 

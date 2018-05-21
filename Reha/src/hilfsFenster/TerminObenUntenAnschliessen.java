@@ -19,15 +19,14 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import rehaContainer.RehaTP;
-import CommonTools.JRtaTextField;
-import terminKalender.TerminFenster;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaTextField;
 import dialoge.RehaSmartDialog;
+import rehaContainer.RehaTP;
+import terminKalender.TerminFenster;
 
 public class TerminObenUntenAnschliessen implements KeyListener, ActionListener, FocusListener{
 

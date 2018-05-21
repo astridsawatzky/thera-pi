@@ -23,7 +23,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 
 public class AltImport extends JXPanel{

@@ -1,7 +1,5 @@
 package arztFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -37,41 +35,38 @@ import javax.swing.JToolBar;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import krankenKasse.KassenFormulare;
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import rehaInternalFrame.JArztInternal;
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import stammDatenTools.ArztTools;
-
-import systemEinstellungen.SystemConfig;
-import CommonTools.Colors;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Colors;
+import CommonTools.ExUndHop;
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import krankenKasse.KassenFormulare;
+import oOorgTools.OOTools;
+import rehaInternalFrame.JArztInternal;
+import stammDatenTools.ArztTools;
+import systemEinstellungen.SystemConfig;
 
 public class ArztPanel extends JXPanel implements PropertyChangeListener,TableModelListener,KeyListener,FocusListener,ActionListener, MouseListener{
 	/**

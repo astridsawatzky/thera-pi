@@ -1,8 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,23 +24,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.StringTools;
-import terminKalender.DatFunk;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JCompTools;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 
 public class PatientStammDatenPanel extends JXPanel{

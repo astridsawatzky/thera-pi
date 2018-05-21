@@ -4,17 +4,12 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeCellRenderer;
 
-import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import sun.swing.DefaultLookup;

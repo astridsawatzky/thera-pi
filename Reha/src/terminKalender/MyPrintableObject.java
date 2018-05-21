@@ -1,8 +1,15 @@
 package terminKalender;
 /* MyPrintableObject.java: Printable-Hilfsklasse für J2SE-Programmierbeispiele */
 
-import java.awt.*;
-import java.awt.print.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterGraphics;
+import java.awt.print.PrinterJob;
 
 public class MyPrintableObject implements Printable
 {

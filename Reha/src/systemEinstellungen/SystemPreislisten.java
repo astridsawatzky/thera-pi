@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,8 +9,8 @@ import java.util.Vector;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-
 import CommonTools.SqlInfo;
+import hauptFenster.Reha;
 
 public class SystemPreislisten {
 	public static Vector<Vector<Vector<String>>> vKGPreise = new Vector<Vector<Vector<String>>>();

@@ -16,7 +16,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -28,25 +27,6 @@ import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 
-
-
-import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.ITerminateEvent;
-import ag.ion.bion.officelayer.event.VetoTerminateListener;
-
-import chrriis.dj.nativeswing.swtimpl.NativeInterface;
-import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-
-
-
-
-
-
-
 import CommonTools.Colors;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
@@ -55,6 +35,10 @@ import CommonTools.Verschluesseln;
 import RehaIO.RehaIOMessages;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
+import ag.ion.bion.officelayer.application.IOfficeApplication;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 
 public class RehaHMK implements WindowListener {
 	public static boolean DbOk;

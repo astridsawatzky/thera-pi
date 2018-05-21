@@ -6,8 +6,6 @@ import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JFrame;
@@ -17,10 +15,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
 
-
-
-
-
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
@@ -29,14 +23,8 @@ import CommonTools.Verschluesseln;
 import RehaIO.RehaIOMessages;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
-import ag.ion.bion.officelayer.application.ILazyApplicationInfo;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.ITerminateEvent;
-import ag.ion.bion.officelayer.event.VetoTerminateListener;
 
 public class RehaSql implements WindowListener {
 

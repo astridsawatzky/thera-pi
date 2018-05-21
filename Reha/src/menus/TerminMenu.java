@@ -1,8 +1,5 @@
 package menus;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.Event;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -12,6 +9,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import terminKalender.iCalRehaExporter;
 

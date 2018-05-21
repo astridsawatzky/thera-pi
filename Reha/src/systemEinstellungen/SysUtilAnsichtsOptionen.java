@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -25,15 +23,15 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-import terminKalender.ParameterLaden;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import terminKalender.ParameterLaden;
 
 
 

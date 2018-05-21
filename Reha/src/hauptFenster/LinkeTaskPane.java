@@ -2,8 +2,6 @@ package hauptFenster;
 
 
 
-import generalSplash.RehaSplash;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -38,12 +36,8 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-
-import kurzAufrufe.KurzAufrufe;
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 
 import org.jdesktop.swingx.JXHyperlink;
 import org.jdesktop.swingx.JXMonthView;
@@ -55,19 +49,21 @@ import org.jdesktop.swingx.plaf.windows.WindowsTaskPaneUI;
 import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.LadeProg;
 
-import rechteTools.Rechte;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import systemTools.TestePatStamm;
-import terminKalender.TerminFenster;
-import wecker.Wecker;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import dialoge.DatumWahl;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import generalSplash.RehaSplash;
+import kurzAufrufe.KurzAufrufe;
+import oOorgTools.OOTools;
+import rechteTools.Rechte;
+import systemEinstellungen.SystemConfig;
+import systemTools.TestePatStamm;
+import terminKalender.TerminFenster;
+import wecker.Wecker;
 
 public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentListener, DropTargetListener {
 	/**

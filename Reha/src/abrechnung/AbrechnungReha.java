@@ -1,8 +1,5 @@
 package abrechnung;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
@@ -21,24 +18,18 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
 
-import patientenFenster.KassenAuswahl;
-import rehaInternalFrame.JRehaabrechnungInternal;
-import CommonTools.SqlInfo;
-import stammDatenTools.PatTools;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import terminKalender.DatFunk;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -52,13 +43,19 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import dta301.RVMeldung301;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import patientenFenster.KassenAuswahl;
+import rehaInternalFrame.JRehaabrechnungInternal;
+import stammDatenTools.PatTools;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import terminKalender.DatFunk;
 
 public class AbrechnungReha extends JXPanel{
 	/**

@@ -12,10 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -37,8 +34,9 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import RehaIO.RehaIOMessages;
-import RehaIO.SocketClient;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.DateTableCellEditor;
@@ -49,9 +47,8 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
 import CommonTools.SqlInfo;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import RehaIO.RehaIOMessages;
+import RehaIO.SocketClient;
 
 public class OffenepostenPanel extends JXPanel implements TableModelListener{
 

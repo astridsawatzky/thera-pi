@@ -12,10 +12,6 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-
-
-
-
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import ag.ion.bion.officelayer.application.IOfficeApplication;

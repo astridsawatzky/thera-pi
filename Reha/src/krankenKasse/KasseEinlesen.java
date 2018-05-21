@@ -1,13 +1,13 @@
 package krankenKasse;
 
-import hauptFenster.Reha;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+
+import hauptFenster.Reha;
 
 
 public class KasseEinlesen {

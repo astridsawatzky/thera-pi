@@ -3,6 +3,9 @@ package terminKalender;
  * Copyright © 2006 Bastie - Sebastian Ritter
  */
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FontMetrics;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,10 +13,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.InputVerifier;
+import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;

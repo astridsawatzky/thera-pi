@@ -19,19 +19,18 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXFrame;
 
-import CommonTools.SqlInfo;
-import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
-import terminKalender.DatFunk;
+import org.jdesktop.swingx.JXFrame;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import systemTools.ListenerTools;
+import terminKalender.DatFunk;
 
 public class SchluesselDialog extends JDialog implements WindowListener{
 

@@ -15,8 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import nebraska.FileStatics;
-
 import org.jdesktop.swingx.JXPanel;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
@@ -27,6 +25,8 @@ import org.thera_pi.nebraska.gui.utils.JRtaTextField;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import nebraska.FileStatics;
 
 public class NebraskaToolPanel extends JXPanel{
 

@@ -1,7 +1,5 @@
 package terminKalender;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -26,28 +24,27 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
-import systemTools.WinNum;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaTextField;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import systemTools.ListenerTools;
+import systemTools.WinNum;
 
 
 public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, ActionListener, ComponentListener, WindowListener, KeyListener,RehaTPEventListener{

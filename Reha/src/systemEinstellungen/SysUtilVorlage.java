@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import org.jdesktop.swingx.JXPanel;
+
+import hauptFenster.Reha;
 
 public class SysUtilVorlage extends JXPanel implements KeyListener, ActionListener {
 	/**

@@ -1,19 +1,12 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.LinearGradientPaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -29,36 +22,31 @@ import javax.swing.JScrollPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
-import jxTableTools.DblCellEditor;
-import jxTableTools.DoubleTableCellRenderer;
-import jxTableTools.MitteRenderer;
-import jxTableTools.TableTool;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
-import sqlTools.PLServerAuslesen;
-import CommonTools.SqlInfo;
+import CommonTools.INIFile;
+import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import jxTableTools.DblCellEditor;
+import jxTableTools.DoubleTableCellRenderer;
+import jxTableTools.MitteRenderer;
+import jxTableTools.TableTool;
+import sqlTools.PLServerAuslesen;
 import terminKalender.DatFunk;
-import terminKalender.ParameterLaden;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionListener {
 	
