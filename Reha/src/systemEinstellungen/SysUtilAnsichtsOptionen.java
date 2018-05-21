@@ -167,7 +167,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener,Acti
 			optimize.setSelected(true);
 		}
 	}	
-	@SuppressWarnings("unchecked")
+	
 	private void comboFuellen(){
 		int von = 0;
 		int bis = ParameterLaden.vKKollegen.size();

@@ -916,7 +916,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 	}
 /****************************************/	
 }
-@SuppressWarnings("unchecked")	
+	
 class GruppenTableModel extends DefaultTableModel{
 	   /**
 	 * 

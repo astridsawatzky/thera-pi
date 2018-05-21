@@ -158,7 +158,7 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		return jpan.getPanel();
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void tabelleFuellen(String diszi,int row){
 		String cmd = "select * from kuerzel where disziplin ='"+diszi+"' order by kuerzel";
 		Vector<Vector<String>> vec = SqlInfo.holeFelder(cmd);

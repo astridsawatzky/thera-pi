@@ -62,7 +62,7 @@ import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 import textBlockTherapeuten.ThTextBlock;
 
-@SuppressWarnings("unused")
+
 public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
 	/**
 	 * 
@@ -1207,7 +1207,7 @@ class TextBausteine extends AbstractAction {
 		
 		
 	}
-	@SuppressWarnings("rawtypes")
+
 	private void setzeHmAufNull(){
 		Set entries = SystemConfig.hmAdrBDaten.entrySet();
 	    Iterator it = entries.iterator();

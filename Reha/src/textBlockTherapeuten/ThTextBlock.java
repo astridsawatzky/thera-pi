@@ -369,7 +369,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			}
 			textblock.validate();
 		}
-		@SuppressWarnings("unchecked")
+		
 		private void testeTbText(String text){
 			/// Hier den SytemVariablen-Check einbauen!!!!!!!!!!!!!!!!!!!!
 			Vector<String> tbvars = new Vector<String>();
@@ -404,7 +404,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			vectb = (Vector<String>)tbvars.clone();
 			//////System.out.println("Variablen Vector = "+tbvars);
 		}
-		@SuppressWarnings("unused")
+		
 		private void infoPosition(int diff,int i,int lang){
 			//////System.out.println("Längendifferenz ="+diff+"  /  neuer Wert für Position i ="+i+" / neuer Wert für Textlänge lang="+lang);
 		}

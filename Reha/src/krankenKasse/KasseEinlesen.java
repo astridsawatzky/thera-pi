@@ -30,7 +30,7 @@ public class KasseEinlesen {
 	        public void propertyChange(PropertyChangeEvent e) {
 	            if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                    || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-	                @SuppressWarnings("unused")
+	                
 					final File f = (File) e.getNewValue();
 	            }
 	        }

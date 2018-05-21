@@ -274,7 +274,7 @@ private RehaTPEventClass rtp = null;
 		return jpan;
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleTabelle(String suchkrit){
 		arztwahlmod.setRowCount(0);
 		arztwahltbl.validate();
@@ -299,7 +299,7 @@ private RehaTPEventClass rtp = null;
 			arztwahlmod.addRow((Vector<?>)vec.get(i));	
 		}
 	}
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleIdTabelle(String suchid){
 		arztwahlmod.setRowCount(0);
 		arztwahltbl.validate();

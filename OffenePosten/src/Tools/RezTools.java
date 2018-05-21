@@ -42,7 +42,7 @@ public class RezTools {
 		return ret;
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<String> holeEinzelTermineAusRezept(String xreznr,String termine){
 		Vector<String> xvec = null;
 		Vector<String> retvec = new Vector<String>();

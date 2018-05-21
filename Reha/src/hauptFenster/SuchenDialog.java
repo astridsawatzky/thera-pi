@@ -781,7 +781,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	}
 
 	
-	@SuppressWarnings("unchecked")
+	
 	private void suchePatienten(){
 		Statement stmt = null;
 		ResultSet rs = null;

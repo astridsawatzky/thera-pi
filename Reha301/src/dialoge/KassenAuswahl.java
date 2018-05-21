@@ -272,7 +272,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 		jpan.add(span,cc.xyw(2, 4,6));
 		return jpan;
 	}
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleTabelle(String suchkrit){
 		kassenwahlmod.setRowCount(0);
 		kassenwahltbl.validate();
@@ -298,7 +298,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleIdTabelle(String suchid){
 		kassenwahlmod.setRowCount(0);
 		kassenwahltbl.validate();

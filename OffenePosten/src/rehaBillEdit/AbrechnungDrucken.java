@@ -27,7 +27,7 @@ import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.TextException;
 import offenePosten.OffenePosten;
 
-@SuppressWarnings("unused")
+
 public class AbrechnungDrucken {
 	int aktuellePosition = 0;
 	ITextTable textTable = null;

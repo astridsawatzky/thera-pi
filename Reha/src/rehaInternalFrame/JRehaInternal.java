@@ -803,7 +803,7 @@ class CustomPinPanel extends JButton{
 	}
 	public void paintComponent(Graphics g)
 	{
-	@SuppressWarnings("unused")
+	
 	Graphics2D g2d = (Graphics2D) g;
 		//g2d.drawImage(getToolkit().getImage("C:/RehaVerwaltung/icons/red.png"),0 ,20, this);
 		//g2d.drawImage(getToolkit().getImage("C:/RehaVerwaltung/icons/red.png"),40 ,20, this);		

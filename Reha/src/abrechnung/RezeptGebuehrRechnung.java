@@ -68,7 +68,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 	private PinPanel pinPanel = null;
 	private JXPanel content = null;
 	private RehaTPEventClass rtp = null;
-	@SuppressWarnings("unused")
+	
 	private int rueckgabe;
 	private JRtaTextField[] tfs = {null,null,null,null,null};
 	private JButton[] but = {null,null};
@@ -401,7 +401,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 			Set<?> entries = hmRezgeb.entrySet();
 		    Iterator<?> it = entries.iterator();
 			    while (it.hasNext()) {
-			      @SuppressWarnings("rawtypes")
+			      
 				Map.Entry entry = (Map.Entry) it.next();
 			      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
 			    	  try{

@@ -4,7 +4,7 @@ package reha301;
 
 public class AuftragsDatei {
 
-	@SuppressWarnings("unused")
+	
 	private static void doAuftragsDatei(int originalSize,int encryptedSize){
 		StringBuffer auftragsBuf = new StringBuffer();
 		/*

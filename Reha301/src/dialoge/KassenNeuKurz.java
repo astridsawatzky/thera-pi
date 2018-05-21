@@ -400,7 +400,7 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 				}
 			});
 	}
-	@SuppressWarnings("unchecked")
+	
 	public void ktraegerAuslesen (String iKNummer){
 		boolean emailaddyok = false;
  		List<String> nichtlesen = Arrays.asList(new String[] {"KMEMO"});

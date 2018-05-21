@@ -73,7 +73,7 @@ public class PatientToolBarPanel extends JXPanel{
 	}
 
 
-	@SuppressWarnings("rawtypes")
+
 	public PatientToolBarPanel(PatientHauptPanel patHauptPanel){
 		super();
 		setOpaque(false);

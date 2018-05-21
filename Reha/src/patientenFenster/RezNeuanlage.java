@@ -1094,7 +1094,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	private void doRechnen(int comb){
 		//unbelegt
 	}
-	@SuppressWarnings("unused")
+	
 	private void mustHmrCheck(){
 		if( SystemPreislisten.hmHMRAbrechnung.get(aktuelleDisziplin).get(preisgruppen[jcmb[cRKLASSE].getSelectedIndex()])==1  ){
 			this.hmrcheck.setEnabled(false);
@@ -1593,7 +1593,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		kwahl = null;
 	}
 	
-	@SuppressWarnings("unused")
+	
 	private void holePreisGruppeMitWorker(String id){
 		final String xid = id;
 		new SwingWorker<Void,Void>(){
@@ -1778,7 +1778,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 	
 	/********************************/
-	@SuppressWarnings("unused")
+	
 	private Double holePreisDoubleX(String pos,int ipreisgruppe){
 		Double dbl = 0.0;
 		for(int i = 0; i < preisvec.size();i++){
@@ -1805,7 +1805,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 
 	/*********************************/
-	@SuppressWarnings("unused")
+	
 	private String[] holePreis(int ivec,int ipreisgruppe){
 		if(ivec > 0){
 			int prid = Integer.valueOf((String) this.preisvec.get(ivec).get(this.preisvec.get(ivec).size()-1));
@@ -1952,7 +1952,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			////System.out.println("Speichern bestehendes Rezept -> Preisgruppe = "+jtf[cPREISGR].getText());
 			Integer izuzahl = Integer.valueOf(jtf[cPREISGR].getText());
 			String szzstatus = "";
-			@SuppressWarnings("unused")
+			
 			String unter18 = "F";
 			for(int i = 0; i < 1;i++){
 				if(SystemPreislisten.hmZuzahlRegeln.get(aktuelleDisziplin).get(izuzahl-1) <= 0){
@@ -2385,7 +2385,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 	
 	// Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-	@SuppressWarnings("unused")
+	
 	private void doKopiereLetztesRezeptDesPatienten() {
 		/** KONZEPT
 		 holle alle Rezepte aus den Tabellen "verordn" und "lza" zum aktuellen Patienten sortiert und finde das neueste als erstes in der Liste

@@ -16,7 +16,7 @@ public class GruppenEinlesen{
 	public Vector<Vector<Object>> gruppeAlle = new Vector<Vector<Object>>();
 	public int anzahl;
 	private INIFile ini;
-	@SuppressWarnings("unchecked")
+	
 	public GruppenEinlesen init(){
 		ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "gruppen.ini");
 

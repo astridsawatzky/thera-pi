@@ -773,7 +773,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 	}
 	private void doTabelleFuellen(){
 		new SwingWorker<Void,Void>(){
-			@SuppressWarnings("unchecked")
+			
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{

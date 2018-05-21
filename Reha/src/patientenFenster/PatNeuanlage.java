@@ -596,7 +596,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 								"Achtung - Sie haben dem Patient eine neue Kasse zugewiesen.\n"
 										+ "Eventuell ändert sich dadurch der Zuzahlungsstatus vorhandener Rezepte. Bitte prüfen!!!");
 			}
-			@SuppressWarnings("unused")
+			
 			int zzregel = -1;
 			boolean doof = false;
 			if (!(freizumstart == freibeimspeichern)) {
@@ -638,7 +638,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 									.sDatInDeutsch(Reha.thisClass.patpanel.patDaten
 											.get(4));
 							String befreit = (freibeimspeichern ? "T" : "F");
-							@SuppressWarnings("unused")
+							
 							String datum = (freibeimspeichern ? "" : jtf[16]
 									.getText().trim());
 							ZuzahlTools.zzStatusEdit(pat_intern, geboren, "",
@@ -1351,7 +1351,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		return pat31;
 	}
 
-	@SuppressWarnings("unused")
+	
 	private ImageIcon getPatBild() {
 		return null;
 	}

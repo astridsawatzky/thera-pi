@@ -6,7 +6,7 @@ import java.text.DecimalFormat;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
-@SuppressWarnings("unused")
+
 public class DoubleTableCellRenderer extends DefaultTableCellRenderer
 
 {

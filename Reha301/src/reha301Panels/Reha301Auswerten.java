@@ -523,7 +523,7 @@ public class Reha301Auswerten extends JXPanel{
 		
 	}
 	
-	@SuppressWarnings("unused")
+	
 	private void doPatUntersuchen(int row,Point pos){
 		String[] teilen = tab.getValueAt(row,4).toString().split("#");
 		String cmd = "select * from pat5 where n_name='"+teilen[1]+"' and v_name='"+teilen[2]+"' and "+
@@ -1498,7 +1498,7 @@ public class Reha301Auswerten extends JXPanel{
 		 * 
 		 */
 		private static final long serialVersionUID = 2195590211796817012L;
-		@SuppressWarnings("unused")
+		
 		public boolean enabled = false;
     	private KnotenObjekt knotenObjekt = null;
     	public JXTreeNode(KnotenObjekt obj,boolean enabled){

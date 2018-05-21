@@ -395,7 +395,7 @@ public class AbrechnungReha extends JXPanel{
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	
 	private void holePatientUndKostentraeger(String pat_intern,String kassenid){
 		patvec = SqlInfo.holeFelder("select n_name,v_name,geboren,anrede,titel,strasse,plz,ort,kv_status from pat5 where pat_intern='"+pat_intern+"' LIMIT 1");
 		kassvec = SqlInfo.holeFelder("select kassen_nam1,kassen_nam2,strasse,plz,ort,ik_papier,ik_kostent from kass_adr where id='"+kassenid+"' LIMIT 1");
@@ -707,7 +707,7 @@ public class AbrechnungReha extends JXPanel{
 		}.execute();
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void doEigenanteilDrucken() throws Exception{
 		aktuellePosition = 0;
 		istprivat = true;
@@ -850,7 +850,7 @@ public class AbrechnungReha extends JXPanel{
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 		
 	}
-	@SuppressWarnings("unchecked")
+	
 	private void doHauptRechnungDrucken() throws Exception{
 		hmRechnung.clear();
 

@@ -1217,7 +1217,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 
 }
 /**************************************/
-@SuppressWarnings("unchecked")	
+	
 class MyDefaultTableModel extends DefaultTableModel{
 	   /**
 	 * 

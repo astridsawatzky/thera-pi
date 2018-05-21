@@ -167,7 +167,7 @@ public class Beteiligung  extends JXPanel{
 		content.validate();
 		return content;
 	}
-	@SuppressWarnings("unchecked")
+	
 	private Vector<Vector<String>> doKollegen(){
 		int lang = ParameterLaden.vKollegen.size();
 		veckolls.clear();

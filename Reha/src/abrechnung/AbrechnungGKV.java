@@ -2161,7 +2161,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		 * 
 		 */
 		private static final long serialVersionUID = 2195590211796817012L;
-		@SuppressWarnings("unused")
+		
 		public boolean enabled = false;
     	private KnotenObjekt knotenObjekt = null;
     	public JXTTreeNode(KnotenObjekt obj,boolean enabled){
@@ -2214,7 +2214,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		public KassenTreeModel(JXTTreeNode node) {
 	            super((TreeNode) node);
 	        }
-		 @SuppressWarnings("unused")
+		 
 		public Object getValueAt(Object node, int column) {
 			 JXTTreeNode jXnode = (JXTTreeNode) node;
 
@@ -2229,11 +2229,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	        	}
 	        	return jXnode.getObject().titel;
 		 } 
-		 @SuppressWarnings("unused")
+		 
 		public int getColumnCount() {
 	            return 3;
 	        }
-	      @SuppressWarnings("unused")
+	      
 		public void setValueAt(Object value, Object node, int column){
 	    	  JXTTreeNode jXnode = (JXTTreeNode) node;
 	    	  KnotenObjekt  o;
@@ -2247,7 +2247,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	            	break;
 	    	  }
 	      } 
-	      @SuppressWarnings("unused")
+	      
 		public Class<?> getColumnClass(int column) {
 	            switch (column) {
 	            case 0:

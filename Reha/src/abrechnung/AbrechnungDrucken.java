@@ -29,7 +29,7 @@ import oOorgTools.OOTools;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 
-@SuppressWarnings("unused")
+
 public class AbrechnungDrucken {
 	int aktuellePosition = 0;
 	ITextTable textTable = null;

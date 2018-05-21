@@ -74,7 +74,7 @@ public class DatFunk {
 		return s;
 	}
 /*************************************************************************************/	
-	@SuppressWarnings("deprecation")
+	
 	public static String WochenTag(String sdatum) {
 		String[] asDatTeil = sdatum.split("\\.");
 		SimpleDateFormat formatter = new SimpleDateFormat("dd.mm.yyyy");

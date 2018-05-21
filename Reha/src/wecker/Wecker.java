@@ -357,7 +357,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		   
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void doNeuTermin(){
 		int minuten = 0; 
 		try{
@@ -585,14 +585,14 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-			@SuppressWarnings("unused")
+			
 			TerminAbgelaufen tab = getInstance();
 			tab = null;
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 			this.doAufraeumen();
-			@SuppressWarnings("unused")
+			
 			TerminAbgelaufen tab = getInstance();
 			tab = null;
 	}

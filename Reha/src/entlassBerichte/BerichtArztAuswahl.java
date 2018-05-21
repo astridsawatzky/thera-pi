@@ -136,7 +136,7 @@ public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyLi
 		
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
 	private void ladeTabelle(){
 		String test = Reha.thisClass.patpanel.patDaten.get(63);
 		if(test.trim().equals("")){
@@ -207,7 +207,7 @@ public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyLi
 		
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	private void doArztAufnehmen(){
 		JRtaTextField[] tf = {null,null,null};
 		tf[0] = new JRtaTextField("nix",false);

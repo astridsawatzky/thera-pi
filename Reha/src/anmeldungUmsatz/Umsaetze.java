@@ -435,7 +435,7 @@ public class Umsaetze extends JXPanel{
 		}
 	}
 	/**********************/	
-	@SuppressWarnings("unchecked")
+	
 	private int testeKalenderUser(){
 		int lang = ParameterLaden.vKKollegen.size();
 		Vector<Object> vec = new Vector<Object>();
@@ -453,7 +453,7 @@ public class Umsaetze extends JXPanel{
 		return kalUsers.size();
 	}
 	/**********************/
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	private int ermittleFaelle(String datum_von,String datum_bis){
 		int lang = kalUsers.size();
 		int behandler = 0;

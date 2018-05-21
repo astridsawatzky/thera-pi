@@ -321,7 +321,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 
 	
 	}
-	@SuppressWarnings("unchecked")
+	
 	private void wechsleEmail(){
 		if(Postfach.getSelectedIndex()==0){
 			if(SystemConfig.hmEmailExtern.get("SmtpSecure")==null){

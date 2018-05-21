@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 
-@SuppressWarnings("unused")
+
 public class EmailSendenExtern {
     public boolean sendMail(String smtpHost,String username,String password,String senderAddress,String recipientsAddress,String subject,String text,ArrayList<String[]>attachments,boolean authx,boolean bestaetigen,String secure,String useport ) throws AddressException, MessagingException, Exception{
     	

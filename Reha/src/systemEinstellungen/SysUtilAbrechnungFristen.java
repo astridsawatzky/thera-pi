@@ -65,7 +65,7 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 	String lastdiszi = null;
 	int lasttarif = -1;
 	
-	@SuppressWarnings("unchecked")
+	
 	public SysUtilAbrechnungFristen(){
 		super(new BorderLayout());
 		//System.out.println("Aufruf SysUtilKalendereinstell");
@@ -227,7 +227,7 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 		}
 		return changed;
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	private void doSpeichern(){
 		try{
 			((Vector)hmFristen.get(lastdiszi).get(0)).set(lasttarif,(Integer) Integer.parseInt(tage1.getText()));

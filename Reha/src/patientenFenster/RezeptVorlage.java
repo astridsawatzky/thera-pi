@@ -452,7 +452,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 	}
 	
 /*	
-	@SuppressWarnings("unchecked")
+	
 	public static void starteAusfallRechnung(String url){
 		IDocumentService documentService = null;;
 		//System.out.println("Starte Datei -> "+url);
@@ -546,7 +546,7 @@ class RezeptVorlageHintergrund extends JXPanel{
 	@Override
 	public void paintComponent( Graphics g ) { 
 		super.paintComponent( g );
-		@SuppressWarnings("unused")
+		
 		Graphics2D g2d = (Graphics2D)g;
 		
 		if(hgicon != null){

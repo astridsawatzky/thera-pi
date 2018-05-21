@@ -423,7 +423,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	}
 
 
-	@SuppressWarnings("rawtypes")
+
 	private void holeText(){
 		int row = this.arzttbl.getSelectedRow();
 		if(row < 0){return;}

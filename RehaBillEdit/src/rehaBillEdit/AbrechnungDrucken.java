@@ -23,7 +23,7 @@ import ag.ion.bion.officelayer.text.ITextTableCell;
 import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.TextException;
 
-@SuppressWarnings("unused")
+
 public class AbrechnungDrucken {
 	int aktuellePosition = 0;
 	ITextTable textTable = null;

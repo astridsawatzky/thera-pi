@@ -53,7 +53,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 		this.printPan = pan;
 		execute();
 	}
-	@SuppressWarnings("unused")
+	
 	@Override
 	protected Void doInBackground() throws Exception {
 		// TODO Auto-generated method stub

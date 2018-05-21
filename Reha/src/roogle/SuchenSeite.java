@@ -86,7 +86,7 @@ import systemEinstellungen.SystemConfig;
 import terminKalender.DatFunk;
 import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
-@SuppressWarnings({ "unchecked", "unused" })
+
 public class SuchenSeite extends JXPanel implements TableModelListener,FocusListener, ActionListener,PropertyChangeListener, KeyListener{
 	/**
 	 * 
@@ -1449,7 +1449,7 @@ Vector mit Normal-Termin
 					((Vector<Object>)vecWahl.get(i)).set(6,(String) ((Vector<Object>)vecWahl.get(i)).get(11));
 				}
 			}
-			@SuppressWarnings("rawtypes")
+		
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 				@Override
 				public int compare(Vector o1, Vector o2) {
@@ -1513,7 +1513,7 @@ Vector mit Normal-Termin
 				((Vector<Object>)vecWahl.get(i)).set(6, ((String)((Vector<Object>)vecWahl.get(i)).get(11)) );
 			}
 		}
-		@SuppressWarnings("rawtypes")
+	
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 			@Override
 			public int compare(Vector o1, Vector o2) {

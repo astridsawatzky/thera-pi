@@ -1597,7 +1597,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
         	tp2.tageEinstellen();
         	//final JTabbedPane xpane = pane;
     		SwingUtilities.invokeLater(new Runnable(){
-    			@SuppressWarnings("unchecked")
+    			
 				public  void run(){
     				int i;
     				int lang = jxTable.getRowCount();

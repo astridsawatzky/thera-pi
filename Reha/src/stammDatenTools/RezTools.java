@@ -282,7 +282,7 @@ public class RezTools {
 		return bret;
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<String> holeEinzelZiffernAusRezept(String xreznr,String termine){
 		Vector<String> xvec = null;
 		Vector<String> retvec = new Vector<String>();
@@ -333,7 +333,7 @@ public class RezTools {
 		}
 		return retobj;
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static String holeErstenTermin(String xreznr,String termine){
 		try{
 			Vector<String> xvec = null;
@@ -363,7 +363,7 @@ public class RezTools {
 		}
 		return "";
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static String holeLetztenTermin(String xreznr,String termine){
 		try{
 			Vector<String> xvec = null;
@@ -395,7 +395,7 @@ public class RezTools {
 		return "";
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<String> holeEinzelTermineAusRezept(String xreznr,String termine){
 		Vector<String> xvec = null;
 		Vector<String> retvec = new Vector<String>();
@@ -434,7 +434,7 @@ public class RezTools {
 		Collections.sort(retvec,comparator);
 		return (Vector<String>)retvec.clone();
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<Vector<String>> holeTermineUndBehandlerAusRezept(String xreznr,String termine){
 		Vector<String> xvec = null;
 		Vector<String> retvec = new Vector<String>();
@@ -490,7 +490,7 @@ public class RezTools {
 		return (pos==null ? "" : pos);
 	}
 /********************************************************************************/
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<Vector<String>> macheTerminVector(String termine){
 		String[] tlines = termine.split("\n");
 		int lines = tlines.length;
@@ -1463,7 +1463,7 @@ public class RezTools {
 		//System.out.println("*****Über Ende Frei*********");
 		constructAnfangFreiRezHMap(zm,anfang);
 	}	
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<Vector<String>>splitteTermine(String terms){
 		Vector<Vector<String>> termine = new Vector<Vector<String>>();
 		String[] tlines = terms.split("\n");
@@ -1576,7 +1576,7 @@ public class RezTools {
 		Double preis = 0.00;
 		Double wgkm = (vec.get(7).equals("") ? 0.00 : Double.parseDouble(vec.get(7)) );
 		
-		@SuppressWarnings("unused")
+		
 		String pospauschale = "";
 		Double preispauschale =0.00;
 		//Double wgpauschal = 0.00;
@@ -1648,7 +1648,7 @@ public class RezTools {
 		String pos = "";
 		String preis = "";
 		String pospauschale = "";
-		@SuppressWarnings("unused")
+		
 		String preispauschale = "";
 		int preisgruppe = Integer.parseInt(vec.get(0).get(41));
 		String termine = vec.get(0).get(34);

@@ -344,7 +344,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 			this.dispose();
 		}
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	public static void starteAusfallRechnung(String url){
 		IDocumentService documentService = null;;
 		//System.out.println("Starte Datei -> "+url);
@@ -483,7 +483,7 @@ class AusfallRechnungHintergrund extends JXPanel{
 	@Override
 	public void paintComponent( Graphics g ) { 
 		super.paintComponent( g );
-		@SuppressWarnings("unused")
+		
 		Graphics2D g2d = (Graphics2D)g;
 		
 		if(hgicon != null){

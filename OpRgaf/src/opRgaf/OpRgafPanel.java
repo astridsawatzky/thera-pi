@@ -952,7 +952,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			Set<?> entries = hmRezgeb.entrySet();
 		    Iterator<?> it = entries.iterator();
 			    while (it.hasNext()) {
-			      @SuppressWarnings("rawtypes")
+			      
 				Map.Entry entry = (Map.Entry) it.next();
 			      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
 			    	  try{

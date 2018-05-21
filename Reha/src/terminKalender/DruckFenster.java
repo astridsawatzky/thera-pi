@@ -137,7 +137,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener, Key
 		thisClass = this;
 	}		    
 /*******************************************************/	
-	@SuppressWarnings("unchecked")
+	
 	private void macheTerminVec(ArrayList<String[]>  termine){
 		Vector<String> dummyTermin = new Vector<String>();
 		for(int i = 0; i < termine.size();i++){
@@ -148,7 +148,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener, Key
 			termineVec.add((Vector<String>)dummyTermin.clone());
 		}
 		if(dummyTermin.size() > 0){
-			@SuppressWarnings("rawtypes")
+		
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 				@Override
 				public int compare(Vector o1, Vector o2) {

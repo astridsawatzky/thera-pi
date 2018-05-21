@@ -7,11 +7,11 @@ public class RehaEvent extends EventObject {
     /**
 	 * 
 	 */
-	@SuppressWarnings("unused")
+	
 	private Object source;
 	private String sRehaEvent = "";
 	private String[] sDetails = {"",""};
-	@SuppressWarnings("unused")
+	
 	private String name = "";
 	private static final long serialVersionUID = 1L;
 	

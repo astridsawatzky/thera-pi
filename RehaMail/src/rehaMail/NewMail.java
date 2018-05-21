@@ -264,7 +264,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		return jPopupMenu;
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void doAttachments(){
 		if(vecAttachments.size()==3){
 			JOptionPane.showMessageDialog(null,"Es sind bereits 3 Attachments angegeben.\nMehr geht in Thera-Pi-Nachrichten nicht!");

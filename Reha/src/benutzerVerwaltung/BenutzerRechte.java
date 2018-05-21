@@ -121,7 +121,7 @@ public class BenutzerRechte extends JXPanel{
 	String klartextLabel = null;
 	String elternTitel = null;
 	private JXRechteTreeTableNode aktNode;
-	@SuppressWarnings("unused")
+	
 	private int aktRow;
 	private JXRechteTreeTableNode root = null;
 	private RechteTreeTableModel rechteTreeTableModel = null;
@@ -556,7 +556,7 @@ public class BenutzerRechte extends JXPanel{
 		}
 	}
 	/********************************************/	
-	@SuppressWarnings("unchecked")
+	
 	private void doSave(){
 		String aktuelleruser = tfs[0].getText();
 		if ( !String.valueOf(pws[0].getPassword()).equals(
@@ -747,7 +747,7 @@ public class BenutzerRechte extends JXPanel{
 	
 /****************************************************************************************/
     private static class JXRechteTreeTableNode extends DefaultMutableTreeTableNode {
-    	@SuppressWarnings("unused")
+    	
 		public boolean enabled = false;
     	private Rechte rechte = null;
     	public JXRechteTreeTableNode(String name,Rechte rechte ,boolean enabled){

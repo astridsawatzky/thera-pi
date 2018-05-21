@@ -823,7 +823,7 @@ public class OpRgafMahnungen extends JXPanel{
 		
 	}
 	/*******************************/
-	@SuppressWarnings("rawtypes")
+
 	private void starteMahnDruck(String url){
 		IDocumentService documentService = null;;
 		//System.out.println("Starte Datei -> "+url);

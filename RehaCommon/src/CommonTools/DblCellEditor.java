@@ -17,7 +17,7 @@ import javax.swing.table.TableCellEditor;
 
 
 
-@SuppressWarnings("unused")
+
 public class DblCellEditor extends AbstractCellEditor implements KeyListener,TableCellEditor {
     /**
 	 * 

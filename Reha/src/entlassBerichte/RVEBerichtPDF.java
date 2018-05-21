@@ -312,7 +312,7 @@ public class RVEBerichtPDF {
 			
 			docversion.open();
 			//System.out.println(tempDateien[0][0] );
-			@SuppressWarnings("unused")
+			
 			File f = new File(tempDateien[0][0]);
 			//System.out.println("Die Datei = "+tempDateien[0][0]+" existiert = "+f.exists() );
 			PdfReader reader = new PdfReader(tempDateien[0][0]);
@@ -355,7 +355,7 @@ public class RVEBerichtPDF {
 		return true;
 	}
 	/******************************************/
-	@SuppressWarnings("unused")
+	
 	private void starteReader(String datei) throws IOException{
 		Process process = new ProcessBuilder(SystemConfig.hmFremdProgs.get("AcrobatReader"),"",datei).start();
 		InputStream is = process.getInputStream();

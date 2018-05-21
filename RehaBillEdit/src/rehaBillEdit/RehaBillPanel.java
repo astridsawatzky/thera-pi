@@ -399,7 +399,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		}
 
 	}
-	@SuppressWarnings("unchecked")
+	
 	private void doZeileNeu(){
 		int row = tab.getSelectedRow();
 		if(row < 0){

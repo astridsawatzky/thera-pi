@@ -63,7 +63,7 @@ public class FahrdienstExporter {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	
 	private void macheVector(String zeile){
 		Object[] obj = {null,null,null,null,null,null}; 
 		String[] szeile = zeile.split("°");

@@ -206,7 +206,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 
 		public void paintComponent( Graphics g ) { 
 			super.paintComponent( g );
-			@SuppressWarnings("unused")
+			
 			Graphics2D g2d = (Graphics2D)g;
 			
 			if(hgicon != null){
@@ -697,7 +697,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		return ret;
 	}
 	/*************************************************/
-	@SuppressWarnings("rawtypes")
+
 	public void holeRezepte(String patint,String rez_nr){
 		final String xpatint = patint;
 		final String xrez_nr = rez_nr;

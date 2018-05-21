@@ -547,7 +547,7 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 		
 	}
 
-	@SuppressWarnings("unchecked")
+	
 	private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException, WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, IndexOutOfBoundsException{
 		int tabindex = combo.getSelectedIndex();
 		if(tabindex <=0){

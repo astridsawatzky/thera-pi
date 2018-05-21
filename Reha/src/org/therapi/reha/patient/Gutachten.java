@@ -581,7 +581,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		      }
 		   
 	}
-	@SuppressWarnings("unused")
+	
 	private  void doArztBausteine(){
 		new LadeProg(Reha.proghome+"ArztBaustein.jar "+
 				Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini");	

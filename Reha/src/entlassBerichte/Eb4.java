@@ -375,7 +375,7 @@ public class Eb4 implements ActionListener {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
 	private void holeKTL(boolean ktlneu){
 		Vector<Vector<String>> vec = null;
 		String ktltabelle = "";
@@ -391,7 +391,7 @@ public class Eb4 implements ActionListener {
 		System.out.println("EBericht verwende KTL-Tabelle "+ktltabelle);
 		vec = SqlInfo.holeFelder("select * from "+ktltabelle);
 		Comparator<Vector> comparator = new Comparator<Vector>() {
-		    @SuppressWarnings("unused")
+		    
 			public int compare(String s1, String s2) {
 		        String[] strings1 = s1.split("\\s");
 		        String[] strings2 = s2.split("\\s");

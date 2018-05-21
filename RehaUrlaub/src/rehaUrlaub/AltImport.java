@@ -162,7 +162,7 @@ public class AltImport extends JXPanel{
 		importdatei.setText(ximportdatei);
 	}
 	/*******************************************/
-	@SuppressWarnings("unchecked")
+	
 	private void holeKalUser(){
 		vecKalZeile = SqlInfo.holeFelder("select matchcode,kalzeile,astunden from kollegen2 order by matchcode");
 		Vector<String> dummy = new Vector<String>();

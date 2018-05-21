@@ -74,7 +74,7 @@ public class datFunk {
 		return s;
 	}
 /*************************************************************************************/	
-	@SuppressWarnings("deprecation")
+	
 	public static String WochenTag(String sdatum) {
 		String[] asDatTeil = sdatum.split("\\.");
 		SimpleDateFormat formatter = new SimpleDateFormat("dd.mm.yyyy");
@@ -88,7 +88,7 @@ public class datFunk {
 	return asErgebnis[0];
 	}
 	
-	@SuppressWarnings("deprecation")
+	
 	public static int TagDerWoche(String sdatum) {
 		int tag=0;
 		String[] datsplit = sdatum.split("\\.");

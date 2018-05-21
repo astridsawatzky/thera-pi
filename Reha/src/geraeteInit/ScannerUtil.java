@@ -335,7 +335,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		//this.dispose();
 
 	}
-	@SuppressWarnings("unused")
+	
 	private void macheAFRHmap(){
 		String mappos = "";
 		String mappreis = "";
@@ -407,7 +407,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		}
 	}
 	
-	@SuppressWarnings("rawtypes")
+
 	public static void starteAusfallRechnung(String url){
 		IDocumentService documentService = null;;
 		//System.out.println("Starte Datei -> "+url);

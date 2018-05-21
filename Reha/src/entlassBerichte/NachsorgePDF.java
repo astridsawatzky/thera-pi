@@ -40,7 +40,7 @@ public class NachsorgePDF {
 		rvVorlagen[1]  = vorlagenPfad+"Nachsorge2-Variante2.pdf";
 		rvVorlagen[2]  = vorlagenPfad+"";
 		rvVorlagen[3]  = vorlagenPfad+"";
-		@SuppressWarnings("unused")
+		
 		boolean geklappt = doSeite1(true,"","");
 		geklappt = doSeite2(true,"","");
 		try {
@@ -67,7 +67,7 @@ public class NachsorgePDF {
 		
 	}
 	private boolean doSeite2(boolean vorschau,String ausfertigung,String bereich){
-		@SuppressWarnings("unused")
+		
 		String pdfPfad = rvVorlagen[1];
 		//PdfStamper stamper = null;
 		tempDateien[1] = new String[]{tempPfad+"NS2"+System.currentTimeMillis()+".pdf"};
@@ -435,7 +435,7 @@ public class NachsorgePDF {
 		return sret;
 	}
 
-	@SuppressWarnings("unused")
+	
 	private void schreibeKTLErlaeut(int ierlaeut,PdfContentByte cb){
 		ColumnText ct = null;
 		Phrase ph = null;

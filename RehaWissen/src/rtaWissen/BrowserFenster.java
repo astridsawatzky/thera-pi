@@ -822,7 +822,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 	
 }
 /**************************************/
-@SuppressWarnings("unchecked")	
+	
 class MyDefaultTableModel extends DefaultTableModel{
 	   /**
 	 * 

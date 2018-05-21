@@ -53,7 +53,7 @@ public class SystemConfig {
 	public static Vector<String> vSysDefNamen;
 	
 
-	@SuppressWarnings("unchecked")
+	
 	public static Vector vSysColDlg;
 	public static HashMap<String,Color[]> aktTkCol;
 	public static boolean[] RoogleTage = {false,false,false,false,false,false,false};
@@ -104,7 +104,7 @@ public class SystemConfig {
 	public static HashMap<String,String> hmVerzeichnisse  = null;
 	public static HashMap<String,String> hmFirmenDaten  = null;
 
-	@SuppressWarnings("unchecked")
+	
 	public static HashMap<String,Vector> hmDBMandant  = null;
 	public static Vector<String[]>Mandanten = null;
 	public static Vector<String[]>DBTypen = null;	
@@ -322,7 +322,7 @@ public class SystemConfig {
 		}
 		return;
 	}
-	@SuppressWarnings("unchecked")
+	
 	private void DatenBank(){
 		try{
 			ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rehajava.ini");
@@ -532,7 +532,7 @@ public class SystemConfig {
 		return f.exists();
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void TerminKalender(){
 		try{
 			INIFile termkalini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
@@ -598,7 +598,7 @@ public class SystemConfig {
 		
 		return;
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static void NurSets(){
 		try{
 			ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
@@ -624,7 +624,7 @@ public class SystemConfig {
 			ex.printStackTrace();
 		}
 	}		
-	@SuppressWarnings("unchecked")
+	
 	public static void  RoogleGruppen(){
 		try{
 			INIFile roogleini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
@@ -813,7 +813,7 @@ public class SystemConfig {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void TKFarben(){
 		try{
 			if (colini==null){
@@ -900,7 +900,7 @@ public class SystemConfig {
 		}
 
 	}
-	@SuppressWarnings({ "unchecked" })
+	
 	public static void MandantenEinlesen(){
 		try{
 			INIFile inif = INITool.openIni(Reha.proghome+"ini/", "mandanten.ini");
@@ -1260,7 +1260,7 @@ public class SystemConfig {
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der arzt.ini, Mehode:ArztGruppenInit!\nFehlertext: "+ex.getMessage());
 		}
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static void RezeptInit(){
 		try{
 			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rezept.ini");
@@ -1362,7 +1362,7 @@ public class SystemConfig {
 		}
 		
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static void TherapBausteinInit() {
 		INIFile inif = null;
 		try{
@@ -1605,7 +1605,7 @@ public class SystemConfig {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	
 	public static void FremdProgs(){
 		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "fremdprog.ini");
 		vFremdProgs = new Vector<Vector<String>>();

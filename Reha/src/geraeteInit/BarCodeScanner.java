@@ -32,7 +32,7 @@ import terminKalender.TermineErfassen;
 public class BarCodeScanner implements Runnable, SerialPortEventListener{
 	   static CommPortIdentifier portId = null;
 
-	@SuppressWarnings("rawtypes")
+
 	static Enumeration  portList = null;
 	   InputStream inputStream = null;
 	   static OutputStream outputStream = null;
@@ -196,7 +196,7 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 		    	byteArrayOutputStream.close();
 				if(outString.length()>= 2){
 					if("KGMAERLORHPORSFT".contains(outString.substring(0,2))){
-						@SuppressWarnings("rawtypes")
+					
 						Vector tvec = null;
 						JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 						if(termin != null){

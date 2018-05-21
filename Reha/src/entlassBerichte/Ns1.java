@@ -1226,7 +1226,7 @@ public class Ns1 implements ActionListener,ComponentListener {
 		lab.setForeground(Color.RED);
 		return lab;
 	}
-	@SuppressWarnings("unused")
+	
 	private JLabel getLabelArialFettNormal(String text){
 		JLabel lab = new JLabel(text);
 		lab.setFont(fontarialfett);
@@ -1238,7 +1238,7 @@ public class Ns1 implements ActionListener,ComponentListener {
 		lab.setForeground(Color.RED);
 		return lab;
 	}
-	@SuppressWarnings("unused")
+	
 	private JPanel getRand(Color col){
 		JPanel pan = new JPanel();
 		pan.setOpaque(false);

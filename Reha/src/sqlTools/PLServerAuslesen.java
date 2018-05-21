@@ -23,7 +23,7 @@ public class PLServerAuslesen {
 	public PLServerAuslesen(){
 		oeffnePLConnection();
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<Vector<String>> holeFelder(String xstmt){
 		Statement stmt = null;
 		ResultSet rs = null;

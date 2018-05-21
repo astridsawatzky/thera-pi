@@ -230,7 +230,7 @@ public class Eb2_2015 {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
+	
 	public void zeigePopUp(MouseEvent e){
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		// Lemmi 20101231: Icon zugefügt

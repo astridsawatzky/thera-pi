@@ -1842,7 +1842,7 @@ public class OOTools{
 		try{
 			if (aUniFlv != null){
                 //System.out.println("Unicode text on the clipboard...");
-                @SuppressWarnings("unused")
+                
 				Object aData = xTransferable.getTransferData(aUniFlv);      
 
                 //System.out.println(AnyConverter.toString(aData));
