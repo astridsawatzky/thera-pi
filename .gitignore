@@ -52,3 +52,4 @@ stash
 .gitignore
 
 # ignores from old projectdir end
+/.metadata/
