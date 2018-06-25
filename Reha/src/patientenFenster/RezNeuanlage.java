@@ -2,6 +2,7 @@ package patientenFenster;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.LinearGradientPaint;
 import java.awt.event.ActionEvent;
@@ -141,7 +142,6 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	public String feldname = "";
 	
 	// Lemmi 20110101: strKopiervorlage zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-	//boolean bCtrlPressed = false;
 	public String strKopiervorlage = "";
 	
 	public Vector<String> vec = null;  // Lemmi Doku: Das bekommt den 'vecaktrez' aus dem rufenden Programm (AktuelleRezepte)
@@ -166,21 +166,23 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	JLabel kassenLab;
 	JLabel arztLab;
 	
-	// Lemmi 20110106: Lieber Hr. Steinhilber: Diese Funktion an andere Stelle verlegt, weil Architekturänderung
-//	String rezToCopy = null;
-	
 	String[] strRezepklassenAktiv = null;
 	private Disziplinen diszis = null;
 
-	// Lemmi 20110101: bCtrlPressed zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
+	// McM 16/11: Steuerung der Abkürzungen bei Rezepteingabe
+	private boolean ctrlIsPressed = false;
+	private Component eingabeRezDate = null;
+	private Component eingabeBehFrequ = null;
+	private Component eingabeVerordnArt = null;
+	private Component eingabeVerordn1 = null;
+	private Component eingabeICD = null;
+	
 	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname){
-//	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname, boolean bCtrlPressed){
 		super();
 		try{
 			this.neu = neu;
 			this.feldname = sfeldname;
 			this.vec = vec;  // Lemmi 20110106  Wird auch für das Kopieren verwendet !!!!
-//			this.bCtrlPressed = bCtrlPressed;
 			diszis = new Disziplinen();
 			
 			if( vec.size() > 0 && this.neu ) {
@@ -467,6 +469,9 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				 strOptions, strOptions[1] );
 	 }
 	
+	/**
+	 * @return
+	 */
 	private JScrollPane getDatenPanel(){  //1                  2      3    4          5              6      7        8       
 		FormLayout lay = new FormLayout("right:max(80dlu;p), 4dlu, 60dlu, 5dlu, right:max(60dlu;p), 4dlu, 60dlu",
 			       //1.   2.   3.   4.   5.   6   7   8    9   10   11  12  13  14    15   16   17  18 19   20   21  22   23  24   25  
@@ -536,6 +541,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		jpan.add(jcmb[cRKLASSE],cc.xyw(3, 3,5));
 		jcmb[cRKLASSE].setActionCommand("rezeptklasse");
 		jcmb[cRKLASSE].addActionListener(this);
+		allowShortCut((Component)jcmb[cRKLASSE],"RezeptClass");
 		/********************/
 		
 		if(this.neu){
@@ -574,6 +580,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	
 		jtf[cKTRAEG].setName("ktraeger");
 		jtf[cKTRAEG].addKeyListener(this);
+		allowShortCut((Component)jtf[cKTRAEG],"ktraeger");
 		jpan.add(kassenLab,cc.xy(1,7));
 		jpan.add(jtf[cKTRAEG],cc.xy(3,7));
 		
@@ -604,23 +611,28 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		
 
 		jtf[cREZDAT].setName("rez_datum");
-		jtf[cREZDAT].addFocusListener(this);
+		//jtf[cREZDAT].setName("rez_datum");
+		allowShortCut((Component)jtf[cREZDAT],"rez_datum");
 		jpan.addLabel("Rezeptdatum",cc.xy(1,9));
 		jpan.add(jtf[cREZDAT],cc.xy(3,9));
-		
+		eingabeRezDate = jpan.add(jtf[cREZDAT],cc.xy(3,9));		
 
-		jtf[cBEGINDAT].setName("lastdate");
+		//jtf[cBEGINDAT].setName("lastdate");
+		allowShortCut((Component)jtf[cBEGINDAT],"lastdate");
 		jpan.addLabel("spätester Beh.Beginn",cc.xy(5,9));
 		jpan.add(jtf[cBEGINDAT],cc.xy(7,9));
 
 		jcmb[cVERORD] = new JRtaComboBox(new String[] {"Erstverordnung","Folgeverordnung", "außerhalb des Regelfalles"});
 		jcmb[cVERORD].setActionCommand("verordnungsart");
 		jcmb[cVERORD].addActionListener(this);
+		allowShortCut((Component)jcmb[cVERORD],"selArtDerVerordn");
 		jpan.addLabel("Art d. Verordn.",cc.xy(1, 11));
-		jpan.add(jcmb[cVERORD],cc.xy(3, 11));
+		eingabeVerordnArt = jpan.add(jcmb[cVERORD],cc.xy(3, 11));
+		
 		jcb[cBEGRADR] = new JRtaCheckBox("vorhanden");
 		jcb[cBEGRADR].setOpaque(false);
 		jcb[cBEGRADR].setEnabled(false);
+		allowShortCut((Component)jcb[cBEGRADR],"adrCheck");
 		jpan.addLabel("Begründ. für adR",cc.xy(5, 11));
 		jpan.add(jcb[cBEGRADR],cc.xy(7, 11));
 		
@@ -628,6 +640,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		jcb[cHAUSB].setOpaque(false);
 		jcb[cHAUSB].setActionCommand("Hausbesuche");
 		jcb[cHAUSB].addActionListener(this);
+		allowShortCut((Component)jcb[cHAUSB],"hbCheck");
 		jpan.addLabel("Hausbesuch",cc.xy(1, 13));
 		jpan.add(jcb[cHAUSB],cc.xy(3, 13));
 
@@ -659,6 +672,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				}
 			}
 		}
+		allowShortCut((Component)jcb[cVOLLHB],"hbVollCheck");
 		jpan.add(jcb[cVOLLHB],cc.xy(7,13));
 		
 
@@ -666,37 +680,42 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		jcb[cTBANGEF] = new JRtaCheckBox("angefordert");
 		jcb[cTBANGEF].setOpaque(false);
 		jpan.addLabel("Therapiebericht",cc.xy(1, 15));
+		jcb[cTBANGEF].addKeyListener(this);		
 		jpan.add(jcb[cTBANGEF],cc.xy(3, 15));
 		
 		jpan.addSeparator("Verordnete Heilmittel", cc.xyw(1,17,7));
 
 		jtf[cANZ1].setName("anzahl1");
 		jtf[cANZ1].addFocusListener(this);
+		jtf[cANZ1].addKeyListener(this);		
 		jpan.addLabel("Anzahl / Heilmittel 1",cc.xy(1, 19));
-		jpan.add(jtf[cANZ1],cc.xy(3, 19));
+		eingabeVerordn1  = jpan.add(jtf[cANZ1],cc.xy(3, 19));
 		jcmb[cLEIST1] = new JRtaComboBox();
-		jcmb[cLEIST1].setName("leistung1");
 		jcmb[cLEIST1].setActionCommand("leistung1");
 		jcmb[cLEIST1].addActionListener(this);
+		allowShortCut((Component)jcmb[cLEIST1],"leistung1");
 		jpan.add(jcmb[cLEIST1],cc.xyw(5, 19,3));
 		
 		jpan.addLabel("Anzahl / Heilmittel 2",cc.xy(1, 21));
+		jtf[cANZ2].addKeyListener(this);		
 		jpan.add(jtf[cANZ2],cc.xy(3, 21));
 		jcmb[cLEIST2] = new JRtaComboBox();
-		jcmb[cLEIST2].setName("leistung2");
 		jcmb[cLEIST2].setActionCommand("leistung2");
 		jcmb[cLEIST2].addActionListener(this);
+		allowShortCut((Component)jcmb[cLEIST2],"leistung2");
 		jpan.add(jcmb[cLEIST2],cc.xyw(5, 21,3));
 		
 		jpan.addLabel("Anzahl / Heilmittel 3",cc.xy(1, 23));
+		jtf[cANZ3].addKeyListener(this);		
 		jpan.add(jtf[cANZ3],cc.xy(3, 23));
 		jcmb[cLEIST3] = new JRtaComboBox();
 		jcmb[cLEIST3].setActionCommand("leistung3");
-		jcmb[cLEIST3].setName("leistung3");
 		jcmb[cLEIST3].addActionListener(this);
+		allowShortCut((Component)jcmb[cLEIST3],"leistung3");
 		jpan.add(jcmb[cLEIST3],cc.xyw(5, 23,3));
 
 		jpan.addLabel("Anzahl / Heilmittel 4",cc.xy(1, 25));
+		jtf[cANZ4].addKeyListener(this);		
 		jpan.add(jtf[cANZ4],cc.xy(3, 25));
 		jcmb[cLEIST4] = new JRtaComboBox();
 		jcmb[cLEIST4].setActionCommand("leistung4");
@@ -706,15 +725,18 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		
 		jpan.addSeparator("Durchführungsbestimmungen", cc.xyw(1,27,7));
 		
+		jtf[cFREQ].addKeyListener(this);		
 		jpan.addLabel("Behandlungsfrequenz",cc.xy(1, 29));		
-		jpan.add(jtf[cFREQ],cc.xy(3, 29));	
+		eingabeBehFrequ = jpan.add(jtf[cFREQ],cc.xy(3, 29));	
 
 		jpan.addLabel("Dauer der Behandl. in Min.",cc.xy(5, 29));
+		jtf[cDAUER].addKeyListener(this);		
 		jpan.add(jtf[cDAUER],cc.xy(7, 29));
 
 		
 		jpan.addLabel("Indikationsschlüssel",cc.xy(1, 31));		
 		jcmb[cINDI] = new JRtaComboBox();
+		jtf[cDAUER].addKeyListener(this);		
 		jpan.add(jcmb[cINDI],cc.xy(3, 31));
 		
 		klassenReady = true;
@@ -723,10 +745,12 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		jpan.addLabel("Barcode-Format",cc.xy(5, 31));
 		//jcmb[cBARCOD] = new JRtaComboBox(new String[] {"Muster 13/18","Muster 14","DIN A6-Format","DIN A4(BGE)","DIN A4 (REHA)"});
 		jcmb[cBARCOD] = new JRtaComboBox(SystemConfig.rezBarCodName);
+		jcmb[cBARCOD].addKeyListener(this);		
 		jpan.add(jcmb[cBARCOD],cc.xy(7, 31));
 
 		jpan.addLabel("FarbCode im TK",cc.xy(1, 33));
 		jcmb[cFARBCOD] = new JRtaComboBox();
+		jcmb[cFARBCOD].addKeyListener(this);		
 		macheFarbcodes();
 		/*
 		new SwingWorker<Void,Void>(){
@@ -738,14 +762,19 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		}.execute();
 		*/
 		jpan.add(jcmb[cFARBCOD],cc.xy(3, 33));
+
 		jpan.addLabel("Angelegt von",cc.xy(5, 33));
+		jtf[cANGEL].addKeyListener(this);		
 		jpan.add(jtf[cANGEL],cc.xy(7, 33));
+
 		jpan.addSeparator("ICD-10 Codes", cc.xyw(1,35,7));
 		// hier der ICD-10 Code
 		/********/
 		jpan.addLabel("1. ICD-10-Code",cc.xy(1,37));
 		jtf[cICD10].setName("icd10");
-		jpan.add(jtf[cICD10],cc.xy(3,37));
+		jtf[cICD10].addKeyListener(this);
+		//jtf[cICD10].addFocusListener(this);
+		eingabeICD  = jpan.add(jtf[cICD10],cc.xy(3,37));
 
 		jpan.addLabel("2. ICD-10-Code",cc.xy(5, 37));
 		jtf[cICD10_2].setName("icd10_2");
@@ -774,8 +803,6 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				this.fuelleIndis(jcmb[cRKLASSE].getSelectedItem().toString().trim());
 				ladeZusatzDatenNeu();				
 			}else if ( this.neu && vec.size() > 0 ){
-				// Lemmi 20110101: bCtrlPressed zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-			  // das muß auch als Voraussetzung für doKopiereLetztesRezeptDesPatienten gemacht werden
 				try{
 					String sindi = String.valueOf(vec.get(44));
 					String xkasse = String.valueOf(vec.get(37));
@@ -817,8 +844,11 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		return jscr;
 	}
 	
-
-	
+	private void allowShortCut(Component thisComponent, String name) {
+		thisComponent.setName(name);
+		thisComponent.addKeyListener(this);
+		thisComponent.addFocusListener(this);
+	}
 	
 	public int leistungTesten(int combo,int veczahl){
 		int retwert = 0;
@@ -1453,10 +1483,13 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			jtf[cKTRAEG].setText(suchkrit[0]);
 			kassenAuswahl(suchkrit);
 		}
-		if(arg0.getKeyCode()==27){  // Lemmi Doku: Taste "ESC" gedrückt: besser wäre die Abfrage nach "KeyEvent.VK_ESCAPE"
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			doAbbrechen();
 		}
-
+		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL){
+			//System.out.println("CTRL pressed");
+			ctrlIsPressed = true;
+		}
 		/* Lemmi Experimental
 		if(arg0.getKeyCode()==KeyEvent.VK_S && arg0.isControlDown()){  // Lemmi Doku: Taste "Strg+S" gedrückt: besser wäre die Abfrage nach "KeyEvent.VK_ESCAPE"
 			System.out.println("ausgelöst " + x++ );
@@ -1478,6 +1511,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
+		if(arg0.getKeyCode() == KeyEvent.VK_CONTROL){
+			//System.out.println("CTRL released");
+			ctrlIsPressed = false;
+		}
 	}
 
 	@Override
@@ -1491,36 +1528,55 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	@Override
 	public void focusLost(FocusEvent arg0) {
 		if( ((JComponent)arg0.getSource()).getName() != null){
-			if( ((JComponent)arg0.getSource()).getName().equals("rez_datum") ){
+			String componentName = ((JComponent)arg0.getSource()).getName();
+			boolean jumpForward = arg0.toString().contains("cause=TRAVERSAL_FORWARD");
+			//String evt = arg0.toString();
+			//System.out.println("Focus lost: "+ componentName + " (" + evt + ")");
+			//System.out.println("Focus lost: "+ componentName);
+			if( componentName.equals("RezeptClass")  || componentName.equals("ktraeger")){
+				if (ctrlIsPressed && jumpForward){
+					// jtf[cREZDAT].requestFocus();
+					eingabeRezDate.requestFocus();		// zur Eingabe Rezeptdatum springen
+				}
 				return;
 			}
-			if( ((JComponent)arg0.getSource()).getName().equals("anzahl1") && neu ){
+			if( componentName.equals("rez_datum") || componentName.equals("lastdate")){
+				if (ctrlIsPressed && jumpForward){
+					eingabeVerordnArt.requestFocus();	// zur Auswahl 'Art d. Verordn.' springen
+				}
+				return;
+			}
+			if( componentName.equals("selArtDerVerordn") ||
+					componentName.equals("adrCheck") ||
+					componentName.equals("hbCheck") ||
+					componentName.equals("hbVollCheck")
+					){
+				if (ctrlIsPressed && jumpForward){ eingabeVerordn1.requestFocus(); }	// zur Eingabe der ersten Verordnung springen
+				return;
+			}
+			if( componentName.equals("anzahl1") && neu ){
 				String text = jtf[cANZ1].getText();
 				jtf[cANZ2].setText(text);
 				jtf[cANZ3].setText(text);
 				jtf[cANZ4].setText(text);				
 				return;
 			}
-			//Die ICD-10 Prüfung ist im HMR-Check wohl besser aufgehoben
-			/*
-			if( ((JComponent)arg0.getSource()).getName().equals("icd10") ){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						if(SqlInfo.holeEinzelFeld("select id from icd10 where schluessel1 like '"+jtf[cICD10].getText().trim()+"%' LIMIT 1").equals("")){
-							int frage = JOptionPane.showConfirmDialog(null, "<html>Achtung!!<br><br>Der ICD-10 Code <b>"+jtf[cICD10].getText().trim()+
-									"</b> existiert nicht!<br>"+
-									"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
-							if(frage==JOptionPane.YES_OPTION){
-								new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
-							}
-						}
-						return null;
+			if( componentName.contains("leistung") && jumpForward){
+				// ComboBox mit [TAB] verlassen ...
+				String test = (String)((JRtaComboBox)arg0.getSource()).getSelectedItem();
+				if(test.equals("./.")){		// ... + kein Heilmittel ausgewählt -> zur Behandlungsfrequenz springen
+					eingabeBehFrequ.requestFocus();
+				} else {
+					if (ctrlIsPressed){		// schöner/schneller: [STRG][TAB] bzw. [STRG][ENTER] springt zur Behandlungsfrequenz
+						eingabeBehFrequ.requestFocus();
 					}
-				}.execute();
+				}
 				return;
 			}
-			*/
+			if( componentName.equals("Indikationsschluessel") && jumpForward){
+				if (ctrlIsPressed){ eingabeICD.requestFocus(); }	// zur Eingabe ICD10-Code springen
+				return;
+			}
 		}
 	}
 	
