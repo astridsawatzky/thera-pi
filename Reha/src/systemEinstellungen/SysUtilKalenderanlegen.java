@@ -889,7 +889,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 	private void starteSession(String land,String jahr) throws IOException{
 		String urltext = null;
 		try{
-			urltext = "http://www.feiertage.net/csvfile.php?state="+land+"&year="+jahr+"&type=csv";
+			urltext = "https://www.feiertage.net/csvfile.php?state="+land+"&year="+jahr+"&type=csv";
 			//System.out.println("Öffne Seite: "+urltext);
 			String text = null;
 			//ftm.getDataVector().clear();
