@@ -49,7 +49,18 @@ bin
 #510841109
 dist
 stash
-.gitignore
+.gitignor*
 
 # ignores from old projectdir end
 /.metadata/
+
+.byke
+.recommenders
+.pmd
+.eclipse-pmd
+*report.txt
+*.mgp
+*.mgi
+
+*sonarlint*prefs
+*.patch
