@@ -214,13 +214,12 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 			}
 			setFlags();
 		}catch(Exception ex){
-			JOptionPane.showMessageDialog(null,"Kein Kontakt zum Preislisten-/Kostträgerserver");
+			JOptionPane.showMessageDialog(null,"Kein Kontakt zum Preislisten-/Kostenträgerserver");
 		}
 	}
 	private void starteSession(String land,String jahr) throws IOException{
-		//String urltext = "http://www.gkv-datenaustausch.de/Leistungserbringer_Sole_Kostentraegerdateien.gkvnet";
-		//String urltext = "http://www.gkv-datenaustausch.de/Leistungserbringer_Sole_Kotr.gkvnet";
-		String urltext = "http://www.gkv-datenaustausch.de/leistungserbringer/sonstige_leistungserbringer/kostentraegerdateien_sle/kostentraegerdateien.jsp";
+		//String urltext = "http://www.gkv-datenaustausch.de/leistungserbringer/sonstige_leistungserbringer/kostentraegerdateien_sle/kostentraegerdateien.jsp";
+		String urltext = "https://www.gkv-datenaustausch.de/leistungserbringer/sonstige_leistungserbringer/kostentraegerdateien_sle/kostentraegerdateien.jsp";
 		String text = null;
 		try{
 		URL url = new URL(urltext);
@@ -419,8 +418,8 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 		boolean start = false;
 		boolean gestartet = false;
 		if(inhalt==null){
-			String urltext = "http://www.gkv-datenaustausch.de/media/dokumente/leistungserbringer_1/sonstige_leistungserbringer/kostentraegerdateien_1/"+datei;
-			//String urltext = "http://www.gkv-datenaustausch.de/upload/"+datei;
+			//String urltext = "http://www.gkv-datenaustausch.de/media/dokumente/leistungserbringer_1/sonstige_leistungserbringer/kostentraegerdateien_1/"+datei;
+			String urltext = "https://www.gkv-datenaustausch.de/media/dokumente/leistungserbringer_1/sonstige_leistungserbringer/kostentraegerdateien_1/"+datei;
 			String text = null;
 			URL url = new URL(urltext);
 			   
@@ -453,7 +452,7 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 			    	  }
 			    	  lang+=text.length();
 			      }
-			inS.close();
+ 			inS.close();
 		
 		}else{
 			//JOptionPane.showMessageDialog(null, "Länge des Contents = "+inhalt.length());
