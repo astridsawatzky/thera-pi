@@ -50,25 +50,19 @@ public class TheraPi{
 		public static Vector<Vector<String>> updatefiles = new Vector<Vector<String>>();
 
 		public static void main(String[] args) {
-			TheraPi application = new TheraPi();
-			String prog = java.lang.System.getProperty("user.dir");
-			try {
-				UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-			} catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (InstantiationException e1) {
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				e1.printStackTrace();
-			} catch (UnsupportedLookAndFeelException e1) {
-				e1.printStackTrace();
-			}
-			if(System.getProperty("os.name").contains("Linux")){
-				proghome = "/opt/RehaVerwaltung/";
-			}else if(System.getProperty("os.name").contains("Windows")){
-				proghome = prog.substring(0, 2)+"/RehaVerwaltung/";
-			}else if(System.getProperty("os.name").contains("Mac")){
-				proghome = "/opt/RehaVerwaltung/";				
+			setLookAndFeel();
+			
+			if (args.length == 0) {
+				String prog = java.lang.System.getProperty("user.dir");
+				if (System.getProperty("os.name").contains("Linux")) {
+					proghome = "/opt/RehaVerwaltung/";
+				} else if (System.getProperty("os.name").contains("Windows")) {
+					proghome = prog.substring(0, 2) + "/RehaVerwaltung/";
+				} else if (System.getProperty("os.name").contains("Mac")) {
+					proghome = "/opt/RehaVerwaltung/";
+				} 
+			} else {
+				proghome = "C:/RehaVerwaltung/";
 			}
 			System.out.println("Programmverzeichnis = "+proghome);
 			INIFile inif = new INIFile(proghome+"ini/mandanten.ini");
@@ -107,7 +101,8 @@ public class TheraPi{
 					mand[1] = new String(inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+(i+1)));
 					mandvec.add(mand);
 				}
-				//updateCheck();
+				//updateCheck(); XXX: where are available updates checked ?
+				TheraPi application = new TheraPi();
 				jDiag = application.getDialog();
 
 				jDiag.validate();
@@ -115,6 +110,19 @@ public class TheraPi{
 				jDiag.setVisible(true);
 			}
 			
+		}
+		private static void setLookAndFeel() {
+			try {
+				UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+			} catch (ClassNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (InstantiationException e1) {
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				e1.printStackTrace();
+			} catch (UnsupportedLookAndFeelException e1) {
+				e1.printStackTrace();
+			}
 		}
 		private JDialog getDialog() {
 			contentPanel = new JXPanel(new BorderLayout());
