@@ -47,6 +47,7 @@ import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
@@ -293,7 +294,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 	private void doSpeichernScanner(){
 		String item = "";
 		if(jcbscan[1].isSelected()){
-			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "geraete.ini");
+			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
 
 			item = (String) jcmbscan[0].getSelectedItem();
 			SystemConfig.sDokuScanner = item;

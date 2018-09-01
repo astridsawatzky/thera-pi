@@ -15,6 +15,7 @@ import javax.swing.SwingWorker;
 
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
@@ -2314,7 +2315,7 @@ public class RezTools {
 				try{
 					if(SqlInfo.holeEinzelFeld("select zzstatus from verordn where rez_nr = '"+xrez_num+"' LIMIT 1").equals("2") ){
 						//System.out.println("In Soundaufruf = "+Reha.proghome+"sounds/"+"doorbell.wav");
-						new AePlayWave(Reha.proghome+"sounds/"+"doorbell.wav").start();
+						new AePlayWave(Environment.Instance.getProghome()+"sounds/"+"doorbell.wav").start();
 					}
 				}catch(Exception ex){
 					ex.printStackTrace();

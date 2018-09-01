@@ -33,6 +33,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import dialoge.RehaSmartDialog;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SysUtilDruckvorlage;
@@ -98,7 +99,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 
 		String text = "";
 		/*********/
-		 File file = new File(Reha.proghome+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+		 File file = new File(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
 	      try {
 	         // FileReader zum Lesen aus Datei
 	         FileReader fr = new FileReader(file);
@@ -207,7 +208,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 				FileWriter w = null;
 
 				 try {
-				        w = new FileWriter(Reha.proghome+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+				        w = new FileWriter(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
 				        w.write(ta.getText());
 				 
 				    } catch (IOException e) {

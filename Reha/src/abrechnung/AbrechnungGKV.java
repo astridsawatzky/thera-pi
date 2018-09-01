@@ -68,6 +68,7 @@ import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.PatStammEventListener;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rehaInternalFrame.JAbrechnungInternal;
@@ -1175,7 +1176,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		if(abrechnungsModus.equals(ABR_MODE_302)){
 			try {
 				
-				f = new File(Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org");
+				f = new File(Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw); 
 			    bw.write(gesamtBuf.toString());
@@ -1217,7 +1218,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			    doAuftragsDatei(originalSize,encryptedSize);
 			    
 				
-				f = new File(Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf");
+				f = new File(Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw); 
 			    bw.write(auftragsBuf.toString()); 
@@ -1316,9 +1317,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			String text = "";
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;
-			String[] encodedDat = {Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
+			String[] encodedDat = {Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
 			//String[] encodedDat = {Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org","esol0"+aktEsol+".org"};
-			String[] aufDat = {Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
+			String[] aufDat = {Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(encodedDat);
 			attachments.add(aufDat);
@@ -1468,7 +1469,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", zertifikatVon.replace("IK", ""));
 			
 			NebraskaEncryptor encryptor = store.getEncryptor(ik_nutzer);
-			String inFile = Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
+			String inFile = Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
 			long size = encryptor.encrypt(inFile, inFile.replace(".org", ""));
 			return Integer.parseInt(Long.toString(size));
 		} catch (NebraskaCryptoException e) {
@@ -1558,7 +1559,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				if(abrechnungsModus.equals(ABR_MODE_302)){
 					try{
 						Thread.sleep(100);
-						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
+						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
 					}catch(Exception ex){
 						JOptionPane.showMessageDialog(null, "Fehler im Modul BegleitzettlDrucken - Fehler-Exception: ex\n"+ex.getMessage());
 					}
@@ -1727,7 +1728,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	private void holeEdifact(){
 		try {
 			if(SystemConfig.hmAbrechnung.get("hmgkvrauchdrucken").equals("1")){
-				abrDruck = new AbrechnungDrucken(this,Reha.proghome+
+				abrDruck = new AbrechnungDrucken(this,Environment.Instance.getProghome()+
 						"vorlagen/"+
 						Reha.aktIK+
 						"/"+

@@ -47,6 +47,7 @@ import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ArztTools;
@@ -56,10 +57,10 @@ import systemTools.ReaderStart;
 public class RVEBerichtPDF {
 	public EBerichtPanel eltern = null;
 
-	public String vorlagenPfad = Reha.proghome+"vorlagen/"+Reha.aktIK+"/";
+	public String vorlagenPfad = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
 	public String[] rvVorlagen = {null,null,null,null};
 	String[][] tempDateien = {null,null,null,null,null,null};
-	public String tempPfad = Reha.proghome+"temp/"+Reha.aktIK+"/";
+	public String tempPfad = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
 	public boolean RV;
 	public boolean altesFormular;
 	
@@ -238,7 +239,7 @@ public class RVEBerichtPDF {
 						baout.flush();
 						baout.close();
 						////System.out.println("Bytes available = "+is.available());
- 						ITextDocument doc = OOTools.starteGKVBericht(Reha.proghome+"vorlagen/"+Reha.aktIK+"/GKVArztbericht2.ott", "");
+ 						ITextDocument doc = OOTools.starteGKVBericht(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/GKVArztbericht2.ott", "");
  						Thread.sleep(100);
  						//doc.getViewCursorService().getViewCursor().getTextCursorFromStart().insertDocument( is, RTFFilter.FILTER );
  						ITextFieldService textFieldService = doc.getTextFieldService();
@@ -385,7 +386,7 @@ public class RVEBerichtPDF {
 		PdfStamper stamper = null;
 			
 		// Geschiss bis die bestehende PDF eingelesen und gestampt ist
-		tempDateien[0] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB1"+System.currentTimeMillis()+".pdf"};
+		tempDateien[0] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB1"+System.currentTimeMillis()+".pdf"};
 		 
 		BaseFont bf;
 		try {
@@ -636,7 +637,7 @@ public class RVEBerichtPDF {
 		PdfStamper stamper = null;
 			
 		// Geschiss bis die bestehende PDF eingelesen und gestampt ist
-		tempDateien[0] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB1"+System.currentTimeMillis()+".pdf"};
+		tempDateien[0] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB1"+System.currentTimeMillis()+".pdf"};
 		 
 		BaseFont bf;
 		try {
@@ -862,7 +863,7 @@ public class RVEBerichtPDF {
 		PdfStamper stamper = null;
 			
 		// Geschiss bis die bestehende PDF eingelesen und gestampt ist
-		tempDateien[0] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB1"+System.currentTimeMillis()+".pdf"};
+		tempDateien[0] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB1"+System.currentTimeMillis()+".pdf"};
 		 
 		BaseFont bf;
 		try {
@@ -1093,7 +1094,7 @@ public class RVEBerichtPDF {
 			PdfContentByte cb = stamper2.getOverContent(1);
 			*/
 			/************/
-			tempDateien[1] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB2"+System.currentTimeMillis()+".pdf"};
+			tempDateien[1] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB2"+System.currentTimeMillis()+".pdf"};
 			Document docktl = new Document(PageSize.A4);
 			PdfCopy cop = new PdfCopy(docktl,new FileOutputStream(tempDateien[1][0]));
 			docktl.open();
@@ -1301,7 +1302,7 @@ public class RVEBerichtPDF {
 		
 		try {
 			String pdfPfad = rvVorlagen[1];
-			tempDateien[1] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB2"+System.currentTimeMillis()+".pdf"};
+			tempDateien[1] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB2"+System.currentTimeMillis()+".pdf"};
 			PdfReader reader = new PdfReader (pdfPfad);
 			PdfStamper stamper2 = new PdfStamper(reader,new  FileOutputStream(tempDateien[1][0]));
 
@@ -1401,7 +1402,7 @@ public class RVEBerichtPDF {
 	 */
 	
 	private boolean doSeite3_2015(){
-		tempDateien[2] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB3"+System.currentTimeMillis()+".pdf"};
+		tempDateien[2] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB3"+System.currentTimeMillis()+".pdf"};
 		//String pdfPfad = rvVorlagen[2];
 		//PdfReader reader;
 		try {
@@ -1490,7 +1491,7 @@ public class RVEBerichtPDF {
 	 **********/
 
 	private boolean doSeite3(){
-		tempDateien[2] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB3"+System.currentTimeMillis()+".pdf"};
+		tempDateien[2] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB3"+System.currentTimeMillis()+".pdf"};
 		//String pdfPfad = rvVorlagen[2];
 		//PdfReader reader;
 		try {
@@ -1795,7 +1796,7 @@ public class RVEBerichtPDF {
 
 	}
 	private void druckeVersion(String datei){
-		final String xcmd = "java -jar "+Reha.proghome+"PDFDrucker.jar "+datei;
+		final String xcmd = "java -jar "+Environment.Instance.getProghome()+"PDFDrucker.jar "+datei;
 		
 		try {
 			Runtime.getRuntime().exec(xcmd);

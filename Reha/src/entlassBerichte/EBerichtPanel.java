@@ -77,6 +77,7 @@ import errorMail.ErrorMail;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rechteTools.Rechte;
@@ -118,8 +119,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public boolean neu = false;
 	public boolean jetztneu = false;
 	public boolean inebericht = false;
-	public String tempPfad = Reha.proghome+"temp/"+Reha.aktIK+"/";
-	public String vorlagenPfad = Reha.proghome+"vorlagen/"+Reha.aktIK+"/";
+	public String tempPfad = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
+	public String vorlagenPfad = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
 	public String[] rvVorlagen = {null,null,null,null};
 	EBerichtTab ebt = null;;
 	NachsorgeTab nat = null;
@@ -2061,15 +2062,15 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				doTextBausteine();
 				break;
 			case 1:
-				new LadeProg(Reha.proghome+"BMIRechner.jar");
+				new LadeProg(Environment.Instance.getProghome()+"BMIRechner.jar");
 				break;
 			case 2:
 				//new LadeProg(Reha.proghome+"ICDSuche.jar");
-				new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+				new LadeProg(Environment.Instance.getProghome()+"ICDSuche.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
 				break;
 			case 3:
 				//new LadeProg(Reha.proghome+"ICDSuche.jar");
-				new LadeProg(Reha.proghome+"RehaOCR.jar "+" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				new LadeProg(Environment.Instance.getProghome()+"RehaOCR.jar "+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
 				break;
 			case 4:
 				starteTest();

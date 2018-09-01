@@ -40,6 +40,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.DblCellEditor;
 import jxTableTools.DoubleTableCellRenderer;
@@ -320,7 +321,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 	
 	private void fuelleMitWerten(){
 		int aktiv;
-		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/","rezept.ini");
+		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/","rezept.ini");
 		
 		for(int i = 0;i < 5;i++){
 			aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString());
@@ -571,7 +572,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			//((Vector)SystemConfig.vNeuePreiseRegel.get(jcmb[0].getSelectedIndex())).set(jcmb[1].getSelectedIndex(), jcmb[2].getSelectedIndex());
 			SystemPreislisten.hmNeuePreiseAb.get(diszis[jcmb[0].getSelectedIndex()]).set(jcmb[1].getSelectedIndex(),xgueltig);
 			SystemPreislisten.hmNeuePreiseRegel.get(diszis[jcmb[0].getSelectedIndex()]).set(jcmb[1].getSelectedIndex(),jcmb[2].getSelectedIndex());
-			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/","preisgruppen.ini");
+			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/","preisgruppen.ini");
 			inif.setStringProperty("PreisRegeln_"+diszis[jcmb[0].getSelectedIndex()], "PreisAb"+(diswelche),xgueltig , null);
 			inif.setIntegerProperty("PreisRegeln_"+diszis[jcmb[0].getSelectedIndex()], "PreisRegel"+(diswelche),regel , null);
 			INITool.saveIni(inif);

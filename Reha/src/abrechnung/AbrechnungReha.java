@@ -47,6 +47,7 @@ import dta301.RVMeldung301;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import patientenFenster.KassenAuswahl;
@@ -757,7 +758,7 @@ public class AbrechnungReha extends JXPanel{
 		vecposrechnung.add((Vector<String>)((Vector<String>)vecpos).clone() );
 		gesamtPreis = BigDecimal.valueOf(Double.parseDouble(tfpatgesamt[0].getText().trim().replace(",", ".")));
 
-		starteDokument(Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
+		starteDokument(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
 		//System.out.println("Dokument gestartet");
 		starteErsetzen(hmRechnung);
 		//System.out.println("suche ersetzen abeschlossen");
@@ -959,7 +960,7 @@ public class AbrechnungReha extends JXPanel{
 				}
 			}
 			
-			starteDokument(Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
+			starteDokument(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
 			starteErsetzen(hmRechnung);
 			startePositionen(vecposrechnung,gesamtPreis);
 			starteDrucken(this.druckExemplare);

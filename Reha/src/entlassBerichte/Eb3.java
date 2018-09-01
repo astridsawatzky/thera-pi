@@ -49,6 +49,7 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextRange;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.noa.frame.ILayoutManager;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
@@ -65,7 +66,7 @@ public class Eb3 implements RehaEventListener  {
 	Container xparent = null;
 	NativeView nativeView = null; 
 	ByteArrayOutputStream outtemp = null;	
-	public String tempPfad = Reha.proghome+"temp/"+Reha.aktIK+"/";
+	public String tempPfad = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
 
 	//boolean gestartet = false;
 	//boolean inseitenaufbau = false;

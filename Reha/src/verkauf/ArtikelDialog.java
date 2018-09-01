@@ -27,6 +27,7 @@ import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import verkauf.model.Artikel;
 import verkauf.model.Lieferant;
@@ -68,7 +69,7 @@ public class ArtikelDialog extends RehaSmartDialog {
 		//pinPanel.getRot().setActionCommand("close");
 		pinPanel.setName("ArtikelDlg");
 		setPinPanel(pinPanel);
-		inif = INITool.openIni(Reha.proghome +"ini/"+ Reha.aktIK +"/", "verkauf.ini"); 
+		inif = INITool.openIni(Environment.Instance.getProghome() +"ini/"+ Reha.aktIK +"/", "verkauf.ini"); 
 		getSmartTitledPanel().setContentContainer(getContent());
 		getSmartTitledPanel().getContentContainer().setName("ArtikelDlg");
 		getSmartTitledPanel().setTitle("Artikel anlegen / bearbeiten");

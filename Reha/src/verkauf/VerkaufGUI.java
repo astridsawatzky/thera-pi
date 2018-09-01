@@ -51,6 +51,7 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import verkauf.model.Artikel;
@@ -95,7 +96,7 @@ public class VerkaufGUI extends JXPanel{
 		this.add(this.getContent1(), BorderLayout.CENTER);
 		verkauf = new Verkauf();
 		df = new DecimalFormat("0.00");
-		settings = INITool.openIni(Reha.proghome +"ini/"+ Reha.aktIK +"/", "verkauf.ini");
+		settings = INITool.openIni(Environment.Instance.getProghome() +"ini/"+ Reha.aktIK +"/", "verkauf.ini");
 
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
@@ -552,7 +553,7 @@ public class VerkaufGUI extends JXPanel{
 			descriptor.setHidden(settings.getBooleanProperty(propSection, "SofortDrucken"));
 			descriptor.setAsTemplate(true);
 			
-			String url = Reha.proghome + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
+			String url = Environment.Instance.getProghome() + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
 			ITextDocument doc = (ITextDocument) service.loadDocument(url, descriptor);
 			if(settings.getBooleanProperty(propSection, "SeitenLaengeAendern")) {
 				Size page = (Size) doc.getPageService().getPage(0).getPageStyle().getProperties().getXPropertySet().getPropertyValue("Size");
@@ -664,7 +665,7 @@ public class VerkaufGUI extends JXPanel{
 				descriptor.setHidden(settings.getBooleanProperty(propSection, "SofortDrucken"));
 				descriptor.setAsTemplate(true);
 				
-				String url = Reha.proghome + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
+				String url = Environment.Instance.getProghome() + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
 				IDocument document = service.loadDocument(url, descriptor);
 				ITextDocument doc = (ITextDocument) document;
 				

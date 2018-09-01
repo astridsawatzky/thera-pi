@@ -48,6 +48,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -148,7 +149,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 		}else{
 			optimize.setSelected(true);
 		}
-		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/","patient.ini");
+		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/","patient.ini");
 		int forms = inif.getIntegerProperty("Formulare", "PatientFormulareAnzahl");
 		Vector<String> vec = new Vector<String>();
 		for(int i = 1; i <= forms; i++){
@@ -199,7 +200,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 					int col = vorlagen.getSelectedColumn();	
 					if(col==1){
 						setCursor(Reha.thisClass.wartenCursor);
-						String svorlage = dateiDialog(Reha.proghome+"vorlagen/"+Reha.aktIK);
+						String svorlage = dateiDialog(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
 						if(svorlage.equals("")){
 							return;
 						}
@@ -355,7 +356,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			}
 			if(cmd.equals("vorlagenwahl")){
 				setCursor(Reha.thisClass.wartenCursor);
-				String svorlage = dateiDialog(Reha.proghome+"vorlagen/"+Reha.aktIK);
+				String svorlage = dateiDialog(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
 				if(! svorlage.equals("")){
 					datLabel.setText(svorlage);
 				}else{
@@ -366,7 +367,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			if(cmd.equals("vorlagenneu")){
 				
 				setCursor(Reha.thisClass.wartenCursor);
-				String svorlage = dateiDialog(Reha.proghome+"vorlagen/"+Reha.aktIK);
+				String svorlage = dateiDialog(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
 				if(! svorlage.equals("")){
 					datLabel.setText(svorlage);
 				}else{
@@ -404,10 +405,10 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			if(cmd.contains("iwahl")){
 				int wahl = Integer.valueOf(cmd.substring(cmd.length()-1));
 				setCursor(Reha.thisClass.wartenCursor);
-				String sicon = dateiDialog(Reha.proghome+"icons/");
+				String sicon = dateiDialog(Environment.Instance.getProghome()+"icons/");
 				if(! sicon.equals("")){
 					icon[wahl].setText(sicon);
-					kritlab[wahl].setIcon(new ImageIcon(Reha.proghome+"icons/"+sicon));
+					kritlab[wahl].setIcon(new ImageIcon(Environment.Instance.getProghome()+"icons/"+sicon));
 				}else{
 					icon[wahl].setText("");
 					kritlab[wahl].setIcon(null);
@@ -441,7 +442,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 	private void doSpeichern(){
 		try{
 			String wert = "";
-			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/","patient.ini");
+			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/","patient.ini");
 			//System.out.println(Reha.proghome+"ini/"+Reha.aktIK+"/patient.ini");
 			wert = (unten.isSelected() ? "1" : "0");
 			SystemConfig.hmContainer.put("Patient", Integer.valueOf(wert));
@@ -480,8 +481,8 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 				
 				wert = icon[i].getText();
 				inif.setStringProperty("Kriterien", "Image"+(i+1),icon[i].getText() , null);
-				SystemConfig.vPatMerkerIcon.set(i, (wert.equals("") ? null : new ImageIcon(Reha.proghome+"icons/"+wert)));
-				SystemConfig.vPatMerkerIconFile.set(i, (wert.equals("") ? null : Reha.proghome+"icons/"+wert));
+				SystemConfig.vPatMerkerIcon.set(i, (wert.equals("") ? null : new ImageIcon(Environment.Instance.getProghome()+"icons/"+wert)));
+				SystemConfig.vPatMerkerIconFile.set(i, (wert.equals("") ? null : Environment.Instance.getProghome()+"icons/"+wert));
 				
 			}
 			INITool.saveIni(inif);

@@ -43,6 +43,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import dialoge.ToolsDialog;
 import generalSplash.RehaSplash;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import patientenFenster.GutachtenWahl;
@@ -583,8 +584,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 	}
 	
 	private  void doArztBausteine(){
-		new LadeProg(Reha.proghome+"ArztBaustein.jar "+
-				Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini");	
+		new LadeProg(Environment.Instance.getProghome()+"ArztBaustein.jar "+
+				Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");	
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -654,13 +655,13 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			JOptionPane.showMessageDialog(null,"Kein Bericht für Datenübernahme ausgewählt");
 			return;
 		}
-		new LadeProg(Reha.proghome+"PDFLoader.jar "+
+		new LadeProg(Environment.Instance.getProghome()+"PDFLoader.jar "+
 				Integer.toString(art)+" "+
 				tabbericht.getValueAt(row, 0).toString()+" "+
 				SystemConfig.PDFformularPfad+" "+
-				Reha.proghome+"ini/"+Reha.aktIK+"/fremdprog.ini"+" "+
+				Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini"+" "+
 				Reha.thisClass.patpanel.patDaten.get(29)+" "+
-				Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini");
+				Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");
 	}
 
 	class ToolsDlgGutachten{
@@ -788,10 +789,10 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			case 19:
 				//LVA-Entlassmitteilung
 				try{
-					new LadeProg(Reha.proghome+"LVAEntlass.jar "+
-							" "+Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
+					new LadeProg(Environment.Instance.getProghome()+"LVAEntlass.jar "+
+							" "+Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
 							Reha.thisClass.patpanel.vecaktrez.get(1)+" "+
-							Reha.proghome+"ini/"+Reha.aktIK+"/fremdprog.ini");
+							Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini");
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}

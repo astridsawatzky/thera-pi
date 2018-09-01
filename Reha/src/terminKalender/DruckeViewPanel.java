@@ -40,6 +40,7 @@ import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.noa.graphic.GraphicInfo;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import sun.awt.image.ImageFormatException;
 
@@ -70,7 +71,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
     	g2d.dispose();
     	speichernQualitaet("",1.0F);
     	
-    	String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/terminshot_.ott";
+    	String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/terminshot_.ott";
     	IDocumentService documentService = Reha.officeapplication.getDocumentService();
     	 IDocumentDescriptor docdescript = new DocumentDescriptor();
 	        docdescript.setHidden(false);
@@ -82,7 +83,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
         boolean useStream = false;
 
         
-        String imagePath = (Reha.proghome+"ScreenShots/termin__temp.jpg").replace("\\", "/");
+        String imagePath = (Environment.Instance.getProghome()+"ScreenShots/termin__temp.jpg").replace("\\", "/");
         //String imagePath = "file:///"+Reha.proghome.replace("C:/", "/")+"ScreenShots/termin__temp.jpg";
         
         // Tip aus dem NOA-Forum
@@ -237,7 +238,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	                XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(
 	                                XPropertySet.class, xImage);
 
-	                url = "file:///"+Reha.proghome+"ScreenShots/termin__temp.jpg";
+	                url = "file:///"+Environment.Instance.getProghome()+"ScreenShots/termin__temp.jpg";
 
 	                xBitmapContainer.insertByName("someID",(Object) url);
 	                //xBitmapContainer.insertByName("someID", grProps.getUrl());
@@ -311,7 +312,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
         ImageWriteParam param = writer.getDefaultWriteParam();
         param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
         param.setCompressionQuality(fQuality);
-        File fimg = new File(Reha.proghome+"ScreenShots/termin__temp.jpg");
+        File fimg = new File(Environment.Instance.getProghome()+"ScreenShots/termin__temp.jpg");
 
         try {
 			writer.setOutput(ImageIO.createImageOutputStream(fimg));

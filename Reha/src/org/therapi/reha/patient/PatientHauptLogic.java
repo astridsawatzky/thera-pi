@@ -40,6 +40,7 @@ import events.PatStammEvent;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.SuchenDialog;
 import krankenKasse.KassenFormulare;
@@ -463,7 +464,7 @@ public class PatientHauptLogic {
 								iformular = Integer.valueOf(formularid.getText());
 								if(iformular >=0){
 									String sdatei = formular.get(iformular);
-									OOTools.starteStandardFormular(Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+sdatei,null);
+									OOTools.starteStandardFormular(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+sdatei,null);
 								}
 							}
 							return null;
@@ -481,7 +482,7 @@ public class PatientHauptLogic {
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "patient.ini");
+				INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "patient.ini");
 				int forms = inif.getIntegerProperty("Formulare", "PatientFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
 					titel.add(inif.getStringProperty("Formulare","PFormularText"+i));			

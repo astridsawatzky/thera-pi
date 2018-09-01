@@ -39,6 +39,7 @@ import dialoge.PinPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -142,7 +143,7 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 
 	private void fuellen(){
 		//String pfad = Reha.proghome+"ini/"+Reha.aktIK+"/floskeln.ini";
-		INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "floskeln.ini"); 
+		INIFile ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "floskeln.ini"); 
 		int floskeln = Integer.parseInt(ini.getStringProperty("Floskeln", "FloskelAnzahl"));
 		Vector<String> vec = new Vector<String>();
 		for(int i = 0; i < floskeln;i++){

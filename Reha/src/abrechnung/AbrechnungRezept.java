@@ -100,6 +100,7 @@ import ag.ion.noa.NOAException;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import jxTableTools.DblCellEditor;
@@ -824,7 +825,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 					new Thread(){
 						public void run(){
 							try {
-								File f = new File(Reha.proghome+"scanrun.bat");
+								File f = new File(Environment.Instance.getProghome()+"scanrun.bat");
 								if(!f.exists()){
 									JOptionPane.showMessageDialog(null,"Datei scanrun.bat existiert nicht");
 								}else{
@@ -832,7 +833,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 										JOptionPane.showMessageDialog(null, "Kein Rezept zum Scannen ausgewählt");
 										return;
 									}
-									Runtime.getRuntime().exec(Reha.proghome+"scanrun.bat "+aktRezNum.getText());
+									Runtime.getRuntime().exec(Environment.Instance.getProghome()+"scanrun.bat "+aktRezNum.getText());
 								}
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -1056,7 +1057,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA5.ott";
 			}
 			*/
-			formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+tbcombo.getSelectedItem().toString();
+			formular = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+tbcombo.getSelectedItem().toString();
 			/*
 			if(bcform.equals("1")){
 				formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA4.ott";
@@ -1161,7 +1162,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			*/
 
 			"<div id=\"center\">"+
-			"<img src=\"file:///"+Reha.proghome+"icons/p302.png\" align=\"center\">"+
+			"<img src=\"file:///"+Environment.Instance.getProghome()+"icons/p302.png\" align=\"center\">"+
 			"</div>"+
 
 			"</body>"+
@@ -2433,7 +2434,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			/*****Rezept****/
 			/*******/
 			buf1.append("<tr>");
-			buf1.append("<th rowspan=\"4\"><a href=\"http://rezedit.de\"><img src='file:///"+Reha.proghome+"icons/Rezept.png' border=0></a></th>");
+			buf1.append("<th rowspan=\"4\"><a href=\"http://rezedit.de\"><img src='file:///"+Environment.Instance.getProghome()+"icons/Rezept.png' border=0></a></th>");
 			buf1.append("<td class=\"spalte1\" align=\"right\">");
 			buf1.append("Ausstellungsdatum");
 			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
@@ -2475,7 +2476,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			buf1.append("</tr>");
 			/********Patient********/
 			buf1.append("<tr>");
-			buf1.append("<th rowspan=\"5\" valign=\"top\"><a href=\"http://patedit.de\"><img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=52 height=52 border=0></a></th>" );
+			buf1.append("<th rowspan=\"5\" valign=\"top\"><a href=\"http://patedit.de\"><img src='file:///"+Environment.Instance.getProghome()+"icons/kontact_contacts.png' width=52 height=52 border=0></a></th>" );
 			buf1.append("<td class=\"spalte1\" align=\"right\">");
 			buf1.append("Patient");
 			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
@@ -2526,7 +2527,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			buf1.append("</tr>");
 			/********Arzt********/
 			buf1.append("<tr>");
-			buf1.append("<th rowspan=\"3\" valign=\"top\"><a href=\"http://arztedit.de\"><img src='file:///"+Reha.proghome+"icons/system-users.png' width=52 height=52 border=0></a></th>");
+			buf1.append("<th rowspan=\"3\" valign=\"top\"><a href=\"http://arztedit.de\"><img src='file:///"+Environment.Instance.getProghome()+"icons/system-users.png' width=52 height=52 border=0></a></th>");
 			buf1.append("<td class=\"spalte1\" align=\"right\">");
 			buf1.append("verordnender Arzt");
 			buf1.append("</td><td class=\"spalte2\" align=\"left\">");
@@ -2585,7 +2586,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 
 		
 		buf3.append("<tr>");
-		buf3.append("<th rowspan=\"4\" valign=\"top\"><a href=\"http://alternativekrankenkasse.de\"><img src='file:///"+Reha.proghome+"icons/krankenkasse.png' width=52 height=52 border=0></a></th>");
+		buf3.append("<th rowspan=\"4\" valign=\"top\"><a href=\"http://alternativekrankenkasse.de\"><img src='file:///"+Environment.Instance.getProghome()+"icons/krankenkasse.png' width=52 height=52 border=0></a></th>");
 		buf3.append("<td class=\"spalte1\" align=\"right\">");
 		buf3.append("<b>Adresse für die</b>");
 		buf3.append("</td><td class=\"spalte2\" align=\"left\">");
@@ -2620,7 +2621,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		buf3.append("</tr>");
 		
 		buf3.append("<tr>");
-		buf3.append("<th rowspan=\"4\" valign=\"top\"><a href=\"http://tagedrucken.de\"><img src='file:///"+Reha.proghome+"icons/vcalendar.png' width=52 height=52 border=0></a></th>");
+		buf3.append("<th rowspan=\"4\" valign=\"top\"><a href=\"http://tagedrucken.de\"><img src='file:///"+Environment.Instance.getProghome()+"icons/vcalendar.png' width=52 height=52 border=0></a></th>");
 		buf3.append("<td class=\"spalte1\" align=\"right\">");
 		buf3.append("<b>Behandlungstage</b>");
 		buf3.append("</td><td class=\"spalte2\" align=\"left\">");

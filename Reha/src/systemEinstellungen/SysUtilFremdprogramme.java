@@ -31,6 +31,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 
 public class SysUtilFremdprogramme extends JXPanel implements KeyListener, ActionListener {
@@ -294,7 +295,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 	
 	private void doSpeichern(){
 		String wert = "";
-		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "fremdprog.ini");
+		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "fremdprog.ini");
 		wert = adobepfad.getText().trim();
 		inif.setStringProperty("FestProg", "FestProgPfad1", wert, null);
 		//SystemConfig.hmFremdProgs.put("AcrobatReader",wert);
@@ -311,11 +312,11 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 		INITool.saveIni(inif);
 		
  
-		inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+		inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 		wert = oopfad.getText().trim();
 		inif.setStringProperty("OpenOffice.org", "OfficePfad", wert, null);
 		SystemConfig.OpenOfficePfad = wert;
-		wert = Reha.proghome+"Libraries/lib/openofficeorg";
+		wert = Environment.Instance.getProghome()+"Libraries/lib/openofficeorg";
 		inif.setStringProperty("OpenOffice.org", "OfficeNativePfad", wert, null);
 		SystemConfig.OpenOfficeNativePfad = wert;
 		INITool.saveIni(inif);
@@ -330,7 +331,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
     chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
     //
     if(lpfad == null){
-    	lpfad = Reha.proghome;
+    	lpfad = Environment.Instance.getProghome();
     }
    	File file = new File(lpfad);	
     chooser.setCurrentDirectory(file);

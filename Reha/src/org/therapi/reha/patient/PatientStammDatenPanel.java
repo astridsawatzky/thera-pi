@@ -39,6 +39,7 @@ import CommonTools.StringTools;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import terminKalender.DatFunk;
@@ -170,12 +171,12 @@ public class PatientStammDatenPanel extends JXPanel{
 			buf1.append("<table>");
 			/*****Rezept****/
 			/*******/
-			String linktext = "<img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=36 height=36 border=0>";
+			String linktext = "<img src='file:///"+Environment.Instance.getProghome()+"icons/kontact_contacts.png' width=36 height=36 border=0>";
 			buf1.append("<tr><td class=\"spalte1\" align=\"left\">"+makeLink(linktext,"FOTO"));;
 			//buf1.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=36 height=36 border=0>");
 			if(Reha.bRGAFoffen || Reha.bHatMerkmale){
 				buf1.append("&nbsp;&nbsp;");
-				buf1.append("<img src='file:///"+Reha.proghome+"icons/Icon_Achtung.svg.png' width=48 height=41 border=0>");
+				buf1.append("<img src='file:///"+Environment.Instance.getProghome()+"icons/Icon_Achtung.svg.png' width=48 height=41 border=0>");
 			}
 			buf1.append("</td></tr>" );
 			buf1.append("<tr><td class=\"spalte1\" align=\"left\">");
@@ -221,8 +222,8 @@ public class PatientStammDatenPanel extends JXPanel{
 			buf1.append("&nbsp;");
 			buf1.append("</td></tr>" );
 			buf1.append("<tr><td class=\"spalte1\" align=\"left\">");
-			buf1.append("<img src='file:///"+Reha.proghome+"icons/krankenkasse.png' width=30 height=30 border=0><b>"+"+"+"</b>");
-			buf1.append("<img src='file:///"+Reha.proghome+"icons/system-users.png' width=30 height=30 border=0>");
+			buf1.append("<img src='file:///"+Environment.Instance.getProghome()+"icons/krankenkasse.png' width=30 height=30 border=0><b>"+"+"+"</b>");
+			buf1.append("<img src='file:///"+Environment.Instance.getProghome()+"icons/system-users.png' width=30 height=30 border=0>");
 			buf1.append("</td></tr>" );
 			buf1.append("<tr><td class=\"spalte1\" align=\"left\">");
 			buf1.append(makeLink(StringTools.EGross(patientHauptPanel.patDaten.get(13)),"KASSE"));
@@ -234,7 +235,7 @@ public class PatientStammDatenPanel extends JXPanel{
 			buf1.append("&nbsp;");
 			buf1.append("</td></tr>" );
 			buf1.append("<tr><td class=\"spalte1\" align=\"left\">");
-			buf1.append("<img src='file:///"+Reha.proghome+"icons/evolution-addressbook.png' width=32 height=32 border=0>");
+			buf1.append("<img src='file:///"+Environment.Instance.getProghome()+"icons/evolution-addressbook.png' width=32 height=32 border=0>");
 			buf1.append("</td></tr>" );
 			buf1.append(getAkutDaten());
 			buf1.append(getBefreiungsDaten());
@@ -322,7 +323,7 @@ public class PatientStammDatenPanel extends JXPanel{
 		buf2.append("<table>");
 			/*****Rezept****/
 			/*******/
-		buf2.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=52 height=52 border=0>");
+		buf2.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Environment.Instance.getProghome()+"icons/kontact_contacts.png' width=52 height=52 border=0>");
 		buf2.append("</tr></td>");
 		buf2.append("</table>");
 		buf2.append("</font>");

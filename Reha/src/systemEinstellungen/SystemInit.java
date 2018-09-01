@@ -26,6 +26,7 @@ import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.therapi.reha.patient.LadeProg;
 
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rechteTools.Rechte;
@@ -657,7 +658,7 @@ private void auswertenSysUtil(String util){
 				@Override
 				protected Void doInBackground() throws Exception {
 					try {
-						new LadeProg(Reha.proghome+"Nebraska.jar "+Reha.aktIK);						
+						new LadeProg(Environment.Instance.getProghome()+"Nebraska.jar "+Reha.aktIK);						
 						//Runtime.getRuntime().exec("java -jar "+Reha.proghome+"Nebraska.jar "+Reha.aktIK);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -713,7 +714,7 @@ private void auswertenSysUtil(String util){
 						"Achtung: Wichtige Benuterzanfrage",JOptionPane.YES_NO_OPTION);
 				if(anfrage == JOptionPane.YES_OPTION){
 					try {
-						Runtime.getRuntime().exec("java -Djava.net.preferIPv4Stack=true -jar "+Reha.proghome+"TheraPiUpdates.jar TheraPiStarten");
+						Runtime.getRuntime().exec("java -Djava.net.preferIPv4Stack=true -jar "+Environment.Instance.getProghome()+"TheraPiUpdates.jar TheraPiStarten");
 						Reha.thisClass.beendeSofort();
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -725,7 +726,7 @@ private void auswertenSysUtil(String util){
 						"Achtung: Wichtige Benuterzanfrage",JOptionPane.YES_NO_OPTION);
 				if(anfrage == JOptionPane.YES_OPTION){
 					try {
-						Runtime.getRuntime().exec("java -Djava.net.preferIPv4Stack=true -jar "+Reha.proghome+"TheraPiUpdates.jar TheraPiStarten");
+						Runtime.getRuntime().exec("java -Djava.net.preferIPv4Stack=true -jar "+Environment.Instance.getProghome()+"TheraPiUpdates.jar TheraPiStarten");
 						Reha.thisClass.beendeSofort();
 					} catch (IOException e) {
 						e.printStackTrace();
@@ -739,8 +740,8 @@ private void auswertenSysUtil(String util){
 				return;
 			}
 			JOptionPane.showMessageDialog(null,"<html><b>Achtung!!!!</b><br>Wenn Sie mit dem INI-Editor eine INI-Datei verändern oder neu erstellen,<br>wirkt sich die jeweilige Änderung erst dann aus wenn Sie<br><b>Thera-Pi neu starten!</b></html>");
-			new LadeProg(Reha.proghome+"RehaIniedit.jar "+
-					" "+Reha.proghome+" "+Reha.aktIK );
+			new LadeProg(Environment.Instance.getProghome()+"RehaIniedit.jar "+
+					" "+Environment.Instance.getProghome()+" "+Reha.aktIK );
 			cursorWait(false);
 			setHeader("dummy");
 			break;
@@ -827,7 +828,7 @@ private void auswertenSysUtil(String util){
 
 		
 		if(SystemConfig.hmSysIcons.get("werkzeuge") == null){
-			SystemConfig.hmSysIcons.put("werkzeuge",new ImageIcon(Reha.proghome+"icons/werkzeug.gif"));
+			SystemConfig.hmSysIcons.put("werkzeuge",new ImageIcon(Environment.Instance.getProghome()+"icons/werkzeug.gif"));
 		}
 		jxInhaltRechts = new SysUtilVorlage(SystemConfig.hmSysIcons.get("werkzeuge"));
 		jxInhaltRechts.setVisible(true);
@@ -842,7 +843,7 @@ private void auswertenSysUtil(String util){
 /*******************************************/
 private void doAccessDenied(){
 	if(SystemConfig.hmSysIcons.get("noaccess") == null){
-		SystemConfig.hmSysIcons.put("noaccess",new ImageIcon(Reha.proghome+"icons/"+"noaccess.gif"));
+		SystemConfig.hmSysIcons.put("noaccess",new ImageIcon(Environment.Instance.getProghome()+"icons/"+"noaccess.gif"));
 	}
 	jxInhaltRechts = new SysUtilVorlage(SystemConfig.hmSysIcons.get("noaccess"));
 	jxInhaltRechts.setVisible(true);
@@ -882,7 +883,7 @@ private void setHeader(String shm){
 }
 
 private void addHeaderEntry(String key, String titel, String text, String icon){
-    String iconPath = Reha.proghome + "icons/"; 
+    String iconPath = Environment.Instance.getProghome() + "icons/"; 
     if (icon == null){iconPath = iconPath + "header-image.png";}
     	else{iconPath = iconPath + icon;}
 	htitel.put(key, titel);

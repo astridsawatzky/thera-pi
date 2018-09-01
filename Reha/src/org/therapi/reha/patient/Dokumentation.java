@@ -100,6 +100,7 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import dialoge.ToolsDialog;
 import generalSplash.RehaSplash;
 import geraeteInit.ScannerUtil;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import oOorgTools.OOTools;
@@ -1149,7 +1150,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
         File file = null;
         if(lastPath==null){
-        	file = new File(Reha.proghome);	
+        	file = new File(Environment.Instance.getProghome());	
         }else{
         	file = new File(lastPath);
         }
@@ -2211,8 +2212,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		}
 		String dest = null;
 		if(art==0){
-			String src = Reha.proghome+"vorlagen/"+Reha.aktIK+"/EmptyWriterDoku.ott";
-			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+".odt";
+			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmptyWriterDoku.ott";
+			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+".odt";
 
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
@@ -2223,8 +2224,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
 			}
 		}else if(art==1){
-			String src = Reha.proghome+"vorlagen/"+Reha.aktIK+"/EmptyCalcDoku.ots";
-			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+".ods";
+			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmptyCalcDoku.ots";
+			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+".ods";
 			
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
@@ -2236,8 +2237,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, "Fehler kann neues CalcDokument nicht erzeugen");
 			}
 		}else if(art==2){
-			String src = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".odt";
+			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
+			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".odt";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
@@ -2248,8 +2249,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
 			}		
 		}else if(art==3){
-			String src = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Reha.proghome+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".ods";
+			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
+			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".ods";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);

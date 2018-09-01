@@ -64,6 +64,7 @@ import emailHandling.EmailSendenExtern;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
@@ -574,7 +575,7 @@ public void run(){
 	}
 
 	try {
-		String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
+		String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
 		//String url = Reha.proghome+"vorlagen/"+SystemConfig.oTerminListe.NameTemplate; 
 		////System.out.println("***************URL = "+url+"****************");
 		String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
@@ -816,7 +817,7 @@ public void run(){
 
 		}else{
 			try{
-				exporturl = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+				exporturl = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 				File f = new File(exporturl);
 				if(f.exists()){
 					f.delete();
@@ -946,7 +947,7 @@ final class sendeTermine extends Thread implements Runnable{
 			}
 		}
 		try{
-			File f = new File(Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf"); 
+			File f = new File(Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf"); 
 			if(f.exists()){
 				f.delete();
 			}
@@ -988,11 +989,11 @@ final class sendeTermine extends Thread implements Runnable{
 		ArrayList<String[]> attachments = new ArrayList<String[]>();
 		String[] anhang = {null,null};//zwei weitere Elemente für iCal-Datei erforderlich
 
-		anhang[0] = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+		anhang[0] = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
 		attachments.add(anhang.clone());
 		if(success){
-			attachments.add(new String[] {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"});
+			attachments.add(new String[] {Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"});
 		}
 		File f = new File(anhang[0]);
 		long zeit = System.currentTimeMillis();
@@ -1028,7 +1029,7 @@ final class sendeTermine extends Thread implements Runnable{
 
 		String text = "";
 		/*********/
-		 File file = new File(Reha.proghome+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+		 File file = new File(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
 	      try {
 	         // FileReader zum Lesen aus Datei
 	         FileReader fr = new FileReader(file);
@@ -1130,7 +1131,7 @@ final class sendeTermine extends Thread implements Runnable{
 				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4),datewarning));
 			}
 			buf.append(ICalGenerator.macheEnd());
-			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
+			FileOutputStream outputFile = new  FileOutputStream(Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
             //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
             OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
 			BufferedWriter bw = null;

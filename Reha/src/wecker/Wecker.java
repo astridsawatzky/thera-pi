@@ -43,6 +43,7 @@ import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemTools.ButtonTools;
 import terminKalender.DatFunk;
@@ -575,7 +576,7 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				new AePlayWave(Reha.proghome+"sounds/"+"carhorn.wav").start();
+				new AePlayWave(Environment.Instance.getProghome()+"sounds/"+"carhorn.wav").start();
 				return null;
 			}
 		}.execute();
@@ -679,7 +680,7 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		buf1.append("<table>");
 		
 		buf1.append("<tr>");
-		buf1.append("<th rowspan=\"4\"><a href=\"http://rezedit.de\"><img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=52 height=52 border=0></a></th>");
+		buf1.append("<th rowspan=\"4\"><a href=\"http://rezedit.de\"><img src='file:///"+Environment.Instance.getProghome()+"icons/kontact_contacts.png' width=52 height=52 border=0></a></th>");
 		buf1.append("<td class=\"spalte1\" align=\"right\">");
 		buf1.append("Behandlungszeit abgelaufen");
 		buf1.append("</td><td class=\"spalte2\" align=\"left\">");

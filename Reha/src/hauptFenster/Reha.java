@@ -265,8 +265,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	public static CompoundPainter[] RehaPainter = {null,null,null,null,null};
 	public Vector<Object> aktiveFenster = new Vector<Object>();
-	public static String proghome = "";
-	public static String userHome = "";
 	public final String NULL_DATE = "  .  .    ";
 	public static boolean warten=true;
 	public static String aktIK = "000000000";
@@ -383,25 +381,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	
 	
 	public static void main(String[] args) {
-		String prog = java.lang.System.getProperty("user.dir");
-		String homedir = java.lang.System.getProperty("user.home");
-		osVersion = System.getProperty("os.name");
-		if(osVersion.contains("Linux")){
-			proghome = "/opt/RehaVerwaltung/";
-			isLinux = true;
-		}else if(osVersion.contains("Windows")){
-			proghome = prog.substring(0, 2)+"/RehaVerwaltung/";
-		}else if(osVersion.contains("Mac OS X")){
-			//welcher Rückgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhänger ermittelt werden
-			System.out.println("Vermutlich MAC, Output = "+osVersion);
-			proghome = homedir+"/RehaVerwaltung/";
-		}
-		if (! (new File(proghome + "Rehaverwaltung").exists())) {
-			System.out.println("setting Directory to default");
-			proghome = "C:/RehaVerwaltung/";
-		}
-		//Reha.proghome = "C:/RehaVerwaltung/";
-		System.out.println("Programmverzeichnis = "+Reha.proghome);
+		findProghome();
 		
 		
 		String javaPfad = java.lang.System.getProperty("java.home").replaceAll("\\\\","/");
@@ -424,12 +404,12 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				}
 			}
 		}else{
-			INIFile inif = new INIFile(Reha.proghome+"ini/mandanten.ini"); 
+			INIFile inif = new INIFile(Environment.Instance.getProghome()+"ini/mandanten.ini"); 
 			int DefaultMandant = inif.getIntegerProperty("TheraPiMandanten", "DefaultMandant");
 			aktIK = inif.getStringProperty("TheraPiMandanten", "MAND-IK"+DefaultMandant);
 			aktMandant = inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+DefaultMandant);			
 		}
-		INITool.init(proghome+"ini/"+aktIK+"/");
+		INITool.init(Environment.Instance.getProghome()+"ini/"+aktIK+"/");
 		System.out.println("Insgesamt sind "+Integer.toString(INITool.getDBInis().length)+" INI-Dateien in der Tabelle inidatei abgelegt");
 
 		Titel2 = "  -->  [Mandant: "+aktMandant+"]";
@@ -451,7 +431,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				Process process;
 				try {
 					System.out.println("Starte RehaxSwing.jar");
-					process = new ProcessBuilder("java","-Djava.net.preferIPv4Stack=true", "-jar",proghome+"RehaxSwing.jar").start();
+					process = new ProcessBuilder("java","-Djava.net.preferIPv4Stack=true", "-jar",Environment.Instance.getProghome()+"RehaxSwing.jar").start();
 					InputStream is = process.getInputStream();
 					
 					InputStreamReader isr = new InputStreamReader(is);
@@ -542,7 +522,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		
 		setSystemConfig(sysConf);
 			
-		sysConf.SystemStart(Reha.proghome);
+		sysConf.SystemStart(Environment.Instance.getProghome());
 
 		sysConf.SystemInit(1);
 
@@ -617,7 +597,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				Reha application = new Reha();
 				application.sqlInfo = new SqlInfo();
 				application.sqlInfo.setDieseMaschine(SystemConfig.dieseMaschine);
-				rehaBackImg = new ImageIcon(Reha.proghome+"icons/therapieMT1.gif");
+				rehaBackImg = new ImageIcon(Environment.Instance.getProghome()+"icons/therapieMT1.gif");
 				thisClass = application;
 				RehaEventClass rehaEvent = new RehaEventClass();
 			    rehaEvent.addRehaEventListener(thisClass);
@@ -626,7 +606,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				application.getJFrame();
 
 				
-				Reha.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( Reha.proghome+"icons/Pi_1_0.png" ) );
+				Reha.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( Environment.Instance.getProghome()+"icons/Pi_1_0.png" ) );
 				
 				if(!dividerOk){
 					//Reha.thisClass.setDivider(5);
@@ -667,6 +647,27 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 		
 	}
+	private static void findProghome() {
+		String prog = java.lang.System.getProperty("user.dir");
+		String homedir = java.lang.System.getProperty("user.home");
+		osVersion = System.getProperty("os.name");
+		if(osVersion.contains("Linux")){
+			Environment.Instance.setProghome("/opt/RehaVerwaltung/");
+			isLinux = true;
+		}else if(osVersion.contains("Windows")){
+			Environment.Instance.setProghome(prog.substring(0, 2)+"/RehaVerwaltung/");
+		}else if(osVersion.contains("Mac OS X")){
+			//welcher Rückgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhänger ermittelt werden
+			System.out.println("Vermutlich MAC, Output = "+osVersion);
+			Environment.Instance.setProghome(homedir+"/RehaVerwaltung/");
+		}
+		if (! (new File(Environment.Instance.getProghome() + "Rehaverwaltung").exists())) {
+			System.out.println("setting Directory to default");
+			Environment.Instance.setProghome("C:/RehaVerwaltung/");
+		}
+		//Reha.proghome = "C:/RehaVerwaltung/";
+		System.out.println("Programmverzeichnis = "+Environment.Instance.getProghome());
+	}
 	public void setzeInitEnde(){
 		new SwingWorker<Void,Void>(){
 			@Override
@@ -692,7 +693,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			e.printStackTrace();
 		}
 		try{
-			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rehajava.ini"); 
+			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini"); 
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",(Object)jSplitLR.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",(Object)jSplitRechtsOU.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",(Object)(LinkeTaskPane.tp1.isCollapsed() ? "1" : "0"),null );
@@ -775,7 +776,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			}
 		}
 		try{
-			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",(Object)jSplitLR.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",(Object)jSplitRechtsOU.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",(Object)(LinkeTaskPane.tp1.isCollapsed() ? "1" : "0"),null );
@@ -1101,7 +1102,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}else{
 			if((!Reha.aktUser.trim().startsWith("Therapeut")) && Reha.checkForMails()){
 				if(Reha.isStarted){
-					new LadeProg(Reha.proghome+"RehaMail.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));	
+					new LadeProg(Environment.Instance.getProghome()+"RehaMail.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));	
 				}
 			}
 		}
@@ -1427,11 +1428,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				protected Void doInBackground() throws java.lang.Exception {
 					try{
 						INIFile updateini = null;
-						File f = new File(Reha.proghome+"ini/tpupdateneu.ini");
+						File f = new File(Environment.Instance.getProghome()+"ini/tpupdateneu.ini");
 						if(f.exists()){
-							updateini = INITool.openIni(Reha.proghome+"ini/", "tpupdateneu.ini");	
+							updateini = INITool.openIni(Environment.Instance.getProghome()+"ini/", "tpupdateneu.ini");	
 						}else{
-							updateini = INITool.openIni(Reha.proghome+"ini/", "tpupdate.ini");
+							updateini = INITool.openIni(Environment.Instance.getProghome()+"ini/", "tpupdate.ini");
 						}
 						try{
 							if(updateini.getStringProperty("TheraPiUpdates", "ProxyIP") != null && updateini.getStringProperty("TheraPiUpdates", "ProxyPort") != null && updateini.getStringProperty("TheraPiUpdates", "NoProxy") != null &&
@@ -2048,7 +2049,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		case JOptionPane.CANCEL_OPTION:		// restart
 			doCloseEverything();
 			try {
-				Runtime.getRuntime().exec("java -jar "+Reha.proghome+"TheraPi.jar");		// restart einleiten
+				Runtime.getRuntime().exec("java -jar "+Environment.Instance.getProghome()+"TheraPi.jar");		// restart einleiten
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -2827,7 +2828,7 @@ public void actionPerformed(ActionEvent arg0) {
 		if(! Rechte.hatRecht(Rechte.Funktion_urlaubueberstunden, true)){
 			return;
 		}
-		new LadeProg(Reha.proghome+"RehaUrlaub.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+		new LadeProg(Environment.Instance.getProghome()+"RehaUrlaub.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
 		return;
 	}
 	if(cmd.equals("umsatzbeteiligung")){
@@ -2835,7 +2836,7 @@ public void actionPerformed(ActionEvent arg0) {
 		return;
 	}
 	if(cmd.equals("lvastatistik")){
-		new LadeProg(Reha.proghome+"RehaStatistik.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+		new LadeProg(Environment.Instance.getProghome()+"RehaStatistik.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
 		return;
 	}
 	/*****************************/
@@ -2844,7 +2845,7 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		if(! RehaIOServer.offenePostenIsActive){
-			new LadeProg(Reha.proghome+"OffenePosten.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+Reha.xport);
+			new LadeProg(Environment.Instance.getProghome()+"OffenePosten.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport);
 		}else{
 			new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
 		}
@@ -2862,7 +2863,7 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		if(! RehaIOServer.rgAfIsActive){
-			new LadeProg(Reha.proghome+"OpRgaf.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+Reha.xport);
+			new LadeProg(Environment.Instance.getProghome()+"OpRgaf.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport);
 		}else{
 			new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
 		}
@@ -2873,14 +2874,14 @@ public void actionPerformed(ActionEvent arg0) {
 		if(!Rechte.hatRecht(Rechte.Funktion_kassenbuch, true)){
 			return;
 		}
-		new LadeProg(Reha.proghome+"RehaKassenbuch.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+		new LadeProg(Environment.Instance.getProghome()+"RehaKassenbuch.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
 		return;
 	}
 	if(cmd.equals("geburtstagsbriefe")){
 		if(!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)){
 			return;
 		}
-		new LadeProg(Reha.proghome+"GBriefe.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+		new LadeProg(Environment.Instance.getProghome()+"GBriefe.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
 		return;
 	}
 	/*****************************/
@@ -2891,7 +2892,7 @@ public void actionPerformed(ActionEvent arg0) {
 		}
 		
 		if(!RehaIOServer.rehaSqlIsActive){
-			new LadeProg(Reha.proghome+"RehaSql.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+
+			new LadeProg(Environment.Instance.getProghome()+"RehaSql.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+
 					String.valueOf(Integer.toString(Reha.xport))+ (!Rechte.hatRecht(Rechte.BenutzerSuper_user,false) ? " readonly" : " full"));	
 		}else{
 			new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );			
@@ -2913,8 +2914,8 @@ public void actionPerformed(ActionEvent arg0) {
 			});
 			return;
 		}
-		new LadeProg(Reha.proghome+"Reha301.jar "+
-				" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+		new LadeProg(Environment.Instance.getProghome()+"Reha301.jar "+
+				" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
 		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		return;
 	}
@@ -2931,8 +2932,8 @@ public void actionPerformed(ActionEvent arg0) {
 			});
 			return;
 		}
-		new LadeProg(Reha.proghome+"WorkFlow.jar "+
-				" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+		new LadeProg(Environment.Instance.getProghome()+"WorkFlow.jar "+
+				" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
 		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		return;
 	}
@@ -2950,8 +2951,8 @@ public void actionPerformed(ActionEvent arg0) {
 			});
 			return;
 		}
-		new LadeProg(Reha.proghome+"RehaHMK.jar "+
-				" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "") );
+		new LadeProg(Environment.Instance.getProghome()+"RehaHMK.jar "+
+				" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "") );
 		//System.out.println("Übergebe Rezeptnummer: "+SystemConfig.hmAdrRDaten.get("Rnummer"));
 		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		return;
@@ -2960,14 +2961,14 @@ public void actionPerformed(ActionEvent arg0) {
 		if(!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)){
 			return;
 		}
-		new LadeProg(Reha.proghome+"RehaIniedit.jar "+
-				" "+Reha.proghome+" "+Reha.aktIK );
+		new LadeProg(Environment.Instance.getProghome()+"RehaIniedit.jar "+
+				" "+Environment.Instance.getProghome()+" "+Reha.aktIK );
 		return;
 		
 	}
 	if(cmd.equals("ocr")){
-		new LadeProg(Reha.proghome+"RehaOCR.jar "+
-				" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+		new LadeProg(Environment.Instance.getProghome()+"RehaOCR.jar "+
+				" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
 		return;
 	}
 	
@@ -3042,9 +3043,10 @@ public void mustReloadDb(){
 }
 
 
+
+
 /*********************************************/
 }
-
 
 /**************
  * 
@@ -3427,7 +3429,7 @@ final class ErsterLogin implements Runnable{
 				Reha.thisFrame.setPreferredSize(new Dimension(800,600));
 				Reha.thisFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 				Reha.thisFrame.setVisible(true);
-				INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+				INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 				if(inif.getIntegerProperty("HauptFenster", "Divider1") != null){
 					Reha.thisClass.jSplitLR.setDividerLocation((Reha.divider1=inif.getIntegerProperty("HauptFenster", "Divider1")));
 					Reha.thisClass.jSplitRechtsOU.setDividerLocation((Reha.divider2=inif.getIntegerProperty("HauptFenster", "Divider2")));

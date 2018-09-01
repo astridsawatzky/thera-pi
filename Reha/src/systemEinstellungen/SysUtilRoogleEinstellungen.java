@@ -23,6 +23,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 
 public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, ActionListener {
@@ -171,7 +172,7 @@ public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, 
 		// TODO Auto-generated method stub
 		if(e.getActionCommand().equals("speichern")){
 			try{
-				INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/","terminkalender.ini");
+				INIFile ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/","terminkalender.ini");
 				for(int i = 0;i<7;i++){
 					ini.setStringProperty("RoogleEinstellungen", "Tag"+(i+1),(tage[i].isSelected() ? "1" : "0"),null);
 					SystemConfig.RoogleTage[i] = tage[i].isSelected();

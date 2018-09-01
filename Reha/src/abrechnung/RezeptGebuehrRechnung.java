@@ -52,6 +52,7 @@ import dialoge.PinPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ZuzahlTools.ZZStat;
@@ -234,7 +235,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 					hmRezgeb.get("<rgreznum>")+"' LIMIT 1"));
 		}
 		hmRezgeb.put("<rgbehandlung>",tfs[4].getText().trim());
-		String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/RezeptgebuehrRechnung.ott";
+		String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/RezeptgebuehrRechnung.ott";
 		try {
 			officeStarten(url);
 		} catch (OfficeApplicationException e) {

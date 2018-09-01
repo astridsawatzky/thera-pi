@@ -53,6 +53,7 @@ import emailHandling.EmailSendenExtern;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
@@ -446,7 +447,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		final JFileChooser chooser = new JFileChooser("Dateianhang wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(Reha.proghome);
+        final File file = new File(Environment.Instance.getProghome());
         chooser.setCurrentDirectory(file);
         chooser.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {

@@ -21,14 +21,15 @@ import com.lowagie.text.pdf.PdfCopy;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.ReaderStart;
 
 public class NachsorgePDF {
 	public EBerichtPanel eltern = null;
-	public String tempPfad = Reha.proghome+"temp/"+Reha.aktIK+"/";
-	public String vorlagenPfad = Reha.proghome+"vorlagen/"+Reha.aktIK+"/";
+	public String tempPfad = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
+	public String vorlagenPfad = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
 	public String[] rvVorlagen = {null,null,null,null};
 	String[][] tempDateien = {null,null,null,null,null};
 
@@ -587,7 +588,7 @@ public class NachsorgePDF {
 		}
 	}
 	private void druckeVersion(String datei){
-		final String xcmd = "java -jar "+Reha.proghome+"PDFDrucker.jar "+datei;
+		final String xcmd = "java -jar "+Environment.Instance.getProghome()+"PDFDrucker.jar "+datei;
 		
 		try {
 			Runtime.getRuntime().exec(xcmd);

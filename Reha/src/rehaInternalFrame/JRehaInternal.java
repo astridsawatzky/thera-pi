@@ -54,6 +54,7 @@ import com.jgoodies.looks.plastic.PlasticInternalFrameUI;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
@@ -482,8 +483,8 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		jmen.setText((this.desktop==0 ? "in den "+(SystemConfig.desktopHorizontal ? "unteren" : "rechten" )+
 				" Container verschieben" : "in den "+(SystemConfig.desktopHorizontal ? "oberen" : "linken" )+" Container verschieben"));
 
-		jmen.setIcon((this.desktop==0 ? new ImageIcon(Reha.proghome+(SystemConfig.desktopHorizontal ? "/icons/unten.gif" : "/icons/forward.gif")) :
-			new ImageIcon(Reha.proghome+(SystemConfig.desktopHorizontal ? "/icons/oben.gif" : "/icons/backward.gif"))));
+		jmen.setIcon((this.desktop==0 ? new ImageIcon(Environment.Instance.getProghome()+(SystemConfig.desktopHorizontal ? "/icons/unten.gif" : "/icons/forward.gif")) :
+			new ImageIcon(Environment.Instance.getProghome()+(SystemConfig.desktopHorizontal ? "/icons/oben.gif" : "/icons/backward.gif"))));
 		jmen.setRolloverEnabled(true);
 		jmen.setEnabled(true);
 		jmen.setActionCommand("verschieben");
@@ -520,7 +521,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		
 		jmen = new JMenuItem();
 		jmen.setText("Fenster zu Icon verkleinern");
-		jmen.setIcon(new ImageIcon(Reha.proghome+"/icons/buttongreen.png"));
+		jmen.setIcon(new ImageIcon(Environment.Instance.getProghome()+"/icons/buttongreen.png"));
 		jmen.setEnabled(true);
 		jmen.setActionCommand("icon");
 		jmen.addActionListener(this);
@@ -528,7 +529,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 
 		jmen = new JMenuItem();
 		jmen.setText("Fenster schließen");
-		jmen.setIcon(new ImageIcon(Reha.proghome+"/icons/buttonred.png"));
+		jmen.setIcon(new ImageIcon(Environment.Instance.getProghome()+"/icons/buttonred.png"));
 		jmen.setEnabled(true);
 		jmen.setActionCommand("schliessen");
 		jmen.addActionListener(this);

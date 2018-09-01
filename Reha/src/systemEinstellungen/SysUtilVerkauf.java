@@ -29,6 +29,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 
 public class SysUtilVerkauf extends JXPanel {
@@ -74,7 +75,7 @@ public class SysUtilVerkauf extends JXPanel {
 	     jscr.setViewportView(getContent());
 	     jscr.validate();
 	    
-	     inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "verkauf.ini");
+	     inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "verkauf.ini");
 		
 		
 		//add(getContent(),BorderLayout.CENTER);
@@ -305,7 +306,7 @@ public class SysUtilVerkauf extends JXPanel {
 		JFileChooser explorer = new JFileChooser();
 		explorer.setDialogType(JFileChooser.OPEN_DIALOG);
 		explorer.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-		explorer.setCurrentDirectory(new File(Reha.thisClass.proghome+"/vorlagen"));
+		explorer.setCurrentDirectory(new File(Environment.Instance.getProghome()+"/vorlagen"));
 		
 		explorer.setFileFilter(new FileFilter() {
 			public boolean accept(File f) {

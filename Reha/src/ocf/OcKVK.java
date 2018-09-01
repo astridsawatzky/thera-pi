@@ -26,6 +26,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import CommonTools.StringTools;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import opencard.core.event.CTListener;
 import opencard.core.event.CardTerminalEvent;
@@ -251,7 +252,7 @@ public class OcKVK {
 			        	in = new ByteArrayInputStream(resultpd); 
 			        	//System.out.println(new String(resultpd));
 			        	/*****ausschalten nach Test******/
-			        	InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKpd.zip",resultpd);
+			        	InDatei(Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/eGKpd.zip",resultpd);
 			        	out = Unzip("",in);
 			        	in.close();
 			        	out.flush();
@@ -351,7 +352,7 @@ public class OcKVK {
 			        try{
 			        	in = new ByteArrayInputStream(resultvd); 
 			        	/*****ausschalten nach Test******/
-			        	InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKvd.zip",resultvd);
+			        	InDatei(Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/eGKvd.zip",resultvd);
 			        	out = Unzip("",in);
 			        	in.close();
 			        	out.flush();
@@ -384,8 +385,8 @@ public class OcKVK {
 							String rs1 = resultString.substring(0,resultString.lastIndexOf("<?xml version"));
 							String rs2 = resultString.substring(resultString.lastIndexOf("<?xml version"));
 							if(mustdebug){
-								InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKvd",rs1.getBytes());
-								InDatei(Reha.proghome+"temp/"+Reha.aktIK+"/eGKzd",rs2.getBytes());
+								InDatei(Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/eGKvd",rs1.getBytes());
+								InDatei(Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/eGKzd",rs2.getBytes());
 							}
 
 							org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(rs1.getBytes()));

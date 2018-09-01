@@ -174,7 +174,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Patienten und Rezepte");
 		jxLink.setToolTipText("Strg+P = Patienten-/Rezeptstamm starten");
-		img = new ImageIcon(Reha.proghome+"icons/kontact_contacts.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/kontact_contacts.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -223,7 +223,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setText("Ärzte");
 		jxLink.setActionCommand("Arztstamm");
 		jxLink.setToolTipText("Strg+A = Arztstamm starten");
-		img = new ImageIcon(Reha.proghome+"icons/system-users.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/system-users.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));				
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -232,7 +232,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("Krankenkassen");
 		jxLink.setToolTipText("Strg+K = Kassenstamm starten");
-		img = new ImageIcon(Reha.proghome+"icons/krankenkasse.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/krankenkasse.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));				
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -251,11 +251,11 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
 		tp4.setUI(wui);		
 		tp4.setTitle("Termin-Management");
-		tp4.setIcon(new ImageIcon(Reha.proghome+"icons/table_mode.png"));				
+		tp4.setIcon(new ImageIcon(Environment.Instance.getProghome()+"icons/table_mode.png"));				
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Terminkalender starten");
 		jxLink.setToolTipText("Strg+T = Terminkalender starten");
-		img = new ImageIcon(Reha.proghome+"icons/evolution-addressbook.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/evolution-addressbook.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -305,7 +305,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setText(srugl);
 		//jxLink.setText("[Ru:gl] - Die Terminsuchmaschine");
 		jxLink.setToolTipText("Strg+R = [Ru:gl] starten");
-		img = new ImageIcon(Reha.proghome+"icons/orca.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/orca.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.setActionCommand("[Ru:gl] - Die Terminsuchmaschine");
@@ -313,7 +313,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp4.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("Wochenarbeitszeiten definieren");
-		img = new ImageIcon(Reha.proghome+"icons/alacarte.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/alacarte.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -321,7 +321,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("Akutliste - kurzfristige Termine");
 		jxLink.setActionCommand("Akutliste");
-		img = new ImageIcon(Reha.proghome+"icons/vcalendar.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/vcalendar.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -330,7 +330,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("Thera-\u03C0"+" Erinnerungs-System");
 		//img = new ImageIcon(Reha.proghome+"icons/wecker.gif").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		img = new ImageIcon(Reha.proghome+"icons/chronometer.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/chronometer.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.setActionCommand("neuerwecker");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
@@ -428,21 +428,21 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Thera-PI - Nachrichten");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Reha.proghome+"icons/emblem-mail.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/emblem-mail.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.addActionListener(this);
 		tp5.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("Thera-PI - Browser");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Reha.proghome+"icons/home.gif").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/home.gif").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.addActionListener(this);
 		tp5.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("piTool - ScreenShots");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Reha.proghome+"icons/camera_unmount.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/camera_unmount.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		//Reha.proghome+"icons/cameraklein.png"
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piTool");
@@ -452,7 +452,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("piHelp - Hifetextgenerator");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
-		img = new ImageIcon(Reha.proghome+"icons/fragezeichenklein.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/fragezeichenklein.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piHelp");
 		jxLink.addActionListener(this);
@@ -461,7 +461,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("Textbausteine - Therapiebericht");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
-		img = new ImageIcon(Reha.proghome+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piTextb");
 		jxLink.addActionListener(this);
@@ -471,7 +471,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("Textbausteine - Gutachten");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
-		img = new ImageIcon(Reha.proghome+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piArztTextb");
 		jxLink.addActionListener(this);
@@ -481,30 +481,30 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("ICD-10 Recherche");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
-		img = new ImageIcon(Reha.proghome+"icons/mag.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/mag.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piIcd10");
 		jxLink.addActionListener(this);
 		//jxLink.setEnabled(false);
 		tp5.add(jxLink);
-		File f = new File(Reha.proghome+"QMHandbuch.jar");
+		File f = new File(Environment.Instance.getProghome()+"QMHandbuch.jar");
 		if(f.exists()){
 			jxLink = new JXHyperlink();
 			jxLink.setText("QM-Handbuch");
 			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
-			img = new ImageIcon(Reha.proghome+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+			img = new ImageIcon(Environment.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 			jxLink.setIcon(new ImageIcon(img));
 			jxLink.setActionCommand("piQM");
 			jxLink.addActionListener(this);
 			//jxLink.setEnabled(false);
 			tp5.add(jxLink);
 		}
-		f = new File(Reha.proghome+"QMAuswertung.jar");
+		f = new File(Environment.Instance.getProghome()+"QMAuswertung.jar");
 		if(f.exists()){
 			jxLink = new JXHyperlink();
 			jxLink.setText("QM-Auswertungen");
 			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
-			img = new ImageIcon(Reha.proghome+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+			img = new ImageIcon(Environment.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 			jxLink.setIcon(new ImageIcon(img));
 			jxLink.setActionCommand("piAW");
 			jxLink.addActionListener(this);
@@ -528,10 +528,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp2.setUI(wui);
 		
 		tp2.setTitle("Systemeinstellungen");
-		tp2.setIcon(new ImageIcon(Reha.proghome+"icons/pdf.gif"));				
+		tp2.setIcon(new ImageIcon(Environment.Instance.getProghome()+"icons/pdf.gif"));				
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Benutzerverwaltung");
-		img = new ImageIcon(Reha.proghome+"icons/contact-new.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/contact-new.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -539,7 +539,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp2.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("System Initialisierung");
-		img = new ImageIcon(Reha.proghome+"icons/galternatives.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+		img = new ImageIcon(Environment.Instance.getProghome()+"icons/galternatives.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -784,7 +784,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				*/
 				new Thread(){
 					public void run(){
-						new LadeProg(Reha.proghome+"RehaWissen.jar");		
+						new LadeProg(Environment.Instance.getProghome()+"RehaWissen.jar");		
 					}
 				}.start();
 				new SwingWorker<Void,Void>(){
@@ -814,7 +814,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 					new Thread(){
 						public void run(){
-							new LadeProg(Reha.proghome+"RehaMail.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));		
+							new LadeProg(Environment.Instance.getProghome()+"RehaMail.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));		
 						}
 					}.start();
 					
@@ -850,8 +850,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					public void run(){
 						try{
 							//Runtime.getRuntime().exec(Reha.proghome+"piHelp.jar");
-							new LadeProg(Reha.proghome+"piHelp.jar "+
-									Reha.proghome+" "+Reha.aktIK);
+							new LadeProg(Environment.Instance.getProghome()+"piHelp.jar "+
+									Environment.Instance.getProghome()+" "+Reha.aktIK);
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -884,12 +884,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				break;
 			}
 			if (cmd.equals("piTool")){
-				new LadeProg(Reha.proghome+"piTool.jar");				
+				new LadeProg(Environment.Instance.getProghome()+"piTool.jar");				
 				break;
 			}
 			if (cmd.equals("piTextb")){
-				new LadeProg(Reha.proghome+"TBedit.jar "+
-						Reha.proghome+" "+Reha.aktIK);	
+				new LadeProg(Environment.Instance.getProghome()+"TBedit.jar "+
+						Environment.Instance.getProghome()+" "+Reha.aktIK);	
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -915,8 +915,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				}
 				new Thread(){
 					public void run(){
-						new LadeProg(Reha.proghome+"ArztBaustein.jar "+
-								Reha.proghome+" "+Reha.aktIK);	
+						new LadeProg(Environment.Instance.getProghome()+"ArztBaustein.jar "+
+								Environment.Instance.getProghome()+" "+Reha.aktIK);	
 					}
 				}.start();
 				
@@ -939,12 +939,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				break;
 			}
 			if (cmd.equals("piIcd10")){
-				new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+				new LadeProg(Environment.Instance.getProghome()+"ICDSuche.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
 			}
 			if (cmd.equals("piQM")){
 				new Thread(){
 					public void run(){
-						new LadeProg(Reha.proghome+"QMHandbuch.jar");		
+						new LadeProg(Environment.Instance.getProghome()+"QMHandbuch.jar");		
 					}
 				}.start();
 				new SwingWorker<Void,Void>(){
@@ -968,7 +968,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			if (cmd.equals("piAW")){
 				new Thread(){
 					public void run(){
-						new LadeProg(Reha.proghome+"QMAuswertung.jar"+" "+Reha.proghome+" "+Reha.aktIK);		
+						new LadeProg(Environment.Instance.getProghome()+"QMAuswertung.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);		
 					}
 				}.start();
 				new SwingWorker<Void,Void>(){
@@ -1071,12 +1071,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		
 	}
 	private boolean testUserTask(){
-		File f = new File(Reha.proghome+"ini/"+Reha.aktIK+"/usertask.ini");
+		File f = new File(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/usertask.ini");
 		if(! f.exists()){
 			return false;
 		}
 		try{
-			INIFile utask = new INIFile(Reha.proghome+"ini/"+Reha.aktIK+"/usertask.ini");
+			INIFile utask = new INIFile(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/usertask.ini");
 			int tasks = Integer.parseInt(utask.getStringProperty("UserTasks", "AnzahlUserTasks"));
 			if(tasks == 0){
 				return false;

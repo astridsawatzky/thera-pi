@@ -32,6 +32,7 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 
 public class SysUtilAbrechnungFormulare extends JXPanel implements KeyListener, ActionListener {
@@ -304,7 +305,7 @@ public class SysUtilAbrechnungFormulare extends JXPanel implements KeyListener, 
 	private void doSpeichern(){
 		try{
 		String wert = "";
-		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "abrechnung.ini");
+		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "abrechnung.ini");
 		inif.setStringProperty("HMGKVRechnung", "Rformular",tf[0].getText().trim() , null);
 		inif.setStringProperty("HMGKVRechnung", "Rdrucker",((String) jcmb[0].getSelectedItem()).trim() , null);
 		inif.setStringProperty("HMGKVRechnung", "Tdrucker",((String) jcmb[1].getSelectedItem()).trim() , null);
@@ -346,7 +347,7 @@ public class SysUtilAbrechnungFormulare extends JXPanel implements KeyListener, 
 		final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(Reha.proghome+"/vorlagen/"+Reha.aktIK);
+        final File file = new File(Environment.Instance.getProghome()+"/vorlagen/"+Reha.aktIK);
 
         chooser.setCurrentDirectory(file);
 

@@ -8,6 +8,7 @@ import javax.mail.internet.AddressException;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import emailHandling.EmailSendenExtern;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -28,7 +29,7 @@ public class ErrorMail extends Thread{
 		start();
 	}
 	public void run(){
-		INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "error.ini"); 
+		INIFile ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "error.ini"); 
 		String empfaenger = ini.getStringProperty("Email", "RecipientAdress");
 		   EmailSendenExtern oMail = new EmailSendenExtern();
 			String smtphost = SystemConfig.hmEmailIntern.get("SmtpHost");

@@ -10,6 +10,7 @@ import java.util.Vector;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 
 public class SystemPreislisten {
@@ -68,9 +69,9 @@ public class SystemPreislisten {
 		}
 		int tarife = -1;
 		try{
-			inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "preisgruppen.ini");
+			inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "preisgruppen.ini");
 			tarife = inif.getIntegerProperty("PreisGruppen_"+diszis[treffer], "AnzahlPreisGruppen");
-			fristenini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "fristen.ini");		
+			fristenini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "fristen.ini");		
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

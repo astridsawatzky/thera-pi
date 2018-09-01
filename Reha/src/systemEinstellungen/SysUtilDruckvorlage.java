@@ -50,6 +50,7 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.printing.IPrinter;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hilfsFenster.EmailText;
 
@@ -424,7 +425,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		}
 		try{
 		
-		INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "terminliste.ini");
+		INIFile ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminliste.ini");
 		ini.setStringProperty("TerminListe1", "AnzahlTabellen", Integer.valueOf( test1).toString(), null);
 		SystemConfig.oTerminListe.AnzahlTerminTabellen = test1;
 		
@@ -496,7 +497,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(Reha.proghome+"/vorlagen/"+Reha.aktIK);
+        final File file = new File(Environment.Instance.getProghome()+"/vorlagen/"+Reha.aktIK);
 
         chooser.setCurrentDirectory(file);
 
@@ -530,7 +531,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 	/*************************************/
 	private void vorlageBearbeiten(){
 		IDocumentService documentService = null;
-		String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim();
+		String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim();
 		//String url = urlx.replaceAll("/", "\\\\");
 		////System.out.println("Url = -------------->"+url);
 		try {
@@ -591,7 +592,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		
 	}	
 	private void testDruck(){
-		String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim(); 
+		String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim(); 
 		////System.out.println("***************URL = "+url+"****************");
 		String terminDrucker = (String) druckername.getSelectedItem();
 		Vector<TermObjekt> termindat = new Vector<TermObjekt>();

@@ -28,6 +28,7 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.printing.IPrinter;
 import emailHandling.EmailSendenExtern;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -59,7 +60,7 @@ SuchenSeite eltern;
 	}
 	
 	public synchronized void run() {
-			String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
+			String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
 			//String url = Reha.proghome+"vorlagen/"+SystemConfig.oTerminListe.NameTemplate; 
 			////System.out.println("***************URL = "+url+"****************");
 			String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
@@ -423,7 +424,7 @@ SuchenSeite eltern;
 				}
 			}else{
 				
-				exporturl = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+				exporturl = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 				File f = new File(exporturl);
 				if(f.exists()){
 					f.delete();
@@ -526,7 +527,7 @@ SuchenSeite eltern;
 		}
 		/*****************bis hierher lediglich Emailadressen gewurschtel**************************/
 		String[] anhang = {null,null};
-		anhang[0] = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+		anhang[0] = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
 		
 		File f = new File(anhang[0]);
@@ -564,7 +565,7 @@ SuchenSeite eltern;
 		boolean bestaetigen = (SystemConfig.hmEmailExtern.get("Bestaetigen").equals("0") ? false : true);
 		String text = "";
 		/*********/
-		 File file = new File(Reha.proghome+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+		 File file = new File(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
 	      try {
 	         // FileReader zum Lesen aus Datei
 	         FileReader fr = new FileReader(file);

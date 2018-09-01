@@ -33,6 +33,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.ColorEditor;
 import jxTableTools.ColorRenderer;
@@ -294,7 +295,7 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 				defName = "UserFarben";
 			}
 			
-			INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", colorini);
+			INIFile ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", colorini);
 
 			for(int i = 0; i<lang;i++){
 				hg = ((Color)FarbTab.getValueAt(i, 2));

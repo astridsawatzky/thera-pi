@@ -129,9 +129,9 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			if(xansicht != 2){
 				String stag = DatFunk.sHeute();
 				String titel = DatFunk.WochenTag(stag)+" "+stag+" -- KW: "+DatFunk.KalenderWoche(stag)+" -- [Normalansicht]";
-				terminjry = new JTerminInternal(titel,new ImageIcon(Reha.proghome+"icons/calendar.png"),containerNr);				
+				terminjry = new JTerminInternal(titel,new ImageIcon(Environment.Instance.getProghome()+"icons/calendar.png"),containerNr);				
 			}else{
-				terminjry = new JTerminInternal("Terminkalender - "+DatFunk.sHeute(),new ImageIcon(Reha.proghome+"icons/calendar.png"),containerNr);
+				terminjry = new JTerminInternal("Terminkalender - "+DatFunk.sHeute(),new ImageIcon(Environment.Instance.getProghome()+"icons/calendar.png"),containerNr);
 			}
 			terminjry.setName(name);
 			((JRehaInternal)terminjry).setImmerGross((SystemConfig.hmContainer.get("KalenderOpti")==1 ? true : false));
