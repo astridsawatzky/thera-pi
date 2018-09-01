@@ -1903,7 +1903,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 					try {
 						
-						if(Reha.osVersion.contains("Windows")){
+						if(Environment.Instance.isWindows()){
 							datei = datei.replaceAll("/", "\\\\");
 						}
 						long zeit1 = System.currentTimeMillis();

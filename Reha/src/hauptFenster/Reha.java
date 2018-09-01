@@ -273,7 +273,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static String kalMin = "";
 	public static String kalMax = "";
 	public static String Titel2;
-	public static String osVersion = ""; 
+	//public static String osVersion = ""; 
 	public int vollsichtbar = 0; 
 	public JDesktopPane deskrechts = new JDesktopPane();
 	public JDesktopPane[] desktops = {null,null,null,null};
@@ -369,7 +369,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	
 	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
 	
-	public static boolean isLinux = false;
 	
 	/*
 	 * Einschalten für Geschwindigkeitstests
@@ -381,7 +380,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	
 	
 	public static void main(String[] args) {
-		findProghome();
 		
 		
 		String javaPfad = java.lang.System.getProperty("java.home").replaceAll("\\\\","/");
@@ -646,27 +644,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		});
 
 		
-	}
-	private static void findProghome() {
-		String prog = java.lang.System.getProperty("user.dir");
-		String homedir = java.lang.System.getProperty("user.home");
-		osVersion = System.getProperty("os.name");
-		if(osVersion.contains("Linux")){
-			Environment.Instance.setProghome("/opt/RehaVerwaltung/");
-			isLinux = true;
-		}else if(osVersion.contains("Windows")){
-			Environment.Instance.setProghome(prog.substring(0, 2)+"/RehaVerwaltung/");
-		}else if(osVersion.contains("Mac OS X")){
-			//welcher Rückgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhänger ermittelt werden
-			System.out.println("Vermutlich MAC, Output = "+osVersion);
-			Environment.Instance.setProghome(homedir+"/RehaVerwaltung/");
-		}
-		if (! (new File(Environment.Instance.getProghome() + "Rehaverwaltung").exists())) {
-			System.out.println("setting Directory to default");
-			Environment.Instance.setProghome("C:/RehaVerwaltung/");
-		}
-		//Reha.proghome = "C:/RehaVerwaltung/";
-		System.out.println("Programmverzeichnis = "+Environment.Instance.getProghome());
 	}
 	public void setzeInitEnde(){
 		new SwingWorker<Void,Void>(){
@@ -1677,7 +1654,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				        	mitgebracht  = String.valueOf((String) tr.getTransferData(flavors[i]).toString());
 				      }
 				      */
-				      if(Reha.osVersion.contains("Linux")){
+				      if(Environment.Instance.isLinux()){
 				    	  if(Reha.dragDropComponent instanceof JRtaTextField){
 				    		  mitgebracht = ((JRtaTextField)Reha.dragDropComponent).getText();
 				    	  }
@@ -1726,7 +1703,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		    copyLabel.setTransferHandler(new TransferHandler(propertyName));
 		    copyLabel.setName("copyLabel");
 		    /*********************/
-		    if(Reha.osVersion.contains("Linux")){
+		    if(Environment.Instance.isLinux()){
 		    	DragGestureListener dragGestureListener = new DragGestureListener() {
 		    	     public void dragGestureRecognized(
 		    	       DragGestureEvent e) {

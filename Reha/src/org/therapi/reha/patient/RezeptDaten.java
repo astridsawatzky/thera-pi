@@ -31,6 +31,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaLabel;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
+import hauptFenster.Environment;
 import hauptFenster.Reha;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
@@ -358,7 +359,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 			      JComponent c = (JComponent)draghandler;
 			      TransferHandler th = c.getTransferHandler();
 			      th.exportAsDrag(c, e, TransferHandler.COPY); //TransferHandler.COPY
-			      if(Reha.osVersion.contains("Linux")){
+			      if(Environment.Instance.isLinux()){
 		    		  Reha.dragDropComponent = (JComponent) draghandler;
 			      }			      
 
