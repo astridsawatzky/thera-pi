@@ -6,9 +6,7 @@ public enum Environment {
 	Instance;
 	
 	String proghome="";
-	
-	private boolean isLinux;
-	private boolean isWindows;
+	OS currentOS = OS.WIN;
 	
 	public  String getProghome() {
 		return proghome;
@@ -17,10 +15,10 @@ public enum Environment {
 		this.proghome = proghome;
 	}
 	public boolean isLinux() {
-		return this.isLinux;
+		return currentOS.isLinux();
 	}
 	public boolean isWindows() {
-		return this.isWindows;
+		return currentOS.isWindows();
 	}
 	
 	Environment() {
@@ -30,12 +28,14 @@ public enum Environment {
 		osVersion = System.getProperty("os.name");
 		if(osVersion.contains("Linux")){
 			setProghome("/opt/RehaVerwaltung/");
-			isLinux = true;
+			currentOS=OS.Linux;
 		}else if(osVersion.contains("Windows")){
 			setProghome(prog.substring(0, 2)+"/RehaVerwaltung/");
-			isWindows = true;
+			currentOS = OS.WIN;
 		}else if(osVersion.contains("Mac OS X")){
-			//welcher Rückgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhänger ermittelt werden
+			currentOS=OS.MAC;
+			/**XXX: es wird zwar geprueft, ob man auf Mac ist, hat aber ausser dem pfad keine weitere Konsequenzen
+			welcher Rueckgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhänger ermittelt werden **/
 			System.out.println("Vermutlich MAC, Output = "+osVersion);
 			setProghome(homedir+"/RehaVerwaltung/");
 		}
@@ -44,5 +44,44 @@ public enum Environment {
 			setProghome("C:/RehaVerwaltung/");
 		}
 		System.out.println("Programmverzeichnis = "+getProghome());
+	}
+	private enum OS{
+		WIN {
+			@Override
+			boolean isLinux() {
+				return false;
+			}
+
+			@Override
+			boolean isWindows() {
+				return true;
+			}
+		},
+		Linux {
+			@Override
+			boolean isLinux() {
+				return true;
+			}
+
+			@Override
+			boolean isWindows() {
+				return false;
+			}
+		},
+		MAC {
+			@Override
+			boolean isLinux() {
+				return false;
+			}
+
+			@Override
+			boolean isWindows() {
+				return false;
+			}
+		};
+		abstract boolean isLinux();
+		abstract boolean isWindows();
+		
+		
 	}
 }

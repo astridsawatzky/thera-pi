@@ -273,7 +273,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static String kalMin = "";
 	public static String kalMax = "";
 	public static String Titel2;
-	//public static String osVersion = ""; 
 	public int vollsichtbar = 0; 
 	public JDesktopPane deskrechts = new JDesktopPane();
 	public JDesktopPane[] desktops = {null,null,null,null};
@@ -382,11 +381,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static void main(String[] args) {
 		
 		
-		String javaPfad = java.lang.System.getProperty("java.home").replaceAll("\\\\","/");
-		/*
-		INITool.setDBInis(new String[] {"preisgruppen.ini","terminkalender.ini","gruppen.ini","icons.ini","fristen.ini","color.ini",
-			"dta301.ini","firmen.ini","gutachten.ini","ktraeger.ini","offeneposten.ini","oprgaf.ini","sqlmodul.ini","thbericht.ini"});
-		*/
 		
 		if(args.length > 0){
 			String[] split = args[0].split("@");
@@ -456,46 +450,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				e.printStackTrace();
 			}
 		}
-		/*
-		 * War nur bis WinXP sinnvoll einsetzbar
-		new SocketClient().setzeInitStand("Überprüfe Dateisystem");
-		File f = null;
-		if(osVersion.contains("Windows")){
-			f = new File(javaPfad+"/bin/win32com.dll");
-			if(! f.exists()){
-				new SocketClient().setzeInitStand("Kopiere win32com.dll");
-				try {
-					FileTools.copyFile(new File(proghome+"Libraries/lib/serial/win32com.dll"),f, 4096, false);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}else{
-				////System.out.println("Systemdateien win32com.dll existiert bereits, kopieren nicht erforderlich");
-			}	
-		}	
-		f = new File(javaPfad+"/lib/ext/comm.jar");
-		if(! f.exists()){
-			try {
-				new SocketClient().setzeInitStand("Kopiere comm.jar");
-				FileTools.copyFile(new File(proghome+"Libraries/lib/serial/comm.jar"),f, 4096, false);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}else{
-			////System.out.println("Systemdateien comm.jar existiert bereits, kopieren nicht erforderlich");
-		}
-		f = new File(javaPfad+"/lib/javax.comm.properties");
-		if(! f.exists()){
-			try {
-				new SocketClient().setzeInitStand("Kopiere javax.comm.properties");
-				FileTools.copyFile(new File(proghome+"Libraries/lib/serial/javax.comm.properties"),f, 4096, false);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}else{
-			////System.out.println("Systemdateien javax.comm.properties existiert bereits, kopieren nicht erforderlich");
-		}
-		*/
+	
 		new Thread(){
 			public void run(){
 				
@@ -566,7 +521,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		//Font[] fonts = {new Font(name, 0, size), new Font(name, 1, size),
 		//new Font(name, 2, size), new Font(name, 3, size)}; 
 		UIDefaults defs = (UIDefaults) UIManager.getLookAndFeelDefaults().clone();
-
 		for(Iterator ii = new HashSet(defs.keySet()).iterator(); ii.hasNext(); ) {   
 			Object key = ii.next();
 			if(key.equals("FormattedTextField.font")){
@@ -1728,7 +1682,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		     DragSource dragSource = new DragSource();
 		     
 		     
-			DragGestureRecognizer dgr = dragSource.createDefaultDragGestureRecognizer(
+			dragSource.createDefaultDragGestureRecognizer(
 		    	    		copyLabel, 
 		    	    		DnDConstants.ACTION_COPY, 
 		    	    		dragGestureListener);
