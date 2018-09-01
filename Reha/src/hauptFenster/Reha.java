@@ -396,7 +396,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			System.out.println("Vermutlich MAC, Output = "+osVersion);
 			proghome = homedir+"/RehaVerwaltung/";
 		}
-		
+		if (! (new File(proghome + "Rehaverwaltung").exists())) {
+			System.out.println("setting Directory to default");
+			proghome = "C:/RehaVerwaltung/";
+		}
 		//Reha.proghome = "C:/RehaVerwaltung/";
 		System.out.println("Programmverzeichnis = "+Reha.proghome);
 		
