@@ -34,6 +34,7 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
@@ -43,7 +44,6 @@ import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemTools.ButtonTools;
 import terminKalender.DatFunk;

@@ -31,6 +31,7 @@ import com.sun.star.text.XTextViewCursor;
 import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
 
+import CommonTools.Environment;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
@@ -49,7 +50,6 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextRange;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.noa.frame.ILayoutManager;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;

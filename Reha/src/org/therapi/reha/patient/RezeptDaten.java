@@ -26,12 +26,12 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaLabel;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;

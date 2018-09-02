@@ -34,13 +34,13 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
+import CommonTools.Environment;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.noa.graphic.GraphicInfo;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import sun.awt.image.ImageFormatException;
 

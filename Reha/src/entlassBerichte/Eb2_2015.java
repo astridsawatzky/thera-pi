@@ -34,11 +34,11 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemTools.SetMaxText;
 

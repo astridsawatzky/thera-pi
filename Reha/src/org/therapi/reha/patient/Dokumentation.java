@@ -86,6 +86,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.mysql.jdbc.PreparedStatement;
 
 import CommonTools.Colors;
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JCompTools;
@@ -100,7 +101,6 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import dialoge.ToolsDialog;
 import generalSplash.RehaSplash;
 import geraeteInit.ScannerUtil;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import oOorgTools.OOTools;

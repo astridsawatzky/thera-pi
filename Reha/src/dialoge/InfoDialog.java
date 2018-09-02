@@ -40,6 +40,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
@@ -47,7 +48,6 @@ import CommonTools.StringTools;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;

@@ -25,11 +25,11 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
+import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 
 public class SysUtilVerkauf extends JXPanel {

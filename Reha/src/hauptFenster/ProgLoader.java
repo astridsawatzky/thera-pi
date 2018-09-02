@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 
 import org.therapi.reha.patient.PatientHauptPanel;
 
+import CommonTools.Environment;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import anmeldungUmsatz.Anmeldungen;

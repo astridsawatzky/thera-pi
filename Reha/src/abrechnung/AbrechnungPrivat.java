@@ -39,6 +39,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.AdressTools;
+import CommonTools.Environment;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.SqlInfo;
@@ -60,7 +61,6 @@ import events.PatStammEventClass;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import oOorgTools.OOTools;

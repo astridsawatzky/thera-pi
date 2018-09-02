@@ -61,6 +61,7 @@ import com.mysql.jdbc.PreparedStatement;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.INITool;
@@ -75,7 +76,6 @@ import events.PatStammEventClass;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;

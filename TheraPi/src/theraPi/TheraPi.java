@@ -40,7 +40,6 @@ public class TheraPi{
 		static JLabel standDerDingelbl = null;
 		static boolean socketoffen = false;
 		public static String proghome;
-		//static SockServer sock = null;
 		public static int AnzahlMandanten;
 		public static int AuswahlImmerZeigen;
 		public static int DefaultMandant;		

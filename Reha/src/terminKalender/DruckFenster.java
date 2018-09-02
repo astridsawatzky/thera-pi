@@ -41,6 +41,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 
+import CommonTools.Environment;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ZeitFunk;
@@ -64,7 +65,6 @@ import emailHandling.EmailSendenExtern;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;

@@ -23,10 +23,10 @@ import org.jdesktop.swingx.JXPanel;
 
 import com.sun.star.awt.KeyModifier;
 
+import CommonTools.Environment;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import terminKalender.ParameterLaden;
 

@@ -25,8 +25,8 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import CommonTools.Environment;
 import CommonTools.StringTools;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import opencard.core.event.CTListener;
 import opencard.core.event.CardTerminalEvent;

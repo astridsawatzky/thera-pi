@@ -1,10 +1,11 @@
-package hauptFenster;
+package CommonTools;
 
 import java.io.File;
 
 public enum Environment {
 	Instance;
 	
+	private static final String C_REHA_VERWALTUNG = "C:/RehaVerwaltung/";
 	String proghome="";
 	OS currentOS = OS.WIN;
 	
@@ -15,10 +16,10 @@ public enum Environment {
 		this.proghome = proghome;
 	}
 	public boolean isLinux() {
-		return currentOS.isLinux();
+		return currentOS.is(OS.Linux);
 	}
 	public boolean isWindows() {
-		return currentOS.isWindows();
+		return currentOS.is(OS.WIN);
 	}
 	
 	Environment() {
@@ -41,46 +42,19 @@ public enum Environment {
 		}
 		if (! (new File(getProghome() + "Rehaverwaltung").exists())) {
 			System.out.println("setting Directory to default");
-			setProghome("C:/RehaVerwaltung/");
+			setProghome(C_REHA_VERWALTUNG);
 		}
 		System.out.println("Programmverzeichnis = "+getProghome());
 	}
-	private enum OS{
-		WIN {
-			@Override
-			boolean isLinux() {
-				return false;
-			}
-
-			@Override
-			boolean isWindows() {
-				return true;
-			}
-		},
-		Linux {
-			@Override
-			boolean isLinux() {
-				return true;
-			}
-
-			@Override
-			boolean isWindows() {
-				return false;
-			}
-		},
-		MAC {
-			@Override
-			boolean isLinux() {
-				return false;
-			}
-
-			@Override
-			boolean isWindows() {
-				return false;
-			}
-		};
-		abstract boolean isLinux();
-		abstract boolean isWindows();
+	enum OS{
+		WIN ,
+		Linux ,
+		MAC 
+		;
+		
+		 boolean is(OS toCompare) {
+			return this == toCompare;
+		}
 		
 		
 	}

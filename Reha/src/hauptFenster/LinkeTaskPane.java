@@ -49,6 +49,7 @@ import org.jdesktop.swingx.plaf.windows.WindowsTaskPaneUI;
 import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.LadeProg;
 
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;

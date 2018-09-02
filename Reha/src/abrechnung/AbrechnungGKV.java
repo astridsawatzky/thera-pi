@@ -57,6 +57,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.mysql.jdbc.PreparedStatement;
 
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -68,7 +69,6 @@ import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.PatStammEventListener;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rehaInternalFrame.JAbrechnungInternal;

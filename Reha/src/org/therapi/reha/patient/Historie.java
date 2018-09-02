@@ -56,10 +56,10 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 import dialoge.ToolsDialog;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;

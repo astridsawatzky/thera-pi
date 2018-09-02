@@ -41,6 +41,7 @@ import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
 import CommonTools.Colors;
 import CommonTools.DatFunk;
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -51,7 +52,6 @@ import CommonTools.StringTools;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import rehaInternalFrame.JDta301Internal;

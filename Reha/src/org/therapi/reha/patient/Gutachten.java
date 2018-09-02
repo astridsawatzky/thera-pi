@@ -37,13 +37,13 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import dialoge.ToolsDialog;
 import generalSplash.RehaSplash;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import patientenFenster.GutachtenWahl;

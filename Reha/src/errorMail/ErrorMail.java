@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
+import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import emailHandling.EmailSendenExtern;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 

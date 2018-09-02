@@ -87,6 +87,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.uno.Exception;
 
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -100,7 +101,6 @@ import ag.ion.noa.NOAException;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import jxTableTools.DblCellEditor;

@@ -68,6 +68,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
 import CommonTools.DateTableCellEditor;
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.INITool;
@@ -87,7 +88,6 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hmrCheck.HMRCheck;
 import jxTableTools.MyTableStringDatePicker;

@@ -33,6 +33,7 @@ import org.jdesktop.swingx.JXTitledPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -52,7 +53,6 @@ import dialoge.PinPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ZuzahlTools.ZZStat;

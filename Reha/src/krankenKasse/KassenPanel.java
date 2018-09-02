@@ -64,6 +64,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.INIFile;
@@ -76,7 +77,6 @@ import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rehaInternalFrame.JKasseInternal;

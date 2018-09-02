@@ -25,6 +25,7 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
@@ -47,7 +48,6 @@ import dta301.RVMeldung301;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import patientenFenster.KassenAuswahl;

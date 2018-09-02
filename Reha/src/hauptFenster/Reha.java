@@ -120,6 +120,7 @@ import com.jgoodies.looks.Options;
 import com.sun.star.uno.Exception;
 
 import CommonTools.Colors;
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.FireRehaError;

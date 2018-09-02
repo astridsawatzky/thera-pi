@@ -31,6 +31,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.awt.Size;
 
 import CommonTools.ButtonTools;
+import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
@@ -51,7 +52,6 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import verkauf.model.Artikel;

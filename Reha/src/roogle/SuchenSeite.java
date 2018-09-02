@@ -67,6 +67,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JRtaTextField;
@@ -76,7 +77,6 @@ import CommonTools.ZeitFunk;
 import abrechnung.AbrechnungDlg;
 import dialoge.EmailDialog;
 import dialoge.InfoDialog;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import jxTableTools.ToolTipRenderer;
 import jxTableTools.ZahlTableCellEditor;

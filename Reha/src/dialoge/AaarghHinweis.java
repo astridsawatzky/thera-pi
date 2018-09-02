@@ -3,7 +3,7 @@ package dialoge;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import hauptFenster.Environment;
+import CommonTools.Environment;
 import hauptFenster.Reha;
 
 public class AaarghHinweis {

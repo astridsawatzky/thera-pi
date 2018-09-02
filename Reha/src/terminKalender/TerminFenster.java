@@ -65,6 +65,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.therapi.reha.patient.AktuelleRezepte;
 
+import CommonTools.Environment;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import dialoge.InfoDialog;
@@ -75,7 +76,6 @@ import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import generalSplash.RehaSplash;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hilfsFenster.TerminEinpassen;
 import hilfsFenster.TerminObenUntenAnschliessen;

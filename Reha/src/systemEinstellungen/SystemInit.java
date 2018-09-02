@@ -26,7 +26,7 @@ import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.therapi.reha.patient.LadeProg;
 
-import hauptFenster.Environment;
+import CommonTools.Environment;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rechteTools.Rechte;

@@ -33,13 +33,13 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import terminKalender.DatFunk;

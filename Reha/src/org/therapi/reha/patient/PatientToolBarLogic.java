@@ -19,11 +19,11 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import CommonTools.Environment;
 import CommonTools.StringTools;
 import dialoge.EmailDialog;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;

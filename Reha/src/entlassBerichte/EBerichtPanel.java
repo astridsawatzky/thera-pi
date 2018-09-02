@@ -50,6 +50,7 @@ import org.therapi.reha.patient.LadeProg;
 
 import com.mysql.jdbc.PreparedStatement;
 
+import CommonTools.Environment;
 import CommonTools.FileTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -77,7 +78,6 @@ import errorMail.ErrorMail;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rechteTools.Rechte;

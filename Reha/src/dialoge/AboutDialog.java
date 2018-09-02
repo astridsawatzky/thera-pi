@@ -39,7 +39,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
-import hauptFenster.Environment;
+import CommonTools.Environment;
 import hauptFenster.Reha;
 
 /**

@@ -21,12 +21,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import CommonTools.Environment;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;

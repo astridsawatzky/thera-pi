@@ -29,6 +29,7 @@ import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXPanel;
 
+import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
@@ -40,7 +41,6 @@ import events.PatStammEvent;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import hauptFenster.SuchenDialog;
 import krankenKasse.KassenFormulare;

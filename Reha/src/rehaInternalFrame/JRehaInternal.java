@@ -51,10 +51,10 @@ import org.jdesktop.swingx.border.DropShadowBorder;
 
 import com.jgoodies.looks.plastic.PlasticInternalFrameUI;
 
+import CommonTools.Environment;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;

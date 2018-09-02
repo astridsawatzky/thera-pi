@@ -31,6 +31,7 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.therapi.reha.patient.PatientMemoPanel;
 
+import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
@@ -39,7 +40,6 @@ import dialoge.PinPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 

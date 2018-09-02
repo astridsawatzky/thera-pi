@@ -19,9 +19,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import CommonTools.Environment;
 import CommonTools.ZeitFunk;
 import dialoge.EmailDialog;
-import hauptFenster.Environment;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 

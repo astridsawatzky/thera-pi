@@ -7,7 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import hauptFenster.Environment;
+import CommonTools.Environment;
 import hauptFenster.Reha;
 
 
