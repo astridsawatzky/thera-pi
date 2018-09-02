@@ -24,6 +24,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
+import CommonTools.Environment;
+
 
 
 
@@ -51,18 +53,7 @@ public class TheraPi{
 		public static void main(String[] args) {
 			setLookAndFeel();
 			
-			if (args.length == 0) {
-				String prog = java.lang.System.getProperty("user.dir");
-				if (System.getProperty("os.name").contains("Linux")) {
-					proghome = "/opt/RehaVerwaltung/";
-				} else if (System.getProperty("os.name").contains("Windows")) {
-					proghome = prog.substring(0, 2) + "/RehaVerwaltung/";
-				} else if (System.getProperty("os.name").contains("Mac")) {
-					proghome = "/opt/RehaVerwaltung/";
-				} 
-			} else {
-				proghome = "C:/RehaVerwaltung/";
-			}
+			proghome= Environment.Instance.getProghome();
 			System.out.println("Programmverzeichnis = "+proghome);
 			INIFile inif = new INIFile(proghome+"ini/mandanten.ini");
 			int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
@@ -188,9 +179,9 @@ class RehaStarter extends SwingWorker<Integer,Void>{
 		System.out.println("In TheraPi.jar Programmstart = "+programm);
 		String mandik = TheraPi.StartMandant.split("@")[0];
 		INIFile minif = new INIFile(TheraPi.proghome+"ini/"+mandik+"/rehajava.ini");
+		//FIXME: memsize of JVM should not be hard coded
 		String memsizemin = "-Xms128m ";
 		String memsizemax = "-Xmx256m ";
-		//String memsizethread = "-Xxs2046k ";
 		/****/
 		String dummy = minif.getStringProperty("SystemIntern", "MinMemSize");
 		if(dummy != null){

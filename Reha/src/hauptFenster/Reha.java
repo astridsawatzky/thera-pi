@@ -380,7 +380,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	
 	public static void main(String[] args) {
 		
+		System.setProperty("java.net.preferIPv4Stack" , "true");
 		
+	
 		
 		if(args.length > 0){
 			String[] split = args[0].split("@");
@@ -455,7 +457,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			public void run(){
 				
 				new SocketClient().setzeInitStand("System-Icons laden");
-				
 				while(! Reha.DbOk){
 					try {
 						Thread.sleep(25);
@@ -505,21 +506,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		/***********************/		
 
 		javax.swing.plaf.FontUIResource fontUIDresource = new FontUIResource("Tahoma", Font.PLAIN, 11);
-		/*
-		Font fon= new Font("Tahoma", Font.PLAIN, 11);
-		Attribute[] attr = (Attribute[]) fontUIDresource.getAvailableAttributes();
-		Map attrMap = fontUIDresource.getAttributes();
-		for(int i2 = 0; i2 < attr.length;i2++){
-			System.out.println("Key  = "+attr[i2]);	
-			System.out.println("Wert = "+attrMap.get(attr[i2]));
-		}
-		*/
-
-		//String name = "Tahoma";
-		//int size = 10;
-		//PLAIN=0, BOLD=1, ITALIC=2
-		//Font[] fonts = {new Font(name, 0, size), new Font(name, 1, size),
-		//new Font(name, 2, size), new Font(name, 3, size)}; 
 		UIDefaults defs = (UIDefaults) UIManager.getLookAndFeelDefaults().clone();
 		for(Iterator ii = new HashSet(defs.keySet()).iterator(); ii.hasNext(); ) {   
 			Object key = ii.next();
@@ -542,7 +528,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				UIManager.put(key, fontUIDresource);
 			}
 		}
-		//new ListUIManagerValues();
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				try{
@@ -553,18 +538,13 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				thisClass = application;
 				RehaEventClass rehaEvent = new RehaEventClass();
 			    rehaEvent.addRehaEventListener(thisClass);
-				//new DatenbankStarten().run();
 				new Thread(new DatenbankStarten()).start();
 				application.getJFrame();
 
 				
 				Reha.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( Environment.Instance.getProghome()+"icons/Pi_1_0.png" ) );
 				
-				if(!dividerOk){
-					//Reha.thisClass.setDivider(5);
-				}
 				
-				//
 				Reha.thisClass.doCompoundPainter();
 				Reha.thisClass.starteTimer();
 				if(SystemConfig.timerdelay > 0){
@@ -604,15 +584,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			@Override
 			protected Void doInBackground() throws java.lang.Exception {
 				new SocketClient().setzeInitStand("INITENDE");
-				/*
-				try{
-			    //nur zum Test
-			    System.out.println("Abfeuern des ErrorEvents");
-				new FireRehaError(this, RehaEvent.ERROR_EVENT,new String[] {"Reha","Blödsinn\nBlödsinn"});
-				}catch(NullPointerException ex){
-					ex.printStackTrace();
-				}
-				*/
 				return null;
 			}
 		}.execute();
@@ -3135,6 +3106,7 @@ final class DatenbankStarten implements Runnable{
 				
 
 				Reha.sysConf.SystemInit(3);
+				
 				ParameterLaden.Passwort();
 				new SocketClient().setzeInitStand("Systemparameter ok");
 				
