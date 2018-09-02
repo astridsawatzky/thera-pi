@@ -392,7 +392,6 @@ private JPanel getKnopfPanel(){
 		try{
 			String wert = "";
 			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
-			//System.out.println(Reha.proghome+"ini/"+Reha.aktIK+"/patient.ini");
 			wert = (unten.isSelected() ? "1" : "0");
 			SystemConfig.hmContainer.put("Arzt", Integer.valueOf(wert));
 			inif.setStringProperty("Container", "StarteIn",wert , null);

@@ -576,10 +576,8 @@ public void run(){
 
 	try {
 		String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
-		//String url = Reha.proghome+"vorlagen/"+SystemConfig.oTerminListe.NameTemplate; 
 		////System.out.println("***************URL = "+url+"****************");
 		String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
-		//String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
 		int anzahl = oOTermine.size();
 		int AnzahlTabellen = SystemConfig.oTerminListe.AnzahlTerminTabellen;
 		int maxTermineProTabelle = SystemConfig.oTerminListe.AnzahlTermineProTabelle;

@@ -116,11 +116,6 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		/****/
 		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
 		/****/
-	     /*
-	     JLabel jlbl = new JLabel("");
-	     jlbl.setIcon(new ImageIcon(Reha.proghome+"icons/werkzeug.gif"));
-	     add(jlbl,BorderLayout.CENTER);
-	     */
 	     jscr = new JScrollPane();
 	     jscr.setBorder(null);
 	     jscr.setOpaque(false);

@@ -2021,8 +2021,6 @@ public class SystemConfig {
 		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "icons.ini");
 		INIFile iniFallBack = INITool.openIniFallback(Environment.Instance.getProghome()+"defaults/ini/","icons.ini");	// lokale ini (falls aktive ini in DB abgelegt ist)
 		INIFile iniDefault = new INIFile(Environment.Instance.getProghome()+"defaults/ini/icons.ini");					// ini im defaults-Pfad, die ist immer da
-		//System.out.println("inif: "+Reha.proghome+"ini/"+Reha.aktIK+"/");
-		//System.out.println("iniFallBack: "+Reha.proghome+"defaults/ini/");
 
 		hmSysIcons = new HashMap<String,ImageIcon>();
 		Image ico = null;

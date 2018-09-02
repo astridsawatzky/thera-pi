@@ -933,11 +933,8 @@ public class OOTools{
 	/*******************************************************************************************/
 
 	public static void starteTaxierung(String url,HashMap<String,String> taxWerte) throws Exception, OfficeApplicationException, NOAException, TextException, DocumentException{
-		//String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA5.ott";
-		//String drucker = "";
 		IDocumentService documentService = null;
 		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
-		////System.out.println("Starte Datei -> "+url);
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();
 		}

@@ -22,7 +22,6 @@ import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragGestureRecognizer;
 import java.awt.dnd.DragSource;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
@@ -288,19 +287,19 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static ImageIcon rehaBackImg = null;
 	public JLabel bunker = null;
 	public JProgressBar Rehaprogress = null;
-	public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
-	public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-	public final Cursor kreuzCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
-	public final Cursor cmove = new Cursor(Cursor.MOVE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cnsize = new Cursor(Cursor.N_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cnwsize = new Cursor(Cursor.NW_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cnesize = new Cursor(Cursor.NE_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cswsize = new Cursor(Cursor.SW_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cwsize = new Cursor(Cursor.W_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor csesize = new Cursor(Cursor.SE_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cssize = new Cursor(Cursor.S_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR);  //  @jve:decl-index=0:	
-	public final Cursor cdefault = new Cursor(Cursor.DEFAULT_CURSOR);  //  @jve:decl-index=0:
+	public final Cursor wartenCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+	public final Cursor normalCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+	public final Cursor kreuzCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+	public final Cursor cmove = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);  
+	public final Cursor cnsize = Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR);  
+	public final Cursor cnwsize = Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR);  
+	public final Cursor cnesize = Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR);  
+	public final Cursor cswsize = Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR);  
+	public final Cursor cwsize = Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);  
+	public final Cursor csesize = Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR);  
+	public final Cursor cssize = Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR);  
+	public final Cursor cesize = Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);  	
+	public final Cursor cdefault = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);  
 	
 	
 	public GradientPaint gp1 = new GradientPaint(0,0,new Color(112,141,255),0,25,Color.WHITE,true);	
@@ -2208,28 +2207,15 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
                 }
             }
         }, AWTEvent.KEY_EVENT_MASK);
-        /*
-        toolkit.addAWTEventListener(new AWTEventListener() {
-
-			@Override
-			public void eventDispatched(AWTEvent event) {
-				// TODO Auto-generated method stub
-				MouseEvent mouseEvent = (MouseEvent) event;
-				if(event instanceof MouseEvent) {
-            		//System.out.println("MausEvent = "+event);
-            	}
-			}
-        	
-        }, AWTEvent.MOUSE_EVENT_MASK);
-        */
+      
     }
     public void setVertDivider(final int variante){
     	//System.out.println("Variante = "+variante);
-    	//Diese Funktion wäre etwas für Michael Schütt
+    	//Diese Funktion wäre etwas für Michael Schuett
     	/*
-    	 * Im Grunde würde es genügen wenn Strg+Pfeil-Links/oder Rechts gedrückt wird,
+    	 * Im Grunde wuerde es genuegen wenn Strg+Pfeil-Links/oder Rechts gedrueckt wird,
     	 * die Arbeitsflächen entweder hälftig oder voll sichtbar darzustellen
-    	 * den Rest müßte man dann einfacht mit der Maus herstellen.
+    	 * den Rest muesste man dann einfach mit der Maus herstellen.
     	 * 
     	 */
     	SwingUtilities.invokeLater(new Runnable(){

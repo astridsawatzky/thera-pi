@@ -1049,24 +1049,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		
 		try {
 			String bcform = SqlInfo.holeEinzelFeld("select barcodeform from verordn where rez_nr='"+aktRezNum.getText().trim()+"' LIMIT 1");
-			String formular = "";
-			/*
-			if(((String)eltern.cmbDiszi.getSelectedItem()).contains("Logo")){
-				formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA4.ott";
-			}else{
-				formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA5.ott";
-			}
-			*/
-			formular = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+tbcombo.getSelectedItem().toString();
-			/*
-			if(bcform.equals("1")){
-				formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA4.ott";
-			}else if(bcform.equals("0")){
-				formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA5.ott";
-			}else{
-				formular = Reha.proghome+"vorlagen/"+Reha.aktIK+"/TaxierungA5.ott";
-			}
-			*/
+			String formular = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+tbcombo.getSelectedItem().toString();
 			OOTools.starteTaxierung(formular, taxWerte);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1155,11 +1138,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			"</STYLE>"+
 			"</head>"+
 			"<body>"+
-			/*
-			"<div style=\"background-image: url("+Reha.proghome+"icons/p302.png); "+
-			"background-repeat:repeat; float:left;\">"+
-			"</div>"+
-			*/
+		
 
 			"<div id=\"center\">"+
 			"<img src=\"file:///"+Environment.Instance.getProghome()+"icons/p302.png\" align=\"center\">"+

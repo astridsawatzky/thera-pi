@@ -1086,13 +1086,6 @@ public class RVEBerichtPDF {
 	private boolean doSeite2_2015(){
 		
 		try {
-			/*
-			String pdfPfad = rvVorlagen[1];
-			tempDateien[1] = new String[]{Reha.proghome+"temp/"+Reha.aktIK+"/EB2"+System.currentTimeMillis()+".pdf"};
-			PdfReader reader = new PdfReader (pdfPfad);
-			PdfStamper stamper2 = new PdfStamper(reader,new  FileOutputStream(tempDateien[1][0]));
-			PdfContentByte cb = stamper2.getOverContent(1);
-			*/
 			/************/
 			tempDateien[1] = new String[]{Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/EB2"+System.currentTimeMillis()+".pdf"};
 			Document docktl = new Document(PageSize.A4);

@@ -57,7 +57,6 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	
 	@Override
 	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
 		if(printPan == null){
 			return null;
 		}
@@ -84,7 +83,6 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 
         
         String imagePath = (Environment.Instance.getProghome()+"ScreenShots/termin__temp.jpg").replace("\\", "/");
-        //String imagePath = "file:///"+Reha.proghome.replace("C:/", "/")+"ScreenShots/termin__temp.jpg";
         
         // Tip aus dem NOA-Forum
         imagePath = "file:///"+imagePath;

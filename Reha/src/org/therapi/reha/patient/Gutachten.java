@@ -524,8 +524,6 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			super();
 			setOpaque(false);
 			hgicon = SystemConfig.hmSysIcons.get("historie"); 
-			//hgicon = new ImageIcon(Reha.proghome+"icons/ChipKarte.png");
-			//hgicon = new ImageIcon(Reha.proghome+"icons/Chip.png");
 			icx = hgicon.getIconWidth()/2;
 			icy = hgicon.getIconHeight()/2;
 			xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.075f); 

@@ -61,15 +61,6 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
 		super();
 		setLayout(new BorderLayout());
 		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
-/*
-        String ss = Reha.proghome+"icons/header-image.png"; //"icons/header-image.png";
-        header = new JXHeader("Mit der Systeminitialisierung....",
-                "....erstellen bzw. ändern Sie die Systemeinstellungen auf Ihre inividuelle Bedürfnisse hin.\n" +
-                "Von den Behandlersets des Terminkalender, Aktualisierungszyklen bis hin zu Pfadangaben und Emailparameter.\n" +
-                "Systemparameter die ein gewisses Maß an Computer-Kenntnisse voraussetzen haben wir mit einem roten Ausrufezeichen versehen.\n\n"+
-                "Sie schließen dieses Fenster über den roten Punkt rechts oben, oder mit der Taste >>ESC<<.",
-                new ImageIcon(ss));
- */
         header = new JXHeader(null,null,null);
         addHeaderEntry(defaultTitel, "Mit der Systeminitialisierung....", 		// den ersten legen wir gleich an; Rest im Hintergrund
                 "....erstellen bzw. ändern Sie die Systemeinstellungen auf Ihre inividuelle Bedürfnisse hin.\n" +
@@ -659,7 +650,6 @@ private void auswertenSysUtil(String util){
 				protected Void doInBackground() throws Exception {
 					try {
 						new LadeProg(Environment.Instance.getProghome()+"Nebraska.jar "+Reha.aktIK);						
-						//Runtime.getRuntime().exec("java -jar "+Reha.proghome+"Nebraska.jar "+Reha.aktIK);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -892,21 +882,7 @@ private void addHeaderEntry(String key, String titel, String text, String icon){
 }
 
 private void headerInfos(){
-//	String sdummy = null;
-//	ImageIcon icodummy = null;
 	/***********Numero uno***********/
-/*
-    sdummy = "Terminkalender-Grundeinstellungen";
-	htitel.put("TKGrundeinstellungen", sdummy);
-	sdummy = "Die Grundeinstellungen beeinflussen die Struktur und die Funktionen der Kalenderdatenbank. Änderungen von Tagesbeginn \n"+
-	"oder -ende führen zur Neudefinition ALLER bestehenden Datenbanken. Dieser Vorgang benötigt viel Rechenkapazität und dauert daher\n"+
-	"entsprechend lange.\n"+
-	"Der Refreshtakt definiert, in welchem Zyklus die Bildschirmanzeige mit der Datenbank abgeglichen wird. Einzelplatzinstallationen\n "+
-	"arbeiten dabei ohne zeitliche Verzögerung.";
-	hdescription.put("TKGrundeinstellungen", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("TKGrundeinstellungen", icodummy);
- */
     addHeaderEntry("TKGrundeinstellungen", "Terminkalender-Grundeinstellungen", 
     		"Die Grundeinstellungen beeinflussen die Struktur und die Funktionen der Kalenderdatenbank. Änderungen von Tagesbeginn \n"+
     				"oder -ende führen zur Neudefinition ALLER bestehenden Datenbanken. Dieser Vorgang benötigt viel Rechenkapazität und dauert daher\n"+
@@ -915,64 +891,23 @@ private void headerInfos(){
     				"arbeiten dabei ohne zeitliche Verzögerung.",
             null);
 	/***********Numero due***********/
-/*
-    sdummy = "Kalenderbenutzer verwalten";
-	htitel.put("Kalenderbenutzer", sdummy);
-	sdummy = "'Kalenderbenutzer' kann ein Behandler, sonstige Mitarbeiter oder auch eine besondere Ressource sein.\n\n"+
-	"Der Matchcode ist die dargestellte Überschrift bzw. der in der Terminsuche verwendete Begriff. Er kann frei vergeben werden\n"+
-	"und ist der Form nicht festgelegt. 'Peter', 'Müller Martina' oder 'Gewürzgurke007' - Alles erlaubt!";
-	hdescription.put("Kalenderbenutzer", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("Kalenderbenutzer", icodummy);
- */
     addHeaderEntry("Kalenderbenutzer", "Kalenderbenutzer verwalten", 
     		"'Kalenderbenutzer' kann ein Behandler, sonstige Mitarbeiter oder auch eine besondere Ressource sein.\n\n"+
     				"Der Matchcode ist die dargestellte Überschrift bzw. der in der Terminsuche verwendete Begriff. Er kann frei vergeben werden\n"+
     				"und ist der Form nicht festgelegt. 'Peter', 'Müller Martina' oder 'Gewürzgurke007' - Alles erlaubt!",
             null);
 	/***********Numero tre***********/
-/*
-    sdummy = "Behandlersets definieren";
-	htitel.put("Behandlersets", sdummy);
-	sdummy = "In Behandlersets werden bis zu 7 Kalenderbenutzer gruppiert, die im Terminkalender gleichzeitig\n"+
-	"nebeneinander dargestellt werden sollen. Im Terminkalender kann über F12 schnell zwischen den verschiedenen Sets\n"+
-	"umgeschaltet werden.";
-	hdescription.put("Behandlersets", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("Behandlersets", icodummy);
- */
     addHeaderEntry("Behandlersets", "Behandlersets definieren", 
     		"In Behandlersets werden bis zu 7 Kalenderbenutzer gruppiert, die im Terminkalender gleichzeitig\n"+
     				"nebeneinander dargestellt werden sollen. Im Terminkalender kann über F12 schnell zwischen den verschiedenen Sets\n"+
     				"umgeschaltet werden.",
             null);
 	/***********Numero tre bi***********/
-/*
-    sdummy = "Terminkalender Startoptionen";
-	htitel.put("Ansichtsoptionen", sdummy);
-	sdummy = "Der Terminkalender startet standardmäßig in der Normalansicht ohne vordefiniertem Behandlerset.\n"+
-	"Hier können Sie die Ansichtsoptionen festlegen die beim starten des Terminkalenders angewendet werden.\n";
-	hdescription.put("Ansichtsoptionen", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("Ansichtsoptionen", icodummy);
- */	
     addHeaderEntry("Ansichtsoptionen", "Terminkalender Startoptionen", 
     		"Der Terminkalender startet standardmäßig in der Normalansicht ohne vordefiniertem Behandlerset.\n"+
     				"Hier können Sie die Ansichtsoptionen festlegen die beim starten des Terminkalenders angewendet werden.\n",
             null);
 	/***********Numero vier***********/
-/*
-    sdummy = "Druckvorlage";
-	htitel.put("DruckvorlageTerminliste", sdummy);
-	sdummy = "In diesem Fenster können für jeden angeschlossenen Rechner Vorgaben zum Druck der Terminliste\n"+
-	"gemacht werden. \n"+
-	"Wenn Sie die Druckvorlagendatei hinsichtlich der Tabellen-, Zeilen- oder Spaltenzahl verändern, müssen diese\n"+
-	"Strukturparameter unbedingt hier ebenfalls angepasst werden, da die Daten sonst nicht korrekt übergeben werden können."+
-	"Angaben zu Papierformat und verwendetem Druckereinzug werden in der Vorlagendatei mit OpenOffice eingestellt.";
-	hdescription.put("DruckvorlageTerminliste", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("DruckvorlageTerminliste", icodummy);
- */
     addHeaderEntry("DruckvorlageTerminliste", "Druckvorlage", 
     		"In diesem Fenster können für jeden angeschlossenen Rechner Vorgaben zum Druck der Terminliste\n"+
     				"gemacht werden. \n"+
@@ -981,19 +916,6 @@ private void headerInfos(){
     				"Angaben zu Papierformat und verwendetem Druckereinzug werden in der Vorlagendatei mit OpenOffice eingestellt.",
             null);
 	/***********Numero fünef***********/
-/*
-    sdummy = "Kalenderfarben definieren";
-	htitel.put("Kalenderfarben", sdummy);
-	sdummy = "Die farbliche Darstellung der Termine im Kalender ist eine sehr effiziente Signalsprache. \n"+
-	"Sie können zwischen 4 vordefinierten Farbkombinationen wählen oder für die jeweilige Bedeutung eine eigene\n"+
-	"Kombination vergeben.\n"+
-	"Besondere Bedeutung haben die Codes 'A' bis 'H', die mit einer Bedeutung frei verknüpft werden können.\n"+
-	"Diese Codes können dann wie in der Tabelle angegeben in den Terminen hinter der Rezeptnummer eingetragen werden\n"+
-	"und bestimmen die Farbgebung (der Code für die Behandlungszeit wird dann nachrangig).";
-	hdescription.put("Kalenderfarben", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("Kalenderfarben", icodummy);
- */
     addHeaderEntry("Kalenderfarben", "Kalenderfarben definieren", 
     		"Die farbliche Darstellung der Termine im Kalender ist eine sehr effiziente Signalsprache. \n"+
     				"Sie können zwischen 4 vordefinierten Farbkombinationen wählen oder für die jeweilige Bedeutung eine eigene\n"+
@@ -1003,61 +925,23 @@ private void headerInfos(){
     				"und bestimmen die Farbgebung (der Code für die Behandlungszeit wird dann nachrangig).",
             null);
 	/***********Numero sex***********/
-/*
-    sdummy = "Gruppentermine definieren";
-	htitel.put("Gruppentermine", sdummy);
-	sdummy = "Gruppentermine ist was für den Spezialisten\n"+
-	"Der wird dann auch den Text schreiben....\n"+
-	"...und beim Hilfetext richtig ins Zeugs legen!";
-	hdescription.put("Gruppentermine", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("Gruppentermine", icodummy);
- */
     addHeaderEntry("Gruppentermine", "Gruppentermine definieren", 
     		"Gruppentermine ist was für den Spezialisten\n"+
     				"Der wird dann auch den Text schreiben....\n"+
     				"...und beim Hilfetext richtig ins Zeugs legen!",
             null);
 	/***********Numero siebene***********/
-/*
-    sdummy = "Kalenderjahr anlegen";
-	htitel.put("Kalenderjahranlegen", sdummy);
-	sdummy = "Hier wird die Kalenderdatenbank um ein weiteres Jahr verlängert. Sinnvoll ist dies, wenn zuvor\n"+
-	"die Arbeitszeitpläne inklusive der Dauertermine auf den aktuellen Stand gebracht wurden (sofern gewünscht). \n"+
-	"Die Feiertagsliste kann importiert werden und durch eigene Daten (z.B. Betriebsausflug, -ferien) ergänzt werden.";
-	hdescription.put("Kalenderjahranlegen", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("Kalenderjahranlegen", icodummy);
- */
     addHeaderEntry("Kalenderjahranlegen", "Kalenderjahr anlegen", 
     		"Hier wird die Kalenderdatenbank um ein weiteres Jahr verlängert. Sinnvoll ist dies, wenn zuvor\n"+
     				"die Arbeitszeitpläne inklusive der Dauertermine auf den aktuellen Stand gebracht wurden (sofern gewünscht). \n"+
     				"Die Feiertagsliste kann importiert werden und durch eigene Daten (z.B. Betriebsausflug, -ferien) ergänzt werden.",
             null);
 	/***********Numero achte***********/
-/*
-    sdummy = "Ru:gl - Grundeinstellungen";
-	htitel.put("RoogleGrundeinstellungen", sdummy);
-	sdummy = "Die Grundeinstellungen für die Terminsuchmaschine [Ru:gl] legen die Vorgaben fest, mit denen\n"+
-	"Ru:gl startet. Sie können natürlich für jeden Suchvorgang im Ru:gl-Fenster 'individueller Zeitraum' angepasst werden.\n";
-	hdescription.put("RoogleGrundeinstellungen", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("RoogleGrundeinstellungen", icodummy);
- */
     addHeaderEntry("RoogleGrundeinstellungen", "Ru:gl - Grundeinstellungen", 
     		"Die Grundeinstellungen für die Terminsuchmaschine [Ru:gl] legen die Vorgaben fest, mit denen\n"+
     				"Ru:gl startet. Sie können natürlich für jeden Suchvorgang im Ru:gl-Fenster 'individueller Zeitraum' angepasst werden.\n",
             null);
 	/***********Numero neune***********/
-/*
-    sdummy = "Stammdaten - Patienten";
-	htitel.put("PatientStammdaten", sdummy);
-	sdummy = "Hier legen Sie fest in welchem Container das Patientenfenster erscheinen soll.\n"+
-	"Sie können Textvorlagen definieren, und individuelle Merkmale aufnehmen, die Sie später dem Patienten zuordnen.\n";
-	hdescription.put("PatientStammdaten", sdummy);
-	icodummy = new ImageIcon(Reha.proghome+"icons/header-image.png");
-	hicon.put("PatientStammdaten", icodummy);
- */
     addHeaderEntry("PatientStammdaten", "Stammdaten - Patienten", 
     		"Hier legen Sie fest in welchem Container das Patientenfenster erscheinen soll.\n"+
     				"Sie können Textvorlagen definieren, und individuelle Merkmale aufnehmen, die Sie später dem Patienten zuordnen.\n",

@@ -1490,26 +1490,6 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				jtf[cANZ4].setText(text);				
 				return;
 			}
-			//Die ICD-10 Prüfung ist im HMR-Check wohl besser aufgehoben
-			/*
-			if( ((JComponent)arg0.getSource()).getName().equals("icd10") ){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						if(SqlInfo.holeEinzelFeld("select id from icd10 where schluessel1 like '"+jtf[cICD10].getText().trim()+"%' LIMIT 1").equals("")){
-							int frage = JOptionPane.showConfirmDialog(null, "<html>Achtung!!<br><br>Der ICD-10 Code <b>"+jtf[cICD10].getText().trim()+
-									"</b> existiert nicht!<br>"+
-									"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
-							if(frage==JOptionPane.YES_OPTION){
-								new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
-							}
-						}
-						return null;
-					}
-				}.execute();
-				return;
-			}
-			*/
 		}
 	}
 	

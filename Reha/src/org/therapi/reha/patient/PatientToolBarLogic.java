@@ -212,7 +212,6 @@ public class PatientToolBarLogic {
 			final String xsrez_nr = srez_nr;
 			new Thread(){
 				public void run(){
-					//System.out.println(Reha.proghome+"RehaFbBrowser.jar"+" ?patnummer="+spat_intern+"#reznummer="+xsrez_nr);
 					new LadeProg(Environment.Instance.getProghome()+"RehaFbBrowser.jar"+" ?pat_intern="+spat_intern+"#rez_nr="+xsrez_nr);		
 				}
 			}.start();			

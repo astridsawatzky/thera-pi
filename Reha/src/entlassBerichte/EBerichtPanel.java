@@ -2065,11 +2065,9 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				new LadeProg(Environment.Instance.getProghome()+"BMIRechner.jar");
 				break;
 			case 2:
-				//new LadeProg(Reha.proghome+"ICDSuche.jar");
 				new LadeProg(Environment.Instance.getProghome()+"ICDSuche.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
 				break;
 			case 3:
-				//new LadeProg(Reha.proghome+"ICDSuche.jar");
 				new LadeProg(Environment.Instance.getProghome()+"RehaOCR.jar "+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
 				break;
 			case 4:
@@ -2080,7 +2078,6 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				break;
 			}
 			tDlg = null;
-			//System.out.println("Rückgabewert = "+Reha.toolsDlgRueckgabe);
 		}
 	}
 /**********************************************/	

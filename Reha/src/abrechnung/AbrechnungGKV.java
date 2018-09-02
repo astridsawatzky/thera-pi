@@ -223,8 +223,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	}
 	public static int checkCert(String alias){
 		try{
-			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");//Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", ""));
 			Vector<X509Certificate> certs = store.getAllCerts();
 			String[] dn = null;
@@ -346,29 +345,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		//cmbDiszi.setSelectedIndex(cmbDiszi.getSelectedIndex());
 		return jscr;
 	}
-	/*
-	private JXPanel getIVPanel(){
-		JXPanel jpan = new JXPanel();
-		jpan.setOpaque(false);
-		String xwerte = "0dlu,fill:0:grow(1.0),0dlu";
-		//               1    2  3  4   5   6  7
-		String ywerte = "5dlu,p,3dlu,p,25dlu";
-		FormLayout lay = new FormLayout(xwerte,ywerte);
-		CellConstraints cc = new CellConstraints();
-		jpan.setLayout(lay);
-		soll302 = new JRtaCheckBox("Abrechnung nach §302 erstellen");
-		soll302.setSelected(true);
-		soll302.setOpaque(false);
-		jpan.add(soll302,cc.xy(2,2));
-		alternativeKK = new JButton("Adresse...");
-		alternativeKK.setActionCommand("alternativeadresse");
-		alternativeKK.addActionListener(this);
-		Image img = new ImageIcon(Reha.proghome+"icons/krankenkasse.png").getImage().getScaledInstance(22, 22, Image.SCALE_SMOOTH);
-		alternativeKK.setIcon(new ImageIcon(img));
-		jpan.add(alternativeKK,cc.xy(2,4));
-		return jpan;
-	}
-	*/
 	private JXPanel getRight(){
 		this.abrRez = new AbrechnungRezept(this);
 		this.abrRez.setRechtsAufNull();
@@ -1045,9 +1021,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		
 		String test = "";
 		if(abrechnungsModus.equals(ABR_MODE_302)){
-			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
-			//Einbau Test ob Zertifikat abgelaufen
+			//TODO: Einbau Test ob Zertifikat abgelaufen
 			test = "IK der Krankenkasse: "+ik_kasse+"\n"+
 			"IK des Kostenträgers: "+ik_kostent+"\n"+ 
 			"IK des Nutzer mit Entschlüsselungsbefungnis: "+ik_nutzer+"\n"+
@@ -1190,7 +1164,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			    int originalSize = Integer.parseInt(Long.toString(f.length()));
 			    int encryptedSize = originalSize;
 			    String skeystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
-				//String skeystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
 				File fkeystore = new File(skeystore);
 				if(! fkeystore.exists()){
 					abrDlg.setzeLabel("Rechnungsdatei verschlüsseln - fehlgeschlagen!!!");
@@ -1318,7 +1291,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;
 			String[] encodedDat = {Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
-			//String[] encodedDat = {Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org","esol0"+aktEsol+".org"};
 			String[] aufDat = {Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(encodedDat);
@@ -1463,9 +1435,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	private int doVerschluesseln(String datei){
 		try {
 			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
-			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
 
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", zertifikatVon.replace("IK", ""));
 			
 			NebraskaEncryptor encryptor = store.getEncryptor(ik_nutzer);

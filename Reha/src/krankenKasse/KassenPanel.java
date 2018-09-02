@@ -245,7 +245,6 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		jtb.add(jbut[2]);
 		jtb.addSeparator(new Dimension(40,0));
 		jbut[3] = new JButton();
-		//jbut[3].setIcon(new ImageIcon(Reha.proghome+"icons/mail_write_22.png"));
 		jbut[3].setIcon(SystemConfig.hmSysIcons.get("print"));
 		jbut[3].setToolTipText("Brief/Formular für Kasse erstellen (Alt+B)");
 		jbut[3].setActionCommand("formulare");
@@ -264,14 +263,6 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		contPan.add(jtb,cc.xy(1,1));
 		contPan.add(getTabelle(),cc.xyw(1,3,3));
 
-		/*
-		ta = new JTextArea();
-		JScrollPane span = JCompTools.getTransparentScrollPane(ta);
-		span.setOpaque(true);
-		span.setBackground(Color.WHITE);
-		span.validate();
-		contPan.add(ta,cc.xyw(1,5,3));
-		*/
 		SwingUtilities.invokeLater(new Runnable(){
 		 	   public  void run(){
 		 		   holeFormulare();
@@ -300,7 +291,6 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		kassentbl.getColumn(4).setMinWidth(100);
 		kassentbl.getColumn(5).setMinWidth(100);
 		kassentbl.getColumn(7).setMinWidth(30);
-		//kassentbl.getColumn(7).setMaxWidth(0);
 		kassentbl.addKeyListener(this);
 		kassentbl.addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent arg0) {
@@ -429,7 +419,6 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		kedit.addSeparator(new Dimension(40,0));
 		memobut[2] = new JButton();
 		memobut[2].setIcon(SystemConfig.hmSysIcons.get("stop"));
-		//memobut[2].setIcon(new ImageIcon(Reha.proghome+"icons/cancel.png"));
 		memobut[2].setToolTipText("Langtext bearbeiten abbrechen");		
 		memobut[2].setActionCommand("kbreak");
 		memobut[2].addActionListener(this);
@@ -723,10 +712,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 					@Override
 					protected Void doInBackground() throws Exception {
 						try{
-							//OOTools.testePlatzhalter(Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
 							OOTools.starteStandardFormular(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
-							//ladeSchreiben(Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular));
-							// TODO Auto-generated method stub
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -1081,7 +1067,6 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             			SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", "")+ " verwendet!");
             }
            	String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
-            //String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
             File f = new File(keystore);
             if(! f.exists()){
             	JOptionPane.showMessageDialog(null,"Kein Keystore für den aktuellen Mandanten vorhanden");
@@ -1140,10 +1125,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		int[] retint = {-1,-1};
 		try {
 			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
-			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", ""));
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, "123456","123456", Reha.aktIK);
 			NebraskaEncryptor encryptor = store.getEncryptor(hmap.get("decode_ik"));
 			
 			String inFile = datei+".original";

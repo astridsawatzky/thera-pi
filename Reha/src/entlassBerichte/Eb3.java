@@ -57,22 +57,14 @@ import systemEinstellungen.SystemConfig;
 public class Eb3 implements RehaEventListener  {
 	RehaEventClass rEvent = null;
 	public JXPanel pan = null;
-	//Panel pan = null;
 	JXPanel parken = null;
 	JPanel oopan = null;
-	//IFrame officeFrame = null;
-	//static ITextDocument document = null;
 	EBerichtPanel eltern = null;
 	Container xparent = null;
 	NativeView nativeView = null; 
 	ByteArrayOutputStream outtemp = null;	
 	public String tempPfad = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
 
-	//boolean gestartet = false;
-	//boolean inseitenaufbau = false;
-	//boolean getrennt = true;
-	//boolean tempgespeichert = false;
-	//boolean pdfok = false;
 	/***********neue logische Variable***************/
 	boolean newframeok = false;
 	boolean bytebufferok = false;
@@ -87,13 +79,11 @@ public class Eb3 implements RehaEventListener  {
 		rEvent = new RehaEventClass();
 		rEvent.addRehaEventListener((RehaEventListener) this);
 		pan = new JXPanel(new BorderLayout());
-		//pan = new Panel(new BorderLayout());
 		pan.setDoubleBuffered(true);
 		pan.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
 		pan.setVisible(true);
 		pan.setName("ooNativePanel");
 		if(!Reha.officeapplication.isActive()){
-			//System.out.println("Aktiviere Office...");
 			Reha.starteOfficeApplication();
 		}
 		new SwingWorker<Void,Void>(){
@@ -105,7 +95,6 @@ public class Eb3 implements RehaEventListener  {
 					while(inseitenaufbau){
 						Thread.sleep(20);
 					}
-					//System.out.println("Vorhandener Bericht - Seite wurde zum StartAufgebaut");
 				}catch(Exception ex){
 					Reha.thisClass.progressStarten(false);
 					ex.printStackTrace();
@@ -120,7 +109,6 @@ public class Eb3 implements RehaEventListener  {
 			try {
 				outtemp.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -452,13 +440,7 @@ public class Eb3 implements RehaEventListener  {
 				nativeView.requestFocus();
 
 				
-				//FileOutputStream fout = new FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/ootemp");
 				eltern.document.getPersistenceService().store(out);
-				//eltern.document.getPersistenceService().export(out, RTFFilter.FILTER);
-				//eltern.document.getPersistenceService().store(Reha.proghome+"temp/"+Reha.aktIK+"/ootemp");
-				//fout.flush();
-				//fout.close();
-				//barr = FileTools.File2ByteArray(new File(Reha.proghome+"temp/"+Reha.aktIK+"/ootemp"));
 	
 
 

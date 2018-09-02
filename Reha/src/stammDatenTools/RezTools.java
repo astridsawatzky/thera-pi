@@ -2314,7 +2314,6 @@ public class RezTools {
 			protected Void doInBackground() throws Exception {
 				try{
 					if(SqlInfo.holeEinzelFeld("select zzstatus from verordn where rez_nr = '"+xrez_num+"' LIMIT 1").equals("2") ){
-						//System.out.println("In Soundaufruf = "+Reha.proghome+"sounds/"+"doorbell.wav");
 						new AePlayWave(Environment.Instance.getProghome()+"sounds/"+"doorbell.wav").start();
 					}
 				}catch(Exception ex){

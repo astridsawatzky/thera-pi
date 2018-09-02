@@ -2596,8 +2596,6 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		
 		img = SystemConfig.hmSysIcons.get("zuzahlnichtok");
 		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");		
-		//img = new ImageIcon(Reha.proghome+"icons/Kreuz_klein.gif");
-		//img2 = new ImageIcon(Reha.proghome+"icons/frei.png");		
 		img.setDescription("gesperrt");
 		img2.setDescription("offen");
 		setZeit();
@@ -2612,10 +2610,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
 
 	
-		//Vector treadVect = new Vector();
 		aktDatum = getAktDatum();
 		
 		try {

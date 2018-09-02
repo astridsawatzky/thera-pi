@@ -85,7 +85,7 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 			this.neuAnlage = false;
 		}
 
-		hgicon = Reha.rehaBackImg;//new ImageIcon(Reha.proghome+"icons/therapieMT1.gif");
+		hgicon = Reha.rehaBackImg;
 		icx = hgicon.getIconWidth()/2;
 		icy = hgicon.getIconHeight()/2;
 		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.07f); 

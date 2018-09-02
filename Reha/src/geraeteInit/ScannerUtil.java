@@ -487,8 +487,7 @@ class ScannerUtilHintergrund extends JXPanel{
 	AlphaComposite xac2 = null;		
 	public ScannerUtilHintergrund(){
 		super();
-		hgicon = SystemConfig.hmSysIcons.get("scannergross");//new ImageIcon(new ImageIcon(Reha.proghome+"icons/xsane.png").getImage().getScaledInstance(250, 250, Image.SCALE_SMOOTH));
-		//hgicon = new ImageIcon(Reha.proghome+"icons/geld.png");
+		hgicon = SystemConfig.hmSysIcons.get("scannergross");
 		icx = hgicon.getIconWidth()/2;
 		icy = hgicon.getIconHeight()/2;
 		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 

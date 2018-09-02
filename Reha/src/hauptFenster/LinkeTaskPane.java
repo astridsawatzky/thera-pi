@@ -170,7 +170,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
 		tp1.setUI(wui);
 		tp1.setTitle("Stammdaten");
-		//tp1.setIcon(new ImageIcon(Reha.proghome+"icons/personen16.gif"));				
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Patienten und Rezepte");
 		jxLink.setToolTipText("Strg+P = Patienten-/Rezeptstamm starten");
@@ -329,7 +328,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		
 		jxLink = new JXHyperlink();
 		jxLink.setText("Thera-\u03C0"+" Erinnerungs-System");
-		//img = new ImageIcon(Reha.proghome+"icons/wecker.gif").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		img = new ImageIcon(Environment.Instance.getProghome()+"icons/chronometer.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));		
 		jxLink.setActionCommand("neuerwecker");
@@ -443,7 +441,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setText("piTool - ScreenShots");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		img = new ImageIcon(Environment.Instance.getProghome()+"icons/camera_unmount.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		//Reha.proghome+"icons/cameraklein.png"
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piTool");
 		jxLink.addActionListener(this);
@@ -774,14 +771,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				break;
 			}
 			if (cmd.equals("Thera-PI - Browser")){
-				/*
-				File file = new File(Reha.proghome+"xulrunner/xulrunner.exe");
-				if(! file.exists()){
-					JOptionPane.showMessageDialog(null,"Die Mozilla-Runtime 'xulrunner' wurde nicht, oder nicht korrekt installiert\n"+
-							"Der Thera-PI - Browser kann deshalb nicht gestartet werden");
-					return;
-				}
-				*/
 				new Thread(){
 					public void run(){
 						new LadeProg(Environment.Instance.getProghome()+"RehaWissen.jar");		
@@ -849,7 +838,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new Thread(){
 					public void run(){
 						try{
-							//Runtime.getRuntime().exec(Reha.proghome+"piHelp.jar");
 							new LadeProg(Environment.Instance.getProghome()+"piHelp.jar "+
 									Environment.Instance.getProghome()+" "+Reha.aktIK);
 						}catch(Exception ex){
@@ -874,13 +862,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					}
 					
 				}.execute();
-				/*
-				new Thread(){
-					public void run(){
-						new LadeProg(Reha.proghome+"piHelp.jar");		
-					}
-				}.start();
-				*/
 				break;
 			}
 			if (cmd.equals("piTool")){
@@ -1254,68 +1235,3 @@ public void dropActionChanged(DropTargetDragEvent arg0) {
 }
 
 
-/*	
-class ladeProg{
-
-	public ladeProg(String prog){
-	String progname= null;
-	if(prog.indexOf(" ")>=0){
-		progname = prog.split(" ")[0];
-	}else{
-		progname = prog;
-	}
-	File f = new File(progname);
-	if(! f.exists()){
-		JOptionPane.showMessageDialog(null,"Diese Software ist auf Ihrem System nicht installiert!");
-		return;
-	}
-	String vmload = "java -jar ";
-	String commandx = vmload + prog; 
-    File ausgabedatei = new File(Reha.proghome+"laden.bat"); 
-    FileWriter fw;
-	try {
-		fw = new FileWriter(ausgabedatei);
-	    BufferedWriter bw = new BufferedWriter(fw); 
-	    bw.write(commandx); 
-	    bw.close(); 
-	} catch (IOException e1) {
-		e1.printStackTrace();
-	} 
-	final String xprog = prog;
-	new SwingWorker<Void, Void>(){
-
-		@Override
-		protected Void doInBackground() throws Exception {
-			try {
-				List<String>list = Arrays.asList(xprog.split(" "));
-				ArrayList<String> alist = new ArrayList<String>(list);
-				alist.add(0,"-jar");
-				alist.add(0,"java");
-				//System.out.println(list);
-				//System.out.println("Die Liste = "+alist);
-				
-				//System.out.println("Liste = "+list);
-				Process process = new ProcessBuilder(alist).start();
-			       InputStream is = process.getInputStream();
-			       InputStreamReader isr = new InputStreamReader(is);
-			       BufferedReader br = new BufferedReader(isr);
-			       String line;
-			       while ((line = br.readLine()) != null) {
-			         //System.out.println(line);
-			       }
-			       is.close();
-			       isr.close();
-			       br.close();
-
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
-	}.execute();
-}
-}
-*/

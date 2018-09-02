@@ -246,7 +246,6 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		jtb.add(jbut[2]);
 		jtb.addSeparator(new Dimension(40,0));
 		jbut[3] = new JButton();
-		//jbut[3].setIcon(new ImageIcon(Reha.proghome+"icons/mail_write_22.png"));
 		jbut[3].setIcon(SystemConfig.hmSysIcons.get("print"));
 		jbut[3].setToolTipText("Brief/Formular für Arzt erstellen (Alt+B)");
 		jbut[3].setActionCommand("formulare");
@@ -353,7 +352,6 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		kedit.addSeparator(new Dimension(40,0));
 		memobut[2] = new JButton();
 		memobut[2].setIcon(SystemConfig.hmSysIcons.get("stop"));
-		//memobut[2].setIcon(new ImageIcon(Reha.proghome+"icons/cancel.png"));
 		memobut[2].setToolTipText("Langtext bearbeiten abbrechen");		
 		memobut[2].setActionCommand("kbreak");
 		memobut[2].addActionListener(this);

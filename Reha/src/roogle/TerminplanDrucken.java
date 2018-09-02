@@ -61,8 +61,6 @@ SuchenSeite eltern;
 	
 	public synchronized void run() {
 			String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
-			//String url = Reha.proghome+"vorlagen/"+SystemConfig.oTerminListe.NameTemplate; 
-			////System.out.println("***************URL = "+url+"****************");
 			String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
 			int anzahl = termindat.size();
 			int AnzahlTabellen = SystemConfig.oTerminListe.AnzahlTerminTabellen;

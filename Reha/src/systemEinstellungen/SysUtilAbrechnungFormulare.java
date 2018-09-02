@@ -64,9 +64,6 @@ public class SysUtilAbrechnungFormulare extends JXPanel implements KeyListener, 
 				drucker[i] = services[i].getName();
 			}
 		/****/
-	     //JLabel jlbl = new JLabel("");
-	     //jlbl.setIcon(new ImageIcon(Reha.proghome+"icons/werkzeug.gif"));
-	     //add(jlbl,BorderLayout.CENTER);
 	     JScrollPane jscr = new JScrollPane();
 	     jscr.setBorder(null);
 	     jscr.setOpaque(false);

@@ -443,7 +443,6 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 		try{
 			String wert = "";
 			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/","patient.ini");
-			//System.out.println(Reha.proghome+"ini/"+Reha.aktIK+"/patient.ini");
 			wert = (unten.isSelected() ? "1" : "0");
 			SystemConfig.hmContainer.put("Patient", Integer.valueOf(wert));
 			inif.setStringProperty("Container", "StarteIn",wert , null);

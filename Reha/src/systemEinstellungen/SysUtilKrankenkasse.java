@@ -404,7 +404,6 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 	private void doSpeichern(){
 		String wert = "";
 		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kasse.ini");
-		//System.out.println(Reha.proghome+"ini/"+Reha.aktIK+"/kasse.ini");
 		wert = (unten.isSelected() ? "1" : "0");
 		SystemConfig.hmContainer.put("Kasse", Integer.valueOf(wert));
 		inif.setStringProperty("Container", "StarteIn",wert , null);

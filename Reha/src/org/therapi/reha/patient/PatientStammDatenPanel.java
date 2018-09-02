@@ -173,7 +173,6 @@ public class PatientStammDatenPanel extends JXPanel{
 			/*******/
 			String linktext = "<img src='file:///"+Environment.Instance.getProghome()+"icons/kontact_contacts.png' width=36 height=36 border=0>";
 			buf1.append("<tr><td class=\"spalte1\" align=\"left\">"+makeLink(linktext,"FOTO"));;
-			//buf1.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Reha.proghome+"icons/kontact_contacts.png' width=36 height=36 border=0>");
 			if(Reha.bRGAFoffen || Reha.bHatMerkmale){
 				buf1.append("&nbsp;&nbsp;");
 				buf1.append("<img src='file:///"+Environment.Instance.getProghome()+"icons/Icon_Achtung.svg.png' width=48 height=41 border=0>");
