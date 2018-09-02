@@ -39,7 +39,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
-import CommonTools.Environment;
+import Environment.Path;
 import hauptFenster.Reha;
 
 /**
@@ -129,7 +129,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 		//dialogArea.setBackground(Color.yellow);
 		GridBagConstraints gbc = new GridBagConstraints();
 
-        ImageIcon icon = new ImageIcon(Environment.Instance.getProghome()+"icons/Pi_1_0_64x64.png");
+        ImageIcon icon = new ImageIcon(Path.Instance.getProghome()+"icons/Pi_1_0_64x64.png");
 		JLabel imgLbl = new JLabel(icon);
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.gridx = 0;
@@ -235,7 +235,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 			protected Void doInBackground() throws java.lang.Exception {
 				processingMD5 = true;
 				MessageDigest md = MessageDigest.getInstance( "MD5" );
-				File dir = new File(Environment.Instance.getProghome());
+				File dir = new File(Path.Instance.getProghome());
 				File[] files = dir.listFiles(
 						new FilenameFilter() { 
 							@Override 

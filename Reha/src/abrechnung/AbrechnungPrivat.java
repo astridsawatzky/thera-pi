@@ -39,11 +39,11 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.AdressTools;
-import CommonTools.Environment;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -395,7 +395,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 			}
 			aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
 			hmAdresse.put("<pri6>",aktRechnung);
-			starteDokument(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmpriformular"));
+			starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmpriformular"));
 			starteErsetzen();
 			startePositionen();
 
@@ -424,7 +424,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 			aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
 			hmAdresse.put("<pri6>",aktRechnung);
 			
-			starteDokument(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmbgeformular"));
+			starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmbgeformular"));
 			starteErsetzen();
 			startePositionen();
 			

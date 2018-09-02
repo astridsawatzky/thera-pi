@@ -86,11 +86,11 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.mysql.jdbc.PreparedStatement;
 
 import CommonTools.Colors;
-import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.IDocumentEvent;
@@ -1150,7 +1150,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
         File file = null;
         if(lastPath==null){
-        	file = new File(Environment.Instance.getProghome());	
+        	file = new File(Path.Instance.getProghome());	
         }else{
         	file = new File(lastPath);
         }
@@ -1903,7 +1903,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 					try {
 						
-						if(Environment.Instance.isWindows()){
+						if(Path.Instance.isWindows()){
 							datei = datei.replaceAll("/", "\\\\");
 						}
 						long zeit1 = System.currentTimeMillis();
@@ -2212,8 +2212,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		}
 		String dest = null;
 		if(art==0){
-			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmptyWriterDoku.ott";
-			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+".odt";
+			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmptyWriterDoku.ott";
+			dest = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+".odt";
 
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
@@ -2224,8 +2224,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
 			}
 		}else if(art==1){
-			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmptyCalcDoku.ots";
-			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+".ods";
+			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmptyCalcDoku.ots";
+			dest = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+".ods";
 			
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
@@ -2237,8 +2237,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, "Fehler kann neues CalcDokument nicht erzeugen");
 			}
 		}else if(art==2){
-			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".odt";
+			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
+			dest = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".odt";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
@@ -2249,8 +2249,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
 			}		
 		}else if(art==3){
-			String src = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".ods";
+			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
+			dest = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".ods";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);

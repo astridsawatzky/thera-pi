@@ -20,10 +20,10 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import Environment.Path;
 import hauptFenster.Reha;
 
 public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, ActionListener {
@@ -172,7 +172,7 @@ public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, 
 		// TODO Auto-generated method stub
 		if(e.getActionCommand().equals("speichern")){
 			try{
-				INIFile ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/","terminkalender.ini");
+				INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/","terminkalender.ini");
 				for(int i = 0;i<7;i++){
 					ini.setStringProperty("RoogleEinstellungen", "Tag"+(i+1),(tage[i].isSelected() ? "1" : "0"),null);
 					SystemConfig.RoogleTage[i] = tage[i].isSelected();

@@ -57,13 +57,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.mysql.jdbc.PreparedStatement;
 
-import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import emailHandling.EmailSendenExtern;
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -1150,7 +1150,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		if(abrechnungsModus.equals(ABR_MODE_302)){
 			try {
 				
-				f = new File(Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org");
+				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw); 
 			    bw.write(gesamtBuf.toString());
@@ -1191,7 +1191,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			    doAuftragsDatei(originalSize,encryptedSize);
 			    
 				
-				f = new File(Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf");
+				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw); 
 			    bw.write(auftragsBuf.toString()); 
@@ -1290,8 +1290,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			String text = "";
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;
-			String[] encodedDat = {Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
-			String[] aufDat = {Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
+			String[] encodedDat = {Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
+			String[] aufDat = {Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(encodedDat);
 			attachments.add(aufDat);
@@ -1439,7 +1439,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", zertifikatVon.replace("IK", ""));
 			
 			NebraskaEncryptor encryptor = store.getEncryptor(ik_nutzer);
-			String inFile = Environment.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
+			String inFile = Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
 			long size = encryptor.encrypt(inFile, inFile.replace(".org", ""));
 			return Integer.parseInt(Long.toString(size));
 		} catch (NebraskaCryptoException e) {
@@ -1529,7 +1529,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				if(abrechnungsModus.equals(ABR_MODE_302)){
 					try{
 						Thread.sleep(100);
-						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
+						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
 					}catch(Exception ex){
 						JOptionPane.showMessageDialog(null, "Fehler im Modul BegleitzettlDrucken - Fehler-Exception: ex\n"+ex.getMessage());
 					}
@@ -1698,7 +1698,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	private void holeEdifact(){
 		try {
 			if(SystemConfig.hmAbrechnung.get("hmgkvrauchdrucken").equals("1")){
-				abrDruck = new AbrechnungDrucken(this,Environment.Instance.getProghome()+
+				abrDruck = new AbrechnungDrucken(this,Path.Instance.getProghome()+
 						"vorlagen/"+
 						Reha.aktIK+
 						"/"+

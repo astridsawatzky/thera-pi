@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 
 import org.therapi.reha.patient.PatientHauptPanel;
 
-import CommonTools.Environment;
+import Environment.Path;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import anmeldungUmsatz.Anmeldungen;
@@ -130,9 +130,9 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			if(xansicht != 2){
 				String stag = DatFunk.sHeute();
 				String titel = DatFunk.WochenTag(stag)+" "+stag+" -- KW: "+DatFunk.KalenderWoche(stag)+" -- [Normalansicht]";
-				terminjry = new JTerminInternal(titel,new ImageIcon(Environment.Instance.getProghome()+"icons/calendar.png"),containerNr);				
+				terminjry = new JTerminInternal(titel,new ImageIcon(Path.Instance.getProghome()+"icons/calendar.png"),containerNr);				
 			}else{
-				terminjry = new JTerminInternal("Terminkalender - "+DatFunk.sHeute(),new ImageIcon(Environment.Instance.getProghome()+"icons/calendar.png"),containerNr);
+				terminjry = new JTerminInternal("Terminkalender - "+DatFunk.sHeute(),new ImageIcon(Path.Instance.getProghome()+"icons/calendar.png"),containerNr);
 			}
 			terminjry.setName(name);
 			((JRehaInternal)terminjry).setImmerGross((SystemConfig.hmContainer.get("KalenderOpti")==1 ? true : false));

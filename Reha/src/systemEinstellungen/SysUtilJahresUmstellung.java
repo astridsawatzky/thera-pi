@@ -27,8 +27,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
@@ -207,7 +207,7 @@ public class SysUtilJahresUmstellung extends JXPanel implements KeyListener, Act
 		int anzahl = -1;
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new FileWriter(new File(Environment.Instance.getProghome()+"umstellung"+reset+".txt")));
+			writer = new BufferedWriter(new FileWriter(new File(Path.Instance.getProghome()+"umstellung"+reset+".txt")));
 		} catch (IOException e1) {
 			JOptionPane.showMessageDialog(null,"Fehler im BufferedWriter");
 			e1.printStackTrace();

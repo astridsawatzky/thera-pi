@@ -50,7 +50,6 @@ import org.therapi.reha.patient.LadeProg;
 
 import com.mysql.jdbc.PreparedStatement;
 
-import CommonTools.Environment;
 import CommonTools.FileTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -60,6 +59,7 @@ import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import abrechnung.AbrechnungDlg;
 import ag.ion.bion.officelayer.desktop.IFrame;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -119,8 +119,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public boolean neu = false;
 	public boolean jetztneu = false;
 	public boolean inebericht = false;
-	public String tempPfad = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
-	public String vorlagenPfad = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
+	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
+	public String vorlagenPfad = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
 	public String[] rvVorlagen = {null,null,null,null};
 	EBerichtTab ebt = null;;
 	NachsorgeTab nat = null;
@@ -2062,13 +2062,13 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				doTextBausteine();
 				break;
 			case 1:
-				new LadeProg(Environment.Instance.getProghome()+"BMIRechner.jar");
+				new LadeProg(Path.Instance.getProghome()+"BMIRechner.jar");
 				break;
 			case 2:
-				new LadeProg(Environment.Instance.getProghome()+"ICDSuche.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
+				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
 				break;
 			case 3:
-				new LadeProg(Environment.Instance.getProghome()+"RehaOCR.jar "+" "+Environment.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				new LadeProg(Path.Instance.getProghome()+"RehaOCR.jar "+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
 				break;
 			case 4:
 				starteTest();

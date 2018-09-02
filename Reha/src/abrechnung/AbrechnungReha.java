@@ -25,12 +25,12 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -758,7 +758,7 @@ public class AbrechnungReha extends JXPanel{
 		vecposrechnung.add((Vector<String>)((Vector<String>)vecpos).clone() );
 		gesamtPreis = BigDecimal.valueOf(Double.parseDouble(tfpatgesamt[0].getText().trim().replace(",", ".")));
 
-		starteDokument(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
+		starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
 		//System.out.println("Dokument gestartet");
 		starteErsetzen(hmRechnung);
 		//System.out.println("suche ersetzen abeschlossen");
@@ -960,7 +960,7 @@ public class AbrechnungReha extends JXPanel{
 				}
 			}
 			
-			starteDokument(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
+			starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
 			starteErsetzen(hmRechnung);
 			startePositionen(vecposrechnung,gesamtPreis);
 			starteDrucken(this.druckExemplare);

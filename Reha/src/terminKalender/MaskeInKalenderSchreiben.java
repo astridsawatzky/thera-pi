@@ -30,11 +30,11 @@ import org.jdesktop.swingx.JXTitledPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
@@ -106,7 +106,7 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
 		jp1.setBackground(Color.WHITE);
         jp1.setLayout(new BorderLayout());
         //jp1.setLayout(new VerticalLayout(1));
-        String ss = Environment.Instance.getProghome()+"icons/header-image.png";
+        String ss = Path.Instance.getProghome()+"icons/header-image.png";
         JXHeader header = new JXHeader("Hier schreiben Sie die Maskendefinition (=Wochenarbeitszeit) in den Terminkalender!\n\n",
         		"Äußerste Vorsicht im Umgang mit dieser Funktion ist sicherlich 'nicht ganz unangebracht'.....\n\n"+
                 "Stellen Sie vor allen Dingen sicher, daß wirklich nur Sie als Super-User Zugang zu dieser Funktion haben!\n" +

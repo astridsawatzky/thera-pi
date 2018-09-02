@@ -36,13 +36,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
-import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
@@ -1160,7 +1160,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					"HMR-Check nicht möglich!<br><br>"+
 					"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 			if(frage==JOptionPane.YES_OPTION){
-				new LadeProg(Environment.Instance.getProghome()+"ICDSuche.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
+				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
 			}
 			if(welcher==1){
 				jtf[cICD10].setText("");

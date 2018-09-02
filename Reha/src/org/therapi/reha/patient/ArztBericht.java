@@ -40,13 +40,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
-import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
@@ -104,7 +104,7 @@ public class ArztBericht extends RehaSmartDialog implements RehaTPEventListener,
 		super(owner, name);
 		super.getSmartTitledPanel().setName(name);
 		super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
-		String xtitel = "<html>Arztbericht erstellen / ändern   -->&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#ffffff'>Tip:&nbsp;&nbsp;&nbsp;&nbsp;entscheiden Sie sich für das ICF-Schema</font></b>&nbsp;&nbsp;<img src='file:///"+Environment.Instance.getProghome()+"icons/Haken_klein.gif'>";
+		String xtitel = "<html>Arztbericht erstellen / ändern   -->&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#ffffff'>Tip:&nbsp;&nbsp;&nbsp;&nbsp;entscheiden Sie sich für das ICF-Schema</font></b>&nbsp;&nbsp;<img src='file:///"+Path.Instance.getProghome()+"icons/Haken_klein.gif'>";
 	    super.getSmartTitledPanel().setTitle(xtitel);
 		this.setName(name);
 		addKeyListener(this);

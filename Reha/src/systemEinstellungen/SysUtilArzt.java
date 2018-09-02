@@ -40,11 +40,11 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
+import Environment.Path;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -126,7 +126,7 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener 
 			gruppen.setRowSelectionInterval(0, 0);			
 		}
 		gruppen.validate();
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
 		int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
 		vec = new Vector<String>();
 		for(int i = 1; i <= forms; i++){
@@ -218,7 +218,7 @@ private JPanel getKnopfPanel(){
 					int col = vorlagen.getSelectedColumn();	
 					if(col==1){
 						setCursor(Reha.thisClass.wartenCursor);
-						String svorlage = dateiDialog(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
+						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
 						if(svorlage.equals("")){
 							return;
 						}
@@ -347,7 +347,7 @@ private JPanel getKnopfPanel(){
 			}
 			if(cmd.equals("neuvorlagen")){
 				setCursor(Reha.thisClass.wartenCursor);
-				String svorlage = dateiDialog(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
+				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
 				if(svorlage.equals("")){
 					return;
 				}
@@ -391,7 +391,7 @@ private JPanel getKnopfPanel(){
 	private void doSpeichern(){
 		try{
 			String wert = "";
-			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
 			wert = (unten.isSelected() ? "1" : "0");
 			SystemConfig.hmContainer.put("Arzt", Integer.valueOf(wert));
 			inif.setStringProperty("Container", "StarteIn",wert , null);

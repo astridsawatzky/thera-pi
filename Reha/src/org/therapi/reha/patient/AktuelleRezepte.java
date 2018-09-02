@@ -68,7 +68,6 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
 import CommonTools.DateTableCellEditor;
-import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.INITool;
@@ -76,6 +75,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import abrechnung.AbrechnungPrivat;
 import abrechnung.AbrechnungRezept;
 import abrechnung.Disziplinen;
@@ -299,7 +299,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						System.out.println("Rlangtext1 = "+SystemConfig.hmAdrRDaten.get("<Rlangtext1>"));
 						//RezTools.constructFormularHMap();
 						*/
-						OOTools.starteStandardFormular(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
+						OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
 						return null;
 					}
     			}.execute();
@@ -575,18 +575,18 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 	private JPopupMenu getTerminPopupMenu(){
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		// Lemmi 20101231: Icon zugefügt
-		JMenuItem item = new JMenuItem("Zuzahlungsstatus auf befreit setzen", new ImageIcon(Environment.Instance.getProghome()+"icons/frei.png"));
+		JMenuItem item = new JMenuItem("Zuzahlungsstatus auf befreit setzen", new ImageIcon(Path.Instance.getProghome()+"icons/frei.png"));
 		item.setActionCommand("statusfrei");
 		item.addActionListener(this);
 		jPopupMenu.add(item);				// McM 2016-01	keine Auswirkung auf Abrechnung; RTA intern benutzt für verschieben in die Historie ohne Abrechnung (Rezept-split)
 											//				?? sollte Abrechnung den gesetzten Status verwenden?
 		// Lemmi 20101231: Icon zugefügt
-		item = new JMenuItem("... auf bereits bezahlt setzen", new ImageIcon(Environment.Instance.getProghome()+"icons/Haken_klein.gif"));
+		item = new JMenuItem("... auf bereits bezahlt setzen", new ImageIcon(Path.Instance.getProghome()+"icons/Haken_klein.gif"));
 		item.setActionCommand("statusbezahlt");
 		item.addActionListener(this);
 		jPopupMenu.add(item);				// McM 2016-01	keine Auswirkung auf Abrechnung; RTA intern benutzt
 		// Lemmi 20101231: Icon zugefügt
-		item = new JMenuItem("... auf nicht bezahlt setzen", new ImageIcon(Environment.Instance.getProghome()+"icons/Kreuz.png"));
+		item = new JMenuItem("... auf nicht bezahlt setzen", new ImageIcon(Path.Instance.getProghome()+"icons/Kreuz.png"));
 		item.setActionCommand("statusnichtbezahlt");
 		item.addActionListener(this);
 		jPopupMenu.add(item);
@@ -594,20 +594,20 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		jPopupMenu.addSeparator();
 
 		// Lemmi 201110106: Knopf zum Kopieren des aktiven Rezeptes zugefügt
-		item = new JMenuItem("Angewähltes Rezept kopieren", new ImageIcon(Environment.Instance.getProghome()+"icons/plus_button_gn_klein.png"));
+		item = new JMenuItem("Angewähltes Rezept kopieren", new ImageIcon(Path.Instance.getProghome()+"icons/plus_button_gn_klein.png"));
 		item.setActionCommand("KopiereAngewaehltes");
 		item.addActionListener(this);
 		jPopupMenu.add(item);
 
 		// Lemmi 201110113: Knopf zum Kopieren des jüngsten Rezeptes zugefügt
-		item = new JMenuItem("Jüngstes Rezept kopieren", new ImageIcon(Environment.Instance.getProghome()+"icons/plus_button_bl_klein.png"));
+		item = new JMenuItem("Jüngstes Rezept kopieren", new ImageIcon(Path.Instance.getProghome()+"icons/plus_button_bl_klein.png"));
 		item.setActionCommand("KopiereLetztes");
 		item.addActionListener(this);
 		jPopupMenu.add(item);
 		
 		jPopupMenu.addSeparator();
 		
-		item = new JMenuItem("Angewähltes Rezept aufteilen", new ImageIcon(Environment.Instance.getProghome()+"icons/split.png"));
+		item = new JMenuItem("Angewähltes Rezept aufteilen", new ImageIcon(Path.Instance.getProghome()+"icons/split.png"));
 		item.setActionCommand("RezeptTeilen");
 		item.addActionListener(this);
 		jPopupMenu.add(item);
@@ -1701,7 +1701,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			@Override
 			protected Void doInBackground() throws Exception {
 				// TODO Auto-generated method stub
-				INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
 				int forms = inif.getIntegerProperty("Formulare", "RezeptFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
 					titel.add(inif.getStringProperty("Formulare","RFormularText"+i));			
@@ -2330,7 +2330,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 								"HMR-Check nicht möglich!<br><br>"+
 								"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 						if(frage==JOptionPane.YES_OPTION){
-							new LadeProg(Environment.Instance.getProghome()+"ICDSuche.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
+							new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
 						}
 						return;
 
@@ -2343,7 +2343,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 									"HMR-Check nicht möglich!<br><br>"+
 									"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 							if(frage==JOptionPane.YES_OPTION){
-								new LadeProg(Environment.Instance.getProghome()+"ICDSuche.jar"+" "+Environment.Instance.getProghome()+" "+Reha.aktIK);
+								new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
 							}
 							return;
 						}
@@ -2891,7 +2891,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		SystemConfig.hmAdrRDaten.put("<Buser>", Reha.aktUser);
 		SystemConfig.hmAdrRDaten.put("<Rpatid>", Reha.thisClass.patpanel.vecaktrez.get(0));
 		//System.out.println("Es wird folgender Bacrode genommen "+url);
-		OOTools.starteBacrodeFormular(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+url,SystemConfig.rezBarcodeDrucker);
+		OOTools.starteBacrodeFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+url,SystemConfig.rezBarcodeDrucker);
 		
 	}
 	public String rezUnterbrechung(boolean lneu,String feldname,int behandlung,String utage){

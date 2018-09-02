@@ -24,7 +24,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.Environment;
+import Environment.Path;
 
 
 
@@ -53,7 +53,7 @@ public class TheraPi{
 		public static void main(String[] args) {
 			setLookAndFeel();
 			
-			proghome= Environment.Instance.getProghome();
+			proghome= Path.Instance.getProghome();
 			System.out.println("Programmverzeichnis = "+proghome);
 			INIFile inif = new INIFile(proghome+"ini/mandanten.ini");
 			int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");

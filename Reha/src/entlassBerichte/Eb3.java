@@ -31,12 +31,12 @@ import com.sun.star.text.XTextViewCursor;
 import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.uno.UnoRuntime;
 
-import CommonTools.Environment;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.TopWindow;
+import Environment.Path;
 import ag.ion.bion.officelayer.NativeView;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.desktop.GlobalCommands;
@@ -63,7 +63,7 @@ public class Eb3 implements RehaEventListener  {
 	Container xparent = null;
 	NativeView nativeView = null; 
 	ByteArrayOutputStream outtemp = null;	
-	public String tempPfad = Environment.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
+	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
 
 	/***********neue logische Variable***************/
 	boolean newframeok = false;

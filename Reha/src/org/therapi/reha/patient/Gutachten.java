@@ -37,11 +37,11 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import dialoge.ToolsDialog;
 import generalSplash.RehaSplash;
 import hauptFenster.Reha;
@@ -582,8 +582,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 	}
 	
 	private  void doArztBausteine(){
-		new LadeProg(Environment.Instance.getProghome()+"ArztBaustein.jar "+
-				Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");	
+		new LadeProg(Path.Instance.getProghome()+"ArztBaustein.jar "+
+				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");	
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -653,13 +653,13 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			JOptionPane.showMessageDialog(null,"Kein Bericht für Datenübernahme ausgewählt");
 			return;
 		}
-		new LadeProg(Environment.Instance.getProghome()+"PDFLoader.jar "+
+		new LadeProg(Path.Instance.getProghome()+"PDFLoader.jar "+
 				Integer.toString(art)+" "+
 				tabbericht.getValueAt(row, 0).toString()+" "+
 				SystemConfig.PDFformularPfad+" "+
-				Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini"+" "+
+				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini"+" "+
 				Reha.thisClass.patpanel.patDaten.get(29)+" "+
-				Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");
+				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");
 	}
 
 	class ToolsDlgGutachten{
@@ -787,10 +787,10 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			case 19:
 				//LVA-Entlassmitteilung
 				try{
-					new LadeProg(Environment.Instance.getProghome()+"LVAEntlass.jar "+
-							" "+Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
+					new LadeProg(Path.Instance.getProghome()+"LVAEntlass.jar "+
+							" "+Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
 							Reha.thisClass.patpanel.vecaktrez.get(1)+" "+
-							Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini");
+							Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini");
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}

@@ -36,11 +36,11 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
+import Environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeuerMandant;
 
@@ -485,7 +485,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 	private void loeschenRegeln(){
 		int aktman = mandant.getSelectedIndex();
 		SystemConfig.Mandanten.remove(aktman);
-		INIFile ifile = INITool.openIni(Environment.Instance.getProghome()+"ini/", "mandanten.ini");		
+		INIFile ifile = INITool.openIni(Path.Instance.getProghome()+"ini/", "mandanten.ini");		
 		ifile.setIntegerProperty("TheraPiMandanten", "AuswahlImmerZeigen", 1, null);
 		ifile.setIntegerProperty("TheraPiMandanten", "DefaultMandant", 1, null);
 		SystemConfig.AuswahlImmerZeigen = 1;
@@ -529,7 +529,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		macheVerzeichnis("keystore",neuik);
 		macheVerzeichnis("urlaub",neuik);
 		
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/", "mandanten.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/", "mandanten.ini");
 		int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten")+1;
 		//int AnzahlMandanten = mandant.getItemCount()+1;
 		inif.setStringProperty("TheraPiMandanten", "AnzahlMandanten",Integer.valueOf(AnzahlMandanten).toString(),null);
@@ -622,17 +622,17 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		defman.setSelected(false);
 	}
 	private void macheVerzeichnis(String vz, String sIK){
-		File verzeichnis = new File(Environment.Instance.getProghome()+vz+"/"+sIK);
+		File verzeichnis = new File(Path.Instance.getProghome()+vz+"/"+sIK);
 		verzeichnis.mkdir();
-		File defvz = new File(Environment.Instance.getProghome()+"defaults/"+vz);
+		File defvz = new File(Path.Instance.getProghome()+"defaults/"+vz);
 		String[] dateien = defvz.list();
 		for(int i = 0 ;i < dateien.length;i++){
 			try {
-				copyFile(new File(Environment.Instance.getProghome()+"defaults/"+vz+"/"+dateien[i]),
-						new File(Environment.Instance.getProghome()+vz+"/"+sIK+"/"+dateien[i]),1024,true);
+				copyFile(new File(Path.Instance.getProghome()+"defaults/"+vz+"/"+dateien[i]),
+						new File(Path.Instance.getProghome()+vz+"/"+sIK+"/"+dateien[i]),1024,true);
 			} catch (IOException e) {
-				System.out.println(Environment.Instance.getProghome()+"defaults/"+vz+"/"+dateien[i]);
-				System.out.println(Environment.Instance.getProghome()+vz+"/"+sIK+"/"+dateien[i]);
+				System.out.println(Path.Instance.getProghome()+"defaults/"+vz+"/"+dateien[i]);
+				System.out.println(Path.Instance.getProghome()+vz+"/"+sIK+"/"+dateien[i]);
 				e.printStackTrace();
 			}
 		}
@@ -748,7 +748,7 @@ class MandantEinlesen extends SwingWorker<Integer,Void>{
 	protected Integer doInBackground() throws Exception {
 		// TODO Auto-generated method stub
 		//int man = this.mandant;
-		INIFile ifile = INITool.openIni(Environment.Instance.getProghome()+"ini/"+SystemConfig.Mandanten.get(this.mandant)[0]+"/","firmen.ini");
+		INIFile ifile = INITool.openIni(Path.Instance.getProghome()+"ini/"+SystemConfig.Mandanten.get(this.mandant)[0]+"/","firmen.ini");
 		
 		
 		String[] stitel = {"Ik","Ikbezeichnung","Firma1","Firma2","Anrede","Nachname","Vorname",
@@ -783,7 +783,7 @@ class MandantSpeichern extends SwingWorker<Integer,Void>{
 	protected Integer doInBackground() throws Exception {
 		try{
 			
-			INIFile ifile = INITool.openIni(Environment.Instance.getProghome()+"ini/"+SystemConfig.Mandanten.get(this.mandant)[0]+"/", "firmen.ini");
+			INIFile ifile = INITool.openIni(Path.Instance.getProghome()+"ini/"+SystemConfig.Mandanten.get(this.mandant)[0]+"/", "firmen.ini");
 			String[] stitel = {"Ik","Ikbezeichnung","Firma1","Firma2","Anrede","Nachname","Vorname",
 							"Strasse","Plz","Ort","Telefon","Telefax","Email","Internet","Bank","Blz","Kto",
 							"Steuernummer","Hrb","Logodatei","Zusatz1","Zusatz2","Zusatz3","Zusatz4"};
@@ -795,7 +795,7 @@ class MandantSpeichern extends SwingWorker<Integer,Void>{
 			//ifile = null;
 			INITool.saveIni(ifile);
 			
-			ifile = INITool.openIni(Environment.Instance.getProghome()+"ini/", "mandanten.ini");
+			ifile = INITool.openIni(Path.Instance.getProghome()+"ini/", "mandanten.ini");
 			if(SysUtilMandanten.thisClass.bootman.isSelected()){
 				ifile.setIntegerProperty("TheraPiMandanten", "AuswahlImmerZeigen", 1, null);
 				SystemConfig.AuswahlImmerZeigen = 1;

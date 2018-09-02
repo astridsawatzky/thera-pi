@@ -61,7 +61,6 @@ import com.mysql.jdbc.PreparedStatement;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
-import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.INITool;
@@ -71,6 +70,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.RehaTPEvent;
@@ -1928,7 +1928,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			@Override
 			protected Void doInBackground() throws Exception {
 				try {
-					INIFile inif = INITool.openIni(Environment.Instance.getProghome() + "ini/"
+					INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/"
 							+ Reha.aktIK + "/", "arzt.ini"); 
 							//+ Reha.aktIK + "/arzt.ini");
 					int forms = inif.getIntegerProperty("Formulare",
@@ -1970,7 +1970,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 					protected Void doInBackground() throws Exception {
 						ArztTools.constructArztHMap(xid);
 						OOTools.starteStandardFormular(
-								Environment.Instance.getProghome() + "vorlagen/" + Reha.aktIK + "/"
+								Path.Instance.getProghome() + "vorlagen/" + Reha.aktIK + "/"
 										+ formular.get(iformular), null);
 						return null;
 					}
@@ -2254,7 +2254,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 				JOptionPane.showMessageDialog(this,"Patientenadresse oder Firmenadresse sind unvollständig");
 				return;
 			}
-			File f = new File(Environment.Instance.getProghome()+"CalcKilometer.jar");
+			File f = new File(Path.Instance.getProghome()+"CalcKilometer.jar");
 			if(! f.exists()){
 				JOptionPane.showMessageDialog(this,"Die Software zur Kilometerermittlung ist nicht installiert");
 				return;

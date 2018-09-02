@@ -40,11 +40,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
-import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
@@ -494,45 +494,45 @@ public class InfoDialog extends JDialog implements WindowListener{
 			if(i==0){
 				//zuerst testen ob vor dem Rezeptdatum begonnen wurde
 				if( (diff1=DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(16)), tageplus.get(i).get(0)/*tage.get(i)*/)) < 0){
-					mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" < Rezeptdatum<br>"+Long.toString(diff1)+" Tage"+"</td>\n");
+					mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" < Rezeptdatum<br>"+Long.toString(diff1)+" Tage"+"</td>\n");
 					mitte.append("<td>&nbsp;</td>\n");
 				}else{
 					if( (diff = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(0)), tageplus.get(i).get(0)/*tage.get(i)*/)) > 0){
-						mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
+						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
 						otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 						if( ((Boolean)otest[0]) == (Boolean) true){
-							mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 						}else{
-							mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 						}
 					}else{
-						mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
+						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
 						otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 						if( ((Boolean)otest[0]) == (Boolean) true){
-							mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 						}else{
-							mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 						}
 					}
 				}
 				mitte.append("<td>"+tageplus.get(i).get(1)+"</td>\n");
 			}else if(i > 0 ){
 				if( (diff = DatFunk.TageDifferenz(tageplus.get(i-1).get(0)/*tage.get(i-1)*/,tageplus.get(i).get(0)/*tage.get(i)*/)) > tagebreak){
-					mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
+					mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
 					otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 					if( ((Boolean)otest[0]) == (Boolean) true){
-						mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}else{
-						mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}
 
 				}else{
-					mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
+					mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
 					otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
 					if( ((Boolean)otest[0]) == (Boolean) true){
-						mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}else{
-						mitte.append("<td><img src='file:///"+Environment.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
+						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}
 
 				}
@@ -556,7 +556,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 	}
 	/***************************************************/
 	private String makeLink(String ico, String url){
-		String linktext = "<img src='file:///"+Environment.Instance.getProghome()+"icons/"+ico+"'  border=0>";
+		String linktext = "<img src='file:///"+Path.Instance.getProghome()+"icons/"+ico+"'  border=0>";
 		linktext = "<a href=\"http://"+url+".de\">"+linktext+"</a>\n";
 		return linktext;
 		

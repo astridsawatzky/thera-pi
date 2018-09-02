@@ -41,11 +41,11 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.ZeitFunk;
+import Environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeueGruppe;
 import jxTableTools.ZeitTableCellEditor;
@@ -87,7 +87,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 	static String editGruppenName = null;
 	static String editGruppenGueltigAb = null;
 	static String gruppeninidat = "gruppen.ini";
-	static String gruppeninipfad = Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/";
+	static String gruppeninipfad = Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/";
 	
 	boolean ltermneu = false,ltermedit=false;
 	boolean lgruppeneu = false,lgruppeedit=false;

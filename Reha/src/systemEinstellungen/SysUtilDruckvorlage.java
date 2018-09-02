@@ -34,10 +34,10 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -425,7 +425,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		}
 		try{
 		
-		INIFile ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminliste.ini");
+		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminliste.ini");
 		ini.setStringProperty("TerminListe1", "AnzahlTabellen", Integer.valueOf( test1).toString(), null);
 		SystemConfig.oTerminListe.AnzahlTerminTabellen = test1;
 		
@@ -497,7 +497,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(Environment.Instance.getProghome()+"/vorlagen/"+Reha.aktIK);
+        final File file = new File(Path.Instance.getProghome()+"/vorlagen/"+Reha.aktIK);
 
         chooser.setCurrentDirectory(file);
 
@@ -531,7 +531,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 	/*************************************/
 	private void vorlageBearbeiten(){
 		IDocumentService documentService = null;
-		String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim();
+		String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim();
 		//String url = urlx.replaceAll("/", "\\\\");
 		////System.out.println("Url = -------------->"+url);
 		try {
@@ -592,7 +592,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		
 	}	
 	private void testDruck(){
-		String url = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim(); 
+		String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+vorlagenname.getText().trim(); 
 		////System.out.println("***************URL = "+url+"****************");
 		String terminDrucker = (String) druckername.getSelectedItem();
 		Vector<TermObjekt> termindat = new Vector<TermObjekt>();

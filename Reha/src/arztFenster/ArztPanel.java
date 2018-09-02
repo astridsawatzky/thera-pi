@@ -50,13 +50,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
-import CommonTools.Environment;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
@@ -593,7 +593,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			@Override
 			protected Void doInBackground() throws Exception {
 				// TODO Auto-generated method stub
-				INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini"); 
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini"); 
 				int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
 					titel.add(inif.getStringProperty("Formulare","AFormularText"+i));			
@@ -626,7 +626,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 					protected Void doInBackground() throws Exception {
 						try{
 							ArztTools.constructArztHMap(xid);
-							OOTools.starteStandardFormular(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
+							OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
 						}catch(Exception ex){
 							JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Arztadresse");
 						}

@@ -45,10 +45,10 @@ import org.jdesktop.swingx.JXTitledPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
+import Environment.Path;
 import abrechnung.AbrechnungDlg;
 import emailHandling.EmailSendenExtern;
 import events.RehaTPEvent;
@@ -447,7 +447,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		final JFileChooser chooser = new JFileChooser("Dateianhang wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(Environment.Instance.getProghome());
+        final File file = new File(Path.Instance.getProghome());
         chooser.setCurrentDirectory(file);
         chooser.addPropertyChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent e) {

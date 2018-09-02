@@ -29,12 +29,12 @@ import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.PatStammEvent;
@@ -464,7 +464,7 @@ public class PatientHauptLogic {
 								iformular = Integer.valueOf(formularid.getText());
 								if(iformular >=0){
 									String sdatei = formular.get(iformular);
-									OOTools.starteStandardFormular(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+sdatei,null);
+									OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+sdatei,null);
 								}
 							}
 							return null;
@@ -482,7 +482,7 @@ public class PatientHauptLogic {
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "patient.ini");
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "patient.ini");
 				int forms = inif.getIntegerProperty("Formulare", "PatientFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
 					titel.add(inif.getStringProperty("Formulare","PFormularText"+i));			

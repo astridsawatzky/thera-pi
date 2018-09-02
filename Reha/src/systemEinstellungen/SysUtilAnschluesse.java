@@ -18,9 +18,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import Environment.Path;
 import hauptFenster.Reha;
 
 
@@ -158,7 +158,7 @@ public class SysUtilAnschluesse extends JXPanel implements KeyListener, ActionLi
 		params[2] = (String) parity.getSelectedItem();
 		params[3] = (String) stopbits.getSelectedItem();
 
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
 		inif.setStringProperty(com, "BaudRate",params[0] , null);
 		inif.setStringProperty(com, "Bits",params[1] , null);
 		inif.setStringProperty(com, "Parity",params[2] , null);		

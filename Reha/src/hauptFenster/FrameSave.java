@@ -5,9 +5,9 @@ import java.awt.Point;
 
 import javax.swing.SwingWorker;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import Environment.Path;
 import systemEinstellungen.SystemConfig;
 
 public class FrameSave {
@@ -17,7 +17,7 @@ public class FrameSave {
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
-					INIFile inifile = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", xinifile);
+					INIFile inifile = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", xinifile);
 					inifile.setIntegerProperty("Container", "StarteIn", container, null);
 					inifile.setIntegerProperty("Container", "ImmerOptimieren", autosize, null);
 					inifile.setIntegerProperty("Container", "ZeigeAnPositionX", (autosize==1 ? 0 : position.x), null);

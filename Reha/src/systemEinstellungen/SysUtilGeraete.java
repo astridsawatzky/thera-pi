@@ -26,9 +26,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import Environment.Path;
 import hauptFenster.Reha;
 import ocf.OcKVK;
 import uk.co.mmscomputing.device.scanner.Scanner;
@@ -322,7 +322,7 @@ private JPanel getKnopfPanel(){
 	
 	
 	private void doSpeichern(){
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
 
 		SystemConfig.sReaderAktiv = (kvkakt.isSelected() ? "1" : "0");
 		inif.setStringProperty("KartenLeser", "KartenLeserAktivieren",SystemConfig.sReaderAktiv , null);

@@ -29,9 +29,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Environment;
 import CommonTools.JRtaCheckBox;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -240,7 +240,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 				@Override
 				protected Void doInBackground() throws Exception {
 					try{
-						starteAusfallRechnung(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/AusfallRechnung.ott");
+						starteAusfallRechnung(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/AusfallRechnung.ott");
 						doBuchen();
 						if(leistung[4].isSelected()){
 							macheMemoEintrag();

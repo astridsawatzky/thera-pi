@@ -21,12 +21,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import CommonTools.Environment;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
+import Environment.Path;
 import hauptFenster.Reha;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;
@@ -266,7 +266,7 @@ public class SystemConfig {
 	
 	}
 	public void SystemStart(String homedir){
-		ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+		ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 		PDFformularPfad = ini.getStringProperty("Formulare","PDFFormularPfad");
 		try {
 			dieseMaschine = java.net.InetAddress.getLocalHost();
@@ -326,7 +326,7 @@ public class SystemConfig {
 	
 	private void DatenBank(){
 		try{
-			ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 			int lesen;
 			int i;
 			ArrayList<String> aKontakt;
@@ -375,9 +375,9 @@ public class SystemConfig {
 		}
 		/*********************************/
 		try{
-			File f = new File(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "phoneservice.ini");
+			File f = new File(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "phoneservice.ini");
 			if(f.exists()){
-				INIFile phservice = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "phoneservice.ini");
+				INIFile phservice = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "phoneservice.ini");
 				if(phservice.getStringProperty("SMSDienste","SmartPhoneSms") != null){
 					try{
 						hmSMS.put("SMS",phservice.getStringProperty("SMSDienste","SmartPhoneSms") );
@@ -461,7 +461,7 @@ public class SystemConfig {
 
 	private void HauptFenster(){
 		try{
-			ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 			boolean mustsave = false;
 			aHauptFenster = new ArrayList<String>();
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","Hintergrundbild"));
@@ -514,14 +514,14 @@ public class SystemConfig {
 			}
 			OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org","OfficeNativePfad");
 			
-			ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "nachrichten.ini");
+			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "nachrichten.ini");
 			timerdelay = ini.getLongProperty("RehaNachrichten", "NachrichtenTimer");
 			timerpopup = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenPopUp") <= 0 ? false : true);
 			timerprogressbar = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenProgressbar") <= 0 ? false : true);
 
 			wissenURL = ini.getStringProperty("WWW-Services","RTA-Wissen");
 			homePageURL = ini.getStringProperty("WWW-Services","HomePage");		
-			homeDir = Environment.Instance.getProghome();
+			homeDir = Path.Instance.getProghome();
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der rehajava.ini, Mehode:HauptFenster!\nFehlertext: "+ex.getMessage());
 			ex.printStackTrace();
@@ -536,7 +536,7 @@ public class SystemConfig {
 	
 	private void TerminKalender(){
 		try{
-			INIFile termkalini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
+			INIFile termkalini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
 			aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
 			ArrayList<String> aList1  = new ArrayList<String>();
 			ArrayList<String[]> aList2 = new ArrayList<String[]>();
@@ -571,7 +571,7 @@ public class SystemConfig {
 			GruppenLesen();
 			//oGruppen = new GruppenEinlesen().init();
 			try{
-				ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kalender.ini");
+				ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kalender.ini");
 				KalenderLangesMenue = (ini.getStringProperty("Kalender","LangesMenue").trim().equals("0") ? false : true );
 				KalenderStartWochenAnsicht = (ini.getStringProperty("Kalender","StartWochenAnsicht").trim().equals("0") ? false : true );
 				KalenderStartWADefaultUser = (ini.getStringProperty("Kalender","AnsichtDefault").split("@")[0]);
@@ -602,7 +602,7 @@ public class SystemConfig {
 	
 	public static void NurSets(){
 		try{
-			ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
+			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
 			aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
 			aTerminKalender.clear();
 			ArrayList<String> aList1  = new ArrayList<String>();
@@ -628,7 +628,7 @@ public class SystemConfig {
 	
 	public static void  RoogleGruppen(){
 		try{
-			INIFile roogleini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
+			INIFile roogleini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
 			aRoogleGruppen = new ArrayList<ArrayList<ArrayList<String[]>>>();
 			int lesen,i;
 			lesen =  Integer.parseInt(String.valueOf(roogleini.getStringProperty("RoogleEinstellungen","RoogleAnzahlGruppen")) );
@@ -664,7 +664,7 @@ public class SystemConfig {
 	private void EmailParameter(){
 		try{
 			boolean mustsave = false;
-			INIFile emailini = 		INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "email.ini");
+			INIFile emailini = 		INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "email.ini");
 			hmEmailExtern = new HashMap<String,String>();
 			hmEmailExtern.put("SmtpHost",emailini.getStringProperty("EmailExtern","SmtpHost"));
 			hmEmailExtern.put("SmtpAuth",emailini.getStringProperty("EmailExtern","SmtpAuth"));			
@@ -739,8 +739,8 @@ public class SystemConfig {
 				INITool.saveIni(emailini);
 			}
 			
-			if(new File(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/dta301.ini").exists()){
-				INIFile dtaini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "dta301.ini");
+			if(new File(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/dta301.ini").exists()){
+				INIFile dtaini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "dta301.ini");
 				dta301InBox = dtaini.getStringProperty("DatenPfade301", "inbox");
 				dta301OutBox = dtaini.getStringProperty("DatenPfade301", "outbox");
 			}
@@ -751,7 +751,7 @@ public class SystemConfig {
 	}	
 	public static void IcalSettings(){
 		try{
-			INIFile icalini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "icalendar.ini");
+			INIFile icalini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "icalendar.ini");
 			hmIcalSettings.put("warnen",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnen").equals("0") ? false : true) );
 			hmIcalSettings.put("warnzeitpunkt", (String)icalini.getStringProperty("ICalendar", "Warnzeitpunkt"));
 			hmIcalSettings.put("organisatorname", (String)icalini.getStringProperty("ICalendar", "Organisatorname"));
@@ -799,13 +799,13 @@ public class SystemConfig {
 	
 	private void Verzeichnisse(){
 		try{
-			ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 			hmVerzeichnisse = new HashMap<String,String>();
-			hmVerzeichnisse.put("Programmverzeichnis",String.valueOf(Environment.Instance.getProghome()));
-			hmVerzeichnisse.put("Vorlagen",String.valueOf(Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK));
-			hmVerzeichnisse.put("Icons",String.valueOf(Environment.Instance.getProghome()+"icons"));
-			hmVerzeichnisse.put("Temp",String.valueOf(Environment.Instance.getProghome()+"temp/"+Reha.aktIK));		
-			hmVerzeichnisse.put("Ini",String.valueOf(Environment.Instance.getProghome()+"ini/"+Reha.aktIK));		
+			hmVerzeichnisse.put("Programmverzeichnis",String.valueOf(Path.Instance.getProghome()));
+			hmVerzeichnisse.put("Vorlagen",String.valueOf(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK));
+			hmVerzeichnisse.put("Icons",String.valueOf(Path.Instance.getProghome()+"icons"));
+			hmVerzeichnisse.put("Temp",String.valueOf(Path.Instance.getProghome()+"temp/"+Reha.aktIK));		
+			hmVerzeichnisse.put("Ini",String.valueOf(Path.Instance.getProghome()+"ini/"+Reha.aktIK));		
 			hmVerzeichnisse.put("Rehaplaner",ini.getStringProperty("Verzeichnisse", "Rehaplaner"));
 			hmVerzeichnisse.put("Fahrdienstliste",ini.getStringProperty("Verzeichnisse", "Fahrdienstliste"));
 			hmVerzeichnisse.put("Fahrdienstrohdatei",ini.getStringProperty("Verzeichnisse", "Fahrdienstrohdatei"));
@@ -818,7 +818,7 @@ public class SystemConfig {
 	private void TKFarben(){
 		try{
 			if (colini==null){
-				colini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "color.ini");
+				colini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "color.ini");
 			}
 			////System.out.println("In TK-Farben");
 			int anz  = Integer.valueOf( String.valueOf(colini.getStringProperty("Terminkalender","FarbenAnzahl")));
@@ -904,7 +904,7 @@ public class SystemConfig {
 	
 	public static void MandantenEinlesen(){
 		try{
-			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/", "mandanten.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/", "mandanten.ini");
 			int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
 			AuswahlImmerZeigen = inif.getIntegerProperty("TheraPiMandanten", "AuswahlImmerZeigen");
 			DefaultMandant = inif.getIntegerProperty("TheraPiMandanten", "DefaultMandant");
@@ -918,7 +918,7 @@ public class SystemConfig {
 			}
 			hmDBMandant = new HashMap<String,Vector>(); 
 			for(int i = 0; i < AnzahlMandanten;i++){
-				INIFile minif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Mandanten.get(i)[0]+"/", "rehajava.ini");
+				INIFile minif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Mandanten.get(i)[0]+"/", "rehajava.ini");
 				Vector<String> mandantDB = new Vector<String>();
 				mandantDB.add(minif.getStringProperty("DatenBank", "DBType1"));
 				mandantDB.add(minif.getStringProperty("DatenBank", "DBTreiber1"));
@@ -939,7 +939,7 @@ public class SystemConfig {
 				hmDBMandant.put(Mandanten.get(i)[1],(Vector<String>)mandantDB.clone());
 			}
 			
-			INIFile dbtini = INITool.openIni(Environment.Instance.getProghome()+"ini/", "dbtypen.ini");
+			INIFile dbtini = INITool.openIni(Path.Instance.getProghome()+"ini/", "dbtypen.ini");
 			int itypen = dbtini.getIntegerProperty("Datenbanktypen", "TypenAnzahl");
 			DBTypen = new Vector<String[]>();
 			String[] typen = new String[] {null,null,null};
@@ -971,7 +971,7 @@ public class SystemConfig {
 
 	public static void InetSeitenEinlesen(){
 		try{
-			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/", "rehabrowser.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/", "rehabrowser.ini");
 			int seitenanzahl = inif.getIntegerProperty("RehaBrowser", "SeitenAnzahl");
 			InetSeiten = new Vector<ArrayList<String>>();
 			ArrayList<String> seite = null;
@@ -1002,7 +1002,7 @@ public class SystemConfig {
  
 
 	public static void UpdateIni(String inidatei,String gruppe,String element,String wert){
-		INIFile	updateini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", inidatei);
+		INIFile	updateini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", inidatei);
 		updateini.setStringProperty(gruppe, element, wert, null);
 		INITool.saveIni(updateini);
 	}
@@ -1087,7 +1087,7 @@ public class SystemConfig {
 		for(int i = 0; i < fenster.length;i++){
 			try{
 				mustupdate = false;
-				inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", files[i]);
+				inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", files[i]);
 				//desktopPane 0 oder 1
 				if(inif.getIntegerProperty("Container", "StarteIn")==null){
 					inif.setIntegerProperty("Container","StarteIn",1,null);
@@ -1143,7 +1143,7 @@ public class SystemConfig {
 			vPatMerker = new Vector<String>();
 			vPatMerkerIcon = new Vector<ImageIcon>();
 			vPatMerkerIconFile = new Vector<String>();
-			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "patient.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "patient.ini");
 			for(int i = 1; i < 7;i++){
 				vPatMerker.add(inif.getStringProperty("Kriterien", "Krit"+i));
 				String simg = inif.getStringProperty("Kriterien", "Image"+i);
@@ -1151,8 +1151,8 @@ public class SystemConfig {
 					vPatMerkerIcon.add(null);
 					vPatMerkerIconFile.add(null);
 				}else{
-					vPatMerkerIcon.add(new ImageIcon(Environment.Instance.getProghome()+"icons/"+simg));
-					vPatMerkerIconFile.add(Environment.Instance.getProghome()+"icons/"+simg);
+					vPatMerkerIcon.add(new ImageIcon(Path.Instance.getProghome()+"icons/"+simg));
+					vPatMerkerIconFile.add(Path.Instance.getProghome()+"icons/"+simg);
 				}
 			}
 		}catch(Exception es){
@@ -1163,7 +1163,7 @@ public class SystemConfig {
 	public static void GeraeteInit(){
 		INIFile inif = null;
 		try{
-			inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
+			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
 			boolean mustsave = false;
 			if(inif.getIntegerProperty("KartenLeser", "KartenLeserAktivieren") > 0){
 				sReaderName = inif.getStringProperty("KartenLeser", "KartenLeserName");
@@ -1249,7 +1249,7 @@ public class SystemConfig {
 	}
 	public static void ArztGruppenInit(){
 		try{
-			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
 			int ags;
 			if( (ags = inif.getIntegerProperty("ArztGruppen", "AnzahlGruppen")) > 0){
 				arztGruppen = new String[ags];
@@ -1264,7 +1264,7 @@ public class SystemConfig {
 	
 	public static void RezeptInit(){
 		try{
-			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
 			boolean mustsave = false;;
 			int args;
 			//public static String[] rezeptKlassen = null;
@@ -1295,9 +1295,9 @@ public class SystemConfig {
 			}
 			//System.out.println(rezeptKlassenAktiv);
 			rezGebDrucker = inif.getStringProperty("DruckOptionen", "RezGebDrucker");
-			rezGebVorlageNeu = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Vorlagen", "RezGebVorlageNeu");
-			rezGebVorlageAlt = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Vorlagen", "RezGebVorlageAlt");
-			rezGebVorlageHB = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Vorlagen", "RezGebVorlageHB");
+			rezGebVorlageNeu = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Vorlagen", "RezGebVorlageNeu");
+			rezGebVorlageAlt = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Vorlagen", "RezGebVorlageAlt");
+			rezGebVorlageHB = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Vorlagen", "RezGebVorlageHB");
 			rezGebDirektDruck = (inif.getIntegerProperty("DruckOptionen", "DirektDruck") <= 0 ? false : true);
 			rezBarcodeDrucker = inif.getStringProperty("DruckOptionen", "BarCodeDrucker");
 			args = inif.getIntegerProperty("BarcodeForm", "BarcodeFormAnzahl");
@@ -1367,7 +1367,7 @@ public class SystemConfig {
 	public static void TherapBausteinInit() {
 		INIFile inif = null;
 		try{
-			inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "thbericht.ini");
+			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "thbericht.ini");
 			hmTherapBausteine = new HashMap<String,Vector<String>>();
 			int lang = rezeptKlassenAktiv.size();
 			Vector<String> vec = new Vector<String>();
@@ -1389,7 +1389,7 @@ public class SystemConfig {
 			for(int i = 0; i<4;i++){
 				berichttitel[i] = inif.getStringProperty("Bericht", "Block"+(i+1));	
 			}
-			thberichtdatei = Environment.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Datei", "BerichtsDatei");
+			thberichtdatei = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Datei", "BerichtsDatei");
 			
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der thbericht.ini, Mehode:TherapBausteinInit!\nFehlertext: "+ex.getMessage());
@@ -1403,7 +1403,7 @@ public class SystemConfig {
 					"Strasse","Plz","Ort","Telefon","Telefax","Email","Internet","Bank","Blz","Kto",
 					"Steuernummer","Hrb","Logodatei","Zusatz1","Zusatz2","Zusatz3","Zusatz4","Bundesland"};
 			hmFirmenDaten = new HashMap<String,String>();
-			inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "firmen.ini");
+			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "firmen.ini");
 			for(int i = 0; i < stitel.length;i++){
 				hmFirmenDaten.put(stitel[i],inif.getStringProperty("Firma",stitel[i] ) );
 			}
@@ -1415,7 +1415,7 @@ public class SystemConfig {
 	
 	// Lemmi 20101224 Steuerparanmeter für RGR und AFR in OffenPosten und Mahnungen, zentral einlesen
 	public static void OffenePostenIni_ReadFromIni(){
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "offeneposten.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "offeneposten.ini");
 
 		// Voreinstellung von Defaultwerten
 		hmZusatzInOffenPostenIni.put("RGRinOPverwaltung", 0);
@@ -1433,7 +1433,7 @@ public class SystemConfig {
 	public static void EigeneDokuvorlagenLesen(){
 		INIFile inif = null;
 		try{
-			inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "eigenedoku.ini");
+			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "eigenedoku.ini");
 			String dokus = null;
 			vOwnDokuTemplate.clear();
 			hmDokuSortMode.clear();
@@ -1479,7 +1479,7 @@ public class SystemConfig {
 		INIFile inif = null;
 		try{
 			boolean mustsave = false;
-			inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
+			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
 			
 //			if ( inif.IsFileLoaded() )
 //				int x = 5;
@@ -1565,7 +1565,7 @@ public class SystemConfig {
 
 	// Lemmi 20101223 Steuerparanmeter für den Patienten-Suchen-Dialog in die INI schreiben	
 	public static void BedienungIni_WriteToIni(){
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
 
 		// Sofern alle Parameter hier wieder in die INI geschrieben werden, legt das eine komplette INI an !
 	
@@ -1585,7 +1585,7 @@ public class SystemConfig {
 
 		  // Daten wegschreiben
 		INITool.saveIni(inif);
-		ini = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+		ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 		ini.setStringProperty("HauptFenster", "HorizontalTeilen",(SystemConfig.desktopHorizontal ? "1" : "0"),null);
 		INITool.saveIni(ini);
 
@@ -1608,7 +1608,7 @@ public class SystemConfig {
 	
 	
 	public static void FremdProgs(){
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "fremdprog.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "fremdprog.ini");
 		vFremdProgs = new Vector<Vector<String>>();
 		Vector<String> progs = new Vector<String>();
 		int anzahl =  inif.getIntegerProperty("FremdProgramme", "FremdProgrammeAnzahl");
@@ -1630,7 +1630,7 @@ public class SystemConfig {
 	}
 	public static void GeraeteListe(){
 		hmGeraete = new HashMap<String,String[]>();
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
 
 		int anzahl =  inif.getIntegerProperty("KartenLeserListe", "LeserAnzahl");
 		String[] string = new String[anzahl]; 
@@ -1694,7 +1694,7 @@ public class SystemConfig {
 	
 	public static void CompanyInit(){
 		hmCompany = new HashMap<String,String>();
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "company.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "company.ini");
 		hmCompany.put("name", inif.getStringProperty("Company", "CompanyName"));
 		hmCompany.put("enable", inif.getStringProperty("Company", "DeliverEnable"));
 		hmCompany.put("event", inif.getStringProperty("Company", "DeliverEvent"));
@@ -1708,7 +1708,7 @@ public class SystemConfig {
 		vGutachtenIK = new Vector<String>();
 		vGutachtenArzt = new Vector<String>();
 		vGutachtenDisplay = new Vector<String>();
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "gutachten.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "gutachten.ini");
 		int anzahl =  inif.getIntegerProperty("GutachtenEmpfaenger", "AnzahlEmpfaenger");
 		for(int i = 0; i < anzahl;i++){
 			vGutachtenEmpfaenger.add( inif.getStringProperty("GutachtenEmpfaenger", "Empfaenger"+(i+1)) );
@@ -1732,7 +1732,7 @@ public class SystemConfig {
 		boolean mustsave = false;
 		hmAbrechnung.clear();
 		/********Heilmittelabrechnung********/
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "abrechnung.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "abrechnung.ini");
 		hmAbrechnung.put("hmgkvformular", inif.getStringProperty("HMGKVRechnung", "Rformular"));
 		hmAbrechnung.put("hmgkvrechnungdrucker", inif.getStringProperty("HMGKVRechnung", "Rdrucker"));
 		hmAbrechnung.put("hmgkvtaxierdrucker", inif.getStringProperty("HMGKVRechnung", "Tdrucker"));
@@ -1848,7 +1848,7 @@ public class SystemConfig {
 		Verschluesseln man = Verschluesseln.getInstance();
 		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		try{
-			inif = INITool.openIni(Environment.Instance.getProghome(), INI_FILE);
+			inif = INITool.openIni(Path.Instance.getProghome(), INI_FILE);
 			String pw = null;
 			String decrypted = null;
 			hmAbrechnung.put("hmkeystorepw", "");
@@ -1892,7 +1892,7 @@ public class SystemConfig {
 		//System.out.println("Keystore-Passwort = "+hmAbrechnung.get("hmkeystorepw"));
 	}
 	public static void AktiviereLog(){
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 		boolean mustsave = false;
 		String dummy = inif.getStringProperty("SystemIntern","VLog");
 		if(dummy==null){
@@ -1929,7 +1929,7 @@ public class SystemConfig {
 	}	
 	
 	public static void JahresUmstellung(){
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 		aktJahr = inif.getStringProperty("SystemIntern","AktJahr");
 		String jahrHeute = DatFunk.sHeute().substring(6);
 		if(! aktJahr.equals(jahrHeute) ){
@@ -1962,8 +1962,8 @@ public class SystemConfig {
 	public static void ArschGeigenTest(){
 		//public static HashMap<String,Object> hmArschgeigenModus = new HashMap<String,Object>();
 		//public static Vector<Vector<String>> vArschgeigenDaten = new Vector<Vector<String>>();
-		if(new File(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/arschgeigen.ini").exists()){
-			INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arschgeigen.ini");
+		if(new File(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/arschgeigen.ini").exists()){
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arschgeigen.ini");
 			int anzahlag = inif.getIntegerProperty("Arschgeigen", "AnzahlArschgeigen");
 			int anzahliks;
 			Vector<String> vDummy = new Vector<String>();
@@ -2018,9 +2018,9 @@ public class SystemConfig {
 				"abrdreizwei","abriv","att","close","confirm","copy","cut","day","dayselect","down","left","minimize","paste","patsearch",
 				"quicksearch","refresh","right","search","tellist","termin","upw","week","abrdreieins","ebcheck","hbmehrere","verkaufArtikel",
 				"verkaufLieferant", "verkaufTuten","patnachrichten","ocr","BarKasse"};
-		INIFile inif = INITool.openIni(Environment.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "icons.ini");
-		INIFile iniFallBack = INITool.openIniFallback(Environment.Instance.getProghome()+"defaults/ini/","icons.ini");	// lokale ini (falls aktive ini in DB abgelegt ist)
-		INIFile iniDefault = new INIFile(Environment.Instance.getProghome()+"defaults/ini/icons.ini");					// ini im defaults-Pfad, die ist immer da
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "icons.ini");
+		INIFile iniFallBack = INITool.openIniFallback(Path.Instance.getProghome()+"defaults/ini/","icons.ini");	// lokale ini (falls aktive ini in DB abgelegt ist)
+		INIFile iniDefault = new INIFile(Path.Instance.getProghome()+"defaults/ini/icons.ini");					// ini im defaults-Pfad, die ist immer da
 
 		hmSysIcons = new HashMap<String,ImageIcon>();
 		Image ico = null;
@@ -2052,10 +2052,10 @@ public class SystemConfig {
 			}
 
 			if((xscale >0) && (yscale > 0)){
-				ico = new ImageIcon(Environment.Instance.getProghome()+"icons/"+use_ini.getStringProperty("Icons", bilder[i])).getImage().getScaledInstance(xscale,yscale, Image.SCALE_SMOOTH);
+				ico = new ImageIcon(Path.Instance.getProghome()+"icons/"+use_ini.getStringProperty("Icons", bilder[i])).getImage().getScaledInstance(xscale,yscale, Image.SCALE_SMOOTH);
 				hmSysIcons.put(bilder[i], new ImageIcon(ico));				
 			}else{
-				hmSysIcons.put(bilder[i], new ImageIcon(Environment.Instance.getProghome()+"icons/"+use_ini.getStringProperty("Icons", bilder[i])));
+				hmSysIcons.put(bilder[i], new ImageIcon(Path.Instance.getProghome()+"icons/"+use_ini.getStringProperty("Icons", bilder[i])));
 				ico = null;
 			}
 			ico = null;

@@ -41,7 +41,6 @@ import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
 import CommonTools.Colors;
 import CommonTools.DatFunk;
-import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -49,6 +48,7 @@ import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
@@ -709,12 +709,12 @@ public class Dta301 extends JXPanel implements FocusListener {
 			buf.append("<font face=\"Tahoma\"><style=margin-left=5px;>");
 			buf.append("<table>");
 			/****************************/
-			buf.append("<tr><td class=\"spalte3\" align=\"left\">"+"<img src='file:///"+Environment.Instance.getProghome()+"icons/rezept.png' border=0>");
+			buf.append("<tr><td class=\"spalte3\" align=\"left\">"+"<img src='file:///"+Path.Instance.getProghome()+"icons/rezept.png' border=0>");
 			buf.append("</td></tr>");
 			buf.append("<tr><td class=\"spalte1\"><font size=\"+1\"><b>"+reznummer);
 			buf.append("</b></font></td></tr>");
 			buf.append("<tr><td>&nbsp</td></tr>");
-			buf.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Environment.Instance.getProghome()+"icons/kontact_contacts.png' width=52 height=52 border=0>");
+			buf.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Path.Instance.getProghome()+"icons/kontact_contacts.png' width=52 height=52 border=0>");
 			buf.append("</td></tr>");
 			
 			buf.append("<tr><td class=\"spalte1\">");
@@ -737,7 +737,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 			buf.append("</td></tr>" );
 			
 			buf.append("<tr><td>&nbsp</td></tr>");
-			buf.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Environment.Instance.getProghome()+"icons/emblem-mail.png' width=52 height=52 border=0>");
+			buf.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Path.Instance.getProghome()+"icons/emblem-mail.png' width=52 height=52 border=0>");
 			buf.append("</td></tr>");
 
 			patnummer = String.valueOf(Reha.thisClass.patpanel.patDaten.get(29));
@@ -831,23 +831,23 @@ public class Dta301 extends JXPanel implements FocusListener {
 	        head.setTitle("Aufnahme oder Absage einer Rehaleistungen mitteilen");
 	        head.setDescription("<html>Tragen Sie hier bitte das <u>Datum der Eingangsuntersuchung</u> des Patienten sowie die <u>Uhrzeit</u> der Aufnahme ein.<br>"+
 	        		"Im Fall einer Absage benutzen Sie bitte die untere Rubrik</html>");
-	        head.setIcon(new ImageIcon(Environment.Instance.getProghome()+"icons/start.jpg"));
+	        head.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/start.jpg"));
 	        break;
 		case 1:
 	        head.setTitle("Unterbrechung eine Reha");
 	        head.setDescription("<html><br>Hier melden Sie <u>Reha-Unterbrechungen</u> sowie den <u>Grund der Unterbrechung</u> (z.B.Krankheit.)<br>"+
 	        		"Tragen Sie den <u>ersten Fehltag</u> und den <u>letzten Fehltag</u> ein.<br>Bei Bedarf ergänzen Sie die Nachricht durch einen <u>kurzen</u> Text.</html>");
-	        head.setIcon(new ImageIcon(Environment.Instance.getProghome()+"icons/break.jpg"));
+	        head.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/break.jpg"));
 	        break;
 		case 2:
 	        head.setTitle("Entlass-Mitteilung eines Reha-Patienten");
 	        head.setDescription("<html><br><u>Kontrollieren Sie im Rezeptstamm die einzelnen Datumswerte</u> auf Richtigkeit.<br><br>Tragen Sie dann das <u>Datum der Aufnahme</u> und das <u>Datum der Entlassung</u> ein.</html>");
-	        head.setIcon(new ImageIcon(Environment.Instance.getProghome()+"icons/ziel.jpg"));
+	        head.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/ziel.jpg"));
 	        break;
 		case 3:
 	        head.setTitle("Übersicht über alle Meldungen die diesen Fall betreffen");
 	        head.setDescription("<html><br>Datmit eine lückenlose Fall-Kontrolle möglich ist können Sie sich hier<br>einen Überblick über die gesamte Kommunikation mit dem jeweiligen Kostenträger verschaffen.</html>");
-	        head.setIcon(new ImageIcon(Environment.Instance.getProghome()+"icons/uebersicht.jpg"));
+	        head.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/uebersicht.jpg"));
 	        break;
 	        
 		}

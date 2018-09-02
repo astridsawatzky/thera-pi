@@ -46,12 +46,12 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.uno.Exception;
 
-import CommonTools.Environment;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import hauptFenster.Reha;
 import rehaInternalFrame.JBenutzerInternal;
 import systemEinstellungen.SystemConfig;
@@ -147,7 +147,7 @@ public class BenutzerRechte extends JXPanel{
 		validate();
 	}
 	private JXHeader getHeader(){
-		String ss = Environment.Instance.getProghome()+"icons/header-image.png";
+		String ss = Path.Instance.getProghome()+"icons/header-image.png";
 	    JXHeader header = new JXHeader("Benutzerverwaltung",
 	            "Hier legen Sie die Namen der Programmbenutzer fest. Sie können Passwörter erstellen oder ändern.\n" +
 	            "Der Benutzername des eingeloggten Users erscheint später im Fenster-Titel. \n" +

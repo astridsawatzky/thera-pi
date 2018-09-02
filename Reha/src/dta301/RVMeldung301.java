@@ -18,9 +18,9 @@ import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 
-import CommonTools.Environment;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import emailHandling.EmailSendenExtern;
 import entlassBerichte.EBerichtPanel;
 import hauptFenster.Reha;
@@ -1642,7 +1642,7 @@ public class RVMeldung301 {
 			if(frage1 != JOptionPane.YES_OPTION){
 				return false;
 			}
-			String keystore = Environment.Instance.getProghome()+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+			String keystore = Path.Instance.getProghome()+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
 			NebraskaEncryptor encryptor = store.getEncryptor(EMPFAENGERIK);
 			String inFile = (SystemConfig.dta301OutBox+(imtest ? "T" : "E")+"REH"+strAktEREH+".ORG").toLowerCase();

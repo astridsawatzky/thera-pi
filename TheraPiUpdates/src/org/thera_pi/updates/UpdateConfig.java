@@ -47,7 +47,6 @@ public class UpdateConfig {
 		if(!f.exists()){
 			TheraPiUpdates.isrta = true;
 			INIFile ini = new INIFile(proghome + "/ini/tpupdate.ini");
-			//if()
 			System.out.println(ini.getFileName());
 
 			updateHost = ini.getStringProperty("TheraPiUpdates", "UpdateFTP");
