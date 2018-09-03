@@ -46,10 +46,6 @@ import com.sun.star.view.XLineCursor;
 
 import ag.ion.bion.officelayer.desktop.IFrame;
 import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.IDocumentEvent;
-import ag.ion.bion.officelayer.event.IDocumentListener;
-import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.bion.officelayer.text.IText;
 import ag.ion.bion.officelayer.text.ITextCursor;
@@ -68,12 +64,7 @@ import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
 
 public class OOTools{
-	public OOTools(){
-		
-	}
-	public static synchronized void sucheLeerenPlatzhalter(ITextDocument textDocument, ITextField placeholders){
-		
-	}
+	
 	public static synchronized void loescheLeerenPlatzhalter(ITextDocument textDocument, ITextField placeholders){
 		try{
 			IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
@@ -452,20 +443,6 @@ public class OOTools{
 		ret = cell.getType().getDefault();
 		return ret;
 	}
-	/*
-	public static void doCellValue(XSheetCellCursor cellCursor,int col,int row,Object value) throws IndexOutOfBoundsException{
-		XCell cell= cellCursor.getCellByPosition(col,row);
-        XText cellText;
-        if(value instanceof Double){
-        	cell.setValue((Double)value);
-        }else if(value instanceof String){
-        	cellText = (XText)UnoRuntime.queryInterface(XText.class, cell);
-        	cellText.setString((String)value);
-        }else{
-        	
-        }
-	}
-	*/
 	public static void doCellFormula(XSheetCellCursor cellCursor,int col,int row,String formula) throws IndexOutOfBoundsException{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         cell.setFormula(formula);
@@ -582,123 +559,4 @@ public class OOTools{
 	
 	/*******************************************************/
 }
-class TheraPiDocListener implements IDocumentListener{
-	Object document = null;
-	public TheraPiDocListener(IDocument document){
-		this.document = document;
-	}
-	@Override
-	public void disposing(IEvent arg0) {
-		System.out.println("disposing");
-		
-	}
 
-	@Override
-	public void onAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onFocus(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onInsertDone(IDocumentEvent arg0) {
-		System.out.println("onInsertDone");
-		
-	}
-
-	@Override
-	public void onInsertStart(IDocumentEvent arg0) {
-		System.out.println("onInsertStart");
-		
-	}
-
-	@Override
-	public void onLoad(IDocumentEvent arg0) {
-		System.out.println("onLoad");
-		
-	}
-
-	@Override
-	public void onLoadDone(IDocumentEvent arg0) {
-		System.out.println("onLoadDone");
-		
-	}
-
-	@Override
-	public void onLoadFinished(IDocumentEvent arg0) {
-		System.out.println("onLoadFinished");
-		
-	}
-
-	@Override
-	public void onModifyChanged(IDocumentEvent arg0) {
-		System.out.println("onModifyChanged");
-	}
-
-	@Override
-	public void onMouseOut(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onMouseOver(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onNew(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onNonAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSave(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSaveAs(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSaveAsDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSaveDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onSaveFinished(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void onUnload(IDocumentEvent arg0) {
-		System.out.println("onUnload");
-		
-	}
-	
-}
-/**************************************/

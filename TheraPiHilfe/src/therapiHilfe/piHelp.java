@@ -37,6 +37,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXFrame;
 
+import Environment.Path;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
@@ -78,35 +79,13 @@ public static IOfficeApplication officeapplication;
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		String prog = java.lang.System.getProperty("user.dir");
-		if(System.getProperty("os.name").contains("Linux")){
-			proghome = "/opt/RehaVerwaltung/";
-		}else if(System.getProperty("os.name").contains("Windows")){
-			proghome = prog.substring(0, 2)+"/RehaVerwaltung/";
-		}else if(System.getProperty("os.name").contains("Mac")){
-			proghome = "/opt/RehaVerwaltung/";			
-		}
+		proghome = Path.Instance.getProghome();
 
-		//System.out.println("ProgHome = "+proghome);
-		/************Für die Entwicklung dieses Teil benutzen********/
+				/************Für die Entwicklung dieses Teil benutzen********/
 		//INIFile inif = new INIFile(piHelp.proghome+"pihelp.ini");
 		
 
 		INIFile inif = new INIFile(piHelp.proghome+"ini/pihelp.ini");
-		// Wird nicht mehr gebraucht, da MySql-Datenbank von 1&1 fest verdrahtet ist
-		/*
-			dbtreiber = new String(inif.getStringProperty("piHelp", "DBTreiber"));
-			dblogin = new String(inif.getStringProperty("piHelp", "DBLogin"));			
-			dbuser = new String(inif.getStringProperty("piHelp", "DBUser"));
-			 
-			String pw = new String(inif.getStringProperty("piHelp", "DBPassword"));
-			Verschluesseln man = Verschluesseln.getInstance();
-			man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
-		    String decrypted = man.decrypt (pw);
-		    dbpassword = new String(decrypted);
-		 */   
 		    tempvz = new String(inif.getStringProperty("piHelp", "TempVZ"));
 		    
 		    OpenOfficePfad = new String(inif.getStringProperty("piHelp", "OOPfad"));

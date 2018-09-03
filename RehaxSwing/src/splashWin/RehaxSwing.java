@@ -288,7 +288,6 @@ class RxSocketClient {
 		try {
 			serverStarten();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			String mes = new String(  e.toString());
 			JOptionPane.showMessageDialog(null,  mes);
 		}
@@ -323,7 +322,6 @@ class SetzeLabel extends SwingWorker<Void, Void>{
 	}
 	@Override
 	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable(){
 			public  void run(){
 				RehaxSwing.standDerDingelbl.setText(labeltext);

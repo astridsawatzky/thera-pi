@@ -23,6 +23,7 @@ import org.jdesktop.swingx.JXFrame;
 
 import com.sun.star.uno.Exception;
 
+import Environment.Path;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
@@ -57,15 +58,6 @@ public class ArztBausteine implements WindowListener, WindowStateListener {
 	
 	public static void main(String[] args) throws OfficeApplicationException {
 	
-		String prog = java.lang.System.getProperty("user.dir");
-		osVersion = System.getProperty("os.name");
-		if(osVersion.contains("Linux")){
-			proghome = "/opt/RehaVerwaltung/";
-		}else if(osVersion.contains("Windows")){
-			proghome = prog.substring(0, 2)+"/RehaVerwaltung/";
-		}else if(osVersion.contains("OSX")){
-			
-		}
 		if(args.length > 0){
 			System.out.println("hole daten aus INI-Datei "+args[0]);
 			INIFile ini = new INIFile(args[0]);

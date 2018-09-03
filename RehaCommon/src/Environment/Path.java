@@ -2,6 +2,13 @@ package Environment;
 
 import java.io.File;
 
+/**
+ * Tries to guess the programs execution home based on the OS it is running on and defaults to c:/RehaVerwaltung/
+ * 
+ * This guessing is at the moment (sep.2018) scattered through the code. 
+ * This class is probably temporary until the program does finding its files how it should
+ *
+ */
 public enum Path {
 	Instance;
 	
@@ -12,9 +19,7 @@ public enum Path {
 	public  String getProghome() {
 		return proghome;
 	}
-	 void setProghome(String proghome) {
-		this.proghome = proghome;
-	}
+	
 	public boolean isLinux() {
 		return currentOS.is(OS.Linux);
 	}
@@ -22,6 +27,9 @@ public enum Path {
 		return currentOS.is(OS.WIN);
 	}
 	
+	private void setProghome(String proghome) {
+		this.proghome = proghome;
+	}
 	Path() {
 		currentOS = determineOS();
 			
@@ -36,7 +44,7 @@ public enum Path {
 		case MAC:
 			String homedir = java.lang.System.getProperty("user.home");
 			setProghome(homedir+"/RehaVerwaltung/");
-			/**welcher Rueckgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhänger ermittelt werden **/
+			/**welcher Rueckgaberwert im Fall von OSX erfolgt muß durch einen Mac-Anhaenger ermittelt werden **/
 			break;
 		case UNKNOWN:
 			setProghome(C_REHA_VERWALTUNG);
@@ -48,6 +56,7 @@ public enum Path {
 		}
 		if (!new File(getProghome()).exists()) {
 			//program wasn't started from within its installation directory, probably developer.
+			//we assume standardpath until this mess is fixed
 			setProghome(C_REHA_VERWALTUNG);
 			
 		}
@@ -65,19 +74,6 @@ public enum Path {
 		}
 		//this should not happen
 		return OS.UNKNOWN;
-		
-	}
-	enum OS{
-		WIN ,
-		Linux ,
-		MAC,
-		UNKNOWN
-		;
-		
-		 boolean is(OS toCompare) {
-			return this == toCompare;
-		}
-		
 		
 	}
 }

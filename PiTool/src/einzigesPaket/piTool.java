@@ -15,12 +15,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -83,11 +78,12 @@ import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import Environment.Path;
 import sun.awt.image.ImageFormatException;
 import sun.awt.image.ToolkitImage;
 
 
-public class piTool implements ComponentListener,ContainerListener,MouseListener,MouseMotionListener,KeyListener,ActionListener,WindowListener, ChangeListener {
+public class piTool implements MouseListener,ActionListener,WindowListener, ChangeListener {
 public static JFrame jFrame = null;
 public static piTool app = null;
 
@@ -143,52 +139,22 @@ public String dbConnection = null;
 public String dbParameter = null;
 public String emailDaten;
 
-public static String proghome;
- 
 public static HashMap<String,String> hmEmailExtern;
 public static HashMap<String,String> hmEmailIntern;
+//FIXME: path to gimp might be wrong, depending on user system.
 public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 	
 	public static void main(String[] args) {
-		String prog = java.lang.System.getProperty("user.dir");
-		/*
-		int ind1 = prog.lastIndexOf("PiTool");
-		int ind2 = prog.indexOf("PiTool");
-		if((ind1 >= 0) && (ind1 != ind2)){
-			prog = prog.substring(0,ind1);
-		}
-
-		if(prog.contains("\\PiTool")){
-			String cuthome = prog.replace("PiTool", "");
-			System.out.println("nach cut "+cuthome);
-			proghome = cuthome.replace('\\', '/');
-		}else{
-			proghome = prog.replace('\\', '/');			
-		}
-
-
-		 
-		if(!proghome.substring(proghome.length()-1).equals("/")){
-			proghome = proghome+'/';
-		}else{
-		}
-		*/
-		if(System.getProperty("os.name").contains("Linux")){
-			proghome = "/opt/RehaVerwaltung/";
-		}else if(System.getProperty("os.name").contains("Windows")){
-			proghome = prog.substring(0, 2)+"/RehaVerwaltung/";
-		}else if(System.getProperty("os.name").contains("Mac")){
-			proghome = "/opt/RehaVerwaltung/";
-		}
-
-		System.out.println("ProgHome = "+proghome);
+		
+		
+		System.out.println("ProgHome = "+ Path.Instance.getProghome());
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				piTool application = new piTool();
 				application.getJFrame();
 				app = application;
-				app.jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/camera.png" ) );
+				jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( Path.Instance.getProghome()+"icons/camera.png" ) );
 				SwingUtilities.invokeLater(new Runnable(){
 					public  void run(){
 						new Thread(){
@@ -196,11 +162,9 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 								SystemStart();
 								DatenBankStarten();
 								if(app.dbok){
-									piTool.jFrame.setCursor(Cursor.WAIT_CURSOR);
+									jFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 									holeShots hl = new holeShots();
 									hl.execute();
-									//HoleBilder();
-									//JOptionPane.showMessageDialog(null,"Datenbank wurde gestartet!");
 								}else{
 									JOptionPane.showMessageDialog(null,"Datenbank konnte nicht gestartet werden!");							
 								}
@@ -239,11 +203,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		jFrame = new JFrame();
 		jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jFrame.setSize(900, 700);
-		//jFrame.setRootPane(getJRootPane());
 		jFrame.setTitle("pi-ScreenShot Tool");
-		//jFrame.addComponentListener(this);
-		//jFrame.addContainerListener(this);		
-
 		jFrame.setContentPane(getContentPane());
 		jFrame.setVisible(true);
 		
@@ -254,7 +214,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		cont.setBorder(null);
 		cont.add(getSued(), BorderLayout.NORTH);
 		
-		//cont.add(getKnopf(),BorderLayout.WEST);
 		JScrollPane contscr = new JScrollPane(getKnopf());
 		contscr.getVerticalScrollBar().setUnitIncrement(15);
 		contscr.validate();
@@ -377,8 +336,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		FlowLayout fl = new FlowLayout(FlowLayout.CENTER);
 		fl.setHgap(5);
 		tabelle = new JPanel(fl);
-		//tabelle.setBorder(BorderFactory.createEmptyBorder(0, 0, 7, 0));
-		//tabelle.setPreferredSize(new Dimension(0,25));
 		
 
 		jsl = new JSlider(JSlider.HORIZONTAL,FPS_MIN, FPS_MAX, FPS_INIT);
@@ -489,42 +446,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 	}
 
 
-	@Override
-	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentResized(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		knopf.revalidate();
-	}
-
-	@Override
-	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentAdded(ContainerEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void componentRemoved(ContainerEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
@@ -545,7 +467,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		String comp = ((JComponent)arg0.getSource()).getName();
 		boolean gefunden = false;
 		if(arg0.getSource() instanceof JLabel){
@@ -560,7 +481,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		}
 		if(gefunden){
 			
-			piTool.jFrame.setCursor(Cursor.WAIT_CURSOR);
+			piTool.jFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			System.out.println("Bild angeklickt: BildName = "+aktbild);
 			System.out.println("Bild angeklickt: BildID = "+iaktbild);
 			img = HoleGrossesBild(((JComponent)arg0.getSource()).getName());
@@ -575,8 +496,8 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
         	System.out.println("X="+xoriginal+" / Y="+yoriginal);
 			jsl.setValue(0);
 			((ShotBereich) shot).Zeichnen();
-			piTool.app.loeschen.setEnabled(true);
-			piTool.jFrame.setCursor(Cursor.DEFAULT_CURSOR);
+			app.loeschen.setEnabled(true);
+			jFrame.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			ShotBereich.setzeAusschnitt(false);
 
 		}else{
@@ -598,38 +519,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		if(arg0.getActionCommand().equals("anwenden")){
 			skaliereBild();
 		}
@@ -642,17 +532,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 			if(vos!=null){
 	   		 	speichern.setEnabled(true);				
 			}
-			/*
-			try {
-				bufferedImageToByteArray((BufferedImage)img);
-			} catch (ImageFormatException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			*/
 		}
 		if(arg0.getActionCommand().equals("gimpstart")){
 			try {
@@ -684,7 +563,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 				speichernQualitaet(stitel,1.0f);
 		         //boolean boo = ImageIO.write((RenderedImage) img, "jpg", new File("C:\\ScreenShots\\"+stitel+".jpg") ) ;
 		         //System.out.println("Ergebnis von Bild = "+boo);
-		         boolean boo = ImageIO.write((RenderedImage) vos, "jpg", new File(piTool.proghome+"ScreenShots/"+stitel+"_kl.jpg") ) ;
+		         boolean boo = ImageIO.write((RenderedImage) vos, "jpg", new File(Path.Instance.getProghome()+"ScreenShots/"+stitel+"_kl.jpg") ) ;
 		         System.out.println("Ergebnis von Vorschau = "+boo);
 		         if(jrb[0].isSelected()){
 			         final String xtitel = stitel;
@@ -704,10 +583,10 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 			        	 }
 			         }.start();
 			         JOptionPane.showMessageDialog(null, "Die Grafiken wurde im Internet veröffentlichtund\nzusätzlich lokal auf Ihrer Festplatte gespeichert\n"+
-			        		 		"Verzeichnis: "+piTool.proghome+"/ScreenShots");
+			        		 		"Verzeichnis: "+Path.Instance.getProghome()+"/ScreenShots");
 		         }else{
 			         JOptionPane.showMessageDialog(null, "Die Grafiken wurde auf Ihrer Festplatte gespeichert\n"+
-			        		 "Verzeichnis: "+piTool.proghome+"/ScreenShots");
+			        		 "Verzeichnis: "+Path.Instance.getProghome()+"/ScreenShots");
 		        	 
 		         }
 		     }
@@ -718,7 +597,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		     
 		}
 		if(arg0.getActionCommand().equals("laden")){
-			piTool.jFrame.setCursor(Cursor.WAIT_CURSOR);
+			piTool.jFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			SwingUtilities.invokeLater(new Runnable(){
 				public  void run(){
 					macheGrafikLaden();
@@ -761,7 +640,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
         ImageWriteParam param = writer.getDefaultWriteParam();
         param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
         param.setCompressionQuality(fQuality);
-        File fimg = new File(piTool.proghome+"ScreenShots/"+stitel+".jpg");
+        File fimg = new File(Path.Instance.getProghome()+"ScreenShots/"+stitel+".jpg");
         try {
         	ImageOutputStream out = ImageIO.createImageOutputStream(fimg); 
 			writer.setOutput(out);
@@ -807,7 +686,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 			final JFileChooser chooser = new JFileChooser("Verzeichnis wÃhlen");
 	        chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 	        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-	        final File file = new File(piTool.proghome+"ScreenShots/");
+	        final File file = new File(Path.Instance.getProghome()+"ScreenShots/");
 
 	        chooser.setCurrentDirectory(file);
 
@@ -922,107 +801,11 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		}
 		
 
-/**********************/		
-		public static void HoleBilder(){
-			Statement stmt = null;;
-			ResultSet rs = null;
-			int bilder = 0;
-			
-			final bitteWarten bw=null;
-			new Thread(){
-				public void run(){
-					bitteWarten bw = new bitteWarten("lade Bild - bitte warten...");
-					bw.setLocationRelativeTo(piTool.jFrame);
-					bw.setVisible(true);
-				}
-			}.start();
-			while(bw == null){
-				try {
-					Thread.sleep(80);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
-
-
-
-		
-			//piTool.app.conn.setAutoCommit(true);
-			try {
-				stmt = (Statement) piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-	                    ResultSet.CONCUR_UPDATABLE );
-				String test = "select count(*) as zaehler from sshots";
-				rs = (ResultSet) stmt.executeQuery(test);
-				bilder = 0;
-				if(rs.next()){
-					bilder = rs.getInt("zaehler");
-				}	
-				if(bilder > 0){
-					pBarInit(0,bilder+1);
-					piTool.vbilder = new Image[bilder];
-					test = "select vorschau,id,titel from sshots";
-					rs = (ResultSet) stmt.executeQuery(test);
-					int lauf = 0;
-					while(rs.next()){
-						pBarAkt(lauf);
-						piTool.vbilder[lauf] = ImageIO.read( new ByteArrayInputStream(rs.getBytes("vorschau")) );
-						System.out.println("Länge des Bildes ist "+rs.getBytes("vorschau").length);
-						Vector ar = new Vector();
-						ar.add(rs.getInt("id"));
-						ar.add(rs.getString("titel"));
-						shotvec.add((Vector)ar.clone());
-						//piTool.vbilder[lauf] = ImageIO.read(new ByteArrayInputStream(rs.getBlob("vorschau")));
-						//JLabel label = new JLabel();
-						//label.setIcon(new ImageIcon( ImageIO.read(new ByteArrayInputStream(rs.getBytes("vorschau")))  ));
-						//piTool.app.jroller.add(label);
-
-						lauf++;
-
-					}
-				}
-
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					} catch (SQLException sqlEx) { // ignore }
-						rs = null;
-					}
-					if (stmt != null) {
-						try {
-							stmt.close();
-						} catch (SQLException sqlEx) { // ignore }
-							stmt = null;
-						}
-					}
-				}
-			}
-			while(bw == null){
-				try {
-					Thread.sleep(80);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-			}
-			bw.dispose();
-		
-		}
 /**************************/
 		public static BufferedImage HoleGrossesBild(String titel){
 			Statement stmt = null;;
 			ResultSet rs = null;
-			int bilder = 0;
+			
 			Image bild = null;
 			
 
@@ -1071,8 +854,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		public static void SpeichereBilder(){
 			Statement stmt = null;;
 			ResultSet rs = null;
-			boolean ret = false;
-			int bilder = 0;
 		
 			//piTool.app.conn.setAutoCommit(true);
 			try {
@@ -1136,8 +917,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		public static void loescheAktuellesBild(String xStmt){
 			Statement stmt = null;;
 			ResultSet rs = null;
-			boolean ret = false;
-			int bilder = 0;
 		
 			//piTool.app.conn.setAutoCommit(true);
 			try {
@@ -1145,7 +924,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 	                    ResultSet.CONCUR_UPDATABLE );
 				
 				  String neuid = new String(xStmt);
-				  ret = stmt.execute(neuid);
+				   stmt.execute(neuid);
 				  
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -1222,7 +1001,7 @@ public void windowOpened(WindowEvent arg0) {
 	
 }
 public static void SystemStart(){
-		String datei = piTool.proghome+"ini/pitool.ini";
+		String datei = Path.Instance.getProghome() +"ini/pitool.ini";
 		File f = new File(datei);
 		if(!f.exists()){
 			System.out.println("Sie Rindvieh haben die pitool.ini im verkehrten Verzeichnis");
@@ -1413,20 +1192,20 @@ class holeShots extends SwingWorker<Void,Void>{
 			}	
 			if(bilder > 0){
 				piTool.app.pbar.setEnabled(true);
-				piTool.app.pBarInit(0,bilder);
+				piTool.pBarInit(0,bilder);
 				piTool.vbilder = new Image[bilder];
 				test = "select vorschau,id,titel from sshots ORDER by id";
 				rs = (ResultSet) stmt.executeQuery(test);
 				int lauf = 0;
 				while(rs.next()){
-					piTool.app.pBarAkt(lauf+1);
+					piTool.pBarAkt(lauf+1);
 					Thread.sleep(20);
 					piTool.vbilder[lauf] = ImageIO.read( new ByteArrayInputStream(rs.getBytes("vorschau")) );
 					System.out.println("Länge des Bildes ist "+rs.getBytes("vorschau").length);
 					Vector ar = new Vector();
 					ar.add(rs.getInt("id"));
 					ar.add(rs.getString("titel"));
-					piTool.app.shotvec.add((Vector)ar.clone());
+					piTool.shotvec.add((Vector)ar.clone());
 					//piTool.vbilder[lauf] = ImageIO.read(new ByteArrayInputStream(rs.getBlob("vorschau")));
 					//JLabel label = new JLabel();
 					//label.setIcon(new ImageIcon( ImageIO.read(new ByteArrayInputStream(rs.getBytes("vorschau")))  ));
@@ -1461,9 +1240,9 @@ class holeShots extends SwingWorker<Void,Void>{
 			}
 		}
 		
-		piTool.app.macheScroll();
+		piTool.macheScroll();
 		piTool.app.pbar.setEnabled(false);
-		piTool.jFrame.setCursor(Cursor.DEFAULT_CURSOR);		
+		piTool.jFrame.setCursor(Cursor.getDefaultCursor());		
 		return null;
 	}
 	
@@ -1566,25 +1345,7 @@ class MacheBufferedImage extends JFrame {
 
 }
 /**********************************/
-class bitteWarten extends JDialog{
-	public bitteWarten(String text){
-		//super();
-		//setUndecorated(true);
-		setModal(false);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		setSize(250,125);
-		/*
-		JPanel jpWarten = new JPanel();
-		jpWarten.setBackground(Color.WHITE);
-		jpWarten.add(new JLabel(text));
-		*/
-		setBackground(Color.WHITE);
-		add(new JLabel(text));
-		//setContentPane(jpWarten);
-		validate();
-		setVisible(true);
-	}
-}
+
 class passwortEncrypt extends JDialog{
 	JPasswordField pf = new JPasswordField();
 	JLabel lbl = new JLabel("Email-Passwort eingeben: ");
@@ -1622,7 +1383,7 @@ class passwortEncrypt extends JDialog{
 		}else{
 			gruppe = "EmailExtern";			
 		}
-		String datei = piTool.proghome+"ini/pitool.ini";
+		String datei =Path.Instance.getProghome()+"ini/pitool.ini";
 		File f = new File(datei);
 		if(!f.exists()){
 			System.out.println("Sie Rindvieh haben die pitool.ini im verkehrten Verzeichnis");
@@ -1642,7 +1403,7 @@ class ShotSenden extends JDialog{
 	JLabel lbl = new JLabel("Empfängeradresse: ");
 	JTextPane ta = new JTextPane();
 
-	JComboBox comb = new JComboBox(new String[]{piTool.app.hmEmailIntern.get("SenderAdresse"),piTool.app.hmEmailExtern.get("SenderAdresse")});
+	JComboBox comb = new JComboBox(new String[]{piTool.hmEmailIntern.get("SenderAdresse"),piTool.hmEmailExtern.get("SenderAdresse")});
 	JButton but = new JButton("Senden");
 	public ShotSenden(){
 		
@@ -1656,7 +1417,7 @@ class ShotSenden extends JDialog{
 		JPanel jgross = new JPanel(new BorderLayout());
 
 		tf.setPreferredSize(new Dimension(150,25));
-		tf.setText(piTool.app.hmEmailIntern.get("SenderAdresse"));
+		tf.setText(piTool.hmEmailIntern.get("SenderAdresse"));
 		JPanel jpan = new JPanel(new FlowLayout());
 		//jpan.setPreferredSize(new Dimension(0,100));
 		jpan.setBackground(Color.WHITE);
@@ -1697,7 +1458,7 @@ class ShotSenden extends JDialog{
 	private void senden(){
 		String smtpHost = null,username=null,password=null,senderAddress=null;
 		boolean smtpAuth = false;
-		if(comb.getSelectedItem().equals(piTool.app.hmEmailIntern.get("SenderAdresse"))){
+		if(comb.getSelectedItem().equals(piTool.hmEmailIntern.get("SenderAdresse"))){
 			username = piTool.hmEmailIntern.get("Username");
 			password = piTool.hmEmailIntern.get("Password");
 			senderAddress =piTool.hmEmailIntern.get("SenderAdresse");
@@ -1712,7 +1473,7 @@ class ShotSenden extends JDialog{
 		}
 		
 		ArrayList<String[]> attachments = new ArrayList<String[]>();
-		String[] anhang = {piTool.proghome+"ScreenShots/email-shot.jpg","email-shot.jpg"};
+		String[] anhang = {Path.Instance.getProghome()+"ScreenShots/email-shot.jpg","email-shot.jpg"};
 		attachments.add(anhang);
 		String recipientsAddress = tf.getText().trim();
 		String subject = "ScreenShot-Email";
