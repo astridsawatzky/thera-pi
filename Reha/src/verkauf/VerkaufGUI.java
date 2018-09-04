@@ -38,6 +38,7 @@ import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -95,7 +96,7 @@ public class VerkaufGUI extends JXPanel{
 		this.add(this.getContent1(), BorderLayout.CENTER);
 		verkauf = new Verkauf();
 		df = new DecimalFormat("0.00");
-		settings = INITool.openIni(Reha.proghome +"ini/"+ Reha.aktIK +"/", "verkauf.ini");
+		settings = INITool.openIni(Path.Instance.getProghome() +"ini/"+ Reha.aktIK +"/", "verkauf.ini");
 
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
@@ -552,7 +553,7 @@ public class VerkaufGUI extends JXPanel{
 			descriptor.setHidden(settings.getBooleanProperty(propSection, "SofortDrucken"));
 			descriptor.setAsTemplate(true);
 			
-			String url = Reha.proghome + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
+			String url = Path.Instance.getProghome() + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
 			ITextDocument doc = (ITextDocument) service.loadDocument(url, descriptor);
 			if(settings.getBooleanProperty(propSection, "SeitenLaengeAendern")) {
 				Size page = (Size) doc.getPageService().getPage(0).getPageStyle().getProperties().getXPropertySet().getPropertyValue("Size");
@@ -664,7 +665,7 @@ public class VerkaufGUI extends JXPanel{
 				descriptor.setHidden(settings.getBooleanProperty(propSection, "SofortDrucken"));
 				descriptor.setAsTemplate(true);
 				
-				String url = Reha.proghome + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
+				String url = Path.Instance.getProghome() + "vorlagen/"+ Reha.aktIK + "/" + settings.getStringProperty(propSection, "Vorlage");
 				IDocument document = service.loadDocument(url, descriptor);
 				ITextDocument doc = (ITextDocument) document;
 				

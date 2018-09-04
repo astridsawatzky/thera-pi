@@ -63,6 +63,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import emailHandling.EmailSendenExtern;
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -222,8 +223,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	}
 	public static int checkCert(String alias){
 		try{
-			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");//Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", ""));
 			Vector<X509Certificate> certs = store.getAllCerts();
 			String[] dn = null;
@@ -345,29 +345,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		//cmbDiszi.setSelectedIndex(cmbDiszi.getSelectedIndex());
 		return jscr;
 	}
-	/*
-	private JXPanel getIVPanel(){
-		JXPanel jpan = new JXPanel();
-		jpan.setOpaque(false);
-		String xwerte = "0dlu,fill:0:grow(1.0),0dlu";
-		//               1    2  3  4   5   6  7
-		String ywerte = "5dlu,p,3dlu,p,25dlu";
-		FormLayout lay = new FormLayout(xwerte,ywerte);
-		CellConstraints cc = new CellConstraints();
-		jpan.setLayout(lay);
-		soll302 = new JRtaCheckBox("Abrechnung nach §302 erstellen");
-		soll302.setSelected(true);
-		soll302.setOpaque(false);
-		jpan.add(soll302,cc.xy(2,2));
-		alternativeKK = new JButton("Adresse...");
-		alternativeKK.setActionCommand("alternativeadresse");
-		alternativeKK.addActionListener(this);
-		Image img = new ImageIcon(Reha.proghome+"icons/krankenkasse.png").getImage().getScaledInstance(22, 22, Image.SCALE_SMOOTH);
-		alternativeKK.setIcon(new ImageIcon(img));
-		jpan.add(alternativeKK,cc.xy(2,4));
-		return jpan;
-	}
-	*/
 	private JXPanel getRight(){
 		this.abrRez = new AbrechnungRezept(this);
 		this.abrRez.setRechtsAufNull();
@@ -1044,9 +1021,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		
 		String test = "";
 		if(abrechnungsModus.equals(ABR_MODE_302)){
-			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
-			//Einbau Test ob Zertifikat abgelaufen
+			//TODO: Einbau Test ob Zertifikat abgelaufen
 			test = "IK der Krankenkasse: "+ik_kasse+"\n"+
 			"IK des Kostenträgers: "+ik_kostent+"\n"+ 
 			"IK des Nutzer mit Entschlüsselungsbefungnis: "+ik_nutzer+"\n"+
@@ -1175,7 +1150,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		if(abrechnungsModus.equals(ABR_MODE_302)){
 			try {
 				
-				f = new File(Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org");
+				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw); 
 			    bw.write(gesamtBuf.toString());
@@ -1189,7 +1164,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			    int originalSize = Integer.parseInt(Long.toString(f.length()));
 			    int encryptedSize = originalSize;
 			    String skeystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
-				//String skeystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
 				File fkeystore = new File(skeystore);
 				if(! fkeystore.exists()){
 					abrDlg.setzeLabel("Rechnungsdatei verschlüsseln - fehlgeschlagen!!!");
@@ -1217,7 +1191,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			    doAuftragsDatei(originalSize,encryptedSize);
 			    
 				
-				f = new File(Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf");
+				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw); 
 			    bw.write(auftragsBuf.toString()); 
@@ -1316,9 +1290,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			String text = "";
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;
-			String[] encodedDat = {Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
-			//String[] encodedDat = {Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org","esol0"+aktEsol+".org"};
-			String[] aufDat = {Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
+			String[] encodedDat = {Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
+			String[] aufDat = {Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(encodedDat);
 			attachments.add(aufDat);
@@ -1462,13 +1435,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	private int doVerschluesseln(String datei){
 		try {
 			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
-			//String keystore = Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
 
-			//NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", zertifikatVon.replace("IK", ""));
 			
 			NebraskaEncryptor encryptor = store.getEncryptor(ik_nutzer);
-			String inFile = Reha.proghome+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
+			String inFile = Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
 			long size = encryptor.encrypt(inFile, inFile.replace(".org", ""));
 			return Integer.parseInt(Long.toString(size));
 		} catch (NebraskaCryptoException e) {
@@ -1558,7 +1529,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				if(abrechnungsModus.equals(ABR_MODE_302)){
 					try{
 						Thread.sleep(100);
-						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
+						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
 					}catch(Exception ex){
 						JOptionPane.showMessageDialog(null, "Fehler im Modul BegleitzettlDrucken - Fehler-Exception: ex\n"+ex.getMessage());
 					}
@@ -1727,7 +1698,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	private void holeEdifact(){
 		try {
 			if(SystemConfig.hmAbrechnung.get("hmgkvrauchdrucken").equals("1")){
-				abrDruck = new AbrechnungDrucken(this,Reha.proghome+
+				abrDruck = new AbrechnungDrucken(this,Path.Instance.getProghome()+
 						"vorlagen/"+
 						Reha.aktIK+
 						"/"+

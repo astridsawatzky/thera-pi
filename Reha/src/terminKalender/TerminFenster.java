@@ -67,6 +67,7 @@ import org.therapi.reha.patient.AktuelleRezepte;
 
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import dialoge.InfoDialog;
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -1527,7 +1528,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 					jPopupMenu.add(getTerminedespatsuchen());
 					jPopupMenu.addSeparator();
 					submenu = new JMenu("Patient suchen / Telefonliste");
-					submenu.setIcon(new ImageIcon(Reha.proghome+"/icons/personen16.gif"));
+					submenu.setIcon(new ImageIcon(Path.Instance.getProghome()+"/icons/personen16.gif"));
 					submenu.add(getPatientsuchen());
 					submenu.add(getTelefonliste());
 					jPopupMenu.add(submenu);

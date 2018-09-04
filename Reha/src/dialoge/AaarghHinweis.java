@@ -3,6 +3,7 @@ package dialoge;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import Environment.Path;
 import hauptFenster.Reha;
 
 public class AaarghHinweis {
@@ -13,7 +14,7 @@ public class AaarghHinweis {
 				title,
 				JOptionPane.YES_OPTION,
 				JOptionPane.QUESTION_MESSAGE,
-				new ImageIcon(Reha.proghome+"/icons/strauss.png"),     //do not use a custom Icon
+				new ImageIcon(Path.Instance.getProghome()+"/icons/strauss.png"),     //do not use a custom Icon
 				options,  //the titles of buttons
 				options[0]); //default button title
 	}

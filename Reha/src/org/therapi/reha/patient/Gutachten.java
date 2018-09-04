@@ -41,6 +41,7 @@ import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import dialoge.ToolsDialog;
 import generalSplash.RehaSplash;
 import hauptFenster.Reha;
@@ -523,8 +524,6 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			super();
 			setOpaque(false);
 			hgicon = SystemConfig.hmSysIcons.get("historie"); 
-			//hgicon = new ImageIcon(Reha.proghome+"icons/ChipKarte.png");
-			//hgicon = new ImageIcon(Reha.proghome+"icons/Chip.png");
 			icx = hgicon.getIconWidth()/2;
 			icy = hgicon.getIconHeight()/2;
 			xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.075f); 
@@ -583,8 +582,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 	}
 	
 	private  void doArztBausteine(){
-		new LadeProg(Reha.proghome+"ArztBaustein.jar "+
-				Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini");	
+		new LadeProg(Path.Instance.getProghome()+"ArztBaustein.jar "+
+				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");	
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -654,13 +653,13 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			JOptionPane.showMessageDialog(null,"Kein Bericht für Datenübernahme ausgewählt");
 			return;
 		}
-		new LadeProg(Reha.proghome+"PDFLoader.jar "+
+		new LadeProg(Path.Instance.getProghome()+"PDFLoader.jar "+
 				Integer.toString(art)+" "+
 				tabbericht.getValueAt(row, 0).toString()+" "+
 				SystemConfig.PDFformularPfad+" "+
-				Reha.proghome+"ini/"+Reha.aktIK+"/fremdprog.ini"+" "+
+				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini"+" "+
 				Reha.thisClass.patpanel.patDaten.get(29)+" "+
-				Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini");
+				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");
 	}
 
 	class ToolsDlgGutachten{
@@ -788,10 +787,10 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			case 19:
 				//LVA-Entlassmitteilung
 				try{
-					new LadeProg(Reha.proghome+"LVAEntlass.jar "+
-							" "+Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
+					new LadeProg(Path.Instance.getProghome()+"LVAEntlass.jar "+
+							" "+Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
 							Reha.thisClass.patpanel.vecaktrez.get(1)+" "+
-							Reha.proghome+"ini/"+Reha.aktIK+"/fremdprog.ini");
+							Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini");
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}

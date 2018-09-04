@@ -606,8 +606,6 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 	@Override
 	public void valueChanged(TreeSelectionEvent arg0) {
-		// TODO Auto-generated method stub
-		//System.out.println(arg0);
 		TreePath path = arg0.getNewLeadSelectionPath();
 		try{
 		int element = path.getPathCount();
@@ -620,25 +618,17 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	    			((String)((Vector)dateien.get(i)).get(1)).equals(sgruppe) ) {
 	    			String pfad = RehaWissen.proghome+"howto";
 	    			File file = new File(pfad,sitem+".html");
-	    			//File file = new File(pfad,sitem+".html");
 	    			if (file.exists()) {
 	    				rtaWissen.highlight = true;
 	    				rtaWissen.Navigiere(SystemConfig.HilfeServer+((String)((Vector)dateien.get(i)).get(2)));
-		    			//rtaWissen.Navigiere("file:///"+Reha.proghome+"howto/"+sitem+".html");
 	    			}else{
 	    				rtaWissen.highlight = true;	    				
 	    				rtaWissen.Navigiere(SystemConfig.HilfeServer+((String)((Vector)dateien.get(i)).get(2)));
-	    				//rtaWissen.Navigiere(SystemConfig.HilfeServer+sitem+".html");
 	    			}
 	    			break;
 	    		}
 	    	}
 	    }
-	    /*
-	    if(thema.equals("Grundlagen der Bedienung")){
-	    	rtaWissen.Navigiere("file:///"+Reha.proghome+"howto/tk-bedienung.html");	    	
-	    }
-	*/
 		}catch(java.lang.NullPointerException npex){
 			
 		}

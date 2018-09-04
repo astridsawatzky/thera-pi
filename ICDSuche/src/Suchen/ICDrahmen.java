@@ -30,10 +30,6 @@ public class ICDrahmen extends JApplet implements WindowListener{
 	   
 
 	public static void main(String[] args) {
-		//System.out.println(" Name des Betriebssystems: "+System.getProperty("os.name"));
-		//System.out.println("      Benutzerverzeichnis: "+java.lang.System.getProperty("user.dir").replaceAll("\\\\","/"));
-		//System.out.println("Installierte Java-Version: "+java.lang.System.getProperty("java.version"));
-		//System.out.println("         Java-Verzeichnis: "+java.lang.System.getProperty("java.home").replaceAll("\\\\","/"));
 		
 		ICDrahmen frm = new ICDrahmen();
 		frm.getJFrame();

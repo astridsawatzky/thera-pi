@@ -28,6 +28,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -343,7 +344,7 @@ public class Barkasse extends JXPanel implements ItemListener{
 		DocumentDescriptor docdescript = new DocumentDescriptor();
 		docdescript.setAsTemplate(true);
 		docdescript.setHidden(true);
-		document = documentService.loadDocument(Reha.proghome+"vorlagen/"+Reha.aktIK+"/Barkasse.ott",docdescript);
+		document = documentService.loadDocument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/Barkasse.ott",docdescript);
 		//ITextTable[] tbl = null;
 		ITextDocument textDocument = (ITextDocument)document;
 		//tbl = textDocument.getTextTableService().getTextTables();
@@ -399,7 +400,7 @@ public class Barkasse extends JXPanel implements ItemListener{
 	 * ist keine Einstellung vorhanden, wird ein Default gesetzt
 	 */
 	private void readLastSelection(){
-		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "bedienung.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
 		if ( inif.getStringProperty("BarKasse", "Rezeptgebuehren") != null ){					// Eintraege in ini vorhanden
 			incRG = inif.getBooleanProperty("BarKasse", "Rezeptgebuehren") ;
 			incVerk = inif.getBooleanProperty("BarKasse", "Verkaeufe");			
@@ -414,7 +415,7 @@ public class Barkasse extends JXPanel implements ItemListener{
 	 */
 	private void saveLastSelection(){
 		if ( ( ChkRG.isSelected() != incRG ) || ( ChkVerk.isSelected() != incVerk ) ){
-			INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "bedienung.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
 			inif.setBooleanProperty("BarKasse", "Rezeptgebuehren", ChkRG.isSelected(), "Abrechnung Barkasse beruecksichtigt");
 			inif.setBooleanProperty("BarKasse", "Verkaeufe", ChkVerk.isSelected(), null);
 			INITool.saveIni(inif);

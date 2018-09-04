@@ -35,6 +35,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -234,7 +235,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 					hmRezgeb.get("<rgreznum>")+"' LIMIT 1"));
 		}
 		hmRezgeb.put("<rgbehandlung>",tfs[4].getText().trim());
-		String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/RezeptgebuehrRechnung.ott";
+		String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/RezeptgebuehrRechnung.ott";
 		try {
 			officeStarten(url);
 		} catch (OfficeApplicationException e) {

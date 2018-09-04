@@ -38,7 +38,6 @@ public class RehaxSwing implements WindowListener,KeyListener{
 	static SockServer sock = null;
 	public static String proghome;
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		RehaxSwing application = new RehaxSwing();
 		new Thread(){
 			public void run(){
@@ -46,7 +45,6 @@ public class RehaxSwing implements WindowListener,KeyListener{
 				try {
 					new SockServer();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -109,13 +107,11 @@ public class RehaxSwing implements WindowListener,KeyListener{
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		System.out.println("In windowClosed");
 		if(SockServer.serv != null){
 			try {
 				SockServer.serv.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -123,14 +119,12 @@ public class RehaxSwing implements WindowListener,KeyListener{
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		System.out.println("In windowClosing");
 		if(SockServer.serv != null){
 			try {
 				SockServer.serv.close();
 				SockServer.serv = null;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -138,14 +132,12 @@ public class RehaxSwing implements WindowListener,KeyListener{
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		/*
 		if(SockServer.serv != null){
 			try {
 				SockServer.serv.close();
 				SockServer.serv = null;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -168,7 +160,6 @@ public class RehaxSwing implements WindowListener,KeyListener{
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
 		if(arg0.getKeyCode()==KeyEvent.VK_F4 && arg0.isAltDown()){
 			System.out.println("ALT+F4 gedrückt");
 			if(SockServer.serv != null){
@@ -176,7 +167,6 @@ public class RehaxSwing implements WindowListener,KeyListener{
 					SockServer.serv.close();
 					SockServer.serv = null;
 				} catch (IOException e) {
-					//TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -205,7 +195,6 @@ class SockServer{
 		try {
 			serv = new ServerSocket(1234);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			RehaxSwing.jDiag.dispose();
 			return;
@@ -223,7 +212,6 @@ class SockServer{
 				}
 				client = serv.accept();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				break;
 			}
@@ -255,7 +243,6 @@ class SockServer{
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}								
 						System.exit(0);
@@ -301,7 +288,6 @@ class RxSocketClient {
 		try {
 			serverStarten();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			String mes = new String(  e.toString());
 			JOptionPane.showMessageDialog(null,  mes);
 		}
@@ -336,7 +322,6 @@ class SetzeLabel extends SwingWorker<Void, Void>{
 	}
 	@Override
 	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable(){
 			public  void run(){
 				RehaxSwing.standDerDingelbl.setText(labeltext);

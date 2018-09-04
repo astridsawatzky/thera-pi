@@ -70,6 +70,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.RehaTPEvent;
@@ -1927,7 +1928,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			@Override
 			protected Void doInBackground() throws Exception {
 				try {
-					INIFile inif = INITool.openIni(Reha.proghome + "ini/"
+					INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/"
 							+ Reha.aktIK + "/", "arzt.ini"); 
 							//+ Reha.aktIK + "/arzt.ini");
 					int forms = inif.getIntegerProperty("Formulare",
@@ -1969,7 +1970,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 					protected Void doInBackground() throws Exception {
 						ArztTools.constructArztHMap(xid);
 						OOTools.starteStandardFormular(
-								Reha.proghome + "vorlagen/" + Reha.aktIK + "/"
+								Path.Instance.getProghome() + "vorlagen/" + Reha.aktIK + "/"
 										+ formular.get(iformular), null);
 						return null;
 					}
@@ -2253,7 +2254,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 				JOptionPane.showMessageDialog(this,"Patientenadresse oder Firmenadresse sind unvollständig");
 				return;
 			}
-			File f = new File(Reha.proghome+"CalcKilometer.jar");
+			File f = new File(Path.Instance.getProghome()+"CalcKilometer.jar");
 			if(! f.exists()){
 				JOptionPane.showMessageDialog(this,"Die Software zur Kilometerermittlung ist nicht installiert");
 				return;

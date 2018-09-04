@@ -59,6 +59,7 @@ import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Environment.Path;
 import abrechnung.AbrechnungDlg;
 import ag.ion.bion.officelayer.desktop.IFrame;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -118,8 +119,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public boolean neu = false;
 	public boolean jetztneu = false;
 	public boolean inebericht = false;
-	public String tempPfad = Reha.proghome+"temp/"+Reha.aktIK+"/";
-	public String vorlagenPfad = Reha.proghome+"vorlagen/"+Reha.aktIK+"/";
+	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
+	public String vorlagenPfad = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
 	public String[] rvVorlagen = {null,null,null,null};
 	EBerichtTab ebt = null;;
 	NachsorgeTab nat = null;
@@ -2061,15 +2062,13 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				doTextBausteine();
 				break;
 			case 1:
-				new LadeProg(Reha.proghome+"BMIRechner.jar");
+				new LadeProg(Path.Instance.getProghome()+"BMIRechner.jar");
 				break;
 			case 2:
-				//new LadeProg(Reha.proghome+"ICDSuche.jar");
-				new LadeProg(Reha.proghome+"ICDSuche.jar"+" "+Reha.proghome+" "+Reha.aktIK);
+				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
 				break;
 			case 3:
-				//new LadeProg(Reha.proghome+"ICDSuche.jar");
-				new LadeProg(Reha.proghome+"RehaOCR.jar "+" "+Reha.proghome+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				new LadeProg(Path.Instance.getProghome()+"RehaOCR.jar "+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
 				break;
 			case 4:
 				starteTest();
@@ -2079,7 +2078,6 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				break;
 			}
 			tDlg = null;
-			//System.out.println("Rückgabewert = "+Reha.toolsDlgRueckgabe);
 		}
 	}
 /**********************************************/	

@@ -28,6 +28,7 @@ import CommonTools.INITool;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import hauptFenster.Reha;
 import systemTools.ButtonTools;
 
@@ -447,7 +448,7 @@ public class SysUtilOpMahnung extends JXPanel implements KeyListener, ActionList
 
 	
 	private void doSpeichern(){
-		INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "offeneposten.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "offeneposten.ini");
 	
 		SystemConfig.hmZusatzInOffenPostenIni.put("RGRinOPverwaltung", Integer.parseInt(tfs[0].getText()) );
 		SystemConfig.hmZusatzInOffenPostenIni.put("AFRinOPverwaltung", Integer.parseInt(tfs[1].getText()) );

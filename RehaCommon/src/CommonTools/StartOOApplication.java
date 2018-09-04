@@ -19,7 +19,6 @@ public class StartOOApplication {
 	static String ooPath,libPath;
 	boolean isLibreOffice;
 	public IOfficeApplication officeapplication = null; 
-		
 
 	public StartOOApplication(String oopath,String libpath){
 		ooPath = oopath;

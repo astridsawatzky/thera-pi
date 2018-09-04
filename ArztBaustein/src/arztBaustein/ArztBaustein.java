@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.event.WindowStateListener;
-import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -33,36 +32,24 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 	/**
 	 * @param args
 	 */
-	public static String OpenOfficePfad = "C:/Program Files (x86)/OpenOffice.org 3";
-	public static IOfficeApplication officeapplication = null;
-	public static String OpenOfficeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg";
+	private static String OpenOfficePfad = "C:/Program Files (x86)/OpenOffice.org 3";
+	static IOfficeApplication officeapplication = null;
+	static String OpenOfficeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg";
 	
-	public Connection conn = null;
-	public static boolean DbOk = false;
-	public static ArztBaustein thisClass = null;
-	public static String osVersion = null;
-	public static String proghome = null;
+	Connection conn = null;
+	static boolean DbOk = false;
+	static ArztBaustein thisClass = null;
 
-	public JXFrame jFrame = null;
+	JXFrame jFrame = null;
 
-	public String dieseMaschine = null;	
-	public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/dbf";
-	public static String dbUser = "entwickler";
-	public static String dbPassword = "entwickler";
+	private static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/dbf";
+	private static String dbUser = "entwickler";
+	private static String dbPassword = "entwickler";
 	
-	ArztBausteinPanel arztbausteinpanel = null;
-	public SqlInfo sqlInfo;
+	private ArztBausteinPanel arztbausteinpanel = null;
+	private SqlInfo sqlInfo;
 	public static void main(String[] args) throws OfficeApplicationException {
 	
-		String prog = java.lang.System.getProperty("user.dir");
-		osVersion = System.getProperty("os.name");
-		if(osVersion.contains("Linux")){
-			proghome = "/opt/RehaVerwaltung/";
-		}else if(osVersion.contains("Windows")){
-			proghome = prog.substring(0, 2)+"/RehaVerwaltung/";
-		}else if(osVersion.contains("OSX")){
-			
-		}
 		if(args.length > 0){
 			System.out.println("hole daten aus INI-Datei "+args[0]);
 			INIFile ini = new INIFile(args[0]+"ini/"+args[1]+"/rehajava.ini");
@@ -94,11 +81,6 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			jFrame = new JXFrame();
 			sqlInfo.setFrame(jFrame);
 			thisClass = this;
-			try {
-				dieseMaschine = java.net.InetAddress.getLocalHost().toString();
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
 			
 			new SwingWorker<Void,Void>(){
 				@Override
@@ -141,8 +123,6 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			jFrame.getContentPane().setPreferredSize(new Dimension(1024,800));
 			jFrame.getContentPane().setLayout(new GridLayout());
 			jFrame.getContentPane().add ( (arztbausteinpanel=new ArztBausteinPanel()));
-//			jFrame.validate();
-//			
 
 			jFrame.setVisible(true);
 
@@ -180,21 +160,6 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			arztbausteinpanel.document.close();
 			arztbausteinpanel.document = null;
 			System.out.println("Dokument wurde geschlossen");
-			/*
-			try {
-				IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();
-				if(docs.length > 0){
-					for(int i = docs.length-1; i >= 0;i--){
-						docs[i].close();
-						System.out.println("Schliesse Dokument "+i);
-					}
-				}
-			} catch (DocumentException e) {
-				e.printStackTrace();
-			} catch (OfficeApplicationException e) {
-				e.printStackTrace();
-			}
-			*/
 		}
 		if(conn != null){
 			try {
@@ -231,50 +196,11 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();
 		}
-		/*
-    	final String OPEN_OFFICE_ORG_PATH = ArztBausteine.OpenOfficePfad;
-        try
-        {
-            String path = OPEN_OFFICE_ORG_PATH;
-            Map <String, String>config = new HashMap<String, String>();
-            config.put(IOfficeApplication.APPLICATION_HOME_KEY, path);
-            config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            config.put(IOfficeApplication.APPLICATION_HOST_KEY, "localhost");
-            //config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH,ArztBausteine.OpenOfficeNativePfad);
-            officeapplication = OfficeApplicationRuntime.getApplication(config);
-            officeapplication.activate();
-            officeapplication.getDesktopService().addTerminateListener(new VetoTerminateListener() {
-          	  public void queryTermination(ITerminateEvent terminateEvent) {
-          	    super.queryTermination(terminateEvent);
-          	    try {
-          	      IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();
-          	      if (docs.length == 1) { 
-          	        docs[0].close();
-          	        ////System.out.println("Letztes Dokument wurde geschlossen");
-          	      }else{
-          	    	System.out.println("Es sind noch "+docs.length+" Dokumente offen");
-          	      }
-          	    }
-          	    catch (DocumentException e) {
-          	    	e.printStackTrace();
-          	    } catch (OfficeApplicationException e) {
-						e.printStackTrace();
-				}
-          	  }
-          	});
-        }
-        catch (OfficeApplicationException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        */
+	
     }
 	
 	private void starteDB() throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 
-			final String sDB = "SQL";
 			if (conn != null){
 				try{
 				conn.close();}

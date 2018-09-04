@@ -7,6 +7,7 @@ import javax.swing.SwingWorker;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import Environment.Path;
 import systemEinstellungen.SystemConfig;
 
 public class FrameSave {
@@ -16,7 +17,7 @@ public class FrameSave {
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
-					INIFile inifile = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", xinifile);
+					INIFile inifile = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", xinifile);
 					inifile.setIntegerProperty("Container", "StarteIn", container, null);
 					inifile.setIntegerProperty("Container", "ImmerOptimieren", autosize, null);
 					inifile.setIntegerProperty("Container", "ZeigeAnPositionX", (autosize==1 ? 0 : position.x), null);
@@ -31,11 +32,6 @@ public class FrameSave {
 					SystemConfig.hmContainer.put(hashmap+"LocationY",(autosize==1 ? 0 : position.y));
 					SystemConfig.hmContainer.put(hashmap+"DimensionX",(autosize==1 ? -1 : groesse.width));
 					SystemConfig.hmContainer.put(hashmap+"DimensionY",(autosize==1 ? -1 : groesse.height));
-					/*
-					System.out.println("Beschreibe File -> "+Reha.proghome+"ini/"+Reha.aktIK+"/"+xinifile);
-					System.out.println("Container = "+container+" / AutoSize = "+autosize+
-							" / Position = "+position+" / Groesse = "+groesse);
-					*/		
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}

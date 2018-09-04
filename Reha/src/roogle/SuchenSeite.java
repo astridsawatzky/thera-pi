@@ -73,6 +73,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ZeitFunk;
+import Environment.Path;
 import abrechnung.AbrechnungDlg;
 import dialoge.EmailDialog;
 import dialoge.InfoDialog;
@@ -1285,7 +1286,7 @@ Vector mit Normal-Termin
 19-false]			 
 			 */
 			try{
-				FileTools.deleteAllFiles(new File(Reha.proghome+"temp/"+Reha.aktIK));
+				FileTools.deleteAllFiles(new File(Path.Instance.getProghome()+"temp/"+Reha.aktIK));
 			}catch(Exception ex2){
 				JOptionPane.showMessageDialog(null,"Fehler beim löschen der temporären Dateien");
 				return false;
@@ -1341,7 +1342,7 @@ Vector mit Normal-Termin
 				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4),datewarning));
 			}
 			buf.append(ICalGenerator.macheEnd());
-			FileOutputStream outputFile = new  FileOutputStream(Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
+			FileOutputStream outputFile = new  FileOutputStream(Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
             //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
             OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
 			BufferedWriter bw = null;
@@ -1354,12 +1355,12 @@ Vector mit Normal-Termin
 			outputFile.close();
 
 			String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
-			String[] aufDat = {Reha.proghome+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"};
+			String[] aufDat = {Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(aufDat);
 			if((Boolean) SystemConfig.hmIcalSettings.get("pdfbeilegen")){
 				auswahlDrucken(false,false);
-				attachments.add(new String[] {Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf","Terminplan.pdf"});
+				attachments.add(new String[] {Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf","Terminplan.pdf"});
 			}
 			EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"ICS-Datei der Behandlungstermin",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
 					(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
@@ -1399,7 +1400,7 @@ Vector mit Normal-Termin
 							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 							JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");
 							try{
-								FileTools.deleteAllFiles(new File(Reha.proghome+"temp/"+Reha.aktIK));
+								FileTools.deleteAllFiles(new File(Path.Instance.getProghome()+"temp/"+Reha.aktIK));
 							}catch(Exception ex2){
 								JOptionPane.showMessageDialog(null,"Fehler beim löschen der temporären Dateien");
 								return;
@@ -1413,7 +1414,7 @@ Vector mit Normal-Termin
 			}else{
 				femlDlg.setVisible(true);
 				try{
-					FileTools.deleteAllFiles(new File(Reha.proghome+"temp/"+Reha.aktIK));
+					FileTools.deleteAllFiles(new File(Path.Instance.getProghome()+"temp/"+Reha.aktIK));
 				}catch(Exception ex2){
 					JOptionPane.showMessageDialog(null,"Fehler beim löschen der temporären Dateien");
 					return false;
@@ -1483,8 +1484,8 @@ Vector mit Normal-Termin
 			bw.close();
 			out.close();
 			outputFile.close();
-			new LadeProg(Reha.proghome+"FahrdienstExporter.jar " +
-					Reha.proghome+"ini/"+Reha.aktIK+"/rehajava.ini");
+			new LadeProg(Path.Instance.getProghome()+"FahrdienstExporter.jar " +
+					Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");
 		}catch(Exception ex){
 			ex.printStackTrace();
 			cursorWait(false);
@@ -2595,8 +2596,6 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		
 		img = SystemConfig.hmSysIcons.get("zuzahlnichtok");
 		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");		
-		//img = new ImageIcon(Reha.proghome+"icons/Kreuz_klein.gif");
-		//img2 = new ImageIcon(Reha.proghome+"icons/frei.png");		
 		img.setDescription("gesperrt");
 		img2.setDescription("offen");
 		setZeit();
@@ -2611,10 +2610,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
 
 	
-		//Vector treadVect = new Vector();
 		aktDatum = getAktDatum();
 		
 		try {

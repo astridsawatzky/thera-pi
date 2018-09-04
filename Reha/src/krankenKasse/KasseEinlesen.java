@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import Environment.Path;
 import hauptFenster.Reha;
 
 
@@ -22,7 +23,7 @@ public class KasseEinlesen {
 		final JFileChooser chooser = new JFileChooser("Kostenträger-Datei wählen");
 	    chooser.setDialogType(JFileChooser.OPEN_DIALOG);
 	    chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-	    final File file = new File(Reha.proghome+"KostenTraeger/");
+	    final File file = new File(Path.Instance.getProghome()+"KostenTraeger/");
 
 	    chooser.setCurrentDirectory(file);
 

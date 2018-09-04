@@ -23,6 +23,7 @@ import org.jdesktop.swingx.JXPanel;
 
 import com.sun.star.awt.KeyModifier;
 
+import Environment.Path;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
@@ -45,7 +46,7 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 		setBorder(null);
 		thisClass = this;
 		setLayout(new BorderLayout());
-        String ss = Reha.proghome+"icons/schluessel3.gif";
+        String ss = Path.Instance.getProghome()+"icons/schluessel3.gif";
         JXHeader header = new JXHeader("Benutzer Authentifizierung",
                 "In diesem Fenster geben Sie Ihr persönliches Passwort ein.\n" +
                 "Abhängig vom Ihrem Passwort, haben Sie Zugang zu allen Programmteilen "+

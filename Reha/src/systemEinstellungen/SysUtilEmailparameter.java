@@ -28,6 +28,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
+import Environment.Path;
 import emailHandling.EmailSendenExtern;
 import hauptFenster.Reha;
 import systemTools.Verschluesseln;
@@ -302,7 +303,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 			mailmap.put("SmtpAuth", authent);		
 			mailmap.put("SmtpSecure", Secure.getSelectedItem().toString());
 			mailmap.put("SmtpPort", useport);
-			INIFile ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "email.ini");
+			INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "email.ini");
 			ini.setStringProperty(postfach, "SenderAdresse", sender, null);
 			ini.setStringProperty(postfach, "EmpfangBestaetigen", bestaetigung, null);	
 			ini.setStringProperty(postfach, "Username",benutzer , null);		

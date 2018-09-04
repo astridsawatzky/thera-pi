@@ -31,6 +31,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaCheckBox;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -239,7 +240,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 				@Override
 				protected Void doInBackground() throws Exception {
 					try{
-						starteAusfallRechnung(Reha.proghome+"vorlagen/"+Reha.aktIK+"/AusfallRechnung.ott");
+						starteAusfallRechnung(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/AusfallRechnung.ott");
 						doBuchen();
 						if(leistung[4].isSelected()){
 							macheMemoEintrag();
@@ -442,25 +443,6 @@ class AusfallRechnungHintergrund extends JXPanel{
 	AlphaComposite xac2 = null;		
 	public AusfallRechnungHintergrund(){
 		super();
-		/*
-		hgicon = new ImageIcon(Reha.proghome+"icons/geld.png");
-		icx = hgicon.getIconWidth()/2;
-		icy = hgicon.getIconHeight()/2;
-		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 
-		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
-		*/			
 		
-	}
-	@Override
-	public void paintComponent( Graphics g ) { 
-		super.paintComponent( g );
-		
-		Graphics2D g2d = (Graphics2D)g;
-		
-		if(hgicon != null){
-			//g2d.setComposite(this.xac1);
-			//g2d.drawImage(hgicon.getImage(), (getWidth()/2)-icx , (getHeight()/2)-icy,null);
-			//g2d.setComposite(this.xac2);
-		}
 	}
 }

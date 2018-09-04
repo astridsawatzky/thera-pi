@@ -317,9 +317,7 @@ class GutachtenWahlHintergrund extends JXPanel{
 	AlphaComposite xac2 = null;		
 	public GutachtenWahlHintergrund(){
 		super();
-		hgicon = null; //new ImageIcon(Reha.proghome+"icons/geld.png");
-		//icx = hgicon.getIconWidth()/2;
-		//icy = hgicon.getIconHeight()/2;
+		hgicon = null;
 		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 
 		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);			
 		

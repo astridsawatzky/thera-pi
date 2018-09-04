@@ -34,6 +34,7 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
+import Environment.Path;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -56,7 +57,6 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	
 	@Override
 	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
 		if(printPan == null){
 			return null;
 		}
@@ -70,7 +70,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
     	g2d.dispose();
     	speichernQualitaet("",1.0F);
     	
-    	String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/terminshot_.ott";
+    	String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/terminshot_.ott";
     	IDocumentService documentService = Reha.officeapplication.getDocumentService();
     	 IDocumentDescriptor docdescript = new DocumentDescriptor();
 	        docdescript.setHidden(false);
@@ -82,8 +82,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
         boolean useStream = false;
 
         
-        String imagePath = (Reha.proghome+"ScreenShots/termin__temp.jpg").replace("\\", "/");
-        //String imagePath = "file:///"+Reha.proghome.replace("C:/", "/")+"ScreenShots/termin__temp.jpg";
+        String imagePath = (Path.Instance.getProghome()+"ScreenShots/termin__temp.jpg").replace("\\", "/");
         
         // Tip aus dem NOA-Forum
         imagePath = "file:///"+imagePath;
@@ -237,7 +236,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	                XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(
 	                                XPropertySet.class, xImage);
 
-	                url = "file:///"+Reha.proghome+"ScreenShots/termin__temp.jpg";
+	                url = "file:///"+Path.Instance.getProghome()+"ScreenShots/termin__temp.jpg";
 
 	                xBitmapContainer.insertByName("someID",(Object) url);
 	                //xBitmapContainer.insertByName("someID", grProps.getUrl());
@@ -311,7 +310,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
         ImageWriteParam param = writer.getDefaultWriteParam();
         param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
         param.setCompressionQuality(fQuality);
-        File fimg = new File(Reha.proghome+"ScreenShots/termin__temp.jpg");
+        File fimg = new File(Path.Instance.getProghome()+"ScreenShots/termin__temp.jpg");
 
         try {
 			writer.setOutput(ImageIO.createImageOutputStream(fimg));

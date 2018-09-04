@@ -71,7 +71,7 @@ public class PinPanel extends JXPanel implements ActionListener{
 			jb2.setBorder(null);
 			jb2.setOpaque(false);
 			jb2.setPreferredSize(new Dimension(16,16));
-			img2 = SystemConfig.hmSysIcons.get("rot"); //new ImageIcon(Reha.proghome+"icons/red.png");
+			img2 = SystemConfig.hmSysIcons.get("rot");
 			jb2.setIcon(img2);
 			jb2.setActionCommand("rot");
 			jb2.addActionListener(this);

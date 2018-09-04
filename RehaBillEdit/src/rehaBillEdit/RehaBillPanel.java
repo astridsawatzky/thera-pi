@@ -1081,7 +1081,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		hmAdresse.put("<gkv5>",rnummerAlt.getText());
 		hmAdresse.put("<gkv12>",(originalChb.isSelected() ? tfs[6].getText().trim() : DatFunk.sHeute()) );
 		
-		//new BegleitzettelDrucken(abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Reha.proghome+"vorlagen/"+Reha.aktIK+"/HMBegleitzettelGKV.ott");
 		String ik_kostent = SqlInfo.holeEinzelFeld("select ik_kostent from kass_adr where id ='"+Integer.toString((Integer)tabmod.getValueAt(0, 32))+"' LIMIT 1" );
 		String name_kostent = SqlInfo.holeEinzelFeld("select name1 from ktraeger where ikkasse ='"+ik_kostent+"' LIMIT 1" );
 		name_kostent = name_kostent+"\n"+SqlInfo.holeEinzelFeld("select name2 from ktraeger where ikkasse ='"+ik_kostent+"' LIMIT 1" );

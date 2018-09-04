@@ -38,6 +38,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
+import Environment.Path;
 import hauptFenster.Reha;
 import systemTools.SetMaxText;
 
@@ -234,7 +235,7 @@ public class Eb2_2015 {
 	public void zeigePopUp(MouseEvent e){
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		// Lemmi 20101231: Icon zugefügt
-		JMenuItem item = new JMenuItem("vorhandene Platzhalter füllen", new ImageIcon(Reha.proghome+"icons/frei.png"));
+		JMenuItem item = new JMenuItem("vorhandene Platzhalter füllen", new ImageIcon(Path.Instance.getProghome()+"icons/frei.png"));
 		item.setActionCommand("fuellen");
 		item.addActionListener(new ActionListener(){
 			@Override

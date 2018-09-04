@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import CommonTools.StringTools;
+import Environment.Path;
 import dialoge.EmailDialog;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
@@ -172,7 +173,7 @@ public class PatientToolBarLogic {
 						if(Reha.aktUser.startsWith("Therapeut")){return;}
 						Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 						
-								new LadeProg(Reha.proghome+"RehaMail.jar"+" "+Reha.proghome+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
+								new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
 								long warten = System.currentTimeMillis();
 								while( (!RehaIOServer.rehaMailIsActive)  && (System.currentTimeMillis()-warten < 15000)){
 									Thread.sleep(75);
@@ -211,8 +212,7 @@ public class PatientToolBarLogic {
 			final String xsrez_nr = srez_nr;
 			new Thread(){
 				public void run(){
-					//System.out.println(Reha.proghome+"RehaFbBrowser.jar"+" ?patnummer="+spat_intern+"#reznummer="+xsrez_nr);
-					new LadeProg(Reha.proghome+"RehaFbBrowser.jar"+" ?pat_intern="+spat_intern+"#rez_nr="+xsrez_nr);		
+					new LadeProg(Path.Instance.getProghome()+"RehaFbBrowser.jar"+" ?pat_intern="+spat_intern+"#rez_nr="+xsrez_nr);		
 				}
 			}.start();			
 		}catch(Exception ex){

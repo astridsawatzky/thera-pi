@@ -560,17 +560,6 @@ class RgebHintergrund extends JXPanel{
 	int icx,icy;
 	AlphaComposite xac1 = null;
 	AlphaComposite xac2 = null;		
-	public RgebHintergrund(){
-		super();
-		/*
-		hgicon = new ImageIcon(Reha.proghome+"icons/geld.png");
-		icx = hgicon.getIconWidth()/2;
-		icy = hgicon.getIconHeight()/2;
-		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 
-		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
-		*/			
-		
-	}
 	@Override
 	public void paintComponent( Graphics g ) { 
 		super.paintComponent( g );

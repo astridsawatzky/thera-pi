@@ -13,6 +13,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -59,9 +60,7 @@ SuchenSeite eltern;
 	}
 	
 	public synchronized void run() {
-			String url = Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
-			//String url = Reha.proghome+"vorlagen/"+SystemConfig.oTerminListe.NameTemplate; 
-			////System.out.println("***************URL = "+url+"****************");
+			String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
 			String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
 			int anzahl = termindat.size();
 			int AnzahlTabellen = SystemConfig.oTerminListe.AnzahlTerminTabellen;
@@ -423,7 +422,7 @@ SuchenSeite eltern;
 				}
 			}else{
 				
-				exporturl = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+				exporturl = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 				File f = new File(exporturl);
 				if(f.exists()){
 					f.delete();
@@ -526,7 +525,7 @@ SuchenSeite eltern;
 		}
 		/*****************bis hierher lediglich Emailadressen gewurschtel**************************/
 		String[] anhang = {null,null};
-		anhang[0] = Reha.proghome+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+		anhang[0] = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
 		
 		File f = new File(anhang[0]);
@@ -564,7 +563,7 @@ SuchenSeite eltern;
 		boolean bestaetigen = (SystemConfig.hmEmailExtern.get("Bestaetigen").equals("0") ? false : true);
 		String text = "";
 		/*********/
-		 File file = new File(Reha.proghome+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
 	      try {
 	         // FileReader zum Lesen aus Datei
 	         FileReader fr = new FileReader(file);

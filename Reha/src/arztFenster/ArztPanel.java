@@ -56,6 +56,7 @@ import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import Environment.Path;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
@@ -245,7 +246,6 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		jtb.add(jbut[2]);
 		jtb.addSeparator(new Dimension(40,0));
 		jbut[3] = new JButton();
-		//jbut[3].setIcon(new ImageIcon(Reha.proghome+"icons/mail_write_22.png"));
 		jbut[3].setIcon(SystemConfig.hmSysIcons.get("print"));
 		jbut[3].setToolTipText("Brief/Formular für Arzt erstellen (Alt+B)");
 		jbut[3].setActionCommand("formulare");
@@ -352,7 +352,6 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		kedit.addSeparator(new Dimension(40,0));
 		memobut[2] = new JButton();
 		memobut[2].setIcon(SystemConfig.hmSysIcons.get("stop"));
-		//memobut[2].setIcon(new ImageIcon(Reha.proghome+"icons/cancel.png"));
 		memobut[2].setToolTipText("Langtext bearbeiten abbrechen");		
 		memobut[2].setActionCommand("kbreak");
 		memobut[2].addActionListener(this);
@@ -594,7 +593,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			@Override
 			protected Void doInBackground() throws Exception {
 				// TODO Auto-generated method stub
-				INIFile inif = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "arzt.ini"); 
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini"); 
 				int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
 					titel.add(inif.getStringProperty("Formulare","AFormularText"+i));			
@@ -627,7 +626,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 					protected Void doInBackground() throws Exception {
 						try{
 							ArztTools.constructArztHMap(xid);
-							OOTools.starteStandardFormular(Reha.proghome+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
+							OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
 						}catch(Exception ex){
 							JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Arztadresse");
 						}

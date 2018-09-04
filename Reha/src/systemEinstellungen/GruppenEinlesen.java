@@ -5,6 +5,7 @@ import java.util.Vector;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.ZeitFunk;
+import Environment.Path;
 import hauptFenster.Reha;
 import terminKalender.DatFunk;
 
@@ -18,7 +19,7 @@ public class GruppenEinlesen{
 	private INIFile ini;
 	
 	public GruppenEinlesen init(){
-		ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "gruppen.ini");
+		ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "gruppen.ini");
 
 		anzahl = Integer.valueOf(ini.getStringProperty("Gruppen", "GruppenAnzahl")); 
 		gruppenNamen = new Vector<String>();
