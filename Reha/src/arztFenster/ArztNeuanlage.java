@@ -421,7 +421,7 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 			for(int i = 0; i < list.size();i++){
 				vec.add(list.get(i));
 			}
-			apan.atblm.addRow((Vector<String>)vec);
+			apan.atblm.addRow(vec);
 			//System.out.println("Tabellenzeile eingefügt");
 		}else{
 			int row = apan.arzttbl.getSelectedRow();
@@ -484,9 +484,9 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 		int anzahlf = felderpos.length;
 		if(gros > 0){
 			for(int i = 0; i < anzahlf;i++){
-				tfs[i].setText((String) felder.get(felderpos[i]) );
+				tfs[i].setText(felder.get(felderpos[i]) );
 			}
-			arztgruppe.setSelectedItem((String) felder.get(7));
+			arztgruppe.setSelectedItem(felder.get(7));
 		}
 		
 	}

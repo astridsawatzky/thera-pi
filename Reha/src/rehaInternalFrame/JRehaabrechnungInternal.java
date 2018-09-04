@@ -21,7 +21,7 @@ public class JRehaabrechnungInternal extends JRehaInternal implements RehaEventL
 	public JRehaabrechnungInternal(String titel, ImageIcon img, int desktop) {
 		super(titel, img, desktop);
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 	}
 	@Override
 	public void internalFrameClosing(InternalFrameEvent arg0) {
@@ -35,7 +35,7 @@ public class JRehaabrechnungInternal extends JRehaInternal implements RehaEventL
 		//nächsten JInternalFrame aktivieren
 		Reha.thisClass.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
-		rEvent.removeRehaEventListener((RehaEventListener) this);
+		rEvent.removeRehaEventListener(this);
 		this.removeInternalFrameListener(this);
 		//
 		Reha.thisFrame.requestFocus();

@@ -129,7 +129,7 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 
 		
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		
 		jcc.add(getTagWahl(jpan = new JXPanel()));
 		jpan.validate();
@@ -402,7 +402,7 @@ public void keyPressed(KeyEvent arg0) {
 	for(int i = 0;i<1;i++){
 		if(arg0.getKeyCode() == 27){
 			arg0.consume();
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			this.dispose();
 
 			break;
@@ -481,7 +481,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 	try{
 		if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 			FensterSchliessen(evt.getDetails()[0]);
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 		}	
 	}catch(NullPointerException ne){
@@ -491,7 +491,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 @Override
 public void windowClosed(WindowEvent arg0) {
 	if(rtp != null){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		rtp = null;
 	}
 	if(datum != null){
@@ -513,7 +513,7 @@ public void windowClosed(WindowEvent arg0) {
 @Override
 public void windowClosing(WindowEvent arg0) {
 	if(rtp != null){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		rtp = null;
 	}	
 }

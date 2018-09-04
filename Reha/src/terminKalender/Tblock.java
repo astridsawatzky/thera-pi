@@ -20,7 +20,6 @@ private String[] terminDat;
 private int Spalte;
 private int Block;
 private int Kollege;
-private boolean fehler;
 private int result;
 private String Name;
 private String Nummer;
@@ -382,7 +381,7 @@ private int dbBehandler;
 		//}
 		/**** neue Endezeit ist bisherige Endezeit **/
 		this.feld.setFeld(this.Kollege,iEnde,neublocknum,endeBisher);
-		this.feld.setFeld(this.Kollege,iDauer,neublocknum,(String) Integer.toString(differenz));
+		this.feld.setFeld(this.Kollege,iDauer,neublocknum,Integer.toString(differenz));
 		minuten = (int) ZeitFunk.MinutenSeitMitternacht( endeBisher)-differenz;
 		beginnZweitBlock = ZeitFunk.MinutenZuZeit(minuten);
 		this.feld.setFeld(this.Kollege,iBeginn,neublocknum,beginnZweitBlock);		
@@ -454,7 +453,7 @@ private int dbBehandler;
 		}
 		/**** neue Beginnzeit ist bisherige Beginnzeit**/
 		this.feld.setFeld(this.Kollege,iBeginn,neublocknum,beginnBisher);
-		this.feld.setFeld(this.Kollege,iDauer,neublocknum,(String) Integer.toString(differenz));
+		this.feld.setFeld(this.Kollege,iDauer,neublocknum,Integer.toString(differenz));
 		this.feld.setFeld(this.Kollege,iEnde,neublocknum,this.Beginn);		
 
 		//Blockzahl erh�hen und eintragen
@@ -814,23 +813,23 @@ class Felder{
 	}
 	public String getFeld(int iKoll,int iFeld,int iBlock){
 		String sRet;
-		sRet = ((String) ((ArrayList<Vector<String>>) tvect.get(iKoll)).get(iFeld).get(iBlock));
+		sRet = (((ArrayList<Vector<String>>) tvect.get(iKoll)).get(iFeld).get(iBlock));
 		return sRet;
 	}
 	public void setFeld(int iKoll,int iFeld,int iBlock,String text){
 		String sRet;
-		sRet = ((String) ((ArrayList<Vector<String>>) tvect.get(iKoll)).get(iFeld).set(iBlock,text));
+		sRet = (((ArrayList<Vector<String>>) tvect.get(iKoll)).get(iFeld).set(iBlock,text));
 		return;
 	}
 	public int getAnzahlBloecke(int iKoll){
-		return Integer.valueOf( ((String) ((ArrayList<Vector<String>>) tvect.get(iKoll)).get(5).get(0)));
+		return Integer.valueOf( (((ArrayList<Vector<String>>) tvect.get(iKoll)).get(5).get(0)));
 	}
 	public int setAnzahlBloecke(int iKoll,int bloecke){
 		((ArrayList<Vector<String>>) tvect.get(iKoll)).get(5).set(0,Integer.toString(bloecke));
 		return bloecke;
 	}
 	public int getSize(int iKoll){
-		return ((int) ((ArrayList<Vector<String>>) tvect.get(iKoll)).get(0).size());
+		return (((ArrayList<Vector<String>>) tvect.get(iKoll)).get(0).size());
 	}
 	public boolean einfuegenBlock(int iKoll,int iFeld){
 		((ArrayList<Vector<String>>) tvect.get(iKoll)).get(0).insertElementAt("", iFeld);

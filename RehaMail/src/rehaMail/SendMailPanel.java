@@ -551,12 +551,12 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			while(rs.next()){
 				vec.clear();
 				try{
-					vec.add((String) (rs.getString(1)==null ? "" : rs.getString(1)));
-					vec.add((Boolean) (rs.getString(2)==null ?  Boolean.FALSE : (rs.getString(2).equals("T") ? Boolean.TRUE : Boolean.FALSE)) );
+					vec.add(rs.getString(1)==null ? "" : rs.getString(1));
+					vec.add(rs.getString(2)==null ?  Boolean.FALSE : (rs.getString(2).equals("T") ? Boolean.TRUE : Boolean.FALSE) );
 					vec.add(rs.getDate(3));
-					vec.add((String) (rs.getString(4)==null ? "" : getTimestampString(rs.getString(4)) ));
-					vec.add((String) (rs.getString(5)==null ? "" : rs.getString(5)));
-					vec.add((String) (rs.getString(6)==null ? "" : rs.getString(6)));
+					vec.add(rs.getString(4)==null ? "" : getTimestampString(rs.getString(4)));
+					vec.add(rs.getString(5)==null ? "" : rs.getString(5));
+					vec.add(rs.getString(6)==null ? "" : rs.getString(6));
 				
 				}catch(Exception ex){
 					ex.printStackTrace();

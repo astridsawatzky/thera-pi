@@ -40,7 +40,7 @@ public class SysUtilVerkauf extends JXPanel {
 	private static final long serialVersionUID = 1L;
 	private String[] druckernamen, spaltenNamen = {"ArtikelID", "Beschreibung", "Anzahl", "EinzelPreis", "GesamtPreis", "MwSt",
 			"Rabatt", "Bemerkung", "Nettopreis"};
-	private Integer[] spaltenAnzahl = {1, 2, 3, 4, 5, 6};;
+	private Integer[] spaltenAnzahl = {1, 2, 3, 4, 5, 6};
 	
 	private JComboBox rechnungSpalte1, rechnungSpalte2, rechnungSpalte3, rechnungSpalte4, rechnungSpalte5, rechnungSpalte6,
 	bonSpalte1, bonSpalte2, bonSpalte3, bonSpalte4, bonSpalte5, bonSpalte6, rechnungDrucker, bonDrucker, rechnungSpalten,

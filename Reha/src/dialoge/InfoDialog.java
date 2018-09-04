@@ -500,7 +500,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 					if( (diff = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(0)), tageplus.get(i).get(0)/*tage.get(i)*/)) > 0){
 						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
 						otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
-						if( ((Boolean)otest[0]) == (Boolean) true){
+						if( ((Boolean)otest[0]) == true){
 							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 						}else{
 							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
@@ -508,7 +508,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 					}else{
 						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
 						otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
-						if( ((Boolean)otest[0]) == (Boolean) true){
+						if( ((Boolean)otest[0]) == true){
 							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 						}else{
 							mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
@@ -520,7 +520,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				if( (diff = DatFunk.TageDifferenz(tageplus.get(i-1).get(0)/*tage.get(i-1)*/,tageplus.get(i).get(0)/*tage.get(i)*/)) > tagebreak){
 					mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+" > "+Long.toString(diff)+" Tage"+"</td>\n");
 					otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
-					if( ((Boolean)otest[0]) == (Boolean) true){
+					if( ((Boolean)otest[0]) == true){
 						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}else{
 						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
@@ -529,7 +529,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				}else{
 					mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+" <= "+Long.toString(diff)+" Tage"+"</td>\n");
 					otest = Wochen12Test(last12Wo,tageplus.get(i).get(0)/*tage.get(i)*/);
-					if( ((Boolean)otest[0]) == (Boolean) true){
+					if( ((Boolean)otest[0]) == true){
 						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/nichtok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
 					}else{
 						mitte.append("<td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'>"+/*otest[1].toString()*/""+" 12 Wo."+"</td>\n");
@@ -572,11 +572,11 @@ public class InfoDialog extends JDialog implements WindowListener{
 		wert = DatFunk.TageDifferenz(datumalt,datumneu);
 		oret[1] = (int) Integer.parseInt( Long.toString(wert-1) );
 		if( wert > 0){
-			oret[0] = (Boolean) true;	
+			oret[0] = true;	
 		}else{
-			oret[0] = (Boolean) false;
+			oret[0] = false;
 		}
-		return (Object[])oret.clone();
+		return oret.clone();
 	}
 	private String getPositionen(){
 		StringBuffer  positionen = new StringBuffer();
@@ -738,7 +738,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 			this.setName("FolgeTermine");
 			//super.getPinPanel().setName("RezeptNeuanlage");
 			rtp = new RehaTPEventClass();
-			rtp.addRehaTPEventListener((RehaTPEventListener) this);
+			rtp.addRehaTPEventListener(this);
 
 		}
 		public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -749,7 +749,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 					if(evt.getDetails()[0].equals(this.getName())){
 						this.setVisible(false);
 						this.dispose();
-						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						ListenerTools.removeListeners(this);
 						muststop = true;
@@ -769,7 +769,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
 				this.setVisible(false);			
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+				rtp.removeRehaTPEventListener(this);		
 				rtp = null;
 				dispose();
 				ListenerTools.removeListeners(this);
@@ -800,7 +800,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 //			public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname, boolean bCtrlPressed){
 				super();
 				rtp = new RehaTPEventClass();
-				rtp.addRehaTPEventListener((RehaTPEventListener) this);
+				rtp.addRehaTPEventListener(this);
 				al = new ActionListener(){
 
 					@Override
@@ -876,7 +876,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				if(evt.getDetails()[0] != null){
 					if(evt.getDetails()[0].equals(this.getName())){
 						this.setVisible(false);
-						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						muststop = true;
 						//aufraeumen();
@@ -969,7 +969,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		public void run(){
 
 			try {
-				stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                    ResultSet.CONCUR_UPDATABLE );
 				/*
 				for(int i = 0; i < suchkrit.length;i++){
@@ -978,7 +978,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				*/
 				while(!muststop){
 					try{
-						rs = (ResultSet) stmt.executeQuery("select * from flexkc where datum = '"+DatFunk.sDatInSQL(anzeigedatum)+"' LIMIT "+Integer.toString(ParameterLaden.maxKalZeile) ) ;
+						rs = stmt.executeQuery("select * from flexkc where datum = '"+DatFunk.sDatInSQL(anzeigedatum)+"' LIMIT "+Integer.toString(ParameterLaden.maxKalZeile) ) ;
 						////System.out.println("Nach for..."+exStatement[i]);
 						//SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
 						
@@ -1009,7 +1009,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 											uhrzeit = rs.getString("TS"+(ii+1));
 											sorigdatum = rs.getString(305); 
 											sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-											skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+											skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 											//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 											
 											termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
@@ -1035,7 +1035,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 											uhrzeit = rs.getString("TS"+(ii+1));
 											sorigdatum = rs.getString(305); 
 											sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-											skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+											skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 											//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 											
 											termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+

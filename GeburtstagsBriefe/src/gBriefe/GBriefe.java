@@ -182,7 +182,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			public void run() {
 				GBriefe application = new GBriefe();
 				application.getJFrame();
-				application.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/fragezeichen.png" ) );
+				GBriefe.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/fragezeichen.png" ) );
 				 
 			}
 		});
@@ -395,9 +395,9 @@ final class DatenbankStarten implements Runnable{
 		final GBriefe obj = GBriefe.thisClass;
 
 		final String sDB = "SQL";
-		if (obj.conn != null){
+		if (GBriefe.conn != null){
 			try{
-			obj.conn.close();}
+			GBriefe.conn.close();}
 			catch(final SQLException e){}
 		}
 		try{
@@ -419,7 +419,7 @@ final class DatenbankStarten implements Runnable{
 	        		//GBriefe.conn = (Connection) DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.2.3:2000/programme;TableType=cdx","","");
 	        		//GBriefe.conn = (Connection) DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.2.3:2000/programme/projekte/rta/dbf;TableType=cdx","","");
 	        		
-	        		GBriefe.conn = (Connection) DriverManager.getConnection(GBriefe.dblogin,
+	        		GBriefe.conn = DriverManager.getConnection(GBriefe.dblogin,
 	        				GBriefe.dbuser,GBriefe.dbpassword);
 	        				
 	        				
@@ -458,7 +458,7 @@ class SocketClient {
 	}
 	private void serverStarten() throws IOException{
 		this.server = new Socket("localhost",1234);
-		OutputStream output = (OutputStream) server.getOutputStream();
+		OutputStream output = server.getOutputStream();
 		InputStream input = server.getInputStream();
 
 		byte[] bytes = this.stand.getBytes();

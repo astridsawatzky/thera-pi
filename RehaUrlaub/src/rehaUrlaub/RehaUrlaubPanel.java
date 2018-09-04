@@ -617,7 +617,7 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 				}else if(tabmod.getColumnClass(col) == Date.class){
 					value = tabmod.getValueAt(row,col).toString();
 				}else if(tabmod.getColumnClass(col) == Double.class){
-					value = dcf.format((Double)tabmod.getValueAt(row,col)).replace(",",".");
+					value = dcf.format(tabmod.getValueAt(row,col)).replace(",",".");
 				}else if(tabmod.getColumnClass(col) == Integer.class){
 					value = Integer.toString((Integer)tabmod.getValueAt(row,col));
 				}else if(tabmod.getColumnClass(col) == String.class){
@@ -985,7 +985,7 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 		if(feldNamen.get(col).get(1).startsWith("decimal(")){
 			ret = Double.toString((Double)tabmod.getValueAt(row, col));
 		}else if(feldNamen.get(col).get(1).startsWith("varchar(")){
-			ret = (String)tabmod.getValueAt(row, col).toString();
+			ret = tabmod.getValueAt(row, col).toString();
 		}else if(feldNamen.get(col).get(1).startsWith("enum(")){
 			ret = ( (Boolean)tabmod.getValueAt(row, col) ? "T" : "F");
 		}else if(feldNamen.get(col).get(1).startsWith("int(")){

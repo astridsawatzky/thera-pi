@@ -9,10 +9,8 @@ import java.io.IOException;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
-import sun.awt.image.ImageFormatException;
-
 public class GrafikTools {
-	 public static byte[] bufferedImageToByteArray(BufferedImage img) throws ImageFormatException, IOException{
+	 public static byte[] bufferedImageToByteArray(BufferedImage img) throws IOException{
 			if(img != null){
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);

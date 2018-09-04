@@ -1574,9 +1574,9 @@ public class RVEBerichtPDF {
 		ph = new Phrase();
 		ph.setFont(FontFactory.getFont("Courier",9,Font.PLAIN));
 		if(ierlaeut > 0){
-			ph.add((String)this.eltern.bta[9].getText());			
+			ph.add(this.eltern.bta[9].getText());			
 		}else{
-			ph.add((String)this.eltern.bta[8].getText());
+			ph.add(this.eltern.bta[8].getText());
 		}
 		ct.addText(ph);
 		try {
@@ -1639,7 +1639,7 @@ public class RVEBerichtPDF {
 		
 		ph = new Phrase();
 		ph.setFont(FontFactory.getFont("Courier",9,Font.PLAIN));
-		ph.add((String)eltern.ktlcmb[ktlpos].getSelectedItem());
+		ph.add(eltern.ktlcmb[ktlpos].getSelectedItem());
 		ct.addText(ph);
 		try {
 			ct.go();
@@ -2141,7 +2141,7 @@ class EBAerzteDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 		super(null,"EBPrint");
 		this.setName("EBPrint");
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 	}
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -2150,7 +2150,7 @@ class EBAerzteDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					this.dispose();
 					//System.out.println("****************EGPrint -> Listener entfernt**************");				
@@ -2164,7 +2164,7 @@ class EBAerzteDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			dispose();
 			//System.out.println("****************EGPrint -> Listener entfernt (Closed)**********");

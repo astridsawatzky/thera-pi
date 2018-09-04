@@ -85,7 +85,6 @@ public class ArztBausteinPanel extends JXPanel {
 	/**
 	 * 
 	 */
-	private JXPanel content = null;
 	private static final long serialVersionUID = -3384203389588570947L;
 	private JXTable bausteintbl = null;
 	MyBausteinTableModel bausteinmod = null;
@@ -691,7 +690,7 @@ public class ArztBausteinPanel extends JXPanel {
         XLayoutManager xLayoutManager = layoutManager.getXLayoutManager();
         XUIElement element = xLayoutManager.getElement(url);
         if (element != null) {
-            XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, element);
+            XPropertySet xps = UnoRuntime.queryInterface(XPropertySet.class, element);
             xps.setPropertyValue("Persistent", new Boolean(false));
             xLayoutManager.hideElement(url);
         }
@@ -764,7 +763,7 @@ public class ArztBausteinPanel extends JXPanel {
 		Statement stmt = null;
 
 		try {
-			stmt = (Statement) ArztBaustein.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = ArztBaustein.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			
 			String select = "update tbar set tbthema = ? , tbuntert = ?, tbtitel = ?,"+
@@ -837,7 +836,7 @@ public class ArztBausteinPanel extends JXPanel {
 				bausteinmod.addRow((Vector<?>)retvec.clone());
 
 				if(bausteine==0){
-					final String id = ((Vector<String>)retvec).get(3).toString();
+					final String id = retvec.get(3).toString();
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {

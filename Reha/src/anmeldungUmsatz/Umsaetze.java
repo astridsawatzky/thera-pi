@@ -78,7 +78,7 @@ public class Umsaetze extends JXPanel{
 	DecimalFormat dcf = new DecimalFormat("##########0.00");
 	
 	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;;
+	ISpreadsheetDocument spreadsheetDocument = null;
 	IDocument document  = null;
 	XSheetCellCursor cellCursor = null;
 	String[] kopfzeile = {"Datum","Uhrzeit","Pos1","Pos2","Pos3","Pos4","HB","WG",
@@ -444,8 +444,8 @@ public class Umsaetze extends JXPanel{
 		for(int i = 0; i < lang; i++){
 			if(! ParameterLaden.getMatchcode(i).trim().equals("./.")){
 				vec.clear();
-				vec.add((String)ParameterLaden.getMatchcode(i));
-				vec.add((Integer)ParameterLaden.getDBZeile(i));
+				vec.add(ParameterLaden.getMatchcode(i));
+				vec.add(ParameterLaden.getDBZeile(i));
 				
 				kalUsers.add((Vector<Object>)vec.clone());
 			}	
@@ -530,7 +530,7 @@ public class Umsaetze extends JXPanel{
 
 														XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 														String sheetName= "Tabelle1";
-														XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+														XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 														cellCursor = spreadsheet1.createCursor();
 														doCellCharWeight(0,calcrow,com.sun.star.awt.FontWeight.BOLD);
 														doCellValue(0,calcrow,"Gesamtumsätze vom "+tfs[0].getText()+" bis einschließlich "+tfs[1].getText());
@@ -599,66 +599,59 @@ public class Umsaetze extends JXPanel{
         docdescript.setAsTemplate(true);
 		document = documentService.constructNewDocument(IDocument.CALC, docdescript);
 		spreadsheetDocument = (ISpreadsheetDocument) document;
-		OOTools.setzePapierFormatCalc((ISpreadsheetDocument) spreadsheetDocument, 21000, 29700);
-		OOTools.setzeRaenderCalc((ISpreadsheetDocument) spreadsheetDocument, 1000,1000, 1000, 1000);
+		OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
+		OOTools.setzeRaenderCalc(spreadsheetDocument, 1000,1000, 1000, 1000);
 	}
 	private void doColWith(ISpreadsheetDocument spreadsheetDocument, int col_first,int col_last,int width) throws NoSuchElementException, WrappedTargetException, IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 		String sheetName= "Tabelle1";
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		XCellRange xCellRange = spreadsheet1.getCellRangeByPosition( 0, 0, col_last, 0 );
-		com.sun.star.table.XColumnRowRange xColRowRange = ( com.sun.star.table.XColumnRowRange )
-		UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
+		com.sun.star.table.XColumnRowRange xColRowRange = UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
 
 		com.sun.star.beans.XPropertySet xPropSet = null;
 		com.sun.star.table.XTableColumns xColumns = xColRowRange.getColumns();
 		for(int i = col_first; i <= col_last;i++){
 			Object aColumnObj = xColumns.getByIndex(i);
-			xPropSet = (com.sun.star.beans.XPropertySet)
-			UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
+			xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
 			xPropSet.setPropertyValue("Width", Integer.valueOf(width));
 		}
 	}
 	private void doColTextAlign(ISpreadsheetDocument spreadsheetDocument, int col_first,int col_last,int col_textalign) throws NoSuchElementException, WrappedTargetException, IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 		String sheetName= "Tabelle1";
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		XCellRange xCellRange = spreadsheet1.getCellRangeByPosition( 0, 0, col_last, 0 );
-		com.sun.star.table.XColumnRowRange xColRowRange = ( com.sun.star.table.XColumnRowRange )
-		UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
+		com.sun.star.table.XColumnRowRange xColRowRange = UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
 
 		com.sun.star.beans.XPropertySet xPropSet = null;
 		com.sun.star.table.XTableColumns xColumns = xColRowRange.getColumns();
 		for(int i = col_first; i <= col_last;i++){
 			Object aColumnObj = xColumns.getByIndex(i);
-			xPropSet = (com.sun.star.beans.XPropertySet)
-			UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
+			xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
 			xPropSet.setPropertyValue("HoriJustify", col_textalign);
 		}
 	}
 	private void doColNumberFormat(ISpreadsheetDocument spreadsheetDocument, int col_first,int col_last,int col_numberformat) throws NoSuchElementException, WrappedTargetException, IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 		String sheetName= "Tabelle1";
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		XCellRange xCellRange = spreadsheet1.getCellRangeByPosition( 0, 0, col_last, 0 );
-		com.sun.star.table.XColumnRowRange xColRowRange = ( com.sun.star.table.XColumnRowRange )
-		UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
+		com.sun.star.table.XColumnRowRange xColRowRange = UnoRuntime.queryInterface( com.sun.star.table.XColumnRowRange.class, xCellRange );
 
 		com.sun.star.beans.XPropertySet xPropSet = null;
 		com.sun.star.table.XTableColumns xColumns = xColRowRange.getColumns();
 		for(int i = col_first; i <= col_last;i++){
 			Object aColumnObj = xColumns.getByIndex(i);
-			xPropSet = (com.sun.star.beans.XPropertySet)
-			UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
+			xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
 			xPropSet.setPropertyValue("NumberFormat", col_numberformat);
 		}
 	}
-	private void doCellNumberFormat(int col,int row,int cell_numberformat) throws NoSuchElementException, WrappedTargetException, IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
+	private void doCellNumberFormat(int col,int row,int cell_numberformat) throws WrappedTargetException, IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         com.sun.star.beans.XPropertySet xPropSet = null;
-		xPropSet = (com.sun.star.beans.XPropertySet)
-		UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
+		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
 		xPropSet.setPropertyValue( "NumberFormat", cell_numberformat );
 	}
 	
@@ -668,7 +661,7 @@ public class Umsaetze extends JXPanel{
         if(value instanceof Double){
         	cell.setValue((Double)value);
         }else if(value instanceof String){
-        	cellText = (XText)UnoRuntime.queryInterface(XText.class, cell);
+        	cellText = UnoRuntime.queryInterface(XText.class, cell);
         	cellText.setString((String)value);
         }else{
         	
@@ -682,8 +675,7 @@ public class Umsaetze extends JXPanel{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         com.sun.star.beans.XPropertySet xPropSet = null;
-		xPropSet = (com.sun.star.beans.XPropertySet)
-		UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
+		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
 		xPropSet.setPropertyValue( "CharColor", color );
 		/*
 		//System.out.println("Start-CellPropertie*********************************");
@@ -700,8 +692,7 @@ public class Umsaetze extends JXPanel{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         com.sun.star.beans.XPropertySet xPropSet = null;
-		xPropSet = (com.sun.star.beans.XPropertySet)
-		UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
+		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
 		xPropSet.setPropertyValue( "CharWeight", charweight );
 		/*
 		xProps.setPropertyValue("CharFontStyleName", String.valueOf("Times New Roman"));

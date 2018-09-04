@@ -51,6 +51,7 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
+import org.therapi.reha.patient.AktuelleRezepte;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.CC;
@@ -85,7 +86,6 @@ import oOorgTools.OOTools;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
 import stammDatenTools.ZuzahlTools;
-import sun.awt.image.ImageFormatException;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
 
@@ -229,9 +229,9 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		patTab.addTab("1 - Stammdaten", Tab1());
 		patTab.addTab("2 - Zusätze", Tab2());
 		patTab.addTab("3 - Sonstiges", Tab3());
-		patTab.setMnemonicAt(0, (int) '1');
-		patTab.setMnemonicAt(1, (int) '2');
-		patTab.setMnemonicAt(2, (int) '3');
+		patTab.setMnemonicAt(0, '1');
+		patTab.setMnemonicAt(1, '2');
+		patTab.setMnemonicAt(2, '3');
 
 		if (!editvoll) {
 			new SwingWorker<Void, Void>() {
@@ -281,7 +281,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f);
 
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		this.addKeyListener(this);
 
 		// ****************Checken ob Preisgruppen bedient
@@ -452,7 +452,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 								|| name.contains("bef_dat")
 								|| name.contains("bef_ab")
 								|| name.contains("er_dat")) {
-							String datum = String.valueOf((String) felder
+							String datum = String.valueOf(felder
 									.get(ffelder[i]));
 							if (datum.trim().length() > 0) {
 								// //System.out.println("Datum w�re gewesen->"+datum+" L�nge->"+datum.trim().length());
@@ -690,11 +690,11 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		// final PatNeuanlage xthis = this;
 
 		String rez_num = "";
-		if (Reha.thisClass.patpanel.aktRezept.tabaktrez.getRowCount() > 0) {
-			int row = Reha.thisClass.patpanel.aktRezept.tabaktrez
+		if (AktuelleRezepte.tabaktrez.getRowCount() > 0) {
+			int row = AktuelleRezepte.tabaktrez
 					.getSelectedRow();
 			if (row >= 0) {
-				rez_num = Reha.thisClass.patpanel.aktRezept.tabaktrez
+				rez_num = AktuelleRezepte.tabaktrez
 						.getValueAt(row, 0).toString().trim();
 			}
 		}
@@ -989,7 +989,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		doclist = null;
 		docmod = null;
 		if (rtp != null) {
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 		}
 	}
@@ -2043,7 +2043,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 					.holeFelder("select arztnum,nachname,strasse,ort,bsnr,id  from arzt where id='"
 							+ aid + "' LIMIT 1");
 			if (vecx.size() > 0) {
-				mod.addRow((Vector<String>) vecx.get(0));
+				mod.addRow(vecx.get(0));
 			}
 		} else {
 
@@ -2076,7 +2076,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	private void speichernPatBild(boolean neu, ImageIcon ico, String pat_intern) {
 		Statement stmt = null;
-		;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		// boolean ret = false;
@@ -2102,7 +2101,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 						ico.getImage().getScaledInstance(35, 44,
 								Image.SCALE_SMOOTH), null, null);
 				g.dispose();
-				ps.setBytes(3, bufferedImageToByteArray((BufferedImage) buf));
+				ps.setBytes(3, bufferedImageToByteArray(buf));
 				ps.execute();
 				buf = null;
 			} else {
@@ -2119,7 +2118,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 						ico.getImage().getScaledInstance(35, 44,
 								Image.SCALE_SMOOTH), null, null);
 				g.dispose();
-				ps.setBytes(2, bufferedImageToByteArray((BufferedImage) buf));
+				ps.setBytes(2, bufferedImageToByteArray(buf));
 				ps.setString(3, pat_intern);
 				ps.execute();
 				buf = null;
@@ -2128,8 +2127,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ImageFormatException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2159,7 +2156,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 	}
 
 	private static byte[] bufferedImageToByteArray(BufferedImage img)
-			throws ImageFormatException, IOException {
+			throws IOException {
 		if (img != null) {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
@@ -2172,17 +2169,16 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	public static BufferedImage holePatBild(String pat_intern) {
 		Statement stmt = null;
-		;
 		ResultSet rs = null;
 		// int bilder = 0;
 		Image bild = null;
 		try {
-			stmt = (Statement) Reha.thisClass.conn
+			stmt = Reha.thisClass.conn
 					.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 							ResultSet.CONCUR_UPDATABLE);
 			String test = "select bild from patbild where pat_intern ='"
 					+ pat_intern + "'";
-			rs = (ResultSet) stmt.executeQuery(test);
+			rs = stmt.executeQuery(test);
 			while (rs.next()) {
 				bild = ImageIO.read(new ByteArrayInputStream(rs
 						.getBytes("bild")));
@@ -2242,7 +2238,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		checks.clear();
 		xfelder = null;
 		checks = null;
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		rtp = null;
 	}
 	
@@ -2398,7 +2394,7 @@ class ArztListeSpeichern {
 		String aliste = "";
 		for (int i = 0; i < vec.size(); i++) {
 			aliste = aliste + "@"
-					+ ((String) ((Vector<String>) vec.get(i)).get(5)) + "@\n";
+					+ (vec.get(i).get(5)) + "@\n";
 		}
 		SqlInfo.aktualisiereSaetze("pat5", "aerzte='" + aliste + "'",
 				"pat_intern='" + xpatintern + "'");

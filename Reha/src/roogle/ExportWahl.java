@@ -104,7 +104,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 	    setLocation(lpt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 
 		SwingUtilities.invokeLater(new Runnable(){
@@ -194,7 +194,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					ListenerTools.removeListeners(rbut[0]);
 					ListenerTools.removeListeners(rbut[1]);
@@ -214,7 +214,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			ListenerTools.removeListeners(rbut[0]);
 			ListenerTools.removeListeners(rbut[1]);

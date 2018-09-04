@@ -120,7 +120,7 @@ public class NebraskaEncryptor {
 			bcProvider = new BouncyCastleProvider();
 			Security.addProvider(bcProvider);			 
 		} else {
-			bcProvider = (BouncyCastleProvider) provBC;
+			bcProvider = provBC;
 		}
 
 		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
@@ -144,7 +144,7 @@ public class NebraskaEncryptor {
 		// first processing step: sign data
 		
 		CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
-		generator.addSigner(senderKey, (X509Certificate)senderCert,
+		generator.addSigner(senderKey, senderCert,
 				(use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1)  );
 
 		try {
@@ -180,11 +180,11 @@ public class NebraskaEncryptor {
 		CMSEnvelopedDataGenerator envelopedGenerator = new CMSEnvelopedDataGenerator();
 		
 		// the receiver must be able to decrypt the data
-		envelopedGenerator.addKeyTransRecipient((X509Certificate) receiverCert);
+		envelopedGenerator.addKeyTransRecipient(receiverCert);
 		
 		// optionally the sender may also decrypt it
 		if(encryptToSelf) {
-			envelopedGenerator.addKeyTransRecipient((X509Certificate) senderCert);
+			envelopedGenerator.addKeyTransRecipient(senderCert);
 		}
 		
 		CMSProcessable signedContent;

@@ -36,7 +36,6 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import jxTableTools.DoubleTableCellRenderer;
 
 
@@ -306,7 +305,7 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 			
 		};
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 	}
 	
 	
@@ -349,7 +348,7 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 			}
 		}
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;
 		}
@@ -360,7 +359,7 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 		try{
 			if(evt.getDetails()[0].equals("ArtSuchen")){
 				this.setVisible(false);
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				pinPanel = null;
 				this.dispose();

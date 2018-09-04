@@ -220,7 +220,7 @@ public class Rahmen extends JApplet{
 		        }	
 			        	try {
 			        		
-			   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+			   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
 		    				//obj.conn = (Connection) DriverManager.getConnection("jdbc:mysql://192.168.2.2:3306/dbf","entwickler","entwickler");
 		    				Rahmen.DbOk = true;
 			    			System.out.println("Datenbankkontakt hergestellt");

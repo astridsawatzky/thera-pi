@@ -469,7 +469,7 @@ public class SystemConfig {
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","LookAndFeel"));
 			
 			if ( ini.getStringProperty("HauptFenster", "HorizontalTeilen") != null ){
-				desktopHorizontal = ((Integer)ini.getIntegerProperty("HauptFenster", "HorizontalTeilen") == 1 ? true : false) ;
+				desktopHorizontal = (ini.getIntegerProperty("HauptFenster", "HorizontalTeilen") == 1 ? true : false) ;
 			}else{
 				ini.setStringProperty("HauptFenster", "HorizontalTeilen","1",null);
 				mustsave = true;
@@ -636,7 +636,7 @@ public class SystemConfig {
 
 			for(i=1;i<=lesen;i++){
 				aList1.add(String.valueOf(roogleini.getStringProperty("RoogleEinstellungen","RoogleNameGruppen"+i)) );
-				aList2.add((String[]) String.valueOf(roogleini.getStringProperty("RoogleEinstellungen","RoogleFelderGruppen"+i)).split(",") );
+				aList2.add(String.valueOf(roogleini.getStringProperty("RoogleEinstellungen","RoogleFelderGruppen"+i)).split(",") );
 				aList3.add((ArrayList)aList1.clone());
 				aList3.add((ArrayList) aList2.clone());
 				aRoogleGruppen.add((ArrayList)aList3.clone());
@@ -748,43 +748,43 @@ public class SystemConfig {
 	public static void IcalSettings(){
 		try{
 			INIFile icalini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "icalendar.ini");
-			hmIcalSettings.put("warnen",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnen").equals("0") ? false : true) );
-			hmIcalSettings.put("warnzeitpunkt", (String)icalini.getStringProperty("ICalendar", "Warnzeitpunkt"));
-			hmIcalSettings.put("organisatorname", (String)icalini.getStringProperty("ICalendar", "Organisatorname"));
-			hmIcalSettings.put("organisatoremail", (String)icalini.getStringProperty("ICalendar", "Organisatoremail"));
-			hmIcalSettings.put("praefix", (String)icalini.getStringProperty("ICalendar", "Praefixvortermin"));
-			hmIcalSettings.put("aufeigeneemail",(Boolean)  (icalini.getStringProperty("ICalendar", "Aufeigeneemail").equals("0") ? false : true) );
-			hmIcalSettings.put("praefixbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Praefixbeireha").equals("0") ? false : true) );
-			hmIcalSettings.put("warnenbeireha",(Boolean)  (icalini.getStringProperty("ICalendar", "Warnenbeireha").equals("0") ? false : true) );
-			hmIcalSettings.put("rehaplanverzeichnis", (String)icalini.getStringProperty("ICalendar", "Rehaplanverzeichnis"));
+			hmIcalSettings.put("warnen",icalini.getStringProperty("ICalendar", "Warnen").equals("0") ? false : true );
+			hmIcalSettings.put("warnzeitpunkt", icalini.getStringProperty("ICalendar", "Warnzeitpunkt"));
+			hmIcalSettings.put("organisatorname", icalini.getStringProperty("ICalendar", "Organisatorname"));
+			hmIcalSettings.put("organisatoremail", icalini.getStringProperty("ICalendar", "Organisatoremail"));
+			hmIcalSettings.put("praefix", icalini.getStringProperty("ICalendar", "Praefixvortermin"));
+			hmIcalSettings.put("aufeigeneemail",icalini.getStringProperty("ICalendar", "Aufeigeneemail").equals("0") ? false : true );
+			hmIcalSettings.put("praefixbeireha",icalini.getStringProperty("ICalendar", "Praefixbeireha").equals("0") ? false : true );
+			hmIcalSettings.put("warnenbeireha",icalini.getStringProperty("ICalendar", "Warnenbeireha").equals("0") ? false : true );
+			hmIcalSettings.put("rehaplanverzeichnis", icalini.getStringProperty("ICalendar", "Rehaplanverzeichnis"));
 			if( icalini.getStringProperty("ICalendar", "Direktsenden") == null ){
 				hmIcalSettings.put("direktsenden",false);
 			}else{
-				hmIcalSettings.put("direktsenden",(Boolean)  (icalini.getStringProperty("ICalendar", "Direktsenden").equals("0") ? false : true) );
+				hmIcalSettings.put("direktsenden",icalini.getStringProperty("ICalendar", "Direktsenden").equals("0") ? false : true );
 			}
 			if( icalini.getStringProperty("ICalendar", "Postfach") == null ){
 				hmIcalSettings.put("postfach",0);
 			}else{
-				hmIcalSettings.put("postfach",(Integer)  Integer.parseInt((String)icalini.getStringProperty("ICalendar", "Postfach")) );
+				hmIcalSettings.put("postfach",Integer.parseInt(icalini.getStringProperty("ICalendar", "Postfach")) );
 			}
 			if( icalini.getStringProperty("ICalendar", "Pdfbeilegen") == null ){
 				hmIcalSettings.put("pdfbeilegen",false);
 			}else{
-				hmIcalSettings.put("pdfbeilegen",(Boolean)  (icalini.getStringProperty("ICalendar", "Pdfbeilegen").equals("0") ? false : true) );
+				hmIcalSettings.put("pdfbeilegen",icalini.getStringProperty("ICalendar", "Pdfbeilegen").equals("0") ? false : true );
 			}
 			int zeilen = Integer.parseInt(icalini.getStringProperty("Terminbeschreibung", "TextzeilenAnzahl"));
 			String beschreibung = "";
 			for(int i = 0; i < zeilen; i++){
 				beschreibung = beschreibung + icalini.getStringProperty("Terminbeschreibung", "Textzeile"+Integer.toString(i+1))+( i < (zeilen-1) ? "\n" : "");
 			}
-			hmIcalSettings.put("beschreibung",String.valueOf((String)beschreibung));
+			hmIcalSettings.put("beschreibung",String.valueOf(beschreibung));
 			zeilen = Integer.parseInt(icalini.getStringProperty("Emailtext", "TextzeilenAnzahl"));
 			beschreibung = "";
 			for(int i = 0; i < zeilen; i++){
 				beschreibung = beschreibung + icalini.getStringProperty("Emailtext", "Textzeile"+Integer.toString(i+1))+( i < (zeilen-1) ? "\n" : "");
 			}
-			hmIcalSettings.put("emailtext",String.valueOf((String)beschreibung));
-			hmIcalSettings.put("betreff", (String)icalini.getStringProperty("Emailtext", "Betreff"));
+			hmIcalSettings.put("emailtext",String.valueOf(beschreibung));
+			hmIcalSettings.put("betreff", icalini.getStringProperty("Emailtext", "Betreff"));
 			//ICalGenerator.setUtcTime("20151022T113000");
 			//ICalGenerator.setUtcTime("20151029T113000");
 		}catch(Exception ex){
@@ -1259,7 +1259,7 @@ public class SystemConfig {
 	public static void RezeptInit(){
 		try{
 			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
-			boolean mustsave = false;;
+			boolean mustsave = false;
 			int args;
 			//public static String[] rezeptKlassen = null;
 			initRezeptKlasse = inif.getStringProperty("RezeptKlassen", "InitKlasse");
@@ -1487,20 +1487,20 @@ public class SystemConfig {
 
 			hmPatientenWerkzeugDlgIni.put("ToolsDlgShowButton", false);
 			if ( inif.getStringProperty("Bedienung", "WerkzeugaufrufButtonZeigen") != null )  // Prüfung auf Existenz
-				hmPatientenWerkzeugDlgIni.put("ToolsDlgShowButton",(Integer)inif.getIntegerProperty("Bedienung", "WerkzeugaufrufButtonZeigen") == 1 ? true : false );
+				hmPatientenWerkzeugDlgIni.put("ToolsDlgShowButton",inif.getIntegerProperty("Bedienung", "WerkzeugaufrufButtonZeigen") == 1 ? true : false );
 			//System.out.println("Default1 = "+hmPatientenWerkzeugDlgIni.get("ToolsDlgClickCount"));
 			
 			// Lemmi 20110116: Abfrage Abbruch bei Rezeptänderungen mit Warnung
 			hmRezeptDlgIni.put("RezAendAbbruchWarn", false);
 			if ( inif.getStringProperty("Rezept", "RezeptAenderungAbbruchWarnung") != null )  // Prüfung auf Existenz
-				hmRezeptDlgIni.put("RezAendAbbruchWarn",(Integer)inif.getIntegerProperty("Rezept", "RezeptAenderungAbbruchWarnung") == 1 ? true : false );
+				hmRezeptDlgIni.put("RezAendAbbruchWarn",inif.getIntegerProperty("Rezept", "RezeptAenderungAbbruchWarnung") == 1 ? true : false );
 			
 			///Zeigt den Terminbestätigungsdialog wenn erforderlich, siehe Erweiterung von Drud
 			//Ist der Wert false wird der Dialog nie gezeigt
 			//mit Strg+F11 anstatt Shift+F11 kann die Anzeige des Dialoges
 			//aber unabhängig von dieser Einstellung erzwungen werden /st.
 			if ( inif.getStringProperty("Termine", "HMDialogZeigen") != null ){
-				hmTerminBestaetigen.put("dlgzeigen",((Integer)inif.getIntegerProperty("Termine", "HMDialogZeigen") == 1 ? true : false) );
+				hmTerminBestaetigen.put("dlgzeigen",(inif.getIntegerProperty("Termine", "HMDialogZeigen") == 1 ? true : false) );
 			}else{
 				hmTerminBestaetigen.put("dlgzeigen",false);
 				inif.setStringProperty("Termine", "HMDialogZeigen","0",null);
@@ -1512,14 +1512,14 @@ public class SystemConfig {
 			//die dahinterliegende Funktion ist noch nicht implementiert
 			//Persönlicher Wunsch von mir: Drud's Job /st.
 			if ( inif.getStringProperty("Termine", "HMDialogDiffZeigen") != null ){
-				hmTerminBestaetigen.put("dlgdiffzeigen",((Integer)inif.getIntegerProperty("Termine", "HMDialogDiffZeigen") == 1 ? true : false) );
+				hmTerminBestaetigen.put("dlgdiffzeigen",(inif.getIntegerProperty("Termine", "HMDialogDiffZeigen") == 1 ? true : false) );
 			}else{
 				hmTerminBestaetigen.put("dlgdiffzeigen",false);
 				inif.setStringProperty("Termine", "HMDialogDiffZeigen","0",null);
 				mustsave = true;
 			}
 			if ( inif.getStringProperty("PwDialog", "PWVollbild") != null ){
-				fullSizePwDialog = ((Integer)inif.getIntegerProperty("PwDialog", "PWVollbild") == 1 ? true : false);
+				fullSizePwDialog = (inif.getIntegerProperty("PwDialog", "PWVollbild") == 1 ? true : false);
 
 			}else{
 				fullSizePwDialog = false;
@@ -1889,7 +1889,7 @@ public class SystemConfig {
 		boolean mustsave = false;
 		String dummy = inif.getStringProperty("SystemIntern","VLog");
 		if(dummy==null){
-			if(Reha.thisClass.aktMandant.startsWith("RTA")){
+			if(Reha.aktMandant.startsWith("RTA")){
 				inif.setStringProperty("SystemIntern","VLog","1",null);
 				logVTermine = true;
 				mustsave = true;
@@ -1903,7 +1903,7 @@ public class SystemConfig {
 		}
 		dummy = inif.getStringProperty("SystemIntern","ALog");
 		if(dummy==null){
-			if(Reha.thisClass.aktMandant.startsWith("RTA")){
+			if(Reha.aktMandant.startsWith("RTA")){
 				inif.setStringProperty("SystemIntern","ALog","1",null);
 				logAlleTermine = true;
 				mustsave = true;
@@ -1973,10 +1973,10 @@ public class SystemConfig {
 				ArschgeigenTarifgruppeNeu = 2
 				*/
 				vArschgeigenDaten.add((Vector<String>)vDummy.clone());
-				hmArschgeigenModus.put("Modus"+Integer.toString(i),(Integer) inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenModus") );
-				hmArschgeigenModus.put("Stichtag"+Integer.toString(i),(String) inif.getStringProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenStichtag") );
-				hmArschgeigenModus.put("Tarifalt"+Integer.toString(i),(Integer) inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenTarifgruppeAlt")-1 );
-				hmArschgeigenModus.put("Tarifneu"+Integer.toString(i),(Integer) inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenTarifgruppeNeu")-1 );
+				hmArschgeigenModus.put("Modus"+Integer.toString(i),inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenModus") );
+				hmArschgeigenModus.put("Stichtag"+Integer.toString(i),inif.getStringProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenStichtag") );
+				hmArschgeigenModus.put("Tarifalt"+Integer.toString(i),inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenTarifgruppeAlt")-1 );
+				hmArschgeigenModus.put("Tarifneu"+Integer.toString(i),inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenTarifgruppeNeu")-1 );
 			}
 			
 		}

@@ -46,7 +46,7 @@ public class RehaAUZeiten extends JXPanel{
 	DecimalFormat dcf = new DecimalFormat("##########0.00");
 	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy"); //Konv.
 	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;;
+	ISpreadsheetDocument spreadsheetDocument = null;
 	IDocument document  = null;
 	XSheetCellCursor cellCursor = null;
 	String sheetName = null;
@@ -240,11 +240,11 @@ public class RehaAUZeiten extends JXPanel{
         docdescript.setAsTemplate(true);
 		document = documentService.constructNewDocument(IDocument.CALC, docdescript);
 		spreadsheetDocument = (ISpreadsheetDocument) document;
-		OOTools.setzePapierFormatCalc((ISpreadsheetDocument) spreadsheetDocument, 21000, 29700);
-		OOTools.setzeRaenderCalc((ISpreadsheetDocument) spreadsheetDocument, 1000,1000, 1000, 1000);
+		OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
+		OOTools.setzeRaenderCalc(spreadsheetDocument, 1000,1000, 1000, 1000);
 		sheetName= "Tabelle1";
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();		
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		cellCursor = spreadsheet1.createCursor();
 	}
 	private void fuelleTabelle() throws IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, NoSuchElementException{
@@ -277,7 +277,7 @@ public class RehaAUZeiten extends JXPanel{
 			OOTools.doCellValue(cellCursor, 0, calcrow, vecKalZeile.get(i).get(0));
 			for(int x = 1; x < 13;x++){
 				if(((Double)auGesamt.get(i)[x-1]) > 0.00){
-					OOTools.doCellValue(cellCursor, x, calcrow, (Double) auGesamt.get(i)[x-1]);
+					OOTools.doCellValue(cellCursor, x, calcrow, auGesamt.get(i)[x-1]);
 					summe = true;
 				}
 				
@@ -286,7 +286,7 @@ public class RehaAUZeiten extends JXPanel{
 				OOTools.doCellFormula(cellCursor, 13,calcrow, "=sum(B"+Integer.toString(calcrow+1)+":M"+Integer.toString(calcrow+1)+")");
 				for(int x = 14; x < 21;x++){
 					if(((Double)auGesamt.get(i)[x-2]) > 0.00){
-						OOTools.doCellValue(cellCursor, x, calcrow, (Double) auGesamt.get(i)[x-2]);
+						OOTools.doCellValue(cellCursor, x, calcrow, auGesamt.get(i)[x-2]);
 					}	
 				}				
 			}

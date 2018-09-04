@@ -356,7 +356,7 @@ public class Reha301 implements WindowListener  {
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName+"?jdbcCompliantTruncation=false",dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName+"?jdbcCompliantTruncation=false",dbUser,dbPassword);
    				Reha301.thisClass.sqlInfo.setConnection(obj.conn); 
 				Reha301.DbOk = true;
         	} 
@@ -447,7 +447,7 @@ public class Reha301 implements WindowListener  {
 
         try
         {
-			officeapplication = (IOfficeApplication)new StartOOApplication(Reha301.officeProgrammPfad,Reha301.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(Reha301.officeProgrammPfad,Reha301.officeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
         }catch (OfficeApplicationException e) {
             e.printStackTrace();

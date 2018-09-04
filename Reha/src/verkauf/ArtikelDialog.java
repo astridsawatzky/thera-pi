@@ -27,7 +27,6 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import verkauf.model.Artikel;
 import verkauf.model.Lieferant;
@@ -189,12 +188,12 @@ public class ArtikelDialog extends RehaSmartDialog {
 			
 		};
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 	}
 	
 	private void schliessen() {
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;			
 		}
@@ -263,7 +262,7 @@ public class ArtikelDialog extends RehaSmartDialog {
 		try{
 			if(evt.getDetails()[0].equals("ArtikelDlg")){
 				this.setVisible(false);
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				pinPanel = null;
 				schliessen();

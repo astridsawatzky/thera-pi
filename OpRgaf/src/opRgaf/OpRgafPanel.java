@@ -61,7 +61,6 @@ import RehaIO.RehaIOMessages;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
@@ -377,7 +376,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		}
 	}
 	private void setzeBezahlBetrag(final int i){
-		tfs[0].setText(dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(i), 4)));
+		tfs[0].setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(i), 4)));
 	}
 
 	private void sucheEinleiten(){
@@ -452,7 +451,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			SqlInfo.sqlAusfuehren(cmd);
 		}
 		tabmod.setValueAt(new Date(), tab.convertRowIndexToModel(row), 6);		
-		tabmod.setValueAt((Double)restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 4);
+		tabmod.setValueAt(restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 4);
 		//
 
 		if(rgaf_rechnum.startsWith("RGR-")){
@@ -790,14 +789,14 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 					}
 					//value = tabmod.getValueAt(row,col).toString();
 				}else if(tabmod.getColumnClass(col) == Double.class){
-					value = dcf.format((Double)tabmod.getValueAt(row,col)).replace(",",".");
+					value = dcf.format(tabmod.getValueAt(row,col)).replace(",",".");
 				}else if(tabmod.getColumnClass(col) == String.class){
 					value = tabmod.getValueAt(row,col).toString();
 				}
 				String cmd = "update rgaffaktura set "+colname+"="+(value != null ? "'"+value+"'" : "null")+" where id='"+id+"' LIMIT 1";
 				//System.out.println(cmd);
 				SqlInfo.sqlAusfuehren(cmd);
-				tfs[0].setText(dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 4)));
+				tfs[0].setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), 4)));
 			
 			}catch(Exception ex){
 				System.out.println(ex);
@@ -890,9 +889,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			e.printStackTrace();
 		} catch (TextException e) {
 			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
-		}
+		} 
 		
 	}
 	
@@ -902,9 +899,9 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		String cmd = "select anrede,titel,n_name,v_name,strasse,plz,ort from pat5 where id='"+
 		patid+"' LIMIT 1";
 		Vector<Vector<String>> abwvec = SqlInfo.holeFelder(cmd);
-		Object[] obj = { (Object)abwvec.get(0).get(0),(Object)abwvec.get(0).get(1),(Object)abwvec.get(0).get(2),
-			(Object)abwvec.get(0).get(3),(Object)abwvec.get(0).get(4),(Object)abwvec.get(0).get(5),
-			(Object)abwvec.get(0).get(6)
+		Object[] obj = { abwvec.get(0).get(0),abwvec.get(0).get(1),abwvec.get(0).get(2),
+			abwvec.get(0).get(3),abwvec.get(0).get(4),abwvec.get(0).get(5),
+			abwvec.get(0).get(6)
 			};
 		return AdressTools.machePrivatAdresse(obj,true);
 	}
@@ -914,14 +911,14 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		String cmd = "select abwanrede,abwtitel,abwn_name,abwv_name,abwstrasse,abwplz,abwort from pat5 where id='"+
 			patid+"' LIMIT 1";
 		Vector<Vector<String>> abwvec = SqlInfo.holeFelder(cmd);
-		Object[] obj = { (Object)abwvec.get(0).get(0),(Object)abwvec.get(0).get(1),(Object)abwvec.get(0).get(2),
-				(Object)abwvec.get(0).get(3),(Object)abwvec.get(0).get(4),(Object)abwvec.get(0).get(5),
-				(Object)abwvec.get(0).get(6)
+		Object[] obj = { abwvec.get(0).get(0),abwvec.get(0).get(1),abwvec.get(0).get(2),
+				abwvec.get(0).get(3),abwvec.get(0).get(4),abwvec.get(0).get(5),
+				abwvec.get(0).get(6)
 				};
 		return AdressTools.machePrivatAdresse(obj,true);
 	}
 	
-	private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException, DocumentException{
+	private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException{
 		IDocumentService documentService = null;
 		OpRgaf.thisFrame.setCursor(OpRgaf.thisClass.wartenCursor);
 		////System.out.println("Starte Datei -> "+url);

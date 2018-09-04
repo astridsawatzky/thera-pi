@@ -85,7 +85,6 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	boolean direktsenden = false;
 	ArrayList<String[]> attachments;
 	//private String info = null;
-	private String nummer = "";
 	
 	public AbrechnungDlg abrDlg = null;
 
@@ -94,7 +93,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		installListener();
 		this.setUndecorated(true);
 		this.setName("EMAILDlg");	
-		this.titel = titel;
+		this.titel = titel; 
 		this.recipients = recipients;
 		if(postfach==0){
 			this.recipients = this.recipients + ((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
@@ -128,7 +127,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		this.setModal(true);
 		this.setResizable(false);
 		this.rtp = new RehaTPEventClass();
-		this.rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		this.rtp.addRehaTPEventListener(this);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		regleJList(0);
 	}
@@ -138,7 +137,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 				Object[] result = new Object[attachments.size()];
 				Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
 				for(int i = 0; i < attachments.size(); i++){
-					icons.put(attachments.get(i)[1], (ImageIcon)findIcon(attachments.get(i)[1]));
+					icons.put(attachments.get(i)[1], findIcon(attachments.get(i)[1]));
 				}
 				for(int i = 0; i < attachments.size(); i++){
 					result[i] = attachments.get(i)[1];
@@ -159,15 +158,15 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		ImageIcon reticon = null;
 		String test = datei.toLowerCase();
 		if(test.endsWith(".ics")){
-			reticon = (ImageIcon) SystemConfig.hmSysIcons.get("patnachrichten");
+			reticon = SystemConfig.hmSysIcons.get("patnachrichten");
 		}else if(test.endsWith(".pdf")){
-			reticon = (ImageIcon) new ImageIcon(SystemConfig.hmSysIcons.get("pdf").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
+			reticon = new ImageIcon(SystemConfig.hmSysIcons.get("pdf").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
 		}else if(test.endsWith(".odt")){
-			reticon = (ImageIcon) new ImageIcon(SystemConfig.hmSysIcons.get("ooowriter").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
+			reticon = new ImageIcon(SystemConfig.hmSysIcons.get("ooowriter").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
 		}else if(test.endsWith(".ods")){
-			reticon = (ImageIcon) new ImageIcon(SystemConfig.hmSysIcons.get("ooocalc").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
+			reticon = new ImageIcon(SystemConfig.hmSysIcons.get("ooocalc").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH));
 		}else{
-			reticon = (ImageIcon) SystemConfig.hmSysIcons.get("patnachrichten");	
+			reticon = SystemConfig.hmSysIcons.get("patnachrichten");	
 		}
 		return reticon;
 	}
@@ -485,7 +484,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		this.mymouse = null;
 		 
 		if(this.rtp != null){
-			this.rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			this.rtp.removeRehaTPEventListener(this);
 			this.rtp=null;			
 		}
 		if(jta != null){

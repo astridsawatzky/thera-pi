@@ -628,7 +628,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		Vector<String> spaltenNamen = new Vector<String>(); 
 		for(int i = 0; i < 4;i++){
 			if(spa[i].isEnabled()){
-				spaltenNamen.add((String)spalten[ spa[i].getSelectedIndex()]);
+				spaltenNamen.add(spalten[ spa[i].getSelectedIndex()]);
 			}
 		}
 
@@ -638,7 +638,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		String[] tabName;
 		//int anzahl = oOTermine.size();
 		String patname = "Hr.Kracher,Karl";
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		
 		try {
 			documentService = Reha.officeapplication.getDocumentService();
@@ -694,7 +694,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		IPrinter iprint = null;
 		if(! druckerName.equals(terminDrucker)){
 			try {
-				iprint = (IPrinter) textDocument.getPrintService().createPrinter(terminDrucker);
+				iprint = textDocument.getPrintService().createPrinter(terminDrucker);
 			} catch (NOAException e) {
 				JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 				// TODO Auto-generated catch block

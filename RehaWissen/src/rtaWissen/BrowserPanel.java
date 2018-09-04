@@ -30,7 +30,7 @@ public class BrowserPanel extends JXPanel implements HyperlinkListener{
 
 	}
 	private JScrollPane init(String url){
-		JScrollPane scrollPane = null;;
+		JScrollPane scrollPane = null;
 	    try {
 	        htmlPane = new JEditorPane(url);
 	        htmlPane.setEditable(false);

@@ -83,7 +83,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<String>)retvec;
+		return retvec;
 	}
 	
 	public static void zeigeTabellen(Connection conn){

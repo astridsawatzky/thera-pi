@@ -2,7 +2,6 @@ package therapiDBAdmin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -113,7 +112,7 @@ public class Seite2 extends JXPanel {
 			String connection = "jdbc:mysql://"+
 			MySqlTab.iPAdresse+":"+MySqlTab.portAdresse+"/"+tfs[0].getText().trim();
 			//tfs[0].getText().trim()+":"+tfs[1].getText().trim()+"/"+tfs[4].getText().trim();
-			TheraPiDbAdmin.conn_db = (Connection) DriverManager.getConnection(connection,
+			TheraPiDbAdmin.conn_db = DriverManager.getConnection(connection,
 					tfs[1].getText().trim(),
 					tfs[2].getText().trim() );
 			return true;

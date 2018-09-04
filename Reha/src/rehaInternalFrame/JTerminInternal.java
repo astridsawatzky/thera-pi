@@ -28,7 +28,7 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 	public JTerminInternal(String titel, ImageIcon img, int desktop) {
 		super(titel, img, desktop);
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 		addInternalFrameListener(this);
 		// TODO Auto-generated constructor stub
 	}
@@ -47,8 +47,8 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 			inIniSave = true;
 			new FrameSave ((Dimension)this.getSize().clone(), 
 					(Point)this.getLocation().clone(), 
-					(Integer) Integer.valueOf(this.desktop), 
-					(Integer) Integer.valueOf((this.getImmerGross()? 1 : 0)),
+					Integer.valueOf(this.desktop), 
+					Integer.valueOf((this.getImmerGross()? 1 : 0)),
 					String.valueOf("kalender.ini"),
 					String.valueOf("Kalender"));	
 		}
@@ -61,7 +61,7 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 		////System.out.println("Lösche Termin Internal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
 		////System.out.println("Termin-Internal geschlossen***************");
 
-		rEvent.removeRehaEventListener((RehaEventListener) this);
+		rEvent.removeRehaEventListener(this);
 		if(Reha.thisClass.terminpanel != null){
 			try{
 				Reha.thisClass.terminpanel.db_Aktualisieren.interrupt();

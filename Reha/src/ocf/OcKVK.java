@@ -162,7 +162,7 @@ public class OcKVK {
 		    s = "";
 		    satrId = ""; 
 		    for (n = 0; n < i.length; n++) {
-		       x = (int) (0x000000FF & i[n]);
+		       x = 0x000000FF & i[n];
 		       s = Integer.toHexString(x).toUpperCase();
 		       if (s.length() == 1) s = "0" + s;
 		       satrId = satrId+String.valueOf(s);
@@ -640,7 +640,7 @@ public class OcKVK {
 		int bytes = by.length;
 		int x;
         for (n = 0; n < bytes; n++) {
-        	x = (int) (0x000000FF & by[n]);
+        	x = 0x000000FF & by[n];
    			s = Integer.toHexString(x).toUpperCase();
         	if (s.length() == 1) s = "0" + s;
             if( (n >= (bytes-2))){
@@ -956,7 +956,7 @@ public class OcKVK {
 			}
 			if(found >= 0){
 				try{
-					lang = (int) (0x000000FF & bytes[found+1]);
+					lang = 0x000000FF & bytes[found+1];
 					found = found+2;
 					SystemConfig.hmKVKDaten.put(hmProperty[y],
 							StringTools.do301NormalizeString(string.substring(found,found+lang)));
@@ -1004,19 +1004,19 @@ public class OcKVK {
 		int i = -1,i2=-1;
 		int testen = -1;
 		byte[] value = null;
-		if((int) (0x000000FF & response[0]) !=  (Integer)tags[0][0] ){
+		if((0x000000FF & response[0]) !=  (Integer)tags[0][0] ){
 			JOptionPane.showMessageDialog(null,"Chip-Karte ist defekt oder keine KV-Karte!" );
 			SystemConfig.hmKVKDaten.clear();
 			//System.out.println("Die Karte ist keine KV-Karte");
 			SystemConfig.hmKVKDaten.clear();
 			return SystemConfig.hmKVKDaten;
 		}else{
-			dataLength = (int) (0x000000FF & response[1]);
+			dataLength = 0x000000FF & response[1];
 		}
 		
 		//Falls nicht sofort mit dem Tag 1 begonnen wird;
 		for(i = 2; i < dataLength; i++){
-			if((int) (0x000000FF & response[i]) ==  (Integer)tags[1][0] ){
+			if((0x000000FF & response[i]) ==  (Integer)tags[1][0] ){
 				//System.out.println("Tag 1 beginnt bei Byte "+i);
 				startByte = Integer.valueOf(i);
 				break;
@@ -1031,7 +1031,7 @@ public class OcKVK {
 		SystemConfig.hmKVKDaten.put("Anrede", "HERR");
 		for(i=1; i < tags.length;i++ ){
 			//Wenn eines der optionalen Tags nicht vorhanden ist...
-			if((int) (0x000000FF & response[startByte]) !=  (Integer)tags[i][0] ){
+			if((0x000000FF & response[startByte]) !=  (Integer)tags[i][0] ){
 				//kvinhalte.put((String)tags[i][1],"");
 				if(! (Boolean) tags[i][2] ){
 					JOptionPane.showMessageDialog(null,"Das Pflichtfeld "+(String)tags[i][1]+" ist auf der Karte nicht vorhanden" );
@@ -1042,7 +1042,7 @@ public class OcKVK {
 				continue;
 			}
 			startByte += 1;
-			tagLength = (int) (0x000000FF & response[startByte]);
+			tagLength = 0x000000FF & response[startByte];
 			startByte += 1;
 			value = new byte[tagLength];
 			for(i2 = startByte; i2 < startByte+tagLength;i2++){

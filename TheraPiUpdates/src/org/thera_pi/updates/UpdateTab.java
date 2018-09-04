@@ -52,7 +52,7 @@ public class UpdateTab  extends JXPanel implements ChangeListener{
 		
 	}
 	public void activateUpdateCheck(){
-		((UpdatePanel)tab1).doUpdateCheck();
+		tab1.doUpdateCheck();
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public class UpdateTab  extends JXPanel implements ChangeListener{
 		// TODO Auto-generated method stub
 	}
 	public FTPFile[] getFilesFromUpdatePanel(){
-		return ((UpdatePanel)tab1).ffile;
+		return tab1.ffile;
 	}
 	
 }

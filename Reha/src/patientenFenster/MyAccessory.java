@@ -46,7 +46,7 @@ public class MyAccessory extends JComponent implements PropertyChangeListener {
 				mediaTracker.waitForID(0);
 			} catch (Exception ie) {
 			}
-			;
+			
 			repaint();
 		}
 	}

@@ -294,7 +294,7 @@ class RxSocketClient {
 	}
 	private void serverStarten() throws IOException{
 		this.server = new Socket("localhost",1235);
-		OutputStream output = (OutputStream) server.getOutputStream();
+		OutputStream output = server.getOutputStream();
 		InputStream input = server.getInputStream();
 
 		byte[] bytes = this.stand.getBytes();

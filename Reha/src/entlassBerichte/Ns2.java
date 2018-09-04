@@ -736,9 +736,9 @@ public class Ns2 implements ActionListener {
 		vec2.add("");
 		vec2.add("");
 		vec2.add("0");
-		vec.insertElementAt((Vector)((Vector<String>)vec2).clone(), 0);
+		vec.insertElementAt((Vector)vec2.clone(), 0);
 		for(int i = 0;i < 10;i++){
-			eltern.ktlcmb[i].setDataVectorVector((Vector<Vector<String>>)vec, 0, 3);
+			eltern.ktlcmb[i].setDataVectorVector(vec, 0, 3);
 			eltern.ktlcmb[i].setName("TMA"+(i+1));
 			eltern.ktltfc[i].setName("TKT"+(i+1));
 			eltern.ktltfd[i].setName("TZT"+(i+1));			

@@ -40,7 +40,6 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 
 public class ArztAuswahl extends RehaSmartDialog{
 /**
@@ -86,7 +85,7 @@ private RehaTPEventClass rtp = null;
 	     pinPanel.getGruen().setVisible(false);
 	     this.setPinPanel(pinPanel);
 	     rtp = new RehaTPEventClass();
-	     rtp.addRehaTPEventListener((RehaTPEventListener) this);
+	     rtp.addRehaTPEventListener(this);
 
 	     /**************************/
 		//((JXPanel)super.getSmartTitledPanel().getContentContainer()).setBackgroundPainter(new CompoundPainter(mp));;;
@@ -123,7 +122,7 @@ private RehaTPEventClass rtp = null;
 					doAbbrechen();
 					if(rtp != null){
 						this.setVisible(false);
-						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						pinPanel = null;
 						this.dispose();
@@ -296,7 +295,7 @@ private RehaTPEventClass rtp = null;
 		int bis = vec.size();
 		int i;
 		for(i = 0; i < bis; i++){
-			arztwahlmod.addRow((Vector<?>)vec.get(i));	
+			arztwahlmod.addRow(vec.get(i));	
 		}
 	}
 	
@@ -307,7 +306,7 @@ private RehaTPEventClass rtp = null;
 		int bis = vec.size();
 		int i;
 		for(i = 0; i < bis; i++){
-			arztwahlmod.addRow((Vector<?>)vec.get(i));	
+			arztwahlmod.addRow(vec.get(i));	
 		}
 	}
 	public void werteUebergeben(){
@@ -318,7 +317,7 @@ private RehaTPEventClass rtp = null;
 			elterntfs[1].setText((String)arztwahlmod.getValueAt(model, 4));	
 			elterntfs[2].setText((String)arztwahlmod.getValueAt(model, 5));
 			if(rtp != null){
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				////System.out.println("****************Arztkurz -> Listener entfernt**************");
 				pinPanel = null;
@@ -381,7 +380,7 @@ private RehaTPEventClass rtp = null;
 			elterntfs[0].setText(arztbisher);			
 		}
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;
 			////System.out.println("****************Arztkurz -> Listener entfernt**************");

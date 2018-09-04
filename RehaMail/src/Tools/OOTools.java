@@ -57,13 +57,13 @@ public class OOTools{
 			ITextDocument textDocument = (ITextDocument) document;
 			/*********************/
 			XController xController = textDocument.getXTextDocument().getCurrentController();
-			XTextViewCursorSupplier xTextViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
+			XTextViewCursorSupplier xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
 			xController);
 			XTextViewCursor xtvc = xTextViewCursorSupplier.getViewCursor();
 			xtvc.gotoStart(false);
 			textDocument.getFrame().setFocus();
 
-			return (ITextDocument) textDocument;	
+			return textDocument;	
 			
 		}catch (OfficeApplicationException exception) {
 			exception.printStackTrace();
@@ -89,13 +89,13 @@ public class OOTools{
 			ITextDocument textDocument = (ITextDocument)document;
 			textDocument.getViewCursorService().getViewCursor().getTextCursorFromStart().insertDocument(is, new RTFFilter());
 			XController xController = textDocument.getXTextDocument().getCurrentController();
-			XTextViewCursorSupplier xTextViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
+			XTextViewCursorSupplier xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
 			xController);
 			XTextViewCursor xtvc = xTextViewCursorSupplier.getViewCursor();
 			xtvc.gotoStart(false);
 			textDocument.getFrame().setFocus();
 			is.close();
-			return (ITextDocument) textDocument;	
+			return textDocument;	
 			
 		}catch (OfficeApplicationException exception) {
 			exception.printStackTrace();
@@ -126,7 +126,7 @@ public class OOTools{
 			ISpreadsheetDocument spreadsheetDocument = (ISpreadsheetDocument) document;
 			/********************/
 			spreadsheetDocument.getFrame().setFocus();
-			return (ISpreadsheetDocument) spreadsheetDocument;
+			return spreadsheetDocument;
 			
 		} 
 		catch (Throwable exception) {
@@ -210,7 +210,7 @@ public class OOTools{
 		try {
 			XComponentContext xComponentContext;
 
-			xComponentContext = (XComponentContext) com.sun.star.comp.helper.Bootstrap.bootstrap();
+			xComponentContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
 			XMultiComponentFactory xMultiComponentFactory;
 			xMultiComponentFactory = (XMultiComponentFactory) RehaMail.officeapplication.getDocumentService();
 		
@@ -218,8 +218,7 @@ public class OOTools{
 		          xMultiComponentFactory.createInstanceWithContext(
 		          "com.sun.star.datatransfer.clipboard.SystemClipboard", 
 		          xComponentContext);
-			XClipboard xClipboard = (XClipboard)
-	        UnoRuntime.queryInterface(XClipboard.class, oClipboard);
+			XClipboard xClipboard = UnoRuntime.queryInterface(XClipboard.class, oClipboard);
 
 			//---------------------------------------------------
 			// 	get a list of formats currently on the clipboard

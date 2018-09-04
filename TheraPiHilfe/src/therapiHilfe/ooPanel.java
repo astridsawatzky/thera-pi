@@ -10,14 +10,12 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,9 +26,6 @@ import javax.swing.JLabel;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.XTopWindow;
-import com.sun.star.frame.XFrame;
 import com.sun.star.uno.Exception;
 
 import ag.ion.bion.officelayer.NativeView;
@@ -62,10 +57,6 @@ public class ooPanel{
 	public IFrame frame = null;
 	public ICloseListener clListener = null;
 
-	private XExtendedToolkit extendedToolkit = null;
-	private com.sun.star.awt.XTopWindowListener topWindowListener = null;
-	private XFrame xxframe = null;
-	private XTopWindow myTopWindow = null;
 	static ooPanel thisClass; 
 	public JXPanel noaPanel = null;
 	private static IFrame             officeFrame       = null;
@@ -263,7 +254,6 @@ public class ooPanel{
 		  }
 /*********************************************************/		  
 		  public static void erzeugeAusByteArray(byte[] bhtml,String datei,boolean alsweb){
-			  InputStream is = new ByteArrayInputStream( bhtml ); 
 			  FileOutputStream fileOut;
 			  String indatei = datei;
 			  if(! indatei.contains(".html")){
@@ -600,12 +590,9 @@ class testObVorhanden{
 		boolean ret = true;
 		Statement stmtx = null;
 		ResultSet rsx = null;
-		String[] comboInhalt = null;
-				stmtx = null;
-				rsx = null;
 				//System.out.println("In holeGruppen");
 				try {
-					stmtx = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
@@ -628,24 +615,18 @@ class testObVorhanden{
 							rsx = null;
 						}
 					}	
-					if (stmtx != null) {
-						try {
-							stmtx.close();
-						} catch (SQLException sqlEx) { // ignore }
-							stmtx = null;
-						}
-					}
 					
-			
+					try {
+						stmtx.close();
+					} catch (SQLException sqlEx) { // ignore }
+						stmtx = null;
+					}
 			return ret;
-	
 	}
 }
 class DokumentListener implements IDocumentListener {
 
-	private IOfficeApplication officeAplication = null;
 	public DokumentListener(IOfficeApplication officeAplication) {
-		this.officeAplication = officeAplication;
 	}
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {

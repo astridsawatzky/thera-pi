@@ -293,7 +293,7 @@ public class RezTools {
 			if(xvec.size()==0){
 				return (Vector<String>)retvec.clone();
 			}else{
-				terms = (String) xvec.get(0);	
+				terms = xvec.get(0);	
 			}
 		}else{
 			terms = termine;
@@ -345,7 +345,7 @@ public class RezTools {
 				if(xvec.size()==0){
 					return "";
 				}else{
-					terms = (String) xvec.get(0);	
+					terms = xvec.get(0);	
 				}
 			}else{
 				terms = termine;
@@ -375,7 +375,7 @@ public class RezTools {
 				if(xvec.size()==0){
 					return "";
 				}else{
-					terms = (String) xvec.get(0);	
+					terms = xvec.get(0);	
 				}
 			}else{
 				terms = termine;
@@ -406,7 +406,7 @@ public class RezTools {
 			if(xvec.size()==0){
 				return (Vector<String>)retvec.clone();
 			}else{
-				terms = (String) xvec.get(0);	
+				terms = xvec.get(0);	
 			}
 		}else{
 			terms = termine;
@@ -446,7 +446,7 @@ public class RezTools {
 			if(xvec.size()==0){
 				return (Vector<Vector<String>>)retbeides.clone();
 			}else{
-				terms = (String) xvec.get(0);	
+				terms = xvec.get(0);	
 			}
 		}else{
 			terms = termine;
@@ -486,7 +486,7 @@ public class RezTools {
 	public static String holePosAusIdUndRezNr(String id,String reznr){
 		String diszi = RezTools.putRezNrGetDisziplin(reznr);
 		String preisgruppe = SqlInfo.holeEinzelFeld("select preisgruppe from verordn where rez_nr='"+reznr+"' LIMIT 1");
-		Vector<Vector<String>> preisvec = (Vector<Vector<String>>) SystemPreislisten.hmPreise.get(diszi).get(Integer.parseInt(preisgruppe)-1);
+		Vector<Vector<String>> preisvec = SystemPreislisten.hmPreise.get(diszi).get(Integer.parseInt(preisgruppe)-1);
 		String pos = RezTools.getPosFromID(id, preisgruppe, preisvec) ;
 		return (pos==null ? "" : pos);
 	}
@@ -522,8 +522,8 @@ public class RezTools {
 			Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
 				@Override
 				public int compare(Vector<String> o1, Vector<String> o2) {
-					String s1 = (String)o1.get(4);
-					String s2 = (String)o2.get(4);
+					String s1 = o1.get(4);
+					String s2 = o2.get(4);
 					return s1.compareTo(s2);
 				}
 			};
@@ -887,7 +887,7 @@ public class RezTools {
 			// Es gibt Termine in der Tabelle
 			bTermine = true;
 			//iTermine = vAktTermine.size();
-			if( ((String)vAktTermine.get(0)).substring(6).equals(SystemConfig.vorJahr)){
+			if( vAktTermine.get(0).substring(6).equals(SystemConfig.vorJahr)){
 				bMitJahresWechsel = true;
 			}
 			if(DatFunk.Unter18(vAktTermine.get(0), 
@@ -901,14 +901,14 @@ public class RezTools {
 		//System.out.println(vAktTermine);
 		for(int i = 0;i < 1;i++){
 
-			if(Integer.parseInt(((String)Reha.thisClass.patpanel.vecaktrez.get(63))) <= 0){
+			if(Integer.parseInt((Reha.thisClass.patpanel.vecaktrez.get(63))) <= 0){
 				// Kasse erfordert keine Zuzahlung
 				//System.out.println("Kasse erfordert keine Zuzahlung");
 				zm.allefrei = true;
 				iret = 0;
 				break;
 			}
-			if(Integer.parseInt(((String)Reha.thisClass.patpanel.vecaktrez.get(39))) == 1){
+			if(Integer.parseInt((Reha.thisClass.patpanel.vecaktrez.get(39))) == 1){
 				// Hat bereits bezahlt normal behandeln (zzstatus == 1)
 				//System.out.println("Hat bereits bezahlt normal behandeln (zzstatus == 1)");
 				zm.allezuzahl = true;
@@ -917,12 +917,12 @@ public class RezTools {
 			}
 
 			/************************ Jetzt der Ober-Scheißdreck für den Achtzehner-Test***********************/
-			if( ((Boolean) ((String)Reha.thisClass.patpanel.vecaktrez.get(60)).equals("T")) || (u18Test)){
+			if( (Reha.thisClass.patpanel.vecaktrez.get(60).equals("T")) || (u18Test)){
 				// Es ist ein unter 18 Jahre Test notwendig
 				//System.out.println("Es ist ein unter 18 Jahre Test notwendig");
 				if(bTermine){
 
-					int [] test = ZuzahlTools.terminNachAchtzehn(vAktTermine,DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.patDaten.get(4))); 
+					int [] test = ZuzahlTools.terminNachAchtzehn(vAktTermine,DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4))); 
 					if( test[0] > 0 ){
 						//muß zuzahlen
 						//System.out.println("Parameter 1 = "+test[0]);
@@ -970,8 +970,8 @@ public class RezTools {
 			}
 
 			/************************ Keine Befreiung Aktuell und keine Vorjahr (Normalfall************************/
-			if((boolean) ((String)Reha.thisClass.patpanel.patDaten.get(30)).equals("F") && 
-					(((String)Reha.thisClass.patpanel.patDaten.get(69)).trim().equals("")) ){
+			if(Reha.thisClass.patpanel.patDaten.get(30).equals("F") && 
+					(Reha.thisClass.patpanel.patDaten.get(69).trim().equals("")) ){
 				// Es liegt weder eine Befreiung für dieses noch für letztes Jahr vor.
 				// Standard
 				//System.out.println("Es liegt weder eine Befreiung für dieses noch für letztes Jahr vor.");
@@ -979,16 +979,16 @@ public class RezTools {
 				break;
 			}
 			/************************ Aktuell Befreit und im Vorjahr auch befreit************************/			
-			if((boolean) ((String)Reha.thisClass.patpanel.patDaten.get(30)).equals("T") && 
-					(!((String)Reha.thisClass.patpanel.patDaten.get(69)).equals("")) ){
+			if(Reha.thisClass.patpanel.patDaten.get(30).equals("T") && 
+					(!Reha.thisClass.patpanel.patDaten.get(69).equals("")) ){
 				// Es liegt eine Befreiung vor und im Vorjahr ebenfenfalls befreit
 				//System.out.println("Es liegt eine Befreiung vor und im Vorjahr ebenfenfalls befreit");
 				iret = 0;
 				break;
 			}
 			/************************ aktuell Nicht frei, Vorjahr frei************************/
-			if((boolean) (((String)Reha.thisClass.patpanel.patDaten.get(30)).equals("F")) && 
-					(!((String)Reha.thisClass.patpanel.patDaten.get(69)).equals("")) ){
+			if((Reha.thisClass.patpanel.patDaten.get(30).equals("F")) && 
+					(!Reha.thisClass.patpanel.patDaten.get(69).equals("")) ){
 				//System.out.println("aktuell Nicht frei, Vorjahr frei");
 				if(!bMitJahresWechsel){//Alle Termine aktuell
 					iret = 2;
@@ -1044,8 +1044,8 @@ public class RezTools {
 			}
 			/************************Aktuelle Befreiung aber nicht im Vorjahr************************/		
 			// Fehler !!!!!!!!!!!!!!!!!!!!!!! muß korrigiert werden!!!!!!!!!!!!!!!!!!!!!!!
-			if((boolean) ((String)Reha.thisClass.patpanel.patDaten.get(30)).equals("T") && 
-					(((String)Reha.thisClass.patpanel.vecaktrez.get(59)).trim().equals("")) ){
+			if(Reha.thisClass.patpanel.patDaten.get(30).equals("T") && 
+					(Reha.thisClass.patpanel.vecaktrez.get(59).trim().equals("")) ){
 				//System.out.println("Aktuelle Befreiung aber nicht im Vorjahr");
 				if(!bMitJahresWechsel){//Alle Termine aktuell
 					iret = 0;
@@ -1068,12 +1068,12 @@ public class RezTools {
 		}
 		
 
-		zm.hausbesuch = ((String)Reha.thisClass.patpanel.vecaktrez.get(43)).equals("T");
-		zm.hbvoll = ((String)Reha.thisClass.patpanel.vecaktrez.get(61)).equals("T");
-		zm.hbheim = ((String)Reha.thisClass.patpanel.patDaten.get(44)).equals("T");
-		zm.km = StringTools.ZahlTest(((String)Reha.thisClass.patpanel.patDaten.get(48)));
-		zm.preisgruppe = Integer.parseInt(((String)Reha.thisClass.patpanel.vecaktrez.get(41)));
-		zm.gesamtZahl = Integer.parseInt(((String)Reha.thisClass.patpanel.vecaktrez.get(64)));
+		zm.hausbesuch = Reha.thisClass.patpanel.vecaktrez.get(43).equals("T");
+		zm.hbvoll = Reha.thisClass.patpanel.vecaktrez.get(61).equals("T");
+		zm.hbheim = Reha.thisClass.patpanel.patDaten.get(44).equals("T");
+		zm.km = StringTools.ZahlTest((Reha.thisClass.patpanel.patDaten.get(48)));
+		zm.preisgruppe = Integer.parseInt((Reha.thisClass.patpanel.vecaktrez.get(41)));
+		zm.gesamtZahl = Integer.parseInt((Reha.thisClass.patpanel.vecaktrez.get(64)));
 		//Hausbesuch als logischen wert
 		//System.out.println("Rückgabewert iret = "+iret);
 		if(iret==0){
@@ -1133,17 +1133,17 @@ public class RezTools {
 		DecimalFormat dfx = new DecimalFormat( "0.00" );
 		String xdiszi = RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1));
 		int xpreisgr = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
-		String xrezdatum = DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)); 
+		String xrezdatum = DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)); 
 
-		SystemConfig.hmAdrRDaten.put("<Rid>",(String)Reha.thisClass.patpanel.vecaktrez.get(35) );
-		SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)) );	
+		SystemConfig.hmAdrRDaten.put("<Rid>",Reha.thisClass.patpanel.vecaktrez.get(35) );
+		SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)) );	
 		boolean neuerpreis = neuePreisNachRezeptdatumOderStichtag(xdiszi,xpreisgr,xrezdatum,false,Reha.thisClass.patpanel.vecaktrez);
 		//System.out.println("Neuer Preis = "+neuerpreis+"\n");
 
 		for(i = 0;i < 4;i++){
-			anzahl[i] = Integer.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(i+3));
-			artdbeh[i] = Integer.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(i+8));
+			anzahl[i] = Integer.valueOf(Reha.thisClass.patpanel.vecaktrez.get(i+3));
+			artdbeh[i] = Integer.valueOf(Reha.thisClass.patpanel.vecaktrez.get(i+8));
 			if(!neuerpreis){
 				if(artdbeh[i] > 0){
 					preise[i] = BigDecimal.valueOf(new Double(RezTools.getPreisAltFromID(Integer.toString(artdbeh[i]), Integer.toString(xpreisgr), SystemPreislisten.hmPreise.get(xdiszi).get(xpreisgr))));	
@@ -1153,12 +1153,12 @@ public class RezTools {
 			}else{
 				try{
 					if(artdbeh[i] > 0){
-						preistest = BigDecimal.valueOf(new Double((String)Reha.thisClass.patpanel.vecaktrez.get(i+18)));
+						preistest = BigDecimal.valueOf(new Double(Reha.thisClass.patpanel.vecaktrez.get(i+18)));
 						preise[i] = BigDecimal.valueOf(new Double(RezTools.getPreisAktFromID(Integer.toString(artdbeh[i]), Integer.toString(xpreisgr), SystemPreislisten.hmPreise.get(xdiszi).get(xpreisgr))));
 						if( (preistest.compareTo(preise[i]) != 0) ){
 							meldung = "Achtung Unterschiedliche Preise!!!\n\n"+
-							"Im Rezept gespeicherter Preis für Position "+(String)Reha.thisClass.patpanel.vecaktrez.get(48+i)+" = "+dfx.format(preistest)+"\n"+
-							"In der Preisliste gespeicherter Preis für Position "+(String)Reha.thisClass.patpanel.vecaktrez.get(48+i)+" = "+dfx.format(preise[i])+"\n\n"+
+							"Im Rezept gespeicherter Preis für Position "+Reha.thisClass.patpanel.vecaktrez.get(48+i)+" = "+dfx.format(preistest)+"\n"+
+							"In der Preisliste gespeicherter Preis für Position "+Reha.thisClass.patpanel.vecaktrez.get(48+i)+" = "+dfx.format(preise[i])+"\n\n"+
 							"Vermutete Ursache: Die Preisliste wurde nach der Rezeptanlage aktualisiert\n"+
 							"Berechung erfolgt mit dem Preis aus der Preisliste, Rezept wird aktualisiert!";
 							JOptionPane.showMessageDialog(null,meldung);
@@ -1170,7 +1170,7 @@ public class RezTools {
 						preise[i] = BigDecimal.valueOf(new Double("0.00"));
 					}
 				}catch(Exception ex){
-					preise[i] = BigDecimal.valueOf(new Double((String)Reha.thisClass.patpanel.vecaktrez.get(i+18)));	
+					preise[i] = BigDecimal.valueOf(new Double(Reha.thisClass.patpanel.vecaktrez.get(i+18)));	
 				}
 					
 			}
@@ -1182,9 +1182,9 @@ public class RezTools {
 //		String runden;
 		
 		BigDecimal endpos;
-		SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-		SystemConfig.hmAdrRDaten.put("<Rpatid>",(String)Reha.thisClass.patpanel.vecaktrez.get(0) );
-		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch( (String)Reha.thisClass.patpanel.vecaktrez.get(2))  );		
+		SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+		SystemConfig.hmAdrRDaten.put("<Rpatid>",Reha.thisClass.patpanel.vecaktrez.get(0) );
+		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch( Reha.thisClass.patpanel.vecaktrez.get(2))  );		
 		SystemConfig.hmAdrRDaten.put("<Rpauschale>",dfx.format(rezgeb) );
 		
 		for(i = 0; i < 4; i++){
@@ -1194,7 +1194,7 @@ public class RezTools {
 					preise[i].toString() );
 			*/		
 			if(artdbeh[i] > 0){
-				SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">",(String)Reha.thisClass.patpanel.vecaktrez.get(48+i) );
+				SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">",Reha.thisClass.patpanel.vecaktrez.get(48+i) );
 
 				SystemConfig.hmAdrRDaten.put("<Rpreis"+(i+1)+">", dfx.format(preise[i]) );
 				
@@ -1226,7 +1226,7 @@ public class RezTools {
 		//System.out.println(SystemConfig.hmAdrRDaten);
 		/*****************************************************/
 		if(zm.hausbesuch){ //Hausbesuch
-			Object[] obi = hbNormal(zm,rezwert,rezgeb,Integer.valueOf(((String)Reha.thisClass.patpanel.vecaktrez.get(64))),neuerpreis);
+			Object[] obi = hbNormal(zm,rezwert,rezgeb,Integer.valueOf((Reha.thisClass.patpanel.vecaktrez.get(64))),neuerpreis);
 			rezwert = ((BigDecimal)obi[0]);
 			rezgeb = (Double)obi[1];
 		}
@@ -1254,26 +1254,26 @@ public class RezTools {
 			protected Void doInBackground() throws Exception {
 				try{
 					DecimalFormat df = new DecimalFormat( "0.00" );
-					String diszi = RezTools.putRezNrGetDisziplin((String)Reha.thisClass.patpanel.vecaktrez.get(1));
+					String diszi = RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1));
 
-					int pg = Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+					int pg = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
 					String id = "";
-					SystemConfig.hmAdrRDaten.put("<Rid>",(String)Reha.thisClass.patpanel.vecaktrez.get(35) );
-					SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-					SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)) );
-					SystemConfig.hmAdrRDaten.put("<Rdiagnose>",(String)Reha.thisClass.patpanel.vecaktrez.get(23) );
+					SystemConfig.hmAdrRDaten.put("<Rid>",Reha.thisClass.patpanel.vecaktrez.get(35) );
+					SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+					SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)) );
+					SystemConfig.hmAdrRDaten.put("<Rdiagnose>",Reha.thisClass.patpanel.vecaktrez.get(23) );
 					
 					BigDecimal dummyproz = null;
 					BigDecimal roundproz = null;
 					for(int i = 0;i<4;i++){
-						id = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
-						SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">",(String)Reha.thisClass.patpanel.vecaktrez.get(48+i));
-						SystemConfig.hmAdrRDaten.put("<Rpreis"+(i+1)+">", (String)Reha.thisClass.patpanel.vecaktrez.get(18+i).replace(".",",") );
-						SystemConfig.hmAdrRDaten.put("<Ranzahl"+(i+1)+">", (String)Reha.thisClass.patpanel.vecaktrez.get(3+i) );
+						id = Reha.thisClass.patpanel.vecaktrez.get(8+i);
+						SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">",Reha.thisClass.patpanel.vecaktrez.get(48+i));
+						SystemConfig.hmAdrRDaten.put("<Rpreis"+(i+1)+">", Reha.thisClass.patpanel.vecaktrez.get(18+i).replace(".",",") );
+						SystemConfig.hmAdrRDaten.put("<Ranzahl"+(i+1)+">", Reha.thisClass.patpanel.vecaktrez.get(3+i) );
 						//SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( ((BigDecimal)BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">"))).multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Rpreis"+(i+1)+">").replace(",","."))))).doubleValue() ));
-						dummyproz = BigDecimal.valueOf(Double.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(18+i))).divide(BigDecimal.valueOf(new Double(10.000)));
+						dummyproz = BigDecimal.valueOf(Double.valueOf(Reha.thisClass.patpanel.vecaktrez.get(18+i))).divide(BigDecimal.valueOf(new Double(10.000)));
 						roundproz = dummyproz.setScale(2, BigDecimal.ROUND_HALF_UP);
-						SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( ((BigDecimal)roundproz.multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">"))))).doubleValue()) );
+						SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i+1)+">", df.format( roundproz.multiply(BigDecimal.valueOf(Double.valueOf(SystemConfig.hmAdrRDaten.get("<Ranzahl"+(i+1)+">")))).doubleValue()) );
 						if(!id.equals("0")){
 							SystemConfig.hmAdrRDaten.put("<Rkuerzel"+(i+1)+">", RezTools.getKurzformFromID(id, SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
 							SystemConfig.hmAdrRDaten.put("<Rlangtext"+(i+1)+">", RezTools.getLangtextFromID(id, "", SystemPreislisten.hmPreise.get(diszi).get(pg) ) );
@@ -1283,12 +1283,12 @@ public class RezTools {
 						}
 					}
 					//Hausbesuche
-					if( ((String)Reha.thisClass.patpanel.vecaktrez.get(43)).equals("T") ){
+					if( Reha.thisClass.patpanel.vecaktrez.get(43).equals("T") ){
 						SystemConfig.hmAdrRDaten.put("<Rhbpos>", SystemPreislisten.hmHBRegeln.get(diszi).get(pg).get(0));
-						SystemConfig.hmAdrRDaten.put("<Rhbanzahl>",(String)Reha.thisClass.patpanel.vecaktrez.get(64) );
+						SystemConfig.hmAdrRDaten.put("<Rhbanzahl>",Reha.thisClass.patpanel.vecaktrez.get(64) );
 						SystemConfig.hmAdrRDaten.put("<Rhbpreis>",RezTools.getPreisAktFromPos(SystemConfig.hmAdrRDaten.get("<Rhbpos>"), "", SystemPreislisten.hmPreise.get(diszi).get(pg)).replace(".",",") );
 						SystemConfig.hmAdrRDaten.put("<Rwegpos>", SystemPreislisten.hmHBRegeln.get(diszi).get(pg).get(2));
-						SystemConfig.hmAdrRDaten.put("<Rweganzahl>",(String)Reha.thisClass.patpanel.vecaktrez.get(7) );
+						SystemConfig.hmAdrRDaten.put("<Rweganzahl>",Reha.thisClass.patpanel.vecaktrez.get(7) );
 						SystemConfig.hmAdrRDaten.put("<Rwegpreis>",RezTools.getPreisAktFromPos(SystemConfig.hmAdrRDaten.get("<Rwegpos>"), "", SystemPreislisten.hmPreise.get(diszi).get(pg)).replace(".",",") );						
 					}else{
 						SystemConfig.hmAdrRDaten.put("<Rhbpos>", "");
@@ -1307,10 +1307,10 @@ public class RezTools {
 		}.execute();
 	}
 	public static void constructGanzFreiRezHMap(ZuzahlModell zm){
-		SystemConfig.hmAdrRDaten.put("<Rid>",(String)Reha.thisClass.patpanel.vecaktrez.get(35) );
-		SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)) );		
-		SystemConfig.hmAdrRDaten.put("<Rpatid>",(String)Reha.thisClass.patpanel.vecaktrez.get(0) );
+		SystemConfig.hmAdrRDaten.put("<Rid>",Reha.thisClass.patpanel.vecaktrez.get(35) );
+		SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)) );		
+		SystemConfig.hmAdrRDaten.put("<Rpatid>",Reha.thisClass.patpanel.vecaktrez.get(0) );
 		SystemConfig.hmAdrRDaten.put("<Rpauschale>","0,00");
 		for(int i = 0;i<5;i++){
 			SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">","----");
@@ -1350,7 +1350,7 @@ public class RezTools {
 		
 		String xdiszi = RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1));
 		int xpreisgr = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
-		String xrezdatum = DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)); 
+		String xrezdatum = DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)); 
 		boolean neuerpreis = neuePreisNachRezeptdatumOderStichtag(xdiszi,xpreisgr,xrezdatum,false,Reha.thisClass.patpanel.vecaktrez);
 
 		
@@ -1363,16 +1363,16 @@ public class RezTools {
 		BigDecimal einzelpreis = null;
 		BigDecimal poswert = null;
 		BigDecimal rezwert = BigDecimal.valueOf(new Double(0.000));
-		SystemConfig.hmAdrRDaten.put("<Rid>",(String)Reha.thisClass.patpanel.vecaktrez.get(35) );
-		SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-		SystemConfig.hmAdrRDaten.put("<Rdatum>",(String)Reha.thisClass.patpanel.vecaktrez.get(2) );		
+		SystemConfig.hmAdrRDaten.put("<Rid>",Reha.thisClass.patpanel.vecaktrez.get(35) );
+		SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+		SystemConfig.hmAdrRDaten.put("<Rdatum>",Reha.thisClass.patpanel.vecaktrez.get(2) );		
 		for(i = 0;i < 4;i++){
-			gesanzahl[i] = Integer.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(i+3));
-			anzahl[i] = Integer.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(i+3));
+			gesanzahl[i] = Integer.valueOf(Reha.thisClass.patpanel.vecaktrez.get(i+3));
+			anzahl[i] = Integer.valueOf(Reha.thisClass.patpanel.vecaktrez.get(i+3));
 			if(! (anzahl[i] < zm.gesamtZahl)){
 				anzahl[i] = Integer.valueOf(zm.gesamtZahl);
 			}
-			artdbeh[i] = Integer.valueOf((String)Reha.thisClass.patpanel.vecaktrez.get(i+8));
+			artdbeh[i] = Integer.valueOf(Reha.thisClass.patpanel.vecaktrez.get(i+8));
 			/****/
 			if(!neuerpreis){
 				if(artdbeh[i] > 0){
@@ -1381,7 +1381,7 @@ public class RezTools {
 					preise[i] = BigDecimal.valueOf(new Double("0.00"));
 				}
 			}else{
-				preise[i] = BigDecimal.valueOf(new Double((String)Reha.thisClass.patpanel.vecaktrez.get(i+18)));	
+				preise[i] = BigDecimal.valueOf(new Double(Reha.thisClass.patpanel.vecaktrez.get(i+18)));	
 			}			
 			//preise[i] = BigDecimal.valueOf(new Double((String)Reha.thisClass.patpanel.vecaktrez.get(i+18)));
 			/****/
@@ -1398,9 +1398,9 @@ public class RezTools {
 		//String runden;
 		DecimalFormat dfx = new DecimalFormat( "0.00" );
 		BigDecimal endpos;
-		SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-		SystemConfig.hmAdrRDaten.put("<Rpatid>",(String)Reha.thisClass.patpanel.vecaktrez.get(0) );
-		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch( (String)Reha.thisClass.patpanel.vecaktrez.get(2) )  );		
+		SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+		SystemConfig.hmAdrRDaten.put("<Rpatid>",Reha.thisClass.patpanel.vecaktrez.get(0) );
+		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch( Reha.thisClass.patpanel.vecaktrez.get(2) )  );		
 		SystemConfig.hmAdrRDaten.put("<Rpauschale>",dfx.format(rezgeb) );
 		
 		for(i = 0; i < 4; i++){
@@ -1410,7 +1410,7 @@ public class RezTools {
 					preise[i].toString() );
 			*/		
 			if(artdbeh[i] > 0){
-				SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">",(String)Reha.thisClass.patpanel.vecaktrez.get(48+i) );
+				SystemConfig.hmAdrRDaten.put("<Rposition"+(i+1)+">",Reha.thisClass.patpanel.vecaktrez.get(48+i) );
 				SystemConfig.hmAdrRDaten.put("<Rpreis"+(i+1)+">", dfx.format(preise[i]) );
 				
 				einzelpreis = preise[i].divide(BigDecimal.valueOf(new Double(10.000)));
@@ -1440,10 +1440,10 @@ public class RezTools {
 		}
 		/*****************************************************/
 		if(zm.hausbesuch){ //Hausbesuch
-			if(zm.gesamtZahl > Integer.valueOf(((String)Reha.thisClass.patpanel.vecaktrez.get(64)))){
-				zm.gesamtZahl = Integer.valueOf(((String)Reha.thisClass.patpanel.vecaktrez.get(64))); 
+			if(zm.gesamtZahl > Integer.valueOf((Reha.thisClass.patpanel.vecaktrez.get(64)))){
+				zm.gesamtZahl = Integer.valueOf((Reha.thisClass.patpanel.vecaktrez.get(64))); 
 			}
-			Object[] obi = hbNormal(zm,rezwert,rezgeb,Integer.valueOf(((String)Reha.thisClass.patpanel.vecaktrez.get(64))),neuerpreis);
+			Object[] obi = hbNormal(zm,rezwert,rezgeb,Integer.valueOf((Reha.thisClass.patpanel.vecaktrez.get(64))),neuerpreis);
 			rezwert = ((BigDecimal)obi[0]);
 			rezgeb = (Double)obi[1];
 		}
@@ -1491,7 +1491,7 @@ public class RezTools {
 	public static Object[] JahrEnthalten(Vector<String>vtage,String jahr){
 		Object[] ret = {Boolean.valueOf(false),-1};
 		for(int i = 0; i < vtage.size();i++){
-			if( ((String)vtage.get(i)).equals(jahr) ){
+			if( vtage.get(i).equals(jahr) ){
 				ret[0] = true;
 				ret[1] = Integer.valueOf(i);
 				break;
@@ -1502,7 +1502,7 @@ public class RezTools {
 	public static Object[] JahresWechsel(Vector<String>vtage,String jahr){
 		Object[] ret = {Boolean.valueOf(false),-1,-1};
 		for(int i = 0; i < vtage.size();i++){
-			if(!((String)vtage.get(i)).substring(6).equals(jahr) ){
+			if(!vtage.get(i).substring(6).equals(jahr) ){
 				ret[0] = true;
 				ret[1] = Integer.valueOf(i);
 				ret[2] = maxAnzahl()-(Integer)ret[1];
@@ -1523,7 +1523,7 @@ public class RezTools {
 		int ret = -1;
 		int test;
 		for(int i = 3; i < 7;i++){
-			test = Integer.valueOf(((String)Reha.thisClass.patpanel.vecaktrez.get(i)));
+			test = Integer.valueOf((Reha.thisClass.patpanel.vecaktrez.get(i)));
 			if(test > ret){
 				ret = Integer.valueOf(test);
 			}
@@ -1658,7 +1658,7 @@ public class RezTools {
 		int fehlerstufe = 0;
 		int ipos = 0;
 		String kform = "";
-		String[] posbestaetigt = null;;
+		String[] posbestaetigt = null;
 		Object[][] preisobj = {{null,null,null,null},{null,null,null,null}};
 		/************************/
 		//1. Termine aus Rezept holen
@@ -1694,8 +1694,8 @@ public class RezTools {
 		if(fehlerstufe==0){
 			//5. Wenn hier angekommen die Preise und Positionen aus der Preisliste entnehmen
 			for(int j = 0; j < 4;j++){
-				retvec.set(j,String.valueOf((String) (preisobj[0][j] != null ? preisobj[0][j] : "-----")));
-				retvec.set(j+6,String.valueOf((String) (preisobj[1][j] != null ? preisobj[1][j] : "0.00")));
+				retvec.set(j,String.valueOf(preisobj[0][j] != null ? preisobj[0][j] : "-----"));
+				retvec.set(j+6,String.valueOf(preisobj[1][j] != null ? preisobj[1][j] : "0.00"));
 			}
 			retvec.set(12,"0");
 		}else{
@@ -1805,7 +1805,7 @@ public class RezTools {
 		//Object[] retobj = {new BigDecimal(new Double(0.00)),(Double)rezgeb};
 		//((BigDecimal)retobj[0]).add(BigDecimal.valueOf(new Double(1.00)));
 		//((BigDecimal) retobj[0]).add(new BigDecimal(rezwert));
-		Object[] retobj = {(BigDecimal) rezwert,(Double)rezgeb};
+		Object[] retobj = {rezwert,rezgeb};
 		//System.out.println("Die tatsächlich HB-Anzahl = "+realhbAnz);
 		//System.out.println("Der Rezeptwert zu Beginn = "+retobj[0]);
 		if(zm.hausbesuch){ //Hausbesuch
@@ -2184,10 +2184,10 @@ public class RezTools {
 	}
 	public static void constructVirginHMap(){
 		try{
-		SystemConfig.hmAdrRDaten.put("<Rid>",(String)Reha.thisClass.patpanel.vecaktrez.get(35) );
-		SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)) );
-		SystemConfig.hmAdrRDaten.put("<Rdiagnose>",(String)Reha.thisClass.patpanel.vecaktrez.get(23) );
+		SystemConfig.hmAdrRDaten.put("<Rid>",Reha.thisClass.patpanel.vecaktrez.get(35) );
+		SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)) );
+		SystemConfig.hmAdrRDaten.put("<Rdiagnose>",Reha.thisClass.patpanel.vecaktrez.get(23) );
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -2196,17 +2196,17 @@ public class RezTools {
 	public static void constructFormularHMap(){
 		try{
 			DecimalFormat dfx = new DecimalFormat( "0.00" );	
-		SystemConfig.hmAdrRDaten.put("<Rid>",(String)Reha.thisClass.patpanel.vecaktrez.get(35) );
-		SystemConfig.hmAdrRDaten.put("<Rnummer>",(String)Reha.thisClass.patpanel.vecaktrez.get(1) );
-		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch((String)Reha.thisClass.patpanel.vecaktrez.get(2)) );
+		SystemConfig.hmAdrRDaten.put("<Rid>",Reha.thisClass.patpanel.vecaktrez.get(35) );
+		SystemConfig.hmAdrRDaten.put("<Rnummer>",Reha.thisClass.patpanel.vecaktrez.get(1) );
+		SystemConfig.hmAdrRDaten.put("<Rdatum>",DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)) );
 		for(int i = 3; i < 7;i++){
 			if( ! Reha.thisClass.patpanel.vecaktrez.get(i).equals("0") ){
-				SystemConfig.hmAdrRDaten.put("<Rposition"+(i-2)+">",(String)Reha.thisClass.patpanel.vecaktrez.get(45+i) );
-				Double preis = Double.parseDouble((String)Reha.thisClass.patpanel.vecaktrez.get(15+i));
+				SystemConfig.hmAdrRDaten.put("<Rposition"+(i-2)+">",Reha.thisClass.patpanel.vecaktrez.get(45+i) );
+				Double preis = Double.parseDouble(Reha.thisClass.patpanel.vecaktrez.get(15+i));
 
 				SystemConfig.hmAdrRDaten.put("<Rpreis"+(i-2)+">", dfx.format(preis).replace(".",",") );
-				SystemConfig.hmAdrRDaten.put("<Ranzahl"+(i-2)+">", (String)Reha.thisClass.patpanel.vecaktrez.get(i) );
-				BigDecimal gesamt = BigDecimal.valueOf(preis).multiply(BigDecimal.valueOf(Double.parseDouble((String)Reha.thisClass.patpanel.vecaktrez.get(i) ))) ;
+				SystemConfig.hmAdrRDaten.put("<Ranzahl"+(i-2)+">", Reha.thisClass.patpanel.vecaktrez.get(i) );
+				BigDecimal gesamt = BigDecimal.valueOf(preis).multiply(BigDecimal.valueOf(Double.parseDouble(Reha.thisClass.patpanel.vecaktrez.get(i) ))) ;
 				SystemConfig.hmAdrRDaten.put("<Rgesamt"+(i-2)+">", dfx.format(gesamt).replace(".",",") );
 			}
 		}
@@ -2367,7 +2367,7 @@ public class RezTools {
 			if (vec.size() > 0){
 				termbuf = new StringBuffer();
 				if(alletermine){
-					termbuf.append((String) vec.get(0));	
+					termbuf.append(vec.get(0));	
 				}
 				
 				Vector<ArrayList<?>> termine = RezTools.holePosUndAnzahlAusTerminen(swreznum);
@@ -2387,7 +2387,7 @@ public class RezTools {
 						hMPos.get(i).anzBBT = 0;
 					}else{
 						hMPos.get(i).hMPosNr = String.valueOf(vec.get(1+i));
-						hMPos.get(i).vOMenge = Integer.parseInt( (String) vec.get(i+11) );
+						hMPos.get(i).vOMenge = Integer.parseInt( vec.get(i+11) );
 						hMPos.get(i).vorrangig = (Boolean)((ArrayList<?>)((Vector<?>)termine).get(2)).get(i);
 						hMPos.get(i).invOBelegt = true;
 						hMPos.get(i).anzBBT = Integer.valueOf( (Integer)((ArrayList<?>)((Vector<?>)termine).get(1)).get(i));
@@ -2486,7 +2486,7 @@ public class RezTools {
 				// Evtl. noch Einbauen ob bei unterschiedlichen Anzahlen (System-Initialisierung) immer geöffnet wird.
 				if (xforceDlg || (dlgZeigen && (Boolean)SystemConfig.hmTerminBestaetigen.get("dlgzeigen") ) ){
 							
-							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.thisFrame,null,(Vector<BestaetigungsDaten>)hMPos,swreznum,Integer.parseInt((String)vec.get(15)));
+							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.thisFrame,null,hMPos,swreznum,Integer.parseInt(vec.get(15)));
 							termBestAusw.pack();
 							if(pt==null){
 								termBestAusw.setLocationRelativeTo(null);

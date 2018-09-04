@@ -12,16 +12,16 @@ public class SMSClient{
 	String sms = "";
 	Socket server = null;
 	String retString = "";
-	public void setzeNachricht(String SMS) throws ConnectException, IOException, InterruptedException{
+	public void setzeNachricht(String SMS) throws ConnectException, IOException{
 		this.sms = SMS;
 		run();
 	}
-	public void run() throws ConnectException, IOException, InterruptedException {
+	public void run() throws ConnectException, IOException {
 		
 			serverStarten();
 		
 	}
-	private void serverStarten() throws IOException,ConnectException, InterruptedException{
+	private void serverStarten() throws IOException,ConnectException{
 
 			/*
 			this.server = new Socket(); 
@@ -31,7 +31,7 @@ public class SMSClient{
 			
 			this.server = new Socket(SystemConfig.hmSMS.get("IP"),Integer.parseInt(SystemConfig.hmSMS.get("PORT")));
 			
-			OutputStream output = (OutputStream) server.getOutputStream();
+			OutputStream output = server.getOutputStream();
 
 			//BufferedReader input = new BufferedReader(new InputStreamReader(server.getInputStream()));
 			

@@ -4,7 +4,6 @@ package org.therapi.reha.patient;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -534,7 +533,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//tabaktrez.getSelectionModel().addListSelectionListener(this);
 		//dtblm.addTableModelListener(this);
 		//dummypan.setPreferredSize(new Dimension(0,100));
-		JScrollPane aktrezscr = JCompTools.getTransparentScrollPane((Component)tabdokus);
+		JScrollPane aktrezscr = JCompTools.getTransparentScrollPane(tabdokus);
 		aktrezscr.validate(); 
 		aktrezscr.getVerticalScrollBar().setUnitIncrement(15);
 		dummypan.add(aktrezscr,BorderLayout.CENTER);
@@ -581,16 +580,16 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		return this;
 	}
 	public void holeOorg(String sdatei,String sid){
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		//int bilder = 0;
 		//System.out.println(sdatei);
 
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 				String test = "select dokublob from doku1 where id='"+sid+"'";
-				rs = (ResultSet) stmt.executeQuery(test);
+				rs = stmt.executeQuery(test);
 				if(rs.next()){
 					FileTools.ByteArray2File(rs.getBytes(1), sdatei);
 				}
@@ -641,15 +640,15 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		
 	}
 	public void holeDoku(String datei,String id){
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		//int bilder = 0;
 		
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 					String test = "select dokublob from doku1 where id='"+id+"'";
-				rs = (ResultSet) stmt.executeQuery(test);
+				rs = stmt.executeQuery(test);
 				if(rs.next()){
 					FileTools.ByteArray2File(rs.getBytes(1), datei);
 				}
@@ -1248,9 +1247,9 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			Rectangle format = null;
 			try {
 			com.lowagie.text.Image jpg2 = com.lowagie.text.Image.getInstance(vecBilderPfad.get(i));
-			if(((String)vecBilderAktion.get(i)).equals("scanner")){
+			if(vecBilderAktion.get(i).equals("scanner")){
 				format = getLowagieForm(vecBilderFormat.get(i));				
-			}else if(((String)vecBilderAktion.get(i)).equals("bildgeladen")){
+			}else if(vecBilderAktion.get(i).equals("bildgeladen")){
 				if(jpg2.getPlainWidth() > jpg2.getPlainHeight()){
 					format = new Rectangle(PageSize.A4.rotate());
 				}else{
@@ -1269,11 +1268,11 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				PdfWriter writer = PdfWriter.getInstance(document, fout);
 			document.open(); 
 
-			if(((String)vecBilderAktion.get(i)).equals("scanner")){
+			if(vecBilderAktion.get(i).equals("scanner")){
 				jpg2.scaleAbsoluteHeight(document.getPageSize().getHeight());
 				jpg2.scaleAbsoluteWidth(document.getPageSize().getWidth());
 				document.add(jpg2);
-			}else if(((String)vecBilderAktion.get(i)).equals("bildgeladen")){
+			}else if(vecBilderAktion.get(i).equals("bildgeladen")){
 				jpg2.scaleAbsoluteHeight(document.getPageSize().getHeight());
 				jpg2.scaleAbsoluteWidth(document.getPageSize().getWidth());						
 				document.add(jpg2);
@@ -1711,17 +1710,17 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					//System.out.println("Sende Seitengröße an Funktion "+vecBilderFormat.get(seite));
 					//Rectangle format = PageSize.A4.rotate();
 					Rectangle format = null;
-					if(((String)vecBilderAktion.get(seite)).equals("scanner")){
+					if(vecBilderAktion.get(seite).equals("scanner")){
 						format = getLowagieForm(vecBilderFormat.get(seite));
-					}else if(((String)vecBilderAktion.get(seite)).equals("bildgeladen")){
+					}else if(vecBilderAktion.get(seite).equals("bildgeladen")){
 						
 					}
 					
 					try {
 					com.lowagie.text.Image jpg2 = com.lowagie.text.Image.getInstance(vecBilderPfad.get(seite));
-					if(((String)vecBilderAktion.get(seite)).equals("scanner")){
+					if(vecBilderAktion.get(seite).equals("scanner")){
 						format = getLowagieForm(vecBilderFormat.get(seite));
-					}else if(((String)vecBilderAktion.get(seite)).equals("bildgeladen")){
+					}else if(vecBilderAktion.get(seite).equals("bildgeladen")){
 						if(jpg2.getPlainWidth() > jpg2.getPlainHeight()){
 							format = new Rectangle(PageSize.A4.rotate());
 						}else{
@@ -1742,11 +1741,11 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					PdfWriter writer = PdfWriter.getInstance(document, fout);  
 					document.open(); 
 					//System.out.println("Die aktion = "+((String)vecBilderAktion.get(seite)) );
-					if(((String)vecBilderAktion.get(seite)).equals("scanner")){
+					if(vecBilderAktion.get(seite).equals("scanner")){
 						jpg2.scaleAbsoluteHeight(document.getPageSize().getHeight());
 						jpg2.scaleAbsoluteWidth(document.getPageSize().getWidth());
 						document.add(jpg2);
-					}else if(((String)vecBilderAktion.get(seite)).equals("bildgeladen")){
+					}else if(vecBilderAktion.get(seite).equals("bildgeladen")){
 
 						//document.setPageSize(new Rectangle(jpg2.getScaledWidth(),jpg2.getScaledHeight()));
 						Thread.sleep(20);
@@ -1883,7 +1882,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					File file = null;
 					String datei = "";
 					String grafik = SystemConfig.hmFremdProgs.get("GrafikProg").trim();
-					if(((String)vecBilderAktion.get(seite-1)).equals("scanner") || grafik.equals("")){
+					if(vecBilderAktion.get(seite-1).equals("scanner") || grafik.equals("")){
 						pdfZeigen(seite-1);
 						file = new File(SystemConfig.hmFremdProgs.get("AcrobatReader"));
 						if(!file.exists()){
@@ -1892,13 +1891,13 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						}
 						datei = SystemConfig.hmVerzeichnisse.get("Temp")+"/"+vecPdfPfad.get(aktivesBild-1);
 						
-					}else if(((String)vecBilderAktion.get(seite-1)).equals("bildgeladen")){
+					}else if(vecBilderAktion.get(seite-1).equals("bildgeladen")){
 						file = new File(SystemConfig.hmFremdProgs.get("GrafikProg"));
 						if(!file.exists()){
 							JOptionPane.showMessageDialog(null, "Der Pfad zu Ihrem Bildbearbeitungsprogramm ist nicht korrekt konfiguriert");
 							return;
 						}
-						datei = ((String)vecBilderPfad.get(aktivesBild-1));
+						datei = (vecBilderPfad.get(aktivesBild-1));
 					}
 
 					try {
@@ -2018,7 +2017,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					}else if(!((Vector<?>)vec.get(i)).get(1).equals("")){
 						zzbild = Integer.valueOf((String) ((Vector<?>)vec.get(i)).get(1) );
 					}
-					dtblm.addRow((Vector<?>)vec.get(i));
+					dtblm.addRow(vec.get(i));
 					dtblm.setValueAt(tabIcons[zzbild], i, 1);
 					//dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[zzbild], i, 1);
 				}
@@ -2128,7 +2127,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 
 	public static void doSpeichernDoku(int dokuid,int pat_intern, String dateiname,int format,String[] str,boolean neu) throws Exception{
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		//boolean ret = false;
@@ -2136,7 +2135,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//FileInputStream fis = null;
 		//piTool.app.conn.setAutoCommit(true);
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			
 			String select = "Insert into doku1 set dokuid = ? , datum = ?, dokutitel = ?,"+
@@ -2166,7 +2165,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			  File f = new File(dateiname);
 			  byte[] b = FileTools.File2ByteArray(f);
 			  ps.setBytes(8,b);
-			  ps.setInt(9, (int)b.length);
+			  ps.setInt(9, b.length);
 			  ps.execute();
 
 			} catch (SQLException e) {
@@ -2306,7 +2305,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 	}
 /**************************************************/
 	public void speichernOoDocs(int dokuid,int pat_intern, String dateiname,int format,String[] str,boolean neu) throws Exception{
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		//boolean ret = false;
@@ -2314,7 +2313,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//FileInputStream fis = null;
 		//piTool.app.conn.setAutoCommit(true);
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			//Dokumentation.speichernOoDocs(Integer.valueOf(id), -1, file, -1, null, false);
 			if(neu){
@@ -2348,7 +2347,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			  File f = new File(dateiname);
 			  byte[] b = FileTools.File2ByteArray(f);
 			  ps.setBytes(8,b);
-			  ps.setInt(9, (int)b.length);
+			  ps.setInt(9, b.length);
 			  ps.setString(10, dateiname.substring(dateiname.replace("\\", "/").lastIndexOf("/")+1));
 			  ps.execute();
 			  //System.out.println("OOOrg-Doku wurde gespeichert");
@@ -2366,7 +2365,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				  File f = new File(dateiname);
 				  byte[] b = FileTools.File2ByteArray(f);
 				  ps.setBytes(1,b);
-				  ps.setInt(2, (int)b.length);
+				  ps.setInt(2, b.length);
 				  ps.setString(3, DatFunk.sDatInSQL(DatFunk.sHeute()));
 				  ps.setString(4,Integer.valueOf(dokuid).toString());
 				  ps.execute();
@@ -2461,7 +2460,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				if(i < 6){
 					obj2[i] = obj1[i];
 				}else{
-					obj2[i] = (Object) SystemConfig.vOwnDokuTemplate.get(i-6).get(0);
+					obj2[i] = SystemConfig.vOwnDokuTemplate.get(i-6).get(0);
 				}
 			}
 			JList list = new JList(obj2);

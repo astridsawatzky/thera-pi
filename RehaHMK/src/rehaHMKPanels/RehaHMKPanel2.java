@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -547,7 +546,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
 	}
 	private void doOOFormular(){
 		//Rezeptkorrektur_A5-Rezepte.ott
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		RehaHMK.thisFrame.setCursor(RehaHMK.thisClass.wartenCursor);
 		if(!RehaHMK.officeapplication.isActive()){
 			RehaHMK.starteOfficeApplication();
@@ -720,7 +719,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
 	}
 	private static void doRefresh(ITextDocument document){
 		XRefreshable refresh = null;
-        refresh = (XRefreshable)UnoRuntime.queryInterface(XRefreshable.class, document.getXTextDocument());
+        refresh = UnoRuntime.queryInterface(XRefreshable.class, document.getXTextDocument());
         refresh.refresh();
         try {
 			Thread.sleep(50);
@@ -870,10 +869,10 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
 				FileOutputStream fout = new FileOutputStream(file);
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
 				JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
-				JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(((BufferedImage)metadata.getImage()));  
-				param.setQuality((float) 1.0f, false);  
+				JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam((metadata.getImage()));  
+				param.setQuality(1.0f, false);  
 				encoder.setJPEGEncodeParam(param);  
-				encoder.encode(((BufferedImage)metadata.getImage()));
+				encoder.encode((metadata.getImage()));
 				os.close();
 				fout.write( os.toByteArray());
 				fout.flush();
@@ -891,7 +890,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
                     VertOrientation.TOP, HoriOrientation.RIGHT,
                     TextContentAnchorType.AT_PAGE); 
 			
-			XMultiServiceFactory multiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class,
+			XMultiServiceFactory multiServiceFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class,
 	                  textDocument.getXTextDocument());
 	          XText xText = textDocument.getXTextDocument().getText();
 	          
@@ -920,13 +919,13 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
     String url = null;
 
     try {
-            xBitmapContainer = (XNameContainer) UnoRuntime.queryInterface(
+            xBitmapContainer = UnoRuntime.queryInterface(
                             XNameContainer.class, xMSF.createInstance(
                                             "com.sun.star.drawing.BitmapTable"));
-            xImage = (XTextContent) UnoRuntime.queryInterface(
+            xImage = UnoRuntime.queryInterface(
                             XTextContent.class,     xMSF.createInstance(
                                             "com.sun.star.text.TextGraphicObject"));
-            XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(
+            XPropertySet xProps = UnoRuntime.queryInterface(
                             XPropertySet.class, xImage);
             
   	      
@@ -940,7 +939,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
             //url = "file:///"+RehaHMK.progHome+"ScreenShots/termin__temp.jpg";
             url = "file:///"+RehaHMK.progHome+"temp/"+RehaHMK.aktIK+"/rezkorrekt.jpg";
 
-            xBitmapContainer.insertByName("someID",(Object) url);
+            xBitmapContainer.insertByName("someID",url);
             //xBitmapContainer.insertByName("someID", grProps.getUrl());
             internalURL = AnyConverter.toString(xBitmapContainer
                             .getByName("someID"));
@@ -949,8 +948,8 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
                             com.sun.star.text.TextContentAnchorType.AT_PAGE);
             xProps.setPropertyValue("GraphicURL", internalURL);
 
-            xProps.setPropertyValue("Width", (int) 14850);
-            xProps.setPropertyValue("Height", (int) 21000);
+            xProps.setPropertyValue("Width", 14850);
+            xProps.setPropertyValue("Height", 21000);
 
             /*
             xProps.setPropertyValue("ContourOutside", Boolean.valueOf(true));
@@ -985,8 +984,8 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener{
             
 
             
-            xProps.setPropertyValue("Width", (int) 14000);
-            xProps.setPropertyValue("Height", (int) 19798);
+            xProps.setPropertyValue("Width", 14000);
+            xProps.setPropertyValue("Height", 19798);
 
 
             xText.insertTextContent(xCursor, xImage, false);

@@ -189,9 +189,9 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 						}
 
 						//int zzbild = 0;
-						if( (! ((String)((Vector<String>)vec.get(i)).get(2)).toUpperCase().contains("REHA")) &&
-								(! ((String)((Vector<String>)vec.get(i)).get(2)).toUpperCase().contains("ARZT"))	){
-							dtblm.addRow((Vector<?>)vec.get(i));							
+						if( (! vec.get(i).get(2).toUpperCase().contains("REHA")) &&
+								(! vec.get(i).get(2).toUpperCase().contains("ARZT"))	){
+							dtblm.addRow(vec.get(i));							
 						}
 					}
 					anz = dtblm.getRowCount();

@@ -275,7 +275,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<String>)retvec;
+		return retvec;
 	}
 /*****************************************/
 	/*******************************/
@@ -334,7 +334,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<String>)retvec;
+		return retvec;
 	}
 /*****************************************/
 	public static Vector<String> holeFeldNamen(String tabelle, boolean ausnahmen, List<?> lausnahmen){
@@ -424,7 +424,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<String>)retvec;
+		return retvec;
 	}
 
 	/*******************************/
@@ -497,7 +497,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<Vector<String>>)retkomplett;
+		return retkomplett;
 	}
 /*****************************************/
 	public static String macheWhereKlausel(String praefix,String test,String[] suchein){
@@ -625,8 +625,8 @@ public class SqlInfo {
 		}
 		if(numvec.size() > 0){
 			try{
-			reznr = Integer.parseInt( (String)((Vector<String>) numvec).get(0) );
-			String cmd = "update nummern set "+nummer+"='"+(reznr+1)+"' where id='"+((Vector<String>) numvec).get(1)+"'";
+			reznr = Integer.parseInt( numvec.get(0) );
+			String cmd = "update nummern set "+nummer+"='"+(reznr+1)+"' where id='"+numvec.get(1)+"'";
 			SqlInfo.sqlAusfuehren(cmd);
 			}catch(Exception ex){
 				reznr = -1;
@@ -667,12 +667,12 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		if(numvec.size() > 0){
-			reznr = Integer.parseInt(  (String)((Vector<String>) numvec).get(0) );
+			reznr = Integer.parseInt(  numvec.get(0) );
 			if((reznr+1) > max){
 				reznr = 1;
 			}
 			////System.out.println("Neue Rezeptnummer = "+reznr);
-			String cmd = "update nummern set "+nummer+"='"+(reznr+1)+"' where id='"+((Vector<String>) numvec).get(1)+"'";
+			String cmd = "update nummern set "+nummer+"='"+(reznr+1)+"' where id='"+numvec.get(1)+"'";
 			////System.out.println("Kommando = "+cmd);
 			new ExUndHop().setzeStatement(cmd);
 			////System.out.println("bisherige Rezeptnummer = "+nummer.toUpperCase()+reznr+" / neue Rezeptnummer = "+nummer.toUpperCase()+(reznr+1));
@@ -1007,7 +1007,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<Vector<String>>) retkomplett;
+		return retkomplett;
 	}
 /*****************************************/
 
@@ -1243,14 +1243,14 @@ public class SqlInfo {
 	
 	public static InputStream liesIniAusTabelle(String inifilename){
 		InputStream retStream = null;
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 				String test = "select inhalt from inidatei where dateiname='"+inifilename+"' LIMIT 1";
 				
-				rs = (ResultSet) stmt.executeQuery(test);
+				rs = stmt.executeQuery(test);
 				if(rs.next()){
 					retStream = rs.getBinaryStream(1);
 				}
@@ -1279,11 +1279,11 @@ public class SqlInfo {
 	public static boolean schreibeIniInTabelle(String inifilename,byte[] buf){
 		boolean ret = false;
 		try{
-			Statement stmt = null;;
+			Statement stmt = null;
 			ResultSet rs = null;
 			PreparedStatement ps = null;
 			try {
-				stmt = (Statement) conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 						ResultSet.CONCUR_UPDATABLE );
 				String select = null;
 				if(SqlInfo.holeEinzelFeld("select dateiname from inidatei where dateiname='"+inifilename+"' LIMIT 1").equals("")){
@@ -1291,7 +1291,7 @@ public class SqlInfo {
 				}else{
 					select = "update inidatei set dateiname = ? , inhalt = ? where dateiname = '"+inifilename+"'" ;						
 				}
-				ps = (PreparedStatement) conn.prepareStatement(select);
+				ps = conn.prepareStatement(select);
 				ps.setString(1, inifilename);
 				ps.setBytes(2, buf);			  
 				ps.execute();

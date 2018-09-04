@@ -287,9 +287,9 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 		int anzahlf = fedits.length;
 		if(gros > 0){
 			for(int i = 0; i < anzahlf;i++){
-				jtf[fedits[i]].setText((String) felder.get(ffelder[i]) );
+				jtf[fedits[i]].setText(felder.get(ffelder[i]) );
 			}
-			int preisG = Integer.valueOf((String) felder.get(1))-1 ;
+			int preisG = Integer.valueOf(felder.get(1))-1 ;
 			//System.out.println("In Preisgruppe einstellen Preisgruppe = "+preisG);
 			tarifGruppe.setSelectedIndex((preisG >= 0 ? preisG : 0));
 		}
@@ -308,7 +308,7 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
  		List<String> nichtlesen = Arrays.asList(new String[] {"KMEMO"});
  		Vector<String> felder = SqlInfo.holeSatz("kass_adr", "*", "id='"+this.kassenId+"'",nichtlesen);
  		felder.setElementAt(jtf[13].getText(), 14);
- 		Vector<String> felder2 = SqlInfo.holeSatz("ktraeger", "*", "ikkasse='"+(String) felder.get(14)+"'",nichtlesen);
+ 		Vector<String> felder2 = SqlInfo.holeSatz("ktraeger", "*", "ikkasse='"+felder.get(14)+"'",nichtlesen);
  		if(felder2.size() <= 0){
  			JOptionPane.showMessageDialog(null, "Kein Eintrag in der Kostenträgerdatei vorhanden für IK="+felder.get(14));
  			return;
@@ -443,7 +443,7 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 			for(int i = 0; i < list.size();i++){
 				vec.add(list.get(i));
 			}
-			kpan.ktblm.addRow((Vector<?>)vec);
+			kpan.ktblm.addRow(vec);
 		}else{
 			int row = kpan.kassentbl.getSelectedRow();
 			int model = kpan.kassentbl.convertRowIndexToModel(row);

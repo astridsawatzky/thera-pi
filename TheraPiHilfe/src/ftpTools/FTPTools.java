@@ -206,7 +206,7 @@ public class FTPTools {
 			String reply = ftpClient.getReplyString();
 			//System.out.println("Nach Retrive Stream------>"+reply);
 			//System.out.println("Pfadangabe -> C:/RehaVerwaltung/HowTo/"+datfern);
-			FileOutputStream fos = null;;
+			FileOutputStream fos = null;
 			//fos = new FileOutputStream("C:/RehaVerwaltung/HowTo/"+datfern);
 			fos = new FileOutputStream(piHelp.tempvz+datfern);
 			int n = 0;

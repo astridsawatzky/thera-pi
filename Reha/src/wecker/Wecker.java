@@ -88,7 +88,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 			droppat = "";
 		}
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		PinPanel pinPanel = new PinPanel();
 		pinPanel.getGruen().setVisible(false);
 		pinPanel.setName("WeckerNeuanlage");
@@ -184,7 +184,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			this.setVisible(false);
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			this.pinPanel = null;
 			this.dispose();
@@ -201,7 +201,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		Reha.timerInBearbeitung = false;
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			this.pinPanel = null;
 			doAufraeumen();
@@ -390,10 +390,10 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		long minFertig = ZeitFunk.MinutenSeitMitternacht(fertigstring);
 
 		Vector<Object> vec = new Vector<Object>();
-		vec.add((String) fertigstring);
-		vec.add((String) tfs[1].getText());
-		vec.add((String) tfs[0].getText());
-		vec.add((Long) minFertig);
+		vec.add(fertigstring);
+		vec.add(tfs[1].getText());
+		vec.add(tfs[0].getText());
+		vec.add(minFertig);
 		Reha.timerVec.add((Vector<Object>)vec.clone());
 		doSortieren();
 		doTabelle();

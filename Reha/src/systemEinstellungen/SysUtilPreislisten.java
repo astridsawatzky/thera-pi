@@ -163,7 +163,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 		jcmb[2] = new JRtaComboBox(zzart);
 		
 		//int einstellung = ((Integer) ((Vector)SystemConfig.vNeuePreiseRegel.get(jcmb[0].getSelectedIndex())).get( jcmb[1].getSelectedIndex()) );
-		int einstellung = ((Integer) SystemPreislisten.hmNeuePreiseRegel.get(disziplin[jcmb[0].getSelectedIndex()]).get(jcmb[1].getSelectedIndex()));
+		int einstellung = (SystemPreislisten.hmNeuePreiseRegel.get(disziplin[jcmb[0].getSelectedIndex()]).get(jcmb[1].getSelectedIndex()));
 		jcmb[2].setSelectedIndex(einstellung);
 		
 		builder.add(jcmb[2],cc.xy(9,5));
@@ -371,7 +371,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				//int einstellung = ((Integer) ((Vector)SystemConfig.vNeuePreiseRegel.get(jcmb[0].getSelectedIndex())).get( jcmb[1].getSelectedIndex()) );
 				//System.out.println("Diziplin = "+disziplin[jcmb[0].getSelectedIndex()]);
 				//System.out.println(jcmb[1].getSelectedIndex());
-				int einstellung = ((Integer) SystemPreislisten.hmNeuePreiseRegel.get(disziplin[jcmb[0].getSelectedIndex()]).get(jcmb[1].getSelectedIndex()));
+				int einstellung = (SystemPreislisten.hmNeuePreiseRegel.get(disziplin[jcmb[0].getSelectedIndex()]).get(jcmb[1].getSelectedIndex()));
 				jcmb[2].setSelectedIndex(einstellung);
 				String[] xkuerzel = {"KG","MA","ER","LO","RH","PO","RS","FT"};
 				kuerzelcombo.setDataVector(SqlInfo.holeFeld("select kuerzel from kuerzel where disziplin='"+xkuerzel[jcmb[0].getSelectedIndex()]+"'" ));
@@ -403,7 +403,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 						String[] lists = {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
 						plEinlesen.setText("<html>Verfügbare Preislisten für <b><font color='#ff0000'>"+lists[jcmb[0].getSelectedIndex()]+"</font></b> ermitteln");
 						jcmb[3].removeAllItems();
-						jcmb[3].addItem((String) jcmb[1].getSelectedItem());
+						jcmb[3].addItem(jcmb[1].getSelectedItem());
 						jcmb[3].setEnabled(false);
 						modserver.setRowCount(0);
 						plserver.validate();
@@ -429,8 +429,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			//neue Position in lokaler Liste
 			int row = preislisten.getRowCount();
 			Vector<Object> nvec = new Vector<Object>();
-			nvec.add((String)"00000");
-			nvec.add( (String)"KurzNeu-"+Integer.toString(kurztext));
+			nvec.add("00000");
+			nvec.add( "KurzNeu-"+Integer.toString(kurztext));
 			kurztext++;
 			nvec.add("");
 			nvec.add(new Double("0.00"));
@@ -670,13 +670,13 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 					getroffen = true;
 					modpreis.setValueAt(Double.parseDouble(((String)((Vector)preis.get(i)).get(1))), b, 3);
 					if(mitbezeich){
-						modpreis.setValueAt(((String)((Vector)preis.get(i)).get(3)), b, 2);						
+						modpreis.setValueAt((((Vector)preis.get(i)).get(3)), b, 2);						
 					}
 				}
 			}
 			if(!getroffen){
 				preisAufnahme(getroffen,preis,i);
-				getroffen = true;;
+				getroffen = true;
 			}
 
 		}
@@ -698,10 +698,10 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				int frage = JOptionPane.showConfirmDialog(null,msg,"Achtung wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION );
 				if(frage == JOptionPane.YES_OPTION){
 					Vector xvec = new Vector();
-					xvec.add( ((String)((Vector)preis.get(i)).get(0)) );
+					xvec.add( (((Vector)preis.get(i)).get(0)) );
 					xvec.add( "Neu-"+Integer.toString(kurztext) );
 					kurztext++;
-					xvec.add( ((String)((Vector)preis.get(i)).get(3)) );
+					xvec.add( (((Vector)preis.get(i)).get(3)) );
 					xvec.add( Double.parseDouble( ((String)((Vector)preis.get(i)).get(1)) ) );
 					xvec.add( Double.parseDouble( ((String)((Vector)preis.get(i)).get(1)) ) );
 					xvec.add("-1" );						
@@ -712,10 +712,10 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				}
 			}else{
 				Vector xvec = new Vector();
-				xvec.add( ((String)((Vector)preis.get(i)).get(0)) );
+				xvec.add( (((Vector)preis.get(i)).get(0)) );
 				xvec.add( "Neu-"+Integer.toString(kurztext)  );
 				kurztext++;
-				xvec.add( ((String)((Vector)preis.get(i)).get(3)) );
+				xvec.add( (((Vector)preis.get(i)).get(3)) );
 				xvec.add( Double.parseDouble( ((String)((Vector)preis.get(i)).get(1)) ) );
 				xvec.add( Double.parseDouble( ((String)((Vector)preis.get(i)).get(1)) ) );
 				xvec.add("-1" );						
@@ -929,9 +929,9 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 		}
 		for(int i = 0;i < anzahl ; i++){
 			vec.clear();
-			vec.add( (String) ((Vector)preisvec.get(i)).get(2));
-			vec.add((String)((Vector)preisvec.get(i)).get(1));
-			vec.add((String)((Vector)preisvec.get(i)).get(0));
+			vec.add( ((Vector)preisvec.get(i)).get(2));
+			vec.add(((Vector)preisvec.get(i)).get(1));
+			vec.add(((Vector)preisvec.get(i)).get(0));
 			try{
 				vec.add(Double.parseDouble( (String) ((Vector)preisvec.get(i)).get( 3) ) );
 			}catch(Exception ex){
@@ -942,7 +942,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			}catch(Exception ex){
 				vec.add(Double.parseDouble("0.00"));
 			}
-			vec.add( (String) ((Vector)preisvec.get(i)).get(idpos) );
+			vec.add( ((Vector)preisvec.get(i)).get(idpos) );
 			modpreis.addRow((Vector)vec.clone());
 		}
 		try{

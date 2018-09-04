@@ -80,7 +80,7 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 	int angemeldetbahnseeahb = 0;
 
 	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;;
+	ISpreadsheetDocument spreadsheetDocument = null;
 	IDocument document  = null;
 	XSheetCellCursor cellCursor = null;
 	String sheetName = "Tabelle1";
@@ -337,24 +337,24 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 			starteCalc();
 			OOTools.doColWidth(spreadsheetDocument,sheetName,0,0,10000);
 			OOTools.doColWidth(spreadsheetDocument,sheetName,1,2,3000);
-			OOTools.doCellValue(cellCursor, 0, 0, (String) "GKV - Jahresstatistik");
+			OOTools.doCellValue(cellCursor, 0, 0, "GKV - Jahresstatistik");
 			OOTools.doCellFontBold(cellCursor, 0, 0);
-			OOTools.doCellValue(cellCursor, 0, 1, (String) "Zeitraum: "+DatFunk.sDatInDeutsch(von)+
+			OOTools.doCellValue(cellCursor, 0, 1, "Zeitraum: "+DatFunk.sDatInDeutsch(von)+
 					" bis "+DatFunk.sDatInDeutsch(bis));
 			OOTools.doCellFontBold(cellCursor, 0, 1);
 			for(int i = 0; i <ktraeger.size();i++){
-				OOTools.doCellValue(cellCursor, 0, i+3, (String) ktraeger.get(i));
-				OOTools.doCellValue(cellCursor, 1, i+3, (Double) Double.parseDouble(Integer.toString(rehaFaelle.get(i))));
-				OOTools.doCellValue(cellCursor, 2, i+3, (Double) Double.parseDouble(Integer.toString(rehaTage.get(i))));
+				OOTools.doCellValue(cellCursor, 0, i+3, ktraeger.get(i));
+				OOTools.doCellValue(cellCursor, 1, i+3, Double.parseDouble(Integer.toString(rehaFaelle.get(i))));
+				OOTools.doCellValue(cellCursor, 2, i+3, Double.parseDouble(Integer.toString(rehaTage.get(i))));
 			}
 			if(unklareFaelle.size() > 0){
 				int zeile = ktraeger.size()+5;
-				OOTools.doCellValue(cellCursor, 0, zeile, (String) "unklare Rehafälle");
+				OOTools.doCellValue(cellCursor, 0, zeile, "unklare Rehafälle");
 				zeile++;
 				for(int i = 0; i < unklareFaelle.size();i++){
-					OOTools.doCellValue(cellCursor, 0, zeile, (String) unklareFaelle.get(i).get(0)+" - "+
+					OOTools.doCellValue(cellCursor, 0, zeile, unklareFaelle.get(i).get(0)+" - "+
 							unklareFaelle.get(i).get(1));
-					OOTools.doCellValue(cellCursor, 2, zeile, (Double) Double.parseDouble(unklareFaelle.get(i).get(2)));
+					OOTools.doCellValue(cellCursor, 2, zeile, Double.parseDouble(unklareFaelle.get(i).get(2)));
 					zeile++;
 				}
 				
@@ -457,15 +457,15 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 			starteCalc();
 			OOTools.doColWidth(spreadsheetDocument,sheetName,0,0,10000);
 			OOTools.doColWidth(spreadsheetDocument,sheetName,1,2,3000);
-			OOTools.doCellValue(cellCursor, 0, 0, (String) "LVA-Quartalsstatistik");
+			OOTools.doCellValue(cellCursor, 0, 0, "LVA-Quartalsstatistik");
 			OOTools.doCellFontBold(cellCursor, 0, 0);
-			OOTools.doCellValue(cellCursor, 0, 1, (String) "Zeitraum: "+DatFunk.sDatInDeutsch(von)+
+			OOTools.doCellValue(cellCursor, 0, 1, "Zeitraum: "+DatFunk.sDatInDeutsch(von)+
 					" bis "+DatFunk.sDatInDeutsch(bis));
 			OOTools.doCellFontBold(cellCursor, 0, 1);
 			for(int i = 0; i < rehaArt.size();i++){
-				OOTools.doCellValue(cellCursor, 0, i+3, (String) rehaArt.get(i));
-				OOTools.doCellValue(cellCursor, 1, i+3, (Double) Double.parseDouble(Integer.toString(rehaFaelle.get(i))));
-				OOTools.doCellValue(cellCursor, 2, i+3, (Double) Double.parseDouble(Integer.toString(rehaTage.get(i))));
+				OOTools.doCellValue(cellCursor, 0, i+3, rehaArt.get(i));
+				OOTools.doCellValue(cellCursor, 1, i+3, Double.parseDouble(Integer.toString(rehaFaelle.get(i))));
+				OOTools.doCellValue(cellCursor, 2, i+3, Double.parseDouble(Integer.toString(rehaTage.get(i))));
 			}
 			zeigeCalc();
 		} catch (NoSuchElementException e) {
@@ -715,11 +715,11 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
         docdescript.setAsTemplate(true);
 		document = documentService.constructNewDocument(IDocument.CALC, docdescript);
 		spreadsheetDocument = (ISpreadsheetDocument) document;
-		OOTools.setzePapierFormatCalc((ISpreadsheetDocument) spreadsheetDocument, 21000, 29700);
-		OOTools.setzeRaenderCalc((ISpreadsheetDocument) spreadsheetDocument, 1000,1000, 1000, 1000);
+		OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
+		OOTools.setzeRaenderCalc(spreadsheetDocument, 1000,1000, 1000, 1000);
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 		String sheetName= "Tabelle1";
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		cellCursor = spreadsheet1.createCursor();
 	}
 	/************************************************/
@@ -736,76 +736,76 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 			
 			OOTools.doCellFontSize(cellCursor, 0, 0, Float.valueOf("12."));
 			OOTools.doCellFontBold(cellCursor, 0, 0);
-			OOTools.doCellValue(cellCursor, 0, 0, (String) "Reha-Belegung vom "+DatFunk.sHeute());
+			OOTools.doCellValue(cellCursor, 0, 0, "Reha-Belegung vom "+DatFunk.sHeute());
 
 			OOTools.doCellFontBold(cellCursor, 0, 2);
-			OOTools.doCellValue(cellCursor, 0, 2, (String) "Kostenträger");
+			OOTools.doCellValue(cellCursor, 0, 2, "Kostenträger");
 			OOTools.doCellFontBold(cellCursor, 1, 2);
-			OOTools.doCellValue(cellCursor, 1, 2, (String) "anwesend");
+			OOTools.doCellValue(cellCursor, 1, 2, "anwesend");
 			OOTools.doCellFontBold(cellCursor, 2, 2);
-			OOTools.doCellValue(cellCursor, 2, 2, (String) "angemeldet");
+			OOTools.doCellValue(cellCursor, 2, 2, "angemeldet");
 			
-			OOTools.doCellValue(cellCursor, 0, 3, (String) "DRV-BaWü (med)");
+			OOTools.doCellValue(cellCursor, 0, 3, "DRV-BaWü (med)");
 			OOTools.doCellFontName(cellCursor, 0, 3, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 4, (String) "DRV-BaWü (AHB)");
+			OOTools.doCellValue(cellCursor, 0, 4, "DRV-BaWü (AHB)");
 			OOTools.doCellFontName(cellCursor, 0, 4, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 5, (String) "DRV-Bund (med)");
+			OOTools.doCellValue(cellCursor, 0, 5, "DRV-Bund (med)");
 			OOTools.doCellFontName(cellCursor, 0, 5, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 6, (String) "DRV-Bund (AHB)");
+			OOTools.doCellValue(cellCursor, 0, 6, "DRV-Bund (AHB)");
 			OOTools.doCellFontName(cellCursor, 0, 6, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 7, (String) "DRV-Knappsch.(med)");
+			OOTools.doCellValue(cellCursor, 0, 7, "DRV-Knappsch.(med)");
 			OOTools.doCellFontName(cellCursor, 0, 7, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 8, (String) "DRV-Knappsch.(AHB)");
+			OOTools.doCellValue(cellCursor, 0, 8, "DRV-Knappsch.(AHB)");
 			OOTools.doCellFontName(cellCursor, 0, 8, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 9, (String) "GKV (med)");
+			OOTools.doCellValue(cellCursor, 0, 9, "GKV (med)");
 			OOTools.doCellFontName(cellCursor, 0, 9, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 10, (String) "GKV (AHB)");
+			OOTools.doCellValue(cellCursor, 0, 10, "GKV (AHB)");
 			OOTools.doCellFontName(cellCursor, 0, 10, "Courier New");
-			OOTools.doCellValue(cellCursor, 0, 11, (String) "Summen");
+			OOTools.doCellValue(cellCursor, 0, 11, "Summen");
 			OOTools.doCellFontName(cellCursor, 0, 11, "Courier New");
 			
-			OOTools.doCellValue(cellCursor, 1, 3, (Double) Double.valueOf(Integer.toString(anwesendlvamed))  );
+			OOTools.doCellValue(cellCursor, 1, 3, Double.valueOf(Integer.toString(anwesendlvamed))  );
 			OOTools.doCellFontName(cellCursor, 1, 3, "Courier New");
-			OOTools.doCellValue(cellCursor, 1, 4, (Double) Double.valueOf(Integer.toString(anwesendlvaahb)) );
+			OOTools.doCellValue(cellCursor, 1, 4, Double.valueOf(Integer.toString(anwesendlvaahb)) );
 			OOTools.doCellFontName(cellCursor, 1, 4, "Courier New");
-			OOTools.doCellValue(cellCursor, 1, 5, (Double) Double.valueOf(Integer.toString(anwesendbfamed)) );
+			OOTools.doCellValue(cellCursor, 1, 5, Double.valueOf(Integer.toString(anwesendbfamed)) );
 			OOTools.doCellFontName(cellCursor, 1, 5, "Courier New");
-			OOTools.doCellValue(cellCursor, 1, 6, (Double) Double.valueOf(Integer.toString(anwesendbfaahb)) );
+			OOTools.doCellValue(cellCursor, 1, 6, Double.valueOf(Integer.toString(anwesendbfaahb)) );
 			OOTools.doCellFontName(cellCursor, 1, 6, "Courier New");
-			OOTools.doCellValue(cellCursor, 1, 7, (Double) Double.valueOf(Integer.toString(anwesendbahnseemed)) );
+			OOTools.doCellValue(cellCursor, 1, 7, Double.valueOf(Integer.toString(anwesendbahnseemed)) );
 			OOTools.doCellFontName(cellCursor, 1, 7, "Courier New");
-			OOTools.doCellValue(cellCursor, 1, 8, (Double) Double.valueOf(Integer.toString(anwesendbahnseeahb)) );
+			OOTools.doCellValue(cellCursor, 1, 8, Double.valueOf(Integer.toString(anwesendbahnseeahb)) );
 			OOTools.doCellFontName(cellCursor, 1, 8, "Courier New");
-			OOTools.doCellValue(cellCursor, 1, 9, (Double) Double.valueOf(Integer.toString(anwesendgkvmed)) );
+			OOTools.doCellValue(cellCursor, 1, 9, Double.valueOf(Integer.toString(anwesendgkvmed)) );
 			OOTools.doCellFontName(cellCursor, 1, 9, "Courier New");
-			OOTools.doCellValue(cellCursor, 1, 10, (Double) Double.valueOf(Integer.toString(anwesendgkvahb)) );
+			OOTools.doCellValue(cellCursor, 1, 10, Double.valueOf(Integer.toString(anwesendgkvahb)) );
 			OOTools.doCellFontName(cellCursor, 1, 10, "Courier New");
 			
-			OOTools.doCellValue(cellCursor, 2, 3, (Double) Double.valueOf(Integer.toString(angemeldetlvamed))  );
+			OOTools.doCellValue(cellCursor, 2, 3, Double.valueOf(Integer.toString(angemeldetlvamed))  );
 			OOTools.doCellFontName(cellCursor, 2, 3, "Courier New");
-			OOTools.doCellValue(cellCursor, 2, 4, (Double) Double.valueOf(Integer.toString(angemeldetlvaahb)) );
+			OOTools.doCellValue(cellCursor, 2, 4, Double.valueOf(Integer.toString(angemeldetlvaahb)) );
 			OOTools.doCellFontName(cellCursor, 2, 4, "Courier New");
-			OOTools.doCellValue(cellCursor, 2, 5, (Double) Double.valueOf(Integer.toString(angemeldetbfamed)) );
+			OOTools.doCellValue(cellCursor, 2, 5, Double.valueOf(Integer.toString(angemeldetbfamed)) );
 			OOTools.doCellFontName(cellCursor, 2, 5, "Courier New");
-			OOTools.doCellValue(cellCursor, 2, 6, (Double) Double.valueOf(Integer.toString(angemeldetbfaahb)) );
+			OOTools.doCellValue(cellCursor, 2, 6, Double.valueOf(Integer.toString(angemeldetbfaahb)) );
 			OOTools.doCellFontName(cellCursor, 2, 6, "Courier New");
-			OOTools.doCellValue(cellCursor, 2, 7, (Double) Double.valueOf(Integer.toString(angemeldetbahnseemed)) );
+			OOTools.doCellValue(cellCursor, 2, 7, Double.valueOf(Integer.toString(angemeldetbahnseemed)) );
 			OOTools.doCellFontName(cellCursor, 2, 7, "Courier New");
-			OOTools.doCellValue(cellCursor, 2, 8, (Double) Double.valueOf(Integer.toString(angemeldetbahnseeahb)) );
+			OOTools.doCellValue(cellCursor, 2, 8, Double.valueOf(Integer.toString(angemeldetbahnseeahb)) );
 			OOTools.doCellFontName(cellCursor, 2, 8, "Courier New");
-			OOTools.doCellValue(cellCursor, 2, 9, (Double) Double.valueOf(Integer.toString(angemeldetgkvmed)) );
+			OOTools.doCellValue(cellCursor, 2, 9, Double.valueOf(Integer.toString(angemeldetgkvmed)) );
 			OOTools.doCellFontName(cellCursor, 2, 9, "Courier New");
-			OOTools.doCellValue(cellCursor, 2, 10, (Double) Double.valueOf(Integer.toString(angemeldetgkvahb)) );
+			OOTools.doCellValue(cellCursor, 2, 10, Double.valueOf(Integer.toString(angemeldetgkvahb)) );
 			OOTools.doCellFontName(cellCursor, 2, 10, "Courier New");
 
 			OOTools.doCellFontName(cellCursor, 1, 11, "Courier New");
-			OOTools.doCellFormula(cellCursor, 1, 11, (String) "=sum(B4:B11)");
+			OOTools.doCellFormula(cellCursor, 1, 11, "=sum(B4:B11)");
 
 			OOTools.doCellFontName(cellCursor, 2, 11, "Courier New");
-			OOTools.doCellFormula(cellCursor, 2, 11, (String) "=sum(C4:C11)");
+			OOTools.doCellFormula(cellCursor, 2, 11, "=sum(C4:C11)");
 			
 			
-			OOTools.doCellValue(cellCursor, 0, 13, (String) "*********************ausstehende Entlassberichte ("+berichtfehlt.size()+" Fälle) ********************" );
+			OOTools.doCellValue(cellCursor, 0, 13, "*********************ausstehende Entlassberichte ("+berichtfehlt.size()+" Fälle) ********************" );
 			OOTools.doCellFontName(cellCursor, 0, 13, "Courier");
 			calcrow = 14;
 			String name = "";
@@ -826,7 +826,7 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 			
 			calcrow +=3;
 			status1.setText("ermittle unklare Rehafälle");
-			OOTools.doCellValue(cellCursor, 0, calcrow, (String) "*********************unklare Rehafälle ("+unklar.size()+" Fälle) ******************************" );
+			OOTools.doCellValue(cellCursor, 0, calcrow, "*********************unklare Rehafälle ("+unklar.size()+" Fälle) ******************************" );
 			OOTools.doCellFontName(cellCursor, 0, calcrow, "Courier New");
 			calcrow +=1;
 			
@@ -842,7 +842,7 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 
 			calcrow +=3;
 			status1.setText("ermittle anwesende Rehafälle");
-			OOTools.doCellValue(cellCursor, 0, calcrow, (String) "*********************anwesende Rehafälle ("+anwesend.size()+" Fälle) *****************************" );
+			OOTools.doCellValue(cellCursor, 0, calcrow, "*********************anwesende Rehafälle ("+anwesend.size()+" Fälle) *****************************" );
 			OOTools.doCellFontName(cellCursor, 0, calcrow, "Courier New");
 			calcrow +=1;
 			for(int i = 0; i < anwesend.size();i++){
@@ -858,7 +858,7 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 
 			calcrow +=3;
 			status1.setText("ermittle angemeldete Rehafälle");
-			OOTools.doCellValue(cellCursor, 0, calcrow, (String) "*********************angemeldete Rehafälle ("+angemeldet.size()+" Fälle) ****************************" );
+			OOTools.doCellValue(cellCursor, 0, calcrow, "*********************angemeldete Rehafälle ("+angemeldet.size()+" Fälle) ****************************" );
 			OOTools.doCellFontName(cellCursor, 0, calcrow, "Courier New");
 			calcrow +=1;
 			for(int i = 0; i < angemeldet.size();i++){

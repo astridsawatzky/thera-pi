@@ -43,7 +43,7 @@ public class CreatePKCS7 {
 			BCStatics.providerTest();
 		  //Security.addProvider(new BouncyCastleProvider());
 		  CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
-		  generator.addSigner(getPrivateKey(), (X509Certificate) getCertificate(),
+		  generator.addSigner(getPrivateKey(), getCertificate(),
 		      CMSSignedDataGenerator.DIGEST_SHA1);
 		  
 
@@ -58,7 +58,7 @@ public class CreatePKCS7 {
 		BCStatics.providerTest();
 	  //Security.addProvider(new BouncyCastleProvider());
 	  CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
-	  generator.addSigner(getPrivateKey(), (X509Certificate) getCertificate(),
+	  generator.addSigner(getPrivateKey(), getCertificate(),
 	      CMSSignedDataGenerator.DIGEST_SHA1);
 
 	  generator.addCertificatesAndCRLs(getCertStore());
@@ -69,7 +69,7 @@ public class CreatePKCS7 {
 	  
 	}
 
-	private X509Certificate getCertificate() throws KeyStoreException, GeneralSecurityException, IOException{
+	private X509Certificate getCertificate() throws KeyStoreException, GeneralSecurityException{
 		return (X509Certificate) store.getCertificate(this.alias);
 	}
 /**
@@ -86,14 +86,14 @@ public class CreatePKCS7 {
 		  return CertStore.getInstance("Collection", new CollectionCertStoreParameters(list), "BC");
 		}
 		    
-		private PrivateKey getPrivateKey() throws GeneralSecurityException, IOException {
+		private PrivateKey getPrivateKey() throws GeneralSecurityException {
 		  if (this.privateKey == null) {
 		     this.privateKey = initalizePrivateKey();
 		  }
 		  return this.privateKey;
 		}
 
-		private PrivateKey initalizePrivateKey() throws GeneralSecurityException, IOException {
+		private PrivateKey initalizePrivateKey() throws GeneralSecurityException {
 		   return (PrivateKey) store.getKey(this.alias, Constants.PRAXIS_KS_PW.toCharArray());
 		}
 /*******************************************/

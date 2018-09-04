@@ -166,7 +166,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         if(value == null){
         	insstr = "  .  .    ";
             ftf.setText(insstr);        	
-        }else if(((Object)value).toString().trim().equals("")){
+        }else if(value.toString().trim().equals("")){
         	insstr = "  .  .    ";
             ftf.setText(insstr);        	
         }else{
@@ -207,7 +207,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         JFormattedTextField ftf = (JFormattedTextField)getComponent();
         //Object o = ftf.getValue();
         //return o.toString();
-        return (String)ftf.getText();
+        return ftf.getText();
         /*
         if (o instanceof Integer) {
             return o;

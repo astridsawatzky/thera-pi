@@ -104,7 +104,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 	    setLocation(lpt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 		pack();
 		
@@ -128,7 +128,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		pb.addLabel("Bitte die Positionen auswählen die Sie berechnen wollen",cc.xyw(2, 2, 4));
 
 		pb.addLabel("Heilmittel 1",cc.xy(3, 4));
-		String lab = (String)Reha.thisClass.patpanel.vecaktrez.get(48);
+		String lab = Reha.thisClass.patpanel.vecaktrez.get(48);
 		leistung[0] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[0].setOpaque(false);
 		if(!lab.equals("")){
@@ -140,7 +140,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		pb.add(leistung[0],cc.xyw(5, 4, 2));
 		
 		pb.addLabel("Heilmittel 2",cc.xy(3, 6));
-		lab = (String)Reha.thisClass.patpanel.vecaktrez.get(49);
+		lab = Reha.thisClass.patpanel.vecaktrez.get(49);
 		leistung[1] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[1].setOpaque(false);
 		if(!lab.equals("")){
@@ -152,7 +152,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		pb.add(leistung[1],cc.xyw(5, 6, 2));
 
 		pb.addLabel("Heilmittel 3",cc.xy(3, 8));
-		lab = (String)Reha.thisClass.patpanel.vecaktrez.get(50);
+		lab = Reha.thisClass.patpanel.vecaktrez.get(50);
 		leistung[2] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[2].setOpaque(false);
 		if(!lab.equals("")){
@@ -164,7 +164,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		pb.add(leistung[2],cc.xyw(5, 8, 2));
 
 		pb.addLabel("Heilmittel 4",cc.xy(3, 10));
-		lab = (String)Reha.thisClass.patpanel.vecaktrez.get(51);
+		lab = Reha.thisClass.patpanel.vecaktrez.get(51);
 		leistung[3] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[3].setOpaque(false);
 		if(!lab.equals("")){
@@ -204,7 +204,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					this.dispose();
 					super.dispose();
@@ -219,7 +219,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			pinPanel = null;
 			dispose();
@@ -276,10 +276,10 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		StringBuffer buf = new StringBuffer();
 		buf.append("insert into rgaffaktura set ");
 		buf.append("rnr='"+afrNummer+"', ");
-		buf.append("reznr='"+(String)Reha.thisClass.patpanel.vecaktrez.get(1)+"', ");
-		buf.append("pat_intern='"+(String)Reha.thisClass.patpanel.vecaktrez.get(0)+"', ");
-		buf.append("rgesamt='"+(String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
-		buf.append("roffen='"+(String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
+		buf.append("reznr='"+Reha.thisClass.patpanel.vecaktrez.get(1)+"', ");
+		buf.append("pat_intern='"+Reha.thisClass.patpanel.vecaktrez.get(0)+"', ");
+		buf.append("rgesamt='"+SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
+		buf.append("roffen='"+SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"',");
 		buf.append("ik='"+Reha.aktIK+"'");
 		SqlInfo.sqlAusfuehren(buf.toString());
@@ -310,14 +310,14 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 			mapkurz = "<AFRkurz"+(i+1)+">";
 			maplang = "<AFRlang"+(i+1)+">";
 			if(leistung[i].isSelected()){
-				Double preis = new Double( (String)Reha.thisClass.patpanel.vecaktrez.get(18+i));
+				Double preis = new Double( Reha.thisClass.patpanel.vecaktrez.get(18+i));
 				String s = df.format( preis);
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,s);
 				gesamt = gesamt+preis;
 				
-				spos = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
+				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;		
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
@@ -327,8 +327,8 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 				////System.out.println(inpos[1]);
 				
 			}else{
-				spos = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
+				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
@@ -364,7 +364,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 	}
 	
 	public static void starteAusfallRechnung(String url){
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		//System.out.println("Starte Datei -> "+url);
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();
@@ -403,8 +403,8 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
 		      Map.Entry<String,String> entry = ((Map.Entry<String,String>) it.next());
-		      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
-		    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
+		      if(entry.getKey().toLowerCase().equals(placeholderDisplayText)){
+		    	  placeholders[i].getTextRange().setText((entry.getValue()));
 		    	  schonersetzt = true;
 		    	  break;
 		      }

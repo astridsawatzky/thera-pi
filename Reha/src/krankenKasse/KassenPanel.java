@@ -549,7 +549,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			String sid =  (String) kassentbl.getValueAt(row,7);
 			List<String> nichtlesen = Arrays.asList(new String[] {});
 			Vector<String> vec = SqlInfo.holeSatz("kass_adr", "KMEMO", "id='"+sid+"'", nichtlesen);
-			ta.setText((String) vec.get(0));
+			ta.setText(vec.get(0));
 			return;
 		}
 		
@@ -853,7 +853,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		int anzahl = 0;
 		if( (anzahl = vec.size()) > 0){
 			for(int i = 0; i < anzahl;i++ ){
-				this.ktblm.addRow((Vector<?>)vec.get(i));
+				this.ktblm.addRow(vec.get(i));
 			}
 			this.kassentbl.setRowSelectionInterval(0, 0);
 			//holeText();
@@ -1440,7 +1440,7 @@ class KasseNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 	public KasseNeuDlg(){
 		super(null,"KassenNeuanlage");
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 	}
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -1448,7 +1448,7 @@ class KasseNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 		try{
 			if(evt.getDetails()[0].equals("KassenNeuanlage")){
 				this.setVisible(false);
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				this.dispose();
 			}
@@ -1461,7 +1461,7 @@ class KasseNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			//System.out.println("****************Kasse Neu/ändern -> Listener entfernt (Closed)**********");
 		}

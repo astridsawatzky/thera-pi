@@ -125,45 +125,45 @@ public class OpRgaf implements WindowListener{
 				aktIK = args[1];
 				
 				inif = new INIFile(args[0]+"ini/"+args[1]+"/oprgaf.ini");
-				mahnParameter.put("frist1", (Integer) inif.getIntegerProperty("General","TageBisMahnung1") );
-				mahnParameter.put("frist2", (Integer) inif.getIntegerProperty("General","TageBisMahnung2") );
-				mahnParameter.put("frist3", (Integer) inif.getIntegerProperty("General","TageBisMahnung3") );
-				mahnParameter.put("einzelmahnung", (Boolean) (inif.getIntegerProperty("General","EinzelMahnung").equals("1") ? Boolean.TRUE : Boolean.FALSE) );
-				mahnParameter.put("drucker", (String) inif.getStringProperty("General","MahnungDrucker") );
-				mahnParameter.put("exemplare", (Integer) inif.getIntegerProperty("General","MahnungExemplare") );
-				mahnParameter.put("inofficestarten", (Boolean) (inif.getIntegerProperty("General","InOfficeStarten").equals("1") ? Boolean.TRUE : Boolean.FALSE) );
-				mahnParameter.put("erstsuchenab", (String) inif.getStringProperty("General","AuswahlErstAb") );
+				mahnParameter.put("frist1", inif.getIntegerProperty("General","TageBisMahnung1") );
+				mahnParameter.put("frist2", inif.getIntegerProperty("General","TageBisMahnung2") );
+				mahnParameter.put("frist3", inif.getIntegerProperty("General","TageBisMahnung3") );
+				mahnParameter.put("einzelmahnung", inif.getIntegerProperty("General","EinzelMahnung").equals("1") ? Boolean.TRUE : Boolean.FALSE );
+				mahnParameter.put("drucker", inif.getStringProperty("General","MahnungDrucker") );
+				mahnParameter.put("exemplare", inif.getIntegerProperty("General","MahnungExemplare") );
+				mahnParameter.put("inofficestarten", inif.getIntegerProperty("General","InOfficeStarten").equals("1") ? Boolean.TRUE : Boolean.FALSE );
+				mahnParameter.put("erstsuchenab", inif.getStringProperty("General","AuswahlErstAb") );
 				/***/
 				String forms = inif.getStringProperty("General","FormularMahnung1") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular1", (String) progHome+"vorlagen/"+aktIK+"/"+forms );
+				mahnParameter.put("formular1", progHome+"vorlagen/"+aktIK+"/"+forms );
 				/***/
 				forms = inif.getStringProperty("General","FormularMahnung2") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular2", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				mahnParameter.put("formular2", progHome+"vorlagen/"+aktIK+"/"+forms  );
 				/***/
 				forms = inif.getStringProperty("General","FormularMahnung3") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular3", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				mahnParameter.put("formular3", progHome+"vorlagen/"+aktIK+"/"+forms  );
 				/***/
 				forms = inif.getStringProperty("General","FormularMahnung4") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular4", (String) progHome+"vorlagen/"+aktIK+"/"+forms   );
+				mahnParameter.put("formular4", progHome+"vorlagen/"+aktIK+"/"+forms   );
 				/***/
 				//System.out.println(mahnParameter.get("formular1"));
 				//System.out.println(mahnParameter.get("formular2"));
 				//System.out.println(mahnParameter.get("formular3"));
 				//System.out.println(mahnParameter.get("formular4"));
-				mahnParameter.put("diralterechnungen", (String) inif.getStringProperty("General","DirAlteRechnungen")  );
-				mahnParameter.put("inkasse", (String) inif.getStringProperty("General","WohinBuchen")  );
+				mahnParameter.put("diralterechnungen", inif.getStringProperty("General","DirAlteRechnungen")  );
+				mahnParameter.put("inkasse", inif.getStringProperty("General","WohinBuchen")  );
 				AbrechnungParameter(progHome);
 				FirmenDaten(progHome);
 				if(args.length >= 3){
@@ -171,45 +171,45 @@ public class OpRgaf implements WindowListener{
 				}
 			}else{
 				INIFile inif = new INIFile(progHome+"ini/"+aktIK+"/oprgaf.ini");
-				mahnParameter.put("frist1", (Integer) inif.getIntegerProperty("General","TageBisMahnung1") );
-				mahnParameter.put("frist2", (Integer) inif.getIntegerProperty("General","TageBisMahnung2") );
-				mahnParameter.put("frist3", (Integer) inif.getIntegerProperty("General","TageBisMahnung3") );
-				mahnParameter.put("einzelmahnung", (Boolean) (inif.getIntegerProperty("General","EinzelMahnung").equals("1") ? Boolean.TRUE : Boolean.FALSE) );
-				mahnParameter.put("drucker", (String) inif.getStringProperty("General","MahnungDrucker") );
-				mahnParameter.put("exemplare", (Integer) inif.getIntegerProperty("General","MahnungExemplare") );
-				mahnParameter.put("inofficestarten", (Boolean) (inif.getIntegerProperty("General","InOfficeStarten").equals("1") ? Boolean.TRUE : Boolean.FALSE) );
-				mahnParameter.put("erstsuchenab", (String) inif.getStringProperty("General","AuswahlErstAb") );
+				mahnParameter.put("frist1", inif.getIntegerProperty("General","TageBisMahnung1") );
+				mahnParameter.put("frist2", inif.getIntegerProperty("General","TageBisMahnung2") );
+				mahnParameter.put("frist3", inif.getIntegerProperty("General","TageBisMahnung3") );
+				mahnParameter.put("einzelmahnung", inif.getIntegerProperty("General","EinzelMahnung").equals("1") ? Boolean.TRUE : Boolean.FALSE );
+				mahnParameter.put("drucker", inif.getStringProperty("General","MahnungDrucker") );
+				mahnParameter.put("exemplare", inif.getIntegerProperty("General","MahnungExemplare") );
+				mahnParameter.put("inofficestarten", inif.getIntegerProperty("General","InOfficeStarten").equals("1") ? Boolean.TRUE : Boolean.FALSE );
+				mahnParameter.put("erstsuchenab", inif.getStringProperty("General","AuswahlErstAb") );
 				/***/
 				String forms = inif.getStringProperty("General","FormularMahnung1") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular1", (String) progHome+"vorlagen/"+aktIK+"/"+forms );
+				mahnParameter.put("formular1", progHome+"vorlagen/"+aktIK+"/"+forms );
 				/***/
 				forms = inif.getStringProperty("General","FormularMahnung2") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular2", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				mahnParameter.put("formular2", progHome+"vorlagen/"+aktIK+"/"+forms  );
 				/***/
 				forms = inif.getStringProperty("General","FormularMahnung3") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular3", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+				mahnParameter.put("formular3", progHome+"vorlagen/"+aktIK+"/"+forms  );
 				/***/
 				forms = inif.getStringProperty("General","FormularMahnung4") ;
 				if(forms.indexOf("/") > 0){
 					forms = forms.substring(forms.lastIndexOf("/")+1);
 				}
-				mahnParameter.put("formular4", (String) progHome+"vorlagen/"+aktIK+"/"+forms   );
+				mahnParameter.put("formular4", progHome+"vorlagen/"+aktIK+"/"+forms   );
 				/***/
 				//System.out.println(mahnParameter.get("formular1"));
 				//System.out.println(mahnParameter.get("formular2"));
 				//System.out.println(mahnParameter.get("formular3"));
 				//System.out.println(mahnParameter.get("formular4"));
-				mahnParameter.put("diralterechnungen", (String) inif.getStringProperty("General","DirAlteRechnungen")  );
-				mahnParameter.put("inkasse", (String) inif.getStringProperty("General","InKasseBuchen")  );
+				mahnParameter.put("diralterechnungen", inif.getStringProperty("General","DirAlteRechnungen")  );
+				mahnParameter.put("inkasse", inif.getStringProperty("General","InKasseBuchen")  );
 				AbrechnungParameter(progHome);
 				FirmenDaten(progHome);
 			}
@@ -406,7 +406,7 @@ public class OpRgaf implements WindowListener{
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName+"?jdbcCompliantTruncation=false"
+   				obj.conn = DriverManager.getConnection(dbIpAndName+"?jdbcCompliantTruncation=false"
    						,dbUser,dbPassword);
    				OpRgaf.thisClass.sqlInfo.setConnection(obj.conn);
 				OpRgaf.DbOk = true;
@@ -567,7 +567,7 @@ public class OpRgaf implements WindowListener{
 	
     public static void starteOfficeApplication(){ 
     	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(OpRgaf.officeProgrammPfad,OpRgaf.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(OpRgaf.officeProgrammPfad,OpRgaf.officeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();

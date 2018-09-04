@@ -303,21 +303,21 @@ public class NebraskaZertExplorer  extends JXPanel implements ListSelectionListe
 			try{
 			if(dn.length==5){
 				
-				ik = (String)dn[3].split("=")[1];
+				ik = dn[3].split("=")[1];
 				if(!ik.equals(jcombo.getSelectedItem().toString().trim())){
 					vec.add(ik);
-					vec.add((ImageIcon) imgcert);	
-					vec.add((String)dn[2].split("=")[1]);
-					vec.add((String)dn[4].split("=")[1]);
-					vec.add((String)certs.get(i).getNotAfter().toLocaleString());
+					vec.add(imgcert);	
+					vec.add(dn[2].split("=")[1]);
+					vec.add(dn[4].split("=")[1]);
+					vec.add(certs.get(i).getNotAfter().toLocaleString());
 					tabmod.addRow((Vector<?>)vec.clone());
 				}else{
 					if(!ownCertOk){
 						vec.add(ik);
-						vec.add((ImageIcon) imgkey);	
-						vec.add((String)dn[2].split("=")[1]);
-						vec.add((String)dn[4].split("=")[1]);
-						vec.add((String)certs.get(i).getNotAfter().toLocaleString());
+						vec.add(imgkey);	
+						vec.add(dn[2].split("=")[1]);
+						vec.add(dn[4].split("=")[1]);
+						vec.add(certs.get(i).getNotAfter().toLocaleString());
 						tabmod.addRow((Vector<?>)vec.clone());
 						ownCertOk = true;
 						try{

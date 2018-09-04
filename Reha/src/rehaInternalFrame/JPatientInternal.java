@@ -29,7 +29,7 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 		super(titel, img, desktop);
 		this.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 			if(! this.isIcon){
 				new FrameSave((Dimension)this.getSize().clone(), 
 						(Point)this.getLocation().clone(), 
-						(Integer) Integer.valueOf(this.desktop), 
-						(Integer) Integer.valueOf((this.getImmerGross()? 1 : 0)),
+						Integer.valueOf(this.desktop), 
+						Integer.valueOf((this.getImmerGross()? 1 : 0)),
 						String.valueOf("patient.ini"),
 						String.valueOf("Patient"));				
 			}
@@ -55,7 +55,7 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 		//JInternalFram von Desktop lösen
 		Reha.thisClass.desktops[this.desktop].remove(this);
 		//Listener deaktivieren
-		rEvent.removeRehaEventListener((RehaEventListener) this);
+		rEvent.removeRehaEventListener(this);
 		rEvent = null;
 		this.removeInternalFrameListener(this);
 		

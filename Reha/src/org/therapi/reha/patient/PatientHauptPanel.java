@@ -261,7 +261,7 @@ public class PatientHauptPanel extends JXPanel{
 			}
 		};
 		this.ptp = new PatStammEventClass();
-		this.ptp.addPatStammEventListener((PatStammEventListener)patientStammEventListener);
+		this.ptp.addPatStammEventListener(patientStammEventListener);
 		
 	}
 

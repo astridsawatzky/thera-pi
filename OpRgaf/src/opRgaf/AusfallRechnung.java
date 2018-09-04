@@ -4,8 +4,6 @@ package opRgaf;
 
 import java.awt.AlphaComposite;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -134,7 +132,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 		pb.addLabel("Bitte die Positionen auswählen die Sie berechnen wollen",cc.xyw(2, 2, 4));
 
 		pb.addLabel("Heilmittel 1",cc.xy(3, 4));
-		String lab = (String)vecaktrez.get(48);
+		String lab = vecaktrez.get(48);
 		leistung[0] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[0].setOpaque(false);
 		if(!lab.equals("")){
@@ -146,7 +144,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 		pb.add(leistung[0],cc.xyw(5, 4, 2));
 		
 		pb.addLabel("Heilmittel 2",cc.xy(3, 6));
-		lab = (String)vecaktrez.get(49);
+		lab = vecaktrez.get(49);
 		leistung[1] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[1].setOpaque(false);
 		if(!lab.equals("")){
@@ -158,7 +156,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 		pb.add(leistung[1],cc.xyw(5, 6, 2));
 
 		pb.addLabel("Heilmittel 3",cc.xy(3, 8));
-		lab = (String)vecaktrez.get(50);
+		lab = vecaktrez.get(50);
 		leistung[2] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[2].setOpaque(false);
 		if(!lab.equals("")){
@@ -170,7 +168,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 		pb.add(leistung[2],cc.xyw(5, 8, 2));
 
 		pb.addLabel("Heilmittel 4",cc.xy(3, 10));
-		lab = (String)vecaktrez.get(51);
+		lab = vecaktrez.get(51);
 		leistung[3] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[3].setOpaque(false);
 		if(!lab.equals("")){
@@ -258,10 +256,10 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 		StringBuffer buf = new StringBuffer();
 		buf.append("insert into rgaffaktura set ");
 		buf.append("rnr='"+afrNummer+"', ");
-		buf.append("reznr='"+(String)vecaktrez.get(1)+"', ");
-		buf.append("pat_intern='"+(String)vecaktrez.get(0)+"', ");
-		buf.append("rgesamt='"+(String)InitHashMaps.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
-		buf.append("roffen='"+(String)InitHashMaps.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
+		buf.append("reznr='"+vecaktrez.get(1)+"', ");
+		buf.append("pat_intern='"+vecaktrez.get(0)+"', ");
+		buf.append("rgesamt='"+InitHashMaps.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
+		buf.append("roffen='"+InitHashMaps.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"'");
 		SqlInfo.sqlAusfuehren(buf.toString());
 	}
@@ -284,14 +282,14 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 			mapkurz = "<AFRkurz"+(i+1)+">";
 			maplang = "<AFRlang"+(i+1)+">";
 			if(leistung[i].isSelected()){
-				Double preis = new Double( (String)vecaktrez.get(18+i));
+				Double preis = new Double( vecaktrez.get(18+i));
 				String s = df.format( preis);
 				InitHashMaps.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				InitHashMaps.hmAdrAFRDaten.put(mappreis,s);
 				gesamt = gesamt+preis;
 				
-				spos = (String)vecaktrez.get(8+i);
-				sart = (String)vecaktrez.get(1);
+				spos = vecaktrez.get(8+i);
+				sart = vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(vecaktrez.get(41));		
 				inpos = LeistungTools.getLeistungRaw(sart, spos,preisgruppe);
@@ -301,8 +299,8 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 				////System.out.println(inpos[1]);
 				
 			}else{
-				spos = (String)vecaktrez.get(8+i);
-				sart = (String)vecaktrez.get(1);
+				spos = vecaktrez.get(8+i);
+				sart = vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(vecaktrez.get(41));
 				if(spos.equals("0") || spos.equals("")){
@@ -346,7 +344,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 	}
 	
 	public static void starteAusfallRechnung(String url){
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		//System.out.println("Starte Datei -> "+url);
 		if(!OpRgaf.officeapplication.isActive()){
 			OpRgaf.starteOfficeApplication();
@@ -385,8 +383,8 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
 		      Map.Entry<String,String> entry = ((Map.Entry<String,String>) it.next());
-		      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
-		    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
+		      if(entry.getKey().toLowerCase().equals(placeholderDisplayText)){
+		    	  placeholders[i].getTextRange().setText((entry.getValue()));
 		    	  schonersetzt = true;
 		    	  break;
 		      }

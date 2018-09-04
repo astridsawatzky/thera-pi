@@ -25,7 +25,6 @@ public class ICDrahmen extends JApplet implements WindowListener{
 	JFrame jFrame;
 	public Connection conn;
 	
-	private ICDoberflaeche test;
 	private JXPanel grund;
 	   
 
@@ -139,7 +138,7 @@ public class ICDrahmen extends JApplet implements WindowListener{
 		    		return ;
 	        }	
 		        	try {
-	    				obj.conn = (Connection) DriverManager.getConnection("jdbc:mysql://192.168.2.2:3306/dbf","entwickler","entwickler");
+	    				obj.conn = DriverManager.getConnection("jdbc:mysql://192.168.2.2:3306/dbf","entwickler","entwickler");
 	    				ICDrahmen.DbOk = true;
 		    			System.out.println("Datenbankkontakt hergestellt");
 		        	} 

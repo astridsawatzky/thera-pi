@@ -34,7 +34,7 @@ public class PatientToolBarPanel extends JXPanel{
 	PatientToolBarLogic patToolLogic = null;
 	public JLabel sucheLabel = null;
 	private String kriterium[]={"Nachname Vorname","Patienten-ID","Vorname Nachname",
-			"Telefon privat","Telefon geschäftl.","Telefon mobil","Notizen", "Patienten mit aktuellen Rezepten"};;
+			"Telefon privat","Telefon geschäftl.","Telefon mobil","Notizen", "Patienten mit aktuellen Rezepten"};
 
 	public String getKritAsString(int idx){
 		return 	kriterium[idx];

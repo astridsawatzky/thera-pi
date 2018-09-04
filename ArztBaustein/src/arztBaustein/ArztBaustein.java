@@ -48,7 +48,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 	
 	private ArztBausteinPanel arztbausteinpanel = null;
 	private SqlInfo sqlInfo;
-	public static void main(String[] args) throws OfficeApplicationException {
+	public static void main(String[] args) {
 	
 		if(args.length > 0){
 			System.out.println("hole daten aus INI-Datei "+args[0]);
@@ -190,7 +190,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
     public static void starteOfficeApplication()
     { 
     	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(ArztBaustein.OpenOfficePfad,ArztBaustein.OpenOfficeNativePfad).start(false);
+			officeapplication = new StartOOApplication(ArztBaustein.OpenOfficePfad,ArztBaustein.OpenOfficeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();
@@ -210,7 +210,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 
 
         	try {
-   				conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
    				sqlInfo.setConnection(conn);
     			DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");

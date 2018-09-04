@@ -33,9 +33,9 @@ public class OOorgTools {
 		IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
 		viewCursor.goToRange(placeholders.getTextRange(), false);
 		XController xController = textDocument.getXTextDocument().getCurrentController();
-		XTextViewCursorSupplier xTextViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
+		XTextViewCursorSupplier xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
 		xController);
-		XLineCursor xLineCursor = (XLineCursor) UnoRuntime.queryInterface(XLineCursor.class,
+		XLineCursor xLineCursor = UnoRuntime.queryInterface(XLineCursor.class,
 		xTextViewCursorSupplier.getViewCursor());
 		xLineCursor.gotoStartOfLine(false);
 		xLineCursor.gotoEndOfLine(true); 
@@ -45,7 +45,7 @@ public class OOorgTools {
 		textCursor.setString("");
 	}
 	public static void starteStandardFormular(String url,String drucker) throws Exception{
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		NebraskaMain.jf.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		System.out.println("Starte Datei -> "+url);
 
@@ -62,7 +62,7 @@ public class OOorgTools {
 			druckerName = textDocument.getPrintService().getActivePrinter().getName();
 			IPrinter iprint = null;
 			if(! druckerName.equals(drucker)){
-				iprint = (IPrinter) textDocument.getPrintService().createPrinter(drucker);
+				iprint = textDocument.getPrintService().createPrinter(drucker);
 				textDocument.getPrintService().setActivePrinter(iprint);
 			}
 		}
@@ -86,7 +86,7 @@ public class OOorgTools {
 		    	  if(entry.getValue().trim().equals("")){
 		    		  placeholders[i].getTextRange().setText("\b");
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText((entry.getValue()));		    		  
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;

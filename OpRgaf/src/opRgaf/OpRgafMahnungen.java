@@ -825,7 +825,7 @@ public class OpRgafMahnungen extends JXPanel{
 	/*******************************/
 
 	private void starteMahnDruck(String url){
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		//System.out.println("Starte Datei -> "+url);
 		if(!OpRgaf.officeapplication.isActive()){
 			OpRgaf.starteOfficeApplication();

@@ -17,7 +17,6 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
@@ -53,11 +52,9 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 	private MouseAdapter mymouse = null;
 	private PinPanel pinPanel = null;
 	private JXPanel content = null;
-	private JList jList = null;
 	private RehaTPEventClass rtp = null;
 	
 	private JButton abfeuern = null;
-	private MouseListener toolsMl = null;
 	
 	private JXTable tab = null;
 
@@ -88,8 +85,8 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 		//this.setModal(true);
 		this.setResizable(false);
 		this.rtp = new RehaTPEventClass();
-		this.rtp.addRehaTPEventListener((RehaTPEventListener) this);
-		this.memopan = (PatientMemoPanel)aktFocus;
+		this.rtp.addRehaTPEventListener(this);
+		this.memopan = aktFocus;
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){

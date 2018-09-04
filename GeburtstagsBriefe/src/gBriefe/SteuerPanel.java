@@ -164,7 +164,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 		sstmt = "select * from pat5 where PAT_INTERN = '"+patint+"'";
 			
 		try {
-			stmt =  GBriefe.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -235,7 +235,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 		//sstmt = "select * from pat5 where Convert(Month(GEBOREN),SQL_CHAR)='"+daten[1]+"' AND  Convert(DayOfMonth(GEBOREN),SQL_CHAR)= '"+daten[0]+"' ORDER BY GEBOREN";
 			
 		try {
-			stmt =  GBriefe.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -416,7 +416,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 		//gebTag.clear();
 		//gebTag = holEinzeldaten(aktPat);
 		String datei = "";
-		String doku1 = GBriefe.thisClass.vorlagenvz+"GBE";
+		String doku1 = GBriefe.vorlagenvz+"GBE";
 		String sex = ((String) jtab.getValueAt(jtab.getSelectedRow(), 0)).substring(0,1);
 		if(sex.trim().equals("")){
 			JOptionPane.showMessageDialog(null,"Keine Anrede im Patientenstamm verhanden.\nBrief wird nicht gedruckt!!!");

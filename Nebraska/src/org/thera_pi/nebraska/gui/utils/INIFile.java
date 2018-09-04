@@ -63,7 +63,7 @@ public final class INIFile
         INIProperty objProp  = null;
         INISection  objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -85,7 +85,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -112,7 +112,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -144,7 +144,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -175,7 +175,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -208,7 +208,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -246,7 +246,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -279,7 +279,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -295,7 +295,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -310,7 +310,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -328,7 +328,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -343,7 +343,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -358,7 +358,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -373,7 +373,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -389,7 +389,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -435,7 +435,7 @@ public final class INIFile
                 arrRet = new String[this.mhmapSections.size()];
                 for (iter = this.mhmapSections.keySet().iterator();;iter.hasNext())
                 {
-                    arrRet[iCntr] = (String) iter.next();
+                    arrRet[iCntr] = iter.next();
                     iCntr++;
                 }
             }
@@ -456,7 +456,7 @@ public final class INIFile
         String[]   arrRet = null;
         INISection objSec = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             arrRet = objSec.getPropNames();
@@ -471,7 +471,7 @@ public final class INIFile
         Map<String, INIProperty>        hmRet = null;
         INISection objSec = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             hmRet = objSec.getProperties();
@@ -485,7 +485,7 @@ public final class INIFile
     {
         INISection objSec = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objSec.removeProperty(pstrProp);
@@ -520,8 +520,8 @@ public final class INIFile
             itrSec = this.mhmapSections.keySet().iterator();
             while (itrSec.hasNext())
             {
-                strName = (String) itrSec.next();
-                objSec = (INISection) this.mhmapSections.get(strName);
+                strName = itrSec.next();
+                objSec = this.mhmapSections.get(strName);
                 strTemp = objSec.toString();
                 objWriter.write(strTemp);
                 objWriter.write("\r\n");
@@ -936,7 +936,7 @@ public final class INIFile
                     arrRet = new String[this.mhmapProps.size()]; 
                     for (iter = this.mhmapProps.keySet().iterator();iter.hasNext();)
                     {
-                        arrRet[iCntr] = (String) iter.next();
+                        arrRet[iCntr] = iter.next();
                         iCntr++;
                     }
                 }
@@ -954,7 +954,7 @@ public final class INIFile
             INIProperty objRet = null;
 
             if (this.mhmapProps.containsKey(pstrProp))
-                objRet = (INIProperty) this.mhmapProps.get(pstrProp);
+                objRet = this.mhmapProps.get(pstrProp);
             return objRet;
         }
 
@@ -978,7 +978,7 @@ public final class INIFile
                 {
                     while (iter.hasNext())
                     {
-                        objProp = (INIProperty) this.mhmapProps.get(iter.next());
+                        objProp = this.mhmapProps.get(iter.next());
                         objBuf.append(objProp.toString());
                         objBuf.append("\r\n");
                         objProp = null;
@@ -1088,7 +1088,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objSec.mstrName = new String(newpstrSection);

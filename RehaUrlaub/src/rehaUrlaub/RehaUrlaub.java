@@ -254,7 +254,7 @@ public class RehaUrlaub implements WindowListener {
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
    				sqlInfo.setConnection(obj.conn);
 				RehaUrlaub.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
@@ -331,7 +331,7 @@ public class RehaUrlaub implements WindowListener {
 	
     public static void starteOfficeApplication(){ 
      	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(RehaUrlaub.officeProgrammPfad,RehaUrlaub.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(RehaUrlaub.officeProgrammPfad,RehaUrlaub.officeNativePfad).start(false);
 			RehaUrlaub.officeOk = true;
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();

@@ -122,7 +122,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
 	public String vorlagenPfad = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
 	public String[] rvVorlagen = {null,null,null,null};
-	EBerichtTab ebt = null;;
+	EBerichtTab ebt = null;
 	NachsorgeTab nat = null;
 	IFrame officeFrame = null;
 	RehaEventClass evt = null;
@@ -257,7 +257,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 		
 		evt = new RehaEventClass();
-		evt.addRehaEventListener((RehaEventListener) this);
+		evt.addRehaEventListener(this);
 		UseNeueRvVariante = false;
 		addFocusListener(this);
 	    setBackgroundPainter(Reha.thisClass.compoundPainter.get("EBerichtPanel"));
@@ -1135,7 +1135,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 							document.close();
 						}
 					}
-					this.evt.removeRehaEventListener((RehaEventListener)this);
+					this.evt.removeRehaEventListener(this);
 				}else{
 					
 				}
@@ -1153,7 +1153,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	}
 	/*****************************************/
 	public boolean textSpeichernInDB(){
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		boolean fehler = false;
@@ -1229,38 +1229,38 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public void finalise(){
 		for(int i = 0; i < btf.length;i++){
 			if(btf[i] != null){
-				ListenerTools.removeListeners((Component)btf[i]);
+				ListenerTools.removeListeners(btf[i]);
 				btf[i] = null;
 			}
 		}
 		btf = null;
 		for(int i = 0; i < bcmb.length;i++){
 			if(bcmb[i] != null){
-				ListenerTools.removeListeners((Component)bcmb[i]);
+				ListenerTools.removeListeners(bcmb[i]);
 				bcmb[i] = null;
 			}
 		}
 		for(int i = 0; i < bchb.length;i++){
 			if(bchb[i] != null){
-				ListenerTools.removeListeners((Component)bchb[i]);
+				ListenerTools.removeListeners(bchb[i]);
 				bchb[i] = null;
 			}
 		}
 		for(int i = 0; i < ktlcmb.length;i++){
 			if(ktlcmb[i] != null){
-			ListenerTools.removeListeners((Component)ktlcmb[i]);
+			ListenerTools.removeListeners(ktlcmb[i]);
 			ktlcmb[i] = null;
-			ListenerTools.removeListeners((Component)ktltfc[i]);
+			ListenerTools.removeListeners(ktltfc[i]);
 			ktltfc[i] = null;
-			ListenerTools.removeListeners((Component)ktltfd[i]);
+			ListenerTools.removeListeners(ktltfd[i]);
 			ktltfd[i] = null;
-			ListenerTools.removeListeners((Component)ktltfa[i]);
+			ListenerTools.removeListeners(ktltfa[i]);
 			ktltfa[i] = null;
 			}
 		}
 		for(int i = 0; i < bta.length;i++){
 			if(bta[i] != null){
-				ListenerTools.removeListeners((Component)bta[i]);
+				ListenerTools.removeListeners(bta[i]);
 				bta[i] = null;
 			}
 		}
@@ -1337,7 +1337,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		ktltfa = null;
 		bta = null;
 
-		ebt = null;;
+		ebt = null;
 		nat = null;
 		officeFrame = null;
 		
@@ -1608,7 +1608,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	 * 
 	 */
 	public Object[] ebTest(){
-		Object[] oret = {(Integer)0,(Integer)0,null};
+		Object[] oret = {0,0,null};
 		int ifehler = 0;
 		int iwarnung = 0;
 		StringBuffer buf = new StringBuffer();
@@ -1995,9 +1995,9 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			ifehler++;
 		}
 		if(ifehler > 0 || iwarnung > 0){
-			oret[0]= (Integer)ifehler;
-			oret[1]= (Integer)iwarnung;
-			oret[2]= (StringBuffer) kopf.append(buf.toString()).append("</table></html>");
+			oret[0]= ifehler;
+			oret[1]= iwarnung;
+			oret[2]= kopf.append(buf.toString()).append("</table></html>");
 		}
 
 		return oret;
@@ -2094,7 +2094,7 @@ class EBPrintDlg extends RehaSmartDialog implements RehaTPEventListener,WindowLi
 		super(null,"EBPrint");
 		this.setName("EBPrint");
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 	}
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -2103,7 +2103,7 @@ class EBPrintDlg extends RehaSmartDialog implements RehaTPEventListener,WindowLi
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					this.dispose();
 					////System.out.println("****************EGPrint -> Listener entfernt**************");				
@@ -2117,7 +2117,7 @@ class EBPrintDlg extends RehaSmartDialog implements RehaTPEventListener,WindowLi
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			dispose();
 			////System.out.println("**************** In Panel EGPrint -> Listener entfernt (Closed)**********");

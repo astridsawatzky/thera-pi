@@ -211,7 +211,7 @@ public class RehaStatistik implements WindowListener{
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
    				sqlInfo.setConnection(obj.conn);
 				RehaStatistik.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
@@ -279,7 +279,7 @@ public class RehaStatistik implements WindowListener{
 	
     public static void starteOfficeApplication(){ 
     	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(RehaStatistik.officeProgrammPfad,RehaStatistik.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(RehaStatistik.officeProgrammPfad,RehaStatistik.officeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();

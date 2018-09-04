@@ -25,7 +25,7 @@ public class JBeteiligungInternal extends JRehaInternal implements RehaEventList
 	public JBeteiligungInternal(String titel, ImageIcon img, int desktop) {
 		super(titel, img, desktop);
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 	}
 	@Override
 	public void internalFrameClosing(InternalFrameEvent arg0) {
@@ -38,7 +38,7 @@ public class JBeteiligungInternal extends JRehaInternal implements RehaEventList
 		//nächsten JInternalFrame aktivieren
 		Reha.thisClass.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
-		rEvent.removeRehaEventListener((RehaEventListener) this);
+		rEvent.removeRehaEventListener(this);
 		//hier die Aufräumenfunktion
 		this.removeInternalFrameListener(this);
 		//

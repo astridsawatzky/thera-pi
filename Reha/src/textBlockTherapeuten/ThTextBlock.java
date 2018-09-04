@@ -107,7 +107,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			this.reznummer = xreznummer;
 			this.zuletztaktiv = letztaktiv;
 			rtp = new RehaTPEventClass();
-			rtp.addRehaTPEventListener((RehaTPEventListener) this);
+			rtp.addRehaTPEventListener(this);
 
 			grundPanel = new JXPanel(new BorderLayout());
 			grundPanel.setName(name);
@@ -187,7 +187,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 		@Override
 		public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 			}
 			this.removeWindowListener(this);
@@ -212,7 +212,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			//String ss =  this.getName();
 			try{
 				////System.out.println("Schließe Fenster Textbaustein");
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				FensterSchliessen(evt.getDetails()[0]);
 			}catch(NullPointerException ne){
 				ne.printStackTrace();
@@ -223,7 +223,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 		public void FensterSchliessen(String welches){
 			this.removeWindowListener(this);
 			if(rtp != null){
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 			}
 			this.dispose();
@@ -409,7 +409,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			//////System.out.println("Längendifferenz ="+diff+"  /  neuer Wert für Position i ="+i+" / neuer Wert für Textlänge lang="+lang);
 		}
 		private void holeTbText(int tbid){
-			String text = (String) SqlInfo.holeSatz("tb"+this.reznummer.substring(0,2).toLowerCase(), "tbtext", "id='"+tbid+"'", Arrays.asList(new String[] {})).get(0);
+			String text = SqlInfo.holeSatz("tb"+this.reznummer.substring(0,2).toLowerCase(), "tbtext", "id='"+tbid+"'", Arrays.asList(new String[] {})).get(0);
 			text = testeAufSysVars(text);
 			tbtext.setText(text );
 			final int xtbid = tbid;

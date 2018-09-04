@@ -669,10 +669,10 @@ public class Reha301Auswerten extends JXPanel{
 				for(int i = 0; i < vec.size();i++){
 					vecobj.clear();
 					
-					vecobj.add((String) Integer.toString(i+1));
-					vecobj.add((Boolean) (vec.get(i).get(0).equals("T")? true : false) );
-					vecobj.add((String)vec.get(i).get(1));
-					vecobj.add((String) artderNachricht[Integer.parseInt(vec.get(i).get(2))]+"-"+vec.get(i).get(8)+"-"+vec.get(i).get(9));
+					vecobj.add(Integer.toString(i+1));
+					vecobj.add(vec.get(i).get(0).equals("T")? true : false );
+					vecobj.add(vec.get(i).get(1));
+					vecobj.add(artderNachricht[Integer.parseInt(vec.get(i).get(2))]+"-"+vec.get(i).get(8)+"-"+vec.get(i).get(9));
 					pat = vec.get(i).get(3).split("#");
 					////System.out.println(vec.get(i).get(3));
 					patangaben = "";
@@ -696,27 +696,27 @@ public class Reha301Auswerten extends JXPanel{
 						}
 
 					}
-					vecobj.add((String) patangaben);
-					vecobj.add((String) ortsangaben);
-					vecobj.add((String) vec.get(i).get(4));
-					vecobj.add((String) vec.get(i).get(5));
+					vecobj.add(patangaben);
+					vecobj.add(ortsangaben);
+					vecobj.add(vec.get(i).get(4));
+					vecobj.add(vec.get(i).get(5));
 					if(pat.length >=8){
 						kassenangaben = SqlInfo.holeEinzelFeld("select name1 from ktraeger where ikkasse='"+pat[7]+"' LIMIT 1");
 						kassenangaben = kassenangaben+String.valueOf("#"+pat[7]);
 					}
-					vecobj.add((String) kassenangaben);
+					vecobj.add(kassenangaben);
 					try{
-						vecobj.add((String) DatFunk.sDatInDeutsch(vec.get(i).get(6)));	
+						vecobj.add(DatFunk.sDatInDeutsch(vec.get(i).get(6)));	
 					}catch(Exception ex){
 						vecobj.add("01.01.0000");
 					}
-					vecobj.add((String) patgeboren);
-					vecobj.add((String) vec.get(i).get(7));
-					vecobj.add((String) pat[3]);
-					if( ((String) vec.get(i).get(10)).trim().length() < 10){
+					vecobj.add(patgeboren);
+					vecobj.add(vec.get(i).get(7));
+					vecobj.add(pat[3]);
+					if( vec.get(i).get(10).trim().length() < 10){
 						vecobj.add("");
 					}else{
-						vecobj.add(DatFunk.sDatInDeutsch((String) vec.get(i).get(10)));	
+						vecobj.add(DatFunk.sDatInDeutsch(vec.get(i).get(10)));	
 					}
 					
 					tabmod.addRow( (Vector<?>)vecobj.clone());
@@ -1060,7 +1060,7 @@ public class Reha301Auswerten extends JXPanel{
 			SqlInfo.sqlAusfuehren(buf.toString());	
 			int xrow = tab.convertRowIndexToModel(tab.getSelectedRow());
 			tabmod.setValueAt(Boolean.valueOf(true),xrow, 1);
-			tabmod.setValueAt((String)DatFunk.sHeute(),xrow, 13);
+			tabmod.setValueAt(DatFunk.sHeute(),xrow, 13);
 			buts[1].setEnabled(false);
 			buts[0].setEnabled(false);			
 			return;
@@ -1093,7 +1093,7 @@ public class Reha301Auswerten extends JXPanel{
 		/************Dann die Tabelle regeln********/
 		int xrow = tab.convertRowIndexToModel(tab.getSelectedRow());
 		tabmod.setValueAt(Boolean.valueOf(true),xrow, 1);
-		tabmod.setValueAt((String)DatFunk.sHeute(),xrow, 13);
+		tabmod.setValueAt(DatFunk.sHeute(),xrow, 13);
 		buts[1].setEnabled(false);
 		buts[0].setEnabled(false);
 		
@@ -1254,7 +1254,7 @@ public class Reha301Auswerten extends JXPanel{
 		/************Dann die Tabelle regeln********/
 		int xrow = tab.convertRowIndexToModel(tab.getSelectedRow());
 		tabmod.setValueAt(Boolean.valueOf(true),xrow, 1);
-		tabmod.setValueAt((String)DatFunk.sHeute(),xrow, 13);
+		tabmod.setValueAt(DatFunk.sHeute(),xrow, 13);
 		buts[1].setEnabled(false);
 		buts[0].setEnabled(false);
 

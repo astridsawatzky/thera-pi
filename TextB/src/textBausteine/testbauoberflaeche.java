@@ -272,8 +272,6 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	    	
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        
-	        int firstIndex = e.getFirstIndex();
-	        int lastIndex = e.getLastIndex();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){
 	        	return;
@@ -290,7 +288,6 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	                	new SwingWorker<Void,Void>(){
 							@Override
 							protected Void doInBackground() throws Exception {
-								// TODO Auto-generated method stub
 								try{
 	                			setCursor(new Cursor(Cursor.WAIT_CURSOR));
 	                			//String id = (String) tbtab.getValueAt(ix, 3);
@@ -423,7 +420,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		combobox.removeAllItems();
 		int anzahl = SystemEinstellungen.hmThema.get(disziplin).size();
 		for(int i = 0; i < anzahl; i++){
-			combobox.addItem((String) SystemEinstellungen.hmThema.get(disziplin).get(i));
+			combobox.addItem(SystemEinstellungen.hmThema.get(disziplin).get(i));
 		}
 		ladeOberbegriff(disziplin);
 	}
@@ -431,7 +428,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		oberbegriff.removeAllItems();
 		int anzahl = SystemEinstellungen.hmOberbegriff.get(disziplin).size();
 		for(int i = 0; i < anzahl; i++){
-			oberbegriff.addItem((String) SystemEinstellungen.hmOberbegriff.get(disziplin).get(i));
+			oberbegriff.addItem(SystemEinstellungen.hmOberbegriff.get(disziplin).get(i));
 		}
 		
 	}
@@ -442,9 +439,9 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 			int lang = tbtext.size();
 				if(lang >0){
 					jtbf.setText(tbtext.get(0).get(0));
-					oberbegriff.setSelectedItem((String) tbtab.getValueAt(row, 3));
-					textblock.setSelectedItem((String) tbtab.getValueAt(row, 1));
-					rang.setSelectedItem((String) tbtab.getValueAt(row, 2));
+					oberbegriff.setSelectedItem(tbtab.getValueAt(row, 3));
+					textblock.setSelectedItem(tbtab.getValueAt(row, 1));
+					rang.setSelectedItem(tbtab.getValueAt(row, 2));
 					tftitel.setText((String) tbtab.getValueAt(row, 0));
 				}
 			}
@@ -629,7 +626,6 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		//Datenbank ermitteln
 		String cmd="";
 		if(!neu){
-			String idtitel = (String)tbtab.getValueAt(row, 0);
 			cmd = "update "+getDb()+" set ";
 		}else{
 			cmd = "insert into "+getDb()+" set ";
@@ -675,8 +671,8 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 				System.out.println("Tabelle wird aktualisiert...."+stitel);
 				System.out.println("Aktualisiere Row = "+xrow);
 				tbmod.setValueAt(stitel, xrow, 0);	
-				tbmod.setValueAt((String)textblock.getSelectedItem(), xrow, 1);
-				tbmod.setValueAt((String)rang.getSelectedItem(), xrow, 2);
+				tbmod.setValueAt(textblock.getSelectedItem(), xrow, 1);
+				tbmod.setValueAt(rang.getSelectedItem(), xrow, 2);
 				tbmod.setValueAt(sober, xrow, 3);
 				tbtab.validate();
 				tftitel.setText((String)tbmod.getValueAt(xrow,0));

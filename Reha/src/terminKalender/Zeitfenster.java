@@ -388,7 +388,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 		for(int i = 0; i< 1;i++){
 			if(((JComponent)arg0.getSource()).getName().equals("Dauer")){
 				if(rechenart ==0){
-					int dauer1 = Integer.parseInt((String) ((JRtaTextField) arg0.getSource()).getText() );
+					int dauer1 = Integer.parseInt(((JRtaTextField) arg0.getSource()).getText() );
 					
 					int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(BeginnStunde.getText()+
 												":"+BeginnMinute.getText()+":00");
@@ -398,7 +398,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 					EndeMinute.setText(sEnde.split(":")[1]);
 				}
 				if(rechenart ==1){
-					int dauer1 = Integer.parseInt((String) ((JRtaTextField) arg0.getSource()).getText() );
+					int dauer1 = Integer.parseInt(((JRtaTextField) arg0.getSource()).getText() );
 					
 					int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(EndeStunde.getText()+
 												":"+EndeMinute.getText()+":00");
@@ -420,7 +420,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 				if(sb.length()==1){
 					((JRtaTextField) arg0.getSource()).setText("0"+sb);
 				}
-				int dauer1 = Integer.parseInt( (String) ((JRtaTextField)Dauer).getText() );
+				int dauer1 = Integer.parseInt( Dauer.getText() );
 				int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(BeginnStunde.getText()+
 											":"+BeginnMinute.getText()+":00");
 				int dauer3 = (int) ZeitFunk.MinutenSeitMitternacht(EndeStunde.getText()+
@@ -447,7 +447,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 				if(sb.length()==1){
 					((JRtaTextField) arg0.getSource()).setText("0"+sb);
 				}
-				int dauer1 = Integer.parseInt( (String) ((JRtaTextField)Dauer).getText() );
+				int dauer1 = Integer.parseInt( Dauer.getText() );
 				int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(BeginnStunde.getText()+
 					":"+BeginnMinute.getText()+":00");
 				int dauer3 = (int) ZeitFunk.MinutenSeitMitternacht(EndeStunde.getText()+
@@ -537,7 +537,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		if(((JComponent)arg0.getSource()).getName().equals("Ok")){
-			int dauer1 = Integer.parseInt( (String) ((JRtaTextField)Dauer).getText() );
+			int dauer1 = Integer.parseInt( Dauer.getText() );
 			int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(BeginnStunde.getText()+
 										":"+BeginnMinute.getText()+":00");
 			int dauer3 = (int) ZeitFunk.MinutenSeitMitternacht(EndeStunde.getText()+

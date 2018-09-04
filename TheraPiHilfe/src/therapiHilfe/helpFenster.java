@@ -20,7 +20,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,7 +28,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -97,7 +95,6 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 	public boolean sqlfertig;
 	public boolean ftpfertig;
 	public String initvz = piHelp.proghome+"ScreenShots/";
-	private Vector titelDaten = new Vector();
 	helpFenster(){
 		super();
 		this.addComponentListener(this);
@@ -153,12 +150,6 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 		splitORL.validate();
 		jlr.add(splitORL,BorderLayout.CENTER);
 		return jlr;
-	}
-	private JXPanel getObenLinks(){
-		obenLinks = new JXPanel(new BorderLayout());
-		obenLinks.setBackground(Color.WHITE);
-		obenLinks.validate();
-		return obenLinks;
 	}
 	private JScrollPane getScrollOL(){
 		FormLayout lay = new FormLayout("10dlu,80dlu,10dlu,80dlu,10dlu","10dlu,p,2dlu,p,10dlu,p,5dlu,p,5dlu,p,5dlu,p,5dlu,p,5dlu,p,3dlu,p");
@@ -279,17 +270,10 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 		return jscr;
 		
 	}
-	private JXPanel getObenRechts(){
-		obenRechts = new JXPanel(new BorderLayout());
-		obenRechts.setBackground(Color.WHITE);		
-		obenRechts.validate();
-		return obenRechts;
-	}
 	public void starteOOO(){
 		new ooPanel(ooPan);
 	}
 	public void setzeTitelTabelle(Vector vec){
-		int ii = themenDtblm.getDataVector().size();
 		while(tblThemen.getRowCount() > 0){
 			themenDtblm.removeRow(0);	
 		}
@@ -441,7 +425,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 			"Bitte eine Email an -> j.steinhilber@rta.de <- und geben Sie bitte\n"+
 			"Die 'ID' des Beitrages an den Sie löschen wollen\n"+
 			"(Die 'ID' des Beitrages steht in der Liste oben ganz rechts)\n\n";
-			String s = (String)JOptionPane.showInputDialog(
+			String s = JOptionPane.showInputDialog(
 			                    this,
 			                    stext,
 			                    "Hilfe-Thema löschen",
@@ -478,7 +462,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 						wf = new WartenFenster();
 						wf.setLocationRelativeTo(null);
 						wf.setVisible(true);
-						wf.setStand("Transferiere Datei: "+sret[0]);
+						WartenFenster.setStand("Transferiere Datei: "+sret[0]);
 						
 						FTPTools ftpt = new FTPTools();
 						lblstand.setText("Datei uploaden: "+sret[0]);
@@ -547,18 +531,8 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 		final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        //final File file = new File(piHelp.proghome+"ScreenShots/");
         final File file = new File(initvz);
         chooser.setCurrentDirectory(file);
-
-        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent e) {
-                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
-                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-                    final File f = (File) e.getNewValue();
-                }
-            }
-        });
         chooser.setVisible(true);
         piHelp.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         final int result = chooser.showOpenDialog(null);
@@ -568,21 +542,15 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
             String inputVerzStr = inputVerzFile.getPath();
             String inputDatei = inputVerzFile.getName();
             
-            //System.out.println("Pfad:" + inputVerzStr);
-            //System.out.println("Datei:" + inputDatei);
             File fgr = new File(inputVerzStr);
             long length = fgr.length();
             initvz = String.valueOf(inputVerzStr);
             sret = new String[] {inputDatei,inputVerzStr,new Long(length).toString()};
         }
-        //System.out.println("Abbruch");
         chooser.setVisible(false); 			
 		
 		
 		return sret;
-	}
-	private void schreibeDatei(){
-		
 	}
 	private static boolean inTransaktion(){
 		//System.out.println("ftpfertig = "+thisClass.ftpfertig);
@@ -608,11 +576,10 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 		Vector<String> ar = new Vector<String>();
 		ar = FTPTools.getInstance().holeDatNamen();
 		jprogress.setStringPainted(true);
-		boolean ret;
 		for(int i = 0; i < ar.size();i+= 3){
 			//System.out.println("****Obere Funktion*********"+piHelp.tempvz+ar.get(i)+"**************");
 			lblstand.setText("Hole Datei:"+ar.get(i));
-			ret = ftpt.holeDatei(ar.get(i), ar.get(i), new Long(ar.get(i+2)),jprogress);
+			 ftpt.holeDatei(ar.get(i), ar.get(i), new Long(ar.get(i+2)),jprogress);
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
@@ -621,9 +588,6 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 			}
 		}
 		 
-		String dateiname = ar.get(3);
-		String nurName = dateiname.substring(0,dateiname.length()-5 );
-		String ergebnis = nurName+"_html";
 		Vector<String> arbild = new Vector<String>();
 		arbild = FTPTools.getInstance().holeDatNamen();		
 		//System.out.println(arbild);
@@ -634,7 +598,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 				lblstand.setText("Datei existiert bereits:"+arbild.get(i));				
 			}else{
 				lblstand.setText("Hole Datei:"+arbild.get(i));
-				ret = ftpt.holeDatei(arbild.get(i), arbild.get(i), new Long(0),jprogress);
+				ftpt.holeDatei(arbild.get(i), arbild.get(i), new Long(0),jprogress);
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -670,7 +634,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 		wf = new WartenFenster();
 		wf.setLocationRelativeTo(null);
 		wf.setVisible(true);
-		wf.setStand("Überprüfe Dateien");
+		WartenFenster.setStand("Überprüfe Dateien");
 		
 		new SwingWorker<Void,Void>(){
 			@Override
@@ -719,30 +683,18 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
   
 		System.out.println("Ist FTP-Fertig -> "+ftpfertig);
 		System.out.println("Ist Sql-Fertig -> "+sqlfertig);
-		//tempname = new String(stitel.getText()+".html");
 		tempname = new String(absolutDatei);
-		String temppfad = piHelp.tempvz;
 		
-		//helpFenster.hilfeDatei = piHelp.tempvz+new String(stitel.getText()+".html");
 		helpFenster.hilfeDatei = piHelp.tempvz+new String(tempname);
-		wf.setStand("Aktuelle Datei wird gespeichert");
+		WartenFenster.setStand("Aktuelle Datei wird gespeichert");
 		/**********OOo-Speichern**********/
 		String tempdat = ooPanel.speichernText(helpFenster.hilfeDatei,neuertext);
-		/*
-		int a = 0;
-		if(a == 0){
-			return;
-		}
-
-		*/
 		System.out.println("Ist FTP-Fertig -> "+ftpfertig);
 		System.out.println("Ist Sql-Fertig -> "+sqlfertig);
 
 		ooPanel.schliesseText();
 		
 		/************** Einheit gehört zusammen************/
-		Vector altbilder = new Vector();
-		altbilder = (Vector) ((Vector)helpFenster.thisClass.bilder).clone();
 		extrahiereBilder(helpFenster.hilfeDatei);
 		//System.out.println(helpFenster.thisClass.bilder);
 		/************** Einheit gehört zusammen************/
@@ -776,7 +728,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 				for(int i = 0; i < helpFenster.thisClass.bilder.size(); i++){
 					if(!ar.contains(helpFenster.thisClass.bilder.get(i))){
 						//System.out.println("jetzt wird der FTP zum speichern angeschmissen");
-						wf.setStand("Übertrage Grafik: "+helpFenster.thisClass.bilder.get(i));
+						WartenFenster.setStand("Übertrage Grafik: "+helpFenster.thisClass.bilder.get(i));
 						long gross = new File(piHelp.tempvz+helpFenster.thisClass.bilder.get(i)).length();
 						System.out.println("Scheibe Bild "+helpFenster.thisClass.bilder.get(i)+" "+gross+" Bytes");
 						lblstand.setText(helpFenster.thisClass.bilder.get(i));
@@ -785,7 +737,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 
 					}
 				}
-				wf.setStand("Übertrage Datei: "+helpFenster.absolutDatei);
+				WartenFenster.setStand("Übertrage Datei: "+helpFenster.absolutDatei);
 				String htmldat = helpFenster.absolutDatei;
 				long gross = new File(helpFenster.hilfeDatei).length();
 				System.out.println("Scheibe HTML-Datei "+helpFenster.hilfeDatei+" "+gross+" Bytes");
@@ -828,7 +780,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
         htmlDaten = new Vector();
         htmlDaten.add(stitel.getText().trim());
         htmlDaten.add(0);
-        htmlDaten.add((String) gruppenbox.getSelectedItem());
+        htmlDaten.add(gruppenbox.getSelectedItem());
         try {
         	if(!tempdat.contains(".html")){
         		tempdat = tempdat+".html";
@@ -862,7 +814,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
         }
         try{
             if(wf != null){
-            	wf.setStand("Übertrage Dateien in Datenbank......");
+            	WartenFenster.setStand("Übertrage Dateien in Datenbank......");
             }
         	sqlfertig = doHtmlSpeichern((Vector)htmlDaten.clone());
         	/*
@@ -934,7 +886,6 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 	   }
 /****************************************************************/	
 	  public static void erzeugeAusByteArray(byte[] bhtml,String datei,boolean alsweb){
-		  InputStream is = new ByteArrayInputStream( bhtml ); 
 		  FileOutputStream fileOut;
 		  String indatei = datei;
 		  if(! indatei.contains(".html")){
@@ -1070,9 +1021,6 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 	        public void valueChanged(ListSelectionEvent e) { 
 	            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
-	            int firstIndex = e.getFirstIndex();
-	            int lastIndex = e.getLastIndex();
-	            boolean isAdjusting = e.getValueIsAdjusting(); 
 	            /*
 	            output.append("Event for indexes "
 	                          + firstIndex + " - " + lastIndex
@@ -1103,11 +1051,9 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 	    }
 	 /******************************************************/
 	 public boolean doHtmlSpeichern(Vector htmlvec){
-			Statement stmt = null;;
+			Statement stmt = null;
 			ResultSet rs = null;
 			PreparedStatement ps = null;
-			boolean ret = false;
-			int bilder = 0;
 					/*
 					WartenFenster wf = new WartenFenster();
 					wf.setLocationRelativeTo(null);
@@ -1118,18 +1064,18 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 						if(htmlvec.size() < 6){
 							//System.out.println("In neuem Text speichern");
 							System.out.println("Neuer Text wird eingefügt");
-							helpFenster.thisClass.wf.setStand("Übertrage Internetseite");
+							WartenFenster.setStand("Übertrage Internetseite");
 							
 
-							stmt = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+							stmt = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				                    ResultSet.CONCUR_UPDATABLE );
 
 							String select = "Insert into htitel set titel = ? , bilder = ?, gruppe = ?, inhalt = ?, datei = ?, lastedit = ?;";
 
-							ps = (PreparedStatement) piHelp.conn.prepareStatement(select);
-							  ps.setBytes(1, (byte[]) ((String)htmlvec.get(0)).getBytes());
+							ps = piHelp.conn.prepareStatement(select);
+							  ps.setBytes(1, ((String)htmlvec.get(0)).getBytes());
 							  ps.setInt(2, (new Integer((Integer)htmlvec.get(1))) );
-							  ps.setBytes(3, (byte[]) ((String)htmlvec.get(2)).getBytes() );
+							  ps.setBytes(3, ((String)htmlvec.get(2)).getBytes() );
 							  ps.setBytes(4, (byte[])htmlvec.get(3) );
 							  ps.setString(5, (String)htmlvec.get(4));
 							  ps.setString(6, DatFunk.sDatInSQL(DatFunk.sHeute()) );
@@ -1137,13 +1083,13 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 							  ps.execute();
 							  
 							  String neuid = "select max(id) from htitel";
-							  rs = (ResultSet) stmt.executeQuery(neuid);
+							  rs = stmt.executeQuery(neuid);
 							  rs.next();
 							  int ineuid = rs.getInt(1);
 							  Vector vec = new Vector();
-							  vec.add((String)htmlvec.get(0));
-							  vec.add((String)htmlvec.get(4));
-							  vec.add((String)"");
+							  vec.add(htmlvec.get(0));
+							  vec.add(htmlvec.get(4));
+							  vec.add("");
 							  vec.add(new Integer(ineuid).toString());
 							  helpFenster.thisClass.themenDtblm.addRow((Vector)vec.clone());
 							  helpFenster.thisClass.tblThemen.setRowSelectionInterval(
@@ -1152,7 +1098,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 						}else{
 							System.out.println("Bestehender Text wird Updated");
 							
-							helpFenster.thisClass.wf.setStand("Übertrage Internetseite");
+							WartenFenster.setStand("Übertrage Internetseite");
 							/*
 							stmt = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				                    ResultSet.CONCUR_UPDATABLE );
@@ -1161,20 +1107,20 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 							//String sid =  new Integer( ((Integer)htmlvec.get(4)) ).toString();
 							String select = "Update htitel set titel = ? , bilder = ?, gruppe = ?, inhalt = ? ,lastedit = ? where id= ?;";
 							
-							  ps = (PreparedStatement) piHelp.conn.prepareStatement(select);
+							  ps = piHelp.conn.prepareStatement(select);
 
-							  ps.setBytes(1, (byte[]) ((String)htmlvec.get(0)).getBytes());
+							  ps.setBytes(1, ((String)htmlvec.get(0)).getBytes());
 
-							  ps.setInt(2,   new Integer( ((Vector)htmlvec).get(1).toString()));
+							  ps.setInt(2,   new Integer( htmlvec.get(1).toString()));
 
-							  ps.setBytes(3, (byte[]) ((String)htmlvec.get(2)).getBytes() );
+							  ps.setBytes(3, ((String)htmlvec.get(2)).getBytes() );
 							  
 
 							  ps.setBytes(4, (byte[])htmlvec.get(3) );
 							  
 							  ps.setString(5, DatFunk.sDatInSQL(DatFunk.sHeute()) );
 							  
-							  ps.setInt(6, new Integer( ((Vector)htmlvec).get(5).toString()) );
+							  ps.setInt(6, new Integer( htmlvec.get(5).toString()) );
 
 							  ps.execute();
 							  
@@ -1281,11 +1227,9 @@ final class WorkerTitel extends SwingWorker<Void,Void>{
 		ResultSet rsx = null;
 		Vector comboInhalt = null;
 		Vector gesamtVec = null;
-				stmtx = null;
-				rsx = null;
 				//System.out.println("In holeTitel");
 				try {
-					stmtx = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
@@ -1314,12 +1258,10 @@ final class WorkerTitel extends SwingWorker<Void,Void>{
 							rsx = null;
 						}
 					}	
-					if (stmtx != null) {
-						try {
-							stmtx.close();
-						} catch (SQLException sqlEx) { // ignore }
-							stmtx = null;
-						}
+					try {
+						stmtx.close();
+					} catch (SQLException sqlEx) { // ignore }
+						stmtx = null;
 					}
 			//System.out.println("Insgesamt Elemente = "+comboInhalt.size());		
 			return (Vector)gesamtVec.clone();
@@ -1343,13 +1285,11 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 	}
 	
 	protected Void doInBackground() throws Exception {
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
-		boolean ret = false;
-		int bilder = 0;
-				System.out.println("In Speichern Titel - Neuer Titel ="+(htmlvec.size() < 5 ? true : false));
-				System.out.println("Die Größe des Arrays = "+htmlvec.size());
+		System.out.println("In Speichern Titel - Neuer Titel ="+(htmlvec.size() < 5 ? true : false));
+		System.out.println("Die Größe des Arrays = "+htmlvec.size());
 				/*
 				WartenFenster wf = new WartenFenster();
 				wf.setLocationRelativeTo(null);
@@ -1360,14 +1300,14 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 					if(htmlvec.size() < 6){
 						//System.out.println("In neuem Text speichern");
 						System.out.println("Neuer Text wird eingefügt");
-						helpFenster.thisClass.wf.setStand("Übertrage Internetseite");
+						WartenFenster.setStand("Übertrage Internetseite");
 						/*
 						stmt = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			                    ResultSet.CONCUR_UPDATABLE );
 						*/
 						String select = "Insert into htitel set titel = ? , bilder = ?, gruppe = ?, inhalt = ?, datei = ?, lastedit = ?";
 
-						ps = (PreparedStatement) piHelp.conn.prepareStatement(select);
+						ps = piHelp.conn.prepareStatement(select);
 						  ps.setString(1, (String)htmlvec.get(0));
 						  ps.setInt(2, (new Integer((Integer)htmlvec.get(1))) );
 						  ps.setString(3, (String)htmlvec.get(2) );
@@ -1378,13 +1318,13 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 						  ps.execute();
 						  
 						  String neuid = "select max(id) from htitel";
-						  rs = (ResultSet) stmt.executeQuery(neuid);
+						  rs = stmt.executeQuery(neuid); //FIXME: stmt can only be null here
 						  rs.next();
 						  int ineuid = rs.getInt(1);
 						  Vector vec = new Vector();
-						  vec.add((String)htmlvec.get(0));
-						  vec.add((String)htmlvec.get(4));
-						  vec.add((String)"");
+						  vec.add(htmlvec.get(0));
+						  vec.add(htmlvec.get(4));
+						  vec.add("");
 						  vec.add(new Integer(ineuid).toString());
 						  helpFenster.thisClass.themenDtblm.addRow((Vector)vec.clone());
 						  helpFenster.thisClass.tblThemen.setRowSelectionInterval(
@@ -1392,7 +1332,7 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 								  helpFenster.thisClass.tblThemen.getRowCount()-1);
 					}else{
 						System.out.println("Bestehender Text wird Updated");
-						helpFenster.thisClass.wf.setStand("Übertrage Internetseite");
+						WartenFenster.setStand("Übertrage Internetseite");
 						/*
 						stmt = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			                    ResultSet.CONCUR_UPDATABLE );
@@ -1401,11 +1341,11 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 						//String sid =  new Integer( ((Integer)htmlvec.get(4)) ).toString();
 						String select = "Update htitel set titel = ? , bilder = ?, gruppe = ?, inhalt = ? ,lastedit = ? where id= ?";
 						
-						  ps = (PreparedStatement) piHelp.conn.prepareStatement(select);
+						  ps = piHelp.conn.prepareStatement(select);
 
 						  ps.setString(1, (String)htmlvec.get(0));
 
-						  ps.setInt(2,   new Integer( ((Vector)htmlvec).get(1).toString()));
+						  ps.setInt(2,   new Integer( htmlvec.get(1).toString()));
 
 						  ps.setString(3, (String)htmlvec.get(2) );
 						  
@@ -1414,7 +1354,7 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 						  
 						  ps.setString(5, DatFunk.sDatInSQL(DatFunk.sHeute()) );
 						  
-						  ps.setInt(6, new Integer( ((Vector)htmlvec).get(5).toString()) );
+						  ps.setInt(6, new Integer( htmlvec.get(5).toString()) );
 
 						  ps.execute();
 						  
@@ -1470,13 +1410,8 @@ final class HtmlHolen extends SwingWorker<Void,Void>{
 	protected Void doInBackground() throws Exception {
 		Statement stmtx = null;
 		ResultSet rsx = null;
-		Vector comboInhalt = null;
-		Vector gesamtVec = null;
-				stmtx = null;
-				rsx = null;
-				//System.out.println("In holeTitel");
 				try {
-					stmtx = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
@@ -1498,23 +1433,22 @@ final class HtmlHolen extends SwingWorker<Void,Void>{
 							//new copyFile(helpFenster.hilfeDatei,helpFenster.hilfeDatei+".html");
 							
 						}else{
-							wf.setStand("Erzeuge HTML-Datei");
+							WartenFenster.setStand("Erzeuge HTML-Datei");
 							helpFenster.erzeugeAusByteArray(rsx.getBytes("inhalt"),helpFenster.hilfeDatei, helpFenster.thisClass.chkweb.isSelected());
 							////System.out.println(new String(rsx.getBytes("inhalt")));
 						}
 						if(helpFenster.thisClass.bilder.size() > 0){
-							boolean ret;
 							FTPTools ftpt = new FTPTools();
 							for(int i = 0; i < helpFenster.thisClass.bilder.size();i++){
 								//System.out.println("Dateinamen->"+helpFenster.thisClass.bilder.get(i));
 								File f = new File(piHelp.tempvz+helpFenster.thisClass.bilder.get(i));
 								if(f.exists()){
-									wf.setStand("Bereits vorhanden: "+(i+1)+" von "+helpFenster.thisClass.bilder.size()+" "+helpFenster.thisClass.bilder.get(i));
+									WartenFenster.setStand("Bereits vorhanden: "+(i+1)+" von "+helpFenster.thisClass.bilder.size()+" "+helpFenster.thisClass.bilder.get(i));
 									helpFenster.thisClass.lblstand.setText("Bereits vorhanden: "+helpFenster.thisClass.bilder.get(i));									
 								}else{
-									wf.setStand("Hole Datei: "+(i+1)+" von "+helpFenster.thisClass.bilder.size()+" "+helpFenster.thisClass.bilder.get(i));
+									WartenFenster.setStand("Hole Datei: "+(i+1)+" von "+helpFenster.thisClass.bilder.size()+" "+helpFenster.thisClass.bilder.get(i));
 									helpFenster.thisClass.lblstand.setText("Hole Datei: "+helpFenster.thisClass.bilder.get(i));
-									ret = ftpt.holeDatei(helpFenster.thisClass.bilder.get(i), helpFenster.thisClass.bilder.get(i), new Long(0),helpFenster.thisClass.jprogress);
+									ftpt.holeDatei(helpFenster.thisClass.bilder.get(i), helpFenster.thisClass.bilder.get(i), new Long(0),helpFenster.thisClass.jprogress);
 									try {
 										Thread.sleep(80);
 									} catch (InterruptedException e) {
@@ -1539,7 +1473,7 @@ final class HtmlHolen extends SwingWorker<Void,Void>{
 						ooPanel.starteDatei(fneu, helpFenster.thisClass.chkweb.isSelected());							
 						
 					}
-					wf.setStand("Datentransfer beendet ");
+					WartenFenster.setStand("Datentransfer beendet ");
 					wf.dispose();
 					wf = null;
 				}catch(SQLException e){
@@ -1552,16 +1486,11 @@ final class HtmlHolen extends SwingWorker<Void,Void>{
 							rsx = null;
 						}
 					}	
-					if (stmtx != null) {
-						try {
-							stmtx.close();
-						} catch (SQLException sqlEx) { // ignore }
-							stmtx = null;
-						}
+					try {
+						stmtx.close();
+					} catch (SQLException sqlEx) { // ignore }
+						stmtx = null;
 					}
-
-					
-			
 			return null;
 			}
 }

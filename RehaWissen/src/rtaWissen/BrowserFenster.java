@@ -83,36 +83,15 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	 */
 	public static BrowserFenster thisClass = null;
 	private static final long serialVersionUID = -3482074172384055074L;
-	private int setOben;
 
 
-	private JXPanel jp1 = null;
-	private ArrayList<String[]> termine = new ArrayList<String[]>();
-	private JXPanel jtp = null;
 	private String dieserName = "";
-	private JXTable pliste = null;
 
 	public JRtaTextField tfSuche = null;
-	private JXButton heute = null;
-	private JXButton heute4 = null;
-	private JTextArea tae = null;
-	private JXLabel lblsuche = null;
-	private JXLabel lbldatum = null;
-	private JXTable ttbl = null;
-	private String aktDatum = "";
-	private Vector vTdata = new Vector();
 
 	private JList listSeiten = null;
-	private JXHeader header = null;  
-	private JXPanel jxLinks = null;
-	private JXPanel jxRechts = null;
-	private JXPanel jxInhaltRechts = null;
 	
 	public JScrollPane parameterScroll = null;
-	private JScrollPane panelScroll = null;
-	private HashMap<String,String> htitel = new HashMap<String,String>();
-	private HashMap<String,String> hdescription = new HashMap<String,String>();
-	private HashMap<String,ImageIcon> hicon = new HashMap<String,ImageIcon>();
 
 	private JXPanel leftOPanel = null;
 	private JXPanel leftUPanel = null;	
@@ -121,7 +100,6 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	private UIFSplitPane jSplitLinksOU = null;
 	RtaWissen rtaWissen = null;
 	private int linkalt=0,linkneu=0;
-	private JXTitledPanel jtpx = null;
 	public JXTable tblgefunden = null;
 	public DefaultTableModel themenDtblm = null;
 	
@@ -208,7 +186,6 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		rightPanel.setBackground(Color.WHITE);
 		rightPanel.addKeyListener(this);
 		rightPanel.setBackground(Color.WHITE);
-					// TODO Auto-generated method stub
 					/*
 					JTabbedPane tpane = new JTabbedPane();
 					tpane.addTab("Hilfe", new RtaWissen(1,"http://www.thera-pi.org") );
@@ -237,7 +214,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
             public void mouseClicked(java.awt.event.MouseEvent evt) {
         		int ind = listSeiten.getSelectedIndex();
         		linkneu = ind;
-            	rtaWissen.highlight = false;
+            	RtaWissen.highlight = false;
        			rtaWissen.Navigiere(SystemConfig.InetSeiten.get(ind).get(2));
             }
         });
@@ -245,7 +222,6 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 
 
-		ImageIcon icon = null;
 		JXLabel lab = null;
 		//System.out.println("InetSeiten-Anzahl = "+SystemConfig.InetSeiten.size());
 		for(int i=0;i < SystemConfig.InetSeiten.size();i++){
@@ -258,7 +234,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 				lab.setIcon(new ImageIcon( RehaWissen.proghome + "icons/" + SystemConfig.InetSeiten.get(i).get(1)));
 				lab.setIconTextGap(10);
 			}
-			model.addElement((JXLabel)lab);
+			model.addElement(lab);
 			//listSeiten.add(lab);
 		}
 		listSeiten.setSelectedIndex(0);
@@ -352,7 +328,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
             public void mouseClicked(java.awt.event.MouseEvent evt) {
             	if(tblgefunden.getSelectedRow()>=0){
                 	String url = (String)tblgefunden.getValueAt(tblgefunden.getSelectedRow(),2);
-                	rtaWissen.highlight = true;
+                	RtaWissen.highlight = true;
                 	rtaWissen.Navigiere(SystemConfig.HilfeServer+url); 
             	}
             }
@@ -367,7 +343,6 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		aktbutton.addActionListener(this);
 		jlupan.add(aktbutton,cc.xy(2,8));
 		
-		DefaultMutableTreeNode treeitem = null;
 		parameterScroll = new JScrollPane();
 		parameterScroll.setOpaque(true);
 		parameterScroll.setBorder(null);
@@ -610,8 +585,8 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		try{
 		int element = path.getPathCount();
 	    if(element >= 3){
-	    	String sitem = (String) path.getPathComponent(element-1).toString();
-	    	String sgruppe = (String) path.getPathComponent(element-2).toString();
+	    	String sitem = path.getPathComponent(element-1).toString();
+	    	String sgruppe = path.getPathComponent(element-2).toString();
 	    	int i;
 	    	for(i = 0;i < dateien.size();i++){
 	    		if( ((String)((Vector)dateien.get(i)).get(0)).equals(sitem)  && 
@@ -619,10 +594,10 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	    			String pfad = RehaWissen.proghome+"howto";
 	    			File file = new File(pfad,sitem+".html");
 	    			if (file.exists()) {
-	    				rtaWissen.highlight = true;
+	    				RtaWissen.highlight = true;
 	    				rtaWissen.Navigiere(SystemConfig.HilfeServer+((String)((Vector)dateien.get(i)).get(2)));
 	    			}else{
-	    				rtaWissen.highlight = true;	    				
+	    				RtaWissen.highlight = true;	    				
 	    				rtaWissen.Navigiere(SystemConfig.HilfeServer+((String)((Vector)dateien.get(i)).get(2)));
 	    			}
 	    			break;
@@ -681,7 +656,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 		stmtx = null;
 		rsx = null;
 		try {
-			stmtx = (Statement) RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			        ResultSet.CONCUR_UPDATABLE );
 			
 		} catch (SQLException e) {
@@ -724,7 +699,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 		rsx = null;
 			
 		try {
-			stmtx = (Statement) RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			        ResultSet.CONCUR_UPDATABLE );
 			
 		} catch (SQLException e) {
@@ -737,7 +712,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 			try {
 				rsx = stmtx.executeQuery("select titel,gruppe,datei from htitel where gruppe='"+gruppen.get(i).trim()+"'");		
 				try {
-					stmtx = (Statement) RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
@@ -780,7 +755,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 					BrowserFenster.hilfsDateien((Vector) items.clone());
 					//System.out.println(items);
 				}	
-				BrowserFenster.thisClass.root.add(node);
+				BrowserFenster.root.add(node);
 				BrowserFenster.thisClass.tree.validate();
 			}catch(SQLException e){
 				e.printStackTrace();
@@ -871,7 +846,7 @@ class SharedListSelectionHandler implements ListSelectionListener {
             for (int i = minIndex; i <= maxIndex; i++) {
                 if (lsm.isSelectedIndex(i)) {
                 	String url = (String)BrowserFenster.thisClass.themenDtblm.getValueAt(i,2);
-                	BrowserFenster.thisClass.rtaWissen.highlight = false;
+                	RtaWissen.highlight = false;
                 	BrowserFenster.thisClass.rtaWissen.Navigiere(SystemConfig.HilfeServer+url);
                 	//helpFenster.thisClass.stitel.setText(
                 			//(String)helpFenster.thisClass.tblThemen.getValueAt(i,0)) ;
@@ -951,7 +926,7 @@ final class MachSuche extends SwingWorker<Void,Void>{
 					rsx = null;
 					//System.out.println("In holeTitel");
 					try {
-						stmtx = (Statement) RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+						stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 						        ResultSet.CONCUR_UPDATABLE );
 						
 					} catch (SQLException e) {

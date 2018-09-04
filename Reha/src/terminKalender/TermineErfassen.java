@@ -185,7 +185,7 @@ public class TermineErfassen implements Runnable {
 		return;
 	}
 	private void setTerminSuccess(boolean xsuccess){
-		this.success = xsuccess;
+		TermineErfassen.success = xsuccess;
 	}
 	public static boolean getTerminSuccess(){
 		return success;
@@ -207,14 +207,14 @@ public class TermineErfassen implements Runnable {
 			}
 						
 		}
-		String termine = (String)vec.get(0);
+		String termine = vec.get(0);
 		//Tag ist bereits erfaßt !
 		if(termine.contains(DatFunk.sHeute())){
 			//JOptionPane.showMessageDialog(null, "Dieser Termin wurde heute bereits erfa�t");
 			return 3;
 		}
-		unter18 =  ( ((String)vec.get(6)).equals("T") ? true : false );
-		vorjahrfrei = ( ((String)vec.get(7)).equals("") ? false : true );
+		unter18 =  ( vec.get(6).equals("T") ? true : false );
+		vorjahrfrei = ( vec.get(7).equals("") ? false : true );
 		// 0 = Tage ist noch nicht erfaßt
 		return 0;
 	}
@@ -251,8 +251,8 @@ public class TermineErfassen implements Runnable {
 			//System.out.println(copyright.trim());
 			//System.out.println("if(!(String)obj[4]).contains(copyright.trim()) "+ obj[4]+" contains("+copyright.trim()+")");
 			if( !((String)obj[4]).contains(copyright.trim())){
-				this.kollege = String.valueOf((String)obj[1]);
-				string = "Rezeptnummer wurde gefunden bei Kollege "+(String)obj[1]+" an Block "+(Integer)obj[2]+" Rezeptnummer:"+(String)obj[3];
+				this.kollege = String.valueOf(obj[1]);
+				string = "Rezeptnummer wurde gefunden bei Kollege "+(String)obj[1]+" an Block "+obj[2]+" Rezeptnummer:"+(String)obj[3];
 				String stmt = " sperre = '"+(String)obj[1]+heute+"'";
 				////System.out.println(stmt);
 				int gesperrt = SqlInfo.zaehleSaetze("flexlock", stmt);
@@ -286,7 +286,7 @@ public class TermineErfassen implements Runnable {
 							if((ansicht = Reha.thisClass.terminpanel.ansicht) == 0){
 								if(Reha.thisClass.terminpanel.getAktuellerTag().equals(DatFunk.sHeute())){
 									int iblock = Integer.valueOf(sblock)-1;
-									((ArrayList<Vector<String>>)((Vector)Reha.thisClass.terminpanel.getDatenVector()).get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
+									((ArrayList<Vector<String>>)Reha.thisClass.terminpanel.getDatenVector().get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
 									Reha.thisClass.terminpanel.ViewPanel.repaint();
 								}else{
 									//System.out.println("Aktueller Tag = "+Reha.thisClass.terminpanel.getAktuellerTag());
@@ -348,13 +348,13 @@ public class TermineErfassen implements Runnable {
 					//int block = ((y*5)+1);
 					if( ((String) ((Vector)alleterm.get(i)).get( ((y*5)+1) )).contains(scanrez) ){
 						obj[0] = Boolean.valueOf(true); //gefunden
-						obj[1] = (String) ((Vector)alleterm.get(i)).get(bloecke-4) ;//Kollege
+						obj[1] = ((Vector)alleterm.get(i)).get(bloecke-4) ;//Kollege
 						obj[2] = ((y*5)+1);//Blocknummer
-						obj[3] = (String) ((Vector)alleterm.get(i)).get( ((y*5)+1) ); // Rezeptnummer
-						obj[4] = (String) ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
-						obj[5] = (String) ((Vector)alleterm.get(i)).get( ((y*5))+2 ); // Beginn
-						obj[6] = (String) ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
-						obj[7] = (String) ((Vector)alleterm.get(i)).get(bloecke-2) ;//Datum
+						obj[3] = ((Vector)alleterm.get(i)).get( ((y*5)+1) ); // Rezeptnummer
+						obj[4] = ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
+						obj[5] = ((Vector)alleterm.get(i)).get( ((y*5))+2 ); // Beginn
+						obj[6] = ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
+						obj[7] = ((Vector)alleterm.get(i)).get(bloecke-2) ;//Datum
 						//((Vector)alleterm.get(i)).set((y*5), copyright+String.valueOf((String)obj[4]));
 						//System.out.println("Gefunden in Spalte "+Integer.toString(i+1)+
 						//		" in Block "+Integer.toString(y+1)+" Ergebnis = "+obj[3]);
@@ -407,13 +407,13 @@ public class TermineErfassen implements Runnable {
 				//int block = ((y*5)+1);
 				if( ((String) ((Vector)alleterm.get(i)).get( ((y*5)+1) )).contains(scanrez) ){
 					obj[0] = Boolean.valueOf(true); //gefunden
-					obj[1] = (String) ((Vector)alleterm.get(i)).get(bloecke-4) ;//Kollege
+					obj[1] = ((Vector)alleterm.get(i)).get(bloecke-4) ;//Kollege
 					obj[2] = ((y*5)+1);//Blocknummer
-					obj[3] = (String) ((Vector)alleterm.get(i)).get( ((y*5)+1) ); // Rezeptnummer
-					obj[4] = (String) ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
-					obj[5] = (String) ((Vector)alleterm.get(i)).get( ((y*5))+2 ); // Beginn
-					obj[6] = (String) ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
-					obj[7] = (String) ((Vector)alleterm.get(i)).get(bloecke-2) ;//Datum
+					obj[3] = ((Vector)alleterm.get(i)).get( ((y*5)+1) ); // Rezeptnummer
+					obj[4] = ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
+					obj[5] = ((Vector)alleterm.get(i)).get( ((y*5))+2 ); // Beginn
+					obj[6] = ((Vector)alleterm.get(i)).get( ((y*5)) ); // Name
+					obj[7] = ((Vector)alleterm.get(i)).get(bloecke-2) ;//Datum
 					
 					if( !((String)obj[4]).contains(copyright.trim())){
 						mehrstellen++;
@@ -454,7 +454,7 @@ public class TermineErfassen implements Runnable {
 											termOk = true;
 										}
 										int iblock = Integer.valueOf(sblock)-1;
-										((ArrayList<Vector<String>>)((Vector)Reha.thisClass.terminpanel.getDatenVector()).get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
+										((ArrayList<Vector<String>>)Reha.thisClass.terminpanel.getDatenVector().get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
 									}else{
 										//System.out.println("Aktueller Tag = "+Reha.thisClass.terminpanel.getAktuellerTag());
 									}
@@ -490,8 +490,8 @@ public class TermineErfassen implements Runnable {
 		sbuftermine.setLength(0);
 		sbuftermine.toString();
 		vec2 = null;
-		if(! ((String)vec.get(0)).trim().equals("")){
-			sbuftermine.append((String)vec.get(0));
+		if(! vec.get(0).trim().equals("")){
+			sbuftermine.append(vec.get(0));
 		}
 		
 		Object[] objTerm = RezTools.BehandlungenAnalysieren(scanrez, false,false,false, ((Vector<String>)vec.clone()),null,this.kollege,DatFunk.sHeute());
@@ -607,10 +607,10 @@ public class TermineErfassen implements Runnable {
 			"@"+
 			text+
 			"@"+
-			(String)vec.get(1)+
-			( ((String)vec.get(2)).trim().equals("") ? "" : ","+ ((String)vec.get(2)) )+
-			( ((String)vec.get(3)).trim().equals("") ? "" : ","+ ((String)vec.get(3)) )+
-			( ((String)vec.get(4)).trim().equals("") ? "" : ","+ ((String)vec.get(4)) )+
+			vec.get(1)+
+			( vec.get(2).trim().equals("") ? "" : ","+ (vec.get(2)) )+
+			( vec.get(3).trim().equals("") ? "" : ","+ (vec.get(3)) )+
+			( vec.get(4).trim().equals("") ? "" : ","+ (vec.get(4)) )+
 			"@"+
 			DatFunk.sDatInSQL(DatFunk.sHeute())+"\n";
 		return ret;
@@ -690,7 +690,7 @@ public class TermineErfassen implements Runnable {
 			if (vec.size() > 0){
 				termbuf = new StringBuffer();
 				if(alletermine){
-					termbuf.append((String) vec.get(0));	
+					termbuf.append(vec.get(0));	
 				}
 				
 				Vector<ArrayList<?>> termine = RezTools.holePosUndAnzahlAusTerminen(swreznum);
@@ -701,7 +701,7 @@ public class TermineErfassen implements Runnable {
 						hMPos.get(i).vOMenge = 0;
 					}else{
 						hMPos.get(i).hMPosNr = String.valueOf(vec.get(1+i));
-						hMPos.get(i).vOMenge = Integer.parseInt( (String) vec.get(i+11) );
+						hMPos.get(i).vOMenge = Integer.parseInt( vec.get(i+11) );
 						hMPos.get(i).vorrangig = (Boolean)((ArrayList<?>)((Vector<?>)termine).get(2)).get(i);
 						hMPos.get(i).invOBelegt = true;
 					}
@@ -802,7 +802,7 @@ public class TermineErfassen implements Runnable {
 				// TerminBestätigenAuswahlFenster anzeigen oder überspringen
 				if (xforceDlg || (!springen && (Boolean)SystemConfig.hmTerminBestaetigen.get("dlgzeigen") ) ){
 							
-							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.thisFrame,null,(Vector<BestaetigungsDaten>)hMPos,swreznum,Integer.parseInt((String)vec.get(15)));
+							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.thisFrame,null,hMPos,swreznum,Integer.parseInt(vec.get(15)));
 							termBestAusw.pack();
 							if(pt==null){
 								termBestAusw.setLocationRelativeTo(null);
@@ -853,10 +853,10 @@ public class TermineErfassen implements Runnable {
 						}						
 
 						termbuf.append(TermineErfassen.macheNeuTermin2(
-								(String) (hMPos.get(0).best ? vec.get(1) : ""),
-								(String) (hMPos.get(1).best ? vec.get(2) : ""),
-								(String) (hMPos.get(2).best ? vec.get(3) : ""),
-								(String) (hMPos.get(3).best ? vec.get(4) : ""),
+								hMPos.get(0).best ? vec.get(1) : "",
+								hMPos.get(1).best ? vec.get(2) : "",
+								hMPos.get(2).best ? vec.get(3) : "",
+								hMPos.get(3).best ? vec.get(4) : "",
 								(thisClass == null ?  null : thisClass.kollege),
 								datum));
 						//hier zunächst den neuen Termin basteln;
@@ -866,10 +866,10 @@ public class TermineErfassen implements Runnable {
 					}
 				}
 				termbuf.append(TermineErfassen.macheNeuTermin2(
-						(String) (hMPos.get(0).best ? vec.get(1) : ""),
-						(String) (hMPos.get(1).best ? vec.get(2) : ""),
-						(String) (hMPos.get(2).best ? vec.get(3) : ""),
-						(String) (hMPos.get(3).best ? vec.get(4) : ""),
+						hMPos.get(0).best ? vec.get(1) : "",
+						hMPos.get(1).best ? vec.get(2) : "",
+						hMPos.get(2).best ? vec.get(3) : "",
+						hMPos.get(3).best ? vec.get(4) : "",
 						(thisClass == null ?  null : thisClass.kollege),
 						datum));
 				//hier zunächst den neuen Termin basteln;

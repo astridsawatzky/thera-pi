@@ -158,7 +158,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy"); //Konv.
 	
 	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;;
+	ISpreadsheetDocument spreadsheetDocument = null;
 	IDocument document  = null;
 	XSheetCellCursor cellCursor = null;
 	String sheetName = null;
@@ -189,7 +189,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 					}
 				}
 				chbstatement.addActionListener(al);
-				setzeFocus((JComponent) sqlstatement);
+				setzeFocus(sqlstatement);
 				return null;
 			}
 			
@@ -403,8 +403,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			int anzahl = inif.getIntegerProperty("SqlStatements", "StatementsAnzahl");
 			for(int i = 0; i < anzahl;i++){
 				vecstmts.clear();
-				vecstmts.add((String)inif.getStringProperty("SqlStatements", "StatementTitel"+Integer.toString(i+1)));
-				vecstmts.add((String)inif.getStringProperty("SqlStatements", "Statement"+Integer.toString(i+1)));
+				vecstmts.add(inif.getStringProperty("SqlStatements", "StatementTitel"+Integer.toString(i+1)));
+				vecstmts.add(inif.getStringProperty("SqlStatements", "Statement"+Integer.toString(i+1)));
 				vecStatements.add( ((Vector<String>)vecstmts.clone()) );
 			}
 			chbstatement.setDataVectorWithStartElement(vecStatements, 0, 1, "./.");
@@ -705,7 +705,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 						value = "null";
 					}
 				}else if(tabmod.getColumnClass(col) == Double.class){
-					value = dcf.format((Double)tabmod.getValueAt(row,col)).replace(",",".");
+					value = dcf.format(tabmod.getValueAt(row,col)).replace(",",".");
 				}else if(tabmod.getColumnClass(col) == Integer.class){
 					value = Integer.toString((Integer)tabmod.getValueAt(row,col));
 				}else if(tabmod.getColumnClass(col) == String.class){
@@ -871,10 +871,10 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			            ResultSet.CONCUR_UPDATABLE );
 			rs = stmt.executeQuery(sqlstatement.getText().trim());
 			
-			md = (ResultSetMetaData) rs.getMetaData();
+			md = rs.getMetaData();
 			
 			int cols = md.getColumnCount();
-			String table0 = null;;
+			String table0 = null;
 			for(int i = 0; i < cols;i++){
 				
 				colName.add(md.getColumnName(i+1));
@@ -1089,11 +1089,11 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 					//System.out.println(y+" Durchlauf = "+ obj.getClass());
 					if(obj!=null){
 						if(obj instanceof Double){
-							OOTools.doCellValue(cellCursor, y, i+1, (Double) obj);
+							OOTools.doCellValue(cellCursor, y, i+1, obj);
 						}else if(obj instanceof Integer){
-							OOTools.doCellValue(cellCursor, y, i+1, (Integer) obj);
+							OOTools.doCellValue(cellCursor, y, i+1, obj);
 						}else if(obj instanceof Boolean){
-							OOTools.doCellValue(cellCursor, y, i+1, (String) (obj==Boolean.TRUE ? "ja" : "nein"));
+							OOTools.doCellValue(cellCursor, y, i+1, obj==Boolean.TRUE ? "ja" : "nein");
 						}else if(obj instanceof Date){
 							try{
 								if(datumsFormat.format(obj).length()==10){
@@ -1101,14 +1101,14 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 									OOTools.doCellDateFormatGerman(spreadsheetDocument, cellCursor, y, i+1,true);
 								}
 							}catch(Exception ex){
-								OOTools.doCellValue(cellCursor, y, i+1, (String)obj.toString());
+								OOTools.doCellValue(cellCursor, y, i+1, obj.toString());
 							}
 						}else if(obj instanceof Long){
-							OOTools.doCellValue(cellCursor, y, i+1, (Long) obj);
+							OOTools.doCellValue(cellCursor, y, i+1, obj);
 						}else if(obj instanceof Short){
-							OOTools.doCellValue(cellCursor, y, i+1, (Integer) obj);
+							OOTools.doCellValue(cellCursor, y, i+1, obj);
 						}else{
-							OOTools.doCellValue(cellCursor, y, i+1, (String) obj);
+							OOTools.doCellValue(cellCursor, y, i+1, obj);
 						}
 					}
 				}
@@ -1142,11 +1142,11 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
         docdescript.setAsTemplate(true);
 		document = documentService.constructNewDocument(IDocument.CALC, docdescript);
 		spreadsheetDocument = (ISpreadsheetDocument) document;
-		OOTools.setzePapierFormatCalc((ISpreadsheetDocument) spreadsheetDocument, 21000, 29700);
-		OOTools.setzeRaenderCalc((ISpreadsheetDocument) spreadsheetDocument, 1000,1000, 1000, 1000);
+		OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
+		OOTools.setzeRaenderCalc(spreadsheetDocument, 1000,1000, 1000, 1000);
 		sheetName= "Tabelle1";
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();		
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		cellCursor = spreadsheet1.createCursor();
 	}
 }	

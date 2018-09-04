@@ -299,9 +299,9 @@ class MyArztTableModel extends DefaultTableModel{
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			Object theData = null;
 			if(columnIndex > 0){
-				theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);				
+				theData = ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);				
 			}else{
-				theData = (Boolean) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);
+				theData = ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);
 			}
 			Object result = null;
 			result = theData;

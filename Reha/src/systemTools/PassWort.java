@@ -125,8 +125,8 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 		for(i=0;i<size;i++){
 			////System.out.println(ParameterLaden.pKollegen.get(i).get(1));
 			if(test.equals(ParameterLaden.pKollegen.get(i).get(1))){
-				name = (String) ParameterLaden.pKollegen.get(i).get(0);
-				rechte = (String) ParameterLaden.pKollegen.get(i).get(2);
+				name = ParameterLaden.pKollegen.get(i).get(0);
+				rechte = ParameterLaden.pKollegen.get(i).get(2);
 				////System.out.println("Rechte = "+rechte);
 				Reha.progRechte = rechte;
 				Reha.thisFrame.setTitle(Reha.Titel+Reha.Titel2+"  -->  [Benutzer: "+name+"]");

@@ -56,7 +56,7 @@ public class RezeptFahnder {
 					}
 					
 					String s1 = "#PATSUCHEN";
-					String s2 = (String) xpat_int;
+					String s2 = xpat_int;
 					PatStammEvent pEvt = new PatStammEvent(this);
 					pEvt.setPatStammEvent("PatSuchen");
 					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
@@ -78,7 +78,7 @@ public class RezeptFahnder {
 			try{
 			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
 			String s1 = "#PATSUCHEN";
-			String s2 = (String) pat_intern;
+			String s2 = pat_intern;
 			PatStammEvent pEvt = new PatStammEvent(this);
 			pEvt.setPatStammEvent("PatSuchen");
 			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;

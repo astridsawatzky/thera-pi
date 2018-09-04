@@ -449,9 +449,9 @@ public class NachsorgePDF {
 		ph = new Phrase();
 		ph.setFont(FontFactory.getFont("Courier",9,Font.PLAIN));
 		if(ierlaeut > 0){
-			ph.add((String)this.eltern.bta[9].getText());			
+			ph.add(this.eltern.bta[9].getText());			
 		}else{
-			ph.add((String)this.eltern.bta[8].getText());
+			ph.add(this.eltern.bta[8].getText());
 		}
 		ct.addText(ph);
 		try {
@@ -508,7 +508,7 @@ public class NachsorgePDF {
 		
 		ph = new Phrase();
 		ph.setFont(FontFactory.getFont("Courier",9,Font.PLAIN));
-		ph.add((String)eltern.ktlcmb[ktlpos].getSelectedItem());
+		ph.add(eltern.ktlcmb[ktlpos].getSelectedItem());
 		ct.addText(ph);
 		try {
 			ct.go();

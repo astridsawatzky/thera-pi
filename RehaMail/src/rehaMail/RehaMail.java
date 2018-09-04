@@ -226,7 +226,7 @@ public class RehaMail implements WindowListener {
 				
 			RehaMail application = new RehaMail();
 			application.getInstance();
-			application.getInstance().sqlInfo = new SqlInfo();;
+			application.getInstance().sqlInfo = new SqlInfo();
 			final RehaMail xapplication = application;
 			new SwingWorker<Void,Void>(){
 				@Override
@@ -264,8 +264,8 @@ public class RehaMail implements WindowListener {
 							Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
 								@Override
 								public int compare(Vector<String> o1, Vector<String> o2) {
-									String s1 = (String)o1.get(0);
-									String s2 = (String)o2.get(0);
+									String s1 = o1.get(0);
+									String s2 = o2.get(0);
 									return s1.compareTo(s2);
 								}
 							};
@@ -291,11 +291,7 @@ public class RehaMail implements WindowListener {
 			
 			new Thread(){
 				public void run(){
-					try {
-						RehaMail.starteOfficeApplication();
-					} catch (OfficeApplicationException e) {
-						e.printStackTrace();
-					}		
+					RehaMail.starteOfficeApplication();		
 				}
 			}.start();
 			
@@ -551,7 +547,7 @@ public class RehaMail implements WindowListener {
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
     			RehaMail.thisClass.sqlInfo.setConnection(obj.conn);
 				RehaMail.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
@@ -613,7 +609,7 @@ public class RehaMail implements WindowListener {
     			connProperties.setProperty("compression","false");
     			connProperties.setProperty("NO_DRIVER_INFO", "1");
 
-    			obj.conn = (Connection) DriverManager.getConnection("jdbc:jpmdbc:http://www.thera-pi.org/jpmdbc.php?db336243054",connProperties);
+    			obj.conn = DriverManager.getConnection("jdbc:jpmdbc:http://www.thera-pi.org/jpmdbc.php?db336243054",connProperties);
         		
    				//obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
 				RehaMail.DbOk = true;
@@ -728,11 +724,11 @@ public class RehaMail implements WindowListener {
 	/**
 	 * @throws Throwable *************************/
 	
-    public static void starteOfficeApplication() throws OfficeApplicationException{ 
+    public static void starteOfficeApplication(){ 
 
     	try {
     		System.out.println(RehaMail.officeProgrammPfad+" / "+RehaMail.officeNativePfad);
-			officeapplication = (IOfficeApplication)new StartOOApplication(RehaMail.officeProgrammPfad,RehaMail.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(RehaMail.officeProgrammPfad,RehaMail.officeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();

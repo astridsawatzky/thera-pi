@@ -106,7 +106,7 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 	    setLocation(pt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 		pack();
 		
@@ -201,7 +201,7 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 					ListenerTools.removeListeners(tabbericht);
 					ListenerTools.removeListeners(uebernahme);
 					ListenerTools.removeListeners(abbrechen);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					super.dispose();
 					this.dispose();
@@ -216,7 +216,7 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			ListenerTools.removeListeners(tabbericht);
 			ListenerTools.removeListeners(uebernahme);

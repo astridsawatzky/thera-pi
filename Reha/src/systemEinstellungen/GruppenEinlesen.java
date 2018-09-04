@@ -52,11 +52,11 @@ public class GruppenEinlesen{
 						gruppenParam.add(ini.getStringProperty(rubrik,"TA"+k+"ZE"+l));
 						gruppenParam.add(ini.getStringProperty(rubrik,"TA"+k+"TX"+l));						
 						gruppenParam.add(ini.getStringProperty(rubrik,"TA"+k+"DA"+l));
-						gruppeAmTag.add((Vector)gruppenParam.clone());
+						gruppeAmTag.add(gruppenParam.clone());
 					}//Ende einzelne Tage einlesen
-					gruppeTag.add((Vector)gruppeAmTag.clone());	
+					gruppeTag.add(gruppeAmTag.clone());	
 				}//Ende alle Wochentage
-				gruppeWoche.add((Vector)gruppeTag.clone());
+				gruppeWoche.add(gruppeTag.clone());
 			}//Ende alte / neue Definition
 			gruppeAlle.add((Vector)gruppeWoche.clone());
 		}//Ende alle Gruppen

@@ -53,7 +53,7 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
         } 
         switch (column) {
         case 0:
-			o.indischl =((String) ((JLabel)value).getText()) ;
+			o.indischl =(((JLabel)value).getText()) ;
 			break;
         case 1:
 			o.grunddaten =((String) value) ;
@@ -107,13 +107,13 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
     public String getColumnName(int column) {
         switch (column) {
         case 0:
-            return "Indik.Schlüssel";
+            return "Indik.Schlï¿½ssel";
         case 1:
             return "Grunddaten";
         case 2:
             return "vorrangige HM";
         case 3:
-            return "ergänzende HM";
+            return "ergï¿½nzende HM";
         default:
             return "Column " + (column + 1);
         }

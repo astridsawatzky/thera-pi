@@ -167,12 +167,12 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		modkuerzel.setRowCount(0);
 		for(int i = 0; i < lang;i++){
 			dummy.clear();
-			dummy.add((String)vec.get(i).get(this.I_KUERZEL));
-			dummy.add((String)vec.get(i).get(this.I_LEISTUNG));
-			dummy.add((String)vec.get(i).get(this.I_DISZIPLIN));
-			dummy.add((Boolean)(vec.get(i).get(this.I_VORRANGIG).equals("T") ? true : false));
-			dummy.add((Boolean)(vec.get(i).get(this.I_EXTRAOK).equals("T") ? true : false));
-			dummy.add((String)vec.get(i).get(this.I_ID));
+			dummy.add(vec.get(i).get(this.I_KUERZEL));
+			dummy.add(vec.get(i).get(this.I_LEISTUNG));
+			dummy.add(vec.get(i).get(this.I_DISZIPLIN));
+			dummy.add(vec.get(i).get(this.I_VORRANGIG).equals("T") ? true : false);
+			dummy.add(vec.get(i).get(this.I_EXTRAOK).equals("T") ? true : false);
+			dummy.add(vec.get(i).get(this.I_ID));
 			modkuerzel.addRow((Vector<Object>)dummy.clone());
 		}
 		tblkuerzel.validate();
@@ -239,8 +239,8 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		aktuelleRow = row;
 		ret[0] = modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 0).toString();
 		ret[1] = modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 1).toString();
-		ret[2] = ((Boolean) modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 3));
-		ret[3] = ((Boolean) modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 4));
+		ret[2] = (modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 3));
+		ret[3] = (modkuerzel.getValueAt(tblkuerzel.convertRowIndexToModel(row), 4));
 		return ret;
 	}
 	public void updateKuerzel(String kurz,String lang,Boolean vorrang,Boolean separat){
@@ -250,10 +250,10 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		SqlInfo.sqlAusfuehren(cmd);
 		int row = tblkuerzel.getSelectedRow();
 		
-		modkuerzel.setValueAt((String) kurz, tblkuerzel.convertRowIndexToModel(row), 0);
-		modkuerzel.setValueAt((String) lang, tblkuerzel.convertRowIndexToModel(row), 1);
-		modkuerzel.setValueAt((Boolean) vorrang, tblkuerzel.convertRowIndexToModel(row), 3);
-		modkuerzel.setValueAt((Boolean) separat, tblkuerzel.convertRowIndexToModel(row), 4);
+		modkuerzel.setValueAt(kurz, tblkuerzel.convertRowIndexToModel(row), 0);
+		modkuerzel.setValueAt(lang, tblkuerzel.convertRowIndexToModel(row), 1);
+		modkuerzel.setValueAt(vorrang, tblkuerzel.convertRowIndexToModel(row), 3);
+		modkuerzel.setValueAt(separat, tblkuerzel.convertRowIndexToModel(row), 4);
 		tblkuerzel.validate();
 	}
 	public void insertKuerzel(String kurz,String lang,Boolean vorrang,Boolean separat){

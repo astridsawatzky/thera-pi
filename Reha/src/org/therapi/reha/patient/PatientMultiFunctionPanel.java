@@ -25,7 +25,7 @@ public class PatientMultiFunctionPanel extends JXPanel{
 		setLayout(new BorderLayout());
 		setOpaque(false);
 		this.patientHauptPanel = patHauptPanel;
-		add(getTabs(),BorderLayout.CENTER);;
+		add(getTabs(),BorderLayout.CENTER);
 	}
 	public void fireAufraeumen(){
 		patientHauptPanel = null;

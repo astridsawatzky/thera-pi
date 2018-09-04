@@ -35,7 +35,7 @@ public class MyTableComboBox extends AbstractCellEditor implements TableCellEdit
 				((JRtaComboBox)component).setSelectedVecIndex(0, (String)table.getValueAt(rowIndex,vColIndex) );
 				((JRtaComboBox)component).setVisible(true);
 			}else{
-				((JRtaComboBox)component).setSelectedItem( (String)table.getValueAt(rowIndex,vColIndex) );
+				((JRtaComboBox)component).setSelectedItem( table.getValueAt(rowIndex,vColIndex) );
 			}
 			return component;
 		} // This method is called when editing is completed. 

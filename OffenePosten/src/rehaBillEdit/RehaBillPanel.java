@@ -447,7 +447,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		buts[1].setEnabled(false);
 		buts[3].setEnabled(true);
 		int modvec = tab.convertRowIndexToModel(row);
-		Vector<Vector<Object>> vec = (Vector<Vector<Object>>) tabmod.getDataVector();
+		Vector<Vector<Object>> vec = tabmod.getDataVector();
 		tabmod.addRow( (Vector<?>) vec.get(modvec).clone());
 		tabmod.setValueAt(tabmod.getRowCount()-1, tabmod.getRowCount()-1, 5);
 		tabmod.setValueAt(-1, tabmod.getRowCount()-1, tabmod.getColumnCount()+ccount);
@@ -519,7 +519,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 				}
 			}
 		}else if(tabmod.getColumnClass(col) == Double.class){
-			value = dcf.format((Double)tabmod.getValueAt(row,col)).replace(",",".");
+			value = dcf.format(tabmod.getValueAt(row,col)).replace(",",".");
 		}else if(tabmod.getColumnClass(col) == Integer.class){
 			value = Integer.toString((Integer)tabmod.getValueAt(row,col));
 		}else if(tabmod.getColumnClass(col) == String.class){
@@ -647,7 +647,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 				}else if(tabmod.getColumnClass(col) == Date.class){
 					value = tabmod.getValueAt(row,col).toString();
 				}else if(tabmod.getColumnClass(col) == Double.class){
-					value = dcf.format((Double)tabmod.getValueAt(row,col)).replace(",",".");
+					value = dcf.format(tabmod.getValueAt(row,col)).replace(",",".");
 				}else if(tabmod.getColumnClass(col) == Integer.class){
 					value = Integer.toString((Integer)tabmod.getValueAt(row,col));
 				}else if(tabmod.getColumnClass(col) == String.class){
@@ -1282,7 +1282,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 	/*********************************************************************/	
 	public void starteDokument(String url) throws Exception{
 		System.out.println("Starte Dokument = "+url);
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		documentService = OffenePosten.officeapplication.getDocumentService();
 		IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);

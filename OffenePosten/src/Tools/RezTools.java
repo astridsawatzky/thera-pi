@@ -52,7 +52,7 @@ public class RezTools {
 			if(xvec.size()==0){
 				return (Vector<String>)retvec.clone();
 			}else{
-				terms = (String) xvec.get(0);	
+				terms = xvec.get(0);	
 			}
 		}else{
 			terms = termine;

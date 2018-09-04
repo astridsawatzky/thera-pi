@@ -755,7 +755,7 @@ public class AbrechnungReha extends JXPanel{
 		vecpos.add(tfpatgesamt[0].getText().trim());
 		vecpos.add(jcmbpat[0].getValueAt(2).toString());
 		vecpos.add(jcmbpat[0].getValueAt(9).toString());
-		vecposrechnung.add((Vector<String>)((Vector<String>)vecpos).clone() );
+		vecposrechnung.add((Vector<String>)vecpos.clone() );
 		gesamtPreis = BigDecimal.valueOf(Double.parseDouble(tfpatgesamt[0].getText().trim().replace(",", ".")));
 
 		starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
@@ -956,7 +956,7 @@ public class AbrechnungReha extends JXPanel{
 						vecpos.add("");
 						vecpos.add("");
 					}
-					vecposrechnung.add((Vector<String>)((Vector<String>)vecpos).clone() );
+					vecposrechnung.add((Vector<String>)vecpos.clone() );
 				}
 			}
 			

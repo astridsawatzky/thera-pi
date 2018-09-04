@@ -85,13 +85,13 @@ public class BerichtDrucken extends JXPanel implements ActionListener, KeyListen
 				checks[i].setEnabled(false);
 			}
 			exemplare[i] = eltern.druckversion[i];
-			eltern.druckversion[i] = -1;;
+			eltern.druckversion[i] = -1;
 
 		}
 		checks[5].setForeground(Color.RED);
 		checks[5].addKeyListener(this);
 		checks[5].setFont(fon);
-		eltern.druckversion[5] = -1;;
+		eltern.druckversion[5] = -1;
 		checks[0].requestFocus();
 		
 		validate();

@@ -22,7 +22,7 @@ public class JAnmeldungenInternal extends JRehaInternal implements RehaEventList
 	public JAnmeldungenInternal(String titel, ImageIcon img, int desktop) {
 		super(titel, img, desktop);
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 	}
 	@Override
 	public void internalFrameClosing(InternalFrameEvent arg0) {
@@ -36,7 +36,7 @@ public class JAnmeldungenInternal extends JRehaInternal implements RehaEventList
 		//nächsten JInternalFrame aktivieren
 		Reha.thisClass.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
-		rEvent.removeRehaEventListener((RehaEventListener) this);
+		rEvent.removeRehaEventListener(this);
 		((Anmeldungen)this.inhalt).doAufraeumen();
 		this.removeInternalFrameListener(this);
 		//

@@ -152,44 +152,44 @@ public class OffenePosten implements WindowListener{
 							Thread.sleep(30);
 						}
 						INIFile oinif = INITool.openIni(arg0+"ini/"+arg1+"/", "offeneposten.ini");
-						mahnParameter.put("frist1", (Integer) oinif.getIntegerProperty("General","TageBisMahnung1") );
-						mahnParameter.put("frist2", (Integer) oinif.getIntegerProperty("General","TageBisMahnung2") );
-						mahnParameter.put("frist3", (Integer) oinif.getIntegerProperty("General","TageBisMahnung3") );
-						mahnParameter.put("einzelmahnung", (Boolean) (oinif.getIntegerProperty("General","EinzelMahnung") == 1 ? Boolean.TRUE : Boolean.FALSE) );
-						mahnParameter.put("drucker", (String) oinif.getStringProperty("General","MahnungDrucker") );
-						mahnParameter.put("exemplare", (Integer) oinif.getIntegerProperty("General","MahnungExemplare") );
-						mahnParameter.put("inofficestarten", (Boolean) (oinif.getIntegerProperty("General","InOfficeStarten") == 1 ? Boolean.TRUE : Boolean.FALSE) );
-						mahnParameter.put("erstsuchenab", (String) oinif.getStringProperty("General","AuswahlErstAb") );
+						mahnParameter.put("frist1", oinif.getIntegerProperty("General","TageBisMahnung1") );
+						mahnParameter.put("frist2", oinif.getIntegerProperty("General","TageBisMahnung2") );
+						mahnParameter.put("frist3", oinif.getIntegerProperty("General","TageBisMahnung3") );
+						mahnParameter.put("einzelmahnung", oinif.getIntegerProperty("General","EinzelMahnung") == 1 ? Boolean.TRUE : Boolean.FALSE );
+						mahnParameter.put("drucker", oinif.getStringProperty("General","MahnungDrucker") );
+						mahnParameter.put("exemplare", oinif.getIntegerProperty("General","MahnungExemplare") );
+						mahnParameter.put("inofficestarten", oinif.getIntegerProperty("General","InOfficeStarten") == 1 ? Boolean.TRUE : Boolean.FALSE );
+						mahnParameter.put("erstsuchenab", oinif.getStringProperty("General","AuswahlErstAb") );
 						/***/
 						String forms = oinif.getStringProperty("General","FormularMahnung1") ;
 						if(forms.indexOf("/") > 0){
 							forms = forms.substring(forms.lastIndexOf("/")+1);
 						}
-						mahnParameter.put("formular1", (String) progHome+"vorlagen/"+aktIK+"/"+forms );
+						mahnParameter.put("formular1", progHome+"vorlagen/"+aktIK+"/"+forms );
 						/***/
 						forms = oinif.getStringProperty("General","FormularMahnung2") ;
 						if(forms.indexOf("/") > 0){
 							forms = forms.substring(forms.lastIndexOf("/")+1);
 						}
-						mahnParameter.put("formular2", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+						mahnParameter.put("formular2", progHome+"vorlagen/"+aktIK+"/"+forms  );
 						/***/
 						forms = oinif.getStringProperty("General","FormularMahnung3") ;
 						if(forms.indexOf("/") > 0){
 							forms = forms.substring(forms.lastIndexOf("/")+1);
 						}
-						mahnParameter.put("formular3", (String) progHome+"vorlagen/"+aktIK+"/"+forms  );
+						mahnParameter.put("formular3", progHome+"vorlagen/"+aktIK+"/"+forms  );
 						/***/
 						forms = oinif.getStringProperty("General","FormularMahnung4") ;
 						if(forms.indexOf("/") > 0){
 							forms = forms.substring(forms.lastIndexOf("/")+1);
 						}
-						mahnParameter.put("formular4", (String) progHome+"vorlagen/"+aktIK+"/"+forms   );
+						mahnParameter.put("formular4", progHome+"vorlagen/"+aktIK+"/"+forms   );
 						/***/
 						//System.out.println(mahnParameter.get("formular1"));
 						//System.out.println(mahnParameter.get("formular2"));
 						//System.out.println(mahnParameter.get("formular3"));
 						//System.out.println(mahnParameter.get("formular4"));
-						mahnParameter.put("diralterechnungen", (String) oinif.getStringProperty("General","DirAlteRechnungen")  );
+						mahnParameter.put("diralterechnungen", oinif.getStringProperty("General","DirAlteRechnungen")  );
 						//System.out.println(mahnParameter);
 						AbrechnungParameter(progHome);
 						FirmenDaten(progHome);
@@ -203,18 +203,18 @@ public class OffenePosten implements WindowListener{
 				}
 
 			}else{
-				mahnParameter.put("frist1", (Integer) 31 );
-				mahnParameter.put("frist2", (Integer) 11 );
-				mahnParameter.put("frist3", (Integer) 11);
-				mahnParameter.put("einzelmahnung", (Boolean) Boolean.TRUE);
-				mahnParameter.put("drucker", (String) "RICOH Aficio MP C2800 PS SW" );
-				mahnParameter.put("exemplare", (Integer) 5 );
-				mahnParameter.put("inofficestarten", (Boolean) Boolean.TRUE);
-				mahnParameter.put("erstsuchenab", (String) "2009-01-01" );
-				mahnParameter.put("formular1", (String) "2009-01-01" );
-				mahnParameter.put("formular2", (String) "2009-01-01" );
-				mahnParameter.put("formular3", (String) "2009-01-01" );
-				mahnParameter.put("formular4", (String) "2009-01-01" );
+				mahnParameter.put("frist1", 31 );
+				mahnParameter.put("frist2", 11 );
+				mahnParameter.put("frist3", 11);
+				mahnParameter.put("einzelmahnung", Boolean.TRUE);
+				mahnParameter.put("drucker", "RICOH Aficio MP C2800 PS SW" );
+				mahnParameter.put("exemplare", 5 );
+				mahnParameter.put("inofficestarten", Boolean.TRUE);
+				mahnParameter.put("erstsuchenab", "2009-01-01" );
+				mahnParameter.put("formular1", "2009-01-01" );
+				mahnParameter.put("formular2", "2009-01-01" );
+				mahnParameter.put("formular3", "2009-01-01" );
+				mahnParameter.put("formular4", "2009-01-01" );
 				mahnParameter.put("diralterechnungen", "l:/projekte/rta/dbf/rechnung/" );
 				AbrechnungParameter(progHome);
 				FirmenDaten(progHome);
@@ -387,7 +387,7 @@ public class OffenePosten implements WindowListener{
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
    				OffenePosten.thisClass.sqlInfo.setConnection(obj.conn);
 				OffenePosten.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
@@ -523,7 +523,7 @@ public class OffenePosten implements WindowListener{
 	
     public static void starteOfficeApplication(){ 
     	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(OffenePosten.officeProgrammPfad,OffenePosten.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(OffenePosten.officeProgrammPfad,OffenePosten.officeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();

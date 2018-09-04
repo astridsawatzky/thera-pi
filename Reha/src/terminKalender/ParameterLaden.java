@@ -60,7 +60,7 @@ public static String getKollegenUeberReihe(int reihe){
 }
 
 public static Kollegen getKollegen(int i){
-	return ((Kollegen)vKKollegen.get(i));
+	return (vKKollegen.get(i));
 }
 
 public static String getKollegenUeberDBZeile(int reihe){
@@ -171,7 +171,7 @@ public static void Init(){
 
 	 	vKKollegen.add(new Kollegen("./.","","",0,"","F",0));
 
-	 	col[0][0] = (String) aKollegen.get(0);
+	 	col[0][0] = aKollegen.get(0);
 	 	aKollegen.clear();
 	 	durchlauf++;
 	 	String test = "";
@@ -202,9 +202,9 @@ public static void Init(){
 		 							aKollegen.get(2),
 		 							durchlauf) );
 		 	//vKKollegen.add(new Kollegen(rs.getString("Matchcode"),rs.getString("Nachname"),rs.getString("Nicht_Zeig"),durchlauf) );
-		 	col[durchlauf][0] = (String) aKollegen.get(0);
-		 	col[durchlauf][1] = (String) aKollegen.get(1);
-		 	col[durchlauf][2] = (String) aKollegen.get(2);
+		 	col[durchlauf][0] = aKollegen.get(0);
+		 	col[durchlauf][1] = aKollegen.get(1);
+		 	col[durchlauf][2] = aKollegen.get(2);
 		 	//col[durchlauf][3] = (String) aKollegen.get(3);		 	
 		 	aKollegen.clear();
 		 	durchlauf++;

@@ -38,7 +38,6 @@ import org.jdesktop.swingx.JXPanel;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
-import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 import org.thera_pi.nebraska.gui.utils.INIFile;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
 import org.thera_pi.nebraska.gui.utils.JRtaCheckBox;
@@ -521,7 +520,7 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 					if(ret.equals("")){
 						return;
 					}
-					NebraskaKeystore nebraskastore = new NebraskaKeystore(kfile,(String) pw,"abc",aliasIk,institution,person);
+					NebraskaKeystore nebraskastore = new NebraskaKeystore(kfile,pw,"abc",aliasIk,institution,person);
 					String pfad = this.therapidir+"keystore";
 					String source = FileStatics.dirChooser(pfad, "p7c.Datei auswählen");
 					if(!source.equals("")){
@@ -536,8 +535,6 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 				} catch (NebraskaCryptoException e) {
 					e.printStackTrace();
 				} catch (NebraskaFileException e) {
-					e.printStackTrace();
-				} catch (NebraskaNotInitializedException e) {
 					e.printStackTrace();
 				} catch (Exception ex){
 					ex.printStackTrace();

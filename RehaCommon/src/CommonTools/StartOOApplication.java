@@ -71,7 +71,7 @@ public class StartOOApplication {
             	officeapplication.getDesktopService().addTerminateListener(new VetoTerminateListener() {
             	public void queryTermination(ITerminateEvent terminateEvent) {
             		super.queryTermination(terminateEvent);
-            		IDocument[] docs = null;;
+            		IDocument[] docs = null;
 					try {
 						docs = officeapplication.getDocumentService().getCurrentDocuments();
 					} catch (DocumentException e) {

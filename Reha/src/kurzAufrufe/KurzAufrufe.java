@@ -259,7 +259,7 @@ class TelefonListe{
 				daten[1] = ((String) ((Vector<?>)((ArrayList<?>) tfobj).get(0)).get(i))+"\r\rKeine Zuordnung möglich!";
 				daten[2] = "keine RezNr.";
 				daten[4] = "???";
-				dvec.add((String[])daten);
+				dvec.add(daten);
 				continue;
 			}
 
@@ -304,12 +304,12 @@ class TelefonListe{
 		daten[0] =  ((String) ((Vector<?>)((ArrayList<?>) tfobj).get(2)).get(zaehler)).substring(0,5)+ " Uhr";
 		daten[1] = vec2.get(0)+", "+vec2.get(1);
 		daten[2] = xreznr;
-		String telefon = ( ((String)vec2.get(2)).trim().length() > 0  ? "p:"+((String)vec2.get(2)) : "" );
-		telefon = telefon + ( ((String)vec2.get(3)).trim().length() > 0 ? "\r"+"g:"+((String)vec2.get(3)) : "" );
-		telefon = telefon + ( ((String)vec2.get(4)).trim().length() > 0 ? "\r"+"m:"+((String)vec2.get(4)) : "" );		
-		telefon = telefon + ( ((String)vec2.get(5)).trim().length() > 0 ? "\r"+"e:"+((String)vec2.get(5)) : "" );
+		String telefon = ( vec2.get(2).trim().length() > 0  ? "p:"+(vec2.get(2)) : "" );
+		telefon = telefon + ( vec2.get(3).trim().length() > 0 ? "\r"+"g:"+(vec2.get(3)) : "" );
+		telefon = telefon + ( vec2.get(4).trim().length() > 0 ? "\r"+"m:"+(vec2.get(4)) : "" );		
+		telefon = telefon + ( vec2.get(5).trim().length() > 0 ? "\r"+"e:"+(vec2.get(5)) : "" );
 		daten[3] = telefon;
-		daten[4] = ( ((String)vec2.get(6)).equals("T") ? "JA!!!!" : "nein");
+		daten[4] = ( vec2.get(6).equals("T") ? "JA!!!!" : "nein");
 		dvec.add(daten);
 	}
 	private void druckeTelefonListe() throws TextException{
@@ -386,11 +386,11 @@ class TelefonListe{
 			  //String test = "";
 			for(int i = 0; i < lang;i++){
 				  try {
-					  textTable.getCell(0,i+1).getTextService().getText().setText(((String)((String[])((Vector<?>)dvec).get(i))[0]) );
-					  textTable.getCell(1,i+1).getTextService().getText().setText(((String)((String[])((Vector<?>)dvec).get(i))[1]) );
-					  textTable.getCell(2,i+1).getTextService().getText().setText(((String)((String[])((Vector<?>)dvec).get(i))[2]) );					  
-					  textTable.getCell(3,i+1).getTextService().getText().setText(((String)((String[])((Vector<?>)dvec).get(i))[3]) );
-					  textTable.getCell(4,i+1).getTextService().getText().setText(((String)((String[])((Vector<?>)dvec).get(i))[4]) );					  
+					  textTable.getCell(0,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[0]) );
+					  textTable.getCell(1,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[1]) );
+					  textTable.getCell(2,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[2]) );					  
+					  textTable.getCell(3,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[3]) );
+					  textTable.getCell(4,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[4]) );					  
 					  textTable.getCell(5,i+1).getTextService().getText().setText("" );					  
 					} 
 				  catch (TextException exception) {
@@ -610,8 +610,7 @@ class F2RettungsAnker{
 			com.sun.star.beans.XPropertySet xPropSet = null;
 			Object aColumnObj = null;
 			aColumnObj = range.getCell(0,0);
-			xPropSet = (com.sun.star.beans.XPropertySet)
-			UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
+			xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, aColumnObj);
 			xPropSet.setPropertyValue("HoriJustify", 0);
 		} catch (UnknownPropertyException e) {
 			e.printStackTrace();

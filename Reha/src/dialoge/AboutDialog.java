@@ -57,12 +57,12 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 	public JTextArea text;
 	protected HashMap<String, String> md5Hashes = new HashMap<String, String>();
 	JButton[] buts = {null,null};
-	enum btIdx {detail,ok};
+	enum btIdx {detail,ok}
 	int btDetail = btIdx.detail.ordinal();
 	int btOK = btIdx.ok.ordinal();
 	AboutDialog currInstance = null;
 	JFrame instJar = null;
-	Boolean processingMD5 = false;
+	boolean processingMD5 = false;
 
 	public AboutDialog(Frame parent, String title)
 	{
@@ -377,7 +377,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		// do nothing
 		
 	}
 
@@ -416,7 +416,7 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		//do nothing
 		
 	}
 

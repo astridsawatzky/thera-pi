@@ -32,7 +32,6 @@ import org.jdesktop.swingx.JXTitledPanel;
 import CommonTools.ListenerTools;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import reha301.Reha301;
 
 
@@ -210,7 +209,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 	}
 	
 	public void setContentPanel(Container cont){
-		this.jtp.setContentContainer((Container)cont);
+		this.jtp.setContentContainer(cont);
 		//this.jtp.setRightDecoration(new PinPanel());
 		this.jtp.setPreferredSize(cont.getPreferredSize());
 		this.setName(this.jtp.getContentContainer().getName());
@@ -268,7 +267,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		try{
 				if(evt.getDetails()[1].equals("ROT")){ 
 					//////System.out.println("RehaSmartDialog hat EventListener gel�scht");
-					xEvent.removeRehaTPEventListener((RehaTPEventListener)this);
+					xEvent.removeRehaTPEventListener(this);
 					xEvent = null;
 					this.dispose();
 				}

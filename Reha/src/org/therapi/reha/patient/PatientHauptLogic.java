@@ -543,14 +543,14 @@ public class PatientHauptLogic {
 			super(null,"PatientenNeuanlage");
 			this.setName("PatientenNeuanlage");
 			rtp = new RehaTPEventClass();
-			rtp.addRehaTPEventListener((RehaTPEventListener) this);
+			rtp.addRehaTPEventListener(this);
 		}
 		public void rehaTPEventOccurred(RehaTPEvent evt) {
 			try{
 				if(evt.getDetails()[0] != null){
 					if(evt.getDetails()[0].equals(this.getName())){
 						this.setVisible(false);
-						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						this.dispose();
 						super.dispose();
@@ -564,7 +564,7 @@ public class PatientHauptLogic {
 		public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
 				this.setVisible(false);			
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+				rtp.removeRehaTPEventListener(this);		
 				rtp = null;
 				dispose();
 				super.dispose();
@@ -585,14 +585,14 @@ public class PatientHauptLogic {
 			super(null,"PatientenFoto");
 			this.setName("PatientenFoto");
 			rtp = new RehaTPEventClass();
-			rtp.addRehaTPEventListener((RehaTPEventListener) this);
+			rtp.addRehaTPEventListener(this);
 		}
 		public void rehaTPEventOccurred(RehaTPEvent evt) {
 			try{
 				if(evt.getDetails()[0] != null){
 					if(evt.getDetails()[0].equals(this.getName())){
 						this.setVisible(false);
-						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						this.dispose();
 						super.dispose();
@@ -605,7 +605,7 @@ public class PatientHauptLogic {
 		public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
 				this.setVisible(false);			
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+				rtp.removeRehaTPEventListener(this);		
 				rtp = null;
 				dispose();
 				super.dispose();

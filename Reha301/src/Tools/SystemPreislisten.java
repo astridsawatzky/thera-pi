@@ -68,8 +68,8 @@ public class SystemPreislisten {
 			@Override
 			public int compare(Vector o1, Vector o2) {
 				
-				String s1 = (String)((Vector)o1).get(0).toString();
-				String s2 = (String)((Vector)o2).get(0).toString();
+				String s1 = o1.get(0).toString();
+				String s2 = o2.get(0).toString();
 				return s1.compareTo(s2);
 			}
 		};
@@ -78,7 +78,7 @@ public class SystemPreislisten {
 			vKGPreise.clear();
 			for(int i = 0; i < tarife;i++){
 				preisliste.clear();
-				preisliste = (Vector<Vector<String>>)SqlInfo.holeFelder("select * from kgtarif"+Integer.toString(i+1));
+				preisliste = SqlInfo.holeFelder("select * from kgtarif"+Integer.toString(i+1));
 				Collections.sort((Vector)preisliste,comparator);
 				vKGPreise.add((Vector<Vector<String>> )preisliste.clone());
 			}
@@ -120,7 +120,7 @@ public class SystemPreislisten {
 			vMAPreise.clear();
 			for(int i = 0; i < tarife;i++){
 				preisliste.clear();
-				preisliste = (Vector<Vector<String>>)SqlInfo.holeFelder("select * from matarif"+Integer.toString(i+1));
+				preisliste = SqlInfo.holeFelder("select * from matarif"+Integer.toString(i+1));
 				Collections.sort((Vector)preisliste,comparator);
 				vMAPreise.add((Vector<Vector<String>> )preisliste.clone());
 			}
@@ -162,7 +162,7 @@ public class SystemPreislisten {
 			vERPreise.clear();
 			for(int i = 0; i < tarife;i++){
 				preisliste.clear();
-				preisliste = (Vector<Vector<String>>)SqlInfo.holeFelder("select * from ertarif"+Integer.toString(i+1));
+				preisliste = SqlInfo.holeFelder("select * from ertarif"+Integer.toString(i+1));
 				Collections.sort((Vector)preisliste,comparator);
 				vERPreise.add((Vector<Vector<String>> )preisliste.clone());
 			}
@@ -204,7 +204,7 @@ public class SystemPreislisten {
 			vLOPreise.clear();
 			for(int i = 0; i < tarife;i++){
 				preisliste.clear();
-				preisliste = (Vector<Vector<String>>)SqlInfo.holeFelder("select * from lotarif"+Integer.toString(i+1));
+				preisliste = SqlInfo.holeFelder("select * from lotarif"+Integer.toString(i+1));
 				Collections.sort((Vector)preisliste,comparator);
 				vLOPreise.add((Vector<Vector<String>> )preisliste.clone());
 			}
@@ -246,7 +246,7 @@ public class SystemPreislisten {
 			vRHPreise.clear();
 			for(int i = 0; i < tarife;i++){
 				preisliste.clear();
-				preisliste = (Vector<Vector<String>>)SqlInfo.holeFelder("select * from rhtarif"+Integer.toString(i+1));
+				preisliste = SqlInfo.holeFelder("select * from rhtarif"+Integer.toString(i+1));
 				Collections.sort((Vector)preisliste,comparator);
 				vRHPreise.add((Vector<Vector<String>> )preisliste.clone());
 			}
@@ -288,7 +288,7 @@ public class SystemPreislisten {
 			vPOPreise.clear();
 			for(int i = 0; i < tarife;i++){
 				preisliste.clear();
-				preisliste = (Vector<Vector<String>>)SqlInfo.holeFelder("select * from potarif"+Integer.toString(i+1));
+				preisliste = SqlInfo.holeFelder("select * from potarif"+Integer.toString(i+1));
 				Collections.sort((Vector)preisliste,comparator);
 				vPOPreise.add((Vector<Vector<String>> )preisliste.clone());
 			}
@@ -438,8 +438,8 @@ class Sortiere{
 
 			@Override
 			public int compare(Vector o1, Vector o2) {
-				String s1 = (String)((Vector)o1).get(0).toString();
-				String s2 = (String)((Vector)o2).get(0).toString();
+				String s1 = o1.get(0).toString();
+				String s2 = o2.get(0).toString();
 				return s1.compareTo(s2);
 			}
 		};

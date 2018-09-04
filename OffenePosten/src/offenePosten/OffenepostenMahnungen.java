@@ -720,8 +720,8 @@ public class OffenepostenMahnungen extends JXPanel{
 		
 		rtfs[4].setText( tabmod.getValueAt(tab.convertRowIndexToModel(row), 0).toString() );
 		rtfs[5].setText( DatFunk.sDatInDeutsch(tabmod.getValueAt(tab.convertRowIndexToModel(row), 1).toString()) );
-		rtfs[6].setText( dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 5) ) );
-		rtfs[7].setText( dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 6) ) );
+		rtfs[6].setText( dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), 5) ) );
+		rtfs[7].setText( dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), 6) ) );
 		
 		Date test = (Date)tabmod.getValueAt(tab.convertRowIndexToModel(row), 9);
 		if(test==null){
@@ -757,7 +757,7 @@ public class OffenepostenMahnungen extends JXPanel{
 	/*******************************/
 
 	private void starteMahnDruck(String url){
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		//System.out.println("Starte Datei -> "+url);
 		if(!OffenePosten.officeapplication.isActive()){
 			OffenePosten.starteOfficeApplication();
@@ -814,7 +814,7 @@ public class OffenepostenMahnungen extends JXPanel{
 		    /*****************/
 		}
 		
-		XTextFieldsSupplier xTextFieldsSupplier = (XTextFieldsSupplier)UnoRuntime.queryInterface(XTextFieldsSupplier.class, textDocument.getXTextDocument());
+		XTextFieldsSupplier xTextFieldsSupplier = UnoRuntime.queryInterface(XTextFieldsSupplier.class, textDocument.getXTextDocument());
 		XRefreshable xUp = UnoRuntime.queryInterface(XRefreshable.class, xTextFieldsSupplier.getTextFields());
         xUp.refresh();
         textDocument.getXTextDocument().reformat();

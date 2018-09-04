@@ -40,7 +40,6 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -89,7 +88,7 @@ public class PatientenFoto  extends RehaSmartDialog{
 	    pinPanel.getGruen().setVisible(false);
 	    setPinPanel(pinPanel);
 	    rtp = new RehaTPEventClass();
-	    rtp.addRehaTPEventListener((RehaTPEventListener) this);
+	    rtp.addRehaTPEventListener(this);
 		grundPanel = new JXPanel(new BorderLayout());
 
 		panel = new PhotoFrame();
@@ -224,7 +223,7 @@ public class PatientenFoto  extends RehaSmartDialog{
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
 					if(rtp != null){
-						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						pinPanel = null;
 						Reha.thisClass.player.stop();
@@ -241,7 +240,7 @@ public class PatientenFoto  extends RehaSmartDialog{
 	public void doAbbrechen(){
 		this.setVisible(false);
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;
 			Reha.thisClass.player.stop();

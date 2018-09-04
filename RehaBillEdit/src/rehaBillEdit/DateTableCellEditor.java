@@ -162,12 +162,12 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         if(value == null){
         	insstr = "  .  .    ";
             ftf.setText(insstr);        	
-        }else if(((Object)value).toString().trim().equals("")){
+        }else if(value.toString().trim().equals("")){
         	insstr = "  .  .    ";
             ftf.setText(insstr);        	
         }else{
         	try{
-        		insstr = DatFunk.sDatInDeutsch(((Object)value).toString() );	
+        		insstr = DatFunk.sDatInDeutsch(value.toString() );	
         	}catch(Exception ex){
         		insstr = "  .  .    ";
         	}

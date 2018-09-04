@@ -396,7 +396,7 @@ public class SysUtilRoogleGruppen extends JXPanel implements ActionListener,KeyL
 			mitglieder = new String[lang][];
 			for(i=0;i<lang;i++){
 				gruppenname[i] = (String)((ArrayList)SystemConfig.aRoogleGruppen.get(i).get(0)).get(0);
-				mitglieder[i] = ((ArrayList<String[]>)SystemConfig.aRoogleGruppen.get(i).get(1)).get(0);
+				mitglieder[i] = SystemConfig.aRoogleGruppen.get(i).get(1).get(0);
 
 			}
 			if(akt >= 0){
@@ -501,7 +501,7 @@ public class SysUtilRoogleGruppen extends JXPanel implements ActionListener,KeyL
 				}
 				
 				for(i=0;i<lang;i++){
-					j = ((Vector)glm.getDataVector()).size();
+					j = glm.getDataVector().size();
 					//System.out.println("Anzahl = "+j);
 					for(count= 0;count<j;count++){
 						if(((Vector)glm.getDataVector().get(count)).get(0).equals(vec.get(i))){
@@ -580,7 +580,7 @@ public class SysUtilRoogleGruppen extends JXPanel implements ActionListener,KeyL
 					vec.add(st);
 				}
 				for(i=0;i<lang;i++){
-					j = ((Vector)klm.getDataVector()).size();
+					j = klm.getDataVector().size();
 					for(count= 0;count<j;count++){
 						if(((Vector)klm.getDataVector().get(count)).get(0).equals(vec.get(i))){
 							klm.removeRow(count);

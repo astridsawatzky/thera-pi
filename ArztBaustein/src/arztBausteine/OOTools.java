@@ -17,23 +17,23 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 public class OOTools {
 	public static void setzePapierFormat(ITextDocument textDocument,int hoch,int breit) throws NoSuchElementException, WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
 		XTextDocument xTextDocument = textDocument.getXTextDocument();
-		XStyleFamiliesSupplier xSupplier = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
+		XStyleFamiliesSupplier xSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
 		xTextDocument);
-		XNameContainer family = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class,
+		XNameContainer family = UnoRuntime.queryInterface(XNameContainer.class,
 		xSupplier.getStyleFamilies().getByName("PageStyles"));
-		XStyle xStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, family.getByName("Standard"));
-		XPropertySet xStyleProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,	xStyle);
+		XStyle xStyle = UnoRuntime.queryInterface(XStyle.class, family.getByName("Standard"));
+		XPropertySet xStyleProps = UnoRuntime.queryInterface(XPropertySet.class,	xStyle);
 		xStyleProps.setPropertyValue("Height", hoch);
 		xStyleProps.setPropertyValue("Width", breit);
 	}
 	public static void setzeRaender(ITextDocument textDocument,int oben,int unten,int links,int rechts) throws NoSuchElementException, WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
     	XTextDocument xTextDocument = textDocument.getXTextDocument();
-    	XStyleFamiliesSupplier xSupplier = (XStyleFamiliesSupplier) UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
+    	XStyleFamiliesSupplier xSupplier = UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
     	xTextDocument);
-    	XNameContainer family = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class,
+    	XNameContainer family = UnoRuntime.queryInterface(XNameContainer.class,
     	xSupplier.getStyleFamilies().getByName("PageStyles"));
-    	XStyle xStyle = (XStyle) UnoRuntime.queryInterface(XStyle.class, family.getByName("Standard") );
-    	XPropertySet xStyleProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class,
+    	XStyle xStyle = UnoRuntime.queryInterface(XStyle.class, family.getByName("Standard") );
+    	XPropertySet xStyleProps = UnoRuntime.queryInterface(XPropertySet.class,
     	xStyle);
     	xStyleProps.setPropertyValue("TopMargin",oben);
     	xStyleProps.setPropertyValue("BottomMargin",unten);

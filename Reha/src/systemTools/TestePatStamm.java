@@ -16,14 +16,14 @@ public class TestePatStamm {
 		}
 		if(! (Reha.thisClass.patpanel.vecaktrez == null)){
 			if(Reha.thisClass.patpanel.vecaktrez.size() > 0){
-				return (String)Reha.thisClass.patpanel.vecaktrez.get(16);
+				return Reha.thisClass.patpanel.vecaktrez.get(16);
 			}
 		}
 		if(! (Reha.thisClass.patpanel.patDaten == null)){	
 			if(Reha.thisClass.patpanel.patDaten.size() > 0){
 				////System.out.println("gr��e der PatDaten = "+PatGrundPanel.thisClass.patDaten.size());
 				////System.out.println("gr��e der PatDaten = "+PatGrundPanel.thisClass.patDaten);
-				return (String) Reha.thisClass.patpanel.patDaten.get(67);
+				return Reha.thisClass.patpanel.patDaten.get(67);
 			}	
 		}else{
 			return "";
@@ -38,12 +38,12 @@ public class TestePatStamm {
 		}
 		if(! (Reha.thisClass.patpanel.vecaktrez == null)){
 			if(Reha.thisClass.patpanel.vecaktrez.size() > 0){
-				return (String)Reha.thisClass.patpanel.vecaktrez.get(37);
+				return Reha.thisClass.patpanel.vecaktrez.get(37);
 			}
 		}
 		if(! (Reha.thisClass.patpanel.patDaten == null)){	
 			if(Reha.thisClass.patpanel.patDaten.size() > 0){			
-				return (String) Reha.thisClass.patpanel.patDaten.get(68);
+				return Reha.thisClass.patpanel.patDaten.get(68);
 			}
 		}else{
 			return "";

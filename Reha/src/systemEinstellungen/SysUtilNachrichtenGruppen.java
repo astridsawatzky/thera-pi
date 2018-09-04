@@ -507,7 +507,7 @@ public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener
 				}
 				
 				for(i=0;i<lang;i++){
-					j = ((Vector)glm.getDataVector()).size();
+					j = glm.getDataVector().size();
 					//System.out.println("Anzahl = "+j);
 					for(count= 0;count<j;count++){
 						if(((Vector)glm.getDataVector().get(count)).get(0).equals(vec.get(i))){
@@ -565,7 +565,7 @@ public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener
 					vec.add(st);
 				}
 				for(i=0;i<lang;i++){
-					j = ((Vector)klm.getDataVector()).size();
+					j = klm.getDataVector().size();
 					for(count= 0;count<j;count++){
 						if(((Vector)klm.getDataVector().get(count)).get(0).equals(vec.get(i))){
 							klm.removeRow(count);

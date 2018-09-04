@@ -5,8 +5,6 @@ package patientenFenster;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,7 +67,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 		super(null,"RezeptVorlage");		
 
 		// Ermittlung der Rezept-Daten zu diesem Patienten
-		String strPatIntern = (String)Reha.thisClass.patpanel.vecaktrez.get(0);
+		String strPatIntern = Reha.thisClass.patpanel.vecaktrez.get(0);
 		
 		String cmd = "SELECT DISTINCT SUBSTR(REZ_NR,1,2) as diszi from " +
 					"(SELECT \"lza\", `PAT_INTERN`,`REZ_NR`, `REZ_DATUM` FROM `lza` lza WHERE `PAT_INTERN` = " + strPatIntern +
@@ -115,7 +113,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 	    setLocation(lpt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 		pack();
 		
@@ -124,7 +122,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 		if ( vecDiszi.size() < 2 ) {
 			if ( vecDiszi.size() == 1 ) strSelectedDiszi = vecDiszi.get( 0 );
 			// mit der Disziplin such wir jetzt noch das konkrete letzte Rezept zu dieser Disziplin
-			starteSucheVorlage( (String)Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
+			starteSucheVorlage( Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
 			this.dispose();
 			bHasSelfDisposed = true;
 			return;
@@ -272,7 +270,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					this.dispose();
 					super.dispose();
@@ -287,7 +285,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			pinPanel = null;
 			dispose();
@@ -302,7 +300,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 		// TODO Auto-generated method stub
 		if(arg0.getActionCommand().equals("kopieren")){
 			// hier wird vecResult gefüllt
-			starteSucheVorlage( (String)Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
+			starteSucheVorlage( Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
 //			Vector<String> vecTest = new Vector<String>();
 //			vecTest = vecResult;
 			this.dispose();
@@ -310,7 +308,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 		if( vecDiszi.contains( arg0.getActionCommand()) ) {  // Wenn eine der gefundenen Disziplinen angewählt worden ist
 			strSelectedDiszi = arg0.getActionCommand();
 			// hier wird vecResult gefüllt
-			starteSucheVorlage( (String)Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
+			starteSucheVorlage( Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
 			this.dispose();
 		}
 		if(arg0.getActionCommand().equals("abbrechen")){

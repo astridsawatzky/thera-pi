@@ -41,7 +41,6 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXPanel;
@@ -232,7 +231,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			for(int i = 0; i < certs.size();i++){
 				dn=certs.get(i).getSubjectDN().toString().split(",");
 				if(dn.length==5){
-					ik = (String)dn[3].split("=")[1];
+					ik = dn[3].split("=")[1];
 					if(ik.equals(alias)){
 						String verfall = certs.get(i).getNotAfter().toLocaleString().split(" ")[0].trim();
 						tage = DatFunk.TageDifferenz(DatFunk.sHeute(),verfall); 
@@ -305,7 +304,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		pb.add(cmbDiszi,cc.xy(2,4));
 
 		rootKasse = new JXTTreeNode(new KnotenObjekt("Abrechnung für Kasse...","",false,"",""),true);
-		treeModelKasse = new KassenTreeModel((JXTTreeNode) rootKasse);
+		treeModelKasse = new KassenTreeModel(rootKasse);
 
 		treeKasse = new JXTree(treeModelKasse);
 		treeKasse.setModel(treeModelKasse);
@@ -473,7 +472,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				vecKassen.get(i).get(1)+"' LIMIT 1";
 
 				String name = SqlInfo.holeFelder(cmd).get(0).get(0);
-				cmd = "select preisgruppe from verordn where rez_nr='"+vecKassen.get(i).get(0)+"' LIMIT 1";;
+				cmd = "select preisgruppe from verordn where rez_nr='"+vecKassen.get(i).get(0)+"' LIMIT 1";
 				////System.out.println(cmd);
 				String preisgr = SqlInfo.holeEinzelFeld(cmd); 
 				////System.out.println("Preisgruppe="+preisgr);
@@ -493,8 +492,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				
 				aeste = rootKasse.getChildCount();
 				treeKasse.updateUI();
-				treeKasse.expandPath(new TreePath(((JXTTreeNode)node).getPath() ) );
-				treeKasse.scrollPathToVisible(new TreePath(((JXTTreeNode)meinitem).getPath() ));
+				treeKasse.expandPath(new TreePath(node.getPath() ) );
+				treeKasse.scrollPathToVisible(new TreePath(meinitem.getPath() ));
 				for(int i2 = 0; i2 < aeste; i2++){
 					if(treeKasse.isCollapsed(  new TreePath(((JXTTreeNode)rootKasse.getChildAt(i2)).getPath() ) ) ){
 						//System.out.println("geschlossen "+i2+" - "+((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.titel);
@@ -609,7 +608,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 								System.out.println("Wechsel IK-Papier: "+ikpapier+" Hintergrund oder Icon-Farbe ändern @: "+
 								((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.titel);
 								*/
-							};
+							}
 							if (toggleIcons == 1 ){
 								customIconList.add(ktraeger);								
 							}
@@ -658,7 +657,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				vecKassen.get(i).get(1)+"' LIMIT 1";
 
 				String name = SqlInfo.holeFelder(cmd).get(0).get(0);
-				cmd = "select preisgruppe from verordn where rez_nr='"+vecKassen.get(i).get(0)+"' LIMIT 1";;
+				cmd = "select preisgruppe from verordn where rez_nr='"+vecKassen.get(i).get(0)+"' LIMIT 1";
 				////System.out.println(cmd);
 				String preisgr = SqlInfo.holeEinzelFeld(cmd); 
 				////System.out.println("Preisgruppe="+preisgr);
@@ -769,16 +768,16 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
     		return;
     	}
     	JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
-    	String rez_nr = ((JXTTreeNode)node).knotenObjekt.rez_num;
+    	String rez_nr = node.knotenObjekt.rez_num;
     	if(!rez_nr.trim().equals("")){
     		aktuellerKnoten = node;
     		doKassenTreeAuswerten(node.knotenObjekt);
     		aktuellerPat = node.knotenObjekt.pat_intern;
-    		aktuellerKassenKnoten =(JXTTreeNode) ((JXTTreeNode)aktuellerKnoten).getParent();
+    		aktuellerKassenKnoten =(JXTTreeNode) aktuellerKnoten.getParent();
     		int pgr = -1;
-    		if(! ((JXTTreeNode)node).knotenObjekt.preisgruppe.trim().equals("")){
+    		if(! node.knotenObjekt.preisgruppe.trim().equals("")){
     			////System.out.println("Aktuelle Disziplin = "+getDiszis()+" / Aktuelle Preisgruppe = "+pgr);
-    			pgr = Integer.parseInt(((JXTTreeNode)node).knotenObjekt.preisgruppe.trim());
+    			pgr = Integer.parseInt(node.knotenObjekt.preisgruppe.trim());
     			zuzahlModusDefault = (SystemPreislisten.hmZuzahlModus.get(disziSelect.getCurrDiszi()).get(pgr-1)==1 ? true : false);
     		} 
     		if(pgr < 0){
@@ -788,10 +787,10 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 
     	}else{
     		abrRez.setRechtsAufNull();
-    		aktuellerKnoten = (JXTTreeNode)node;
+    		aktuellerKnoten = node;
     		if(aktuellerKnoten.getParent() != null){
     			if(((JXTTreeNode)aktuellerKnoten.getParent()).isRoot()){
-    	    		aktuellerKassenKnoten =(JXTTreeNode) ((JXTTreeNode)aktuellerKnoten);
+    	    		aktuellerKassenKnoten =(aktuellerKnoten);
     	    		//////System.out.println("Aktueller Knoten ist Root");
     			}else{
     				//////System.out.println("Aktueller Knoten ungleich Root");
@@ -819,7 +818,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	}
 	public String getAbrechnungKasse(){
 		////System.out.println(((JXTTreeNode)aktuellerKnoten).knotenObjekt.ktraeger);
-		return ((JXTTreeNode)aktuellerKnoten).knotenObjekt.ktraeger;
+		return aktuellerKnoten.knotenObjekt.ktraeger;
 	}
 	public void rechneKasse(JXTTreeNode aktKasse){
 		kontrollierteRezepte = 0;
@@ -1716,7 +1715,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		for(int i = 0; i < lang;i++){
 			node = (JXTTreeNode) aktuellerKassenKnoten.getChildAt(i);
 			if(node.knotenObjekt.fertig){
-				vec = SqlInfo.holeFelder("select edifact from fertige where rez_nr='"+(String) node.knotenObjekt.rez_num+"'");
+				vec = SqlInfo.holeFelder("select edifact from fertige where rez_nr='"+node.knotenObjekt.rez_num+"'");
 				//abrDlg.setzeLabel("Edifact-Daten holen von Rezept:"+(String) node.knotenObjekt.rez_num);
 				try{
 					if(!annahmeAdresseOk){
@@ -1731,11 +1730,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					}
 					Thread.sleep(75);
 					//abzurechnendeKassenID = holeAbrechnungsKasse(vec.get(0).get(0));
-					abgerechneteRezepte.add((String) node.knotenObjekt.rez_num);
-					abgerechnetePatienten.add((String) node.knotenObjekt.pat_intern);
+					abgerechneteRezepte.add(node.knotenObjekt.rez_num);
+					abgerechnetePatienten.add(node.knotenObjekt.pat_intern);
 					//hier den Edifact-Code analysieren und die Rechnungsdatei erstellen;
 					try{
-						analysierenEdifact(vec.get(0).get(0),(String) node.knotenObjekt.rez_num);
+						analysierenEdifact(vec.get(0).get(0),node.knotenObjekt.rez_num);
 					}catch(Exception ex){
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(null,"Unbekannter Fehler bei Edifact analysierenEdifact()\n"+ex.getLocalizedMessage());
@@ -2183,7 +2182,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		 */
 		private static final long serialVersionUID = 6391618556224740611L;
 		public KassenTreeModel(JXTTreeNode node) {
-	            super((TreeNode) node);
+	            super(node);
 	        }
 		 
 		public Object getValueAt(Object node, int column) {
@@ -2328,7 +2327,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				return;
 			}
 			JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
-			String rez_nr = ((JXTTreeNode)node).knotenObjekt.rez_num;
+			String rez_nr = node.knotenObjekt.rez_num;
 			if(!rez_nr.trim().equals("")){
 				if(node.knotenObjekt.fertig){
 					String msg = "<html>Achtung Sie editieren im Anschluß den EDIFACT-Code!<br>"+

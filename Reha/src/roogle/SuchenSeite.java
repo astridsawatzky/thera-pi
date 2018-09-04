@@ -50,7 +50,6 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import org.jdesktop.swingx.JXPanel;
@@ -260,7 +259,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		return sucheKollegen;
 	}
 	public void setKollegenZeiten(HashMap<String,Integer> xhZeiten){
-		hZeiten =  ((HashMap<String,Integer>)xhZeiten);//((HashMap<String,Integer>)hZeiten.clone());
+		hZeiten =  (xhZeiten);//((HashMap<String,Integer>)hZeiten.clone());
 	}
 	public HashMap<String,Integer> getKollegenZeiten(){
 		return this.hZeiten; 
@@ -747,12 +746,12 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		jxSucheTable.getColumn(6).setMinWidth(40);
 		jxSucheTable.getColumn(6).setMaxWidth(40);
 		jxSucheTable.getColumn(6).setCellRenderer(farbrenderer);
-		((TableColumnExt)jxSucheTable.getColumn(6)).setCellEditor((TableCellEditor) new ZeitTableCellEditor());		
+		((TableColumnExt)jxSucheTable.getColumn(6)).setCellEditor(new ZeitTableCellEditor());		
 		//Dauer - Termin zum schreiben
 		jxSucheTable.getColumn(7).setMinWidth(35);
 		jxSucheTable.getColumn(7).setMaxWidth(35);
 		jxSucheTable.getColumn(7).setCellRenderer(farbrenderer);		
-		((TableColumnExt)jxSucheTable.getColumn(7)).setCellEditor((TableCellEditor) new ZahlTableCellEditor());		
+		((TableColumnExt)jxSucheTable.getColumn(7)).setCellEditor(new ZahlTableCellEditor());		
 		//Name
 		jxSucheTable.getColumn(8).setMinWidth(80);	
 		//Rezeptnummer
@@ -767,7 +766,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		jxSucheTable.getColumn(11).setMinWidth(45);	
 		jxSucheTable.getColumn(11).setMaxWidth(45);
 		jxSucheTable.getColumn(11).setCellRenderer(crenderer);
-		((TableColumnExt)jxSucheTable.getColumn(11)).setCellEditor((TableCellEditor) new ZeitCancelCellEditor());
+		((TableColumnExt)jxSucheTable.getColumn(11)).setCellEditor(new ZeitCancelCellEditor());
 		// Übrige daten sind versteckt
 		jxSucheTable.getColumn(12).setMinWidth(0);	
 		jxSucheTable.getColumn(12).setMaxWidth(0);		
@@ -1053,7 +1052,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		String dauer = jxSucheTable.getValueAt(start, 7).toString();
 		for(int i = (start+1); i < ende; i++){
 			if( (Boolean) jxSucheTable.getValueAt(i, 0)){
-				jxSucheTable.setValueAt((String)dauer, i, 7);	
+				jxSucheTable.setValueAt(dauer, i, 7);	
 			}
 		}
 	}
@@ -1297,14 +1296,14 @@ Vector mit Normal-Termin
 			for(int i = 0; i < lang;i++){
 				//System.out.println(vecWahl.get(i));
 				icalDummy.clear();
-				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(15)).replace("-", "") );
-				icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(6)).replace(":", "")+"00" );
+				icalDummy.add( ((String)vecWahl.get(i).get(15)).replace("-", "") );
+				icalDummy.add( ((String)vecWahl.get(i).get(6)).replace(":", "")+"00" );
 				//icalDummy.add( ((String)((Vector<Object>)vecWahl.get(i)).get(4)).replace(":", "")+"00" );
-				endzeit = ZeitFunk.ZeitPlusMinuten(((String)((Vector<Object>)vecWahl.get(i)).get(6)) , ((String)((Vector<Object>)vecWahl.get(i)).get(7)));
+				endzeit = ZeitFunk.ZeitPlusMinuten(((String)vecWahl.get(i).get(6)) , ((String)vecWahl.get(i).get(7)));
 				//System.out.println(endzeit);
 				icalDummy.add( endzeit.replace(":", "")+"00" );
-				if( (xtitel=((String)((Vector<Object>)vecWahl.get(i)).get(9))).length() >= 2){
-					if( (xindex=x0diszis.indexOf((String)xtitel.substring(0,2))) < 0 ){
+				if( (xtitel=((String)vecWahl.get(i).get(9))).length() >= 2){
+					if( (xindex=x0diszis.indexOf(xtitel.substring(0,2))) < 0 ){
 						icalDummy.add("Therapie-Termin");
 					}else{
 						icalDummy.add((String)x1diszis.get(xindex));
@@ -1446,8 +1445,8 @@ Vector mit Normal-Termin
 			}
 			//Druckzeit sofern vorhanden in offizielle Druckzeit übertragen
 			for(int i = 0; i < lang;i++){
-				if(! ((String)((Vector<Object>)vecWahl.get(i)).get(11)).trim().equals("")){
-					((Vector<Object>)vecWahl.get(i)).set(6,(String) ((Vector<Object>)vecWahl.get(i)).get(11));
+				if(! ((String)vecWahl.get(i).get(11)).trim().equals("")){
+					vecWahl.get(i).set(6,vecWahl.get(i).get(11));
 				}
 			}
 		
@@ -1468,15 +1467,15 @@ Vector mit Normal-Termin
 			bw = new BufferedWriter(out);
 			//bw = new BufferedWriter(new FileWriter(SystemConfig.hmVerzeichnisse.get("Fahrdienstrohdatei")+"FPSort.txt"));
 			for(int i = 0; i < lang;i++){
-				if( ((Boolean)((Vector<Object>)vecWahl.get(i)).get(19)) ){
+				if( ((Boolean)vecWahl.get(i).get(19)) ){
 					//dauer holen
-					drzeit = getGruppendauer( ((String) ((Vector<Object>)vecWahl.get(i)).get(8)) );
+					drzeit = getGruppendauer( ((String) vecWahl.get(i).get(8)) );
 				}else{
-					drzeit = getGruppendauer(  ((String) ((Vector<Object>)vecWahl.get(i)).get(5)) );
+					drzeit = getGruppendauer(  ((String) vecWahl.get(i).get(5)) );
 				}
-				bw.write( ((String) ((Vector<Object>)vecWahl.get(i)).get(15))+"°"+((String)((Vector<Object>)vecWahl.get(i)).get(6))+
-						"°"+(String)((Vector<Object>)vecWahl.get(i)).get(10)+"°"+((String)((Vector<Object>)vecWahl.get(i)).get(8)).replace("KGG-", "")+
-						"°"+(String)((Vector<Object>)vecWahl.get(i)).get(9)+"°"+drzeit
+				bw.write( ((String) vecWahl.get(i).get(15))+"°"+((String)vecWahl.get(i).get(6))+
+						"°"+(String)vecWahl.get(i).get(10)+"°"+((String)vecWahl.get(i).get(8)).replace("KGG-", "")+
+						"°"+(String)vecWahl.get(i).get(9)+"°"+drzeit
 						);
 				bw.newLine();
 			}
@@ -1510,8 +1509,8 @@ Vector mit Normal-Termin
 
 		//Druckzeit sofern vorhanden in offizielle Druckzeit übertragen
 		for(int i = 0; i < lang;i++){
-			if(! ((String) ((Vector<Object>)vecWahl.get(i)).get(11)).trim().equals("")){
-				((Vector<Object>)vecWahl.get(i)).set(6, ((String)((Vector<Object>)vecWahl.get(i)).get(11)) );
+			if(! ((String) vecWahl.get(i).get(11)).trim().equals("")){
+				vecWahl.get(i).set(6, (vecWahl.get(i).get(11)) );
 			}
 		}
 	
@@ -1539,28 +1538,28 @@ Vector mit Normal-Termin
 
 			for(int i = 0; i < lang;i++){
 				//Wenn Gruppensignal gesetzt
-				if( ((Boolean) ((Vector<Object>)vecWahl.get(i)).get(19)) ){
+				if( ((Boolean) vecWahl.get(i).get(19)) ){
 					//dauer holen
-					drzeit = getGruppendauer( ((String) ((Vector<Object>)vecWahl.get(i)).get(8)) );
+					drzeit = getGruppendauer( ((String) vecWahl.get(i).get(8)) );
 				}else{
-					drzeit = getGruppendauer( ((String) ((Vector<Object>)vecWahl.get(i)).get(5)) );
+					drzeit = getGruppendauer( ((String) vecWahl.get(i).get(5)) );
 				}
 				//Jetzt die gruppenzugehörigkeit holen
 				try{
-					kalzeile = Integer.parseInt( ((String)((Vector<Object>)vecWahl.get(i)).get(13)).substring(0,2));
+					kalzeile = Integer.parseInt( ((String)vecWahl.get(i).get(13)).substring(0,2));
 					gruppe = ParameterLaden.searchAbteilung(kalzeile);
 					////System.out.println(((Vector<String>)vecWahl.get(i)).get(6)+"/"+((Vector<String>)vecWahl.get(i)).get(10));
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
 				//                        Datum auf deutsch                     Anfangszeit(=Druckzeit)
-				bw.write( ((String)((Vector<Object>)vecWahl.get(i)).get(14))+"°"+((String)((Vector<Object>)vecWahl.get(i)).get(6))+
+				bw.write( ((String)vecWahl.get(i).get(14))+"°"+((String)vecWahl.get(i).get(6))+
 				//   ermittelte Dauer                     Gruppenkürzel
 						"°"+drzeit+"°"+(gruppe.trim().equals("") ? "--" : gruppe)+"°"+
 				//   Matchcode Kalenderbenutzer
-						((String)((Vector<Object>)vecWahl.get(i)).get(10))+"°"+
+						((String)vecWahl.get(i).get(10))+"°"+
 				//		
-						((String)((Vector<Object>)vecWahl.get(i)).get(8)).replaceFirst("\\\\", "").replace("\\", "/Gruppe:_")
+						((String)vecWahl.get(i).get(8)).replaceFirst("\\\\", "").replace("\\", "/Gruppe:_")
 						
 				);
 				bw.newLine();
@@ -1599,14 +1598,14 @@ Vector mit Normal-Termin
 			}
 			int minpos = 0;
 			for(i=0;i<lang;i++){
-				boolean isdruckzeit = (  ((String)((Vector<Object>)vecWahl.get(i)).get(11)).trim().equals("")
+				boolean isdruckzeit = (  ((String)vecWahl.get(i).get(11)).trim().equals("")
 								?  false 
 								:  true	);
 				String druckzeit = (  isdruckzeit
-								?  ((String)((Vector<Object>)vecWahl.get(i)).get(11)) 
-								: 	 ((String)((Vector<Object>)vecWahl.get(i)).get(6))	);
-				String sorter = ((String)((Vector<Object>)vecWahl.get(i)).get(15))+ druckzeit;
-				String tag = ((String)((Vector<Object>)vecWahl.get(i)).get(2));
+								?  ((String)vecWahl.get(i).get(11)) 
+								: 	 ((String)vecWahl.get(i).get(6))	);
+				String sorter = ((String)vecWahl.get(i).get(15))+ druckzeit;
+				String tag = ((String)vecWahl.get(i).get(2));
 				String termtext = null;
 				/*
 				String termtext	= (isdruckzeit
@@ -1614,12 +1613,12 @@ Vector mit Normal-Termin
 								:((String)((Vector)vecWahl.get(i)).get(10))  );
 				*/				
 				
-				if(isdruckzeit && ((String)((Vector<Object>)vecWahl.get(i)).get(12)).trim().equals("")){
-					if(((String)((Vector<Object>)vecWahl.get(i)).get(8)).contains("\\\\")){
+				if(isdruckzeit && ((String)vecWahl.get(i).get(12)).trim().equals("")){
+					if(((String)vecWahl.get(i).get(8)).contains("\\\\")){
 						//System.out.println(((Vector)vecWahl.get(i)).get(8));
-						termtext = ((String)((Vector<Object>)vecWahl.get(i)).get(8)).substring(7);
+						termtext = ((String)vecWahl.get(i).get(8)).substring(7);
 						if(termtext.contains("BWB")){
-							termtext = ((String)((Vector<Object>)vecWahl.get(i)).get(10));
+							termtext = ((String)vecWahl.get(i).get(10));
 						}else{
 							if(termtext.contains("Min.")){
 								minpos = termtext.lastIndexOf("-");
@@ -1640,25 +1639,25 @@ Vector mit Normal-Termin
 
 					}else{
 
-						termtext = ((String)((Vector<Object>)vecWahl.get(i)).get(8));
+						termtext = ((String)vecWahl.get(i).get(8));
 						if(termtext.contains("Gruppe:_")){
 							termtext = termtext.substring(8);
 						}else{
-							termtext = ((String)((Vector<Object>)vecWahl.get(i)).get(10));  // neu eingef�gt am 06.04.2009
+							termtext = ((String)vecWahl.get(i).get(10));  // neu eingef�gt am 06.04.2009
 						}
 					}
 
 				}else{
-					termtext = ((String)((Vector<Object>)vecWahl.get(i)).get(10));
+					termtext = ((String)vecWahl.get(i).get(10));
 				}
 				//erweitert um die Dauer;
-				vec.add(new TermObjekt(tag,druckzeit,termtext,sorter,((String)((Vector<Object>)vecWahl.get(i)).get(5))));
+				vec.add(new TermObjekt(tag,druckzeit,termtext,sorter,((String)vecWahl.get(i).get(5))));
 				
 
 				
 			}
 			Collections.sort(vec);
-			new TerminplanDrucken().init((Vector<TermObjekt>)vec, drucken,schreibeName.getText().trim(),schreibeNummer.getText().trim(),getInstance(),direktsenden);
+			new TerminplanDrucken().init(vec, drucken,schreibeName.getText().trim(),schreibeNummer.getText().trim(),getInstance(),direktsenden);
 		}
 		
 	}
@@ -1819,8 +1818,8 @@ Vector mit Normal-Termin
 
 				setFortschrittSetzen(durchlauf++);
 				vecWahl.add((Vector<Object>)dtblm.getDataVector().get(i));
-				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(11, (String) dtblm.getValueAt(i,11));
-				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(6, (String) dtblm.getValueAt(i,6));		
+				vecWahl.get(vecWahl.size()-1).set(11, dtblm.getValueAt(i,11));
+				vecWahl.get(vecWahl.size()-1).set(6, dtblm.getValueAt(i,6));		
 			}
 		}	
 	}
@@ -1835,8 +1834,8 @@ Vector mit Normal-Termin
 				setFortschrittSetzen(durchlauf++);
 				vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)));
 				//vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)).clone());
-				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(11, (String) dtblm.getValueAt(i,11));
-				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(6, (String) dtblm.getValueAt(i,6));		
+				vecWahl.get(vecWahl.size()-1).set(11, dtblm.getValueAt(i,11));
+				vecWahl.get(vecWahl.size()-1).set(6, dtblm.getValueAt(i,6));		
 			}
 		}
 	}
@@ -1915,8 +1914,8 @@ Vector mit Normal-Termin
 			if((Boolean)dtblm.getValueAt(i,0)){
 				setFortschrittSetzen(durchlauf++);
 				vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)) );
-				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(11, (String) dtblm.getValueAt(i,11));
-				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(6, (String) dtblm.getValueAt(i,6));
+				vecWahl.get(vecWahl.size()-1).set(11, dtblm.getValueAt(i,11));
+				vecWahl.get(vecWahl.size()-1).set(6, dtblm.getValueAt(i,6));
 				tkstart = (int) ZeitFunk.MinutenSeitMitternacht(((String)jxSucheTable.getValueAt(i, 3)).trim()+":00");
 				tkdauer = Integer.parseInt((String)jxSucheTable.getValueAt(i, 5));
 				plstart = (int) ZeitFunk.MinutenSeitMitternacht(((String)jxSucheTable.getValueAt(i, 6)).trim()+":00");
@@ -1947,16 +1946,8 @@ Vector mit Normal-Termin
 						if((tkstart==plstart) && (tkdauer==pldauer)){
 							// Beginn und Dauer sind gleich geblieben
 							if((name.equals("")) &&	(nummer.equals(""))){
-								// Termin wird gelöscht es müssen die Blöcke vorher und nachher getestet werden;
-								// deshalb zuerst Vector mit dem Tag holen
-								try {
-									vec = sucheZeile(i);
-									schreibeLoeschen(vec,i,name,nummer);
-								} catch (SQLException e) {
-									e.printStackTrace();
-									JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion schreibeLoeschen() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
-									JOptionPane.showMessageDialog(null, "SQL-Fehler:\n"+e.getMessage());
-								}
+								vec = sucheZeile(i);
+								schreibeLoeschen(vec,i,name,nummer);
 								break;
 							}else{
 								// nur Statement bilden und weg damit... kein Vector gedönse
@@ -1974,13 +1965,7 @@ Vector mit Normal-Termin
 								break;
 							}
 						}else{
-							// Zunächst den Vector mit dem Tag holen der immer überprüft werden muß				
-							try {
-								vec = sucheZeile(i);
-							} catch (SQLException e) {
-								e.printStackTrace();
-								JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion sucheZeile() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
-							}
+							vec = sucheZeile(i);
 							if((name.equals("")) &&	(nummer.equals(""))){
 								JOptionPane.showMessageDialog(null,"Das löschen eines Termin und gleichzeitiges verändern der Startzeit \n"+
 										"bzw. der Termindauer, ist in einem - nicht unerheblich Maß - Schwachsinn!\n"+
@@ -2042,11 +2027,11 @@ Vector mit Normal-Termin
 			if(art==1){
 				for(i=0;i<vecgross;i++){
 					if(i<(block-1)){
-						newvec.add((Vector<String>)vec.get(i));
+						newvec.add(vec.get(i));
 					}else if(i==(block-1)){
 						newvec.add(vec.get(i));
-						((Vector<String>)newvec.get(i)).set(3,Integer.toString(plstart-tkstart));
-						((Vector<String>)newvec.get(i)).set(4,ZeitFunk.MinutenZuZeit(tkstart+(plstart-tkstart)));
+						newvec.get(i).set(3,Integer.toString(plstart-tkstart));
+						newvec.get(i).set(4,ZeitFunk.MinutenZuZeit(tkstart+(plstart-tkstart)));
 						Vector<String> aktvec = new Vector<String>();
 						aktvec.add(name);
 						aktvec.add(nummer);
@@ -2055,13 +2040,13 @@ Vector mit Normal-Termin
 						aktvec.add(ZeitFunk.MinutenZuZeit(plstart+pldauer));
 						newvec.add(aktvec);
 						Vector<String> nachvec = new Vector<String>();
-						nachvec.add(  ((Vector<String>)vec.get(i)).get(0));
-						nachvec.add( ((Vector<String>)vec.get(i)).get(1));
+						nachvec.add(  vec.get(i).get(0));
+						nachvec.add( vec.get(i).get(1));
 						nachvec.add( aktvec.get(4));
 						String planende = (String)jxSucheTable.getValueAt(zeile,4)+":00";
 						
 						nachvec.add( Integer.toString((int) ZeitFunk.MinutenSeitMitternacht(planende) - 
-								(int)ZeitFunk.MinutenSeitMitternacht((String)nachvec.get(2)) ) ) ;					
+								(int)ZeitFunk.MinutenSeitMitternacht(nachvec.get(2)) ) ) ;					
 						nachvec.add(planende );
 						
 						newvec.add(nachvec);
@@ -2097,20 +2082,20 @@ Vector mit Normal-Termin
 						if(i < (vecgross-1) ){
 							//hier rein die Abfrage ob Nachfolgeblock
 							//leer ist
-							if( ((String)((Vector<String>)vec.get(i+1)).get(0)).equals("") && 
-									((String)((Vector<String>)vec.get(i+1)).get(1)).equals("") &&
+							if( vec.get(i+1).get(0).equals("") && 
+									vec.get(i+1).get(1).equals("") &&
 									nachfolgerloeschen){
 								Vector<String> nachvec = new Vector<String>();
 								nachvec.add( "" ) ;
 								nachvec.add( "" ) ;
-								nachvec.add( (String)aktvec.get(4) ) ;
+								nachvec.add( aktvec.get(4) ) ;
 								//Dauer neu einstellen
-								long dauer = ZeitFunk.ZeitDifferenzInMinuten((String)aktvec.get(4),
-										((String)((Vector<String>)vec.get(i+1)).get(4)) );
+								long dauer = ZeitFunk.ZeitDifferenzInMinuten(aktvec.get(4),
+										(vec.get(i+1).get(4)) );
 								
 								nachvec.add( Long.toString(dauer) ) ;
 								//Ende neu einstellen
-								nachvec.add( ((String)((Vector<String>)vec.get(i+1)).get(4)) );
+								nachvec.add( (vec.get(i+1).get(4)) );
 								newvec.add(nachvec);
 								i+= 1;
 								continue;
@@ -2119,15 +2104,15 @@ Vector mit Normal-Termin
 									Vector<String> nachvec = new Vector<String>();
 									nachvec.add( "" ) ;
 									nachvec.add( "" ) ;
-									nachvec.add( (String)aktvec.get(4) ) ;						
+									nachvec.add( aktvec.get(4) ) ;						
 									nachvec.add( Integer.toString(tkdauer-pldauer)) ;
 									nachvec.add( ZeitFunk.MinutenZuZeit(tkende) ) ;
 									newvec.add(nachvec);
 								}else{
 									Vector<String> nachvec = new Vector<String>();
-									nachvec.add( ((String)((Vector<String>)vec.get(i)).get(0)) ) ;
-									nachvec.add( ((String)((Vector<String>)vec.get(i)).get(1)) ) ;
-									nachvec.add( (String)aktvec.get(4) ) ;						
+									nachvec.add( (vec.get(i).get(0)) ) ;
+									nachvec.add( (vec.get(i).get(1)) ) ;
+									nachvec.add( aktvec.get(4) ) ;						
 									nachvec.add( Integer.toString(tkdauer-pldauer)) ;
 									nachvec.add( ZeitFunk.MinutenZuZeit(tkende) ) ;
 									newvec.add(nachvec);
@@ -2135,9 +2120,9 @@ Vector mit Normal-Termin
 							}
 						}else{
 							Vector<String> nachvec = new Vector<String>();
-							nachvec.add( ((String)((Vector<String>)vec.get(i)).get(0)) ) ;
-							nachvec.add( ((String)((Vector<String>)vec.get(i)).get(1)) ) ;
-							nachvec.add( (String)aktvec.get(4) ) ;						
+							nachvec.add( (vec.get(i).get(0)) ) ;
+							nachvec.add( (vec.get(i).get(1)) ) ;
+							nachvec.add( aktvec.get(4) ) ;						
 							nachvec.add( Integer.toString(tkdauer-pldauer)) ;
 							nachvec.add( ZeitFunk.MinutenZuZeit(tkende) ) ;
 							newvec.add(nachvec);
@@ -2163,8 +2148,8 @@ Vector mit Normal-Termin
 				for(i=0;i<vecgross;i++){
 					if(i==(block-1)){
 						Vector<String> vorvec = new Vector<String>();
-						vorvec.add( ((String)((Vector<String>)vec.get(i)).get(0)) ) ;
-						vorvec.add( ((String)((Vector<String>)vec.get(i)).get(1)) ) ;
+						vorvec.add( (vec.get(i).get(0)) ) ;
+						vorvec.add( (vec.get(i).get(1)) ) ;
 						vorvec.add( ZeitFunk.MinutenZuZeit(tkstart)) ;
 						vorvec.add( Integer.toString(tkdauer-pldauer) ) ;
 						vorvec.add( ZeitFunk.MinutenZuZeit(plstart)) ;
@@ -2216,8 +2201,8 @@ Vector mit Normal-Termin
 				if(bloecke==1){
 					////System.out.println(jxSucheTable.getValueAt(zeile,8)+" ist im ersten Block / insgesamt existieren "+vec.size()+" Blöcke");
 					// es gibt mehrere blöcke
-					((Vector<String>)vec.get(block-1)).set(0, "");
-					((Vector<String>)vec.get(block-1)).set(1, "");					
+					vec.get(block-1).set(0, "");
+					vec.get(block-1).set(1, "");					
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Es gibt nur einen Block, deshalb kann man dirket das statement basteln");
 					////System.out.println(stmt);
@@ -2226,19 +2211,19 @@ Vector mit Normal-Termin
 				//es gibt mehrere bloecke und der betroffene block = der erste, also muß der nachfolgende untersucht werden.
 					////System.out.println(jxSucheTable.getValueAt(zeile,8)+" ist im ersten Block / insgesamt existieren "+vec.size()+" Blöcke");
 					String xname,xnummer;
-					xname = (String) ((Vector<String>)vec.get(1)).get(0);
-					xnummer = (String) ((Vector<String>)vec.get(1)).get(1);
+					xname = vec.get(1).get(0);
+					xnummer = vec.get(1).get(1);
 					if(xname.trim().equals("") && xnummer.trim().equals("")){
-						String startzeit = (String) ((Vector<String>)vec.get(0)).get(2);
-						String endzeit = (String) ((Vector<String>)vec.get(1)).get(4);
-						int dauer1 = Integer.parseInt((String) ((Vector<String>)vec.get(1)).get(3));
-						int dauer2 = Integer.parseInt((String) ((Vector<String>)vec.get(0)).get(3));
+						String startzeit = vec.get(0).get(2);
+						String endzeit = vec.get(1).get(4);
+						int dauer1 = Integer.parseInt(vec.get(1).get(3));
+						int dauer2 = Integer.parseInt(vec.get(0).get(3));
 						int dauerNeu = dauer1+dauer2;
-						((Vector<String>)vec.get(1)).set(0, "");
-						((Vector<String>)vec.get(1)).set(1, "");					
-						((Vector<String>)vec.get(1)).set(2, startzeit);
-						((Vector<String>)vec.get(1)).set(3, Integer.toString(dauerNeu));
-						((Vector<String>)vec.get(1)).set(4,endzeit);
+						vec.get(1).set(0, "");
+						vec.get(1).set(1, "");					
+						vec.get(1).set(2, startzeit);
+						vec.get(1).set(3, Integer.toString(dauerNeu));
+						vec.get(1).set(4,endzeit);
 						vec.remove(0);
 						stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 						////System.out.println("Der betroffene Block ist der erste und der nachfolgende Block = ebenfalls leer");
@@ -2246,8 +2231,8 @@ Vector mit Normal-Termin
 						break;
 						
 					}else{
-						((Vector<String>)vec.get(block-1)).set(0, "");
-						((Vector<String>)vec.get(block-1)).set(1, "");					
+						vec.get(block-1).set(0, "");
+						vec.get(block-1).set(1, "");					
 						stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 						////System.out.println("Der betroffene Block ist der erste und der nachfolgende Block = nicht(!!) leer");
 						////System.out.println(stmt);
@@ -2259,27 +2244,27 @@ Vector mit Normal-Termin
 			if(block == bloecke){
 				////System.out.println(jxSucheTable.getValueAt(zeile,8)+" ist im ersten Block / insgesamt existieren "+vec.size()+" Bl�cke");
 				String xname,xnummer;
-				xname = (String) ((Vector<String>)vec.get(block-2)).get(0);
-				xnummer = (String) ((Vector<String>)vec.get(block-2)).get(1);
+				xname = vec.get(block-2).get(0);
+				xnummer = vec.get(block-2).get(1);
 				if(xname.trim().equals("") && xnummer.trim().equals("")){
-					String startzeit = (String) ((Vector<String>)vec.get(block-2)).get(2);
-					String endzeit = (String) ((Vector<String>)vec.get(block-1)).get(4);
-					int dauer1 = Integer.parseInt((String) ((Vector<String>)vec.get(block-2)).get(3));
-					int dauer2 = Integer.parseInt((String) ((Vector<String>)vec.get(block-1)).get(3));
+					String startzeit = vec.get(block-2).get(2);
+					String endzeit = vec.get(block-1).get(4);
+					int dauer1 = Integer.parseInt(vec.get(block-2).get(3));
+					int dauer2 = Integer.parseInt(vec.get(block-1).get(3));
 					int dauerNeu = dauer1+dauer2;
-					((Vector<String>)vec.get(block-2)).set(0, "");
-					((Vector<String>)vec.get(block-2)).set(1, "");					
-					((Vector<String>)vec.get(block-2)).set(2, startzeit);
-					((Vector<String>)vec.get(block-2)).set(3, Integer.toString(dauerNeu));
-					((Vector<String>)vec.get(block-2)).set(4,endzeit);
+					vec.get(block-2).set(0, "");
+					vec.get(block-2).set(1, "");					
+					vec.get(block-2).set(2, startzeit);
+					vec.get(block-2).set(3, Integer.toString(dauerNeu));
+					vec.get(block-2).set(4,endzeit);
 					vec.remove(block-1);
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block ist der letzte und der vorhergehende ist ebenfalls leer");
 					////System.out.println(stmt);
 					break;				
 				}else{
-					((Vector<String>)vec.get(block-1)).set(0, "");
-					((Vector<String>)vec.get(block-1)).set(1, "");					
+					vec.get(block-1).set(0, "");
+					vec.get(block-1).set(1, "");					
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block ist der letzte und der nachfolgende Block = nicht(!!) leer");
 					////System.out.println(stmt);
@@ -2288,24 +2273,24 @@ Vector mit Normal-Termin
 			}
 			if((block > 1) && (block != bloecke)){
 				String xname,xnummer,yname,ynummer;
-				xname = (String) ((Vector<String>)vec.get(block-2)).get(0);
-				xnummer = (String) ((Vector<String>)vec.get(block-2)).get(1);
-				yname = (String) ((Vector<String>)vec.get(block)).get(0);
-				ynummer = (String) ((Vector<String>)vec.get(block)).get(1);
+				xname = vec.get(block-2).get(0);
+				xnummer = vec.get(block-2).get(1);
+				yname = vec.get(block).get(0);
+				ynummer = vec.get(block).get(1);
 				if(( xname.trim().equals("")) && (xnummer.trim().equals("")) &&
 						( yname.trim().equals("")) && (ynummer.trim().equals("")) ){
 					//der Vorbock ist leer und der Nachblock ist auch leef
-					String startzeitvb = (String) ((Vector<String>)vec.get(block-2)).get(2);
-					String endzeitnb = (String) ((Vector<String>)vec.get(block)).get(4);
-					int dauervb = Integer.parseInt((String) ((Vector<String>)vec.get(block-2)).get(3));
-					int dauerakt = Integer.parseInt((String) ((Vector<String>)vec.get(block-1)).get(3));
-					int dauernb = Integer.parseInt((String) ((Vector<String>)vec.get(block)).get(3));
+					String startzeitvb = vec.get(block-2).get(2);
+					String endzeitnb = vec.get(block).get(4);
+					int dauervb = Integer.parseInt(vec.get(block-2).get(3));
+					int dauerakt = Integer.parseInt(vec.get(block-1).get(3));
+					int dauernb = Integer.parseInt(vec.get(block).get(3));
 					int dauerNeu = dauervb+dauerakt+dauernb;
-					((Vector<String>)vec.get(block-2)).set(0, "");
-					((Vector<String>)vec.get(block-2)).set(1, "");					
-					((Vector<String>)vec.get(block-2)).set(2, startzeitvb);
-					((Vector<String>)vec.get(block-2)).set(3, Integer.toString(dauerNeu));
-					((Vector<String>)vec.get(block-2)).set(4,endzeitnb);
+					vec.get(block-2).set(0, "");
+					vec.get(block-2).set(1, "");					
+					vec.get(block-2).set(2, startzeitvb);
+					vec.get(block-2).set(3, Integer.toString(dauerNeu));
+					vec.get(block-2).set(4,endzeitnb);
 					vec.remove(block);
 					vec.remove(block-1);					
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
@@ -2315,16 +2300,16 @@ Vector mit Normal-Termin
 				}
 				if(( xname.trim().equals("")) && (xnummer.trim().equals("")) ){
 					//der Vorblock ist leer der Nachblock nicht !!
-					String startzeit = (String) ((Vector<String>)vec.get(block-2)).get(2);
-					String endzeit = (String) ((Vector<String>)vec.get(block-1)).get(4);
-					int dauer1 = Integer.parseInt((String) ((Vector<String>)vec.get(block-2)).get(3));
-					int dauer2 = Integer.parseInt((String) ((Vector<String>)vec.get(block-1)).get(3));
+					String startzeit = vec.get(block-2).get(2);
+					String endzeit = vec.get(block-1).get(4);
+					int dauer1 = Integer.parseInt(vec.get(block-2).get(3));
+					int dauer2 = Integer.parseInt(vec.get(block-1).get(3));
 					int dauerNeu = dauer1+dauer2;
-					((Vector<String>)vec.get(block-2)).set(0, "");
-					((Vector<String>)vec.get(block-2)).set(1, "");					
-					((Vector<String>)vec.get(block-2)).set(2, startzeit);
-					((Vector<String>)vec.get(block-2)).set(3, Integer.toString(dauerNeu));
-					((Vector<String>)vec.get(block-2)).set(4,endzeit);
+					vec.get(block-2).set(0, "");
+					vec.get(block-2).set(1, "");					
+					vec.get(block-2).set(2, startzeit);
+					vec.get(block-2).set(3, Integer.toString(dauerNeu));
+					vec.get(block-2).set(4,endzeit);
 					vec.remove(block-1);
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block zwischendrinn und der vorhergende ist ebenfalls leer");
@@ -2333,24 +2318,24 @@ Vector mit Normal-Termin
 				}
 				if(( yname.trim().equals("")) && (ynummer.trim().equals("")) ){
 					//der Vorblock ist nicht leer aber der Nachblock!!
-					String startzeit = (String) ((Vector<String>)vec.get(block-1)).get(2);
-					String endzeit = (String) ((Vector<String>)vec.get(block)).get(4);
-					int dauer1 = Integer.parseInt((String) ((Vector<String>)vec.get(block-1)).get(3));
-					int dauer2 = Integer.parseInt((String) ((Vector<String>)vec.get(block)).get(3));
+					String startzeit = vec.get(block-1).get(2);
+					String endzeit = vec.get(block).get(4);
+					int dauer1 = Integer.parseInt(vec.get(block-1).get(3));
+					int dauer2 = Integer.parseInt(vec.get(block).get(3));
 					int dauerNeu = dauer1+dauer2;
-					((Vector<String>)vec.get(block-1)).set(0, "");
-					((Vector<String>)vec.get(block-1)).set(1, "");					
-					((Vector<String>)vec.get(block-1)).set(2, startzeit);
-					((Vector<String>)vec.get(block-1)).set(3, Integer.toString(dauerNeu));
-					((Vector<String>)vec.get(block-1)).set(4,endzeit);
+					vec.get(block-1).set(0, "");
+					vec.get(block-1).set(1, "");					
+					vec.get(block-1).set(2, startzeit);
+					vec.get(block-1).set(3, Integer.toString(dauerNeu));
+					vec.get(block-1).set(4,endzeit);
 					vec.remove(block);
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block zwischendrinn und der nachfolgende ist ebenfalls leer");
 					////System.out.println(stmt);
 					break;				
 				}else{
-					((Vector<String>)vec.get(block-1)).set(0, "");
-					((Vector<String>)vec.get(block-1)).set(1, "");					
+					vec.get(block-1).set(0, "");
+					vec.get(block-1).set(1, "");					
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block zwischendrinn und weder der vorherige noch der nachfolgende sind leer");
 					////System.out.println(stmt);
@@ -2385,15 +2370,15 @@ Vector mit Normal-Termin
 		////System.out.println(name+"  -  "+nummer);
 		for(i=0;i<gross;i++){
 			////System.out.println(vec.get(i));
-			stmt = stmt +"T"+(i+1)+" = '"+StringTools.Escaped(((String)((Vector<String>)vec.get(i)).get(0)))+"'"+", ";
-			rnummer = ((String)((Vector<String>)vec.get(i)).get(1));
+			stmt = stmt +"T"+(i+1)+" = '"+StringTools.Escaped((vec.get(i).get(0)))+"'"+", ";
+			rnummer = (vec.get(i).get(1));
 			snummer = rnummer.trim().replace("\\", "\\\\") ;
 			rnummer = snummer.replace("\\\\\\\\", "\\\\");
 			stmt = stmt +"N"+(i+1)+" = '"+rnummer+"'"+", ";
 			//stmt = stmt +"N"+(i+1)+" = '"+((String)((Vector)vec.get(i)).get(1))+"'"+", ";
-			stmt = stmt +"TS"+(i+1)+" = '"+((String)((Vector<String>)vec.get(i)).get(2))+"'"+", ";
-			stmt = stmt +"TD"+(i+1)+" = '"+((String)((Vector<String>)vec.get(i)).get(3))+"'"+", ";
-			stmt = stmt +"TE"+(i+1)+" = '"+((String)((Vector<String>)vec.get(i)).get(4))+"'"+", ";			
+			stmt = stmt +"TS"+(i+1)+" = '"+(vec.get(i).get(2))+"'"+", ";
+			stmt = stmt +"TD"+(i+1)+" = '"+(vec.get(i).get(3))+"'"+", ";
+			stmt = stmt +"TE"+(i+1)+" = '"+(vec.get(i).get(4))+"'"+", ";			
 		}
 		stmt = stmt+ "BELEGT ='"+Integer.toString(vec.size())+"' where id='"+Integer.toString(id)+"'";
 		////System.out.println(stmt);
@@ -2414,7 +2399,7 @@ Vector mit Normal-Termin
 		*/
 		//bis hierher entfernen
 		try {
-				stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
 			
 			res = stmt.execute(sstmt);
@@ -2437,18 +2422,18 @@ Vector mit Normal-Termin
 		}
 	}	
 	/*****************************************/	
-	private Vector<Vector<String>> sucheZeile(int zeile) throws SQLException{
+	private Vector<Vector<String>> sucheZeile(int zeile){
 		Statement stmt = null;
 		ResultSet rs = null;
 		String suchstmt;
 		Vector<Vector<String>> vec = new Vector<Vector<String>>();
 		try {
-				stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
 			suchstmt = "select * from flexkc where id = '"+jxSucheTable.getValueAt(zeile,17)+"'";						
 		
 
-			rs = (ResultSet) stmt.executeQuery(suchstmt);
+			rs = stmt.executeQuery(suchstmt);
 			Vector<String> vx = new Vector<String>();
 			while(rs.next()){
 				int bloecke = Integer.parseInt(rs.getString(301));
@@ -2491,7 +2476,7 @@ Vector mit Normal-Termin
 
 		}
 		
-		return (Vector<Vector<String>>)vec;//.clone();
+		return vec;//.clone();
 	}
 	/********Ende SwingWorker*/
 	
@@ -2615,7 +2600,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		aktDatum = getAktDatum();
 		
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			sqlEnde = DatFunk.sDatInSQL(getStopDatum());
 
@@ -2679,7 +2664,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 					}else{
 						test = "select * from flexkc where datum = '"+sqlAkt+"' LIMIT "+ParameterLaden.maxKalZeile;						
 					}
-					rs = (ResultSet) stmt.executeQuery(test);
+					rs = stmt.executeQuery(test);
 					
 
 					while(rs.next()){
@@ -2712,7 +2697,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 						String sabteilung = eltern.kollegenAbteilung[ikollege].trim();//getKollegenAbteilung(ikollege).trim();
 						if(! sabteilung.equals("") ){
 							if( (abtlg.contains(sabteilung)) ){
-								defdauer = (int) eltern.hZeiten.get(eltern.kollegenAbteilung[ikollege]);
+								defdauer = eltern.hZeiten.get(eltern.kollegenAbteilung[ikollege]);
 										//getKollegenAbteilung(ikollege));
 								gruppe = false;
 							}else{
@@ -2987,7 +2972,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	for(int i = 0; i < column.length;i++){
 		cols.add(column[i]);
 	}
-		return (Vector)cols;//(Vector)cols.clone();
+		return cols;//(Vector)cols.clone();
 	}
 	
 /********************************************/
@@ -3006,7 +2991,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		int xdauer = Integer.parseInt(rs.getString("TD"+(feld)).trim());		
 		String xzeit = rs.getString("TS"+(feld)).trim().substring(0,5);
 		
-		int gross = (int)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).size();
+		int gross = ((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).size();
 		/*
 		System.out.println("\n***************************************\n");
 		System.out.println("Termine = "+gross);
@@ -3019,12 +3004,12 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			long lgrenzegross =(Long) ((Vector)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).get(i)).get(1); 	
 			
 			if(longPasstZwischen(lgrenzeklein,lgrenzegross,xzeit,(suchleer ? defdauer : xdauer))){
-				vecret = (Vector) ((Vector)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).get(i));
+				vecret = ((Vector)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).get(i));
 				/*
 				System.out.println("passt zwischen");
 				System.out.println(vecret);
 				*/
-				return (Vector)vecret;
+				return vecret;
 			}
 			
 			
@@ -3369,7 +3354,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	
 	
 /************ alternative ***********/
-	private boolean freiTermin(String name,String nummer) throws SQLException{
+	private boolean freiTermin(String name,String nummer){
 		if(name.equals("") && nummer.equals("") ){
 			return true;
 		}	
@@ -3378,7 +3363,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	
 	private Vector<Object> sucheNachFreien(ResultSet rs,String name,String nummer,String skollege,int ikollege,int ii,int defdauer) throws SQLException{
 		Vector<Object> vec = null;
-		if(name.equals("") && nummer.equals("") ){
+		if("".equals(name) && "".equals(nummer) ){
 			vec = macheVector(rs,name,nummer,skollege,ikollege,ii,defdauer);
 		}	
 		return vec;
@@ -3421,7 +3406,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		
 		sorigdatum = rs.getString(305); 
 		sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-		skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+		skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 		//{"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
 		machevec.add(Boolean.valueOf(false));
 		machevec.add(null);
@@ -3459,7 +3444,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		
 		sorigdatum = rs.getString(305); 
 		sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-		skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+		skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 		//{"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
 		machevec.add(Boolean.valueOf(false));
 		machevec.add(null);
@@ -3498,7 +3483,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		
 		sorigdatum = rs.getString(305); 
 		sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-		skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+		skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 		//{"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
 		machevec.add(Boolean.valueOf(false));
 		machevec.add(null);
@@ -3568,14 +3553,14 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 		
 
 	String sperre;
-	sperre = (String)((Vector)vecx).get(13)+
-						(String)((Vector)vecx).get(14) ; 
+	sperre = (String)vecx.get(13)+
+						(String)vecx.get(14) ; 
 
 		//if(! sperrDatum.contains(sperre+SystemConfig.dieseMaschine)){
 			stmtx = null;
 			rsx = null;
 			try {
-				stmtx = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmtx = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
 				
 			} catch (SQLException e) {
@@ -3739,9 +3724,9 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 					 	
 						aktuell++;
 						SuchenSeite.verarbeitetLbl.setText(Integer.toString(aktuell+1));
-						nvec = (Vector) ((Vector)sucheDaten.get(aktuell));//.clone();
-						sperre = (String)((Vector)nvec).get(13)+
-											(String)((Vector)nvec).get(14) ; 
+						nvec = sucheDaten.get(aktuell);//.clone();
+						sperre = (String)nvec.get(13)+
+											(String)nvec.get(14) ; 
 
 						if(sperrDatum.contains(sperre+SystemConfig.dieseMaschine+zeit)){
 							nvec.set(1, img2);
@@ -3790,8 +3775,8 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 		boolean neu = true;
 		
 		String sperre;
-		sperre = (String)((Vector<String>)vecx).get(13)+
-							(String)((Vector<String>)vecx).get(14) ;
+		sperre = vecx.get(13)+
+							vecx.get(14) ;
 		
 		if(neu){
 			String cmd = "sperre='"+sperre+"'";
@@ -3811,7 +3796,7 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 				stmtx = null;
 				rsx = null;
 				try {
-					stmtx = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmtx = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
@@ -4034,7 +4019,7 @@ class EntsperreSatz extends Thread implements Runnable{
 		Statement stmt = null;
 
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			        ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			e.printStackTrace();

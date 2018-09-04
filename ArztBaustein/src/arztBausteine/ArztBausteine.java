@@ -56,7 +56,7 @@ public class ArztBausteine implements WindowListener, WindowStateListener {
 	
 	ArztBausteinPanel arztbausteinpanel = null;
 	
-	public static void main(String[] args) throws OfficeApplicationException {
+	public static void main(String[] args) {
 	
 		if(args.length > 0){
 			System.out.println("hole daten aus INI-Datei "+args[0]);
@@ -277,7 +277,7 @@ public class ArztBausteine implements WindowListener, WindowStateListener {
 
 
         	try {
-   				conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
     			DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
         	} 

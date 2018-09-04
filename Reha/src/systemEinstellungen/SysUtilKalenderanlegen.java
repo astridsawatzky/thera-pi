@@ -12,7 +12,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
@@ -386,17 +385,8 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 			if(arg0.getActionCommand().equals("FTimport")){
 			     SwingUtilities.invokeLater(new Runnable(){
 				 	   public  void run(){
-				 		   try {
-								starteSession((String)BuLand.getSelectedItem(),(String)FJahr.getSelectedItem());
-								FeierTag.setText("Feiertagsliste für das Jahr -> "+FJahr.getSelectedItem()+" <- eintragen.");
-				 		   } catch (IOException e) {
-								// TODO Auto-generated catch block
-				 			   ftm.getDataVector().clear();
-				 			   FreiTage.validate();
-				 			   JOptionPane.showMessageDialog(null, "Verbindung zu www.feiertage.net konnte nicht aufgebaut werden\n"+
-																	"Ist Ihre Internetverbindung o.k.???");
-				 			   
-				 		   }
+				 		   starteSession((String)BuLand.getSelectedItem(),(String)FJahr.getSelectedItem());
+						FeierTag.setText("Feiertagsliste für das Jahr -> "+FJahr.getSelectedItem()+" <- eintragen.");
 				 	   }
 					});
 					break;
@@ -454,7 +444,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 			}
 			if(arg0.getActionCommand().equals("delete")){
  
-				while(FreiTage.getSelectedRows().length > 0){;
+				while(FreiTage.getSelectedRows().length > 0){
 					int[] select = FreiTage.getSelectedRows();
 					doAusDbLoeschen(select[0]);
 					//ftm.removeRow(FreiTage.convertRowIndexToModel(select[0]));
@@ -863,7 +853,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 		return sret;
 	}
 
-	private void starteSession(String land,String jahr) throws IOException{
+	private void starteSession(String land,String jahr){
 		String urltext = null;
 		try{
 			urltext = "https://www.feiertage.net/csvfile.php?state="+land+"&year="+jahr+"&type=csv";
@@ -945,7 +935,7 @@ class HoleMaxDatum extends Thread implements Runnable{
 	public void run(){
 
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					rs =  stmt.executeQuery(this.statement);
@@ -1209,7 +1199,7 @@ class SchreibeNeuenKalender extends Thread implements Runnable{
 	public synchronized void run(){
 		//Vector treadVect = new Vector();
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					geklappt =  stmt.execute(this.statement);

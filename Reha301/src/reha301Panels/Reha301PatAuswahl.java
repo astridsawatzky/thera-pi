@@ -108,7 +108,7 @@ public class Reha301PatAuswahl extends JDialog{
 		patvec.clear();
 		patvec = SqlInfo.holeFelder(cmd);
 		for(int i = 0; i < patvec.size();i++){
-			combo.addItem(StringTools.EGross((String) patvec.get(i).get(0))+" - "+Integer.toString(i+1));
+			combo.addItem(StringTools.EGross(patvec.get(i).get(0))+" - "+Integer.toString(i+1));
 		}
 		macheHtml(combo.getSelectedIndex(),nachrichtenvec);
 	}

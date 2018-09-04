@@ -661,7 +661,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
           String url = ILayoutManager.ALL_BARS_URLS[i];
           XUIElement element = xLayoutManager.getElement(url);
           if (element != null) {
-            XPropertySet xps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, element);
+            XPropertySet xps = UnoRuntime.queryInterface(XPropertySet.class, element);
             xps.setPropertyValue("Persistent", new Boolean(false));
             xLayoutManager.hideElement(url);
           }

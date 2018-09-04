@@ -89,7 +89,7 @@ SuchenSeite eltern;
 	        }
 	        /**********/
 	        
-	        IDocumentService documentService = null;;
+	        IDocumentService documentService = null;
 			if(!Reha.officeapplication.isActive()){
 				Reha.starteOfficeApplication();
 			}
@@ -147,7 +147,7 @@ SuchenSeite eltern;
 			IPrinter iprint = null;
 			if(! druckerName.equals(terminDrucker)){
 				try {
-					iprint = (IPrinter) textDocument.getPrintService().createPrinter(terminDrucker);
+					iprint = textDocument.getPrintService().createPrinter(terminDrucker);
 				} catch (NOAException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -630,10 +630,10 @@ SuchenSeite eltern;
 		ResultSet rs = null;
 		String sergebnis = "";
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
-				rs = (ResultSet) stmt.executeQuery(exStatement);		
+				rs = stmt.executeQuery(exStatement);		
 				while(rs.next()){
 					sergebnis = (rs.getString(1) == null ? "" : rs.getString(1));
 				}

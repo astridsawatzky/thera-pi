@@ -721,12 +721,12 @@ public class NewMail extends JFrame  implements WindowListener  {
 			InputStream insemailtext,
 			Vector<Vector<String>> attaches
 			) throws Exception{
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		FileInputStream[] ins = {null,null,null}; 
 		try {
-			stmt = (Statement) RehaMail.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = RehaMail.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			
 			String select = "insert into pimail set "+

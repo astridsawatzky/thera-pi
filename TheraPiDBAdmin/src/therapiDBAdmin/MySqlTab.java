@@ -55,7 +55,7 @@ public class MySqlTab  extends JXPanel implements ChangeListener{
 		tab1 = new Seite1(this);
 		tab1.setName("Seite1");
 		sqlTab.add("<html><font size='5' >&nbsp;1 - MySql-Zugang testen&nbsp;<img src='file:///"+TheraPiDbAdmin.proghome+"icons/application-exit.png' width='32' height='32'></font></html>",tab1);
-		tab2 = new Seite2(this);;
+		tab2 = new Seite2(this);
 		tab2.setName("Seite2");
 		sqlTab.add("<html><font size='5' >&nbsp;2 - <font color='e77817'>Thera-Pi</font> Datenbank erstellen&nbsp;<img src='file:///"+TheraPiDbAdmin.proghome+"icons/application-exit.png' width='32' height='32'></font></html>",tab2);
 		tab3 = new Seite3(this);

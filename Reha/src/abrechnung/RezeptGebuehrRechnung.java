@@ -101,7 +101,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 		this.setModal(true);
 		this.setResizable(false);
 		this.rtp = new RehaTPEventClass();
-		this.rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		this.rtp.addRehaTPEventListener(this);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
@@ -542,7 +542,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 		}
 		this.mymouse = null; 
 		if(this.rtp != null){
-			this.rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			this.rtp.removeRehaTPEventListener(this);
 			this.rtp=null;			
 		}
 		this.pinPanel = null;

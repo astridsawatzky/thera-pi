@@ -38,7 +38,7 @@ public class RehaUrlaubCalc {
 	DecimalFormat dcf = new DecimalFormat("##########0.00");
 	
 	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;;
+	ISpreadsheetDocument spreadsheetDocument = null;
 	IDocument document  = null;
 	XSheetCellCursor cellCursor = null;
 
@@ -53,15 +53,6 @@ public class RehaUrlaubCalc {
 			e.printStackTrace();
 			spreadSheetSchliessen();
 		} catch (WrappedTargetException e) {
-			e.printStackTrace();
-			spreadSheetSchliessen();
-		} catch (UnknownPropertyException e) {
-			e.printStackTrace();
-			spreadSheetSchliessen();
-		} catch (PropertyVetoException e) {
-			e.printStackTrace();
-			spreadSheetSchliessen();
-		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			spreadSheetSchliessen();
 		} catch (OfficeApplicationException e) {
@@ -104,7 +95,7 @@ public class RehaUrlaubCalc {
 	
 	
 	
-	private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException, WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
+	private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException, WrappedTargetException{
 		if(!RehaUrlaub.officeapplication.isActive()){
 			RehaUrlaub.starteOfficeApplication();
 		}
@@ -119,7 +110,7 @@ public class RehaUrlaubCalc {
 		
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 		String sheetName= "Tabelle1";
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		cellCursor = spreadsheet1.createCursor();
 
 	}
@@ -133,39 +124,39 @@ public class RehaUrlaubCalc {
 				OOTools.doCellValue(cellCursor, 0, row,Double.parseDouble(Integer.toString((Integer)eltern.tabmod.getValueAt(i, 0))));
 				OOTools.doCellValue(cellCursor, 1, row, eltern.tabmod.getValueAt(i, 1).toString() );
 				
-				OOTools.doCellValue(cellCursor, 2, row, (Double)eltern.tabmod.getValueAt(i, 2) );
+				OOTools.doCellValue(cellCursor, 2, row, eltern.tabmod.getValueAt(i, 2) );
 				farbTest(3,row,i,3);
 				OOTools.doCellValue(cellCursor, 3, row, eltern.tabmod.getValueAt(i, 3).toString() );
 				
-				OOTools.doCellValue(cellCursor, 4, row, (Double)eltern.tabmod.getValueAt(i, 4) );
+				OOTools.doCellValue(cellCursor, 4, row, eltern.tabmod.getValueAt(i, 4) );
 				farbTest(5,row,i,5);
 				OOTools.doCellValue(cellCursor, 5, row, eltern.tabmod.getValueAt(i, 5).toString() );
 
-				OOTools.doCellValue(cellCursor, 6, row, (Double)eltern.tabmod.getValueAt(i, 6) );
+				OOTools.doCellValue(cellCursor, 6, row, eltern.tabmod.getValueAt(i, 6) );
 				farbTest(7,row,i,7);
 				OOTools.doCellValue(cellCursor, 7, row, eltern.tabmod.getValueAt(i, 7).toString() );
 
-				OOTools.doCellValue(cellCursor, 8, row, (Double)eltern.tabmod.getValueAt(i, 8) );
+				OOTools.doCellValue(cellCursor, 8, row, eltern.tabmod.getValueAt(i, 8) );
 				farbTest(9,row,i,9);
 				OOTools.doCellValue(cellCursor, 9, row, eltern.tabmod.getValueAt(i, 9).toString() );
 
-				OOTools.doCellValue(cellCursor, 10, row, (Double)eltern.tabmod.getValueAt(i, 10) );
+				OOTools.doCellValue(cellCursor, 10, row, eltern.tabmod.getValueAt(i, 10) );
 				farbTest(11,row,i,11);
 				OOTools.doCellValue(cellCursor, 11, row, eltern.tabmod.getValueAt(i, 11).toString() );
 
-				OOTools.doCellValue(cellCursor, 12, row, (Double)eltern.tabmod.getValueAt(i, 12) );
+				OOTools.doCellValue(cellCursor, 12, row, eltern.tabmod.getValueAt(i, 12) );
 				farbTest(13,row,i,13);
 				OOTools.doCellValue(cellCursor, 13, row, eltern.tabmod.getValueAt(i, 13).toString() );
 
-				OOTools.doCellValue(cellCursor, 14, row, (Double)eltern.tabmod.getValueAt(i, 14) );
+				OOTools.doCellValue(cellCursor, 14, row, eltern.tabmod.getValueAt(i, 14) );
 				farbTest(15,row,i,15);
 				OOTools.doCellValue(cellCursor, 15, row, eltern.tabmod.getValueAt(i, 15).toString() );
 				
-				OOTools.doCellValue(cellCursor, 17, row, (Double)eltern.tabmod.getValueAt(i, 17) );
+				OOTools.doCellValue(cellCursor, 17, row, eltern.tabmod.getValueAt(i, 17) );
 				
-				OOTools.doCellValue(cellCursor, 19, row, (Double)eltern.tabmod.getValueAt(i, 19) );
-				OOTools.doCellValue(cellCursor, 20, row, (Double)eltern.tabmod.getValueAt(i, 20) );
-				OOTools.doCellValue(cellCursor, 21, row, (Double)eltern.tabmod.getValueAt(i, 21) );
+				OOTools.doCellValue(cellCursor, 19, row, eltern.tabmod.getValueAt(i, 19) );
+				OOTools.doCellValue(cellCursor, 20, row, eltern.tabmod.getValueAt(i, 20) );
+				OOTools.doCellValue(cellCursor, 21, row, eltern.tabmod.getValueAt(i, 21) );
 			}
 		}
 		final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;

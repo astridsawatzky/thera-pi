@@ -407,7 +407,7 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 	public void ktraegerAuslesen (String iKNummer){
 		boolean emailaddyok = false;
  		List<String> nichtlesen = Arrays.asList(new String[] {"KMEMO"});
- 		Vector<String> felder2 = SqlInfo.holeSatz("ktraeger", "*", "ikkasse='"+(String) iKNummer+"'",nichtlesen);
+ 		Vector<String> felder2 = SqlInfo.holeSatz("ktraeger", "*", "ikkasse='"+iKNummer+"'",nichtlesen);
  		if(felder2.size() <= 0){
  			JOptionPane.showMessageDialog(null, "Kein Eintrag in der Kostenträgerdatei vorhanden für IK="+iKNummer);
  			return;

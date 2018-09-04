@@ -53,7 +53,7 @@ public DateInputTextField () {
     if (this.getBorder() != null)
       breite += this.getBorder().getBorderInsets(this).left + this.getBorder().getBorderInsets(this).right;
     Dimension d = new Dimension();
-    d.setSize((double) breite, height);
+    d.setSize(breite, height);
     return d;
   }
 

@@ -89,7 +89,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 		thisClass = this;
 		setSize(250,250);
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		validate();
 		
 		SwingUtilities.invokeLater(new Runnable(){
@@ -173,7 +173,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 		//String[] fach = new String[max];
 		for(i=0;i<max;i++){
 			//model.add(i,(String)KassenPanel.thisClass.titel.get(i));
-			model.add(i,(String)titel.get(i));
+			model.add(i,titel.get(i));
 		}
 		return;
 	}
@@ -183,7 +183,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 		this.jtp.removeMouseMotionListener(this.mymouse);
 		mymouse = null; 
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp=null;			
 		}
 		setVisible(false);
@@ -246,7 +246,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			//System.out.println("EventListener geschlossen");	
 		}
 		if(mymouse != null){
@@ -263,7 +263,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 		try{
 			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 				FensterSchliessen(evt.getDetails()[0]);
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 			}	
 		}catch(NullPointerException ne){
 			//System.out.println("Schließen des KassenFormular" +evt);

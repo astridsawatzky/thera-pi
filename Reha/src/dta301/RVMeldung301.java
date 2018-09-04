@@ -1599,7 +1599,7 @@ public class RVMeldung301 {
 			 ******/
 			zeilen = doRechnungKopf(zeilen, gesamt,"",mache10erDatum(erstDatum),mache10erDatum(letztDatum),false,rnr);
 			for(int i = 0; i < vecobj.size(); i++){
-				zeilen = doPositionen(zeilen,(Object[])vecobj.get(i),mache10erDatum(erstDatum),mache10erDatum(letztDatum));
+				zeilen = doPositionen(zeilen,vecobj.get(i),mache10erDatum(erstDatum),mache10erDatum(letztDatum));
 			}
 			System.out.println(buf301Body.toString());
 			

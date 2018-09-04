@@ -20,7 +20,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -389,7 +388,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		int anzahl = 0;
 		if( (anzahl = vec.size()) > 0){
 			for(int i = 0; i < anzahl;i++ ){
-				this.atblm.addRow((Vector<String>)vec.get(i));
+				this.atblm.addRow(vec.get(i));
 			}
 			this.arzttbl.setRowSelectionInterval(0, 0);
 			//holeText();
@@ -413,7 +412,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		int anzahl = 0;
 		if( (anzahl = vec.size()) > 0){
 			for(int i = 0; i < anzahl;i++ ){
-				this.atblm.addRow((Vector<String>)vec.get(i));
+				this.atblm.addRow(vec.get(i));
 			}
 			this.arzttbl.setRowSelectionInterval(0, 0);
 			//holeText();
@@ -543,8 +542,8 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			ta.setForeground(Color.BLUE);
 			int row = arzttbl.getSelectedRow();
 			String sid =  (String) arzttbl.getValueAt(row,9);
-			Vector<String> vec = SqlInfo.holeSatz("arzt", "MTEXT", "id='"+sid+"'", (List<String>)new ArrayList<String>());
-			ta.setText((String) vec.get(0));
+			Vector<String> vec = SqlInfo.holeSatz("arzt", "MTEXT", "id='"+sid+"'", new ArrayList<String>());
+			ta.setText(vec.get(0));
 			return;
 		}
 		
@@ -847,14 +846,14 @@ class ArztNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowLi
 	public ArztNeuDlg(){
 		super(null,"ArztNeuanlage");
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 	}
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		try{
 			this.setVisible(false);
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			this.dispose();
 			//System.out.println("****************Arzt Neu/ändern -> Listener entfernt**************");				
@@ -867,7 +866,7 @@ class ArztNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowLi
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			//System.out.println("****************Arzt Neu/ändern -> Listener entfernt (Closed)**********");
 		}

@@ -102,7 +102,7 @@ public class GutachtenWahl extends RehaSmartDialog implements RehaTPEventListene
 	    setLocation(lpt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 
 		SwingUtilities.invokeLater(new Runnable(){
@@ -184,7 +184,7 @@ public class GutachtenWahl extends RehaSmartDialog implements RehaTPEventListene
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					ListenerTools.removeListeners(rbut[0]);
 					ListenerTools.removeListeners(rbut[1]);
@@ -203,7 +203,7 @@ public class GutachtenWahl extends RehaSmartDialog implements RehaTPEventListene
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			ListenerTools.removeListeners(rbut[0]);
 			ListenerTools.removeListeners(rbut[1]);

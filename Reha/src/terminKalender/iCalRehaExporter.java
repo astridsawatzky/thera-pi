@@ -1,8 +1,6 @@
 package terminKalender;
 
 import java.awt.Dimension;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -140,10 +138,6 @@ public class iCalRehaExporter {
 		return true;
 	}
 	
-	private String giveMePart(String[] string, int part){
-		return string[part];
-	}
-	
 	private Vector<String> plandateiEinlesen(){
 		Vector<String> vecz = new Vector<String>();
 		BufferedReader in = null;
@@ -185,21 +179,12 @@ public class iCalRehaExporter {
 
         chooser.setCurrentDirectory(file);
 
-        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent e) {
-                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
-                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-                    final File f = (File) e.getNewValue();
-                }
-            }
-        });
         chooser.setVisible(true);
         Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
         final int result = chooser.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {
             File inputVerzFile = chooser.getSelectedFile();
-            //String inputVerzStr = inputVerzFile.getPath();
 
             if(inputVerzFile.getName().trim().equals("")){
             	sret = "";

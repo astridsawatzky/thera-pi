@@ -132,7 +132,7 @@ private void fillOneDimensionWithStartElement(Vector<?> ve,String startElement){
 	int lang = ve.size();	
 	addItem(startElement);
 	for(int i = 0;i < lang;i++){
-		addItem( (String) ve.get(i));
+		addItem( ve.get(i));
 	}
 }
 
@@ -141,7 +141,7 @@ private void fillComboWithStartElement(Vector<?> ve,String startElement){
 	int lang = ve.size();
 	addItem(startElement);
 	for(int i = 0;i < lang;i++){
-		addItem( (String) ((Vector<?>)ve.get(i)).get(this.cmbdisplay));
+		addItem( ((Vector<?>)ve.get(i)).get(this.cmbdisplay));
 	}
 	
 }
@@ -149,7 +149,7 @@ private void fillComboWithStartElement(Vector<?> ve,String startElement){
 private void fillOneDimension(Vector<?> ve){
 	int lang = ve.size();
 	for(int i = 0;i < lang;i++){
-		addItem( (String) ve.get(i));
+		addItem( ve.get(i));
 	}
 }
 
@@ -157,46 +157,46 @@ private void fillCombo(Vector<?> ve){
 	//int lang = ve.size()-1;
 	int lang = ve.size();
 	for(int i = 0;i < lang;i++){
-		addItem( (String) ((Vector<?>)ve.get(i)).get(this.cmbdisplay));
+		addItem( ((Vector<?>)ve.get(i)).get(this.cmbdisplay));
 	}
 	
 }
 
 public Object getSecValue(){
 	if(this.startElement.equals("")){
-		return ((Object)((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );		
 	}else{
-		return ((Object)((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(this.cmbretvalue) );
+		return (((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(this.cmbretvalue) );
 	}
 
 }
 public Object getValue(){
 	if(this.startElement.equals("")){
-		return ((String)((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );		
 	}else{
-		return ((String)((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(this.cmbretvalue) );
+		return (((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(this.cmbretvalue) );
 	}
 }
 public Object getValueAt(int pos){
 	if(vec.size()<=0){return "";}
 	if(this.startElement.equals("")){
-		return ((String)((Vector<?>)vec.get(this.getSelectedIndex())).get(pos) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(pos) );		
 	}else{
 		if(this.getSelectedIndex()==0){return "";}
-		return ((String)((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(pos) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(pos) );		
 	}
 }
 public void setNewValueAtCurrentPosition(int pos,Object newvalue){
 
 	if(this.startElement.equals("")){
-		((Vector<Object>)vec.get(this.getSelectedIndex())).set(pos,(String)newvalue);		
+		((Vector<Object>)vec.get(this.getSelectedIndex())).set(pos,newvalue);		
 	}else{
-		((Vector<Object>)vec.get(this.getSelectedIndex()-1)).set(pos,(String)newvalue);
+		((Vector<Object>)vec.get(this.getSelectedIndex()-1)).set(pos,newvalue);
 	}
 }
 public void addNewVector(Vector<String> newvec){
-	((Vector<Vector<String>>)vec).add( (Vector<String>) newvec);
-	addItem( (String)((Vector<String>)newvec).get(this.cmbdisplay) );
+	((Vector<Vector<String>>)vec).add( newvec);
+	addItem( newvec.get(this.cmbdisplay) );
 }
 public void removeVector(int pos){
 	if(this.startElement.equals("")){

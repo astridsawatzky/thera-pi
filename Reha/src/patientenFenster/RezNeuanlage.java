@@ -29,6 +29,7 @@ import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
+import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.LadeProg;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -185,7 +186,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			
 			setName("RezeptNeuanlage");
 			rtp = new RehaTPEventClass();
-			rtp.addRehaTPEventListener((RehaTPEventListener) this);
+			rtp.addRehaTPEventListener(this);
 
 
 			addKeyListener(this);
@@ -265,7 +266,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			if(! this.neu){
 				int itest = StringTools.ZahlTest(this.vec.get(57));
 				if(itest >= 0){
-					jcmb[cFARBCOD].setSelectedItem( (String)SystemConfig.vSysColsBedeut.get(itest) );			
+					jcmb[cFARBCOD].setSelectedItem( SystemConfig.vSysColsBedeut.get(itest) );			
 				}else{
 					jcmb[cFARBCOD].setSelectedIndex(0);
 				}
@@ -406,12 +407,12 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		
 		// alle ComboBoxen
 		for ( i = 0; i < jcmb.length; i++ ) {
-			originale.add( (Integer)jcmb[i].getSelectedIndex() );  // Art d. Verordn. etc.
+			originale.add( jcmb[i].getSelectedIndex() );  // Art d. Verordn. etc.
 		}
 		
 		// alle CheckBoxen
 		for ( i = 0; i < jcb.length; i++ ) {  
-			originale.add( (Boolean)(jcb[i].isSelected() ) );  // 
+			originale.add( (jcb[i].isSelected() ) );  // 
 		}
 	}
 	
@@ -830,7 +831,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 	public static String macheIcdString(String string){
 		String String1 = string.trim().substring(0,1).toUpperCase();
-		String String2 = string.trim().substring(1).toUpperCase().replace(" ", "").replace("*", "").replace("!", "").replace("+","").replace("R", "").replace("L","").replace("B","").replace("G","").replace("V","").replace("Z","");;
+		String String2 = string.trim().substring(1).toUpperCase().replace(" ", "").replace("*", "").replace("!", "").replace("+","").replace("R", "").replace("L","").replace("B","").replace("G","").replace("V","").replace("Z","");
 		return String1+String2;
 
 	}
@@ -1199,7 +1200,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			}
 			boolean checkok = new HMRCheck(
 					indi,
-					Arrays.asList(idiszi).indexOf((String)jcmb[cRKLASSE].getSelectedItem().toString()),
+					Arrays.asList(idiszi).indexOf(jcmb[cRKLASSE].getSelectedItem().toString()),
 					anzahlen,
 					hmpositionen,
 					preisgruppen[jcmb[cRKLASSE].getSelectedIndex()],
@@ -1593,8 +1594,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					for(int i = 1; i < vec.get(0).size();i++){
 						preisgruppen[i-1] = Integer.parseInt(vec.get(0).get(i))-1;
 					}
-					preisgruppe = Integer.parseInt((String)vec.get(0).get(0))-1;
-					jtf[cPREISGR].setText((String)vec.get(0).get(0));
+					preisgruppe = Integer.parseInt(vec.get(0).get(0))-1;
+					jtf[cPREISGR].setText(vec.get(0).get(0));
 					ladePreisliste(jcmb[cRKLASSE].getSelectedItem().toString().trim(), preisgruppen[jcmb[cRKLASSE].getSelectedIndex()]);
 					fuelleIndis(jcmb[cRKLASSE].getSelectedItem().toString().trim());
 					ladeZusatzDatenNeu();
@@ -1623,8 +1624,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			for(int i = 1; i < vec.get(0).size();i++){
 				preisgruppen[i-1] = Integer.parseInt(vec.get(0).get(i))-1;
 			}
-			preisgruppe = Integer.parseInt((String)vec.get(0).get(0))-1;
-			jtf[cPREISGR].setText((String)vec.get(0).get(0));
+			preisgruppe = Integer.parseInt(vec.get(0).get(0))-1;
+			jtf[cPREISGR].setText(vec.get(0).get(0));
 		}else{
 			JOptionPane.showMessageDialog(null,"Achtung - kann Preisgruppe nicht ermitteln - Rezept kann später nicht abgerechnet werden!");
 		}
@@ -1753,7 +1754,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		
 		itest = StringTools.ZahlTest(this.vec.get(57));
 		if(itest >= 0){
-			jcmb[cFARBCOD].setSelectedItem( (String)SystemConfig.vSysColsBedeut.get(itest) );			
+			jcmb[cFARBCOD].setSelectedItem( SystemConfig.vSysColsBedeut.get(itest) );			
 		}
 		
 	}
@@ -1789,8 +1790,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	
 	private String[] holePreis(int ivec,int ipreisgruppe){
 		if(ivec > 0){
-			int prid = Integer.valueOf((String) this.preisvec.get(ivec).get(this.preisvec.get(ivec).size()-1));
-			Vector<?> xvec = ((Vector<?>)this.preisvec.get(ivec));
+			int prid = Integer.valueOf(this.preisvec.get(ivec).get(this.preisvec.get(ivec).size()-1));
+			Vector<?> xvec = (this.preisvec.get(ivec));
 			return new String[] {(String)xvec.get(3),(String)xvec.get(2)};
 		}else{
 			return new String[] {"0.00",""};
@@ -1820,9 +1821,9 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			}
 			boolean neuerpreis = RezTools.neuePreisNachRezeptdatumOderStichtag(aktuelleDisziplin, preisgruppe, String.valueOf(stest),false,Reha.thisClass.patpanel.vecaktrez);
 			sbuf.append("rez_datum='"+DatFunk.sDatInSQL(stest)+"', ");
-			int row = Reha.thisClass.patpanel.aktRezept.tabaktrez.getSelectedRow();
+			int row = AktuelleRezepte.tabaktrez.getSelectedRow();
 			if(row >= 0){
-				Reha.thisClass.patpanel.aktRezept.tabaktrez.getModel().setValueAt(stest, row, 2);	
+				AktuelleRezepte.tabaktrez.getModel().setValueAt(stest, row, 2);	
 			}
 			String stest2 = jtf[cBEGINDAT].getText().trim();
 			if(stest2.equals(".  .")){
@@ -1839,7 +1840,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				}
 			}
 			if(row >= 0){
-				Reha.thisClass.patpanel.aktRezept.tabaktrez.getModel().setValueAt(stest2, row, 4);	
+				AktuelleRezepte.tabaktrez.getModel().setValueAt(stest2, row, 4);	
 			}
 			sbuf.append("lastdate='"+DatFunk.sDatInSQL(stest2)+"', ");
 			sbuf.append("lasteddate='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"', ");
@@ -2049,7 +2050,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				}
 				/**********************/
 				if(this.vec.get(14).equals("T") || 
-						(new Double((String)this.vec.get(13)) > 0.00) ){
+						(new Double(this.vec.get(13)) > 0.00) ){
 					szzstatus = "1";
 				}else{
 					// hier testen ob erster Behandlungstag bereits ab dem Befreiungszeitraum
@@ -2545,7 +2546,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					aufraeumen();
 				}
@@ -2571,7 +2572,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				ListenerTools.removeListeners(jta);
 				ListenerTools.removeListeners(getInstance());
 				if(rtp != null){
-					rtp.removeRehaTPEventListener((RehaTPEventListener) getInstance());
+					rtp.removeRehaTPEventListener(getInstance());
 					rtp = null;
 				}
 				return null;

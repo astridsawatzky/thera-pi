@@ -20,7 +20,7 @@ public class RezTest extends RehaSmartDialog implements RehaTPEventListener,Wind
 		this.setName("RezeptTest");
 		//super.getPinPanel().setName("RezeptNeuanlage");
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 	}
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -30,7 +30,7 @@ public class RezTest extends RehaSmartDialog implements RehaTPEventListener,Wind
 					//System.out.println("In rezNeuDlg set Visible false***************");
 					this.setVisible(false);
 					this.dispose();
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					ListenerTools.removeListeners(this);					
 					super.dispose();
@@ -45,7 +45,7 @@ public class RezTest extends RehaSmartDialog implements RehaTPEventListener,Wind
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			dispose();
 			ListenerTools.removeListeners(this);

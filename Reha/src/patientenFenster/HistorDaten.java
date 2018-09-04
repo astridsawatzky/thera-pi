@@ -106,46 +106,46 @@ public class HistorDaten extends JXPanel{
 				
 				vecaktrez = SqlInfo.holeSatz("lza", " * ", "id = '"+xsid+"'", Arrays.asList(new String[] {}) );
 				Reha.thisClass.patpanel.vecakthistor = vecaktrez;
-				String stest = StringTools.NullTest((String)vecaktrez.get(43));
-				String einzeln = StringTools.NullTest((String)vecaktrez.get(61));
+				String stest = StringTools.NullTest(vecaktrez.get(43));
+				String einzeln = StringTools.NullTest(vecaktrez.get(61));
 
 				String diszi = RezTools.putRezNrGetDisziplin(vecaktrez.get(1));
 				int prgruppe = 0;
 				try{
-					 prgruppe = Integer.parseInt((String)vecaktrez.get(41))-1;
+					 prgruppe = Integer.parseInt(vecaktrez.get(41))-1;
 				}catch(Exception ex){}
 
 				
 				if( stest.equals("T") ){
-					rezlabs[1].setText(StringTools.NullTest((String)vecaktrez.get(64))+" *");
+					rezlabs[1].setText(StringTools.NullTest(vecaktrez.get(64))+" *");
 					rezlabs[1].setIcon((einzeln.equals("T") ? hbimg : hbimg2));
 				}else{
 					rezlabs[1].setText("");
 					rezlabs[1].setIcon(null);
 				}
-				rezlabs[2].setText("angelegt von: "+StringTools.NullTest((String)vecaktrez.get(45)));
-				if(StringTools.ZahlTest( (String)vecaktrez.get(37)) >= 0 ){
+				rezlabs[2].setText("angelegt von: "+StringTools.NullTest(vecaktrez.get(45)));
+				if(StringTools.ZahlTest( vecaktrez.get(37)) >= 0 ){
 					rezlabs[3].setForeground(Color.BLACK);
 				}else{
 					rezlabs[3].setForeground(Color.RED);					
 				}
-				rezlabs[3].setText(StringTools.NullTest((String)vecaktrez.get(36)));
+				rezlabs[3].setText(StringTools.NullTest(vecaktrez.get(36)));
 
-				if(StringTools.ZahlTest( (String)vecaktrez.get(16)) >= 0 ){
+				if(StringTools.ZahlTest( vecaktrez.get(16)) >= 0 ){
 					rezlabs[4].setForeground(Color.BLACK);
 				}else{
 					rezlabs[4].setForeground(Color.RED);					
 				}
-				rezlabs[4].setText(StringTools.NullTest((String)vecaktrez.get(15)));
+				rezlabs[4].setText(StringTools.NullTest(vecaktrez.get(15)));
 
-				int test = StringTools.ZahlTest((String)vecaktrez.get(27));
+				int test = StringTools.ZahlTest(vecaktrez.get(27));
 				if(test >= 0){
 					if(test > 2){
 						test = 2;
 					}
 					rezlabs[5].setText(rezart[test]);
 					if(test==2){
-						stest = StringTools.NullTest((String)vecaktrez.get(42));
+						stest = StringTools.NullTest(vecaktrez.get(42));
 						if(stest.equals("T")){
 							rezlabs[6].setForeground(Color.BLACK);
 							rezlabs[6].setText("Begründung o.k.");
@@ -162,9 +162,9 @@ public class HistorDaten extends JXPanel{
 					rezlabs[6].setText(" ");
 				}
 				
-				stest = StringTools.NullTest((String)vecaktrez.get(55));
+				stest = StringTools.NullTest(vecaktrez.get(55));
 				if( stest.equals("T") ){
-					test = StringTools.ZahlTest((String)vecaktrez.get(54));
+					test = StringTools.ZahlTest(vecaktrez.get(54));
 					if(test > 0){
 						rezlabs[7].setForeground(Color.BLACK);
 						rezlabs[7].setText("Therapiebericht o.k.");
@@ -200,9 +200,9 @@ public class HistorDaten extends JXPanel{
 				preisvec = SystemPreislisten.hmPreise.get(diszi).get(prgruppe);
 				
 
-				rezlabs[8].setText( leistungTesten(0,preisvec,StringTools.ZahlTest((String)vecaktrez.get(8))) );
+				rezlabs[8].setText( leistungTesten(0,preisvec,StringTools.ZahlTest(vecaktrez.get(8))) );
 
-				stest = StringTools.NullTest((String)vecaktrez.get(52));
+				stest = StringTools.NullTest(vecaktrez.get(52));
 				if(stest.equals("")){
 					rezlabs[9].setForeground(Color.RED);
 					rezlabs[9].setText(stest+"??? / Wo.");					
@@ -211,11 +211,11 @@ public class HistorDaten extends JXPanel{
 					rezlabs[9].setText(stest+" / Wo.");					
 				}
 				
-				rezlabs[10].setText( leistungTesten(1,preisvec,StringTools.ZahlTest((String)vecaktrez.get(9))) );				
-				rezlabs[11].setText( leistungTesten(2,preisvec,StringTools.ZahlTest((String)vecaktrez.get(10))) );				
-				rezlabs[12].setText( leistungTesten(3,preisvec,StringTools.ZahlTest((String)vecaktrez.get(11))) );				
+				rezlabs[10].setText( leistungTesten(1,preisvec,StringTools.ZahlTest(vecaktrez.get(9))) );				
+				rezlabs[11].setText( leistungTesten(2,preisvec,StringTools.ZahlTest(vecaktrez.get(10))) );				
+				rezlabs[12].setText( leistungTesten(3,preisvec,StringTools.ZahlTest(vecaktrez.get(11))) );				
 
-				stest = StringTools.NullTest((String)vecaktrez.get(44));
+				stest = StringTools.NullTest(vecaktrez.get(44));
 				if(stest.equals("") || stest.equals("kein IndiSchl.") ){
 					if(!vecaktrez.get(1).startsWith("RH")){
 						rezlabs[13].setForeground(Color.RED);
@@ -233,7 +233,7 @@ public class HistorDaten extends JXPanel{
 				}
 
 				
-				stest = StringTools.NullTest((String)vecaktrez.get(47));
+				stest = StringTools.NullTest(vecaktrez.get(47));
 				if(stest.equals("") ){
 					rezlabs[14].setForeground(Color.RED);
 					rezlabs[14].setText("??? Min.");
@@ -242,13 +242,13 @@ public class HistorDaten extends JXPanel{
 					rezlabs[14].setText(stest+" Min.");
 				}
 				
-				if( (stest = StringTools.NullTest((String)vecaktrez.get(71))).trim().length() > 0){
-					stest = "1.ICD-10: "+stest +( StringTools.NullTest((String)vecaktrez.get(72)).trim().length() > 0 ? 
-							"  -  2.ICD-10: "+(String)vecaktrez.get(72) : ""); 
+				if( (stest = StringTools.NullTest(vecaktrez.get(71))).trim().length() > 0){
+					stest = "1.ICD-10: "+stest +( StringTools.NullTest(vecaktrez.get(72)).trim().length() > 0 ? 
+							"  -  2.ICD-10: "+vecaktrez.get(72) : ""); 
 
-					rezdiag.setText(stest+"\n"+StringTools.NullTest((String)vecaktrez.get(23)));
+					rezdiag.setText(stest+"\n"+StringTools.NullTest(vecaktrez.get(23)));
 				}else{
-					rezdiag.setText(StringTools.NullTest((String)vecaktrez.get(23)));	
+					rezdiag.setText(StringTools.NullTest(vecaktrez.get(23)));	
 				}
 				//rezdiag.setText(StringTools.NullTest((String)vecaktrez.get(23)));
 				}catch(Exception ex){
@@ -269,7 +269,7 @@ public class HistorDaten extends JXPanel{
 		}
 		for(int i = 0;i<preisevec.size();i++){
 			if( Integer.valueOf( (String) ((Vector)preisevec.get(i)).get(preisevec.get(i).size()-1)) == veczahl ){
-				return StringTools.NullTest((String)vecaktrez.get(leistung+3))+"  *  "+
+				return StringTools.NullTest(vecaktrez.get(leistung+3))+"  *  "+
 				(String) ((Vector)preisevec.get(i)).get(1);
 			}
 		}
@@ -300,11 +300,11 @@ public class HistorDaten extends JXPanel{
 		reznum.setDragEnabled(true);
 		reznum.addMouseListener(new MouseAdapter() {
 		    public void mousePressed(MouseEvent e) {
-		    	draghandler.setText(((String)Reha.thisClass.patpanel.patDaten.get(0)).substring(0,1)+
+		    	draghandler.setText(Reha.thisClass.patpanel.patDaten.get(0).substring(0,1)+
 		    			"-"+Reha.thisClass.patpanel.patDaten.get(2)+","+Reha.thisClass.patpanel.patDaten.get(3)+"°"+
 		    			reznum.getText()+"°"+rezlabs[14].getText()
 		    			);
-		      JComponent c = (JComponent)draghandler;
+		      JComponent c = draghandler;
 		      TransferHandler th = c.getTransferHandler();
 		      th.exportAsDrag(c, e, TransferHandler.COPY); //TransferHandler.COPY
 		    }

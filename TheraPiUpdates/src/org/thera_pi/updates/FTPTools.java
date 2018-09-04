@@ -140,7 +140,7 @@ public class FTPTools {
 			
 			//System.out.println("**********************available**********************  "+max+" Bytes");
 			
-			FileOutputStream fos = null;;
+			FileOutputStream fos = null;
 			fos = new FileOutputStream(vznah+/*"test/"+*/datfern);
 
 			int n = 0;
@@ -461,7 +461,7 @@ public class FTPTools {
 			
 
 			ftpClient.getReplyString();
-			FileOutputStream fos = null;;
+			FileOutputStream fos = null;
 			fos = new FileOutputStream(vznah+datfern);
 
 			int n = 0;

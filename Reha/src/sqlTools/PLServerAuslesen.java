@@ -81,7 +81,7 @@ public class PLServerAuslesen {
 				}
 			}
 		}
-		return (Vector<Vector<String>>) retkomplett;
+		return retkomplett;
 	}
 	
 	public static void sqlAusfuehren(String sstmt){

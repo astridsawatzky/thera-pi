@@ -77,7 +77,7 @@ public class Eb3 implements RehaEventListener  {
 	public Eb3(EBerichtPanel xeltern){
 		eltern = xeltern; 
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 		pan = new JXPanel(new BorderLayout());
 		pan.setDoubleBuffered(true);
 		pan.setBorder(BorderFactory.createEmptyBorder(0, 0, 3, 0));
@@ -263,7 +263,7 @@ public class Eb3 implements RehaEventListener  {
 										}
 				        			}.execute();
 									XController xController = eltern.document.getXTextDocument().getCurrentController();
-									XTextViewCursorSupplier xTextViewCursorSupplier = (XTextViewCursorSupplier) UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
+									XTextViewCursorSupplier xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
 									xController);
 									XTextViewCursor xtvc = xTextViewCursorSupplier.getViewCursor();
 									xtvc.gotoStart(false);
@@ -374,7 +374,7 @@ public class Eb3 implements RehaEventListener  {
 	
 	
 
-	public void tempTextSpeichern() throws InterruptedException{
+	public void tempTextSpeichern(){
 		String url = tempPfad+"EBfliesstext.pdf";
 		if(eltern.document.isOpen()){
 			if(eltern.document.isModified()){
@@ -400,12 +400,12 @@ public class Eb3 implements RehaEventListener  {
 		}	
 	}	
 
-	public void tempStartSpeichern() throws InterruptedException{
+	public void tempStartSpeichern(){
 		
 	}
 	
 	public boolean textSpeichernInDB(boolean mittemp){
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		//boolean ret = false;
@@ -633,7 +633,7 @@ public class Eb3 implements RehaEventListener  {
 						e.printStackTrace();
 					}
 					
-					this.rEvent.removeRehaEventListener((RehaEventListener)this);
+					this.rEvent.removeRehaEventListener(this);
 				}
 			}
 			if(evt.getRehaEvent().equals("OOFrame")){

@@ -343,7 +343,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 			return;
 		}
 		try {
-			Connection conn = (Connection) DriverManager.getConnection(skontakt,ss6,ss7);
+			Connection conn = DriverManager.getConnection(skontakt,ss6,ss7);
 			JOptionPane.showMessageDialog(null,"Glückwunsch - die Datenbankparameter sind in Ordnung.\n"+
 					"Kontakt zur Datenbank konnte hergestellt werden!");
 			Statement stmt = null;

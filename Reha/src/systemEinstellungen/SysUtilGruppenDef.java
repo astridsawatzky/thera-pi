@@ -30,8 +30,6 @@ import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
-
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -335,11 +333,11 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 					dummy.add(ttext);
 					//Beginn im Kalender
 					int val = new Long(  (Long)((Vector) vec3.get(i)).get(0)).intValue();
-					String start = (String) ZeitFunk.MinutenZuZeit(val); 
+					String start = ZeitFunk.MinutenZuZeit(val); 
 					dummy.add(start.substring(0,5) );
 					//Ende im Kalender
 					int val2 = new Long(  (Long)((Vector) vec3.get(i)).get(1)).intValue();
-					String end = (String) ZeitFunk.MinutenZuZeit(val2); 
+					String end = ZeitFunk.MinutenZuZeit(val2); 
 					dummy.add(end.substring(0,5) );
 					//Dauer
 					long val3 = new Long(  (String)((Vector) vec3.get(i)).get(4) );
@@ -384,9 +382,9 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 		/***************************/		
 		//jxSucheTable.setHighlighters(HighlighterFactory.createSimpleStriping());
 		jTblGruppen.setHighlighters(HighlighterFactory.createSimpleStriping(new Color(204,255,255)));		
-		((TableColumnExt)jTblGruppen.getColumn(1)).setCellEditor((TableCellEditor) new ZeitTableCellEditor());
-		((TableColumnExt)jTblGruppen.getColumn(2)).setCellEditor((TableCellEditor) new ZeitTableCellEditor());
-		((TableColumnExt)jTblGruppen.getColumn(3)).setCellEditor((TableCellEditor) new ZeitTableCellEditor());	
+		((TableColumnExt)jTblGruppen.getColumn(1)).setCellEditor(new ZeitTableCellEditor());
+		((TableColumnExt)jTblGruppen.getColumn(2)).setCellEditor(new ZeitTableCellEditor());
+		((TableColumnExt)jTblGruppen.getColumn(3)).setCellEditor(new ZeitTableCellEditor());	
 		jTblGruppen.setEditable(false);
 		jTblGruppen.setName("tabelle");
 		jTblGruppen.addKeyListener(this);
@@ -440,7 +438,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
         	        DataFlavor[] flavors = tr.getTransferDataFlavors();
         	        for (int i = 0; i < flavors.length; i++){
         	        	if(flavors[i].getRepresentationClass().toString().equals("java.lang.String")){
-        	        		mitgebracht  =(String) tr.getTransferData(flavors[i]).toString();
+        	        		mitgebracht  =tr.getTransferData(flavors[i]).toString();
         	        	}
         	        	mitgebracht  = (String) tr.getTransferData(flavors[i]);
         	        }
@@ -803,7 +801,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 				ini.setStringProperty(sektion, "TA"+itag+"ZE"+(i+1),druckzeit, null);
 				String text = (String)jTblGruppen.getValueAt(i,0);
 				ini.setStringProperty(sektion, "TA"+itag+"TX"+(i+1),text, null);
-				String dauer = Integer.valueOf((String)jTblGruppen.getValueAt(i,4).toString()).toString();
+				String dauer = Integer.valueOf(jTblGruppen.getValueAt(i,4).toString()).toString();
 				ini.setStringProperty(sektion, "TA"+itag+"DA"+(i+1),dauer, null);
 			}
 			INITool.saveIni(ini);

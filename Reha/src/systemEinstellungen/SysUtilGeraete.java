@@ -130,7 +130,7 @@ private JPanel getKnopfPanel(){
 		ecakt = new JCheckBox();
 		ecakt.setEnabled(false);
 		
-		kvkgeraet = new JComboBox( (String[]) SystemConfig.hmGeraete.get("Kartenleser"));
+		kvkgeraet = new JComboBox( SystemConfig.hmGeraete.get("Kartenleser"));
 		kvkgeraet.setSelectedItem(SystemConfig.sReaderName);
 		
 		kvktest = new JButton("testen....");

@@ -23,7 +23,7 @@ public class ExUndHop extends Thread implements Runnable{
 		
 		//Vector treadVect = new Vector();
 		try {
-			stmt = (Statement) textbaus.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = textbaus.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					geklappt =  stmt.execute(this.statement);

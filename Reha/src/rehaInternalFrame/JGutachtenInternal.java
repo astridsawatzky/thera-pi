@@ -29,7 +29,7 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 		this.setIconifiable(true);
 		//this.setIconifiable(false);
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 		this.addPropertyChangeListener(new PropertyChangeListener() {
 	          public void propertyChange(PropertyChangeEvent evt) {
 	        	////System.out.println(evt);
@@ -68,7 +68,7 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 		Reha.thisClass.desktops[this.desktop].remove(this);
 		((EBerichtPanel)this.inhalt).finalise();
 		//Listener deaktivieren
-		rEvent.removeRehaEventListener((RehaEventListener) this);
+		rEvent.removeRehaEventListener(this);
 		this.removeInternalFrameListener(this);
 		this.removeAncestorListener(this);
 		((EBerichtPanel)this.inhalt).dokumentSchliessen();

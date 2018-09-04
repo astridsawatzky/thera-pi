@@ -23,11 +23,11 @@ public class TopWindow implements XTopWindowListener{
 		xdocument = doc;
 		
 		
-		XWindowPeer myWindowPeer = (XWindowPeer) UnoRuntime.queryInterface (XWindowPeer.class,xdocument.getFrame().getXFrame().getContainerWindow());
+		XWindowPeer myWindowPeer = UnoRuntime.queryInterface (XWindowPeer.class,xdocument.getFrame().getXFrame().getContainerWindow());
 
     	XToolkit myToolkit = myWindowPeer.getToolkit();
     	
-    	myExtToolkit = (XExtendedToolkit) UnoRuntime.queryInterface (XExtendedToolkit.class, myToolkit);
+    	myExtToolkit = UnoRuntime.queryInterface (XExtendedToolkit.class, myToolkit);
     	
     	myExtToolkit.addTopWindowListener(this);
 		

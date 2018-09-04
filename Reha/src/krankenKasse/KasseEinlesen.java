@@ -8,7 +8,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import Environment.Path;
-import hauptFenster.Reha;
 
 
 public class KasseEinlesen {

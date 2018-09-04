@@ -90,7 +90,7 @@ public class SysUtilAbrechnungFormulare extends JXPanel implements KeyListener, 
 		tf[0] = new JRtaTextField("nix",false);
 		//tf[0].setEditable(false);
 		builder.add(tf[0],cc.xy(3,3));
-		builder.add((but[0] = macheBut("auswaehlen","gkvrechnwahl")),cc.xy(5,3));;
+		builder.add((but[0] = macheBut("auswaehlen","gkvrechnwahl")),cc.xy(5,3));
 
 		builder.addLabel("Rechnungsdrucker",cc.xy(1,5));
 		jcmb[0] = new JRtaComboBox(drucker);

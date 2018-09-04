@@ -99,7 +99,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 		this.setModal(true);
 		this.setUndecorated(true);
 		this.setContentPanel(titlePanel() );
-		this.jtp.setLayout(new BorderLayout());
+		SchnellSuche.jtp.setLayout(new BorderLayout());
 		
 		JXPanel jp1 = new JXPanel();
 		jp1.setBorder(null);
@@ -116,7 +116,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
         jp1.add(header,BorderLayout.NORTH);
         jp1.add(eingabePanel(),BorderLayout.SOUTH);
 
-		this.jtp.add(jp1,BorderLayout.NORTH);
+		SchnellSuche.jtp.add(jp1,BorderLayout.NORTH);
 		JScrollPane jscr = new JScrollPane();
 		/*
 		tae = new JTextArea();
@@ -143,11 +143,11 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 		jscr.setViewportView(ttbl);
 		
 		
-		this.jtp.add(jscr,BorderLayout.CENTER);
+		SchnellSuche.jtp.add(jscr,BorderLayout.CENTER);
 		JXPanel dummy = new JXPanel();
 		dummy.setBorder(null);
 		dummy.setPreferredSize(new Dimension(0,10));
-		this.jtp.add(dummy,BorderLayout.SOUTH);
+		SchnellSuche.jtp.add(dummy,BorderLayout.SOUTH);
 		getSmartTitledPanel().setTitle("Schnellsuche ab heute + 4 Tage");
 		PinPanel pinPanel = new PinPanel();
 		pinPanel.getGruen().setVisible(false);
@@ -155,7 +155,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 		pinPanel.setzeName(dieserName);
 		setPinPanel(pinPanel);
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		thisClass = this;
 		SwingUtilities.invokeLater(new Runnable(){
 		 	   public  void run()
@@ -347,7 +347,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 	try{
 		//if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 			FensterSchliessen(evt.getDetails()[0]);
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 		//}	
 	}catch(NullPointerException ne){
 		//System.out.println("In DruckFenster" +evt);
@@ -472,7 +472,7 @@ public void suchenFocus(){
 public void keyPressed(KeyEvent arg0) {
 	////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource());
 	if(arg0.getKeyCode() == 27){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
 	}
 	if(arg0.getKeyCode() == 10 && (!arg0.isControlDown())){
@@ -516,7 +516,7 @@ public void keyReleased(KeyEvent arg0) {
 public void keyTyped(KeyEvent arg0) {
 	// TODO Auto-generated method stub
 	if(arg0.getKeyCode() == 27){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
 	}	
 }
@@ -542,11 +542,11 @@ final class SuchenInTagen extends Thread implements Runnable{
 	public void run(){
 		Vector treadVect = new Vector();
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			for(int i = 0; i<exStatement.length;i++){
 				try{
-					rs = (ResultSet) stmt.executeQuery(exStatement[i]);
+					rs = stmt.executeQuery(exStatement[i]);
 					////System.out.println("Nach for..."+exStatement[i]);
 					//SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
 					while(rs.next()){
@@ -574,7 +574,7 @@ final class SuchenInTagen extends Thread implements Runnable{
 								uhrzeit = rs.getString("TS"+(ii+1));
 								sorigdatum = rs.getString(305); 
 								sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-								skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+								skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 								//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 								
 								termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
@@ -597,7 +597,7 @@ final class SuchenInTagen extends Thread implements Runnable{
 										uhrzeit = rs.getString("TS"+(ii+1));
 										sorigdatum = rs.getString(305); 
 										sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-										skollege = (String) ParameterLaden.getKollegenUeberReihe(ikollege);
+										skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 										//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 										
 										termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+

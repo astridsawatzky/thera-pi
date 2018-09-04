@@ -38,7 +38,6 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 
 
 
@@ -82,7 +81,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 	    pinPanel.getGruen().setVisible(false);
 	    this.setPinPanel(pinPanel);
 	    rtp = new RehaTPEventClass();
-	    rtp.addRehaTPEventListener((RehaTPEventListener) this);
+	    rtp.addRehaTPEventListener(this);
 
 	     
 		grundPanel = new JXPanel(new BorderLayout());
@@ -120,7 +119,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 					doAbbrechen();
 					if(rtp != null){
 						this.setVisible(false);
-						rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						pinPanel = null;
 						this.dispose();
@@ -144,7 +143,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 			elterntfs[0].setText(kassenbisher);			
 		}
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;
 			////System.out.println("****************Arztkurz -> Listener entfernt**************");
@@ -294,7 +293,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 		int bis = vec.size();
 		int i;
 		for(i = 0; i < bis; i++){
-			kassenwahlmod.addRow((Vector<?>)vec.get(i));	
+			kassenwahlmod.addRow(vec.get(i));	
 		}
 	}
 	
@@ -306,7 +305,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 		int bis = vec.size();
 		int i;
 		for(i = 0; i < bis; i++){
-			kassenwahlmod.addRow((Vector<?>)vec.get(i));	
+			kassenwahlmod.addRow(vec.get(i));	
 		}
 	}
 

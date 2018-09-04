@@ -49,7 +49,7 @@ public class HMKTreeCellRenderer extends DefaultTreeCellRenderer implements Tree
 	    	if(((JXHMKTreeTableNode)value).key != null){
 	    		node = ((JXHMKTreeTableNode)value);
 	    		indi = ((JXHMKTreeTableNode)value).key;
-	    		stringValue = (String) indi.indischl;
+	    		stringValue = indi.indischl;
 	    		setBackgroundSelectionColor((indi.ungerade ? HighlighterFactory.QUICKSILVER : HighlighterFactory.CLASSIC_LINE_PRINTER) );
 	    		setBackgroundNonSelectionColor((indi.ungerade ? HighlighterFactory.BEIGE : HighlighterFactory.CLASSIC_LINE_PRINTER) );
 	    		setBackground((indi.ungerade ? HighlighterFactory.BEIGE : HighlighterFactory.CLASSIC_LINE_PRINTER));

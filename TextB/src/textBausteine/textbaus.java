@@ -176,7 +176,7 @@ final class DatenbankStarten implements Runnable{
 	    		return ;
         }	
 	        	try {
-    				obj.conn = (Connection) DriverManager.getConnection(obj.dbIpAndName+"?jdbcCompliantTruncation=false",obj.dbUser,obj.dbPassword);
+    				obj.conn = DriverManager.getConnection(obj.dbIpAndName+"?jdbcCompliantTruncation=false",obj.dbUser,obj.dbPassword);
 	    			textbaus.DbOk = true;
 	    			System.out.println("Datenbankkontakt hergestellt");
 	        	} 

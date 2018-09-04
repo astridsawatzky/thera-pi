@@ -428,7 +428,7 @@ public class RehaHMK implements WindowListener {
 	    		return ;
 			}	
         	try {
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
 				RehaHMK.DbOk = true;
 				RehaHMK.thisClass.sqlInfo.setConnection(RehaHMK.thisClass.conn); 
     			System.out.println("Datenbankkontakt hergestellt");
@@ -461,7 +461,7 @@ public class RehaHMK implements WindowListener {
         			"Dieser Pfad existiert: NEIN");
     	}
     	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(RehaHMK.officeProgrammPfad,RehaHMK.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(RehaHMK.officeProgrammPfad,RehaHMK.officeNativePfad).start(false);
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();
 		}

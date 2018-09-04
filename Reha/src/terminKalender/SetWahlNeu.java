@@ -87,7 +87,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 		pinPanel.addKeyListener(this);
 		
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		
 		jcc.add(getSetWahl(jpan = new JXPanel(new BorderLayout())));
 		jcc.validate();
@@ -96,7 +96,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 		((JXTitledPanel)this.getContentPane()).getContentContainer().add(jcc,BorderLayout.CENTER);
 		
 		
-		this.wahl = ((TerminFenster) Reha.thisClass.terminpanel).aktuellesSet();
+		this.wahl = Reha.thisClass.terminpanel.aktuellesSet();
 		this.jList1.setSelectedIndex(this.wahl);
 		this.validate();
 		
@@ -142,7 +142,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 		int i,max = 0;
 		max = SystemConfig.aTerminKalender.size();
 		for(i=0;i<max;i++){
-			model.add(i,(String)((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0));
+			model.add(i,((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0));
 		}
 		return;
 	}
@@ -203,7 +203,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 		if(rtp != null){
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 		}
 		if(pinPanel != null){
@@ -217,7 +217,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 		try{
 			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 				FensterSchliessen(evt.getDetails()[0]);
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 			}	
 		}catch(NullPointerException ne){

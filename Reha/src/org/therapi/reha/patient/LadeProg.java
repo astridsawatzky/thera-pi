@@ -99,7 +99,9 @@ public class LadeProg {
 							if(Reha.thisClass.patpanel.aktPatID.equals(befehle[1])){
 								befehlAbfeuern("#PATSUCHEN",befehle[1],befehle[2]);								
 							}
-						}catch(Exception ex){};
+						}catch(Exception ex){
+							
+						}
 					}
 				}
 				

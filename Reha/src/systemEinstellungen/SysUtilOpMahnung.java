@@ -453,8 +453,8 @@ public class SysUtilOpMahnung extends JXPanel implements KeyListener, ActionList
 		SystemConfig.hmZusatzInOffenPostenIni.put("RGRinOPverwaltung", Integer.parseInt(tfs[0].getText()) );
 		SystemConfig.hmZusatzInOffenPostenIni.put("AFRinOPverwaltung", Integer.parseInt(tfs[1].getText()) );
 
-		inif.setIntegerProperty("ZusaetzlicheRechnungen", "RGRinOPverwaltung", (Integer)SystemConfig.hmZusatzInOffenPostenIni.get("RGRinOPverwaltung"), " RFR in OP-Verwaltung" );
-		inif.setIntegerProperty("ZusaetzlicheRechnungen", "AFRinOPverwaltung", (Integer)SystemConfig.hmZusatzInOffenPostenIni.get("AFRinOPverwaltung"), " AFR in OP-Verwaltung" );
+		inif.setIntegerProperty("ZusaetzlicheRechnungen", "RGRinOPverwaltung", SystemConfig.hmZusatzInOffenPostenIni.get("RGRinOPverwaltung"), " RFR in OP-Verwaltung" );
+		inif.setIntegerProperty("ZusaetzlicheRechnungen", "AFRinOPverwaltung", SystemConfig.hmZusatzInOffenPostenIni.get("AFRinOPverwaltung"), " AFR in OP-Verwaltung" );
 
 		// Die sysetmspezifischen Daten müssen eigentlich in die Tabelle 'ini' weggespeichert werden
 		

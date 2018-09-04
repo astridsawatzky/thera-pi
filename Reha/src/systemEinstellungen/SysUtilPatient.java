@@ -167,7 +167,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			button[i].addActionListener(this);
 		}
 		for(int i = 0;i < 6;i++){
-			krit[i].setText((String)SystemConfig.vPatMerker.get(i));
+			krit[i].setText(SystemConfig.vPatMerker.get(i));
 			String sico = ""; 
 			if(SystemConfig.vPatMerkerIcon.get(i)==null){
 				sico = "";
@@ -212,7 +212,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 		});
 		
 		//vorlagen.setDefaultEditor(new Object().getClass(), new MyEditor());
-		vorlagen.getColumn(0).setCellEditor((TableCellEditor) new TitelEditor());
+		vorlagen.getColumn(0).setCellEditor(new TitelEditor());
 		vorlagen.getColumn(0).getCellEditor().addCellEditorListener(this);
 		vorlage = new JRtaTextField("NIX", true);
 		button[6] = new JButton("entfernen");

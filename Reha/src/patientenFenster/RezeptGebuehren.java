@@ -119,7 +119,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListe
 	    setLocation(lpt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 		pack();
 		SwingUtilities.invokeLater(new Runnable(){
@@ -244,7 +244,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListe
 
 		try{
 		String url = "";
-		if( ((String)Reha.thisClass.patpanel.vecaktrez.get(43)).equals("T") ){
+		if( Reha.thisClass.patpanel.vecaktrez.get(43).equals("T") ){
 			url = SystemConfig.rezGebVorlageHB;
 		}else{
 			url = SystemConfig.rezGebVorlageNeu;			
@@ -342,7 +342,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListe
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					super.dispose();
 					this.dispose();
@@ -357,7 +357,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListe
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			super.dispose();
 			dispose();
@@ -499,7 +499,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListe
 						"Fehler-Mail");
 			}
 			try{
-				aktuelleRezepte.setZuzahlImage(1);	// zuzahlok
+				AktuelleRezepte.setZuzahlImage(1);	// zuzahlok
 			}catch(Exception ex3){
 				JOptionPane.showMessageDialog(null,"Der Zuzahlungsstatus im Rezeptstamm konnte nicht korrekt gesetzt werden.\n+" +
 					"Bitte notieren Sie den Namen des Patienten und die Rezeptnummer und verständigen\n"+

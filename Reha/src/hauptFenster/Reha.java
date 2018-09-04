@@ -596,16 +596,16 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}
 		try{
 			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini"); 
-			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",(Object)jSplitLR.getDividerLocation(),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",(Object)jSplitRechtsOU.getDividerLocation(),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",(Object)(LinkeTaskPane.tp1.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",(Object)(LinkeTaskPane.tp4.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",(Object)(LinkeTaskPane.tp3.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",(Object)(LinkeTaskPane.tp5.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",(Object)(LinkeTaskPane.tp2.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",(Object)(LinkeTaskPane.tp6.isCollapsed() ? "1" : "0"),null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",jSplitLR.getDividerLocation(),null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",jSplitRechtsOU.getDividerLocation(),null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",LinkeTaskPane.tp1.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",LinkeTaskPane.tp4.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",LinkeTaskPane.tp3.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",LinkeTaskPane.tp5.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",LinkeTaskPane.tp2.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",LinkeTaskPane.tp6.isCollapsed() ? "1" : "0",null );
 			if(LinkeTaskPane.mitUserTask){
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",(Object)(LinkeTaskPane.tp7.isCollapsed() ? "1" : "0"),null );				
+				SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",LinkeTaskPane.tp7.isCollapsed() ? "1" : "0",null );				
 			}
 		}catch(NullPointerException ex){
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
@@ -679,16 +679,16 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}
 		try{
 			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
-			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",(Object)jSplitLR.getDividerLocation(),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",(Object)jSplitRechtsOU.getDividerLocation(),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",(Object)(LinkeTaskPane.tp1.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",(Object)(LinkeTaskPane.tp4.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",(Object)(LinkeTaskPane.tp3.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",(Object)(LinkeTaskPane.tp5.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",(Object)(LinkeTaskPane.tp2.isCollapsed() ? "1" : "0"),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",(Object)(LinkeTaskPane.tp6.isCollapsed() ? "1" : "0"),null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",jSplitLR.getDividerLocation(),null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",jSplitRechtsOU.getDividerLocation(),null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",LinkeTaskPane.tp1.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",LinkeTaskPane.tp4.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",LinkeTaskPane.tp3.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",LinkeTaskPane.tp5.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",LinkeTaskPane.tp2.isCollapsed() ? "1" : "0",null );
+			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",LinkeTaskPane.tp6.isCollapsed() ? "1" : "0",null );
 			if(LinkeTaskPane.mitUserTask){
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",(Object)(LinkeTaskPane.tp7.isCollapsed() ? "1" : "0"),null );				
+				SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",LinkeTaskPane.tp7.isCollapsed() ? "1" : "0",null );				
 			}
 		}catch(NullPointerException ex){
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
@@ -1586,7 +1586,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				      }else{
 					      DataFlavor[] flavors = tr.getTransferDataFlavors();
 					      for (int i = 0; i < flavors.length; i++){
-					        	mitgebracht  = String.valueOf((String) tr.getTransferData(flavors[i]).toString());
+					        	mitgebracht  = String.valueOf(tr.getTransferData(flavors[i]).toString());
 					      }
 				      }
 				
@@ -1634,11 +1634,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		    	       DragGestureEvent e) {
 		    	    	 StringSelection selection = new StringSelection(copyLabel.getText());
 		    			    //if(Reha.osVersion.contains("Linux")){				            
-					    		  Reha.dragDropComponent = (JComponent) bunker;
+					    		  Reha.dragDropComponent = bunker;
 					    		  if(!Rechte.hatRecht(Rechte.Kalender_termindragdrop, false)){
 						        		return;
 					    		  }
-						            JComponent comp = (JComponent)copyLabel;
+						            JComponent comp = copyLabel;
 						            if( ((JLabel)comp).getText().equals("") ){
 						            	return;
 						            }
@@ -1673,7 +1673,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		            	TerminFenster.setDragMode(0);
 		            }
 		            TransferHandler th = bunker.getTransferHandler();
-		            th.exportAsDrag((JComponent) bunker, evt, TransferHandler.COPY);
+		            th.exportAsDrag(bunker, evt, TransferHandler.COPY);
 		        }
 		    });
 		    bar2.add(copyLabel);
@@ -2006,7 +2006,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
     public static void starteOfficeApplication(){ 
         try
         {
-			officeapplication = (IOfficeApplication)new StartOOApplication(SystemConfig.OpenOfficePfad,SystemConfig.OpenOfficeNativePfad).start(false);
+			officeapplication = new StartOOApplication(SystemConfig.OpenOfficePfad,SystemConfig.OpenOfficeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und aktiv = "+officeapplication.isActive());
 			 Reha.thisClass.Rehaprogress.setIndeterminate(false);
         }catch (OfficeApplicationException e) {
@@ -2385,11 +2385,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		//Größe einstellen
 		try{
 			if(((JComponent)arg0.getSource()).getName() != null){
-				if( ((String)((JComponent)arg0.getSource()).getName()).equals("PanelOben")){
+				if( ((JComponent)arg0.getSource()).getName().equals("PanelOben")){
 					desktops[0].setBounds(0,0,Reha.thisClass.jpOben.getWidth(),
 							Reha.thisClass.jpOben.getHeight());
 				}
-				if( ((String)((JComponent)arg0.getSource()).getName()).equals("PanelUnten")){
+				if( ((JComponent)arg0.getSource()).getName().equals("PanelUnten")){
 					desktops[1].setBounds(0,0,Reha.thisClass.jpUnten.getWidth(),
 							Reha.thisClass.jpUnten.getHeight() );
 				}
@@ -2587,7 +2587,7 @@ public static void testeStrictMode(){
 			String meldung = "Achtung der MySql-Server wird im Modus: "+vecfeld.get(0).get(1).trim()+" betrieben!\n"+
 			"In diesem Modus kann Thera-Pi nicht fehlerfrei betrieben werden.\n\n"+
 			"Beenden Sie Thera-Pi und stellen Sie in der Datei my.ini (Linux=my.cnf) den Wert sql_mode='' ein\n"+
-			"Die Datei befindet sich in dem Verzeichnis indem der MySql-Server installiert wurde";;
+			"Die Datei befindet sich in dem Verzeichnis indem der MySql-Server installiert wurde";
 			JOptionPane.showMessageDialog(null,meldung);
 		}
 	}catch(NullPointerException ex){
@@ -2883,13 +2883,13 @@ public void activateWebCam(){
 		           
 		        }
 				
-				Vector<CaptureDeviceInfo> deviceList = (Vector<CaptureDeviceInfo>)javax.media.cdm.CaptureDeviceManager.getDeviceList(new YUVFormat());
+				Vector<CaptureDeviceInfo> deviceList = javax.media.cdm.CaptureDeviceManager.getDeviceList(new YUVFormat());
 				if(deviceList == null){
 					JOptionPane.showMessageDialog(null,"Keine WebCam verfügbar!!");
 					SystemConfig.sWebCamActive = "0";
 					return null;
 				}
-				device = (CaptureDeviceInfo) deviceList.firstElement();
+				device = deviceList.firstElement();
 				ml = device.getLocator();
 				Manager.setHint(Manager.LIGHTWEIGHT_RENDERER, new Boolean(true));
 				player = Manager.createRealizedPlayer(ml);
@@ -2973,7 +2973,7 @@ final class DatenbankStarten implements Runnable{
 				
 				//obj.conn = (Connection) DriverManager.getConnection("jdbc:mysql://194.168.1.8:3306/dbf","entwickler","entwickler");
 				new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-				obj.conn = (Connection) DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
+				obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
 						SystemConfig.vDatenBank.get(0).get(3),SystemConfig.vDatenBank.get(0).get(4));
 				}	
 				int nurmaschine = SystemConfig.dieseMaschine.toString().lastIndexOf("/");
@@ -3198,9 +3198,9 @@ final class DatenbankStarten implements Runnable{
 
 				Vector<Vector<String>> vec = SqlInfo.holeFelder("select min(datum),max(datum) from flexkc");
 
-				Reha.kalMin = DatFunk.sDatInDeutsch( ((String)((Vector<String>)vec.get(0)).get(0)) );
+				Reha.kalMin = DatFunk.sDatInDeutsch( (vec.get(0).get(0)) );
 
-				Reha.kalMax = DatFunk.sDatInDeutsch( ((String)((Vector<String>)vec.get(0)).get(1)) );
+				Reha.kalMax = DatFunk.sDatInDeutsch( (vec.get(0).get(1)) );
 				
 				SystemConfig.FirmenDaten();			
 
@@ -3265,7 +3265,7 @@ final class DbNachladen implements Runnable{
     	try {
 			if (sDB=="SQL"){
 				new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-				obj.conn = (Connection) DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false",
+				obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false",
 						SystemConfig.vDatenBank.get(0).get(3),SystemConfig.vDatenBank.get(0).get(4));
 			}	
 			int nurmaschine = SystemConfig.dieseMaschine.toString().lastIndexOf("/");
@@ -3544,15 +3544,12 @@ class SocketClient {
 		run();
 	}
 	public void run() {
-		try {
-			serverStarten();
-		} catch (IOException e) {
-		}
+		serverStarten();
 	}
-	private void serverStarten() throws IOException{
+	private void serverStarten(){
 		try{
 			this.server = new Socket("localhost",1234);
-			OutputStream output = (OutputStream) server.getOutputStream();
+			OutputStream output = server.getOutputStream();
 			InputStream input = server.getInputStream();
 
 			byte[] bytes = this.stand.getBytes();
@@ -3680,7 +3677,7 @@ final class HilfeDatenbankStarten implements Runnable{
 		}	
 	    try {
 	        		Reha.thisClass.hilfeConn = 
-	        			(Connection) DriverManager.getConnection(SystemConfig.hmHilfeServer.get("HilfeDBLogin"),
+	        			DriverManager.getConnection(SystemConfig.hmHilfeServer.get("HilfeDBLogin"),
 	        					SystemConfig.hmHilfeServer.get("HilfeDBUser"),SystemConfig.hmHilfeServer.get("HilfeDBPassword"));
 	    }catch (final SQLException ex) {
 	    	Reha.HilfeDbOk = false;

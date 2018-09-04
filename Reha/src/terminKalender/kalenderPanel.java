@@ -46,7 +46,6 @@ private int xEnde;
 //private int iMinKalStart;
 private int baseline;
 //private int fonthoch;
-private SystemFarben oCol = null;
 private boolean spalteAktiv = false;
 private int blockAktiv = 0;
 private int panelNummer = 0;
@@ -89,7 +88,7 @@ public void paintComponent( Graphics g ) {
 		//super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;
 
-		vectorzahl = ((Vector)dat).size();
+		vectorzahl = dat.size();
 
 		if (vectorzahl > 0){
 			String sName=""; //Namenseintrag
@@ -105,10 +104,9 @@ public void paintComponent( Graphics g ) {
 			float fEndePix;
 
 			float fDifferenz;
-			float fStart;
 			//final ZeitFunk zStart = new ZeitFunk();
 			int i1;
-			g2d.setFont(oCol.fon3);
+			g2d.setFont(SystemFarben.fon3);
 
 			//g.setColor( new Color(0x80,0x9f,0xff));
 		
@@ -162,10 +160,10 @@ public void paintComponent( Graphics g ) {
 					sStart = (String)((Vector)dat.get(2)).get(i);
 					sEnde = (String)((Vector)dat.get(2)).get(i);					
 					dauer = Integer.parseInt((String)((Vector)dat.get(3)).get(i));
-					yStartMin = (int) ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
+					yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
 
-					fStartPix = ((float)yStartMin)*fPixelProMinute;
-					fEndePix  = fStartPix+((float) dauer * fPixelProMinute);
+					fStartPix = (yStartMin)*fPixelProMinute;
+					fEndePix  = fStartPix+(dauer * fPixelProMinute);
 					yStartMin = ((int) (fStartPix));
 					yEndeMin = ((int) (fEndePix));
 					yDifferenz = yEndeMin-yStartMin;
@@ -290,9 +288,9 @@ public void paintComponent( Graphics g ) {
 
 						if((this.blockAktiv >= 0) && (this.blockAktiv == i) && (this.spalteAktiv)){
 							////System.out.println("in aktiv zeichnen");
-							g2d.setColor( oCol.colGrau1);
+							g2d.setColor( SystemFarben.colGrau1);
 							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
-							g2d.setColor( oCol.colWeiss);
+							g2d.setColor( SystemFarben.colWeiss);
 							if (sReznr.contains("@FREI")){
 								g2d.drawString(sName, 5, (baseline));								
 							}else{
@@ -636,8 +634,8 @@ public void paintComponent( Graphics g ) {
 /**********************************/
 	public void zeitSpanne(){
 		iMaxHoehe = this.getSize().height;
-		fPixelProMinute = (float) iMaxHoehe;
-		fPixelProMinute =(float) fPixelProMinute / minutenInsgesamt;
+		fPixelProMinute = iMaxHoehe;
+		fPixelProMinute =fPixelProMinute / minutenInsgesamt;
 		setiPixelProMinute(((int) (fPixelProMinute)));
 		xStart = 2;
 		xEnde = this.getSize().width;
@@ -662,7 +660,7 @@ public void paintComponent( Graphics g ) {
 		zeitSpanneVon = von;
 		setZeitSpanneBis(bis);
 		minutenInsgesamt = bis-von;
-		oCol = new SystemFarben();
+		 new SystemFarben();
 	}
 	public int[] BlockTest(int x,int y,int[] spdaten){
 		int[] ret = spdaten;
@@ -684,9 +682,9 @@ public void paintComponent( Graphics g ) {
 				//sEnde = (String)((Vector<?>)dat.get(2)).get(i);					
 				dauer = Integer.parseInt((String)((Vector<?>)dat.get(3)).get(i));
 				
-				yStartMin = (int) ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
-				fStartPix = ((float)yStartMin)*fPixelProMinute;
-				fEndePix  = fStartPix+((float) dauer * fPixelProMinute);
+				yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
+				fStartPix = (yStartMin)*fPixelProMinute;
+				fEndePix  = fStartPix+(dauer * fPixelProMinute);
 				if ((y >= fStartPix) && (y <= fEndePix)){
 					this.blockAktiv = i;
 					this.spalteAktiv = true;
@@ -703,7 +701,7 @@ public void paintComponent( Graphics g ) {
 				}
 			}
 		}
-		return (int[]) ret.clone();
+		return ret.clone();
 	}
 	
 /********************************/
@@ -719,9 +717,9 @@ public void paintComponent( Graphics g ) {
 				sStart = (String)((Vector<?>)dat.get(2)).get(i);
 				dauer = Integer.parseInt((String)((Vector<?>)dat.get(3)).get(i));
 				
-				yStartMin = (int) ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
-				fStartPix = ((float)yStartMin)*fPixelProMinute;
-				fEndePix  = fStartPix+((float) dauer * fPixelProMinute);
+				yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
+				fStartPix = (yStartMin)*fPixelProMinute;
+				fEndePix  = fStartPix+(dauer * fPixelProMinute);
 				if ((y >= fStartPix) && (y <= fEndePix)){
 					ret[3] = ret[2];
 					ret[2] = panelNummer;
@@ -731,7 +729,7 @@ public void paintComponent( Graphics g ) {
 				}	
 			}
 		}
-		return (int[]) ret.clone();
+		return ret.clone();
 	}
 /********************************/
 		
@@ -750,9 +748,9 @@ public void paintComponent( Graphics g ) {
 				//sEnde = (String)((Vector<?>)dat.get(2)).get(i);					
 				dauer = Integer.parseInt((String)((Vector<?>)dat.get(3)).get(i));
 				
-				yStartMin = (int) ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
-				fStartPix = ((float)yStartMin)*fPixelProMinute;
-				fEndePix  = fStartPix+((float) dauer * fPixelProMinute);
+				yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
+				fStartPix = (yStartMin)*fPixelProMinute;
+				fEndePix  = fStartPix+(dauer * fPixelProMinute);
 				if ((y >= fStartPix) && (y <= fEndePix)){
 					trefferblock = i;
 					break;
@@ -828,7 +826,6 @@ public void paintComponent( Graphics g ) {
 		int dauer;    //Termin Dauer
 		int yEndeMin;
 		float fStartPix;
-		float fEndePix;
 		int block1,block2;
 		block1 = gruppe[0];
 		block2 = gruppe[1];
@@ -851,12 +848,12 @@ public void paintComponent( Graphics g ) {
 
 			////System.out.println("Start = "+sStart+" / Ende = "+sEnde);
 
-			fStartPix = ((float)yStartMin)*fPixelProMinute;
+			fStartPix = (yStartMin)*fPixelProMinute;
 			//fEndePix  = fStartPix+((float) dauer * fPixelProMinute);
 			yStartMin = ((int) (fStartPix));
 			//yEndeMin = ((int) (fEndePix));
 			
-			yEndeMin = (int) (((float)dauer)*fPixelProMinute);
+			yEndeMin = (int) ((dauer)*fPixelProMinute);
 			rahmen[0] = 0;
 			rahmen[1] = yStartMin;
 			rahmen[2] = this.getWidth();

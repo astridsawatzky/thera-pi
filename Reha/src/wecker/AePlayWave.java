@@ -22,7 +22,7 @@ public class AePlayWave extends Thread {
  
     enum Position {
         LEFT, RIGHT, NORMAL
-    };
+    }
  
     public AePlayWave(String wavfile) {
         filename = wavfile;

@@ -160,7 +160,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<String>)retvec;
+		return retvec;
 	}
 /*****************************************/
 	/*******************************/
@@ -223,7 +223,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<String>)retvec;
+		return retvec;
 	}
 /*****************************************/
 	public static Vector<String> holeFeldNamen(String tabelle, boolean ausnahmen, List<?> lausnahmen){
@@ -311,7 +311,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<String>)retvec;
+		return retvec;
 	}
 
 	/*******************************/
@@ -480,7 +480,6 @@ public class SqlInfo {
 /*******************************/
 	public static void aktualisiereSatz(String tabelle, String sets, String kriterium){
 		Statement stmt = null;
-		ResultSet rs = null;
 	
 		try {
 			stmt =  ArztBausteine.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -493,8 +492,7 @@ public class SqlInfo {
 			ArztBausteine.thisClass.jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			String sstmt = "update "+tabelle+" set "+sets+" where "+kriterium+" LIMIT 1";
 			//System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
-			Object ret = stmt.execute(sstmt);
-			//System.out.println(ret);
+			stmt.execute(sstmt);
 			ArztBausteine.thisClass.jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
@@ -502,14 +500,6 @@ public class SqlInfo {
 			System.out.println("VendorError: " + ev.getErrorCode());
 		}	
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -524,7 +514,6 @@ public class SqlInfo {
 	/*******************************/
 	public static void aktualisiereSaetze(String tabelle, String sets, String kriterium){
 		Statement stmt = null;
-		ResultSet rs = null;
 	
 		try {
 			stmt =  ArztBausteine.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -537,8 +526,7 @@ public class SqlInfo {
 			ArztBausteine.thisClass.jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			String sstmt = "update "+tabelle+" set "+sets+" where "+kriterium;
 			//System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
-			Object ret = stmt.execute(sstmt);
-			//System.out.println(ret);
+			 stmt.execute(sstmt);
 			ArztBausteine.thisClass.jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
@@ -546,14 +534,6 @@ public class SqlInfo {
 			System.out.println("VendorError: " + ev.getErrorCode());
 		}	
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -572,13 +552,11 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		String ret = "";
-		//Vector<String> retvec = new Vector<String>();
 			
 		try {
 			stmt =  ArztBausteine.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try{
@@ -620,7 +598,6 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		String ret = "";
-		ResultSetMetaData rsMetaData = null;
 		try {
 			stmt =  ArztBausteine.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -644,9 +621,6 @@ public class SqlInfo {
 			System.out.println("VendorError: " + ev.getErrorCode());
 		}
 		finally {
-			if(rsMetaData != null){
-				rsMetaData = null;
-			}
 			if (rs != null) {
 				try {
 					rs.close();
@@ -672,7 +646,6 @@ public class SqlInfo {
 	public static Vector<Vector<String>> holeFelder(String xstmt){
 		Statement stmt = null;
 		ResultSet rs = null;
-		String ret = "";
 		Vector<String> retvec = new Vector<String>();
 		Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();	
 		ResultSetMetaData rsMetaData = null;
@@ -728,7 +701,7 @@ public class SqlInfo {
 				}
 			}
 		}
-		return (Vector<Vector<String>>) retkomplett;
+		return retkomplett;
 	}
 /*****************************************/
 
@@ -781,7 +754,6 @@ public class SqlInfo {
 	}
 /*****************************************/
 	public static void sqlAusfuehren(String sstmt){
-		boolean geklappt = false;
 		Statement stmt = null;
 			
 		try {
@@ -792,7 +764,7 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			geklappt =  stmt.execute(sstmt);
+			stmt.execute(sstmt);
 			ArztBausteine.thisClass.jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
@@ -821,7 +793,6 @@ public class SqlInfo {
 			stmt =  ArztBausteine.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try{

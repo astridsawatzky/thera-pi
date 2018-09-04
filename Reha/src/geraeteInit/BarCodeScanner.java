@@ -37,7 +37,7 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 	   InputStream inputStream = null;
 	   static OutputStream outputStream = null;
 	   public static SerialPort serialPort = null;
-	   Thread readThread = null;;
+	   Thread readThread = null;
 	   boolean portFound = false; 
 	   //static String port;
 	   int baud,bits,stopbit,parity ;

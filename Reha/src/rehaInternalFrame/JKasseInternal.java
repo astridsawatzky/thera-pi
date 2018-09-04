@@ -22,7 +22,7 @@ public class JKasseInternal extends JRehaInternal implements RehaEventListener{
 	public JKasseInternal(String titel, ImageIcon img, int desktop) {
 		super(titel, img, desktop);
 		rEvent = new RehaEventClass();
-		rEvent.addRehaEventListener((RehaEventListener) this);
+		rEvent.addRehaEventListener(this);
 	}
 	@Override
 	public void internalFrameClosing(InternalFrameEvent arg0) {
@@ -37,7 +37,7 @@ public class JKasseInternal extends JRehaInternal implements RehaEventListener{
 		//System.out.println("Lösche KasseInternal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
 		Reha.thisClass.desktops[this.desktop].remove(this);
 		Reha.thisClass.aktiviereNaechsten(this.desktop);
-		rEvent.removeRehaEventListener((RehaEventListener) this);
+		rEvent.removeRehaEventListener(this);
 		this.nord = null;
 		this.inhalt = null;
 		this.thisContent = null;

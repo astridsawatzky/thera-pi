@@ -34,6 +34,7 @@ import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
+import org.therapi.reha.patient.AktuelleRezepte;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -46,7 +47,6 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import Environment.Path;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
@@ -176,7 +176,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 		//this.setModal(true);
 		this.setResizable(false);
 		this.rtp = new RehaTPEventClass();
-		this.rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		this.rtp.addRehaTPEventListener(this);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
 	private JXPanel getContent(){
@@ -311,7 +311,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 		}else{
 			doBGE();
 		}
-		posteAktualisierung((String) Reha.thisClass.patpanel.patDaten.get(29) );
+		posteAktualisierung(Reha.thisClass.patpanel.patDaten.get(29) );
 		FensterSchliessen("dieses");
 	}
 	/*
@@ -569,10 +569,10 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 	}
 	
 	private void doTabelle(){
-		int row =  Reha.thisClass.patpanel.aktRezept.tabaktrez.getSelectedRow();
+		int row =  AktuelleRezepte.tabaktrez.getSelectedRow();
 		if(row >= 0){
-			TableTool.loescheRowAusModel(Reha.thisClass.patpanel.aktRezept.tabaktrez, row);
-			Reha.thisClass.patpanel.aktRezept.tabaktrez.repaint();
+			TableTool.loescheRowAusModel(AktuelleRezepte.tabaktrez, row);
+			AktuelleRezepte.tabaktrez.repaint();
 			Reha.thisClass.patpanel.aktRezept.setzeKarteiLasche();
 		}
 	}
@@ -1400,7 +1400,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 		}
 		this.mymouse = null; 
 		if(this.rtp != null){
-			this.rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			this.rtp.removeRehaTPEventListener(this);
 			this.rtp=null;			
 		}
 		this.pinPanel = null;
@@ -1408,7 +1408,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 		this.dispose();
 	}
 	public void starteDokument(String url) throws Exception{
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		documentService = Reha.officeapplication.getDocumentService();
 		IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
@@ -1512,7 +1512,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 
 	}
 	
-	private synchronized void starteDrucken() throws DocumentException, InterruptedException{
+	private synchronized void starteDrucken(){
 		if(SystemConfig.hmAbrechnung.get("hmallinoffice").equals("1")){
 			textDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 		}else{

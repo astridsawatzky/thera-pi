@@ -264,7 +264,7 @@ public class NebraskaPanel extends JPanel implements ActionListener{
 	}
 	
 	public static int unsignedByteToInt(byte b) {
-		return (int) b & 0xFF;
+		return b & 0xFF;
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {

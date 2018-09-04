@@ -153,7 +153,7 @@ public class NebraskaUtil {
 			if(i>0) {
 				result.append(':');
 			}
-			String hex = Integer.toHexString(0xFF & (int)(bytes[i]));
+			String hex = Integer.toHexString(0xFF & (bytes[i]));
 			if(hex.length() < 2){
 				result.append('0');
 			}

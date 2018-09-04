@@ -409,7 +409,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		
 		
 		
-		if (wert==1);{
+		if (wert==1);{  //XXX: <- da ist ein semicolon das das IF beendet. Der untere Block wird also immer ausgeführt, wenn wert >0
 			tf1[1].setText("166,00");
 			tf1[2].setText("24,00");
 			tf1[3].setText("8,00");
@@ -442,8 +442,8 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 				@Override
 				public int compare(String o1, String o2) {
 					// TODO Auto-generated method stub
-					String s1 = DatFunk.sDatInSQL((String)o1);
-					String s2 = DatFunk.sDatInSQL((String)o2);
+					String s1 = DatFunk.sDatInSQL(o1);
+					String s2 = DatFunk.sDatInSQL(o2);
 					return s1.compareTo(s2);
 				}
 			};
@@ -499,7 +499,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
             		}
             		//dummyvec.add(datum);
             		//dummyvec.add(DatFunk.sDatInSQL(datum));
-            		vec.add((String)datum);
+            		vec.add(datum);
             		////System.out.println("Feld "+j+" "+(aobj[j]));
             	}
             }	
@@ -537,7 +537,7 @@ class MultiLineLabelUI extends BasicLabelUI
         Rectangle textR)
     {
         String s = layoutCompoundLabel(
-            (JComponent) label,
+            label,
             fontMetrics,
             splitStringByLines(text),
             icon,

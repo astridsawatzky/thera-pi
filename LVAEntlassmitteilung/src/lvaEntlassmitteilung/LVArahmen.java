@@ -179,7 +179,7 @@ final class DatenbankStarten implements Runnable{
 	    		return ;
         }	
 	        	try {
-	   				obj.conn = (Connection) DriverManager.getConnection(LVArahmen.dbIpAndName,LVArahmen.dbUser,LVArahmen.dbPassword);
+	   				obj.conn = DriverManager.getConnection(LVArahmen.dbIpAndName,LVArahmen.dbUser,LVArahmen.dbPassword);
     				//obj.conn = (Connection) DriverManager.getConnection("jdbc:mysql://192.168.2.2:3306/dbf","entwickler","entwickler");
 	    			LVArahmen.DbOk = true;
 	    			System.out.println("Datenbankkontakt hergestellt");

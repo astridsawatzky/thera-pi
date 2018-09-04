@@ -91,7 +91,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	public SuchenDialog(JXFrame owner,JComponent focusBack,String fname,int art,PatientHauptLogic xaufrufer) {
 		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
 		this.focusBack = (focusBack == null ? null : focusBack);
-		this.fname = (String) (fname.equals("") ? "" : fname);
+		this.fname = fname.equals("") ? "" : fname;
 		this.suchart = art;
 		this.aufrufer = xaufrufer;
 		toolBar = aufrufer.patientHauptPanel.patToolBarPanel;
@@ -373,7 +373,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	public void sucheBeenden(){
 		PatSuchenDlgIniSave();
 		String s1 = String.valueOf("#SUCHENBEENDEN");
-		String s2 = (String) "";
+		String s2 = "";
 		setDetails(s1,s2) ;
 		PatStammEvent pEvt = new PatStammEvent(SuchenDialog.this);
 		pEvt.setPatStammEvent("PatSuchen");
@@ -416,7 +416,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				titel = titel + kriterium;
 			}else{
 				titel = titel + "Patient..."+this.fname+" nach "+kriterium;
-			};
+			}
 			jXTitledPanel.setTitle(titel);
 			jXTitledPanel.setTitleForeground(Color.WHITE);
 			jXTitledPanel.setName("PatSuchen");
@@ -718,7 +718,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			if (sTmp.endsWith("o")){sSuchPattern.add(sTmp.concat("e"));} else
 			if (sTmp.endsWith("u")){sSuchPattern.add(sTmp.concat("e"));} else
 			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("s"));} else
-			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("z"));}; 
+			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("z"));} 
 			i = sSuchPattern.size();
 			// ---- ersetzt Umlaut <-> Umschreibung
 			for (int k=0; k<i; k++){			
@@ -743,7 +743,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				if (sTmp.indexOf("oe") >= 0){sSuchPattern.add(sTmp.replace("oe", "ö"));} 
 				if (sTmp.indexOf("ue") >= 0){sSuchPattern.add(sTmp.replace("ue", "ü"));} 
 				if (sTmp.indexOf("ss") >= 0){sSuchPattern.add(sTmp.replace("ss", "ß"));} 
-				if (sTmp.indexOf("sz") >= 0){sSuchPattern.add(sTmp.replace("sz", "ß"));};
+				if (sTmp.indexOf("sz") >= 0){sSuchPattern.add(sTmp.replace("sz", "ß"));}
 			}
 		}
 		// ---- Suchstring zusammensetzen

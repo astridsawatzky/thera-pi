@@ -322,7 +322,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		}.execute();
 	}
 	private void setzeBezahlBetrag(final int i){
-		tfs[0].setText(dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(i), 6)));
+		tfs[0].setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(i), 6)));
 	}
 	private void doAusbuchen(){
 		
@@ -349,8 +349,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		
 		gesamtOffen = gesamtOffen.subtract( eingang );
 		
-		tabmod.setValueAt((Double)restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 6);
-		tabmod.setValueAt((Date)new Date(), tab.convertRowIndexToModel(row), 7);
+		tabmod.setValueAt(restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 6);
+		tabmod.setValueAt(new Date(), tab.convertRowIndexToModel(row), 7);
 		
 		int id = (Integer) tabmod.getValueAt(tab.convertRowIndexToModel(row), 15);
 		String cmd = "update rliste set r_offen='"+Double.toString(restbetrag.doubleValue()).replace(",", ".")+"', r_bezdatum='"+
@@ -672,7 +672,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 					}
 					//value = tabmod.getValueAt(row,col).toString();
 				}else if(tabmod.getColumnClass(col) == Double.class){
-					value = dcf.format((Double)tabmod.getValueAt(row,col)).replace(",",".");
+					value = dcf.format(tabmod.getValueAt(row,col)).replace(",",".");
 				}else if(tabmod.getColumnClass(col) == Integer.class){
 					value = Integer.toString((Integer)tabmod.getValueAt(row,15));
 				}else if(tabmod.getColumnClass(col) == String.class){
@@ -681,7 +681,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 				String cmd = "update rliste set "+colname+"=" + (value != null ? "'"+value+"'" : "null") +" where id='"+id+"' LIMIT 1";
 				//System.out.println(cmd);
 				SqlInfo.sqlAusfuehren(cmd);
-				tfs[0].setText(dcf.format((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 6)));
+				tfs[0].setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), 6)));
 			
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler in der Dateneingbe");

@@ -141,7 +141,7 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
 		pinPanel.setzeName(dieserName);
 		setPinPanel(pinPanel);
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		thisClass = this;
 
 		SwingUtilities.invokeLater(new Runnable(){
@@ -257,7 +257,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 	try{
 		//if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 			FensterSchliessen(evt.getDetails()[0]);
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 		//}	
 	}catch(NullPointerException ne){
 		//System.out.println("In DruckFenster" +evt);
@@ -322,7 +322,7 @@ public void setAktuellesDatum(String aktDat){
 public void keyPressed(KeyEvent arg0) {
 	////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource());
 	if(arg0.getKeyCode() == 27){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
 	}
 	if(arg0.getKeyCode() == 10){
@@ -346,7 +346,7 @@ public void keyReleased(KeyEvent arg0) {
 public void keyTyped(KeyEvent arg0) {
 	// TODO Auto-generated method stub
 	if(arg0.getKeyCode() == 27){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
 	}	
 }
@@ -503,7 +503,7 @@ final class SchreibeMaskeInKalender extends Thread implements Runnable{
 	public void run(){
 		//Vector treadVect = new Vector();
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					geklappt =  stmt.execute(this.statement);

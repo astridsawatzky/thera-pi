@@ -120,7 +120,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener, Key
 		setPinPanel(pinPanel);
 		this.addKeyListener(this);
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		SwingUtilities.invokeLater(new Runnable(){
 	        public  void run()
            	   {
@@ -195,7 +195,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener, Key
 	
 public void FensterSchliessen(String welches){
 	if(rtp != null){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+		rtp.removeRehaTPEventListener(this);		
 	}
 	this.dispose();
 }
@@ -356,7 +356,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 	try{
 		//if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 			FensterSchliessen(evt.getDetails()[0]);
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 		//}	
 	}catch(NullPointerException ne){
 		////System.out.println("In DruckFenster" +evt);
@@ -479,7 +479,7 @@ public void actionPerformed(ActionEvent arg0) {
 @Override
 public void keyPressed(KeyEvent arg0) {
 	if(arg0.getKeyCode() == 27){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		rtp = null;
 		FensterSchliessen(null);
 	}
@@ -495,7 +495,7 @@ public void keyReleased(KeyEvent arg0) {
 public void keyTyped(KeyEvent arg0) {
 	// TODO Auto-generated method stub
 	if(arg0.getKeyCode() == 27){
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		rtp = null;
 		FensterSchliessen(null);
 	}	
@@ -630,7 +630,7 @@ public void run(){
 		//Wenn nicht gleich wie in der INI angegeben -> Drucker wechseln
 		IPrinter iprint = null;
 		if(! druckerName.equals(terminDrucker)){
-			iprint = (IPrinter) textDocument.getPrintService().createPrinter(terminDrucker);
+			iprint = textDocument.getPrintService().createPrinter(terminDrucker);
 			textDocument.getPrintService().setActivePrinter(iprint);
 		}
 		//Jetzt den Platzhalter ^Name^ suchen
@@ -1111,10 +1111,10 @@ final class sendeTermine extends Thread implements Runnable{
 				icalDummy.add(endzeit.replace(":", "")+"00");
 				//Terminart (Physio, Logo etc.)
 				if( (xtitel=pliste.getValueAt(i, 9).toString()).trim().length() >= 2){
-					if( (xindex=x0diszis.indexOf((String)xtitel.substring(0,2))) < 0 ){
+					if( (xindex=x0diszis.indexOf(xtitel.substring(0,2))) < 0 ){
 						icalDummy.add("Therapie-Termin");
 					}else{
-						icalDummy.add((String)x1diszis.get(xindex));
+						icalDummy.add(x1diszis.get(xindex));
 					}
 				}else{
 					icalDummy.add("Therapie-Termin");
@@ -1154,10 +1154,10 @@ final class sendeTermine extends Thread implements Runnable{
 		ResultSet rs = null;
 		String sergebnis = "";
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
-				rs = (ResultSet) stmt.executeQuery(exStatement);		
+				rs = stmt.executeQuery(exStatement);		
 				while(rs.next()){
 					sergebnis = (rs.getString(1) == null ? "" : rs.getString(1));
 				}
@@ -1227,10 +1227,10 @@ final class druckListeSperren{
 		String sergebnis = "";
 		//boolean gesperrt = false;
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
-				rs = (ResultSet) stmt.executeQuery(exStatement[0]);		
+				rs = stmt.executeQuery(exStatement[0]);		
 				while(rs.next()){
 					sergebnis = (rs.getString(1) == null ? "" : rs.getString(1));
 				}
@@ -1283,7 +1283,7 @@ final class druckListeSperren{
 		ResultSet rs = null;
 		boolean boolergebnis = false;
 		try {
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 				boolergebnis = stmt.execute(exStatement);		

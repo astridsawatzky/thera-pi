@@ -238,7 +238,7 @@ public class PatientMemoPanel extends JXPanel{
 			patientHauptPanel.pmemo[0].setForeground(Color.BLUE);
 			patientHauptPanel.pmemo[0].setEditable(false);
 			patientHauptPanel.memobut[3].setEnabled(true);
-			patientHauptPanel.pmemo[0].setText((String) SqlInfo.holeSatz("pat5", "anamnese", "id='"+patientHauptPanel.autoPatid+"'", Arrays.asList(new String[] {})).get(0) );
+			patientHauptPanel.pmemo[0].setText(SqlInfo.holeSatz("pat5", "anamnese", "id='"+patientHauptPanel.autoPatid+"'", Arrays.asList(new String[] {})).get(0) );
 			patientHauptPanel.pmemo[0].setCaretPosition(0);
 			patientHauptPanel.inMemo = -1;
 			return;
@@ -250,7 +250,7 @@ public class PatientMemoPanel extends JXPanel{
 			patientHauptPanel.pmemo[1].setForeground(Color.BLUE);
 			patientHauptPanel.pmemo[1].setEditable(false);
 			patientHauptPanel.memobut[0].setEnabled(true);		
-			patientHauptPanel.pmemo[1].setText((String) SqlInfo.holeSatz("pat5", "pat_text", "id='"+patientHauptPanel.autoPatid+"'", Arrays.asList(new String[] {})).get(0) );
+			patientHauptPanel.pmemo[1].setText(SqlInfo.holeSatz("pat5", "pat_text", "id='"+patientHauptPanel.autoPatid+"'", Arrays.asList(new String[] {})).get(0) );
 			patientHauptPanel.pmemo[1].setCaretPosition(0);
 			patientHauptPanel.inMemo = -1;
 			return;

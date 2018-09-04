@@ -86,7 +86,7 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 	JLabel anzahlsaetze = null;
 	
 	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;;
+	ISpreadsheetDocument spreadsheetDocument = null;
 	IDocument document  = null;
 	XSheetCellCursor cellCursor = null;
 	
@@ -479,7 +479,7 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 				}else if(tabmod.getColumnClass(col) == Date.class){
 					value = DatFunk.sDatInSQL(tabmod.getValueAt(row,col).toString());
 				}else if(tabmod.getColumnClass(col) == Double.class){
-					value = dcf.format((Double)tabmod.getValueAt(row,col)).replace(",",".");
+					value = dcf.format(tabmod.getValueAt(row,col)).replace(",",".");
 				}else if(tabmod.getColumnClass(col) == Integer.class){
 					value = Integer.toString((Integer)tabmod.getValueAt(row,col));
 				}else if(tabmod.getColumnClass(col) == String.class){
@@ -568,7 +568,7 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 		
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 		String sheetName= "Tabelle1";
-		XSpreadsheet spreadsheet1 = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		XSpreadsheet spreadsheet1 = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		cellCursor = spreadsheet1.createCursor();
 		final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
 		SwingUtilities.invokeLater(new Runnable(){
@@ -581,33 +581,33 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 		OOTools.doColWidth(spreadsheetDocument, sheetName, 4, 4, 10000);
 		OOTools.doColNumberFormat(spreadsheetDocument, sheetName, 0, 1, 2);
 
-		OOTools.doCellValue(cellCursor, 0, 0, (String) "EINNAHME");
-		OOTools.doCellValue(cellCursor, 1, 0, (String) "AUSGABE");
-		OOTools.doCellValue(cellCursor, 2, 0, (String) "DATUM");
-		OOTools.doCellValue(cellCursor, 4, 0, (String) "TEXT");
-		Vector<Vector<Object>> vec = (Vector<Vector<Object>>)tabmod.getDataVector();
+		OOTools.doCellValue(cellCursor, 0, 0, "EINNAHME");
+		OOTools.doCellValue(cellCursor, 1, 0, "AUSGABE");
+		OOTools.doCellValue(cellCursor, 2, 0, "DATUM");
+		OOTools.doCellValue(cellCursor, 4, 0, "TEXT");
+		Vector<Vector<Object>> vec = tabmod.getDataVector();
 		for(int i = 0; i < vec.size();i++){
 			if(vec.get(i).get(0) instanceof Double){
 				if( ((Double) vec.get(i).get(0)) != 0.){
-					OOTools.doCellValue(cellCursor, 0, i+1, (Double) vec.get(i).get(0));				
+					OOTools.doCellValue(cellCursor, 0, i+1, vec.get(i).get(0));				
 				}
 				if( ((Double) vec.get(i).get(1)) != 0.){
-					OOTools.doCellValue(cellCursor, 1, i+1, (Double) vec.get(i).get(1));				
+					OOTools.doCellValue(cellCursor, 1, i+1, vec.get(i).get(1));				
 				}
 			}
 			if(vec.get(i).get(0) instanceof java.lang.String){
 				if( ((Double) vec.get(i).get(0)) != 0.){
-					OOTools.doCellValue(cellCursor, 0, i+1, (Double) vec.get(i).get(0));				
+					OOTools.doCellValue(cellCursor, 0, i+1, vec.get(i).get(0));				
 				}
 				if( ((Double) vec.get(i).get(1)) != 0.){
-					OOTools.doCellValue(cellCursor, 1, i+1, (Double) vec.get(i).get(1));				
+					OOTools.doCellValue(cellCursor, 1, i+1, vec.get(i).get(1));				
 				}
 			}
 
 			try{
 				OOTools.doCellValue(cellCursor, 2, i+1, DatFunk.sDatInDeutsch(((Date) vec.get(i).get(2)).toString()));
 			}catch(Exception ex){}
-			OOTools.doCellValue(cellCursor, 4, i+1, (String) vec.get(i).get(3));
+			OOTools.doCellValue(cellCursor, 4, i+1, vec.get(i).get(3));
 			
 		}
 	}

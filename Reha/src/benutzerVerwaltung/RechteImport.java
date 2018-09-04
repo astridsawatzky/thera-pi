@@ -106,7 +106,7 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 	    setLocation(lpt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 
 		SwingUtilities.invokeLater(new Runnable(){
@@ -180,7 +180,7 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					ListenerTools.removeListeners(rbut[0]);
 					ListenerTools.removeListeners(rbut[1]);
@@ -199,7 +199,7 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			ListenerTools.removeListeners(but[0]);
 			ListenerTools.removeListeners(but[1]);

@@ -751,7 +751,6 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
 	 */
 	private static final long serialVersionUID = -5902870392371289350L;
 	// **** Attribute
-	 private static final String JAHR  = "0123456789";// Erlaubte Ziffern Jahr
 	 private static final String DREI  = "0123";// Erlaubte Ziffern Tag 10er
 	 private static final String MONAT = "01";  // Erlaubte Zeichen Monat 10er
 	 private Calendar initDate = new GregorianCalendar(); // Calender fuers init

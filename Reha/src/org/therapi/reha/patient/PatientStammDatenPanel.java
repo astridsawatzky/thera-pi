@@ -12,7 +12,6 @@ import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.TooManyListenersException;
 import java.util.Vector;
 
@@ -172,7 +171,7 @@ public class PatientStammDatenPanel extends JXPanel{
 			/*****Rezept****/
 			/*******/
 			String linktext = "<img src='file:///"+Path.Instance.getProghome()+"icons/kontact_contacts.png' width=36 height=36 border=0>";
-			buf1.append("<tr><td class=\"spalte1\" align=\"left\">"+makeLink(linktext,"FOTO"));;
+			buf1.append("<tr><td class=\"spalte1\" align=\"left\">"+makeLink(linktext,"FOTO"));
 			if(Reha.bRGAFoffen || Reha.bHatMerkmale){
 				buf1.append("&nbsp;&nbsp;");
 				buf1.append("<img src='file:///"+Path.Instance.getProghome()+"icons/Icon_Achtung.svg.png' width=48 height=41 border=0>");
@@ -438,9 +437,9 @@ public class PatientStammDatenPanel extends JXPanel{
 			reznr = reznr.substring(0,ind);
 		}
 		
-		Vector<String> vec = SqlInfo.holeSatz("verordn", "pat_intern", "rez_nr='"+reznr+"'",(List<?>) new ArrayList<String>() );
+		Vector<String> vec = SqlInfo.holeSatz("verordn", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
 		if(vec.size() == 0){
-			vec = SqlInfo.holeSatz("lza", "pat_intern", "rez_nr='"+reznr+"'",(List<?>) new ArrayList<String>() );
+			vec = SqlInfo.holeSatz("lza", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
 			if(vec.size() == 0){
 				JOptionPane.showMessageDialog(null,"Rezept weder im aktuellen Rezeptstamm noch in der Historie vorhanden!\nIst die eingetragene Rezeptnummer korrekt?");
 				return;
@@ -449,12 +448,12 @@ public class PatientStammDatenPanel extends JXPanel{
 				inhistorie = true;
 			}
 		}
-		vec = SqlInfo.holeSatz("pat5", "pat_intern", "pat_intern='"+vec.get(0)+"'",(List<?>) new ArrayList<String>() );
+		vec = SqlInfo.holeSatz("pat5", "pat_intern", "pat_intern='"+vec.get(0)+"'",new ArrayList<String>() );
 		if(vec.size() == 0){
 			JOptionPane.showMessageDialog(null,"Patient mit zugeordneter Rezeptnummer -> "+reznr+" <- wurde nicht gefunden");
 			return;
 		}
-		pat_int = (String) vec.get(0);
+		pat_int = vec.get(0);
 		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 		final String xreznr = reznr;
 		final boolean xinhistorie = inhistorie;
@@ -473,7 +472,7 @@ public class PatientStammDatenPanel extends JXPanel{
 					}
 					
 					String s1 = "#PATSUCHEN";
-					String s2 = (String) xpat_int;
+					String s2 = xpat_int;
 					PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
 					pEvt.setPatStammEvent("PatSuchen");
 					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
@@ -491,7 +490,7 @@ public class PatientStammDatenPanel extends JXPanel{
 		}else{
 			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
 			String s1 = "#PATSUCHEN";
-			String s2 = (String) pat_int;
+			String s2 = pat_int;
 			PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
 			pEvt.setPatStammEvent("PatSuchen");
 			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;

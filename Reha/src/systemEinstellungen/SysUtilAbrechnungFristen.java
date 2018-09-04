@@ -230,12 +230,12 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 	
 	private void doSpeichern(){
 		try{
-			((Vector)hmFristen.get(lastdiszi).get(0)).set(lasttarif,(Integer) Integer.parseInt(tage1.getText()));
-			((Vector)hmFristen.get(lastdiszi).get(2)).set(lasttarif,(Integer) Integer.parseInt(tage2.getText()));
-			((Vector)hmFristen.get(lastdiszi).get(1)).set(lasttarif,(Boolean)rads[0].isSelected() );
-			((Vector)hmFristen.get(lastdiszi).get(3)).set(lasttarif,(Boolean)rads[2].isSelected() );
-			((Vector)hmFristen.get(lastdiszi).get(4)).set(lasttarif,(Boolean)cbox[0].isSelected() );
-			((Vector)hmFristen.get(lastdiszi).get(5)).set(lasttarif,(Boolean)cbox[1].isSelected() );
+			((Vector)hmFristen.get(lastdiszi).get(0)).set(lasttarif,Integer.parseInt(tage1.getText()));
+			((Vector)hmFristen.get(lastdiszi).get(2)).set(lasttarif,Integer.parseInt(tage2.getText()));
+			((Vector)hmFristen.get(lastdiszi).get(1)).set(lasttarif,rads[0].isSelected() );
+			((Vector)hmFristen.get(lastdiszi).get(3)).set(lasttarif,rads[2].isSelected() );
+			((Vector)hmFristen.get(lastdiszi).get(4)).set(lasttarif,cbox[0].isSelected() );
+			((Vector)hmFristen.get(lastdiszi).get(5)).set(lasttarif,cbox[1].isSelected() );
 			((Vector)hmZuzahlModus.get(lastdiszi)).set( lasttarif,(rads[4].isSelected()? 1 : 0));
 			SystemConfig.UpdateIni("fristen.ini", "Fristen_"+lastdiszi, "FristBeginn"+Integer.toString(lasttarif+1),tage1.getText());
 			SystemConfig.UpdateIni("fristen.ini", "Fristen_"+lastdiszi, "FristUnterbrechung"+Integer.toString(lasttarif+1),tage2.getText());

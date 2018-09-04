@@ -53,7 +53,7 @@ public class PDFDummy {
 		if(this.vec2.size() <= 5 ){
 			zeilen = 1;
 		}else{
-			zeilen = (int) this.vec2.size() / 5;
+			zeilen = this.vec2.size() / 5;
 			if( (this.vec2.size() % 5) > 0){
 				zeilen++;
 			}

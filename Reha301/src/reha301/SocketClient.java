@@ -15,15 +15,12 @@ public class SocketClient {
 		run();
 	}
 	public void run() {
-		try {
-			serverStarten();
-		} catch (IOException e) {
-		}
+		serverStarten();
 	}
-	private void serverStarten() throws IOException{
+	private void serverStarten(){
 		try{
 			this.client = new Socket("localhost",this.port);
-			OutputStream output = (OutputStream) client.getOutputStream();
+			OutputStream output = client.getOutputStream();
 			InputStream input = client.getInputStream();
 
 			byte[] bytes = this.nachricht.getBytes();

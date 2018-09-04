@@ -27,7 +27,6 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.TooManyListenersException;
 import java.util.Vector;
 
@@ -1087,7 +1086,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		String behandler = "";
 		Statement stmt = null;
 		try{
-			stmt = (Statement) Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			for(int i=1;i<61;i++){
 				for(int t=1;t<8;t++){
@@ -1132,9 +1131,9 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			reznr = reznr.substring(0,ind);
 		}
 		
-		Vector<String> vec = SqlInfo.holeSatz("verordn", "pat_intern", "rez_nr='"+reznr+"'",(List<?>) new ArrayList<String>() );
+		Vector<String> vec = SqlInfo.holeSatz("verordn", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
 		if(vec.size() == 0){
-			vec = SqlInfo.holeSatz("lza", "pat_intern", "rez_nr='"+reznr+"'",(List<?>) new ArrayList<String>() );
+			vec = SqlInfo.holeSatz("lza", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
 			if(vec.size() == 0){
 				JOptionPane.showMessageDialog(null,"Rezept weder im aktuellen Rezeptstamm noch in der Historie vorhanden!\nIst die eingetragene Rezeptnummer korrekt?");
 				return;
@@ -1143,12 +1142,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				inhistorie = true;
 			}
 		}
-		vec = SqlInfo.holeSatz("pat5", "pat_intern", "pat_intern='"+vec.get(0)+"'",(List<?>) new ArrayList<String>() );
+		vec = SqlInfo.holeSatz("pat5", "pat_intern", "pat_intern='"+vec.get(0)+"'",new ArrayList<String>() );
 		if(vec.size() == 0){
 			JOptionPane.showMessageDialog(null,"Patient mit zugeordneter Rezeptnummer -> "+reznr+" <- wurde nicht gefunden");
 			return;
 		}
-		pat_int = (String) vec.get(0);
+		pat_int = vec.get(0);
 		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 		final String xreznr = reznr;
 		final boolean xinhistorie = inhistorie;
@@ -1167,7 +1166,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					}
 					
 					String s1 = "#PATSUCHEN";
-					String s2 = (String) xpat_int;
+					String s2 = xpat_int;
 					PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
 					pEvt.setPatStammEvent("PatSuchen");
 					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
@@ -1185,7 +1184,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		}else{
 			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
 			String s1 = "#PATSUCHEN";
-			String s2 = (String) pat_int;
+			String s2 = pat_int;
 			PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
 			pEvt.setPatStammEvent("PatSuchen");
 			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;

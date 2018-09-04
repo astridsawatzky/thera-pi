@@ -98,9 +98,9 @@ public class AdressTools {
 		String cmd = "select abwanrede,abwtitel,abwn_name,abwv_name,abwstrasse,abwplz,abwort from pat5 where id='"+
 			patid+"' LIMIT 1";
 		Vector<Vector<String>> abwvec = SqlInfo.holeFelder(cmd);
-		Object[] obj = { (Object)abwvec.get(0).get(0),(Object)abwvec.get(0).get(1),(Object)abwvec.get(0).get(2),
-				(Object)abwvec.get(0).get(3),(Object)abwvec.get(0).get(4),(Object)abwvec.get(0).get(5),
-				(Object)abwvec.get(0).get(6)
+		Object[] obj = { abwvec.get(0).get(0),abwvec.get(0).get(1),abwvec.get(0).get(2),
+				abwvec.get(0).get(3),abwvec.get(0).get(4),abwvec.get(0).get(5),
+				abwvec.get(0).get(6)
 				};
 		return AdressTools.machePrivatAdresse(obj,true);
 	}

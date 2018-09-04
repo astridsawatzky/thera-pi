@@ -775,7 +775,6 @@ class NurMinutenDocument extends javax.swing.text.PlainDocument
 /*****************************************************************/
 class DateFieldDocument extends javax.swing.text.PlainDocument {
 	 // **** Attribute
-	 private static final String JAHR  = "0123456789";// Erlaubte Ziffern Jahr
 	 private static final String DREI  = "0123";// Erlaubte Ziffern Tag 10er
 	 private static final String MONAT = "01";  // Erlaubte Zeichen Monat 10er
 	 private Calendar initDate = new GregorianCalendar(); // Calender fuers init
@@ -860,7 +859,7 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
 	    return;                                 // Keine Verarbeitung!
 	   }
 	   if(offset==0) {                          // Tage auf 10 20 30 pr�fen
-	    if( DREI.indexOf( zeichen.valueOf(zeichen.charAt(0) ) ) == -1 ) {
+	    if( DREI.indexOf( String.valueOf(zeichen.charAt(0) ) ) == -1 ) {
 	     //Toolkit.getDefaultToolkit().beep();
 	     return;
 	    }
@@ -885,14 +884,14 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
 	   }
 	   if(offset==2) {                         // Monate auf 0x-1x pr�fen
 	                                           // (Caret links vom Trenner)
-	    if( MONAT.indexOf( zeichen.valueOf(zeichen.charAt(0) ) ) == -1 ) {
+	    if( MONAT.indexOf( String.valueOf(zeichen.charAt(0) ) ) == -1 ) {
 	     //Toolkit.getDefaultToolkit().beep();
 	     return;
 	    }
 	   }
 	   if(offset==3) {                         // Monate auf 0x-1x pr�fen
 	                                           // (Caret rechts vom Trenner)
-	    if( MONAT.indexOf( zeichen.valueOf(zeichen.charAt(0) ) ) == -1 ) {
+	    if( MONAT.indexOf( String.valueOf(zeichen.charAt(0) ) ) == -1 ) {
 	     //Toolkit.getDefaultToolkit().beep();
 	     return;
 	    }

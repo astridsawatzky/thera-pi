@@ -32,7 +32,6 @@ import CommonTools.SqlInfo;
 import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
@@ -301,8 +300,6 @@ public class Barkasse extends JXPanel implements ItemListener{
 			starteOO();
 		} catch (OfficeApplicationException e) {
 			e.printStackTrace();
-		} catch (DocumentException e) {
-			e.printStackTrace();
 		} catch (NOAException e) {
 			e.printStackTrace();
 		} catch (TextException e) {
@@ -333,7 +330,7 @@ public class Barkasse extends JXPanel implements ItemListener{
 		}
 		return Double.parseDouble(dbl.replace(",", "."));
 	}
-	private void starteOO() throws OfficeApplicationException, DocumentException, NOAException, TextException{
+	private void starteOO() throws OfficeApplicationException, NOAException, TextException{
 		IDocumentService documentService = null;
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();

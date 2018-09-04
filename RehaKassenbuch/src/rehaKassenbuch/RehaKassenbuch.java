@@ -222,7 +222,7 @@ public class RehaKassenbuch implements WindowListener {
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
    				sqlInfo.setConnection(obj.conn);
 				RehaKassenbuch.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
@@ -290,7 +290,7 @@ public class RehaKassenbuch implements WindowListener {
 	
     public static void starteOfficeApplication(){ 
     	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(RehaKassenbuch.officeProgrammPfad,RehaKassenbuch.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(RehaKassenbuch.officeProgrammPfad,RehaKassenbuch.officeNativePfad).start(false);
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();
 		}

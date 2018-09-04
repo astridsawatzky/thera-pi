@@ -1,7 +1,6 @@
 package hauptFenster;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -156,8 +155,8 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			terminjry.setVisible(true);
 			Reha.thisClass.desktops[containerNr].add(terminjry);
 			LinkeTaskPane.thisClass.setCursor(Reha.thisClass.normalCursor);
-			AktiveFenster.setNeuesFenster(name,(JComponent)terminjry,containerNr,(Container)Reha.thisClass.terminpanel.getViewPanel());			
-			((JTerminInternal)terminjry).aktiviereDiesenFrame(((JTerminInternal)terminjry).getName());
+			AktiveFenster.setNeuesFenster(name,terminjry,containerNr,Reha.thisClass.terminpanel.getViewPanel());			
+			terminjry.aktiviereDiesenFrame(terminjry.getName());
 			SwingUtilities.invokeLater(new Runnable(){
 			 	   public  void run()
 			 	   {
@@ -222,7 +221,7 @@ public void KassenFenster(int setPos,String kid) {
 	int containerNr = SystemConfig.hmContainer.get("Kasse");
 	containerHandling(containerNr);
 	kassejry = new JKasseInternal("thera-\u03C0 Krankenkassen-Verwaltung ",SystemConfig.hmSysIcons.get("kassenstamm"),containerNr) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)kassejry,containerNr,(Container)kassejry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,kassejry,containerNr,kassejry.getContentPane());
 	kassejry.setName(name);
 	kassejry.setSize(new Dimension(650,500));
 	kassejry.setPreferredSize(new Dimension(650,500));
@@ -236,7 +235,7 @@ public void KassenFenster(int setPos,String kid) {
 	Reha.thisClass.desktops[containerNr].add(kassejry);
 	((JRehaInternal)kassejry).setImmerGross( (SystemConfig.hmContainer.get("KasseOpti") > 0 ? true : false));
 	////System.out.println("Anzahl Fenster = "+Reha.thisClass.desktops[containerNr].getComponentCount());
-	((JKasseInternal)kassejry).aktiviereDiesenFrame( ((JKasseInternal)kassejry).getName());
+	kassejry.aktiviereDiesenFrame( kassejry.getName());
 	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 	Reha.thisClass.kassenpanel.setzeFocus();
 }
@@ -270,7 +269,7 @@ public void ArztFenster(int setPos,String aid) {
 	containerHandling(containerNr);
 	//arztjry = new JArztInternal("thera-\u03C0 Ärzte-Verwaltung  || F3 = Daten in Zwischenablage | F2 = Daten aus Zwischenablage",SystemConfig.hmSysIcons.get("arztstamm"),containerNr) ;
 	arztjry = new JArztInternal("thera-\u03C0 Ärzte-Verwaltung",SystemConfig.hmSysIcons.get("arztstamm"),containerNr) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)arztjry,containerNr,(Container)arztjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,arztjry,containerNr,arztjry.getContentPane());
 	arztjry.setName(name);
 	arztjry.setSize(new Dimension(650,500));
 	arztjry.setPreferredSize(new Dimension(650,500));
@@ -284,7 +283,7 @@ public void ArztFenster(int setPos,String aid) {
 	Reha.thisClass.desktops[containerNr].add(arztjry);
 	((JRehaInternal)arztjry).setImmerGross( (SystemConfig.hmContainer.get("ArztOpti") > 0 ? true : false));
 	////System.out.println("Anzahl Fenster = "+Reha.thisClass.desktops[containerNr].getComponentCount());
-	((JArztInternal)arztjry).aktiviereDiesenFrame( ((JArztInternal)arztjry).getName());
+	arztjry.aktiviereDiesenFrame( arztjry.getName());
 	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 	Reha.thisClass.arztpanel.setzeFocus();
 	
@@ -322,7 +321,7 @@ public void GutachenFenster(int setPos,String pat_intern,int berichtid,String be
 	int containerNr = SystemConfig.hmContainer.get("Arzt");
 	containerHandling(containerNr);
 	gutjry = new JGutachtenInternal("thera-\u03C0 Gutachten ",SystemConfig.hmSysIcons.get("drvlogo"),containerNr) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)gutjry,containerNr,(Container)gutjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,gutjry,containerNr,gutjry.getContentPane());
 	gutjry.setName(name);
 	gutjry.setSize(new Dimension(900,Reha.thisClass.desktops[containerNr].getHeight()-20));
 	gutjry.setPreferredSize(new Dimension(900,Reha.thisClass.desktops[containerNr].getHeight()-20));
@@ -334,7 +333,7 @@ public void GutachenFenster(int setPos,String pat_intern,int berichtid,String be
 	gutjry.pack();
 	gutjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(gutjry);
-	((JGutachtenInternal)gutjry).aktiviereDiesenFrame( ((JGutachtenInternal)gutjry).getName());
+	gutjry.aktiviereDiesenFrame( gutjry.getName());
 	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 }
 public void loescheGutachten(){
@@ -370,7 +369,7 @@ public void AbrechnungFenster(int setPos) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	abrechjry = new JAbrechnungInternal("thera-\u03C0  - Kassen-Abrechnung nach §302 ",SystemConfig.hmSysIcons.get("bomb24"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)abrechjry,1,(Container)abrechjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,abrechjry,1,abrechjry.getContentPane());
 	abrechjry.setName(name);
 	abrechjry.setSize(new Dimension(850,700));
 	abrechjry.setPreferredSize(new Dimension(850,700));
@@ -419,7 +418,7 @@ public void AnmeldungenFenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	anmeldungenjry = new JAnmeldungenInternal("thera-\u03C0  - Ermittlung des Anmeldevolumens ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)anmeldungenjry,1,(Container)anmeldungenjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,anmeldungenjry,1,anmeldungenjry.getContentPane());
 	anmeldungenjry.setName(name);
 	anmeldungenjry.setSize(new Dimension(570,500));
 	anmeldungenjry.setPreferredSize(new Dimension(570,500));
@@ -466,7 +465,7 @@ public void UmsatzFenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	umsaetzejry = new JUmsaetzeInternal("thera-\u03C0  - Ermittlung der realisierten Umsätze ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)umsaetzejry,1,(Container)umsaetzejry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,umsaetzejry,1,umsaetzejry.getContentPane());
 	umsaetzejry.setName(name);
 	umsaetzejry.setSize(new Dimension(500,150));
 	umsaetzejry.setPreferredSize(new Dimension(500,150));
@@ -513,7 +512,7 @@ public void VerkaufFenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	verkaufjry = new JVerkaufInternal("thera-\u03C0  - Verkäufe tätigen ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)verkaufjry,1,(Container)verkaufjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,verkaufjry,1,verkaufjry.getContentPane());
 	verkaufjry.setName(name);
 	verkaufjry.setSize(new Dimension(700,600));
 	verkaufjry.setPreferredSize(new Dimension(700,600));
@@ -562,7 +561,7 @@ public void Dta301Fenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	dta301jry = new JDta301Internal("thera-\u03C0  - Fallsteuerung nach §301 ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)dta301jry,1,(Container)dta301jry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,dta301jry,1,dta301jry.getContentPane());
 	dta301jry.setName(name);
 	dta301jry.setSize(new Dimension(780,500));
 	dta301jry.setPreferredSize(new Dimension(820,600));
@@ -613,7 +612,7 @@ public void BarkassenFenster(int setPos,String sparam) {
 	containerHandling(containerNr);
 	//barkassenjry = new JBarkassenInternal("thera-\u03C0  - Barkasse abrechnen ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
 	barkassenjry = new JBarkassenInternal("thera-\u03C0  - Barkasse abrechnen ",SystemConfig.hmSysIcons.get("BarKasse"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)barkassenjry,1,(Container)barkassenjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,barkassenjry,1,barkassenjry.getContentPane());
 	barkassenjry.setName(name);
 	barkassenjry.setSize(new Dimension(500,400));
 	barkassenjry.setPreferredSize(new Dimension(500,400));
@@ -659,7 +658,7 @@ public void RehaabrechnungFenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	rehaabrechnungjry = new JRehaabrechnungInternal("thera-\u03C0  - ganztägig ambulante Reha abrechnen ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)rehaabrechnungjry,1,(Container)rehaabrechnungjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,rehaabrechnungjry,1,rehaabrechnungjry.getContentPane());
 	rehaabrechnungjry.setName(name);
 	rehaabrechnungjry.setSize(new Dimension(500,430));
 	rehaabrechnungjry.setPreferredSize(new Dimension(500,430));
@@ -706,7 +705,7 @@ public void BeteiligungFenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	beteiligungjry = new JBeteiligungInternal("thera-\u03C0  - Ermittlung der Umsatzbeteiligungen ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)beteiligungjry,1,(Container)beteiligungjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,beteiligungjry,1,beteiligungjry.getContentPane());
 	beteiligungjry.setName(name);
 	beteiligungjry.setSize(new Dimension(500,500));
 	Reha.thisClass.beteiligungpanel = new Beteiligung(beteiligungjry); 
@@ -752,7 +751,7 @@ public void BenutzerrechteFenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	benutzerjry = new JBenutzerInternal("thera-\u03C0  - Benutzer- und Rechteverwaltung ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)benutzerjry,1,(Container)benutzerjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,benutzerjry,1,benutzerjry.getContentPane());
 	benutzerjry.setName(name);
 	benutzerjry.setSize(new Dimension(800,500));
 	benutzerjry.setPreferredSize(new Dimension(800,500));
@@ -797,7 +796,7 @@ public void UrlaubFenster(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	urlaubjry = new JUrlaubInternal("thera-\u03C0  - Bearbeitung von Urlaub und Überstunden ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)urlaubjry,1,(Container)urlaubjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,urlaubjry,1,urlaubjry.getContentPane());
 	urlaubjry.setName(name);
 	urlaubjry.setSize(new Dimension(500,500));
 	urlaubjry.setPreferredSize(new Dimension(500,500));
@@ -874,7 +873,7 @@ public void ProgPatientenVerwaltung(int setPos) {
 	/***************************/
 	//Hier muß anstelle der Hartcodierung 0 oder 1 (3. Parameter) die Variable containerNr erscheinen	
 	/***************************/	
-	AktiveFenster.setNeuesFenster(name,(JComponent)patjry,containerNr,(Container)patjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,patjry,containerNr,patjry.getContentPane());
 	patjry.setName(name);
 	
 /***************************/
@@ -909,7 +908,7 @@ public void ProgPatientenVerwaltung(int setPos) {
 	/***************************/	
 	((JRehaInternal)patjry).setImmerGross( (SystemConfig.hmContainer.get("PatientOpti") == 1 ? true : false));
 	LinkeTaskPane.thisClass.setCursor(Reha.thisClass.normalCursor);
-	((JPatientInternal)patjry).aktiviereDiesenFrame(((JPatientInternal)patjry).getName());
+	patjry.aktiviereDiesenFrame(patjry.getName());
 	SwingUtilities.invokeLater(new Runnable(){
 	 	   public  void run()
 	 	   {
@@ -1010,7 +1009,7 @@ public void SystemInit(int setPos,String sparam) {
 	int containerNr = setPos;
 	containerHandling(containerNr);
 	systeminitjry = new JSysteminitInternal("thera-\u03C0  - System-Initialisierung und Einstellungen ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
-	AktiveFenster.setNeuesFenster(name,(JComponent)systeminitjry,1,(Container)systeminitjry.getContentPane());
+	AktiveFenster.setNeuesFenster(name,systeminitjry,1,systeminitjry.getContentPane());
 	systeminitjry.setName(name);
 	systeminitjry.setSize(new Dimension(850,620));
 	systeminitjry.setPreferredSize(new Dimension(850,620));

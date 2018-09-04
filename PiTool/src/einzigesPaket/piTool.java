@@ -78,8 +78,6 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import CommonTools.Verschluesseln;
 import Environment.Path;
-import sun.awt.image.ImageFormatException;
-import sun.awt.image.ToolkitImage;
 
 
 public class piTool implements MouseListener,ActionListener,WindowListener, ChangeListener {
@@ -239,7 +237,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		knopf.setBorder(null);
 		
 		int x = 140;
-		int y = 20;
 		knopf.setPreferredSize(new Dimension(160,0));
 
 		FormLayout lay = new FormLayout("5px,140px,15px",
@@ -416,7 +413,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
                 	lblinfo.setText("  Bildinfo - Pixel: X="+xoriginal+" Y="+yoriginal);
 
                 	System.out.println("X="+xoriginal+" / Y="+yoriginal);
-                orig =(Image) ((ToolkitImage)((BufferedImage)t.getTransferData(DataFlavor.imageFlavor)).getScaledInstance(140, 100, Image.SCALE_SMOOTH)); 
+                orig =(((BufferedImage)t.getTransferData(DataFlavor.imageFlavor)).getScaledInstance(140, 100, Image.SCALE_SMOOTH)); 
                 senden.setEnabled(true);
             	zoom = 1.000000;
                 return img;
@@ -429,12 +426,12 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
         ShotBereich.setzeAusschnitt(false);
         return null;
     }
-	public static byte[] bufferedImageToByteArray(BufferedImage img) throws ImageFormatException, IOException{
+	public static byte[] bufferedImageToByteArray(BufferedImage img) throws IOException{
 		if(img != null){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
 		JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(img);  
-		param.setQuality((float) 1.0f, false);  
+		param.setQuality(1.0f, false);  
 		encoder.setJPEGEncodeParam(param);  
 		encoder.encode(img);
 		os.close();
@@ -470,7 +467,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		boolean gefunden = false;
 		if(arg0.getSource() instanceof JLabel){
 			for(int i = 0;i< shotvec.size() ;i++){
-				if(	comp.equals((String) ((Vector)shotvec.get(i)).get(1))){
+				if(	comp.equals(((Vector)shotvec.get(i)).get(1))){
 					aktbild = comp;
 					iaktbild = (Integer) ((Vector)shotvec.get(i)).get(0);
 					gefunden = true;
@@ -534,9 +531,8 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		}
 		if(arg0.getActionCommand().equals("gimpstart")){
 			try {
-				Process process = new ProcessBuilder(gimpCommand,"").start();
+				 new ProcessBuilder(gimpCommand,"").start();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -565,7 +561,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		         boolean boo = ImageIO.write((RenderedImage) vos, "jpg", new File(Path.Instance.getProghome()+"ScreenShots/"+stitel+"_kl.jpg") ) ;
 		         System.out.println("Ergebnis von Vorschau = "+boo);
 		         if(jrb[0].isSelected()){
-			         final String xtitel = stitel;
 			         new Thread(){
 			        	 public void run(){
 			        		 SpeichereBilder();	
@@ -693,7 +688,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 	            public void propertyChange(PropertyChangeEvent e) {
 	                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-	                    final File f = (File) e.getNewValue();
+	                     e.getNewValue();
 	                }
 	            }
 	        });
@@ -736,16 +731,14 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		}
 /******************************/
 		public static void DatenBankStarten(){
-			final String sDB = "SQL";
 			try {
 				Class.forName(piTool.app.dbConnection);
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 			try {
-				piTool.app.conn = (Connection) DriverManager.getConnection(piTool.app.dbParameter,"entwickler","entwickler");
+				piTool.app.conn = DriverManager.getConnection(piTool.app.dbParameter,"entwickler","entwickler");
 				//piTool.app.conn = (Connection) DriverManager.getConnection("jdbc:mysql://192.168.2.2:3306/dbf","entwickler","entwickler");
 				//piTool.app.conn = (Connection) DriverManager.getConnection("jdbc:mysql://rtahost.dyndns.org:3306/dbf","entwickler","entwickler");
 				piTool.app.dbok = true;
@@ -761,16 +754,16 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		}
 		
 		public static int gibtsSchon(String titel){
-			Statement stmt = null;;
+			Statement stmt = null;
 			ResultSet rs = null;
 			int bilder = 0;
 		
 			//piTool.app.conn.setAutoCommit(true);
 			try {
-				stmt = (Statement) piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                    ResultSet.CONCUR_UPDATABLE );
 				String test = "select count(*) as zaehler from sshots where titel='"+titel+"'";
-				rs = (ResultSet) stmt.executeQuery(test);
+				rs = stmt.executeQuery(test);
 				if(rs.next()){
 					bilder = rs.getInt("zaehler");
 				}	
@@ -802,7 +795,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 /**************************/
 		public static BufferedImage HoleGrossesBild(String titel){
-			Statement stmt = null;;
+			Statement stmt = null;
 			ResultSet rs = null;
 			
 			Image bild = null;
@@ -810,11 +803,11 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 			//piTool.app.conn.setAutoCommit(true);
 			try {
-				stmt = (Statement) piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                    ResultSet.CONCUR_UPDATABLE );
 					
 					String test = "select bild from sshots where titel ='"+titel+"'";
-					rs = (ResultSet) stmt.executeQuery(test);
+					rs = stmt.executeQuery(test);
 
 					while(rs.next()){
 						bild = ImageIO.read( new ByteArrayInputStream(rs.getBytes("bild")) );
@@ -851,12 +844,12 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		
 /**************************/		
 		public static void SpeichereBilder(){
-			Statement stmt = null;;
+			Statement stmt = null;
 			ResultSet rs = null;
 		
 			//piTool.app.conn.setAutoCommit(true);
 			try {
-				stmt = (Statement) piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                    ResultSet.CONCUR_UPDATABLE );
 				
 				String select = "Insert into sshots set vorschau = ? , titel = ?, bild = ?";
@@ -870,13 +863,13 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 				  macheScroller(vos,app.titel.getText());
 				  
 				  String neuid = "select max(id) from sshots";
-				  rs = (ResultSet) stmt.executeQuery(neuid);
+				  rs = stmt.executeQuery(neuid);
 				  rs.next();
 				  int ineuid = rs.getInt(1);
 				  Vector ar = new Vector();
 				  ar.add(ineuid);
 				  ar.add(piTool.app.titel.getText());
-				  shotvec.add((Vector)ar.clone());
+				  shotvec.add(ar.clone());
 				  System.out.println("Neues Bild Name= "+piTool.app.titel.getText()+ " / id in Datenbank = "+ineuid);
 
 
@@ -886,9 +879,6 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ImageFormatException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -914,28 +904,20 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 		/******************************/
 		/**************************/		
 		public static void loescheAktuellesBild(String xStmt){
-			Statement stmt = null;;
-			ResultSet rs = null;
+			Statement stmt = null;
 		
-			//piTool.app.conn.setAutoCommit(true);
 			try {
-				stmt = (Statement) piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                    ResultSet.CONCUR_UPDATABLE );
 				
 				  String neuid = new String(xStmt);
 				   stmt.execute(neuid);
 				  
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 				finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					} catch (SQLException sqlEx) { // ignore }
-						rs = null;
-					}
+				
 					if (stmt != null) {
 						try {
 							stmt.close();
@@ -943,7 +925,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 							stmt = null;
 						}
 					}
-				}
+				
 			}
 			
 		}
@@ -960,12 +942,10 @@ public void windowActivated(WindowEvent arg0) {
 
 @Override
 public void windowClosed(WindowEvent arg0) {
-	// TODO Auto-generated method stub
 	try {
 		piTool.app.conn.close();
 		JOptionPane.showMessageDialog(null,"Datenverbindung wurde gelöst");
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 }
@@ -1071,8 +1051,8 @@ public void stateChanged(ChangeEvent arg0) {
 			
 	
 
-	int ixzoom = (int) Math.round(zx1);
-	int iyzoom = (int) Math.round(zy1);
+	int ixzoom = Math.round(zx1);
+	int iyzoom = Math.round(zy1);
 	
 	if(ixzoom<= 0 || iyzoom <=0){
 		lblzoom.setForeground(Color.RED);	
@@ -1131,8 +1111,8 @@ public void skaliereBild(){
 	
 	System.out.println("fX="+zx1+" / fY="+zy1);
 			
-	int ixzoom = (int) Math.round(zx1);
-	int iyzoom = (int) Math.round(zy1);
+	int ixzoom = Math.round(zx1);
+	int iyzoom = Math.round(zy1);
 	
 	if(ixzoom<= 0 || iyzoom <=0){
 		JOptionPane.showMessageDialog(null, "Die gewählte Skalierung ergäbe ein Bild mit einer Größe < NULL.\nSkalierung nicht möglich");
@@ -1169,7 +1149,7 @@ class holeShots extends SwingWorker<Void,Void>{
 
 	@Override
 	protected Void doInBackground() throws Exception {
-		Statement stmt = null;;
+		Statement stmt = null;
 		ResultSet rs = null;
 		int bilder = 0;
 
@@ -1177,10 +1157,10 @@ class holeShots extends SwingWorker<Void,Void>{
 	
 		//piTool.app.conn.setAutoCommit(true);
 		try {
-			stmt = (Statement) piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			String test = "select count(*) as zaehler from sshots";
-			rs = (ResultSet) stmt.executeQuery(test);
+			rs = stmt.executeQuery(test);
 			bilder = 0;
 			if(rs.next()){
 				bilder = rs.getInt("zaehler");
@@ -1190,7 +1170,7 @@ class holeShots extends SwingWorker<Void,Void>{
 				piTool.pBarInit(0,bilder);
 				piTool.vbilder = new Image[bilder];
 				test = "select vorschau,id,titel from sshots ORDER by id";
-				rs = (ResultSet) stmt.executeQuery(test);
+				rs = stmt.executeQuery(test);
 				int lauf = 0;
 				while(rs.next()){
 					piTool.pBarAkt(lauf+1);
@@ -1200,7 +1180,7 @@ class holeShots extends SwingWorker<Void,Void>{
 					Vector ar = new Vector();
 					ar.add(rs.getInt("id"));
 					ar.add(rs.getString("titel"));
-					piTool.shotvec.add((Vector)ar.clone());
+					piTool.shotvec.add(ar.clone());
 					//piTool.vbilder[lauf] = ImageIO.read(new ByteArrayInputStream(rs.getBlob("vorschau")));
 					//JLabel label = new JLabel();
 					//label.setIcon(new ImageIcon( ImageIO.read(new ByteArrayInputStream(rs.getBytes("vorschau")))  ));

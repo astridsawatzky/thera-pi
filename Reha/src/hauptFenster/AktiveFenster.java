@@ -31,7 +31,7 @@ public class AktiveFenster {
 		////System.out.println("Aktive-Fenster: "+name+" wird gelöscht");
 		////System.out.println("FensterElemente vor löschen "+Fenster.size());		
 		for(i=0;i<Fenster.size();i++){
-			if((boolean)((AlleFenster)Fenster.get(i)).fname.equals(name)){
+			if(((AlleFenster)Fenster.get(i)).fname.equals(name)){
 				////System.out.println("Setze freferenz auf null!");
 				((AlleFenster)Fenster.get(i)).freferenz = null;
 				Fenster.removeElementAt(i);
@@ -56,7 +56,7 @@ public class AktiveFenster {
 		int i;
 		JComponent gef = null;
 		for(i=0;i<Fenster.size();i++){
-			if((boolean)((AlleFenster)Fenster.get(i)).fname.equals(name)){
+			if(((AlleFenster)Fenster.get(i)).fname.equals(name)){
 				gef = ((AlleFenster)Fenster.get(i)).freferenz;
 				break;
 			}
@@ -68,7 +68,7 @@ public class AktiveFenster {
 		int i;
 		JComponent gef = null;
 		for(i=0;i<Fenster.size();i++){
-			if((boolean)((AlleFenster)Fenster.get(i)).fname.contains(name)){
+			if(((AlleFenster)Fenster.get(i)).fname.contains(name)){
 				gef = ((AlleFenster)Fenster.get(i)).freferenz;
 				break;
 			}
@@ -80,7 +80,7 @@ public class AktiveFenster {
 		int i;
 		String gef = "";
 		for(i=0;i<Fenster.size();i++){
-			if((boolean)((AlleFenster)Fenster.get(i)).fname.equals(name)){
+			if(((AlleFenster)Fenster.get(i)).fname.equals(name)){
 				gef = ((AlleFenster)Fenster.get(i)).fname;
 				break;
 			}
@@ -93,7 +93,7 @@ public class AktiveFenster {
 /********************************/
 class AlleFenster implements Comparable<AlleFenster> {
 	  String fname="";
-	  JComponent freferenz=null;;
+	  JComponent freferenz=null;
 	  int fposition;
 	  Container feltern=null;
 

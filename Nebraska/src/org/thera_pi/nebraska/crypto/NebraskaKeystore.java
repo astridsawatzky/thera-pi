@@ -984,7 +984,7 @@ public class NebraskaKeystore {
 	 * @throws NebraskaCryptoException on cryptography related errors
 	 */
 	X509Certificate getSenderCertificate() throws NebraskaCryptoException {
-		return (X509Certificate) getCertificate(institutionID);
+		return getCertificate(institutionID);
 	}
 
 	/**
@@ -1171,7 +1171,7 @@ public class NebraskaKeystore {
 		return false;
 	}
 	
-	public PKCS10CertificationRequest getCertificateRequest() throws NebraskaCryptoException, NebraskaFileException, NebraskaNotInitializedException {
+	public PKCS10CertificationRequest getCertificateRequest() throws NebraskaCryptoException, NebraskaNotInitializedException {
 		if((institutionName == null) || (personName == null)) {
 			readNameFromCert();
 		}
@@ -1236,7 +1236,7 @@ public class NebraskaKeystore {
 	public String getCEO(){
 		return personName;		
 	}
-	public void importNewCertFromReply(String fileName,String ikToAdd) throws NebraskaFileException, NebraskaCryptoException, NebraskaNotInitializedException {
+	public void importNewCertFromReply(String fileName,String ikToAdd) throws NebraskaFileException, NebraskaCryptoException {
 		String realIkToAdd = (ikToAdd.startsWith("IK") ? ikToAdd : "IK"+ikToAdd );
 		/*
 		// we must already have the private key

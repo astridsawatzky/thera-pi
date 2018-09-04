@@ -2,7 +2,6 @@ package org.therapi.reha.patient;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -347,7 +346,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 
 		});
 		dummypan.setPreferredSize(new Dimension(0,100));
-		JScrollPane aktrezscr = JCompTools.getTransparentScrollPane((Component)tabhistorie); 
+		JScrollPane aktrezscr = JCompTools.getTransparentScrollPane(tabhistorie); 
 		aktrezscr.getVerticalScrollBar().setUnitIncrement(15);
 		dummypan.add(aktrezscr,BorderLayout.CENTER);
 		dummypan.validate();
@@ -479,8 +478,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		gesamtAkt = doRechneHistorie("verordn");
 		double gesamtumsatz = gesamtHistor+gesamtAkt;
 		DecimalFormat dfx = new DecimalFormat( "0.00" );
-		String msg = "<html><font font-family='Courier New'>Gesamtumsatz von Patient --> "+(String) Reha.thisClass.patpanel.patDaten.get(2)+", "+
-		(String) Reha.thisClass.patpanel.patDaten.get(3)+"&nbsp;&nbsp;&nbsp;&nbsp;"+   
+		String msg = "<html><font font-family='Courier New'>Gesamtumsatz von Patient --> "+Reha.thisClass.patpanel.patDaten.get(2)+", "+
+		Reha.thisClass.patpanel.patDaten.get(3)+"&nbsp;&nbsp;&nbsp;&nbsp;"+   
 		"<br><br>Historie&nbsp;=&nbsp;"+dfx.format(gesamtHistor)+" EUR"+
 		"<br>Aktuell&nbsp;&nbsp;=&nbsp;"+dfx.format(gesamtAkt)+" EUR"+
 		"<br><br><p><b>Gesamt = <font align='center' color='#FF0000'>"+dfx.format(gesamtumsatz)+" EUR </font></b></p><br><br></font>";
@@ -528,7 +527,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 						if(vec.size() > 0){
 							BigDecimal preispos = BigDecimal.valueOf(new Double(0.00));
 							for(int anz = 0;anz <4;anz++){
-								preispos = BigDecimal.valueOf(new Double((String)vec.get(anz+4))).multiply( BigDecimal.valueOf(new Double((String)vec.get(anz)))) ;
+								preispos = BigDecimal.valueOf(new Double(vec.get(anz+4))).multiply( BigDecimal.valueOf(new Double(vec.get(anz)))) ;
 								gesamtumsatz = gesamtumsatz+preispos.doubleValue();
 							}
 						}
@@ -538,7 +537,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 					if(vec.size() > 0){
 						BigDecimal preispos = BigDecimal.valueOf(new Double(0.00));
 						for(int anz = 0;anz <4;anz++){
-							preispos = BigDecimal.valueOf(new Double((String)vec.get(anz+4))).multiply( BigDecimal.valueOf(new Double((String)vec.get(anz)))) ;
+							preispos = BigDecimal.valueOf(new Double(vec.get(anz+4))).multiply( BigDecimal.valueOf(new Double(vec.get(anz)))) ;
 							gesamtumsatz = gesamtumsatz+preispos.doubleValue();
 						}
 					}
@@ -578,7 +577,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 				if(vec2.size() > 0){
 					BigDecimal preispos = BigDecimal.valueOf(new Double(0.00));
 					for(int anz = 0;anz <4;anz++){
-						preispos = BigDecimal.valueOf(new Double((String)vec2.get(anz+4))).multiply( BigDecimal.valueOf(new Double((String)vec2.get(anz)))) ;
+						preispos = BigDecimal.valueOf(new Double(vec2.get(anz+4))).multiply( BigDecimal.valueOf(new Double(vec2.get(anz)))) ;
 						gesamtumsatz = gesamtumsatz+preispos.doubleValue();
 					}
 				}
@@ -719,7 +718,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			}else if(!((Vector)vec.get(i)).get(1).equals("")){
 				zzbild = Integer.valueOf((String) ((Vector)vec.get(i)).get(1) );
 			}
-			dtblm.addRow((Vector)vec.get(i));
+			dtblm.addRow(vec.get(i));
 			
 			dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[zzbild], i, 1);
 			if(i==0){

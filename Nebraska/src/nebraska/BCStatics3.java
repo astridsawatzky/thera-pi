@@ -127,7 +127,7 @@ public class BCStatics3 {
 			 String alias = extrahiereAlias(certs[i].getSubjectDN().toString());
 			 X509Certificate cert = certs[i];
 			 if (cert != null) {
-				 Principal subjectDN = (Principal) cert.getSubjectDN();
+				 Principal subjectDN = cert.getSubjectDN();
 				 List<X509Certificate> vec = answer.get(subjectDN);
 				 if (vec == null) {
 					 vec = new ArrayList<X509Certificate>();

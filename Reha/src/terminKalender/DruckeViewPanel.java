@@ -2,7 +2,6 @@ package terminKalender;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,7 +41,6 @@ import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.noa.graphic.GraphicInfo;
 import hauptFenster.Reha;
-import sun.awt.image.ImageFormatException;
 
 
 
@@ -124,7 +122,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
           Thread.sleep(100);
 
 
-          multiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class,
+          multiServiceFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class,
                   textDocument.getXTextDocument());
           XText xText = textDocument.getXTextDocument().getText();
           
@@ -152,7 +150,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
         	Thread.sleep(100);
                 
             
-            multiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class,
+            multiServiceFactory = UnoRuntime.queryInterface(XMultiServiceFactory.class,
                     textDocument.getXTextDocument());
             XText xText = textDocument.getXTextDocument().getText();
             
@@ -227,18 +225,18 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	        String url = null;
 
 	        try {
-	                xBitmapContainer = (XNameContainer) UnoRuntime.queryInterface(
+	                xBitmapContainer = UnoRuntime.queryInterface(
 	                                XNameContainer.class, xMSF.createInstance(
 	                                                "com.sun.star.drawing.BitmapTable"));
-	                xImage = (XTextContent) UnoRuntime.queryInterface(
+	                xImage = UnoRuntime.queryInterface(
 	                                XTextContent.class,     xMSF.createInstance(
 	                                                "com.sun.star.text.TextGraphicObject"));
-	                XPropertySet xProps = (XPropertySet) UnoRuntime.queryInterface(
+	                XPropertySet xProps = UnoRuntime.queryInterface(
 	                                XPropertySet.class, xImage);
 
 	                url = "file:///"+Path.Instance.getProghome()+"ScreenShots/termin__temp.jpg";
 
-	                xBitmapContainer.insertByName("someID",(Object) url);
+	                xBitmapContainer.insertByName("someID",url);
 	                //xBitmapContainer.insertByName("someID", grProps.getUrl());
 	                internalURL = AnyConverter.toString(xBitmapContainer
 	                                .getByName("someID"));
@@ -246,8 +244,8 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	                xProps.setPropertyValue("AnchorType",
 	                                com.sun.star.text.TextContentAnchorType.AS_CHARACTER);
 	                xProps.setPropertyValue("GraphicURL", internalURL);
-	                xProps.setPropertyValue("Width", (int) grProps.getWidth());
-	                xProps.setPropertyValue("Height", (int) grProps.getHeight());
+	                xProps.setPropertyValue("Width", grProps.getWidth());
+	                xProps.setPropertyValue("Height", grProps.getHeight());
 	               
 	                xText.insertTextContent(xCursor, xImage, false);
 	               
@@ -260,7 +258,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	}
 	
 	
-	public static byte[] bufferedImageToByteArray(BufferedImage img) throws ImageFormatException, IOException{
+	public static byte[] bufferedImageToByteArray(BufferedImage img) throws IOException{
 		if(img != null){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
@@ -270,7 +268,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 			return null;
 		}
 	}
-	public static ByteArrayOutputStream bufferedImageToOutputStream(BufferedImage img) throws ImageFormatException, IOException{
+	public static ByteArrayOutputStream bufferedImageToOutputStream(BufferedImage img) throws IOException{
 		if(img != null){
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 		JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
@@ -285,11 +283,11 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
     	XGraphic xGraphic = null;
     	try {
     		XGraphicProvider xGraphicProvider =
-    			(XGraphicProvider) UnoRuntime.queryInterface(
-    					XGraphicProvider.class,
-    					xContext.getServiceManager().createInstanceWithContext(
-    							"com.sun.star.graphic.GraphicProvider",
-    							xContext));
+    			UnoRuntime.queryInterface(
+					XGraphicProvider.class,
+					xContext.getServiceManager().createInstanceWithContext(
+							"com.sun.star.graphic.GraphicProvider",
+							xContext));
     		PropertyValue[] aMediaProperties = new PropertyValue[1];
     		aMediaProperties[0] = new PropertyValue();
     		aMediaProperties[0].Name = "URL";
@@ -305,7 +303,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 	
 	private void speichernQualitaet(String stitel,Float fQuality){
 //		img, "jpg", new File("C:\\ScreenShots\\"+stitel+".jpg")
-		IIOImage imgq = new IIOImage((RenderedImage) bufimg, null, null);
+		IIOImage imgq = new IIOImage(bufimg, null, null);
         ImageWriter writer = ImageIO.getImageWritersBySuffix("jpg").next();
         ImageWriteParam param = writer.getDefaultWriteParam();
         param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);

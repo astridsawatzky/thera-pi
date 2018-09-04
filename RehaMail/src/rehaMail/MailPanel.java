@@ -364,7 +364,7 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
 		Integer.toString(idneu)+"' LIMIT 1";
 		SqlInfo.sqlAusfuehren(cmd);
 		try{
-			((MailTab)this.getParent().getParent()).getToDoPanel().checkForNewToDo(true);;
+			((MailTab)this.getParent().getParent()).getToDoPanel().checkForNewToDo(true);
 			((MailTab)this.getParent().getParent()).setzeTitel(2, ToDoPanel.setTabTitel());
 			((MailTab)this.getParent().getParent()).getToDoPanel().selectFirstRow();
 		}catch(Exception ex){
@@ -674,7 +674,7 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
 		if(row < 0){tabelleLeeren();return;}
 		
 		bins = null;
-		ins = (ByteArrayInputStream)SqlInfo.holeStream("pimail", "emailtext", "id='"+aktId+"'");
+		ins = SqlInfo.holeStream("pimail", "emailtext", "id='"+aktId+"'");
 		try {
 			rtfEditor.editorArea.getDocument().remove(0, rtfEditor.editorArea.getDocument().getLength());
 			rtfEditor.editorArea.getEditorKit().read(ins, rtfEditor.editorArea.getDocument(),0);
@@ -887,12 +887,12 @@ public class MailPanel extends JXPanel implements TableModelListener, KeyListene
 			while(rs.next()){
 				vec.clear();
 				try{
-					vec.add((String) (rs.getString(1)==null ? "" : rs.getString(1)));
-					vec.add((Boolean) (rs.getString(2)==null ?  Boolean.FALSE : (rs.getString(2).equals("T") ? Boolean.TRUE : Boolean.FALSE)) );
+					vec.add(rs.getString(1)==null ? "" : rs.getString(1));
+					vec.add(rs.getString(2)==null ?  Boolean.FALSE : (rs.getString(2).equals("T") ? Boolean.TRUE : Boolean.FALSE) );
 					vec.add(rs.getDate(3));
-					vec.add((String) (rs.getString(4)==null ? "" : getTimestampString(rs.getString(4)) ));
-					vec.add((String) (rs.getString(5)==null ? "" : rs.getString(5)));
-					vec.add((String) (rs.getString(6)==null ? "" : rs.getString(6)));
+					vec.add(rs.getString(4)==null ? "" : getTimestampString(rs.getString(4)));
+					vec.add(rs.getString(5)==null ? "" : rs.getString(5));
+					vec.add(rs.getString(6)==null ? "" : rs.getString(6));
 				
 				}catch(Exception ex){
 					ex.printStackTrace();

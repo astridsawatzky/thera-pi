@@ -22,8 +22,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -64,8 +62,8 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
 			label.setIcon(new ImageIcon(piTool.img));   //  = new JLabel(new ImageIcon(piTool.img));
 			
 			
-			float x = new Float( piTool.img.getWidth((ImageObserver) piTool.jFrame) );
-			float y = new Float( piTool.img.getHeight((ImageObserver) piTool.jFrame) );
+			float x = new Float( piTool.img.getWidth(piTool.jFrame) );
+			float y = new Float( piTool.img.getHeight(piTool.jFrame) );
 
 			faktory = y/x;
 			faktorx = x/y;

@@ -110,7 +110,7 @@ public class BCStatics2 {
 		if(isroot){
 			store.setCertificateEntry(alias, cert);
 			X509Certificate[] chain = new X509Certificate[1];
-			chain[0] = (X509Certificate) cert;
+			chain[0] = cert;
 			//store.setKeyEntry(alias,keypair.getPrivate(),passw.toCharArray(),(java.security.cert.Certificate[]) chain);
 		}
 		//String alias = (isroot ? cavec.get(0) : "keys");
@@ -505,7 +505,7 @@ public class BCStatics2 {
 			String alias = BCStatics3.extrahiereAlias(((X509Certificate)chain2.get(i)).getSubjectDN().toString()).trim();
 			System.out.println("Alias = "+alias);
 			//BCStatics2.importCertIntoStore((X509Certificate) chain2.get(i),keystoreDir + File.separator +keystoreFile,keystorePassword,"");
-			store.setCertificateEntry( alias, (X509Certificate)chain2.get(i));
+			store.setCertificateEntry( alias, chain2.get(i));
 		}
 		X509Certificate[] chain3 = {chain[1],chain[0],chain[2]};
 		CollectionCertStoreParameters params = new CollectionCertStoreParameters(Arrays.asList(chain3));
@@ -517,7 +517,7 @@ public class BCStatics2 {
 		endConstraints.setIssuer(chain3[2].getIssuerX500Principal().getEncoded());
 		
 		PKIXBuilderParameters buildParms = new PKIXBuilderParameters(
-				Collections.singleton(new TrustAnchor((X509Certificate) chain3[0],null)),endConstraints);
+				Collections.singleton(new TrustAnchor(chain3[0],null)),endConstraints);
 
 		buildParms.addCertStore(cstore);
 		
@@ -577,7 +577,7 @@ public class BCStatics2 {
 	 }
 	 public static String getSHA1(X509Certificate cert){
 		 	byte[] encryptCert;
-		 	byte[] dig = null;;
+		 	byte[] dig = null;
 			try {
 				encryptCert = cert.getEncoded();
 				MessageDigest messageDigest = MessageDigest.getInstance("SHA-1","BC");
@@ -593,7 +593,7 @@ public class BCStatics2 {
 			return NUtils.toHex(dig);
 	 }
 	 public static String getSHA1fromByte(byte[] b){
-		 	byte[] dig = null;;
+		 	byte[] dig = null;
 			try {
 				MessageDigest messageDigest = MessageDigest.getInstance("SHA-1","BC");
 				messageDigest.update(b);
@@ -607,7 +607,7 @@ public class BCStatics2 {
 	 }
 	 
  	public static String getSHA256fromByte(byte[] b){
-	 	byte[] dig = null;;
+	 	byte[] dig = null;
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("SHA-256","BC");
 			messageDigest.update(b);
@@ -623,7 +623,7 @@ public class BCStatics2 {
 
 	 public static String getMD5(X509Certificate cert){
 		 	byte[] encryptCert;
-		 	byte[] dig = null;;
+		 	byte[] dig = null;
 			try {
 				encryptCert = cert.getEncoded();
 				MessageDigest messageDigest = MessageDigest.getInstance("MD5","BC");
@@ -640,7 +640,7 @@ public class BCStatics2 {
 	 }
 
 	 public static String getMD5fromByte(byte[] b){
-		 	byte[] dig = null;;
+		 	byte[] dig = null;
 			try {
 				MessageDigest messageDigest = MessageDigest.getInstance("MD5","BC");
 				messageDigest.update(b);
@@ -1150,7 +1150,7 @@ public class BCStatics2 {
 			 String alias = aliases.nextElement();
 			 X509Certificate cert = (X509Certificate) ks.getCertificate(alias);
 			 if (cert != null) {
-				 Principal subjectDN = (Principal) cert.getSubjectDN();
+				 Principal subjectDN = cert.getSubjectDN();
 				 List<X509Certificate> vec = answer.get(subjectDN);
 				 if (vec == null) {
 					 vec = new ArrayList<X509Certificate>();
@@ -1194,19 +1194,19 @@ public class BCStatics2 {
 	    	X509Certificate tmpCert = replyCerts.get(0);
 	    	replyCerts.set(0, replyCerts.get(i));
 	    	replyCerts.set(i, tmpCert);
-	    	Principal issuer = (Principal) replyCerts.get(0).getIssuerDN();
+	    	Principal issuer = replyCerts.get(0).getIssuerDN();
 
 	    	for (i = 1; i < replyCerts.size() - 1; i++) {
 	    		// find a cert in the reply whose "subject" is the same as the
 	    		// given "issuer"
 	    		int j;
 	    		for (j = i; j < replyCerts.size(); j++) {
-	    			Principal subject = (Principal) replyCerts.get(j).getSubjectDN();
+	    			Principal subject = replyCerts.get(j).getSubjectDN();
 	    			if (subject.equals(issuer)) {
 	    				tmpCert = replyCerts.get(i);
 	    				replyCerts.set(i, replyCerts.get(j));
 	    				replyCerts.set(j, tmpCert);
-	    				issuer = (Principal) replyCerts.get(i).getIssuerDN();
+	    				issuer = replyCerts.get(i).getIssuerDN();
 	    				break;
 	    			}
 	    		}

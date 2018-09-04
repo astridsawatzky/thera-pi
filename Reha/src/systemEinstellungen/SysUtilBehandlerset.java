@@ -273,7 +273,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
 		SetName.removeAllItems();
 		for(i=0;i<lang;i++){
 			fach[i] = (String)((ArrayList<?>)SystemConfig.aTerminKalender.get(i).get(0)).get(0);
-			teilnehmer[i] = ((ArrayList<String[]>)SystemConfig.aTerminKalender.get(i).get(1)).get(0);
+			teilnehmer[i] = SystemConfig.aTerminKalender.get(i).get(1).get(0);
 			SetName.addItem(String.valueOf(fach[i]));
 		}
 		if(erster){

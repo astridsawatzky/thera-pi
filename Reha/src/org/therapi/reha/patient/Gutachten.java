@@ -271,7 +271,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 								}
 								if(((String)((Vector<?>)vec.get(i)).get(2)).toUpperCase().contains("REHAARZT") ||
 										((String)((Vector<?>)vec.get(i)).get(2)).toUpperCase().contains("REHA-ARZT")	){
-									dtblm.addRow((Vector<?>)vec.get(i));							
+									dtblm.addRow(vec.get(i));							
 								}
 							}
 							
@@ -406,7 +406,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 					try{
 						JRtaTextField tf = new JRtaTextField("nix",false);
 						//System.out.println("in GutachtenWahl");
-						GutachtenWahl gwahl = new GutachtenWahl( (Point)comp.getLocationOnScreen(),tf,"Neues Gutachten erstellen" );
+						GutachtenWahl gwahl = new GutachtenWahl( comp.getLocationOnScreen(),tf,"Neues Gutachten erstellen" );
 						//System.out.println("Aufruf des Focus***********");
 						gwahl.setzeFocus();
 						gwahl.setVisible(true);
@@ -607,7 +607,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 				try{
 					JRtaTextField tf = new JRtaTextField("nix",false);
 					//System.out.println("in GutachtenWahl");
-					Point pt = (Point)gutbut[3].getLocationOnScreen();
+					Point pt = gutbut[3].getLocationOnScreen();
 					pt.x = pt.x+150;
 					GutachtenWahl gwahl = new GutachtenWahl(pt ,tf,"<html><font color='#ffff66'>Stammdaten auf neues Gutachten übertragen</font></html>" );
 					//System.out.println("Aufruf des Focus***********");

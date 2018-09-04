@@ -245,7 +245,7 @@ public class UpdatePanel extends JXPanel{
 					int anfrage = JOptionPane.showConfirmDialog(null, "Soll der Tabellen-Update jetzt durchgeführt werden?","Achtung wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 					if(anfrage==JOptionPane.YES_OPTION){
 						doTabellenUpdate();	
-						tabmod.setValueAt((ImageIcon) icokeinupdate,row, 3);
+						tabmod.setValueAt(icokeinupdate,row, 3);
 					}
 					break;
 				}
@@ -253,7 +253,7 @@ public class UpdatePanel extends JXPanel{
 					int anfrage = JOptionPane.showConfirmDialog(null, "Soll das im Change-Log aufgeführte Programm jetzt gestartet werden?","Achtung wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 					if(anfrage==JOptionPane.YES_OPTION){
 						doProgExecute();	
-						tabmod.setValueAt((ImageIcon) icokeinupdate,row, 3);
+						tabmod.setValueAt(icokeinupdate,row, 3);
 					}
 					break;
 				}
@@ -355,7 +355,7 @@ public class UpdatePanel extends JXPanel{
 		
 	}
 	public void setDoneIcon(){
-		tabmod.setValueAt((ImageIcon) icokeinupdate,xaktrow, 3);
+		tabmod.setValueAt(icokeinupdate,xaktrow, 3);
 	}
 	private UpdatePanel getInstance(){
 		return this;
@@ -532,7 +532,7 @@ public class UpdatePanel extends JXPanel{
 								dummy.add(updatedir+sourceAndTarget[0].trim());
 								dummy.add(sourceAndTarget[1].trim().replace("%proghome%", PROGHOME).replace("//", "/"));
 								if(! targetvec.contains(dummy.get(1))){
-									targetvec.add(new String((String)dummy.get(1)));
+									targetvec.add(new String(dummy.get(1)));
 									updatefiles.add(new Vector<String>(dummy));									
 								}
 							}else if(sourceAndTarget[1].contains("%userdir%")){
@@ -739,7 +739,7 @@ public class UpdatePanel extends JXPanel{
 		}	
     	try {
     		
-			conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+			conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
 			DbOk = true;
 			System.out.println("Datenbankkontakt hergestellt");
     	} 

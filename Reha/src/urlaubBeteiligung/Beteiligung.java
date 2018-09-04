@@ -88,7 +88,7 @@ public class Beteiligung  extends JXPanel{
 	
 	int anzahlTagesBehandlungen = 0;
 	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;;
+	ISpreadsheetDocument spreadsheetDocument = null;
 	IDocument document  = null;
 	XSheetCellCursor cellCursor = null;
 	XSpreadsheet spreadsheet = null;
@@ -175,15 +175,15 @@ public class Beteiligung  extends JXPanel{
 		for(int i = 0;i<lang;i++){
 			vecdummy.clear();
 			//System.outprintln(ParameterLaden.vKollegen.get(i));
-			vecdummy.add((String)ParameterLaden.vKollegen.get(i).get(0));
-			vecdummy.add((String)ParameterLaden.vKollegen.get(i).get(3));
+			vecdummy.add(ParameterLaden.vKollegen.get(i).get(0));
+			vecdummy.add(ParameterLaden.vKollegen.get(i).get(3));
 			veckolls.add((Vector<String>)vecdummy.clone());
 		}
 		Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
 			@Override
 			public int compare(Vector<String> o1, Vector<String> o2) {
-				String s1 = (String)o1.get(0);
-				String s2 = (String)o2.get(0);
+				String s1 = o1.get(0);
+				String s2 = o2.get(0);
 				return s1.compareTo(s2);
 			}
 		};
@@ -442,12 +442,12 @@ public class Beteiligung  extends JXPanel{
         docdescript.setAsTemplate(true);
 		document = documentService.constructNewDocument(IDocument.CALC, docdescript);
 		spreadsheetDocument = (ISpreadsheetDocument) document;
-		OOTools.setzePapierFormatCalc((ISpreadsheetDocument) spreadsheetDocument, 21000, 29700);
-		OOTools.setzeRaenderCalc((ISpreadsheetDocument) spreadsheetDocument, 1000,1000, 1000, 1000);
+		OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
+		OOTools.setzeRaenderCalc(spreadsheetDocument, 1000,1000, 1000, 1000);
 		XSpreadsheets spreadsheets = spreadsheetDocument.getSpreadsheetDocument().getSheets();
 		
 		sheetName= "Tabelle1";
-		spreadsheet = (XSpreadsheet)UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
+		spreadsheet = UnoRuntime.queryInterface(XSpreadsheet.class,spreadsheets.getByName(sheetName));
 		cellCursor = spreadsheet.createCursor();
 		doTabellenKopf();
 		doSpaltenJustieren();

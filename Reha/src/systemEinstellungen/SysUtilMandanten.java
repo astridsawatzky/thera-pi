@@ -104,7 +104,6 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		JScrollPane jscr = null;
 		
 		private boolean lneu;
-		private boolean ledit;
 		public String neuik = null;
 		public String neuname = null;
 		public static SysUtilMandanten thisClass = null;
@@ -759,7 +758,7 @@ class MandantEinlesen extends SwingWorker<Integer,Void>{
 			SysUtilMandanten.thisClass.jprog.setValue(i+1);
 			SysUtilMandanten.thisClass.tfield[i].setText(ifile.getStringProperty("Firma", stitel[i]));
 		}
-		SysUtilMandanten.thisClass.bula.setSelectedItem((String)ifile.getStringProperty("Firma", "Bundesland") );
+		SysUtilMandanten.thisClass.bula.setSelectedItem(ifile.getStringProperty("Firma", "Bundesland") );
 		if(SystemConfig.AuswahlImmerZeigen==1){
 			SysUtilMandanten.thisClass.bootman.setSelected(true);
 		}else if(SystemConfig.AuswahlImmerZeigen==0 && SystemConfig.DefaultMandant==(this.mandant+1)){

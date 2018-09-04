@@ -205,7 +205,7 @@ public class NebraskaReplyEinlesen extends JDialog {
 			try {
 				NebraskaZertExplorer explorer = eltern.elternTab.getZertExplorer();
 				int index = explorer.jcombo.getSelectedIndex();
-				NebraskaKeystore nebraskastore = new NebraskaKeystore(kfile,(String) ret,"abc","IK"+eltern.getIK(),eltern.getInstitution(),eltern.getPerson());
+				NebraskaKeystore nebraskastore = new NebraskaKeystore(kfile,ret,"abc","IK"+eltern.getIK(),eltern.getInstitution(),eltern.getPerson());
 				System.out.println("KeyStore initialisiert "+kfile);
 				nebraskastore.deleteAllCerts();
 				/*

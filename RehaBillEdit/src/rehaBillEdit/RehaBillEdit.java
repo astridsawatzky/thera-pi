@@ -230,7 +230,7 @@ public class RehaBillEdit implements WindowListener {
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
 				RehaBillEdit.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
         	} 

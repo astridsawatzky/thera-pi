@@ -41,7 +41,7 @@ public class SetWahl extends JDialog {
 	public SetWahl(TerminFenster xeltern) {
 		super();
 		eltern = xeltern; 
-		wahl = ((TerminFenster) eltern).aktuellesSet();
+		wahl = eltern.aktuellesSet();
 		initialize();
 	}
 
@@ -137,7 +137,7 @@ public class SetWahl extends JDialog {
 		max = SystemConfig.aTerminKalender.size();
 		//String[] fach = new String[max];
 		for(i=0;i<max;i++){
-			model.add(i,(String)((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0));
+			model.add(i,((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0));
 			//fach[i] = (String)((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0);
 		}
 		//jList.setName((String)((ArrayList)SystemConfig.aTerminKalender.get(0).get(0)).get(0));

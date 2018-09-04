@@ -473,13 +473,13 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		for(int i = 0;i<lang;i++){
 				try{
 				//Preisgruppen-Name
-				swert = String.valueOf((String) tarife.getValueAt(i, 0));
+				swert = String.valueOf(tarife.getValueAt(i, 0));
 				//SystemConfig.vPreisGruppen.set(i, swert);
 				SystemPreislisten.hmPreisGruppen.get(diszi).set(i,swert);
 				inif.setStringProperty("PreisGruppen_"+diszi, "PGName"+(i+1),swert , null);
 				
 				//Zuzahlregel-einstellen
-				swert = String.valueOf((String) tarife.getValueAt(i, 1));
+				swert = String.valueOf(tarife.getValueAt(i, 1));
 				int zzreg = stringPosErmitteln(zzregel,swert);
 				//SystemConfig.vZuzahlRegeln.set(i, zzreg);
 				SystemPreislisten.hmZuzahlRegeln.get(diszi).set(i, zzreg);
@@ -490,7 +490,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				/**********
 				 * Abpr�fen welche Disziplin
 				 */
-				swert = String.valueOf((String) tarife.getValueAt(i, 2));
+				swert = String.valueOf(tarife.getValueAt(i, 2));
 				if(swert.equals(".  .")){
 					swert="";
 				}
@@ -501,13 +501,13 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				inif.setStringProperty("PreisRegeln_"+diszi, "PreisAb"+(i+1),swert , null);
 				
 				//Splittingregel-einstellen
-				swert = String.valueOf((String) tarife.getValueAt(i, 3));
+				swert = String.valueOf(tarife.getValueAt(i, 3));
 				zzreg = stringPosErmitteln(zzart,swert);
 				//((Vector)SystemConfig.vNeuePreiseRegel.get(disziplin.getSelectedIndex())).set(i, zzreg);
 				SystemPreislisten.hmNeuePreiseRegel.get(diszi).set(i, zzreg);
 				inif.setIntegerProperty("PreisRegeln_"+diszi, "PreisRegel"+(i+1),zzreg , null);
 
-				swert = String.valueOf((String) tarife.getValueAt(i, 4));
+				swert = String.valueOf(tarife.getValueAt(i, 4));
 				int treffer = Arrays.asList(getBereichLang()).indexOf(swert);
 				if(treffer < 0){
 					SystemPreislisten.hmPreisBereich.get(diszi).set(i, "-1");
@@ -523,14 +523,14 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				String[] wgkm = {"nicht abrechenbar","x9907 (teilw.GKV u.teilw.BG)","8603 (teilw. BG)","54 (Beihilfe)"};
 				String[] wgpausch = {"nicht abrechenbar","x9903 (teilw. GKV)"};
 				 */
-				swert = String.valueOf((String) tarife.getValueAt(i, 5));
+				swert = String.valueOf(tarife.getValueAt(i, 5));
 				treffer = Arrays.asList(janein).indexOf(swert);
 				
 				SystemPreislisten.hmHMRAbrechnung.get(diszi).set(i, (treffer==0 ? 1 : 0));
 				inif.setIntegerProperty("HMRAbrechnung_"+diszi, "HMRAbrechnung"+(i+1), (treffer==0 ? 1 : 0), null);
 				
 				
-				swert = String.valueOf((String) tarife.getValueAt(i, 6));
+				swert = String.valueOf(tarife.getValueAt(i, 6));
 				treffer = Arrays.asList(hbeinzelart).indexOf(swert);
 				if(treffer >= 0){
 					SystemPreislisten.hmHBRegeln.get(diszi).get(i).set(0, resulthbeinzel[treffer]);
@@ -540,7 +540,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 					inif.setStringProperty("HBRegeln_"+diszi, "HBPosVoll"+(i+1), "", null);
 				}
 				
-				swert = String.valueOf((String) tarife.getValueAt(i, 7));
+				swert = String.valueOf(tarife.getValueAt(i, 7));
 				treffer = Arrays.asList(hbmehrereart).indexOf(swert);
 				if(treffer >= 0){
 					SystemPreislisten.hmHBRegeln.get(diszi).get(i).set(1, resulthbmehrere[treffer]);
@@ -550,7 +550,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 					inif.setStringProperty("HBRegeln_"+diszi, "HBPosMit"+(i+1), "", null);
 				}
 				
-				swert = String.valueOf((String) tarife.getValueAt(i, 8));
+				swert = String.valueOf(tarife.getValueAt(i, 8));
 				treffer = Arrays.asList(wgkm).indexOf(swert);
 				if(treffer >= 0){
 					SystemPreislisten.hmHBRegeln.get(diszi).get(i).set(2, resultwgkm[treffer]);
@@ -561,7 +561,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				}
 
 				
-				swert = String.valueOf((String) tarife.getValueAt(i, 9));
+				swert = String.valueOf(tarife.getValueAt(i, 9));
 				treffer = Arrays.asList(wgpausch).indexOf(swert);
 				if(treffer >= 0){
 					SystemPreislisten.hmHBRegeln.get(diszi).get(i).set(3, resultwgpausch[treffer]);
@@ -572,21 +572,21 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				}
 				
 						
-				swert = String.valueOf((String) tarife.getValueAt(i, 10));
+				swert = String.valueOf(tarife.getValueAt(i, 10));
 				treffer = Arrays.asList(janein).indexOf(swert);
 				SystemPreislisten.hmHBRegeln.get(diszi).get(i).set(4, (treffer==0 ? "1" : "0"));
 				inif.setStringProperty("HBRegeln_"+diszi, "HBHeimMitZuZahl"+(i+1), (treffer==0 ? "1" : "0"), null);
 				
-				swert = String.valueOf((String) tarife.getValueAt(i, 11));
+				swert = String.valueOf(tarife.getValueAt(i, 11));
 				treffer = Arrays.asList(arztbericht).indexOf(swert);
 				SystemPreislisten.hmBerichtRegeln.get(diszi).set(i, (treffer==0 ? "" : resultarztbericht[treffer]));
 				inif.setStringProperty("BerichtRegeln_"+diszi, "Bericht"+(i+1), (treffer==0 ? "" : resultarztbericht[treffer]), null);
 				
-				swert = String.valueOf((String) tarife.getValueAt(i, 12));
+				swert = String.valueOf(tarife.getValueAt(i, 12));
 				if(swert.trim().length() != 3){
 					JOptionPane.showMessageDialog(null,"Der Wert Tarifbesonderheit in der Tarifgruppe\n"+
 							inif.getStringProperty("PreisGruppen_"+diszi, "PGName"+(i+1))+" besteht nicht aus 3 Zahlen und wird deshalb auf\n000 (=ohne Besonderheit) zurückgesetzt");
-					tarife.setValueAt((String) "000",i, 12 );
+					tarife.setValueAt("000",i, 12 );
 					SystemPreislisten.hmPreisBesonderheit.get(diszi).set(i, "000");
 					inif.setStringProperty("PreisGruppen_"+diszi, "PGBesonderheit"+(i+1),"000" , null);
 				}else{
@@ -599,7 +599,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 					if(falsch){
 						JOptionPane.showMessageDialog(null,"Der Wert Tarifbesonderheit in der Tarifgruppe\n"+
 								inif.getStringProperty("PreisGruppen_"+diszi, "PGName"+(i+1))+" besteht nicht aus 3 Zahlen und wird deshalb auf\n000 (=ohne Besonderheit) zurückgesetzt");
-						tarife.setValueAt((String) "000",i, 12 );
+						tarife.setValueAt("000",i, 12 );
 						SystemPreislisten.hmPreisBesonderheit.get(diszi).set(i, "000");
 						inif.setStringProperty("PreisGruppen_"+diszi, "PGBesonderheit"+(i+1),"000" , null);
 					}else{

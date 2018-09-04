@@ -32,7 +32,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -143,13 +142,13 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		this.thisContent.add(jpan);
 	}
 	public  JXPanel getContent(){
-		return (JXPanel)this.thisContent;
+		return this.thisContent;
 	}
 	public  JComponent getComponent(){
-		return (JComponent)this.thisContent;
+		return this.thisContent;
 	}
 	public  JComponent getInhalt(){
-		return (JComponent)this.inhalt;
+		return this.inhalt;
 	}
 
 	public void setzeTitel(String titel){
@@ -555,14 +554,14 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		this.setVisible(false);
 		////System.out.println("Layer vor dem Wechsel" +Reha.thisClass.desktops[vorher].getLayer(this));		
 		Reha.thisClass.desktops[vorher].remove(this);
-		((JDesktopPane)Reha.thisClass.desktops[vorher]).updateUI();
+		Reha.thisClass.desktops[vorher].updateUI();
 		Reha.thisClass.desktops[vorher].repaint();
 		this.setVisible(true);
 		Reha.thisClass.desktops[nachher].add(this);
 
 		this.setLocation(20,10);
 		Reha.thisClass.desktops[nachher].validate();		
-		((JDesktopPane)Reha.thisClass.desktops[nachher]).updateUI();
+		Reha.thisClass.desktops[nachher].updateUI();
 		Reha.thisClass.desktops[nachher].repaint();
 		this.desktop = nachher;
 		this.addInternalFrameListener(this);
@@ -757,15 +756,15 @@ class RehaInternal extends BasicInternalFrameTitlePane{
 		int x = this.getWidth()-21;
 		if(this.img1 != null){
 			if(((JRehaInternal)getParent()).doNotClose){
-				g2d.drawImage((Image)this.img3, x, 5, this);	
+				g2d.drawImage(this.img3, x, 5, this);	
 			}else{
-				g2d.drawImage((Image)this.img1, x, 5, this);
+				g2d.drawImage(this.img1, x, 5, this);
 			}
 			
 			if(((JRehaInternal)getParent()).getActive()){
-				g2d.drawImage((Image)this.img2, x-20, 5, this);
+				g2d.drawImage(this.img2, x-20, 5, this);
 			}else{
-				g2d.drawImage((Image)this.img3, x-20, 5, this);				
+				g2d.drawImage(this.img3, x-20, 5, this);				
 			}
 		}
 

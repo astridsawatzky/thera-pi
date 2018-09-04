@@ -2,7 +2,6 @@ package rehaHMKPanels;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +32,6 @@ import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTreeTable;
-import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableModel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -129,8 +127,8 @@ public class RehaHMKPanel1 extends JXPanel{
 		icons.put("key",new ImageIcon(RehaHMK.progHome+"icons/entry-pk.gif"));
 		icons.put("lupe",new ImageIcon(RehaHMK.progHome+"icons/mag.png"));
 		*/
-		tpane.addTab("Recherche",RehaHMK.icons.get("key"),(Component)searchpan,"");
-		tpane.addTab("Web",RehaHMK.icons.get("browser"),(Component)(webpan = webPan()),"");
+		tpane.addTab("Recherche",RehaHMK.icons.get("key"),searchpan,"");
+		tpane.addTab("Web",RehaHMK.icons.get("browser"),webpan = webPan(),"");
 		add(tpane, BorderLayout.CENTER);
 		
 		
@@ -452,7 +450,7 @@ public class RehaHMKPanel1 extends JXPanel{
 				htmlScroll.validate();
 				JViewport jv = htmlScroll.getViewport();  
 				jv.setViewPosition(new Point(0,0));  
-			};
+			}
 		});
 		//htmlScroll.scrollRectToVisible(new Rectangle(0,0,0,0));
 		//this.htmlPane.repaint();
@@ -527,7 +525,7 @@ public class RehaHMKPanel1 extends JXPanel{
 		IndiKey key = new IndiKey((alwayskey ? vec.get(0) : ""),"<html>"+vec.get(2)+" max. pro Rezept "+
 				(nofolge.equals("") ? "" : "(<b><font color='#ff0000'>"+nofolge+"</font></b>)" )+"</html>","","",durchlauf);
 		JXHMKTreeTableNode xnode = new JXHMKTreeTableNode("nixgibts",key,true);
-		node.insert((MutableTreeTableNode)xnode,node.getChildCount());
+		node.insert(xnode,node.getChildCount());
 
 		//
 		String[] vorrangig =  vec.get(3).split("@");

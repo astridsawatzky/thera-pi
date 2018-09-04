@@ -78,7 +78,7 @@ public class KuerzelNeu extends JXDialog implements  WindowListener, KeyListener
 		this.setModal(true);
 		this.setResizable(false);
 		this.rtp = new RehaTPEventClass();
-		this.rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		this.rtp.addRehaTPEventListener(this);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		SwingUtilities.invokeLater(new Runnable(){
@@ -90,7 +90,7 @@ public class KuerzelNeu extends JXDialog implements  WindowListener, KeyListener
 					jbox[0].setSelected((Boolean)kdaten[2]);
 					jbox[1].setSelected((Boolean)kdaten[3]);
 				}
-				setzeFocus((JComponent)tfs[0]);
+				setzeFocus(tfs[0]);
 			}
 		});
 	}
@@ -280,7 +280,7 @@ public class KuerzelNeu extends JXDialog implements  WindowListener, KeyListener
 		this.jtp.removeMouseMotionListener(this.mymouse);
 		this.mymouse = null; 
 		if(this.rtp != null){
-			this.rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			this.rtp.removeRehaTPEventListener(this);
 			this.rtp=null;			
 		}
 		setVisible(false);

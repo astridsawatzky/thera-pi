@@ -57,7 +57,7 @@ public class EncUtils {
 		 praxiscert = (X509Certificate) store.getCertificate(Constants.PRAXIS_OU_ALIAS);
 		 PrivateKey privkey = (PrivateKey) store.getKey(Constants.PRAXIS_OU_ALIAS, Constants.PRAXIS_KS_PW.toCharArray());
 		 //certRecipient = (X509Certificate) store.getCertificate(kkAlias); IKK-Bundesverband 
-		 certRecipient = (X509Certificate) praxiscert; // in der Hoffnung ich könnte es wieder entschlüsseln
+		 certRecipient = praxiscert; // in der Hoffnung ich könnte es wieder entschlüsseln
 		 certRoot = BCStatics3.getRootCACert(store);
 		 encData = FileStatics.BytesFromFile(new File(inFile));
 		 /******************Signed Data*************************/
@@ -325,7 +325,7 @@ public class EncUtils {
 		      int outputSize = cipher.getOutputSize(blockSize);
 		      byte[] inBytes = new byte[blockSize];
 		      byte[] outBytes = new byte[outputSize];       
-		      int inLength = 0;;
+		      int inLength = 0;
 		      boolean more = true;
 		      while (more){
 		         inLength = in.read(inBytes);

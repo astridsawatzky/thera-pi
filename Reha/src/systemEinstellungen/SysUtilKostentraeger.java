@@ -218,114 +218,6 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 			JOptionPane.showMessageDialog(null,"Kein Kontakt zum Preislisten-/Kostenträgerserver");
 		}
 	}
-	private void starteSession(String land,String jahr) throws IOException{
-		//String urltext = "http://www.gkv-datenaustausch.de/leistungserbringer/sonstige_leistungserbringer/kostentraegerdateien_sle/kostentraegerdateien.jsp";
-		String urltext = "https://www.gkv-datenaustausch.de/leistungserbringer/sonstige_leistungserbringer/kostentraegerdateien_sle/kostentraegerdateien.jsp";
-		String text = null;
-		try{
-		URL url = new URL(urltext);
-		   
-		      URLConnection conn = url.openConnection();
-		      ////System.out.println(conn.getContentEncoding());
-		      BufferedReader inS = null;
-		      try{
-		    	  inS = new BufferedReader( new InputStreamReader( conn.getInputStream() ));
-		      }catch(Exception ex){
-		    	  JOptionPane.showMessageDialog(null, "Die Webseite\n"+urltext+"\nist derzeit nicht erreichbar!\n"+
-		    			  "Überprüfen Sie Ihre Internetverbindung und überprüfen Sie ggfls.\n"+
-		    			  "die o.g. Adresse mit Hilfe Ihres Browsers auf Verfügbarkeit");
-		    	  return;
-		      }
-		      int durchlauf = 0;
-		      //Vector<Vector<String>> ktraegerdat = new Vector<Vector<String>>();
-		      Vector<String> kassendat = new Vector<String>();
-		      int index;
-		      boolean gestartet = false;
-		      String saveLink = "";
-		      String[] datLink = null;
-		      while ( (text  = inS.readLine())!= null ) {
-		    	  text = makeUTF8(text);
-		    	  
-		    	  if(durchlauf > 0){
-		    		  if(text.startsWith("<a href=\"")){
-		    			  //saveLink = text;
-		    			  datLink = getDateiUndLink(text);
-		    		  }
-		        	  if(text.indexOf("<strong>Kosten") >= 0){
-		        		  kassendat.clear();
-		        		  
-		        		  text = text.replace("<strong>", "");
-		        		  text = text.replace("</strong>", "");
-		        		  
-		        		  if(text.indexOf("AOK")> 0){
-		        			  text = "AOK-Bundesverband";
-		        		  }else if(text.indexOf("Betriebs") > 0 || text.indexOf("BKK")> 0){
-		        			  text = "BKK (Betriebskrankenkassen)";
-		        		  }else if(text.indexOf("Landwirt") > 0 || text.indexOf("LKK")> 0){
-		        			  text = "LKK (Landwirtschaftl. Krankenkassen)";
-		        		  }else if(text.indexOf("Innungs") > 0 || text.indexOf("IKK")> 0){
-		        			  text = "IKK (Innungskrankenkassen)";
-		        		  }else if(text.indexOf("Knappschaft") > 0 || text.indexOf("KBS")> 0){
-		        			  text = "Knappschaft";
-		        		  }else if(text.indexOf("Ersatzkassen") > 0 || text.toUpperCase().indexOf("VDEK")> 0){
-		        			  text = "VdEK (Ersatzkassen)";
-		        		  }else{
-		        			  continue;
-		        		  }
-		        			  
-		        		  
-		        		  gestartet = true;
-		        		  kassendat.add(text.trim());
-		        		  
-		        		  //System.out.println(text);
-		        		  //System.out.println(saveLink);
-
-		        		  saveLink = "";
-		        		  continue;
-		        	  }
-		        	  //g&uuml;ltig
-		        	  if( ((index = text.indexOf("g&uuml;ltig")) >= 0) || ((index = text.indexOf("G&uuml;ltig")) >= 0) || ((index = text.indexOf("gueltig")) >= 0)|| ((index = text.indexOf("Gueltig")) >= 0)){ 
-		        		  //text = text.substring(index+2);
-		        		  text = text.replace("g&uuml;ltig ab", "");
-		        		  text = text.replace("G&uuml;ltig ab", "");
-		        		  text = text.replace("gueltig ab", "");
-		        		  text = text.replace("Gueltig ab", "");
-		        		  text = text.replace("dem", "");
-		        		  text = text.replace("Januar", "01.");
-		        		  text = text.replace("Februar", "02.");
-		        		  text = text.replace("März", "03.");
-		        		  text = text.replace("April", "04.");
-		        		  text = text.replace("Mai", "05.");
-		        		  text = text.replace("Juni", "06.");
-		        		  text = text.replace("Juli", "07.");
-		        		  text = text.replace("August", "08.");
-		        		  text = text.replace("September", "09.");
-		        		  text = text.replace("Oktober", "10.");
-		        		  text = text.replace("November", "11.");
-		        		  text = text.replace("Dezember", "12.");
-		        		  text= text.replace(" ", "");
-		        		  //if (text.substring(1, 2).equals(".")== true) {
-		        		  if (text.substring(1, 2).equals(".")) {
-		        			  text="0"+text;
-		        		  }
-		        		  kassendat.add(text.trim());
-		        		  
-		        		  kassendat.add(datLink[0]);
-		        		  ktrmod.addRow((Vector<?>)kassendat.clone());
-		        		  //ktraegerdat.add((Vector<String>)kassendat.clone());
-		        		  gestartet = false;
-
-		        		  continue;
-		        	  }
-		          }
-		          ++durchlauf;
-		      }
-		      inS.close();
-		      setFlags();
-		}catch(Exception ex){
-			JOptionPane.showMessageDialog(null,"Fehler bei der Analyse der Kostenträgerseite\n"+urltext);
-		}
-	}
 	private String[] getDateiUndLink(String textzeile){
 		String[] ret = {null,null};
 		try{
@@ -691,8 +583,8 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 		      }
 			public Object getValueAt(int rowIndex, int columnIndex) {
 				Object theData;
-				if (columnIndex==3){theData = (ImageIcon) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);}
-				else{theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);}
+				if (columnIndex==3){theData = ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);}
+				else{theData = ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);}
 				Object result = null;
 				result = theData;
 				return result;

@@ -325,7 +325,7 @@ public class RehaSql implements WindowListener {
 	    		return ;
 			}	
         	try {
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName+"?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull",dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName+"?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull",dbUser,dbPassword);
     			RehaSql.thisClass.sqlInfo.setConnection(obj.conn);
 				RehaSql.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
@@ -389,7 +389,7 @@ public class RehaSql implements WindowListener {
     			connProperties.setProperty("compression","false");
     			connProperties.setProperty("NO_DRIVER_INFO", "1");
 
-    			obj.conn = (Connection) DriverManager.getConnection("jdbc:jpmdbc:http://www.thera-pi.org/jpmdbc.php?db336243054",connProperties);
+    			obj.conn = DriverManager.getConnection("jdbc:jpmdbc:http://www.thera-pi.org/jpmdbc.php?db336243054",connProperties);
         		
    				//obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
  
@@ -465,7 +465,7 @@ public class RehaSql implements WindowListener {
 	
     public static void starteOfficeApplication(){ 
     	try {
-			officeapplication = (IOfficeApplication)new StartOOApplication(RehaSql.officeProgrammPfad,RehaSql.officeNativePfad).start(false);
+			officeapplication = new StartOOApplication(RehaSql.officeProgrammPfad,RehaSql.officeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();

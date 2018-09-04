@@ -20,13 +20,13 @@ public class TableTool {
 		
 		if(countrow > currow){
 			table.setRowSelectionInterval(currow, currow);
-			return (int) table.getSelectedRow();
+			return table.getSelectedRow();
 		}else if(countrow==0){
 			return -1;
 			
 		}else{
 			table.setRowSelectionInterval(countrow-1, countrow-1);
-			return (int) table.getSelectedRow();
+			return table.getSelectedRow();
 		}
 	}
 	public static int loescheRowAusModel(JXTable table,int row){
@@ -41,13 +41,13 @@ public class TableTool {
 		
 		if(countrow > currow){
 			table.setRowSelectionInterval(currow, currow);
-			return (int) table.getSelectedRow();
+			return table.getSelectedRow();
 		}else if(countrow==0){
 			return -1;
 			
 		}else{
 			table.setRowSelectionInterval(countrow-1, countrow-1);
-			return (int) table.getSelectedRow();
+			return table.getSelectedRow();
 		}
 	}
 

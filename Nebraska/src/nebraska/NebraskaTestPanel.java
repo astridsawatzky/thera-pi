@@ -502,7 +502,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 			        	kident = iRID.getKeyIdentifier();
 			        	if(kident!=null){
 				        	for(int i2 = 0;i2<kident.length;i2++ ){
-				        		System.out.println((int)kident[i2]);
+				        		System.out.println(kident[i2]);
 				        	}
 			        	}else{
 			        		System.out.println("KeyIdentifier == null");
@@ -571,7 +571,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 						continue;
 						
 					}else{
-						btag = (BERTaggedObject)((DERObject)seq.getObjectAt(i).getDERObject()).toASN1Object();	
+						btag = (BERTaggedObject)seq.getObjectAt(i).getDERObject().toASN1Object();	
 					}
 					
 					//ASN1Sequence seq2 = (ASN1Sequence)((DERObject)seq.getObjectAt(i).getDERObject()).toASN1Object();
@@ -1007,7 +1007,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 	}
 	private Vector macheTabellenZeile(boolean isKeyEntry,String alias,X509Certificate cert) throws Exception{
 		Vector zeile = new Vector();
-		zeile.add((String)alias);
+		zeile.add(alias);
 		zeile.add( (isKeyEntry ? imgKey : imgCert));
 		//byte[] ext = cert.getExtensionValue("1.3.6.1.5.5.7.3.1");
 		byte[] ext = cert.getExtensionValue("2.5.29.19");
@@ -1062,8 +1062,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				if(alias==null){
 					alias = chainAnnahme[i].getSubjectDN().toString();
 				}
-				if(! certVec.contains((X509Certificate) chainAnnahme[i])){
-					certVec.add((X509Certificate) chainAnnahme[i]);
+				if(! certVec.contains(chainAnnahme[i])){
+					certVec.add(chainAnnahme[i]);
 					certAlias.add(alias);
 				}
 			}
@@ -1174,10 +1174,10 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		/**********************************/
 		String alias = "";
 		for(int i = 0; i < chain.length;i++){
-			alias = BCStatics3.extrahiereAlias(((X509Certificate)chain[i]).getSubjectDN().toString());
+			alias = BCStatics3.extrahiereAlias(chain[i].getSubjectDN().toString());
 			try{
 				//chain[i].verify(kp.getPublic());
-				keyStore.setCertificateEntry(alias, ((X509Certificate)chain[i]));
+				keyStore.setCertificateEntry(alias, (chain[i]));
 				//keyStore.setEntry(arg0, arg1, arg2)
 				
 			}catch(Exception ex){
@@ -1195,7 +1195,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		
 		keyStore = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+"540840108", Constants.PRAXIS_KS_PW);
 		System.out.println("Zertifikatskette von Alias IK540840108**************************");
-		Certificate[] chainCerts = (Certificate[]) keyStore.getCertificateChain("IK540840108");
+		Certificate[] chainCerts = keyStore.getCertificateChain("IK540840108");
 		//Certificate[] chainCerts = (Certificate[]) keyStore.getCertificateChain("C=DE,O=ITSG TrustCenter fuer sonstige Leistungserbringer");
 		for(int i = 0; i < chainCerts.length;i++){
 			System.out.println(((X509Certificate)chainCerts[i]).getSubjectDN()+" - "+

@@ -226,7 +226,7 @@ public class NebraskaToolPanel extends JXPanel{
 				if(sdf.format(certs.get(i).getNotAfter()).equals(tf[0].getText())){
 					dn=certs.get(i).getSubjectDN().toString().split(",");
 					if(dn.length==5){
-						ik = (String)dn[3].split("=")[1];
+						ik = dn[3].split("=")[1];
 						if(eltern.zertExplorer.keystore.deleteCertByAlias(ik.substring(2))){
 							geloescht++;
 						}

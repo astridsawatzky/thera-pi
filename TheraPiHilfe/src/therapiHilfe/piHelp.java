@@ -118,7 +118,7 @@ public static IOfficeApplication officeapplication;
 				public void run() {
 					piHelp application = new piHelp();
 					application.getJFrame();
-					application.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/fragezeichen.png" ) );
+					piHelp.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/fragezeichen.png" ) );
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run() {
 							new WorkerGruppen().execute();
@@ -322,9 +322,7 @@ public static IOfficeApplication officeapplication;
 final class DatenbankStarten implements Runnable{
 
 	void StarteDB(){
-		final piHelp obj = piHelp.thisClass;
 
-		final String sDB = "SQL";
 /********************/
 		try{
 			Class.forName("de.root1.jpmdbc.Driver");
@@ -390,7 +388,6 @@ final class DatenbankStarten implements Runnable{
 	    */    
 	}
 	public void run() {
-		int i=0;
 		StarteDB();
 	}
 }
@@ -426,11 +423,9 @@ final class WorkerGruppen extends SwingWorker<Void,Void>{
 		Statement stmtx = null;
 		ResultSet rsx = null;
 		String[] comboInhalt = null;
-				stmtx = null;
-				rsx = null;
 				//System.out.println("In holeGruppen");
 				try {
-					stmtx = (Statement) piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
@@ -446,7 +441,6 @@ final class WorkerGruppen extends SwingWorker<Void,Void>{
 					int i = 0;
 					while(rsx.next()){
 						comboInhalt[i] = rsx.getString(1);
-						//System.out.println(rsx.getString(1));
 						i++;
 					}
 				}catch(SQLException e){
@@ -459,15 +453,11 @@ final class WorkerGruppen extends SwingWorker<Void,Void>{
 							rsx = null;
 						}
 					}	
-					if (stmtx != null) {
-						try {
-							stmtx.close();
-						} catch (SQLException sqlEx) { // ignore }
-							stmtx = null;
-						}
+					try {
+						stmtx.close();
+					} catch (SQLException sqlEx) { // ignore }
+						stmtx = null;
 					}
-			//System.out.println("Insgesamt Elemente = "+comboInhalt.length);		
 			return comboInhalt.clone();
-			
 			}
 }

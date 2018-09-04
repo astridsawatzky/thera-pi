@@ -33,7 +33,6 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemPreislisten;
@@ -138,7 +137,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		setPinPanel(pinPanel);
 		
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		jcc.add(getTerminBest(jpan = new JXPanel()),BorderLayout.CENTER);
 		jcc.add(getButtonBest(),BorderLayout.SOUTH);
 		jpan.validate();
@@ -327,7 +326,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		try{
 			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 				FensterSchliessen(evt.getDetails()[0]);
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 			}	
 		}catch(NullPointerException ne){

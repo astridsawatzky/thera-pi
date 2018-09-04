@@ -175,7 +175,7 @@ public class RehaIniedit implements WindowListener {
 			}	
         	try {
         		
-   				obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
+   				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
    				RehaIniedit.thisClass.sqlInfo.setConnection(obj.conn);
     			RehaIniedit.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");

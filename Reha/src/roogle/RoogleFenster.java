@@ -186,7 +186,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		setPinPanel(pinPanel);
 		
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 
 		this.setName(eigenName);
 		
@@ -414,8 +414,8 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
         tabbedPane.addTab("Termine suchen und Überschreiben", SystemConfig.hmSysIcons.get("find"), tp2,
         "Termine suchen und Überschreiben");
         
-        tabbedPane.setMnemonicAt(0, (int) 'i');
-        tabbedPane.setMnemonicAt(1, (int) 'u');   
+        tabbedPane.setMnemonicAt(0, 'i');
+        tabbedPane.setMnemonicAt(1, 'u');   
         tabbedPane.addFocusListener(this);
         tp1.addFocusListener(this);
         tp2.addFocusListener(this);
@@ -449,7 +449,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	            	setTableSelection(jxTable,0,0);
 	            	return;
 	            }
-	            if(((int) e.getActionCommand().toCharArray()[0])==27){
+	            if((e.getActionCommand().toCharArray()[0])==27){
 	            	setVisible(false);
 	            	dispose();
 	            }
@@ -460,7 +460,9 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
     	try{
 		table.addRowSelectionInterval(row,col);
     	table.addColumnSelectionInterval(row,col);
-    	}catch(java.lang.IllegalArgumentException e){};
+    	}catch(java.lang.IllegalArgumentException e){
+    		//do nothing
+    	}
 	}
 	/******************************************/
 	private void TabelleSetzen(int wert){
@@ -812,7 +814,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		};	
 		worker.execute();
 		try {
-			return (JPanel) worker.get();
+			return worker.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -912,7 +914,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		};	
 		worker.execute();
 		try {
-			return (JPanel) worker.get();
+			return worker.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1015,7 +1017,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		};	
 		worker.execute();
 		try {
-			return (JPanel) worker.get();
+			return worker.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1042,7 +1044,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 				//String[] sSet = ((ArrayList<String[]>)SystemConfig.aRoogleGruppen.get(0).get(1)).get(0);
 			}
 		}else{
-			dataVector = null;;
+			dataVector = null;
 		}
 		MyRoogleGruppe myGTable = new MyRoogleGruppe();
 		myGTable.columnNames = column;
@@ -1347,7 +1349,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			////System.out.println("Entferne Listener in windowClosed");
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			ListenerTools.removeListeners(this);
 		}
@@ -1425,7 +1427,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+		rtp.removeRehaTPEventListener(this);
 		////System.out.println("In Closing***********************>");
 
 
@@ -1461,7 +1463,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource()+"Roogle");
 		if(arg0.getKeyCode() == 27){
 			arg0.consume();
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+			rtp.removeRehaTPEventListener(this);
 			FensterSchliessen(null);
 		}
 		if(arg0.getKeyCode() == 10){
@@ -1475,7 +1477,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		////System.out.println("Roogle - "+this.getName()+" Eltern "+ss);
 		try{
 			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
-				rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				FensterSchliessen(evt.getDetails()[0]);
 
@@ -1550,7 +1552,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 				////System.out.println("Celle wurde updated");				
 			}
 			
-			String[] sSet = ((ArrayList<String[]>)SystemConfig.aRoogleGruppen.get(arg0.getFirstRow()).get(1)).get(0);
+			String[] sSet = SystemConfig.aRoogleGruppen.get(arg0.getFirstRow()).get(1).get(0);
 			ArrayList<String> arr = new ArrayList<String>();
 			for(int i = 0;i<sSet.length;i++){
 				arr.add(sSet[i]);
@@ -1715,7 +1717,7 @@ class MyRoogleTable1 extends AbstractTableModel {
     public String[] columnNames = { "", "","","",""};
 
     
-    public Object[][] data = {{(boolean) Boolean.valueOf(false),(String) "","","",""}};
+    public Object[][] data = {{(boolean) Boolean.valueOf(false),"","","",""}};
     
     
 

@@ -123,7 +123,7 @@ public class BCStatics {
 	            }
 	            Iterator<X509Certificate> it = collection.iterator();
 	            while(it.hasNext()){
-        			X509Certificate x509Certifikat = ((X509Certificate)it.next());
+        			X509Certificate x509Certifikat = (it.next());
 
         			System.out.println("Version = "+
  
@@ -174,7 +174,7 @@ public class BCStatics {
 
 	}
 	public static int unsignedByteToInt(byte b){
-		return (int)b & 0xff;
+		return b & 0xff;
 	}
 
 	/*************************************************************************************/
@@ -314,8 +314,8 @@ public class BCStatics {
 			store.load(null,null);
 			store.setCertificateEntry(ROOT_ALIAS, rootCert);
 			X509Certificate[] chain = new X509Certificate[1];
-			chain[0] = (X509Certificate) rootCert;
-			store.setKeyEntry(ROOT_ALIAS,rootPair.getPrivate(),Constants.KEYSTORE_PASSWORD.toCharArray(),(java.security.cert.Certificate[]) chain);
+			chain[0] = rootCert;
+			store.setKeyEntry(ROOT_ALIAS,rootPair.getPrivate(),Constants.KEYSTORE_PASSWORD.toCharArray(),chain);
 
 			ByteArrayOutputStream bOut = new ByteArrayOutputStream();
 			
@@ -330,7 +330,7 @@ public class BCStatics {
 			
 			Enumeration<String> en = store.aliases();
 			while (en.hasMoreElements()){
-				String alias = (String)en.nextElement();
+				String alias = en.nextElement();
 				System.out.println("gefunden wurde: "+alias+" ist es ein Zertifikat? "+
 						store.isCertificateEntry(alias)+ " ist es ein Key entry ?"+store.isKeyEntry(alias)+
 						"");
@@ -406,7 +406,7 @@ public class BCStatics {
 			store.load(in,Constants.KEYSTORE_PASSWORD.toCharArray());
 			Enumeration<String> en = store.aliases();
 			while (en.hasMoreElements()){
-				String alias = (String)en.nextElement();
+				String alias = en.nextElement();
 				if(store.isCertificateEntry(alias)){
 					X509Certificate cert = (X509Certificate)store.getCertificate(alias);
 					java.security.interfaces.RSAPublicKey pub =
@@ -547,7 +547,7 @@ public class BCStatics {
 		Enumeration<String> en = store.aliases();
 		if(alias == null){
 			while (en.hasMoreElements()){
-				String aliases = (String)en.nextElement();
+				String aliases = en.nextElement();
 				if(aliases != null){
 					if(store.isCertificateEntry(aliases)){
 						store.deleteEntry(aliases);
@@ -700,7 +700,7 @@ public class BCStatics {
 	 /***************************************************************************/
 	 public static String getSHA1(X509Certificate cert){
 		 	byte[] encryptCert;
-		 	byte[] dig = null;;
+		 	byte[] dig = null;
 			try {
 				encryptCert = cert.getEncoded();
 				MessageDigest messageDigest = MessageDigest.getInstance(Constants.HASH_ALGORITHM_SHA_1,Constants.SECURITY_PROVIDER);
@@ -717,7 +717,7 @@ public class BCStatics {
 	 }
 	 public static String getMD5(X509Certificate cert){
 		 	byte[] encryptCert;
-		 	byte[] dig = null;;
+		 	byte[] dig = null;
 			try {
 				encryptCert = cert.getEncoded();
 				MessageDigest messageDigest = MessageDigest.getInstance(Constants.HASH_ALGORITHM_MD5,Constants.SECURITY_PROVIDER);

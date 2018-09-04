@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -228,7 +227,7 @@ public class MyErstInstall extends JXPanel{
 			MySqlTab.iPAdresse+":3306/"+MySqlTab.neuerDBName;
 			//tfs[0].getText().trim()+":"+tfs[1].getText().trim()+"/"+tfs[4].getText().trim();
 			System.out.println(connection);
-			TheraPiDbAdmin.conn_root = (Connection) DriverManager.getConnection(connection,
+			TheraPiDbAdmin.conn_root = DriverManager.getConnection(connection,
 					MySqlTab.neuerUser,
 					MySqlTab.neuesPasswort);
 

@@ -152,7 +152,7 @@ public class AbrechnungDrucken {
 		
 	}
 	public void starteDokument(String url) throws Exception{
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		documentService = RehaBillEdit.officeapplication.getDocumentService();
 		IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);

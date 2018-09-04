@@ -97,14 +97,14 @@ private void fillOneDimension(Vector ve){
 	System.out.println(ve);
 	removeAllItems();
 	for(int i = 0;i < lang;i++){
-		addItem( (String) ve.get(i));
+		addItem( ve.get(i));
 	}
 }
 
 private void fillCombo(Vector ve){
 	int lang = ve.size();
 	for(int i = 0;i < lang;i++){
-		addItem( (String) ((Vector)ve.get(i)).get(this.cmbdisplay));
+		addItem( ((Vector)ve.get(i)).get(this.cmbdisplay));
 		System.out.println("i="+i+" - "+(String) ((Vector)ve.get(i)).get(this.cmbdisplay));
 	}
 	
@@ -114,13 +114,13 @@ public Vector getDataVector(){
 }
 
 public Object getSecValue(){
-	return ((Object)((Vector)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );
+	return (((Vector)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );
 }
 public Object getValue(){
-	return ((String)((Vector)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );
+	return (((Vector)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );
 }
 public Object getValueAt(int pos){
-	return ((String)((Vector)vec.get(this.getSelectedIndex())).get(pos) );
+	return (((Vector)vec.get(this.getSelectedIndex())).get(pos) );
 }
 
 @Override

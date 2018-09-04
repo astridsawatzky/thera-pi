@@ -35,21 +35,21 @@ public class ArztTools {
 			 *														"<Atel>","<Afax>","<Aemail>","<Aid>"});
 			 */
 			if(vec.size()==0){return;}
-			String anrede = (String)vec.get(0);
+			String anrede = vec.get(0);
 			if(anrede.toUpperCase().equals("HERR")){
 				isherr = true;
 			}
-			String titel =  ((String) vec.get(1)).trim();
-			String vorname =  (String) vec.get(3);
-			String nachname =  (String) vec.get(2);
-			String strasse = (String) vec.get(4);
-			String plzort = (String) vec.get(5)+" "+(String) vec.get(6);
+			String titel =  vec.get(1).trim();
+			String vorname =  vec.get(3);
+			String nachname =  vec.get(2);
+			String strasse = vec.get(4);
+			String plzort = vec.get(5)+" "+vec.get(6);
 			String zeile1 = "";
 			//String zeile2 = "";
 			//String zeile3 = "";
 			String branrede = "";
 			
-			SystemConfig.hmAdrADaten.put("<Aklinik>", ((String) vec.get(12)).trim() );
+			SystemConfig.hmAdrADaten.put("<Aklinik>", vec.get(12).trim() );
 			
 			SystemConfig.hmAdrADaten.put("<Aadr1>", anrede);
 
@@ -70,16 +70,16 @@ public class ArztTools {
 			}
 			SystemConfig.hmAdrADaten.put("<Aadr5>", branrede);
 			
-			SystemConfig.hmAdrADaten.put("<Atel>", (String) vec.get(8));
-			SystemConfig.hmAdrADaten.put("<Afax>", (String) vec.get(9));		
-			SystemConfig.hmAdrADaten.put("<Aemail>", (String) vec.get(14));		
-			SystemConfig.hmAdrADaten.put("<Aid>", (String) vec.get(16));
+			SystemConfig.hmAdrADaten.put("<Atel>", vec.get(8));
+			SystemConfig.hmAdrADaten.put("<Afax>", vec.get(9));		
+			SystemConfig.hmAdrADaten.put("<Aemail>", vec.get(14));		
+			SystemConfig.hmAdrADaten.put("<Aid>", vec.get(16));
 			
 			//"<Aihrer>","<Apatientin>","<Adie>"
 			JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 			if(patient != null){
 				if(! Reha.thisClass.patpanel.aktPatID.equals("")){
-					boolean bfrau = ( ((String)vec.get(0)).equalsIgnoreCase("FRAU") ? true : false );
+					boolean bfrau = ( vec.get(0).equalsIgnoreCase("FRAU") ? true : false );
 					SystemConfig.hmAdrADaten.put("<Aihrer>", (bfrau ? "Ihrer" : "Ihres"));
 					SystemConfig.hmAdrADaten.put("<Apatientin>", (bfrau ? "Patientin" : "Patienten"));
 					SystemConfig.hmAdrADaten.put("<Adie>", (bfrau ? "die" : "den"));

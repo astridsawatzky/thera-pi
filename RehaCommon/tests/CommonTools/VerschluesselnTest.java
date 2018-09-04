@@ -3,8 +3,6 @@ package CommonTools;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-import java.io.UnsupportedEncodingException;
-
 import org.junit.Test;
 
 public class VerschluesselnTest {
@@ -26,7 +24,7 @@ public class VerschluesselnTest {
     }
 
     @Test
-    public void testDecrypt() throws UnsupportedEncodingException, SecurityException {
+    public void testDecrypt() throws SecurityException {
         Verschluesseln ver = Verschluesseln.getInstance();
        assertEquals("Bastie",ver.decrypt("OK1VGAz2LN15juNtHxkcbg=="));
        assertEquals("Bastie_hateinengroßenH\u00fctehund",

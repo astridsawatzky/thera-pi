@@ -195,12 +195,8 @@ public class Reha301Einlesen{
 				//dbHmap.put("beauftragtestelle",dbHmap.get("ktraeger"));
 				dbHmap.put("beauftragtestelle","");
 			}
-			try {
-				doBewilligungSpeichern(pfad,datei);
-				doHmapLeeren();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			doBewilligungSpeichern(pfad,datei);
+			doHmapLeeren();
 			//doPatTest();
 			return;
 		}
@@ -209,12 +205,8 @@ public class Reha301Einlesen{
 				//dbHmap.put("beauftragtestelle",dbHmap.get("ktraeger"));
 				dbHmap.put("beauftragtestelle","");
 			}
-			try {
-				doBewilligungSpeichern(pfad,datei);
-				doHmapLeeren();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			doBewilligungSpeichern(pfad,datei);
+			doHmapLeeren();
 			//doPatTest();
 			return;
 		}
@@ -289,7 +281,7 @@ public class Reha301Einlesen{
 		pan.validate();
 		return pan;
 	}
-	private void doBewilligungSpeichern(String pfad,String datei) throws IOException{
+	private void doBewilligungSpeichern(String pfad,String datei){
 		String bedingung = "versicherungsnr='"+dbHmap.get("versicherungsnr")+"' and datum='"+
 		dbHmap.get("datum")+"' and nachrichtentyp='"+(bewilligung ? "1" : "2")+"'";
 		int anzahl = SqlInfo.zaehleSaetze("dta301", bedingung);
@@ -558,7 +550,7 @@ public class Reha301Einlesen{
 	}
 	/*********************************/
 	private Object[] doAuswertenBewilligung(String zeile,int i){
-		Object[] ret = {null,(Integer) i};
+		Object[] ret = {null,i};
 		String[] teile = null;
 		String test = null;
 		teile = zeile.split("\\+");
@@ -1369,14 +1361,14 @@ public class Reha301Einlesen{
 		// 0 = Sender, 1 = Sender, 2 = Empfänger mit Entschl., 3 = Physik Empfänger, 4 = Originalgr.
 		// 5 = Encoded-Größe, 6 = log.Dateiname, 7 = physik. Dateiname
 		//Object[] decodeparms = {null,null,null,null,null,null,null};
-		decodeparms[7] = (String) auftragsdatei.substring(19,19+8);
-		decodeparms[0] = (String) auftragsdatei.substring(32,32+15).trim();
-		decodeparms[1] = (String) auftragsdatei.substring(47,47+15).trim();
-		decodeparms[2] = (String) auftragsdatei.substring(62,62+15).trim();
-		decodeparms[3] = (String) auftragsdatei.substring(77,77+15).trim();
-		decodeparms[4] = (Integer) IntegerTools.trailNullAndRetInt(auftragsdatei.substring(178,178+12));
-		decodeparms[5] = (Integer) IntegerTools.trailNullAndRetInt(auftragsdatei.substring(190,190+12));
-		decodeparms[6] = (String) auftragsdatei.substring(104,104+25).trim();
+		decodeparms[7] = auftragsdatei.substring(19,19+8);
+		decodeparms[0] = auftragsdatei.substring(32,32+15).trim();
+		decodeparms[1] = auftragsdatei.substring(47,47+15).trim();
+		decodeparms[2] = auftragsdatei.substring(62,62+15).trim();
+		decodeparms[3] = auftragsdatei.substring(77,77+15).trim();
+		decodeparms[4] = IntegerTools.trailNullAndRetInt(auftragsdatei.substring(178,178+12));
+		decodeparms[5] = IntegerTools.trailNullAndRetInt(auftragsdatei.substring(190,190+12));
+		decodeparms[6] = auftragsdatei.substring(104,104+25).trim();
 		/*
 		for(int i = 0; i < 8;i++){
 			//System.out.println("Eingelesene Parameter = "+Integer.toString(i)+" "+decodeparms[i]);

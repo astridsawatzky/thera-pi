@@ -122,7 +122,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 	    setLocation(lpt);
 	    
 		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener((RehaTPEventListener) this);
+		rtp.addRehaTPEventListener(this);
 		
 		new SwingWorker<String,String>(){
 			@Override
@@ -237,7 +237,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
 					this.setVisible(false);
-					rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+					rtp.removeRehaTPEventListener(this);
 					rtp = null;
 					uebernahme.removeActionListener(this);
 					abbrechen.removeActionListener(this);
@@ -255,7 +255,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		// TODO Auto-generated method stub
 		if(rtp != null){
 			this.setVisible(false);			
-			rtp.removeRehaTPEventListener((RehaTPEventListener) this);		
+			rtp.removeRehaTPEventListener(this);		
 			rtp = null;
 			pinPanel = null;
 			dispose();
@@ -359,15 +359,15 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 			mapkurz = "<AFRkurz"+(i+1)+">";
 			maplang = "<AFRlang"+(i+1)+">";
 			if(leistung[i].isSelected()){
-				Double preis = new Double( (String)Reha.thisClass.patpanel.vecaktrez.get(18+i));
+				Double preis = new Double( Reha.thisClass.patpanel.vecaktrez.get(18+i));
 				String s = df.format( preis);
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,s);
 				gesamt = gesamt+preis;
 				//spos = art_dbeh1 etc.
-				spos = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
+				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
 				//sart = rezeptnummer;
-				sart = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
@@ -377,8 +377,8 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 				////System.out.println(inpos[1]);
 				
 			}else{
-				spos = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
+				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
@@ -410,7 +410,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 	
 
 	public static void starteAusfallRechnung(String url){
-		IDocumentService documentService = null;;
+		IDocumentService documentService = null;
 		//System.out.println("Starte Datei -> "+url);
 		try {
 			documentService = Reha.officeapplication.getDocumentService();

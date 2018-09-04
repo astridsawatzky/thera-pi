@@ -294,7 +294,7 @@ public class SysUtilBedienung extends JXPanel implements KeyListener, ActionList
 		builder.addLabel("Horizontal (übereinander) oder vertikal (nebeneinander) teilen",cc.xy(1,iAktY));
 		tfs[4] = new JRtaTextField("Zahlen", true);
 		tfs[4].setName("desktop");
-		tfs[4].setText((Boolean)SystemConfig.desktopHorizontal ? "1" : "0");
+		tfs[4].setText(SystemConfig.desktopHorizontal ? "1" : "0");
 		cmbDesktop.setDataVectorVector(vecHV, 0, 1);
 		cmbDesktop.setSelectedItem(tfs[4].getText().equals("1") ? "horizontal" : "vertikal" );  // setze den aktuell gewählten Wert
 		cmbDesktop.setActionCommand("cmbDesktop");

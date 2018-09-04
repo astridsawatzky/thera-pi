@@ -359,7 +359,7 @@ public class BenutzerRechte extends JXPanel{
 					rechteTreeTableModel.setValueAt(0 ,	node, 1);
 				}else{
 					try{
-						rechteTreeTableModel.setValueAt((Integer)Integer.parseInt(aktuelleRechte.substring(recht,recht+1)) ,
+						rechteTreeTableModel.setValueAt(Integer.parseInt(aktuelleRechte.substring(recht,recht+1)) ,
 							node, 1);
 					}catch(java.lang.NumberFormatException ex){
 						
@@ -901,21 +901,21 @@ public class BenutzerRechte extends JXPanel{
     		component = new JComboBox(new Object[] { SystemConfig.hmSysIcons.get("zuzahlnichtok"), 
     				SystemConfig.hmSysIcons.get("zuzahlok")});
 
-    		((JComboBox)component).setRenderer(new RechteComboBoxRenderer() );
+    		component.setRenderer(new RechteComboBoxRenderer() );
     		
     	}
 		@Override
 		public Component getTableCellEditorComponent(JTable table,
 				Object value, boolean isSelected, int row, int column) {
 			if(isSelected){
-				((JComboBox)component).requestFocus();
+				component.requestFocus();
 				if(value instanceof ImageIcon){
 					if( ((ImageIcon)value).equals(img[0])){
-						((JComboBox)component).setSelectedIndex(0);					
+						component.setSelectedIndex(0);					
 					}else if( ((ImageIcon)value).equals(img[1])){
-						((JComboBox)component).setSelectedIndex(1);
+						component.setSelectedIndex(1);
 					}else{
-						((JComboBox)component).setSelectedIndex(0);
+						component.setSelectedIndex(0);
 					}
 				}
 			}else{
@@ -926,7 +926,7 @@ public class BenutzerRechte extends JXPanel{
 
 		@Override
 		public Object getCellEditorValue() {
-			return ((JComboBox)component).getSelectedIndex();
+			return component.getSelectedIndex();
 		}
 		
     }

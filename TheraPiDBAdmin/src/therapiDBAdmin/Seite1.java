@@ -2,7 +2,6 @@ package therapiDBAdmin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -98,7 +97,7 @@ public class Seite1 extends JXPanel{
 			tfs[0].getText().trim()+":"+tfs[1].getText().trim()+"/";
 			//tfs[0].getText().trim()+":"+tfs[1].getText().trim()+"/"+tfs[4].getText().trim();
 			System.out.println(connection);
-			TheraPiDbAdmin.conn_root = (Connection) DriverManager.getConnection(connection,
+			TheraPiDbAdmin.conn_root = DriverManager.getConnection(connection,
 					tfs[3].getText().trim(),
 					String.valueOf(pw.getPassword()));
 			//TheraPiDbAdmin.conn_root.close();

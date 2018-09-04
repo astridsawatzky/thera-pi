@@ -93,7 +93,7 @@ public class OffenepostenEinstellungen extends JXPanel{
 
 			
 		combo = new JRtaComboBox(drucker);
-		combo.setSelectedItem((String)OffenePosten.mahnParameter.get("drucker") );
+		combo.setSelectedItem(OffenePosten.mahnParameter.get("drucker") );
 		content.add(combo, cc.xy(4, 10));
 		/**************/
 		
@@ -147,31 +147,31 @@ public class OffenepostenEinstellungen extends JXPanel{
 
 		int iwert = Integer.parseInt( (tfs[0].getText().equals("") ? "31" : tfs[0].getText() ) );
 		inif.setIntegerProperty("General", "TageBisMahnung1", iwert, null);
-		OffenePosten.mahnParameter.put("frist1",(Integer)iwert);
+		OffenePosten.mahnParameter.put("frist1",iwert);
 		
 		iwert = Integer.parseInt( (tfs[1].getText().equals("") ? "11" : tfs[1].getText() ) );
 		inif.setIntegerProperty("General", "TageBisMahnung2", iwert, null);
-		OffenePosten.mahnParameter.put("frist2",(Integer)iwert);
+		OffenePosten.mahnParameter.put("frist2",iwert);
 		
 		iwert = Integer.parseInt( (tfs[2].getText().equals("") ? "11" : tfs[2].getText() ) );
 		inif.setIntegerProperty("General", "TageBisMahnung3", iwert, null);
-		OffenePosten.mahnParameter.put("frist3",(Integer)iwert);
+		OffenePosten.mahnParameter.put("frist3",iwert);
 		
 		boolean bwert = chk[0].isSelected();
 		inif.setStringProperty("General", "EinzelMahnung", (bwert ? "1" : "0"), null);
-		OffenePosten.mahnParameter.put("einzelmahnung",(Boolean)bwert);
+		OffenePosten.mahnParameter.put("einzelmahnung",bwert);
 		
 		String swert = combo.getSelectedItem().toString();
 		inif.setStringProperty("General", "MahnungDrucker", swert, null);
-		OffenePosten.mahnParameter.put("drucker",(String)swert);
+		OffenePosten.mahnParameter.put("drucker",swert);
 		
 		iwert = Integer.parseInt( (tfs[3].getText().equals("") ? "2" : tfs[3].getText() ) );
 		inif.setIntegerProperty("General", "MahnungExemplare", iwert, null);
-		OffenePosten.mahnParameter.put("exemplare",(Integer) iwert);
+		OffenePosten.mahnParameter.put("exemplare",iwert);
 		
 		bwert = chk[1].isSelected();
 		inif.setStringProperty("General", "InOfficeStarten", (bwert ? "1" : "0"), null);
-		OffenePosten.mahnParameter.put("inofficestarten",(Boolean)bwert);
+		OffenePosten.mahnParameter.put("inofficestarten",bwert);
 
 		try{
 			swert = DatFunk.sDatInSQL(tfs[4].getText());
@@ -179,8 +179,8 @@ public class OffenepostenEinstellungen extends JXPanel{
 			swert = "1995-01-01";
 			JOptionPane.showMessageDialog(null,"Datumswert für 'Alles ausblenden..' falsch eingegeben, nehme den 01.01.1995");
 		}
-		inif.setStringProperty("General", "AuswahlErstAb", (String) swert, null);
-		OffenePosten.mahnParameter.put("erstsuchenab",(String)swert);
+		inif.setStringProperty("General", "AuswahlErstAb", swert, null);
+		OffenePosten.mahnParameter.put("erstsuchenab",swert);
 		INITool.saveIni(inif);
 		JOptionPane.showMessageDialog(null,"Einstellungen ind offeneposten.ini erfolgreich gespeichert");
 	}
