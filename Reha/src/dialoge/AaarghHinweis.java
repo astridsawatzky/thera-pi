@@ -4,7 +4,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import Environment.Path;
-import hauptFenster.Reha;
 
 public class AaarghHinweis {
 	public AaarghHinweis(String hinweis,String title){

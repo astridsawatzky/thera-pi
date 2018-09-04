@@ -254,8 +254,6 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 		                    md.update(daten, 0, read);
 		            byte[] hash =  md.digest();
 		            BigInteger bi=new BigInteger(1, hash);
-		            String output = bi.toString(16);
-		            //System.out.println(output+"  "+files[i].getName()); // 5a707acfefbdbdda54166ceee7945437  Nebraska.jar
 		            is.close();
 
 					md5Hashes.put(files[i].getName(),bi.toString(16));					
@@ -299,7 +297,6 @@ public class AboutDialog extends JDialog implements ActionListener,KeyListener
 	private StringBuffer mkMd5Table() {
 		int calcRows = 0, waitMax = 100;
 		StringBuffer strBuf = new StringBuffer();
-		Boolean gerade = true;
 
 		strBuf.setLength(0);
 		strBuf.trimToSize();
