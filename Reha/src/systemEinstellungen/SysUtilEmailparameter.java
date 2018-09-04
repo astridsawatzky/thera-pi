@@ -288,7 +288,6 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 				return;
 			}
 			Verschluesseln man = Verschluesseln.getInstance();
-			man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			String encrypted = man.encrypt(pass1);
 			String smtphost = SMTPhost.getText().trim();
 			String pophost = POPhost.getText().trim();

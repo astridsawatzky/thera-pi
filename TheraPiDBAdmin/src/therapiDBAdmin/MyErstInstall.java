@@ -283,7 +283,6 @@ public class MyErstInstall extends JXPanel{
 
 			String decrypted = MySqlTab.neuesPasswort;
 			Verschluesseln man = Verschluesseln.getInstance();
-			man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			RWJedeIni.schreibeIniDatei(copyTarget[0]+"rehajava.ini", "DatenBank", "DBPasswort1", man.encrypt(decrypted));
 			RWJedeIni.schreibeIniDatei(copyTarget[0]+"rehajava.ini", "DatenBank", "AnzahlConnections", "1");
 			RWJedeIni.schreibeIniDatei(copyTarget[0]+"rehajava.ini", "DatenBank", "DBKontakt1", 

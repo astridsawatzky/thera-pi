@@ -151,7 +151,6 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			String pw = new String(inif.getStringProperty("DatenBank","DBPasswort1"));
 			Verschluesseln man = Verschluesseln.getInstance();
 			man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		    String decrypted = man.decrypt (pw);
 		    dbpassword = new String(decrypted);
 		    tempvz = args[0]+"temp/"+args[1]+"/"; //new String(inif.getStringProperty("GBriefe", "TempVZ"));
@@ -170,7 +169,6 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			String pw = new String(inif.getStringProperty("GBriefe", "DBPassword"));
 			Verschluesseln man = Verschluesseln.getInstance();
 			man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		    String decrypted = man.decrypt (pw);
 		    dbpassword = new String(decrypted);
 		    tempvz = new String(inif.getStringProperty("GBriefe", "TempVZ"));

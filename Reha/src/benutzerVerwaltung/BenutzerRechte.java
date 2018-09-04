@@ -457,7 +457,6 @@ public class BenutzerRechte extends JXPanel{
 	/********************************************/
 	private void doImport(){
 		Verschluesseln man = Verschluesseln.getInstance();
-	    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 	    Vector<Vector<String>> vec = SqlInfo.holeFelder("select * from restricttemplates");
 	    for(int i = 0; i < vec.size();i++){
 	    	vec.get(i).set(0, man.decrypt(vec.get(i).get(0)) );
@@ -481,7 +480,6 @@ public class BenutzerRechte extends JXPanel{
 			return;
 		}
 		Verschluesseln man = Verschluesseln.getInstance();
-	    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 
 		String rechte = getRechte();
 		String cmd = "insert into restricttemplates set abteilung='"+man.encrypt(ret.toString())+"', sammlung='"+man.encrypt(rechte)+"'";
@@ -589,7 +587,6 @@ public class BenutzerRechte extends JXPanel{
 		
 		
 		Verschluesseln man = Verschluesseln.getInstance();
-	    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		String encrypted = man.encrypt(pw);
 		
 		if(!neu){

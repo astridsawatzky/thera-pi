@@ -276,7 +276,6 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		dbini.setStringProperty("DatenBank", "DBBenutzer1", ss6, null);
 
 		Verschluesseln man = Verschluesseln.getInstance();
-		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		String encrypted = man.encrypt(ss7);
 		dbini.setStringProperty("DatenBank", "DBPasswort1", encrypted, null);
 		String skontakt = "jdbc:"+ss1+"://"+ss3+":"+ss4+"/"+ss5;

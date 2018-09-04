@@ -345,7 +345,6 @@ public class SystemConfig {
 				if(!pw.equals("")){
 					if(pw != null){
 						Verschluesseln man = Verschluesseln.getInstance();
-						man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 						decrypted = man.decrypt (pw);
 					}else{
 						decrypted = String.valueOf("");
@@ -358,7 +357,6 @@ public class SystemConfig {
 					}else{
 						decrypted = ((String)ret).trim();
 						Verschluesseln man = Verschluesseln.getInstance();
-						man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 						ini.setStringProperty("DatenBank","DBPasswort"+i,man.encrypt(((String)ret)),null);
 						INITool.saveIni(ini);
 					}
@@ -672,7 +670,6 @@ public class SystemConfig {
 			hmEmailExtern.put("Username",emailini.getStringProperty("EmailExtern","Username"));
 			String pw = emailini.getStringProperty("EmailExtern","Password");
 			Verschluesseln man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			String decrypted = man.decrypt (pw);
 			hmEmailExtern.put("Password",decrypted);
 			hmEmailExtern.put("SenderAdresse",emailini.getStringProperty("EmailExtern","SenderAdresse"));			
@@ -707,7 +704,6 @@ public class SystemConfig {
 			hmEmailIntern.put("Username",emailini.getStringProperty("EmailIntern","Username"));
 			pw = emailini.getStringProperty("EmailIntern","Password");
 			man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			decrypted = man.decrypt (pw);
 			hmEmailIntern.put("Password",decrypted);
 			hmEmailIntern.put("SenderAdresse",emailini.getStringProperty("EmailIntern","SenderAdresse"));			
@@ -930,7 +926,6 @@ public class SystemConfig {
 				String decrypted = null;
 				if(pw != null){
 					Verschluesseln man = Verschluesseln.getInstance();
-					man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 					decrypted = man.decrypt (pw);
 				}else{
 					decrypted = String.valueOf("");
@@ -991,7 +986,6 @@ public class SystemConfig {
 				hmHilfeServer.put("HilfeDBUser", inif.getStringProperty("TheraPiHilfe", "HilfeDBUser"));
 				String pw = String.valueOf(inif.getStringProperty("TheraPiHilfe","HilfeDBPassword"));
 				Verschluesseln man = Verschluesseln.getInstance();
-			    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 				String decrypted = man.decrypt (pw);
 				hmHilfeServer.put("HilfeDBPassword", decrypted);			
 			}
@@ -1846,7 +1840,6 @@ public class SystemConfig {
 			INI_FILE = "nebraska_mac.conf";
 		}
 		Verschluesseln man = Verschluesseln.getInstance();
-		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		try{
 			inif = INITool.openIni(Path.Instance.getProghome(), INI_FILE);
 			String pw = null;

@@ -185,7 +185,6 @@ public class RehaMail implements WindowListener {
 				String decrypted = null;
 				if(pw != null){
 					Verschluesseln man = Verschluesseln.getInstance();
-					man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 					decrypted = man.decrypt (pw);
 				}else{
 					decrypted = new String("");
@@ -253,7 +252,6 @@ public class RehaMail implements WindowListener {
 					/*********************************/
 							
 							Verschluesseln man = Verschluesseln.getInstance();
-							man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 							einzelMail = SqlInfo.holeFelder("select user,rights,id from rehalogin");
 							for(int i = 0; i < einzelMail.size();i++){
 								einzelMail.get(i).set(0,man.decrypt(einzelMail.get(i).get(0)));

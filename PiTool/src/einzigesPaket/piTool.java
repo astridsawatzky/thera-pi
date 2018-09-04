@@ -1024,12 +1024,10 @@ public static void SystemStart(){
 			pe.setVisible(true);
 			pw = new String(ini.getStringProperty("EmailExtern","Password"));
 			Verschluesseln man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			String decrypted = man.decrypt (pw);
 			hmEmailExtern.put("Password",new String(decrypted));
 		}else{
 			Verschluesseln man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			String decrypted = man.decrypt (pw);
 			hmEmailExtern.put("Password",new String(decrypted));			
 		}
@@ -1047,12 +1045,10 @@ public static void SystemStart(){
 			pe.setVisible(true);
 			pw = new String(ini.getStringProperty("EmailIntern","Password"));
 			Verschluesseln man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			String decrypted = man.decrypt (pw);
 			hmEmailIntern.put("Password",new String(decrypted));
 		}else{
 			Verschluesseln man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			String decrypted = man.decrypt (pw);
 			hmEmailIntern.put("Password",new String(decrypted));			
 		}
@@ -1374,7 +1370,6 @@ class passwortEncrypt extends JDialog{
 	private void verschluesseln(){
 		String pw = pf.getText();
 		Verschluesseln man = Verschluesseln.getInstance();
-		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		String encrypted = man.encrypt(pw);
 		String gruppe = null;
 		if(getTitle().equals("Passwort für Interne-Email" )){

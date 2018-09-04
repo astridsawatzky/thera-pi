@@ -113,7 +113,6 @@ public class OpRgaf implements WindowListener{
 				String decrypted = null;
 				if(pw != null){
 					Verschluesseln man = Verschluesseln.getInstance();
-					man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 					decrypted = man.decrypt (pw);
 				}else{
 					decrypted = new String("");

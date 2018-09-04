@@ -49,7 +49,6 @@ public class UpdateConfig {
 			String pw = ""; 
 			pw = ini.getStringProperty("TheraPiUpdates", "UpdatePasswd");
 			Verschluesseln man = Verschluesseln.getInstance();
-			man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			if(pw.length() <= 20){
 				ini.setStringProperty("TheraPiUpdates", "UpdatePasswd", man.encrypt(String.valueOf(pw)),null);
 				ini.save();
@@ -67,7 +66,6 @@ public class UpdateConfig {
 
 
 			Verschluesseln man = Verschluesseln.getInstance();
-			man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 			updateHost = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdateFTP"));
 			updateDir = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdateVerzeichnis"));
 			updateUser = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdateUser"));

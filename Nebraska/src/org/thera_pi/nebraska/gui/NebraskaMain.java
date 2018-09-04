@@ -59,7 +59,6 @@ public class NebraskaMain {
 			INI_FILE = progHome+ File.separator +"nebraska_mac.conf";
 		}
 		Verschluesseln man = Verschluesseln.getInstance();
-		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 
 		if(args.length > 0){
 			try{

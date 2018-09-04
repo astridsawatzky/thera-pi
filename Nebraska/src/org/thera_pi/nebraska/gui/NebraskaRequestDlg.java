@@ -273,7 +273,6 @@ public class NebraskaRequestDlg extends JDialog{
 			NebraskaMain.keyStoreParameter.set(inipos-1,(Vector<String>) dummy.clone() );
 		}
 		Verschluesseln man = Verschluesseln.getInstance();
-		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 
 		ifile.setIntegerProperty("KeyStores", "KeyStoreAnzahl", NebraskaMain.keyStoreParameter.size(),null);
 		ifile.setStringProperty("KeyStores", "KeyStoreFile"+Integer.toString(inipos),this.zertantrag.therapidir+"/keystore/"+this.ik+"/"+this.ik+".p12",null);

@@ -267,7 +267,6 @@ public static void Passwort() {
 		Vector<String> aKollegen = new Vector<String>();
 	 	String test = "";
 		Verschluesseln man = Verschluesseln.getInstance();
-	    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 	 	while( rs.next()){
 	 		try{
 	 			/*

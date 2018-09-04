@@ -1458,7 +1458,6 @@ public class Reha301Einlesen{
 								
 				String pw = String.valueOf(file.getStringProperty("KeyStores","KeyStorePw"+Integer.toString(i)));
 				Verschluesseln man = Verschluesseln.getInstance();
-				man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 				kstorepw = man.decrypt (pw);
 				
 				kstorealias =  file.getStringProperty("KeyStores","KeyStoreAlias"+Integer.toString(i));
