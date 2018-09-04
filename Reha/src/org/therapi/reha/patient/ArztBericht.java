@@ -40,6 +40,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
@@ -59,7 +60,6 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import systemTools.AdressTools;
-import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 import textBlockTherapeuten.ThTextBlock;
 

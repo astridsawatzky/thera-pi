@@ -16,6 +16,7 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
 
+import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -29,7 +30,6 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
-import terminKalender.DatFunk;
 
 public class KurzAufrufe {
 	public static void starteFunktion(String funktion, Object obj1,Object obj2){

@@ -55,8 +55,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 
+import CommonTools.DatFunk;
 import opencard.core.util.HexString;
-import utils.DatFunk;
 import utils.NUtils;
 
 

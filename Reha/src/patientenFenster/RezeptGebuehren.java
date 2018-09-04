@@ -34,6 +34,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -56,7 +57,6 @@ import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 
 public class RezeptGebuehren extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
 	/**

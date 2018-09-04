@@ -42,9 +42,9 @@ import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import pdfDrucker.PDFDrucker;
-import utils.DatFunk;
 import utils.JCompTools;
 import utils.JRtaCheckBox;
 import utils.JRtaRadioButton;

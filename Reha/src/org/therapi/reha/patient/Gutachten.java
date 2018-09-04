@@ -37,6 +37,7 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
@@ -51,7 +52,6 @@ import patientenFenster.KeinRezept;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
-import terminKalender.DatFunk;
 
 public class Gutachten extends JXPanel implements ActionListener, TableModelListener, PropertyChangeListener{
 

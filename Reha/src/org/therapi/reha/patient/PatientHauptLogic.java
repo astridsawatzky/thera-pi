@@ -29,6 +29,7 @@ import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXPanel;
 
+import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
@@ -53,7 +54,6 @@ import stammDatenTools.KasseTools;
 import stammDatenTools.PatTools;
 import stammDatenTools.ZuzahlTools;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 
 public class PatientHauptLogic {
 	

@@ -41,6 +41,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 
+import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ZeitFunk;

@@ -8,12 +8,12 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.SqlInfo;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
-import terminKalender.DatFunk;
 
 public class ZuzahlTools {
 	/** EnumMap anlegen, mit ZuZahlStatus als key, Icon als value **/	

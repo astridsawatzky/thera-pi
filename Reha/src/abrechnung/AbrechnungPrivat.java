@@ -39,6 +39,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.AdressTools;
+import CommonTools.DatFunk;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.SqlInfo;
@@ -67,7 +68,6 @@ import oOorgTools.OOTools;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
-import terminKalender.DatFunk;
 
 public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionListener, MouseListener, KeyListener,RehaTPEventListener, ChangeListener{
 	/**

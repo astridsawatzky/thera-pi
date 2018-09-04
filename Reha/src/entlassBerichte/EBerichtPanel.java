@@ -50,6 +50,7 @@ import org.therapi.reha.patient.LadeProg;
 
 import com.mysql.jdbc.PreparedStatement;
 
+import CommonTools.DatFunk;
 import CommonTools.FileTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -85,7 +86,6 @@ import rehaInternalFrame.JGutachtenInternal;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 import systemTools.ListenerTools;
-import terminKalender.DatFunk;
 
 public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventListener,PropertyChangeListener,TableModelListener,KeyListener,FocusListener,ActionListener, MouseListener{
 	/**

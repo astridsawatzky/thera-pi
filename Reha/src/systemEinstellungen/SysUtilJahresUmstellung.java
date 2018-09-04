@@ -27,12 +27,12 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
 import Environment.Path;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
-import terminKalender.DatFunk;
 
 public class SysUtilJahresUmstellung extends JXPanel implements KeyListener, ActionListener  {
 	

@@ -44,6 +44,8 @@ import org.jdesktop.swingx.table.TableColumnExt;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
+
 public class SteuerPanel extends JXPanel implements ActionListener,MouseListener,KeyListener{
 	public JFormattedTextField[] jtf = {null,null,null,null,null};
 	public JFormattedTextField suchdatum;
@@ -66,7 +68,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 		super();
 		thisClass = this;
 		
-		aktJahr = new Integer(datFunk.sHeute().substring(6));
+		aktJahr = new Integer(DatFunk.sHeute().substring(6));
 		
 		setPreferredSize(new Dimension(0,250));
 		setBackground( Color.WHITE);
@@ -219,7 +221,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 			return;
 		}
 		String aktuell = new String(geb+new Integer(SteuerPanel.thisClass.aktJahr).toString());
-		if(datFunk.DatumsWert(aktuell) <= datFunk.DatumsWert(datFunk.sHeute())){
+		if(DatFunk.DatumsWert(aktuell) <= DatFunk.DatumsWert(DatFunk.sHeute())){
 			SteuerPanel.thisClass.nachtraeglich = true;
 		}else{
 			SteuerPanel.thisClass.nachtraeglich = false;
@@ -270,7 +272,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 				xvec.add(strasse);
 				ort = StringTools.EGross(rs.getString("PLZ"))+" "+StringTools.EGross(rs.getString("Ort"));
 				xvec.add(ort);
-				xvec.add(datFunk.sDatInDeutsch(rs.getString("GEBOREN")));
+				xvec.add(DatFunk.sDatInDeutsch(rs.getString("GEBOREN")));
 				xvec.add(new Integer(SteuerPanel.thisClass.aktJahr - aktJahr).toString());			
 				xvec.add(rs.getString("PAT_INTERN"));
 				String anamnese = rs.getString("ANAMNESE"); 

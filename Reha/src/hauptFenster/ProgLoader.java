@@ -15,6 +15,7 @@ import javax.swing.SwingUtilities;
 
 import org.therapi.reha.patient.PatientHauptPanel;
 
+import CommonTools.DatFunk;
 import Environment.Path;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
@@ -53,7 +54,6 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
 import systemTools.PassWort;
 import systemTools.WinNum;
-import terminKalender.DatFunk;
 import terminKalender.TerminFenster;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;

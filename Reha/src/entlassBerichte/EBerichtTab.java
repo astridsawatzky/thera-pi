@@ -5,9 +5,9 @@ import javax.swing.JTabbedPane;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import hauptFenster.Reha;
-import terminKalender.DatFunk;
 
 public class EBerichtTab {
 	EBerichtPanel eltern = null;

@@ -39,6 +39,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -47,7 +48,6 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 
 public class Eb1_2015 implements ActionListener,ComponentListener {
 	JXPanel pan = null;

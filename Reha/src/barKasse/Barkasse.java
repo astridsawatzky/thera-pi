@@ -24,6 +24,7 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
@@ -41,7 +42,6 @@ import ag.ion.noa.NOAException;
 import hauptFenster.Reha;
 import rehaInternalFrame.JBarkassenInternal;
 import systemTools.ButtonTools;
-import terminKalender.DatFunk;
 
 public class Barkasse extends JXPanel implements ItemListener{
 

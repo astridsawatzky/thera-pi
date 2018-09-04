@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 
 public class TagWahl {

@@ -65,6 +65,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.therapi.reha.patient.AktuelleRezepte;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import Environment.Path;

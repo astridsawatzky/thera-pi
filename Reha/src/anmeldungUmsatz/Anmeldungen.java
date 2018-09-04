@@ -27,6 +27,7 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
@@ -37,7 +38,6 @@ import hauptFenster.Reha;
 import rehaInternalFrame.JAnmeldungenInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
-import terminKalender.DatFunk;
 
 public class Anmeldungen extends JXPanel{
 	

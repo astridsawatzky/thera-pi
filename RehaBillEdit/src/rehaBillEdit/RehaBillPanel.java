@@ -43,8 +43,8 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import Tools.ButtonTools;
-import Tools.DatFunk;
 import Tools.JCompTools;
 import Tools.JRtaCheckBox;
 import Tools.JRtaTextField;

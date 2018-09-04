@@ -67,6 +67,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JRtaTextField;
@@ -84,7 +85,6 @@ import jxTableTools.ZeitCancelCellEditor;
 import jxTableTools.ZeitTableCellEditor;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
 

@@ -22,6 +22,7 @@ import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
@@ -29,7 +30,6 @@ import CommonTools.StringTools;
 import floskeln.Floskeln;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 
 public class PatientMemoPanel extends JXPanel{
 

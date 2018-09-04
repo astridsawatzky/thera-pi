@@ -42,6 +42,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
@@ -53,7 +54,6 @@ import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import jxTableTools.RechtsRenderer;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 
 public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
 	/**

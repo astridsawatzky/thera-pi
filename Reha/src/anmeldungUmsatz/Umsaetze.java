@@ -34,6 +34,7 @@ import com.sun.star.table.XCellRange;
 import com.sun.star.text.XText;
 import com.sun.star.uno.UnoRuntime;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -48,7 +49,6 @@ import oOorgTools.OOTools;
 import rehaInternalFrame.JUmsaetzeInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
-import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 
 public class Umsaetze extends JXPanel{

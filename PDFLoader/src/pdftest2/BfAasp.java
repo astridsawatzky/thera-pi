@@ -13,7 +13,7 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import Tools.DatFunk;
+import CommonTools.DatFunk;
 import Tools.SqlInfo;
 
 

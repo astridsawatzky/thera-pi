@@ -2,12 +2,12 @@ package systemEinstellungen;
 
 import java.util.Vector;
 
+import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.ZeitFunk;
 import Environment.Path;
 import hauptFenster.Reha;
-import terminKalender.DatFunk;
 
 public class GruppenEinlesen{
 	//public Vector gruppenParam = null;

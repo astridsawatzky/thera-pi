@@ -33,6 +33,7 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
@@ -42,7 +43,6 @@ import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 
 
 public class PatientStammDatenPanel extends JXPanel{

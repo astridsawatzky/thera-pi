@@ -33,6 +33,7 @@ import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.uno.UnoRuntime;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
@@ -49,7 +50,6 @@ import oOorgTools.OOTools;
 import rehaInternalFrame.JBeteiligungInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
-import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 
 public class Beteiligung  extends JXPanel{

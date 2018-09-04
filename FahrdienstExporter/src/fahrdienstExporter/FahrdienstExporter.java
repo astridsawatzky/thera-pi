@@ -11,7 +11,7 @@ import com.hexiong.jdbf.DBFWriter;
 import com.hexiong.jdbf.JDBFException;
 import com.hexiong.jdbf.JDBField;
 
-import tools.DatFunk;
+import CommonTools.DatFunk;
 import tools.INIFile;
 
 

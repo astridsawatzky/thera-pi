@@ -13,6 +13,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import Environment.Path;
@@ -20,7 +21,6 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import terminKalender.BestaetigungsDaten;
-import terminKalender.DatFunk;
 import terminKalender.TerminBestaetigenAuswahlFenster;
 import terminKalender.TermineErfassen;
 import wecker.AePlayWave;

@@ -34,6 +34,7 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
@@ -46,7 +47,6 @@ import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemTools.ButtonTools;
-import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 
 public class Wecker extends RehaSmartDialog implements RehaTPEventListener,WindowListener{

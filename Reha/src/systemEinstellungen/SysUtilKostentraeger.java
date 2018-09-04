@@ -35,6 +35,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
@@ -42,7 +43,6 @@ import CommonTools.SqlInfo;
 import Environment.Path;
 import hauptFenster.Reha;
 import sqlTools.PLServerAuslesen;
-import terminKalender.DatFunk;
 
 public class SysUtilKostentraeger extends JXPanel implements KeyListener, ActionListener {
 	

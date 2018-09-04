@@ -19,11 +19,11 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import CommonTools.DatFunk;
 import dialoge.SchluesselDialog;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 import terminKalender.TermineErfassen;
 
 

@@ -47,13 +47,12 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 //import roogle.SuchenSeite;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
-//import terminKalender.TerminFenster;
-import terminKalender.DatFunk;
 
 public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, ActionListener {
 

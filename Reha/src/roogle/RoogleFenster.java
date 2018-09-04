@@ -55,6 +55,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
@@ -68,7 +69,6 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
 import systemTools.WinNum;
-import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 
 public class RoogleFenster extends RehaSmartDialog implements TableModelListener, FocusListener, ActionListener, ComponentListener, WindowListener, ChangeListener, KeyListener, MouseListener, RehaTPEventListener{

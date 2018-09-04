@@ -8,12 +8,12 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
-import terminKalender.DatFunk;
 
 public class HMRCheck {
 	Vector<Integer> anzahl = null;

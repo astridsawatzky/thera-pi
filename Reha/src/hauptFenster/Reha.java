@@ -120,6 +120,7 @@ import com.jgoodies.looks.Options;
 import com.sun.star.uno.Exception;
 
 import CommonTools.Colors;
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.FireRehaError;
@@ -163,7 +164,6 @@ import systemEinstellungen.SystemPreislisten;
 import systemTools.RehaPainters;
 import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
-import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 import terminKalender.TerminFenster;
 import urlaubBeteiligung.Beteiligung;

@@ -86,6 +86,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.mysql.jdbc.PreparedStatement;
 
 import CommonTools.Colors;
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JCompTools;
@@ -110,7 +111,6 @@ import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.GrafikTools;
 import systemTools.IconListRenderer;
-import terminKalender.DatFunk;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerDevice;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;

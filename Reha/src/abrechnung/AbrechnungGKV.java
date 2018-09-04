@@ -57,6 +57,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.mysql.jdbc.PreparedStatement;
 
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -75,7 +76,6 @@ import rehaInternalFrame.JAbrechnungInternal;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
-import terminKalender.DatFunk;
 
 public class AbrechnungGKV extends JXPanel implements PatStammEventListener,ActionListener,TreeSelectionListener, MouseListener{
 	/**

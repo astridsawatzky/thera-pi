@@ -92,10 +92,10 @@ import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import encode.BodosDecryptor;
 import encode.EncUtils;
-import utils.DatFunk;
 import utils.JCompTools;
 import utils.MitteRenderer;
 import utils.NUtils;

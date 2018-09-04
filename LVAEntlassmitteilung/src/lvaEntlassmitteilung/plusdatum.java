@@ -16,6 +16,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
+
 public class plusdatum extends JDialog implements ActionListener{
 	
 	JButton bnr1;	

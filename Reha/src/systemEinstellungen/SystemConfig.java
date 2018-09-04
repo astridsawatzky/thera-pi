@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import CommonTools.DatFunk;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
@@ -31,7 +32,6 @@ import hauptFenster.Reha;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;
 import systemTools.Verschluesseln;
-import terminKalender.DatFunk;
 import terminKalender.ParameterLaden;
 
 

@@ -61,6 +61,7 @@ import com.mysql.jdbc.PreparedStatement;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
+import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.INITool;
@@ -87,7 +88,6 @@ import stammDatenTools.ZuzahlTools;
 import sun.awt.image.ImageFormatException;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
-import terminKalender.DatFunk;
 
 public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		Serializable, ActionListener, KeyListener, FocusListener {

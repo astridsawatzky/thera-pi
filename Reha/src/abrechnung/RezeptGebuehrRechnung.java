@@ -33,6 +33,7 @@ import org.jdesktop.swingx.JXTitledPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import Environment.Path;
@@ -57,7 +58,6 @@ import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ZuzahlTools.ZZStat;
 import systemEinstellungen.SystemConfig;
-import terminKalender.DatFunk;
 
 public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, ActionListener, MouseListener, KeyListener,RehaTPEventListener{
 	/**

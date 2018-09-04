@@ -3,8 +3,6 @@ package org.therapi.reha.patient;
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +27,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaCheckBox;
 import CommonTools.SqlInfo;
 import Environment.Path;
@@ -51,7 +50,6 @@ import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
 import systemTools.LeistungTools;
-import terminKalender.DatFunk;
 
 public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
 	/**

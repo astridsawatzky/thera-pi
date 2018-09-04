@@ -36,6 +36,7 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;

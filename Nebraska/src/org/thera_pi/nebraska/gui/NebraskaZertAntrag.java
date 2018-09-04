@@ -39,7 +39,6 @@ import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
-import org.thera_pi.nebraska.gui.utils.DatFunk;
 import org.thera_pi.nebraska.gui.utils.INIFile;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
 import org.thera_pi.nebraska.gui.utils.JRtaCheckBox;
@@ -53,6 +52,7 @@ import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import CommonTools.DatFunk;
 import nebraska.FileStatics;
 import pdfDrucker.PDFDrucker;
 

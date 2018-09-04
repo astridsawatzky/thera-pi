@@ -19,6 +19,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import CommonTools.DatFunk;
 import CommonTools.ZeitFunk;
 import Environment.Path;
 import dialoge.EmailDialog;
