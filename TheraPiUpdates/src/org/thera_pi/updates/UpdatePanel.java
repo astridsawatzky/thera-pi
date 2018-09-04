@@ -53,6 +53,8 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Verschluesseln;
+
 
 
 
@@ -114,14 +116,12 @@ public class UpdatePanel extends JXPanel{
 		super();
 		eltern = xeltern;
 		this.jFrame = jFrame;
-		//man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 		if(xupdateTab != null){
 			updateTab = xupdateTab;
 		}
 		setLayout(new BorderLayout());
 		add(getHeader(),BorderLayout.NORTH);
 		add(getContent(),BorderLayout.CENTER);
-		//doUpdateCheck();
 	}
 	public void starteFTP(){
 		doUpdateCheck();
@@ -475,17 +475,6 @@ public class UpdatePanel extends JXPanel{
 		}
 
 	}
-	/*
-	private String usingDateFormatter(long input){  
-		         Date date = new Date(input);  
-		         Calendar cal = new GregorianCalendar();  
-		         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss z");  
-		         sdf.setCalendar(cal);  
-		         cal.setTime(date);  
-		         return sdf.format(date);  
-		   
-	} 
-	*/ 
 	 private String usingDateFormatterWithTimeZone(long input){  
 		 Date date = new Date(input);  
 		 Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));  
@@ -770,12 +759,8 @@ public class UpdatePanel extends JXPanel{
 			String decrypted = null;
 			
 			if(pw != null){
-				
-				TheraPiUpdates.isrta = true;
-				VerschluesselnDB man = VerschluesselnDB.getInstance();
-				man.init(VerschluesselnDB.getPassword().toCharArray(), man.getSalt(), man.getIterations());
+				Verschluesseln man = Verschluesseln.getInstance();
 				decrypted = man.decrypt (pw);
-				TheraPiUpdates.isrta = false;
 			}else{
 				decrypted = new String("");
 			}

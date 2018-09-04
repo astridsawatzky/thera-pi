@@ -49,7 +49,6 @@ import com.jgoodies.forms.layout.FormLayout;
 public class TheraPiUpdates implements WindowListener {
 	private JFrame jFrame = null;
 	public static boolean starteTheraPi = false;
-	public static boolean isrta = false;
 	public static boolean updateallowed = false;
 	public static boolean showpwdlg = true;
 	public static boolean macNotMatch = true;
@@ -222,7 +221,7 @@ public class TheraPiUpdates implements WindowListener {
 	    File fi = new File(UpdateConfig.getInstance().getProghome()+"ini/tpupdateneu.ini");
 		if(fi.exists()){
 			System.out.println("Datei existiert = "+fi.getName());
-			TheraPiUpdates.isrta = false;
+			UpdateConfig.isrta = false;
 		}else{
 			System.out.println("Datei existiert nicht");
 		}
@@ -503,7 +502,7 @@ public class TheraPiUpdates implements WindowListener {
 						File fi = new File(UpdateConfig.getInstance().getProghome()+"ini/tpupdateneu.ini");
 						if(fi.exists()){
 							//System.out.println("Vor der Verschlüsselung Datei existiert = "+fi.getName());
-							TheraPiUpdates.isrta = false;
+							UpdateConfig.isrta = false;
 						}else{
 							//System.out.println("Vor der Verschlüsselung Datei existiert nicht");
 						}
