@@ -10,6 +10,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.net.ftp.FTPFile;
 
+import Environment.Path;
+
 
 
 
@@ -39,9 +41,9 @@ public class TestForUpdates {
 			
 			FTPTools ftpt = new FTPTools();
 			
-			ftpt.holeDateiSilent("update.files", UpdateConfig.getProghome(), false);
+			ftpt.holeDateiSilent("update.files", Path.Instance.getProghome(), false);
 
-			updateCheck(UpdateConfig.getProghome() + "update.files");
+			updateCheck(Path.Instance.getProghome() + "update.files");
 			
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -124,7 +126,7 @@ public class TestForUpdates {
 		BufferedReader in = null;
 		
 		/************************/
-		INIFile inif = new INIFile(UpdateConfig.getProghome() + "ini/mandanten.ini");
+		INIFile inif = new INIFile(Path.Instance.getProghome() + "ini/mandanten.ini");
 		try{
 			int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
 			for(int i = 0; i < AnzahlMandanten;i++){
@@ -162,13 +164,13 @@ public class TestForUpdates {
 							if(sourceAndTarget[1].contains("%proghome%")){
 								dummy.clear();
 								dummy.add(updatedir+sourceAndTarget[0].trim());
-								dummy.add(sourceAndTarget[1].trim().replace("%proghome%", UpdateConfig.getProghome()).replace("//", "/"));
+								dummy.add(sourceAndTarget[1].trim().replace("%proghome%", Path.Instance.getProghome()).replace("//", "/"));
 								if(! targetvec.contains(dummy.get(1))){
 									targetvec.add(new String(dummy.get(1)));
 									updatefiles.add(new Vector<String>(dummy));
 								}
 							}else if(sourceAndTarget[1].contains("%userdir%")){
-								String home = sourceAndTarget[1].trim().replace("%userdir%", UpdateConfig.getProghome()).replace("//", "/"); 
+								String home = sourceAndTarget[1].trim().replace("%userdir%", Path.Instance.getProghome()).replace("//", "/"); 
 								for(int i = 0; i < mandvec.size();i++){
 									dummy.clear();
 									dummy.add(updatedir+sourceAndTarget[0].trim());

@@ -25,6 +25,8 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import Environment.Path;
+
 public class EntwicklerPanel extends JXPanel implements ActionListener{
 	/**
 	 * 
@@ -160,7 +162,7 @@ public class EntwicklerPanel extends JXPanel implements ActionListener{
 			hochladen.setEnabled(false);
 			return;
 		}
-		dateiDialog(UpdateConfig.getProghome());
+		dateiDialog(Path.Instance.getProghome());
 		if(updatedatei==null){
 			updatepfad = "";
 			updatedatei = "";

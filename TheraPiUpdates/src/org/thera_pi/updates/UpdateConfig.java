@@ -106,10 +106,6 @@ public class UpdateConfig {
 		return useActiveMode;
 	}
 
-	public static String getProghome() {
-		return proghome;
-	}
-
 	public boolean isDeveloperMode() {
 		return developerMode;
 	}

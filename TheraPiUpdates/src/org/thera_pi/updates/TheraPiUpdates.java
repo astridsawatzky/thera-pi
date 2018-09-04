@@ -44,9 +44,12 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import Environment.Path;
+
 
 
 public class TheraPiUpdates implements WindowListener {
+	private static final String PROGHOME = Path.Instance.getProghome();
 	private JFrame jFrame = null;
 	public static boolean starteTheraPi = false;
 	public static boolean updateallowed = false;
@@ -90,18 +93,10 @@ public class TheraPiUpdates implements WindowListener {
 			System.out.println("FTP-Modus = PassiveMode");
 		}
 
-		System.out.println("program home: " + UpdateConfig.getProghome());
+		System.out.println("program home: " + PROGHOME);
 		
 		
 		TheraPiUpdates application = new TheraPiUpdates();
-		/*
-	    try {
-			getMacAddress();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		*/
 		
 		application.createJFrame();
 		if(TheraPiUpdates.showpwdlg){
@@ -120,13 +115,13 @@ public class TheraPiUpdates implements WindowListener {
 			}else{
 				TheraPiUpdates.updateallowed = false;
 				JOptionPane.showMessageDialog(null,"Sie haben zwar eine Zugangsdatei in Ihrem System integriert, die Zugangsdaten sind allderdings falsch");
-				File ftest = new File(UpdateConfig.getProghome()+"Libraries/lib/ocf/sig.jar");
+				File ftest = new File(PROGHOME+"Libraries/lib/ocf/sig.jar");
 				if(ftest.exists()){
 					ftest.delete();
 				}	
 				if(TheraPiUpdates.starteTheraPi){
 						try {
-							Runtime.getRuntime().exec("java -jar "+UpdateConfig.getProghome()+"TheraPi.jar");
+							Runtime.getRuntime().exec("java -jar "+PROGHOME+"TheraPi.jar");
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -218,7 +213,7 @@ public class TheraPiUpdates implements WindowListener {
 	    }catch(Exception ex){
 	    	ex.printStackTrace();
 	    }
-	    File fi = new File(UpdateConfig.getInstance().getProghome()+"ini/tpupdateneu.ini");
+	    File fi = new File(PROGHOME+"ini/tpupdateneu.ini");
 		if(fi.exists()){
 			System.out.println("Datei existiert = "+fi.getName());
 			UpdateConfig.isrta = false;
@@ -226,10 +221,10 @@ public class TheraPiUpdates implements WindowListener {
 			System.out.println("Datei existiert nicht");
 		}
 		/***************Testen ob die sig.jar noch altes Format hat*************/
-		File ftest = new File(UpdateConfig.getProghome()+"Libraries/lib/ocf/sig.jar");
+		File ftest = new File(PROGHOME+"Libraries/lib/ocf/sig.jar");
 		if(ftest.exists()){
 			try {
-				BufferedReader in = new BufferedReader(new FileReader(UpdateConfig.getProghome()+"Libraries/lib/ocf/sig.jar"));
+				BufferedReader in = new BufferedReader(new FileReader(PROGHOME+"Libraries/lib/ocf/sig.jar"));
 				String test = in.readLine().trim();
 				in.close();
 				if(!test.startsWith("[Updates]")){
@@ -249,14 +244,14 @@ public class TheraPiUpdates implements WindowListener {
 		Verschluesseln dec = Verschluesseln.getInstance();
 		dec.init(Verschluesseln.getPassword().toCharArray(), dec.getSalt(), dec.getIterations());
 		*/
-	    File f = new File(UpdateConfig.getProghome()+"Libraries/lib/ocf/sig.jar");
+	    File f = new File(PROGHOME+"Libraries/lib/ocf/sig.jar");
 	    if(! f.exists()){
 	    	System.out.println("sig nicht vorhanden");
 	    	showpwdlg = true;
 	    }else{
 	    	try {
 	    		//INIFile inif = new INIFile("C:/sig.jar");
-	    		INIFile inif = new INIFile(UpdateConfig.getProghome()+"Libraries/lib/ocf/sig.jar");
+	    		INIFile inif = new INIFile(PROGHOME+"Libraries/lib/ocf/sig.jar");
 	    		
 		        
 		        this.macAdr = inif.getStringProperty("Updates", "1");
@@ -294,7 +289,7 @@ public class TheraPiUpdates implements WindowListener {
 	    			//System.out.println(strMACAdr+" = "+dec.decrypt(macAdr.trim()));
 	    			showpwdlg = false;
 	    		}
-	    		imgtporg = new ImageIcon(UpdateConfig.getProghome() + "icons/TPorgKlein.png").getImage().getScaledInstance(246,35, Image.SCALE_SMOOTH);
+	    		imgtporg = new ImageIcon(PROGHOME + "icons/TPorgKlein.png").getImage().getScaledInstance(246,35, Image.SCALE_SMOOTH);
 	    		
 	    	} catch (Exception e) {
 	    		e.printStackTrace();
@@ -499,7 +494,7 @@ public class TheraPiUpdates implements WindowListener {
 					try {
 
 						
-						File fi = new File(UpdateConfig.getInstance().getProghome()+"ini/tpupdateneu.ini");
+						File fi = new File(PROGHOME+"ini/tpupdateneu.ini");
 						if(fi.exists()){
 							//System.out.println("Vor der Verschlüsselung Datei existiert = "+fi.getName());
 							UpdateConfig.isrta = false;
@@ -528,7 +523,7 @@ public class TheraPiUpdates implements WindowListener {
 				        f.close();
 				        */
 				        
-				        INIFile inif = new INIFile(UpdateConfig.getProghome()+"Libraries/lib/ocf/sig.jar");
+				        INIFile inif = new INIFile(PROGHOME+"Libraries/lib/ocf/sig.jar");
 				        inif.setStringProperty("Updates", "1",strMACAdr.trim() ,null);
 				        inif.setStringProperty("Updates", "2",field1.getText() ,null);
 				        inif.setStringProperty("Updates", "3",pw ,null);
@@ -568,7 +563,7 @@ public class TheraPiUpdates implements WindowListener {
 					int anfrage = JOptionPane.showConfirmDialog(null, "Wollen Sie Thera-Pi 1.0 jetzt starten?","Thera-Pi starten?",JOptionPane.YES_NO_OPTION);
 					if(anfrage == JOptionPane.YES_OPTION){
 						try {
-							Runtime.getRuntime().exec("java -jar "+UpdateConfig.getProghome()+"TheraPi.jar");
+							Runtime.getRuntime().exec("java -jar "+PROGHOME+"TheraPi.jar");
 						} catch (IOException ex) {
 							ex.printStackTrace();
 						}
