@@ -14,6 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
+import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
 
@@ -31,7 +32,6 @@ public class NebraskaMain {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception{
-		// TODO Auto-generated method stub
 		if(System.getProperty("os.name").contains("Windows")){
 			try {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -58,8 +58,8 @@ public class NebraskaMain {
 		}else if(System.getProperty("os.name").contains("String für MaxOSX????")){
 			INI_FILE = progHome+ File.separator +"nebraska_mac.conf";
 		}
-		org.thera_pi.nebraska.gui.utils.Verschluesseln man = org.thera_pi.nebraska.gui.utils.Verschluesseln.getInstance();
-		man.init(org.thera_pi.nebraska.gui.utils.Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
+		Verschluesseln man = Verschluesseln.getInstance();
+		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 
 		if(args.length > 0){
 			try{
@@ -167,7 +167,7 @@ public class NebraskaMain {
 		starteOfficeApplication();	
 		new Constants();
 		return jf;
-	}
+	} 
     public static void starteOfficeApplication () throws Exception {
         new SwingWorker<Void,Void>(){
 			@Override

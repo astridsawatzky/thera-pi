@@ -23,7 +23,7 @@ import org.jdesktop.swingx.JXFrame;
 
 import com.sun.star.uno.Exception;
 
-import Environment.Path;
+import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;

@@ -48,6 +48,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
+import CommonTools.Verschluesseln;
 import nebraska.BCStatics2;
 import nebraska.FileStatics;
 import nebraska.Nebraska;
@@ -271,8 +272,8 @@ public class NebraskaRequestDlg extends JDialog{
 			dummy.add("abc");
 			NebraskaMain.keyStoreParameter.set(inipos-1,(Vector<String>) dummy.clone() );
 		}
-		org.thera_pi.nebraska.gui.utils.Verschluesseln man = org.thera_pi.nebraska.gui.utils.Verschluesseln.getInstance();
-		man.init(org.thera_pi.nebraska.gui.utils.Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
+		Verschluesseln man = Verschluesseln.getInstance();
+		man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
 
 		ifile.setIntegerProperty("KeyStores", "KeyStoreAnzahl", NebraskaMain.keyStoreParameter.size(),null);
 		ifile.setStringProperty("KeyStores", "KeyStoreFile"+Integer.toString(inipos),this.zertantrag.therapidir+"/keystore/"+this.ik+"/"+this.ik+".p12",null);

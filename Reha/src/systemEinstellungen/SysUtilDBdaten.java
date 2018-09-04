@@ -28,9 +28,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import CommonTools.Verschluesseln;
 import Environment.Path;
 import hauptFenster.Reha;
-import systemTools.Verschluesseln;
 
 public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListener {
 	
