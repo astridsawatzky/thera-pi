@@ -40,7 +40,6 @@ import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
 import org.thera_pi.nebraska.gui.utils.JRtaComboBox;
-import org.thera_pi.nebraska.gui.utils.JRtaTextField;
 import org.thera_pi.nebraska.gui.utils.MultiLineLabel;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -48,6 +47,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
+import CommonTools.JRtaTextField;
 import CommonTools.Verschluesseln;
 import nebraska.BCStatics2;
 import nebraska.FileStatics;

@@ -44,11 +44,11 @@ import com.lowagie.text.pdf.PdfStamper;
 
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
+import CommonTools.JRtaTextField;
 import pdfDrucker.PDFDrucker;
 import utils.JCompTools;
 import utils.JRtaCheckBox;
 import utils.JRtaRadioButton;
-import utils.JRtaTextField;
 
 public class ZertAntrag extends JXPanel implements ListSelectionListener, ActionListener {
 	

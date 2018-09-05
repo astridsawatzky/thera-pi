@@ -14,6 +14,8 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableCellEditor;
 
+import CommonTools.JRtaTextField;
+
 
 
 

@@ -44,10 +44,10 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
+import CommonTools.JRtaTextField;
 import Tools.ButtonTools;
 import Tools.JCompTools;
 import Tools.JRtaCheckBox;
-import Tools.JRtaTextField;
 import Tools.PatTools;
 import Tools.RezTools;
 import Tools.SqlInfo;

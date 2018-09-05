@@ -42,7 +42,6 @@ import org.thera_pi.nebraska.gui.utils.INIFile;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
 import org.thera_pi.nebraska.gui.utils.JRtaCheckBox;
 import org.thera_pi.nebraska.gui.utils.JRtaRadioButton;
-import org.thera_pi.nebraska.gui.utils.JRtaTextField;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -52,6 +51,7 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 import CommonTools.DatFunk;
+import CommonTools.JRtaTextField;
 import nebraska.FileStatics;
 import pdfDrucker.PDFDrucker;
 

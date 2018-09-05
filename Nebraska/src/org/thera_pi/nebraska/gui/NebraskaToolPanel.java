@@ -20,12 +20,12 @@ import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
-import org.thera_pi.nebraska.gui.utils.JRtaTextField;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaTextField;
 import nebraska.FileStatics;
 
 public class NebraskaToolPanel extends JXPanel{
@@ -37,7 +37,7 @@ public class NebraskaToolPanel extends JXPanel{
 	NebraskaJTabbedPaneOrganizer eltern = null;
 	JXPanel content = null;
 	JScrollPane jscr = null;
-	JRtaTextField[] tf = {null,null,null,null,null,null,null,null};
+	CommonTools.JRtaTextField[] tf = {null,null,null,null,null,null,null,null};
 	JButton[] buts = {null,null,null,null,null};
 	ActionListener al = null;
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");

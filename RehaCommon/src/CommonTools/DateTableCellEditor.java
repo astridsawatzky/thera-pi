@@ -38,7 +38,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
     public DateTableCellEditor() {
         super(new JFormattedTextField());
         ftf = (JFormattedTextField)getComponent();
-        ftf.setDocument(new XDateFieldDocument(ftf,false));
+        ftf.setDocument(new DateFieldDocument(ftf,false));
         ftf.setInputVerifier(new DateInputVerifier(ftf));
         ftf.addKeyListener(this);
 

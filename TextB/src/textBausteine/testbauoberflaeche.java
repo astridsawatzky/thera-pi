@@ -35,9 +35,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaTextField;
 import Tools.JCompTools;
 import Tools.JRtaRadioButton;
-import Tools.JRtaTextField;
 import sqlTools.SqlInfo;
 import sqlTools.SystemEinstellungen;
 

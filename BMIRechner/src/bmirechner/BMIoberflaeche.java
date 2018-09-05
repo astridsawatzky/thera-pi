@@ -23,7 +23,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import Tools.JRtaTextField;
+import CommonTools.JRtaTextField;
+
 
 
 

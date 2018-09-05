@@ -42,6 +42,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
+import CommonTools.JRtaTextField;
 
 
 public class LVAoberflaeche extends JXPanel implements ListSelectionListener, ActionListener {
