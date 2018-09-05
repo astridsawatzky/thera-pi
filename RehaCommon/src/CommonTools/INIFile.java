@@ -419,7 +419,7 @@ public final class INIFile
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             this.mhmapSections.put(newpstrSection, objSec);
@@ -875,11 +875,7 @@ public final class INIFile
         try
         {
             objFRdr = new FileReader(this.mstrFile);
-            if (objFRdr != null)
-            {
                 objBRdr = new BufferedReader(objFRdr);
-                if (objBRdr != null)
-                {
                     while (objBRdr.ready())
                     {
                         iPos = -1;
@@ -921,8 +917,6 @@ public final class INIFile
                     if (objSec != null)
                         this.mhmapSections.put(strSection.trim(), objSec);
                     this.mblnLoaded = true;
-                }
-            }
         }
         catch (FileNotFoundException FNFExIgnore)
         {
@@ -965,55 +959,49 @@ public final class INIFile
         try
         {
             objFRdr = new InputStreamReader(streamin);
-            if (objFRdr != null)
+            objBRdr = new BufferedReader(objFRdr);
+            while (objBRdr.ready())
             {
-                objBRdr = new BufferedReader(objFRdr);
-                if (objBRdr != null)
+                iPos = -1;
+                //strLine  = null;
+                strLine = objBRdr.readLine().trim();
+                if (strLine == null)
                 {
-                    while (objBRdr.ready())
-                    {
-                        iPos = -1;
-                        //strLine  = null;
-                        strLine = objBRdr.readLine().trim();
-                        if (strLine == null)
-                        {
-                        }
-                        else if (strLine.length() == 0)
-                        {
-                        }
-                        else if (strLine.substring(0, 1).equals(";"))
-                        {
-                            if (strRemarks == null)
-                                strRemarks = strLine.substring(1);
-                            else if (strRemarks.length() == 0)
-                                strRemarks = strLine.substring(1);
-                            else
-                                strRemarks = strRemarks + "\r\n" + strLine.substring(1);
-                        }
-                        else if (strLine.startsWith("[") && strLine.endsWith("]"))
-                        {
-                            // Section start reached create new section
-                            if (objSec != null) 
-                                this.mhmapSections.put(strSection.trim(), objSec);
-                            objSec = null;
-                            strSection = strLine.substring(1, strLine.length() - 1);
-                            objSec = new INISection(strSection.trim(), strRemarks);
-                            strRemarks = null;
-                        }
-                        else if ((iPos = strLine.indexOf("=")) > 0 && objSec != null)
-                        {
-                            // read the key value pair 012345=789
-                            objSec.setProperty(strLine.substring(0, iPos).trim(), 
-                                                strLine.substring(iPos + 1).trim(), 
-                                                strRemarks);
-                            strRemarks = null;
-                        }
-                    }
-                    if (objSec != null)
+                }
+                else if (strLine.length() == 0)
+                {
+                }
+                else if (strLine.substring(0, 1).equals(";"))
+                {
+                    if (strRemarks == null)
+                        strRemarks = strLine.substring(1);
+                    else if (strRemarks.length() == 0)
+                        strRemarks = strLine.substring(1);
+                    else
+                        strRemarks = strRemarks + "\r\n" + strLine.substring(1);
+                }
+                else if (strLine.startsWith("[") && strLine.endsWith("]"))
+                {
+                    // Section start reached create new section
+                    if (objSec != null) 
                         this.mhmapSections.put(strSection.trim(), objSec);
-                    this.mblnLoaded = true;
+                    objSec = null;
+                    strSection = strLine.substring(1, strLine.length() - 1);
+                    objSec = new INISection(strSection.trim(), strRemarks);
+                    strRemarks = null;
+                }
+                else if ((iPos = strLine.indexOf("=")) > 0 && objSec != null)
+                {
+                    // read the key value pair 012345=789
+                    objSec.setProperty(strLine.substring(0, iPos).trim(), 
+                                        strLine.substring(iPos + 1).trim(), 
+                                        strRemarks);
+                    strRemarks = null;
                 }
             }
+            if (objSec != null)
+                this.mhmapSections.put(strSection.trim(), objSec);
+            this.mblnLoaded = true;
         }
         catch (FileNotFoundException FNFExIgnore)
         {
@@ -1250,15 +1238,6 @@ public final class INIFile
         // Following call will load the strFile if one exists.
         objINI = new INIFile(strFile);
 
-//        objINI.addSection("QADatabase", "QA database connection details\nUsed for QA Testing");
-//        objINI.setStringProperty("QADatabase", "SID", "ORCL", null);
-//        objINI.setStringProperty("QADatabase", "UserId", "System", null);
-//        objINI.setStringProperty("QADatabase", "Password", "Manager", null);
-//        objINI.setStringProperty("QADatabase", "HostName", "DBServer", null);
-//        objINI.setIntegerProperty("QADatabase", "Port", 1521, null);
-//        objINI.setStringProperty("QADatabase", "OracleHome", "%ORACLE_HOME%", null);
-//        
-        //objINI.setSectionComments("Folders", "Directories where generated files are stored");
         objINI.setStringProperty("Folders", "folder1", "G:\\Temp", null);
         objINI.setStringProperty("Folders", "folder2", "G:\\Temp\\Backup", null);
 
@@ -1424,6 +1403,7 @@ public final class INIFile
         /* (non-Javadoc)
          * @see java.lang.Object#toString()
          */
+        @Override
         public String toString()
         {
             Set<String>          colKeys = null;
@@ -1582,6 +1562,7 @@ public final class INIFile
         /* (non-Javadoc)
          * @see java.lang.Object#toString()
          */
+        @Override
         public String toString()
         {
             String strRet = "";
