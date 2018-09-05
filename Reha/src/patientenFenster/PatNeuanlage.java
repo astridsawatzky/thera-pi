@@ -292,7 +292,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				// TODO Auto-generated method stub
 				try {
 					if (((JComponent) arg0.getSource()).getName().equals(
 							"PatientenNeuanlage")) {
@@ -321,7 +320,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				// TODO Auto-generated method stub
+				// Do nothing
 			}
 
 		};
@@ -455,7 +454,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 							String datum = String.valueOf(felder
 									.get(ffelder[i]));
 							if (datum.trim().length() > 0) {
-								// //System.out.println("Datum w�re gewesen->"+datum+" L�nge->"+datum.trim().length());
+								// //System.out.println("Datum waere gewesen->"+datum+" Laenge->"+datum.trim().length());
 								jtf[fedits[i]].setText(DatFunk
 										.sDatInDeutsch(datum));
 							}
@@ -2075,17 +2074,9 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 	}
 
 	private void speichernPatBild(boolean neu, ImageIcon ico, String pat_intern) {
-		Statement stmt = null;
-		ResultSet rs = null;
 		PreparedStatement ps = null;
-		// boolean ret = false;
-		// int bilder = 0;
 
-		// piTool.app.conn.setAutoCommit(true);
 		try {
-			// stmt = (Statement)
-			// Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-			// ResultSet.CONCUR_UPDATABLE );
 			if (neu) {
 				String select = "Insert into patbild set bild = ? , pat_intern = ?, vorschau = ?";
 				ps = (PreparedStatement) Reha.thisClass.conn
@@ -2131,24 +2122,11 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException sqlEx) { // ignore }
-					stmt = null;
-				}
-			}
+			
 			if (ps != null) {
 				try {
 					ps.close();
-				} catch (SQLException sqlEx) { // ignore }
+				} catch (SQLException sqlEx) {
 					ps = null;
 				}
 			}
@@ -2170,7 +2148,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 	public static BufferedImage holePatBild(String pat_intern) {
 		Statement stmt = null;
 		ResultSet rs = null;
-		// int bilder = 0;
 		Image bild = null;
 		try {
 			stmt = Reha.thisClass.conn
@@ -2280,8 +2257,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			alist.add(0,"-jar");
 			alist.add(0,"java");
 			Process p = new ProcessBuilder(alist).start();
-			//ProcessBuilder builder = new ProcessBuilder("java -jar",  "CalcKilometer", patientAdr, mandAdr);
-			//Process p = builder.start();
 			Scanner s = new Scanner(new InputStreamReader(p.getInputStream(), "windows-1252" )).useDelimiter("\\Z");
 			String result = s.next();
 			String[] ergebnis = result.split(";");
@@ -2400,6 +2375,5 @@ class ArztListeSpeichern {
 				"pat_intern='" + xpatintern + "'");
 		new ExUndHop().setzeStatement(cmd);
 		Reha.thisClass.patpanel.patDaten.set(63, aliste);
-		// System.out.println(cmd);
 	}
 }

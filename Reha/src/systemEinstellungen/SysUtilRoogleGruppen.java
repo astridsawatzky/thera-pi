@@ -416,9 +416,9 @@ public class SysUtilRoogleGruppen extends JXPanel implements ActionListener,KeyL
 			int i;
 
 			vmitglieder.clear();
-			Vector vec;
+			Vector<String> vec;
 			for(i=0;i<lang;i++){
-				vec = new Vector();
+				vec = new Vector<String>();
 				vec.add(String.valueOf(mitglieder[mgl][i]));				
  				vmitglieder.add(vec.clone());
  			}
