@@ -2,6 +2,7 @@ package org.thera_pi.updates;
 
 import java.io.File;
 
+import CommonTools.INIFile;
 import CommonTools.Verschluesseln;
 import environment.Path;
 

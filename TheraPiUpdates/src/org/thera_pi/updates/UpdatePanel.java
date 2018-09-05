@@ -53,6 +53,7 @@ import org.jdesktop.swingx.JXTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.INIFile;
 import CommonTools.Verschluesseln;
 import environment.Path;
 

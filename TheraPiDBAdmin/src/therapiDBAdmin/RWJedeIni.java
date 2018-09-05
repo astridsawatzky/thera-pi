@@ -1,5 +1,7 @@
 package therapiDBAdmin;
 
+import CommonTools.INIFile;
+
 public class RWJedeIni {
 private static INIFile ini = null; 
 

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
+import CommonTools.INIFile;
+
 
 
 public class SystemConfig {
-	private static INIFile ini; 
-	private static INIFile colini;
 	public static java.net.InetAddress dieseMaschine = null;
 	public static String wissenURL = null;
 	public static String homeDir = null;
@@ -49,26 +49,7 @@ public class SystemConfig {
 		}
 		HilfeServer = inif.getStringProperty("TheraPiHilfe", "HilfeServer");
 		HilfeServerIstDatenServer = (inif.getIntegerProperty("TheraPiHilfe", "HilfeDBIstDatenDB") > 0 ? true : false);
-		// Wird nicht mehr gebraucht, da MySql von 1&1 fest verdrahtet ist
-		/*
-		if(! HilfeServerIstDatenServer){
-			hmHilfeServer = new HashMap<String,String>();
-			hmHilfeServer.put("HilfeDBTreiber", inif.getStringProperty("TheraPiHilfe", "HilfeDBTreiber"));
-			hmHilfeServer.put("HilfeDBLogin", inif.getStringProperty("TheraPiHilfe", "HilfeDBLogin"));		
-			hmHilfeServer.put("HilfeDBUser", inif.getStringProperty("TheraPiHilfe", "HilfeDBUser"));
-			String pw = new String(inif.getStringProperty("TheraPiHilfe","HilfeDBPassword"));
-			Verschluesseln man = Verschluesseln.getInstance();
-		    man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
-			String decrypted = man.decrypt (pw);
-			hmHilfeServer.put("HilfeDBPassword", new String(decrypted));			
-		}
-		try {
-			dieseMaschine = java.net.InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		
 	}	
  
 

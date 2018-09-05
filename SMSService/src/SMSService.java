@@ -8,9 +8,7 @@ import org.smslib.Service;
 import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
-import Tools.INIFile;
-
-
+import CommonTools.INIFile;
 
 
 public class SMSService {
@@ -45,8 +43,8 @@ public class SMSService {
 			}
 			String IK = (String)JOptionPane.showInputDialog(
                     null,
-                    "Bitte IK wählen:",
-                    "IK wählen",
+                    "Bitte IK wï¿½hlen:",
+                    "IK wï¿½hlen",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
                     possibilities,

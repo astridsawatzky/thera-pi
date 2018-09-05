@@ -1,6 +1,7 @@
 package CommonTools;
 
 /*------------------------------------------------------------------------------
+ * based on 
  * PACKAGE: com.freeware.inifiles
  * FILE   : iniFile.java
  * CREATED: Jun 30, 2004
@@ -42,9 +43,6 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Set;
 
-
-
-
 /**
  * INIFile class provides methods for manipulating (Read/Write) windows ini files.
  * 
@@ -61,8 +59,7 @@ public final class INIFile
     private String mstrTimeStampFmt = "dd.mm.yyyy hh:mm:ss";
 
     /** Variable to denote the successfull load operation. */
-    
-	private boolean mblnLoaded = false;
+    private boolean mblnLoaded = false;
 
     /** Variable to hold the ini file name and full path */
     private String mstrFile;
@@ -71,8 +68,7 @@ public final class INIFile
     private InputStream streamin;
     
     /** Variable to hold the sections in an ini file. */
-    
-	private LinkedHashMap mhmapSections;
+    private LinkedHashMap<String, INISection> mhmapSections;
 
     /** Variable to hold environment variables **/
     private Properties mpropEnv;
@@ -81,11 +77,10 @@ public final class INIFile
      * Create a iniFile object from the file named in the parameter.
      * @param pstrPathAndName The full path and name of the ini file to be used.
      */
-    
-	public INIFile(String pstrPathAndName)
+    public INIFile(String pstrPathAndName)
     {
         this.mpropEnv = getEnvVars();
-        this.mhmapSections = new LinkedHashMap();
+        this.mhmapSections = new LinkedHashMap<String, INISection>();
         this.mstrFile = pstrPathAndName;
         // Load the specified INI file.
         if (checkFile(pstrPathAndName)) loadFile();
@@ -105,6 +100,17 @@ public final class INIFile
 /*------------------------------------------------------------------------------
  * Getters
 ------------------------------------------------------------------------------*/
+    /**  Lemmi 20101224: neue Funktion:
+     * Check file loading success
+     * @return TRUE if file was loaded successfully
+     */
+    public Boolean IsFileLoaded()
+    {
+        return this.mblnLoaded;
+    }
+
+     
+    
     /**
      * Returns the ini file name being used.
      * @return the INI file name.
@@ -129,7 +135,7 @@ public final class INIFile
         INIProperty objProp  = null;
         INISection  objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -165,7 +171,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -197,7 +203,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -234,7 +240,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -271,7 +277,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -309,7 +315,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -352,7 +358,7 @@ public final class INIFile
         INIProperty objProp = null;
         INISection  objSec  = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objProp = objSec.getProperty(pstrProp);
@@ -389,16 +395,36 @@ public final class INIFile
      * @param pstrSection the section name
      * @param pstrComments the comments.
      */
-    
-	public void addSection(String pstrSection, String pstrComments)
+    public void addSection(String pstrSection, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
             this.mhmapSections.put(pstrSection, objSec);
+        }
+        objSec.setSecComments(delRemChars(pstrComments));
+        objSec = null;
+    }
+    /**
+     * Sets the specified string property.
+     * @param pstrSection the INI section name.
+     * @param newpstrSection the new Section name to be set.
+     * @pstrVal the string value to be persisted
+     */
+
+    public void renameSection(String pstrSection,String newpstrSection, String pstrComments)
+    {
+        INISection objSec   = null;
+
+        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        if (objSec != null)
+        {
+            this.mhmapSections.put(newpstrSection, objSec);
+            if (this.mhmapSections.containsKey(pstrSection))
+                this.mhmapSections.remove(pstrSection);
         }
         objSec.setSecComments(delRemChars(pstrComments));
         objSec = null;
@@ -410,13 +436,12 @@ public final class INIFile
      * @param pstrProp the property to be set.
      * @pstrVal the string value to be persisted
      */
-    
-	public void setStringProperty(String pstrSection, String pstrProp, 
+    public void setStringProperty(String pstrSection, String pstrProp, 
                     				String pstrVal, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -431,13 +456,12 @@ public final class INIFile
      * @param pstrProp the property to be set.
      * @param pblnVal the boolean value to be persisted
      */
-    
     public void setBooleanProperty(String pstrSection, String pstrProp, 
                     				boolean pblnVal, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -455,13 +479,12 @@ public final class INIFile
      * @param pstrProp the property to be set.
      * @param pintVal the int property to be persisted.
      */
-        
     public void setIntegerProperty(String pstrSection, String pstrProp, 
                     				int pintVal, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -476,13 +499,12 @@ public final class INIFile
      * @param pstrProp the property to be set.
      * @param plngVal the long value to be persisted.
      */
-        
     public void setLongProperty(String pstrSection, String pstrProp, 
                     			long plngVal, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -497,13 +519,12 @@ public final class INIFile
      * @param pstrProp the property to be set.
      * @param pdblVal the double value to be persisted.
      */
-        
     public void setDoubleProperty(String pstrSection, String pstrProp, 
                     				double pdblVal, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -518,13 +539,12 @@ public final class INIFile
      * @param pstrProp the property to be set.
      * @param pdtVal the date value to be persisted.
      */
-        
     public void setDateProperty(String pstrSection, String pstrProp, 
                     			Date pdtVal, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -540,13 +560,12 @@ public final class INIFile
      * @param pstrProp the property to be set.
      * @param ptsVal the timestamp value to be persisted.
      */
-        
     public void setTimestampProperty(String pstrSection, String pstrProp, 
                     					Timestamp ptsVal, String pstrComments)
     {
         INISection objSec   = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec == null)
         {
             objSec = new INISection(pstrSection);
@@ -592,11 +611,10 @@ public final class INIFile
      * Returns a string array containing names of all sections in INI file.
      * @return the string array of section names
      */
-        
     public String[] getAllSectionNames()
     {
         int        iCntr  = 0;
-        Iterator   iter   = null;
+        Iterator<String>   iter   = null;
         String[]   arrRet = null;
 
         try
@@ -606,7 +624,7 @@ public final class INIFile
                 arrRet = new String[this.mhmapSections.size()];
                 for (iter = this.mhmapSections.keySet().iterator();;iter.hasNext())
                 {
-                    arrRet[iCntr] = (String) iter.next();
+                    arrRet[iCntr] = iter.next();
                     iCntr++;
                 }
             }
@@ -631,7 +649,7 @@ public final class INIFile
         String[]   arrRet = null;
         INISection objSec = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             arrRet = objSec.getPropNames();
@@ -645,13 +663,12 @@ public final class INIFile
      * @param pstrSection the name of the section for which properties are to be retrieved.
      * @return the map of properties.
      */
-        
-    public Map getProperties(String pstrSection)
+    public Map<String, INIProperty> getProperties(String pstrSection)
     {
-        Map        hmRet = null;
+        Map<String, INIProperty>        hmRet = null;
         INISection objSec = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             hmRet = objSec.getProperties();
@@ -670,7 +687,7 @@ public final class INIFile
     {
         INISection objSec = null;
 
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
+        objSec = this.mhmapSections.get(pstrSection);
         if (objSec != null)
         {
             objSec.removeProperty(pstrProp);
@@ -692,14 +709,13 @@ public final class INIFile
      * Flush changes back to the disk file. If the disk file does not exists then
      * creates the new one. 
      */
-        
     public boolean save()
     {
         boolean    blnRet    = false;
         File       objFile   = null;
         String     strName   = null;
         String     strTemp   = null;
-        Iterator   itrSec    = null;
+        Iterator<String>   itrSec    = null;
         INISection objSec    = null;
         FileWriter objWriter = null;
 
@@ -712,8 +728,8 @@ public final class INIFile
             itrSec = this.mhmapSections.keySet().iterator();
             while (itrSec.hasNext())
             {
-                strName = (String) itrSec.next();
-                objSec = (INISection) this.mhmapSections.get(strName);
+                strName = itrSec.next();
+                objSec = this.mhmapSections.get(strName);
                 strTemp = objSec.toString();
                 objWriter.write(strTemp);
                 objWriter.write("\r\n");
@@ -753,7 +769,7 @@ public final class INIFile
             while (itrSec.hasNext())
             {
                 strName = (String) itrSec.next();
-                objSec = (INISection) this.mhmapSections.get(strName);
+                objSec = this.mhmapSections.get(strName);
                 strTemp = objSec.toString();
                 buf.append(strTemp);
                 buf.append("\r\n");
@@ -846,7 +862,6 @@ public final class INIFile
      * Reads the INI file and load its contentens into a section collection after 
      * parsing the file line by line. 
      */
-        
     private void loadFile()
     {
         int            iPos       = -1;
@@ -868,7 +883,6 @@ public final class INIFile
                     while (objBRdr.ready())
                     {
                         iPos = -1;
-                        //strLine  = null;
                         strLine = objBRdr.readLine().trim();
                         if (strLine == null)
                         {
@@ -1262,7 +1276,6 @@ public final class INIFile
      * @version 1.0
      * @since 1.0
      */
-        
     private class INISection
     {
         /** Variable to hold any comments associated with this section */
@@ -1272,7 +1285,7 @@ public final class INIFile
         private String mstrName;
         
         /** Variable to hold the properties falling under this section. */
-        private LinkedHashMap mhmapProps;
+        private LinkedHashMap<String, INIProperty> mhmapProps;
 
         /**
          * Construct a new section object identified by the name specified in 
@@ -1282,7 +1295,7 @@ public final class INIFile
         public INISection(String pstrSection)
         {
             this.mstrName =  pstrSection;
-            this.mhmapProps = new LinkedHashMap();
+            this.mhmapProps = new LinkedHashMap<String, INIProperty>();
         }
 
         /**
@@ -1295,15 +1308,14 @@ public final class INIFile
         {
             this.mstrName =  pstrSection;
             this.mstrComment = delRemChars(pstrComments);
-            this.mhmapProps = new LinkedHashMap();
+            this.mhmapProps = new LinkedHashMap<String, INIProperty>();
         }
         
         /**
          * Returns any comments associated with this section
          * @return the comments
          */
-        
-		public String getSecComments()
+        public String getSecComments()
         {
             return this.mstrComment;
         }
@@ -1312,8 +1324,7 @@ public final class INIFile
          * Returns name of the section.
          * @return Name of the section.
          */
-        
-		public String getSecName()
+        public String getSecName()
         {
             return this.mstrName;
         }
@@ -1331,8 +1342,7 @@ public final class INIFile
          * Sets the section name.
          * @param pstrName the section name.
          */
-        
-		public void setSecName(String pstrName)
+        public void setSecName(String pstrName)
         {
             this.mstrName = pstrName;
         }
@@ -1362,7 +1372,7 @@ public final class INIFile
          * Returns a map of all properties.
          * @return a map of all properties
          */
-        public Map getProperties()
+        public Map<String, INIProperty> getProperties()
         {
             return Collections.unmodifiableMap(this.mhmapProps);
         }
@@ -1376,7 +1386,7 @@ public final class INIFile
         {
             int      iCntr  = 0;
             String[] arrRet = null;
-            Iterator iter   = null;
+            Iterator<String> iter   = null;
 
             try
             {
@@ -1385,7 +1395,7 @@ public final class INIFile
                     arrRet = new String[this.mhmapProps.size()]; 
                     for (iter = this.mhmapProps.keySet().iterator();iter.hasNext();)
                     {
-                        arrRet[iCntr] = (String) iter.next();
+                        arrRet[iCntr] = iter.next();
                         iCntr++;
                     }
                 }
@@ -1407,7 +1417,7 @@ public final class INIFile
             INIProperty objRet = null;
 
             if (this.mhmapProps.containsKey(pstrProp))
-                objRet = (INIProperty) this.mhmapProps.get(pstrProp);
+                objRet = this.mhmapProps.get(pstrProp);
             return objRet;
         }
 
@@ -1416,9 +1426,9 @@ public final class INIFile
          */
         public String toString()
         {
-            Set          colKeys = null;
+            Set<String>          colKeys = null;
             String       strRet  = "";
-            Iterator     iter    = null;
+            Iterator<String>     iter    = null;
             INIProperty  objProp = null;
             StringBuffer objBuf  = new StringBuffer();
 
@@ -1433,7 +1443,7 @@ public final class INIFile
                 {
                     while (iter.hasNext())
                     {
-                        objProp = (INIProperty) this.mhmapProps.get(iter.next());
+                        objProp = this.mhmapProps.get(iter.next());
                         objBuf.append(objProp.toString());
                         objBuf.append("\r\n");
                         objProp = null;
@@ -1472,8 +1482,7 @@ public final class INIFile
          * @param pstrName the name of this property.
          * @param pstrValue the value of this property.
          */
-        
-		public INIProperty(String pstrName, String pstrValue)
+        public INIProperty(String pstrName, String pstrValue)
         {
             this.mstrName = pstrName;
             this.mstrValue = pstrValue;
@@ -1496,8 +1505,7 @@ public final class INIFile
          * Returns the string identifier (key part) of this property.
          * @return the string identifier of this property.
          */
-        
-		public String getPropName()
+        public String getPropName()
         {
             return this.mstrName;
         }
@@ -1539,8 +1547,7 @@ public final class INIFile
          * Returns comments associated with this property.
          * @return the associated comments if any.
          */
-        
-		public String getPropComments()
+        public String getPropComments()
         {
             return this.mstrComments;
         }
@@ -1549,8 +1556,7 @@ public final class INIFile
          * Sets the string identifier (key part) of a property
          * @param pstrName the string identifier of a property
          */
-        
-		public void setPropName(String pstrName)
+        public void setPropName(String pstrName)
         {
             this.mstrName = pstrName;
         }
@@ -1559,8 +1565,7 @@ public final class INIFile
          * Sets the property value
          * @param pstrValue the value for the property
          */
-        
-		public void setPropValue(String pstrValue)
+        public void setPropValue(String pstrValue)
         {
             this.mstrValue = pstrValue;
         }
@@ -1569,8 +1574,7 @@ public final class INIFile
          * Sets the comments for a property
          * @param pstrComments the comments
          */
-        
-		public void setPropComments(String pstrComments)
+        public void setPropComments(String pstrComments)
         {
             this.mstrComments = delRemChars(pstrComments);
         }
@@ -1587,18 +1591,5 @@ public final class INIFile
             strRet = strRet + this.mstrName + " = " + this.mstrValue;
             return strRet;
         }
-    }
-
-    public void renameSection(String pstrSection,String newpstrSection, String pstrComments)
-    {
-        INISection objSec   = null;
-
-        objSec = (INISection) this.mhmapSections.get(pstrSection);
-        if (objSec != null)
-        {
-            objSec.mstrName = newpstrSection;
-        }
-        objSec.setSecComments(delRemChars(pstrComments));
-        objSec = null;
     }
 }
