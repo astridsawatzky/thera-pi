@@ -44,7 +44,7 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import Environment.Path;
+import environment.Path;
 
 
 

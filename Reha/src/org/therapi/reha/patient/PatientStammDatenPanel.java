@@ -36,7 +36,7 @@ import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import Environment.Path;
+import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;

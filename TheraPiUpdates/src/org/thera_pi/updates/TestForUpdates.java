@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.net.ftp.FTPFile;
 
-import Environment.Path;
+import environment.Path;
 
 
 

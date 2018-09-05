@@ -23,8 +23,8 @@ import org.jdesktop.swingx.JXPanel;
 
 import com.sun.star.awt.KeyModifier;
 
-import Environment.Path;
 import dialoge.RehaSmartDialog;
+import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;

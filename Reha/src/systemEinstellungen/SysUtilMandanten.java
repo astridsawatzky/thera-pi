@@ -40,7 +40,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeuerMandant;
 

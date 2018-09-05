@@ -28,7 +28,7 @@ import CommonTools.INITool;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import systemTools.ButtonTools;
 

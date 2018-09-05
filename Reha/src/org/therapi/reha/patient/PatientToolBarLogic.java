@@ -20,10 +20,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import CommonTools.StringTools;
-import Environment.Path;
 import dialoge.EmailDialog;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
+import environment.Path;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;

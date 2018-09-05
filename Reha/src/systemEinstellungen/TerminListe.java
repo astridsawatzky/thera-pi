@@ -2,7 +2,7 @@ package systemEinstellungen;
 
 import java.util.Vector;
 
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 
 public class TerminListe{

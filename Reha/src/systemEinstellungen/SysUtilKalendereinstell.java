@@ -29,7 +29,7 @@ import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 
 public class SysUtilKalendereinstell extends JXPanel implements KeyListener, ActionListener, FocusListener {

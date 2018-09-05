@@ -6,7 +6,7 @@ import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.ZeitFunk;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 
 public class GruppenEinlesen{

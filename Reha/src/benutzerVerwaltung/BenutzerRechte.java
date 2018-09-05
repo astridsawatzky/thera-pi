@@ -52,7 +52,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.Verschluesseln;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import rehaInternalFrame.JBenutzerInternal;
 import systemEinstellungen.SystemConfig;

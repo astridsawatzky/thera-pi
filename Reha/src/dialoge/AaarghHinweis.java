@@ -3,7 +3,7 @@ package dialoge;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
-import Environment.Path;
+import environment.Path;
 
 public class AaarghHinweis {
 	public AaarghHinweis(String hinweis,String title){

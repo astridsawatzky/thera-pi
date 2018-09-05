@@ -30,7 +30,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import terminKalender.ParameterLaden;
 

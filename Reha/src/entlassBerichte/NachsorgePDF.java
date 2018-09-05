@@ -21,7 +21,7 @@ import com.lowagie.text.pdf.PdfCopy;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.ReaderStart;

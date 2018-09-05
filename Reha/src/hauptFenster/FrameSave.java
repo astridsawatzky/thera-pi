@@ -7,7 +7,7 @@ import javax.swing.SwingWorker;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-import Environment.Path;
+import environment.Path;
 import systemEinstellungen.SystemConfig;
 
 public class FrameSave {

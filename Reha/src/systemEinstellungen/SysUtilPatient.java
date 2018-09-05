@@ -48,7 +48,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 

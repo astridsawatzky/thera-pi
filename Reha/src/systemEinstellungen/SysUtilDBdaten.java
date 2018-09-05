@@ -29,7 +29,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.Verschluesseln;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 
 public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListener {

@@ -28,7 +28,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import ocf.OcKVK;
 import uk.co.mmscomputing.device.scanner.Scanner;

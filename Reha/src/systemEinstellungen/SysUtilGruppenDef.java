@@ -44,7 +44,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.ZeitFunk;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeueGruppe;
 import jxTableTools.ZeitTableCellEditor;

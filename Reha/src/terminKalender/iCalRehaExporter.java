@@ -19,8 +19,8 @@ import javax.swing.SwingUtilities;
 
 import CommonTools.DatFunk;
 import CommonTools.ZeitFunk;
-import Environment.Path;
 import dialoge.EmailDialog;
+import environment.Path;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 

@@ -28,7 +28,7 @@ import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.Verschluesseln;
 import CommonTools.ZeitFunk;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;

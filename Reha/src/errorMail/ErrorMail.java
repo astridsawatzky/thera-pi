@@ -7,8 +7,8 @@ import javax.mail.internet.AddressException;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-import Environment.Path;
 import emailHandling.EmailSendenExtern;
+import environment.Path;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 

@@ -31,7 +31,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 
 public class SysUtilFremdprogramme extends JXPanel implements KeyListener, ActionListener {

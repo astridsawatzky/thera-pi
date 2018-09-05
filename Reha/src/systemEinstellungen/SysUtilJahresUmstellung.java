@@ -29,7 +29,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;

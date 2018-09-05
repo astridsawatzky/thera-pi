@@ -3,7 +3,7 @@ package org.thera_pi.updates;
 import java.io.File;
 
 import CommonTools.Verschluesseln;
-import Environment.Path;
+import environment.Path;
 
 public class UpdateConfig {
 	private static final String NONRTASPEZIALSCHLUESSEL = "NurFuerRegistrierteUserjeLaengerJeBesserPasswortRehaVerwaltung";

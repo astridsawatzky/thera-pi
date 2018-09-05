@@ -52,7 +52,7 @@ import com.jgoodies.looks.plastic.PlasticInternalFrameUI;
 
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;

@@ -15,7 +15,6 @@ import javax.swing.SwingUtilities;
 import org.therapi.reha.patient.PatientHauptPanel;
 
 import CommonTools.DatFunk;
-import Environment.Path;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import anmeldungUmsatz.Anmeldungen;
@@ -27,6 +26,7 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
+import environment.Path;
 import events.RehaTPEvent;
 import krankenKasse.KassenPanel;
 import rechteTools.Rechte;

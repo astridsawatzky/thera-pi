@@ -32,8 +32,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import Environment.Path;
 import dialoge.RehaSmartDialog;
+import environment.Path;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SysUtilDruckvorlage;

@@ -31,7 +31,6 @@ import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
-import Environment.Path;
 import ag.ion.bion.officelayer.filter.PDFFilter;
 import ag.ion.bion.officelayer.text.ITextCursor;
 import ag.ion.bion.officelayer.text.ITextDocument;
@@ -45,6 +44,7 @@ import ag.ion.noa.NOAException;
 import ag.ion.noa.filter.OpenOfficeFilter;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
+import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;

@@ -41,7 +41,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import jxTableTools.DblCellEditor;
 import jxTableTools.DoubleTableCellRenderer;

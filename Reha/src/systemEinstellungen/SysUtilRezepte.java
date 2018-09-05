@@ -47,7 +47,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 

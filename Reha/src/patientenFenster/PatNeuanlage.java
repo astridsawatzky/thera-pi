@@ -72,7 +72,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import Environment.Path;
+import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.RehaTPEvent;

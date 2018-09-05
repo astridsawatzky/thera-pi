@@ -31,7 +31,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaLabel;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;

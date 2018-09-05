@@ -10,7 +10,7 @@ import java.util.Vector;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
-import Environment.Path;
+import environment.Path;
 import hauptFenster.Reha;
 
 public class SystemPreislisten {

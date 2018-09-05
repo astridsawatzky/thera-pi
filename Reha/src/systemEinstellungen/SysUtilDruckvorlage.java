@@ -37,7 +37,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
-import Environment.Path;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -51,6 +50,7 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.printing.IPrinter;
+import environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.EmailText;
 
