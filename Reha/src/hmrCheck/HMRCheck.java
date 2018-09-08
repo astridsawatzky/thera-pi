@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import abrechnung.Disziplinen;
 import CommonTools.SqlInfo;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
@@ -23,9 +24,8 @@ public class HMRCheck {
 	Vector<String> positionen = null;
 	Vector<Vector<String>> preisvec = null;
 	String indischluessel = null;
-	String diszis[] = {"2","1","5","3","8","7"};
-	String diszikurz[] = {"KG","MA","ER","LO","RH","PO"}; 
-	//RezNeuanlage rezanlage = null;
+//	String diszis[] = {"2","1","5","3","8","7"};
+//	String diszikurz[] = {"KG","MA","ER","LO","RH","PO"}; 
 	int disziplin;
 	int preisgruppe;
 	final String maxanzahl = "Die Höchstmenge pro Rezept bei ";
@@ -53,6 +53,7 @@ public class HMRCheck {
 	
 	int maxprorezept = 0;
 	int maxprofall = 0;
+	Disziplinen diszis = null;
 	
 	public HMRCheck(String indi,int idiszi,Vector<Integer> vecanzahl,Vector<String>vecpositionen,
 			int xpreisgruppe,Vector<Vector<String>> xpreisvec,int xrezeptart,String xreznr,String xrezdatum,String xletztbeginn){
@@ -73,6 +74,7 @@ public class HMRCheck {
 		letztbeginn = xletztbeginn;
 		//System.out.println("IDdiszi = "+idiszi);
 		//aktualisiereHMRs();
+		diszis = new Disziplinen();
 	}
 	/*
 	 * 
@@ -85,7 +87,7 @@ public class HMRCheck {
 	 * 
 	 */
 	public boolean check(){
-		if(reznummer.startsWith("RS") || reznummer.startsWith("FT") ){
+		if(reznummer.startsWith("RS") || reznummer.startsWith("FT") ){	// Wat is mit "RH"? Nicht im HMK
 			return true;
 		}
 		AdRrezept = (rezeptart==2);
@@ -118,10 +120,12 @@ public class HMRCheck {
 		String[] vorrangig = vec.get(0).get(3).split("@");
 		String[] ergaenzend = vec.get(0).get(5).split("@");
 		for(int i = 0; i < vorrangig.length;i++){
-			vorrangig[i] = diszis[disziplin]+vorrangig[i];
+//			vorrangig[i] = diszis[disziplin]+vorrangig[i];
+			vorrangig[i] = diszis.getPrefix(disziplin)+vorrangig[i];
 		}
 		for(int i = 0; i < ergaenzend.length;i++){
-			ergaenzend[i] = diszis[disziplin]+ergaenzend[i];
+//			ergaenzend[i] = diszis[disziplin]+ergaenzend[i];
+			ergaenzend[i] = diszis.getPrefix(disziplin)+ergaenzend[i];
 		}
 		//hier einbauen:
 		//testen auf WS1,Ex1 etc. hier ist keine Folgeverordnung möglich // Status:erledigt!!
@@ -474,14 +478,25 @@ public class HMRCheck {
 		
 		if(Reha.thisClass.patpanel != null){
 			patintern = Reha.thisClass.patpanel.patDaten.get(29);
-			String stmt = "(select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from verordn  where pat_intern = '"+patintern+"'"+
-						" and rez_nr like '"+diszikurz[disziplin]+"%' and indikatschl = '"+aktindischl+"')"+
-			" union "+ 
-						"(select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from lza where pat_intern = '"+patintern+"'"+
-						" and rez_nr like '"+diszikurz[disziplin]+"%' and indikatschl = '"+aktindischl+"')"+
-			" order by rez_datum DESC, indikatschl";
-			Vector<Vector<String>> testvec = SqlInfo.holeFelder(stmt);
+			String selFieldsFrom = "select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from ";	// icd10,icd10_2 ?
+			String selCond = "where pat_intern = '"+patintern+"'"+" and rez_nr like '"+diszis.getRezClass(disziplin)+"%' and indikatschl = '"+aktindischl+"'";
+			String stmt = 	"("+selFieldsFrom+" verordn "+ selCond+")"+
+						" union "+ 
+							"("+selFieldsFrom+" lza "+ selCond+")"+
+						" order by rez_datum DESC, indikatschl";
+			Vector<Vector<String>> testvec = SqlInfo.holeFelder(stmt);	//alle Rezepte aus verordn u. lza, sortiert nach datum u. Indi-Schlüssel
 
+			// erstmal die eindeutigen Faelle aussortieren
+			if(testvec.size() == 1){	// entweder schon gespeichert, oder es gibt ein Vorrezept
+				if(neurezept ){
+					return true;		// Hoechstverordnungsmenge kann noch nicht ueberschritten sein
+				}else{
+					return chkIsErstVO(rezeptart);	// muesste dann Erstverordnung sein
+				}
+			}else if(testvec.size() == 0 && neurezept ){
+				return chkIsErstVO(rezeptart);		// muesste auch Erstverordnung sein
+			}
+			
 			boolean zaehlen = false;
 			int gesamt = 0;
 			int aktanzahl = 0;
@@ -561,6 +576,29 @@ public class HMRCheck {
 		// true damit die restliche Prüfung durchlaufen wird.
 		return true;		
 	}
+
+	private String errTxtNoEVO(String htmlTxt) {
+		htmlTxt = htmlTxt+(htmlTxt.length() <= 0 ? "<html>" : "")+"<br>Verordnung müsste<b><font color='#ff0000'> Erstverordnung sein</font><br><br>"+
+				"</b><br><br>";	
+		return htmlTxt;
+	}
+	private boolean chkIsErstVO(String rezeptArt){
+		if (rezarten[Integer.parseInt(rezeptArt)] == "Erstverordnung"){
+			return true;
+		}else{
+			errTxtNoEVO(fehlertext);
+			return false;			
+		}
+	}
+	private boolean chkIsErstVO(int rezeptArt){
+		if (rezarten[rezeptArt] == "Erstverordnung"){
+			return true;
+		}else{
+			errTxtNoEVO(fehlertext);
+			return false;			
+		}
+	}
+
 	/*
 	private void aktualisiereHMRs(){
 		Vector<Vector<String>> vec = SqlInfo.holeFelder("select ergaenzend,maxergaenzend,id from hmrcheck  where ergaenzend LIKE '%1508%'");
