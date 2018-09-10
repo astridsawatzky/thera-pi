@@ -44,7 +44,7 @@ public class HMRCheck {
 	static SimpleDateFormat sdDeutsch = new SimpleDateFormat("dd.MM.yyyy");	
 	static SimpleDateFormat sdSql = new SimpleDateFormat("yyyy-MM-dd");
 	
-	String[] rezarten = {"Erstverodnung","Folgeverordnung",	"außerhalb des Regelfalles"};
+	String[] rezarten = {"Erstverordnung","Folgeverordnung","außerhalb des Regelfalles"};
 
 	String[] keinefolgevo = {"EX1a","EX1b","EX1c","WS1a","WS1b","WS1c","WS1d","WS1e",
 			"AT1a","AT1b","AT1c","SB4","ST3"};
@@ -500,35 +500,25 @@ public class HMRCheck {
 			boolean zaehlen = false;
 			int gesamt = 0;
 			int aktanzahl = 0;
-			if(testvec.size() == 1 && neurezept ){
-				//Höchstverordnungsmenge kann noch nicht überschritten sein
-				return true;
-			}else if(testvec.size() == 1 && (!neurezept)){
-				//müßte dann erstverordnung sein
-				fehlertext = fehlertext+(fehlertext.length() <= 0 ? "<html>" : "")+"<br>Verordnung müsste<b><font color='#ff0000'> Erstverordnung sein</font><br><br>"+
-						"</b><br><br>";
-				return false;
-			}else if(testvec.size() == 0 && neurezept ){
-				// müßte dann erstverordnung sein
-				fehlertext = fehlertext+(fehlertext.length() <= 0 ? "<html>" : "")+"<br>Verordnung müsste<b><font color='#ff0000'> Erstverordnung sein</font><br><br>"+
-						"</b><br><br>";
-				return false;
-			}
-			
+			boolean neudummy = Boolean.valueOf(neurezept);
 			
 			//  0         1       2       3        4            5       6
 			//rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern
-			boolean neudummy = Boolean.valueOf(neurezept);
+			if(neurezept){
+				gesamt = anzahl.get(0);		// die kommt zu denen in testvec noch dazu
+			}
 			for(int i = 0; i < testvec.size();i++){
 				if(testvec.get(i).get(1).equals(reznummer) || zaehlen || neudummy){
 					zaehlen = true;
-					if(neudummy){
-						aktanzahl = anzahl.get(0);
-					}else{
-						aktanzahl = Integer.parseInt(testvec.get(i).get(3));
-					}
+//					if(neudummy){
+//						aktanzahl = anzahl.get(0);		// <- Das  ist Murks! Anz. des Rez. im testvec[0] wird so nicht berücksichtigt!
+//					}else{
+//						aktanzahl = Integer.parseInt(testvec.get(i).get(3));
+//					}
+					aktanzahl = Integer.parseInt(testvec.get(i).get(3));
+
 					//erst prüfen ob zwischen letzter behandlung des alten Rezeptes und dem ersten Termin der
-					//neuen VO 12 Wochen Therapiepause lagen, sofern nicht summieren
+					//neuen VO 12 Wochen Therapiepause lagen, sofern ja -> nicht summieren (muesste dann Erstverordnung sein)
 					if(i+1 <= testvec.size()){
 						if(neudummy){
 							startdatum_neu = DatFunk.sHeute();
@@ -546,10 +536,13 @@ public class HMRCheck {
 						//System.out.println("Enddatum: "+enddatum_alt);
 						
 						tagedifferenz = DatFunk.TageDifferenz(enddatum_alt, startdatum_neu);
+						String voArt = testvec.get(i).get(2);
 						if(tagedifferenz < therapiepause){
 							gesamt = gesamt + aktanzahl;							
 						}else{
-							return true;
+							if (chkIsErstVO(voArt)) {
+								return true; 
+							}
 						}
 						//System.out.println("Gesamt: "+gesamt);
 						//System.out.println(startdatum_neu+" - "+ enddatum_alt+" - "+Long.toString(tagedifferenz));
@@ -560,6 +553,10 @@ public class HMRCheck {
 									"</b><br><br>";
 									testok = false;
 							return false;
+						}
+
+						if (chkIsErstVO(voArt)) {
+							return true; // Erst-VO gefunden
 						}
 					}
 
