@@ -92,7 +92,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -137,7 +137,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -194,7 +194,7 @@ public class SqlInfo {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -228,7 +228,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -288,7 +288,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -387,7 +387,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -439,7 +439,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -634,7 +634,7 @@ public class SqlInfo {
 			try {
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}else{
@@ -642,7 +642,7 @@ public class SqlInfo {
 				conn.rollback();
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -663,7 +663,7 @@ public class SqlInfo {
 			numvec = SqlInfo.holeFeldForUpdate("nummern", nummer+",id", " FOR UPDATE");
 			////System.out.println(Reha.aktIK);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		if(numvec.size() > 0){
@@ -679,7 +679,7 @@ public class SqlInfo {
 			try {
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}else{
@@ -687,7 +687,7 @@ public class SqlInfo {
 				conn.rollback();
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -707,7 +707,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -789,7 +789,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -832,7 +832,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -936,7 +936,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -999,7 +999,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -1048,7 +1048,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -1131,7 +1131,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{

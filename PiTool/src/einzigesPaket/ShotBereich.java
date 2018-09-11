@@ -193,12 +193,12 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
 	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//Cursor curs = new Cursor(Cursor.CROSSHAIR_CURSOR);
 		piTool.jFrame.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 		requestFocus();
@@ -206,13 +206,13 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		piTool.jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		transferFocus();
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("Button Nr."+arg0.getButton());
 		if(arg0.getButton() == MouseEvent.BUTTON1){
 			dragstart = true;
@@ -249,7 +249,7 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
 	
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		dragstart = false;
 		stoppunkt = arg0.getPoint();
 		if(shiftunten){
@@ -272,32 +272,32 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		stoppunkt = arg0.getPoint();
 		repaint();
 		//markiereBereich();
 	}
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		stoppunkt = arg0.getPoint();		
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.isShiftDown()){
 			shiftunten = true;
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		shiftunten = false;
 		repaint();
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	public void macheAusschnitt(){
@@ -354,7 +354,7 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
         try {
 			ImageIO.write((RenderedImage) bufi, "jpg", file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} 
 		*/
@@ -365,7 +365,7 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
         try {
 			ImageIO.write((RenderedImage) img2, "jpg", file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} 
 	*/
@@ -383,7 +383,7 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
 		try {
 			label.setIcon(new ImageIcon(ImageIO.read(new File("C:\\ScreenShots\\test2.jpg"))));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		*/
@@ -401,7 +401,7 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
 	*/
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getActionCommand().equals("inclipboard")){
 			System.out.println("Es wird in Clipboard übertragen");
 			TransferableImage ti = new TransferableImage( (ImageIcon)label.getIcon() );

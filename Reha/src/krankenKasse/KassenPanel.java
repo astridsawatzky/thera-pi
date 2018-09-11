@@ -302,7 +302,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 				if(inMemoEdit){
 					return;
 				}
-				// TODO Auto-generated method stub
+				
 				//System.out.println(" in Tabelle "+arg0.getKeyCode());
 				if(arg0.getKeyCode()== 10){
 					arg0.consume();
@@ -450,7 +450,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(inMemoEdit){
 			return;
 		}
@@ -478,7 +478,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(inMemoEdit){
 			return;
 		}
@@ -489,14 +489,14 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	/****************************/
 /**************************/
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		SwingUtilities.invokeLater(new Runnable(){
 		 	   @Override
             public  void run()
@@ -509,12 +509,12 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String sc = arg0.getActionCommand();
 		if(sc.equals("kedit")){
 			//String sid = "";
@@ -596,18 +596,18 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
 	@Override
 	public void tableChanged(TableModelEvent e) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("TabelEvent "+e);
 
 	}
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("PropertyChange "+evt);
 	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(((JComponent)arg0.getSource()).getName().equals("KrankenKasse") && arg0.getClickCount()==2){
 			int row = kassentbl.getSelectedRow();
 			if(row >= 0){
@@ -687,7 +687,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				// TODO Auto-generated method stub
+				
 				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kasse.ini");
 				int forms = inif.getIntegerProperty("Formulare", "KassenFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
@@ -740,22 +740,22 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	public void neuanlageKasse(String id){
@@ -816,7 +816,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		try {
 			documentService = Reha.officeapplication.getDocumentService();
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -836,7 +836,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		try {
 			placeholders = textFieldService.getPlaceholderFields();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		for (int i = 0; i < placeholders.length; i++) {
@@ -1303,7 +1303,7 @@ class HoleKassen{
 		stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	}
 	try{
@@ -1369,7 +1369,7 @@ class HoleText{
 		stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	}
 	try{
@@ -1457,7 +1457,7 @@ class KasseNeuDlg extends RehaSmartDialog{
 	}
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		try{
 			if(evt.getDetails()[0].equals("KassenNeuanlage")){
 				this.setVisible(false);
@@ -1472,7 +1472,7 @@ class KasseNeuDlg extends RehaSmartDialog{
 	}
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);

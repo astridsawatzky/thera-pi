@@ -38,7 +38,7 @@ public class OffenepostenRgAf extends JXPanel implements TableModelListener {
 	}
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

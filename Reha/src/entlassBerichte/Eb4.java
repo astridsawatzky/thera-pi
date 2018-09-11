@@ -402,7 +402,7 @@ public class Eb4 implements ActionListener {
 
 			@Override
 			public int compare(Vector o1, Vector o2) {
-				// TODO Auto-generated method stub
+				
 				String s1 = (String)o1.get(0);
 				String s2 = (String)o2.get(0);
 				return s1.compareTo(s2);

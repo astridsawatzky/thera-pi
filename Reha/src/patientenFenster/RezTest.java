@@ -41,7 +41,7 @@ public class RezTest extends RehaSmartDialog{
 	}
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);

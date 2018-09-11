@@ -473,7 +473,7 @@ public class RezTools {
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 			@Override
 			public int compare(Vector o1, Vector o2) {
-				// TODO Auto-generated method stub
+				
 				String s1 = DatFunk.sDatInSQL((String)o1.get(0));
 				String s2 = DatFunk.sDatInSQL((String)o2.get(0));
 				return s1.compareTo(s2);

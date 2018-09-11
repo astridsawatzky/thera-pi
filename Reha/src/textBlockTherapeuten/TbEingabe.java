@@ -53,7 +53,7 @@ public class TbEingabe extends RehaSmartDialog implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

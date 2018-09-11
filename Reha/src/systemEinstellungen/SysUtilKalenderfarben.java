@@ -225,23 +225,23 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 	
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
-	// TODO Auto-generated method stub
+	
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		int i;
 		for(i=0;i<1;i++){
 			if(e.getActionCommand().equals("alpha")){
@@ -367,12 +367,12 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 	}
 	@Override
 	public void editingCanceled(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void editingStopped(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

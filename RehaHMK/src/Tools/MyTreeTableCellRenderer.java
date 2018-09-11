@@ -78,7 +78,7 @@ public class MyTreeTableCellRenderer extends JXTreeTable implements TableCellRen
 	public Component getTreeCellRendererComponent(JTree tree, Object value,
 			boolean selected, boolean expanded, boolean leaf, int row,
 			boolean hasFocus) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 }

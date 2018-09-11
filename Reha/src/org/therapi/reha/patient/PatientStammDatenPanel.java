@@ -139,7 +139,7 @@ public class PatientStammDatenPanel extends JXPanel{
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
 		} catch (TooManyListenersException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}        
 		htmlPane.setDropTarget(dndt);

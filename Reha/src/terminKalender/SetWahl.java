@@ -34,21 +34,21 @@ public class SetWahl extends JDialog {
 	public int ret = 0;
 	private JList jList1 = null;
 	private int wahl;
-	private TerminFenster eltern; 
+	private TerminFenster eltern;
 	/**
 	 * @param owner
 	 */
 	public SetWahl(TerminFenster xeltern) {
 		super();
-		eltern = xeltern; 
+		eltern = xeltern;
 		wahl = eltern.aktuellesSet();
 		initialize();
 	}
 
-	
+
 	/**
 	 * This method initializes this
-	 * 
+	 *
 	 * @return void
 	 */
 	private void initialize() {
@@ -66,7 +66,7 @@ public class SetWahl extends JDialog {
 
 	/**
 	 * This method initializes jContentPane
-	 * 
+	 *
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane() {
@@ -88,9 +88,9 @@ public class SetWahl extends JDialog {
 	}
 
 	/**
-	 * This method initializes jPanelTasten	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jPanelTasten
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJPanelTasten() {
 		if (jPanelTasten == null) {
@@ -105,9 +105,9 @@ public class SetWahl extends JDialog {
 	}
 
 	/**
-	 * This method initializes jScrollPane	
-	 * 	
-	 * @return javax.swing.JScrollPane	
+	 * This method initializes jScrollPane
+	 *
+	 * @return javax.swing.JScrollPane
 	 */
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
@@ -120,15 +120,15 @@ public class SetWahl extends JDialog {
 	}
 
 	/**
-	 * This method initializes jList	
-	 * 	
-	 * @return javax.swing.JList	
+	 * This method initializes jList
+	 *
+	 * @return javax.swing.JList
 	 */
-	
+
 	/**
-	 * This method initializes jList	
-	 * 	
-	 * @return javax.swing.JList	
+	 * This method initializes jList
+	 *
+	 * @return javax.swing.JList
 	 */
 
 
@@ -145,9 +145,9 @@ public class SetWahl extends JDialog {
 	}
 
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 *
+	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
 		if (jButton == null) {
@@ -159,7 +159,6 @@ public class SetWahl extends JDialog {
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				@Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-					//System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 					DialogBeenden(jList1.getSelectedIndex());
 				}
 			});
@@ -168,9 +167,9 @@ public class SetWahl extends JDialog {
 	}
 
 	/**
-	 * This method initializes jButton1	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton1
+	 *
+	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton1() {
 		if (jButton1 == null) {
@@ -181,7 +180,6 @@ public class SetWahl extends JDialog {
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
 				@Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-					//System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 					DialogBeenden(-1);
 				}
 			});
@@ -195,17 +193,17 @@ public class SetWahl extends JDialog {
 	}
 
 	/**
-	 * This method initializes jList1	
-	 * 	
-	 * @return javax.swing.JList	
+	 * This method initializes jList1
+	 *
+	 * @return javax.swing.JList
 	 */
 	private JList getJList1() {
 		final DefaultListModel model = new DefaultListModel();
 		if (jList1 == null) {
 			jList1 = new JList(model);
-			jList1.addKeyListener(new java.awt.event.KeyAdapter() {   
+			jList1.addKeyListener(new java.awt.event.KeyAdapter() {
 				@Override
-                public void keyPressed(java.awt.event.KeyEvent e) {    
+                public void keyPressed(java.awt.event.KeyEvent e) {
 					if (e.getKeyCode()==10){
 						DialogBeenden(jList1.getSelectedIndex());
 					}
@@ -220,7 +218,7 @@ public class SetWahl extends JDialog {
 					if (e.getClickCount() == 2){
 						DialogBeenden(jList1.getSelectedIndex());
 					}
-					
+
 				}
 			});
 			ListeFuellen(model);

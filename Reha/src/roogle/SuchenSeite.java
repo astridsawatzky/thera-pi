@@ -694,13 +694,13 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			}
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
@@ -855,21 +855,21 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		startLbl.setText(eltern.zeitraumEdit[0].getText());
 		stopLbl.setText(eltern.zeitraumEdit[1].getText());
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String name = arg0.getActionCommand();
 		if(name.equals("")){return;}
 		for(int i = 0;i<1;i++){
@@ -1073,7 +1073,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -1125,7 +1125,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				try {
 					Reha.thisClass.conn.setAutoCommit(true);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				*/
@@ -1902,7 +1902,7 @@ Vector mit Normal-Termin
 			if(  (schreibeName.getText().trim().equals("")) && (schreibeNummer.getText().trim().equals(""))){
 				//roogleZuruecksetzen();
 			}
-			// TODO Auto-generated method stub
+			
 			return null;
 		}
 
@@ -2016,7 +2016,7 @@ Vector mit Normal-Termin
 					try {
 						Thread.sleep(5);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 						JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion Thread.sleep() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
 					}
@@ -2075,7 +2075,7 @@ Vector mit Normal-Termin
 				try {
 					schreibeZeile(stmt);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				break;
@@ -2155,7 +2155,7 @@ Vector mit Normal-Termin
 					////System.out.println("EscapedDouble String = "+stmt);
 					schreibeZeile(stmt);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				break;
@@ -2367,7 +2367,7 @@ Vector mit Normal-Termin
 			try {
 				schreibeZeile(stmt);
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Fehler - betroffenes Statement:\n"+stmt);
 				JOptionPane.showMessageDialog(null, "SQL-Fehler:\n"+e.getMessage());
@@ -3556,7 +3556,7 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 	try {
 		Reha.thisClass.conn.setAutoCommit(true);
 	} catch (SQLException e1) {
-		// TODO Auto-generated catch block
+		
 		e1.printStackTrace();
 	}
 	*/
@@ -3573,7 +3573,7 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 				        ResultSet.CONCUR_UPDATABLE );
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			try {
@@ -3588,7 +3588,7 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 					try {
 						Thread.sleep(10);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 					*/
@@ -3605,7 +3605,7 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -3809,7 +3809,7 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 					        ResultSet.CONCUR_UPDATABLE );
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {
@@ -3823,7 +3823,7 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 						try {
 							Thread.sleep(10);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 						return(0);
@@ -3839,7 +3839,7 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 
 					}
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 

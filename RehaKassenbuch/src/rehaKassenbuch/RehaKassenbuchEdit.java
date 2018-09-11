@@ -372,7 +372,7 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 			stmt = RehaKassenbuch.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{

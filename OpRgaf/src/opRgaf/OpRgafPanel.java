@@ -304,12 +304,12 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			}
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 			
@@ -628,7 +628,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			stmt =  OpRgaf.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{

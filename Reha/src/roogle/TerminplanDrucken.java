@@ -112,7 +112,7 @@ SuchenSeite eltern;
 				document = documentService.loadDocument(url,docdescript);
 
 			} catch (NOAException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			/**********************/
@@ -141,7 +141,7 @@ SuchenSeite eltern;
 			try {
 				druckerName = textDocument.getPrintService().getActivePrinter().getName();
 			} catch (NOAException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			//Wenn nicht gleich wie in der INI angegeben -> Drucker wechseln
@@ -150,13 +150,13 @@ SuchenSeite eltern;
 				try {
 					iprint = textDocument.getPrintService().createPrinter(terminDrucker);
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {
 					textDocument.getPrintService().setActivePrinter(iprint);
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -169,7 +169,7 @@ SuchenSeite eltern;
 				try {
 					placeholders = textFieldService.getPlaceholderFields();
 				} catch (TextException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				for (int i = 0; i < placeholders.length; i++) {
@@ -258,7 +258,7 @@ SuchenSeite eltern;
 						try {
 							textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
 						} catch (TextException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 					}
@@ -418,7 +418,7 @@ SuchenSeite eltern;
 						}
 
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}else{

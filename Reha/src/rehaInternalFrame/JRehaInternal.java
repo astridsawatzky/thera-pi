@@ -322,7 +322,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 	  						xiframe.setSelected(true);
 	  						xiframe.toFront();
 	  					} catch (PropertyVetoException e) {
-	  						// TODO Auto-generated catch block
+	  						
 	  						e.printStackTrace();
 	  					}
 
@@ -572,7 +572,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 			this.isActive = true;
 			this.validateTree();
 		} catch (PropertyVetoException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 
@@ -582,7 +582,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		try {
 			setSelected(true);
 		} catch (PropertyVetoException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		*/
@@ -590,7 +590,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String comm = arg0.getActionCommand();
 
 		for(int i = 0; i < 1; i++){

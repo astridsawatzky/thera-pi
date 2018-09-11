@@ -90,7 +90,7 @@ public class RehaHMKTab extends JXPanel implements ChangeListener{
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
+		
 		JTabbedPane pane = (JTabbedPane)e.getSource();
         int sel = pane.getSelectedIndex();
         jxh = getHeader(sel);

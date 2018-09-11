@@ -225,7 +225,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		vorlagen.addMouseListener(new MouseAdapter(){		
 			@Override
             public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					int row = vorlagen.getSelectedRow();
 					row = vorlagen.convertRowIndexToModel(row);
@@ -309,25 +309,25 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		String cmd = e.getActionCommand();
 		if(cmd.equals("abbrechen")){
 			SystemInit.abbrechen();
@@ -550,7 +550,7 @@ public TitelEditor(){
 
 	@Override
 	public Object getCellEditorValue() {
-		// TODO Auto-generated method stub
+		
 		return  ((JFormattedTextField)component).getText();
 	}
 

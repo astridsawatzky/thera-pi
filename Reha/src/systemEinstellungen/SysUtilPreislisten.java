@@ -206,25 +206,25 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 			private void startCellEditing(JXTable table,int row,int col){
@@ -350,13 +350,13 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	private SysUtilPreislisten getInstance(){
@@ -365,7 +365,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		String cmd = e.getActionCommand();
 		if(cmd.equals("tabelleRegeln")){
 			delvec.clear();

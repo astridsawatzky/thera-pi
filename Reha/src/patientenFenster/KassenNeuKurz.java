@@ -356,7 +356,7 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 	/**********************Listener der Klasse*****************************/
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String comm = arg0.getActionCommand();
 		if(comm.equals("speichern")){
 			panelWechsel(true);
@@ -473,7 +473,7 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getKeyCode() == 27){
 			arg0.consume();
 			panelWechsel(false);
@@ -516,7 +516,7 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

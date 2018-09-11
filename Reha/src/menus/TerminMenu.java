@@ -18,12 +18,12 @@ public class TerminMenu {
 
 	private JMenu jMenu = null;  //  @jve:decl-index=0:visual-constraint="363,126"
 	private JMenuItem TermStart = null;
-	private JMenuItem RoogleStart = null;	
+	private JMenuItem RoogleStart = null;
 	public TerminMenu thisClass;  //  @jve:decl-index=0:
 	/**
-	 * This method initializes jMenu	
-	 * 	
-	 * @return javax.swing.JMenu	
+	 * This method initializes jMenu
+	 *
+	 * @return javax.swing.JMenu
 	 */
 	public JMenu getJMenu() {
 		if (jMenu == null) {
@@ -42,9 +42,9 @@ public class TerminMenu {
 	}
 
 	/**
-	 * This method initializes TermStart	
-	 * 	
-	 * @return javax.swing.JMenuItem	
+	 * This method initializes TermStart
+	 *
+	 * @return javax.swing.JMenuItem
 	 */
 	private JMenuItem getTermStart() {
 		if (TermStart == null) {
@@ -55,7 +55,6 @@ public class TerminMenu {
 			TermStart.addActionListener(new java.awt.event.ActionListener() {
 				@Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-					//System.out.println("Terminkalenderaufruf-Menü"); // TODO Auto-generated Event stub actionPerformed()
 					JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 					Reha.thisClass.progLoader.ProgTerminFenster(0, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
 					//ProgLoader.ProgTerminFenster(0,0);
@@ -68,7 +67,7 @@ public class TerminMenu {
 					}
 				}
 			});
-			
+
 		}
 		return TermStart;
 	}
@@ -80,7 +79,6 @@ public class TerminMenu {
 		RoogleStart.addActionListener(new java.awt.event.ActionListener() {
 			@Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
-				//System.out.println("Ru:gl"); // TODO Auto-generated Event stub actionPerformed()
 				Reha.thisClass.messageLabel.setText("Roogle");
 				Reha.thisClass.progLoader.ProgRoogleFenster(0,null);
 				//ProgLoader.ProgRoogleFenster(0,null);
@@ -95,7 +93,6 @@ public class TerminMenu {
 		waz.addActionListener(new java.awt.event.ActionListener() {
 			@Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
-				//System.out.println("Ru:gl"); // TODO Auto-generated Event stub actionPerformed()
 				Reha.thisClass.messageLabel.setText("Wochenarbeitszeit definieren");
 				//ProgLoader.ProgTerminFenster(0,2);
 				Reha.thisClass.progLoader.ProgTerminFenster(0, 2);
@@ -118,6 +115,6 @@ public class TerminMenu {
 			}
 		});
 		return ical;
-	}	
+	}
 
 }

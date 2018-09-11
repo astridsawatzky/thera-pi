@@ -156,7 +156,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 			jList1.addMouseListener(new MouseAdapter(){
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
-					// TODO Auto-generated method stub
+					
 					if (arg0.getClickCount() == 2){
 						tfrueck.setText(Integer.toString(jList1.getSelectedIndex()));
 						//KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
@@ -199,17 +199,17 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println(arg0.getKeyCode());
 		if (arg0.getKeyCode()==10){
 			//arg0.consume();
@@ -239,12 +239,12 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 	}	
 	@Override
 	public void windowClosed(WindowEvent arg0) {
@@ -260,7 +260,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 	
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("****************Schließen des KassenFormular **************");
 		String ss =  getName();
 		//System.out.println(getName()+" Eltern "+ss);
@@ -276,37 +276,37 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String cmd = arg0.getActionCommand();
 		if(cmd.equals("ok")){
 			tfrueck.setText(Integer.valueOf(jList1.getSelectedIndex()).toString());

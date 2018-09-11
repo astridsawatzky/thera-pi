@@ -566,7 +566,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
@@ -722,7 +722,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 			stmt =  OffenePosten.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{

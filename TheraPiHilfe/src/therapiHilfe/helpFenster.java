@@ -295,61 +295,61 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void componentResized(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void componentAdded(ContainerEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void componentRemoved(ContainerEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String command = arg0.getActionCommand();
 		
 		if(command.equals("neuertext")){
@@ -454,7 +454,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 
 				@Override
 				protected Void doInBackground() throws Exception {
-					// TODO Auto-generated method stub
+					
 					try{
 					String[] sret = transferiereDatei(); 
 					if(sret.length > 0){
@@ -583,7 +583,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -602,7 +602,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -617,7 +617,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -650,7 +650,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 						}
 
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}catch(Exception ex){
 						ex.printStackTrace();
@@ -773,7 +773,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -804,7 +804,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
    
@@ -938,7 +938,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 			  infile.close();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			//System.exit(1);
 		}
@@ -1005,14 +1005,14 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println(arg0);
 		
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getSource() instanceof JXTable ){
 			////System.out.println(arg0);
 		}
@@ -1129,7 +1129,7 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 						}
 						System.out.println("Daten wurden erfolgreich in DB gespeichert");  
 					} catch (SQLException e) {
-						JOptionPane.showMessageDialog(null, "Fehler beim Abspeichern in die MySql-Tabelle");// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, "Fehler beim Abspeichern in die MySql-Tabelle");
 						e.printStackTrace();
 					}
 					
@@ -1237,7 +1237,7 @@ final class WorkerTitel extends SwingWorker<Void,Void>{
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {
@@ -1368,7 +1368,7 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 					helpFenster.thisClass.sqlfertig = true;
 					System.out.println("Daten wurden erfolgreich in DB gespeichert");  
 				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(null, "Fehler beim Abspeichern in die MySql-Tabelle");// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Fehler beim Abspeichern in die MySql-Tabelle");
 					e.printStackTrace();
 				}
 				
@@ -1421,7 +1421,7 @@ final class HtmlHolen extends SwingWorker<Void,Void>{
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {
@@ -1458,7 +1458,7 @@ final class HtmlHolen extends SwingWorker<Void,Void>{
 									try {
 										Thread.sleep(80);
 									} catch (InterruptedException e) {
-										// TODO Auto-generated catch block
+										
 										e.printStackTrace();
 									}
 								}

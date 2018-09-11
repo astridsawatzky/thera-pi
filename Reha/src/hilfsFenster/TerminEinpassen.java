@@ -131,7 +131,7 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getKeyCode()==38){
 			//auf
 			((Component) e.getSource()).transferFocusBackward();
@@ -157,19 +157,19 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println(arg0.getSource());
 		String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
 		for (int i = 0 ; i < 1 ; i++){
@@ -215,13 +215,13 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 				}
 			}
 		}
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

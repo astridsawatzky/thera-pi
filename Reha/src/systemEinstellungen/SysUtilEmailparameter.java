@@ -237,25 +237,25 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getActionCommand().equals("speichern")){
 			if(Postfach.getSelectedIndex()==0){
 				datenSpeichern(SystemConfig.hmEmailExtern,"EmailExtern");

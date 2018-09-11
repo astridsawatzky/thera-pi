@@ -129,7 +129,7 @@ public class NeuerMandant implements KeyListener, ActionListener, FocusListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getKeyCode()==10){
 			if(!endeRegeln()){e.consume();return;}
 			SysUtilMandanten.thisClass.neuik = jrtaf[1].getText().trim();
@@ -172,19 +172,19 @@ public class NeuerMandant implements KeyListener, ActionListener, FocusListener{
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println(arg0.getSource());
 		String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
 		for (int i = 0 ; i < 1 ; i++){
@@ -205,13 +205,13 @@ public class NeuerMandant implements KeyListener, ActionListener, FocusListener{
 	@Override
 	public void focusGained(FocusEvent arg0) {
 		////System.out.println(arg0);
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

@@ -1232,7 +1232,6 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 			@Override
 			public int compare(Vector o1, Vector o2) {
-				// TODO Auto-generated method stub
 				String s1 = (String)o1.get(4);
 				String s2 = (String)o2.get(4);
 				return s1.compareTo(s2);
@@ -1678,39 +1677,32 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 	@Override
 	public void columnPropertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
 		////System.out.println("model-listener"+arg0);
 	}
 	@Override
 	public void columnAdded(TableColumnModelEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void columnMarginChanged(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void columnMoved(TableColumnModelEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void columnRemoved(TableColumnModelEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void columnSelectionChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	public void holeFormulare(){
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				// TODO Auto-generated method stub
 				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
 				int forms = inif.getIntegerProperty("Formulare", "RezeptFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
@@ -1728,7 +1720,6 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 
 		String cmd = arg0.getActionCommand();
 

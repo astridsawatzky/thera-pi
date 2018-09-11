@@ -20,7 +20,7 @@ import hauptFenster.Reha;
 
 public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 	/**
-	 * 
+	 *
 	 */
 	public static boolean inIniSave = false;
 	private static final long serialVersionUID = -3063788551323647566L;
@@ -30,7 +30,6 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 		rEvent = new RehaEventClass();
 		rEvent.addRehaEventListener(this);
 		addInternalFrameListener(this);
-		// TODO Auto-generated constructor stub
 	}
 	/*
 	public void internalFrameActivated(InternalFrameEvent arg0) {
@@ -45,12 +44,12 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 	public void internalFrameClosed(InternalFrameEvent arg0) {
 		if(! this.isIcon && !inIniSave ){
 			inIniSave = true;
-			new FrameSave ((Dimension)this.getSize().clone(), 
-					(Point)this.getLocation().clone(), 
-					Integer.valueOf(this.desktop), 
+			new FrameSave ((Dimension)this.getSize().clone(),
+					(Point)this.getLocation().clone(),
+					Integer.valueOf(this.desktop),
 					Integer.valueOf((this.getImmerGross()? 1 : 0)),
 					String.valueOf("kalender.ini"),
-					String.valueOf("Kalender"));	
+					String.valueOf("Kalender"));
 		}
 
 		Reha.thisClass.desktops[this.desktop].remove(this);
@@ -66,13 +65,13 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 			try{
 				Reha.thisClass.terminpanel.db_Aktualisieren.interrupt();
 			}catch(Exception ex){
-				
+
 			}
 		}
 		if(Reha.thisClass.terminpanel != null){
-			Reha.thisClass.terminpanel = null;			
+			Reha.thisClass.terminpanel = null;
 		}
-		
+
 		Reha.thisClass.terminpanel = null;
 		this.nord = null;
 		this.inhalt = null;
@@ -92,7 +91,7 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 		 	   }
 		});
 		*/
-	}	
+	}
 
 	@Override
 	public void rehaEventOccurred(RehaEvent evt) {
@@ -104,7 +103,7 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 				try {
 					this.setIcon(true);
 				} catch (PropertyVetoException e) {
-					// TODO Auto-generated catch block
+
 					e.printStackTrace();
 				}
 				this.setActive(false);
@@ -115,7 +114,7 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 final class JDesktopIcon extends JComponent implements Accessible
 {
   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -196,5 +195,5 @@ final class JDesktopIcon extends JComponent implements Accessible
 	return false;
     }
   }
-}  
+}
 

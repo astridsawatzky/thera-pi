@@ -211,7 +211,7 @@ public class NebraskaPanel extends JPanel implements ActionListener{
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		*/
@@ -245,7 +245,7 @@ public class NebraskaPanel extends JPanel implements ActionListener{
 			System.out.println(sig);
 			System.out.println("HashCode des PublicKey = "+pair.getPublic().hashCode());
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return certGen.generate(pair.getPrivate(),Constants.SECURITY_PROVIDER);
@@ -291,10 +291,10 @@ public class NebraskaPanel extends JPanel implements ActionListener{
 				kp = BCStatics.generateRSAKeyPair();
 				BCStatics.createKeyStore(kp);
 			} catch (NoSuchAlgorithmException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (NoSuchProviderException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}else if(cmd.equals("showcerts")){
@@ -346,22 +346,22 @@ public class NebraskaPanel extends JPanel implements ActionListener{
 			System.out.println(request.hashCode());
 			
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SignatureException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -370,10 +370,10 @@ public class NebraskaPanel extends JPanel implements ActionListener{
 		try {
 			kp = BCStatics.generateRSAKeyPair();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
  
@@ -416,31 +416,31 @@ public class NebraskaPanel extends JPanel implements ActionListener{
 			jta.setText("********************************************************************\n\n"+jta.getText());
 			
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SignatureException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (CertificateExpiredException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (CertificateNotYetValidException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

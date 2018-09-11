@@ -20,38 +20,34 @@ public class BMIrahmen extends JApplet implements WindowListener{
 	public static boolean DbOk;
 	JFrame jFrame;
 	public Connection conn;
-	
-	
-	   
+
+
+
 
 	public static void main(String[] args) {
-		
+
 		BMIrahmen frm = new BMIrahmen();
 		frm.getJFrame();
-		
+
 
 	}
 
 
-	
+
 	public JFrame getJFrame(){
+
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//thisClass = this;
-		
+
 		jFrame = new JFrame();
 		jFrame.setSize(350,450);
 		jFrame.setPreferredSize(new Dimension(350,450));
@@ -59,18 +55,18 @@ public class BMIrahmen extends JApplet implements WindowListener{
 		jFrame.setLocationRelativeTo(null);
 		jFrame.setContentPane(new BMIoberflaeche());// .add (jpan);
 		thisClass = this;
-		
+
 		jFrame.pack();
 		jFrame.setVisible(true);
 		return jFrame;
 	}
-	
-	
-	
+
+
+
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
+
 	}
 
 	@Override
@@ -80,44 +76,43 @@ public class BMIrahmen extends JApplet implements WindowListener{
 				BMIrahmen.thisClass.conn.close();
 				System.out.println("Datenbankverbindung wurde geschlossen");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		System.exit(0);
 	}
 
-	
+
 	@Override
     public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
+
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
+
 	}
 
 
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		// TODO Auto-generated method stub
 		
+
 	}
 }
 

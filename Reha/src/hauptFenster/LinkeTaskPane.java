@@ -217,7 +217,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
 		} catch (TooManyListenersException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		jxLink.setDropTarget(dndt);
@@ -303,7 +303,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
 		} catch (TooManyListenersException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		jxLink.setDropTarget(dndt);
@@ -381,7 +381,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
 		} catch (TooManyListenersException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		jxLink.setDropTarget(dndt);
@@ -1055,23 +1055,23 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	}
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentResized(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("Linke-Task-Pane: "+e);
 		
 	}
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	private boolean testUserTask(){
@@ -1119,21 +1119,21 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					try {
 						stmt.execute(sstmt);
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					} 
 				}	
 			}
 					
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}finally {
 				if (stmt != null) {
 					try {
 						stmt.close();
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 				}
@@ -1228,30 +1228,30 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 @Override
 public void dragEnter(DropTargetDragEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("Enter---->"+arg0);
 	////System.out.println(((JComponent)arg0.getSource()).getName());
 	
 }
 @Override
 public void dragExit(DropTargetEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 @Override
 public void dragOver(DropTargetDragEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 @Override
 public void drop(DropTargetDropEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println(arg0);
 	
 }
 @Override
 public void dropActionChanged(DropTargetDragEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 	

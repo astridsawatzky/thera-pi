@@ -460,7 +460,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						try {
 							Thread.sleep(20);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 					}
@@ -618,7 +618,6 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				}.execute();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
@@ -679,7 +678,6 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		finally {
@@ -831,7 +829,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String cmd = arg0.getActionCommand();
 		if(cmd.equals("arztbericht")){
 
@@ -862,7 +860,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				scanner.acquire();
         		aktion = "bildgescannt";
 			} catch (ScannerIOException e) {
-				// TODO Auto-generated catch block
+				
 				//System.out.println("***************Fehler beim scannen*******************");
 				setCursor(Reha.thisClass.normalCursor);
 				e.printStackTrace();
@@ -1040,10 +1038,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					}
 
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -1114,7 +1110,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
         	    setCursor(Reha.thisClass.normalCursor);
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				setCursor(Reha.thisClass.normalCursor);
 				e.printStackTrace();
 			} catch (OutOfMemoryError ome) {
@@ -1291,19 +1287,19 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			fout.close();
 			Thread.sleep(100);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (DocumentException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -1326,10 +1322,10 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				copy.addPage(copy.getImportedPage(reader,1));
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (DocumentException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -1432,7 +1428,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		try {
 			Thread.sleep(50);
 		} catch (InterruptedException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		if(!infolab[0].getText().equals(SystemConfig.sDokuScanner)){
@@ -1473,12 +1469,12 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	/*
@@ -1772,19 +1768,19 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 					Thread.sleep(100);
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					} catch (DocumentException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					} catch (MalformedURLException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 
@@ -1918,7 +1914,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 							try {
 								Thread.sleep(50);
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
+								
 								e.printStackTrace();
 							}
 							if((System.currentTimeMillis()-zeit1) > 1000){
@@ -1961,7 +1957,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
@@ -2111,7 +2107,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 							@Override
 							protected Void doInBackground() throws Exception {
 
-								// TODO Auto-generated method stub
+								
 								inDokuDaten = true;
 	                			setCursor(Reha.thisClass.wartenCursor);
 	                    		//holeEinzelTermine(ix,null);
@@ -2176,7 +2172,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			  ps.execute();
 
 			} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 			  }
 
@@ -2373,7 +2369,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 
 			} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 			  }
 
@@ -2648,61 +2644,61 @@ class OoListener implements IDocumentListener {
 	}
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onInsertDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onInsertStart(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onLoad(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onLoadDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 	}
 	@Override
 	public void onLoadFinished(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onModifyChanged(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onNew(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
@@ -2712,17 +2708,17 @@ class OoListener implements IDocumentListener {
 	}
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onSaveAsDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("Savedone");
 		IDocument doc = arg0.getDocument();
 		if(doc == null){
@@ -2741,7 +2737,7 @@ class OoListener implements IDocumentListener {
 	}
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("SaveFinisched");
 
 	}
@@ -2776,7 +2772,7 @@ class OoListener implements IDocumentListener {
 												Reha.thisClass.patpanel.dokumentation.setCursor(Reha.thisClass.wartenCursor);
 												eltern.speichernOoDocs(xid, -1, xfile, -1, null, neu);
 											} catch (Exception e) {
-												// TODO Auto-generated catch block
+												
 												e.printStackTrace();
 											}
 
@@ -2857,7 +2853,7 @@ class OoListener implements IDocumentListener {
 									Reha.thisClass.patpanel.dokumentation.setCursor(Reha.thisClass.wartenCursor);
 									Dokumentation.speichernOoDocs(xid, -1, xfile, -1, null, neu);
 								} catch (Exception e) {
-									// TODO Auto-generated catch block
+									
 									e.printStackTrace();
 								}
 

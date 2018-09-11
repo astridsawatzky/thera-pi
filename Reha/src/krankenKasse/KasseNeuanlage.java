@@ -140,7 +140,7 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String comm = arg0.getActionCommand();
 		final String xcomm = comm;
 		SwingUtilities.invokeLater(new Runnable(){
@@ -246,11 +246,11 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(((JComponent)arg0.getSource()).getName().equals("TARIFGRUPPE") ){
 			
 			if(this.neuAnlage && (!jtf[0].getText().trim().equals("-")) ){

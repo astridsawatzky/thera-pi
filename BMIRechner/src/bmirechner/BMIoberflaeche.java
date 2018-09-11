@@ -142,7 +142,7 @@ public class BMIoberflaeche extends JXPanel implements ListSelectionListener, Ac
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	private void doRechnen(){

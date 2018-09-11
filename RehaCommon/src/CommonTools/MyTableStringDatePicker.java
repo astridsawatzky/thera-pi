@@ -49,7 +49,7 @@ public class MyTableStringDatePicker extends AbstractCellEditor implements Table
 			try {
 				((JXDatePicker)component).setDate( sdf.parse((String)value) );
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			// Return the configured component 

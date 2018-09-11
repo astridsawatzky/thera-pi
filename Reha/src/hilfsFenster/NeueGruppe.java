@@ -149,7 +149,7 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getKeyCode()==10){
 			if(!endeRegeln()){e.consume();return;}
 			rSmart.dispose();
@@ -186,19 +186,19 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println(arg0.getSource());
 		String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
 		for (int i = 0 ; i < 1 ; i++){
@@ -226,13 +226,13 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 			for (int i = 0 ; i < 1 ; i++){
 			}
 		}
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

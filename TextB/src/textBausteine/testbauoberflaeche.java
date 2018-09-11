@@ -453,7 +453,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -735,13 +735,13 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		lastCurPos = this.jtbf.getCaretPosition();
 		
 	}

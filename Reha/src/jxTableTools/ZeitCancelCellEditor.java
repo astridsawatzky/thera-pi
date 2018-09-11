@@ -27,7 +27,7 @@ public class ZeitCancelCellEditor extends AbstractCellEditor implements TableCel
 			mf.setOverwriteMode(true);
 			mf.setCommitsOnValidEdit(false);
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
         //mf.setPlaceholderCharacter(':');

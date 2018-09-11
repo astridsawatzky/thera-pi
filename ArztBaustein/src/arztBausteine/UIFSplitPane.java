@@ -267,7 +267,7 @@ public final class UIFSplitPane extends JSplitPane {
 
 
 	public Component setDividerColor(Color col) {
-		// TODO Auto-generated method stub
+		
         SplitPaneUI splitPaneUI = getUI();
         if (splitPaneUI instanceof BasicSplitPaneUI) {
             BasicSplitPaneUI basicUI = (BasicSplitPaneUI) splitPaneUI;

@@ -494,37 +494,37 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -1000,31 +1000,31 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	public void dokumentSchliessen(){
@@ -1120,7 +1120,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	}
 	@Override
 	public void rehaEventOccurred(RehaEvent evt) {
-		// TODO Auto-generated method stub
+		
 		//////System.out.println(evt);
 		////System.out.println("In RehaEvent Occured: EbereichtPanel -> Schließenanforderung von InternalFrame");
 		if(evt.getDetails()[0].contains("GutachtenFenster")){
@@ -2083,7 +2083,7 @@ class EBPrintDlg extends RehaSmartDialog{
 	}
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -2100,7 +2100,7 @@ class EBPrintDlg extends RehaSmartDialog{
 	}
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);

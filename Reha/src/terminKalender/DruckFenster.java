@@ -152,7 +152,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener{
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 				@Override
 				public int compare(Vector o1, Vector o2) {
-					// TODO Auto-generated method stub
+					
 					String s1 = (String)o1.get(3);
 					String s2 = (String)o2.get(3);
 					return s1.compareTo(s2);
@@ -349,7 +349,7 @@ public String dieserName(){
 
 @Override
 public void rehaTPEventOccurred(RehaTPEvent evt) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("****************das darf doch nicht wahr sein in DruckFenster**************");
 	//String ss =  this.getName();
 	////System.out.println("Durckerlistenfenster "+this.getName()+" Eltern "+ss);
@@ -483,17 +483,17 @@ public void keyPressed(KeyEvent arg0) {
 		rtp = null;
 		FensterSchliessen(null);
 	}
-	// TODO Auto-generated method stub
+	
 
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	if(arg0.getKeyCode() == 27){
 		rtp.removeRehaTPEventListener(this);
 		rtp = null;
@@ -695,7 +695,7 @@ public void run(){
 						textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertPageBreak();
 						textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertDocument(url) ;
 					} catch (NOAException e) {
-						// TODO Auto-generated catch block
+						
 						JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 						e.printStackTrace();
 					}
@@ -713,7 +713,7 @@ public void run(){
 							try {
 								placeholders = textFieldService.getPlaceholderFields();
 							} catch (TextException e) {
-								// TODO Auto-generated catch block
+								
 								JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 								e.printStackTrace();
 							}
@@ -732,7 +732,7 @@ public void run(){
 					try {
 						textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
 					} catch (TextException e) {
-						// TODO Auto-generated catch block
+						
 						JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 						e.printStackTrace();
 					}
@@ -843,28 +843,28 @@ public void run(){
 		*/
 		//Reha.officeapplication.getDesktopService().dispose();
 	} catch (OfficeApplicationException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 		DruckFenster.OOoFertig = 0;
 		DruckFenster.buttonsEinschalten();
 		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (DocumentException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 		DruckFenster.OOoFertig = 0;
 		DruckFenster.buttonsEinschalten();
 		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (NOAException e) {
-		// TODO Auto-generated catch block
+		
 		DruckFenster.OOoFertig = 0;
 		DruckFenster.buttonsEinschalten();
 		e.printStackTrace();
 		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (TextException e) {
-		// TODO Auto-generated catch block
+		
 		DruckFenster.OOoFertig = 0;
 		e.printStackTrace();
 		DruckFenster.buttonsEinschalten();
@@ -1006,7 +1006,7 @@ final class sendeTermine extends Thread{
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			f = new File(anhang[0]);

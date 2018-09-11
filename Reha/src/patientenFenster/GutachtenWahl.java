@@ -201,7 +201,7 @@ public class GutachtenWahl extends RehaSmartDialog implements ActionListener{
 	}
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);
@@ -219,7 +219,7 @@ public class GutachtenWahl extends RehaSmartDialog implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 		if(arg0.getActionCommand().equals("uebernahme")){
 			//System.out.println("In Übernahme");
@@ -251,13 +251,13 @@ public class GutachtenWahl extends RehaSmartDialog implements ActionListener{
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

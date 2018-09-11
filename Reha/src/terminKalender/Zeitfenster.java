@@ -365,28 +365,28 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		for(int i = 0; i< 1;i++){
 			if(((JComponent)arg0.getSource()).getName().equals("Dauer")){
 				if(rechenart ==0){
@@ -538,7 +538,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 
 	@Override
     public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(((JComponent)arg0.getSource()).getName().equals("Ok")){
 			int dauer1 = Integer.parseInt( Dauer.getText() );
 			int dauer2 = (int) ZeitFunk.MinutenSeitMitternacht(BeginnStunde.getText()+

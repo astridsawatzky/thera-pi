@@ -70,7 +70,7 @@ public class OOTools{
 		}catch (NOAException exception) {
 			exception.printStackTrace();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return null;
@@ -102,10 +102,10 @@ public class OOTools{
 		}catch (NOAException exception) {
 			exception.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return null;
@@ -180,7 +180,7 @@ public class OOTools{
 						try {
 							RehaMail.starteOfficeApplication();
 						} catch (Throwable e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 					}

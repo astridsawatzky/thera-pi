@@ -1580,7 +1580,7 @@ public class RVEBerichtPDF {
 		try {
 			ct.go();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -1800,7 +1800,7 @@ public class RVEBerichtPDF {
 					//System.out.println(xcmd);
 					Reha.thisClass.progressStarten(false);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -1827,10 +1827,10 @@ public class RVEBerichtPDF {
 			rvorlage.close();
 			baout.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

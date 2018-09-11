@@ -580,7 +580,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
         jXTreeTable.getColumnModel().getColumn(4).getCellEditor().addCellEditorListener(new CellEditorListener(){
 			@Override
 			public void editingStopped(ChangeEvent e) {
-				// TODO Auto-generated method stub
 				getVectorFromNodes();
 				doTreeRezeptWertermitteln();
 //				doPositionenErmitteln();
@@ -598,7 +597,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			}
 			@Override
 			public void editingCanceled(ChangeEvent e) {
-				// TODO Auto-generated method stub
 			}
 
         });
@@ -3822,38 +3820,31 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void popupMenuCanceled(PopupMenuEvent arg0) {
-		// TODO Auto-generated method stub
 
 	}
 	@Override
 	public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
 		//////System.out.println("Will become Invisible - "+arg0);
-		// TODO Auto-generated method stub
 
 	}
 	@Override
@@ -4415,13 +4406,11 @@ class MyDate2CellEditor extends AbstractCellEditor implements TableCellEditor {
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object value,
 			boolean isSelected, int row, int column) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Object getCellEditorValue() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

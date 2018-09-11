@@ -51,7 +51,7 @@ public class PDFDrucker {
         try {
 			pjob.print();
 		} catch (PrinterException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 /*******************************

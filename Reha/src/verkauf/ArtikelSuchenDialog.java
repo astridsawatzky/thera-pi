@@ -201,7 +201,7 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
@@ -254,7 +254,7 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 			
@@ -284,25 +284,25 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 			

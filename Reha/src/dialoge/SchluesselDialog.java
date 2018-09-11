@@ -58,7 +58,7 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 		kli = new KeyListener(){
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
+				
 				if(e.getKeyCode() == 10){
 					if(e.getSource() instanceof JButton){
 						if(((JComponent)e.getSource()).getName().equals("ok")){
@@ -76,13 +76,13 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 		};
@@ -207,7 +207,7 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
@@ -218,22 +218,22 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

@@ -196,7 +196,7 @@ public class VorBerichte extends RehaSmartDialog implements ActionListener{
 
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -217,7 +217,7 @@ public class VorBerichte extends RehaSmartDialog implements ActionListener{
 	}
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);
@@ -234,7 +234,7 @@ public class VorBerichte extends RehaSmartDialog implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getActionCommand().equals("uebernahme")){
 			doUebernahme();
 		}

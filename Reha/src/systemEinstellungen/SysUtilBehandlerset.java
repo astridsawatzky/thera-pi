@@ -221,25 +221,25 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
 	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getActionCommand().equals("comboaktion")){comboAuswerten();}
 
 		if(arg0.getActionCommand().equals("neu")){neuHandeln();}

@@ -336,7 +336,7 @@ public class TbEingabeNeu extends JXPanel implements ActionListener,KeyListener,
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getKeyCode()==10){
 			if( ((JComponent)arg0.getSource()).getName() != null) {
 				if( ((JComponent)arg0.getSource()).getName().equals("abbrechen")){
@@ -355,25 +355,25 @@ public class TbEingabeNeu extends JXPanel implements ActionListener,KeyListener,
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

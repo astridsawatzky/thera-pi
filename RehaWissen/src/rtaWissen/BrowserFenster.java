@@ -393,7 +393,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getActionCommand().equals("aktualisieren")){
 			DefaultTreeModel model = (DefaultTreeModel) tree.getModel();
 			int childs = model.getChildCount(root);
@@ -437,7 +437,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		Runtime r = Runtime.getRuntime();
 	    r.gc();
 	    long freeMem = r.freeMemory();
@@ -482,7 +482,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 	@Override
     public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("KeyReleased "+arg0);
 		if(arg0.getKeyCode() == 10){
 			arg0.consume();
@@ -492,7 +492,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 	@Override
     public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("KeyTyped "+arg0);
 		if(arg0.getKeyCode() == 10){
 			arg0.consume();
@@ -504,38 +504,38 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		//System.out.println("Fenster "+this.dieserName+" wurde aktiviert");
 		//pinPanel.SetzeAktivButton(true);
 		this.rtaWissen.requestFocus();
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void windowClosing(WindowEvent e) {
 		//System.out.println("Fenster in Schliessen "+e);
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 		//pinPanel.SetzeAktivButton(false);
-		// TODO Auto-generated method stub
+		
 	}
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		int ind = listSeiten.getSelectedIndex();
 		linkneu = ind;
 		if(linkneu != linkalt){
@@ -555,17 +555,17 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -604,25 +604,25 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -632,7 +632,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 	Vector<String> gruppen = new Vector<String>();
 	@Override
 	protected Void doInBackground() throws Exception {
-		// TODO Auto-generated method stub
+		
 		gruppen = holeGruppen();
 		holeTitel();
 		return null;
@@ -686,7 +686,6 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 			        ResultSet.CONCUR_UPDATABLE );
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -699,7 +698,6 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 					        ResultSet.CONCUR_UPDATABLE );
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				/*
@@ -853,7 +851,7 @@ final class MachSuche extends SwingWorker<Void,Void>{
 		String[] fundstelle;
 		@Override
 		protected Void doInBackground(){
-			// TODO Auto-generated method stub
+			
 			//System.out.println("Statement = "+xstmt1);
 
 			if(BrowserFenster.thisClass.tblgefunden.getRowCount() > 0){
@@ -1021,7 +1019,6 @@ class BrowserSockServer{
 			serv = new ServerSocket(9999);
 			//System.out.println("BrowserSockeServer gestartet auf Port 9999");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			//RehaxSwing.jDiag.dispose();
 			return;
@@ -1034,7 +1031,6 @@ class BrowserSockServer{
 				//RehaxSwing.socketoffen = true;
 				client = serv.accept();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				break;
 			}

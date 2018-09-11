@@ -71,7 +71,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		hblab.addMouseListener(new MouseAdapter(){
 			@Override
             public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				if( (arg0.getSource() instanceof JLabel) && (arg0.getClickCount()==2)){
 					if(!Rechte.hatRecht(Rechte.Rezept_editvoll, true)){
 						return;

@@ -84,7 +84,7 @@ import Tools.UIFSplitPane;
 public class ToDoPanel extends JXPanel implements TableModelListener, KeyListener {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -1065523479449767071L;
 	Vector<String> colName = new Vector<String>();
@@ -96,45 +96,45 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 	boolean isUpdateable = true;
 	int autoIncCol = -1;
 	String aktuelleTabelle = "";
-	
+
 	ActionListener al = null;
-	
+
 	RTFEditorPanel rtfEditor= null;
 	ObjectInputStream ois = null;
 	InputStream ins = null;
-	ByteArrayInputStream bins;	
+	ByteArrayInputStream bins;
 
 	JButton[] buts = {null,null,null,null,null,null};
-	
+
 	JRtaTextField suchen = null;
-	
+
 	JScrollPane jscr = null;
-	
+
 	boolean gelesen;
 	String aktId = "";
 	String aktAbsender = "";
 	String aktBetreff = "";
-	
+
 	JXTable todotab = null;
 	ToDoTableModel todomod = null;
 	ToDoListSelectionHandler listhandler = null;
-	
+
 	CommonTools.DateTableCellEditor tabDateEditor = new CommonTools.DateTableCellEditor();
 	DateTableCellRenderer tabDateRenderer = new DateTableCellRenderer(true);
-	
+
 	DblCellEditor tabDoubleEditor = new DblCellEditor();
 	DoubleTableCellRenderer tabDoubleRenderer = new DoubleTableCellRenderer();
-	
+
 	CommonTools.IntTableCellEditor tabIntegerEditor = new CommonTools.IntTableCellEditor();
 	CommonTools.IntTableCellRenderer tabIntegerRenderer = new CommonTools.IntTableCellRenderer();
-	
+
 	JRtaTextField sqlstatement = null;
-	
+
 	DecimalFormat dcf = new DecimalFormat("##########0.00");
-	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy"); //Konv.	
+	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy"); //Konv.
 
 	Vector<String> attachmentFileName = new Vector<String>();
-	
+
 	public static String titelString = "ToDo....";
 	public static int anzahlAufgaben = 0;
 	public ToDoPanel(){
@@ -147,7 +147,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			MattePainter mp = null;
 			LinearGradientPaint p = null;
 			Point2D start = new Point2D.Float(0, 0);
-			Point2D end = new Point2D.Float(960,100);		
+			Point2D end = new Point2D.Float(960,100);
 			start = new Point2D.Float(0, 0);
 			end = new Point2D.Float(0,400);
 			float[] dist =null;
@@ -160,7 +160,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		    this.setBackgroundPainter(cp);
 
 
-		    
+
 			/******************/
 			JXPanel pan = new JXPanel();
 			pan.setOpaque(false);
@@ -174,11 +174,11 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			pan.add(getAttachmentButton(),cc.xy(2,2,CellConstraints.RIGHT,CellConstraints.DEFAULT));
 			pan.validate();
 			add(pan,BorderLayout.NORTH);
-			
+
 			add(constructSplitPaneOU(),BorderLayout.CENTER);
-			
+
 			/*******************/
-				
+
 
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -186,13 +186,13 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				checkForNewToDo(true);	
+				checkForNewToDo(true);
 				ToDoPanel.setTabTitel();
 				if(todomod.getRowCount()>=1){
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
                         public void run(){
-							todotab.setRowSelectionInterval(0, 0);		
+							todotab.setRowSelectionInterval(0, 0);
 						}
 					});
 				}
@@ -203,7 +203,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		/*
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
-				checkForNewToDo(true);	
+				checkForNewToDo(true);
 				ToDoPanel.setTabTitel();
 			}
 		});
@@ -219,9 +219,9 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 	}
 	public void checkForNewToDo(boolean all){
 		listenerAusschalten();
-		String stmt = null; 
+		String stmt = null;
 		if(all){
-			
+
 			stmt = "select absender,"+
 			"gelesen,versanddatum,gelesendatum,betreff,id from todo where taskowner='"+
 			RehaMail.mailUser+"' or empfaenger_gruppe like'%"+
@@ -235,7 +235,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		doStatementAuswerten(stmt,all);
 		for(int i = 0; i < 4; i++){
 			if(buts[i] != null){
-				buts[i].setEnabled(true);	
+				buts[i].setEnabled(true);
 			}
 		}
 	}
@@ -244,7 +244,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
                 public void run(){
-					todotab.setRowSelectionInterval(0, 0);		
+					todotab.setRowSelectionInterval(0, 0);
 				}
 			});
 		}
@@ -252,8 +252,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 	/**************************************************/
 	private JXPanel getAttachmentButton(){
 		JXPanel pan = new JXPanel();
-		pan.setOpaque(false); 
-		
+		pan.setOpaque(false);
+
 		buts[4]=ButtonTools.macheButton("", "attachments", al);
 		buts[4].setIcon(RehaMail.attachmentIco[3]);
 		buts[4].setToolTipText("Dateianhänge holen/ansehen");
@@ -261,9 +261,9 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		pan.add(buts[4]);
 		pan.validate();
 		return pan;
-		
-	}	
-	/**************************************************/	
+
+	}
+	/**************************************************/
 	private Tools.UIFSplitPane constructSplitPaneOU(){
 		UIFSplitPane jSplitRechtsOU =  UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT,
         		getToolsPanel(),
@@ -295,7 +295,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		pan.validate();
 		return pan;
 	}
-	/**************************************************/	
+	/**************************************************/
 	private JToolBar getToolbar(){
 		JToolBar jtb = new JToolBar();
 		jtb.setOpaque(false);
@@ -323,7 +323,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		buts[2].setIcon(RehaMail.symbole.get("drucken"));
 		buts[2].setToolTipText("die gewählte Nachricht drucken");
 
-	
+
 		jtb.addSeparator(new Dimension(50,30));
 		jtb.add(new JLabel("Betreff oder Nachricht enthält: "));
 		suchen = new JRtaTextField("nix",false);
@@ -336,10 +336,10 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 
 		jtb.add(suchen);
 		jtb.addSeparator(new Dimension(50,30));
-		
+
 		return jtb;
 	}
-	/**************************************************/	
+	/**************************************************/
 	private JXPanel getContent(){
 		JXPanel pan = new JXPanel();
 		setOpaque(false);
@@ -363,7 +363,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 				}
 				return null;
 			}
-			
+
 		}.execute();
 		pan.validate();
 		return pan;
@@ -380,7 +380,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
                         public void run(){
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
 							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","",false);
-							
+
 						}
 					});
 					return;
@@ -397,7 +397,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 						checkForNewToDo(true);
 						return;
 					}
-					
+
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
                         public void run(){
@@ -450,7 +450,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 							ins.close();
 							return null;
 						}
-						
+
 					}.execute();
 					return;
 				}
@@ -466,10 +466,10 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 					soloTodo();
 					return;
 				}
-				
-				
+
+
 			}
-			
+
 		};
 	}
 	private void soloTodo(){
@@ -492,20 +492,20 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 				attr = new SimpleAttributeSet();
 				StyleConstants.setFontSize(attr,16);
 				rtfEditor.editorArea.setCharacterAttributes(attr, true);
-				
+
 				rtfEditor.editorArea.select(0, rtfEditor.editorArea.getDocument().getLength());
 				StyleConstants.setForeground(attr, Color.BLACK);
 				rtfEditor.editorArea.setCharacterAttributes(attr, true);
 				rtfEditor.editorArea.setCaretPosition(0);
 			} catch (BadLocationException e) {
 				e.printStackTrace();
-			}			
+			}
 			rtfEditor.editorArea.getEditorKit().write(out,
 						rtfEditor.editorArea.getDocument(),
 						0,rtfEditor.editorArea.getDocument().getLength());
-			
+
 			ByteArrayInputStream ins = null;
-			
+
 			out.flush();
 			doSpeichernNewTodo(
 					RehaMail.mailUser,
@@ -519,7 +519,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 				SwingUtilities.invokeLater(new Runnable(){
 					@Override
                     public void run(){
-						todotab.setRowSelectionInterval(0, 0);		
+						todotab.setRowSelectionInterval(0, 0);
 					}
 				});
 			}
@@ -531,14 +531,14 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void allesAufNull(){
 		listenerAusschalten();
 		try {
 			rtfEditor.editorArea.getDocument().remove(0, rtfEditor.editorArea.getDocument().getLength());
 		} catch (BadLocationException e) {
 			e.printStackTrace();
-		}		
+		}
 		todotab.getSelectionModel().removeListSelectionListener(listhandler);
 		todomod.setRowCount(0);
 		todotab.validate();
@@ -551,7 +551,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		anzahlAufgaben = 0;
 		((MailTab)this.getParent().getParent()).setzeTitel(2, setTabTitel());
 	}
-	
+
 	public void listenerAusschalten(){
 		todotab.getSelectionModel().removeListSelectionListener(listhandler);
 	}
@@ -571,7 +571,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 	public void panelRegeln(){
 		if(todomod.getRowCount()<=0){tabelleLeeren();return;}
 		int row = todotab.getSelectedRow();
-		while(!RehaMail.DbOk);  //XXX: what are we waiting for ?
+		while(!RehaMail.DbOk);  //XXX: what are we waiting for ? What if Database never becomes ok?
 		if(row < 0){tabelleLeeren();return;}
 		gelesen = (Boolean)todomod.getValueAt(todotab.convertRowIndexToModel(row),1 );
 		aktId = todomod.getValueAt(todotab.convertRowIndexToModel(row),5 ).toString();
@@ -604,12 +604,12 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		holeMail();
 	}
 	public void holeMail(){
-		
+
 		int row = todotab.getSelectedRow();
 		if(row < 0){tabelleLeeren();return;}
-		
+
 		bins = null;
-		
+
 		ins = SqlInfo.holeStream("todo", "emailtext", "id='"+aktId+"'");
 		//System.out.println(ins);
 		try {
@@ -620,7 +620,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,"Fehler beim Einlesen der Nachricht");
 			e.printStackTrace();
-		} 
+		}
 	}
 	public void holeAttachments(){
 		this.attachmentFileName.clear();
@@ -641,8 +641,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 				}
 			}
 		});
-	}	
-		
+	}
+
 	private void doLoeschen(){
 		if(todomod.getRowCount()<=0){tabelleLeeren();return;}
 		listenerAusschalten();
@@ -659,12 +659,12 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
                 public void run(){
-					todotab.setRowSelectionInterval(0, 0);		
+					todotab.setRowSelectionInterval(0, 0);
 				}
 			});
 		}
 		textLoeschen();
-		
+
 	}
 	private void textLoeschen(){
 		if(todotab.getRowCount()<=0 || todotab.getSelectedRow()<0){
@@ -674,7 +674,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null,"Fehler beim Einlesen der Nachricht");
 				e.printStackTrace();
-			} 
+			}
 		}
 	}
 	private void setzeGelesen(){
@@ -686,12 +686,12 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			JOptionPane.showMessageDialog(null,"Zeitstempel für gelesen gesetzt!");
 		}
 	}
-	
+
 	private JXTable getTable(){
 		todomod = new ToDoTableModel();
 		todomod.setColumnIdentifiers(new String[] {"Absender","gelesen","Abs.Datum","Empf.Datum","Betreff","id"});
 		todotab = new JXTable(todomod);
-		
+
 		todotab.addMouseListener(new MouseAdapter(){
 			@Override
             public void mouseClicked(MouseEvent arg0) {
@@ -702,7 +702,7 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 						//setzeGelesen();
 					}
 				}
-			}	
+			}
 		});
 		todotab.getColumn(0).setMinWidth(120);
 		todotab.getColumn(0).setMaxWidth(120);
@@ -720,16 +720,16 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 
 		todotab.setFont(new Font("Courier New",12,12));
 		todotab.getSelectionModel().addListSelectionListener( (listhandler=new ToDoListSelectionHandler()));
-		
+
 		return todotab;
 	}
 	/********************************************/
 
-	
-	
-	
+
+
+
 class ToDoListSelectionHandler implements ListSelectionListener {
-		
+
 	    @Override
         public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
@@ -753,7 +753,7 @@ class ToDoListSelectionHandler implements ListSelectionListener {
 	            		SwingUtilities.invokeLater(new Runnable(){
 	            			@Override
                             public void run(){
-	            				panelRegeln();	            				
+	            				panelRegeln();
 	            			}
 	            		});
 	            		if(RehaMail.thisFrame != null)
@@ -768,7 +768,7 @@ class ToDoListSelectionHandler implements ListSelectionListener {
 
 class ToDoTableModel extends DefaultTableModel{
 	   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -780,7 +780,7 @@ class ToDoTableModel extends DefaultTableModel{
 		if(columnIndex==3){return Timestamp.class;}
 		if(columnIndex==4){return String.class;}
 		if(columnIndex==5){return String.class;}
-		
+
 	   return String.class;
  }
 
@@ -788,18 +788,18 @@ class ToDoTableModel extends DefaultTableModel{
     public boolean isCellEditable(int row, int col) {
 		return false;
 	}
-	   
+
 }
 
 private void doStatementAuswerten(final String stat,boolean all){
-	
+
 	todotab.getRowSorter().setSortKeys(null);
 	autoIncCol = -1;
 	todomod.removeTableModelListener(this);
 	if(all){
-		todomod.setRowCount(0);	
+		todomod.setRowCount(0);
 	}
-	
+
 	colName.clear();
 	colType.clear();
 	colAutoinc.clear();
@@ -807,12 +807,12 @@ private void doStatementAuswerten(final String stat,boolean all){
 	colTypeName.clear();
 	isUpdateable = true;
 	aktuelleTabelle = "";
-	
+
 	Statement stmt = null;
 	ResultSet rs = null;
 	//ResultSet md = null;
-	
-	
+
+
 	Vector<Object> vec = new Vector<Object>();
 	int durchlauf = 0;
 
@@ -823,14 +823,14 @@ private void doStatementAuswerten(final String stat,boolean all){
 	//CHAR kann sowohl ein einzelnes Zeichen als auch enum('T','F') also boolean sein...
 	//eigentlich ein Riesenmist!
 
-	todotab.getSelectionModel().removeListSelectionListener(listhandler);	
+	todotab.getSelectionModel().removeListSelectionListener(listhandler);
 	try {
 
 		stmt =  RehaMail.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 		rs = stmt.executeQuery(stat);
-		
-		
+
+
 		while(rs.next()){
 			vec.clear();
 			try{
@@ -840,16 +840,16 @@ private void doStatementAuswerten(final String stat,boolean all){
 				vec.add(rs.getString(4)==null ? "" : getTimestampString(rs.getString(4)));
 				vec.add(rs.getString(5)==null ? "" : rs.getString(5));
 				vec.add(rs.getString(6)==null ? "" : rs.getString(6));
-			
+
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
 			if(all){
-				todomod.addRow( (Vector<?>) vec.clone());	
+				todomod.addRow( (Vector<?>) vec.clone());
 			}else{
 				todomod.insertRow(0, (Vector<?>) vec.clone());
 			}
-			
+
 
 			if(durchlauf>200){
 				try {
@@ -872,11 +872,11 @@ private void doStatementAuswerten(final String stat,boolean all){
 		}
 		//((MailTab)this.getParent().getParent()).getToDoPanel().holeMail();
 		((MailTab)this.getParent().getParent()).setzeTitel(2, setTabTitel());
-		
+
 		jscr.validate();
 		//doSetAbfrageErgebnis();
-		
-		
+
+
 
 	} catch (SQLException e) {
 		e.printStackTrace();
@@ -888,7 +888,7 @@ private void doStatementAuswerten(final String stat,boolean all){
 			} catch (SQLException sqlEx) { // ignore }
 				rs = null;
 			}
-		}	
+		}
 		if (stmt != null) {
 			try {
 				stmt.close();
@@ -899,13 +899,13 @@ private void doStatementAuswerten(final String stat,boolean all){
 	}
 	todotab.getSelectionModel().addListSelectionListener(listhandler);
 	//todomod.addTableModelListener(this);
-	
-	
+
+
 }
 
 /********
- * 
- * 
+ *
+ *
  * @param ts
  * @return
  */
@@ -916,11 +916,11 @@ class ToolsDlgAktuelleRezepte{
 		Object[] obi  = new Object[attachmentFileName.size()];
 		Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
 		for(int i = 0; i < attachmentFileName.size();i++){
-			icons.put(attachmentFileName.get(i),testDatei(attachmentFileName.get(i)));	
+			icons.put(attachmentFileName.get(i),testDatei(attachmentFileName.get(i)));
 			obi[i] = attachmentFileName.get(i);
 		}
 		JList list = new JList(obi);
-		list.setCellRenderer(new IconListRenderer(icons));	
+		list.setCellRenderer(new IconListRenderer(icons));
 		RehaMail.toolsDlgRueckgabe = -1;
 		ToolsDialog tDlg = new ToolsDialog(RehaMail.thisFrame,"Dateianhänge",list);
 		tDlg.setPreferredSize(new Dimension(200, 60+(attachmentFileName.size()*28)));
@@ -928,8 +928,8 @@ class ToolsDlgAktuelleRezepte{
 		tDlg.pack();
 		tDlg.setModal(true);
 		tDlg.activateListener();
-		tDlg.setVisible(true);	
-		
+		tDlg.setVisible(true);
+
 		if(RehaMail.toolsDlgRueckgabe == -1){return;}
 		String komplett = RehaMail.progHome+"temp/"+RehaMail.aktIK+"/"+attachmentFileName.get(RehaMail.toolsDlgRueckgabe);
 
@@ -941,13 +941,13 @@ class ToolsDlgAktuelleRezepte{
 						Integer.toString(RehaMail.toolsDlgRueckgabe+1))){
 					return;
 				}
-			 
+
 			 if(komplett.toUpperCase().endsWith(".PDF")){
 				 new ReaderStart(komplett,RehaMail.pdfReader);
 			 }else if(komplett.toUpperCase().endsWith(".ODT") ||komplett.toUpperCase().endsWith(".ODT")  ){
-				Tools.OOTools.starteWriterMitDatei(komplett.replace("//", "/")); 
+				Tools.OOTools.starteWriterMitDatei(komplett.replace("//", "/"));
 			 }else if(komplett.toUpperCase().endsWith(".ODS")){
-				 Tools.OOTools.starteCalcMitDatei(komplett); 
+				 Tools.OOTools.starteCalcMitDatei(komplett);
 			 }
 		 }else{
 				String[] indatei = dateiDialog(attachmentFileName.get(RehaMail.toolsDlgRueckgabe));
@@ -959,9 +959,9 @@ class ToolsDlgAktuelleRezepte{
 							"Verzeichnis: --> "+indatei[1].replace("\\", "/"));
 
 				}
-			 
+
 		 }
-		
+
 	}
 	private ImageIcon testDatei(String filename){
 		if(filename.toUpperCase().endsWith(".PDF")){
@@ -987,7 +987,7 @@ private boolean speichereDatei(String[] pfade,String datei,String attachnumber){
 		  byte buf[]=new byte[1024];
 		  int len;
 		  while((len=inputStream.read(buf))>0){
-			  out.write(buf,0,len);  
+			  out.write(buf,0,len);
 		  }
 		  out.close();
 		  inputStream.close();
@@ -999,8 +999,8 @@ private boolean speichereDatei(String[] pfade,String datei,String attachnumber){
 		  return false;
 	  }
 	return success;
-		
-}	
+
+}
 
 
 private String[] dateiDialog(String pfad){
@@ -1032,10 +1032,10 @@ private String[] dateiDialog(String pfad){
     if (result == JFileChooser.APPROVE_OPTION) {
         File inputVerzFile = chooser.getSelectedFile();
         String inputVerzStr = inputVerzFile.getPath();
-        
+
 
         if(inputVerzFile.getName().trim().equals("")){
-        	
+
         	//sret = "";
         }else{
         	sret[0] = inputVerzFile.getName().trim();
@@ -1044,7 +1044,7 @@ private String[] dateiDialog(String pfad){
     }else{
     	//sret = ""; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
     }
-    chooser.setVisible(false); 
+    chooser.setVisible(false);
 
     return sret;
 }
@@ -1054,7 +1054,7 @@ private String getTimestampString(String ts){
 	try{
 		return DatFunk.sDatInDeutsch(ts.split(" ")[0].trim())+"-"+ts.split(" ")[1].trim().substring(0,8);
 	}catch(Exception ex){
-		
+
 	}
 	return "";
 }
@@ -1083,7 +1083,7 @@ private String getTimestampString(String ts){
 			e1.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
+		}
 		finally {
 			if(ps != null){
 				try {
@@ -1096,18 +1096,18 @@ private String getTimestampString(String ts){
 				}
 			}
 		}
-		
+
 	}
-	
-	
+
+
 	public void doSpeichernNewTodo(
 		String empfaenger,
 		String betreff,
 		InputStream insemailtext,
 		Vector<Vector<String>> attaches
-		) throws Exception{		
+		) throws Exception{
 		PreparedStatement ps = null;
-		FileInputStream[] ins = {null,null,null}; 
+		FileInputStream[] ins = {null,null,null};
 		try {
 			String select = "insert into todo set "+
 			"absender = ? ,"+
@@ -1126,9 +1126,9 @@ private String getTimestampString(String ts){
 			ps = (PreparedStatement) RehaMail.thisClass.conn.prepareStatement(select);
 			ps.setString(1, RehaMail.mailUser);
 			ps.setString(2, empfaenger);
-			ps.setString(3, empfaenger);			  
+			ps.setString(3, empfaenger);
 			ps.setString(4, DatFunk.sDatInSQL(DatFunk.sHeute()));
-			ps.setString(5, "F");			  
+			ps.setString(5, "F");
 			ps.setString(6, betreff);
 			ps.setBinaryStream(7,insemailtext);
 			for(int i = 0; i < 3; i++){
@@ -1150,13 +1150,13 @@ private String getTimestampString(String ts){
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
 		finally {
 			if(ps != null){
 				ps.close();
 			}
 		}
-	
+
 	}
 
 }

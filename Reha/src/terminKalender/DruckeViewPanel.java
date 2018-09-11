@@ -315,7 +315,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 			writer.write(null, imgq, param);
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}	

@@ -134,42 +134,41 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 
 		public CbEditor(String type, boolean selectWhenFocus) {
 			super(type, selectWhenFocus);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
 		public void addActionListener(ActionListener arg0) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
 		public Component getEditorComponent() {
-			// TODO Auto-generated method stub
+			
 			return null;
 		}
 
 		@Override
 		public Object getItem() {
-			// TODO Auto-generated method stub
+			
 			return null;
 		}
 
 		@Override
 		public void removeActionListener(ActionListener arg0) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
 		public void selectAll() {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
 		public void setItem(Object arg0) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
@@ -193,7 +192,6 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		combobox2.addActionListener(this);
 		pabschnitt2.add(combobox2,ca2.xyw(2,6,5));
 
-		//JLabel lbl3 = new JLabel();
 		JLabel lbl3 = new JLabel( "Abstand in Millimeter\nvom oberen Blattrand\nbis zur ersten\nDatumszeile:", null, SwingConstants.LEFT );
 		lbl3.setHorizontalTextPosition( SwingConstants.LEFT );
 		lbl3.setUI( new MultiLineLabelUI() );
@@ -280,7 +278,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -347,7 +345,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			stmt =  LVArahmen.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 		try{
@@ -512,7 +510,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
         combobox1.validate();
 		//System.out.println("Vectorlänge = "+vec.size());
 		} catch (JDBFException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 

@@ -112,7 +112,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 			//img = (BufferedImage) new ImageIcon(ImageIO.read(new File(GBriefe.proghome+"icons/rta.gif"))).getImage();
 			img = (BufferedImage) new ImageIcon(ImageIO.read(new File(GBriefe.proghome+"icons/handschlag.gif"))).getImage();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}// Image(GBriefe.proghome+"icons/rta.gif"))).getImage();
 		lab.setIcon(new ImageIcon(img));
@@ -122,7 +122,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String comm = arg0.getActionCommand();
 		if(comm.equals("datenholen")){
 			//System.out.println("Geburtstage vom "+suchdatum.getText().trim());
@@ -167,7 +167,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 			stmt =  GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -238,7 +238,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 			stmt =  GBriefe.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -360,7 +360,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 	}
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getClickCount()==2){
 			if(((JComponent)arg0.getSource()).getName().equals("Geburtstage")){
 				starteDruck();
@@ -397,7 +397,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 
 					@Override
 					protected Void doInBackground() throws Exception {
-						// TODO Auto-generated method stub
+						
 						//System.out.println(dtblm.getDataVector().get(jtab.getSelectedRow()));
 						OOoPanel.thisClass.dokumentLaden(xdatei,(Vector)dtblm.getDataVector().get(jtab.getSelectedRow()),direktPrint.isSelected());
 						return null;
@@ -443,7 +443,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				// TODO Auto-generated method stub
+				
 				//System.out.println(dtblm.getDataVector().get(jtab.getSelectedRow()));
 				OOoPanel.thisClass.dokumentLaden(xdatei,(Vector)dtblm.getDataVector().get(jtab.getSelectedRow()),direktPrint.isSelected());
 				return null;
@@ -460,27 +460,27 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getKeyCode() == 10){
 			if(((JComponent)arg0.getSource()).getName().equals("Geburtstage")){
 				arg0.consume();
@@ -491,12 +491,12 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

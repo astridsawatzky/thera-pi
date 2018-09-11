@@ -10,12 +10,12 @@ public class PatStammEventClass {
 
 	    // This methods allows classes to unregister for RehaEvents
 		public void removePatStammEventListener(PatStammEventListener ooListener) {
-			// TODO Auto-generated method stub
+			
 			//System.out.println("PatStamm Object Listener gelöscht "+ooListener);
 			listenerList.remove(PatStammEventListener.class, ooListener);
 		}
 		public void addPatStammEventListener(PatStammEventListener ooListener) {
-			// TODO Auto-generated method stub
+			
 			//System.out.println("PatStamm Object Listener hinzugefügt "+ooListener);
 			listenerList.add(PatStammEventListener.class, ooListener);
 		}

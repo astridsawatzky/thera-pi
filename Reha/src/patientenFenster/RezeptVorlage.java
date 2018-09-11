@@ -155,7 +155,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -264,7 +264,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -282,7 +282,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 	}
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);
@@ -297,7 +297,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getActionCommand().equals("kopieren")){
 			// hier wird vecResult gefüllt
 			starteSucheVorlage( Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
@@ -482,7 +482,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 		try {
 			placeholders = textFieldService.getPlaceholderFields();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		for (int i = 0; i < placeholders.length; i++) {

@@ -13,7 +13,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import nebraska.Constants;
 
 public class DESKeyGenerator {
-    
+
     public static void main(String[] args) {
         //
         // Dynamically load a provider at runtime
@@ -23,7 +23,7 @@ public class DESKeyGenerator {
         	//KeyPairGenerator keyp;
     		KeyPairGenerator keyp;
 			try {
-				
+
 			keyp = KeyPairGenerator.getInstance(Constants.PUBLIC_KEY_ALGORITHM,Constants.SECURITY_PROVIDER);
     		keyp.initialize(1024, new SecureRandom());
     		KeyPair keyPair = keyp.generateKeyPair();
@@ -31,7 +31,7 @@ public class DESKeyGenerator {
     		Key keyPu = keyPair.getPublic();
             //
             // Get a DES private key
-            //System.out.println( "\nStart generating DES key" );         
+            //System.out.println( "\nStart generating DES key" );
             //KeyGenerator kg = KeyGenerator.getInstance(Constants.SECRET_KEY_ALGORITHM_DES);
             //Key key = kg.generateKey();
             System.out.println("Private-Key format: " + keyPr.getFormat());
@@ -45,9 +45,8 @@ public class DESKeyGenerator {
             e.printStackTrace();
         }
         } catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
     }
-}    
+}

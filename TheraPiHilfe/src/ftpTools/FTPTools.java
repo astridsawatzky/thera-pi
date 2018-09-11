@@ -86,10 +86,10 @@ public class FTPTools {
 				ftpClient.disconnect();
 
 	    	} catch (SocketException e1) {
-	    		// TODO Auto-generated catch block
+	    		
 				JOptionPane.showMessageDialog(null, e1.getMessage());
 	    	} catch (IOException e1) {
-	    		// TODO Auto-generated catch block
+	    		
 				JOptionPane.showMessageDialog(null, e1.getMessage());    		
 
 	    	}
@@ -111,11 +111,11 @@ public class FTPTools {
 			//System.out.println(ftpClient.getReplyString());
 
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return false;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return false;
 		}
@@ -135,11 +135,11 @@ public class FTPTools {
 			//System.out.println("Login-Reply = "+sreply);
 
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return false;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return false;
 		}
@@ -266,7 +266,7 @@ public class FTPTools {
 			//System.out.println("Nach Disconnect = "+reply);
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 			return false;
 		}
@@ -580,7 +580,7 @@ public class FTPTools {
 
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 			return false;
 		}
@@ -599,7 +599,7 @@ public class FTPTools {
 				reply = ftpClient.getReplyString();
 				//System.out.println("Nach Disconnect = "+reply);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}	
 		}

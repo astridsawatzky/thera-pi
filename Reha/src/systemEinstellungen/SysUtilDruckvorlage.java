@@ -296,25 +296,25 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getActionCommand().equals("file")){
 			//DateiDialog zur Auswahl der Vorlage;
 	        thisClass.setCursor(Reha.thisClass.wartenCursor);
@@ -566,12 +566,12 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(((JComponent)arg0.getSource()).getName() != null){
 			if(((JComponent)arg0.getSource()).getName().equals("spaltenanzahl")){
 				int anzahl;
@@ -654,7 +654,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		try {
 			documentService = Reha.officeapplication.getDocumentService();
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -671,7 +671,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 			document = documentService.loadDocument(url,docdescript);
 
 		} catch (NOAException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		/**********************/
@@ -698,7 +698,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		try {
 			druckerName = textDocument.getPrintService().getActivePrinter().getName();
 		} catch (NOAException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		//Wenn nicht gleich wie in der INI angegeben -> Drucker wechseln
@@ -708,14 +708,14 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 				iprint = textDocument.getPrintService().createPrinter(terminDrucker);
 			} catch (NOAException e) {
 				JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				thisClass.setCursor(Reha.thisClass.normalCursor);
 			}
 			try {
 				textDocument.getPrintService().setActivePrinter(iprint);
 			} catch (NOAException e) {
-				// TODO Auto-generated catch block
+				
 				JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");				
 				e.printStackTrace();
 				thisClass.setCursor(Reha.thisClass.normalCursor);				
@@ -740,7 +740,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		        try {
 					textDocument.setSelection(new TextRangeSelection(textRanges[0]));
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 					e.printStackTrace();
 					thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -762,7 +762,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		      try {
 					textDocument.getTextFieldService().refresh();
 				} catch (TextException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 		      }
@@ -772,7 +772,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 				try {
 					placeholders = textFieldService.getPlaceholderFields();
 				} catch (TextException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				for (int i = 0; i < placeholders.length; i++) {
@@ -797,7 +797,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 			//textTable = textDocument.getTextTableService().getTextTable(SystemConfig.oTerminListe.NameTabelle[0]);				
 			textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 			thisClass.setCursor(Reha.thisClass.normalCursor);
 			e.printStackTrace();
@@ -817,7 +817,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 				try {
 					textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
 				} catch (TextException e) {
-					// TODO Auto-generated catch block
+					
 					JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 					e.printStackTrace();
 					thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -834,7 +834,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 					textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertPageBreak();
 					textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertDocument(url) ;
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 					e.printStackTrace();
 					thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -855,7 +855,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 				        try {
 							textDocument.setSelection(new TextRangeSelection(textRanges[0]));
 						} catch (NOAException e) {
-							// TODO Auto-generated catch block
+							
 							JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 							e.printStackTrace();
 							thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -869,7 +869,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 						try {
 							placeholders = textFieldService.getPlaceholderFields();
 						} catch (TextException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 						for (int i = 0; i < placeholders.length; i++) {
@@ -888,7 +888,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 				try {
 					textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
 				} catch (TextException e) {
-					// TODO Auto-generated catch block
+					
 					JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 					e.printStackTrace();
 					thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -921,7 +921,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 						try {
 							textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );
 						} catch (TextException e) {
-							// TODO Auto-generated catch block
+							
 							JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 							e.printStackTrace();
 							thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -931,7 +931,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 					try {
 						textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );
 					} catch (TextException e) {
-						// TODO Auto-generated catch block
+						
 						JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 						e.printStackTrace();
 						thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -955,7 +955,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 				}
 
 			} catch (TextException e) {
-				// TODO Auto-generated catch block
+				
 				JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 				e.printStackTrace();
 				thisClass.setCursor(Reha.thisClass.normalCursor);
@@ -967,7 +967,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
         	try {
 				textDocument.print();
 			} catch (DocumentException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			textDocument.close();

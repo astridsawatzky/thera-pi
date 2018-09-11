@@ -431,7 +431,7 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 		try {
 			placeholders = textFieldService.getPlaceholderFields();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		for (int i = 0; i < placeholders.length; i++) {

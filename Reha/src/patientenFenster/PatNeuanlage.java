@@ -379,7 +379,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				// TODO Auto-generated method stub
+				
 				for (int i = 0; i < jtf.length; i++) {
 					if (jtf[i].getName() != null) {
 						if (jtf[i].getName().trim().toUpperCase().equals(xfeld)) {
@@ -1634,7 +1634,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String com = arg0.getActionCommand();
 		if (com.equals("einlesen")) {
 			if (SystemConfig.sReaderAktiv.equals("0")) {
@@ -1715,7 +1715,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		// //System.out.println("Neuanlage Pressed "+arg0.getKeyCode());
 		if (arg0.getKeyCode() == 10 || arg0.getKeyCode() == 0) {
 			arg0.consume();
@@ -1769,7 +1769,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		// //System.out.println("Neuanlage Released "+arg0);
 		if (arg0.getKeyCode() == 10 || arg0.getKeyCode() == 0)
 			arg0.consume();
@@ -1777,7 +1777,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		// //System.out.println("Neuanlage Typed "+arg0);
 		if (arg0.getKeyCode() == 10 || arg0.getKeyCode() == 0)
 			arg0.consume();
@@ -1785,7 +1785,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		/*
 		 * Rectangle rec1 =((JComponent)arg0.getSource()).getBounds(); Rectangle
 		 * rec2 = jscr.getViewport().getViewRect(); JViewport vp =
@@ -1834,7 +1834,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			// System.out.println(((JComponent)arg0.getSource()).getName());
 		}
 
-		// TODO Auto-generated method stub
+		
 	}
 
 	private void arztAuswahl(String[] suchenach) {

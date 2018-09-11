@@ -281,7 +281,7 @@ public class ICDoberflaeche extends JXPanel implements ListSelectionListener, Ac
 
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}	
 }

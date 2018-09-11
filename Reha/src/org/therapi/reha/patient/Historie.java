@@ -673,12 +673,12 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 	}
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

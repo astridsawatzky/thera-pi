@@ -170,25 +170,25 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getActionCommand().equals("speichern")){
 			if(kalNeuAnfang || kalNeuEnde){
 				JOptionPane.showMessageDialog(null, "Die Funktion Kalenderzeiten verändern, wird während der Softwarentwicklung nicht aufgerufen!");
@@ -235,7 +235,7 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(((JComponent)arg0.getSource()).getName() != null){
 			if(((JComponent)arg0.getSource()).getName().equals("MIN1")){
 				String s1,s2,s3;
@@ -280,7 +280,7 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}	
 

@@ -55,7 +55,7 @@ public class RehaSplash extends JXDialog{
 		try {
 			Thread.sleep(30);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

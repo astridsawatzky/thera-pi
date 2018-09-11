@@ -271,7 +271,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		try {
 			dndt.addDropTargetListener(this);
 		} catch (TooManyListenersException e2) {
-			// TODO Auto-generated catch block
+			
 			e2.printStackTrace();
 		}
 		TerminFlaeche.setDropTarget(dndt);
@@ -1065,7 +1065,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 										break;
 									}
 								} catch (InterruptedException e1) {
-									// TODO Auto-generated catch block
+									
 									e1.printStackTrace();
 								}
 							}
@@ -4907,19 +4907,19 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		}
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
@@ -4935,7 +4935,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
 		@Override
 		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
+			
 
 		}
 
@@ -5249,7 +5249,7 @@ class DragSupport implements DragGestureListener{
 
 	@Override
 	public void dragGestureRecognized(DragGestureEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("in datGasture "+arg0);
 
 	}

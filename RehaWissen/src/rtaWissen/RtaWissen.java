@@ -136,7 +136,7 @@ public class RtaWissen extends JXPanel implements KeyListener,ComponentListener,
 				      }
 					
 					public void getSourceCode(WebBrowserEvent arg0) {
-						// TODO Auto-generated method stub
+						
 						//System.out.println("Aufruf des Source-Codes im Listener");
 					}
 				    });   
@@ -194,7 +194,7 @@ public void starteJavaScript(String high){
 					javascript = javascript+"\n"+zusatz;
 					webBro.executeJavascript(javascript);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 
@@ -245,44 +245,44 @@ public void Markiere(String[] fundstelle){
 
 @Override
 public void keyPressed(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	if(arg0.getKeyCode() == 10){
 		arg0.consume();
 	}	
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	if(arg0.getKeyCode() == 10){
 		arg0.consume();
 	}	
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	if(arg0.getKeyCode() == 10){
 		arg0.consume();
 	}	
 }
 @Override
 public void componentHidden(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 @Override
 public void componentMoved(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 @Override
 public void componentResized(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	webBro.revalidate();
 	
 }
 @Override
 public void componentShown(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
@@ -296,7 +296,7 @@ class ReloadTask   extends TimerTask
 
 @Override
 public void actionPerformed(ActionEvent e) {
-	// TODO Auto-generated method stub
+	
 	JOptionPane.showMessageDialog(null,"Action Performed");
 	//System.out.println("Action performed -> "+e.getActionCommand());
 	
@@ -308,19 +308,19 @@ public static void setQuelltext(){
 @Override
 public void ancestorAdded(AncestorEvent arg0) {
 	System.out.println("Anc1");
-	// TODO Auto-generated method stub
+	
 	
 }
 @Override
 public void ancestorMoved(AncestorEvent arg0) {
 	System.out.println("Anc2");
-	// TODO Auto-generated method stub
+	
 	
 }
 @Override
 public void ancestorRemoved(AncestorEvent arg0) {
 	System.out.println("Anc3");
-	// TODO Auto-generated method stub
+	
 	
 }
 

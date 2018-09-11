@@ -54,7 +54,7 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 	}
 	@Override
 	public void internalFrameClosing(InternalFrameEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("Internal-GutachtenFrame in schliessen***************");
 		
 	}
@@ -157,7 +157,7 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 					RehaEventClass.fireRehaEvent(xevt);
 					this.setIcon(true);
 				} catch (PropertyVetoException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				this.setActive(false);

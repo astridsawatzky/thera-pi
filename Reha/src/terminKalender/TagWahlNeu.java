@@ -289,7 +289,7 @@ public void focusGained(FocusEvent arg0) {
 	if( ((JComponent)arg0.getSource()).getName().equals("datum")){
 		////System.out.println("focus erhalten "+arg0);
 	}
-	// TODO Auto-generated method stub
+	
 	////System.out.println("focus erhalten "+arg0);
 
 }
@@ -312,14 +312,14 @@ public void focusLost(FocusEvent arg0) {
 		}
 	}
 
-	// TODO Auto-generated method stub
+	
 	//
 
 }
 
 @Override
 public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	//System.out.println(arg0);
 	if(arg0.getActionCommand().equals("datePickerCommit")){
 		////System.out.println("Gew�hlt wurde das Datum: "+datePick.getEditor().getText().trim());
@@ -381,25 +381,25 @@ private void zurueck(){
 }
 @Override
 public void componentHidden(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
 @Override
 public void componentMoved(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
 @Override
 public void componentResized(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
 @Override
 public void componentShown(ComponentEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 @Override
@@ -544,7 +544,7 @@ class kalenderAction extends AbstractAction {
 
 @Override
 public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("in Abstract Action" +arg0);
 }
 }
@@ -561,20 +561,20 @@ class MeinPicker extends JXDatePicker implements KeyListener{
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("pressed");
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("released");
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("typed");
 	}
 

@@ -161,7 +161,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				// TODO Auto-generated method stub
+				
 				return null;
 			}
 			
@@ -200,25 +200,25 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		String cmd = e.getActionCommand();
 		if(cmd.equals("oopfad")){
 			String pfad = progWaehlen(0);

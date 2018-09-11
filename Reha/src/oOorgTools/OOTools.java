@@ -224,7 +224,7 @@ public class OOTools{
 		    }catch(Exception exception) {
 		    	exception.printStackTrace();
 		    } catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		    return arrayList;
@@ -272,7 +272,7 @@ public class OOTools{
 			try {
 				druckerName = textDocument.getPrintService().getActivePrinter().getName();
 			} catch (NOAException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			IPrinter iprint = null;
@@ -571,7 +571,7 @@ public class OOTools{
 			documentService = Reha.officeapplication.getDocumentService();
 
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -593,7 +593,7 @@ public class OOTools{
 			try {
 				druckerName = textDocument.getPrintService().getActivePrinter().getName();
 			} catch (NOAException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			//Wenn nicht gleich wie in der INI angegeben -> Drucker wechseln
@@ -602,13 +602,13 @@ public class OOTools{
 				try {
 					iprint = textDocument.getPrintService().createPrinter(drucker);
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {
 					textDocument.getPrintService().setActivePrinter(iprint);
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -619,7 +619,7 @@ public class OOTools{
 		try {
 			placeholders = textFieldService.getPlaceholderFields();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		String placeholderDisplayText = "";
@@ -717,7 +717,7 @@ public class OOTools{
 			documentService = Reha.officeapplication.getDocumentService();
 
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -838,7 +838,7 @@ public class OOTools{
 						} catch (DocumentException e) {
 							e.printStackTrace();
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 						return null;
@@ -1036,7 +1036,7 @@ public class OOTools{
 		try {
 			placeholders = textFieldService.getPlaceholderFields();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try{
@@ -1114,7 +1114,7 @@ public class OOTools{
 				    try {
 						Thread.sleep(25);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 
@@ -1182,7 +1182,7 @@ public class OOTools{
 		try {
 			placeholders = textFieldService.getPlaceholderFields();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		try {
@@ -1320,7 +1320,7 @@ public class OOTools{
 		}catch (NOAException exception) {
 			exception.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return null;
@@ -1448,7 +1448,7 @@ public class OOTools{
 		try {
 			documentService = Reha.officeapplication.getDocumentService();
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -1469,7 +1469,7 @@ public class OOTools{
 			try {
 				druckerName = textDocument.getPrintService().getActivePrinter().getName();
 			} catch (NOAException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			//Wenn nicht gleich wie in der INI angegeben -> Drucker wechseln
@@ -1478,13 +1478,13 @@ public class OOTools{
 				try {
 					iprint = textDocument.getPrintService().createPrinter(drucker);
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {
 					textDocument.getPrintService().setActivePrinter(iprint);
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -1501,7 +1501,7 @@ public class OOTools{
 			//System.out.println("************feddisch mit den Placeholders********************");
 			*/
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		String placeholderDisplayText = "";
@@ -1838,13 +1838,13 @@ public class OOTools{
 		}
 
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (BootstrapException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -1864,13 +1864,13 @@ class TheraPiDocListener implements IDocumentListener{
 
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -1911,55 +1911,55 @@ class TheraPiDocListener implements IDocumentListener{
 
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onNew(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onSave(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onSaveAsDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

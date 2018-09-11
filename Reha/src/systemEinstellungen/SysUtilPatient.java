@@ -194,7 +194,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 		vorlagen.addMouseListener(new MouseAdapter(){		
 			@Override
             public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					int row = vorlagen.getSelectedRow();
 					row = vorlagen.convertRowIndexToModel(row);
@@ -323,25 +323,25 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		String cmd = e.getActionCommand();
 		for(int i = 0;i < 1;i++){
 			if(cmd.equals("entfernen")){
@@ -585,7 +585,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 
 		@Override
 		public Object getCellEditorValue() {
-			// TODO Auto-generated method stub
+			
 			return  ((JFormattedTextField)component).getText();
 		}
 
@@ -624,12 +624,12 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 	}
 	@Override
 	public void editingCanceled(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("In Hauptprogramm-Listener editingCanceled");
 	}
 	@Override
 	public void editingStopped(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("In Hauptprogramm-Listener editingStopped");
 	}
 	

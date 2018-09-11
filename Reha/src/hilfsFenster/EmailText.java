@@ -184,19 +184,19 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println(arg0.getSource());
 		//String sAktion = ((AbstractButton) arg0.getSource()).getText();
 		////System.out.println("In Text abspeichern");
@@ -219,7 +219,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 				            try {
 				                w.close();
 				            } catch (IOException e) {
-				                // TODO Auto-generated catch block
+				                
 				                e.printStackTrace();
 				            }
 				        }
@@ -252,13 +252,13 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 				}
 			}
 		}
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

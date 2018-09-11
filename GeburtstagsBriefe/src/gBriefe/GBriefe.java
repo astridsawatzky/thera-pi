@@ -74,22 +74,22 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 	public static boolean testcase = false;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		GBriefe application = new GBriefe();
 		String prog = java.lang.System.getProperty("user.dir");
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		INIFile inif = null;
@@ -114,7 +114,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 					//System.out.println("Starte SocketServer");
 					RehaSock = new RehaSockServer();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -126,7 +126,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 		try {
 			processBuilder.start();
 		} catch (IOException e2) {
-			// TODO Auto-generated catch block
+			
 			e2.printStackTrace();
 		}
 
@@ -138,7 +138,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			// System.out.println("In warten");
 			i++;
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -246,23 +246,23 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 	}
 	@Override
 	public void windowStateChanged(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 
-			// TODO Auto-generated method stub
+			
 			try {
 				GBriefe.conn.close();
 				System.out.println("Datenbankkontakt - geschlossen");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			System.out.println("Programm Exit(0)");
@@ -272,12 +272,12 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 
-		// TODO Auto-generated method stub
+		
 		try {
 			GBriefe.conn.close();
 			System.out.println("Datenbankkontakt - geschlossen");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		if(OOoPanel.document != null){
@@ -293,52 +293,52 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentAdded(ContainerEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentRemoved(ContainerEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
     public static void starteOfficeApplication()
@@ -386,7 +386,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
         }
         catch (OfficeApplicationException e)
         {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         }
     }
@@ -457,7 +457,7 @@ class SocketClient {
 		try {
 			serverStarten();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			String mes = new String(  e.toString());
 			//JOptionPane.showMessageDialog(null,  mes);
 		}
@@ -490,7 +490,7 @@ class RehaSockServer{
 			serv = new ServerSocket(1235);
 			System.out.println("Reha SocketServer gestartet auf Port 1235");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			//RehaxSwing.jDiag.dispose();
 			return;
@@ -503,7 +503,7 @@ class RehaSockServer{
 				
 				client = serv.accept();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				break;
 			}
@@ -533,7 +533,7 @@ class RehaSockServer{
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}								
 						System.out.println("INITENDE-angekommen");

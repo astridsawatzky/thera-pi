@@ -226,13 +226,13 @@ public class InfoDialog extends JDialog implements WindowListener{
 		kl = new KeyListener(){
 			@Override
 			public void keyTyped(KeyEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
+				
 
 			}
 

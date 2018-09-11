@@ -73,7 +73,7 @@ public class OOoPanel {
 		try {
 			configureOOOFrame(GBriefe.officeapplication,officeFrame);
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -92,10 +92,10 @@ public class OOoPanel {
 			document.zoom(DocumentZoomType.BY_VALUE, (short)75);
 
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -104,7 +104,7 @@ public class OOoPanel {
 			try {
 				placeholders = textFieldService.getPlaceholderFields();
 			} catch (TextException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			int alter = new Integer((String)vec.get(6));
@@ -148,7 +148,7 @@ public class OOoPanel {
 					Toolkit.getDefaultToolkit().beep();
 					SteuerPanel.thisClass.setzteFertig();
 				} catch (DocumentException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -162,10 +162,10 @@ public class OOoPanel {
 		try {
 			document = (ITextDocument) GBriefe.officeapplication.getDocumentService().constructNewDocument(officeFrame,IDocument.WRITER,d);
 		} catch (NOAException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -303,106 +303,106 @@ class DokumentListener implements IDocumentListener {
 	}
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onInsertDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onInsertStart(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onLoad(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onLoadDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("************************Dokument geladen************************* "+arg0);
 
 	}
 	@Override
 	public void onLoadFinished(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("************************Dokument geladen finished************************* "+arg0);
 		/*
 		try {
 			Reha.officeapplication.getDesktopService().removeDocumentListener(this);
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		*/
 	}
 	@Override
 	public void onModifyChanged(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onNew(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onSave(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("************************Dokument gespeichert - doneSave************************* "+arg0);
 	}
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onSaveAsDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("************************Dokument gespeichert - done************************* "+arg0);
 	}
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		System.out.println("************************Dokument gespeichert - finished************************* "+arg0);
 	}
 	@Override
 	public void onUnload(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void disposing(IEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

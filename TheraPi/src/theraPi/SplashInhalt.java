@@ -56,7 +56,7 @@ public class SplashInhalt extends JXPanel implements ActionListener{
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		int action = new Integer(arg0.getActionCommand());
 		String s1 = TheraPi.mandvec.get(action)[0];
 		String s2 = TheraPi.mandvec.get(action)[1];		
@@ -72,10 +72,10 @@ public class SplashInhalt extends JXPanel implements ActionListener{
 				System.exit(0);
 			}
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		

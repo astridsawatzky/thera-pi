@@ -161,7 +161,7 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println(e);
 		int code = e.getKeyCode();
 		if(code==27){
@@ -177,19 +177,19 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		passWortCheck();
 	}
 

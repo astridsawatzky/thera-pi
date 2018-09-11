@@ -186,7 +186,7 @@ public class FTPTools {
 		
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			JOptionPane.showMessageDialog(null,"Bezug der Datei "+datfern+" fehlgeschlagen!\nBitte starten Sie einen neuen Versuch");
 			e1.printStackTrace();
 			return false;
@@ -377,7 +377,7 @@ public class FTPTools {
 
 
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 				return false;
 			}
@@ -493,7 +493,7 @@ public class FTPTools {
 			//System.out.println("Nach Disconnect = "+reply);
 			ftpClient.disconnect();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 			return false;
 		}
@@ -654,7 +654,7 @@ public class FTPTools {
 
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 			return false;
 		}
@@ -796,7 +796,7 @@ public class FTPTools {
 
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 			return false;
 		}

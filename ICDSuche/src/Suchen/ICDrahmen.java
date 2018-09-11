@@ -41,16 +41,16 @@ public class ICDrahmen extends JApplet implements WindowListener{
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}		
 		DatenbankStarten dbstart = new DatenbankStarten();
@@ -78,7 +78,7 @@ public class ICDrahmen extends JApplet implements WindowListener{
 				ICDrahmen.thisClass.conn.close();
 				System.out.println("Datenbankverbindung wurde geschlossen");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -91,16 +91,16 @@ public class ICDrahmen extends JApplet implements WindowListener{
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		//thisClass = this;
@@ -162,7 +162,7 @@ public class ICDrahmen extends JApplet implements WindowListener{
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -173,7 +173,7 @@ public class ICDrahmen extends JApplet implements WindowListener{
 				ICDrahmen.thisClass.conn.close();
 				System.out.println("Datenbankverbindung wurde geschlossen");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -187,7 +187,7 @@ public class ICDrahmen extends JApplet implements WindowListener{
 				ICDrahmen.thisClass.conn.close();
 				System.out.println("Datenbankverbindung wurde geschlossen");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -196,25 +196,25 @@ public class ICDrahmen extends JApplet implements WindowListener{
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 }

@@ -306,7 +306,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 				if(inMemoEdit){
 					return;
 				}
-				// TODO Auto-generated method stub
+				
 				//System.out.println(" in Tabelle "+arg0.getKeyCode());
 				if(arg0.getKeyCode()== 10){
 					arg0.consume();
@@ -443,12 +443,12 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
@@ -482,7 +482,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(inMemoEdit){
 			return;
 		}
@@ -493,17 +493,17 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -597,7 +597,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				// TODO Auto-generated method stub
+				
 				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
 				int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
@@ -732,7 +732,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(((JComponent)arg0.getSource()).getName().equals("ArztVerwaltung") && arg0.getClickCount()==2){
 			int row = arzttbl.getSelectedRow();
 			if(row >= 0){
@@ -752,22 +752,22 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 
 	}	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -862,7 +862,7 @@ class ArztNeuDlg extends RehaSmartDialog{
 	}
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		try{
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);
@@ -876,7 +876,7 @@ class ArztNeuDlg extends RehaSmartDialog{
 	}
 	@Override
     public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);

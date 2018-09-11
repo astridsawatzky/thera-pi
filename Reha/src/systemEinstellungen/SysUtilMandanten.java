@@ -385,7 +385,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println(e.getKeyCode());
 		if(e.getKeyCode() == 10){
 			e.consume();
@@ -394,7 +394,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getKeyCode() == 10){
 			e.consume();
 		}
@@ -402,7 +402,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getKeyCode() == 10){
 			e.consume();
 		}
@@ -410,7 +410,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getActionCommand().equals("mandwahl")){
 			MandantEinlesen me = new MandantEinlesen();
 		     me.setzeMandant(mandant.getSelectedIndex());
@@ -498,7 +498,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -509,7 +509,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -545,7 +545,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		try {
 			Thread.sleep(150);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -560,7 +560,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		mandant.addItem(slabel);
@@ -686,7 +686,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(arg0.getSource() instanceof JRtaTextField){
 			Rectangle rec1 =((JComponent)arg0.getSource()).getBounds();
 			//System.out.println("Rec1 = "+rec1);
@@ -713,7 +713,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -745,7 +745,7 @@ class MandantEinlesen extends SwingWorker<Integer,Void>{
 
 	@Override
 	protected Integer doInBackground() throws Exception {
-		// TODO Auto-generated method stub
+		
 		//int man = this.mandant;
 		INIFile ifile = INITool.openIni(Path.Instance.getProghome()+"ini/"+SystemConfig.Mandanten.get(this.mandant)[0]+"/","firmen.ini");
 		

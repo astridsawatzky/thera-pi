@@ -165,7 +165,7 @@ public class WechselgeldDialog extends RehaSmartDialog {
 
 			@Override
 			public void focusGained(FocusEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				
 			}
 

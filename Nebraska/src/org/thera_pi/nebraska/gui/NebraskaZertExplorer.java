@@ -134,7 +134,7 @@ public class NebraskaZertExplorer  extends JXPanel implements ListSelectionListe
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -232,7 +232,7 @@ public class NebraskaZertExplorer  extends JXPanel implements ListSelectionListe
 				try {
 					keystore.exportKey("C:/privkey", NebraskaMain.keyStoreParameter.get(index-1).get(1));
 				} catch (NebraskaNotInitializedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				*/

@@ -26,7 +26,7 @@ public class JKasseInternal extends JRehaInternal implements RehaEventListener{
 	}
 	@Override
 	public void internalFrameClosing(InternalFrameEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("Internal-KassenFrame in schliessen***************");
 	}
 	@Override

@@ -99,7 +99,7 @@ public class PinPanel extends JXPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		String cmd = e.getActionCommand();
 		if(cmd.equals("gruen")){
 			String sEvent = getName();

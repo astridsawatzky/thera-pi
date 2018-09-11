@@ -449,19 +449,19 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -514,7 +514,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -623,7 +623,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 					ss.setLocationRelativeTo(jFrame);
 					ss.setVisible(true);
 				//} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					//e.printStackTrace();
 				//}
 			}else{
@@ -648,7 +648,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         //writer.write(null, img, param);
@@ -727,7 +727,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 	                	lblinfo.setText("  Bildinfo - Pixel: X="+xoriginal+" Y="+yoriginal);
 
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
+						
 						e1.printStackTrace();
 					}
 
@@ -777,7 +777,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 				}
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			finally {
@@ -823,10 +823,10 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 					}
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			finally {
@@ -884,10 +884,10 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			finally {
@@ -944,7 +944,7 @@ public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 @Override
 public void windowActivated(WindowEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
@@ -960,31 +960,31 @@ public void windowClosed(WindowEvent arg0) {
 
 @Override
 public void windowClosing(WindowEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
 @Override
 public void windowDeactivated(WindowEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
 @Override
 public void windowDeiconified(WindowEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
 @Override
 public void windowIconified(WindowEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 
 @Override
 public void windowOpened(WindowEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 public static void SystemStart(){
@@ -1045,7 +1045,7 @@ public static void SystemStart(){
 /*************************************************************************/
 @Override
 public void stateChanged(ChangeEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	float zwert = new Float(jsl.getValue());
 	float fxoriginal = new Float(xoriginal);
 	float fyoriginal = new Float(yoriginal);
@@ -1088,7 +1088,7 @@ public void skaliereBild(){
 
 		@Override
 		protected Object doInBackground() throws Exception {
-			// TODO Auto-generated method stub
+			
 
 	piTool.jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 

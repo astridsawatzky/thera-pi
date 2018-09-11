@@ -122,19 +122,19 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -443,7 +443,7 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 		try {
 			Thread.sleep(150);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		setFlags();

@@ -102,16 +102,16 @@ public static IOfficeApplication officeapplication;
 		    try {
 				UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (InstantiationException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (IllegalAccessException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (UnsupportedLookAndFeelException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			}
 			
@@ -168,7 +168,7 @@ public static IOfficeApplication officeapplication;
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -177,12 +177,12 @@ public static IOfficeApplication officeapplication;
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		try {
 			piHelp.conn.close();
 			//System.out.println("MySQL - geschlossen");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		if(ooPanel.webdocument != null){
@@ -212,7 +212,7 @@ public static IOfficeApplication officeapplication;
 			piHelp.officeapplication.deactivate();
 			//System.out.println("OpenOffice deaktiviert");			
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		*/
@@ -221,57 +221,57 @@ public static IOfficeApplication officeapplication;
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowStateChanged(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentAdded(ContainerEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentRemoved(ContainerEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}	
     public static void starteOfficeApplication()
@@ -317,7 +317,7 @@ public static IOfficeApplication officeapplication;
         }
         catch (OfficeApplicationException e)
         {
-            // TODO Auto-generated catch block
+            
             e.printStackTrace();
         }
     }
@@ -437,7 +437,7 @@ final class WorkerGruppen extends SwingWorker<Void,Void>{
 					        ResultSet.CONCUR_UPDATABLE );
 					
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {

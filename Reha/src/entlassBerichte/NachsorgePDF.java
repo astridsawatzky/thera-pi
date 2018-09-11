@@ -47,10 +47,10 @@ public class NachsorgePDF {
 		try {
 			geklappt = doSeitenZusammenstellen();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		final String xdatei =  tempDateien[2][0];
@@ -457,7 +457,7 @@ public class NachsorgePDF {
 		try {
 			ct.go();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -482,10 +482,10 @@ public class NachsorgePDF {
 			}
 
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -513,7 +513,7 @@ public class NachsorgePDF {
 		try {
 			ct.go();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -577,13 +577,13 @@ public class NachsorgePDF {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -595,7 +595,7 @@ public class NachsorgePDF {
 			//System.out.println(xcmd);
 			Reha.thisClass.progressStarten(false);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

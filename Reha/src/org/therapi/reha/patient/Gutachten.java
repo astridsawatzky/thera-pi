@@ -112,7 +112,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 					@Override
 					protected Void doInBackground() throws Exception {
 				
-						// TODO Auto-generated method stub
+						
 						vollPanel = new JXPanel();
 						FormLayout vplay = new FormLayout("5dlu,fill:0:grow(1.00),5dlu","13dlu,fill:0:grow(1.00),5dlu");
 						//FormLayout vplay = new FormLayout("5dlu,fill:0:grow(1.00),5dlu","5dlu,fill:0:grow(1.00),5dlu");
@@ -148,7 +148,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		tabbericht.addMouseListener(new MouseAdapter(){
 			@Override
             public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				if(arg0.getClickCount()==2){
 					if(!Rechte.hatRecht(Rechte.Gutachten_editvoll, true)){
 						return;
@@ -506,12 +506,12 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	class GutachtenPanel extends JXPanel{

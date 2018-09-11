@@ -82,7 +82,7 @@ public class PdfDrucker {
         try {
 			pjob.print();
 		} catch (PrinterException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         raf.close();

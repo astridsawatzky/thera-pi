@@ -107,7 +107,7 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 					@Override
 					protected Void doInBackground() throws Exception {
 				
-						// TODO Auto-generated method stub
+						
 						vollPanel = new JXPanel();
 						FormLayout vplay = new FormLayout("5dlu,fill:0:grow(1.00),5dlu","13dlu,fill:0:grow(1.00),5dlu");
 						//FormLayout vplay = new FormLayout("5dlu,fill:0:grow(1.00),5dlu","5dlu,fill:0:grow(1.00),5dlu");
@@ -356,7 +356,7 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 		tabbericht.addMouseListener(new MouseAdapter(){
 			@Override
             public void mouseClicked(MouseEvent arg0) {
-				// TODO Auto-generated method stub
+				
 				if(arg0.getClickCount()==2){
 					// hier pr�fen welcher Berichtstyp und dementsprechend das Berichtsfenster �ffnen
 					///neuanlageRezept(false,"");
@@ -434,61 +434,61 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
  */
 @Override
 public void valueChanged(ListSelectionEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void tableChanged(TableModelEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void columnPropertyChange(PropertyChangeEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void columnAdded(TableColumnModelEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void columnMarginChanged(ChangeEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void columnMoved(TableColumnModelEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void columnRemoved(TableColumnModelEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void columnSelectionChanged(ListSelectionEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void propertyChange(PropertyChangeEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	String cmd = arg0.getActionCommand();
 	if(cmd.equals("beredit")){
 		int wahl = tabbericht.getSelectedRow();

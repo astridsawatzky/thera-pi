@@ -24,7 +24,7 @@ BufferedImage img1 = null;
 			img1 = ImageIO.read( grafik);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} 
 		repaint();

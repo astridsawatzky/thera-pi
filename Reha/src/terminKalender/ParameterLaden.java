@@ -243,7 +243,7 @@ public static void Init(){
 /***********Ende Klasse************/
 
 public static void Passwort() {
-	// TODO Auto-generated method stub
+	
 	Reha obj = Reha.thisClass;
 	Statement stmt = null;
 	ResultSet rs = null;

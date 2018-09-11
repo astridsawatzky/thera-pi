@@ -93,7 +93,7 @@ public class BCStatics {
             if(inputVerzFile.getName().trim().equals("")){
             	sret = "";
             }else{
-            	sret = inputVerzFile.getName().trim();	
+            	sret = inputVerzFile.getName().trim();
             }
         }else{
         	sret = ""; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
@@ -105,10 +105,10 @@ public class BCStatics {
 		byte[] byteArray = null;
         try {
             byteArray = BytesFromFile(new File(pfad+sret));
-            ByteArrayInputStream byteArrayInputStream = new 
+            ByteArrayInputStream byteArrayInputStream = new
             ByteArrayInputStream(byteArray);
             System.out.println("Größe der Datei = "+byteArray.length+" Bytes");
-            
+
             //while(byteArrayInputStream.read()!=-1)
             //	  System.out.println(byteArrayInputStream.read());
             CertificateFactory fact;
@@ -127,13 +127,13 @@ public class BCStatics {
         			X509Certificate x509Certifikat = (it.next());
 
         			System.out.println("Version = "+
- 
+
         					x509Certifikat.getVersion());
 	            	System.out.println("Algorythmus-Name = "+
 	            			x509Certifikat.getSigAlgName());
 	            	System.out.println("Public-Key = "+
 	            			x509Certifikat.getPublicKey());
-	            	
+
 	            	System.out.println("Algorythmus = "+
 	            			x509Certifikat.getSigAlgOID());
 	            	System.out.println("Distinguished Name = "+
@@ -144,7 +144,7 @@ public class BCStatics {
 	            	//		new String(x509Certifikat.getSignature()));
 	            	//System.out.println("Signatur Parameters= "+
 	            	//new String(x509Certifikat.getSigAlgParams()));
-	            	
+
 	            	 byte[] sig = x509Certifikat.getSignature();
 	            	 System.out.println("Signatur: = ");
 	            	 System.out.println(new BigInteger(sig).toString(16));
@@ -158,17 +158,15 @@ public class BCStatics {
 
 	            }
 	            System.out.println("\nAnzahl Zertifikate = "+collection.size());
-				
+
 			} catch (CertificateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (NoSuchProviderException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
-            
-            
-            
+			}
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -209,7 +207,7 @@ public class BCStatics {
             if(inputVerzFile.getName().trim().equals("")){
             	sret = "";
             }else{
-            	sret = inputVerzFile.getName().trim();	
+            	sret = inputVerzFile.getName().trim();
             }
         }else{
         	sret = ""; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
@@ -218,7 +216,7 @@ public class BCStatics {
         if(sret.equals("")){
         	return;
         }
-        
+
 		providerTest();
 
 		int eingelesen = 0;
@@ -233,7 +231,7 @@ public class BCStatics {
 			while(true){
 				if( (zeile = in.readLine()) != null){
 					if(! zeile.equals("")){
-						buf.append(zeile+separator);					
+						buf.append(zeile+separator);
 					}else{
 						buf.append(zertende+separator);
 						// Hier das Pem Ged�nse anlegen....
@@ -270,13 +268,10 @@ public class BCStatics {
 			System.out.println("Insgesamt importierte Zertifikate = "+zertifikate);
 			*/
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -288,26 +283,25 @@ public class BCStatics {
 			writer = new FileWriter(f);
 			writer.write(buf.toString());
 			writer.close();
-			FileReader reader = new FileReader(f); 
+			FileReader reader = new FileReader(f);
 			PEMReader pemReader = new PEMReader(reader);
 			Object o;
 			o = pemReader.readObject();
 			if (o instanceof X509Certificate){
 					X509Certificate cert = (X509Certificate) o;
 					importCertIntoStore(keystoreDir,cert);
-			}	
+			}
 			pemReader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 	/*************************************************************************************/
 	public static void createKeyStore(KeyPair kp){
 		try {
 			KeyStore store;
-			
+
 			KeyPair rootPair = kp;
 			X509Certificate rootCert = gnerateRootCert(rootPair);
 			System.out.println(rootCert);
@@ -320,16 +314,16 @@ public class BCStatics {
 			store.setKeyEntry(ROOT_ALIAS,rootPair.getPrivate(),Constants.KEYSTORE_PASSWORD.toCharArray(),chain);
 
 			ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-			
+
 			store.store(bOut,Constants.KEYSTORE_PASSWORD.toCharArray());
-			
+
 			System.out.println("fertig gestored....");
 			storeToFile(Nebraska.keystorefile,bOut.toByteArray());
-			
+
 			store = KeyStore.getInstance(Constants.KEYSTORE_TYPE,Constants.SECURITY_PROVIDER);
 			InputStream in = new FileInputStream(new File(Nebraska.keystorefile));
 			store.load(in,Constants.KEYSTORE_PASSWORD.toCharArray());
-			
+
 			Enumeration<String> en = store.aliases();
 			while (en.hasMoreElements()){
 				String alias = en.nextElement();
@@ -350,54 +344,44 @@ public class BCStatics {
 					System.out.println( "Subject        = "+cert.getSubjectDN());
 					System.out.println( "Gültig bis     = "+cert.getNotAfter());
 					try{
-						cert.checkValidity();	
+						cert.checkValidity();
 					}catch(Exception ex){
 						System.out.println("Fehler im Zertifikat "+cert);
 					}
-					
-					
+
+
 
 				}
 				if(store.isKeyEntry(alias)){
 					try {
 						System.out.println(store.getKey(alias,Constants.KEYSTORE_PASSWORD.toCharArray()));
 					} catch (UnrecoverableKeyException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
-			
+
 		}catch (InvalidKeyException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 		} catch (SecurityException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 		} catch (SignatureException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-				
+
 		}catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CertificateEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 	public static void showAllCertsInStore(){
 		KeyStore store;
@@ -431,7 +415,7 @@ public class BCStatics {
 				        	if(i>0){
 				        		hex = hex+":"+HexString.hexify(dig[i]);
 				        	}else{
-						        hex = hex+ HexString.hexify(dig[i]);				        		
+						        hex = hex+ HexString.hexify(dig[i]);
 				        	}
 				        }
 				        System.out.println( "MD5-AS-Hex: "+hex );
@@ -447,14 +431,14 @@ public class BCStatics {
 					        	if(i>0){
 					        		hex = hex+":"+HexString.hexify(dig[i]);
 					        	}else{
-							        hex = hex+ HexString.hexify(dig[i]);				        		
+							        hex = hex+ HexString.hexify(dig[i]);
 					        	}
 					        }
 					        System.out.println( "SHA1-AS-Hex: "+hex );
 					        //System.out.println( "\nDigest: " );
 					        //System.out.println(  messageDigest.digest() );
 
-					
+
 				}else if(store.isKeyEntry(alias)){
 					System.out.println("KeyEntry");
 				}
@@ -462,22 +446,16 @@ public class BCStatics {
 			in.close();
 
 		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -508,10 +486,10 @@ public class BCStatics {
 					}else{
 						cert.getBasicConstraints();
 						System.out.println("Zertifikat von "+alias+" bereits enthalten");
-					}	
+					}
 				}
-				
-			/*	
+
+			/*
 			store.setCertificateEntry(ROOT_ALIAS, rootCert);
 			X509Certificate[] chain = new X509Certificate[1];
 			chain[0] = (X509Certificate) rootCert;
@@ -519,22 +497,16 @@ public class BCStatics {
 			*/
 
 		} catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -556,7 +528,7 @@ public class BCStatics {
 						System.out.println("Store Entry mit alias "+aliases+" wurde gelöscht!");
 					}
 				}
-			}	
+			}
 		}else{
 			if(store.containsAlias(alias)){
 				store.deleteEntry(alias);
@@ -588,10 +560,10 @@ public class BCStatics {
 		certGen.setSignatureAlgorithm(Constants.SIGNATURE_ALGORITHM);
 		return certGen.generate(pair.getPrivate(),Constants.SECURITY_PROVIDER);
 	}
-	public static X509Certificate generateV3Certificate(KeyPair pair,Vector<String>vec) 
+	public static X509Certificate generateV3Certificate(KeyPair pair,Vector<String>vec)
 	throws InvalidKeyException, NoSuchProviderException, SecurityException, SignatureException, CertificateEncodingException, IllegalStateException, NoSuchAlgorithmException{
 		Security.addProvider(new BouncyCastleProvider());
-		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator(); 
+		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 		certGen.setSerialNumber(BigInteger.valueOf(19620502));
 		certGen.setIssuerDN(new X500Principal("O=ITSG TrustCenter fuer sonstige Leistungserbringer,C=DE"));
 		certGen.setNotBefore(new Date(BCStatics.certifikatsDatum(DatFunk.sHeute(), 0)));
@@ -602,13 +574,13 @@ public class BCStatics {
 		certGen.setSignatureAlgorithm(Constants.SIGNATURE_ALGORITHM);
 		return certGen.generate(pair.getPrivate(),Constants.SECURITY_PROVIDER);
 	}
-	
-	
-	/*************************************************************************************/	
+
+
+	/*************************************************************************************/
 	 public static byte[] BytesFromFile(File file) throws IOException {
 	        InputStream is = new FileInputStream(file);
 	        long length = file.length();
-	    
+
 	        if (length > Integer.MAX_VALUE) {
 	      System.out.println("Sorry! Your given file is too large.");
 	      System.exit(0);
@@ -617,7 +589,7 @@ public class BCStatics {
 	        byte[] bytes = new byte[(int)length];
 	        int offset = 0;
 	        int numRead = 0;
-	        while (offset < bytes.length && (numRead=is.read(bytes, 
+	        while (offset < bytes.length && (numRead=is.read(bytes,
 	                    offset, bytes.length-offset)) >= 0) {
 	            offset += numRead;
 	        }
@@ -642,9 +614,9 @@ public class BCStatics {
 			catch (IOException e)
 			{
 			  e.printStackTrace();
-			}		
+			}
 		}
-	 	
+
 	 	public static byte[] inputStreamToBytes(InputStream in) throws IOException {
 
 	 		ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
@@ -657,7 +629,7 @@ public class BCStatics {
 	 		in.close();
 	 		out.close();
 	 		return out.toByteArray();
-	 		} 	 	
+	 		}
 	 public static void certToFile(X509Certificate x509Cert,byte[] b) throws IOException{
 
 			String name = Nebraska.keystoredir + File.separator +System.currentTimeMillis();
@@ -671,7 +643,7 @@ public class BCStatics {
 			fos.write(x509Cert.toString().getBytes());
 			fos.flush();
 			fos.close();
-		 
+
 	 }
 	 public static void storeToFile(String file,byte[] b) throws IOException{
 			File f = new File(file);
@@ -679,25 +651,25 @@ public class BCStatics {
 			fos.write(b);
 			fos.flush();
 			fos.close();
-		 
+
 	 }
 	 public static long  certifikatsDatum(String datum, int jahre){
 		 int aktjahr = Integer.parseInt(datum.substring(6));
 		 aktjahr = aktjahr+jahre;
 		 return DatFunk.DatumsWert(datum.substring(0,6)+Integer.toString(aktjahr));
-		 
+
 	 }
 	 public static void generateRequest(){
-		 
+
 	 }
 	 public static void generateRequestReply(){
-		 
+
 	 }
 	 public static void importRequestReply(){
-		 
+
 	 }
 	 public static void importRootCert(){
-		 
+
 	 }
 	 /***************************************************************************/
 	 public static String getSHA1(X509Certificate cert){
@@ -753,7 +725,7 @@ public class BCStatics {
 		 java.security.interfaces.RSAPublicKey pub =
 				(java.security.interfaces.RSAPublicKey)pubKey;
 		 String hexstring = new BigInteger(pub.getModulus().toByteArray()).toString(16);
-		 EncodedKeySpec publicKeySpec =new X509EncodedKeySpec(cert.getPublicKey().getEncoded()); 
+		 EncodedKeySpec publicKeySpec =new X509EncodedKeySpec(cert.getPublicKey().getEncoded());
 		 System.out.println(publicKeySpec);
 
 		 int lang = hexstring.length();
@@ -772,7 +744,7 @@ public class BCStatics {
 				 try{
 					 zeile = zeile+ hexstring.substring(stelle+i2,stelle+i2+2)+" ";
 				 }catch(Exception ex){
-					 
+
 				 }
 			 }
 			 System.out.println("Zeile "+i+(i < 10 ? "=   " : "=  ")+zeile);
@@ -809,7 +781,7 @@ public class BCStatics {
 	            if(inputVerzFile.getName().trim().equals("")){
 	            	sret = "";
 	            }else{
-	            	//sret = inputVerzFile.getName().trim();	
+	            	//sret = inputVerzFile.getName().trim();
 	            	sret = inputVerzStr;
 	            }
 	        }else{
@@ -817,7 +789,7 @@ public class BCStatics {
 	        }
 	        return sret;
 	 }
-	 
+
 	 public static void verschluesseln(String alias){
 		 String pfad = Nebraska.keystoredir;
 		 String datei = chooser(pfad);
@@ -841,8 +813,8 @@ public class BCStatics {
 					*/
 					byte[] sigBytes = BytesFromFile(new File(pfad+datei));
 					byte[] out = new byte[sigBytes.length];
-					
-					 
+
+
 					cipher.init(Cipher.ENCRYPT_MODE,  cert.getPublicKey());
 					 int offset = 0;
 					 while(offset >=0){
@@ -850,54 +822,43 @@ public class BCStatics {
 			                        offset,
 			                        2,
 			                        out,
-			                        offset);  
+			                        offset);
 					 }
 					 cipher.doFinal();
 					 BytesToFile(out,new File(pfad+datei+".cipher"));
 			 }
-			 
+
 		 } catch (KeyStoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchProviderException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (CertificateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalBlockSizeException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (BadPaddingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ShortBufferException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		 
+
 
 	 }
 	 public static void providerTest(){
 		 Provider provBC = Security.getProvider(Constants.SECURITY_PROVIDER);
 		 if(provBC==null){
-			 Security.addProvider(new BouncyCastleProvider());			 
+			 Security.addProvider(new BouncyCastleProvider());
 		 }
 	 }
 

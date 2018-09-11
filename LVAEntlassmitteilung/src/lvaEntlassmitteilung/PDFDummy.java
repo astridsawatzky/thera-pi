@@ -78,10 +78,10 @@ public class PDFDummy {
 		    cb = writer.getDirectContent();
 
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -122,7 +122,7 @@ public class PDFDummy {
 	       isr.close();
 	       br.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

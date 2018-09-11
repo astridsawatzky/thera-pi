@@ -199,7 +199,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				// TODO Auto-generated method stub
+				
 
 			}
 
@@ -517,7 +517,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String cmd = arg0.getActionCommand();
 		if(cmd.equals("neuerempfaenger")){
 			neuerArzt();
@@ -1120,7 +1120,7 @@ class TextBausteine extends AbstractAction {
  */
 	@Override
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		try{
 			if(evt.getDetails()[0].equals(this.getName())){
 				new Thread(){

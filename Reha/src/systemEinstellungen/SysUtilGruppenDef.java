@@ -478,19 +478,19 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(e.getKeyCode()==10){
 			e.consume();
 		}
@@ -498,7 +498,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		if(jTblGruppen == null){
 			return;
 		}

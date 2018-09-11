@@ -397,7 +397,7 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		String comm = arg0.getActionCommand();
 		final String xcomm = comm;
 		SwingUtilities.invokeLater(new Runnable(){
@@ -552,11 +552,11 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		Rectangle rec1 =((JComponent)arg0.getSource()).getBounds();
 		Rectangle rec2 = jscr.getViewport().getViewRect();
 		JViewport vp = jscr.getViewport();
@@ -572,7 +572,7 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

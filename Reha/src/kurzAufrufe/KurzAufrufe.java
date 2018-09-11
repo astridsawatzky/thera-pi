@@ -37,7 +37,7 @@ public class KurzAufrufe {
 			try {
 				new AkutListe();
 			} catch (TextException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -45,7 +45,7 @@ public class KurzAufrufe {
 			try {
 				new TelefonListe(obj1);
 			} catch (TextException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -95,19 +95,19 @@ class AkutListe{
 			try {
 				OOTools.setzePapierFormat(textDocument, 21000, 29700);
 			} catch (NoSuchElementException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (WrappedTargetException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (UnknownPropertyException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (PropertyVetoException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (IllegalArgumentException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			}
 			/*
@@ -338,19 +338,19 @@ class TelefonListe{
 			try {
 				OOTools.setzePapierFormat(textDocument, 21000, 29700);
 			} catch (NoSuchElementException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (WrappedTargetException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (UnknownPropertyException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (PropertyVetoException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (IllegalArgumentException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			}
 			/*
@@ -474,19 +474,19 @@ class F2RettungsAnker{
 			OOTools.setzePapierFormat(textDocument, 21000, 29700);
 			OOTools.setzeRaender(textDocument, 500, 500, 500, 500);
 		} catch (NoSuchElementException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (WrappedTargetException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (UnknownPropertyException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (PropertyVetoException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (IllegalArgumentException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		/*
@@ -610,16 +610,16 @@ class F2RettungsAnker{
 		} catch (UnknownPropertyException e) {
 			e.printStackTrace();
 		} catch (PropertyVetoException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (WrappedTargetException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (TextException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

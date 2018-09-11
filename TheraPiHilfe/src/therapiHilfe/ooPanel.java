@@ -78,7 +78,7 @@ public class ooPanel{
 		try {
 			//configureOOOFrame(piHelp.officeapplication,officeFrame);
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		*/
@@ -219,7 +219,7 @@ public class ooPanel{
 			  	try {
 					piHelp.officeapplication.getDesktopService().removeDocumentListener(thisClass.doclistener);
 				} catch (OfficeApplicationException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				if(ansicht == ANSICHT_WEB){
@@ -242,10 +242,10 @@ public class ooPanel{
 		        	document = (ITextDocument) piHelp.officeapplication.getDocumentService().constructNewDocument(officeFrame,IDocument.WRITER,d);
 		        	ansicht = ANSICHT_DOKUMENT;
 				} catch (NOAException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (OfficeApplicationException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 
@@ -264,10 +264,10 @@ public class ooPanel{
 				fileOut.close();
 				extrahiereBilder(datei);
 			} catch (FileNotFoundException e1) {
-				// TODO Auto-generated catch block
+				
 				e1.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		  }
@@ -308,7 +308,7 @@ public class ooPanel{
 			        	ansicht = ANSICHT_DOKUMENT;
 					}
 				} catch (DocumentException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 
@@ -327,7 +327,7 @@ public class ooPanel{
 				 */
 
 			}	catch (OfficeApplicationException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -347,7 +347,7 @@ public class ooPanel{
 					tempFile.deleteOnExit();
 					outputStream = new FileOutputStream(tempFile);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			     */
@@ -518,7 +518,7 @@ public class ooPanel{
 				  outfile.close();
 				  infile.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		  }
@@ -594,7 +594,7 @@ class testObVorhanden{
 					        ResultSet.CONCUR_UPDATABLE );
 
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				try {
@@ -628,83 +628,83 @@ class DokumentListener implements IDocumentListener {
 	}
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onInsertDone(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onInsertStart(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onLoad(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onLoadDone(IDocumentEvent arg0) {
 		System.out.println("onLoad Done");
-		// TODO Auto-generated method stub
+		
 		//System.out.println("************************Dokument geladen************************* "+arg0);
 
 	}
 	@Override
 	public void onLoadFinished(IDocumentEvent arg0) {
 		System.out.println("onLoad Finished");
-		// TODO Auto-generated method stub
+		
 		//System.out.println("************************Dokument geladen finished************************* "+arg0);
 		/*
 		try {
 			Reha.officeapplication.getDesktopService().removeDocumentListener(this);
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		*/
 	}
 	@Override
 	public void onModifyChanged(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onNew(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void onSave(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("************************Dokument gespeichert - doneSave************************* "+arg0);
 	}
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
@@ -715,22 +715,22 @@ class DokumentListener implements IDocumentListener {
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
 		System.out.println("save Done");
-		// TODO Auto-generated method stub
+		
 		//System.out.println("************************Dokument gespeichert - done************************* "+arg0);
 	}
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//System.out.println("************************Dokument gespeichert - finished************************* "+arg0);
 	}
 	@Override
 	public void onUnload(IDocumentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void disposing(IEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

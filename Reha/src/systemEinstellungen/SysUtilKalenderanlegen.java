@@ -361,25 +361,25 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		int i;
 		for(i=0;i<1;i++){
 			if(arg0.getActionCommand().equals("FTimport")){
@@ -603,7 +603,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 				try {
 					Thread.sleep(speed);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -632,7 +632,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 					Thread.sleep(15);
 					progress = i;
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -735,7 +735,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 					//Thread.sleep(15);
 					++progress;
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			}
@@ -1001,7 +1001,7 @@ class HoleMaxDatum extends Thread{
 class HoleMasken{
 	HoleMasken(String sstmt){
 
-	// TODO Auto-generated method stub
+	
 	Statement stmt = null;
 	ResultSet rs = null;
 
@@ -1119,7 +1119,7 @@ class HoleMasken{
 class TesteKalender{
 	TesteKalender(String sstmt){
 
-	// TODO Auto-generated method stub
+	
 	Statement stmt = null;
 	ResultSet rs = null;
 	int tage = 0;

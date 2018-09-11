@@ -57,7 +57,7 @@ public class UpdateTab  extends JXPanel implements ChangeListener{
 
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
 	}
 	public FTPFile[] getFilesFromUpdatePanel(){
 		return tab1.ffile;

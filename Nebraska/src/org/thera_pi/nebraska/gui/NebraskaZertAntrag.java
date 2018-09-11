@@ -455,7 +455,7 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 	
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

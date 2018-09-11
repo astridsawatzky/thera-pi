@@ -33,9 +33,9 @@ public class TagWahl {
 	private String tag;  //  @jve:decl-index=0:
 	private JLabel jLabel3 = null;
 	/**
-	 * This method initializes jDialog	
-	 * 	
-	 * @return javax.swing.JDialog	
+	 * This method initializes jDialog
+	 *
+	 * @return javax.swing.JDialog
 	 */
 	public JDialog getJDialog(String tag,String sDatText,String sTitel,int x, int y) {
 		if (jDialog == null) {
@@ -44,7 +44,7 @@ public class TagWahl {
 			jDialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			jDialog.setSize(new Dimension(295, 153));
 			//int x1 = ((x-jDialog.getSize().width)/2);
-			//int y1 = ((y-jDialog.getSize().height)/2);			
+			//int y1 = ((y-jDialog.getSize().height)/2);
 			jDialog.setLocation(x-(jDialog.getWidth()/2), y-(jDialog.getHeight()/2));
 			jDialog.setTitle(sTitel);
 			//jDialog.setModal(true);
@@ -56,9 +56,9 @@ public class TagWahl {
 	}
 
 	/**
-	 * This method initializes jContentPane	
-	 * 	
-	 * @return javax.swing.JPanel	
+	 * This method initializes jContentPane
+	 *
+	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane(String sDatText,String tag) {
 		//datFunk df = new datFunk();
@@ -94,9 +94,9 @@ public class TagWahl {
 	}
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes jTextField
+	 *
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField() {
 		if (jTextField == null) {
@@ -109,19 +109,16 @@ public class TagWahl {
 			jTextField.addKeyListener(new java.awt.event.KeyListener() {
 				@Override
                 public void keyTyped(java.awt.event.KeyEvent e) {
-					////System.out.println("keyTyped()"); // TODO Auto-generated Event stub keyTyped()
 					if(e.getKeyCode()==10){
 						e.consume();
 					}
 				}
 				@Override
                 public void keyPressed(java.awt.event.KeyEvent e) {
-					////System.out.println("keypressed()"); // TODO Auto-generated Event stub keyTyped()
-					TagEinstellen(e, jTextField.getText());// TODO Auto-generated Event stub keyTyped()
+					TagEinstellen(e, jTextField.getText());
 				}
 				@Override
                 public void keyReleased(java.awt.event.KeyEvent e) {
-					////System.out.println("keypreleased()e");
 					if(e.getKeyCode()==10){
 						e.consume();
 					}
@@ -131,12 +128,12 @@ public class TagWahl {
 	}
 	public void TagEinstellen(java.awt.event.KeyEvent e,String sTag){
 		//datFunk dat = new datFunk();
-		////System.out.println(e);		
+		////System.out.println(e);
 		switch(e.getKeyCode()){
 			case 33: //Bild auf
 				////System.out.println("Bild auf");
 				jTextField.setText(DatFunk.sDatPlusTage(sTag, +1));
-				jLabel3.setText(DatFunk.WochenTag(jTextField.getText()));				
+				jLabel3.setText(DatFunk.WochenTag(jTextField.getText()));
 				jTextField.setCaretPosition(0);
 				break;
 			case 34: //Bild ab
@@ -145,16 +142,16 @@ public class TagWahl {
 				jLabel3.setText(DatFunk.WochenTag(jTextField.getText()));
 				jTextField.setCaretPosition(0);
 				break;
-			case 10: //Bild auf	
+			case 10: //Bild auf
 				e.consume();
 				jDialog.dispose();
-				
+
 		}
 	}
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 *
+	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton() {
 		if (jButton == null) {
@@ -165,7 +162,6 @@ public class TagWahl {
 			jButton.addActionListener(new java.awt.event.ActionListener() {
 				@Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-					////System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 					SetzeButton(0);
 					jDialog.dispose();
 				}
@@ -175,9 +171,9 @@ public class TagWahl {
 	}
 
 	/**
-	 * This method initializes jButton1	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton1
+	 *
+	 * @return javax.swing.JButton
 	 */
 	private JButton getJButton1() {
 		if (jButton1 == null) {

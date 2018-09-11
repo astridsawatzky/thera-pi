@@ -42,13 +42,13 @@ public void listenerLoeschen(){
 
 @Override
 public void propertyChange(PropertyChangeEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	//this.getParent().dispatchEvent(arg0);	
 }
 
 @Override
 public void focusGained(FocusEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("Focus "+arg0);
 	try{
 		this.getParent().dispatchEvent(arg0);
@@ -59,13 +59,13 @@ public void focusGained(FocusEvent arg0) {
 
 @Override
 public void focusLost(FocusEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void keyPressed(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("Pressed "+arg0);
 	int code = arg0.getKeyCode();
 	
@@ -96,20 +96,20 @@ public void keyPressed(KeyEvent arg0) {
 
 @Override
 public void keyReleased(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("Released "+arg0);
 	
 }
 
 @Override
 public void keyTyped(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("Typed "+arg0);
 	
 }
 @Override
 public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	try{
 		this.getParent().dispatchEvent(arg0);
 	}catch(Exception ex){

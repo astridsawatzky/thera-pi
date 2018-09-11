@@ -1791,12 +1791,12 @@ public class Eb1 implements ActionListener,ComponentListener {
 	}
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
@@ -1805,7 +1805,7 @@ public class Eb1 implements ActionListener,ComponentListener {
 	}
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	public final void refreshSize() {

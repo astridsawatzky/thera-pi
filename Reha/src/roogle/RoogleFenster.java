@@ -822,10 +822,10 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		try {
 			return worker.get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return new JPanel();
@@ -923,10 +923,10 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		try {
 			return worker.get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return new JPanel();
@@ -1027,10 +1027,10 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		try {
 			return worker.get();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -1092,25 +1092,25 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	}
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -1344,19 +1344,19 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 			}
 
 		}
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if(rtp != null){
 			////System.out.println("Entferne Listener in windowClosed");
 			rtp.removeRehaTPEventListener(this);
@@ -1437,7 +1437,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		rtp.removeRehaTPEventListener(this);
 		////System.out.println("In Closing***********************>");
 
@@ -1447,25 +1447,25 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -1483,7 +1483,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	}
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("****************Schließen des Roogle-Fensters**************");
 		String ss =  this.getName();
 		////System.out.println("Roogle - "+this.getName()+" Eltern "+ss);
@@ -1502,7 +1502,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		JComponent jcom = (JComponent)arg0.getSource();
-		// TODO Auto-generated method stub
+		
 		try{
 			if(jcom.getName().equals("RoogleListe1")){
 				if(arg0.getClickCount()==2){
@@ -1523,19 +1523,19 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		//setClicks(arg0.getX(),arg0.getY());
 		////System.out.println("XY = "+arg0.getX()+" = "+arg0.getY());
 	}
@@ -1543,12 +1543,12 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		setClicks(-1,-1);
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		/*
 		//System.out.println("Art der �nderung : "+arg0.getType());
 		//System.out.println("�nderung in Zeile: "+arg0.getFirstRow());
@@ -1584,18 +1584,18 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("Focus erhalten "+arg0);
 
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("Focus verloren "+arg0);
 	}
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
-		// TODO Auto-generated method stub
+		
             // Get current tab
 		////System.out.println(arg0);
 		JTabbedPane pane = (JTabbedPane)arg0.getSource();
@@ -1704,12 +1704,12 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

@@ -156,17 +156,17 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println(arg0.getKeyCode());
 		if (arg0.getKeyCode()==10){
 			//arg0.consume();
@@ -193,12 +193,12 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 	}	
 	@Override
 	public void windowClosed(WindowEvent arg0) {
@@ -213,7 +213,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 	
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		String ss =  this.getName();
 		try{
 			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
@@ -245,7 +245,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		if (arg0.getClickCount() == 2){
 			eltern.swSetWahl = jList1.getSelectedIndex();
 			FensterSchliessen("Dieses");
@@ -255,57 +255,57 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

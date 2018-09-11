@@ -55,12 +55,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	private JXButton jButton = null;
 	private JXTable jtable = null;
 	public JTextField jTextField = null;
-	
+
 	private JTextField jtext = null;
 
 	private int clickX;
 	private int clickY;
-	
+
 	private Cursor cmove = Reha.thisClass.cmove;
 	private Cursor cnsize = Reha.thisClass.cnsize;
 	private Cursor cnwsize = Reha.thisClass.cnwsize;
@@ -69,23 +69,23 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	private Cursor cwsize = Reha.thisClass.cwsize;
 	private Cursor csesize = Reha.thisClass.csesize;
 	private Cursor cssize = Reha.thisClass.cssize;
-	private Cursor cesize = Reha.thisClass.cesize;	
+	private Cursor cesize = Reha.thisClass.cesize;
 	private Cursor cdefault = Reha.thisClass.cdefault;
 
 	private boolean insize;
 	private int[] orgbounds = {0,0};
 	private int sizeart;
 	private String[] sEventDetails ={null,null};
-	
+
 	public JComponent focusBack = null;
 	private String fname = "";  //  @jve:decl-index=0:
 	public DefaultTableModel tblDataModel;
 	public boolean jumpok = false;
 	public  int suchart = 0;
 	private PatientToolBarPanel toolBar;
-	
+
 	/**
-	 * @param 
+	 * @param
 	 */
 	private PatientHauptLogic aufrufer = null;
 	public SuchenDialog(JXFrame owner,JComponent focusBack,String fname,int art,PatientHauptLogic xaufrufer) {
@@ -114,11 +114,11 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			}
 		});
 	}
-	
+
 	public void	setzeReihe(Vector<?> vec){
 		tblDataModel.addRow(vec);
 		jtable.validate();
-		
+
 	}
 
 	@Override
@@ -132,32 +132,32 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			}
 		}catch(NullPointerException ne){
 
-	}	
-	
+	}
+
 	}
 
 	public void suchDasDing(String suchkrit){
 		jTextField.setText(suchkrit);
 		jXTitledPanel.setTitle("Suche Patient..."+suchkrit);
 		new suchePatient().init(tblDataModel);
-		
+
 	}
 
 	/**
 	 * This method initializes this
-	 * 
+	 *
 	 * @return void
 	 */
 	private void initialize() {
-		
+
 		// Lemmi 20101212: zuletzt eingestellte und gemerkte Dimension des Suchfensters zurückholen
 		Dimension dim = new Dimension(300, 400);  // Diese Defaultwerte haben keine Wirkung !
 
 		dim.width = SystemConfig.hmPatientenSuchenDlgIni.get("fensterbreite");
 		dim.height = SystemConfig.hmPatientenSuchenDlgIni.get("fensterhoehe");
-		
+
 		this.setSize(dim);
-		
+
 		this.setUndecorated(true);
 		this.setTitle("Dialog-Test");
 		this.setContentPane(getJContentPane());
@@ -167,15 +167,15 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		this.setResizable(true);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	}
-	
+
 	public void setzeFocusAufSucheFeld(){
 		jtext.requestFocus();
-		
+
 	}
 
 	/**
 	 * This method initializes jContentPane
-	 * 
+	 *
 	 * @return javax.swing.JPanel
 	 */
 	private JPanel getJContentPane() {
@@ -195,23 +195,23 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			gridJx.setLayout(new GridBagLayout());
 			gridJx.setBackground(Color.WHITE);
 			gridJx.setBorder(null);
-			
+
 			jContentPane = new JXPanel();
 			jContentPane.setLayout(new BorderLayout());
 			jContentPane.setBorder(null);
-			JXTitledPanel jtp = getJXTitledPanel(); 
+			JXTitledPanel jtp = getJXTitledPanel();
 
-			
+
 			jContent = new JXPanel(new BorderLayout());
-			jContent.setSize(new Dimension(286, 162)); 
+			jContent.setSize(new Dimension(286, 162));
 			jContent.add(getJButton(), BorderLayout.SOUTH);
 			JXPanel jp1 = new JXPanel(new FlowLayout());
 			jp1.setBorder(null);
-			
+
 			// Lemmi 20101212: Das Labelfeld für einen Hinweis auf aktuelle Rezepte "mißbraucht"
 			JLabel jlb = new JLabel( suchart == toolBar.getAktRezIdx() ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: ");  // Lemmi 20101212: Prompt für die Eingabe eines Suchkriteriums
 			jp1.add(jlb);
-			
+
 			jtext = getJTextField();
 			// Lemmi 20101212: Das Such-Eingabefeld unsichtbar gemacht - wird hier nicht benötigt
 			if(suchart == toolBar.getAktRezIdx()){
@@ -219,9 +219,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			} else{
 				jtext.setPreferredSize(new Dimension(100,20));
 			}
-			jtext.addKeyListener(new java.awt.event.KeyAdapter() {   
+			jtext.addKeyListener(new java.awt.event.KeyAdapter() {
 				@Override
-                public void keyPressed(java.awt.event.KeyEvent e) {    
+                public void keyPressed(java.awt.event.KeyEvent e) {
 					if (e.getKeyCode() == 10){   // RETURN gedrückt
 						e.consume();
 						new SwingWorker<Void,Void>(){
@@ -233,7 +233,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 								return null;
 							}
 						}.execute();
-						
+
 					}
 					if (e.getKeyCode() == 27){   // ESC gedrückt
 						e.consume();
@@ -250,29 +250,19 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 								jtable.requestFocus();
 							}else{
 								if(jumpok){
-									jtable.setRowSelectionInterval(aufrufer.getLastRow(),aufrufer.getLastRow());	
+									jtable.setRowSelectionInterval(aufrufer.getLastRow(),aufrufer.getLastRow());
 								}else{
 									jtable.setRowSelectionInterval(0,0);
 								}
-									
+
 							}
 						}
 					}
-				}   
-				@Override
-                public void keyReleased(java.awt.event.KeyEvent e) {    
-					if (e.getKeyCode() == 10){
-						//suchePatient();
-					}
-				}
-				@Override
-                public void keyTyped(java.awt.event.KeyEvent e) {
-					////System.out.println("keyTyped()"); // TODO Auto-generated Event stub keyTyped()
 				}
 			});
 			jp1.add(jtext);  // Lemmi: Suchfeld im Dialog einfügen (im Norden = oben)
 			jContent.add(jp1, BorderLayout.NORTH);
-			
+
 			/**
 			 * JXTable
 			 */
@@ -285,7 +275,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			reiheVector.addElement("Geboren");
 			reiheVector.addElement("Pat-Nr.");
 			if(suchart==toolBar.getAktRezIdx()){   // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
-				reiheVector.addElement("Rezepte");			
+				reiheVector.addElement("Rezepte");
 			}
 			tblDataModel = new DefaultTableModel();
 			tblDataModel.setColumnIdentifiers(reiheVector);
@@ -293,7 +283,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			this.jtable.getColumnModel().getColumn(0).setPreferredWidth(100);
 			this.jtable.getColumn(3).setMinWidth(0);	// Spalte pat_intern ausblenden
 			this.jtable.getColumn(3).setMaxWidth(0);	// Breite der Spalte pat_intern
-			
+
 			// Lemmi 20101212: Einige maximale Spaltenbreiten fixiert
 			if(suchart == toolBar.getAktRezIdx()) {  // Spielereine, funktioniert alles
 				this.jtable.getColumn(2).setPreferredWidth(80);  	// Geboren
@@ -301,12 +291,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				this.jtable.getColumn(4).setPreferredWidth(100);  	// Rezepte
 //				this.jtable.setGridColor(Color.red);
 			}
-			
-			
+
+
 			InputMap inputMap = jtable.getInputMap(JComponent.WHEN_FOCUSED);
 
 			inputMap.remove(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0));
-			jtable.setInputMap(JComponent.WHEN_FOCUSED,inputMap);			
+			jtable.setInputMap(JComponent.WHEN_FOCUSED,inputMap);
 
 			jtable.setEditable(false);
 
@@ -316,7 +306,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 					if (e.getKeyCode() == 10){								// ENTER
 						aufrufer.setLastRow(jtable.getSelectedRow());
 						sucheAbfeuern();
-						e.consume();	
+						e.consume();
 						setVisible(false);
 					}
 					if (e.getKeyCode() == 40 ||e.getKeyCode() == 38){		// ArrDwn, ArrUp
@@ -328,11 +318,11 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 					if (e.getKeyCode() == 27){								// ESC
 						e.consume();
 						setVisible(false);
-						sucheBeenden();						
+						sucheBeenden();
 					}
 				}
 			});
-						
+
 			jtable.addMouseListener(new java.awt.event.MouseAdapter() {
 				@Override
                 public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -345,19 +335,19 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 						sucheAbfeuern();
 						e.consume();
 						setVisible(false);
-					}	
+					}
 				}
 			});
 			jtable.updateUI();
 			jscr.setViewportView(jtable);
 			jp2.add(jscr,BorderLayout.CENTER);
-			
+
 			jContent.add(jp2, BorderLayout.CENTER);
 			gridJx.add(jContent,gridBagConstraints);
 			jtp.setContentContainer(gridJx);
 			jtp.validate();
 			jContentPane.add(jtp, BorderLayout.CENTER);
-			
+
 			if(suchart == toolBar.getAktRezIdx()){
 				// NOTHING to do
 				// Lemmi 20101212: wir brauchen kein Suchwert-Eingabefeld im Ergebnisdialog
@@ -376,7 +366,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		PatStammEvent pEvt = new PatStammEvent(SuchenDialog.this);
 		pEvt.setPatStammEvent("PatSuchen");
 		pEvt.setDetails(s1,s2,fname) ;
-		PatStammEventClass.firePatStammEvent(pEvt);		
+		PatStammEventClass.firePatStammEvent(pEvt);
 		Reha.thisClass.lastSelectedPat = jtable.getSelectedRow();
 	}
 	public void sucheBeenden(){
@@ -387,7 +377,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		PatStammEvent pEvt = new PatStammEvent(SuchenDialog.this);
 		pEvt.setPatStammEvent("PatSuchen");
 		pEvt.setDetails(s1,s2,fname) ;
-		PatStammEventClass.firePatStammEvent(pEvt);	
+		PatStammEventClass.firePatStammEvent(pEvt);
 		Reha.thisClass.lastSelectedPat = -1;
 	}
 	// Lemmi 20101212: Merken der Defaultwerte für den nächsten Aufruf
@@ -398,25 +388,25 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		SystemConfig.hmPatientenSuchenDlgIni.put("fensterbreite", dim.width);
 		SystemConfig.hmPatientenSuchenDlgIni.put("fensterhoehe", dim.height);
 		SystemConfig.hmPatientenSuchenDlgIni.put("suchart", suchart);
-		
+
 		// !! Werte landen erstmal nur in der HashMap; in der ini nur bei Speichern der 'Einstellungen -> Bedienung'!!
 	}
-	
+
 
 	/**
-	 * This method initializes JXTitledPanel	
-	 * 	
-	 * @return org.jdesktop.swingx.JXTitledPanel	
+	 * This method initializes JXTitledPanel
+	 *
+	 * @return org.jdesktop.swingx.JXTitledPanel
 	 */
 	private JXTitledPanel getJXTitledPanel() {
 		if (jXTitledPanel == null) {
 			jXTitledPanel = new JXTitledPanel();
-			
+
 			/*
 			// Lemmi 20101212: Erweitert um "Patienten mit aktuellen Rezepten"
 			String kriterium[]={"Nachname Vorname","Patienten-ID","Vorname Nachname",
 					"Telefon privat","Telefon geschäftl.","Telefon mobil","Notizen", "Nur Patienten mit aktuellen Rezepten"};
-			
+
 			jXTitledPanel.setTitle("Suche Patient..."+this.fname+" nach "+kriterium[suchart]);
 			*/
 			String titel = "Suche ";
@@ -443,9 +433,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				}
 			});
 			jXTitledPanel.setRightDecoration(jb2);
-			jXTitledPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {   
+			jXTitledPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
 				@Override
-                public void mouseMoved(java.awt.event.MouseEvent e) {    
+                public void mouseMoved(java.awt.event.MouseEvent e) {
 					for(int i = 0; i < 1; i++){
 						sizeart=-1;
 						setCursor(cdefault);
@@ -453,7 +443,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							insize = true;
 							sizeart = 1;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(cnwsize);
 							break;
 						}
@@ -461,7 +451,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							insize = true;
 							sizeart = 2;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(cnesize);
 							break;
 						}
@@ -469,7 +459,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							insize = true;
 							sizeart = 3;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(cnsize);
 							break;
 						}
@@ -477,7 +467,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							insize = true;
 							sizeart = 4;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(cswsize);
 							break;
 						}
@@ -485,16 +475,16 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							insize = true;
 							sizeart = 5;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(cwsize);
 							break;
 						}
 						if ((e.getX()>=  (((JComponent) e.getSource()).getWidth()-4)) && //s�d-ost
-								e.getY() >= (((JComponent) e.getSource()).getHeight()-4)){ 
+								e.getY() >= (((JComponent) e.getSource()).getHeight()-4)){
 							insize = true;
 							sizeart = 6;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(csesize);
 							break;
 						}
@@ -502,7 +492,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							insize = true;
 							sizeart = 7;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(cssize);
 							break;
 						}
@@ -510,7 +500,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							insize = true;
 							sizeart = 8;
 							orgbounds[0]=e.getXOnScreen();
-							orgbounds[1]=e.getYOnScreen();						
+							orgbounds[1]=e.getYOnScreen();
 							setCursor(cesize);
 							break;
 						}
@@ -534,7 +524,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 						for(int i = 0;i<1;i++){  // Lemmi Frage: Was ist denn das für eine magische Konstruktion: Warum kein switch????
 							if(sizeart==1){ //nord-west
 								dim.width = (oX > orgbounds[0] ? dim.width-(oX-orgbounds[0]) : dim.width+(orgbounds[0]-oX));
-								dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));						
+								dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -546,7 +536,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							}
 							if(sizeart==2){ //nord-ost
 								dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
-								dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));						
+								dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -558,7 +548,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							}
 							if(sizeart==3){ //nord
 								//dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
-								dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));						
+								dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -567,10 +557,10 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 								SuchenDialog.this.setLocation(e.getXOnScreen()-e.getX(),e.getYOnScreen());
 								setCursor(cnsize);
 								break;
-							}	
+							}
 							if(sizeart==4){ //s�d-west
 								dim.width = (oX > orgbounds[0] ? dim.width-(oX-orgbounds[0]) : dim.width+(orgbounds[0]-oX));
-								dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
+								dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -582,7 +572,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							}
 							if(sizeart==5){ //west
 								dim.width = (oX > orgbounds[0] ? dim.width-(oX-orgbounds[0]) : dim.width+(orgbounds[0]-oX));
-								//dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
+								//dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -594,7 +584,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							}
 							if(sizeart==6){ //s�d-ost
 								dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
-								dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
+								dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -606,7 +596,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							}
 							if(sizeart==7){ //s�d
 								//dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
-								dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
+								dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -618,7 +608,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 							}
 							if(sizeart==8){ //ost
 								dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
-								//dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));						
+								//dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
 								dim.width = (dim.width < 185 ? 185 : dim.width);
 								dim.height = (dim.height < 125 ? 125 : dim.height);
 								orgbounds[0] = oX;
@@ -638,16 +628,16 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				}
 			});
 
-			jXTitledPanel.addMouseListener(new java.awt.event.MouseAdapter() {   
+			jXTitledPanel.addMouseListener(new java.awt.event.MouseAdapter() {
 				@Override
-                public void mouseExited(java.awt.event.MouseEvent e) {    
-				}   
+                public void mouseExited(java.awt.event.MouseEvent e) {
+				}
 				@Override
-                public void mouseReleased(java.awt.event.MouseEvent e) {    
+                public void mouseReleased(java.awt.event.MouseEvent e) {
 					clickX = -1;
 					clickY = -1;
 					orgbounds[0] = -1;
-					orgbounds[1] = -1;					
+					orgbounds[1] = -1;
 					insize = false;
 					setCursor(cdefault);
 				}
@@ -664,9 +654,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	}
 
 	/**
-	 * This method initializes jButton	
-	 * 	
-	 * @return javax.swing.JButton	
+	 * This method initializes jButton
+	 *
+	 * @return javax.swing.JButton
 	 */
 	private JXButton getJButton() {
 		if (jButton == null) {
@@ -682,7 +672,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 
 					aufrufer.setLastRow(-1);
 					SuchenDialog.this.dispose();
-					sucheBeenden();						
+					sucheBeenden();
 				}
 			});
 		}
@@ -690,9 +680,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	}
 
 	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
+	 * This method initializes jTextField
+	 *
+	 * @return javax.swing.JTextField
 	 */
 	private JTextField getJTextField() {
 		if (jTextField == null) {
@@ -702,9 +692,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		return jTextField;
 	}
 	class suchePatient extends SwingWorker<Void,Void>{
-		
+
 	DefaultTableModel tblDataModel;
-	
+
 	public String ADS_Date(){
 		if (!SystemConfig.vDatenBank.get(0).get(2).equals("ADS")){
 			return "DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren";
@@ -716,7 +706,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	/**
 	 * Erzeugt für jeden, im Suchstring gefundenen, Umlaut einen weiteren Suchstring mit der Umschreibung des Umlautes (u. vice-versa).
 	 * Vokale am Ende des Suchstrings werden als möglicher Beginn einer Umlaut-Umschreibung angesehen
-	 * 
+	 *
 	 * @param fieldname Tabellenspalte, in der gesucht wird
 	 * @param val eingegebener Suchbegriff (Anfang des Namens, Vornamens)
 	 * @return gibt die ODER-Verknüpfung der Suchstrings zurück (SQL-Syntax)
@@ -730,51 +720,51 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		sSuchPattern.add(val.toLowerCase());		// Original merken
 		if (systemEinstellungen.SystemConfig.searchExtended()){
 			// ---- könnte Ende Teil einer Umlaut-Umschreibung sein?
-			if (sTmp.endsWith("a")){sSuchPattern.add(sTmp.concat("e"));} else	
+			if (sTmp.endsWith("a")){sSuchPattern.add(sTmp.concat("e"));} else
 			if (sTmp.endsWith("o")){sSuchPattern.add(sTmp.concat("e"));} else
 			if (sTmp.endsWith("u")){sSuchPattern.add(sTmp.concat("e"));} else
 			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("s"));} else
-			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("z"));} 
+			if (sTmp.endsWith("s")){sSuchPattern.add(sTmp.concat("z"));}
 			i = sSuchPattern.size();
 			// ---- ersetzt Umlaut <-> Umschreibung
-			for (int k=0; k<i; k++){			
+			for (int k=0; k<i; k++){
 				sTmp=sSuchPattern.get(k);
 				if (sTmp.indexOf("ä") >= 0){
 					sSuchPattern.add(sTmp.replace("ä", "ae"));	// Umschreibung
 					sSuchPattern.add(sTmp.replace("ä", "a"));	// ohne Umlaut geschrieben
-				} 
+				}
 				if (sTmp.indexOf("ö") >= 0){
 					sSuchPattern.add(sTmp.replace("ö", "oe"));
 					sSuchPattern.add(sTmp.replace("ö", "o"));
-				} 
+				}
 				if (sTmp.indexOf("ü") >= 0){
 					sSuchPattern.add(sTmp.replace("ü", "ue"));
 					sSuchPattern.add(sTmp.replace("ü", "u"));
-				} 
+				}
 				if (sTmp.indexOf("ß") >= 0){
 					sSuchPattern.add(sTmp.replace("ß", "ss"));
 					sSuchPattern.add(sTmp.replace("ß", "sz"));
-				} 
-				if (sTmp.indexOf("ae") >= 0){sSuchPattern.add(sTmp.replace("ae", "ä"));} 
-				if (sTmp.indexOf("oe") >= 0){sSuchPattern.add(sTmp.replace("oe", "ö"));} 
-				if (sTmp.indexOf("ue") >= 0){sSuchPattern.add(sTmp.replace("ue", "ü"));} 
-				if (sTmp.indexOf("ss") >= 0){sSuchPattern.add(sTmp.replace("ss", "ß"));} 
+				}
+				if (sTmp.indexOf("ae") >= 0){sSuchPattern.add(sTmp.replace("ae", "ä"));}
+				if (sTmp.indexOf("oe") >= 0){sSuchPattern.add(sTmp.replace("oe", "ö"));}
+				if (sTmp.indexOf("ue") >= 0){sSuchPattern.add(sTmp.replace("ue", "ü"));}
+				if (sTmp.indexOf("ss") >= 0){sSuchPattern.add(sTmp.replace("ss", "ß"));}
 				if (sTmp.indexOf("sz") >= 0){sSuchPattern.add(sTmp.replace("sz", "ß"));}
 			}
 		}
 		// ---- Suchstring zusammensetzen
 		sTmp = "";
 		/*
-		// ergibt ein absolut "ungewöhnliches" Ergebnis. 
+		// ergibt ein absolut "ungewöhnliches" Ergebnis.
 		for (String c: sSuchPattern){
 			if (sTmp.isEmpty()){
-				sTmp = fieldname+" LIKE '"+c+"%'";	
+				sTmp = fieldname+" LIKE '"+c+"%'";
 			}else{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
 			}
 		}
 		*/
-		
+
 		for (int i2 = 0; i2 < sSuchPattern.size();i2++){
 			if(i2 == 2){
 				//steht lediglich ein Vokal was zu einer größeren Menge nicht gewünschter Datensätze führt
@@ -785,34 +775,34 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				break;
 			}
 			if (sTmp.isEmpty()){
-				sTmp = fieldname+" LIKE '"+sSuchPattern.get(i2)+"%'";	
+				sTmp = fieldname+" LIKE '"+sSuchPattern.get(i2)+"%'";
 			}else{
 				sTmp = sTmp+" OR "+fieldname+" LIKE '"+sSuchPattern.get(i2)+"%'";
 			}
 		}
-		
+
 
 		//System.out.println("Suchstring: "+sTmp);
 		return sTmp;
 	}
 
-	
-	
+
+
 	private void suchePatienten(){
 		Statement stmt = null;
 		ResultSet rs = null;
 		String sstmt = "", eingabe = "";
-		
+
 		String[] suche = {null};
-		setCursor(Reha.thisClass.wartenCursor);	
-		
+		setCursor(Reha.thisClass.wartenCursor);
+
 		eingabe = jTextField.getText().trim();
 		while  (eingabe.contains("  ") ){
 			eingabe = eingabe.replace("  ", " ");
 		}
-		suche = eingabe.split(" ");	 
-		
-		if(suchart == toolBar.getNnVnIdx()){  // "Name Vorname" 
+		suche = eingabe.split(" ");
+
+		if(suchart == toolBar.getNnVnIdx()){  // "Name Vorname"
 			// 2015-08 McM auf Suche nach Umlaut-Umschreibung erweitert
 			//         (besser mit tmp-var für Eingabe (dann reicht 1x trim ...))
 			if (eingabe.contains(" ") ){
@@ -821,11 +811,11 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			}else{
 				sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern from pat5 where ("+SucheKlang("n_name",suche[0])+") order by n_name,v_name,geboren";
 			}
-		
+
 		}else if(suchart == toolBar.getPatIdIdx()){    // "Patienten-ID"
 			sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where pat_intern = '"+suche[0]+"' LIMIT 1";
 		}else if(suchart == toolBar.getVnNnIdx()){  // "Vorname Name"  (Erweiterung von Drud) + Umlaut-Suche (McM)
-			
+
 			if (eingabe.contains(" ") ){
 				sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern  from pat5 where ("+SucheKlang("v_name",suche[0])+") AND ("+SucheKlang("n_name",suche[1])+") order by n_name,v_name";
 			}else{
@@ -857,7 +847,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		}
 		//System.out.println(sstmt);
 		try {
-			
+
 			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
@@ -874,13 +864,13 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				}
 
 				setCursor(Reha.thisClass.normalCursor);
-				
+
 				try{
 					if(jtable.getRowCount() > 0 && aufrufer.getLastRow() >=0 && aufrufer.getLastRow() < jtable.getRowCount()){
 						jtable.setRowSelectionInterval(aufrufer.getLastRow(), aufrufer.getLastRow());
 						jumpok = true;
 						jtable.requestFocus();
-						
+
 					}else{
 						jumpok = false;
 					}
@@ -889,10 +879,10 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 					aufrufer.setLastRow(-1);
 					ex.printStackTrace();
 				}
-				
+
 			}catch(SQLException ev){
 				ev.getMessage();
-			}	
+			}
 
 		}catch(SQLException ex) {
 			ex.getMessage();
@@ -927,11 +917,11 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		return null;
 	}
 	}
-	
+
 	private void setDetails(String Event,String PatNummer){
 			this.sEventDetails[0] = Event;
 			this.sEventDetails[1] = PatNummer;
-	}	
+	}
 	public String[] getDetails(String Event,String PatNummer){
 			return this.sEventDetails;
 	}

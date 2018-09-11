@@ -34,7 +34,7 @@ public class TopWindow implements XTopWindowListener{
 	}
 	@Override
 	public void disposing(EventObject arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -52,31 +52,31 @@ public class TopWindow implements XTopWindowListener{
 
 	@Override
 	public void windowClosing(EventObject arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowDeactivated(EventObject arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowMinimized(EventObject arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowNormalized(EventObject arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowOpened(EventObject arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

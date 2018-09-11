@@ -115,7 +115,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 
 	@Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+		
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -397,7 +397,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 
 		@Override
 		public void keyPressed(KeyEvent arg0) {
-			// TODO Auto-generated method stub
+			
 			if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode() == 10){
 				arg0.consume();
 				fuelleTabelle(tf.getText().trim());
@@ -432,7 +432,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 		}
 		@Override
 		public void keyTyped(KeyEvent arg0) {
-			// TODO Auto-generated method stub
+			
 		}
 	}	
 	/************************************************/	

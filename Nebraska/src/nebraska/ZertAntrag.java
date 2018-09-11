@@ -429,7 +429,7 @@ public class ZertAntrag extends JXPanel implements ListSelectionListener, Action
 	
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

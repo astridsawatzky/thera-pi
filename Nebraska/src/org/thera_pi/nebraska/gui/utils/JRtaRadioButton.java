@@ -40,25 +40,25 @@ public void listenerLoeschen(){
 
 @Override
 public void propertyChange(PropertyChangeEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	//this.getParent().dispatchEvent(arg0);	
 }
 
 @Override
 public void focusGained(FocusEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void focusLost(FocusEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void keyPressed(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	int code = arg0.getKeyCode();
 	if(code == KeyEvent.VK_ENTER){
 		arg0.consume();
@@ -77,18 +77,18 @@ public void keyPressed(KeyEvent arg0) {
 
 @Override
 public void keyReleased(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 
 @Override
 public void keyTyped(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	
 }
 @Override
 public void actionPerformed(ActionEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	this.getParent().dispatchEvent(arg0);	
 }
 

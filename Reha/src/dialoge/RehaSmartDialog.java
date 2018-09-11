@@ -95,17 +95,17 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 			UIManager.setLookAndFeel(Reha.aktLookAndFeel);
 			
 		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (InstantiationException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 			
 		} catch (UnsupportedLookAndFeelException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 		final ActionListener listener = new ActionListener() {
@@ -296,7 +296,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		ListenerSchliessen();
 		this.removeWindowListener(this);
 		//System.out.println("Basisklasse wird geschlossen - "+getName()+" IgnoreReturn = "+ignorereturn);
@@ -307,7 +307,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		//System.out.println("In Closing der Elternklasse "+arg0);
-		// TODO Auto-generated method stub
+		
 			
 	}
 
@@ -321,19 +321,19 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -347,19 +347,19 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		////System.out.println("In Click Klick Y bei "+arg0);
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	public void setClicks(int x,int y){
@@ -623,21 +623,21 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
 	@Override
     public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("SmartDialog Pressed "+arg0.getKeyCode());
 	}
 
 
 	@Override
     public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("SmartDialog Released "+arg0);		
 	}
 
 	
 	@Override
     public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+		
 		////System.out.println("SmartDialog Typed "+arg0);
 	}
 	

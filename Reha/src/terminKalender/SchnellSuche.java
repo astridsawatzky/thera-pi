@@ -341,7 +341,7 @@ public String dieserName(){
 
 @Override
 public void rehaTPEventOccurred(RehaTPEvent evt) {
-	// TODO Auto-generated method stub
+	
 	//System.out.println("****************das darf doch nicht wahr sein in DruckFenster**************");
 	String ss =  this.getName();
 	//System.out.println("SchnellSucheFenster "+this.getName()+" Eltern "+ss);
@@ -513,12 +513,12 @@ public void keyPressed(KeyEvent arg0) {
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
-	// TODO Auto-generated method stub
+	
 	if(arg0.getKeyCode() == 27){
 		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);

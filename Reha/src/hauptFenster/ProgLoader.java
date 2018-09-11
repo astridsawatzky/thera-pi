@@ -835,7 +835,7 @@ public static void InternalGut2(){
 	try {
 		iframe.setSelected(true);
 	} catch (PropertyVetoException e) {
-		// TODO Auto-generated catch block
+		
 		e.printStackTrace();
 	}
 
@@ -1107,7 +1107,7 @@ public static void containerBelegen(int setPos,RehaTP jtp){
 }
 
 public void RehaTPEventOccurred(RehaTPEvent evt) {
-	// TODO Auto-generated method stub
+	
 	////System.out.println("ProgLoader Systemausl�ser"+evt.getSource());
 	////System.out.println("ProgLoader Event getDetails[0]: = "+evt.getDetails()[0]);
 	////System.out.println("ProgLoader Event getDetails[1]: = "+evt.getDetails()[1]);
