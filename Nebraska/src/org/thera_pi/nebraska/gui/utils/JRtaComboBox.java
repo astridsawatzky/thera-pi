@@ -1,7 +1,6 @@
 package org.thera_pi.nebraska.gui.utils;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -14,9 +13,9 @@ import javax.swing.JComboBox;
 
 
 
-public class JRtaComboBox extends JComboBox implements ActionListener,PropertyChangeListener,FocusListener,KeyListener{
+public class JRtaComboBox extends JComboBox implements PropertyChangeListener,FocusListener,KeyListener{
 /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 6867094510690570951L;
 public Vector<?> vec  = null;
@@ -26,7 +25,7 @@ public String startElement = "";
 public JRtaComboBox(){
 	super();
 	addKeyListener(this);
-	addActionListener(this);	
+	addActionListener(this);
 }
 public JRtaComboBox(String[] ss){
 	super(ss);
@@ -37,7 +36,7 @@ public JRtaComboBox(Vector<String> ve){
 	super();
 	this.vec = ve;
 	if(this.vec.get(0) instanceof Vector<?>){
-		fillCombo(this.vec);		
+		fillCombo(this.vec);
 	}else{
 		fillOneDimension(this.vec);
 	}
@@ -53,14 +52,14 @@ public JRtaComboBox(Vector<Vector<String>> ve,int item,int ret){
 	this.cmbretvalue = ret;
 	try{
 		if(this.vec == null){
-			
+
 		}else if(this.vec.get(0) instanceof Vector<?>){
-			fillCombo(this.vec);		
+			fillCombo(this.vec);
 		}else{
 			fillOneDimension(this.vec);
 		}
 	}catch(Exception ex){
-		
+
 	}
 	addKeyListener(this);
 	addActionListener(this);
@@ -78,7 +77,7 @@ public void setDataVector2Dim(Vector<Vector<String>> ve,int item,int ret){
 	this.cmbdisplay = item;
 	this.cmbretvalue = ret;
 	if(this.vec.get(0) instanceof Vector<?>){
-		fillCombo(this.vec);		
+		fillCombo(this.vec);
 	}else{
 		fillOneDimension(this.vec);
 	}
@@ -90,7 +89,7 @@ public void setDataVectorVector(Vector<Vector<String>> ve,int item,int ret){
 	this.cmbdisplay = item;
 	this.cmbretvalue = ret;
 	if(this.vec.get(0) instanceof Vector<?>){
-		fillCombo(this.vec);		
+		fillCombo(this.vec);
 	}else{
 		fillOneDimension(this.vec);
 	}
@@ -102,7 +101,7 @@ public void setDataVectorWithStartElement(Vector<Vector<String>> ve,int item,int
 	this.cmbretvalue = ret;
 	this.startElement = startElement;
 	if(this.vec.get(0) instanceof Vector<?>){
-		fillComboWithStartElement(this.vec,this.startElement);		
+		fillComboWithStartElement(this.vec,this.startElement);
 	}else{
 		fillOneDimensionWithStartElement(this.vec,this.startElement);
 	}
@@ -126,10 +125,10 @@ public void setSelectedVecIndex(int index, String vergleich){
 	}
 }
 public void setDataVector(Vector <String> ve,int item,int ret){
-	
+
 }
 private void fillOneDimensionWithStartElement(Vector<?> ve,String startElement){
-	int lang = ve.size();	
+	int lang = ve.size();
 	addItem(startElement);
 	for(int i = 0;i < lang;i++){
 		addItem( ve.get(i));
@@ -143,7 +142,7 @@ private void fillComboWithStartElement(Vector<?> ve,String startElement){
 	for(int i = 0;i < lang;i++){
 		addItem( ((Vector<?>)ve.get(i)).get(this.cmbdisplay));
 	}
-	
+
 }
 
 private void fillOneDimension(Vector<?> ve){
@@ -159,12 +158,12 @@ private void fillCombo(Vector<?> ve){
 	for(int i = 0;i < lang;i++){
 		addItem( ((Vector<?>)ve.get(i)).get(this.cmbdisplay));
 	}
-	
+
 }
 
 public Object getSecValue(){
 	if(this.startElement.equals("")){
-		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );
 	}else{
 		return (((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(this.cmbretvalue) );
 	}
@@ -172,7 +171,7 @@ public Object getSecValue(){
 }
 public Object getValue(){
 	if(this.startElement.equals("")){
-		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(this.cmbretvalue) );
 	}else{
 		return (((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(this.cmbretvalue) );
 	}
@@ -180,16 +179,16 @@ public Object getValue(){
 public Object getValueAt(int pos){
 	if(vec.size()<=0){return "";}
 	if(this.startElement.equals("")){
-		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(pos) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex())).get(pos) );
 	}else{
 		if(this.getSelectedIndex()==0){return "";}
-		return (((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(pos) );		
+		return (((Vector<?>)vec.get(this.getSelectedIndex()-1)).get(pos) );
 	}
 }
 public void setNewValueAtCurrentPosition(int pos,Object newvalue){
 
 	if(this.startElement.equals("")){
-		((Vector<Object>)vec.get(this.getSelectedIndex())).set(pos,newvalue);		
+		((Vector<Object>)vec.get(this.getSelectedIndex())).set(pos,newvalue);
 	}else{
 		((Vector<Object>)vec.get(this.getSelectedIndex()-1)).set(pos,newvalue);
 	}
@@ -200,7 +199,7 @@ public void addNewVector(Vector<String> newvec){
 }
 public void removeVector(int pos){
 	if(this.startElement.equals("")){
-		((Vector<Object>)vec).remove(pos);		
+		((Vector<Object>)vec).remove(pos);
 	}else{
 		((Vector<Object>)vec).remove(pos-1);
 	}
@@ -211,19 +210,19 @@ public void removeVector(int pos){
 @Override
 public void propertyChange(PropertyChangeEvent arg0) {
 	// TODO Auto-generated method stub
-	//this.getParent().dispatchEvent(arg0);	
+	//this.getParent().dispatchEvent(arg0);
 }
 
 @Override
 public void focusGained(FocusEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 public void focusLost(FocusEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
@@ -243,7 +242,7 @@ public void keyPressed(KeyEvent arg0) {
 			this.getParent().getParent().getParent().dispatchEvent(arg0);
 			this.getParent().getParent().getParent().getParent().dispatchEvent(arg0);
 		}catch(Exception ex){
-			
+
 		}
 		return;
 	}
@@ -252,19 +251,19 @@ public void keyPressed(KeyEvent arg0) {
 		this.transferFocusBackward();
 		this.getParent().dispatchEvent(arg0);
 		return;
-	}	
+	}
 }
 
 @Override
 public void keyReleased(KeyEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 public void keyTyped(KeyEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 @Override
 public void actionPerformed(ActionEvent arg0) {
@@ -272,7 +271,7 @@ public void actionPerformed(ActionEvent arg0) {
 	try{
 		this.getParent().dispatchEvent(arg0);
 	}catch(java.lang.NullPointerException ex){
-		
+
 	}
 }
 

@@ -608,7 +608,8 @@ public class OffenepostenMahnungen extends JXPanel{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			switch(columnIndex){
 			case 0:
 				return Integer.class;
@@ -647,7 +648,8 @@ public class OffenepostenMahnungen extends JXPanel{
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			if(col==12){
 				return true;				
 			}
@@ -660,7 +662,8 @@ public class OffenepostenMahnungen extends JXPanel{
 
 	class MahnungListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){

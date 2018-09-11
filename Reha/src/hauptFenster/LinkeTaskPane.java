@@ -181,10 +181,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		DropTarget dndt = new DropTarget();
 		DropTargetListener dropTargetListener =
 			 new DropTargetListener() {
-			  public void dragEnter(DropTargetDragEvent e) {}
-			  public void dragExit(DropTargetEvent e) {}
-			  public void dragOver(DropTargetDragEvent e) {}
-			  public void drop(DropTargetDropEvent e) {
+			  @Override
+            public void dragEnter(DropTargetDragEvent e) {}
+			  @Override
+            public void dragExit(DropTargetEvent e) {}
+			  @Override
+            public void dragOver(DropTargetDragEvent e) {}
+			  @Override
+            public void drop(DropTargetDropEvent e) {
 				  String mitgebracht = "";
 			    try {
 			      Transferable tr = e.getTransferable();
@@ -206,7 +210,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			    // Ein Problem ist aufgetreten
 			    e.dropComplete(true);
 			  }
-			  public void dropActionChanged(
+			  @Override
+            public void dropActionChanged(
 			         DropTargetDragEvent e) {}
 		};
 		try {
@@ -263,10 +268,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		DropTarget dndt = new DropTarget();
 		DropTargetListener dropTargetListener =
 			 new DropTargetListener() {
-			  public void dragEnter(DropTargetDragEvent e) {}
-			  public void dragExit(DropTargetEvent e) {}
-			  public void dragOver(DropTargetDragEvent e) {}
-			  public void drop(DropTargetDropEvent e) {
+			  @Override
+            public void dragEnter(DropTargetDragEvent e) {}
+			  @Override
+            public void dragExit(DropTargetEvent e) {}
+			  @Override
+            public void dragOver(DropTargetDragEvent e) {}
+			  @Override
+            public void drop(DropTargetDropEvent e) {
 				  String mitgebracht = "";
 			    try {
 			      Transferable tr = e.getTransferable();
@@ -287,7 +296,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			    // Ein Problem ist aufgetreten
 			    e.dropComplete(true);
 			  }
-			  public void dropActionChanged(
+			  @Override
+            public void dropActionChanged(
 			         DropTargetDragEvent e) {}
 		};
 		try {
@@ -336,10 +346,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		dndt = new DropTarget();
 		dropTargetListener =
 			 new DropTargetListener() {
-			  public void dragEnter(DropTargetDragEvent e) {}
-			  public void dragExit(DropTargetEvent e) {}
-			  public void dragOver(DropTargetDragEvent e) {}
-			  public void drop(DropTargetDropEvent e) {
+			  @Override
+            public void dragEnter(DropTargetDragEvent e) {}
+			  @Override
+            public void dragExit(DropTargetEvent e) {}
+			  @Override
+            public void dragOver(DropTargetDragEvent e) {}
+			  @Override
+            public void drop(DropTargetDropEvent e) {
 				  String mitgebracht = "";
 			    try {
 			      Transferable tr = e.getTransferable();
@@ -360,7 +374,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			    // Ein Problem ist aufgetreten
 			    e.dropComplete(true);
 			  }
-			  public void dropActionChanged(
+			  @Override
+            public void dropActionChanged(
 			         DropTargetDragEvent e) {}
 		};
 		try {
@@ -591,7 +606,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					aktTag = wahlTag;
 					Reha.thisClass.progLoader.ProgTerminFenster(1, 0);
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							TerminFenster.getThisClass().springeAufDatum(aktTag);
 							
 						}
@@ -649,7 +665,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	 * Eigener Event-Handler man wird sehen ob das vern�ftig ist.
 	 * 	@Override
 	 */
-	public void actionPerformed(ActionEvent e) {
+	@Override
+    public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		int i;
 		for(i=0;i<1;i++){
@@ -772,7 +789,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 			if (cmd.equals("Thera-PI - Browser")){
 				new Thread(){
-					public void run(){
+					@Override
+                    public void run(){
 						new LadeProg(Path.Instance.getProghome()+"RehaWissen.jar");		
 					}
 				}.start();
@@ -802,7 +820,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					if(Reha.aktUser.startsWith("Therapeut")){return;}
 					Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 					new Thread(){
-						public void run(){
+						@Override
+                        public void run(){
 							new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));		
 						}
 					}.start();
@@ -836,7 +855,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 			if (cmd.equals("piHelp")){
 				new Thread(){
-					public void run(){
+					@Override
+                    public void run(){
 						try{
 							new LadeProg(Path.Instance.getProghome()+"piHelp.jar "+
 									Path.Instance.getProghome()+" "+Reha.aktIK);
@@ -895,7 +915,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					return;
 				}
 				new Thread(){
-					public void run(){
+					@Override
+                    public void run(){
 						new LadeProg(Path.Instance.getProghome()+"ArztBaustein.jar "+
 								Path.Instance.getProghome()+" "+Reha.aktIK);	
 					}
@@ -924,7 +945,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 			if (cmd.equals("piQM")){
 				new Thread(){
-					public void run(){
+					@Override
+                    public void run(){
 						new LadeProg(Path.Instance.getProghome()+"QMHandbuch.jar");		
 					}
 				}.start();
@@ -948,7 +970,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 			if (cmd.equals("piAW")){
 				new Thread(){
-					public void run(){
+					@Override
+                    public void run(){
 						new LadeProg(Path.Instance.getProghome()+"QMAuswertung.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);		
 					}
 				}.start();
@@ -1154,7 +1177,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		if(patient == null){
 			final String xpat_int = pat_int;
 			new SwingWorker<Void,Void>(){
-				protected Void doInBackground() throws Exception {
+				@Override
+                protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 					Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
 					while( (xpatient == null) ){

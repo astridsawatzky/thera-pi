@@ -243,7 +243,8 @@ public class RehaBillEdit implements WindowListener {
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	
@@ -388,7 +389,8 @@ public class RehaBillEdit implements WindowListener {
             officeapplication = OfficeApplicationRuntime.getApplication(config);
             officeapplication.activate();
             officeapplication.getDesktopService().addTerminateListener(new VetoTerminateListener() {
-            	  public void queryTermination(ITerminateEvent terminateEvent) {
+            	  @Override
+                public void queryTermination(ITerminateEvent terminateEvent) {
             	    super.queryTermination(terminateEvent);
             	    try {
             	      IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();

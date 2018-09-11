@@ -575,7 +575,8 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 	 */
 	class BillListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){
@@ -651,7 +652,8 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			if(feldNamen.get(columnIndex).get(1).contains("varchar(")){
 				return String.class;
 			}else if(feldNamen.get(columnIndex).get(1).contains("enum(")){
@@ -668,7 +670,8 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			
 			if(feldNamen.get(col).get(5).equalsIgnoreCase("auto_increment")){
 				return false;				
@@ -1265,7 +1268,8 @@ public class RehaUrlaubPanel extends JXPanel implements TableModelListener  {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Component getListCellRendererComponent(JList list, Object value,
+		@Override
+        public Component getListCellRendererComponent(JList list, Object value,
 			int index, boolean isSelected, boolean cellHasFocus) {
 			if (isSelected) {
 				setBackground(list.getSelectionBackground());

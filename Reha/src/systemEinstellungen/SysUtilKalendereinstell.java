@@ -59,7 +59,8 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 		/****/
 	     add(getVorlagenSeite());
 	     SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				STD1.requestFocus();
 	 	  	}
 	     });			
@@ -157,7 +158,8 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 		builder.addLabel("gesperrte Spalten freigeben", cc.xy(1,27));
 		builder.add(knopf3, cc.xyw(3, 27, 5));		
 	     SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 					STD1.requestFocus();
 		 	  	}
 		     });			
@@ -244,7 +246,8 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 					JOptionPane.showMessageDialog(null, "Sie haben die Kalenderanfangszeit verändert.\n\n"+
 							"Für die Neuorganisation des Terminkalenders können Sie schon mal einige Kannen Kaffee kochen!");
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 							STD2.requestFocus();
 				 	  	}
 					});			
@@ -263,7 +266,8 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 							"Für die Neuorganisation des Terminkalenders können Sie schon mal einige Kannen Kaffee kochen!");
 					kalNeuEnde = true;
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 							refresh.requestFocus();
 				 	  	}
 					});			

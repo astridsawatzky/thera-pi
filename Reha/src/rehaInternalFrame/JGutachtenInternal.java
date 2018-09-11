@@ -31,7 +31,8 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 		rEvent = new RehaEventClass();
 		rEvent.addRehaEventListener(this);
 		this.addPropertyChangeListener(new PropertyChangeListener() {
-	          public void propertyChange(PropertyChangeEvent evt) {
+	          @Override
+            public void propertyChange(PropertyChangeEvent evt) {
 	        	////System.out.println(evt);
 	              if (evt.getPropertyName().equalsIgnoreCase(JInternalFrame.IS_ICON_PROPERTY) 
 	            		  && evt.getNewValue().equals(Boolean.TRUE)){
@@ -102,7 +103,8 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 		final String name = this.getName();
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 				AktiveFenster.loescheFenster(name);
 				Reha.thisClass.progLoader.loescheGutachten();
@@ -111,7 +113,8 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

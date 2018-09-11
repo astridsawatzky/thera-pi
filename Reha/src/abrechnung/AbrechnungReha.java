@@ -60,12 +60,12 @@ import systemEinstellungen.SystemPreislisten;
 
 public class AbrechnungReha extends JXPanel{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -7029656388659186476L;
 
 	/**
-	 * 
+	 *
 	 */
 	JRehaabrechnungInternal internal = null;
 	JXPanel content;
@@ -78,7 +78,7 @@ public class AbrechnungReha extends JXPanel{
 	JRtaTextField[] tfgesamt = {null,null,null,null};
 	JRtaComboBox[] jcmb = {null,null,null,null};
 	JRtaTextField[] tfrehanr = {null};
-	
+
 	JRtaCheckBox[] jckb = {null,null};
 	JRtaTextField[] tfpatanzahl = {null};
 	JRtaTextField[] tfpatpreis = {null};
@@ -86,7 +86,7 @@ public class AbrechnungReha extends JXPanel{
 	JRtaComboBox[] jcmbpat = {null};
 
 	JButton[] jbut = {null,null,null,null,null,null};
-	Vector<Vector<String>> rehavec = new Vector<Vector<String>>(); 
+	Vector<Vector<String>> rehavec = new Vector<Vector<String>>();
 	Vector<Vector<String>> kassvec = new Vector<Vector<String>>();
 	Vector<Vector<String>> rechnungvec = new Vector<Vector<String>>();
 	Vector<Vector<String>> patvec = new Vector<Vector<String>>();
@@ -105,7 +105,7 @@ public class AbrechnungReha extends JXPanel{
 	ActionListener al;
 	KeyListener kl;
 
-	
+
 	ITextTable textTable = null;
 	ITextTable textEndbetrag = null;
 	ITextDocument textDocument = null;
@@ -121,7 +121,7 @@ public class AbrechnungReha extends JXPanel{
 	StringBuffer rechnungBuf = new StringBuffer();
 	HashMap<String,String> hmRechnung = new HashMap<String,String>();
 	Vector<Vector<String>> vecposrechnung = new Vector<Vector<String>>();
-	
+
 	public AbrechnungReha(JRehaabrechnungInternal rai){
 		super();
 		this.internal = rai;
@@ -146,17 +146,18 @@ public class AbrechnungReha extends JXPanel{
 						tfpatpreis[i].setName("tfpatpreis"+Integer.toString(i));
 					}else{
 						tfanzahl[i].addKeyListener(kl);
-						tfanzahl[i].setName("tfanzahl_"+Integer.toString(i));						
+						tfanzahl[i].setName("tfanzahl_"+Integer.toString(i));
 						tfpreis[i].addKeyListener(kl);
 						tfpreis[i].setName("tfpreis_"+Integer.toString(i));
 					}
 				}
 				return null;
 			}
-			
+
 		}.execute();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
@@ -183,10 +184,11 @@ public class AbrechnungReha extends JXPanel{
 			}
 		}.execute();
 	}
-	
+
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				tfrehanr[0].requestFocus();
 			}
 		});
@@ -217,7 +219,7 @@ public class AbrechnungReha extends JXPanel{
 		jpan.add((jbut[0] = macheBut("drucken & buchen","drucken")),cc.xy(2,2));
 		jpan.add((jbut[1] = macheBut("Korrektur","korrektur")),cc.xy(4,2));
 		jpan.add((jbut[2] = macheBut("abbrechen","abbrechen")),cc.xy(6,2));
-		
+
 		return jpan;
 	}
 
@@ -243,7 +245,7 @@ public class AbrechnungReha extends JXPanel{
 		kassenLabel = new JLabel(" ");
 		kassenLabel.setForeground(Color.BLUE);
 		content.add(kassenLabel,cc.xyw(2,6,7));
-		
+
 		for(int i = 0; i < 4;i++){
 			tfanzahl[i] = new JRtaTextField("ZAHLEN",true);
 			content.add(tfanzahl[i],cc.xy(2,8+(i*2)));
@@ -261,12 +263,12 @@ public class AbrechnungReha extends JXPanel{
 		kasseGesamt.setForeground(Color.RED);
 		kasseGesamt.setHorizontalAlignment(JLabel.RIGHT);
 		content.add(kasseGesamt,cc.xy(8,16));
-		
+
 		jckb[1] = new JRtaCheckBox("nach §301 abrechnen und zusätzlich 1 Original drucken");
 		jckb[1].setOpaque(false);
 		jckb[1].setForeground(Color.BLUE);
 		content.add(jckb[1] ,cc.xyw(4,18,5));
-		
+
 		jckb[0] = new JRtaCheckBox("zusätzlich Eigenanteile der Patienten abrechnen");
 		jckb[0].setOpaque(false);
 		jckb[0].setActionCommand("auchpatliquidieren");
@@ -296,7 +298,7 @@ public class AbrechnungReha extends JXPanel{
 	}
 	private void reglePreise(int preisnummer){
 		if(jcmb[preisnummer].getSelectedIndex() > 0){
-			tfpreis[preisnummer].setText(((String)jcmb[preisnummer].getValueAt(3)).replace(".", ","));			
+			tfpreis[preisnummer].setText(((String)jcmb[preisnummer].getValueAt(3)).replace(".", ","));
 		}else{
 			tfpreis[preisnummer].setText("0,00");
 			tfanzahl[preisnummer].setText("0");
@@ -305,7 +307,7 @@ public class AbrechnungReha extends JXPanel{
 	}
 	private void reglePreisePat(){
 		if(jcmbpat[0].getSelectedIndex() > 0){
-			tfpatpreis[0].setText(((String)jcmbpat[0].getValueAt(3)).replace(".", ","));			
+			tfpatpreis[0].setText(((String)jcmbpat[0].getValueAt(3)).replace(".", ","));
 		}else{
 			tfpatpreis[0].setText("0,00");
 			tfpatanzahl[0].setText("0");
@@ -329,14 +331,14 @@ public class AbrechnungReha extends JXPanel{
 		tfpatgesamt[0].setText(dcf.format(gesamtPatPreis.doubleValue()));
 		patGesamt.setText(tfpatgesamt[0].getText());
 	}
-	 
-		
+
+
 	private void doEinlesen(String rehanummer){
 		String suchenach = rehanummer;
 		if(rehanummer.equals("")){
 			JOptionPane.showMessageDialog(null, "Witzbolde gibt's....");
 			return;
-		}	
+		}
 		if(!rehanummer.startsWith("RH")){
 			tfrehanr[0].setText("RH"+rehanummer);
 			suchenach = "RH"+rehanummer;
@@ -352,7 +354,7 @@ public class AbrechnungReha extends JXPanel{
 				holeRechnungsAnschrift(rehavec.get(0).get(37).trim());
 				return null;
 			}
-			
+
 		}.execute();
 		if(rehavec.size()<=0){
 			JOptionPane.showMessageDialog(null, "Reha-Verordnung mit Nummer "+suchenach+" wurde nicht gefunden");
@@ -391,12 +393,12 @@ public class AbrechnungReha extends JXPanel{
 
 				return null;
 			}
-			
+
 		}.execute();
 	}
-	
-	
-	
+
+
+
 	private void holePatientUndKostentraeger(String pat_intern,String kassenid){
 		patvec = SqlInfo.holeFelder("select n_name,v_name,geboren,anrede,titel,strasse,plz,ort,kv_status from pat5 where pat_intern='"+pat_intern+"' LIMIT 1");
 		kassvec = SqlInfo.holeFelder("select kassen_nam1,kassen_nam2,strasse,plz,ort,ik_papier,ik_kostent from kass_adr where id='"+kassenid+"' LIMIT 1");
@@ -419,7 +421,7 @@ public class AbrechnungReha extends JXPanel{
 				DatFunk.sDatInDeutsch(patvec.get(0).get(2))+(istprivat ? " - privat" : "")
 				);
 		doKassenLabel();
-				
+
 	}
 	private void controlsEinschalten(boolean einschalten){
 		if(einschalten){
@@ -428,7 +430,7 @@ public class AbrechnungReha extends JXPanel{
 			tfpatpreis[0].setEnabled(true);
 			tfpatpreis[0].setText("0,00");
 			tfpatgesamt[0].setText("0,00");
-			jcmbpat[0].setEnabled(true);		
+			jcmbpat[0].setEnabled(true);
 		}else{
 			tfpatanzahl[0].setEnabled(false);
 			tfpatanzahl[0].setText("");
@@ -438,7 +440,7 @@ public class AbrechnungReha extends JXPanel{
 			if(jcmbpat[0].getItemCount()>0){
 				jcmbpat[0].setSelectedIndex(0);
 			}
-			jcmbpat[0].setEnabled(false);	
+			jcmbpat[0].setEnabled(false);
 			patGesamt.setText("0,00");
 		}
 	}
@@ -460,7 +462,7 @@ public class AbrechnungReha extends JXPanel{
 				tfanzahl[i].setText("");
 				tfpreis[i].setText("");
 				tfgesamt[i].setText("");
-				jcmb[i].removeAllItems();				
+				jcmb[i].removeAllItems();
 			}
 		}
 		jckb[1].setSelected(false);
@@ -468,11 +470,11 @@ public class AbrechnungReha extends JXPanel{
 		patGesamt.setText(" ");
 		kasseGesamt.setText(" ");
 		patLabel.setText(" ");
-		kassenLabel.setText(" "); 
+		kassenLabel.setText(" ");
 		this.initOk = false;
 		setzeFocus();
 	}
-	
+
 	private void createListener(){
 		al = new ActionListener(){
 			@Override
@@ -520,7 +522,7 @@ public class AbrechnungReha extends JXPanel{
 				if(cmd.contains("anschrift")){
 					doAnschrift();
 				}
-				
+
 			}
 		};
 		kl = new KeyListener(){
@@ -533,15 +535,15 @@ public class AbrechnungReha extends JXPanel{
 					return;
 				}
 				if ( ((JComponent)arg0.getSource()).getName().contains("_")){
-					doRechnen();					
+					doRechnen();
 				}else{
-					doRechnenPat();					
+					doRechnenPat();
 				}
 			}
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 			}
-			
+
 		};
 	}
 	private void doKassenLabel(){
@@ -623,7 +625,7 @@ public class AbrechnungReha extends JXPanel{
 							JOptionPane.showConfirmDialog(null, "Während der Rechnungserstellung ist ein Fehler aufgetreten!");
 						}else{
 							if(Reha.vollbetrieb){
-								doUebertragen();								
+								doUebertragen();
 							}
 						}
 						allesAusschalten();
@@ -674,7 +676,7 @@ public class AbrechnungReha extends JXPanel{
 			meldung.doRechnung(tagevec.get(0), tagevec.get(tagevec.size()-1), objvec, dcf.format(gesamtPreis.doubleValue()),Integer.parseInt(aktRechnung));
 			return true;
 		}catch(Exception ex){ex.printStackTrace();return false;}
-		
+
 	}
 	private void doUebertragen(){
 		String delrez = String.valueOf(rehavec.get(0).get(1));
@@ -701,14 +703,14 @@ public class AbrechnungReha extends JXPanel{
 				PatStammEvent pEvt = new PatStammEvent(getInstance());
 				pEvt.setPatStammEvent("PatSuchen");
 				pEvt.setDetails(s1,s2,"") ;
-				PatStammEventClass.firePatStammEvent(pEvt);		
+				PatStammEventClass.firePatStammEvent(pEvt);
 				return null;
 			}
-			
+
 		}.execute();
 	}
-	
-	
+
+
 	private void doEigenanteilDrucken() throws Exception{
 		aktuellePosition = 0;
 		istprivat = true;
@@ -729,8 +731,8 @@ public class AbrechnungReha extends JXPanel{
 		}
 		vecposrechnung.clear();
 		Vector<String> vecpos = new Vector<String>();
-		
-		
+
+
 		if( (jcmbpat[0].getSelectedIndex()==0) || (tfpatanzahl[0].getText().trim().equals(0)) ){
 			JOptionPane.showMessageDialog(null, "Fehler - Eigenenanteilsrechnung kann nicht erstellt werden" );
 			abrechnungOk = false;
@@ -770,24 +772,24 @@ public class AbrechnungReha extends JXPanel{
 
 	private void doFaktura(){
 		String cmdKopf = "insert into faktura set ";
-		
+
 		for(int i = 0; i< vecposrechnung.size();i++){
 			////System.out.println("In RechnungFaktura "+hmRechnung);
 			rechnungBuf.setLength(0);
 			rechnungBuf.trimToSize();
-			rechnungBuf.append(cmdKopf);				
+			rechnungBuf.append(cmdKopf);
 			if(i==0){
 				rechnungBuf.append("kassen_nam='"+hmRechnung.get("<pri1>")+"', ");
 				rechnungBuf.append("kassen_na2='"+hmRechnung.get("<pri2>")+"', ");
 				rechnungBuf.append("strasse='"+hmRechnung.get("<pri3>")+"', ");
 				try{
 					if( hmRechnung.get("<pri4>").indexOf(" ") >= 0){
-						rechnungBuf.append("plz='"+hmRechnung.get("<pri4>").split(" ")[0]+"', ");	
+						rechnungBuf.append("plz='"+hmRechnung.get("<pri4>").split(" ")[0]+"', ");
 						int leeran = hmRechnung.get("<pri4>").indexOf(" ");
-						rechnungBuf.append("ort='"+hmRechnung.get("<pri4>").substring(leeran).trim()+"', ");	
-						
+						rechnungBuf.append("ort='"+hmRechnung.get("<pri4>").substring(leeran).trim()+"', ");
+
 					}else{
-						rechnungBuf.append("plz='"+""+"', ");	
+						rechnungBuf.append("plz='"+""+"', ");
 						rechnungBuf.append("ort='"+hmRechnung.get("<pri4>")+"', ");
 					}
 					rechnungBuf.append("name='"+patvec.get(0).get(0)+","+patvec.get(0).get(1)+
@@ -807,7 +809,7 @@ public class AbrechnungReha extends JXPanel{
 			rechnungBuf.append("zzbetrag='"+  "0.00" +"', ");
 			rechnungBuf.append("netto='"+  vecposrechnung.get(i).get(3).replace(",", ".")  +"', ");
 			rechnungBuf.append("pauschale='"+  "0.00" +"', ");
-			rechnungBuf.append("rez_nr='"+   rehavec.get(0).get(1) +"', ");		
+			rechnungBuf.append("rez_nr='"+   rehavec.get(0).get(1) +"', ");
 			rechnungBuf.append("rezeptart='8', ");
 			rechnungBuf.append("pat_intern='"+rehavec.get(0).get(0)+"', ");
 			rechnungBuf.append("rnummer='"+  aktRechnung +"', ");
@@ -823,7 +825,7 @@ public class AbrechnungReha extends JXPanel{
 				e.printStackTrace();
 			}
 		}
-		
+
 	}
 	private void doAnlegenOP(){
 		rechnungBuf.setLength(0);
@@ -849,9 +851,9 @@ public class AbrechnungReha extends JXPanel{
 		rechnungBuf.append("ikktraeger='"+kassvec.get(0).get(6)+"',");
 		rechnungBuf.append("ik='"+Reha.aktIK+"'");
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());
-		
+
 	}
-	
+
 	private void doHauptRechnungDrucken() throws Exception{
 		hmRechnung.clear();
 
@@ -873,9 +875,9 @@ public class AbrechnungReha extends JXPanel{
 				hmRechnung.put("<pri4>",rechnungvec.get(0).get(3)+" "+rechnungvec.get(0).get(4));
 				hmRechnung.put("<pri5>","Sehr geehrte Damen und Herren,");
 			}
-			
+
 			aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
-			
+
 			if(aktRechnung.equals("-1")){
 				JOptionPane.showMessageDialog(null, "Fehler - Rechnungsnummer für Reharechnung kann nicht bezogen werden" );
 				abrechnungOk = false;
@@ -902,16 +904,16 @@ public class AbrechnungReha extends JXPanel{
 				if(this.jckb[1].isSelected()){
 					this.druckExemplare = 1;
 				}else{
-					this.druckExemplare = Integer.parseInt(SystemConfig.hmAbrechnung.get("rehadrvexemplare"));	
+					this.druckExemplare = Integer.parseInt(SystemConfig.hmAbrechnung.get("rehadrvexemplare"));
 				}
-				
+
 				//hier die VSNR ermitteln
-				
+
 				Vector<Vector<String>> vecvsnr = SqlInfo.holeFelder("select berichtid from berhist where pat_intern = '"+
 						Reha.thisClass.patpanel.patDaten.get(29)+"' and bertitel like 'Reha-Ent%' order by id DESC LIMIT 1");
 				String vsnr = SqlInfo.holeEinzelFeld("select vnummer from bericht2 where berichtid = '"+vecvsnr.get(0).get(0)+"' LIMIT 1");
 				if(vsnr.trim().length()==12){
-				 vsnr = vsnr.substring(0,2)+" "+vsnr.substring(2,8)+" "+vsnr.substring(8,9)+" "+vsnr.substring(9);	
+				 vsnr = vsnr.substring(0,2)+" "+vsnr.substring(2,8)+" "+vsnr.substring(8,9)+" "+vsnr.substring(9);
 				}
 				hmRechnung.put("<pri9>",vsnr );
 				//testik = 1;
@@ -929,7 +931,7 @@ public class AbrechnungReha extends JXPanel{
 				this.druckFormular = SystemConfig.hmAbrechnung.get("rehadrvformular");
 				this.druckExemplare = Integer.parseInt(SystemConfig.hmAbrechnung.get("rehadrvexemplare"));
 				hmRechnung.put("<pri9>", "nicht relevant");
-				
+
 				//testik = 3;
 			}
 			hmRechnung.put("<pri8>",this.druckIk);
@@ -941,7 +943,7 @@ public class AbrechnungReha extends JXPanel{
 
 			vecposrechnung.clear();
 
-			Vector<String> vecpos = new Vector<String>(); 
+			Vector<String> vecpos = new Vector<String>();
 			for(int i = 0; i < 4;i++){
 				vecpos.clear();
 				if(jcmb[i].getSelectedIndex()>0){
@@ -959,7 +961,7 @@ public class AbrechnungReha extends JXPanel{
 					vecposrechnung.add((Vector<String>)vecpos.clone() );
 				}
 			}
-			
+
 			starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
 			starteErsetzen(hmRechnung);
 			startePositionen(vecposrechnung,gesamtPreis);
@@ -970,7 +972,7 @@ public class AbrechnungReha extends JXPanel{
 			abrechnungOk = false;
 		}
 	}
-	
+
 	/******************Nachfolgend die OO.writer - Funktionen**************************/
 	public synchronized void starteDokument(String url,String drucker) {
 		//System.out.println("URL="+url);
@@ -1016,13 +1018,13 @@ public class AbrechnungReha extends JXPanel{
 			if(placeholders[i].getDisplayText().toLowerCase().equals("<pri1>")){
 				placeholders[i].getTextRange().setText(hmAdresse.get("<pri1>"));
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<pri2>")){
-				placeholders[i].getTextRange().setText(hmAdresse.get("<pri2>"));				
+				placeholders[i].getTextRange().setText(hmAdresse.get("<pri2>"));
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<pri3>")){
-				placeholders[i].getTextRange().setText(hmAdresse.get("<pri3>"));				
+				placeholders[i].getTextRange().setText(hmAdresse.get("<pri3>"));
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<pri4>")){
-				placeholders[i].getTextRange().setText(hmAdresse.get("<pri4>"));				
+				placeholders[i].getTextRange().setText(hmAdresse.get("<pri4>"));
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<pri5>")){
-				placeholders[i].getTextRange().setText(hmAdresse.get("<pri5>"));				
+				placeholders[i].getTextRange().setText(hmAdresse.get("<pri5>"));
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<pri6>")){
 				placeholders[i].getTextRange().setText(hmAdresse.get("<pri6>"));
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<pri7>")){
@@ -1037,24 +1039,25 @@ public class AbrechnungReha extends JXPanel{
 				placeholders[i].getTextRange().setText(hmAdresse.get("<pri11>"));
 			}
 		}
-		
+
 	}
 	private void startePositionen(Vector<Vector<String>> vecpositionen,BigDecimal gesamt) throws TextException{
-		aktuellePosition++;	 
+		aktuellePosition++;
 		for(int i = 0; i < vecpositionen.size();i++){
 			textTable.getCell(0,aktuellePosition).getTextService().getText().setText(vecpositionen.get(i).get(0));
 			textTable.getCell(1,aktuellePosition).getTextService().getText().setText(vecpositionen.get(i).get(1));
 			textTable.getCell(2,aktuellePosition).getTextService().getText().setText(vecpositionen.get(i).get(2));
 			textTable.getCell(3,aktuellePosition).getTextService().getText().setText(vecpositionen.get(i).get(3));
 			textTable.addRow(1);
-			aktuellePosition++;				
+			aktuellePosition++;
 		}
 		textEndbetrag.getCell(1,0).getTextService().getText().setText(dcf.format(gesamt.doubleValue())+" EUR");
 	}
 	private synchronized void starteDrucken(int exemplare){
 		if(SystemConfig.hmAbrechnung.get("hmallinoffice").equals("1")){
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					textDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 					textDocument.getFrame().setFocus();
 				}
@@ -1075,7 +1078,7 @@ public class AbrechnungReha extends JXPanel{
 			} catch (DocumentException e1) {
 				e1.printStackTrace();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
+				// ignore
 				e.printStackTrace();
 			} catch (NOAException e) {
 				e.printStackTrace();
@@ -1085,11 +1088,11 @@ public class AbrechnungReha extends JXPanel{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 	}
-	
-	
+
+
 	/******************Ende der OO.writer - Funktionen*********************************/
-	
+
 }

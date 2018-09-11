@@ -176,7 +176,8 @@ public class UpdatePanel extends JXPanel{
 		tab = new JXTable(tabmod);
 		tab.setSortable(false);
 		tab.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent evt){
+			@Override
+            public void mousePressed(MouseEvent evt){
 				if(evt.getClickCount()==2){
 					if(!TheraPiUpdates.updateallowed){
 						JOptionPane.showMessageDialog(null,"Keine gültigen Zugangsdaten eingegeben!\nUpdates können nicht heruntergeladen werden!");
@@ -302,7 +303,8 @@ public class UpdatePanel extends JXPanel{
 								ftpt = null;
 								//pbar.setValue(0);
 								SwingUtilities.invokeLater(new Runnable(){
-									public void run(){
+									@Override
+                                    public void run(){
 										/*
 										for(int i = 0; i < 6;i++){
 											System.out.println(i+" Divisionsrest = "+(eltern.userdaten.get(i).length() % 8));
@@ -663,7 +665,8 @@ public class UpdatePanel extends JXPanel{
 	    }
 	    if(vecstmt.size() > 0){
 	    	SwingUtilities.invokeLater(new Runnable(){
-	    		public void run(){
+	    		@Override
+                public void run(){
 	    	    	jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));	    			
 	    		}
 	    	});
@@ -696,7 +699,8 @@ public class UpdatePanel extends JXPanel{
 				}
 			}
 	    	SwingUtilities.invokeLater(new Runnable(){
-	    		public void run(){
+	    		@Override
+                public void run(){
 	    	    	jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));	    			
 	    		}
 	    	});
@@ -780,14 +784,16 @@ public class UpdatePanel extends JXPanel{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			if(columnIndex==3){
 				return ImageIcon.class;
 			}
 			return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			
 				return false;				
 		}
@@ -808,7 +814,8 @@ public class UpdatePanel extends JXPanel{
 
 	class UpdateListSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){

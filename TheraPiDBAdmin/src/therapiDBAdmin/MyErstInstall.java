@@ -316,7 +316,8 @@ public class MyErstInstall extends JXPanel{
 			System.out.println("Aufbereitung der firmen.ini beendet");
 			try{
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						eltern.setSeite4Ok(true);					
 					}
 				});
@@ -345,7 +346,8 @@ public class MyErstInstall extends JXPanel{
 		System.out.println("Beende PrepareTheraPi.jar");
 		try{
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					System.exit(0);					
 				}
 			});

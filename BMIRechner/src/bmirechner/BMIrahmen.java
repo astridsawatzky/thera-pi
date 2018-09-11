@@ -88,7 +88,8 @@ public class BMIrahmen extends JApplet implements WindowListener{
 	}
 
 	
-	public void windowDeactivated(WindowEvent arg0) {
+	@Override
+    public void windowDeactivated(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}

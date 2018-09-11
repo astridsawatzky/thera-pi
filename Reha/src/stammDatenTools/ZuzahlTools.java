@@ -68,7 +68,8 @@ public class ZuzahlTools {
 		}
 	
 		Comparator comparator = new Comparator<String>() {
-			public int compare(String s1, String s2) {
+			@Override
+            public int compare(String s1, String s2) {
 		        String strings1 = DatFunk.sDatInSQL(s1);
 		        String strings2 = DatFunk.sDatInSQL(s2);
 		        return strings1.compareTo(strings2);
@@ -155,7 +156,8 @@ public class ZuzahlTools {
 		}
 	
 		Comparator comparator = new Comparator<String>() {
-			public int compare(String s1, String s2) {
+			@Override
+            public int compare(String s1, String s2) {
 		        String strings1 = DatFunk.sDatInSQL(s1);
 		        String strings2 = DatFunk.sDatInSQL(s2);
 		        return strings1.compareTo(strings2);

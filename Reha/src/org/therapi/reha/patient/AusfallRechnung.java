@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Map;
@@ -45,30 +44,29 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
 import systemTools.LeistungTools;
 
-public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
+public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public JRtaCheckBox[] leistung = {null,null,null,null,null}; 
+	public JRtaCheckBox[] leistung = {null,null,null,null,null};
 
 	private RehaTPEventClass rtp = null;
-	private AusfallRechnungHintergrund rgb;	
-	
+	private AusfallRechnungHintergrund rgb;
+
 	public JButton uebernahme;
 	public JButton abbrechen;
 	public String afrNummer;
 	public AusfallRechnung(Point pt){
-		super(null,"AusfallRechnung");		
+		super(null,"AusfallRechnung");
 
-		
+
 		pinPanel = new PinPanel();
 		pinPanel.setName("AusfallRechnung");
 		pinPanel.getGruen().setVisible(false);
@@ -82,19 +80,19 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		rgb = new AusfallRechnungHintergrund();
 		rgb.setLayout(new BorderLayout());
 
-		
+
 		new SwingWorker<Void,Void>(){
 
 			@Override
 			protected Void doInBackground() throws Exception {
-	
+
 			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezeptGebuehren"));
 				return null;
 			}
-			
-		}.execute();	
+
+		}.execute();
 		rgb.add(getGebuehren(),BorderLayout.CENTER);
-		
+
 		getSmartTitledPanel().setContentContainer(rgb);
 		getSmartTitledPanel().getContentContainer().setName("AusfallRechnung");
 		setName("AusfallRechnung");
@@ -102,19 +100,19 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 	    //Point lpt = new Point(pt.x-125,pt.y+30);
 		Point lpt = new Point(pt.x-150,pt.y+30);
 	    setLocation(lpt);
-	    
+
 		rtp = new RehaTPEventClass();
 		rtp.addRehaTPEventListener(this);
 
 		pack();
-		
-			
-	    
+
+
+
 
 
 	}
-	
-/****************************************************/	
+
+/****************************************************/
 
 	private JPanel getGebuehren(){     // 1     2                   3         4     5        6              7
 		FormLayout lay = new FormLayout("10dlu,fill:0:grow(0.50),right:80dlu,10dlu,80dlu,fill:0:grow(0.50),10dlu",
@@ -124,7 +122,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		CellConstraints cc = new CellConstraints();
 
 		pb.getPanel().setOpaque(false);
-		
+
 		pb.addLabel("Bitte die Positionen auswählen die Sie berechnen wollen",cc.xyw(2, 2, 4));
 
 		pb.addLabel("Heilmittel 1",cc.xy(3, 4));
@@ -132,19 +130,19 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		leistung[0] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[0].setOpaque(false);
 		if(!lab.equals("")){
-			leistung[0].setSelected(true);			
+			leistung[0].setSelected(true);
 		}else{
 			leistung[0].setSelected(false);
 			leistung[0].setEnabled(false);
 		}
 		pb.add(leistung[0],cc.xyw(5, 4, 2));
-		
+
 		pb.addLabel("Heilmittel 2",cc.xy(3, 6));
 		lab = Reha.thisClass.patpanel.vecaktrez.get(49);
 		leistung[1] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[1].setOpaque(false);
 		if(!lab.equals("")){
-						
+
 		}else{
 			leistung[1].setSelected(false);
 			leistung[1].setEnabled(false);
@@ -156,7 +154,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		leistung[2] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[2].setOpaque(false);
 		if(!lab.equals("")){
-						
+
 		}else{
 			leistung[2].setSelected(false);
 			leistung[2].setEnabled(false);
@@ -168,7 +166,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		leistung[3] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[3].setOpaque(false);
 		if(!lab.equals("")){
-						
+
 		}else{
 			leistung[3].setSelected(false);
 			leistung[3].setEnabled(false);
@@ -180,25 +178,26 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		leistung[4].setOpaque(false);
 		leistung[4].setSelected(true);
 		pb.add(leistung[4],cc.xyw(5, 12, 2));
-		
+
 		uebernahme = new JButton("drucken & buchen");
 		uebernahme.setActionCommand("uebernahme");
 		uebernahme.addActionListener(this);
 		uebernahme.addKeyListener(this);
 		pb.add(uebernahme,cc.xy(3,14));
-		
+
 		abbrechen = new JButton("abbrechen");
 		abbrechen.setActionCommand("abbrechen");
 		abbrechen.addActionListener(this);
 		abbrechen.addKeyListener(this);
 		pb.add(abbrechen,cc.xy(5,14));
-		
+
 		pb.getPanel().validate();
 		return pb.getPanel();
 	}
-/****************************************************/	
-	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+/****************************************************/
+
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		try{
 			if(evt.getDetails()[0] != null){
@@ -208,26 +207,27 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 					rtp = null;
 					this.dispose();
 					super.dispose();
-					//System.out.println("****************Ausfallrechnung -> Listener entfernt**************");				
+					//System.out.println("****************Ausfallrechnung -> Listener entfernt**************");
 				}
 			}
 		}catch(NullPointerException ne){
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;
 			dispose();
 			super.dispose();
 			//System.out.println("****************Ausfallrechnung -> Listener entfernt (Closed)**********");
 		}
-		
-		
+
+
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -303,7 +303,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		Double gesamt = new Double(0.00);
 		int preisgruppe = 0;
 		DecimalFormat df = new DecimalFormat( "0.00" );
-		
+
 		for(int i = 0 ; i < 4; i++){
 			mappos = "<AFRposition"+(i+1)+">";
 			mappreis = "<AFRpreis"+(i+1)+">";
@@ -315,23 +315,23 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,s);
 				gesamt = gesamt+preis;
-				
+
 				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
 				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;		
-				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
+				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 				SystemConfig.hmAdrAFRDaten.put(maplang,inpos[0]);
 				SystemConfig.hmAdrAFRDaten.put(mapkurz,inpos[1]);
 				////System.out.println(inpos[0]);
 				////System.out.println(inpos[1]);
-				
+
 			}else{
 				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
 				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
-				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
+				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,"0,00");
@@ -339,14 +339,15 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 				SystemConfig.hmAdrAFRDaten.put(mapkurz,(!inpos[1].equals("") ? inpos[1] : "----") );
 
 			}
-			
+
 		}
 		SystemConfig.hmAdrAFRDaten.put("<AFRgesamt>",df.format( gesamt));
 		/// Hier muß noch die Rechnungsnummer bezogen und eingetragen werden
 		afrNummer = "AFR-"+Integer.toString(SqlInfo.erzeugeNummer("afrnr"));
 		SystemConfig.hmAdrAFRDaten.put("<AFRnummer>",afrNummer);
 	}
-	public void keyPressed(KeyEvent event) {
+	@Override
+    public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()==10){
 			event.consume();
 			if( ((JComponent)event.getSource()).getName().equals("uebernahme")){
@@ -362,7 +363,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 			this.dispose();
 		}
 	}
-	
+
 	public static void starteAusfallRechnung(String url){
 		IDocumentService documentService = null;
 		//System.out.println("Starte Datei -> "+url);
@@ -398,7 +399,7 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		for (int i = 0; i < placeholders.length; i++) {
 			boolean schonersetzt = false;
 			String placeholderDisplayText = placeholders[i].getDisplayText().toLowerCase();
-		    /*****************/			
+		    /*****************/
 			Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
@@ -425,22 +426,22 @@ public class AusfallRechnung extends RehaSmartDialog implements RehaTPEventListe
 		    }
 		    /*****************/
 		}
-		
+
 	}
-	
-	
+
+
 }
 class AusfallRechnungHintergrund extends JXPanel{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	ImageIcon hgicon;
 	int icx,icy;
 	AlphaComposite xac1 = null;
-	AlphaComposite xac2 = null;		
+	AlphaComposite xac2 = null;
 	public AusfallRechnungHintergrund(){
 		super();
-		
+
 	}
 }

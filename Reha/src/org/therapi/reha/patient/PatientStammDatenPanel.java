@@ -105,10 +105,14 @@ public class PatientStammDatenPanel extends JXPanel{
         DropTarget dndt = new DropTarget();
 		DropTargetListener dropTargetListener =
 			 new DropTargetListener() {
-			  public void dragEnter(DropTargetDragEvent e) {}
-			  public void dragExit(DropTargetEvent e) {}
-			  public void dragOver(DropTargetDragEvent e) {}
-			  public void drop(DropTargetDropEvent e) {
+			  @Override
+            public void dragEnter(DropTargetDragEvent e) {}
+			  @Override
+            public void dragExit(DropTargetEvent e) {}
+			  @Override
+            public void dragOver(DropTargetDragEvent e) {}
+			  @Override
+            public void drop(DropTargetDropEvent e) {
 				  String mitgebracht = "";
 			    try {
 			      Transferable tr = e.getTransferable();
@@ -128,7 +132,8 @@ public class PatientStammDatenPanel extends JXPanel{
 			    // Ein Problem ist aufgetreten
 			    e.dropComplete(true);
 			  }
-			  public void dropActionChanged(
+			  @Override
+            public void dropActionChanged(
 			         DropTargetDragEvent e) {}
 		};
 		try {
@@ -247,7 +252,8 @@ public class PatientStammDatenPanel extends JXPanel{
 		}
 		((JScrollPane)this.htmlPane.getParent().getParent()).validate();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				try{
 				JViewport vp = ((JScrollPane)htmlPane.getParent().getParent()).getViewport();
 				vp.setViewPosition(new Point(0,0));
@@ -460,7 +466,8 @@ public class PatientStammDatenPanel extends JXPanel{
 		if(patient == null){
 			final String xpat_int = pat_int;
 			new SwingWorker<Void,Void>(){
-				protected Void doInBackground() throws Exception {
+				@Override
+                protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 					Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
 					while( (xpatient == null) ){

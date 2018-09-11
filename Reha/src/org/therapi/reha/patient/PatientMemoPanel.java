@@ -68,7 +68,8 @@ public class PatientMemoPanel extends JXPanel{
 	}
 	private void caretAufNull(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				//patientHauptPanel.pmemo[patientHauptPanel.inMemo].setSelectionStart(0);
 				//patientHauptPanel.pmemo[patientHauptPanel.inMemo].setSelectionEnd(0);
 				patientHauptPanel.pmemo[patientHauptPanel.inMemo].setCaretPosition(0);	
@@ -376,7 +377,8 @@ public class PatientMemoPanel extends JXPanel{
 		mittelinksunten.add(patientHauptPanel.memotab,BorderLayout.CENTER);
 		mittelinksunten.revalidate();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				activateMouseListener();
 			}
 		});

@@ -408,7 +408,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				//treeKasse.getSelectionModel().removeTreeSelectionListener(this);
 				final int xindex = doEinlesenEinzeln(neueReznr);
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						try{
 							//System.out.println("rechne Kasse neu");
 							treeKasse.clearSelection();
@@ -521,7 +522,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					if (! SystemConfig.hmAbrechnung.get("autoOk302").equals("0")) {
 						//System.out.println("autoOk302: markiere Rezept "+neueReznr+" fertig zur Abrechnung");
 						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
+							@Override
+                            public void run(){
 								abrRez.actionAbschluss();		
 							}
 						});
@@ -717,7 +719,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			////System.out.println("Rezept "+node.rez_num+" fertig eingestellt");
 			setCursor(Reha.thisClass.normalCursor);
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					Reha.thisClass.progressStarten(false);					
 				}
 			});
@@ -2261,7 +2264,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		fertigIcon = icon;
 		}
 
-		public Component getTreeCellRendererComponent(
+		@Override
+        public Component getTreeCellRendererComponent(
 		JTree tree,
 		Object value,
 		boolean sel,

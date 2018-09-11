@@ -54,7 +54,8 @@ List<OOOInternalFrame> iconifiedOthers = new ArrayList<OOOInternalFrame>();
 
   public void init() {
     addPropertyChangeListener(new PropertyChangeListener() {
-      public void propertyChange(PropertyChangeEvent evt) {
+      @Override
+    public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals(IS_MAXIMUM_PROPERTY)) {
           boolean newValue = ((Boolean) evt.getNewValue()).booleanValue();
           if (newValue) {
@@ -93,11 +94,13 @@ List<OOOInternalFrame> iconifiedOthers = new ArrayList<OOOInternalFrame>();
     });
   }
 
-  public void moveToBack() {
+  @Override
+public void moveToBack() {
     //do nothing as this breaks the ooo window
   }
 
-  public void moveToFront() {
+  @Override
+public void moveToFront() {
     //do nothing as this breaks the ooo window
   }
 }

@@ -571,17 +571,20 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 	class MyKtraegerModel extends DefaultTableModel{
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==3){return JLabel.class;}
 			   else{return String.class;}
 	}
 
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        //Note that the data/cell address is constant,
 		        //no matter where the cell appears onscreen.
 		    	return false;
 		      }
-			public Object getValueAt(int rowIndex, int columnIndex) {
+			@Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
 				Object theData;
 				if (columnIndex==3){theData = ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);}
 				else{theData = ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);}

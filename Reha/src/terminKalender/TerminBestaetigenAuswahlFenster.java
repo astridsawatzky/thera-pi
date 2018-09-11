@@ -8,9 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -40,12 +38,12 @@ import systemTools.ListenerTools;
 import systemTools.WinNum;
 
 //Drud 110418
-//TODO 6. Anpassung des Umsatzbeteiligung-Moduls, um nur die tatsächlich geleisteten Heilmittel anzuzeigen 
+//TODO 6. Anpassung des Umsatzbeteiligung-Moduls, um nur die tatsächlich geleisteten Heilmittel anzuzeigen
 
-public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements   ActionListener, WindowListener, KeyListener, ItemListener{
+public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements   ActionListener, ItemListener{
 	private static final long serialVersionUID = -2972115133247099975L;
 	/**
-	 * 
+	 *
 	 */
 	private String eigenName = null;
 	private JXPanel jcc = null;
@@ -65,20 +63,20 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 	public TerminBestaetigenAuswahlFenster(JXFrame owner, String name,Vector<BestaetigungsDaten> hMPos,String reznum,int preisgruppe){
 		super(owner, "Eltern-TermBest"+WinNum.NeueNummer());
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		
+
 		hMPosLC= hMPos;
 		anzahlPos = hMPosLC.size();
-		
+
 		for (int i=0;i<4;i++){
 			btm[i] = new JRtaCheckBox("");
 			if(i<anzahlPos){
 				btm[i].setName(Integer.toString(i));
-				HMPosNr[i] = new JXLabel("HMPos");	
+				HMPosNr[i] = new JXLabel("HMPos");
 				AnzTermine[i] = new JXLabel("geleistet_Menge");
 				AnzRezept[i] = new JXLabel("VO_Menge");
 
 				btm[i].setEnabled((hMPosLC.get(i).anzBBT < hMPosLC.get(i).vOMenge) ? true : false);
-				
+
 				HMPosNr[i].setText(RezTools.getKurzformFromPos(hMPosLC.get(i).hMPosNr, Integer.toString(preisgruppe-1),
 						SystemPreislisten.hmPreise.get(RezTools.putRezNrGetDisziplin(reznum)).get(preisgruppe-1)) );
 				//HMPosNr[i].setText(hMPosLC.get(i).hMPosNr);
@@ -98,7 +96,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 
 		setPreferredSize(new Dimension(240,250));
 
-		eigenName = "TermBest"+WinNum.NeueNummer(); 
+		eigenName = "TermBest"+WinNum.NeueNummer();
 		this.setName(eigenName);
 		getSmartTitledPanel().setPreferredSize(new Dimension(240,220));
 		getSmartTitledPanel().setName("Eltern-"+eigenName);
@@ -135,7 +133,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		pinPanel.addKeyListener(this);
 
 		setPinPanel(pinPanel);
-		
+
 		rtp = new RehaTPEventClass();
 		rtp.addRehaTPEventListener(this);
 		jcc.add(getTerminBest(jpan = new JXPanel()),BorderLayout.CENTER);
@@ -144,18 +142,20 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		jcc.validate();
 
 		//this.setAlwaysOnTop(true); //gefährlich in Java, außer in begründeten Ausnahmefenstern eigentlich nur anzuwenden bei NON-Modalen Fenstern
-		//this.setModal(true); //Wenn man Modal in der aufrufenden Methode setzt hat man noch die Chance den Focus zu setzten. 
+		//this.setModal(true); //Wenn man Modal in der aufrufenden Methode setzt hat man noch die Chance den Focus zu setzten.
 		validate();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
-		
+
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				okbut.requestFocus();
 			}
 		});
@@ -192,7 +192,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		jp.add(okbut,cc.xyw(2, 14,3));
 		jp.add(abbruchbut,cc.xyw(6, 14,3));
 		*/
-		
+
 		jp.addKeyListener(this);
 		jp.validate();
 		return jp;
@@ -222,8 +222,9 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 	public void actionPerformed(ActionEvent arg0) {
 		if(arg0.getActionCommand().equals("ok")){
 			new Thread(){
-				public void run(){
-					zurueck();				
+				@Override
+                public void run(){
+					zurueck();
 				}
 			}.start();
 		}
@@ -238,7 +239,8 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		}
 		if (counter != 0){
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					for (int i=0;i<anzahlPos;i++){
 						hMPosLC.get(i).best = btm[i].isSelected();
 					}
@@ -254,7 +256,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 	private void reset(){
 		for (int i=0; i <btm.length; i++){
 			if(i < anzahlPos){
-				hMPosLC.get(i).best = false;				
+				hMPosLC.get(i).best = false;
 			}
 		}
 		RezTools.DIALOG_WERT = RezTools.DIALOG_ABBRUCH;
@@ -282,12 +284,12 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 			((JComponent) e.getSource()).requestFocus();
 			e.consume();
 			zurueck();
-		}	
+		}
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
 			e.consume();
 			reset();
 		}
-		*/	
+		*/
 	}
 
 	@Override
@@ -297,12 +299,12 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 			((JComponent) e.getSource()).requestFocus();
 			e.consume();
 			zurueck();
-		}	
+		}
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
 			e.consume();
 			reset();
 		}
-		*/	
+		*/
 	}
 
 	@Override
@@ -313,7 +315,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		}
 		if (abbruchbut != null){
 			ListenerTools.removeListeners(abbruchbut);
-			abbruchbut = null;	
+			abbruchbut = null;
 		}
 		ListenerTools.removeListeners(this);
 		if(jcc != null){
@@ -321,22 +323,23 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 			jcc = null;
 		}
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		String ss =  this.getName();
 		try{
 			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 				FensterSchliessen(evt.getDetails()[0]);
 				rtp.removeRehaTPEventListener(this);
 				rtp = null;
-			}	
+			}
 		}catch(NullPointerException ne){
 
 		}
 	}
 	public void FensterSchliessen(String welches){
-		this.dispose();		
-	}	
-	
+		this.dispose();
+	}
+
 	@Override
 	public void itemStateChanged(ItemEvent arg0) {
 		int chkBoxNr= -1;
@@ -348,7 +351,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 			System.out.println(Ex);
 		}
 		if (arg0.getStateChange() == ItemEvent.SELECTED) {
-			AnzTermine[chkBoxNr].setText(Integer.toString(Integer.parseInt(AnzTermine[chkBoxNr].getText())+1)); 
+			AnzTermine[chkBoxNr].setText(Integer.toString(Integer.parseInt(AnzTermine[chkBoxNr].getText())+1));
 			AnzTermine[chkBoxNr].setForeground(Color.BLUE);
 		} else {
 			AnzTermine[chkBoxNr].setText(Integer.toString(Integer.parseInt(AnzTermine[chkBoxNr].getText())-1));

@@ -888,7 +888,8 @@ public class Reha301Auswerten extends JXPanel{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==1 ){
 				   return Boolean.class;}
 			   else{
@@ -896,7 +897,8 @@ public class Reha301Auswerten extends JXPanel{
 			   }
 	       }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 
 	    	if (col == 0){
 	    		return true;
@@ -913,7 +915,8 @@ public class Reha301Auswerten extends JXPanel{
 	}
 	class MyAuswertungListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        
 	        //int firstIndex = e.getFirstIndex();
@@ -946,7 +949,8 @@ public class Reha301Auswerten extends JXPanel{
 		    				buts[0].setEnabled(false);
 		    				buts[1].setEnabled(false);
 		    				SwingUtilities.invokeLater(new Runnable(){
-		    					public void run(){
+		    					@Override
+                                public void run(){
 				    				Vector<Vector<String>> xvec = SqlInfo.holeFelder("select pat_intern,rez_nr from dta301 where id = '"+
 				    						dta301mod.getDtaId()+"' LIMIT 1");
 				    				if(xvec.size() > 0){
@@ -1424,7 +1428,8 @@ public class Reha301Auswerten extends JXPanel{
 			treeModel.removeNodeFromParent(node);
 			tree.setModel(treeModel);
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					tree.validate();
 					tree.repaint();
 				}
@@ -1551,7 +1556,8 @@ public class Reha301Auswerten extends JXPanel{
 		fertigIcon = icon;
 		}
 
-		public Component getTreeCellRendererComponent(
+		@Override
+        public Component getTreeCellRendererComponent(
 		JTree tree,
 		Object value,
 		boolean sel,

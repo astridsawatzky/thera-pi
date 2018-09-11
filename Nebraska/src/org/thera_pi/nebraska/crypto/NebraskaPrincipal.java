@@ -171,7 +171,8 @@ public class NebraskaPrincipal {
 				buf.append(value);
 			}
 		}
-		public String toString()
+		@Override
+        public String toString()
 		{
 			return buf.toString();
 		}
@@ -201,7 +202,8 @@ public class NebraskaPrincipal {
 	/* (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	public boolean equals(Object o)
+	@Override
+    public boolean equals(Object o)
 	{
 		// other object must exist and must be of this object's class.
 		if(o == null) return false;

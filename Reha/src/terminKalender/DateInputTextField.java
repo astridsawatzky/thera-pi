@@ -45,7 +45,8 @@ public DateInputTextField () {
    * Preferred size for date mask
    * @return Dimension
    */
-  public Dimension getPreferredSize () {
+  @Override
+public Dimension getPreferredSize () {
     final double height = super.getPreferredSize().getHeight();
     final FontMetrics fm = this.getFontMetrics(this.getFont());
     int breite = fm.charsWidth (this.getDateMask ().getMask().toCharArray(), 0, this.getDateMask ().getMask().length ());
@@ -106,6 +107,7 @@ public DateInputTextField () {
    * @version 1.0
    */
   protected static class DateInputVerifier extends InputVerifier {
+    @Override
     public boolean verify (final JComponent input) {
       if (input instanceof DateInputTextField) {
         return this.isAlowedDate((DateInputTextField)input);
@@ -125,7 +127,8 @@ public DateInputTextField () {
       try {
         final Date d = sdf.parse (input.getText());
         SwingUtilities.invokeLater(new Runnable () {
-          public void run () {
+          @Override
+        public void run () {
             input.setText(sdf.format(d));
           }
         });
@@ -168,6 +171,7 @@ public DateInputTextField () {
      * @return true when valid, false when invalid
      *
      */
+    @Override
     public boolean shouldYieldFocus (final JComponent input) {
       if (!verify(input)) {
         input.setForeground(Color.RED);

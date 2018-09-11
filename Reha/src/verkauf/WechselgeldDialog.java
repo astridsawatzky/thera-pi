@@ -81,7 +81,8 @@ public class WechselgeldDialog extends RehaSmartDialog {
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				gegebenFeld.requestFocus();
 			}
 		});
@@ -221,7 +222,8 @@ public class WechselgeldDialog extends RehaSmartDialog {
 		this.setVisible(false);
 		this.dispose();
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0].equals("WechselGeld")){
 				this.setVisible(false);

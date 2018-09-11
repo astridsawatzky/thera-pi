@@ -41,7 +41,8 @@ public class MyTableCheckBox extends AbstractCellEditor implements TableCellEdit
 	}
 	 
 	// This method is called when a cell value is edited by the user. 
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
+	@Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
 		if (isSelected)	{ 
 			//((JRtaCheckBox)component).setVerticalAlignment(SwingConstants.CENTER);
 			//((JRtaCheckBox)component).setHorizontalAlignment(SwingConstants.CENTER);
@@ -60,15 +61,18 @@ public class MyTableCheckBox extends AbstractCellEditor implements TableCellEdit
 	
 	// 'value' is value contained in the cell located at (rowIndex, vColIndex) 
 	// It must return the new value to be stored in the cell. 
-	public Object getCellEditorValue() { 
+	@Override
+    public Object getCellEditorValue() { 
 		return ( ((JRtaCheckBox)component).isSelected() ); 
 	} 
 
-	 public boolean stopCellEditing() {
+	 @Override
+    public boolean stopCellEditing() {
 		 fireEditingStopped();
 		 return super.stopCellEditing();
 	 }
-	 public void cancelCellEditing() {
+	 @Override
+    public void cancelCellEditing() {
 		 fireEditingCanceled();
 		 super.cancelCellEditing();
 	    }

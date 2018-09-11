@@ -208,7 +208,8 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 /****************************************************/	
 	
 	
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 
 		
@@ -326,7 +327,8 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 		}catch(Exception ex){}	
 		//System.out.println(InitHashMaps.hmAdrAFRDaten);
 	}
-	public void keyPressed(KeyEvent event) {
+	@Override
+    public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()==10){
 			event.consume();
 			if( ((JComponent)event.getSource()).getName().equals("uebernahme")){

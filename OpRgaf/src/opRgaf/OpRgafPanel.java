@@ -121,7 +121,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		setLayout(new BorderLayout());
 		add(getContent(),BorderLayout.CENTER);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
@@ -129,7 +130,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				suchen.requestFocus();
 			}
 		});
@@ -580,7 +582,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			switch(columnIndex){
 			case 0:
 			case 1:
@@ -602,7 +605,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			
 			if(col > 1 && col < 9){
 				return true;				
@@ -723,7 +727,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 	/*****************************************************/
 	class OPListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){

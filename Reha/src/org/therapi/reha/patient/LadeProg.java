@@ -35,7 +35,8 @@ public class LadeProg {
 		//String commandx = vmload + prog;
 		final String xprog = prog;
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				/*
 				new SwingWorker<Void, Void>(){
 

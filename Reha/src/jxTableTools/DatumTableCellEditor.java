@@ -77,7 +77,8 @@ public class DatumTableCellEditor extends DefaultCellEditor{
 	    }
 
 	    //Override to invoke setValue on the formatted text field.
-	    public Component getTableCellEditorComponent(JTable table,
+	    @Override
+        public Component getTableCellEditorComponent(JTable table,
 	            Object value, boolean isSelected,
 	            int row, int column) {
 	        JFormattedTextField ftf =
@@ -88,7 +89,8 @@ public class DatumTableCellEditor extends DefaultCellEditor{
 	    }
 
 	    //Override to ensure that the value remains an Integer.
-	    public Object getCellEditorValue() {
+	    @Override
+        public Object getCellEditorValue() {
 	        JFormattedTextField ftf = (JFormattedTextField)getComponent();
 	        Object o = ftf.getValue();
 	        if (o instanceof Integer) {
@@ -113,7 +115,8 @@ public class DatumTableCellEditor extends DefaultCellEditor{
 	    //it isn't.  If it's OK for the editor to go
 	    //away, we need to invoke the superclass's version 
 	    //of this method so that everything gets cleaned up.
-	    public boolean stopCellEditing() {
+	    @Override
+        public boolean stopCellEditing() {
 	        JFormattedTextField ftf = (JFormattedTextField)getComponent();
 	        if (ftf.isEditValid()) {
 	            try {

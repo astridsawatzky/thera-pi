@@ -33,7 +33,8 @@ import java.nio.channels.FileChannel;
 	            return true;
 	        }
 	        
-	        public int compareFiles(File source1, File source2) throws IOException {
+	        @Override
+            public int compareFiles(File source1, File source2) throws IOException {
 	            FileInputStream s1 = null, s2 = null;
 	            long source1Size = source1.length();
 	            long source2Size = source2.length();

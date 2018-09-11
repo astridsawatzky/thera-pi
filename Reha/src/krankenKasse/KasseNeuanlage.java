@@ -128,7 +128,8 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 	
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		  jtf[0].requestFocusInWindow();
 		 	   }
 		}); 	   		
@@ -143,7 +144,8 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 		String comm = arg0.getActionCommand();
 		final String xcomm = comm;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 			if(xcomm.equals("speichern")){
 		 				datenSpeichern();
 		 				tabelleAktualisieren();
@@ -206,7 +208,8 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 					ktraegerAuslesen();
 				}
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						jtf[0].requestFocus();
 					}
 				});
@@ -262,7 +265,8 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 							JOptionPane.showMessageDialog(null, "Krankenkasse mit dem Kürzel --> "+kurz+" <-- bereits vorhanden");
 							jtf[0].setText("XXX-YY");
 							SwingUtilities.invokeLater(new Runnable(){
-								public  void run(){
+								@Override
+                                public  void run(){
 									jtf[0].requestFocus();
 								}
 							});
@@ -545,7 +549,8 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 			labKuerzel.setIcon(SystemConfig.hmSysIcons.get("kleinehilfe"));
 			labKuerzel.setHorizontalTextPosition(JLabel.LEFT);
 			labKuerzel.addMouseListener(new MouseAdapter(){
-				public void mousePressed(MouseEvent arg0) {
+				@Override
+                public void mousePressed(MouseEvent arg0) {
 					doVergleichKT();
 				}				
 			});

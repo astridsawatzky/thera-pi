@@ -213,7 +213,8 @@ public class ArztNeuKurz extends JXPanel implements ActionListener,KeyListener,F
 	}
 	public void setzteFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				tfs[0].requestFocus();
 			}
 		});

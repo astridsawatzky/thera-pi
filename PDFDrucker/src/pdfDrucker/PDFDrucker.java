@@ -65,6 +65,7 @@ public class PDFDrucker {
 
     public static void main(final String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 try {
                 	if(args.length == 0){

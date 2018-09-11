@@ -8,7 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -44,26 +43,25 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemTools.ButtonTools;
 import terminKalender.ParameterLaden;
 
-public class Wecker extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+public class Wecker extends RehaSmartDialog{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -8884397927377259156L;
 	private RehaTPEventClass rtp = null;
 	JXPanel content = null;
-	
+
 	ActionListener al = null;
 	KeyListener kl = null;
-	
+
 	JRtaTextField[] tfs = {null,null,null,null,null,null};
 	JButton[] buts = {null,null,null,null};
-	
+
 	MyWeckerTableModel tabmod = null;
 	JXTable tab = null;
 	Font labelFont = new Font("Tahoma",Font.BOLD,15);
@@ -94,7 +92,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		pinPanel.setName("WeckerNeuanlage");
 		setPinPanel(pinPanel);
 		activateListener();
-		getSmartTitledPanel().setTitle("Thera-\u03C0"+" Erinnerungs-System");			
+		getSmartTitledPanel().setTitle("Thera-\u03C0"+" Erinnerungs-System");
 		getSmartTitledPanel().setContentContainer(getContent());
 		getSmartTitledPanel().getContentContainer().setName("WeckerNeuanlage");
 		setName("WeckerNeuanlage");
@@ -109,14 +107,15 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		addWindowListener(this);
 		addKeyListener(this);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus(0);
 			}
 		});
 		dialogoffen = true;
 		thisClass = this;
 		doTabelle();
-		
+
 	}
 	/*******************************************************/
 	public static void testeWecker(){
@@ -126,7 +125,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 			//System.out.println("dialogoffen: "+dialogoffen);
 			return;
 		}
-		
+
 		if(Reha.timerVec.size() <= 0){
 			//System.out.println("timer wird gestoppt");
 			Reha.fangoTimer.stop();
@@ -151,7 +150,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 				Reha.timerVec.remove(termin);
 				Reha.timerVec.trimToSize();
 				Reha.timerInBearbeitung = false;
-				
+
 				if(Reha.timerVec.size() <= 0){
 					Reha.fangoTimer.stop();
 					Reha.timerLaeuft = false;
@@ -162,7 +161,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 					Reha.thisClass.messageLabel.setForeground(Color.RED);
 					Reha.thisClass.messageLabel.setText("in "+msg+(msg.equals("1") ? " Minute " : " Minuten ")+"nächster Timer-Termin" );
 				}
-				
+
 			}else{
 				String msg = Long.toString((Long)Reha.timerVec.get(0).get(3)-aktuelleMinuten());
 				Reha.thisClass.messageLabel.setForeground(Color.RED);
@@ -176,12 +175,14 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 	private void setzeFocus(int wohin){
 		final int xwohin = wohin;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				tfs[xwohin].requestFocus();
 			}
 		});
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);
@@ -195,13 +196,13 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		dialogoffen = false;
 		Reha.timerInBearbeitung = false;
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			this.pinPanel = null;
 			doAufraeumen();
@@ -224,7 +225,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		Reha.timerInBearbeitung = false;
 		dialogoffen = false;
 	}
-	
+
 	private void activateListener(){
 		al = new ActionListener(){
 			@Override
@@ -239,7 +240,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 					return;
 				}
 			}
-			
+
 		};
 		kl = new KeyListener(){
 			@Override
@@ -252,7 +253,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 				if(arg0.getKeyCode()==27){
 					thisClass.dispose();
 				}
-				
+
 
 			}
 			@Override
@@ -276,7 +277,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 	private JXPanel getContent(){
 		//                1      2      3    4      5
 		String xwerte = "10dlu,60dlu:g,5dlu,200dlu,10dlu";
-		//                1    2  3   4  5   6  7   8  9         10           11 12 13 
+		//                1    2  3   4  5   6  7   8  9         10           11 12 13
 		String ywerte = "10dlu,p,5dlu,p,5dlu,p,5dlu,p,5dlu,fill:0:grow(1.0),5dlu,p,10dlu";
 		FormLayout lay = new FormLayout(xwerte,ywerte);
 		CellConstraints cc = new CellConstraints();
@@ -294,10 +295,10 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		tfs[0].addKeyListener(kl);
 		tfs[0].setText(droppat);
 		content.add(tfs[0],cc.xy(4,2));
-		
+
 		lab = new JLabel("Raum/Kabine");
 		lab.setFont(labelFont);
-		lab.setForeground(Color.RED);		
+		lab.setForeground(Color.RED);
 		content.add(lab,cc.xy(2,4,CellConstraints.RIGHT,CellConstraints.DEFAULT));
 		tfs[1] = new JRtaTextField("GROSS",true);
 		tfs[1].setFont(labelFont);
@@ -307,20 +308,20 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 
 		lab = new JLabel("Dauer in Minuten");
 		lab.setFont(labelFont);
-		lab.setForeground(Color.RED);		
+		lab.setForeground(Color.RED);
 		content.add(lab,cc.xy(2,6,CellConstraints.RIGHT,CellConstraints.DEFAULT));
 		tfs[2] = new JRtaTextField("nix",true);
 		tfs[2].setFont(labelFont);
 		tfs[2].setName("tfs2");
 		tfs[2].addKeyListener(kl);
 		content.add(tfs[2],cc.xy(4,6));
-		
+
 		buts[0] = ButtonTools.macheButton("neuen Termin eintragen", "terminneu", al);
 		buts[0].setMnemonic(KeyEvent.VK_N);
 		buts[0].setName("terminneu");
 		buts[0].addKeyListener(kl);
 		content.add(buts[0],cc.xy(4,8));
-		
+
 		tabmod = new MyWeckerTableModel();
 		tabmod.setColumnIdentifiers(new String[]{"fertig um","Raum/Kabine","Patient",""});
 		tab = new JXTable(tabmod);
@@ -333,34 +334,36 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
 		jscr.validate();
 		content.add(jscr,cc.xyw(2,10,3));
-		
+
 		buts[1] = ButtonTools.macheButton("löschen Termin", "termindelete", al);
 		buts[1].setMnemonic(KeyEvent.VK_L);
 		content.add(buts[1],cc.xyw(2,12,3));
-		
+
 		content.validate();
 		return content;
 	}
-	
+
 	class MyWeckerTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			return false;
 		}
-		   
+
 	}
-	
-	
+
+
 	private void doNeuTermin(){
-		int minuten = 0; 
+		int minuten = 0;
 		try{
 			minuten = Integer.parseInt(tfs[2].getText().trim());
 			if(minuten <= 0){
@@ -383,9 +386,9 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 			setzeFocus(1);
 			return;
 		}
-		long minsinceMidnight = aktuelleMinuten(); 
-		
-		String fertigstring = ZeitFunk.MinutenZuZeit( Integer.parseInt( Long.toString(minsinceMidnight) ) + minuten); 
+		long minsinceMidnight = aktuelleMinuten();
+
+		String fertigstring = ZeitFunk.MinutenZuZeit( Integer.parseInt( Long.toString(minsinceMidnight) ) + minuten);
 
 		long minFertig = ZeitFunk.MinutenSeitMitternacht(fertigstring);
 
@@ -400,14 +403,14 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		doLeeren();
 	}
 	static long aktuelleMinuten(){
-		Calendar cal = Calendar.getInstance();   
-		cal.setTime(new Date()); 
-		int hour = cal.get(Calendar.HOUR_OF_DAY); 
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		int hour = cal.get(Calendar.HOUR_OF_DAY);
 		int min = cal.get(Calendar.MINUTE);
 		String zeitstring = (Integer.toString(hour).length() < 2 ? "0"+Integer.toString(hour) : Integer.toString(hour))+
 			":"+(Integer.toString(min).length() < 2 ? "0"+Integer.toString(min) : Integer.toString(min))+":00";
 		return ZeitFunk.MinutenSeitMitternacht(zeitstring);
-		
+
 	}
 	private void doLeeren(){
 		tfs[0].setText("");
@@ -455,9 +458,9 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 
 }
 /************************************************************************************/
-final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
+final class TerminAbgelaufen extends RehaSmartDialog{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private Vector<Object> vec = null;
@@ -465,16 +468,16 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 	JButton ok = null;
 	JEditorPane htmlPane = null;
 	Timer tontimer = null;
-	ActionListener alton = null; 
+	ActionListener alton = null;
 	KeyListener klton = null;
 	JPasswordField pwfield = null;
 	public TerminAbgelaufen(JXFrame owner, Vector<Object> xvec) {
-		
+
 		super(null,"TerminAbgelaufen");
 		vec = xvec;
 		setzeTon();
 		activateListener();
-		getSmartTitledPanel().setTitle("Thera-\u03C0"+" TerminAbgelaufen");			
+		getSmartTitledPanel().setTitle("Thera-\u03C0"+" TerminAbgelaufen");
 		getSmartTitledPanel().setContentContainer(getHTMLContent());
 		getSmartTitledPanel().getContentContainer().setName("TerminAbgelaufen");
 		setName("TerminAbgelaufen");
@@ -493,7 +496,8 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		pack();
 
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
@@ -502,7 +506,8 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				pwfield.requestFocus();
 			}
 		});
@@ -519,13 +524,13 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 				if(cmd.equals("ok")){
 					testeOk();
 				}
-				
+
 			}
 		};
 		klton = new KeyListener(){
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				String cname = ((JComponent)arg0.getSource()).getName(); 
+				String cname = ((JComponent)arg0.getSource()).getName();
 				if(arg0.getKeyCode()==10){
 					if(cname.equals("pwfield") || cname.equals("ok")){
 						testeOk();
@@ -586,20 +591,20 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-			
+
 			TerminAbgelaufen tab = getInstance();
 			tab = null;
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 			this.doAufraeumen();
-			
+
 			TerminAbgelaufen tab = getInstance();
 			tab = null;
 	}
 	private void doAufraeumen(){
 		if(htmlPane != null){
-			htmlPane = null;			
+			htmlPane = null;
 		}
 		if(tontimer != null){
 			tontimer.stop();
@@ -624,8 +629,8 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		JXPanel jpan = new JXPanel();
 		jpan.setLayout(lay);
 		jpan.setBackground(Color.WHITE);
-		
-		
+
+
 		htmlPane = new JEditorPane();
         htmlPane.setContentType("text/html");
         htmlPane.setEditable(false);
@@ -641,7 +646,7 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		CellConstraints cc2 = new CellConstraints();
 		JXPanel jpan2 = new JXPanel();
 		jpan2.setLayout(lay2);
-		
+
 
 		JLabel lab = new JLabel("Bitte Passwort eingeben");
 		jpan2.add(lab,cc2.xy(2, 2));
@@ -650,13 +655,13 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		pwfield.setName("pwfield");
 		pwfield.addKeyListener(klton);
 		jpan2.add(pwfield,cc2.xy(4, 2));
-		
+
 		ok = ButtonTools.macheButton("Ok", "ok", alton);
 		ok.setName("ok");
 		ok.addKeyListener(klton);
 		jpan2.add(ok,cc2.xy(6, 2));
 		jpan2.validate();
-		
+
 		jpan.add(jpan2,cc.xy(2,4));
 		jpan.validate();
 		return jpan;
@@ -678,7 +683,7 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		buf1.append("<font face=\"Tahoma\"><style=margin-left=30px;>");
 		buf1.append("<br>");
 		buf1.append("<table>");
-		
+
 		buf1.append("<tr>");
 		buf1.append("<th rowspan=\"4\"><a href=\"http://rezedit.de\"><img src='file:///"+Path.Instance.getProghome()+"icons/kontact_contacts.png' width=52 height=52 border=0></a></th>");
 		buf1.append("<td class=\"spalte1\" align=\"right\">");
@@ -687,7 +692,7 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		buf1.append("<b>"+(String) vec.get(0)+"</b>");
 		buf1.append("</td>");
 		buf1.append("</tr>");
-		
+
 		buf1.append("<tr>");
 		buf1.append("<td class=\"spalte1\" align=\"right\">");
 		buf1.append("Patient");
@@ -703,7 +708,7 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 		buf1.append("<b>"+vec.get(1)+"</b>");
 		buf1.append("</td>");
 		buf1.append("</tr>");
-		
+
 		buf1.append("</table>");
 		buf1.append("</font>");
 		buf1.append("</div>");

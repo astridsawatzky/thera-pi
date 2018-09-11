@@ -102,7 +102,8 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		tblkuerzel.getColumn(5).setMaxWidth(60);
 		tblkuerzel.getColumn(5).setCellRenderer(mr);
 		tblkuerzel.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent arg0) {
+			@Override
+            public void mousePressed(MouseEvent arg0) {
 				if(arg0.getClickCount()==2){
 					doKuerzelNeu(false);
 				}
@@ -184,14 +185,16 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			if(columnIndex==3 ||columnIndex==4){
 				return Boolean.class;
 			}
 			return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			
 			return false;
 		}

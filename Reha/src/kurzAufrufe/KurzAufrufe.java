@@ -54,7 +54,7 @@ public class KurzAufrufe {
 				new F2RettungsAnker();
 			} catch (TextException e) {
 				e.printStackTrace();
-			}			
+			}
 		}
 	}
 }
@@ -73,9 +73,7 @@ class AkutListe{
 				}
 				documentService = Reha.officeapplication.getDocumentService();
 			} catch (OfficeApplicationException e) {
-				if(documentService==null){
-					//System.out.println("Die Java-Access-Bridge ist zusammengebrochen...");
-				}
+				System.out.println("Die Java-Access-Bridge ist zusammengebrochen...");
 				e.printStackTrace();
 			}
 			IDocument document = null;
@@ -88,11 +86,11 @@ class AkutListe{
 			} catch (NOAException e) {
 				e.printStackTrace();
 			}
-			
+
 			ITextDocument textDocument = (ITextDocument)document;
 			/*
-			IParagraph paragraph = 
-		  		textDocument.getTextService().getTextContentService().constructNewParagraph();	  	
+			IParagraph paragraph =
+		  		textDocument.getTextService().getTextContentService().constructNewParagraph();
 			*/
 			try {
 				OOTools.setzePapierFormat(textDocument, 21000, 29700);
@@ -121,9 +119,9 @@ class AkutListe{
 
 			} catch (TextException e) {
 				e.printStackTrace();
-			}				
+			}
 			try {
-				
+
 				textDocument.getTextService().getTextContentService().insertTextContent(textTable);
 			} catch (TextException e) {
 				e.printStackTrace();
@@ -131,11 +129,11 @@ class AkutListe{
 			try {
 				textTable.getCell(0,0).getTextService().getText().setText("Behandler");
 				textTable.getCell(1,0).getTextService().getText().setText("Patient");
-				textTable.getCell(2,0).getTextService().getText().setText("Kontakt");			
+				textTable.getCell(2,0).getTextService().getText().setText("Kontakt");
 				textTable.getCell(3,0).getTextService().getText().setText("von / bis");
 				textTable.getCell(4,0).getTextService().getText().setText("mögliche Termine");
 
-			} 
+			}
 			  catch (TextException exception) {
 			  	exception.printStackTrace();
 			}
@@ -149,13 +147,13 @@ class AkutListe{
 					  		"telefonp,telefong,telefonm,emaila," +
 					  		"termine1,"termine2";
 					  		,akutdat,akutbis
-					  */		
+					  */
 					  text = (String) ((Vector<?>)vec.get(i)).get(0);
 					  textTable.getCell(0,i+1).getTextService().getText().setText(text);
 
 					  text = (String) ((Vector<?>)vec.get(i)).get(1)+"\r"+ (String)((Vector<?>)vec.get(i)).get(2);
 					  textTable.getCell(1,i+1).getTextService().getText().setText(text);
-					  
+
 					  text = "";
 					  test = (String) ((Vector<?>)vec.get(i)).get(3);
 					  text = text + (test.trim().equals("") ? "" : "p:"+test);
@@ -166,7 +164,7 @@ class AkutListe{
 					  test = (String) ((Vector<?>)vec.get(i)).get(6);
 					  text = text + (test.trim().equals("") ? "" : "\r"+"e:"+test);
 					  textTable.getCell(2,i+1).getTextService().getText().setText(text);
-					  
+
 					  text = "";
 					  test = (String) ((Vector<?>)vec.get(i)).get(9);
 					  test = (test.trim().equals("") ? "ab: " : "ab:  "+DatFunk.sDatInDeutsch(test));
@@ -175,7 +173,7 @@ class AkutListe{
 					  test = (test.trim().equals("") ? "\rbis: " : "\rbis: "+DatFunk.sDatInDeutsch(test));
 					  text = text + test;
 					  textTable.getCell(3,i+1).getTextService().getText().setText(text);
-					  
+
 					  text = "";
 					  test = (String) ((Vector<?>)vec.get(i)).get(7);
 					  text = text + (test.trim().equals("") ? "" : test);
@@ -183,7 +181,7 @@ class AkutListe{
 					  text = text + (test.trim().equals("") ? "" : "\r"+test);
 					  textTable.getCell(4,i+1).getTextService().getText().setText(text);
 
-					} 
+					}
 				  catch (TextException exception) {
 				  	exception.printStackTrace();
 					}
@@ -192,7 +190,7 @@ class AkutListe{
 			tbc[0].setWidth((short) 1500);
 			tbc[1].setWidth((short) 1500);
 			tbc[2].setWidth((short) 1700);
-			tbc[3].setWidth((short) 1500);			
+			tbc[3].setWidth((short) 1500);
 			//tbc[4].setWidth((short) 7920);
 			//System.out.println("Es gibt insgesamt "+tbc.length+" Column");
 
@@ -205,7 +203,7 @@ class AkutListe{
 				textTable.getCell(0, i).getCharacterProperties().setFontName("Courier New");
 				textTable.getCell(0, i).getCharacterProperties().setFontSize(10.f);
 				textTable.getCell(0, i).getCharacterProperties().setFontBold((i==0 ? true : false));
-				textTable.getCell(0, i).getCharacterProperties().setFontColor(magenta);				
+				textTable.getCell(0, i).getCharacterProperties().setFontColor(magenta);
 				textTable.getCell(1, i).getCharacterProperties().setFontName("Courier New");
 				textTable.getCell(1, i).getCharacterProperties().setFontSize(10.f);
 				textTable.getCell(1, i).getCharacterProperties().setFontColor(blau);
@@ -228,7 +226,7 @@ class AkutListe{
 					xdoc.getFrame().getXFrame().getContainerWindow().setVisible(true);
 					return null;
 				}
-				
+
 			}.execute();
 			vec.clear();
 			vec = null;
@@ -241,7 +239,7 @@ class TelefonListe{
 	Vector<String[]> dvec = new Vector<String[]>();
 	Object tfobj = null;
 	public TelefonListe(Object obj) throws TextException{
-		////System.out.println("�bergebene Parameter = "+obj);	
+		////System.out.println("�bergebene Parameter = "+obj);
 		////System.out.println("Einzelner Termin "+((String) ((Vector)((ArrayList) obj).get(0)).get(1)) );
 		tfobj = obj;
 		for(int i = 0; i <((Vector<?>)((ArrayList<?>) obj).get(0)).size(); i++){
@@ -306,7 +304,7 @@ class TelefonListe{
 		daten[2] = xreznr;
 		String telefon = ( vec2.get(2).trim().length() > 0  ? "p:"+(vec2.get(2)) : "" );
 		telefon = telefon + ( vec2.get(3).trim().length() > 0 ? "\r"+"g:"+(vec2.get(3)) : "" );
-		telefon = telefon + ( vec2.get(4).trim().length() > 0 ? "\r"+"m:"+(vec2.get(4)) : "" );		
+		telefon = telefon + ( vec2.get(4).trim().length() > 0 ? "\r"+"m:"+(vec2.get(4)) : "" );
 		telefon = telefon + ( vec2.get(5).trim().length() > 0 ? "\r"+"e:"+(vec2.get(5)) : "" );
 		daten[3] = telefon;
 		daten[4] = ( vec2.get(6).equals("T") ? "JA!!!!" : "nein");
@@ -331,11 +329,11 @@ class TelefonListe{
 			} catch (NOAException e) {
 				e.printStackTrace();
 			}
-			
+
 			ITextDocument textDocument = (ITextDocument)document;
 			/*
-			IParagraph paragraph = 
-		  		textDocument.getTextService().getTextContentService().constructNewParagraph();	  	
+			IParagraph paragraph =
+		  		textDocument.getTextService().getTextContentService().constructNewParagraph();
 			*/
 			try {
 				OOTools.setzePapierFormat(textDocument, 21000, 29700);
@@ -364,9 +362,9 @@ class TelefonListe{
 
 			} catch (TextException e) {
 				e.printStackTrace();
-			}				
+			}
 			try {
-				
+
 				textDocument.getTextService().getTextContentService().insertTextContent(textTable);
 			} catch (TextException e) {
 				e.printStackTrace();
@@ -374,11 +372,11 @@ class TelefonListe{
 			try {
 				textTable.getCell(0,0).getTextService().getText().setText("Beh.Beginn");
 				textTable.getCell(1,0).getTextService().getText().setText("Patient");
-				textTable.getCell(2,0).getTextService().getText().setText("Rezeptnr.");			
+				textTable.getCell(2,0).getTextService().getText().setText("Rezeptnr.");
 				textTable.getCell(3,0).getTextService().getText().setText("Kontakt");
 				textTable.getCell(4,0).getTextService().getText().setText("Akutpatient");
 				textTable.getCell(5,0).getTextService().getText().setText("Bemerkung");
-			} 
+			}
 			  catch (TextException exception) {
 			  	exception.printStackTrace();
 			}
@@ -388,11 +386,11 @@ class TelefonListe{
 				  try {
 					  textTable.getCell(0,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[0]) );
 					  textTable.getCell(1,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[1]) );
-					  textTable.getCell(2,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[2]) );					  
+					  textTable.getCell(2,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[2]) );
 					  textTable.getCell(3,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[3]) );
-					  textTable.getCell(4,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[4]) );					  
-					  textTable.getCell(5,i+1).getTextService().getText().setText("" );					  
-					} 
+					  textTable.getCell(4,i+1).getTextService().getText().setText((((String[])((Vector<?>)dvec).get(i))[4]) );
+					  textTable.getCell(5,i+1).getTextService().getText().setText("" );
+					}
 				  catch (TextException exception) {
 				  	exception.printStackTrace();
 					}
@@ -401,7 +399,7 @@ class TelefonListe{
 			tbc[0].setWidth((short) 1500);
 			tbc[1].setWidth((short) 1500);
 			tbc[2].setWidth((short) 1500);
-			tbc[3].setWidth((short) 1500);			
+			tbc[3].setWidth((short) 1500);
 			tbc[4].setWidth((short) 1500);
 			//tbc[4].setWidth((short) 7920);
 			//System.out.println("Es gibt insgesamt "+tbc.length+" Column");
@@ -419,7 +417,7 @@ class TelefonListe{
 				textTable.getCell(0, i).getCharacterProperties().setFontName("Courier New");
 				textTable.getCell(0, i).getCharacterProperties().setFontSize(10.f);
 				textTable.getCell(0, i).getCharacterProperties().setFontBold((i==0 ? true : false));
-				textTable.getCell(0, i).getCharacterProperties().setFontColor(magenta);				
+				textTable.getCell(0, i).getCharacterProperties().setFontColor(magenta);
 				textTable.getCell(1, i).getCharacterProperties().setFontName("Courier New");
 				textTable.getCell(1, i).getCharacterProperties().setFontSize(10.f);
 				textTable.getCell(1, i).getCharacterProperties().setFontColor(blau);
@@ -441,7 +439,7 @@ class TelefonListe{
 			dvec.clear();
 			dvec = null;
 		}
-		
+
 	}
 }
 
@@ -454,9 +452,6 @@ class F2RettungsAnker{
 			}
 			documentService = Reha.officeapplication.getDocumentService();
 		} catch (OfficeApplicationException e) {
-			if(documentService==null){
-				//System.out.println("Die Java-Access-Bridge ist zusammengebrochen...");
-			}
 			e.printStackTrace();
 		}
 		IDocument document = null;
@@ -469,11 +464,11 @@ class F2RettungsAnker{
 		} catch (NOAException e) {
 			e.printStackTrace();
 		}
-		
+
 		ITextDocument textDocument = (ITextDocument)document;
 		/*
-		IParagraph paragraph = 
-	  		textDocument.getTextService().getTextContentService().constructNewParagraph();	  	
+		IParagraph paragraph =
+	  		textDocument.getTextService().getTextContentService().constructNewParagraph();
 		*/
 		try {
 			OOTools.setzePapierFormat(textDocument, 21000, 29700);
@@ -500,23 +495,23 @@ class F2RettungsAnker{
 		ITextTable textTable = null;
 		try {
 			textTable = textDocument.getTextTableService().constructTextTable(Reha.terminLookup.size()+1, 5);
-			
-			
+
+
 		} catch (TextException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
-			
+
 			textDocument.getTextService().getTextContentService().insertTextContent(textTable);
-	
+
 		} catch (TextException e) {
 			e.printStackTrace();
 		}
 		try {
 			textTable.getCell(0,0).getTextService().getText().setText("lfNr.");
 			textTable.getCell(1,0).getTextService().getText().setText("durchgeführt von/am/um");
-			textTable.getCell(2,0).getTextService().getText().setText("was/wo/wann");			
+			textTable.getCell(2,0).getTextService().getText().setText("was/wo/wann");
 			textTable.getCell(3,0).getTextService().getText().setText("Termindaten vor Aktion");
 			textTable.getCell(4,0).getTextService().getText().setText("Termindaten nach Aktion");
 			for(int i = 1; i < Reha.terminLookup.size()+1;i++){
@@ -534,26 +529,26 @@ class F2RettungsAnker{
 				textTable.getCell(3,i).getTextService().getText().setText(
 						" Name: "+Reha.terminLookup.get(i-1).get(1).get(0)+"\r"+
 						"RezNr: "+Reha.terminLookup.get(i-1).get(1).get(1)+"\r"+
-						"Start: "+Reha.terminLookup.get(i-1).get(1).get(2)+"\r"+	
-						" Ende: "+Reha.terminLookup.get(i-1).get(1).get(4)+"\r"+	
+						"Start: "+Reha.terminLookup.get(i-1).get(1).get(2)+"\r"+
+						" Ende: "+Reha.terminLookup.get(i-1).get(1).get(4)+"\r"+
 						"Dauer: "+Reha.terminLookup.get(i-1).get(1).get(3)
 						);
 				textTable.getCell(4,i).getTextService().getText().setText(
 						" Name: "+Reha.terminLookup.get(i-1).get(2).get(0)+"\r"+
 						"RezNr: "+Reha.terminLookup.get(i-1).get(2).get(1)+"\r"+
-						"Start: "+Reha.terminLookup.get(i-1).get(2).get(2)+"\r"+	
-						" Ende: "+Reha.terminLookup.get(i-1).get(2).get(4)+"\r"+	
+						"Start: "+Reha.terminLookup.get(i-1).get(2).get(2)+"\r"+
+						" Ende: "+Reha.terminLookup.get(i-1).get(2).get(4)+"\r"+
 						"Dauer: "+Reha.terminLookup.get(i-1).get(2).get(3)
-						);				
-				
+						);
+
 			}
 			//textTable.getCell(4,1).getTextService().getText().setText(Reha.terminLookup.toString());
 
-		} 
+		}
 		  catch (TextException exception) {
 		  	exception.printStackTrace();
 		}
-		
+
 		TextTableColumn[] tbc = (TextTableColumn[]) textTable.getColumns();
 		/*
 		int width = 0;
@@ -565,9 +560,9 @@ class F2RettungsAnker{
 		tbc[0].setWidth((short) 500);
 		tbc[1].setWidth((short) 2375);
 		tbc[2].setWidth((short) 2375);
-		tbc[3].setWidth((short) 2375);	
+		tbc[3].setWidth((short) 2375);
 		tbc[4].setWidth((short) 2375);
-		
+
 		int rows = textTable.getRowCount();
 		int rot = Color.RED.getRGB();
 		int blau = Color.BLUE.getRGB();
@@ -577,7 +572,7 @@ class F2RettungsAnker{
 			textTable.getCell(0, i).getCharacterProperties().setFontName("Courier New");
 			textTable.getCell(0, i).getCharacterProperties().setFontSize(9.f);
 			textTable.getCell(0, i).getCharacterProperties().setFontBold((i==0 ? true : false));
-			textTable.getCell(0, i).getCharacterProperties().setFontColor(magenta);				
+			textTable.getCell(0, i).getCharacterProperties().setFontColor(magenta);
 			textTable.getCell(1, i).getCharacterProperties().setFontName("Courier New");
 			textTable.getCell(1, i).getCharacterProperties().setFontSize(9.f);
 			textTable.getCell(1, i).getCharacterProperties().setFontColor(blau);
@@ -594,7 +589,7 @@ class F2RettungsAnker{
 			textTable.getCell(4, i).getCharacterProperties().setFontBold((i==0 ? true : false));
 			textTable.getCell(4, i).getCharacterProperties().setFontColor(rot);
 		}
-		
+
 		final IDocument xdoc = document;
 		new SwingWorker<Void,Void>(){
 			@Override
@@ -602,7 +597,7 @@ class F2RettungsAnker{
 				xdoc.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				return null;
 			}
-			
+
 		}.execute();
 	}
 	public void propSet(ITextTableCellRange range){

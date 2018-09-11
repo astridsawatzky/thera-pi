@@ -31,7 +31,8 @@ BufferedImage img1 = null;
 		
 	}
 
-	public void paintComponent( Graphics g ) {
+	@Override
+    public void paintComponent( Graphics g ) {
 		g.drawImage(this.img1,0, 0, this);
 	}
 }

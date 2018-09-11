@@ -96,13 +96,15 @@ public static final int LEFT = 0; // Alignment constants
     repaint();
   }
 
-  public void setFont(Font f) {
+  @Override
+public void setFont(Font f) {
     super.setFont(f);
     measure();
     repaint();
   }
 
-  public void setForeground(Color c) {
+  @Override
+public void setForeground(Color c) {
     super.setForeground(c);
     repaint();
   }
@@ -139,21 +141,24 @@ public static final int LEFT = 0; // Alignment constants
   // invoked our superclass's addNotify() method, we have font
   // metrics and can successfully call measure() to figure out
   // how big the label is.
-  public void addNotify() {
+  @Override
+public void addNotify() {
     super.addNotify();
     measure();
   }
 
   // This method is called by a layout manager when it wants to
   // know how big we'd like to be.
-  public Dimension getPreferredSize() {
+  @Override
+public Dimension getPreferredSize() {
     return new Dimension(max_width + 2 * margin_width, num_lines
         * line_height + 2 * margin_height);
   }
 
   // This method is called when the layout manager wants to know
   // the bare minimum amount of space we need to get by.
-  public Dimension getMinimumSize() {
+  @Override
+public Dimension getMinimumSize() {
     return new Dimension(max_width, num_lines * line_height);
   }
 
@@ -161,7 +166,8 @@ public static final int LEFT = 0; // Alignment constants
   // Note that it handles the margins and the alignment, but that
   // it doesn't have to worry about the color or font--the superclass
   // takes care of setting those in the Graphics object we're passed.
-  public void paint(Graphics g) {
+  @Override
+public void paint(Graphics g) {
     int x, y;
     Dimension d = getSize();
     y = line_ascent + (d.height - num_lines * line_height) / 2;

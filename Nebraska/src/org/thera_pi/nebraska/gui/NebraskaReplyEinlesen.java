@@ -27,7 +27,7 @@ import utils.ButtonTools;
 public class NebraskaReplyEinlesen extends JDialog {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 4158060069360452844L;
 	private ActionListener al = null;
@@ -37,7 +37,7 @@ public class NebraskaReplyEinlesen extends JDialog {
 	private JButton[] actionbuts = {null,null};
 	private JButton[] buts = {null,null};
 	private NebraskaZertAntrag eltern;
-	
+
 	public NebraskaReplyEinlesen(NebraskaZertAntrag xeltern){
 		super();
 		this.activateListeners();
@@ -71,7 +71,7 @@ public class NebraskaReplyEinlesen extends JDialog {
 		content.add(replyfile,cc.xy(4,5));
 		actionbuts[1] = ButtonTools.macheBut("auswählen", "replywahl", al);
 		content.add(actionbuts[1],cc.xy(6,5));
-		
+
 		JXPanel jpan = new JXPanel();
 		FormLayout lay2 = new FormLayout("fill:0:grow(0.33),60dlu,fill:0:grow(0.33),60dlu,fill:0:grow(0.33)",
 				"10dlu,p,10dlu");
@@ -85,7 +85,7 @@ public class NebraskaReplyEinlesen extends JDialog {
 		content.add(jpan,cc.xyw(1,7,7));
 		content.validate();
 		return content;
-		
+
 	}
 	private void activateListeners(){
 		al = new ActionListener(){
@@ -110,9 +110,9 @@ public class NebraskaReplyEinlesen extends JDialog {
 					dispose();
 					return;
 				}
-				
+
 			}
-		};	
+		};
 	}
 
 	private void doKeystorewahl(){
@@ -131,7 +131,7 @@ public class NebraskaReplyEinlesen extends JDialog {
 			keystorelab.setText(keystore);
 		}
 	}
-		
+
 	private void doReplywahl(){
 		String replykurz = eltern.getIK().substring(0,8)+".p7c";
 		String annahme = "annahme-sha256.key";
@@ -168,10 +168,10 @@ public class NebraskaReplyEinlesen extends JDialog {
 	 * @param IK institution ID
 	 * @throws NebraskaCryptoException on cryptography related errors
 	 * @throws NebraskaFileException on I/O related errors
-	 * 
+	 *
 	 */
 	private void doEinlesen(String keystorefile,String requestfile){
-		
+
 		/*
 		if( keystorefile.startsWith("kein") ||
 				requestfile.trim().startsWith("kein") ) {
@@ -190,7 +190,9 @@ public class NebraskaReplyEinlesen extends JDialog {
 			dispose();
 			return;
 		}
-		String kfile = keystorelab.getText().replace("\\", "/"); //"C:/RehaVerwaltung/keystore/540840108/540840108.p12";
+		String kfile = keystorelab.getText().replace("\\", "/");
+		//"C:/RehaVerwaltung/keystore/540840108/540840108.p12";
+
 		//Object ret = JOptionPane.showInputDialog(null, "Geben Sie bitte das (6-stellige) Passwort für den gewählten KeyStore ein, Default-Passwort = 123456", "");
 		String ret = "123456";
 		for(int i = 0; i < NebraskaMain.keyStoreParameter.size();i++){
@@ -222,7 +224,11 @@ public class NebraskaReplyEinlesen extends JDialog {
 				System.out.println("fertig");
 
 				String privkeyfile = FileStatics.dirChooser(this.eltern.therapidir+"/keystore/"+eltern.getIK()+"/privkeys/", "PrivateKey-File auswählen");
-				System.out.println("Datei = "+privkeyfile.replace("\\", "/"));
+				if (privkeyfile!= null) {
+				    System.out.println("Datei = "+privkeyfile.replace("\\", "/"));
+				} else {
+				    System.out.println("Datei = null");
+				}
 				if(privkeyfile==null || privkeyfile.equals("")){
 					JOptionPane.showMessageDialog(null,"Ohne die Datei für den privaten Schlüssel kann der Reply nicht eingelesen werden!");
 					setVisible(false);
@@ -258,5 +264,5 @@ public class NebraskaReplyEinlesen extends JDialog {
 			setVisible(false);
 			dispose();
 	}
-	
-}	
+
+}

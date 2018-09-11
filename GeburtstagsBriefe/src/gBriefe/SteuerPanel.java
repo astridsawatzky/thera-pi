@@ -509,7 +509,8 @@ class MyGbTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class getColumnClass(int columnIndex) {
+	@Override
+    public Class getColumnClass(int columnIndex) {
 		   if(columnIndex==0){
 			   return String.class;
 		   }else if (columnIndex==9){
@@ -520,7 +521,8 @@ class MyGbTableModel extends DefaultTableModel{
         //return (columnIndex == 0) ? Boolean.class : String.class;
     }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	        if (col == 9){

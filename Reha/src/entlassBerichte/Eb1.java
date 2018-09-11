@@ -153,7 +153,8 @@ public class Eb1 implements ActionListener,ComponentListener {
 				pan.validate();
 				pan.setVisible(true);
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 				 		if(!eltern.neu){
 				 			new SwingWorker<Void,Void>(){
 								@Override
@@ -180,7 +181,8 @@ public class Eb1 implements ActionListener,ComponentListener {
 				 			eltern.meldeInitOk(0);
 							eltern.doSysVars();
 				 			SwingUtilities.invokeLater(new Runnable(){
-				 				public void run(){
+				 				@Override
+                                public void run(){
 						 			jscr.scrollRectToVisible(new Rectangle(0,0,0,0));				 					
 				 				}
 				 			});
@@ -1905,7 +1907,8 @@ public class Eb1 implements ActionListener,ComponentListener {
 
 
 
-	    public void remove(DocumentFilter.FilterBypass fb, int offset, int length)
+	    @Override
+        public void remove(DocumentFilter.FilterBypass fb, int offset, int length)
 
 	        throws BadLocationException
 
@@ -1944,7 +1947,8 @@ public class Eb1 implements ActionListener,ComponentListener {
 
 
 
-	    public void insertString(FilterBypass fb, int offset, String str, AttributeSet a)
+	    @Override
+        public void insertString(FilterBypass fb, int offset, String str, AttributeSet a)
 
 	        throws BadLocationException
 
@@ -1974,7 +1978,8 @@ public class Eb1 implements ActionListener,ComponentListener {
 
 
 
-	    public void replace(FilterBypass fb, int offset, int length, String str, AttributeSet a)
+	    @Override
+        public void replace(FilterBypass fb, int offset, int length, String str, AttributeSet a)
 
 	        throws BadLocationException
 

@@ -1,7 +1,6 @@
 package lvaEntlassmitteilung;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -14,14 +13,14 @@ import javax.swing.JComboBox;
 
 
 
-public class JRtaComboBox extends JComboBox implements ActionListener,PropertyChangeListener,FocusListener,KeyListener{
+public class JRtaComboBox extends JComboBox implements PropertyChangeListener,FocusListener,KeyListener{
 public Vector vec  = null;
 public int cmbdisplay;
 public int cmbretvalue;
 public JRtaComboBox(){
 	super();
 	addKeyListener(this);
-	addActionListener(this);	
+	addActionListener(this);
 }
 public JRtaComboBox(String[] ss){
 	super(ss);
@@ -32,7 +31,7 @@ public JRtaComboBox(Vector<String> ve){
 	super();
 	this.vec = ve;
 	if(this.vec.get(0) instanceof Vector){
-		fillCombo(this.vec);		
+		fillCombo(this.vec);
 	}else{
 		fillOneDimension(this.vec);
 	}
@@ -48,7 +47,7 @@ public JRtaComboBox(Vector<Vector<String>> ve,int item,int ret){
 	this.cmbretvalue = ret;
 	if(vec.size()>0){
 		if(this.vec.get(0) instanceof Vector){
-			fillCombo(this.vec);		
+			fillCombo(this.vec);
 		}else{
 			fillOneDimension(this.vec);
 		}
@@ -107,7 +106,7 @@ private void fillCombo(Vector ve){
 		addItem( ((Vector)ve.get(i)).get(this.cmbdisplay));
 		System.out.println("i="+i+" - "+(String) ((Vector)ve.get(i)).get(this.cmbdisplay));
 	}
-	
+
 }
 public Vector getDataVector(){
 	return this.vec;
@@ -126,19 +125,19 @@ public Object getValueAt(int pos){
 @Override
 public void propertyChange(PropertyChangeEvent arg0) {
 	// TODO Auto-generated method stub
-	//this.getParent().dispatchEvent(arg0);	
+	//this.getParent().dispatchEvent(arg0);
 }
 
 @Override
 public void focusGained(FocusEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 public void focusLost(FocusEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
@@ -163,19 +162,19 @@ public void keyPressed(KeyEvent arg0) {
 		this.transferFocusBackward();
 		this.getParent().dispatchEvent(arg0);
 		return;
-	}	
+	}
 }
 
 @Override
 public void keyReleased(KeyEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 public void keyTyped(KeyEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 @Override
 public void actionPerformed(ActionEvent arg0) {
@@ -183,7 +182,7 @@ public void actionPerformed(ActionEvent arg0) {
 	try{
 		this.getParent().dispatchEvent(arg0);
 	}catch(java.lang.NullPointerException ex){
-		
+
 	}
 }
 

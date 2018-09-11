@@ -44,7 +44,8 @@ public class RehaTP extends JXTitledPanel implements RehaTPEventListener,FocusLi
 		*/	
 			
 		this.addFocusListener(new java.awt.event.FocusAdapter() {
-			public void focusGained(java.awt.event.FocusEvent e) {    
+			@Override
+            public void focusGained(java.awt.event.FocusEvent e) {    
 				if(thisClass.pinPanel != null){
 					thisClass.pinPanel.SetzeAktivButton(true);
 					RehaTPEvent tPEvent = new RehaTPEvent(this);   
@@ -53,7 +54,8 @@ public class RehaTP extends JXTitledPanel implements RehaTPEventListener,FocusLi
 					RehaTPEventClass.fireRehaTPEvent(tPEvent);
 				}
 			}   
-			public void focusLost(java.awt.event.FocusEvent e) {    
+			@Override
+            public void focusLost(java.awt.event.FocusEvent e) {    
 				if(thisClass.pinPanel != null){
 					thisClass.pinPanel.SetzeAktivButton(false);
 				}

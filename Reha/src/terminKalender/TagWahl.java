@@ -107,17 +107,20 @@ public class TagWahl {
 			jTextField.setText(this.tag);
 			jTextField.setCaretPosition(0);
 			jTextField.addKeyListener(new java.awt.event.KeyListener() {
-				public void keyTyped(java.awt.event.KeyEvent e) {
+				@Override
+                public void keyTyped(java.awt.event.KeyEvent e) {
 					////System.out.println("keyTyped()"); // TODO Auto-generated Event stub keyTyped()
 					if(e.getKeyCode()==10){
 						e.consume();
 					}
 				}
-				public void keyPressed(java.awt.event.KeyEvent e) {
+				@Override
+                public void keyPressed(java.awt.event.KeyEvent e) {
 					////System.out.println("keypressed()"); // TODO Auto-generated Event stub keyTyped()
 					TagEinstellen(e, jTextField.getText());// TODO Auto-generated Event stub keyTyped()
 				}
-				public void keyReleased(java.awt.event.KeyEvent e) {
+				@Override
+                public void keyReleased(java.awt.event.KeyEvent e) {
 					////System.out.println("keypreleased()e");
 					if(e.getKeyCode()==10){
 						e.consume();
@@ -160,7 +163,8 @@ public class TagWahl {
 			jButton.setIcon(new ImageIcon(getClass().getResource("/icons/ok.gif")));
 			jButton.setText("Ok");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
+				@Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
 					////System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 					SetzeButton(0);
 					jDialog.dispose();
@@ -182,7 +186,8 @@ public class TagWahl {
 			jButton1.setIcon(new ImageIcon(getClass().getResource("/icons/nichtok.gif")));
 			jButton1.setText("Abbruch");
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
+				@Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
 					SetzeButton(1);
 					jDialog.dispose();
 				}

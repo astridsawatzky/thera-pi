@@ -159,7 +159,8 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 			jSplitLR.setDividerSize(7);
 			jSplitLR.addPropertyChangeListener(new PropertyChangeListener(){
 				
-				public void propertyChange(PropertyChangeEvent arg0) {
+				@Override
+                public void propertyChange(PropertyChangeEvent arg0) {
 					dividerLocLR = jSplitLR.getDividerLocation();
 					int letzte = ((UIFSplitPane)arg0.getSource()).getLastDividerLocation(); 
 					for(int i = 0; i < 1; i++){
@@ -317,7 +318,8 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 
 
 	
-	public void keyPressed(KeyEvent arg0) {
+	@Override
+    public void keyPressed(KeyEvent arg0) {
 		if (arg0.getKeyCode() == 27){
 			arg0.consume();
 			Beenden(0);
@@ -534,7 +536,8 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 
 
 
-	public void actionPerformed(ActionEvent arg0) {
+	@Override
+    public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		if(((JComponent)arg0.getSource()).getName().equals("Ok")){
 			int dauer1 = Integer.parseInt( Dauer.getText() );

@@ -57,19 +57,19 @@ import terminKalender.ParameterLaden;
 
 public class InfoDialog extends JDialog implements WindowListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -2903001967749371315L;
 	private JLabel textlab;
 	private JLabel bildlab;
 	private KeyListener kl;
 	Font font = new Font("Arial",Font.PLAIN,12);
-	
+
 	private String arg1 = null;
 	private String infoArt = null;
 	JEditorPane htmlPane1 = null;
 	JEditorPane htmlPane2 = null;
-	
+
 	Vector <Vector<String>> vecResult = null;
 	Vector<String> tage = null;
 	Vector<Vector<String>> tageplus = null;
@@ -78,20 +78,20 @@ public class InfoDialog extends JDialog implements WindowListener{
 	String endhinweis = "";
 	JScrollPane scr1 = null;
 	JScrollPane scr2 = null;
-	
+
 	String last12Wo = null;
-	
+
 	String disziplin = "";
 	int tagebreak = 0;
-	
+
 	DecimalFormat df = new DecimalFormat( "0.00" );
-	
+
 	boolean muststop = false;
-	
+
 	boolean isF1Released = false;
-	
+
 	JButton[] buts = {null,null,null};
-	
+
 	public InfoDialog(String arg1,String infoArt,Vector<Vector<String>> data) {
 		super();
 		/*
@@ -109,16 +109,16 @@ public class InfoDialog extends JDialog implements WindowListener{
 			this.setContentPane(getTerminInfoContent());
 		}else if(this.infoArt.equals("offenRGAF")){
 			this.setContentPane(getOffeneRechnungenInfoContent(data));
-		}else{	
-			this.setContentPane(getContent());	
+		}else{
+			this.setContentPane(getContent());
 		}
-		
+
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		this.addKeyListener(kl);
 		//validate();
 		this.getContentPane().validate();
 	}
-	
+
 	public JXPanel getTerminInfoContent(){
 		JXPanel jpan = new JXPanel();
 		jpan.addKeyListener(kl);
@@ -141,8 +141,8 @@ public class InfoDialog extends JDialog implements WindowListener{
         //htmlPane1.setPreferredSize(new Dimension(1000,750));
         //htmlPane.addHyperlinkListener(this);
         scr1 = JCompTools.getTransparentScrollPane(htmlPane1);
-        
-        scr1.validate();	
+
+        scr1.validate();
         jpan.add(scr1,cc.xywh(2,4,3, 3,CellConstraints.FILL,CellConstraints.FILL));
 
 		htmlPane2 = new JEditorPane(/*initialURL*/);
@@ -150,23 +150,24 @@ public class InfoDialog extends JDialog implements WindowListener{
         htmlPane2.setEditable(false);
         htmlPane2.setOpaque(false);
         htmlPane2.addKeyListener(kl);
-        
+
 
         scr2 = JCompTools.getTransparentScrollPane(htmlPane2);
-        scr2.validate();	
+        scr2.validate();
         jpan.add(scr2,cc.xyw(2,8,3,CellConstraints.FILL,CellConstraints.FILL));
-        
+
         holeTerminInfo();
-       
+
         htmlPane1.addHyperlinkListener(new HyperlinkListener() {
-			public void hyperlinkUpdate(HyperlinkEvent e) {
+			@Override
+            public void hyperlinkUpdate(HyperlinkEvent e) {
 				if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED){
 					if( extractFieldName(e.getURL().toString()).equals("weiteretermine") ){
 						//System.err.println(e.getURL().toString());
 						htmlPane1.requestFocus();
 						//hier muß der Suchendialog gestartet werden
 						starteFolgeTermine();
-						
+
 						return;
 					}
 				}
@@ -176,11 +177,11 @@ public class InfoDialog extends JDialog implements WindowListener{
 				return ext.replace(".de", "");
 			}
 	    });
-        
+
 		jpan.validate();
 		return jpan;
 	}
-	
+
 	public JXPanel getOffeneRechnungenInfoContent(Vector<Vector<String>> vdata){
 		JXPanel jpan = new JXPanel();
 		jpan.addKeyListener(kl);
@@ -202,7 +203,7 @@ public class InfoDialog extends JDialog implements WindowListener{
         htmlPane1.addKeyListener(kl);
         //htmlPane.addHyperlinkListener(this);
         scr1 = JCompTools.getTransparentScrollPane(htmlPane1);
-        scr1.validate();	
+        scr1.validate();
         jpan.add(scr1,cc.xywh(2,4,3, 4));
 
 		htmlPane2 = new JEditorPane(/*initialURL*/);
@@ -211,28 +212,28 @@ public class InfoDialog extends JDialog implements WindowListener{
         htmlPane2.setOpaque(false);
         htmlPane2.addKeyListener(kl);
         scr2 = JCompTools.getTransparentScrollPane(htmlPane2);
-        scr2.validate();	
-        jpan.add(scr2,cc.xywh(2,8,3,2));		
+        scr2.validate();
+        jpan.add(scr2,cc.xywh(2,8,3,2));
 
 		holeOffeneRechnungen(vdata);
 		scr1.validate();
 		scr2.validate();
 		jpan.revalidate();
 		return jpan;
-	}	
+	}
 
 	private void activateListener(){
 		kl = new KeyListener(){
 			@Override
 			public void keyTyped(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -240,9 +241,9 @@ public class InfoDialog extends JDialog implements WindowListener{
 				if(e.getKeyCode()==KeyEvent.VK_F1 && (!e.isControlDown()) && (!e.isShiftDown())){
 					dispose();
 				}
-				
+
 			}
-			
+
 		};
 	}
 	public JXPanel getContent(){
@@ -267,7 +268,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 	int tagebeginn = 0;
 	int tagebreak = 0;
 	return jpan;
-	
+
 	}
 	public void setzeLabel(String labelText){
 		textlab.setText(labelText);
@@ -299,7 +300,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 	@Override
 	public void windowDeactivated(WindowEvent e) {
 	}
-	
+
 	private void holeTerminInfo(){
 		//vecResult = SqlInfo.holeFelder("select lastdate,termine from verordn where rez_nr = '"+macheNummer(this.arg1)+"' LIMIT 1");
 		vecResult = SqlInfo.holeFelder("select t1.lastdate,t1.termine,t2.n_name,t2.v_name,t1.kuerzel1,t1.anzahl1,t1.kuerzel2,t1.anzahl2,t1.kuerzel3,t1.anzahl3,t1.kuerzel4,t1.anzahl4,ktraeger,rezeptart,zzstatus,preisgruppe,rez_datum,arztbericht,berid from verordn as t1 join pat5 as t2 on(t2.pat_intern = t1.pat_intern) where t1.rez_nr = '"+macheNummer(this.arg1)+"' LIMIT 1");
@@ -307,32 +308,33 @@ public class InfoDialog extends JDialog implements WindowListener{
 			this.historie=true;
 			vecResult = SqlInfo.holeFelder("select t1.lastdate,t1.termine,t2.n_name,t2.v_name,t1.kuerzel1,t1.anzahl1,t1.kuerzel2,t1.anzahl2,t1.kuerzel3,t1.anzahl3,t1.kuerzel4,t1.anzahl4,ktraeger,rezeptart,zzstatus,preisgruppe,rez_datum,arztbericht,berid from lza as t1 join pat5 as t2 on(t2.pat_intern = t1.pat_intern) where t1.rez_nr = '"+macheNummer(this.arg1)+"' LIMIT 1");
 			if(vecResult.size() > 0){
-				JOptionPane.showMessageDialog(null,"Dieses Rezept ist bereits in der Historie - also abgerechnet!"+"\nRezeptnummer: "+this.arg1);				
+				JOptionPane.showMessageDialog(null,"Dieses Rezept ist bereits in der Historie - also abgerechnet!"+"\nRezeptnummer: "+this.arg1);
 			}else{
 				JOptionPane.showMessageDialog(null,"Dieses Rezept ist weder im aktuellen Rezeptstamm noch in der Historie - also gelöscht!"+"\nRezeptnummer: "+this.arg1);
 			}
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					dispose();
 				}
 			});
 			return;
 		}
-		
+
 		try{
 			//int frist = (Integer)((Vector<?>)SystemPreislisten.hmFristen.get(disziplin).get((erstebehandlung ? 0 : 2))).get(preisgruppe);
 			disziplin = StringTools.getDisziplin(this.arg1);
-			
+
 			tagebreak = (Integer)((Vector<?>)SystemPreislisten.hmFristen.get(disziplin).get(2)).get(Integer.parseInt(vecResult.get(0).get(15))-1 );
 
 		}catch(Exception ex){
 			tagebreak = 28;
 			ex.printStackTrace();
 		}
-		
+
 		fuelleHTML();
 	}
-	
+
 	private void fuelleHTML(){
 		try{
 			String shtml = ladehead()+
@@ -342,7 +344,8 @@ public class InfoDialog extends JDialog implements WindowListener{
 			scr1.revalidate();
 			htmlPane1.validate();
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					if(scr1.isVisible()){
 						scr1.getVerticalScrollBar().setValue(0);
 						//scr1.getViewport().scrollRectToVisible(new Rectangle(0,0));
@@ -357,16 +360,17 @@ public class InfoDialog extends JDialog implements WindowListener{
 			scr2.revalidate();
 			htmlPane2.validate();
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					if(scr2.isVisible()){
 						scr2.getVerticalScrollBar().setValue(0);
 						//scr1.getViewport().scrollRectToVisible(new Rectangle(0,0));
 					}
 				}
 			});
-			
-			
-			
+
+
+
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -387,17 +391,17 @@ public class InfoDialog extends JDialog implements WindowListener{
 			String lastdate = DatFunk.WochenTag(slastdate)+" "+slastdate;
 			long diff = 0;
 			if( (diff = DatFunk.TageDifferenz(slastdate, DatFunk.sHeute())) > 0 ){
-				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<b>"+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"Maximale Unterbrechung verpasst "+lastdate+"!! ("+Integer.toString(tagebreak)+" Tage)</span>\n");	
+				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<b>"+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"Maximale Unterbrechung verpasst "+lastdate+"!! ("+Integer.toString(tagebreak)+" Tage)</span>\n");
 			}else{
 				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<b>"+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"nächster Termin spätestens am " +lastdate+" ("+Integer.toString(tagebreak)+" Tage)</span>\n");
 			}
-			
+
 		}else if(tage.size() == 0){
 			long diff = 0;
 			if((diff = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(0)), DatFunk.sHeute())) > 0){
 				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(0))+"</b></span><br>"+"<span "+getSpanStyle("10","")+"Achtung Behandlungsbeginn heute überschreitet<br>den spätestesn Behandlungsbeginn<br>um "+Long.toString(diff)+" Tage!!</span>\n");
 			}else{
-				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(0))+"</b></span><br>"+"<span "+getSpanStyle("10","")+"Behandlung noch nicht begonnen stand heute<br>spätester Behandlungsbeginn<br>in "+Long.toString(diff)+" Tage(n)!!</span>\n");				
+				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(0))+"</b></span><br>"+"<span "+getSpanStyle("10","")+"Behandlung noch nicht begonnen stand heute<br>spätester Behandlungsbeginn<br>in "+Long.toString(diff)+" Tage(n)!!</span>\n");
 			}
 		}
 		//jetzt den Saich mit der 12-Wochenfrist für ADR
@@ -405,7 +409,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 			String lastdate = DatFunk.sDatPlusTage(tage.get(0), (12*7)-1);
 			long diff = DatFunk.TageDifferenz(lastdate, DatFunk.sHeute());
 			if(diff > 0){
-				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+" VO-AdR</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");	
+				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+" VO-AdR</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");
 			}else{
 				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+" VO-AdR</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am  "+lastdate+" (12 Wochenfrist)</span>\n");
 			}
@@ -413,7 +417,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 			String lastdate = DatFunk.sDatPlusTage(tage.get(0), (12*7)-1);
 			long diff = DatFunk.TageDifferenz(lastdate, DatFunk.sHeute());
 			if(diff > 0){
-				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");	
+				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");
 			}else{
 				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");
 			}
@@ -422,17 +426,17 @@ public class InfoDialog extends JDialog implements WindowListener{
 			String lastdate = DatFunk.sDatPlusTage(tage.get(0), (12*7)-1);
 			long diff = DatFunk.TageDifferenz(lastdate, DatFunk.sHeute());
 			if(diff > 0){
-				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");	
+				ergebnis.append("<span "+getSpanStyle("14","#ff0000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");
 			}else{
 				ergebnis.append("<span "+getSpanStyle("14","#008000")+"<br><br><b>"+DatFunk.WochenTag(lastdate)+" "+lastdate+"</b></span><br>"+"<span "+getSpanStyle("10","")+"letzter Behandlungstermin spätestens am "+lastdate+" (12 Wochenfrist)</span>\n");
 			}
 		}
-		
-		
 
-		
+
+
+
 		return ergebnis.toString();
-	}	
+	}
 	/***************************************************/
 	public String getMittelTeil(){
 		StringBuffer  mitte = new StringBuffer();
@@ -442,18 +446,18 @@ public class InfoDialog extends JDialog implements WindowListener{
 		Object[] otest = {null,null};
 		/**********************/
 		if(tageplus.size()/*tage.size()*/ > 0){
-			last12Wo = DatFunk.sDatPlusTage(tageplus.get(0).get(0)/*tage.get(0)*/, (12*7)-1);	
+			last12Wo = DatFunk.sDatPlusTage(tageplus.get(0).get(0)/*tage.get(0)*/, (12*7)-1);
 		}else{
 			last12Wo = DatFunk.sDatPlusTage(DatFunk.sDatInDeutsch(vecResult.get(0).get(0)), (12*7)-1);
 		}
-		
+
 		//System.out.println("12 Wochenfrist läuft ab am "+last12Wo);
 		/*********************/
-		
+
 		mitte.append("<span "+getSpanStyle("12","")+StringTools.EGross(vecResult.get(0).get(2))+", "+StringTools.EGross(vecResult.get(0).get(3))+"<br>Rezeptnummer: "+this.arg1+
 				"<br>"+StringTools.EGross(vecResult.get(0).get(12))+"</span>"+"<br><br>\n");
 		mitte.append("<span "+getSpanStyle("10","")+getPositionen()+"</span>"+"<br><br>\n");
-		
+
 		if(!zuzahl){
 			mitte.append("<span "+getSpanStyle("10","")+"Rezeptgebühr: </span><span "+getSpanStyle("10","#008000")+ "<b>nicht erforderlich oder befreit</b>"+"</span>"+"<br>\n");
 		}else{
@@ -462,7 +466,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 			}else if(vecResult.get(0).get(14).equals("2")){
 				mitte.append("<span "+getSpanStyle("10","")+"Rezeptgebühr: </span><span "+getSpanStyle("10","#ff0000")+ "<b>nicht bezahlt</b>"+"</span>"+"<br>\n");
 			}
-				
+
 		}
 		if(vecResult.get(0).get(17).equals("T")){
 			if(vecResult.get(0).get(18).equals("") || vecResult.get(0).get(18).equals("-1") || vecResult.get(0).get(18).equals("0") ){
@@ -473,8 +477,8 @@ public class InfoDialog extends JDialog implements WindowListener{
 		}
 		mitte.append("<span "+getSpanStyle("10","")+"Bislang durchgeführt: <b>"+Integer.toString(tageplus.size()/*tage.size()*/)+" von "+vecResult.get(0).get(5)+"</b></span>"+"<br>\n");
 		mitte.append("<span "+getSpanStyle("10","")+"Rezeptdatum: <b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(16))+"</b></span>"+"<br>\n");
-		mitte.append("<span "+getSpanStyle("10","")+"Spätester Behandlungsbeginn: <b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(0))+"</b></span>"+"<br><br>\n");	
-		
+		mitte.append("<span "+getSpanStyle("10","")+"Spätester Behandlungsbeginn: <b>"+DatFunk.sDatInDeutsch(vecResult.get(0).get(0))+"</b></span>"+"<br><br>\n");
+
 		int pghmr = Integer.parseInt(vecResult.get(0).get(15));
 		String disziplin = StringTools.getDisziplin(this.arg1);
 
@@ -485,12 +489,12 @@ public class InfoDialog extends JDialog implements WindowListener{
 		/***********************************************************************************/
 		long diff = 0;
 		long diff1 = 0;
-		
+
 		for(int i = 0; i < tageplus.size()/*tage.size()*/;i++){
 			mitte.append("<tr>\n");
 			mitte.append("<td class='itemkleinodd'>"+Integer.toString(i+1)+"</td>\n");
 			mitte.append("<td class='itemkleinodd' align=\"center\">"+tageplus.get(i).get(0)/*tage.get(i)*/+"</td>\n");
-			
+
 			if(i==0){
 				//zuerst testen ob vor dem Rezeptdatum begonnen wurde
 				if( (diff1=DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(vecResult.get(0).get(16)), tageplus.get(i).get(0)/*tage.get(i)*/)) < 0){
@@ -539,7 +543,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				mitte.append("<td style='white-space: nowrap;'>"+tageplus.get(i).get(1)+"</td>\n");
 				//mitte.append("<td style='white-space: nowrap;'>&nbsp;</td>\n");
 			}
-			
+
 			mitte.append("</tr>\n");
 		}
 		/***********************************************************************************/
@@ -559,7 +563,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		String linktext = "<img src='file:///"+Path.Instance.getProghome()+"icons/"+ico+"'  border=0>";
 		linktext = "<a href=\"http://"+url+".de\">"+linktext+"</a>\n";
 		return linktext;
-		
+
 	}
 	private Object[] Tage28Test(String datumalt,String datumneu){
 		Object[] oret = {null,null};
@@ -572,7 +576,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		wert = DatFunk.TageDifferenz(datumalt,datumneu);
 		oret[1] = (int) Integer.parseInt( Long.toString(wert-1) );
 		if( wert > 0){
-			oret[0] = true;	
+			oret[0] = true;
 		}else{
 			oret[0] = false;
 		}
@@ -584,7 +588,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				(!vecResult.get(0).get(6).equals("") ? ", "+vecResult.get(0).get(7)+" x "+vecResult.get(0).get(6) : "")+
 				(!vecResult.get(0).get(8).equals("") ? ", "+vecResult.get(0).get(9)+" x "+vecResult.get(0).get(8) : "")+
 				(!vecResult.get(0).get(10).equals("") ? ", "+vecResult.get(0).get(11)+" x "+vecResult.get(0).get(10) : "") );
-		
+
 		return positionen.toString();
 	}
 	private String getSpanStyle(String pix,String color){
@@ -603,9 +607,9 @@ public class InfoDialog extends JDialog implements WindowListener{
 		bufhead.append("TD.inhalt {font-family: Arial, Helvetica, sans-serif; font-size: 20px;background-color: #7356AC;color: #FFFFFF;}\n");
 		bufhead.append("TD.inhaltinfo {font-family: Arial, Helvetica, sans-serif; font-size: 20px;background-color: #DACFE7; color: #1E0F87;}\n");
 		bufhead.append("TD.headline1 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #EADFF7; color: #000000;}\n");
-		bufhead.append("TD.headline2 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #DACFE7; color: #000000;}\n");		
-		bufhead.append("TD.headline3 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #7356AC; color: #FFFFFF;}\n");		
-		bufhead.append("TD.headline4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #1E0F87; color: #FFFFFF;}\n");		
+		bufhead.append("TD.headline2 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #DACFE7; color: #000000;}\n");
+		bufhead.append("TD.headline3 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #7356AC; color: #FFFFFF;}\n");
+		bufhead.append("TD.headline4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #1E0F87; color: #FFFFFF;}\n");
 		bufhead.append("TD.itemeven {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #E6E6E6; color: #000000;}\n");
 		bufhead.append("TD.itemodd {font-family: Arial, Helvetica, sans-serif; font-size: 14px; background-color: #737373; color: #F0F0F0;}\n");
 		bufhead.append("TD.itemkleineven {font-family: Arial, Helvetica, sans-serif; font-size: 9px; background-color: #E6E6E6; color: #000000;}\n");
@@ -621,21 +625,21 @@ public class InfoDialog extends JDialog implements WindowListener{
 		//bufhead.append("<div style=margin-left:30px;>");
 		//bufhead.append("<font face=\"Tahoma\"><style=margin-left=30px;>");
 		return bufhead.toString();
-		
 
-					
+
+
 	}
 	public String ladeend(){
 		bufend.append("</body>\n</html>\n");
 		return bufend.toString();
 	}
-	
+
 	/***************************************************/
 	public void holeOffeneRechnungen(Vector<Vector<String>> data){
 		String complete = ladehead();
 		StringBuffer bdata = new StringBuffer();
 		bdata.append("<span "+getSpanStyle("14","")+"Offene RGR-/AFR-Rechnungen</span><br>\n");
-		bdata.append("<table width='100%'>\n"); 
+		bdata.append("<table width='100%'>\n");
 		Double gesamt = 0.00;
 		//String stmt = "select t1.rdatum,t1.rnr,t1.roffen,t1.pat_intern from rgaffaktura as t1 join pat5 as t2 on (t1.pat_intern=t2.pat_intern) where t1.roffen > '0' and t1.pat_intern = '"+xpatint+"' order by t1.rdatum";
 		for( int i = 0; i < data.size();i++){
@@ -667,11 +671,11 @@ public class InfoDialog extends JDialog implements WindowListener{
 		bdata.append("<b>"+df.format( gesamt)+"</b> EUR");
 		bdata.append("</td>\n");
 		bdata.append("</tr>\n");
-		
+
 		bdata.append("</table>\n");
 		complete = complete+bdata.toString()+ladeend();
 		htmlPane1.setText(complete);
-		
+
 		bdata.setLength(0);
 		bdata.trimToSize();
 		complete = "";
@@ -681,20 +685,20 @@ public class InfoDialog extends JDialog implements WindowListener{
 		for(int i = 62; i > 56;i--){
 			if(Reha.thisClass.patpanel.patDaten.get(i).equals("T")){
 				if(SystemConfig.vPatMerkerIconFile.get(durchlauf) != null){
-					bdata.append("<img src='file:///"+SystemConfig.vPatMerkerIconFile.get(durchlauf)+"'>&nbsp;&nbsp;");	
+					bdata.append("<img src='file:///"+SystemConfig.vPatMerkerIconFile.get(durchlauf)+"'>&nbsp;&nbsp;");
 				}
-				
+
 				bdata.append("<span "+getSpanStyle("12","#FF0000")+SystemConfig.vPatMerker.get(durchlauf)+"</span><br>\n");
-				
-				
+
+
 			}
 			durchlauf++;
 		}
 		complete = complete+bdata.toString()+ladeend();
 		htmlPane2.setText(complete);
-		 
+
 	}
-	
+
 	private void starteFolgeTermine(){
 		FolgeTermine folgeTermine = new FolgeTermine();
 		PinPanel pinPanel = new PinPanel();
@@ -721,15 +725,15 @@ public class InfoDialog extends JDialog implements WindowListener{
 			rob.keyRelease(KeyEvent.VK_F1 );
 		} catch (AWTException e) {
 			e.printStackTrace();
-		}		
-		
+		}
+
 	}
-	
+
 	/***************************************/
-	class FolgeTermine extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+	class FolgeTermine extends RehaSmartDialog{
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		private RehaTPEventClass rtp = null;
@@ -741,7 +745,8 @@ public class InfoDialog extends JDialog implements WindowListener{
 			rtp.addRehaTPEventListener(this);
 
 		}
-		public void rehaTPEventOccurred(RehaTPEvent evt) {
+		@Override
+        public void rehaTPEventOccurred(RehaTPEvent evt) {
 
 			try{
 
@@ -762,14 +767,15 @@ public class InfoDialog extends JDialog implements WindowListener{
 				ne.printStackTrace();
 				//System.out.println("In FolgeTermine " +evt);
 			}catch(Exception ex){
-				
+
 			}
-		}	
-		
-		public void windowClosed(WindowEvent arg0) {
+		}
+
+		@Override
+        public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
-				this.setVisible(false);			
-				rtp.removeRehaTPEventListener(this);		
+				this.setVisible(false);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				dispose();
 				ListenerTools.removeListeners(this);
@@ -781,7 +787,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 	/**************************************************/
 	class FolgeTermineSuchen extends JXPanel implements KeyListener,FocusListener,RehaTPEventListener{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		private RehaTPEventClass rtp = null;
@@ -791,7 +797,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		JRtaTextField tfsuche;
 		JLabel lbstart;
 		JLabel lbaktuell;
-		
+
 		String suchkrit;
 		String startdate;
 		String aktdate;
@@ -824,18 +830,18 @@ public class InfoDialog extends JDialog implements WindowListener{
 							muststop = true;
 							dispose();
 						}
-						
+
 					}
-					
+
 				};
 				addKeyListener(this);
 				//           1   2  3    4     5   6  7    8     9   10 11   12
 				String x = "5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,0dlu:g,5dlu";
-				//           1   2  3   4  5    6  
+				//           1   2  3   4  5    6
 				String y = "5dlu,p,5dlu,p,5dlu,30dlu:g,5dlu";
 				FormLayout lay = new FormLayout(x , y);
 				CellConstraints cc = new CellConstraints();
-				
+
 				setLayout(lay);
 				add(new JLabel("suche nach"),cc.xy(2, 2));
 				add((tfsuche= new JRtaTextField("GROSS",true)),cc.xy(4, 2));
@@ -861,15 +867,15 @@ public class InfoDialog extends JDialog implements WindowListener{
 				if(tageplus.size() <= 0){
 					startdate = DatFunk.sHeute();
 				}else{
-					startdate = DatFunk.sDatPlusTage(tageplus.get(tageplus.size()-1).get(0),1); 
+					startdate = DatFunk.sDatPlusTage(tageplus.get(tageplus.size()-1).get(0),1);
 				}
 				tfstart.setText(startdate);
 				suchkrit = vecResult.get(0).get(2) +" "+arg1;
 				tfsuche.setText(suchkrit);
 				lbaktuell.setText(startdate);
 				starteSuche();
-				
-		}		
+
+		}
 		@Override
 		public void rehaTPEventOccurred(RehaTPEvent evt) {
 			try{
@@ -886,7 +892,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 				JOptionPane.showMessageDialog(null, "Fehler beim abhängen des Listeners Rezept-Neuanlage\n"+
 						"Bitte informieren Sie den Administrator über diese Fehlermeldung");
 			}
-			
+
 		}
 		@Override
 		public void focusGained(FocusEvent e) {
@@ -911,42 +917,45 @@ public class InfoDialog extends JDialog implements WindowListener{
 			muststop = false;
 			new SuchenInTagen().setzeStatement(lbaktuell, startdate, tfsuche.getText().split(" "), mod);
 		}
-		
-		
+
+
 	}
 /*****************************************************/
 	class MyFolgeTermineTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==0){return String.class;}
 			  /* if(columnIndex==1){return JLabel.class;}*/
 			   else{return String.class;}
 	  //return (columnIndex == 0) ? Boolean.class : String.class;
 	}
 
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        //Note that the data/cell address is constant,
 		        //no matter where the cell appears onscreen.
 		    	return false;
 		      }
 
-			public Object getValueAt(int rowIndex, int columnIndex) {
-				String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
+			@Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+				String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);
 				Object result = null;
 				//result = theData.toUpperCase();
 				result = theData;
 				return result;
 			}
-		    
-		   
+
+
 	}
 /*****************************************************/
-	final class SuchenInTagen extends Thread implements Runnable{
+	final class SuchenInTagen extends Thread{
 		Statement stmt = null;
 		ResultSet rs = null;
 		String sergebnis = "";
@@ -956,7 +965,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		JLabel lbaktuell;
 		String startdat;
 		MyFolgeTermineTableModel mod;
-		Vector<String> atermine = new Vector<String>(); 
+		Vector<String> atermine = new Vector<String>();
 		int treffer = 1;
 		public void setzeStatement(JLabel lbaktuell, String startdat, String[] suchkrit,MyFolgeTermineTableModel mod){
 			this.lbaktuell = lbaktuell;
@@ -966,7 +975,8 @@ public class InfoDialog extends JDialog implements WindowListener{
 			this.suchkrit = suchkrit;
 			start();
 		}
-		public void run(){
+		@Override
+        public void run(){
 
 			try {
 				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -981,10 +991,10 @@ public class InfoDialog extends JDialog implements WindowListener{
 						rs = stmt.executeQuery("select * from flexkc where datum = '"+DatFunk.sDatInSQL(anzeigedatum)+"' LIMIT "+Integer.toString(ParameterLaden.maxKalZeile) ) ;
 						////System.out.println("Nach for..."+exStatement[i]);
 						//SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
-						
+
 						while(rs.next() && !muststop){
 							try{
-								/*in Spalte 301 steht die Anzahl der belegten Blöcke*/ 
+								/*in Spalte 301 steht die Anzahl der belegten Blöcke*/
 								belegt = rs.getInt(301);
 								//SchnellSuche.thisClass.setLabelDatum(DatFunk.sDatInDeutsch(rs.getString(305)));
 								String name = "";
@@ -996,22 +1006,22 @@ public class InfoDialog extends JDialog implements WindowListener{
 								String skollege = "";
 								int ikollege = 0;
 								for(int ii = 0;ii < belegt;ii++){
-									name = rs.getString("T"+(ii+1)); 
+									name = rs.getString("T"+(ii+1));
 									nummer = rs.getString("N"+(ii+1));
 									skollege = rs.getString(303).substring(0,2);
 									if( skollege.substring(0,1).equals("0") ){
 										ikollege = Integer.parseInt(skollege.substring(1,2));
 									}else{
-										ikollege = Integer.parseInt(skollege);								
+										ikollege = Integer.parseInt(skollege);
 									}
 									if(suchkrit.length > 1){
 										if(name.contains(suchkrit[0]) || nummer.contains(suchkrit[1]) ){
 											uhrzeit = rs.getString("TS"+(ii+1));
-											sorigdatum = rs.getString(305); 
+											sorigdatum = rs.getString(305);
 											sdatum = DatFunk.sDatInDeutsch(sorigdatum);
 											skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 											//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
-											
+
 											termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
 											"  -  "+name +" - "+nummer+" - "+skollege;
 											//SchnellSuche.thisClass.setTextAreaText(termin);
@@ -1020,10 +1030,10 @@ public class InfoDialog extends JDialog implements WindowListener{
 											atermine.add(sdatum);
 											atermine.add(uhrzeit.substring(0,5));
 											atermine.add(name);
-											atermine.add(nummer);								
+											atermine.add(nummer);
 											atermine.add(skollege);
 											atermine.add("k.A.");
-											//atermine.add(sorigdatum+uhrzeit.substring(0,5));	
+											//atermine.add(sorigdatum+uhrzeit.substring(0,5));
 											mod.addRow((Vector)atermine.clone());
 											treffer++;
 											//treadVect.addElement(atermine.clone());
@@ -1033,11 +1043,11 @@ public class InfoDialog extends JDialog implements WindowListener{
 									}else{
 										if(name.contains(suchkrit[0]) || nummer.contains(suchkrit[0]) ){
 											uhrzeit = rs.getString("TS"+(ii+1));
-											sorigdatum = rs.getString(305); 
+											sorigdatum = rs.getString(305);
 											sdatum = DatFunk.sDatInDeutsch(sorigdatum);
 											skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 											//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
-											
+
 											termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
 											"  -  "+name +" - "+nummer+" - "+skollege;
 											//SchnellSuche.thisClass.setTextAreaText(termin);
@@ -1046,24 +1056,24 @@ public class InfoDialog extends JDialog implements WindowListener{
 											atermine.add(sdatum);
 											atermine.add(uhrzeit.substring(0,5));
 											atermine.add(name);
-											atermine.add(nummer);								
+											atermine.add(nummer);
 											atermine.add(skollege);
 											atermine.add("k.A.");
-											//atermine.add(sorigdatum+uhrzeit.substring(0,5));	
+											//atermine.add(sorigdatum+uhrzeit.substring(0,5));
 											mod.addRow((Vector)atermine.clone());
 											treffer++;
 											//treadVect.addElement(atermine.clone());
 											//SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
 											atermine.clear();
 										}
-										
+
 									}
 								}
 							}catch(Exception ex){
 								ex.printStackTrace();
 							}
 						}
-						
+
 					}catch(SQLException ev){
 						//System.out.println("SQLException: " + ev.getMessage());
 						//System.out.println("SQLState: " + ev.getSQLState());
@@ -1073,15 +1083,15 @@ public class InfoDialog extends JDialog implements WindowListener{
 					if(DatFunk.TageDifferenz(startdat, anzeigedatum) > 90){
 						muststop = true;
 					}else{
-						this.lbaktuell.setText(anzeigedatum);	
+						this.lbaktuell.setText(anzeigedatum);
 					}
-					
+
 				}
 
 				buts[1].setEnabled(false);
 				buts[0].setEnabled(true);
 
-				
+
 				//SchnellSuche.thisClass.setTerminTable((Vector) treadVect.clone());
 			}catch(SQLException ex) {
 				//System.out.println("von stmt -SQLState: " + ex.getSQLState());
@@ -1103,11 +1113,11 @@ public class InfoDialog extends JDialog implements WindowListener{
 				}
 				}
 			}
-			 
+
 		}
-		
+
 	}
-	
+
 /*****************************************************/
 /*****************************************************/
 }

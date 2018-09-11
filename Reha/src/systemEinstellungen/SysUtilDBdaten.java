@@ -33,9 +33,9 @@ import environment.Path;
 import hauptFenster.Reha;
 
 public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListener {
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	JComboBox mandant = null;
@@ -50,8 +50,8 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 	JButton knopf1 = null;
 	JButton knopf2 = null;
 	JRtaTextField port = null;
-	
-	
+
+
 	public SysUtilDBdaten(){
 		super(new GridLayout(1,1));
 		//System.out.println("Aufruf SysUtilDBdaten");
@@ -63,10 +63,10 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		return;
 	}
 	/************** Beginn der Methode für die Objekterstellung und -platzierung *********/
-	
+
 	private JPanel getVorlagenSeite(){
 		try{
-		
+
 		knopf2 = new JButton("abbrechen");
 		knopf2.setPreferredSize(new Dimension(70, 20));
 		knopf2.addActionListener(this);
@@ -87,7 +87,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		knopf4.addActionListener(this);
 		knopf4.setActionCommand("testen");
 		knopf4.addKeyListener(this);
-		
+
 		mandant = new JComboBox() ;
 		//int vecindex = 0;
 		for(int i = 0; i < SystemConfig.Mandanten.size();i++){
@@ -108,7 +108,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		try{
 			dbtyp.setSelectedItem(SystemConfig.hmDBMandant.get(Reha.aktMandant).get(0));
 		}catch(Exception ex){
-			
+
 		}
 		dbtyp.setActionCommand("dbtyp");
 		dbtyp.addActionListener(this);
@@ -119,33 +119,33 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		server = new JRtaTextField("",true);
 		server.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(2));
 		dbname = new JRtaTextField("",true);
-		dbname.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(4));		
+		dbname.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(4));
 		dbuser = new JRtaTextField("",true);
 		dbuser.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(5));
 		dbpasswort = new JPasswordField();
-		dbpasswort.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(6));		
+		dbpasswort.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(6));
 		port = new JRtaTextField("ZAHLEN", true);
-		port.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(3));		
+		port.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(3));
 		/*
 		mandantDB.add(minif.getStringProperty("Application", "DBType1"));
 		mandantDB.add(minif.getStringProperty("Application", "DBTreiber1"));
-		mandantDB.add(minif.getStringProperty("Application", "DBServer1"));			
-		mandantDB.add(minif.getStringProperty("Application", "DBPort1"));			
-		mandantDB.add(minif.getStringProperty("Application", "DBName1"));			
-		mandantDB.add(minif.getStringProperty("Application", "DBBenutzer1"));	
+		mandantDB.add(minif.getStringProperty("Application", "DBServer1"));
+		mandantDB.add(minif.getStringProperty("Application", "DBPort1"));
+		mandantDB.add(minif.getStringProperty("Application", "DBName1"));
+		mandantDB.add(minif.getStringProperty("Application", "DBBenutzer1"));
 		*/
-		
-		
+
+
         //                                      1.            2.    3.      4.     5.     6.    7.      8.     9.
 		FormLayout lay = new FormLayout("right:max(60dlu;p), 10dlu, 40dlu, 40dlu, 10dlu, 40dlu",
        //1.    2.  3.   4.  5.   6.  7.   8.  9.  10.  11. 12. 13.  14.  15. 16.    17.  18.  19.   20.    21.   22.   23.
 		"p, 10dlu, p, 2dlu, p,  2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 10dlu, p, 10dlu, p, 10dlu, p");
-		
+
 		PanelBuilder builder = new PanelBuilder(lay);
 		builder.setDefaultDialogBorder();
 		builder.getPanel().setOpaque(false);
 		CellConstraints cc = new CellConstraints();
-		
+
 		builder.addLabel("Mandant auswählen", cc.xy(1,1));
 		builder.add(mandant, cc.xyw(3, 1, 2));
 		builder.addLabel("Datenbanktyp", cc.xy(1, 3));
@@ -178,31 +178,28 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 			JOptionPane.showMessageDialog(null,buf.toString());
 			JOptionPane.showMessageDialog(null, SystemConfig.hmDBMandant.toString());
 		}
-		
+
 		return null;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+		// REDO use composition and KeyAdapter instead of listener
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if(e.getActionCommand().equals("mandantwahl")){
 			neuerDBMandant();
 		}
@@ -211,18 +208,17 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		}
 		if(e.getActionCommand().equals("testen")){
 			testenDBMandant(getSelectedIK());
-		}		
+		}
 		if(e.getActionCommand().equals("neutyp")){
 			JOptionPane.showMessageDialog(null,"Die Aufnahme einer 'Nicht-MySQL-Datenbank' wird erst später verfügbar sein");
 		}
 		if(e.getActionCommand().equals("abbruch")){
 			SystemInit.abbrechen();
-			//SystemUtil.thisClass.parameterScroll.requestFocus();
 		}
 		if(e.getActionCommand().equals("dbtyp")){
 			dbtypEinstellen();
 		}
-					
+
 	}
 	private String getSelectedIK(){
 		String ret = null;
@@ -250,7 +246,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		String ss1,ss2,ss3,ss4,ss5,ss6,ss7;
 		ss1 = ((String) dbtyp.getSelectedItem()).trim();
 		ss2 = (treiber.getText().trim().equals("") ? "keineAngaben" : treiber.getText().trim());
-		ss3 = (server.getText().trim().equals("") ? "keineAngaben" : server.getText().trim());		
+		ss3 = (server.getText().trim().equals("") ? "keineAngaben" : server.getText().trim());
 		ss4 = (port.getText().trim().equals("") ? "" : port.getText().trim());
 		ss5= (dbname.getText().trim().equals("") ? "" : dbname.getText().trim());
 		ss6 = (dbuser.getText().trim().equals("") ? "" : dbuser.getText().trim());
@@ -283,7 +279,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		//jdbc:mysql://192.168.2.2:3306/dbf
 		INITool.saveIni(dbini);
 		SystemConfig.MandantenEinlesen();
-		String saktmandant = ((String)mandant.getSelectedItem()).trim(); 
+		String saktmandant = ((String)mandant.getSelectedItem()).trim();
 		if(saktmandant.equals(Reha.aktMandant)){
 			JOptionPane.showMessageDialog(null, "Die Datenbankeinstellungen für den aktuellen Mandant,\n"+
 					"werden erst nach dem Neustart der ->Software<- wirksam\n\n"+
@@ -298,9 +294,9 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		dbtyp.setSelectedItem(SystemConfig.hmDBMandant.get(smandant).get(0));
 		treiber.setText((String)SystemConfig.hmDBMandant.get(smandant).get(1));
 		server.setText((String)SystemConfig.hmDBMandant.get(smandant).get(2));
-		dbname.setText((String)SystemConfig.hmDBMandant.get(smandant).get(4));		
+		dbname.setText((String)SystemConfig.hmDBMandant.get(smandant).get(4));
 		dbuser.setText((String)SystemConfig.hmDBMandant.get(smandant).get(5));
-		dbpasswort.setText((String)SystemConfig.hmDBMandant.get(smandant).get(6));		
+		dbpasswort.setText((String)SystemConfig.hmDBMandant.get(smandant).get(6));
 		port.setText((String)SystemConfig.hmDBMandant.get(smandant).get(3));
 		validate();
 	}
@@ -314,7 +310,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		String ss1,ss2,ss3,ss4,ss5,ss6,ss7;
 		ss1 = ((String) dbtyp.getSelectedItem()).trim();
 		ss2 = (treiber.getText().trim().equals("") ? "keineAngaben" : treiber.getText().trim());
-		ss3 = (server.getText().trim().equals("") ? "keineAngaben" : server.getText().trim());		
+		ss3 = (server.getText().trim().equals("") ? "keineAngaben" : server.getText().trim());
 		ss4 = (port.getText().trim().equals("") ? "" : ":"+port.getText().trim());
 		ss5= (dbname.getText().trim().equals("") ? "keineAngaben" : dbname.getText().trim());
 		ss6 = (dbuser.getText().trim().equals("") ? "" : dbuser.getText().trim());
@@ -330,15 +326,12 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		try {
 			Class.forName(ss2).newInstance();
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null,"Die Treiberklasse konnte nicht initialisiert werden");
 			return;
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null,"Sie haben keine Berechtigung für diese Treiberklasse");
 			return;
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null,"Die Treiberklasse der Datenbank wurde nicht gefunden, sind die Angaben korrekt?");
 			return;
 		}
@@ -347,7 +340,6 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 			JOptionPane.showMessageDialog(null,"Glückwunsch - die Datenbankparameter sind in Ordnung.\n"+
 					"Kontakt zur Datenbank konnte hergestellt werden!");
 			Statement stmt = null;
-			ResultSet rs = null;
 			try {
 				stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				            ResultSet.CONCUR_UPDATABLE );
@@ -355,23 +347,6 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 				e.printStackTrace();
 				return;
 			}
-			/*
-			rs = stmt.executeQuery("select mandant from nummern LIMIT 1");
-			if(!rs.next()){
-		   		String cmd = "insert into nummern set pat='1',kg='1',ma='1',er='1',"+
-	    		"lo='1',rh='1',rnr='1',esol='1',bericht='1',afrnr='1',rgrnr='1',doku='1',"+
-	    		"dfue='1',mandant='"+selectedMandantIK+"'";
-		   		stmt.execute(cmd);
-			}
-			*/
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -387,6 +362,6 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 			"Es konnte kein Kontakt zur Datenbank aufgebaut werden!");
 			return;
 		}
-		
+
 	}
 }

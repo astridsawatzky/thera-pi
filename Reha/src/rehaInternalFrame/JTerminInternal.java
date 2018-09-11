@@ -138,6 +138,7 @@ final class JDesktopIcon extends JComponent implements Accessible
      *
      * @return DOCUMENT ME!
      */
+    @Override
     public AccessibleRole getAccessibleRole()
     {
 	return null;
@@ -147,6 +148,7 @@ final class JDesktopIcon extends JComponent implements Accessible
      *
      * @return DOCUMENT ME!
      */
+    @Override
     public AccessibleValue getAccessibleValue()
     {
 	return null;
@@ -156,6 +158,7 @@ final class JDesktopIcon extends JComponent implements Accessible
      *
      * @return DOCUMENT ME!
      */
+    @Override
     public Number getCurrentAccessibleValue()
     {
 	return null;
@@ -165,6 +168,7 @@ final class JDesktopIcon extends JComponent implements Accessible
      *
      * @return DOCUMENT ME!
      */
+    @Override
     public Number getMaximumAccessibleValue()
     {
 	return null;
@@ -174,6 +178,7 @@ final class JDesktopIcon extends JComponent implements Accessible
      *
      * @return DOCUMENT ME!
      */
+    @Override
     public Number getMinimumAccessibleValue()
     {
 	return null;
@@ -185,6 +190,7 @@ final class JDesktopIcon extends JComponent implements Accessible
      *
      * @return DOCUMENT ME!
      */
+    @Override
     public boolean setCurrentAccessibleValue(Number n)
     {
 	return false;

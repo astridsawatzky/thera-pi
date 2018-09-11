@@ -103,7 +103,8 @@ public class IniEditPanel extends JXPanel{
 		alleini.getColumn(1).setMaxWidth(0);
 		alleini.setSortable(false);
 		alleini.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent me){
+			@Override
+            public void mousePressed(MouseEvent me){
 				if(alleini.isEnabled()){
 					doHoleIni(alleini.getSelectedRow());	
 				}
@@ -278,11 +279,13 @@ public class IniEditPanel extends JXPanel{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			return false;
 		}
 		   

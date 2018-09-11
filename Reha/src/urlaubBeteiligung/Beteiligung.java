@@ -644,7 +644,8 @@ public class Beteiligung  extends JXPanel{
 	private void zeigeCalc(){
 		final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				xspredsheetDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xspredsheetDocument.getFrame().setFocus();
 			}

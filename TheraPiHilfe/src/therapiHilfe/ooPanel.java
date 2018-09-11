@@ -52,12 +52,12 @@ import ag.ion.noa.NOAException;
 import ag.ion.noa.frame.ILayoutManager;
 
 public class ooPanel{
-	
+
 	public ITextDocument doc = null;
 	public IFrame frame = null;
 	public ICloseListener clListener = null;
 
-	static ooPanel thisClass; 
+	static ooPanel thisClass;
 	public JXPanel noaPanel = null;
 	private static IFrame             officeFrame       = null;
 	static ITextDocument      document          = null;
@@ -69,7 +69,7 @@ public class ooPanel{
 	public static int ansicht = 0;
 	DokumentListener doclistener = null;
 
-	
+
 	ooPanel(JXPanel jpan){
 		noaPanel = jpan;
 		thisClass = this;
@@ -82,7 +82,7 @@ public class ooPanel{
 			e.printStackTrace();
 		}
 		*/
-		
+
 	}
 
 /*********************************************************/
@@ -91,20 +91,20 @@ public class ooPanel{
 		      try {
 		        if (piHelp.officeapplication == null)
 		        	piHelp.officeapplication = startOOO();
-		        
-		      
+
+
 		        	officeFrame = constructOOOFrame(piHelp.officeapplication, noaPanel);
 		        	DocumentDescriptor d = new DocumentDescriptor();
 		        	d.setTitle("piHelp- leeres Dokument");
 		        	//d.setURL(piHelp.tempvz+"dummy.html");
 		        	//d.setAsTemplate(true);
-		        	//d.setFilterDefinition(HTMLFilter.FILTER.getFilterDefinition(IDocument.WRITER)); 
+		        	//d.setFilterDefinition(HTMLFilter.FILTER.getFilterDefinition(IDocument.WRITER));
 		        	//
 		        	/*
-		        	File f = new File( piHelp.tempvz+"dummy.html" ); 
-		        	byte[] buffer = new byte[ (int) f.length() ]; 
-		        	InputStream in = new FileInputStream( f ); 
-		        	in.read( buffer ); 
+		        	File f = new File( piHelp.tempvz+"dummy.html" );
+		        	byte[] buffer = new byte[ (int) f.length() ];
+		        	InputStream in = new FileInputStream( f );
+		        	in.read( buffer );
 		        	in.close();
 		        	*/
 
@@ -114,12 +114,12 @@ public class ooPanel{
 		        	ansicht = ANSICHT_DOKUMENT;
 		        	piHelp.thisClass.jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 		        	piHelp.thisClass.jFrame.validate();
-		        	
+
 		        	//textDocument = (ITextDocument)document;
 		        	if(doclistener == null){
-			        	doclistener = new DokumentListener(piHelp.officeapplication);		        		
+			        	doclistener = new DokumentListener(piHelp.officeapplication);
 		        	}
-		        	piHelp.officeapplication.getDesktopService().addDocumentListener(doclistener);		        	
+		        	piHelp.officeapplication.getDesktopService().addDocumentListener(doclistener);
 				    officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
 				    officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
 				    officeFrame.disableDispatch(GlobalCommands.CLOSE_WINDOW);
@@ -129,8 +129,8 @@ public class ooPanel{
 		        			IDocument.WEB,
 		            DocumentDescriptor.DEFAULT);
 		        	*/
-		        	
-		        	
+
+
 		        noaPanel.setVisible(true);
 				piHelp.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 		      }
@@ -163,18 +163,16 @@ public class ooPanel{
 		  private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent)
 		      throws Throwable {
 		    final NativeView nativeView = new NativeView(piHelp.OfficeNativePfad);
-		    if(nativeView == null){
-		    	//System.out.println("nativeView == null");
-		    }
 		    if(parent == null){
 		    	//System.out.println("nativeView == null");
 		    }
 		    parent.add(nativeView);
 		    parent.addComponentListener(new ComponentAdapter(){
-		        public void componentResized(ComponentEvent e) {
+		        @Override
+                public void componentResized(ComponentEvent e) {
 		          nativeView.setPreferredSize(new Dimension(parent.getWidth()-5,parent.getHeight()-5));
 		          parent.getLayout().layoutContainer(parent);
-		        }      
+		        }
 		      });
 		    nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
 		    parent.getLayout().layoutContainer(parent);
@@ -188,7 +186,7 @@ public class ooPanel{
 			    layoutManager.showElement(ILayoutManager.URL_TOOLBAR_STANDARDBAR);
 			    layoutManager.showElement(ILayoutManager.URL_TOOLBAR_TEXTOBJECTBAR);
 			    layoutManager.showElement(ILayoutManager.URL_STATUSBAR);
-			    
+
 			    officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
 			    officeFrame.disableDispatch(GlobalCommands.CLOSE_WINDOW);
 			    officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
@@ -207,15 +205,15 @@ public class ooPanel{
 			    officeFrame.disableDispatch(GlobalCommands.OPEN_STYLE_SHEET);
 			    officeFrame.disableDispatch(GlobalCommands.OPEN_HELP);
 			    //officeFrame.disableDispatch(GlobalCommands.PRINT_PREVIEW);
-			    
-			    
+
+
 			    officeFrame.updateDispatches();
-			    
+
 			    //officeFrame.getDispatch(".uno:PrintLayout").dispatch();
 			  }
-	
+
 		  public static void allesOOZu(){
-			  
+
 		  }
 		  public static void schliesseText(){
 			  	try {
@@ -223,15 +221,15 @@ public class ooPanel{
 				} catch (OfficeApplicationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}		 
+				}
 				if(ansicht == ANSICHT_WEB){
 					if(webdocument.isOpen()){
-						webdocument.close();	
+						webdocument.close();
 					}
 					thisClass.noaPanel.remove(0);
 				}else{
-					document.close();	
-					thisClass.noaPanel.remove(0);					
+					document.close();
+					thisClass.noaPanel.remove(0);
 				}
 		  }
 		  public static void neuesNoaPanel(){
@@ -250,9 +248,9 @@ public class ooPanel{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			  
+
 		  }
-/*********************************************************/		  
+/*********************************************************/
 		  public static void erzeugeAusByteArray(byte[] bhtml,String datei,boolean alsweb){
 			  FileOutputStream fileOut;
 			  String indatei = datei;
@@ -273,14 +271,14 @@ public class ooPanel{
 				e.printStackTrace();
 			}
 		  }
-/********************************************************/		  
-		  
+/********************************************************/
+
 		  public static void starteDatei(String datei,boolean alsweb){
 
 			 /************
-			  * 
+			  *
 			  *  Erst hier das Dokument laden
-			  *  
+			  *
 			  */
 		      //ITextDocument document;
 			  String startdatei = datei;
@@ -292,21 +290,21 @@ public class ooPanel{
 				/*
 				webdocument = (IWebDocument) piHelp.officeapplication.getDocumentService().constructNewDocument(officeFrame,
 	        			IDocument.WEB,docdescript);
-	        	*/		
+	        	*/
 				try {
 
 					if(alsweb){
 						IDocumentDescriptor docdescript = DocumentDescriptor.DEFAULT;
 						docdescript.setURL(datei);
 						docdescript.setFilterDefinition(HTMLFilter.FILTER.getFilterDefinition(IDocument.WEB));
-						webdocument = (IWebDocument) piHelp.officeapplication.getDocumentService().loadDocument(officeFrame, startdatei, docdescript);					
+						webdocument = (IWebDocument) piHelp.officeapplication.getDocumentService().loadDocument(officeFrame, startdatei, docdescript);
 			        	ansicht = ANSICHT_WEB;
 					}else{
 						IDocumentDescriptor docdescript = DocumentDescriptor.DEFAULT;
 						docdescript.setURL(datei);
 						docdescript.setFilterDefinition(HTMLFilter.FILTER.getFilterDefinition(IDocument.WRITER));
 						//System.out.println("***************Datei = *****************"+startdatei);
-						document = (ITextDocument) piHelp.officeapplication.getDocumentService().loadDocument(officeFrame, startdatei, docdescript);					
+						document = (ITextDocument) piHelp.officeapplication.getDocumentService().loadDocument(officeFrame, startdatei, docdescript);
 			        	ansicht = ANSICHT_DOKUMENT;
 					}
 				} catch (DocumentException e) {
@@ -314,7 +312,7 @@ public class ooPanel{
 					e.printStackTrace();
 				}
 
-				
+
 
 
 				//ITextDocument doc = (ITextDocument) webdocument.getWebDocument();
@@ -327,21 +325,21 @@ public class ooPanel{
 				document.getViewCursorService().getViewCursor().getTextCursorFromStart().insertDocument( is, new HTMLFilter() );
 				 textDocument = (ITextDocument) document;
 				 */
-				 
+
 			}	catch (OfficeApplicationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		    		  
-			  
+
+
 		  }
 /**
- * @throws Exception *******************************************************/		  
+ * @throws Exception *******************************************************/
 		  public static String speichernText(String aktdatei,Boolean neu) {
 			  FileOutputStream outputStream = null;
 			  String datei = null;
 			  try {
-				  
+
 				  /*
 				  File tempFile;
 				try {
@@ -352,16 +350,16 @@ public class ooPanel{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			     */   
-			        
+			     */
+
 
 				  datei = new String(aktdatei);
 				  if(!datei.contains(".html")){
 					  datei = datei+".html";
 				  }else{
-					 //System.out.println("ooPane - speichernText, Dateiname korrekt ->"+datei); 
+					 //System.out.println("ooPane - speichernText, Dateiname korrekt ->"+datei);
 				  }
-				  //System.out.println("ooPane - exportiere Datei nach ->"+datei);				  
+				  //System.out.println("ooPane - exportiere Datei nach ->"+datei);
 				 // textDocument.getPersistenceService().export(temppfad+tempname, new HTMLFilter());
 		        	if(ansicht == ANSICHT_DOKUMENT){
 		        		//System.out.println(document.getDocumentType());
@@ -409,12 +407,12 @@ public class ooPanel{
 								e.printStackTrace();
 							}
 							*/
-		        		
-		        		
+
+
 		        		if(f.exists()){
 		        			//System.out.println("IDcument - Datei wird nur gespeichert");
 		        			//document.getPersistenceService().export(datei, new HTMLFilter());
-		        			document.getPersistenceService().store();	
+		        			document.getPersistenceService().store();
 		        			Thread.sleep(100);
 		        		}else{
 		        			//System.out.println("IDcument - Datei wird exportiert");
@@ -429,7 +427,7 @@ public class ooPanel{
 		        		File f = new File(datei);
 		        		/*
 		        		try {
-							
+
 		        		IWebDocument textDocument = webdocument;
 		        		  XTextGraphicObjectsSupplier graphicObjSupplier = (XTextGraphicObjectsSupplier) UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
 		        		      textDocument.getWebDocument());
@@ -477,15 +475,15 @@ public class ooPanel{
 		        			Thread.sleep(100);
 		        			//webdocument.getPersistenceService().export(datei, new HTMLFilter());
 		        		}else{
-		        			//System.out.println("IWeb - Datei wird exportiert");		        			
+		        			//System.out.println("IWeb - Datei wird exportiert");
 		        			webdocument.getPersistenceService().export(datei, new HTMLFilter());
 		        			Thread.sleep(100);
 		        		}
-		        		
+
 		        		//webdocument.getPersistenceService().export(datei+".html", new HTMLFilter());
 		        		//webdocument.getPersistenceService().export(datei+".export", new HTMLFilter());
 		        	}
-				
+
 				} catch (DocumentException e) {
 
 					e.printStackTrace();
@@ -495,14 +493,14 @@ public class ooPanel{
 				}
 				return new String(datei);
 		  }
-		  
-/***********************************************/		  
+
+/***********************************************/
 		  public static void extrahiereBilder(String url){
-			  //System.out.println("Beginn extrahiereBilder aus "+url);			  
+			  //System.out.println("Beginn extrahiereBilder aus "+url);
 			  helpFenster.thisClass.bilder.clear();
 			  BufferedReader infile = null;
 			  BufferedWriter outfile = null;
-			  
+
 			  try {
 				  infile = new BufferedReader(new FileReader(url));
 				  outfile = new BufferedWriter(new FileWriter(url+".html"));
@@ -524,7 +522,7 @@ public class ooPanel{
 				e.printStackTrace();
 			}
 		  }
-/***********************************************/		  
+/***********************************************/
 		  public static String testeString(String webstring,String trenner){
 			  int aktuell = 0;
 			  int wo = 0;
@@ -567,7 +565,7 @@ public class ooPanel{
 					  sret = new String(nurBild.substring(ergebnis+1));
 					  String salt = meinweb.substring(istart,iende);
 					  ssret =   new String( meinweb.replaceAll(salt, sret));
-					  //sret = new String(nurBild);  
+					  //sret = new String(nurBild);
 					  helpFenster.thisClass.bilder.add(sret.replaceAll("%20"," "));
 				  }else{
 					  //String salt = meinweb.substring(istart,iende);
@@ -578,11 +576,11 @@ public class ooPanel{
 				  //System.out.println("Gefunden "+sret);
 				  aktuell = new Integer(iende);
 			  }
-				  
+
 			  return ssret;
-			  
+
 		  }
-/***********************************************/		  
+/***********************************************/
 }
 class testObVorhanden{
 	String svorhanden = null;
@@ -594,7 +592,7 @@ class testObVorhanden{
 				try {
 					stmtx = piHelp.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
-					
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -604,7 +602,7 @@ class testObVorhanden{
 					rsx.next();
 					if(rsx.getInt(1) <=0){
 						ret = false;
-					}	
+					}
 				}catch(SQLException e){
 					e.printStackTrace();
 				}
@@ -614,8 +612,8 @@ class testObVorhanden{
 						} catch (SQLException sqlEx) { // ignore }
 							rsx = null;
 						}
-					}	
-					
+					}
+
 					try {
 						stmtx.close();
 					} catch (SQLException sqlEx) { // ignore }
@@ -631,40 +629,40 @@ class DokumentListener implements IDocumentListener {
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onInsertDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onInsertStart(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onLoad(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onLoadDone(IDocumentEvent arg0) {
 		System.out.println("onLoad Done");
 		// TODO Auto-generated method stub
 		//System.out.println("************************Dokument geladen************************* "+arg0);
-		
+
 	}
 	@Override
 	public void onLoadFinished(IDocumentEvent arg0) {
 		System.out.println("onLoad Finished");
 		// TODO Auto-generated method stub
-		//System.out.println("************************Dokument geladen finished************************* "+arg0);	
+		//System.out.println("************************Dokument geladen finished************************* "+arg0);
 		/*
 		try {
 			Reha.officeapplication.getDesktopService().removeDocumentListener(this);
@@ -677,65 +675,65 @@ class DokumentListener implements IDocumentListener {
 	@Override
 	public void onModifyChanged(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onNew(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSave(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		//System.out.println("************************Dokument gespeichert - doneSave************************* "+arg0);		
+		//System.out.println("************************Dokument gespeichert - doneSave************************* "+arg0);
 	}
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSaveAsDone(IDocumentEvent arg0) {
 		System.out.println("saveas Done");
-		
+
 	}
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
 		System.out.println("save Done");
 		// TODO Auto-generated method stub
-		//System.out.println("************************Dokument gespeichert - done************************* "+arg0);		
+		//System.out.println("************************Dokument gespeichert - done************************* "+arg0);
 	}
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		//System.out.println("************************Dokument gespeichert - finished************************* "+arg0);		
+		//System.out.println("************************Dokument gespeichert - finished************************* "+arg0);
 	}
 	@Override
 	public void onUnload(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void disposing(IEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-}	
-	
+
+}
+

@@ -93,7 +93,8 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 		validate();
 		
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
@@ -102,14 +103,16 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 	}
 	public void aufErsteElement(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				jList1.requestFocus();
 				jList1.setSelectedIndex(0);
 			}
@@ -255,7 +258,8 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 		}
 	}
 	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		//System.out.println("****************Schließen des KassenFormular **************");
 		String ss =  getName();

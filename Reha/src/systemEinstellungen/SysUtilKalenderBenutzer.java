@@ -138,7 +138,8 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
         
 		//setVisible(true);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				jcomboWahl.requestFocus();
        	  	}
 		});
@@ -200,7 +201,8 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 		builder.addLabel("Benutzer auswählen", cc.xy(1,1));
 		jcomboWahl = new JComboBox();
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				comboFuellen();
        	  	}
 		});
@@ -522,7 +524,8 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 		if(arg0.getActionCommand().equals("loeschen")){loeschenHandeln();}		
 		if(arg0.getActionCommand().equals("liste")){
 			new Thread(){
-				public void run(){
+				@Override
+                public void run(){
 					listeHandeln();
 				}
 			}.start();

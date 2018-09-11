@@ -73,7 +73,7 @@ import rehaWissen.UIFSplitPane;
 
 public class BrowserFenster extends JFrame implements MouseListener,MouseMotionListener,ListSelectionListener,ActionListener, WindowListener, KeyListener, TreeSelectionListener{
 	/**
-	 * 
+	 *
 	 */
 	public static BrowserFenster thisClass = null;
 	private static final long serialVersionUID = -3482074172384055074L;
@@ -84,11 +84,11 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	public JRtaTextField tfSuche = null;
 
 	private JList listSeiten = null;
-	
+
 	public JScrollPane parameterScroll = null;
 
 	private JXPanel leftOPanel = null;
-	private JXPanel leftUPanel = null;	
+	private JXPanel leftUPanel = null;
 	private JXPanel rightPanel = null;
 	private UIFSplitPane jSplitLR = null;
 	private UIFSplitPane jSplitLinksOU = null;
@@ -96,21 +96,21 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	private int linkalt=0,linkneu=0;
 	public JXTable tblgefunden = null;
 	public DefaultTableModel themenDtblm = null;
-	
 
-	
-	
+
+
+
 	JFormattedTextField jtf = null;
 	public static DefaultMutableTreeNode root;
 	public DefaultTreeModel treeModel;
 	public JXTree tree;
 	public Vector dateien = new Vector();
-	
+
 	public Connection conn = null;
 	private BrowserSockServer bws = null;
-	
+
 	public BrowserFenster(JXFrame owner,String stitel){
-		
+
 		//super(frame, titlePanel());
 		super();
 		//super(owner,stitel);
@@ -128,7 +128,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		this.setUndecorated(false);
 		this.setBackground(Color.WHITE);
 		//this.setContentPanel(new RtaWissen(1,"http://www.rta.de"));
-		
+
 		JXPanel jpan = new JXPanel(new BorderLayout());
 		jpan.setPreferredSize(new Dimension(1024,750));
 		jpan.setBackground(Color.WHITE);
@@ -136,12 +136,12 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		//this.setContentPanel(jpan);
 
 		this.setContentPane(new JXPanel(new BorderLayout()));
-		
+
 		//getSmartTitledPanel().setTitle("Thera-PI - Browser");
-		
+
 		jSplitLR =  UIFSplitPane.createStrippedSplitPane(JSplitPane.HORIZONTAL_SPLIT,
         		getLeft(),
-        		getRight()); 
+        		getRight());
 		jSplitLR.setDividerSize(7);
 		jSplitLR.setDividerBorderVisible(true);
 		jSplitLR.setName("BrowserSplitLinksRechts");
@@ -151,11 +151,11 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		this.getContentPane().add(jSplitLR,BorderLayout.CENTER);
 		jSplitLR.validate();
 		listSeiten.requestFocus();
-  
-		
-			
+
+
+
 	}
-	
+
 	private UIFSplitPane getLeft(){
 		leftOPanel = new JXPanel(new BorderLayout());
 		leftOPanel.add(getSeiten(),BorderLayout.CENTER);
@@ -166,7 +166,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 
 		jSplitLinksOU  =  UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT,
         		leftOPanel,
-        		leftUPanel); 
+        		leftUPanel);
 		jSplitLinksOU.setDividerSize(7);
 		jSplitLinksOU.setDividerBorderVisible(true);
 		jSplitLinksOU.setName("BrowserSplitObenUnten");
@@ -187,12 +187,12 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 					rightPanel.add(tpane);
 					*/
 					BrowserFenster.thisClass.setCursor(new Cursor(Cursor.WAIT_CURSOR));
-					
+
 					rtaWissen = new RtaWissen(1,SystemConfig.InetSeiten.get(0).get(2));
-					//rtaWissen = new RtaWissen(1,"http://www.thera-pi.org"); 
+					//rtaWissen = new RtaWissen(1,"http://www.thera-pi.org");
 					rightPanel.add(rtaWissen);
 					rightPanel.validate();
-					BrowserFenster.thisClass.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));				
+					BrowserFenster.thisClass.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
 		return rightPanel;
 	}
@@ -205,6 +205,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		listSeiten.addKeyListener(this);
 		listSeiten.setName("liste");
 		listSeiten.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
         		int ind = listSeiten.getSelectedIndex();
         		linkneu = ind;
@@ -242,7 +243,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		jscr.validate();
 		return jscr;
 	}
-		
+
 	class MyCellRenderer extends JXLabel implements ListCellRenderer {
 		Color background;
         Color foreground;
@@ -252,25 +253,26 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
         	super();
             setOpaque(true);
             selectedfont = new Font("Tahoma",Font.BOLD,11);
-            unselectedfont = new Font("Tahoma",Font.PLAIN,11);            
+            unselectedfont = new Font("Tahoma",Font.PLAIN,11);
         }
 
-		public Component getListCellRendererComponent(
+		@Override
+        public Component getListCellRendererComponent(
 		JList list, Object value, int index, boolean selected,boolean focus){
 			setText(((JXLabel)value).getText());
 			setIcon(((JXLabel)value).getIcon());
 			((JXLabel)value).setIconTextGap(15);
-			
+
 			if(selected){
 				//Paint newPaint = new GradientPaint(0,0,new Color(112,141,223),0,getHeight(),Color.WHITE,true);
 				//background = new Color(112,141,223);
 				//System.out.println("Selected = "+((JXLabel)value).getText());
-				
+
 				this.background = Color.BLUE;
 	            this.foreground = Color.RED;
 	            ((JXLabel)value).setFont(this.selectedfont);
 	            ((JXLabel)value).repaint();
-				
+
 			}else{
 				//System.out.println("nicht Selected = "+((JXLabel)value).getText());
 				//Paint newPaint = new GradientPaint(0,0,Color.WHITE,0,getHeight(),Color.WHITE,true);
@@ -278,11 +280,11 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	            this.foreground = Color.BLACK;
 	            ((JXLabel)value).setFont(this.unselectedfont);
 	            ((JXLabel)value).repaint();
-	            
+
 			}
 			setBackground(this.background);
 			setForeground(this.foreground);
-			
+
 		return this;
 		}
 	}
@@ -301,7 +303,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		String[] column = 	{"gefunden in...","ID","Datei"};
 		themenDtblm.setColumnIdentifiers(column);
 		//themenDtblm.addTableModelListener(this);
-		
+
 		tblgefunden = new JXTable(themenDtblm);
 		tblgefunden.setDoubleBuffered(true);
 		tblgefunden.setHighlighters(HighlighterFactory.createSimpleStriping(new Color(204,255,255)));
@@ -310,7 +312,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		tblgefunden.getColumn(1).setMaxWidth(0);
 		tblgefunden.getColumn(2).setMinWidth(0);
 		tblgefunden.getColumn(2).setMaxWidth(0);
-		
+
 		ListSelectionModel listSelectionModel = tblgefunden.getSelectionModel();
 		listSelectionModel.addListSelectionListener(new SharedListSelectionHandler());
 		tblgefunden.setSelectionModel(listSelectionModel);
@@ -319,15 +321,16 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		tblgefunden.setSelectionMode(0);
 		tblgefunden.addMouseListener(this);
 		tblgefunden.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
             	if(tblgefunden.getSelectedRow()>=0){
                 	String url = (String)tblgefunden.getValueAt(tblgefunden.getSelectedRow(),2);
                 	RtaWissen.highlight = true;
-                	rtaWissen.Navigiere(SystemConfig.HilfeServer+url); 
+                	rtaWissen.Navigiere(SystemConfig.HilfeServer+url);
             	}
             }
         });
-		
+
 		JScrollPane gefunden = new JScrollPane(tblgefunden);
 		gefunden.validate();
 		jlupan.add(gefunden,cc.xy(2,6));
@@ -336,7 +339,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		aktbutton.setActionCommand("aktualisieren");
 		aktbutton.addActionListener(this);
 		jlupan.add(aktbutton,cc.xy(2,8));
-		
+
 		parameterScroll = new JScrollPane();
 		parameterScroll.setOpaque(true);
 		parameterScroll.setBorder(null);
@@ -347,27 +350,27 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		root = new DefaultMutableTreeNode( "Thera-PI HowTo" );
 		treeModel = new DefaultTreeModel(root);
 		tree = new JXTree( root );
-		
-		tree.getSelectionModel().addTreeSelectionListener(this); 
+
+		tree.getSelectionModel().addTreeSelectionListener(this);
 		FuelleTree ft = new FuelleTree();
 		ft.execute();
-		
-		
-		
+
+
+
 		parameterScroll.setViewportView(tree);
 		parameterScroll.validate();
 		jlupan.add(parameterScroll,cc.xy(2, 10));
-		
-		
+
+
 		//jlupan.add(dummy2,cc.xy(2, 10));
 		jlupan.validate();
-		
+
 		return jlupan;
 	}
 	public static void hilfsDateien(Vector vec){
 		thisClass.dateien.add(vec);
 	}
-	
+
 	public static BrowserFenster getInstance(){
 		return thisClass;
 	}
@@ -380,24 +383,13 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	public static void browserMeldung(String meldung){
 		//System.out.println(meldung);
 	}
-	
-	private boolean WertZwischen(int punkt,int kleinerWert,int grosserWert){
-		if (punkt < kleinerWert){
-			return false;
-		}
-		if (punkt > grosserWert){
-			return false;
-		}
-		return true;
-	}
-
 
 	public void FensterSchliessen(String welches){
-		
+
 		this.dispose();
 		//NativeInterface.close();
 	}
-	
+
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -409,14 +401,14 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 				try{
 					root.removeAllChildren();
 				}catch(java.lang.ArrayIndexOutOfBoundsException obex){
-					
+
 				}
 			}
-			
+
 			//model.removeNodeFromParent((DefaultMutableTreeNode)tree.getLastSelectedPathComponent());
-			
+
 			//tree.setModel(new DefaultTreeModel(root));
-			
+
 			//tree.remove(0);
 			model.reload();
 			tree.validate();
@@ -426,11 +418,11 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 			model.reload();
 			tree.validate();
 			tree.repaint();
-			
+
 			/*
 			tree.setModel(new DefaultTreeModel(root));
-			
-			
+
+
 			*/
 			/*
 			*/
@@ -443,17 +435,19 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 		//System.out.println(arg0);
 	}
 
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		Runtime r = Runtime.getRuntime();
 	    r.gc();
 	    long freeMem = r.freeMemory();
-	    //System.out.println("Freier Speicher nach  gc():    " + freeMem); 
+	    //System.out.println("Freier Speicher nach  gc():    " + freeMem);
 	}
 
 
 
-	public void keyPressed(KeyEvent arg0) {
+	@Override
+    public void keyPressed(KeyEvent arg0) {
 //		System.out.println("KeyPressed "+arg0.getKeyCode()+" - "+arg0.getSource());
 		if(arg0.getSource() instanceof JFormattedTextField ){
 			if(arg0.getKeyCode() == 10){
@@ -470,7 +464,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 				tblgefunden.setRowSelectionInterval(0, 0);
 				tblgefunden.requestFocus();
 			}
-			
+
 			if(arg0.getKeyCode() == 27){
 				arg0.consume();
 			}
@@ -486,7 +480,8 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	}
 
 
-	public void keyReleased(KeyEvent arg0) {
+	@Override
+    public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		//System.out.println("KeyReleased "+arg0);
 		if(arg0.getKeyCode() == 10){
@@ -495,27 +490,28 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	}
 
 
-	public void keyTyped(KeyEvent arg0) {
+	@Override
+    public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		//System.out.println("KeyTyped "+arg0);
 		if(arg0.getKeyCode() == 10){
 			arg0.consume();
 		}
 	}
-	
+
 	@Override
 	public void windowActivated(WindowEvent e) {
 		//System.out.println("Fenster "+this.dieserName+" wurde aktiviert");
 		//pinPanel.SetzeAktivButton(true);
 		this.rtaWissen.requestFocus();
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowClosing(WindowEvent e) {
 		//System.out.println("Fenster in Schliessen "+e);
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowDeactivated(WindowEvent e) {
@@ -525,17 +521,17 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	@Override
 	public void windowDeiconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowIconified(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowOpened(WindowEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
@@ -548,29 +544,29 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 			rtaWissen.Navigiere(SystemConfig.InetSeiten.get(ind).get(2));
 			linkalt = linkneu;
 		}
-		
+
 	}
 /***********************************/
 
-	
-	
-	
-	
+
+
+
+
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -583,7 +579,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	    	String sgruppe = path.getPathComponent(element-2).toString();
 	    	int i;
 	    	for(i = 0;i < dateien.size();i++){
-	    		if( ((String)((Vector)dateien.get(i)).get(0)).equals(sitem)  && 
+	    		if( ((String)((Vector)dateien.get(i)).get(0)).equals(sitem)  &&
 	    			((String)((Vector)dateien.get(i)).get(1)).equals(sgruppe) ) {
 	    			String pfad = RehaWissen.proghome+"howto";
 	    			File file = new File(pfad,sitem+".html");
@@ -591,7 +587,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	    				RtaWissen.highlight = true;
 	    				rtaWissen.Navigiere(SystemConfig.HilfeServer+((String)((Vector)dateien.get(i)).get(2)));
 	    			}else{
-	    				RtaWissen.highlight = true;	    				
+	    				RtaWissen.highlight = true;
 	    				rtaWissen.Navigiere(SystemConfig.HilfeServer+((String)((Vector)dateien.get(i)).get(2)));
 	    			}
 	    			break;
@@ -599,38 +595,38 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 	    	}
 	    }
 		}catch(java.lang.NullPointerException npex){
-			
-		}
-	    
 
-		
+		}
+
+
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
+
 }
 final class FuelleTree extends SwingWorker<Void,Void>{
 	Vector<String> gruppen = new Vector<String>();
@@ -641,25 +637,22 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 		holeTitel();
 		return null;
 	}
-/*****************************************************************/	
+/*****************************************************************/
 	private Vector holeGruppen(){
 		Vector<String> vec = new Vector<String>();
 		Statement stmtx = null;
 		ResultSet rsx = null;
-		
-		stmtx = null;
-		rsx = null;
+
 		try {
 			stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			        ResultSet.CONCUR_UPDATABLE );
-			
+
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try {
 			rsx = stmtx.executeQuery("select gruppe from hgroup order by reihenfolge");
-			
+
 			while(rsx.next()){
 				vec.add(rsx.getString(1));
 			}
@@ -669,18 +662,16 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 			if (rsx != null) {
 				try {
 					rsx.close();
-				} catch (SQLException sqlEx) { // ignore }
+				} catch (SQLException sqlEx) {
 					rsx = null;
 				}
-			}	
-			if (stmtx != null) {
-				try {
-					stmtx.close();
-				} catch (SQLException sqlEx) { // ignore }
-					stmtx = null;
-				}
 			}
-	
+			try {
+				stmtx.close();
+			} catch (SQLException sqlEx) {
+				stmtx = null;
+			}
+
 			return (Vector)vec.clone();
 	}
 /**********************************************************************/
@@ -688,27 +679,25 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 		int i;
 		Statement stmtx = null;
 		ResultSet rsx = null;
-		
-		stmtx = null;
-		rsx = null;
-			
+
+
 		try {
 			stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			        ResultSet.CONCUR_UPDATABLE );
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		for(i = 0; i < gruppen.size();i++){
-			/*******/				
+			/*******/
 			try {
-				rsx = stmtx.executeQuery("select titel,gruppe,datei from htitel where gruppe='"+gruppen.get(i).trim()+"'");		
+				rsx = stmtx.executeQuery("select titel,gruppe,datei from htitel where gruppe='"+gruppen.get(i).trim()+"'");
 				try {
 					stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
-					
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -716,7 +705,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 				/*
 				DefaultMutableTreeNode node = new DefaultMutableTreeNode( "Terminkalender");
 				treeitem = new DefaultMutableTreeNode("Grundlagen der Bedienung");
-				node.add(treeitem ); 
+				node.add(treeitem );
 				treeitem = new DefaultMutableTreeNode("Kalenderbenutzer anlegen");
 				node.add(treeitem );
 				treeitem = new DefaultMutableTreeNode("Was sind Behandlersets");
@@ -725,7 +714,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 				node.add(treeitem );
 				root.add(node);
 
-				node = new DefaultMutableTreeNode( "Ru:gl"); 
+				node = new DefaultMutableTreeNode( "Ru:gl");
 				treeitem = new DefaultMutableTreeNode("Grundlagen der Bedienung");
 				node.add(treeitem );
 				root.add(node);
@@ -740,7 +729,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 					items.clear();
 					treeitem = new DefaultMutableTreeNode(rsx.getString(1));
 					node.add(treeitem);
-					
+
 					/*************/
 
 					items.add(rsx.getString(1));
@@ -748,23 +737,23 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 					items.add(rsx.getString(3));
 					BrowserFenster.hilfsDateien((Vector) items.clone());
 					//System.out.println(items);
-				}	
+				}
 				BrowserFenster.root.add(node);
 				BrowserFenster.thisClass.tree.validate();
 			}catch(SQLException e){
 				e.printStackTrace();
 			}
-			
-			/*******/			
+
+			/*******/
 		}
-		
+
 		if (rsx != null) {
 			try {
 				rsx.close();
 			} catch (SQLException sqlEx) { // ignore }
 				rsx = null;
 			}
-		}	
+		}
 		if (stmtx != null) {
 			try {
 				stmtx.close();
@@ -777,25 +766,27 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 		//BrowserFenster.thisClass.tree.setExpandsSelectedPaths(true);
 
 	}
-	
-	
+
+
 }
 /**************************************/
-	
+
 class MyDefaultTableModel extends DefaultTableModel{
 	   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class getColumnClass(int columnIndex) {
+	@Override
+    public Class getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return String.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
            //return (columnIndex == 0) ? Boolean.class : String.class;
        }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	    	/*
@@ -813,29 +804,30 @@ class MyDefaultTableModel extends DefaultTableModel{
 	        */
 	    	return false;
 	      }
-	   
+
 }
 class SharedListSelectionHandler implements ListSelectionListener {
-    public void valueChanged(ListSelectionEvent e) { 
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
         ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
         int firstIndex = e.getFirstIndex();
         int lastIndex = e.getLastIndex();
-        boolean isAdjusting = e.getValueIsAdjusting(); 
+        boolean isAdjusting = e.getValueIsAdjusting();
         /*
         output.append("Event for indexes "
                       + firstIndex + " - " + lastIndex
                       + "; isAdjusting is " + isAdjusting
                       + "; selected indexes:");
-        */              
-        
+        */
+
         if (lsm.isSelectionEmpty()) {
            // output.append(" <none>");
         } else {
-        	
+
             // Find out which indexes are selected.
             int minIndex = lsm.getMinSelectionIndex();
-            
+
             int maxIndex = lsm.getMaxSelectionIndex();
             for (int i = minIndex; i <= maxIndex; i++) {
                 if (lsm.isSelectedIndex(i)) {
@@ -863,24 +855,24 @@ final class MachSuche extends SwingWorker<Void,Void>{
 		protected Void doInBackground(){
 			// TODO Auto-generated method stub
 			//System.out.println("Statement = "+xstmt1);
-			
+
 			if(BrowserFenster.thisClass.tblgefunden.getRowCount() > 0){
 				BrowserFenster.thisClass.themenDtblm.setRowCount(0);
 				BrowserFenster.thisClass.tblgefunden.validate();
 			}
-			
+
 			String test = new String(BrowserFenster.thisClass.jtf.getText().trim());
 			//String test = "";
 			//System.out.println("ï¿½bergebener String = "+test);
 			//System.out.println("Statement = "+xstmt1);
-	 
+
 			for(int i = 0; i < 1; i++){
 				if(test.equals("")){
 				 xstmt1 = "select titel,id,datei from htitel";
 				 xstmt2 = "select titel,id,datei from htitel";
 				 break;
 				}
-				fundstelle = test.split(" ");			
+				fundstelle = test.split(" ");
 				if(fundstelle.length == 0){
 					xstmt1 = "select titel,id,datei from htitel where inhalt LIKE '%"+ersetzeUmlaute2(test)+"%'";
 					xstmt2 = "select titel,id,datei from htitel where inhalt LIKE '%"+ersetzeUmlaute2(test)+"%'";
@@ -889,7 +881,7 @@ final class MachSuche extends SwingWorker<Void,Void>{
 				}
 				if(fundstelle.length > 0){
 					xstmt1= "select titel,id,datei from htitel where inhalt LIKE '%"+ersetzeUmlaute2(fundstelle[0])+"%'";
-					xstmt2= "select titel,id,datei from htitel where inhalt LIKE '%"+ersetzeUmlaute2(fundstelle[0])+"%'";					
+					xstmt2= "select titel,id,datei from htitel where inhalt LIKE '%"+ersetzeUmlaute2(fundstelle[0])+"%'";
 					for(i = 1;i<fundstelle.length;i++){
 						String zusatz1 = " AND inhalt LIKE '%"+ersetzeUmlaute2(fundstelle[i])+"%'";
 						xstmt1 = xstmt1 + new String(zusatz1);
@@ -898,7 +890,7 @@ final class MachSuche extends SwingWorker<Void,Void>{
 
 					}
 					//System.out.println("Statement = "+xstmt1);
-					//System.out.println("Statement = "+xstmt2);					
+					//System.out.println("Statement = "+xstmt2);
 					break;
 				}
 
@@ -914,17 +906,13 @@ final class MachSuche extends SwingWorker<Void,Void>{
 			//System.out.println(xstmt1);
 			Statement stmtx = null;
 			ResultSet rsx = null;
-			Vector comboInhalt = null;
 			Vector gesamtVec = new Vector();
-					stmtx = null;
-					rsx = null;
 					//System.out.println("In holeTitel");
 					try {
 						stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 						        ResultSet.CONCUR_UPDATABLE );
-						
+
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					try {
@@ -970,7 +958,7 @@ final class MachSuche extends SwingWorker<Void,Void>{
 
 							}
 						}*/
-						
+
 					}catch(SQLException e){
 						e.printStackTrace();
 					}
@@ -980,50 +968,20 @@ final class MachSuche extends SwingWorker<Void,Void>{
 						} catch (SQLException sqlEx) { // ignore }
 							rsx = null;
 						}
-					}	
-					if (stmtx != null) {
-						try {
-							stmtx.close();
-						} catch (SQLException sqlEx) { // ignore }
-							stmtx = null;
-						}
 					}
+
+					try {
+						stmtx.close();
+					} catch (SQLException sqlEx) { // ignore }
+						stmtx = null;
+					}
+
 				return;
 				}
-		private String ersetzeUmlaute1(String str){
-			String ersetzen = new String(str);
-			String neu = "", alt = neu = "";
-			neu = new String(ersetzen.replaceAll("ï¿½","Ã¤")); 
-			alt = new String(neu);
-			neu = new String(alt.replaceAll("ï¿½","Ã¶" ));
-			alt = new String(neu);
-			neu = new String(alt.replaceAll("ï¿½","Ã¼" ));
-			alt = new String(neu);
-			neu = new String(alt.replaceAll("ï¿½","Ã" ));
-			alt = new String(neu);
-			neu = new String(alt.replaceAll("ï¿½","Ã" ));
-			alt = new String(neu);
-			neu = new String(alt.replaceAll("ï¿½","Ã" ));
-			alt = new String(neu);
-			neu = new String(alt.replaceAll("ï¿½","Ã" ));
-
-			/*
-			Ã¤ statt ï¿½
-			Ã¶ statt ï¿½
-			Ã¼ statt ï¿½
-			Ã statt ï¿½
-			Ã statt ï¿½
-			Ã statt ï¿½
-			Ã statt ï¿½
-			*/
-			//ersetzen
-			return new String(neu);
-			
-		}
 		private String ersetzeUmlaute2(String str){
 			String ersetzen = new String(str);
 			String neu = "", alt = neu = "";
-			neu = new String(ersetzen.replaceAll("ï¿½","&auml;")); 
+			neu = new String(ersetzen.replaceAll("ï¿½","&auml;"));
 			alt = new String(neu);
 			neu = new String(alt.replaceAll("ï¿½","&ouml;" ));
 			alt = new String(neu);
@@ -1048,11 +1006,11 @@ final class MachSuche extends SwingWorker<Void,Void>{
 			*/
 			//ersetzen
 			return new String(neu);
-			
+
 		}
 
 }
-	/****************************************/	
+	/****************************************/
 
 class BrowserSockServer{
 	static ServerSocket serv = null;
@@ -1068,12 +1026,12 @@ class BrowserSockServer{
 			//RehaxSwing.jDiag.dispose();
 			return;
 		}
-		
+
 		Socket client = null;
 		//RehaxSwing.standDerDingelbl.setText("ï¿½ffne Socket");
 		while(xlisten){
 			try {
-				//RehaxSwing.socketoffen = true;				
+				//RehaxSwing.socketoffen = true;
 				client = serv.accept();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -1088,12 +1046,12 @@ class BrowserSockServer{
 			while( (byteStream =  input.read()) > -1){
 				//System.out.println("******byteStream Erhalten******  "+byteStream );
 				char b = (char)byteStream;
-				
+
 				sb.append(b);
 			}
 
 			test = new String(sb);
-			//System.out.println("Socket= "+test);			
+			//System.out.println("Socket= "+test);
 			final String xtest = new String(test);
 			BrowserFenster.browserMeldung(new String(xtest));
 			byte[] schreib = "ok".getBytes();

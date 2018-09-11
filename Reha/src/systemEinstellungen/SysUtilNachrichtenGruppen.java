@@ -80,7 +80,8 @@ public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener
 
 		
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				//System.out.println("Aufruf der Seite RoogleGruppen definieren");
 				jscroll.setViewportView(getRoogleGruppenLayout());
 				jscroll.validate();
@@ -185,7 +186,8 @@ public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener
 			final PanelBuilder xbuilder = builder;
 			final CellConstraints xcc = cc;
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 
 			macheKollegen();
 			klm = new NachrichtenKollegenListModel();
@@ -590,14 +592,16 @@ public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener
 }
 
 class NachrichtenGruppenListModel extends DefaultTableModel{
-	   public Class getColumnClass(int columnIndex) {
+	   @Override
+    public Class getColumnClass(int columnIndex) {
 		   if(columnIndex>0){return Boolean.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
            //return (columnIndex == 0) ? Boolean.class : String.class;
        }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	        if (col == 0 ) {
@@ -614,7 +618,8 @@ class NachrichtenKollegenListModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 5521090004889817226L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		
 		   if(columnIndex>0){return String.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
@@ -622,7 +627,8 @@ class NachrichtenKollegenListModel extends DefaultTableModel{
            //return (columnIndex == 0) ? Boolean.class : String.class;
        }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	        if (col == 0 ) {

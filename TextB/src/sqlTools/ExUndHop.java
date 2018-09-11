@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 import textBausteine.textbaus;
 
-public class ExUndHop extends Thread implements Runnable{
+public class ExUndHop extends Thread{
 	Statement stmt = null;
 	ResultSet rs = null;
 	String statement;
@@ -19,20 +19,21 @@ public class ExUndHop extends Thread implements Runnable{
 		this.statement = statement;
 		start();
 	}
-	public synchronized void run(){
-		
+	@Override
+    public synchronized void run(){
+
 		//Vector treadVect = new Vector();
 		try {
 			stmt = textbaus.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					geklappt =  stmt.execute(this.statement);
-					
+
 			}catch(SQLException ev){
 					System.out.println("SQLException: " + ev.getMessage());
 					System.out.println("SQLState: " + ev.getSQLState());
 					System.out.println("VendorError: " + ev.getErrorCode());
-			}	
+			}
 
 		}catch(SQLException ex) {
 			System.out.println("von stmt -SQLState: " + ex.getSQLState());
@@ -58,6 +59,6 @@ public class ExUndHop extends Thread implements Runnable{
 		}
 		processdone = true;
 	}
-	
-	
+
+
 }

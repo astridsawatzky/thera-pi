@@ -16,7 +16,8 @@ private static final long serialVersionUID = 1L;
 	}
 	
 
-	public void setValue(Object value) {
+	@Override
+    public void setValue(Object value) {
 		if(value == null){
 			setText("");
 		}else{

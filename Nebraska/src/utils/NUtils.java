@@ -63,7 +63,8 @@ public class NUtils {
 			}
 		}
 
-		public void nextBytes(byte[] bytes){
+		@Override
+        public void nextBytes(byte[] bytes){
 			int off = 0;
 			sha.update(state);
 			while(off < bytes.length){

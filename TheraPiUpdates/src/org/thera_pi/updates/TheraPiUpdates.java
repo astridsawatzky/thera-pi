@@ -429,7 +429,8 @@ public class TheraPiUpdates implements WindowListener {
 			
 			
 		}
-		public void run() {
+		@Override
+        public void run() {
 			int i=0;
 			StarteDB();
 		}

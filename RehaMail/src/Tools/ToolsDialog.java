@@ -77,14 +77,16 @@ public class ToolsDialog extends JXDialog implements FocusListener, ActionListen
 		this.rtp.addRehaTPEventListener(this);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				jList.requestFocus();
 				jList.setSelectedIndex(0);
 			}
@@ -140,7 +142,8 @@ public class ToolsDialog extends JXDialog implements FocusListener, ActionListen
 		};
 		this.jList.addMouseListener(toolsMl);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				jList.requestFocus();		
 			}
 		});

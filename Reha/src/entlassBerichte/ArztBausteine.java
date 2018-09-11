@@ -84,7 +84,7 @@ import systemEinstellungen.SystemConfig;
 public class ArztBausteine extends JDialog implements WindowListener{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	EBerichtPanel eltern = null;
@@ -98,11 +98,11 @@ public class ArztBausteine extends JDialog implements WindowListener{
 	private IFrame             officeFrame       = null;
 	private ITextDocument      document          = null;
 	private JPanel             noaPanel          = null;
-	NativeView nativeView = null; 
+	NativeView nativeView = null;
 	ActionListener al = null;
 	MouseListener ml = null;
 	KeyListener kl = null;
-	
+
 	public ArztBausteine(EBerichtPanel xeltern,Point pt){
 		super();
 		this.setPreferredSize(new Dimension(400,520));
@@ -126,14 +126,16 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		}.execute();
 		content.revalidate();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				suchenach.requestFocus();
 			}
 		});
@@ -154,7 +156,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 				if(arg0.getClickCount()==2){
 					if(arg0.getSource() instanceof JXTable){
 						if(sucheNachPlatzhalter()){
-							sendeText();							
+							sendeText();
 						}
 						suchenach.requestFocus();
 					}
@@ -195,7 +197,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 			}
-			
+
 		};
 	}
 	private boolean sucheNachPlatzhalter(){
@@ -213,7 +215,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 			row = bausteintbl.convertRowIndexToModel(row);
 			titel = bausteinmod.getValueAt(row,2).toString();
 		}
-		 
+
 		while ((start = stext.indexOf("^")) >= 0){
 			noendfound = true;
 			for(int i = 1;i < 150;i++){
@@ -225,7 +227,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 						sucheErsetze(dummy,eltern.sysVarInhalt.get(sysvar),true);
 					}else{
 						String sanweisung = dummy.toString().replace("^", "");
-						Object ret = JOptionPane.showInputDialog(this,"<html>Bitte Wert für eingeben für: --\u003E<b> "+sanweisung+" </b> &nbsp; </html>","Baustein: "+titel, 1);						
+						Object ret = JOptionPane.showInputDialog(this,"<html>Bitte Wert für eingeben für: --\u003E<b> "+sanweisung+" </b> &nbsp; </html>","Baustein: "+titel, 1);
 						//Object ret = JOptionPane.showInputDialog(this,"Bitte Wert für eingeben für: --> "+sanweisung+" <-- ","Baustein: "+titel, 1);
 						if(ret==null){
 							return true;
@@ -257,18 +259,18 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		if(alle){
 			searchResult = document.getSearchService().findAll(searchDescriptor);
 		}else{
-			searchResult = document.getSearchService().findFirst(searchDescriptor);			
+			searchResult = document.getSearchService().findFirst(searchDescriptor);
 		}
 
 		if(!searchResult.isEmpty()) {
 			ITextRange[] textRanges = searchResult.getTextRanges();
 			for (int resultIndex=0; resultIndex<textRanges.length; resultIndex++) {
 				textRanges[resultIndex].setText(ersetzemit);
-				
+
 			}
 		}
 	}
-	
+
 	private void sendeText(){
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		try {
@@ -281,7 +283,6 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -299,7 +300,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 	/*
 	private void doActionTest(String action){
 		if(action.equals("tabellenklick")){
-			
+
 		}
 	}
 	*/
@@ -315,7 +316,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		content = new JXPanel(new BorderLayout());
 		//content.add(getTabs(),BorderLayout.CENTER);
 		content.add(getTabPage1(),BorderLayout.CENTER);
-		
+
 		return content;
 	}
 	/*
@@ -332,7 +333,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		tab.addTab("Bausteine abrufen", getTabPage1());
 		tab.addTab("Bausteine bearbeiten", new JXPanel());
 		tab.addTab("Bausteine testen", new JXPanel());
-		
+
 		UIManager.put("TabbedPane.tabsOpaque", Boolean.TRUE);
 		UIManager.put("TabbedPane.contentOpaque", Boolean.TRUE);
 
@@ -351,7 +352,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		toolb.setOpaque(false);
 		toolb.setRollover(true);
 		toolb.setBorder(null);
-		
+
 		String[] cmbinhalt = {"suche in Titel","suche in Untergliederung","suche in Haupt-Rubrik"};
 		suchart = new JRtaComboBox(cmbinhalt);
 		toolb.add(suchart);
@@ -398,8 +399,8 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		return pan;
 	}
 	/**********
-	 * 
-	 * 
+	 *
+	 *
 	 * @param id
 	 */
 
@@ -407,7 +408,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		InputStream ins = SqlInfo.holeStream("tbar", "tbtext", "id='"+id+"'");
 		//String instring = SqlInfo.holeEinzelFeld("select tbtext from tbar where id='"+id+"' LIMIT 1");
 		document.getTextService().getText().setText("");
-		
+
 		ITextCursor textCursor = null;
 		IViewCursor viewCursor = null;
 		try {
@@ -421,13 +422,13 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-		
-		
+
+
 	}
-	
+
 	/**********
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	private void fuelleTabelle(String cmd){
 
@@ -440,14 +441,13 @@ public class ArztBausteine extends JDialog implements WindowListener{
 				stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				            ResultSet.CONCUR_UPDATABLE );
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			try{
 				String sstmt = null;
 				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 				if(cmd.equals("")){
-					sstmt = "select tbthema,tbuntert,tbtitel,id from tbar Order BY tbthema";					
+					sstmt = "select tbthema,tbuntert,tbtitel,id from tbar Order BY tbthema";
 				}else{
 					sstmt = cmd;
 				}
@@ -490,7 +490,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 					} catch (SQLException sqlEx) { // ignore }
 						rs = null;
 					}
-				}	
+				}
 				if (stmt != null) {
 					try {
 						stmt.close();
@@ -502,10 +502,10 @@ public class ArztBausteine extends JDialog implements WindowListener{
 			}
 	}
 	/**********
-	 * 
-	 * 
+	 *
+	 *
 	 */
-	
+
 	private void fillNOAPanel() {
 	    if (noaPanel != null) {
 		      try {
@@ -516,7 +516,8 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		            IDocument.WRITER,
 		            DocumentDescriptor.DEFAULT);
 		        SwingUtilities.invokeLater(new Runnable(){
-		        	public void run(){
+		        	@Override
+                    public void run(){
 		        		try{
 		        			//Workaround für Java 7
 		        			new TopWindow(document);
@@ -524,13 +525,13 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		        			JOptionPane.showMessageDialog(null,"Achtung!, der TopWindow-Listener (wichtig für Java 7) konnte nicht korrekt gestartet werden");
 		        		}
 		        	}
-		        });		        
-		        
+		        });
+
 	        	OOTools.setzePapierFormat(document, Integer.valueOf(25199), Integer.valueOf(19299));
 	        	OOTools.setzeRaender(document, Integer.valueOf(1000), Integer.valueOf(1000),Integer.valueOf(1000),Integer.valueOf(1000));
 	        	hideAllElements();
 		        nativeView.validate();
-		        
+
 		        try {
 					document.zoom(DocumentZoomType.BY_VALUE, (short)70);
 				} catch (DocumentException e) {
@@ -542,12 +543,13 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		      }
 		    }
 		  }
-	
+
 	private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent) throws Throwable {
 	    nativeView = new NativeView(SystemConfig.OpenOfficeNativePfad);
 	    parent.add(nativeView);
 	    parent.addComponentListener(new ComponentAdapter() {
-	      public void componentResized(ComponentEvent e) {
+	      @Override
+        public void componentResized(ComponentEvent e) {
 	    	refreshSize();
 	        nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
 	        parent.getLayout().layoutContainer(parent);
@@ -559,7 +561,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 	    officeFrame = officeApplication.getDesktopService().constructNewOfficeFrame(nativeView);
 	    return officeFrame;
 	}
-	
+
 	public final void refreshSize() {
 		noaPanel.setPreferredSize(new Dimension(noaPanel.getWidth() , noaPanel.getHeight()
 		- 5));
@@ -575,21 +577,23 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		noaPanel.getLayout().layoutContainer(noaPanel);
 
 		}
-	
+
 	class MyTermTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==0){return String.class;}
 			   /*else if(columnIndex==1){return JLabel.class;}*/
 			   else{return String.class;}
 	           //return (columnIndex == 0) ? Boolean.class : String.class;
 	       }
 
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        if (col == 0){
 		        	return false;
 		        }else if(col == 1){
@@ -607,11 +611,12 @@ public class ArztBausteine extends JDialog implements WindowListener{
 	}
 	class MyBausteinTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==1 || columnIndex==5 ){
 				   return String.class;}
 			   else{
@@ -619,7 +624,8 @@ public class ArztBausteine extends JDialog implements WindowListener{
 			   }
 	       }
 
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        if (col == 0){
 		        	return false;
 		        }else if(col == 3){
@@ -632,12 +638,12 @@ public class ArztBausteine extends JDialog implements WindowListener{
 		          return false;
 		        }
 		      }
-		   
+
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
@@ -665,34 +671,35 @@ public class ArztBausteine extends JDialog implements WindowListener{
             xps.setPropertyValue("Persistent", new Boolean(false));
             xLayoutManager.hideElement(url);
           }
-        }		
+        }
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	class BausteinSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-	        
+
 	        //int firstIndex = e.getFirstIndex();
 	        //int lastIndex = e.getLastIndex();
 	        boolean isAdjusting = e.getValueIsAdjusting();
@@ -708,5 +715,5 @@ public class ArztBausteine extends JDialog implements WindowListener{
 	    }
 	}
 
-	
+
 }

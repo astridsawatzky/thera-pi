@@ -68,7 +68,8 @@ public class ICDoberflaeche extends JXPanel implements ListSelectionListener, Ac
 					add(getCombobox1(),c1.xy(6,4));
 					tf1[0] = new JTextField("");
 					tf1[0].addKeyListener(new KeyAdapter(){
-						public void keyPressed(KeyEvent ev){
+						@Override
+                        public void keyPressed(KeyEvent ev){
 							if(ev.getKeyCode()==10){
 								doSuchen();
 							}
@@ -150,7 +151,8 @@ public class ICDoberflaeche extends JXPanel implements ListSelectionListener, Ac
 	
 	class TBListSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	    	
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        
@@ -255,7 +257,8 @@ public class ICDoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class getColumnClass(int columnIndex) {
+		@Override
+        public Class getColumnClass(int columnIndex) {
 			   if(columnIndex==0){return String.class;}
 
 			   else{return String.class;}

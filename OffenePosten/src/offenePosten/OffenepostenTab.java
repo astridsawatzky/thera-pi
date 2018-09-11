@@ -135,14 +135,16 @@ public class OffenepostenTab extends JXPanel implements ChangeListener{
         try{
         	if(sel==0){
         		SwingUtilities.invokeLater(new Runnable(){
-        			public void run(){
+        			@Override
+                    public void run(){
         				oppanel.setzeFocus();		
         			}
         		});
         		
         	}else if(sel==1){
         		SwingUtilities.invokeLater(new Runnable(){
-        			public void run(){
+        			@Override
+                    public void run(){
                 		rehaBillPanel.setzeFocus();		
         			}
         		});
@@ -157,7 +159,8 @@ public class OffenepostenTab extends JXPanel implements ChangeListener{
 	}
 	public void setFirstFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				oppanel.setzeFocus();		
 			}
 		});

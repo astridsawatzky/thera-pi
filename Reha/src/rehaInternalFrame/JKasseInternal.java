@@ -47,7 +47,8 @@ public class JKasseInternal extends JRehaInternal implements RehaEventListener{
 		Reha.thisClass.progLoader.loescheKasse();
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

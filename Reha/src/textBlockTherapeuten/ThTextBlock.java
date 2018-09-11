@@ -10,7 +10,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -50,20 +49,19 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import jxTableTools.RechtsRenderer;
 import systemEinstellungen.SystemConfig;
 
-public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+public class ThTextBlock extends RehaSmartDialog{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -170735450415633105L;
 	public JFormattedTextField tf = null;
 	String suchkrit = "";
 	String suchid = "";
-	
+
 	public JButton neuarzt = null;
 	public JRtaTextField[] elterntfs;
 	public Container dummyPan = null;
@@ -82,21 +80,21 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 	TbEingabeNeu tbEingabeNeu = null;
 	String alttitel = "";
 	JRtaTextField jtfrueck = null;
-	/***************/	
+	/***************/
 	JPanel content = null;
 	public JXPanel grundPanel = null;
 	public String arztbisher;
 	ArztBericht abr = null;
-	
+
 	List<String> sysVars1;
 	List<String> sysVars2;
 	String[][] sysInhalt1;
 	String[] sysInhalt2;
-	
+
 	String reznummer = null;
 	int zuletztaktiv = -1;
 	private RehaTPEventClass rtp = null;
-	
+
 		public ThTextBlock(JXFrame owner, String name,String diag,ArztBericht abr,String xreznummer,int letztaktiv) {
 			super(owner, name);
 			//System.out.println("Name des Fensters = "+name);
@@ -120,7 +118,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 					macheSysVars2();
 					return null;
 				}
-				
+
 			}.execute();
 		    super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
 		    super.getSmartTitledPanel().setName(name);
@@ -130,7 +128,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			pinPanel.setName(name);
 			pinPanel.setzeName(name);
 			setPinPanel(pinPanel);
-			
+
 			this.addWindowListener(this);
 			this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
@@ -142,29 +140,32 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			grundPanel.setName(name);
 			getSmartTitledPanel().setContentContainer(grundPanel);
 			getSmartTitledPanel().setName(name);
-			
+
 
 			//this.getContentPanel().add(content);
-			
+
 			//final JPanel thispan = content;
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 					KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.ALT_MASK);
 					grundPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doSuchen");
 					grundPanel.getActionMap().put("doSuchen", new BausteinAction());
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
-							setzeFocus();		
+						@Override
+                        public  void run(){
+							setzeFocus();
 						}
-					});	
+					});
 
-					
+
 				}
 			});
-			
+
 			//pack();
 			new Thread(){
-				public void run(){
+				@Override
+                public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -175,15 +176,16 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 				}
 			}.start();
 		}
-		
+
 		private void setzeFocus(){
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
-					suchenach.requestFocus();		
+				@Override
+                public  void run(){
+					suchenach.requestFocus();
 				}
-			});	
+			});
 		}
-		
+
 		@Override
 		public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
@@ -207,8 +209,9 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 		}
 
 
-		
-		public void rehaTPEventOccurred(RehaTPEvent evt) {
+
+		@Override
+        public void rehaTPEventOccurred(RehaTPEvent evt) {
 			//String ss =  this.getName();
 			try{
 				////System.out.println("Schließe Fenster Textbaustein");
@@ -228,12 +231,13 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			}
 			this.dispose();
 		}
-		
-		
+
+
 		private JPanel getAuswahl(){
 			suchenach = new JFormattedTextField();
 			suchenach.addKeyListener(new KeyAdapter(){
-				public void keyPressed(KeyEvent arg0) {
+				@Override
+                public void keyPressed(KeyEvent arg0) {
 					if(arg0.getKeyCode()==10){
 						arg0.consume();
 						suchenach.requestFocus();
@@ -242,9 +246,9 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 							protected Void doInBackground() throws Exception {
 								String mwk = "";
 								if(zuletztaktiv >= 0){
-									mwk = "(tbblock='"+Integer.toString(zuletztaktiv+1)+"') AND "+ macheWhereKlausel(" (tbthema='"+suchkrit+"') AND ",suchenach.getText(),new String[] {"tbtitel","tbtext"});									
+									mwk = "(tbblock='"+Integer.toString(zuletztaktiv+1)+"') AND "+ macheWhereKlausel(" (tbthema='"+suchkrit+"') AND ",suchenach.getText(),new String[] {"tbtitel","tbtext"});
 								}else{
-									mwk = macheWhereKlausel(" (tbthema='"+suchkrit+"') AND ",suchenach.getText(),new String[] {"tbtitel","tbtext"});									
+									mwk = macheWhereKlausel(" (tbthema='"+suchkrit+"') AND ",suchenach.getText(),new String[] {"tbtitel","tbtext"});
 								}
 								//System.out.println(mwk);
 								fuelleSucheInTabelle(mwk);
@@ -252,7 +256,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 							}
 						}.execute();
 					}
-					
+
 					if(arg0.getKeyCode()==27){
 						arg0.consume();
 						FensterSchliessen("null");
@@ -264,11 +268,11 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 							if(textblock.getSelectedRow()>=0){
 								textblock.requestFocus();
 							}else{
-								textblock.setRowSelectionInterval(0, 0);	
+								textblock.setRowSelectionInterval(0, 0);
 							}
 						}
 					}
-					
+
 				}
 			});
 			tbtext = new JTextArea();
@@ -278,7 +282,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			tbtext.setName("tbtext");
 			tbtext.setWrapStyleWord(true);
 			tbtext.setEditable(false);
-			
+
 
 			modtextblock = new MyTextBlockModel();
 			modtextblock.setColumnIdentifiers(new String[] {"Block-Rang","Titel","ID"});
@@ -288,18 +292,20 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			textblock.getColumn(0).setMaxWidth(75);
 			//textblock.getColumn(2).setMinWidth(0);
 			textblock.getColumn(2).setMaxWidth(40);
-			textblock.getColumn(2).setCellRenderer(new RechtsRenderer());			
+			textblock.getColumn(2).setCellRenderer(new RechtsRenderer());
 			textblock.setSelectionMode(0);
 			textblock.getSelectionModel().addListSelectionListener( new TblockListSelectionHandler());
 			textblock.addMouseListener(new MouseAdapter(){
-				public void mousePressed(MouseEvent arg0) {
+				@Override
+                public void mousePressed(MouseEvent arg0) {
 					if(arg0.getClickCount()==2){
-						tbCheckundStart();						
+						tbCheckundStart();
 					}
-				}	
+				}
 			});
 			textblock.addKeyListener(new KeyAdapter(){
-				public void keyPressed(KeyEvent arg0) {
+				@Override
+                public void keyPressed(KeyEvent arg0) {
 					if(arg0.getKeyCode()==10){
 						arg0.consume();
 						tbCheckundStart();
@@ -308,13 +314,13 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 						FensterSchliessen("null");
 					}
 
-				}	
+				}
 			});
 
 			FormLayout lay = new FormLayout(
-				//x   1    2          3           4         5          6    
+				//x   1    2          3           4         5          6
 					"5dlu,0dlu,right:max(40dlu;p),2dlu,fill:300dlu:grow(1.00),5dlu",
-				//y	  1   2   3       4                  5    6     7                
+				//y	  1   2   3       4                  5    6     7
 					"5dlu,p,2dlu,fill:100dlu:grow(1.00),2dlu,30dlu,10dlu,5dlu"
 					);
 			PanelBuilder pb = new PanelBuilder(lay);
@@ -369,7 +375,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			}
 			textblock.validate();
 		}
-		
+
 		private void testeTbText(String text){
 			/// Hier den SytemVariablen-Check einbauen!!!!!!!!!!!!!!!!!!!!
 			Vector<String> tbvars = new Vector<String>();
@@ -391,7 +397,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 						var = var+test;
 						if(test.equals("^")){
 							if(!var.equals("^CRLF^")){
-								tbvars.add(String.valueOf(var));								
+								tbvars.add(String.valueOf(var));
 							}
 							start = false;
 							var = "";
@@ -404,7 +410,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			vectb = (Vector<String>)tbvars.clone();
 			//////System.out.println("Variablen Vector = "+tbvars);
 		}
-		
+
 		private void infoPosition(int diff,int i,int lang){
 			//////System.out.println("Längendifferenz ="+diff+"  /  neuer Wert für Position i ="+i+" / neuer Wert für Textlänge lang="+lang);
 		}
@@ -451,7 +457,6 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 					try {
 						Thread.sleep(20);
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					if((System.currentTimeMillis()-zeit) > 2000){
@@ -469,7 +474,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			if(vectb.size() > 0){
 				if(tbEingabeNeu == null){
 					jtfrueck = new JRtaTextField("NIX",false);
-					tbEingabeNeu = new TbEingabeNeu(tbtext.getText(),vectb,this,jtfrueck);			
+					tbEingabeNeu = new TbEingabeNeu(tbtext.getText(),vectb,this,jtfrueck);
 				}else{
 					tbEingabeNeu.neueDaten(tbtext.getText(),vectb);
 				}
@@ -479,7 +484,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 				grundPanel.validate();
 				repaint();
 			}else{
-				
+
 				String sblock = (String) textblock.getValueAt(textblock.getSelectedRow(), 0);
 				int block = Integer.valueOf(sblock.substring(0,1))-1;
 				abr.schreibeTextBlock(block,String.valueOf(tbtext.getText()) );
@@ -512,7 +517,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			textblock.requestFocus();
 		}
 		/******************************************************/
-		
+
 		private String macheWhereKlausel(String praefix,String test,String[] suchein){
 			String ret = praefix;
 			String cmd = test;
@@ -532,8 +537,8 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 				ret = ret +") ";
 				return ret;
 			}
-			
-			
+
+
 			ret = ret +"( ";
 			for(int i = 0; i < split.length;i++){
 				if(! split[i].equals("")){
@@ -549,31 +554,34 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 						ret = ret+ " AND ";
 					}
 				}
-				
+
 			}
 			ret = ret +") ";
 			return ret;
 		}
 		class MyTextBlockModel extends DefaultTableModel{
 			   /**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
-			public Class<?> getColumnClass(int columnIndex) {
+			@Override
+            public Class<?> getColumnClass(int columnIndex) {
 				   if(columnIndex==0){
 					   return String.class;
 				   }else{
 					   return String.class;
 				   }
 			}
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        //Note that the data/cell address is constant,
 		        //no matter where the cell appears onscreen.
 		    	return true;
 		    }
-			public Object getValueAt(int rowIndex, int columnIndex) {
-				String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
+			@Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
+				String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);
 				Object result = null;
 				result = theData;
 				return result;
@@ -581,7 +589,8 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 		}
 		class TblockListSelectionHandler implements ListSelectionListener {
 
-		    public void valueChanged(ListSelectionEvent e) {
+		    @Override
+            public void valueChanged(ListSelectionEvent e) {
 				if(blockneugefunden || inholetext){
 					blockneugefunden = false;
 					//////System.out.println("Wert von inholetext = "+inholetext);
@@ -621,7 +630,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 
 		class BausteinAction extends AbstractAction {
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
@@ -629,14 +638,14 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			public void actionPerformed(ActionEvent arg0) {
 				suchenach.requestFocus();
 			}
-			 
+
 		}
 		private void macheSysVars1(){
 			sysVars1 = Arrays.asList(new String[] {"^DerPat/DiePat^","^derPat/diePat^",
 					"^DemPat/DerPat^","^demPat/derPat^","^DenPat/DiePat^","^denPat/diePat^",
 					"^desPat/derPat^","^ihm/ihr^","^Sein/Ihr^","^sein/ihr^","^Seine/Ihre^","^seine/ihre^",
 					"^Er/Sie^","^er/sie^"
-		
+
 			});
 			sysInhalt1 = new String[][] {{"Der Patient","Die Patientin"},{"der Patient","die Patientin"},
 					{"Dem Patient","Der Patientin"},{"dem Patient","der Patientin"},{"Den Patient","Die Patientin"},
@@ -646,7 +655,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 		}
 		private void macheSysVars2(){
 			sysVars2 = Arrays.asList(new String[] {
-					"^ErstDatum^","^LetztDatum^","^RezDatum^","^Anrede^","^PatName^","^PatVName^","^Heute^"	
+					"^ErstDatum^","^LetztDatum^","^RezDatum^","^Anrede^","^PatName^","^PatVName^","^Heute^"
 			});
 			sysInhalt2 = new String[] {SystemConfig.hmAdrRDaten.get("<Rerstdat>"),
 					SystemConfig.hmAdrRDaten.get("<Rletztdat>"),
@@ -682,6 +691,6 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			return origtext;
 		}
 
-		
-/*************************************************/		
-}		
+
+/*************************************************/
+}

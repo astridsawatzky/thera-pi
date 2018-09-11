@@ -161,7 +161,8 @@ public class RehaUrlaubCalc {
 		}
 		final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				xspredsheetDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xspredsheetDocument.getFrame().setFocus();
 			}

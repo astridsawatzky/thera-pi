@@ -171,7 +171,8 @@ public class RehaKassenbuch implements WindowListener {
 	
 	public void starteDB(){
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				DatenbankStarten dbstart = new DatenbankStarten();
 				dbstart.run(); 			
 			}
@@ -236,7 +237,8 @@ public class RehaKassenbuch implements WindowListener {
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	

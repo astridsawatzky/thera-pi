@@ -30,6 +30,7 @@ public class MyTreeTableCellRenderer extends JXTreeTable implements TableCellRen
     /**
      * Tree und Table muessen die gleiche Hoehe haben.
      */
+    @Override
     public void setRowHeight(int rowHeight) {
         if (rowHeight > 0) {
             super.setRowHeight(rowHeight);
@@ -42,6 +43,7 @@ public class MyTreeTableCellRenderer extends JXTreeTable implements TableCellRen
     /**
      * Tree muss die gleiche Hoehe haben wie Table.
      */
+    @Override
     public void setBounds(int x, int y, int w, int h) {
         super.setBounds(x, 0, w, treeTable.getHeight());
     }
@@ -49,6 +51,7 @@ public class MyTreeTableCellRenderer extends JXTreeTable implements TableCellRen
     /**
      * Sorgt fuer die Einrueckung der Ordner.
      */
+    @Override
     public void paint(Graphics g) {
         g.translate(0, -visibleRow * getRowHeight());
          

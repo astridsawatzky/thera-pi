@@ -37,7 +37,8 @@ public class AktiveFenster {
 				Fenster.removeElementAt(i);
 				Fenster.trimToSize();
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run()
+				 	   @Override
+                    public  void run()
 				 	   {
 				 			////System.out.println("Total Memory  = "+Runtime.getRuntime().totalMemory());    
 				 		    ////System.out.println("Free Memory   = "+Runtime.getRuntime().freeMemory());
@@ -103,7 +104,8 @@ class AlleFenster implements Comparable<AlleFenster> {
 	    fposition = f;
 	    feltern = e;
 	  }
-	  public int compareTo(AlleFenster o) {
+	  @Override
+    public int compareTo(AlleFenster o) {
 	      int result = fname.compareTo(o.fname);
 	      if (0 == result) {
 	      }

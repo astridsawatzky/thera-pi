@@ -90,7 +90,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		setLayout(new BorderLayout());
 		add(getContent(),BorderLayout.CENTER);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
@@ -98,7 +99,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				suchen.requestFocus();
 			}
 		});
@@ -458,7 +460,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 	
 	public void benachrichtigeReha(final int i){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				String patintern = tab.getValueAt(i, 13).toString().trim();
 				if(!patintern.equals("")){
 					new SocketClient().setzeRehaNachricht(OffenePosten.rehaReversePort,"OffenePosten#"+RehaIOMessages.MUST_PATFIND+"#"+patintern);
@@ -468,7 +471,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 	}
 	public void benachrichtigeBillPanel(final int i){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				eltern.setOnBillPanel(tab.getValueAt(i, 0).toString().trim());
 			}
 		});
@@ -481,7 +485,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			switch(columnIndex){
 			case 0:
 			case 15:
@@ -509,7 +514,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			
 			if(col < 15){
 				return true;				
@@ -612,7 +618,8 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 	/*****************************************************/
 	class OPListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){

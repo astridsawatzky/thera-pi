@@ -105,7 +105,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		add(JCompTools.getTransparentScrollPane(allesrein),BorderLayout.CENTER);
 		validate();
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				new SwingWorker<Void,Void>(){
 
 					@Override
@@ -145,7 +146,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		//tabbericht.setEditable(true);
 		tabbericht.setSortable(false);
 		tabbericht.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				if(arg0.getClickCount()==2){
 					if(!Rechte.hatRecht(Rechte.Gutachten_editvoll, true)){
@@ -279,7 +281,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 							final int fanz = anz;
 							try{
 								SwingUtilities.invokeLater(new Runnable(){
-									public void run(){
+									@Override
+                                    public void run(){
 										Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(fanz,"Gutachten"));	
 									}
 								});
@@ -532,7 +535,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		}
 
 		//@Override
-		public void paintComponent( Graphics g ) { 
+		@Override
+        public void paintComponent( Graphics g ) { 
 			super.paintComponent( g );
 			Graphics2D g2d = (Graphics2D)g;
 			
@@ -550,7 +554,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==1){
 				   //return JLabel.class;}
 			   		return String.class;}
@@ -560,7 +565,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 	        //return (columnIndex == 0) ? Boolean.class : String.class;
 	    }
 
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        //Note that the data/cell address is constant,
 		        //no matter where the cell appears onscreen.
 		    	return false;

@@ -65,7 +65,8 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 	     add(getVorlagenSeite(),BorderLayout.CENTER);
 	     add(getKnopfPanel(),BorderLayout.SOUTH);
 	     SwingUtilities.invokeLater(new Runnable(){
-	    	 public void run(){
+	    	 @Override
+            public void run(){
 	    		 validate();		 
 	    	 }
 	     });
@@ -253,7 +254,8 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 			int rows = modprog.getRowCount(); 
 			final int xrows = rows -1;
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run(){
+			 	   @Override
+                public  void run(){
 			 		  progtab.requestFocus();
 			 		  progtab.setRowSelectionInterval(xrows, xrows);
 			 		  startCellEditing(progtab,xrows);
@@ -286,7 +288,8 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 		final int xrows = row;
 		final JXTable xtable = table;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		  xtable.scrollRowToVisible(xrows);
 		 				xtable.editCellAt(xrows, 0);
 		 	   }
@@ -336,6 +339,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
    	File file = new File(lpfad);	
     chooser.setCurrentDirectory(file);
     chooser.addPropertyChangeListener(new PropertyChangeListener() {
+        @Override
         public void propertyChange(PropertyChangeEvent e) {
             if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                     || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
@@ -374,12 +378,14 @@ class MyProgTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		 return String.class;
     }
 	
 
- public boolean isCellEditable(int row, int col) {
+ @Override
+public boolean isCellEditable(int row, int col) {
  	
  	return true;
  }

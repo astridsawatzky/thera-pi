@@ -12,7 +12,8 @@ public class JLabelRenderer extends JLabel implements TableCellRenderer{
 	      setOpaque( true );
 	   }
 	   
-	   public Component getTableCellRendererComponent(JTable table, Object value,
+	   @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
 	         boolean isSelected, boolean hasFocus, int row, int column) {
 	      
 	      // die normalen Farben

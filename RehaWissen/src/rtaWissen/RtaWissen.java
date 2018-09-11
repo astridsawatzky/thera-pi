@@ -55,6 +55,7 @@ public class RtaWissen extends JXPanel implements KeyListener,ComponentListener,
 		setBorder(null);
 		list = new ActionListener()
         {
+            @Override
             public void actionPerformed( ActionEvent e )
             {
             	if(e.getActionCommand().equals("SourceCode")){
@@ -116,7 +117,8 @@ public class RtaWissen extends JXPanel implements KeyListener,ComponentListener,
 				      }
 				      */
 		   		
-				      public void loadingProgressChanged(WebBrowserEvent e){
+				      @Override
+                    public void loadingProgressChanged(WebBrowserEvent e){
 				    	  if(highlight){
 					    	  String suchen = BrowserFenster.getSuchkriterium();
 					    	  if(! suchen.equals("")){
@@ -125,7 +127,8 @@ public class RtaWissen extends JXPanel implements KeyListener,ComponentListener,
 				    	  }
 				      }
 
-				      public void locationChanged(WebBrowserNavigationEvent e){
+				      @Override
+                    public void locationChanged(WebBrowserNavigationEvent e){
 				    	  //System.out.println(e);
 				    	  if(highlight){
 				    	  }
@@ -145,7 +148,8 @@ public class RtaWissen extends JXPanel implements KeyListener,ComponentListener,
       		   add(webBrowser,BorderLayout.CENTER);
       		   //NativeInterface.runEventPump();
       			SwingUtilities.invokeLater(new Runnable(){
-    				public  void run(){
+    				@Override
+                    public  void run(){
        	      		   webBrowser.navigate(Url);
        	      		   //String str = webBrowser.getHTMLContent();
        	      		   //System.out.println(str);
@@ -290,6 +294,7 @@ class ReloadTask   extends TimerTask
 }
 
 
+@Override
 public void actionPerformed(ActionEvent e) {
 	// TODO Auto-generated method stub
 	JOptionPane.showMessageDialog(null,"Action Performed");
@@ -323,7 +328,8 @@ public void neuesSourceFenster(){
 	  /* Standard main method to try that test as a standalone application. */  
 	    NativeInterface.open();   
 	    SwingUtilities.invokeLater(new Runnable() {   
-	      public void run() {  
+	      @Override
+        public void run() {  
 	    	StringBuffer buf = new StringBuffer();
 	    	buf.append(webBro.getHTMLContent());
 	        JDialog frame = new JDialog();   
@@ -342,7 +348,8 @@ public void neuesSourceFenster(){
 
 interface MeinListener extends ActionListener{
 	
-	public void actionPerformed(ActionEvent e);
+	@Override
+    public void actionPerformed(ActionEvent e);
 	
 	
 }

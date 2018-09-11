@@ -7,7 +7,6 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,7 +40,6 @@ import environment.Path;
 import events.PatStammEvent;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import hauptFenster.SuchenDialog;
 import krankenKasse.KassenFormulare;
@@ -56,7 +54,7 @@ import stammDatenTools.ZuzahlTools;
 import systemEinstellungen.SystemConfig;
 
 public class PatientHauptLogic {
-	
+
 	public PatientHauptPanel patientHauptPanel = null;
 	private String lastseek = "";
 	public boolean neuDlgOffen = false;
@@ -73,7 +71,7 @@ public class PatientHauptLogic {
 	String xfeldname = "";
 	int idialnr = -1;
 	public PatientHauptLogic(PatientHauptPanel patHauptPanel){
-		
+
 		this.patientHauptPanel = patHauptPanel;
 		new SwingWorker<Void,Void>(){
 			@Override
@@ -81,28 +79,29 @@ public class PatientHauptLogic {
 				try{
 					ZuzahlTools.setZzIcons(); // soll peu-a-peu 'die da' ersetzen:
 					patientHauptPanel.imgzuzahl[0] = SystemConfig.hmSysIcons.get("zuzahlfrei");
-					patientHauptPanel.imgzuzahl[1] = SystemConfig.hmSysIcons.get("zuzahlok");			
+					patientHauptPanel.imgzuzahl[1] = SystemConfig.hmSysIcons.get("zuzahlok");
 					patientHauptPanel.imgzuzahl[2] = SystemConfig.hmSysIcons.get("zuzahlnichtok");
 					patientHauptPanel.imgzuzahl[3] = SystemConfig.hmSysIcons.get("kleinehilfe");
 
 					//imgrezstatus[0] = SystemConfig.hmSysIcons.get("statusoffen");
 					patientHauptPanel.imgrezstatus[0] = null;
 					patientHauptPanel.imgrezstatus[1] = SystemConfig.hmSysIcons.get("statuszu");
-				
+
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
 				return null;
 			}
-		}.execute();	
+		}.execute();
 		SwingUtilities.invokeLater(new Runnable(){
-			public synchronized void run(){
+			@Override
+            public synchronized void run(){
 				KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.ALT_MASK);
 				patientHauptPanel.getInstance().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doSuchen");
 				patientHauptPanel.getActionMap().put("doSuchen", new PatientAction());
 				stroke = KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.ALT_MASK);
 				patientHauptPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doNeu");
-				patientHauptPanel.getActionMap().put("doNeu", new PatientAction());	
+				patientHauptPanel.getActionMap().put("doNeu", new PatientAction());
 				stroke = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.ALT_MASK);
 				patientHauptPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doEdit");
 				patientHauptPanel.getActionMap().put("doEdit", new PatientAction());
@@ -119,14 +118,14 @@ public class PatientHauptLogic {
 
 	   	  	}
 		});
-		
+
 	}
 	public void fireAufraeumen(){
 		formularid.listenerLoeschen();
 		formularid = null;
 		patientHauptPanel = null;
 	}
-	
+
 	/***
 	 * SuchenDialog aufrufen
 	 */
@@ -134,9 +133,9 @@ public class PatientHauptLogic {
 		String sstmt = "", cmd = "", strAnzahl = "", strStamm = "";
 		Statement stmt = null;
 		ResultSet rs = null;
-		
+
 		if(patientHauptPanel.tfsuchen.getText().trim().equals("")){  // Wenn keine Suchvorgaben eingetippt worden sind:
-			
+
 			// Lemmi 20101212: Anzahl der zu erwartenden Datensätze eingebaut
 			int suchart = patientHauptPanel.jcom.getSelectedIndex();
 			//if(suchart==6){
@@ -149,7 +148,7 @@ public class PatientHauptLogic {
 			}else{
 				sstmt = "SELECT COUNT(*) from pat5";
 				strStamm = "Patientenstamm";
-				
+
 				// Lemmi 20101212: Anzahl der zu erwartenden Datensätze ermitteln via DB-Abfrage
 				try {
 					stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -159,7 +158,7 @@ public class PatientHauptLogic {
 						rs.absolute(1); // moves the cursor to the 1st row of rs
 						strAnzahl = rs.getString(1);
 					}catch(SQLException ev){
-					}	
+					}
 				}catch(SQLException ex) {
 				}
 
@@ -179,13 +178,13 @@ public class PatientHauptLogic {
 						}
 					}
 				}
-				
+
 				// Lemmi 20101212: Erstellung der Meldung mit Anzahl der Datensätze
 				cmd = "<html>Sie haben <b>kein</b> Suchkriterium eingegeben.<br>"+
 				"Das bedeutet Sie laden den <b>kompletten " + strStamm + "!!!</b><br><br>"+
 				"Es sind <b>" + strAnzahl + " </b>Datensätze zu erwarten.<br>"+
 				"<b>Wollen Sie das wirklich?</b>";
-				
+
 				// Abfrage-Dialog anzeigen und Ergebnis der User-Eingabe abfragen
 				int anfrage = JOptionPane.showConfirmDialog(null, cmd,"Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 				if(anfrage == JOptionPane.NO_OPTION){
@@ -196,7 +195,7 @@ public class PatientHauptLogic {
 		if (patientHauptPanel.sucheComponent != null){
 			Point thispoint = patientHauptPanel.tfsuchen.getLocationOnScreen();
 			((SuchenDialog) patientHauptPanel.sucheComponent).setLocation(thispoint.x-60, thispoint.y+25);
-		
+
 			if(! patientHauptPanel.tfsuchen.getText().trim().equals(lastseek.trim())){
 				((SuchenDialog) patientHauptPanel.sucheComponent).suchDasDing(patientHauptPanel.tfsuchen.getText());
 				lastseek = patientHauptPanel.tfsuchen.getText().trim();
@@ -206,7 +205,7 @@ public class PatientHauptLogic {
 				lastrow = -1;
 				((SuchenDialog) patientHauptPanel.sucheComponent).setVisible(true);
 			}
-			
+
 		}else{
 			//System.out.println("Lastseek = "+lastseek.trim()+" / aktuelle Suche = "+patientHauptPanel.tfsuchen.getText().trim());
 			if(! patientHauptPanel.tfsuchen.getText().trim().equals(lastseek.trim())){
@@ -229,11 +228,12 @@ public class PatientHauptLogic {
 
 	class PatientAction extends AbstractAction {
 	    /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 6195808468235028392L;
 
-		public void actionPerformed(ActionEvent e) {
+		@Override
+        public void actionPerformed(ActionEvent e) {
 	        ////System.out.println("Patient Action = "+e.getActionCommand());
 	        ////System.out.println(e);
 	        if(e.getActionCommand().equals("f")){
@@ -245,10 +245,10 @@ public class PatientHauptLogic {
 	        if(e.getActionCommand().equals("e")){
 	        	patEdit();
 
-	        }	            
+	        }
 	        if(e.getActionCommand().equals("l")){
 	       		patDelete();
-	        }	            
+	        }
 	        if(e.getActionCommand().equals("b")){
 	        	patStarteFormulare();
 	        }
@@ -257,10 +257,10 @@ public class PatientHauptLogic {
 	        }
 	        if(e.getActionCommand().equals("korrigieren")){
 	        	neuanlagePatient(false, xfeldname);
-	        }	
+	        }
 	    }
 	}
-	
+
 	public void patNeu(){
 		if(!Rechte.hatRecht(Rechte.Patient_anlegen, true)){
 			return;
@@ -271,7 +271,7 @@ public class PatientHauptLogic {
 		if(Rechte.hatRecht(Rechte.Patient_editteil, false) ||
 				Rechte.hatRecht(Rechte.Patient_editvoll, false)){
 			if(!patientHauptPanel.aktPatID.equals("")){
-				neuanlagePatient(false,"");	
+				neuanlagePatient(false,"");
 			}else{
 				JOptionPane.showMessageDialog(null, "Welchen Patient bitteschön wollen Sie editieren?");
 				setzeFocus();
@@ -293,7 +293,7 @@ public class PatientHauptLogic {
 			if(! patientHauptPanel.aktPatID.equals("")){
 				//hier die Dialexistenz
 				if(SystemConfig.activateSMS && (teles.contains(feldname) )){
-					//hier die Dialberechtigung 
+					//hier die Dialberechtigung
 					if(SystemConfig.hmSMS.get("DIAL").equals("1")){
 						//nur wenn berechtigt Popup zeigen
 						//Hierher Popupaufruf
@@ -307,7 +307,7 @@ public class PatientHauptLogic {
 									ZeigePopupMenu(sdialnr,MouseInfo.getPointerInfo().getLocation());
 									return null;
 								}
-								
+
 							}.execute();
 						}else{
 							neuanlagePatient(false, feldname);
@@ -316,20 +316,20 @@ public class PatientHauptLogic {
 						neuanlagePatient(false, feldname);
 					}
 				}else{
-					neuanlagePatient(false, feldname);	
+					neuanlagePatient(false, feldname);
 				}
-						
+
 			}
 		}else{
 			Rechte.hatRecht(Rechte.Patient_editvoll, true);
 		}
 	}
-	
+
 	public void dialOut(String number){
 		String b = ":++:";
 		final StringBuffer buf = new StringBuffer();
 		Reha.lastCommId = Long.toString(System.currentTimeMillis());
-		Reha.lastCommAction = "DIAL-OUT:TO:"+number+":"; 
+		Reha.lastCommAction = "DIAL-OUT:TO:"+number+":";
 		buf.append(Reha.lastCommId);
 		buf.append(b);
 		buf.append(SystemConfig.dieseMaschine);
@@ -350,14 +350,14 @@ public class PatientHauptLogic {
 				}
 				return null;
 			}
-		}.execute();		
+		}.execute();
 	}
-	
+
 	private void ZeigePopupMenu(String nummer,Point p){
 		JPopupMenu jPop = getPhonePopupMenu(nummer);
-		jPop.show( Reha.thisFrame, (int)p.getX()+25, (int)p.getY() ); 
+		jPop.show( Reha.thisFrame, (int)p.getX()+25, (int)p.getY() );
 	}
-	
+
 	private JPopupMenu getPhonePopupMenu(String nummer){
 		JPopupMenu jPopupMenu = new JPopupMenu();
 
@@ -366,12 +366,12 @@ public class PatientHauptLogic {
 		item.addActionListener(new PatientAction());
 		jPopupMenu.add(item);
 		jPopupMenu.addSeparator();
-		
+
 		item = new JMenuItem("Patientenstamm editieren");
 		item.setActionCommand("korrigieren");
 		item.addActionListener(new PatientAction());
 		jPopupMenu.add(item);
-	
+
 		return jPopupMenu;
 	}
 	public void patDelete(){
@@ -387,7 +387,8 @@ public class PatientHauptLogic {
 	    	}
 	    	final String spatid = String.valueOf(patientHauptPanel.aktPatID);
 	    	new Thread(){
-	    		public void run(){
+	    		@Override
+                public void run(){
 	    			String stmt = "delete from pat5 where pat_intern='"+spatid+"'";
 	    			SqlInfo.sqlAusfuehren(stmt);
 	    			stmt = "delete from patbild where pat_intern='"+spatid+"' LIMIT 1";
@@ -414,7 +415,7 @@ public class PatientHauptLogic {
 			JOptionPane.showMessageDialog(null, "Welchen Patient bitteschön wollen Sie löschen?");
 			setzeFocus();
 			return;
-		}		
+		}
 	}
 	private void allesAufNull(){
 		/******************************************************************************/
@@ -453,10 +454,10 @@ public class PatientHauptLogic {
 						public void run() {
 							xkf.aufErsteElement();
 						}
-						
+
 					});
 					kf.setVisible(true);
-					
+
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -473,10 +474,10 @@ public class PatientHauptLogic {
 					kf=null;
 					return null;
 				}
-				
+
 			}.execute();
 		}
-		
+
 
 	public void holeFormulare(){
 		new SwingWorker<Void,Void>(){
@@ -485,15 +486,15 @@ public class PatientHauptLogic {
 				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "patient.ini");
 				int forms = inif.getIntegerProperty("Formulare", "PatientFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
-					titel.add(inif.getStringProperty("Formulare","PFormularText"+i));			
+					titel.add(inif.getStringProperty("Formulare","PFormularText"+i));
 					formular.add(inif.getStringProperty("Formulare","PFormularName"+i));
-				}	
+				}
 				return null;
 			}
 		}.execute();
 	}
-	
-	
+
+
 	public void neuanlagePatient(boolean lneu,String feldname){
 		if(neuDlgOffen){
 			return;
@@ -505,10 +506,10 @@ public class PatientHauptLogic {
 		pinPanel.getGruen().setVisible(false);
 		neuPat.setPinPanel(pinPanel);
 		if(lneu){
-			neuPat.getSmartTitledPanel().setTitle("Patient Neuanlage");	
+			neuPat.getSmartTitledPanel().setTitle("Patient Neuanlage");
 		}else{
 			neuPat.getSmartTitledPanel().setTitle("Patient ändern");
-			//neuPat.getSmartTitledPanel().setTitle("editieren ---> "+ptfield[2].getText().trim()+", "+ptfield[3].getText().trim()+", geboren am: "+ptfield[4].getText().trim());		
+			//neuPat.getSmartTitledPanel().setTitle("editieren ---> "+ptfield[2].getText().trim()+", "+ptfield[3].getText().trim()+", geboren am: "+ptfield[4].getText().trim());
 		}
 		neuPat.setSize(960,600);
 		neuPat.setPreferredSize(new Dimension(960,600));
@@ -530,12 +531,12 @@ public class PatientHauptLogic {
 	    pinPanel = null;
 		//System.out.println("Pat Neu/ändern ist disposed");
 		neuDlgOffen = false;
-		
+
 
 	}
-	class PatNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+	class PatNeuDlg extends RehaSmartDialog{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = -7706110755275876905L;
 		private RehaTPEventClass rtp = null;
@@ -545,7 +546,8 @@ public class PatientHauptLogic {
 			rtp = new RehaTPEventClass();
 			rtp.addRehaTPEventListener(this);
 		}
-		public void rehaTPEventOccurred(RehaTPEvent evt) {
+		@Override
+        public void rehaTPEventOccurred(RehaTPEvent evt) {
 			try{
 				if(evt.getDetails()[0] != null){
 					if(evt.getDetails()[0].equals(this.getName())){
@@ -554,30 +556,31 @@ public class PatientHauptLogic {
 						rtp = null;
 						this.dispose();
 						super.dispose();
-						//System.out.println("****************Patient Neu/ändern -> Listener entfernt**************");				
+						//System.out.println("****************Patient Neu/ändern -> Listener entfernt**************");
 					}
 				}
 			}catch(NullPointerException ne){
 				//System.out.println("In PatNeuanlage" +evt);
 			}
 		}
-		public void windowClosed(WindowEvent arg0) {
+		@Override
+        public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
-				this.setVisible(false);			
-				rtp.removeRehaTPEventListener(this);		
+				this.setVisible(false);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				dispose();
 				super.dispose();
 				//System.out.println("****************Patient Neu/ändern -> Listener entfernt (Closed)**********");
 			}
 		}
-		
-		
+
+
 	}
-	
-	class PatFotoDlg extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+
+	class PatFotoDlg extends RehaSmartDialog{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = -7706110755275876905L;
 		private RehaTPEventClass rtp = null;
@@ -587,7 +590,8 @@ public class PatientHauptLogic {
 			rtp = new RehaTPEventClass();
 			rtp.addRehaTPEventListener(this);
 		}
-		public void rehaTPEventOccurred(RehaTPEvent evt) {
+		@Override
+        public void rehaTPEventOccurred(RehaTPEvent evt) {
 			try{
 				if(evt.getDetails()[0] != null){
 					if(evt.getDetails()[0].equals(this.getName())){
@@ -602,10 +606,11 @@ public class PatientHauptLogic {
 
 			}
 		}
-		public void windowClosed(WindowEvent arg0) {
+		@Override
+        public void windowClosed(WindowEvent arg0) {
 			if(rtp != null){
-				this.setVisible(false);			
-				rtp.removeRehaTPEventListener(this);		
+				this.setVisible(false);
+				rtp.removeRehaTPEventListener(this);
 				rtp = null;
 				dispose();
 				super.dispose();
@@ -625,7 +630,7 @@ public class PatientHauptLogic {
 		foto.setPinPanel(pinPanel);
 		foto.setPinPanel(pinPanel);
 		JXPanel pan = new JXPanel(new BorderLayout());
-		
+
 		JLabel lab = new JLabel();
 		lab.setIcon(new ImageIcon(buf));
 		pan.add(lab);
@@ -642,11 +647,11 @@ public class PatientHauptLogic {
 		foto.setVisible(true);
 		buf = null;
 		foto = null;
-		
-		
+
+
 	}
 
-	
+
 	public void arztListeSpeichernVector(Vector<?> vec, boolean inNeu, String xpatintern){
 		String aliste = "";
 		for(int i = 0;i < vec.size();i++){
@@ -657,7 +662,7 @@ public class PatientHauptLogic {
 		//System.out.println("Sets = "+sets +" pat_Intern = "+xpatintern);
 		if(Reha.thisClass.patpanel.aktPatID.equals(xpatintern)){
 			//System.out.println("Länge des patDaten.Arrays = "+Reha.thisClass.patpanel.patDaten.size());
-			Reha.thisClass.patpanel.patDaten.set(63,aliste);		
+			Reha.thisClass.patpanel.patDaten.set(63,aliste);
 		}
 	}
 	public void arztListeSpeichernString(String aliste,boolean inNeu,String xpatintern){
@@ -665,15 +670,15 @@ public class PatientHauptLogic {
 		SqlInfo.aktualisiereSaetze("pat5",sets , "pat_intern='"+xpatintern+"'");
 		//System.out.println("Sets = "+sets +" pat_Intern = "+xpatintern);
 		if(Reha.thisClass.patpanel.aktPatID.equals(xpatintern)){
-			Reha.thisClass.patpanel.patDaten.set(63,aliste);		
+			Reha.thisClass.patpanel.patDaten.set(63,aliste);
 		}
 	}
-	
-	
+
+
 	public void patStammEventOccurred(PatStammEvent evt) {
 		////System.out.println("Event im Neuen PatStamm = "+evt);
 		////System.out.println("Detail 0 = "+evt.getDetails()[0]);
-		////System.out.println("Detail 1 = "+evt.getDetails()[1]);	
+		////System.out.println("Detail 1 = "+evt.getDetails()[1]);
 		if(evt.getDetails()[0].equals("#PATSUCHEN")){
 			final String xpatint = evt.getDetails()[1].trim();
 			final String xrez = evt.getDetails()[2].trim();
@@ -681,18 +686,20 @@ public class PatientHauptLogic {
 			// Anzeigedaten holen
 			//System.out.println("In Thera-Pi PatID="+xpatint+" Rezeptnummer="+xrez);
 			new Thread(){
-				public void run(){
+				@Override
+                public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
 							try{
-								datenHolen(xpatint);	
+								datenHolen(xpatint);
 							}catch(Exception ex){
 								ex.printStackTrace();
 							}
-							
+
 							SwingUtilities.invokeLater(new Runnable(){
-							 	   public  void run()
+							 	   @Override
+                                public  void run()
 							 	   {
 							 		   try{
 								 		   String titel = "Patient: "+Reha.thisClass.patpanel.patDaten.get(2)+", "+
@@ -712,14 +719,15 @@ public class PatientHauptLogic {
 					}.execute();
 				}
 			}.start();
-			// kmplette Patdaten holen		
+			// kmplette Patdaten holen
 			//new Thread(){
 				//public void run(){
 				//}
 			//}.start();
 			// Rezeptdaten holen
 			new Thread(){
-				public void run(){		
+				@Override
+                public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -733,7 +741,7 @@ public class PatientHauptLogic {
 							}
 							if(!xrez.contains("#REZHOLEN-")){
 								if(xrez.trim().equals("")){
-									patientHauptPanel.aktRezept.holeRezepte(xpatint,"");									
+									patientHauptPanel.aktRezept.holeRezepte(xpatint,"");
 								}else{
 									patientHauptPanel.aktRezept.holeRezepte(xpatint,xrez.trim());
 								}
@@ -748,7 +756,8 @@ public class PatientHauptLogic {
 			}.start();
 			// Historie holen
 			new Thread(){
-				public void run(){		
+				@Override
+                public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -764,12 +773,13 @@ public class PatientHauptLogic {
 			}.start();
 			// Berichte holen
 			new Thread(){
-				public void run(){		
+				@Override
+                public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
 							try{
-								patientHauptPanel.berichte.holeBerichte(xpatint,"");								
+								patientHauptPanel.berichte.holeBerichte(xpatint,"");
 							}catch(Exception ex){
 								//ex.printStackTrace();
 							}
@@ -780,7 +790,8 @@ public class PatientHauptLogic {
 			}.start();
 			// Dokumentation holen
 			new Thread(){
-				public void run(){		
+				@Override
+                public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -788,7 +799,7 @@ public class PatientHauptLogic {
 								patientHauptPanel.dokumentation.holeDokus(xpatint,"");
 							}catch(Exception ex){
 								//ex.printStackTrace();
-							}	
+							}
 							return null;
 						}
 					}.execute();
@@ -796,15 +807,16 @@ public class PatientHauptLogic {
 			}.start();
 			// Gutachten (E-Berichte) holen
 			new Thread(){
-				public void run(){		
+				@Override
+                public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
 							try{
-								patientHauptPanel.gutachten.holeGutachten(xpatint,"");	
+								patientHauptPanel.gutachten.holeGutachten(xpatint,"");
 							}catch(Exception ex){
 								//ex.printStackTrace();
-							}	
+							}
 							return null;
 						}
 					}.execute();
@@ -813,12 +825,12 @@ public class PatientHauptLogic {
 			/*
 			//auf offene RGR-Prüfen
 			new Thread(){
-				public void run(){		
+				public void run(){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
 							try{
-								patientHauptPanel.holeWichtigeInfos(xpatint,"");								
+								patientHauptPanel.holeWichtigeInfos(xpatint,"");
 							}catch(Exception ex){
 								ex.printStackTrace();
 							}
@@ -846,17 +858,17 @@ public class PatientHauptLogic {
 					    r.gc();
 						return null;
 					}
-					
+
 				}.execute();
 			}
 		}
 		if(evt.getDetails()[0].equals("#PATEDIT")){
-			//neuanlagePatient(false,"");	
+			//neuanlagePatient(false,"");
 		}
 		if(evt.getDetails()[0].equals("#CLOSING")){
 			if(patientHauptPanel.sucheComponent != null){
 				//patientHauptPanel.ptp.removePatStammEventListener((PatStammEventListener) this);
-				((SuchenDialog) patientHauptPanel.sucheComponent).dispose();	
+				((SuchenDialog) patientHauptPanel.sucheComponent).dispose();
 			}
 		}
 		if(evt.getDetails()[0].equals("#FOCUSIEREN")){
@@ -880,31 +892,35 @@ public class PatientHauptLogic {
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 			 		  if(! patientHauptPanel.tfsuchen.hasFocus()){
 			 			  if(! patientHauptPanel.patientInternal.getActive()){
 			 				 patientHauptPanel.patientInternal.activateInternal();
 			 				  SwingUtilities.invokeLater(new Runnable(){
-			 					  public  void run(){
+			 					  @Override
+                                public  void run(){
 			 						 patientHauptPanel.tfsuchen.requestFocus();
 			 					  }
-			 				  }); 	   	
+			 				  });
 		 				  }else{
 		 					 SwingUtilities.invokeLater(new Runnable(){
-								  public  void run(){
+								  @Override
+                                public  void run(){
 									  patientHauptPanel.tfsuchen.requestFocus();
 								  }
-		 					 }); 	   	
+		 					 });
 		 				  }
 					  }else{
 						  SwingUtilities.invokeLater(new Runnable(){
-							  public  void run(){
+							  @Override
+                            public  void run(){
 								  patientHauptPanel.tfsuchen.requestFocus();
 							  }
-						  }); 	   	
+						  });
 					  }
 			 	   }
-		}); 	   	
+		});
 	}
 
 	public void datenHolen(String patint){
@@ -912,38 +928,38 @@ public class PatientHauptLogic {
 			Reha.thisClass.patpanel.patDatenOk = false;
 			Reha.thisClass.patpanel.patDaten = SqlInfo.holeSatz("pat5"," * ", "PAT_INTERN ='"+patint+"'", Arrays.asList(new String[] {}) );
 			String stmt = "select id from rgaffaktura where roffen > '0' and pat_intern = '"+patint+"' LIMIT 1";
-			
+
 			if(SqlInfo.holeFelder(stmt).size() > 0){
 				Reha.bRGAFoffen = true;
 			}else{
 				Reha.bRGAFoffen = false;
 			}
-			
+
 			//System.out.println("Größe der Daten = "+Reha.thisClass.patpanel.patDaten.size());
 			if(Reha.thisClass.patpanel.patDaten.size() >= 71){
 				if( (Reha.thisClass.patpanel.patDaten.get(57)+Reha.thisClass.patpanel.patDaten.get(58)+Reha.thisClass.patpanel.patDaten.get(59)+
 						Reha.thisClass.patpanel.patDaten.get(60)+Reha.thisClass.patpanel.patDaten.get(61)+Reha.thisClass.patpanel.patDaten.get(62)).contains("T")){
 					Reha.bHatMerkmale=true;
 				}else{
-					Reha.bHatMerkmale=false;					
+					Reha.bHatMerkmale=false;
 				}
-				
+
 				if(Reha.thisClass.patpanel.patDaten.get(65).equals("")){
 					Reha.thisClass.patpanel.pmemo[0].setText("");
 				}else{
-					Reha.thisClass.patpanel.pmemo[0].setText(Reha.thisClass.patpanel.patDaten.get(65));				
+					Reha.thisClass.patpanel.pmemo[0].setText(Reha.thisClass.patpanel.patDaten.get(65));
 				}
 				if(Reha.thisClass.patpanel.patDaten.get(64).equals("")){
 					Reha.thisClass.patpanel.pmemo[1].setText("");
 				}else{
-					Reha.thisClass.patpanel.pmemo[1].setText(Reha.thisClass.patpanel.patDaten.get(64));				
+					Reha.thisClass.patpanel.pmemo[1].setText(Reha.thisClass.patpanel.patDaten.get(64));
 				}
 				Reha.thisClass.patpanel.autoPatid = Integer.parseInt(Reha.thisClass.patpanel.patDaten.get(66));
 				Reha.thisClass.patpanel.aid = StringTools.ZahlTest(Reha.thisClass.patpanel.patDaten.get(67));
 				Reha.thisClass.patpanel.kid = StringTools.ZahlTest(Reha.thisClass.patpanel.patDaten.get(68));
 				Reha.thisClass.patpanel.patDatenOk = true;
 				Reha.thisClass.patpanel.getStammDaten().parseHTML(true);
-				
+
 			}else{
 				JOptionPane.showMessageDialog(null, "Fehler beim Einlesen der Patientendaten");
 				Reha.thisClass.patpanel.patDatenOk = false;
@@ -953,7 +969,7 @@ public class PatientHauptLogic {
 			ex.printStackTrace();
 			Reha.thisClass.patpanel.patDatenOk = true;
 		}
-		
+
 	}
 	private void macheAlleHashMaps(){
 		new SwingWorker<Void,Void>(){
@@ -982,6 +998,6 @@ public class PatientHauptLogic {
 			}
 		}.execute();
 	}
-	
-	
+
+
 }

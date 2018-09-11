@@ -87,14 +87,16 @@ public class Anmeldungen extends JXPanel{
 		this.content.setName(this.internal.getName());
 		//System.out.println("Name = "+getName());
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				tfs[0].requestFocus();
 			}
 		});
@@ -519,15 +521,18 @@ public class Anmeldungen extends JXPanel{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==0){return String.class;}
 			   else{return String.class;}
 		}
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	    	return true;
 	    }
-		public Object getValueAt(int rowIndex, int columnIndex) {
+		@Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
 			String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
 			Object result = null;
 			result = theData;

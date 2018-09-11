@@ -20,7 +20,7 @@ import com.sun.pdfview.PagePanel;
 
 /**
  * An example of using the PagePanel class to show PDFs. For more advanced
- * usage including navigation and zooming, look ad the 
+ * usage including navigation and zooming, look ad the
  * com.sun.pdfview.PDFViewer class.
  *
  * @author joshua.marinacci@sun.com
@@ -28,9 +28,9 @@ import com.sun.pdfview.PagePanel;
 public class PdfDrucker {
 
     public static void setup(String sfile) throws IOException {
-    
+
         //set up the frame and panel
-    	
+
         JFrame frame = new JFrame("PDF Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         PagePanel panel = new PagePanel();
@@ -49,10 +49,10 @@ public class PdfDrucker {
         // show the first page
         PDFPage page = pdffile.getPage(0);
         panel.showPage(page);
-        
+
 /******************************
- * 
- *         
+ *
+ *
  */
         File f = new File(sfile);
         FileInputStream fis = new FileInputStream(f);
@@ -60,7 +60,7 @@ public class PdfDrucker {
         ByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
         PDFFile pdfFile = new PDFFile(bb); // Create PDF Print Page
         PDFPrintPage pages = new PDFPrintPage(pdfFile);
-         
+
         // Create Print Job
         PrinterJob pjob = PrinterJob.getPrinterJob();
         PageFormat pf = PrinterJob.getPrinterJob().defaultPage();
@@ -71,13 +71,13 @@ public class PdfDrucker {
 	    //int height = ( int ) paper.getHeight ( );
 	    //System.out.println("width:"+width+" / height:"+height);
         pf.setPaper(paper);
-        
+
         pjob.setJobName(f.getName());
         Book book = new Book();
         book.append(pages, pf, 1);
         //book.append(pages, pf, pdfFile.getNumPages());
         pjob.setPageable(book);
-         
+
         // Send print job to default printer
         try {
 			pjob.print();
@@ -85,10 +85,11 @@ public class PdfDrucker {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        raf.close();
 /*******************************
- * 
- *         
- *         
+ *
+ *
+ *
  */
     }
 

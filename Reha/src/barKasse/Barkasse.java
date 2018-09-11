@@ -79,14 +79,16 @@ public class Barkasse extends JXPanel implements ItemListener{
 			tfzahlen[i].addKeyListener(kl);
 		}
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				tfs[0].requestFocus();
 			}
 		});

@@ -82,7 +82,8 @@ public class KuerzelNeu extends JXDialog implements  WindowListener, KeyListener
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				if(!neu){
 					Object[] kdaten = eltern.getKuerzelDaten();
 					tfs[0].setText(String.valueOf(kdaten[0]));
@@ -97,7 +98,8 @@ public class KuerzelNeu extends JXDialog implements  WindowListener, KeyListener
 	private void setzeFocus(JComponent comp){
 		final JComponent xcomp = comp;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				xcomp.requestFocus();
 			}
 		});

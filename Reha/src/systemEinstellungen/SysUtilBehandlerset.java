@@ -76,7 +76,8 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
 
 		macheKollegen();
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				jscroll.setViewportView(getSetSeite());
 				jscroll.validate();
 				add(jscroll);
@@ -88,7 +89,8 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
 
 		//this.setBackground(Color.YELLOW);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				comboFuellen(true,0);
        	  	}
 		});

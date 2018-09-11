@@ -97,7 +97,8 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 	
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				suche.requestFocus();
 			}
 		});
@@ -162,7 +163,8 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==2 ){
 				   return Double.class;}
 			   else{
@@ -224,7 +226,8 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 								tabelle.setRowSelectionInterval(0,0);
 							}
 							SwingUtilities.invokeLater(new Runnable(){
-								public void run(){
+								@Override
+                                public void run(){
 									tabelle.requestFocus();		
 								}
 							});
@@ -355,7 +358,8 @@ public class ArtikelSuchenDialog extends RehaSmartDialog{
 		this.setVisible(false);
 		this.dispose();
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0].equals("ArtSuchen")){
 				this.setVisible(false);

@@ -276,6 +276,7 @@ public class CMSTest
         }
     }
     
+    @Override
     public TestResult perform()
     {
         TestResult  res = compressionTest();
@@ -294,6 +295,7 @@ public class CMSTest
         return signedTest();
     }
 
+    @Override
     public String getName()
     {
         return "CMS";

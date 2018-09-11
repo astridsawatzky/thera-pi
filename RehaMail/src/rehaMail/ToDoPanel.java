@@ -190,7 +190,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 				ToDoPanel.setTabTitel();
 				if(todomod.getRowCount()>=1){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							todotab.setRowSelectionInterval(0, 0);		
 						}
 					});
@@ -241,7 +242,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 	public void selectFirstRow(){
 		if(todomod.getRowCount()>=1){
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					todotab.setRowSelectionInterval(0, 0);		
 				}
 			});
@@ -374,7 +376,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 				String cmd = arg0.getActionCommand();
 				if(cmd.equals("newMail")){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
 							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","",false);
 							
@@ -396,7 +399,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 					}
 					
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							ByteArrayOutputStream out = new ByteArrayOutputStream();
 							//OutputStream out = null;
 							try {
@@ -513,7 +517,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 			this.checkForNewToDo(true);
 			if(todomod.getRowCount()>=1){
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						todotab.setRowSelectionInterval(0, 0);		
 					}
 				});
@@ -621,7 +626,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		this.attachmentFileName.clear();
 		this.attachmentFileName.trimToSize();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				Vector<Vector<String>> vec = SqlInfo.holeFelder("select file1,file2,file3 from todo where id ='"+aktId+"' Limit 1" );
 				for(int i = 0; i < vec.get(0).size();i++){
 					if(! vec.get(0).get(i).trim().equals("")){
@@ -651,7 +657,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		checkForNewToDo(true);
 		if(todomod.getRowCount()>=1){
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					todotab.setRowSelectionInterval(0, 0);		
 				}
 			});
@@ -686,7 +693,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 		todotab = new JXTable(todomod);
 		
 		todotab.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					if(!gelesen){
 						holeNeueMail();
@@ -722,7 +730,8 @@ public class ToDoPanel extends JXPanel implements TableModelListener, KeyListene
 	
 class ToDoListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){
@@ -742,7 +751,8 @@ class ToDoListSelectionHandler implements ListSelectionListener {
 	            		if(RehaMail.thisFrame != null)
 	            		RehaMail.thisFrame.setCursor(RehaMail.WAIT_CURSOR);
 	            		SwingUtilities.invokeLater(new Runnable(){
-	            			public void run(){
+	            			@Override
+                            public void run(){
 	            				panelRegeln();	            				
 	            			}
 	            		});
@@ -762,7 +772,8 @@ class ToDoTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		if(columnIndex==0){return String.class;}
 		if(columnIndex==1){return Boolean.class;}
 		if(columnIndex==2){return Date.class;}
@@ -773,7 +784,8 @@ class ToDoTableModel extends DefaultTableModel{
 	   return String.class;
  }
 
-	public boolean isCellEditable(int row, int col) {
+	@Override
+    public boolean isCellEditable(int row, int col) {
 		return false;
 	}
 	   
@@ -1004,6 +1016,7 @@ private String[] dateiDialog(String pfad){
     chooser.setCurrentDirectory(new File(RehaMail.progHome));
     chooser.setSelectedFile(file);
     chooser.addPropertyChangeListener(new PropertyChangeListener() {
+        @Override
         public void propertyChange(PropertyChangeEvent e) {
             if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                     || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {

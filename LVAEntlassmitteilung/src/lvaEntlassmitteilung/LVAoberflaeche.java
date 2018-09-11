@@ -48,7 +48,7 @@ import CommonTools.JRtaTextField;
 public class LVAoberflaeche extends JXPanel implements ListSelectionListener, ActionListener {
 	JRtaComboBox combobox1;
 	JComboBox combobox2;
-	JButton bnr1;	
+	JButton bnr1;
 	JButton bnr2;
 	JButton bnr3;
 	JButton bnr4;
@@ -58,44 +58,44 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 	public String returnString;
 	JRtaTextField[] tf1 = {null,null,null,null,null,null};
 	Vector<String> vec = new Vector<String>();
-	Vector<String> dummyvec = new Vector<String>();	
-	
+	Vector<String> dummyvec = new Vector<String>();
+
 	JLabel tagelab = null;
-	
+
 	public LVAoberflaeche(String rez_nr){
 		super();
-		
-			setOpaque(false);	
-	
+
+			setOpaque(false);
+
 
 		FormLayout layob1 = new FormLayout("1500dlu",
-				// 1  2     3    4  5           6           7          8            9     10    11   
+				// 1  2     3    4  5           6           7          8            9     10    11
 				"p,5dlu,p,5dlu,p");
 						CellConstraints cc = new CellConstraints();
 						setLayout(layob1);
-						
+
 						add(getAbschnitt1(rez_nr),cc.xy(1, 1));
 						add(getAbschnitt2(),cc.xy(1, 3));
 						add(getAbschnitt3(),cc.xy(1, 5));
-	
-	
+
+
 	}
-				
-		
+
+
 	private JPanel getAbschnitt1(String rez_nr){
 			FormLayout abschnitt1Pan = new FormLayout("10dlu,p,5dlu,40dlu,10dlu,p,p,40dlu,20dlu,2dlu,20dlu,2dlu,40dlu,10dlu",
 					"10dlu,p,p,p,3dlu,p,10dlu");
 			PanelBuilder pabschnitt1 = new PanelBuilder(abschnitt1Pan);
 			pabschnitt1.getPanel().setOpaque(false);
 			CellConstraints ca1 = new CellConstraints();
-		
+
 			JLabel lbl1 = new JLabel("<html><u>Rehadaten:</u>");
 			pabschnitt1.add(lbl1, ca1.xy(2,2));
 			JLabel lbl2 = new JLabel("Rehanummer:");
 			pabschnitt1.add(lbl2, ca1.xy(2,4));
 			tf1 [0] = new JRtaTextField("ZAHLEN",true);
 			if(rez_nr != null){
-				tf1[0].setText(rez_nr.replace("RH", ""));				
+				tf1[0].setText(rez_nr.replace("RH", ""));
 			}
 			pabschnitt1.add(tf1[0],ca1.xy(2,6));
 			bnr1 = new JButton("Connect");
@@ -106,7 +106,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			pabschnitt1.add(lbl3, ca1.xy(6,6));
 			tagelab = new JLabel("0");
 			pabschnitt1.add(tagelab, ca1.xy(7,6));
-			
+
 			bnr4 = new JButton("+");
 			bnr4.setActionCommand("plus");
 			bnr4.addActionListener(this);
@@ -120,13 +120,13 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			bnr6.addActionListener(this);
 			bnr6.setEnabled(false);
 			pabschnitt1.add(bnr6,ca1.xy(13,4));
-			
+
 			JLabel lbl4 = new JLabel("Anwesenheitsliste:");
 			pabschnitt1.add(lbl4, ca1.xyw(9,3,5));
 	     	combobox1 = new JRtaComboBox(new Vector<Vector<String>>(),0,1);
 			pabschnitt1.add(combobox1,ca1.xyw(9,6,5));
 
-		
+
 			pabschnitt1.getPanel().validate();
 			return pabschnitt1.getPanel();
 		}
@@ -140,7 +140,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		@Override
 		public void addActionListener(ActionListener arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
@@ -158,41 +158,41 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		@Override
 		public void removeActionListener(ActionListener arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void selectAll() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 		@Override
 		public void setItem(Object arg0) {
 			// TODO Auto-generated method stub
-			
+
 		}
-		
+
 	}
-	
+
 	private JPanel getAbschnitt2(){
 		FormLayout abschnitt2Pan = new FormLayout("10dlu,70dlu,5dlu,p,10dlu,70dlu,5dlu,p,10dlu,70dlu,5dlu,p,10dlu",
 				"10dlu,p,5dlu,p,5dlu,p,10dlu,p,5dlu,p,10dlu,p,5dlu,p,10dlu");
 		PanelBuilder pabschnitt2 = new PanelBuilder(abschnitt2Pan);
 		pabschnitt2.getPanel().setOpaque(false);
 		CellConstraints ca2 = new CellConstraints();
-	
-		
+
+
 		JLabel lbl1 = new JLabel("<html><u>Fomulardaten:</u>");
 		pabschnitt2.add(lbl1, ca2.xy(2,2));
 		JLabel lbl2 = new JLabel("Fomulartyp:");
 		pabschnitt2.add(lbl2, ca2.xy(2,4));
-		
+
 		combobox2 = new JComboBox(new String[] {"4-Zeilig mit Fahrtkosten","10-Zeilig o. Fahrtkosten"});
 		combobox2.setActionCommand("zeilig");
 		combobox2.addActionListener(this);
 		pabschnitt2.add(combobox2,ca2.xyw(2,6,5));
-		
+
 		//JLabel lbl3 = new JLabel();
 		JLabel lbl3 = new JLabel( "Abstand in Millimeter\nvom oberen Blattrand\nbis zur ersten\nDatumszeile:", null, SwingConstants.LEFT );
 		lbl3.setHorizontalTextPosition( SwingConstants.LEFT );
@@ -206,7 +206,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		lbl5.setHorizontalTextPosition( SwingConstants.LEFT );
 		lbl5.setUI( new MultiLineLabelUI() );
 		pabschnitt2.add(lbl5, ca2.xy(10,8));
-		
+
 		tf1 [1] = new JRtaTextField("D",true,"6.2","");
 		tf1[1].setText("174,00");
 		pabschnitt2.add(tf1[1],ca2.xy(2,10));
@@ -216,14 +216,14 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		tf1 [3] = new JRtaTextField("D",true,"6.2","");
 		tf1[3].setText("8,00");
 		pabschnitt2.add(tf1[3],ca2.xy(10,10));
-		
+
 		JLabel lbl6 = new JLabel("mm");
 		pabschnitt2.add(lbl6, ca2.xy(4,10));
 		JLabel lbl7 = new JLabel("mm");
 		pabschnitt2.add(lbl7, ca2.xy(8,10));
 		JLabel lbl8 = new JLabel("mm");
 		pabschnitt2.add(lbl8, ca2.xy(12,10));
-		
+
 		JLabel lbl9 = new JLabel("Länge der einzelnen\nDatumslinien:",null, SwingConstants.LEFT);
 		lbl9.setHorizontalTextPosition( SwingConstants.LEFT );
 		lbl9.setUI( new MultiLineLabelUI() );
@@ -232,56 +232,56 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		lbl10.setHorizontalTextPosition( SwingConstants.LEFT );
 		lbl10.setUI( new MultiLineLabelUI() );
 		pabschnitt2.add(lbl10, ca2.xy(6,12));
-		
+
 		tf1 [4] = new JRtaTextField("D",true,"6.2","");
 		tf1[4].setText("25,00");
 		pabschnitt2.add(tf1[4],ca2.xy(2,14));
 		tf1 [5] = new JRtaTextField("D",true,"6.2","");
 		tf1[5].setText("5,50");
 		pabschnitt2.add(tf1[5],ca2.xy(6,14));
-		
+
 		JLabel lbl11 = new JLabel("mm");
 		pabschnitt2.add(lbl11, ca2.xy(4,14));
 		JLabel lbl12 = new JLabel("mm");
 		pabschnitt2.add(lbl12, ca2.xy(8,14));
-		
-		
-		
+
+
+
 		pabschnitt2.getPanel().validate();
 		return pabschnitt2.getPanel();
 	}
-	
-	
+
+
 	private JPanel getAbschnitt3(){
 		FormLayout abschnitt3Pan = new FormLayout("100dlu,60dlu,50dlu,60dlu,10dlu",
 				"10dlu,p,10dlu");
 		PanelBuilder pabschnitt3 = new PanelBuilder(abschnitt3Pan);
 		pabschnitt3.getPanel().setOpaque(false);
 		CellConstraints ca3 = new CellConstraints();
-		
+
 		bnr2 = new JButton("Drucken");
 		bnr2.setActionCommand("drucken");
 		bnr2.addActionListener(this);
 		pabschnitt3.add(bnr2,ca3.xy(2,2));
-		
+
 		bnr3 = new JButton("Schliessen");
 		bnr3.setActionCommand("schliessen");
 		bnr3.addActionListener(this);
 		pabschnitt3.add(bnr3,ca3.xy(4,2));
-		
-		
-		
+
+
+
 		pabschnitt3.getPanel().validate();
 		return pabschnitt3.getPanel();
 	}
-		
-		
-		
-	
+
+
+
+
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -305,7 +305,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		if(cmd.equals("sortieren")){
 			doSortieren();
 			return;
-		}		
+		}
 		if(cmd.equals("zeilig")){
 			doZeilig(combobox2.getSelectedIndex());
 			return;
@@ -318,9 +318,9 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			System.exit(0);
 			return;
 		}
-		  
-		
-		
+
+
+
 	}
 	private void doHoleTermine(){
 		String termine = holeRezFeld("termine", "rez_nr='"+"RH"+tf1[0].getText().trim()+"'");
@@ -341,8 +341,8 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		Statement stmt = null;
 		ResultSet rs = null;
 		String ret = "";
-		
-			
+
+
 		try {
 			stmt =  LVArahmen.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -351,19 +351,19 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "select "+feld+" from verordn where "+kriterium+" LIMIT 1";
 			rs = stmt.executeQuery(sstmt);
 
 			if(rs.next()){
 				ret = (rs.getString(feld)==null  ? "" :  rs.getString(feld));
 			}
-			
+
 		}catch(SQLException ev){
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -371,7 +371,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -382,12 +382,12 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		}
 		return ret;
 	}
-	
-	
+
+
 	private void doSortieren(){
-		
+
 	}
-	
+
 	private void doPDFStarten(){
 		String[] werte = {tf1[1].getText().trim().replace(",","."),
 				tf1[2].getText().trim().replace(",","."),
@@ -398,7 +398,7 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 		new PDFDummy(combobox1.getDataVector(),werte);
 	}
 	private void doZeilig(int wert){
-				
+
 		if(wert==0){
 			tf1[1].setText("174,00");
 			tf1[2].setText("23,00");
@@ -407,10 +407,10 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			tf1[5].setText("5,50");
 		return;
 		}
-		
-		
-		
-		if (wert==1);{  //XXX: <- da ist ein semicolon das das IF beendet. Der untere Block wird also immer ausgeführt, wenn wert >0
+
+
+
+		if (wert==1);{  //XXX: <- da ist ein semicolon das das IF beendet. Der untere Block wird also immer ausgefuehrt, wenn wert >0
 			tf1[1].setText("166,00");
 			tf1[2].setText("24,00");
 			tf1[3].setText("8,00");
@@ -418,11 +418,11 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			tf1[5].setText("5,50");
 		return;
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 	private void doPlus(Point p){
 		JRtaTextField datum = new JRtaTextField("DATUM",true);
 		datum.setText(DatFunk.sHeute());
@@ -439,10 +439,9 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			Vector vec = combobox1.getDataVector();
 			vec.add(returnString);
 			Comparator<String> comparator = new Comparator<String>() {
-		
+
 				@Override
 				public int compare(String o1, String o2) {
-					// TODO Auto-generated method stub
 					String s1 = DatFunk.sDatInSQL(o1);
 					String s2 = DatFunk.sDatInSQL(o2);
 					return s1.compareTo(s2);
@@ -465,12 +464,12 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 	private void doDBFEinlesen(){
 		String datei;
 		String nummer = tf1[0].getText().trim();
-		
+
 		if (nummer.equals("")){
 			JOptionPane.showMessageDialog(null, "Bitte Reha-Nummer eingeben");
 			return;
 		}
-		datei = ("L:/projekte/rta/dbf/eterm/"+"RH" + nummer +".dbf").toLowerCase();	
+		datei = ("L:/projekte/rta/dbf/eterm/"+"RH" + nummer +".dbf").toLowerCase();
 
 		File f = new File(datei);
 
@@ -478,17 +477,17 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			JOptionPane.showMessageDialog(null, "Rehanummer --> RH"+nummer+" <-- existiert nicht");
 			return;
 		}
-		
+
 		DBFReader dbfreader;
 		try {
 			dbfreader = new DBFReader(datei);
-		////System.out.println("Öffne Datei "+datei);
+		////System.out.println("Oeffne Datei "+datei);
 		String ganzerString = "";
 		String datum;
 		DateFormat df = DateFormat.getDateInstance();
 		vec.clear();
 		combobox1.setDataVector((Vector)vec.clone());
-        for(int i = 0; dbfreader.hasNextRecord(); i++){	
+        for(int i = 0; dbfreader.hasNextRecord(); i++){
         	dummyvec.clear();
             Object aobj[] = dbfreader.nextRecord();
             for (int j=0; j<aobj.length; j++){
@@ -496,18 +495,18 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
             		try{
             			datum = df.format(aobj[j]);
             		}catch(Exception ex){
-            			datum = DatFunk.sHeute();            			
+            			datum = DatFunk.sHeute();
             		}
             		//dummyvec.add(datum);
             		//dummyvec.add(DatFunk.sDatInSQL(datum));
             		vec.add(datum);
             		////System.out.println("Feld "+j+" "+(aobj[j]));
             	}
-            }	
-              
+            }
+
             ////System.out.print("\n");
         }
-        dbfreader.close();		
+        dbfreader.close();
         combobox1.setDataVector((Vector<String>)vec.clone());
         combobox1.setMaximumRowCount(25);
         combobox1.validate();
@@ -516,9 +515,9 @@ public class LVAoberflaeche extends JXPanel implements ListSelectionListener, Ac
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
+
+
+
 	}
 }
 /****************************************************************************************/
@@ -527,14 +526,15 @@ class MultiLineLabelUI extends BasicLabelUI
 	static {
 		labelUI = new MultiLineLabelUI();
 	}
-	
+
+    @Override
     protected String layoutCL(
-        JLabel label,                  
-        FontMetrics fontMetrics, 
-        String text, 
-        Icon icon, 
-        Rectangle viewR, 
-        Rectangle iconR, 
+        JLabel label,
+        FontMetrics fontMetrics,
+        String text,
+        Icon icon,
+        Rectangle viewR,
+        Rectangle iconR,
         Rectangle textR)
     {
         String s = layoutCompoundLabel(
@@ -550,13 +550,13 @@ class MultiLineLabelUI extends BasicLabelUI
             iconR,
             textR,
             label.getIconTextGap());
-    	
+
     	if( s.equals("") )
     		return text;
     	return s;
     }
-	
-	
+
+
 	static final int LEADING = SwingConstants.LEADING;
 	static final int TRAILING = SwingConstants.TRAILING;
 	static final int LEFT = SwingConstants.LEFT;
@@ -589,21 +589,21 @@ class MultiLineLabelUI extends BasicLabelUI
         int     hAlign = horizontalAlignment;
         int     hTextPos = horizontalTextPosition;
 
-        
+
         if (c != null) {
             if (!(c.getComponentOrientation().isLeftToRight())) {
                 orientationIsLeftToRight = false;
             }
         }
-        
+
 
         // Translate LEADING/TRAILING values in horizontalAlignment
         // to LEFT/RIGHT values depending on the components orientation
         switch (horizontalAlignment) {
-        case LEADING: 
+        case LEADING:
             hAlign = (orientationIsLeftToRight) ? LEFT : RIGHT;
             break;
-        case TRAILING: 
+        case TRAILING:
             hAlign = (orientationIsLeftToRight) ? RIGHT : LEFT;
             break;
         }
@@ -611,10 +611,10 @@ class MultiLineLabelUI extends BasicLabelUI
         // Translate LEADING/TRAILING values in horizontalTextPosition
         // to LEFT/RIGHT values depending on the components orientation
         switch (horizontalTextPosition) {
-        case LEADING: 
+        case LEADING:
             hTextPos = (orientationIsLeftToRight) ? LEFT : RIGHT;
             break;
-        case TRAILING: 
+        case TRAILING:
             hTextPos = (orientationIsLeftToRight) ? RIGHT : LEFT;
             break;
         }
@@ -808,7 +808,8 @@ class MultiLineLabelUI extends BasicLabelUI
 
         return rettext;
     }
-	
+
+    @Override
     protected void paintEnabledText(JLabel l, Graphics g, String s, int textX, int textY)
     {
         int accChar = l.getDisplayedMnemonic();
@@ -817,13 +818,14 @@ class MultiLineLabelUI extends BasicLabelUI
     }
 
 
+    @Override
     protected void paintDisabledText(JLabel l, Graphics g, String s, int textX, int textY)
     {
 		int accChar = l.getDisplayedMnemonic();
 		g.setColor(l.getBackground());
     	drawString(g, s, accChar, textX, textY);
     }
-	
+
 	protected void drawString( Graphics g, String s, int accChar, int textX, int textY )
 	{
     	if( s.indexOf('\n') == -1 )
@@ -838,7 +840,7 @@ class MultiLineLabelUI extends BasicLabelUI
     			g.drawString( strs[i], textX, textY + (height*i) );
     	}
 	}
-	
+
 	public static Dimension computeMultiLineDimension( FontMetrics fm, String[] strs )
 	{
 		int i, c, width = 0;
@@ -846,18 +848,18 @@ class MultiLineLabelUI extends BasicLabelUI
         	width = Math.max( width, SwingUtilities.computeStringWidth(fm,strs[i]) );
 		return new Dimension( width, fm.getHeight() * strs.length );
 	}
-	
-	
+
+
 	protected String str;
 	protected String[] strs;
-	
+
 	public String[] splitStringByLines( String str )
 	{
 		if( str.equals(this.str) )
 			return strs;
-		
+
 		this.str = str;
-		
+
 		int lines = 1;
 		int i, c;
         for(i=0, c=str.length() ; i < c ; i++) {
@@ -866,11 +868,11 @@ class MultiLineLabelUI extends BasicLabelUI
         }
 		strs = new String[lines];
 		StringTokenizer st = new StringTokenizer( str, "\n" );
-		
+
 		int line = 0;
 		while( st.hasMoreTokens() )
 			strs[line++] = st.nextToken();
-			
+
 		return strs;
 	}
 }

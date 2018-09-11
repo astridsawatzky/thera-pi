@@ -13,7 +13,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -42,15 +41,14 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemTools.ListenerTools;
 import systemTools.WinNum;
 
 
-public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, ActionListener, ComponentListener, WindowListener, KeyListener,RehaTPEventListener{
+public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, ActionListener, ComponentListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -6708633280442828667L;
 	//private static TagWahlNeu thisClass = null;
@@ -60,10 +58,10 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 	private RehaTPEventClass rtp = null;
 	private MeinPicker datePick = null;
 	public  JRtaTextField datum;
-	private String akttag; 
+	private String akttag;
 	private String starttag;
 	private JXLabel wochentag;
-	private JXLabel kalwoche;	
+	private JXLabel kalwoche;
 	private JXButton okbut;
 	private JXButton abbruchbut;
 	//private String aktfocus = "";
@@ -72,23 +70,23 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		akttag = aktday;
 		starttag = aktday;
-		
+
 		setPreferredSize(new Dimension(240,170));
-		
-		eigenName = "TagWahl"+WinNum.NeueNummer(); 
+
+		eigenName = "TagWahl"+WinNum.NeueNummer();
 		this.setName(eigenName);
 		getSmartTitledPanel().setPreferredSize(new Dimension(240,170));
 		getSmartTitledPanel().setName("Eltern-"+eigenName);
 		this.getParent().setName("Eltern-"+eigenName);
-			
+
 		this.setUndecorated(true);
 		this.addFocusListener(this);
 		this.addWindowListener(this);
 		this.addKeyListener(this);
-		
+
 		/**jcc ist die Haupt-JXPanel**/
 
-	
+
 		jcc = new JXPanel(new GridLayout(1,1));
 		jcc.setDoubleBuffered(true);
 		jcc.setName(eigenName);
@@ -99,21 +97,21 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 			     jcc.setBackgroundPainter(Reha.thisClass.compoundPainter.get("TagWahlNeu"));
 				return null;
 			}
-			
+
 		}.execute();
-		
+
 		//jcc.setBackground(Color.WHITE);
 		jcc.setBorder(null);
 		jcc.addKeyListener(this);
 		jcc.addFocusListener(this);
-		
 
-		//okbut.setPreferredSize(new Dimension(abbruchbut.getWidth(),abbruchbut.getHeight() ));		
 
-		
+		//okbut.setPreferredSize(new Dimension(abbruchbut.getWidth(),abbruchbut.getHeight() ));
+
+
 		this.setContentPanel(jcc );
 
-		
+
 		getSmartTitledPanel().setTitle("Anzeigetag auswählen");
 		getSmartTitledPanel().getContentContainer().setName(eigenName);
 		getSmartTitledPanel().addKeyListener(this);
@@ -125,18 +123,19 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 		pinPanel.addKeyListener(this);
 
 		setPinPanel(pinPanel);
-		
 
-		
+
+
 		rtp = new RehaTPEventClass();
 		rtp.addRehaTPEventListener(this);
-		
+
 		jcc.add(getTagWahl(jpan = new JXPanel()));
 		jpan.validate();
 		jcc.validate();
-		
+
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				datePick.getInputMap().clear();
 				datePick.getActionMap().clear();
 				datePick.getMonthView().getInputMap().clear();
@@ -145,15 +144,16 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 				KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0);
 				datePick.getMonthView().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doSuchen");
 				datePick.getMonthView().getActionMap().put("doSuchen", new kalenderAction());
-				
-				
+
+
 			}
 		});
 		this.setAlwaysOnTop(true);
 		this.setModal(true);
 		validate();
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				setzeDatumFocus();
 				//datum.requestFocus();
 	 			  //datum.setCaretPosition(0);
@@ -163,13 +163,14 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 
 	public void setzeDatumFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   if(! datum.hasFocus()){
 		 			  datum.requestFocus();
-		 			  datum.setCaretPosition(0);		 			  
+		 			  datum.setCaretPosition(0);
 		 		   }
 		 	   }
-		}); 	   		
+		});
 	}
 
 
@@ -184,14 +185,14 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 					CellConstraints cc = new CellConstraints();
 					/*
 					 */
-					
+
 					jp.add(new JXLabel("Datumspicker"),cc.xy(2,2));
 					datePick = new MeinPicker();
 					Calendar cal1 = new GregorianCalendar();
 					String[] spl = starttag.split("\\.");
 					cal1.set(Integer.valueOf(spl[2]),
 							Integer.valueOf( (spl[1].substring(0,0).equals("0") ? spl[1].substring(1, 1) : spl[1]) )-1,
-							
+
 							Integer.valueOf( (spl[0].substring(0,0).equals("0") ? spl[0].substring(1, 1) : spl[0]) )
 					);
 					datePick.setDate(machePickerDatum(starttag));
@@ -204,24 +205,27 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 					datePick.addActionListener(this);
 					datePick.setName("datPick");
 					datePick.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
+						@Override
+                        public void actionPerformed(ActionEvent e) {
 							////System.out.println("Date-Picker*************"+e);
 						}
 					});
 
 					datePick.getMonthView().addKeyListener(new KeyAdapter(){
-					
-						
-						public void keyTyped(KeyEvent arg0) { 
-							////System.out.println("Woot"); 
-						} 
+
+
+						@Override
+                        public void keyTyped(KeyEvent arg0) {
+							////System.out.println("Woot");
+						}
 					});
 					datePick.getLinkPanel().addKeyListener(new KeyAdapter(){
-						public void keyTyped(KeyEvent arg0) { 
-							////System.out.println("Woot"); 
-						} 
-					}); 
-					
+						@Override
+                        public void keyTyped(KeyEvent arg0) {
+							////System.out.println("Woot");
+						}
+					});
+
 					//datePick.addNotify();
 					jp.add(datePick,cc.xy(4, 2));
 
@@ -233,15 +237,15 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 					datum.addFocusListener(this);
 					datum.setName("datum");
 					jp.add(datum,cc.xy(4,4));
-					
-					
+
+
 					kalwoche = new JXLabel("KW-"+DatFunk.KalenderWoche(starttag) );
 					kalwoche.setForeground(Color.RED);
-					jp.add(kalwoche,cc.xy(2,6));					
+					jp.add(kalwoche,cc.xy(2,6));
 					wochentag = new JXLabel(DatFunk.WochenTag(starttag));
 					wochentag.setForeground(Color.RED);
 					jp.add(wochentag,cc.xy(4,6));
-					
+
 					okbut = new JXButton(     "   ok    ");
 					okbut.setActionCommand("ok");
 					okbut.addActionListener(this);
@@ -254,12 +258,12 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 					jp.add(abbruchbut,cc.xy(4, 8));
 
 					//jp.add(abbruchbut,cc.xy(4, 8));
-					
+
 					jp.addKeyListener(this);
 					jp.validate();
 					//jp.requestFocus();
 					//datum.requestFocusInWindow();
-			
+
 
 		return jp;
 	}
@@ -268,7 +272,7 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 		String[] spl = sdatum.split("\\.");
 		cal1.set(Integer.valueOf(spl[2]),
 				Integer.valueOf( (spl[1].substring(0,0).equals("0") ? spl[1].substring(1, 1) : spl[1]) )-1,
-				
+
 				Integer.valueOf( (spl[0].substring(0,0).equals("0") ? spl[0].substring(1, 1) : spl[0]) )
 		);
 		return cal1.getTime();
@@ -287,7 +291,7 @@ public void focusGained(FocusEvent arg0) {
 	}
 	// TODO Auto-generated method stub
 	////System.out.println("focus erhalten "+arg0);
-	
+
 }
 
 @Override
@@ -297,10 +301,10 @@ public void focusLost(FocusEvent arg0) {
 			////System.out.println("focus verloren "+arg0);
 			try{
 				String opposite = ((JComponent)arg0.getOppositeComponent()).getName();
-				if( opposite.contains("TagWahl") || 
+				if( opposite.contains("TagWahl") ||
 						opposite.contains("Spalte") ||
 						opposite.contains("Combo")){
-					datum.requestFocus();	
+					datum.requestFocus();
 				}
 			}catch(java.lang.NullPointerException ex){
 				//dispose();
@@ -310,7 +314,7 @@ public void focusLost(FocusEvent arg0) {
 
 	// TODO Auto-generated method stub
 	//
-	
+
 }
 
 @Override
@@ -328,77 +332,79 @@ public void actionPerformed(ActionEvent arg0) {
 		//datum.requestFocus();
 		zurueck();
 		this.dispose();
-		
+
 	}
 	if(arg0.getActionCommand().equals("ok")){
 		new Thread(){
-			public void run(){
-				zurueck();				
+			@Override
+            public void run(){
+				zurueck();
 			}
 		}.start();
 		this.setVisible(false);
 
-		
+
 	}
 	if(arg0.getActionCommand().equals("abbruch")){
 		this.dispose();
 		setVisible(false);
 
 	}
-	
+
 }
 private void zurueck(){
 	SwingUtilities.invokeLater(new Runnable(){
-		public  void run(){
+		@Override
+        public  void run(){
 			setVisible(false);
 			akttag = datum.getText().trim();
-			
+
         	if(DatFunk.DatumsWert(akttag) > DatFunk.DatumsWert(Reha.kalMax)){
         		JOptionPane.showMessageDialog(null,"Sie versuchen hinter das Ende des Kalenders zu springen ("+akttag+")"+
         				"\nKalenderspanne aktuell = von "+Reha.kalMin+" bis "+Reha.kalMax);
-        		
+
         	}else if(DatFunk.DatumsWert(akttag) < DatFunk.DatumsWert(Reha.kalMin)){
         		JOptionPane.showMessageDialog(null,"Sie versuchen vor den Beginn des Kalenders zu springen ("+akttag+")"+
         				"\nKalenderspanne aktuell = von "+Reha.kalMin+" bis "+Reha.kalMax);
 
-        		
+
         	}else{
     			Reha.thisClass.terminpanel.datGewaehlt = akttag;
     			Reha.thisClass.terminpanel.suchSchonMal();
         	}
 
-			
+
 		}
 	});
-	this.dispose();	
+	this.dispose();
 	//FensterSchliessen(this.getName());
 }
 @Override
 public void componentHidden(ComponentEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 public void componentMoved(ComponentEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 public void componentResized(ComponentEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 
 @Override
 public void componentShown(ComponentEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 @Override
 public void keyPressed(KeyEvent arg0) {
-	////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource()+"Key Event");	
+	////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource()+"Key Event");
 	for(int i = 0;i<1;i++){
 		if(arg0.getKeyCode() == 27){
 			arg0.consume();
@@ -414,7 +420,7 @@ public void keyPressed(KeyEvent arg0) {
 				((JComponent) arg0.getSource()).requestFocus();
 				////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource()+"Soll Focus behalten");
 			zurueck();
-			//}	
+			//}
 			break;
 		}
 		if(arg0.getKeyCode() == 33){
@@ -445,20 +451,20 @@ public void keyPressed(KeyEvent arg0) {
 		}
 	}
 
-}	
+}
 @Override
 public void keyReleased(KeyEvent e) {
 	////System.out.println("Key event Released ");
-	
+
 	if(e.getKeyCode() == 10){
 		e.consume();
 			((JComponent) e.getSource()).requestFocus();
 			zurueck();
-	}	
+	}
 	if(e.getKeyCode() == 27){
 		e.consume();
 		this.dispose();
-	}	
+	}
 }
 
 @Override
@@ -469,13 +475,14 @@ public void keyTyped(KeyEvent e) {
 		((JComponent) e.getSource()).requestFocus();
 
 		zurueck();
-	}	
+	}
 	if(e.getKeyCode() == 27){
 		e.consume();
 		this.dispose();
-	}	
+	}
 }
 
+@Override
 public void rehaTPEventOccurred(RehaTPEvent evt) {
 	String ss =  this.getName();
 	try{
@@ -483,7 +490,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 			FensterSchliessen(evt.getDetails()[0]);
 			rtp.removeRehaTPEventListener(this);
 			rtp = null;
-		}	
+		}
 	}catch(NullPointerException ne){
 
 	}
@@ -515,36 +522,36 @@ public void windowClosing(WindowEvent arg0) {
 	if(rtp != null){
 		rtp.removeRehaTPEventListener(this);
 		rtp = null;
-	}	
+	}
 }
 
 public void FensterSchliessen(String welches){
-	this.dispose();		
-}	
+	this.dispose();
+}
 
 
 
 }
 class kalenderAction extends AbstractAction {
-	
-	
+
+
 
 
 /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 @Override
 public void actionPerformed(ActionEvent arg0) {
 	// TODO Auto-generated method stub
-	////System.out.println("in Abstract Action" +arg0);	
+	////System.out.println("in Abstract Action" +arg0);
 }
 }
 
 class MeinPicker extends JXDatePicker implements KeyListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -556,7 +563,7 @@ class MeinPicker extends JXDatePicker implements KeyListener{
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		////System.out.println("pressed");
-		
+
 	}
 
 	@Override
@@ -570,7 +577,7 @@ class MeinPicker extends JXDatePicker implements KeyListener{
 		// TODO Auto-generated method stub
 		////System.out.println("typed");
 	}
-	
+
 }
 
 

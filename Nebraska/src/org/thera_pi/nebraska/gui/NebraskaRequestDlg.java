@@ -191,7 +191,8 @@ public class NebraskaRequestDlg extends JDialog{
 					"";
 					JOptionPane.showMessageDialog(null, meldung);
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							try{
 								RunAjax("http://www.thera-pi.org/html/updates.php", "updated.txt", "ZertRequest-erstellt-für-"+ik+"-"+institution.replace(" ", "_")+"-"+person.replace(" ", "_"));								
 							}catch(Exception ex){
@@ -200,7 +201,8 @@ public class NebraskaRequestDlg extends JDialog{
 					});
 					
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							try{
 								macheConfig();	
 							}catch(Exception ex){

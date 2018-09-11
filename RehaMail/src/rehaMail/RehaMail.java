@@ -290,7 +290,8 @@ public class RehaMail implements WindowListener {
 			}.execute();
 			
 			new Thread(){
-				public void run(){
+				@Override
+                public void run(){
 					RehaMail.starteOfficeApplication();		
 				}
 			}.start();
@@ -321,7 +322,8 @@ public class RehaMail implements WindowListener {
 	public void starteTimer(){
 		RehaMail.nachrichtenTimer = new Timer();
 		TimerTask task = new TimerTask() {
-			public void run() {
+			@Override
+            public void run() {
 				if(!nachrichtenInBearbeitung){
 					try{
 					nachrichtenInBearbeitung = true;
@@ -332,7 +334,8 @@ public class RehaMail implements WindowListener {
 							getMTab().mailPanel.checkForNewMail(true);
 							//getMTab().mailPanel.allesAufNull();							
 						SwingUtilities.invokeAndWait(new Runnable(){
-							public void run(){
+							@Override
+                            public void run(){
 								RehaMail.thisFrame.setVisible(true);		
 							}
 						});
@@ -562,7 +565,8 @@ public class RehaMail implements WindowListener {
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	
@@ -625,7 +629,8 @@ public class RehaMail implements WindowListener {
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	
@@ -706,7 +711,8 @@ public class RehaMail implements WindowListener {
 			return;
 		}
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				try{
 					//("Erstellt in Thera-Pi Nachrichten:\n"+xnachricht.split("#")[4]).getBytes()
 					inPatMessage = true;

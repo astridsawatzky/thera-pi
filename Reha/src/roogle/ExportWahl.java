@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,37 +34,36 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemTools.ListenerTools;
 
-public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
-	
+public class ExportWahl extends RehaSmartDialog implements ActionListener{
+
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 4413969383176351539L;
 
-	public JRtaCheckBox[] leistung = {null,null,null,null,null}; 
+	public JRtaCheckBox[] leistung = {null,null,null,null,null};
 
 	private RehaTPEventClass rtp = null;
-	private GutachtenWahlHintergrund rgb;	
-	
+	private GutachtenWahlHintergrund rgb;
+
 	public JButton uebernahme;
 	public JButton abbrechen;
-	
+
 	JRtaTextField exportArt = null;
 	ButtonGroup bg = new ButtonGroup();
 	JRadioButton[] rbut = {null,null,null};
 	JButton[] but = {null,null};
-	
-	
+
+
 	MattePainter mp = null;
 	LinearGradientPaint p = null;
 
 	public ExportWahl(Point pt, JRtaTextField xtf,String xtitel){
-		super(null,"ExportWahl");		
+		super(null,"ExportWahl");
 
 		exportArt = xtf;
 		exportArt.setText("");
@@ -84,7 +81,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		rgb = new GutachtenWahlHintergrund();
 		rgb.setLayout(new BorderLayout());
 
-		
+
 		new SwingWorker<Void,Void>(){
 
 			@Override
@@ -92,9 +89,9 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 			    rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("GutachtenWahl"));
 				return null;
 			}
-			
+
 		}.execute();
- 
+
 		rgb.add(getGutachten(),BorderLayout.CENTER);
 		rgb.revalidate();
 		getSmartTitledPanel().setContentContainer(rgb);
@@ -102,45 +99,47 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		setName("ExportWahl");
 		Point lpt = new Point(pt.x-50,pt.y+25);
 	    setLocation(lpt);
-	    
+
 		rtp = new RehaTPEventClass();
 		rtp.addRehaTPEventListener(this);
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   if(! rbut[0].hasFocus()){
 		 			  rbut[0].requestFocus();
-		 		   }  
+		 		   }
 			   }
-		}); 	   		
+		});
 		pack();
 		setModal(true);
 
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   if(! rbut[0].hasFocus()){
 			 		  rbut[0].requestFocus();
-		 		   }  
+		 		   }
 			   }
-		}); 	   		
+		});
 	}
 
-	
-/****************************************************/	
+
+/****************************************************/
 
 
-	private JPanel getGutachten(){     // 1        2             3        4            5  
+	private JPanel getGutachten(){     // 1        2             3        4            5
 		FormLayout lay = new FormLayout("15dlu,fill:0:grow(0.50),p,fill:0:grow(0.50),10dlu",
-									//     1               2  3    4  5    6  7                 8     9   10  
+									//     1               2  3    4  5    6  7                 8     9   10
 										"20dlu,p,10dlu,p,10dlu,p,15dlu,p,fill:0:grow(0.50),5dlu:g,p,20dlu");
 		PanelBuilder pb = new PanelBuilder(lay);
 		CellConstraints cc = new CellConstraints();
 
 		pb.getPanel().setOpaque(false);
-		
+
 		rbut[0] = new JRadioButton("Daten für Reha-Planer exportieren");
 		rbut[0].setOpaque(false);
 		rbut[0].addKeyListener(this);
@@ -155,7 +154,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		rbut[2].addKeyListener(this);
 		//von 0 auf 1 geändert am 21.09.2015
 		rbut[2].setName("ical");
-		
+
 		bg.add(rbut[0]);
 		bg.add(rbut[1]);
 		bg.add(rbut[2]);
@@ -182,13 +181,14 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		pb2.add(but[1],cc2.xy(4,1));
 		pb2.getPanel().validate();
 		pb.add(pb2.getPanel(),cc.xyw(1, 11, 5));
-		
+
 		pb.getPanel().validate();
 		return pb.getPanel();
 	}
-/****************************************************/	
-	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+/****************************************************/
+
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 
 		try{
 			if(evt.getDetails()[0] != null){
@@ -203,18 +203,19 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 					ListenerTools.removeListeners(but[1]);
 					super.dispose();
 					this.dispose();
-					//System.out.println("****************GutachtenWahl -> Listener entfernt**************");				
+					//System.out.println("****************GutachtenWahl -> Listener entfernt**************");
 				}
 			}
 		}catch(NullPointerException ne){
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			ListenerTools.removeListeners(rbut[0]);
 			ListenerTools.removeListeners(rbut[1]);
@@ -225,13 +226,13 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 			dispose();
 			//System.out.println("****************GutachtenWahl -> Listener entfernt (Closed)**********");
 		}
-		
-		
+
+
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 		if(arg0.getActionCommand().equals("uebernahme")){
 			//System.out.println("In Übernahme");
 			new SwingWorker<Void,Void>(){
@@ -239,7 +240,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 				protected Void doInBackground() throws Exception {
 					//System.out.println("In SwingWorker");
 					if(rbut[0].isSelected()){
-						exportArt.setText("rehaplan");	
+						exportArt.setText("rehaplan");
 					}else if(rbut[1].isSelected()){
 						exportArt.setText("fahrdienstliste");
 					}else{
@@ -249,11 +250,11 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 					return null;
 				}
 			}.execute();
-			
+
 			/********
-			 * 
+			 *
 			 * Hier noch schnell buchen entwickeln und feddisch...
-			 * 
+			 *
 			 */
 		}
 		if(arg0.getActionCommand().equals("abbrechen")){
@@ -265,15 +266,15 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()==38){
@@ -295,7 +296,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 			}
 			if( ((JComponent)event.getSource()).getName().equals("uebernahme")){
 				if(rbut[0].isSelected()){
-					exportArt.setText("rehaplan");	
+					exportArt.setText("rehaplan");
 				}else{
 					exportArt.setText("fahrdienstliste");
 				}
@@ -309,7 +310,7 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 					((JComponent)event.getSource()).getName().equals("ical")
 					){
 				if(rbut[0].isSelected()){
-					exportArt.setText("rehaplan");	
+					exportArt.setText("rehaplan");
 				}else if(rbut[1].isSelected()){
 					exportArt.setText("fahrdienstliste");
 				}else{
@@ -319,30 +320,30 @@ public class ExportWahl extends RehaSmartDialog implements RehaTPEventListener,W
 		}
 	}
 
-	
-	
+
+
 }
 class GutachtenWahlHintergrund extends JXPanel{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	ImageIcon hgicon;
 	int icx,icy;
 	AlphaComposite xac1 = null;
-	AlphaComposite xac2 = null;		
+	AlphaComposite xac2 = null;
 	public GutachtenWahlHintergrund(){
 		super();
 		hgicon = null;
-		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 
-		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);			
-		
+		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f);
+		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
+
 	}
 	@Override
-	public void paintComponent( Graphics g ) { 
+	public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;
-		
+
 		if(hgicon != null){
 			g2d.setComposite(this.xac1);
 			g2d.drawImage(hgicon.getImage(), (getWidth()/2)-icx , (getHeight()/2)-icy,null);

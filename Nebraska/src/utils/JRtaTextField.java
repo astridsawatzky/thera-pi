@@ -30,7 +30,8 @@ class NurZahlenDocument extends javax.swing.text.PlainDocument
 		textField = tf;
 	}
 
-	public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
+	@Override
+    public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
 	throws javax.swing.text.BadLocationException
 	{
 		try
@@ -63,7 +64,8 @@ class NurNormalDocument extends javax.swing.text.PlainDocument
 		textField = tf;
 	}
 
-	public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
+	@Override
+    public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
 	throws javax.swing.text.BadLocationException
 	{
 		try
@@ -106,7 +108,8 @@ class NurGrossDocument extends javax.swing.text.PlainDocument
 		textField = tf;
 	}
 
-	public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
+	@Override
+    public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
 	throws javax.swing.text.BadLocationException
 	{
 		try
@@ -137,7 +140,8 @@ class NurKleinDocument extends javax.swing.text.PlainDocument
 		textField = tf;
 	}
 
-	public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
+	@Override
+    public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
 	throws javax.swing.text.BadLocationException
 	{
 		try
@@ -168,7 +172,8 @@ class NurStundenDocument extends javax.swing.text.PlainDocument
 		textField = tf;
 	}
 
-	public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
+	@Override
+    public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
 	throws javax.swing.text.BadLocationException
 	{
 		try
@@ -205,7 +210,8 @@ class NurMinutenDocument extends javax.swing.text.PlainDocument
 		textField = tf;
 	}
 
-	public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
+	@Override
+    public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
 	throws javax.swing.text.BadLocationException
 	{
 		try
@@ -273,7 +279,8 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
 	 // **** Konstruktor 2 Ende
 
 	 // **** Überschreiben Insert-Methode
-	 public void insertString(int offset, String zeichen, 
+	 @Override
+    public void insertString(int offset, String zeichen, 
 	       AttributeSet attributeSet) 
 	       throws BadLocationException {
 	  if(zeichen.equals(initString) || zeichen.equals("  .  .    ")) { // Wenn initString oder leeres Datum, gleich rein
@@ -382,7 +389,8 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
 	 // **** Überschreiben Insert Ende
 
 	 // **** Überschreiben Remove
-	 public void remove(int offset, int length) 
+	 @Override
+    public void remove(int offset, int length) 
 	       throws BadLocationException {
 	  if(atSeparator(offset)) 
 	   textComponent.setCaretPosition(offset-1);

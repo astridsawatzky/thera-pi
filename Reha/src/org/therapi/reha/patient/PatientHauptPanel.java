@@ -325,7 +325,8 @@ public class PatientHauptPanel extends JXPanel{
 	
 	private void createMouseListeners(){
 		toolBarMouse = new MouseListener(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				patToolBarPanel.getLogic().reactOnMouseClicked(arg0);
 			}
 			@Override
@@ -344,7 +345,8 @@ public class PatientHauptPanel extends JXPanel{
 		};
 
 		stammDatenMouse = new MouseListener(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				
 			}
 			@Override
@@ -396,7 +398,8 @@ public class PatientHauptPanel extends JXPanel{
 				infoDlg.setVisible(true);
 				infoDlg = null;
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						tfsuchen.requestFocus();		
 					}
 				});			
@@ -423,7 +426,8 @@ private static final long serialVersionUID = 2904164740273664807L;
 		setEditable(false);
 		setBorder(null);
 		addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					new SwingWorker<Void,Void>(){
 						@Override

@@ -63,12 +63,14 @@ public class ICDrahmen extends JApplet implements WindowListener{
 		grund.add(jscr);
 		getContentPane().add(grund);
 	}
-	  public void start()
+	  @Override
+    public void start()
 	   {
 	      super.start();
 
 	   }
-	  public void stop()
+	  @Override
+    public void stop()
 	   {
 	      super.stop();
 	  	if(ICDrahmen.thisClass.conn != null){
@@ -151,7 +153,8 @@ public class ICDrahmen extends JApplet implements WindowListener{
 		        	}
 		        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	

@@ -152,7 +152,8 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		jpan.add(lab,cc.xy(2,2,CellConstraints.RIGHT,CellConstraints.DEFAULT));
 		tfs[0] = new JRtaTextField("nix",true);
 		tfs[0].addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent evt){
+			@Override
+            public void keyPressed(KeyEvent evt){
 				if(evt.getKeyCode()==KeyEvent.VK_ENTER){
 					evt.consume();
 					tfs[0].requestFocus();
@@ -533,7 +534,8 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			if(feldNamen.get(columnIndex).get(1).contains("varchar(")){
 				return String.class;
 			}else if(feldNamen.get(columnIndex).get(1).contains("enum(")){
@@ -550,7 +552,8 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			if(is302er && col > 4){
 				JOptionPane.showMessageDialog(null,"Für Abrechnungen nach §302 können lediglich die Adressfelder editiert werden");
 				return false;
@@ -565,7 +568,8 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 	
 	class BillListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){

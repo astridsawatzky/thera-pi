@@ -28,7 +28,8 @@ public class MyTableComboBox extends AbstractCellEditor implements TableCellEdit
  
 	 
 	// This method is called when a cell value is edited by the user. 
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
+	@Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
 		if (isSelected)	{ 
 			if(((JRtaComboBox)component).vec != null){
 				((JRtaComboBox)component).setSelectedVecIndex(0, (String)table.getValueAt(rowIndex,vColIndex) );
@@ -50,7 +51,8 @@ public class MyTableComboBox extends AbstractCellEditor implements TableCellEdit
 	}
 	// 'value' is value contained in the cell located at (rowIndex, vColIndex) 
 	// It must return the new value to be stored in the cell. 
-	public Object getCellEditorValue() { 
+	@Override
+    public Object getCellEditorValue() { 
 		try{
 			if(((JRtaComboBox)component).vec != null){
 				return ( ((JRtaComboBox)component).getValueAt(0)  );	
@@ -62,13 +64,15 @@ public class MyTableComboBox extends AbstractCellEditor implements TableCellEdit
 		}
 	} 
 
-	 public boolean stopCellEditing() {
+	 @Override
+    public boolean stopCellEditing() {
 		 try{
 		 fireEditingStopped();
 		 }catch(Exception ex){}
 		 return super.stopCellEditing();
 	 }
-	 public void cancelCellEditing() {
+	 @Override
+    public void cancelCellEditing() {
 		 fireEditingCanceled();
 	    	super.cancelCellEditing();
 	    }

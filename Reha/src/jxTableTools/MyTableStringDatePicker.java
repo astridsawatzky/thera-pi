@@ -27,7 +27,8 @@ public class MyTableStringDatePicker extends AbstractCellEditor implements Table
 	public MyTableStringDatePicker(){
 		//((JXDatePicker)component).addActionListener(((JComponent)component).getParent() );
 		((JXDatePicker)component).addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			@Override
+            public void actionPerformed(ActionEvent e) {
 				//label.setText(((JXDatePicker)component).getDate().toString());
 			}
 		});
@@ -37,7 +38,8 @@ public class MyTableStringDatePicker extends AbstractCellEditor implements Table
 		this.component = xcomponent;
 	}
 
-	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
+	@Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
 		if (isSelected)	{ 
 			((JXDatePicker)component).getEditor().setEditable(false);
 
@@ -62,18 +64,22 @@ public class MyTableStringDatePicker extends AbstractCellEditor implements Table
 	}
 	// 'value' is value contained in the cell located at (rowIndex, vColIndex) 
 	// It must return the new value to be stored in the cell. 
-	public Object getCellEditorValue() { 
+	@Override
+    public Object getCellEditorValue() { 
 		return ( sdf.format( ((JXDatePicker)component).getDate() )  ); 
 	} 
-	public void actionPerformed(ActionEvent e) {
+	@Override
+    public void actionPerformed(ActionEvent e) {
 		//System.out.println("Action Performed in JXDatePicker");
 		fireEditingStopped();
 	}
-	 public boolean stopCellEditing() {
+	 @Override
+    public boolean stopCellEditing() {
 		 fireEditingStopped();
 		 return super.stopCellEditing();
 	 }
-	 public void cancelCellEditing() {
+	 @Override
+    public void cancelCellEditing() {
 		 fireEditingCanceled();
 	    	super.cancelCellEditing();
 	 }

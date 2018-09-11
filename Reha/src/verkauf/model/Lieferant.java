@@ -115,7 +115,8 @@ public class Lieferant {
 		return this.id;
 	}
 	
-	public boolean equals(Object o) {
+	@Override
+    public boolean equals(Object o) {
 		if(o instanceof Lieferant ) {
 			Lieferant vergleichsObjekt = (Lieferant) o; 
 			if(vergleichsObjekt.getID() == this.id) {
@@ -125,7 +126,8 @@ public class Lieferant {
 		return false;
 	}
 	
-	public String toString() {
+	@Override
+    public String toString() {
 		String returnsstmt = this.name + " - " + this.ansprechpartner;
 		return returnsstmt;
 	}

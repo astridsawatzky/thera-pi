@@ -21,7 +21,8 @@ int align = 0;
 		   hinterGrund2 =  col;
 	   }
 	   
-	   public Component getTableCellRendererComponent(JTable table, Object value,
+	   @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
 	         boolean isSelected, boolean hasFocus, int row, int column) {
 		   //setBackground(new Color(255,0,0));
 		   //setBackground((row%2 ==0 ? hinterGrund1 : hinterGrund2));

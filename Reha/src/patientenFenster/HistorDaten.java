@@ -299,7 +299,8 @@ public class HistorDaten extends JXPanel{
 		reznum.setBorder(null);
 		reznum.setDragEnabled(true);
 		reznum.addMouseListener(new MouseAdapter() {
-		    public void mousePressed(MouseEvent e) {
+		    @Override
+            public void mousePressed(MouseEvent e) {
 		    	draghandler.setText(Reha.thisClass.patpanel.patDaten.get(0).substring(0,1)+
 		    			"-"+Reha.thisClass.patpanel.patDaten.get(2)+","+Reha.thisClass.patpanel.patDaten.get(3)+"°"+
 		    			reznum.getText()+"°"+rezlabs[14].getText()

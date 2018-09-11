@@ -91,10 +91,10 @@ import systemEinstellungen.SystemConfig;
 
 public class OOTools{
 	public OOTools(){
-		
+
 	}
 	public static synchronized void sucheLeerenPlatzhalter(ITextDocument textDocument, ITextField placeholders){
-		
+
 	}
 	public static synchronized void loescheLeerenPlatzhalter(ITextDocument textDocument, ITextField placeholders){
 		try{
@@ -106,7 +106,7 @@ public class OOTools{
 			XLineCursor xLineCursor = UnoRuntime.queryInterface(XLineCursor.class,
 			xTextViewCursorSupplier.getViewCursor());
 			xLineCursor.gotoStartOfLine(false);
-			xLineCursor.gotoEndOfLine(true); 
+			xLineCursor.gotoEndOfLine(true);
 			ITextCursor textCursor = viewCursor.getTextCursorFromStart();
 			textCursor.goLeft((short) 1, false);
 			textCursor.gotoRange(viewCursor.getTextCursorFromEnd().getEnd(), true);
@@ -119,7 +119,7 @@ public class OOTools{
 		//System.out.println(startCell+" / "+endCell);
 		XTextTableCursor cursor = table.createCursorByCellName(startCell);
 		cursor.gotoCellByName(endCell, true);
-		cursor.mergeRange(); 
+		cursor.mergeRange();
 		return cursor;
 	}
 	public static void setOneCellProperty(ITextTableCell cell,boolean italic,boolean bold,boolean underline,int color,float size){
@@ -134,15 +134,15 @@ public class OOTools{
 		} catch (TextException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 	public static void setOneCellWidth(ITextTableCell cell,short width) throws Exception{
 		ITextTableCellProperties props = cell.getProperties();
 		XPropertySet xpropset = props.getXPropertySet();
-		xpropset.setPropertyValue("Width", width);		
-	}	
+		xpropset.setPropertyValue("Width", width);
+	}
 	public static synchronized void printAndClose(final ITextDocument textDocument, final int exemplare){
-		
+
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws java.lang.Exception {
@@ -168,7 +168,7 @@ public class OOTools{
 					}
 					return null;
 				}
-				
+
 			}.execute();
 	}
 	public static synchronized ITextField[] holePlatzhalter(ITextDocument textDocument){
@@ -216,7 +216,7 @@ public class OOTools{
 	 		        XServiceInfo xInfo = UnoRuntime.queryInterface(XServiceInfo.class, xTextField);
 	 		        XTextRange range = xTextField.getAnchor();
 	 		        // nur die Platzhalter
-	 		        if(xInfo.supportsService("com.sun.star.text.TextField.JumpEdit") /* || 
+	 		        if(xInfo.supportsService("com.sun.star.text.TextField.JumpEdit") /* ||
 	 		        		xInfo.supportsService("com.sun.star.text.TextField.User")*/){
 	 		          arrayList.add(range);
 	 		        }
@@ -228,7 +228,7 @@ public class OOTools{
 				e.printStackTrace();
 			}
 		    return arrayList;
-  }	
+  }
 	/**************************************************************************************/
 	public static void starteStandardFormular(String url,String drucker) {
 		new SwingWorker<Void,Void>(){
@@ -237,11 +237,11 @@ public class OOTools{
 				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 				return null;
 			}
-			
+
 		}.execute();
 		IDocumentService documentService = null;
 		ITextDocument textDocument = null;
-		
+
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();
 		}
@@ -251,13 +251,13 @@ public class OOTools{
 		} catch (OfficeApplicationException e) {
 			e.printStackTrace();
 		}
-		
+
 		IDocumentDescriptor docdescript = new DocumentDescriptor();
 		docdescript.setHidden(true);
 		docdescript.setAsTemplate(true);
 		IDocument document = null;
 		//ITextTable[] tbl = null;
-		
+
 		try {
 			document = documentService.loadDocument(url,docdescript);
 		} catch (NOAException e) {
@@ -313,7 +313,7 @@ public class OOTools{
 				System.out.println("Insgesamt Placeholderanzahl = "+placeholders.length);
 			}
 
-		    /*****************/			
+		    /*****************/
 			Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
@@ -322,7 +322,7 @@ public class OOTools{
 		    	  if(entry.getValue().toString().trim().equals("")){
 		    		  placeholders[i].getTextRange().setText("\b");
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(entry.getValue().toString());		    		  
+			    	  placeholders[i].getTextRange().setText(entry.getValue().toString());
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -337,7 +337,7 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -352,7 +352,7 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -369,7 +369,7 @@ public class OOTools{
 		    		  placeholders[i].getTextRange().setText("");
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -394,26 +394,27 @@ public class OOTools{
 				return;
 			}
 		}
-		
+
 		sucheNachPlatzhalter(textDocument);
-		
+
 		try {
 			refreshTextFields(textDocument.getXTextDocument());
 		} catch (java.lang.Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
 		viewCursor.getPageCursor().jumpToFirstPage();
 		final ITextDocument xtextDocument = textDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
 			}
 		});
-		
+
 
 
 	}
@@ -430,10 +431,10 @@ public class OOTools{
         refreshTables.refresh();
     }
 	public static void refreshTextFields(XTextDocument xTextDocument){
-		XTextFieldsSupplier tfSupplier = UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument); 
-		XRefreshable refreshable = UnoRuntime.queryInterface(XRefreshable.class, tfSupplier.getTextFields()); 
-		refreshable.refresh(); 
-		
+		XTextFieldsSupplier tfSupplier = UnoRuntime.queryInterface(XTextFieldsSupplier.class, xTextDocument);
+		XRefreshable refreshable = UnoRuntime.queryInterface(XRefreshable.class, tfSupplier.getTextFields());
+		refreshable.refresh();
+
 	}
 	/**************************************************************************************/
 	public static void erstzeNurPlatzhalter(ITextDocument textDocument) {
@@ -461,7 +462,7 @@ public class OOTools{
 				System.out.println("Insgesamt Placeholderanzahl = "+placeholders.length);
 			}
 
-		    /*****************/			
+		    /*****************/
 			Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
@@ -470,7 +471,7 @@ public class OOTools{
 		    	  if(entry.getValue().toString().trim().equals("")){
 		    		  placeholders[i].getTextRange().setText("\b");
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(entry.getValue().toString());		    		  
+			    	  placeholders[i].getTextRange().setText(entry.getValue().toString());
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -485,7 +486,7 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -500,7 +501,7 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -517,7 +518,7 @@ public class OOTools{
 		    		  placeholders[i].getTextRange().setText("");
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -531,26 +532,25 @@ public class OOTools{
 		}catch(java.lang.IllegalArgumentException ex){
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null,"Fehler in der Dokumentvorlage");
-			if(textDocument != null){
 				textDocument.close();
-				try {
-					Reha.officeapplication.deactivate();
-				} catch (OfficeApplicationException e) {
-					e.printStackTrace();
-				}
-				Reha.officeapplication.dispose();
-				return;
+			try {
+				Reha.officeapplication.deactivate();
+			} catch (OfficeApplicationException e) {
+				e.printStackTrace();
 			}
+			Reha.officeapplication.dispose();
+			return;
 		}
-		
+
 		/*****/
 		sucheNachPlatzhalter(textDocument);
-		
+
 		IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
 		viewCursor.getPageCursor().jumpToFirstPage();
 		final ITextDocument xtextDocument = textDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
@@ -579,7 +579,7 @@ public class OOTools{
 		docdescript.setAsTemplate(true);
 		IDocument document = null;
 		//ITextTable[] tbl = null;
-		
+
 		try {
 			document = documentService.loadDocument(url,docdescript);
 		} catch (NOAException e) {
@@ -635,7 +635,7 @@ public class OOTools{
 				ex.printStackTrace();
 			}
 
-		    /*****************/			
+		    /*****************/
 			Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
@@ -645,7 +645,7 @@ public class OOTools{
 		    		  placeholders[i].getTextRange().setText("\b");
 		    		  //OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(entry.getValue().toString());		    		  
+			    	  placeholders[i].getTextRange().setText(entry.getValue().toString());
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -660,7 +660,7 @@ public class OOTools{
 		    		  placeholders[i].getTextRange().setText("");
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -691,7 +691,8 @@ public class OOTools{
 
 		final ITextDocument xtextDocument = textDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
 			}
@@ -748,8 +749,8 @@ public class OOTools{
 			}catch(com.sun.star.uno.RuntimeException ex){
 				ex.printStackTrace();
 			}
-	
-		    /*****************/			
+
+		    /*****************/
 			Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
@@ -758,7 +759,7 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  placeholders[i].getTextRange().setText("\b");
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -773,7 +774,7 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -789,7 +790,7 @@ public class OOTools{
 		    		  //placeholders[i].getTextRange().setText("\b");
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -805,7 +806,7 @@ public class OOTools{
 		    		  placeholders[i].getTextRange().setText("");
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
@@ -823,7 +824,7 @@ public class OOTools{
 			textDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 			textDocument.getFrame().setFocus();
 		}else{
-				final ITextDocument xdoc = textDocument; 
+				final ITextDocument xdoc = textDocument;
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws java.lang.Exception {
@@ -906,7 +907,7 @@ public class OOTools{
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 	private static void sucheErsetze(ITextDocument document,String suchenach,String ersetzemit,boolean alle){
@@ -916,18 +917,18 @@ public class OOTools{
 		if(alle){
 			searchResult = document.getSearchService().findAll(searchDescriptor);
 		}else{
-			searchResult = document.getSearchService().findFirst(searchDescriptor);			
+			searchResult = document.getSearchService().findFirst(searchDescriptor);
 		}
 
 		if(!searchResult.isEmpty()) {
 			ITextRange[] textRanges = searchResult.getTextRanges();
 			for (int resultIndex=0; resultIndex<textRanges.length; resultIndex++) {
 				textRanges[resultIndex].setText(ersetzemit);
-				
+
 			}
 		}
 	}
-	
+
 	/*******************************************************************************************/
 
 	public static void starteTaxierung(String url,HashMap<String,String> taxWerte) throws OfficeApplicationException, NOAException, TextException{
@@ -964,12 +965,12 @@ public class OOTools{
 			      Map.Entry<?,?> entry = (Map.Entry<?,?>) it.next();
 			      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
 			    	  try{
-			    		  
+
 			    	  }catch(com.sun.star.uno.RuntimeException ex){
 			    		  ex.printStackTrace();
 			    		  //System.out.println("Fehler bei "+placeholderDisplayText);
 			    	  }
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 
 			    	  break;
 			      }
@@ -980,7 +981,7 @@ public class OOTools{
 		if(SystemConfig.hmAbrechnung.get("hmallinoffice").equals("1")){
 			textDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 		}else{
-			final ITextDocument xdoc = textDocument; 
+			final ITextDocument xdoc = textDocument;
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws java.lang.Exception {
@@ -998,9 +999,9 @@ public class OOTools{
 					return null;
 				}
 			}.execute();
-			
-			
-		}	
+
+
+		}
 	}
 	/*******************************************************************************************/
 	/*******************************************************************************************/
@@ -1039,31 +1040,31 @@ public class OOTools{
 			e.printStackTrace();
 		}
 		try{
-			
-			
-		
+
+
+
 		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		for (int i = 0; i < placeholders.length; i++) {
 			System.out.println("Durchlauf = "+i+" insgesamt Plazhalter = "+placeholders.length);
 			//boolean loeschen = false;
 			//boolean schonersetzt = false;
 			String placeholderDisplayText = placeholders[i].getDisplayText().toLowerCase();
-			
 
-			////System.out.println(placeholderDisplayText);	
+
+			////System.out.println(placeholderDisplayText);
 			////System.out.println("Oiginal-Placeholder-Text = "+placeholders[i].getDisplayText());
 		    /*****************/
 			//int i = 0;
 			//int anzahlplatzhalter = placeholders.length;
-			//String placeholderDisplayText = placeholders[i].getDisplayText().toLowerCase();		
+			//String placeholderDisplayText = placeholders[i].getDisplayText().toLowerCase();
 
 			Set<?> entries = SystemConfig.hmAdrBDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
-		    
-		    while (it.hasNext()) {
-		    	
 
-		    			
+		    while (it.hasNext()) {
+
+
+
 
 			      Map.Entry<?,?> entry = (Map.Entry<?,?>) it.next();
 			      String key = entry.getKey().toString().toLowerCase();
@@ -1096,20 +1097,20 @@ public class OOTools{
 			    			  }
 			    		  }
 			    	  }
-			    	  
+
 			      }else if( (!(key.contains("<bblock") || key.contains("<btitel"))) && key.equals(placeholderDisplayText)  ){
 				      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
 				    	  if((key.contains("<blang")) && ((String)entry.getValue()).trim().equals("") ){
 				    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 				    	  }else{
-					    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));			    		  
+					    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 				    	  }
 	    				  break;
 				      }
 			      }else{
 			    	  System.out.println("in keinem von Beidem "+entry.getKey()+" - "+key+" - "+placeholderDisplayText);
 			      }
-			      
+
 				    try {
 						Thread.sleep(25);
 					} catch (InterruptedException e) {
@@ -1119,11 +1120,11 @@ public class OOTools{
 
 			    }
 
-			
+
 
 		}
-		
- 
+
+
 
 		}catch(NullPointerException ex){
 				ex.printStackTrace();
@@ -1132,7 +1133,8 @@ public class OOTools{
 		viewCursor.getPageCursor().jumpToFirstPage();
 		final ITextDocument xtextDocument = textDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
@@ -1141,7 +1143,7 @@ public class OOTools{
 
 	}
 
-	
+
 	/*******************************************************************************************/
 	/*******************************************************************************************/
 
@@ -1173,7 +1175,7 @@ public class OOTools{
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		ITextDocument textDocument = (ITextDocument)document;
 		ITextFieldService textFieldService = textDocument.getTextFieldService();
 		ITextField[] placeholders = null;
@@ -1190,15 +1192,15 @@ public class OOTools{
 		}
 		try{
 		Vector<String> docPlatzhalter = new Vector<String>();
-		int i; 
+		int i;
 		int anzahlph = placeholders.length;
-		
+
 		for(i = 0; i < anzahlph;i++){
-			docPlatzhalter.add( placeholders[i].getDisplayText().substring(0,1) + 
+			docPlatzhalter.add( placeholders[i].getDisplayText().substring(0,1) +
 					placeholders[i].getDisplayText().substring(1,2).toUpperCase() + placeholders[i].getDisplayText().substring(2).toLowerCase());
 
 		}
-		
+
 		String key;
 		String wert;
 		for(i = 0; i < anzahlph;i++){
@@ -1215,7 +1217,7 @@ public class OOTools{
 						//System.out.println("nach Text setzen -> "+key+" = "+wert);
 					}
 				}
-		}	
+		}
 
 		}catch(NullPointerException ex){
 				ex.printStackTrace();
@@ -1224,7 +1226,8 @@ public class OOTools{
 		viewCursor.getPageCursor().jumpToFirstPage();
 		final ITextDocument xtextDocument = textDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
@@ -1245,18 +1248,18 @@ public class OOTools{
 			textDocument = (ITextDocument)document;
 			OOTools.inDenVordergrund(textDocument);
 			////System.out.println("In den Vordergrund");
-				textDocument.getFrame().setFocus();	
-			
-		} 
+				textDocument.getFrame().setFocus();
+
+		}
 		catch (OfficeApplicationException exception) {
 			exception.printStackTrace();
-		} 
+		}
 		catch (NOAException exception) {
 			exception.printStackTrace();
 		}
 		return textDocument;
 	}
-		
+
 	public synchronized ITextDocument starteWriterMitDatei(String url){
 		try {
 			if(!Reha.officeapplication.isActive()){
@@ -1274,22 +1277,22 @@ public class OOTools{
 			XTextViewCursorSupplier xTextViewCursorSupplier = UnoRuntime.queryInterface(XTextViewCursorSupplier.class,
 			xController);
 			XTextViewCursor xtvc = xTextViewCursorSupplier.getViewCursor();
-			
-			
-			
-			//xtvc.gotoStart(false);	
-			
+
+
+
+			//xtvc.gotoStart(false);
+
 			textDocument.getFrame().setFocus();
 
-			return textDocument;	
-			
+			return textDocument;
+
 		}catch (OfficeApplicationException exception) {
 			exception.printStackTrace();
 		}catch (NOAException exception) {
 			exception.printStackTrace();
 		}
 		return null;
-		
+
 	}
 	public static synchronized ITextDocument starteWriterMitStream(InputStream is, String titel){
 		try {
@@ -1310,8 +1313,8 @@ public class OOTools{
 			xtvc.gotoStart(false);
 			textDocument.getFrame().setFocus();
 			is.close();
-			return textDocument;	
-			
+			return textDocument;
+
 		}catch (OfficeApplicationException exception) {
 			exception.printStackTrace();
 		}catch (NOAException exception) {
@@ -1321,7 +1324,7 @@ public class OOTools{
 			e.printStackTrace();
 		}
 		return null;
-		
+
 	}
 
 	public ISpreadsheetDocument starteCalcMitDatei(String url){
@@ -1339,11 +1342,11 @@ public class OOTools{
 			/********************/
 			spreadsheetDocument.getFrame().setFocus();
 			return spreadsheetDocument;
-			
-		} 
+
+		}
 		catch (Throwable exception) {
 			exception.printStackTrace();
-		} 
+		}
 		return null;
 	}
 
@@ -1353,14 +1356,14 @@ public class OOTools{
 			IDocument document = documentService.constructNewDocument(IDocument.CALC, DocumentDescriptor.DEFAULT);
 			ISpreadsheetDocument spreadsheetDocument = (ISpreadsheetDocument) document;
 			spreadsheetDocument.getFrame().setFocus();
-		} 
+		}
 		catch (Throwable exception) {
 			exception.printStackTrace();
-		} 
+		}
 	}
-		
-		
-	
+
+
+
 	public static void starteLeerenImpress(){
 		try {
 			IDocumentService documentService = Reha.officeapplication.getDocumentService();
@@ -1371,8 +1374,8 @@ public class OOTools{
 		catch(Throwable throwable) {
 			throwable.printStackTrace();
 		}
-		
-		
+
+
 	}
 	public static synchronized void setzePapierFormat(ITextDocument textDocument,int hoch,int breit) throws NoSuchElementException, WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
 		XTextDocument xTextDocument = textDocument.getXTextDocument();
@@ -1390,7 +1393,7 @@ public class OOTools{
 		+ xStyleProps.getPropertyValue(props[i].Name));
 		}
 		//z.B. für A5
-		 * 
+		 *
 		 */
 		xStyleProps.setPropertyValue("Height", hoch);
 		xStyleProps.setPropertyValue("Width", breit);
@@ -1512,8 +1515,8 @@ public class OOTools{
 				//System.out.println("************catch()*******************");
 				ex.printStackTrace();
 			}
-	
-		    /*****************/			
+
+		    /*****************/
 			Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
@@ -1523,7 +1526,7 @@ public class OOTools{
 		    		  placeholders[i].getTextRange().setText("\b");
 		    		  //OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  //placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  schonersetzt = true;
@@ -1539,7 +1542,7 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  //placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  schonersetzt = true;
@@ -1556,16 +1559,16 @@ public class OOTools{
 		    		  //placeholders[i].getTextRange().setText("\b");
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  //placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  schonersetzt = true;
 		    	  break;
 		      }
 		    }
-		    
+
 		    /*****************/
-		    
+
 		    entries = SystemConfig.hmEBerichtDaten.entrySet();
 		    it = entries.iterator();
 		    while (it.hasNext() && (!schonersetzt)) {
@@ -1574,27 +1577,27 @@ public class OOTools{
 		    	  if(((String)entry.getValue()).trim().equals("")){
 		    		  OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    	  }else{
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 		    	  }
 		    	  schonersetzt = true;
 		    	  break;
 		      }
 		    }
-		    
-		    
+
+
 		    if( (!schonersetzt) && (!placeholders[i].getDisplayText().equalsIgnoreCase("<bblock1>"))){
 		    	OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
 		    }
 		    /*****************/
 		}
-		
-		return textDocument;	
+
+		return textDocument;
 	}
-		
-		
-	
+
+
+
 	public static void inDenVordergrund(ITextDocument textDocumentx){
-		ITextDocument textDocument = textDocumentx; 
+		ITextDocument textDocument = textDocumentx;
 		IFrame officeFrame = textDocument.getFrame();
 		XFrame xFrame = officeFrame.getXFrame();
 		XTopWindow topWindow = UnoRuntime.queryInterface(XTopWindow.class,
@@ -1603,7 +1606,7 @@ public class OOTools{
 		xFrame.activate();
 		topWindow.toFront();
 
-		
+
 	}
 	public static synchronized void ooOrgAnmelden(){
 		new SwingWorker<Void,Void>(){
@@ -1618,7 +1621,7 @@ public class OOTools{
 					if(!Reha.officeapplication.isActive()){
 						Reha.starteOfficeApplication();
 					}
-					
+
 					IDocumentService documentService = Reha.officeapplication.getDocumentService();
 					document = documentService.constructNewDocument(IDocument.WRITER, docdescript);
 					textDocument = (ITextDocument)document;
@@ -1626,11 +1629,11 @@ public class OOTools{
 					System.err.println("Initiales Dokument wurde produziert und wieder geschlossen");
 					Reha.thisClass.messageLabel.setForeground(Color.BLACK);
 					Reha.thisClass.messageLabel.setText("OpenOffice.org: Init o.k.");
-				} 
+				}
 				catch (OfficeApplicationException exception) {
 					Reha.thisClass.messageLabel.setText("OO.org: nicht Verfügbar");
 					exception.printStackTrace();
-				} 
+				}
 				catch (NOAException exception) {
 					Reha.thisClass.messageLabel.setText("OO.org: nicht Verfügbar");
 					exception.printStackTrace();
@@ -1638,10 +1641,10 @@ public class OOTools{
 				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 				return null;
 			}
-			
+
 		}.execute();
 	}
-	
+
 	public static void druckerSetzen(ITextDocument textDocument,String drucker){
 
 		/**********************/
@@ -1668,7 +1671,7 @@ public class OOTools{
 					e.printStackTrace();
 				}
 			}
-		}		
+		}
 	}
 	/***********************OO-Calc Funktionen*******************************/
 	public static void doColWidth(ISpreadsheetDocument spreadsheetDocument,String sheetName, int col_first,int col_last,int width) throws NoSuchElementException, WrappedTargetException, IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
@@ -1714,10 +1717,10 @@ public class OOTools{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         com.sun.star.beans.XPropertySet xPropSet = null;
-		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
+		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
 		xPropSet.setPropertyValue( "NumberFormat", cell_numberformat );
 	}
-	
+
 	public static void doCellValue(XSheetCellCursor cellCursor,int col,int row,Object value) throws IndexOutOfBoundsException{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         XText cellText;
@@ -1727,7 +1730,7 @@ public class OOTools{
         	cellText = UnoRuntime.queryInterface(XText.class, cell);
         	cellText.setString((String)value);
         }else{
-        	
+
         }
 	}
 	public static void doCellFormula(XSheetCellCursor cellCursor,int col,int row,String formula) throws IndexOutOfBoundsException{
@@ -1738,7 +1741,7 @@ public class OOTools{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         com.sun.star.beans.XPropertySet xPropSet = null;
-		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
+		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
 		xPropSet.setPropertyValue( "CharColor", color );
 		/* Beispiel für Auflistung der Property-Namen
 		//System.out.println("Start-CellPropertie*********************************");
@@ -1749,34 +1752,34 @@ public class OOTools{
 	      }
 		//System.out.println("End-CellPropertie*********************************");
 		*/
-	    
+
 	}
 	public static void doCellFontBold(XSheetCellCursor cellCursor,int col,int row) throws IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         com.sun.star.beans.XPropertySet xPropSet = null;
-		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
+		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
 		xPropSet.setPropertyValue( "CharWeight",com.sun.star.awt.FontWeight.BOLD );
 		/* Beispiele für Fonthandling
 		xPropSet.setPropertyValue("CharFontStyleName", String.valueOf("Times New Roman"));
 		xPropSet.setPropertyValue("CharWeight", new Float(com.sun.star.awt.FontWeight.NORMAL));
 		xPropSet.setPropertyValue("CharHeight", new Float(12));
-		*/ 
+		*/
 	}
 	public static void doCellFontItalic(XSheetCellCursor cellCursor,int col,int row) throws IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException{
 		XCell cell= cellCursor.getCellByPosition(col,row);
         UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         com.sun.star.beans.XPropertySet xPropSet = null;
-		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);        
+		xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
 		xPropSet.setPropertyValue( "CharPosture", com.sun.star.awt.FontSlant.ITALIC );
 	}
-	
-	
+
+
 	/*******************************************************/
 	public static void holeClipBoard() {
 
 		//System.out.println("Connected to a running office ...");
-        
+
 
 		try {
 			XComponentContext xComponentContext;
@@ -1784,10 +1787,10 @@ public class OOTools{
 			xComponentContext = com.sun.star.comp.helper.Bootstrap.bootstrap();
 			XMultiComponentFactory xMultiComponentFactory;
 			xMultiComponentFactory = (XMultiComponentFactory) Reha.officeapplication.getDocumentService();
-		
+
 		Object oClipboard =
 	          xMultiComponentFactory.createInstanceWithContext(
-	          "com.sun.star.datatransfer.clipboard.SystemClipboard", 
+	          "com.sun.star.datatransfer.clipboard.SystemClipboard",
 	          xComponentContext);
 		XClipboard xClipboard = UnoRuntime.queryInterface(XClipboard.class, oClipboard);
 
@@ -1807,16 +1810,16 @@ public class OOTools{
 		DataFlavor aUniFlv = null;
 
 		for (int i=0;i<aDflvArr.length;i++)	{
-			//System.out.println( "MimeType: " + 
-            //    aDflvArr[i].MimeType + 
-              //  " HumanPresentableName: " + 
-            //    aDflvArr[i].HumanPresentableName );    
+			//System.out.println( "MimeType: " +
+            //    aDflvArr[i].MimeType +
+              //  " HumanPresentableName: " +
+            //    aDflvArr[i].HumanPresentableName );
 
 			// if there is the format unicode text on the clipboard save the
 			// corresponding DataFlavor so that we can later output the string
 
 			if (aDflvArr[i].MimeType.equals("text/plain;charset=utf-16"))
-			{     
+			{
                 aUniFlv = aDflvArr[i];
 			}
 		}
@@ -1825,15 +1828,15 @@ public class OOTools{
 		try{
 			if (aUniFlv != null){
                 //System.out.println("Unicode text on the clipboard...");
-                
-				Object aData = xTransferable.getTransferData(aUniFlv);      
+
+				Object aData = xTransferable.getTransferData(aUniFlv);
 
                 //System.out.println(AnyConverter.toString(aData));
 			}
 		}catch(UnsupportedFlavorException ex){
 			System.err.println( "Requested format is not available" );
 		}
-		
+
 		} catch (OfficeApplicationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -1856,49 +1859,49 @@ class TheraPiDocListener implements IDocumentListener{
 	@Override
 	public void disposing(IEvent arg0) {
 		System.out.println("disposing");
-		
+
 	}
 
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onInsertDone(IDocumentEvent arg0) {
 		System.out.println("onInsertDone");
-		
+
 	}
 
 	@Override
 	public void onInsertStart(IDocumentEvent arg0) {
 		System.out.println("onInsertStart");
-		
+
 	}
 
 	@Override
 	public void onLoad(IDocumentEvent arg0) {
 		System.out.println("onLoad");
-		
+
 	}
 
 	@Override
 	public void onLoadDone(IDocumentEvent arg0) {
 		System.out.println("onLoadDone");
-		
+
 	}
 
 	@Override
 	public void onLoadFinished(IDocumentEvent arg0) {
 		System.out.println("onLoadFinished");
-		
+
 	}
 
 	@Override
@@ -1909,62 +1912,62 @@ class TheraPiDocListener implements IDocumentListener{
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNew(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onSave(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onSaveAsDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onUnload(IDocumentEvent arg0) {
 		System.out.println("onUnload");
-		
+
 	}
-	
+
 }
 /**************************************/

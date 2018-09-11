@@ -51,6 +51,7 @@ public class ColorEditor extends AbstractCellEditor
      * Handles events from the editor button and from
      * the dialog's OK button.
      */
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (EDIT.equals(e.getActionCommand())) {
             //The user has clicked the cell, so
@@ -68,11 +69,13 @@ public class ColorEditor extends AbstractCellEditor
     }
 
     //Implement the one CellEditor method that AbstractCellEditor doesn't.
+    @Override
     public Object getCellEditorValue() {
         return currentColor;
     }
 
     //Implement the one method defined by TableCellEditor.
+    @Override
     public Component getTableCellEditorComponent(JTable table,
                                                  Object value,
                                                  boolean isSelected,
@@ -83,6 +86,7 @@ public class ColorEditor extends AbstractCellEditor
         return button;
     }
     
+    @Override
     public boolean isCellEditable(EventObject evt) {
         if (evt instanceof MouseEvent) {
         	if(((MouseEvent)evt).getClickCount()==2){

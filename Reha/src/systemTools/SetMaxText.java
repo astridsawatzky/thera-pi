@@ -37,7 +37,8 @@ public class SetMaxText extends PlainDocument {
 	  }
 
 	 
-	  public void insertString
+	  @Override
+    public void insertString
 	    (int offset, String  str, AttributeSet attr)
 	      throws BadLocationException {
 		  if (str == null) return;

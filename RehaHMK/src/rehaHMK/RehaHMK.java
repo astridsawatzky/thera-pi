@@ -445,7 +445,8 @@ public class RehaHMK implements WindowListener {
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	

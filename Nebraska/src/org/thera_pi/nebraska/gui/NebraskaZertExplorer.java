@@ -402,7 +402,8 @@ public class NebraskaZertExplorer  extends JXPanel implements ListSelectionListe
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class getColumnClass(int columnIndex) {
+		@Override
+        public Class getColumnClass(int columnIndex) {
 			   if(columnIndex==1 ){
 				   return ImageIcon.class;
 			   }else if(columnIndex==4){
@@ -413,7 +414,8 @@ public class NebraskaZertExplorer  extends JXPanel implements ListSelectionListe
 			   }
 		}
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 		          return false;
      }
 	}
@@ -421,7 +423,8 @@ public class NebraskaZertExplorer  extends JXPanel implements ListSelectionListe
 	/*****************************************************************************/
 	class ZertListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        
 	        //int firstIndex = e.getFirstIndex();

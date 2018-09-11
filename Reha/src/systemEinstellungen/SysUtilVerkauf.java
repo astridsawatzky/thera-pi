@@ -309,10 +309,12 @@ public class SysUtilVerkauf extends JXPanel {
 		explorer.setCurrentDirectory(new File(Path.Instance.getProghome()+"/vorlagen"));
 		
 		explorer.setFileFilter(new FileFilter() {
-			public boolean accept(File f) {
+			@Override
+            public boolean accept(File f) {
 				return f.isDirectory() || f.getName().toLowerCase().endsWith(".ott");
 			}
-			public String getDescription() {
+			@Override
+            public String getDescription() {
 				return "OpenOffice.org Vorlagen";
 			}
 		});

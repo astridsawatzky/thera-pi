@@ -364,7 +364,8 @@ class Kollegen implements Comparable<Kollegen> {
 	    Zeigen = z;
 	    Position = p;
 	  }
-	  public int compareTo(Kollegen o) {
+	  @Override
+    public int compareTo(Kollegen o) {
 	      //First order by name
 	      int result = Matchcode.compareTo(o.Matchcode);
 	      if (0 == result) {

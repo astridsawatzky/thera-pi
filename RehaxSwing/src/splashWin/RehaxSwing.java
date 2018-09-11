@@ -40,7 +40,8 @@ public class RehaxSwing implements WindowListener,KeyListener{
 	public static void main(String[] args) {
 		RehaxSwing application = new RehaxSwing();
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				
 				try {
 					new SockServer();
@@ -323,7 +324,8 @@ class SetzeLabel extends SwingWorker<Void, Void>{
 	@Override
 	protected Void doInBackground() throws Exception {
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				RehaxSwing.standDerDingelbl.setText(labeltext);
 			}
 		});

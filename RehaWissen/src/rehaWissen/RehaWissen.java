@@ -63,7 +63,8 @@ public class RehaWissen  {
 		NativeInterface.runEventPump();
 		final RehaWissen xapplication = application;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				System.out.println("ProgHome = "+proghome);
 				jDiag = xapplication.getDialog();
 
@@ -104,7 +105,8 @@ public class RehaWissen  {
 }
 final class HilfeDatenbankStarten implements Runnable{
 
-	public void run(){
+	@Override
+    public void run(){
 
 		try{
 			Class.forName("de.root1.jpmdbc.Driver");

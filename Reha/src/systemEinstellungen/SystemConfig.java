@@ -36,7 +36,7 @@ import terminKalender.ParameterLaden;
 
 
 public class SystemConfig {
- 
+
 	public static Vector<ArrayList<String>> vDatenBank;
 	public static Vector<ArrayList<String>> vSystemKollegen;
 	public static Vector<String> vComboKollegen;
@@ -49,18 +49,18 @@ public class SystemConfig {
 	public static Vector<Vector<Color[]>> hmDefaultCols;
 	public static Vector<Vector<Color[]>> vSysColsObject;
 	public static Vector<String> vSysColsNamen;
-	public static Vector<String> vSysColsBedeut;	
-	public static Vector<String> vSysColsCode;	
+	public static Vector<String> vSysColsBedeut;
+	public static Vector<String> vSysColsCode;
 	public static Vector<String> vSysDefNamen;
-	
 
-	
+
+
 	public static Vector vSysColDlg;
 	public static HashMap<String,Color[]> aktTkCol;
 	public static boolean[] RoogleTage = {false,false,false,false,false,false,false};
 	public static int RoogleZeitraum;
 	public static HashMap<String,String> RoogleZeiten = null;
-	
+
 	public static boolean[] taskPaneCollapsed = {false,false,true,true,false,true,false};
 	/**
 	 * nachfolgende static's sind notwendig für den Einsatz des Terminkalenders
@@ -80,15 +80,15 @@ public class SystemConfig {
 	public static long[]  KalenderMilli =  {0,0};
 	public static int UpdateIntervall;
 	public static float KalenderAlpha = 0.0f;
-	
+
 	public static boolean AngelegtVonUser = false;
 	public static boolean RezGebWarnung = true;
-	
+
 	public static ArrayList<ArrayList<ArrayList<String[]>>> aRoogleGruppen;
-	
+
 	public static String OpenOfficePfad = null;
 	public static String OpenOfficeNativePfad = null;
-	private static INIFile ini; 
+	private static INIFile ini;
 	private static INIFile colini;
 	public static java.net.InetAddress dieseMaschine = null;
 	public static String dieseCallbackIP = null;
@@ -99,24 +99,24 @@ public class SystemConfig {
 	public static int TerminUeberlappung = 1;
 	public static TerminListe oTerminListe = null;
 	public static GruppenEinlesen oGruppen = null;
-		
+
 	public static HashMap<String,String> hmEmailExtern;
-	public static HashMap<String,String> hmEmailIntern;	
+	public static HashMap<String,String> hmEmailIntern;
 	public static HashMap<String,String> hmVerzeichnisse  = null;
 	public static HashMap<String,String> hmFirmenDaten  = null;
 
-	
+
 	public static HashMap<String,Vector> hmDBMandant  = null;
 	public static Vector<String[]>Mandanten = null;
-	public static Vector<String[]>DBTypen = null;	
+	public static Vector<String[]>DBTypen = null;
 	public static int AuswahlImmerZeigen;
-	public static int DefaultMandant;		
+	public static int DefaultMandant;
 
 	public static Vector<ArrayList<String>>InetSeiten = null;
 	public static String HilfeServer = null;
 	public static boolean HilfeServerIstDatenServer;
 	public static HashMap <String,String> hmHilfeServer;
-	
+
 	public static HashMap<String,String> hmAdrKDaten = null;
 	public static HashMap<String,String> hmAdrADaten = null;
 	public static HashMap<String,String> hmAdrPDaten = null;
@@ -126,8 +126,8 @@ public class SystemConfig {
 	public static HashMap<String,String> hmAdrHMRDaten = null;
 	public static HashMap<String,String> hmEBerichtDaten = new HashMap<String,String>();
 	public static HashMap<String,String> hmRgkDaten = new HashMap<String,String>();
-	
-	
+
+
 	/*
 	public static List<String> lAdrKDaten = null;
 	public static List<String> lAdrADaten = null;
@@ -135,9 +135,9 @@ public class SystemConfig {
 	public static List<String> lAdrRDaten = null;
 	*/
 	public static HashMap<String,Integer> hmContainer = null;
-	
 
-	
+
+
 	/*
 	public static Vector<String> vPreisGruppen;
 	public static Vector<Integer> vHMRAbrechnung;
@@ -148,11 +148,11 @@ public class SystemConfig {
 	public static Vector<Vector<String>> vHBRegeln;
 	public static Vector<String> vBerichtRegeln;
 	*/
-	
+
 	public static Vector<String> vPatMerker = null;
 	public static Vector<ImageIcon> vPatMerkerIcon = null;
 	public static Vector<String> vPatMerkerIconFile = null;
-	
+
 	public static HashMap<String,String> hmKVKDaten = null;
 	public static String sReaderName = null;
 	public static String sReaderAktiv = null;
@@ -176,94 +176,94 @@ public class SystemConfig {
 	public static String rezBarcodeDrucker = null;
 	public static HashMap<String,String> hmDokuScanner = null;
 	public static HashMap<String,String[]> hmGeraete = null;
-	
+
 	public static HashMap<String,String> hmFremdProgs = null;
 	public static Vector<Vector<String>> vFremdProgs = null;
 	public static HashMap<String,String> hmCompany = null;
-	
+
 	public static String[] rezBarCodName = null;
 	public static Vector<String>rezBarCodForm = null;
-	
+
 
 	public static HashMap<String,Vector<String>> hmTherapBausteine = null;
 
 	public static String[] berichttitel = {null,null,null,null};
 	public static String  thberichtdatei = "";
 	public static HashMap<String,ImageIcon> hmSysIcons = null;
-	
+
 	public static Vector<String> vGutachtenEmpfaenger;
 	public static Vector<String> vGutachtenIK;
 	public static Vector<String> vGutachtenAbsAdresse;
 	public static Vector<String> vGutachtenArzt;
 	public static Vector<String> vGutachtenDisplay;
 	public static String sGutachtenOrt;
-	
+
 	public static HashMap<String,String> hmAbrechnung = new HashMap<String,String>();
 	public static Vector<String> vecTaxierung = new Vector<String>();
-	
+
 	public static HashMap<String,Object> hmPatientenWerkzeugDlgIni = new HashMap<String,Object>();
 
-	// Lemmi 20101223 Steuerparanmeter für den Patienten-Suchen-Dialog	
+	// Lemmi 20101223 Steuerparanmeter für den Patienten-Suchen-Dialog
 	public static HashMap<String,Integer> hmPatientenSuchenDlgIni = new HashMap<String,Integer>();
-	
-	// Lemmi 20110116 Steuerparanmeter für den Rezept-Dialog	
-	public static HashMap<String,Object> hmRezeptDlgIni = new HashMap<String,Object>(); 
-	
-	
-	// Lemmi 20101224 Steuerparanmeter für RGR und AFR Behandlung in OffenePosten und Mahnungen	
+
+	// Lemmi 20110116 Steuerparanmeter für den Rezept-Dialog
+	public static HashMap<String,Object> hmRezeptDlgIni = new HashMap<String,Object>();
+
+
+	// Lemmi 20101224 Steuerparanmeter für RGR und AFR Behandlung in OffenePosten und Mahnungen
 	public static HashMap<String,Integer> hmZusatzInOffenPostenIni = new HashMap<String,Integer>();
-	
+
 	public static HashMap<String,Object> hmTerminBestaetigen = new HashMap<String,Object>();
-	
+
 	public static boolean desktopHorizontal = true;
 
 	public static String dta301InBox = null;
 	public static String dta301OutBox = null;
-	
+
 	public static long timerdelay = 600000;
 	public static boolean timerpopup = true;
 	public static boolean timerprogressbar = true;
-	
+
 	public static Vector<String> vFeiertage;
-	
+
 	public static String sWebCamActive = null;
 	public static int[] sWebCamSize = {320,240};
-	
+
 	public static HashMap<String,Object> hmArschgeigenModus = new HashMap<String,Object>();
 	public static Vector<Vector<String>> vArschgeigenDaten = new Vector<Vector<String>>();
-	
+
 	public static boolean logVTermine = false;
 	public static boolean logAlleTermine = false;
-	
+
 	public static HashMap<String,String> hmHmPraefix = new HashMap<String,String>();
 	public static HashMap<String,String> hmHmPosIndex = new HashMap<String,String>();
-	
+
 	public static Vector <Vector<String>> vOwnDokuTemplate = new Vector <Vector<String>>();
 	public static HashMap<String,String> hmDokuSortMode = new HashMap<String,String>();
-	
+
 	public static HashMap<String,Object> hmIcalSettings = new HashMap<String,Object>();
-	
+
 	public static int certState = 0;
 	final public static int certOK = 0;
 	final public static int certWillExpire = 1;
 	final public static int certIsExpired = 2;
 	final public static int certNotFound = 3;
 	public static boolean certHash256 = false;
-	
+
 	public static HashMap<String,String> hmSMS = new HashMap<String,String>();
 	public static boolean activateSMS = false;
-	public static boolean phoneAvailable = false; 
-	
+	public static boolean phoneAvailable = false;
+
 	public static boolean behdatumTippen = false;
 	public static boolean isAndi = false;
-	
+
 	public static boolean fullSizePwDialog = false;
-	
+
 	public static Vector<Vector<String>> vUserTasks = new Vector <Vector<String>>();
-	
-	
+
+
 	public SystemConfig(){
-	
+
 	}
 	public void SystemStart(String homedir){
 		ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
@@ -272,17 +272,17 @@ public class SystemConfig {
 			dieseMaschine = java.net.InetAddress.getLocalHost();
 		}
 		catch (java.net.UnknownHostException uhe) {
-			
+
 		}
-		
-		
-		
-		
+
+
+
+
 	}
 	public void SystemInit(int i){
 		switch(i){
 		case 1:
-			HauptFenster();	
+			HauptFenster();
 			break;
 		case 2:
 			DatenBank();
@@ -301,7 +301,7 @@ public class SystemConfig {
 			break;
 		case 7:
 			RoogleGruppen();
-			break;	
+			break;
 		case 8:
 			NurSets();
 			break;
@@ -323,7 +323,7 @@ public class SystemConfig {
 		}
 		return;
 	}
-	
+
 	private void DatenBank(){
 		try{
 			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
@@ -331,25 +331,23 @@ public class SystemConfig {
 			int i;
 			ArrayList<String> aKontakt;
 			aKontakt = new ArrayList<String>();
-			
+
 			vDatenBank = new Vector<ArrayList<String>>();
 			lesen =  ini.getIntegerProperty("DatenBank","AnzahlConnections") ;
 			for (i=1;i<(lesen+1);i++){
 				aKontakt.add(String.valueOf(ini.getStringProperty("DatenBank","DBTreiber"+i)) );
-				aKontakt.add(String.valueOf(ini.getStringProperty("DatenBank","DBKontakt"+i)) );			
+				aKontakt.add(String.valueOf(ini.getStringProperty("DatenBank","DBKontakt"+i)) );
 				aKontakt.add(String.valueOf(ini.getStringProperty("DatenBank","DBType"+i)) );
 				String sbenutzer =String.valueOf(ini.getStringProperty("DatenBank","DBBenutzer"+i));
 				aKontakt.add(String.valueOf(sbenutzer));
 				String pw = String.valueOf(ini.getStringProperty("DatenBank","DBPasswort"+i));
 				String decrypted = null;
-				if(!pw.equals("")){
-					if(pw != null){
-						Verschluesseln man = Verschluesseln.getInstance();
-						decrypted = man.decrypt (pw);
-					}else{
-						decrypted = String.valueOf("");
-						JOptionPane.showMessageDialog(null,"Passwort der MySql-Datenbank = null");
-					}
+				if (pw==null) {
+				    decrypted = String.valueOf("");
+                    JOptionPane.showMessageDialog(null,"Passwort der MySql-Datenbank = null");
+				} else	if(!pw.equals("")){
+					Verschluesseln man = Verschluesseln.getInstance();
+					decrypted = man.decrypt (pw);
 				}else{
 					Object ret = JOptionPane.showInputDialog(null, "Geben Sie bitte das Passwort für die MySql-Datenbank ein", "");
 					if(ret == null){
@@ -366,7 +364,7 @@ public class SystemConfig {
 				vDatenBank.add( (ArrayList<String>) aKontakt.clone());
 				aKontakt.clear();
 			}
-			
+
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der rehajava.ini, Methode: Datenbank!\nFehlertext: "+ex.getMessage());
 			ex.printStackTrace();
@@ -386,14 +384,14 @@ public class SystemConfig {
 						hmSMS.put("COMM",phservice.getStringProperty("SMSDienste","TheraPiSMSPort") );
 						activateSMS = true;
 						new Thread(){
-							public void run(){
+							@Override
+                            public void run(){
 								try {
 									boolean loopback = false;
 									boolean sitelocal = false;
 									boolean reachable = false;
-									
+
 									Enumeration<NetworkInterface> netInter = NetworkInterface.getNetworkInterfaces();
-									int n = 0;
 
 									while ( netInter.hasMoreElements() )
 									{
@@ -410,7 +408,7 @@ public class SystemConfig {
 											  if(!loopback && sitelocal && reachable){
 												  dieseCallbackIP = iaddress.getHostAddress();
 												  if(dieseCallbackIP.toString().contains(hmSMS.get("IP").substring(0,hmSMS.get("IP").lastIndexOf(".")))){
-													  System.out.println("Callback-IP: "+dieseCallbackIP);  
+													  System.out.println("Callback-IP: "+dieseCallbackIP);
 													  return;
 												  }
 											  }
@@ -425,19 +423,19 @@ public class SystemConfig {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
-								
+
 								try{
 									new SMSClient().setzeNachricht("PHONE-CONNECTABLE");
 								}catch(Exception ex){
-									
+
 								}
 
 								return;
-								
+
 							}
 						}.start();
 
-						
+
 						System.out.println(hmSMS);
 						}catch(Exception ex){
 							ex.printStackTrace();
@@ -445,7 +443,7 @@ public class SystemConfig {
 					}else{
 						System.out.println("Dienste Autodialer/SMS nicht verfügbar");
 					}
-				
+
 			}else{
 				System.out.println("SmartPhone-Service ist nicht installiert");
 			}
@@ -453,7 +451,7 @@ public class SystemConfig {
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der phoneserver.ini!\nFehlertext: "+ex.getMessage());
 		}
-		
+
 		return;
 	}
 
@@ -463,17 +461,17 @@ public class SystemConfig {
 			boolean mustsave = false;
 			aHauptFenster = new ArrayList<String>();
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","Hintergrundbild"));
-			aHauptFenster.add(ini.getStringProperty("HauptFenster","Bildgroesse"));			
+			aHauptFenster.add(ini.getStringProperty("HauptFenster","Bildgroesse"));
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","FensterFarbeRGB"));
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","FensterTitel"));
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","LookAndFeel"));
-			
+
 			if ( ini.getStringProperty("HauptFenster", "HorizontalTeilen") != null ){
 				desktopHorizontal = (ini.getIntegerProperty("HauptFenster", "HorizontalTeilen") == 1 ? true : false) ;
 			}else{
 				ini.setStringProperty("HauptFenster", "HorizontalTeilen","1",null);
 				mustsave = true;
-				
+
 			}
 			if ( ini.getStringProperty("HauptFenster", "TP1Offen") != null ){
 				if ( ini.getStringProperty("HauptFenster", "TP7Offen") == null ){
@@ -497,7 +495,7 @@ public class SystemConfig {
 				INITool.saveIni(ini);
 			}
 
-			
+
 			OpenOfficePfad = ini.getStringProperty("OpenOffice.org","OfficePfad");
 			if(!pfadOk(OpenOfficePfad)){
 				String meldung = "Es konnte keine gültige OpenOffice-Installation entdeckt werden\n"+
@@ -511,14 +509,14 @@ public class SystemConfig {
 				JOptionPane.showMessageDialog(null, meldung);
 			}
 			OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org","OfficeNativePfad");
-			
+
 			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "nachrichten.ini");
 			timerdelay = ini.getLongProperty("RehaNachrichten", "NachrichtenTimer");
 			timerpopup = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenPopUp") <= 0 ? false : true);
 			timerprogressbar = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenProgressbar") <= 0 ? false : true);
 
 			wissenURL = ini.getStringProperty("WWW-Services","RTA-Wissen");
-			homePageURL = ini.getStringProperty("WWW-Services","HomePage");		
+			homePageURL = ini.getStringProperty("WWW-Services","HomePage");
 			homeDir = Path.Instance.getProghome();
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der rehajava.ini, Mehode:HauptFenster!\nFehlertext: "+ex.getMessage());
@@ -530,8 +528,8 @@ public class SystemConfig {
 		File f = new File(pfad);
 		return f.exists();
 	}
-	
-	
+
+
 	private void TerminKalender(){
 		try{
 			INIFile termkalini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
@@ -550,11 +548,11 @@ public class SystemConfig {
 				aList1.clear();
 				aList2.clear();
 				aList3.clear();
-			}	
+			}
 			KalenderUmfang[0] = String.valueOf(termkalini.getStringProperty("Kalender","KalenderStart"));
-			KalenderUmfang[1] = String.valueOf(termkalini.getStringProperty("Kalender","KalenderEnde"));	
+			KalenderUmfang[1] = String.valueOf(termkalini.getStringProperty("Kalender","KalenderEnde"));
 			KalenderMilli[0] = ZeitFunk.MinutenSeitMitternacht(KalenderUmfang[0]);
-			KalenderMilli[1] = ZeitFunk.MinutenSeitMitternacht(KalenderUmfang[1]);		
+			KalenderMilli[1] = ZeitFunk.MinutenSeitMitternacht(KalenderUmfang[1]);
 			KalenderBarcode =  (termkalini.getStringProperty("Kalender","KalenderBarcode").trim().equals("0") ? false : true );
 			UpdateIntervall = Integer.valueOf(String.valueOf(termkalini.getStringProperty("Kalender","KalenderTimer")));
 			/*ParameterLaden kolLad = */new ParameterLaden();
@@ -580,24 +578,24 @@ public class SystemConfig {
 					INITool.saveIni(ini);
 					KalenderTimeLineZeigen = false;
 				}else{
-					KalenderTimeLineZeigen = (ini.getStringProperty("Kalender", "ZeitLinieZeigen").trim().equals("0") ? false : true);	
+					KalenderTimeLineZeigen = (ini.getStringProperty("Kalender", "ZeitLinieZeigen").trim().equals("0") ? false : true);
 				}
-				
+
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der kalender.ini, Mehode:TerminKalender!\nFehlertext: "+ex.getMessage());
 				ex.printStackTrace();
 				new FireRehaError(this,"SystemConfig.Terminkalender()",new String[]{"kalender.ini einlesen",ex.getMessage()});
-				
+
 			}
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der terminkalender.ini, Mehode:TerminKalender!\nFehlertext: "+ex.getMessage());
 		}
-		
-		
-		
+
+
+
 		return;
 	}
-	
+
 	public static void NurSets(){
 		try{
 			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
@@ -617,13 +615,13 @@ public class SystemConfig {
 				aList1.clear();
 				aList2.clear();
 				aList3.clear();
-			}	
+			}
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der terminkalender.ini, Mehode:NurSets!\nFehlertext: "+ex.getMessage());
 			ex.printStackTrace();
 		}
-	}		
-	
+	}
+
 	public static void  RoogleGruppen(){
 		try{
 			INIFile roogleini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
@@ -665,15 +663,15 @@ public class SystemConfig {
 			INIFile emailini = 		INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "email.ini");
 			hmEmailExtern = new HashMap<String,String>();
 			hmEmailExtern.put("SmtpHost",emailini.getStringProperty("EmailExtern","SmtpHost"));
-			hmEmailExtern.put("SmtpAuth",emailini.getStringProperty("EmailExtern","SmtpAuth"));			
+			hmEmailExtern.put("SmtpAuth",emailini.getStringProperty("EmailExtern","SmtpAuth"));
 			hmEmailExtern.put("Pop3Host",emailini.getStringProperty("EmailExtern","Pop3Host"));
 			hmEmailExtern.put("Username",emailini.getStringProperty("EmailExtern","Username"));
 			String pw = emailini.getStringProperty("EmailExtern","Password");
 			Verschluesseln man = Verschluesseln.getInstance();
 			String decrypted = man.decrypt (pw);
 			hmEmailExtern.put("Password",decrypted);
-			hmEmailExtern.put("SenderAdresse",emailini.getStringProperty("EmailExtern","SenderAdresse"));			
-			hmEmailExtern.put("Bestaetigen",emailini.getStringProperty("EmailExtern","EmpfangBestaetigen"));	
+			hmEmailExtern.put("SenderAdresse",emailini.getStringProperty("EmailExtern","SenderAdresse"));
+			hmEmailExtern.put("Bestaetigen",emailini.getStringProperty("EmailExtern","EmpfangBestaetigen"));
 			if(emailini.getStringProperty("EmailExtern","SmtpSecure")==null){
 				hmEmailExtern.put("SmtpSecure", "keine");
 				emailini.setStringProperty("EmailExtern","SmtpSecure","keine",null);
@@ -683,32 +681,32 @@ public class SystemConfig {
 			}
 			if(emailini.getStringProperty("EmailExtern","SmtpPort")==null){
 				if(hmEmailExtern.get("SmtpSecure").equals("keine")){
-					hmEmailExtern.put("SmtpPort", "25");	
+					hmEmailExtern.put("SmtpPort", "25");
 					emailini.setStringProperty("EmailExtern","SmtpPort","25",null);
 				}else if(hmEmailExtern.get("SmtpSecure").equals("TLS/STARTTLS")){
-					hmEmailExtern.put("SmtpPort", "587");	
+					hmEmailExtern.put("SmtpPort", "587");
 					emailini.setStringProperty("EmailExtern","SmtpPort","587",null);
 				}else if(hmEmailExtern.get("SmtpSecure").equals("SSL")){
-					hmEmailExtern.put("SmtpPort", "465");	
+					hmEmailExtern.put("SmtpPort", "465");
 					emailini.setStringProperty("EmailExtern","SmtpPort","465",null);
 				}
-				mustsave = true;			
+				mustsave = true;
 			}else{
 				hmEmailExtern.put("SmtpPort", emailini.getStringProperty("EmailExtern","SmtpPort"));
 			}
 			/********************/
 			hmEmailIntern = new HashMap<String,String>();
 			hmEmailIntern.put("SmtpHost",emailini.getStringProperty("EmailIntern","SmtpHost"));
-			hmEmailIntern.put("SmtpAuth",emailini.getStringProperty("EmailIntern","SmtpAuth"));			
+			hmEmailIntern.put("SmtpAuth",emailini.getStringProperty("EmailIntern","SmtpAuth"));
 			hmEmailIntern.put("Pop3Host",emailini.getStringProperty("EmailIntern","Pop3Host"));
 			hmEmailIntern.put("Username",emailini.getStringProperty("EmailIntern","Username"));
 			pw = emailini.getStringProperty("EmailIntern","Password");
 			man = Verschluesseln.getInstance();
 			decrypted = man.decrypt (pw);
 			hmEmailIntern.put("Password",decrypted);
-			hmEmailIntern.put("SenderAdresse",emailini.getStringProperty("EmailIntern","SenderAdresse"));			
-			hmEmailIntern.put("Bestaetigen",emailini.getStringProperty("EmailIntern","EmpfangBestaetigen"));	
-			
+			hmEmailIntern.put("SenderAdresse",emailini.getStringProperty("EmailIntern","SenderAdresse"));
+			hmEmailIntern.put("Bestaetigen",emailini.getStringProperty("EmailIntern","EmpfangBestaetigen"));
+
 			if(emailini.getStringProperty("EmailIntern","SmtpSecure")==null){
 				hmEmailIntern.put("SmtpSecure", "keine");
 				emailini.setStringProperty("EmailIntern","SmtpSecure","keine",null);
@@ -718,23 +716,23 @@ public class SystemConfig {
 			}
 			if(emailini.getStringProperty("EmailIntern","SmtpPort")==null){
 				if(hmEmailIntern.get("SmtpSecure").equals("keine")){
-					hmEmailIntern.put("SmtpPort", "25");	
+					hmEmailIntern.put("SmtpPort", "25");
 					emailini.setStringProperty("EmailIntern","SmtpPort","25",null);
 				}else if(hmEmailIntern.get("SmtpSecure").equals("TLS/STARTTLS")){
-					hmEmailIntern.put("SmtpPort", "587");	
+					hmEmailIntern.put("SmtpPort", "587");
 					emailini.setStringProperty("EmailIntern","SmtpPort","587",null);
 				}else if(hmEmailIntern.get("SmtpSecure").equals("SSL")){
-					hmEmailIntern.put("SmtpPort", "465");	
+					hmEmailIntern.put("SmtpPort", "465");
 					emailini.setStringProperty("EmailIntern","SmtpPort","465",null);
 				}
-				mustsave = true;			
+				mustsave = true;
 			}else{
 				hmEmailIntern.put("SmtpPort", emailini.getStringProperty("EmailIntern","SmtpPort"));
 			}
 			if(mustsave){
 				INITool.saveIni(emailini);
 			}
-			
+
 			if(new File(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/dta301.ini").exists()){
 				INIFile dtaini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "dta301.ini");
 				dta301InBox = dtaini.getStringProperty("DatenPfade301", "inbox");
@@ -744,7 +742,7 @@ public class SystemConfig {
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der email.ini, Mehode:EmailParameter!\nFehlertext: "+ex.getMessage());
 		}
 
-	}	
+	}
 	public static void IcalSettings(){
 		try{
 			INIFile icalini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "icalendar.ini");
@@ -792,7 +790,7 @@ public class SystemConfig {
 		}
 		//System.out.println(hmIcalSettings);
 	}
-	
+
 	private void Verzeichnisse(){
 		try{
 			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
@@ -800,8 +798,8 @@ public class SystemConfig {
 			hmVerzeichnisse.put("Programmverzeichnis",String.valueOf(Path.Instance.getProghome()));
 			hmVerzeichnisse.put("Vorlagen",String.valueOf(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK));
 			hmVerzeichnisse.put("Icons",String.valueOf(Path.Instance.getProghome()+"icons"));
-			hmVerzeichnisse.put("Temp",String.valueOf(Path.Instance.getProghome()+"temp/"+Reha.aktIK));		
-			hmVerzeichnisse.put("Ini",String.valueOf(Path.Instance.getProghome()+"ini/"+Reha.aktIK));		
+			hmVerzeichnisse.put("Temp",String.valueOf(Path.Instance.getProghome()+"temp/"+Reha.aktIK));
+			hmVerzeichnisse.put("Ini",String.valueOf(Path.Instance.getProghome()+"ini/"+Reha.aktIK));
 			hmVerzeichnisse.put("Rehaplaner",ini.getStringProperty("Verzeichnisse", "Rehaplaner"));
 			hmVerzeichnisse.put("Fahrdienstliste",ini.getStringProperty("Verzeichnisse", "Fahrdienstliste"));
 			hmVerzeichnisse.put("Fahrdienstrohdatei",ini.getStringProperty("Verzeichnisse", "Fahrdienstrohdatei"));
@@ -809,8 +807,8 @@ public class SystemConfig {
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der rehajava.ini, Mehode:Verzeichnisse!\nFehlertext: "+ex.getMessage());
 		}
 	}
-	
-	
+
+
 	private void TKFarben(){
 		try{
 			if (colini==null){
@@ -825,12 +823,12 @@ public class SystemConfig {
 			for(int i = 0;i<anz;i++){
 				vSysColsNamen.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenNamen"+(i+1))));
 				vSysColsBedeut.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenBedeutung"+(i+1))));
-				vSysColsCode.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenCode"+(i+1))));			
+				vSysColsCode.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenCode"+(i+1))));
 				//colnames.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenNamen")));
 			}
 			int def = Integer.valueOf( String.valueOf(colini.getStringProperty("Terminkalender","FarbenDefaults")));
 			vSysDefNamen = new Vector<String>();
-			//ArrayList<String> defnames = new ArrayList<String>();		
+			//ArrayList<String> defnames = new ArrayList<String>();
 			for(int i = 0;i<def;i++){
 				vSysDefNamen.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenDefaultNamen"+(i+1))));
 				//defnames.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenDefaultNamen")));
@@ -856,8 +854,8 @@ public class SystemConfig {
 				colv.add(farbe);
 			}
 			vSysColsObject.add((Vector<Color[]>)colv.clone());
-			
-			
+
+
 			for(int i = 0; i < def; i++){
 				//Anzahl der Sets
 				colv = new Vector<Color[]>();
@@ -872,7 +870,7 @@ public class SystemConfig {
 				vSysColsObject.add((Vector<Color[]>)colv.clone());
 			}
 
-			JLabel BeispielDummi = new JLabel("so sieht's aus");		
+			JLabel BeispielDummi = new JLabel("so sieht's aus");
 			int i,lang;
 			lang = SystemConfig.vSysColsNamen.size();
 			vSysColDlg = new Vector();
@@ -881,7 +879,7 @@ public class SystemConfig {
 				ovec.add(SystemConfig.vSysColsCode.get(i));
 				ovec.add(SystemConfig.vSysColsBedeut.get(i));
 				ovec.add(SystemConfig.vSysColsObject.get(0).get(i)[0]);
-				ovec.add(SystemConfig.vSysColsObject.get(0).get(i)[1]);			
+				ovec.add(SystemConfig.vSysColsObject.get(0).get(i)[1]);
 				ovec.add(BeispielDummi);
 				vSysColDlg.add(ovec.clone());
 			}
@@ -889,7 +887,7 @@ public class SystemConfig {
 			for(i=0;i<lang;i++){
 				aktTkCol.put(vSysColsNamen.get(i), new Color[] {SystemConfig.vSysColsObject.get(0).get(i)[0],
 					SystemConfig.vSysColsObject.get(0).get(i)[1]});
-				 
+
 			}
 			KalenderHintergrund = aktTkCol.get("AusserAZ")[0];
 		}catch(Exception ex){
@@ -897,7 +895,7 @@ public class SystemConfig {
 		}
 
 	}
-	
+
 	public static void MandantenEinlesen(){
 		try{
 			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/", "mandanten.ini");
@@ -905,23 +903,23 @@ public class SystemConfig {
 			AuswahlImmerZeigen = inif.getIntegerProperty("TheraPiMandanten", "AuswahlImmerZeigen");
 			DefaultMandant = inif.getIntegerProperty("TheraPiMandanten", "DefaultMandant");
 			//int LetzterMandant = inif.getIntegerProperty("TheraPiMandanten", "LetzterMandant");
-			Mandanten = new Vector<String[]>();			
+			Mandanten = new Vector<String[]>();
 			for(int i = 0; i < AnzahlMandanten;i++){
 				String[] mand = {null,null};
 				mand[0] = String.valueOf(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+(i+1)));
 				mand[1] = String.valueOf(inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+(i+1)));
 				Mandanten.add(mand.clone());
 			}
-			hmDBMandant = new HashMap<String,Vector>(); 
+			hmDBMandant = new HashMap<String,Vector>();
 			for(int i = 0; i < AnzahlMandanten;i++){
 				INIFile minif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Mandanten.get(i)[0]+"/", "rehajava.ini");
 				Vector<String> mandantDB = new Vector<String>();
 				mandantDB.add(minif.getStringProperty("DatenBank", "DBType1"));
 				mandantDB.add(minif.getStringProperty("DatenBank", "DBTreiber1"));
-				mandantDB.add(minif.getStringProperty("DatenBank", "DBServer1"));			
-				mandantDB.add(minif.getStringProperty("DatenBank", "DBPort1"));			
-				mandantDB.add(minif.getStringProperty("DatenBank", "DBName1"));			
-				mandantDB.add(minif.getStringProperty("DatenBank", "DBBenutzer1"));	
+				mandantDB.add(minif.getStringProperty("DatenBank", "DBServer1"));
+				mandantDB.add(minif.getStringProperty("DatenBank", "DBPort1"));
+				mandantDB.add(minif.getStringProperty("DatenBank", "DBName1"));
+				mandantDB.add(minif.getStringProperty("DatenBank", "DBBenutzer1"));
 				String pw = minif.getStringProperty("DatenBank", "DBPasswort1");
 				String decrypted = null;
 				if(pw != null){
@@ -933,14 +931,14 @@ public class SystemConfig {
 				mandantDB.add(String.valueOf(decrypted));
 				hmDBMandant.put(Mandanten.get(i)[1],(Vector<String>)mandantDB.clone());
 			}
-			
+
 			INIFile dbtini = INITool.openIni(Path.Instance.getProghome()+"ini/", "dbtypen.ini");
 			int itypen = dbtini.getIntegerProperty("Datenbanktypen", "TypenAnzahl");
 			DBTypen = new Vector<String[]>();
 			String[] typen = new String[] {null,null,null};
 			for(int i = 0; i < itypen;i++){
 				typen[0] = dbtini.getStringProperty("Datenbanktypen", "Typ"+(i+1)+"Typ");
-				typen[1] = dbtini.getStringProperty("Datenbanktypen", "Typ"+(i+1)+"Treiber");			
+				typen[1] = dbtini.getStringProperty("Datenbanktypen", "Typ"+(i+1)+"Treiber");
 				typen[2] = dbtini.getStringProperty("Datenbanktypen", "Typ"+(i+1)+"Port");
 				DBTypen.add(typen.clone());
 			}
@@ -955,13 +953,13 @@ public class SystemConfig {
 			}
 			System.out.println("**********************************************************************");
 			*/
-			
+
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der mandanten.ini, Mehode:MandantenEinlesen!\nFehlertext: "+ex.getMessage());
 		}
 	}
 	public static void GleicheDBMandanten(String sik){
-		
+
 	}
 
 	public static void InetSeitenEinlesen(){
@@ -982,18 +980,18 @@ public class SystemConfig {
 			if(! HilfeServerIstDatenServer){
 				hmHilfeServer = new HashMap<String,String>();
 				hmHilfeServer.put("HilfeDBTreiber", inif.getStringProperty("TheraPiHilfe", "HilfeDBTreiber"));
-				hmHilfeServer.put("HilfeDBLogin", inif.getStringProperty("TheraPiHilfe", "HilfeDBLogin"));		
+				hmHilfeServer.put("HilfeDBLogin", inif.getStringProperty("TheraPiHilfe", "HilfeDBLogin"));
 				hmHilfeServer.put("HilfeDBUser", inif.getStringProperty("TheraPiHilfe", "HilfeDBUser"));
 				String pw = String.valueOf(inif.getStringProperty("TheraPiHilfe","HilfeDBPassword"));
 				Verschluesseln man = Verschluesseln.getInstance();
 				String decrypted = man.decrypt (pw);
-				hmHilfeServer.put("HilfeDBPassword", decrypted);			
+				hmHilfeServer.put("HilfeDBPassword", decrypted);
 			}
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der rehabrowser.ini, Mehode:InetSeitenEinlesen!\nFehlertext: "+ex.getMessage());
 		}
-	}	
- 
+	}
+
 
 	public static void UpdateIni(String inidatei,String gruppe,String element,String wert){
 		INIFile	updateini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", inidatei);
@@ -1002,7 +1000,7 @@ public class SystemConfig {
 	}
 	public static void UpdateIni(INIFile inidatei,String gruppe,String element,Object wert,String hinweis){
 		if(wert instanceof java.lang.String){
-			inidatei.setStringProperty(gruppe, element, (String)wert, hinweis);			
+			inidatei.setStringProperty(gruppe, element, (String)wert, hinweis);
 		}else if(wert instanceof java.lang.Integer){
 			inidatei.setIntegerProperty(gruppe, element, (Integer)wert, hinweis);
 		}
@@ -1036,7 +1034,7 @@ public class SystemConfig {
 		for(int i = 0; i < lAdrPDaten.size(); i++){
 			hmAdrPDaten.put(lAdrPDaten.get(i),"");
 		}
-		/********************/		
+		/********************/
 		hmAdrRDaten = new HashMap<String,String>();
 		List<String> lAdrRDaten = Arrays.asList(new String[]{"<Rpatid>","<Rnummer>","<Rdatum>","<Rposition1>","<Rposition2>","<Rposition3>"
 				,"<Rposition4>","<Rpreis1>","<Rpreis2>","<Rpreis3>","<Rpreis4>","<Rproz1>","<Rproz2>","<Rproz3>"
@@ -1048,7 +1046,7 @@ public class SystemConfig {
 		for(int i = 0; i < lAdrRDaten.size(); i++){
 			hmAdrRDaten.put(lAdrRDaten.get(i),"");
 		}
-		/********************/		
+		/********************/
 		hmAdrBDaten = new HashMap<String,String>();
 		List<String> lAdrBDaten = Arrays.asList(new String[]{"<Badr1>","<Badr2>","<Badr3>","<Badr4>","<Badr5>","<Bbanrede>",
 				"<Bihrenpat>","<Bdisziplin>","<Bdiagnose>","<Breznr>","<Brezdatum>","<Bblock1>","<Bblock2>","<Bblock3>","<Bblock4>",
@@ -1057,7 +1055,7 @@ public class SystemConfig {
 				"<Blang1>","<Blang2>","<Blang3>","<Blang4>","<Barztfax>","<Barztemail>"});
 		for(int i = 0; i < lAdrBDaten.size(); i++){
 			hmAdrBDaten.put(lAdrBDaten.get(i),"");
-		}	
+		}
 		/********************/
 		hmAdrAFRDaten = new HashMap<String,String>();
 		List<String> lAdrAFRDaten = Arrays.asList(new String[]{"<AFRposition1>","<AFRposition2>","<AFRposition3>"
@@ -1068,9 +1066,9 @@ public class SystemConfig {
 		}
 		/********************/
 		hmAdrHMRDaten = new HashMap<String,String>();
-		
+
 	}
-		
+
 
 	public static void DesktopLesen(){
 		hmContainer = new HashMap<String,Integer>();
@@ -1099,7 +1097,7 @@ public class SystemConfig {
 					inif.setIntegerProperty("Container","ZeigeAnPositionX",5,null);
 					mustupdate = true;
 					if(fenster[i].equals("Kalender")){
-						hmContainer.put(fenster[i]+"Opti",1);		
+						hmContainer.put(fenster[i]+"Opti",1);
 					}
 				}
 				hmContainer.put(fenster[i]+"LocationX", inif.getIntegerProperty("Container", "ZeigeAnPositionX"));
@@ -1112,19 +1110,19 @@ public class SystemConfig {
 				//X-Größe
 				if(inif.getIntegerProperty("Container", "DimensionX")==null){
 					inif.setIntegerProperty("Container","DimensionX",-1,null);
-					mustupdate = true;					
+					mustupdate = true;
 				}
 				hmContainer.put(fenster[i]+"DimensionX", inif.getIntegerProperty("Container", "DimensionX"));
 				//Y-Größe
 				if(inif.getIntegerProperty("Container", "DimensionY")==null){
 					inif.setIntegerProperty("Container","DimensionY",-1,null);
-					mustupdate = true;					
+					mustupdate = true;
 				}
 				hmContainer.put(fenster[i]+"DimensionY", inif.getIntegerProperty("Container", "DimensionY"));
 				if(mustupdate){
 					INITool.saveIni(inif);
 				}
-	
+
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung von INI-Dateien , Mehode:DesktopLesen!\nFehlertext: "+ex.getMessage());
 			}
@@ -1141,7 +1139,7 @@ public class SystemConfig {
 			for(int i = 1; i < 7;i++){
 				vPatMerker.add(inif.getStringProperty("Kriterien", "Krit"+i));
 				String simg = inif.getStringProperty("Kriterien", "Image"+i);
-				if(simg.equals("") || simg==null){
+				if( simg==null || simg.equals("") ){
 					vPatMerkerIcon.add(null);
 					vPatMerkerIconFile.add(null);
 				}else{
@@ -1178,18 +1176,18 @@ public class SystemConfig {
 				hmKVKDaten.put("Krankekasse", "");
 				hmKVKDaten.put("Kassennummer", "");
 				hmKVKDaten.put("Kartennummer", "");
-				hmKVKDaten.put("Versichertennummer", "");			
-				hmKVKDaten.put("Status", "");			
+				hmKVKDaten.put("Versichertennummer", "");
+				hmKVKDaten.put("Status", "");
 				hmKVKDaten.put("Statusext", "");
-				hmKVKDaten.put("Vorname", "");			
-				hmKVKDaten.put("Nachname", "");			
-				hmKVKDaten.put("Geboren", "");			
-				hmKVKDaten.put("Strasse", "");			
-				hmKVKDaten.put("Land", "");			
-				hmKVKDaten.put("Plz", "");			
-				hmKVKDaten.put("Ort", "");			
-				hmKVKDaten.put("Gueltigkeit", "");			
-				hmKVKDaten.put("Checksumme", "");	
+				hmKVKDaten.put("Vorname", "");
+				hmKVKDaten.put("Nachname", "");
+				hmKVKDaten.put("Geboren", "");
+				hmKVKDaten.put("Strasse", "");
+				hmKVKDaten.put("Land", "");
+				hmKVKDaten.put("Plz", "");
+				hmKVKDaten.put("Ort", "");
+				hmKVKDaten.put("Gueltigkeit", "");
+				hmKVKDaten.put("Checksumme", "");
 				hmKVKDaten.put("Fehlercode", "");
 				hmKVKDaten.put("Fehlertext", "");
 				hmKVKDaten.put("Anrede", "");
@@ -1197,7 +1195,7 @@ public class SystemConfig {
 			}else{
 				sReaderName = "";
 				sReaderAktiv = "0";
-				sReaderCtApiLib = inif.getStringProperty("KartenLeser", "KartenLeserCTAPILib");			
+				sReaderCtApiLib = inif.getStringProperty("KartenLeser", "KartenLeserCTAPILib");
 			}
 			if(inif.getIntegerProperty("BarcodeScanner", "BarcodeScannerAktivieren") > 0){
 				try{
@@ -1231,7 +1229,7 @@ public class SystemConfig {
 				hmDokuScanner.put("seiten", "---");
 				hmDokuScanner.put("dialog", "---");
 			}
-			
+
 			if(mustsave){
 				INITool.saveIni(inif);
 			}
@@ -1255,7 +1253,7 @@ public class SystemConfig {
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der arzt.ini, Mehode:ArztGruppenInit!\nFehlertext: "+ex.getMessage());
 		}
 	}
-	
+
 	public static void RezeptInit(){
 		try{
 			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
@@ -1324,17 +1322,17 @@ public class SystemConfig {
 			if(dummy != null){
 				behdatumTippen = (inif.getStringProperty("Sonstiges", "BehDatumTippen").equals("0") ? false : true);
 			}
-			
+
 			String[] hmPraefixArt =  {"KG","MA","ER","LO","RH","PO","RS","FT"};
 			String[] hmPraefixZahl = {"22","21","26","23","67","71","61","62"};
 			String[] hmIndexZahl = 	 {"2", "1", "5", "3", "6", "7","6","7"};
 			//hmHmPraefix
-			
+
 			if(inif.getStringProperty("HMRPraefix", "KG") == null || inif.getStringProperty("HMRPosindex", "KG") == null){
 				for(int i = 0; i < hmPraefixArt.length;i++){
 					inif.setStringProperty("HMRPraefix",hmPraefixArt[i] ,hmPraefixZahl[i],null);
 					inif.setStringProperty("HMRPosindex",hmPraefixArt[i] ,hmIndexZahl[i],null);
-					hmHmPraefix.put(hmPraefixArt[i] ,hmPraefixZahl[i]);	
+					hmHmPraefix.put(hmPraefixArt[i] ,hmPraefixZahl[i]);
 					hmHmPosIndex.put(hmPraefixArt[i],hmIndexZahl[i]);
 				}
 				//System.out.println("Aus Direktzuweisung\n"+hmHmPraefix);
@@ -1343,7 +1341,7 @@ public class SystemConfig {
 			}else{
 				for(int i = 0; i < hmPraefixArt.length;i++){
 					hmHmPraefix.put(hmPraefixArt[i] ,inif.getStringProperty("HMRPraefix",hmPraefixArt[i]));
-					hmHmPosIndex.put(hmPraefixArt[i],inif.getStringProperty("HMRPosindex",hmPraefixArt[i]));				
+					hmHmPosIndex.put(hmPraefixArt[i],inif.getStringProperty("HMRPosindex",hmPraefixArt[i]));
 				}
 				//System.out.println("Aus INI-Datei\n"+hmHmPraefix);
 				//System.out.println("Aus INI-Datei\n"+hmHmPosIndex);
@@ -1351,13 +1349,13 @@ public class SystemConfig {
 			if(mustsave){
 				INITool.saveIni(inif);
 			}
-			
+
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der rezept.ini, Mehode:RezeptInit!\nFehlertext: "+ex.getMessage());
 		}
-		
+
 	}
-	
+
 	public static void TherapBausteinInit() {
 		INIFile inif = null;
 		try{
@@ -1381,10 +1379,10 @@ public class SystemConfig {
 			}
 			//System.out.println(hmTherapBausteine);
 			for(int i = 0; i<4;i++){
-				berichttitel[i] = inif.getStringProperty("Bericht", "Block"+(i+1));	
+				berichttitel[i] = inif.getStringProperty("Bericht", "Block"+(i+1));
 			}
 			thberichtdatei = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+inif.getStringProperty("Datei", "BerichtsDatei");
-			
+
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der thbericht.ini, Mehode:TherapBausteinInit!\nFehlertext: "+ex.getMessage());
 		}
@@ -1405,8 +1403,8 @@ public class SystemConfig {
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der firmen.ini, Mehode:FirmenDaten!\nFehlertext: "+ex.getMessage());
 		}
 	}
-	
-	
+
+
 	// Lemmi 20101224 Steuerparanmeter für RGR und AFR in OffenPosten und Mahnungen, zentral einlesen
 	public static void OffenePostenIni_ReadFromIni(){
 		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "offeneposten.ini");
@@ -1439,7 +1437,7 @@ public class SystemConfig {
 				inif.setStringProperty("EigeneDokus", "DokuDatei1","",null);
 				mustsave = true;
 			}else{
-				Vector<String> vdummy = new Vector<String>(); 
+				Vector<String> vdummy = new Vector<String>();
 				for(int i = 0; i < Integer.parseInt(dokus); i++){
 					vdummy.clear();
 					vdummy.add( inif.getStringProperty("EigeneDokus", "DokuText"+Integer.toString(i+1)));
@@ -1452,7 +1450,7 @@ public class SystemConfig {
 				inif.setStringProperty("EigeneDokus", "SortAsc","0",null);
 				hmDokuSortMode.put("sortmode", "0");
 				hmDokuSortMode.put("sortasc", "0" );
-				
+
 				mustsave = true;
 			}else{
 				hmDokuSortMode.put("sortmode", inif.getStringProperty("EigeneDokus", "SortByDate") );
@@ -1465,7 +1463,7 @@ public class SystemConfig {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der eigenedoku.ini, Mehode:EigeneDokuvorlagenLesen!\nFehlertext: "+ex.getMessage());
 		}
-		
+
 	}
 
 	// Lemmi 20101223 Steuerparanmeter für den Patienten-Suchen-Dialog aus der INI zentral einlesen
@@ -1474,12 +1472,12 @@ public class SystemConfig {
 		try{
 			boolean mustsave = false;
 			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
-			
+
 //			if ( inif.IsFileLoaded() )
 //				int x = 5;
 			// funktioniert auch mit Defaultwerten, wenn die INI-Datei bis dato NICHT existiert. In BedienungIni_WriteToIni()
 			// wird dann eine komplette INI angelegt !
-			
+
 			// Voreinstellung von Defaultwerten
 			hmPatientenWerkzeugDlgIni.put("ToolsDlgClickCount", 2);
 			if ( inif.getStringProperty("Bedienung", "WerkzeugaufrufMausklicks") != null )  // Prüfung auf Existenz
@@ -1489,12 +1487,12 @@ public class SystemConfig {
 			if ( inif.getStringProperty("Bedienung", "WerkzeugaufrufButtonZeigen") != null )  // Prüfung auf Existenz
 				hmPatientenWerkzeugDlgIni.put("ToolsDlgShowButton",inif.getIntegerProperty("Bedienung", "WerkzeugaufrufButtonZeigen") == 1 ? true : false );
 			//System.out.println("Default1 = "+hmPatientenWerkzeugDlgIni.get("ToolsDlgClickCount"));
-			
+
 			// Lemmi 20110116: Abfrage Abbruch bei Rezeptänderungen mit Warnung
 			hmRezeptDlgIni.put("RezAendAbbruchWarn", false);
 			if ( inif.getStringProperty("Rezept", "RezeptAenderungAbbruchWarnung") != null )  // Prüfung auf Existenz
 				hmRezeptDlgIni.put("RezAendAbbruchWarn",inif.getIntegerProperty("Rezept", "RezeptAenderungAbbruchWarnung") == 1 ? true : false );
-			
+
 			///Zeigt den Terminbestätigungsdialog wenn erforderlich, siehe Erweiterung von Drud
 			//Ist der Wert false wird der Dialog nie gezeigt
 			//mit Strg+F11 anstatt Shift+F11 kann die Anzeige des Dialoges
@@ -1538,8 +1536,8 @@ public class SystemConfig {
 					hmPatientenSuchenDlgIni.put("fensterbreite", inif.getIntegerProperty("PatientenSuche", "SuchFensterBreite"));
 				if ( inif.getStringProperty("PatientenSuche", "SuchFensterHoehe") != null )  // Prüfung auf Existenz
 					hmPatientenSuchenDlgIni.put("fensterhoehe", inif.getIntegerProperty("PatientenSuche", "SuchFensterHoehe"));
-				if ( inif.getStringProperty("PatientenSuche", "erweiterteUmlautSuche") != null ){	
-					hmPatientenSuchenDlgIni.put("erweiterteUmlautSuche", inif.getIntegerProperty("PatientenSuche", "erweiterteUmlautSuche"));					
+				if ( inif.getStringProperty("PatientenSuche", "erweiterteUmlautSuche") != null ){
+					hmPatientenSuchenDlgIni.put("erweiterteUmlautSuche", inif.getIntegerProperty("PatientenSuche", "erweiterteUmlautSuche"));
 				} else {
 					inif.setIntegerProperty("PatientenSuche", "erweiterteUmlautSuche", 0, " berücksichtigt bei dt. Umlauten versch. Schreibweisen");
 					hmPatientenSuchenDlgIni.put("erweiterteUmlautSuche", 0);	// kein Eintrag -> Voreinstellung: abgeschaltet
@@ -1551,21 +1549,21 @@ public class SystemConfig {
 			if(mustsave){
 				INITool.saveIni(inif);
 			}
-			
+
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der bedienung.ini, Mehode:BedienungIni_ReadFromIni!\nFehlertext: "+ex.getMessage());
 		}
 	}
 
-	// Lemmi 20101223 Steuerparanmeter für den Patienten-Suchen-Dialog in die INI schreiben	
+	// Lemmi 20101223 Steuerparanmeter für den Patienten-Suchen-Dialog in die INI schreiben
 	public static void BedienungIni_WriteToIni(){
 		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "bedienung.ini");
 
 		// Sofern alle Parameter hier wieder in die INI geschrieben werden, legt das eine komplette INI an !
-	
+
 		inif.setIntegerProperty("Bedienung", "WerkzeugaufrufMausklicks", Integer.parseInt(hmPatientenWerkzeugDlgIni.get("ToolsDlgClickCount").toString()), " Anzahl Klicks für Werkzeugaufruf");
 		inif.setIntegerProperty("Bedienung", "WerkzeugaufrufButtonZeigen", (Boolean)hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton") ? 1 : 0, " Zusatzknopf im Werkzeugdialog");
-		
+
 		inif.setIntegerProperty("PatientenSuche", "SuchFensterBreite", hmPatientenSuchenDlgIni.get("fensterbreite"), " letzte Breite des Suchfensters");
 		inif.setIntegerProperty("PatientenSuche", "SuchFensterHoehe", hmPatientenSuchenDlgIni.get("fensterhoehe"), " letzte Höhe des Suchfensters");
 		inif.setIntegerProperty("PatientenSuche", "Suchart", hmPatientenSuchenDlgIni.get("suchart"), " letzte angewählte Suchart Suchfensters");
@@ -1583,24 +1581,24 @@ public class SystemConfig {
 		ini.setStringProperty("HauptFenster", "HorizontalTeilen",(SystemConfig.desktopHorizontal ? "1" : "0"),null);
 		INITool.saveIni(ini);
 
-/*		
+/*
 		// Wegschreiben der INI-Parameter in die Datenbank TESTHALBER
-		inidb.WritePropInteger("bedienung.ini", "Bedienung", "WerkzeugaufrufMausklicks", 
+		inidb.WritePropInteger("bedienung.ini", "Bedienung", "WerkzeugaufrufMausklicks",
 								Integer.parseInt(hmPatientenWerkzeugDlgIni.get("ToolsDlgClickCount").toString()), "Anzahl Klicks für Werkzeugaufruf");
-		inidb.WritePropInteger("bedienung.ini", "Bedienung", "WerkzeugaufrufButtonZeigen", 
+		inidb.WritePropInteger("bedienung.ini", "Bedienung", "WerkzeugaufrufButtonZeigen",
 								(Boolean)hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton") ? 1 : 0, "Zusatzknopf im Werkzeugdialog");
-	
-		inidb.WritePropInteger("bedienung.ini", "PatientenSuche", "SuchFensterBreite", 
-								hmPatientenSuchenDlgIni.get("fensterbreite"), "letzte Breite des Suchfensters"); 
-		inidb.WritePropInteger("bedienung.ini", "PatientenSuche", "SuchFensterHoehe", 
+
+		inidb.WritePropInteger("bedienung.ini", "PatientenSuche", "SuchFensterBreite",
+								hmPatientenSuchenDlgIni.get("fensterbreite"), "letzte Breite des Suchfensters");
+		inidb.WritePropInteger("bedienung.ini", "PatientenSuche", "SuchFensterHoehe",
 								hmPatientenSuchenDlgIni.get("fensterhoehe"), " letzte Höhe des Suchfensters");
-		inidb.WritePropInteger("bedienung.ini", "PatientenSuche", "Suchart", 
+		inidb.WritePropInteger("bedienung.ini", "PatientenSuche", "Suchart",
 								hmPatientenSuchenDlgIni.get("suchart"), " letzte angewählte Suchart im Suchfenster");
-*/		
+*/
 	}
-	
-	
-	
+
+
+
 	public static void FremdProgs(){
 		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "fremdprog.ini");
 		vFremdProgs = new Vector<Vector<String>>();
@@ -1614,7 +1612,7 @@ public class SystemConfig {
 		}
 		hmFremdProgs = new HashMap<String,String>();
 		anzahl =  inif.getIntegerProperty("FestProg", "FestProgAnzahl");
-		for(int i = 0; i < anzahl; i++){		
+		for(int i = 0; i < anzahl; i++){
 			hmFremdProgs.put(
 					inif.getStringProperty("FestProg", "FestProgName"+(i+1)),
 					inif.getStringProperty("FestProg", "FestProgPfad"+(i+1))
@@ -1627,7 +1625,7 @@ public class SystemConfig {
 		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
 
 		int anzahl =  inif.getIntegerProperty("KartenLeserListe", "LeserAnzahl");
-		String[] string = new String[anzahl]; 
+		String[] string = new String[anzahl];
 		String[] string2 = new String[anzahl];
 		boolean mustsave = false;
 		for(int i = 0; i < anzahl; i++){
@@ -1651,11 +1649,11 @@ public class SystemConfig {
 			inif.setIntegerProperty("WebCam", "WebCamY",sWebCamSize[1],null);
 		}
 		//sWebCamActive
-		
+
 		sWebCamSize[0] = inif.getIntegerProperty("WebCam", "WebCamX");
 		sWebCamSize[1] = inif.getIntegerProperty("WebCam", "WebCamY");
 
-		
+
 		hmGeraete.put("Kartenleser", string.clone());
 		hmGeraete.put("CTApi", string2.clone());
 
@@ -1663,39 +1661,39 @@ public class SystemConfig {
 		string = new String[anzahl];
 		for(int i = 0; i < anzahl; i++){
 			string[i] = inif.getStringProperty("BarcodeScannerListe", "Scanner"+(i+1));
-		}		
+		}
 		hmGeraete.put("Barcode", string.clone());
-		
+
 		anzahl =  inif.getIntegerProperty("ECKartenLeserListe", "ECLeserAnzahl");
 		string = new String[anzahl];
 		for(int i = 0; i < anzahl; i++){
 			string[i] = inif.getStringProperty("ECKartenLeserListe", "ECLeser"+(i+1));
-		}		
+		}
 		hmGeraete.put("ECKarte", string.clone());
 		string = new String[4];
 		for(int i = 1; i < 11; i++){
 			string[0] = inif.getStringProperty("COM"+i, "BaudRate");
 			string[1] = inif.getStringProperty("COM"+i, "Bits");
-			string[2] = inif.getStringProperty("COM"+i, "Parity");			
+			string[2] = inif.getStringProperty("COM"+i, "Parity");
 			string[3] = inif.getStringProperty("COM"+i, "StopBit");
-			hmGeraete.put("COM"+i, string.clone());			
+			hmGeraete.put("COM"+i, string.clone());
 		}
 		if(mustsave){
 			INITool.saveIni(inif);
 		}
-		
+
 	}
-	
+
 	public static void CompanyInit(){
 		hmCompany = new HashMap<String,String>();
 		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "company.ini");
 		hmCompany.put("name", inif.getStringProperty("Company", "CompanyName"));
 		hmCompany.put("enable", inif.getStringProperty("Company", "DeliverEnable"));
 		hmCompany.put("event", inif.getStringProperty("Company", "DeliverEvent"));
-		hmCompany.put("ip", inif.getStringProperty("Company", "DeliverIP"));		
+		hmCompany.put("ip", inif.getStringProperty("Company", "DeliverIP"));
 		hmCompany.put("port", inif.getStringProperty("Company", "DeliverPort"));
 		hmCompany.put("mail", inif.getStringProperty("Company", "DeliverMail"));
-		hmCompany.put("adress", inif.getStringProperty("Company", "DeliverAdress"));		
+		hmCompany.put("adress", inif.getStringProperty("Company", "DeliverAdress"));
 	}
 	public static void GutachtenInit(){
 		vGutachtenEmpfaenger = new Vector<String>();
@@ -1721,7 +1719,7 @@ public class SystemConfig {
 		vGutachtenDisplay.add(inif.getStringProperty("AbsenderDisplayAdresse", "Display2"));
 		vGutachtenDisplay.add(inif.getStringProperty("AbsenderDisplayAdresse", "Display3"));
 	}
-	
+
 	public static void AbrechnungParameter(){
 		boolean mustsave = false;
 		hmAbrechnung.clear();
@@ -1740,7 +1738,7 @@ public class SystemConfig {
 		}else{
 			if(inif.getStringProperty("HMGKVRechnung", "FreigabeErzwingen").trim().equals("0")){
 				hmAbrechnung.put("hmgkvfreigabeerzwingen","0");
-				
+
 			}else if(inif.getStringProperty("HMGKVRechnung", "FreigabeErzwingen").trim().equals("1")){
 				hmAbrechnung.put("hmgkvfreigabeerzwingen","1");
 			}else{
@@ -1752,7 +1750,7 @@ public class SystemConfig {
 		hmAbrechnung.put("hmpriformular", inif.getStringProperty("HMPRIRechnung", "Pformular"));
 		hmAbrechnung.put("hmpridrucker", inif.getStringProperty("HMPRIRechnung", "Pdrucker"));
 		hmAbrechnung.put("hmpriexemplare", inif.getStringProperty("HMPRIRechnung", "Pexemplare"));
-		
+
 		hmAbrechnung.put("hmbgeformular", inif.getStringProperty("HMBGERechnung", "Bformular"));
 		hmAbrechnung.put("hmbgedrucker", inif.getStringProperty("HMBGERechnung", "Bdrucker"));
 		hmAbrechnung.put("hmbgeexemplare", inif.getStringProperty("HMBGERechnung", "Bexemplare"));
@@ -1761,17 +1759,17 @@ public class SystemConfig {
 		hmAbrechnung.put("rehagkvdrucker", inif.getStringProperty("RehaGKVRechnung", "RehaGKVdrucker"));
 		hmAbrechnung.put("rehagkvexemplare", inif.getStringProperty("RehaGKVRechnung", "RehaGKVexemplare"));
 		hmAbrechnung.put("rehagkvik", inif.getStringProperty("RehaGKVRechnung", "RehaGKVik"));
-		
+
 		hmAbrechnung.put("rehadrvformular", inif.getStringProperty("RehaDRVRechnung", "RehaDRVformular"));
 		hmAbrechnung.put("rehadrvdrucker", inif.getStringProperty("RehaDRVRechnung", "RehaDRVdrucker"));
 		hmAbrechnung.put("rehadrvexemplare", inif.getStringProperty("RehaDRVRechnung", "RehaDRVexemplare"));
 		hmAbrechnung.put("rehadrvik", inif.getStringProperty("RehaDRVRechnung", "RehaDRVik"));
-		
+
 		hmAbrechnung.put("rehapriformular", inif.getStringProperty("RehaPRIRechnung", "RehaPRIformular"));
 		hmAbrechnung.put("rehapridrucker", inif.getStringProperty("RehaPRIRechnung", "RehaPRIdrucker"));
 		hmAbrechnung.put("rehapriexemplare", inif.getStringProperty("RehaPRIRechnung", "RehaPRIexemplare"));
 		hmAbrechnung.put("rehapriik", inif.getStringProperty("RehaPRIRechnung", "RehaPRIik"));
-		
+
 		hmAbrechnung.put("hmallinoffice", inif.getStringProperty("GemeinsameParameter", "InOfficeStarten"));
 
 		if ( inif.getStringProperty("HMGKVRechnung", "AutoOKwenn302offen") == null ){			// kein Eintrag in ini -> default anlegen
@@ -1805,7 +1803,7 @@ public class SystemConfig {
 				mustsave = true;
 			}else{
 				hmAbrechnung.put("rgrdruckanzahl",inif.getStringProperty("RGRParameter", "RGRexemplare"));
-			}			
+			}
 		/*}*/
 		sask = inif.getStringProperty("GKVTaxierung", "AnzahlVorlagen");
 		if(sask==null){
@@ -1820,22 +1818,22 @@ public class SystemConfig {
 		try{
 			int ownTemplate = Integer.parseInt(inif.getStringProperty("GKVTaxierung", "AnzahlVorlagen"));
 			for(int i = 0; i < ownTemplate;i++){
-					vecTaxierung.add(inif.getStringProperty("GKVTaxierung", "Vorlage"+Integer.toString(i+1)));	
+					vecTaxierung.add(inif.getStringProperty("GKVTaxierung", "Vorlage"+Integer.toString(i+1)));
 			}
 		}catch(Exception ex){
-			
+
 		}
-		
+
 		if(mustsave){
 			INITool.saveIni(inif);
 		}
 		//sask = inif.getStringProperty("GemeinsameParameter", "ZuzahlmodusNormal");
-		
+
 		String INI_FILE = "";
 		if(System.getProperty("os.name").contains("Windows")){
 			INI_FILE = "nebraska_windows.conf";
 		}else if(System.getProperty("os.name").contains("Linux")){
-			INI_FILE = "nebraska_linux.conf";			
+			INI_FILE = "nebraska_linux.conf";
 		}else if(System.getProperty("os.name").contains("String für MaxOSX????")){
 			INI_FILE = "nebraska_mac.conf";
 		}
@@ -1864,14 +1862,14 @@ public class SystemConfig {
 								hmAbrechnung.put("hmkeystoreusecertof", "IK"+Reha.aktIK);
 							}else{
 								hmAbrechnung.put("hmkeystoreusecertof", inif.getStringProperty("KeyStores", "KeyStoreUseCertOf"+Integer.toString(i+1)) );
-							}					
+							}
 					/*}*/
 					break;
 				}
 			}
 			if(hmAbrechnung.get("hmkeystoreusecertof")==null){
 				hmAbrechnung.put("hmkeystoreusecertof","Owner nicht vorhanden");
-				hmAbrechnung.put("hmkeystorealias","Alias nicht vorhanden");				
+				hmAbrechnung.put("hmkeystorealias","Alias nicht vorhanden");
 			}
 			System.out.println("Alias="+hmAbrechnung.get("hmkeystorealias"));
 			System.out.println("Owner="+hmAbrechnung.get("hmkeystoreusecertof"));
@@ -1919,8 +1917,8 @@ public class SystemConfig {
 			INITool.saveIni(inif);
 		}
 
-	}	
-	
+	}
+
 	public static void JahresUmstellung(){
 		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
 		aktJahr = inif.getStringProperty("SystemIntern","AktJahr");
@@ -1951,7 +1949,7 @@ public class SystemConfig {
 			JOptionPane.showMessageDialog(null,htmlstring);
 		}
 	}
-	
+
 	public static void ArschGeigenTest(){
 		//public static HashMap<String,Object> hmArschgeigenModus = new HashMap<String,Object>();
 		//public static Vector<Vector<String>> vArschgeigenDaten = new Vector<Vector<String>>();
@@ -1978,13 +1976,13 @@ public class SystemConfig {
 				hmArschgeigenModus.put("Tarifalt"+Integer.toString(i),inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenTarifgruppeAlt")-1 );
 				hmArschgeigenModus.put("Tarifneu"+Integer.toString(i),inif.getIntegerProperty("Arschgeigen"+Integer.toString(i+1), "ArschgeigenTarifgruppeNeu")-1 );
 			}
-			
+
 		}
 	}
 	/**
 	 * checkt, ob Schlüssel iniKey in der ini-Datei enthalten ist, liefert dessen int-Wert oder 0
 	 * @param ini2use zu prüfende ini-Datei
-	 * @param iniSect zu prüfende Sektion in der Datei 
+	 * @param iniSect zu prüfende Sektion in der Datei
 	 * @param iniKey gesuchter Schlüssel
 	 * @return Wert
 	 */
@@ -2017,7 +2015,7 @@ public class SystemConfig {
 
 		hmSysIcons = new HashMap<String,ImageIcon>();
 		Image ico = null;
-		
+
 		int xscale = 0;
 		int yscale = 0;
 		int lang = bilder.length;
@@ -2032,24 +2030,23 @@ public class SystemConfig {
 				}
 				if (xscale == 0){
 					use_ini = iniDefault;								// letzterVersuch: default-ini
-					xscale = testIntIni(use_ini, "Icons", bilder[i]+"ScaleX");					
+					xscale = testIntIni(use_ini, "Icons", bilder[i]+"ScaleX");
 				}
 			}
 			if (xscale != 0){
 				if(use_ini != inif){
-					System.out.println("found " + bilder[i] + " in " + use_ini.getFileName());					
+					System.out.println("found " + bilder[i] + " in " + use_ini.getFileName());
 				}
 				yscale = use_ini.getIntegerProperty("Icons", bilder[i]+"ScaleY");
 			}else{
-				System.out.println("Fehler!!!!!!!!! bei Bild: "+bilder[i]+". Fehler->Bilddatei existiert nicht, oder ist nicht in icons.ini vermerkt");		
+				System.out.println("Fehler!!!!!!!!! bei Bild: "+bilder[i]+". Fehler->Bilddatei existiert nicht, oder ist nicht in icons.ini vermerkt");
 			}
 
 			if((xscale >0) && (yscale > 0)){
 				ico = new ImageIcon(Path.Instance.getProghome()+"icons/"+use_ini.getStringProperty("Icons", bilder[i])).getImage().getScaledInstance(xscale,yscale, Image.SCALE_SMOOTH);
-				hmSysIcons.put(bilder[i], new ImageIcon(ico));				
+				hmSysIcons.put(bilder[i], new ImageIcon(ico));
 			}else{
 				hmSysIcons.put(bilder[i], new ImageIcon(Path.Instance.getProghome()+"icons/"+use_ini.getStringProperty("Icons", bilder[i])));
-				ico = null;
 			}
 			ico = null;
 			/*
@@ -2058,10 +2055,10 @@ public class SystemConfig {
 			 * INITool.addIcon("Icons", "dummy.png", xscale, yscale);
 			 *     public Integer getIntegerProperty(String pstrSection, String pstrProp)
 			 *     public void setIntegerProperty(String pstrSection, String pstrProp, int pintVal, String pstrComments)
-			 *     
+			 *
 			 *     public String getStringProperty(String pstrSection, String pstrProp)
 			 *     public void setStringProperty(String pstrSection, String pstrProp, String pstrVal, String pstrComments)
-			 *     
+			 *
 			 *     inif.setStringProperty("Icons", bilder[i], "", "");
 			 *     inif.setIntegerProperty("Icons", bilder[i]+"ScaleX", xscale, "")
 			 *     inif.setIntegerProperty("Icons", bilder[i]+"ScaleY", yscale, "")
@@ -2092,14 +2089,13 @@ public class SystemConfig {
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 			@Override
 			public int compare(Vector o1, Vector o2) {
-				// TODO Auto-generated method stub
 				String s1 = (String)o1.get(0);
 				String s2 = (String)o2.get(0);
 				return s1.compareTo(s2);
 			}
 		};
 		Collections.sort(vec,comparator);
-	
+
 	}
 	*/
 
@@ -2110,7 +2106,7 @@ public class SystemConfig {
 		}
 		return  true;
 	}
-	
+
 }
 
 /*****************************************/

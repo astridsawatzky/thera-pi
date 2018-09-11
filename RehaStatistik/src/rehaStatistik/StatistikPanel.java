@@ -880,7 +880,8 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 			}			
 			final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					xspredsheetDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 					xspredsheetDocument.getFrame().setFocus();
 				}
@@ -909,7 +910,8 @@ public class StatistikPanel extends JXPanel implements ListSelectionListener, Ac
 	public void zeigeCalc(){
 		final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				xspredsheetDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xspredsheetDocument.getFrame().setFocus();
 			}

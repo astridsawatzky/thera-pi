@@ -103,7 +103,7 @@ import utils.OOorgTools;
 
 public class NebraskaTestPanel  extends JPanel implements ActionListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 3831067622472056656L;
 	JTextField[] tn1 = {null,null,null,null,null};
@@ -120,21 +120,21 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 	public static String praxisPassw;
 	public static String caPassw;
 	public static String annahmeKeyFile = "";
-	
+
 	public JXTable tabprax;
 	public JXTable tabca;
 	//public DefaultTableModel tabmodprax;
 	public MyCertTableModel tabmodprax;
 	public MyCertTableModel tabmodca;
-	
-	public KeyPair kpprax = null; 
+
+	public KeyPair kpprax = null;
 	public KeyPair kpca = null;
 	public static X509Certificate[] annahmeCerts =null;
-	
+
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy - HH:mm");
-	
+
 	public ImageIcon imgKey = new ImageIcon( (Constants.KEYSTORE_DIR+File.separator+"icons"+File.separator+"entry_pk.gif").replace("/", File.separator));
-	public ImageIcon imgCert = new ImageIcon( (Constants.KEYSTORE_DIR+File.separator+"icons"+File.separator+"certificate_node.gif").replace("/", File.separator));	
+	public ImageIcon imgCert = new ImageIcon( (Constants.KEYSTORE_DIR+File.separator+"icons"+File.separator+"certificate_node.gif").replace("/", File.separator));
 	public NebraskaTestPanel(){
 		super();                   //     1      2                3         4          5            6
 		FormLayout lay = new FormLayout("2dlu,fill:0:grow(0.5),2dlu,fill:0:grow(0.5),2dlu",
@@ -148,7 +148,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		add(getButs2(),cc.xy(4, 5,CellConstraints.FILL,CellConstraints.FILL));
 		validate();
 	}
-	
+
 	private JPanel getTN1(){
 		FormLayout lay = new FormLayout("5dlu,right:max(50dlu;p),5dlu,p:g,5dlu",
 				"5dlu,p,5dlu,p,5dlu,p,5dlu,p,5dlu:g,75dlu");
@@ -170,7 +170,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		tabprax.getColumn(4).setMaxWidth(60);
 		tabprax.getColumn(1).setMaxWidth(60);
 		tabprax.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent evt){
+			@Override
+            public void mousePressed(MouseEvent evt){
 				if(evt.getClickCount()==2){
 					try {
 						doCertAuswerten();
@@ -229,7 +230,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		pb.getPanel().validate();
 		return pb.getPanel();
 	}
-	
+
 	private JPanel getButs1(){
 		FormLayout lay = new FormLayout("5dlu,p,2dlu,p,2dlu,p,2dlu,p,5dlu",
 		"5dlu,p,2dlu,p,5dlu");
@@ -258,7 +259,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		pb.getPanel().validate();
 		return pb.getPanel();
 
-	}	
+	}
 
 	public JButton macheBut(String titel,String cmd){
 		JButton but = new JButton(titel);
@@ -285,7 +286,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				String inFile = Constants.KEYSTORE_DIR+File.separator+"TSOL0021.org";
 				String decFile = Constants.KEYSTORE_DIR+File.separator+"encrypted.dat";
 				String kkAlias = "IK109900019";
-				
+
 				KeyStore store = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+Constants.PRAXIS_OU_ALIAS.replace("IK", ""), Constants.PRAXIS_KS_PW);
 				PrivateKey privKey = (PrivateKey) store.getKey(Constants.PRAXIS_OU_ALIAS, Constants.PRAXIS_KS_PW.toCharArray());
 				FileStatics.BytesToFile(EncUtils.doNextEncTest4(inFile,kkAlias),new File(inFile+".encoded"));
@@ -296,7 +297,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				bodoDecrypt.decrypt(inStream, outStream);
 				inStream.close();
 				outStream.close();
-				
+
 			}
 			/*****Zertifikatsrequest* erzeugen*********/
 			if(cmd.equals("requgen1")){
@@ -308,7 +309,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				doReadAndManageReply();
 				JOptionPane.showMessageDialog(null, "ZertifikatsReply wurde eingelesen");
 			}
-			/****Vergleicht den Fingerprint des Zerts der Datenbank mit dem der PEM-Datei ****/			
+			/****Vergleicht den Fingerprint des Zerts der Datenbank mit dem der PEM-Datei ****/
 			if(cmd.equals("sha1test1")){
 				doSHA1Test();
 			}
@@ -331,7 +332,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				doAnnahmeReadAndStore();
 			}
 
-			
+
 			/***********Keystore f�r CA anlegen********/
 			if(cmd.equals("kgen2")){
 				doKeystore(caPassw,true);
@@ -400,7 +401,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		try{
 			CMSSignedDataGenerator signGen = new CMSSignedDataGenerator();
 			signGen.addSigner(priv, ourCert, CMSSignedDataGenerator.DIGEST_SHA1);
-			
+
 			signContent = new CMSProcessableByteArray(dataParm);
 			CMSSignedData signedData = signGen.generate(signContent,true,"BC");
 			signedByteData = signedData.getEncoded();
@@ -434,8 +435,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		}
 		return signedByteEnvelope;
 		//return encodedData;
-		}	
-	
+		}
+
 	/******************************************************************/
 	public void doNextDecTest() throws Exception{
 		System.out.println("****************Beginn der Entschlüsselung********************");
@@ -445,20 +446,20 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		org.bouncycastle.asn1.cms.ContentInfo coInfo = envelopedData.getContentInfo();
 		DEREncodable enc = coInfo.getContent();
 
-		
+
 		//System.out.println("*****"+new String(envelopedData.getContentInfo().getEncoded()));
 		System.out.println(envelopedData.getRecipientInfos().getRecipients().iterator());
 /*******************/
 
-/*******************/		
+/*******************/
 		KeyStore store = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+Constants.PRAXIS_OU_ALIAS.replace("IK", ""), Constants.PRAXIS_KS_PW);
 		System.out.println("EncryptionAlgOID "+ envelopedData.getEncryptionAlgOID());
 		envelopedData = new CMSEnvelopedData(envelopedData.getEncoded());
-		
+
 		Iterator it = envelopedData.getRecipientInfos().getRecipients().iterator();
 
-		
-		PrivateKey privkey = (PrivateKey) store.getKey(Constants.PRAXIS_OU_ALIAS, Constants.PRAXIS_KS_PW.toCharArray());		
+
+		PrivateKey privkey = (PrivateKey) store.getKey(Constants.PRAXIS_OU_ALIAS, Constants.PRAXIS_KS_PW.toCharArray());
 
 		RecipientInformationStore recipients = envelopedData.getRecipientInfos();
 		Collection col = recipients.getRecipients();
@@ -466,11 +467,11 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		while(itx.hasNext()){
 			RecipientInformation inform = ((RecipientInformation)itx.next());
 			//System.out.println( new String(inform.getRID().getKeyIdentifier()));
-			
+
 		}
-		
+
 		System.out.println("KeyTransRecipientInformation"+recipients.getRecipients());
-		
+
 		RecipientInformation recipient = null;
 		X509Certificate xcert = null;
 		boolean keyOwner = false;
@@ -486,7 +487,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
         	Enumeration<?> en = store.aliases();
 
         	recipient = envelopedData.getRecipientInfos().get(iRID);
-        	
+
 			while (en.hasMoreElements()){
 				String aliases = (String)en.nextElement();
 				if(aliases != null){
@@ -496,7 +497,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 					String hexRID =  Integer.toHexString(i);
 					if(serial.equals(hexRID) /*&& xcert.getSubjectDN().toString().contains(Constants.PRAXIS_OU_ALIAS)*/){
 						//System.out.println("Zertifikat gefunden = "+xcert.getSubjectDN());
-						
+
 			        	byte[] kident = null;
 			        	System.out.println("Issuer: "+iRID.getIssuer());
 			        	kident = iRID.getKeyIdentifier();
@@ -516,7 +517,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				}
 			}
 			}catch(Exception ex){
-				
+
 			}
 
 			if(keyOwner){
@@ -525,7 +526,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 			//System.out.println(new String(envelopedData.getEncryptionAlgParams()));
 			//recipient.getContent(privkey, "BC");
         }
-		
+
 		RecipientId rid = inform.getRID();
 		RecipientInformation reci = recipients.get(rid);
 
@@ -535,8 +536,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		RecipientInformationStore rstore = envelopedData.getRecipientInfos();
 		Collection rcols = rstore.getRecipients();
 		Iterator ity = rcols.iterator();
-		
-		
+
+
 		//System.out.println(xcert);
 		//System.out.println(recipient.getKeyEncryptionAlgOID());
 		//System.out.println(envelopedData.getContentInfo().getDERObject());
@@ -545,12 +546,12 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 
 		System.out.println(der.toASN1Object());
 		ASN1Object obj = ASN1Object.fromByteArray(envelopedData.getEncoded());
-		
+
 		String str = ASN1Dump.dumpAsString(obj);
 		//ASN1TaggedObject.getInstance(obj);
 		//System.out.println("Dump As String "+str);
-		ASN1Object asn = (ASN1Object) der.toASN1Object(); 
-		
+		ASN1Object asn = (ASN1Object) der.toASN1Object();
+
 		//System.out.println("ASN1Object = "+asn);
 		ASN1InputStream ain = new ASN1InputStream(asn.getDEREncoded());
 		DERObject der2 = ain.readObject();
@@ -569,13 +570,13 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 						org.bouncycastle.asn1.DERObjectIdentifier ident = (DERObjectIdentifier)seq.getObjectAt(i).getDERObject().toASN1Object();
 						System.out.println(ident);
 						continue;
-						
+
 					}else{
-						btag = (BERTaggedObject)seq.getObjectAt(i).getDERObject().toASN1Object();	
+						btag = (BERTaggedObject)seq.getObjectAt(i).getDERObject().toASN1Object();
 					}
-					
+
 					//ASN1Sequence seq2 = (ASN1Sequence)((DERObject)seq.getObjectAt(i).getDERObject()).toASN1Object();
-					
+
 					System.out.println("Tag No="+btag.getObject());
 					BERSequence bseq = (BERSequence)btag.getObject();
 					int bsize = bseq.size();
@@ -584,7 +585,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 						System.out.println("Sequenz "+i2+" - "+bseq.getObjectAt(i2));
 
 						if( (bseq.getObjectAt(i2) instanceof org.bouncycastle.asn1.DERSet) ){
-							DERSet dset = (DERSet)bseq.getObjectAt(i2);		
+							DERSet dset = (DERSet)bseq.getObjectAt(i2);
 							int dsize = dset.size();
 							for(int i3 = 0;i3 < dsize;i3++){
 								System.out.println("DSet "+i3+" - "+dset.getObjectAt(i3));
@@ -608,11 +609,11 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 											KeyPair kp = BCStatics2.getBothFromPem(Constants.KEYSTORE_DIR+File.separator+"540840108");
 											PrivateKey pk = kp.getPrivate();
 											ASN1Object pkobj = ASN1Object.fromByteArray(pk.getEncoded());
-											ASN1Sequence encodedSeq =(ASN1Sequence)pkobj; 
+											ASN1Sequence encodedSeq =(ASN1Sequence)pkobj;
 											PrivateKeyInfo prikInfo = new PrivateKeyInfo(encodedSeq);
 								            //DERObject derobj= prikInfo.getPrivateKey();
 								            System.out.println(prikInfo.getPrivateKey());
- 
+
 											RSAPrivateKeyStructure privStruct = new RSAPrivateKeyStructure((DERSequence) prikInfo.getPrivateKey());
 									           BigInteger coeficiente = privStruct.getCoefficient();
 									            BigInteger modulo = privStruct.getModulus();
@@ -625,13 +626,13 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 
 									            RSAPrivateCrtKeyParameters keySpec = new RSAPrivateCrtKeyParameters(
 									                    modulo, publicExponent, privateExponent, primo1, primo2,
-									                    exponente1, exponente2, coeficiente); 											
+									                    exponente1, exponente2, coeficiente);
 									            AsymmetricBlockCipher rsaEngine = new RSAEngine();
 									            rsaEngine.init(false, keySpec); // if true = encryption
-									            String decrypted = ""; 
+									            String decrypted = "";
 									            byte[] toDEcrypt = doct.getOctets();
 									            byte[] bcrsacipher = rsaEngine.processBlock(toDEcrypt, 0, toDEcrypt.length);
-								            decrypted = new String(NUtils.toHex(bcrsacipher)); 
+								            decrypted = new String(NUtils.toHex(bcrsacipher));
 								            System.out.println("Decrypted = "+decrypted);
 										}
 									}
@@ -649,16 +650,16 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				}
 
 			}
-				
+
 		}else{
 			System.out.println("seQ == null");
 		}
 		//System.out.println("ContentTyp = "+envelopedData.getContentInfo().getContentType());
 		DERObjectIdentifier dident = envelopedData.getContentInfo().getContentType();
 		//System.out.println("getDEREncoded = "+NUtils.toHex(dident.getDEREncoded()));
-		
-		
-		
+
+
+
 		ASN1EncodableVector avec = new ASN1EncodableVector();
 
 		avec.add(der.getDERObject().toASN1Object());
@@ -666,32 +667,32 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		//Attribute attributes = null;
 		DEREncodable enc3 = avec.get(0);
 		//System.out.println("DERObjekt = "+enc3.getDERObject());
-		DEREncodableVector dervec = new DEREncodableVector();  
+		DEREncodableVector dervec = new DEREncodableVector();
 		dervec.add(der2);
 		for(int i = 0 ; i < dervec.size();i++){
 			//System.out.println(dervec.get(0).getDERObject());
 		}
-		
-		
 
+
+		ain.close();
 	}
 	public byte[] doNextEncTest(String inFile,String kkAlias) throws Exception{
 		X509Certificate praxiscert = null; //eigenes Zertifikat
 		X509Certificate certRecipient = null; // Zertifikat des Empfängers
-		
+
 		BCStatics.providerTest();
 
 		// Für den Test eigenes Zertifikat, den PrivKey und das Zertifikat des IKK-Bundesverbandes aus dem Keystore holen
 		KeyStore store = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+Constants.PRAXIS_OU_ALIAS.replace("IK", ""), Constants.PRAXIS_KS_PW);
 		praxiscert = (X509Certificate) store.getCertificate(Constants.PRAXIS_OU_ALIAS);
         PrivateKey privkey = (PrivateKey) store.getKey(Constants.PRAXIS_OU_ALIAS, Constants.PRAXIS_KS_PW.toCharArray());
-        certRecipient = (X509Certificate) store.getCertificate("IK109900019");        
+        certRecipient = (X509Certificate) store.getCertificate("IK109900019");
 
         /*********************Secret Key *****************************/
 		KeyGenerator    keyGen = KeyGenerator.getInstance("DESEDE", "BC");
         SecretKey       key  = keyGen.generateKey();
         byte[] kekID = {1, 17, 9, 5, 2, 8, 24, 18};
-        
+
         /******************Signed Data*************************/
 		CMSSignedDataGenerator sgen = new CMSSignedDataGenerator();
 		sgen.addSigner(privkey,praxiscert,CMSSignedDataGenerator.DIGEST_SHA1);
@@ -722,15 +723,15 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
         gen.addKeyTransRecipient(praxiscert); //zum Test auf eigenes Zert verschlüsseln
         //gen.addKEKRecipient(key, kekID);
 
-        
+
         //CMSProcessable data = new CMSProcessableFile(new File(Constants.KEYSTORE_DIR+File.separator+"TSOL0021.org"));
 
         CMSEnvelopedData envelopedData = gen.generate(signed.getSignedContent(),CMSEnvelopedDataGenerator.DES_EDE3_CBC ,"BC");
         //CMSEnvelopedData envelopedData = gen.generate(data,CMSEnvelopedDataGenerator.DES_EDE3_CBC ,"BC");
         //envelopedData = new CMSEnvelopedData(envelopedData.getEncoded());
-        
+
         RecipientId recID = new RecipientId();
-        
+
         /********************************/
         // Generate an AES key
 
@@ -745,31 +746,31 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
         options.setKeyCipherAlgorithm(XMLCipher.RSA_v1dot5);
         options.setIncludeKeyInfo(true);
         */
-        
-        
-        
+
+
+
         /********************************/
-        
+
         recID.setKeyIdentifier(kekID);
         //recID.setCertificate(certRecipient);
         //recID.setSubjectPublicKey(pubRecipient.getEncoded());
-        
+
         recID.setCertificate(praxiscert);
         recID.setSubjectPublicKey(praxiscert.getPublicKey().getEncoded());
 
 
-        
+
         RecipientInformationStore recipients = envelopedData.getRecipientInfos();
 
         RecipientInformation recipient = recipients.get(recID);
-        
+
 
 
         System.out.println("KeyIdentifier = "+NUtils.toHex(recID.getKeyIdentifier()));
         System.out.println("Länge des KeyIdentifier = "+recID.getKeyIdentifier().length);
 
         //System.out.println(new String(recipient.getContent(key, "BC")));
-        
+
         System.out.println("Recipients = "+envelopedData.getRecipientInfos().size());
         System.out.println("ContentType = "+envelopedData.getContentInfo().getContentType());
         System.out.println("EncryptionAlgOID = "+envelopedData.getEncryptionAlgOID());
@@ -798,31 +799,31 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 						System.out.println("Zertifikat gefunden = "+xcert.getSubjectDN());
 					}
 				}
-			}	
+			}
         }
         */
         return envelopedData.getEncoded();
-        
+
 	}
-	public static String[] getCryptoImpls(String serviceType) { 
-		Set result = new HashSet(); 
-		// All all providers 
-		Provider[] providers = Security.getProviders(); 
-		for (int i=0; i<providers.length; i++) { 
-			// Get services provided by each provider 
-			Set keys = providers[i].keySet(); 
-			for (Iterator it=keys.iterator(); it.hasNext(); ) { 
-				String key = (String)it.next(); key = key.split(" ")[0]; 
-				if (key.startsWith(serviceType+".")) { 
-					result.add(key.substring(serviceType.length()+1)); 
-				} else if (key.startsWith("Alg.Alias."+serviceType+".")){ // This is an alias 
-					result.add(key.substring(serviceType.length()+11)); 
-				} 
-			} 
-		} 
-		return (String[])result.toArray(new String[result.size()]); 
-	} 
-	
+	public static String[] getCryptoImpls(String serviceType) {
+		Set result = new HashSet();
+		// All all providers
+		Provider[] providers = Security.getProviders();
+		for (int i=0; i<providers.length; i++) {
+			// Get services provided by each provider
+			Set keys = providers[i].keySet();
+			for (Iterator it=keys.iterator(); it.hasNext(); ) {
+				String key = (String)it.next(); key = key.split(" ")[0];
+				if (key.startsWith(serviceType+".")) {
+					result.add(key.substring(serviceType.length()+1));
+				} else if (key.startsWith("Alg.Alias."+serviceType+".")){ // This is an alias
+					result.add(key.substring(serviceType.length()+11));
+				}
+			}
+		}
+		return (String[])result.toArray(new String[result.size()]);
+	}
+
 	public void doNextEncTest3() throws Exception{
 		X509Certificate cert = null; //eigenes Zertifikat
 		X509Certificate certRecipient = null; // Zertifikat des Empfängers
@@ -832,61 +833,61 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		KeyStore store = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+Constants.PRAXIS_OU_ALIAS.replace("IK", ""), Constants.PRAXIS_KS_PW);
         cert = (X509Certificate) store.getCertificate(Constants.PRAXIS_OU_ALIAS);
         PrivateKey privkey = (PrivateKey) store.getKey(Constants.PRAXIS_OU_ALIAS, Constants.PRAXIS_KS_PW.toCharArray());
-        certRecipient = (X509Certificate) store.getCertificate("IK109900019");        
+        certRecipient = (X509Certificate) store.getCertificate("IK109900019");
 
         /*********************Secret Key *****************************/
 		KeyGenerator    keyGen = KeyGenerator.getInstance("DESEDE", "BC");
         SecretKey       key  = keyGen.generateKey();
         byte[] kekID = {1, 17, 9, 5, 2, 8, 24, 18};
-        
+
         CMSEnvelopedDataGenerator gen = new CMSEnvelopedDataGenerator();
-        
+
         if(cert==null){
         	System.out.println("Zertifikat = null");
         	return;
         }
-  
+
 
         //gen.addKeyTransRecipient(certRecipient); //IKK
         //gen.addKeyAgreementRecipient( CMSEnvelopedGenerator.DES_EDE3_CBC, privkey, cert.getPublicKey(), certRecipient,  CMSEnvelopedGenerator.DES_EDE3_WRAP, "BC");
         gen.addKeyTransRecipient(cert); //zum Test auf eigenes Zert verschlüsseln
-        
+
         CMSProcessable data = new CMSProcessableFile(new File(Constants.KEYSTORE_DIR+File.separator+"TSOL0021.org"));
 
         CMSEnvelopedData envelopedData = gen.generate(data,CMSEnvelopedDataGenerator.DES_EDE3_CBC ,"BC");
         envelopedData = new CMSEnvelopedData(envelopedData.getEncoded());
-        
+
         RecipientId recID = new RecipientId();
-        
+
         /********************************/
         // Generate an AES key
         KeyGenerator keygen = KeyGenerator.getInstance("DESEDE", "BC");
         keygen.init(64,new SecureRandom());
         Key seckey = keygen.generateKey();
-       
+
         recID.setKeyIdentifier(kekID);
-        
+
         recID.setCertificate(cert);
         recID.setSubjectPublicKey(cert.getPublicKey().getEncoded());
 
-        
+
         RecipientInformationStore recipients = envelopedData.getRecipientInfos();
 
         RecipientInformation recipient = recipients.get(recID);
-        
+
 
 
         System.out.println("KeyIdentifier = "+NUtils.toHex(recID.getKeyIdentifier()));
         System.out.println("Länge des KeyIdentifier = "+recID.getKeyIdentifier().length);
 
         //System.out.println(new String(recipient.getContent(key, "BC")));
-        
+
         System.out.println("Recipients = "+envelopedData.getRecipientInfos().size());
         System.out.println("ContentType = "+envelopedData.getContentInfo().getContentType());
         System.out.println("EncryptionAlgOID = "+envelopedData.getEncryptionAlgOID());
         System.out.println("EnvelopedData = "+new String(envelopedData.getEncoded()));
-        
-        
+
+
         /******************Signed Data*************************/
 		CMSSignedDataGenerator sgen = new CMSSignedDataGenerator();
 		sgen.addSigner(privkey,cert,CMSSignedDataGenerator.DIGEST_SHA1);
@@ -894,7 +895,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		//CMSSignedData signed = sgen.generate(dataToSign,"BC");
 		//signed = new CMSSignedData(dataToSign,signed.getEncoded());
 		CMSSignedData signed = sgen.generate((CMSProcessable) envelopedData.getContentInfo().getContent(),"BC");
-		
+
 
 		//Signatur mit dem PublicKey verifizieren auf der Absenderseite überflüssig
 		Iterator<?> its = signed.getSignerInfos().getSigners().iterator();
@@ -928,10 +929,10 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 						System.out.println("Zertifikat gefunden = "+xcert.getSubjectDN());
 					}
 				}
-			}	
+			}
         }
         */
-        
+
 	}
 
 	public void doCertAuswerten() throws Exception{
@@ -952,8 +953,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		ASN1InputStream aIn = new ASN1InputStream(cert.getPublicKey().getEncoded());
 		SubjectPublicKeyInfo sub = SubjectPublicKeyInfo.getInstance(aIn.readObject());
 
-		certInfo = certInfo+ " MD5-Fingerpr. Cert = "+BCStatics2.macheHexDump(BCStatics2.getMD5fromByte(cert.getEncoded()), 20," ")+"\n";		
-		certInfo = certInfo+ "MD5-Fingerpr.PubKey = "+BCStatics2.macheHexDump(BCStatics2.getMD5fromByte(sub.getPublicKeyData().getBytes()), 20," ")+"\n";		
+		certInfo = certInfo+ " MD5-Fingerpr. Cert = "+BCStatics2.macheHexDump(BCStatics2.getMD5fromByte(cert.getEncoded()), 20," ")+"\n";
+		certInfo = certInfo+ "MD5-Fingerpr.PubKey = "+BCStatics2.macheHexDump(BCStatics2.getMD5fromByte(sub.getPublicKeyData().getBytes()), 20," ")+"\n";
 		boolean[] ku = cert.getKeyUsage();
 		if(ku != null){
 			String inter ="";
@@ -981,7 +982,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		Enumeration<?> en = store.aliases();
 		Vector<X509Certificate> certVec = new Vector<X509Certificate>();
 		Vector<String> certAlias = new Vector<String>();
-		Vector<Vector> vecTabPrax = new Vector<Vector>(); 
+		Vector<Vector> vecTabPrax = new Vector<Vector>();
 		int durchlauf = 0;
 		tabmodprax.setRowCount(0);
 			while (en.hasMoreElements()){
@@ -1003,7 +1004,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				}
 
 			}
-	
+
 	}
 	private Vector macheTabellenZeile(boolean isKeyEntry,String alias,X509Certificate cert) throws Exception{
 		Vector zeile = new Vector();
@@ -1016,12 +1017,12 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		zeile.add(sdf.format(cert.getNotAfter()));
 		zeile.add("?");
 		zeile.add(true);
-		
+
 
 		tabmodprax.addRow((Vector)zeile.clone());
 		tabprax.setValueAt(imgKey, tabprax.getRowCount()-1, 1);
 		return (Vector)zeile.clone();
-		
+
 	}
 	private void doCertTest() throws Exception{
 		KeyStore store = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+"540840108", Constants.PRAXIS_KS_PW);
@@ -1038,11 +1039,11 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				String aliases = (String)en.nextElement();
 				if(aliases != null){
 					if(store.isCertificateEntry(aliases)){
-						
+
 						certVec.add((X509Certificate) store.getCertificate(aliases));
 						certAlias.add(aliases);
 					}else{
-						
+
 						certVec.add((X509Certificate) store.getCertificate(aliases));
 						certAlias.add(aliases);
 					}
@@ -1054,9 +1055,9 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 
 			X509Certificate[] chainAnnahme = BCStatics3.holeZertifikate();
 			System.out.println("Es sind "+chainAnnahme+" Zetrifikate in der AnnahmeKey");
-			
+
 			String alias ="";
-			
+
 			for(int i = 0;i < chainAnnahme.length;i++){
 				alias = BCStatics3.extrahiereAlias(chainAnnahme[i].getSubjectDN().toString());
 				if(alias==null){
@@ -1068,7 +1069,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				}
 			}
 			KeyStore store2 = BCStatics3.erzeugeLeerenKeyStore(Constants.PRAXIS_KS_PW);
-			
+
 			int lang = certVec.size();
 			System.out.println("Länge des Arrays = "+lang);
 			X509Certificate[] chainGesamt = new X509Certificate[lang];
@@ -1091,10 +1092,10 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				}
 				store2.setCertificateEntry(alias, (Certificate) lcerts.get(i));
 				X509Certificate cert = (X509Certificate) lcerts.get(i);
-				
-				
+
+
 			}
-			 
+
 			ByteArrayOutputStream bout = new ByteArrayOutputStream();
 			store2.store(bout, Constants.PRAXIS_KS_PW.toCharArray());
 			FileStatics.BytesToFile(bout.toByteArray(), new File(Constants.KEYSTORE_DIR+File.separator+"540840108.p12"));
@@ -1114,8 +1115,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 			FileStatics.BytesToFile(bOut.toByteArray(), new File(Constants.KEYSTORE_DIR+File.separator+"540840108.p12"));
 			bOut.close();
 			*/
-			
-			
+
+
 	}
 	private void doMacheKeyStoreNeu() throws Exception{
 		BCStatics.providerTest();
@@ -1124,7 +1125,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		KeyPair kp = BCStatics2.getBothFromPem(Constants.KEYSTORE_DIR+File.separator+"540840108");
 		KeyStore secretKeyStore = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+"540840108_key", Constants.PRAXIS_KS_PW);
 		X509Certificate[] chain = new X509Certificate[1];
-		chain[0] = BCStatics2.generateSelfSignedV3Certificate(kp, vecprax, vecca); 
+		chain[0] = BCStatics2.generateSelfSignedV3Certificate(kp, vecprax, vecca);
 		secretKeyStore.setKeyEntry("IK540840108", kp.getPrivate(),"196205".toCharArray(),chain );
 		try{
 		BCStatics2.saveStore(secretKeyStore,"196205" , "540840108_key");
@@ -1138,9 +1139,9 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		KeyStore keyStore = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+"540840108", Constants.PRAXIS_KS_PW);
 		KeyStore trustStore = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+"540840108_key", Constants.PRAXIS_KS_PW);
 		FileInputStream in = new FileInputStream(new File(Constants.KEYSTORE_DIR+File.separator+"54084010.p7c"));
-		//System.out.println("Länge des InputStreams = "+in.available()); 
+		//System.out.println("Länge des InputStreams = "+in.available());
 
-		
+
 		//boolean geklappt = BCStatics2.installReply(keyStore, trustStore, "196205", "C=DE,O=Datenaustausch im Gesundheits- und Sozialwesen", in, true, true, kp.getPrivate());
 		boolean geklappt = BCStatics2.installReply(keyStore, trustStore, "196205", "IK540840108", in, true, true, kp.getPrivate());
 		System.out.println("Reply wurde korrekt eingelesen und die Kette aufgebaut -> "+geklappt);
@@ -1149,7 +1150,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		keyStore.store(bOut1, "196205".toCharArray());
 		FileStatics.BytesToFile(bOut1.toByteArray(), new File("C:/Nebraska/540840108.p12"));
 		bOut1.close();
-		
+
 		keyStore = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+"540840108", Constants.PRAXIS_KS_PW);
 		/**********Zertifikate[] aus annahmeKey holen****/
 		X509Certificate[] chain = BCStatics3.holeZertifikate();
@@ -1170,7 +1171,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		/**********Zertifikate[] aus annahmeKey holen****/
 		annahmeCerts = chain;
 		//System.out.println(BCStatics3.getCertsByIssuer(chain));
-		
+
 		/**********************************/
 		String alias = "";
 		for(int i = 0; i < chain.length;i++){
@@ -1179,7 +1180,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				//chain[i].verify(kp.getPublic());
 				keyStore.setCertificateEntry(alias, (chain[i]));
 				//keyStore.setEntry(arg0, arg1, arg2)
-				
+
 			}catch(Exception ex){
 				ex.printStackTrace();
 				System.out.println("Alias - "+alias+" - ist bereits im KeyStore enthalten");
@@ -1192,17 +1193,17 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		keyStore.store(bOut1, "196205".toCharArray());
 		FileStatics.BytesToFile(bOut1.toByteArray(), new File("C:/Nebraska/540840108.p12"));
 		bOut1.close();
-		
+
 		keyStore = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+"540840108", Constants.PRAXIS_KS_PW);
 		System.out.println("Zertifikatskette von Alias IK540840108**************************");
 		Certificate[] chainCerts = keyStore.getCertificateChain("IK540840108");
 		//Certificate[] chainCerts = (Certificate[]) keyStore.getCertificateChain("C=DE,O=ITSG TrustCenter fuer sonstige Leistungserbringer");
 		for(int i = 0; i < chainCerts.length;i++){
 			System.out.println(((X509Certificate)chainCerts[i]).getSubjectDN()+" - "+
-					((X509Certificate)chainCerts[i]).getIssuerDN()+" - "+((X509Certificate)chainCerts[i]).getBasicConstraints());	
+					((X509Certificate)chainCerts[i]).getIssuerDN()+" - "+((X509Certificate)chainCerts[i]).getBasicConstraints());
 		}
-		
-		
+
+
 	}
 	private void doCertAntrag() throws Exception{
 		// Umbau zum test der MD5-Fingerprints
@@ -1217,8 +1218,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 
 		System.out.println(key);
 		System.out.println("Fingerprint vom Public-Key: "+BCStatics2.getMD5fromByte(key.getEncoded()));
-		
-		
+
+
 		CertificationRequestInfo csrInfo = csr.getCertificationRequestInfo();
 		System.out.println("SubjectDN: "+csrInfo.getSubject());
 		System.out.println("SubjectDN: "+csrInfo.getSubjectPublicKeyInfo().getPublicKey());
@@ -1226,7 +1227,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		*/
 		String outFile = null;
 		PdfReader reader = new PdfReader(Constants.KEYSTORE_DIR+File.separator+"vorlagen"+File.separator+"Zertifizierungsantrag.pdf");
-		outFile = Constants.KEYSTORE_DIR+File.separator+"vorlagen"+File.separator+"Zertifizierungsantrag"+DatFunk.sHeute()+".pdf"; 
+		outFile = Constants.KEYSTORE_DIR+File.separator+"vorlagen"+File.separator+"Zertifizierungsantrag"+DatFunk.sHeute()+".pdf";
 		FileOutputStream out = new FileOutputStream(outFile);
 		PdfStamper stamper = new PdfStamper(reader, out);
 		AcroFields form = stamper.getAcroFields();
@@ -1246,7 +1247,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
         stamper.close();
         reader.close();
         //PDFDrucker.setup(outFile);
-        
+
 	}
 	private void saveTestCase(){
 		INIFile inif = new INIFile(Constants.INI_FILE);
@@ -1262,7 +1263,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		inif.setStringProperty("TestCA", "TEST_CA_KS_PW", tn2[4].getText().trim(),null);
 		inif.save();
 		JOptionPane.showMessageDialog(null, "Die aktuellen Angaben zu Praxis und CA wurden gesichert in Datei:\n"+Constants.INI_FILE);
-		
+
 	}
 	public void doVergleichen()throws Exception{
 		BCStatics2.providerTest();
@@ -1279,19 +1280,19 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		PublicKey pairDb = null;
 		KeyPair pairPem = null;
 		PublicKey pairSt = null;
-		
+
 		X509Certificate cert = null;
 		X509Certificate storedcert = null;
-		
+
 		cert = BCStatics2.readSingleCert(keystoreDir);
 		pairDb = cert.getPublicKey();
-		
+
 		KeyStore store = BCStatics2.loadStore(keystoreDir + File.separator +"540840108",praxisPassw);
 		storedcert = (X509Certificate) store.getCertificate("IK540840108");
 		pairSt = storedcert.getPublicKey();
-		
+
 		pairPem = BCStatics2.getBothFromPem(keystoreDir + File.separator + "540840108");
-		
+
 		System.out.println("Public-Key aus .p7b-File    = "+pairDb);
 		System.out.println("Public-Key im PEM-File      = "+pairPem.getPublic());
 		System.out.println("Public-Key KeyStore-File    = "+pairSt);
@@ -1304,7 +1305,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		System.out.println("SHA1-KeyStore-Zertifikat  "+BCStatics2.getSHA1(storedcert));
 		*/
 	}
-	
+
 	public void doAnnahmeReadAndStore() throws Exception{
 		annahmeKeyFile = "";
 		Object[] annahmeRet =  BCStatics3.readAnnahme(true,null);
@@ -1317,11 +1318,11 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		annahmeRet = BCStatics3.readAnnahme(false,chain);
 		chain = (X509Certificate[])annahmeRet[1];
 		for(int i = 0; i < anzahl;i++){
-			String alias = getAliasFromCert(chain[i]); 
-			//BCStatics2.importCertIntoStore(chain[i], keystoreDir+File.separator, praxisPassw, vecprax.get(0).replace("IK", "")+"_key");	
+			String alias = getAliasFromCert(chain[i]);
+			//BCStatics2.importCertIntoStore(chain[i], keystoreDir+File.separator, praxisPassw, vecprax.get(0).replace("IK", "")+"_key");
 		}
-		
-		
+
+
 		CertificateFactory fact = CertificateFactory.getInstance("X.509","BC");
 		CertPath certPath = fact.generateCertPath(Arrays.asList(chain));
 
@@ -1349,29 +1350,29 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 	}
 	public void doCertCreate() throws Exception{
 		KeyPair kpprax = null;
-		String datei = keystoreDir + File.separator +vecprax.get(0).replace("IK", ""); 
+		String datei = keystoreDir + File.separator +vecprax.get(0).replace("IK", "");
 		File f = new File(datei+".prv");
 		if(f.exists()){
 			KeyPair kp = BCStatics2.getBothFromPem(datei);
 			kpprax = kp;
 			System.out.println("SHA1 von PrivateKey (aus Pem-File) = "+BCStatics2.getSHA1fromByte(kpprax.getPrivate().getEncoded()));
 			System.out.println("SHA1 von PublicKey (aus Pem-File) "+BCStatics2.getSHA1fromByte(kpprax.getPublic().getEncoded()));
-		}else if(kpprax==null){
+		}else {
 			kpprax = BCStatics2.generateRSAKeyPair();
 		}
 		X509Certificate[] chain = {BCStatics2.generateV3Certificate(kpprax,vecprax,vecca)};
 		KeyStore store = BCStatics2.loadStore(datei, praxisPassw);
-		
+
 		store.setKeyEntry(vecprax.get(0), kpprax.getPrivate(),praxisPassw.toCharArray(), chain);
 		//store.setKeyEntry("secret", kpprax.getPrivate(),praxisPassw.toCharArray(), chain);
 
 		BCStatics2.saveStore(store, praxisPassw, vecprax.get(0).replace("IK", ""));
 		//BCStatics2.certToFile(cert, cert.getEncoded(), keystoreDir+ File.separator +"test");
-		
+
 
 		//System.out.println(cert);
 		//FileStatics.BytesToFile(cert.getEncoded(), new File(keystoreDir+ File.separator +"test.p7b"));
-		
+
 	}
 	public void doEncode() throws Exception{
 		BCStatics2.verschluesseln(vecprax.get(0),keystoreDir + File.separator +vecprax.get(0).replace("IK", ""),praxisPassw);
@@ -1387,11 +1388,11 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 		setVecs();
 	}
 	/******************************************************************************/
-	
+
 	public void doGenerateRequest() throws Exception{
 		Nebraska.jf.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 		Nebraska.hmZertifikat.clear();
-		String datei = keystoreDir + File.separator +vecprax.get(0).replace("IK", ""); 
+		String datei = keystoreDir + File.separator +vecprax.get(0).replace("IK", "");
 		File f = new File(datei+".prv");
 		if(f.exists()){
 			KeyPair kp = BCStatics2.getBothFromPem(datei);
@@ -1445,8 +1446,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
         System.out.println("SHA-1-Fingerprint CertRequest="+BCStatics2.getSHA1fromByte(request.getEncoded()));
         /*********Test eines neuen Schl�ssels******///
         //BCStatics.machePublicKey(kpprax.getPublic(), cert1);
-        
-        
+
+
         Nebraska.hmZertifikat.put("<Ikpraxis>",vecprax.get(0));
         Nebraska.hmZertifikat.put("<Issuerc>","C=DE");
         Nebraska.hmZertifikat.put("<Issuero>","O="+vecca.get(3));
@@ -1456,43 +1457,43 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
         Nebraska.hmZertifikat.put("<Subjectou2>","OU="+vecprax.get(0));
         Nebraska.hmZertifikat.put("<Subjectcn>","CN="+vecprax.get(2));
         Nebraska.hmZertifikat.put("<Algorithm>",kpprax.getPublic().getAlgorithm());
-        
+
         String sha1 = BCStatics2.getSHA1fromByte(spub.getPublicKeyData().getBytes());
         //String sha1 = BCStatics2.getSHA1fromByte(kpprax.getPublic().getEncoded());
         Nebraska.hmZertifikat.put("<Sha1publickey>",BCStatics2.macheHexDump(sha1, 20," "));
-        
+
         String md5 = BCStatics2.getMD5fromByte(spub.getPublicKeyData().getBytes());
         //String md5 = BCStatics2.getMD5fromByte(kpprax.getPublic().getEncoded());
         Nebraska.hmZertifikat.put("<Md5publickey>",BCStatics2.macheHexDump(md5, 20," "));
-        
+
         sha1 = BCStatics2.getSHA1fromByte(request.getEncoded());
         Nebraska.hmZertifikat.put("<Sha1certificate>",BCStatics2.macheHexDump(sha1, 20," "));
 
         md5 = BCStatics2.getMD5fromByte(request.getEncoded());
         Nebraska.hmZertifikat.put("<Md5certificate>",BCStatics2.macheHexDump(md5, 20," "));
 
-        
+
         java.security.interfaces.RSAPublicKey pub =
 			(java.security.interfaces.RSAPublicKey)kpprax.getPublic();
         String hexstring = new BigInteger(pub.getModulus().toByteArray()).toString(16);
         System.out.println("Hexstring = "+hexstring);
         String modulus = BCStatics2.macheHexDump(hexstring, 20," ");
         Nebraska.hmZertifikat.put("<Modulus>",modulus);
-        
+
         hexstring = new BigInteger(pub.getPublicExponent().toByteArray()).toString(16);
         Nebraska.hmZertifikat.put("<Exponent>",(hexstring.length()==5 ? "0"+hexstring : hexstring  ));
 		OOorgTools.starteStandardFormular(keystoreDir + File.separator +"vorlagen"+File.separator+"ZertBegleitzettel.ott", null);
 		Nebraska.jf.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	}            
+	}
 
-	
+
 	/**
 	 * @throws Exception ************************/
 	private boolean doKeystore(String passw,boolean isRoot) throws Exception{
 		String datei = "";
 		String keystore = "";
 		if(isRoot){
-			String testdatei = keystoreDir+ File.separator +vecca.get(0).replace("IK", ""); 
+			String testdatei = keystoreDir+ File.separator +vecca.get(0).replace("IK", "");
 			File f = new File(testdatei+".prv");
 			if(f.exists()){
 				KeyPair kp = BCStatics2.getBothFromPem(testdatei);
@@ -1508,7 +1509,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 				return false;
 			}
 		}else{
-			String testdatei = keystoreDir + File.separator +vecprax.get(0).replace("IK", ""); 
+			String testdatei = keystoreDir + File.separator +vecprax.get(0).replace("IK", "");
 			File f = new File(testdatei+".prv");
 			if(f.exists()){
 				KeyPair kp = BCStatics2.getBothFromPem(testdatei);
@@ -1545,7 +1546,7 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 	private void Message(String msg){
 		JOptionPane.showMessageDialog(null, msg);
 	}
-	
+
 	private void setVecs(){
 		vecprax.clear();vecca.clear();
 		for(int i = 0;i<5;i++){
@@ -1560,11 +1561,12 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 
 	class MyCertTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class getColumnClass(int columnIndex) {
+		@Override
+        public Class getColumnClass(int columnIndex) {
 			   if(columnIndex==1 ){
 				   return ImageIcon.class;
 			   }else if(columnIndex==4){
@@ -1575,7 +1577,8 @@ public class NebraskaTestPanel  extends JPanel implements ActionListener{
 			   }
 		}
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 		          return false;
         }
 	}

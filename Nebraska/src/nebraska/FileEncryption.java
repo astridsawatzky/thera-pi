@@ -26,11 +26,11 @@ import javax.crypto.spec.SecretKeySpec;
  * @author Michael Lones
  */
 public class FileEncryption {
-	
+
 	Cipher pkCipher, aesCipher;
 	byte[] aesKey;
 	SecretKeySpec aeskeySpec;
-	
+
 	/**
 	 * Constructor: creates ciphers
 	 */
@@ -40,7 +40,7 @@ public class FileEncryption {
 	    // create AES shared key cipher
 	    aesCipher = Cipher.getInstance(Constants.SECRET_KEY_ALGORITHM);
 	}
-	
+
 	/**
 	 * Creates a new AES key
 	 */
@@ -58,13 +58,14 @@ public class FileEncryption {
 	public void loadKey(File in, File privateKeyFile) throws GeneralSecurityException, IOException {
 		// read private key to be used to decrypt the AES key
 		byte[] encodedKey = new byte[(int)privateKeyFile.length()];
+		//XXX : where is this reading to and FileInputStream is never closed
 		new FileInputStream(privateKeyFile).read(encodedKey);
-		
+
 		// create private key
 		PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(encodedKey);
 		KeyFactory kf = KeyFactory.getInstance(Constants.PUBLIC_KEY_ALGORITHM);
 		PrivateKey pk = kf.generatePrivate(privateKeySpec);
-		
+
 		// read AES key
 		pkCipher.init(Cipher.DECRYPT_MODE, pk);
 		aesKey = new byte[Constants.AES_Key_Size/8];
@@ -72,56 +73,57 @@ public class FileEncryption {
 		is.read(aesKey);
 		aeskeySpec = new SecretKeySpec(aesKey, Constants.SECRET_KEY_ALGORITHM);
 	}
-	
+
 	/**
 	 * Encrypts the AES key to a file using an RSA public key
 	 */
 	public void saveKey(File out, File publicKeyFile) throws IOException, GeneralSecurityException {
 		// read public key to be used to encrypt the AES key
 		byte[] encodedKey = new byte[(int)publicKeyFile.length()];
+		//XXX : where is this reading to and FileInputStream is never closed
 		new FileInputStream(publicKeyFile).read(encodedKey);
-		
+
 		// create public key
 		X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encodedKey);
 		KeyFactory kf = KeyFactory.getInstance(Constants.PUBLIC_KEY_ALGORITHM);
 		PublicKey pk = kf.generatePublic(publicKeySpec);
-		
+
 		// write AES key
 		pkCipher.init(Cipher.ENCRYPT_MODE, pk);
 		CipherOutputStream os = new CipherOutputStream(new FileOutputStream(out), pkCipher);
 		os.write(aesKey);
 		os.close();
 	}
-	
+
 	/**
 	 * Encrypts and then copies the contents of a given file.
 	 */
 	public void encrypt(File in, File out) throws IOException, InvalidKeyException {
 		aesCipher.init(Cipher.ENCRYPT_MODE, aeskeySpec);
-		
+
 		FileInputStream is = new FileInputStream(in);
 		CipherOutputStream os = new CipherOutputStream(new FileOutputStream(out), aesCipher);
-		
+
 		copy(is, os);
-		
+
 		os.close();
 	}
-	
+
 	/**
 	 * Decrypts and then copies the contents of a given file.
 	 */
 	public void decrypt(File in, File out) throws IOException, InvalidKeyException {
 		aesCipher.init(Cipher.DECRYPT_MODE, aeskeySpec);
-		
+
 		CipherInputStream is = new CipherInputStream(new FileInputStream(in), aesCipher);
 		FileOutputStream os = new FileOutputStream(out);
-		
+
 		copy(is, os);
-		
+
 		is.close();
 		os.close();
 	}
-	
+
 	/**
 	 * Copies a stream.
 	 */

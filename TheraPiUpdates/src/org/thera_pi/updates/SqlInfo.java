@@ -16,31 +16,26 @@ import java.util.Vector;
 
 
 public class SqlInfo {
-	
+
 /**
- * @throws SQLException *********************************/	
+ * @throws SQLException *********************************/
 	public static void sqlAusfuehren(Connection conn,String sstmt) throws SQLException{
 
 		Statement stmt = null;
 		stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
-
-			stmt.execute(sstmt);
-			
-			if (stmt != null) {
-					stmt.close();
-			}
-
+		stmt.execute(sstmt);
+		stmt.close();
 		return;
 	}
-	
+
 /*****************************************/
 
 	public static Vector<String> holeSatz(Connection conn,String tabelle, String felder, String kriterium){
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -64,7 +59,7 @@ public class SqlInfo {
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -73,7 +68,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -85,7 +80,7 @@ public class SqlInfo {
 		}
 		return retvec;
 	}
-	
+
 	public static void zeigeTabellen(Connection conn){
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -106,15 +101,15 @@ public class SqlInfo {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
 	public static Vector<String> holeFeld(Connection conn,String sstmt){
 		Statement stmt = null;
 		ResultSet rs = null;
 		String ret = "";
 		Vector<String> vecret = new Vector<String>();
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -133,7 +128,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -142,7 +137,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -154,6 +149,6 @@ public class SqlInfo {
 		}
 		return vecret;
 	}
-	
-	
+
+
 }

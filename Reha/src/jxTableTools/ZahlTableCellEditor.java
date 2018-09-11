@@ -49,6 +49,7 @@ public class ZahlTableCellEditor extends AbstractCellEditor implements KeyListen
 
     // This method is called when a cell value is edited by the user.
     
+    @Override
     public Component getTableCellEditorComponent(JTable table, Object value,
             boolean isSelected, int rowIndex, int vColIndex) {
         // 'value' is value contained in the cell located at (rowIndex, vColIndex)
@@ -60,7 +61,8 @@ public class ZahlTableCellEditor extends AbstractCellEditor implements KeyListen
         // Configure the component with the specified value
         ((JFormattedTextField)component).setText(((String)value));
         SwingUtilities.invokeLater(new Runnable(){
-        	public void run(){
+        	@Override
+            public void run(){
                 //
                 ((JFormattedTextField)component).setCaretPosition(0);
         		
@@ -76,6 +78,7 @@ public class ZahlTableCellEditor extends AbstractCellEditor implements KeyListen
     // This method is called when editing is completed.
     // It must return the new value to be stored in the cell.
     
+    @Override
     public Object getCellEditorValue() {
         return ((JFormattedTextField)component).getText().trim();
     }

@@ -144,7 +144,8 @@ public class RehaHMKPanel1 extends JXPanel{
 					fuelleCombos(0);
 					ready = true;
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							htmlPane.setText(getPiLogo());
 							//"http://www.heilmittelkatalog.de/tl_files/hmk/"+"physio/index.htm"
 							webBrowser.navigate(RehaHMK.hmkURL+"physio/index.htm");
@@ -290,7 +291,8 @@ public class RehaHMKPanel1 extends JXPanel{
 								final String url = RehaHMK.hmkURL+diszi+"/index.htm";
 								//System.out.println("angestossen über Radiobuttons: "+url);
 								SwingUtilities.invokeLater(new Runnable(){
-									public void run(){
+									@Override
+                                    public void run(){
 										webBrowser.navigate(url);
 										htmlPane.setText(getPiLogo());
 									}
@@ -364,7 +366,8 @@ public class RehaHMKPanel1 extends JXPanel{
 			webBrowser.setHTMLContent(getPiLogo());
 		}else{
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					webBrowser.setHTMLContent(getPiLogo());					
 				}
 			});
@@ -446,7 +449,8 @@ public class RehaHMKPanel1 extends JXPanel{
 		bufhtmlcode.append(this.bufend);
 		this.htmlPane.setText(bufhtmlcode.toString());
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				htmlScroll.validate();
 				JViewport jv = htmlScroll.getViewport();  
 				jv.setViewPosition(new Point(0,0));  
@@ -613,7 +617,8 @@ public class RehaHMKPanel1 extends JXPanel{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			/*
 			if(columnIndex==0){return String.class;}
 			if(columnIndex==1){return Boolean.class;}
@@ -625,13 +630,15 @@ public class RehaHMKPanel1 extends JXPanel{
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			return false;
 		}
 		   
 	}
 	class IndiListSelectionHandler implements ListSelectionListener {
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){
@@ -646,7 +653,8 @@ public class RehaHMKPanel1 extends JXPanel{
 	                if (lsm.isSelectedIndex(i)) {
 	                	final int ix = i;
 	            		SwingUtilities.invokeLater(new Runnable(){
-	            			public void run(){
+	            			@Override
+                            public void run(){
 	    	            		regleHMKSeite(ix);	            				
 	            			}
 	            		});
@@ -752,7 +760,8 @@ public class RehaHMKPanel1 extends JXPanel{
 	class HMKTreeSelectionListener implements TreeSelectionListener {
 		boolean isUpdating = false;
 		
-		public void valueChanged(TreeSelectionEvent e) {
+		@Override
+        public void valueChanged(TreeSelectionEvent e) {
 			if (!isUpdating) {
 				/******/
 				try{
@@ -785,7 +794,8 @@ public class RehaHMKPanel1 extends JXPanel{
 					TreePath tp = tt.getTreeSelectionModel().getSelectionPath();
 					aktNode =  (JXHMKTreeTableNode) tp.getLastPathComponent();//selpaths[selpaths.length-1].getLastPathComponent();
 					new SwingWorker<Void,Void>(){
-						protected Void doInBackground() throws Exception {
+						@Override
+                        protected Void doInBackground() throws Exception {
 							try{
 							int lang = getNodeCount();
 							aktRow = -1;
@@ -803,7 +813,8 @@ public class RehaHMKPanel1 extends JXPanel{
 									//htmlPane.setPage(url);
 									//System.out.println(url);
 									SwingUtilities.invokeLater(new Runnable(){
-										public void run(){
+										@Override
+                                        public void run(){
 											webBrowser.navigate(url);
 											
 										}

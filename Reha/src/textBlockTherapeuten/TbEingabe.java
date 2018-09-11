@@ -3,7 +3,6 @@ package textBlockTherapeuten;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowListener;
 import java.util.Vector;
 
 import javax.swing.JPanel;
@@ -15,12 +14,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
 import dialoge.RehaSmartDialog;
-import events.RehaTPEventListener;
 
-public class TbEingabe extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
+public class TbEingabe extends RehaSmartDialog implements ActionListener{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private ThTextBlock thb = null;
@@ -34,7 +32,7 @@ public class TbEingabe extends RehaSmartDialog implements RehaTPEventListener,Wi
 		this.tbvec = vtbs;
 		this.tbaktid = akttbid;
 		this.rueck = rueck;
-		
+
 		super.getSmartTitledPanel().setName(name);
 		super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
 		String xtitel = "<html>Text für Platzhalter eingeben";
@@ -56,7 +54,7 @@ public class TbEingabe extends RehaSmartDialog implements RehaTPEventListener,Wi
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

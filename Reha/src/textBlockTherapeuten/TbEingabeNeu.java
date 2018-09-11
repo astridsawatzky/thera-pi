@@ -91,7 +91,8 @@ public class TbEingabeNeu extends JXPanel implements ActionListener,KeyListener,
 		pb.addLabel("Wert eingeben",cc.xy(3,2));
 		tbeingabe = new JRtaTextField("NIX",true);
 		tbeingabe.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent arg0) {
+			@Override
+            public void keyPressed(KeyEvent arg0) {
 				if(arg0.getKeyCode()==10){
 					arg0.consume();
 					machText();

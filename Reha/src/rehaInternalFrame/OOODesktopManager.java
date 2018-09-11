@@ -109,7 +109,8 @@ Map<JInternalFrame, Rectangle> oldBounds = new HashMap<JInternalFrame, Rectangle
 
   }
 /******************************************************************/
-  public void deiconifyFrame(JInternalFrame f) {
+  @Override
+public void deiconifyFrame(JInternalFrame f) {
     JInternalFrame.JDesktopIcon desktopIcon = f.getDesktopIcon();
     Container c = desktopIcon.getParent();
     if (c != null) {
@@ -143,7 +144,8 @@ Map<JInternalFrame, Rectangle> oldBounds = new HashMap<JInternalFrame, Rectangle
     }
   }
 /******************************************************/
-  public void activateFrame(JInternalFrame f) {
+  @Override
+public void activateFrame(JInternalFrame f) {
     Container p = f.getParent();
     //Component[] c;
     JDesktopPane d = f.getDesktopPane();

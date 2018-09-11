@@ -148,14 +148,16 @@ public class Dta301 extends JXPanel implements FocusListener {
 			}
 		}.execute();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				beginndatum.requestFocus();
 			}
 		});
@@ -942,7 +944,8 @@ public class Dta301 extends JXPanel implements FocusListener {
 			this.ubbeginndatum.setEnabled(true);
 			this.ubendedatum.setEnabled(false);
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					ubbeginndatum.requestFocus();					
 				}
 			});
@@ -952,7 +955,8 @@ public class Dta301 extends JXPanel implements FocusListener {
 			this.ubbeginndatum.setEnabled(false);
 			this.ubendedatum.setEnabled(true);
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					ubendedatum.requestFocus();					
 				}
 			});
@@ -962,7 +966,8 @@ public class Dta301 extends JXPanel implements FocusListener {
 			this.ubbeginndatum.setEnabled(true);
 			this.ubendedatum.setEnabled(true);
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					ubbeginndatum.requestFocus();					
 				}
 			});
@@ -1273,14 +1278,16 @@ public class Dta301 extends JXPanel implements FocusListener {
 			 */
 			private static final long serialVersionUID = 1L;
 
-			public Class<?> getColumnClass(int columnIndex) {
+			@Override
+            public Class<?> getColumnClass(int columnIndex) {
 				   if(columnIndex==0){return String.class;}
 				   /*else if(columnIndex==1){return JLabel.class;}*/
 				   else{return String.class;}
 		           //return (columnIndex == 0) ? Boolean.class : String.class;
 		       }
 
-			    public boolean isCellEditable(int row, int col) {
+			    @Override
+                public boolean isCellEditable(int row, int col) {
 			        //Note that the data/cell address is constant,
 			        //no matter where the cell appears onscreen.
 			    	return false;

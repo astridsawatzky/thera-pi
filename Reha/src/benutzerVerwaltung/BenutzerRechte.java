@@ -535,7 +535,8 @@ public class BenutzerRechte extends JXPanel{
 		pws[1].setText("");
 		aktualisiereTree(true);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				tfs[0].requestFocus();
 			}
 		});
@@ -774,6 +775,7 @@ public class BenutzerRechte extends JXPanel{
             super(jXrechteTreeTableNode);
         }
         /******************/
+        @Override
         public Object getValueAt(Object node, int column) {
         	JXRechteTreeTableNode jXTreeTableNode = (JXRechteTreeTableNode) node;
 
@@ -794,6 +796,7 @@ public class BenutzerRechte extends JXPanel{
         	return super.getValueAt(node, column);
         }
         /******************/
+        @Override
         public void setValueAt(Object value, Object node, int column){
         	JXRechteTreeTableNode jXTreeTableNode = (JXRechteTreeTableNode) node;
         	Rechte o;
@@ -818,11 +821,13 @@ public class BenutzerRechte extends JXPanel{
             }	
         }  
         /******************/
+        @Override
         public int getColumnCount() {
             return 2;
         }
 
         /******************/
+        @Override
         public boolean isCellEditable(java.lang.Object node,int column){
         	Rechte o = null;
         	try{
@@ -846,6 +851,7 @@ public class BenutzerRechte extends JXPanel{
             }
         }
         /******************/
+        @Override
         public Class<?> getColumnClass(int column) {
             switch (column) {
             case 0:
@@ -971,7 +977,8 @@ public class BenutzerRechte extends JXPanel{
 	class RechteTreeSelectionListener implements TreeSelectionListener {
 		boolean isUpdating = false;
 		
-		public void valueChanged(TreeSelectionEvent e) {
+		@Override
+        public void valueChanged(TreeSelectionEvent e) {
 			if (!isUpdating) {
 				isUpdating = true;
 				JXTreeTable tt = jXTreeTable;
@@ -1002,7 +1009,8 @@ public class BenutzerRechte extends JXPanel{
 					if(tp==null){return;}
 					aktNode =  (JXRechteTreeTableNode) tp.getLastPathComponent();//selpaths[selpaths.length-1].getLastPathComponent();
 					new SwingWorker<Void,Void>(){
-						protected Void doInBackground() throws Exception {
+						@Override
+                        protected Void doInBackground() throws Exception {
 							int lang = getNodeCount();
 							aktRow = -1;
 							

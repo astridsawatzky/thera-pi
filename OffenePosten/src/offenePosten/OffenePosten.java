@@ -312,7 +312,8 @@ public class OffenePosten implements WindowListener{
 		thisFrame = jFrame;
 		
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				otab.setFirstFocus();		
 			}
 		});
@@ -401,7 +402,8 @@ public class OffenePosten implements WindowListener{
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	

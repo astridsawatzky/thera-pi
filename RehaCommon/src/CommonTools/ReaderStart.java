@@ -14,7 +14,8 @@ public class ReaderStart{
 		final String xdatei = datei;
 		final String xpathToReader = pathToReader;
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				Process process;
 				try {
 					process = new ProcessBuilder(xpathToReader,"",xdatei).start();

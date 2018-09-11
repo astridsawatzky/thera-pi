@@ -137,7 +137,8 @@ public class SMSDialog extends JXDialog implements  WindowListener, KeyListener,
 	}
 	public void setTextCursor(final int pos){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				jta.requestFocus();
 				jta.setCaretPosition(pos);		
 			}

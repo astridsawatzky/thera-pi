@@ -14,7 +14,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,13 +40,12 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemTools.ListenerTools;
 
-public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
+public class VorBerichte extends RehaSmartDialog implements ActionListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3970089431666417693L;
 	boolean nurkopie;
@@ -58,9 +56,9 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 	public JLabel rueckgeld;
 	public JCheckBox diagnoseuebernahme;
 	private RehaTPEventClass rtp = null;
-	private VorBerichtHintergrund rgb;	
+	private VorBerichtHintergrund rgb;
 	private ArztBericht clazz;
-	
+
 	public JXTable tabbericht = null;
 	public MyBerichtTableModel dtblm;
 	MattePainter mp = null;
@@ -68,17 +66,17 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 
 
 	public VorBerichte(boolean kopie,boolean historie,Point pt,ArztBericht xclazz){
-		super(null,"VorberichtLaden");		
+		super(null,"VorberichtLaden");
 
 		this.nurkopie = kopie;
 		this.aushistorie = historie;
 		this.clazz = xclazz;
-		
+
 		PinPanel pinPanel = new PinPanel();
 		pinPanel.setName("VorberichtLaden");
 		pinPanel.getGruen().setVisible(false);
 		setPinPanel(pinPanel);
-		getSmartTitledPanel().setTitle("Text aus Vorbericht laden");	
+		getSmartTitledPanel().setTitle("Text aus Vorbericht laden");
 		setSize(750,290);
 		setPreferredSize(new Dimension(750,290));
 		getSmartTitledPanel().setPreferredSize(new Dimension (750,290));
@@ -86,66 +84,68 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 		rgb = new VorBerichtHintergrund();
 		rgb.setLayout(new BorderLayout());
 
-		
+
 		new SwingWorker<Void,Void>(){
 
 			@Override
 			protected Void doInBackground() throws Exception {
-			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("VorBerichte"));		
+			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("VorBerichte"));
 				return null;
 			}
-			
-		}.execute();	
+
+		}.execute();
 		rgb.add(getGebuehren(),BorderLayout.CENTER);
-		
+
 		getSmartTitledPanel().setContentContainer(rgb);
 		getSmartTitledPanel().getContentContainer().setName("VorberichtLaden");
 	    setName("VorberichtLaden");
 		setModal(true);
 	    //Point lpt = new Point(pt.x-125,pt.y+30);
 	    setLocation(pt);
-	    
+
 		rtp = new RehaTPEventClass();
 		rtp.addRehaTPEventListener(this);
 
 		pack();
-		
+
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		 setzeFocus();
 		 	   }
 		});
-				
-	    
+
+
 
 
 	}
-	
+
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
-		 			//gegeben.requestFocus();		 		   
+		 			//gegeben.requestFocus();
 		 	   }
 		});
 	}
-/****************************************************/	
+/****************************************************/
 
 
 	private JPanel getGebuehren(){     // 1      2    3     4       5               6                7
 		FormLayout lay = new FormLayout("10dlu,80dlu,10dlu,80dlu,fill:0:grow(1.00),10dlu",
-									//     1   2  3    4       5   6  7    
+									//     1   2  3    4       5   6  7
 										"15dlu,p,2dlu,100dlu,15dlu,p,15dlu");
 		PanelBuilder pb = new PanelBuilder(lay);
 		CellConstraints cc = new CellConstraints();
 
 		pb.getPanel().setOpaque(false);
-		
+
 		diagnoseuebernahme = new JCheckBox("Diagnose ebenfalls übernehmen");
 		diagnoseuebernahme.setOpaque(false);
-		diagnoseuebernahme.setSelected(false);	
-		
+		diagnoseuebernahme.setSelected(false);
+
 
 		pb.add(diagnoseuebernahme,cc.xyw(2,2,3));
 
@@ -156,43 +156,46 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 		tabbericht.getColumn(6).setMaxWidth(0);
 		tabbericht.setRowSelectionInterval(0, 0);
 		tabbericht.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount()==2){
 					doUebernahme();
 				}
 			}
 		});
 		tabbericht.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent arg0) {
+			@Override
+            public void keyPressed(KeyEvent arg0) {
 				if(arg0.getKeyCode()==10){
 					doUebernahme();
 				}
 			}
 		});
-		
-		
+
+
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(tabbericht);
 		jscr.validate();
 		pb.add(jscr,cc.xyw(2,4,4));
-		
+
 		uebernahme = new JButton("Text übernehmen");
 		uebernahme.setActionCommand("uebernahme");
 		uebernahme.addActionListener(this);
 		uebernahme.addKeyListener(this);
 		pb.add(uebernahme,cc.xy(2,6));
-		
+
 		abbrechen = new JButton("abbrechen");
 		abbrechen.setActionCommand("abbrechen");
 		abbrechen.addActionListener(this);
-		abbrechen.addKeyListener(this);		
+		abbrechen.addKeyListener(this);
 		pb.add(abbrechen,cc.xy(4,6));
-		
+
 		pb.getPanel().validate();
 		return pb.getPanel();
 	}
-/****************************************************/	
-	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+/****************************************************/
+
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		try{
 			if(evt.getDetails()[0] != null){
@@ -205,18 +208,19 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 					rtp = null;
 					super.dispose();
 					this.dispose();
-					//System.out.println("****************Rezeptgebühren -> Listener entfernt**************");				
+					//System.out.println("****************Rezeptgebühren -> Listener entfernt**************");
 				}
 			}
 		}catch(NullPointerException ne){
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			ListenerTools.removeListeners(tabbericht);
 			ListenerTools.removeListeners(uebernahme);
@@ -225,8 +229,8 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 			dispose();
 			//System.out.println("****************Rezeptgebühren -> Listener entfernt (Closed)**********");
 		}
-		
-		
+
+
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -239,8 +243,9 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 		}
 
 	}
-	
-	public void keyPressed(KeyEvent event) {
+
+	@Override
+    public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()==10){
 			event.consume();
 			if( ((JComponent)event.getSource()).getName().equals("uebernahme")){
@@ -263,29 +268,29 @@ public class VorBerichte extends RehaSmartDialog implements RehaTPEventListener,
 		}
 		this.dispose();
 	}
-	
+
 }
 class VorBerichtHintergrund extends JXPanel{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1049788497941853572L;
 	ImageIcon hgicon;
 	int icx,icy;
 	AlphaComposite xac1 = null;
-	AlphaComposite xac2 = null;		
+	AlphaComposite xac2 = null;
 	public VorBerichtHintergrund(){
 		super();
 		hgicon = null;
-		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 
-		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);			
-		
+		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f);
+		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
+
 	}
 	@Override
-	public void paintComponent( Graphics g ) { 
+	public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;
-		
+
 		if(hgicon != null){
 			g2d.setComposite(this.xac1);
 			g2d.drawImage(hgicon.getImage(), (getWidth()/2)-icx , (getHeight()/2)-icy,null);

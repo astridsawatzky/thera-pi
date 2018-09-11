@@ -99,26 +99,30 @@ private RehaTPEventClass rtp = null;
 		grundPanel.add(content,BorderLayout.CENTER);
 		getSmartTitledPanel().setContentContainer(grundPanel);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.ALT_MASK);
 				((JComponent)getContentPanel()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doSuchen");
 				((JComponent)getContentPanel()).getActionMap().put("doSuchen", new ArztWahlAction());
 			}
 		});
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){		
+			@Override
+            public  void run(){		
 				tf.requestFocus();
 			}
 		});
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -165,7 +169,8 @@ private RehaTPEventClass rtp = null;
 		neuarzt.setMnemonic(KeyEvent.VK_N);
 		neuarzt.addKeyListener(akl);
 		neuarzt.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				neuAnlageArzt();
 			}
 	    });
@@ -177,7 +182,8 @@ private RehaTPEventClass rtp = null;
 		suchearzt.setMnemonic(KeyEvent.VK_S);
 		suchearzt.addKeyListener(akl);
 		suchearzt.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				fuelleTabelle(tf.getText().trim());
 				tf.requestFocus();
 			}
@@ -188,7 +194,8 @@ private RehaTPEventClass rtp = null;
 		uebernahmearzt.setName("suchearzt");
 		uebernahmearzt.addKeyListener(akl);
 		uebernahmearzt.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				werteUebergeben();
 			}
 	    }); 
@@ -200,7 +207,8 @@ private RehaTPEventClass rtp = null;
 		abbrechenarzt.setMnemonic(KeyEvent.VK_A);
 		abbrechenarzt.addKeyListener(akl);
 		abbrechenarzt.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				doAbbrechen();
 			}
 	    }); 
@@ -214,7 +222,8 @@ private RehaTPEventClass rtp = null;
 		arztwahltbl = new JXTable(arztwahlmod);
 		arztwahltbl.addKeyListener(akl);
 		arztwahltbl.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() == 2){
 					werteUebergeben();					
 				}
@@ -236,7 +245,8 @@ private RehaTPEventClass rtp = null;
 				protected Void doInBackground() throws Exception {
 					fuelleIdTabelle(suchid);
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							setzeFocus();								
 						}
 					});
@@ -250,7 +260,8 @@ private RehaTPEventClass rtp = null;
 					protected Void doInBackground() throws Exception {
 						fuelleTabelle(suchkrit);
 						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
+							@Override
+                            public void run(){
 								setzeFocus();								
 							}
 						});
@@ -262,7 +273,8 @@ private RehaTPEventClass rtp = null;
 					@Override
 					protected Void doInBackground() throws Exception {
 						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
+							@Override
+                            public void run(){
 								setzeFocus();								
 							}
 						});
@@ -364,7 +376,8 @@ private RehaTPEventClass rtp = null;
 		}
 		grundPanel.add(this.content);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				tf.requestFocus();
 			}
 		});		
@@ -397,7 +410,8 @@ private RehaTPEventClass rtp = null;
 		 */
 		private static final long serialVersionUID = -6371294487538741375L;
 
-		public void actionPerformed(ActionEvent e) {
+		@Override
+        public void actionPerformed(ActionEvent e) {
 
 	        if(e.getActionCommand().equals("f")){
 	        	 tf.requestFocus();
@@ -456,15 +470,18 @@ class MyArztWahlModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return String.class;}
 		   else{return String.class;}
 	}
 
+    @Override
     public boolean isCellEditable(int row, int col) {
     	return true;
     }
-	public Object getValueAt(int rowIndex, int columnIndex) {
+	@Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
 		String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
 		Object result = null;
 		result = theData;

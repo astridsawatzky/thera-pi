@@ -77,7 +77,8 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener,Acti
         this.add(jscroll,BorderLayout.CENTER);
         this.addKeyListener(this);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				knopf2.requestFocus();
        	  	}
 		});
@@ -142,7 +143,8 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener,Acti
 		builder.add(defaultNA, cc.xyw(3,11,3));
 
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				comboFuellen();
 				fuelleMitWerten();
        	  	}

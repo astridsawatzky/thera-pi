@@ -157,7 +157,8 @@ public class SetWahl extends JDialog {
 			//jButton.setIcon(new ImageIcon("C:/MeinWorkspace/pics/ok.gif"));
 
 			jButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
+				@Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
 					//System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 					DialogBeenden(jList1.getSelectedIndex());
 				}
@@ -178,7 +179,8 @@ public class SetWahl extends JDialog {
 			jButton1.setText("Abbruch");
 			//jButton1.setIcon(new ImageIcon("C:/MeinWorkspace/pics/nichtok.gif"));
 			jButton1.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
+				@Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
 					//System.out.println("actionPerformed()"); // TODO Auto-generated Event stub actionPerformed()
 					DialogBeenden(-1);
 				}
@@ -202,7 +204,8 @@ public class SetWahl extends JDialog {
 		if (jList1 == null) {
 			jList1 = new JList(model);
 			jList1.addKeyListener(new java.awt.event.KeyAdapter() {   
-				public void keyPressed(java.awt.event.KeyEvent e) {    
+				@Override
+                public void keyPressed(java.awt.event.KeyEvent e) {    
 					if (e.getKeyCode()==10){
 						DialogBeenden(jList1.getSelectedIndex());
 					}
@@ -212,7 +215,8 @@ public class SetWahl extends JDialog {
 				}
 			});
 			jList1.addMouseListener(new java.awt.event.MouseAdapter() {
-				public void mouseClicked(java.awt.event.MouseEvent e) {
+				@Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
 					if (e.getClickCount() == 2){
 						DialogBeenden(jList1.getSelectedIndex());
 					}

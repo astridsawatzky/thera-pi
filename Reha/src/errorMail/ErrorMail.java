@@ -28,7 +28,8 @@ public class ErrorMail extends Thread{
 		this.titel = String.valueOf(xtitel);
 		start();
 	}
-	public void run(){
+	@Override
+    public void run(){
 		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "error.ini"); 
 		String empfaenger = ini.getStringProperty("Email", "RecipientAdress");
 		   EmailSendenExtern oMail = new EmailSendenExtern();

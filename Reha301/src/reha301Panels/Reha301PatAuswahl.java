@@ -82,7 +82,8 @@ public class Reha301PatAuswahl extends JDialog{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						macheHtml(combo.getSelectedIndex(),null);						
 					}
 				});

@@ -63,7 +63,8 @@ public class DateFieldDocument extends javax.swing.text.PlainDocument {
 	 // **** Konstruktor 2 Ende
 
 	 // **** �berschreiben Insert-Methode
-	 public void insertString(int offset, String zeichen, 
+	 @Override
+    public void insertString(int offset, String zeichen, 
 	       AttributeSet attributeSet) 
 	       throws BadLocationException {
 		  ////System.out.println("In insert String - Zeichen = "+zeichen);
@@ -173,7 +174,8 @@ public class DateFieldDocument extends javax.swing.text.PlainDocument {
 	 // **** Überschreiben Insert Ende
 
 	 // **** Überschreiben Remove
-	 public void remove(int offset, int length) 
+	 @Override
+    public void remove(int offset, int length) 
 	       throws BadLocationException {
 	  if(atSeparator(offset)) 
 	   textComponent.setCaretPosition(offset-1);

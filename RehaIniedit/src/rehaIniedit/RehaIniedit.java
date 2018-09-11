@@ -190,7 +190,8 @@ public class RehaIniedit implements WindowListener {
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	

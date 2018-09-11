@@ -31,6 +31,7 @@ public class DblCellEditor extends AbstractCellEditor implements KeyListener,Tab
     public DblCellEditor(){
     	component.addKeyListener(this);
     }
+    @Override
     public Object getCellEditorValue() {
     	String foo;
     	try{
@@ -43,6 +44,7 @@ public class DblCellEditor extends AbstractCellEditor implements KeyListener,Tab
         return new Double(i_spent_hours_on_this);
     }
     // This method is called when a cell value is edited by the user.
+    @Override
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
         // Configure the component with the specified value
     	if(!mitMaus){
@@ -53,7 +55,8 @@ public class DblCellEditor extends AbstractCellEditor implements KeyListener,Tab
     	}else{
     		final String xvalue = String.valueOf(value);
     		SwingUtilities.invokeLater(new Runnable(){
-    			public void run(){
+    			@Override
+                public void run(){
     	    		((JFormattedTextField)component).setText(String.valueOf(xvalue).replace(".", ","));
     	            ((JFormattedTextField)component).selectAll();
     	            ((JFormattedTextField)component).setHorizontalAlignment(SwingConstants.RIGHT);

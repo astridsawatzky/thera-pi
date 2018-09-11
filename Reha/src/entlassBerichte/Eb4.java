@@ -72,7 +72,8 @@ public class Eb4 implements ActionListener {
 						eltern.bta[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 					}
 					new Thread(){
-						public void run(){
+						@Override
+                        public void run(){
 							laden(eltern.neu);
 							inGuiInit = false;
 							eltern.meldeInitOk(3);

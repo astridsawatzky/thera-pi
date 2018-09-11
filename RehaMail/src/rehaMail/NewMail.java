@@ -74,24 +74,24 @@ import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.text.ITextDocument;
 
 public class NewMail extends JFrame  implements WindowListener  {
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 218981219028959375L;
 
 	boolean neu;
-	
+
 	private IFrame             officeFrame       = null;
 	public	ITextDocument      document          = null;
 	private JPanel             noaPanel          = null;
 	private JXPanel			noaDummy = null;
 	NativeView nativeView = null;
 	DocumentDescriptor xdescript = null;
-	
+
 	ActionListener al = null;
 	MouseListener ml = null;
-	
+
 	JButton[] buts = {null,null,null,null,null};
 	JRadioButton[] rads = {null,null,null};
 	ButtonGroup bg = new ButtonGroup();
@@ -102,11 +102,11 @@ public class NewMail extends JFrame  implements WindowListener  {
 	String aktAbsender = "";
 	private boolean fromOutside = false;
 	private String outBetreff = "";
-	
+
 	RTFEditorPanel rtfEditor= null;
 	ObjectInputStream ois = null;
 	ByteArrayInputStream in = null;
-	Vector<Vector<String>> vecAttachments = new Vector<Vector<String>>(); 
+	Vector<Vector<String>> vecAttachments = new Vector<Vector<String>>();
 	ByteArrayOutputStream out;
 	public NewMail(String title,boolean neu,Point pt,ByteArrayOutputStream out,String absender,String sbetreff,boolean fromOutside){
 		super();
@@ -142,7 +142,8 @@ public class NewMail extends JFrame  implements WindowListener  {
 		final String xabsender = absender;
 		final String xbetreff = sbetreff;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				try{
 				if(!xneu){
 					rads[0].setSelected(true);
@@ -185,7 +186,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 			//System.out.println(text);
 			in.close();
 		} catch (BadLocationException e) {
-			
+
 			e.printStackTrace();
 		} catch (IOException e) {
 
@@ -209,7 +210,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 						return;
 					}else if(cmd.equals("selektor")){
 						if(rads[1].isSelected()){
-							empfaenger.setText(box.getSecValue().toString());	
+							empfaenger.setText(box.getSecValue().toString());
 						}
 						return;
 					}else if(cmd.equals("attachments")){
@@ -218,37 +219,39 @@ public class NewMail extends JFrame  implements WindowListener  {
 					}else if(Integer.parseInt(cmd) >= 1 && Integer.parseInt(cmd) <= 3){
 						loescheAttachments(Integer.parseInt(cmd)-1);
 						regleAttachments();
-						
+
 						return;
 					}
 				}catch(Exception ex){
 					ex.printStackTrace();
 
 				}
-			}	
+			}
 		};
 		ml = new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount()==1 && arg0.getButton()==3){
 					if(vecAttachments.size()==0){attachments.setText("");return;}
 						ZeigePopupMenu(arg0);
 				}
-			}	
+			}
 		};
 	}
 	private void ZeigePopupMenu(java.awt.event.MouseEvent me){
 		JPopupMenu jPop = getAttachmentPopupMenu();
-		
+
 		final java.awt.event.MouseEvent mex = me;
 		final JPopupMenu jxPop = jPop;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				attachments.requestFocus();
 				jxPop.show(mex.getComponent(), mex.getX(), mex.getY()-jxPop.getHeight());
 				jxPop.setLocation( mex.getLocationOnScreen().x, mex.getLocationOnScreen().y-jxPop.getHeight());
 			}
 		});
-		 
+
 	}
 	private JPopupMenu getAttachmentPopupMenu(){
 		JPopupMenu jPopupMenu = new JPopupMenu();
@@ -263,14 +266,14 @@ public class NewMail extends JFrame  implements WindowListener  {
 		}
 		return jPopupMenu;
 	}
-	
-	
+
+
 	private void doAttachments(){
 		if(vecAttachments.size()==3){
 			JOptionPane.showMessageDialog(null,"Es sind bereits 3 Attachments angegeben.\nMehr geht in Thera-Pi-Nachrichten nicht!");
 			return;
 		}
-		
+
 		String[] ret = dateiDialog(RehaMail.progHome);
 		if(ret[0]==null){return;}
 		Vector<String> vec = new Vector<String>();
@@ -310,7 +313,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 				String msg = "<html>Wenn Sie jemandem eine Nachricht zukommen lassen wollen,<br>"+
 				"<b>empfiehlt es sich den Nachrichtenempfänger auszuwählen !</b><br><br>"+
 				"Oh Herr sieh Dein Volk an, aber verzage nicht<br><b>(auch wenn's schwer fällt...)</b><html>";
-				new AaarghHinweis(msg,"Oh jeh, oh jeh....."); 
+				new AaarghHinweis(msg,"Oh jeh, oh jeh.....");
 				//JOptionPane.showMessageDialog(null, msg);
 				return;
 			}
@@ -344,7 +347,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
 		}
-		
+
 		//document.getPersistenceService().export(out,OpenDocumentFilter.FILTER);
 		try {
 			ByteArrayInputStream ins = null;
@@ -359,17 +362,17 @@ public class NewMail extends JFrame  implements WindowListener  {
 					rtfEditor.editorArea.getDocument().getText(0, rtfEditor.editorArea.getDocument().getLength())+
 					"\n"+"***********Ende der Nachricht**************\n"+
 					xtext;
-					
+
 					String xstmt = "update pat5 set anamnese = '"+StringTools.EscapedDouble(xtext)+"' where pat_intern = '"+ RehaMail.sidPatMessage+"' LIMIT 1";
 					SqlInfo.sqlAusfuehren(xstmt);
 					if(RehaMail.sidRezMessage.equals("-1")){
 						new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"RehaMail#"+RehaIOMessages.MUST_PATFIND+"#"+RehaMail.sidPatMessage);
 					}else{
-						new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"RehaMail#"+RehaIOMessages.MUST_PATANDREZFIND+"#"+RehaMail.sidPatMessage+"#"+RehaMail.sidRezMessage);	
+						new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"RehaMail#"+RehaIOMessages.MUST_PATANDREZFIND+"#"+RehaMail.sidPatMessage+"#"+RehaMail.sidRezMessage);
 					}
 				}
 			}
-			
+
 			for(int i = 0; i < versand.size();i++){
 				try {
 					doSpeichernMail(
@@ -384,12 +387,13 @@ public class NewMail extends JFrame  implements WindowListener  {
 			}
 			out.close();
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					RehaMail.thisClass.getMTab().getSendPanel().checkForNewMail();
 					RehaMail.thisClass.getMTab().getMailPanel().checkForNewMail(true);
 				}
 			});
-			
+
 			RehaMail.thisFrame.setCursor(RehaMail.DEFAULT_CURSOR);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -399,7 +403,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		RehaMail.nachrichtenInBearbeitung = false;
 		this.setVisible(false);
 		this.dispose();
-		
+
 	}
 	private boolean gibtsDenEmpfaenger(String empfaenger){
 		boolean ret = false;
@@ -407,7 +411,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 			if(RehaMail.einzelMail.get(i).get(0).trim().equals(empfaenger.trim())){return true;}
 		}
 		return ret;
-		
+
 	}
 	private void doRecipient(boolean einzel){
 		if(einzel){box.setDataVectorVector(RehaMail.einzelMail, 0, 2);empfaenger.setText("");return;}
@@ -447,7 +451,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		pan.add(rtfEditor = new RTFEditorPanel(true,true,false),cc.xy(1, 3));
 		/*
 		pan.add(getnoaDummy(),cc.xy(1, 3));
-		
+
 		noaDummy.setVisible(true);
 		noaDummy.add(getOOorgPanel(),BorderLayout.CENTER);
 
@@ -457,7 +461,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 				if(!RehaMail.officeapplication.isActive()){
 					//System.out.println("Aktiviere Office...");
 					RehaMail.starteOfficeApplication();
-				}				
+				}
 				fillNOAPanel();
 				validate();
 				nativeView.requestFocus();
@@ -465,7 +469,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 				setVisible(true);
 				return null;
 			}
-			
+
 		}.execute();
 		*/
 
@@ -480,7 +484,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		FormLayout lay = new FormLayout(xwert,ywert);
 		CellConstraints cc = new CellConstraints();
 		pan.setLayout(lay);
-		
+
 		JToolBar bar = new JToolBar();
 		bar.setOpaque(false);
 		bar.setRollover(true);
@@ -491,7 +495,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		bar.add(buts[0]=ButtonTools.macheButton("", "senden", al));
 
 		buts[0].setIcon(RehaMail.symbole.get("senden"));
-		
+
 		buts[0].setToolTipText("Nachricht versenden");
 		bar.addSeparator(new Dimension(40,30));
 		bar.add(rads[0]=new JRadioButton("an Einzelperson"));
@@ -505,19 +509,19 @@ public class NewMail extends JFrame  implements WindowListener  {
 		rads[1].addActionListener(al);
 		rads[1].setOpaque(false);
 		pan.add(bar,cc.xy(1,1));
-		
+
 		pan.add(box=new JRtaComboBox(),cc.xy(3,1));
 		box.setActionCommand("selektor");
 		box.addActionListener(al);
-		
-		
+
+
 		pan.add(empfaenger=new JRtaTextField("nix",true),cc.xy(5, 1));
 		empfaenger.setFont(new Font("Courier New",12,12));
-		
+
 		JLabel lab = new JXLabel("Betreff der Nachricht");
 		lab.setForeground(Color.RED);
 		pan.add(lab,cc.xy(1, 3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-		
+
 		betreff = new JRtaTextField("nix",true);
 		betreff.setFont(new Font("Courier New",12,12));
 		if(!outBetreff.equals("")){
@@ -525,9 +529,9 @@ public class NewMail extends JFrame  implements WindowListener  {
 		}
 		pan.add(betreff,cc.xyw(3,3,3));
 		pan.validate();
-		
-		
-		
+
+
+
 		pan.add(buts[1] = ButtonTools.macheButton("", "attachments", al),cc.xy(1, 5,CellConstraints.RIGHT,CellConstraints.DEFAULT));
 		buts[1].setIcon(RehaMail.attachmentIco[3]);
 		buts[1].setToolTipText("Datei(en) dieser Nachricht anhängen");
@@ -559,7 +563,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 		        DocumentDescriptor desc = new DocumentDescriptor();
 		        desc.setFilterDefinition(OpenDocumentFilter.FILTER.toString());
 
-		        
+
 		        document = (ITextDocument) RehaMail.officeapplication.getDocumentService().constructNewDocument(officeFrame,
 		            IDocument.WRITER,
 		            desc);
@@ -567,7 +571,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 	        	Tools.OOTools.setzeRaender(document, new Integer(1000), new Integer(1000),new Integer(1000),new Integer(1000));
 		        //hideElements(LayoutManager.URL_MENUBAR);
 		        //hideElements(LayoutManager.URL_STATUSBAR);
-	        	
+
 		        try {
 					document.zoom(DocumentZoomType.BY_VALUE, (short)90);
 				} catch (DocumentException e) {
@@ -599,14 +603,14 @@ public class NewMail extends JFrame  implements WindowListener  {
 					xtextDocument.close();
 					IViewCursor viewCursor = document.getViewCursorService().getViewCursor();
 					viewCursor.getPageCursor().jumpToFirstPage();
-					
+
 					ITextCursor textCursor = document.getTextService().getText().getTextCursorService().getTextCursor();
 			        textCursor.getStart();//.gotoEnd(false);
 			        IParagraph paragraph = document.getTextService().getTextContentService().constructNewParagraph();
 			        textCursor.getStart();//textCursor.gotoEnd(false);
 			        document.getTextService().getTextContentService().insertTextContent(textCursor.getEnd(),
 			            paragraph);
-			        */    
+			        */
 			        /*
 			        StringBuffer bufferedString = new StringBuffer();
 			        for (int j = 0; j < allTexts2BePlaced[i].length; j++) {
@@ -615,11 +619,11 @@ public class NewMail extends JFrame  implements WindowListener  {
 			        */
 	/*
 			        //paragraph.setParagraphText("\n\n********************bisherige Nachricht, beantwortet am: "+DatFunk.sHeute()+"************************\n");
-					
+
 					//ITextContent tcontent =
 					//document.getTextService().getTextContentService().insertTextContent(arg0)
 		        	//document.getTextService().getText().setText("\n\n********************bisherige Nachricht, beantwortet am: "+DatFunk.sHeute()+"************************\n");
-		        	
+
 		        }
 		        nativeView.validate();
 		        //noaPanel.setVisible(true);
@@ -677,7 +681,7 @@ public class NewMail extends JFrame  implements WindowListener  {
 
 
 
-	
+
 	@Override
 	public void windowActivated(WindowEvent arg0) {
 	}
@@ -722,13 +726,12 @@ public class NewMail extends JFrame  implements WindowListener  {
 			Vector<Vector<String>> attaches
 			) throws Exception{
 		Statement stmt = null;
-		ResultSet rs = null;
 		PreparedStatement ps = null;
-		FileInputStream[] ins = {null,null,null}; 
+		FileInputStream[] ins = {null,null,null};
 		try {
 			stmt = RehaMail.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
-			
+
 			String select = "insert into pimail set "+
 			"absender = ? ,"+
 			"empfaenger_person = ?,"+
@@ -744,9 +747,9 @@ public class NewMail extends JFrame  implements WindowListener  {
 			"file3 = ?";
 			ps = (PreparedStatement) RehaMail.thisClass.conn.prepareStatement(select);
 			ps.setString(1, RehaMail.mailUser);
-			ps.setString(2, empfaenger);			  
+			ps.setString(2, empfaenger);
 			ps.setString(3, DatFunk.sDatInSQL(DatFunk.sHeute()));
-			ps.setString(4, "F");			  
+			ps.setString(4, "F");
 			ps.setString(5, betreff);
 			ps.setBinaryStream(6,insemailtext);
 			for(int i = 0; i < 3; i++){
@@ -768,15 +771,8 @@ public class NewMail extends JFrame  implements WindowListener  {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
+		}
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -788,9 +784,9 @@ public class NewMail extends JFrame  implements WindowListener  {
 				ps.close();
 			}
 		}
-		
+
 	}
-	
+
 	private String[] dateiDialog(String pfad){
 		//String sret = "";
 		String[] sret ={null,null};
@@ -802,6 +798,7 @@ public class NewMail extends JFrame  implements WindowListener  {
         chooser.setCurrentDirectory(file);
 
         chooser.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                         || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
@@ -817,10 +814,10 @@ public class NewMail extends JFrame  implements WindowListener  {
         if (result == JFileChooser.APPROVE_OPTION) {
             File inputVerzFile = chooser.getSelectedFile();
             String inputVerzStr = inputVerzFile.getPath();
-            
+
 
             if(inputVerzFile.getName().trim().equals("")){
-            	
+
             	//sret = "";
             }else{
             	sret[0] = inputVerzFile.getName().trim();
@@ -829,10 +826,10 @@ public class NewMail extends JFrame  implements WindowListener  {
         }else{
         	//sret = ""; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
         }
-        chooser.setVisible(false); 
+        chooser.setVisible(false);
 
         return sret;
 	}
-	
+
 
 }

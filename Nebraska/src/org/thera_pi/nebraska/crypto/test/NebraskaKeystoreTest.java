@@ -22,7 +22,8 @@ public class NebraskaKeystoreTest extends TestCase {
 
 	private NebraskaKeystore nebraskaKeystore;
 
-	protected void setUp() throws Exception {
+	@Override
+    protected void setUp() throws Exception {
 		super.setUp();
 		File keystoreFile = new File(keystoreFilename);
 		if(keystoreFile.exists()) {
@@ -31,7 +32,8 @@ public class NebraskaKeystoreTest extends TestCase {
 		nebraskaKeystore = new NebraskaKeystore(keystoreFilename, keystorePassword, keyPassword, institutionId, institutionName, personName);
 	}
 
-	protected void tearDown() throws Exception {
+	@Override
+    protected void tearDown() throws Exception {
 		super.tearDown();
 	}
 

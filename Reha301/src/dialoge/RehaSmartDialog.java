@@ -113,7 +113,8 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		}
 		*/
 		final ActionListener listener = new ActionListener() {
-		    public final void actionPerformed(final ActionEvent e) {
+		    @Override
+            public final void actionPerformed(final ActionEvent e) {
 		    	if(hasFocus()){
 			        setVisible(false);
 			        dispose();
@@ -190,7 +191,8 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		return jtp;
 	}
 
-	public JXTitledPanel getSmartTitledPanel(){
+	@Override
+    public JXTitledPanel getSmartTitledPanel(){
 		return jtp;
 	}
 	
@@ -204,11 +206,13 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		return true;
 	}
 
-	public JXTitledPanel getTitledPanel(){
+	@Override
+    public JXTitledPanel getTitledPanel(){
 		return jtp;
 	}
 	
-	public void setContentPanel(Container cont){
+	@Override
+    public void setContentPanel(Container cont){
 		this.jtp.setContentContainer(cont);
 		//this.jtp.setRightDecoration(new PinPanel());
 		this.jtp.setPreferredSize(cont.getPreferredSize());
@@ -219,25 +223,30 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		return this.jtp.getContentContainer();
 	}
 
-	public void aktiviereIcon(){
+	@Override
+    public void aktiviereIcon(){
 		if(pinPanel != null){
 			pinPanel.SetzeAktivButton(true);			
 		}
 	}
-	public void deaktiviereIcon(){
+	@Override
+    public void deaktiviereIcon(){
 		if(pinPanel != null){
 			pinPanel.SetzeAktivButton(false);
 		}	
 	}	
-	public void setPinPanel (PinPanel pinPanel){
+	@Override
+    public void setPinPanel (PinPanel pinPanel){
 		this.pinPanel = pinPanel;
 		this.jtp.setRightDecoration(this.pinPanel);
 	}
-	public PinPanel getPinPanel (){
+	@Override
+    public PinPanel getPinPanel (){
 		return this.pinPanel;
 	}
 	
-	public void ListenerSchliessen(){
+	@Override
+    public void ListenerSchliessen(){
 		//////System.out.println("In ListenerSchlie�en - Basisklasse");
 		if(xEvent != null){
 			xEvent.removeRehaTPEventListener(this);
@@ -381,7 +390,8 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 	public void mouseReleased(java.awt.event.MouseEvent e) {    
 		//final java.awt.event.MouseEvent ex = e;
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				setCursor(Reha301.thisClass.cdefault);
 				clickX = -1;
 				clickY = -1;
@@ -413,7 +423,8 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 			//////System.out.println("in Mousedragged");
 			final java.awt.event.MouseEvent ex = e;
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 					setCursor(Reha301.thisClass.cmove);
 					setLocation(ex.getXOnScreen()-clickX,ex.getYOnScreen()-clickY);
 		 	  	}
@@ -614,19 +625,22 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 	}
 
 
-	public void keyPressed(KeyEvent arg0) {
+	@Override
+    public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		//////System.out.println("SmartDialog Pressed "+arg0.getKeyCode());
 	}
 
 
-	public void keyReleased(KeyEvent arg0) {
+	@Override
+    public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		//////System.out.println("SmartDialog Released "+arg0);		
 	}
 
 	
-	public void keyTyped(KeyEvent arg0) {
+	@Override
+    public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		//////System.out.println("SmartDialog Typed "+arg0);
 	}

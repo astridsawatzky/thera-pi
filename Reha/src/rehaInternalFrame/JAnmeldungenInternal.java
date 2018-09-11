@@ -51,7 +51,8 @@ public class JAnmeldungenInternal extends JRehaInternal implements RehaEventList
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 				AktiveFenster.loescheFenster(name);
 				Reha.thisClass.progLoader.loescheAnmeldungen();
@@ -60,7 +61,8 @@ public class JAnmeldungenInternal extends JRehaInternal implements RehaEventList
 
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

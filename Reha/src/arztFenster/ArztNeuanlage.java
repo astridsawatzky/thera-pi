@@ -301,14 +301,16 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				tfs[0].requestFocus();
 			}
 		});
 	}
 	private void drecksFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				setzeFocus();
 			}
 		});
@@ -399,7 +401,8 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 		String comm = arg0.getActionCommand();
 		final String xcomm = comm;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 			if(xcomm.equals("speichern")){
 		 				datenSpeichern();
 		 				tabelleAktualisieren();

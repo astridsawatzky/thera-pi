@@ -181,11 +181,13 @@ public class Rahmen extends JApplet{
 			
 
 		}
-		  public void start()
+		  @Override
+        public void start()
 		   {
 		      super.start();
 		   }
-		  public void stop()
+		  @Override
+        public void stop()
 		   {
 		      super.stop();
 
@@ -234,7 +236,8 @@ public class Rahmen extends JApplet{
 			        	}
 			        return;
 			}
-			public void run() {
+			@Override
+            public void run() {
 				StarteDB();
 			}
 		

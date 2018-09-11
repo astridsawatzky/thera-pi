@@ -36,16 +36,16 @@ import systemEinstellungen.SystemConfig;
 
 
 
-public class TerminplanDrucken extends Thread implements Runnable {
+public class TerminplanDrucken extends Thread {
 private Vector<TermObjekt> termindat = null;
-private boolean ldrucken; 
+private boolean ldrucken;
 private boolean ldirektsenden;
 private boolean lendlos;
 private String patient;
 private String rezept;
 public int  seiten = 1;
 TerminplanDrucken thisDruck = null;
-String[] tabName; 
+String[] tabName;
 static String exporturl = "";
 SuchenSeite eltern;
 	public void init(Vector<TermObjekt> termdat,boolean drucken,String patName,String rezNr,SuchenSeite xeltern,boolean ldirektsenden){
@@ -58,8 +58,9 @@ SuchenSeite eltern;
 		thisDruck = this;
 		start();
 	}
-	
-	public synchronized void run() {
+
+	@Override
+    public synchronized void run() {
 			String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
 			String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
 			int anzahl = termindat.size();
@@ -77,7 +78,7 @@ SuchenSeite eltern;
 			String patname = (patient.indexOf("?")>=0 ? patient.substring(1).trim() : patient.trim());
 			String rez = (rezept.trim().equals("") ? "" : " - "+rezept.trim());
 	        patname = patname+rez;
-	        
+
 	        /**********/
 	        if(ldirektsenden){
 		        eltern.getFortschritt().setStringPainted(true);
@@ -85,10 +86,10 @@ SuchenSeite eltern;
 		        eltern.setFortschrittZeigen(true);
 		        eltern.setFortschrittRang(0, Long.valueOf(Integer.toString(termindat.size())));
 		        eltern.setFortschrittSetzen(0);
-		        //eltern.setFortschrittZeigen(true);	        	
+		        //eltern.setFortschrittZeigen(true);
 	        }
 	        /**********/
-	        
+
 	        IDocumentService documentService = null;
 			if(!Reha.officeapplication.isActive()){
 				Reha.starteOfficeApplication();
@@ -100,7 +101,7 @@ SuchenSeite eltern;
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null,"Fehler im OpenOffice-System, Terminplan kann nicht gedruckt werden");
 			}
-			
+
 	        IDocumentDescriptor docdescript = new DocumentDescriptor();
 	        docdescript.setHidden(true);
 	        docdescript.setAsTemplate(true);
@@ -129,7 +130,7 @@ SuchenSeite eltern;
 			tabName = new String[AnzahlTabellen];
 			int x = 0;
 			for(int i=AnzahlTabellen;i>0;i--){
-				tabName[x] = tbl[(tbl.length-1)-x].getName(); 
+				tabName[x] = tbl[(tbl.length-1)-x].getName();
 				////System.out.println(tabName[x]);
 				x++;
 			}
@@ -176,9 +177,9 @@ SuchenSeite eltern;
 					////System.out.println("Platzhalter-Name = "+placeholderDisplayText);
 					if(placeholderDisplayText.equals("<^Name^>")){
 						placeholders[i].getTextRange().setText(patname);
-					}	
+					}
 				}
-			      
+
 			}
 			/********************************************/
 			//int zeile = 0;
@@ -199,7 +200,7 @@ SuchenSeite eltern;
 				aktTerminInTabelle = aktTerminInTabelle+1;
 				aktTermin = aktTermin+1;
 		        if(ldirektsenden){
-		        	eltern.setFortschrittSetzen(aktTermin);	
+		        	eltern.setFortschrittSetzen(aktTermin);
 		        }
 				if(aktTermin >= anzahl){
 					break;
@@ -230,10 +231,10 @@ SuchenSeite eltern;
 						tbl = textDocument.getTextTableService().getTextTables();
 						x = 0;
 						for(int i=AnzahlTabellen;i>0;i--){
-							tabName[x] = tbl[(tbl.length-1)-x].getName(); 
+							tabName[x] = tbl[(tbl.length-1)-x].getName();
 							x++;
 						}
-						
+
 						if(ipatdrucken  > 0){
 						      ITextFieldService textFieldService = textDocument.getTextFieldService();
 						      ITextField[] placeholders = null;
@@ -246,9 +247,9 @@ SuchenSeite eltern;
 									String placeholderDisplayText = placeholders[i].getDisplayText();
 									if(placeholderDisplayText.equals("<^Name^>")){
 										placeholders[i].getTextRange().setText(patname);
-									}	
+									}
 								}
-						      
+
 						}
 
 						aktTabelle = 0;
@@ -267,7 +268,7 @@ SuchenSeite eltern;
 				if(!lendlos){
 					if(spaltenNamen.contains("Wochentag")){
 						int zelle = spaltenNamen.indexOf("Wochentag");
-						
+
 						druckDatum = termindat.get(aktTermin).tag;
 						if(aktTerminInTabelle > 0){
 							if(! druckDatum.equals(termindat.get(aktTermin-1).tag)){
@@ -275,7 +276,7 @@ SuchenSeite eltern;
 									textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );
 								} catch (TextException e) {
 									e.printStackTrace();
-								}					
+								}
 							}
 						}else{
 							try {
@@ -295,7 +296,7 @@ SuchenSeite eltern;
 							textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(termindat.get(aktTermin).beginn);
 						}
 						if(spaltenNamen.indexOf("Behandler") > 0){
-							int zelle = spaltenNamen.indexOf("Behandler");						
+							int zelle = spaltenNamen.indexOf("Behandler");
 							textTable.getCell(zelle,aktTerminInTabelle+iheader).getTextService().getText().setText(termindat.get(aktTermin).termtext);
 						}
 
@@ -311,7 +312,7 @@ SuchenSeite eltern;
 					}
 					if(spaltenNamen.contains("Wochentag")){
 						int zelle = spaltenNamen.indexOf("Wochentag");
-						
+
 						druckDatum = termindat.get(aktTermin).tag;
 						if(aktTermin > 0){
 							if(! druckDatum.equals(termindat.get(aktTermin-1).tag)){
@@ -319,7 +320,7 @@ SuchenSeite eltern;
 									textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(druckDatum.substring(0,2) );
 								} catch (TextException e) {
 									e.printStackTrace();
-								}					
+								}
 							}
 						}else{
 							try {
@@ -339,16 +340,16 @@ SuchenSeite eltern;
 							textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(termindat.get(aktTermin).beginn);
 						}
 						if(spaltenNamen.indexOf("Behandler") > 0){
-							int zelle = spaltenNamen.indexOf("Behandler");						
+							int zelle = spaltenNamen.indexOf("Behandler");
 							textTable.getCell(zelle,aktTermin+iheader).getTextService().getText().setText(termindat.get(aktTermin).termtext);
 						}
 
 					} catch (TextException e) {
 						e.printStackTrace();
 					}
-					
+
 				}
-				
+
 				/********************/
 				try {
 					zaehler+=1;
@@ -356,16 +357,16 @@ SuchenSeite eltern;
 						Thread.sleep(25);
 						zaehler=0;
 					}
-					
+
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 			// Jetzt das fertige Dokument drucken, bzw. als PDF aufbereiten;
-			
-			/********************************************/			
+
+			/********************************************/
 			if (ldrucken){
-				
+
 				try {
 						final ITextDocument xdoc = textDocument;
 						if(SystemConfig.oTerminListe.DirektDruck){
@@ -402,7 +403,7 @@ SuchenSeite eltern;
 								eltern.setFortschrittSetzen(termindat.size());
 								eltern.setFortschrittZeigen(false);
 						        eltern.getFortschritt().setStringPainted(true);
-								eltern.cursorWait(false);	
+								eltern.cursorWait(false);
 							}
 							this.termindat = null;
 						}else{
@@ -411,17 +412,17 @@ SuchenSeite eltern;
 								eltern.setFortschrittZeigen(false);
 						        eltern.getFortschritt().setStringPainted(true);
 							}
-							this.termindat = null;		
+							this.termindat = null;
 							document.getFrame().getXFrame().getContainerWindow().setVisible(true);
-							
+
 						}
-						
+
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}else{
-				
+
 				exporturl = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 				File f = new File(exporturl);
 				if(f.exists()){
@@ -436,7 +437,7 @@ SuchenSeite eltern;
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					JOptionPane.showMessageDialog(null, "Fehler bei der Aufbereitung des Terminplanes als PDF für Emailversand\nFehler: "+e.getMessage());
-				}			
+				}
 			}
 			// Anschließend die Vorlagendatei schließen
 			//textDocument.close();
@@ -455,7 +456,7 @@ SuchenSeite eltern;
 									return null;
 								}
 								if(ldirektsenden){
-									sendeEmail();	
+									sendeEmail();
 								}
 							} catch (InterruptedException e) {
 								e.printStackTrace();
@@ -470,15 +471,15 @@ SuchenSeite eltern;
 				}.execute();
 				if(ldirektsenden){
 					eltern.setFortschrittZeigen(false);
-			        eltern.getFortschritt().setStringPainted(true);				
+			        eltern.getFortschritt().setStringPainted(true);
 				}
 				this.termindat = null;
 			}
 			if(ldirektsenden){
-				eltern.cursorWait(false);	
+				eltern.cursorWait(false);
 			}
 		}
-	
+
 	private void sendeEmail(){
 		String emailaddy=null,pat_intern=null;
 		if(this.rezept.trim().equals("")){
@@ -519,7 +520,7 @@ SuchenSeite eltern;
 						return;
 					}
 				}else{
-					emailaddy = JOptionPane.showInputDialog(null,"Soll diese Emailadresse verwendet werden?" , emailaddy); 
+					emailaddy = JOptionPane.showInputDialog(null,"Soll diese Emailadresse verwendet werden?" , emailaddy);
 				}
 			}
 		}
@@ -527,7 +528,7 @@ SuchenSeite eltern;
 		String[] anhang = {null,null};
 		anhang[0] = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
-		
+
 		File f = new File(anhang[0]);
 		long zeit = System.currentTimeMillis();
 		while(!f.exists()){
@@ -540,18 +541,18 @@ SuchenSeite eltern;
 				e.printStackTrace();
 			}
 			f = new File(anhang[0]);
-			
+
 		}
 		if(!f.exists()){
 			JOptionPane.showMessageDialog (null, "PDF-Emailanhang konnte nicht erzeugt werden, Aktion wird abgebrochen");
 			return;
 		}
-		
-		ArrayList<String[]> attachments = new ArrayList<String[]>();		
-		
-		
+
+		ArrayList<String[]> attachments = new ArrayList<String[]>();
+
+
 		attachments.add(anhang.clone());
-		
+
 		String username = SystemConfig.hmEmailExtern.get("Username");
 		String password = SystemConfig.hmEmailExtern.get("Password");
 		String senderAddress =SystemConfig.hmEmailExtern.get("SenderAdresse");
@@ -596,7 +597,7 @@ SuchenSeite eltern;
 					"abgesagt werden.\n\nIhr Planungs-Team vom RTA";
 	      }
 		String smtpHost = SystemConfig.hmEmailExtern.get("SmtpHost");
-		
+
 		EmailSendenExtern oMail = new EmailSendenExtern();
 		try{
 			oMail.sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text,attachments,authx,bestaetigen,secure,useport);
@@ -604,7 +605,7 @@ SuchenSeite eltern;
 			if(ldirektsenden){
 				eltern.cursorWait(false);
 			}
-			
+
 			f = new File(anhang[0]);
 			if(f.exists()){
 				f.delete();
@@ -612,7 +613,7 @@ SuchenSeite eltern;
 			}else{
 				JOptionPane.showMessageDialog (null, "Die Terminliste konnte nicht als PDF aufbereitet werden\n");
 			}
-		
+
 		}catch(Exception e){
 			if(ldirektsenden){
 				eltern.cursorWait(false);
@@ -620,10 +621,10 @@ SuchenSeite eltern;
 			JOptionPane.showMessageDialog (null, "Der Emailversand der Terminliste ist fehlgeschlagen!!!!!\n");
 			e.printStackTrace( );
 		}
-		
-		
-			
-		
+
+
+
+
 	}
 	private String holeAusDB(String exStatement){
 		Statement stmt = null;
@@ -633,7 +634,7 @@ SuchenSeite eltern;
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
-				rs = stmt.executeQuery(exStatement);		
+				rs = stmt.executeQuery(exStatement);
 				while(rs.next()){
 					sergebnis = (rs.getString(1) == null ? "" : rs.getString(1));
 				}
@@ -641,7 +642,7 @@ SuchenSeite eltern;
         		//System.out.println("SQLException: " + ev.getMessage());
         		//System.out.println("SQLState: " + ev.getSQLState());
         		//System.out.println("VendorError: " + ev.getErrorCode());
-			}	
+			}
 
 		}catch(SQLException ex) {
 			//System.out.println("von stmt -SQLState: " + ex.getSQLState());
@@ -666,7 +667,7 @@ SuchenSeite eltern;
 		}
 		return sergebnis;
 	}
-	        
+
 	}
 
 

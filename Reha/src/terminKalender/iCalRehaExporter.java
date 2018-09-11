@@ -72,14 +72,16 @@ public class iCalRehaExporter {
 						//emlDlg.setLocation(pt.x-350,pt.y+100);
 						emlDlg.pack();
 						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
+							@Override
+                            public void run(){
 								//emlDlg.setTextCursor(0);		
 							}
 						});
 						
 						emlDlg.setVisible(true);
 						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
+							@Override
+                            public void run(){
 								//emlDlg.setTextCursor(0);		
 							}
 						});

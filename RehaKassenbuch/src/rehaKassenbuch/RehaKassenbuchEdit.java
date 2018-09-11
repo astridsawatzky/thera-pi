@@ -231,7 +231,8 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 	}
 	
 	private class MyListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
+		@Override
+        public void actionPerformed(ActionEvent e) {
 			//Object src = e.getSource();
 			String actionCmd = e.getActionCommand();
 			if (actionCmd.equals("Enter")) {
@@ -506,7 +507,8 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			if(feldNamen.get(columnIndex).get(1).contains("varchar(")){
 				return String.class;
 			}else if(feldNamen.get(columnIndex).get(1).contains("enum(")){
@@ -523,7 +525,8 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			if(col == 6){
 				return false;				
 			}
@@ -572,7 +575,8 @@ public class RehaKassenbuchEdit extends JXPanel implements TableModelListener{
 		cellCursor = spreadsheet1.createCursor();
 		final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				xspredsheetDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xspredsheetDocument.getFrame().setFocus();
 			}

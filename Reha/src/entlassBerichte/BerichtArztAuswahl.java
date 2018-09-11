@@ -282,21 +282,24 @@ class MyArztTableModel extends DefaultTableModel{
 	private static final long serialVersionUID = 1L;
 
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return Boolean.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
 //return (columnIndex == 0) ? Boolean.class : String.class;
 }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	    	return true;
 	      }
 	    
 
-		public Object getValueAt(int rowIndex, int columnIndex) {
+		@Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
 			Object theData = null;
 			if(columnIndex > 0){
 				theData = ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);				

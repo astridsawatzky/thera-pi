@@ -15,7 +15,8 @@ public class MyPrintableObject implements Printable
 {
   public int iResMul = 4;  // 1 = 72 dpi; 4 = 288 dpi
 
-  public int print( Graphics g, PageFormat pf, int iPage )
+  @Override
+public int print( Graphics g, PageFormat pf, int iPage )
   throws PrinterException
   {
     final int    FONTSIZE = 12;

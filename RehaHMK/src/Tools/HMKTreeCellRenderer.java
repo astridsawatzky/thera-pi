@@ -8,15 +8,13 @@ import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.TreeCellRenderer;
-
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import sun.swing.DefaultLookup;
 
-public class HMKTreeCellRenderer extends DefaultTreeCellRenderer implements TreeCellRenderer{
+public class HMKTreeCellRenderer extends DefaultTreeCellRenderer{
 /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -5690508896668147474L;
 	private JTree tree;
@@ -27,8 +25,8 @@ public class HMKTreeCellRenderer extends DefaultTreeCellRenderer implements Tree
 	   public HMKTreeCellRenderer(){
 		   super();
 	   }
-	   
-	   
+
+
 	   public Component getTableCellRendererComponent(JTree table,
 	                                                  Object value,
 	                                                  boolean isSelected,
@@ -38,9 +36,10 @@ public class HMKTreeCellRenderer extends DefaultTreeCellRenderer implements Tree
 		   System.out.println("in treecell renderer");
 		   setBackground(Color.BLACK);
 		   return this;
-		   
+
 	   }
-	    public Component getTreeCellRendererComponent(JTree tree, Object value,
+	    @Override
+        public Component getTreeCellRendererComponent(JTree tree, Object value,
                 boolean sel,
                 boolean expanded,
                 boolean leaf, int row,
@@ -59,12 +58,12 @@ public class HMKTreeCellRenderer extends DefaultTreeCellRenderer implements Tree
 	    		indi = null;
 	    		stringValue = tree.convertValueToText(value, sel,   expanded, leaf, row, hasFocus);
 	    	}
-	    	
+
 	    	this.tree = tree;
 
 	    	this.hasFocus = hasFocus;
 	    	setText(stringValue);
-	    	
+
 	    	Color fg = null;
 	    	isDropCell = false;
 
@@ -72,14 +71,14 @@ public class HMKTreeCellRenderer extends DefaultTreeCellRenderer implements Tree
 	    	if (dropLocation != null
 	    			&& dropLocation.getChildIndex() == -1
 	    			&& tree.getRowForPath(dropLocation.getPath()) == row) {
-	    		
+
 	    		Color col = DefaultLookup.getColor(this, ui, "Tree.dropCellForeground");
 	    		if (col != null) {
 	    			fg = col;
 	    		} else {
 	    			fg = getTextSelectionColor();
 	    		}
-	    		
+
 	    		isDropCell = true;
 	    	} else if (sel) {
 	    		fg = getTextSelectionColor();
@@ -115,7 +114,7 @@ public class HMKTreeCellRenderer extends DefaultTreeCellRenderer implements Tree
 
 	    	return this;
 	    }
-	
 
-	
+
+
 }

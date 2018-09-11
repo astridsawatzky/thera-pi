@@ -53,7 +53,8 @@ public class JUrlaubInternal extends JRehaInternal implements RehaEventListener{
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		//System.out.println("LöscheFenster "+name);   
 				AktiveFenster.loescheFenster(name);
@@ -63,7 +64,8 @@ public class JUrlaubInternal extends JRehaInternal implements RehaEventListener{
 
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

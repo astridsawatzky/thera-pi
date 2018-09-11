@@ -78,31 +78,31 @@ import ag.ion.noa.internal.frame.LayoutManager;
 public class ArztBausteinPanel extends JXPanel {
 
 	/**
-	 * 
+	 *
 	 */
 	private JXPanel content = null;
 	private static final long serialVersionUID = -3384203389588570947L;
 	private JXTable bausteintbl = null;
 	MyBausteinTableModel bausteinmod = null;
-	
+
 	private IFrame             officeFrame       = null;
 	public	ITextDocument      document          = null;
 	private JPanel             noaPanel          = null;
 	private JXPanel			noaDummy = null;
-	NativeView nativeView = null; 
-	
+	NativeView nativeView = null;
+
 	ActionListener al = null;
 	KeyListener kl = null;
 	MouseListener ml = null;
-	
+
 	JRtaTextField[] jtfs = {null,null,null};
 	JRtaTextField suchenach = null;
-	
+
 	String[] rubriken = {" ","01.Allgem. u. klin. Anamnese","02.Jetzige Beschwerden u...",
-				"03.Gegenwärtige Therapie","04.Allgem. Sozialanamnese","05.Arbeits- u. Berufsanamnese",						
-				"06.Aufnahme, Vorbefunde...","07.Rehabilitationsdiagnosen",						
-				"08.Rehabilitationsverlauf","09.Rehabilitationsergebnis",												
-				"10.Sozialmed. Epikrise","99.sonstige Textbausteine"};																		
+				"03.Gegenwärtige Therapie","04.Allgem. Sozialanamnese","05.Arbeits- u. Berufsanamnese",
+				"06.Aufnahme, Vorbefunde...","07.Rehabilitationsdiagnosen",
+				"08.Rehabilitationsverlauf","09.Rehabilitationsergebnis",
+				"10.Sozialmed. Epikrise","99.sonstige Textbausteine"};
 
 	Object[] varnamen = {"heutiges Datum","Anrede Pat.","Nachname Pat.","Vorname Pat.",
 			"Geburtsdatum Pat.","Strasse Pat.","PLZ Pat.","Ort Pat.",
@@ -126,12 +126,12 @@ public class ArztBausteinPanel extends JXPanel {
 
 	JComboBox jcmb = null;
 	JList list = null;
-	
+
 	JButton suchen = null;
 	JButton[] buts = {null,null,null,null,null};
-	
+
 	boolean neu = false;
-	
+
 	private boolean noapanelready = false;
 	private boolean tablepanelready = false;
 
@@ -153,14 +153,14 @@ public class ArztBausteinPanel extends JXPanel {
 		}
 		noapanelready = true;
 		*/
-		
+
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
 					noaDummy.add(getOOorgPanel());
 					//noaPanel.setVisible(true);
-					fillNOAPanel();		
+					fillNOAPanel();
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
@@ -168,7 +168,7 @@ public class ArztBausteinPanel extends JXPanel {
 				return null;
 			}
 		}.execute();
-		
+
 		validate();
 		setVisible(true);
 
@@ -187,20 +187,21 @@ public class ArztBausteinPanel extends JXPanel {
 					try {
 						Thread.sleep(25);
 					} catch (InterruptedException e) {
-						
+
 						e.printStackTrace();
 					}
 				}
 				return null;
 			}
-			
+
 		}.execute();
 		/*
 		*/
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				suchenach.requestFocus();
 			}
 		});
@@ -212,7 +213,7 @@ public class ArztBausteinPanel extends JXPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				String cmd = arg0.getActionCommand();
 				if(cmd.equals("suchen")){
-					doKeyTest();	
+					doKeyTest();
 				}else if(cmd.equals("edit")){
 					doEdit();
 				}else if(cmd.equals("break")){
@@ -224,7 +225,7 @@ public class ArztBausteinPanel extends JXPanel {
 				}else if(cmd.equals("delete")){
 					doDelete();
 				}
-				
+
 			}
 		};
 		/*******************************/
@@ -235,7 +236,7 @@ public class ArztBausteinPanel extends JXPanel {
 					if(arg0.getSource() instanceof JXTable){
 						/*
 						if(sucheNachPlatzhalter()){
-							sendeText();							
+							sendeText();
 						}
 						suchenach.requestFocus();
 						*/
@@ -280,7 +281,7 @@ public class ArztBausteinPanel extends JXPanel {
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 			}
-			
+
 		};
 	}
 	private void controlsEin(boolean ein){
@@ -409,16 +410,16 @@ public class ArztBausteinPanel extends JXPanel {
 				}
 				return null;
 			}
-			
+
 		}.execute();
 		return pan;
 	}
-	
+
 	private JXPanel getButtonPanel(){
 		JXPanel pan = new JXPanel();
 		try{
 			FormLayout lay = new FormLayout("5dlu,fill:0:grow(1.0),5dlu",
-					//1   2  3   4  5   6  7    8  9  10 11 
+					//1   2  3   4  5   6  7    8  9  10 11
 					"3dlu,p,5dlu,p,5dlu,p,5dlu,p,5dlu,p,3dlu");
 			CellConstraints cc = new CellConstraints();
 			pan.setLayout(lay);
@@ -427,12 +428,12 @@ public class ArztBausteinPanel extends JXPanel {
 			buts[0].setActionCommand("neu");
 			buts[0].addActionListener(al);
 			pan.add(buts[0],cc.xy(2,2));
-			
+
 			buts[1] = new JButton("Baustein ändern");
 			buts[1].setActionCommand("edit");
 			buts[1].addActionListener(al);
 			pan.add(buts[1],cc.xy(2,4));
-			
+
 			buts[2] = new JButton("speichern");
 			buts[2].setActionCommand("save");
 			buts[2].addActionListener(al);
@@ -447,7 +448,7 @@ public class ArztBausteinPanel extends JXPanel {
 			buts[4].setActionCommand("break");
 			buts[4].addActionListener(al);
 			pan.add(buts[4],cc.xy(2,10));
-			
+
 			this.regleButton(true, true, false, true, false);
 
 		}catch(Exception ex){
@@ -479,7 +480,7 @@ public class ArztBausteinPanel extends JXPanel {
 		jcmb.setEnabled(false);
 		jcmb.setMaximumRowCount(5);
 		pan.add(jcmb,cc.xyw(2,6,3));
-		
+
 		pan.add(new JLabel("Untergliederung"),cc.xyw(2,8,3,CellConstraints.DEFAULT,CellConstraints.BOTTOM));
 		jtfs[0] = new JRtaTextField("nix",true);
 		jtfs[0].setEnabled(false);
@@ -492,11 +493,11 @@ public class ArztBausteinPanel extends JXPanel {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-		
+
 		return pan;
-		
+
 	}
-	private JScrollPane getTablePanel(){ 
+	private JScrollPane getTablePanel(){
 		bausteinmod = new MyBausteinTableModel();
 		String[] columns = {"Haupt-Rubrik","Untergliederung","Titel des Bausteins","id"};
 		bausteinmod.setColumnIdentifiers(columns);
@@ -519,7 +520,7 @@ public class ArztBausteinPanel extends JXPanel {
 					while(!ArztBausteine.DbOk){
 						Thread.sleep(20);
 					}
-					fuelleTabelle("");	
+					fuelleTabelle("");
 					tablepanelready = true;
 				}catch(Exception ex){
 					ex.printStackTrace();
@@ -527,7 +528,7 @@ public class ArztBausteinPanel extends JXPanel {
 
 				return null;
 			}
-			
+
 		}.execute();
 		return jscr;
 	}
@@ -559,7 +560,7 @@ public class ArztBausteinPanel extends JXPanel {
 		jSplitRechtsOU.setDividerLocation(175);
 		jSplitRechtsOU.validate();
 		return jSplitRechtsOU;
-	}	
+	}
 	private void holeIdUndText(){
 		int row = bausteintbl.getSelectedRow();
 		if(row >= 0){
@@ -585,27 +586,25 @@ public class ArztBausteinPanel extends JXPanel {
 		    while((len=ins.read(buf))>0)
 		    out.write(buf,0,len);
 		    out.close();
-		    ins.close();		
+		    ins.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		*/
-		
-/*****/		
-		
+
+/*****/
+
 		//String instring = SqlInfo.holeEinzelFeld("select tbtext from tbar where id='"+id+"' LIMIT 1");
 		document.getTextService().getText().setText("");
-		
+
 		ITextCursor textCursor = null;
 		IViewCursor viewCursor = null;
 		try {
 			textCursor = document.getTextService().getCursorService().getTextCursor();
 			textCursor.insertDocument(ins, OpenDocumentFilter.FILTER);
-			
+
 			//textCursor.insertDocument(ArztBausteine.proghome+"tbout.tb");
 			//textCursor.insertDocument(ins, RTFFilter.FILTER);
 			textCursor.gotoStart(false);
@@ -616,7 +615,7 @@ public class ArztBausteinPanel extends JXPanel {
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-	}	
+	}
 	private void fillNOAPanel() {
 	    if (noaPanel != null) {
 		      try {
@@ -641,13 +640,14 @@ public class ArztBausteinPanel extends JXPanel {
 		      noapanelready = true;
 		    }
 		  }
-	
+
 	private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent) throws Throwable {
   	  System.out.println("Konstruiere die Native-View");
 	    nativeView = new NativeView(ArztBausteine.OpenOfficeNativePfad);
 	    parent.add(nativeView);
 	    parent.addComponentListener(new ComponentAdapter() {
-	      public void componentResized(ComponentEvent e) {
+	      @Override
+        public void componentResized(ComponentEvent e) {
 	        nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
 	        parent.getLayout().layoutContainer(parent);
 	    	refreshSize();
@@ -669,7 +669,7 @@ public class ArztBausteinPanel extends JXPanel {
             xLayoutManager.hideElement(url);
         }
 	}
-	
+
 	public final void refreshSize() {
 		noaPanel.setPreferredSize(new Dimension(noaPanel.getWidth() , noaPanel.getHeight()- 5));
 		final Container parent = noaPanel.getParent();
@@ -729,7 +729,6 @@ public class ArztBausteinPanel extends JXPanel {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		PreparedStatement ps = null;
@@ -739,20 +738,19 @@ public class ArztBausteinPanel extends JXPanel {
 		try {
 			stmt = ArztBausteine.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
-			
+
 			String select = "update tbar set tbthema = ? , tbuntert = ?, tbtitel = ?,"+
 			"tbtext = ? where id = ? LIMIT 1";
 			 ps = (PreparedStatement) ArztBausteine.thisClass.conn.prepareStatement(select);
-			 ps.setString(1, jcmb.getSelectedItem().toString());			  
+			 ps.setString(1, jcmb.getSelectedItem().toString());
 			 ps.setString(2, jtfs[0].getText());
-			 ps.setString(3, jtfs[1].getText());			  
+			 ps.setString(3, jtfs[1].getText());
 			 ps.setBytes(4, bout.toByteArray());
 			 ps.setInt(5, Integer.parseInt(id));
-			 ps.execute();			 
+			 ps.execute();
 		}catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 		finally {
 			if (stmt != null) {
 				try {
@@ -776,7 +774,7 @@ public class ArztBausteinPanel extends JXPanel {
 			bausteinmod.setValueAt(jtfs[0].getText(), row, 1);
 			bausteinmod.setValueAt(jtfs[1].getText(), row, 2);
 		}
-		
+
 	}
 	private void fuelleTabelle(String cmd){
 
@@ -789,14 +787,13 @@ public class ArztBausteinPanel extends JXPanel {
 			stmt =  ArztBausteine.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try{
 			String sstmt = null;
 			ArztBausteine.thisClass.jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			if(cmd.equals("")){
-				sstmt = "select tbthema,tbuntert,tbtitel,id from tbar Order BY tbthema";					
+				sstmt = "select tbthema,tbuntert,tbtitel,id from tbar Order BY tbthema";
 			}else{
 				sstmt = cmd;
 			}
@@ -839,7 +836,7 @@ public class ArztBausteinPanel extends JXPanel {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -867,7 +864,8 @@ public class ArztBausteinPanel extends JXPanel {
 		}
 		insertTextAtCurrentPosition(toSet);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				nativeView.requestFocus();
 			}
 		});
@@ -882,16 +880,17 @@ public class ArztBausteinPanel extends JXPanel {
 			e.printStackTrace();
 		}
 	}
-	
+
 
 	/*****************************************/
 	class MyBausteinTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==1 || columnIndex==5 ){
 				   return String.class;}
 			   else{
@@ -899,7 +898,8 @@ public class ArztBausteinPanel extends JXPanel {
 			   }
 	       }
 
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        if (col == 0){
 		        	return false;
 		        }else if(col == 3){
@@ -912,11 +912,12 @@ public class ArztBausteinPanel extends JXPanel {
 		          return false;
 		        }
 		      }
-		   
-	}	
+
+	}
 	class BausteinSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){

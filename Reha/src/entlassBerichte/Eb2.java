@@ -75,7 +75,8 @@ public class Eb2 {
 				pan.validate();
 				pan.setVisible(true);
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 					 		if(!eltern.neu){
 					 			new SwingWorker<Void,Void>(){
 									@Override

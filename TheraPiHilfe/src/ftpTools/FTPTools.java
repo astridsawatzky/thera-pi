@@ -219,7 +219,8 @@ public class FTPTools {
 			final JProgressBar xprog = jprog;
 			final long xgross = dgroesse;
 			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
+				@Override
+                public void run() {
 					xprog.setMinimum(0);
 					xprog.setMaximum(new Long(xgross).intValue());
 					xprog.repaint();
@@ -232,7 +233,8 @@ public class FTPTools {
 				////System.out.println("Abgeholt in Bytes = "+gesamt);
 				final int xgesamt = gesamt;
 				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
+					@Override
+                    public void run() {
 						xprog.setValue(xgesamt);
 						xprog.repaint();
 					}
@@ -241,7 +243,8 @@ public class FTPTools {
 			System.out.println("Datei "+datfern+" abgeholt mit "+gesamt+ "Bytes");
 			final int xgesamt = gesamt;
 			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
+				@Override
+                public void run() {
 					xprog.setValue(xgesamt);
 					xprog.repaint();
 				}
@@ -365,7 +368,8 @@ public class FTPTools {
 			final long xgross = groesse;
 			if(	jprog != null){
 				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
+					@Override
+                    public void run() {
 						xprog.setStringPainted(true);
 						xprog.setMinimum(0);
 						xprog.setMaximum(new Long(xgross).intValue());
@@ -383,7 +387,8 @@ public class FTPTools {
 				if(progresszeigen){
 					final int xgesamt = gesamt;
 					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
+						@Override
+                        public void run() {
 							xprog.setValue(xgesamt);
 							xprog.repaint();
 						}
@@ -393,7 +398,8 @@ public class FTPTools {
 			System.out.println("Datei "+datfern+" auf Server geschrieben mit "+gesamt+ "Bytes");
 			if(progresszeigen){
 				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
+					@Override
+                    public void run() {
 						xprog.setValue(0);
 						xprog.repaint();
 					}
@@ -504,7 +510,8 @@ public class FTPTools {
 			final long xgross = groesse;
 			if(	jprog != null){
 				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
+					@Override
+                    public void run() {
 						xprog.setStringPainted(true);
 						xprog.setMinimum(0);
 						xprog.setMaximum(new Long(xgross).intValue());
@@ -526,7 +533,8 @@ public class FTPTools {
 				if(progresszeigen){
 					final int xgesamt = gesamt;
 					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
+						@Override
+                        public void run() {
 							xprog.setValue(xgesamt);
 							xprog.repaint();
 						}
@@ -553,7 +561,8 @@ public class FTPTools {
 			fos = null;
 			if(progresszeigen){
 				SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
+					@Override
+                    public void run() {
 						xprog.setValue(0);
 						xprog.repaint();
 					}

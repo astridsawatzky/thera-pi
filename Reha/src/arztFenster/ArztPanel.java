@@ -15,7 +15,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -60,7 +59,6 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import krankenKasse.KassenFormulare;
 import oOorgTools.OOTools;
@@ -70,7 +68,7 @@ import systemEinstellungen.SystemConfig;
 
 public class ArztPanel extends JXPanel implements PropertyChangeListener,TableModelListener,KeyListener,FocusListener,ActionListener, MouseListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3764586594168846949L;
 	JButton einlesen = null;
@@ -85,7 +83,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	public JButton[] jbut = {null,null,null,null};
 	//public JRtaTextField[] tf = {null,null,null,null,null,null,null,null,null,null,null,null,null,null,null};
 	public JTextArea ta;
-	public boolean inMemoEdit = false; 
+	public boolean inMemoEdit = false;
 	private JRtaTextField formularid = new JRtaTextField("NIX",false);
 	Vector<String> titel = new Vector<String>() ;
 	Vector<String> formular = new Vector<String>();
@@ -98,30 +96,32 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 
 		addFocusListener(this);
 		setBackgroundPainter(Reha.thisClass.compoundPainter.get("ArztPanel"));
-	     
-		
+
+
 		setLayout(new BorderLayout());
 		add(getContent(),BorderLayout.CENTER);
 		if(!arztid.equals("")){
-			final String xarzt = arztid; 
+			final String xarzt = arztid;
 			new SwingWorker<Void,Void>(){
 
 				@Override
 				protected Void doInBackground() throws Exception {
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 							holeAktArzt(xarzt);
 					 		setzeFocus();
 						}
 					});
 					return null;
 				}
-				
+
 			}.execute();
-			
+
 		}else{
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 			 		setzeFocus();
 				}
 			});
@@ -129,13 +129,14 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				KeyStroke stroke = KeyStroke.getKeyStroke(70, KeyEvent.ALT_MASK);
 				getInstance().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doSuchen");
 				getInstance().getActionMap().put("doSuchen", new ArztAction());
 				stroke = KeyStroke.getKeyStroke(78, KeyEvent.ALT_MASK);
 				getInstance().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doNeu");
-				getInstance().getActionMap().put("doNeu", new ArztAction());	
+				getInstance().getActionMap().put("doNeu", new ArztAction());
 				stroke = KeyStroke.getKeyStroke(69, KeyEvent.ALT_MASK);
 				getInstance().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doEdit");
 				getInstance().getActionMap().put("doEdit", new ArztAction());
@@ -154,16 +155,18 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			}
 		});
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 		 		setzeFocus();
 			}
 		});
 
 	}
-	
+
 	   /************************************/
     class ArztListSelectionHandler implements ListSelectionListener {
-    	
+
+        @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             boolean isAdjusting = e.getValueIsAdjusting();
@@ -184,18 +187,19 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
             }
 
         }
-    }	
+    }
 	private ArztPanel getInstance(){
 		return this;
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				suchen.requestFocus();
 			}
 		});
 	}
-	
+
 	public JXPanel getContent(){
 		FormLayout lay = new FormLayout("pref:g,0dlu,pref:g","pref,5dlu,150dlu,5dlu,fill:0:grow(1.0),5dlu");
 		CellConstraints cc = new CellConstraints();
@@ -207,7 +211,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		jtb.setRollover(true);
 		jtb.setBorder(null);
 		jtb.setOpaque(false);
-		
+
 		jtb.add(new JLabel("finde Arzt -->"));
 
 		JXPanel supan = new JXPanel(new BorderLayout());
@@ -222,9 +226,9 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		suchen.addKeyListener(this);
 		supan.add(suchen,BorderLayout.NORTH);
 		jtb.add(supan);
-		
+
 		jtb.addSeparator(new Dimension(40,25));
-		
+
 		jbut[0] = new JButton();
 		jbut[0].setIcon(SystemConfig.hmSysIcons.get("neu"));
 		jbut[0].setToolTipText("neuen Arzt anlegen (Alt+N)");
@@ -233,7 +237,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		jtb.add(jbut[0]);
 		jbut[1] = new JButton();
 		jbut[1].setIcon(SystemConfig.hmSysIcons.get("edit"));
-		jbut[1].setToolTipText("aktuellen Arzt ändern/editieren (Alt+E)");		
+		jbut[1].setToolTipText("aktuellen Arzt ändern/editieren (Alt+E)");
 		jbut[1].setActionCommand("edit");
 		jbut[1].addActionListener(this);
 		jtb.add(jbut[1]);
@@ -265,16 +269,17 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		contPan.add(ta,cc.xyw(1,5,3));
 		*/
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   holeFormulare();
 		 		   return;
 		 	   }
-		}); 	  
+		});
 
-		
+
 		contPan.add(getEdits(),cc.xyw(1,5,3));
 		contPan.validate();
-		
+
 		return contPan;
 	}
 	public JScrollPane getTabelle(){
@@ -296,7 +301,8 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		//arzttbl.getColumn(9).setMaxWidth(30);
 		arzttbl.addKeyListener(this);
 		arzttbl.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent arg0) {
+			@Override
+            public void keyPressed(KeyEvent arg0) {
 				if(inMemoEdit){
 					return;
 				}
@@ -304,13 +310,13 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 				//System.out.println(" in Tabelle "+arg0.getKeyCode());
 				if(arg0.getKeyCode()== 10){
 					arg0.consume();
-					int row = arzttbl.getSelectedRow(); 
+					int row = arzttbl.getSelectedRow();
 					if(row >= 0){
 						String sid =  (String) arzttbl.getValueAt(row,9);
 						neuanlageArzt(sid);
 					}
 				}
-			}	
+			}
 		});
 		arzttbl.getSelectionModel().addListSelectionListener(arztselect);
 		arzttbl.addMouseListener(this);
@@ -321,29 +327,29 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		jscr.validate();
 		return jscr;
 	}
-	
-	
+
+
 	private JXPanel getEdits(){
 		JXPanel jpan = JCompTools.getEmptyJXPanel();
 		jpan.setOpaque(false);
 		FormLayout laye= new FormLayout("250dlu:g",
 				"30px,0dlu,100dlu:g,1dlu");
-		CellConstraints cce = new CellConstraints(); 
+		CellConstraints cce = new CellConstraints();
 		jpan.setLayout(laye);
 		JToolBar kedit = new JToolBar();
 		kedit.setOpaque(false);
 		kedit.setRollover(true);
 		kedit.setBorder(null);
-		
+
 		memobut[0] = new JButton();
 		memobut[0].setIcon(SystemConfig.hmSysIcons.get("edit"));
-		memobut[0].setToolTipText("Langtext editieren");		
+		memobut[0].setToolTipText("Langtext editieren");
 		memobut[0].setActionCommand("kedit");
 		memobut[0].addActionListener(this);
 		kedit.add(memobut[0]);
 		memobut[1] = new JButton();
 		memobut[1].setIcon(SystemConfig.hmSysIcons.get("save"));
-		memobut[1].setToolTipText("Langtext speichern");		
+		memobut[1].setToolTipText("Langtext speichern");
 		memobut[1].setActionCommand("ksave");
 		memobut[1].addActionListener(this);
 		memobut[1].setEnabled(false);
@@ -351,7 +357,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		kedit.addSeparator(new Dimension(40,0));
 		memobut[2] = new JButton();
 		memobut[2].setIcon(SystemConfig.hmSysIcons.get("stop"));
-		memobut[2].setToolTipText("Langtext bearbeiten abbrechen");		
+		memobut[2].setToolTipText("Langtext bearbeiten abbrechen");
 		memobut[2].setActionCommand("kbreak");
 		memobut[2].addActionListener(this);
 		memobut[2].setEnabled(false);
@@ -408,7 +414,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			vec = SqlInfo.holeSaetze("arzt", "arztnum,nachname,vorname,strasse,ort,telefon,fax,klinik,facharzt,id",
 					"id='"+id+"' LIMIT 1", Arrays.asList(new String[]{}));
 		}
-		this.atblm.setRowCount(0);		
+		this.atblm.setRowCount(0);
 		int anzahl = 0;
 		if( (anzahl = vec.size()) > 0){
 			for(int i = 0; i < anzahl;i++ ){
@@ -431,19 +437,19 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	}
 	public void setMemo(String text){
 		ta.setText(text);
-		
+
 	}
-	
-	
+
+
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
@@ -454,9 +460,9 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 				//new HoleKassen(suchen.getText().trim());
 				if(suchen.getText().trim().equals("")){
 					fuelleTabelle("");
-					
+
 				}else{
-					fuelleTabelle(SqlInfo.macheWhereKlausel("",suchen.getText().trim() , 
+					fuelleTabelle(SqlInfo.macheWhereKlausel("",suchen.getText().trim() ,
 							new String[] {"nachname","vorname","ort","facharzt","klinik"}));
 				}
 			}
@@ -472,7 +478,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 
 		}
 
-		
+
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
@@ -483,25 +489,25 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		if(((JComponent)arg0.getSource()).getName().equals("ArztVerwaltung") && (arg0.getKeyCode() != 10) ){
 			holeText();
 			return;
-		}		
+		}
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String sc = arg0.getActionCommand();
@@ -509,7 +515,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			//String sid = "";
 			int row = arzttbl.getSelectedRow();
 			if(row < 0){
-				String mes = "\nWenn man den Langtext eines Arztes ändern will, empfiehlt es sich\n"+ 
+				String mes = "\nWenn man den Langtext eines Arztes ändern will, empfiehlt es sich\n"+
 				"vorher den Arzt auszuwählen dessen Langtext man ändern will!!!\nHerr schmeiß Hirn ra....\n";
 				JOptionPane.showMessageDialog(null, mes);
 				suchen.requestFocus();
@@ -525,7 +531,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		}
 		if(sc.equals("ksave")){
 			inMemoEdit = false;
-			controlsEin(true);			
+			controlsEin(true);
 			ta.setEditable(false);
 			ta.setBackground(Color.WHITE);
 			ta.setForeground(Color.BLUE);
@@ -536,7 +542,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		}
 		if(sc.equals("kbreak")){
 			inMemoEdit = false;
-			controlsEin(true);			
+			controlsEin(true);
 			ta.setEditable(false);
 			ta.setBackground(Color.WHITE);
 			ta.setForeground(Color.BLUE);
@@ -546,7 +552,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			ta.setText(vec.get(0));
 			return;
 		}
-		
+
 		if(inMemoEdit){
 			return;
 		}
@@ -554,12 +560,12 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			neuanlageArzt("");
 		}
 		if(sc.equals("edit")){
-			int row = arzttbl.getSelectedRow(); 
+			int row = arzttbl.getSelectedRow();
 			if(row >= 0){
 				String sid =  (String) arzttbl.getValueAt(row,9);
 				neuanlageArzt(sid);
 			}else{
-				String mes = "\nWenn man einen Arzt ändern will, empfiehlt es sich\n"+ 
+				String mes = "\nWenn man einen Arzt ändern will, empfiehlt es sich\n"+
 				"vorher den Arzt auszuwählen den man ändern will!!!";
 				JOptionPane.showMessageDialog(null, mes);
 				suchen.requestFocus();
@@ -573,8 +579,8 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			formulareAuswerten();
 		}
 	}
-	
-	
+
+
 	public void controlsEin(boolean ein){
 		suchen.setEnabled((ein ? true : false));
 		arzttbl.setEnabled((ein ? true : false));
@@ -592,21 +598,21 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			@Override
 			protected Void doInBackground() throws Exception {
 				// TODO Auto-generated method stub
-				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini"); 
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "arzt.ini");
 				int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
-					titel.add(inif.getStringProperty("Formulare","AFormularText"+i));			
+					titel.add(inif.getStringProperty("Formulare","AFormularText"+i));
 					formular.add(inif.getStringProperty("Formulare","AFormularName"+i));
-				}	
+				}
 				return null;
 			}
-			
+
 		}.execute();
-		
+
 	}
 
 	public void formulareAuswerten(){
-		int row = arzttbl.getSelectedRow(); 
+		int row = arzttbl.getSelectedRow();
 		if(row >= 0){
 			String sid = Integer.valueOf((String) arzttbl.getValueAt(row, 9)).toString();
     		iformular = -1;
@@ -632,13 +638,13 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 						return null;
 					}
     			}.execute();
-    			
+
     		}
- 
+
     		//System.out.println("Es wurde Formular "+iformular+" gewählt");
-        	
+
 		}else{
-			String mes = "\nWenn man einen Arzt anschreiben möchte, empfiehlt es sich\n"+ 
+			String mes = "\nWenn man einen Arzt anschreiben möchte, empfiehlt es sich\n"+
 			"vorher den Arzt auszuwählen den man anschreiben möchte!!!\n\n"+
 			"Aber trösten Sie sich, unser Herrgott hat ein Herz für eine ganz spezielle Randgruppe.\n"+
 			"Sie dürfen also hoffen....\n\n";
@@ -646,9 +652,9 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			iformular = -1;
 			suchen.requestFocus();
 		}
-		
+
 	}
-	
+
 
 	public void neuanlageArzt(String id){
 		ArztNeuDlg neuArzt = new ArztNeuDlg();
@@ -658,7 +664,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		pinPanel.setName("ArztNeuanlage");
 		neuArzt.setPinPanel(pinPanel);
 		if(id.equals("")){
-			neuArzt.getSmartTitledPanel().setTitle("Arzt neu anlegen  || F3 = Daten in Zwischenablage | F2 = Daten aus Zwischenablage");			
+			neuArzt.getSmartTitledPanel().setTitle("Arzt neu anlegen  || F3 = Daten in Zwischenablage | F2 = Daten aus Zwischenablage");
 		}else{
 			neuArzt.getSmartTitledPanel().setTitle("Daten eines Arztes ändern  || F3 = Daten in Zwischenablage | F2 = Daten aus Zwischenablage");
 		}
@@ -673,12 +679,13 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		neuArzt.setLocationRelativeTo(null);
 		//neuPat.setLocation(new Point(200,50));
 		neuArzt.setTitle("Arzt Neuanlage");
-		final ArztNeuDlg xneuArzt = neuArzt; 
+		final ArztNeuDlg xneuArzt = neuArzt;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 			((ArztNeuanlage)xneuArzt.getSmartTitledPanel().getContentContainer()).setzeFocus();
 		 	   }
-		}); 	   	
+		});
 		neuArzt.setVisible(true);
 		neuArzt.setVisible(false);
 		neuArzt = null;
@@ -694,14 +701,14 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			    */
 				return null;
 			}
-			
+
 		}.execute();
-		
-		
+
+
 	}
-	
+
 	public void arztLoeschen(){
-		int row = arzttbl.getSelectedRow(); 
+		int row = arzttbl.getSelectedRow();
 		if(row >= 0){
         	int frage = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Arzt wirklich löschen??", "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
         	if(frage== JOptionPane.NO_OPTION){
@@ -713,9 +720,9 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			atblm.removeRow(model);
 			arzttbl.revalidate();
 			getInstance().arzttbl.repaint();
-        	
+
 		}else{
-			String mes = "\nWenn man schon einen Arzt löschen will, empfiehlt es sich\n"+ 
+			String mes = "\nWenn man schon einen Arzt löschen will, empfiehlt es sich\n"+
 			"vorher den Arzt auszuwählen den man löschen will!!!";
 			JOptionPane.showMessageDialog(null, mes);
 			suchen.requestFocus();
@@ -727,7 +734,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		if(((JComponent)arg0.getSource()).getName().equals("ArztVerwaltung") && arg0.getClickCount()==2){
-			int row = arzttbl.getSelectedRow(); 
+			int row = arzttbl.getSelectedRow();
 			if(row >= 0){
 				holeText();
 				String sid =  (String) arzttbl.getValueAt(row,9);
@@ -736,41 +743,42 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 			}
 		}
 		if(((JComponent)arg0.getSource()).getName().equals("ArztVerwaltung")){
-			int row = arzttbl.getSelectedRow(); 
+			int row = arzttbl.getSelectedRow();
 			if(row >= 0){
 				holeText();
 			}
 		}
 
-		
+
 	}	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	class ArztAction extends AbstractAction {
 	    /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+		@Override
+        public void actionPerformed(ActionEvent e) {
 	    	if( inMemoEdit){
 	    		return;
 	    	}
@@ -782,64 +790,67 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	        	neuanlageArzt("");
 	        }
 	        if(e.getActionCommand().equals("e")){
-				int row = arzttbl.getSelectedRow(); 
+				int row = arzttbl.getSelectedRow();
 				if(row >= 0){
 					String sid =  (String) arzttbl.getValueAt(row,9);
 					neuanlageArzt(sid);
 				}else{
-					String mes = "\nWenn man einen Arzt ändern will, empfiehlt es sich\n"+ 
+					String mes = "\nWenn man einen Arzt ändern will, empfiehlt es sich\n"+
 					"vorher den Arzt auszuwählen den man ändern will!!!";
 					JOptionPane.showMessageDialog(null, mes);
 					suchen.requestFocus();
 				}
 
-	        }	            
+	        }
 	        if(e.getActionCommand().equals("l")){
 	        	arztLoeschen();
 	        }
 	        if(e.getActionCommand().equals("b")){
 	        	formulareAuswerten();
 	        }
-	        
+
 	    }
 	}
-	
+
 }
 class MyArztTableModel extends DefaultTableModel{
 	   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return String.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
   //return (columnIndex == 0) ? Boolean.class : String.class;
 }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	    	return true;
 	      }
 
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
+		@Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+			String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);
 			Object result = null;
 			//result = theData.toUpperCase();
 			result = theData;
 			return result;
 		}
-	    
-	   
+
+
 }
 
 
-class ArztNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+class ArztNeuDlg extends RehaSmartDialog{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private RehaTPEventClass rtp = null;
@@ -849,29 +860,31 @@ class ArztNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowLi
 		rtp.addRehaTPEventListener(this);
 
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		try{
 			this.setVisible(false);
 			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			this.dispose();
-			//System.out.println("****************Arzt Neu/ändern -> Listener entfernt**************");				
-	
+			//System.out.println("****************Arzt Neu/ändern -> Listener entfernt**************");
+
 		}catch(NullPointerException ne){
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			//System.out.println("****************Arzt Neu/ändern -> Listener entfernt (Closed)**********");
 		}
-		
-		
+
+
 	}
-	
+
 }

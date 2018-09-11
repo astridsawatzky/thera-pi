@@ -16,7 +16,8 @@ public class RechtsRenderer extends DefaultTableCellRenderer {
 		}
 		
 
-		public void setValue(Object value) {
+		@Override
+        public void setValue(Object value) {
 			if(value == null){
 				setText("");
 			}else{

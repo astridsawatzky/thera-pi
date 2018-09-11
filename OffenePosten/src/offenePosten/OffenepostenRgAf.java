@@ -48,7 +48,8 @@ public class OffenepostenRgAf extends JXPanel implements TableModelListener {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			switch(columnIndex){
 			case 0:
 				return Integer.class;
@@ -87,7 +88,8 @@ public class OffenepostenRgAf extends JXPanel implements TableModelListener {
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			
 			if(col < 15){
 				return true;				

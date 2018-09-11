@@ -89,14 +89,16 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 		this.memopan = aktFocus;
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				//jList.requestFocus();
 				//jList.setSelectedIndex(0);
 			}

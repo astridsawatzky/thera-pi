@@ -199,7 +199,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezNeuanlage"));
 			validate();
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 			 			setzeFocus();		 		   
 			 	   }
@@ -282,7 +283,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		   if(neu){
 		 			   int aid,kid;
@@ -311,7 +313,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		 			   }else{
 			 			   holePreisGruppe(jtf[cKASID].getText().trim());
 				 			  SwingUtilities.invokeLater(new Runnable(){
-				 				  public  void run()
+				 				  @Override
+                                public  void run()
 				 				  {
 				 					  jcmb[cRKLASSE].requestFocus();
 				 				  }
@@ -340,7 +343,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		 				  //ladePreise();
 		 			   }
 		 			   SwingUtilities.invokeLater(new Runnable(){
-			 			 	   public  void run()
+			 			 	   @Override
+                            public  void run()
 			 			 	   {
 			 			 		   jtf[cKTRAEG].requestFocus();
 			 			 	   }
@@ -547,7 +551,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		kassenLab.setIcon(SystemConfig.hmSysIcons.get("kleinehilfe"));
 		kassenLab.setHorizontalTextPosition(JLabel.LEFT);
 		kassenLab.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent ev){
+			@Override
+            public void mousePressed(MouseEvent ev){
 				if(!Rechte.hatRecht(Rechte.Rezept_editvoll,false)){
 					return;
 				}
@@ -572,7 +577,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		arztLab.setIcon(SystemConfig.hmSysIcons.get("kleinehilfe"));
 		arztLab.setHorizontalTextPosition(JLabel.LEFT);
 		arztLab.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent ev){
+			@Override
+            public void mousePressed(MouseEvent ev){
 				if(!Rechte.hatRecht(Rechte.Rezept_editvoll,false)){
 					return;
 				}
@@ -859,7 +865,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		/*********************/		
 		if(e.getActionCommand().equals("speichern") ){
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 						try{
 							if(! anzahlTest()){
@@ -956,7 +963,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 						jcb[cVOLLHB].setEnabled(true);						
 					}
 					SwingUtilities.invokeLater(new Runnable(){
-					 	   public  void run()
+					 	   @Override
+                        public  void run()
 					 	   {
 								jcb[cHAUSB].requestFocus();		 		   
 					 	   }
@@ -965,7 +973,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					jcb[cVOLLHB].setEnabled(false);
 					jcb[cVOLLHB].setSelected(true);
 					SwingUtilities.invokeLater(new Runnable(){
-					 	   public  void run()
+					 	   @Override
+                        public  void run()
 					 	   {
 								jcb[cHAUSB].requestFocus();		 		   
 					 	   }
@@ -976,7 +985,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				jcb[cVOLLHB].setEnabled(false);
 				jcb[cVOLLHB].setSelected(false);
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run()
+				 	   @Override
+                    public  void run()
 				 	   {
 							jcb[cHAUSB].requestFocus();		 		   
 				 	   }
@@ -1166,14 +1176,16 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			if(welcher==1){
 				jtf[cICD10].setText("");
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						jtf[cICD10].requestFocus();		
 					}
 				});
 			}else if(welcher==2){
 				jtf[cICD10_2].setText("");
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						jtf[cICD10_2].requestFocus();		
 					}
 				});
@@ -1224,7 +1236,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(jtf[cREZDAT].getText().trim().equals(".  .")){
 			JOptionPane.showMessageDialog(null, "Ohne ein gültiges 'Rezeptdatum' kann ein Rezept nicht abgespeichert werden.");
 			 SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 						jtf[cREZDAT].requestFocus();
 			 	   }
@@ -1235,7 +1248,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(jtf[cKTRAEG].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null, "Ohne die Angabe 'Kostenträger' kann ein Rezept nicht abgespeichert werden.");
 			 SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 						jtf[cKTRAEG].requestFocus();
 			 	   }
@@ -1245,7 +1259,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(jtf[cARZT].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null, "Ohne die Angabe 'verordn. Arzt' kann ein Rezept nicht abgespeichert werden.");
 			 SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 						jtf[cARZT].requestFocus();
 			 	   }
@@ -1255,7 +1270,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(jtf[cDAUER].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null, "Ohne die Angabe 'Behandlungsdauer' kann ein Rezept nicht abgespeichert werden.");
 			 SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 						jtf[cDAUER].requestFocus();
 			 	   }
@@ -1265,7 +1281,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(jtf[cANGEL].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null, "Ohne die Angabe 'Angelegt von' kann ein Rezept nicht abgespeichert werden.");
 			 SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 						jtf[cANGEL].requestFocus();
 			 	   }
@@ -1276,7 +1293,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			if(jtf[cFREQ].getText().trim().equals("")){
 				JOptionPane.showMessageDialog(null, "Ohne Angabe der 'Behandlungsfrequenz' kann ein GKV-Rezept nicht abgespeichert werden.");
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run()
+				 	   @Override
+                    public  void run()
 				 	   {
 							jtf[cFREQ].requestFocus();
 				 	   }
@@ -1503,7 +1521,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		awahl.setLocationRelativeTo(this);
 		awahl.setVisible(true);
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 			jtf[cREZDAT].requestFocus();
 		 	   }
 		});
@@ -1514,7 +1533,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				Reha.thisClass.patpanel.patDaten.set(63,aliste+ "@"+aneu+"@\n");
 				Reha.thisClass.patpanel.getLogic().arztListeSpeichernString(aliste,false,Reha.thisClass.patpanel.aktPatID);
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 				 			jtf[cREZDAT].requestFocus();
 				 	   }
 				});
@@ -1558,7 +1578,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		kwahl.setLocationRelativeTo(this);
 		kwahl.setVisible(true);
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   if(jtf[cKASID].getText().equals("")){
 		 			   String meldung = "Achtung - kann Preisgruppe nicht ermitteln!\n"+
 		 			   "Das bedeutet diese Rezept kann später nicht abgerechnet werden!\n\n"+
@@ -2150,7 +2171,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 						"Wollen Sie dieses Rezeptdatum tatsächlich abspeichern?", "Bedenkliches Rezeptdatum",JOptionPane.YES_NO_OPTION);
 				if(frage!=JOptionPane.YES_OPTION){
 					 SwingUtilities.invokeLater(new Runnable(){
-					 	   public  void run()
+					 	   @Override
+                        public  void run()
 					 	   {
 								jtf[cREZDAT].requestFocus();
 					 	   }

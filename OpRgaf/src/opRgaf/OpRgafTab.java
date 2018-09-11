@@ -128,7 +128,8 @@ public class OpRgafTab extends JXPanel implements ChangeListener{
 	}
 	public void setFirstFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				new InitHashMaps();
 				opRgafPanel.setzeFocus();				
 			}

@@ -12,7 +12,8 @@ public class ReaderStart{
 	public ReaderStart(String datei ){
 		final String xdatei = datei;
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				Process process;
 				try {
 					String readerstring =  ( SystemConfig.hmFremdProgs.get("AcrobatReader").contains("AcroR") ? "/n" : "");

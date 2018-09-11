@@ -50,7 +50,8 @@ public class JArztInternal extends JRehaInternal implements RehaEventListener{
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 				AktiveFenster.loescheFenster(name);
 				Reha.thisClass.progLoader.loescheArzt();
@@ -59,7 +60,8 @@ public class JArztInternal extends JRehaInternal implements RehaEventListener{
 
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

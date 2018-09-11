@@ -42,7 +42,8 @@ public class SimpleApp extends JFrame {
     fillNOAPanel();
     
     addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent windowEvent) {
+      @Override
+    public void windowClosing(WindowEvent windowEvent) {
         try {
           if (document != null)
             document.close();
@@ -103,7 +104,8 @@ public class SimpleApp extends JFrame {
     final NativeView nativeView = new NativeView("C:\\RehaVerwaltung\\RTAJars\\openofficeorg");
     parent.add(nativeView);
     parent.addComponentListener(new ComponentAdapter() {
-      public void componentResized(ComponentEvent e) {
+      @Override
+    public void componentResized(ComponentEvent e) {
         nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
         parent.getLayout().layoutContainer(parent);
       }

@@ -69,7 +69,8 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		hbimg2 = SystemConfig.hmSysIcons.get("hbmehrere");
 		hblab.setHorizontalTextPosition(JLabel.LEFT);
 		hblab.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				if( (arg0.getSource() instanceof JLabel) && (arg0.getClickCount()==2)){
 					if(!Rechte.hatRecht(Rechte.Rezept_editvoll, true)){
@@ -182,7 +183,8 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 					}
 					
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 							int farbcode = StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(57));
 							if(farbcode > 0){
 								reznum.setText(xreznummer);
@@ -343,7 +345,8 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		reznum.setDragEnabled(true);
 		
 		reznum.addMouseListener(new MouseAdapter() {
-		    public void mousePressed(MouseEvent e) {
+		    @Override
+            public void mousePressed(MouseEvent e) {
 		    	if(e.getButton()!=java.awt.event.MouseEvent.BUTTON3){
 			    	int farbcode = StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(57));
 			    	TerminFenster.DRAG_MODE = TerminFenster.DRAG_UNKNOWN;

@@ -89,39 +89,39 @@ import terminKalender.ParameterLaden;
 
 public class SuchenSeite extends JXPanel implements TableModelListener,FocusListener, ActionListener,PropertyChangeListener, KeyListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	public SuchenSeite thisClass = null; 
+	public SuchenSeite thisClass = null;
 	private JXPanel panLinks = null;
 	private JXPanel panRechts =  null;
 	private JRtaTextField sucheName = null;
 	private JRtaTextField sucheNummer = null;
 	private JRtaTextField schreibeName = null;
 	private JRtaTextField schreibeNummer = null;
-	
+
 	private JButton sucheStarten = null;
-	private JButton sucheWeiter = null;	
-	private JButton sucheStoppen = null;	
-	private JButton auswahlUebernahme = null;	
-	private JButton auswahlDrucken = null;	
+	private JButton sucheWeiter = null;
+	private JButton sucheStoppen = null;
+	private JButton auswahlUebernahme = null;
+	private JButton auswahlDrucken = null;
 	private JButton auswahlInDatei = null;
 	private JButton auswahlPerEmail = null;
-	private JButton allesMarkieren = null;	
-	private JButton allesEntmarkieren = null;	
+	private JButton allesMarkieren = null;
+	private JButton allesEntmarkieren = null;
 	private JButton allesZuruecksetzen = null;
 	private JProgressBar fortschritt = null;
-	
+
 	private JLabel startLbl = null;
 	private JLabel stopLbl = null;
 	private JLabel aktLbl = null;
 	private JLabel aktLblLegende = null;
-	
-	private JLabel trefferLbl = null;	
+
+	private JLabel trefferLbl = null;
 	private JLabel ausgewaehltLbl = null;
 	public  static JLabel verarbeitetLbl = null;
 	public JXTable jxSucheTable = null;
-	
+
 	//private MyRoogleSuche myTable = null;
 	public DefaultTableModel dtblm = null;
 	/****************************/
@@ -141,10 +141,10 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	private int zeilengewaehlt = 0;
 	public static boolean schicht;
 	public static boolean selektiv;
-	public String[] selectUhr = {null,null,null,null}; 
+	public String[] selectUhr = {null,null,null,null};
 	public boolean[] selectWal = {false,false,false,false};
-	public String[] schichtUhr = {null,null}; 
-	public boolean[] schichtWal = {false,false};	
+	public String[] schichtUhr = {null,null};
+	public boolean[] schichtWal = {false,false};
 	public boolean[] schichtVor = {false,false};
 	public String[] kollegenAbteilung = null;
 	public boolean[] kollegenSuchen = null;
@@ -154,12 +154,12 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	public String schichtbeginn;
 	public RoogleFenster eltern;
 	public boolean nachfolgerloeschen = false;
-	
+
 	public InfoDialog infoDlg = null;
 	public KeyListener kl = null;
-	
+
 	public AbrechnungDlg abrDlg = null;
-	
+
 	SuchenSeite(RoogleFenster xeltern){
 		super();
 		activateKl();
@@ -183,10 +183,10 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		aktLbl.setText(sdat);
 	}
 	public void setKollegenSuchen(boolean[] kollSuchen){
-		kollegenSuchen = kollSuchen; 
+		kollegenSuchen = kollSuchen;
 	}
 	public boolean getKollegenSuchen(int koll){
-		return this.kollegenSuchen[koll]; 
+		return this.kollegenSuchen[koll];
 	}
 	public void setKollegenAbteilung(String[] kolls){
 		kollegenAbteilung = kolls;
@@ -218,7 +218,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	public void setSucheBeendet(){
 		mussUnterbrechen = true;
 		sucheStoppen.setEnabled(false);
-		sucheStarten.setEnabled(true);				
+		sucheStarten.setEnabled(true);
 	}
 	public boolean getSucheBeendet(){
 		return mussUnterbrechen;
@@ -234,9 +234,9 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	public JProgressBar getFortschritt(){
 		return fortschritt;
 	}
-	
+
 	public void setFortschrittZeigen(boolean zeigen){
-		fortschritt.setVisible(zeigen);		
+		fortschritt.setVisible(zeigen);
 	}
 
 	/*
@@ -251,7 +251,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	*/
 	public static void verarbeitungEinschalten(){
 	}
-	
+
 	public void setKollegenEinstellen(Object[][] obj){
 		sucheKollegen = obj; //obj.clone();
 	}
@@ -262,8 +262,8 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		hZeiten =  (xhZeiten);//((HashMap<String,Integer>)hZeiten.clone());
 	}
 	public HashMap<String,Integer> getKollegenZeiten(){
-		return this.hZeiten; 
-		
+		return this.hZeiten;
+
 	}
 	public void setGewaehlt(int gewaehlt){
 		this.gewaehlt = gewaehlt;
@@ -272,15 +272,15 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		return this.gewaehlt;
 	}
 	public void setZeit(){
-		this.zeit = Long.valueOf(System.currentTimeMillis()).toString();	
+		this.zeit = Long.valueOf(System.currentTimeMillis()).toString();
 	}
 	public String getZeit(){
-		return this.zeit;	
+		return this.zeit;
 	}
-	
+
 	public int getTreffer(){
 		return Integer.parseInt(trefferLbl.getText());
-	
+
 	}
 	public boolean tagDurchsuchen(String sdatum){
 		boolean ret = false;
@@ -293,7 +293,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	}
 	public void datumEinstellen(){
 		startLbl.setText(eltern.zeitraumEdit[0].getText());
-		stopLbl.setText(eltern.zeitraumEdit[1].getText());		
+		stopLbl.setText(eltern.zeitraumEdit[1].getText());
 	}
 	public void tageEinstellen(){
 		for(int i = 0;i<7;i++){
@@ -316,7 +316,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		jxSucheTable.setEditable(true);
 		jxSucheTable.setRowSelectionAllowed(true);
 	}
-	
+
 	void listenerEinschalten(){
 		dtblm.addTableModelListener(this);
 	}
@@ -330,7 +330,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			this.setCursor(Reha.thisClass.wartenCursor);
 		}
 	}
-	
+
 	private void activateKl(){
 		kl = new KeyListener(){
 			@Override
@@ -354,7 +354,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					infoDlg.pack();
 					infoDlg.setLocationRelativeTo(null);
 					infoDlg.setVisible(true);
-					infoDlg = null;							
+					infoDlg = null;
 				}
 			}
 			@Override
@@ -363,35 +363,35 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		};
 	}
 
-	
+
 	/******************************************/
-	
+
 	private void erstelleGridBag(){
 
 		GridBagConstraints cc = new GridBagConstraints();
-		
+
 		cc.anchor = GridBagConstraints.FIRST_LINE_START;
 		cc.gridx = 0;
 		cc.gridy = 0;
 		cc.gridwidth = 1;
 		cc.gridheight = 1;
 		cc.weightx = 0.00;
-		cc.weighty = 1.00;		
+		cc.weighty = 1.00;
 		cc.fill = GridBagConstraints.BOTH;
 		add(machePaneLinks(),cc);
 
-		cc.anchor = GridBagConstraints.PAGE_START;		
+		cc.anchor = GridBagConstraints.PAGE_START;
 		cc.gridx = 1;
 		cc.gridy = 0;
 		cc.gridwidth = 3;
-		cc.gridheight = 1;		
+		cc.gridheight = 1;
 		cc.weightx = 3.75;
-		cc.weighty = 1.00;		
-		cc.fill = GridBagConstraints.BOTH;		
+		cc.weighty = 1.00;
+		cc.fill = GridBagConstraints.BOTH;
 		add(machePaneRechts(),cc);
 		validate();
 	}
-	
+
 	private JXPanel machePaneLinks(){
 		panLinks = new JXPanel(new BorderLayout());
 		panLinks.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
@@ -412,18 +412,18 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		panRechts.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		panRechts.setBackground(Color.WHITE);
 		panRechts.validate();
-		
+
 		JScrollPane jscr = new JScrollPane();
 		jscr.setBorder(null);
 		jscr.setBackground(Color.WHITE);
 		jscr.setViewportView(formRechts());
 		panRechts.add(jscr,BorderLayout.CENTER);
-		
+
 		//panRechts.add(formRechts(),BorderLayout.CENTER);
 		return panRechts;
 	}
 	private JPanel formLinks(){
-		//                 1    2       3    4      5    6 
+		//                 1    2       3    4      5    6
 		String spalten = "5dlu,70dlu:g,2dlu,30dlu:g,3dlu,p";
 		//                1      2  3  4   5  6    7  8   9  10 11  12   13  14  15   16   17    18   19   20   21   22   23   24    25  26   27
 		/*
@@ -435,7 +435,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		String reihen = "10dlu,2dlu, p,2dlu,p,13dlu,p,2dlu,p,2dlu,p,10dlu, p, 2dlu,p, 10dlu, p  ,2px,  8dlu ,2px, p , 2dlu, p , 8dlu , p, 8dlu, p, 8dlu, p ,"  +
 		//				  28   29  30     31    32   33   34    35   36    37  38  39
 						"2dlu , p, 2dlu , p ,  8dlu,  p , 2dlu, p , 8dlu , p";
-		
+
 		FormLayout lay = new FormLayout(spalten,reihen);
 		PanelBuilder builder = new PanelBuilder(lay);
 		builder.setDefaultDialogBorder();
@@ -446,7 +446,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 
 		//builder.addLabel("Name suchen (leer = freie Termine)",cc.xy(2, 3));
 		//builder.addLabel("Rez.Nr.",cc.xy(4, 3));
-		
+
 		sucheName = new JRtaTextField("GROSS",true);
 		sucheName.setToolTipText("Geben Sie hier Ihr Suchkriterim ein, leer = freie Termine suchen!");
 		//SuchenSeite.thisClass.schreibeName.setText(drops[0]);
@@ -459,7 +459,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		builder.add(sucheNummer,cc.xyw(4,5,3));
 
 		builder.addSeparator("mit was überschreiben?", cc.xyw(1, 7,5));
-		
+
 		schreibeName = new JRtaTextField("GROSS",true);
 		schreibeName.setToolTipText("Mit diesem Feld können Sie bestimmen mit was oder wem (evtl.) später Termineinträge überschrieben werden");
 		builder.add(schreibeName,cc.xy(2,11));
@@ -470,7 +470,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 
 		if(RoogleFenster.gedropt){
 			if(RoogleFenster.sldrops[0].length() > 10){
-				sucheName.setText(RoogleFenster.sldrops[0].substring(0,10));			
+				sucheName.setText(RoogleFenster.sldrops[0].substring(0,10));
 			}else{
 				sucheName.setText(RoogleFenster.sldrops[0]);
 			}
@@ -478,36 +478,36 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			schreibeNummer.setText(RoogleFenster.sldrops[1]);
 		}
 		builder.addSeparator("suche von / bis...", cc.xyw(1, 13,5));
-		
+
 		JXPanel dummy = new JXPanel();
 		dummy.setBorder(null);
 		dummy.setOpaque(false);
 		//dummy.setBackground(Color.WHITE);
-		//                   1     2       3          4       5   6     
+		//                   1     2       3          4       5   6
 		String dspalten = "5dlu,70dlu:g,right:5dlu:g,5dlu:g,3dlu,right:p";
 		//                1      2   3   4  5  6   7  8   9  10 11  12  13  14  15
 		String dreihen = "0dlu,2dlu,p,2dlu,p,2dlu, p"; // ,2dlu,p,2dlu,p,2dlu, p, 2dlu,p";
 		FormLayout dlay = new FormLayout(dspalten,dreihen);
 		dummy.setLayout(dlay);
-		
+
 		CellConstraints dcc = new CellConstraints();
 		dummy.add(new JLabel("Start bei Datum:"), dcc.xy(2,3));
 		dummy.add(new JLabel("Stop  bei Datum:"), dcc.xy(2,5));
 		aktLblLegende = new JLabel(" ");
-		dummy.add(aktLblLegende, dcc.xy(2,7));		
+		dummy.add(aktLblLegende, dcc.xy(2,7));
 		startLbl = new JLabel("01.01.2008");
 		startLbl.setForeground(Color.BLUE);
-		stopLbl = new JLabel("01.01.2008");		
-		stopLbl.setForeground(Color.BLUE);		
+		stopLbl = new JLabel("01.01.2008");
+		stopLbl.setForeground(Color.BLUE);
 		aktLbl = new JLabel(" ");
 		aktLbl.setForeground(Color.RED);
 		dummy.add(startLbl, dcc.xyw(6,3,1));
 		dummy.add(stopLbl, dcc.xyw(6,5,1));
-		dummy.add(aktLbl, dcc.xyw(6,7,1));		
-		
+		dummy.add(aktLbl, dcc.xyw(6,7,1));
+
 		builder.add(dummy,cc.xyw(2,15,4));
-		
-		builder.addSeparator("Funktionsaufrufe", cc.xyw(1, 17,5));	
+
+		builder.addSeparator("Funktionsaufrufe", cc.xyw(1, 17,5));
 		/*********************************************/
 		/*********************************************/
 		sucheStarten = new JButton("Suchlauf starten");
@@ -517,54 +517,54 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		sucheStarten.addKeyListener(this);
 		sucheStarten.setActionCommand("sstart");
 		sucheStarten.addActionListener(this);
-		
+
 		sucheWeiter = new JButton("Auswahl nur(!!) drucken");
 		sucheWeiter.setEnabled(false);
 		sucheWeiter.setName("sucheWeiter");
-		sucheWeiter.addKeyListener(this);		
+		sucheWeiter.addKeyListener(this);
 		sucheWeiter.setActionCommand("nurdrucken");
 		sucheWeiter.addActionListener(this);
-		
+
 		sucheStoppen = new JButton("Suche unterbrechen");
 		sucheStoppen.setIcon(SystemConfig.hmSysIcons.get("buttonrot"));
 		sucheStoppen.setName("stop");
 		sucheStoppen.addKeyListener(this);
 		sucheStoppen.setEnabled(false);
 		sucheStoppen.setActionCommand("sstop");
-		sucheStoppen.addActionListener(this);		
-	
+		sucheStoppen.addActionListener(this);
+
 		auswahlUebernahme = new JButton("Auswahl übernehmen");
 		auswahlUebernahme.setActionCommand("uebernahme");
 		auswahlUebernahme.addActionListener(this);
-		
+
 		auswahlDrucken = new JButton("Term.Liste drucken");
 		auswahlDrucken.setActionCommand("drucken");
 		auswahlDrucken.addActionListener(this);
-		
+
 		auswahlPerEmail = new JButton("per Email senden");
 		auswahlPerEmail.setActionCommand("email");
 		auswahlPerEmail.addActionListener(this);
-		
+
 		auswahlInDatei = new  JButton("Auswahl exportieren");
 		auswahlInDatei.setActionCommand("export");
 		auswahlInDatei.addActionListener(this);
-		
+
 		allesMarkieren = new JButton("alles markieren");
 		allesMarkieren.setActionCommand("alles markieren");
 		allesMarkieren.addActionListener(this);
 
-		allesEntmarkieren = new JButton("alle entmarkieren");		
+		allesEntmarkieren = new JButton("alle entmarkieren");
 		allesEntmarkieren.setActionCommand("alles entmarkieren");
 		allesEntmarkieren.addActionListener(this);
 
 		allesZuruecksetzen = new JButton("alles zurücksetzen");
 		allesZuruecksetzen.setName("zurueck");
-		allesZuruecksetzen.addKeyListener(this);		
+		allesZuruecksetzen.addKeyListener(this);
 		allesZuruecksetzen.setActionCommand("zuruecksetzen");
 		allesZuruecksetzen.setMnemonic(KeyEvent.VK_Z);
 		allesZuruecksetzen.setForeground(Color.RED);
-		allesZuruecksetzen.addActionListener(this);		
-		
+		allesZuruecksetzen.addActionListener(this);
+
 		fortschritt = new JProgressBar();
 		fortschritt.setStringPainted(true);
 
@@ -572,18 +572,18 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		builder.add(fortschritt,cc.xyw(2,19,4));
 
 		builder.add(sucheStarten,cc.xyw(2,21, 4));
-		builder.add(sucheStoppen,cc.xyw(2,23, 4));		
-		builder.add(sucheWeiter,cc.xyw(2,25, 4));		
+		builder.add(sucheStoppen,cc.xyw(2,23, 4));
+		builder.add(sucheWeiter,cc.xyw(2,25, 4));
 		builder.add(auswahlUebernahme,cc.xyw(2,27, 4));
 		builder.add(auswahlDrucken,cc.xyw(2,29, 4));
-		builder.add(auswahlPerEmail,cc.xyw(2,31, 4));	
+		builder.add(auswahlPerEmail,cc.xyw(2,31, 4));
 		builder.add(auswahlInDatei,cc.xyw(2,33, 4));
-		
-		builder.add(allesMarkieren,cc.xyw(2,35, 4));		
-		builder.add(allesEntmarkieren,cc.xyw(2,37, 4));		
-		builder.add(allesZuruecksetzen,cc.xyw(2,39, 4));	
-		
-		
+
+		builder.add(allesMarkieren,cc.xyw(2,35, 4));
+		builder.add(allesEntmarkieren,cc.xyw(2,37, 4));
+		builder.add(allesZuruecksetzen,cc.xyw(2,39, 4));
+
+
 		setKnopfGedoense(new int[]  {1,0,0,0,0,0,0,0,0,0});
 		//builder.getPanel().addKeyListener(this);
 		return builder.getPanel();
@@ -618,7 +618,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		builder.add(fpan,cc.xy(2,1));
 		dtblm = new MyDefaultTableModel();
 		//dtblm.addTableModelListener(this);
-		//					 1     2     3       4     5     6       7       8          9	    10        11 
+		//					 1     2     3       4     5     6       7       8          9	    10        11
 		String[] column = 	{"x?","G!","Datum","von","bis","Min.","Beginn","Dauer.","Namen","Rez.Nr.","Behandler",
 		//		  12          13      14      15        16          17       18     19
 				"Druckzeit","Sort","Spalte","sDatum","sOrigDatum","iBlock","id","maxblock",""};
@@ -627,16 +627,18 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		jxSucheTable.setDoubleBuffered(true);
 		jxSucheTable.setAutoStartEditOnKeyStroke(false);
 		jxSucheTable.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent arg0){
+			@Override
+            public void mousePressed(MouseEvent arg0){
 				arg0.consume();
 			}
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				arg0.consume();
 				if(arg0.getClickCount()==2){
 					int row = jxSucheTable.getSelectedRow();
 					int col = jxSucheTable.getSelectedColumn();
 					if( (Boolean) jxSucheTable.getValueAt(row, 0)){
-						startCellEditing(jxSucheTable,row,col);						
+						startCellEditing(jxSucheTable,row,col);
 					}
 					return;
 				}
@@ -647,7 +649,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					if(row != row2){
 						row = row2;
 					}
-					jxSucheTable.setRowSelectionInterval(row, row);	
+					jxSucheTable.setRowSelectionInterval(row, row);
 					if( (Boolean) jxSucheTable.getValueAt(row, 0)){
 						if(col==7){
 							ZeigePopupMenuDauer(arg0,jxSucheTable.getValueAt(row, col).toString());
@@ -685,7 +687,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 							infoDlg.pack();
 							infoDlg.setLocationRelativeTo(TerminFlaeche);
 							infoDlg.setVisible(true);
-							infoDlg = null;							
+							infoDlg = null;
 						}
 					});
 				}
@@ -693,52 +695,52 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void keyTyped(KeyEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 		});
 		*/
 
-		
-		/***************************/		
+
+		/***************************/
 		//jxSucheTable.setHighlighters(HighlighterFactory.createSimpleStriping());
 		jxSucheTable.setHighlighters(HighlighterFactory.createSimpleStriping(new Color(204,255,255)));
 
 		((TableColumnExt)jxSucheTable.getColumn(0)).setCellEditor(new JXTable.BooleanEditor());
 
-		jxSucheTable.getColumn(0).setMinWidth(25);	
+		jxSucheTable.getColumn(0).setMinWidth(25);
 		jxSucheTable.getColumn(0).setMaxWidth(25);
 
 		TableCellRenderer renderer = new DefaultTableRenderer(new MappedValue(StringValues.EMPTY, IconValues.ICON), JLabel.CENTER);
 		// original   TableCellRenderer renderer = new DefaultTableRenderer(new MappedValue(StringValue.EMPTY, IconValue.ICON), JLabel.CENTER);
 
 		// ImageIcon f�r gesperrt oder nicht
-		jxSucheTable.getColumn(1).setCellRenderer(renderer);		
-		jxSucheTable.getColumn(1).setMinWidth(20);	
+		jxSucheTable.getColumn(1).setCellRenderer(renderer);
+		jxSucheTable.getColumn(1).setMinWidth(20);
 		jxSucheTable.getColumn(1).setMaxWidth(20);
 		//Datum
 		jxSucheTable.getColumn(2).setMinWidth(80);
 		jxSucheTable.getColumn(2).setMaxWidth(80);
 		//Beginn
-		jxSucheTable.getColumn(3).setMinWidth(40);	
+		jxSucheTable.getColumn(3).setMinWidth(40);
 		jxSucheTable.getColumn(3).setMaxWidth(40);
 		DefaultTableCellRenderer crenderer = new DefaultTableCellRenderer();
 		crenderer.setHorizontalAlignment(JLabel.CENTER);
 		jxSucheTable.getColumn(3).setCellRenderer(crenderer);
 		//Ende
-		jxSucheTable.getColumn(4).setMinWidth(40);	
+		jxSucheTable.getColumn(4).setMinWidth(40);
 		jxSucheTable.getColumn(4).setMaxWidth(40);
 		jxSucheTable.getColumn(4).setCellRenderer(crenderer);
 		//Länge des Termins
-		jxSucheTable.getColumn(5).setMinWidth(40);	
+		jxSucheTable.getColumn(5).setMinWidth(40);
 		jxSucheTable.getColumn(5).setMaxWidth(40);
-		jxSucheTable.getColumn(5).setCellRenderer(crenderer);		
+		jxSucheTable.getColumn(5).setCellRenderer(crenderer);
 		//Beginn - Termin zum schreiben
 		DefaultTableCellRenderer farbrenderer = new DefaultTableCellRenderer();
 		farbrenderer.setForeground(Color.BLUE);
@@ -746,52 +748,52 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		jxSucheTable.getColumn(6).setMinWidth(40);
 		jxSucheTable.getColumn(6).setMaxWidth(40);
 		jxSucheTable.getColumn(6).setCellRenderer(farbrenderer);
-		((TableColumnExt)jxSucheTable.getColumn(6)).setCellEditor(new ZeitTableCellEditor());		
+		((TableColumnExt)jxSucheTable.getColumn(6)).setCellEditor(new ZeitTableCellEditor());
 		//Dauer - Termin zum schreiben
 		jxSucheTable.getColumn(7).setMinWidth(35);
 		jxSucheTable.getColumn(7).setMaxWidth(35);
-		jxSucheTable.getColumn(7).setCellRenderer(farbrenderer);		
-		((TableColumnExt)jxSucheTable.getColumn(7)).setCellEditor(new ZahlTableCellEditor());		
+		jxSucheTable.getColumn(7).setCellRenderer(farbrenderer);
+		((TableColumnExt)jxSucheTable.getColumn(7)).setCellEditor(new ZahlTableCellEditor());
 		//Name
-		jxSucheTable.getColumn(8).setMinWidth(80);	
+		jxSucheTable.getColumn(8).setMinWidth(80);
 		//Rezeptnummer
-		jxSucheTable.getColumn(9).setMinWidth(55);	
+		jxSucheTable.getColumn(9).setMinWidth(55);
 		jxSucheTable.getColumn(9).setMaxWidth(80);
 		//Behandler
 		jxSucheTable.getColumn(10).setCellRenderer(new ToolTipRenderer(new Color(204,255,255)));
-		jxSucheTable.getColumn(10).setMinWidth(65);	
+		jxSucheTable.getColumn(10).setMinWidth(65);
 		jxSucheTable.getColumn(10).setMaxWidth(65);
 		//jxSucheTable.getColumn(10).setCellRenderer( new ToolTipRenderer());
 		//Druckzeit
-		jxSucheTable.getColumn(11).setMinWidth(45);	
+		jxSucheTable.getColumn(11).setMinWidth(45);
 		jxSucheTable.getColumn(11).setMaxWidth(45);
 		jxSucheTable.getColumn(11).setCellRenderer(crenderer);
 		((TableColumnExt)jxSucheTable.getColumn(11)).setCellEditor(new ZeitCancelCellEditor());
 		// Übrige daten sind versteckt
-		jxSucheTable.getColumn(12).setMinWidth(0);	
-		jxSucheTable.getColumn(12).setMaxWidth(0);		
-		jxSucheTable.getColumn(13).setMinWidth(0);	
+		jxSucheTable.getColumn(12).setMinWidth(0);
+		jxSucheTable.getColumn(12).setMaxWidth(0);
+		jxSucheTable.getColumn(13).setMinWidth(0);
 		jxSucheTable.getColumn(13).setMaxWidth(0);
-		jxSucheTable.getColumn(14).setMinWidth(0);	
-		jxSucheTable.getColumn(14).setMaxWidth(0);		
-		jxSucheTable.getColumn(15).setMinWidth(0);	
-		jxSucheTable.getColumn(15).setMaxWidth(0);		
-		jxSucheTable.getColumn(16).setMinWidth(0);	
-		jxSucheTable.getColumn(16).setMaxWidth(0);		
-		jxSucheTable.getColumn(17).setMinWidth(0);	
+		jxSucheTable.getColumn(14).setMinWidth(0);
+		jxSucheTable.getColumn(14).setMaxWidth(0);
+		jxSucheTable.getColumn(15).setMinWidth(0);
+		jxSucheTable.getColumn(15).setMaxWidth(0);
+		jxSucheTable.getColumn(16).setMinWidth(0);
+		jxSucheTable.getColumn(16).setMaxWidth(0);
+		jxSucheTable.getColumn(17).setMinWidth(0);
 		jxSucheTable.getColumn(17).setMaxWidth(0);
-		jxSucheTable.getColumn(18).setMinWidth(0);	
-		jxSucheTable.getColumn(18).setMaxWidth(0);		
-		jxSucheTable.getColumn(19).setMinWidth(0);	
+		jxSucheTable.getColumn(18).setMinWidth(0);
+		jxSucheTable.getColumn(18).setMaxWidth(0);
+		jxSucheTable.getColumn(19).setMinWidth(0);
 		jxSucheTable.getColumn(19).setMaxWidth(0);
 		jxSucheTable.setColumnControlVisible(false);
-		
+
 		jxSucheTable.setEditable(true);
 		jxSucheTable.setSortable(false);
 		jxSucheTable.validate();
 		jxSucheTable.setName("RoogleSuche");
 
-		
+
 		//jxSucheTable.addTableModelListener(this);
 		/***************************/
 		ptc = new JScrollPane();
@@ -799,22 +801,23 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
         ptc.setViewportBorder(null);
         ptc.setViewportView(jxSucheTable);
         ptc.revalidate();
-		
-		
-		
+
+
+
 		builder.add(ptc,cc.xywh(2, 3, 1, 2));
 
 		return builder.getPanel();
-		
+
 	}
 	/******************************************/
-	
+
 	private void startCellEditing(JXTable table,int row,int col){
 		final int xrows = row;
 		final int xcols = col;
 		final JXTable xtable = table;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		  xtable.setRowSelectionInterval(xrows, xrows);
 		 		 xtable.setColumnSelectionInterval(xcols, xcols);
 		 		  xtable.scrollRowToVisible(xrows);
@@ -822,19 +825,19 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		 	   }
 		});
 	}
-	
+
 	private void ZeigePopupMenuDauer(java.awt.event.MouseEvent me,String dauer){
 		JPopupMenu jPop = getDauerPopupMenu(dauer);
-		
-		jPop.show( me.getComponent(), me.getX(), me.getY() ); 
+
+		jPop.show( me.getComponent(), me.getX(), me.getY() );
 	}
 	/*
 	private void ZeigePopupStartzeit(java.awt.event.MouseEvent me){
 		JPopupMenu jPop = getBehandlungsartLoeschenMenu();
-		jPop.show( me.getComponent(), me.getX(), me.getY() ); 
+		jPop.show( me.getComponent(), me.getX(), me.getY() );
 	}
 	*/
-	
+
 	private JPopupMenu getDauerPopupMenu(String dauer){
 		JPopupMenu jPopupMenu = new JPopupMenu();
 		JMenuItem item = new JMenuItem("alle nachfolgenden Termine auf die Dauer "+dauer+" Minuten setzen, Nachfolgeblock löschen sofern erforderlich ?");
@@ -854,13 +857,13 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	public void focusGained(FocusEvent arg0) {
 		// TODO Auto-generated method stub
 		startLbl.setText(eltern.zeitraumEdit[0].getText());
-		stopLbl.setText(eltern.zeitraumEdit[1].getText());		
+		stopLbl.setText(eltern.zeitraumEdit[1].getText());
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 
@@ -870,7 +873,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		String name = arg0.getActionCommand();
 		if(name.equals("")){return;}
 		for(int i = 0;i<1;i++){
-			
+
 			if(name.equals("sstart")){
 				knopfGedoense(new int[]  {0,1,0,0,0,0,0,0,0,0});
 				roogleStarten();
@@ -892,7 +895,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 						nachfolgerloeschen = false;
 						return null;
 					}
-					
+
 				}.execute();
 				//Runtime r = Runtime.getRuntime();
 			    //r.gc();
@@ -911,25 +914,26 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					JOptionPane.showMessageDialog(null,"So so...,Sie haben zwar nix gewählt wollen es aber schon mal übernehmen - das NIX....\nOh Herr schmeiß Hirn ra!");
 					return;
 				}
-				if((((String)jxSucheTable.getValueAt(0, 8)).trim().equals("")) && (((String)jxSucheTable.getValueAt(0, 9)).trim().equals("")) && 
+				if((((String)jxSucheTable.getValueAt(0, 8)).trim().equals("")) && (((String)jxSucheTable.getValueAt(0, 9)).trim().equals("")) &&
 						(schreibeName.getText().trim().equals("")) && (schreibeNummer.getText().trim().equals("")) ){
 					JOptionPane.showMessageDialog(null,"So so...,Sie suchen 'freie Termine' und wollen diese dann mit 'freien Terminen' überschreiben...\nOh Herr schmeiß Hirn ra!");
 					return;
-					
+
 				}
 				SwingUtilities.invokeLater(new Runnable(){
-					public  void run(){
+					@Override
+                    public  void run(){
 						try{
 							SchreibeAuswahl sa = new SchreibeAuswahl();
 							sa.execute();
 							knopfGedoense(new int[]  {0,0,0,0,1,1,1,0,0,1});
-							//auswahlSchreiben();						
+							//auswahlSchreiben();
 						}catch(Exception ex){
 							JOptionPane.showMessageDialog(null,"Achtung - Fehler!!!!!\n\nBei der Übernahme der Termine ist ein Fehler aufgetreten!\nBitte kontrollieren Sie ob die Termine wirklich\nvollständig und korrekt in den Terminkalender übertragen wurden.\n");
 						}
 
 					}
-				});	
+				});
 				break;
 			}
 			if(name.equals("drucken")){
@@ -939,16 +943,18 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				}
 				cursorWait(true);
 				SwingUtilities.invokeLater(new Runnable(){
-					public  void run(){
+					@Override
+                    public  void run(){
 						new Thread(){
-							public void run(){
-								auswahlDrucken(true,true);								
+							@Override
+                            public void run(){
+								auswahlDrucken(true,true);
 							}
 						}.start();
 
 						//auswahlSchreiben();
 					}
-				});	
+				});
 				break;
 			}
 			if(name.equals("nurdrucken")){
@@ -959,25 +965,27 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				String fragestring = "Achtung Sie schreiben keinerlei Daten in den Kalender!!!!!!\n"+
 				"Sie erstellen lediglich einen Ausdruck Ihrer derzeitigen Auswahl\n\n"+
 				"Wollen Sie den Vorgang fortsetzen ?";
-				int anfrage = JOptionPane.showConfirmDialog(null, fragestring, "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION); 
+				int anfrage = JOptionPane.showConfirmDialog(null, fragestring, "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 				if(anfrage == JOptionPane.NO_OPTION){
 					sucheWeiter.setEnabled(false);
 					return;
 				}
 				cursorWait(true);
 				SwingUtilities.invokeLater(new Runnable(){
-					public  void run(){
+					@Override
+                    public  void run(){
 						new Thread(){
-							public void run(){
+							@Override
+                            public void run(){
 								//26.09.2015 /st.
 								druckVectorInit();
-								auswahlDrucken(true,true);								
+								auswahlDrucken(true,true);
 							}
 						}.start();
 					}
-				});	
+				});
 				break;
-				
+
 			}
 			if(name.equals("email")){
 				if(gewaehlt==0){
@@ -988,29 +996,31 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					String fragestring = "Achtung Sie schreiben keinerlei Daten in den Kalender!!!!!!\n"+
 							"Sie erstellen lediglich einen PDF-Terminplan für den Emailversand mit Ihrer derzeitigen Auswahl\n\n"+
 							"Wollen Sie den Vorgang fortsetzen ?";
-					int anfrage = JOptionPane.showConfirmDialog(null, fragestring, "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION); 
+					int anfrage = JOptionPane.showConfirmDialog(null, fragestring, "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 					if(anfrage == JOptionPane.NO_OPTION){
 						sucheWeiter.setEnabled(false);
 						return;
 					}
 					try{
-						druckVectorInit();	
+						druckVectorInit();
 					}catch(Exception ex){
 						JOptionPane.showMessageDialog(null,"Fehler bei der Aufbereitung des Druckvectors für Email");
 					}
 				}
 				cursorWait(true);
 				SwingUtilities.invokeLater(new Runnable(){
-					public  void run(){
+					@Override
+                    public  void run(){
 						new Thread(){
-							public void run(){
-								auswahlDrucken(false,true);								
+							@Override
+                            public void run(){
+								auswahlDrucken(false,true);
 							}
 						}.start();
 
 						//auswahlSchreiben();
 					}
-				});	
+				});
 				break;
 			}
 			if(name.equals("export")){
@@ -1020,18 +1030,20 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				}
 				cursorWait(true);
 				SwingUtilities.invokeLater(new Runnable(){
-					public  void run(){
+					@Override
+                    public  void run(){
 						new Thread(){
-							public void run(){
-								auswahlExportieren();								
+							@Override
+                            public void run(){
+								auswahlExportieren();
 							}
 						}.start();
 
 						//auswahlSchreiben();
 					}
-				});	
+				});
 				break;
-				
+
 			}
 			if(name.equals("dauerneublockdelete")){
 				setzeNeueDauer();
@@ -1052,7 +1064,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		String dauer = jxSucheTable.getValueAt(start, 7).toString();
 		for(int i = (start+1); i < ende; i++){
 			if( (Boolean) jxSucheTable.getValueAt(i, 0)){
-				jxSucheTable.setValueAt(dauer, i, 7);	
+				jxSucheTable.setValueAt(dauer, i, 7);
 			}
 		}
 	}
@@ -1067,18 +1079,18 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		}
 		sucheStarten.setEnabled((knopf[0]==1 ? true : false));
 		sucheStoppen.setEnabled((knopf[1]==1 ? true : false));
-		sucheWeiter.setEnabled((knopf[2]==1 ? true : false));	
+		sucheWeiter.setEnabled((knopf[2]==1 ? true : false));
 		if(!Rechte.hatRecht(Rechte.Rugl_write, false)){
 			auswahlUebernahme.setEnabled(false);
 		}else{
-			auswahlUebernahme.setEnabled((knopf[3]==1 ? true : false));			
+			auswahlUebernahme.setEnabled((knopf[3]==1 ? true : false));
 		}
 		auswahlDrucken.setEnabled((knopf[4]==1 ? true : false));
 		auswahlPerEmail.setEnabled((knopf[5]==1 ? true : false));
-		auswahlInDatei.setEnabled((knopf[6]==1 ? true : false));		
-		allesMarkieren.setEnabled((knopf[7]==1 ? true : false));		
-		allesEntmarkieren.setEnabled((knopf[8]==1 ? true : false));		
-		allesZuruecksetzen.setEnabled((knopf[9]==1 ? true : false));		
+		auswahlInDatei.setEnabled((knopf[6]==1 ? true : false));
+		allesMarkieren.setEnabled((knopf[7]==1 ? true : false));
+		allesEntmarkieren.setEnabled((knopf[8]==1 ? true : false));
+		allesZuruecksetzen.setEnabled((knopf[9]==1 ? true : false));
 	}
 	public void setKnopfGedoense(int[] knopf){
 		knopfGedoense(knopf);
@@ -1091,17 +1103,18 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		es.setzeEltern(getInstance());
 		es.start();
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				aktLblLegende.setText("Aktuelles Datum:");
 				aktLbl.setText(getStartDatum());
 				mussUnterbrechen = false;
-				
+
 				sucheStoppen.setEnabled(true);
-				sucheStarten.setEnabled(false);		
+				sucheStarten.setEnabled(false);
 				dtblm.getDataVector().clear();
 				sucheDaten.clear();
 				sucheDaten.trimToSize();
-				
+
 				jxSucheTable.clearSelection();
 				jxSucheTable.setSelectionMode(0);
 				tabelleAusschalten();
@@ -1119,20 +1132,20 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 				WorkerSuchenInKalenderTagen WsIT = new WorkerSuchenInKalenderTagen();
 				WsIT.setzeStatement(getInstance());
 				WsIT.execute();
-				
+
 				/*
 				SwingUtilities.invokeLater(new Runnable(){
 					public  void run(){
 						getInstance().workerfertig = false;
-						
+
 						WorkerTabelle2 wt = new WorkerTabelle2();
 						wt.init();
 						wt.execute();
 					}
 				});
 				*/
-					
-				
+
+
 				/* bislang o.k.
 				new Thread(){
 					public void run(){
@@ -1143,21 +1156,23 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 					}
 				}.start();
 				*/
-				
-				
-				
+
+
+
 				sucheStoppen.requestFocus();
-				
+
 			}
 		});
 	}
 	private void roogleStoppen(){
 		sucheStoppen.setEnabled(false);
-		sucheStarten.setEnabled(true);				
+		sucheStarten.setEnabled(true);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				new Thread(){
-				public void run(){
+				@Override
+                public void run(){
 					mussUnterbrechen = true;
 					jxSucheTable.setRowSelectionAllowed(true);
 					setFortschrittZeigen(false);
@@ -1209,19 +1224,19 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			JOptionPane.showMessageDialog(null, "Daten für Fahrdienstliste wurden erfolgreich exportiert");
 		}else if(exportart.getText().equals("ical")){
 			if(icalExport()){
-				JOptionPane.showMessageDialog(null, "Daten für iCal wurden exportiert und per Email versendet");	
+				JOptionPane.showMessageDialog(null, "Daten für iCal wurden exportiert und per Email versendet");
 			}
 		}else if(exportart.getText().equals("icalreha")){
 			if(icalRehaExport()){
-				JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");	
+				JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");
 			}
 		}
 		cursorWait(false);
 	}
-	
+
 	/********
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public static boolean icalRehaExport(){
 		Vector<Vector<String>> icalVec = new Vector<Vector<String>>();
@@ -1232,24 +1247,24 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 		return false;
 	}
 	/********
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * @return
 	 */
-	
+
 	private boolean icalExport(){
 		try{
-			
+
 			exportVectorInit();
 			int lang = vecWahl.size();
 			if(lang <=0){
 				JOptionPane.showMessageDialog(null, "Keine Termine zum iCal-Export und Versand ausgewählt");
 				return false;
 			}
-			
-			
-			
+
+
+
 			Vector<Vector<String>> icalVec = new Vector<Vector<String>>();
 			Vector<String> icalDummy = new Vector<String>();
 			String emailaddy = "";
@@ -1263,26 +1278,26 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 			int xpos;
 			/*
 Vector mit Normal-Termin
-[0-true, 
-1-offen, 
-2-Fr-04.06.2010, 
-3-12:30, 
-4-12:55, 
-5-25, 
-6-12:30, 
-7-25, 
-8-H-MUSTERMANN,HANNES, 
-9-KG60004, 
+[0-true,
+1-offen,
+2-Fr-04.06.2010,
+3-12:30,
+4-12:55,
+5-25,
+6-12:30,
+7-25,
+8-H-MUSTERMANN,HANNES,
+9-KG60004,
 10-Holger Physio,
 11- ,(== Druckzeit)
 12- ,
-13-01BEHANDLER, 
-14-04.06.2010, 
-15-2010-06-04, 
-16-4, 
-17-208531, 
-18-6, 
-19-false]			 
+13-01BEHANDLER,
+14-04.06.2010,
+15-2010-06-04,
+16-4,
+17-208531,
+18-6,
+19-false]
 			 */
 			try{
 				FileTools.deleteAllFiles(new File(Path.Instance.getProghome()+"temp/"+Reha.aktIK));
@@ -1290,7 +1305,7 @@ Vector mit Normal-Termin
 				JOptionPane.showMessageDialog(null,"Fehler beim löschen der temporären Dateien");
 				return false;
 			}
-			
+
 			//macheVevent(String datum, String start, String end, String titel, String beschreibung){
 			String endzeit = "";
 			for(int i = 0; i < lang;i++){
@@ -1314,7 +1329,7 @@ Vector mit Normal-Termin
 				if(emailaddy.equals("") && !xtitel.equals("")){
 					xpos = xtitel.indexOf("\\");
 					if(xpos < 0){
-						emailaddy = SqlInfo.holeEinzelFeld(stmt+xtitel+"' LIMIT 1");	
+						emailaddy = SqlInfo.holeEinzelFeld(stmt+xtitel+"' LIMIT 1");
 						//System.out.println(emailaddy);
 					}else{
 						emailaddy = SqlInfo.holeEinzelFeld(stmt+xtitel.substring(0,xpos)+"' LIMIT 1");
@@ -1328,12 +1343,12 @@ Vector mit Normal-Termin
 			if(emailaddy.equals("")){
 				if(schreibeNummer.getText().trim().length() > 2){
 					String schreibereznr = (schreibeNummer.getText().indexOf("\\") < 0 ? schreibeNummer.getText() : schreibeNummer.getText().substring(0,schreibeNummer.getText().indexOf("\\") )  );
-					emailaddy = SqlInfo.holeEinzelFeld(stmt+schreibereznr+"' LIMIT 1");	
+					emailaddy = SqlInfo.holeEinzelFeld(stmt+schreibereznr+"' LIMIT 1");
 				}
 			}
 			/*****************************/
-			
-						
+
+
 			/*****************************/
 			StringBuffer buf = new StringBuffer();
 			buf.append(ICalGenerator.macheKopf());
@@ -1342,7 +1357,7 @@ Vector mit Normal-Termin
 			}
 			buf.append(ICalGenerator.macheEnd());
 			FileOutputStream outputFile = new  FileOutputStream(Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
-            //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
+            //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1");
             OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
 			BufferedWriter bw = null;
 			String drzeit = "";
@@ -1368,7 +1383,7 @@ Vector mit Normal-Termin
 			//emlDlg.setLocation(pt.x-350,pt.y+100);
 			emlDlg.pack();
 			final EmailDialog femlDlg = emlDlg;
-			
+
 			if((Boolean) SystemConfig.hmIcalSettings.get("direktsenden")){
 				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 				/*
@@ -1381,19 +1396,20 @@ Vector mit Normal-Termin
 						abrDlg.setVisible(true);
 						return null;
 					}
-					
+
 				}.execute();
 				*/
-				
+
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						try{
 							femlDlg.senden();
 							/*
 							if(abrDlg != null){
 								abrDlg.setVisible(false);
 								abrDlg.dispose();
-								abrDlg = null;								
+								abrDlg = null;
 							}
 							*/
 							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
@@ -1409,7 +1425,7 @@ Vector mit Normal-Termin
 						}
 					}
 				});
-				
+
 			}else{
 				femlDlg.setVisible(true);
 				try{
@@ -1419,8 +1435,8 @@ Vector mit Normal-Termin
 					return false;
 				}
 			}
-			
-			
+
+
 		}catch(Exception ex){
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Fehler beim iCal-Export und Versand");
@@ -1429,10 +1445,10 @@ Vector mit Normal-Termin
 		return false;
 	}
 	/*****
-	 * 
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
+	 *
 	 * @return
 	 */
 	private boolean fahrdienstExport(){
@@ -1449,7 +1465,7 @@ Vector mit Normal-Termin
 					vecWahl.get(i).set(6,vecWahl.get(i).get(11));
 				}
 			}
-		
+
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 				@Override
 				public int compare(Vector o1, Vector o2) {
@@ -1461,7 +1477,7 @@ Vector mit Normal-Termin
 			};
 			Collections.sort(vecWahl,comparator);
 			FileOutputStream outputFile = new  FileOutputStream(SystemConfig.hmVerzeichnisse.get("Fahrdienstrohdatei")+"FPSort.txt");
-            OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
+            OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1");
 			BufferedWriter bw = null;
 			String drzeit = "";
 			bw = new BufferedWriter(out);
@@ -1489,12 +1505,12 @@ Vector mit Normal-Termin
 			ex.printStackTrace();
 			cursorWait(false);
 			return false;
-			
+
 		}
 		cursorWait(false);
 		return true;
 	}
-	private boolean rehaplanExport(){	
+	private boolean rehaplanExport(){
 		exportVectorInit();
 		int lang = vecWahl.size();
 		if(lang <=0){
@@ -1513,7 +1529,7 @@ Vector mit Normal-Termin
 				vecWahl.get(i).set(6, (vecWahl.get(i).get(11)) );
 			}
 		}
-	
+
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 			@Override
 			public int compare(Vector o1, Vector o2) {
@@ -1532,7 +1548,7 @@ Vector mit Normal-Termin
 
 		try {
 			FileOutputStream outputFile = new  FileOutputStream(SystemConfig.hmVerzeichnisse.get("Rehaplaner")+sucheName.getText().trim()+".txt");
-	        OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1"); 
+	        OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1");
 			BufferedWriter bw = null;
 			bw = new BufferedWriter(out);
 
@@ -1558,9 +1574,9 @@ Vector mit Normal-Termin
 						"°"+drzeit+"°"+(gruppe.trim().equals("") ? "--" : gruppe)+"°"+
 				//   Matchcode Kalenderbenutzer
 						((String)vecWahl.get(i).get(10))+"°"+
-				//		
+				//
 						((String)vecWahl.get(i).get(8)).replaceFirst("\\\\", "").replace("\\", "/Gruppe:_")
-						
+
 				);
 				bw.newLine();
 			}
@@ -1599,10 +1615,10 @@ Vector mit Normal-Termin
 			int minpos = 0;
 			for(i=0;i<lang;i++){
 				boolean isdruckzeit = (  ((String)vecWahl.get(i).get(11)).trim().equals("")
-								?  false 
+								?  false
 								:  true	);
 				String druckzeit = (  isdruckzeit
-								?  ((String)vecWahl.get(i).get(11)) 
+								?  ((String)vecWahl.get(i).get(11))
 								: 	 ((String)vecWahl.get(i).get(6))	);
 				String sorter = ((String)vecWahl.get(i).get(15))+ druckzeit;
 				String tag = ((String)vecWahl.get(i).get(2));
@@ -1611,8 +1627,8 @@ Vector mit Normal-Termin
 				String termtext	= (isdruckzeit
 								?((String)((Vector)vecWahl.get(i)).get(8))
 								:((String)((Vector)vecWahl.get(i)).get(10))  );
-				*/				
-				
+				*/
+
 				if(isdruckzeit && ((String)vecWahl.get(i).get(12)).trim().equals("")){
 					if(((String)vecWahl.get(i).get(8)).contains("\\\\")){
 						//System.out.println(((Vector)vecWahl.get(i)).get(8));
@@ -1626,7 +1642,7 @@ Vector mit Normal-Termin
 							}
 						}
 						/*
-						 * 
+						 *
 						if(termtext.contains("Gruppe:_")){
 							termtext = termtext.substring(8);
 							System.out.println("in variante 1= "+termtext);
@@ -1652,14 +1668,14 @@ Vector mit Normal-Termin
 				}
 				//erweitert um die Dauer;
 				vec.add(new TermObjekt(tag,druckzeit,termtext,sorter,((String)vecWahl.get(i).get(5))));
-				
 
-				
+
+
 			}
 			Collections.sort(vec);
 			new TerminplanDrucken().init(vec, drucken,schreibeName.getText().trim(),schreibeNummer.getText().trim(),getInstance(),direktsenden);
 		}
-		
+
 	}
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
@@ -1679,9 +1695,9 @@ Vector mit Normal-Termin
 							setzeZeilenAusgewaehlt(this.zeilengewaehlt);
 							if(this.zeilengewaehlt==1){
 								if(!Rechte.hatRecht(Rechte.Rugl_write, false)){
-									auswahlUebernahme.setEnabled(false);									
+									auswahlUebernahme.setEnabled(false);
 								}else{
-									auswahlUebernahme.setEnabled(true);									
+									auswahlUebernahme.setEnabled(true);
 								}
 								auswahlDrucken.setEnabled(true);
 								auswahlPerEmail.setEnabled(true);
@@ -1699,7 +1715,7 @@ Vector mit Normal-Termin
 								sucheWeiter.setEnabled(false);
 							}
 						}
-					}	
+					}
 				}
 				if(arg0.getColumn() == 11){
 					if(((String)jxSucheTable.getValueAt(arg0.getFirstRow(), 11)).trim().equals(":")){
@@ -1707,23 +1723,23 @@ Vector mit Normal-Termin
 					}
 				}
 				if(arg0.getColumn() == 6){
-						int test = testeZeiten(arg0.getFirstRow(),arg0.getColumn()); 
+						int test = testeZeiten(arg0.getFirstRow(),arg0.getColumn());
 						if( test > 0){
 							if(test==1){
 								JOptionPane.showMessageDialog(null,"Sie haben versucht den Terminstart von den Beginn des verfügbaren Blockes zu setzen");
 								jxSucheTable.setValueAt(jxSucheTable.getValueAt(arg0.getFirstRow(),3), arg0.getFirstRow(), 6);
 							}
 							if(test==2){
-								jxSucheTable.setValueAt(jxSucheTable.getValueAt(arg0.getFirstRow(),3), arg0.getFirstRow(), 6);								
+								jxSucheTable.setValueAt(jxSucheTable.getValueAt(arg0.getFirstRow(),3), arg0.getFirstRow(), 6);
 							}
-	
+
 						}
 						// Prüfung einbauen ob Beginnzeit + Dauer nicht Endzeit übersteigt bzw. vor Planbeginnzeit liegt.
 						//jxSucheTable.setValueAt("", arg0.getFirstRow(), 6);
 				}
 				if(arg0.getColumn() == 7){
 						if(testeZeiten(arg0.getFirstRow(),arg0.getColumn()) > 0){
-							jxSucheTable.setValueAt(jxSucheTable.getValueAt(arg0.getFirstRow(),5), arg0.getFirstRow(), 7);	
+							jxSucheTable.setValueAt(jxSucheTable.getValueAt(arg0.getFirstRow(),5), arg0.getFirstRow(), 7);
 						}
 						//jxSucheTable.setValueAt("", arg0.getFirstRow(), 7);
 						// Prüfung einbauen ob Beginnzeit + Dauer nicht Endzeit übersteigt bzw. vor Planbeginnzeit liegt.
@@ -1763,30 +1779,30 @@ Vector mit Normal-Termin
 					if(((ImageIcon)dtblm.getValueAt(i, 1)).getDescription().equals("offen")){
 						dtblm.setValueAt(Boolean.valueOf(true),i, 0);
 						this.zeilengewaehlt++;
-						
+
 					}
-					
+
 				}else{
 					if(!gezeigt){
 						JOptionPane.showMessageDialog(null,"Ein oder mehrere Termine sind noch nicht verifizier \n und können deshalb nicht gewählt werden");
 						gezeigt = true;
 					}
 				}
-					
+
 			}
 			setzeZeilenAusgewaehlt(this.zeilengewaehlt);
 			listenerEinschalten();
 			if(!Rechte.hatRecht(Rechte.Rugl_write, false)){
-				auswahlUebernahme.setEnabled(false);									
+				auswahlUebernahme.setEnabled(false);
 			}else{
-				auswahlUebernahme.setEnabled(true);									
-			}			
+				auswahlUebernahme.setEnabled(true);
+			}
 			auswahlDrucken.setEnabled(true);
 			auswahlPerEmail.setEnabled(true);
 			auswahlInDatei.setEnabled(true);
 			sucheWeiter.setEnabled(true);
 		}else{
-			listenerAusschalten();			
+			listenerAusschalten();
 			for(i=0;i<bis;i++){
 				dtblm.setValueAt(Boolean.valueOf(false),i, 0);
 			}
@@ -1799,7 +1815,7 @@ Vector mit Normal-Termin
 			auswahlInDatei.setEnabled(false);
 			sucheWeiter.setEnabled(false);
 		}
-		
+
 	}
 	private void druckVectorInit(){
 		int lang = dtblm.getRowCount(),i;
@@ -1813,15 +1829,15 @@ Vector mit Normal-Termin
 		////System.out.println("Rezeptnummer = "+nummer);
 
 		for(i=0;i<lang;i++){
-			
+
 			if((Boolean)dtblm.getValueAt(i,0)){
 
 				setFortschrittSetzen(durchlauf++);
 				vecWahl.add((Vector<Object>)dtblm.getDataVector().get(i));
 				vecWahl.get(vecWahl.size()-1).set(11, dtblm.getValueAt(i,11));
-				vecWahl.get(vecWahl.size()-1).set(6, dtblm.getValueAt(i,6));		
+				vecWahl.get(vecWahl.size()-1).set(6, dtblm.getValueAt(i,6));
 			}
-		}	
+		}
 	}
 	private void exportVectorInit(){
 		int lang = dtblm.getRowCount(),i;
@@ -1835,7 +1851,7 @@ Vector mit Normal-Termin
 				vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)));
 				//vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)).clone());
 				vecWahl.get(vecWahl.size()-1).set(11, dtblm.getValueAt(i,11));
-				vecWahl.get(vecWahl.size()-1).set(6, dtblm.getValueAt(i,6));		
+				vecWahl.get(vecWahl.size()-1).set(6, dtblm.getValueAt(i,6));
 			}
 		}
 	}
@@ -1852,12 +1868,12 @@ Vector mit Normal-Termin
 				vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)));
 				//vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)).clone());
 				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(11, (String) dtblm.getValueAt(i,11));
-				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(6, (String) dtblm.getValueAt(i,6));		
+				((Vector<Object>)vecWahl.get(vecWahl.size()-1)).set(6, (String) dtblm.getValueAt(i,6));
 			}
-		}	
+		}
 	}
 	*/
-	
+
 	/********************************************************/
 	class SchreibeAuswahl extends SwingWorker<Void,Void>{
 
@@ -1882,14 +1898,14 @@ Vector mit Normal-Termin
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Achtung - Fehler!!\nIn der Funktion auswahlSchreiben() ist ein Fehler aufgetreten.\nBitte kontrollieren Sie ob alle Termine korrekt in den Kalender eingetragen wurden.");
 			}
-			
+
 			if(  (schreibeName.getText().trim().equals("")) && (schreibeNummer.getText().trim().equals(""))){
 				//roogleZuruecksetzen();
 			}
 			// TODO Auto-generated method stub
 			return null;
 		}
-		
+
 	}
 	private void auswahlSchreiben(){
 		int lang = dtblm.getRowCount(),i;
@@ -1905,12 +1921,12 @@ Vector mit Normal-Termin
 		setFortschrittZeigen(true);
 
 		vecWahl.clear();
-		
+
 		name = schreibeName.getText().trim();
 		nummer =schreibeNummer.getText().trim().replace("\\", "\\\\") ;
 		String meldung = "";
 		for(i=0;i<lang;i++){
-			
+
 			if((Boolean)dtblm.getValueAt(i,0)){
 				setFortschrittSetzen(durchlauf++);
 				vecWahl.add( ((Vector<Object>)dtblm.getDataVector().get(i)) );
@@ -2007,7 +2023,7 @@ Vector mit Normal-Termin
 			}
 		}
 		setFortschrittZeigen(false);
-		
+
 	}
 	/*****************************************/
 	private void schreibeTermin(Vector<Vector<String>> vec,int zeile,int art,int tkstart,int tkdauer,int tkende,int plstart,int pldauer,int plende,String name,String nummer){
@@ -2021,7 +2037,7 @@ Vector mit Normal-Termin
 			block += (vecgross-geaendert);
 		}
 
-		
+
 		int i;
 		for(int j = 0; j<1;j++){
 			if(art==1){
@@ -2044,11 +2060,11 @@ Vector mit Normal-Termin
 						nachvec.add( vec.get(i).get(1));
 						nachvec.add( aktvec.get(4));
 						String planende = (String)jxSucheTable.getValueAt(zeile,4)+":00";
-						
-						nachvec.add( Integer.toString((int) ZeitFunk.MinutenSeitMitternacht(planende) - 
-								(int)ZeitFunk.MinutenSeitMitternacht(nachvec.get(2)) ) ) ;					
+
+						nachvec.add( Integer.toString((int) ZeitFunk.MinutenSeitMitternacht(planende) -
+								(int)ZeitFunk.MinutenSeitMitternacht(nachvec.get(2)) ) ) ;
 						nachvec.add(planende );
-						
+
 						newvec.add(nachvec);
 					}else if (i>(block-1)){
 						newvec.add(vec.get(i));
@@ -2068,7 +2084,7 @@ Vector mit Normal-Termin
 				//hier muß eingegriffen werden wenn beim Überschreiben mit
 				//veränderter Dauer der Nachblock gelöscht werden soll
 				//ebenfalls muß dann überprüft werden ob er übernächste Block ebenfalls ein Leerblock ist
-				//in dem Fall müßte dann der Leerblock zusammengefaßt werden 
+				//in dem Fall müßte dann der Leerblock zusammengefaßt werden
 				//die Blockanzahl bliebe also gleich!!!
 				for(i=0;i<vecgross;i++){
 					if(i==(block-1)){
@@ -2082,7 +2098,7 @@ Vector mit Normal-Termin
 						if(i < (vecgross-1) ){
 							//hier rein die Abfrage ob Nachfolgeblock
 							//leer ist
-							if( vec.get(i+1).get(0).equals("") && 
+							if( vec.get(i+1).get(0).equals("") &&
 									vec.get(i+1).get(1).equals("") &&
 									nachfolgerloeschen){
 								Vector<String> nachvec = new Vector<String>();
@@ -2092,7 +2108,7 @@ Vector mit Normal-Termin
 								//Dauer neu einstellen
 								long dauer = ZeitFunk.ZeitDifferenzInMinuten(aktvec.get(4),
 										(vec.get(i+1).get(4)) );
-								
+
 								nachvec.add( Long.toString(dauer) ) ;
 								//Ende neu einstellen
 								nachvec.add( (vec.get(i+1).get(4)) );
@@ -2104,7 +2120,7 @@ Vector mit Normal-Termin
 									Vector<String> nachvec = new Vector<String>();
 									nachvec.add( "" ) ;
 									nachvec.add( "" ) ;
-									nachvec.add( aktvec.get(4) ) ;						
+									nachvec.add( aktvec.get(4) ) ;
 									nachvec.add( Integer.toString(tkdauer-pldauer)) ;
 									nachvec.add( ZeitFunk.MinutenZuZeit(tkende) ) ;
 									newvec.add(nachvec);
@@ -2112,7 +2128,7 @@ Vector mit Normal-Termin
 									Vector<String> nachvec = new Vector<String>();
 									nachvec.add( (vec.get(i).get(0)) ) ;
 									nachvec.add( (vec.get(i).get(1)) ) ;
-									nachvec.add( aktvec.get(4) ) ;						
+									nachvec.add( aktvec.get(4) ) ;
 									nachvec.add( Integer.toString(tkdauer-pldauer)) ;
 									nachvec.add( ZeitFunk.MinutenZuZeit(tkende) ) ;
 									newvec.add(nachvec);
@@ -2122,7 +2138,7 @@ Vector mit Normal-Termin
 							Vector<String> nachvec = new Vector<String>();
 							nachvec.add( (vec.get(i).get(0)) ) ;
 							nachvec.add( (vec.get(i).get(1)) ) ;
-							nachvec.add( aktvec.get(4) ) ;						
+							nachvec.add( aktvec.get(4) ) ;
 							nachvec.add( Integer.toString(tkdauer-pldauer)) ;
 							nachvec.add( ZeitFunk.MinutenZuZeit(tkende) ) ;
 							newvec.add(nachvec);
@@ -2154,7 +2170,7 @@ Vector mit Normal-Termin
 						vorvec.add( Integer.toString(tkdauer-pldauer) ) ;
 						vorvec.add( ZeitFunk.MinutenZuZeit(plstart)) ;
 						newvec.add(vorvec);
-						
+
 						Vector<String> aktvec = new Vector<String>();
 						aktvec.add(name);
 						aktvec.add(nummer);
@@ -2166,7 +2182,7 @@ Vector mit Normal-Termin
 					}else{
 						newvec.add(vec.get(i));
 					}
-					
+
 				}
 				String stmt = macheStat(newvec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 				try {
@@ -2180,12 +2196,12 @@ Vector mit Normal-Termin
 			}
 
 		}
-		
+
 	}
-	/*****************************************/	
+	/*****************************************/
 	private void schreibeLoeschen(Vector<Vector<String>> vec,int zeile,String name,String nummer){
 		int block = (Integer) jxSucheTable.getValueAt(zeile,16);
-		int bloecke = vec.size(); 
+		int bloecke = vec.size();
 		int geaendert = Integer.parseInt( (String) jxSucheTable.getValueAt(zeile,18) );
 		if(bloecke != geaendert ){
 			////System.out.println("vermerkt sind "+bloecke+" Blöcke / tatsächlich in der Datenbank sind "+geaendert+" Blöcke");
@@ -2195,14 +2211,14 @@ Vector mit Normal-Termin
 		// nur den nachfolgenden Block prüfen!!
 		for(int i=0;i<1;i++){
 			if(block == 1){
-				
 
-				// es gibt nur einen Block 
+
+				// es gibt nur einen Block
 				if(bloecke==1){
 					////System.out.println(jxSucheTable.getValueAt(zeile,8)+" ist im ersten Block / insgesamt existieren "+vec.size()+" Blöcke");
 					// es gibt mehrere blöcke
 					vec.get(block-1).set(0, "");
-					vec.get(block-1).set(1, "");					
+					vec.get(block-1).set(1, "");
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Es gibt nur einen Block, deshalb kann man dirket das statement basteln");
 					////System.out.println(stmt);
@@ -2220,26 +2236,26 @@ Vector mit Normal-Termin
 						int dauer2 = Integer.parseInt(vec.get(0).get(3));
 						int dauerNeu = dauer1+dauer2;
 						vec.get(1).set(0, "");
-						vec.get(1).set(1, "");					
+						vec.get(1).set(1, "");
 						vec.get(1).set(2, startzeit);
 						vec.get(1).set(3, Integer.toString(dauerNeu));
 						vec.get(1).set(4,endzeit);
 						vec.remove(0);
 						stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 						////System.out.println("Der betroffene Block ist der erste und der nachfolgende Block = ebenfalls leer");
-						////System.out.println(stmt);						
+						////System.out.println(stmt);
 						break;
-						
+
 					}else{
 						vec.get(block-1).set(0, "");
-						vec.get(block-1).set(1, "");					
+						vec.get(block-1).set(1, "");
 						stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 						////System.out.println("Der betroffene Block ist der erste und der nachfolgende Block = nicht(!!) leer");
 						////System.out.println(stmt);
 						break;
 					}
 				}
-			}	
+			}
 			// es gibt mehrere Blöcke aber der betroffene ist der letzte nur den vorherigen Block prüfen
 			if(block == bloecke){
 				////System.out.println(jxSucheTable.getValueAt(zeile,8)+" ist im ersten Block / insgesamt existieren "+vec.size()+" Bl�cke");
@@ -2253,7 +2269,7 @@ Vector mit Normal-Termin
 					int dauer2 = Integer.parseInt(vec.get(block-1).get(3));
 					int dauerNeu = dauer1+dauer2;
 					vec.get(block-2).set(0, "");
-					vec.get(block-2).set(1, "");					
+					vec.get(block-2).set(1, "");
 					vec.get(block-2).set(2, startzeit);
 					vec.get(block-2).set(3, Integer.toString(dauerNeu));
 					vec.get(block-2).set(4,endzeit);
@@ -2261,10 +2277,10 @@ Vector mit Normal-Termin
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block ist der letzte und der vorhergehende ist ebenfalls leer");
 					////System.out.println(stmt);
-					break;				
+					break;
 				}else{
 					vec.get(block-1).set(0, "");
-					vec.get(block-1).set(1, "");					
+					vec.get(block-1).set(1, "");
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block ist der letzte und der nachfolgende Block = nicht(!!) leer");
 					////System.out.println(stmt);
@@ -2287,12 +2303,12 @@ Vector mit Normal-Termin
 					int dauernb = Integer.parseInt(vec.get(block).get(3));
 					int dauerNeu = dauervb+dauerakt+dauernb;
 					vec.get(block-2).set(0, "");
-					vec.get(block-2).set(1, "");					
+					vec.get(block-2).set(1, "");
 					vec.get(block-2).set(2, startzeitvb);
 					vec.get(block-2).set(3, Integer.toString(dauerNeu));
 					vec.get(block-2).set(4,endzeitnb);
 					vec.remove(block);
-					vec.remove(block-1);					
+					vec.remove(block-1);
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block ist zwischendrinn der vorhergehende und der nachfolgende sind ebenfalls leer");
 					////System.out.println(stmt);
@@ -2306,7 +2322,7 @@ Vector mit Normal-Termin
 					int dauer2 = Integer.parseInt(vec.get(block-1).get(3));
 					int dauerNeu = dauer1+dauer2;
 					vec.get(block-2).set(0, "");
-					vec.get(block-2).set(1, "");					
+					vec.get(block-2).set(1, "");
 					vec.get(block-2).set(2, startzeit);
 					vec.get(block-2).set(3, Integer.toString(dauerNeu));
 					vec.get(block-2).set(4,endzeit);
@@ -2314,7 +2330,7 @@ Vector mit Normal-Termin
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block zwischendrinn und der vorhergende ist ebenfalls leer");
 					////System.out.println(stmt);
-					break;				
+					break;
 				}
 				if(( yname.trim().equals("")) && (ynummer.trim().equals("")) ){
 					//der Vorblock ist nicht leer aber der Nachblock!!
@@ -2324,7 +2340,7 @@ Vector mit Normal-Termin
 					int dauer2 = Integer.parseInt(vec.get(block).get(3));
 					int dauerNeu = dauer1+dauer2;
 					vec.get(block-1).set(0, "");
-					vec.get(block-1).set(1, "");					
+					vec.get(block-1).set(1, "");
 					vec.get(block-1).set(2, startzeit);
 					vec.get(block-1).set(3, Integer.toString(dauerNeu));
 					vec.get(block-1).set(4,endzeit);
@@ -2332,20 +2348,20 @@ Vector mit Normal-Termin
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block zwischendrinn und der nachfolgende ist ebenfalls leer");
 					////System.out.println(stmt);
-					break;				
+					break;
 				}else{
 					vec.get(block-1).set(0, "");
-					vec.get(block-1).set(1, "");					
+					vec.get(block-1).set(1, "");
 					stmt = macheStat(vec,Integer.parseInt((String)jxSucheTable.getValueAt(zeile,17)),name,nummer);
 					////System.out.println("Der betroffene Block zwischendrinn und weder der vorherige noch der nachfolgende sind leer");
 					////System.out.println(stmt);
 					break;
 				}
 
-				
+
 			}
 			////System.out.println(jxSucheTable.getValueAt(zeile,8)+" ist im Block Nr. "+block+" / insgesamt existieren "+vec.size()+" Blöcke");
-			
+
 		}
 		if(stmt!=null){
 			try {
@@ -2360,7 +2376,7 @@ Vector mit Normal-Termin
 			//
 		}
 	}
-	/*****************************************/	
+	/*****************************************/
 	private String macheStat(Vector<Vector<String>> vec,int id,String name,String nummer){
 		String stmt = "";//String.valueOf();
 		int gross = vec.size(),i;
@@ -2378,17 +2394,16 @@ Vector mit Normal-Termin
 			//stmt = stmt +"N"+(i+1)+" = '"+((String)((Vector)vec.get(i)).get(1))+"'"+", ";
 			stmt = stmt +"TS"+(i+1)+" = '"+(vec.get(i).get(2))+"'"+", ";
 			stmt = stmt +"TD"+(i+1)+" = '"+(vec.get(i).get(3))+"'"+", ";
-			stmt = stmt +"TE"+(i+1)+" = '"+(vec.get(i).get(4))+"'"+", ";			
+			stmt = stmt +"TE"+(i+1)+" = '"+(vec.get(i).get(4))+"'"+", ";
 		}
 		stmt = stmt+ "BELEGT ='"+Integer.toString(vec.size())+"' where id='"+Integer.toString(id)+"'";
 		////System.out.println(stmt);
-		
+
 		return stmt;
 	}
 	/*****************************************/
 	private void schreibeZeile(String sstmt) throws SQLException{
 		Statement stmt = null;
-		ResultSet rs = null;
 		boolean res;
 		//Wenn die Zeilen tats�chlich geschrieben werden sollen ab hier entfernen
 		/*
@@ -2401,16 +2416,9 @@ Vector mit Normal-Termin
 		try {
 				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
-			
+
 			res = stmt.execute(sstmt);
 		}finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -2420,8 +2428,8 @@ Vector mit Normal-Termin
 			}
 
 		}
-	}	
-	/*****************************************/	
+	}
+	/*****************************************/
 	private Vector<Vector<String>> sucheZeile(int zeile){
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -2430,8 +2438,8 @@ Vector mit Normal-Termin
 		try {
 				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
-			suchstmt = "select * from flexkc where id = '"+jxSucheTable.getValueAt(zeile,17)+"'";						
-		
+			suchstmt = "select * from flexkc where id = '"+jxSucheTable.getValueAt(zeile,17)+"'";
+
 
 			rs = stmt.executeQuery(suchstmt);
 			Vector<String> vx = new Vector<String>();
@@ -2439,15 +2447,15 @@ Vector mit Normal-Termin
 				int bloecke = Integer.parseInt(rs.getString(301));
 				////System.out.println("Bl�cke = "+bloecke);
 				int ii;
-				
+
 				for(ii=0;ii<bloecke;ii++){
 					vx.add(rs.getString("T"+(ii+1)));
-					vx.add(rs.getString("N"+(ii+1)));					
-					vx.add(rs.getString("TS"+(ii+1)));					
-					vx.add(rs.getString("TD"+(ii+1)));					
+					vx.add(rs.getString("N"+(ii+1)));
+					vx.add(rs.getString("TS"+(ii+1)));
+					vx.add(rs.getString("TD"+(ii+1)));
 					vx.add(rs.getString("TE"+(ii+1)));
 					vec.add( (Vector<String>)vx.clone());
-					vx.clear();					
+					vx.clear();
 				}
 				/*
 				vx.clear();
@@ -2457,7 +2465,7 @@ Vector mit Normal-Termin
 			}
 			vx = null;
 		}catch(Exception ex){
-			
+
 		}finally {
 			if (rs != null) {
 				try {
@@ -2465,7 +2473,7 @@ Vector mit Normal-Termin
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -2475,22 +2483,23 @@ Vector mit Normal-Termin
 			}
 
 		}
-		
+
 		return vec;//.clone();
 	}
 	/********Ende SwingWorker*/
-	
+
 
 /**************Ende der Hauptklasse*******************************/
 
-	
-	public void propertyChange(PropertyChangeEvent arg0) {
+
+	@Override
+    public void propertyChange(PropertyChangeEvent arg0) {
 	}
 
 @Override
 public void keyPressed(KeyEvent arg0) {
-	////System.out.println("********Button in KeyPressed*********");	
-	////System.out.println(((JComponent)arg0.getSource()).getName());	
+	////System.out.println("********Button in KeyPressed*********");
+	////System.out.println(((JComponent)arg0.getSource()).getName());
 	if(arg0.getKeyCode()== 10 || arg0.getKeyCode()==0){
 		arg0.consume();
 	}
@@ -2542,8 +2551,8 @@ public void keyTyped(KeyEvent arg0) {
 		arg0.consume();
 	}else{
 		return;
-	}	
-}	
+	}
+}
 
 /***********************Bereits jetzt f�r*************************/
 /***********************ein Update vorgesehen*********************/
@@ -2574,13 +2583,13 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	int selektivArt = -1;
 	SuchenSeite eltern;
 	Vector<Object> machevec = new Vector<Object>();
-	
+
 
 	public void setzeStatement(SuchenSeite xeltern){
 		eltern = xeltern;
-		
+
 		img = SystemConfig.hmSysIcons.get("zuzahlnichtok");
-		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");		
+		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");
 		img.setDescription("gesperrt");
 		img2.setDescription("offen");
 		setZeit();
@@ -2589,16 +2598,16 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		if(SuchenSeite.selektiv){
 			selektivArt = macheSelektiv();
 		}
-		
+
 	}
 
 
 	@Override
 	protected Void doInBackground() throws Exception {
 
-	
+
 		aktDatum = getAktDatum();
-		
+
 		try {
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
@@ -2612,9 +2621,9 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			int suchArt = 0;
 			int dbzeil = -1;
 			String szeil = "";
-			
+
 			int gruppereal,gruppewant;
-			
+
 			for(int j=0;j<1;j++){
 				if(suchkrit1.equals("")&& suchkrit2.equals("")){
 					// es wird nach leeren Terminen gesucht
@@ -2627,19 +2636,19 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 					break;
 				}
 				if( (suchkrit1.equals(""))&& (!suchkrit2.equals(""))){
-					// es wird nach einer Nummer gesucht					
+					// es wird nach einer Nummer gesucht
 					suchArt = 3;
 					break;
 				}
 				if( (!suchkrit1.equals(""))&& (!suchkrit2.equals(""))){
-					// es wird nach einem Namen und nach einer Nummer gesucht					
+					// es wird nach einem Namen und nach einer Nummer gesucht
 					suchArt = 4;
 					break;
 				}
 
 			}
 			String[] abtei = {"KG","MA","ER","LO","SP"};
-			
+
 			zeit1 = System.currentTimeMillis();
 			tabelleAusschalten();
 			setFortschrittRang(0,DatFunk.TageDifferenz( eltern.getStartDatum(), eltern.getStopDatum() ) );
@@ -2656,21 +2665,21 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 				setzeDatum(aktDatum );
 				if( tagDurchsuchen(aktDatum) ){
 
-					
+
 					String test = "";
 					if(getGewaehlt() <= 20){
-						test = macheStatement(sqlAkt);	
+						test = macheStatement(sqlAkt);
 						////System.out.println(test);
 					}else{
-						test = "select * from flexkc where datum = '"+sqlAkt+"' LIMIT "+ParameterLaden.maxKalZeile;						
+						test = "select * from flexkc where datum = '"+sqlAkt+"' LIMIT "+ParameterLaden.maxKalZeile;
 					}
 					rs = stmt.executeQuery(test);
-					
+
 
 					while(rs.next()){
-						
-						
-						/*in Spalte 301 steht die Anzahl der belegten Bl�cke*/ 
+
+
+						/*in Spalte 301 steht die Anzahl der belegten Bl�cke*/
 						int belegt = rs.getInt(301);
 
 						String name = "";
@@ -2685,7 +2694,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 						if( skollege.substring(0,1) == "0" ){
 							ikollege = Integer.parseInt(skollege.substring(1,2));
 						}else{
-							ikollege = Integer.parseInt(skollege);								
+							ikollege = Integer.parseInt(skollege);
 						}
 
 						/***************Hier wird getestet ob die Kalender zeile belegt ist*****/
@@ -2693,7 +2702,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 						szeil = ParameterLaden.getKollegenUeberDBZeile(ikollege);
 						////System.out.println("Kollege �ber DBZeile = "+szeil);
 						if(!szeil.equals("")){
-						
+
 						String sabteilung = eltern.kollegenAbteilung[ikollege].trim();//getKollegenAbteilung(ikollege).trim();
 						if(! sabteilung.equals("") ){
 							if( (abtlg.contains(sabteilung)) ){
@@ -2702,8 +2711,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 								gruppe = false;
 							}else{
 								////System.out.println("Kollege "+szeil+" hat keine Zeitzuordnung, nehme Gruppendefiniton");
-								
-								
+
+
 								if( (abteilnr = SystemConfig.oGruppen.gruppenNamen.indexOf(sabteilung)) >= 0){
 									defdauer = Long.valueOf(SystemConfig.oGruppen.gruppenGueltig.get(abteilnr)[2]).intValue();
 									//defdauer = (int) new Long(SystemConfig.oGruppen.gruppenGueltig.get(abteilnr)[2]).intValue();
@@ -2715,27 +2724,27 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 									defdauer = 15;
 								}
 								gruppe = true;
-							
-							}					
+
+							}
 						}else{
 							defdauer = 15;
 							gruppe = false;
 						}
-							
+
 						int ii;
 						for(ii = 1;ii <= belegt;ii++){
-							
-							name =  ( rs.getString("T"+(ii))== null ? "" : rs.getString("T"+(ii)).trim() ); 
-							nummer =  ( rs.getString("N"+(ii))== null ? "" : rs.getString("N"+(ii)).trim() );							
 
-							
+							name =  ( rs.getString("T"+(ii))== null ? "" : rs.getString("T"+(ii)).trim() );
+							nummer =  ( rs.getString("N"+(ii))== null ? "" : rs.getString("N"+(ii)).trim() );
+
+
 							if(! (eltern.getKollegenSuchen(ikollege)) ){
 								////System.out.println("Keine Suche erforderlich f�r Kollege "+ikollege);
 								// falls hier nicht gesucht werden soll = anzahl > 20
 								break;
 							}
-							
-							
+
+
 							int j;
 							yvec = null;
 							int kaldauer = Integer.parseInt(rs.getString("TD"+(ii)));
@@ -2766,7 +2775,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 											}
 										}
 										break;
-									}									
+									}
 									if(schicht){
 										if(freiTermin(name,nummer)){
 											if(schichtTest(rs,ii,defdauer)){
@@ -2777,7 +2786,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 										break;
 									}
 									if(selektiv){
-										if(freiTermin(name,nummer)){										
+										if(freiTermin(name,nummer)){
 											if(selektivTest(rs,ii,defdauer)){
 												yvec = sucheNachSelect(rs,name,nummer,skollege,ikollege,ii,defdauer);
 												break;
@@ -2786,7 +2795,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 										break;
 									}
 								}
-	
+
 								/***********************************/
 								if( (suchArt==2)){
 									if(name.contains(suchkrit1) && !nummer.contains("@FREI") && (!gruppe) ){
@@ -2809,7 +2818,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 												gruppereal = Integer.parseInt( (String)yvec.get(5));
 												gruppewant = Integer.parseInt( (String)yvec.get(7));
 												if(gruppereal < gruppewant){
-													yvec.set(7,Integer.toString(gruppereal));				
+													yvec.set(7,Integer.toString(gruppereal));
 												}
 										}
 									}
@@ -2833,7 +2842,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 												gruppereal = Integer.parseInt( (String)yvec.get(5));
 												gruppewant = Integer.parseInt( (String)yvec.get(7));
 												if(gruppereal < gruppewant){
-													yvec.set(7,Integer.toString(gruppereal));				
+													yvec.set(7,Integer.toString(gruppereal));
 												}
 
 										}
@@ -2866,17 +2875,17 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 												gruppereal = Integer.parseInt( (String)yvec.get(5));
 												gruppewant = Integer.parseInt( (String)yvec.get(7));
 												if(gruppereal < gruppewant){
-													yvec.set(7,Integer.toString(gruppereal));				
+													yvec.set(7,Integer.toString(gruppereal));
 												}
 										}
 									}
 									break;
 								}
-								
+
 								/***********************************/
 								break;
 							}
-						
+
 							if(yvec != null){
 								++treffer;
 								yvec.set(1,img2);
@@ -2885,7 +2894,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 								aktuell = dtblm.getRowCount();
 								SuchenSeite.verarbeitetLbl.setText(Integer.toString(aktuell));
 								sperre = (String)dtblm.getValueAt(aktuell-1,13)+
-								dtblm.getValueAt(aktuell-1,14) ;  
+								dtblm.getValueAt(aktuell-1,14) ;
 								if(!sperrDatum.contains(sperre+SystemConfig.dieseMaschine+zeit)){
 									cmd = "sperre='"+sperre+"'";
 									ret = SqlInfo.zaehleSaetze("flexlock", cmd);
@@ -2901,24 +2910,24 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 								//sucheDaten.add(yvec);
 								trefferSetzen();
 							}
-							
+
 						} // ende der for f�r die einzelnen Felder
 						/*****************/
 						} //neu endif von: keine Zeile im Kalender
-					} // Klammer der While 
-					
+					} // Klammer der While
+
 				aktDatum = DatFunk.sDatPlusTage(aktDatum, 1);
 				setFortschrittSetzen(++ftage);
 				sqlAlt = String.valueOf(sqlAkt);
 				sqlAkt = DatFunk.sDatInSQL(aktDatum );
 				}else{
 					aktDatum = DatFunk.sDatPlusTage(aktDatum, 1);
-					sqlAlt = sqlAkt;					
+					sqlAlt = sqlAkt;
 					sqlAkt = DatFunk.sDatInSQL(aktDatum );					////System.out.println(SuchenSeite.getAktDatum()+"-"+SuchenSeite.tagDurchsuchen(SuchenSeite.getAktDatum()) );
 					setFortschrittSetzen(++ftage);
 				}
 				/*********Ende der oberen While*********/
-			}		
+			}
 		}catch(SQLException ex) {
 			//System.out.println("von stmt -SQLState: " + ex.getSQLState());
 		}catch(Exception ex2){
@@ -2936,7 +2945,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -2953,7 +2962,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		}
 		long dauer = (System.currentTimeMillis()-zeit1);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				setKnopfGedoense(new int[]  {0,0,0,0,0,0,0,1,1,1});
 				tabelleEinschalten();
 				listenerEinschalten();
@@ -2965,7 +2975,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	return null;
 	}
 	private Vector getColVec(){
-	Vector cols = new Vector();	
+	Vector cols = new Vector();
 	String[] column = 	{"x?","G!","Datum","von","bis","Min.","Beginn","Dauer.","Namen","Rez.Nr.","Behandler",
 			//		  12          13      14      15        16          17       18     19
 					"Druckzeit","Sort","Spalte","sDatum","sOrigDatum","iBlock","id","maxblock",""};
@@ -2974,7 +2984,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	}
 		return cols;//(Vector)cols.clone();
 	}
-	
+
 /********************************************/
 	private Vector gruppenTest(ResultSet rs, int gruppe,int feld,int defdauer,boolean suchleer) throws SQLException{
 
@@ -2983,14 +2993,14 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 
 		int taginwoche = DatFunk.TagDerWoche(sDatum);
 		int altneu = 1;
-		
+
 		if( DatFunk.DatumsWert(sDatum) >=
 			SystemConfig.oGruppen.gruppenGueltig.get(gruppe)[0] ){
 			altneu = 0;
 		}
-		int xdauer = Integer.parseInt(rs.getString("TD"+(feld)).trim());		
+		int xdauer = Integer.parseInt(rs.getString("TD"+(feld)).trim());
 		String xzeit = rs.getString("TS"+(feld)).trim().substring(0,5);
-		
+
 		int gross = ((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).size();
 		/*
 		System.out.println("\n***************************************\n");
@@ -3001,8 +3011,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		*/
 		for(int i = 0;i<gross;i++){
 			long lgrenzeklein =(Long) ((Vector)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).get(i)).get(0);
-			long lgrenzegross =(Long) ((Vector)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).get(i)).get(1); 	
-			
+			long lgrenzegross =(Long) ((Vector)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).get(i)).get(1);
+
 			if(longPasstZwischen(lgrenzeklein,lgrenzegross,xzeit,(suchleer ? defdauer : xdauer))){
 				vecret = ((Vector)((Vector)((Vector)((Vector)SystemConfig.oGruppen.gruppeAlle.get(gruppe)).get(altneu)).get(taginwoche-1)).get(i));
 				/*
@@ -3011,8 +3021,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 				*/
 				return vecret;
 			}
-			
-			
+
+
 		}
 
 
@@ -3029,7 +3039,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		wogerade = DatFunk.GeradeWoche(DatFunk.sDatInDeutsch(rs.getString("DATUM")));
 		kalanfang = SystemConfig.KalenderUmfang[0];
 		kalende = SystemConfig.KalenderUmfang[1];
-		
+
 		// Bearbeitet nur gerade Kalenderwochen
 		uhr1 = schichtUhr[0];
 		uhr2 = schichtUhr[1];
@@ -3037,9 +3047,9 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			if(schichtVor[0]){
 				selektparm1 = (Schnittmenge(kalanfang,uhr1,pbeginn,pende));
 				if(selektparm1[0] >=defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
-					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5)); 
+					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					return true;
 				}else{
@@ -3048,23 +3058,23 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			}else{
 				selektparm1 = (Schnittmenge(uhr1,kalende,pbeginn,pende));
 				if(selektparm1[0] >=defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
-					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5)); 
+					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					return true;
 				}else{
 					return false;
 				}
-			}		
+			}
 		}
 		if((!wogerade) && (schichtWal[1])){
 			if(schichtVor[1]){
 				selektparm1 = (Schnittmenge(kalanfang,uhr2,pbeginn,pende));
 				if(selektparm1[0] >=defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
-					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5)); 
+					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					return true;
 				}else{
@@ -3073,9 +3083,9 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			}else{
 				selektparm1 = (Schnittmenge(uhr2,kalende,pbeginn,pende));
 				if(selektparm1[0] >=defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
-					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5)); 
+					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					return true;
 				}else{
@@ -3095,11 +3105,11 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		wende1 = selectUhr[1];
 		wbeginn2 = selectUhr[2];
 		wende2 = selectUhr[3];
- 		
+
 		kalanfang = SystemConfig.KalenderUmfang[0];
 		kalende = SystemConfig.KalenderUmfang[1];
-		
-		
+
+
 		int[] selektparm1=null;
 		int[] selektparm2=null;
 		for(int v = 0;v < 1; v++){
@@ -3107,9 +3117,9 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			if(macheSelektiv()==0){
 				selektparm1 = (Schnittmenge(wbeginn1,kalende,pbeginn,pende));
 				if(selektparm1[0] >=defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
-					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5)); 
+					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					return true;
 				}else{
@@ -3118,9 +3128,9 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			}
 			/*******************************/
 			if(macheSelektiv()==1){
-				selektparm1 = Schnittmenge(kalanfang,wende1,pbeginn,pende); 
+				selektparm1 = Schnittmenge(kalanfang,wende1,pbeginn,pende);
 				if(selektparm1[0 ]>=defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
@@ -3131,9 +3141,9 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			}
 			/*******************************/
 			if(macheSelektiv()==2){
-				selektparm1 = Schnittmenge(wbeginn1,wende1,pbeginn,pende); 
+				selektparm1 = Schnittmenge(wbeginn1,wende1,pbeginn,pende);
 				if(( selektparm1[0] >=defdauer)){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
@@ -3144,63 +3154,63 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			}
 			/**************ab hier mit ODER - Bedingung***************/
 			if(macheSelektiv()==3){
-				selektparm1 = Schnittmenge(wbeginn1,wende1,pbeginn,pende); 
+				selektparm1 = Schnittmenge(wbeginn1,wende1,pbeginn,pende);
 				selektparm2 = Schnittmenge(wbeginn2,kalende,pbeginn,pende);
 				if( (selektparm1[0]>=defdauer) || (selektparm2[0]>=defdauer)	){
 					if(selektparm1[0] >= defdauer){
 					//if(selektparm1[3] == -1){//System.out.println("Anfang = -1 - "+pbeginn);}
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					}else{
-					String drzeit = (selektparm2[3] > 0 ? 
+					String drzeit = (selektparm2[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm2[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm2[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
-					}	
+					}
 					return true;
 				}else{
 					return false;
 				}
 			}
-			/*******************************/			
+			/*******************************/
 			if(macheSelektiv()==4){
 				selektparm1 = Schnittmenge(wbeginn1,wende1,pbeginn,pende);
 				selektparm2 = Schnittmenge(kalanfang,wende2,pbeginn,pende);
 				if( (selektparm1[0]>=defdauer) || (selektparm2[0]>=defdauer)	){
 					if(selektparm1[0] >= defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					}else{
-					String drzeit = (selektparm2[3] > 0 ? 
+					String drzeit = (selektparm2[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm2[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm2[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
-					}	
+					}
 					return true;
 				}else{
 					return false;
 				}
 			}
-			/*******************************/			
+			/*******************************/
 			if(macheSelektiv()==5){
 				selektparm1 = Schnittmenge(wbeginn1,wende1,pbeginn,pende);
 				selektparm2 = Schnittmenge(wbeginn2,wende2,pbeginn,pende);
 				if( (selektparm1[0]>=defdauer) || (selektparm2[0]>=defdauer)	){
 					if(selektparm1[0] >= defdauer){
-					String drzeit = (selektparm1[3] > 0 ? 
+					String drzeit = (selektparm1[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm1[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm1[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
 					}else{
-					String drzeit = (selektparm2[3] > 0 ? 
+					String drzeit = (selektparm2[3] > 0 ?
 					 ZeitFunk.MinutenZuZeit(selektparm2[1]).substring(0,5) :
 					 ZeitFunk.MinutenZuZeit(selektparm2[2]-defdauer).substring(0,5));
 					selektbeginn = drzeit;
-					}	
+					}
 					return true;
 				}else{
 					return false;
@@ -3219,7 +3229,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	boolean longPasstZwischen(long lgrenzeklein,long lgrenzegross,String szeit,int dauer){
 		long z1 = lgrenzeklein;
 		long z2 = lgrenzegross;
-		
+
 		long z3 = ZeitFunk.MinutenSeitMitternacht(szeit)+Long.parseLong(Integer.toString(dauer));
 		return( ((z3 >= z1) &&  (z3<=z2)) ? true : false);
 	}
@@ -3250,7 +3260,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		long z4 = ZeitFunk.MinutenSeitMitternacht(sgross2);
 		long schnittbeginn, schnittende;
 		int ananfang = 1;
-		// Wenn Wunschbeginn fr�her oder gleich als gefundener Termin-Beginn  
+		// Wenn Wunschbeginn fr�her oder gleich als gefundener Termin-Beginn
 		if ( (z1 <= z3) && (z2 >= z4) ){
 			schnittbeginn = z3;
 			schnittende = z4;
@@ -3260,7 +3270,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 
 		if(z1 <= z3){
 			schnittbeginn = z3;
-			ananfang = 1; 
+			ananfang = 1;
 			//return new Long(z2-z3).intValue();
 		}else if(z1 > z3){
 			schnittbeginn = z1;
@@ -3279,11 +3289,11 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			ananfang = -1;
 			schnittende = -1;
 		}
-		
+
 		return new int[] {Long.valueOf(schnittende-schnittbeginn).intValue(),Long.valueOf(schnittbeginn).intValue(),Long.valueOf(schnittende).intValue(),ananfang};
 	}
-	
-	
+
+
 	private int macheSelektiv(){
 		boolean c0 = selectWal[0];
 		boolean c1 = selectWal[1];
@@ -3312,11 +3322,12 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	}
 	private boolean keinTest(){
 		return ((!schicht) &&(!selektiv) ? true : false);
-	}	
+	}
 	public void trefferSetzen(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
-				setzeTreffer(treffer);						       	  	
+			@Override
+            public  void run(){
+				setzeTreffer(treffer);
 			}
 		});
 	}
@@ -3327,9 +3338,9 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		String ssuchen = "";
 		String stmt = "";
 		lang = getKollegenEinstellen().length;
-	
+
 			for (i=0;i<lang;i++){
-				
+
 				if(((Boolean)getKollegenEinstellen()[i][1]) ){
 					////System.out.println("Inhalt von [i]="+i+" / Inhalt von [5=]"+SuchenSeite.getKollegenEinstellen()[i][5] );
 					int dbZeile = (Integer) getKollegenEinstellen()[i][0];
@@ -3350,22 +3361,22 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 			}
 		return stmt;
 	}
-			
-	
-	
+
+
+
 /************ alternative ***********/
 	private boolean freiTermin(String name,String nummer){
 		if(name.equals("") && nummer.equals("") ){
 			return true;
-		}	
+		}
 		return false;
 	}
-	
+
 	private Vector<Object> sucheNachFreien(ResultSet rs,String name,String nummer,String skollege,int ikollege,int ii,int defdauer) throws SQLException{
 		Vector<Object> vec = null;
 		if("".equals(name) && "".equals(nummer) ){
 			vec = macheVector(rs,name,nummer,skollege,ikollege,ii,defdauer);
-		}	
+		}
 		return vec;
 	}
 	private Vector<Object> sucheNachGruppenFreien(ResultSet rs,String name,String nummer,String skollege,int ikollege,int ii,int defdauer,int gruppennr,Vector<?> grupdat,boolean suchleer) throws SQLException{
@@ -3379,7 +3390,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		Vector<Object> vec = null;
 		if(name.contains(suchkrit1)){
 			vec = macheVector(rs,name,nummer,skollege,ikollege,ii,-1);
-		}	
+		}
 		return vec;
 	}
 	private Vector<Object> sucheNachSelect(ResultSet rs,String name,String nummer,String skollege,int ikollege,int ii,int defdauer) throws SQLException{
@@ -3393,7 +3404,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		vec = macheKGGVector(rs,name,nummer,skollege,ikollege,ii,defdauer);
 		return vec;
 	}
-	
+
 	private Vector<Object> macheVector(ResultSet rs,String name,String nummer,String skollege,int ikollege,int ii,int defdauer) throws SQLException{
 		//Vector vec = new Vector();
 		machevec.clear();
@@ -3403,8 +3414,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		String sdatum;
 
 		uhrzeit = rs.getString("TS"+(ii));
-		
-		sorigdatum = rs.getString(305); 
+
+		sorigdatum = rs.getString(305);
 		sdatum = DatFunk.sDatInDeutsch(sorigdatum);
 		skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 		//{"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
@@ -3413,15 +3424,15 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		machevec.add(DatFunk.WochenTag(sdatum).substring(0,2)+"-"+sdatum);
 		machevec.add(uhrzeit.substring(0,5));
 		machevec.add(rs.getString("TE"+(ii)).trim().substring(0,5));
-		machevec.add(rs.getString("TD"+(ii)).trim());		
+		machevec.add(rs.getString("TD"+(ii)).trim());
 		machevec.add(rs.getString("TS"+(ii)).trim().substring(0,5));
 		machevec.add((defdauer == -1 ? rs.getString("TD"+(ii)).trim() : Integer.toString(defdauer) ) );
 		machevec.add(name);
-		machevec.add(nummer);								
-		machevec.add(skollege);								
-		machevec.add("");								
+		machevec.add(nummer);
+		machevec.add(skollege);
+		machevec.add("");
 		machevec.add(""); //fr�her sorter
-		machevec.add(rs.getString("BEHANDLER"));		
+		machevec.add(rs.getString("BEHANDLER"));
 		machevec.add(sdatum);
 		machevec.add(sorigdatum);
 		machevec.add(ii);
@@ -3441,8 +3452,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		String sdatum;
 
 		uhrzeit = rs.getString("TS"+(ii));
-		
-		sorigdatum = rs.getString(305); 
+
+		sorigdatum = rs.getString(305);
 		sdatum = DatFunk.sDatInDeutsch(sorigdatum);
 		skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 		//{"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
@@ -3451,15 +3462,15 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		machevec.add(DatFunk.WochenTag(sdatum).substring(0,2)+"-"+sdatum);
 		machevec.add(uhrzeit.substring(0,5));
 		machevec.add(rs.getString("TE"+(ii)).trim().substring(0,5));
-		machevec.add(rs.getString("TD"+(ii)).trim());		
+		machevec.add(rs.getString("TD"+(ii)).trim());
 		machevec.add(rs.getString("TS"+(ii)).trim().substring(0,5));
 		machevec.add((defdauer == -1 ? rs.getString("TD"+(ii)).trim() : Integer.toString(defdauer) ) );
 		machevec.add(name);
-		machevec.add(nummer);								
-		machevec.add(skollege);								
-		machevec.add(rs.getString("TS"+(ii)).trim().substring(0,2)+":00");								
+		machevec.add(nummer);
+		machevec.add(skollege);
+		machevec.add(rs.getString("TS"+(ii)).trim().substring(0,2)+":00");
 		machevec.add(skollege); //früher sorter
-		machevec.add(rs.getString("BEHANDLER"));		
+		machevec.add(rs.getString("BEHANDLER"));
 		machevec.add(sdatum);
 		machevec.add(sorigdatum);
 		machevec.add(ii);
@@ -3471,7 +3482,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 	}
 
 	private Vector<Object> macheGruppenVector(ResultSet rs,String name,String nummer,String skollege,int ikollege,int ii,int defdauer,Vector vecgruppe,boolean suchleer) throws SQLException{
-		
+
 		machevec.clear();
 		machevec.trimToSize();
 		//Vector vec = new Vector();
@@ -3480,8 +3491,8 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		String sdatum;
 
 		uhrzeit = rs.getString("TS"+(ii));
-		
-		sorigdatum = rs.getString(305); 
+
+		sorigdatum = rs.getString(305);
 		sdatum = DatFunk.sDatInDeutsch(sorigdatum);
 		skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 		//{"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
@@ -3490,7 +3501,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		machevec.add(DatFunk.WochenTag(sdatum).substring(0,2)+"-"+sdatum);
 		machevec.add(uhrzeit.substring(0,5));
 		machevec.add(rs.getString("TE"+(ii)).trim().substring(0,5));
-		machevec.add(rs.getString("TD"+(ii)).trim());		
+		machevec.add(rs.getString("TD"+(ii)).trim());
 		machevec.add(rs.getString("TS"+(ii)).trim().substring(0,5));
 		machevec.add(Integer.toString(defdauer));
 		boolean xgruppe = false;
@@ -3501,27 +3512,27 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 				if(name.length() >= 5){
 					snam = name.substring(0,5)+"\\\\"+((String)vecgruppe.get(3)).split("@")[0]+"-"+vecgruppe.get(4)+"Min.";
 				}else{
-					snam = ((String)vecgruppe.get(3)).split("@")[0]+"-"+vecgruppe.get(4)+"Min.";					
-				}				
+					snam = ((String)vecgruppe.get(3)).split("@")[0]+"-"+vecgruppe.get(4)+"Min.";
+				}
 				xgruppe = true;
 			}else{
 				if(name.length() >= 5){
 					snam = name.substring(0,5)+"\\\\"+vecgruppe.get(3)+"-"+vecgruppe.get(4)+"Min.";
 				}else{
-					snam = vecgruppe.get(3)+"-"+vecgruppe.get(4)+"Min.";					
+					snam = vecgruppe.get(3)+"-"+vecgruppe.get(4)+"Min.";
 				}
-				
+
 			}
 			machevec.add(snam);
 		//}else{
-			//vec.add(name);			
+			//vec.add(name);
 		//}
-		machevec.add(nummer);								
+		machevec.add(nummer);
 		machevec.add(skollege);
 		String drzeit = (String)vecgruppe.get(2);
-		machevec.add((drzeit.trim().equals("00:00") ? "--:--" : vecgruppe.get(2)));								
+		machevec.add((drzeit.trim().equals("00:00") ? "--:--" : vecgruppe.get(2)));
 		machevec.add((xgruppe ? skollege : ""));  //früher sorter
-		machevec.add(rs.getString("BEHANDLER"));		
+		machevec.add(rs.getString("BEHANDLER"));
 		machevec.add(sdatum);
 		machevec.add(sorigdatum);
 		machevec.add(ii);
@@ -3532,7 +3543,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		return (Vector<Object>)machevec.clone();
 	}
 
-	
+
 
 /**********************************************************************/
 /**********************************************************************/
@@ -3550,19 +3561,17 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 	}
 	*/
 	try{
-		
+
 
 	String sperre;
 	sperre = (String)vecx.get(13)+
-						(String)vecx.get(14) ; 
+						(String)vecx.get(14) ;
 
 		//if(! sperrDatum.contains(sperre+SystemConfig.dieseMaschine)){
-			stmtx = null;
-			rsx = null;
 			try {
 				stmtx = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
-				
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -3599,29 +3608,27 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-					
-		//}
-		
 
-		
+		//}
+
+
+
 		if (rsx != null) {
 			try {
 				rsx.close();
 			} catch (SQLException sqlEx) { // ignore }
 				rsx = null;
 			}
-		}	
-		if (stmtx != null) {
-			try {
-				stmtx.close();
-			} catch (SQLException sqlEx) { // ignore }
-				stmtx = null;
-			}
+		}
+		try {
+			stmtx.close();
+		} catch (SQLException sqlEx) { // ignore }
+			stmtx = null;
 		}
 	}catch(Exception ex){
 		ex.printStackTrace();
 	}
-				
+
 		return 0;
 	}
 
@@ -3635,25 +3642,27 @@ private synchronized void malen(ImageIcon bild,int wo){
 /************************Ende des WorkerThreads************************/
 /**********************************************************************/
 /**********************************************************************/
-/**********************************************************************/	
+/**********************************************************************/
 
 /**********************************************************************/
 
-    
+
 class MyDefaultTableModel extends DefaultTableModel{
 	   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class getColumnClass(int columnIndex) {
+	@Override
+    public Class getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return Boolean.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
            //return (columnIndex == 0) ? Boolean.class : String.class;
        }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	        if (col == 0){
@@ -3672,7 +3681,7 @@ class MyDefaultTableModel extends DefaultTableModel{
 	          return false;
 	        }
 	      }
-	   
+
 }
 /*******************************************************************/
 /*******************************************************************/
@@ -3690,18 +3699,19 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 
 	public void init(){
 		img = SystemConfig.hmSysIcons.get("zuzahlnichtok");
-		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");		
+		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");
 		img.setDescription("gesperrt");
 		img2.setDescription("offen");
 		setZeit();
 		zeit = getZeit();
-		sperrDatum.clear();		
+		sperrDatum.clear();
 	}
 	public void setEnde(){
 		fertig = true;
 	}
-	
-	protected Void doInBackground() throws Exception {
+
+	@Override
+    protected Void doInBackground() throws Exception {
 		int anzahl;
 		int verarbeitet;
 		sperrDatum.clear();
@@ -3709,7 +3719,7 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 		String sperre;
 		try{
 		while(true){
-			
+
 			anzahl = sucheDaten.size();
 			if( (SuchenSeite.mussUnterbrechen) && (anzahl==0) && (getTreffer()==anzahl) ){
 				break;
@@ -3721,12 +3731,12 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 
 			if(anzahl > 0){
 				if(aktuell != (anzahl-1)){
-					 	
+
 						aktuell++;
 						SuchenSeite.verarbeitetLbl.setText(Integer.toString(aktuell+1));
 						nvec = sucheDaten.get(aktuell);//.clone();
 						sperre = (String)nvec.get(13)+
-											(String)nvec.get(14) ; 
+											(String)nvec.get(14) ;
 
 						if(sperrDatum.contains(sperre+SystemConfig.dieseMaschine+zeit)){
 							nvec.set(1, img2);
@@ -3740,7 +3750,8 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 						}
 						dtblm.addRow(nvec);
 						new Thread(){
-							public void run(){
+							@Override
+                            public void run(){
 								jxSucheTable.validate();
 							}
 						}.start();
@@ -3750,19 +3761,19 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 						}
 				}
 			}
-			if( (SuchenSeite.mussUnterbrechen) 
-					&& (anzahl==(aktuell+1)) 
-					&& (aktuell==(getTreffer()-1)) 
+			if( (SuchenSeite.mussUnterbrechen)
+					&& (anzahl==(aktuell+1))
+					&& (aktuell==(getTreffer()-1))
 					&& (getTreffer()==anzahl) ){
 				break;
 
 			}
-			
+
 		}
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-			
+
 		setWorkerFertig(true);
 		nvec = null;
 		sperre = null;
@@ -3773,11 +3784,11 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 		Statement stmtx = null;
 		ResultSet rsx = null;
 		boolean neu = true;
-		
+
 		String sperre;
 		sperre = vecx.get(13)+
 							vecx.get(14) ;
-		
+
 		if(neu){
 			String cmd = "sperre='"+sperre+"'";
 			if(SqlInfo.zaehleSaetze("flexlock", cmd)==0){
@@ -3785,20 +3796,18 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 				"zeit='"+zeit+"'";
 				//SqlInfo.sqlAusfuehren(cmd);
 				new ExUndHop().setzeStatement(cmd);
-				return(0); 
+				return(0);
 			}else{
-				return(1);				
+				return(1);
 			}
 		}
 
 
 			//if(! sperrDatum.contains(sperre+SystemConfig.dieseMaschine)){
-				stmtx = null;
-				rsx = null;
 				try {
 					stmtx = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
-					
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -3833,11 +3842,11 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-						
-			//}
-			
 
-			
+			//}
+
+
+
 			if (rsx != null) {
 				try {
 					rsx.close();
@@ -3845,7 +3854,7 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 				} catch (SQLException sqlEx) { // ignore }
 					rsx = null;
 				}
-			}	
+			}
 			if (stmtx != null) {
 				try {
 					stmtx.close();
@@ -3854,11 +3863,11 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 					stmtx = null;
 				}
 			}
-					
+
 			return 0;
 		}
-	
-	
+
+
 }
 /**************************************************/
 class WorkerTabelle2 extends SwingWorker<Void,Void>{
@@ -3871,18 +3880,19 @@ class WorkerTabelle2 extends SwingWorker<Void,Void>{
 
 	public void init(){
 		img = SystemConfig.hmSysIcons.get("zuzahlnichtok");
-		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");		
+		img2 = SystemConfig.hmSysIcons.get("zuzahlfrei");
 		img.setDescription("gesperrt");
 		img2.setDescription("offen");
 		setZeit();
 		zeit = getZeit();
-		sperrDatum.clear();		
+		sperrDatum.clear();
 	}
 	public void setEnde(){
 		fertig = true;
 	}
-	
-	protected Void doInBackground() throws Exception {
+
+	@Override
+    protected Void doInBackground() throws Exception {
 		int anzahl;
 		int verarbeitet;
 		sperrDatum.clear();
@@ -3900,11 +3910,11 @@ class WorkerTabelle2 extends SwingWorker<Void,Void>{
 
 			if(anzahl > 0){
 				if(aktuell != (anzahl-1)){
-					 	
+
 						aktuell++;
 						SuchenSeite.verarbeitetLbl.setText(Integer.toString(aktuell+1));
 						sperre = (String)dtblm.getValueAt(aktuell,13)+
-						dtblm.getValueAt(aktuell,14) ; 
+						dtblm.getValueAt(aktuell,14) ;
 						if(sperrDatum.contains(sperre+SystemConfig.dieseMaschine+zeit)){
 							//dtblm.setValueAt(img2,aktuell,1) ;
 						}else{
@@ -3913,9 +3923,9 @@ class WorkerTabelle2 extends SwingWorker<Void,Void>{
 							if(ret==0){
 								sperrDatum.add(sperre+SystemConfig.dieseMaschine+zeit);
 							}else{
-								dtblm.setValueAt(img,aktuell,1);	
+								dtblm.setValueAt(img,aktuell,1);
 							}
-							
+
 
 						}
 						if( (SuchenSeite.mussUnterbrechen) && (anzahl==(aktuell+1)) && (aktuell==(getTreffer()-1)) ){
@@ -3924,14 +3934,14 @@ class WorkerTabelle2 extends SwingWorker<Void,Void>{
 						}
 				}
 			}
-			if( (SuchenSeite.mussUnterbrechen) 
-					&& (anzahl==(aktuell+1)) 
-					&& (aktuell==(getTreffer()-1)) 
+			if( (SuchenSeite.mussUnterbrechen)
+					&& (anzahl==(aktuell+1))
+					&& (aktuell==(getTreffer()-1))
 					&& (getTreffer()==anzahl) ){
 				break;
 
 			}
-			
+
 		}
 		setWorkerFertig(true);
 		//nvec = null;
@@ -3945,7 +3955,7 @@ class WorkerTabelle2 extends SwingWorker<Void,Void>{
 		Statement stmtx = null;
 		ResultSet rsx = null;
 		boolean neu = true;
-		
+
 		String sperre = xsperre;
 		if(neu){
 			String cmd = "sperre='"+sperre+"'";
@@ -3954,22 +3964,22 @@ class WorkerTabelle2 extends SwingWorker<Void,Void>{
 				"zeit='"+zeit+"'";
 				SqlInfo.sqlAusfuehren(cmd);
 				//new ExUndHop().setzeStatement(cmd);
-				return(0); 
+				return(0);
 			}else{
-				return(1);				
+				return(1);
 			}
 		}
-					
+
 		return 0;
 	}
 
-	
-	
+
+
 }
 /**************************************************/
 
 
-	
+
 
 }
 class TermObjekt implements Comparable<TermObjekt>{
@@ -3978,14 +3988,14 @@ class TermObjekt implements Comparable<TermObjekt>{
 	public String termtext;
 	public String sorter;
 	public String dauer;
-	
+
 	public TermObjekt(String xtag,String xbeginn,String xtermtext,String xsorter,String xdauer){
 		this.tag = xtag;
 		this.beginn = xbeginn;
 		this.termtext =xtermtext;
 		this.sorter =  xsorter;
 		this.dauer = xdauer;
-		
+
 	}
 
 	@Override
@@ -3999,23 +4009,24 @@ class TermObjekt implements Comparable<TermObjekt>{
 	      return result;
 	  }
 
-	
+
 }
 
 class Rdaten extends Observable{
-	public Vector<String> rvec; 
+	public Vector<String> rvec;
 	public Rdaten(){
 		super();
 		rvec = new Vector<String>();
 	}
-	
+
 }
-class EntsperreSatz extends Thread implements Runnable{
+class EntsperreSatz extends Thread{
 	private SuchenSeite eltern;
 	public void setzeEltern(SuchenSeite xeltern){
 		this.eltern = xeltern;
 	}
-	public void run(){
+	@Override
+    public void run(){
 		Statement stmt = null;
 
 		try {

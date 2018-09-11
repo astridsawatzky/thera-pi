@@ -315,7 +315,8 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 			iframe.setActive(true);
 			final JRehaInternal xiframe = iframe;
 			SwingUtilities.invokeLater(new Runnable(){
-	  		 	   public  void run()
+	  		 	   @Override
+                public  void run()
 	  		 	   {	
 	  					try {
 	  						xiframe.setSelected(true);
@@ -699,6 +700,7 @@ class RehaInternal extends BasicInternalFrameTitlePane{
 		this.img3 = img3.getImage();
 		this.pp = pp;
 		addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
             	if(evt.getButton()==MouseEvent.BUTTON3){
                     ((JRehaInternal)getParent()).showPopUp(evt);
@@ -726,7 +728,8 @@ class RehaInternal extends BasicInternalFrameTitlePane{
 
 	}
 
-	public void paintComponent(Graphics g){
+	@Override
+    public void paintComponent(Graphics g){
 		setOpaque(false);
 		Graphics2D g2d = (Graphics2D) g;
 		
@@ -785,7 +788,8 @@ class CustomPinPanel extends JButton{
 		}
 		setPreferredSize(new Dimension(15,15));
 		addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
+			@Override
+            public void actionPerformed(ActionEvent evt) {
 				////System.out.println("Action ausgel�st von: "+((JComponent)evt.getSource()).getName());
 				if(((JComponent)evt.getSource()).getName().equals("GRUEN")){
 					((JRehaInternal)getParent().getParent()).gruenGedrueckt();
@@ -801,7 +805,8 @@ class CustomPinPanel extends JButton{
 			}
 		});
 	}
-	public void paintComponent(Graphics g)
+	@Override
+    public void paintComponent(Graphics g)
 	{
 	
 	Graphics2D g2d = (Graphics2D) g;

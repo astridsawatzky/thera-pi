@@ -123,8 +123,8 @@ public class BCStatics2 {
 		System.out.println(cert);
 		System.out.println("*********************Zertifikat Ende***************************\n");
 	}
-	
-	
+
+
 	public static X509Certificate generateRootCert(KeyPair pair,Vector<String>vecca) throws InvalidKeyException, NoSuchProviderException, SecurityException, SignatureException{
 		providerTest();
 		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
@@ -143,13 +143,13 @@ public class BCStatics2 {
 				new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
 		certGen.addExtension(X509Extensions.ExtendedKeyUsage,true,
 				new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
-		X509Certificate cert = certGen.generateX509Certificate(pair.getPrivate(),"BC"); 
+		X509Certificate cert = certGen.generateX509Certificate(pair.getPrivate(),"BC");
 		return cert;
 	}
-	public static X509Certificate generateV3Certificate(KeyPair pair,Vector<String>praxvec,Vector<String>cavec) 
+	public static X509Certificate generateV3Certificate(KeyPair pair,Vector<String>praxvec,Vector<String>cavec)
 	throws Exception{
 		providerTest();
-		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator(); 
+		X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 		certGen.setSerialNumber(BigInteger.valueOf(1));
 		certGen.setIssuerDN(new X500Principal("O="+cavec.get(3)+",C=DE"));
 		certGen.setNotBefore(new Date(BCStatics2.certifikatsDatum(DatFunk.sHeute(), 0)));
@@ -165,21 +165,21 @@ public class BCStatics2 {
 				new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
 		certGen.addExtension(X509Extensions.ExtendedKeyUsage,true,
 				new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
-			
+
 		Date d = new Date(BCStatics2.certifikatsDatum(DatFunk.sHeute(), 0));
 		Time time = new Time(d.getTime());
 		 */
 		X509Certificate cert = certGen.generateX509Certificate(pair.getPrivate(),"BC");
 		cert.checkValidity();
 		cert.verify(pair.getPublic(), "BC");
-		return cert; 
+		return cert;
 	}
 	/*********************************/
 	public static PKCS10CertificationRequest generateRequest(KeyPair pair,Vector<String>praxvec,Vector<String>cavec) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchProviderException, SignatureException{
 		providerTest();
 		System.out.println("Pbulic Key SHA-1 Hash = "+getSHA1fromByte(pair.getPublic().getEncoded()));
 		System.out.println("  Public Key MD5 Hash = "+getMD5fromByte(pair.getPublic().getEncoded()));
- 
+
 		return new PKCS10CertificationRequest("SHA1withRSA",
 				new X500Principal("CN="+praxvec.get(2)+"," +
 				"OU="+praxvec.get(0)+",OU="+praxvec.get(1)+","+
@@ -188,7 +188,7 @@ public class BCStatics2 {
 				null,
 				pair.getPrivate() );
 	}
-	/*********************************/	
+	/*********************************/
 	public static X509Certificate[] makeReply(String csrPfad,String keystorefile,String alias,String passw) throws Exception{
 		providerTest();
 		/******Zuerst den Zertifikatsrequest �ffnen******/
@@ -205,7 +205,7 @@ public class BCStatics2 {
 		System.out.println(csrInfo.getSubjectPublicKeyInfo());
 		*/
 		/****Unterschrift****/
-		
+
 		String pfad = NebraskaTestPanel.keystoreDir + File.separator  + keystorefile + ".p12" ;
 		KeyStore store = KeyStore.getInstance("BCPKCS12","BC");
 		FileInputStream fin = new FileInputStream(new File(pfad));
@@ -221,7 +221,7 @@ public class BCStatics2 {
 		X500Principal xprinc1 = rootCert.getSubjectX500Principal();
 		System.out.println(xprinc1);
 		String[] princ = xprinc1.toString().split(",");
-		X500Principal xprinc2 = new X500Principal(princ[3]+","+princ[4]); 
+		X500Principal xprinc2 = new X500Principal(princ[3]+","+princ[4]);
 		certGen.setIssuerDN(xprinc2);
 		certGen.setNotBefore(new Date(BCStatics2.certifikatsDatum(DatFunk.sHeute(), 0)));
 		certGen.setNotAfter(new Date(BCStatics2.certifikatsDatum(DatFunk.sHeute(), 3)));
@@ -260,6 +260,7 @@ public class BCStatics2 {
 		System.out.println("IsscuedCert = "+issuedCert);
 		System.out.println("CSR-Pfad = "+csrPfad);
 		FileStatics.BytesToFile(issuedCert.getEncoded(), new File(csrPfad.replace("p10", "p7c")));
+		ain.close();
 		return  new X509Certificate[] {issuedCert,rootCert};
 	}
 	/***************************************************************************/
@@ -276,7 +277,8 @@ public class BCStatics2 {
 	        final File file = new File(pfad);
 	        chooser.setCurrentDirectory(file);
 	        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-	            public void propertyChange(PropertyChangeEvent e) {
+	            @Override
+                public void propertyChange(PropertyChangeEvent e) {
 	                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
 	                    final File f = (File) e.getNewValue();
@@ -292,10 +294,10 @@ public class BCStatics2 {
 	            if(inputVerzFile.getName().trim().equals("")){
 	            	sret = "";
 	            }else{
-	            	sret = inputVerzFile.getName().trim();	
+	            	sret = inputVerzFile.getName().trim();
 	            }
 	        }else{
-	        	sret = ""; 
+	        	sret = "";
 	        }
 	        if(sret.equals("")){
 	        	return certcount;
@@ -320,7 +322,7 @@ public class BCStatics2 {
 		while(true){
 			if( (zeile = in.readLine()) != null){
 				if(! zeile.equals("")){
-					buf.append(zeile+separator);					
+					buf.append(zeile+separator);
 				}else{
 					buf.append(zertende+separator);
 					if(!checkonly){
@@ -347,13 +349,13 @@ public class BCStatics2 {
 		writer = new FileWriter(f);
 		writer.write(buf.toString());
 		writer.close();
-		FileReader reader = new FileReader(f); 
+		FileReader reader = new FileReader(f);
 		PEMReader pemReader = new PEMReader(reader);
 		Object o;
 		o = pemReader.readObject();
 		if (o instanceof X509Certificate){
 				cert = (X509Certificate) o;
-		}	
+		}
 		pemReader.close();
 		return cert;
 	}
@@ -363,14 +365,14 @@ public class BCStatics2 {
 		writer = new FileWriter(f);
 		writer.write(buf.toString());
 		writer.close();
-		FileReader reader = new FileReader(f); 
+		FileReader reader = new FileReader(f);
 		PEMReader pemReader = new PEMReader(reader);
 		Object o;
 		o = pemReader.readObject();
 		if (o instanceof X509Certificate){
 				X509Certificate cert = (X509Certificate) o;
 				importCertIntoStore(cert,keystoreDir,pw,xalias);
-		}	
+		}
 		pemReader.close();
 	}
 
@@ -389,7 +391,7 @@ public class BCStatics2 {
 		} else {
 			alias = subjectDN;
 		}
-			if(!store.containsAlias(alias.trim())){	
+			if(!store.containsAlias(alias.trim())){
 				store.setCertificateEntry(alias, cert);
 				System.out.println("Zertifikat von "+alias+" der Datenbank "+keystore + File.separator +xalias+".p12"+" hinzugefügt");
 				ByteArrayOutputStream bOut = new ByteArrayOutputStream();
@@ -408,10 +410,10 @@ public class BCStatics2 {
 					FileStatics.BytesToFile(bOut.toByteArray(), new File(keystore +xalias+".p12"));
 				}
 				cert.getBasicConstraints();
-			
-			}	
+
+			}
 	}
-	
+
 	public static void deleteCertFromStore(String alias,String keystoreFile,String pw) throws Exception{
 		KeyStore store;
 		providerTest();
@@ -431,7 +433,7 @@ public class BCStatics2 {
 						store.deleteEntry(aliases);
 					}
 				}
-			}	
+			}
 		}else{
 			if(store.containsAlias(alias)){
 				store.deleteEntry(alias);
@@ -488,7 +490,7 @@ public class BCStatics2 {
 	}
 	private static void doCertPath(Vector<X509Certificate> certVec,String keystoreDir, String keystoreFile, String keystorePassword) throws Exception{
 		X509Certificate[] chain = new X509Certificate[certVec.size()];
-		
+
 			for(int i = 0; i < certVec.size();i++){
 				chain[i] = certVec.get(i);
 		}
@@ -500,7 +502,7 @@ public class BCStatics2 {
 		List<? extends Certificate> chain2 = certPath.getCertificates();
 		KeyStore store = KeyStore.getInstance("BCPKCS12","BC");
 		store.load(null,null);
-		
+
 		for(int i = 0; i < chain2.size();i++){
 			String alias = BCStatics3.extrahiereAlias(((X509Certificate)chain2.get(i)).getSubjectDN().toString()).trim();
 			System.out.println("Alias = "+alias);
@@ -510,20 +512,20 @@ public class BCStatics2 {
 		X509Certificate[] chain3 = {chain[1],chain[0],chain[2]};
 		CollectionCertStoreParameters params = new CollectionCertStoreParameters(Arrays.asList(chain3));
 		CertStore cstore = CertStore.getInstance("Collection",params,"BC");
-		
+
 		CertPathBuilder builder = CertPathBuilder.getInstance("PKIX","BC");
 		X509CertSelector endConstraints = new X509CertSelector();
 		endConstraints.setSerialNumber(chain3[2].getSerialNumber());
 		endConstraints.setIssuer(chain3[2].getIssuerX500Principal().getEncoded());
-		
+
 		PKIXBuilderParameters buildParms = new PKIXBuilderParameters(
 				Collections.singleton(new TrustAnchor(chain3[0],null)),endConstraints);
 
 		buildParms.addCertStore(cstore);
-		
-		PKIXCertPathBuilderResult result = 
+
+		PKIXCertPathBuilderResult result =
 			(PKIXCertPathBuilderResult) builder.build(buildParms);
-		
+
 		CertPath path = result.getCertPath();
 		Iterator it = path.getCertificates().iterator();
 		while(it.hasNext()){
@@ -537,7 +539,7 @@ public class BCStatics2 {
 		bOut.close();
 		*/
 		//KeyStore keyStore = BCStatics2.loadStore(Constants.KEYSTORE_DIR+File.separator+keystoreFile, keystorePassword);
-		
+
 		//keyStore.
 		//keyStore.
 	}
@@ -552,7 +554,7 @@ public class BCStatics2 {
 	public static void providerTest(){
 		Provider provBC = Security.getProvider("BC");
 		if(provBC==null){
-			Security.addProvider(new BouncyCastleProvider());			 
+			Security.addProvider(new BouncyCastleProvider());
 		}
 	}
 	/*********************************************/
@@ -605,7 +607,7 @@ public class BCStatics2 {
 			}
 			return NUtils.toHex(dig);
 	 }
-	 
+
  	public static String getSHA256fromByte(byte[] b){
 	 	byte[] dig = null;
 		try {
@@ -652,10 +654,10 @@ public class BCStatics2 {
 			}
 			return NUtils.toHex(dig);
 	 }
-		public static X509Certificate generateSelfSignedV3Certificate(KeyPair pair,Vector<String>praxvec,Vector<String>cavec) 
+		public static X509Certificate generateSelfSignedV3Certificate(KeyPair pair,Vector<String>praxvec,Vector<String>cavec)
 		throws Exception{
 			providerTest();
-			X509V3CertificateGenerator certGen = new X509V3CertificateGenerator(); 
+			X509V3CertificateGenerator certGen = new X509V3CertificateGenerator();
 			certGen.setSerialNumber(BigInteger.valueOf(1));
 			certGen.setIssuerDN(new X500Principal("O="+cavec.get(3)+",C=DE"));
 			certGen.setNotBefore(new Date(BCStatics2.certifikatsDatum(DatFunk.sHeute(), 0)));
@@ -671,7 +673,7 @@ public class BCStatics2 {
 					new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
 			certGen.addExtension(X509Extensions.ExtendedKeyUsage,true,
 					new ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
-			*/	
+			*/
 			/*
 			Date d = new Date(BCStatics2.certifikatsDatum(DatFunk.sHeute(), 0));
 			Time time = new Time(d.getTime());
@@ -679,13 +681,13 @@ public class BCStatics2 {
 		    certGen.addExtension(X509Extensions.KeyUsage, true, new KeyUsage(KeyUsage.digitalSignature
 		        | KeyUsage.keyEncipherment));
 		    certGen.addExtension(X509Extensions.ExtendedKeyUsage, true, new ExtendedKeyUsage(
-		        KeyPurposeId.id_kp_serverAuth));	
-		    */    
+		        KeyPurposeId.id_kp_serverAuth));
+		    */
 		    X509Certificate cert = certGen.generateX509Certificate(pair.getPrivate(),"BC");
 			cert.checkValidity(new Date());
 			//cert.verify(pair.getPublic(), "BC");
 			cert.verify(pair.getPublic(),"BC");
-		    return cert; 
+		    return cert;
 		}
 
 
@@ -730,7 +732,7 @@ public class BCStatics2 {
 		   return certificateRequestExtensions;
 	 }
 	 /***************
-	  * 
+	  *
 	  * @param alias
 	  * @throws Exception
 	  */
@@ -740,7 +742,7 @@ public class BCStatics2 {
 		 if(datei.equals("")){
 			 return;
 		 }
-		 
+
 		 providerTest();
 		 KeyStore store;
 		 store = KeyStore.getInstance("BCPKCS12","BC");
@@ -768,33 +770,33 @@ public class BCStatics2 {
 			 	for(int i = 0; i < 40; i+=2){
 			 		keyBytes[i/2] = sha.substring(i,i+2).getBytes()[0];
 			 	}
-			
+
 			 	/**********************************Encrypt***************************************/
 			 	byte[] msgNumber = new byte[] {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
-			 	
+
 			 	IvParameterSpec zeroIV = new IvParameterSpec(new byte[8]);
 
 			 	SecretKeySpec key = new SecretKeySpec(keyBytes,Constants.SECRET_KEY_DES_DER3_CBC /*"DES-EDE3-CBC"*/);
 
 			 	Cipher	cipher = Cipher.getInstance(Constants.CIPHER_AND_PADDING /*"DESEDE/CBC/TBCPadding"*/, "BC");
 
-				cipher.init(Cipher.ENCRYPT_MODE, key,zeroIV); 
-				
+				cipher.init(Cipher.ENCRYPT_MODE, key,zeroIV);
+
 				IvParameterSpec encryptionIV = new IvParameterSpec(cipher.doFinal(msgNumber),0,8);
 
 				cipher.init(Cipher.ENCRYPT_MODE, key,encryptionIV);
-				
+
 				byte[] cipherText = new byte[cipher.getOutputSize(input.length)];
-				
+
 				int ctLength = cipher.update(input,0,input.length,cipherText, 0);
-				
+
 				ctLength += cipher.doFinal(cipherText,ctLength);
-				
+
 				FileStatics.BytesToFile(cipherText, new File(datei+".cipher"));
 				//gleich wieder einlesen
 				cipherText = FileStatics.BytesFromFile(new File(datei+".cipher"));
 				/*************************Ende - Encrypt*******************************/
-				
+
 				System.out.println("\nLänge des Encrypted-File-Bytestreams="+ctLength);
 				System.out.println("****************Beginn Encrypted-File******************************************");
 				System.out.println(new String(cipherText));
@@ -802,34 +804,34 @@ public class BCStatics2 {
 
 				/**********************************Decrypt*****************************/
 				cipher.init(Cipher.ENCRYPT_MODE, key,zeroIV);
-				
+
 				IvParameterSpec decryptionIV = new IvParameterSpec(cipher.doFinal(msgNumber),0,8);
-				
+
 				cipher.init(Cipher.DECRYPT_MODE, key,decryptionIV);
-				
+
 				//byte[] plainText = new byte[cipher.getOutputSize(ctLength)];
 				byte[] plainText = new byte[cipher.getOutputSize(cipherText.length)];
-				
+
 				//int ptLength = cipher.update(cipherText, 0,ctLength,plainText,0);
 				int ptLength = cipher.update(cipherText, 0,cipherText.length,plainText,0);
-				
+
 				ptLength += cipher.doFinal(plainText, ptLength);
-				
+
 				/**********************************Ende - Decrypt*****************************/
-				
+
 				System.out.println("\nLänge des Decrypted-File-Bytestreams="+ptLength);
-				System.out.println("****************Beginn Dencrypted-File******************************************");				
+				System.out.println("****************Beginn Dencrypted-File******************************************");
 				System.out.println(new String(FileStatics.TransferByteArray(plainText, 0, ptLength)));
-				System.out.println("****************Ende Dencrypted-File******************************************");				
+				System.out.println("****************Ende Dencrypted-File******************************************");
 				FileStatics.BytesToFile(FileStatics.TransferByteArray(plainText, 0, ptLength), new File(datei+".plain"));
-				 
+
 		 }
 	 }
 	/**************
-	 * 
-	 * 
-	 * 
-	 * 	 
+	 *
+	 *
+	 *
+	 *
 	 */
 
 	 public static KeyStore loadStore(String keystoreFile,String pw) throws Exception{
@@ -840,7 +842,7 @@ public class BCStatics2 {
 			store = KeyStore.getInstance("BCPKCS12","BC");
 			InputStream in = new FileInputStream(new File(keystoreFile+".p12"));
 			store.load(in,pw.toCharArray());
-			in.close();	
+			in.close();
 			return store;
 	 }
 	 public static void saveStore(KeyStore keystore,String pw,String name) throws Exception{
@@ -886,7 +888,7 @@ public class BCStatics2 {
 	        fWriter.close();
 
 	 }
-	 
+
 	 public static PrivateKey getPrivateFromPem(String name) throws Exception{
 	   		 FileReader fReader = new FileReader(new File(name+".prv"));
 		        PEMReader pReader = new PEMReader(fReader);
@@ -916,7 +918,7 @@ public class BCStatics2 {
 		 int aktjahr = Integer.parseInt(datum.substring(6));
 		 aktjahr = aktjahr+jahre;
 		 return DatFunk.DatumsWert(datum.substring(0,6)+Integer.toString(aktjahr));
-		 
+
 	 }
 	 public static String chooser(String pfad){
 			//String pfad = "C:/Lost+Found/verschluesselung/";
@@ -929,7 +931,8 @@ public class BCStatics2 {
 	        chooser.setCurrentDirectory(file);
 
 	        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-	            public void propertyChange(PropertyChangeEvent e) {
+	            @Override
+                public void propertyChange(PropertyChangeEvent e) {
 	                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
 	                    final File f = (File) e.getNewValue();
@@ -948,7 +951,7 @@ public class BCStatics2 {
 	            if(inputVerzFile.getName().trim().equals("")){
 	            	sret = "";
 	            }else{
-	            	//sret = inputVerzFile.getName().trim();	
+	            	//sret = inputVerzFile.getName().trim();
 	            	sret = inputVerzStr;
 	            }
 	        }else{
@@ -956,14 +959,14 @@ public class BCStatics2 {
 	        }
 	        return sret;
 	 }
-	 
+
 	 public static String macheHexDump(String hexstring,int zeilenlaenge,String trenner){
 		 String zeile = "";
 		 String ganzerString = "";
 		 int bytes = hexstring.length()/2;
-		 
+
 		 int zeilen = bytes/zeilenlaenge;
-		 
+
 		 if(bytes <= zeilenlaenge){
 			 zeilen = 1;
 		 }else if( (((Double.parseDouble(Integer.toString(bytes)) / Double.parseDouble(Integer.toString(zeilenlaenge))) % 2.0) != 0)  && (bytes>zeilenlaenge) ){
@@ -982,7 +985,7 @@ public class BCStatics2 {
 				 }
 			 }
 			 if( (((i*zeilenlaenge)+i2)-zeilenlaenge) < bytes ){
-				 ganzerString = ganzerString + zeile.trim() + "\n";//System.getProperty("line.separator");	 
+				 ganzerString = ganzerString + zeile.trim() + "\n";//System.getProperty("line.separator");
 			 }else{
 				 ganzerString = ganzerString + zeile.trim();
 			 }
@@ -990,16 +993,16 @@ public class BCStatics2 {
 		 return ganzerString;
 	 }
 /************************************************************************/
-	 public static boolean installReply(KeyStore keyStore, 
-			 							KeyStore trustStore, 
-			 							String keyPassword, 
-			 							String alias, 
-			 							InputStream inputStream, 
+	 public static boolean installReply(KeyStore keyStore,
+			 							KeyStore trustStore,
+			 							String keyPassword,
+			 							String alias,
+			 							InputStream inputStream,
 			 							boolean trustCACerts,
 			 							boolean validateRoot,PrivateKey privkey) throws Exception {
 
 	// Check that there is a certificate for the specified alias
-		 
+
 	X509Certificate certificate = (X509Certificate) keyStore.getCertificate(alias);
 	if (certificate == null) {
 		System.out.println("Certificate not found for alias: " + alias);
@@ -1008,8 +1011,8 @@ public class BCStatics2 {
 	// Retrieve the private key of the stored certificate
 	//PrivateKey privKey = (PrivateKey) keyStore.getKey(alias, keyPassword.toCharArray());
 	PrivateKey privKey = privkey;
-	
-	//PrivateKey privKey = privkey;	 
+
+	//PrivateKey privKey = privkey;
 	// Load certificates found in the PEM input stream
 	List<X509Certificate> certs = new ArrayList<X509Certificate>();
 	for (Certificate cert : CertificateFactory.getInstance("X509").generateCertificates(inputStream)) {
@@ -1030,7 +1033,7 @@ public class BCStatics2 {
 		newCerts = validateReply(keyStore, trustStore, alias, certificate, certs, trustCACerts, validateRoot);
 		System.out.println("Beginn Chain of certs******************************"+keyStore+"-"+trustStore+"-"+alias+"-"+certificate+"-"+certs);
 		System.out.println("*****************Chain of certs Anzahl = "+newCerts.size());
-		System.out.println("End Chain of certs******************************");		
+		System.out.println("End Chain of certs******************************");
 	}
 	if (newCerts != null) {
 		keyStore.setKeyEntry(alias, privKey, keyPassword.toCharArray(),
@@ -1073,13 +1076,13 @@ public class BCStatics2 {
 			 }
 		 }
 		 Map<Principal, List<X509Certificate>> knownCerts = new Hashtable<Principal, List<X509Certificate>>();
-		 
+
 		 if (keyStore.size() > 0) {
 			 knownCerts.putAll(getCertsByIssuer(keyStore));
 		 }
 		 if (trustCACerts && trustStore.size() > 0) {
 			 knownCerts.putAll(getCertsByIssuer(trustStore));
-			 
+
 		 }
 		 LinkedList<X509Certificate> answer = new LinkedList<X509Certificate>();
 		 if (buildChain(certReply, answer, knownCerts)) {
@@ -1140,7 +1143,7 @@ public class BCStatics2 {
 		 System.out.println("Returnwert von buildChain Ende "+true);
 		 return true;
 	 }
-	 
+
 /***************************************************/
 	 private static Map<Principal, List<X509Certificate>> getCertsByIssuer(KeyStore ks)
      throws Exception {
@@ -1166,7 +1169,7 @@ public class BCStatics2 {
 		 }
 		 return answer;
 	 }
-	 
+
 /***************************************************/
 	    private static List<X509Certificate> validateReply(KeyStore keyStore, KeyStore trustStore, String alias,
                 X509Certificate userCert, List<X509Certificate> replyCerts,
@@ -1287,6 +1290,6 @@ public class BCStatics2 {
 	        listeners.remove(listener);
 	    }
 
-	 
-/***************************************************/	 
+
+/***************************************************/
 }

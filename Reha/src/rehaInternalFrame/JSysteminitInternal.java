@@ -49,7 +49,8 @@ public class JSysteminitInternal extends JRehaInternal implements RehaEventListe
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		//System.out.println("LöscheFenster "+name);   
 				AktiveFenster.loescheFenster(name);
@@ -59,7 +60,8 @@ public class JSysteminitInternal extends JRehaInternal implements RehaEventListe
 
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

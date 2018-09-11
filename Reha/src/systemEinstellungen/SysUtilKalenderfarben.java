@@ -117,10 +117,12 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 					FarbTab.setRowSelectionAllowed(true); 
 					FarbTab.setCellSelectionEnabled(true);
 					FarbTab.addMouseListener(new MouseAdapter(){
-						public void mousePressed(MouseEvent arg0){
+						@Override
+                        public void mousePressed(MouseEvent arg0){
 							arg0.consume();
 						}
-						public void mouseClicked(MouseEvent arg0) {
+						@Override
+                        public void mouseClicked(MouseEvent arg0) {
 							arg0.consume();
 							System.out.println("Im eigenen Mouseadapter");
 							if(arg0.getClickCount()==2){
@@ -202,7 +204,8 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 		final int xcols = col;
 		final JXTable xtable = table;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		  xtable.setRowSelectionInterval(xrows, xrows);
 		 		 xtable.setColumnSelectionInterval(xcols, xcols);
 		 		  xtable.scrollRowToVisible(xrows);
@@ -251,10 +254,12 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 			}
 			if(e.getActionCommand().equals("defaultsave")){
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run()
+				 	   @Override
+                    public  void run()
 				 	   {
 				 		   new Thread(){
-				 			   public void run(){
+				 			   @Override
+                            public void run(){
 				 				  saveColorData(standard.getSelectedIndex());	   
 				 			   }
 				 		   }.start();
@@ -264,10 +269,12 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 			}
 			if(e.getActionCommand().equals("anwenden")){
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run()
+				 	   @Override
+                    public  void run()
 				 	   {
 				 		   new Thread(){
-				 			   public void run(){
+				 			   @Override
+                            public void run(){
 				 				  saveColorData(0);	   
 				 			   }
 				 		   }.start();
@@ -374,7 +381,8 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 
 class KalenderFarbenModel extends DefaultTableModel{
 
-	public Class getColumnClass(int columnIndex) {
+	@Override
+    public Class getColumnClass(int columnIndex) {
 		   if(columnIndex >= 2 && columnIndex <=3){
 			   return Color.class;
 		   }else if(columnIndex ==  4){
@@ -383,7 +391,8 @@ class KalenderFarbenModel extends DefaultTableModel{
 			   return String.class;
 		   }
        }
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	    	if(col==2){

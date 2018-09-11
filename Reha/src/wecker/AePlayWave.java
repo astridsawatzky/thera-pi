@@ -34,6 +34,7 @@ public class AePlayWave extends Thread {
         curPosition = p;
     }
  
+    @Override
     public void run() {
  
         File soundFile = new File(filename);

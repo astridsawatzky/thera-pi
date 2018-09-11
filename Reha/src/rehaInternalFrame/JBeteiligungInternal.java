@@ -53,7 +53,8 @@ public class JBeteiligungInternal extends JRehaInternal implements RehaEventList
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		//System.out.println("LöscheFenster "+name);   
 				AktiveFenster.loescheFenster(name);
@@ -63,7 +64,8 @@ public class JBeteiligungInternal extends JRehaInternal implements RehaEventList
 
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

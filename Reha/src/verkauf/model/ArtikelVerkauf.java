@@ -47,7 +47,8 @@ public class ArtikelVerkauf extends Artikel{
 		return this.position;
 	}
 	
-	public void setBeschreibung(String beschreibung) {
+	@Override
+    public void setBeschreibung(String beschreibung) {
 		this.beschreibung = beschreibung;
 	}
 	

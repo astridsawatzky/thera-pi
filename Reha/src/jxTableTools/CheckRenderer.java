@@ -29,6 +29,7 @@ public class CheckRenderer extends JCheckBox
 
     }
 
+    @Override
     public Component getTableCellRendererComponent(
                             JTable table, Object value,
                             boolean isSelected, boolean hasFocus,

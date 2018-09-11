@@ -110,7 +110,8 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 		final String name = this.getName();
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		   AktiveFenster.loescheFenster(name);
 		 		   Reha.thisClass.progLoader.loeschePatient();
@@ -126,7 +127,8 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 	public void setzeSuche(){
 		Reha.thisClass.patpanel.setzeFocus();
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

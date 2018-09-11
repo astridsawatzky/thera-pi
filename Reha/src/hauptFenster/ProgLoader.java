@@ -119,7 +119,8 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 	final int xansicht=ansicht;
 
 	SwingUtilities.invokeLater(new Runnable(){
-		public  void run(){
+		@Override
+        public  void run(){
 			String name = "TerminFenster"+WinNum.NeueNummer();
  
 			int containerNr = SystemConfig.hmContainer.get("Kalender");
@@ -158,7 +159,8 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			AktiveFenster.setNeuesFenster(name,terminjry,containerNr,Reha.thisClass.terminpanel.getViewPanel());			
 			terminjry.aktiviereDiesenFrame(terminjry.getName());
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 			 		  Reha.thisClass.terminpanel.getViewPanel().requestFocus();
 			 	   }
@@ -177,7 +179,8 @@ public void ProgRoogleFenster(int setPos,String droptext) {
 	final String xdroptext = droptext;
 	
 	new Thread(){
-		public void run(){
+		@Override
+        public void run(){
 			if(!Rechte.hatRecht(Rechte.Rugl_open, true)){
 				return;
 			}
@@ -910,7 +913,8 @@ public void ProgPatientenVerwaltung(int setPos) {
 	LinkeTaskPane.thisClass.setCursor(Reha.thisClass.normalCursor);
 	patjry.aktiviereDiesenFrame(patjry.getName());
 	SwingUtilities.invokeLater(new Runnable(){
-	 	   public  void run()
+	 	   @Override
+        public  void run()
 	 	   {
 	 		   patjry.setzeSuche();
 	 	   }
@@ -976,7 +980,8 @@ public static void PasswortDialog(int setPos) {
 	}
 	SwingUtilities.invokeLater(new Runnable(){
 		
-		public void run(){
+		@Override
+        public void run(){
 			if(Reha.isStarted){
 				Reha.nachrichtenRegeln();	
 			}

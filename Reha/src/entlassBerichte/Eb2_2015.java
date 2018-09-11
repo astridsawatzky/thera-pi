@@ -130,7 +130,8 @@ public class Eb2_2015 {
 				pan.validate();
 				pan.setVisible(true);
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 					 		if(!eltern.neu){
 					 			new SwingWorker<Void,Void>(){
 									@Override
@@ -211,7 +212,8 @@ public class Eb2_2015 {
 		//System.out.println(stext);
 		final String xtext= stext;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				int pos = eltern.bta[7].getCaretPosition(); 
 				generiereText(xtext,true);
 				if(pos >= 0){

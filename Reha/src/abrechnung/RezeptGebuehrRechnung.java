@@ -104,7 +104,8 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 		this.rtp.addRehaTPEventListener(this);
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				if(buchen){
 					setzeFelderMitBuchung();	
 				}else{
@@ -114,7 +115,8 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 			}
 		});
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
@@ -123,7 +125,8 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				//but[0].requestFocus();
 				tfs[3].requestFocus();
 			}

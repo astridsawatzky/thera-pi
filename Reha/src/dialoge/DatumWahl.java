@@ -119,7 +119,8 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener{
 					aktTag = wahlTag;
 					Reha.thisClass.progLoader.ProgTerminFenster(1, 0);
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							TerminFenster.getThisClass().springeAufDatum(aktTag);
 							
 						}

@@ -99,7 +99,8 @@ public class VerkaufGUI extends JXPanel{
 		settings = INITool.openIni(Path.Instance.getProghome() +"ini/"+ Reha.aktIK +"/", "verkauf.ini");
 
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
@@ -108,7 +109,8 @@ public class VerkaufGUI extends JXPanel{
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				if(edits[0] != null){
 					edits[0].requestFocus();	
 				}
@@ -381,7 +383,8 @@ public class VerkaufGUI extends JXPanel{
 			// die dann z.B. für Focus setzen verwendet werden kann
 			adlg = new ArtikelSuchenDialog(null, uebergabe, this.owner.holePosition(300, 400), ""); //neu
 			SwingUtilities.invokeLater(new Runnable(){ //neu
-				public void run(){
+				@Override
+                public void run(){
 					adlg.setzeFocus(); //neu					
 				}
 			});
@@ -399,7 +402,8 @@ public class VerkaufGUI extends JXPanel{
 	private void setzeTabellenWerte(String[][] tabDaten){
 		final String[][] tDaten = tabDaten;
 		new SwingWorker<Void, Void>() {
-				protected Void doInBackground() throws Exception {
+				@Override
+                protected Void doInBackground() throws Exception {
 				vkmod.setRowCount(0);
 				for(int i = 0; i < tDaten.length;i++){
 					if(debug){zeigeWerte(tDaten[i]);}

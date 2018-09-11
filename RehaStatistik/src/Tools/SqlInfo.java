@@ -13,13 +13,13 @@ import java.util.Vector;
 import rehaStatistik.RehaStatistik;
 
 public class SqlInfo {
-	
-/***********************************/	
+
+/***********************************/
 	public static boolean gibtsSchon(String sstmt){
 		boolean gibtsschon = false;
 		Statement stmt = null;
 		ResultSet rs = null;
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -29,16 +29,16 @@ public class SqlInfo {
 		}
 		try{
 			rs = stmt.executeQuery(sstmt);
-			
+
 			if(rs.next()){
 				gibtsschon = true;
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -46,7 +46,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -61,29 +61,20 @@ public class SqlInfo {
 	public static int holeId(String tabelle, String feld){
 		int retid = -1;
 		Statement stmt = null;
-		ResultSet rs = null;
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
+
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
+
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException sqlEx) { // ignore }
+				} catch (SQLException sqlEx) {
 					stmt = null;
 				}
 			}
@@ -95,16 +86,15 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "select "+felder+" from "+tabelle+" where "+kriterium+" LIMIT 1";
 			rs = stmt.executeQuery(sstmt);
 			int nichtlesen = ausschliessen.size();
@@ -114,19 +104,19 @@ public class SqlInfo {
 				 for(int i = 1 ; i < numberOfColumns;i++){
 					 if(nichtlesen > 0){
 						 if(!ausschliessen.contains( rsMetaData.getColumnName(i)) ){
-							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );						 
+							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
 						 }
 					 }else{
 						 retvec.add((rs.getString(i)==null  ? "" :  rs.getString(i)));
 					 }
 				 }
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -134,7 +124,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -151,11 +141,11 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
-/*			
+/*
 			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 */
@@ -175,7 +165,7 @@ public class SqlInfo {
 				 for(int i = 1 ; i < numberOfColumns;i++){
 					 if(nichtlesen > 0){
 						 if(!ausschliessen.contains( rsMetaData.getColumnName(i)) ){
-							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );						 
+							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
 						 }
 					 }else{
 						 retvec.add((rs.getString(i)==null  ? "" :  rs.getString(i)));
@@ -187,7 +177,7 @@ public class SqlInfo {
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -195,7 +185,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -212,7 +202,7 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -221,19 +211,19 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "select "+feld+" from "+tabelle+" where "+kriterium;
 			rs = stmt.executeQuery(sstmt);
 			if(rs.next()){
-				 retvec.add( (rs.getString(1)==null  ? "" :  rs.getString(1)) );						 
+				 retvec.add( (rs.getString(1)==null  ? "" :  rs.getString(1)) );
 				 retvec.add( (rs.getString(2)==null  ? "" :  rs.getString(2)) );
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -241,7 +231,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -258,7 +248,7 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-		Vector<Vector> retkomplett = new Vector<Vector>();	
+		Vector<Vector> retkomplett = new Vector<Vector>();
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -267,7 +257,7 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "select "+felder+" from "+tabelle+" where "+kriterium;
 			rs = stmt.executeQuery(sstmt);
 			int nichtlesen = ausschliessen.size();
@@ -278,7 +268,7 @@ public class SqlInfo {
 				 for(int i = 1 ; i < numberOfColumns;i++){
 					 if(nichtlesen > 0){
 						 if(!ausschliessen.contains( rsMetaData.getColumnName(i)) ){
-							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );						 
+							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
 						 }
 					 }else{
 						 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
@@ -286,12 +276,12 @@ public class SqlInfo {
 				 }
 				 retkomplett.add((Vector)retvec.clone());
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -299,7 +289,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -311,16 +301,16 @@ public class SqlInfo {
 		return (Vector)retkomplett.clone();
 	}
 /*****************************************/
-	
-	
-	
-	
+
+
+
+
 	/*******************************************/
 	public static int zaehleSaetze(String tabelle, String bedingung){
 		int retid = -1;
 		Statement stmt = null;
 		ResultSet rs = null;
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -329,18 +319,18 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt1 = "select count(*) from "+tabelle+" where "+bedingung;
-			rs = stmt.executeQuery(sstmt1);			
+			rs = stmt.executeQuery(sstmt1);
 			if(rs.next()){
 				retid = rs.getInt(1);
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -348,7 +338,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -363,7 +353,7 @@ public class SqlInfo {
 	public static void aktualisiereSatz(String tabelle, String sets, String kriterium){
 		Statement stmt = null;
 		ResultSet rs = null;
-	
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -372,17 +362,17 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "update "+tabelle+" set "+sets+" where "+kriterium+" LIMIT 1";
 			//System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
 			Object ret = stmt.execute(sstmt);
 			//System.out.println(ret);
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -390,7 +380,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -405,7 +395,7 @@ public class SqlInfo {
 	public static void aktualisiereSaetze(String tabelle, String sets, String kriterium){
 		Statement stmt = null;
 		ResultSet rs = null;
-	
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -414,17 +404,17 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "update "+tabelle+" set "+sets+" where "+kriterium;
 			//System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
 			Object ret = stmt.execute(sstmt);
 			//System.out.println(ret);
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -432,7 +422,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -451,7 +441,7 @@ public class SqlInfo {
 		ResultSet rs = null;
 		String ret = "";
 		//Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -460,19 +450,19 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "select "+feld+" from pat5 where "+kriterium+" LIMIT 1";
 			rs = stmt.executeQuery(sstmt);
 
 			if(rs.next()){
 				ret = (rs.getString(feld)==null  ? "" :  rs.getString(feld));
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -480,7 +470,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -498,7 +488,7 @@ public class SqlInfo {
 		ResultSet rs = null;
 		String ret = "";
 		Vector<String> retvec = new Vector<String>();
-		Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();	
+		Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -507,7 +497,7 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = xstmt;
 			rs = stmt.executeQuery(sstmt);
 
@@ -521,12 +511,12 @@ public class SqlInfo {
 				 }
 				 retkomplett.add((Vector<String>)retvec.clone());
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -534,7 +524,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -553,7 +543,7 @@ public class SqlInfo {
 		ResultSet rs = null;
 		String ret = "";
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -562,19 +552,19 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-			
+
 			String sstmt = "select "+feld+" from verordn where "+kriterium+" LIMIT 1";
 			rs = stmt.executeQuery(sstmt);
 
 			if(rs.next()){
 				ret = (rs.getString(feld)==null  ? "" :  rs.getString(feld));
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -582,7 +572,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -597,7 +587,7 @@ public class SqlInfo {
 	public static void sqlAusfuehren(String sstmt){
 		boolean geklappt = false;
 		Statement stmt = null;
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -607,12 +597,12 @@ public class SqlInfo {
 		}
 		try{
 			geklappt =  stmt.execute(sstmt);
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (stmt != null) {
 				try {
@@ -629,7 +619,7 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		InputStream is = null;
-			
+
 		try {
 			stmt =  RehaStatistik.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -638,18 +628,18 @@ public class SqlInfo {
 			e.printStackTrace();
 		}
 		try{
-		
+
 			String sstmt = "select "+feld+" from "+tabelle+" where "+kriterium;
 			rs = stmt.executeQuery(sstmt);
 			if(rs.next()){
-				is = rs.getBinaryStream(1); 
+				is = rs.getBinaryStream(1);
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -657,7 +647,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();

@@ -8,6 +8,7 @@ public class PinStatus {
     private String _pinStatus;
  
     
+    @Override
     public String toString() {
         return _pinStatus;
     }

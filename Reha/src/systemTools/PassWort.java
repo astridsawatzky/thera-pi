@@ -110,7 +110,8 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 		this.setVisible(true);
 		this.addKeyListener(this);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				pwTextFeld.requestFocus();
 			}
 		});

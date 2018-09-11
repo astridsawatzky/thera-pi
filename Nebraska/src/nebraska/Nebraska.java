@@ -43,7 +43,8 @@ public class Nebraska {
 		jf.setVisible(true);
 		starteOfficeApplication();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				jtbo.setHeader(0);
 			}
 		});

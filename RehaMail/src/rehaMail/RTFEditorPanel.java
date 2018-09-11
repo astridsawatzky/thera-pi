@@ -173,7 +173,8 @@ public class RTFEditorPanel extends JXPanel implements FocusListener{
 			if(selend > 0 && selend != selstart){
 				final Color xcolor = color;
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						editorArea.removeFocusListener(getInstance());
 						//editorArea.select(selstart, selend);
 						editorArea.setSelectionStart(selstart);
@@ -238,7 +239,8 @@ public class RTFEditorPanel extends JXPanel implements FocusListener{
 	private void setCaret(){
 		if(caretposition < 0){return;}
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				editorArea.requestFocus();
 				if(selend > 0){
 					//editorArea.setSelectionStart(selstart);

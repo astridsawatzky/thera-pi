@@ -77,59 +77,59 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 
 public class SendMailPanel extends JXPanel implements KeyListener {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 5871553539357474995L;
-	
 
-	
+
+
 	CommonTools.DateTableCellEditor tabDateEditor = new CommonTools.DateTableCellEditor();
 	DateTableCellRenderer tabDateRenderer = new DateTableCellRenderer(true);
-	
+
 	DblCellEditor tabDoubleEditor = new DblCellEditor();
 	DoubleTableCellRenderer tabDoubleRenderer = new DoubleTableCellRenderer();
-	
+
 	CommonTools.IntTableCellEditor tabIntegerEditor = new CommonTools.IntTableCellEditor();
 	CommonTools.IntTableCellRenderer tabIntegerRenderer = new CommonTools.IntTableCellRenderer();
-	
+
 	JRtaTextField sqlstatement = null;
-	
+
 	DecimalFormat dcf = new DecimalFormat("##########0.00");
 	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy"); //Konv.
 	ActionListener al = null;
 	JScrollPane jscr = null;
 	JXPanel grundpanel;
-	
+
 	/***********/
 	JXTable eintab = null;
 	EinTableModel einmod = null;
 	/***********/
-	
+
 	private IFrame             officeFrame       = null;
 	public	ITextDocument      document          = null;
 	private JXPanel             noaPanel          = null;
 
 	NativeView nativeView = null;
 	DocumentDescriptor xdescript = null;
-	
+
 	boolean gelesen = false;
 	String aktId = "";
 	String aktAbsender = "";
 	String aktBetreff = "";
 	JButton[] buts = {null,null,null,null,null};
-	
+
 	EinListSelectionHandler listhandler = null;
 
 	Vector<String> attachmentFileName = new Vector<String>();
-	
+
 	RTFEditorPanel rtfEditor= null;
 	ObjectInputStream ois = null;
 	InputStream ins = null;
-	
+
 	ByteArrayInputStream bins;
-	
+
 	JRtaTextField suchen = null;
-	
+
 	public SendMailPanel(){
 		super(new BorderLayout());
 		/**************/
@@ -149,7 +149,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			pan.validate();
 			add(pan,BorderLayout.NORTH);
 			/*******************/
-			
+
 			add(constructSplitPaneOU(),BorderLayout.CENTER);
 			//noaDummy.add(getOOorgPanel());
 			//noaPanel.setVisible(true);
@@ -167,7 +167,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 					return null;
 				}
 			}.execute();
-			*/		
+			*/
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
@@ -175,18 +175,18 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 						while(!RehaMail.DbOk){
 							Thread.sleep(20);
 						}
-						checkForNewMail();					
+						checkForNewMail();
 					}catch(Exception ex){
 						ex.printStackTrace();
 					}
 					return null;
 				}
-				
-			}.execute();		
+
+			}.execute();
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
-		validate();		
+		validate();
 		/**************/
 		/*
 		setOpaque(false);
@@ -202,10 +202,10 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 	/******************************************/
 	public void updateMails(){
 		/********
-		 * 
+		 *
 		 */
-		
-		
+
+
 	}
 	public void checkForNewMail(){
 		suchen.setText("");
@@ -215,12 +215,12 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 				RehaMail.mailUser+"' order by gelesen DESC,versanddatum DESC,gelesendatum DESC");
 		for(int i = 0; i < 4; i++){
 			if(buts[i] != null){
-				buts[i].setEnabled(true);	
+				buts[i].setEnabled(true);
 			}
 		}
 	}
-	
-	/******************************************/	
+
+	/******************************************/
 	private Tools.UIFSplitPane constructSplitPaneOU(){
 		try{
 		UIFSplitPane jSplitRechtsOU =  UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT,
@@ -239,30 +239,31 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			ex.printStackTrace();
 		}
 		return null;
-	}	
-	
+	}
+
 	public JXPanel getTabelle(){
 		JXPanel pan = new JXPanel();
 		pan.setOpaque(false);
 		String xwert = "fill:0:grow(1.0)";
 		String ywert = "fill:0:grow(1.0)";
 		FormLayout lay = new FormLayout(xwert,ywert);
-		CellConstraints cc = new CellConstraints(); 
+		CellConstraints cc = new CellConstraints();
 		pan.setLayout(lay);
-		
+
 		einmod = new EinTableModel();
 		einmod.setColumnIdentifiers(new String[] {"Empfänger","gelesen","Abs.Datum","Gelesen-Datum","Betreff","id"});
 		eintab = new JXTable(einmod);
-		
+
 		eintab.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					if(!gelesen){
 						//holeNeueMail();
 						//setzeGelesen();
 					}
 				}
-			}	
+			}
 		});
 		eintab.getColumn(0).setMinWidth(120);
 		eintab.getColumn(0).setMaxWidth(120);
@@ -289,9 +290,9 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		pan.validate();
 		return pan;
 	}
-	
+
 	private void activateListener(){
-		 
+
 		al = new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -302,7 +303,8 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 				}
 				if(cmd.equals("newMail")){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							Point pt = RehaMail.thisFrame.getLocationOnScreen();
 							new NewMail("neue Nachricht erstellen",true,new Point(pt.x+50,pt.y+50),null,"","",false);
 						}
@@ -324,9 +326,9 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 					return;
 				}
 
-				
+
 				if(cmd.equals("print")){
-					
+
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
@@ -347,20 +349,20 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 							ins.close();
 							return null;
 						}
-						
+
 					}.execute();
-					return;					
+					return;
 				}
-				
+
 			}
 		};
-	}	
+	}
 
-	
+
 	private JXPanel getAttachmentButton(){
 		JXPanel pan = new JXPanel();
-		pan.setOpaque(false); 
-		
+		pan.setOpaque(false);
+
 		buts[4]=ButtonTools.macheButton("", "attachments", al);
 		buts[4].setIcon(RehaMail.attachmentIco[3]);
 		buts[4].setToolTipText("Dateianhänge holen/ansehen");
@@ -368,10 +370,10 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		pan.add(buts[4]);
 		pan.validate();
 		return pan;
-		
+
 	}
 
-	
+
 	private JToolBar getToolbar(){
 		JToolBar jtb = new JToolBar();
 		jtb.setOpaque(false);
@@ -405,17 +407,17 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 
 		jtb.add(suchen);
 		jtb.addSeparator(new Dimension(50,30));
-		
-		
+
+
 		return jtb;
 	}
-	
+
 	/********OO.org-Ged�nse*******
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 * ************/
-/*	
+/*
 	private void fillNOAPanel() {
 	    if (noaPanel != null) {
 		      try {
@@ -439,7 +441,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 				} catch (DocumentException e) {
 					e.printStackTrace();
 				}
-		       
+
 		      catch (Throwable throwable) {
 		        noaPanel.add(new JLabel("<html>Ein Fehler ist aufgetreten:<br>" + throwable.getMessage()+"</html>"));
 		      }
@@ -486,12 +488,13 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		noaPanel.getLayout().layoutContainer(noaPanel);
 
 	}
-*/	
+*/
 	public void holeAttachments(){
 		this.attachmentFileName.clear();
 		this.attachmentFileName.trimToSize();
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				Vector<Vector<String>> vec = SqlInfo.holeFelder("select file1,file2,file3 from pimail where id ='"+aktId+"' Limit 1" );
 				for(int i = 0; i < vec.get(0).size();i++){
 					if(! vec.get(0).get(i).trim().equals("")){
@@ -506,25 +509,25 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			}
 		});
 	}
-	
 
-	
+
+
 	/*********************
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
+	 *
+	 *
 	 * ******************/
-	
+
 	private void doStatementAuswerten(final String stat){
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
 		Statement stmt = null;
 		ResultSet rs = null;
 		//ResultSet md = null;
@@ -540,14 +543,14 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		//CHAR kann sowohl ein einzelnes Zeichen als auch enum('T','F') also boolean sein...
 		//eigentlich ein Riesenmist!
 
-		eintab.getSelectionModel().removeListSelectionListener(listhandler);	
+		eintab.getSelectionModel().removeListSelectionListener(listhandler);
 		try {
 
 			stmt =  RehaMail.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 			rs = stmt.executeQuery(stat);
-			
-			
+
+
 			while(rs.next()){
 				vec.clear();
 				try{
@@ -557,19 +560,20 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 					vec.add(rs.getString(4)==null ? "" : getTimestampString(rs.getString(4)));
 					vec.add(rs.getString(5)==null ? "" : rs.getString(5));
 					vec.add(rs.getString(6)==null ? "" : rs.getString(6));
-				
+
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
 				einmod.addRow( (Vector<?>) vec.clone());
 				if(einmod.getRowCount()==1){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							eintab.getSelectionModel().addListSelectionListener(listhandler);
-							eintab.setRowSelectionInterval(0, 0);		
+							eintab.setRowSelectionInterval(0, 0);
 						}
 					});
-					
+
 				}
 
 				if(durchlauf>200){
@@ -584,13 +588,13 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 				}
 				durchlauf++;
 			}
-			
+
 			eintab.validate();
 			eintab.repaint();
 			jscr.validate();
 			//doSetAbfrageErgebnis();
-			
-			
+
+
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -602,7 +606,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -613,44 +617,46 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		}
 
 
-		
-		
+
+
 	}
-	
+
 	private String getTimestampString(String ts){
 		try{
 			return DatFunk.sDatInDeutsch(ts.split(" ")[0].trim())+"-"+ts.split(" ")[1].trim().substring(0,8);
 		}catch(Exception ex){
-			
+
 		}
 		return "";
 	}
-	
-	
 
-	
+
+
+
 
 	class EinTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			if(columnIndex==0){return String.class;}
 			if(columnIndex==1){return Boolean.class;}
 			if(columnIndex==2){return Date.class;}
 			if(columnIndex==3){return Timestamp.class;}
 			if(columnIndex==4){return String.class;}
 			if(columnIndex==5){return String.class;}
-			
+
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			return false;
 		}
-		   
+
 	}
 	/******************************************************/
 	public void allesAufNull(){
@@ -659,7 +665,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			rtfEditor.editorArea.getDocument().remove(0, rtfEditor.editorArea.getDocument().getLength());
 		} catch (BadLocationException e) {
 			e.printStackTrace();
-		}		
+		}
 		eintab.getSelectionModel().removeListSelectionListener(listhandler);
 		einmod.setRowCount(0);
 		eintab.validate();
@@ -673,11 +679,11 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 /*
 	protected void loescheBilder(){
 		ITextDocument textDocument = (ITextDocument)document;
-		
+
 		XTextGraphicObjectsSupplier graphicObjSupplier = (XTextGraphicObjectsSupplier) UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
         	      textDocument.getXTextDocument());
 		XNameAccess nameAccess = graphicObjSupplier.getGraphicObjects();
-		
+
 		String[] names = nameAccess.getElementNames();
 		try{
 		for(int i = 0; i < names.length;i++){
@@ -700,21 +706,21 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 				XTextContent textContent = paragraphs[i].getXTextContent();
 				textContent.getAnchor().setString("");
 				textContent.dispose();
-			}	
+			}
 
 		} catch (TextException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
-*/	
+*/
 	public void tabelleLeeren(){
 		eintab.getSelectionModel().removeListSelectionListener(listhandler);
 		einmod.setRowCount(0);
 		eintab.validate();
 		eintab.repaint();
 	}
-	
+
 	public void listenerAusschalten(){
 		eintab.getSelectionModel().removeListSelectionListener(listhandler);
 	}
@@ -732,8 +738,8 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		}
 		checkForNewMail();
 		textLoeschen();
-		
-		
+
+
 	}
 	private void textLoeschen(){
 		if(eintab.getRowCount()<=0 || eintab.getSelectedRow()<0){
@@ -743,7 +749,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null,"Fehler beim Einlesen der Nachricht");
 				e.printStackTrace();
-			} 
+			}
 		}
 	}
 
@@ -752,7 +758,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 		if(einmod.getRowCount()<=0){tabelleLeeren();return;}
 		//System.out.println("einlesen text");
 		int row = eintab.getSelectedRow();
-		while(!RehaMail.DbOk);
+		while(!RehaMail.DbOk); //FIXME: never come back without database;
 		if(row < 0){tabelleLeeren();return;}
 		gelesen = (Boolean)einmod.getValueAt(eintab.convertRowIndexToModel(row),1 );
 		aktId = einmod.getValueAt(eintab.convertRowIndexToModel(row),5 ).toString();
@@ -761,7 +767,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			JOptionPane.showMessageDialog(null,"Diese Nachricht existiert nicht mehr!");
 			checkForNewMail();
 			return;
-			
+
 		}
 		/****************************************************/
 		ByteArrayInputStream ins = null;
@@ -775,7 +781,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null,"Fehler beim Einlesen der Nachricht");
 				e.printStackTrace();
-			} 
+			}
 
 			ins.close();
 		}catch(Exception ex){
@@ -787,15 +793,16 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 				holeAttachments();
 				return null;
 			}
-			
+
 		}.execute();
-		
+
 
 	}
-	
+
 	class EinListSelectionHandler implements ListSelectionListener {
-		
-	    public void valueChanged(ListSelectionEvent e) {
+
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){
@@ -837,37 +844,37 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		if( ((JComponent)arg0.getSource()).getName().equals("suchen")){
-			
+
 			if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				if(suchen.getText().trim().equals("")){checkForNewMail();return;}
 				try{
 					//toRTF(suchen.getText())
 				((JComponent)arg0.getSource()).requestFocus();
-				String where = SqlInfo.macheWhereKlauselRTF("where absender='"+RehaMail.mailUser+"' AND ", 
+				String where = SqlInfo.macheWhereKlauselRTF("where absender='"+RehaMail.mailUser+"' AND ",
 						suchen.getText(), new String[] {"betreff","emailtext"});
 				String cmd = "select empfaenger_person,"+
 				"gelesen,versanddatum,gelesendatum,betreff,id from pimail "+where+
 				" order by gelesen DESC,versanddatum DESC";
 				//System.out.println(where);
 				doStatementAuswerten(cmd);
-				
+
 
 				}catch(Exception ex){
 					JOptionPane.showMessageDialog(null,ex.getMessage());
 				}
 			}
 		}
-		
+
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	/*********************************************/
 	/************************************************/
@@ -877,11 +884,11 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			Object[] obi  = new Object[attachmentFileName.size()];
 			Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
 			for(int i = 0; i < attachmentFileName.size();i++){
-				icons.put(attachmentFileName.get(i),testDatei(attachmentFileName.get(i)));	
+				icons.put(attachmentFileName.get(i),testDatei(attachmentFileName.get(i)));
 				obi[i] = attachmentFileName.get(i);
 			}
 			JList list = new JList(obi);
-			list.setCellRenderer(new IconListRenderer(icons));	
+			list.setCellRenderer(new IconListRenderer(icons));
 			RehaMail.toolsDlgRueckgabe = -1;
 			ToolsDialog tDlg = new ToolsDialog(RehaMail.thisFrame,"Dateianhänge",list);
 			tDlg.setPreferredSize(new Dimension(200, 60+(attachmentFileName.size()*28)));
@@ -889,8 +896,8 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			tDlg.pack();
 			tDlg.setModal(true);
 			tDlg.activateListener();
-			tDlg.setVisible(true);	
-			
+			tDlg.setVisible(true);
+
 			if(RehaMail.toolsDlgRueckgabe == -1){return;}
 			String komplett = RehaMail.progHome+"temp/"+RehaMail.aktIK+"/"+attachmentFileName.get(RehaMail.toolsDlgRueckgabe);
 
@@ -902,13 +909,13 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 							Integer.toString(RehaMail.toolsDlgRueckgabe+1))){
 						return;
 					}
-				 
+
 				 if(komplett.toUpperCase().endsWith(".PDF")){
 					 new ReaderStart(komplett,RehaMail.pdfReader);
 				 }else if(komplett.toUpperCase().endsWith(".ODT") ||komplett.toUpperCase().endsWith(".ODT")  ){
-					Tools.OOTools.starteWriterMitDatei(komplett.replace("//", "/")); 
+					Tools.OOTools.starteWriterMitDatei(komplett.replace("//", "/"));
 				 }else if(komplett.toUpperCase().endsWith(".ODS")){
-					 Tools.OOTools.starteCalcMitDatei(komplett); 
+					 Tools.OOTools.starteCalcMitDatei(komplett);
 				 }
 			 }else{
 					String[] indatei = dateiDialog(attachmentFileName.get(RehaMail.toolsDlgRueckgabe));
@@ -920,9 +927,9 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 								"Verzeichnis: --> "+indatei[1].replace("\\", "/"));
 
 					}
-				 
+
 			 }
-			
+
 		}
 		private ImageIcon testDatei(String filename){
 			if(filename.toUpperCase().endsWith(".PDF")){
@@ -935,7 +942,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			return RehaMail.attachmentIco[4];
 		}
 	}
-	
+
 	/*********************************************/
 	private boolean speichereDatei(String[] pfade,String datei,String attachnumber){
 		boolean success = true;
@@ -950,7 +957,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			  byte buf[]=new byte[1024];
 			  int len;
 			  while((len=inputStream.read(buf))>0){
-				  out.write(buf,0,len);  
+				  out.write(buf,0,len);
 			  }
 			  out.close();
 			  inputStream.close();
@@ -962,7 +969,7 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 			  return false;
 		  }
 		return success;
-			
+
 	}
 	private String[] dateiDialog(String pfad){
 		//String sret = "";
@@ -977,7 +984,8 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 	    chooser.setCurrentDirectory(new File(RehaMail.progHome));
 	    chooser.setSelectedFile(file);
 	    chooser.addPropertyChangeListener(new PropertyChangeListener() {
-	        public void propertyChange(PropertyChangeEvent e) {
+	        @Override
+            public void propertyChange(PropertyChangeEvent e) {
 	            if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                    || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
 	                //final File f = (File) e.getNewValue();
@@ -992,10 +1000,10 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 	    if (result == JFileChooser.APPROVE_OPTION) {
 	        File inputVerzFile = chooser.getSelectedFile();
 	        String inputVerzStr = inputVerzFile.getPath();
-	        
+
 
 	        if(inputVerzFile.getName().trim().equals("")){
-	        	
+
 	        	//sret = "";
 	        }else{
 	        	sret[0] = inputVerzFile.getName().trim();
@@ -1004,10 +1012,10 @@ public class SendMailPanel extends JXPanel implements KeyListener {
 	    }else{
 	    	//sret = ""; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
 	    }
-	    chooser.setVisible(false); 
+	    chooser.setVisible(false);
 
 	    return sret;
 	}
-	
-	
+
+
 }

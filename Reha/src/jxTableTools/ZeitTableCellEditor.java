@@ -71,7 +71,8 @@ public class ZeitTableCellEditor extends AbstractCellEditor implements KeyListen
         //final Object xvalue = value;
         ((JFormattedTextField)component).setText((String)value);
         SwingUtilities.invokeLater(new Runnable(){
-        	public void run(){
+        	@Override
+            public void run(){
                 //((JFormattedTextField)component).select(0,((String)xvalue).length()-1);
                 ((JFormattedTextField)component).setCaretPosition(0);
         	}
@@ -86,6 +87,7 @@ public class ZeitTableCellEditor extends AbstractCellEditor implements KeyListen
     // This method is called when editing is completed.
     // It must return the new value to be stored in the cell.
 
+    @Override
     public Object getCellEditorValue() {
         return ((JFormattedTextField)component).getText();
     }

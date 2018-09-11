@@ -223,7 +223,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		alletabletab = new JXTable(alletablemod);
 		alletabletab.setEditable(false);
 		alletabletab.addMouseListener(new MouseAdapter(){
-			public void mousePressed(MouseEvent me){
+			@Override
+            public void mousePressed(MouseEvent me){
 				if(me.getClickCount()==2){
 					if(!RehaSql.isReadOnly){
 						sqlstatement.setText("describe "+alletabletab.getValueAt(alletabletab.getSelectedRow(), 0).toString());
@@ -348,7 +349,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	private void setzeFocus(JComponent comp){
 		final JComponent xcomp = comp;
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				xcomp.requestFocus();
 			}
 		});
@@ -447,7 +449,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 
 	class BillListSelectionHandler implements ListSelectionListener {
 		
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){
@@ -1032,7 +1035,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			if(colTypeName.get(columnIndex).contains("VARCHAR")){
 				return String.class;
 			}else if(colTypeName.get(columnIndex).equals("BOOLEAN")){
@@ -1051,7 +1055,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		   return String.class;
 	    }
 
-		public boolean isCellEditable(int row, int col) {
+		@Override
+        public boolean isCellEditable(int row, int col) {
 			
 			if(colAutoinc.get(col)){
 				return false;				

@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -40,7 +39,6 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
@@ -49,9 +47,9 @@ import systemTools.WinNum;
 
 
 
-public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener, KeyListener, RehaTPEventListener{
+public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3482074172384055074L;
 	private int setOben;
@@ -61,7 +59,7 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
 
 	private JXPanel jtp = null;
 	private String dieserName = "";
-	
+
 	private JRtaTextField startDatum = null;
 	private JRtaTextField endDatum = null;
 	private JXLabel startLabel = null;
@@ -79,7 +77,7 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
 
 	private Vector vTerm = new Vector();
 	public static MaskeInKalenderSchreiben thisClass = null;
-	
+
     Vector<String> feiertagDatum = new Vector<String>();
     Vector<String> feiertagName = new Vector<String>();
 
@@ -121,13 +119,13 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
         //jp1.add(eingabePanel(),BorderLayout.SOUTH);
 
 		this.jtp.add(jp1,BorderLayout.NORTH);
-		
+
 		JScrollPane jscr = new JScrollPane();
 		jscr.setBorder(null);
 		jscr.setViewportView(eingabePanel());
 		jscr.setVisible(true);
 		jscr.validate();
-		
+
 		this.jtp.add(jscr,BorderLayout.CENTER);
 		JXPanel dummy = new JXPanel();
 		dummy.setBorder(null);
@@ -145,14 +143,15 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
 		thisClass = this;
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		  startFocus();
 		 	   }
 		});
- 	   
-	}		    
-/*******************************************************/			
+
+	}
+/*******************************************************/
 /*********************************************************/
 public void FensterSchliessen(String welches){
 	////System.out.println("Eltern-->"+this.getParent().getParent().getParent().getParent().getParent());
@@ -168,21 +167,21 @@ public JScrollPane eingabePanel(){
 	private JXLabel endLabel = null;
 	private JXLabel aktDatum = null;
 	private JXLabel behandlerLabel = null;
-*/	
+*/
 	//,40dlu,80dlu,4dlu,80dlu,15dlu,80dlu,4dlu
 	FormLayout flay = new FormLayout("40dlu,right:120dlu,4dlu,80dlu,80dlu",
-	// 1    2     3     4    5     6    7     8   9     10    11		
+	// 1    2     3     4    5     6    7     8   9     10    11
 	"15dlu,25dlu,15dlu,5dlu,15dlu,5dlu,15dlu,5dlu,15dlu,5dlu,15dlu"); //,30dlu,15dlu
 	JXPanel eingabep = new JXPanel(flay);
 	flay.layoutContainer(eingabep);
 	eingabep.setBorder(null);
 	//eingabep.setPreferredSize(new Dimension(350,250));
-	
+
 	//eingabep.setLayout(flay);
 	CellConstraints cc = new CellConstraints();
 
 	behandlerLabel = new JXLabel("Wochenarbeitszeit übertragen von  -->  "+ParameterLaden.getKollegenUeberDBZeile(maskenBehandler));
-	
+
 	behandlerLabel.setForeground(Color.RED);
 	eingabep.add(behandlerLabel,cc.xyw(2,2,3));
 
@@ -194,7 +193,7 @@ public JScrollPane eingabePanel(){
 	startDatum.addKeyListener(this);
 	startDatum.setName("StartDatum");
 	eingabep.add(startDatum,cc.xy(4,3));
-	
+
 	endLabel = new JXLabel("Übertrage Maske bis (einschließlich):");
 	eingabep.add(endLabel,cc.xy(2,5));
 
@@ -213,16 +212,16 @@ public JScrollPane eingabePanel(){
 	starten = new JXButton("Übertrag starten");
 	//starten.setPreferredSize(new Dimension(80,15));
 	starten.addActionListener(this);
-	starten.addKeyListener(this);	
+	starten.addKeyListener(this);
 	eingabep.add(starten,cc.xy(2,9));
 
 	anhalten = new JXButton("Übertrag anhalten");
-	//anhalten.setPreferredSize(new Dimension(80,15));	
+	//anhalten.setPreferredSize(new Dimension(80,15));
 	anhalten.setEnabled(false);
 	anhalten.addActionListener(this);
 	anhalten.addKeyListener(this);
 	eingabep.add(anhalten,cc.xy(4,9));
-	
+
 	aktDatum = new JXLabel("            ");
 	eingabep.add(aktDatum,cc.xy(2,11));
 	eingabep.setVisible(true);
@@ -249,6 +248,7 @@ public String dieserName(){
 	return this.getName();
 }
 
+@Override
 public void rehaTPEventOccurred(RehaTPEvent evt) {
 	// TODO Auto-generated method stub
 	//System.out.println("****************das darf doch nicht wahr sein in DruckFenster**************");
@@ -258,7 +258,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 		//if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 			FensterSchliessen(evt.getDetails()[0]);
 			rtp.removeRehaTPEventListener(this);
-		//}	
+		//}
 	}catch(NullPointerException ne){
 		//System.out.println("In DruckFenster" +evt);
 	}
@@ -266,46 +266,50 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 
 }
 
+@Override
 public void actionPerformed(ActionEvent arg0) {
 	String cmd = arg0.getActionCommand();
 	for(int i = 0; i< 1;i++){
 		if(cmd.equals("Übertrag starten")){
 			stopUebertrag = false;
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
-			 	   {	
+			 	   @Override
+                public  void run()
+			 	   {
 			 		   new Thread(){
-			 			   public void run(){
+			 			   @Override
+                        public void run(){
 			 				   String hinweis = "Sie schreiben im Anschluß eine neue Wochenarbeitszeit in den Terminkalender!\n"+
 			 				   "Bitte unterbrechen Sie diesen Prozeß keinesfalls!";
-			 				   					
+
 			 				   JOptionPane.showMessageDialog(null,hinweis);
-			 				   
+
 			 				   anhalten.setEnabled(true);
 			 				   starten.setEnabled(false);
 			 				   maskenEintragen();
-			 				  
+
 			 			   }
 			 		   }.start();
-						
+
 			 	   }
 			});
 			break;
 		}
 		if(cmd.equals("Übertrag anhalten")){
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 						stopUebertrag = true;
 						anhalten.setEnabled(false);
 						starten.setEnabled(true);
 			 	   }
 			});
-			
+
 			break;
 		}
 	}
-	
+
 }
 
 public String getStartDatum(){
@@ -335,12 +339,12 @@ public void keyPressed(KeyEvent arg0) {
 
 	}
 
-	
+
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
@@ -348,7 +352,7 @@ public void keyTyped(KeyEvent arg0) {
 	if(arg0.getKeyCode() == 27){
 		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
-	}	
+	}
 }
 private void regleFeiertage(String start,String stop){
 	feiertagDatum.clear();
@@ -381,7 +385,7 @@ public void maskenEintragen(){
 	/*********************************************/
 	regleFeiertage(startTag,stopTag);
 	/*********************************************/
-	
+
 	int wochenTag = 0;
 	int i = 0;
 	if(DatFunk.DatumsWert(startTag) > DatFunk.DatumsWert(stopTag)){
@@ -398,9 +402,9 @@ public void maskenEintragen(){
 		for(j=0; j< ((ArrayList)this.vTerm.get(i)).size();j++){
 			//System.out.println("Inhalte get("+i+") an Position "+j+" = "+((ArrayList)this.vTerm.get(i)).get(j));
 		}
-		*/	
+		*/
 	}
-	////System.out.println("Vector-Element1 = "+this.vTerm.size());	
+	////System.out.println("Vector-Element1 = "+this.vTerm.size());
 	while(!stopUebertrag){
 		////System.out.println("Bearbeite Tag "+aktTag);
 		aktDatum.setText(aktTag);
@@ -451,15 +455,15 @@ public void maskenEintragen(){
 				  split = replace.split("\\\\");
 				  nummer =  split[0]+"\\\\"+split[1];
 				  ////System.out.println("Backslashtermin = "+nummer);
-			  	
+
 			  }else{
 				  nummer = ((String)((Vector) list.get(1)).get(i));
 			  }
 
 			sret = sret + "T"+ (i+1) + "='" + StringTools.Escaped(((Vector) list.get(0)).get(i).toString()) + "', " ;
-			sret = sret + "N"+ (i+1) + "='" + nummer + "', "; 
-			sret = sret + "TS"+ (i+1) + "='" + ((Vector) list.get(2)).get(i) + "', ";			
-			sret = sret + "TD"+ (i+1) + "='" + ((Vector) list.get(3)).get(i) + "', ";			
+			sret = sret + "N"+ (i+1) + "='" + nummer + "', ";
+			sret = sret + "TS"+ (i+1) + "='" + ((Vector) list.get(2)).get(i) + "', ";
+			sret = sret + "TD"+ (i+1) + "='" + ((Vector) list.get(3)).get(i) + "', ";
 			sret = sret + "TE"+ (i+1) + "='" + ((Vector) list.get(4)).get(i) + "', ";
 		}
 		sret = sret + "BELEGT='"+Integer.toString(bloecke)+"' WHERE DATUM='"+sqldat+"' AND BEHANDLER='"+this.sBehandler+"' LIMIT 1";
@@ -480,39 +484,41 @@ public void maskenEintragen(){
 
 public void startFocus(){
 	SwingUtilities.invokeLater(new Runnable(){
-	 	   public  void run()
+	 	   @Override
+        public  void run()
 	 	   {
 	 		  startDatum.requestFocus();
 	 	   }
-	}); 
-}	
+	});
+}
 
 /*******************************************/
 }
 /******************************************/
-final class SchreibeMaskeInKalender extends Thread implements Runnable{
+final class SchreibeMaskeInKalender extends Thread{
 	Statement stmt = null;
 	ResultSet rs = null;
 	String statement;
 	boolean geklappt = false;
- 
+
 	public void setzeStatement(String statement){
 		this.statement = statement;
 		start();
 	}
-	public void run(){
+	@Override
+    public void run(){
 		//Vector treadVect = new Vector();
 		try {
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					geklappt =  stmt.execute(this.statement);
-					
+
 			}catch(SQLException ev){
 					//System.out.println("SQLException: " + ev.getMessage());
 					//System.out.println("SQLState: " + ev.getSQLState());
 					//System.out.println("VendorError: " + ev.getErrorCode());
-			}	
+			}
 
 		}catch(SQLException ex) {
 			//System.out.println("von stmt -SQLState: " + ex.getSQLState());
@@ -535,7 +541,7 @@ final class SchreibeMaskeInKalender extends Thread implements Runnable{
 			}
 		}
 	}
-	
+
 }
 
 

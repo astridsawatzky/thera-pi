@@ -20,7 +20,8 @@ int align = 0;
 	      //setOpaque( true );
 	   }
 	   
-	   public Component getTableCellRendererComponent(JTable table, Object value,
+	   @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
 	         boolean isSelected, boolean hasFocus, int row, int column) {
 	      
 	      // die normalen Farben

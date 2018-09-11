@@ -74,7 +74,8 @@ public class XRehaDocumentCloseListener implements ICloseListener {
    * @author Sebastian R�sgen
 	 * @date 17.03.2006
    */ 
-	public void queryClosing(ICloseEvent closeEvent, boolean getsOwnership) {
+	@Override
+    public void queryClosing(ICloseEvent closeEvent, boolean getsOwnership) {
 		//nothing to do in here
 	}
   //----------------------------------------------------------------------------
@@ -88,7 +89,8 @@ public class XRehaDocumentCloseListener implements ICloseListener {
    */
 
 
-	public void notifyClosing(ICloseEvent closeEvent) {
+	@Override
+    public void notifyClosing(ICloseEvent closeEvent) {
 		/*try {
 			//officeAplication.deactivate(); // this is really necessary
 			//System.out.println("Office application deactivated.");
@@ -110,7 +112,8 @@ public class XRehaDocumentCloseListener implements ICloseListener {
    * @author Sebastian R�sgen
 	 * @date 17.03.2006
    */
-	public void disposing(IEvent event) {
+	@Override
+    public void disposing(IEvent event) {
 
 		//nothing to do in here
 	}

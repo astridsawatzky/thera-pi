@@ -268,7 +268,8 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	
 	class TBListSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	    	
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        
@@ -364,19 +365,22 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class getColumnClass(int columnIndex) {
+		@Override
+        public Class getColumnClass(int columnIndex) {
 			   if(columnIndex==0){return String.class;}
 
 			   else{return String.class;}
 
 	}
 
-		    public boolean isCellEditable(int row, int col) {
+		    @Override
+            public boolean isCellEditable(int row, int col) {
 		        //Note that the data/cell address is constant,
 		        //no matter where the cell appears onscreen.
 		    	return false;
 		      }
-			public Object getValueAt(int rowIndex, int columnIndex) {
+			@Override
+            public Object getValueAt(int rowIndex, int columnIndex) {
 				String theData = (String) ((Vector)getDataVector().get(rowIndex)).get(columnIndex); 
 				Object result = null;
 				//result = theData.toUpperCase();
@@ -559,7 +563,8 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		textVariable.setLocation(p.x+xwert+5, p.y-30);
 		textVariable.setVisible(true);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				jtbf.requestFocus();		
 			}
 		});
@@ -658,7 +663,8 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 					tbtab.setRowSelectionInterval(i, i);
 					tbtab.scrollRowToVisible(i);
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							tbtab.scrollRowToVisible(tbtab.getRowCount());
 						}
 					});

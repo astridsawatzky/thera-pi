@@ -83,7 +83,8 @@ public class ArtikelDialog extends RehaSmartDialog {
 	
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				textArtikelID.requestFocus();
 			}
 		});
@@ -159,7 +160,8 @@ public class ArtikelDialog extends RehaSmartDialog {
 	
 	private void activateListener() {
 		al = new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			@Override
+            public void actionPerformed(ActionEvent arg0) {
 				speicher();
 			}
 			
@@ -258,7 +260,8 @@ public class ArtikelDialog extends RehaSmartDialog {
 		return einheiten;
 	}
 	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0].equals("ArtikelDlg")){
 				this.setVisible(false);

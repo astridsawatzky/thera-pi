@@ -245,6 +245,7 @@ public final class UIFSplitPane extends JSplitPane {
      * may be restored by a L&F at UI installation time. And so, we
      * try to reset it each time the UI is changed.
      */
+    @Override
     public void updateUI() {
         super.updateUI();
         if (!isDividerBorderVisible())

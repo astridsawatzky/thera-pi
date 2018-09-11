@@ -90,7 +90,8 @@ public class LagerGUI extends JXPanel {
 		
 		lgtab.addMouseListener(new MouseListener() {
 			
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() == 2) {
 					owner.aktiviereFunktion(VerkaufTab.edit);
 				}
@@ -173,7 +174,8 @@ public class LagerGUI extends JXPanel {
 		final Artikel a = new Artikel(id);
 		final DecimalFormat df = new DecimalFormat("0.00");
 		new SwingWorker<Void,Void>() {
-			protected Void doInBackground() throws Exception {
+			@Override
+            protected Void doInBackground() throws Exception {
 				for(int n = 0; n < lgtab.getRowCount(); n++) {
 					//System.out.println("Bin in Zeile " + n + " Suche " + id + " finde: " + Integer.parseInt((String)lgmod.getValueAt(n, lgmod.getColumnCount()-1)));
 					if(id == Integer.parseInt((String)lgmod.getValueAt(n, lgmod.getColumnCount()-1))) {
@@ -199,7 +201,8 @@ public class LagerGUI extends JXPanel {
 	private void setzeTabDaten(Vector<Vector<String>> daten) {
 		final Vector<Vector<String>> d = daten;
 		new SwingWorker<Void, Void>() {
-			protected Void doInBackground() throws Exception {
+			@Override
+            protected Void doInBackground() throws Exception {
 				lgmod.setRowCount(0);
 				for(int i = 0; i < d.size();i++){
 					lgmod.addRow(d.get(i));
@@ -213,7 +216,8 @@ public class LagerGUI extends JXPanel {
 	private void doArtikelDialog(int id) {
 		adlg = new ArtikelDialog(id, this.owner.holePosition(300, 300));
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				adlg.setzeFocus();				
 			}
 		});

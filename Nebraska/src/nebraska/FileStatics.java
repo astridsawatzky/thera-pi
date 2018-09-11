@@ -133,7 +133,8 @@ public class FileStatics {
 	        chooser.setCurrentDirectory(file);
 
 	        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-	            public void propertyChange(PropertyChangeEvent e) {
+	            @Override
+                public void propertyChange(PropertyChangeEvent e) {
 	                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
 	                    // final File f = (File) e.getNewValue();
@@ -168,7 +169,8 @@ public class FileStatics {
 	        chooser.setCurrentDirectory(file);
 
 	        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-	            public void propertyChange(PropertyChangeEvent e) {
+	            @Override
+                public void propertyChange(PropertyChangeEvent e) {
 	                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
 	                    // final File f = (File) e.getNewValue();

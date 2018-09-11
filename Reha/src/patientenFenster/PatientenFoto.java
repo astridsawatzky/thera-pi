@@ -101,7 +101,8 @@ public class PatientenFoto  extends RehaSmartDialog{
 		
 		grundPanel.add(this.actionPanel(),BorderLayout.SOUTH);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				panel.setPhotoFrameSize(defaultsize[0],defaultsize[1]);
 				panel.setCenter();
 				frameGrabber  = (FrameGrabbingControl)Reha.thisClass.player.getControl("javax.media.control.FrameGrabbingControl");
@@ -217,7 +218,8 @@ public class PatientenFoto  extends RehaSmartDialog{
 		Runtime r = Runtime.getRuntime();
 		r.gc();
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -334,7 +336,8 @@ public class PatientenFoto  extends RehaSmartDialog{
 			return new Dimension(width,height);
 		}
 
-		public void paint(Graphics g){
+		@Override
+        public void paint(Graphics g){
 			super.paint(g);
 		      Graphics2D g2d = (Graphics2D)g;
 		      g2d.setColor(Color.RED);

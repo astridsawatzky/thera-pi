@@ -44,7 +44,7 @@ import ag.ion.noa.frame.ILayoutManager;
 
 
 public class OOoPanel {
-	
+
 	public ITextDocument doc = null;
 	public IFrame frame = null;
 	public ICloseListener clListener = null;
@@ -53,7 +53,7 @@ public class OOoPanel {
 	private com.sun.star.awt.XTopWindowListener topWindowListener = null;
 	private XFrame xxframe = null;
 	private XTopWindow myTopWindow = null;
-	static OOoPanel thisClass; 
+	static OOoPanel thisClass;
 	public JPanel noaPanel = null;
 	private static IFrame             officeFrame       = null;
 	static ITextDocument      document          = null;
@@ -64,7 +64,7 @@ public class OOoPanel {
 	final static int ANSICHT_DOKUMENT = 0;
 	public static int ansicht = 0;
 	DokumentListener doclistener = null;
-	
+
 	public OOoPanel(JPanel jpan){
 		super();
 		noaPanel = jpan;
@@ -75,14 +75,14 @@ public class OOoPanel {
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
+		}
 	}
-	
+
 	public void dokumentLaden(String datei, Vector vec,boolean direktPrint){
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setAsTemplate(true);
 		docdescript.setURL(datei);
-		
+
 		//docdescript.setHidden(true);
 		//docdescript.setFilterDefinition(HTMLFilter.FILTER.getFilterDefinition(IDocument.WRITER));
 		System.out.println("***************Datei = *****************");
@@ -97,8 +97,8 @@ public class OOoPanel {
 		} catch (DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
-		
+		}
+
 	      ITextFieldService textFieldService = document.getTextFieldService();
 	      ITextField[] placeholders = null;
 			try {
@@ -111,38 +111,38 @@ public class OOoPanel {
 			for (int i = 0; i < placeholders.length; i++) {
 				String placeholderDisplayText = placeholders[i].getDisplayText();
 				System.out.println("Platzhalter-Text = "+placeholderDisplayText);
-				
+
 				if(placeholderDisplayText.equals("<Anrede>")){
 					if(alter > 13){
-						placeholders[i].getTextRange().setText((String)vec.get(0));						
+						placeholders[i].getTextRange().setText((String)vec.get(0));
 					}else{
 						placeholders[i].getTextRange().setText("");
 					}
-				}	
+				}
 				if(placeholderDisplayText.equals("<Banrede>")){
 					placeholders[i].getTextRange().setText((String)vec.get(1));
-				}	
+				}
 				if(placeholderDisplayText.equals("<Strasse>")){
 					placeholders[i].getTextRange().setText((String)vec.get(3));
-				}	
+				}
 				if(placeholderDisplayText.equals("<Ort>")){
 					placeholders[i].getTextRange().setText((String)vec.get(4));
-				}	
+				}
 				if(placeholderDisplayText.equals("<BriefAnrede>")){
 					placeholders[i].getTextRange().setText((String)vec.get(2));
-				}	
+				}
 				if(placeholderDisplayText.equals("<Jahre>")){
 					if(alter >= 20 ){
-						placeholders[i].getTextRange().setText((String)vec.get(6)+"-sten");	
+						placeholders[i].getTextRange().setText((String)vec.get(6)+"-sten");
 					}else{
-						placeholders[i].getTextRange().setText((String)vec.get(6)+"-ten");						
+						placeholders[i].getTextRange().setText((String)vec.get(6)+"-ten");
 					}
-				}	
+				}
 
 			}
 			if(direktPrint){
 				try {
-					
+
 					//document.getFrame().getXFrame().getContainerWindow().setVisible(true);
 					document.print();
 					Toolkit.getDefaultToolkit().beep();
@@ -152,7 +152,7 @@ public class OOoPanel {
 					e.printStackTrace();
 				}
 			}
-		
+
 	}
 	public void dokumentSchreibeText(String datei){
 		if(document != null){
@@ -183,18 +183,18 @@ public class OOoPanel {
 	        	d.setTitle("Geburtstagsbriefe");
 	        	document = (ITextDocument) GBriefe.officeapplication.getDocumentService().constructNewDocument(officeFrame,IDocument.WRITER,d);
 
-	        	
+
 	        	//textDocument = (ITextDocument)document;
 	        	if(doclistener == null){
-		        	doclistener = new DokumentListener(GBriefe.officeapplication);		        		
+		        	doclistener = new DokumentListener(GBriefe.officeapplication);
 	        	}
-	        	GBriefe.officeapplication.getDesktopService().addDocumentListener(doclistener);		        	
+	        	GBriefe.officeapplication.getDesktopService().addDocumentListener(doclistener);
 			    officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
 			    officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
 			    officeFrame.disableDispatch(GlobalCommands.CLOSE_WINDOW);
 			    officeFrame.updateDispatches();
-	        	
-	        	
+
+
 	        noaPanel.setVisible(true);
 	        GBriefe.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	      }
@@ -204,7 +204,7 @@ public class OOoPanel {
 	    }
 	  }
 /*********************************************************/
-	 
+
 
 	  private IOfficeApplication startOOO() throws Throwable {
 		  IApplicationAssistant applicationAssistant = new ApplicationAssistant(GBriefe.OfficeNativePfad);
@@ -225,15 +225,13 @@ public class OOoPanel {
 	    officeAplication.activate();
 	    return officeAplication;
 	  }
-	 
-/*********************************************************/	
-	
+
+/*********************************************************/
+
 	private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent)
     throws Throwable {
 		final NativeView nativeView = new NativeView(GBriefe.OfficeNativePfad);
-		  if(nativeView == null){
-		  	System.out.println("nativeView == null");
-		  }
+
 		  if(parent == null){
 		  	System.out.println("nativeView == null");
 		  }
@@ -241,13 +239,14 @@ public class OOoPanel {
 		  parent.add(nativeView);
 		  System.out.println("nach add nativeView");
 		  parent.addComponentListener(new ComponentAdapter(){
-		      public void componentResized(ComponentEvent e) {
+		      @Override
+            public void componentResized(ComponentEvent e) {
 		        nativeView.setPreferredSize(new Dimension(parent.getWidth()-5,parent.getHeight()-5));
 		        parent.getLayout().layoutContainer(parent);
-		      }      
+		      }
 		    });
 		  if(nativeView != null){
-			  System.out.println("nativeView ist nicht null");			  
+			  System.out.println("nativeView ist nicht null");
 		  }
 		  System.out.println(parent.getWidth()+" / "+parent.getHeight());
 		  nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
@@ -264,7 +263,7 @@ public class OOoPanel {
 			    layoutManager.showElement(ILayoutManager.URL_TOOLBAR_STANDARDBAR);
 			    layoutManager.showElement(ILayoutManager.URL_TOOLBAR_TEXTOBJECTBAR);
 			    layoutManager.showElement(ILayoutManager.URL_STATUSBAR);
-			    
+
 			    officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
 			    officeFrame.disableDispatch(GlobalCommands.CLOSE_WINDOW);
 			    officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
@@ -284,13 +283,13 @@ public class OOoPanel {
 			    officeFrame.disableDispatch(GlobalCommands.OPEN_HELP);
 			    //officeFrame.disableDispatch(GlobalCommands.PRINT_PREVIEW);
 			    */
-			    
+
 			    officeFrame.updateDispatches();
-			    
+
 			    //officeFrame.getDispatch(".uno:PrintLayout").dispatch();
 			  }
-	
-	
+
+
 }
 
 
@@ -305,38 +304,38 @@ class DokumentListener implements IDocumentListener {
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onInsertDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onInsertStart(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onLoad(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onLoadDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
 		System.out.println("************************Dokument geladen************************* "+arg0);
-		
+
 	}
 	@Override
 	public void onLoadFinished(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("************************Dokument geladen finished************************* "+arg0);	
+		System.out.println("************************Dokument geladen finished************************* "+arg0);
 		/*
 		try {
 			Reha.officeapplication.getDesktopService().removeDocumentListener(this);
@@ -349,64 +348,64 @@ class DokumentListener implements IDocumentListener {
 	@Override
 	public void onModifyChanged(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onNew(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSave(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("************************Dokument gespeichert - doneSave************************* "+arg0);		
+		System.out.println("************************Dokument gespeichert - doneSave************************* "+arg0);
 	}
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSaveAsDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("************************Dokument gespeichert - done************************* "+arg0);		
+		System.out.println("************************Dokument gespeichert - done************************* "+arg0);
 	}
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("************************Dokument gespeichert - finished************************* "+arg0);		
+		System.out.println("************************Dokument gespeichert - finished************************* "+arg0);
 	}
 	@Override
 	public void onUnload(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void disposing(IEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-}	
-	
+
+}
+

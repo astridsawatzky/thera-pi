@@ -28,6 +28,7 @@ public class DateInputVerifier extends InputVerifier {
 	public DateInputVerifier(JFormattedTextField tf){
 		this.input = tf;
 	}
+    @Override
     public boolean verify (final JComponent input) {
     ////System.out.println("Input getText = "+((JRtaTextField)input).getText());
     ////System.out.println("Länge des Inputs = "+((JRtaTextField)input).getText().length());    
@@ -87,7 +88,8 @@ public class DateInputVerifier extends InputVerifier {
     	}
         final Date d = sdf.parse (input.getText());
         SwingUtilities.invokeLater(new Runnable () {
-          public void run () {
+          @Override
+        public void run () {
             input.setText(sdf.format(d));
           }
         });
@@ -131,6 +133,7 @@ public class DateInputVerifier extends InputVerifier {
       }
     }
 
+    @Override
     public boolean shouldYieldFocus (final JComponent input) {
       if (!verify(input)) {
         input.setForeground(Color.RED);

@@ -15,7 +15,8 @@ public class DoubleTableCellRenderer extends DefaultTableCellRenderer
 	 */
 	private static final long serialVersionUID = -1029644753226393604L;
 	DecimalFormat dform = new DecimalFormat("####0.00");
-	public Component getTableCellRendererComponent(final JTable table, final
+	@Override
+    public Component getTableCellRendererComponent(final JTable table, final
 			Object value,boolean isSelected,boolean hasFocus,int row,int column){
 			super.getTableCellRendererComponent(table, value, isSelected, hasFocus,row, column);
 			setHorizontalAlignment(javax.swing.SwingConstants. RIGHT);

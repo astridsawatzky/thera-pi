@@ -84,6 +84,7 @@ public void  ListenerSetzen(int aktPanel){
 	return;
 }
 
+@Override
 public void paintComponent( Graphics g ) { 
 		//super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;
@@ -806,7 +807,8 @@ public void paintComponent( Graphics g ) {
 		this.blockAktiv = block;
 		this.maleSchwarz = schwarz;
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				repaint();
 		 	}
 		});

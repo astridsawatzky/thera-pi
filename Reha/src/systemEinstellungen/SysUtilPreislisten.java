@@ -183,7 +183,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				if(arg0.getClickCount()==1){
 					final MouseEvent xarg0 = arg0;
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							preislisten.setRowSelectionInterval(preislisten.getSelectedRow(), preislisten.getSelectedRow());
 							preislisten.setColumnSelectionInterval(preislisten.getSelectedColumn(), preislisten.getSelectedColumn());
 							//startCellEditing(tarife,tarife.getSelectedRow(),tarife.getSelectedColumn());
@@ -193,7 +194,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 					return;
 				}else if(arg0.getClickCount()==2){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							preislisten.setRowSelectionInterval(preislisten.getSelectedRow(), preislisten.getSelectedRow());
 							preislisten.setColumnSelectionInterval(preislisten.getSelectedColumn(), preislisten.getSelectedColumn());
 							startCellEditing(preislisten,preislisten.getSelectedRow(),preislisten.getSelectedColumn());
@@ -230,7 +232,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 				final int xcols = col;
 				final JXTable xtable = table;
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 				 		  xtable.setRowSelectionInterval(xrows, xrows);
 				 		 xtable.setColumnSelectionInterval(xcols, xcols);
 				 		  xtable.scrollRowToVisible(xrows);
@@ -300,7 +303,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 	}
 
 	private class MyListener implements ActionListener {
-		public void actionPerformed(ActionEvent e) {
+		@Override
+        public void actionPerformed(ActionEvent e) {
 			//Object src = e.getSource();
 			String actionCmd = e.getActionCommand();
 			if (actionCmd.equals("Enter")) {
@@ -379,7 +383,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 
 				if(((JComponent)e.getSource()).getName().equals("rezeptklassen")){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							jcmb[1].removeActionListener(getInstance());
 							int aktuell = jcmb[1].getSelectedIndex();
 							jcmb[1].setDataVector(SystemPreislisten.hmPreisGruppen.get(disziplin[jcmb[0].getSelectedIndex()]));
@@ -394,7 +399,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 		}
 		if(cmd.equals("plUpdate")){
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run(){
+			 	   @Override
+                public  void run(){
 			 		   JOptionPane.showMessageDialog(null,"Die Forumsteilnehmer von Thera-Pi.org sind bemüht\n"+
 			 				   "die Preislisten vollständig und aktuell zu halten.\n\n"+
 			 				   "Wir übernehmen aber keinerlei Garantie dafür, daß dies zu jedem Zeitpunkt\n"+
@@ -440,7 +446,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			preislisten.validate();
 			final int xrow = row;
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					preislisten.scrollRowToVisible(preislisten.getRowCount());
 					preislisten.setRowSelectionInterval(xrow, xrow);
 				}
@@ -599,7 +606,8 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 	}
 	private void doZurueck(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 					remove(plupdate);
 					pledit.validate();
 					add(pledit,BorderLayout.CENTER);
@@ -997,14 +1005,16 @@ class MyPreislistenTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		if(columnIndex==3 || columnIndex==4){
 			return Double.class;
 		}
 		   return String.class;
     }
 
-	public boolean isCellEditable(int row, int col) {
+	@Override
+    public boolean isCellEditable(int row, int col) {
 		if(col == 5){
 			return false;
 		}
@@ -1018,12 +1028,14 @@ class MyServerTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		return String.class;
 
  }
 
-	public boolean isCellEditable(int row, int col) {
+	@Override
+    public boolean isCellEditable(int row, int col) {
 		return false;
 	}
 	   

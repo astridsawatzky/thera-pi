@@ -29,20 +29,20 @@ import javax.swing.JOptionPane;
 
 
 public class SqlInfo {
-	
+
 	static JFrame frame = null;
 	static Connection conn = null;
 	static InetAddress dieseMaschine;
 	static Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
 	static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-	
-	
+
+
 	public SqlInfo(JFrame frame,Connection conn,InetAddress dieseMaschine){
 		SqlInfo.frame = frame;
 		SqlInfo.conn = conn;
 		SqlInfo.dieseMaschine = dieseMaschine;
 	}
-	
+
 
 	public SqlInfo(JFrame frame, Connection conn) {
 		SqlInfo.frame = frame;
@@ -54,7 +54,7 @@ public class SqlInfo {
 		SqlInfo.conn = null;
 		SqlInfo.dieseMaschine = null;
 	}
-	
+
 	public void setFrame(JFrame frame){
 		SqlInfo.frame = frame;
 	}
@@ -85,7 +85,7 @@ public class SqlInfo {
 		boolean gibtsschon = false;
 		Statement stmt = null;
 		ResultSet rs = null;
-			
+
 		try {
 			if(frame != null)
 			frame.setCursor(wartenCursor);
@@ -97,18 +97,18 @@ public class SqlInfo {
 		}
 		try{
 			rs = stmt.executeQuery(sstmt);
-			
+
 			if(rs.next()){
 				gibtsschon = true;
 			}
 			if(frame != null)
 			frame.setCursor(normalCursor);
-			
+
 		}catch(SQLException ev){
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -116,7 +116,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -132,7 +132,7 @@ public class SqlInfo {
 		int retid = -1;
 		Statement stmt = null;
 		ResultSet rs = null;
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -144,7 +144,7 @@ public class SqlInfo {
 			if(frame != null)
 			frame.setCursor(wartenCursor);
 			String sstmt1 = "insert into "+tabelle+" set "+feld+" = '"+dieseMaschine+"'";
-			stmt.execute(sstmt1);			
+			stmt.execute(sstmt1);
 			String sstmt2 = "select id from "+tabelle+" where "+feld+" = '"+dieseMaschine+"'";
 			rs = stmt.executeQuery(sstmt2);
 			if(rs.next()){
@@ -156,7 +156,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -165,7 +165,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -182,7 +182,7 @@ public class SqlInfo {
 		int retid = -1;
 		Statement stmt = null;
 		ResultSet rs = null;
-			
+
 		try {
 
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -190,15 +190,15 @@ public class SqlInfo {
 			stmt.execute(befehl);
 			rs = stmt.executeQuery("select max(id) from "+tabelle);
 			if(rs.next()){
-				retid = rs.getInt(1);	
+				retid = rs.getInt(1);
 			}
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
+
+
 		finally {
 			if (rs != null) {
 				try {
@@ -206,7 +206,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -218,12 +218,12 @@ public class SqlInfo {
 		return retid;
 	}
 /*******************************/
-	
+
 	public static Vector<String> holeSatz(String tabelle, String felder, String kriterium, List<?> ausschliessen){
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -243,7 +243,7 @@ public class SqlInfo {
 				 for(int i = 1 ; i < numberOfColumns;i++){
 					 if(nichtlesen > 0){
 						 if(!ausschliessen.contains( rsMetaData.getColumnName(i)) ){
-							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );						 
+							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
 						 }
 					 }else{
 						 retvec.add((rs.getString(i)==null  ? "" :  rs.getString(i)));
@@ -256,7 +256,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -265,7 +265,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -283,7 +283,7 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
@@ -303,7 +303,7 @@ public class SqlInfo {
 				 for(int i = 1 ; i < numberOfColumns;i++){
 					 if(nichtlesen > 0){
 						 if(!ausschliessen.contains( rsMetaData.getColumnName(i)) ){
-							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );						 
+							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
 						 }
 					 }else{
 						 retvec.add((rs.getString(i)==null  ? "" :  rs.getString(i)));
@@ -315,7 +315,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -324,7 +324,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -365,7 +365,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -382,7 +382,7 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -396,7 +396,7 @@ public class SqlInfo {
 			String sstmt = "select "+feld+" from "+tabelle+kriterium;
 			rs = stmt.executeQuery(sstmt);
 			if(rs.next()){
-				 retvec.add( (rs.getString(1)==null  ? "" :  rs.getString(1)) );						 
+				 retvec.add( (rs.getString(1)==null  ? "" :  rs.getString(1)) );
 				 retvec.add( (rs.getString(2)==null  ? "" :  rs.getString(2)) );
 			}
 			if(frame != null)
@@ -405,7 +405,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -414,7 +414,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -428,7 +428,7 @@ public class SqlInfo {
 	}
 
 	/*******************************/
-	
+
 	public static Vector<Vector<String>> holeSaetze(String tabelle, String felder, String kriterium, List<String> ausschliessen){
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -447,7 +447,7 @@ public class SqlInfo {
 			frame.setCursor(wartenCursor);
 			String sstmt = "select "+felder+" from "+tabelle+" where "+kriterium;
 			rs = stmt.executeQuery(sstmt);
-			
+
 			int nichtlesen = ausschliessen.size();
 			while(rs.next()){
 				try{
@@ -457,7 +457,7 @@ public class SqlInfo {
 					 for(int i = 1 ; i < numberOfColumns;i++){
 						 if(nichtlesen > 0){
 							 if(!ausschliessen.contains( rsMetaData.getColumnName(i)) ){
-								 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );						 
+								 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
 							 }
 						 }else{
 							 retvec.add( (rs.getString(i)==null  ? "" :  rs.getString(i)) );
@@ -475,7 +475,7 @@ public class SqlInfo {
 		}catch(SQLException ev){
 			ev.printStackTrace();
 			//JOptionPane.showMessageDialog(null, "Fehler in der MySqlFunktion-HoeleSaetze");
-		}	
+		}
 		finally {
 			if (rsMetaData != null){
 				rsMetaData = null;
@@ -487,7 +487,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -508,7 +508,7 @@ public class SqlInfo {
 		//innerhalb der spalten, bezogen auf die Spalten -> OR-Suche
 		String ret = praefix;
 		String cmd = test;
-		//zun�chst versuchen da� immer nur ein Leerzeichen zwischen den Begriffen existiert 
+		//zun�chst versuchen da� immer nur ein Leerzeichen zwischen den Begriffen existiert
 		cmd = cmd.replaceAll("   ", " ");
 		cmd = cmd.replaceAll("  ", " ");
 		// wer jetzt immer noch Leerzeichen in der Suchbedingung hat ist selbst schuld daß er nix finder!!!
@@ -525,8 +525,8 @@ public class SqlInfo {
 			ret = ret +") ";
 			return ret;
 		}
-		
-		
+
+
 		ret = ret +"( ";
 		for(int i = 0; i < split.length;i++){
 			if(! split[i].equals("")){
@@ -542,13 +542,13 @@ public class SqlInfo {
 					ret = ret+ " AND ";
 				}
 			}
-			
+
 		}
 		ret = ret +") ";
 		return ret;
-		
+
 	}
-	/***********************************/	
+	/***********************************/
 	private static String toRTF(String toConvert){
 		String convertet = "";
 		convertet = toConvert.replace("Ö", "\\\\\\\\\\'d6").replace("ö", "\\\\\\\\\\'f6");
@@ -557,7 +557,7 @@ public class SqlInfo {
 		convertet = convertet.replace("ß", "\\\\\\\\\\'df");
 		return String.valueOf(convertet);
 	}
-	/***********************************/	
+	/***********************************/
 	public static String macheWhereKlauselRTF(String praefix,String test,String[] suchein){
 		String ret = praefix;
 		String cmd = test;
@@ -569,11 +569,11 @@ public class SqlInfo {
 			ret = ret +" (";
 			for(int i = 0; i < felder.length;i++){
 				if(i==0){
-					ret = ret+felder[i]+" like '%"+cmd+"%'";	
+					ret = ret+felder[i]+" like '%"+cmd+"%'";
 				}else{
 					ret = ret+felder[i]+" like '%"+toRTF(cmd)+"%'";
 				}
-				
+
 				if(i < felder.length-1){
 					ret = ret+ " OR ";
 				}
@@ -587,11 +587,11 @@ public class SqlInfo {
 				ret = ret +" (";
 				for(int i2 = 0; i2 < felder.length;i2++){
 					if(i2==0){
-						ret = ret+felder[i2]+" like '%"+split[i]+"%'";	
+						ret = ret+felder[i2]+" like '%"+split[i]+"%'";
 					}else{
 						ret = ret+felder[i2]+" like '%"+toRTF(split[i])+"%'";
 					}
-					
+
 					if(i2 < felder.length-1){
 						ret = ret+ " OR ";
 					}
@@ -601,14 +601,14 @@ public class SqlInfo {
 					ret = ret+ " AND ";
 				}
 			}
-			
+
 		}
 		ret = ret +") ";
 		return ret;
-		
+
 	}
-	
-	
+
+
 	public static int erzeugeNummer(String nummer){
 		int reznr = -1;
 		/****** Zunächst eine neue Rezeptnummer holen ******/
@@ -645,13 +645,13 @@ public class SqlInfo {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
 		numvec = null;
 		return reznr;
 
 	}
-	
+
 	public static int erzeugeNummerMitMax(String nummer,int max){
 		int reznr = -1;
 		/****** Zunächst eine neue Rezeptnummer holen ******/
@@ -690,7 +690,7 @@ public class SqlInfo {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
 		numvec = null;
 		return reznr;
@@ -702,7 +702,7 @@ public class SqlInfo {
 		int retid = -1;
 		Statement stmt = null;
 		ResultSet rs = null;
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -714,7 +714,7 @@ public class SqlInfo {
 			if(frame != null)
 			frame.setCursor(wartenCursor);
 			String sstmt1 = "select count(*) from "+tabelle+" where "+bedingung;
-			rs = stmt.executeQuery(sstmt1);			
+			rs = stmt.executeQuery(sstmt1);
 			if(rs.next()){
 				retid = rs.getInt(1);
 			}
@@ -724,7 +724,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -733,7 +733,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -748,13 +748,11 @@ public class SqlInfo {
 /*******************************/
 	public static void aktualisiereSatz(String tabelle, String sets, String kriterium){
 		Statement stmt = null;
-		ResultSet rs = null;
-	
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		try{
@@ -770,16 +768,8 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -794,8 +784,7 @@ public class SqlInfo {
 	/*******************************/
 	public static void aktualisiereSaetze(String tabelle, String sets, String kriterium){
 		Statement stmt = null;
-		ResultSet rs = null;
-	
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -816,16 +805,9 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
+
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -845,7 +827,7 @@ public class SqlInfo {
 		ResultSet rs = null;
 		String ret = "";
 		//Vector<String> retvec = new Vector<String>();
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -868,7 +850,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -877,7 +859,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -894,7 +876,6 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		String ret = "";
-		ResultSetMetaData rsMetaData = null;
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -920,9 +901,6 @@ public class SqlInfo {
 			//System.out.println("VendorError: " + ev.getErrorCode());
 		}
 		finally {
-			if(rsMetaData != null){
-				rsMetaData = null;
-			}
 			if (rs != null) {
 				try {
 					rs.close();
@@ -930,7 +908,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -943,15 +921,15 @@ public class SqlInfo {
 		return ret;
 	}
 /*****************************************/
-	
+
 	/*****************************************/
-	
+
 	public static Vector<Vector<String>> holeFelder(String xstmt){
 		Statement stmt = null;
 		ResultSet rs = null;
 		//String ret = "";
 		Vector<String> retvec = new Vector<String>();
-		Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();	
+		Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();
 		ResultSetMetaData rsMetaData = null;
 		int numberOfColumns = 0;
 		try {
@@ -997,7 +975,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -1016,7 +994,7 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		String ret = "";
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -1039,7 +1017,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -1048,7 +1026,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -1065,7 +1043,7 @@ public class SqlInfo {
 		ResultSet rs = null;
 		String ret = "";
 		Vector<String> vecret = new Vector<String>();
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -1088,7 +1066,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -1097,7 +1075,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -1113,7 +1091,7 @@ public class SqlInfo {
 	/*****************************************/
 	public static boolean sqlAusfuehren(String sstmt){
 		Statement stmt = null;
-		boolean ret = true;	
+		boolean ret = true;
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -1130,7 +1108,7 @@ public class SqlInfo {
 			ev.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Fehler bei der Ausführung des Statements\nMethode:sqlAusfuehren("+sstmt+")\n\nBitte informieren Sie sofort den Administrator!!!");
 			ret = false;
-		}	
+		}
 		finally {
 			if (stmt != null) {
 				try {
@@ -1148,7 +1126,7 @@ public class SqlInfo {
 		Statement stmt = null;
 		ResultSet rs = null;
 		InputStream is = null;
-			
+
 		try {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
@@ -1160,10 +1138,10 @@ public class SqlInfo {
 			if(frame != null)
 			frame.setCursor(wartenCursor);
 			String sstmt = "select "+feld+" from "+tabelle+" where "+kriterium+" LIMIT 1";
-			
+
 			rs = stmt.executeQuery(sstmt);
 			if(rs.next()){
-				is = rs.getBinaryStream(1); 
+				is = rs.getBinaryStream(1);
 			}
 			if(frame != null)
 			frame.setCursor(normalCursor);
@@ -1171,7 +1149,7 @@ public class SqlInfo {
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
 			//System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -1180,7 +1158,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -1198,7 +1176,7 @@ public class SqlInfo {
 			String argument,
 			boolean ausnahmen,
 			List<?> lausnahmen){
-		
+
 		boolean ret = false;
 		StringBuffer transferBuf = new StringBuffer();
 		StringBuffer insertBuf = new StringBuffer();
@@ -1207,7 +1185,7 @@ public class SqlInfo {
 		int rezeptFelder = 0;
 		for(int i = 0; i < feldNamen.size();i++){
 			if(i > 0){
-				transferBuf.append(","+feldNamen.get(i));				
+				transferBuf.append(","+feldNamen.get(i));
 			}else{
 				transferBuf.append(feldNamen.get(i));
 			}
@@ -1216,12 +1194,12 @@ public class SqlInfo {
 		////System.out.println(transferBuf.toString());
 		//System.out.println(transferBuf.toString());
 		Vector<Vector<String>> vec = SqlInfo.holeFelder(transferBuf.toString());
-		
+
 		if(vec.size()<=0){
 			return false;
 		}
 		try{
-			rezeptFelder = vec.get(0).size();	
+			rezeptFelder = vec.get(0).size();
 			insertBuf.append("insert into "+targetdb+" set ");
 			for(int i = 0; i < rezeptFelder;i++){
 				if(!vec.get(0).get(i).equals("")){
@@ -1240,7 +1218,7 @@ public class SqlInfo {
 		}
 		return ret;
 	}
-	
+
 	public static InputStream liesIniAusTabelle(String inifilename){
 		InputStream retStream = null;
 		Statement stmt = null;
@@ -1249,14 +1227,14 @@ public class SqlInfo {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 				String test = "select inhalt from inidatei where dateiname='"+inifilename+"' LIMIT 1";
-				
+
 				rs = stmt.executeQuery(test);
 				if(rs.next()){
 					retStream = rs.getBinaryStream(1);
 				}
 		}catch (SQLException e) {
 			e.printStackTrace();
-		} 
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -1264,7 +1242,7 @@ public class SqlInfo {
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -1272,7 +1250,7 @@ public class SqlInfo {
 					stmt = null;
 				}
 			}
-			
+
 		}
 		return retStream;
 	}
@@ -1289,11 +1267,11 @@ public class SqlInfo {
 				if(SqlInfo.holeEinzelFeld("select dateiname from inidatei where dateiname='"+inifilename+"' LIMIT 1").equals("")){
 						select = "insert into inidatei set dateiname = ? , inhalt = ?";
 				}else{
-					select = "update inidatei set dateiname = ? , inhalt = ? where dateiname = '"+inifilename+"'" ;						
+					select = "update inidatei set dateiname = ? , inhalt = ? where dateiname = '"+inifilename+"'" ;
 				}
 				ps = conn.prepareStatement(select);
 				ps.setString(1, inifilename);
-				ps.setBytes(2, buf);			  
+				ps.setBytes(2, buf);
 				ps.execute();
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -1307,7 +1285,7 @@ public class SqlInfo {
 					} catch (SQLException sqlEx) {
 						rs = null;
 					}
-				}	
+				}
 				if (stmt != null) {
 					try {
 						stmt.close();
@@ -1321,7 +1299,7 @@ public class SqlInfo {
 			}
 			ret = true;
 		}catch(Exception ex){
-			
+
 		}
 		return ret;
 	}

@@ -153,7 +153,8 @@ public class ShotBereich extends JPanel implements MouseListener,MouseMotionList
            }
 	}
 
-	public void paintComponent( Graphics g ) { 
+	@Override
+    public void paintComponent( Graphics g ) { 
 		super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;	
 		  if(dragstart && shiftunten){
@@ -444,7 +445,8 @@ class TransferableImage implements Transferable, ClipboardOwner
    }
 
    //Returns an object which represents the data to be transferred.
-   public Object getTransferData(DataFlavor flavor)
+   @Override
+public Object getTransferData(DataFlavor flavor)
       throws UnsupportedFlavorException
    {
       if( flavor.equals(DataFlavor.imageFlavor) )
@@ -455,20 +457,23 @@ class TransferableImage implements Transferable, ClipboardOwner
 
    //Returns an array of DataFlavor objects indicating the flavors
    //the data can be provided in.
-   public DataFlavor[] getTransferDataFlavors()
+   @Override
+public DataFlavor[] getTransferDataFlavors()
    {
       return new DataFlavor[] {DataFlavor.imageFlavor} ;
    }
 
    //Returns whether or not the specified data flavor is supported
    //for this object.
-   public boolean isDataFlavorSupported(DataFlavor flavor)
+   @Override
+public boolean isDataFlavorSupported(DataFlavor flavor)
    {
       return flavor.equals(DataFlavor.imageFlavor) ;
    }
 
    // Implementierung des Interfaces ClipboardOwner
-   public void lostOwnership(Clipboard clipboard, Transferable contents)
+   @Override
+public void lostOwnership(Clipboard clipboard, Transferable contents)
    {
    }
 

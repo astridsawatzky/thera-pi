@@ -223,7 +223,8 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		vorlagen.getColumn(0).setCellEditor(new TitelEditor());
 		vorlagen.setSortable(false);
 		vorlagen.addMouseListener(new MouseAdapter(){		
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					int row = vorlagen.getSelectedRow();
@@ -362,7 +363,8 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 			//vorlagen.setCellSelectionEnabled(true);
 			final int xrows = rows -1;
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run(){
+			 	   @Override
+                public  void run(){
 			 		  vorlagen.requestFocus();
 			 		  vorlagen.setRowSelectionInterval(xrows, xrows);
 			 		  startCellEditing(xrows);
@@ -391,7 +393,8 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 	private void startCellEditing(int row){
 		final int xrows = row;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 				vorlagen.editCellAt(xrows, 0);
 		 	   }
 		});
@@ -406,6 +409,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
         chooser.setCurrentDirectory(file);
 
         chooser.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                         || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
@@ -503,11 +507,13 @@ class MyVorlagenTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class getColumnClass(int columnIndex) {
+	@Override
+    public Class getColumnClass(int columnIndex) {
 		   return String.class;
     }
 
- public boolean isCellEditable(int row, int col) {
+ @Override
+public boolean isCellEditable(int row, int col) {
      if (col == 0){
      	return true;
      }else{
@@ -524,7 +530,8 @@ public TitelEditor(){
 	   //component = new JRtaTextField("NIX",true);
 	   //System.out.println("editor-Component wurde initialisiert");
 	   component.addKeyListener(new KeyAdapter(){
-		   public void keyPressed(KeyEvent arg0) {
+		   @Override
+        public void keyPressed(KeyEvent arg0) {
 				//System.out.println("********Button in KeyPressed*********");	
 				if(arg0.getKeyCode()== 10){
 					arg0.consume();
@@ -548,7 +555,8 @@ public TitelEditor(){
 	}
 
 
-	public boolean isCellEditable(EventObject anEvent) {
+	@Override
+    public boolean isCellEditable(EventObject anEvent) {
 		if(anEvent instanceof MouseEvent)
        {
           MouseEvent me = (MouseEvent)anEvent;

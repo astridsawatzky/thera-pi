@@ -49,7 +49,8 @@ public class JRehaabrechnungInternal extends JRehaInternal implements RehaEventL
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 				AktiveFenster.loescheFenster(name);
 				Reha.thisClass.progLoader.loescheRehaabrechnung();
@@ -58,7 +59,8 @@ public class JRehaabrechnungInternal extends JRehaInternal implements RehaEventL
 
 
 	}
-	public void setzeTitel(String stitel){
+	@Override
+    public void setzeTitel(String stitel){
 		super.setzeTitel(stitel);
 		repaint();
 		

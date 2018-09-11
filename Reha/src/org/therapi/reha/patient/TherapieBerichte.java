@@ -100,7 +100,8 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 		validate();
 		
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				new SwingWorker<Void,Void>(){
 
 					@Override
@@ -353,7 +354,8 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 		tabbericht.setEditable(false);
 		tabbericht.setSortable(false);
 		tabbericht.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				if(arg0.getClickCount()==2){
 					// hier pr�fen welcher Berichtstyp und dementsprechend das Berichtsfenster �ffnen
@@ -510,7 +512,8 @@ class MyBerichtTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==1){
 		   		return String.class;}
 		   else{
@@ -518,6 +521,7 @@ class MyBerichtTableModel extends DefaultTableModel{
 		   }
     }
 
+    @Override
     public boolean isCellEditable(int row, int col) {
     	return false;
     }

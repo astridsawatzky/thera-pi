@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -38,37 +37,36 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemTools.ListenerTools;
 
-public class RechteImport extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
+public class RechteImport extends RehaSmartDialog implements ActionListener{
 
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 357869906417195786L;
 
-	public JRtaCheckBox[] leistung = {null,null,null,null,null}; 
+	public JRtaCheckBox[] leistung = {null,null,null,null,null};
 
 	private RehaTPEventClass rtp = null;
-	private GutachtenWahlHintergrund rgb;	
-	
+	private GutachtenWahlHintergrund rgb;
+
 	public JButton uebernahme;
 	public JButton abbrechen;
-	
+
 	JRtaTextField rechteImport = null;
 	ButtonGroup bg = new ButtonGroup();
 	JRadioButton[] rbut = {null,null};
 	JButton[] but = {null,null};
 	JRtaComboBox combo = null;
-	
+
 	MattePainter mp = null;
 	LinearGradientPaint p = null;
 
 	public RechteImport(Point pt, JRtaTextField xtf,String xtitel,Vector<Vector<String>> rechte){
-		super(null,"RechteImportieren");		
+		super(null,"RechteImportieren");
 
 		rechteImport = xtf;
 		rechteImport.setText("");
@@ -86,7 +84,7 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 		rgb = new GutachtenWahlHintergrund();
 		rgb.setLayout(new BorderLayout());
 
-		
+
 		new SwingWorker<Void,Void>(){
 
 			@Override
@@ -94,9 +92,9 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 			    rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("GutachtenWahl"));
 				return null;
 			}
-			
+
 		}.execute();
- 
+
 		rgb.add(getImportRechte(rechte),BorderLayout.CENTER);
 		rgb.revalidate();
 		getSmartTitledPanel().setContentContainer(rgb);
@@ -104,50 +102,52 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 		setName("GutachtenWahl");
 		Point lpt = new Point(pt.x,pt.y-200);
 	    setLocation(lpt);
-	    
+
 		rtp = new RehaTPEventClass();
 		rtp.addRehaTPEventListener(this);
 
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   if(! combo.hasFocus()){
 		 			  combo.requestFocus();
-		 		   }  
+		 		   }
 			   }
-		}); 	   		
+		});
 		pack();
 		setModal(true);
 
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   if(! combo.hasFocus()){
 			 		  combo.requestFocus();
-		 		   }  
+		 		   }
 			   }
-		}); 	   		
+		});
 	}
 
-	
-/****************************************************/	
+
+/****************************************************/
 
 
-	private JPanel getImportRechte(Vector<Vector<String>> rechte){     // 1        2             3        4            5  
+	private JPanel getImportRechte(Vector<Vector<String>> rechte){     // 1        2             3        4            5
 		FormLayout lay = new FormLayout("15dlu,fill:0:grow(0.50),120dlu,fill:0:grow(0.50),10dlu",
-									//     1               2  3    4  5    6  7                 8     9   10  
+									//     1               2  3    4  5    6  7                 8     9   10
 										"20dlu,p,10dlu,p,15dlu,p,fill:0:grow(0.50),5dlu:g,p,20dlu");
 		PanelBuilder pb = new PanelBuilder(lay);
 		CellConstraints cc = new CellConstraints();
 
 		pb.getPanel().setOpaque(false);
-		
+
 		combo = new JRtaComboBox();
 		combo.setDataVectorVector(rechte, 0, 1);
 		pb.add(combo,cc.xy(3,2));
 
-		
+
 		FormLayout lay2 = new FormLayout("fill:0:grow(0.33),60dlu,fill:0:grow(0.33),60dlu,fill:0:grow(0.33)",
 				"p");
 		PanelBuilder pb2 = new PanelBuilder(lay2);
@@ -168,13 +168,14 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 		pb2.add(but[1],cc2.xy(4,1));
 		pb2.getPanel().validate();
 		pb.add(pb2.getPanel(),cc.xyw(1, 9, 5));
-		
+
 		pb.getPanel().validate();
 		return pb.getPanel();
 	}
-/****************************************************/	
-	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+/****************************************************/
+
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 
 		try{
 			if(evt.getDetails()[0] != null){
@@ -188,18 +189,19 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 					ListenerTools.removeListeners(but[1]);
 					super.dispose();
 					this.dispose();
-					//System.out.println("****************GutachtenWahl -> Listener entfernt**************");				
+					//System.out.println("****************GutachtenWahl -> Listener entfernt**************");
 				}
 			}
 		}catch(NullPointerException ne){
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			ListenerTools.removeListeners(but[0]);
 			ListenerTools.removeListeners(but[1]);
@@ -207,13 +209,13 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 			dispose();
 			//System.out.println("****************GutachtenWahl -> Listener entfernt (Closed)**********");
 		}
-		
-		
+
+
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 		if(arg0.getActionCommand().equals("uebernahme")){
 			//System.out.println("In Übernahme");
 			new SwingWorker<Void,Void>(){
@@ -224,11 +226,11 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 					return null;
 				}
 			}.execute();
-			
+
 			/********
-			 * 
+			 *
 			 * Hier noch schnell buchen entwickeln und feddisch...
-			 * 
+			 *
 			 */
 		}
 		if(arg0.getActionCommand().equals("abbrechen")){
@@ -240,15 +242,15 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()==38){
@@ -279,30 +281,30 @@ public class RechteImport extends RehaSmartDialog implements RehaTPEventListener
 		}
 	}
 
-	
-	
+
+
 }
 class GutachtenWahlHintergrund extends JXPanel{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	ImageIcon hgicon;
 	int icx,icy;
 	AlphaComposite xac1 = null;
-	AlphaComposite xac2 = null;		
+	AlphaComposite xac2 = null;
 	public GutachtenWahlHintergrund(){
 		super();
 		hgicon = null;
-		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 
-		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);			
-		
+		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f);
+		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
+
 	}
 	@Override
-	public void paintComponent( Graphics g ) { 
+	public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;
-		
+
 		if(hgicon != null){
 			g2d.setComposite(this.xac1);
 			g2d.drawImage(hgicon.getImage(), (getWidth()/2)-icx , (getHeight()/2)-icy,null);

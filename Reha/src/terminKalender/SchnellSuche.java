@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -46,7 +45,6 @@ import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import rechteTools.Rechte;
 import rehaContainer.RehaTP;
@@ -56,9 +54,9 @@ import systemTools.RezeptFahnder;
 
 
 
-public class SchnellSuche extends RehaSmartDialog implements ActionListener, KeyListener, RehaTPEventListener{
+public class SchnellSuche extends RehaSmartDialog implements ActionListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3482074172384055074L;
 	private int setOben;
@@ -86,21 +84,21 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 	TerminFenster eltern;
 	public JXDatePicker datePicker = null;
 	SchnellSucheListSelectionHandler ssucheselect = new SchnellSucheListSelectionHandler();
-	
+
 	public SchnellSuche(JXFrame owner,TerminFenster eltern){
 		//super(frame, titlePanel());
 		super(owner,"SchnellSuche");
 		dieserName = "SchnellSuche";
 		setName(dieserName);
 		getSmartTitledPanel().setName(dieserName);
-		
+
 		this.eltern = eltern;
-		
+
 		this.setModal(true);
 		this.setUndecorated(true);
 		this.setContentPanel(titlePanel() );
 		SchnellSuche.jtp.setLayout(new BorderLayout());
-		
+
 		JXPanel jp1 = new JXPanel();
 		jp1.setBorder(null);
 		jp1.setBackground(Color.WHITE);
@@ -138,11 +136,11 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 		ttbl.getColumn(1).setMaxWidth(65);
 		ttbl.getColumn(2).setMaxWidth(60);
 		ttbl.getColumn(6).setMinWidth(0);
-		ttbl.getColumn(6).setMaxWidth(0); //Datenvector				
+		ttbl.getColumn(6).setMaxWidth(0); //Datenvector
 		ttbl.getSelectionModel().addListSelectionListener(ssucheselect);
 		jscr.setViewportView(ttbl);
-		
-		
+
+
 		SchnellSuche.jtp.add(jscr,BorderLayout.CENTER);
 		JXPanel dummy = new JXPanel();
 		dummy.setBorder(null);
@@ -158,16 +156,18 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 		rtp.addRehaTPEventListener(this);
 		thisClass = this;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
+		 	   @Override
+            public  void run()
 		 	   {
 		 		  suchenFocus();
 		 	   }
-		}); 	   
-	}		    
-/*******************************************************/			
+		});
+	}
+/*******************************************************/
 /*********************************************************/
     class SchnellSucheListSelectionHandler implements ListSelectionListener {
-    	
+
+        @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             boolean isAdjusting = e.getValueIsAdjusting();
@@ -193,11 +193,11 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
 										//todo = "Farbsignale mit \XY  vor der Suche abtrennen
 										int index = reznr.indexOf("\\");
 										if(index >= 0){
-											new RezeptFahnder(false).doFahndung(reznr.substring(0,index));	
+											new RezeptFahnder(false).doFahndung(reznr.substring(0,index));
 										}else{
 											new RezeptFahnder(false).doFahndung(reznr);
 										}
-		                				//in Spalte 1 des TK den Behandler aufrufen 
+		                				//in Spalte 1 des TK den Behandler aufrufen
 		                				//und den markierten Termin auf den angewählten Termin setzen.
 										return null;
 									}
@@ -215,11 +215,11 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
             					System.out.println(eltern.getAktiveSpalte(1));
             					System.out.println(eltern.getAktiveSpalte(2));
             					*/
-            					//eltern.terminBestaetigen(eltern.getAktiveSpalte(2),false);    						
+            					//eltern.terminBestaetigen(eltern.getAktiveSpalte(2),false);
         					}catch(Exception ex){
-        						
+
         					}
- 
+
         				}
                         break;
                     }
@@ -227,8 +227,8 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener, Key
             }
 
         }
-    }	
-	
+    }
+
 public void FensterSchliessen(String welches){
 	////System.out.println("Eltern-->"+this.getParent().getParent().getParent().getParent().getParent());
 	//webBrowser.dispose();
@@ -252,11 +252,11 @@ public JXPanel eingabePanel(){
 	tfSuche.addKeyListener(this);
 	tfSuche.setName("SucheFeld");
 	eingabep.add(tfSuche,cc.xy(4,2));
-	
+
 	heute = new JXButton(startdatum);
 	heute.setActionCommand("start");
 	heute.addActionListener(this);
-	heute.addKeyListener(this);	
+	heute.addKeyListener(this);
 	eingabep.add(heute,cc.xy(6,2));
 
 	heute4 = new JXButton(startdatum+" + 4 Tage");
@@ -264,17 +264,17 @@ public JXPanel eingabePanel(){
 	heute4.addActionListener(this);
 	heute4.addKeyListener(this);
 	eingabep.add(heute4,cc.xy(8,2));
-	
+
 	lbldatum = new JXLabel("            ");
 	eingabep.add(lbldatum,cc.xy(10,2));
-	
 
-	
-	datePicker = new JXDatePicker(); 
+
+
+	datePicker = new JXDatePicker();
 	datePicker.setDate(new Date());
 	datePicker.setName("datePicker");
 	//datePicker.addActionListener(this);
-	
+
 	datePicker.addActionListener(new ActionListener(){
 
 		@Override
@@ -285,14 +285,14 @@ public JXPanel eingabePanel(){
 			heute.setText(startdatum);
 			heute4.setText(startdatum+" + 4 Tage");
 		}
-		
+
 	});
-	
+
 	eingabep.add(datePicker,cc.xy(12,2));
-	
-	
+
+
 	eingabep.setVisible(true);
-	
+
 	return eingabep;
 }
 
@@ -316,14 +316,14 @@ public void setTerminTable(Vector threadVect){
 	ttbl.getColumn(1).setMaxWidth(65);
 	ttbl.getColumn(2).setMaxWidth(60);
 	ttbl.getColumn(6).setMinWidth(0);
-	ttbl.getColumn(6).setMaxWidth(0); //Datenvector				
+	ttbl.getColumn(6).setMaxWidth(0); //Datenvector
 	ttbl.setEditable(false);
 	ttbl.setSortable(true);
 	//SortOrder setSort = SortOrder.ASCENDING;
 	//ttbl.setSortOrder(6,(SortOrder) setSort);
-	ttbl.setSelectionMode(0);	
+	ttbl.setSelectionMode(0);
 
-	
+
 }
 private static JXPanel titlePanel(){
 	jp = new RehaTP(0);
@@ -339,6 +339,7 @@ public String dieserName(){
 	return this.getName();
 }
 
+@Override
 public void rehaTPEventOccurred(RehaTPEvent evt) {
 	// TODO Auto-generated method stub
 	//System.out.println("****************das darf doch nicht wahr sein in DruckFenster**************");
@@ -348,7 +349,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 		//if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
 			FensterSchliessen(evt.getDetails()[0]);
 			rtp.removeRehaTPEventListener(this);
-		//}	
+		//}
 	}catch(NullPointerException ne){
 		//System.out.println("In DruckFenster" +evt);
 	}
@@ -356,6 +357,7 @@ public void rehaTPEventOccurred(RehaTPEvent evt) {
 
 }
 
+@Override
 public void actionPerformed(ActionEvent arg0) {
 	String cmd = arg0.getActionCommand();
 		if(cmd.equals("start")){
@@ -383,12 +385,12 @@ private void tageSuchen(int abheute){
 		ttbl.getColumn(1).setMaxWidth(65);
 		ttbl.getColumn(2).setMaxWidth(60);
 		ttbl.getColumn(6).setMinWidth(0);
-		ttbl.getColumn(6).setMaxWidth(0); //Datenvector				
+		ttbl.getColumn(6).setMaxWidth(0); //Datenvector
 		ttbl.setEditable(false);
 		ttbl.setSortable(true);
 		//SortOrder setSort = SortOrder.ASCENDING;
 		//ttbl.setSortOrder(6,(SortOrder) setSort);
-		ttbl.setSelectionMode(0);	
+		ttbl.setSelectionMode(0);
 
 		String[] stmts = {null};
 		String sdatum = "";
@@ -410,12 +412,12 @@ private void tageSuchen(int abheute){
 		ttbl.getColumn(1).setMaxWidth(65);
 		ttbl.getColumn(2).setMaxWidth(60);
 		ttbl.getColumn(6).setMinWidth(0);
-		ttbl.getColumn(6).setMaxWidth(0); //Datenvector				
+		ttbl.getColumn(6).setMaxWidth(0); //Datenvector
 		ttbl.setEditable(false);
 		ttbl.setSortable(true);
 		//SortOrder setSort = SortOrder.ASCENDING;
 		//ttbl.setSortOrder(6,(SortOrder) setSort);
-		ttbl.setSelectionMode(0);	
+		ttbl.setSelectionMode(0);
 		String[] stmts = {null,null,null,null,null};
 		String sdatum = "";
 		aktDatum = startdatum; //DatFunk.sDatPlusTage(DatFunk.sHeute(), 0);
@@ -439,7 +441,7 @@ private void tageSuchen(int abheute){
 		for(int i=0;i<5;i++){
 			//System.out.println("Befehl = "+stmts[i]);
 		}
-		*/	
+		*/
 		SuchenInTagen sIt = new SuchenInTagen();
 		sIt.setzeStatement(stmts.clone(), suchkrit);
 	}
@@ -454,11 +456,12 @@ public static ArrayList<String[]> getTermine(){
 }
 public void suchenFocus(){
 	SwingUtilities.invokeLater(new Runnable(){
-	 	   public  void run()
+	 	   @Override
+        public  void run()
 	 	   {
 	 		   tfSuche.requestFocus();
 	 	   }
-	}); 
+	});
 	/*
     Verschluesseln man = Verschluesseln.getInstance();
     man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
@@ -498,19 +501,20 @@ public void keyPressed(KeyEvent arg0) {
 		if(frage==JOptionPane.YES_OPTION){
 			eltern.terminBestaetigen(eltern.getAktiveSpalte(2),false);
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					ttbl.requestFocus();
 				}
 			});
 		}
 	}
 
-	
+
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
 	// TODO Auto-generated method stub
-	
+
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
@@ -518,7 +522,7 @@ public void keyTyped(KeyEvent arg0) {
 	if(arg0.getKeyCode() == 27){
 		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
-	}	
+	}
 }
 
 
@@ -526,20 +530,21 @@ public void keyTyped(KeyEvent arg0) {
 /*******************************************/
 }
 /******************************************/
-final class SuchenInTagen extends Thread implements Runnable{
+final class SuchenInTagen extends Thread{
 	Statement stmt = null;
 	ResultSet rs = null;
 	String sergebnis = "";
 	boolean gesperrt = false;
 	String[] exStatement = null;
 	String suchkrit = "";
-	ArrayList<String> atermine = new ArrayList<String>(); 
+	ArrayList<String> atermine = new ArrayList<String>();
 	public void setzeStatement(String[] exStatement,String suchkrit){
 		this.exStatement = exStatement;
 		this.suchkrit = suchkrit;
 		start();
 	}
-	public void run(){
+	@Override
+    public void run(){
 		Vector treadVect = new Vector();
 		try {
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -550,7 +555,7 @@ final class SuchenInTagen extends Thread implements Runnable{
 					////System.out.println("Nach for..."+exStatement[i]);
 					//SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
 					while(rs.next()){
-						/*in Spalte 301 steht die Anzahl der belegten Bl�cke*/ 
+						/*in Spalte 301 steht die Anzahl der belegten Bl�cke*/
 						int belegt = rs.getInt(301);
 						SchnellSuche.thisClass.setLabelDatum(DatFunk.sDatInDeutsch(rs.getString(305)));
 						String name = "";
@@ -562,21 +567,21 @@ final class SuchenInTagen extends Thread implements Runnable{
 						String skollege = "";
 						int ikollege = 0;
 						for(int ii = 0;ii < belegt;ii++){
-							name = rs.getString("T"+(ii+1)); 
+							name = rs.getString("T"+(ii+1));
 							nummer = rs.getString("N"+(ii+1));
 							skollege = rs.getString(303).substring(0,2);
 							if( skollege.substring(0,1).equals("0") ){
 								ikollege = Integer.parseInt(skollege.substring(1,2));
 							}else{
-								ikollege = Integer.parseInt(skollege);								
+								ikollege = Integer.parseInt(skollege);
 							}
 							if(name.contains(suchkrit) || nummer.contains(suchkrit) ){
 								uhrzeit = rs.getString("TS"+(ii+1));
-								sorigdatum = rs.getString(305); 
+								sorigdatum = rs.getString(305);
 								sdatum = DatFunk.sDatInDeutsch(sorigdatum);
 								skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 								//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
-								
+
 								termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
 								"  -  "+name +" - "+nummer+" - "+skollege;
 								//SchnellSuche.thisClass.setTextAreaText(termin);
@@ -584,9 +589,9 @@ final class SuchenInTagen extends Thread implements Runnable{
 								atermine.add(sdatum);
 								atermine.add(uhrzeit.substring(0,5));
 								atermine.add(name);
-								atermine.add(nummer);								
-								atermine.add(skollege);								
-								atermine.add(sorigdatum+uhrzeit.substring(0,5));								
+								atermine.add(nummer);
+								atermine.add(skollege);
+								atermine.add(sorigdatum+uhrzeit.substring(0,5));
 								treadVect.addElement(atermine.clone());
 								//SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
 								atermine.clear();
@@ -595,11 +600,11 @@ final class SuchenInTagen extends Thread implements Runnable{
 									String extraktnummer = (nummer.indexOf("\\") >= 0 ? nummer.substring(0,nummer.indexOf("\\")) : nummer);
 									if(extraktnummer.length() > 2 && (!name.startsWith("®")) && (!nummer.equals("@FREI"))){
 										uhrzeit = rs.getString("TS"+(ii+1));
-										sorigdatum = rs.getString(305); 
+										sorigdatum = rs.getString(305);
 										sdatum = DatFunk.sDatInDeutsch(sorigdatum);
 										skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
 										//skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
-										
+
 										termin = DatFunk.WochenTag(sdatum)+" - "+sdatum+" - "+uhrzeit+
 										"  -  "+name +" - "+nummer+" - "+skollege;
 										//SchnellSuche.thisClass.setTextAreaText(termin);
@@ -607,25 +612,25 @@ final class SuchenInTagen extends Thread implements Runnable{
 										atermine.add(sdatum);
 										atermine.add(uhrzeit.substring(0,5));
 										atermine.add(name);
-										atermine.add(nummer);								
-										atermine.add(skollege);								
-										atermine.add(sorigdatum+uhrzeit.substring(0,5));								
+										atermine.add(nummer);
+										atermine.add(skollege);
+										atermine.add(sorigdatum+uhrzeit.substring(0,5));
 										treadVect.addElement(atermine.clone());
 										atermine.clear();
-									}									
+									}
 								}catch(Exception ex){
-									
+
 								}
 
 							}
 						}
 					}
-					
+
 				}catch(SQLException ev){
 					//System.out.println("SQLException: " + ev.getMessage());
 					//System.out.println("SQLState: " + ev.getSQLState());
 					//System.out.println("VendorError: " + ev.getErrorCode());
-				}	
+				}
 			}
 			SchnellSuche.thisClass.setTerminTable((Vector) treadVect.clone());
 		}catch(SQLException ex) {
@@ -648,9 +653,9 @@ final class SuchenInTagen extends Thread implements Runnable{
 			}
 			}
 		}
-		 
+
 	}
-	
+
 }
 
 
@@ -658,23 +663,25 @@ class SchnellSucheTableModel extends AbstractTableModel {
     private static final boolean DEBUG = false;
 
     //public String[] columnNames = null;
-    //public Object[][] data = null;    
-    
+    //public Object[][] data = null;
+
     public String[] columnNames = { "", "",};
 
     //public Object[][] data = {{"","","","","","",-1,-1}};
     public Vector<ArrayList> data = null;
 
+    @Override
     public int getColumnCount() {
       return columnNames.length;
     }
 
+    @Override
     public int getRowCount() {
       return data.size();
     }
-    
+
     public void deleteRow(int row){
-    	////System.out.println("Wert = "+getValueAt(row,3)); 
+    	////System.out.println("Wert = "+getValueAt(row,3));
     	printDebugData();
     	data.remove(row);
     	fireTableDataChanged();
@@ -682,10 +689,12 @@ class SchnellSucheTableModel extends AbstractTableModel {
     	//fireTableChanged(null);
     }
 
+    @Override
     public String getColumnName(int col) {
       return columnNames[col];
     }
 
+    @Override
     public Object getValueAt(int row, int col) {
       return ((ArrayList) ((Vector) data).get(row)).get(col);
     }
@@ -695,6 +704,7 @@ class SchnellSucheTableModel extends AbstractTableModel {
      * each cell. If we didn't implement this method, then the last column
      * would contain text ("true"/"false"), rather than a check box.
      */
+    @Override
     public Class getColumnClass(int c) {
 		   return String.class;
       //return getValueAt(0, c).getClass();
@@ -703,6 +713,7 @@ class SchnellSucheTableModel extends AbstractTableModel {
     /*
      * Don't need to implement this method unless your table's editable.
      */
+    @Override
     public boolean isCellEditable(int row, int col) {
       //Note that the data/cell address is constant,
       //no matter where the cell appears onscreen.
@@ -717,6 +728,7 @@ class SchnellSucheTableModel extends AbstractTableModel {
      * Don't need to implement this method unless your table's data can
      * change.
      */
+    @Override
     public void setValueAt(Object value, int row, int col) {
       //if (DEBUG) {
         //System.out.println("Setting value at " + row + "," + col

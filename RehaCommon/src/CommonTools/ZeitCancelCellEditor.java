@@ -59,6 +59,7 @@ public class ZeitCancelCellEditor extends AbstractCellEditor implements TableCel
     // This method is called when editing is completed.
     // It must return the new value to be stored in the cell.
 
+    @Override
     public Object getCellEditorValue() {
         return ((JFormattedTextField)component).getText();
     }

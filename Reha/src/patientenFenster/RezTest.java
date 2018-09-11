@@ -1,17 +1,14 @@
 package patientenFenster;
 
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import systemTools.ListenerTools;
 
-public class RezTest extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+public class RezTest extends RehaSmartDialog{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 5410743025474817628L;
 	private RehaTPEventClass rtp = null;
@@ -23,7 +20,8 @@ public class RezTest extends RehaSmartDialog implements RehaTPEventListener,Wind
 		rtp.addRehaTPEventListener(this);
 
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -32,20 +30,21 @@ public class RezTest extends RehaSmartDialog implements RehaTPEventListener,Wind
 					this.dispose();
 					rtp.removeRehaTPEventListener(this);
 					rtp = null;
-					ListenerTools.removeListeners(this);					
+					ListenerTools.removeListeners(this);
 					super.dispose();
-					//System.out.println("****************RezeptTest -> Listener entfernt**************");				
+					//System.out.println("****************RezeptTest -> Listener entfernt**************");
 				}
 			}
 		}catch(NullPointerException ne){
 			//System.out.println("In RezeptNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			dispose();
 			ListenerTools.removeListeners(this);

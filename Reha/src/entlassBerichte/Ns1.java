@@ -103,7 +103,8 @@ public class Ns1 implements ActionListener,ComponentListener {
 				pan.validate();
 				pan.setVisible(true);
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 				 		if(!eltern.neu){
 				 			new SwingWorker<Void,Void>(){
 								@Override
@@ -129,7 +130,8 @@ public class Ns1 implements ActionListener,ComponentListener {
 				 		}else if(eltern.uebernahmeid >= 0){
 				 			ladeDatenAusVorbericht(eltern.uebernahmeid);
 				 			SwingUtilities.invokeLater(new Runnable(){
-				 				public void run(){
+				 				@Override
+                                public void run(){
 						 			jscr.scrollRectToVisible(new Rectangle(0,0,0,0));				 					
 				 				}
 				 			});

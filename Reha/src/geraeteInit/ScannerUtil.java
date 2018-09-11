@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Map;
@@ -47,7 +46,6 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
@@ -55,28 +53,28 @@ import systemTools.LeistungTools;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
-public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
+public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 7878966572279505811L;
 
-	public JRtaCheckBox[] leistung = {null,null,null,null}; 
+	public JRtaCheckBox[] leistung = {null,null,null,null};
 
 	private RehaTPEventClass rtp = null;
-	private ScannerUtilHintergrund rgb;	
-	
+	private ScannerUtilHintergrund rgb;
+
 	public JButton uebernahme;
 	public JButton abbrechen;
-	
+
 	public JRtaComboBox[] jcmbscan = {null,null,null,null,null};
 	public JRtaCheckBox[] jcbscan = {null,null,null,null,null};
-	Scanner scanner;	
+	Scanner scanner;
 	//PinPanel pinPanel;
 	public ScannerUtil(Point pt){
-		super(null,"ScannerUtil");		
+		super(null,"ScannerUtil");
 
-		
+
 		pinPanel = new PinPanel();
 		pinPanel.setName("ScannerUtil");
 		pinPanel.getGruen().setVisible(false);
@@ -90,12 +88,11 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		rgb = new ScannerUtilHintergrund();
 		rgb.setLayout(new BorderLayout());
 
-		
+
 		new SwingWorker<Void,Void>(){
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				// TODO Auto-generated method stub
 				/*
 				Point2D start = new Point2D.Float(0, 0);
 			     Point2D end = new Point2D.Float(PatGrundPanel.thisClass.getWidth(),100);
@@ -105,14 +102,14 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 			         new LinearGradientPaint(start, end, dist, colors);
 			     MattePainter mp = new MattePainter(p);
 			     rgb.setBackgroundPainter(new CompoundPainter(mp));
-			     */		
+			     */
 			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("ScannerUtil"));
 				return null;
 			}
-			
-		}.execute();	
+
+		}.execute();
 		rgb.add(getGebuehren(),BorderLayout.CENTER);
-		
+
 		getSmartTitledPanel().setContentContainer(rgb);
 		getSmartTitledPanel().getContentContainer().setName("ScannerUtil");
 		setName("ScannerUtil");
@@ -120,10 +117,10 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 	    //Point lpt = new Point(pt.x-125,pt.y+30);
 		Point lpt = new Point(pt.x-150,pt.y+30);
 	    setLocation(lpt);
-	    
+
 		rtp = new RehaTPEventClass();
 		rtp.addRehaTPEventListener(this);
-		
+
 		new SwingWorker<String,String>(){
 			@Override
 			protected String doInBackground() throws Exception {
@@ -136,26 +133,26 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 						if(!scanner.getSelectedDeviceName().equals(SystemConfig.sDokuScanner)){
 							jcmbscan[0].setSelectedItem(scanner.getSelectedDeviceName());
 						}else{
-							jcmbscan[0].setSelectedItem(SystemConfig.sDokuScanner);	
+							jcmbscan[0].setSelectedItem(SystemConfig.sDokuScanner);
 						}
-						
+
 					} catch (ScannerIOException e2) {
 						e2.printStackTrace();
 					}
 				return null;
 			}
-			
+
 		}.execute();
 
 		pack();
-		
-			
-	    
+
+
+
 
 
 	}
-	
-/****************************************************/	
+
+/****************************************************/
 	/*
 	public JButton okknopf;
 	public JRtaTextField gegeben;
@@ -170,38 +167,38 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		PanelBuilder pb = new PanelBuilder(lay);
 		CellConstraints cc = new CellConstraints();
 		pb.getPanel().setOpaque(false);
-		
+
 		pb.addLabel("installierte Geräte",cc.xy(2, 2));
 		jcmbscan[0] = new JRtaComboBox();
 		pb.add(jcmbscan[0],cc.xy(4, 2));
-		
+
 		pb.addLabel("Scanmodus",cc.xy(2, 4));
 		jcmbscan[1] = new JRtaComboBox(new String[] {"Schwarz/Weiß","Graustufen","Farbe"} );
 		jcmbscan[1].setSelectedItem(SystemConfig.hmDokuScanner.get("farben"));
 		pb.add(jcmbscan[1],cc.xy(4, 4));
 
 		pb.addLabel("Auflösung",cc.xy(2, 6));
-		jcmbscan[2] = new JRtaComboBox(new String[]{"50dpi","75dpi","100dpi","150dpi","200dpi","300dpi"});		
+		jcmbscan[2] = new JRtaComboBox(new String[]{"50dpi","75dpi","100dpi","150dpi","200dpi","300dpi"});
 		jcmbscan[2].setSelectedItem(SystemConfig.hmDokuScanner.get("aufloesung")+"dpi");
 		pb.add(jcmbscan[2],cc.xy(4, 6));
-		
+
 		pb.addLabel("Seitenformat",cc.xy(2, 8));
 		//jcmbscan[3] = new JRtaComboBox(new String[]{"Din A6","Din A6-quer","Din A5","Din A5-quer","Din A4","Din A4-quer"});
-		jcmbscan[3] = new JRtaComboBox(new String[]{"Din A6","Din A5","Din A4","angepasst"});		
+		jcmbscan[3] = new JRtaComboBox(new String[]{"Din A6","Din A5","Din A4","angepasst"});
 		jcmbscan[3].setSelectedItem(SystemConfig.hmDokuScanner.get("seiten"));
 		pb.add(jcmbscan[3],cc.xy(4, 8));
-		
+
 		pb.addLabel("Scandialog",cc.xy(2, 10));
 		jcbscan[0] = new JRtaCheckBox("verwenden");
 		jcbscan[0].setOpaque(false);
 		jcbscan[0].setSelected((SystemConfig.hmDokuScanner.get("dialog").equals("1") ? true : false));
 		pb.add(jcbscan[0],cc.xy(4, 10));
-		
+
 		pb.addLabel("Einstellungen als",cc.xy(2, 12));
 		jcbscan[1] = new JRtaCheckBox("Standard verwenden");
-		jcbscan[1].setOpaque(false);		
+		jcbscan[1].setOpaque(false);
 		pb.add(jcbscan[1],cc.xy(4, 12));
-		
+
 		JXPanel jpan = new JXPanel();
 		//jpan.setBackground(Color.RED);
 		jpan.setOpaque(false);
@@ -225,14 +222,14 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		pb.add(pb2.getPanel(),cc.xyw(1, 14,5));
 		//public JRtaComboBox[] jcmbscan = {null,null,null,null,null};
 		//public JRtaCheckBox[] jcbscan = {null,null,null,null,null};
-		
+
 		pb.getPanel().validate();
 		return pb.getPanel();
 	}
-/****************************************************/	
-	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
-		// TODO Auto-generated method stub
+/****************************************************/
+
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0] != null){
 				if(evt.getDetails()[0].equals(this.getName())){
@@ -244,18 +241,18 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 					rgb = null;
 					this.dispose();
 					super.dispose();
-					//System.out.println("****************Scanner-Util -> Listener entfernt**************");				
+					//System.out.println("****************Scanner-Util -> Listener entfernt**************");
 				}
 			}
 		}catch(NullPointerException ne){
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
-		// TODO Auto-generated method stub
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;
 			dispose();
@@ -264,26 +261,25 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		}
 		scanner = null;
 
-		
-		
+
+
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		if(arg0.getActionCommand().equals("uebernahme")){
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
-					 
+
 					return null;
 				}
 			}.execute();
 			doSpeichernScanner();
 			this.dispose();
 			/********
-			 * 
+			 *
 			 * Hier noch schnell buchen entwickeln und feddisch...
-			 * 
+			 *
 			 */
 		}
 		if(arg0.getActionCommand().equals("abbrechen")){
@@ -303,7 +299,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 			item = (String) jcmbscan[1].getSelectedItem();
 			SystemConfig.hmDokuScanner.put("farben",item);
 			inif.setStringProperty("DokumentenScanner","DokumentenScannerFarben" , item, null);
-			
+
 
 			item = (String) jcmbscan[2].getSelectedItem();
 			SystemConfig.hmDokuScanner.put("aufloesung",item.replaceAll("dpi", "") );
@@ -312,10 +308,10 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 			item = (String) jcmbscan[3].getSelectedItem();
 			inif.setStringProperty("DokumentenScanner","DokumentenScannerSeiten" , item , null);
 			SystemConfig.hmDokuScanner.put("seiten", item);
-			
+
 			item = (jcbscan[0].isSelected() ? "1" : "0");
 			SystemConfig.hmDokuScanner.put("dialog", item);
-			inif.setStringProperty("DokumentenScanner","DokumentenScannerDialog" , item , null);		
+			inif.setStringProperty("DokumentenScanner","DokumentenScannerDialog" , item , null);
 			INITool.saveIni(inif);
 		}else{
 			item = (String) jcmbscan[0].getSelectedItem();
@@ -329,14 +325,14 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 
 			item = (String) jcmbscan[3].getSelectedItem();
 			SystemConfig.hmDokuScanner.put("seiten", item);
-			
+
 			item = (jcbscan[0].isSelected() ? "1" : "0");
 			SystemConfig.hmDokuScanner.put("dialog", item);
 		}
 		//this.dispose();
 
 	}
-	
+
 	private void macheAFRHmap(){
 		String mappos = "";
 		String mappreis = "";
@@ -346,13 +342,13 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		String spos = "";
 		String sart = "";
 		int preisgruppe = 0;
-		Double gesamt = new Double(0.00); 
+		Double gesamt = new Double(0.00);
 		/*
 		List<String> lAdrAFRDaten = Arrays.asList(new String[]{"<AFRposition1>","<AFRposition2>","<AFRposition3>"
 				,"<AFRposition4>","<AFRpreis1>","<AFRpreis2>","<AFRpreis3>","<AFRpreis4>","<AFRgesamt>","<AFRnummer>"});
-		*/	
+		*/
 		DecimalFormat df = new DecimalFormat( "0.00" );
-		
+
 		for(int i = 0 ; i < 4; i++){
 			mappos = "<AFRposition"+(i+1)+">";
 			mappreis = "<AFRpreis"+(i+1)+">";
@@ -370,18 +366,18 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
-				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
+				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 				SystemConfig.hmAdrAFRDaten.put(maplang,inpos[0]);
 				SystemConfig.hmAdrAFRDaten.put(mapkurz,inpos[1]);
 				////System.out.println(inpos[0]);
 				////System.out.println(inpos[1]);
-				
+
 			}else{
 				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
 				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
 				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
-				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);	
+				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,"0,00");
@@ -389,12 +385,13 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 				SystemConfig.hmAdrAFRDaten.put(mapkurz,(!inpos[1].equals("") ? inpos[1] : "----") );
 
 			}
-			
+
 		}
 		SystemConfig.hmAdrAFRDaten.put("<AFRgesamt>",df.format( gesamt));
 		SystemConfig.hmAdrAFRDaten.put("<AFRnummer>","AF-010101");
 	}
-	public void keyPressed(KeyEvent event) {
+	@Override
+    public void keyPressed(KeyEvent event) {
 		if(event.getKeyCode()==10){
 			event.consume();
 			if( ((JComponent)event.getSource()).getName().equals("uebernahme")){
@@ -407,7 +404,7 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 			//System.out.println("Return Gedrückt");
 		}
 	}
-	
+
 
 	public static void starteAusfallRechnung(String url){
 		IDocumentService documentService = null;
@@ -415,7 +412,6 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		try {
 			documentService = Reha.officeapplication.getDocumentService();
 		} catch (OfficeApplicationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         IDocumentDescriptor docdescript = new DocumentDescriptor();
@@ -442,8 +438,8 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 			//boolean loeschen = false;
 			boolean schonersetzt = false;
 			String placeholderDisplayText = placeholders[i].getDisplayText().toLowerCase();
-			////System.out.println(placeholderDisplayText);	
-		    /*****************/			
+			////System.out.println(placeholderDisplayText);
+		    /*****************/
 			Set<?> entries = SystemConfig.hmAdrPDaten.entrySet();
 		    Iterator<?> it = entries.iterator();
 		    while (it.hasNext()) {
@@ -470,35 +466,35 @@ public class ScannerUtil extends RehaSmartDialog implements RehaTPEventListener,
 		    }
 		    /*****************/
 		}
-		
-		
+
+
 	}
-	
-	
+
+
 }
 class ScannerUtilHintergrund extends JXPanel{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -2862600734998377499L;
 	ImageIcon hgicon;
 	int icx,icy;
 	AlphaComposite xac1 = null;
-	AlphaComposite xac2 = null;		
+	AlphaComposite xac2 = null;
 	public ScannerUtilHintergrund(){
 		super();
 		hgicon = SystemConfig.hmSysIcons.get("scannergross");
 		icx = hgicon.getIconWidth()/2;
 		icy = hgicon.getIconHeight()/2;
-		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f); 
-		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);			
-		
+		xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.15f);
+		xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
+
 	}
 	@Override
-	public void paintComponent( Graphics g ) { 
+	public void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;
-		
+
 		if(hgicon != null){
 			g2d.setComposite(this.xac1);
 			g2d.drawImage(hgicon.getImage(), (getWidth()/2)-icx , (getHeight()/2)-icy,null);

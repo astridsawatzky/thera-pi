@@ -37,7 +37,8 @@ public class JAbrechnungInternal extends JRehaInternal implements FocusListener,
 			final String name = this.getName();
 
 			SwingUtilities.invokeLater(new Runnable(){
-			 	   public  void run()
+			 	   @Override
+                public  void run()
 			 	   {
 					AktiveFenster.loescheFenster(name);
 					Reha.thisClass.progLoader.loescheAbrechnung();

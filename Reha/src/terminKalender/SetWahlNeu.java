@@ -211,7 +211,8 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 		}
 	}
 	
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		String ss =  this.getName();
 		try{
@@ -232,7 +233,8 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 
 	class Task   extends TimerTask  
 	{
-	    public void run()  
+	    @Override
+        public void run()  
 	  {
 	    	while(!jList1.hasFocus()){
 	    		jList1.grabFocus();

@@ -340,7 +340,8 @@ public class OpRgaf implements WindowListener{
 			JOptionPane.showMessageDialog(null, "Fehler in der Socketkommunikation");
 		}
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				otab.opRgafPanel.setzeFocus();		
 			}
 		});
@@ -421,7 +422,8 @@ public class OpRgaf implements WindowListener{
         	}
 	        return;
 		}
-		public void run() {
+		@Override
+        public void run() {
 			StarteDB();
 		}
 	

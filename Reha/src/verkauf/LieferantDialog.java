@@ -69,7 +69,8 @@ public class LieferantDialog extends RehaSmartDialog {
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				name.requestFocus();
 			}
 		});
@@ -139,7 +140,8 @@ public class LieferantDialog extends RehaSmartDialog {
 	
 	private void activateListener() {
 		al = new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			@Override
+            public void actionPerformed(ActionEvent arg0) {
 				speicher();
 			}
 			
@@ -211,7 +213,8 @@ public class LieferantDialog extends RehaSmartDialog {
 		this.telefax.setText(this.lieferant.getTelefax());
 		
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		try{
 			if(evt.getDetails()[0].equals("LieferDlg")){
 				this.setVisible(false);

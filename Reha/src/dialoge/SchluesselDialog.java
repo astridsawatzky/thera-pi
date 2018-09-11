@@ -191,7 +191,8 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 	private void doAbbrechen(){
 		this.dispose();
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		//System.out.println("In windowClosed von RehaSmartDialog");
 		ListenerTools.removeListeners(tfs[0]);
 		ListenerTools.removeListeners(tfs[1]);

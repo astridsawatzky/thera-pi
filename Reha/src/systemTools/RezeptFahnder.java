@@ -43,7 +43,8 @@ public class RezeptFahnder {
 		if(patient == null){
 			final String xpat_int = pat_intern;
 			new SwingWorker<Void,Void>(){
-				protected Void doInBackground() throws Exception {
+				@Override
+                protected Void doInBackground() throws Exception {
 					try{
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 					Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);

@@ -18,6 +18,7 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
     	JXHMKTreeTableNode jXHMKreeTableNode = (JXHMKTreeTableNode) node;
     	return jXHMKreeTableNode.getIndex((JXHMKTreeTableNode)node);
     }
+    @Override
     public Object getValueAt(Object node, int column) {
     	JXHMKTreeTableNode jXHMKreeTableNode = (JXHMKTreeTableNode) node;
 
@@ -42,6 +43,7 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
         return super.getValueAt(node, column);
     }
     
+    @Override
     public void setValueAt(Object value, Object node, int column){
     	JXHMKTreeTableNode jXTreeTableNode = (JXHMKTreeTableNode) node;
     	IndiKey o;
@@ -67,6 +69,7 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
         }
     }
 
+    @Override
     public boolean isCellEditable(java.lang.Object node,int column){
         switch (column) {
         case 0:
@@ -82,6 +85,7 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
         }
     }
     
+    @Override
     public Class<?> getColumnClass(int column) {
         switch (column) {
         case 0:
@@ -99,11 +103,13 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
         }
     }
 
+    @Override
     public int getColumnCount() {
         return 4;
     }
 
 
+    @Override
     public String getColumnName(int column) {
         switch (column) {
         case 0:

@@ -154,7 +154,8 @@ public class VerkaufTab extends JXPanel implements ChangeListener {
 			if(  (((JTabbedPane)e.getSource()).getSelectedIndex() > 0) &&
 					 (!Rechte.hatRecht(Rechte.Sonstiges_artikelanlegen, false)) ){
 				SwingUtilities.invokeLater(new Runnable(){
-					public void run(){
+					@Override
+                    public void run(){
 						pane.setSelectedIndex(0);
 						JOptionPane.showMessageDialog(pane,"Keine Berechtigung zum Aufruf der Artikelverwaltung");
 					}

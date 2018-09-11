@@ -191,7 +191,8 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				tarife.requestFocus();
 				if(arg0.getClickCount()==1){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							tarife.setRowSelectionInterval(tarife.getSelectedRow(), tarife.getSelectedRow());
 							tarife.setColumnSelectionInterval(tarife.getSelectedColumn(), tarife.getSelectedColumn());
 							//startCellEditing(tarife,tarife.getSelectedRow(),tarife.getSelectedColumn());
@@ -200,7 +201,8 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 					return;
 				}else if(arg0.getClickCount()==2){
 					SwingUtilities.invokeLater(new Runnable(){
-						public void run(){
+						@Override
+                        public void run(){
 							tarife.setRowSelectionInterval(tarife.getSelectedRow(), tarife.getSelectedRow());
 							tarife.setColumnSelectionInterval(tarife.getSelectedColumn(), tarife.getSelectedColumn());
 							startCellEditing(tarife,tarife.getSelectedRow(),tarife.getSelectedColumn());
@@ -237,7 +239,8 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 				final int xcols = col;
 				final JXTable xtable = table;
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 				 		  xtable.setRowSelectionInterval(xrows, xrows);
 				 		 xtable.setColumnSelectionInterval(xcols, xcols);
 				 		  xtable.scrollRowToVisible(xrows);
@@ -852,12 +855,14 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			 return String.class;
 		}
 		
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	    	
 	    	return true;
 	    }
@@ -876,7 +881,8 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		   //component = new JRtaTextField("NIX",true);
 		   //System.out.println("editor-Component wurde initialisiert");
 		   component.addKeyListener(new KeyAdapter(){
-			   public void keyPressed(KeyEvent arg0) {
+			   @Override
+            public void keyPressed(KeyEvent arg0) {
 					//System.out.println("********Button in KeyPressed*********");	
 					if(arg0.getKeyCode()== 10){
 						arg0.consume();
@@ -900,7 +906,8 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		}
 
 
-		public boolean isCellEditable(EventObject anEvent) {
+		@Override
+        public boolean isCellEditable(EventObject anEvent) {
 			if(anEvent instanceof MouseEvent)
 	          {
 	             MouseEvent me = (MouseEvent)anEvent;
@@ -935,7 +942,8 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 
 	class TarifeListSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        
 	        //int firstIndex = e.getFirstIndex();

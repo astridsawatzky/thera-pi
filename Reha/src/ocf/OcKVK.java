@@ -1154,7 +1154,8 @@ class CardListener implements CTListener {
 	public void unregister(){
 		EventGenerator.getGenerator().removeCTListener(this);
 	}
-	public void cardInserted(CardTerminalEvent event) throws CardTerminalException{
+	@Override
+    public void cardInserted(CardTerminalEvent event) throws CardTerminalException{
 		if(! eltern.systemStarted){
 			JOptionPane.showMessageDialog(null,"Im Kartenlesegerät steckt noch eine Chipkarte!!!!\n\nBitte entnehmen und Eigentümer aushändigen\n");
 			return;
@@ -1193,7 +1194,8 @@ class CardListener implements CTListener {
 			eltern.isCardReady = false;
 		}
 	}
-	public void cardRemoved(CardTerminalEvent event){
+	@Override
+    public void cardRemoved(CardTerminalEvent event){
 		//System.out.println("karte ausgezogen");
 		if ((event.getSlotID() == slotID) &&(event.getCardTerminal()==terminal)) {
 			smartcard = null;

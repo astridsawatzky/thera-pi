@@ -122,7 +122,7 @@ import uk.co.mmscomputing.device.twain.TwainSource;
 
 public class Dokumentation extends JXPanel implements ActionListener, TableModelListener, PropertyChangeListener, ScannerListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	//public static Dokumentation doku = null;
@@ -190,58 +190,58 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		leerPanel.setOpaque(false);
 		leerInfo = getInfoPanelLeer();
 		leerPanel.add(leerInfo,BorderLayout.SOUTH);
-		
-		/********dann das volle**************/		
+
+		/********dann das volle**************/
 		JXPanel allesrein = new JXPanel(new BorderLayout());
 		allesrein.setOpaque(false);
 		allesrein.setBorder(null);
-		
+
 		FormLayout lay = new FormLayout("5dlu,fill:0:grow(1.00),0dlu",
 		"0dlu,p,2dlu,p,2dlu,fill:0:grow(1.00),2dlu");
 		CellConstraints cc = new CellConstraints();
 		allesrein.setLayout(lay);
-		
+
 		wechselPanel = new JXPanel(new BorderLayout());
 		wechselPanel.setOpaque(false);
 		wechselPanel.setBorder(null);
 		wechselPanel.add(leerPanel,BorderLayout.CENTER);
 		aktPanel = "leerPanel";
-		
+
 		allesrein.add(getToolbar(),cc.xy(2, 2));
 
 		allesrein.add(wechselPanel,cc.xy(2, 6));
 
 		add(JCompTools.getTransparentScrollPane(allesrein),BorderLayout.CENTER);
 		validate();
-		
+
 		new SwingWorker<Void,Void>(){
 
 			@Override
 			protected Void doInBackground() throws Exception {
 				vollPanel = new JXPanel();
-				
+
 				FormLayout vplay = new FormLayout("fill:0:grow(0.60),5dlu,fill:0:grow(0.40),5dlu",
 						"p,2dlu,100dlu,0dlu,fill:0:grow(1.00),0dlu");
 				CellConstraints vpcc = new CellConstraints();
 				vollPanel.setLayout(vplay);
 				vollPanel.setOpaque(false);
 				vollPanel.setBorder(null);
-				
+
 				Font font = new Font("Tahoma",Font.PLAIN,11);
 				anzahlDokus = new JLabel("Anzahl gespeicherter Dokumentationen: 0");
 				anzahlDokus.setFont(font);
 				vollPanel.add(anzahlDokus,vpcc.xy(1,1));
-				
+
 				vollPanel.add(getTabelle(),vpcc.xywh(1,3,3,1));
 
-				
+
 				jpan1 = new DokuPanel();
 				jpan1.setLayout(new BorderLayout());
 				jpan1.setOpaque(false);
 				jpan1.add(getToolBereich(),BorderLayout.CENTER);
 				vollPanel.add(jpan1,vpcc.xyw(1,5,3));
 				jpan1.validate();
-				
+
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -255,20 +255,20 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						oowriterplus = new ImageIcon(ico);
 						ico = SystemConfig.hmSysIcons.get("ooocalc").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH);
 						oocalcplus = new ImageIcon(ico);
-						
+
 						return null;
 					}
 				}.execute();
-				
-				
+
+
 				return null;
 			}
 		}.execute();
 
 
 
-		
-		
+
+
 
 
 	}
@@ -280,7 +280,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		tbereich.setLayout(lay);
 
 		tbereich.add(getBildPanel(),cc.xy(2,2));
-		
+
 		tbereich.add(getInfoPanel(),cc.xy(2,4,CellConstraints.DEFAULT,CellConstraints.BOTTOM));
 		tbereich.validate();
 		return tbereich;
@@ -318,19 +318,19 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		pb.add(infolab[0],cc.xy(6,4));
 		pb.addLabel("Scanmodus:",cc.xy(4, 6));
 		infolab[1] = new JLabel(SystemConfig.hmDokuScanner.get("farben"));
-		infolab[1].setFont(fon);		
+		infolab[1].setFont(fon);
 		pb.add(infolab[1],cc.xy(6,6));
 		pb.addLabel("Auflösung:",cc.xy(8, 4));
 		infolab[2] = new JLabel(SystemConfig.hmDokuScanner.get("aufloesung")+"dpi");
-		infolab[2].setFont(fon);		
+		infolab[2].setFont(fon);
 		pb.add(infolab[2],cc.xy(10,4));
 		pb.addLabel("Seitenformat:",cc.xy(8, 6));
 		infolab[3] = new JLabel(SystemConfig.hmDokuScanner.get("seiten"));
-		infolab[3].setFont(fon);		
+		infolab[3].setFont(fon);
 		pb.add(infolab[3],cc.xy(10,6));
 		pb.addLabel("Scannerdialog verwenden:",cc.xy(8, 8));
 		infolab[4] = new JLabel( (SystemConfig.hmDokuScanner.get("dialog").equals("1") ? "ja" : "nein"));
-		infolab[4].setFont(fon);		
+		infolab[4].setFont(fon);
 		pb.add(infolab[4],cc.xy(10,8));
 		pb.getPanel().setOpaque(false);
 		pb.getPanel().setPreferredSize(new Dimension(500,100));
@@ -359,19 +359,19 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		pb.add(infolabLeer[0],cc.xy(6,4));
 		pb.addLabel("Scanmodus:",cc.xy(4, 6));
 		infolabLeer[1] = new JLabel(SystemConfig.hmDokuScanner.get("farben"));
-		infolabLeer[1].setFont(fon);		
+		infolabLeer[1].setFont(fon);
 		pb.add(infolabLeer[1],cc.xy(6,6));
 		pb.addLabel("Auflösung:",cc.xy(8, 4));
 		infolabLeer[2] = new JLabel(SystemConfig.hmDokuScanner.get("aufloesung")+"dpi");
-		infolabLeer[2].setFont(fon);		
+		infolabLeer[2].setFont(fon);
 		pb.add(infolabLeer[2],cc.xy(10,4));
 		pb.addLabel("Seitenformat:",cc.xy(8, 6));
 		infolabLeer[3] = new JLabel(SystemConfig.hmDokuScanner.get("seiten"));
-		infolabLeer[3].setFont(fon);		
+		infolabLeer[3].setFont(fon);
 		pb.add(infolabLeer[3],cc.xy(10,6));
 		pb.addLabel("Scannerdialog verwenden:",cc.xy(8, 8));
 		infolabLeer[4] = new JLabel( (SystemConfig.hmDokuScanner.get("dialog").equals("1") ? "ja" : "nein"));
-		infolabLeer[4].setFont(fon);		
+		infolabLeer[4].setFont(fon);
 		pb.add(infolabLeer[4],cc.xy(10,8));
 		pb.getPanel().setOpaque(false);
 		pb.getPanel().setPreferredSize(new Dimension(500,100));
@@ -380,35 +380,36 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 	class DokuPanel extends JXPanel{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 		ImageIcon hgicon;
 		int icx,icy;
 		AlphaComposite xac1 = null;
-		AlphaComposite xac2 = null;		
+		AlphaComposite xac2 = null;
 		DokuPanel(){
 			super();
 			setOpaque(false);
-			hgicon = SystemConfig.hmSysIcons.get("scannergross"); 
+			hgicon = SystemConfig.hmSysIcons.get("scannergross");
 			icx = hgicon.getIconWidth()/2;
 			icy = hgicon.getIconHeight()/2;
-			xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f); 
-			xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);			
-			
+			xac1 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.25f);
+			xac2 = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,1.0f);
+
 		}
-		public void paintComponent( Graphics g ) { 
+		@Override
+        public void paintComponent( Graphics g ) {
 			super.paintComponent( g );
 			Graphics2D g2d = (Graphics2D)g;
-			
+
 			if(hgicon != null){
 				g2d.setComposite(this.xac1);
 				g2d.drawImage(hgicon.getImage(), (getWidth()/3)-(icx+20) , (getHeight()/2)-(icy-40),null);
 				g2d.setComposite(this.xac2);
 			}
 		}
-	}	
-	
+	}
+
 
 	public JXPanel getTabelle(){
 		JXPanel dummypan = new JXPanel(new BorderLayout());
@@ -435,13 +436,13 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		tabdokus.getColumn(2).setMinWidth(275);
 		tabdokus.getColumn(3).setMaxWidth(80);
 		//tabhistorie.getColumn(4).setMinWidth(0);
-		//tabhistorie.getColumn(4).setMaxWidth(0);		
+		//tabhistorie.getColumn(4).setMaxWidth(0);
 		tabdokus.getColumn(5).setMinWidth(0);
-		tabdokus.getColumn(5).setMaxWidth(0);		
+		tabdokus.getColumn(5).setMaxWidth(0);
 		tabdokus.getColumn(6).setMinWidth(0);
-		tabdokus.getColumn(6).setMaxWidth(0);		
+		tabdokus.getColumn(6).setMaxWidth(0);
 		tabdokus.getColumn(7).setMinWidth(0);
-		tabdokus.getColumn(7).setMaxWidth(0);		
+		tabdokus.getColumn(7).setMaxWidth(0);
 
 		tabdokus.validate();
 		tabdokus.setName("AktDoku");
@@ -449,7 +450,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//tabaktrez.addPropertyChangeListener(this);
 		tabdokus.getSelectionModel().addListSelectionListener( new DokuListSelectionHandler());
 		tabdokus.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(!Rechte.hatRecht(Rechte.Doku_open, true)){
 					return;
 				}
@@ -462,7 +464,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 							e.printStackTrace();
 						}
 					}
-					
+
 					int row = tabdokus.getSelectedRow();
 					/***********************/
 					if(! ((String)tabdokus.getValueAt(row, 7)).trim().equals("")){
@@ -472,7 +474,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						holeOorg(sdatei,sid);
 						return;
 					}
-					
+
 					/***********************/
 					String sdatei = SystemConfig.hmVerzeichnisse.get("Temp")+"/pdf"+tabdokus.getValueAt(row, 0)+".pdf";
 					//System.out.println("Starte doku holen");
@@ -497,7 +499,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 								return null;
 							}
-							
+
 						}.execute();
 					}else{
 						setCursor(Reha.thisClass.wartenCursor);
@@ -509,7 +511,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 								long zeit = System.currentTimeMillis();
 								return null;
 							}
-							
+
 						}.execute();
 						*/
 						holeDoku(sdatei,sid);
@@ -519,7 +521,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 		});
 		tabdokus.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent arg0) {
+			@Override
+            public void keyPressed(KeyEvent arg0) {
 				if(arg0.getKeyCode()==10){
 					arg0.consume();
 					//neuanlageRezept(false,"");
@@ -534,13 +537,13 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//dtblm.addTableModelListener(this);
 		//dummypan.setPreferredSize(new Dimension(0,100));
 		JScrollPane aktrezscr = JCompTools.getTransparentScrollPane(tabdokus);
-		aktrezscr.validate(); 
+		aktrezscr.validate();
 		aktrezscr.getVerticalScrollBar().setUnitIncrement(15);
 		dummypan.add(aktrezscr,BorderLayout.CENTER);
 		dummypan.validate();
 		return dummypan;
 	}
-	
+
 	public void setzeDokuPanelAufNull(boolean aufnull){
 		if(aufnull){
 			if(aktPanel.equals("vollPanel")){
@@ -549,7 +552,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				aktPanel = "leerPanel";
 				try{
 					dokubut[2].setEnabled(false);
-				}catch(Exception ex ){}	
+				}catch(Exception ex ){}
 				wechselPanel.validate();
 				wechselPanel.repaint();
 				for(int i = 0; i < 4;i++){
@@ -613,11 +616,11 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						return null;
 					}
 				}.execute();
-				
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -625,7 +628,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -633,17 +636,17 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					stmt = null;
 				}
 			}
-			
+
 		}
-				
-		
-		
+
+
+
 	}
 	public void holeDoku(String datei,String id){
 		Statement stmt = null;
 		ResultSet rs = null;
 		//int bilder = 0;
-		
+
 		try {
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
@@ -652,7 +655,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				if(rs.next()){
 					FileTools.ByteArray2File(rs.getBytes(1), datei);
 				}
-				
+
 				final String xdatei = datei;
 				new SwingWorker<Void,Void>(){
 					@Override
@@ -671,14 +674,14 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 						return null;
 					}
-					
+
 				}.execute();
 
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -686,7 +689,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -694,16 +697,16 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					stmt = null;
 				}
 			}
-			
+
 		}
 	}
 	/*****************************
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
+	 *
+	 *
+	 *
 	 * */
 	public JToolBar getToolbar(){
 		JToolBar jtb = new JToolBar();
@@ -729,7 +732,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		jtb.add(dokubut[2]);
 
 		jtb.addSeparator(new Dimension(40,0));
-		
+
 		dokubut[0] = new JButton();
 		dokubut[0].setIcon(SystemConfig.hmSysIcons.get("scanner"));
 		dokubut[0].setToolTipText("Papierbericht einscannen");
@@ -737,13 +740,13 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		dokubut[0].setEnabled(false);
 		dokubut[0].addActionListener(this);
 		jtb.add(dokubut[0]);
-	
+
 		jtb.addSeparator(new Dimension(40,0));
 		dokubut[1] = new JButton();
 		dokubut[1].setIcon(SystemConfig.hmSysIcons.get("tools"));
 		dokubut[1].setToolTipText("Scannereinstellungen ändern");
 		dokubut[1].setActionCommand("werkzeuge");
-		dokubut[1].addActionListener(this);		
+		dokubut[1].addActionListener(this);
 		jtb.add(dokubut[1]);
 
 		/*
@@ -751,7 +754,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		dokubut[1].setIcon(SystemConfig.hmSysIcons.get("tools"));
 		dokubut[1].setToolTipText("Scannereinstellungen ändern");
 		dokubut[1].setActionCommand("scanedit");
-		dokubut[1].addActionListener(this);		
+		dokubut[1].addActionListener(this);
 		jtb.add(dokubut[1]);
 
 		jtb.addSeparator(new Dimension(40,0));
@@ -762,7 +765,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		dokubut[3].addActionListener(this);
 		dokubut[3].setEnabled(false);
 		jtb.add(dokubut[3]);
-		
+
 
 		dokubut[4] = new JButton();
 		dokubut[4].setIcon(SystemConfig.hmSysIcons.get("openoffice26"));
@@ -772,14 +775,14 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		dokubut[4].setEnabled(false);
 		jtb.add(dokubut[4]);
 		*/
-		
-		
 
-		
-		
-		
+
+
+
+
+
 		/*
-		
+
 		JLabel jlab = new JLabel("Patienten-Nummer eingeben ");
 		jlab.setOpaque(false);
 		jtb.add(jlab);
@@ -790,48 +793,48 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		tfp.add(annika);
 		jtb.add(tfp);
 		*/
-		
+
 		if(!scanaktiv){
 			dokubut[0].setEnabled(false);
 			dokubut[1].setEnabled(false);
 			dokubut[2].setEnabled(false);
 		}
-		
+
 
 		for(int i = 0; i < 4;i++){
 			//dokubut[i].setEnabled(false);
 		}
-		
-		
+
+
 		return jtb;
 	}
-	
-	
-	
+
+
+
 
 	public void macheTabelle(Vector<?> vec){
 		if(vec.size()> 0){
-			dtblm.addRow(vec);	
+			dtblm.addRow(vec);
 		}else{
 			dtblm.setRowCount(0);
 			tabdokus.validate();
 		}
-		
+
 	}
 	/******************
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	/******************
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		String cmd = arg0.getActionCommand();
 		if(cmd.equals("arztbericht")){
-			
+
 		}else if(cmd.equals("scannen")){
 			if(!Rechte.hatRecht(Rechte.Doku_scannen, true)){
 				return;
@@ -853,7 +856,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 //				vollpanel.validate();
 				if(scanner==null){
 					//System.out.println("Neustart des Scannersystems erforderlich");
-					scanStarten();					
+					scanStarten();
 				}
 				setCursor(Reha.thisClass.wartenCursor);
 				scanner.acquire();
@@ -864,8 +867,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				setCursor(Reha.thisClass.normalCursor);
 				e.printStackTrace();
 			}
-				
-			return;			
+
+			return;
 		}else if(cmd.equals("scanedit")){
 			if(!Rechte.hatRecht(Rechte.Doku_scannen, true)){
 				return;
@@ -889,8 +892,8 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				}
 			}.execute();
 
-			
-			return;			
+
+			return;
 		}else if(cmd.equals("Dokusave")){
 			//rehaSplash = new RehaSplash(null,"Erstelle Dokumentation");
 			//rehaSplash.setVisible(true);
@@ -908,7 +911,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 			*/
 			doDokusave(value);
-			
+
 			//rehaSplash.dispose();
 			//rehaSplash = null;
 			return;
@@ -938,9 +941,9 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
-					int row = tabdokus.getSelectedRow();			
+					int row = tabdokus.getSelectedRow();
 					if(row >= 0){
-						
+
 						String sdokuid = (String)tabdokus.getValueAt(row, 0);
 						int frage = JOptionPane.showConfirmDialog(null, "Soll die Dokumentation mit der ID-"+sdokuid+" wirklich gelöscht werden?","Achtung wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 						if(frage == JOptionPane.NO_OPTION){
@@ -951,7 +954,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						TableTool.loescheRow(tabdokus, row);
 						if(tabdokus.getRowCount()==0){
 							if(plusminus != null){
-								loescheBilderPan();						
+								loescheBilderPan();
 							}
 							setzeDokuPanelAufNull(true);
 							dokubut[5].setEnabled(false);
@@ -972,11 +975,11 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
-					
+
 
 					return null;
 				}
-			}.execute();	
+			}.execute();
 		}else if(cmd.equals("werkzeuge")){
 			new ToolsDlgDokumentation("",dokubut[1].getLocationOnScreen());
 		}
@@ -1013,7 +1016,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		String[] bild = oeffneBild(new String[] {"odt","ods","???"},false);
 		if(bild.length > 0){
 			String bildpfad = bild[1].replaceAll("\\\\", "/");
-			if( (bildpfad.toLowerCase().endsWith(".odt")) || 
+			if( (bildpfad.toLowerCase().endsWith(".odt")) ||
 					(bildpfad.toLowerCase().endsWith(".ods")) ){
 				try {
 					Reha.thisClass.patpanel.dokumentation.setCursor(Reha.thisClass.wartenCursor);
@@ -1023,7 +1026,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						int dokuid = SqlInfo.erzeugeNummer("doku");
 						int pat_int = Integer.valueOf(Reha.thisClass.patpanel.aktPatID); //Integer.valueOf(annika.getText().trim());
 
-							
+
 							speichernOoDocs(
 									dokuid,
 									pat_int,
@@ -1043,7 +1046,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 			}else{
 				JOptionPane.showMessageDialog(null,"Es werden ausschliesslich OpenOffice Writer und Calc Dateien unterstützt");
 				return;
@@ -1068,7 +1071,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			//BufferedImage img = null;
 			try {
 				setCursor(Reha.thisClass.wartenCursor);
-				commonName = Long.toString(System.currentTimeMillis()); 
+				commonName = Long.toString(System.currentTimeMillis());
 				String fname = "scan"+commonName+".jpg";
 				Image img2 = null;
 				/*
@@ -1087,7 +1090,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					mediaTracker.waitForID(0);
 				} catch (Exception ie) {
 				}
-				
+
 
 				FileTools.copyFile(new File(bildpfad), new File(SystemConfig.hmVerzeichnisse.get("Temp")+"/"+fname), 4096*5, false);
 
@@ -1099,17 +1102,17 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		        		//vecBilderAktion.add("jpggeladen");
 		        		aktion = "bildgeladen";
 		        		zeigeBilder(img2,SystemConfig.hmVerzeichnisse.get("Temp")+"/"+fname,commonName);
-		        	/*	
+		        	/*
 			}
 		        }.start();
 		        */
-		       img2 = null; 		
+		       img2 = null;
 		       Runtime r = Runtime.getRuntime();
         	    r.gc();
         	    r.freeMemory();
         	    //System.out.println("Freier Speicher "+freeMem);
         	    setCursor(Reha.thisClass.normalCursor);
-		        
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				setCursor(Reha.thisClass.normalCursor);
@@ -1120,7 +1123,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, cmd);
 				//System.err.println("Bild zu gro� f�r Arbeitsspeicher.\nSpeichern Sie nur dieses Bild in einer eigenen Dokumentation");
 			}
-		}	
+		}
 	}
 	private String[] oeffneBild(String[] pattern,boolean mitVorschau){
 		String[] sret = {};
@@ -1133,6 +1136,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
         //
         final String[] xpattern = pattern;
         chooser.addChoosableFileFilter(new FileFilter() {
+            @Override
             public boolean accept(File f) {
               if (f.isDirectory()) return true;
               if(f.getName().toLowerCase().endsWith(xpattern[0]) || f.getName().toLowerCase().endsWith(xpattern[1])||
@@ -1143,27 +1147,29 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
               }
               //return f.getName().toLowerCase().endsWith(xpattern);
             }
-            public String getDescription () { return ""; }  
+            @Override
+            public String getDescription () { return ""; }
           });
 
 
         File file = null;
         if(lastPath==null){
-        	file = new File(Path.Instance.getProghome());	
+        	file = new File(Path.Instance.getProghome());
         }else{
         	file = new File(lastPath);
         }
 
         chooser.setCurrentDirectory(file);
         PropertyChangeListener pl = new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                         || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-                    
+
 					final File f = (File) e.getNewValue();
                 }
             }
-        }; 
+        };
         chooser.addPropertyChangeListener(pl);
         chooser.setVisible(true);
         setCursor(Reha.thisClass.normalCursor);
@@ -1172,29 +1178,29 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
         if (result == JFileChooser.APPROVE_OPTION) {
             File inputVerzFile = chooser.getSelectedFile();
             String inputVerzStr = inputVerzFile.getPath();
-            
+
 
             if(inputVerzFile.getName().trim().equals("")){
             	sret = new String[] {};
             }else{
             	Reha.thisClass.patpanel.dokumentation.setCursor(Reha.thisClass.wartenCursor);
-            	sret = new String[] {inputVerzFile.getName().trim(),inputVerzStr};	
+            	sret = new String[] {inputVerzFile.getName().trim(),inputVerzStr};
             	lastPath = inputVerzFile.getAbsolutePath();
             }
         }else{
         	sret = new String[] {}; //vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
         }
-        chooser.setVisible(false); 
+        chooser.setVisible(false);
         chooser.removePropertyChangeListener(pl);
         chooser.removeAll();
         chooser = null;
         pl = null;
         return sret;
-		
+
 	}
 	private void doDokudelete(){
 		if(this.aktivesBild <= 0){
-			JOptionPane.showMessageDialog(null, "Es wurde keine Seite zum Löschen ausgewählt");	
+			JOptionPane.showMessageDialog(null, "Es wurde keine Seite zum Löschen ausgewählt");
 			return;
 		}
 		if(vecBilderPfad.size()==1){
@@ -1220,7 +1226,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		}
 		bilderPan.validate();
 		bilderPan.repaint();
-		
+
 	}
 	private Rectangle getLowagieForm(String format){
 		Rectangle[] rec = {PageSize.A6,PageSize.A6.rotate(),
@@ -1233,7 +1239,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		}
 		return rec[0];
 	}
-	
+
 	/******************************************/
 	private void doDokusave(String dokuTitel){
 		dokubut[0].setEnabled(false);
@@ -1248,7 +1254,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			try {
 			com.lowagie.text.Image jpg2 = com.lowagie.text.Image.getInstance(vecBilderPfad.get(i));
 			if(vecBilderAktion.get(i).equals("scanner")){
-				format = getLowagieForm(vecBilderFormat.get(i));				
+				format = getLowagieForm(vecBilderFormat.get(i));
 			}else if(vecBilderAktion.get(i).equals("bildgeladen")){
 				if(jpg2.getPlainWidth() > jpg2.getPlainHeight()){
 					format = new Rectangle(PageSize.A4.rotate());
@@ -1258,15 +1264,15 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 
 			if(format==null){
-				format = new Rectangle(jpg2.getPlainWidth(),jpg2.getPlainHeight()); 
+				format = new Rectangle(jpg2.getPlainWidth(),jpg2.getPlainHeight());
 			}
 			//System.out.println("Das Format = "+format);
 			document = new Document();
-			document.setPageSize(format);	
+			document.setPageSize(format);
 			document.setMargins(0.0f, 0.0f, 0.0f, 0.0f);
 				fout = new  FileOutputStream(SystemConfig.hmVerzeichnisse.get("Temp")+"/pdfDokuSeite"+(i+1)+".pdf");
 				PdfWriter writer = PdfWriter.getInstance(document, fout);
-			document.open(); 
+			document.open();
 
 			if(vecBilderAktion.get(i).equals("scanner")){
 				jpg2.scaleAbsoluteHeight(document.getPageSize().getHeight());
@@ -1274,10 +1280,10 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				document.add(jpg2);
 			}else if(vecBilderAktion.get(i).equals("bildgeladen")){
 				jpg2.scaleAbsoluteHeight(document.getPageSize().getHeight());
-				jpg2.scaleAbsoluteWidth(document.getPageSize().getWidth());						
+				jpg2.scaleAbsoluteWidth(document.getPageSize().getWidth());
 				document.add(jpg2);
 			}
-			
+
 
 			document.close();
 			writer.close();
@@ -1300,15 +1306,15 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}	
-		
+		}
+
 		PdfReader reader = null;
 		PdfCopy copy = null;
 		for(int i = 0;i<vecBilderPfad.size();i++){
 			//rehaSplash.setNewText("Seiten zusammenf�hren - Seite"+(i+1)+" von "+vecBilderPfad.size());
 			//Rectangle format = getLowagieForm(vecBilderFormat.get(i)); // vorher eingeschaltet....
 			//System.out.println("Das Format = "+format);
-			
+
 			try {
 				reader = new PdfReader(SystemConfig.hmVerzeichnisse.get("Temp")+"/pdfDokuSeite"+(i+1)+".pdf");
 				if(i==0){
@@ -1318,7 +1324,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					document.open();
 				}
 				copy.addPage(copy.getImportedPage(reader,1));
-				
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1326,38 +1332,38 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 		}
 		document.close();
 		copy.close();
 		document = null;
 
-		
-		
+
+
 		  /*
-		   * 
+		   *
 		    ps.setBytes(1,   //dokuid - integer
 		    ps.setBytes(2,   //datum - date
-		    ps.setBytes(3,   //dokutitel - longtext			    
+		    ps.setBytes(3,   //dokutitel - longtext
 		    ps.setBytes(4,   //benutzer - zeichen
-			ps.setBytes(5,   //pat_intern - integer			    			    
+			ps.setBytes(5,   //pat_intern - integer
 			ps.setBytes(6,   //format - integer
-			ps.setBytes(7,   //dokutext - longtext								
-			ps.setBytes(8,   //dokublob - longblog /bin�r	
+			ps.setBytes(7,   //dokutext - longtext
+			ps.setBytes(8,   //dokublob - longblog /bin�r
 			public static void doSpeichernDoku(
 			int dokuid,
-			int pat_intern, 
+			int pat_intern,
 			String dateiname,
 			int format,
 			Vector<String> vec,
-			boolean neu){			
+			boolean neu){
 		   */
 		//System.out.println("Beginne speichern");
 		//rehaSplash.setNewText("Dokumentation auf Server transferieren");
 		int dokuid = SqlInfo.erzeugeNummer("doku");
 		int pat_int = Integer.valueOf(Reha.thisClass.patpanel.aktPatID); //Integer.valueOf(annika.getText().trim());
 		try {
-			
+
 			doSpeichernDoku(
 					dokuid,
 					pat_int,
@@ -1416,11 +1422,11 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		bilderPan.validate();
 		bilderPan.repaint();
 		aktivesBild=0;
-		
+
 		if(this.dtblm.getRowCount()==0){
 			this.setzeDokuPanelAufNull(true);
 		}
-		
+
 	}
 	private void updateInfoLab(){
 		try {
@@ -1435,7 +1441,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				if(scanner==null){
 					scanStarten();
 				}else{
-					scanner.select(SystemConfig.sDokuScanner);					
+					scanner.select(SystemConfig.sDokuScanner);
 				}
 
 			} catch (ScannerIOException e) {
@@ -1462,18 +1468,18 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		infolabLeer[3].setText(SystemConfig.hmDokuScanner.get("seiten"));
 		infolabLeer[4].setText( (SystemConfig.hmDokuScanner.get("dialog").equals("1") ? "ja" : "nein"));
 		leerInfo.validate();
-		
+
 	}
-	
+
 	@Override
 	public void tableChanged(TableModelEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void propertyChange(PropertyChangeEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	/*
 	void setRezeptDaten(){
@@ -1487,17 +1493,17 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					//jpan1.setRezeptDaten(reznr,id);
 					//System.out.println("Aus Bericht....."+reznr+"....."+id);
 				}
-			});	
+			});
 
 		}
 	}
-	*/	
+	*/
 	/**************************************************
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public void scanStarten(){
-		if((!scanaktiv) || 
+		if((!scanaktiv) ||
 				SystemConfig.sDokuScanner.equals("") ){
 			//System.out.println("Scanner = null");
 			return;
@@ -1505,7 +1511,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		if(scanner == null){
 			scanner = Scanner.getDevice();
 		}
-	    
+
 	    try {
 			String[] names = scanner.getDeviceNames();
 			for(int i = 0; i < names.length;i++){
@@ -1514,7 +1520,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				}
 			}
 	    	if(deviceinstalled){
-	    		scanner.select(SystemConfig.sDokuScanner);	
+	    		scanner.select(SystemConfig.sDokuScanner);
 	    	}else{
 	    		if(infolab[0] != null){
 	    			infolab[0].setText(scanner.getSelectedDeviceName());
@@ -1524,20 +1530,20 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			e2.printStackTrace();
 		}
 
-		scanner.addListener( this);    
-		
+		scanner.addListener( this);
+
 	}
 	private Double[] getDims(String seite){
 		List<String> list = Arrays.asList( new String[] {"Din A6","Din A6-quer","Din A5","Din A5-quer","Din A4","Din A4-quer","angepasst"});
 		//String[] dims = new String[] {"Din A6","Din A6-quer","Din A5","Din A5-quer","Din A4","Din A4-quer"};
 		Double[][] d =  new Double[][]  {{4.23,5.82},{4.23,5.82},{5.82,8.26},{5.82,8.26},{8.26,11.69},{8.26,11.69},{8.26,11.69}};
-		Double[] ret = {8.26,11.69};		
+		Double[] ret = {8.26,11.69};
 		ret = d[list.indexOf(seite)].clone();
 		return ret;
 	}
 	@Override
 	public void update( ScannerIOMetadata.Type type, ScannerIOMetadata metadata ) {
-		
+
 		/*****************************************************/
 		if ( ScannerIOMetadata.NEGOTIATE.equals(type)){
 			ScannerDevice device=metadata.getDevice();
@@ -1548,17 +1554,17 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
     				int dpi= Integer.valueOf(SystemConfig.hmDokuScanner.get("aufloesung"));
     				source.getCapability(TwainConstants.ICAP_UNITS,TwainConstants.MSG_GETCURRENT).setCurrentValue(TwainConstants.TWUN_INCHES);
     				source.getCapability(TwainConstants.ICAP_XRESOLUTION,TwainConstants.MSG_GETCURRENT).setCurrentValue(dpi);
-    				source.getCapability(TwainConstants.ICAP_YRESOLUTION,TwainConstants.MSG_GETCURRENT).setCurrentValue(dpi); 
+    				source.getCapability(TwainConstants.ICAP_YRESOLUTION,TwainConstants.MSG_GETCURRENT).setCurrentValue(dpi);
 
     				if(SystemConfig.hmDokuScanner.get("farben").equals("Schwarz/Weiß")){
-    					source.getCapability(TwainConstants.ICAP_PIXELTYPE).setCurrentValue(TwainConstants.TWPT_BW); 
+    					source.getCapability(TwainConstants.ICAP_PIXELTYPE).setCurrentValue(TwainConstants.TWPT_BW);
     				}else if(SystemConfig.hmDokuScanner.get("farben").equals("Graustufen")){
-    					source.getCapability(TwainConstants.ICAP_PIXELTYPE).setCurrentValue(TwainConstants.TWPT_GRAY); 
+    					source.getCapability(TwainConstants.ICAP_PIXELTYPE).setCurrentValue(TwainConstants.TWPT_GRAY);
     				}else{
     					SystemConfig.hmDokuScanner.get("farben").equals("Farbe");
-    					source.getCapability(TwainConstants.ICAP_PIXELTYPE).setCurrentValue(TwainConstants.TWPT_RGB); 
+    					source.getCapability(TwainConstants.ICAP_PIXELTYPE).setCurrentValue(TwainConstants.TWPT_RGB);
     				}
-    				 
+
     				TwainImageLayout imageLayout=new TwainImageLayout(source);
     				imageLayout.get();
     				imageLayout.setLeft(0.0);
@@ -1566,7 +1572,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
     				imageLayout.setRight(setDim[0]);
     				imageLayout.setBottom(setDim[1]);
     				imageLayout.set();
-					
+
     				device.setShowUserInterface((SystemConfig.hmDokuScanner.get("dialog").equals("1") ? true :false) );
     				device.setShowProgressBar(true);
     				setCursor(Reha.thisClass.normalCursor);
@@ -1574,7 +1580,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
     	            //System.out.println("3\b"+getClass().getName()+".update:\n\tCannot retrieve image information.\n\t"+e);
     			}
     		}
-    		/*****************************************************/      		
+    		/*****************************************************/
 		}else if ( ScannerIOMetadata.STATECHANGE.equals(type)){
     		if(metadata.isFinished()){
     			if(metadata.getImage() != null){
@@ -1593,44 +1599,45 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
     	        //System.out.println("Scanvorgang wurde beendet");
 				setCursor(Reha.thisClass.normalCursor);
     	      }else{
-    	    	  //System.out.println("nicht finished = "+metadata.getStateStr());	  
+    	    	  //System.out.println("nicht finished = "+metadata.getStateStr());
     	      }
-    		
-    		/*****************************************************/    		
+
+    		/*****************************************************/
 		}else if ( type.equals(ScannerIOMetadata.EXCEPTION)){
 			//System.out.println("Exception in EXEPTION");
     	    if(!metadata.getException().getMessage().contains("Failed during call to twain source")){
         	    JOptionPane.showMessageDialog(null,"Bezug des Scans fehlgeschlagen.\nVersuchen Sie es mit einer niedrigeren Auflösung\n\n"+
 	    		"Ideale Auflösung für Dokumentation: 150dpi");
     	    }
-			
+
     	    scanner.removeListener(this);
     	    scanner = null;
             Runtime r = Runtime.getRuntime();
     	    r.gc();
     	    setCursor(Reha.thisClass.normalCursor);
-    		/*****************************************************/    	    
+    		/*****************************************************/
 		}else if ( ScannerIOMetadata.ACQUIRED.equals( type )){
 			//System.out.println("ACUIRED");
 			//System.out.println(metadata.getStateStr());
 			if(metadata.getStateStr().contains("Transferring Data")){
 				setCursor(Reha.thisClass.wartenCursor);
 				if(metadata.getImage() != null){
-					commonName = Long.toString(System.currentTimeMillis()); 
+					commonName = Long.toString(System.currentTimeMillis());
 					String fname = "scan"+commonName+".jpg";
 					quelle = "scanner";
 			        File file = new File(SystemConfig.hmVerzeichnisse.get("Temp"),fname);
 			        try {
 						ImageIO.write( metadata.getImage(),
-								"jpg", 
+								"jpg",
 								file ) ;
-						
+
 						//System.out.println("Fertig mit Image schreiben");
 				        final Image img = metadata.getImage().getScaledInstance(50, 65,Image.SCALE_SMOOTH);
 				        final String pfad = file.getAbsolutePath();
 				        new Thread(){
-				        	public void run(){
-				        		zeigeBilder(img,pfad,commonName);		
+				        	@Override
+                            public void run(){
+				        		zeigeBilder(img,pfad,commonName);
 				        	}
 				        }.start();
 					} catch (IOException e) {
@@ -1643,17 +1650,17 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				setCursor(Reha.thisClass.normalCursor);
 			}
 		}
-	}   
+	}
 
 	/**************************************************
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	public void zeigeBilder(Image imgx,String datei,String commonname){
 		Image img = imgx;
 
 		bildnummer++;
-		String name = "Bildnummer-"+bildnummer; 
+		String name = "Bildnummer-"+bildnummer;
 		LabName.add(name);
 		if(SystemConfig.hmDokuScanner.get("seiten").contains("quer")){
 			BufferedImage bimage = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_RGB);
@@ -1692,14 +1699,14 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			pmbut[2].setEnabled(false);
 			pmbut[3].setEnabled(false);
 		}
-		
+
 		bilderPan.add(lab);
 		bilderPan.validate();
 	}
 	/*********************
-	 * 
-	 * 
-	 * 
+	 *
+	 *
+	 *
 	 */
 	public void pdfZeigen(int seite){
 
@@ -1713,9 +1720,9 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					if(vecBilderAktion.get(seite).equals("scanner")){
 						format = getLowagieForm(vecBilderFormat.get(seite));
 					}else if(vecBilderAktion.get(seite).equals("bildgeladen")){
-						
+
 					}
-					
+
 					try {
 					com.lowagie.text.Image jpg2 = com.lowagie.text.Image.getInstance(vecBilderPfad.get(seite));
 					if(vecBilderAktion.get(seite).equals("scanner")){
@@ -1726,20 +1733,20 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						}else{
 							format = new Rectangle(PageSize.A4);
 						}
-						//format = new Rectangle(jpg2.getPlainWidth(),jpg2.getPlainHeight());						
+						//format = new Rectangle(jpg2.getPlainWidth(),jpg2.getPlainHeight());
 					}
-					
-					
-					
-					
+
+
+
+
 					//System.out.println("Das Format = "+format);
 					document = new Document();
-					document.setPageSize(format);	
+					document.setPageSize(format);
 					document.setMargins(0.0f, 0.0f, 0.0f, 0.0f);
 					datname = SystemConfig.hmVerzeichnisse.get("Temp")+"/"+vecPdfPfad.get(seite);
 					FileOutputStream fout = new FileOutputStream(datname);
-					PdfWriter writer = PdfWriter.getInstance(document, fout);  
-					document.open(); 
+					PdfWriter writer = PdfWriter.getInstance(document, fout);
+					document.open();
 					//System.out.println("Die aktion = "+((String)vecBilderAktion.get(seite)) );
 					if(vecBilderAktion.get(seite).equals("scanner")){
 						jpg2.scaleAbsoluteHeight(document.getPageSize().getHeight());
@@ -1753,16 +1760,16 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 						//jpg2.scalePercent(0.25f);
 						jpg2.scaleAbsoluteHeight(document.getPageSize().getHeight());
-						jpg2.scaleAbsoluteWidth(document.getPageSize().getWidth());						
+						jpg2.scaleAbsoluteWidth(document.getPageSize().getWidth());
 						document.add(jpg2);
 					}
-					
+
 
 					document.close();
 					writer.close();
 					fout.flush();
 					fout.close();
-					
+
 					Thread.sleep(100);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -1780,10 +1787,10 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-			  
-				/***************************/				
-				
+
+
+				/***************************/
+
 				File file = new File(SystemConfig.hmFremdProgs.get("AcrobatReader"));
 				if(!file.exists()){
 					JOptionPane.showMessageDialog(null, "Der Pfad zu Ihrem Adobe-Acrobatreader ist nicht korrekt konfiguriert");
@@ -1808,14 +1815,14 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 						return null;
 					}
-					
+
 				}.execute();
 				*/
-		        
+
 				setCursor(Reha.thisClass.normalCursor);
-			
-			
-		
+
+
+
 	}
 	public JXPanel setzePlusMinus(){
 		plusminus = new JXPanel();
@@ -1823,12 +1830,12 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		CellConstraints cc = new CellConstraints();
 		plusminus.setLayout(lay);
 		plusminus.setOpaque(false);
-		
+
 		JToolBar jtbpm = new JToolBar();
 		jtbpm.setRollover(true);
 		jtbpm.setBorder(null);
 		jtbpm.setOpaque(false);
-		
+
 		pmbut[0] = new JButton();
 		pmbut[0].setIcon(SystemConfig.hmSysIcons.get("delete"));
 		pmbut[0].setToolTipText("Aktive Dokuseite löschen");
@@ -1842,7 +1849,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		pmbut[1].setActionCommand("Dokusave");
 		pmbut[1].addActionListener(this);
 		jtbpm.add(pmbut[1]);
-		
+
 		jtbpm.addSeparator(new Dimension(15,0));
 		plusminus.add(jtbpm,cc.xy(1,1));
 
@@ -1850,7 +1857,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		jtbpm.setRollover(true);
 		jtbpm.setBorder(null);
 		jtbpm.setOpaque(false);
-		
+
 		pmbut[2] = new JButton();
 		pmbut[2].setIcon(SystemConfig.hmSysIcons.get("links"));
 		pmbut[2].setToolTipText("Seiten nach links verschieben");
@@ -1864,13 +1871,13 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		pmbut[3].setToolTipText("Seiten nach rechts verschieben");
 		pmbut[3].setActionCommand("Dokurechts");
 		pmbut[3].addActionListener(this);
-		pmbut[3].setEnabled(false);		
+		pmbut[3].setEnabled(false);
 		jtbpm.add(pmbut[3]);
 		plusminus.add(jtbpm,cc.xy(1,2));
-		
+
 		return plusminus;
 	}
-	
+
 	public void setzeListener(){
 		mlist = new MouseListener(){
 
@@ -1890,7 +1897,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 							return;
 						}
 						datei = SystemConfig.hmVerzeichnisse.get("Temp")+"/"+vecPdfPfad.get(aktivesBild-1);
-						
+
 					}else if(vecBilderAktion.get(seite-1).equals("bildgeladen")){
 						file = new File(SystemConfig.hmFremdProgs.get("GrafikProg"));
 						if(!file.exists()){
@@ -1901,7 +1908,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					}
 
 					try {
-						
+
 						if(Path.Instance.isWindows()){
 							datei = datei.replaceAll("/", "\\\\");
 						}
@@ -1918,33 +1925,33 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 								break;
 							}
 						}
-						
+
 						//System.out.println("Starte :"+file.getAbsolutePath()+" "+datei);
 						//Runtime.getRuntime().exec(datei.trim());
 						Runtime.getRuntime().exec(file.getAbsolutePath().toString()+" "+datei.trim());
 			        } catch(IOException e) {
 			            e.printStackTrace();
 			        }
-					
+
 				}else if(arg0.getClickCount()==1){
 					if(aktivesBild > 0){
-						int bild = Integer.valueOf( Labels.get(aktivesBild-1).getText().split("-")[1]); 
+						int bild = Integer.valueOf( Labels.get(aktivesBild-1).getText().split("-")[1]);
 						Labels.get(bild-1).setBorder(BorderFactory.createLineBorder(Color.BLACK));
 					}
 					aktivesBild = Integer.valueOf( ((JLabel)((JComponent)arg0.getSource())).getText().split("-")[1] );
 					Labels.get(aktivesBild-1).setBorder(BorderFactory.createLineBorder(Color.RED));
 				}
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent arg0) {
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent arg0) {
-								
+
 			}
 
 
@@ -1955,32 +1962,32 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
-			
+
 		};
-		
+
 	}
 	class DokuListener implements ScannerListener{
 		@Override
 		public void update(ScannerIOMetadata.Type type, ScannerIOMetadata metadata) {
 			if ( ScannerIOMetadata.NEGOTIATE.equals(type)){
-				
+
 			}else if ( ScannerIOMetadata.STATECHANGE.equals(type)){
-				
+
 			}else if ( type.equals(ScannerIOMetadata.EXCEPTION)){
-				
+
 			}else if ( ScannerIOMetadata.ACQUIRED.equals( type )){
-				
+
 			}
 		}
-		
+
 	}
 	private String macheHtmlTitel(int anz,String titel){
-		
+
 		String ret = titel+" - "+Integer.toString(anz);
-		
+
 		/*
 		String ret = "<html>"+titel+
 		(anz > 0 ? " - <font color='#ff0000'>"+Integer.valueOf(anz).toString()+"<font></html>" : " - <font color='#000000'>"+Integer.valueOf(anz).toString()+"</font>");
@@ -1997,18 +2004,18 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				try{
 		//{"Doku-Id","Doku-Art","Titel","erfa�t am","von","",""};
 				//String sstmt = "select * from verordn where PAT_INTERN ='"+xpatint+"' ORDER BY REZ_DATUM";
-				String sortmode = (SystemConfig.hmDokuSortMode.get("sortmode").equals("0") ? " dokuid " : " datum ");	
+				String sortmode = (SystemConfig.hmDokuSortMode.get("sortmode").equals("0") ? " dokuid " : " datum ");
 				String sortasc = (SystemConfig.hmDokuSortMode.get("sortasc").equals("0") ? "DESC" : "ASC");
 				String cmd = "dokuid,format,dokutitel,DATE_FORMAT(datum,'%d.%m.%Y') AS dokudatum," +
 						"benutzer,pat_intern,id,datei";
-				String wherecl = "pat_intern='"+xpatint+"' ORDER BY"+sortmode+sortasc; 
+				String wherecl = "pat_intern='"+xpatint+"' ORDER BY"+sortmode+sortasc;
 				Vector<Vector<String>> vec = SqlInfo.holeSaetze("doku1",cmd,wherecl ,Arrays.asList(new String[]{}));
 
 				int anz = vec.size();
 
 				for(int i = 0; i < anz;i++){
 					if(i==0){
-						dtblm.setRowCount(0);						
+						dtblm.setRowCount(0);
 					}
 
 					int zzbild = 0;
@@ -2025,17 +2032,17 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				if(anz > 0){
 					setzeDokuPanelAufNull(false);
 					//int anzeigen = -1;
-					anzahlDokus.setText("Anzahl gespeicherter Dokumentationen: "+anz);	
+					anzahlDokus.setText("Anzahl gespeicherter Dokumentationen: "+anz);
 					tabdokus.setRowSelectionInterval(0, 0);
 					wechselPanel.revalidate();
-					wechselPanel.repaint();	
+					wechselPanel.repaint();
 					if((!dokubut[0].isEnabled()) && SystemConfig.hmDokuScanner.get("aktivieren").trim().equals("1")){
-						dokubut[0].setEnabled(true);						
+						dokubut[0].setEnabled(true);
 					}
 					dokubut[5].setEnabled(true);
 					dokubut[1].setEnabled(true);
 					/*
-					dokubut[3].setEnabled(true);	
+					dokubut[3].setEnabled(true);
 					dokubut[4].setEnabled(true);
 					dokubut[5].setEnabled(true);
 					*/
@@ -2047,33 +2054,34 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					wechselPanel.repaint();
 					dtblm.setRowCount(0);
 					if((!dokubut[0].isEnabled()) && SystemConfig.hmDokuScanner.get("aktivieren").trim().equals("1")){
-						dokubut[0].setEnabled(true);						
+						dokubut[0].setEnabled(true);
 					}
 					dokubut[1].setEnabled(true);
 					dokubut[5].setEnabled(false);
 					/*
-					dokubut[3].setEnabled(true);	
+					dokubut[3].setEnabled(true);
 					dokubut[4].setEnabled(true);
 					dokubut[5].setEnabled(false);
 					*/
 
 				}
-				
+
 				}catch(Exception ex){
 					//ex.printStackTrace();
 				}
 				return null;
 			}
-		
+
 		}.execute();
-		
+
 	}
-	
-	
+
+
 	/*************************************************/
 	class DokuListSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 	    	/*
 			if(rezneugefunden){
 				rezneugefunden = false;
@@ -2081,7 +2089,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 			*/
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-	        
+
 	        //int firstIndex = e.getFirstIndex();
 	        //int lastIndex = e.getLastIndex();
 	        boolean isAdjusting = e.getValueIsAdjusting();
@@ -2097,12 +2105,12 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 	            for (int i = minIndex; i <= maxIndex; i++) {
 	                if (lsm.isSelectedIndex(i)) {
 	                	//final int ix = i;
-	                	
+
 	                	new SwingWorker<Void,Void>(){
 
 							@Override
 							protected Void doInBackground() throws Exception {
-						
+
 								// TODO Auto-generated method stub
 								inDokuDaten = true;
 	                			setCursor(Reha.thisClass.wartenCursor);
@@ -2114,7 +2122,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 	    						return null;
 							}
-	                		
+
 	                	}.execute();
 
 	                    break;
@@ -2128,7 +2136,6 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 
 	public static void doSpeichernDoku(int dokuid,int pat_intern, String dateiname,int format,String[] str,boolean neu) throws Exception{
 		Statement stmt = null;
-		ResultSet rs = null;
 		PreparedStatement ps = null;
 		//boolean ret = false;
 		//int bilder = 0;
@@ -2137,30 +2144,30 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		try {
 			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
-			
+
 			String select = "Insert into doku1 set dokuid = ? , datum = ?, dokutitel = ?,"+
 			"benutzer = ?, pat_intern = ?, format = ?,"+
 			"dokutext = ?, dokublob = ? , groesse = ? ";
 			  ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(select);
 			  /*
-			   * 
+			   *
 			    ps.setBytes(1,   //dokuid - integer
 			    ps.setBytes(2,   //datum - date
-			    ps.setBytes(3,   //dokutitel - longtext			    
+			    ps.setBytes(3,   //dokutitel - longtext
 			    ps.setBytes(4,   //benutzer - zeichen
-				ps.setBytes(5,   //pat_intern - integer			    			    
+				ps.setBytes(5,   //pat_intern - integer
 				ps.setBytes(6,   //format - integer
-				ps.setBytes(7,   //dokutext - longtext								
+				ps.setBytes(7,   //dokutext - longtext
 				ps.setBytes(8,   //dokublob - longblog /bin�r
-				new String[] {datFunk.sDatInSQL(datFunk.sHeute()),"Eingescannte Papierdokumentation",Reha.aktUser,""},				
+				new String[] {datFunk.sDatInSQL(datFunk.sHeute()),"Eingescannte Papierdokumentation",Reha.aktUser,""},
 			   */
 			  //System.out.println("Setze InputStream "+dateiname);
 			  ps.setInt(1, dokuid);
-			  ps.setString(2, str[0]);			  
+			  ps.setString(2, str[0]);
 			  ps.setString(3, str[1]);
-			  ps.setString(4, str[2]);			  
+			  ps.setString(4, str[2]);
 			  ps.setInt(5, pat_intern);
-			  ps.setInt(6, format);			  
+			  ps.setInt(6, format);
 			  ps.setString(7, str[3]);
 			  File f = new File(dateiname);
 			  byte[] b = FileTools.File2ByteArray(f);
@@ -2171,22 +2178,9 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-			  }	
+			  }
 
-			   
-
-
-			  
-	  
-							  
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -2198,7 +2192,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				ps.close();
 			}
 		}
-		
+
 	}
 	public void	oooDokuNeu(int art, int vecnum){
 		String[] welcheArt = {"OpenOffice-Writer","OpenOffice-Calc","Eigene Writer-Doku","Eigene Calc-Doku"};
@@ -2225,7 +2219,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		}else if(art==1){
 			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmptyCalcDoku.ots";
 			dest = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+".ods";
-			
+
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);
@@ -2246,7 +2240,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			} catch (IOException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
-			}		
+			}
 		}else if(art==3){
 			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
 			dest = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".ods";
@@ -2260,7 +2254,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				JOptionPane.showMessageDialog(null, "Fehler kann neues CalcDokument nicht erzeugen");
 			}
 		}
-		
+
 	}
 /**************************************************/
 	private String testName(String string){
@@ -2290,7 +2284,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		doku[1] = doku[1].replaceAll("\\\\", "/");
 		try {
 			doSpeichernDoku( (dokuid=SqlInfo.erzeugeNummer("doku")),
-					Integer.valueOf(Reha.thisClass.patpanel.aktPatID), 
+					Integer.valueOf(Reha.thisClass.patpanel.aktPatID),
 					doku[1],
 					0,
 					new String[] {DatFunk.sDatInSQL(DatFunk.sHeute()),doku[0],Reha.aktUser,""},
@@ -2306,7 +2300,6 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 /**************************************************/
 	public void speichernOoDocs(int dokuid,int pat_intern, String dateiname,int format,String[] str,boolean neu) throws Exception{
 		Statement stmt = null;
-		ResultSet rs = null;
 		PreparedStatement ps = null;
 		//boolean ret = false;
 		//int bilder = 0;
@@ -2322,27 +2315,27 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			"dokutext = ?, dokublob = ? , groesse = ? , datei = ?";
 			  ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(select);
 			  /*
-			   * 
+			   *
 			    ps.setBytes(1,   //dokuid - integer
 			    ps.setBytes(2,   //datum - date
-			    ps.setBytes(3,   //dokutitel - longtext			    
+			    ps.setBytes(3,   //dokutitel - longtext
 			    ps.setBytes(4,   //benutzer - zeichen
-				ps.setBytes(5,   //pat_intern - integer			    			    
+				ps.setBytes(5,   //pat_intern - integer
 				ps.setBytes(6,   //format - integer
-				ps.setBytes(7,   //dokutext - longtext								
+				ps.setBytes(7,   //dokutext - longtext
 				ps.setBytes(8,   //dokublob - longblog /bin�r
-				ps.setBytes(9,   //groesse - longtext								
+				ps.setBytes(9,   //groesse - longtext
 				ps.setBytes(10,   //datei - longblog /bin�r
-				
-				new String[] {datFunk.sDatInSQL(datFunk.sHeute()),"Eingescannte Papierdokumentation",Reha.aktUser,""},				
+
+				new String[] {datFunk.sDatInSQL(datFunk.sHeute()),"Eingescannte Papierdokumentation",Reha.aktUser,""},
 			   */
 			  //System.out.println("Setze InputStream "+dateiname);
 			  ps.setInt(1, dokuid);
-			  ps.setString(2, DatFunk.sDatInSQL(DatFunk.sHeute()));			  
+			  ps.setString(2, DatFunk.sDatInSQL(DatFunk.sHeute()));
 			  ps.setString(3, dateiname.substring(dateiname.replace("\\", "/").lastIndexOf("/")+1));
-			  ps.setString(4, Reha.aktUser);			  
+			  ps.setString(4, Reha.aktUser);
 			  ps.setInt(5, Integer.parseInt(Reha.thisClass.patpanel.patDaten.get(29).trim()));
-			  ps.setInt(6,  (dateiname.endsWith(".odt") ? 1 : 2));			  
+			  ps.setInt(6,  (dateiname.endsWith(".odt") ? 1 : 2));
 			  ps.setString(7, dateiname.substring(dateiname.replace("\\", "/").lastIndexOf("/")+1));
 			  File f = new File(dateiname);
 			  byte[] b = FileTools.File2ByteArray(f);
@@ -2354,10 +2347,10 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			  //String id = SqlInfo.holeEinzelFeld("select id from doku1 where dokuid='"+dokuid+"' LIMIT 1");
 			  ////System.out.println("ID der neuen Doku ist "+id);
 			  holeDokus(Reha.thisClass.patpanel.patDaten.get(29).trim(),"");
-			  
+
 			}else{
 				//int dokuid,int pat_intern, String dateiname,int format,String[] str,boolean neu
-				//Dokumentation.speichernOoDocs(Integer.valueOf(id), -1, file, -1, null, false);	
+				//Dokumentation.speichernOoDocs(Integer.valueOf(id), -1, file, -1, null, false);
 				String select = "update doku1 set dokublob = ?, groesse = ?, datum = ? "+
 				" where id = ?";
 				//System.out.println("Prepared statement: "+select);
@@ -2382,23 +2375,16 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-			  }	
-
-			   
+			  }
 
 
-			  
-	  
-							  
+
+
+
+
+
 		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-					rs = null;
-				} catch (SQLException sqlEx) { // ignore }
-					rs = null;
-				}
-			}	
+
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -2412,13 +2398,13 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				ps = null;
 			}
 		}
-		
+
 	}
 	private void doEigenDoku(int welchedoku){
 		if(SystemConfig.vOwnDokuTemplate.get(welchedoku).get(1).contains(".ods") ||
 				SystemConfig.vOwnDokuTemplate.get(welchedoku).get(1).contains(".ots")){
 			oooDokuNeu(3,welchedoku);
-			
+
 		}else if(SystemConfig.vOwnDokuTemplate.get(welchedoku).get(1).contains(".odt") ||
 				SystemConfig.vOwnDokuTemplate.get(welchedoku).get(1).contains(".ott")){
 			oooDokuNeu(2,welchedoku);
@@ -2442,15 +2428,15 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				if(SystemConfig.vOwnDokuTemplate.get(i).get(1).contains(".ods") ||
 						SystemConfig.vOwnDokuTemplate.get(i).get(1).contains(".ots")){
 					icons.put(SystemConfig.vOwnDokuTemplate.get(i).get(0),oocalcplus/*SystemConfig.hmSysIcons.get("ooocalc")*/);
-					
+
 				}else if(SystemConfig.vOwnDokuTemplate.get(i).get(1).contains(".odt") ||
 						SystemConfig.vOwnDokuTemplate.get(i).get(1).contains(".ott")){
 					icons.put(SystemConfig.vOwnDokuTemplate.get(i).get(0),oowriterplus/*SystemConfig.hmSysIcons.get("ooocalc")*/);
 				}
-				
+
 			}
 			Object[] obj1 = {"Scanner einstellungen",
-					"Photo von DigiCam holen", 
+					"Photo von DigiCam holen",
 					"Office-Dokument aufnehmen",
 					"PDF-Dokument aufnehmen",
 					"Neue OO-Writer-Doku erstellen",
@@ -2467,15 +2453,15 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					// create a list with some test data
 			/*
 			JList list = new JList(	new Object[] {"Scanner einstellungen",
-					"Photo von DigiCam holen", 
+					"Photo von DigiCam holen",
 					"Office-Dokument aufnehmen",
 					"PDF-Dokument aufnehmen",
 					"Neue OO-Writer-Doku erstellen",
 					"Neue OO-Calc-Doku erstellen"});
 			*/
-			list.setCellRenderer(new IconListRenderer(icons));	
+			list.setCellRenderer(new IconListRenderer(icons));
 			Reha.toolsDlgRueckgabe = -1;
-			
+
 			ToolsDialog tDlg = new ToolsDialog(Reha.thisFrame,"Werkzeuge: Dokumentation",list);
 			tDlg.setPreferredSize(new Dimension(240,220+(owndoku>3 ? 3*20 : owndoku*20)+
 					((Boolean)SystemConfig.hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton")? 25 : 0) ));
@@ -2554,7 +2540,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				}
 				doEigenDoku(Reha.toolsDlgRueckgabe-6);
 			}
-			
+
 			tDlg = null;
 			////System.out.println("Rückgabewert = "+tDlg.rueckgabe);
 		}
@@ -2562,20 +2548,21 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			JOptionPane.showMessageDialog(null,"Kein Patient für Dokumentation ausgewählt");
 		}
 	}
-	
 
-	
+
+
 }
 /*************************************/
 /*************************************/
 
 class MyDoku2TableModel extends DefaultTableModel{
 	   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==1){
 			   return JLabel.class;}
 		   else{
@@ -2584,7 +2571,8 @@ class MyDoku2TableModel extends DefaultTableModel{
         //return (columnIndex == 0) ? Boolean.class : String.class;
     }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 
@@ -2600,23 +2588,25 @@ class MyDoku2TableModel extends DefaultTableModel{
 	          return false;
 	        }
 	      }
-	   
+
 }
 
 class MyDokuTermTableModel extends DefaultTableModel{
 	   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return String.class;}
 		   /*else if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
         //return (columnIndex == 0) ? Boolean.class : String.class;
     }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	        if (col == 0){
@@ -2631,7 +2621,7 @@ class MyDokuTermTableModel extends DefaultTableModel{
 	          return false;
 	        }
 	      }
- 
+
 }
 
 class OoListener implements IDocumentListener {
@@ -2659,27 +2649,27 @@ class OoListener implements IDocumentListener {
 	@Override
 	public void onAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onFocus(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onInsertDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onInsertStart(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onLoad(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onLoadDone(IDocumentEvent arg0) {
@@ -2688,47 +2678,47 @@ class OoListener implements IDocumentListener {
 	@Override
 	public void onLoadFinished(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-			
+
 	}
 	@Override
 	public void onModifyChanged(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onMouseOut(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onMouseOver(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onNew(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onNonAlphaCharInput(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSave(IDocumentEvent arg0) {
 		////System.out.println("onSave");
-		
+
 	}
 	@Override
 	public void onSaveAs(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSaveAsDone(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void onSaveDone(IDocumentEvent arg0) {
@@ -2744,27 +2734,27 @@ class OoListener implements IDocumentListener {
 			geaendert = true;
 		}
 	}
-	
-	
+
+
 	private void doUebertragen(String file){
-		
+
 	}
 	@Override
 	public void onSaveFinished(IDocumentEvent arg0) {
 		// TODO Auto-generated method stub
 		////System.out.println("SaveFinisched");
-		
+
 	}
 	@Override
 	public void onUnload(IDocumentEvent arg0) {
 		try {
-			
+
 			IDocument doc = arg0.getDocument();
 			if(doc == null){
 				//System.out.println(geaendert+" - "+datei+" - "+neu+" doc = null ");
 				return;
 			}
-			
+
 			String file = arg0.getDocument().getPersistenceService().getLocation().getPath();
 			file = file.substring(1).replace("%20", " ");
 			//System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
@@ -2775,7 +2765,8 @@ class OoListener implements IDocumentListener {
 					//final IDocumentEvent xarg0 = arg0;
 					Thread.sleep(50);
 					new Thread(){
-						public void run(){
+						@Override
+                        public void run(){
 							try{
 								String nurDatei = datei.substring(datei.replace("\\", "/").lastIndexOf("/")+1);
 								int frage = JOptionPane.showConfirmDialog(null, "Die Dokumentationsdatei --> "+nurDatei+" <-- wurde geändert\n\nWollen Sie die geänderte Fassung in die Patienten-Dokumentation übernehmen?", "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
@@ -2787,7 +2778,7 @@ class OoListener implements IDocumentListener {
 											} catch (Exception e) {
 												// TODO Auto-generated catch block
 												e.printStackTrace();
-											}							
+											}
 
 								}
 							}catch(Exception ex){
@@ -2808,7 +2799,8 @@ class OoListener implements IDocumentListener {
 			}else if(neu){
 				//System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
 				new Thread(){
-					public void run(){	
+					@Override
+                    public void run(){
 						String nurDatei = datei.substring(datei.replace("\\", "/").lastIndexOf("/")+1);
 						int frage = JOptionPane.showConfirmDialog(null, "Die Dokumentationsdatei --> "+nurDatei+" <-- wurde geändert\n\nWollen Sie die geänderte Fassung in die Patienten-Dokumentation übernehmen?", "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 						if(frage == JOptionPane.YES_OPTION){
@@ -2819,11 +2811,11 @@ class OoListener implements IDocumentListener {
 										eltern.speichernOoDocs(nummer, -1, datei, -1, null, neu);
 									} catch (Exception e) {
 										e.printStackTrace();
-									}							
+									}
 
 						}
 					}
-				}.start();	
+				}.start();
 				arg0.getDocument().removeDocumentListener(this);
 			}else{
 				//System.out.println("else");
@@ -2838,7 +2830,7 @@ class OoListener implements IDocumentListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 	@Override
 	public void disposing(IEvent arg0) {
@@ -2857,7 +2849,7 @@ class OoListener implements IDocumentListener {
 
 					Thread.sleep(50);
 					new Thread(){
-						public void run(){				
+						public void run(){
 					int frage = JOptionPane.showConfirmDialog(null, "Die Dokumentationsdatei "+xfile+" wurde geändert\n\nWollen Sie die geänderte Fassung in die Patienten-Dokumentation übernehmen?", "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 					if(frage == JOptionPane.YES_OPTION){
 						geaendert = false;
@@ -2867,7 +2859,7 @@ class OoListener implements IDocumentListener {
 								} catch (Exception e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
-								}							
+								}
 
 					}
 
@@ -2875,7 +2867,7 @@ class OoListener implements IDocumentListener {
 					//System.out.println("Listener entfernt - Datei geändert "+xfile);
 						}
 					}.start();
-					doc.removeDocumentListener(this);				
+					doc.removeDocumentListener(this);
 				}else if(datei.equals(file) && !geaendert){
 					doc.removeDocumentListener(this);
 					//System.out.println("Listener entfernt - Datei nicht geändert"+file);
@@ -2889,14 +2881,14 @@ class OoListener implements IDocumentListener {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		}else{
 			//System.out.println("warschoninsave = "+warschoninsave);
 		}
 		*/
-		
+
 	}
 
-	
-}	
+
+}
 

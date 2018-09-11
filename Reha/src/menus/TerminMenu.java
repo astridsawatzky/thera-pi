@@ -53,7 +53,8 @@ public class TerminMenu {
 			TermStart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_T, Event.CTRL_MASK, false));
 			TermStart.setMnemonic(KeyEvent.VK_T);
 			TermStart.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
+				@Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
 					//System.out.println("Terminkalenderaufruf-Menü"); // TODO Auto-generated Event stub actionPerformed()
 					JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 					Reha.thisClass.progLoader.ProgTerminFenster(0, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
@@ -77,7 +78,8 @@ public class TerminMenu {
 		RoogleStart.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Event.CTRL_MASK, false));
 		RoogleStart.setText("Ru:gl - die Suchmaschine für Termine");
 		RoogleStart.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
+			@Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
 				//System.out.println("Ru:gl"); // TODO Auto-generated Event stub actionPerformed()
 				Reha.thisClass.messageLabel.setText("Roogle");
 				Reha.thisClass.progLoader.ProgRoogleFenster(0,null);
@@ -91,7 +93,8 @@ public class TerminMenu {
 		JMenuItem waz = new JMenuItem();
 		waz.setText("Wochenarbeitszeit definieren");
 		waz.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
+			@Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
 				//System.out.println("Ru:gl"); // TODO Auto-generated Event stub actionPerformed()
 				Reha.thisClass.messageLabel.setText("Wochenarbeitszeit definieren");
 				//ProgLoader.ProgTerminFenster(0,2);
@@ -105,7 +108,8 @@ public class TerminMenu {
 		JMenuItem ical = new JMenuItem();
 		ical.setText("Rehaplandaten -> iCalendar");
 		ical.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent e) {
+			@Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
 				try{
 					new iCalRehaExporter();
 				}catch(Exception ex){

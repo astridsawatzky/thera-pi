@@ -66,7 +66,8 @@ public class PatientToolBarLogic {
 		}else if(e.getKeyCode() == KeyEvent.VK_F1 && (!patientHauptPanel.aktPatID.equals("")) ){
 			if(Reha.bRGAFoffen || Reha.bHatMerkmale){
 				new Thread(){
-					public void run(){		
+					@Override
+                    public void run(){		
 						new SwingWorker<Void,Void>(){
 							@Override
 							protected Void doInBackground() throws Exception {
@@ -159,7 +160,8 @@ public class PatientToolBarLogic {
 	}
 	public void doPatNachricht(){
 		new Thread(){
-			public void run(){
+			@Override
+            public void run(){
 				try{
 					//hier Pat_intern und Rezeptnummer ermitteln
 					if(patientHauptPanel.aktPatID.equals("")){return;}
@@ -211,7 +213,8 @@ public class PatientToolBarLogic {
 			final String spat_intern = patientHauptPanel.patDaten.get(29);
 			final String xsrez_nr = srez_nr;
 			new Thread(){
-				public void run(){
+				@Override
+                public void run(){
 					new LadeProg(Path.Instance.getProghome()+"RehaFbBrowser.jar"+" ?pat_intern="+spat_intern+"#rez_nr="+xsrez_nr);		
 				}
 			}.start();			
@@ -236,14 +239,16 @@ public class PatientToolBarLogic {
 							smsDlg.setLocation(pt.x-350,pt.y+100);
 							smsDlg.pack();
 							SwingUtilities.invokeLater(new Runnable(){
-								public void run(){
+								@Override
+                                public void run(){
 									smsDlg.setTextCursor(0);		
 								}
 							});
 							
 							smsDlg.setVisible(true);
 							SwingUtilities.invokeLater(new Runnable(){
-								public void run(){
+								@Override
+                                public void run(){
 									smsDlg.setTextCursor(0);		
 								}
 							});

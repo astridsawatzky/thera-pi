@@ -42,6 +42,7 @@ public class FinalGlassPane extends JPanel implements AWTEventListener {
         this.point = point; 
     } 
  
+    @Override
     protected void paintComponent(Graphics g) { 
         Graphics2D g2 = (Graphics2D) g; 
         //g2.setColor(Color.GREEN.darker()); 
@@ -59,6 +60,7 @@ public class FinalGlassPane extends JPanel implements AWTEventListener {
         g2.dispose(); 
     } 
 
+    @Override
     public void eventDispatched(AWTEvent event) {
     	//System.out.println(event.getClass());
         if (event instanceof MouseEvent) { 
@@ -108,6 +110,7 @@ public class FinalGlassPane extends JPanel implements AWTEventListener {
      * for the underneath components 
      */ 
 
+    @Override
     public boolean contains(int x, int y) { 
         if (getMouseListeners().length == 0 && getMouseMotionListeners().length == 0 
                 && getMouseWheelListeners().length == 0 

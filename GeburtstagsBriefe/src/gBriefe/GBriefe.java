@@ -108,7 +108,8 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 		
 		/**************************/
 		new Thread(){
-			public  void run(){
+			@Override
+            public  void run(){
 				try {
 					//System.out.println("Starte SocketServer");
 					RehaSock = new RehaSockServer();
@@ -180,7 +181,8 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 		}
 		
 		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
+			@Override
+            public void run() {
 				GBriefe application = new GBriefe();
 				application.getJFrame();
 				GBriefe.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/fragezeichen.png" ) );
@@ -228,7 +230,8 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			//jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 			
             SwingUtilities.invokeLater(new Runnable(){
-            	public  void run(){
+            	@Override
+                public  void run(){
             		jFrame.setSize(800,600);
             		jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
             		jFrame.setVisible(true);
@@ -360,7 +363,8 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
             System.out.println("Open-Office wurde gestartet");
             System.out.println("Open-Office-Typ: "+officeapplication.getApplicationType());
             officeapplication.getDesktopService().addTerminateListener(new VetoTerminateListener() {
-          	  public void queryTermination(ITerminateEvent terminateEvent) {
+          	  @Override
+            public void queryTermination(ITerminateEvent terminateEvent) {
           	    super.queryTermination(terminateEvent);
           	    try {
           	      IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();
@@ -435,7 +439,8 @@ final class DatenbankStarten implements Runnable{
 	        System.out.println("Datenbank - gestartet = "+GBriefe.dblogin);	
 	        return;
 	}
-	public void run() {
+	@Override
+    public void run() {
 		int i=0;
 		StarteDB();
 	}

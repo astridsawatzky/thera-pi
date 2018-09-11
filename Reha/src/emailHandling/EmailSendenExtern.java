@@ -34,7 +34,7 @@ import com.sun.mail.util.MailSSLSocketFactory;
 
 public class EmailSendenExtern {
     public boolean sendMail(String smtpHost,String username,String password,String senderAddress,String recipientsAddress,String subject,String text,ArrayList<String[]>attachments,boolean authx,boolean bestaetigen,String secure,String useport ) throws AddressException, MessagingException, Exception{
-    	
+
     	Session session = null;
     	Properties properties = null;
         Transport tran = null;
@@ -42,14 +42,14 @@ public class EmailSendenExtern {
         MailAuthenticator auth = null;
     	if(secure.equals("keine")){
             auth = new MailAuthenticator(username, password);
-            
+
             properties = new Properties();
             if(properties.get("mail.smtp.host") != null){
-              //System.out.println("Bereits belegt mit "+properties.get("mail.smtp.host"));	
+              //System.out.println("Bereits belegt mit "+properties.get("mail.smtp.host"));
             }
             properties.clear();
-            
-            
+
+
             properties.put("mail.smtp.host", smtpHost);
             properties.put("mail.smtp.socketFactory.fallback", "false");
             if(authx){
@@ -57,12 +57,12 @@ public class EmailSendenExtern {
             } else {
             	properties.put("mail.smtp.auth", "false");
             }
-            session = Session.getInstance(properties, auth);	
-            
+            session = Session.getInstance(properties, auth);
+
         }else if(secure.equals("TLS/STARTTLS")){
         	properties = new Properties();
             properties.put("mail.smtp.host", smtpHost);
-        	properties.put("mail.smtp.ssl.trust", smtpHost);            
+        	properties.put("mail.smtp.ssl.trust", smtpHost);
             properties.put("mail.smtp.starttls.enable", "true");
             properties.put("mail.smtp.port", useport);
 
@@ -71,31 +71,32 @@ public class EmailSendenExtern {
             } else {
             	properties.put("mail.smtp.auth", "false");
             }
-	
+
     		final String xusername = username;
     		final String xpassword = password;
     		session = Session.getInstance(properties,
     				new javax.mail.Authenticator() {
-    			protected PasswordAuthentication getPasswordAuthentication() {
+    			@Override
+                protected PasswordAuthentication getPasswordAuthentication() {
     				return new PasswordAuthentication(xusername, xpassword);
     			}
-    		  });  
-    		
+    		  });
+
         }else if(secure.equals("SSL")){
         	//Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
         	properties = new Properties();
         	properties.put("mail.smtp.host", smtpHost);
-        	
+
         	MailSSLSocketFactory sf = new MailSSLSocketFactory();
         	sf.setTrustAllHosts(true);
         	properties.put("mail.smtp.ssl.enable", "true");
         	properties.put("mail.smtp.ssl.socketFactory", sf);
- 
+
 
         	properties.put("mail.smtp.socketFactory.port", useport);
         	properties.put("mail.smtp.socketFactory.class",
     				"javax.net.ssl.SSLSocketFactory");
-        	
+
            	properties.put("mail.smtp.ssl.trust", smtpHost);
             if(authx){
             	properties.put("mail.smtp.auth", "true");
@@ -107,41 +108,42 @@ public class EmailSendenExtern {
     		final String xpassword = password;
     		session = Session.getDefaultInstance(properties,
     			new javax.mail.Authenticator() {
-    				protected PasswordAuthentication getPasswordAuthentication() {
+    				@Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
     					return new PasswordAuthentication(xusername,xpassword);
     				}
-    			});   
-    		
+    			});
+
         }else{
         	JOptionPane.showMessageDialog(null,"Fehler in der Emailkonfiguration, Item Sicherheitsstufe!");
         	return false;
         }
-        
-        
+
+
         //try{
-        
+
 
          // Eine neue Message erzeugen
         msg = new MimeMessage(session);
         // Hier werden die Absender- und Empfängeradressen gesetzt
         msg.setFrom(new InternetAddress(senderAddress));
-        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientsAddress, false));            	
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipientsAddress, false));
 
-            
+
          // Der Betreff und Body der Message werden gesetzt
          msg.setSubject(subject);
          //msg.setText(text);
 /*********************/
          BodyPart messageBodyPart = new MimeBodyPart();
          messageBodyPart.setText(text);
-            
+
          Multipart multipart = new MimeMultipart();
          multipart.addBodyPart(messageBodyPart);
-            
+
             if(attachments.size()>0){
             	DataSource source = null;
             	for(int i = 0;i<attachments.size();i++){
-            		
+
             		messageBodyPart = new MimeBodyPart();
             		/*
             		FileInputStream file;
@@ -154,7 +156,7 @@ public class EmailSendenExtern {
 						e.printStackTrace();
 					}
 					*/
-            	      
+
     	           	source = new FileDataSource(attachments.get(i)[0]);
     	           	messageBodyPart.setDataHandler(new DataHandler(source));
     	           	messageBodyPart.setFileName(attachments.get(i)[1]);
@@ -163,16 +165,16 @@ public class EmailSendenExtern {
             	}
             }
             msg.setContent(multipart);
-/*********************/            
+/*********************/
             // Hier lassen sich HEADER-Informationen hinzufügen
             //msg.setHeader("Test", "Test");
             if(bestaetigen){
-            	msg.addHeader("Return-Receipt-To", senderAddress);	
+            	msg.addHeader("Return-Receipt-To", senderAddress);
             }
-            
+
             msg.setSentDate(new Date( ));
             // Zum Schluss wird die Mail natürlich noch verschickt
-            
+
    			tran = session.getTransport("smtp");
    			/*
    			//System.out.println("Sender Domain ="+smtpHost);
@@ -181,26 +183,22 @@ public class EmailSendenExtern {
    			//System.out.println("Benutzername  ="+username);
    			tran.connect(smtpHost, 25, senderAddress, password);
    			*/
-   			
-            
+
+
 
             Transport.send(msg);
-        /*    
-            
+        /*
+
         }catch(Exception ex){
         	JOptionPane.showMessageDialog(null,"Fehler beim Versand der Email, evtl kein Kontakt zum Internet");
         }
         */
-           
 
-        	if(session != null){
+
         		session = null;
-        	}
-        	if(msg != null){
-                msg = null;        		
-        	}
+                msg = null;
         	if(auth != null){
-                auth = null;        		
+                auth = null;
         	}
         	if(tran != null){
         		tran = null;
@@ -218,14 +216,14 @@ public class EmailSendenExtern {
          * dieser Klasse enthalten wird.
          */
         private String user;
- 
+
         /**
          * Ein String, der das Passwort nach der Erzeugung eines
          * Objektes<br>
          * dieser Klasse enthalten wird.
          */
         private String password;
- 
+
         /**
          * Der Konstruktor erzeugt ein MailAuthenticator Objekt<br>
          * aus den beiden Parametern user und passwort.
@@ -240,18 +238,19 @@ public class EmailSendenExtern {
             this.password = password;
             ////System.out.println("In Authenticator user ="+this.user+"  Passwort = "+this.password);
         }
- 
+
         /**
          * Diese Methode gibt ein neues PasswortAuthentication
          * Objekt zurueck.
          *
          * @see javax.mail.Authenticator#getPasswordAuthentication()
          */
+        @Override
         protected PasswordAuthentication getPasswordAuthentication() {
             return new PasswordAuthentication(this.user, this.password);
         }
     }
-    
+
 /******************************************************/
    class Mail3Attachment implements DataSource
     {
@@ -276,7 +275,7 @@ public class EmailSendenExtern {
         {
           ueException.printStackTrace();
         }
-      }  
+      }
 
       /**
        * Erzeugt ein DataSource-Objekt über einen InputStream
@@ -314,7 +313,8 @@ public class EmailSendenExtern {
        * (non-Javadoc)
        * @see javax.activation.DataSource#getInputStream()
        */
-      public InputStream getInputStream() throws IOException
+      @Override
+    public InputStream getInputStream() throws IOException
       {
         if (m_File == null)
         {
@@ -327,7 +327,8 @@ public class EmailSendenExtern {
        * (non-Javadoc)
        * @see javax.activation.DataSource#getOutputStream()
        */
-      public OutputStream getOutputStream() throws IOException
+      @Override
+    public OutputStream getOutputStream() throws IOException
       {
         throw new IOException("Nicht implementiert");
       }
@@ -336,7 +337,8 @@ public class EmailSendenExtern {
        * (non-Javadoc)
        * @see javax.activation.DataSource#getContentType()
        */
-      public String getContentType()
+      @Override
+    public String getContentType()
       {
         return m_MimeType;
       }
@@ -345,14 +347,15 @@ public class EmailSendenExtern {
        * (non-Javadoc)
        * @see javax.activation.DataSource#getName()
        */
-      public String getName()
+      @Override
+    public String getName()
       {
         return "dummy";
       }
     }
 
-    
-   
+
+
 /*
     public static void main(String[] args) {
         String username = "";
@@ -365,5 +368,5 @@ public class EmailSendenExtern {
         new SendMailExample().sendMail(smtpHost, username, password, senderAddress, recipientsAddress, subject, text);
 
     }
-*/    
+*/
 }

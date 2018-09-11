@@ -262,7 +262,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 		
 		if(agruppen.length > 0){
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 					for(int i = 0; i< column.length;i++){
 						colVec.add(column[i]);
 					}
@@ -360,7 +361,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 	}
 	private void tabellenRefresh(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				jTblGruppen.validate();
 				jscr.validate();
 				jTblGruppen.repaint();
@@ -467,7 +469,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 		dtblm.setValueAt(ddaten[4].substring(0,5), modrowselected, 2);
 		dtblm.setValueAt(endekal.substring(0,5), modrowselected, 3);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				jTblGruppen.editCellAt(jTblGruppen.getSelectedRow(), 1);
 			}
 		});
@@ -565,7 +568,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 				int anfrage = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die aktuelle Gruppendefinition auf die - alte Definition - übertragen?", "Achtung wichtige Benutzeranfrage!!!!", JOptionPane.YES_NO_OPTION);
 				if(anfrage == JOptionPane.YES_OPTION){
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 							definitionUebertragen();
 						}
 					});
@@ -577,7 +581,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 				int anfrage = JOptionPane.showConfirmDialog(null, "Wollen Sie dies komplette Gruppe tatsächlich löschen?", "Achtung wichtige Benutzeranfrage!!!!", JOptionPane.YES_NO_OPTION);
 				if(anfrage == JOptionPane.YES_OPTION){
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 							loescheGruppe();
 						}
 					});
@@ -594,7 +599,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 				jTblGruppen.requestFocus();
 				jTblGruppen.setRowSelectionInterval(jTblGruppen.getRowCount()-1,jTblGruppen.getRowCount()-1);
 				SwingUtilities.invokeLater(new Runnable(){
-					public  void run(){
+					@Override
+                    public  void run(){
 						jTblGruppen.editCellAt(jTblGruppen.getRowCount()-1, 0);
 					}
 				});
@@ -623,7 +629,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 				jTblGruppen.setEditable(true);
 				jTblGruppen.requestFocus();
 				SwingUtilities.invokeLater(new Runnable(){
-					public  void run(){
+					@Override
+                    public  void run(){
 						int[] wahl = jTblGruppen.getSelectedRows();
 						if(wahl.length > 0){
 							termgewaehlt = wahl[0];
@@ -653,7 +660,8 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 				int anfrage = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Gruppentermin wirklich löschen?", "Achtung wichtige Benutzeranfrage!!!!", JOptionPane.YES_NO_OPTION);
 				if(anfrage == JOptionPane.YES_OPTION){
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 							int[] wahl = jTblGruppen.getSelectedRows();
 							if(wahl.length > 0){
 								dtblm.removeRow(wahl[0]);
@@ -922,7 +930,8 @@ class GruppenTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class getColumnClass(int columnIndex) {
+	@Override
+    public Class getColumnClass(int columnIndex) {
 		   if(columnIndex<0){return Boolean.class;}
 		   else if(columnIndex==4){return Long.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
@@ -930,7 +939,8 @@ class GruppenTableModel extends DefaultTableModel{
            //return (columnIndex == 0) ? Boolean.class : String.class;
        }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	    	/*

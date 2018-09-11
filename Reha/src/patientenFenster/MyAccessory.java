@@ -31,7 +31,8 @@ public class MyAccessory extends JComponent implements PropertyChangeListener {
 	}
 
 
-	public void propertyChange(PropertyChangeEvent evt) {
+	@Override
+    public void propertyChange(PropertyChangeEvent evt) {
 		if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(evt
 				.getPropertyName())) {
 			// Get the new selected file
@@ -51,7 +52,8 @@ public class MyAccessory extends JComponent implements PropertyChangeListener {
 		}
 	}
 
-	public void paint(Graphics g) {
+	@Override
+    public void paint(Graphics g) {
 		try {
 			g.drawImage(image, 10, 0, 150, 150, this.getBackground(), null);
 		} catch (NullPointerException np) {

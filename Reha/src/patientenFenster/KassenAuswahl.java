@@ -90,27 +90,31 @@ public class KassenAuswahl extends RehaSmartDialog{
 		getSmartTitledPanel().setContentContainer(grundPanel);
 		//final JXPanel thispan = content;
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, KeyEvent.ALT_MASK);
 				((JComponent)getContentPanel()).getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doSuchen");
 				((JComponent)getContentPanel()).getActionMap().put("doSuchen", new KassenWahlAction());
 			}
 		});
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){		
+			@Override
+            public  void run(){		
 				tf.requestFocus();
 			}
 		});
 	}
 
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		try{
 			if(evt.getDetails()[0] != null){
@@ -177,7 +181,8 @@ public class KassenAuswahl extends RehaSmartDialog{
 		neukasse.setMnemonic(KeyEvent.VK_N);
 		neukasse.addKeyListener(akl);
 		neukasse.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				neuAnlageKassen();
 			}
 	    });
@@ -189,7 +194,8 @@ public class KassenAuswahl extends RehaSmartDialog{
 		suchekasse.setMnemonic(KeyEvent.VK_S);
 		suchekasse.addKeyListener(akl);
 		suchekasse.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				fuelleTabelle(tf.getText().trim());
 				tf.requestFocus();
 			}
@@ -200,7 +206,8 @@ public class KassenAuswahl extends RehaSmartDialog{
 		uebernahmekasse.setName("suchearzt");
 		uebernahmekasse.addKeyListener(akl);
 		uebernahmekasse.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				werteUebergeben();
 			}
 	    }); 
@@ -211,7 +218,8 @@ public class KassenAuswahl extends RehaSmartDialog{
 		abbrechenkasse.setMnemonic(KeyEvent.VK_A);
 		abbrechenkasse.addKeyListener(akl);
 		abbrechenkasse.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e){
+			@Override
+            public void actionPerformed(ActionEvent e){
 				doAbbrechen();
 			}
 	    }); 
@@ -226,7 +234,8 @@ public class KassenAuswahl extends RehaSmartDialog{
 		kassenwahltbl = new JXTable(kassenwahlmod);
 		kassenwahltbl.addKeyListener(akl);
 		kassenwahltbl.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() == 2){
 					werteUebergeben();					
 				}
@@ -345,7 +354,8 @@ public class KassenAuswahl extends RehaSmartDialog{
 		}
 		grundPanel.add(this.content);
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				tf.requestFocus();
 			}
 		});		
@@ -370,7 +380,8 @@ public class KassenAuswahl extends RehaSmartDialog{
 		 */
 		private static final long serialVersionUID = 4162099265232433545L;
 
-		public void actionPerformed(ActionEvent e) {
+		@Override
+        public void actionPerformed(ActionEvent e) {
 
 	        if(e.getActionCommand().equals("f")){
 	        	 tf.requestFocus();
@@ -429,15 +440,18 @@ public class KassenAuswahl extends RehaSmartDialog{
 	class MyKassenWahlModel extends DefaultTableModel{
 		private static final long serialVersionUID = 1L;
 
-		public Class<?> getColumnClass(int columnIndex) {
+		@Override
+        public Class<?> getColumnClass(int columnIndex) {
 			   if(columnIndex==0){return String.class;}
 			   else{return String.class;}
 		}
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	    	return true;
 	    }
-		public Object getValueAt(int rowIndex, int columnIndex) {
+		@Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
 			String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
 			Object result = null;
 			result = theData;

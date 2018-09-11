@@ -222,7 +222,8 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.NEED_AKTUSER)){
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.NEED_AKTUSER+"#"+Reha.aktUser);
 				}
 			});

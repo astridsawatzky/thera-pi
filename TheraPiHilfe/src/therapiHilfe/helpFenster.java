@@ -1018,7 +1018,8 @@ public class helpFenster extends JXPanel implements TableModelListener,Component
 		}
 	}	
 	 class SharedListSelectionHandler implements ListSelectionListener {
-	        public void valueChanged(ListSelectionEvent e) { 
+	        @Override
+            public void valueChanged(ListSelectionEvent e) { 
 	            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 
 	            /*
@@ -1171,14 +1172,16 @@ class MyDefaultTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class getColumnClass(int columnIndex) {
+	@Override
+    public Class getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return String.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
            //return (columnIndex == 0) ? Boolean.class : String.class;
        }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	    	/*
@@ -1209,7 +1212,8 @@ final class WorkerTitel extends SwingWorker<Void,Void>{
 
 	}
 	
-	protected Void doInBackground() throws Exception {
+	@Override
+    protected Void doInBackground() throws Exception {
 		Vector combInhalt = holeGruppen();
 		//System.out.println("Titel-Elemente = "+combInhalt.size());
 	
@@ -1284,7 +1288,8 @@ final class HtmlSpeichern extends SwingWorker<Void,Void>{
 		execute();
 	}
 	
-	protected Void doInBackground() throws Exception {
+	@Override
+    protected Void doInBackground() throws Exception {
 		Statement stmt = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
@@ -1407,7 +1412,8 @@ final class HtmlHolen extends SwingWorker<Void,Void>{
 		helpFenster.thisClass.bilder.clear();
 		execute();
 	}
-	protected Void doInBackground() throws Exception {
+	@Override
+    protected Void doInBackground() throws Exception {
 		Statement stmtx = null;
 		ResultSet rsx = null;
 				try {

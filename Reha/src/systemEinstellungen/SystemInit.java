@@ -121,9 +121,11 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
 			revalidate();
 			auswertenSysUtil("nix");
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 					new Thread(){
-						public void run(){
+						@Override
+                        public void run(){
 							headerInfos();							
 						}
 					}.start();

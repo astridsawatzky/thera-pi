@@ -231,7 +231,8 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 		modvorlagen.setColumnIdentifiers(new String[] {"Titel der Vorlage","Vorlagendatei"});
 		vorlagen = new JXTable(modvorlagen);
 		vorlagen.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				// TODO Auto-generated method stub
 				if(arg0.getClickCount()==2 && arg0.getButton()==1){
 					int row = vorlagen.getSelectedRow();
@@ -374,7 +375,8 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 				int rows = modvorlagen.getRowCount(); 
 				final int xrows = rows -1;
 				SwingUtilities.invokeLater(new Runnable(){
-				 	   public  void run(){
+				 	   @Override
+                    public  void run(){
 				 		  vorlagen.requestFocus();
 				 		  vorlagen.setRowSelectionInterval(xrows, xrows);
 				 		  startCellEditing(vorlagen,xrows);
@@ -461,7 +463,8 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 		final int xrows = row;
 		final JXTable xtable = table;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		  xtable.scrollRowToVisible(xrows);
 		 				xtable.editCellAt(xrows, 0);
 		 	   }
@@ -480,6 +483,7 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
         chooser.setCurrentDirectory(file);
 
         chooser.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                         || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
@@ -517,11 +521,13 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class getColumnClass(int columnIndex) {
+		@Override
+        public Class getColumnClass(int columnIndex) {
 			   return String.class;
 	       }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        if (col == 0){
 	        	return true;
 	        }else{
@@ -536,12 +542,14 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public Class getColumnClass(int columnIndex) {
+		@Override
+        public Class getColumnClass(int columnIndex) {
 			 return String.class;
 	       }
 		
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	    	
 	    	return true;
 	    }
@@ -556,7 +564,8 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 		   //component = new JRtaTextField("NIX",true);
 		   //System.out.println("editor-Component wurde initialisiert");
 		   component.addKeyListener(new KeyAdapter(){
-			   public void keyPressed(KeyEvent arg0) {
+			   @Override
+            public void keyPressed(KeyEvent arg0) {
 					//System.out.println("********Button in KeyPressed*********");	
 					if(arg0.getKeyCode()== 10){
 						arg0.consume();
@@ -580,7 +589,8 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 		}
 
 
-		public boolean isCellEditable(EventObject anEvent) {
+		@Override
+        public boolean isCellEditable(EventObject anEvent) {
 			if(anEvent instanceof MouseEvent)
 	          {
 	             MouseEvent me = (MouseEvent)anEvent;

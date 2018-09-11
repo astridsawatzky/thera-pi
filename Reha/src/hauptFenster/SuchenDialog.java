@@ -100,14 +100,16 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		new suchePatient().init(tblDataModel);
 		this.setAlwaysOnTop(true);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				jTextField.requestFocus();
 			}
 		});
@@ -119,7 +121,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		
 	}
 
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 
 		try{
 			if(evt.getDetails()[0] != null){
@@ -217,7 +220,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 				jtext.setPreferredSize(new Dimension(100,20));
 			}
 			jtext.addKeyListener(new java.awt.event.KeyAdapter() {   
-				public void keyPressed(java.awt.event.KeyEvent e) {    
+				@Override
+                public void keyPressed(java.awt.event.KeyEvent e) {    
 					if (e.getKeyCode() == 10){   // RETURN gedrückt
 						e.consume();
 						new SwingWorker<Void,Void>(){
@@ -255,12 +259,14 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 						}
 					}
 				}   
-				public void keyReleased(java.awt.event.KeyEvent e) {    
+				@Override
+                public void keyReleased(java.awt.event.KeyEvent e) {    
 					if (e.getKeyCode() == 10){
 						//suchePatient();
 					}
 				}
-				public void keyTyped(java.awt.event.KeyEvent e) {
+				@Override
+                public void keyTyped(java.awt.event.KeyEvent e) {
 					////System.out.println("keyTyped()"); // TODO Auto-generated Event stub keyTyped()
 				}
 			});
@@ -305,7 +311,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jtable.setEditable(false);
 
 			jtable.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyPressed(java.awt.event.KeyEvent e) {
+				@Override
+                public void keyPressed(java.awt.event.KeyEvent e) {
 					if (e.getKeyCode() == 10){								// ENTER
 						aufrufer.setLastRow(jtable.getSelectedRow());
 						sucheAbfeuern();
@@ -327,10 +334,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			});
 						
 			jtable.addMouseListener(new java.awt.event.MouseAdapter() {
-				public void mouseEntered(java.awt.event.MouseEvent e) {
+				@Override
+                public void mouseEntered(java.awt.event.MouseEvent e) {
 					SuchenDialog.this.setCursor(cdefault);
 				}
-				public void mouseClicked(java.awt.event.MouseEvent e) {
+				@Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
 					if(e.getClickCount() == 2){
 						aufrufer.setLastRow(jtable.getSelectedRow());
 						sucheAbfeuern();
@@ -426,7 +435,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jb2.setPreferredSize(new Dimension(16,16));
 			jb2.setIcon(SystemConfig.hmSysIcons.get("rot"));
 			jb2.addMouseListener(new java.awt.event.MouseAdapter(){
-				public void mouseClicked(java.awt.event.MouseEvent e) {		// <- Window-Close-Button
+				@Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {		// <- Window-Close-Button
 					e.consume();
 					setVisible(false);
 					sucheBeenden();
@@ -434,7 +444,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			});
 			jXTitledPanel.setRightDecoration(jb2);
 			jXTitledPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {   
-				public void mouseMoved(java.awt.event.MouseEvent e) {    
+				@Override
+                public void mouseMoved(java.awt.event.MouseEvent e) {    
 					for(int i = 0; i < 1; i++){
 						sizeart=-1;
 						setCursor(cdefault);
@@ -509,7 +520,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 						setCursor(cdefault);
 					}
 				}
-				public void mouseDragged(java.awt.event.MouseEvent e) {
+				@Override
+                public void mouseDragged(java.awt.event.MouseEvent e) {
 					if (! insize && clickY > 0){
 						SuchenDialog.this.getLocationOnScreen();
 						SuchenDialog.this.setLocation(e.getXOnScreen()-clickX,e.getYOnScreen()-clickY);
@@ -627,9 +639,11 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			});
 
 			jXTitledPanel.addMouseListener(new java.awt.event.MouseAdapter() {   
-				public void mouseExited(java.awt.event.MouseEvent e) {    
+				@Override
+                public void mouseExited(java.awt.event.MouseEvent e) {    
 				}   
-				public void mouseReleased(java.awt.event.MouseEvent e) {    
+				@Override
+                public void mouseReleased(java.awt.event.MouseEvent e) {    
 					clickX = -1;
 					clickY = -1;
 					orgbounds[0] = -1;
@@ -637,7 +651,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 					insize = false;
 					setCursor(cdefault);
 				}
-				public void mousePressed(java.awt.event.MouseEvent e) {
+				@Override
+                public void mousePressed(java.awt.event.MouseEvent e) {
 					if (e.getY() <= 25){
 						clickY = e.getY();
 						clickX = e.getX();
@@ -658,7 +673,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 			jButton = new JXButton();
 			jButton.setText("Schliessen");
 			jButton.addActionListener(new java.awt.event.ActionListener() {
-				public void actionPerformed(java.awt.event.ActionEvent e) {
+				@Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
 					RehaEvent rEvt = new RehaEvent(this);
 					rEvt.setRehaEvent("Am Arsch lecken");
 					RehaEventClass.fireRehaEvent(rEvt);

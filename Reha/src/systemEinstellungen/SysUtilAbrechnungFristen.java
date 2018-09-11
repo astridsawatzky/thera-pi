@@ -80,7 +80,8 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 	    add(getKnopfPanel(),BorderLayout.SOUTH);
 	    validate();
 	    SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				cmbtarife.addActionListener(getInstance());
 				cmbdiszi.addActionListener(getInstance());
 				werteEinlesen();

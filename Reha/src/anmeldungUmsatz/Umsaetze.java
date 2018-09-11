@@ -92,14 +92,16 @@ public class Umsaetze extends JXPanel{
 		this.makeListeners();
 		this.add(getContent(),BorderLayout.CENTER);
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				setzeFocus();
 			}
 		});		
 	}
 	private void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
+			@Override
+            public void run(){
 				tfs[0].requestFocus();
 			}
 		});
@@ -423,7 +425,8 @@ public class Umsaetze extends JXPanel{
 			}
 			final ISpreadsheetDocument xspredsheetDocument = spreadsheetDocument;
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					xspredsheetDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 					xspredsheetDocument.getFrame().setFocus();
 				}

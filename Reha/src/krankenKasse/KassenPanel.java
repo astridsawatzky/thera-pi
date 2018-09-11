@@ -15,7 +15,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -76,7 +75,6 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rehaInternalFrame.JKasseInternal;
@@ -86,7 +84,7 @@ import systemEinstellungen.SystemConfig;
 
 public class KassenPanel extends JXPanel implements PropertyChangeListener,TableModelListener,KeyListener,FocusListener,ActionListener, MouseListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -8071861793718571588L;
 	JButton einlesen = null;
@@ -101,7 +99,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	public JButton[] jbut = {null,null,null,null,null};
 	//public JRtaTextField[] tf = {null,null,null,null,null,null,null,null,null,null,null,null,null,null,null};
 	public JTextArea ta;
-	public boolean inMemoEdit = false; 
+	public boolean inMemoEdit = false;
 	private JRtaTextField formularid = new JRtaTextField("NIX",false);
 	Vector<String> titel = new Vector<String>() ;
 	Vector<String> formular = new Vector<String>();
@@ -128,37 +126,40 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		setLayout(new BorderLayout());
 		add(getContent(),BorderLayout.CENTER);
 		if(!kid.equals("")){
-			final String xkass = kid; 
+			final String xkass = kid;
 			new SwingWorker<Void,Void>(){
 
 				@Override
 				protected Void doInBackground() throws Exception {
 					holeAktKasse(xkass);
 					SwingUtilities.invokeLater(new Runnable(){
-						public  void run(){
+						@Override
+                        public  void run(){
 					 		setzeFocus();
 						}
 					});
 					return null;
 				}
-				
+
 			}.execute();
-			
+
 		}else{
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 			 		setzeFocus();
 				}
 			});
 		}
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				KeyStroke stroke = KeyStroke.getKeyStroke(70, KeyEvent.ALT_MASK);
 				getInstance().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doSuchen");
 				getInstance().getActionMap().put("doSuchen", new KasseAction());
 				stroke = KeyStroke.getKeyStroke(78, KeyEvent.ALT_MASK);
 				getInstance().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doNeu");
-				getInstance().getActionMap().put("doNeu", new KasseAction());	
+				getInstance().getActionMap().put("doNeu", new KasseAction());
 				stroke = KeyStroke.getKeyStroke(69, KeyEvent.ALT_MASK);
 				getInstance().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doEdit");
 				getInstance().getActionMap().put("doEdit", new KasseAction());
@@ -176,21 +177,23 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			    */
 			}
 		});
-		
+
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 		 		setzeFocus();
 			}
 		});
 
-		
+
 	}
 	public KassenPanel getInstance(){
 		return this;
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				suchen.requestFocus();
 			}
 		});
@@ -207,7 +210,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		jtb.setRollover(true);
 		jtb.setBorder(null);
 		jtb.setOpaque(false);
-		
+
 		jtb.add(new JLabel("finde Kasse -->"));
 
 		JXPanel supan = new JXPanel(new BorderLayout());
@@ -222,9 +225,9 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		suchen.addKeyListener(this);
 		supan.add(suchen,BorderLayout.NORTH);
 		jtb.add(supan);
-		
+
 		jtb.addSeparator(new Dimension(40,25));
-		
+
 		jbut[0] = new JButton();
 		jbut[0].setIcon(SystemConfig.hmSysIcons.get("neu"));
 		jbut[0].setToolTipText("neue Kasse anlegen (Alt+N)");
@@ -233,7 +236,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		jtb.add(jbut[0]);
 		jbut[1] = new JButton();
 		jbut[1].setIcon(SystemConfig.hmSysIcons.get("edit"));
-		jbut[1].setToolTipText("aktuelle Kasse ändern/editieren (Alt+E)");		
+		jbut[1].setToolTipText("aktuelle Kasse ändern/editieren (Alt+E)");
 		jbut[1].setActionCommand("edit");
 		jbut[1].addActionListener(this);
 		jtb.add(jbut[1]);
@@ -264,16 +267,17 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		contPan.add(getTabelle(),cc.xyw(1,3,3));
 
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 		   holeFormulare();
 		 		   return;
 		 	   }
-		}); 	  
+		});
 
-		
+
 		contPan.add(getEdits(),cc.xyw(1,5,3));
 		contPan.validate();
-		
+
 		return contPan;
 	}
 	public JScrollPane getTabelle(){
@@ -293,7 +297,8 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		kassentbl.getColumn(7).setMinWidth(30);
 		kassentbl.addKeyListener(this);
 		kassentbl.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent arg0) {
+			@Override
+            public void keyPressed(KeyEvent arg0) {
 				if(inMemoEdit){
 					return;
 				}
@@ -301,13 +306,13 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 				//System.out.println(" in Tabelle "+arg0.getKeyCode());
 				if(arg0.getKeyCode()== 10){
 					arg0.consume();
-					int row = kassentbl.getSelectedRow(); 
+					int row = kassentbl.getSelectedRow();
 					if(row >= 0){
 						String sid =  (String) kassentbl.getValueAt(row,7);
 						neuanlageKasse(sid);
 					}
 				}
-			}	
+			}
 		});
 
 		kassentbl.addMouseListener(this);
@@ -318,16 +323,16 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(kassentbl);
 		jscr.validate();
 		return jscr;
-		
+
 	}
 	public void macheTabelle(Vector<?> vec){
 		if(vec.size()> 0){
-			ktblm.addRow(vec);	
+			ktblm.addRow(vec);
 		}else{
 			ktblm.setRowCount(0);
 			kassentbl.validate();
 		}
-		
+
 	}
 	/*
 	private void testeTabelle(){
@@ -337,7 +342,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			if(!match[1].trim().equals("")){
 				//Filter[] filterArray = { new PatternAndOrFilterAcrossAllColumns(vgl, 0, 7,match)  };
 				//FilterPipeline filters = new FilterPipeline(filterArray);
-				//kassentbl.setFilters(filters);				
+				//kassentbl.setFilters(filters);
 				//System.out.println("In mehrfachsuche");
 			}else{
 				//Filter[] filterArray = { new PatternFilterAcrossAllColumns(vgl, 0, 7)  };
@@ -358,19 +363,19 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		}
 		int anzahl = kassentbl.getRowCount();
 		if(suchestarten > anzahl){
-			JOptionPane.showMessageDialog(null,"Ende der Kassen-Tabelle erreicht");		
+			JOptionPane.showMessageDialog(null,"Ende der Kassen-Tabelle erreicht");
 			return;
 		}
 		for(int i = suchestarten; i < anzahl;i++){
-			if( ((String)kassentbl.getValueAt(i, 0)).toUpperCase().indexOf(vgl) >= 0 ||  
+			if( ((String)kassentbl.getValueAt(i, 0)).toUpperCase().indexOf(vgl) >= 0 ||
 				((String)kassentbl.getValueAt(i, 1)).toUpperCase().indexOf(vgl) >= 0 ||
-				((String)kassentbl.getValueAt(i, 2)).toUpperCase().indexOf(vgl) >= 0 || 
+				((String)kassentbl.getValueAt(i, 2)).toUpperCase().indexOf(vgl) >= 0 ||
 				((String)kassentbl.getValueAt(i, 3)).toUpperCase().indexOf(vgl) >= 0 ||
-				((String)kassentbl.getValueAt(i, 4)).toUpperCase().indexOf(vgl) >= 0 	
+				((String)kassentbl.getValueAt(i, 4)).toUpperCase().indexOf(vgl) >= 0
 			){
 				treffer = true;
 				itreffer = i;
-				break; 
+				break;
 			}
 		}
 		if(treffer){
@@ -379,14 +384,14 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			//System.out.println("nächster gefunden bei "+itreffer+" // suchestarten = "+suchestarten);
 			suchestarten = itreffer+1;
 			//JOptionPane.showMessageDialog(null,"Treffer bei "+itreffer);
-		
+
 		}else{
 			if(suchestarten > 0){
-				JOptionPane.showMessageDialog(null,"Keine weitere Übereinstimmung mit Suchkriterium");				
+				JOptionPane.showMessageDialog(null,"Keine weitere Übereinstimmung mit Suchkriterium");
 			}else{
-				JOptionPane.showMessageDialog(null,"Keine Übereinstimmung mit Suchkriterium");				
+				JOptionPane.showMessageDialog(null,"Keine Übereinstimmung mit Suchkriterium");
 			}
-			
+
 		}
 		suchen.requestFocus();
 	}
@@ -396,22 +401,22 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		jpan.setOpaque(false);
 		FormLayout laye= new FormLayout("250dlu:g",
 				"30px,0dlu,100dlu:g,1dlu");
-		CellConstraints cce = new CellConstraints(); 
+		CellConstraints cce = new CellConstraints();
 		jpan.setLayout(laye);
 		JToolBar kedit = new JToolBar();
 		kedit.setOpaque(false);
 		kedit.setRollover(true);
 		kedit.setBorder(null);
-		
+
 		memobut[0] = new JButton();
 		memobut[0].setIcon(SystemConfig.hmSysIcons.get("edit"));
-		memobut[0].setToolTipText("Langtext editieren");		
+		memobut[0].setToolTipText("Langtext editieren");
 		memobut[0].setActionCommand("kedit");
 		memobut[0].addActionListener(this);
 		kedit.add(memobut[0]);
 		memobut[1] = new JButton();
 		memobut[1].setIcon(SystemConfig.hmSysIcons.get("save"));
-		memobut[1].setToolTipText("Langtext speichern");		
+		memobut[1].setToolTipText("Langtext speichern");
 		memobut[1].setActionCommand("ksave");
 		memobut[1].addActionListener(this);
 		memobut[1].setEnabled(false);
@@ -419,7 +424,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		kedit.addSeparator(new Dimension(40,0));
 		memobut[2] = new JButton();
 		memobut[2].setIcon(SystemConfig.hmSysIcons.get("stop"));
-		memobut[2].setToolTipText("Langtext bearbeiten abbrechen");		
+		memobut[2].setToolTipText("Langtext bearbeiten abbrechen");
 		memobut[2].setActionCommand("kbreak");
 		memobut[2].addActionListener(this);
 		memobut[2].setEnabled(false);
@@ -442,7 +447,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		jpan.validate();
 		return jpan;
 	}
-	
+
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
@@ -450,7 +455,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			return;
 		}
 		//System.out.println(arg0.getKeyCode());
-		
+
 		if(arg0.getSource() instanceof JRtaTextField){
 			if(arg0.getKeyCode() == 10 && ((JComponent)arg0.getSource()).getName().equals("suchen")){
 				ktblm.setRowCount(0);
@@ -470,7 +475,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
 		}
 	}
-	
+
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		// TODO Auto-generated method stub
@@ -480,12 +485,12 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		if(((JComponent)arg0.getSource()).getName().equals("KrankenKasse") && (arg0.getKeyCode() != 10) ){
 			//holeText();
 			return;
-		}		
+		}
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	/****************************/
 /**************************/
@@ -493,18 +498,19 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	public void focusGained(FocusEvent arg0) {
 		// TODO Auto-generated method stub
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run()
-		 	   
+		 	   @Override
+            public  void run()
+
 		 	   {
 		 		   suchen.requestFocus();
 		 	   }
 		});
-		
+
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -514,7 +520,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			//String sid = "";
 			int row = kassentbl.getSelectedRow();
 			if(row < 0){
-				String mes = "\nWenn man den Langtext einer Kasse ändern will, empfiehlt es sich\n"+ 
+				String mes = "\nWenn man den Langtext einer Kasse ändern will, empfiehlt es sich\n"+
 				"vorher die Kasse auszuwählen deren Langtext man ändern will!!!\nHerr schmeiß Hirn ra....\n";
 				JOptionPane.showMessageDialog(null, mes);
 				suchen.requestFocus();
@@ -530,7 +536,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		}
 		if(sc.equals("ksave")){
 			inMemoEdit = false;
-			controlsEin(true);			
+			controlsEin(true);
 			ta.setEditable(false);
 			ta.setBackground(Color.WHITE);
 			ta.setForeground(Color.BLUE);
@@ -541,7 +547,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		}
 		if(sc.equals("kbreak")){
 			inMemoEdit = false;
-			controlsEin(true);			
+			controlsEin(true);
 			ta.setEditable(false);
 			ta.setBackground(Color.WHITE);
 			ta.setForeground(Color.BLUE);
@@ -552,7 +558,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			ta.setText(vec.get(0));
 			return;
 		}
-		
+
 		if(inMemoEdit){
 			return;
 		}
@@ -561,13 +567,13 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			return;
 		}
 		if(sc.equals("edit")){
-			int row = kassentbl.getSelectedRow(); 
+			int row = kassentbl.getSelectedRow();
 			if(row >= 0){
 				String sid =  (String) kassentbl.getValueAt(row,7);
 				neuanlageKasse(sid);
 				return;
 			}else{
-				String mes = "\nWenn man eine Kasse ändern will, empfiehlt es sich\n"+ 
+				String mes = "\nWenn man eine Kasse ändern will, empfiehlt es sich\n"+
 				"vorher die Kasse auszuwählen die man ändern will!!!";
 				JOptionPane.showMessageDialog(null, mes);
 				suchen.requestFocus();
@@ -587,12 +593,12 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			return;
 		}
 	}
-	
+
 	@Override
 	public void tableChanged(TableModelEvent e) {
 		// TODO Auto-generated method stub
 		//System.out.println("TabelEvent "+e);
-		
+
 	}
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
@@ -603,7 +609,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		if(((JComponent)arg0.getSource()).getName().equals("KrankenKasse") && arg0.getClickCount()==2){
-			int row = kassentbl.getSelectedRow(); 
+			int row = kassentbl.getSelectedRow();
 			if(row >= 0){
 				//holeText();
 				String sid =  (String) kassentbl.getValueAt(row,7);
@@ -613,13 +619,13 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		}
 
 		if(((JComponent)arg0.getSource()).getName().equals("KrankenKasse")){
-			int row = kassentbl.getSelectedRow(); 
+			int row = kassentbl.getSelectedRow();
 			if(row >= 0){
 				//holeText();
 			}
 		}
 
-		
+
 	}
 	public void controlsEin(boolean ein){
 		suchen.setEnabled((ein ? true : false));
@@ -633,7 +639,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		jbut[3].setEnabled((ein ? true : false));
 	}
 	public void kasseLoeschen(){
-		int row = kassentbl.getSelectedRow(); 
+		int row = kassentbl.getSelectedRow();
 		if(row >= 0){
         	int frage = JOptionPane.showConfirmDialog(null, "Wollen Sie diese Krankenkasse wirklich löschen??", "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
         	if(frage== JOptionPane.NO_OPTION){
@@ -645,9 +651,9 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			ktblm.removeRow(model);
 			kassentbl.revalidate();
 			kassentbl.repaint();
-        	
+
 		}else{
-			String mes = "\nWenn man schon eine Kasse löschen will, empfiehlt es sich\n"+ 
+			String mes = "\nWenn man schon eine Kasse löschen will, empfiehlt es sich\n"+
 			"vorher die Kasse auszuwählen die man löschen will!!!";
 			JOptionPane.showMessageDialog(null, mes);
 			suchen.requestFocus();
@@ -655,7 +661,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
 	}
 	public void holeText(){
-		int row = kassentbl.getSelectedRow(); 
+		int row = kassentbl.getSelectedRow();
 		if(row >= 0){
 			//System.out.println("In HoleText");
 			String sid = Integer.valueOf((String) kassentbl.getValueAt(row, 7)).toString();
@@ -668,13 +674,13 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 					KasseTools.constructKasseHMap(xsid);
 					return null;
 				}
-				
+
 			}.execute();
 		}
 	}
 	public void setMemo(String text){
 		ta.setText(text);
-		
+
 	}
 	public void holeFormulare(){
 		new SwingWorker<Void,Void>(){
@@ -685,17 +691,17 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kasse.ini");
 				int forms = inif.getIntegerProperty("Formulare", "KassenFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
-					titel.add(inif.getStringProperty("Formulare","KFormularText"+i));			
+					titel.add(inif.getStringProperty("Formulare","KFormularText"+i));
 					formular.add(inif.getStringProperty("Formulare","KFormularName"+i));
-				}	
+				}
 				return null;
 			}
-			
+
 		}.execute();
-		
+
 	}
 	public void formulareAuswerten(){
-		int row = kassentbl.getSelectedRow(); 
+		int row = kassentbl.getSelectedRow();
 		if(row >= 0){
 			//String sid = Integer.valueOf((String) kassentbl.getValueAt(row, 7)).toString();
     		iformular = -1;
@@ -719,10 +725,10 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 						return null;
 					}
     			}.execute();
-    			
+
     		}
  		}else{
-			String mes = "\nWenn man eine Kasse anschreiben möchte, empfiehlt es sich\n"+ 
+			String mes = "\nWenn man eine Kasse anschreiben möchte, empfiehlt es sich\n"+
 			"vorher die Kasse auszuwählen die man anschreiben möchte!!!\n\n"+
 			"Aber trösten Sie sich, unser Herrgott hat ein Herz für eine ganz spezielle Randgruppe.\n"+
 			"Sie dürfen also hoffen....\n\n";
@@ -730,27 +736,27 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			iformular = -1;
 			suchen.requestFocus();
 		}
-		
+
 	}
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mousePressed(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void neuanlageKasse(String id){
 		KasseNeuDlg neuKas = new KasseNeuDlg();
@@ -760,7 +766,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		pinPanel.setName("KassenNeuanlage");
 		neuKas.setPinPanel(pinPanel);
 		if(id.equals("")){
-			neuKas.getSmartTitledPanel().setTitle("Kranke-Kasse anlegen - nur der Herrgott weiß ob es sich lohnt diesen Lotterladen anzulegen");			
+			neuKas.getSmartTitledPanel().setTitle("Kranke-Kasse anlegen - nur der Herrgott weiß ob es sich lohnt diesen Lotterladen anzulegen");
 		}else{
 			neuKas.getSmartTitledPanel().setTitle("Daten einer kranken-Kasse ändern");
 		}
@@ -776,12 +782,13 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		neuKas.setLocationRelativeTo(null);
 		//neuPat.setLocation(new Point(200,50));
 		neuKas.setTitle("Kasse Neuanlage");
-		final KasseNeuDlg xneuKas = neuKas; 
+		final KasseNeuDlg xneuKas = neuKas;
 		SwingUtilities.invokeLater(new Runnable(){
-		 	   public  void run(){
+		 	   @Override
+            public  void run(){
 		 			((KasseNeuanlage)xneuKas.getSmartTitledPanel().getContentContainer()).setzeFocus();
 		 	   }
-		}); 	   	
+		});
 		neuKas.setVisible(true);
 		neuKas.setVisible(false);
 		neuKas = null;
@@ -797,15 +804,15 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			    */
 				return null;
 			}
-			
+
 		}.execute();
-		
-		
+
+
 	}
 	/*
 	private void ladeSchreiben(String url){
 		IDocumentService documentService = null;;
-		
+
 		try {
 			documentService = Reha.officeapplication.getDocumentService();
 		} catch (OfficeApplicationException e) {
@@ -874,7 +881,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 				buf.append("ik_physika='"+ikdaten+"', ");
 				buf.append("ik_nutzer='"+iknutzer+"', ");
 				buf.append("ik_papier='"+ikpapier+"', ");
-	
+
      */
         if(kassentbl.getRowCount()<=0){
         	JOptionPane.showMessageDialog(null,"Keine Kasse für 302-er Test vorhanden");
@@ -893,7 +900,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
         HashMap<String,String> testHm = new HashMap<String,String>();
     	//buf1.setLength(0);
     	//buf1.trimToSize();
-    	
+
     	buf1.append("<html><head>");
     	buf1.append("<STYLE TYPE='text/css'>");
     	buf1.append("<!--");
@@ -909,9 +916,9 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
     	buf1.append("<font face='Tahoma'><style=margin-left=30px;>");
     	buf1.append("<br>");
     	buf1.append("<table>");
-    	/*****************************************/ 
+    	/*****************************************/
     	//Test von Kassennamen und IK
-    	
+
         //0=Kassenname
         //1=IK der Kasse
         //2=IK des Kostenträgers
@@ -947,7 +954,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             	buf1.append("<tr><td class='spalte2' align='right'>Kostenträger im Kassenstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(2)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             }else{
             	//wenn nicht im Kassenstamm dann Kostenträgerdatei auswerten
-            	
+
             	if( ! SqlInfo.holeEinzelFeld("select id from ktraeger where ikkasse='"+testvec.get(0).get(2)+"' LIMIT 1").equals("") ){
                 	buf1.append("<tr><td class='spalte2' align='right'>Kostenträger im Kostenträgerstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(2)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             	}else{
@@ -965,7 +972,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             buf1.append("<tr><td class='spalte2' align='right'>IK der Datenannahmestelle</td><td>&nbsp;</td><td>"+testvec.get(0).get(3)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             testHm.put("annahme_ik", String.valueOf(testvec.get(0).get(3).trim()));
             if(!SqlInfo.holeEinzelFeld("select id from kass_adr where ik_kasse='"+testvec.get(0).get(3)+"' LIMIT 1").equals("")){
-            	buf1.append("<tr><td class='spalte2' align='right'>Datenannahmestelle im Kassenstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(3)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");	
+            	buf1.append("<tr><td class='spalte2' align='right'>Datenannahmestelle im Kassenstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(3)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             }else{
             	//wenn nicht im Kassenstamm dann Kostenträgerdatei auswerten
             	if( ! SqlInfo.holeEinzelFeld("select id from ktraeger where ikkasse='"+testvec.get(0).get(3)+"' LIMIT 1").equals("") ){
@@ -985,7 +992,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             buf1.append("<tr><td class='spalte2' align='right'>IK der Stelle mit Entschlüsselungsbefugnis</td><td>&nbsp;</td><td>"+testvec.get(0).get(4)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             testHm.put("decode_ik", String.valueOf(testvec.get(0).get(4).trim()));
             if(!SqlInfo.holeEinzelFeld("select id from kass_adr where ik_kasse='"+testvec.get(0).get(4)+"' LIMIT 1").equals("")){
-            	buf1.append("<tr><td class='spalte2' align='right'>Stelle mit Entschlüsselungsbefugnis im Kassenstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(4)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");	
+            	buf1.append("<tr><td class='spalte2' align='right'>Stelle mit Entschlüsselungsbefugnis im Kassenstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(4)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             }else{
             	//wenn nicht im Kassenstamm dann Kostenträgerdatei auswerten
             	if( ! SqlInfo.holeEinzelFeld("select id from ktraeger where ikkasse='"+testvec.get(0).get(4)+"' LIMIT 1").equals("") ){
@@ -1005,7 +1012,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             buf1.append("<tr><td class='spalte2' align='right'>IK der Papierannahmestelle</td><td>&nbsp;</td><td>"+testvec.get(0).get(5)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             testHm.put("papier_ik", String.valueOf(testvec.get(0).get(5).trim()));
             if(!SqlInfo.holeEinzelFeld("select id from kass_adr where ik_kasse='"+testvec.get(0).get(5)+"' LIMIT 1").equals("")){
-            	buf1.append("<tr><td class='spalte2' align='right'>Papierannahmestelle im Kassenstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(5)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");	
+            	buf1.append("<tr><td class='spalte2' align='right'>Papierannahmestelle im Kassenstamm vorhanden</td><td>&nbsp;</td><td>"+testvec.get(0).get(5)+"</td><td><img src='file:///"+Path.Instance.getProghome()+"icons/ok.gif"+"'></td></tr>");
             }else{
             	//wenn nicht im Kassenstamm dann Kostenträgerdatei auswerten
             	if( ! SqlInfo.holeEinzelFeld("select id from ktraeger where ikkasse='"+testvec.get(0).get(4)+"' LIMIT 1").equals("") ){
@@ -1043,15 +1050,15 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             		"Test der Krankenkasse auf 302-Fähigkeit",
             			JOptionPane.YES_NO_OPTION,
             			JOptionPane.QUESTION_MESSAGE,
-            			null, 
-            			options, 
+            			null,
+            			options,
             			options[0]);
             /*
             int frage = JOptionPane.showConfirmDialog(null, buf1.toString(),
             		"Test der Krankenkasse auf 302-Fähigkeit",JOptionPane.YES_NO_OPTION);*/
 
             if(frage != JOptionPane.YES_OPTION){
-            	
+
             	buf1.setLength(0);
             	buf1.trimToSize();
             	buf1.append("<html>Ach so, Sie haben also kein Interesse an einer Probeverschlüsselung,<br>tja wenn das so ist....<br><br>");
@@ -1075,7 +1082,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             FileTools.ByteArray2File(testDatei(testHm).getBytes(), datei+".original");
 			f = new File(datei+".original");
 			long size = f.length();
-			
+
 			int[] ret = doVerschluesseln(datei,testHm);
 			if(ret[0] < 0){
 				JOptionPane.showMessageDialog(null,"Fehler in der Verschlüsselung, eine maschinelle Kassenabrechnung\nkann nicht(!!!) durchgeführt werden");
@@ -1106,8 +1113,8 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
         	JOptionPane.showMessageDialog(null, buf1.toString());
         }
 
-    
-    
+
+
     }
     private String testDatei(HashMap<String,String> hmap){
     	StringBuffer buf = new StringBuffer();
@@ -1127,7 +1134,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", ""));
 			NebraskaEncryptor encryptor = store.getEncryptor(hmap.get("decode_ik"));
-			
+
 			String inFile = datei+".original";
 			encryptor.setEncryptToSelf(true);
 			long size = encryptor.encrypt(inFile.replace("\\", "/"), (datei+".encoded").replace("\\", "/"));
@@ -1141,7 +1148,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			fin.close();
 			fout.flush();
 			fout.close();
-			
+
 			File f = new File(datei+".decoded");
 			size = f.length();
 			retint[1] = Integer.parseInt(Long.toString(size));
@@ -1162,7 +1169,8 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
     /************************************/
     class KassenListSelectionHandler implements ListSelectionListener {
-    	
+
+        @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             boolean isAdjusting = e.getValueIsAdjusting();
@@ -1185,16 +1193,17 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
         }
     }
     /************************************/
-    
+
 	/***************************************/
 
 	class KasseAction extends AbstractAction {
 	    /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public void actionPerformed(ActionEvent e) {
+		@Override
+        public void actionPerformed(ActionEvent e) {
 	    	if( inMemoEdit){
 	    		return;
 	    	}
@@ -1207,18 +1216,18 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	        	neuanlageKasse("");
 	        }
 	        if(e.getActionCommand().equals("e")){
-				int row = kassentbl.getSelectedRow(); 
+				int row = kassentbl.getSelectedRow();
 				if(row >= 0){
 					String sid =  (String) kassentbl.getValueAt(row,7);
 					neuanlageKasse(sid);
 				}else{
-					String mes = "\nWenn man eine Kasse ändern will, empfiehlt es sich\n"+ 
+					String mes = "\nWenn man eine Kasse ändern will, empfiehlt es sich\n"+
 					"vorher die Kasse auszuwählen die man ändern will!!!";
 					JOptionPane.showMessageDialog(null, mes);
 					suchen.requestFocus();
 				}
 
-	        }	            
+	        }
 	        if(e.getActionCommand().equals("l")){
 	        	kasseLoeschen();
 	        }
@@ -1229,12 +1238,12 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 
 	    }
 	}
-	
+
 	/********************************************/
 	/*****************************************************/
 	/*
 	class KassenListSelectionHandler implements KassenSelectionListener {
-		
+
 	    public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
 	        boolean isAdjusting = e.getValueIsAdjusting();
@@ -1257,9 +1266,9 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	    }
 	}
 	*/
-	
-	
-	
+
+
+
 	/********************************************/
 }
 /*********************************************************/
@@ -1278,18 +1287,18 @@ class HoleKassen{
 		if(zweisuche.length==1){
 			krit = " where (kuerzel like'%"+zweisuche[0]+"%' or kassen_nam1 like '%"+zweisuche[0]+"%' or "+
 			"kassen_nam2 like '%"+zweisuche[0]+"%' or ort like '%"+zweisuche[0]+"%' or ik_kasse like '%"+zweisuche[0]+"%') ";
-				sstmt = "select kuerzel,kassen_nam1,kassen_nam2,ort,telefon,fax,ik_kasse,id from kass_adr "+krit+ "ORDER BY kuerzel";			
+				sstmt = "select kuerzel,kassen_nam1,kassen_nam2,ort,telefon,fax,ik_kasse,id from kass_adr "+krit+ "ORDER BY kuerzel";
 		}else if(zweisuche.length >=2){
 			krit = " where (kuerzel like'%"+zweisuche[0]+"%' or kassen_nam1 like '%"+zweisuche[0]+"%' or "+
 			"kassen_nam2 like '%"+zweisuche[0]+"%' or ort like '%"+zweisuche[0]+"%' or ik_kasse like '%"+zweisuche[0]+"%') AND "+
 			"(kuerzel like'%"+zweisuche[1]+"%' or kassen_nam1 like '%"+zweisuche[1]+"%' or "+
 			"kassen_nam2 like '%"+zweisuche[1]+"%' or ort like '%"+zweisuche[1]+"%' or ik_kasse like '%"+zweisuche[1]+"%')";
-				sstmt = "select kuerzel,kassen_nam1,kassen_nam2,ort,telefon,fax,ik_kasse,id from kass_adr "+krit+ "ORDER BY kuerzel";			
+				sstmt = "select kuerzel,kassen_nam1,kassen_nam2,ort,telefon,fax,ik_kasse,id from kass_adr "+krit+ "ORDER BY kuerzel";
 		}
 	}
-	
+
 	//sstmt = "select kuerzel,kassen_nam1,kassen_nam2,ort,telefon,fax,ik_kasse,id from kass_adr ORDER BY kuerzel";
-		
+
 	try {
 		stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
@@ -1305,11 +1314,11 @@ class HoleKassen{
 		while( rs.next()){
 			anzahl++;
 			xvec.add(rs.getString("KUERZEL"));
-			xvec.add(rs.getString("KASSEN_NAM1"));			
-			xvec.add(rs.getString("KASSEN_NAM2"));			
+			xvec.add(rs.getString("KASSEN_NAM1"));
+			xvec.add(rs.getString("KASSEN_NAM2"));
 			xvec.add(rs.getString("ORT"));
-			xvec.add(rs.getString("TELEFON"));			
-			xvec.add(rs.getString("FAX"));			
+			xvec.add(rs.getString("TELEFON"));
+			xvec.add(rs.getString("FAX"));
 			xvec.add(rs.getString("IK_KASSE"));
 			xvec.add(rs.getString("id"));
 			kpan.macheTabelle((Vector<?>)xvec.clone());
@@ -1319,14 +1328,14 @@ class HoleKassen{
 			kpan.kassentbl.setRowSelectionInterval(0, 0);
 			kpan.holeText();
 		}
-		
+
 		Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 		kpan.setzeFocus();
 	}catch(SQLException ev){
 		//System.out.println("SQLException: " + ev.getMessage());
 		//System.out.println("SQLState: " + ev.getSQLState());
 		//System.out.println("VendorError: " + ev.getErrorCode());
-	}	
+	}
 	finally {
 		if (rs != null) {
 			try {
@@ -1334,7 +1343,7 @@ class HoleKassen{
 			} catch (SQLException sqlEx) { // ignore }
 				rs = null;
 			}
-		}	
+		}
 		if (stmt != null) {
 			try {
 				stmt.close();
@@ -1353,9 +1362,9 @@ class HoleText{
 	Statement stmt = null;
 	ResultSet rs = null;
 	String sstmt = "";
-	
+
 	sstmt = "select kmemo from kass_adr where id = '"+id+"'";
-		
+
 	try {
 		stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
@@ -1372,12 +1381,12 @@ class HoleText{
 			pan.setMemo("");
 		}
 		Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
-		
+
 	}catch(SQLException ev){
 		//System.out.println("SQLException: " + ev.getMessage());
 		//System.out.println("SQLState: " + ev.getSQLState());
 		//System.out.println("VendorError: " + ev.getErrorCode());
-	}	
+	}
 	finally {
 		if (rs != null) {
 			try {
@@ -1385,7 +1394,7 @@ class HoleText{
 			} catch (SQLException sqlEx) { // ignore }
 				rs = null;
 			}
-		}	
+		}
 		if (stmt != null) {
 			try {
 				stmt.close();
@@ -1403,37 +1412,40 @@ class HoleText{
 /***************************************************************/
 class MyKassenTableModel extends DefaultTableModel{
 	   /**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return String.class;}
 		  /* if(columnIndex==1){return JLabel.class;}*/
 		   else{return String.class;}
      //return (columnIndex == 0) ? Boolean.class : String.class;
  }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        //Note that the data/cell address is constant,
 	        //no matter where the cell appears onscreen.
 	    	return true;
 	      }
-		public Object getValueAt(int rowIndex, int columnIndex) {
-			String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex); 
+		@Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+			String theData = (String) ((Vector<?>)getDataVector().get(rowIndex)).get(columnIndex);
 			Object result = null;
 			//result = theData.toUpperCase();
 			result = theData;
 			return result;
 		}
-	    
-	   
+
+
 }
 
 
-class KasseNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
+class KasseNeuDlg extends RehaSmartDialog{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private RehaTPEventClass rtp = null;
@@ -1443,7 +1455,8 @@ class KasseNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 		rtp.addRehaTPEventListener(this);
 
 	}
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
+	@Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
 		// TODO Auto-generated method stub
 		try{
 			if(evt.getDetails()[0].equals("KassenNeuanlage")){
@@ -1452,21 +1465,22 @@ class KasseNeuDlg extends RehaSmartDialog implements RehaTPEventListener,WindowL
 				rtp = null;
 				this.dispose();
 			}
-			//System.out.println("****************Kasse Neu/ändern -> Listener entfernt**************");				
+			//System.out.println("****************Kasse Neu/ändern -> Listener entfernt**************");
 		}catch(NullPointerException ne){
 			//System.out.println("In PatNeuanlage" +evt);
 		}
 	}
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 		if(rtp != null){
-			this.setVisible(false);			
-			rtp.removeRehaTPEventListener(this);		
+			this.setVisible(false);
+			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			//System.out.println("****************Kasse Neu/ändern -> Listener entfernt (Closed)**********");
 		}
-		
-		
+
+
 	}
-	
+
 }

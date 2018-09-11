@@ -177,7 +177,8 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		if(tf[0].getText().trim().equals("") || tf[0].getText().trim().startsWith(",") ){
 			JOptionPane.showMessageDialog(null,"Keine Empfängeradresse angegeben");
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					tf[0].requestFocus();
 				}
 			});
@@ -186,7 +187,8 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 		if(tf[1].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null,"Keine Betreff angegeben");
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					tf[1].requestFocus();
 				}
 			});
@@ -449,6 +451,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
         final File file = new File(Path.Instance.getProghome());
         chooser.setCurrentDirectory(file);
         chooser.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                         || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {

@@ -26,43 +26,43 @@ import CommonTools.JRtaComboBox;
 import CommonTools.SqlInfo;
 
 public class AltImport extends JXPanel{
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -3639615688821194744L;
-	
+
 	RehaUrlaubTab elternTab = null;
-	
+
 	JRtaComboBox usercombo = null;
 	JRtaComboBox jahrecombo = null;
-	
+
 	JButton importholen = null;
-	
+
 	JXPanel content = null;
-	
+
 	JLabel importdatei = null;
-	
+
 	JButton importstart = null;
-	
+
 	ActionListener al = null;
-	
+
 	String importpfad = "l:\\projekte\\rta\\dbf\\urlaub";
-	
+
 	String urlaubtabelle = "urlaub2009";
-	
+
 	DBFReader dbfreader = null;
 	private Vector<Vector<String>> vecKalZeile = new Vector<Vector<String>>();
-	
-	private Vector<Vector<String>> vecKollegenUrlaub = new Vector<Vector<String>>(); 
-	
-	private Vector<String> vectabellen = new Vector<String>(); 
+
+	private Vector<Vector<String>> vecKollegenUrlaub = new Vector<Vector<String>>();
+
+	private Vector<String> vectabellen = new Vector<String>();
 
 	private Vector<String> vecimportfelder = new Vector<String>();
-	
+
 	StringBuffer buf = new StringBuffer();
-	
+
 	public AltImport(RehaUrlaubTab xeltern){
 		super();
 		this.elternTab = xeltern;
@@ -77,44 +77,44 @@ public class AltImport extends JXPanel{
 				holeImportFelder();
 				return null;
 			}
-			
+
 		}.execute();
 		validate();
 	}
-	
+
 	private JXPanel getContent(){
 		//                 1    2    3     4     5      6
 		String xwerte = "30dlu,60dlu,5dlu,200dlu,5dlu,50dlu,0dlu:g";
-		//                 1   2  3   4  5   6   7  8  9  10 
+		//                 1   2  3   4  5   6   7  8  9  10
 		String ywerte = "30dlu,p,5dlu,p,5dlu,p,5dlu,p,25dlu,p";
 		FormLayout lay = new FormLayout(xwerte,ywerte);
 		CellConstraints cc = new CellConstraints();
 		content = new JXPanel();
 		content.setLayout(lay);
-		
+
 		JLabel lab = new JLabel("Kalenderjahr");
 		content.add(lab,cc.xy(2,2));
 		String[] jahre = {"2009","2010"};
-		jahrecombo = new JRtaComboBox(jahre); 
+		jahrecombo = new JRtaComboBox(jahre);
 		jahrecombo.setActionCommand("urlaubtabelle");
 		jahrecombo.addActionListener(al);
 		content.add(jahrecombo,cc.xyw(4, 2,3));
-		
+
 		lab = new JLabel("Kal.Benutzer");
 		content.add(lab,cc.xy(2,4));
-		usercombo = new JRtaComboBox(); 
+		usercombo = new JRtaComboBox();
 		content.add(usercombo,cc.xyw(4, 4,3));
-		
+
 		lab = new JLabel("ImportDatei");
 		content.add(lab,cc.xy(2,6));
 		importholen = new JButton("Import-Datei auswählen");
 		importholen.setActionCommand("importwahl");
 		importholen.addActionListener(al);
 		content.add(importholen,cc.xyw(4, 6,3));
-		
-		importdatei = new JLabel(""); 
+
+		importdatei = new JLabel("");
 		content.add(importdatei,cc.xyw(4, 8,3));
-		
+
 		importstart = new JButton("Import starten");
 		importstart.setActionCommand("start");
 		importstart.addActionListener(al);
@@ -142,7 +142,7 @@ public class AltImport extends JXPanel{
 				}
 
 			}
-			
+
 		};
 	}
 	private void doImportWahl(){
@@ -153,7 +153,7 @@ public class AltImport extends JXPanel{
 			importdatei.setText("");
 			return;
 		}
-		if((!ximportdatei.contains(usercombo.getSelectedItem().toString())) || 
+		if((!ximportdatei.contains(usercombo.getSelectedItem().toString())) ||
 				(!ximportdatei.contains(jahrecombo.getSelectedItem().toString())) ){
 			JOptionPane.showMessageDialog(null,"Der eingestellte Kalenderbenutzer und die ausgwählte Importdatei passen nicht zusammen");
 			importdatei.setText("");
@@ -162,7 +162,7 @@ public class AltImport extends JXPanel{
 		importdatei.setText(ximportdatei);
 	}
 	/*******************************************/
-	
+
 	private void holeKalUser(){
 		vecKalZeile = SqlInfo.holeFelder("select matchcode,kalzeile,astunden from kollegen2 order by matchcode");
 		Vector<String> dummy = new Vector<String>();
@@ -172,7 +172,7 @@ public class AltImport extends JXPanel{
 		vecKalZeile.insertElementAt((Vector<String>)dummy.clone(), 0);
 		usercombo.setDataVectorVector(vecKalZeile, 0, 1);
 	}
-	
+
 	private void holeTabellen(){
 		Vector<Vector<String>> dummy = SqlInfo.holeFelder("show tables");
 		vectabellen.clear();
@@ -181,7 +181,7 @@ public class AltImport extends JXPanel{
 			vectabellen.add( String.valueOf( dummy.get(i).get(0) ) );
 		}
 	}
-	
+
 	private void holeImportFelder(){
 		Vector<Vector<String>> dummy = new Vector<Vector<String>>();
 		dummy = SqlInfo.holeFelder("describe urlaub");
@@ -204,7 +204,8 @@ public class AltImport extends JXPanel{
 	        chooser.setCurrentDirectory(file);
 
 	        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-	            public void propertyChange(PropertyChangeEvent e) {
+	            @Override
+                public void propertyChange(PropertyChangeEvent e) {
 	                if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
 	                        || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
 	                }
@@ -219,7 +220,7 @@ public class AltImport extends JXPanel{
 	            if(inputVerzFile.getName().trim().equals("")){
 	            	sret = "";
 	            }else{
-	            	sret = inputVerzFile.getAbsolutePath().trim();	
+	            	sret = inputVerzFile.getAbsolutePath().trim();
 	            }
 	        }else{
 	        	sret = "";
@@ -245,7 +246,7 @@ public class AltImport extends JXPanel{
 		System.out.println(cmd);
 		vecKollegenUrlaub = SqlInfo.holeFelder(cmd);
 		System.out.println("Größe es Urlaubsvectors = "+vecKollegenUrlaub.size());
-		
+
 		try {
 			dbfreader = new DBFReader(importdatei.getText().trim());
 			int durchlauf = 0;
@@ -259,10 +260,10 @@ public class AltImport extends JXPanel{
 						if(i == 16){
 							buf.append(", "+vecimportfelder.get(i)+"='"+Double.toString(elternTab.getAZ())+"'");
 						}else{
-							buf.append(", "+vecimportfelder.get(i)+"='"+aobj[i]+"'");	
+							buf.append(", "+vecimportfelder.get(i)+"='"+aobj[i]+"'");
 						}
 					}else{
-						buf.append(vecimportfelder.get(i)+"='"+aobj[i]+"'");							
+						buf.append(vecimportfelder.get(i)+"='"+aobj[i]+"'");
 					}
 				}
 				buf.append(", BERECHNET='T'");
@@ -270,15 +271,15 @@ public class AltImport extends JXPanel{
 				SqlInfo.sqlAusfuehren(buf.toString());
 				//System.out.println(buf.toString());
 				durchlauf++;
-			}	
+			}
 			System.out.println("feddisch");
 			dbfreader.close();
 
 		} catch (JDBFException e) {
-			// TODO Auto-generated catch block
+			// ignore
 			e.printStackTrace();
 		}
-		
+
 	}
 
 }

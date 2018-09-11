@@ -77,7 +77,8 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 	}
 	public void setzeFocus(){
 		SwingUtilities.invokeLater(new Runnable(){
-			public  void run(){
+			@Override
+            public  void run(){
 				tfs[0].requestFocus();
 			}
 		});
@@ -160,7 +161,8 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 			labKuerzel.setIcon(new ImageIcon(Reha301.progHome+"icons/help.gif"));
 			labKuerzel.setHorizontalTextPosition(JLabel.LEFT);
 			labKuerzel.addMouseListener(new MouseAdapter(){
-				public void mousePressed(MouseEvent arg0) {
+				@Override
+                public void mousePressed(MouseEvent arg0) {
 					doVergleichKT();
 				}				
 			});
@@ -395,7 +397,8 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 				ktraegerAuslesen(iKNummer);
 			}
 			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
+				@Override
+                public void run(){
 					tfs[0].requestFocus();
 				}
 			});

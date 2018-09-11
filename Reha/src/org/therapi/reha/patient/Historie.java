@@ -204,7 +204,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			*/			
 		}
 
-		public void paintComponent( Graphics g ) { 
+		@Override
+        public void paintComponent( Graphics g ) { 
 			super.paintComponent( g );
 			
 			Graphics2D g2d = (Graphics2D)g;
@@ -275,7 +276,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		tabaktterm.getColumn(4).setMaxWidth(0);
 		tabaktterm.setOpaque(true);
 		tabaktterm.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent arg0) {
+			@Override
+            public void keyPressed(KeyEvent arg0) {
 				if(arg0.getKeyCode()==10){
 				}
 				if(arg0.getKeyCode()==27){
@@ -317,7 +319,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		tabhistorie.setSelectionMode(0);
 		tabhistorie.getSelectionModel().addListSelectionListener( new HistorRezepteListSelectionHandler());
 		tabhistorie.addMouseListener(new MouseAdapter(){
-			public void mouseClicked(MouseEvent arg0) {
+			@Override
+            public void mouseClicked(MouseEvent arg0) {
 				long zeit = System.currentTimeMillis();
 				if(arg0.getClickCount()==2){
 					while(inRezeptDaten){
@@ -335,7 +338,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			}
 		});
 		tabhistorie.addKeyListener(new KeyAdapter(){
-			public void keyPressed(KeyEvent arg0) {
+			@Override
+            public void keyPressed(KeyEvent arg0) {
 				if(arg0.getKeyCode()==10){
 					arg0.consume();
 				}
@@ -683,7 +687,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		if(row >= 0){
 			final int xrow = row;
 			SwingUtilities.invokeLater(new Runnable(){
-				public  void run(){
+				@Override
+                public  void run(){
 					String reznr = (String)tabhistorie.getValueAt(xrow,0);
 					String id = (String)tabhistorie.getValueAt(xrow,idInTable);
 					jpan1.setRezeptDaten(reznr,id);
@@ -724,7 +729,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			if(i==0){
 				final int ix = i;
                 new Thread(){
-                	public void run(){
+                	@Override
+                    public void run(){
                 		holeEinzelTermine(ix,null);
                 	}
                 }.start();
@@ -830,7 +836,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 	/*************************************************/
 	class HistorRezepteListSelectionHandler implements ListSelectionListener {
 
-	    public void valueChanged(ListSelectionEvent e) {
+	    @Override
+        public void valueChanged(ListSelectionEvent e) {
 			if(rezneugefunden){
 				rezneugefunden = false;
 				return;
@@ -1066,7 +1073,8 @@ class MyHistorieTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==1){
 			   return JLabel.class;}
 		   else{
@@ -1074,7 +1082,8 @@ class MyHistorieTableModel extends DefaultTableModel{
 		   }
     }
 
-	    public boolean isCellEditable(int row, int col) {
+	    @Override
+        public boolean isCellEditable(int row, int col) {
 	        if (col == 0){
 	        	return true;
 	        }else if(col == 3){
@@ -1096,11 +1105,13 @@ class MyHistorTermTableModel extends DefaultTableModel{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public Class<?> getColumnClass(int columnIndex) {
+	@Override
+    public Class<?> getColumnClass(int columnIndex) {
 		   if(columnIndex==0){return String.class;}
 		   else{return String.class;}
     }
 
+    @Override
     public boolean isCellEditable(int row, int col) {
         if (col == 0){
         	return true;

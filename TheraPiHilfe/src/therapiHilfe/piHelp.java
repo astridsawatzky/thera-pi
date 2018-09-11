@@ -116,12 +116,14 @@ public static IOfficeApplication officeapplication;
 			}
 			
 			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
+				@Override
+                public void run() {
 					piHelp application = new piHelp();
 					application.getJFrame();
 					piHelp.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/fragezeichen.png" ) );
 					SwingUtilities.invokeLater(new Runnable() {
-						public void run() {
+						@Override
+                        public void run() {
 							new WorkerGruppen().execute();
 						}
 					});
@@ -153,7 +155,8 @@ public static IOfficeApplication officeapplication;
 			//jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 			
             SwingUtilities.invokeLater(new Runnable(){
-            	public  void run(){
+            	@Override
+                public  void run(){
             		jFrame.setVisible(true);
             		hf.starteOOO();
             	}
@@ -169,7 +172,8 @@ public static IOfficeApplication officeapplication;
 		
 	}
 
-	public void windowClosed(WindowEvent arg0) {
+	@Override
+    public void windowClosed(WindowEvent arg0) {
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
@@ -289,7 +293,8 @@ public static IOfficeApplication officeapplication;
             officeapplication = OfficeApplicationRuntime.getApplication(config);
             officeapplication.activate();
             officeapplication.getDesktopService().addTerminateListener(new VetoTerminateListener() {
-          	  public void queryTermination(ITerminateEvent terminateEvent) {
+          	  @Override
+            public void queryTermination(ITerminateEvent terminateEvent) {
           	    super.queryTermination(terminateEvent);
           	    try {
           	      IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();
@@ -388,7 +393,8 @@ final class DatenbankStarten implements Runnable{
 	        return;
 	    */    
 	}
-	public void run() {
+	@Override
+    public void run() {
 		StarteDB();
 	}
 }
@@ -403,7 +409,8 @@ final class WorkerGruppen extends SwingWorker<Void,Void>{
 
 	}
 	
-	protected Void doInBackground() throws Exception {
+	@Override
+    protected Void doInBackground() throws Exception {
 		String[] combInhalt = holeGruppen();
 		//ActionListener[] al = helpFenster.gruppenbox.getActionListeners();
 		if(helpFenster.gruppenbox.getItemCount() > 0){

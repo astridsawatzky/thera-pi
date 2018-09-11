@@ -110,14 +110,18 @@ public class PatientToolBarPanel extends JXPanel{
 
 		patientHauptPanel.dropTargetListener =
 			 new DropTargetListener() {
-			  public void dragEnter(DropTargetDragEvent e) {
+			  @Override
+            public void dragEnter(DropTargetDragEvent e) {
 				  if(!patientHauptPanel.tfsuchen.getText().equals("")){
 					  patientHauptPanel.tfsuchen.setText("");					  
 				  }
 			  }
-			  public void dragExit(DropTargetEvent e) {}
-			  public void dragOver(DropTargetDragEvent e) {}
-			  public void drop(DropTargetDropEvent e) {
+			  @Override
+            public void dragExit(DropTargetEvent e) {}
+			  @Override
+            public void dragOver(DropTargetDragEvent e) {}
+			  @Override
+            public void drop(DropTargetDropEvent e) {
 				  //String mitgebracht = "";
 				    try {
 					    patientHauptPanel.patientLogic.starteSuche();
@@ -128,7 +132,8 @@ public class PatientToolBarPanel extends JXPanel{
 				    }
 			    	e.dropComplete(true);
 			  	}
-			  public void dropActionChanged(
+			  @Override
+            public void dropActionChanged(
 			         DropTargetDragEvent e) {System.out.println(e);}
 		};	
 		//sucheLabel.setDropTarget(dndt);
