@@ -27,8 +27,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
@@ -47,6 +47,7 @@ import CommonTools.JRtaTextField;
 import systemTools.ListenerTools;
 import CommonTools.StringTools;
 import terminKalender.DatFunk;
+import abrechnung.Disziplinen;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -165,7 +166,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 //	String rezToCopy = null;
 	
 	String[] strRezepklassenAktiv = null;
-	
+	private Disziplinen diszis = null;
+
 	// Lemmi 20110101: bCtrlPressed zugefügt. Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
 	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname){
 //	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname, boolean bCtrlPressed){
@@ -175,6 +177,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			this.feldname = sfeldname;
 			this.vec = vec;  // Lemmi 20110106  Wird auch für das Kopieren verwendet !!!!
 //			this.bCtrlPressed = bCtrlPressed;
+			diszis = new Disziplinen();
 			
 			if( vec.size() > 0 && this.neu ) {
 				// Lemmi 20110106: Lieber Hr. Steinhilber: Diese Funktion an andere Stelle verlegt, weil Architekturänderung
@@ -512,12 +515,14 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		jtf[cICD10_2] = new JRtaTextField("GROSS",false); //2. ICD10-Code
 		jcmb[cRKLASSE] = new JRtaComboBox();
 		int lang = SystemConfig.rezeptKlassenAktiv.size();
-		strRezepklassenAktiv = new String[lang];
-		for(int i = 0;i < lang;i++){
-			jcmb[cRKLASSE].addItem(SystemConfig.rezeptKlassenAktiv.get(i).get(0));	
-			// Lemmi 20110106: Belegung der Indices zur ComboBox für spätere Auswahlen:
-			strRezepklassenAktiv[i] = SystemConfig.rezeptKlassenAktiv.get(i).get(1);  // hier speichern wir die Kürzel für spätere Aktivitäten
-		}
+//		strRezepklassenAktiv = new String[lang];
+//		for(int i = 0;i < lang;i++){
+//			jcmb[cRKLASSE].addItem(SystemConfig.rezeptKlassenAktiv.get(i).get(0));	
+//			// Lemmi 20110106: Belegung der Indices zur ComboBox für spätere Auswahlen:
+//			strRezepklassenAktiv[i] = SystemConfig.rezeptKlassenAktiv.get(i).get(1);  // hier speichern wir die Kürzel für spätere Aktivitäten
+//		}
+		strRezepklassenAktiv = diszis.getActiveRK();
+		jcmb[cRKLASSE]=diszis.getComboBoxActiveRK();
 		if(SystemConfig.AngelegtVonUser) {
 			jtf[cANGEL].setText(Reha.aktUser);
 			jtf[cANGEL].setEditable(false);
@@ -604,7 +609,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		jpan.addLabel("spätester Beh.Beginn",cc.xy(5,9));
 		jpan.add(jtf[cBEGINDAT],cc.xy(7,9));
 
-		jcmb[cVERORD] = new JRtaComboBox(new String[] {"Erstverodnung","Folgeverordnung", "außerhalb des Regelfalles"});
+		jcmb[cVERORD] = new JRtaComboBox(new String[] {"Erstverordnung","Folgeverordnung", "außerhalb des Regelfalles"});
 		jcmb[cVERORD].setActionCommand("verordnungsart");
 		jcmb[cVERORD].addActionListener(this);
 		jpan.addLabel("Art d. Verordn.",cc.xy(1, 11));
@@ -1182,8 +1187,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			return;
 		}
 		if(hmpositionen.size() > 0){
-			String[] idiszi = {"Physio-Rezept","Massage/Lymphdrainage-Rezept",
-					"Ergotherapie-Rezept","Logopädie-Rezept","REHA-Verordnung","Podologie-Rezept"};  // Lemmi Fehler: Wa ist die Podologie ? Warum müssen diese "Standard-Strings immer neu aufgeführt werden? (genau EINAML an zentraler Stelle reicht! dt. für die 2-Buchstaben-Kürzel !
+//			String[] idiszi = {"Physio-Rezept","Massage/Lymphdrainage-Rezept",
+//					"Ergotherapie-Rezept","Logopädie-Rezept","REHA-Verordnung","Podologie-Rezept"};  // Lemmi Fehler: Wa ist die Podologie ? Warum müssen diese "Standard-Strings immer neu aufgeführt werden? (genau EINAML an zentraler Stelle reicht! dt. für die 2-Buchstaben-Kürzel !
 			String letztbeginn =  jtf[cBEGINDAT].getText().trim();
 			if(letztbeginn.equals(".  .")){
 				//Preisgruppe holen
@@ -1200,7 +1205,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			}
 			boolean checkok = new HMRCheck(
 					indi,
-					Arrays.asList(idiszi).indexOf((String)jcmb[cRKLASSE].getSelectedItem().toString()),
+//					Arrays.asList(idiszi).indexOf((String)jcmb[cRKLASSE].getSelectedItem().toString()),
+					diszis.getIndex(diszis.getCurrDisziFromActRK()),
 					anzahlen,
 					hmpositionen,
 					preisgruppen[jcmb[cRKLASSE].getSelectedIndex()],
