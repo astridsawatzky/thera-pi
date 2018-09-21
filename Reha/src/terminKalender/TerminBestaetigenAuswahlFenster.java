@@ -1,11 +1,8 @@
 package terminKalender;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,31 +17,28 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemPreislisten;
-import CommonTools.JRtaCheckBox;
-import systemTools.ListenerTools;
-import systemTools.WinNum;
-
-
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaCheckBox;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.ListenerTools;
+import systemTools.WinNum;
 
 //Drud 110418
 //TODO 6. Anpassung des Umsatzbeteiligung-Moduls, um nur die tatsächlich geleisteten Heilmittel anzuzeigen 

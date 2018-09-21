@@ -9,9 +9,7 @@ import java.net.SocketException;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
-
 
 import events.PatStammEvent;
 import events.PatStammEventClass;

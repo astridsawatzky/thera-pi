@@ -1,7 +1,6 @@
 package org.thera_pi.updates;
 
 import java.io.File;
-import java.net.UnknownHostException;
 
 public class UpdateConfig {
 	private String updateDir = "";

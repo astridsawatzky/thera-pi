@@ -6,7 +6,6 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -45,6 +44,19 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.mysql.jdbc.PreparedStatement;
+import com.sun.star.beans.PropertyVetoException;
+import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XLayoutManager;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.ui.XUIElement;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.view.DocumentZoomType;
+
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.OOTools;
@@ -65,24 +77,6 @@ import ag.ion.noa.NOAException;
 import ag.ion.noa.filter.OpenDocumentFilter;
 import ag.ion.noa.frame.ILayoutManager;
 import ag.ion.noa.internal.frame.LayoutManager;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.mysql.jdbc.PreparedStatement;
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XTopWindowListener;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XLayoutManager;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import com.sun.star.ui.XUIElement;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.view.DocumentZoomType;
 
 
 

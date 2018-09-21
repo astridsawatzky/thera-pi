@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
 
-
-
 import Tools.INIFile;
 import Tools.Verschluesseln;
 

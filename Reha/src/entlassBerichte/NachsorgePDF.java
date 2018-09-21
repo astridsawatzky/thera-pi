@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.Font;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -9,11 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.swing.SwingWorker;
-
-
-
-import systemEinstellungen.SystemConfig;
-import systemTools.ReaderStart;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -27,6 +20,10 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfCopy;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
+
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import systemTools.ReaderStart;
 
 public class NachsorgePDF {
 	public EBerichtPanel eltern = null;
@@ -43,7 +40,7 @@ public class NachsorgePDF {
 		rvVorlagen[1]  = vorlagenPfad+"Nachsorge2-Variante2.pdf";
 		rvVorlagen[2]  = vorlagenPfad+"";
 		rvVorlagen[3]  = vorlagenPfad+"";
-		@SuppressWarnings("unused")
+		
 		boolean geklappt = doSeite1(true,"","");
 		geklappt = doSeite2(true,"","");
 		try {
@@ -70,7 +67,7 @@ public class NachsorgePDF {
 		
 	}
 	private boolean doSeite2(boolean vorschau,String ausfertigung,String bereich){
-		@SuppressWarnings("unused")
+		
 		String pdfPfad = rvVorlagen[1];
 		//PdfStamper stamper = null;
 		tempDateien[1] = new String[]{tempPfad+"NS2"+System.currentTimeMillis()+".pdf"};
@@ -438,7 +435,7 @@ public class NachsorgePDF {
 		return sret;
 	}
 
-	@SuppressWarnings("unused")
+	
 	private void schreibeKTLErlaeut(int ierlaeut,PdfContentByte cb){
 		ColumnText ct = null;
 		Phrase ph = null;

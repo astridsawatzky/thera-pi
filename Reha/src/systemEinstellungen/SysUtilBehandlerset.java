@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,12 +18,13 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-import terminKalender.ParameterLaden;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import terminKalender.ParameterLaden;
 
 public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionListener {
 	/**

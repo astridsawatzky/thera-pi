@@ -1,13 +1,9 @@
 package terminKalender;
 
 
-import hauptFenster.Reha;
-import hauptFenster.ReverseSocket;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -21,17 +17,16 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXFrame;
@@ -42,24 +37,20 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 //import org.jdesktop.swingx.decorator.SortOrder;
 
-
-
-
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import rechteTools.Rechte;
-import rehaContainer.RehaTP;
 import CommonTools.JRtaTextField;
-import systemEinstellungen.SystemConfig;
-import systemTools.RezeptFahnder;
-import systemTools.Verschluesseln;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import rechteTools.Rechte;
+import rehaContainer.RehaTP;
+import systemEinstellungen.SystemConfig;
+import systemTools.RezeptFahnder;
 
 
 

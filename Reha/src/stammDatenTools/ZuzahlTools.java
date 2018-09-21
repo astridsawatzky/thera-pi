@@ -1,7 +1,5 @@
 package stammDatenTools;
 
-import hauptFenster.Reha;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -10,11 +8,12 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
+import CommonTools.ExUndHop;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import terminKalender.DatFunk;
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
 
 public class ZuzahlTools {
 	/** EnumMap anlegen, mit ZuZahlStatus als key, Icon als value **/	
@@ -56,7 +55,7 @@ public class ZuzahlTools {
 		return false;
 	}
 	/**********************************************************/
-	@SuppressWarnings("unchecked")
+	
 	public static Object[] unter18TestDirekt(Vector<String> termine,boolean azTest,boolean jahrTest){
 						// Rez geb f�llig   //Anzahl Term   //Anzahl frei  //Anzahl unfrei  //Zuzahlstatus
 		Object[] ret = {new Boolean(false),Integer.valueOf(-1),Integer.valueOf(-1),Integer.valueOf(-1),Integer.valueOf(-1)};
@@ -65,7 +64,7 @@ public class ZuzahlTools {
 		if(tage.size()==0){
 			return ret;
 		}
-		@SuppressWarnings("rawtypes")
+	
 		Comparator comparator = new Comparator<String>() {
 			public int compare(String s1, String s2) {
 		        String strings1 = DatFunk.sDatInSQL(s1);
@@ -143,7 +142,7 @@ public class ZuzahlTools {
 	/********************************************************/
 
 	/********************************************************/	
-	@SuppressWarnings("unchecked")
+	
 	public static Object[] unter18TestAllesSuchen(String rez_nr,boolean azTest,boolean jahrTest){
 
 		Object[] ret = {new Boolean(false),Integer.valueOf(-1),Integer.valueOf(-1),Integer.valueOf(-1)};
@@ -152,7 +151,7 @@ public class ZuzahlTools {
 		if(tage.size()==0){
 			return ret;
 		}
-		@SuppressWarnings("rawtypes")
+	
 		Comparator comparator = new Comparator<String>() {
 			public int compare(String s1, String s2) {
 		        String strings1 = DatFunk.sDatInSQL(s1);
@@ -204,7 +203,7 @@ public class ZuzahlTools {
 	}
 	/********************************************************/
 
-	@SuppressWarnings("rawtypes")
+
 	public static void jahresWechselTest(String rez_nr,boolean azTest,boolean jahrTest){
 		Vector vec = SqlInfo.holeFelder("select termine,id from verordn where rez_nr='"+rez_nr+"' LIMIT 1");
 		vec = RezTools.holeEinzelTermineAusRezept(null,(String)((Vector)vec.get(0)).get(0));

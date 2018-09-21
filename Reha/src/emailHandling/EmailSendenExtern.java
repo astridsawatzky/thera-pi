@@ -2,13 +2,10 @@ package emailHandling;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
@@ -16,7 +13,6 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.mail.Address;
 import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Message;
@@ -35,7 +31,7 @@ import javax.swing.JOptionPane;
 import com.sun.mail.util.MailSSLSocketFactory;
 
 
-@SuppressWarnings("unused")
+
 public class EmailSendenExtern {
     public boolean sendMail(String smtpHost,String username,String password,String senderAddress,String recipientsAddress,String subject,String text,ArrayList<String[]>attachments,boolean authx,boolean bestaetigen,String secure,String useport ) throws AddressException, MessagingException, Exception{
     	

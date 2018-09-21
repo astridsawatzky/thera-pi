@@ -371,7 +371,7 @@ public class StringTools {
 		return "Physio";
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<String> fliessTextZerhacken(String textcontent,int max_line_lenght,String trenner){
 		//Ausgabe in eine Datei schreiben
 		/*

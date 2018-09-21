@@ -1,19 +1,16 @@
 package hmrCheck;
 
-import hauptFenster.Reha;
-
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
 import abrechnung.Disziplinen;
 import CommonTools.SqlInfo;
+import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
@@ -351,7 +348,7 @@ public class HMRCheck {
 
 		return differenz;
 	}
-	@SuppressWarnings("deprecation")
+	
 	public static int[] XX_hmrArbeitsTage(Date start,Date ende,boolean samstagWochenende,boolean checkFeiertage){
 		int[] ret = {0,0,0};  //0=Arbeitstag,1=wochenende,2=Feiertag
 
@@ -379,7 +376,7 @@ public class HMRCheck {
 		return ret;
 	}
 	/******************************************/	
-	@SuppressWarnings("deprecation")
+	
 	public static String hmrLetztesDatum(String startdatum,int differenz,boolean samstagistwerktag){
 		//SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
 		int i = 0; 
@@ -415,7 +412,7 @@ public class HMRCheck {
 			date = new Date(date.getTime()+ (24*60*60*1000) );
 		}
 	}
-	@SuppressWarnings("deprecation")
+	
 	public static int XX_hmrAnzahlTageLetztesDatum(String startdatum,int differenz){
 		//SimpleDateFormat sd = new SimpleDateFormat("dd.MM.yyyy");
 		int i = 0; 

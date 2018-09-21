@@ -1,7 +1,5 @@
 package verkauf;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionListener;
@@ -22,25 +20,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import CommonTools.SqlInfo;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.sun.star.awt.Size;
 
-import systemEinstellungen.SystemConfig;
 import CommonTools.ButtonTools;
+import CommonTools.INIFile;
+import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import verkauf.model.Artikel;
-import verkauf.model.ArtikelVerkauf;
-import verkauf.model.Verkauf;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -54,10 +51,11 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.sun.star.awt.Size;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import verkauf.model.Artikel;
+import verkauf.model.ArtikelVerkauf;
+import verkauf.model.Verkauf;
 
 public class VerkaufGUI extends JXPanel{
 

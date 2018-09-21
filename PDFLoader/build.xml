@@ -3,14 +3,14 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="PDFLoader">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="PDFtest2">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
     <import file="build-user.xml"/>
-    <path id="PDFLoader.classpath">
+    <path id="PDFtest2.classpath">
         <pathelement location="bin"/>
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/jgoodies/forms-1.3.0.jar"/>
@@ -38,7 +38,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="PDFLoader.classpath"/>
+            <classpath refid="PDFtest2.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>

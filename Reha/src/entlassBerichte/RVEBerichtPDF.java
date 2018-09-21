@@ -1,6 +1,4 @@
 package entlassBerichte;
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.WindowEvent;
@@ -17,25 +15,7 @@ import java.io.InputStreamReader;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
-
-import stammDatenTools.ArztTools;
-import systemEinstellungen.SystemConfig;
-import systemTools.ReaderStart;
-import ag.ion.bion.officelayer.filter.PDFFilter;
-import ag.ion.bion.officelayer.text.ITextCursor;
-import ag.ion.bion.officelayer.text.ITextDocument;
-import ag.ion.bion.officelayer.text.ITextField;
-import ag.ion.bion.officelayer.text.ITextFieldService;
-import ag.ion.bion.officelayer.text.ITextRange;
-import ag.ion.bion.officelayer.text.ITextTable;
-import ag.ion.bion.officelayer.text.IViewCursor;
-import ag.ion.bion.officelayer.text.TextException;
-import ag.ion.noa.NOAException;
-import ag.ion.noa.filter.OpenOfficeFilter;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -51,11 +31,27 @@ import com.lowagie.text.pdf.PdfImportedPage;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
+import ag.ion.bion.officelayer.filter.PDFFilter;
+import ag.ion.bion.officelayer.text.ITextCursor;
+import ag.ion.bion.officelayer.text.ITextDocument;
+import ag.ion.bion.officelayer.text.ITextField;
+import ag.ion.bion.officelayer.text.ITextFieldService;
+import ag.ion.bion.officelayer.text.ITextRange;
+import ag.ion.bion.officelayer.text.ITextTable;
+import ag.ion.bion.officelayer.text.IViewCursor;
+import ag.ion.bion.officelayer.text.TextException;
+import ag.ion.noa.NOAException;
+import ag.ion.noa.filter.OpenOfficeFilter;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import stammDatenTools.ArztTools;
+import systemEinstellungen.SystemConfig;
+import systemTools.ReaderStart;
 
 public class RVEBerichtPDF {
 	public EBerichtPanel eltern = null;
@@ -316,7 +312,7 @@ public class RVEBerichtPDF {
 			
 			docversion.open();
 			//System.out.println(tempDateien[0][0] );
-			@SuppressWarnings("unused")
+			
 			File f = new File(tempDateien[0][0]);
 			//System.out.println("Die Datei = "+tempDateien[0][0]+" existiert = "+f.exists() );
 			PdfReader reader = new PdfReader(tempDateien[0][0]);
@@ -359,7 +355,7 @@ public class RVEBerichtPDF {
 		return true;
 	}
 	/******************************************/
-	@SuppressWarnings("unused")
+	
 	private void starteReader(String datei) throws IOException{
 		Process process = new ProcessBuilder(SystemConfig.hmFremdProgs.get("AcrobatReader"),"",datei).start();
 		InputStream is = process.getInputStream();

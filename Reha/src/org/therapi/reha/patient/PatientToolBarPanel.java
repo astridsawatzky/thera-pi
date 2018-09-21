@@ -8,7 +8,6 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.TooManyListenersException;
 
@@ -21,11 +20,10 @@ import javax.swing.JToolBar;
 
 import org.jdesktop.swingx.JXPanel;
 
-import systemEinstellungen.SystemConfig;
-import CommonTools.Colors;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import systemEinstellungen.SystemConfig;
 
 public class PatientToolBarPanel extends JXPanel{
 	/**
@@ -75,7 +73,7 @@ public class PatientToolBarPanel extends JXPanel{
 	}
 
 
-	@SuppressWarnings("rawtypes")
+
 	public PatientToolBarPanel(PatientHauptPanel patHauptPanel){
 		super();
 		setOpaque(false);

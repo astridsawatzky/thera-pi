@@ -2,8 +2,6 @@ package patientenFenster;
 // Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
 // dazu neue Klasse mit Auswahlfenster angelegt !
 
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -26,22 +24,22 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import systemEinstellungen.SystemConfig;
-import CommonTools.JRtaRadioButton;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JRtaRadioButton;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListener,WindowListener, ActionListener{
 	/**
@@ -454,7 +452,7 @@ public class RezeptVorlage extends RehaSmartDialog implements RehaTPEventListene
 	}
 	
 /*	
-	@SuppressWarnings("unchecked")
+	
 	public static void starteAusfallRechnung(String url){
 		IDocumentService documentService = null;;
 		//System.out.println("Starte Datei -> "+url);
@@ -548,7 +546,7 @@ class RezeptVorlageHintergrund extends JXPanel{
 	@Override
 	public void paintComponent( Graphics g ) { 
 		super.paintComponent( g );
-		@SuppressWarnings("unused")
+		
 		Graphics2D g2d = (Graphics2D)g;
 		
 		if(hgicon != null){

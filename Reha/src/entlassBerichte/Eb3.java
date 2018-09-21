@@ -1,11 +1,8 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
 import java.awt.Window;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -24,15 +21,21 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
 
+import com.mysql.jdbc.PreparedStatement;
+import com.sun.star.frame.XController;
+import com.sun.star.text.XTextViewCursor;
+import com.sun.star.text.XTextViewCursorSupplier;
+import com.sun.star.uno.UnoRuntime;
+
+import CommonTools.RehaEvent;
+import CommonTools.RehaEventClass;
+import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.TopWindow;
-import systemEinstellungen.SystemConfig;
 import ag.ion.bion.officelayer.NativeView;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.desktop.GlobalCommands;
@@ -46,21 +49,9 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextRange;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.noa.frame.ILayoutManager;
-
-import com.mysql.jdbc.PreparedStatement;
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XTopWindowListener;
-import com.sun.star.awt.XWindowPeer;
-import com.sun.star.frame.XController;
-import com.sun.star.lang.EventObject;
-import com.sun.star.text.XTextViewCursor;
-import com.sun.star.text.XTextViewCursorSupplier;
-import com.sun.star.uno.UnoRuntime;
-
-import CommonTools.RehaEvent;
-import CommonTools.RehaEventClass;
-import CommonTools.RehaEventListener;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import systemEinstellungen.SystemConfig;
 
 public class Eb3 implements RehaEventListener  {
 	RehaEventClass rEvent = null;

@@ -1,7 +1,5 @@
 package generalSplash;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -14,6 +12,8 @@ import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import hauptFenster.Reha;
 
 public class RehaSplash extends JXDialog{
 	/**

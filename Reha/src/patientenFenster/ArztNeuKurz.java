@@ -17,19 +17,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import systemEinstellungen.SystemConfig;
 
 public class ArztNeuKurz extends JXPanel implements ActionListener,KeyListener,FocusListener{
 	/**

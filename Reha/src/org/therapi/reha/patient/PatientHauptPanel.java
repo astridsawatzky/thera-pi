@@ -1,8 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.Reha;
-import hauptFenster.UIFSplitPane;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.dnd.DropTargetListener;
@@ -15,8 +12,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -29,23 +24,23 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import rehaInternalFrame.JPatientInternal;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-import CommonTools.SqlInfo;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import dialoge.InfoDialog;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.PatStammEventListener;
+import hauptFenster.Reha;
+import hauptFenster.UIFSplitPane;
+import rehaInternalFrame.JPatientInternal;
 
 /**
  * @author juergen

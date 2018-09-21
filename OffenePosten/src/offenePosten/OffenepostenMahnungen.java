@@ -37,6 +37,13 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.hexiong.jdbf.DBFReader;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.sun.star.text.XTextFieldsSupplier;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.util.XRefreshable;
+
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.DblCellEditor;
@@ -60,13 +67,6 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
-
-import com.hexiong.jdbf.DBFReader;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.sun.star.text.XTextFieldsSupplier;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.util.XRefreshable;
 
 public class OffenepostenMahnungen extends JXPanel{
 
@@ -755,7 +755,7 @@ public class OffenepostenMahnungen extends JXPanel{
 	}
 
 	/*******************************/
-	@SuppressWarnings("rawtypes")
+
 	private void starteMahnDruck(String url){
 		IDocumentService documentService = null;;
 		//System.out.println("Starte Datei -> "+url);

@@ -1,7 +1,5 @@
 package krankenKasse;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -38,6 +36,7 @@ import dialoge.PinPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
 
 public class KassenFormulare extends JXDialog implements FocusListener, ActionListener, WindowListener, KeyListener,RehaTPEventListener{
 	/**

@@ -5,7 +5,6 @@ package rehaUrlaub;
 import java.awt.BorderLayout;
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
@@ -14,9 +13,9 @@ import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import CommonTools.SqlInfo;
-
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
+
+import CommonTools.SqlInfo;
 
 public class RehaUrlaubTab extends JXPanel{
 	

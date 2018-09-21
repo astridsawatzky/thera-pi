@@ -34,13 +34,7 @@ import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import nebraska.Constants;
-import nebraska.FileStatics;
-
 import org.jdesktop.swingx.JXPanel;
-
-import pdfDrucker.PDFDrucker;
-
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
@@ -58,6 +52,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.lowagie.text.pdf.AcroFields;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
+
+import nebraska.FileStatics;
+import pdfDrucker.PDFDrucker;
 
 public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener, ActionListener {
 	
@@ -717,7 +714,7 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
 			e.printStackTrace();
 		}
 	}
-	@SuppressWarnings("unchecked")
+	
 	private void doPdfFuellen() throws Exception{
 		String outFile = null;
 		String vorlage = therapidir+File.separator+"defaults/vorlagen/"+"Zertifizierungsantrag.pdf";

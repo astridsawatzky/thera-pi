@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -13,16 +11,12 @@ import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
-import jxTableTools.MitteRenderer;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
@@ -30,12 +24,13 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import dialoge.KuerzelNeu;
-
-import CommonTools.SqlInfo;
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
+import CommonTools.SqlInfo;
+import dialoge.KuerzelNeu;
+import hauptFenster.Reha;
+import jxTableTools.MitteRenderer;
 
 public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 	
@@ -163,7 +158,7 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		return jpan.getPanel();
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void tabelleFuellen(String diszi,int row){
 		String cmd = "select * from kuerzel where disziplin ='"+diszi+"' order by kuerzel";
 		Vector<Vector<String>> vec = SqlInfo.holeFelder(cmd);

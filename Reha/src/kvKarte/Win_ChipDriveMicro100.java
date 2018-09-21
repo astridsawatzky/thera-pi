@@ -4,9 +4,6 @@ package kvKarte;
 
 
 
-import systemEinstellungen.SystemConfig;
-import hauptFenster.Reha;
-
 import com.sun.jna.Native;
 import com.sun.jna.Pointer;
 import com.sun.jna.examples.win32.W32API.HWND;
@@ -14,6 +11,9 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.win32.StdCallFunctionMapper;
 import com.sun.jna.win32.StdCallLibrary;
+
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class Win_ChipDriveMicro100 {
 	String sCommando = "";

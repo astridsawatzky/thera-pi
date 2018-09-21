@@ -1,7 +1,5 @@
 package abrechnung;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -27,18 +25,16 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import oOorgTools.OOTools;
-
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import CommonTools.SqlInfo;
-import stammDatenTools.ZuzahlTools.ZZStat;
-import systemEinstellungen.SystemConfig;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
+import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -51,15 +47,16 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import dialoge.DragWin;
 import dialoge.PinPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import stammDatenTools.ZuzahlTools.ZZStat;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, ActionListener, MouseListener, KeyListener,RehaTPEventListener{
 	/**
@@ -71,7 +68,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 	private PinPanel pinPanel = null;
 	private JXPanel content = null;
 	private RehaTPEventClass rtp = null;
-	@SuppressWarnings("unused")
+	
 	private int rueckgabe;
 	private JRtaTextField[] tfs = {null,null,null,null,null};
 	private JButton[] but = {null,null};
@@ -404,7 +401,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 			Set<?> entries = hmRezgeb.entrySet();
 		    Iterator<?> it = entries.iterator();
 			    while (it.hasNext()) {
-			      @SuppressWarnings("rawtypes")
+			      
 				Map.Entry entry = (Map.Entry) it.next();
 			      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
 			    	  try{

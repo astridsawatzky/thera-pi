@@ -1,6 +1,5 @@
 package gBriefe;
 
-import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -13,12 +12,10 @@ import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jdesktop.swingx.JXFrame;
-import org.jdesktop.swingx.JXPanel;
-
-
-
-
+import com.sun.star.awt.XExtendedToolkit;
+import com.sun.star.awt.XTopWindow;
+import com.sun.star.frame.XFrame;
+import com.sun.star.view.DocumentZoomType;
 
 import ag.ion.bion.officelayer.NativeView;
 import ag.ion.bion.officelayer.application.IApplicationAssistant;
@@ -36,7 +33,6 @@ import ag.ion.bion.officelayer.event.ICloseListener;
 import ag.ion.bion.officelayer.event.IDocumentEvent;
 import ag.ion.bion.officelayer.event.IDocumentListener;
 import ag.ion.bion.officelayer.event.IEvent;
-import ag.ion.bion.officelayer.filter.HTMLFilter;
 import ag.ion.bion.officelayer.internal.application.ApplicationAssistant;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextField;
@@ -45,11 +41,6 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.bion.officelayer.web.IWebDocument;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.frame.ILayoutManager;
-
-import com.sun.star.awt.XExtendedToolkit;
-import com.sun.star.awt.XTopWindow;
-import com.sun.star.frame.XFrame;
-import com.sun.star.view.DocumentZoomType;
 
 
 public class OOoPanel {

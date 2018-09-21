@@ -3,8 +3,8 @@ package abrechnung;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import systemEinstellungen.SystemConfig;
 import CommonTools.JRtaComboBox;
+import systemEinstellungen.SystemConfig;
 
 public class Disziplinen {
 	private String[] typeOfVerordnung;

@@ -4,9 +4,6 @@ package rehaInternalFrame;
 
 
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -42,23 +39,24 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.border.DropShadowBorder;
-
-import systemEinstellungen.SystemConfig;
-import systemTools.ListenerTools;
 
 import com.jgoodies.looks.plastic.PlasticInternalFrameUI;
 
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import systemTools.ListenerTools;
 
 public class JRehaInternal extends JInternalFrame implements ActionListener,ComponentListener,KeyListener,MouseListener,MouseMotionListener,InternalFrameListener,AncestorListener{
 	/**
@@ -805,7 +803,7 @@ class CustomPinPanel extends JButton{
 	}
 	public void paintComponent(Graphics g)
 	{
-	@SuppressWarnings("unused")
+	
 	Graphics2D g2d = (Graphics2D) g;
 		//g2d.drawImage(getToolkit().getImage("C:/RehaVerwaltung/icons/red.png"),0 ,20, this);
 		//g2d.drawImage(getToolkit().getImage("C:/RehaVerwaltung/icons/red.png"),40 ,20, this);		

@@ -8,7 +8,7 @@ public class PatStammEvent extends EventObject {
 	    /**
 		 * 
 		 */
-		@SuppressWarnings("unused")
+		
 		private Object source;
 		private String sPatStammEvent = "";
 		private String[] sDetails = {"","",""};

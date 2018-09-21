@@ -1,8 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.Reha;
-import hauptFenster.SuchenDialog;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.MouseInfo;
@@ -28,33 +25,34 @@ import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
-
-import krankenKasse.KassenFormulare;
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-import patientenFenster.PatNeuanlage;
-import rechteTools.Rechte;
-import CommonTools.SqlInfo;
-import socketClients.SMSClient;
-import stammDatenTools.ArztTools;
-import stammDatenTools.KasseTools;
-import stammDatenTools.PatTools;
-import stammDatenTools.ZuzahlTools;
-import systemEinstellungen.SystemConfig;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import terminKalender.DatFunk;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.PatStammEvent;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import hauptFenster.SuchenDialog;
+import krankenKasse.KassenFormulare;
+import oOorgTools.OOTools;
+import patientenFenster.PatNeuanlage;
+import rechteTools.Rechte;
+import socketClients.SMSClient;
+import stammDatenTools.ArztTools;
+import stammDatenTools.KasseTools;
+import stammDatenTools.PatTools;
+import stammDatenTools.ZuzahlTools;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 public class PatientHauptLogic {
 	

@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,8 +9,8 @@ import java.util.Vector;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-
 import CommonTools.SqlInfo;
+import hauptFenster.Reha;
 
 public class SystemPreislisten {
 	public static Vector<Vector<Vector<String>>> vKGPreise = new Vector<Vector<Vector<String>>>();
@@ -57,7 +55,7 @@ public class SystemPreislisten {
 
 	static INIFile fristenini = null;
 	static INIFile inif = null;
-	@SuppressWarnings("unchecked")
+	
 	public static void ladePreise(String disziplin){
 		String[] diszis = {"Physio","Massage","Ergo","Logo","Reha","Common","Podo","Rsport","Ftrain"};
 		
@@ -555,7 +553,7 @@ public class SystemPreislisten {
 			intdummy.add(f.getIntegerProperty("HMRAbrechnung_"+disziplin, "HMRAbrechnung"+Integer.toString(i+1)));
 		}
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static void getHBRegeln(INIFile f,String disziplin,int tarife){
 		for(int i = 0; i < tarife;i++){
 			hbdummy_1.clear();
@@ -627,7 +625,7 @@ public class SystemPreislisten {
 		public Sortiere (Vector<Vector<String>> vec){
 			this.vector = vec;
 			}
-		@SuppressWarnings("unchecked")
+		
 		public Vector<Vector<String>> sortieren(){
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 

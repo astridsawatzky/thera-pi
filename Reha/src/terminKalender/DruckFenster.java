@@ -1,8 +1,6 @@
 package terminKalender;
 
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -43,10 +41,8 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import rehaContainer.RehaTP;
-import systemEinstellungen.SystemConfig;
-import CommonTools.StringTools;
 import CommonTools.SqlInfo;
+import CommonTools.StringTools;
 import CommonTools.ZeitFunk;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -68,6 +64,9 @@ import emailHandling.EmailSendenExtern;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import rehaContainer.RehaTP;
+import systemEinstellungen.SystemConfig;
 
 
 
@@ -138,7 +137,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener, Key
 		thisClass = this;
 	}		    
 /*******************************************************/	
-	@SuppressWarnings("unchecked")
+	
 	private void macheTerminVec(ArrayList<String[]>  termine){
 		Vector<String> dummyTermin = new Vector<String>();
 		for(int i = 0; i < termine.size();i++){
@@ -149,7 +148,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener, Key
 			termineVec.add((Vector<String>)dummyTermin.clone());
 		}
 		if(dummyTermin.size() > 0){
-			@SuppressWarnings("rawtypes")
+		
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 				@Override
 				public int compare(Vector o1, Vector o2) {

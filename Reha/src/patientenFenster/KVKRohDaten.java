@@ -1,7 +1,5 @@
 package patientenFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,21 +19,20 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import ocf.OcKVK;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import systemTools.IntegerTools;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.SqlInfo;
 import dialoge.RehaSmartDialog;
+import hauptFenster.Reha;
+import ocf.OcKVK;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.IntegerTools;
 
 public class KVKRohDaten extends RehaSmartDialog implements ActionListener{
 	/**

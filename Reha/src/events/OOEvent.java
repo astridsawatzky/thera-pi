@@ -7,7 +7,7 @@ public class OOEvent extends EventObject {
 	    /**
 		 * 
 		 */
-		@SuppressWarnings("unused")
+		
 		private Object source;
 		private String sOOEvent = "";
 		private String[] sDetails = {"",""};

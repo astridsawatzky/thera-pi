@@ -4,8 +4,6 @@ package rehaHMK;
 
 import java.awt.BorderLayout;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -15,11 +13,10 @@ import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
+import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
+
 import rehaHMKPanels.RehaHMKPanel1;
 import rehaHMKPanels.RehaHMKPanel2;
-
-
-import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
 
 

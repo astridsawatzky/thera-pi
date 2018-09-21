@@ -6,9 +6,6 @@ package CommonTools;
 
 
 
-import grad.GradientPainter;
-import grad.GradientSegment;
-
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.LinearGradientPaint;
@@ -20,9 +17,12 @@ import org.jdesktop.swingx.painter.GlossPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.painter.Painter;
 
+import grad.GradientPainter;
+import grad.GradientSegment;
+
 public final class RehaPainters {
 
-	@SuppressWarnings("unchecked")
+	
 	public static CompoundPainter<?> getBlauPainter() {
 
 		 // set the background painter
@@ -40,7 +40,7 @@ public final class RehaPainters {
 
 	 }
 	 
-	@SuppressWarnings("unchecked")
+	
 	public static CompoundPainter<?> getBlauGradientPainter() {
 		/*
 		BasicGradientPainter gradient = new BasicGradientPainter(
@@ -56,7 +56,7 @@ public final class RehaPainters {
 		  return new CompoundPainter(mp,gp);
 
 	 }
-	@SuppressWarnings("unchecked")
+	
 	public static Painter getGradientGradPainter() {
 	  GradientPainter gp1 = new GradientPainter();
 	  gp1.addSegment(new GradientSegment(new Color(0,51,255), new Color(128,153,255), 0.0,0.28045976,false));
@@ -65,7 +65,7 @@ public final class RehaPainters {
 	} 
 	  
 
-	@SuppressWarnings("unchecked")
+	
 	public static CompoundPainter getSchwarzGradientPainter() {
 
 		 // set the background painter
@@ -91,7 +91,7 @@ public final class RehaPainters {
 
 	
 
-	@SuppressWarnings("unchecked")
+	
 	Painter getPaint() {
 	        Color start = SystemColor.activeCaption;
 	        Color end = new Color(Math.min(start.getRed() + 30, 255),

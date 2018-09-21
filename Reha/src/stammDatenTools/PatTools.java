@@ -2,9 +2,9 @@ package stammDatenTools;
 
 import javax.swing.JOptionPane;
 
+import CommonTools.StringTools;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
-import CommonTools.StringTools;
 import terminKalender.DatFunk;
 
 public class PatTools {

@@ -1,7 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.SwingWorker;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -25,22 +24,21 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-import jxTableTools.TableTool;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.event.TableColumnModelExtListener;
 
-import patientenFenster.KeinRezept;
-import rechteTools.Rechte;
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.ExUndHop;
+import CommonTools.JCompTools;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import jxTableTools.TableTool;
+import patientenFenster.KeinRezept;
+import rechteTools.Rechte;
+import systemEinstellungen.SystemConfig;
 
 public class TherapieBerichte  extends JXPanel implements ListSelectionListener,TableModelListener,TableColumnModelExtListener,PropertyChangeListener, ActionListener{ 
 	/**

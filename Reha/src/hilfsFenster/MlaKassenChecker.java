@@ -1,7 +1,5 @@
 package hilfsFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,8 +13,6 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
-import krankenKasse.KasseNeuanlage;
-
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
@@ -29,6 +25,8 @@ import dialoge.PinPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import krankenKasse.KasseNeuanlage;
 
 public class MlaKassenChecker extends JXDialog implements  WindowListener, KeyListener,RehaTPEventListener{
 	/**

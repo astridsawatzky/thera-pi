@@ -1,7 +1,5 @@
 package verkauf;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -18,22 +16,20 @@ import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-
-import verkauf.model.Artikel;
-import verkauf.model.Lieferant;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaTextField;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import verkauf.model.Artikel;
+import verkauf.model.Lieferant;
 
 public class ArtikelDialog extends RehaSmartDialog {
 

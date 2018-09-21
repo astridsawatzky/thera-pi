@@ -16,11 +16,10 @@ import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import rehaBillEdit.RehaBillPanel;
+import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
 import CommonTools.DatFunk;
-
-import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
+import rehaBillEdit.RehaBillPanel;
 
 public class OffenepostenTab extends JXPanel implements ChangeListener{
 	

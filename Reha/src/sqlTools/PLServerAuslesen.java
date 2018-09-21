@@ -1,7 +1,5 @@
 package sqlTools;
 
-import hauptFenster.Reha;
-
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +13,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import hauptFenster.Reha;
+
 
 
 public class PLServerAuslesen {
@@ -23,7 +23,7 @@ public class PLServerAuslesen {
 	public PLServerAuslesen(){
 		oeffnePLConnection();
 	}
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<Vector<String>> holeFelder(String xstmt){
 		Statement stmt = null;
 		ResultSet rs = null;

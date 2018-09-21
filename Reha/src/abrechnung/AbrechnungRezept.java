@@ -1,9 +1,5 @@
 package abrechnung;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-import hauptFenster.UIFSplitPane;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -55,6 +51,7 @@ import javax.swing.JViewport;
 import javax.swing.ListSelectionModel;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.HyperlinkEvent;
@@ -70,14 +67,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import jxTableTools.DblCellEditor;
-import jxTableTools.DoubleTableCellRenderer;
-import jxTableTools.MitteRenderer;
-import jxTableTools.MyTableCheckBox;
-import jxTableTools.MyTableComboBox;
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
@@ -94,31 +83,39 @@ import org.jdesktop.swingx.treetable.TreeTableNode;
 import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.Historie;
 
-import patientenFenster.KassenAuswahl;
-import patientenFenster.RezNeuanlage;
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import systemTools.AdressTools;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
-import CommonTools.StringTools;
-import terminKalender.DatFunk;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.text.TextException;
-import ag.ion.noa.NOAException;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.uno.Exception;
 
+import CommonTools.JCompTools;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.document.DocumentException;
+import ag.ion.bion.officelayer.text.TextException;
+import ag.ion.noa.NOAException;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import hauptFenster.UIFSplitPane;
+import jxTableTools.DblCellEditor;
+import jxTableTools.DoubleTableCellRenderer;
+import jxTableTools.MitteRenderer;
+import jxTableTools.MyTableCheckBox;
+import jxTableTools.MyTableComboBox;
+import oOorgTools.OOTools;
+import patientenFenster.KassenAuswahl;
+import patientenFenster.RezNeuanlage;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.AdressTools;
+import systemTools.ListenerTools;
+import terminKalender.DatFunk;
 
 
 
@@ -179,7 +176,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	
 	JRtaComboBox cmbkuerzel = null;
 	JRtaComboBox cmbbreak = null;
-	@SuppressWarnings("rawtypes")
+
 	JComboBox cmbpreis = null;
 	JCheckBox chkzuzahl = null;
 	
@@ -326,7 +323,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
         scrHtml.validate();
 		return scrHtml;
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	public void setKuerzelVec(String xreznummer,String preisgr){
 		if(xreznummer.startsWith("KG")){
 			preisvec = (Vector<Vector<String>>)RezTools.holePreisVector("KG", Integer.parseInt(preisgr.trim())-1);
@@ -402,7 +399,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			vec_kuerzel.add( (Vector<String>)kundid.clone() );
 		}
 		Comparator<Vector> comparator = new Comparator<Vector>() {
-		    @SuppressWarnings("unused")
+		    
 			public int compare(String s1, String s2) {
 		        String[] strings1 = s1.split("\\s");
 		        String[] strings2 = s2.split("\\s");
@@ -958,15 +955,15 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		HashMap<String,String> taxWerte = new HashMap<String,String>(); 
 		JXTTreeTableNode node;
 		
-		@SuppressWarnings("unused")
+		
 		String km = "";
-		@SuppressWarnings("unused")
+		
 		boolean hb = false;
-		@SuppressWarnings("unused")
+		
 		boolean hbmit = false;
-		@SuppressWarnings("unused")
+		
 		boolean wgkm = false;
-		@SuppressWarnings("unused")
+		
 		boolean wgpausch = false;
 		//boolean hbcecked = false;
 		boolean kmchecked = false;
@@ -1450,22 +1447,22 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 			return;
 		}
 		
-		@SuppressWarnings("unused")
+		
 		boolean amBeginnFrei = false;
-		@SuppressWarnings("unused")
+		
 		boolean amEndeFrei = false;
 
-		@SuppressWarnings("unused")
+		
 		boolean volleZuzahlung = true;
 
 		boolean unter18 = false;
 		
-		@SuppressWarnings("unused")
+		
 		boolean vollFrei = false;
-		@SuppressWarnings("unused")
+		
 		boolean teilFrei = false;
 		mitPauschale = true;
-		@SuppressWarnings("unused")
+		
 		boolean jahresWechsel = false;
 		zuZahlungsPos = "3";
 		////System.out.println("Einsprung 2 in doGebuehren");
@@ -2083,7 +2080,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	 * 
 	 */
 	/*******************************/
-	@SuppressWarnings("unchecked")
+	
 	private void constructTagVector(String datum,String[] behandlungen,int anzahlbehandlungen,int anzahlhb,int tag,boolean toomuch){
 		try{
 		String[] abrfall = new String[anzahlbehandlungen];
@@ -3220,7 +3217,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
     }
  
     private static class JXTTreeTableNode extends DefaultMutableTreeTableNode {
-    	@SuppressWarnings("unused")
+    	
 		private boolean enabled = false;
     	private AbrFall abr = null;
     	public JXTTreeTableNode(String name,AbrFall abr ,boolean enabled){
@@ -3583,7 +3580,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				(Boolean)vec_tabelle.get(vecindex).get(10));
 		return abr;
 	}
-	@SuppressWarnings("unchecked")
+	
 	private JXTTreeTableNode constructNewBehandlung(JXTTreeTableNode node){
 		JXTTreeTableNode xnode = null;
 		AbrFall abr = null;
@@ -3665,7 +3662,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		}
 	}
 	*/
-	@SuppressWarnings("unchecked")
+	
 	private void getVectorFromNodes(){
 		int lang = this.getNodeCount();
 		
@@ -3694,7 +3691,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
 	private void sortiereVector(Vector vec,int dimension){
 		final int xdimension = dimension;
 		Comparator<Vector> comparator = new Comparator<Vector>() {
@@ -4149,7 +4146,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		return str;
 	}
 	/************************************************************************/
-	@SuppressWarnings("unchecked")
+	
 	private boolean holeEDIFACT(String rez_nr){
 		int zugabe = 0;
 		boolean ret = true;
@@ -4323,7 +4320,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
         return count;
     }
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
 	private void macheVector(Vector vec, String svec,int type){
 		//type 0 = String, type 1 = int;
 		String ergebnis = svec.substring(1);

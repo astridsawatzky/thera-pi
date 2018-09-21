@@ -1,14 +1,12 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.util.Vector;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-
-import terminKalender.DatFunk;
 import CommonTools.ZeitFunk;
+import hauptFenster.Reha;
+import terminKalender.DatFunk;
 
 public class GruppenEinlesen{
 	//public Vector gruppenParam = null;
@@ -18,7 +16,7 @@ public class GruppenEinlesen{
 	public Vector<Vector<Object>> gruppeAlle = new Vector<Vector<Object>>();
 	public int anzahl;
 	private INIFile ini;
-	@SuppressWarnings("unchecked")
+	
 	public GruppenEinlesen init(){
 		ini = INITool.openIni(Reha.proghome+"ini/"+Reha.aktIK+"/", "gruppen.ini");
 

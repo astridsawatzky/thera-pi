@@ -1,7 +1,5 @@
 package textBlockTherapeuten;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -30,33 +28,32 @@ import javax.swing.JTextArea;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import jxTableTools.RechtsRenderer;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.therapi.reha.patient.ArztBericht;
 
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import jxTableTools.RechtsRenderer;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
 	/**
@@ -372,7 +369,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			}
 			textblock.validate();
 		}
-		@SuppressWarnings("unchecked")
+		
 		private void testeTbText(String text){
 			/// Hier den SytemVariablen-Check einbauen!!!!!!!!!!!!!!!!!!!!
 			Vector<String> tbvars = new Vector<String>();
@@ -407,7 +404,7 @@ public class ThTextBlock extends RehaSmartDialog implements RehaTPEventListener,
 			vectb = (Vector<String>)tbvars.clone();
 			//////System.out.println("Variablen Vector = "+tbvars);
 		}
-		@SuppressWarnings("unused")
+		
 		private void infoPosition(int diff,int i,int lang){
 			//////System.out.println("Längendifferenz ="+diff+"  /  neuer Wert für Position i ="+i+" / neuer Wert für Textlänge lang="+lang);
 		}

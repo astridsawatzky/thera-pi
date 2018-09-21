@@ -1,9 +1,6 @@
 package terminKalender;
 
 
-import hauptFenster.Reha;
-import hauptFenster.UIFSplitPane;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,10 +27,12 @@ import javax.swing.border.SoftBevelBorder;
 
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import hauptFenster.UIFSplitPane;
 
 public class Zeitfenster extends JDialog implements KeyListener,FocusListener,ActionListener{
 

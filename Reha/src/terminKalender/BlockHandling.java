@@ -1,7 +1,5 @@
 package terminKalender;
 
-import hauptFenster.Reha;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,10 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
-
 import CommonTools.StringTools;
 import CommonTools.ZeitFunk;
+import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 
@@ -612,7 +609,7 @@ public class BlockHandling {
 		//return -1;
 	}
 	
-	@SuppressWarnings("unused")
+	
 	private void sucheNachLeerBlock(){
 		
 		

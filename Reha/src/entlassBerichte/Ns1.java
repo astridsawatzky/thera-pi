@@ -1,7 +1,5 @@
 package entlassBerichte;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,22 +21,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import CommonTools.StringTools;
-import terminKalender.DatFunk;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaCheckBox;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 
 public class Ns1 implements ActionListener,ComponentListener {
@@ -1227,7 +1226,7 @@ public class Ns1 implements ActionListener,ComponentListener {
 		lab.setForeground(Color.RED);
 		return lab;
 	}
-	@SuppressWarnings("unused")
+	
 	private JLabel getLabelArialFettNormal(String text){
 		JLabel lab = new JLabel(text);
 		lab.setFont(fontarialfett);
@@ -1239,7 +1238,7 @@ public class Ns1 implements ActionListener,ComponentListener {
 		lab.setForeground(Color.RED);
 		return lab;
 	}
-	@SuppressWarnings("unused")
+	
 	private JPanel getRand(Color col){
 		JPanel pan = new JPanel();
 		pan.setOpaque(false);

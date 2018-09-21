@@ -131,7 +131,7 @@ public class SetWahl extends JDialog {
 	 * @return javax.swing.JList	
 	 */
 
-	@SuppressWarnings("rawtypes")
+
 	private void ListeFuellen(DefaultListModel model){
 		int i,max = 0;
 		max = SystemConfig.aTerminKalender.size();

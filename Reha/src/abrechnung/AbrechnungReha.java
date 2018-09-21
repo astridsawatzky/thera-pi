@@ -1,8 +1,5 @@
 package abrechnung;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
@@ -21,24 +18,18 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
 
-import patientenFenster.KassenAuswahl;
-import rehaInternalFrame.JRehaabrechnungInternal;
-import CommonTools.SqlInfo;
-import stammDatenTools.PatTools;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import terminKalender.DatFunk;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -52,13 +43,19 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import dta301.RVMeldung301;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import patientenFenster.KassenAuswahl;
+import rehaInternalFrame.JRehaabrechnungInternal;
+import stammDatenTools.PatTools;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import terminKalender.DatFunk;
 
 public class AbrechnungReha extends JXPanel{
 	/**
@@ -398,7 +395,7 @@ public class AbrechnungReha extends JXPanel{
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	
 	private void holePatientUndKostentraeger(String pat_intern,String kassenid){
 		patvec = SqlInfo.holeFelder("select n_name,v_name,geboren,anrede,titel,strasse,plz,ort,kv_status from pat5 where pat_intern='"+pat_intern+"' LIMIT 1");
 		kassvec = SqlInfo.holeFelder("select kassen_nam1,kassen_nam2,strasse,plz,ort,ik_papier,ik_kostent from kass_adr where id='"+kassenid+"' LIMIT 1");
@@ -710,7 +707,7 @@ public class AbrechnungReha extends JXPanel{
 		}.execute();
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void doEigenanteilDrucken() throws Exception{
 		aktuellePosition = 0;
 		istprivat = true;
@@ -853,7 +850,7 @@ public class AbrechnungReha extends JXPanel{
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 		
 	}
-	@SuppressWarnings("unchecked")
+	
 	private void doHauptRechnungDrucken() throws Exception{
 		hmRechnung.clear();
 

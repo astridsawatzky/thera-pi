@@ -1,7 +1,5 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -11,14 +9,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.IOException;
-import java.net.ConnectException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.Collections;
-import java.util.Enumeration;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -26,28 +16,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.therapi.reha.patient.PatientToolBarLogic;
 
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import socketClients.SMSClient;
-import systemEinstellungen.SysUtilKuerzel;
-import systemEinstellungen.SystemConfig;
-import systemTools.ButtonTools;
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import socketClients.SMSClient;
+import systemEinstellungen.SystemConfig;
+import systemTools.ButtonTools;
 
 public class SMSDialog extends JXDialog implements  WindowListener, KeyListener,RehaTPEventListener{
 

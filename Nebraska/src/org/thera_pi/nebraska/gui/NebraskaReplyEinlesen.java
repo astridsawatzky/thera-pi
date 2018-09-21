@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.security.cert.X509Certificate;
-import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -13,18 +12,17 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import nebraska.FileStatics;
-
 import org.jdesktop.swingx.JXPanel;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 
-import utils.ButtonTools;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import nebraska.FileStatics;
+import utils.ButtonTools;
 
 public class NebraskaReplyEinlesen extends JDialog {
 

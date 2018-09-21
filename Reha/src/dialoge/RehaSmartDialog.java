@@ -1,7 +1,5 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -31,10 +29,11 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import systemTools.ListenerTools;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import systemTools.ListenerTools;
 
 public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowListener,MouseMotionListener,MouseListener,KeyListener{
 //public class RehaSmartDialog extends JXDialog implements RehaTPEventListener{

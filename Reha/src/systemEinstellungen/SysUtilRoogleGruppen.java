@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -23,12 +21,13 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import CommonTools.JRtaTextField;
-import terminKalender.ParameterLaden;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import terminKalender.ParameterLaden;
 
 public class SysUtilRoogleGruppen extends JXPanel implements ActionListener,KeyListener{
 	/**

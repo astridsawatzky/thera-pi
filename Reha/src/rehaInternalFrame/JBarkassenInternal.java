@@ -1,18 +1,17 @@
 package rehaInternalFrame;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.beans.PropertyVetoException;
 
 import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameEvent;
 
-import barKasse.Barkasse;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
+import barKasse.Barkasse;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 
 public class JBarkassenInternal extends JRehaInternal implements RehaEventListener{
 	/**

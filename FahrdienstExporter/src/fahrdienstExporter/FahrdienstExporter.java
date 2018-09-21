@@ -4,9 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-
-
 import java.util.Date;
 import java.util.Vector;
 
@@ -66,7 +63,7 @@ public class FahrdienstExporter {
 	}
 	
 	
-	@SuppressWarnings("unchecked")
+	
 	private void macheVector(String zeile){
 		Object[] obj = {null,null,null,null,null,null}; 
 		String[] szeile = zeile.split("°");

@@ -1,8 +1,5 @@
 package stammDatenTools;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -11,8 +8,10 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
 import CommonTools.StringTools;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class ArztTools {
 	public static void constructArztHMap(String id){

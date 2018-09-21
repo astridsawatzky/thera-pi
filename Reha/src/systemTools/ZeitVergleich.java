@@ -1,5 +1,5 @@
 package systemTools;
-import java.util.*;
+import java.util.Date;
 
 
 final class ZeitVergleich {

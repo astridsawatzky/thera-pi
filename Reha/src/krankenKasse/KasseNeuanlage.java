@@ -1,7 +1,5 @@
 package krankenKasse;
 
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,22 +28,23 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
 
 public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListener,FocusListener {
 	/**

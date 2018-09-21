@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,15 +22,16 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
 
-import systemTools.ButtonTools;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import hauptFenster.Reha;
+import systemTools.ButtonTools;
 
 public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, ActionListener, FocusListener {
 	
@@ -66,7 +65,7 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 	String lastdiszi = null;
 	int lasttarif = -1;
 	
-	@SuppressWarnings("unchecked")
+	
 	public SysUtilAbrechnungFristen(){
 		super(new BorderLayout());
 		//System.out.println("Aufruf SysUtilKalendereinstell");
@@ -228,7 +227,7 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 		}
 		return changed;
 	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	private void doSpeichern(){
 		try{
 			((Vector)hmFristen.get(lastdiszi).get(0)).set(lasttarif,(Integer) Integer.parseInt(tage1.getText()));

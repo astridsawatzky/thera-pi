@@ -1,10 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.Reha;
-import hauptFenster.RehaIOMessages;
-import hauptFenster.RehaIOServer;
-import hauptFenster.ReverseSocket;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -40,6 +35,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -48,12 +44,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import jxTableTools.DateTableCellEditor;
-import jxTableTools.TableTool;
-
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -62,22 +52,27 @@ import org.jdesktop.swingx.renderer.IconValues;
 import org.jdesktop.swingx.renderer.MappedValue;
 import org.jdesktop.swingx.renderer.StringValues;
 
-
-import patientenFenster.HistorDaten;
-import patientenFenster.KeinRezept;
-import rechteTools.Rechte;
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import CommonTools.Colors;
-import systemTools.IconListRenderer;
-import CommonTools.JCompTools;
-import terminKalender.DatFunk;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.Colors;
+import CommonTools.JCompTools;
+import CommonTools.SqlInfo;
 import dialoge.ToolsDialog;
+import hauptFenster.Reha;
+import hauptFenster.RehaIOMessages;
+import hauptFenster.RehaIOServer;
+import hauptFenster.ReverseSocket;
+import jxTableTools.DateTableCellEditor;
+import jxTableTools.TableTool;
+import oOorgTools.OOTools;
+import patientenFenster.HistorDaten;
+import patientenFenster.KeinRezept;
+import rechteTools.Rechte;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemTools.IconListRenderer;
+import terminKalender.DatFunk;
 
 public class Historie extends JXPanel implements ActionListener, TableModelListener, PropertyChangeListener{
 	/**
@@ -211,7 +206,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 
 		public void paintComponent( Graphics g ) { 
 			super.paintComponent( g );
-			@SuppressWarnings("unused")
+			
 			Graphics2D g2d = (Graphics2D)g;
 			
 			if(hgicon != null){
@@ -702,7 +697,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		return ret;
 	}
 	/*************************************************/
-	@SuppressWarnings("rawtypes")
+
 	public void holeRezepte(String patint,String rez_nr){
 		final String xpatint = patint;
 		final String xrez_nr = rez_nr;

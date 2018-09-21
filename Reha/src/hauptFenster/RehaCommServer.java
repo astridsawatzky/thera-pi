@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import javax.swing.JOptionPane;
-
 import javax.swing.SwingWorker;
 
 public class RehaCommServer  extends SwingWorker<Void,Void>{

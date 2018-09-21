@@ -1,24 +1,14 @@
 package abrechnung;
 
-import hauptFenster.Reha;
-
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
-
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.text.XTextTableCursor;
 
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -31,19 +21,15 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.ITextTableCell;
 import ag.ion.bion.officelayer.text.ITextTableCellProperties;
-import ag.ion.bion.officelayer.text.ITextTableColumn;
-import ag.ion.bion.officelayer.text.ITextTableRow;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
 
-import com.sun.star.beans.Property;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.table.XCell;
-import com.sun.star.text.XTextTable;
-import com.sun.star.text.XTextTableCursor;
 
-@SuppressWarnings("unused")
 public class AbrechnungDrucken {
 	int aktuellePosition = 0;
 	ITextTable textTable = null;

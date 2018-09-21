@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import java.util.EventListener;
 
 public class ListenerTools {
-	@SuppressWarnings("unchecked")
+	
 	public static void removeListeners(Component comp)
     {
         Method []methods = comp.getClass().getMethods();

@@ -5,10 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-import javax.swing.JComponent;
-
 import CommonTools.SqlInfo;
-
 import rehaHMK.RehaHMK;
 
 

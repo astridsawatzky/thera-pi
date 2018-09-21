@@ -31,18 +31,13 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
-import dialoge.PinPanel;
-import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
@@ -279,7 +274,7 @@ private RehaTPEventClass rtp = null;
 		return jpan;
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleTabelle(String suchkrit){
 		arztwahlmod.setRowCount(0);
 		arztwahltbl.validate();
@@ -304,7 +299,7 @@ private RehaTPEventClass rtp = null;
 			arztwahlmod.addRow((Vector<?>)vec.get(i));	
 		}
 	}
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleIdTabelle(String suchid){
 		arztwahlmod.setRowCount(0);
 		arztwahltbl.validate();

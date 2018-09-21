@@ -1,7 +1,5 @@
 package wecker;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -25,31 +23,30 @@ import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import CommonTools.SqlInfo;
-import systemTools.ButtonTools;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
-import terminKalender.ParameterLaden;
-import CommonTools.ZeitFunk;
-
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.ZeitFunk;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import systemTools.ButtonTools;
+import terminKalender.DatFunk;
+import terminKalender.ParameterLaden;
 
 public class Wecker extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
 
@@ -360,7 +357,7 @@ public class Wecker extends RehaSmartDialog implements RehaTPEventListener,Windo
 		   
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	private void doNeuTermin(){
 		int minuten = 0; 
 		try{
@@ -588,14 +585,14 @@ final class TerminAbgelaufen extends RehaSmartDialog implements WindowListener{
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
-			@SuppressWarnings("unused")
+			
 			TerminAbgelaufen tab = getInstance();
 			tab = null;
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 			this.doAufraeumen();
-			@SuppressWarnings("unused")
+			
 			TerminAbgelaufen tab = getInstance();
 			tab = null;
 	}

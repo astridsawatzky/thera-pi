@@ -2,13 +2,13 @@ package Tools;
 
 
 
-import reha301.Reha301;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.noa.NOAException;
+import reha301.Reha301;
 
 public class OOTools{
 	public OOTools(){

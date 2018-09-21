@@ -1,10 +1,6 @@
 package org.therapi.reha.patient;
 
 
-import generalSplash.RehaSplash;
-import geraeteInit.ScannerUtil;
-import hauptFenster.Reha;
-
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -59,6 +55,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -68,10 +65,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import jxTableTools.TableTool;
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -79,35 +72,6 @@ import org.jdesktop.swingx.renderer.DefaultTableRenderer;
 import org.jdesktop.swingx.renderer.IconValues;
 import org.jdesktop.swingx.renderer.MappedValue;
 import org.jdesktop.swingx.renderer.StringValues;
-
-import patientenFenster.KeinRezept;
-import patientenFenster.MyAccessory;
-import rechteTools.Rechte;
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.Colors;
-import CommonTools.FileTools;
-import systemTools.GrafikTools;
-import systemTools.IconListRenderer;
-import CommonTools.JCompTools;
-import terminKalender.DatFunk;
-import uk.co.mmscomputing.device.scanner.Scanner;
-import uk.co.mmscomputing.device.scanner.ScannerDevice;
-import uk.co.mmscomputing.device.scanner.ScannerIOException;
-import uk.co.mmscomputing.device.scanner.ScannerIOMetadata;
-import uk.co.mmscomputing.device.scanner.ScannerListener;
-import uk.co.mmscomputing.device.twain.TwainConstants;
-import uk.co.mmscomputing.device.twain.TwainIOMetadata;
-import uk.co.mmscomputing.device.twain.TwainImageLayout;
-import uk.co.mmscomputing.device.twain.TwainSource;
-import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.IDocumentEvent;
-import ag.ion.bion.officelayer.event.IDocumentListener;
-import ag.ion.bion.officelayer.event.IEvent;
-import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
-import ag.ion.bion.officelayer.text.ITextDocument;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -121,7 +85,40 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
 import com.mysql.jdbc.PreparedStatement;
 
+import CommonTools.Colors;
+import CommonTools.ExUndHop;
+import CommonTools.FileTools;
+import CommonTools.JCompTools;
+import CommonTools.SqlInfo;
+import ag.ion.bion.officelayer.application.IOfficeApplication;
+import ag.ion.bion.officelayer.document.IDocument;
+import ag.ion.bion.officelayer.event.IDocumentEvent;
+import ag.ion.bion.officelayer.event.IDocumentListener;
+import ag.ion.bion.officelayer.event.IEvent;
+import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
+import ag.ion.bion.officelayer.text.ITextDocument;
 import dialoge.ToolsDialog;
+import generalSplash.RehaSplash;
+import geraeteInit.ScannerUtil;
+import hauptFenster.Reha;
+import jxTableTools.TableTool;
+import oOorgTools.OOTools;
+import patientenFenster.KeinRezept;
+import patientenFenster.MyAccessory;
+import rechteTools.Rechte;
+import systemEinstellungen.SystemConfig;
+import systemTools.GrafikTools;
+import systemTools.IconListRenderer;
+import terminKalender.DatFunk;
+import uk.co.mmscomputing.device.scanner.Scanner;
+import uk.co.mmscomputing.device.scanner.ScannerDevice;
+import uk.co.mmscomputing.device.scanner.ScannerIOException;
+import uk.co.mmscomputing.device.scanner.ScannerIOMetadata;
+import uk.co.mmscomputing.device.scanner.ScannerListener;
+import uk.co.mmscomputing.device.twain.TwainConstants;
+import uk.co.mmscomputing.device.twain.TwainIOMetadata;
+import uk.co.mmscomputing.device.twain.TwainImageLayout;
+import uk.co.mmscomputing.device.twain.TwainSource;
 
 public class Dokumentation extends JXPanel implements ActionListener, TableModelListener, PropertyChangeListener, ScannerListener{
 	/**
@@ -1162,7 +1159,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
             public void propertyChange(PropertyChangeEvent e) {
                 if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                         || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-                    @SuppressWarnings("unused")
+                    
 					final File f = (File) e.getNewValue();
                 }
             }
@@ -2748,7 +2745,7 @@ class OoListener implements IDocumentListener {
 		}
 	}
 	
-	@SuppressWarnings("unused")
+	
 	private void doUebertragen(String file){
 		
 	}

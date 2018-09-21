@@ -1,8 +1,5 @@
 package geraeteInit;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,13 +17,14 @@ import javax.comm.SerialPortEventListener;
 import javax.comm.UnsupportedCommOperationException;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-
 import javax.swing.SwingWorker;
 
+import dialoge.SchluesselDialog;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import terminKalender.DatFunk;
 import terminKalender.TermineErfassen;
-import dialoge.SchluesselDialog;
 
 
 
@@ -34,7 +32,7 @@ import dialoge.SchluesselDialog;
 public class BarCodeScanner implements Runnable, SerialPortEventListener{
 	   static CommPortIdentifier portId = null;
 
-	@SuppressWarnings("rawtypes")
+
 	static Enumeration  portList = null;
 	   InputStream inputStream = null;
 	   static OutputStream outputStream = null;
@@ -198,7 +196,7 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 		    	byteArrayOutputStream.close();
 				if(outString.length()>= 2){
 					if("KGMAERLORHPORSFT".contains(outString.substring(0,2))){
-						@SuppressWarnings("rawtypes")
+					
 						Vector tvec = null;
 						JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 						if(termin != null){

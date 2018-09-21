@@ -29,17 +29,13 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-
-
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.Colors;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
@@ -276,7 +272,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 		jpan.add(span,cc.xyw(2, 4,6));
 		return jpan;
 	}
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleTabelle(String suchkrit){
 		kassenwahlmod.setRowCount(0);
 		kassenwahltbl.validate();
@@ -302,7 +298,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
+	
 	public void fuelleIdTabelle(String suchid){
 		kassenwahlmod.setRowCount(0);
 		kassenwahltbl.validate();

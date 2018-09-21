@@ -4,11 +4,6 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-
-
-
-
-
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;

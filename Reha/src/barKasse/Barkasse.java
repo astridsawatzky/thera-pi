@@ -1,7 +1,5 @@
 package barKasse;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -19,10 +17,17 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
-import org.jdesktop.swingx.JXPanel;
 import javax.swing.SwingWorker;
 
+import org.jdesktop.swingx.JXPanel;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -32,17 +37,9 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-
-import com.jgoodies.forms.debug.FormDebugPanel;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
+import hauptFenster.Reha;
 import rehaInternalFrame.JBarkassenInternal;
-import CommonTools.INIFile;
-import CommonTools.INITool;
-import CommonTools.SqlInfo;
 import systemTools.ButtonTools;
-import CommonTools.JRtaTextField;
 import terminKalender.DatFunk;
 
 public class Barkasse extends JXPanel implements ItemListener{

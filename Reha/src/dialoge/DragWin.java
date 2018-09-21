@@ -1,7 +1,5 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -11,6 +9,8 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
+
+import hauptFenster.Reha;
 
 public class DragWin extends MouseAdapter implements MouseListener, MouseMotionListener{
 	public int clickX;

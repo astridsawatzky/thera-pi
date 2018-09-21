@@ -1,8 +1,5 @@
 package patientenFenster;
 
-import hauptFenster.Reha;
-import hmrCheck.HMRCheck;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -34,17 +31,16 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.therapi.reha.patient.LadeProg;
 
-import rechteTools.Rechte;
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.Colors;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import systemTools.ListenerTools;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import terminKalender.DatFunk;
 import abrechnung.Disziplinen;
@@ -56,6 +52,14 @@ import com.jgoodies.forms.layout.FormLayout;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import hmrCheck.HMRCheck;
+import rechteTools.Rechte;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.ListenerTools;
+import terminKalender.DatFunk;
 
 public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener,FocusListener,RehaTPEventListener{
 
@@ -1101,7 +1105,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	private void doRechnen(int comb){
 		//unbelegt
 	}
-	@SuppressWarnings("unused")
+	
 	private void mustHmrCheck(){
 		if( SystemPreislisten.hmHMRAbrechnung.get(aktuelleDisziplin).get(preisgruppen[jcmb[cRKLASSE].getSelectedIndex()])==1  ){
 			this.hmrcheck.setEnabled(false);
@@ -1601,7 +1605,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		kwahl = null;
 	}
 	
-	@SuppressWarnings("unused")
+	
 	private void holePreisGruppeMitWorker(String id){
 		final String xid = id;
 		new SwingWorker<Void,Void>(){
@@ -1786,7 +1790,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 	
 	/********************************/
-	@SuppressWarnings("unused")
+	
 	private Double holePreisDoubleX(String pos,int ipreisgruppe){
 		Double dbl = 0.0;
 		for(int i = 0; i < preisvec.size();i++){
@@ -1813,7 +1817,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 
 	/*********************************/
-	@SuppressWarnings("unused")
+	
 	private String[] holePreis(int ivec,int ipreisgruppe){
 		if(ivec > 0){
 			int prid = Integer.valueOf((String) this.preisvec.get(ivec).get(this.preisvec.get(ivec).size()-1));
@@ -1960,7 +1964,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			////System.out.println("Speichern bestehendes Rezept -> Preisgruppe = "+jtf[cPREISGR].getText());
 			Integer izuzahl = Integer.valueOf(jtf[cPREISGR].getText());
 			String szzstatus = "";
-			@SuppressWarnings("unused")
+			
 			String unter18 = "F";
 			for(int i = 0; i < 1;i++){
 				if(SystemPreislisten.hmZuzahlRegeln.get(aktuelleDisziplin).get(izuzahl-1) <= 0){
@@ -2393,7 +2397,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	}
 	
 	// Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
-	@SuppressWarnings("unused")
+	
 	private void doKopiereLetztesRezeptDesPatienten() {
 		/** KONZEPT
 		 holle alle Rezepte aus den Tabellen "verordn" und "lza" zum aktuellen Patienten sortiert und finde das neueste als erstes in der Liste

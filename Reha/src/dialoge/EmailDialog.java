@@ -1,10 +1,7 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.DefaultListModel;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -38,35 +34,29 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.table.DefaultTableModel;
-
-import oOorgTools.OOTools;
-
 import javax.swing.SwingWorker;
+import javax.swing.WindowConstants;
+
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
-import org.therapi.reha.patient.LadeProg;
-import org.therapi.reha.patient.PatientToolBarLogic;
-
-import systemEinstellungen.SystemConfig;
-import systemTools.IconListRenderer;
-import abrechnung.AbrechnungDlg;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
+import abrechnung.AbrechnungDlg;
 import emailHandling.EmailSendenExtern;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import systemEinstellungen.SystemConfig;
+import systemTools.IconListRenderer;
 
 public class EmailDialog  extends JXDialog implements  WindowListener, KeyListener,RehaTPEventListener{
 	

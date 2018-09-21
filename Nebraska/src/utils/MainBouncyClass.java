@@ -17,8 +17,6 @@ import java.util.Date;
 
 import javax.security.auth.x500.X500Principal;
 
-import nebraska.Constants;
-
 import org.bouncycastle.asn1.x509.BasicConstraints;
 import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
 import org.bouncycastle.asn1.x509.GeneralName;
@@ -27,6 +25,8 @@ import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.bouncycastle.asn1.x509.KeyUsage;
 import org.bouncycastle.asn1.x509.X509Extensions;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+
+import nebraska.Constants;
 
 public class MainBouncyClass {
 	  public static X509Certificate generateV3Certificate(KeyPair pair) throws InvalidKeyException,

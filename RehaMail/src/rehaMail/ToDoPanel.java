@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.LinearGradientPaint;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -63,6 +62,10 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.mysql.jdbc.PreparedStatement;
+
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.DateTableCellRenderer;
@@ -73,15 +76,10 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
 import CommonTools.ReaderStart;
-import Tools.OOTools;
-import Tools.Rechte;
-import Tools.ToolsDialog;
 import CommonTools.SqlInfo;
+import Tools.OOTools;
+import Tools.ToolsDialog;
 import Tools.UIFSplitPane;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.mysql.jdbc.PreparedStatement;
 
 public class ToDoPanel extends JXPanel implements TableModelListener, KeyListener {
 

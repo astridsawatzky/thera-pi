@@ -14,7 +14,6 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-
 import dialoge.RehaSmartDialog;
 import events.RehaTPEventListener;
 

@@ -5,12 +5,16 @@ package utils;
 import java.awt.Cursor;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.thera_pi.nebraska.gui.NebraskaMain;
 
-import nebraska.Nebraska;
+import com.sun.star.frame.XController;
+import com.sun.star.text.XTextViewCursorSupplier;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.view.XLineCursor;
+
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -21,11 +25,7 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.noa.printing.IPrinter;
-
-import com.sun.star.frame.XController;
-import com.sun.star.text.XTextViewCursorSupplier;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.view.XLineCursor;
+import nebraska.Nebraska;
 
 public class OOorgTools {
 	public static void loescheLeerenPlatzhalter(ITextDocument textDocument, ITextField placeholders){

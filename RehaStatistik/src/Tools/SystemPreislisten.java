@@ -46,7 +46,7 @@ public class SystemPreislisten {
 	private static Vector<String> hbdummy_1 = new Vector<String>();
 	private static Vector<Vector<String>> preisliste = new Vector<Vector<String>>();
 	
-	@SuppressWarnings("unchecked")
+	
 	public static void ladePreise(String disziplin){
 		String[] diszis = {"Physio","Massage","Ergo","Logo","Reha","Common"};
 		List<String> list = Arrays.asList(diszis);
@@ -350,7 +350,7 @@ class Sortiere{
 	public Sortiere (Vector<Vector<String>> vec){
 		this.vector = vec;
 		}
-	@SuppressWarnings("unchecked")
+	
 	public Vector<Vector<String>> sortieren(){
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 

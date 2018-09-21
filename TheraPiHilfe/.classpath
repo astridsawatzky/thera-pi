@@ -21,8 +21,8 @@
 	<classpathentry kind="lib" path="/Libraries/lib/sql/mysql-connector-java-5.1.5-bin.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swingx-1.6.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swing-worker.jar"/>
-	<classpathentry kind="lib" path="/Libraries/lib/apachecommons/commons-net-2.0.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/ag.ion.noa_2.2.3.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/sql/jpmdbc.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/apachecommons/commons-net-3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,11 +4,6 @@ import java.util.HashMap;
 
 import javax.swing.JOptionPane;
 
-import oOorgTools.OOTools;
-
-import systemEinstellungen.SystemConfig;
-
-import hauptFenster.Reha;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -17,6 +12,9 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
+import hauptFenster.Reha;
+import oOorgTools.OOTools;
+import systemEinstellungen.SystemConfig;
 
 public class BegleitzettelDrucken {
 	ITextDocument textDocument = null;

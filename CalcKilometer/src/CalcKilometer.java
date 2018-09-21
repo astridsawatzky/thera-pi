@@ -1,8 +1,6 @@
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.net.URL;
 
-import javax.swing.JOptionPane;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 

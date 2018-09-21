@@ -1,10 +1,7 @@
 package floskeln;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -23,31 +20,27 @@ import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
-
 import org.therapi.reha.patient.PatientMemoPanel;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
-
-
-import systemEinstellungen.SystemConfig;
-
 import dialoge.DragWin;
 import dialoge.PinPanel;
-
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class Floskeln extends JXDialog implements FocusListener, ActionListener, MouseListener, WindowListener, KeyListener,RehaTPEventListener{
 	/**

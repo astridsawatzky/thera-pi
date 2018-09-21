@@ -7,7 +7,7 @@ public class RehaTPEvent extends EventObject {
     /**
 	 * 
 	 */
-	@SuppressWarnings("unused")
+	
 	private Object source;
 	private String sRehaEvent = "";
 	private String[] sDetails = {"",""};

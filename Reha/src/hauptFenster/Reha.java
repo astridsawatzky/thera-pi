@@ -94,6 +94,7 @@ import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.Timer;
 import javax.swing.TransferHandler;
 import javax.swing.UIDefaults;
@@ -102,15 +103,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
-import krankenKasse.KassenPanel;
-import kurzAufrufe.KurzAufrufe;
-import menus.TerminMenu;
-import oOorgTools.OOTools;
-import ocf.OcKVK;
-import opencard.core.service.CardServiceException;
-import opencard.core.terminal.CardTerminalException;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXStatusBar;
@@ -119,27 +111,15 @@ import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.thera_pi.updates.TestForUpdates;
-import org.thera_pi.updates.UpdateConfig;
 import org.therapi.reha.patient.LadeProg;
 import org.therapi.reha.patient.PatientHauptPanel;
 
-import rechteTools.Rechte;
-import rehaInternalFrame.JRehaInternal;
-import rehaInternalFrame.OOODesktopManager;
-import roogle.RoogleFenster;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemInit;
-import systemEinstellungen.SystemPreislisten;
-import systemTools.RehaPainters;
-import systemTools.RezeptFahnder;
-import systemTools.TestePatStamm;
-import terminKalender.DatFunk;
-import terminKalender.ParameterLaden;
-import terminKalender.TerminFenster;
-import urlaubBeteiligung.Beteiligung;
-import urlaubBeteiligung.Urlaub;
-import verkauf.VerkaufTab;
-import wecker.Wecker;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.looks.HeaderStyle;
+import com.jgoodies.looks.Options;
+import com.sun.star.uno.Exception;
+
 import CommonTools.Colors;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
@@ -161,18 +141,35 @@ import anmeldungUmsatz.Umsaetze;
 import arztFenster.ArztPanel;
 import barKasse.Barkasse;
 import benutzerVerwaltung.BenutzerRechte;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.looks.HeaderStyle;
-import com.jgoodies.looks.Options;
-import com.sun.star.uno.Exception;
-
 import dialoge.AboutDialog;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
 import geraeteInit.BarCodeScanner;
+import krankenKasse.KassenPanel;
+import kurzAufrufe.KurzAufrufe;
+import menus.TerminMenu;
+import oOorgTools.OOTools;
+import ocf.OcKVK;
+import opencard.core.service.CardServiceException;
+import opencard.core.terminal.CardTerminalException;
+import rechteTools.Rechte;
+import rehaInternalFrame.JRehaInternal;
+import rehaInternalFrame.OOODesktopManager;
+import roogle.RoogleFenster;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemInit;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.RehaPainters;
+import systemTools.RezeptFahnder;
+import systemTools.TestePatStamm;
+import terminKalender.DatFunk;
+import terminKalender.ParameterLaden;
+import terminKalender.TerminFenster;
+import urlaubBeteiligung.Beteiligung;
+import urlaubBeteiligung.Urlaub;
+import verkauf.VerkaufTab;
+import wecker.Wecker;
 
 public class Reha implements FocusListener,ComponentListener,ContainerListener,MouseListener,MouseMotionListener,KeyListener,RehaEventListener, WindowListener, WindowStateListener, ActionListener  {
 
@@ -265,7 +262,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static BarCodeScanner barcodeScanner = null;
 		
 	public static RehaSockServer RehaSock = null;
-	@SuppressWarnings("rawtypes")
+
 	public static CompoundPainter[] RehaPainter = {null,null,null,null,null};
 	public Vector<Object> aktiveFenster = new Vector<Object>();
 	public static String proghome = "";
@@ -384,7 +381,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static long startmillis = 0;
 	*/
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	
 	public static void main(String[] args) {
 		String prog = java.lang.System.getProperty("user.dir");
 		String homedir = java.lang.System.getProperty("user.home");
@@ -1164,7 +1161,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		
 	}
 
-	@SuppressWarnings("rawtypes")
+
 	private JXFrame getJFrame() {
 		if (jFrame == null) {
 			jFrame = new JXFrame();
@@ -1749,7 +1746,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		    
 		     DragSource dragSource = new DragSource();
 		     
-		     @SuppressWarnings("unused")
+		     
 			DragGestureRecognizer dgr = dragSource.createDefaultDragGestureRecognizer(
 		    	    		copyLabel, 
 		    	    		DnDConstants.ACTION_COPY, 
@@ -2117,7 +2114,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
         	if(Reha.isStarted){
         		JOptionPane.showMessageDialog(null,"Zur Info die UNO-Runtime wird neu gestartet!");
         	}
-            @SuppressWarnings("unused")
+            
 			String path = OPEN_OFFICE_ORG_PATH;
 
             ILazyApplicationInfo info =  OfficeApplicationRuntime.getApplicationAssistant(SystemConfig.OpenOfficeNativePfad).findLocalApplicationInfo(SystemConfig.OpenOfficePfad);
@@ -2978,13 +2975,13 @@ public void actionPerformed(ActionEvent arg0) {
 public void activateWebCam(){
 	
 	new SwingWorker<Void,Void>(){
-		@SuppressWarnings("rawtypes")
+	
 		@Override
 		protected Void doInBackground() throws java.lang.Exception {
 	
 			try{
 				try{
-		            @SuppressWarnings("unused")
+		            
 					Class c = Class.forName("javax.media.Manager");
 		        }catch (ClassNotFoundException e){
 		        	SystemConfig.sWebCamActive = "0";
@@ -2992,7 +2989,7 @@ public void activateWebCam(){
 		        			"\nWebCam kann nicht gestartet werden");
 		           
 		        }
-				@SuppressWarnings("unchecked")
+				
 				Vector<CaptureDeviceInfo> deviceList = (Vector<CaptureDeviceInfo>)javax.media.cdm.CaptureDeviceManager.getDeviceList(new YUVFormat());
 				if(deviceList == null){
 					JOptionPane.showMessageDialog(null,"Keine WebCam verfügbar!!");

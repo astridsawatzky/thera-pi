@@ -1,11 +1,10 @@
 package verkauf.model;
 
-import hauptFenster.Reha;
-
 import java.text.DecimalFormat;
 import java.util.Vector;
 
 import CommonTools.SqlInfo;
+import hauptFenster.Reha;
 
 public class Artikel {
 	private double preis;

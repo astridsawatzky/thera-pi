@@ -1,7 +1,5 @@
 package terminKalender;
 
-import hauptFenster.Reha;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -14,17 +12,9 @@ import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import sun.awt.image.ImageFormatException;
-import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.document.IDocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocumentService;
-import ag.ion.bion.officelayer.text.ITextDocument;
-import ag.ion.noa.graphic.GraphicInfo;
+import org.jdesktop.swingx.JXPanel;
 
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
@@ -44,6 +34,15 @@ import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
+import ag.ion.bion.officelayer.document.DocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocument;
+import ag.ion.bion.officelayer.document.IDocumentDescriptor;
+import ag.ion.bion.officelayer.document.IDocumentService;
+import ag.ion.bion.officelayer.text.ITextDocument;
+import ag.ion.noa.graphic.GraphicInfo;
+import hauptFenster.Reha;
+import sun.awt.image.ImageFormatException;
+
 
 
 public class DruckeViewPanel extends SwingWorker<Void, Void>{
@@ -54,7 +53,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 		this.printPan = pan;
 		execute();
 	}
-	@SuppressWarnings("unused")
+	
 	@Override
 	protected Void doInBackground() throws Exception {
 		// TODO Auto-generated method stub

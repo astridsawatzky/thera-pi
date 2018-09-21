@@ -64,13 +64,13 @@ import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import rehaWissen.JRtaTextField;
 import rehaWissen.RehaWissen;
 import rehaWissen.SystemConfig;
 import rehaWissen.UIFSplitPane;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 
 
@@ -822,7 +822,7 @@ final class FuelleTree extends SwingWorker<Void,Void>{
 	
 }
 /**************************************/
-@SuppressWarnings("unchecked")	
+	
 class MyDefaultTableModel extends DefaultTableModel{
 	   /**
 	 * 

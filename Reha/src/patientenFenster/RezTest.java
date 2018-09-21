@@ -3,11 +3,11 @@ package patientenFenster;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import systemTools.ListenerTools;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import systemTools.ListenerTools;
 
 public class RezTest extends RehaSmartDialog implements RehaTPEventListener,WindowListener{
 	/**

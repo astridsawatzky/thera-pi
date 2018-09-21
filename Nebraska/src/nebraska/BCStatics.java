@@ -51,12 +51,11 @@ import javax.crypto.ShortBufferException;
 import javax.security.auth.x500.X500Principal;
 import javax.swing.JFileChooser;
 
-import opencard.core.util.HexString;
-
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
 
+import opencard.core.util.HexString;
 import utils.DatFunk;
 import utils.NUtils;
 

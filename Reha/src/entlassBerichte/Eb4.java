@@ -16,19 +16,19 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JViewport;
-
 import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.SqlInfo;
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import terminKalender.DatFunk;
+import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import terminKalender.DatFunk;
 
 public class Eb4 implements ActionListener {
 	EBerichtPanel eltern = null;
@@ -375,7 +375,7 @@ public class Eb4 implements ActionListener {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
 	private void holeKTL(boolean ktlneu){
 		Vector<Vector<String>> vec = null;
 		String ktltabelle = "";
@@ -391,7 +391,7 @@ public class Eb4 implements ActionListener {
 		System.out.println("EBericht verwende KTL-Tabelle "+ktltabelle);
 		vec = SqlInfo.holeFelder("select * from "+ktltabelle);
 		Comparator<Vector> comparator = new Comparator<Vector>() {
-		    @SuppressWarnings("unused")
+		    
 			public int compare(String s1, String s2) {
 		        String[] strings1 = s1.split("\\s");
 		        String[] strings2 = s2.split("\\s");

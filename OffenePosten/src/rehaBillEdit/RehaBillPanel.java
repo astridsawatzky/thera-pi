@@ -37,24 +37,12 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
-
-
-
-
-import offenePosten.OffenePosten;
-import offenePosten.OffenepostenTab;
-
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-
-
-
-
-
-
-
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
@@ -64,12 +52,10 @@ import CommonTools.DoubleTableCellRenderer;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
-import Tools.PatTools;
-import Tools.RezTools;
 import CommonTools.SqlInfo;
 import CommonTools.TableTool;
-
-
+import Tools.PatTools;
+import Tools.RezTools;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
@@ -79,9 +65,8 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import offenePosten.OffenePosten;
+import offenePosten.OffenepostenTab;
 
 public class RehaBillPanel extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener  {
 
@@ -452,7 +437,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 		}
 
 	}
-	@SuppressWarnings("unchecked")
+	
 	private void doZeileNeu(){
 		int row = tab.getSelectedRow();
 		if(row < 0){

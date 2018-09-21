@@ -428,7 +428,7 @@ public class SqlInfo {
 	}
 
 	/*******************************/
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<Vector<String>> holeSaetze(String tabelle, String felder, String kriterium, List<String> ausschliessen){
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -945,7 +945,7 @@ public class SqlInfo {
 /*****************************************/
 	
 	/*****************************************/
-	@SuppressWarnings("unchecked")
+	
 	public static Vector<Vector<String>> holeFelder(String xstmt){
 		Statement stmt = null;
 		ResultSet rs = null;

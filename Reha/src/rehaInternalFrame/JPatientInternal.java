@@ -1,9 +1,5 @@
 package rehaInternalFrame;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.FrameSave;
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.FocusListener;
@@ -14,11 +10,14 @@ import javax.swing.JInternalFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.event.InternalFrameEvent;
 
-import events.PatStammEvent;
-import events.PatStammEventClass;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
+import events.PatStammEvent;
+import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.FrameSave;
+import hauptFenster.Reha;
 
 public class JPatientInternal extends JRehaInternal implements FocusListener, RehaEventListener{
 	/**

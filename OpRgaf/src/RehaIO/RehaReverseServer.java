@@ -8,11 +8,10 @@ import java.net.Socket;
 import java.net.SocketException;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
-import opRgaf.OpRgaf;
 
 import org.jdesktop.swingworker.SwingWorker;
+
+import opRgaf.OpRgaf;
 
 
 public class RehaReverseServer extends SwingWorker<Void,Void>{

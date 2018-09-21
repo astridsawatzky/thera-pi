@@ -1,8 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-import hilfsFenster.NeuerMandant;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -31,21 +28,20 @@ import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import hilfsFenster.NeuerMandant;
 
 public class SysUtilMandanten extends JXPanel implements KeyListener, ActionListener, FocusListener {
 	

@@ -1,9 +1,6 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -35,14 +32,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-
 import javax.swing.SwingWorker;
-
-import CommonTools.ButtonTools;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.ButtonTools;
+import hauptFenster.Reha;
 
 /**
  * This class shall give credit to where credit is due.

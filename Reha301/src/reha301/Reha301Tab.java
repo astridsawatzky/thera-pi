@@ -9,10 +9,10 @@ import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
+import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
+
 import reha301Panels.Reha301Auswerten;
 import reha301Panels.Reha301Einlesen;
-
-import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
 
 

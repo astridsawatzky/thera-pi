@@ -1,7 +1,5 @@
 package systemEinstellungen;
 
-import hauptFenster.Reha;
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -23,15 +21,15 @@ import javax.swing.JPasswordField;
 
 import org.jdesktop.swingx.JXPanel;
 
-import CommonTools.JRtaTextField;
-import systemTools.Verschluesseln;
-
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.INIFile;
+import CommonTools.INITool;
+import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import systemTools.Verschluesseln;
 
 public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListener {
 	

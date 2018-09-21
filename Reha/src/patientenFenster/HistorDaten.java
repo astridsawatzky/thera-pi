@@ -1,7 +1,5 @@
 package patientenFenster;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -15,22 +13,23 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
 import javax.swing.TransferHandler;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.SqlInfo;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-import CommonTools.StringTools;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import hauptFenster.Reha;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
 
 public class HistorDaten extends JXPanel{
 	/**
@@ -262,7 +261,7 @@ public class HistorDaten extends JXPanel{
 		
 	}
 	
-	@SuppressWarnings("rawtypes")
+
 	public String leistungTesten(int leistung,Vector<Vector<String>> preisevec,int veczahl){
 		String retwert = "----";
 		if(veczahl==-1 || veczahl==0){

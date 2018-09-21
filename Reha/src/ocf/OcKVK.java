@@ -1,13 +1,10 @@
 package ocf;
 
-import hauptFenster.Reha;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
@@ -17,19 +14,19 @@ import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import javax.swing.SwingWorker;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import opencard.core.OpenCardException;
+import CommonTools.StringTools;
+import hauptFenster.Reha;
 import opencard.core.event.CTListener;
 import opencard.core.event.CardTerminalEvent;
 import opencard.core.event.EventGenerator;
@@ -44,8 +41,6 @@ import opencard.core.terminal.CommandAPDU;
 import opencard.core.terminal.ResponseAPDU;
 import opencard.opt.util.PassThruCardService;
 import systemEinstellungen.SystemConfig;
-import CommonTools.FileTools;
-import CommonTools.StringTools;
 
 
 public class OcKVK {

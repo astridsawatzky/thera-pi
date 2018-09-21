@@ -14,7 +14,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -68,6 +67,9 @@ import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.DateTableCellEditor;
@@ -80,17 +82,12 @@ import CommonTools.IntTableCellRenderer;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
-import Tools.OOTools;
 import CommonTools.ReaderStart;
-import Tools.Rechte;
 import CommonTools.SqlInfo;
+import Tools.OOTools;
+import Tools.Rechte;
 import Tools.ToolsDialog;
 import Tools.UIFSplitPane;
-
-import ag.ion.bion.officelayer.text.ITextDocument;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 
 

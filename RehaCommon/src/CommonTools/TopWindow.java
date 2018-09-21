@@ -2,8 +2,6 @@ package CommonTools;
 
 import java.awt.KeyboardFocusManager;
 
-import ag.ion.bion.officelayer.document.IDocument;
-
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XTopWindowListener;
@@ -11,6 +9,8 @@ import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
+
+import ag.ion.bion.officelayer.document.IDocument;
 
 public class TopWindow implements XTopWindowListener{
 	XWindow xWindow = null;

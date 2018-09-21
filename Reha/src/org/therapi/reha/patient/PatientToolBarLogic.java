@@ -1,11 +1,5 @@
 package org.therapi.reha.patient;
 
-import geraeteInit.SMS;
-import hauptFenster.Reha;
-import hauptFenster.RehaIOMessages;
-import hauptFenster.RehaIOServer;
-import hauptFenster.ReverseSocket;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
@@ -23,18 +17,20 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
 import javax.swing.SwingWorker;
 
 import CommonTools.StringTools;
+import dialoge.EmailDialog;
+import dialoge.SMSDialog;
+import dialoge.ToolsDialog;
+import hauptFenster.Reha;
+import hauptFenster.RehaIOMessages;
+import hauptFenster.RehaIOServer;
+import hauptFenster.ReverseSocket;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 import terminKalender.iCalRehaExporter;
-import dialoge.EmailDialog;
-import dialoge.KuerzelNeu;
-import dialoge.SMSDialog;
-import dialoge.ToolsDialog;
 
 
 

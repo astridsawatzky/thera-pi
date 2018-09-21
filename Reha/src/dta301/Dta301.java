@@ -1,7 +1,5 @@
 package dta301;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -29,37 +27,35 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
-import jxTableTools.TableTool;
-
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
-import rehaInternalFrame.JDta301Internal;
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import systemTools.ButtonTools;
 import CommonTools.Colors;
+import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import CommonTools.DatFunk;
-
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
+import hauptFenster.Reha;
+import jxTableTools.TableTool;
+import rehaInternalFrame.JDta301Internal;
+import systemEinstellungen.SystemConfig;
+import systemTools.ButtonTools;
 
 public class Dta301 extends JXPanel implements FocusListener {
 
@@ -777,7 +773,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 	}
 	private void doTabelleFuellen(){
 		new SwingWorker<Void,Void>(){
-			@SuppressWarnings("unchecked")
+			
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{

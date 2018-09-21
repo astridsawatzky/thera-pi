@@ -1,17 +1,11 @@
 package roogle;
 
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.LinearGradientPaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -20,22 +14,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,19 +31,12 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Vector;
 
-import javax.swing.AbstractCellEditor;
 import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.DefaultCellEditor;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -63,86 +44,49 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-
-
-import javax.swing.JFormattedTextField.AbstractFormatterFactory;
+import javax.swing.SwingWorker;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.text.DefaultFormatterFactory;
-import javax.swing.text.MaskFormatter;
 
-import jxTableTools.ToolTipRenderer;
-import jxTableTools.ZahlTableCellEditor;
-import jxTableTools.ZeitCancelCellEditor;
-import jxTableTools.ZeitTableCellEditor;
-
-import javax.swing.SwingWorker;
-import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.ColorHighlighter;
-import org.jdesktop.swingx.decorator.HighlightPredicate;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
-import org.jdesktop.swingx.painter.CompoundPainter;
-import org.jdesktop.swingx.painter.MattePainter;
 import org.jdesktop.swingx.renderer.DefaultTableRenderer;
-import org.jdesktop.swingx.renderer.IconValue;
 import org.jdesktop.swingx.renderer.IconValues;
-import org.jdesktop.swingx.renderer.JRendererCheckBox;
 import org.jdesktop.swingx.renderer.MappedValue;
-import org.jdesktop.swingx.renderer.StringValue;
 import org.jdesktop.swingx.renderer.StringValues;
 import org.jdesktop.swingx.table.TableColumnExt;
 import org.therapi.reha.patient.LadeProg;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import rechteTools.Rechte;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import CommonTools.Colors;
-import systemTools.IntegerTools;
-import CommonTools.JRtaTextField;
-import CommonTools.StringTools;
-import terminKalender.ICalGenerator;
-import terminKalender.ParameterLaden;
-import terminKalender.DatFunk;
-import CommonTools.FileTools;
-import CommonTools.ZeitFunk;
-import CommonTools.ExUndHop;
-import CommonTools.SqlInfo;
-import abrechnung.AbrechnungDlg;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.ExUndHop;
+import CommonTools.FileTools;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
+import CommonTools.ZeitFunk;
+import abrechnung.AbrechnungDlg;
 import dialoge.EmailDialog;
 import dialoge.InfoDialog;
-import emailHandling.EmailSendenExtern;
-@SuppressWarnings({ "unchecked", "unused" })
+import hauptFenster.Reha;
+import jxTableTools.ToolTipRenderer;
+import jxTableTools.ZahlTableCellEditor;
+import jxTableTools.ZeitCancelCellEditor;
+import jxTableTools.ZeitTableCellEditor;
+import rechteTools.Rechte;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
+import terminKalender.ICalGenerator;
+import terminKalender.ParameterLaden;
+
 public class SuchenSeite extends JXPanel implements TableModelListener,FocusListener, ActionListener,PropertyChangeListener, KeyListener{
 	/**
 	 * 
@@ -1505,7 +1449,7 @@ Vector mit Normal-Termin
 					((Vector<Object>)vecWahl.get(i)).set(6,(String) ((Vector<Object>)vecWahl.get(i)).get(11));
 				}
 			}
-			@SuppressWarnings("rawtypes")
+		
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 				@Override
 				public int compare(Vector o1, Vector o2) {
@@ -1569,7 +1513,7 @@ Vector mit Normal-Termin
 				((Vector<Object>)vecWahl.get(i)).set(6, ((String)((Vector<Object>)vecWahl.get(i)).get(11)) );
 			}
 		}
-		@SuppressWarnings("rawtypes")
+	
 		Comparator<Vector> comparator = new Comparator<Vector>() {
 			@Override
 			public int compare(Vector o1, Vector o2) {

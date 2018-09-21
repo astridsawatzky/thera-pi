@@ -28,24 +28,20 @@ import javax.swing.SwingUtilities;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
-
-
 import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
-
-import reha301.Reha301;
-
-
-import CommonTools.JCompTools;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import Tools.KTraegerTools;
-import CommonTools.SqlInfo;
-import Tools.SystemPreislisten;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.JCompTools;
+import CommonTools.JRtaComboBox;
+import CommonTools.JRtaTextField;
+import CommonTools.SqlInfo;
+import Tools.KTraegerTools;
+import Tools.SystemPreislisten;
+import reha301.Reha301;
 
 
 public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener,FocusListener{
@@ -404,7 +400,7 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 				}
 			});
 	}
-	@SuppressWarnings("unchecked")
+	
 	public void ktraegerAuslesen (String iKNummer){
 		boolean emailaddyok = false;
  		List<String> nichtlesen = Arrays.asList(new String[] {"KMEMO"});

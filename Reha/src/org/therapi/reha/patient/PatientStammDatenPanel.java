@@ -1,8 +1,5 @@
 package org.therapi.reha.patient;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -27,23 +24,24 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
-
-import CommonTools.SqlInfo;
-import systemEinstellungen.SystemConfig;
-import CommonTools.JCompTools;
-import CommonTools.StringTools;
-import terminKalender.DatFunk;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JCompTools;
+import CommonTools.SqlInfo;
+import CommonTools.StringTools;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
+import terminKalender.DatFunk;
 
 
 public class PatientStammDatenPanel extends JXPanel{
@@ -333,7 +331,7 @@ public class PatientStammDatenPanel extends JXPanel{
 		
 	}
  
-	@SuppressWarnings("unused")
+	
 	private JXPanel getStammDatenPanel(){   //1         2            3       4    5           6           7         8         
 		FormLayout lay = new FormLayout("3dlu,right:max(38dlu;p),3dlu,55dlu:g,3dlu,right:max(39dlu;p),3dlu,45dlu:g,5dlu",
 				// 1     2  3  4  5  6	7  8  9 10 11 12 13
