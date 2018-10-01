@@ -488,22 +488,20 @@ public class HMRCheck {
 				if(neurezept ){
 					return true;		// Hoechstverordnungsmenge kann noch nicht ueberschritten sein
 				}else{
-					return chkIsErstVO(rezeptart);	// muesste dann Erstverordnung sein
+					return shouldBeErstVO(rezeptart);	// muesste dann Erstverordnung sein
 				}
 			}else if(testvec.size() == 0 && neurezept ){
-				return chkIsErstVO(rezeptart);		// muesste auch Erstverordnung sein
+				return shouldBeErstVO(rezeptart);		// muesste auch Erstverordnung sein
 			}
 			
 			boolean zaehlen = false;
 			int gesamt = 0;
-			int aktanzahl = 0;
+			int aktanzahl = 0, iVg = 0;
 			boolean neudummy = Boolean.valueOf(neurezept);
+			String voArt = null;
 			
 			//  0         1       2       3        4            5       6
 			//rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern
-			if(neurezept){
-				gesamt = anzahl.get(0);		// die kommt zu denen in testvec noch dazu
-			}
 			for(int i = 0; i < testvec.size();i++){
 				if(testvec.get(i).get(1).equals(reznummer) || zaehlen || neudummy){
 					zaehlen = true;
@@ -512,33 +510,56 @@ public class HMRCheck {
 //					}else{
 //						aktanzahl = Integer.parseInt(testvec.get(i).get(3));
 //					}
-					aktanzahl = Integer.parseInt(testvec.get(i).get(3));
 
 					//erst prüfen ob zwischen letzter behandlung des alten Rezeptes und dem ersten Termin der
 					//neuen VO 12 Wochen Therapiepause lagen, sofern ja -> nicht summieren (muesste dann Erstverordnung sein)
-					if(i+1 <= testvec.size()){
+					if(neudummy){
+						iVg = 0;		// Index '0' ist Vorgänger des gerade angelegten (u. noch nicht in der DB gespeicherten) Rezeptes
+						aktanzahl = anzahl.get(0);
+					}else{
+						iVg = i+1;						
+						aktanzahl = Integer.parseInt(testvec.get(i).get(3));
+					}
+					if(iVg <= testvec.size()){
 						if(neudummy){
-							startdatum_neu = DatFunk.sHeute();
+							//startdatum_neu = DatFunk.sHeute();
+							startdatum_neu = rezdatum;		// McM: Ausstellungsdatum ist entscheidend für 12 Wochen Frist, nicht erster Behandlungstermin
 							neudummy = false;
-						}else{
-							startdatum_neu = (testvec.get(i).get(5).length() > 0 ? RezTools.holeErstenTermin(null, testvec.get(i).get(5)) : DatFunk.sHeute() );
+						}else {
+							//startdatum_neu = (testvec.get(i).get(5).length() > 0 ? RezTools.holeErstenTermin(null, testvec.get(i).get(5)) : DatFunk.sHeute() );
+							startdatum_neu = DatFunk.sDatInDeutsch(testvec.get(i).get(0));		// McM: dito
 						}
-						if( (i+1) < testvec.size()){
-							enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(i+1).get(5));
-						}else{
-							enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(i).get(5));
+						while ((iVg < testvec.size()) && (testvec.get(iVg).get(5).length() == 0)){	// falls keine Termine eingetragen sind -> zum Vorgänger wechseln
+							gesamt = gesamt + Integer.parseInt(testvec.get(iVg).get(3));			// die verordneten Behandlungen zaehlen trotzdem mit
+							// test ob gesamt > maxProFall
+							voArt = testvec.get(iVg).get(2);
+							if (chkIsErstVO(voArt)) {												// wenn die Uebersprungene die Erst-VO ist -> Abbruch (Verordnungsmenge ok)
+								return true; 
+							}
+							iVg++;																	// jetzt Index auf Vorgänger ...
 						}
-						//System.out.println("Startdatum: "+startdatum_neu);
-						
+						if(iVg < testvec.size()){													// es ist (immer) noch ein Vorgänger vorhanden und
+							if(testvec.get(iVg).get(5).length() > 0){								// es sind termine eingetragen
+								enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(iVg).get(5));
+							}
+						}else{							// aeltestes Rezept erreicht
+							enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(i).get(5));	// dummy (damit die Berechnung durchlaeuft?)
+						}
+						// besser(?): 
+						//if((iVg >= testvec.size()) || (testvec.get(iVg).get(5).length() == 0)){	// kein Vorgänger oder (auch) keine Termine
+						//	enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(i).get(5));	// dummy (damit die Berechnung durchlaeuft?)
+						//} else {
+						//	enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(iVg).get(5));							
+						//}
+						//System.out.println("Startdatum: "+startdatum_neu);						
 						//System.out.println("Enddatum: "+enddatum_alt);
 						
 						tagedifferenz = DatFunk.TageDifferenz(enddatum_alt, startdatum_neu);
-						String voArt = testvec.get(i).get(2);
+						voArt = testvec.get(i).get(2);
 						if(tagedifferenz < therapiepause){
 							gesamt = gesamt + aktanzahl;							
-						}else{
-							if (chkIsErstVO(voArt)) {
-								return true; 
+						}else{							// Therapiepause ueberschritten
+								if (shouldBeErstVO(voArt)) {
 							}
 						}
 						//System.out.println("Gesamt: "+gesamt);
@@ -553,8 +574,9 @@ public class HMRCheck {
 						}
 
 						if (chkIsErstVO(voArt)) {
-							return true; // Erst-VO gefunden
+							return true;	// Erst-VO gefunden -> Abbruch
 						}
+						i=--iVg;		// Index anpassen, falls Neurezept oder Rezepte uebersprungen wurden
 					}
 
 				}else{
@@ -576,21 +598,28 @@ public class HMRCheck {
 				"</b><br><br>";	
 		return htmlTxt;
 	}
+	private boolean chkIsErstVO(int rezeptArt){
+		if (rezarten[rezeptArt] == "Erstverordnung"){
+			return true;
+		}else{
+			return false;			
+		}
+	}
 	private boolean chkIsErstVO(String rezeptArt){
-		if (rezarten[Integer.parseInt(rezeptArt)] == "Erstverordnung"){
+		return chkIsErstVO(Integer.parseInt(rezeptArt));
+	}
+	
+	private boolean shouldBeErstVO(int rezeptArt){
+		if (chkIsErstVO(rezeptArt)){
 			return true;
 		}else{
 			errTxtNoEVO(fehlertext);
 			return false;			
 		}
 	}
-	private boolean chkIsErstVO(int rezeptArt){
-		if (rezarten[rezeptArt] == "Erstverordnung"){
-			return true;
-		}else{
-			errTxtNoEVO(fehlertext);
-			return false;			
-		}
+
+	private boolean shouldBeErstVO(String rezeptArt){
+		return shouldBeErstVO(Integer.parseInt(rezeptArt));
 	}
 
 	/*
