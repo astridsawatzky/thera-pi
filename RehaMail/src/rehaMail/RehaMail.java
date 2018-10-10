@@ -47,6 +47,7 @@ import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import logging.Config;
 
 public class RehaMail implements WindowListener {
 
@@ -61,9 +62,9 @@ public class RehaMail implements WindowListener {
 	public static JFrame thisFrame = null;
 	public Connection conn;
 	public static RehaMail thisClass;
-	
+
 	public static IOfficeApplication officeapplication;
-	
+
 	public String dieseMaschine = null;
 	public static boolean inPatMessage = false;
 	public static String sidPatMessage = "-1";
@@ -72,8 +73,8 @@ public class RehaMail implements WindowListener {
 	public static String dbIpAndName = null;
 	public static String dbUser = null;
 	public static String dbPassword = null;
-	
-	
+
+
 */
 	public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
 	public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -86,7 +87,7 @@ public class RehaMail implements WindowListener {
 	public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
 	public static String progHome = "C:/RehaVerwaltung/";
 	public static String aktIK = "510841109";
-	
+
 	/*
 	public static String hmRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 	public static String hmRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
@@ -106,17 +107,17 @@ public class RehaMail implements WindowListener {
 	public static String rhRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 	public static String rhRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
 	*/
-		
+
 	public static int xport = 7000;
 	public static boolean xportOk = false;
 	public RehaReverseServer rehaReverseServer = null;
 	public static int rehaReversePort = 6000;
-	
+
 	public static Vector<Vector<String>> einzelMail = null;
 	public static Vector<Vector<String>> gruppenMail = null;
-	
+
 	public static String mailUser = "Jürgen Steinhilber";
-	
+
 	public static Cursor WAIT_CURSOR = new Cursor(Cursor.WAIT_CURSOR);
 	public static Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
 	public final Cursor cmove = new Cursor(Cursor.MOVE_CURSOR);  //  @jve:decl-index=0:
@@ -127,13 +128,13 @@ public class RehaMail implements WindowListener {
 	public final Cursor cwsize = new Cursor(Cursor.W_RESIZE_CURSOR);  //  @jve:decl-index=0:
 	public final Cursor csesize = new Cursor(Cursor.SE_RESIZE_CURSOR);  //  @jve:decl-index=0:
 	public final Cursor cssize = new Cursor(Cursor.S_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public final Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR);  //  @jve:decl-index=0:	
-	public final Cursor cdefault = new Cursor(Cursor.DEFAULT_CURSOR);  //  @jve:decl-index=0:	
-	
+	public final Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR);  //  @jve:decl-index=0:
+	public final Cursor cdefault = new Cursor(Cursor.DEFAULT_CURSOR);  //  @jve:decl-index=0:
+
 	public static int BenutzerSuper_user 	= 2;
 	public static int Sonstiges_NachrichtenLoeschen		= 102;
 	public static String progRechte = "";
-	
+
 	public static ImageIcon[] attachmentIco = {null,null,null,null,null,null,null,null,null};
 	public static int toolsDlgRueckgabe;
 	public MailTab mtab = null;
@@ -141,7 +142,7 @@ public class RehaMail implements WindowListener {
 	public static ImageIcon[] icoPinPanel = {null,null,null};
 
 	public static String pdfReader = null;
-	
+
 	public static String sTitle;
 	public static int testint = 1;
 
@@ -151,14 +152,15 @@ public class RehaMail implements WindowListener {
 	public static long timerdelay = 600000;
 	public static boolean timerpopup = true;
 	public static boolean timerprogressbar = true;
-	
+
 	public static boolean testcase = false;
-	
+
 	public static HashMap<String,ImageIcon> symbole = new HashMap<String,ImageIcon>();
-	
+
 	SqlInfo sqlInfo = null;
-	
+
 	public static void main(String[] args) {
+		new Config("mail");
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 			UIManager.put("TabbedPane.contentOpaque", Boolean.FALSE);
@@ -173,7 +175,7 @@ public class RehaMail implements WindowListener {
 			e1.printStackTrace();
 		}
 
-		
+
 		if(args.length > 0 || testcase){
 			if(!testcase){
 				System.out.println("hole daten aus INI-Datei "+args[0]);
@@ -220,10 +222,10 @@ public class RehaMail implements WindowListener {
 				}catch(Exception ex){
 					JOptionPane.showMessageDialog(null,"Fehler in der fremdprog.ini");
 				}
-				
+
 			}
-			
-				
+
+
 			RehaMail application = new RehaMail();
 			application.getInstance();
 			application.getInstance().sqlInfo = new SqlInfo();
@@ -232,7 +234,7 @@ public class RehaMail implements WindowListener {
 				@Override
 				protected Void doInBackground() throws java.lang.Exception {
 					try{
-						
+
 					}catch(Exception ex){
 						ex.printStackTrace();
 					}
@@ -248,9 +250,9 @@ public class RehaMail implements WindowListener {
 							e.printStackTrace();
 						}
 					}
-					
+
 					/*********************************/
-							
+
 							Verschluesseln man = Verschluesseln.getInstance();
 							einzelMail = SqlInfo.holeFelder("select user,rights,id from rehalogin");
 							for(int i = 0; i < einzelMail.size();i++){
@@ -277,36 +279,36 @@ public class RehaMail implements WindowListener {
 							//System.out.println(gruppenMail);
 					/*********************************/
 					if(!DbOk){
-						JOptionPane.showMessageDialog(null, "Datenbank konnte nicht geöffnet werden!\\nReha-Sql kann nicht gestartet werden");				
+						JOptionPane.showMessageDialog(null, "Datenbank konnte nicht geöffnet werden!\\nReha-Sql kann nicht gestartet werden");
 					}
 					xapplication.getJFrame();
 					if(timerdelay > 0){
-						xapplication.starteTimer();	
+						xapplication.starteTimer();
 					}
-					
+
 					return null;
 				}
-				
+
 			}.execute();
-			
+
 			new Thread(){
 				@Override
                 public void run(){
-					RehaMail.starteOfficeApplication();		
+					RehaMail.starteOfficeApplication();
 				}
 			}.start();
-			
-			
 
-			
+
+
+
 		}else{
-		
-			
+
+
 			JOptionPane.showMessageDialog(null, "Keine Datenbankparameter übergeben!\\nReha-Sql kann nicht gestartet werden");
 			System.exit(0);
-			
+
 		}
-		
+
 	}
 	public static void setRechte(){
 		for(int i = 0; i < einzelMail.size();i++){
@@ -328,15 +330,15 @@ public class RehaMail implements WindowListener {
 					try{
 					nachrichtenInBearbeitung = true;
 					/**************/
-					if( (!RehaMail.mailUser.equals("")) && 
+					if( (!RehaMail.mailUser.equals("")) &&
 							(!SqlInfo.holeEinzelFeld("select gelesen from pimail where empfaenger_person ='"+
 									RehaMail.mailUser+"' and gelesen='F' LIMIT 1").trim().equals("")) ){
 							getMTab().mailPanel.checkForNewMail(true);
-							//getMTab().mailPanel.allesAufNull();							
+							//getMTab().mailPanel.allesAufNull();
 						SwingUtilities.invokeAndWait(new Runnable(){
 							@Override
                             public void run(){
-								RehaMail.thisFrame.setVisible(true);		
+								RehaMail.thisFrame.setVisible(true);
 							}
 						});
 					}
@@ -350,9 +352,9 @@ public class RehaMail implements WindowListener {
 		//start des Timers:
 		RehaMail.nachrichtenTimer.scheduleAtFixedRate(task, RehaMail.timerdelay, RehaMail.timerdelay);
 	}
-	
+
 	/********************/
-	
+
 	public JFrame getJFrame(){
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
@@ -368,21 +370,21 @@ public class RehaMail implements WindowListener {
 		thisClass = this;
 		createIcons();
 		jFrame = new JFrame(){
-			
+
 			/**
-			 * 
+			 *
 			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void setVisible(final boolean visible) {
-				
+
 				if(getState()!=JFrame.NORMAL) { setState(JFrame.NORMAL); }
 
 				  if (visible) {
 				      //setDisposed(false);
 				  }
-				  if (!visible || !isVisible()) { 
+				  if (!visible || !isVisible()) {
 				      super.setVisible(visible);
 				  }
 
@@ -407,8 +409,8 @@ public class RehaMail implements WindowListener {
 				  super.toFront();
 				  super.requestFocus();
 				  super.setAlwaysOnTop(false);
-			}	
-		};	
+			}
+		};
 		try{
 			rehaReverseServer = new RehaReverseServer(7000);
 		}catch(Exception ex){
@@ -426,14 +428,14 @@ public class RehaMail implements WindowListener {
 		jFrame.setLocationRelativeTo(null);
 		/****************/
 		//jFrame.getContentPane().add (mpanel=new MailPanel());
-		
+
 		jFrame.getContentPane().add (mtab=new MailTab(this));
 		jFrame.pack();
-		
+
 		jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( RehaMail.progHome+"icons/emblem-mail.png" ) );
 		jFrame.setVisible(true);
 
-		
+
 		try{
 			new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"AppName#RehaMail#"+Integer.toString(RehaMail.xport));
 			new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"RehaMail#"+RehaIOMessages.IS_STARTET);
@@ -459,12 +461,12 @@ public class RehaMail implements WindowListener {
 		ico = new ImageIcon(RehaMail.progHome+"icons/stock_outbox.png").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH);
 		attachmentIco[6] = new ImageIcon(ico);
 		//ico = new ImageIcon(RehaMail.progHome+"icons/appointment-new.png").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH);
-		//attachmentIco[8] = new ImageIcon(ico);		
-		
+		//attachmentIco[8] = new ImageIcon(ico);
+
 		icoPinPanel[0] = new ImageIcon(RehaMail.progHome+"icons/red.png");
 		icoPinPanel[1] = new ImageIcon(RehaMail.progHome+"icons/buttongreen.png");
 		icoPinPanel[2] = new ImageIcon(RehaMail.progHome+"icons/inaktiv.png");
-		
+
 		ico = new ImageIcon(RehaMail.progHome+"icons/evolution.png").getImage().getScaledInstance(34,34, Image.SCALE_SMOOTH);
 		symbole.put("senden",new ImageIcon(ico));
 		ico = new ImageIcon(RehaMail.progHome+"icons/package-install.png").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH);
@@ -478,47 +480,47 @@ public class RehaMail implements WindowListener {
 		ico = new ImageIcon(RehaMail.progHome+"icons/appointment-soon.png").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH);
 		symbole.put("todo",new ImageIcon(ico));
 		ico = new ImageIcon(RehaMail.progHome+"icons/appointment-new.png").getImage().getScaledInstance(26,26, Image.SCALE_SMOOTH);
-		symbole.put("todosolo",new ImageIcon(ico));		
+		symbole.put("todosolo",new ImageIcon(ico));
 
 	}
 
-	
+
 	public static void updateTitle(String user){
 		RehaMail.mailUser = String.valueOf(user);
 		RehaMail.thisFrame.setTitle(RehaMail.sTitle+RehaMail.mailUser+"]");
 	}
 	/********************/
-	
+
 	public RehaMail getInstance(){
 		thisClass = this;
 		return this;
 	}
-	
+
 	/*******************/
-	
+
 	public void starteDB(){
-		
+
 		//piHelpDatenbankStarten dbstart = new piHelpDatenbankStarten();
-		//dbstart.run(); 			
-		
+		//dbstart.run();
+
 		DatenbankStarten dbstart = new DatenbankStarten();
 		dbstart.run();
-		 			
+
 	}
-	
+
 	/*******************/
-	
+
 	public static void stoppeDB(){
 		try {
 			RehaMail.thisClass.conn.close();
 			RehaMail.thisClass.conn = null;
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} 			
+		}
 	}
-	
+
 	/**********************************************************
-	 * 
+	 *
 	 */
 	final class DatenbankStarten implements Runnable{
 		private void StarteDB(){
@@ -547,21 +549,21 @@ public class RehaMail implements WindowListener {
         		System.out.println(sDB+"Treiberfehler: " + e.getMessage());
         		RehaMail.DbOk = false;
 	    		return ;
-			}	
+			}
         	try {
-        		
+
    				obj.conn = DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
     			RehaMail.thisClass.sqlInfo.setConnection(obj.conn);
 				RehaMail.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
 
-        	} 
+        	}
         	catch (final SQLException ex) {
         		System.out.println("SQLException: " + ex.getMessage());
         		System.out.println("SQLState: " + ex.getSQLState());
         		System.out.println("VendorError: " + ex.getErrorCode());
         		RehaMail.DbOk = false;
-        
+
         	}
 	        return;
 		}
@@ -569,14 +571,14 @@ public class RehaMail implements WindowListener {
         public void run() {
 			StarteDB();
 		}
-	
-	
+
+
 	}
 	/*****************************************************************
-	 * 
+	 *
 	 */
 	/**********************************************************
-	 * 
+	 *
 	 */
 	final class piHelpDatenbankStarten implements Runnable{
 		private void StarteDB(){
@@ -591,14 +593,14 @@ public class RehaMail implements WindowListener {
 			try{
 				Class.forName("de.root1.jpmdbc.Driver");
 				//Class.forName("com.mysql.jdbc.Driver").newInstance();
-	         
+
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Kein Kontakt zu MySql bei 1 & 1");
         		System.out.println(sDB+"Treiberfehler: " + e.getMessage());
         		RehaMail.DbOk = false;
 	    		return ;
-			}	
+			}
         	try {
     			System.out.println("Starte de.root1.jpmdbc.Drive");
     			//System.out.println("Starte Serveradresse:192.168.2.2");
@@ -607,25 +609,25 @@ public class RehaMail implements WindowListener {
     			connProperties.setProperty("user", "dbo336243054");
     			connProperties.setProperty("password", "allepreise");
     			//connProperties.setProperty("host", "localhost");
-    			connProperties.setProperty("host", "db2614.1und1.de");	        			
+    			connProperties.setProperty("host", "db2614.1und1.de");
     			//connProperties.setProperty("host", "db2614.1und1.de");
     			connProperties.setProperty("port", "3306");
     			connProperties.setProperty("compression","false");
     			connProperties.setProperty("NO_DRIVER_INFO", "1");
 
     			obj.conn = DriverManager.getConnection("jdbc:jpmdbc:http://www.thera-pi.org/jpmdbc.php?db336243054",connProperties);
-        		
+
    				//obj.conn = (Connection) DriverManager.getConnection(dbIpAndName,dbUser,dbPassword);
 				RehaMail.DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
-        	} 
+        	}
         	catch (final SQLException ex) {
 				JOptionPane.showMessageDialog(null, "Kein Kontakt zu MySql bei 1 & 1");
         		System.out.println("SQLException: " + ex.getMessage());
         		System.out.println("SQLState: " + ex.getSQLState());
         		System.out.println("VendorError: " + ex.getErrorCode());
         		RehaMail.DbOk = false;
-        
+
         	}
 	        return;
 		}
@@ -633,8 +635,8 @@ public class RehaMail implements WindowListener {
         public void run() {
 			StarteDB();
 		}
-	
-	
+
+
 	}
 
 	@Override
@@ -667,7 +669,7 @@ public class RehaMail implements WindowListener {
 
 		if(RehaMail.thisClass.mtab.getSendPanel() != null){
 		}
-		
+
 		if(RehaMail.thisClass.rehaReverseServer != null){
 			try{
 				new SocketClient().setzeRehaNachricht(RehaMail.rehaReversePort,"RehaMail#"+RehaIOMessages.IS_FINISHED);
@@ -680,16 +682,16 @@ public class RehaMail implements WindowListener {
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
-			
+
 		}
 		if(RehaMail.nachrichtenTimer != null){
 			RehaMail.nachrichtenTimer.cancel();
 			RehaMail.nachrichtenLaeuft = false;
 			RehaMail.nachrichtenTimer = null;
 			System.out.println("Nachrichten-Timer beendet");
-		}						
+		}
 
-		
+
 		System.exit(0);
 	}
 	@Override
@@ -725,12 +727,12 @@ public class RehaMail implements WindowListener {
 				}
 			}
 		});
-		
+
 	}
 	/**
 	 * @throws Throwable *************************/
-	
-    public static void starteOfficeApplication(){ 
+
+    public static void starteOfficeApplication(){
 
     	try {
     		System.out.println(RehaMail.officeProgrammPfad+" / "+RehaMail.officeNativePfad);
@@ -740,7 +742,7 @@ public class RehaMail implements WindowListener {
 			e1.printStackTrace();
 		}
     }
-    
+
     public final static String notread =
     "{\\rtf1\\ansi\\deff0\\adeflang1025"
     		+"{\\fonttbl{\\f0\\froman\\fprq2\\fcharset0 Times New Roman;}{\\f1\\froman\\fprq2\\fcharset2 Symbol;}{\\f2\\fswiss\\fprq2\\fcharset0 Arial;}{\\f3\\fswiss\\fprq2\\fcharset128 Arial;}{\\f4\\fnil\\fprq2\\fcharset0 Microsoft YaHei;}{\\f5\\fnil\\fprq2\\fcharset0 Mangal;}{\\f6\\fnil\\fprq0\\fcharset0 Mangal;}}"
@@ -763,7 +765,7 @@ public class RehaMail implements WindowListener {
     		+"\\u8594\\'92 }{\\cf3\\afs28\\rtlch \\ltrch\\loch\\fs28\\loch\\f3"
     		+"Doppelklick auf die Tabellenzeile}"
     		+"\\par }";
-	
+
     public final static String emptyrtf =
     "{\\rtf1\\ansi\\deff0\\adeflang1025"+
     	"{\\fonttbl{\\f0\\froman\\fprq2\\fcharset0 Times New Roman;}{\\f1\\froman\\fprq2\\fcharset0 Times New Roman;}{\\f2\\fswiss\\fprq2\\fcharset0 Arial;}{\\f3\\fswiss\\fprq2\\fcharset128 Arial;}{\\f4\\fnil\\fprq2\\fcharset0 SimSun;}{\\f5\\fnil\\fprq2\\fcharset0 Microsoft YaHei;}{\\f6\\fnil\\fprq2\\fcharset0 Mangal;}{\\f7\\fnil\\fprq0\\fcharset0 Mangal;}}"+
@@ -779,6 +781,6 @@ public class RehaMail implements WindowListener {
     	"{\\*\\pgdsctbl"+
     	"{\\pgdsc0\\pgdscuse195\\pgwsxn11906\\pghsxn16838\\marglsxn1134\\margrsxn1134\\margtsxn1134\\margbsxn1134\\pgdscnxt0 Standard;}}"+
     	"\\paperh16838\\paperw11906\\margl1134\\margr1134\\margt1134\\margb1134\\sectd\\sbknone\\pgwsxn11906\\pghsxn16838\\marglsxn1134\\margrsxn1134\\margtsxn1134\\margbsxn1134\\ftnbj\\ftnstart1\\ftnrstcont\\ftnnar\\aenddoc\\aftnrstcont\\aftnstart1\\aftnnrlc"+
-    	"\\pard\\plain \\ltrpar\\s1\\cf0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\rtlch\\af6\\afs32\\lang1081\\ltrch\\dbch\\af4\\langfe2052\\hich\\f3\\fs32\\lang1031\\loch\\f3\\fs32\\lang1031"+ 
+    	"\\pard\\plain \\ltrpar\\s1\\cf0{\\*\\hyphen2\\hyphlead2\\hyphtrail2\\hyphmax0}\\rtlch\\af6\\afs32\\lang1081\\ltrch\\dbch\\af4\\langfe2052\\hich\\f3\\fs32\\lang1031\\loch\\f3\\fs32\\lang1031"+
     	"\\par }}";
-}    
+}

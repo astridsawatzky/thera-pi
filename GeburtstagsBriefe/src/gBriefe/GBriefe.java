@@ -40,6 +40,7 @@ import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.ITerminateEvent;
 import ag.ion.bion.officelayer.event.VetoTerminateListener;
+import logging.Config;
 
 
 
@@ -74,22 +75,22 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 	public static boolean testcase = false;
 
 	public static void main(String[] args) {
-		
+		new Config("GBriefe");
 		GBriefe application = new GBriefe();
 		String prog = java.lang.System.getProperty("user.dir");
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (ClassNotFoundException e1) {
-			
+
 			e1.printStackTrace();
 		} catch (InstantiationException e1) {
-			
+
 			e1.printStackTrace();
 		} catch (IllegalAccessException e1) {
-			
+
 			e1.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e1) {
-			
+
 			e1.printStackTrace();
 		}
 		INIFile inif = null;
@@ -103,9 +104,9 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 				proghome = proghome+'/';
 			}
 		}else{
-			proghome = args[0]; 
+			proghome = args[0];
 		}
-		
+
 		/**************************/
 		new Thread(){
 			@Override
@@ -114,19 +115,19 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 					//System.out.println("Starte SocketServer");
 					RehaSock = new RehaSockServer();
 				} catch (IOException e) {
-					
+
 					e.printStackTrace();
 				}
 			}
 		}.start();
 		/**************************/
-		
-		
+
+
 		ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar",proghome+"RehaxSwing.jar");
 		try {
 			processBuilder.start();
 		} catch (IOException e2) {
-			
+
 			e2.printStackTrace();
 		}
 
@@ -138,7 +139,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			// System.out.println("In warten");
 			i++;
 			} catch (InterruptedException e) {
-				
+
 				e.printStackTrace();
 			}
 		}
@@ -147,9 +148,9 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			System.out.println("Programmverzeichnis = "+proghome);
 			inif = new INIFile(args[0]+"ini/"+args[1]+"/rehajava.ini");
 			dbtreiber = new String(inif.getStringProperty("DatenBank", "DBTreiber1"));
-			dblogin = new String(inif.getStringProperty("DatenBank","DBKontakt1"));			
+			dblogin = new String(inif.getStringProperty("DatenBank","DBKontakt1"));
 			dbuser = new String(inif.getStringProperty("DatenBank","DBBenutzer1"));
-			 
+
 			String pw = new String(inif.getStringProperty("DatenBank","DBPasswort1"));
 			Verschluesseln man = Verschluesseln.getInstance();
 			man = Verschluesseln.getInstance();
@@ -165,9 +166,9 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			System.out.println("Programmverzeichnis = "+proghome);
 			inif = new INIFile(proghome+"ini/gbriefe.ini");
 			dbtreiber = new String(inif.getStringProperty("GBriefe", "DBTreiber"));
-			dblogin = new String(inif.getStringProperty("GBriefe", "DBLogin"));			
+			dblogin = new String(inif.getStringProperty("GBriefe", "DBLogin"));
 			dbuser = new String(inif.getStringProperty("GBriefe", "DBUser"));
-			 
+
 			String pw = new String(inif.getStringProperty("GBriefe", "DBPassword"));
 			Verschluesseln man = Verschluesseln.getInstance();
 			man = Verschluesseln.getInstance();
@@ -179,24 +180,24 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 		    OfficeNativePfad = new String(inif.getStringProperty("GBriefe", "OONative"));
 		    aktIK = "unbekannt";
 		}
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
             public void run() {
 				GBriefe application = new GBriefe();
 				application.getJFrame();
 				GBriefe.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( proghome+"icons/fragezeichen.png" ) );
-				 
+
 			}
 		});
 		new SocketClient().setzeInitStand("Initialisiere Geburtstagsbriefe-Generator");
-		
-	
+
+
 	}
 	private JXFrame getJFrame() {
 		if (jFrame == null) {
 			jFrame = new JXFrame();
-			
+
 			jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 			thisClass = this;
 			thisFrame = jFrame;
@@ -204,7 +205,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			//jFrame.setTitle("Geburtstagsbriefe - Generator");
 			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			jFrame.addWindowListener(this);
-			jFrame.addWindowStateListener(this);			
+			jFrame.addWindowStateListener(this);
 			jFrame.addComponentListener(this);
 			jFrame.addContainerListener(this);
 			jFrame.setLayout(new BorderLayout());
@@ -214,7 +215,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 			JPanel jpan = new JPanel(new GridLayout());
 			//jpan.validate();
     		//jpan.setVisible(true);
-    		
+
 			contpan.add(jpan,BorderLayout.CENTER);
 			jFrame.setContentPane(contpan);
 			jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
@@ -228,7 +229,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 
 			jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 			//jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
-			
+
             SwingUtilities.invokeLater(new Runnable(){
             	@Override
                 public  void run(){
@@ -236,33 +237,33 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
             		jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
             		jFrame.setVisible(true);
             		new SocketClient().setzeInitStand("INITENDE");
-       			
+
             	}
          	});
-           
-			
+
+
 		}
 		return jFrame;
 	}
 	@Override
 	public void windowStateChanged(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
 
-			
+
 			try {
 				GBriefe.conn.close();
 				System.out.println("Datenbankkontakt - geschlossen");
 			} catch (SQLException e) {
-				
+
 				e.printStackTrace();
 			}
 			System.out.println("Programm Exit(0)");
@@ -272,77 +273,77 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 
-		
+
 		try {
 			GBriefe.conn.close();
 			System.out.println("Datenbankkontakt - geschlossen");
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		if(OOoPanel.document != null){
-			try{	
+			try{
 				OOoPanel.document.close();
 			}catch(com.sun.star.lang.DisposedException dex){
 				System.exit(1);
 			}
 			System.out.println("OOWriter Dokument - geschlossen");
-		}		
+		}
 		System.out.println("Programm Exit(0)");
 		System.exit(0);
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void componentHidden(ComponentEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void componentMoved(ComponentEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void componentResized(ComponentEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void componentShown(ComponentEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void componentAdded(ContainerEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void componentRemoved(ContainerEvent arg0) {
-		
-		
+
+
 	}
     public static void starteOfficeApplication()
-    { 
+    {
 
     	final String OPEN_OFFICE_ORG_PATH = GBriefe.OpenOfficePfad;
     	//final String OPEN_OFFICE_ORG_PATH = "C:\\Programme\\OpenOffice.org 2.3";
@@ -368,7 +369,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
           	    super.queryTermination(terminateEvent);
           	    try {
           	      IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();
-          	      if (docs.length == 1) { 
+          	      if (docs.length == 1) {
           	        docs[0].close();
           	        //System.out.println("Letztes Dokument wurde geschlossen");
           	      }
@@ -386,11 +387,11 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
         }
         catch (OfficeApplicationException e)
         {
-            
+
             e.printStackTrace();
         }
     }
-	
+
 
 }
 /*************************************/
@@ -406,7 +407,7 @@ final class DatenbankStarten implements Runnable{
 			catch(final SQLException e){}
 		}
 		try{
-			
+
 				//Class.forName("com.extendedsystems.jdbc.advantage.ADSDriver").newInstance();
 				System.out.println("new Instace() "+GBriefe.dbtreiber);
 				Class.forName(GBriefe.dbtreiber).newInstance();
@@ -416,19 +417,19 @@ final class DatenbankStarten implements Runnable{
         		System.out.println(sDB+"Treiberfehler: " + e.getMessage());
         		GBriefe.DbOk = false;
 	    		return ;
-	        }	
+	        }
 	        	try {
 	        		//GBriefe.conn = (Connection) DriverManager.getConnection("G:\\rta\\dbf"+";TableType=cdx","","");
 	        		//GBriefe.conn = (Connection) DriverManager.getConnection(GBriefe.adsconnection+";TableType=cdx","","");
 	        		//GBriefe.conn = (Connection) DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.1.101:2000/programme;TableType=cdx","","");
 	        		//GBriefe.conn = (Connection) DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.2.3:2000/programme;TableType=cdx","","");
 	        		//GBriefe.conn = (Connection) DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.2.3:2000/programme/projekte/rta/dbf;TableType=cdx","","");
-	        		
+
 	        		GBriefe.conn = DriverManager.getConnection(GBriefe.dblogin,
 	        				GBriefe.dbuser,GBriefe.dbpassword);
-	        				
-	        				
-	        	} 
+
+
+	        	}
 	        	catch (final SQLException ex) {
 	        		System.out.println("SQLException: " + ex.getMessage());
 	        		System.out.println("SQLState: " + ex.getSQLState());
@@ -436,7 +437,7 @@ final class DatenbankStarten implements Runnable{
 	        		GBriefe.DbOk = false;
 	        		return;
 	        	}
-	        System.out.println("Datenbank - gestartet = "+GBriefe.dblogin);	
+	        System.out.println("Datenbank - gestartet = "+GBriefe.dblogin);
 	        return;
 	}
 	@Override
@@ -457,7 +458,7 @@ class SocketClient {
 		try {
 			serverStarten();
 		} catch (IOException e) {
-			
+
 			String mes = new String(  e.toString());
 			//JOptionPane.showMessageDialog(null,  mes);
 		}
@@ -476,7 +477,7 @@ class SocketClient {
 			byte[] lesen = new byte[zahl];
 			input.read(lesen);
 		}
-	
+
 		server.close();
 		input.close();
 		output.close();
@@ -490,20 +491,20 @@ class RehaSockServer{
 			serv = new ServerSocket(1235);
 			System.out.println("Reha SocketServer gestartet auf Port 1235");
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 			//RehaxSwing.jDiag.dispose();
 			return;
 		}
-		
+
 		Socket client = null;
 
 		while(true){
 			try {
-				
+
 				client = serv.accept();
 			} catch (IOException e) {
-				
+
 				e.printStackTrace();
 				break;
 			}
@@ -515,12 +516,12 @@ class RehaSockServer{
 			while( (byteStream =  input.read()) > -1){
 				//System.out.println("******byteStream Erhalten******  "+byteStream );
 				char b = (char)byteStream;
-				
+
 				sb.append(b);
 			}
 
 			test = new String(sb);
-			System.out.println("Socket= "+test);			
+			System.out.println("Socket= "+test);
 			final String xtest = new String(test);
 
 			if(xtest.equals("INITENDE")){
@@ -533,9 +534,9 @@ class RehaSockServer{
 						try {
 							Thread.sleep(1000);
 						} catch (InterruptedException e) {
-							
+
 							e.printStackTrace();
-						}								
+						}
 						System.out.println("INITENDE-angekommen");
 						GBriefe.warten = false;
 						break;

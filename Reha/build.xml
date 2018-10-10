@@ -38,6 +38,10 @@
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swingx-1.6.jar"/>
         <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-classic-1.2.3.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-core-1.2.3.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/slf4j-api-1.7.25.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
     </path>
     <path id="Nebraska.classpath">
         <pathelement location="${Nebraska.location}/bin"/>
@@ -117,6 +121,10 @@
         <path refid="RehaCommon.classpath"/>
         <path refid="Nebraska.classpath"/>
         <path refid="TheraPiUpdates.classpath"/>
+        <pathelement location="${Libraries.location}/lib/logging/slf4j-api-1.7.25.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-classic-1.2.3.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-core-1.2.3.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -173,5 +181,10 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
+    </target>
+    <target name="Reha">
+        <java classname="hauptFenster.Reha" failonerror="true" fork="yes">
+            <classpath refid="Reha.classpath"/>
+        </java>
     </target>
 </project>

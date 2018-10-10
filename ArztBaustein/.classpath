@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/ag.ion.noa_2.2.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Libraries"/>
+	<classpathentry kind="lib" path="/Libraries/lib/logging/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

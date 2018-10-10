@@ -16,6 +16,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingx.JXPanel;
 
+import logging.Config;
+
 
 
 public class ICDrahmen extends JApplet implements WindowListener{
@@ -29,7 +31,7 @@ public class ICDrahmen extends JApplet implements WindowListener{
 	   
 
 	public static void main(String[] args) {
-		
+		new Config("ICDSuche");
 		ICDrahmen frm = new ICDrahmen();
 		frm.getJFrame();
 		

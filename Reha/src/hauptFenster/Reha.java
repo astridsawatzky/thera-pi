@@ -109,6 +109,8 @@ import org.jdesktop.swingx.JXTitledPanel;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thera_pi.updates.TestForUpdates;
 import org.therapi.reha.patient.LadeProg;
 import org.therapi.reha.patient.PatientHauptPanel;
@@ -149,6 +151,7 @@ import environment.Path;
 import geraeteInit.BarCodeScanner;
 import krankenKasse.KassenPanel;
 import kurzAufrufe.KurzAufrufe;
+import logging.Config;
 import menus.TerminMenu;
 import oOorgTools.OOTools;
 import ocf.OcKVK;
@@ -381,6 +384,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static void main(String[] args) {
 
 		System.setProperty("java.net.preferIPv4Stack" , "true");
+		new Config("reha");
+
+		 Logger logger = LoggerFactory.getLogger(Reha.class);
+
 
 
 

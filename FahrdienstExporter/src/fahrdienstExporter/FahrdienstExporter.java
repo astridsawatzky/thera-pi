@@ -13,6 +13,7 @@ import com.hexiong.jdbf.JDBField;
 
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
+import logging.Config;
 
 
 public class FahrdienstExporter {
@@ -25,9 +26,10 @@ public class FahrdienstExporter {
 	public Vector<Object[]> termine = new Vector<Object[]>();
 	Vector<String> dummy = new Vector<String>();
 	public static void main(String[] args) {
+		new Config("FahrdienstExporter");
 		FahrdienstExporter application = new FahrdienstExporter();
 		application.getInstance();
-		
+
 		if(args.length > 0){
 			INIFile file = new INIFile(args[0]);
 			rohdatei = file.getStringProperty("Verzeichnisse", "Fahrdienstrohdatei")+"FPSort.txt";
@@ -61,11 +63,11 @@ public class FahrdienstExporter {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
+
+
+
 	private void macheVector(String zeile){
-		Object[] obj = {null,null,null,null,null,null}; 
+		Object[] obj = {null,null,null,null,null,null};
 		String[] szeile = zeile.split("°");
 		if(szeile.length > 0){
 			for(int i = 0; i < szeile.length;i++){
@@ -76,18 +78,18 @@ public class FahrdienstExporter {
 					try {
 						obj[i] = new String (szeile[i].getBytes(),"ISO-8859-1");
 					} catch (UnsupportedEncodingException e) {
-						
+
 						e.printStackTrace();
 					}
 				}
 			}
 			termine.add(obj.clone());
-			//termine.add(((Vector<Object>)dummy.clone()));			
+			//termine.add(((Vector<Object>)dummy.clone()));
 		}
 	}
 	private void dbfProduce(){
 		try {
-	
+
 		JDBField[] fields={new JDBField("DATUM",'D',8,0),
 				new JDBField("UHRZEIT",'C',5,0),
 				new JDBField("BEHANDLER",'C',25,0),
@@ -96,13 +98,13 @@ public class FahrdienstExporter {
 				new JDBField("DAUER",'C',3,0)};
 			DBFWriter dbfwriter = new DBFWriter(fertigdatei, fields);
 			for(int i = 0; i < termine.size();i++){
-				dbfwriter.addRecord(termine.get(i));	
+				dbfwriter.addRecord(termine.get(i));
 			}
 			dbfwriter.close();
-			
+
 		} catch (JDBFException e){
 		e.printStackTrace();}
 
-		
+
 	}
 }

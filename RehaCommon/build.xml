@@ -11,6 +11,7 @@
     <property name="BMIRechner.location" value="../BMIRechner"/>
     <property name="FahrdienstExporter.location" value="../FahrdienstExporter"/>
     <property name="GeburtstagsBriefe.location" value="../GeburtstagsBriefe"/>
+    <property name="ICDSuche.location" value="../ICDSuche"/>
     <property name="LVAEntlassmitteilung.location" value="../LVAEntlassmitteilung"/>
     <property name="Nebraska.location" value="../Nebraska"/>
     <property name="OffenePosten.location" value="../OffenePosten"/>
@@ -62,6 +63,10 @@
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swingx-1.6.jar"/>
         <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-classic-1.2.3.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-core-1.2.3.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/slf4j-api-1.7.25.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -113,6 +118,12 @@
         </ant>
         <ant antfile="build.xml" dir="${GeburtstagsBriefe.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${GeburtstagsBriefe.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${ICDSuche.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${ICDSuche.location}" inheritAll="false" target="build">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>

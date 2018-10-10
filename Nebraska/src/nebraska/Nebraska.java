@@ -13,6 +13,7 @@ import javax.swing.UIManager;
 
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
+import logging.Config;
 
 
 public class Nebraska {
@@ -20,15 +21,16 @@ public class Nebraska {
 	public final static String keystorefile = "";
 	public final static String keystoredir = Constants.KEYSTORE_DIR;
 	public final static String OpenOfficePfad = Constants.OPENOFFICE_HOME;
-	public final static String OfficeNativePfad = Constants.OPENOFFICE_JARS;  
+	public final static String OfficeNativePfad = Constants.OPENOFFICE_JARS;
 	public static IOfficeApplication officeapplication;
 	public static HashMap<String,String> hmZertifikat = new HashMap<String,String>();
 	public static JFrame jf;
 	public static JTabbedPaneOrganizer jtbo;
-	
+
 	public static void main(String[] args) throws Exception{
+		new Config("Nebraska");
 		if(System.getProperty("os.name").contains("Windows")){
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");			
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 		}
 		//UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		new Constants();
@@ -36,7 +38,7 @@ public class Nebraska {
 		jf.setPreferredSize(new Dimension(1000,700));
 		jf.setTitle("Nebraska");
 		jf.setLocation(200,200);
-		jtbo = new JTabbedPaneOrganizer(); 
+		jtbo = new JTabbedPaneOrganizer();
 		jf.setContentPane(jtbo);
 		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		jf.pack();
@@ -68,6 +70,6 @@ public class Nebraska {
 			}
         }.execute();
     }
-	
+
 
 }

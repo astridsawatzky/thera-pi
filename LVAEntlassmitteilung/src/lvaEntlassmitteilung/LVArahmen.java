@@ -12,6 +12,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
 import CommonTools.Verschluesseln;
+import logging.Config;
 
 
 
@@ -19,48 +20,49 @@ import CommonTools.Verschluesseln;
 
 
 public class LVArahmen implements WindowListener{
-	
+
 	JFrame jFrame;
 	public static LVArahmen thisClass = null;
-	public static boolean DbOk; 
-	public Connection conn = null;	
-	
-	public String dieseMaschine = null;	
+	public static boolean DbOk;
+	public Connection conn = null;
+
+	public String dieseMaschine = null;
 	public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/dbf";
 	public static String dbUser = "entwickler";
 	public static String dbPassword = "entwickler";
 	public static String reader;
-	
+
 	/*
-	 * 
+	 *
 	 * Ende Deklaration
-	 * 
+	 *
 	 */
 	public static void main(String[] args) {
+		new Config("LVAEntlass");
 		System.out.println(" Name des Betriebssystems: "+System.getProperty("os.name"));
 		System.out.println("      Benutzerverzeichnis: "+java.lang.System.getProperty("user.dir").replaceAll("\\\\","/"));
 		System.out.println("Installierte Java-Version: "+java.lang.System.getProperty("java.version"));
 		System.out.println("         Java-Verzeichnis: "+java.lang.System.getProperty("java.home").replaceAll("\\\\","/"));
-		
+
 		LVArahmen lbaust = new LVArahmen();
-		
+
 		lbaust.getJFrame(args);
 	}
-	
+
 	public JFrame getJFrame(String[] args){
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (ClassNotFoundException e) {
-			
+
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			
+
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			
+
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
-			
+
 			e.printStackTrace();
 		}
 		thisClass = this;
@@ -79,7 +81,7 @@ public class LVArahmen implements WindowListener{
 			}
 			dbPassword = decrypted.toString();
 		}
-		
+
 		DatenbankStarten dbstart = new DatenbankStarten();
 		dbstart.run();
 		//SystemEinstellungen.ladeGelenke();
@@ -92,17 +94,17 @@ public class LVArahmen implements WindowListener{
 		INIFile file = new INIFile(args[2]);
 		reader = file.getStringProperty("FestProg", "FestProgPfad1");
 
-	
+
 		jFrame.getContentPane().add (new LVAoberflaeche(args[1]));
 		jFrame.setVisible(true);
-		
+
 		return jFrame;
 	}
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
@@ -112,7 +114,7 @@ public class LVArahmen implements WindowListener{
 				LVArahmen.thisClass.conn.close();
 				System.out.println("Datenbankverbindung wurde geschlossen");
 			} catch (SQLException e) {
-				
+
 				e.printStackTrace();
 			}
 		}
@@ -126,7 +128,7 @@ public class LVArahmen implements WindowListener{
 				LVArahmen.thisClass.conn.close();
 				System.out.println("Datenbankverbindung wurde geschlossen");
 			} catch (SQLException e) {
-				
+
 				e.printStackTrace();
 			}
 		}
@@ -135,26 +137,26 @@ public class LVArahmen implements WindowListener{
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		
-		
+
+
 	}
 }
 
@@ -178,19 +180,19 @@ final class DatenbankStarten implements Runnable{
         		System.out.println(sDB+"Treiberfehler: " + e.getMessage());
         		LVArahmen.DbOk = false;
 	    		return ;
-        }	
+        }
 	        	try {
 	   				obj.conn = DriverManager.getConnection(LVArahmen.dbIpAndName,LVArahmen.dbUser,LVArahmen.dbPassword);
     				//obj.conn = (Connection) DriverManager.getConnection("jdbc:mysql://192.168.2.2:3306/dbf","entwickler","entwickler");
 	    			LVArahmen.DbOk = true;
 	    			System.out.println("Datenbankkontakt hergestellt");
-	        	} 
+	        	}
 	        	catch (final SQLException ex) {
 	        		System.out.println("SQLException: " + ex.getMessage());
 	        		System.out.println("SQLState: " + ex.getSQLState());
 	        		System.out.println("VendorError: " + ex.getErrorCode());
 	        		LVArahmen.DbOk = false;
-	        
+
 	        	}
 	        return;
 	}

@@ -26,6 +26,7 @@ import CommonTools.StartOOApplication;
 import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import logging.Config;
 
 public class ArztBaustein implements WindowListener, WindowStateListener {
 
@@ -35,7 +36,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 	private static String OpenOfficePfad = "C:/Program Files (x86)/OpenOffice.org 3";
 	static IOfficeApplication officeapplication = null;
 	static String OpenOfficeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg";
-	
+
 	Connection conn = null;
 	static boolean DbOk = false;
 	static ArztBaustein thisClass = null;
@@ -45,11 +46,13 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 	private static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/dbf";
 	private static String dbUser = "entwickler";
 	private static String dbPassword = "entwickler";
-	
+
 	private ArztBausteinPanel arztbausteinpanel = null;
 	private SqlInfo sqlInfo;
 	public static void main(String[] args) {
-	
+		new Config("arztbaustein");
+
+
 		if(args.length > 0){
 			System.out.println("hole daten aus INI-Datei "+args[0]);
 			INIFile ini = new INIFile(args[0]+"ini/"+args[1]+"/rehajava.ini");
@@ -67,20 +70,20 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			OpenOfficePfad = ini.getStringProperty("OpenOffice.org","OfficePfad");
 			OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org","OfficeNativePfad");
 		}
-		
+
 		starteOfficeApplication();
 		ArztBaustein arztbaustein = new ArztBaustein();
 		arztbaustein.sqlInfo = new SqlInfo();
 		arztbaustein.getJFrame(args);
 
 	}
-	
+
 	public JXFrame getJFrame(String[] args){
 		if (jFrame == null) {
 			jFrame = new JXFrame();
 			sqlInfo.setFrame(jFrame);
 			thisClass = this;
-			
+
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
@@ -95,7 +98,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 					}
 					return null;
 				}
-				
+
 			}.execute();
 
 			try {
@@ -109,7 +112,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			} catch (UnsupportedLookAndFeelException e) {
 				e.printStackTrace();
 			}
-			
+
 
 			jFrame.addWindowListener(this);
 			jFrame.addWindowStateListener(this);
@@ -117,7 +120,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			jFrame.setPreferredSize(new Dimension(1024,800));
 
 			jFrame.setTitle("Bausteine für ärztlichen Entlassbericht anlegen / ändern");
-			
+
 
 			jFrame.getContentPane().setPreferredSize(new Dimension(1024,800));
 			jFrame.getContentPane().setLayout(new GridLayout());
@@ -126,13 +129,13 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			jFrame.setVisible(true);
 
 			jFrame.pack();
-						
-		}	
+
+		}
 		return jFrame;
 	}
 
-	
-	
+
+
 	@Override
 	public void windowActivated(WindowEvent arg0) {
 	}
@@ -151,7 +154,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			}
 		}
 		System.exit(0);
-		
+
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
@@ -186,18 +189,18 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 	@Override
 	public void windowStateChanged(WindowEvent arg0) {
 	}
-	
+
     public static void starteOfficeApplication()
-    { 
+    {
     	try {
 			officeapplication = new StartOOApplication(ArztBaustein.OpenOfficePfad,ArztBaustein.OpenOfficeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und Active ="+officeapplication.isActive());
 		} catch (OfficeApplicationException e1) {
 			e1.printStackTrace();
 		}
-	
+
     }
-	
+
 	private void starteDB() throws InstantiationException, IllegalAccessException, ClassNotFoundException{
 
 			if (conn != null){
@@ -205,7 +208,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 				conn.close();}
 				catch(final SQLException e){}
 			}
-			
+
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 
 
@@ -214,16 +217,16 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
    				sqlInfo.setConnection(conn);
     			DbOk = true;
     			System.out.println("Datenbankkontakt hergestellt");
-        	} 
+        	}
         	catch (final SQLException ex) {
         		System.out.println("SQLException: " + ex.getMessage());
         		System.out.println("SQLState: " + ex.getSQLState());
         		System.out.println("VendorError: " + ex.getErrorCode());
         		DbOk = false;
-		        
+
         	}
         	return;
-	}		
+	}
 
 
 }

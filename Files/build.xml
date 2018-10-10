@@ -35,6 +35,7 @@
 		<mkdir dir="${dir.dist.ini.ikdefault}"/>
 		<mkdir dir="${dir.dist.keystore}"/>
 		<mkdir dir="${dir.dist.keystore.ikdefault}"/>
+		<mkdir dir="${dir.dist.logs}"/>
 		<mkdir dir="${dir.dist.edifact}"/>
 		<mkdir dir="${dir.dist.edifact.ikdefault}"/>
 
@@ -105,6 +106,9 @@
 		<copy todir="${dir.dist.icons}">
 			<fileset dir="${dir.src.icons}" includes="*"/>
 		</copy>
+		<copy todir="${dir.dist.logs}">
+			<fileset dir="${dir.src.logs}" includes="*"/>
+				</copy>
 		<copy todir="${dir.dist.ini.ikdefault}">
 			<fileset dir="${dir.src.defaults.commonini}" includes="tpupdate.ini"/>
 			<fileset dir="${dir.src.defaults.ini}" includes="arzt.ini bedienung.ini company.ini dta301.ini email.ini firmen.ini fremdprog.ini fristen.ini geraete.ini icons.ini kalender.ini kasse.ini ktraeger.ini nachrichten.ini oprgaf.ini patient.ini

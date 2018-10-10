@@ -36,6 +36,10 @@
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swingx-1.6.jar"/>
         <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-classic-1.2.3.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/logback-core-1.2.3.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/slf4j-api-1.7.25.jar"/>
+        <pathelement location="${Libraries.location}/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
     </path>
     <path id="TheraPi.classpath">
         <pathelement location="bin"/>
