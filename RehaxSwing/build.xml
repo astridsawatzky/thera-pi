@@ -6,6 +6,7 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="RehaxSwing">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
+    <property name="ECLIPSE_HOME" value="C:/Users/Astrid/AppData/Local/Yatta/Launcher/installations/therapidevelop/"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
@@ -19,6 +20,7 @@
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>

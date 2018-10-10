@@ -10,7 +10,7 @@
         <delete dir="${dir.dist}"/>
     </target>
 	<target name="dist" depends="jars,copyfiles"/>
-	
+
 	<target name="copyfiles">
 		<ant antfile="${dir.therapi.common}/build.xml" dir="${dir.therapi.common}" inheritAll="false" target="copylibs"/>
 		<ant antfile="${dir.files}/build.xml" dir="${dir.files}" inheritAll="false" target="copyfiles"/>
@@ -44,6 +44,7 @@
         <ant dir="${dir.reha.bill.edit}" target="${build.target}"/>
         <ant dir="${dir.reha.kassenbuch}" target="${build.target}"/>
         <ant dir="${dir.reha.mail}" target="${build.target}"/>
+    	<ant dir="${dir.reha.sms.service}" target="${build.target}"/>
         <ant dir="${dir.reha.sql}" target="${build.target}"/>
         <ant dir="${dir.reha.statistik}" target="${build.target}"/>
         <ant dir="${dir.reha.urlaub}" target="${build.target}"/>

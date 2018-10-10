@@ -6,12 +6,20 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="RehaCommon">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
+    <property name="ECLIPSE_HOME" value="C:/Users/Astrid/AppData/Local/Yatta/Launcher/installations/therapidevelop/"/>
     <property name="ArztBaustein.location" value="../ArztBaustein"/>
+    <property name="BMIRechner.location" value="../BMIRechner"/>
+    <property name="FahrdienstExporter.location" value="../FahrdienstExporter"/>
+    <property name="GeburtstagsBriefe.location" value="../GeburtstagsBriefe"/>
+    <property name="LVAEntlassmitteilung.location" value="../LVAEntlassmitteilung"/>
     <property name="Nebraska.location" value="../Nebraska"/>
     <property name="OffenePosten.location" value="../OffenePosten"/>
     <property name="OpRgaf.location" value="../OpRgaf"/>
+    <property name="PDFLoader.location" value="../PDFLoader"/>
+    <property name="PiTool.location" value="../PiTool"/>
     <property name="Reha.location" value="../Reha"/>
     <property name="Reha301.location" value="../Reha301"/>
+    <property name="RehaBillEdit.location" value="../RehaBillEdit"/>
     <property name="RehaHMK.location" value="../RehaHMK"/>
     <property name="RehaIniedit.location" value="../RehaIniedit"/>
     <property name="RehaKassenbuch.location" value="../RehaKassenbuch"/>
@@ -19,10 +27,21 @@
     <property name="RehaSql.location" value="../RehaSql"/>
     <property name="RehaStatistik.location" value="../RehaStatistik"/>
     <property name="RehaUrlaub.location" value="../RehaUrlaub"/>
+    <property name="RehaWissen.location" value="../RehaWissen"/>
+    <property name="SMSService.location" value="../SMSService"/>
+    <property name="TextB.location" value="../TextB"/>
+    <property name="TheraPi.location" value="../TheraPi"/>
+    <property name="TheraPiDBAdmin.location" value="../TheraPiDBAdmin"/>
+    <property name="TheraPiHilfe.location" value="../TheraPiHilfe"/>
+    <property name="TheraPiUpdates.location" value="../TheraPiUpdates"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
     <import file="build-user.xml"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+        <pathelement location="${ECLIPSE_HOME}plugins/org.hamcrest.core_1.3.0.v20180420-1519.jar"/>
+    </path>
     <path id="RehaCommon.classpath">
         <pathelement location="bin"/>
         <pathelement location="${Libraries.location}/lib/swingx/grad.jar"/>
@@ -42,11 +61,19 @@
         <pathelement location="${Libraries.location}/lib/openofficeorg/unoloader.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swingx-1.6.jar"/>
+        <path refid="JUnit 4.libraryclasspath"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="tests">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -61,12 +88,37 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
+            <src path="tests"/>
             <classpath refid="RehaCommon.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
         <ant antfile="build.xml" dir="${ArztBaustein.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${ArztBaustein.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${BMIRechner.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${BMIRechner.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${FahrdienstExporter.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${FahrdienstExporter.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${GeburtstagsBriefe.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${GeburtstagsBriefe.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${LVAEntlassmitteilung.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${LVAEntlassmitteilung.location}" inheritAll="false" target="build">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
@@ -89,6 +141,18 @@
                 <propertyref name="build.compiler"/>
             </propertyset>
         </ant>
+        <ant antfile="build.xml" dir="${PDFLoader.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${PDFLoader.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${PiTool.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${PiTool.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
         <ant antfile="build.xml" dir="${Reha.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${Reha.location}" inheritAll="false" target="build">
             <propertyset>
@@ -97,6 +161,12 @@
         </ant>
         <ant antfile="build.xml" dir="${Reha301.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${Reha301.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${RehaBillEdit.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${RehaBillEdit.location}" inheritAll="false" target="build">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
@@ -139,6 +209,48 @@
         </ant>
         <ant antfile="build.xml" dir="${RehaUrlaub.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${RehaUrlaub.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${RehaWissen.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${RehaWissen.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${SMSService.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${SMSService.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${TextB.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${TextB.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${TheraPi.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${TheraPi.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${TheraPiDBAdmin.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${TheraPiDBAdmin.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${TheraPiHilfe.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${TheraPiHilfe.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build.xml" dir="${TheraPiUpdates.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${TheraPiUpdates.location}" inheritAll="false" target="build">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
