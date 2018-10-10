@@ -25,6 +25,7 @@
     	<ant dir="${dir.therapi.common}" target="${build.target}"/>
     	<ant dir="${dir.reha.common}" target="${build.target}"/>
         <ant dir="${dir.nebraska}" target="${build.target}"/>
+    	<ant dir="${dir.calcKilometer}" target="${build.target}"/>
         <ant dir="${dir.fahrdienst.exporter}" target="${build.target}"/>
         <ant dir="${dir.gbriefe}" target="${build.target}"/>
         <ant dir="${dir.pdf.drucker}" target="${build.target}"/>
