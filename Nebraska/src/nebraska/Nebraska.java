@@ -13,7 +13,7 @@ import javax.swing.UIManager;
 
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
-import logging.Config;
+import logging.Logging;
 
 
 public class Nebraska {
@@ -28,7 +28,7 @@ public class Nebraska {
 	public static JTabbedPaneOrganizer jtbo;
 
 	public static void main(String[] args) throws Exception{
-		new Config("Nebraska");
+		new Logging("Nebraska");
 		if(System.getProperty("os.name").contains("Windows")){
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 		}

@@ -40,7 +40,7 @@ import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.ITerminateEvent;
 import ag.ion.bion.officelayer.event.VetoTerminateListener;
-import logging.Config;
+import logging.Logging;
 
 
 
@@ -75,7 +75,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 	public static boolean testcase = false;
 
 	public static void main(String[] args) {
-		new Config("GBriefe");
+		new Logging("gbriefe");
 		GBriefe application = new GBriefe();
 		String prog = java.lang.System.getProperty("user.dir");
 		try {

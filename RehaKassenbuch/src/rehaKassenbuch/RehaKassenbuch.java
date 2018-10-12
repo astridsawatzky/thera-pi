@@ -20,7 +20,7 @@ import CommonTools.StartOOApplication;
 import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import logging.Config;
+import logging.Logging;
 
 public class RehaKassenbuch implements WindowListener {
 
@@ -68,7 +68,7 @@ public class RehaKassenbuch implements WindowListener {
 	public SqlInfo sqlInfo;
 
 	public static void main(String[] args) {
-		new Config("Kassenbuch");
+		new Logging("kasse");
 		RehaKassenbuch application = new RehaKassenbuch();
 		application.getInstance();
 		application.sqlInfo = new SqlInfo();

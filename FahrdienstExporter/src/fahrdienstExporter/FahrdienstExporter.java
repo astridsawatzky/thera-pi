@@ -13,7 +13,7 @@ import com.hexiong.jdbf.JDBField;
 
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
-import logging.Config;
+import logging.Logging;
 
 
 public class FahrdienstExporter {
@@ -26,7 +26,7 @@ public class FahrdienstExporter {
 	public Vector<Object[]> termine = new Vector<Object[]>();
 	Vector<String> dummy = new Vector<String>();
 	public static void main(String[] args) {
-		new Config("FahrdienstExporter");
+		new Logging("fahrdienst");
 		FahrdienstExporter application = new FahrdienstExporter();
 		application.getInstance();
 

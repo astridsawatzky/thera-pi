@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import logging.Config;
+import logging.Logging;
 
 
 
@@ -27,7 +27,7 @@ public class BMIrahmen extends JApplet implements WindowListener{
 
 
 	public static void main(String[] args) {
-		new Config("BMIrahmen");
+		new Logging("bmirahmen");
 		BMIrahmen frm = new BMIrahmen();
 		frm.getJFrame();
 

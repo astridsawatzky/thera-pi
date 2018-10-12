@@ -47,7 +47,7 @@ import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import logging.Config;
+import logging.Logging;
 
 public class RehaMail implements WindowListener {
 
@@ -160,7 +160,7 @@ public class RehaMail implements WindowListener {
 	SqlInfo sqlInfo = null;
 
 	public static void main(String[] args) {
-		new Config("mail");
+		new Logging("mail");
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 			UIManager.put("TabbedPane.contentOpaque", Boolean.FALSE);

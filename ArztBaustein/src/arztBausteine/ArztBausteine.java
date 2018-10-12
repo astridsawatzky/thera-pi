@@ -32,7 +32,7 @@ import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.ITerminateEvent;
 import ag.ion.bion.officelayer.event.VetoTerminateListener;
-import logging.Config;
+import logging.Logging;
 
 public class ArztBausteine implements WindowListener, WindowStateListener {
 
@@ -59,7 +59,7 @@ public class ArztBausteine implements WindowListener, WindowStateListener {
 	ArztBausteinPanel arztbausteinpanel = null;
 
 	public static void main(String[] args) {
-		new Config("arztbausteine");
+		new Logging("arztbausteine");
 		if(args.length > 0){
 			System.out.println("hole daten aus INI-Datei "+args[0]);
 			INIFile ini = new INIFile(args[0]);

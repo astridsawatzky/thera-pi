@@ -12,7 +12,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
 import CommonTools.Verschluesseln;
-import logging.Config;
+import logging.Logging;
 
 
 
@@ -38,7 +38,7 @@ public class LVArahmen implements WindowListener{
 	 *
 	 */
 	public static void main(String[] args) {
-		new Config("LVAEntlass");
+		new Logging("lvaentlass");
 		System.out.println(" Name des Betriebssystems: "+System.getProperty("os.name"));
 		System.out.println("      Benutzerverzeichnis: "+java.lang.System.getProperty("user.dir").replaceAll("\\\\","/"));
 		System.out.println("Installierte Java-Version: "+java.lang.System.getProperty("java.version"));

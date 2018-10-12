@@ -26,7 +26,7 @@ import CommonTools.StartOOApplication;
 import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import logging.Config;
+import logging.Logging;
 
 public class ArztBaustein implements WindowListener, WindowStateListener {
 
@@ -50,7 +50,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 	private ArztBausteinPanel arztbausteinpanel = null;
 	private SqlInfo sqlInfo;
 	public static void main(String[] args) {
-		new Config("arztbaustein");
+		new Logging("arztbaustein");
 
 
 		if(args.length > 0){

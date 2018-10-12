@@ -3,8 +3,8 @@ package logging;
 import ch.qos.logback.classic.util.ContextInitializer;
 import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 
-public class Config {
-	public Config(String string) {
+public class Logging {
+	public Logging(String string) {
 		init(string);
 	}
 

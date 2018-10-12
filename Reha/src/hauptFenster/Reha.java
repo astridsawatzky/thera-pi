@@ -151,7 +151,7 @@ import environment.Path;
 import geraeteInit.BarCodeScanner;
 import krankenKasse.KassenPanel;
 import kurzAufrufe.KurzAufrufe;
-import logging.Config;
+import logging.Logging;
 import menus.TerminMenu;
 import oOorgTools.OOTools;
 import ocf.OcKVK;
@@ -384,7 +384,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static void main(String[] args) {
 
 		System.setProperty("java.net.preferIPv4Stack" , "true");
-		new Config("reha");
+		new Logging("reha");
 
 		 Logger logger = LoggerFactory.getLogger(Reha.class);
 

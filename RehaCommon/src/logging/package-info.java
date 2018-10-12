@@ -5,6 +5,11 @@
  * log/<classname>.log
  *
  * This is a mess, but better messy logging than none at all.
+ * 
+ * 
+ * to make a a Process start logging call new Logging("<logfilename>")
+ * this will call <logfilename>.xml for configuration 
+ * and write to log/<logfilename> defined in the xml
  */
 
 package logging;
