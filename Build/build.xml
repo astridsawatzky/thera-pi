@@ -43,6 +43,7 @@
         <ant dir="${dir.op.rgaf}" target="${build.target}"/>
         <ant dir="${dir.reha.301}" target="${build.target}"/>
         <ant dir="${dir.reha.bill.edit}" target="${build.target}"/>
+    	<ant dir="${dir.reha.hmk}" target="${build.target}"/>
         <ant dir="${dir.reha.kassenbuch}" target="${build.target}"/>
         <ant dir="${dir.reha.mail}" target="${build.target}"/>
     	<ant dir="${dir.reha.sms.service}" target="${build.target}"/>
