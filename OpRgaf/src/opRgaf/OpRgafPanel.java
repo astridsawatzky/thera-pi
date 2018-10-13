@@ -73,7 +73,7 @@ import ag.ion.noa.NOAException;
 public class OpRgafPanel extends JXPanel implements TableModelListener{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -7883557713071422132L;
 
@@ -85,7 +85,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 	JXPanel content = null;
 	KeyListener kl = null;
 	ActionListener al = null;
-	
+
 	MyOpRgafTableModel tabmod = null;
 	JXTable tab = null;
 	JLabel summeOffen;
@@ -93,18 +93,18 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 	JLabel summeGesamtOffen;
 	JLabel anzahlSaetze;
 	JRtaCheckBox bar = null;
-	
+
 	JButton kopie;
-	
+
 	BigDecimal gesamtOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
 	BigDecimal suchOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
 	BigDecimal suchGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
 	DecimalFormat dcf = new DecimalFormat("###0.00");
-	
+
 	int ccount = -2;
-	
+
 	private HashMap<String,String> hmRezgeb = new HashMap<String,String>();
-	final String stmtString = 
+	final String stmtString =
 		"select concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(geboren,'%d.%m.%Y'))," +
 		"t1.rnr,t1.rdatum,t1.rgesamt,t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t3.kassen_nam1,t1.reznr,t1.id "+
 		"from rgaffaktura as t1 inner join pat5 as t2 on (t1.pat_intern = t2.pat_intern) "+
@@ -136,20 +136,20 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			}
 		});
 	}
-	
+
 	private JXPanel getContent(){
 		content = new JXPanel();
-		//				 1     2     3    4      5      6      7    8       9    10    11   12   13   14    15  
+		//				 1     2     3    4      5      6      7    8       9    10    11   12   13   14    15
 		String xwerte = "10dlu,50dlu,2dlu,90dlu,10dlu,  p,1dlu,50dlu:g,2dlu,50dlu,5dlu,50dlu,5dlu,50dlu,2dlu,50dlu,2dlu,50dlu,10dlu";
 		//				 1     2  3     4       5    6      7
-		String ywerte = "10dlu,p,2dlu,150dlu:g,5dlu,80dlu,0dlu";	
+		String ywerte = "10dlu,p,2dlu,150dlu:g,5dlu,80dlu,0dlu";
 		FormLayout lay = new FormLayout(xwerte,ywerte);
 		CellConstraints cc = new CellConstraints();
 		content.setLayout(lay);
-		
+
 		JLabel lab = new JLabel("Suchkriterium");
 		content.add(lab,cc.xy(2,2));
-		
+
 		String[] args = {"Rechnungsnummer =","Rechnungsnummer enthält",
 				"Rechnungsbetrag =","Rechnungsbetrag >=","Rechnungsbetrag <=",
 				"Noch offen =","Noch offen >=","Noch offen <=",
@@ -161,26 +161,26 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		//int vorauswahl =  Arrays.asList(args).indexOf("Noch offen >=");
 		int vorauswahl =  0;
 		combo = new JRtaComboBox(args);
-		combo.setSelectedIndex( vorauswahl ); 
+		combo.setSelectedIndex( vorauswahl );
 		content.add(combo,cc.xy(4,2));
-		
+
 		lab = new JLabel("finde:");
 		content.add(lab,cc.xy(6,2));
 		suchen = new JRtaTextField("nix",true);
 		suchen.setName("suchen");
 		suchen.addKeyListener(kl);
 		content.add(suchen,cc.xy(8,2,CellConstraints.FILL,CellConstraints.DEFAULT));
-		
+
 		buts[1] = ButtonTools.macheButton("suchen", "suchen", al);
 		buts[1].setMnemonic('s');
 		content.add(buts[1],cc.xy(10,2));
-		
+
 		bar = new JRtaCheckBox("bar in Kasse");
 		if(OpRgaf.mahnParameter.get("inkasse").equals("Kasse")){
 			bar.setSelected(true);
 		}
 		content.add(bar,cc.xy(12,2));
-		
+
 		lab = new JLabel("Geldeingang:");
 		content.add(lab,cc.xy(14,2));
 		tfs[0] = new JRtaTextField("F",true,"6.2","");
@@ -194,7 +194,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		buts[0].setMnemonic('a');
 
 		while(!OpRgaf.DbOk){
-			
+
 		}
 		tabmod = new MyOpRgafTableModel();
 		/*
@@ -204,21 +204,21 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			spalten[i] = felder.get(i).get(0);
 		}
 		*/
-		
+
 		tabmod.setColumnIdentifiers(spalten);
 		tab = new JXTable(tabmod);
 		tab.setHorizontalScrollEnabled(true);
-		
-		
+
+
 		//tab.getColumn(1).setCellEditor();
 		DateTableCellEditor tble = new DateTableCellEditor();
 		tab.getColumn(1).setCellRenderer(new MitteRenderer());
-		
+
 		tab.getColumn(2).setCellEditor(tble);
-		
+
 		tab.getColumn(3).setCellRenderer(new DoubleTableCellRenderer());
 		tab.getColumn(3).setCellEditor(new DblCellEditor());
-		
+
 		tab.getColumn(4).setCellRenderer(new DoubleTableCellRenderer());
 		tab.getColumn(4).setCellEditor(new DblCellEditor());
 
@@ -232,16 +232,16 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		tab.getColumn(11).setMaxWidth(50);
 		tab.getSelectionModel().addListSelectionListener( new OPListSelectionHandler());
 		tab.setHighlighters(HighlighterFactory.createSimpleStriping(HighlighterFactory.CLASSIC_LINE_PRINTER));
-		
-		
-		
+
+
+
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
 		content.add(jscr,cc.xyw(2,4,17));
-		
+
 		JXPanel auswertung = new JXPanel();
 		//                 1        2   3    4        5     6  7
 		String xwerte2 = "10dlu,150dlu,5dlu,100dlu,150dlu:g,p,10dlu";
-		String ywerte2 = "0dlu,p,2dlu,p,2dlu,p,2dlu,p,10dlu";			
+		String ywerte2 = "0dlu,p,2dlu,p,2dlu,p,2dlu,p,10dlu";
 		FormLayout lay2 = new FormLayout(xwerte2,ywerte2);
 		CellConstraints cc2 = new CellConstraints();
 		auswertung.setLayout(lay2);
@@ -256,7 +256,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		summeOffen = new JLabel("0,00");
 		summeOffen.setForeground(Color.BLUE);
 		auswertung.add(summeOffen,cc2.xy(4,4));
-		
+
 		lab = new JLabel("Summe Rechnunsbetrag der letzten Abfrage:");
 		auswertung.add(lab,cc2.xy(2,6,CellConstraints.RIGHT,CellConstraints.DEFAULT));
 		summeRechnung = new JLabel("0,00");
@@ -268,7 +268,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		anzahlSaetze = new JLabel("0");
 		anzahlSaetze.setForeground(Color.BLUE);
 		auswertung.add(anzahlSaetze,cc2.xy(4,8));
-		
+
 		auswertung.add(ButtonTools.macheButton("Rechnungskopie", "kopie", al),cc2.xy(6,2));
 		content.add(auswertung,cc.xyw(1,6,17));
 		content.validate();
@@ -278,15 +278,15 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				ermittleGesamtOffen();
 				return null;
 			}
-			
+
 		}.execute();
-		
+
 		return content;
 	}
 	private OpRgafPanel getInstance(){
 		return this;
 	}
-	
+
 	private void startKeyListener(){
 		kl = new KeyListener(){
 			@Override
@@ -300,19 +300,19 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 						setzeFocus();
 					}
 				}
-				
+
 			}
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				
-				
+
+
 			}
 			@Override
 			public void keyTyped(KeyEvent arg0) {
-				
-				
+
+
 			}
-			
+
 		};
 	}
 	private void startActionListener(){
@@ -354,7 +354,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 						try{
 						//System.out.println("in Ausfallrechnung");
 						//(Point pt, String pat_intern,String rez_nr,String rnummer,String rdatum){
-						String id = tab.getValueAt(tab.getSelectedRow(), 11).toString(); 
+						String id = tab.getValueAt(tab.getSelectedRow(), 11).toString();
 						String rez_nr = SqlInfo.holeEinzelFeld("select reznr from rgaffaktura where id='"+id+"' LIMIT 1");
 						String pat_intern = SqlInfo.holeEinzelFeld("select pat_intern from rgaffaktura where id='"+id+"' LIMIT 1");
 						String rdatum = SqlInfo.holeEinzelFeld("select rdatum from rgaffaktura where id='"+id+"' LIMIT 1");
@@ -418,7 +418,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		BigDecimal nochoffen = BigDecimal.valueOf((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 4));
 		BigDecimal eingang = BigDecimal.valueOf(Double.parseDouble(tfs[0].getText().replace(",", ".")) );
 		BigDecimal restbetrag = nochoffen.subtract(eingang);
-		
+
 		if(row < 0){
 			JOptionPane.showMessageDialog(null, "Keine Rechnung zum Ausbuchen ausgewählt");
 			return;
@@ -439,7 +439,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		//Der logische Wert muß über die CheckBox bar.isSelected() bestimmt werden alles andere ist völlig Scheiße
 		//ich habe mich dafür bereits mehrfach(!!) in den Arsch gebissen
 		//if(OpRgaf.mahnParameter.get("inkasse").equals("Kasse")){
-		String rgaf_reznum = tabmod.getValueAt(tab.convertRowIndexToModel(row), 10).toString(); 
+		String rgaf_reznum = tabmod.getValueAt(tab.convertRowIndexToModel(row), 10).toString();
 		String rgaf_rechnum = tabmod.getValueAt(tab.convertRowIndexToModel(row), 1).toString();
 		if(bar.isSelected()){
 			//BigDecimal einnahme = BigDecimal.valueOf((Double)tabmod.getValueAt(tab.convertRowIndexToModel(row), 4));
@@ -452,7 +452,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			//System.out.println(cmd);
 			SqlInfo.sqlAusfuehren(cmd);
 		}
-		tabmod.setValueAt(new Date(), tab.convertRowIndexToModel(row), 6);		
+		tabmod.setValueAt(new Date(), tab.convertRowIndexToModel(row), 6);
 		tabmod.setValueAt(restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 4);
 		//
 
@@ -468,13 +468,13 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		DatFunk.sDatInSQL(DatFunk.sHeute())+"' where id ='"+Integer.toString(id)+"' LIMIT 1";
 		/*
 		if(!OpRgaf.testcase){
-			SqlInfo.sqlAusfuehren(cmd);			
+			SqlInfo.sqlAusfuehren(cmd);
 		}
 		*/
 		//hier rein die Kasseneinnahme
 		SqlInfo.sqlAusfuehren(cmd);
-		schreibeAbfrage();			
-		tfs[0].setText("0,00");			
+		schreibeAbfrage();
+		tfs[0].setText("0,00");
 	}
 
 	private void ermittleGesamtOffen(){
@@ -491,17 +491,17 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 	private void schreibeGesamtOffen(){
 		summeGesamtOffen.setText( dcf.format(gesamtOffen) );
 	}
-	
-	
+
+
 	public void sucheRezept(String rezept){
 		suchen.setText(rezept);
 		combo.setSelectedIndex(10);
 		doSuchen();
 	}
-	
+
 	private void doSuchen(){
 		if(suchen.getText().trim().equals("")){
-			
+
 			return;
 		}
 		//tab.setRowSorter(null);
@@ -552,11 +552,11 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			cmd = stmtString+" where t3.kassen_nam1 like'%"+suchen.getText().trim()+"%'";
 			break;
 		}
-		
+
 		}catch(Exception ex){
 			//ex.printStackTrace();
 		}
-		
+
 		if(!cmd.equals("")){
 			buts[0].setEnabled(false);
 			suchen.setEnabled(false);
@@ -567,18 +567,18 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				JOptionPane.showMessageDialog(null, "Korrekte Auflistung des Suchergebnisses fehlgeschlagen");
 			}
 			OpRgaf.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			
+
 			suchen.setEnabled(true);
 			buts[0].setEnabled(true);
 			setzeFocus();
 		}
 
 	}
-	
-	
+
+
 	class MyOpRgafTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -589,7 +589,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			case 1:
 			case 9:
 			case 10:
-				return String.class;				
+				return String.class;
 			case 2:
 			case 6:
 			case 7:
@@ -600,22 +600,22 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			case 5:
 				return Double.class;
 			case 11:
-				return Integer.class;				
+				return Integer.class;
 			}
 		   return String.class;
 	    }
 
 		@Override
         public boolean isCellEditable(int row, int col) {
-			
+
 			if(col > 1 && col < 9){
-				return true;				
+				return true;
 			}
 			return false;
 		}
-		   
+
 	}
-	
+
 	private void starteSuche(String sstmt){
 		tabmod.setRowCount(0);
 		tab.validate();
@@ -623,17 +623,17 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		Statement stmt = null;
 		ResultSet rs = null;
 
-			
+
 		try {
 			stmt =  OpRgaf.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
-			
-			
+
+
 			rs = stmt.executeQuery(sstmt);
 			Vector<Object> vec = new Vector<Object>();
 			int durchlauf = 0;
@@ -647,11 +647,11 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				int numberOfColumns = rsMetaData.getColumnCount()+1;
 				 for(int i = 1 ; i < numberOfColumns;i++){
 					 if(rsMetaData.getColumnClassName(i).toString().equals("java.lang.String")){
-						 vec.add( (rs.getString(i)==null ? "" : rs.getString(i)) ); 
+						 vec.add( (rs.getString(i)==null ? "" : rs.getString(i)) );
 					 }else if(rsMetaData.getColumnClassName(i).toString().equals("java.math.BigDecimal")){
-						 vec.add( rs.getBigDecimal(i).doubleValue() ); 
+						 vec.add( rs.getBigDecimal(i).doubleValue() );
 					 }else if(rsMetaData.getColumnClassName(i).toString().equals("java.sql.Date")){
-						 vec.add( rs.getDate(i) ); 
+						 vec.add( rs.getDate(i) );
 					 }else if(rsMetaData.getColumnClassName(i).toString().equals("java.lang.Integer")){
 						 vec.add( rs.getInt(i) );
 					 }
@@ -676,7 +676,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				vec.add( (rs.getString(15)==null ? "" : rs.getString(15)));//ikktraeger
 				vec.add(rs.getInt(16));//id
 				*/
-				
+
 				suchOffen = suchOffen.add(rs.getBigDecimal(5));
 				suchGesamt = suchGesamt.add(rs.getBigDecimal(4));
 				tabmod.addRow( (Vector<?>) vec.clone());
@@ -693,18 +693,18 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				durchlauf++;
 				gefunden++;
 			}
-			
+
 			tab.validate();
 			tab.repaint();
 			if(tab.getRowCount() > 0){
 				tab.setRowSelectionInterval(0, 0);
 			}
-			
+
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 			System.out.println("SQLState: " + ev.getSQLState());
 			System.out.println("VendorError: " + ev.getErrorCode());
-		}	
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -712,7 +712,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				} catch (SQLException sqlEx) { // ignore }
 					rs = null;
 				}
-			}	
+			}
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -721,12 +721,12 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				}
 			}
 		}
-		
-		
+
+
 	}
 	/*****************************************************/
 	class OPListSelectionHandler implements ListSelectionListener {
-		
+
 	    @Override
         public void valueChanged(ListSelectionEvent e) {
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
@@ -748,7 +748,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 						new SocketClient().setzeRehaNachricht(OpRgaf.rehaReversePort,"OpRgaf#"+
 								RehaIOMessages.MUST_PATANDREZFIND+"#"+pat_intern+"#"+rez_nr);
 	                	//System.out.println("Satz "+i);
-						
+
 	                    break;
 	                }
 	            }
@@ -787,9 +787,9 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 							if(test.equals("    -  -  ")){
 								value = null;
 							}else{
-								value = test;	
+								value = test;
 							}
-							
+
 						}
 					}
 					//value = tabmod.getValueAt(row,col).toString();
@@ -802,21 +802,21 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				//System.out.println(cmd);
 				SqlInfo.sqlAusfuehren(cmd);
 				tfs[0].setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), 4)));
-			
+
 			}catch(Exception ex){
 				System.out.println(ex);
 				JOptionPane.showMessageDialog(null,"Fehler in der Dateneingbe");
 			}
-			
-			
+
+
 			return;
 		}
 	}
-	
+
 	private void doRezeptgebKopie(){
 		if(tabmod.getRowCount() <= 0){return;}
 		String db = "";
-		String id = tab.getValueAt(tab.getSelectedRow(), 11).toString(); 
+		String id = tab.getValueAt(tab.getSelectedRow(), 11).toString();
 		String rgnr = tab.getValueAt(tab.getSelectedRow(), 1).toString();
 		String rez_nr = SqlInfo.holeEinzelFeld("select reznr from rgaffaktura where id='"+id+"' LIMIT 1");
 		String pat_intern = SqlInfo.holeEinzelFeld("select pat_intern from rgaffaktura where id='"+id+"' LIMIT 1");
@@ -855,7 +855,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			(! vecaktrez.get(4).trim().equals("") ? "," +vecaktrez.get(4) : "") +
 			(! vecaktrez.get(5).trim().equals("") ? "," +vecaktrez.get(5) : "") +
 			(! vecaktrez.get(6).trim().equals("") ? "," +vecaktrez.get(6) : "");
-		
+
 		String cmd = "select abwadress,id from pat5 where pat_intern='"+pat_intern+"' LIMIT 1";
 		Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
 		String[] adressParams = null;
@@ -879,7 +879,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		hmRezgeb.put("<rgbanrede>",adressParams[4]);
 		hmRezgeb.put("<rgorigdatum>", DatFunk.sDatInDeutsch(rdatum));
 		hmRezgeb.put("<rgnr>", rgnr);
-		
+
 		hmRezgeb.put("<rgpatnname>", StringTools.EGross(SqlInfo.holeEinzelFeld("select n_name from pat5 where pat_intern='"+pat_intern+"' LIMIT 1") ));
 		hmRezgeb.put("<rgpatvname>", StringTools.EGross(SqlInfo.holeEinzelFeld("select v_name from pat5 where pat_intern='"+pat_intern+"' LIMIT 1") ));
 		hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='"+pat_intern+"' LIMIT 1")) );
@@ -894,10 +894,10 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			e.printStackTrace();
 		} catch (TextException e) {
 			e.printStackTrace();
-		} 
-		
+		}
+
 	}
-	
+
 	public String[] getAdressParams(String patid){
 		//anr=17,titel=18,nname=0,vname=1,strasse=3,plz=4,ort=5,abwadress=19
 		//"anrede,titel,nachname,vorname,strasse,plz,ort"
@@ -910,7 +910,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			};
 		return AdressTools.machePrivatAdresse(obj,true);
 	}
-	
+
 	public String[] holeAbweichendeAdresse(String patid){
 		//"anrede,titel,nachname,vorname,strasse,plz,ort"
 		String cmd = "select abwanrede,abwtitel,abwn_name,abwv_name,abwstrasse,abwplz,abwort from pat5 where id='"+
@@ -922,7 +922,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 				};
 		return AdressTools.machePrivatAdresse(obj,true);
 	}
-	
+
 	private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException{
 		IDocumentService documentService = null;
 		OpRgaf.thisFrame.setCursor(OpRgaf.thisClass.wartenCursor);
@@ -954,15 +954,15 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			Set<?> entries = hmRezgeb.entrySet();
 		    Iterator<?> it = entries.iterator();
 			    while (it.hasNext()) {
-			      
+
 				Map.Entry entry = (Map.Entry) it.next();
 			      if(((String)entry.getKey()).toLowerCase().equals(placeholderDisplayText)){
 			    	  try{
-			    		  
-			    	  }catch(com.sun.star.uno.RuntimeException ex){
+
+			    	  }catch(RuntimeException ex){
 			    		  //System.out.println("Fehler bei "+placeholderDisplayText);
 			    	  }
-			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));		    		  
+			    	  placeholders[i].getTextRange().setText(((String)entry.getValue()));
 
 			    	  break;
 			      }
@@ -970,7 +970,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		}
 		//if(SystemConfig.hmAbrechnung.get("hmallinoffice").equals("1")){
 			textDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
-		/*	
+		/*
 		}else{
 			PrintProperties printprop = new PrintProperties ((short) 2 ,null);
 			textDocument.getPrintService().print(printprop);
@@ -983,12 +983,12 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 			textDocument = null;
 		}
 		*/
-			
+
 			OpRgaf.thisFrame.setCursor(OpRgaf.thisClass.normalCursor);
-		
-		
+
+
 	}
-	
-	
+
+
 
 }

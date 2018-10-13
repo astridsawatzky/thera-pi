@@ -30,6 +30,7 @@ import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import logging.Logging;
 
 
 
@@ -100,6 +101,7 @@ public class OpRgaf implements WindowListener{
 	public SqlInfo sqlInfo;
 	
 	public static void main(String[] args) {
+		new Logging("oprgaf");
 		OpRgaf application = new OpRgaf();
 		application.getInstance();
 		application.getInstance().sqlInfo = new SqlInfo();

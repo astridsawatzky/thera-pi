@@ -8,9 +8,14 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -18,7 +23,7 @@ import hauptFenster.Reha;
 
 public class LadeProg {
 	public LadeProg(String prog){
-		
+		Logger logger = LoggerFactory.getLogger(LadeProg.class);
 		String progname= null;
 		if(prog.indexOf(" ")>=0){
 			progname = prog.split(" ")[0];
@@ -44,35 +49,37 @@ public class LadeProg {
 					protected Void doInBackground() throws Exception {
 					*/
 						try {
-							
-							
-							
-							List<String>list = Arrays.asList(xprog.split(" "));
+
+
+
+							List<String> list = Arrays.asList(xprog.split(" "));
 							ArrayList<String> alist = new ArrayList<String>(list);
 							alist.add(0,"-jar");
 							alist.add(0,"-Djava.net.preferIPv4Stack=true");
 							alist.add(0,"java");
+
+							logger.debug(alist.stream().collect(Collectors.joining()));
 							Process process = new ProcessBuilder(alist).start();
-							
+
 							//Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 						       InputStream is = process.getInputStream();
 						       //InputStream is = process.getErrorStream();
 						       InputStreamReader isr = new InputStreamReader(is);
 						       BufferedReader br = new BufferedReader(isr);
 						       String line;
-						       
+
 						       while ((line = br.readLine()) != null) {
 						    	   System.out.println(line);
 						         //doTestLine(line);
 						       }
-						       
+
 						       is.close();
 						       isr.close();
 						       br.close();
 						       //System.out.println("Process.beendet");
 						       process = null;
-						    
-						     
+
+
 						} catch (IOException e) {
 							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
 							e.printStackTrace();
@@ -82,7 +89,7 @@ public class LadeProg {
 						return null;
 					}
 				}.execute();*/
-				
+
 			}
 		}.start();
 
@@ -98,18 +105,18 @@ public class LadeProg {
 					if(Reha.thisClass.patpanel != null){
 						try{
 							if(Reha.thisClass.patpanel.aktPatID.equals(befehle[1])){
-								befehlAbfeuern("#PATSUCHEN",befehle[1],befehle[2]);								
+								befehlAbfeuern("#PATSUCHEN",befehle[1],befehle[2]);
 							}
 						}catch(Exception ex){
-							
+
 						}
 					}
 				}
-				
-				
+
+
 				return null;
 			}
-			
+
 		}.execute();
 	}
 	public void befehlAbfeuern(String befehl,String detail1,String detail2){
@@ -117,7 +124,7 @@ public class LadeProg {
 		PatStammEvent pEvt = new PatStammEvent(LadeProg.this);
 		pEvt.setPatStammEvent("PatSuchen");
 		pEvt.setDetails(befehl,sEventDetails[0],sEventDetails[1]) ;
-		PatStammEventClass.firePatStammEvent(pEvt);		
+		PatStammEventClass.firePatStammEvent(pEvt);
 	}
 
-}	
+}
