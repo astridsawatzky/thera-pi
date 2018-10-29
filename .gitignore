@@ -1,4 +1,6 @@
 # CVS default ignores begin
+*.iml
+/out
 tags
 TAGS
 .make.state
