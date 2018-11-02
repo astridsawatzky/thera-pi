@@ -10,8 +10,8 @@
     <property name="Nebraska.location" value="../Nebraska"/>
     <property name="TheraPiUpdates.location" value="../TheraPiUpdates"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.7"/>
-    <property name="source" value="1.7"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
     <import file="build-user.xml"/>
     <path id="RehaCommon.classpath">
         <pathelement location="${RehaCommon.location}/bin"/>
@@ -179,6 +179,7 @@
     </target>
     <target name="Reha">
         <java classname="hauptFenster.Reha" failonerror="true" fork="yes">
+            <jvmarg line="-Djava.net.preferIPv4Stack=true"/>
             <classpath refid="Reha.classpath"/>
         </java>
     </target>

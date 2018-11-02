@@ -46,4 +46,10 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
+    <target name="CalcKilometer">
+        <java classname="openMaps.Main" failonerror="true" fork="yes">
+            <arg line="REITBAHNSTR.%202,01069,DRESDEN, KAENDLERSTRASSE%2030,01129,DRESDEN"/>
+            <classpath refid="CalcKilometer.classpath"/>
+        </java>
+    </target>
 </project>

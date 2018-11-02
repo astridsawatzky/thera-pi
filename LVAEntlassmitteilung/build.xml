@@ -3,15 +3,14 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="LVA-Bedingmit">
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="LVAEntlassmitteilung">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
-    <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.7"/>
-    <property name="source" value="1.7"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
     <import file="build-user.xml"/>
-    <path id="LVA-Bedingmit.classpath">
+    <path id="LVAEntlassmitteilung.classpath">
         <pathelement location="bin"/>
         <pathelement location="${Libraries.location}/lib/dbf/jdbf.jar"/>
         <pathelement location="${Libraries.location}/lib/jgoodies/looks-2.3.1.jar"/>
@@ -39,7 +38,7 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <classpath refid="LVA-Bedingmit.classpath"/>
+            <classpath refid="LVAEntlassmitteilung.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
@@ -55,26 +54,5 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
-    </target>
-    <target name="Verschluesseln">
-        <java classname="lvaEntlassmitteilung.Verschluesseln" failonerror="true" fork="yes">
-            <classpath refid="LVA-Bedingmit.classpath"/>
-        </java>
-    </target>
-    <target name="VerschluesselnTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="lvaEntlassmitteilung.VerschluesselnTest" todir="${junit.output.dir}"/>
-            <classpath refid="LVA-Bedingmit.classpath"/>
-        </junit>
-    </target>
-    <target name="junitreport">
-        <junitreport todir="${junit.output.dir}">
-            <fileset dir="${junit.output.dir}">
-                <include name="TEST-*.xml"/>
-            </fileset>
-            <report format="frames" todir="${junit.output.dir}"/>
-        </junitreport>
     </target>
 </project>
