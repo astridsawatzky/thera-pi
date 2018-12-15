@@ -15,7 +15,7 @@ public class DatFunk {
 
     private static final DateTimeFormatter inFormatter = DateTimeFormatter.ofPattern("d.M.yyyy");
     private static final DateTimeFormatter outFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private static DateTimeFormatter reverseHyphonFormatter = DateTimeFormatter.ofPattern("yyyy-M-d");
+    private static DateTimeFormatter reverseHyphonFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     public static String sDatInDeutsch(String sJavaDat) {
         if (sJavaDat == null) {
@@ -28,7 +28,7 @@ public class DatFunk {
 
     public static String sDatInSQL(String sDeutschDat) {
        return LocalDate.parse(sDeutschDat, inFormatter).format(reverseHyphonFormatter);
-       
+
     }
 
     public static String sHeute() {
@@ -73,17 +73,17 @@ public class DatFunk {
         return ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).format(outFormatter);
 
     }
-   
+
     public static int KalenderWoche(String sdatum) {
         LocalDate ld = LocalDate.parse(sdatum, inFormatter);
         return ld.get(WeekFields.of(Locale.GERMANY).weekOfYear());
     }
-    
+
     /**
      * converts a given date into its long value (milliseconds since 01011970)
-     * 
+     *
      * if the date is separated with hyphons it needs to be in format yyyy-M-d
-     * @param sdatum 
+     * @param sdatum
      * @return
      */
     public static long DatumsWert(String sdatum) {
@@ -98,9 +98,9 @@ public class DatFunk {
         ZoneId zoneId = ZoneId.systemDefault();
         return ld.atStartOfDay(zoneId).toInstant().toEpochMilli();
     }
-    
+
     public static String WertInDatum(long ldatum) {
-        
+
         Instant inst;
         if (ldatum == 0) {
             inst = Instant.now();
