@@ -6,7 +6,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/java_uno.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/java_uno_accessbridge.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/juh.jar"/>
-	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/jurt.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/jut.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/officebean.jar"/>

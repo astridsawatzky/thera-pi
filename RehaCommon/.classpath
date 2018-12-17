@@ -8,7 +8,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/java_uno_accessbridge.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/java_uno.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/juh.jar"/>
-	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/junit-3.8.1.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/jurt.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/jut.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/officebean.jar"/>
@@ -20,10 +19,10 @@
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swing-worker.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swingx-1.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-classic-1.2.3.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-core-1.2.3.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/logging/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/junit-4.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
