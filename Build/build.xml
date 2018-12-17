@@ -35,6 +35,7 @@
         <ant dir="${dir.prepare.therapi}" target="${build.target}"/>
         <ant dir="${dir.reha.wissen}" target="${build.target}"/>
         <ant dir="${dir.icd.suche}" target="${build.target}"/>
+    	<ant dir="${dir.ini.edit}" target="${build.target}"/>
         <ant dir="${dir.therapi.updates}" target="${build.target}"/>
         <ant dir="${dir.arzt.baustein}" target="${build.target}"/>
         <ant dir="${dir.bmi.rechner}" target="${build.target}"/>
