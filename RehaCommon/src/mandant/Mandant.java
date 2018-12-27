@@ -1,4 +1,4 @@
-package theraPi;
+package mandant;
 
 public class Mandant {
 	private String ik;

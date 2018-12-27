@@ -8,6 +8,8 @@ import java.util.ListIterator;
 
 import org.ini4j.Ini;
 
+import mandant.Mandant;
+
 public class MandantList implements List<Mandant>{
 	List<Mandant> list;
 	private int defIndex=0;

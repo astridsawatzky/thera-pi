@@ -12,6 +12,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import mandant.Mandant;
+
 final class MandantSelector extends JDialog {
 
 	private Mandant chosen;

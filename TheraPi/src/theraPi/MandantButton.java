@@ -2,6 +2,8 @@ package theraPi;
 
 import javax.swing.JButton;
 
+import mandant.Mandant;
+
 public class MandantButton extends JButton {
 	private Mandant mandant;
 
