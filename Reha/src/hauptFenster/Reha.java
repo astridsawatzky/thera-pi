@@ -370,6 +370,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean bHatMerkmale;
 
 	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
+	private static Logger logger = LoggerFactory.getLogger(Reha.class);
 
 
 	/*
@@ -386,12 +387,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 		new Logging("reha");
 
-		 Logger logger = LoggerFactory.getLogger(Reha.class);
-
-
-
-
-		if(args.length > 0){
+		 if(args.length > 0){
 			String[] split = args[0].split("@");
 			aktIK = split[0];
 			aktMandant = split[1];
@@ -2990,6 +2986,7 @@ public void mustReloadDb(){
  */
 
 final class DatenbankStarten implements Runnable{
+	Logger logger = LoggerFactory.getLogger(DatenbankStarten.class);
 
 	private void StarteDB(){
 		final Reha obj = Reha.thisClass;
@@ -3244,9 +3241,12 @@ final class DatenbankStarten implements Runnable{
 
 				Vector<Vector<String>> vec = SqlInfo.holeFelder("select min(datum),max(datum) from flexkc");
 
-				Reha.kalMin = DatFunk.sDatInDeutsch( (vec.get(0).get(0)) );
-
-				Reha.kalMax = DatFunk.sDatInDeutsch( (vec.get(0).get(1)) );
+				try {
+					Reha.kalMin = DatFunk.sDatInDeutsch((vec.get(0).get(0)));
+					Reha.kalMax = DatFunk.sDatInDeutsch((vec.get(0).get(1)));
+				} catch (java.lang.Exception e) {
+					logger.info("kalmin und kalmax nicht gesetzt", e);
+				}
 
 				SystemConfig.FirmenDaten();
 
