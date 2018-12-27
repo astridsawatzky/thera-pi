@@ -6,5 +6,8 @@
 	<classpathentry kind="lib" path="/Libraries/lib/jgoodies/looks-2.3.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
+	<classpathentry kind="lib" path="/Libraries/lib/ini/ini4j-0.5.4.jar"/>
+	<classpathentry kind="src" path="/Reha"/>
+	<classpathentry kind="lib" path="/Libraries/lib/logging/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
