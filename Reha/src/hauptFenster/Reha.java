@@ -1077,15 +1077,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	}
 
-	public void aktiviereNachNamen(String winname){
 
-	}
-	public void aktiviereNachWinnum(int winnum){
-
-	}
-	public void setzeDivider(){
-
-	}
 
 
 	private JXFrame getJFrame() {

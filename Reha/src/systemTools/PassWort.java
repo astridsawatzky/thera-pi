@@ -33,10 +33,10 @@ import terminKalender.ParameterLaden;
 public class PassWort extends JXPanel implements KeyListener, ActionListener{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -702150863186759990L;
-	private JPasswordField pwTextFeld = null; 
+	private JPasswordField pwTextFeld = null;
 	private JXButton pwButton = null;
 	private int falscherLogin = 0;
 	public static PassWort thisClass = null;
@@ -55,16 +55,16 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
                 "Hinweis--> Nach 3-maliger Falscheingabe wird der Administrator per Email über den fehlgeschlagenen Login-Versuch informiert.",
                 new ImageIcon(ss));
         this.add(header,BorderLayout.NORTH);
-		
-		
+
+
 		//JXPanel jgrid = new JXPanel(new GridBagLayout());
 		JXPanel jgrid = new JXPanel(new GridLayout(4,1));
 		jgrid.setBorder(null);
 		//jgrid.setBackgroundPainter(Reha.RehaPainter[0]);
 		//jgrid.setAlpha(0.5f);
-		
+
 		jgrid.add(new JLabel(""));
-		
+
 		GridBagConstraints gridBagConstraints = new GridBagConstraints() ;
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = GridBagConstraints.CENTER;
@@ -105,7 +105,7 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 		//jgrid.add(pwButton,gridBagConstraints2);
 		jgrid.add(butpanel);
 		jgrid.add(new JLabel(""));
-		
+
 		this.add(jgrid,BorderLayout.CENTER);
 		this.setVisible(true);
 		this.addKeyListener(this);
@@ -151,17 +151,16 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 			RehaTPEvent rEvt = new RehaTPEvent(this);
 			rEvt.setRehaEvent("PinPanelEvent");
 			rEvt.setDetails(this.getName(),"ROT") ;
-			RehaTPEventClass.fireRehaTPEvent(rEvt);	
+			RehaTPEventClass.fireRehaTPEvent(rEvt);
 			Reha.thisFrame.setVisible(true);
-			Reha.thisClass.setzeDivider();
 			Reha.thisFrame.validate();
 			this.grundContainer().Schliessen();
-			
+
 		}
 	}
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		////System.out.println(e);
 		int code = e.getKeyCode();
 		if(code==27){
@@ -172,29 +171,29 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 		}else if((e.getModifiers() == KeyModifier.MOD1) || (e.getModifiers() == KeyModifier.MOD2) ){
 			e.consume();
 		}
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		passWortCheck();
 	}
 
 	public RehaSmartDialog grundContainer(){
-		return (RehaSmartDialog) this.getParent().getParent().getParent().getParent().getParent();		
+		return (RehaSmartDialog) this.getParent().getParent().getParent().getParent().getParent();
 	}
 	public static void zeigen(){
 		//
