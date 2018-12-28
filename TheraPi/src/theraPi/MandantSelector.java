@@ -34,7 +34,7 @@ final class MandantSelector extends JDialog {
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		setUndecorated(true);
 		setPreferredSize(new Dimension(450, 200));
-		getContentPane().add(getCenter(liste));
+		getContentPane().add(center(liste));
 
 		JLabel lblTop = new JLabel("", JLabel.CENTER);
 		lblTop.setPreferredSize(new Dimension(0, 55));
@@ -46,7 +46,7 @@ final class MandantSelector extends JDialog {
 
 	}
 
-	private Component getCenter(MandantList liste) {
+	private Component center(MandantList liste) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new GridLayout(liste.size(), 1));
 		for (Mandant man : liste) {

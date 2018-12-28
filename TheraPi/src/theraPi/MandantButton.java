@@ -4,7 +4,7 @@ import javax.swing.JButton;
 
 import mandant.Mandant;
 
-public class MandantButton extends JButton {
+class MandantButton extends JButton {
 	private Mandant mandant;
 
 	public MandantButton(Mandant mandant) {
@@ -16,7 +16,4 @@ public class MandantButton extends JButton {
 	public Mandant mandant() {
 		return mandant;
 	}
-
-
-
 }
