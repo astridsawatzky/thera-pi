@@ -54,6 +54,7 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
@@ -172,8 +173,8 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	}
 	
 	public void senden(){
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
-		this.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
+		this.setCursor(Cursors.wartenCursor);
 		if(tf[0].getText().trim().equals("") || tf[0].getText().trim().startsWith(",") ){
 			JOptionPane.showMessageDialog(null,"Keine Empfängeradresse angegeben");
 			SwingUtilities.invokeLater(new Runnable(){
@@ -224,7 +225,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 			 oMail = null;
 		}catch(Exception e){
 			 e.printStackTrace( );
-			 Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			 Reha.thisFrame.setCursor(Cursors.normalCursor);
 			 if(abrDlg != null){
 				 abrDlg.setVisible(false);
 				 abrDlg.dispose();
@@ -241,14 +242,14 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 				abrDlg.dispose();
 				abrDlg = null;				
 			}
-			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			Reha.thisFrame.setCursor(Cursors.normalCursor);
 			int frage = JOptionPane.showConfirmDialog(null,"Versand erfolgreich abgeschlossen.\n\nWollen Sie den Email-Dialog jetzt schließen?","Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 			if(frage == JOptionPane.YES_OPTION){
 				FensterSchliessen("dieses");
 			}			
 		}else{
 			FensterSchliessen("dieses");
-			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			Reha.thisFrame.setCursor(Cursors.normalCursor);
 		}
 	}
 	
@@ -460,7 +461,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
             }
         });
         chooser.setVisible(true);
-        setCursor(Reha.thisClass.normalCursor);
+        setCursor(Cursors.normalCursor);
         final int result = chooser.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {

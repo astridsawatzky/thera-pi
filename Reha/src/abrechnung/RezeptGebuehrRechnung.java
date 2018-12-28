@@ -54,6 +54,7 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ZuzahlTools.ZZStat;
@@ -376,7 +377,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 	
 	private synchronized void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException, DocumentException{
 		IDocumentService documentService = null;
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		////System.out.println("Starte Datei -> "+url);
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();

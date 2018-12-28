@@ -75,6 +75,7 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rehaInternalFrame.JKasseInternal;
@@ -1308,7 +1309,7 @@ class HoleKassen{
 	}
 	try{
 		rs = stmt.executeQuery(sstmt);
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		Vector<String> xvec = new Vector<String>();
 		int anzahl = 0;
 		while( rs.next()){
@@ -1329,7 +1330,7 @@ class HoleKassen{
 			kpan.holeText();
 		}
 
-		Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+		Reha.thisFrame.setCursor(Cursors.normalCursor);
 		kpan.setzeFocus();
 	}catch(SQLException ev){
 		//System.out.println("SQLException: " + ev.getMessage());
@@ -1374,13 +1375,13 @@ class HoleText{
 	}
 	try{
 		rs = stmt.executeQuery(sstmt);
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		if( rs.next()){
 			pan.setMemo(rs.getString(1));
 		}else{
 			pan.setMemo("");
 		}
-		Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+		Reha.thisFrame.setCursor(Cursors.normalCursor);
 
 	}catch(SQLException ev){
 		//System.out.println("SQLException: " + ev.getMessage());

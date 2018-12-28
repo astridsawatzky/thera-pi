@@ -48,6 +48,7 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hmrCheck.HMRCheck;
 import rechteTools.Rechte;
@@ -1828,7 +1829,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			if(!komplettTest()){
 				return;
 			}
-			setCursor(Reha.thisClass.wartenCursor);
+			setCursor(Cursors.wartenCursor);
 			String stest = "";
 			int itest = -1;
 			StringBuffer sbuf = new StringBuffer();
@@ -2112,11 +2113,11 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			aufraeumen();
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).dispose();
 			//System.out.println("Rezept wurde mit Preisgruppe "+jtf[cPREISGR].getText()+" gespeichert");
-			setCursor(Reha.thisClass.cdefault);
+			setCursor(Cursors.cdefault);
 			//System.out.println(sbuf.toString());
 		}catch(Exception ex){
 			ex.printStackTrace();
-			setCursor(Reha.thisClass.cdefault);
+			setCursor(Cursors.cdefault);
 			JOptionPane.showMessageDialog(null, "Fehler beim Abspeichern dieses Rezeptes.\n"+
 					"Bitte notieren Sie den Namen des Patienten und die Rezeptnummer\n"+
 					"und informieren Sie umgehend den Administrator");
@@ -2181,7 +2182,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				}
 				
 			}			
-			setCursor(Reha.thisClass.wartenCursor);
+			setCursor(Cursors.wartenCursor);
 			String stest = "";
 			int itest = -1;
 			StringBuffer sbuf = new StringBuffer();
@@ -2189,7 +2190,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			reznr = SqlInfo.erzeugeNummer(nummer);
 			if(reznr < 0){
 				JOptionPane.showMessageDialog(null,"Schwerwiegender Fehler beim Bezug einer neuen Rezeptnummer!");
-				setCursor(Reha.thisClass.cdefault);
+				setCursor(Cursors.cdefault);
 				return;
 			}
 			int rezidneu = SqlInfo.holeId("verordn", "diagnose");
@@ -2365,10 +2366,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).setVisible(false);
 			aufraeumen();
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).dispose();
-			setCursor(Reha.thisClass.cdefault);
+			setCursor(Cursors.cdefault);
 		}catch(Exception ex){
 			ex.printStackTrace();
-			setCursor(Reha.thisClass.cdefault);
+			setCursor(Cursors.cdefault);
 			JOptionPane.showMessageDialog(null, "Fehler beim Abspeichern dieses Rezeptes.\n"+
 					"Bitte notieren Sie den Namen des Patienten und die Rezeptnummer\n"+
 					"und informieren Sie umgehend den Administrator\n"+makeStacktraceToString(ex));

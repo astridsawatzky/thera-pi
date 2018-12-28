@@ -63,6 +63,7 @@ import emailHandling.EmailSendenExtern;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
@@ -166,9 +167,9 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener{
 
 	public void cursorWait(boolean ein){
 		if(!ein){
-			this.setCursor(Reha.thisClass.normalCursor);
+			this.setCursor(Cursors.normalCursor);
 		}else{
-			this.setCursor(Reha.thisClass.wartenCursor);
+			this.setCursor(Cursors.wartenCursor);
 		}
 	}
 	public void setFocusTabelle(){

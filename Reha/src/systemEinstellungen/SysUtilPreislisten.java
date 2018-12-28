@@ -42,6 +42,7 @@ import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.DblCellEditor;
 import jxTableTools.DoubleTableCellRenderer;
@@ -539,7 +540,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			String gruppe = Integer.valueOf(jcmb[1].getSelectedIndex()+1).toString();
 			int igruppe = jcmb[1].getSelectedIndex()+1;
 			String cmd;
-			setCursor(Reha.thisClass.wartenCursor);
+			setCursor(Cursors.wartenCursor);
 			Reha.thisClass.progressStarten(true);
 			for(int i = 0; i < anzahl; i++){
 				hmpos = (String)modpreis.getValueAt(i,0);
@@ -594,12 +595,12 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			//String[] diszi = {"KG","MA","ER","LO","RH"};
 			//ParameterLaden.PreiseEinlesen(diszi[jcmb[0].getSelectedIndex()]);
 			SystemPreislisten.ladePreise(diszis[jcmb[0].getSelectedIndex()]);
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 			Reha.thisClass.Rehaprogress.setIndeterminate(false);
 			JOptionPane.showMessageDialog(null,"Preisliste wurde erfolgreich gespeichert");
 		}catch(Exception ex){
 			ex.printStackTrace();
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 			Reha.thisClass.Rehaprogress.setIndeterminate(false);
 			JOptionPane.showMessageDialog(null,"Fehler beim Abspeichern der Preisliste");
 		}
@@ -645,7 +646,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			if(frage != JOptionPane.YES_OPTION){
 				return;
 			}
-			setCursor(Reha.thisClass.wartenCursor);
+			setCursor(Cursors.wartenCursor);
 			Reha.thisClass.Rehaprogress.setIndeterminate(true);
 			if(neuaufalt.isSelected()){
 				doSetzeNeuAufAlt();			
@@ -654,11 +655,11 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			setzePreise(preis);
 			doZurueck();
 			Reha.thisClass.Rehaprogress.setIndeterminate(false);
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 		}catch(Exception ex){
 			ex.printStackTrace();
 			Reha.thisClass.Rehaprogress.setIndeterminate(false);
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 			JOptionPane.showMessageDialog(null, "Fehler beim Preislistenimport");
 		}
 	}
@@ -984,7 +985,7 @@ public class SysUtilPreislisten extends JXPanel implements KeyListener, ActionLi
 			
 			int pgGruppe = jcmb[1].getSelectedIndex();
 			//String[] diszi = {"Physio","Massage","Ergo","Logo","Reha","Podo"};
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 			//System.out.println("Disziplin = "+diszi[pgs]+" Preisgruppe = "+pgGruppe);
 			
 			return (SystemPreislisten.hmPreise.get(diszi[pgs]).get(pgGruppe) != null ? SystemPreislisten.hmPreise.get(diszi[pgs]).get(pgGruppe) : null) ;

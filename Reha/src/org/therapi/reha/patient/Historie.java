@@ -60,6 +60,7 @@ import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 import dialoge.ToolsDialog;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;
@@ -862,14 +863,14 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 							protected Void doInBackground() throws Exception {
 								try{
 									inRezeptDaten = true;
-		                			setCursor(Reha.thisClass.wartenCursor);
+		                			setCursor(Cursors.wartenCursor);
 		                    		holeEinzelTermine(ix,null);
 		    						jpan1.setRezeptDaten((String)tabhistorie.getValueAt(ix, 0),(String)tabhistorie.getValueAt(ix, idInTable));
-		    						setCursor(Reha.thisClass.normalCursor);
+		    						setCursor(Cursors.normalCursor);
 		    						inRezeptDaten = false;
 								}catch(Exception ex){
 									ex.printStackTrace();
-									setCursor(Reha.thisClass.normalCursor);
+									setCursor(Cursors.normalCursor);
 								}
 
 	    						return null;

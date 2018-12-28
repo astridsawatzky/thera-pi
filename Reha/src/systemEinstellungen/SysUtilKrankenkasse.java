@@ -46,6 +46,7 @@ import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -239,7 +240,7 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 					row = vorlagen.convertRowIndexToModel(row);
 					int col = vorlagen.getSelectedColumn();	
 					if(col==1){
-						setCursor(Reha.thisClass.wartenCursor);
+						setCursor(Cursors.wartenCursor);
 						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 						if(svorlage.equals("")){
 							return;
@@ -360,7 +361,7 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 				break;
 			}
 			if(cmd.equals("neuvorlage")){
-				setCursor(Reha.thisClass.wartenCursor);
+				setCursor(Cursors.wartenCursor);
 				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 				if(svorlage.equals("")){
 					return;
@@ -493,7 +494,7 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 
         });
         chooser.setVisible(true);
-        setCursor(Reha.thisClass.normalCursor);
+        setCursor(Cursors.normalCursor);
         final int result = chooser.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {

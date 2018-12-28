@@ -86,6 +86,7 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hmrCheck.HMRCheck;
 import jxTableTools.MyTableStringDatePicker;
@@ -1541,7 +1542,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				return false;
 			}
 			int ix = tabaktrez.getSelectedRow();
-			setCursor(Reha.thisClass.wartenCursor);
+			setCursor(Cursors.wartenCursor);
 			if(!inEinzelTermine ){
 				try{
 					inEinzelTermine = true;
@@ -1561,7 +1562,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			Reha.thisClass.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(ix, idInTable)+"'", Arrays.asList(new String[] {}) ));
 			Reha.thisClass.patpanel.aktRezept.rezAngezeigt = (String)tabaktrez.getValueAt(ix, 0);
 			rezDatenPanel.setRezeptDaten((String)tabaktrez.getValueAt(ix, 0),(String)tabaktrez.getValueAt(ix, idInTable));
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 			final String testreznum = tabaktrez.getValueAt(ix, 0).toString();
 			//System.out.println("**********"+testreznum+" "+Reha.thisClass.dta301panel);
 
@@ -1575,7 +1576,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			}
 
 		}catch(Exception ex){
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 			ex.printStackTrace();
 			inEinzelTermine = false;
 			//JOptionPane.showMessageDialog(null, "Fehler im ListSelection-Listener aktuelle Rezepte");

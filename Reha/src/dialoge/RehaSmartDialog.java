@@ -31,6 +31,7 @@ import org.jdesktop.swingx.JXTitledPanel;
 
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import systemTools.ListenerTools;
 
@@ -388,13 +389,13 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public  void run(){
-				setCursor(Reha.thisClass.cdefault);
+				setCursor(Cursors.cdefault);
 				clickX = -1;
 				clickY = -1;
 				orgbounds[0] = -1;
 				orgbounds[1] = -1;					
 				insize = false;
-				setCursor(Reha.thisClass.cdefault);
+				setCursor(Cursors.cdefault);
 				hilfsint = getWidth()/2;
 				waagrecht[0] = hilfsint-15;
 				waagrecht[1] = hilfsint+15;
@@ -421,7 +422,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
                 public  void run(){
-					setCursor(Reha.thisClass.cmove);
+					setCursor(Cursors.cmove);
 					setLocation(ex.getXOnScreen()-clickX,ex.getYOnScreen()-clickY);
 		 	  	}
 			});
@@ -445,7 +446,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen(),ex.getYOnScreen());
-					setCursor(Reha.thisClass.cnwsize);
+					setCursor(Cursors.cnwsize);
 					break;
 				}
 				if(sizeart==2){ //nord-ost
@@ -457,7 +458,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen()-dim.width,ex.getYOnScreen());
-					setCursor(Reha.thisClass.cnesize);
+					setCursor(Cursors.cnesize);
 					break;
 				}
 				if(sizeart==3){ //nord
@@ -468,7 +469,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen()-ex.getX(),ex.getYOnScreen());
-					setCursor(Reha.thisClass.cnsize);
+					setCursor(Cursors.cnsize);
 					break;
 				}	
 				if(sizeart==4){ //süd-west
@@ -480,7 +481,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen(),ex.getYOnScreen()-dim.height);
-					setCursor(Reha.thisClass.cswsize);
+					setCursor(Cursors.cswsize);
 					break;
 				}
 				if(sizeart==5){ //west
@@ -491,7 +492,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen(),ex.getYOnScreen()-ex.getY());
-					setCursor(Reha.thisClass.cwsize);
+					setCursor(Cursors.cwsize);
 					break;
 				}
 				if(sizeart==6){ //süd-ost
@@ -503,7 +504,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen()-dim.width,ex.getYOnScreen()-dim.height);
-					setCursor(Reha.thisClass.cwsize);
+					setCursor(Cursors.cwsize);
 					break;
 				}
 				if(sizeart==7){ //süd
@@ -514,7 +515,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen()-ex.getX(),ex.getYOnScreen()-dim.height);
-					setCursor(Reha.thisClass.cssize);
+					setCursor(Cursors.cssize);
 					break;
 				}
 				if(sizeart==8){ //ost
@@ -525,12 +526,12 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 					orgbounds[1] = oY;
 					setSize(dim);
 					setLocation(ex.getXOnScreen()-ex.getX(),ex.getYOnScreen()-ex.getY());
-					setCursor(Reha.thisClass.cesize);
+					setCursor(Cursors.cesize);
 					break;
 				}
 
 				insize = false;
-				setCursor(Reha.thisClass.cdefault);
+				setCursor(Cursors.cdefault);
 			}
 	       //	}
 			//});
@@ -538,7 +539,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 		}else{
 
 			insize = false;
-			setCursor(Reha.thisClass.cdefault);
+			setCursor(Cursors.cdefault);
 		}
 	}
 
@@ -546,13 +547,13 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 	public void mouseMoved(java.awt.event.MouseEvent e) {    
 		for(int i = 0; i < 1; i++){
 			sizeart=-1;
-			setCursor(Reha.thisClass.cdefault);
+			setCursor(Cursors.cdefault);
 			if ((e.getX() <= 4 && e.getY() <= 4)){ //nord-west
 				insize = true;
 				sizeart = 1;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.cnwsize);
+				setCursor(Cursors.cnwsize);
 				break;
 			}
 			if( (e.getX()>=  (((JComponent) e.getSource()).getWidth()-4)) && e.getY() <= 4){//nord-ost
@@ -560,7 +561,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 				sizeart = 2;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.cnesize);
+				setCursor(Cursors.cnesize);
 				break;
 			}
 			if(e.getY() <= 6 && WertZwischen(e.getX(),waagrecht[0],waagrecht[1])){//nord
@@ -568,7 +569,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 				sizeart = 3;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.cnsize);
+				setCursor(Cursors.cnsize);
 				break;
 			}
 			if ((e.getX() <= 4 && e.getY() >= (((JComponent) e.getSource()).getHeight()-4))){ //s�d-west
@@ -576,7 +577,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 				sizeart = 4;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.cswsize);
+				setCursor(Cursors.cswsize);
 				break;
 			}
 			if ((e.getX() <= 6) && WertZwischen(e.getY(),senkrecht[0],senkrecht[1])){ //west
@@ -584,7 +585,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 				sizeart = 5;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.cwsize);
+				setCursor(Cursors.cwsize);
 				break;
 			}
 			if ((e.getX()>=  (((JComponent) e.getSource()).getWidth()-4)) && //s�d-ost
@@ -593,7 +594,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 				sizeart = 6;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.csesize);
+				setCursor(Cursors.csesize);
 				break;
 			}
 			if (e.getY() >= (((JComponent) e.getSource()).getHeight()-4) && WertZwischen(e.getX(),waagrecht[0],waagrecht[1])){ //s�d
@@ -601,7 +602,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 				sizeart = 7;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.cssize);
+				setCursor(Cursors.cssize);
 				break;
 			}
 			if (e.getX() >= (((JComponent) e.getSource()).getWidth()-6) && WertZwischen(e.getY(),senkrecht[0],senkrecht[1])){ //ost
@@ -609,13 +610,13 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 				sizeart = 8;
 				orgbounds[0]=e.getXOnScreen();
 				orgbounds[1]=e.getYOnScreen();						
-				setCursor(Reha.thisClass.cesize);
+				setCursor(Cursors.cesize);
 				break;
 			}
 
 			insize = false;
 			sizeart = -1;
-			setCursor(Reha.thisClass.cdefault);
+			setCursor(Cursors.cdefault);
 
 		}
 	}

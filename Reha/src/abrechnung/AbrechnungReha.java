@@ -49,6 +49,7 @@ import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import patientenFenster.KassenAuswahl;
@@ -602,7 +603,7 @@ public class AbrechnungReha extends JXPanel{
 			@Override
 			protected Void doInBackground() throws Exception {
 				try {
-					getInstance().setCursor(Reha.thisClass.wartenCursor);
+					getInstance().setCursor(Cursors.wartenCursor);
 					if(abrechnungOk){
 						//System.out.println("AbrechnungOK-1 = "+abrechnungOk);
 						doHauptRechnungDrucken();
@@ -633,10 +634,10 @@ public class AbrechnungReha extends JXPanel{
 						JOptionPane.showConfirmDialog(null, "Die Abrechnung enthält Fehler. Bitte beheben Sie die Fehler und starten Sie die RehaAbrechnung erneut");
 						allesAusschalten();
 					}
-					getInstance().setCursor(Reha.thisClass.cdefault);
+					getInstance().setCursor(Cursors.cdefault);
 				} catch (Exception e) {
 					e.printStackTrace();
-					getInstance().setCursor(Reha.thisClass.cdefault);
+					getInstance().setCursor(Cursors.cdefault);
 					JOptionPane.showMessageDialog(null, "Fehler bei der Abrechnung\n"+e.getMessage());
 					e.printStackTrace();
 					allesAusschalten();

@@ -32,6 +32,7 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 
 public class Ns2 implements ActionListener {
@@ -653,7 +654,7 @@ public class Ns2 implements ActionListener {
 			e.printStackTrace();
 		}
 		try{
-			Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+			Reha.thisFrame.setCursor(Cursors.wartenCursor);
 			rs = stmt.executeQuery(buf.toString());
 
 			if(rs.next()){
@@ -664,7 +665,7 @@ public class Ns2 implements ActionListener {
 					eltern.bchb[i].setSelected( ( rs.getString(eltern.bchb[i].getName()).equals("1") ? true : false) );
 				}
 			}
-			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			Reha.thisFrame.setCursor(Cursors.normalCursor);
 		}catch(SQLException ev){
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());

@@ -59,7 +59,7 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 	 */
 	private void doRehaSql(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.IS_STARTET)){
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			rehaSqlIsActive = true;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.IS_FINISHED)){
@@ -88,7 +88,7 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 	 */
 	private void doOffenePosten(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.IS_STARTET)){
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			offenePostenIsActive = true;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.IS_FINISHED)){
@@ -111,7 +111,7 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 
 	private void doWorkFlow(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.IS_STARTET)){
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			rehaWorkFlowIsActive = true;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.IS_FINISHED)){
@@ -130,7 +130,7 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 	
 	private void doOpRgaf(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.IS_STARTET)){
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			rgAfIsActive = true;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.IS_FINISHED)){
@@ -152,7 +152,7 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 	 */
 	private void doReha301(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.IS_STARTET)){
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			reha301IsActive = true;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.IS_FINISHED)){
@@ -185,9 +185,9 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 	 */	
 	private void doRehaMail(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.IS_STARTET)){
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			rehaMailIsActive = true;
-			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			Reha.thisFrame.setCursor(Cursors.normalCursor);
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.IS_FINISHED)){
 			rehaMailIsActive = false;
@@ -212,9 +212,9 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 	 */	
 	private void doRehaHMK(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.IS_STARTET)){
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			rehaHMKIsActive = true;
-			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			Reha.thisFrame.setCursor(Cursors.normalCursor);
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.IS_FINISHED)){
 			rehaHMKIsActive = false;

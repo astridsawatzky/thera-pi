@@ -34,6 +34,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import dialoge.RehaSmartDialog;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SysUtilDruckvorlage;
@@ -67,7 +68,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 		/****************************************************************/
 		rSmart.setLocationRelativeTo(null); 
 		rSmart.setVisible(true);
-		SysUtilDruckvorlage.thisClass.setCursor(Reha.thisClass.normalCursor);
+		SysUtilDruckvorlage.thisClass.setCursor(Cursors.normalCursor);
 
 				
 	}

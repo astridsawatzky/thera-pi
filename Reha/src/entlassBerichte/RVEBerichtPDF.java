@@ -46,6 +46,7 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ArztTools;
@@ -296,7 +297,7 @@ public class RVEBerichtPDF {
  						}
 
 					}
-					Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+					Reha.thisFrame.setCursor(Cursors.normalCursor);
 					Reha.thisClass.progressStarten(false);
 					ArztTools.constructArztHMap(id);
 				}

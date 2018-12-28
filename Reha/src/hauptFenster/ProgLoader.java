@@ -125,7 +125,7 @@ public void ProgTerminFenster(int setPos,int ansicht) {
  
 			int containerNr = SystemConfig.hmContainer.get("Kalender");
 			containerHandling(containerNr);
-			LinkeTaskPane.thisClass.setCursor(Reha.thisClass.wartenCursor);
+			LinkeTaskPane.thisClass.setCursor(Cursors.wartenCursor);
 			terminjry = null;
 			if(xansicht != 2){
 				String stag = DatFunk.sHeute();
@@ -155,7 +155,7 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			terminjry.pack();
 			terminjry.setVisible(true);
 			Reha.thisClass.desktops[containerNr].add(terminjry);
-			LinkeTaskPane.thisClass.setCursor(Reha.thisClass.normalCursor);
+			LinkeTaskPane.thisClass.setCursor(Cursors.normalCursor);
 			AktiveFenster.setNeuesFenster(name,terminjry,containerNr,Reha.thisClass.terminpanel.getViewPanel());			
 			terminjry.aktiviereDiesenFrame(terminjry.getName());
 			SwingUtilities.invokeLater(new Runnable(){
@@ -184,14 +184,14 @@ public void ProgRoogleFenster(int setPos,String droptext) {
 			if(!Rechte.hatRecht(Rechte.Rugl_open, true)){
 				return;
 			}
- 		   	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+ 		   	Reha.thisFrame.setCursor(Cursors.wartenCursor);
  			roogleDlg = new RoogleFenster(Reha.thisFrame,xdroptext);
  			roogleDlg.setSize(940,680);
  			roogleDlg.setPreferredSize(new Dimension(940,680));
  			roogleDlg.setLocationRelativeTo(null);
  			roogleDlg.pack();
  			roogleDlg.setVisible(true);
- 			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+ 			Reha.thisFrame.setCursor(Cursors.normalCursor);
 		}
 	}.start();
 }
@@ -219,7 +219,7 @@ public void KassenFenster(int setPos,String kid) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "KrankenKasse"+WinNum.NeueNummer();
 	int containerNr = SystemConfig.hmContainer.get("Kasse");
 	containerHandling(containerNr);
@@ -239,7 +239,7 @@ public void KassenFenster(int setPos,String kid) {
 	((JRehaInternal)kassejry).setImmerGross( (SystemConfig.hmContainer.get("KasseOpti") > 0 ? true : false));
 	////System.out.println("Anzahl Fenster = "+Reha.thisClass.desktops[containerNr].getComponentCount());
 	kassejry.aktiviereDiesenFrame( kassejry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 	Reha.thisClass.kassenpanel.setzeFocus();
 }
 public void loescheKasse(){
@@ -266,7 +266,7 @@ public void ArztFenster(int setPos,String aid) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "ArztVerwaltung"+WinNum.NeueNummer();
 	int containerNr = SystemConfig.hmContainer.get("Arzt");
 	containerHandling(containerNr);
@@ -287,7 +287,7 @@ public void ArztFenster(int setPos,String aid) {
 	((JRehaInternal)arztjry).setImmerGross( (SystemConfig.hmContainer.get("ArztOpti") > 0 ? true : false));
 	////System.out.println("Anzahl Fenster = "+Reha.thisClass.desktops[containerNr].getComponentCount());
 	arztjry.aktiviereDiesenFrame( arztjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 	Reha.thisClass.arztpanel.setzeFocus();
 	
 }
@@ -319,7 +319,7 @@ public void GutachenFenster(int setPos,String pat_intern,int berichtid,String be
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "GutachtenFenster"+WinNum.NeueNummer();
 	int containerNr = SystemConfig.hmContainer.get("Arzt");
 	containerHandling(containerNr);
@@ -337,7 +337,7 @@ public void GutachenFenster(int setPos,String pat_intern,int berichtid,String be
 	gutjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(gutjry);
 	gutjry.aktiviereDiesenFrame( gutjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 public void loescheGutachten(){
 	gutjry = null;
@@ -367,7 +367,7 @@ public void AbrechnungFenster(int setPos) {
 		return;
 	}
 	//neuer Titel eingebaut
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Abrechnung"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -386,7 +386,7 @@ public void AbrechnungFenster(int setPos) {
 	Reha.thisClass.desktops[containerNr].add(abrechjry);
 	//((JRehaInternal)abrechjry).setImmerGross( (SystemConfig.hmContainer.get("ArztOpti") > 0 ? true : false));
 	abrechjry.aktiviereDiesenFrame( abrechjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 	
 }
 public void loescheAbrechnung(){
@@ -415,7 +415,7 @@ public void AnmeldungenFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Anmeldungen"+WinNum.NeueNummer();
 	//int containerNr = SystemConfig.hmContainer.get("Arzt");
 	int containerNr = setPos;
@@ -434,7 +434,7 @@ public void AnmeldungenFenster(int setPos,String sparam) {
 	anmeldungenjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(anmeldungenjry);
 	anmeldungenjry.aktiviereDiesenFrame( anmeldungenjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 	
 }
 public void loescheAnmeldungen(){
@@ -463,7 +463,7 @@ public void UmsatzFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Umsaetze"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -481,7 +481,7 @@ public void UmsatzFenster(int setPos,String sparam) {
 	umsaetzejry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(umsaetzejry);
 	umsaetzejry.aktiviereDiesenFrame( umsaetzejry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheUmsaetze(){
@@ -510,7 +510,7 @@ public void VerkaufFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Verkauf"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -528,7 +528,7 @@ public void VerkaufFenster(int setPos,String sparam) {
 	verkaufjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(verkaufjry);
 	verkaufjry.aktiviereDiesenFrame( verkaufjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheVerkauf(){
@@ -559,7 +559,7 @@ public void Dta301Fenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "DTA301"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -578,7 +578,7 @@ public void Dta301Fenster(int setPos,String sparam) {
 	dta301jry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(dta301jry);
 	dta301jry.aktiviereDiesenFrame( dta301jry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheDta301(){
@@ -608,7 +608,7 @@ public void BarkassenFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Barkasse"+WinNum.NeueNummer();
 	////System.out.println("Neues Barkassenfenster = "+name);
 	int containerNr = setPos;
@@ -628,7 +628,7 @@ public void BarkassenFenster(int setPos,String sparam) {
 	barkassenjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(barkassenjry);
 	barkassenjry.aktiviereDiesenFrame( barkassenjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheBarkasse(){
@@ -656,7 +656,7 @@ public void RehaabrechnungFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Rehaabrechnung"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -674,7 +674,7 @@ public void RehaabrechnungFenster(int setPos,String sparam) {
 	rehaabrechnungjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(rehaabrechnungjry);
 	rehaabrechnungjry.aktiviereDiesenFrame( rehaabrechnungjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheRehaabrechnung(){
@@ -703,7 +703,7 @@ public void BeteiligungFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Beteiligung"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -720,7 +720,7 @@ public void BeteiligungFenster(int setPos,String sparam) {
 	beteiligungjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(beteiligungjry);
 	beteiligungjry.aktiviereDiesenFrame( beteiligungjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheBeteiligung(){
@@ -749,7 +749,7 @@ public void BenutzerrechteFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Benutzerrechte"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -767,7 +767,7 @@ public void BenutzerrechteFenster(int setPos,String sparam) {
 	benutzerjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(benutzerjry);
 	benutzerjry.aktiviereDiesenFrame(benutzerjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheBenutzerrechte(){
@@ -794,7 +794,7 @@ public void UrlaubFenster(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "Urlaub"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -812,7 +812,7 @@ public void UrlaubFenster(int setPos,String sparam) {
 	urlaubjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(urlaubjry);
 	urlaubjry.aktiviereDiesenFrame( urlaubjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheUrlaub(){
@@ -867,7 +867,7 @@ public void ProgPatientenVerwaltung(int setPos) {
 	}
 	
 	Reha.thisClass.progressStarten(true);
-	LinkeTaskPane.thisClass.setCursor(Reha.thisClass.wartenCursor);
+	LinkeTaskPane.thisClass.setCursor(Cursors.wartenCursor);
 	String name = "PatientenVerwaltung"+WinNum.NeueNummer();
 	int containerNr = SystemConfig.hmContainer.get("Patient");
 	containerHandling(containerNr);
@@ -910,7 +910,7 @@ public void ProgPatientenVerwaltung(int setPos) {
 	//Definition ob immer auf maximale Größe getrimmt wird oder nicht	
 	/***************************/	
 	((JRehaInternal)patjry).setImmerGross( (SystemConfig.hmContainer.get("PatientOpti") == 1 ? true : false));
-	LinkeTaskPane.thisClass.setCursor(Reha.thisClass.normalCursor);
+	LinkeTaskPane.thisClass.setCursor(Cursors.normalCursor);
 	patjry.aktiviereDiesenFrame(patjry.getName());
 	SwingUtilities.invokeLater(new Runnable(){
 	 	   @Override
@@ -944,7 +944,7 @@ public static void PasswortDialog(int setPos) {
 			e.printStackTrace();
 		}
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);	
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);	
 	String name = "PasswortDialog"+WinNum.NeueNummer();
 	RehaTP jtp = new RehaTP(setPos); 
 	jtp.setBorder(null);
@@ -1009,7 +1009,7 @@ public void SystemInit(int setPos,String sparam) {
 		}
 		return;
 	}
-	Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+	Reha.thisFrame.setCursor(Cursors.wartenCursor);
 	String name = "SystemInit"+WinNum.NeueNummer();
 	int containerNr = setPos;
 	containerHandling(containerNr);
@@ -1027,7 +1027,7 @@ public void SystemInit(int setPos,String sparam) {
 	systeminitjry.setVisible(true);
 	Reha.thisClass.desktops[containerNr].add(systeminitjry);
 	systeminitjry.aktiviereDiesenFrame( systeminitjry.getName());
-	Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+	Reha.thisFrame.setCursor(Cursors.normalCursor);
 }
 
 public void loescheSysteminit(){

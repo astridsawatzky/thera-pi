@@ -4,7 +4,6 @@ import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.FlowLayout;
@@ -290,21 +289,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static ImageIcon rehaBackImg = null;
 	public JLabel bunker = null;
 	public JProgressBar Rehaprogress = null;
-	public final Cursor wartenCursor = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-	public final Cursor normalCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-	public final Cursor kreuzCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
-	public final Cursor cmove = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR);
-	public final Cursor cnsize = Cursor.getPredefinedCursor(Cursor.N_RESIZE_CURSOR);
-	public final Cursor cnwsize = Cursor.getPredefinedCursor(Cursor.NW_RESIZE_CURSOR);
-	public final Cursor cnesize = Cursor.getPredefinedCursor(Cursor.NE_RESIZE_CURSOR);
-	public final Cursor cswsize = Cursor.getPredefinedCursor(Cursor.SW_RESIZE_CURSOR);
-	public final Cursor cwsize = Cursor.getPredefinedCursor(Cursor.W_RESIZE_CURSOR);
-	public final Cursor csesize = Cursor.getPredefinedCursor(Cursor.SE_RESIZE_CURSOR);
-	public final Cursor cssize = Cursor.getPredefinedCursor(Cursor.S_RESIZE_CURSOR);
-	public final Cursor cesize = Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
-	public final Cursor cdefault = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-
-
 	public GradientPaint gp1 = new GradientPaint(0,0,new Color(112,141,255),0,25,Color.WHITE,true);
 	public GradientPaint gp2 = new GradientPaint(0,0,new Color(112,141,120),0,25,Color.WHITE,true);
 	public HashMap<String,CompoundPainter<Object>> compoundPainter = new HashMap<String,CompoundPainter<Object>>();
@@ -2116,8 +2100,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
         				new SwingWorker<Void,Void>(){
         					@Override
         					protected Void doInBackground() throws Exception {
-        						Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
-        						Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+        						Reha.thisFrame.setCursor(Cursors.wartenCursor);
+        						Reha.thisFrame.setCursor(Cursors.normalCursor);
         						return null;
         					}
         				}.execute();
@@ -2164,9 +2148,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
                             keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==65) {  // Ctrl-K
     					//JComponent arzt = AktiveFenster.getFensterAlle("ArztVerwaltung");
 
-						Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+						Reha.thisFrame.setCursor(Cursors.wartenCursor);
 						Reha.thisClass.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
-						Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+						Reha.thisFrame.setCursor(Cursors.normalCursor);
                     }
 
                     if(keyEvent.isControlDown() &&

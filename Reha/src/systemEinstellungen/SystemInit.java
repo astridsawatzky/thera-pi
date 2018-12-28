@@ -27,6 +27,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.therapi.reha.patient.LadeProg;
 
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rechteTools.Rechte;
@@ -845,9 +846,9 @@ private void doAccessDenied(){
 }
 private void cursorWait(boolean ein){
 	if(!ein){
-		this.setCursor(Reha.thisClass.cdefault);
+		this.setCursor(Cursors.cdefault);
 	}else{
-		this.setCursor(Reha.thisClass.wartenCursor);
+		this.setCursor(Cursors.wartenCursor);
 	}
 }
 @Override

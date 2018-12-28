@@ -61,16 +61,16 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	private int clickX;
 	private int clickY;
 
-	private Cursor cmove = Reha.thisClass.cmove;
-	private Cursor cnsize = Reha.thisClass.cnsize;
-	private Cursor cnwsize = Reha.thisClass.cnwsize;
-	private Cursor cnesize = Reha.thisClass.cnesize;
-	private Cursor cswsize = Reha.thisClass.cswsize;
-	private Cursor cwsize = Reha.thisClass.cwsize;
-	private Cursor csesize = Reha.thisClass.csesize;
-	private Cursor cssize = Reha.thisClass.cssize;
-	private Cursor cesize = Reha.thisClass.cesize;
-	private Cursor cdefault = Reha.thisClass.cdefault;
+	private Cursor cmove = Cursors.cmove;
+	private Cursor cnsize = Cursors.cnsize;
+	private Cursor cnwsize = Cursors.cnwsize;
+	private Cursor cnesize = Cursors.cnesize;
+	private Cursor cswsize = Cursors.cswsize;
+	private Cursor cwsize = Cursors.cwsize;
+	private Cursor csesize = Cursors.csesize;
+	private Cursor cssize = Cursors.cssize;
+	private Cursor cesize = Cursors.cesize;
+	private Cursor cdefault = Cursors.cdefault;
 
 	private boolean insize;
 	private int[] orgbounds = {0,0};
@@ -794,7 +794,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		String sstmt = "", eingabe = "";
 
 		String[] suche = {null};
-		setCursor(Reha.thisClass.wartenCursor);
+		setCursor(Cursors.wartenCursor);
 
 		eingabe = jTextField.getText().trim();
 		while  (eingabe.contains("  ") ){
@@ -863,7 +863,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 					setzeReihe((Vector<String>)rowVector.clone());
 				}
 
-				setCursor(Reha.thisClass.normalCursor);
+				setCursor(Cursors.normalCursor);
 
 				try{
 					if(jtable.getRowCount() > 0 && aufrufer.getLastRow() >=0 && aufrufer.getLastRow() < jtable.getRowCount()){

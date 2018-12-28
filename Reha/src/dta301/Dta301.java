@@ -52,6 +52,7 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import rehaInternalFrame.JDta301Internal;
@@ -976,7 +977,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 	}
 	private void doBeginn(){
 		
-		setCursor(Reha.thisClass.wartenCursor);
+		setCursor(Cursors.wartenCursor);
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -985,7 +986,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 					buts[0].setEnabled(false);
 					if(! doRegle301(0,SqlInfo.holeEinzelFeld("select id from dta301 where pat_intern='"+patnummer+"' and rez_nr='"+reznummer+"' and nachrichtentyp='1' LIMIT 1")) ){
 						buts[0].setEnabled(true);
-						setCursor(Reha.thisClass.normalCursor);
+						setCursor(Cursors.normalCursor);
 						return null;
 					}
 					JOptionPane.showMessageDialog(null, "Beginnmitteilung erfolgreich versandt!");
@@ -995,14 +996,14 @@ public class Dta301 extends JXPanel implements FocusListener {
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				setCursor(Reha.thisClass.normalCursor);
+				setCursor(Cursors.normalCursor);
 				return null;
 			}
 			
 		}.execute();
 	}
 	private void doVerlaengerung(){
-		setCursor(Reha.thisClass.wartenCursor);
+		setCursor(Cursors.wartenCursor);
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -1011,7 +1012,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 					buts[3].setEnabled(false);
 					if(! doRegle301(3,SqlInfo.holeEinzelFeld("select id from dta301 where pat_intern='"+patnummer+"' and rez_nr='"+reznummer+"' and nachrichtentyp='1' LIMIT 1"))){
 						buts[3].setEnabled(true);
-						setCursor(Reha.thisClass.normalCursor);
+						setCursor(Cursors.normalCursor);
 						return null;
 					}
 					JOptionPane.showMessageDialog(null, "Verlängerung erfolgreich versandt!");
@@ -1021,7 +1022,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				setCursor(Reha.thisClass.normalCursor);
+				setCursor(Cursors.normalCursor);
 				return null;
 			}
 			
@@ -1029,7 +1030,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 	}
 
 	private void doUnterbrechung(){
-		setCursor(Reha.thisClass.wartenCursor);
+		setCursor(Cursors.wartenCursor);
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -1038,7 +1039,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 					buts[1].setEnabled(false);
 					if(! doRegle301(1,SqlInfo.holeEinzelFeld("select id from dta301 where pat_intern='"+patnummer+"' and rez_nr='"+reznummer+"' and nachrichtentyp='1' LIMIT 1"))){
 						buts[1].setEnabled(true);
-						setCursor(Reha.thisClass.normalCursor);
+						setCursor(Cursors.normalCursor);
 						return null;
 					}
 					JOptionPane.showMessageDialog(null, "Unterbrechungsmeldung erfolgreich versandt!");
@@ -1048,14 +1049,14 @@ public class Dta301 extends JXPanel implements FocusListener {
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				setCursor(Reha.thisClass.normalCursor);
+				setCursor(Cursors.normalCursor);
 				return null;
 			}
 			
 		}.execute();
 	}
 	private void doEntlassung(){
-		setCursor(Reha.thisClass.wartenCursor);
+		setCursor(Cursors.wartenCursor);
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -1064,17 +1065,17 @@ public class Dta301 extends JXPanel implements FocusListener {
 					buts[2].setEnabled(false);
 					if(! doRegle301(2,SqlInfo.holeEinzelFeld("select id from dta301 where pat_intern='"+patnummer+"' and rez_nr='"+reznummer+"' and nachrichtentyp='1' LIMIT 1")) ){
 						buts[2].setEnabled(true);
-						setCursor(Reha.thisClass.normalCursor);
+						setCursor(Cursors.normalCursor);
 						return null;						
 					}
 					JOptionPane.showMessageDialog(null, "Entlassmitteilung erfolgreich versandt!");
 					buts[2].setEnabled(true);
-					setCursor(Reha.thisClass.normalCursor);
+					setCursor(Cursors.normalCursor);
 					tabPan.setSelectedIndex(0);
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				setCursor(Reha.thisClass.normalCursor);
+				setCursor(Cursors.normalCursor);
 				return null;
 			}
 			

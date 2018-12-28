@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 
 public class LadeProg {
@@ -81,7 +82,7 @@ public class LadeProg {
 
 
 						} catch (IOException e) {
-							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+							Reha.thisFrame.setCursor(Cursors.normalCursor);
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(null, "Fehler beim starten des Moduls, Fehlermeldung ist\n"+e.getMessage().toString());
 						}

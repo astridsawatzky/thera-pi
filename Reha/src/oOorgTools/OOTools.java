@@ -86,6 +86,7 @@ import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -234,7 +235,7 @@ public class OOTools{
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws java.lang.Exception {
-				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+				Reha.thisFrame.setCursor(Cursors.wartenCursor);
 				return null;
 			}
 
@@ -409,7 +410,7 @@ public class OOTools{
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public void run(){
-				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+				Reha.thisFrame.setCursor(Cursors.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
 			}
@@ -551,7 +552,7 @@ public class OOTools{
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public void run(){
-				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+				Reha.thisFrame.setCursor(Cursors.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
 			}
@@ -562,7 +563,7 @@ public class OOTools{
 	public static synchronized void starteRGKopie(String url,String drucker) {
 		IDocumentService documentService = null;
 		ITextDocument textDocument = null;
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		//System.out.println("Starte Datei -> "+url);
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();
@@ -685,7 +686,7 @@ public class OOTools{
 				return;
 			}
 		}
-		Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+		Reha.thisFrame.setCursor(Cursors.normalCursor);
 		IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
 		viewCursor.getPageCursor().jumpToFirstPage();
 
@@ -703,7 +704,7 @@ public class OOTools{
 	/*******************************************************************************************/
 	public static synchronized void starteBacrodeFormular(String url,String drucker){
 		IDocumentService documentService = null;
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		//System.out.println("Starte Datei -> "+url);
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();
@@ -817,7 +818,7 @@ public class OOTools{
 		    }
 		    /*****************/
 		}
-		Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+		Reha.thisFrame.setCursor(Cursors.cdefault);
 		IViewCursor viewCursor = textDocument.getViewCursorService().getViewCursor();
 		viewCursor.getPageCursor().jumpToFirstPage();
 		if(!SystemConfig.oTerminListe.DirektDruck){
@@ -933,7 +934,7 @@ public class OOTools{
 
 	public static void starteTaxierung(String url,HashMap<String,String> taxWerte) throws OfficeApplicationException, NOAException, TextException{
 		IDocumentService documentService = null;
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();
 		}
@@ -1043,7 +1044,7 @@ public class OOTools{
 
 
 
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		for (int i = 0; i < placeholders.length; i++) {
 			System.out.println("Durchlauf = "+i+" insgesamt Plazhalter = "+placeholders.length);
 			//boolean loeschen = false;
@@ -1135,7 +1136,7 @@ public class OOTools{
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public void run(){
-				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+				Reha.thisFrame.setCursor(Cursors.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
 			}
@@ -1228,7 +1229,7 @@ public class OOTools{
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public void run(){
-				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+				Reha.thisFrame.setCursor(Cursors.normalCursor);
 				xtextDocument.getFrame().getXFrame().getContainerWindow().setVisible(true);
 				xtextDocument.getFrame().setFocus();
 			}
@@ -1442,7 +1443,7 @@ public class OOTools{
 	}
 	/*************************************************************************/
 	public static synchronized ITextDocument  starteGKVBericht(String url,String drucker){
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		IDocumentService documentService = null;
 		//System.out.println("Starte Datei -> "+url);
 		try {
@@ -1616,7 +1617,7 @@ public class OOTools{
 		       	docdescript.setHidden(true);
 				IDocument document = null;
 				ITextDocument textDocument = null;
-				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+				Reha.thisFrame.setCursor(Cursors.wartenCursor);
 				try {
 					if(!Reha.officeapplication.isActive()){
 						Reha.starteOfficeApplication();
@@ -1638,7 +1639,7 @@ public class OOTools{
 					Reha.thisClass.messageLabel.setText("OO.org: nicht Verfügbar");
 					exception.printStackTrace();
 				}
-				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+				Reha.thisFrame.setCursor(Cursors.normalCursor);
 				return null;
 			}
 

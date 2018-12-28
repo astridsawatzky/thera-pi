@@ -48,6 +48,7 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -231,7 +232,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 					row = vorlagen.convertRowIndexToModel(row);
 					int col = vorlagen.getSelectedColumn();	
 					if(col==1){
-						setCursor(Reha.thisClass.wartenCursor);
+						setCursor(Cursors.wartenCursor);
 						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 						if(svorlage.equals("")){
 							return;
@@ -340,7 +341,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 
 		}
 		if(cmd.equals("vorlagenneu")){
-			setCursor(Reha.thisClass.wartenCursor);
+			setCursor(Cursors.wartenCursor);
 			String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 			if(! svorlage.equals("")){
 				datLabel.setText(svorlage);
@@ -418,7 +419,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
             }
         });
         chooser.setVisible(true);
-        setCursor(Reha.thisClass.normalCursor);
+        setCursor(Cursors.normalCursor);
         final int result = chooser.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {

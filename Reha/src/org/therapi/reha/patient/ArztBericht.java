@@ -51,6 +51,7 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import patientenFenster.ArztAuswahl;
@@ -569,7 +570,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 			doBerichtVorbericht(arg0);
 		}
 		if(cmd.equals("berichtdrucken")){
-			Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+			Reha.thisFrame.setCursor(Cursors.wartenCursor);
 			doBerichtDrucken();
 		}
 		if(cmd.equals("berichtabbrechen")){

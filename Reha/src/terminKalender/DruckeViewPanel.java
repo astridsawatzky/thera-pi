@@ -40,6 +40,7 @@ import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.noa.graphic.GraphicInfo;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 
 
@@ -59,7 +60,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 			return null;
 		}
 		try{
-		Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		Reha.thisFrame.setCursor(Cursors.wartenCursor);
 		int pixelWidth = printPan.getWidth();
 		int pixelHeight = printPan.getHeight();
 		bufimg = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_RGB);
@@ -203,9 +204,9 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
             textDocumentImage);
 		*/
 
-		Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+		Reha.thisFrame.setCursor(Cursors.normalCursor);
 		}catch(Exception ex){
-			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			Reha.thisFrame.setCursor(Cursors.normalCursor);
 			ex.printStackTrace();
 		}
 		

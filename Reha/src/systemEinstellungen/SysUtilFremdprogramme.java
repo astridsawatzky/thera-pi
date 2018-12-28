@@ -32,6 +32,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 
 public class SysUtilFremdprogramme extends JXPanel implements KeyListener, ActionListener {
@@ -348,7 +349,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
         }
     });
     chooser.setVisible(true);
-    setCursor(Reha.thisClass.normalCursor);
+    setCursor(Cursors.normalCursor);
     final int result = chooser.showOpenDialog(null);
 
     if (result == JFileChooser.APPROVE_OPTION) {

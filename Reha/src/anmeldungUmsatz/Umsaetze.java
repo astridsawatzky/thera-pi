@@ -44,6 +44,7 @@ import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rehaInternalFrame.JUmsaetzeInternal;
@@ -505,7 +506,7 @@ public class Umsaetze extends JXPanel{
 							@Override
 							protected Void doInBackground() throws Exception {
 								try{
-									setCursor(Reha.thisClass.wartenCursor);
+									setCursor(Cursors.wartenCursor);
 									new SwingWorker<Void,Void>(){
 										@Override
 										protected Void doInBackground() throws Exception {
@@ -545,7 +546,7 @@ public class Umsaetze extends JXPanel{
 													JOptionPane.showMessageDialog(null,"Es ist ein Fehler in der Bearbeitung aufgetreten\nSind die eingegebenen Datumswerte korrekt?");
 												}
 											}
-											setCursor(Reha.thisClass.cdefault);
+											setCursor(Cursors.cdefault);
 											//aktion1.setText("  ");
 											//progress1.setValue(0);
 											////System.out.println("Daten wurden gesammelt von "+allDates.size()+" Behandlern");

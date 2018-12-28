@@ -77,6 +77,7 @@ import abrechnung.AbrechnungDlg;
 import dialoge.EmailDialog;
 import dialoge.InfoDialog;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.ToolTipRenderer;
 import jxTableTools.ZahlTableCellEditor;
@@ -325,9 +326,9 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	}
 	public void cursorWait(boolean ein){
 		if(!ein){
-			this.setCursor(Reha.thisClass.normalCursor);
+			this.setCursor(Cursors.normalCursor);
 		}else{
-			this.setCursor(Reha.thisClass.wartenCursor);
+			this.setCursor(Cursors.wartenCursor);
 		}
 	}
 
@@ -1385,7 +1386,7 @@ Vector mit Normal-Termin
 			final EmailDialog femlDlg = emlDlg;
 
 			if((Boolean) SystemConfig.hmIcalSettings.get("direktsenden")){
-				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+				Reha.thisFrame.setCursor(Cursors.wartenCursor);
 				/*
 				new SwingWorker<Void,Void>(){
 					@Override
@@ -1412,7 +1413,7 @@ Vector mit Normal-Termin
 								abrDlg = null;
 							}
 							*/
-							Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+							Reha.thisFrame.setCursor(Cursors.normalCursor);
 							JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");
 							try{
 								FileTools.deleteAllFiles(new File(Path.Instance.getProghome()+"temp/"+Reha.getAktIK()));

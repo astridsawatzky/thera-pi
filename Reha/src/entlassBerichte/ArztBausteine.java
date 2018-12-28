@@ -77,6 +77,7 @@ import ag.ion.noa.NOAException;
 import ag.ion.noa.frame.ILayoutManager;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
@@ -445,7 +446,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 			}
 			try{
 				String sstmt = null;
-				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+				Reha.thisFrame.setCursor(Cursors.wartenCursor);
 				if(cmd.equals("")){
 					sstmt = "select tbthema,tbuntert,tbtitel,id from tbar Order BY tbthema";
 				}else{
@@ -473,7 +474,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 
 					bausteine++;
 				}
-				Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+				Reha.thisFrame.setCursor(Cursors.normalCursor);
 				retvec.clear();
 				retvec = null;
 			}catch(SQLException ev){

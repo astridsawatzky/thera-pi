@@ -13,6 +13,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 
 
@@ -38,7 +39,7 @@ public class PLServerAuslesen {
 			e.printStackTrace();
 		}
 		try{
-			Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+			Reha.thisFrame.setCursor(Cursors.wartenCursor);
 			String sstmt = xstmt;
 			rs = stmt.executeQuery(sstmt);
 			while(rs.next()){
@@ -51,7 +52,7 @@ public class PLServerAuslesen {
 				 }
 				 retkomplett.add((Vector<String>)retvec.clone());
 			}
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 			retvec.clear();
 			retvec = null;
 		}catch(SQLException ev){
@@ -94,7 +95,7 @@ public class PLServerAuslesen {
 		}
 		try{
 			stmt.execute(sstmt);
-			Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+			Reha.thisFrame.setCursor(Cursors.cdefault);
 		}catch(SQLException ev){
 			System.out.println("SQLException: " + ev.getMessage());
 		}	

@@ -24,6 +24,7 @@ import dialoge.EmailDialog;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;
@@ -173,7 +174,7 @@ public class PatientToolBarLogic {
 					}
 					if(! RehaIOServer.rehaMailIsActive){
 						if(Reha.aktUser.startsWith("Therapeut")){return;}
-						Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+						Reha.thisFrame.setCursor(Cursors.wartenCursor);
 						
 								new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
 								long warten = System.currentTimeMillis();

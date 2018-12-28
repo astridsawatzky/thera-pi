@@ -34,6 +34,7 @@ import CommonTools.SqlInfo;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import rehaInternalFrame.JAnmeldungenInternal;
 import stammDatenTools.RezTools;
@@ -226,7 +227,7 @@ public class Anmeldungen extends JXPanel{
 								@Override
 								protected Void doInBackground() throws Exception {
 									try{
-										setCursor(Reha.thisClass.wartenCursor);
+										setCursor(Cursors.wartenCursor);
 										/*
 										setCursor(Reha.thisClass.wartenCursor);
 										fortschrittDlg = new FortschrittDlg();
@@ -435,7 +436,7 @@ public class Anmeldungen extends JXPanel{
 				summenlab[2].setText(Integer.toString(anzahl2));
 				summenlab[3].setText(dcf.format(umsatz1));
 				summenlab[4].setText(Integer.toString(minuten2));
-				setCursor(Reha.thisClass.cdefault);
+				setCursor(Cursors.cdefault);
 				return null;
 			}
 			

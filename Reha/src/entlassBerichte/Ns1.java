@@ -36,6 +36,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -111,13 +112,13 @@ public class Ns1 implements ActionListener,ComponentListener {
 								protected Void doInBackground()
 										throws Exception {
 									try{
-									eltern.setCursor(Reha.thisClass.wartenCursor);
+									eltern.setCursor(Cursors.wartenCursor);
 									Reha.thisClass.progressStarten(true);	
 						 			laden();
 						 			eltern.btf[0].requestFocusInWindow();
 						 			jscr.scrollRectToVisible(new Rectangle(0,0,0,0));
 						 			Reha.thisClass.progressStarten(false);
-						 			eltern.setCursor(Reha.thisClass.normalCursor);
+						 			eltern.setCursor(Cursors.normalCursor);
 						 			inGuiInit = false;
 									testeIK();
 									}catch(Exception ex){
@@ -1069,7 +1070,7 @@ public class Ns1 implements ActionListener,ComponentListener {
 			e.printStackTrace();
 		}
 		try{
-			Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+			Reha.thisFrame.setCursor(Cursors.wartenCursor);
 			rs = stmt.executeQuery(buf.toString());
 
 			if(rs.next()){
@@ -1099,7 +1100,7 @@ public class Ns1 implements ActionListener,ComponentListener {
 				}
 			
 			}
-			Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			Reha.thisFrame.setCursor(Cursors.normalCursor);
 		}catch(SQLException ev){
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());

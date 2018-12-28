@@ -49,6 +49,7 @@ import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import environment.Path;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -200,7 +201,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 					row = vorlagen.convertRowIndexToModel(row);
 					int col = vorlagen.getSelectedColumn();	
 					if(col==1){
-						setCursor(Reha.thisClass.wartenCursor);
+						setCursor(Cursors.wartenCursor);
 						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 						if(svorlage.equals("")){
 							return;
@@ -356,7 +357,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 				break;
 			}
 			if(cmd.equals("vorlagenwahl")){
-				setCursor(Reha.thisClass.wartenCursor);
+				setCursor(Cursors.wartenCursor);
 				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 				if(! svorlage.equals("")){
 					datLabel.setText(svorlage);
@@ -367,7 +368,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			}
 			if(cmd.equals("vorlagenneu")){
 				
-				setCursor(Reha.thisClass.wartenCursor);
+				setCursor(Cursors.wartenCursor);
 				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 				if(! svorlage.equals("")){
 					datLabel.setText(svorlage);
@@ -406,7 +407,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			
 			if(cmd.contains("iwahl")){
 				int wahl = Integer.valueOf(cmd.substring(cmd.length()-1));
-				setCursor(Reha.thisClass.wartenCursor);
+				setCursor(Cursors.wartenCursor);
 				String sicon = dateiDialog(Path.Instance.getProghome()+"icons/");
 				if(! sicon.equals("")){
 					icon[wahl].setText(sicon);
@@ -513,7 +514,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
             }
         });
         chooser.setVisible(true);
-        setCursor(Reha.thisClass.normalCursor);
+        setCursor(Cursors.normalCursor);
         final int result = chooser.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {

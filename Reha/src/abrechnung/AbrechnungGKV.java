@@ -69,6 +69,7 @@ import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.PatStammEventListener;
 import hauptFenster.AktiveFenster;
+import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rehaInternalFrame.JAbrechnungInternal;
@@ -318,7 +319,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+				Reha.thisFrame.setCursor(Cursors.wartenCursor);
 				return null;
 			}
 
@@ -633,7 +634,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				Reha.thisFrame.setCursor(Reha.thisClass.cdefault);
+				Reha.thisFrame.setCursor(Cursors.cdefault);
 				Reha.thisClass.progressStarten(false);
 				return null;
 			}
@@ -703,12 +704,12 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	/*******************************************/
 	private void doKassenTreeAuswerten(KnotenObjekt node){
 			//Rezept ausgewählt
-			setCursor(Reha.thisClass.wartenCursor);
+			setCursor(Cursors.wartenCursor);
 			Reha.thisClass.progressStarten(true);
 			try{
 				if(! this.abrRez.setNewRez(node.rez_num,node.fertig,aktDisziplin) ){
 					Reha.thisClass.progressStarten(false);
-					setCursor(Reha.thisClass.normalCursor);
+					setCursor(Cursors.normalCursor);
 					JOptionPane.showMessageDialog(null,"Rezept konnte nicht ausgewertet werden");
 					return;
 				}
@@ -716,7 +717,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				ex.printStackTrace();
 			}
 			////System.out.println("Rezept "+node.rez_num+" fertig eingestellt");
-			setCursor(Reha.thisClass.normalCursor);
+			setCursor(Cursors.normalCursor);
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
                 public void run(){
@@ -831,7 +832,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					try{
 						int lang = xaktKasse.getChildCount();
 						Reha.thisClass.progressStarten(true);
-						getInstance().setCursor(Reha.thisClass.wartenCursor);
+						getInstance().setCursor(Cursors.wartenCursor);
 						for(int i = 0; i < lang;i++){
 							if( ((JXTTreeNode)xaktKasse.getChildAt(i)).knotenObjekt.fertig ){
 								kontrollierteRezepte++;
@@ -840,7 +841,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 						}
 						setHtmlLinksUnten(lang,kontrollierteRezepte);
 						Reha.thisClass.progressStarten(false);
-						getInstance().setCursor(Reha.thisClass.cdefault);
+						getInstance().setCursor(Cursors.cdefault);
 					}catch(Exception ex){
 						ex.printStackTrace();
 					}
