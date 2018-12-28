@@ -6,6 +6,7 @@
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="Reha">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
+    <property name="TheraPi.location" value="../TheraPi"/>
     <property name="ECLIPSE_HOME" value="../../../../eclipse/java-latest-released/eclipse/"/>
     <property name="RehaCommon.location" value="../RehaCommon"/>
     <property name="Nebraska.location" value="../Nebraska"/>
@@ -163,7 +164,14 @@
             <classpath refid="Reha.classpath"/>
         </javac>
     </target>
-    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+        <ant antfile="build.xml" dir="${TheraPi.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${TheraPi.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
     <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
         <copy todir="${ant.library.dir}">
             <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
