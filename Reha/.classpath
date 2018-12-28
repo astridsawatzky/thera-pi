@@ -46,5 +46,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-core-1.2.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/TextB"/>
 	<classpathentry kind="src" path="/ArztBaustein"/>
+	<classpathentry kind="lib" path="/Libraries/lib/ini/ini4j-0.5.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

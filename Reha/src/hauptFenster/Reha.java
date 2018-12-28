@@ -54,7 +54,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -426,8 +425,18 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	private static void startWithMandantSet(Mandant mainMandant) {
 		aktIK =mainMandant.ik();
 		aktMandant=mainMandant.name();
-		INITool.init(Path.Instance.getProghome()+"ini/"+getAktIK()+"/");
-		System.out.println("Insgesamt sind "+Integer.toString(INITool.getDBInis().length)+" INI-Dateien in der Tabelle inidatei abgelegt");
+
+
+		String iniPath = Path.Instance.getProghome()+"ini/"+ mainMandant.ik()+"/";
+		try {
+			RehaSettings ini = new RehaSettings(mainMandant);
+		} catch (IOException e) {
+			logger.error("ReheajavaIni could not be created",e);
+		}
+
+
+		INITool.init(iniPath);
+		logger.info("Insgesamt sind "+Integer.toString(INITool.getDBInis().length)+" INI-Dateien in der Tabelle inidatei abgelegt");
 
 		Titel2 = "  -->  [Mandant: "+getAktMandant()+"]";
 		//System.out.println(Titel2);
@@ -1098,42 +1107,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	private JXFrame getJFrame() {
 		if (jFrame == null) {
 			jFrame = new JXFrame();
-			/*{
 
-				private static final long serialVersionUID = 1L;
-
-				//@Override
-				public void setVisible(final boolean visible) {
-					if(!isStarted){return;}
-					if(getState()!=JFrame.NORMAL) { setState(JFrame.NORMAL); }
-
-					  if (!visible || !isVisible()) {
-					      super.setVisible(visible);
-					  }
-
-					  if (visible) {
-					      int state = super.getExtendedState();
-					      state &= ~JFrame.ICONIFIED;
-					      super.setExtendedState(state);
-					      super.setAlwaysOnTop(true);
-					      super.toFront();
-					      super.requestFocus();
-					      super.setAlwaysOnTop(false);
-					  }
-				}
-
-				//@Override
-				public void toFront() {
-					  super.setVisible(true);
-					  int state = super.getExtendedState();
-					  state &= ~JFrame.ICONIFIED;
-					  super.setExtendedState(state);
-					  super.setAlwaysOnTop(true);
-					  super.toFront();
-					  super.requestFocus();
-					  super.setAlwaysOnTop(false);
-				}
-			};*/
 			sqlInfo.setFrame(jFrame);
 			//thisClass = this;
 			jFrame.addWindowListener(this);
@@ -1141,7 +1115,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			jFrame.addComponentListener(this);
 			jFrame.addContainerListener(this);
 
-			new Thread(new SplashStarten()).start();
+
 
 			jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -3550,14 +3524,6 @@ final class PreisListenLaden implements Runnable{
 	}
 
 }
-final class SplashStarten extends Thread{
-	private void StarteSplash(){
-	}
-	@Override
-    public void run() {
-		StarteSplash();
-	}
-}
 
 class SocketClient {
 	String stand = "";
@@ -3615,68 +3581,6 @@ class MyGradPanel extends JXPanel  {
       g.drawImage(jImage,((getWidth()/2)-(jImage.getWidth(this)/2)),((getHeight()/2)-(jImage.getHeight(this)/2)), this);
     }
   }
-/**************************/
-class RehaSockServer{
-	static ServerSocket serv = null;
-	RehaSockServer() throws IOException{
-		try {
-			serv = new ServerSocket(1235);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		Socket client = null;
-		while(true){
-			try {
-				client = serv.accept();
-			} catch (IOException e) {
-				e.printStackTrace();
-				break;
-			}
-			StringBuffer sb = new StringBuffer();
-			InputStream input = client.getInputStream();
-			OutputStream output = client.getOutputStream();
-			int byteStream;
-			String test = "";
-			while( (byteStream =  input.read()) > -1){
-				char b = (char)byteStream;
-				sb.append(b);
-			}
-			test = String.valueOf(sb);
-			final String xtest = test;
-			if(xtest.equals("INITENDE")){
-				byte[] schreib = "ok".getBytes();
-				output.write(schreib);
-				output.flush();
-				output.close();
-				input.close();
-				serv.close();
-				serv = null;
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				Reha.warten = false;
-				break;
-			}else{
-			}
-			byte[] schreib = "ok".getBytes();
-			output.write(schreib);
-			output.flush();
-			output.close();
-			input.close();
-		}
-		if(serv != null){
-			serv.close();
-			serv = null;
-			////System.out.println("Socket wurde geschlossen");
-		}else{
-			////System.out.println("Socket war bereits geschlossen");
-		}
-		return;
-	}
-}
 /*******************************************/
 final class HilfeDatenbankStarten implements Runnable{
 
