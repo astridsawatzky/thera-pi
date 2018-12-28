@@ -760,7 +760,7 @@ public class AbrechnungReha extends JXPanel{
 		vecposrechnung.add((Vector<String>)vecpos.clone() );
 		gesamtPreis = BigDecimal.valueOf(Double.parseDouble(tfpatgesamt[0].getText().trim().replace(",", ".")));
 
-		starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
+		starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+this.druckFormular,this.druckDrucker);
 		//System.out.println("Dokument gestartet");
 		starteErsetzen(hmRechnung);
 		//System.out.println("suche ersetzen abeschlossen");
@@ -817,7 +817,7 @@ public class AbrechnungReha extends JXPanel{
 			rechnungBuf.append("arztid='"+rehavec.get(0).get(16)+"', ");
 			rechnungBuf.append("disziplin='"+  "RH" +"', ");
 			rechnungBuf.append("rdatum='"+  DatFunk.sDatInSQL(DatFunk.sHeute()) +"',");
-			rechnungBuf.append("ik='"+  Reha.aktIK +"'");
+			rechnungBuf.append("ik='"+  Reha.getAktIK() +"'");
 			SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 			try {
 				Thread.sleep(50);
@@ -849,7 +849,7 @@ public class AbrechnungReha extends JXPanel{
 			rechnungBuf.append("pat_intern='"+rehavec.get(0).get(0)+"', ");
 		}
 		rechnungBuf.append("ikktraeger='"+kassvec.get(0).get(6)+"',");
-		rechnungBuf.append("ik='"+Reha.aktIK+"'");
+		rechnungBuf.append("ik='"+Reha.getAktIK()+"'");
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 
 	}
@@ -962,7 +962,7 @@ public class AbrechnungReha extends JXPanel{
 				}
 			}
 
-			starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+this.druckFormular,this.druckDrucker);
+			starteDokument(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+this.druckFormular,this.druckDrucker);
 			starteErsetzen(hmRechnung);
 			startePositionen(vecposrechnung,gesamtPreis);
 			starteDrucken(this.druckExemplare);

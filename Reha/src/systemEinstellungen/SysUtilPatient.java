@@ -149,7 +149,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 		}else{
 			optimize.setSelected(true);
 		}
-		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/","patient.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/","patient.ini");
 		int forms = inif.getIntegerProperty("Formulare", "PatientFormulareAnzahl");
 		Vector<String> vec = new Vector<String>();
 		for(int i = 1; i <= forms; i++){
@@ -201,7 +201,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 					int col = vorlagen.getSelectedColumn();	
 					if(col==1){
 						setCursor(Reha.thisClass.wartenCursor);
-						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
+						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 						if(svorlage.equals("")){
 							return;
 						}
@@ -357,7 +357,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			}
 			if(cmd.equals("vorlagenwahl")){
 				setCursor(Reha.thisClass.wartenCursor);
-				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
+				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 				if(! svorlage.equals("")){
 					datLabel.setText(svorlage);
 				}else{
@@ -368,7 +368,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 			if(cmd.equals("vorlagenneu")){
 				
 				setCursor(Reha.thisClass.wartenCursor);
-				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
+				String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 				if(! svorlage.equals("")){
 					datLabel.setText(svorlage);
 				}else{
@@ -445,7 +445,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 	private void doSpeichern(){
 		try{
 			String wert = "";
-			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/","patient.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/","patient.ini");
 			wert = (unten.isSelected() ? "1" : "0");
 			SystemConfig.hmContainer.put("Patient", Integer.valueOf(wert));
 			inif.setStringProperty("Container", "StarteIn",wert , null);

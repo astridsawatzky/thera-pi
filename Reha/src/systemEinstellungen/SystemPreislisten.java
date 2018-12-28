@@ -69,9 +69,9 @@ public class SystemPreislisten {
 		}
 		int tarife = -1;
 		try{
-			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "preisgruppen.ini");
+			inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "preisgruppen.ini");
 			tarife = inif.getIntegerProperty("PreisGruppen_"+diszis[treffer], "AnzahlPreisGruppen");
-			fristenini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "fristen.ini");		
+			fristenini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "fristen.ini");		
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}

@@ -28,8 +28,8 @@ import systemTools.ReaderStart;
 
 public class NachsorgePDF {
 	public EBerichtPanel eltern = null;
-	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
-	public String vorlagenPfad = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
+	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/";
+	public String vorlagenPfad = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/";
 	public String[] rvVorlagen = {null,null,null,null};
 	String[][] tempDateien = {null,null,null,null,null};
 

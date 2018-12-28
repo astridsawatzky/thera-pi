@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
 import CommonTools.Verschluesseln;
+import logging.Logging;
 import sqlTools.SystemEinstellungen;
 
 
@@ -27,21 +28,22 @@ import sqlTools.SystemEinstellungen;
 public class textbaus implements WindowListener{
 	/*
 	 * Ab hier Deklaration der Klassenobjekte und -Variablen
-	 * 
+	 *
 	 */  
 	JFrame jFrame;
 	public static textbaus thisClass = null;
-	public static boolean DbOk; 
+	public static boolean DbOk;
 	public Connection conn = null;
 	public String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/dbf";
 	public String dbUser = "entwickler";
 	public String dbPassword = "entwickler";
 	/*
-	 * 
+	 *
 	 * Ende Deklaration
-	 * 
+	 *
 	 */
 	public static void main(String[] args) {
+		new Logging("TBedit");
 		System.out.println(" Name des Betriebssystems: "+System.getProperty("os.name"));
 		System.out.println("      Benutzerverzeichnis: "+java.lang.System.getProperty("user.dir").replaceAll("\\\\","/"));
 		System.out.println("Installierte Java-Version: "+java.lang.System.getProperty("java.version"));
@@ -49,24 +51,24 @@ public class textbaus implements WindowListener{
 		textbaus lbaust = new textbaus();
 		lbaust.getJFrame(args);
 	}
-	
+
 	public JFrame getJFrame(String[] args){
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 		} catch (ClassNotFoundException e) {
-			
+
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			
+
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			
+
 			e.printStackTrace();
 		} catch (UnsupportedLookAndFeelException e) {
-			
+
 			e.printStackTrace();
 		}
-		
+
 		thisClass = this;
 		if(args.length > 0){
 			System.out.println("Starte mit Startparameter 1 = "+args[0]);
@@ -83,7 +85,7 @@ public class textbaus implements WindowListener{
 				decrypted = new String("");
 			}
 			dbPassword = decrypted.toString();
-			
+
 		}
 		DatenbankStarten dbstart = new DatenbankStarten();
 		dbstart.run();
@@ -97,7 +99,7 @@ public class textbaus implements WindowListener{
 		jFrame.setTitle("Textbausteine für Therapiebericht erstellen / ändern / löschen");
 		jFrame.setLocationRelativeTo(null);
 
-		
+
 		jFrame.getContentPane().add (new testbauoberflaeche());
 		jFrame.pack();
 		jFrame.setVisible(true);
@@ -107,8 +109,8 @@ public class textbaus implements WindowListener{
 
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
@@ -125,32 +127,32 @@ public class textbaus implements WindowListener{
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		
-		
+
+
 	}
 }
 
@@ -173,18 +175,18 @@ final class DatenbankStarten implements Runnable{
         		System.out.println(sDB+"Treiberfehler: " + e.getMessage());
         		textbaus.DbOk = false;
 	    		return ;
-        }	
+        }
 	        	try {
     				obj.conn = DriverManager.getConnection(obj.dbIpAndName+"?jdbcCompliantTruncation=false",obj.dbUser,obj.dbPassword);
 	    			textbaus.DbOk = true;
 	    			System.out.println("Datenbankkontakt hergestellt");
-	        	} 
+	        	}
 	        	catch (final SQLException ex) {
 	        		System.out.println("SQLException: " + ex.getMessage());
 	        		System.out.println("SQLState: " + ex.getSQLState());
 	        		System.out.println("VendorError: " + ex.getErrorCode());
 	        		textbaus.DbOk = false;
-	        
+
 	        	}
 	        return;
 	}
@@ -192,4 +194,4 @@ final class DatenbankStarten implements Runnable{
     public void run() {
 		StarteDB();
 	}
-}	
+}

@@ -58,7 +58,7 @@ public class LadeProg {
 							alist.add(0,"-Djava.net.preferIPv4Stack=true");
 							alist.add(0,"java");
 
-							logger.debug(alist.stream().collect(Collectors.joining()));
+							logger.debug(alist.stream().collect(Collectors.joining(" ")));
 							Process process = new ProcessBuilder(alist).start();
 
 							//Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);

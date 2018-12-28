@@ -56,20 +56,16 @@ public class TheraPi {
 		MandantList liste = new MandantList(mandantenIni);
 
 		MandantSelector mandantSelector = new MandantSelector(liste);
-		 if (liste.showAllways()) {
-
-				mandantSelector.validate();
-				mandantSelector.pack();
-				mandantSelector.setLocationRelativeTo(null);
-				mandantSelector.setVisible(true);
-
-
+		if (liste.showAllways()) {
+			mandantSelector.validate();
+			mandantSelector.pack();
+			mandantSelector.setLocationRelativeTo(null);
+			mandantSelector.setVisible(true);
 		};
-
 
 		Mandant current = mandantSelector.chosen();
 		System.out.println(current);
-		// new Reha(current);
+		startReha(current);
 
 //			System.out.println("IniVerzeichnisverzeichnis = "+iniUrl);
 //			INIFile inif = new INIFile(iniUrl);
@@ -119,40 +115,28 @@ public class TheraPi {
 
 	}
 
-	private static void starteReha(Mandant mandant) {
-	//	new Reha(mandant).start();
-
+	private static void startReha(Mandant mandant) {
+		new Reha(mandant).start();
 	}
 
 	private static void setLookAndFeel() {
 		for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-			logger.debug(info.getName());
+
 			if (info.getName().contains("PlasticXP")) {
 
-			try {
-				javax.swing.UIManager.setLookAndFeel(info.getClassName());
-			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-					| UnsupportedLookAndFeelException e) {
-				//cannot happen, we searched if it is there but anyways
-				logger.debug("plasticxp L&F could not be set", e);
+				try {
+					javax.swing.UIManager.setLookAndFeel(info.getClassName());
+				} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| UnsupportedLookAndFeelException e) {
+					// cannot happen, we searched if it is there but anyways
+					logger.debug("plasticxp L&F could not be set", e);
+				}
 
-			}
-
-			break;
+				break;
 
 			}
 		}
-//		try {
-//			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-//		} catch (ClassNotFoundException e1) {
-//			e1.printStackTrace();
-//		} catch (InstantiationException e1) {
-//			e1.printStackTrace();
-//		} catch (IllegalAccessException e1) {
-//			e1.printStackTrace();
-//		} catch (UnsupportedLookAndFeelException e1) {
-//			e1.printStackTrace();
-//		}
+
 	}
 
 	private JDialog getDialog() {

@@ -194,11 +194,11 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 				JOptionPane.showMessageDialog(null, "Die Funktion Kalenderzeiten verändern, wird während der Softwarentwicklung nicht aufgerufen!");
 			}
 			try{
-				INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "terminkalender.ini");
+				INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "terminkalender.ini");
 				ini.setStringProperty("Kalender", "KalenderBarcode",(scan.isSelected() ? "1" : "0"),null);
 				INITool.saveIni(ini);
 				
-				ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kalender.ini");
+				ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "kalender.ini");
 				ini.setStringProperty("Kalender", "LangesMenue", (langmenu.isSelected() ? "1" : "0"), null);
 				ini.setStringProperty("Kalender", "ZeitLabelZeigen", (zeitzeigen.isSelected() ? "1" : "0"), null);
 				ini.setStringProperty("Kalender", "ZeitLinieZeigen", (timelinezeigen.isSelected() ? "1" : "0"), null);

@@ -1941,7 +1941,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			protected Void doInBackground() throws Exception {
 				try {
 					INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/"
-							+ Reha.aktIK + "/", "arzt.ini");
+							+ Reha.getAktIK() + "/", "arzt.ini");
 							//+ Reha.aktIK + "/arzt.ini");
 					int forms = inif.getIntegerProperty("Formulare",
 							"ArztFormulareAnzahl");
@@ -1982,7 +1982,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 					protected Void doInBackground() throws Exception {
 						ArztTools.constructArztHMap(xid);
 						OOTools.starteStandardFormular(
-								Path.Instance.getProghome() + "vorlagen/" + Reha.aktIK + "/"
+								Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
 										+ formular.get(iformular), null);
 						return null;
 					}

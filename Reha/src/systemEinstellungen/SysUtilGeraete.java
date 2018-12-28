@@ -322,7 +322,7 @@ private JPanel getKnopfPanel(){
 	
 	
 	private void doSpeichern(){
-		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "geraete.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "geraete.ini");
 
 		SystemConfig.sReaderAktiv = (kvkakt.isSelected() ? "1" : "0");
 		inif.setStringProperty("KartenLeser", "KartenLeserAktivieren",SystemConfig.sReaderAktiv , null);

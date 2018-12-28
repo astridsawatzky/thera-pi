@@ -298,7 +298,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 	
 	private void doSpeichern(){
 		String wert = "";
-		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "fremdprog.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "fremdprog.ini");
 		wert = adobepfad.getText().trim();
 		inif.setStringProperty("FestProg", "FestProgPfad1", wert, null);
 		//SystemConfig.hmFremdProgs.put("AcrobatReader",wert);
@@ -315,7 +315,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 		INITool.saveIni(inif);
 		
  
-		inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+		inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 		wert = oopfad.getText().trim();
 		inif.setStringProperty("OpenOffice.org", "OfficePfad", wert, null);
 		SystemConfig.OpenOfficePfad = wert;

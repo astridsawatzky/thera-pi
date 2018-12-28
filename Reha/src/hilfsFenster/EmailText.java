@@ -99,7 +99,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 
 		String text = "";
 		/*********/
-		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/EmailTerminliste.txt");
 	      try {
 	         // FileReader zum Lesen aus Datei
 	         FileReader fr = new FileReader(file);
@@ -208,7 +208,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 				FileWriter w = null;
 
 				 try {
-				        w = new FileWriter(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+				        w = new FileWriter(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/EmailTerminliste.txt");
 				        w.write(ta.getText());
 				 
 				    } catch (IOException e) {

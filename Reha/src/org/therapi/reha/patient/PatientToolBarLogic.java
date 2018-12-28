@@ -175,7 +175,7 @@ public class PatientToolBarLogic {
 						if(Reha.aktUser.startsWith("Therapeut")){return;}
 						Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 						
-								new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
+								new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
 								long warten = System.currentTimeMillis();
 								while( (!RehaIOServer.rehaMailIsActive)  && (System.currentTimeMillis()-warten < 15000)){
 									Thread.sleep(75);

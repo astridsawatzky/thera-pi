@@ -68,7 +68,7 @@ public class ArtikelDialog extends RehaSmartDialog {
 		//pinPanel.getRot().setActionCommand("close");
 		pinPanel.setName("ArtikelDlg");
 		setPinPanel(pinPanel);
-		inif = INITool.openIni(Path.Instance.getProghome() +"ini/"+ Reha.aktIK +"/", "verkauf.ini"); 
+		inif = INITool.openIni(Path.Instance.getProghome() +"ini/"+ Reha.getAktIK() +"/", "verkauf.ini"); 
 		getSmartTitledPanel().setContentContainer(getContent());
 		getSmartTitledPanel().getContentContainer().setName("ArtikelDlg");
 		getSmartTitledPanel().setTitle("Artikel anlegen / bearbeiten");

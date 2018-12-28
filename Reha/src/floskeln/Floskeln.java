@@ -141,7 +141,7 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 	}
 
 	private void fuellen(){
-		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "floskeln.ini"); 
+		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "floskeln.ini"); 
 		int floskeln = Integer.parseInt(ini.getStringProperty("Floskeln", "FloskelAnzahl"));
 		Vector<String> vec = new Vector<String>();
 		for(int i = 0; i < floskeln;i++){

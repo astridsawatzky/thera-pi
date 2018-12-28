@@ -302,7 +302,7 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 				defName = "UserFarben";
 			}
 			
-			INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", colorini);
+			INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", colorini);
 
 			for(int i = 0; i<lang;i++){
 				hg = ((Color)FarbTab.getValueAt(i, 2));

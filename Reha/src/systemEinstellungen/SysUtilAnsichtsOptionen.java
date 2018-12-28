@@ -205,7 +205,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener,Acti
 	private void speichernHandeln(){
 		try{
 			String wert;
-			INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kalender.ini");
+			INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "kalender.ini");
 			
 			wert = (unten.isSelected() ? "1" : "0");
 			SystemConfig.hmContainer.put("Kalender", Integer.valueOf(wert));

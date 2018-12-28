@@ -238,7 +238,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 				@Override
 				protected Void doInBackground() throws Exception {
 					try{
-						starteAusfallRechnung(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/AusfallRechnung.ott");
+						starteAusfallRechnung(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/AusfallRechnung.ott");
 						doBuchen();
 						if(leistung[4].isSelected()){
 							macheMemoEintrag();
@@ -281,7 +281,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 		buf.append("rgesamt='"+SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("roffen='"+SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"',");
-		buf.append("ik='"+Reha.aktIK+"'");
+		buf.append("ik='"+Reha.getAktIK()+"'");
 		SqlInfo.sqlAusfuehren(buf.toString());
 	}
 	private void macheMemoEintrag(){

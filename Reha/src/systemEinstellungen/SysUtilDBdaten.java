@@ -98,7 +98,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 			}
 			*/
 		}
-		mandant.setSelectedItem(Reha.aktMandant);
+		mandant.setSelectedItem(Reha.getAktMandant());
 		mandant.setActionCommand("mandantwahl");
 		mandant.addActionListener(this);
 		dbtyp = new JComboBox ();
@@ -106,7 +106,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 			dbtyp.addItem(SystemConfig.DBTypen.get(i)[0]);
 		}
 		try{
-			dbtyp.setSelectedItem(SystemConfig.hmDBMandant.get(Reha.aktMandant).get(0));
+			dbtyp.setSelectedItem(SystemConfig.hmDBMandant.get(Reha.getAktMandant()).get(0));
 		}catch(Exception ex){
 
 		}
@@ -115,17 +115,17 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		////System.out.println("DBType von "+Reha.aktMandant+"= "+SystemConfig.hmDBMandant.get(Reha.aktMandant).get(0));
 		//System.out.println(SystemConfig.hmDBMandant.get(Reha.aktMandant));
 		treiber = new JRtaTextField("",true);
-		treiber.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(1));
+		treiber.setText((String)SystemConfig.hmDBMandant.get(Reha.getAktMandant()).get(1));
 		server = new JRtaTextField("",true);
-		server.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(2));
+		server.setText((String)SystemConfig.hmDBMandant.get(Reha.getAktMandant()).get(2));
 		dbname = new JRtaTextField("",true);
-		dbname.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(4));
+		dbname.setText((String)SystemConfig.hmDBMandant.get(Reha.getAktMandant()).get(4));
 		dbuser = new JRtaTextField("",true);
-		dbuser.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(5));
+		dbuser.setText((String)SystemConfig.hmDBMandant.get(Reha.getAktMandant()).get(5));
 		dbpasswort = new JPasswordField();
-		dbpasswort.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(6));
+		dbpasswort.setText((String)SystemConfig.hmDBMandant.get(Reha.getAktMandant()).get(6));
 		port = new JRtaTextField("ZAHLEN", true);
-		port.setText((String)SystemConfig.hmDBMandant.get(Reha.aktMandant).get(3));
+		port.setText((String)SystemConfig.hmDBMandant.get(Reha.getAktMandant()).get(3));
 		/*
 		mandantDB.add(minif.getStringProperty("Application", "DBType1"));
 		mandantDB.add(minif.getStringProperty("Application", "DBTreiber1"));
@@ -280,7 +280,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		INITool.saveIni(dbini);
 		SystemConfig.MandantenEinlesen();
 		String saktmandant = ((String)mandant.getSelectedItem()).trim();
-		if(saktmandant.equals(Reha.aktMandant)){
+		if(saktmandant.equals(Reha.getAktMandant())){
 			JOptionPane.showMessageDialog(null, "Die Datenbankeinstellungen für den aktuellen Mandant,\n"+
 					"werden erst nach dem Neustart der ->Software<- wirksam\n\n"+
 					"Ein Neustart des Computers ist nicht notwendig.");

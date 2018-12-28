@@ -53,7 +53,7 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 	JXTable ktrtbl = null;
 	MyKtraegerModel ktrmod = null;
 	JButton[] but = {null,null,null,null};
-	INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "ktraeger.ini");
+	INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "ktraeger.ini");
 	private TableCellRenderer JLabelRenderer = null; //= new DefaultTableRenderer(new MappedValue(StringValues.EMPTY, IconValues.ICON), JLabel.CENTER);
 	PLServerAuslesen plServer = null;	
 	boolean debug = false;

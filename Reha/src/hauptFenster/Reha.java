@@ -152,6 +152,7 @@ import geraeteInit.BarCodeScanner;
 import krankenKasse.KassenPanel;
 import kurzAufrufe.KurzAufrufe;
 import logging.Logging;
+import mandant.Mandant;
 import menus.TerminMenu;
 import oOorgTools.OOTools;
 import ocf.OcKVK;
@@ -270,8 +271,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public Vector<Object> aktiveFenster = new Vector<Object>();
 	public final String NULL_DATE = "  .  .    ";
 	public static boolean warten=true;
-	public static String aktIK = "000000000";
-	public static String aktMandant = "Übungs-Mandant";
+	private static String aktIK = "000000000";
+	private static String aktMandant = "Übungs-Mandant";
 	public static String aktUser = "";
 	public static String kalMin = "";
 	public static String kalMax = "";
@@ -371,6 +372,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
 	private static Logger logger = LoggerFactory.getLogger(Reha.class);
+	private Mandant mandant;
 
 
 	/*
@@ -382,34 +384,57 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	*/
 
 
+	public static String getAktIK() {
+		return aktIK;
+	}
+	public static String getAktMandant() {
+		return aktMandant;
+	}
+
+	public Reha(Mandant mandant) {
+		this.mandant = mandant;
+
+	}
+	public void start() {
+
+		String[] arguments=new String[1];
+		arguments[0] = mandant.ik() +"@" + mandant.name();
+		startWithMandantSet(mandant);
+
+	}
+
+
+
+	public Reha() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public static void main(String[] args) {
 
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 		new Logging("reha");
-
-		 if(args.length > 0){
-			String[] split = args[0].split("@");
-			aktIK = split[0];
-			aktMandant = split[1];
-			if(args.length > 1){
-				for(int i = 1; i < args.length;i++){
-					try{
-						aktMandant += " "+args[i];
-					}catch(NullPointerException ex){
-						aktMandant = split[1];
-					}
-				}
-			}
+		Mandant mainMandant;
+		 String[] parameter = args;
+		if(parameter.length > 0){
+			String[] split = parameter[0].split("@");
+			 mainMandant = new Mandant(split[0],split[1]);
 		}else{
 			INIFile inif = new INIFile(Path.Instance.getProghome()+"ini/mandanten.ini");
 			int DefaultMandant = inif.getIntegerProperty("TheraPiMandanten", "DefaultMandant");
-			aktIK = inif.getStringProperty("TheraPiMandanten", "MAND-IK"+DefaultMandant);
-			aktMandant = inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+DefaultMandant);
+			 mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+DefaultMandant),
+			inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+DefaultMandant));
 		}
-		INITool.init(Path.Instance.getProghome()+"ini/"+aktIK+"/");
+		startWithMandantSet(mainMandant);
+
+
+	}
+	private static void startWithMandantSet(Mandant mainMandant) {
+		aktIK =mainMandant.ik();
+		aktMandant=mainMandant.name();
+		INITool.init(Path.Instance.getProghome()+"ini/"+getAktIK()+"/");
 		System.out.println("Insgesamt sind "+Integer.toString(INITool.getDBInis().length)+" INI-Dateien in der Tabelle inidatei abgelegt");
 
-		Titel2 = "  -->  [Mandant: "+aktMandant+"]";
+		Titel2 = "  -->  [Mandant: "+getAktMandant()+"]";
 		//System.out.println(Titel2);
 		/**************************/
 		new Thread(){
@@ -584,8 +609,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 			}
 		});
-
-
 	}
 	public void setzeInitEnde(){
 		new SwingWorker<Void,Void>(){
@@ -603,7 +626,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			e.printStackTrace();
 		}
 		try{
-			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",jSplitLR.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",jSplitRechtsOU.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",LinkeTaskPane.tp1.isCollapsed() ? "1" : "0",null );
@@ -686,7 +709,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			}
 		}
 		try{
-			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",jSplitLR.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",jSplitRechtsOU.getDividerLocation(),null );
 			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",LinkeTaskPane.tp1.isCollapsed() ? "1" : "0",null );
@@ -1013,7 +1036,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}else{
 			if((!Reha.aktUser.trim().startsWith("Therapeut")) && Reha.checkForMails()){
 				if(Reha.isStarted){
-					new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
+					new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
 				}
 			}
 		}
@@ -2657,7 +2680,7 @@ public static void testeNummernKreis(){
 	if(vecnummern.size() <= 0){
 		cmd = "insert into nummern set pat='1',kg='1',ma='1',er='1',"+
 		"lo='1',rh='1',rnr='1',esol='1',bericht='1',afrnr='1',rgrnr='1',doku='1',"+
-		"dfue='1',mandant='"+Reha.aktIK+"'";
+		"dfue='1',mandant='"+Reha.getAktIK()+"'";
 		//System.out.println(cmd);
 		SqlInfo.sqlAusfuehren(cmd);
 	}
@@ -2755,7 +2778,7 @@ public void actionPerformed(ActionEvent arg0) {
 		if(! Rechte.hatRecht(Rechte.Funktion_urlaubueberstunden, true)){
 			return;
 		}
-		new LadeProg(Path.Instance.getProghome()+"RehaUrlaub.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+		new LadeProg(Path.Instance.getProghome()+"RehaUrlaub.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 		return;
 	}
 	if(cmd.equals("umsatzbeteiligung")){
@@ -2763,7 +2786,7 @@ public void actionPerformed(ActionEvent arg0) {
 		return;
 	}
 	if(cmd.equals("lvastatistik")){
-		new LadeProg(Path.Instance.getProghome()+"RehaStatistik.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+		new LadeProg(Path.Instance.getProghome()+"RehaStatistik.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 		return;
 	}
 	/*****************************/
@@ -2772,7 +2795,7 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		if(! RehaIOServer.offenePostenIsActive){
-			new LadeProg(Path.Instance.getProghome()+"OffenePosten.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport);
+			new LadeProg(Path.Instance.getProghome()+"OffenePosten.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport);
 		}else{
 			new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
 		}
@@ -2790,7 +2813,7 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		if(! RehaIOServer.rgAfIsActive){
-			new LadeProg(Path.Instance.getProghome()+"OpRgaf.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport);
+			new LadeProg(Path.Instance.getProghome()+"OpRgaf.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport);
 		}else{
 			new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
 		}
@@ -2801,14 +2824,14 @@ public void actionPerformed(ActionEvent arg0) {
 		if(!Rechte.hatRecht(Rechte.Funktion_kassenbuch, true)){
 			return;
 		}
-		new LadeProg(Path.Instance.getProghome()+"RehaKassenbuch.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+		new LadeProg(Path.Instance.getProghome()+"RehaKassenbuch.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 		return;
 	}
 	if(cmd.equals("geburtstagsbriefe")){
 		if(!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)){
 			return;
 		}
-		new LadeProg(Path.Instance.getProghome()+"GBriefe.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+		new LadeProg(Path.Instance.getProghome()+"GBriefe.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 		return;
 	}
 	/*****************************/
@@ -2819,7 +2842,7 @@ public void actionPerformed(ActionEvent arg0) {
 		}
 
 		if(!RehaIOServer.rehaSqlIsActive){
-			new LadeProg(Path.Instance.getProghome()+"RehaSql.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+
+			new LadeProg(Path.Instance.getProghome()+"RehaSql.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+
 					String.valueOf(Integer.toString(Reha.xport))+ (!Rechte.hatRecht(Rechte.BenutzerSuper_user,false) ? " readonly" : " full"));
 		}else{
 			new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );
@@ -2843,7 +2866,7 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		new LadeProg(Path.Instance.getProghome()+"Reha301.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
 		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		return;
 	}
@@ -2862,7 +2885,7 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		new LadeProg(Path.Instance.getProghome()+"WorkFlow.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
 		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		return;
 	}
@@ -2882,7 +2905,7 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		new LadeProg(Path.Instance.getProghome()+"RehaHMK.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "") );
+				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "") );
 		//System.out.println("Übergebe Rezeptnummer: "+SystemConfig.hmAdrRDaten.get("Rnummer"));
 		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
 		return;
@@ -2892,13 +2915,13 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		new LadeProg(Path.Instance.getProghome()+"RehaIniedit.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.aktIK );
+				" "+Path.Instance.getProghome()+" "+Reha.getAktIK() );
 		return;
 
 	}
 	if(cmd.equals("ocr")){
 		new LadeProg(Path.Instance.getProghome()+"RehaOCR.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
 		return;
 	}
 
@@ -2971,6 +2994,9 @@ public void mustReloadDb(){
 	}.execute();
 	*/
 }
+
+
+
 
 
 
@@ -3369,7 +3395,7 @@ final class ErsterLogin implements Runnable{
 				Reha.thisFrame.setPreferredSize(new Dimension(800,600));
 				Reha.thisFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 				Reha.thisFrame.setVisible(true);
-				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rehajava.ini");
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 				if(inif.getIntegerProperty("HauptFenster", "Divider1") != null){
 					Reha.thisClass.jSplitLR.setDividerLocation((Reha.divider1=inif.getIntegerProperty("HauptFenster", "Divider1")));
 					Reha.thisClass.jSplitRechtsOU.setDividerLocation((Reha.divider2=inif.getIntegerProperty("HauptFenster", "Divider2")));

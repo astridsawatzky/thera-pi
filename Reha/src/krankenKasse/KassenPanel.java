@@ -688,7 +688,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 			@Override
 			protected Void doInBackground() throws Exception {
 				
-				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "kasse.ini");
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "kasse.ini");
 				int forms = inif.getIntegerProperty("Formulare", "KassenFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
 					titel.add(inif.getStringProperty("Formulare","KFormularText"+i));
@@ -718,7 +718,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 					@Override
 					protected Void doInBackground() throws Exception {
 						try{
-							OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
+							OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+formular.get(iformular),null);
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -1068,7 +1068,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
             	JOptionPane.showMessageDialog(null,buf1.toString());
             	return;
             }
-            String datei = Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+testHm.get("kassen_ik");
+            String datei = Path.Instance.getProghome()+"edifact/"+Reha.getAktIK()+"/"+testHm.get("kassen_ik");
             if(!SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").equals(SystemConfig.hmAbrechnung.get("hmkeystorealias"))){
             	JOptionPane.showMessageDialog(null,"Für die Verschlüsselung wird das Zertifikat von\nIK "+
             			SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", "")+ " verwendet!");
@@ -1097,7 +1097,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 				return;
 			}
 			String text = "Es wurde absolut fehlerfrei ver- und entschlüsselt\n\n"+
-			"Die Testdateien liegen im Verzeichnis "+Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"\n"+
+			"Die Testdateien liegen im Verzeichnis "+Path.Instance.getProghome()+"edifact/"+Reha.getAktIK()+"/"+"\n"+
 			"1. "+testHm.get("kassen_ik")+".original (Ursprungsdatei)\n"+
 			"2. "+testHm.get("kassen_ik")+".encoded (verschlüsselte Variante der Ursprungsdatei)\n"+
 			"3. "+testHm.get("kassen_ik")+".decoded (entschlüsselte Variante der .encoded Datei)\n\n"+

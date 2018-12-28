@@ -75,7 +75,7 @@ public class SysUtilVerkauf extends JXPanel {
 	     jscr.setViewportView(getContent());
 	     jscr.validate();
 	    
-	     inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "verkauf.ini");
+	     inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "verkauf.ini");
 		
 		
 		//add(getContent(),BorderLayout.CENTER);

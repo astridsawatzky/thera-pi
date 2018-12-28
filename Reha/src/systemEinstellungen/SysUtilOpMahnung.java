@@ -448,7 +448,7 @@ public class SysUtilOpMahnung extends JXPanel implements KeyListener, ActionList
 
 	
 	private void doSpeichern(){
-		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "offeneposten.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "offeneposten.ini");
 	
 		SystemConfig.hmZusatzInOffenPostenIni.put("RGRinOPverwaltung", Integer.parseInt(tfs[0].getText()) );
 		SystemConfig.hmZusatzInOffenPostenIni.put("AFRinOPverwaltung", Integer.parseInt(tfs[1].getText()) );

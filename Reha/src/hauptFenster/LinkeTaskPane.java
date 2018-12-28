@@ -827,7 +827,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					new Thread(){
 						@Override
                         public void run(){
-							new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
+							new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));		
 						}
 					}.start();
 
@@ -864,7 +864,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     public void run(){
 						try{
 							new LadeProg(Path.Instance.getProghome()+"piHelp.jar "+
-									Path.Instance.getProghome()+" "+Reha.aktIK);
+									Path.Instance.getProghome()+" "+Reha.getAktIK());
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -895,7 +895,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 			if (cmd.equals("piTextb")){
 				textbaus.main(new String[] {
-						Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini",
+						Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/rehajava.ini",
 						Path.Instance.getProghome()+"ini/thbericht.ini"
 
 
@@ -931,7 +931,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     public void run(){
 					    ArztBaustein.main(new String[] {
 					            Path.Instance.getProghome(),
-					            Reha.aktIK});
+					            Reha.getAktIK});
 					}
 				}.start();
 
@@ -954,7 +954,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				break;
 			}
 			if (cmd.equals("piIcd10")){
-				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 			}
 			if (cmd.equals("piQM")){
 				new Thread(){
@@ -985,7 +985,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new Thread(){
 					@Override
                     public void run(){
-						new LadeProg(Path.Instance.getProghome()+"QMAuswertung.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+						new LadeProg(Path.Instance.getProghome()+"QMAuswertung.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());		
 					}
 				}.start();
 				new SwingWorker<Void,Void>(){
@@ -1088,12 +1088,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 	}
 	private boolean testUserTask(){
-		File f = new File(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/usertask.ini");
+		File f = new File(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/usertask.ini");
 		if(! f.exists()){
 			return false;
 		}
 		try{
-			INIFile utask = new INIFile(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/usertask.ini");
+			INIFile utask = new INIFile(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/usertask.ini");
 			int tasks = Integer.parseInt(utask.getStringProperty("UserTasks", "AnzahlUserTasks"));
 			if(tasks == 0){
 				return false;

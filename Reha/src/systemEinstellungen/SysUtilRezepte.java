@@ -107,7 +107,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 	}
 	private void fuelleMitWerten(){
 		int aktiv;
-		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/","rezept.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/","rezept.ini");
 		if(SystemConfig.mitRs){
 			for(int i = 0;i < 8;i++){
 				aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv"+Integer.valueOf(i+1).toString());
@@ -232,7 +232,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 					int col = vorlagen.getSelectedColumn();	
 					if(col==1){
 						setCursor(Reha.thisClass.wartenCursor);
-						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
+						String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 						if(svorlage.equals("")){
 							return;
 						}
@@ -341,7 +341,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		}
 		if(cmd.equals("vorlagenneu")){
 			setCursor(Reha.thisClass.wartenCursor);
-			String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK);
+			String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
 			if(! svorlage.equals("")){
 				datLabel.setText(svorlage);
 			}else{
@@ -444,7 +444,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		try{
 		String wert = "";
 		int iwert;
-		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
+		INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rezept.ini");
 		inif.setStringProperty("RezeptKlassen", "InitKlasse",(String)voreinstellung.getSelectedItem(),null);
 		if(!SystemConfig.mitRs){
 			for(int i = 0; i < 6;i++){

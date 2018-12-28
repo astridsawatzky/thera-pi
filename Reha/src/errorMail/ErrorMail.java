@@ -30,7 +30,7 @@ public class ErrorMail extends Thread{
 	}
 	@Override
     public void run(){
-		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "error.ini"); 
+		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "error.ini"); 
 		String empfaenger = ini.getStringProperty("Email", "RecipientAdress");
 		   EmailSendenExtern oMail = new EmailSendenExtern();
 			String smtphost = SystemConfig.hmEmailIntern.get("SmtpHost");

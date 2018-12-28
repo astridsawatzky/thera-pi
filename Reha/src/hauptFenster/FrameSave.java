@@ -17,7 +17,7 @@ public class FrameSave {
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
-					INIFile inifile = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", xinifile);
+					INIFile inifile = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", xinifile);
 					inifile.setIntegerProperty("Container", "StarteIn", container, null);
 					inifile.setIntegerProperty("Container", "ImmerOptimieren", autosize, null);
 					inifile.setIntegerProperty("Container", "ZeigeAnPositionX", (autosize==1 ? 0 : position.x), null);

@@ -931,7 +931,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			String bezdatum = SqlInfo.holeEinzelFeld("select datum from kasse where rez_nr = '"+sreznum+
 					"' or ktext like '%"+sreznum+"%'LIMIT 1");
 			SystemConfig.hmRgkDaten.put("<Rgkbezahldatum>", String.valueOf(DatFunk.sDatInDeutsch(bezdatum)));
-			OOTools.starteRGKopie(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/Rezeptgebuehr.ott.Kopie.ott",SystemConfig.rezGebDrucker);
+			OOTools.starteRGKopie(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/Rezeptgebuehr.ott.Kopie.ott",SystemConfig.rezGebDrucker);
 			return;
 		}
 		if(einnahme.equals("")){
@@ -943,7 +943,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 					@Override
 					protected Void doInBackground() throws Exception {
 						try{
-							new LadeProg(Path.Instance.getProghome()+"OpRgaf.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport);
+							new LadeProg(Path.Instance.getProghome()+"OpRgaf.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport);
 							long start = System.currentTimeMillis();
 							while(!RehaIOServer.rgAfIsActive){
 								Thread.sleep(50);

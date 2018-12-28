@@ -468,7 +468,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 				return;
 			}
 			int imandant = mandant.getSelectedIndex();
-			if(SystemConfig.Mandanten.get(imandant)[0].equals(Reha.aktIK)){
+			if(SystemConfig.Mandanten.get(imandant)[0].equals(Reha.getAktIK())){
 				JOptionPane.showMessageDialog(null,"Der aktuelle (aktive) darf nicht gelöscht werden");
 				return;
 			}

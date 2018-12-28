@@ -115,8 +115,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public boolean neu = false;
 	public boolean jetztneu = false;
 	public boolean inebericht = false;
-	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
-	public String vorlagenPfad = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/";
+	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/";
+	public String vorlagenPfad = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/";
 	public String[] rvVorlagen = {null,null,null,null};
 	EBerichtTab ebt = null;
 	NachsorgeTab nat = null;
@@ -2049,10 +2049,10 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				new LadeProg(Path.Instance.getProghome()+"BMIRechner.jar");
 				break;
 			case 2:
-				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 				break;
 			case 3:
-				new LadeProg(Path.Instance.getProghome()+"RehaOCR.jar "+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+String.valueOf(Integer.toString(Reha.xport)) );
+				new LadeProg(Path.Instance.getProghome()+"RehaOCR.jar "+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
 				break;
 			case 4:
 				starteTest();

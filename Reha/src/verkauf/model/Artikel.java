@@ -70,7 +70,7 @@ public class Artikel {
 		this.lagerstand = this.lagerstand - anzahl;
 		this.update();
 		String sql = "INSERT INTO verkfaktura (verkfakturaID, v_nummer, art_id, art_beschreibung, art_einzelpreis, art_mwst, anzahl, pat_id, ik) " +
-				"VALUES (NULL, '"+ vnummer +"', '"+ this.id +"', '"+ this.getBeschreibung() +"', '"+ vpreis +"', '"+ this.mwst +"', '"+ anzahl +"', '"+ patid+"', '"+Reha.aktIK +"')";
+				"VALUES (NULL, '"+ vnummer +"', '"+ this.id +"', '"+ this.getBeschreibung() +"', '"+ vpreis +"', '"+ this.mwst +"', '"+ anzahl +"', '"+ patid+"', '"+Reha.getAktIK() +"')";
 		SqlInfo.sqlAusfuehren(sql);
 	}
 	

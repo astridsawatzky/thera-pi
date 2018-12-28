@@ -57,7 +57,7 @@ public class iCalRehaExporter {
 					 
 					 String recipient = emailaddy+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
 										 
-					 String[] aufDat = {Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-RehaTermine.ics","iCal-RehaTermine.ics"};
+					 String[] aufDat = {Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/iCal-RehaTermine.ics","iCal-RehaTermine.ics"};
 					 ArrayList<String[]> attachments = new ArrayList<String[]>();
 					 attachments.add(aufDat);
 					 String mailtext = SystemConfig.hmAdrPDaten.get("<Pbanrede>")+
@@ -118,7 +118,7 @@ public class iCalRehaExporter {
 		buf.append(ICalGenerator.macheEnd());
 		FileOutputStream outputFile;
 		try {
-			outputFile = new  FileOutputStream(Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-RehaTermine.ics");
+			outputFile = new  FileOutputStream(Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/iCal-RehaTermine.ics");
 	        OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
 			BufferedWriter bw = null;
 			bw = new BufferedWriter(out);

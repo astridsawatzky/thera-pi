@@ -1642,8 +1642,8 @@ public class RVMeldung301 {
 			if(frage1 != JOptionPane.YES_OPTION){
 				return false;
 			}
-			String keystore = Path.Instance.getProghome()+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.aktIK);
+			String keystore = Path.Instance.getProghome()+"keystore/"+Reha.getAktIK()+"/"+Reha.getAktIK()+".p12";
+			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", Reha.getAktIK());
 			NebraskaEncryptor encryptor = store.getEncryptor(EMPFAENGERIK);
 			String inFile = (SystemConfig.dta301OutBox+(imtest ? "T" : "E")+"REH"+strAktEREH+".ORG").toLowerCase();
 			long size = encryptor.encrypt(inFile, inFile.replace(".org", ""));

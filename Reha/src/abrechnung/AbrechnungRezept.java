@@ -1020,7 +1020,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 		for(int i = 1; i <=18;i++){
 			taxWerte.put("<t"+i+">","");
 		}
-		taxWerte.put("<t1>",Reha.aktIK);
+		taxWerte.put("<t1>",Reha.getAktIK());
 		taxWerte.put("<t3>",dfx.format(rezeptWert));
 		taxWerte.put("<t2>",dfx.format(zuzahlungWert));
 		int taxpos = 4;
@@ -1049,7 +1049,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 
 		try {
 			String bcform = SqlInfo.holeEinzelFeld("select barcodeform from verordn where rez_nr='"+aktRezNum.getText().trim()+"' LIMIT 1");
-			String formular = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+tbcombo.getSelectedItem().toString();
+			String formular = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+tbcombo.getSelectedItem().toString();
 			OOTools.starteTaxierung(formular, taxWerte);
 		} catch (OfficeApplicationException e) {
 			e.printStackTrace();

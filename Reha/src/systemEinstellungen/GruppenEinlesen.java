@@ -19,7 +19,7 @@ public class GruppenEinlesen{
 	private INIFile ini;
 	
 	public GruppenEinlesen init(){
-		ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "gruppen.ini");
+		ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "gruppen.ini");
 
 		anzahl = Integer.valueOf(ini.getStringProperty("Gruppen", "GruppenAnzahl")); 
 		gruppenNamen = new Vector<String>();

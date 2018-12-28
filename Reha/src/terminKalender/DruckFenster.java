@@ -578,7 +578,7 @@ public void run(){
 	}
 
 	try {
-		String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
+		String url = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+SystemConfig.oTerminListe.NameTemplate;
 		////System.out.println("***************URL = "+url+"****************");
 		String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
 		int anzahl = oOTermine.size();
@@ -818,7 +818,7 @@ public void run(){
 
 		}else{
 			try{
-				exporturl = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+				exporturl = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/Terminplan.pdf";
 				File f = new File(exporturl);
 				if(f.exists()){
 					f.delete();
@@ -949,7 +949,7 @@ final class sendeTermine extends Thread{
 			}
 		}
 		try{
-			File f = new File(Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf");
+			File f = new File(Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/Terminplan.pdf");
 			if(f.exists()){
 				f.delete();
 			}
@@ -991,11 +991,11 @@ final class sendeTermine extends Thread{
 		ArrayList<String[]> attachments = new ArrayList<String[]>();
 		String[] anhang = {null,null};//zwei weitere Elemente für iCal-Datei erforderlich
 
-		anhang[0] = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+		anhang[0] = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
 		attachments.add(anhang.clone());
 		if(success){
-			attachments.add(new String[] {Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"});
+			attachments.add(new String[] {Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/iCal-TherapieTermine.ics","iCal-TherapieTermine.ics"});
 		}
 		File f = new File(anhang[0]);
 		long zeit = System.currentTimeMillis();
@@ -1031,7 +1031,7 @@ final class sendeTermine extends Thread{
 
 		String text = "";
 		/*********/
-		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/EmailTerminliste.txt");
 	      try {
 	         // FileReader zum Lesen aus Datei
 	         FileReader fr = new FileReader(file);
@@ -1134,7 +1134,7 @@ final class sendeTermine extends Thread{
 				buf.append(ICalGenerator.macheVevent(icalVec.get(i).get(0), icalVec.get(i).get(1), icalVec.get(i).get(2), icalVec.get(i).get(3), icalVec.get(i).get(4),datewarning));
 			}
 			buf.append(ICalGenerator.macheEnd());
-			FileOutputStream outputFile = new  FileOutputStream(Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/iCal-TherapieTermine.ics");
+			FileOutputStream outputFile = new  FileOutputStream(Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/iCal-TherapieTermine.ics");
             //OutputStreamWriter out = new OutputStreamWriter(outputFile, "ISO-8859-1");
             OutputStreamWriter out = new OutputStreamWriter(outputFile, "UTF8");
 			BufferedWriter bw = null;

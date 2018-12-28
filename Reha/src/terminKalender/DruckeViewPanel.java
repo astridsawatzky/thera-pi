@@ -68,7 +68,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
     	g2d.dispose();
     	speichernQualitaet("",1.0F);
     	
-    	String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/terminshot_.ott";
+    	String url = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/terminshot_.ott";
     	IDocumentService documentService = Reha.officeapplication.getDocumentService();
     	 IDocumentDescriptor docdescript = new DocumentDescriptor();
 	        docdescript.setHidden(false);

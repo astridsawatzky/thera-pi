@@ -298,7 +298,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						System.out.println("Rlangtext1 = "+SystemConfig.hmAdrRDaten.get("<Rlangtext1>"));
 						//RezTools.constructFormularHMap();
 						*/
-						OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+formular.get(iformular),null);
+						OOTools.starteStandardFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+formular.get(iformular),null);
 						return null;
 					}
     			}.execute();
@@ -1703,7 +1703,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/", "rezept.ini");
+				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rezept.ini");
 				int forms = inif.getIntegerProperty("Formulare", "RezeptFormulareAnzahl");
 				for(int i = 1; i <= forms; i++){
 					titel.add(inif.getStringProperty("Formulare","RFormularText"+i));
@@ -2334,7 +2334,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 								"HMR-Check nicht möglich!<br><br>"+
 								"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 						if(frage==JOptionPane.YES_OPTION){
-							new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+							new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 						}
 						return;
 
@@ -2347,7 +2347,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 									"HMR-Check nicht möglich!<br><br>"+
 									"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 							if(frage==JOptionPane.YES_OPTION){
-								new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
+								new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 							}
 							return;
 						}
@@ -2880,7 +2880,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		SystemConfig.hmAdrRDaten.put("<Rwert>", "0,00" );
 		/*int art = */RezTools.testeRezGebArt(true,false,Reha.thisClass.patpanel.vecaktrez.get(1),Reha.thisClass.patpanel.vecaktrez.get(34));
 		//String ik = "510884019";
-		SystemConfig.hmAdrRDaten.put("<Bcik>",Reha.aktIK);
+		SystemConfig.hmAdrRDaten.put("<Bcik>",Reha.getAktIK());
 		String bcreznr = Reha.thisClass.patpanel.vecaktrez.get(1).toString();
 		if(bcreznr.startsWith("RS") || bcreznr.startsWith("FT")){
 			if(bcreznr.length() < 6){
@@ -2899,7 +2899,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		SystemConfig.hmAdrRDaten.put("<Buser>", Reha.aktUser);
 		SystemConfig.hmAdrRDaten.put("<Rpatid>", Reha.thisClass.patpanel.vecaktrez.get(0));
 		//System.out.println("Es wird folgender Bacrode genommen "+url);
-		OOTools.starteBacrodeFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+url,SystemConfig.rezBarcodeDrucker);
+		OOTools.starteBacrodeFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+url,SystemConfig.rezBarcodeDrucker);
 
 	}
 	public String rezUnterbrechung(boolean lneu,String feldname,int behandlung,String utage){

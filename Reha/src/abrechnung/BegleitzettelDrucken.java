@@ -117,7 +117,7 @@ public class BegleitzettelDrucken {
 						SystemConfig.hmFirmenDaten.get("Plz")+" "+
 						SystemConfig.hmFirmenDaten.get("Ort"));
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<gkv8>")){
-				placeholders[i].getTextRange().setText(Reha.aktIK);
+				placeholders[i].getTextRange().setText(Reha.getAktIK());
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<gkv9>")){
 				placeholders[i].getTextRange().setText(this.rechnungNummer);
 			}else if(placeholders[i].getDisplayText().toLowerCase().equals("<gkv10>")){

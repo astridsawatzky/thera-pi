@@ -61,7 +61,7 @@ public class Eb3 implements RehaEventListener  {
 	Container xparent = null;
 	NativeView nativeView = null;
 	ByteArrayOutputStream outtemp = null;
-	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/";
+	public String tempPfad = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/";
 
 	/***********neue logische Variable***************/
 	boolean newframeok = false;

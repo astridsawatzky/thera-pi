@@ -530,7 +530,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 				"pat_intern='"+SystemConfig.hmAdrRDaten.get("<Rpatid>")+"', "+
 				"rez_nr='"+SystemConfig.hmAdrRDaten.get("<Rnummer>")+"' ," +
 				"user='"+ Reha.aktUser +"',"+
-				"ik='"+ Reha.aktIK +"'";
+				"ik='"+ Reha.getAktIK() +"'";
 				SqlInfo.sqlAusfuehren(cmd);
 				////System.out.println("Kassenbuch -> "+cmd);
 			}catch(Exception ex){

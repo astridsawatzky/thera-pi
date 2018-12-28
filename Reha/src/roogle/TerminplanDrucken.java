@@ -61,7 +61,7 @@ SuchenSeite eltern;
 
 	@Override
     public synchronized void run() {
-			String url = Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.oTerminListe.NameTemplate;
+			String url = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+SystemConfig.oTerminListe.NameTemplate;
 			String terminDrucker = SystemConfig.oTerminListe.NameTerminDrucker;
 			int anzahl = termindat.size();
 			int AnzahlTabellen = SystemConfig.oTerminListe.AnzahlTerminTabellen;
@@ -423,7 +423,7 @@ SuchenSeite eltern;
 				}
 			}else{
 
-				exporturl = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+				exporturl = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/Terminplan.pdf";
 				File f = new File(exporturl);
 				if(f.exists()){
 					f.delete();
@@ -526,7 +526,7 @@ SuchenSeite eltern;
 		}
 		/*****************bis hierher lediglich Emailadressen gewurschtel**************************/
 		String[] anhang = {null,null};
-		anhang[0] = Path.Instance.getProghome()+"temp/"+Reha.aktIK+"/Terminplan.pdf";
+		anhang[0] = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/Terminplan.pdf";
 		anhang[1] = "Terminplan.pdf";
 
 		File f = new File(anhang[0]);
@@ -564,7 +564,7 @@ SuchenSeite eltern;
 		boolean bestaetigen = (SystemConfig.hmEmailExtern.get("Bestaetigen").equals("0") ? false : true);
 		String text = "";
 		/*********/
-		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/EmailTerminliste.txt");
+		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/EmailTerminliste.txt");
 	      try {
 	         // FileReader zum Lesen aus Datei
 	         FileReader fr = new FileReader(file);

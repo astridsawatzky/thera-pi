@@ -217,7 +217,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 
 	}
 	public void setEncryptTitle(){
-		this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"]");
+		this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.getAktIK()+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"]");
 		this.jry.repaint();
 	}
 	public static int checkCert(String alias){
@@ -379,7 +379,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				abrRez.setRechtsAufNull();
 	    		aktuellerPat = "";
 			}
-			this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.aktIK+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"] [Disziplin: "+aktDisziplin+"]");
+			this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.getAktIK()+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"] [Disziplin: "+aktDisziplin+"]");
 			doEinlesen(null,null);
 			//setPreisVec(cmbDiszi.getSelectedIndex());
 		}
@@ -1151,7 +1151,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		if(abrechnungsModus.equals(ABR_MODE_302)){
 			try {
 
-				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org");
+				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.getAktIK()+"/"+"esol0"+aktEsol+".org");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw);
 			    bw.write(gesamtBuf.toString());
@@ -1192,7 +1192,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			    doAuftragsDatei(originalSize,encryptedSize);
 
 
-				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf");
+				f = new File(Path.Instance.getProghome()+"edifact/"+Reha.getAktIK()+"/"+"esol0"+aktEsol+".auf");
 				fw = new FileWriter(f);
 			    bw = new BufferedWriter(fw);
 			    bw.write(auftragsBuf.toString());
@@ -1261,7 +1261,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	 */
 	private void cancelRechnung(String aktRnr) {
 		if (aktRnr != null){
-				SqlInfo.sqlAusfuehren("update nummern set rnr='"+aktRnr+"' where mandant='"+Reha.aktIK+"' LIMIT 1");
+				SqlInfo.sqlAusfuehren("update nummern set rnr='"+aktRnr+"' where mandant='"+Reha.getAktIK()+"' LIMIT 1");
 			}
 		doDlgAbort();
 	}
@@ -1291,8 +1291,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			String text = "";
 			boolean authx = (authent.equals("0") ? false : true);
 			boolean bestaetigen = false;
-			String[] encodedDat = {Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
-			String[] aufDat = {Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
+			String[] encodedDat = {Path.Instance.getProghome()+"edifact/"+Reha.getAktIK()+"/"+"esol0"+aktEsol,"esol0"+aktEsol};
+			String[] aufDat = {Path.Instance.getProghome()+"edifact/"+Reha.getAktIK()+"/"+"esol0"+aktEsol+".auf","esol0"+aktEsol+".auf"};
 			ArrayList<String[]> attachments = new ArrayList<String[]>();
 			attachments.add(encodedDat);
 			attachments.add(aufDat);
@@ -1440,7 +1440,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			NebraskaKeystore store = new NebraskaKeystore(keystore, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", zertifikatVon.replace("IK", ""));
 
 			NebraskaEncryptor encryptor = store.getEncryptor(ik_nutzer);
-			String inFile = Path.Instance.getProghome()+"edifact/"+Reha.aktIK+"/"+"esol0"+aktEsol+".org";
+			String inFile = Path.Instance.getProghome()+"edifact/"+Reha.getAktIK()+"/"+"esol0"+aktEsol+".org";
 			long size = encryptor.encrypt(inFile, inFile.replace(".org", ""));
 			return Integer.parseInt(Long.toString(size));
 		} catch (NebraskaCryptoException e) {
@@ -1530,7 +1530,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				if(abrechnungsModus.equals(ABR_MODE_302)){
 					try{
 						Thread.sleep(100);
-						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Path.Instance.getProghome()+"vorlagen/"+Reha.aktIK+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
+						new BegleitzettelDrucken(getInstance(),abrechnungRezepte,ik_kostent,name_kostent,hmAnnahme, aktRechnung,Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
 					}catch(Exception ex){
 						JOptionPane.showMessageDialog(null, "Fehler im Modul BegleitzettlDrucken - Fehler-Exception: ex\n"+ex.getMessage());
 					}
@@ -1557,7 +1557,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		//unbBuf.append(aktDfue+plus+"B"+plus+"SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat()+plus+"2"+EOL);
 
 		unbBuf.append("UNH+00001+SLGA:"+SlgaVersion+":0:0"+EOL);
-		unbBuf.append("FKT+01"+plus+plus+Reha.aktIK+plus+ik_kostent+plus+ik_kasse+plus+zertifikatVon.replace("IK", "")/*Reha.aktIK*/+EOL);
+		unbBuf.append("FKT+01"+plus+plus+Reha.getAktIK()+plus+ik_kostent+plus+ik_kasse+plus+zertifikatVon.replace("IK", "")/*Reha.aktIK*/+EOL);
 		unbBuf.append("REC"+plus+aktRechnung+":0"+plus+getEdiDatumFromDeutsch(DatFunk.sHeute())+plus+(lOwnCert ? "1" : "2")+EOL);
 		unbBuf.append("UST"+plus+SystemConfig.hmFirmenDaten.get("Steuernummer")+plus+"J"+EOL);
 		unbBuf.append("GES"+plus+"00"+plus+dfx.format(preis00[0])+plus+dfx.format(preis00[1])+plus+dfx.format(preis00[2])+EOL);
@@ -1575,7 +1575,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				plus+SystemConfig.hmFirmenDaten.get("Telefon")+EOL);
 		unbBuf.append("UNT+000010+00001"+EOL);
 		unbBuf.append("UNH+00002+SLLA:"+SllaVersion+":0:0"+EOL);
-		unbBuf.append("FKT+01"+plus+plus+Reha.aktIK+plus+ik_kostent+plus+ik_kasse+EOL);
+		unbBuf.append("FKT+01"+plus+plus+Reha.getAktIK()+plus+ik_kostent+plus+ik_kasse+EOL);
 		unbBuf.append("REC"+plus+aktRechnung+":0"+plus+getEdiDatumFromDeutsch(DatFunk.sHeute())+plus+(lOwnCert ? "1" : "2")+EOL);
 		getEdiTimeString(false);
 	}
@@ -1701,7 +1701,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			if(SystemConfig.hmAbrechnung.get("hmgkvrauchdrucken").equals("1")){
 				abrDruck = new AbrechnungDrucken(this,Path.Instance.getProghome()+
 						"vorlagen/"+
-						Reha.aktIK+
+						Reha.getAktIK()+
 						"/"+
 						SystemConfig.hmAbrechnung.get("hmgkvformular"));
 			}
@@ -1789,7 +1789,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		rechnungBuf.append("r_offen='"+dfx.format(preis00[0]).replace(",", ".")+"', ");
 		rechnungBuf.append("r_zuzahl='"+dfx.format(preis00[2]).replace(",", ".")+"', ");
 		rechnungBuf.append("ikktraeger='"+ik_kostent+"',");
-		rechnungBuf.append("ik='"+Reha.aktIK+"'");
+		rechnungBuf.append("ik='"+Reha.getAktIK()+"'");
 		SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 	}
 
@@ -2025,7 +2025,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				rechnungBuf.append("zuzahldiff='"+  (zuzahlUmstellung ? "T" : "F") +"', ");
 				rechnungBuf.append("disziplin='"+  kopf[2].split("=")[1].subSequence(0, 2) +"', ");
 				rechnungBuf.append("rdatum='"+  DatFunk.sDatInSQL(DatFunk.sHeute()) +"',");
-				rechnungBuf.append("ik='"+  Reha.aktIK +"'");
+				rechnungBuf.append("ik='"+  Reha.getAktIK() +"'");
 				SqlInfo.sqlAusfuehren(rechnungBuf.toString());
 			}
 

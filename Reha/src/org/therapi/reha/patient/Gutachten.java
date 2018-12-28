@@ -589,7 +589,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 	
 	private  void doArztBausteine(){
 		new LadeProg(Path.Instance.getProghome()+"ArztBaustein.jar "+
-				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");	
+				Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/rehajava.ini");	
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -663,9 +663,9 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 				Integer.toString(art)+" "+
 				tabbericht.getValueAt(row, 0).toString()+" "+
 				SystemConfig.PDFformularPfad+" "+
-				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini"+" "+
+				Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/fremdprog.ini"+" "+
 				Reha.thisClass.patpanel.patDaten.get(29)+" "+
-				Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini");
+				Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/rehajava.ini");
 	}
 
 	class ToolsDlgGutachten{
@@ -794,9 +794,9 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 				//LVA-Entlassmitteilung
 				try{
 					new LadeProg(Path.Instance.getProghome()+"LVAEntlass.jar "+
-							" "+Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
+							" "+Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/rehajava.ini"+" "+
 							Reha.thisClass.patpanel.vecaktrez.get(1)+" "+
-							Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/fremdprog.ini");
+							Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/fremdprog.ini");
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
