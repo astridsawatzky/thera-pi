@@ -60,6 +60,7 @@ stash
 .recommenders
 .pmd
 .eclipse-pmd
+org.moreunit.prefs
 *report.txt
 *.mgp
 *.mgi
