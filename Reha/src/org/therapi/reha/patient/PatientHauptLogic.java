@@ -355,7 +355,7 @@ public class PatientHauptLogic {
 
 	private void ZeigePopupMenu(String nummer,Point p){
 		JPopupMenu jPop = getPhonePopupMenu(nummer);
-		jPop.show( Reha.thisFrame, (int)p.getX()+25, (int)p.getY() );
+		jPop.show( Reha.getThisFrame(), (int)p.getX()+25, (int)p.getY() );
 	}
 
 	private JPopupMenu getPhonePopupMenu(String nummer){
@@ -444,7 +444,7 @@ public class PatientHauptLogic {
 				@Override
 				protected Void doInBackground() throws Exception {
 					iformular = -1;
-					KassenFormulare kf = new KassenFormulare(Reha.thisFrame,titel,formularid);
+					KassenFormulare kf = new KassenFormulare(Reha.getThisFrame(),titel,formularid);
 					Point pt = patientHauptPanel.jbut[3].getLocationOnScreen();
 					kf.setLocation(pt.x-100,pt.y+25);
 					kf.setModal(true);

@@ -23,7 +23,7 @@ public class RehaSplash extends JXDialog{
 	public JLabel lbl = null;
 	public RehaSplash thisClass;
 	public RehaSplash(Image img,String string){
-		super((JComponent)Reha.thisFrame.getGlassPane());
+		super((JComponent)Reha.getThisFrame().getGlassPane());
 		thisClass = this;
 		this.setUndecorated(true);
 		this.setSize(550,75);

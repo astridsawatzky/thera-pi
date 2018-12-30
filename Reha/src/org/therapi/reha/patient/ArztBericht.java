@@ -570,7 +570,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 			doBerichtVorbericht(arg0);
 		}
 		if(cmd.equals("berichtdrucken")){
-			Reha.thisFrame.setCursor(Cursors.wartenCursor);
+			Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 			doBerichtDrucken();
 		}
 		if(cmd.equals("berichtabbrechen")){

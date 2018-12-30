@@ -33,7 +33,7 @@ public class FortschrittDlg extends JXDialog{
 	public JProgressBar fortschritt;
 	
 	public FortschrittDlg() {
-		super((JComponent)Reha.thisFrame.getGlassPane());
+		super((JComponent)Reha.getThisFrame().getGlassPane());
 		this.setUndecorated(true);
 		this.setModal(false);
 		//this.setAlwaysOnTop(true);

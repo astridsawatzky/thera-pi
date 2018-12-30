@@ -50,7 +50,7 @@ public class ToolsDialog extends JXDialog implements FocusListener, ActionListen
 
 	
 	public ToolsDialog(JXFrame owner,String titel,JList list){
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		this.setUndecorated(true);
 		this.setName("ToolsDlg");	
 		this.jList = list;

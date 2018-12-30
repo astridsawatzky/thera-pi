@@ -47,7 +47,7 @@ public class MlaKassenChecker extends JXDialog implements  WindowListener, KeyLi
 	Object eltern = null;
 	
 	public MlaKassenChecker(JXFrame owner,Object xeltern){
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		installListener();
 		this.setUndecorated(true);
 		this.setName("KuerzelDlg");	

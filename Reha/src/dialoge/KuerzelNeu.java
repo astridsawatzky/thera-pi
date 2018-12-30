@@ -55,7 +55,7 @@ public class KuerzelNeu extends JXDialog implements  WindowListener, KeyListener
 	SysUtilKuerzel eltern = null;
 	
 	public KuerzelNeu(JXFrame owner,String titel,boolean xneu,SysUtilKuerzel xeltern){
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		installListener();
 		this.setUndecorated(true);
 		this.setName("KuerzelDlg");	

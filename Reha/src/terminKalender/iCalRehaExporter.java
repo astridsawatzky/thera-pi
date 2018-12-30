@@ -65,8 +65,8 @@ public class iCalRehaExporter {
 							 ",\nwie gewünscht senden wir Ihnen hiermit Ihre Reha-Termine im RTA\n\nMit freundlichen Grüßen\nIhr Planungsteam im RTA ";
 					 
 					 
-					 Reha.thisFrame.setCursor(Cursors.wartenCursor);
-					 EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"Ihre Reha-Termine als ICS Datei",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
+					 Reha.getThisFrame().setCursor(Cursors.wartenCursor);
+					 EmailDialog emlDlg = new EmailDialog(Reha.getThisFrame(),"Ihre Reha-Termine als ICS Datei",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
 								mailtext,attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
 						emlDlg.setPreferredSize(new Dimension(575,370));
 						emlDlg.setLocationRelativeTo(null);
@@ -88,7 +88,7 @@ public class iCalRehaExporter {
 						});
 					 
 				 }catch(Exception ex){
-					 Reha.thisFrame.setCursor(Cursors.normalCursor);
+					 Reha.getThisFrame().setCursor(Cursors.normalCursor);
 					 JOptionPane.showMessageDialog(null,"Es ist ein Fehler beim ICS-Export aufgetreten");
 				 }
 				 
@@ -183,7 +183,7 @@ public class iCalRehaExporter {
         chooser.setCurrentDirectory(file);
 
         chooser.setVisible(true);
-        Reha.thisFrame.setCursor(Cursors.normalCursor);
+        Reha.getThisFrame().setCursor(Cursors.normalCursor);
         final int result = chooser.showOpenDialog(null);
 
         if (result == JFileChooser.APPROVE_OPTION) {

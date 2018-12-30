@@ -82,7 +82,7 @@ public class LadeProg {
 
 
 						} catch (IOException e) {
-							Reha.thisFrame.setCursor(Cursors.normalCursor);
+							Reha.getThisFrame().setCursor(Cursors.normalCursor);
 							e.printStackTrace();
 							JOptionPane.showMessageDialog(null, "Fehler beim starten des Moduls, Fehlermeldung ist\n"+e.getMessage().toString());
 						}

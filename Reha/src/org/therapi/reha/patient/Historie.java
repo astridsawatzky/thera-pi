@@ -1012,7 +1012,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 					"§301 Reha-Fallsteuerung"});
 			list.setCellRenderer(new IconListRenderer(icons));	
 			Reha.toolsDlgRueckgabe = -1;
-			ToolsDialog tDlg = new ToolsDialog(Reha.thisFrame,"Werkzeuge: Historie",list);
+			ToolsDialog tDlg = new ToolsDialog(Reha.getThisFrame(),"Werkzeuge: Historie",list);
 			tDlg.setPreferredSize(new Dimension(225,200+
 					((Boolean)SystemConfig.hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton")? 25 : 0) ));
 			tDlg.setLocation(pt.x-70,pt.y+30);

@@ -57,7 +57,7 @@ public class EditEdifact extends JXDialog implements FocusListener, ActionListen
 
 	
 	public EditEdifact(JXFrame owner, String titel,String reznr) {
-		super(owner,(JComponent)Reha.thisFrame.getGlassPane());
+		super(owner,(JComponent)Reha.getThisFrame().getGlassPane());
 		
 		this.setUndecorated(true);
 		

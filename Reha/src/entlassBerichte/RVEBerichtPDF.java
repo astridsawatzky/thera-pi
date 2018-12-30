@@ -297,7 +297,7 @@ public class RVEBerichtPDF {
  						}
 
 					}
-					Reha.thisFrame.setCursor(Cursors.normalCursor);
+					Reha.getThisFrame().setCursor(Cursors.normalCursor);
 					Reha.thisClass.progressStarten(false);
 					ArztTools.constructArztHMap(id);
 				}

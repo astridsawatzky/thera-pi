@@ -60,7 +60,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
 			return null;
 		}
 		try{
-		Reha.thisFrame.setCursor(Cursors.wartenCursor);
+		Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 		int pixelWidth = printPan.getWidth();
 		int pixelHeight = printPan.getHeight();
 		bufimg = new BufferedImage(pixelWidth,pixelHeight,BufferedImage.TYPE_INT_RGB);
@@ -204,9 +204,9 @@ public class DruckeViewPanel extends SwingWorker<Void, Void>{
             textDocumentImage);
 		*/
 
-		Reha.thisFrame.setCursor(Cursors.normalCursor);
+		Reha.getThisFrame().setCursor(Cursors.normalCursor);
 		}catch(Exception ex){
-			Reha.thisFrame.setCursor(Cursors.normalCursor);
+			Reha.getThisFrame().setCursor(Cursors.normalCursor);
 			ex.printStackTrace();
 		}
 		

@@ -276,7 +276,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		int row = tabaktrez.getSelectedRow();
 		if(row >= 0){
     		iformular = -1;
-    		KassenFormulare kf = new KassenFormulare(Reha.thisFrame,titel,formularid);
+    		KassenFormulare kf = new KassenFormulare(Reha.getThisFrame(),titel,formularid);
     		Point pt = aktrbut[8].getLocationOnScreen();
     		kf.setLocation(pt.x-100,pt.y+32);
     		kf.setModal(true);
@@ -2657,7 +2657,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			Point pt = aktrbut[3].getLocationOnScreen();
 			pt.x = pt.x-75;
 			pt.y = pt.y+30;
-			AbrechnungPrivat abrechnungPrivat = new AbrechnungPrivat(Reha.thisFrame,"Privat-/BG-/Nachsorge-Rechnung erstellen",-1,preisgruppe);
+			AbrechnungPrivat abrechnungPrivat = new AbrechnungPrivat(Reha.getThisFrame(),"Privat-/BG-/Nachsorge-Rechnung erstellen",-1,preisgruppe);
 			abrechnungPrivat.setLocation(pt);
 			abrechnungPrivat.pack();
 			abrechnungPrivat.setModal(true);
@@ -3314,7 +3314,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		hmRezgeb.put("<rgpatvname>", SystemConfig.hmAdrPDaten.get("<Pvname>") );
 		hmRezgeb.put("<rgpatgeboren>", SystemConfig.hmAdrPDaten.get("<Pgeboren>") );
 
-		RezeptGebuehrRechnung rgeb = new RezeptGebuehrRechnung(Reha.thisFrame,"Nachberechnung Rezeptgebühren",rueckgabe,hmRezgeb,buchen);
+		RezeptGebuehrRechnung rgeb = new RezeptGebuehrRechnung(Reha.getThisFrame(),"Nachberechnung Rezeptgebühren",rueckgabe,hmRezgeb,buchen);
 		rgeb.setSize(new Dimension(250,300));
 		rgeb.setLocation(location.x-50,location.y-50);
 		rgeb.pack();
@@ -3348,7 +3348,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 												  "§301 Reha-Fallsteuerung" });   // Lemmi 20101218: eingefügt  Rezeptgebühr-Rechnung aus dem Rezept heraus erzeugen
 			list.setCellRenderer(new IconListRenderer(icons));
 			Reha.toolsDlgRueckgabe = -1;
-			ToolsDialog tDlg = new ToolsDialog(Reha.thisFrame,"Werkzeuge: aktuelle Rezepte",list);
+			ToolsDialog tDlg = new ToolsDialog(Reha.getThisFrame(),"Werkzeuge: aktuelle Rezepte",list);
 			tDlg.setPreferredSize(new Dimension(275, (255+28) +   // Lemmi: Breite, Höhe des Werkzeug-Dialogs
 					((Boolean)SystemConfig.hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton") ? 25 : 0) ));
 			tDlg.setLocation(pt.x-70,pt.y+30);

@@ -62,7 +62,7 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 	PatientMemoPanel memopan = null;
 	
 	public Floskeln(JXFrame owner,String titel, PatientMemoPanel aktFocus){
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		this.setUndecorated(true);
 		this.setName("Floskeln");	
 		//this.jList.addKeyListener(this);

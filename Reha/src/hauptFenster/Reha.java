@@ -229,8 +229,14 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public JXTitledPanel jxTitelOben = null;
 	public JXTitledPanel jxTitelUnten = null;
 	public static Reha thisClass;  //  @jve:decl-index=0:
-	public static JXFrame thisFrame;
+	private static JXFrame thisFrame;
 
+	public static JXFrame getThisFrame() {
+		return thisFrame;
+	}
+	public static void setThisFrame(JXFrame thisFrame) {
+		Reha.thisFrame = thisFrame;
+	}
 	public JXPanel jInhaltOben = null;
 	public JXPanel jInhaltUnten = null;
 	public JXPanel jEventTargetOben = null;
@@ -562,7 +568,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				application.getJFrame();
 
 
-				Reha.thisFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( Path.Instance.getProghome()+"icons/Pi_1_0.png" ) );
+				Reha.getThisFrame().setIconImage( Toolkit.getDefaultToolkit().getImage( Path.Instance.getProghome()+"icons/Pi_1_0.png" ) );
 
 
 				Reha.thisClass.doCompoundPainter();
@@ -1083,7 +1089,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	private JXFrame getJFrame() {
 		if (jFrame == null) {
 			jFrame = new JXFrame();
-
+			jFrame.setTitle(Titel+Titel2);
+			jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			sqlInfo.setFrame(jFrame);
 			//thisClass = this;
 			jFrame.addWindowListener(this);
@@ -1093,7 +1100,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 
 
-			jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
 
 
 			JDesktopPane desk = new JDesktopPane();
@@ -1102,7 +1109,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			jFrame.setContentPane(desk);
 
 			/*******/
-			jFrame.setTitle(Titel+Titel2);
+
 			jFrame.setJMenuBar(getJJMenuBar());
 			jFrame.setStatusBar(getJXStatusBar());
 			Reha.thisClass.shiftLabel.setText("Prog-User ok!");
@@ -1369,7 +1376,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}
 
 
-		thisFrame = jFrame;
+		setThisFrame(jFrame);
 
 		jxLinks.setAlpha(1.0f);
 		jxRechts.setAlpha(1.0f);
@@ -1970,7 +1977,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	      try {
 	    	  SystemConfig.UpdateIni("rehajava.ini","HauptFenster","LookAndFeel",sUI);
 	    	  UIManager.setLookAndFeel((aktLookAndFeel = sUI));
-	    	  SwingUtilities.updateComponentTreeUI(thisFrame);
+	    	  SwingUtilities.updateComponentTreeUI(getThisFrame());
 	    	  SwingUtilities.updateComponentTreeUI(this.jxRechtsOben);
 	    	  SwingUtilities.updateComponentTreeUI(this.jxRechtsUnten);
 	    	  SwingUtilities.updateComponentTreeUI(this.jSplitLR);
@@ -2092,8 +2099,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
         				new SwingWorker<Void,Void>(){
         					@Override
         					protected Void doInBackground() throws Exception {
-        						Reha.thisFrame.setCursor(Cursors.wartenCursor);
-        						Reha.thisFrame.setCursor(Cursors.normalCursor);
+        						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
+        						Reha.getThisFrame().setCursor(Cursors.normalCursor);
         						return null;
         					}
         				}.execute();
@@ -2140,9 +2147,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
                             keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==65) {  // Ctrl-K
     					//JComponent arzt = AktiveFenster.getFensterAlle("ArztVerwaltung");
 
-						Reha.thisFrame.setCursor(Cursors.wartenCursor);
+						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 						Reha.thisClass.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
-						Reha.thisFrame.setCursor(Cursors.normalCursor);
+						Reha.getThisFrame().setCursor(Cursors.normalCursor);
                     }
 
                     if(keyEvent.isControlDown() &&
@@ -2253,8 +2260,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
       				   if(jSplitLR.getDividerLocation()<250){
       					   jSplitLR.setDividerLocation(dividerLocLR+10);
       				   }else{
-      					   if(dividerLocLR+10 > thisFrame.getRootPane().getWidth()-7){
-      						   jSplitLR.setDividerLocation(thisFrame.getRootPane().getWidth()-7);
+      					   if(dividerLocLR+10 > getThisFrame().getRootPane().getWidth()-7){
+      						   jSplitLR.setDividerLocation(getThisFrame().getRootPane().getWidth()-7);
       					   }else{
       						   jSplitLR.setDividerLocation(dividerLocLR+10);
       					   }
@@ -2263,7 +2270,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
       			   }
       			   if(xvariante==3){
       				   // nach oben
-      				   if(jSplitRechtsOU.getDividerLocation() > (thisFrame.getRootPane().getHeight()/2)-3){
+      				   if(jSplitRechtsOU.getDividerLocation() > (getThisFrame().getRootPane().getHeight()/2)-3){
       					   jSplitRechtsOU.setDividerLocation((jxLinks.getHeight()/2)-3);
           				   vollsichtbar = -1;
       				   }else{
@@ -2277,7 +2284,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
       					   jSplitRechtsOU.setDividerLocation((jxLinks.getHeight()/2)-3);
           				   vollsichtbar = -1;
       				   }else{
-      					   jSplitRechtsOU.setDividerLocation(thisFrame.getRootPane().getHeight()-7);
+      					   jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane().getHeight()-7);
           				   vollsichtbar = 0;
       				   }
       				   break;
@@ -2285,7 +2292,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
       			   if(xvariante==5){
       				   // oben Vollbild
       				   vollsichtbar = 0;
-      				   jSplitRechtsOU.setDividerLocation(thisFrame.getRootPane().getHeight()-7);
+      				   jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane().getHeight()-7);
       				   break;
       			   }
       			   if(xvariante==6){
@@ -2412,7 +2419,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 		}
 		jSplitLR.validate();
-		desktop.setBounds(0,0,thisFrame.getContentPane().getWidth(),thisFrame.getContentPane().getHeight());
+		desktop.setBounds(0,0,getThisFrame().getContentPane().getWidth(),getThisFrame().getContentPane().getHeight());
 		desktop.validate();
 		jFrame.getContentPane().validate();
 
@@ -2484,7 +2491,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		desktop.setBounds(0,0,thisFrame.getContentPane().getWidth(),thisFrame.getContentPane().getHeight());
+		desktop.setBounds(0,0,getThisFrame().getContentPane().getWidth(),getThisFrame().getContentPane().getHeight());
 	}
 	@Override
 	public void windowClosed(WindowEvent arg0) {
@@ -2872,7 +2879,7 @@ public void activateWebCam(){
 	}.execute();
 }
 public void mustReloadDb(){
-	Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.thisFrame,"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?",
+	Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.getThisFrame(),"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?",
 			"Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
 	/*
 	new SwingWorker<Void,Void>(){
@@ -2954,7 +2961,7 @@ final class DatenbankStarten implements Runnable{
 					protected Void doInBackground()
 							throws java.lang.Exception {
 						try{
-							while(Reha.thisFrame == null || Reha.thisFrame.getStatusBar()==null || Reha.thisClass.dbLabel == null){
+							while(Reha.getThisFrame() == null || Reha.getThisFrame().getStatusBar()==null || Reha.thisClass.dbLabel == null){
 								Thread.sleep(25);
 							}
 							Reha.thisClass.dbLabel.setText(Reha.aktuelleVersion+xdb);
@@ -3286,10 +3293,10 @@ final class ErsterLogin implements Runnable{
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public  void run(){
-				Reha.thisFrame.setMinimumSize(new Dimension(800,600));
-				Reha.thisFrame.setPreferredSize(new Dimension(800,600));
-				Reha.thisFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
-				Reha.thisFrame.setVisible(true);
+				Reha.getThisFrame().setMinimumSize(new Dimension(800,600));
+				Reha.getThisFrame().setPreferredSize(new Dimension(800,600));
+				Reha.getThisFrame().setExtendedState(JXFrame.MAXIMIZED_BOTH);
+				Reha.getThisFrame().setVisible(true);
 				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 				if(inif.getIntegerProperty("HauptFenster", "Divider1") != null){
 					Reha.thisClass.jSplitLR.setDividerLocation((Reha.divider1=inif.getIntegerProperty("HauptFenster", "Divider1")));
@@ -3306,10 +3313,10 @@ final class ErsterLogin implements Runnable{
 					Reha.thisClass.setDivider(5);
 				}
 
-				Reha.thisFrame.getRootPane().validate();
+				Reha.getThisFrame().getRootPane().validate();
 				Reha.isStarted = true;
 
-				Reha.thisFrame.setVisible(true);
+				Reha.getThisFrame().setVisible(true);
 
 
 				if(Reha.dividerOk){

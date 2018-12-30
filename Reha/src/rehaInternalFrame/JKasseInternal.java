@@ -33,7 +33,7 @@ public class JKasseInternal extends JRehaInternal implements RehaEventListener{
 	public void internalFrameClosed(InternalFrameEvent arg0) {
 		Reha.thisClass.desktops[this.desktop].remove(this);
 		this.removeInternalFrameListener(this);
-		Reha.thisFrame.requestFocus();
+		Reha.getThisFrame().requestFocus();
 		//System.out.println("Lösche KasseInternal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
 		Reha.thisClass.desktops[this.desktop].remove(this);
 		Reha.thisClass.aktiviereNaechsten(this.desktop);

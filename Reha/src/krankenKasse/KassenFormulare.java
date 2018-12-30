@@ -59,7 +59,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 	private JXTitledPanel jtp = null;
 	private JRtaTextField tfrueck = null;
 	public KassenFormulare(JXFrame owner,Vector<String>titel,JRtaTextField rueckform){
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		this.titel = titel;
 		//this.formular = formular;
 		tfrueck = rueckform;

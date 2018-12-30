@@ -89,7 +89,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 	 */
 	private PatientHauptLogic aufrufer = null;
 	public SuchenDialog(JXFrame owner,JComponent focusBack,String fname,int art,PatientHauptLogic xaufrufer) {
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		this.focusBack = (focusBack == null ? null : focusBack);
 		this.fname = fname.equals("") ? "" : fname;
 		this.suchart = art;

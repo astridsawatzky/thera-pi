@@ -39,7 +39,7 @@ public class JArztInternal extends JRehaInternal implements RehaEventListener{
 		rEvent.removeRehaEventListener(this);
 		this.removeInternalFrameListener(this);
 		//
-		Reha.thisFrame.requestFocus();
+		Reha.getThisFrame().requestFocus();
 		//Componenten des InternalFrameTitelbar auf null setzen
 		this.destroyTitleBar();
 		this.nord = null;

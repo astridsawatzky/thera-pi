@@ -174,7 +174,7 @@ public class PatientToolBarLogic {
 					}
 					if(! RehaIOServer.rehaMailIsActive){
 						if(Reha.aktUser.startsWith("Therapeut")){return;}
-						Reha.thisFrame.setCursor(Cursors.wartenCursor);
+						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 						
 								new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
 								long warten = System.currentTimeMillis();
@@ -235,7 +235,7 @@ public class PatientToolBarLogic {
 						if(!patientHauptPanel.patDaten.get(20).isEmpty()){
 							Point pt = patientHauptPanel.jbut[4].getLocationOnScreen();
 							String stitel = ("SMS für Patient erstellen"); 
-							final SMSDialog smsDlg = new SMSDialog(Reha.thisFrame,stitel,PatientToolBarLogic.this,true,"SMS über "+SystemConfig.hmSMS.get("NAME")+" an "+patientHauptPanel.patDaten.get(20),patientHauptPanel.patDaten.get(20));
+							final SMSDialog smsDlg = new SMSDialog(Reha.getThisFrame(),stitel,PatientToolBarLogic.this,true,"SMS über "+SystemConfig.hmSMS.get("NAME")+" an "+patientHauptPanel.patDaten.get(20),patientHauptPanel.patDaten.get(20));
 							smsDlg.setPreferredSize(new Dimension(475,200));
 							smsDlg.setLocation(pt.x-350,pt.y+100);
 							smsDlg.pack();
@@ -290,7 +290,7 @@ public class PatientToolBarLogic {
 						String recipient = Reha.thisClass.patpanel.patDaten.get(50);
 								//+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
 						final EmailDialog emlDlg = 
-								new EmailDialog(Reha.thisFrame,stitel,recipient,"",mailtext,new ArrayList<String[]>(),
+								new EmailDialog(Reha.getThisFrame(),stitel,recipient,"",mailtext,new ArrayList<String[]>(),
 										(Integer)SystemConfig.hmIcalSettings.get("postfach"),false);
 						emlDlg.setPreferredSize(new Dimension(575,370));
 						emlDlg.setLocation(pt.x-350,pt.y+100);
@@ -326,7 +326,7 @@ public class PatientToolBarLogic {
 					"Rehaplandatei -> iCalendar per Email"});
 			list.setCellRenderer(new IconListRenderer(icons));	
 			Reha.toolsDlgRueckgabe = -1;
-			ToolsDialog tDlg = new ToolsDialog(Reha.thisFrame,"Werkzeuge: aktueller Patient",list);
+			ToolsDialog tDlg = new ToolsDialog(Reha.getThisFrame(),"Werkzeuge: aktueller Patient",list);
 			tDlg.setPreferredSize(new Dimension(300,200+
 					((Boolean)SystemConfig.hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton")? 25 : 0) ));
 			tDlg.setLocation(pt.x-200,pt.y+30);

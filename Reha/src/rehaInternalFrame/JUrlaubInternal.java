@@ -42,7 +42,7 @@ public class JUrlaubInternal extends JRehaInternal implements RehaEventListener{
 		//hier die Aufräumenfunktion
 		this.removeInternalFrameListener(this);
 		//
-		Reha.thisFrame.requestFocus();
+		Reha.getThisFrame().requestFocus();
 		//Componenten des InternalFrameTitelbar auf null setzen
 		this.destroyTitleBar();
 		this.nord = null;

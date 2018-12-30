@@ -138,7 +138,7 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 	Vector<Integer> hbvec = new Vector<Integer>();
 	Vector<Integer> kmvec = new Vector<Integer>();
 	public AbrechnungPrivat(JXFrame owner,String titel,int rueckgabe,int preisgruppe) {
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		final int ipg = preisgruppe-1;
 		/*
 		new SwingWorker<Void,Void>(){

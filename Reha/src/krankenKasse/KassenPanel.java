@@ -706,7 +706,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		if(row >= 0){
 			//String sid = Integer.valueOf((String) kassentbl.getValueAt(row, 7)).toString();
     		iformular = -1;
-    		KassenFormulare kf = new KassenFormulare(Reha.thisFrame,titel,formularid);
+    		KassenFormulare kf = new KassenFormulare(Reha.getThisFrame(),titel,formularid);
     		Point pt = jbut[3].getLocationOnScreen();
     		kf.setLocation(pt.x-100,pt.y+25);
     		kf.setModal(true);
@@ -1309,7 +1309,7 @@ class HoleKassen{
 	}
 	try{
 		rs = stmt.executeQuery(sstmt);
-		Reha.thisFrame.setCursor(Cursors.wartenCursor);
+		Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 		Vector<String> xvec = new Vector<String>();
 		int anzahl = 0;
 		while( rs.next()){
@@ -1330,7 +1330,7 @@ class HoleKassen{
 			kpan.holeText();
 		}
 
-		Reha.thisFrame.setCursor(Cursors.normalCursor);
+		Reha.getThisFrame().setCursor(Cursors.normalCursor);
 		kpan.setzeFocus();
 	}catch(SQLException ev){
 		//System.out.println("SQLException: " + ev.getMessage());
@@ -1375,13 +1375,13 @@ class HoleText{
 	}
 	try{
 		rs = stmt.executeQuery(sstmt);
-		Reha.thisFrame.setCursor(Cursors.wartenCursor);
+		Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 		if( rs.next()){
 			pan.setMemo(rs.getString(1));
 		}else{
 			pan.setMemo("");
 		}
-		Reha.thisFrame.setCursor(Cursors.normalCursor);
+		Reha.getThisFrame().setCursor(Cursors.normalCursor);
 
 	}catch(SQLException ev){
 		//System.out.println("SQLException: " + ev.getMessage());

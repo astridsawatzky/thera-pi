@@ -81,14 +81,14 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 
 
 		//
-		Reha.thisFrame.requestFocus();
+		Reha.getThisFrame().requestFocus();
 		//Componenten des InternalFrameTitelbar auf null setzen
 		this.destroyTitleBar();
 		this.nord = null;
 
 		//((EBerichtPanel)((JComponent)getComponent())).dokumentSchliessen();
 
-		Reha.thisFrame.requestFocus();
+		Reha.getThisFrame().requestFocus();
 
 		this.nord = null;
 		ListenerTools.removeListeners(thisContent);

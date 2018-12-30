@@ -1377,7 +1377,7 @@ Vector mit Normal-Termin
 				auswahlDrucken(false,false);
 				attachments.add(new String[] {Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/Terminplan.pdf","Terminplan.pdf"});
 			}
-			EmailDialog emlDlg = new EmailDialog(Reha.thisFrame,"ICS-Datei der Behandlungstermin",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
+			EmailDialog emlDlg = new EmailDialog(Reha.getThisFrame(),"ICS-Datei der Behandlungstermin",recipient ,(String)SystemConfig.hmIcalSettings.get("betreff"),
 					(String) SystemConfig.hmIcalSettings.get("emailtext"),attachments,(Integer)SystemConfig.hmIcalSettings.get("postfach"), (Boolean)SystemConfig.hmIcalSettings.get("direktsenden")	);
 			emlDlg.setPreferredSize(new Dimension(575,370));
 			emlDlg.setLocationRelativeTo(null);
@@ -1386,7 +1386,7 @@ Vector mit Normal-Termin
 			final EmailDialog femlDlg = emlDlg;
 
 			if((Boolean) SystemConfig.hmIcalSettings.get("direktsenden")){
-				Reha.thisFrame.setCursor(Cursors.wartenCursor);
+				Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 				/*
 				new SwingWorker<Void,Void>(){
 					@Override
@@ -1413,7 +1413,7 @@ Vector mit Normal-Termin
 								abrDlg = null;
 							}
 							*/
-							Reha.thisFrame.setCursor(Cursors.normalCursor);
+							Reha.getThisFrame().setCursor(Cursors.normalCursor);
 							JOptionPane.showMessageDialog(null, "Daten für Reha-iCal wurden exportiert und per Email versendet");
 							try{
 								FileTools.deleteAllFiles(new File(Path.Instance.getProghome()+"temp/"+Reha.getAktIK()));

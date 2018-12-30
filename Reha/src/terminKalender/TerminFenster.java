@@ -3619,7 +3619,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 					return;
 				}
 				setUpdateVerbot(true);
-				mb = new MaskeInKalenderSchreiben(Reha.thisFrame,maskenbelegung,(Vector) vTerm.clone());
+				mb = new MaskeInKalenderSchreiben(Reha.getThisFrame(),maskenbelegung,(Vector) vTerm.clone());
 				mb.setSize(new Dimension(700,430));
 	 			mb.setLocation(new Point(250,200));
 				mb.setVisible(true);
@@ -3927,7 +3927,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	        if(ansicht == NORMAL_ANSICHT){
 	        	intagWahl = true;
 	        	final String datwahl = (sprung != 0 ? DatFunk.sDatPlusTage(this.aktuellerTag,sprung) : this.aktuellerTag);
-				TagWahlNeu tagWahlNeu = new TagWahlNeu(Reha.thisFrame,null,datwahl);
+				TagWahlNeu tagWahlNeu = new TagWahlNeu(Reha.getThisFrame(),null,datwahl);
 				tagWahlNeu.setPreferredSize(new Dimension(240,170));
 				tagWahlNeu.getSmartTitledPanel().setPreferredSize(new Dimension(240,170));
 				tagWahlNeu.pack();
@@ -4196,7 +4196,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		 	   @Override
             public  void run()
 		 	   {
-		 			df = new DruckFenster(Reha.thisFrame,terminVergabe);
+		 			df = new DruckFenster(Reha.getThisFrame(),terminVergabe);
 		 			df.setSize(new Dimension(760,480));
 		 			df.setLocation(new Point(50,150));
 		 			df.setFocusTabelle();
@@ -4217,7 +4217,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             public  void run()
 		 	   {
 		 		   try{
-			 			sf = new SchnellSuche(Reha.thisFrame,getTerminFensterInstance());
+			 			sf = new SchnellSuche(Reha.getThisFrame(),getTerminFensterInstance());
 					 	sf.setSize(new Dimension(720,400));
 			 			sf.setLocation(new Point(250,200));
 			 			sf.setVisible(true);

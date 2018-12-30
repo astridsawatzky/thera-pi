@@ -687,10 +687,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
 					protected Void doInBackground() throws Exception {
 						try{
-							Reha.thisFrame.setCursor(Cursors.wartenCursor);
+							Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 							//ProgLoader.SystemInitialisierung();
 							Reha.thisClass.progLoader.SystemInit(1, "");
-							Reha.thisFrame.setCursor(Cursors.normalCursor);
+							Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
@@ -711,10 +711,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
-						Reha.thisFrame.setCursor(Cursors.wartenCursor);
+						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 						Reha.thisClass.progLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
 						//ProgLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
-						Reha.thisFrame.setCursor(Cursors.normalCursor);
+						Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						return null;
 					}
 				}.execute();
@@ -725,10 +725,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
-						Reha.thisFrame.setCursor(Cursors.wartenCursor);
+						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 						Reha.thisClass.progLoader.ProgTerminFenster(1, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
 						//ProgLoader.ProgTerminFenster(1,0);
-						Reha.thisFrame.setCursor(Cursors.normalCursor);
+						Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						return null;
 					}
 				}.execute();
@@ -738,10 +738,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
-						Reha.thisFrame.setCursor(Cursors.wartenCursor);
+						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 						Reha.thisClass.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
 						//ProgLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
-						Reha.thisFrame.setCursor(Cursors.normalCursor);
+						Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						return null;
 					}
 				}.execute();
@@ -823,7 +823,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				//Reha.nachrichtenRegeln();
 				if(! RehaIOServer.rehaMailIsActive){
 					if(Reha.aktUser.startsWith("Therapeut")){return;}
-					Reha.thisFrame.setCursor(Cursors.wartenCursor);
+					Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 					new Thread(){
 						@Override
                         public void run(){
@@ -1017,9 +1017,9 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
 					protected Void doInBackground() throws Exception {
 						try{
-							Reha.thisFrame.setCursor(Cursors.wartenCursor);
+							Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 							KurzAufrufe.starteFunktion("Akutliste",null,null);
-							Reha.thisFrame.setCursor(Cursors.cdefault);
+							Reha.getThisFrame().setCursor(Cursors.cdefault);
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}

@@ -66,7 +66,7 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 		/****************************************************************/
 		//JXPanel tv = TerminFenster.getThisClass().getViewPanel();
 
-		rSmart.setLocationRelativeTo(Reha.thisFrame); 
+		rSmart.setLocationRelativeTo(Reha.getThisFrame()); 
 		rSmart.setVisible(true);
 
 		//jrb[0].requestFocus();		

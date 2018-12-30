@@ -616,7 +616,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		if(row >= 0){
 			String sid = Integer.valueOf((String) arzttbl.getValueAt(row, 9)).toString();
     		iformular = -1;
-    		KassenFormulare kf = new KassenFormulare(Reha.thisFrame,titel,formularid);
+    		KassenFormulare kf = new KassenFormulare(Reha.getThisFrame(),titel,formularid);
     		Point pt = jbut[3].getLocationOnScreen();
     		kf.setLocation(pt.x-100,pt.y+25);
     		kf.setModal(true);

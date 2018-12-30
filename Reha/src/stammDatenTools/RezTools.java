@@ -2487,7 +2487,7 @@ public class RezTools {
 				// Evtl. noch Einbauen ob bei unterschiedlichen Anzahlen (System-Initialisierung) immer geöffnet wird.
 				if (xforceDlg || (dlgZeigen && (Boolean)SystemConfig.hmTerminBestaetigen.get("dlgzeigen") ) ){
 							
-							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.thisFrame,null,hMPos,swreznum,Integer.parseInt(vec.get(15)));
+							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.getThisFrame(),null,hMPos,swreznum,Integer.parseInt(vec.get(15)));
 							termBestAusw.pack();
 							if(pt==null){
 								termBestAusw.setLocationRelativeTo(null);

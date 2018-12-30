@@ -60,7 +60,7 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 		this.removeInternalFrameListener(this);
 		
 		try{
-			Reha.thisFrame.requestFocus();
+			Reha.getThisFrame().requestFocus();
 			/*
 			Reha.thisClass.patpanel.fl = null;
 			Reha.thisClass.patpanel.kli = null;

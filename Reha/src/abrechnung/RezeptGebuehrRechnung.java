@@ -80,7 +80,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 	boolean buchen;
 	
 	public RezeptGebuehrRechnung(JXFrame owner,String titel,int rueckgabe,HashMap<String,String> hmRezgeb,boolean auchbuchen){
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		this.setUndecorated(true);
 		this.setName("RezgebDlg");
 		this.rueckgabe = rueckgabe;
@@ -377,7 +377,7 @@ public class RezeptGebuehrRechnung extends JXDialog implements FocusListener, Ac
 	
 	private synchronized void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException, DocumentException{
 		IDocumentService documentService = null;
-		Reha.thisFrame.setCursor(Cursors.wartenCursor);
+		Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 		////System.out.println("Starte Datei -> "+url);
 		if(!Reha.officeapplication.isActive()){
 			Reha.starteOfficeApplication();

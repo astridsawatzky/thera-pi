@@ -319,7 +319,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				Reha.thisFrame.setCursor(Cursors.wartenCursor);
+				Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 				return null;
 			}
 
@@ -634,7 +634,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
-				Reha.thisFrame.setCursor(Cursors.cdefault);
+				Reha.getThisFrame().setCursor(Cursors.cdefault);
 				Reha.thisClass.progressStarten(false);
 				return null;
 			}
@@ -2343,7 +2343,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					}
 					PointerInfo info = MouseInfo.getPointerInfo();
 		    	    Point location = info.getLocation();
-					EditEdifact editEdifact = new EditEdifact(Reha.thisFrame,"EDIFACT - editieren",rez_nr.trim());
+					EditEdifact editEdifact = new EditEdifact(Reha.getThisFrame(),"EDIFACT - editieren",rez_nr.trim());
 					editEdifact.getContentPane().setPreferredSize(new Dimension(600,500));
 					editEdifact.setLocation(e.getXOnScreen()-50,e.getYOnScreen()-50);
 					//editEdifact.setLocation(location.x-50,location.y-50);

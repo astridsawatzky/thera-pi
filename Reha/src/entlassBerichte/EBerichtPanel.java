@@ -2034,7 +2034,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 					"RV E-Bericht prüfen","§301 Reha E-Bericht übertragen"});
 			list.setCellRenderer(new IconListRenderer(icons));
 			Reha.toolsDlgRueckgabe = -1;
-			ToolsDialog tDlg = new ToolsDialog(Reha.thisFrame,"Werkzeuge: ärztliche Gutachten",list);
+			ToolsDialog tDlg = new ToolsDialog(Reha.getThisFrame(),"Werkzeuge: ärztliche Gutachten",list);
 			tDlg.setPreferredSize(new Dimension(250,200+
 					((Boolean)SystemConfig.hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton")? 25 : 0) ));
 			tDlg.setLocation(pt.x-20,pt.y+30);

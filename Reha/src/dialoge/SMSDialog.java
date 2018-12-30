@@ -60,7 +60,7 @@ public class SMSDialog extends JXDialog implements  WindowListener, KeyListener,
 	private String nummer = "";
 	 
 	public SMSDialog(JXFrame owner,String titel,PatientToolBarLogic xeltern,boolean SMS, String info,String nummer){
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		installListener();
 
 		this.setUndecorated(true);

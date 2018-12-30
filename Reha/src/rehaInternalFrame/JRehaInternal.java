@@ -350,7 +350,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		thisContent.removeFocusListener(fl);
 		fl = null;
 	    thisContent = null;
-		Reha.thisFrame.requestFocus();
+		Reha.getThisFrame().requestFocus();
 		Reha.thisClass.aktiviereNaechsten(this.desktop);
 		AktiveFenster.loescheFenster(this.getName());
 	}

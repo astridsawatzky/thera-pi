@@ -130,7 +130,7 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 				rechte = ParameterLaden.pKollegen.get(i).get(2);
 				////System.out.println("Rechte = "+rechte);
 				Reha.progRechte = rechte;
-				Reha.thisFrame.setTitle(Reha.Titel+Reha.Titel2+"  -->  [Benutzer: "+name+"]");
+				Reha.getThisFrame().setTitle(Reha.Titel+Reha.Titel2+"  -->  [Benutzer: "+name+"]");
 				Reha.aktUser = name;
 				check = true;
 				break;
@@ -152,8 +152,8 @@ public class PassWort extends JXPanel implements KeyListener, ActionListener{
 			rEvt.setRehaEvent("PinPanelEvent");
 			rEvt.setDetails(this.getName(),"ROT") ;
 			RehaTPEventClass.fireRehaTPEvent(rEvt);
-			Reha.thisFrame.setVisible(true);
-			Reha.thisFrame.validate();
+			Reha.getThisFrame().setVisible(true);
+			Reha.getThisFrame().validate();
 			this.grundContainer().Schliessen();
 
 		}

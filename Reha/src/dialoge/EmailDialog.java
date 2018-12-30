@@ -90,7 +90,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	public AbrechnungDlg abrDlg = null;
 
 	public EmailDialog(JXFrame owner,String titel,String recipients, String betreff, String mailtext,ArrayList<String[]> attachments,int postfach, boolean direktsenden) {
-		super(owner, (JComponent)Reha.thisFrame.getGlassPane());
+		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		installListener();
 		this.setUndecorated(true);
 		this.setName("EMAILDlg");	
@@ -173,7 +173,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 	}
 	
 	public void senden(){
-		Reha.thisFrame.setCursor(Cursors.wartenCursor);
+		Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 		this.setCursor(Cursors.wartenCursor);
 		if(tf[0].getText().trim().equals("") || tf[0].getText().trim().startsWith(",") ){
 			JOptionPane.showMessageDialog(null,"Keine Empfängeradresse angegeben");
@@ -225,7 +225,7 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 			 oMail = null;
 		}catch(Exception e){
 			 e.printStackTrace( );
-			 Reha.thisFrame.setCursor(Cursors.normalCursor);
+			 Reha.getThisFrame().setCursor(Cursors.normalCursor);
 			 if(abrDlg != null){
 				 abrDlg.setVisible(false);
 				 abrDlg.dispose();
@@ -242,14 +242,14 @@ public class EmailDialog  extends JXDialog implements  WindowListener, KeyListen
 				abrDlg.dispose();
 				abrDlg = null;				
 			}
-			Reha.thisFrame.setCursor(Cursors.normalCursor);
+			Reha.getThisFrame().setCursor(Cursors.normalCursor);
 			int frage = JOptionPane.showConfirmDialog(null,"Versand erfolgreich abgeschlossen.\n\nWollen Sie den Email-Dialog jetzt schließen?","Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 			if(frage == JOptionPane.YES_OPTION){
 				FensterSchliessen("dieses");
 			}			
 		}else{
 			FensterSchliessen("dieses");
-			Reha.thisFrame.setCursor(Cursors.normalCursor);
+			Reha.getThisFrame().setCursor(Cursors.normalCursor);
 		}
 	}
 	

@@ -54,7 +54,7 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 
 		Reha.thisClass.desktops[this.desktop].remove(this);
 		this.removeInternalFrameListener(this);
-		Reha.thisFrame.requestFocus();
+		Reha.getThisFrame().requestFocus();
 		Reha.thisClass.aktiviereNaechsten(this.desktop);
 		this.removeAll();
 		////System.out.println("Lösche Termin Internal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);

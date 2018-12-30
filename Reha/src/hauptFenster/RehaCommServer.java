@@ -74,9 +74,9 @@ public class RehaCommServer  extends SwingWorker<Void,Void>{
 	
 	public void handleMessage(String message){
 		if(message.startsWith("GOT-SMS")){
-			JOptionPane.showMessageDialog(Reha.thisFrame, message);
+			JOptionPane.showMessageDialog(Reha.getThisFrame(), message);
 		}else if(message.startsWith("Sender-Info")){
-			JOptionPane.showMessageDialog(Reha.thisFrame, message);
+			JOptionPane.showMessageDialog(Reha.getThisFrame(), message);
 		}
 	}
 	

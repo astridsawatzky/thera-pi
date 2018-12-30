@@ -802,7 +802,7 @@ public class TermineErfassen implements Runnable {
 				// TerminBestätigenAuswahlFenster anzeigen oder überspringen
 				if (xforceDlg || (!springen && (Boolean)SystemConfig.hmTerminBestaetigen.get("dlgzeigen") ) ){
 							
-							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.thisFrame,null,hMPos,swreznum,Integer.parseInt(vec.get(15)));
+							TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(Reha.getThisFrame(),null,hMPos,swreznum,Integer.parseInt(vec.get(15)));
 							termBestAusw.pack();
 							if(pt==null){
 								termBestAusw.setLocationRelativeTo(null);

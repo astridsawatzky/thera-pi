@@ -143,7 +143,7 @@ public class PatientMemoPanel extends JXPanel{
 			public void mousePressed(MouseEvent e) {
 				if(e.getButton() == 3 && ( (patientHauptPanel.pmemo[0].isEditable()) || (patientHauptPanel.pmemo[1].isEditable())) ){
 					//new Floskeln( (patientHauptPanel.pmemo[0].isEditable() ? 0 : 1), e );
-					Floskeln fl = new Floskeln(Reha.thisFrame,"Floskeln",getInstance());
+					Floskeln fl = new Floskeln(Reha.getThisFrame(),"Floskeln",getInstance());
 					fl.setBounds(200, 200, 200, 200);
 					fl.setPreferredSize(new Dimension(200,200));
 					fl.setLocation(e.getLocationOnScreen());

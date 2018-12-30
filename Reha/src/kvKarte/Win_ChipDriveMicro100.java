@@ -30,7 +30,7 @@ public class Win_ChipDriveMicro100 {
 		}
 		if(! isreg){
 			HWND hwnd = new HWND(); 
-			hwnd.setPointer(Native.getWindowPointer(Reha.thisFrame));
+			hwnd.setPointer(Native.getWindowPointer(Reha.getThisFrame()));
 			PointerByReference pbf = new PointerByReference(hwnd.getPointer());
 			String[] spbf = pbf.getValue().toString().split("@");
 			int i = Integer.parseInt(spbf[1].split("x")[1],16);
