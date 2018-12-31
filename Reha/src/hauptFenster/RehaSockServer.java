@@ -8,7 +8,7 @@ import java.net.Socket;
 
 /**************************/
 class RehaSockServer{
-	static ServerSocket serv = null;
+	ServerSocket serv = null;
 	RehaSockServer() throws IOException{
 		try {
 			serv = new ServerSocket(1235);
@@ -36,8 +36,7 @@ class RehaSockServer{
 			test = String.valueOf(sb);
 			final String xtest = test;
 			if(xtest.equals("INITENDE")){
-				byte[] schreib = "ok".getBytes();
-				output.write(schreib);
+				output.write("ok".getBytes());
 				output.flush();
 				output.close();
 				input.close();
@@ -48,12 +47,10 @@ class RehaSockServer{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				Reha.warten = false;
+
 				break;
-			}else{
 			}
-			byte[] schreib = "ok".getBytes();
-			output.write(schreib);
+			output.write("ok".getBytes());
 			output.flush();
 			output.close();
 			input.close();

@@ -9,9 +9,6 @@ import java.awt.Event;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.LinearGradientPaint;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -77,7 +74,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -269,12 +265,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	public static BarCodeScanner barcodeScanner = null;
 
-	public static RehaSockServer RehaSock = null;
 
 	public static CompoundPainter[] RehaPainter = {null,null,null,null,null};
 	public Vector<Object> aktiveFenster = new Vector<Object>();
 	public final String NULL_DATE = "  .  .    ";
-	public static boolean warten=true;
 	private static String aktIK = "000000000";
 	private static String aktMandant = "Übungs-Mandant";
 	public static String aktUser = "";
@@ -382,6 +376,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	public Reha(Mandant mandant) {
 		this.mandant = mandant;
+		instance = this;
 
 	}
 	public void start() {
@@ -409,6 +404,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			 mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+DefaultMandant),
 			inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+DefaultMandant));
 		}
+		 new Reha(mainMandant);
 		startWithMandantSet(mainMandant);
 
 
@@ -432,17 +428,18 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		Titel2 = "  -->  [Mandant: "+getAktMandant()+"]";
 		//System.out.println(Titel2);
 		/**************************/
-		new Thread(){
+		Thread rehasockeThread = new Thread(){
 			@Override
             public  void run(){
 				try {
-					RehaSock = new RehaSockServer();
+					new RehaSockServer();
 				} catch (IOException e) {
 					System.out.println("Kann RehaSocket-Server nicht starten");
 					e.printStackTrace();
 				}
 			}
-		}.start();
+		};
+		rehasockeThread.start();
 		/**************************/
 		new Thread(){
 			@Override
@@ -457,7 +454,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 					BufferedReader br = new BufferedReader(isr);
 
 					while ((br.readLine()) != null) {
-						//System.out.println(br.readLine());
+						System.out.println(br.readLine());
 					}
 					is.close();
 					isr.close();
@@ -469,14 +466,12 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			}
 		}.start();
 		int i=0;
-		while(warten && i < 50){
 		try {
-			Thread.sleep(100);
-			i++;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			rehasockeThread.join(5000);
+		} catch (InterruptedException e2) {
+			logger.error("rehasocketthread could not be joined");
 		}
+
 
 		new Thread(){
 			@Override
@@ -559,15 +554,15 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			@Override
             public void run() {
 				try{
-				Reha application = new Reha(mainMandant);
-				application.sqlInfo = new SqlInfo();
-				application.sqlInfo.setDieseMaschine(SystemConfig.dieseMaschine);
+
+				instance.sqlInfo = new SqlInfo();
+				instance.sqlInfo.setDieseMaschine(SystemConfig.dieseMaschine);
 				rehaBackImg = new ImageIcon(Path.Instance.getProghome()+"icons/therapieMT1.gif");
-				instance = application;
+				instance = instance;
 				RehaEventClass rehaEvent = new RehaEventClass();
 			    rehaEvent.addRehaEventListener(instance);
 				new Thread(new DatenbankStarten()).start();
-				application.getJFrame();
+				instance.getJFrame();
 
 
 				Reha.getThisFrame().setIconImage( Toolkit.getDefaultToolkit().getImage( Path.Instance.getProghome()+"icons/Pi_1_0.png" ) );
@@ -3546,26 +3541,7 @@ class SocketClient {
 		}
 	}
 }
-class MyGradPanel extends JXPanel  {
-    /**
-	 *
-	 */
-	private static final long serialVersionUID = 2882847000287058980L;
 
-	@Override
-    public void paint(Graphics g){
-      Graphics2D g2d = (Graphics2D)g;
-      Color s1 = Colors.TaskPaneBlau.alpha(1.0f);
-      Color e = Color.WHITE;
-      GradientPaint gradient = new GradientPaint(0,0,s1,getWidth(),getHeight(),e);
-
-
-      g2d.setPaint(gradient);
-      g2d.fillRect(0,0,getWidth(),getHeight());
-      Image jImage = Reha.rehaBackImg.getImage();
-      g.drawImage(jImage,((getWidth()/2)-(jImage.getWidth(this)/2)),((getHeight()/2)-(jImage.getHeight(this)/2)), this);
-    }
-  }
 /*******************************************/
 final class HilfeDatenbankStarten implements Runnable{
 
