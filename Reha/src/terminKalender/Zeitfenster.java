@@ -95,7 +95,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 			
 			jContentPane = new JXPanel();
 			jContentPane.setBackground(Color.WHITE);
-			jContentPane.setBackgroundPainter(Reha.thisClass.compoundPainter.get("Zeitfenster"));
+			jContentPane.setBackgroundPainter(Reha.instance.compoundPainter.get("Zeitfenster"));
 			jContentPane.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 			jContentPane.setOpaque(true);
 			jContentPane.setLayout(new BorderLayout());
@@ -104,7 +104,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 			
 			panelRadio = new JXPanel(new BorderLayout());
 			panelRadio.setBorder(BorderFactory.createEmptyBorder(5,20,5,20));
-			panelRadio.setBackgroundPainter(Reha.thisClass.compoundPainter.get("Zeitfenster"));
+			panelRadio.setBackgroundPainter(Reha.instance.compoundPainter.get("Zeitfenster"));
 			panelRadio.setPreferredSize(new Dimension(480,80));
 			panelRadio.add(radioPan(),BorderLayout.CENTER);
 			

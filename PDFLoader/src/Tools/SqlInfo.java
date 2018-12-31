@@ -157,7 +157,7 @@ public class SqlInfo {
 			stmt =  Rahmen.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 /*
-			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 */
 		} catch (SQLException e) {

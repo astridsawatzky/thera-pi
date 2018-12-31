@@ -81,7 +81,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 		//System.out.println("Aufruf SysUtilKalenderanlagen");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 5));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     add(getVorlagenSeite(),BorderLayout.CENTER);
 	     add(getKnopfPanel(),BorderLayout.SOUTH);

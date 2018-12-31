@@ -76,15 +76,15 @@ public class ZuzahlTools {
 		    }
 		};	
 		Collections.sort(tage,comparator);
-		String rez_nr = Reha.thisClass.patpanel.vecaktrez.get(1);
-		String unter18 = Reha.thisClass.patpanel.vecaktrez.get(60);
-		//String pat_int = (String) Reha.thisClass.patpanel.vecaktrez.get(0);
-		String aktzzstatus = Reha.thisClass.patpanel.vecaktrez.get(39);
-		String aktzzregel = Reha.thisClass.patpanel.vecaktrez.get(63);
+		String rez_nr = Reha.instance.patpanel.vecaktrez.get(1);
+		String unter18 = Reha.instance.patpanel.vecaktrez.get(60);
+		//String pat_int = (String) Reha.instance.patpanel.vecaktrez.get(0);
+		String aktzzstatus = Reha.instance.patpanel.vecaktrez.get(39);
+		String aktzzregel = Reha.instance.patpanel.vecaktrez.get(63);
 		if(unter18.equals("T") && (!aktzzregel.equals("0"))){
 			String stichtag = "";
-			String geburtstag = DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4));
-			String gebtag = (DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(22))).substring(0,6)+Integer.valueOf(Integer.valueOf(SystemConfig.aktJahr)-18).toString();
+			String geburtstag = DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4));
+			String gebtag = (DatFunk.sDatInDeutsch(Reha.instance.patpanel.vecaktrez.get(22))).substring(0,6)+Integer.valueOf(Integer.valueOf(SystemConfig.aktJahr)-18).toString();
 			
 			boolean einergroesser = false;
 			int erstergroesser = -1; 
@@ -103,7 +103,7 @@ public class ZuzahlTools {
 				//String cmd = "update verordn set zzstatus='2' where rez_nr='"+rez_nr+" LIMIT 1";
 				//new ExUndHop().setzeStatement(cmd);
 				SqlInfo.aktualisiereSaetze("verordn", "zzstatus='2'", "rez_nr='"+rez_nr+"' LIMIT 1");
-				Reha.thisClass.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),2);				
+				Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),2);				
 				ret[0] = new Boolean(true); 
 				ret[1] = Integer.valueOf(tage.size());
 				ret[2] = Integer.valueOf(erstergroesser-1);
@@ -119,11 +119,11 @@ public class ZuzahlTools {
 				if(tagex <= 0 && tagex > -45){
 					//JOptionPane.showMessageDialog(null ,"Achtung es sind noch "+(tagex*-1)+" Tage bis zur Vollj�hrigkeit\n"+
 							//"Unter Umst�nden wechselt der Zuzahlungsstatus im Verlauf dieses Rezeptes");
-					Reha.thisClass.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),3);
+					Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),3);
 					SqlInfo.aktualisiereSaetze("verordn", "zzstatus='3'", "rez_nr='"+rez_nr+"' LIMIT 1");
 					ret[4] = Integer.valueOf(3);					
 				}else{
-					Reha.thisClass.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),0);
+					Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),0);
 					SqlInfo.aktualisiereSaetze("verordn", "zzstatus='0'", "rez_nr='"+rez_nr+"' LIMIT 1");
 					ret[4] = Integer.valueOf(0);
 				}
@@ -133,7 +133,7 @@ public class ZuzahlTools {
 				
 			}
 		}else if(unter18.equals("T") && (aktzzregel.equals("0"))){
-			Reha.thisClass.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),0);			
+			Reha.instance.patpanel.aktRezept.setzeBild(AktuelleRezepte.tabaktrez.getSelectedRow(),0);			
 			ret[0] = Boolean.valueOf(false); 
 			ret[1] = tage.size();
 			ret[4] = Integer.valueOf(0);			

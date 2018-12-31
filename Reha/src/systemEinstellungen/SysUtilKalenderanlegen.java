@@ -107,7 +107,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 		////System.out.println("Aufruf SysUtilKalenderanlagen");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     JScrollPane jscr = new JScrollPane();
 	     jscr.setBorder(null);
@@ -944,7 +944,7 @@ class HoleMaxDatum extends Thread{
     public void run(){
 
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					rs =  stmt.executeQuery(this.statement);
@@ -1006,7 +1006,7 @@ class HoleMasken{
 	ResultSet rs = null;
 
 	try {
-		stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+		stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE );
 		try{
 		rs = stmt.executeQuery(sstmt);
@@ -1125,7 +1125,7 @@ class TesteKalender{
 	int tage = 0;
 
 	try {
-		stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+		stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE );
 		try{
 			rs = stmt.executeQuery(sstmt);
@@ -1209,7 +1209,7 @@ class SchreibeNeuenKalender extends Thread{
     public synchronized void run(){
 		//Vector treadVect = new Vector();
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					geklappt =  stmt.execute(this.statement);

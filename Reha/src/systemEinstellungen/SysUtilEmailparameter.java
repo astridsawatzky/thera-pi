@@ -65,7 +65,7 @@ public class SysUtilEmailparameter extends JXPanel implements KeyListener, Actio
 		//System.out.println("Aufruf SysUtilEmailparameter");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     JScrollPane jscr = new JScrollPane();
 	     jscr.setBorder(null);

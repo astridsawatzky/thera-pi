@@ -563,7 +563,7 @@ public class SystemConfig {
 			KalenderAlpha = new Float(String.valueOf(termkalini.getStringProperty("Kalender","KalenderHintergrundAlpha")));
 			////System.out.println("Anzal Kollegen = "+AnzahlKollegen);
 			oTerminListe = new TerminListe().init();
-			Reha.thisClass.setzeInitStand("Gruppendefinition einlesen");
+			Reha.instance.setzeInitStand("Gruppendefinition einlesen");
 			GruppenLesen();
 			//oGruppen = new GruppenEinlesen().init();
 			try{
@@ -896,6 +896,9 @@ public class SystemConfig {
 
 	}
 
+	public static String getLookAndFeel() {
+		return aHauptFenster.get(4);
+	}
 	public static void MandantenEinlesen(){
 		try{
 			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/", "mandanten.ini");
@@ -2064,7 +2067,7 @@ public class SystemConfig {
 			 *     inif.setIntegerProperty("Icons", bilder[i]+"ScaleY", yscale, "")
 			 */
 		}
-		//Reha.thisClass.copyLabel.setDropTarget(true);
+		//Reha.instance.copyLabel.setDropTarget(true);
 		////System.out.println("System-Icons wurden geladen");
 	}
 	public static void Feiertage(){

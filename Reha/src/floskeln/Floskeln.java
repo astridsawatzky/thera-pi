@@ -151,8 +151,8 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 			tblDataModel.addRow((Vector<?>)vec.clone());
 		}
 		tab.repaint();
-		if(tab.getRowCount() > Reha.thisClass.lastSelectedFloskel && Reha.thisClass.lastSelectedFloskel >= 0 ){
-			tab.setRowSelectionInterval(Reha.thisClass.lastSelectedFloskel,Reha.thisClass.lastSelectedFloskel);
+		if(tab.getRowCount() > Reha.instance.lastSelectedFloskel && Reha.instance.lastSelectedFloskel >= 0 ){
+			tab.setRowSelectionInterval(Reha.instance.lastSelectedFloskel,Reha.instance.lastSelectedFloskel);
 		}
 		tab.requestFocus();
 	}
@@ -188,7 +188,7 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == 10){
 			e.consume();
-			Reha.thisClass.lastSelectedFloskel = tab.getSelectedRow();
+			Reha.instance.lastSelectedFloskel = tab.getSelectedRow();
 			setVisible(false);
 			auswerten();
 			dispose();
@@ -231,7 +231,7 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 	public void mousePressed(MouseEvent e) {
 		if(e.getClickCount()==2 && e.getButton()==1){
 			e.consume();
-			Reha.thisClass.lastSelectedFloskel = tab.getSelectedRow();
+			Reha.instance.lastSelectedFloskel = tab.getSelectedRow();
 			setVisible(false);
 			auswerten();
 			dispose();
@@ -252,7 +252,7 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 		try{
 			String cmd = e.getActionCommand();
 			if(cmd.equals("abfeuern")){
-				Reha.thisClass.lastSelectedFloskel = tab.getSelectedRow();
+				Reha.instance.lastSelectedFloskel = tab.getSelectedRow();
 				setVisible(false);
 				auswerten();
 				dispose();

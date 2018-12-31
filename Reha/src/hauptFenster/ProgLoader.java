@@ -28,6 +28,7 @@ import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
 import environment.Path;
 import events.RehaTPEvent;
+import gui.Cursors;
 import krankenKasse.KassenPanel;
 import rechteTools.Rechte;
 import rehaContainer.RehaTP;
@@ -136,15 +137,15 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			}
 			terminjry.setName(name);
 			((JRehaInternal)terminjry).setImmerGross((SystemConfig.hmContainer.get("KalenderOpti")==1 ? true : false));
-			Reha.thisClass.terminpanel = new TerminFenster();
-			terminjry.setContent(Reha.thisClass.terminpanel.init(containerNr, xansicht,terminjry));
+			Reha.instance.terminpanel = new TerminFenster();
+			terminjry.setContent(Reha.instance.terminpanel.init(containerNr, xansicht,terminjry));
 			if(SystemConfig.hmContainer.get("KalenderOpti")==1){
 				terminjry.setLocation(new Point(0,0));
-				//Reha.thisClass.jpOben muss noch ersetzt werden durch Reha.thisClass.desktops[containerNr]
-				//terminjry.setSize(new Dimension(Reha.thisClass.jpOben.getWidth(),Reha.thisClass.jpOben.getHeight()));
-				//terminjry.setPreferredSize(new Dimension(Reha.thisClass.jpOben.getWidth(),Reha.thisClass.jpOben.getHeight()));
-				terminjry.setSize(new Dimension(Reha.thisClass.desktops[containerNr].getWidth(),Reha.thisClass.desktops[containerNr].getHeight()));
-				terminjry.setPreferredSize(new Dimension(Reha.thisClass.desktops[containerNr].getWidth(),Reha.thisClass.desktops[containerNr].getHeight()));
+				//Reha.instance.jpOben muss noch ersetzt werden durch Reha.instance.desktops[containerNr]
+				//terminjry.setSize(new Dimension(Reha.instance.jpOben.getWidth(),Reha.instance.jpOben.getHeight()));
+				//terminjry.setPreferredSize(new Dimension(Reha.instance.jpOben.getWidth(),Reha.instance.jpOben.getHeight()));
+				terminjry.setSize(new Dimension(Reha.instance.desktops[containerNr].getWidth(),Reha.instance.desktops[containerNr].getHeight()));
+				terminjry.setPreferredSize(new Dimension(Reha.instance.desktops[containerNr].getWidth(),Reha.instance.desktops[containerNr].getHeight()));
 
 			}else{
 				terminjry.setLocation(new Point(SystemConfig.hmContainer.get("KalenderLocationX"),SystemConfig.hmContainer.get("KalenderLocationY")));
@@ -154,15 +155,15 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			JTerminInternal.inIniSave = false;
 			terminjry.pack();
 			terminjry.setVisible(true);
-			Reha.thisClass.desktops[containerNr].add(terminjry);
+			Reha.instance.desktops[containerNr].add(terminjry);
 			LinkeTaskPane.thisClass.setCursor(Cursors.normalCursor);
-			AktiveFenster.setNeuesFenster(name,terminjry,containerNr,Reha.thisClass.terminpanel.getViewPanel());			
+			AktiveFenster.setNeuesFenster(name,terminjry,containerNr,Reha.instance.terminpanel.getViewPanel());			
 			terminjry.aktiviereDiesenFrame(terminjry.getName());
 			SwingUtilities.invokeLater(new Runnable(){
 			 	   @Override
                 public  void run()
 			 	   {
-			 		  Reha.thisClass.terminpanel.getViewPanel().requestFocus();
+			 		  Reha.instance.terminpanel.getViewPanel().requestFocus();
 			 	   }
 			}); 	   			
 		}
@@ -171,7 +172,7 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 }
 public void loescheTermine(){
 	terminjry = null;
-	Reha.thisClass.terminpanel = null;
+	Reha.instance.terminpanel = null;
 }
 
 /**************Roogle Echtfunktion***********************/
@@ -228,23 +229,23 @@ public void KassenFenster(int setPos,String kid) {
 	kassejry.setName(name);
 	kassejry.setSize(new Dimension(650,500));
 	kassejry.setPreferredSize(new Dimension(650,500));
-	Reha.thisClass.kassenpanel = new KassenPanel(kassejry,kid); 
-	kassejry.setContent(Reha.thisClass.kassenpanel);	
-	kassejry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.kassenpanel = new KassenPanel(kassejry,kid); 
+	kassejry.setContent(Reha.instance.kassenpanel);	
+	kassejry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	kassejry.setLocation(comps*10, comps*10);
 	kassejry.pack();
 	kassejry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(kassejry);
+	Reha.instance.desktops[containerNr].add(kassejry);
 	((JRehaInternal)kassejry).setImmerGross( (SystemConfig.hmContainer.get("KasseOpti") > 0 ? true : false));
-	////System.out.println("Anzahl Fenster = "+Reha.thisClass.desktops[containerNr].getComponentCount());
+	////System.out.println("Anzahl Fenster = "+Reha.instance.desktops[containerNr].getComponentCount());
 	kassejry.aktiviereDiesenFrame( kassejry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
-	Reha.thisClass.kassenpanel.setzeFocus();
+	Reha.instance.kassenpanel.setzeFocus();
 }
 public void loescheKasse(){
 	kassejry = null;
-	Reha.thisClass.kassenpanel = null;
+	Reha.instance.kassenpanel = null;
 }
 
 /**************Ärzteverwaltung Echtfunktion***********************/
@@ -276,24 +277,24 @@ public void ArztFenster(int setPos,String aid) {
 	arztjry.setName(name);
 	arztjry.setSize(new Dimension(650,500));
 	arztjry.setPreferredSize(new Dimension(650,500));
-	Reha.thisClass.arztpanel = new ArztPanel(arztjry,aid); 
-	arztjry.setContent(Reha.thisClass.arztpanel);	
-	arztjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.arztpanel = new ArztPanel(arztjry,aid); 
+	arztjry.setContent(Reha.instance.arztpanel);	
+	arztjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	arztjry.setLocation(comps*10, comps*10);
 	arztjry.pack();
 	arztjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(arztjry);
+	Reha.instance.desktops[containerNr].add(arztjry);
 	((JRehaInternal)arztjry).setImmerGross( (SystemConfig.hmContainer.get("ArztOpti") > 0 ? true : false));
-	////System.out.println("Anzahl Fenster = "+Reha.thisClass.desktops[containerNr].getComponentCount());
+	////System.out.println("Anzahl Fenster = "+Reha.instance.desktops[containerNr].getComponentCount());
 	arztjry.aktiviereDiesenFrame( arztjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
-	Reha.thisClass.arztpanel.setzeFocus();
+	Reha.instance.arztpanel.setzeFocus();
 	
 }
 public void loescheArzt(){
 	arztjry = null;
-	Reha.thisClass.arztpanel = null;
+	Reha.instance.arztpanel = null;
 }
 
 
@@ -326,22 +327,22 @@ public void GutachenFenster(int setPos,String pat_intern,int berichtid,String be
 	gutjry = new JGutachtenInternal("thera-\u03C0 Gutachten ",SystemConfig.hmSysIcons.get("drvlogo"),containerNr) ;
 	AktiveFenster.setNeuesFenster(name,gutjry,containerNr,gutjry.getContentPane());
 	gutjry.setName(name);
-	gutjry.setSize(new Dimension(900,Reha.thisClass.desktops[containerNr].getHeight()-20));
-	gutjry.setPreferredSize(new Dimension(900,Reha.thisClass.desktops[containerNr].getHeight()-20));
-	Reha.thisClass.eberichtpanel = new EBerichtPanel(gutjry,pat_intern,berichtid,berichttyp,neu,empfaenger,uebernahmeid ); 
-	gutjry.setContent(Reha.thisClass.eberichtpanel);
-	gutjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	gutjry.setSize(new Dimension(900,Reha.instance.desktops[containerNr].getHeight()-20));
+	gutjry.setPreferredSize(new Dimension(900,Reha.instance.desktops[containerNr].getHeight()-20));
+	Reha.instance.eberichtpanel = new EBerichtPanel(gutjry,pat_intern,berichtid,berichttyp,neu,empfaenger,uebernahmeid ); 
+	gutjry.setContent(Reha.instance.eberichtpanel);
+	gutjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	gutjry.setLocation(comps*10, comps*10);
 	gutjry.pack();
 	gutjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(gutjry);
+	Reha.instance.desktops[containerNr].add(gutjry);
 	gutjry.aktiviereDiesenFrame( gutjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 public void loescheGutachten(){
 	gutjry = null;
-	Reha.thisClass.eberichtpanel = null;
+	Reha.instance.eberichtpanel = null;
 }
 
 /******************************************/
@@ -376,14 +377,14 @@ public void AbrechnungFenster(int setPos) {
 	abrechjry.setName(name);
 	abrechjry.setSize(new Dimension(850,700));
 	abrechjry.setPreferredSize(new Dimension(850,700));
-	Reha.thisClass.abrechnungpanel = new AbrechnungGKV(abrechjry); 
-	abrechjry.setContent(Reha.thisClass.abrechnungpanel);	
-	abrechjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.abrechnungpanel = new AbrechnungGKV(abrechjry); 
+	abrechjry.setContent(Reha.instance.abrechnungpanel);	
+	abrechjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	abrechjry.setLocation(comps*15, comps*15);
 	abrechjry.pack();
 	abrechjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(abrechjry);
+	Reha.instance.desktops[containerNr].add(abrechjry);
 	//((JRehaInternal)abrechjry).setImmerGross( (SystemConfig.hmContainer.get("ArztOpti") > 0 ? true : false));
 	abrechjry.aktiviereDiesenFrame( abrechjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
@@ -391,7 +392,7 @@ public void AbrechnungFenster(int setPos) {
 }
 public void loescheAbrechnung(){
 	abrechjry = null;
-	Reha.thisClass.abrechnungpanel = null;
+	Reha.instance.abrechnungpanel = null;
 }
 /**********************Neuanmeldungen****************************/
 public void AnmeldungenFenster(int setPos,String sparam) {
@@ -425,21 +426,21 @@ public void AnmeldungenFenster(int setPos,String sparam) {
 	anmeldungenjry.setName(name);
 	anmeldungenjry.setSize(new Dimension(570,500));
 	anmeldungenjry.setPreferredSize(new Dimension(570,500));
-	Reha.thisClass.anmeldungenpanel = new Anmeldungen(anmeldungenjry); 
-	anmeldungenjry.setContent(Reha.thisClass.anmeldungenpanel);	
-	anmeldungenjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.anmeldungenpanel = new Anmeldungen(anmeldungenjry); 
+	anmeldungenjry.setContent(Reha.instance.anmeldungenpanel);	
+	anmeldungenjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	anmeldungenjry.setLocation(comps*15, comps*15);
 	anmeldungenjry.pack();
 	anmeldungenjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(anmeldungenjry);
+	Reha.instance.desktops[containerNr].add(anmeldungenjry);
 	anmeldungenjry.aktiviereDiesenFrame( anmeldungenjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 	
 }
 public void loescheAnmeldungen(){
 	anmeldungenjry = null;
-	Reha.thisClass.anmeldungenpanel = null;
+	Reha.instance.anmeldungenpanel = null;
 }
 /*****************************Umsätze von bis*********************************/
 public void UmsatzFenster(int setPos,String sparam) {
@@ -472,21 +473,21 @@ public void UmsatzFenster(int setPos,String sparam) {
 	umsaetzejry.setName(name);
 	umsaetzejry.setSize(new Dimension(500,150));
 	umsaetzejry.setPreferredSize(new Dimension(500,150));
-	Reha.thisClass.umsaetzepanel = new Umsaetze(umsaetzejry); 
-	umsaetzejry.setContent(Reha.thisClass.umsaetzepanel);	
-	umsaetzejry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.umsaetzepanel = new Umsaetze(umsaetzejry); 
+	umsaetzejry.setContent(Reha.instance.umsaetzepanel);	
+	umsaetzejry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	umsaetzejry.setLocation(comps*15, comps*15);
 	umsaetzejry.pack();
 	umsaetzejry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(umsaetzejry);
+	Reha.instance.desktops[containerNr].add(umsaetzejry);
 	umsaetzejry.aktiviereDiesenFrame( umsaetzejry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheUmsaetze(){
 	umsaetzejry = null;
-	Reha.thisClass.umsaetzepanel = null;
+	Reha.instance.umsaetzepanel = null;
 }
 /***************************Verkäufe in der Praxis*********************************/
 public void VerkaufFenster(int setPos,String sparam) {
@@ -519,21 +520,21 @@ public void VerkaufFenster(int setPos,String sparam) {
 	verkaufjry.setName(name);
 	verkaufjry.setSize(new Dimension(700,600));
 	verkaufjry.setPreferredSize(new Dimension(700,600));
-	Reha.thisClass.verkaufpanel = new VerkaufTab(verkaufjry); 
-	verkaufjry.setContent(Reha.thisClass.verkaufpanel);	
-	verkaufjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.verkaufpanel = new VerkaufTab(verkaufjry); 
+	verkaufjry.setContent(Reha.instance.verkaufpanel);	
+	verkaufjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	verkaufjry.setLocation(comps*15, comps*15);
 	verkaufjry.pack();
 	verkaufjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(verkaufjry);
+	Reha.instance.desktops[containerNr].add(verkaufjry);
 	verkaufjry.aktiviereDiesenFrame( verkaufjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheVerkauf(){
 	verkaufjry = null;
-	Reha.thisClass.verkaufpanel = null;
+	Reha.instance.verkaufpanel = null;
 }
 /***************************Fallsteuerung nach § 301*********************************/
 public void Dta301Fenster(int setPos,String sparam) {
@@ -545,8 +546,8 @@ public void Dta301Fenster(int setPos,String sparam) {
 	}
 	JComponent vk = AktiveFenster.getFensterAlle("DTA301");
 	if(vk != null){
-		Reha.thisClass.dta301panel.aktualisieren(sparam);
-		//Reha.thisClass.dta301panel.aktualisieren(Reha.thisClass.patpanel.vecaktrez.get(1));
+		Reha.instance.dta301panel.aktualisieren(sparam);
+		//Reha.instance.dta301panel.aktualisieren(Reha.instance.patpanel.vecaktrez.get(1));
 		////System.out.println("InternalFrame Anmeldungen bereits geöffnet");
 		containerHandling(((JDta301Internal)vk).getDesktop());
 		((JDta301Internal)vk).aktiviereDiesenFrame( ((JDta301Internal)vk).getName());
@@ -568,22 +569,22 @@ public void Dta301Fenster(int setPos,String sparam) {
 	dta301jry.setName(name);
 	dta301jry.setSize(new Dimension(780,500));
 	dta301jry.setPreferredSize(new Dimension(820,600));
-	Reha.thisClass.dta301panel = new Dta301(dta301jry,sparam); 
-	dta301jry.setContent(Reha.thisClass.dta301panel);	
-	dta301jry.addComponentListener(Reha.thisClass);
-	//int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.dta301panel = new Dta301(dta301jry,sparam); 
+	dta301jry.setContent(Reha.instance.dta301panel);	
+	dta301jry.addComponentListener(Reha.instance);
+	//int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	//dta301jry.setLocation(comps*15, comps*15);
 	dta301jry.setLocation(150, 200);
 	dta301jry.pack();
 	dta301jry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(dta301jry);
+	Reha.instance.desktops[containerNr].add(dta301jry);
 	dta301jry.aktiviereDiesenFrame( dta301jry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheDta301(){
 	dta301jry = null;
-	Reha.thisClass.dta301panel = null;
+	Reha.instance.dta301panel = null;
 }
 
 /***********************Barkasse abrechnen*************************/
@@ -619,21 +620,21 @@ public void BarkassenFenster(int setPos,String sparam) {
 	barkassenjry.setName(name);
 	barkassenjry.setSize(new Dimension(500,400));
 	barkassenjry.setPreferredSize(new Dimension(500,400));
-	Reha.thisClass.barkassenpanel = new Barkasse(barkassenjry); 
-	barkassenjry.setContent(Reha.thisClass.barkassenpanel);	
-	barkassenjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.barkassenpanel = new Barkasse(barkassenjry); 
+	barkassenjry.setContent(Reha.instance.barkassenpanel);	
+	barkassenjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	barkassenjry.setLocation(comps*15, comps*15);
 	barkassenjry.pack();
 	barkassenjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(barkassenjry);
+	Reha.instance.desktops[containerNr].add(barkassenjry);
 	barkassenjry.aktiviereDiesenFrame( barkassenjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheBarkasse(){
 	barkassenjry = null;
-	Reha.thisClass.barkassenpanel = null;
+	Reha.instance.barkassenpanel = null;
 }
 /*************************Rehaabrechnungen*************************/
 public void RehaabrechnungFenster(int setPos,String sparam) {
@@ -665,21 +666,21 @@ public void RehaabrechnungFenster(int setPos,String sparam) {
 	rehaabrechnungjry.setName(name);
 	rehaabrechnungjry.setSize(new Dimension(500,430));
 	rehaabrechnungjry.setPreferredSize(new Dimension(500,430));
-	Reha.thisClass.rehaabrechnungpanel = new AbrechnungReha(rehaabrechnungjry); 
-	rehaabrechnungjry.setContent(Reha.thisClass.rehaabrechnungpanel);	
-	rehaabrechnungjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.rehaabrechnungpanel = new AbrechnungReha(rehaabrechnungjry); 
+	rehaabrechnungjry.setContent(Reha.instance.rehaabrechnungpanel);	
+	rehaabrechnungjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	rehaabrechnungjry.setLocation(comps*25, comps*25);
 	rehaabrechnungjry.pack();
 	rehaabrechnungjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(rehaabrechnungjry);
+	Reha.instance.desktops[containerNr].add(rehaabrechnungjry);
 	rehaabrechnungjry.aktiviereDiesenFrame( rehaabrechnungjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheRehaabrechnung(){
 	rehaabrechnungjry = null;
-	Reha.thisClass.rehaabrechnungpanel = null;
+	Reha.instance.rehaabrechnungpanel = null;
 }
 /***********************************************************/
 public void BeteiligungFenster(int setPos,String sparam) {
@@ -711,21 +712,21 @@ public void BeteiligungFenster(int setPos,String sparam) {
 	AktiveFenster.setNeuesFenster(name,beteiligungjry,1,beteiligungjry.getContentPane());
 	beteiligungjry.setName(name);
 	beteiligungjry.setSize(new Dimension(500,500));
-	Reha.thisClass.beteiligungpanel = new Beteiligung(beteiligungjry); 
-	beteiligungjry.setContent(Reha.thisClass.beteiligungpanel);	
-	beteiligungjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.beteiligungpanel = new Beteiligung(beteiligungjry); 
+	beteiligungjry.setContent(Reha.instance.beteiligungpanel);	
+	beteiligungjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	beteiligungjry.setLocation(comps*15, comps*15);
 	beteiligungjry.pack();
 	beteiligungjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(beteiligungjry);
+	Reha.instance.desktops[containerNr].add(beteiligungjry);
 	beteiligungjry.aktiviereDiesenFrame( beteiligungjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheBeteiligung(){
 	beteiligungjry = null;
-	Reha.thisClass.beteiligungpanel = null;
+	Reha.instance.beteiligungpanel = null;
 }
 /***************************Verkäufe in der Praxis*********************************/
 public void BenutzerrechteFenster(int setPos,String sparam) {
@@ -758,21 +759,21 @@ public void BenutzerrechteFenster(int setPos,String sparam) {
 	benutzerjry.setName(name);
 	benutzerjry.setSize(new Dimension(800,500));
 	benutzerjry.setPreferredSize(new Dimension(800,500));
-	Reha.thisClass.benutzerrechtepanel = new BenutzerRechte(benutzerjry); 
-	benutzerjry.setContent(Reha.thisClass.benutzerrechtepanel);	
-	benutzerjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.benutzerrechtepanel = new BenutzerRechte(benutzerjry); 
+	benutzerjry.setContent(Reha.instance.benutzerrechtepanel);	
+	benutzerjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	benutzerjry.setLocation(comps*15, comps*15);
 	benutzerjry.pack();
 	benutzerjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(benutzerjry);
+	Reha.instance.desktops[containerNr].add(benutzerjry);
 	benutzerjry.aktiviereDiesenFrame(benutzerjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheBenutzerrechte(){
 	benutzerjry = null;
-	Reha.thisClass.benutzerrechtepanel = null;
+	Reha.instance.benutzerrechtepanel = null;
 }
 
 /***********************************************************/
@@ -803,21 +804,21 @@ public void UrlaubFenster(int setPos,String sparam) {
 	urlaubjry.setName(name);
 	urlaubjry.setSize(new Dimension(500,500));
 	urlaubjry.setPreferredSize(new Dimension(500,500));
-	Reha.thisClass.urlaubpanel = new Urlaub(urlaubjry); 
-	urlaubjry.setContent(Reha.thisClass.urlaubpanel);	
-	urlaubjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.urlaubpanel = new Urlaub(urlaubjry); 
+	urlaubjry.setContent(Reha.instance.urlaubpanel);	
+	urlaubjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	urlaubjry.setLocation(comps*15, comps*15);
 	urlaubjry.pack();
 	urlaubjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(urlaubjry);
+	Reha.instance.desktops[containerNr].add(urlaubjry);
 	urlaubjry.aktiviereDiesenFrame( urlaubjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheUrlaub(){
 	urlaubjry = null;
-	Reha.thisClass.urlaubpanel = null;
+	Reha.instance.urlaubpanel = null;
 }
 /***************************Verkäufe in der Praxis*********************************/
 /*
@@ -827,7 +828,7 @@ public static void InternalGut2(){
 	iframe.setResizable(true);
 	iframe.setIconifiable(true);
 	iframe.setClosable(true);
-	Reha.thisClass.desktops[1].add(iframe);
+	Reha.instance.desktops[1].add(iframe);
 	OOIFTest oif = new OOIFTest();
 	iframe.getContentPane().add(oif);
 	iframe.setVisible(true);
@@ -846,7 +847,7 @@ public static void InternalGut2(){
 /**************Patientenverwaltung Echtfunktion***********************/
 public void ProgPatientenVerwaltung(int setPos) {
 	if(! Reha.DbOk){
-		Reha.thisClass.progressStarten(false);
+		Reha.instance.progressStarten(false);
 		return;
 	}
 	try{
@@ -861,18 +862,18 @@ public void ProgPatientenVerwaltung(int setPos) {
 				e.printStackTrace();
 			}
 		}
-		Reha.thisClass.progressStarten(false);
+		Reha.instance.progressStarten(false);
 		((JPatientInternal)patient).setzeSuche();
 		return;
 	}
 	
-	Reha.thisClass.progressStarten(true);
+	Reha.instance.progressStarten(true);
 	LinkeTaskPane.thisClass.setCursor(Cursors.wartenCursor);
 	String name = "PatientenVerwaltung"+WinNum.NeueNummer();
 	int containerNr = SystemConfig.hmContainer.get("Patient");
 	containerHandling(containerNr);
 	patjry = new JPatientInternal("thera-\u03C0 Patientenverwaltung "+
-			Reha.thisClass.desktops[1].getComponentCount()+1 ,SystemConfig.hmSysIcons.get("patstamm"),containerNr) ;
+			Reha.instance.desktops[1].getComponentCount()+1 ,SystemConfig.hmSysIcons.get("patstamm"),containerNr) ;
 	/***************************/
 	//Hier muß anstelle der Hartcodierung 0 oder 1 (3. Parameter) die Variable containerNr erscheinen	
 	/***************************/	
@@ -884,8 +885,8 @@ public void ProgPatientenVerwaltung(int setPos) {
 /***************************/	
 	if(SystemConfig.hmContainer.get("PatientOpti")==1){
 		patjry.setLocation(new Point(0,0));
-		patjry.setSize(new Dimension(Reha.thisClass.desktops[containerNr].getWidth(),Reha.thisClass.desktops[containerNr].getHeight()));
-		patjry.setPreferredSize(new Dimension(Reha.thisClass.desktops[containerNr].getWidth(),Reha.thisClass.desktops[containerNr].getHeight()));
+		patjry.setSize(new Dimension(Reha.instance.desktops[containerNr].getWidth(),Reha.instance.desktops[containerNr].getHeight()));
+		patjry.setPreferredSize(new Dimension(Reha.instance.desktops[containerNr].getWidth(),Reha.instance.desktops[containerNr].getHeight()));
 
 	}else{
 		int xloc = SystemConfig.hmContainer.get("PatientLocationX");
@@ -900,12 +901,12 @@ public void ProgPatientenVerwaltung(int setPos) {
 	/***************************/
 	//Definition der Größe und der Position - Ende	
 	/***************************/	
-	Reha.thisClass.patpanel = new PatientHauptPanel(name,patjry);
-	patjry.setContent(Reha.thisClass.patpanel);
-	patjry.addComponentListener(Reha.thisClass);
+	Reha.instance.patpanel = new PatientHauptPanel(name,patjry);
+	patjry.setContent(Reha.instance.patpanel);
+	patjry.addComponentListener(Reha.instance);
 	patjry.pack();
 	patjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(patjry);
+	Reha.instance.desktops[containerNr].add(patjry);
 	/***************************/
 	//Definition ob immer auf maximale Größe getrimmt wird oder nicht	
 	/***************************/	
@@ -919,7 +920,7 @@ public void ProgPatientenVerwaltung(int setPos) {
 	 		   patjry.setzeSuche();
 	 	   }
 	});
-	Reha.thisClass.progressStarten(false);
+	Reha.instance.progressStarten(false);
 	}catch(Exception ex){
 		ex.printStackTrace();
 	}
@@ -928,8 +929,8 @@ public void ProgPatientenVerwaltung(int setPos) {
 }
 public void loeschePatient(){
 	patjry = null;
-	Reha.thisClass.patpanel = null;
-	//Reha.thisClass.PATINSTANCE = null;
+	Reha.instance.patpanel = null;
+	//Reha.instance.PATINSTANCE = null;
 }
 /**************Passwortverwaltung Echtfunktion*************************/
 public static void PasswortDialog(int setPos) {
@@ -1018,21 +1019,21 @@ public void SystemInit(int setPos,String sparam) {
 	systeminitjry.setName(name);
 	systeminitjry.setSize(new Dimension(850,620));
 	systeminitjry.setPreferredSize(new Dimension(850,620));
-	Reha.thisClass.systeminitpanel = new SystemInit(systeminitjry); 
-	systeminitjry.setContent(Reha.thisClass.systeminitpanel);	
-	systeminitjry.addComponentListener(Reha.thisClass);
-	int comps = Reha.thisClass.desktops[containerNr].getComponentCount();
+	Reha.instance.systeminitpanel = new SystemInit(systeminitjry); 
+	systeminitjry.setContent(Reha.instance.systeminitpanel);	
+	systeminitjry.addComponentListener(Reha.instance);
+	int comps = Reha.instance.desktops[containerNr].getComponentCount();
 	systeminitjry.setLocation(comps*15, comps*15);
 	systeminitjry.pack();
 	systeminitjry.setVisible(true);
-	Reha.thisClass.desktops[containerNr].add(systeminitjry);
+	Reha.instance.desktops[containerNr].add(systeminitjry);
 	systeminitjry.aktiviereDiesenFrame( systeminitjry.getName());
 	Reha.getThisFrame().setCursor(Cursors.normalCursor);
 }
 
 public void loescheSysteminit(){
 	systeminitjry = null;
-	Reha.thisClass.systeminitpanel = null;
+	Reha.instance.systeminitpanel = null;
 }
 
 /*********************************************************************************/
@@ -1054,13 +1055,13 @@ public static void SystemInitialisierung(){
 
 public static void containerBelegen(int setPos,RehaTP jtp){
 	if (setPos==1){
-		if(Reha.thisClass.jLeerOben != null){
-			Reha.thisClass.jLeerOben.setVisible(false);
-			Reha.thisClass.jInhaltOben = jtp;
-			Reha.thisClass.jContainerOben.add(Reha.thisClass.jInhaltOben,BorderLayout.CENTER);
-			Reha.thisClass.jContainerOben.validate();
-			Reha.thisClass.jContainerOben.remove(Reha.thisClass.jLeerOben);
-			Reha.thisClass.jLeerOben = null;
+		if(Reha.instance.jLeerOben != null){
+			Reha.instance.jLeerOben.setVisible(false);
+			Reha.instance.jInhaltOben = jtp;
+			Reha.instance.jContainerOben.add(Reha.instance.jInhaltOben,BorderLayout.CENTER);
+			Reha.instance.jContainerOben.validate();
+			Reha.instance.jContainerOben.remove(Reha.instance.jLeerOben);
+			Reha.instance.jLeerOben = null;
 		}else{
 			RehaSmartDialog rsm = new RehaSmartDialog(Reha.getThisFrame(),jtp.getContentContainer().getName());
 			PinPanel pinPanel = new PinPanel();
@@ -1073,13 +1074,13 @@ public static void containerBelegen(int setPos,RehaTP jtp){
 		}
 		
 	}else if(setPos==2){
-		if(Reha.thisClass.jLeerUnten != null){
-			Reha.thisClass.jLeerUnten.setVisible(false);
-			Reha.thisClass.jInhaltUnten = jtp;
-			Reha.thisClass.jContainerUnten.add(Reha.thisClass.jInhaltUnten,BorderLayout.CENTER);
-			Reha.thisClass.jContainerUnten.validate();
-			Reha.thisClass.jContainerUnten.remove(Reha.thisClass.jLeerUnten);
-			Reha.thisClass.jLeerUnten = null;
+		if(Reha.instance.jLeerUnten != null){
+			Reha.instance.jLeerUnten.setVisible(false);
+			Reha.instance.jInhaltUnten = jtp;
+			Reha.instance.jContainerUnten.add(Reha.instance.jInhaltUnten,BorderLayout.CENTER);
+			Reha.instance.jContainerUnten.validate();
+			Reha.instance.jContainerUnten.remove(Reha.instance.jLeerUnten);
+			Reha.instance.jLeerUnten = null;
 		}else{
 			RehaSmartDialog rsm = new RehaSmartDialog(Reha.getThisFrame(),jtp.getContentContainer().getName());
 			PinPanel pinPanel = new PinPanel();
@@ -1115,40 +1116,40 @@ public void RehaTPEventOccurred(RehaTPEvent evt) {
 }
 
 public static int PosTest(int pos){
-	if((pos==1) && (Reha.thisClass.jLeerOben == null) ){
+	if((pos==1) && (Reha.instance.jLeerOben == null) ){
 		return 0;
 	}
-	if((pos==2) && (Reha.thisClass.jLeerUnten == null) ){
+	if((pos==2) && (Reha.instance.jLeerUnten == null) ){
 		////System.out.println("pos = "+pos);
 		return 0;
 	}
 	return pos;
 }
 public static void containerHandling(int cont){
-	if(Reha.thisClass.vollsichtbar == -1 || (!SystemConfig.desktopHorizontal)){
-		//System.out.println("Location = "+Reha.thisClass.jSplitRechtsOU.getDividerLocation());
-		//System.out.println("Width = "+Reha.thisClass.jSplitRechtsOU.getWidth());
+	if(Reha.instance.vollsichtbar == -1 || (!SystemConfig.desktopHorizontal)){
+		//System.out.println("Location = "+Reha.instance.jSplitRechtsOU.getDividerLocation());
+		//System.out.println("Width = "+Reha.instance.jSplitRechtsOU.getWidth());
 		if(cont == 0){
-			if(Reha.thisClass.jSplitRechtsOU.getDividerLocation() == 0 ){
-				Reha.thisClass.setDivider(5);	
+			if(Reha.instance.jSplitRechtsOU.getDividerLocation() == 0 ){
+				Reha.instance.setDivider(5);	
 			}
 		}else if(cont == 1){
-			if(Reha.thisClass.jSplitRechtsOU.getDividerLocation() == Reha.thisClass.jSplitRechtsOU.getWidth()-7 ){
-				Reha.thisClass.setDivider(6);	
+			if(Reha.instance.jSplitRechtsOU.getDividerLocation() == Reha.instance.jSplitRechtsOU.getWidth()-7 ){
+				Reha.instance.setDivider(6);	
 			}			
 		}
 			
 		return;
 	}
-	if((Reha.thisClass.vollsichtbar == 1 && cont == 1) || (Reha.thisClass.vollsichtbar == 0 && cont == 0) ){
+	if((Reha.instance.vollsichtbar == 1 && cont == 1) || (Reha.instance.vollsichtbar == 0 && cont == 0) ){
 		return;
 	}
-	if(Reha.thisClass.vollsichtbar == 0 && cont == 1){
-		Reha.thisClass.setDivider(6);
+	if(Reha.instance.vollsichtbar == 0 && cont == 1){
+		Reha.instance.setDivider(6);
 		return;
 	}
-	if(Reha.thisClass.vollsichtbar == 1 && cont == 0){
-		Reha.thisClass.setDivider(5);
+	if(Reha.instance.vollsichtbar == 1 && cont == 0){
+		Reha.instance.setDivider(5);
 		return;
 	}
 	

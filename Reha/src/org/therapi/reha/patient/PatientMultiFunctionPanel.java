@@ -49,7 +49,7 @@ public class PatientMultiFunctionPanel extends JXPanel{
 		JXPanel tabpan = new JXPanel(new BorderLayout());
 		tabpan.setBorder(BorderFactory.createEmptyBorder(0,0, 0, 0));
 		tabpan.setOpaque(true);
-		tabpan.setBackgroundPainter(Reha.thisClass.compoundPainter.get("getTabs2"));
+		tabpan.setBackgroundPainter(Reha.instance.compoundPainter.get("getTabs2"));
 		patientHauptPanel.aktRezept = new AktuelleRezepte(patientHauptPanel);
 	    tabpan.add(patientHauptPanel.aktRezept);
 	    patientHauptPanel.multiTab.addTab(patientHauptPanel.tabTitel[0]+" - 0", tabpan);

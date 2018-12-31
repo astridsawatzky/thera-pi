@@ -76,7 +76,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 					if(!Rechte.hatRecht(Rechte.Rezept_editvoll, true)){
 						return;
 					}
-					String anzhb = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(64)).trim();
+					String anzhb = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(64)).trim();
 					Object ret = JOptionPane.showInputDialog(null, "Geben Sie bitte die neue Anzahl für Hausbesuch ein", anzhb);
 					if(ret == null){
 						return;
@@ -85,7 +85,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 						hblab.setText(((String)ret).trim()+" *");
 						new ExUndHop().setzeStatement("update verordn set anzahlhb='"+((String)ret).trim()+"' "+
 								"where rez_nr='"+reznum.getText()+"' LIMIT 1");
-						Reha.thisClass.patpanel.vecaktrez.set(64, ((String)ret).trim());
+						Reha.instance.patpanel.vecaktrez.set(64, ((String)ret).trim());
 					}
 				}
 			}
@@ -99,18 +99,18 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		//reznum.repaint();
 		final String xreznummer = reznummer;
 				try{
-					String stest = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(43));
-					String einzeln = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(61));
+					String stest = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(43));
+					String einzeln = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(61));
 					
-					String diszi = RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1));
+					String diszi = RezTools.putRezNrGetDisziplin(Reha.instance.patpanel.vecaktrez.get(1));
 					int prgruppe = 0;
 					if(prgruppe < 0){prgruppe=0;}
 					try{
-						 prgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+						 prgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 					}catch(Exception ex){}
 					
 					if( stest.equals("T") ){
-						hblab.setText(StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(64))+" *");
+						hblab.setText(StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(64))+" *");
 						hblab.setIcon((einzeln.equals("T") ? hbimg : hbimg2));
 						hblab.setAlternateText("<html>"+
 								(einzeln.equals("T")? "Hausbesuch einzeln (Privatwohnung/-haus)<br>Positionsnummer: "+
@@ -124,53 +124,53 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 						hblab.setIcon(null);
 					}
 
-					Reha.thisClass.patpanel.rezlabs[2].setText("angelegt von: "+StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(45)));
-					if(StringTools.ZahlTest( Reha.thisClass.patpanel.vecaktrez.get(37)) >= 0 ){
-						Reha.thisClass.patpanel.rezlabs[3].setForeground(Color.BLACK);
+					Reha.instance.patpanel.rezlabs[2].setText("angelegt von: "+StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(45)));
+					if(StringTools.ZahlTest( Reha.instance.patpanel.vecaktrez.get(37)) >= 0 ){
+						Reha.instance.patpanel.rezlabs[3].setForeground(Color.BLACK);
 					}else{
-						Reha.thisClass.patpanel.rezlabs[3].setForeground(Color.RED);					
+						Reha.instance.patpanel.rezlabs[3].setForeground(Color.RED);					
 					}
-					Reha.thisClass.patpanel.rezlabs[3].setText(StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(36)));
+					Reha.instance.patpanel.rezlabs[3].setText(StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(36)));
 
-					if(StringTools.ZahlTest( Reha.thisClass.patpanel.vecaktrez.get(16)) >= 0 ){
-						Reha.thisClass.patpanel.rezlabs[4].setForeground(Color.BLACK);
+					if(StringTools.ZahlTest( Reha.instance.patpanel.vecaktrez.get(16)) >= 0 ){
+						Reha.instance.patpanel.rezlabs[4].setForeground(Color.BLACK);
 					}else{
-						Reha.thisClass.patpanel.rezlabs[4].setForeground(Color.RED);					
+						Reha.instance.patpanel.rezlabs[4].setForeground(Color.RED);					
 					}
-					Reha.thisClass.patpanel.rezlabs[4].setText(StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(15)));
+					Reha.instance.patpanel.rezlabs[4].setText(StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(15)));
 
-					int test = StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(27));
+					int test = StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(27));
 					if(test >= 0){
-						Reha.thisClass.patpanel.rezlabs[5].setText(rezart[test]);
+						Reha.instance.patpanel.rezlabs[5].setText(rezart[test]);
 						if(test==2){
-							stest = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(42));
+							stest = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(42));
 							if(stest.equals("T")){
-								Reha.thisClass.patpanel.rezlabs[6].setForeground(Color.BLACK);
-								Reha.thisClass.patpanel.rezlabs[6].setText("Begründung o.k.");
+								Reha.instance.patpanel.rezlabs[6].setForeground(Color.BLACK);
+								Reha.instance.patpanel.rezlabs[6].setText("Begründung o.k.");
 							}else{
-								Reha.thisClass.patpanel.rezlabs[6].setForeground(Color.RED);	
-								Reha.thisClass.patpanel.rezlabs[6].setText("Begründung fehlt");
+								Reha.instance.patpanel.rezlabs[6].setForeground(Color.RED);	
+								Reha.instance.patpanel.rezlabs[6].setText("Begründung fehlt");
 							}
 						}else{
-							Reha.thisClass.patpanel.rezlabs[6].setText(" ");
+							Reha.instance.patpanel.rezlabs[6].setText(" ");
 						}
 					}else{
-						Reha.thisClass.patpanel.rezlabs[5].setText(" ");
-						Reha.thisClass.patpanel.rezlabs[6].setText(" ");
+						Reha.instance.patpanel.rezlabs[5].setText(" ");
+						Reha.instance.patpanel.rezlabs[6].setText(" ");
 					}
-					stest = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(55));
+					stest = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(55));
 					if( stest.equals("T") ){
-						test = StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(54));
+						test = StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(54));
 						if(test >= 0){
-							Reha.thisClass.patpanel.rezlabs[7].setForeground(Color.BLACK);
-							Reha.thisClass.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
+							Reha.instance.patpanel.rezlabs[7].setForeground(Color.BLACK);
+							Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
 						}else{
-							Reha.thisClass.patpanel.rezlabs[7].setForeground(Color.RED);
-							Reha.thisClass.patpanel.rezlabs[7].setText("Therapiebericht fehlt");
+							Reha.instance.patpanel.rezlabs[7].setForeground(Color.RED);
+							Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht fehlt");
 						}
 						
 					}else{
-						Reha.thisClass.patpanel.rezlabs[7].setText(" ");
+						Reha.instance.patpanel.rezlabs[7].setText(" ");
 					}
 					Vector<Vector<String>> preisvec = null;
 					
@@ -185,7 +185,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
                         public  void run(){
-							int farbcode = StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(57));
+							int farbcode = StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(57));
 							if(farbcode > 0){
 								reznum.setText(xreznummer);
 								reznum.setForeground( (SystemConfig.vSysColsObject.get(0).get(farbcode)[0]) );
@@ -197,79 +197,79 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 							}
 						}
 					});		
-					reha = Reha.thisClass.patpanel.vecaktrez.get(1).startsWith("RH");
-					stest = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(52));
+					reha = Reha.instance.patpanel.vecaktrez.get(1).startsWith("RH");
+					stest = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(52));
 					
-					Reha.thisClass.patpanel.rezlabs[8].setText( leistungTesten(0,preisvec,StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(8)))+
+					Reha.instance.patpanel.rezlabs[8].setText( leistungTesten(0,preisvec,StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(8)))+
 							(reha ? "" : "  " +
-							(Reha.thisClass.patpanel.vecaktrez.get(48).trim().equals("") ? "" : " ("+Reha.thisClass.patpanel.vecaktrez.get(48)+")") ) );				
+							(Reha.instance.patpanel.vecaktrez.get(48).trim().equals("") ? "" : " ("+Reha.instance.patpanel.vecaktrez.get(48)+")") ) );				
 
 					if(stest.equals("")){
-						Reha.thisClass.patpanel.rezlabs[9].setForeground(Color.RED);
-						Reha.thisClass.patpanel.rezlabs[9].setText(stest+"??? / Wo.");					
+						Reha.instance.patpanel.rezlabs[9].setForeground(Color.RED);
+						Reha.instance.patpanel.rezlabs[9].setText(stest+"??? / Wo.");					
 					}else{
-						Reha.thisClass.patpanel.rezlabs[9].setForeground(Color.BLACK);
-						Reha.thisClass.patpanel.rezlabs[9].setText(stest+" / Wo.");					
+						Reha.instance.patpanel.rezlabs[9].setForeground(Color.BLACK);
+						Reha.instance.patpanel.rezlabs[9].setText(stest+" / Wo.");					
 					}
 
-					Reha.thisClass.patpanel.rezlabs[10].setText( leistungTesten(1,preisvec,StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(9)))+
+					Reha.instance.patpanel.rezlabs[10].setText( leistungTesten(1,preisvec,StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(9)))+
 							(reha ? "" : "  " +
-							(Reha.thisClass.patpanel.vecaktrez.get(49).trim().equals("") ? "" : " ("+Reha.thisClass.patpanel.vecaktrez.get(49)+")") ) );				
-					Reha.thisClass.patpanel.rezlabs[11].setText( leistungTesten(2,preisvec,StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(10)))+
+							(Reha.instance.patpanel.vecaktrez.get(49).trim().equals("") ? "" : " ("+Reha.instance.patpanel.vecaktrez.get(49)+")") ) );				
+					Reha.instance.patpanel.rezlabs[11].setText( leistungTesten(2,preisvec,StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(10)))+
 							(reha ? "" : "  " +
-							(Reha.thisClass.patpanel.vecaktrez.get(50).trim().equals("") ? "" : " ("+Reha.thisClass.patpanel.vecaktrez.get(50)+")") ) );				
-					Reha.thisClass.patpanel.rezlabs[12].setText( leistungTesten(3,preisvec,StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(11)))+
+							(Reha.instance.patpanel.vecaktrez.get(50).trim().equals("") ? "" : " ("+Reha.instance.patpanel.vecaktrez.get(50)+")") ) );				
+					Reha.instance.patpanel.rezlabs[12].setText( leistungTesten(3,preisvec,StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(11)))+
 							(reha ? "" : "  " +
-							(Reha.thisClass.patpanel.vecaktrez.get(51).trim().equals("") ? "" : " ("+Reha.thisClass.patpanel.vecaktrez.get(51)+")") ) );				
-					stest = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(44));
+							(Reha.instance.patpanel.vecaktrez.get(51).trim().equals("") ? "" : " ("+Reha.instance.patpanel.vecaktrez.get(51)+")") ) );				
+					stest = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(44));
 					if( (stest.equals("") || stest.equals("kein IndiSchl."))  ){
 						if(!reha){
-							Reha.thisClass.patpanel.rezlabs[13].setForeground(Color.RED);
-							Reha.thisClass.patpanel.rezlabs[13].setText("??? "+stest);					
+							Reha.instance.patpanel.rezlabs[13].setForeground(Color.RED);
+							Reha.instance.patpanel.rezlabs[13].setText("??? "+stest);					
 						}else{
-							Reha.thisClass.patpanel.rezlabs[13].setText("");
+							Reha.instance.patpanel.rezlabs[13].setText("");
 						}
 					}else{
 						if(!reha){
-							Reha.thisClass.patpanel.rezlabs[13].setForeground(Color.BLACK);
-							Reha.thisClass.patpanel.rezlabs[13].setText(stest);
+							Reha.instance.patpanel.rezlabs[13].setForeground(Color.BLACK);
+							Reha.instance.patpanel.rezlabs[13].setText(stest);
 						}else{
-							Reha.thisClass.patpanel.rezlabs[13].setText("");
+							Reha.instance.patpanel.rezlabs[13].setText("");
 						}	
 					}
 
 					
-					stest = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(47));
+					stest = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(47));
 					if(stest.equals("") ){
-						Reha.thisClass.patpanel.rezlabs[14].setForeground(Color.RED);
-						Reha.thisClass.patpanel.rezlabs[14].setText("??? Min.");
+						Reha.instance.patpanel.rezlabs[14].setForeground(Color.RED);
+						Reha.instance.patpanel.rezlabs[14].setText("??? Min.");
 					}else{
-						Reha.thisClass.patpanel.rezlabs[14].setForeground(Color.BLACK);
-						Reha.thisClass.patpanel.rezlabs[14].setText(stest+" Min.");
+						Reha.instance.patpanel.rezlabs[14].setForeground(Color.BLACK);
+						Reha.instance.patpanel.rezlabs[14].setText(stest+" Min.");
 					}
 					
-					if( (stest = StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(71))).trim().length() > 0){
-						stest = "1.ICD-10: "+stest +( StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(72)).trim().length() > 0 ? 
-								"  -  2.ICD-10: "+Reha.thisClass.patpanel.vecaktrez.get(72) : ""); 
-						Reha.thisClass.patpanel.rezdiag.setText(stest+"\n"+StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(23)));
+					if( (stest = StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(71))).trim().length() > 0){
+						stest = "1.ICD-10: "+stest +( StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(72)).trim().length() > 0 ? 
+								"  -  2.ICD-10: "+Reha.instance.patpanel.vecaktrez.get(72) : ""); 
+						Reha.instance.patpanel.rezdiag.setText(stest+"\n"+StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(23)));
 					}else{
-						Reha.thisClass.patpanel.rezdiag.setText(StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(23)));	
+						Reha.instance.patpanel.rezdiag.setText(StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(23)));	
 					}
 					
 
 					int zzbild = 0;
 					try{
-						zzbild = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(39) );
+						zzbild = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(39) );
 					}catch(Exception ex){
 						zzbild = 0;
 						ex.printStackTrace();
 					}
 					int row = AktuelleRezepte.tabaktrez.getSelectedRow();
 					if(row >= 0){
-						if(AktuelleRezepte.dtblm.getValueAt(row,1) != Reha.thisClass.patpanel.imgzuzahl[zzbild]){
+						if(AktuelleRezepte.dtblm.getValueAt(row,1) != Reha.instance.patpanel.imgzuzahl[zzbild]){
 							/*
-							Reha.thisClass.patpanel.aktRezept.dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[zzbild],row,1);
-							Reha.thisClass.patpanel.aktRezept.tabaktrez.validate();
+							Reha.instance.patpanel.aktRezept.dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[zzbild],row,1);
+							Reha.instance.patpanel.aktRezept.tabaktrez.validate();
 							 */					
 							org.therapi.reha.patient.AktuelleRezepte.setZuzahlImage(zzbild);
 						}
@@ -278,8 +278,8 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 					
 					try{
 						RezTools.constructVirginHMap();
-						ArztTools.constructArztHMap(Reha.thisClass.patpanel.vecaktrez.get(16));
-						KasseTools.constructKasseHMap(Reha.thisClass.patpanel.vecaktrez.get(37));
+						ArztTools.constructArztHMap(Reha.instance.patpanel.vecaktrez.get(16));
+						KasseTools.constructKasseHMap(Reha.instance.patpanel.vecaktrez.get(37));
 						RezeptDaten.feddisch = true;
 					}catch(Exception ex){
 						JOptionPane.showMessageDialog(null, "Fehler in ConstructHashMap (Modul:RezeptDaten)\nBitte verständigen Sie den Administrator und notieren Sie zuvor die Fehlermeldung");
@@ -291,8 +291,8 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 						protected Void doInBackground() throws Exception {
 							try{
 								RezTools.constructVirginHMap();
-								ArztTools.constructArztHMap((String)Reha.thisClass.patpanel.vecaktrez.get(16));
-								KasseTools.constructKasseHMap((String)Reha.thisClass.patpanel.vecaktrez.get(37));
+								ArztTools.constructArztHMap((String)Reha.instance.patpanel.vecaktrez.get(16));
+								KasseTools.constructKasseHMap((String)Reha.instance.patpanel.vecaktrez.get(37));
 								RezeptDaten.feddisch = true;
 							}catch(Exception ex){
 								JOptionPane.showMessageDialog(null, "Fehler in ConstructHashMap (Modul:RezeptDaten)\nBitte verständigen Sie den Administrator und notieren Sie zuvor die Fehlermeldung");
@@ -315,7 +315,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		}
 		for(int i = 0;i<preisevec.size();i++){
 			if( Integer.valueOf( (String) ((Vector)preisevec.get(i)).get(preisevec.get(i).size()-1)) == veczahl ){
-				return StringTools.NullTest(Reha.thisClass.patpanel.vecaktrez.get(leistung+3))+"  *  "+
+				return StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(leistung+3))+"  *  "+
 				(String) ((Vector)preisevec.get(i)).get(1);
 			}
 		}
@@ -348,16 +348,16 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		    @Override
             public void mousePressed(MouseEvent e) {
 		    	if(e.getButton()!=java.awt.event.MouseEvent.BUTTON3){
-			    	int farbcode = StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(57));
+			    	int farbcode = StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(57));
 			    	TerminFenster.DRAG_MODE = TerminFenster.DRAG_UNKNOWN;
 			    	draghandler.setText(
 			    			"TERMDATEXT"+"°"+
-			    			Reha.thisClass.patpanel.patDaten.get(0).substring(0,1)+
-			    			"-"+Reha.thisClass.patpanel.patDaten.get(2)+","+
-			    			Reha.thisClass.patpanel.patDaten.get(3)+"°"+
+			    			Reha.instance.patpanel.patDaten.get(0).substring(0,1)+
+			    			"-"+Reha.instance.patpanel.patDaten.get(2)+","+
+			    			Reha.instance.patpanel.patDaten.get(3)+"°"+
 			    			String.valueOf(reznum.getText())+
 			    			(farbcode > 0 ? (String)SystemConfig.vSysColsCode.get(farbcode) : "")+
-			    			"°"+Reha.thisClass.patpanel.rezlabs[14].getText()
+			    			"°"+Reha.instance.patpanel.rezlabs[14].getText()
 			    			);
 			      JComponent c = draghandler;
 			      TransferHandler th = c.getTransferHandler();
@@ -374,11 +374,11 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		draghandler = new JRtaTextField("GROSS",true);
 		draghandler.setTransferHandler(new TransferHandler("text"));		
 		/*
-		Reha.thisClass.patpanel.rezlabs[0] = new JLabel();
-		Reha.thisClass.patpanel.rezlabs[0].setFont(fontreznr);
-		Reha.thisClass.patpanel.rezlabs[0].setName("rezeptnummer");
-		Reha.thisClass.patpanel.rezlabs[0].setForeground(Color.BLUE);
-		Reha.thisClass.patpanel.rezlabs[0].setText("KG57606");
+		Reha.instance.patpanel.rezlabs[0] = new JLabel();
+		Reha.instance.patpanel.rezlabs[0].setFont(fontreznr);
+		Reha.instance.patpanel.rezlabs[0].setName("rezeptnummer");
+		Reha.instance.patpanel.rezlabs[0].setForeground(Color.BLUE);
+		Reha.instance.patpanel.rezlabs[0].setText("KG57606");
 		*/
 
 		
@@ -445,7 +445,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 
 
 		jpan.add(reznum,cc.xy(1, 1));
-		//jpan.add(Reha.thisClass.patpanel.rezlabs[0],cc.xy(1, 1));
+		//jpan.add(Reha.instance.patpanel.rezlabs[0],cc.xy(1, 1));
 
 		jpan.add(hblab,cc.xy(3, 1));
 		//jpan.add(eltern.rezlabs[1],cc.xy(3, 1));
@@ -474,7 +474,7 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 		jpan.addSeparator("", cc.xyw(1,19,5));
 		
 		jpan.add(eltern.rezlabs[13],cc.xy(1, 21));
-		//jpan.add(Reha.thisClass.patpanel.rezlabs[14],cc.xy(1, 23));
+		//jpan.add(Reha.instance.patpanel.rezlabs[14],cc.xy(1, 23));
 		JXPanel diagpan = new JXPanel(new BorderLayout());
 		diagpan.setOpaque(false);
 		JScrollPane jscrdiag = JCompTools.getTransparentScrollPane(eltern.rezdiag);
@@ -514,28 +514,28 @@ public class RezeptDaten extends JXPanel implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand().equals("Rezept kopieren")){
-			int farbcode = StringTools.ZahlTest(Reha.thisClass.patpanel.vecaktrez.get(57));
+			int farbcode = StringTools.ZahlTest(Reha.instance.patpanel.vecaktrez.get(57));
 			TerminFenster.DRAG_MODE = TerminFenster.DRAG_UNKNOWN;
-			String dragText = Reha.thisClass.patpanel.patDaten.get(0).substring(0,1)+
-			"-"+Reha.thisClass.patpanel.patDaten.get(2)+","+
-			Reha.thisClass.patpanel.patDaten.get(3)+"°"+
+			String dragText = Reha.instance.patpanel.patDaten.get(0).substring(0,1)+
+			"-"+Reha.instance.patpanel.patDaten.get(2)+","+
+			Reha.instance.patpanel.patDaten.get(3)+"°"+
 			reznum.getText()+
 			(farbcode > 0 ? (String)SystemConfig.vSysColsCode.get(farbcode) : "")+
-			"°"+Reha.thisClass.patpanel.rezlabs[14].getText();
-			Reha.thisClass.copyLabel.setText(String.valueOf(dragText));
-			Reha.thisClass.bunker.setText("TERMDATEXT"+"°"+String.valueOf(dragText));
-			String[] daten = { (Reha.thisClass.patpanel.patDaten.get(0).startsWith("F") ? "F-" : "H-")+
-					Reha.thisClass.patpanel.patDaten.get(2)+","+
-					Reha.thisClass.patpanel.patDaten.get(3),
-					Reha.thisClass.patpanel.vecaktrez.get(1)+(farbcode > 0 ? (String)SystemConfig.vSysColsCode.get(farbcode) : ""),
-					Reha.thisClass.patpanel.vecaktrez.get(47)						
+			"°"+Reha.instance.patpanel.rezlabs[14].getText();
+			Reha.instance.copyLabel.setText(String.valueOf(dragText));
+			Reha.instance.bunker.setText("TERMDATEXT"+"°"+String.valueOf(dragText));
+			String[] daten = { (Reha.instance.patpanel.patDaten.get(0).startsWith("F") ? "F-" : "H-")+
+					Reha.instance.patpanel.patDaten.get(2)+","+
+					Reha.instance.patpanel.patDaten.get(3),
+					Reha.instance.patpanel.vecaktrez.get(1)+(farbcode > 0 ? (String)SystemConfig.vSysColsCode.get(farbcode) : ""),
+					Reha.instance.patpanel.vecaktrez.get(47)						
 			};
 			
-			if(Reha.thisClass.terminpanel != null){
-				Reha.thisClass.terminpanel.setDatenVonExternInSpeicherNehmen(daten.clone());
-				Reha.thisClass.shiftLabel.setText("bereit für F2= "+daten[0]+"°"+daten[1]+"°"+daten[2]+" Min.");
+			if(Reha.instance.terminpanel != null){
+				Reha.instance.terminpanel.setDatenVonExternInSpeicherNehmen(daten.clone());
+				Reha.instance.shiftLabel.setText("bereit für F2= "+daten[0]+"°"+daten[1]+"°"+daten[2]+" Min.");
 			}else{
-				Reha.thisClass.shiftLabel.setText(" ");
+				Reha.instance.shiftLabel.setText(" ");
 			}
 		}
 		

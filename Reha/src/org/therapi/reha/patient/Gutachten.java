@@ -210,7 +210,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		DatFunk.sDatInSQL(editdat)+"', verfasser='"+verfasser+"' where berichtid='"+berid+"'";
 		SqlInfo.sqlAusfuehren(cmd);
 		int row = tabbericht.getSelectedRow();
-		if(! Reha.thisClass.patpanel.aktPatID.equals(patintern)){
+		if(! Reha.instance.patpanel.aktPatID.equals(patintern)){
 			JOptionPane.showMessageDialog(null, "Der aktuelle Patient und das zu speichernde Gutachten passen nicht zusammen...");
 			return;
 		}
@@ -238,11 +238,11 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		xvec.add("");
 		xvec.add("0");
 		xvec.add(patintern);
-		if(Reha.thisClass.patpanel.aktPatID.equals(patintern)){
+		if(Reha.instance.patpanel.aktPatID.equals(patintern)){
 			dtblm.addRow((Vector<?>) xvec.clone());
 			tabbericht.setRowSelectionInterval(tabbericht.getRowCount()-1, tabbericht.getRowCount()-1);
 		}
-		Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(tabbericht.getRowCount(),"Gutachten"));
+		Reha.instance.patpanel.getTab().setTitleAt(4,macheHtmlTitel(tabbericht.getRowCount(),"Gutachten"));
 		anzahlGutachten.setText("Anzahl Gutachten: "+Integer.toString(tabbericht.getRowCount()));
 	}
 	public void holeGutachten(String patint,String rez){
@@ -283,10 +283,10 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 								SwingUtilities.invokeLater(new Runnable(){
 									@Override
                                     public void run(){
-										Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(fanz,"Gutachten"));	
+										Reha.instance.patpanel.getTab().setTitleAt(4,macheHtmlTitel(fanz,"Gutachten"));	
 									}
 								});
-								//Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(anz,"Gutachten"));
+								//Reha.instance.patpanel.getTab().setTitleAt(4,macheHtmlTitel(anz,"Gutachten"));
 							}catch(Exception extiming){
 								System.out.println("Timingprobleme beim setzen des Reitertitels - Reiter: Gutachten");
 							}
@@ -417,13 +417,13 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 						
 						//System.out.println("Der Rückgabewert der Auswahl = "+tf.getText() );
 						if(tf.getText().equalsIgnoreCase("ebericht")){
-							Reha.thisClass.progLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,-1,"E-Bericht",true,"",-1); 
-							//ProgLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,-1,"E-Bericht",true,"" );			
+							Reha.instance.progLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,-1,"E-Bericht",true,"",-1); 
+							//ProgLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,-1,"E-Bericht",true,"" );			
 							return null;
 						}
 						if(tf.getText().equalsIgnoreCase("nachsorge")){
-							Reha.thisClass.progLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,-1,"Nachsorge",true,"",-1 );
-							//ProgLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,-1,"Nachsorge",true,"" );			
+							Reha.instance.progLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,-1,"Nachsorge",true,"",-1 );
+							//ProgLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,-1,"Nachsorge",true,"" );			
 							return null;
 						}
 						gwahl = null;
@@ -474,9 +474,9 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 			int uebrig = tabbericht.getRowCount();
 			
 			anzahlGutachten.setText("Anzahl Gutachten: "+Integer.toString(uebrig));
-			Reha.thisClass.patpanel.getTab().setTitleAt(4,macheHtmlTitel(uebrig,"Gutachten"));
+			Reha.instance.patpanel.getTab().setTitleAt(4,macheHtmlTitel(uebrig,"Gutachten"));
 			if(uebrig <= 0){
-				holeGutachten(Reha.thisClass.patpanel.patDaten.get(29),"");
+				holeGutachten(Reha.instance.patpanel.patDaten.get(29),"");
 			}else{
 			}
 			
@@ -499,8 +499,8 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 		String bertyp = (String) tabbericht.getValueAt(row,1);
 		int berid = Integer.parseInt(tabbericht.getValueAt(row,0).toString());
 		String berempfaenger = (String) tabbericht.getValueAt(row,4);
-		Reha.thisClass.progLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,berid,bertyp,false,berempfaenger,-1 );
-		//ProgLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,berid,bertyp,false,berempfaenger );
+		Reha.instance.progLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,berid,bertyp,false,berempfaenger,-1 );
+		//ProgLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,berid,bertyp,false,berempfaenger );
 		//ProgLoader.InternalGut2();
 	}
 
@@ -629,7 +629,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 							return null;
 						}
 						int uebernahme = Integer.parseInt(tabbericht.getValueAt(row,0).toString());
-						Reha.thisClass.progLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,-1,"E-Bericht",true,"",uebernahme); 
+						Reha.instance.progLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,-1,"E-Bericht",true,"",uebernahme); 
 						return null;
 					}
 					if(tf.getText().equalsIgnoreCase("nachsorge")){
@@ -639,7 +639,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 							return null;
 						}
 						int uebernahme = Integer.parseInt(tabbericht.getValueAt(row,0).toString());
-						Reha.thisClass.progLoader.GutachenFenster(1,Reha.thisClass.patpanel.aktPatID ,-1,"Nachsorge",true,"",uebernahme );
+						Reha.instance.progLoader.GutachenFenster(1,Reha.instance.patpanel.aktPatID ,-1,"Nachsorge",true,"",uebernahme );
 						return null;
 					}
 					gwahl = null;
@@ -664,7 +664,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 				tabbericht.getValueAt(row, 0).toString()+" "+
 				SystemConfig.PDFformularPfad+" "+
 				Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/fremdprog.ini"+" "+
-				Reha.thisClass.patpanel.patDaten.get(29)+" "+
+				Reha.instance.patpanel.patDaten.get(29)+" "+
 				Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/rehajava.ini");
 	}
 
@@ -795,7 +795,7 @@ public class Gutachten extends JXPanel implements ActionListener, TableModelList
 				try{
 					new LadeProg(Path.Instance.getProghome()+"LVAEntlass.jar "+
 							" "+Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/rehajava.ini"+" "+
-							Reha.thisClass.patpanel.vecaktrez.get(1)+" "+
+							Reha.instance.patpanel.vecaktrez.get(1)+" "+
 							Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/fremdprog.ini");
 				}catch(Exception ex){
 					ex.printStackTrace();

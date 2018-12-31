@@ -24,7 +24,7 @@ import dialoge.EmailDialog;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;
@@ -48,7 +48,7 @@ public class PatientToolBarLogic {
 		if(arg0.getSource() instanceof JLabel){
 			if(((JComponent)arg0.getSource()).getName().equals("Suchen")){
 				if(patientHauptPanel.inMemo > -1){
-					Reha.thisClass.patpanel.pmemo[patientHauptPanel.inMemo].requestFocus();
+					Reha.instance.patpanel.pmemo[patientHauptPanel.inMemo].requestFocus();
 					return;
 				}
 				patientHauptPanel.starteSuche();
@@ -109,7 +109,7 @@ public class PatientToolBarLogic {
 	}
 	public void reactOnFocusGained(FocusEvent e){
 		if(((JComponent)e.getSource()).getName().equals("suchenach") && patientHauptPanel.inMemo > -1 ){
-			Reha.thisClass.patpanel.pmemo[patientHauptPanel.inMemo].requestFocus();
+			Reha.instance.patpanel.pmemo[patientHauptPanel.inMemo].requestFocus();
 		}
 		if(!patientHauptPanel.getInternal().getActive()){
 			patientHauptPanel.getInternal().setSpecialActive(true);
@@ -170,7 +170,7 @@ public class PatientToolBarLogic {
 					String srez_nr = "-1";
 					String sbetreff = "Patient(in): "+StringTools.EGross(patientHauptPanel.patDaten.get(2))+", "+StringTools.EGross(patientHauptPanel.patDaten.get(3))+" PatID: "+spat_intern;
 					if(AktuelleRezepte.tabaktrez.getRowCount() > 0){
-						srez_nr = Reha.thisClass.patpanel.vecaktrez.get(1);
+						srez_nr = Reha.instance.patpanel.vecaktrez.get(1);
 					}
 					if(! RehaIOServer.rehaMailIsActive){
 						if(Reha.aktUser.startsWith("Therapeut")){return;}
@@ -203,11 +203,11 @@ public class PatientToolBarLogic {
 			if(patientHauptPanel.aktPatID.equals("")){return;}
 			String srez_nr = "-1";
 			if(AktuelleRezepte.tabaktrez.getRowCount() > 0){
-				srez_nr = Reha.thisClass.patpanel.vecaktrez.get(1);
+				srez_nr = Reha.instance.patpanel.vecaktrez.get(1);
 			}
 			if(srez_nr.isEmpty() || (!srez_nr.startsWith("RH"))){
 				try{
-					srez_nr = Reha.thisClass.patpanel.vecakthistor.get(1);	
+					srez_nr = Reha.instance.patpanel.vecakthistor.get(1);	
 				}catch(Exception ex){srez_nr = "-1";}
 				
 			}
@@ -287,7 +287,7 @@ public class PatientToolBarLogic {
 								 (SystemConfig.hmFirmenDaten.get("Telefax").equals("") ? "" :  "Telefax: "+SystemConfig.hmFirmenDaten.get("Telefax")+"\n")+
 								 (SystemConfig.hmFirmenDaten.get("Internet").equals("") ? "" : "Internet: "+SystemConfig.hmFirmenDaten.get("Internet"))
 								 ;
-						String recipient = Reha.thisClass.patpanel.patDaten.get(50);
+						String recipient = Reha.instance.patpanel.patDaten.get(50);
 								//+((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? ","+SystemConfig.hmEmailExtern.get("SenderAdresse") : "");
 						final EmailDialog emlDlg = 
 								new EmailDialog(Reha.getThisFrame(),stitel,recipient,"",mailtext,new ArrayList<String[]>(),

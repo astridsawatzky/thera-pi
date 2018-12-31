@@ -509,7 +509,7 @@ final class SchreibeMaskeInKalender extends Thread{
     public void run(){
 		//Vector treadVect = new Vector();
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 					geklappt =  stmt.execute(this.statement);

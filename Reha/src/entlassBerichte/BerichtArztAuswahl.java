@@ -61,7 +61,7 @@ public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyLi
 
 		@Override
 		protected Void doInBackground() throws Exception {
-		    setBackgroundPainter(Reha.thisClass.compoundPainter.get("GutachtenWahl"));
+		    setBackgroundPainter(Reha.instance.compoundPainter.get("GutachtenWahl"));
 			return null;
 		}
 		
@@ -119,7 +119,7 @@ public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyLi
 			protected Void doInBackground() throws Exception {
 				try{
 				ladeTabelle();
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
@@ -138,7 +138,7 @@ public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyLi
 
 	
 	private void ladeTabelle(){
-		String test = Reha.thisClass.patpanel.patDaten.get(63);
+		String test = Reha.instance.patpanel.patDaten.get(63);
 		if(test.trim().equals("")){
 			JOptionPane.showMessageDialog(null, "Mit der Arztliste dieses Patienten läuft etwas schief....");
 		}else{
@@ -222,7 +222,7 @@ public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyLi
 		if(!tf[2].getText().trim().equals("")){
 			Vector<Vector<String>> vec = SqlInfo.holeFelder("select nachname,vorname,strasse,ort,arztnum,bsnr,id from arzt where id = '"+tf[2].getText()+"' LIMIT 1");
 			if(vec.size() > 0){
-				String test = Reha.thisClass.patpanel.patDaten.get(63);
+				String test = Reha.instance.patpanel.patDaten.get(63);
 				if(! test.contains("@"+tf[2].getText().trim()+"@")){
 					Vector vec2 = (Vector) ((Vector)vec.get(0)).clone();
 					vec2.insertElementAt(true, 0);
@@ -233,8 +233,8 @@ public class BerichtArztAuswahl extends JXPanel implements ActionListener, KeyLi
 					int frage = JOptionPane.showConfirmDialog(null,msg,"Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 					if(frage == JOptionPane.YES_OPTION){
 						test = test + "@"+tf[2].getText().trim()+"@\n";
-						Reha.thisClass.patpanel.patDaten.set(63,test);
-						String cmd = "update pat5 set aerzte='"+test+"' where pat_intern='"+Reha.thisClass.patpanel.aktPatID+"' LIMIT 1";
+						Reha.instance.patpanel.patDaten.set(63,test);
+						String cmd = "update pat5 set aerzte='"+test+"' where pat_intern='"+Reha.instance.patpanel.aktPatID+"' LIMIT 1";
 						new ExUndHop().setzeStatement(cmd);
 					}
 				}else{

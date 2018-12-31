@@ -65,7 +65,7 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener, Action
 		//System.out.println("Aufruf SysUtilKostentraeger");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		JLabelRenderer = new KtreagerTblRenderer();
 	     add(getVorlagenSeite());

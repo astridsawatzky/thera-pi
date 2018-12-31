@@ -56,7 +56,7 @@ public class SysUtilAbrechnungFormulare extends JXPanel implements KeyListener, 
 		super(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 	     services = PrintServiceLookup.lookupPrintServices(null, null);
 			drucker = new String[services.length];
 			
@@ -358,7 +358,7 @@ public class SysUtilAbrechnungFormulare extends JXPanel implements KeyListener, 
             }
         });
         chooser.setVisible(true);
-        //thisClass.setCursor(Reha.thisClass.normalCursor);
+        //thisClass.setCursor(Reha.instance.normalCursor);
         final int result = chooser.showOpenDialog(null);
         chooser.setVisible(false);
         if (result == JFileChooser.APPROVE_OPTION) {

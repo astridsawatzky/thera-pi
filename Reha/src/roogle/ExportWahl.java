@@ -86,7 +86,7 @@ public class ExportWahl extends RehaSmartDialog implements ActionListener{
 
 			@Override
 			protected Void doInBackground() throws Exception {
-			    rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("GutachtenWahl"));
+			    rgb.setBackgroundPainter(Reha.instance.compoundPainter.get("GutachtenWahl"));
 				return null;
 			}
 

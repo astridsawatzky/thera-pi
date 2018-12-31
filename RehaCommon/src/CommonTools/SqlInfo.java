@@ -6,7 +6,9 @@ package CommonTools;
 
 
 
-import java.awt.Cursor;
+import static gui.Cursors.normalCursor;
+import static gui.Cursors.wartenCursor;
+
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.sql.Connection;
@@ -21,20 +23,11 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
-
-
-
-
-
-
 public class SqlInfo {
 
-	static JFrame frame = null;
-	static Connection conn = null;
-	static InetAddress dieseMaschine;
-	static Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
-	static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
+	private static JFrame frame = null;
+	 static Connection conn = null;
+	private static InetAddress dieseMaschine;
 
 
 	public SqlInfo(JFrame frame,Connection conn,InetAddress dieseMaschine){
@@ -92,7 +85,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -137,7 +130,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -194,7 +187,7 @@ public class SqlInfo {
 			}
 
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 
@@ -228,7 +221,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -288,11 +281,11 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
-			//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+			//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
 			String sstmt = "select "+felder+" from "+tabelle+" "+kriterium+" LIMIT "+Integer.toString(limit[0])+
 			","+Integer.toString(limit[1])+"";
 			rs = stmt.executeQuery(sstmt);
@@ -310,7 +303,7 @@ public class SqlInfo {
 					 }
 				 }
 			}
-			//Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+			//Reha.thisFrame.setCursor(Reha.instance.normalCursor);
 		}catch(SQLException ev){
 			//System.out.println("SQLException: " + ev.getMessage());
 			//System.out.println("SQLState: " + ev.getSQLState());
@@ -387,7 +380,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -439,7 +432,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -634,7 +627,7 @@ public class SqlInfo {
 			try {
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				
+
 				e.printStackTrace();
 			}
 		}else{
@@ -642,7 +635,7 @@ public class SqlInfo {
 				conn.rollback();
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				
+
 				e.printStackTrace();
 			}
 
@@ -663,7 +656,7 @@ public class SqlInfo {
 			numvec = SqlInfo.holeFeldForUpdate("nummern", nummer+",id", " FOR UPDATE");
 			////System.out.println(Reha.aktIK);
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		if(numvec.size() > 0){
@@ -679,7 +672,7 @@ public class SqlInfo {
 			try {
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				
+
 				e.printStackTrace();
 			}
 		}else{
@@ -687,7 +680,7 @@ public class SqlInfo {
 				conn.rollback();
 				conn.setAutoCommit(true);
 			} catch (SQLException e) {
-				
+
 				e.printStackTrace();
 			}
 
@@ -707,7 +700,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -789,7 +782,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -832,7 +825,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -936,7 +929,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -999,7 +992,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -1048,7 +1041,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{
@@ -1131,7 +1124,7 @@ public class SqlInfo {
 			stmt =  conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}
 		try{

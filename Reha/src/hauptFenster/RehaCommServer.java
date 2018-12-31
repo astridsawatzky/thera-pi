@@ -65,7 +65,7 @@ public class RehaCommServer  extends SwingWorker<Void,Void>{
 			ex.printStackTrace();
 			System.out.println("IO-CommServer Installation fehlgeschlagen!");
 			serv = null;
-			Reha.thisClass.rehaCommServer = null;
+			Reha.instance.rehaCommServer = null;
 		}
 		
 

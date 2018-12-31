@@ -376,10 +376,10 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
           	    }
           	    catch (DocumentException e) {
           	    	e.printStackTrace();
-          	    	//Reha.thisClass.messageLabel = new JLabel("OO.org nicht Verf�gbar!!!");
+          	    	//Reha.instance.messageLabel = new JLabel("OO.org nicht Verf�gbar!!!");
           	    } catch (OfficeApplicationException e) {
 						e.printStackTrace();
-						//Reha.thisClass.messageLabel = new JLabel("OO.org nicht Verf�gbar!!!");
+						//Reha.instance.messageLabel = new JLabel("OO.org nicht Verf�gbar!!!");
 					}
           	  }
           	});

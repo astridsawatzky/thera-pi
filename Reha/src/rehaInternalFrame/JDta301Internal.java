@@ -33,11 +33,11 @@ public class JDta301Internal extends JRehaInternal implements RehaEventListener{
 	}
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
-		//System.out.println("Lösche VerkaufInternal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
+		//System.out.println("Lösche VerkaufInternal von Desktop-Pane = "+Reha.instance.desktops[this.desktop]);
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		//nächsten JInternalFrame aktivieren
-		Reha.thisClass.aktiviereNaechsten(this.desktop);		
+		Reha.instance.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
 		this.removeInternalFrameListener(this);
@@ -57,7 +57,7 @@ public class JDta301Internal extends JRehaInternal implements RehaEventListener{
             public  void run()
 		 	   {
 				AktiveFenster.loescheFenster(name);
-				Reha.thisClass.progLoader.loescheDta301();
+				Reha.instance.progLoader.loescheDta301();
 		 	   }
 		});
 

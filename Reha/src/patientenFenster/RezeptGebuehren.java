@@ -99,7 +99,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
-					rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezeptGebuehren"));
+					rgb.setBackgroundPainter(Reha.instance.compoundPainter.get("RezeptGebuehren"));
 				}catch(Exception ex){
 					JOptionPane.showMessageDialog(null, "Fehler im BackgroundPainter Rezeptgebühren");
 				}
@@ -248,7 +248,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 
 		try{
 		String url = "";
-		if( Reha.thisClass.patpanel.vecaktrez.get(43).equals("T") ){
+		if( Reha.instance.patpanel.vecaktrez.get(43).equals("T") ){
 			url = SystemConfig.rezGebVorlageHB;
 		}else{
 			url = SystemConfig.rezGebVorlageNeu;
@@ -454,7 +454,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 				}catch(Exception ex1){
 					JOptionPane.showMessageDialog(null, "Fehler-Nr. 1 beim einstellen der Rezeptgebühr im Rezept\n\n"+
 							"Der Wert der HashMap hat aktuell: "+SystemConfig.hmAdrRDaten.get("<Rendbetrag>")+"\n"+
-							"Der Wert für Rezeptnummer ist aktuell: "+Reha.thisClass.patpanel.vecaktrez.get(1)+"\n"+
+							"Der Wert für Rezeptnummer ist aktuell: "+Reha.instance.patpanel.vecaktrez.get(1)+"\n"+
 							"\nSql-Befehl = "+cmd+"\n\n"+
 							"Bitte notieren Sie diese Fehlermeldung und informieren Sie den Administrator umgehend.");
 					srgeb = "0.00";
@@ -467,7 +467,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 
 				}
 				try{
-					Reha.thisClass.patpanel.vecaktrez.set(39, "1");
+					Reha.instance.patpanel.vecaktrez.set(39, "1");
 					String cmd2 = "update verordn set rez_geb='"+
 					srgeb+"', "+
 					"rez_bez='T', zzstatus='1' where rez_nr='"+SystemConfig.hmAdrRDaten.get("<Rnummer>")+"' LIMIT 1";
@@ -476,7 +476,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 					if(!allesok){
 						JOptionPane.showMessageDialog(null, "Fehler-Nr. 2 beim einstellen der Rezeptgebühr im Rezept\n\n"+
 								"Der Wert der HashMap hat aktuell: "+SystemConfig.hmAdrRDaten.get("<Rendbetrag>")+"\n"+
-								"Der Wert für Rezeptnummer ist aktuell: "+Reha.thisClass.patpanel.vecaktrez.get(1)+"\n"+
+								"Der Wert für Rezeptnummer ist aktuell: "+Reha.instance.patpanel.vecaktrez.get(1)+"\n"+
 								"\nSql-Befehl = "+cmd+"\n\n"+
 								"Bitte notieren Sie diese Fehlermeldung und informieren Sie den Administrator umgehend.");
 						new ErrorMail("Fehler bei Rezeptgebührenkassieren - Fehler-Nr. 2 - Reznr."+SystemConfig.hmAdrRDaten.get("<Rnummer>"),
@@ -489,7 +489,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 				}catch(Exception ex3){
 					JOptionPane.showMessageDialog(null, "Fehler-Nr. 2.1 beim einstellen der Rezeptgebühr im Rezept\n\n"+
 							"Der Wert der HashMap hat aktuell: "+SystemConfig.hmAdrRDaten.get("<Rendbetrag>")+"\n"+
-							"Der Wert für Rezeptnummer ist aktuell: "+Reha.thisClass.patpanel.vecaktrez.get(1)+"\n"+
+							"Der Wert für Rezeptnummer ist aktuell: "+Reha.instance.patpanel.vecaktrez.get(1)+"\n"+
 							"\nSql-Befehl = "+cmd+"\n\n"+
 							"Bitte notieren Sie diese Fehlermeldung und informieren Sie den Administrator umgehend.");
 				}
@@ -497,7 +497,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 			}catch(Exception ex2){
 				JOptionPane.showMessageDialog(null, "Fehler-Nr. 3 beim einstellen der Rezeptgebühr im Rezept\n\n"+
 						"Der Wert der HashMap hat aktuell: "+SystemConfig.hmAdrRDaten.get("<Rendbetrag>")+"\n"+
-						"Der Wert für Rezeptnummer ist aktuell: "+Reha.thisClass.patpanel.vecaktrez.get(1)+"\n"+
+						"Der Wert für Rezeptnummer ist aktuell: "+Reha.instance.patpanel.vecaktrez.get(1)+"\n"+
 						"\nSql-Befehl = "+cmd+"\n\n"+
 						"Bitte notieren Sie diese Fehlermeldung und informieren Sie den Administrator umgehend.");
 				new ErrorMail("Fehler bei Rezeptgebührenkassieren - Fehler-Nr. 3 - Reznr."+SystemConfig.hmAdrRDaten.get("<Rnummer>"),
@@ -525,7 +525,7 @@ public class RezeptGebuehren extends RehaSmartDialog implements ActionListener{
 				cmd = "insert into kasse set einnahme='"+
 				SystemConfig.hmAdrRDaten.get("<Rendbetrag>").replaceAll(",",".")+"', datum='"+
 				DatFunk.sDatInSQL(DatFunk.sHeute())+"', ktext='"+
-				Reha.thisClass.patpanel.patDaten.get(2)+","+
+				Reha.instance.patpanel.patDaten.get(2)+","+
 				SystemConfig.hmAdrRDaten.get("<Rnummer>")+"', "+
 				"pat_intern='"+SystemConfig.hmAdrRDaten.get("<Rpatid>")+"', "+
 				"rez_nr='"+SystemConfig.hmAdrRDaten.get("<Rnummer>")+"' ," +

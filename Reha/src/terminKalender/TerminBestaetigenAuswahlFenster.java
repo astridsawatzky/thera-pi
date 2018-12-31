@@ -112,7 +112,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				jcc.setBackgroundPainter(Reha.thisClass.compoundPainter.get("TerminBestaetigenAuswahlFenster"));
+				jcc.setBackgroundPainter(Reha.instance.compoundPainter.get("TerminBestaetigenAuswahlFenster"));
 				return null;
 			}
 		}.execute();

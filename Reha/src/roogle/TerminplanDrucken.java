@@ -631,7 +631,7 @@ SuchenSeite eltern;
 		ResultSet rs = null;
 		String sergebnis = "";
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 				rs = stmt.executeQuery(exStatement);

@@ -66,7 +66,7 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
 		//System.out.println("Aufruf SysUtilKasse");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 	     
 	     JScrollPane jscr = new JScrollPane();
 	     jscr.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
@@ -270,8 +270,8 @@ private JPanel getKnopfPanel(){
 		//Damit der ganze Scheiß nicht abstürtzt muß hier noch eine
 		//Routine eingebaut werden die überprüft ob die angegebene .dll bzw. .so überhaupt existiert.
 		try {
-			if(Reha.thisClass.ocKVK != null){
-				Reha.thisClass.ocKVK.TerminalDeaktivieren();
+			if(Reha.instance.ocKVK != null){
+				Reha.instance.ocKVK.TerminalDeaktivieren();
 				ocAktive = true;
 			}
 			int antwort = JOptionPane.showConfirmDialog(null,"Bitte KV-Karte einlegen und ok. drücken","Vorbereitung für Reader-Test",JOptionPane.OK_CANCEL_OPTION);
@@ -311,7 +311,7 @@ private JPanel getKnopfPanel(){
 		}
 		if(ocAktive){
 			try {
-				Reha.thisClass.ocKVK = new OcKVK(SystemConfig.sReaderName.trim().replace(" ", "_"),
+				Reha.instance.ocKVK = new OcKVK(SystemConfig.sReaderName.trim().replace(" ", "_"),
 						SystemConfig.sReaderCtApiLib,SystemConfig.sReaderDeviceID,false);
 			} catch (Exception e) {
 				e.printStackTrace();

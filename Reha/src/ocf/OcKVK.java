@@ -1170,13 +1170,13 @@ class CardListener implements CTListener {
 				try {
 					eltern.lesen();
 					eltern.isCardReady = true;
-					if(Reha.thisClass.patpanel != null){
-						if(Reha.thisClass.patpanel.getLogic().pneu != null){
+					if(Reha.instance.patpanel != null){
+						if(Reha.instance.patpanel.getLogic().pneu != null){
 							new SwingWorker<Void,Void>(){
 								@Override
 								protected Void doInBackground()
 										throws Exception {
-									Reha.thisClass.patpanel.getLogic().pneu.enableReaderButton();
+									Reha.instance.patpanel.getLogic().pneu.enableReaderButton();
 									return null;
 								}
 							}.execute();
@@ -1202,13 +1202,13 @@ class CardListener implements CTListener {
 			terminal = null;
 			slotID = -1;
 			eltern.isCardReady = false;
-			if(Reha.thisClass.patpanel != null){
-				if(Reha.thisClass.patpanel.getLogic().pneu != null){
+			if(Reha.instance.patpanel != null){
+				if(Reha.instance.patpanel.getLogic().pneu != null){
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground()
 								throws Exception {
-							Reha.thisClass.patpanel.getLogic().pneu.disableReaderButton();
+							Reha.instance.patpanel.getLogic().pneu.disableReaderButton();
 							return null;
 						}
 					}.execute();

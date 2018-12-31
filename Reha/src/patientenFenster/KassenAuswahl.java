@@ -84,7 +84,7 @@ public class KassenAuswahl extends RehaSmartDialog{
 
 	     
 		grundPanel = new JXPanel(new BorderLayout());
-		grundPanel.setBackgroundPainter(Reha.thisClass.compoundPainter.get("KassenAuswahl"));
+		grundPanel.setBackgroundPainter(Reha.instance.compoundPainter.get("KassenAuswahl"));
 		content = getAuswahl();
 		grundPanel.add(content,BorderLayout.CENTER);
 		getSmartTitledPanel().setContentContainer(grundPanel);

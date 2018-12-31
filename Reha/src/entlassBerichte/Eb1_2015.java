@@ -225,12 +225,12 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		return pan;
 	}
 	private void doKopfNeu(){
-		eltern.btf[2].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(2))+
-				", "+StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(3)));
-		eltern.btf[3].setText(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)));
-		eltern.btf[4].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(21)));
-		eltern.btf[5].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(23)));
-		eltern.btf[6].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(24)));		
+		eltern.btf[2].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(2))+
+				", "+StringTools.EGross(Reha.instance.patpanel.patDaten.get(3)));
+		eltern.btf[3].setText(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
+		eltern.btf[4].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(21)));
+		eltern.btf[5].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(23)));
+		eltern.btf[6].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(24)));		
 	}
 
 	private void laden(){
@@ -312,7 +312,7 @@ public class Eb1_2015 implements ActionListener,ComponentListener {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			e.printStackTrace();

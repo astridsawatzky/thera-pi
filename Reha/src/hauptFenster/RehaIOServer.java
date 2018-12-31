@@ -13,6 +13,7 @@ import javax.swing.SwingWorker;
 
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import gui.Cursors;
 
 public class RehaIOServer extends SwingWorker<Void,Void>{
 	public ServerSocket serv = null;
@@ -67,11 +68,11 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 			rehaSqlreversePort = -1;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePat(op.split("#")[2]);
 			}
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATANDREZFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePatUndRez(op.split("#")[2], op.split("#")[3]);
 			}
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_REZFIND)){
@@ -96,7 +97,7 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 			offenePostenreversePort = -1;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePat(op.split("#")[2]);
 			}
 		}
@@ -138,7 +139,7 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 			rgAfreversePort = -1;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATANDREZFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePatUndRez(op.split("#")[2], op.split("#")[3]);
 			}
 		}
@@ -167,11 +168,11 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 			}.execute();
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATANDREZFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePatUndRez(op.split("#")[2], op.split("#")[3]);
 			}
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePat(op.split("#")[2]);
 			}
 		}
@@ -194,11 +195,11 @@ public class RehaIOServer extends SwingWorker<Void,Void>{
 			rehaMailreversePort = -1;
 			return;
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATANDREZFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePatUndRez(op.split("#")[2], op.split("#")[3]);
 			}
 		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_PATFIND)){
-			if(Reha.thisClass.patpanel != null){
+			if(Reha.instance.patpanel != null){
 				this.posteAktualisierePat(op.split("#")[2]);
 			}
 		}

@@ -54,7 +54,7 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ZuzahlTools.ZZStat;

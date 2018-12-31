@@ -95,7 +95,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 		//System.out.println("Aufruf SysUtilKalenderanlagen");
 		this.setBorder(BorderFactory.createEmptyBorder(15, 40, 15, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     int anzahl = SystemConfig.oGruppen.gruppenNamen.size(); 
 	     if(anzahl > 0){
@@ -418,7 +418,7 @@ public class SysUtilGruppenDef extends JXPanel implements KeyListener, ActionLis
 		    @Override
 		    public void dragOver(DropTargetDragEvent dtde)
 		    {
-		    	//Reha.thisClass.shiftLabel.setText(dtde.getLocation().toString());
+		    	//Reha.instance.shiftLabel.setText(dtde.getLocation().toString());
 		    	////System.out.println("Drag-Support"+dtde);
 		    	if (!fAccept) return;
 		 

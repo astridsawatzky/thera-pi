@@ -64,7 +64,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
 		//System.out.println("Aufruf SysUtilBehandlerset");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		jscroll = new JScrollPane();
 		jscroll.setOpaque(false);

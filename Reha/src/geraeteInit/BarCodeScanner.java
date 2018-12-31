@@ -121,7 +121,7 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 	@Override
 	public void run() {
 		/*
-		while(Reha.thisClass != null){
+		while(Reha.instance != null){
 			try {
 			    Thread.sleep(2000);
 			} catch (InterruptedException e) {
@@ -200,7 +200,7 @@ public class BarCodeScanner implements Runnable, SerialPortEventListener{
 						Vector tvec = null;
 						JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 						if(termin != null){
-							if(Reha.thisClass.terminpanel.getAktuellerTag().equals(DatFunk.sHeute())){
+							if(Reha.instance.terminpanel.getAktuellerTag().equals(DatFunk.sHeute())){
 								// Hier versuchen die Daten des Terminkalenders zu �bernehmen
 							}
 						}

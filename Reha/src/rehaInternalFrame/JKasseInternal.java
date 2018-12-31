@@ -31,12 +31,12 @@ public class JKasseInternal extends JRehaInternal implements RehaEventListener{
 	}
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		this.removeInternalFrameListener(this);
 		Reha.getThisFrame().requestFocus();
-		//System.out.println("Lösche KasseInternal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
-		Reha.thisClass.desktops[this.desktop].remove(this);
-		Reha.thisClass.aktiviereNaechsten(this.desktop);
+		//System.out.println("Lösche KasseInternal von Desktop-Pane = "+Reha.instance.desktops[this.desktop]);
+		Reha.instance.desktops[this.desktop].remove(this);
+		Reha.instance.aktiviereNaechsten(this.desktop);
 		rEvent.removeRehaEventListener(this);
 		this.nord = null;
 		this.inhalt = null;
@@ -44,7 +44,7 @@ public class JKasseInternal extends JRehaInternal implements RehaEventListener{
 		this.dispose();
 		super.dispose();
 		AktiveFenster.loescheFenster(this.getName());
-		Reha.thisClass.progLoader.loescheKasse();
+		Reha.instance.progLoader.loescheKasse();
 
 	}
 	@Override

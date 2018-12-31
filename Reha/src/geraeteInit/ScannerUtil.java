@@ -103,7 +103,7 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 			     MattePainter mp = new MattePainter(p);
 			     rgb.setBackgroundPainter(new CompoundPainter(mp));
 			     */
-			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("ScannerUtil"));
+			     rgb.setBackgroundPainter(Reha.instance.compoundPainter.get("ScannerUtil"));
 				return null;
 			}
 
@@ -355,17 +355,17 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 			mapkurz = "<AFRkurz"+(i+1)+">";
 			maplang = "<AFRlang"+(i+1)+">";
 			if(leistung[i].isSelected()){
-				Double preis = new Double( Reha.thisClass.patpanel.vecaktrez.get(18+i));
+				Double preis = new Double( Reha.instance.patpanel.vecaktrez.get(18+i));
 				String s = df.format( preis);
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,s);
 				gesamt = gesamt+preis;
 				//spos = art_dbeh1 etc.
-				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
+				spos = Reha.instance.patpanel.vecaktrez.get(8+i);
 				//sart = rezeptnummer;
-				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
+				sart = Reha.instance.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 				SystemConfig.hmAdrAFRDaten.put(maplang,inpos[0]);
 				SystemConfig.hmAdrAFRDaten.put(mapkurz,inpos[1]);
@@ -373,10 +373,10 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 				////System.out.println(inpos[1]);
 
 			}else{
-				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = Reha.instance.patpanel.vecaktrez.get(8+i);
+				sart = Reha.instance.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());

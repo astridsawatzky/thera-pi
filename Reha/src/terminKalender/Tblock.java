@@ -878,7 +878,7 @@ class KalenderBeschreiben extends Thread{
 	  }
 	  @Override
     public void run(){
-		  if(Reha.thisClass.terminpanel.getAnsicht()==2){
+		  if(Reha.instance.terminpanel.getAnsicht()==2){
 			  ////System.out.println("vKalDaten="+this.vKalDaten);
 			  ////System.out.println("iKoll = "+this.iKoll);
 			  ////System.out.println("datum = "+this.datum);
@@ -938,7 +938,7 @@ class KalenderBeschreiben extends Thread{
 				//System.out.println("von ResultSet SQLState: " + ex.getSQLState());
 				//System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());//System.out.println("ErrorCode: " + ex.getErrorCode ());
 				//System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
-				Reha.thisClass.messageLabel.setText("Entsperren misslungen");
+				Reha.instance.messageLabel.setText("Entsperren misslungen");
 				TerminFenster.setLockOk(-1," Durch Fehler in SQL-Statement:" +ex.getMessage());
 			}
 			TerminFenster.starteUnlock();
@@ -984,7 +984,7 @@ class KalenderBeschreiben extends Thread{
 			  //System.out.println("von ResultSet SQLState: " + ex.getSQLState());
 			  //System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());//System.out.println("ErrorCode: " + ex.getErrorCode ());
 			  //System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
-			  Reha.thisClass.messageLabel.setText("Entsperren misslungen");
+			  Reha.instance.messageLabel.setText("Entsperren misslungen");
 			  TerminFenster.setLockOk(-1," Durch Fehler in SQL-Statement:" +ex.getMessage());
 		  }
 		  TerminFenster.starteUnlock();

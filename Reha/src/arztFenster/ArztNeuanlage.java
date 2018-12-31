@@ -74,7 +74,7 @@ public class ArztNeuanlage extends JXPanel implements ActionListener,KeyListener
 	
 	public ArztNeuanlage(ArztNeuDlg eltern,ArztPanel apanel,Vector<String> vec,String id){
 		super();
-	     setBackgroundPainter(Reha.thisClass.compoundPainter.get("ArztNeuanlage"));		
+	     setBackgroundPainter(Reha.instance.compoundPainter.get("ArztNeuanlage"));		
 		this.arztDaten = vec;
 		this.arztId = id;
 		this.eltern = eltern;

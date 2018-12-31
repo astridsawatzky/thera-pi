@@ -54,7 +54,7 @@ public class SysUtilOpMahnung extends JXPanel implements KeyListener, ActionList
 		super(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(15, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		/*
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(getVorlagenSeite());

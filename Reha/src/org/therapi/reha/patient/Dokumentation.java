@@ -101,7 +101,7 @@ import dialoge.ToolsDialog;
 import environment.Path;
 import generalSplash.RehaSplash;
 import geraeteInit.ScannerUtil;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import oOorgTools.OOTools;
@@ -590,7 +590,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//System.out.println(sdatei);
 
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 				String test = "select dokublob from doku1 where id='"+sid+"'";
 				rs = stmt.executeQuery(test);
@@ -613,7 +613,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 						}catch(Exception ex){
 							ex.printStackTrace();
 						}
-						Reha.thisClass.patpanel.dokumentation.setCursor(Cursors.normalCursor);
+						Reha.instance.patpanel.dokumentation.setCursor(Cursors.normalCursor);
 						return null;
 					}
 				}.execute();
@@ -648,7 +648,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//int bilder = 0;
 
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 					String test = "select dokublob from doku1 where id='"+id+"'";
 				rs = stmt.executeQuery(test);
@@ -959,7 +959,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 							dokubut[5].setEnabled(false);
 						}
 						try{
-							Reha.thisClass.patpanel.getTab().setTitleAt(3,macheHtmlTitel(tabdokus.getRowCount(),"Dokumentation"));
+							Reha.instance.patpanel.getTab().setTitleAt(3,macheHtmlTitel(tabdokus.getRowCount(),"Dokumentation"));
 						}catch(Exception extiming){
 							System.out.println("Timingprobleme beim setzen des Reitertitels - Reiter: Dokumentation");
 						}
@@ -1018,12 +1018,12 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			if( (bildpfad.toLowerCase().endsWith(".odt")) ||
 					(bildpfad.toLowerCase().endsWith(".ods")) ){
 				try {
-					Reha.thisClass.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
+					Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
 					FileTools.copyFile(new File(bildpfad), new File(SystemConfig.hmVerzeichnisse.get("Temp")+"/"+bild[0]), 4096*4, true);
 					File f = new File(SystemConfig.hmVerzeichnisse.get("Temp")+"/"+bild[0]);
 					if(f.exists()){
 						int dokuid = SqlInfo.erzeugeNummer("doku");
-						int pat_int = Integer.valueOf(Reha.thisClass.patpanel.aktPatID); //Integer.valueOf(annika.getText().trim());
+						int pat_int = Integer.valueOf(Reha.instance.patpanel.aktPatID); //Integer.valueOf(annika.getText().trim());
 
 
 							speichernOoDocs(
@@ -1034,7 +1034,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 									new String[] {DatFunk.sDatInSQL(DatFunk.sHeute()),bild[0],Reha.aktUser,""},
 									true);
 
-							this.holeDokus(Reha.thisClass.patpanel.aktPatID,Integer.toString(dokuid));
+							this.holeDokus(Reha.instance.patpanel.aktPatID,Integer.toString(dokuid));
 							setCursor(Cursors.normalCursor);
 					}
 
@@ -1180,7 +1180,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
             if(inputVerzFile.getName().trim().equals("")){
             	sret = new String[] {};
             }else{
-            	Reha.thisClass.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
+            	Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
             	sret = new String[] {inputVerzFile.getName().trim(),inputVerzStr};
             	lastPath = inputVerzFile.getAbsolutePath();
             }
@@ -1358,7 +1358,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//System.out.println("Beginne speichern");
 		//rehaSplash.setNewText("Dokumentation auf Server transferieren");
 		int dokuid = SqlInfo.erzeugeNummer("doku");
-		int pat_int = Integer.valueOf(Reha.thisClass.patpanel.aktPatID); //Integer.valueOf(annika.getText().trim());
+		int pat_int = Integer.valueOf(Reha.instance.patpanel.aktPatID); //Integer.valueOf(annika.getText().trim());
 		try {
 
 			doSpeichernDoku(
@@ -1372,7 +1372,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			loescheBilderPan();
 			dokubut[0].setEnabled(true);
 			dokubut[1].setEnabled(true);
-			this.holeDokus(Reha.thisClass.patpanel.aktPatID,Integer.toString(dokuid));
+			this.holeDokus(Reha.instance.patpanel.aktPatID,Integer.toString(dokuid));
 			setCursor(Cursors.normalCursor);
 			JOptionPane.showMessageDialog(null,"Dokumentation wurde gespeichert für Patient-Nr.: "+pat_int);
 			//annika.setText("");
@@ -1382,7 +1382,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			loescheBilderPan();
 			dokubut[0].setEnabled(true);
 			dokubut[1].setEnabled(true);
-			//this.holeDokus(Reha.thisClass.patpanel.aktPatID,Integer.valueOf(dokuid).toString());
+			//this.holeDokus(Reha.instance.patpanel.aktPatID,Integer.valueOf(dokuid).toString());
 			setCursor(Cursors.normalCursor);
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der Dokumentation \nDoku wurde nicht gespeichert");
 			//annika.setText("");
@@ -2023,9 +2023,9 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 					}
 					dtblm.addRow(vec.get(i));
 					dtblm.setValueAt(tabIcons[zzbild], i, 1);
-					//dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[zzbild], i, 1);
+					//dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[zzbild], i, 1);
 				}
-				Reha.thisClass.patpanel.getTab().setTitleAt(3,macheHtmlTitel(anz,"Dokumentation"));
+				Reha.instance.patpanel.getTab().setTitleAt(3,macheHtmlTitel(anz,"Dokumentation"));
 				if(anz > 0){
 					setzeDokuPanelAufNull(false);
 					//int anzeigen = -1;
@@ -2139,13 +2139,13 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//FileInputStream fis = null;
 		//piTool.app.conn.setAutoCommit(true);
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 
 			String select = "Insert into doku1 set dokuid = ? , datum = ?, dokutitel = ?,"+
 			"benutzer = ?, pat_intern = ?, format = ?,"+
 			"dokutext = ?, dokublob = ? , groesse = ? ";
-			  ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(select);
+			  ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
 			  /*
 			   *
 			    ps.setBytes(1,   //dokuid - integer
@@ -2228,7 +2228,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 		}else if(art==2){
 			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".odt";
+			dest = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/"+value+"-"+Reha.instance.patpanel.aktPatID+testName(value)+".odt";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
@@ -2240,7 +2240,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			}
 		}else if(art==3){
 			String src = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+SystemConfig.vOwnDokuTemplate.get(vecnum).get(1);
-			dest = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/"+value+"-"+Reha.thisClass.patpanel.aktPatID+testName(value)+".ods";
+			dest = Path.Instance.getProghome()+"temp/"+Reha.getAktIK()+"/"+value+"-"+Reha.instance.patpanel.aktPatID+testName(value)+".ods";
 			try {
 				FileTools.copyFile(new File(src), new File(dest), 8192,true);
 				ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);
@@ -2281,7 +2281,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		doku[1] = doku[1].replaceAll("\\\\", "/");
 		try {
 			doSpeichernDoku( (dokuid=SqlInfo.erzeugeNummer("doku")),
-					Integer.valueOf(Reha.thisClass.patpanel.aktPatID),
+					Integer.valueOf(Reha.instance.patpanel.aktPatID),
 					doku[1],
 					0,
 					new String[] {DatFunk.sDatInSQL(DatFunk.sHeute()),doku[0],Reha.aktUser,""},
@@ -2291,7 +2291,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		this.holeDokus(Reha.thisClass.patpanel.aktPatID,Integer.toString(dokuid));
+		this.holeDokus(Reha.instance.patpanel.aktPatID,Integer.toString(dokuid));
 		setCursor(Cursors.normalCursor);
 	}
 /**************************************************/
@@ -2303,14 +2303,14 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		//FileInputStream fis = null;
 		//piTool.app.conn.setAutoCommit(true);
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			//Dokumentation.speichernOoDocs(Integer.valueOf(id), -1, file, -1, null, false);
 			if(neu){
 			String select = "Insert into doku1 set dokuid = ? , datum = ?, dokutitel = ?,"+
 			"benutzer = ?, pat_intern = ?, format = ?,"+
 			"dokutext = ?, dokublob = ? , groesse = ? , datei = ?";
-			  ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(select);
+			  ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
 			  /*
 			   *
 			    ps.setBytes(1,   //dokuid - integer
@@ -2331,7 +2331,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			  ps.setString(2, DatFunk.sDatInSQL(DatFunk.sHeute()));
 			  ps.setString(3, dateiname.substring(dateiname.replace("\\", "/").lastIndexOf("/")+1));
 			  ps.setString(4, Reha.aktUser);
-			  ps.setInt(5, Integer.parseInt(Reha.thisClass.patpanel.patDaten.get(29).trim()));
+			  ps.setInt(5, Integer.parseInt(Reha.instance.patpanel.patDaten.get(29).trim()));
 			  ps.setInt(6,  (dateiname.endsWith(".odt") ? 1 : 2));
 			  ps.setString(7, dateiname.substring(dateiname.replace("\\", "/").lastIndexOf("/")+1));
 			  File f = new File(dateiname);
@@ -2343,7 +2343,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 			  //System.out.println("OOOrg-Doku wurde gespeichert");
 			  //String id = SqlInfo.holeEinzelFeld("select id from doku1 where dokuid='"+dokuid+"' LIMIT 1");
 			  ////System.out.println("ID der neuen Doku ist "+id);
-			  holeDokus(Reha.thisClass.patpanel.patDaten.get(29).trim(),"");
+			  holeDokus(Reha.instance.patpanel.patDaten.get(29).trim(),"");
 
 			}else{
 				//int dokuid,int pat_intern, String dateiname,int format,String[] str,boolean neu
@@ -2351,7 +2351,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				String select = "update doku1 set dokublob = ?, groesse = ?, datum = ? "+
 				" where id = ?";
 				//System.out.println("Prepared statement: "+select);
-				  ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(select);
+				  ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
 				  File f = new File(dateiname);
 				  byte[] b = FileTools.File2ByteArray(f);
 				  ps.setBytes(1,b);
@@ -2366,7 +2366,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				  //System.out.println("Dateigröße = "+b.length+" Bytes");
 				  //System.out.println("Datum = "+DatFunk.sDatInSQL(DatFunk.sHeute()));
 				  f.delete();
-				  Reha.thisClass.patpanel.dokumentation.setCursor(Cursors.normalCursor);
+				  Reha.instance.patpanel.dokumentation.setCursor(Cursors.normalCursor);
 			}
 
 			} catch (SQLException e) {
@@ -2475,7 +2475,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				doScanEdit(pt);
 				break;
 			case 1:
-				if(Reha.thisClass.patpanel.aktPatID.equals("")){
+				if(Reha.instance.patpanel.aktPatID.equals("")){
 					keinAtiverPatient();
 					tDlg = null;
 					return;
@@ -2486,7 +2486,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				doHolePhoto();
 				break;
 			case 2:
-				if(Reha.thisClass.patpanel.aktPatID.equals("")){
+				if(Reha.instance.patpanel.aktPatID.equals("")){
 					keinAtiverPatient();
 					tDlg = null;
 					return;
@@ -2497,7 +2497,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				doHoleOO();
 				break;
 			case 4:
-				if(Reha.thisClass.patpanel.aktPatID.equals("")){
+				if(Reha.instance.patpanel.aktPatID.equals("")){
 					keinAtiverPatient();
 					tDlg = null;
 					return;
@@ -2508,7 +2508,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				oooDokuNeu(0,-1);
 				break;
 			case 5:
-				if(Reha.thisClass.patpanel.aktPatID.equals("")){
+				if(Reha.instance.patpanel.aktPatID.equals("")){
 					keinAtiverPatient();
 					tDlg = null;
 					return;
@@ -2519,7 +2519,7 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 				oooDokuNeu(1,-1);
 				break;
 			case 3:
-				if(Reha.thisClass.patpanel.aktPatID.equals("")){
+				if(Reha.instance.patpanel.aktPatID.equals("")){
 					keinAtiverPatient();
 					tDlg = null;
 					return;
@@ -2770,7 +2770,7 @@ class OoListener implements IDocumentListener {
 								if(frage == JOptionPane.YES_OPTION){
 									geaendert = false;
 											try {
-												Reha.thisClass.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
+												Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
 												eltern.speichernOoDocs(xid, -1, xfile, -1, null, neu);
 											} catch (Exception e) {
 												
@@ -2803,7 +2803,7 @@ class OoListener implements IDocumentListener {
 						if(frage == JOptionPane.YES_OPTION){
 							geaendert = false;
 									try {
-										Reha.thisClass.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
+										Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
 										int nummer = SqlInfo.erzeugeNummer("doku");
 										eltern.speichernOoDocs(nummer, -1, datei, -1, null, neu);
 									} catch (Exception e) {
@@ -2851,7 +2851,7 @@ class OoListener implements IDocumentListener {
 					if(frage == JOptionPane.YES_OPTION){
 						geaendert = false;
 								try {
-									Reha.thisClass.patpanel.dokumentation.setCursor(Reha.thisClass.wartenCursor);
+									Reha.instance.patpanel.dokumentation.setCursor(Reha.instance.wartenCursor);
 									Dokumentation.speichernOoDocs(xid, -1, xfile, -1, null, neu);
 								} catch (Exception e) {
 									

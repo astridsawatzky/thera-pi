@@ -23,7 +23,7 @@ public class ReaderStart{
 					InputStreamReader isr = new InputStreamReader(is);
 					BufferedReader br = new BufferedReader(isr);
 					//String line;
-					Reha.thisClass.progressStarten(false);							       
+					Reha.instance.progressStarten(false);							       
 					while ((br.readLine()) != null) {
 					     //System.out.println("Lade Adobe "+line);
 					}

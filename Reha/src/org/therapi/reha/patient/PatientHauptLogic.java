@@ -112,7 +112,7 @@ public class PatientHauptLogic {
 				patientHauptPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doFormulare");
 				patientHauptPanel.getActionMap().put("doFormulare", new PatientAction());
 				holeFormulare();
-				if(Reha.thisClass.terminpanel != null){
+				if(Reha.instance.terminpanel != null){
 			    	//TerminFenster.thisClass.setUpdateVerbot(true);
 			    }
 
@@ -151,7 +151,7 @@ public class PatientHauptLogic {
 
 				// Lemmi 20101212: Anzahl der zu erwartenden Datensätze ermitteln via DB-Abfrage
 				try {
-					stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		                    ResultSet.CONCUR_UPDATABLE );
 					try{
 						rs = stmt.executeQuery(sstmt);
@@ -211,7 +211,7 @@ public class PatientHauptLogic {
 			if(! patientHauptPanel.tfsuchen.getText().trim().equals(lastseek.trim())){
 				this.setLastRow(-1);
 			}
-			patientHauptPanel.sucheComponent = new SuchenDialog(null,Reha.thisClass.patpanel,
+			patientHauptPanel.sucheComponent = new SuchenDialog(null,Reha.instance.patpanel,
 					patientHauptPanel.tfsuchen.getText(),patientHauptPanel.jcom.getSelectedIndex(),this);
 			Point thispoint = patientHauptPanel.tfsuchen.getLocationOnScreen();
 			((SuchenDialog) patientHauptPanel.sucheComponent).setLocation(thispoint.x-60, thispoint.y+25);
@@ -237,7 +237,7 @@ public class PatientHauptLogic {
 	        ////System.out.println("Patient Action = "+e.getActionCommand());
 	        ////System.out.println(e);
 	        if(e.getActionCommand().equals("f")){
-	        	 Reha.thisClass.patpanel.tfsuchen.requestFocus();
+	        	 Reha.instance.patpanel.tfsuchen.requestFocus();
 	        }
 	        if(e.getActionCommand().equals("n")){
 	        	patNeu();
@@ -618,7 +618,7 @@ public class PatientHauptLogic {
 		}
 	}
 	public void doPatFoto(){
-		BufferedImage buf = PatNeuanlage.holePatBild(Reha.thisClass.patpanel.aktPatID);
+		BufferedImage buf = PatNeuanlage.holePatBild(Reha.instance.patpanel.aktPatID);
 		if(buf==null){
 			JOptionPane.showMessageDialog(patientHauptPanel.getToolBar(), "Kein Patientenfoto verfügbar!");
 			return;
@@ -660,17 +660,17 @@ public class PatientHauptLogic {
 		String sets = "aerzte='"+aliste+"'";
 		SqlInfo.aktualisiereSaetze("pat5",sets , "pat_intern='"+xpatintern+"'");
 		//System.out.println("Sets = "+sets +" pat_Intern = "+xpatintern);
-		if(Reha.thisClass.patpanel.aktPatID.equals(xpatintern)){
-			//System.out.println("Länge des patDaten.Arrays = "+Reha.thisClass.patpanel.patDaten.size());
-			Reha.thisClass.patpanel.patDaten.set(63,aliste);
+		if(Reha.instance.patpanel.aktPatID.equals(xpatintern)){
+			//System.out.println("Länge des patDaten.Arrays = "+Reha.instance.patpanel.patDaten.size());
+			Reha.instance.patpanel.patDaten.set(63,aliste);
 		}
 	}
 	public void arztListeSpeichernString(String aliste,boolean inNeu,String xpatintern){
 		String sets = "aerzte='"+aliste+"'";
 		SqlInfo.aktualisiereSaetze("pat5",sets , "pat_intern='"+xpatintern+"'");
 		//System.out.println("Sets = "+sets +" pat_Intern = "+xpatintern);
-		if(Reha.thisClass.patpanel.aktPatID.equals(xpatintern)){
-			Reha.thisClass.patpanel.patDaten.set(63,aliste);
+		if(Reha.instance.patpanel.aktPatID.equals(xpatintern)){
+			Reha.instance.patpanel.patDaten.set(63,aliste);
 		}
 	}
 
@@ -702,11 +702,11 @@ public class PatientHauptLogic {
                                 public  void run()
 							 	   {
 							 		   try{
-								 		   String titel = "Patient: "+Reha.thisClass.patpanel.patDaten.get(2)+", "+
-						 					Reha.thisClass.patpanel.patDaten.get(3)+" geboren am: "+
-						 					DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4))+" - "+
-						 					"Patienten-ID: "+Reha.thisClass.patpanel.patDaten.get(29);
-								 		   	Reha.thisClass.patpanel.patientInternal.setzeTitel(titel);
+								 		   String titel = "Patient: "+Reha.instance.patpanel.patDaten.get(2)+", "+
+						 					Reha.instance.patpanel.patDaten.get(3)+" geboren am: "+
+						 					DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4))+" - "+
+						 					"Patienten-ID: "+Reha.instance.patpanel.patDaten.get(29);
+								 		   	Reha.instance.patpanel.patientInternal.setzeTitel(titel);
 								 		   	macheAlleHashMaps();
 							 		   }catch(Exception ex){
 							 			   ex.printStackTrace();
@@ -732,7 +732,7 @@ public class PatientHauptLogic {
 						@Override
 						protected Void doInBackground() throws Exception {
 							long zeit = System.currentTimeMillis();
-							while(! Reha.thisClass.patpanel.patDatenOk){
+							while(! Reha.instance.patpanel.patDatenOk){
 								Thread.sleep(20);
 								if(System.currentTimeMillis()-zeit > 10000){
 									JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Rezeptdaten");
@@ -925,8 +925,8 @@ public class PatientHauptLogic {
 
 	public void datenHolen(String patint){
 		try{
-			Reha.thisClass.patpanel.patDatenOk = false;
-			Reha.thisClass.patpanel.patDaten = SqlInfo.holeSatz("pat5"," * ", "PAT_INTERN ='"+patint+"'", Arrays.asList(new String[] {}) );
+			Reha.instance.patpanel.patDatenOk = false;
+			Reha.instance.patpanel.patDaten = SqlInfo.holeSatz("pat5"," * ", "PAT_INTERN ='"+patint+"'", Arrays.asList(new String[] {}) );
 			String stmt = "select id from rgaffaktura where roffen > '0' and pat_intern = '"+patint+"' LIMIT 1";
 
 			if(SqlInfo.holeFelder(stmt).size() > 0){
@@ -935,39 +935,39 @@ public class PatientHauptLogic {
 				Reha.bRGAFoffen = false;
 			}
 
-			//System.out.println("Größe der Daten = "+Reha.thisClass.patpanel.patDaten.size());
-			if(Reha.thisClass.patpanel.patDaten.size() >= 71){
-				if( (Reha.thisClass.patpanel.patDaten.get(57)+Reha.thisClass.patpanel.patDaten.get(58)+Reha.thisClass.patpanel.patDaten.get(59)+
-						Reha.thisClass.patpanel.patDaten.get(60)+Reha.thisClass.patpanel.patDaten.get(61)+Reha.thisClass.patpanel.patDaten.get(62)).contains("T")){
+			//System.out.println("Größe der Daten = "+Reha.instance.patpanel.patDaten.size());
+			if(Reha.instance.patpanel.patDaten.size() >= 71){
+				if( (Reha.instance.patpanel.patDaten.get(57)+Reha.instance.patpanel.patDaten.get(58)+Reha.instance.patpanel.patDaten.get(59)+
+						Reha.instance.patpanel.patDaten.get(60)+Reha.instance.patpanel.patDaten.get(61)+Reha.instance.patpanel.patDaten.get(62)).contains("T")){
 					Reha.bHatMerkmale=true;
 				}else{
 					Reha.bHatMerkmale=false;
 				}
 
-				if(Reha.thisClass.patpanel.patDaten.get(65).equals("")){
-					Reha.thisClass.patpanel.pmemo[0].setText("");
+				if(Reha.instance.patpanel.patDaten.get(65).equals("")){
+					Reha.instance.patpanel.pmemo[0].setText("");
 				}else{
-					Reha.thisClass.patpanel.pmemo[0].setText(Reha.thisClass.patpanel.patDaten.get(65));
+					Reha.instance.patpanel.pmemo[0].setText(Reha.instance.patpanel.patDaten.get(65));
 				}
-				if(Reha.thisClass.patpanel.patDaten.get(64).equals("")){
-					Reha.thisClass.patpanel.pmemo[1].setText("");
+				if(Reha.instance.patpanel.patDaten.get(64).equals("")){
+					Reha.instance.patpanel.pmemo[1].setText("");
 				}else{
-					Reha.thisClass.patpanel.pmemo[1].setText(Reha.thisClass.patpanel.patDaten.get(64));
+					Reha.instance.patpanel.pmemo[1].setText(Reha.instance.patpanel.patDaten.get(64));
 				}
-				Reha.thisClass.patpanel.autoPatid = Integer.parseInt(Reha.thisClass.patpanel.patDaten.get(66));
-				Reha.thisClass.patpanel.aid = StringTools.ZahlTest(Reha.thisClass.patpanel.patDaten.get(67));
-				Reha.thisClass.patpanel.kid = StringTools.ZahlTest(Reha.thisClass.patpanel.patDaten.get(68));
-				Reha.thisClass.patpanel.patDatenOk = true;
-				Reha.thisClass.patpanel.getStammDaten().parseHTML(true);
+				Reha.instance.patpanel.autoPatid = Integer.parseInt(Reha.instance.patpanel.patDaten.get(66));
+				Reha.instance.patpanel.aid = StringTools.ZahlTest(Reha.instance.patpanel.patDaten.get(67));
+				Reha.instance.patpanel.kid = StringTools.ZahlTest(Reha.instance.patpanel.patDaten.get(68));
+				Reha.instance.patpanel.patDatenOk = true;
+				Reha.instance.patpanel.getStammDaten().parseHTML(true);
 
 			}else{
 				JOptionPane.showMessageDialog(null, "Fehler beim Einlesen der Patientendaten");
-				Reha.thisClass.patpanel.patDatenOk = false;
-				Reha.thisClass.patpanel.getStammDaten().parseHTML(false);
+				Reha.instance.patpanel.patDatenOk = false;
+				Reha.instance.patpanel.getStammDaten().parseHTML(false);
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
-			Reha.thisClass.patpanel.patDatenOk = true;
+			Reha.instance.patpanel.patDatenOk = true;
 		}
 
 	}

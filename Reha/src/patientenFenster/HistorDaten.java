@@ -105,7 +105,7 @@ public class HistorDaten extends JXPanel{
 				try{
 				
 				vecaktrez = SqlInfo.holeSatz("lza", " * ", "id = '"+xsid+"'", Arrays.asList(new String[] {}) );
-				Reha.thisClass.patpanel.vecakthistor = vecaktrez;
+				Reha.instance.patpanel.vecakthistor = vecaktrez;
 				String stest = StringTools.NullTest(vecaktrez.get(43));
 				String einzeln = StringTools.NullTest(vecaktrez.get(61));
 
@@ -301,8 +301,8 @@ public class HistorDaten extends JXPanel{
 		reznum.addMouseListener(new MouseAdapter() {
 		    @Override
             public void mousePressed(MouseEvent e) {
-		    	draghandler.setText(Reha.thisClass.patpanel.patDaten.get(0).substring(0,1)+
-		    			"-"+Reha.thisClass.patpanel.patDaten.get(2)+","+Reha.thisClass.patpanel.patDaten.get(3)+"°"+
+		    	draghandler.setText(Reha.instance.patpanel.patDaten.get(0).substring(0,1)+
+		    			"-"+Reha.instance.patpanel.patDaten.get(2)+","+Reha.instance.patpanel.patDaten.get(3)+"°"+
 		    			reznum.getText()+"°"+rezlabs[14].getText()
 		    			);
 		      JComponent c = draghandler;

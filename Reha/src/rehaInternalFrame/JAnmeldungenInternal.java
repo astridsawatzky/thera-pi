@@ -30,11 +30,11 @@ public class JAnmeldungenInternal extends JRehaInternal implements RehaEventList
 	}
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
-		//System.out.println("Lösche AnmeldungsInternal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
+		//System.out.println("Lösche AnmeldungsInternal von Desktop-Pane = "+Reha.instance.desktops[this.desktop]);
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		//nächsten JInternalFrame aktivieren
-		Reha.thisClass.aktiviereNaechsten(this.desktop);		
+		Reha.instance.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
 		((Anmeldungen)this.inhalt).doAufraeumen();
@@ -55,7 +55,7 @@ public class JAnmeldungenInternal extends JRehaInternal implements RehaEventList
             public  void run()
 		 	   {
 				AktiveFenster.loescheFenster(name);
-				Reha.thisClass.progLoader.loescheAnmeldungen();
+				Reha.instance.progLoader.loescheAnmeldungen();
 		 	   }
 		});
 

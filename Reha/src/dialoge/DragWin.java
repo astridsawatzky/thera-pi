@@ -7,7 +7,7 @@ import java.awt.event.MouseAdapter;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import hauptFenster.Cursors;
+import gui.Cursors;
 
 public class DragWin extends MouseAdapter{
 	public int clickX;
@@ -22,7 +22,7 @@ public class DragWin extends MouseAdapter{
 	public Cursor csesize = new Cursor(Cursor.SE_RESIZE_CURSOR);  //  @jve:decl-index=0:
 	public Cursor cssize = new Cursor(Cursor.S_RESIZE_CURSOR);  //  @jve:decl-index=0:
 	public Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR);  //  @jve:decl-index=0:
-	public Cursor cdefault = Reha.thisClass.normalCursor;  //  @jve:decl-index=0:
+	public Cursor cdefault = Reha.instance.normalCursor;  //  @jve:decl-index=0:
 	*/
 	public boolean insize;
 

@@ -39,24 +39,24 @@ public class PatTools {
 		try{
 			//int lang = SystemConfig.hmAdrPDaten.hashCode();
 			////System.out.println(lang);
-			//SystemConfig.hmAdrPDaten.put("<Padr1>", Reha.thisClass.patpanel.patDaten.get(0));
-			String anrede = StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(0));
+			//SystemConfig.hmAdrPDaten.put("<Padr1>", Reha.instance.patpanel.patDaten.get(0));
+			String anrede = StringTools.EGross(Reha.instance.patpanel.patDaten.get(0));
 			if(anrede.toUpperCase().equals("HERR")){
 				isherr = true;
 			}
-			String titel =  StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(1));
-			String vorname =  StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(3));
-			String nachname = StringTools.EGross(StringTools.EscapedDouble(Reha.thisClass.patpanel.patDaten.get(2)));
+			String titel =  StringTools.EGross(Reha.instance.patpanel.patDaten.get(1));
+			String vorname =  StringTools.EGross(Reha.instance.patpanel.patDaten.get(3));
+			String nachname = StringTools.EGross(StringTools.EscapedDouble(Reha.instance.patpanel.patDaten.get(2)));
 			
 			if(nachname.trim().equals("") && vorname.trim().equals("")){
 				JOptionPane.showMessageDialog(null, "Ausgewählter Patient hat weder Vor- noch Nachname!!!\n+Zifix 'luja");
 				return;
 			}
 			
-			//String nachname =  StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(2));
-			String strasse = StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(21));
-			String plzort = Reha.thisClass.patpanel.patDaten.get(23)+" "+StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(24));
-			String geboren = DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4));
+			//String nachname =  StringTools.EGross(Reha.instance.patpanel.patDaten.get(2));
+			String strasse = StringTools.EGross(Reha.instance.patpanel.patDaten.get(21));
+			String plzort = Reha.instance.patpanel.patDaten.get(23)+" "+StringTools.EGross(Reha.instance.patpanel.patDaten.get(24));
+			String geboren = DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4));
 			String zeile1 = "";
 			String zeile2 = "";
 			String zeile3 = "";
@@ -122,14 +122,14 @@ public class PatTools {
 			SystemConfig.hmAdrPDaten.put("<Pnname>", nachname);
 			SystemConfig.hmAdrPDaten.put("<Pvname>", vorname);		
 					
-			SystemConfig.hmAdrPDaten.put("<Ptelp>", Reha.thisClass.patpanel.patDaten.get(18));
-			SystemConfig.hmAdrPDaten.put("<Ptelg>", Reha.thisClass.patpanel.patDaten.get(19));
-			SystemConfig.hmAdrPDaten.put("<Ptelmob>", Reha.thisClass.patpanel.patDaten.get(20));
-			//SystemConfig.hmAdrPDaten.put("<Pfax>", Reha.thisClass.patpanel.patDaten.get(21));
-			SystemConfig.hmAdrPDaten.put("<Pemail>", Reha.thisClass.patpanel.patDaten.get(50));
+			SystemConfig.hmAdrPDaten.put("<Ptelp>", Reha.instance.patpanel.patDaten.get(18));
+			SystemConfig.hmAdrPDaten.put("<Ptelg>", Reha.instance.patpanel.patDaten.get(19));
+			SystemConfig.hmAdrPDaten.put("<Ptelmob>", Reha.instance.patpanel.patDaten.get(20));
+			//SystemConfig.hmAdrPDaten.put("<Pfax>", Reha.instance.patpanel.patDaten.get(21));
+			SystemConfig.hmAdrPDaten.put("<Pemail>", Reha.instance.patpanel.patDaten.get(50));
 			SystemConfig.hmAdrPDaten.put("<Ptitel>", titel);
-			SystemConfig.hmAdrPDaten.put("<Pid>", Reha.thisClass.patpanel.patDaten.get(66));
-			SystemConfig.hmAdrPDaten.put("<Pvnummer>", Reha.thisClass.patpanel.patDaten.get(16));
+			SystemConfig.hmAdrPDaten.put("<Pid>", Reha.instance.patpanel.patDaten.get(66));
+			SystemConfig.hmAdrPDaten.put("<Pvnummer>", Reha.instance.patpanel.patDaten.get(16));
 		}catch(Exception ex){
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(null,"Fehler beim zusammenstellen der Patienten HashMap");

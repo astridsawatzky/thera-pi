@@ -68,8 +68,8 @@ import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.PatStammEventListener;
+import gui.Cursors;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rehaInternalFrame.JAbrechnungInternal;
@@ -552,7 +552,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					new SwingWorker<Void,Void>(){
 						@Override
 						protected Void doInBackground() throws Exception {
-							Reha.thisClass.progressStarten(true);
+							Reha.instance.progressStarten(true);
 							return null;
 						}
 					}.execute();
@@ -571,7 +571,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 
 					kassenBaumLoeschen();
 					if(vecKassen.size() <= 0){
-						Reha.thisClass.progressStarten(false);
+						Reha.instance.progressStarten(false);
 						return null;
 					}
 					treeKasse.setEnabled(true);
@@ -635,7 +635,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					ex.printStackTrace();
 				}
 				Reha.getThisFrame().setCursor(Cursors.cdefault);
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				return null;
 			}
 		}.execute();
@@ -705,10 +705,10 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	private void doKassenTreeAuswerten(KnotenObjekt node){
 			//Rezept ausgewählt
 			setCursor(Cursors.wartenCursor);
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			try{
 				if(! this.abrRez.setNewRez(node.rez_num,node.fertig,aktDisziplin) ){
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 					setCursor(Cursors.normalCursor);
 					JOptionPane.showMessageDialog(null,"Rezept konnte nicht ausgewertet werden");
 					return;
@@ -721,7 +721,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
                 public void run(){
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 				}
 			});
 
@@ -831,7 +831,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				protected Void doInBackground() throws Exception {
 					try{
 						int lang = xaktKasse.getChildCount();
-						Reha.thisClass.progressStarten(true);
+						Reha.instance.progressStarten(true);
 						getInstance().setCursor(Cursors.wartenCursor);
 						for(int i = 0; i < lang;i++){
 							if( ((JXTTreeNode)xaktKasse.getChildAt(i)).knotenObjekt.fertig ){
@@ -840,7 +840,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 							}
 						}
 						setHtmlLinksUnten(lang,kontrollierteRezepte);
-						Reha.thisClass.progressStarten(false);
+						Reha.instance.progressStarten(false);
 						getInstance().setCursor(Cursors.cdefault);
 					}catch(Exception ex){
 						ex.printStackTrace();
@@ -921,7 +921,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			abrDlg.setVisible(false);
 			abrDlg.dispose();
 			abrDlg = null;
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			JOptionPane.showMessageDialog(null, "Keine Kasse für die Abrechnung ausgewählt!");
 			return;
 		}
@@ -929,7 +929,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			abrDlg.setVisible(false);
 			abrDlg.dispose();
 			abrDlg = null;
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			JOptionPane.showMessageDialog(null, "Für die ausgewählte Kasse sind keine Rezepte zur Abrechnung freigegeben!");
 			return;
 
@@ -959,7 +959,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		kassenIKs = SqlInfo.holeFelder(cmd);
 		////System.out.println(cmd);
 		if(kassenIKs.size()<=0){
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			abrDlg.setVisible(false);
 			abrDlg.dispose();
 			abrDlg = null;
@@ -1006,7 +1006,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 				"\n\n Bitte geben Sie die Emailadresse von Hand ein");
 				Object ret = JOptionPane.showInputDialog(null, "Geben Sie bitte die Emailadresse der Datenannahmestelle ein","");
 				if(ret == null){
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 					abrDlg.setVisible(false);
 					abrDlg.dispose();
 					abrDlg = null;
@@ -1065,7 +1065,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		/************************************************/
 		aktDfue = StringTools.fuelleMitZeichen(Integer.toString(SqlInfo.erzeugeNummerMitMax("dfue", 99999)), "0", true, 5);
 		if(aktRechnung.equals("-1")){
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			abrDlg.setVisible(false);
 			abrDlg.dispose();
 			abrDlg = null;
@@ -1126,7 +1126,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		if(Reha.vollbetrieb && abrechnungsModus.equals(ABR_MODE_302)){
 			PreparedStatement ps = null;
 			try {
-				ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(
+				ps = (PreparedStatement) Reha.instance.conn.prepareStatement(
 				    "insert into edifact (r_nummer, r_datum,r_edifact) VALUES (?,?,?)");
 			    ps.setString(1, aktRechnung);
 			    ps.setString(2, DatFunk.sDatInSQL(DatFunk.sHeute()));
@@ -1172,7 +1172,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 					String message = "<html>Auf Ihrem System ist keine (ITSG) Zertifikatsdatenbank vorhanden.<br>"+
 					"Eine Verschlüsselung gemäß §302 SGB V kann daher nicht durchgeführt werden.<br><br>"+
 					"Melden Sie sich im Forum <a href='http://www.thera-pi.org'>www.Thera-Pi.org</a> und fragen Sie nach dem<br>Verschlüsseler <b>'Nebraska'</b></html>";
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 					JOptionPane.showMessageDialog(null, message);
 
 				}else{
@@ -1183,7 +1183,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 
 			    if(encryptedSize < 0){
 			    	JOptionPane.showMessageDialog(null, "Es ist ein Fehler in der Verschlüsselung aufgetreten!");
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 					abrDlg.setVisible(false);
 					abrDlg.dispose();
 					abrDlg = null;
@@ -1240,13 +1240,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			abrDlg.setzeLabel("organisiere Abrechnungsprogramm");
 		}
 		doLoescheRezepteAusTree();
-		Reha.thisClass.progressStarten(false);
+		Reha.instance.progressStarten(false);
 		abrDlg.setVisible(false);
 		abrDlg.dispose();
 		abrDlg = null;
 		}catch(Exception ex){
 			if(abrDlg != null){
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				abrDlg.setVisible(false);
 				abrDlg.dispose();
 				abrDlg = null;
@@ -1270,7 +1270,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	/********************************************************************/
 	private void doDlgAbort(){
 		if(abrDlg != null){
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			abrDlg.setVisible(false);
 			abrDlg.dispose();
 			abrDlg = null;
@@ -1348,7 +1348,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		String aktiverPatient = "";
 		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 		if(patient != null){
-			aktiverPatient = Reha.thisClass.patpanel.aktPatID;
+			aktiverPatient = Reha.instance.patpanel.aktPatID;
 		}
 
 		Vector<String> feldNamen = SqlInfo.holeFeldNamen("verordn",true,Arrays.asList(new String[] {"id"}) );
@@ -1408,7 +1408,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 			SqlInfo.sqlAusfuehren("delete from volle where rez_nr='"+delrez+"'");
 			if(aktiverPatient.equals(abgerechnetePatienten.get(i2)) ){
 				posteAktualisierung(aktiverPatient.toString());
-				//Reha.thisClass.patpanel.aktRezept.setzeKarteiLasche();
+				//Reha.instance.patpanel.aktRezept.setzeKarteiLasche();
 			}
 
 
@@ -1605,7 +1605,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		kassenIKs = SqlInfo.holeFelder(cmd);
 		////System.out.println(cmd);
 		if(kassenIKs.size()<=0){
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			abrDlg.setVisible(false);
 			abrDlg.dispose();
 			abrDlg = null;

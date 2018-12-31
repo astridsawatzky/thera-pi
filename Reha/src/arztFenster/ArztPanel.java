@@ -95,7 +95,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 		this.jry = jry;
 
 		addFocusListener(this);
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("ArztPanel"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("ArztPanel"));
 
 
 		setLayout(new BorderLayout());

@@ -33,8 +33,8 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import gui.Cursors;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import rehaInternalFrame.JAnmeldungenInternal;
 import stammDatenTools.RezTools;
@@ -229,7 +229,7 @@ public class Anmeldungen extends JXPanel{
 									try{
 										setCursor(Cursors.wartenCursor);
 										/*
-										setCursor(Reha.thisClass.wartenCursor);
+										setCursor(Reha.instance.wartenCursor);
 										fortschrittDlg = new FortschrittDlg();
 										fortschrittDlg.setzeLabel("Ermittle Rezeptanzahl");
 										fortschrittDlg.setVisible(true);
@@ -283,16 +283,16 @@ public class Anmeldungen extends JXPanel{
 		//System.out.println("Hole Daten von Patient "+pat_intern+" Rezept "+reznum);
 		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 		if(patient != null){
-			if(Reha.thisClass.patpanel.aktPatID.equals(pat_intern.trim())){
-				Reha.thisClass.patpanel.aktRezept.holeRezepte(pat_intern.trim(), reznum);
-				//Reha.thisClass.patpanel.aktRezept.holeRezepte(pat_intern.trim(), reznum);
+			if(Reha.instance.patpanel.aktPatID.equals(pat_intern.trim())){
+				Reha.instance.patpanel.aktRezept.holeRezepte(pat_intern.trim(), reznum);
+				//Reha.instance.patpanel.aktRezept.holeRezepte(pat_intern.trim(), reznum);
 			}else{
 				posteAktualisierung(pat_intern,reznum);				
 			}
-			//Reha.thisClass.patpanel.aktRezept.holeRezepte(pat_intern, reznum);
+			//Reha.instance.patpanel.aktRezept.holeRezepte(pat_intern, reznum);
 			return;
 		}else{
-			Reha.thisClass.progLoader.ProgPatientenVerwaltung(0);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(0);
 			long zeit = System.currentTimeMillis();
 			while((patient = AktiveFenster.getFensterAlle("PatientenVerwaltung"))==null){
 				try {
@@ -304,12 +304,12 @@ public class Anmeldungen extends JXPanel{
 					return;
 				}
 			}
-			if(Reha.thisClass.patpanel.aktPatID.equals(pat_intern.trim())){
-				Reha.thisClass.patpanel.aktRezept.holeRezepte(pat_intern.trim(), reznum);
+			if(Reha.instance.patpanel.aktPatID.equals(pat_intern.trim())){
+				Reha.instance.patpanel.aktRezept.holeRezepte(pat_intern.trim(), reznum);
 			}else{
 				posteAktualisierung(pat_intern,reznum);				
 			}
-			//Reha.thisClass.patpanel.aktRezept.holeRezepte(pat_intern, reznum);
+			//Reha.instance.patpanel.aktRezept.holeRezepte(pat_intern, reznum);
 			return;
 		}
 	}

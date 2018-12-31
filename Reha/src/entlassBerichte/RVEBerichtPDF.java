@@ -46,7 +46,7 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import stammDatenTools.ArztTools;
@@ -110,7 +110,7 @@ public class RVEBerichtPDF {
 	private void doRVVorschau(boolean vorschau,int[] versionen){
 		//System.out.println("Vorschau = "+vorschau);
 		boolean geklappt = false;
-		Reha.thisClass.progressStarten(true);
+		Reha.instance.progressStarten(true);
 		File ft = new File(tempPfad+"EBfliesstext.pdf");
 		if(! ft.exists()){
 			JOptionPane.showMessageDialog(null, "<html>Fließtext noch nicht aufbereitet!<br>"+
@@ -178,7 +178,7 @@ public class RVEBerichtPDF {
 					}
 				}.execute();
 			}
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 
 			return;
 		//Keine Vorschau direkt drucken***************************/
@@ -190,10 +190,10 @@ public class RVEBerichtPDF {
 					protected Void doInBackground() throws Exception {
 						try{
 							starteRVDruck(exemplare);
-							Reha.thisClass.progressStarten(false);
+							Reha.instance.progressStarten(false);
 						}catch(Exception ex){
 							ex.printStackTrace();
-							Reha.thisClass.progressStarten(false);
+							Reha.instance.progressStarten(false);
 						}
 						return null;
 					}
@@ -204,10 +204,10 @@ public class RVEBerichtPDF {
 					protected Void doInBackground() throws Exception {
 						try{
 							starteGKVDruck(exemplare,false);
-							Reha.thisClass.progressStarten(false);
+							Reha.instance.progressStarten(false);
 						}catch(Exception ex){
 							ex.printStackTrace();
-							Reha.thisClass.progressStarten(false);
+							Reha.instance.progressStarten(false);
 						}
 						return null;
 					}
@@ -224,7 +224,7 @@ public class RVEBerichtPDF {
 			if(exemplare[3] > 0){
 				doArztAuswaehlen(eltern);
 				if(eltern.aerzte.length > 0){
-					Reha.thisClass.progressStarten(true);
+					Reha.instance.progressStarten(true);
 					String id = SystemConfig.hmAdrADaten.get("<Aid>");
 					for(int i = 0; i < eltern.aerzte.length;i++){
 						////System.out.println("***********Mach HashMap für Arzt "+eltern.aerzte[i]);
@@ -298,7 +298,7 @@ public class RVEBerichtPDF {
 
 					}
 					Reha.getThisFrame().setCursor(Cursors.normalCursor);
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 					ArztTools.constructArztHMap(id);
 				}
 			}
@@ -363,7 +363,7 @@ public class RVEBerichtPDF {
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);
 		String line;
-		 Reha.thisClass.progressStarten(false);
+		 Reha.instance.progressStarten(false);
        while ((line = br.readLine()) != null) {
          //System.out.println("Lade Adobe "+line);
        }
@@ -1787,7 +1787,7 @@ public class RVEBerichtPDF {
 		try {
 			Runtime.getRuntime().exec(xcmd);
 			//System.out.println(xcmd);
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1799,7 +1799,7 @@ public class RVEBerichtPDF {
 				try {
 					Runtime.getRuntime().exec(xcmd);
 					//System.out.println(xcmd);
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 				} catch (IOException e) {
 					
 					e.printStackTrace();

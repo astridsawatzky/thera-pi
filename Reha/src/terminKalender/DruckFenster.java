@@ -63,7 +63,7 @@ import emailHandling.EmailSendenExtern;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
@@ -430,7 +430,7 @@ public void actionPerformed(ActionEvent arg0) {
 				String altname = pliste.getValueAt(selected, 8).toString();
 				String altrezept = pliste.getValueAt(selected, 9).toString();
 				////System.out.println("TerminAusmustern = "+tagundstart+"/"+altdauer+"/"+altbehandler+"/"+altname+"/"+altrezept);
-				Reha.thisClass.terminpanel.terminAusmustern(tagundstart,altdauer,altbehandler,altname,altrezept);
+				Reha.instance.terminpanel.terminAusmustern(tagundstart,altdauer,altbehandler,altname,altrezept);
 			}
 			int reihenselekt = pliste.getSelectedRow();
 			int realindex = pliste.convertRowIndexToModel(reihenselekt);
@@ -517,7 +517,7 @@ public static void buttonsEinschalten(){
 
 private boolean satzSperrenUndLoeschen(int realindex){
 	boolean ret=false;
-	Reha.thisClass.terminpanel.setUpdateVerbot(true);
+	Reha.instance.terminpanel.setUpdateVerbot(true);
 	String behandlernum = (termine.get(realindex)[6].length()==1 ? "0"+termine.get(realindex)[6]+"BEHANDLER" : termine.get(realindex)[6]+"BEHANDLER");
 	String sdatum = termine.get(realindex)[1];
 	String sstmt = "select * from flexlock where sperre = '"+behandlernum+sdatum+"'";
@@ -543,12 +543,12 @@ private boolean satzSperrenUndLoeschen(int realindex){
 	        @Override
             public  void run()
            	   {
-	        	Reha.thisClass.terminpanel.aktualisieren();
+	        	Reha.instance.terminpanel.aktualisieren();
            	   }
 		});
 	}
 	//mm
-	Reha.thisClass.terminpanel.setUpdateVerbot(false);
+	Reha.instance.terminpanel.setUpdateVerbot(false);
 	return ret;
 }
 
@@ -1159,7 +1159,7 @@ final class sendeTermine extends Thread{
 		ResultSet rs = null;
 		String sergebnis = "";
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 				rs = stmt.executeQuery(exStatement);
@@ -1235,7 +1235,7 @@ final class druckListeSperren{
 		String sergebnis = "";
 		//boolean gesperrt = false;
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 				rs = stmt.executeQuery(exStatement[0]);
@@ -1290,7 +1290,7 @@ final class druckListeSperren{
 		Statement stmt = null;
 		boolean boolergebnis = false;
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 				boolergebnis = stmt.execute(exStatement);

@@ -174,7 +174,7 @@ public class RtaWissen extends JXPanel implements KeyListener,ComponentListener,
 public void FensterSchliessen(String welches){
 	//System.out.println("Eltern-->"+this.getParent().getParent().getParent().getParent().getParent());
 	//webBrowser.dispose();
-	//Reha.thisClass.TPschliessen(setOben,(Object) this.getParent().getParent().getParent().getParent().getParent(),welches);
+	//Reha.instance.TPschliessen(setOben,(Object) this.getParent().getParent().getParent().getParent().getParent(),welches);
 }
 public void Navigiere(String url){
 	//System.out.println("Navigiere zu "+url);

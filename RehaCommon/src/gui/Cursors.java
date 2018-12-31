@@ -1,4 +1,4 @@
-package hauptFenster;
+package gui;
 
 import java.awt.Cursor;
 

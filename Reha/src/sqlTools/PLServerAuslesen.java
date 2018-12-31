@@ -13,7 +13,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 
 

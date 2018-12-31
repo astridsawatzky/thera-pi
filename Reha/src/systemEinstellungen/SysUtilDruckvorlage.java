@@ -51,7 +51,7 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.printing.IPrinter;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import hilfsFenster.EmailText;
 
@@ -102,7 +102,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 		////System.out.println("Aufruf SysUtilDruckvorlage");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	 	/****/
 		services = PrintServiceLookup.lookupPrintServices(null, null);
@@ -744,12 +744,12 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 					
 					JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 					e.printStackTrace();
-					thisClass.setCursor(Reha.thisClass.normalCursor);
+					thisClass.setCursor(Reha.instance.normalCursor);
 				}
 		        //Selektion durch eigenen Text ersetzen
 		        textRanges[0].setText(patname);
 			}else{
-				thisClass.setCursor(Reha.thisClass.normalCursor);
+				thisClass.setCursor(Reha.instance.normalCursor);
 				JOptionPane.showMessageDialog (null, "Suche nach ^Name^ war erfolglos");				
 			}
 			*/
@@ -859,7 +859,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
 							
 							JOptionPane.showMessageDialog(null, "Druckvorlage und aktuelle Definition passen nicht zusammen");
 							e.printStackTrace();
-							thisClass.setCursor(Reha.thisClass.normalCursor);
+							thisClass.setCursor(Reha.instance.normalCursor);
 						}
 				        textRanges[0].setText(patname);
 					}

@@ -77,7 +77,7 @@ import ag.ion.noa.NOAException;
 import ag.ion.noa.frame.ILayoutManager;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
@@ -439,7 +439,7 @@ public class ArztBausteine extends JDialog implements WindowListener{
 			int bausteine = 0;
 			bausteinmod.setRowCount(0);
 			try {
-				stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				            ResultSet.CONCUR_UPDATABLE );
 			} catch (SQLException e) {
 				e.printStackTrace();

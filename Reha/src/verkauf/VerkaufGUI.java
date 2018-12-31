@@ -637,18 +637,18 @@ public class VerkaufGUI extends JXPanel{
 	
 	private void rechnungEnde() {
 		if(verkauf.getAnzahlPositionen() != 0) {
-		if(  ((Reha.thisClass.patpanel != null) && (Reha.thisClass.patpanel.patDaten != null) && rbuts[0].isSelected()) || 
-				(Reha.thisClass.kassenpanel != null && rbuts[1].isSelected()) ) {
+		if(  ((Reha.instance.patpanel != null) && (Reha.instance.patpanel.patDaten != null) && rbuts[0].isSelected()) || 
+				(Reha.instance.kassenpanel != null && rbuts[1].isSelected()) ) {
 			String name = null,vorname=null,adresse=null,plz=null,ort=null,anrede=null;
 			int patid = -1;
 			if(rbuts[0].isSelected()){
-				name = StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(2)) ;
-				vorname = StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(3));
-				adresse = StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(21));
-				plz = Reha.thisClass.patpanel.patDaten.get(23); 
-				ort = StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(24));
-				anrede = StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(0));
-				patid = Integer.parseInt(Reha.thisClass.patpanel.patDaten.get(29));
+				name = StringTools.EGross(Reha.instance.patpanel.patDaten.get(2)) ;
+				vorname = StringTools.EGross(Reha.instance.patpanel.patDaten.get(3));
+				adresse = StringTools.EGross(Reha.instance.patpanel.patDaten.get(21));
+				plz = Reha.instance.patpanel.patDaten.get(23); 
+				ort = StringTools.EGross(Reha.instance.patpanel.patDaten.get(24));
+				anrede = StringTools.EGross(Reha.instance.patpanel.patDaten.get(0));
+				patid = Integer.parseInt(Reha.instance.patpanel.patDaten.get(29));
 			}else{
 				vorname = SystemConfig.hmAdrKDaten.get("<Kadr1>");
 				name = (! SystemConfig.hmAdrKDaten.get("<Kadr2>").trim().equals("") ? "\r"+SystemConfig.hmAdrKDaten.get("<Kadr2>") : "");

@@ -75,7 +75,7 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rehaInternalFrame.JKasseInternal;
@@ -123,7 +123,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 	     MattePainter mp = new MattePainter(p);
 	     setBackgroundPainter(new CompoundPainter(mp));
 		*/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("KassenPanel"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("KassenPanel"));
 		setLayout(new BorderLayout());
 		add(getContent(),BorderLayout.CENTER);
 		if(!kid.equals("")){
@@ -1301,7 +1301,7 @@ class HoleKassen{
 	//sstmt = "select kuerzel,kassen_nam1,kassen_nam2,ort,telefon,fax,ik_kasse,id from kass_adr ORDER BY kuerzel";
 
 	try {
-		stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+		stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 	} catch (SQLException e) {
 		
@@ -1367,7 +1367,7 @@ class HoleText{
 	sstmt = "select kmemo from kass_adr where id = '"+id+"'";
 
 	try {
-		stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+		stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 		            ResultSet.CONCUR_UPDATABLE );
 	} catch (SQLException e) {
 		

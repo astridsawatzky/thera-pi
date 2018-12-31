@@ -1,8 +1,8 @@
 package verkauf;
 
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import java.util.Vector;
 
@@ -26,7 +26,7 @@ import verkauf.model.Lieferant;
 public class LagerGUI extends JXPanel {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private VerkaufTab owner;
@@ -36,13 +36,13 @@ public class LagerGUI extends JXPanel {
 	private Vector<String> columns;
 	private ArtikelDialog adlg;
 	private JRtaTextField sucheText = new JRtaTextField("nix", false);
-	
+
 	LagerGUI(VerkaufTab owner) {
 		super();
 		this.owner = owner;
-		
+
 		columns = new Vector<String>();
-		
+
 		columns.add("Artikel-ID");
 		columns.add("Beschreibung");
 		columns.add("VK-Preis");
@@ -51,27 +51,27 @@ public class LagerGUI extends JXPanel {
 		columns.add("Lieferant");
 		columns.add("Lagerstand");
 		columns.add("");
-		
+
 		this.setOpaque(false);
 		this.setLayout(new BorderLayout());
 		this.add(getContent(), BorderLayout.CENTER);
 		this.setLastRowSelected();
-		
+
 	}
-	
+
 	private JXPanel getContent() {
 		JXPanel pane = new JXPanel();
 		pane.setOpaque(false);
-		
+
 		String xwerte = "5dlu, p:g, 5dlu";
 		String ywerte = "5dlu, p, 5dlu, p:g, 5dlu";
-		
+
 		FormLayout lay = new FormLayout(xwerte, ywerte);
 		CellConstraints cc = new CellConstraints();
 		pane.setLayout(lay);
-		
+
 		pane.add(this.owner.getToolbar(sucheText), cc.xy(2,2));
-		
+
 		lgmod = new DefaultTableModel();
 		lgmod.setColumnIdentifiers(columns);
 		lgtab = new JXTable(lgmod);
@@ -85,43 +85,27 @@ public class LagerGUI extends JXPanel {
 				setzeTabDaten(Artikel.liefereArtikelDaten());
 				return null;
 			}
-			
+
 		}.execute();
-		
-		lgtab.addMouseListener(new MouseListener() {
-			
+
+		lgtab.addMouseListener(new MouseAdapter() {
+
+
 			@Override
             public void mouseClicked(MouseEvent arg0) {
 				if(arg0.getClickCount() == 2) {
 					owner.aktiviereFunktion(VerkaufTab.edit);
 				}
 			}
-
-			@Override
-			public void mouseEntered(MouseEvent arg0) {
-			}
-
-			@Override
-			public void mouseExited(MouseEvent arg0) {
-			}
-
-			@Override
-			public void mousePressed(MouseEvent arg0) {
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent arg0) {
-			}
-			
 		});
 		jscr = JCompTools.getTransparentScrollPane(lgtab);
 		jscr.validate();
 		pane.add(jscr, cc.xy(2, 4, CellConstraints.FILL, CellConstraints.FILL));
-		
+
 		pane.validate();
 		return pane;
 	}
-	
+
 	public void aktiviereFunktion(int befehl) {
 		if(befehl == VerkaufTab.neu) {
 			doArtikelDialog(-1);
@@ -153,23 +137,15 @@ public class LagerGUI extends JXPanel {
 
 				@Override
 				protected Void doInBackground() throws Exception {
-					setzeTabDaten(Artikel.liefereArtikelDaten());	
+					setzeTabDaten(Artikel.liefereArtikelDaten());
 					setLastRowSelected();
 					return null;
 				}
-				
+
 			}.execute();
-			/*
-			SwingUtilities.invokeLater(new Runnable(){
-				public void run(){
-					setzeTabDaten(Artikel.liefereArtikelDaten());	
-					setLastRowSelected();
-				}
-			});
-			*/
 		}
 	}
-	
+
 	private void setzeZeileNeu(final int id) {
 		final Artikel a = new Artikel(id);
 		final DecimalFormat df = new DecimalFormat("0.00");
@@ -193,11 +169,11 @@ public class LagerGUI extends JXPanel {
 			}
 		}.execute();
 	}
-	
+
 	private void loescheZeile(int row) {
 		lgmod.removeRow(row);
 	}
-	
+
 	private void setzeTabDaten(Vector<Vector<String>> daten) {
 		final Vector<Vector<String>> d = daten;
 		new SwingWorker<Void, Void>() {
@@ -212,13 +188,13 @@ public class LagerGUI extends JXPanel {
 			}
 		}.execute();
 	}
-	
+
 	private void doArtikelDialog(int id) {
 		adlg = new ArtikelDialog(id, this.owner.holePosition(300, 300));
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public void run(){
-				adlg.setzeFocus();				
+				adlg.setzeFocus();
 			}
 		});
 		new SwingWorker<Void,Void>(){
@@ -249,11 +225,11 @@ public class LagerGUI extends JXPanel {
 		//hier sollten die Listener removed werden
 		//anschließend die Listener genullt
 	}
-	
+
 	private void setLastRowSelected() {
 		if(this.lgmod.getRowCount() > 0) {
 			this.lgtab.setRowSelectionInterval(this.lgmod.getRowCount()-1, this.lgmod.getRowCount()-1);
 		}
 	}
-	
+
 }

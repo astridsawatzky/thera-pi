@@ -96,7 +96,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 		((JXTitledPanel)this.getContentPane()).getContentContainer().add(jcc,BorderLayout.CENTER);
 		
 		
-		this.wahl = Reha.thisClass.terminpanel.aktuellesSet();
+		this.wahl = Reha.instance.terminpanel.aktuellesSet();
 		this.jList1.setSelectedIndex(this.wahl);
 		this.validate();
 		

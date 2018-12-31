@@ -66,7 +66,7 @@ public class SysUtilRoogleGruppen extends JXPanel implements ActionListener,KeyL
 		super(new GridLayout(1,1));
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 
 		jscroll = new JScrollPane();

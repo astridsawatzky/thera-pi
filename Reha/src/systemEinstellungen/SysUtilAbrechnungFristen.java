@@ -74,7 +74,7 @@ public class SysUtilAbrechnungFristen extends JXPanel implements KeyListener, Ac
 		hmZuzahlModus = (HashMap<String,Vector<Integer>>) SystemPreislisten.hmZuzahlModus.clone();
 		// hier noch das Email und Bayern-Gedönse rein;
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	    add(getVorlagenSeite(),BorderLayout.CENTER);
 	    add(getKnopfPanel(),BorderLayout.SOUTH);

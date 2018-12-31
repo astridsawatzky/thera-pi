@@ -61,11 +61,11 @@ public class TermineErfassen implements Runnable {
 					JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 					if(patient != null){
 						//System.out.println("in aktualisierung");
-						//System.out.println("angezeigt wird aktuell "+Reha.thisClass.patpanel.aktRezept.rezAngezeigt);
-						if(Reha.thisClass.patpanel.aktRezept.rezAngezeigt.equalsIgnoreCase(scanrez.trim())){
+						//System.out.println("angezeigt wird aktuell "+Reha.instance.patpanel.aktRezept.rezAngezeigt);
+						if(Reha.instance.patpanel.aktRezept.rezAngezeigt.equalsIgnoreCase(scanrez.trim())){
 							try{
 								//System.out.println("Ansicht ist gleich aktuellem Rezept");
-								Reha.thisClass.patpanel.aktRezept.updateEinzelTermine(terminNeu);								
+								Reha.instance.patpanel.aktRezept.updateEinzelTermine(terminNeu);								
 							}catch(Exception ex){
 								JOptionPane.showMessageDialog(null,"Fehler bei der Aktualisierung der Rezeptansicht");
 								ex.printStackTrace();
@@ -94,11 +94,11 @@ public class TermineErfassen implements Runnable {
 					JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 					if(patient != null){
 						//System.out.println("in aktualisierung");
-						//System.out.println("angezeigt wird aktuell "+Reha.thisClass.patpanel.aktRezept.rezAngezeigt);
-						if(Reha.thisClass.patpanel.aktRezept.rezAngezeigt.equalsIgnoreCase(scanrez.trim())){
+						//System.out.println("angezeigt wird aktuell "+Reha.instance.patpanel.aktRezept.rezAngezeigt);
+						if(Reha.instance.patpanel.aktRezept.rezAngezeigt.equalsIgnoreCase(scanrez.trim())){
 							try{
 								//System.out.println("Ansicht ist gleich aktuellem Rezept");
-								Reha.thisClass.patpanel.aktRezept.updateEinzelTermine(sbuftermine.toString());								
+								Reha.instance.patpanel.aktRezept.updateEinzelTermine(sbuftermine.toString());								
 							}catch(Exception ex){
 								JOptionPane.showMessageDialog(null,"Fehler bei der Aktualisierung der Rezeptansicht");
 								ex.printStackTrace();
@@ -283,13 +283,13 @@ public class TermineErfassen implements Runnable {
 						JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 						if(termin != null){
 							int ansicht;
-							if((ansicht = Reha.thisClass.terminpanel.ansicht) == 0){
-								if(Reha.thisClass.terminpanel.getAktuellerTag().equals(DatFunk.sHeute())){
+							if((ansicht = Reha.instance.terminpanel.ansicht) == 0){
+								if(Reha.instance.terminpanel.getAktuellerTag().equals(DatFunk.sHeute())){
 									int iblock = Integer.valueOf(sblock)-1;
-									((ArrayList<Vector<String>>)Reha.thisClass.terminpanel.getDatenVector().get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
-									Reha.thisClass.terminpanel.ViewPanel.repaint();
+									((ArrayList<Vector<String>>)Reha.instance.terminpanel.getDatenVector().get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
+									Reha.instance.terminpanel.ViewPanel.repaint();
 								}else{
-									//System.out.println("Aktueller Tag = "+Reha.thisClass.terminpanel.getAktuellerTag());
+									//System.out.println("Aktueller Tag = "+Reha.instance.terminpanel.getAktuellerTag());
 								}
 							}else{
 								//System.out.println("Ansicht im TK = "+ansicht);
@@ -448,15 +448,15 @@ public class TermineErfassen implements Runnable {
 							JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 							if(termin != null){
 								int ansicht;
-								if((ansicht = Reha.thisClass.terminpanel.ansicht) == 0){
-									if(Reha.thisClass.terminpanel.getAktuellerTag().equals(DatFunk.sHeute())){
+								if((ansicht = Reha.instance.terminpanel.ansicht) == 0){
+									if(Reha.instance.terminpanel.getAktuellerTag().equals(DatFunk.sHeute())){
 										if(!termOk){
 											termOk = true;
 										}
 										int iblock = Integer.valueOf(sblock)-1;
-										((ArrayList<Vector<String>>)Reha.thisClass.terminpanel.getDatenVector().get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
+										((ArrayList<Vector<String>>)Reha.instance.terminpanel.getDatenVector().get(inum)).get(0).set(iblock,copyright+(String)obj[4]);
 									}else{
-										//System.out.println("Aktueller Tag = "+Reha.thisClass.terminpanel.getAktuellerTag());
+										//System.out.println("Aktueller Tag = "+Reha.instance.terminpanel.getAktuellerTag());
 									}
 								}else{
 									//System.out.println("Ansicht im TK = "+ansicht);
@@ -470,7 +470,7 @@ public class TermineErfassen implements Runnable {
 			}
 		}
 		if(termOk){
-			Reha.thisClass.terminpanel.ViewPanel.repaint();			
+			Reha.instance.terminpanel.ViewPanel.repaint();			
 		}
 		////System.out.println("Anzahl zusätzlicher Fundstellen = "+mehrstellen);
 	}

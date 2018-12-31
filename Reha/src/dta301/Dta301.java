@@ -52,7 +52,7 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import rehaInternalFrame.JDta301Internal;
@@ -235,7 +235,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 				}
 				if(cmd.equals("ahbfall")){
 					if(! beginnahbcheck.isSelected()){
-						beginnahbentlass.setText(Reha.thisClass.NULL_DATE);
+						beginnahbentlass.setText(Reha.instance.NULL_DATE);
 						beginnahbentlass.setEnabled(false);
 					}else{
 						beginnahbentlass.setEnabled(true);
@@ -380,7 +380,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 		beginnahbcheck.addActionListener(al);
 		beginnahbcheck.setForeground(Color.BLUE);
 		beginnahbentlass = new JRtaTextField("DATUM",true);
-		beginnahbentlass.setText(Reha.thisClass.NULL_DATE);
+		beginnahbentlass.setText(Reha.instance.NULL_DATE);
 		beginnahbentlass.setEnabled(false);
 		pan.add(beginnahbcheck,cc.xyw(2, 14, 3, CellConstraints.FILL,CellConstraints.FILL));
 		pan.add(beginnahbentlass,cc.xy(4,14));
@@ -721,29 +721,29 @@ public class Dta301 extends JXPanel implements FocusListener {
 			buf.append("</td></tr>");
 			
 			buf.append("<tr><td class=\"spalte1\">");
-			buf.append(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(0).trim())+" "+
-					StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(1).trim()));
+			buf.append(StringTools.EGross(Reha.instance.patpanel.patDaten.get(0).trim())+" "+
+					StringTools.EGross(Reha.instance.patpanel.patDaten.get(1).trim()));
 			buf.append("</td></tr>" );
 			
 			buf.append("<tr><td class=\"spalte3\" align=\"left\">");
-			buf.append("<b><font color=#000000>"+StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(2))+", "+
-					StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(3))+"</font></b>");
+			buf.append("<b><font color=#000000>"+StringTools.EGross(Reha.instance.patpanel.patDaten.get(2))+", "+
+					StringTools.EGross(Reha.instance.patpanel.patDaten.get(3))+"</font></b>");
 			buf.append("</td></tr>" );
 			buf.append("<tr><td class=\"spalte1\" align=\"left\">");
-			buf.append("geb.: "+"<b><font color=#000000>"+DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4))+"</font></b>");
+			buf.append("geb.: "+"<b><font color=#000000>"+DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4))+"</font></b>");
 			buf.append("</td></tr>" );
 			buf.append("<tr><td class=\"spalte1\" align=\"left\">");
-			buf.append(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(21)));
+			buf.append(StringTools.EGross(Reha.instance.patpanel.patDaten.get(21)));
 			buf.append("</td></tr>" );
 			buf.append("<tr><td class=\"spalte1\" align=\"left\">");
-			buf.append(Reha.thisClass.patpanel.patDaten.get(23)+" "+StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(24)));
+			buf.append(Reha.instance.patpanel.patDaten.get(23)+" "+StringTools.EGross(Reha.instance.patpanel.patDaten.get(24)));
 			buf.append("</td></tr>" );
 			
 			buf.append("<tr><td>&nbsp</td></tr>");
 			buf.append("<tr><td class=\"spalte1\" align=\"left\">"+"<img src='file:///"+Path.Instance.getProghome()+"icons/emblem-mail.png' width=52 height=52 border=0>");
 			buf.append("</td></tr>");
 
-			patnummer = String.valueOf(Reha.thisClass.patpanel.patDaten.get(29));
+			patnummer = String.valueOf(Reha.instance.patpanel.patDaten.get(29));
 			if(Integer.parseInt( SqlInfo.holeEinzelFeld("select count(*) from dta301 where pat_intern='"+patnummer+"' and rez_nr='"+reznummer+"' and nachrichtentyp='1'")) <= 0){
 				is301Ok = false;
 				buf.append("<tr><td class=\"spalte1\"><font size=\"+1\" color=#ff0000><b>"+"§301-DTA nicht möglich mit dieser Verordnung");
@@ -787,7 +787,7 @@ public class Dta301 extends JXPanel implements FocusListener {
 							"Entlassmitteilung und Fahrgeldabrechnung","Fahrgeldabrechnung","Bestätigung der Verlängerung",
 							"Unterbrechung (Ende)","Unterbrechung (Beginn und Ende)"};
 					String cmd = "select nachrichttyp,nachrichtdatum,bearbeiter,id,esolname,icr from dtafall where pat_intern='"+
-					String.valueOf(Reha.thisClass.patpanel.patDaten.get(29))+
+					String.valueOf(Reha.instance.patpanel.patDaten.get(29))+
 					"' and rez_nr='"+
 					reznummer+
 					"' order by nachrichtdatum,id";

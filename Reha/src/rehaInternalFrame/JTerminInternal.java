@@ -52,34 +52,34 @@ public class JTerminInternal extends JRehaInternal implements RehaEventListener{
 					String.valueOf("Kalender"));
 		}
 
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		this.removeInternalFrameListener(this);
 		Reha.getThisFrame().requestFocus();
-		Reha.thisClass.aktiviereNaechsten(this.desktop);
+		Reha.instance.aktiviereNaechsten(this.desktop);
 		this.removeAll();
-		////System.out.println("Lösche Termin Internal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
+		////System.out.println("Lösche Termin Internal von Desktop-Pane = "+Reha.instance.desktops[this.desktop]);
 		////System.out.println("Termin-Internal geschlossen***************");
 
 		rEvent.removeRehaEventListener(this);
-		if(Reha.thisClass.terminpanel != null){
+		if(Reha.instance.terminpanel != null){
 			try{
-				Reha.thisClass.terminpanel.db_Aktualisieren.interrupt();
+				Reha.instance.terminpanel.db_Aktualisieren.interrupt();
 			}catch(Exception ex){
 
 			}
 		}
-		if(Reha.thisClass.terminpanel != null){
-			Reha.thisClass.terminpanel = null;
+		if(Reha.instance.terminpanel != null){
+			Reha.instance.terminpanel = null;
 		}
 
-		Reha.thisClass.terminpanel = null;
+		Reha.instance.terminpanel = null;
 		this.nord = null;
 		this.inhalt = null;
 		this.thisContent = null;
 		this.dispose();
 		super.dispose();
 		AktiveFenster.loescheFenster(this.getName());
-		Reha.thisClass.progLoader.loescheTermine();
+		Reha.instance.progLoader.loescheTermine();
 		/*
 		SwingUtilities.invokeLater(new Runnable(){
 		 	   public  void run()

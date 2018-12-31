@@ -153,8 +153,8 @@ public class PatientHauptPanel extends JXPanel{
 		createMouseListeners();
 		createFocusListeners();
 		
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("getTabs2"));
-		//setBackgroundPainter(Reha.thisClass.compoundPainter.get("HauptPanel"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("getTabs2"));
+		//setBackgroundPainter(Reha.instance.compoundPainter.get("HauptPanel"));
 		FormLayout lay = new FormLayout("0dlu,fill:0:grow(0.33),fill:0:grow(0.66)","0dlu,p,fill:0:grow(1.0)");
 		CellConstraints cc = new CellConstraints();
 		setLayout(lay);

@@ -62,7 +62,7 @@ public class HMRCheck {
 		//rezanlage = xrezanlage;
 		rezeptart =xrezeptart;
 		reznummer = xreznr;
-		unter18 = DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)));
+		unter18 = DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
 		if(reznummer.equals("")){
 			neurezept = true;
 		}
@@ -89,7 +89,7 @@ public class HMRCheck {
 		folgerezept = (rezeptart==1);
 		if(reznummer.startsWith("PO") && rezeptart==0){
 			try{
-				 if(Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(3)) > 3){
+				 if(Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(3)) > 3){
 					 JOptionPane.showMessageDialog(null,"Fehler!\nAnzahl der Behandlungen bei Erstverordnung Podologie sind maximal 3 erlaubt!"); 
 					 return false;
 				 }				
@@ -455,8 +455,8 @@ public class HMRCheck {
 			//System.out.println(aktindischl);
 		}
 		
-		if(Reha.thisClass.patpanel != null){
-			patintern = Reha.thisClass.patpanel.patDaten.get(29);
+		if(Reha.instance.patpanel != null){
+			patintern = Reha.instance.patpanel.patDaten.get(29);
 			String stmt = "(select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from verordn  where pat_intern = '"+patintern+"'"+
 						" and rez_nr like '"+diszikurz[disziplin]+"%' and indikatschl = '"+aktindischl+"')"+
 			" union "+ 

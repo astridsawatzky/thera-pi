@@ -203,7 +203,7 @@ public class BlockHandling {
 		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
 		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
 		//TerminFenster.starteUnlock();
-		Reha.thisClass.terminpanel.terminAufnehmen(kollege,block);
+		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
 		return 1;
 	}
 /*****************************************/	
@@ -240,7 +240,7 @@ public class BlockHandling {
 		KalenderBeschreiben kbs = new KalenderBeschreiben();
 		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
 		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.thisClass.terminpanel.terminAufnehmen(kollege,block);
+		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
 		////System.out.println("0="+alteDaten[0]+"1="+alteDaten[1]+"2="+alteDaten[2]+"3="+alteDaten[3]+"4="+alteDaten[4]);
 		//TerminFenster.starteUnlock();
 		return 1;
@@ -285,7 +285,7 @@ public class BlockHandling {
 		KalenderBeschreiben kbs = new KalenderBeschreiben();
 		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
 		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.thisClass.terminpanel.terminAufnehmen(kollege,bloecke);
+		Reha.instance.terminpanel.terminAufnehmen(kollege,bloecke);
 		////System.out.println("0="+alteDaten[0]+"1="+alteDaten[1]+"2="+alteDaten[2]+"3="+alteDaten[3]+"4="+alteDaten[4]);
 		//TerminFenster.starteUnlock();
 		return 1;
@@ -298,8 +298,8 @@ public class BlockHandling {
 		KalenderBeschreiben kbs = new KalenderBeschreiben();
 		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
 		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.thisClass.terminpanel.setAktiverBlock(block);
-		Reha.thisClass.terminpanel.terminAufnehmen(kollege,block);
+		Reha.instance.terminpanel.setAktiverBlock(block);
+		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
 		//TerminFenster.starteUnlock();
 		return 1;
 	}
@@ -351,8 +351,8 @@ public class BlockHandling {
 		KalenderBeschreiben kbs = new KalenderBeschreiben();
 		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
 		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.thisClass.terminpanel.terminAufnehmen(kollege,bloecke-1);
-		Reha.thisClass.terminpanel.setAktiverBlock(bloecke-1);
+		Reha.instance.terminpanel.terminAufnehmen(kollege,bloecke-1);
+		Reha.instance.terminpanel.setAktiverBlock(bloecke-1);
 		return 1;
 	}
 /*****************************************/	
@@ -386,7 +386,7 @@ public class BlockHandling {
 		KalenderBeschreiben kbs = new KalenderBeschreiben();
 		////System.out.println("Vermutlich falsch------>Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
 		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.thisClass.terminpanel.terminAufnehmen(kollege,block);
+		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
 		return 1;
 	}
 	/*****************************************/	
@@ -489,7 +489,7 @@ public class BlockHandling {
 			test2 = datenfeld.getFeld(kollege,1,block-1);//Text
 			if( test1.trim().equals("") && test2.trim().equals("") ){
 				startBlock= block-1;
-				Reha.thisClass.terminpanel.setAktiverBlock(startBlock);
+				Reha.instance.terminpanel.setAktiverBlock(startBlock);
 				//System.out.println("startBlock = "+startBlock);
 				alteDaten[2] = datenfeld.getFeld(kollege,2,block-1);//Start
 			}

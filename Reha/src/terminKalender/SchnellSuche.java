@@ -205,9 +205,9 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener{
 
                 			}
                 		}
-        				if(Reha.thisClass.terminpanel != null){
+        				if(Reha.instance.terminpanel != null){
         					try{
-               					Reha.thisClass.terminpanel.setzeTerminAktuell(ttbl.getValueAt(ttbl.getSelectedRow(), 1).toString(),
+               					Reha.instance.terminpanel.setzeTerminAktuell(ttbl.getValueAt(ttbl.getSelectedRow(), 1).toString(),
             							ttbl.getValueAt(ttbl.getSelectedRow(), 2).toString(),
             							ttbl.getValueAt(ttbl.getSelectedRow(), 5).toString());
                					/*
@@ -547,7 +547,7 @@ final class SuchenInTagen extends Thread{
     public void run(){
 		Vector treadVect = new Vector();
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			for(int i = 0; i<exStatement.length;i++){
 				try{

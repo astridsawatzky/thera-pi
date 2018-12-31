@@ -146,6 +146,7 @@ import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
 import environment.Path;
 import geraeteInit.BarCodeScanner;
+import gui.Cursors;
 import krankenKasse.KassenPanel;
 import kurzAufrufe.KurzAufrufe;
 import logging.Logging;
@@ -228,7 +229,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public UIFSplitPane jSplitRechtsOU = null;
 	public JXTitledPanel jxTitelOben = null;
 	public JXTitledPanel jxTitelUnten = null;
-	public static Reha thisClass;  //  @jve:decl-index=0:
+	public static Reha instance;
 	private static JXFrame thisFrame;
 
 	public static JXFrame getThisFrame() {
@@ -508,7 +509,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		sysConf.SystemInit(2);
 
 		try {
-			UIManager.setLookAndFeel((aktLookAndFeel = SystemConfig.aHauptFenster.get(4)));
+			  aktLookAndFeel = SystemConfig.getLookAndFeel();
+			UIManager.setLookAndFeel(aktLookAndFeel);
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
 		} catch (InstantiationException e1) {
@@ -561,9 +563,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				application.sqlInfo = new SqlInfo();
 				application.sqlInfo.setDieseMaschine(SystemConfig.dieseMaschine);
 				rehaBackImg = new ImageIcon(Path.Instance.getProghome()+"icons/therapieMT1.gif");
-				thisClass = application;
+				instance = application;
 				RehaEventClass rehaEvent = new RehaEventClass();
-			    rehaEvent.addRehaEventListener(thisClass);
+			    rehaEvent.addRehaEventListener(instance);
 				new Thread(new DatenbankStarten()).start();
 				application.getJFrame();
 
@@ -571,25 +573,25 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				Reha.getThisFrame().setIconImage( Toolkit.getDefaultToolkit().getImage( Path.Instance.getProghome()+"icons/Pi_1_0.png" ) );
 
 
-				Reha.thisClass.doCompoundPainter();
-				Reha.thisClass.starteTimer();
+				Reha.instance.doCompoundPainter();
+				Reha.instance.starteTimer();
 				if(SystemConfig.timerdelay > 0){
-					Reha.thisClass.starteNachrichtenTimer();
+					Reha.instance.starteNachrichtenTimer();
 				}
 
 			    SwingUtilities.invokeLater(new Runnable(){
 			    	@Override
                     public void run(){
 			    		try{
-			    			Reha.thisClass.rehaIOServer = new RehaIOServer(6000);
+			    			Reha.instance.rehaIOServer = new RehaIOServer(6000);
 			    			System.out.println("RehaIOServer wurde initialisiert");
 							SystemConfig.AktiviereLog();
 							try{
 								if(SystemConfig.activateSMS){
-									Reha.thisClass.rehaCommServer = new RehaCommServer(Integer.parseInt(SystemConfig.hmSMS.get("COMM")));
+									Reha.instance.rehaCommServer = new RehaCommServer(Integer.parseInt(SystemConfig.hmSMS.get("COMM")));
 								}
 							}catch(NullPointerException ex){
-								Reha.thisClass.rehaCommServer = null;
+								Reha.instance.rehaCommServer = null;
 							}
 			    		}catch(NullPointerException ex){
 			    			System.out.println("RehaCommServer = null");
@@ -652,9 +654,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	private void doCloseEverything(){
 		this.jFrame.removeWindowListener(this);
-		if(Reha.thisClass.conn != null){
+		if(Reha.instance.conn != null){
 			try {
-				Reha.thisClass.conn.close();
+				Reha.instance.conn.close();
 				System.out.println("Datenbankverbindung geschlossen");
 			} catch (SQLException e1) {
 				e1.printStackTrace();
@@ -694,9 +696,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				e3.printStackTrace();
 			}
 		}
-		if(SystemConfig.sReaderAktiv.equals("1") && Reha.thisClass.ocKVK != null){
+		if(SystemConfig.sReaderAktiv.equals("1") && Reha.instance.ocKVK != null){
 			try{
-			Reha.thisClass.ocKVK.TerminalDeaktivieren();
+			Reha.instance.ocKVK.TerminalDeaktivieren();
 			System.out.println("Card-Terminal deaktiviert");
 			}catch(NullPointerException ex){
 
@@ -738,7 +740,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("PatNeuanlage",cp);
+			    Reha.instance.compoundPainter.put("PatNeuanlage",cp);
 				/*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,100);
@@ -747,7 +749,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =       new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("SuchePanel",cp);
+			    Reha.instance.compoundPainter.put("SuchePanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,15);//vorher 45
@@ -756,7 +758,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("ButtonPanel",cp);
+			    Reha.instance.compoundPainter.put("ButtonPanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,40);
@@ -765,7 +767,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("StammDatenPanel",cp);
+			    Reha.instance.compoundPainter.put("StammDatenPanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,100);
@@ -774,7 +776,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("AnredePanel",cp);
+			    Reha.instance.compoundPainter.put("AnredePanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,150);
@@ -783,7 +785,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("HauptPanel",cp);
+			    Reha.instance.compoundPainter.put("HauptPanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,150);
@@ -792,7 +794,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("FliessText",cp);
+			    Reha.instance.compoundPainter.put("FliessText",cp);
 			    /*****************/
 			    start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,150);
@@ -801,7 +803,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("getTabs",cp);
+			    Reha.instance.compoundPainter.put("getTabs",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,450);
@@ -810,7 +812,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("getTabs2",cp);
+			    Reha.instance.compoundPainter.put("getTabs2",cp);
 				/*****************/
 			    start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(350,290);
@@ -819,7 +821,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("RezeptGebuehren",cp);
+			    Reha.instance.compoundPainter.put("RezeptGebuehren",cp);
 			    /*****************/
 			    start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(400,550);
@@ -828,7 +830,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("EBerichtPanel",cp);
+			    Reha.instance.compoundPainter.put("EBerichtPanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 				end = new Point2D.Float(600,350);
@@ -837,7 +839,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("ArztBericht",cp);
+			    Reha.instance.compoundPainter.put("ArztBericht",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(600,750);
@@ -846,7 +848,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("RezNeuanlage",cp);
+			    Reha.instance.compoundPainter.put("RezNeuanlage",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(300,100);
@@ -855,7 +857,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("ScannerUtil",cp);
+			    Reha.instance.compoundPainter.put("ScannerUtil",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,400);
@@ -864,7 +866,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("ArztAuswahl",cp);
+			    Reha.instance.compoundPainter.put("ArztAuswahl",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 				end = new Point2D.Float(0,400);
@@ -873,7 +875,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("KassenAuswahl",cp);
+			    Reha.instance.compoundPainter.put("KassenAuswahl",cp);
 			    /*****************/
 			    start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(900,100);
@@ -882,7 +884,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("KVKRohDaten",cp);
+			    Reha.instance.compoundPainter.put("KVKRohDaten",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(600,550);
@@ -891,7 +893,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("ArztPanel",cp);
+			    Reha.instance.compoundPainter.put("ArztPanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(400,100);
@@ -900,7 +902,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("ArztNeuanlage",cp);
+			    Reha.instance.compoundPainter.put("ArztNeuanlage",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(400,100);
@@ -909,7 +911,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("KasseNeuanlage",cp);
+			    Reha.instance.compoundPainter.put("KasseNeuanlage",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(600,550);
@@ -918,7 +920,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("KassenPanel",cp);
+			    Reha.instance.compoundPainter.put("KassenPanel",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(200,120);
@@ -927,7 +929,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("SuchenSeite",cp);
+			    Reha.instance.compoundPainter.put("SuchenSeite",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(300,270);
@@ -936,7 +938,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("GutachtenWahl",cp);
+			    Reha.instance.compoundPainter.put("GutachtenWahl",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(900,100);
@@ -945,7 +947,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("VorBerichte",cp);
+			    Reha.instance.compoundPainter.put("VorBerichte",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(0,600);
@@ -954,7 +956,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("TextBlock",cp);
+			    Reha.instance.compoundPainter.put("TextBlock",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(200,120);
@@ -963,7 +965,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("TagWahlNeu",cp);
+			    Reha.instance.compoundPainter.put("TagWahlNeu",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(390,180);
@@ -972,7 +974,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p = new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("Zeitfenster",cp);
+			    Reha.instance.compoundPainter.put("Zeitfenster",cp);
 			    /*****************/
 				start = new Point2D.Float(0, 0);
 			    end = new Point2D.Float(400,500);
@@ -981,7 +983,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			    p =  new LinearGradientPaint(start, end, dist, colors);
 			    mp = new MattePainter(p);
 			    cp = new CompoundPainter<Object>(mp);
-			    Reha.thisClass.compoundPainter.put("SystemInit",cp);
+			    Reha.instance.compoundPainter.put("SystemInit",cp);
 
 			    /*****************/
 			    progLoader = new ProgLoader();
@@ -1088,9 +1090,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	private JXFrame getJFrame() {
 		if (jFrame == null) {
-			jFrame = new JXFrame();
-			jFrame.setTitle(Titel+Titel2);
-			jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			jFrame = new RehaFrame(Titel,Titel2);
+
+
 			sqlInfo.setFrame(jFrame);
 			//thisClass = this;
 			jFrame.addWindowListener(this);
@@ -1112,7 +1114,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 			jFrame.setJMenuBar(getJJMenuBar());
 			jFrame.setStatusBar(getJXStatusBar());
-			Reha.thisClass.shiftLabel.setText("Prog-User ok!");
+			shiftLabel.setText("Prog-User ok!");
 			Reha.RehaPainter[0] = RehaPainters.getBlauPainter();
 			Reha.RehaPainter[1] = RehaPainters.getSchwarzGradientPainter();
 			Reha.RehaPainter[2] = RehaPainters.getBlauGradientPainter() ;
@@ -1935,7 +1937,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		switch (JOptionPane.showOptionDialog(null, "thera-\u03C0 wirklich schließen?", "Bitte bestätigen",
 				JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new String[]{"Ja", "Nein", "Restart"}, "Ja")){
 		case JOptionPane.YES_OPTION:		// schließen
-			if(Reha.DbOk &&  (Reha.thisClass.conn != null) ){
+			if(Reha.DbOk &&  (Reha.instance.conn != null) ){
 				Date zeit = new Date();
 				String stx = "Insert into eingeloggt set comp='"+SystemConfig.dieseMaschine+"', zeit='"+zeit.toString()+"', einaus='aus'";
 				SqlInfo.sqlAusfuehren(stx);
@@ -2002,10 +2004,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
         {
 			officeapplication = new StartOOApplication(SystemConfig.OpenOfficePfad,SystemConfig.OpenOfficeNativePfad).start(false);
 			 System.out.println("OpenOffice ist gestartet und aktiv = "+officeapplication.isActive());
-			 Reha.thisClass.Rehaprogress.setIndeterminate(false);
+			 Reha.instance.Rehaprogress.setIndeterminate(false);
         }catch (OfficeApplicationException e) {
             e.printStackTrace();
-            Reha.thisClass.messageLabel = new JLabel("OO.org nicht verfügbar!!!");
+            Reha.instance.messageLabel = new JLabel("OO.org nicht verfügbar!!!");
         }
 
     	/*
@@ -2022,13 +2024,13 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
             for(int i = 0; i < names.length;i++){
             	System.out.println(names[i]+" = "+info.getProperties().getPropertyValue(names[i]));
             	if(info.getProperties().getPropertyValue(names[i]).contains("LibreOffice")){
-            		Reha.thisClass.isLibreOffice = true;
+            		Reha.instance.isLibreOffice = true;
             	}
             }
             Map <String, Object>config = new HashMap<String, Object>();
             config.put(IOfficeApplication.APPLICATION_HOME_KEY, SystemConfig.OpenOfficePfad);
             config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            if(Reha.thisClass.isLibreOffice){
+            if(Reha.instance.isLibreOffice){
                 config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY,
                 		new String[] {"--nodefault","--nologo",
                 		"--nofirststartwizard",
@@ -2063,19 +2065,19 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
             	      }
             	    }catch (DocumentException e) {
             	    	e.printStackTrace();
-            	    	Reha.thisClass.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
+            	    	Reha.instance.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
             	    } catch (OfficeApplicationException e) {
 						e.printStackTrace();
-						Reha.thisClass.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
+						Reha.instance.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
 					}
             	  }
             	});
             }catch(NullPointerException ex){
             	ex.printStackTrace();
             }
-            Reha.thisClass.Rehaprogress.setIndeterminate(false);
+            Reha.instance.Rehaprogress.setIndeterminate(false);
         }catch (OfficeApplicationException e) {
-			Reha.thisClass.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
+			Reha.instance.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
             e.printStackTrace();
         }
         */
@@ -2148,7 +2150,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
     					//JComponent arzt = AktiveFenster.getFensterAlle("ArztVerwaltung");
 
 						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-						Reha.thisClass.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
+						Reha.instance.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
 						Reha.getThisFrame().setCursor(Cursors.normalCursor);
                     }
 
@@ -2388,27 +2390,27 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		try{
 			if(((JComponent)arg0.getSource()).getName() != null){
 				if( ((JComponent)arg0.getSource()).getName().equals("PanelOben")){
-					desktops[0].setBounds(0,0,Reha.thisClass.jpOben.getWidth(),
-							Reha.thisClass.jpOben.getHeight());
+					desktops[0].setBounds(0,0,Reha.instance.jpOben.getWidth(),
+							Reha.instance.jpOben.getHeight());
 				}
 				if( ((JComponent)arg0.getSource()).getName().equals("PanelUnten")){
-					desktops[1].setBounds(0,0,Reha.thisClass.jpUnten.getWidth(),
-							Reha.thisClass.jpUnten.getHeight() );
+					desktops[1].setBounds(0,0,Reha.instance.jpUnten.getWidth(),
+							Reha.instance.jpUnten.getHeight() );
 				}
-				JInternalFrame[] frm = Reha.thisClass.desktops[0].getAllFrames();
+				JInternalFrame[] frm = Reha.instance.desktops[0].getAllFrames();
 				for(int i = 0;i< frm.length;i++){
 					if(((JRehaInternal)frm[i]).getImmerGross()){
-						frm[i].setBounds(2,2,Reha.thisClass.jpOben.getWidth()-2,
-									Reha.thisClass.jpOben.getHeight()-2);
+						frm[i].setBounds(2,2,Reha.instance.jpOben.getWidth()-2,
+									Reha.instance.jpOben.getHeight()-2);
 					}
 					((JRehaInternal)frm[i]).setCompOrder(i);
 					((JRehaInternal)frm[i]).setzeIcon();
 				}
-				frm = Reha.thisClass.desktops[1].getAllFrames();
+				frm = Reha.instance.desktops[1].getAllFrames();
 				for(int i = 0;i< frm.length;i++){
 					if(((JRehaInternal)frm[i]).getImmerGross()){
-						frm[i].setBounds(2,2,Reha.thisClass.jpUnten.getWidth()-2,
-									Reha.thisClass.jpUnten.getHeight()-2);
+						frm[i].setBounds(2,2,Reha.instance.jpUnten.getWidth()-2,
+									Reha.instance.jpUnten.getHeight()-2);
 					}
 					((JRehaInternal)frm[i]).setCompOrder(i);
 					((JRehaInternal)frm[i]).setzeIcon();
@@ -2629,18 +2631,18 @@ public void actionPerformed(ActionEvent arg0) {
 			@Override
 			protected Void doInBackground() throws Exception {
 				progLoader.ProgPatientenVerwaltung(1);
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				return null;
 			}
 		}.execute();
 		return;
 	}
 	if(cmd.equals("kasse")){
-		Reha.thisClass.progLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
+		Reha.instance.progLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
 		return;
 	}
 	if(cmd.equals("arzt")){
-		Reha.thisClass.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
+		Reha.instance.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
 		return;
 	}
 	if(cmd.equals("hmabrechnung")){
@@ -2653,27 +2655,27 @@ public void actionPerformed(ActionEvent arg0) {
 			JOptionPane.showMessageDialog(null,"<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
 			return;
 		}
-		Reha.thisClass.progLoader.AbrechnungFenster(1);
+		Reha.instance.progLoader.AbrechnungFenster(1);
 		return;
 	}
 	if(cmd.equals("rehaabrechnung")){
-		Reha.thisClass.progLoader.RehaabrechnungFenster(1,"");
+		Reha.instance.progLoader.RehaabrechnungFenster(1,"");
 		return;
 	}
 	if(cmd.equals("barkasse")){
-		Reha.thisClass.progLoader.BarkassenFenster(1,"");
+		Reha.instance.progLoader.BarkassenFenster(1,"");
 		return;
 	}
 	if(cmd.equals("anmeldezahlen")){
-		Reha.thisClass.progLoader.AnmeldungenFenster(1,"");
+		Reha.instance.progLoader.AnmeldungenFenster(1,"");
 		return;
 	}
 	if(cmd.equals("tagesumsatz")){
-		Reha.thisClass.progLoader.UmsatzFenster(1,"");
+		Reha.instance.progLoader.UmsatzFenster(1,"");
 		return;
 	}
 	if(cmd.equals("verkauf")){
-		Reha.thisClass.progLoader.VerkaufFenster(1,"");
+		Reha.instance.progLoader.VerkaufFenster(1,"");
 		return;
 	}
 	if(cmd.equals("urlaub")){
@@ -2684,7 +2686,7 @@ public void actionPerformed(ActionEvent arg0) {
 		return;
 	}
 	if(cmd.equals("umsatzbeteiligung")){
-		Reha.thisClass.progLoader.BeteiligungFenster(1,"");
+		Reha.instance.progLoader.BeteiligungFenster(1,"");
 		return;
 	}
 	if(cmd.equals("lvastatistik")){
@@ -2769,7 +2771,7 @@ public void actionPerformed(ActionEvent arg0) {
 		}
 		new LadeProg(Path.Instance.getProghome()+"Reha301.jar "+
 				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
-		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
 		return;
 	}
 	/*****************************/
@@ -2788,7 +2790,7 @@ public void actionPerformed(ActionEvent arg0) {
 		}
 		new LadeProg(Path.Instance.getProghome()+"WorkFlow.jar "+
 				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
-		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
 		return;
 	}
 	if(cmd.equals("hmrsearch")){
@@ -2797,7 +2799,7 @@ public void actionPerformed(ActionEvent arg0) {
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
                 public void run(){
-					String searchrez = (Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "");
+					String searchrez = (Reha.instance.patpanel != null ? " "+Reha.instance.patpanel.vecaktrez.get(1) : "");
 					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );
 					if(!searchrez.isEmpty()){
 						new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.MUST_REZFIND+"#"+searchrez );
@@ -2807,9 +2809,9 @@ public void actionPerformed(ActionEvent arg0) {
 			return;
 		}
 		new LadeProg(Path.Instance.getProghome()+"RehaHMK.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.thisClass.patpanel != null ? " "+Reha.thisClass.patpanel.vecaktrez.get(1) : "") );
+				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.instance.patpanel != null ? " "+Reha.instance.patpanel.vecaktrez.get(1) : "") );
 		//System.out.println("Übergebe Rezeptnummer: "+SystemConfig.hmAdrRDaten.get("Rnummer"));
-		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
 		return;
 	}
 	if(cmd.equals("iniedit")){
@@ -2917,7 +2919,7 @@ final class DatenbankStarten implements Runnable{
 	Logger logger = LoggerFactory.getLogger(DatenbankStarten.class);
 
 	private void StarteDB(){
-		final Reha obj = Reha.thisClass;
+		final Reha obj = Reha.instance;
 
 		final String sDB = "SQL";
 		if (obj.conn != null){
@@ -2961,10 +2963,10 @@ final class DatenbankStarten implements Runnable{
 					protected Void doInBackground()
 							throws java.lang.Exception {
 						try{
-							while(Reha.getThisFrame() == null || Reha.getThisFrame().getStatusBar()==null || Reha.thisClass.dbLabel == null){
+							while(Reha.getThisFrame() == null || Reha.getThisFrame().getStatusBar()==null || Reha.instance.dbLabel == null){
 								Thread.sleep(25);
 							}
-							Reha.thisClass.dbLabel.setText(Reha.aktuelleVersion+xdb);
+							Reha.instance.dbLabel.setText(Reha.aktuelleVersion+xdb);
 						}catch(NullPointerException ex){
 							ex.printStackTrace();
 						}
@@ -2998,7 +3000,7 @@ final class DatenbankStarten implements Runnable{
 
 			}
 			/*
-			Reha.thisClass.mustReloadDb();
+			Reha.instance.mustReloadDb();
 
 			while(Reha.nachladenDB < 0){
 				try {
@@ -3048,7 +3050,7 @@ final class DatenbankStarten implements Runnable{
 	@Override
     public void run() {
 		int i=0;
-		while (!Reha.thisClass.splashok){
+		while (!Reha.instance.splashok){
 			i = i+1;
 			if(i>10){
 				break;
@@ -3202,7 +3204,7 @@ final class DatenbankStarten implements Runnable{
 				new Thread(new PreisListenLaden()).start();
 
 				if(SystemConfig.sWebCamActive.equals("1")){
-					Reha.thisClass.activateWebCam();
+					Reha.instance.activateWebCam();
 				}
 
 
@@ -3228,10 +3230,10 @@ final class DbNachladen implements Runnable{
 	@Override
     public void run(){
 		final String sDB = "SQL";
-		final Reha obj = Reha.thisClass;
-		if(Reha.thisClass.conn != null){
+		final Reha obj = Reha.instance;
+		if(Reha.instance.conn != null){
 			try {
-				Reha.thisClass.conn.close();
+				Reha.instance.conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -3257,7 +3259,7 @@ final class DbNachladen implements Runnable{
     	catch (final SQLException ex) {
     		Reha.DbOk = false;
 			Reha.nachladenDB = -1;
-			Reha.thisClass.mustReloadDb();
+			Reha.instance.mustReloadDb();
 
     		while(Reha.nachladenDB < 0){
     			try {
@@ -3299,18 +3301,18 @@ final class ErsterLogin implements Runnable{
 				Reha.getThisFrame().setVisible(true);
 				INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 				if(inif.getIntegerProperty("HauptFenster", "Divider1") != null){
-					Reha.thisClass.jSplitLR.setDividerLocation((Reha.divider1=inif.getIntegerProperty("HauptFenster", "Divider1")));
-					Reha.thisClass.jSplitRechtsOU.setDividerLocation((Reha.divider2=inif.getIntegerProperty("HauptFenster", "Divider2")));
+					Reha.instance.jSplitLR.setDividerLocation((Reha.divider1=inif.getIntegerProperty("HauptFenster", "Divider1")));
+					Reha.instance.jSplitRechtsOU.setDividerLocation((Reha.divider2=inif.getIntegerProperty("HauptFenster", "Divider2")));
 					//System.out.println("Divider gesetzt");
 					//System.out.println("Divider 1 = "+inif.getIntegerProperty("HauptFenster", "Divider1"));
 					//System.out.println("Divider 2 = "+inif.getIntegerProperty("HauptFenster", "Divider2")+"\n\n");
 					Reha.dividerOk= true;
 					//Hier mußt noch eine funktion getSichtbar() entwickelt werden
 					//diese ersetzt die nächste Zeile
-					//System.out.println("Sichtbar Variante = "+Reha.thisClass.getSichtbar());
+					//System.out.println("Sichtbar Variante = "+Reha.instance.getSichtbar());
 				}else{
 					//System.out.println("Divider-Angaben sind noch null");
-					Reha.thisClass.setDivider(5);
+					Reha.instance.setDivider(5);
 				}
 
 				Reha.getThisFrame().getRootPane().validate();
@@ -3320,11 +3322,11 @@ final class ErsterLogin implements Runnable{
 
 
 				if(Reha.dividerOk){
-					Reha.thisClass.vollsichtbar = Reha.thisClass.getSichtbar();
+					Reha.instance.vollsichtbar = Reha.instance.getSichtbar();
 					if(!SystemConfig.desktopHorizontal){
-						Reha.thisClass.jSplitRechtsOU.setDividerLocation((Reha.divider2));
+						Reha.instance.jSplitRechtsOU.setDividerLocation((Reha.divider2));
 					}
-					//System.out.println("Wert für Vollsichtbar = "+Reha.thisClass.vollsichtbar);
+					//System.out.println("Wert für Vollsichtbar = "+Reha.instance.vollsichtbar);
 				}
 
 				//Reha.thisFrame.pack();
@@ -3344,7 +3346,7 @@ final class ErsterLogin implements Runnable{
 
 								System.out.println("Aktiviere Reader: "+SystemConfig.sReaderName+"\n"+
 										"CT-API Bibliothek: "+SystemConfig.sReaderCtApiLib);
-								Reha.thisClass.ocKVK = new OcKVK(SystemConfig.sReaderName.trim().replace(" ", "_"),
+								Reha.instance.ocKVK = new OcKVK(SystemConfig.sReaderName.trim().replace(" ", "_"),
 									SystemConfig.sReaderCtApiLib,SystemConfig.sReaderDeviceID,false);
 							}catch(CardTerminalException ex){
 								disableReader("Fehlerstufe rc = -8 = CardTerminal reagiert nicht\n"+ex.getMessage());
@@ -3360,8 +3362,8 @@ final class ErsterLogin implements Runnable{
 									disableReader("Anderweitiger Fehler\n"+e.getMessage());
 								}
 							}
-							if(Reha.thisClass.ocKVK != null){
-								Vector<Vector<String>> vec = Reha.thisClass.ocKVK.getReaderList();
+							if(Reha.instance.ocKVK != null){
+								Vector<Vector<String>> vec = Reha.instance.ocKVK.getReaderList();
 								for(int i = 0; i < vec.get(0).size();i++){
 									System.out.println("*******************");
 									System.out.println(vec.get(0).get(i)+" - "+
@@ -3385,7 +3387,7 @@ final class ErsterLogin implements Runnable{
 	}
 	private void disableReader(String error){
 		SystemConfig.sReaderAktiv = "0";
-		Reha.thisClass.ocKVK = null;
+		Reha.instance.ocKVK = null;
 		JOptionPane.showMessageDialog(null, error);
 	}
 }
@@ -3413,7 +3415,7 @@ final class PreisListenLaden implements Runnable{
 		*/
 		try{
 
-		while(Reha.thisClass == null || Reha.thisClass.jxLinks == null || Reha.thisClass.jxRechts == null){
+		while(Reha.instance == null || Reha.instance.jxLinks == null || Reha.instance.jxRechts == null){
 			long zeit = System.currentTimeMillis();
 			try {
 				Thread.sleep(50);
@@ -3425,8 +3427,8 @@ final class PreisListenLaden implements Runnable{
 				e.printStackTrace();
 			}
 		}
-		//Reha.thisClass.jxLinks.setAlpha(1.0f);
-		//Reha.thisClass.jxRechts.setAlpha(1.0f);
+		//Reha.instance.jxLinks.setAlpha(1.0f);
+		//Reha.instance.jxRechts.setAlpha(1.0f);
 		if(isAktiv("Physio")){
 			new SocketClient().setzeInitStand("Preisliste Physio einlesen");
 			SystemPreislisten.ladePreise("Physio");
@@ -3470,8 +3472,8 @@ final class PreisListenLaden implements Runnable{
 		}
 		try{
 			new SocketClient().setzeInitStand("System-Init abgeschlossen!");
-			Reha.thisClass.setzeInitEnde();
-			Reha.thisClass.initok = true;
+			Reha.instance.setzeInitEnde();
+			Reha.instance.initok = true;
 		}catch(NullPointerException ex){
 			ex.printStackTrace();
 		}
@@ -3491,7 +3493,7 @@ final class PreisListenLaden implements Runnable{
     public void run() {
 		Einlesen();
 		int i=0;
-		while (!Reha.thisClass.initok){
+		while (!Reha.instance.initok){
 			i = i+1;
 			if(i>10){
 				break;
@@ -3568,7 +3570,7 @@ class MyGradPanel extends JXPanel  {
 final class HilfeDatenbankStarten implements Runnable{
 
 	void StarteDB(){
-		final Reha obj = Reha.thisClass;
+		final Reha obj = Reha.instance;
 
 //		final String sDB = "SQL";
 		if (obj.hilfeConn != null){
@@ -3587,7 +3589,7 @@ final class HilfeDatenbankStarten implements Runnable{
 				e.printStackTrace();
 		}
 	    try {
-	        		Reha.thisClass.hilfeConn =
+	        		Reha.instance.hilfeConn =
 	        			DriverManager.getConnection(SystemConfig.hmHilfeServer.get("HilfeDBLogin"),
 	        					SystemConfig.hmHilfeServer.get("HilfeDBUser"),SystemConfig.hmHilfeServer.get("HilfeDBPassword"));
 	    }catch (final SQLException ex) {

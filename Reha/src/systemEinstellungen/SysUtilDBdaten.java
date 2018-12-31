@@ -57,7 +57,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
 		//System.out.println("Aufruf SysUtilDBdaten");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     add(getVorlagenSeite());
 		return;

@@ -94,7 +94,7 @@ private RehaTPEventClass rtp = null;
 		//((JXPanel)super.getSmartTitledPanel().getContentContainer()).setBackgroundPainter(new CompoundPainter(mp));;;
 		grundPanel = new JXPanel(new BorderLayout());
 		
-		grundPanel.setBackgroundPainter(Reha.thisClass.compoundPainter.get("ArztAuswahl"));
+		grundPanel.setBackgroundPainter(Reha.instance.compoundPainter.get("ArztAuswahl"));
 		content = getAuswahl();
 		grundPanel.add(content,BorderLayout.CENTER);
 		getSmartTitledPanel().setContentContainer(grundPanel);

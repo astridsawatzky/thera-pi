@@ -14,16 +14,16 @@ public class TestePatStamm {
 		if(patient == null){
 			return "";
 		}
-		if(! (Reha.thisClass.patpanel.vecaktrez == null)){
-			if(Reha.thisClass.patpanel.vecaktrez.size() > 0){
-				return Reha.thisClass.patpanel.vecaktrez.get(16);
+		if(! (Reha.instance.patpanel.vecaktrez == null)){
+			if(Reha.instance.patpanel.vecaktrez.size() > 0){
+				return Reha.instance.patpanel.vecaktrez.get(16);
 			}
 		}
-		if(! (Reha.thisClass.patpanel.patDaten == null)){	
-			if(Reha.thisClass.patpanel.patDaten.size() > 0){
+		if(! (Reha.instance.patpanel.patDaten == null)){	
+			if(Reha.instance.patpanel.patDaten.size() > 0){
 				////System.out.println("gr��e der PatDaten = "+PatGrundPanel.thisClass.patDaten.size());
 				////System.out.println("gr��e der PatDaten = "+PatGrundPanel.thisClass.patDaten);
-				return Reha.thisClass.patpanel.patDaten.get(67);
+				return Reha.instance.patpanel.patDaten.get(67);
 			}	
 		}else{
 			return "";
@@ -36,14 +36,14 @@ public class TestePatStamm {
 		if(patient == null){
 			return "";
 		}
-		if(! (Reha.thisClass.patpanel.vecaktrez == null)){
-			if(Reha.thisClass.patpanel.vecaktrez.size() > 0){
-				return Reha.thisClass.patpanel.vecaktrez.get(37);
+		if(! (Reha.instance.patpanel.vecaktrez == null)){
+			if(Reha.instance.patpanel.vecaktrez.size() > 0){
+				return Reha.instance.patpanel.vecaktrez.get(37);
 			}
 		}
-		if(! (Reha.thisClass.patpanel.patDaten == null)){	
-			if(Reha.thisClass.patpanel.patDaten.size() > 0){			
-				return Reha.thisClass.patpanel.patDaten.get(68);
+		if(! (Reha.instance.patpanel.patDaten == null)){	
+			if(Reha.instance.patpanel.patDaten.size() > 0){			
+				return Reha.instance.patpanel.patDaten.get(68);
 			}
 		}else{
 			return "";

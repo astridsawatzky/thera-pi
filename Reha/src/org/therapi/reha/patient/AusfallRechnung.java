@@ -86,7 +86,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 			@Override
 			protected Void doInBackground() throws Exception {
 
-			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezeptGebuehren"));
+			     rgb.setBackgroundPainter(Reha.instance.compoundPainter.get("RezeptGebuehren"));
 				return null;
 			}
 
@@ -126,7 +126,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 		pb.addLabel("Bitte die Positionen auswählen die Sie berechnen wollen",cc.xyw(2, 2, 4));
 
 		pb.addLabel("Heilmittel 1",cc.xy(3, 4));
-		String lab = Reha.thisClass.patpanel.vecaktrez.get(48);
+		String lab = Reha.instance.patpanel.vecaktrez.get(48);
 		leistung[0] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[0].setOpaque(false);
 		if(!lab.equals("")){
@@ -138,7 +138,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 		pb.add(leistung[0],cc.xyw(5, 4, 2));
 
 		pb.addLabel("Heilmittel 2",cc.xy(3, 6));
-		lab = Reha.thisClass.patpanel.vecaktrez.get(49);
+		lab = Reha.instance.patpanel.vecaktrez.get(49);
 		leistung[1] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[1].setOpaque(false);
 		if(!lab.equals("")){
@@ -150,7 +150,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 		pb.add(leistung[1],cc.xyw(5, 6, 2));
 
 		pb.addLabel("Heilmittel 3",cc.xy(3, 8));
-		lab = Reha.thisClass.patpanel.vecaktrez.get(50);
+		lab = Reha.instance.patpanel.vecaktrez.get(50);
 		leistung[2] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[2].setOpaque(false);
 		if(!lab.equals("")){
@@ -162,7 +162,7 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 		pb.add(leistung[2],cc.xyw(5, 8, 2));
 
 		pb.addLabel("Heilmittel 4",cc.xy(3, 10));
-		lab = Reha.thisClass.patpanel.vecaktrez.get(51);
+		lab = Reha.instance.patpanel.vecaktrez.get(51);
 		leistung[3] = new JRtaCheckBox((lab.equals("") ? "----" : lab));
 		leistung[3].setOpaque(false);
 		if(!lab.equals("")){
@@ -276,8 +276,8 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 		StringBuffer buf = new StringBuffer();
 		buf.append("insert into rgaffaktura set ");
 		buf.append("rnr='"+afrNummer+"', ");
-		buf.append("reznr='"+Reha.thisClass.patpanel.vecaktrez.get(1)+"', ");
-		buf.append("pat_intern='"+Reha.thisClass.patpanel.vecaktrez.get(0)+"', ");
+		buf.append("reznr='"+Reha.instance.patpanel.vecaktrez.get(1)+"', ");
+		buf.append("pat_intern='"+Reha.instance.patpanel.vecaktrez.get(0)+"', ");
 		buf.append("rgesamt='"+SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("roffen='"+SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"',");
@@ -287,9 +287,9 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 	private void macheMemoEintrag(){
 		StringBuffer sb = new StringBuffer();
 		sb.append(DatFunk.sHeute()+" - unentschuldigt oder zu spät abgesagt - Rechnung!! - Rechnung-Nr.: "+SystemConfig.hmAdrAFRDaten.get("<AFRnummer>")+" - erstellt von: "+Reha.aktUser+"\n");
-		sb.append(Reha.thisClass.patpanel.pmemo[1].getText());
-		Reha.thisClass.patpanel.pmemo[1].setText(sb.toString());
-		String cmd = "update pat5 set pat_text='"+sb.toString()+"' where pat_intern = '"+Reha.thisClass.patpanel.aktPatID+"'";
+		sb.append(Reha.instance.patpanel.pmemo[1].getText());
+		Reha.instance.patpanel.pmemo[1].setText(sb.toString());
+		String cmd = "update pat5 set pat_text='"+sb.toString()+"' where pat_intern = '"+Reha.instance.patpanel.aktPatID+"'";
 		SqlInfo.sqlAusfuehren(cmd);
 	}
 	private void macheAFRHmap(){
@@ -310,16 +310,16 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 			mapkurz = "<AFRkurz"+(i+1)+">";
 			maplang = "<AFRlang"+(i+1)+">";
 			if(leistung[i].isSelected()){
-				Double preis = new Double( Reha.thisClass.patpanel.vecaktrez.get(18+i));
+				Double preis = new Double( Reha.instance.patpanel.vecaktrez.get(18+i));
 				String s = df.format( preis);
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,s);
 				gesamt = gesamt+preis;
 
-				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = Reha.instance.patpanel.vecaktrez.get(8+i);
+				sart = Reha.instance.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 				SystemConfig.hmAdrAFRDaten.put(maplang,inpos[0]);
 				SystemConfig.hmAdrAFRDaten.put(mapkurz,inpos[1]);
@@ -327,10 +327,10 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener{
 				////System.out.println(inpos[1]);
 
 			}else{
-				spos = Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = Reha.instance.patpanel.vecaktrez.get(8+i);
+				sart = Reha.instance.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());

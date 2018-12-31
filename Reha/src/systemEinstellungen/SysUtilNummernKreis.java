@@ -46,7 +46,7 @@ public class SysUtilNummernKreis extends JXPanel implements KeyListener, ActionL
 		super(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(15, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		
 		

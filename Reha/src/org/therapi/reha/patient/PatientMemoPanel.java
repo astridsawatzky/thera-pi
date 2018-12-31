@@ -213,8 +213,8 @@ public class PatientMemoPanel extends JXPanel{
 			patientHauptPanel.pmemo[0].setForeground(Color.BLUE);
 			patientHauptPanel.pmemo[0].setEditable(false);
 			patientHauptPanel.memobut[3].setEnabled(true);
-			String cmd = "update pat5 set anamnese='"+StringTools.Escaped(Reha.thisClass.patpanel.pmemo[0].getText())+"' where id='"+
-			Reha.thisClass.patpanel.autoPatid+"'";
+			String cmd = "update pat5 set anamnese='"+StringTools.Escaped(Reha.instance.patpanel.pmemo[0].getText())+"' where id='"+
+			Reha.instance.patpanel.autoPatid+"'";
 			new ExUndHop().setzeStatement(cmd);
 			patientHauptPanel.inMemo = -1;
 			return;
@@ -226,8 +226,8 @@ public class PatientMemoPanel extends JXPanel{
 			patientHauptPanel.pmemo[1].setForeground(Color.BLUE);
 			patientHauptPanel.pmemo[1].setEditable(false);
 			patientHauptPanel.memobut[0].setEnabled(true);
-			String cmd = "update pat5 set pat_text='"+StringTools.Escaped(Reha.thisClass.patpanel.pmemo[1].getText())+"' where id='"+
-			Reha.thisClass.patpanel.autoPatid+"'";
+			String cmd = "update pat5 set pat_text='"+StringTools.Escaped(Reha.instance.patpanel.pmemo[1].getText())+"' where id='"+
+			Reha.instance.patpanel.autoPatid+"'";
 			new ExUndHop().setzeStatement(cmd);
 			patientHauptPanel.inMemo = -1;
 			return;
@@ -317,7 +317,7 @@ public class PatientMemoPanel extends JXPanel{
 		JXPanel jpan2 = JCompTools.getEmptyJXPanel(new BorderLayout());
 		/*****************/
 
-		jpan2.setBackgroundPainter(Reha.thisClass.compoundPainter.get("FliessText"));
+		jpan2.setBackgroundPainter(Reha.instance.compoundPainter.get("FliessText"));
 	     jpan2.add(jtoolb);
 		jpan.add(jpan2,BorderLayout.NORTH);
 		jpan.add(span,BorderLayout.CENTER);
@@ -366,7 +366,7 @@ public class PatientMemoPanel extends JXPanel{
 		jpan = JCompTools.getEmptyJXPanel(new BorderLayout());
 		jpan.setOpaque(true);
 		jpan2 = JCompTools.getEmptyJXPanel(new BorderLayout());
-		jpan2.setBackgroundPainter(Reha.thisClass.compoundPainter.get("FliessText"));
+		jpan2.setBackgroundPainter(Reha.instance.compoundPainter.get("FliessText"));
 	    jpan2.add(jtoolb2);
 		jpan.add(jpan2,BorderLayout.NORTH);
 		jpan.add(span,BorderLayout.CENTER);

@@ -75,7 +75,7 @@ import environment.Path;
 import errorMail.ErrorMail;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import rechteTools.Rechte;
@@ -257,7 +257,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		evt.addRehaEventListener(this);
 		UseNeueRvVariante = false;
 		addFocusListener(this);
-	    setBackgroundPainter(Reha.thisClass.compoundPainter.get("EBerichtPanel"));
+	    setBackgroundPainter(Reha.instance.compoundPainter.get("EBerichtPanel"));
 		setLayout(new BorderLayout());
 
 		add(this.getToolbar(),BorderLayout.NORTH);
@@ -458,7 +458,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 	private JTabbedPane getEBerichtTab(){
 		setCursor(Cursors.wartenCursor);
-		Reha.thisClass.progressStarten(true);
+		Reha.instance.progressStarten(true);
 		ebt = new EBerichtTab(this);
 		for(int i = 0; i < 4; i++){
 			gutbut[i].setEnabled(false);
@@ -473,7 +473,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		////System.out.println("Meldung von Seite "+seite);
 		initOk[seite] = true;
 		if(initOk[0] && initOk[1] && initOk[2] && initOk[3]){
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			setCursor(Cursors.normalCursor);
 			for(int i = 0; i < 4; i++){
 				gutbut[i].setEnabled(true);
@@ -653,7 +653,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			if(this.neu){
 				doSpeichernNeu();
 				if(mitmeldung){	JOptionPane.showMessageDialog(null,"Entlassbericht wurde gespeichert");}
-				Reha.thisClass.patpanel.gutachten.holeGutachten(Reha.thisClass.patpanel.aktPatID, "");
+				Reha.instance.patpanel.gutachten.holeGutachten(Reha.instance.patpanel.aktPatID, "");
 			}else{
 				if(doSpeichernAlt()){
 					if(mitmeldung){JOptionPane.showMessageDialog(null,"Entlassbericht wurde erfolgreich gespeichert");}
@@ -670,7 +670,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			if(this.neu){
 				doSpeichernNachsorgeNeu();
 				if(mitmeldung){JOptionPane.showMessageDialog(null,"Nachsorge-Dokumentation wurde gespeichert");}
-				Reha.thisClass.patpanel.gutachten.holeGutachten(Reha.thisClass.patpanel.aktPatID, "");
+				Reha.instance.patpanel.gutachten.holeGutachten(Reha.instance.patpanel.aktPatID, "");
 			}else{
 				doSpeichernNachsorgeAlt();
 				if(mitmeldung){JOptionPane.showMessageDialog(null,"Nachsorge-Dokumentation wurde gespeichert");}
@@ -728,7 +728,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 	private void doSpeichernNachsorgeAlt(){
 		try{
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			setCursor(Cursors.wartenCursor);
 			StringBuffer buf = new StringBuffer();
 			buf.append("update bericht2 set ");
@@ -777,35 +777,35 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			}
 			buf.append( " where berichtid = '"+berichtid+"'");
 			SqlInfo.sqlAusfuehren(buf.toString());
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			setCursor(Cursors.cdefault);
 			if(!jetztneu){
 				setCursor(Cursors.cdefault);
 				String empf = (String) cbktraeger.getSelectedItem();
 				String btype = (empf.contains("DRV") && empf.contains("Bund")? "IRENA Nachsorgedoku" : "ASP Nachsorgedoku");
-				Reha.thisClass.patpanel.gutachten.aktualisiereGutachten(DatFunk.sHeute(),btype,empf,"Reha-Arzt",berichtid,pat_intern);
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.patpanel.gutachten.aktualisiereGutachten(DatFunk.sHeute(),btype,empf,"Reha-Arzt",berichtid,pat_intern);
+				Reha.instance.progressStarten(false);
 			}else{
 				jetztneu = false;
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
 			setCursor(Cursors.cdefault);
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 		}
 	}
 	/*************************************************************************/
 	private void doSpeichernNachsorgeNeu(){
 		try{
 			setCursor(Cursors.wartenCursor);
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			int nummer = SqlInfo.erzeugeNummer("bericht");
 			berichtid = nummer;
 			String empf = (String) cbktraeger.getSelectedItem();
 			if(! empf.contains("DRV")){
 				setCursor(Cursors.cdefault);
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				return;
 			}
 			String btype = (empf.contains("DRV") && empf.contains("Bund")? "IRENA Nachsorgedoku" : "ASP Nachsorgedoku");
@@ -823,15 +823,15 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	/////
 			doSpeichernNachsorgeAlt();
 			////System.out.println("Nach Speichern alt");
-			Reha.thisClass.patpanel.gutachten.neuesGutachten(Integer.toString(berichtid),
+			Reha.instance.patpanel.gutachten.neuesGutachten(Integer.toString(berichtid),
 					btype,"Reha-Arzt",DatFunk.sHeute() ,empf, pat_intern,"Nachsorgedokumentation");
 
 			setCursor(Cursors.cdefault);
 		}catch(Exception ex){
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			ex.printStackTrace();
 		}
-		Reha.thisClass.progressStarten(false);
+		Reha.instance.progressStarten(false);
 	}
 /**
  * @throws DocumentException ***********************************************************************/
@@ -839,7 +839,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 		return false;
 	}
 	private boolean doSpeichernAlt() {
-		Reha.thisClass.progressStarten(true);
+		Reha.instance.progressStarten(true);
 		setCursor(Cursors.wartenCursor);
 		StringBuffer buf = new StringBuffer();
 		buf.append("update bericht2 set ");
@@ -915,24 +915,24 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 		if (!ebt.getTab3().textSpeichernInDB(true)){
 			setCursor(Cursors.cdefault);
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			return false;
 		}
 		if(!jetztneu){
 			setCursor(Cursors.cdefault);
 			String empf = (String) cbktraeger.getSelectedItem();
-			Reha.thisClass.patpanel.gutachten.aktualisiereGutachten(DatFunk.sHeute(),(empf.contains("DRV") ? "DRV E-Bericht" : "GKV E-Bericht"),empf,"Reha-Arzt",berichtid,pat_intern);
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.patpanel.gutachten.aktualisiereGutachten(DatFunk.sHeute(),(empf.contains("DRV") ? "DRV E-Bericht" : "GKV E-Bericht"),empf,"Reha-Arzt",berichtid,pat_intern);
+			Reha.instance.progressStarten(false);
 		}else{
 			jetztneu = false;
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 		}
 		return true;
 	}
 	/*************************************************************************/
 	private void doSpeichernNeu(){
 		try{
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			int nummer = SqlInfo.erzeugeNummer("bericht");
 			berichtid = nummer;
 			String empf = (String) cbktraeger.getSelectedItem();
@@ -950,12 +950,12 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			////System.out.println("Historie- und Bericht wurden angelegt");
 			doSpeichernAlt();
 			////System.out.println("Nach Speichern alt");
-			Reha.thisClass.patpanel.gutachten.neuesGutachten(Integer.toString(berichtid),
+			Reha.instance.patpanel.gutachten.neuesGutachten(Integer.toString(berichtid),
 					btype,"Reha-Arzt",DatFunk.sHeute() ,empf, pat_intern,"Reha-Entlassbericht");
 			setCursor(Cursors.normalCursor);
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 		}catch(Exception ex){
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			ex.printStackTrace();
 		}
 	}
@@ -975,7 +975,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
-						Reha.thisClass.progressStarten(true);
+						Reha.instance.progressStarten(true);
 						//ebtab.setSelectedIndex(0);
 
 				        ebtab.getSelectedIndex();
@@ -1156,16 +1156,16 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 		try {
 			if(document==null){
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				System.out.println("Document == null");
 				return false;
 			}
 			if(!document.isOpen()){
 				System.out.println("Document ist closed()");
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				return false;
 			}
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			//byte[] barr = null;
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try{
@@ -1182,16 +1182,16 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 			InputStream ins = new ByteArrayInputStream(out.toByteArray());
 			String select = "Update bericht2 set freitext = ? where berichtid = ? LIMIT 1";
-			ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(select);
+			ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
 			ps.setAsciiStream(1,ins);
 			ps.setInt(2, berichtid);
 			ps.execute();
 			ins.close();
 			out.close();
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 		}catch(Exception ex){
 			ex.printStackTrace();
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			return false;
 		}
 		finally {
@@ -1389,7 +1389,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			}else{
 				entlassform = "nicht relevant";
 			}
-			if(Reha.thisClass.patpanel.patDaten.get(0).toString().trim().equalsIgnoreCase("Herr")){
+			if(Reha.instance.patpanel.patDaten.get(0).toString().trim().equalsIgnoreCase("Herr")){
 				isherr = true;
 			}
 
@@ -1573,8 +1573,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				abrDlg.setVisible(false);
 				abrDlg.dispose();
 				abrDlg = null;
-				if(Reha.thisClass.dta301panel != null){
-					Reha.thisClass.dta301panel.aktualisieren(
+				if(Reha.instance.dta301panel != null){
+					Reha.instance.dta301panel.aktualisieren(
 							SqlInfo.holeEinzelFeld("select rez_nr from dta301 where berichtid='"+berichtid+"' LIMIT 1")
 							);
 				}

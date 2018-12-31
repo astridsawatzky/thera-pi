@@ -48,7 +48,7 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -75,7 +75,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 		//System.out.println("Aufruf SysUtilRezepte");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     services = PrintServiceLookup.lookupPrintServices(null, null);
 	     drucker = new String[services.length];

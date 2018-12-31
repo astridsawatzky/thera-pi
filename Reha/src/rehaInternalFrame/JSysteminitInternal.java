@@ -30,9 +30,9 @@ public class JSysteminitInternal extends JRehaInternal implements RehaEventListe
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		//nächsten JInternalFrame aktivieren
-		Reha.thisClass.aktiviereNaechsten(this.desktop);		
+		Reha.instance.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
 		//hier die Aufräumenfunktion
@@ -54,7 +54,7 @@ public class JSysteminitInternal extends JRehaInternal implements RehaEventListe
 		 	   {
 		 		//System.out.println("LöscheFenster "+name);   
 				AktiveFenster.loescheFenster(name);
-				Reha.thisClass.progLoader.loescheSysteminit();
+				Reha.instance.progLoader.loescheSysteminit();
 		 	   }
 		});
 

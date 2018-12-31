@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import events.PatStammEvent;
 import events.PatStammEventClass;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 
 public class LadeProg {
@@ -36,7 +36,7 @@ public class LadeProg {
 			JOptionPane.showMessageDialog(null,"Diese Software ist auf Ihrem System nicht installiert!");
 			return;
 		}
-		//Reha.thisFrame.setCursor(Reha.thisClass.wartenCursor);
+		//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
 		//String vmload = "java -jar ";
 		//String commandx = vmload + prog;
 		final String xprog = prog;
@@ -62,7 +62,7 @@ public class LadeProg {
 							logger.debug(alist.stream().collect(Collectors.joining(" ")));
 							Process process = new ProcessBuilder(alist).start();
 
-							//Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+							//Reha.thisFrame.setCursor(Reha.instance.normalCursor);
 						       InputStream is = process.getInputStream();
 						       //InputStream is = process.getErrorStream();
 						       InputStreamReader isr = new InputStreamReader(is);
@@ -103,9 +103,9 @@ public class LadeProg {
 				//Nachricht aus dem 301-er-Modul
 				if(xline.startsWith("#AktualisierePat@")){
 					String[] befehle = xline.split("@");
-					if(Reha.thisClass.patpanel != null){
+					if(Reha.instance.patpanel != null){
 						try{
-							if(Reha.thisClass.patpanel.aktPatID.equals(befehle[1])){
+							if(Reha.instance.patpanel.aktPatID.equals(befehle[1])){
 								befehlAbfeuern("#PATSUCHEN",befehle[1],befehle[2]);
 							}
 						}catch(Exception ex){

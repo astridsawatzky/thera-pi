@@ -57,7 +57,7 @@ public class SysUtilKuerzel  extends JXPanel implements ActionListener{
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 5));
 		//this.setBorder(BorderFactory.createEmptyBorder(15, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	    add(getVorlagenSeite(),BorderLayout.CENTER);
 	    add(getKnopfPanel(),BorderLayout.SOUTH);

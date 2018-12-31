@@ -77,7 +77,7 @@ import abrechnung.AbrechnungDlg;
 import dialoge.EmailDialog;
 import dialoge.InfoDialog;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.ToolTipRenderer;
 import jxTableTools.ZahlTableCellEditor;
@@ -396,7 +396,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 	private JXPanel machePaneLinks(){
 		panLinks = new JXPanel(new BorderLayout());
 		panLinks.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
-	     panLinks.setBackgroundPainter(Reha.thisClass.compoundPainter.get("SuchenSeite"));
+	     panLinks.setBackgroundPainter(Reha.instance.compoundPainter.get("SuchenSeite"));
 		//panLinks.setBackground(Color.WHITE);
 		JScrollPane jscr = new JScrollPane();
 		jscr.setOpaque(false);
@@ -656,8 +656,8 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 							ZeigePopupMenuDauer(arg0,jxSucheTable.getValueAt(row, col).toString());
 						}
 					}
-					if(Reha.thisClass.terminpanel!= null){
-						Reha.thisClass.terminpanel.setzeTerminAktuell(jxSucheTable.getValueAt(row, 2).toString().substring(3),
+					if(Reha.instance.terminpanel!= null){
+						Reha.instance.terminpanel.setzeTerminAktuell(jxSucheTable.getValueAt(row, 2).toString().substring(3),
 								jxSucheTable.getValueAt(row, 6).toString(),
 								jxSucheTable.getValueAt(row, 10).toString());
 					}
@@ -1124,7 +1124,7 @@ public class SuchenSeite extends JXPanel implements TableModelListener,FocusList
 
 				/*
 				try {
-					Reha.thisClass.conn.setAutoCommit(true);
+					Reha.instance.conn.setAutoCommit(true);
 				} catch (SQLException e) {
 					
 					e.printStackTrace();
@@ -2415,7 +2415,7 @@ Vector mit Normal-Termin
 		*/
 		//bis hierher entfernen
 		try {
-				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
 
 			res = stmt.execute(sstmt);
@@ -2437,7 +2437,7 @@ Vector mit Normal-Termin
 		String suchstmt;
 		Vector<Vector<String>> vec = new Vector<Vector<String>>();
 		try {
-				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
 			suchstmt = "select * from flexkc where id = '"+jxSucheTable.getValueAt(zeile,17)+"'";
 
@@ -2610,7 +2610,7 @@ class WorkerSuchenInKalenderTagen extends SwingWorker<Void,Void>{
 		aktDatum = getAktDatum();
 
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			sqlEnde = DatFunk.sDatInSQL(getStopDatum());
 
@@ -3555,7 +3555,7 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 
 	/*
 	try {
-		Reha.thisClass.conn.setAutoCommit(true);
+		Reha.instance.conn.setAutoCommit(true);
 	} catch (SQLException e1) {
 		
 		e1.printStackTrace();
@@ -3570,7 +3570,7 @@ private synchronized int XSperrenVerarbeiten(int akt,Vector vecx,String zeit){
 
 		//if(! sperrDatum.contains(sperre+SystemConfig.dieseMaschine)){
 			try {
-				stmtx = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmtx = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 				        ResultSet.CONCUR_UPDATABLE );
 
 			} catch (SQLException e) {
@@ -3806,7 +3806,7 @@ class WorkerTabelle extends SwingWorker<Void,Void>{
 
 			//if(! sperrDatum.contains(sperre+SystemConfig.dieseMaschine)){
 				try {
-					stmtx = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+					stmtx = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					        ResultSet.CONCUR_UPDATABLE );
 
 				} catch (SQLException e) {
@@ -4031,7 +4031,7 @@ class EntsperreSatz extends Thread{
 		Statement stmt = null;
 
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			        ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			e.printStackTrace();

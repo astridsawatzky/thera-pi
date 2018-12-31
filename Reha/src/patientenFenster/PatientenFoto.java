@@ -77,7 +77,7 @@ public class PatientenFoto  extends RehaSmartDialog{
 	    eltern = xeltern;
 	    setName(name);
 	    initListener();
-		Reha.thisClass.player.start();
+		Reha.instance.player.start();
 	    bigvideo = (SystemConfig.sWebCamSize[0]==640 ? true : false);
 
 	    defaultsize[0] = (bigvideo ? 288 : 144);
@@ -105,7 +105,7 @@ public class PatientenFoto  extends RehaSmartDialog{
             public void run(){
 				panel.setPhotoFrameSize(defaultsize[0],defaultsize[1]);
 				panel.setCenter();
-				frameGrabber  = (FrameGrabbingControl)Reha.thisClass.player.getControl("javax.media.control.FrameGrabbingControl");
+				frameGrabber  = (FrameGrabbingControl)Reha.instance.player.getControl("javax.media.control.FrameGrabbingControl");
 			}
 		});
 	}
@@ -228,8 +228,8 @@ public class PatientenFoto  extends RehaSmartDialog{
 						rtp.removeRehaTPEventListener(this);
 						rtp = null;
 						pinPanel = null;
-						Reha.thisClass.player.stop();
-						Reha.thisClass.player.deallocate();
+						Reha.instance.player.stop();
+						Reha.instance.player.deallocate();
 						this.dispose();
 						super.dispose();
 					}
@@ -245,8 +245,8 @@ public class PatientenFoto  extends RehaSmartDialog{
 			rtp.removeRehaTPEventListener(this);
 			rtp = null;
 			pinPanel = null;
-			Reha.thisClass.player.stop();
-			Reha.thisClass.player.deallocate();
+			Reha.instance.player.stop();
+			Reha.instance.player.deallocate();
 		}
 		doAufraeumen();
 		dispose();
@@ -254,8 +254,8 @@ public class PatientenFoto  extends RehaSmartDialog{
 	}
 	
 	public Component getVideoPanel(){
-		//Reha.thisClass.player.start();
-		return Reha.thisClass.player.getVisualComponent();
+		//Reha.instance.player.start();
+		return Reha.instance.player.getVisualComponent();
 	}
 	public JXPanel actionPanel(){
 		JXPanel pan = new JXPanel();

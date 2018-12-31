@@ -31,9 +31,9 @@ public class JBarkassenInternal extends JRehaInternal implements RehaEventListen
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		//nächsten JInternalFrame aktivieren
-		Reha.thisClass.aktiviereNaechsten(this.desktop);		
+		Reha.instance.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
 		((Barkasse)this.inhalt).doAufraeumen();
@@ -55,7 +55,7 @@ public class JBarkassenInternal extends JRehaInternal implements RehaEventListen
 		 	   {
 		 		//System.out.println("LöscheFenster "+name);   
 				AktiveFenster.loescheFenster(name);
-				Reha.thisClass.progLoader.loescheBarkasse();
+				Reha.instance.progLoader.loescheBarkasse();
 		 	   }
 		});
 

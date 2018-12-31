@@ -27,7 +27,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.therapi.reha.patient.LadeProg;
 
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import rechteTools.Rechte;
@@ -61,7 +61,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
 	public SystemInit(JSysteminitInternal sai){
 		super();
 		setLayout(new BorderLayout());
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
         header = new JXHeader(null,null,null);
         addHeaderEntry(defaultTitel, "Mit der Systeminitialisierung....", 		// den ersten legen wir gleich an; Rest im Hintergrund
                 "....erstellen bzw. ändern Sie die Systemeinstellungen auf Ihre inividuelle Bedürfnisse hin.\n" +
@@ -102,7 +102,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener{
         	jxRechts = new JXPanel(new BorderLayout());
     		/****/
     
-   	     	jxRechts.setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+   	     	jxRechts.setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
    	     	/****/
         	// hier muß das add für die weitern Panels rein
         	jSplitLR =  UIFSplitPane.createStrippedSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -708,7 +708,7 @@ private void auswertenSysUtil(String util){
 				if(anfrage == JOptionPane.YES_OPTION){
 					try {
 						Runtime.getRuntime().exec("java -Djava.net.preferIPv4Stack=true -jar "+Path.Instance.getProghome()+"TheraPiUpdates.jar TheraPiStarten");
-						Reha.thisClass.beendeSofort();
+						Reha.instance.beendeSofort();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -720,7 +720,7 @@ private void auswertenSysUtil(String util){
 				if(anfrage == JOptionPane.YES_OPTION){
 					try {
 						Runtime.getRuntime().exec("java -Djava.net.preferIPv4Stack=true -jar "+Path.Instance.getProghome()+"TheraPiUpdates.jar TheraPiStarten");
-						Reha.thisClass.beendeSofort();
+						Reha.instance.beendeSofort();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -860,8 +860,8 @@ public void valueChanged(TreeSelectionEvent e) {
 }
 
 public static void abbrechen(){
-	Reha.thisClass.systeminitpanel.tree.setSelectionInterval(0,0);
-	Reha.thisClass.systeminitpanel.auswertenSysUtil("nix");
+	Reha.instance.systeminitpanel.tree.setSelectionInterval(0,0);
+	Reha.instance.systeminitpanel.auswertenSysUtil("nix");
 }
 //private HashMap<String,String> htitel = new HashMap();
 //private HashMap<String,String> hdescription = new HashMap();

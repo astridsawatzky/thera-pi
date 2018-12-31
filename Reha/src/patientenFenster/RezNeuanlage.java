@@ -48,7 +48,7 @@ import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import hmrCheck.HMRCheck;
 import rechteTools.Rechte;
@@ -197,7 +197,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 			add(getDatenPanel(),BorderLayout.CENTER);
 			add(getButtonPanel(),BorderLayout.SOUTH);
-			setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezNeuanlage"));
+			setBackgroundPainter(Reha.instance.compoundPainter.get("RezNeuanlage"));
 			validate();
 			SwingUtilities.invokeLater(new Runnable(){
 			 	   @Override
@@ -329,14 +329,14 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		 			   kid = StringTools.ZahlTest(jtf[cKASID].getText());
 		 			   aid = StringTools.ZahlTest(jtf[cARZTID].getText());
 		 			   if(kid < 0 && aid < 0){
-		 				   jtf[cKASID].setText(Integer.toString(Reha.thisClass.patpanel.kid));
-		 				   jtf[cARZTID].setText(Integer.toString(Reha.thisClass.patpanel.aid));
-		 				   jtf[cKTRAEG].setText(Reha.thisClass.patpanel.patDaten.get(13));
+		 				   jtf[cKASID].setText(Integer.toString(Reha.instance.patpanel.kid));
+		 				   jtf[cARZTID].setText(Integer.toString(Reha.instance.patpanel.aid));
+		 				   jtf[cKTRAEG].setText(Reha.instance.patpanel.patDaten.get(13));
 		 			   }else if(kid >= 0 && aid < 0){
-		 				   jtf[cARZTID].setText(Integer.toString(Reha.thisClass.patpanel.aid));
+		 				   jtf[cARZTID].setText(Integer.toString(Reha.instance.patpanel.aid));
 		 			   }else if(kid < 0 && aid >= 0){
-		 				   jtf[cKASID].setText(Integer.toString(Reha.thisClass.patpanel.kid));
-		 				   jtf[cKTRAEG].setText(Reha.thisClass.patpanel.patDaten.get(13));
+		 				   jtf[cKASID].setText(Integer.toString(Reha.instance.patpanel.kid));
+		 				   jtf[cKTRAEG].setText(Reha.instance.patpanel.patDaten.get(13));
 		 			   }else{
 		 				   //System.out.println("*****************Keine Preisgruppen bezogen*******************");
 		 				  //preisgruppen
@@ -637,7 +637,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			jcb[cVOLLHB].setEnabled(false);
 			jcb[cVOLLHB].setSelected(false);
 		}else{
-			if(Reha.thisClass.patpanel.patDaten.get(44).equals("T")){
+			if(Reha.instance.patpanel.patDaten.get(44).equals("T")){
 				// Wenn Heimbewohner
 				if(this.vec.get(43).equals("T")){
 					jcb[cVOLLHB].setEnabled(true);
@@ -767,7 +767,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		
 		if(this.neu){
 			if(this.neu && vec.size() <= 0){
-				this.holePreisGruppe(Reha.thisClass.patpanel.patDaten.get(68).trim());
+				this.holePreisGruppe(Reha.instance.patpanel.patDaten.get(68).trim());
 				this.ladePreisliste(jcmb[cRKLASSE].getSelectedItem().toString().trim(), preisgruppen[jcmb[cRKLASSE].getSelectedIndex()]);
 				this.fuelleIndis(jcmb[cRKLASSE].getSelectedItem().toString().trim());
 				ladeZusatzDatenNeu();				
@@ -958,7 +958,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(e.getActionCommand().equals("Hausbesuche") ){
 			if(jcb[cHAUSB].isSelected()){
 				// Hausbesuch gewählt
-				if(Reha.thisClass.patpanel.patDaten.get(44).equals("T")){
+				if(Reha.instance.patpanel.patDaten.get(44).equals("T")){
 					//System.out.println("aktuelle Preisgruppe = "+preisgruppe);
 					if(this.preisgruppe!=1 && (jcmb[cRKLASSE].getSelectedIndex() <= 1) ){
 						jcb[cVOLLHB].setEnabled(true);						
@@ -1392,17 +1392,17 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				|| item.toLowerCase().contains("massage")
 				|| item.toLowerCase().contains("rehasport")
 				|| item.toLowerCase().contains("funktions")){
-				anz = Reha.thisClass.patpanel.aktRezept.indphysio.length;
-				indis = Reha.thisClass.patpanel.aktRezept.indphysio; 
+				anz = Reha.instance.patpanel.aktRezept.indphysio.length;
+				indis = Reha.instance.patpanel.aktRezept.indphysio; 
 			}else if(item.toLowerCase().contains("ergo")){
-				anz = Reha.thisClass.patpanel.aktRezept.indergo.length;
-				indis = Reha.thisClass.patpanel.aktRezept.indergo; 
+				anz = Reha.instance.patpanel.aktRezept.indergo.length;
+				indis = Reha.instance.patpanel.aktRezept.indergo; 
 			}else if(item.toLowerCase().contains("logo")){
-				anz = Reha.thisClass.patpanel.aktRezept.indlogo.length;
-				indis = Reha.thisClass.patpanel.aktRezept.indlogo; 
+				anz = Reha.instance.patpanel.aktRezept.indlogo.length;
+				indis = Reha.instance.patpanel.aktRezept.indlogo; 
 			}else if(item.toLowerCase().contains("podo")){
-				anz = Reha.thisClass.patpanel.aktRezept.indpodo.length;
-				indis = Reha.thisClass.patpanel.aktRezept.indpodo; 
+				anz = Reha.instance.patpanel.aktRezept.indpodo.length;
+				indis = Reha.instance.patpanel.aktRezept.indpodo; 
 			}
 			for(int i = 0; i < anz; i++){
 				jcmb[cINDI].addItem(indis[i]);
@@ -1529,10 +1529,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		});
 		try{
 			String aneu = "";
-			if(! Reha.thisClass.patpanel.patDaten.get(63).contains( ("@"+(aneu = jtf[cARZTID].getText().trim())+"@\n")) ){
-				String aliste = Reha.thisClass.patpanel.patDaten.get(63)+ "@"+aneu+"@\n";
-				Reha.thisClass.patpanel.patDaten.set(63,aliste+ "@"+aneu+"@\n");
-				Reha.thisClass.patpanel.getLogic().arztListeSpeichernString(aliste,false,Reha.thisClass.patpanel.aktPatID);
+			if(! Reha.instance.patpanel.patDaten.get(63).contains( ("@"+(aneu = jtf[cARZTID].getText().trim())+"@\n")) ){
+				String aliste = Reha.instance.patpanel.patDaten.get(63)+ "@"+aneu+"@\n";
+				Reha.instance.patpanel.patDaten.set(63,aliste+ "@"+aneu+"@\n");
+				Reha.instance.patpanel.getLogic().arztListeSpeichernString(aliste,false,Reha.instance.patpanel.aktPatID);
 				SwingUtilities.invokeLater(new Runnable(){
 				 	   @Override
                     public  void run(){
@@ -1545,9 +1545,9 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 				"Soll dieser Arzt der Ärzteliste des Patienten zugeordnet werden?";
 				int frage = JOptionPane.showConfirmDialog(null,msg,"Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 				if(frage == JOptionPane.YES_OPTION){
-					String aliste = Reha.thisClass.patpanel.patDaten.get(63)+ "@"+aneu+"@\n";
-					Reha.thisClass.patpanel.patDaten.set(63,aliste+ "@"+aneu+"@\n");
-					Reha.thisClass.patpanel.getLogic().arztListeSpeichernString(aliste,false,Reha.thisClass.patpanel.aktPatID);
+					String aliste = Reha.instance.patpanel.patDaten.get(63)+ "@"+aneu+"@\n";
+					Reha.instance.patpanel.patDaten.set(63,aliste+ "@"+aneu+"@\n");
+					Reha.instance.patpanel.getLogic().arztListeSpeichernString(aliste,false,Reha.instance.patpanel.aktPatID);
 					SwingUtilities.invokeLater(new Runnable(){
 					 	   public  void run(){
 					 			jtf[REZDAT].requestFocus();
@@ -1665,8 +1665,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	private void ladeZusatzDatenNeu(){
 		//String tests = "";
 		if(vec.size() <= 0){
-			jtf[cKTRAEG].setText(Reha.thisClass.patpanel.patDaten.get(13));
-			jtf[cKASID].setText(Reha.thisClass.patpanel.patDaten.get(68)); //kassenid			
+			jtf[cKTRAEG].setText(Reha.instance.patpanel.patDaten.get(13));
+			jtf[cKASID].setText(Reha.instance.patpanel.patDaten.get(68)); //kassenid			
 		}else{
 			jtf[cKTRAEG].setText(vec.get(36));
 			jtf[cKASID].setText(vec.get(37)); //kassenid						
@@ -1675,15 +1675,15 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 		if(jtf[cKASID].getText().trim().equals("")){
 			JOptionPane.showMessageDialog(null,"Achtung - kann Preisgruppe nicht ermitteln - Rezept kann später nicht abgerechnet werden!");
 		}
-		jtf[cARZT].setText(Reha.thisClass.patpanel.patDaten.get(25)+ " - "+Reha.thisClass.patpanel.patDaten.get(26));
+		jtf[cARZT].setText(Reha.instance.patpanel.patDaten.get(25)+ " - "+Reha.instance.patpanel.patDaten.get(26));
 		// einbauen A-Name +" - " +LANR;
-		jtf[cARZTID].setText(Reha.thisClass.patpanel.patDaten.get(67)); //arztid					
-		//tests = Reha.thisClass.patpanel.patDaten.get(31);		// bef_dat = Datum der Befreiung
-		jtf[cHEIMBEW].setText(Reha.thisClass.patpanel.patDaten.get(44)); //heimbewohn
-		jtf[cBEFREIT].setText(Reha.thisClass.patpanel.patDaten.get(30)); //befreit
-		jtf[cANZKM].setText(Reha.thisClass.patpanel.patDaten.get(48)); //kilometer
-		jtf[cPATID].setText(Reha.thisClass.patpanel.patDaten.get(66)); //id von Patient
-		jtf[cPATINT].setText(Reha.thisClass.patpanel.patDaten.get(29)); //pat_intern von Patient
+		jtf[cARZTID].setText(Reha.instance.patpanel.patDaten.get(67)); //arztid					
+		//tests = Reha.instance.patpanel.patDaten.get(31);		// bef_dat = Datum der Befreiung
+		jtf[cHEIMBEW].setText(Reha.instance.patpanel.patDaten.get(44)); //heimbewohn
+		jtf[cBEFREIT].setText(Reha.instance.patpanel.patDaten.get(30)); //befreit
+		jtf[cANZKM].setText(Reha.instance.patpanel.patDaten.get(48)); //kilometer
+		jtf[cPATID].setText(Reha.instance.patpanel.patDaten.get(66)); //id von Patient
+		jtf[cPATINT].setText(Reha.instance.patpanel.patDaten.get(29)); //pat_intern von Patient
 	}
 	
 	/***********
@@ -1764,9 +1764,9 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			JOptionPane.showMessageDialog(null, "Ermittlung der Preisgruppen erforderlich");				
 		}
 		
-		jtf[cHEIMBEW].setText(Reha.thisClass.patpanel.patDaten.get(44)); //heimbewohn
-		jtf[cBEFREIT].setText(Reha.thisClass.patpanel.patDaten.get(30)); //befreit
-		jtf[cANZKM].setText(Reha.thisClass.patpanel.patDaten.get(48)); //kilometer
+		jtf[cHEIMBEW].setText(Reha.instance.patpanel.patDaten.get(44)); //heimbewohn
+		jtf[cBEFREIT].setText(Reha.instance.patpanel.patDaten.get(30)); //befreit
+		jtf[cANZKM].setText(Reha.instance.patpanel.patDaten.get(48)); //kilometer
 		jtf[cPATID].setText(this.vec.get(38)); //id von Patient
 		jtf[cPATINT].setText(this.vec.get(0)); //pat_intern von Patient
 		
@@ -1841,7 +1841,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			if(stest.equals(".  .")){
 				stest = DatFunk.sHeute();
 			}
-			boolean neuerpreis = RezTools.neuePreisNachRezeptdatumOderStichtag(aktuelleDisziplin, preisgruppe, String.valueOf(stest),false,Reha.thisClass.patpanel.vecaktrez);
+			boolean neuerpreis = RezTools.neuePreisNachRezeptdatumOderStichtag(aktuelleDisziplin, preisgruppe, String.valueOf(stest),false,Reha.instance.patpanel.vecaktrez);
 			sbuf.append("rez_datum='"+DatFunk.sDatInSQL(stest)+"', ");
 			int row = AktuelleRezepte.tabaktrez.getSelectedRow();
 			if(row >= 0){
@@ -1972,7 +1972,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					break;
 				}
 				////System.out.println("ZuzahlStatus = Zuzahlung (zunächst) erforderlich, prüfe ob befreit oder unter 18");
-				if(Reha.thisClass.patpanel.patDaten.get(30).equals("T")){
+				if(Reha.instance.patpanel.patDaten.get(30).equals("T")){
 					//System.out.println("aktuelles Jahr ZuzahlStatus = Patient ist befreit");
 					if(this.vec.get(14).equals("T")){
 						szzstatus = "1";
@@ -1980,17 +1980,17 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 						
 						if(RezTools.mitJahresWechsel(DatFunk.sDatInDeutsch(this.vec.get(2)))){
 							
-							String vorjahr = Reha.thisClass.patpanel.patDaten.get(69); 
+							String vorjahr = Reha.instance.patpanel.patDaten.get(69); 
 							if(vorjahr.trim().equals("")){
 								//Nur einspringen wenn keine Vorjahrbefreiung vorliegt.
 								//Tabelle mit Einzelterminen auslesen ob Sätze vorhanden
 								//wenn Sätze = 0 und bereits im Befreiungszeitraum dann "0", ansonsten "2" 
 								//Wenn Sätze > 0 dann ersten Satz auslesen Wenn Datum < Befreiung-ab dann "2" ansonsten "0" 
-								if(Reha.thisClass.patpanel.aktRezept.tabaktterm.getRowCount() > 0){
+								if(Reha.instance.patpanel.aktRezept.tabaktterm.getRowCount() > 0){
 									// es sind bereits Tage verzeichnet.
-									String ersterTag = Reha.thisClass.patpanel.aktRezept.tabaktterm.getValueAt(0, 0).toString();
+									String ersterTag = Reha.instance.patpanel.aktRezept.tabaktterm.getValueAt(0, 0).toString();
 									try{
-										if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(41)), ersterTag) >= 0){
+										if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(41)), ersterTag) >= 0){
 											//Behandlung liegt nach befr_ab
 											szzstatus = "0";
 										}else{
@@ -2003,7 +2003,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 									
 								}else{
 									//es sind noch keine Sätze verzeichnet
-									if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(41)), DatFunk.sHeute()) >= 0){
+									if(DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(41)), DatFunk.sHeute()) >= 0){
 										//Behandlung muß nach befr_ab liegen
 										szzstatus = "0";
 									}else{
@@ -2031,16 +2031,16 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 						//wenn nein Status == 2 == nicht befreit und nicht bezahlt
 						//szzstatus = "0";
 						/*
-						if(Reha.thisClass.patpanel.aktRezept.tabaktterm.getRowCount() > 0){
-							String ersterTag = Reha.thisClass.patpanel.aktRezept.tabaktterm.getValueAt(0, 0).toString();
-							if(DatFunk.TageDifferenz(Reha.thisClass.patpanel.patDaten.get(41), ersterTag) >= 0){
+						if(Reha.instance.patpanel.aktRezept.tabaktterm.getRowCount() > 0){
+							String ersterTag = Reha.instance.patpanel.aktRezept.tabaktterm.getValueAt(0, 0).toString();
+							if(DatFunk.TageDifferenz(Reha.instance.patpanel.patDaten.get(41), ersterTag) >= 0){
 								
 							}
 						}else{
 							//noch keine Behandlung
-							if(DatFunk.TageDifferenz(Reha.thisClass.patpanel.patDaten.get(41), DatFunk.sHeute()) >= 0){
+							if(DatFunk.TageDifferenz(Reha.instance.patpanel.patDaten.get(41), DatFunk.sHeute()) >= 0){
 								System.out.println("Noch keine Behandlung vermerkt aber bereits im Befr.Zeitraum angekommen");
-								System.out.println(DatFunk.TageDifferenz(Reha.thisClass.patpanel.patDaten.get(41), DatFunk.sHeute()));
+								System.out.println(DatFunk.TageDifferenz(Reha.instance.patpanel.patDaten.get(41), DatFunk.sHeute()));
 								szzstatus = "0";
 							}
 							
@@ -2050,11 +2050,11 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					break;
 				}
 				
-				if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)))){
+				if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)))){
 					//System.out.println("ZuzahlStatus = Patient ist unter 18 also befreit...");
 					int aj = Integer.parseInt(SystemConfig.aktJahr)-18;
 					String gebtag = DatFunk.sHeute().substring(0,6)+Integer.toString(aj);
-					long tage = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)) ,gebtag);
+					long tage = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)) ,gebtag);
 
 					//System.out.println("Differenz in Tagen = "+tage);
 					//System.out.println("Geburtstag = "+gebtag);
@@ -2094,12 +2094,12 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			}
 			/*****/
 			
-			sbuf.append("unter18='"+((DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)))) ? "T', " : "F', "));
+			sbuf.append("unter18='"+((DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)))) ? "T', " : "F', "));
 			sbuf.append("zzstatus='"+szzstatus+"', ");
 			//int leistung;
 			//String[] str;
 			sbuf.append("diagnose='"+StringTools.Escaped(jta.getText())+"', ");
-			sbuf.append("jahrfrei='"+Reha.thisClass.patpanel.patDaten.get(69)+"', ");
+			sbuf.append("jahrfrei='"+Reha.instance.patpanel.patDaten.get(69)+"', ");
 			sbuf.append("heimbewohn='"+jtf[cHEIMBEW].getText()+"', ");
 			sbuf.append("hbvoll='"+(jcb[cVOLLHB].isSelected() ? "T" : "F")+"', ");
 			sbuf.append("anzahlkm='"+(jtf[cANZKM].getText().trim().equals("") ? "0.00" : jtf[cANZKM].getText().trim())+"', ");
@@ -2312,15 +2312,15 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					break;
 				}				
 				////System.out.println("ZuzahlStatus = Zuzahlung (zunï¿½chst) erforderlich, prï¿½fe ob befreit oder unter 18");
-				if(Reha.thisClass.patpanel.patDaten.get(30).equals("T")){
+				if(Reha.instance.patpanel.patDaten.get(30).equals("T")){
 					//System.out.println("2. ZuzahlStatus = Patient ist befreit");
 					szzstatus = "0";				
 					break;
 				}
-				if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)))){
+				if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)))){
 					////System.out.println("ZuzahlStatus = Patient ist unter 18 also befreit...");
 					String gebtag = DatFunk.sHeute().substring(0,6)+Integer.valueOf(Integer.valueOf(SystemConfig.aktJahr)-18).toString();
-					long tage = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)) ,gebtag);
+					long tage = DatFunk.TageDifferenz(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)) ,gebtag);
 					//System.out.println("Differenz in Tagen = "+tage);
 					//System.out.println("Geburtstag = "+gebtag);
 					if(tage < 0 && tage >= -45){
@@ -2350,19 +2350,19 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 			sbuf.append("zzstatus='"+szzstatus+"', ");
 			sbuf.append("diagnose='"+StringTools.Escaped(jta.getText())+"', ");
 			sbuf.append("unter18='"+unter18+"', ");
-			sbuf.append("jahrfrei='"+Reha.thisClass.patpanel.patDaten.get(69)+"', ");
+			sbuf.append("jahrfrei='"+Reha.instance.patpanel.patDaten.get(69)+"', ");
 			sbuf.append("heimbewohn='"+jtf[cHEIMBEW].getText()+"', ");
 			sbuf.append("hbvoll='"+(jcb[cVOLLHB].isSelected() ? "T" : "F")+"', ");
 			sbuf.append("anzahlkm='"+(jtf[cANZKM].getText().trim().equals("") ? "0.00" : jtf[cANZKM].getText().trim())+"', ");		
-			sbuf.append("befr='"+Reha.thisClass.patpanel.patDaten.get(30)+"', ");
+			sbuf.append("befr='"+Reha.instance.patpanel.patDaten.get(30)+"', ");
 			sbuf.append("zzregel='"+SystemPreislisten.hmZuzahlRegeln.get(aktuelleDisziplin).get(Integer.valueOf(jtf[cPREISGR].getText())-1 )+"',");
 			sbuf.append("icd10='"+jtf[cICD10].getText().trim().replace(" ", "")+"', ");
 			sbuf.append("icd10_2='"+jtf[cICD10_2].getText().trim().replace(" ", "")+"' ");
 			sbuf.append("where id='"+Integer.toString(rezidneu)+"'  LIMIT 1");
 			SqlInfo.sqlAusfuehren(sbuf.toString());
 			//System.out.println("Rezept wurde mit Preisgruppe "+jtf[cPREISGR].getText()+" gespeichert");
-			Reha.thisClass.patpanel.aktRezept.setzeRezeptNummerNeu(nummer.toUpperCase()+Integer.toString(reznr));
-			//Reha.thisClass.patpanel.aktRezept.holeRezepte(jtf[cPATINT].getText(),nummer.toUpperCase()+Integer.toString(reznr));
+			Reha.instance.patpanel.aktRezept.setzeRezeptNummerNeu(nummer.toUpperCase()+Integer.toString(reznr));
+			//Reha.instance.patpanel.aktRezept.holeRezepte(jtf[cPATINT].getText(),nummer.toUpperCase()+Integer.toString(reznr));
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).setVisible(false);
 			aufraeumen();
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).dispose();

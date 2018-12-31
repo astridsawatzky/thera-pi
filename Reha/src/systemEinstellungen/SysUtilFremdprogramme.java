@@ -32,7 +32,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 
 public class SysUtilFremdprogramme extends JXPanel implements KeyListener, ActionListener {
@@ -61,7 +61,7 @@ public class SysUtilFremdprogramme extends JXPanel implements KeyListener, Actio
 		this.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 		
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     add(getVorlagenSeite(),BorderLayout.CENTER);
 	     add(getKnopfPanel(),BorderLayout.SOUTH);

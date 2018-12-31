@@ -97,8 +97,8 @@ public class FinalGlassPane extends JPanel implements AWTEventListener {
             repaint(); 
         }
         
-        //Reha.thisClass.terminpanel.getViewPanel().dispatchEvent(event);
-        //Reha.thisClass.terminpanel.getTerminFlaecheFromOutside().dispatchEvent(event);
+        //Reha.instance.terminpanel.getViewPanel().dispatchEvent(event);
+        //Reha.instance.terminpanel.getTerminFlaecheFromOutside().dispatchEvent(event);
 
     } 
  

@@ -191,7 +191,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				setBackgroundPainter(Reha.thisClass.compoundPainter
+				setBackgroundPainter(Reha.instance.compoundPainter
 						.get("PatNeuanlage"));
 				return null;
 			}
@@ -297,13 +297,13 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 						if (inNeu || feldname.equals("")) {
 							setzeFocus();
 						} else {
-							if (Reha.thisClass.patpanel.kid < 0
+							if (Reha.instance.patpanel.kid < 0
 									&& feldname.equals("KASSE")) {
 								if (feldergefuellt) {
 									// jtf[12].setText("?"+jtf[12].getText());
 								}
 							}
-							if (Reha.thisClass.patpanel.aid < 0
+							if (Reha.instance.patpanel.aid < 0
 									&& feldname.equals("ARZT")) {
 								if (feldergefuellt) {
 									// jtf[17].setText("?"+jtf[17].getText());
@@ -439,7 +439,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 				List<String> nichtlesen = Arrays.asList(new String[] {
 						"anamnese", "pat_text" });
 				Vector<?> felder = SqlInfo.holeSatz("pat5", "*", "pat_intern='"
-						+ Reha.thisClass.patpanel.aktPatID + "'", nichtlesen);
+						+ Reha.instance.patpanel.aktPatID + "'", nichtlesen);
 				int gros = felder.size();
 				int anzahlf = fedits.length;
 				int anzahlc = fchecks.length;
@@ -479,10 +479,10 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 				 */
 				arztbisher = jtf[17].getText();
 				kassebisher = jtf[12].getText();
-				kassenid = Reha.thisClass.patpanel.patDaten.get(68);
+				kassenid = Reha.instance.patpanel.patDaten.get(68);
 				befreitdatum = DatFunk
-						.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(31));
-				freizumstart = (Reha.thisClass.patpanel.patDaten.get(30)
+						.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(31));
+				freizumstart = (Reha.instance.patpanel.patDaten.get(30)
 						.equals("T") ? true : false);
 				if (!jtf[35].getText().trim().equals("")) {
 					jcheck[10].setEnabled(true);
@@ -588,9 +588,9 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		}
 
 		if (!this.inNeu) {
-			globPat_intern = Reha.thisClass.patpanel.aktPatID;
+			globPat_intern = Reha.instance.patpanel.aktPatID;
 			buf.append(" where pat_intern='" + globPat_intern + "' LIMIT 1");
-			spatintern = Reha.thisClass.patpanel.aktPatID;
+			spatintern = Reha.instance.patpanel.aktPatID;
 			// Wenn Kasse veränderr wurde....
 			if (!jtf[34].getText().trim().equals(kassenid)) {
 				JOptionPane
@@ -620,7 +620,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 					// hier wäre es optimal eine ZuzahlToolsFunktion zu
 					// haben.....
 					int anzahl = SqlInfo.zaehleSaetze("verordn", "pat_intern='"
-							+ Reha.thisClass.patpanel.aktPatID
+							+ Reha.instance.patpanel.aktPatID
 							+ "' AND REZ_GEB='0.00'");
 					if (anzahl > 0) {
 						String meldung = "Dieser Patient hat -> "
@@ -636,9 +636,9 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 											null,
 											"Dann eben nicht!\nVergessen Sie aber nicht den Befreiungsstatus der Rezepte von Hand zu ändern");
 						} else if (frage == JOptionPane.YES_OPTION) {
-							String pat_intern = Reha.thisClass.patpanel.aktPatID;
+							String pat_intern = Reha.instance.patpanel.aktPatID;
 							String geboren = DatFunk
-									.sDatInDeutsch(Reha.thisClass.patpanel.patDaten
+									.sDatInDeutsch(Reha.instance.patpanel.patDaten
 											.get(4));
 							String befreit = (freibeimspeichern ? "T" : "F");
 
@@ -656,7 +656,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		} else {
 			// Angelegt von aufgenommen werden
 			// int neuid = SqlInfo.holeId("pat5", "n_name");
-			patintern = SqlInfo.erzeugeNummer("pat"); // neuid+Reha.thisClass.patiddiff;
+			patintern = SqlInfo.erzeugeNummer("pat"); // neuid+Reha.instance.patiddiff;
 			if (patintern < 0) {
 				JOptionPane
 						.showMessageDialog(
@@ -705,7 +705,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		new Thread() {
 			@Override
             public void run() {
-				Reha.thisClass.patpanel.getLogic().arztListeSpeichernVector(
+				Reha.instance.patpanel.getLogic().arztListeSpeichernVector(
 						(Vector<?>) docmod.getDataVector().clone(), inNeu,
 						String.valueOf(globPat_intern));
 				// new
@@ -1330,7 +1330,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			protected Void doInBackground() throws Exception {
 				try {
 					if (!inNeu) {
-						BufferedImage img = holePatBild(Reha.thisClass.patpanel.aktPatID);
+						BufferedImage img = holePatBild(Reha.instance.patpanel.aktPatID);
 						if (img == null) {
 							lblbild.setText("Kein Bild des Patienten vorhanden");
 						} else {
@@ -1559,7 +1559,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			return;
 		}
 		// System.out.println("in doArztListe");
-		String aerzte = Reha.thisClass.patpanel.patDaten.get(63);
+		String aerzte = Reha.instance.patpanel.patDaten.get(63);
 		String[] einzelarzt = null;
 		String[] arztdaten = null;
 		Vector<?> arztvec = null;
@@ -1603,7 +1603,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		if (SystemConfig.sReaderAktiv.equals("0")) {
 			return;
 		}
-		if (!Reha.thisClass.ocKVK.isCardReady) {
+		if (!Reha.instance.ocKVK.isCardReady) {
 			JOptionPane.showMessageDialog(null,
 					"Chipkarten-Lesegerät ist nicht bereit");
 			return;
@@ -1677,7 +1677,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 						"Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
 				if (frage == JOptionPane.YES_OPTION) {
 					SqlInfo.sqlAusfuehren("delete from patbild where pat_intern = '"
-							+ Reha.thisClass.patpanel.aktPatID + "' LIMIT 1");
+							+ Reha.instance.patpanel.aktPatID + "' LIMIT 1");
 				} else {
 					return;
 				}
@@ -2092,7 +2092,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		try {
 			if (neu) {
 				String select = "Insert into patbild set bild = ? , pat_intern = ?, vorschau = ?";
-				ps = (PreparedStatement) Reha.thisClass.conn
+				ps = (PreparedStatement) Reha.instance.conn
 						.prepareStatement(select);
 				ps.setBytes(
 						1,
@@ -2110,7 +2110,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 				buf = null;
 			} else {
 				String select = "Update patbild set bild = ? , vorschau = ?  where pat_intern = ?";
-				ps = (PreparedStatement) Reha.thisClass.conn
+				ps = (PreparedStatement) Reha.instance.conn
 						.prepareStatement(select);
 				ps.setBytes(
 						1,
@@ -2163,7 +2163,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		ResultSet rs = null;
 		Image bild = null;
 		try {
-			stmt = Reha.thisClass.conn
+			stmt = Reha.instance.conn
 					.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 							ResultSet.CONCUR_UPDATABLE);
 			String test = "select bild from patbild where pat_intern ='"
@@ -2389,6 +2389,6 @@ class ArztListeSpeichern {
 		SqlInfo.aktualisiereSaetze("pat5", "aerzte='" + aliste + "'",
 				"pat_intern='" + xpatintern + "'");
 		new ExUndHop().setzeStatement(cmd);
-		Reha.thisClass.patpanel.patDaten.set(63, aliste);
+		Reha.instance.patpanel.patDaten.set(63, aliste);
 	}
 }

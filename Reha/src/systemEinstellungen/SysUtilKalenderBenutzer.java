@@ -92,7 +92,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 		//System.out.println("Aufruf SysUtilKalenderBenutzer");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		
 		/*******Karteireiter erzeugen und Seite 1 in Scrollpane legen**********/
@@ -413,7 +413,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 		//System.out.println(statement);
 		JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 		if(termin != null){
-			Reha.thisClass.terminpanel.setCombosOutside();
+			Reha.instance.terminpanel.setCombosOutside();
 			JOptionPane.showMessageDialog(null,"Die Kalenderbenutzer wurden geändert!\n"+
 					"Die Behandlersets des aktiven Terminkalender wurden zurückgesetzt.");
 		}
@@ -436,7 +436,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 				comboAuswerten();
 				JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 				if(termin != null){
-					Reha.thisClass.terminpanel.setCombosOutside();
+					Reha.instance.terminpanel.setCombosOutside();
 					JOptionPane.showMessageDialog(null,"Die Kalenderbenutzer wurden geändert!\n"+
 							"Die Behandlersets des aktiven Terminkalender wurden zurückgesetzt.");
 				}
@@ -569,11 +569,11 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 	}
 	/***********************************************************/
 	private void holeKollege(String match){
-		//Reha obj = Reha.thisClass;
+		//Reha obj = Reha.instance;
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                ResultSet.CONCUR_UPDATABLE );
 			rs = stmt.executeQuery("SELECT * FROM kollegen2 where Matchcode='"+match+"'");
 			kollegenDaten.clear();
@@ -628,7 +628,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 		ResultSet rs = null;
 		int itest = 0;
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                ResultSet.CONCUR_UPDATABLE );
 
 			rs = stmt.executeQuery("SELECT KALZEILE FROM kollegen2 ORDER BY KALZEILE");
@@ -678,7 +678,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 	private void executeStatement(String match){
 		Statement stmt = null;
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                ResultSet.CONCUR_UPDATABLE );
 			stmt.execute(match);
 
@@ -701,7 +701,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener,Acti
 	ResultSet rs = null;
 	boolean ret = true;
 	try {
-		stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+		stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                 ResultSet.CONCUR_UPDATABLE );
 		try{
 			int anz = 0;

@@ -80,7 +80,7 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 	
 	public KasseNeuanlage(Object eltern,KassenPanel xkpan,Vector<String> vec,String id){
 		super();
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("KasseNeuanlage"));		
+		setBackgroundPainter(Reha.instance.compoundPainter.get("KasseNeuanlage"));		
 		this.kasDaten = vec;
 		this.kassenId = id;
 		this.eltern = eltern;

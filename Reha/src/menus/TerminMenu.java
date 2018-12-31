@@ -56,7 +56,7 @@ public class TerminMenu {
 				@Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
 					JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
-					Reha.thisClass.progLoader.ProgTerminFenster(0, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
+					Reha.instance.progLoader.ProgTerminFenster(0, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
 					//ProgLoader.ProgTerminFenster(0,0);
 					if(termin == null){
 
@@ -79,8 +79,8 @@ public class TerminMenu {
 		RoogleStart.addActionListener(new java.awt.event.ActionListener() {
 			@Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
-				Reha.thisClass.messageLabel.setText("Roogle");
-				Reha.thisClass.progLoader.ProgRoogleFenster(0,null);
+				Reha.instance.messageLabel.setText("Roogle");
+				Reha.instance.progLoader.ProgRoogleFenster(0,null);
 				//ProgLoader.ProgRoogleFenster(0,null);
 			}
 		});
@@ -93,9 +93,9 @@ public class TerminMenu {
 		waz.addActionListener(new java.awt.event.ActionListener() {
 			@Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
-				Reha.thisClass.messageLabel.setText("Wochenarbeitszeit definieren");
+				Reha.instance.messageLabel.setText("Wochenarbeitszeit definieren");
 				//ProgLoader.ProgTerminFenster(0,2);
-				Reha.thisClass.progLoader.ProgTerminFenster(0, 2);
+				Reha.instance.progLoader.ProgTerminFenster(0, 2);
 			}
 		});
 

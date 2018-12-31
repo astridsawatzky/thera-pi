@@ -19,7 +19,7 @@ public class ArztTools {
 			boolean isherr = false;
 			int xid;
 			if(id.equals("")){
-				xid = StringTools.ZahlTest(Reha.thisClass.patpanel.patDaten.get(67));			
+				xid = StringTools.ZahlTest(Reha.instance.patpanel.patDaten.get(67));			
 			}else{
 				xid = Integer.valueOf(id);
 			}
@@ -78,7 +78,7 @@ public class ArztTools {
 			//"<Aihrer>","<Apatientin>","<Adie>"
 			JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 			if(patient != null){
-				if(! Reha.thisClass.patpanel.aktPatID.equals("")){
+				if(! Reha.instance.patpanel.aktPatID.equals("")){
 					boolean bfrau = ( vec.get(0).equalsIgnoreCase("FRAU") ? true : false );
 					SystemConfig.hmAdrADaten.put("<Aihrer>", (bfrau ? "Ihrer" : "Ihres"));
 					SystemConfig.hmAdrADaten.put("<Apatientin>", (bfrau ? "Patientin" : "Patienten"));

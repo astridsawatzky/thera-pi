@@ -60,13 +60,13 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
 	}
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
-		//System.out.println("Lösche Gutachten-Internal von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
+		//System.out.println("Lösche Gutachten-Internal von Desktop-Pane = "+Reha.instance.desktops[this.desktop]);
 		//nächsten JInternalFrame aktivieren
 		//System.out.println("Größe = "+this.getWidth()+"/"+this.getHeight()+" Location = "+this.getLocation().x+"/"+this.getLocation().y);
 		((EBerichtPanel)this.inhalt).testeFreiText();		
-		Reha.thisClass.aktiviereNaechsten(this.desktop);		
+		Reha.instance.aktiviereNaechsten(this.desktop);		
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		((EBerichtPanel)this.inhalt).finalise();
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
@@ -107,7 +107,7 @@ public class JGutachtenInternal extends JRehaInternal implements RehaEventListen
             public  void run()
 		 	   {
 				AktiveFenster.loescheFenster(name);
-				Reha.thisClass.progLoader.loescheGutachten();
+				Reha.instance.progLoader.loescheGutachten();
 		 	   }
 		});
 

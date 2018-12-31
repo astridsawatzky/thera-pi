@@ -60,7 +60,7 @@ import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 import dialoge.ToolsDialog;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import hauptFenster.RehaIOMessages;
 import hauptFenster.RehaIOServer;
@@ -483,8 +483,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		gesamtAkt = doRechneHistorie("verordn");
 		double gesamtumsatz = gesamtHistor+gesamtAkt;
 		DecimalFormat dfx = new DecimalFormat( "0.00" );
-		String msg = "<html><font font-family='Courier New'>Gesamtumsatz von Patient --> "+Reha.thisClass.patpanel.patDaten.get(2)+", "+
-		Reha.thisClass.patpanel.patDaten.get(3)+"&nbsp;&nbsp;&nbsp;&nbsp;"+   
+		String msg = "<html><font font-family='Courier New'>Gesamtumsatz von Patient --> "+Reha.instance.patpanel.patDaten.get(2)+", "+
+		Reha.instance.patpanel.patDaten.get(3)+"&nbsp;&nbsp;&nbsp;&nbsp;"+   
 		"<br><br>Historie&nbsp;=&nbsp;"+dfx.format(gesamtHistor)+" EUR"+
 		"<br>Aktuell&nbsp;&nbsp;=&nbsp;"+dfx.format(gesamtAkt)+" EUR"+
 		"<br><br><p><b>Gesamt = <font align='center' color='#FF0000'>"+dfx.format(gesamtumsatz)+" EUR </font></b></p><br><br></font>";
@@ -568,7 +568,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 				/*********************/
 			}
 		}else{
-			String cmd = "pat_intern='"+Reha.thisClass.patpanel.aktPatID+"'";
+			String cmd = "pat_intern='"+Reha.instance.patpanel.aktPatID+"'";
 			Vector<Vector<String>> vec = SqlInfo.holeSaetze(db, "id,rez_nr",cmd , Arrays.asList(new String[] {}));
 			rows = vec.size();
 			String suchrezid = null;
@@ -631,9 +631,9 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 				xreznr = ""; 
 			}
 			
-			int  iexistiert = Reha.thisClass.patpanel.berichte.berichtExistiert(xreznr);
+			int  iexistiert = Reha.instance.patpanel.berichte.berichtExistiert(xreznr);
 			if(iexistiert > 0){
-				xverfasser = Reha.thisClass.patpanel.berichte.holeVerfasser();
+				xverfasser = Reha.instance.patpanel.berichte.holeVerfasser();
 				neuber = false;
 				berid = iexistiert;
 				String meldung = "<html>Für das Historienrezept <b>"+xreznr+"</b> existiert bereits ein Bericht.<br>\nVorhandener Bericht wird jetzt geöffnet";
@@ -726,7 +726,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			}
 			dtblm.addRow(vec.get(i));
 			
-			dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[zzbild], i, 1);
+			dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[zzbild], i, 1);
 			if(i==0){
 				final int ix = i;
                 new Thread(){
@@ -738,7 +738,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			}
 		}
 		try{
-			Reha.thisClass.patpanel.getTab().setTitleAt(1,macheHtmlTitel(anz,"Rezept-Historie"));
+			Reha.instance.patpanel.getTab().setTitleAt(1,macheHtmlTitel(anz,"Rezept-Historie"));
 		}catch(Exception extiming){
 			System.out.println("Timingprobleme beim setzen des Reitertitels - Reiter: Historie");
 		}
@@ -796,7 +796,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 			if(anfrage == JOptionPane.YES_OPTION){
 				SqlInfo.sqlAusfuehren("delete from faktura where rez_nr='"+rez_nr+"'");
 				SqlInfo.sqlAusfuehren("delete from fertige where rez_nr='"+rez_nr+"'");
-				if(Reha.thisClass.abrechnungpanel != null){
+				if(Reha.instance.abrechnungpanel != null){
 					/*
 					String[] diszis = null;
 					if(SystemConfig.mitRs){
@@ -805,17 +805,17 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 						diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};	
 					}
 					
-					String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+					String aktDisziplin = diszis[Reha.instance.abrechnungpanel.cmbDiszi.getSelectedIndex()];
 					*/
-					String aktDisziplin = Reha.thisClass.abrechnungpanel.disziSelect.getCurrDiszi();
+					String aktDisziplin = Reha.instance.abrechnungpanel.disziSelect.getCurrDiszi();
 					if(RezTools.putRezNrGetDisziplin(rez_nr).equals(aktDisziplin)){
-						Reha.thisClass.abrechnungpanel.einlesenErneuern(rez_nr);
+						Reha.instance.abrechnungpanel.einlesenErneuern(rez_nr);
 					}
 				}
 			}
 			//new sqlTools.ExUndHop().setzeStatement("delete from faktura where rez_nr='"+rez_nr+"'");
 			setzeKarteiLasche();
-			Reha.thisClass.patpanel.aktRezept.holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
+			Reha.instance.patpanel.aktRezept.holeRezepte(Reha.instance.patpanel.patDaten.get(29),"");
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
@@ -826,10 +826,10 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 	}
 	public void setzeKarteiLasche(){
 		if(tabhistorie.getRowCount()==0){
-			holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
-			Reha.thisClass.patpanel.multiTab.setTitleAt(1,macheHtmlTitel(tabhistorie.getRowCount(),"Rezept-Historie"));
+			holeRezepte(Reha.instance.patpanel.patDaten.get(29),"");
+			Reha.instance.patpanel.multiTab.setTitleAt(1,macheHtmlTitel(tabhistorie.getRowCount(),"Rezept-Historie"));
 		}else{
-			Reha.thisClass.patpanel.multiTab.setTitleAt(1,macheHtmlTitel(tabhistorie.getRowCount(),"Rezept-Historie"));			
+			Reha.instance.patpanel.multiTab.setTitleAt(1,macheHtmlTitel(tabhistorie.getRowCount(),"Rezept-Historie"));			
 		}
 	}
 	
@@ -908,7 +908,7 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		if(!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)){return;}
 		int row = tabhistorie.getSelectedRow();
 		if(row < 0){JOptionPane.showMessageDialog(null,"Kein Rezept für Fallsteuerung ausgewählt"); return;}
-		Reha.thisClass.progLoader.Dta301Fenster(1, tabhistorie.getValueAt(row, 0).toString());
+		Reha.instance.progLoader.Dta301Fenster(1, tabhistorie.getValueAt(row, 0).toString());
 	}
 	private void doRgebKopie(){
 		if(!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)){return;}
@@ -969,9 +969,9 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		}
 	}
 	public static String getActiveRezNr(){
-		if( Reha.thisClass.patpanel.historie.tabhistorie.getSelectedRow() < 0){return null;}
-		return Reha.thisClass.patpanel.historie.tabhistorie.getValueAt(
-				Reha.thisClass.patpanel.historie.tabhistorie.getSelectedRow(), 0).toString(); 
+		if( Reha.instance.patpanel.historie.tabhistorie.getSelectedRow() < 0){return null;}
+		return Reha.instance.patpanel.historie.tabhistorie.getValueAt(
+				Reha.instance.patpanel.historie.tabhistorie.getSelectedRow(), 0).toString(); 
 	}
 	private void doKopieToNew(){
 		try{
@@ -980,8 +980,8 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 				protected Void doInBackground() throws Exception {
 					try{
 					if( (getActiveRezNr()) == null){return null;}
-						Reha.thisClass.patpanel.aktRezept.neuanlageRezept(true, "", "KopiereHistorienRezept");
-						Reha.thisClass.patpanel.multiTab.setSelectedIndex(0);
+						Reha.instance.patpanel.aktRezept.neuanlageRezept(true, "", "KopiereHistorienRezept");
+						Reha.instance.patpanel.multiTab.setSelectedIndex(0);
 					}catch(Exception ex){
 						ex.printStackTrace();
 					}

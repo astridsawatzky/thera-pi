@@ -32,7 +32,7 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 
 public class Ns2 implements ActionListener {
@@ -648,7 +648,7 @@ public class Ns2 implements ActionListener {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			e.printStackTrace();

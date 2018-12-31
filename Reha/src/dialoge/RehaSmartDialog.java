@@ -31,7 +31,7 @@ import org.jdesktop.swingx.JXTitledPanel;
 
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import systemTools.ListenerTools;
 
@@ -288,7 +288,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
 	@Override
 	public void windowActivated(java.awt.event.WindowEvent e) {    
-		//Reha.thisClass.shiftLabel.setText("Dialog -Focus da");
+		//Reha.instance.shiftLabel.setText("Dialog -Focus da");
 		if(pinPanel != null){
 			jtp.getContentContainer().requestFocus();
 			pinPanel.SetzeAktivButton(true);
@@ -314,7 +314,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
 	@Override
 	public void windowDeactivated(java.awt.event.WindowEvent e) {    
-		//Reha.thisClass.shiftLabel.setText("Dialog -Focus weg");
+		//Reha.instance.shiftLabel.setText("Dialog -Focus weg");
 		if(pinPanel != null){
 			pinPanel.SetzeAktivButton(false);
 		}

@@ -48,8 +48,8 @@ import dta301.RVMeldung301;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import gui.Cursors;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import patientenFenster.KassenAuswahl;
@@ -167,13 +167,13 @@ public class AbrechnungReha extends JXPanel{
 			protected Void doInBackground() throws Exception {
 				try{
 					JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					if(Reha.thisClass.patpanel == null){
+					if(Reha.instance.patpanel == null){
 						return null;
 					}
-					if(  (patient != null)  && (Reha.thisClass.patpanel.vecaktrez.size() > 0) ){
-						if(Reha.thisClass.patpanel.vecaktrez.get(1).startsWith("RH")){
-							tfrehanr[0].setText(Reha.thisClass.patpanel.vecaktrez.get(1));
-							doEinlesen(Reha.thisClass.patpanel.vecaktrez.get(1));
+					if(  (patient != null)  && (Reha.instance.patpanel.vecaktrez.size() > 0) ){
+						if(Reha.instance.patpanel.vecaktrez.get(1).startsWith("RH")){
+							tfrehanr[0].setText(Reha.instance.patpanel.vecaktrez.get(1));
+							doEinlesen(Reha.instance.patpanel.vecaktrez.get(1));
 							doRechnen();
 							initOk = true;
 						}
@@ -688,7 +688,7 @@ public class AbrechnungReha extends JXPanel{
 		SqlInfo.sqlAusfuehren("delete from volle where rez_nr='"+delrez+"'");
 		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 		if(patient != null){
-			aktiverPatient = Reha.thisClass.patpanel.aktPatID;
+			aktiverPatient = Reha.instance.patpanel.aktPatID;
 		}
 		if(aktiverPatient.equals(rehavec.get(0).get(0))){
 			posteAktualisierung(rehavec.get(0).get(0));
@@ -911,7 +911,7 @@ public class AbrechnungReha extends JXPanel{
 				//hier die VSNR ermitteln
 
 				Vector<Vector<String>> vecvsnr = SqlInfo.holeFelder("select berichtid from berhist where pat_intern = '"+
-						Reha.thisClass.patpanel.patDaten.get(29)+"' and bertitel like 'Reha-Ent%' order by id DESC LIMIT 1");
+						Reha.instance.patpanel.patDaten.get(29)+"' and bertitel like 'Reha-Ent%' order by id DESC LIMIT 1");
 				String vsnr = SqlInfo.holeEinzelFeld("select vnummer from bericht2 where berichtid = '"+vecvsnr.get(0).get(0)+"' LIMIT 1");
 				if(vsnr.trim().length()==12){
 				 vsnr = vsnr.substring(0,2)+" "+vsnr.substring(2,8)+" "+vsnr.substring(8,9)+" "+vsnr.substring(9);

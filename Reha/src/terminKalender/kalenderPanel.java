@@ -123,7 +123,7 @@ public void paintComponent( Graphics g ) {
 		
 			/**********************************************/
 			/*
-			if((!this.spalteAktiv) || (!Reha.thisClass.terminpanel.dragStart)){
+			if((!this.spalteAktiv) || (!Reha.instance.terminpanel.dragStart)){
 			}
 			*/
 			g2d.setColor( SystemConfig.KalenderHintergrund);
@@ -226,7 +226,7 @@ public void paintComponent( Graphics g ) {
 							if (sReznr.contains("@FREI")){
 								//TerminFenster.thisClass.dragLab[this.panelNummer].setVisible(false);
 								//TerminFenster.thisClass.dragLab[this.panelNummer].setIcon(null);
-								Reha.thisClass.terminpanel.dragLab[this.panelNummer].setText("");
+								Reha.instance.terminpanel.dragLab[this.panelNummer].setText("");
 
 								g2d.drawString(/*yEndeMin-yStartMin+"s2 "+*/sName, 5, (baseline));
 						
@@ -234,11 +234,11 @@ public void paintComponent( Graphics g ) {
 							}else{
 								if(this.spalteAktiv){
 									
-									if((!sName.equals("") || Reha.thisClass.terminpanel.ansicht==Reha.thisClass.terminpanel.MASKEN_ANSICHT) ){
+									if((!sName.equals("") || Reha.instance.terminpanel.ansicht==Reha.instance.terminpanel.MASKEN_ANSICHT) ){
 										if(yDifferenz < 12){
 											////System.out.println("Y-Differenz ist kleiner 12: "+yDifferenz);
 											if(yDifferenz > 0){
-												Reha.thisClass.terminpanel.dragLab[this.panelNummer].setBounds(xStart+1,yStartMin,xStart+13, yDifferenz-1);
+												Reha.instance.terminpanel.dragLab[this.panelNummer].setBounds(xStart+1,yStartMin,xStart+13, yDifferenz-1);
 												g2d.drawImage(this.dragImage.getImage(),xStart+1,yStartMin+(yDifferenz/2)-(this.dragImage.getIconHeight()/2),null);
 											}else{
 												////System.out.println("Y-Differenz ist kleiner 12 und kleiner 0: "+yDifferenz);
@@ -255,7 +255,7 @@ public void paintComponent( Graphics g ) {
 											*/
 										}else{
 											////System.out.println("Y-Differenz ist gr��er 12: "+yDifferenz);
-											Reha.thisClass.terminpanel.dragLab[this.panelNummer].setBounds(xStart+1,yStartMin,xStart+13, yDifferenz-1);
+											Reha.instance.terminpanel.dragLab[this.panelNummer].setBounds(xStart+1,yStartMin,xStart+13, yDifferenz-1);
 											g2d.drawImage(this.dragImage.getImage(),xStart+1,yStartMin+(yDifferenz/2)-(this.dragImage.getIconHeight()/2),null);
 											g2d.drawString(sStart.substring(0,5)+"-"+
 													sName
@@ -271,8 +271,8 @@ public void paintComponent( Graphics g ) {
 												, 5, (baseline));
 									
 										g2d.draw3DRect(xStart, yStartMin, xEnde-3, yDifferenz-1, true);
-										Reha.thisClass.terminpanel.dragLab[this.panelNummer].setIcon(null);
-										Reha.thisClass.terminpanel.dragLab[this.panelNummer].setText("");
+										Reha.instance.terminpanel.dragLab[this.panelNummer].setIcon(null);
+										Reha.instance.terminpanel.dragLab[this.panelNummer].setText("");
 									}
 									
 								}else{
@@ -795,8 +795,8 @@ public void paintComponent( Graphics g ) {
 			aktivPunkt[1] = -1;
 			aktivPunkt[2] = -1;
 			aktivPunkt[3] = -1;
-			Reha.thisClass.terminpanel.dragLab[this.panelNummer].setText("");
-			Reha.thisClass.terminpanel.dragLab[this.panelNummer].setIcon(null);
+			Reha.instance.terminpanel.dragLab[this.panelNummer].setText("");
+			Reha.instance.terminpanel.dragLab[this.panelNummer].setIcon(null);
 	}
 	public void  setSpalteaktiv(boolean aktiv){
 		

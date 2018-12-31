@@ -94,7 +94,7 @@ public class Eb3 implements RehaEventListener  {
 						Thread.sleep(20);
 					}
 				}catch(Exception ex){
-					Reha.thisClass.progressStarten(false);
+					Reha.instance.progressStarten(false);
 					ex.printStackTrace();
 				}
 				return null;
@@ -416,14 +416,14 @@ public class Eb3 implements RehaEventListener  {
 
 		try {
 			if(eltern.document==null){
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				return false;
 			}
 			if(!eltern.document.isOpen()){
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 				return false;
 			}
-			Reha.thisClass.progressStarten(true);
+			Reha.instance.progressStarten(true);
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			try{
 				eltern.document.setModified(false);
@@ -442,7 +442,7 @@ public class Eb3 implements RehaEventListener  {
 
 			InputStream ins = new ByteArrayInputStream(out.toByteArray());
 			String select = "Update bericht2 set freitext = ? where berichtid = ? LIMIT 1";
-			ps = (PreparedStatement) Reha.thisClass.conn.prepareStatement(select);
+			ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
 			ps.setAsciiStream(1,ins);
 			ps.setInt(2, eltern.berichtid);
 			ps.execute();
@@ -461,12 +461,12 @@ public class Eb3 implements RehaEventListener  {
 			}
 			out.close();
 	    	eltern.document.setModified(false);
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 
 
 		}catch(Exception ex){
 			ex.printStackTrace();
-			Reha.thisClass.progressStarten(false);
+			Reha.instance.progressStarten(false);
 			return false;
 		}
 		finally {

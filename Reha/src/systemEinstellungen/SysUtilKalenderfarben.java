@@ -58,7 +58,7 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
 		//System.out.println("Aufruf SysUtilKalenderfarben");
 		this.setBorder(BorderFactory.createEmptyBorder(15, 40, 15, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		jscroll = new JScrollPane();
 		jscroll.setOpaque(false);

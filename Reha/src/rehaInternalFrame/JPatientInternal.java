@@ -39,7 +39,7 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
 		try{
-		////System.out.println("Lösche Patient von Desktop-Pane = "+Reha.thisClass.desktops[this.desktop]);
+		////System.out.println("Lösche Patient von Desktop-Pane = "+Reha.instance.desktops[this.desktop]);
 		//Nächsten JInternalFrame aktivieren
 			if(! this.isIcon){
 				new FrameSave((Dimension)this.getSize().clone(), 
@@ -51,9 +51,9 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 			}
 			
 	
-		Reha.thisClass.aktiviereNaechsten(this.desktop);
+		Reha.instance.aktiviereNaechsten(this.desktop);
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
 		rEvent = null;
@@ -62,10 +62,10 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 		try{
 			Reha.getThisFrame().requestFocus();
 			/*
-			Reha.thisClass.patpanel.fl = null;
-			Reha.thisClass.patpanel.kli = null;
-			Reha.thisClass.patpanel.gplst = null;
-			Reha.thisClass.patpanel.newPolicy = null;
+			Reha.instance.patpanel.fl = null;
+			Reha.instance.patpanel.kli = null;
+			Reha.instance.patpanel.gplst = null;
+			Reha.instance.patpanel.newPolicy = null;
 			*/
 		}catch(Exception ex){
 			////System.out.println("Fehler beim schließen des IFrames");
@@ -80,16 +80,16 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 		PatStammEventClass.firePatStammEvent(pEvt);
 		
 		////System.out.println("Internal-Pat-Frame in geschlossen***************");
-		Reha.thisClass.aktiviereNaechsten(this.desktop);
-		Reha.thisClass.patpanel.allesAufraeumen();
-		if(Reha.thisClass.patpanel.getInternal() != null){
-			Reha.thisClass.patpanel.setInternalToNull();
-			Reha.thisClass.patpanel = null;
+		Reha.instance.aktiviereNaechsten(this.desktop);
+		Reha.instance.patpanel.allesAufraeumen();
+		if(Reha.instance.patpanel.getInternal() != null){
+			Reha.instance.patpanel.setInternalToNull();
+			Reha.instance.patpanel = null;
 		}
 		/*
-		if(Reha.thisClass.patpanel.jry != null){
-			Reha.thisClass.patpanel.jry = null;
-			Reha.thisClass.patpanel = null;
+		if(Reha.instance.patpanel.jry != null){
+			Reha.instance.patpanel.jry = null;
+			Reha.instance.patpanel = null;
 		}
 		*/
 		//Gutachten.gutachten = null;
@@ -114,7 +114,7 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
             public  void run()
 		 	   {
 		 		   AktiveFenster.loescheFenster(name);
-		 		   Reha.thisClass.progLoader.loeschePatient();
+		 		   Reha.instance.progLoader.loeschePatient();
 		 	   }
 		});
 		}catch(Exception ex){
@@ -125,7 +125,7 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
 		
 	}
 	public void setzeSuche(){
-		Reha.thisClass.patpanel.setzeFocus();
+		Reha.instance.patpanel.setzeFocus();
 	}
 	@Override
     public void setzeTitel(String stitel){

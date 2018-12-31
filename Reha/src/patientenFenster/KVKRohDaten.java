@@ -60,7 +60,7 @@ public class KVKRohDaten extends RehaSmartDialog implements ActionListener{
 		jroot.setLayout(new BorderLayout());
 		jroot.setBackground(Color.WHITE);
 
-		jroot.setBackgroundPainter(Reha.thisClass.compoundPainter.get("KVKRohDaten"));
+		jroot.setBackgroundPainter(Reha.instance.compoundPainter.get("KVKRohDaten"));
 		jroot.setBorder(null);
 		jroot.add(getTextPanel(),BorderLayout.CENTER);
 		jroot.add(getButtonPanel(),BorderLayout.SOUTH);

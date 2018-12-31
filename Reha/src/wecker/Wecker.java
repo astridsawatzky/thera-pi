@@ -130,8 +130,8 @@ public class Wecker extends RehaSmartDialog{
 			//System.out.println("timer wird gestoppt");
 			Reha.fangoTimer.stop();
 			Reha.timerLaeuft = false;
-			Reha.thisClass.messageLabel.setForeground(Color.BLACK);
-			Reha.thisClass.messageLabel.setText("keine Timer-Termine");
+			Reha.instance.messageLabel.setForeground(Color.BLACK);
+			Reha.instance.messageLabel.setText("keine Timer-Termine");
 			return;
 		}
 		try{
@@ -154,18 +154,18 @@ public class Wecker extends RehaSmartDialog{
 				if(Reha.timerVec.size() <= 0){
 					Reha.fangoTimer.stop();
 					Reha.timerLaeuft = false;
-					Reha.thisClass.messageLabel.setForeground(Color.BLACK);
-					Reha.thisClass.messageLabel.setText("keine Timer-Termine");
+					Reha.instance.messageLabel.setForeground(Color.BLACK);
+					Reha.instance.messageLabel.setText("keine Timer-Termine");
 				}else{
 					String msg = Long.toString((Long)Reha.timerVec.get(0).get(3)-aktuelleMinuten());
-					Reha.thisClass.messageLabel.setForeground(Color.RED);
-					Reha.thisClass.messageLabel.setText("in "+msg+(msg.equals("1") ? " Minute " : " Minuten ")+"nächster Timer-Termin" );
+					Reha.instance.messageLabel.setForeground(Color.RED);
+					Reha.instance.messageLabel.setText("in "+msg+(msg.equals("1") ? " Minute " : " Minuten ")+"nächster Timer-Termin" );
 				}
 
 			}else{
 				String msg = Long.toString((Long)Reha.timerVec.get(0).get(3)-aktuelleMinuten());
-				Reha.thisClass.messageLabel.setForeground(Color.RED);
-				Reha.thisClass.messageLabel.setText("in "+msg+(msg.equals("1") ? " Minute " : " Minuten ")+"nächster Timer-Termin" );
+				Reha.instance.messageLabel.setForeground(Color.RED);
+				Reha.instance.messageLabel.setText("in "+msg+(msg.equals("1") ? " Minute " : " Minuten ")+"nächster Timer-Termin" );
 			}
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -283,7 +283,7 @@ public class Wecker extends RehaSmartDialog{
 		CellConstraints cc = new CellConstraints();
 		content = new JXPanel();
 		content.setLayout(lay);
-		content.setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezeptGebuehren"));
+		content.setBackgroundPainter(Reha.instance.compoundPainter.get("RezeptGebuehren"));
 
 		JLabel lab = new JLabel("Patient/Termin");
 		lab.setFont(labelFont);
@@ -445,11 +445,11 @@ public class Wecker extends RehaSmartDialog{
 				//System.out.println("Timer läuft bereits");
 			}
 			String msg = Long.toString((Long)Reha.timerVec.get(0).get(3)-aktuelleMinuten());
-			Reha.thisClass.messageLabel.setForeground(Color.RED);
-			Reha.thisClass.messageLabel.setText("in "+msg+" Minuten nächster Timer-Termin" );
+			Reha.instance.messageLabel.setForeground(Color.RED);
+			Reha.instance.messageLabel.setText("in "+msg+" Minuten nächster Timer-Termin" );
 		}else{
-			Reha.thisClass.messageLabel.setForeground(Color.BLACK);
-			Reha.thisClass.messageLabel.setText("keine Timer-Termine");
+			Reha.instance.messageLabel.setForeground(Color.BLACK);
+			Reha.instance.messageLabel.setText("keine Timer-Termine");
 			Reha.fangoTimer.stop();
 			Reha.timerLaeuft = false;
 			//System.out.println("Timer gestoppt");

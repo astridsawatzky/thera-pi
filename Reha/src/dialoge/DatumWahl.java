@@ -105,7 +105,7 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener{
 						return;
 					}
 					aktTag = wahlTag;
-					Reha.thisClass.progLoader.ProgTerminFenster(1, 0);
+					Reha.instance.progLoader.ProgTerminFenster(1, 0);
 					TerminFenster.getThisClass().springeAufDatum(aktTag);
 				}else{
 					Date dat = monthView.getSelectionDate();
@@ -117,7 +117,7 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener{
 						return;
 					}
 					aktTag = wahlTag;
-					Reha.thisClass.progLoader.ProgTerminFenster(1, 0);
+					Reha.instance.progLoader.ProgTerminFenster(1, 0);
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
                         public void run(){

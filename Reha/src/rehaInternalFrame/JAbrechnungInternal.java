@@ -29,8 +29,8 @@ public class JAbrechnungInternal extends JRehaInternal implements FocusListener,
 		@Override
 		public void internalFrameClosed(InternalFrameEvent arg0) {
 			//System.out.println("JInternalFrame-Kassenabrechnung aufräumen");
-			Reha.thisClass.aktiviereNaechsten(this.desktop);
-			Reha.thisClass.desktops[this.desktop].remove(this);
+			Reha.instance.aktiviereNaechsten(this.desktop);
+			Reha.instance.desktops[this.desktop].remove(this);
 			rEvent.removeRehaEventListener(this);
 			removeFocusListener(this);
 			this.removeAncestorListener(this);
@@ -41,7 +41,7 @@ public class JAbrechnungInternal extends JRehaInternal implements FocusListener,
                 public  void run()
 			 	   {
 					AktiveFenster.loescheFenster(name);
-					Reha.thisClass.progLoader.loescheAbrechnung();
+					Reha.instance.progLoader.loescheAbrechnung();
 			 	   }
 			});
 			//AktiveFenster.loescheFenster("Abrechnung");

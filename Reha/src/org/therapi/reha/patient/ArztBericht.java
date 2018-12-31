@@ -51,7 +51,7 @@ import dialoge.RehaSmartDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import patientenFenster.ArztAuswahl;
@@ -123,7 +123,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 		this.altverfasser = xverfasser;
 		this.diag = xdiag;
 		this.tblreihe = row;
-		this.pat_intern = Reha.thisClass.patpanel.patDaten.get(29);
+		this.pat_intern = Reha.instance.patpanel.patDaten.get(29);
 		/**
 		 *
 		 * this.disziplin = this.reznr.substring(0,2);
@@ -145,7 +145,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 			@Override
 			protected Void doInBackground() throws Exception {
 				/************BackgroundPainter basteln************/
-				grundPanel.setBackgroundPainter(Reha.thisClass.compoundPainter.get("ArztBericht"));
+				grundPanel.setBackgroundPainter(Reha.instance.compoundPainter.get("ArztBericht"));
 			    return null;
 			}
 	    }.execute();
@@ -316,11 +316,11 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 		JLabel lab = new JLabel("Arzbericht für Patient:");
 		pb.add(lab,cc.xy(2,2));
 
-		String name = Reha.thisClass.patpanel.patDaten.get(2)+", "+Reha.thisClass.patpanel.patDaten.get(3);
+		String name = Reha.instance.patpanel.patDaten.get(2)+", "+Reha.instance.patpanel.patDaten.get(3);
 		rlab[0] = new JLabel(name);
 		rlab[0].setForeground(Color.BLUE);
 		pb.add(rlab[0],cc.xy(2, 4));
-		rlab[1] = new JLabel(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)));
+		rlab[1] = new JLabel(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
 		rlab[1].setForeground(Color.BLUE);
 		pb.add(rlab[1],cc.xy(2,6));
 
@@ -330,21 +330,21 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 		pb.add(lab,cc.xy(2,10));
 		// hier testen ob ohne Rezeptbezug, wenn ja kann der Vector nicht verwendet werden
 		if((! this.reznr.equals("")) && (this.aufrufvon < 1)){
-			name = Reha.thisClass.patpanel.vecaktrez.get(15);
-			arztid = Integer.valueOf(Reha.thisClass.patpanel.vecaktrez.get(16));
+			name = Reha.instance.patpanel.vecaktrez.get(15);
+			arztid = Integer.valueOf(Reha.instance.patpanel.vecaktrez.get(16));
 		}else if((! this.reznr.equals("")) && (this.aufrufvon == 1)){
 			try{
 				name = SqlInfo.holeEinzelFeld("select arzt from lza where rez_nr = '"+this.reznr+"' LIMIT 1");
-				//name = (String)Reha.thisClass.patpanel.historie..patDaten.get(25);
+				//name = (String)Reha.instance.patpanel.historie..patDaten.get(25);
 				arztid = Integer.valueOf(SqlInfo.holeEinzelFeld("select arztid from lza where rez_nr = '"+this.reznr+"' LIMIT 1"));
-				//arztid = Integer.valueOf((String)Reha.thisClass.patpanel.patDaten.get(26));
+				//arztid = Integer.valueOf((String)Reha.instance.patpanel.patDaten.get(26));
 			}catch(java.lang.NumberFormatException ex){
 				arztid = Integer.valueOf(-1);
 			}
 		}else if((this.reznr.equals("")) && (this.aufrufvon < 3)){
-			name = Reha.thisClass.patpanel.patDaten.get(25);
+			name = Reha.instance.patpanel.patDaten.get(25);
 			try{
-				arztid = Integer.valueOf(Reha.thisClass.patpanel.patDaten.get(26));
+				arztid = Integer.valueOf(Reha.instance.patpanel.patDaten.get(26));
 			}catch(java.lang.NumberFormatException ex){
 				arztid = Integer.valueOf(-1);
 			}
@@ -388,7 +388,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 		try{
 			String xdiagnose = "";
 			if((! this.reznr.equals("")) && (this.aufrufvon == 0)){
-				xdiagnose = Reha.thisClass.patpanel.vecaktrez.get(23);
+				xdiagnose = Reha.instance.patpanel.vecaktrez.get(23);
 				if(xdiagnose.equals("") ){
 					xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"+
 							Integer.toString(this.berichtid)+"' LIMIT 1");
@@ -398,7 +398,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 				}
 				diagnose.setText(xdiagnose);
 			}else if((!this.reznr.equals("")) && (this.aufrufvon == 1)){
-				xdiagnose = Reha.thisClass.patpanel.vecakthistor.get(23);
+				xdiagnose = Reha.instance.patpanel.vecakthistor.get(23);
 				if(xdiagnose.equals("") ){
 					xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"+
 							Integer.toString(this.berichtid)+"' LIMIT 1");
@@ -583,7 +583,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 	private void doBerichtVorbericht(ActionEvent arg0){
 		vorberichtid = -1;
 		vorberichtdiagnose = false;
-		int wieviel = SqlInfo.zaehleSaetze("berhist", "pat_intern='"+Reha.thisClass.patpanel.patDaten.get(29)+"'");
+		int wieviel = SqlInfo.zaehleSaetze("berhist", "pat_intern='"+Reha.instance.patpanel.patDaten.get(29)+"'");
 		if(wieviel > 0){
 			//System.out.println("Bericht bereits vorhanden: "+wieviel);
 			Point pos = ((JComponent)arg0.getSource()).getLocation();
@@ -696,13 +696,13 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 		}
 		this.berichtid = berichtnr;
 		if(this.aufrufvon == 0){
-			Reha.thisClass.patpanel.vecaktrez.set(54,Integer.toString(berichtnr));
-			Reha.thisClass.patpanel.rezlabs[7].setForeground(Color.BLACK);
-			Reha.thisClass.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
+			Reha.instance.patpanel.vecaktrez.set(54,Integer.toString(berichtnr));
+			Reha.instance.patpanel.rezlabs[7].setForeground(Color.BLACK);
+			Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
 		}else if(this.aufrufvon == 1){
-			Reha.thisClass.patpanel.historie.jpan1.rezlabs[7].setForeground(Color.BLACK);
-			Reha.thisClass.patpanel.historie.jpan1.rezlabs[7].setText("Therapiebericht o.k.");
-			Reha.thisClass.patpanel.historie.jpan1.vecaktrez.set(54,Integer.toString(berichtnr));
+			Reha.instance.patpanel.historie.jpan1.rezlabs[7].setForeground(Color.BLACK);
+			Reha.instance.patpanel.historie.jpan1.rezlabs[7].setText("Therapiebericht o.k.");
+			Reha.instance.patpanel.historie.jpan1.vecaktrez.set(54,Integer.toString(berichtnr));
 		}
 
 		////System.out.println("************************************************************************************");
@@ -767,7 +767,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 					new ExUndHop().setzeStatement(cmd);
 
 					//System.out.println("BerichtNr - "+xberichtnr+" - wurde in verordn und lza gespeichert");
-					Reha.thisClass.patpanel.berichte.holeBerichte(Reha.thisClass.patpanel.patDaten.get(29), "");
+					Reha.instance.patpanel.berichte.holeBerichte(Reha.instance.patpanel.patDaten.get(29), "");
 					//return null;
 					this.neu = false;
 					return true;
@@ -786,7 +786,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 					cmd = "update lza set berid='"+Integer.toString(xberichtnr)+"' where rez_nr='"+reznr+"'";
 					new ExUndHop().setzeStatement(cmd);
 					//System.out.println("BerichtNr - "+xberichtnr+" - wurde nur in lza gespeichert");
-					Reha.thisClass.patpanel.berichte.holeBerichte(Reha.thisClass.patpanel.patDaten.get(29), "");
+					Reha.instance.patpanel.berichte.holeBerichte(Reha.instance.patpanel.patDaten.get(29), "");
 					//return null;
 					this.neu = false;
 					return true;
@@ -843,11 +843,11 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 				if(aufrufvon==3){
 					//tabbericht
 					//{"ID","Titel","Verfasser","erstellt","Empf�nger","letzte �nderung",""};
-					Reha.thisClass.patpanel.berichte.dtblm.setValueAt("Bericht zu "+reznr+" ("+xtbs+")", tblreihe, 1);
-					Reha.thisClass.patpanel.berichte.dtblm.setValueAt(xxverf, tblreihe, 2);
-					Reha.thisClass.patpanel.berichte.dtblm.setValueAt(xempfaenger, tblreihe,4);
-					Reha.thisClass.patpanel.berichte.dtblm.setValueAt(DatFunk.sHeute(), tblreihe,5);
-					Reha.thisClass.patpanel.berichte.tabbericht.revalidate();
+					Reha.instance.patpanel.berichte.dtblm.setValueAt("Bericht zu "+reznr+" ("+xtbs+")", tblreihe, 1);
+					Reha.instance.patpanel.berichte.dtblm.setValueAt(xxverf, tblreihe, 2);
+					Reha.instance.patpanel.berichte.dtblm.setValueAt(xempfaenger, tblreihe,4);
+					Reha.instance.patpanel.berichte.dtblm.setValueAt(DatFunk.sHeute(), tblreihe,5);
+					Reha.instance.patpanel.berichte.tabbericht.revalidate();
 				}else if(aufrufvon==0){
 
 				}
@@ -892,7 +892,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
-			if(Reha.thisClass.patpanel.patDaten.get(0).toUpperCase().equals("HERR")){
+			if(Reha.instance.patpanel.patDaten.get(0).toUpperCase().equals("HERR")){
 				SystemConfig.hmAdrBDaten.put("<Bihrenpat>", "Ihren Patienten");
 			}else{
 				SystemConfig.hmAdrBDaten.put("<Bihrenpat>", "Ihre Patientin");
@@ -927,9 +927,9 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 				}
 
 			}
-			SystemConfig.hmAdrBDaten.put("<Bnname>", StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(2)));
-			SystemConfig.hmAdrBDaten.put("<Bvname>", StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(3)));
-			SystemConfig.hmAdrBDaten.put("<Bgeboren>", DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)));
+			SystemConfig.hmAdrBDaten.put("<Bnname>", StringTools.EGross(Reha.instance.patpanel.patDaten.get(2)));
+			SystemConfig.hmAdrBDaten.put("<Bvname>", StringTools.EGross(Reha.instance.patpanel.patDaten.get(3)));
+			SystemConfig.hmAdrBDaten.put("<Bgeboren>", DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
 			SystemConfig.hmAdrBDaten.put("<Brezdatum>", DatFunk.sDatInDeutsch(rezdatum));
 			SystemConfig.hmAdrBDaten.put("<Breznr>",reznr);
 			String sblock = diagnose.getText().replaceAll("\\n", "");
@@ -962,9 +962,9 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener{
 				SystemConfig.hmAdrBDaten.put("<Blang4>",SystemConfig.hmAdrRDaten.get("<Rposition4>"));
 				*/
 				String diszi = RezTools.putRezNrGetDisziplin(reznr);
-				regleBHashMap(diszi,Reha.thisClass.patpanel.vecaktrez.get(41),
-						Reha.thisClass.patpanel.vecaktrez.get(8),Reha.thisClass.patpanel.vecaktrez.get(9),
-						Reha.thisClass.patpanel.vecaktrez.get(10),Reha.thisClass.patpanel.vecaktrez.get(11));
+				regleBHashMap(diszi,Reha.instance.patpanel.vecaktrez.get(41),
+						Reha.instance.patpanel.vecaktrez.get(8),Reha.instance.patpanel.vecaktrez.get(9),
+						Reha.instance.patpanel.vecaktrez.get(10),Reha.instance.patpanel.vecaktrez.get(11));
 			}else{
 				//
 				String diszi = RezTools.putRezNrGetDisziplin(reznr);
@@ -1132,9 +1132,9 @@ class TextBausteine extends AbstractAction {
 						}
 						if(aufrufvon==0){
 							//System.out.println("Aufgerufen von "+aufrufvon);
-							Reha.thisClass.patpanel.aktRezept.setRezeptDaten();
+							Reha.instance.patpanel.aktRezept.setRezeptDaten();
 						}else if(aufrufvon==1){
-							Reha.thisClass.patpanel.historie.setRezeptDaten();
+							Reha.instance.patpanel.historie.setRezeptDaten();
 							//Historie.historie.setRezeptDaten();
 						}
 						rtp.removeRehaTPEventListener(getInstance());
@@ -1165,9 +1165,9 @@ class TextBausteine extends AbstractAction {
 					}
 					if(aufrufvon==0){
 						//System.out.println("Aufgerufen von "+aufrufvon);
-						Reha.thisClass.patpanel.aktRezept.setRezeptDaten();
+						Reha.instance.patpanel.aktRezept.setRezeptDaten();
 					}else if(aufrufvon==1){
-						Reha.thisClass.patpanel.historie.setRezeptDaten();
+						Reha.instance.patpanel.historie.setRezeptDaten();
 						//Historie.historie.setRezeptDaten();
 					}
 					removeWindowListener(getInstance());
@@ -1200,9 +1200,9 @@ class TextBausteine extends AbstractAction {
 					}
 					if(aufrufvon==0){
 						//System.out.println("Aufgerufen von "+aufrufvon);
-						Reha.thisClass.patpanel.aktRezept.setRezeptDaten();
+						Reha.instance.patpanel.aktRezept.setRezeptDaten();
 					}else if(aufrufvon==1){
-						Reha.thisClass.patpanel.historie.setRezeptDaten();
+						Reha.instance.patpanel.historie.setRezeptDaten();
 						//Historie.historie.setRezeptDaten();
 					}
 					removeWindowListener(getInstance());

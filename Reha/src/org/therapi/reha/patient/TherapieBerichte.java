@@ -197,7 +197,7 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 					}
 					anz = dtblm.getRowCount();
 					try{
-						Reha.thisClass.patpanel.getTab().setTitleAt(2,macheHtmlTitel(anz,"Therapieberichte"));
+						Reha.instance.patpanel.getTab().setTitleAt(2,macheHtmlTitel(anz,"Therapieberichte"));
 					}catch(Exception extiming){
 						System.out.println("Timingprobleme beim setzen des Reitertitels - Reiter: Therapieberichte");
 					}
@@ -268,7 +268,7 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 		if(anfrage == JOptionPane.NO_OPTION){
 			return;
 		}
-		//String xpat_int = Reha.thisClass.patpanel.patDaten.get(29);
+		//String xpat_int = Reha.instance.patpanel.patDaten.get(29);
 		String berid = (String)tabbericht.getValueAt(wahl,0);
 		// zunächst aus der berhist löschen
 		String xcmd = "delete from berhist where berichtid='"+berid+"'";
@@ -299,7 +299,7 @@ public class TherapieBerichte  extends JXPanel implements ListSelectionListener,
 		//tabbericht
 		TableTool.loescheRow(tabbericht, wahl);
 		int anzber = tabbericht.getRowCount();
-		Reha.thisClass.patpanel.getTab().setTitleAt(2,macheHtmlTitel(anzber,"Therapieberichte"));
+		Reha.instance.patpanel.getTab().setTitleAt(2,macheHtmlTitel(anzber,"Therapieberichte"));
 		if(anzber > 0){
 		}else{
 		}

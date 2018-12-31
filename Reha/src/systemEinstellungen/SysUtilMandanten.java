@@ -113,7 +113,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
 		//System.out.println("Aufruf SysUtilMandanten");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     jscr = new JScrollPane();
 	     jscr.setBorder(null);

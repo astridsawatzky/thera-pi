@@ -46,7 +46,7 @@ public class SysUtilRoogleEinstellungen extends JXPanel implements KeyListener, 
 		//System.out.println("Aufruf SysUtilRoogleEinstellungen");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     add(getVorlagenSeite());
 		return;

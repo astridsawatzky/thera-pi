@@ -49,7 +49,7 @@ import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -77,7 +77,7 @@ public class SysUtilPatient extends JXPanel implements KeyListener, ActionListen
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+				setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 				return null;
 			}
 			

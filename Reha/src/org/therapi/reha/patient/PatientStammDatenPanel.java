@@ -469,7 +469,7 @@ public class PatientStammDatenPanel extends JXPanel{
 				@Override
                 protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 					while( (xpatient == null) ){
 						Thread.sleep(20);
 						xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
@@ -480,14 +480,14 @@ public class PatientStammDatenPanel extends JXPanel{
 					
 					String s1 = "#PATSUCHEN";
 					String s2 = xpat_int;
-					PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
+					PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
 					pEvt.setPatStammEvent("PatSuchen");
 					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 					PatStammEventClass.firePatStammEvent(pEvt);
 					if(xinhistorie){
-						Reha.thisClass.patpanel.getTab().setSelectedIndex(1);	
+						Reha.instance.patpanel.getTab().setSelectedIndex(1);	
 					}else{
-						Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
+						Reha.instance.patpanel.getTab().setSelectedIndex(0);
 					}
 
 					return null;
@@ -495,17 +495,17 @@ public class PatientStammDatenPanel extends JXPanel{
 				
 			}.execute();
 		}else{
-			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
-			PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
+			PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
 			pEvt.setPatStammEvent("PatSuchen");
 			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 			PatStammEventClass.firePatStammEvent(pEvt);
 			if(xinhistorie){
-				Reha.thisClass.patpanel.getTab().setSelectedIndex(1);	
+				Reha.instance.patpanel.getTab().setSelectedIndex(1);	
 			}else{
-				Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
+				Reha.instance.patpanel.getTab().setSelectedIndex(0);
 			}
 
 		}		

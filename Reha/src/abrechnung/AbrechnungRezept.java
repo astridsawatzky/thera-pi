@@ -450,7 +450,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 				setKuerzelVec(rez,preisgr);
 				setWerte(rez);
 				regleAbrechnungsModus();
-				Reha.thisClass.progressStarten(false);
+				Reha.instance.progressStarten(false);
 			}else{
 				//////System.out.println("Einlesen aus Edifact-Daten");
 				jXTreeTable.setEditable(false);
@@ -851,7 +851,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 						protected Void doInBackground() throws Exception {
 							try{
 								tbbuts[3].setEnabled(false);
-								Reha.thisClass.progressStarten(true);
+								Reha.instance.progressStarten(true);
 								eltern.abrDlg = new AbrechnungDlg();
 								eltern.abrDlg.pack();
 								eltern.abrDlg.setLocationRelativeTo(eltern.getInstance());
@@ -4429,7 +4429,7 @@ class SucheNachAllem{
 				@Override
                 protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 					while( (xpatient == null) ){
 						try {
 							Thread.sleep(20);
@@ -4457,7 +4457,7 @@ class SucheNachAllem{
 
 			}.execute();
 		}else{
-			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
 			PatStammEvent pEvt = new PatStammEvent(source);

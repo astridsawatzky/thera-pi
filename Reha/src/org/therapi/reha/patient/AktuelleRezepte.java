@@ -85,8 +85,8 @@ import dialoge.ToolsDialog;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
+import gui.Cursors;
 import hauptFenster.AktiveFenster;
-import hauptFenster.Cursors;
 import hauptFenster.Reha;
 import hmrCheck.HMRCheck;
 import jxTableTools.MyTableStringDatePicker;
@@ -970,14 +970,14 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 					// Icons in akt. Zeile setzen
 					dtblm.setValueAt(ZuzahlTools.getZzIcon(iconKey), i, 1);
-					dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[rezstatus],i,5);
+					dtblm.setValueAt(Reha.instance.patpanel.imgrezstatus[rezstatus],i,5);
 
-					if(vec.get(i).get(0).startsWith("RH") && Reha.thisClass.dta301panel != null){
+					if(vec.get(i).get(0).startsWith("RH") && Reha.instance.dta301panel != null){
 						new SwingWorker<Void,Void>(){
 							@Override
 							protected Void doInBackground()
 									throws Exception {
-									Reha.thisClass.dta301panel.aktualisieren(testreznum);
+									Reha.instance.dta301panel.aktualisieren(testreznum);
 								return null;
 							}
 						}.execute();
@@ -1012,7 +1012,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				/************** Bis hierher hat man die Sätze eingelesen ********************/
 				try{
-					Reha.thisClass.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(anz,"aktuelle Rezepte"));
+					Reha.instance.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(anz,"aktuelle Rezepte"));
 				}catch(Exception ex){
 						System.out.println("Timingprobleme beim setzen des Reitertitels - Reiter: aktuelle Rezepte");
 				}
@@ -1031,7 +1031,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 						}
 						//tabaktrez.setRowSelectionInterval(row, row);
-						Reha.thisClass.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(row, idInTable)+"'", Arrays.asList(new String[] {}) ));
+						Reha.instance.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(row, idInTable)+"'", Arrays.asList(new String[] {}) ));
 						rezDatenPanel.setRezeptDaten((String)tabaktrez.getValueAt(row, 0),(String)tabaktrez.getValueAt(row, idInTable));
 						//RezTools.constructRawHMap();
 						/*
@@ -1049,7 +1049,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					}else{
 						rezneugefunden = true;
 						//tabaktrez.setRowSelectionInterval(0, 0);
-						Reha.thisClass.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(row, idInTable)+"'", Arrays.asList(new String[] {}) ));
+						Reha.instance.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(row, idInTable)+"'", Arrays.asList(new String[] {}) ));
 						rezDatenPanel.setRezeptDaten((String)tabaktrez.getValueAt(0, 0),(String)tabaktrez.getValueAt(0, idInTable));
 						//RezTools.constructRawHMap();
 						////System.out.println("rezeptdaten akutalisieren in holeRezepte 1");
@@ -1097,8 +1097,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					dtblm.setRowCount(0);
 					dtermm.setRowCount(0);
 					aktuellAngezeigt = -1;
-					if(Reha.thisClass.patpanel.vecaktrez != null){
-						Reha.thisClass.patpanel.vecaktrez.clear();
+					if(Reha.instance.patpanel.vecaktrez != null){
+						Reha.instance.patpanel.vecaktrez.clear();
 					}
 				}
 				}catch(Exception ex){
@@ -1114,15 +1114,15 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 	}
 	public void setzeKarteiLasche(){
 		if(tabaktrez.getRowCount()==0){
-			holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
-			Reha.thisClass.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(tabaktrez.getRowCount(),"aktuelle Rezepte"));
+			holeRezepte(Reha.instance.patpanel.patDaten.get(29),"");
+			Reha.instance.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(tabaktrez.getRowCount(),"aktuelle Rezepte"));
 		}else{
-			Reha.thisClass.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(tabaktrez.getRowCount(),"aktuelle Rezepte"));
+			Reha.instance.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(tabaktrez.getRowCount(),"aktuelle Rezepte"));
 		}
 	}
 	public void aktualisiereVector(String rid){
 		String[] strg = {};
-		Reha.thisClass.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+rid+"'", Arrays.asList(strg) ));
+		Reha.instance.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+rid+"'", Arrays.asList(strg) ));
 		setRezeptDaten();
 	}
 	public void setRezeptDaten(){
@@ -1172,7 +1172,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 	}
 	public void setzeBild(int satz,int icon){
-		dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[icon],satz,1);
+		dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[icon],satz,1);
 		tabaktrez.validate();
 		tabaktrez.repaint();
 	}
@@ -1354,7 +1354,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		}
 		SystemConfig.hmAdrRDaten.put("<Ranzahltage>",Integer.toString(reihen));
 		SqlInfo.aktualisiereSatz("verordn", "termine='"+sb.toString()+"'","id='"+(String)tabaktrez.getValueAt(tabaktrez.getSelectedRow(), idInTable)+"'");
-		Reha.thisClass.patpanel.vecaktrez.set(34,sb.toString());
+		Reha.instance.patpanel.vecaktrez.set(34,sb.toString());
 		if(aktuellAngezeigt>=0){
 			try{
 				aktTerminBuffer.set(aktuellAngezeigt, sb.toString());
@@ -1408,7 +1408,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			@Override
             public void run(){
 				//System.out.println("Hier den Termintest");
-				if(Reha.thisClass.patpanel.vecaktrez.get(60).equals("T")){
+				if(Reha.instance.patpanel.vecaktrez.get(60).equals("T")){
 					Vector<String>tage = new Vector<String>();
 					Vector<?> v = dtermm.getDataVector();
 					for(int i = 0; i < v.size();i++){
@@ -1417,8 +1417,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					/*Object[] ret =  */ZuzahlTools.unter18TestDirekt(tage,true,false);
 					//String resultgleich = "";
 				}
-				if(!Reha.thisClass.patpanel.patDaten.get(69).equals("")){
-					ZuzahlTools.jahresWechselTest(Reha.thisClass.patpanel.vecaktrez.get(1),true,false);
+				if(!Reha.instance.patpanel.patDaten.get(69).equals("")){
+					ZuzahlTools.jahresWechselTest(Reha.instance.patpanel.vecaktrez.get(1),true,false);
 				}
 			}
 		}.start();
@@ -1472,7 +1472,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 										suchePatUeberRez = false;
 										return null;
 									}
-		                			setCursor(Reha.thisClass.wartenCursor);
+		                			setCursor(Reha.instance.wartenCursor);
 		                			if(!inEinzelTermine ){
 		                				try{
 		                					inEinzelTermine = true;
@@ -1491,19 +1491,19 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		                					inEinzelTermine = false;
 		                				}
 		                			}
-		                			Reha.thisClass.patpanel.vecaktrez = ((Vector<String>)SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(ix, idInTable)+"'", Arrays.asList(new String[] {}) ));
-		                			Reha.thisClass.patpanel.aktRezept.rezAngezeigt = (String)tabaktrez.getValueAt(ix, 0);
+		                			Reha.instance.patpanel.vecaktrez = ((Vector<String>)SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(ix, idInTable)+"'", Arrays.asList(new String[] {}) ));
+		                			Reha.instance.patpanel.aktRezept.rezAngezeigt = (String)tabaktrez.getValueAt(ix, 0);
 		    						rezDatenPanel.setRezeptDaten((String)tabaktrez.getValueAt(ix, 0),(String)tabaktrez.getValueAt(ix, idInTable));
-		    						setCursor(Reha.thisClass.normalCursor);
+		    						setCursor(Reha.instance.normalCursor);
 		    						final String testreznum = (String)tabaktrez.getValueAt(ix, 0).toString();
-		    						//System.out.println("**********"+testreznum+" "+Reha.thisClass.dta301panel);
+		    						//System.out.println("**********"+testreznum+" "+Reha.instance.dta301panel);
 		    						new SwingWorker<Void,Void>(){
 										@Override
 										protected Void doInBackground()
 												throws Exception {
 											try{
-												if( (testreznum.startsWith("RH")) && (Reha.thisClass.dta301panel != null) ){
-													Reha.thisClass.dta301panel.aktualisieren(testreznum);
+												if( (testreznum.startsWith("RH")) && (Reha.instance.dta301panel != null) ){
+													Reha.instance.dta301panel.aktualisieren(testreznum);
 												}
 												//RezTools.constructRawHMap();
 											}catch(Exception ex){
@@ -1514,7 +1514,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 		    						}.execute();
 								}catch(Exception ex){
-		    						setCursor(Reha.thisClass.normalCursor);
+		    						setCursor(Reha.instance.normalCursor);
 									ex.printStackTrace();
 									inEinzelTermine = false;
 									//JOptionPane.showMessageDialog(null, "Fehler im ListSelection-Listener aktuelle Rezepte");
@@ -1559,16 +1559,16 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					inEinzelTermine = false;
 				}
 			}
-			Reha.thisClass.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(ix, idInTable)+"'", Arrays.asList(new String[] {}) ));
-			Reha.thisClass.patpanel.aktRezept.rezAngezeigt = (String)tabaktrez.getValueAt(ix, 0);
+			Reha.instance.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '"+(String)tabaktrez.getValueAt(ix, idInTable)+"'", Arrays.asList(new String[] {}) ));
+			Reha.instance.patpanel.aktRezept.rezAngezeigt = (String)tabaktrez.getValueAt(ix, 0);
 			rezDatenPanel.setRezeptDaten((String)tabaktrez.getValueAt(ix, 0),(String)tabaktrez.getValueAt(ix, idInTable));
 			setCursor(Cursors.normalCursor);
 			final String testreznum = tabaktrez.getValueAt(ix, 0).toString();
-			//System.out.println("**********"+testreznum+" "+Reha.thisClass.dta301panel);
+			//System.out.println("**********"+testreznum+" "+Reha.instance.dta301panel);
 
 			try{
-				if( (testreznum.startsWith("RH")) && (Reha.thisClass.dta301panel != null) ){
-					Reha.thisClass.dta301panel.aktualisieren(testreznum);
+				if( (testreznum.startsWith("RH")) && (Reha.instance.dta301panel != null) ){
+					Reha.instance.dta301panel.aktualisieren(testreznum);
 				}
 				//RezTools.constructRawHMap();
 			}catch(Exception ex){
@@ -1728,7 +1728,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			if(cmd.equals("terminplus")){
 				if(rezGeschlossen()){return;}
 				try{
-					Object[] objTerm = RezTools.BehandlungenAnalysieren(Reha.thisClass.patpanel.vecaktrez.get(1),
+					Object[] objTerm = RezTools.BehandlungenAnalysieren(Reha.instance.patpanel.vecaktrez.get(1),
 							false,false,false,null,null,null,DatFunk.sHeute()); //hier noch ein  Point Object übergeben
 					//System.out.println("objTerm[0]="+objTerm[0]);
 					//System.out.println("objTerm[1]="+objTerm[1]);
@@ -1750,7 +1750,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						starteTests();
 						if( (Integer)objTerm[1] == RezTools.REZEPT_IST_JETZ_VOLL){
 							try{
-								RezTools.fuelleVolleTabelle( (Reha.thisClass.patpanel.vecaktrez.get(1)) , Reha.aktUser);
+								RezTools.fuelleVolleTabelle( (Reha.instance.patpanel.vecaktrez.get(1)) , Reha.aktUser);
 							}catch(Exception ex){
 								JOptionPane.showMessageDialog(null,"Fehler beim Aufruf von 'fuelleVolleTabelle'");
 							}
@@ -1838,7 +1838,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				if(!Rechte.hatRecht(Rechte.Rezept_anlegen, true)){
 					return;
 				}
-				if(Reha.thisClass.patpanel.autoPatid <= 0){
+				if(Reha.instance.patpanel.autoPatid <= 0){
 					JOptionPane.showMessageDialog(null,"Oh Herr laß halten...\n\n"+
 							"....und für welchen Patienten wollen Sie ein neues Rezept anlegen....");
 					return;
@@ -1906,9 +1906,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				int uebrig = tabaktrez.getRowCount();
 
 				anzahlRezepte.setText("Anzahl Rezepte: "+Integer.toString(uebrig));
-				Reha.thisClass.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(uebrig,"aktuelle Rezepte"));
+				Reha.instance.patpanel.multiTab.setTitleAt(0,macheHtmlTitel(uebrig,"aktuelle Rezepte"));
 				if(uebrig <= 0){
-					holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
+					holeRezepte(Reha.instance.patpanel.patDaten.get(29),"");
 				}else{
 				}
 
@@ -1949,9 +1949,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}else{
 					xreznr = "";
 				}
-				int  iexistiert = Reha.thisClass.patpanel.berichte.berichtExistiert(xreznr);
+				int  iexistiert = Reha.instance.patpanel.berichte.berichtExistiert(xreznr);
 				if(iexistiert > 0){
-					xverfasser = Reha.thisClass.patpanel.berichte.holeVerfasser();
+					xverfasser = Reha.instance.patpanel.berichte.holeVerfasser();
 					neuber = false;
 					berid = iexistiert;
 					String meldung = "<html>Für das Rezept <b>"+xreznr+"</b> existiert bereits ein Bericht.<br>Vorhandener Bericht wird jetzt geöffnet</html>";
@@ -1999,7 +1999,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					xreznr = (String)tabaktrez.getValueAt(currow,0);
 					String xcmd = "update verordn set zzstatus='"+0+"', befr='T',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1";
 					SqlInfo.sqlAusfuehren(xcmd);
-					dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[0],currow,1);
+					dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[0],currow,1);
 					tabaktrez.validate();
 					doVectorAktualisieren(new int[]{12,14,39},new String[] {"T","F","0"});		// befr, rez_bez, zzstatus (befreit)
 					SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");
@@ -2017,7 +2017,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					xreznr = (String)tabaktrez.getValueAt(currow,0);
 					String xcmd = "update verordn set zzstatus='"+1+"', befr='F',rez_bez='T' where rez_nr='"+xreznr+"' LIMIT 1";
 					SqlInfo.sqlAusfuehren(xcmd);
-					dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[1],currow,1);
+					dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[1],currow,1);
 					tabaktrez.validate();
 					doVectorAktualisieren(new int[]{12,14,39},new String[] {"F","T","1"});		// befr, rez_bez, zzstatus (zuzahlok)
 				}
@@ -2035,7 +2035,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					xreznr = (String)tabaktrez.getValueAt(currow,0);
 					String xcmd = "update verordn set zzstatus='2', befr='F', rez_geb='0.00',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1";
 					SqlInfo.sqlAusfuehren(xcmd);
-					dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[2],currow,1);
+					dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[2],currow,1);
 					tabaktrez.validate();
 					doVectorAktualisieren(new int[]{12,13,14,39},new String[] {"F","0.00","F","2"});
 					SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");
@@ -2091,7 +2091,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 	}
 	public void doVectorAktualisieren(int[]elemente,String[] werte){
 		for(int i = 0; i < elemente.length;i++){
-			Reha.thisClass.patpanel.vecaktrez.set(elemente[i],werte[i]);
+			Reha.instance.patpanel.vecaktrez.set(elemente[i],werte[i]);
 		}
 	}
 
@@ -2143,10 +2143,10 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		//System.out.println(vec);
 		dtermm.setRowCount(0);
 		for(int i = 0; i < vec.size();i++){
-			vec.get(i).set(3, (Reha.thisClass.patpanel.vecaktrez.get(48).trim().equals("") ? "" : (String)Reha.thisClass.patpanel.vecaktrez.get(48)) +
-					(Reha.thisClass.patpanel.vecaktrez.get(49).trim().equals("") ? "" : ","+Reha.thisClass.patpanel.vecaktrez.get(49)) +
-					(Reha.thisClass.patpanel.vecaktrez.get(50).trim().equals("") ? "" : ","+Reha.thisClass.patpanel.vecaktrez.get(50)) +
-					(Reha.thisClass.patpanel.vecaktrez.get(51).trim().equals("") ? "" : ","+Reha.thisClass.patpanel.vecaktrez.get(51))
+			vec.get(i).set(3, (Reha.instance.patpanel.vecaktrez.get(48).trim().equals("") ? "" : (String)Reha.instance.patpanel.vecaktrez.get(48)) +
+					(Reha.instance.patpanel.vecaktrez.get(49).trim().equals("") ? "" : ","+Reha.instance.patpanel.vecaktrez.get(49)) +
+					(Reha.instance.patpanel.vecaktrez.get(50).trim().equals("") ? "" : ","+Reha.instance.patpanel.vecaktrez.get(50)) +
+					(Reha.instance.patpanel.vecaktrez.get(51).trim().equals("") ? "" : ","+Reha.instance.patpanel.vecaktrez.get(51))
 					);
 			dtermm.addRow(vec.get(i));
 		}
@@ -2157,8 +2157,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 	private void rezeptAbschliessen(){
 		try{
 			if(this.neuDlgOffen){return;}
-			int pghmr = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41));
-			String disziplin = StringTools.getDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1));
+			int pghmr = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41));
+			String disziplin = StringTools.getDisziplin(Reha.instance.patpanel.vecaktrez.get(1));
 			//if(SystemConfig.vHMRAbrechnung.get(pghmr-1) < 1){
 			if(SystemPreislisten.hmHMRAbrechnung.get(disziplin).get(pghmr-1) < 1){
 				String meldung = "Die Tarifgruppe dieser Verordnung unterliegt nicht den Heilmittelrichtlinien.\n\n"+
@@ -2167,7 +2167,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				return;
 			}
 			doAbschlussTest();
-			if(Reha.thisClass.abrechnungpanel != null){
+			if(Reha.instance.abrechnungpanel != null){
 				/*
 				String[] diszis = null;
 				if(SystemConfig.mitRs){
@@ -2180,15 +2180,15 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				int currow = tabaktrez.getSelectedRow();
 				if(currow < 0){return;}
 				if(dtblm.getValueAt(currow,5)==null){		// kein Status-Icon gesetzt
-					Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+					Reha.instance.abrechnungpanel.einlesenErneuern(null);
 				}else{
-//					String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
-					String aktDisziplin = Reha.thisClass.abrechnungpanel.disziSelect.getCurrDiszi();
-					if(RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){
+//					String aktDisziplin = diszis[Reha.instance.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+					String aktDisziplin = Reha.instance.abrechnungpanel.disziSelect.getCurrDiszi();
+					if(RezTools.putRezNrGetDisziplin(Reha.instance.patpanel.vecaktrez.get(1)).equals(aktDisziplin)){
 						// Rezept gehört zu der Sparte, zur Sparte, die gerade im Abrechnungspanel geöffnet ist
-						Reha.thisClass.abrechnungpanel.einlesenErneuern(Reha.thisClass.patpanel.vecaktrez.get(1));
+						Reha.instance.abrechnungpanel.einlesenErneuern(Reha.instance.patpanel.vecaktrez.get(1));
 					}else{
-						Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+						Reha.instance.abrechnungpanel.einlesenErneuern(null);
 					}
 				}
 			}
@@ -2244,7 +2244,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				//System.out.println(vgldat1+" / "+vgldat2);
 				/***Kann ausgeschaltet werden wenn die HMRCheck-Tabelle vollständig befüll ist**/
 				// ist ohnehin nur halblebig
-				int dummypeisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				int dummypeisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 				/*
 				long differenz = HMRCheck.hmrTageErmitteln(dummypeisgruppe,vglreznum,vgldat1,vgldat2,vgldat3);
 				if(differenz < 0){
@@ -2269,36 +2269,36 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				*/
 				/***/
-				if(Reha.thisClass.patpanel.patDaten.get(23).trim().length() != 5){
+				if(Reha.instance.patpanel.patDaten.get(23).trim().length() != 5){
 					JOptionPane.showMessageDialog(null, "Die im Patientenstamm zugewiesene Postleitzahl ist fehlerhaft");
 					return;
 				}
-				if(Reha.thisClass.patpanel.patDaten.get(14).trim().equals("")){
+				if(Reha.instance.patpanel.patDaten.get(14).trim().equals("")){
 					JOptionPane.showMessageDialog(null, "Die im Patientenstamm zugewiesene Krankenkasse hat keine Kassennummer");
 					return;
 				}
-				if(Reha.thisClass.patpanel.patDaten.get(15).trim().equals("")){
+				if(Reha.instance.patpanel.patDaten.get(15).trim().equals("")){
 					JOptionPane.showMessageDialog(null, "Der Mitgliedsstatus fehlt im Patientenstamm, bitte eintragen");
 					return;
 				}
-				if("135".indexOf(Reha.thisClass.patpanel.patDaten.get(15).substring(0,1)) < 0){
+				if("135".indexOf(Reha.instance.patpanel.patDaten.get(15).substring(0,1)) < 0){
 					JOptionPane.showMessageDialog(null, "Der im Patientenstamm vermerkte Mitgliedsstatus ist ungültig\n\n"+
-							"Fehlerhafter Status = "+Reha.thisClass.patpanel.patDaten.get(15)+"\n");
+							"Fehlerhafter Status = "+Reha.instance.patpanel.patDaten.get(15)+"\n");
 					return;
 				}
-				if(Reha.thisClass.patpanel.patDaten.get(16).trim().equals("")){
+				if(Reha.instance.patpanel.patDaten.get(16).trim().equals("")){
 					JOptionPane.showMessageDialog(null, "Die Krankenkassen-Mitgliedsnummer fehlt im Patientenstamm, bitte eintragen");
 					return;
 				}
-				if(!Reha.thisClass.patpanel.patDaten.get(68).trim().equals(
-						Reha.thisClass.patpanel.vecaktrez.get(37))){
+				if(!Reha.instance.patpanel.patDaten.get(68).trim().equals(
+						Reha.instance.patpanel.vecaktrez.get(37))){
 					JOptionPane.showMessageDialog(null, "ID der Krankenkasse im Patientenstamm paßt nicht zu der ID der Krankenkasse im Rezept");
 					return;
 				}
 
 				/*********************/
-				String diszi = RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1));
-				String preisgruppe = Reha.thisClass.patpanel.vecaktrez.get(41);
+				String diszi = RezTools.putRezNrGetDisziplin(Reha.instance.patpanel.vecaktrez.get(1));
+				String preisgruppe = Reha.instance.patpanel.vecaktrez.get(41);
 
 				if(! doTageTest(vgldat3,vgldat2,anzterm,diszi,Integer.parseInt(preisgruppe)-1)){return;}
 
@@ -2317,21 +2317,21 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 
 				/*********************/
-				//String diszi = RezTools.putRezNrGetDisziplin(Reha.thisClass.patpanel.vecaktrez.get(1));
-				//String preisgruppe = Reha.thisClass.patpanel.vecaktrez.get(41);
+				//String diszi = RezTools.putRezNrGetDisziplin(Reha.instance.patpanel.vecaktrez.get(1));
+				//String preisgruppe = Reha.instance.patpanel.vecaktrez.get(41);
 
 				int idtest = 0;
-				String indi = Reha.thisClass.patpanel.vecaktrez.get(44);
+				String indi = Reha.instance.patpanel.vecaktrez.get(44);
 				if(indi.equals("") || indi.contains("kein IndiSchl.")){
 					JOptionPane.showMessageDialog(null, "<html><b>Kein Indikationsschlüssel angegeben.<br>Die Angaben sind <font color='#ff0000'>nicht</font> gemäß den gültigen Heilmittelrichtlinien!</b></html>");
 					return;
 				}
-				if(Reha.thisClass.patpanel.vecaktrez.get(71).trim().length() > 0){
+				if(Reha.instance.patpanel.vecaktrez.get(71).trim().length() > 0){
 					//für die Suche alles entfernen das nicht in der icd10-Tabelle aufgeführt sein kann
-					String suchenach = RezNeuanlage.macheIcdString(Reha.thisClass.patpanel.vecaktrez.get(71));
+					String suchenach = RezNeuanlage.macheIcdString(Reha.instance.patpanel.vecaktrez.get(71));
 					if(SqlInfo.holeEinzelFeld("select id from icd10 where schluessel1 like '"+suchenach+"%' LIMIT 1").equals("")){
 						int frage = JOptionPane.showConfirmDialog(null, "<html><b>Der eingetragene 1. ICD-10-Code ist falsch: <font color='#ff0000'>"+
-								Reha.thisClass.patpanel.vecaktrez.get(71).trim()+"</font></b><br>"+
+								Reha.instance.patpanel.vecaktrez.get(71).trim()+"</font></b><br>"+
 								"HMR-Check nicht möglich!<br><br>"+
 								"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 						if(frage==JOptionPane.YES_OPTION){
@@ -2340,11 +2340,11 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						return;
 
 					}
-					if(Reha.thisClass.patpanel.vecaktrez.get(72).trim().length() > 0){
-						suchenach = RezNeuanlage.macheIcdString(Reha.thisClass.patpanel.vecaktrez.get(72));
+					if(Reha.instance.patpanel.vecaktrez.get(72).trim().length() > 0){
+						suchenach = RezNeuanlage.macheIcdString(Reha.instance.patpanel.vecaktrez.get(72));
 						if(SqlInfo.holeEinzelFeld("select id from icd10 where schluessel1 like '"+suchenach+"%' LIMIT 1").equals("")){
 							int frage = JOptionPane.showConfirmDialog(null, "<html><b>Der eingetragene 2. ICD-10-Code ist falsch: <font color='#ff0000'>"+
-									Reha.thisClass.patpanel.vecaktrez.get(71).trim()+"</font></b><br>"+
+									Reha.instance.patpanel.vecaktrez.get(71).trim()+"</font></b><br>"+
 									"HMR-Check nicht möglich!<br><br>"+
 									"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 							if(frage==JOptionPane.YES_OPTION){
@@ -2377,13 +2377,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 				for(int i = 2;i <= 5;i++ ){
 					try{
-						idtest = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(6+i));
+						idtest = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(6+i));
 					}catch(Exception ex){
 						idtest = 0;
 					}
 					if(idtest > 0){
 						try{
-							anzahlen.add( Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(1+i)) );
+							anzahlen.add( Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(1+i)) );
 						}catch(Exception ex){
 							anzahlen.add(0);
 						}
@@ -2411,10 +2411,10 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 							anzahlen,hmpositionen,
 							Integer.parseInt(preisgruppe)-1,
 							SystemPreislisten.hmPreise.get(diszi).get(Integer.parseInt(preisgruppe)-1),
-							Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(27)),
-							(Reha.thisClass.patpanel.vecaktrez.get(1)),
-							DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)),
-							DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(40))
+							Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(27)),
+							(Reha.instance.patpanel.vecaktrez.get(1)),
+							DatFunk.sDatInDeutsch(Reha.instance.patpanel.vecaktrez.get(2)),
+							DatFunk.sDatInDeutsch(Reha.instance.patpanel.vecaktrez.get(40))
 							).check();
 					//System.out.println("Rückgabewert des HMR-Checks="+checkok);
 					if(!checkok){
@@ -2429,13 +2429,13 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				/*********************/
 				/********************************************************************************/
-				dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[1],currow,5);		// Icon Rezepstatus -> abgeschlossen
+				dtblm.setValueAt(Reha.instance.patpanel.imgrezstatus[1],currow,5);		// Icon Rezepstatus -> abgeschlossen
 				doAbschliessen();
-				String xcmd = "update verordn set abschluss='T' where id='"+Reha.thisClass.patpanel.vecaktrez.get(35)+"' LIMIT 1";
+				String xcmd = "update verordn set abschluss='T' where id='"+Reha.instance.patpanel.vecaktrez.get(35)+"' LIMIT 1";
 				SqlInfo.sqlAusfuehren(xcmd);
-				Reha.thisClass.patpanel.vecaktrez.set(62,"T");
+				Reha.instance.patpanel.vecaktrez.set(62,"T");
 				Vector<Vector<String>> kdat = SqlInfo.holeFelder("select ik_kasse,ik_kostent from kass_adr where id='"+
-						Reha.thisClass.patpanel.vecaktrez.get(37)+"' LIMIT 1");
+						Reha.instance.patpanel.vecaktrez.get(37)+"' LIMIT 1");
 				String ikkass="",ikkost="",kname="",rnr="",patint="";
 				if(kdat.size()>0){
 					ikkass = kdat.get(0).get(0);
@@ -2444,9 +2444,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					ikkass = "";
 					ikkost = "";
 				}
-				kname = Reha.thisClass.patpanel.vecaktrez.get(36);
-				patint=Reha.thisClass.patpanel.vecaktrez.get(0);
-				rnr = Reha.thisClass.patpanel.vecaktrez.get(1);
+				kname = Reha.instance.patpanel.vecaktrez.get(36);
+				patint=Reha.instance.patpanel.vecaktrez.get(0);
+				rnr = Reha.instance.patpanel.vecaktrez.get(1);
 				String cmd = "insert into fertige set ikktraeger='"+ikkost+"', ikkasse='"+ikkass+"', "+
 				"name1='"+kname+"', rez_nr='"+rnr+"', pat_intern='"+patint+"', rezklasse='"+rnr.substring(0,2)+"'";
 				SqlInfo.sqlAusfuehren(cmd);
@@ -2456,7 +2456,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 				//if(abrech1 != null){
 					//Hier umbauen so daß der Rezeptbaun nicht ständig neu aufgebaut wird.
-					//Reha.thisClass.abrechnungpanel.doEinlesen(Reha.thisClass.abrechnungpanel.getaktuellerKassenKnoten(),Reha.thisClass.patpanel.vecaktrez.get(1));
+					//Reha.instance.abrechnungpanel.doEinlesen(Reha.instance.abrechnungpanel.getaktuellerKassenKnoten(),Reha.instance.patpanel.vecaktrez.get(1));
 				//}
 
 			}else{
@@ -2465,18 +2465,18 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				//System.out.println("In Aufschließen");
 				// bereits abgeschlossen muß geöffnet werden
-				dtblm.setValueAt(Reha.thisClass.patpanel.imgrezstatus[0],currow,5);
+				dtblm.setValueAt(Reha.instance.patpanel.imgrezstatus[0],currow,5);
 				doAufschliessen();
-				String xcmd = "update verordn set abschluss='F' where id='"+Reha.thisClass.patpanel.vecaktrez.get(35)+"' LIMIT 1";
-				Reha.thisClass.patpanel.vecaktrez.set(62,"F");
+				String xcmd = "update verordn set abschluss='F' where id='"+Reha.instance.patpanel.vecaktrez.get(35)+"' LIMIT 1";
+				Reha.instance.patpanel.vecaktrez.set(62,"F");
 				SqlInfo.sqlAusfuehren(xcmd);
 				////System.out.println(xcmd);
-				String rnr = Reha.thisClass.patpanel.vecaktrez.get(1);
+				String rnr = Reha.instance.patpanel.vecaktrez.get(1);
 				String cmd = "delete from fertige where rez_nr='"+rnr+"' LIMIT 1";
 				SqlInfo.sqlAusfuehren(cmd);
 				JComponent abrech1 = AktiveFenster.getFensterAlle("Abrechnung-1");
 				if(abrech1 != null){
-					Reha.thisClass.abrechnungpanel.doEinlesen(Reha.thisClass.abrechnungpanel.getaktuellerKassenKnoten(),null);
+					Reha.instance.abrechnungpanel.doEinlesen(Reha.instance.abrechnungpanel.getaktuellerKassenKnoten(),null);
 				}
 			}
 	}
@@ -2487,10 +2487,10 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 		Vector<Vector<String>> tests = null;
 		Vector<String> dummy = new Vector<String>();
-		String lastrezdate = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)),-90));
-		String diszi = Reha.thisClass.patpanel.vecaktrez.get(1).substring(0,2);
+		String lastrezdate = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sDatInDeutsch(Reha.instance.patpanel.vecaktrez.get(2)),-90));
+		String diszi = Reha.instance.patpanel.vecaktrez.get(1).substring(0,2);
 		String cmd = "select rez_datum,rez_nr,termine from verordn where pat_intern = '"+
-		Reha.thisClass.patpanel.vecaktrez.get(0)+"' and rez_nr != '"+Reha.thisClass.patpanel.vecaktrez.get(1)+"'";
+		Reha.instance.patpanel.vecaktrez.get(0)+"' and rez_nr != '"+Reha.instance.patpanel.vecaktrez.get(1)+"'";
 
 		tests = SqlInfo.holeFelder(cmd);
 		//zuerst in den aktuellen Rezepten nachsehen
@@ -2520,7 +2520,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		//3. dann durch alle Rezepte hangeln und testen ob irgend ein Tag in den Terminen enthalten ist
 		//4. dann testen ob der Rezeptdatumsvergleich > als 3 Monate trifft dies zu abbruch
 		cmd = "select rez_datum,rez_nr,termine from lza where pat_intern = '"+
-		Reha.thisClass.patpanel.vecaktrez.get(0)+"' and rez_nr != '"+Reha.thisClass.patpanel.vecaktrez.get(1)+"' and rez_datum >= '"+lastrezdate+"'";
+		Reha.instance.patpanel.vecaktrez.get(0)+"' and rez_nr != '"+Reha.instance.patpanel.vecaktrez.get(1)+"' and rez_datum >= '"+lastrezdate+"'";
 
 		tests = SqlInfo.holeFelder(cmd);
 		for(int i = 0; i < tests.size();i++){
@@ -2587,7 +2587,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				if(ktagebreak){
 					//System.out.println("Kalendertage zwischen den Behandlungen = "+DatFunk.TageDifferenz(vglalt, vglneu)+"\n"+
 							//"erlaubt sind "+fristbreak);
-					if(!"RSFT".contains(Reha.thisClass.patpanel.vecaktrez.get(1).substring(0,2))){
+					if(!"RSFT".contains(Reha.instance.patpanel.vecaktrez.get(1).substring(0,2))){
 						if( ( (utage=DatFunk.TageDifferenz(vglalt, vglneu)) >  fristbreak) && (kommentar.trim().equals("")) ){
 							ret = rezUnterbrechung(true,"",i+1,Long.toString(utage));// Unterbrechungsgrund
 							if(ret.equals("")){
@@ -2600,7 +2600,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}else{
 					//System.out.println("Differenz zwischen dem letzt möglichen und dem tatsächlichen Zeitaum\n"+
 							//HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag));
-					if(!"RSFT".contains(Reha.thisClass.patpanel.vecaktrez.get(1).substring(0,2))){
+					if(!"RSFT".contains(Reha.instance.patpanel.vecaktrez.get(1).substring(0,2))){
 						if( (utage=HMRCheck.hmrTageDifferenz(vglalt,vglneu,fristbreak,breaksamstag)) > 0 && kommentar.trim().equals("")){
 							ret = rezUnterbrechung(true,"",i+1,Long.toString(utage));// Unterbrechungsgrund
 							if(ret.equals("")){
@@ -2628,7 +2628,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		return true;
 	}
 	private boolean rezGeschlossen(){
-		if(Reha.thisClass.patpanel.vecaktrez.get(62).equals("T")){
+		if(Reha.instance.patpanel.vecaktrez.get(62).equals("T")){
 			JOptionPane.showMessageDialog(null,"Das Rezept ist bereits abgeschlossen\nÄnderungen sind nur noch durch berechtigte Personen möglich");
 			return true;
 		}else{
@@ -2636,7 +2636,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		}
 	}
 	private boolean rezBefreit(){
-		if(Reha.thisClass.patpanel.vecaktrez.get(12).equals("T")){
+		if(Reha.instance.patpanel.vecaktrez.get(12).equals("T")){
 			JOptionPane.showMessageDialog(null,"Das Rezept ist zuzahlungsbefreit!");
 			return true;
 		}else{
@@ -2647,9 +2647,9 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		try{
 			//Preisgruppe ermitteln
 			int preisgruppe = 0;
-			KasseTools.constructKasseHMap(Reha.thisClass.patpanel.vecaktrez.get(37));
+			KasseTools.constructKasseHMap(Reha.instance.patpanel.vecaktrez.get(37));
 			try{
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41));
+				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41));
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler in Preisgruppe "+ex.getMessage());
 				ex.printStackTrace();
@@ -2730,7 +2730,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
             public boolean isCellEditable(int row, int col) {
 		        //Note that the data/cell address is constant,
 		        //no matter where the cell appears onscreen.
-		    	if(Reha.thisClass.patpanel.vecaktrez.get(62).equals("T")){
+		    	if(Reha.instance.patpanel.vecaktrez.get(62).equals("T")){
 		    		return false;
 		    	}
 		        if (col == 0){
@@ -2787,7 +2787,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		boolean bereitsbezahlt = false;
 
 		// vvv Lemmi 20101218: Prüfung, ob es eine RGR-RECHNUNG bereits gibt, falls ja, geht hier gar nix !
-		String reznr = Reha.thisClass.patpanel.vecaktrez.get(1);
+		String reznr = Reha.instance.patpanel.vecaktrez.get(1);
 
 		if(ZuzahlTools.existsRGR(reznr)){
 			JOptionPane.showMessageDialog(null, "<html>"+ZuzahlTools.rgrOK(reznr) + "<br>"
@@ -2799,18 +2799,18 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 		// erst prüfen ob Zuzahlstatus = 0, wenn ja zurück;
 		// dann prüfen ob bereits bezahlt wenn ja fragen ob Kopie erstellt werden soll;
-		if( Reha.thisClass.patpanel.vecaktrez.get(39).equals("0") ){
+		if( Reha.instance.patpanel.vecaktrez.get(39).equals("0") ){
 			JOptionPane.showMessageDialog(null,"Zuzahlung nicht erforderlich!");
 			return;
 		}
-		if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)))){
+		if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)))){
 			JOptionPane.showMessageDialog(null,"Stand heute ist der Patient noch nicht Volljährig - Zuzahlung deshalb (bislang) noch nicht erforderlich");
 			return;
 		}
 
 		if(ZuzahlTools.bereitsBezahlt(reznr)){
-//			if( (boolean)Reha.thisClass.patpanel.vecaktrez.get(39).equals("1") ||
-//					(Double.parseDouble((String)Reha.thisClass.patpanel.vecaktrez.get(13)) > 0.00) ){
+//			if( (boolean)Reha.instance.patpanel.vecaktrez.get(39).equals("1") ||
+//					(Double.parseDouble((String)Reha.instance.patpanel.vecaktrez.get(13)) > 0.00) ){
 			int frage = JOptionPane.showConfirmDialog(null,"<html>Zuzahlung für Rezept <b>" + reznr + "</b> bereits in bar geleistet!<br><br> Wollen Sie eine Kopie erstellen?</html>",
 														   "Wichtige Benutzeranfrage",JOptionPane.YES_NO_OPTION);
 			if(frage == JOptionPane.NO_OPTION){
@@ -2829,7 +2829,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		SystemConfig.hmAdrRDaten.put("<Rweggesamt>", "0,00");
 		SystemConfig.hmAdrRDaten.put("<Rendbetrag>", "0,00" );
 		SystemConfig.hmAdrRDaten.put("<Rwert>", "0,00" );
-		/*int art = */RezTools.testeRezGebArt(false,false,Reha.thisClass.patpanel.vecaktrez.get(1),Reha.thisClass.patpanel.vecaktrez.get(34));
+		/*int art = */RezTools.testeRezGebArt(false,false,Reha.instance.patpanel.vecaktrez.get(1),Reha.instance.patpanel.vecaktrez.get(34));
 		//System.out.println(SystemConfig.hmAdrRDaten);
 		new RezeptGebuehren(this,bereitsbezahlt,false,pt);
 	}
@@ -2860,7 +2860,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					"Sie den Administrator");
 			return;
 		}
-		dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[imageno], row, 1);
+		dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[imageno], row, 1);
 		tabaktrez.repaint();
  */
 
@@ -2879,10 +2879,10 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		SystemConfig.hmAdrRDaten.put("<Rweggesamt>", "0,00");
 		SystemConfig.hmAdrRDaten.put("<Rendbetrag>", "0,00" );
 		SystemConfig.hmAdrRDaten.put("<Rwert>", "0,00" );
-		/*int art = */RezTools.testeRezGebArt(true,false,Reha.thisClass.patpanel.vecaktrez.get(1),Reha.thisClass.patpanel.vecaktrez.get(34));
+		/*int art = */RezTools.testeRezGebArt(true,false,Reha.instance.patpanel.vecaktrez.get(1),Reha.instance.patpanel.vecaktrez.get(34));
 		//String ik = "510884019";
 		SystemConfig.hmAdrRDaten.put("<Bcik>",Reha.getAktIK());
-		String bcreznr = Reha.thisClass.patpanel.vecaktrez.get(1).toString();
+		String bcreznr = Reha.instance.patpanel.vecaktrez.get(1).toString();
 		if(bcreznr.startsWith("RS") || bcreznr.startsWith("FT")){
 			if(bcreznr.length() < 6){
 				bcreznr = StringTools.fuelleMitZeichen(bcreznr,"_", false, 6);
@@ -2890,7 +2890,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		}
 		SystemConfig.hmAdrRDaten.put("<Bcode>","*"+bcreznr+"*");
 		//SystemConfig.hmAdrRDaten.put("<Bcode>","*"+"KG500000"+"*");
-		int iurl = Integer.valueOf(Reha.thisClass.patpanel.vecaktrez.get(46));
+		int iurl = Integer.valueOf(Reha.instance.patpanel.vecaktrez.get(46));
 		String url = SystemConfig.rezBarCodForm.get((iurl < 0 ? 0 : iurl));
 		SystemConfig.hmAdrRDaten.put("<Bzu>",StringTools.fuelleMitZeichen(
 				SystemConfig.hmAdrRDaten.get("<Rendbetrag>"), " ", true, 5));
@@ -2898,7 +2898,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				SystemConfig.hmAdrRDaten.get("<Rwert>"), " ", true, 6));
 		SystemConfig.hmAdrRDaten.put("<Bnr>",SystemConfig.hmAdrRDaten.get("<Rnummer>"));
 		SystemConfig.hmAdrRDaten.put("<Buser>", Reha.aktUser);
-		SystemConfig.hmAdrRDaten.put("<Rpatid>", Reha.thisClass.patpanel.vecaktrez.get(0));
+		SystemConfig.hmAdrRDaten.put("<Rpatid>", Reha.instance.patpanel.vecaktrez.get(0));
 		//System.out.println("Es wird folgender Bacrode genommen "+url);
 		OOTools.starteBacrodeFormular(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/"+url,SystemConfig.rezBarcodeDrucker);
 
@@ -2946,7 +2946,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 //	public void neuanlageRezept( boolean lneu, String feldname ) {
 	public void neuanlageRezept( boolean lneu, String feldname, String strModus ){
 		try{
-			if(Reha.thisClass.patpanel.aid < 0 || Reha.thisClass.patpanel.kid < 0){
+			if(Reha.instance.patpanel.aid < 0 || Reha.instance.patpanel.kid < 0){
 				String meldung = "Hausarzt und/oder Krankenkasse im Patientenstamm sind nicht verwertbar.\n"+
 				"Die jeweils ungültigen Angaben sind -> kursiv <- dargestellt.\n\n"+
 				"Bitte korrigieren Sie die entsprechenden Angaben";
@@ -3016,8 +3016,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					neuRez.getSmartTitledPanel().setTitle("Rezept Neuanlage als Kopie von <-- " + vecKopiervorlage.get(1) );
 
 			}else{  // Lemmi Doku: Hier wird ein existierendes Rezept mittels Doppelklick geöffnet:
-				neuRez.getSmartTitledPanel().setContentContainer(new RezNeuanlage(Reha.thisClass.patpanel.vecaktrez,lneu,feldname));
-				neuRez.getSmartTitledPanel().setTitle("editieren Rezept ---> "+Reha.thisClass.patpanel.vecaktrez.get(1));
+				neuRez.getSmartTitledPanel().setContentContainer(new RezNeuanlage(Reha.instance.patpanel.vecaktrez,lneu,feldname));
+				neuRez.getSmartTitledPanel().setTitle("editieren Rezept ---> "+Reha.instance.patpanel.vecaktrez.get(1));
 			}
 			neuRez.getSmartTitledPanel().getContentContainer().setName("RezeptNeuanlage");
 			neuRez.setName("RezeptNeuanlage");
@@ -3037,15 +3037,15 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						aktualisiereVector((String)tabaktrez.getValueAt(tabaktrez.getSelectedRow(), idInTable));
 
 						//Icon
-//						dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[Integer.parseInt((String)Reha.thisClass.patpanel.vecaktrez.get(39))],
+//						dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[Integer.parseInt((String)Reha.instance.patpanel.vecaktrez.get(39))],
 //											tabaktrez.getSelectedRow(),1);
-						int iZzStat = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(39));
-						String sRezNr = Reha.thisClass.patpanel.vecaktrez.get(1);
+						int iZzStat = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(39));
+						String sRezNr = Reha.instance.patpanel.vecaktrez.get(1);
 						ZZStat iconKey =  ZuzahlTools.getIconKey (iZzStat, sRezNr);
 						setZuzahlImageActRow(iconKey,sRezNr);
 
 						//IndiSchlüssel
-						dtblm.setValueAt(Reha.thisClass.patpanel.vecaktrez.get(44), tabaktrez.getSelectedRow(), 7);
+						dtblm.setValueAt(Reha.instance.patpanel.vecaktrez.get(44), tabaktrez.getSelectedRow(), 7);
 						tabaktrez.validate();
 						tabaktrez.repaint();
 					}catch(Exception ex){
@@ -3056,14 +3056,14 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			}else{
 				if(aktPanel.equals("leerPanel")){
 					try{
-						holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
+						holeRezepte(Reha.instance.patpanel.patDaten.get(29),"");
 					}catch(Exception ex){
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(null,"Fehler in holeRezepte\n"+ex.getMessage());
 					}
 				}else{
 					try{
-						holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),this.sRezNumNeu);
+						holeRezepte(Reha.instance.patpanel.patDaten.get(29),this.sRezNumNeu);
 					}catch(Exception ex){
 						ex.printStackTrace();
 						JOptionPane.showMessageDialog(null,"Fehler in holeRezepte\n"+ex.getMessage());
@@ -3094,16 +3094,16 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			String rez_nr = dtblm.getValueAt(mod, 0).toString().trim();
 			SqlInfo.transferRowToAnotherDB("verordn", "lza","rez_nr", rez_nr, true, Arrays.asList(new String[] {"id"}));
 			SqlInfo.sqlAusfuehren("delete from verordn where rez_nr='"+rez_nr+"'");
-			Reha.thisClass.patpanel.aktRezept.holeRezepte(Reha.thisClass.patpanel.patDaten.get(29),"");
+			Reha.instance.patpanel.aktRezept.holeRezepte(Reha.instance.patpanel.patDaten.get(29),"");
 			final String xrez_nr = String.valueOf(rez_nr);
 
 			SwingUtilities.invokeLater(new Runnable(){
 				@Override
                 public void run(){
-					Reha.thisClass.patpanel.historie.holeRezepte(Reha.thisClass.patpanel.patDaten.get(29), "");
+					Reha.instance.patpanel.historie.holeRezepte(Reha.instance.patpanel.patDaten.get(29), "");
 					SqlInfo.sqlAusfuehren("delete from fertige where rez_nr='"+xrez_nr+"'");
 					RezTools.loescheRezAusVolleTabelle(xrez_nr);
-					if(Reha.thisClass.abrechnungpanel != null){
+					if(Reha.instance.abrechnungpanel != null){
 						/*
 						String[] diszis = null;
 						if(SystemConfig.mitRs){
@@ -3112,11 +3112,11 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 							diszis = new String[] {"Physio","Massage","Ergo","Logo","Podo"};
 						}
 
-						String aktDisziplin = diszis[Reha.thisClass.abrechnungpanel.cmbDiszi.getSelectedIndex()];
+						String aktDisziplin = diszis[Reha.instance.abrechnungpanel.cmbDiszi.getSelectedIndex()];
 						*/
-						String aktDisziplin = Reha.thisClass.abrechnungpanel.disziSelect.getCurrDiszi();
+						String aktDisziplin = Reha.instance.abrechnungpanel.disziSelect.getCurrDiszi();
 						if(RezTools.putRezNrGetDisziplin(xrez_nr).equals(aktDisziplin)){
-							Reha.thisClass.abrechnungpanel.einlesenErneuern(null);
+							Reha.instance.abrechnungpanel.einlesenErneuern(null);
 						}
 					}
 
@@ -3180,7 +3180,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		}
 		*/
 
-		Reha.thisClass.progLoader.Dta301Fenster(1, Reha.thisClass.patpanel.vecaktrez.get(1));
+		Reha.instance.progLoader.Dta301Fenster(1, Reha.instance.patpanel.vecaktrez.get(1));
 		// Hier der Aufruf der Fallsteuerungs .JAR
 	}
 
@@ -3189,7 +3189,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		boolean buchen = true;
 		DecimalFormat dfx = new DecimalFormat( "0.00" );
 
-		String sRezNr = Reha.thisClass.patpanel.vecaktrez.get(1);
+		String sRezNr = Reha.instance.patpanel.vecaktrez.get(1);
 		if(ZuzahlTools.existsRGR( sRezNr )){
 			int anfrage = JOptionPane.showConfirmDialog(null, "<html>"+ZuzahlTools.rgrOK(sRezNr) + "<br><br>"
 					+"Wollen Sie eine Kopie erstellen?</html>", "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
@@ -3199,17 +3199,17 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			buchen = false;
 		} else {
 			// vvv Prüfungen aus der Bar-Quittung auch hier !
-			if( Reha.thisClass.patpanel.vecaktrez.get(39).equals("0") ){
+			if( Reha.instance.patpanel.vecaktrez.get(39).equals("0") ){
 				JOptionPane.showMessageDialog(null,"Zuzahlung nicht erforderlich!");
 				return;
 			}
-			if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)))){
+			if(DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)))){
 				JOptionPane.showMessageDialog(null,"Stand heute ist der Patient noch nicht Volljährig - Zuzahlung deshalb (bislang) noch nicht erforderlich");
 				return;
 			}
 			if(ZuzahlTools.existsBarQuittung(sRezNr)){
-//			if( (boolean)Reha.thisClass.patpanel.vecaktrez.get(39).equals("1") ||
-//					(Double.parseDouble((String)Reha.thisClass.patpanel.vecaktrez.get(13)) > 0.00) ){
+//			if( (boolean)Reha.instance.patpanel.vecaktrez.get(39).equals("1") ||
+//					(Double.parseDouble((String)Reha.instance.patpanel.vecaktrez.get(13)) > 0.00) ){
 				JOptionPane.showMessageDialog(null, "<html>Zuzahlung für Rezept  <b>" + sRezNr
 						  + "</b>  wurde bereits in bar geleistet.<br>"
 						  + "Eine Rezeptgebühren-Rechnung kann deshalb nicht mehr erstellt werden.</html>",
@@ -3240,15 +3240,15 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		SystemConfig.hmAdrRDaten.put("<Rweggesamt>", "0,00");
 		SystemConfig.hmAdrRDaten.put("<Rendbetrag>", "0,00" );
 		SystemConfig.hmAdrRDaten.put("<Rwert>", "0,00" );
-		RezTools.testeRezGebArt(false,false,sRezNr,Reha.thisClass.patpanel.vecaktrez.get(34));
+		RezTools.testeRezGebArt(false,false,sRezNr,Reha.instance.patpanel.vecaktrez.get(34));
 
 //		for(int i = 0; i < vec_poskuerzel.size();i++){
 //		behandl=behandl+vec_posanzahl.get(i)+"*"+vec_poskuerzel.get(i)+(i < (vec_poskuerzel.size()-1) ? "," : "" );
 		// String mit den Anzahlen und HM-Kürzeln erzeugen
 		for(i = 0; i < 4; i++){
-			if (   (        Reha.thisClass.patpanel.vecaktrez.get(65+i) != null)
-				&& Reha.thisClass.patpanel.vecaktrez.get(65+i).length() > 0 )  {
-				behandl += ((behandl.length() > 0) ? ", " : "") + Reha.thisClass.patpanel.vecaktrez.get(3+i) + " * " + Reha.thisClass.patpanel.vecaktrez.get(65+i);
+			if (   (        Reha.instance.patpanel.vecaktrez.get(65+i) != null)
+				&& Reha.instance.patpanel.vecaktrez.get(65+i).length() > 0 )  {
+				behandl += ((behandl.length() > 0) ? ", " : "") + Reha.instance.patpanel.vecaktrez.get(3+i) + " * " + Reha.instance.patpanel.vecaktrez.get(65+i);
 			}
 		}
 
@@ -3264,14 +3264,14 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		}
 		dZuzahl += Double.parseDouble(SystemConfig.hmAdrRDaten.get("<Rpauschale>").replaceAll(",", "."));  // 10 Euro dazu
 
-		strZuzahlung = Reha.thisClass.patpanel.vecaktrez.get(13);
+		strZuzahlung = Reha.instance.patpanel.vecaktrez.get(13);
 		strZuzahlung = dfx.format(dZuzahl);
 		strZuzahlung = SystemConfig.hmAdrRDaten.get("<Rendbetrag>");
 
 /*		String test1 = "";  // Mal die Rezeptdaten auflisten !
-		int iMax = Reha.thisClass.patpanel.vecaktrez.size();
+		int iMax = Reha.instance.patpanel.vecaktrez.size();
 		for( i = 0; i < iMax; i++){
-			test1 = test1 + i + " = " + (String)Reha.thisClass.patpanel.vecaktrez.get(i) + "\n";
+			test1 = test1 + i + " = " + (String)Reha.instance.patpanel.vecaktrez.get(i) + "\n";
 			if ( i > 63 ){
 				int x = 5;
 				x += 1;
@@ -3282,7 +3282,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		//"anrede,titel,nachname,vorname,strasse,plz,ort"
 
 //		String cmd = "select abwadress,id from pat5 where pat_intern='"+vec_rez.get(0).get(0)+"' LIMIT 1";
-		String cmd = "select abwadress,id from pat5 where pat_intern='"+Reha.thisClass.patpanel.vecaktrez.get(0)+"' LIMIT 1";
+		String cmd = "select abwadress,id from pat5 where pat_intern='"+Reha.instance.patpanel.vecaktrez.get(0)+"' LIMIT 1";
 		Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
 		String[] adressParams = null;
 
@@ -3296,7 +3296,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 		hmRezgeb.put("<rgbehandlung>",behandl);
 
-		hmRezgeb.put("<rgdatum>",DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.vecaktrez.get(2)));
+		hmRezgeb.put("<rgdatum>",DatFunk.sDatInDeutsch(Reha.instance.patpanel.vecaktrez.get(2)));
 
 		hmRezgeb.put("<rgbetrag>",strZuzahlung);
 		//hmRezgeb.put("<rgpauschale>","5,00");
@@ -3308,7 +3308,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		hmRezgeb.put("<rgort>",adressParams[3]);
 		hmRezgeb.put("<rgbanrede>",adressParams[4]);
 
-		hmRezgeb.put("<rgpatintern>",Reha.thisClass.patpanel.vecaktrez.get(0));
+		hmRezgeb.put("<rgpatintern>",Reha.instance.patpanel.vecaktrez.get(0));
 
 		hmRezgeb.put("<rgpatnname>", SystemConfig.hmAdrPDaten.get("<Pnname>") );
 		hmRezgeb.put("<rgpatvname>", SystemConfig.hmAdrPDaten.get("<Pvname>") );
@@ -3358,7 +3358,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 			tDlg.setVisible(true);
 			/*
 			if(testcase){
-				Reha.thisClass.dbLabel.setText("RWert von Tool = "+Reha.toolsDlgRueckgabe);
+				Reha.instance.dbLabel.setText("RWert von Tool = "+Reha.toolsDlgRueckgabe);
 			}
 			*/
 			if(Reha.toolsDlgRueckgabe > -1){

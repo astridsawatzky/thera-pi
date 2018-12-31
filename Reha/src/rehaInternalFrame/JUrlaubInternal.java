@@ -34,9 +34,9 @@ public class JUrlaubInternal extends JRehaInternal implements RehaEventListener{
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		//nächsten JInternalFrame aktivieren
-		Reha.thisClass.aktiviereNaechsten(this.desktop);		
+		Reha.instance.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
 		//hier die Aufräumenfunktion
@@ -58,7 +58,7 @@ public class JUrlaubInternal extends JRehaInternal implements RehaEventListener{
 		 	   {
 		 		//System.out.println("LöscheFenster "+name);   
 				AktiveFenster.loescheFenster(name);
-				Reha.thisClass.progLoader.loescheUrlaub();
+				Reha.instance.progLoader.loescheUrlaub();
 		 	   }
 		});
 

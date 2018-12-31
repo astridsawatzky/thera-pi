@@ -22,7 +22,7 @@ public class SysUtilPreisregeln extends JXPanel implements KeyListener, ActionLi
 		//System.out.println("Aufruf SysUtilKalenderanlagen");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     add(getVorlagenSeite(),BorderLayout.CENTER);
 		return;

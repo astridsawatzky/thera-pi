@@ -89,7 +89,7 @@ public class VorBerichte extends RehaSmartDialog implements ActionListener{
 
 			@Override
 			protected Void doInBackground() throws Exception {
-			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("VorBerichte"));
+			     rgb.setBackgroundPainter(Reha.instance.compoundPainter.get("VorBerichte"));
 				return null;
 			}
 
@@ -149,7 +149,7 @@ public class VorBerichte extends RehaSmartDialog implements ActionListener{
 
 		pb.add(diagnoseuebernahme,cc.xyw(2,2,3));
 
-		dtblm = Reha.thisClass.patpanel.berichte.dtblm;
+		dtblm = Reha.instance.patpanel.berichte.dtblm;
 		tabbericht = new JXTable(dtblm);
 		tabbericht.getColumn(1).setMinWidth(200);
 		tabbericht.getColumn(6).setMinWidth(0);

@@ -62,7 +62,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener,Acti
 		super(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		
 		JComponent panel1 = getForm1();

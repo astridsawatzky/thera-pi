@@ -208,8 +208,8 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 				stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 				jcc.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(stroke, "doSchliessen");
 				jcc.getActionMap().put("doSchliessen", new RoogleAction());
-			    if(Reha.thisClass.terminpanel != null){
-			    	Reha.thisClass.terminpanel.setUpdateVerbot(true);
+			    if(Reha.instance.terminpanel != null){
+			    	Reha.instance.terminpanel.setUpdateVerbot(true);
 			    }
 			    /*
 			    for(int i = 0;i < kollegenSuchen.length;i++){
@@ -1404,16 +1404,16 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 		}
 		pinPanel = null;
 		//RoogleFenster.thisClass = null;
-		Reha.thisClass.progLoader.loescheRoogle();
+		Reha.instance.progLoader.loescheRoogle();
 
-	    if(Reha.thisClass.terminpanel != null){
+	    if(Reha.instance.terminpanel != null){
 	    	new Thread(){
 	    		@Override
                 public void run(){
-	    			Reha.thisClass.terminpanel.aktualisieren();
-	    			Reha.thisClass.terminpanel.setUpdateVerbot(false);
+	    			Reha.instance.terminpanel.aktualisieren();
+	    			Reha.instance.terminpanel.setUpdateVerbot(false);
 	    	    	//TerminFenster.thisClass.getViewPanel().requestFocus();
-	    			Reha.thisClass.terminpanel.altCtrlAus();
+	    			Reha.instance.terminpanel.altCtrlAus();
 
 
 	    			/*
@@ -1426,7 +1426,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	    	}.start();
 	    }
 	    /*
-		Reha.thisClass.progLoader.loescheRoogle();
+		Reha.instance.progLoader.loescheRoogle();
     	//System.out.println("TerminFenster.thisClass = null ");
 		Runtime r = Runtime.getRuntime();
 	    r.gc();

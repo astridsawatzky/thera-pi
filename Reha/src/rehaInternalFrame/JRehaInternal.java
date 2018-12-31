@@ -271,35 +271,35 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 	public void aktiviereDiesenFrame(String frame){
 		JRehaInternal iframe = null;
 		for(int idesk = 0; idesk < 2;idesk++){
-			int coms = Reha.thisClass.desktops[idesk].getComponentCount();
+			int coms = Reha.instance.desktops[idesk].getComponentCount();
 			String lays = "";
 			for(int layers = 0;layers < coms;layers++){
 				try{
 					try{
 					
-					lays = ((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers)).getName();
+					lays = ((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers)).getName();
 					}catch(java.lang.ClassCastException ex){
 						lays = frame;
 					}
 					if(!lays.equals(frame)){
-						((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers)).setActive(false);
+						((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers)).setActive(false);
 						try {
-							((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers)).setSelected(false);
+							((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers)).setSelected(false);
 						} catch (PropertyVetoException e) {
 							e.printStackTrace();
 						}
-						((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers)).repaint();
+						((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers)).repaint();
 					}else{
 						try{
-							iframe = ((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers));
+							iframe = ((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers));
 						}catch(Exception ex){
 							// Hier muß der Kram mit iconified
-							if(Reha.thisClass.desktops[idesk].getComponent(layers) instanceof JDesktopIcon){
+							if(Reha.instance.desktops[idesk].getComponent(layers) instanceof JDesktopIcon){
 								
 							}else{
-								((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers)).isIcon = false;
-								System.out.println("icon = false "+((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers)).getName());
-								iframe = ((JRehaInternal)Reha.thisClass.desktops[idesk].getComponent(layers));
+								((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers)).isIcon = false;
+								System.out.println("icon = false "+((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers)).getName());
+								iframe = ((JRehaInternal)Reha.instance.desktops[idesk].getComponent(layers));
 							}
 						}
 					}
@@ -340,7 +340,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 	}
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		this.removeInternalFrameListener(this);
 		thisContent.removeKeyListener(this);
 		thisContent.removeMouseListener(this);
@@ -351,7 +351,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		fl = null;
 	    thisContent = null;
 		Reha.getThisFrame().requestFocus();
-		Reha.thisClass.aktiviereNaechsten(this.desktop);
+		Reha.instance.aktiviereNaechsten(this.desktop);
 		AktiveFenster.loescheFenster(this.getName());
 	}
 	@Override
@@ -553,17 +553,17 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		this.removeInternalFrameListener(this);
 
 		this.setVisible(false);
-		////System.out.println("Layer vor dem Wechsel" +Reha.thisClass.desktops[vorher].getLayer(this));		
-		Reha.thisClass.desktops[vorher].remove(this);
-		Reha.thisClass.desktops[vorher].updateUI();
-		Reha.thisClass.desktops[vorher].repaint();
+		////System.out.println("Layer vor dem Wechsel" +Reha.instance.desktops[vorher].getLayer(this));		
+		Reha.instance.desktops[vorher].remove(this);
+		Reha.instance.desktops[vorher].updateUI();
+		Reha.instance.desktops[vorher].repaint();
 		this.setVisible(true);
-		Reha.thisClass.desktops[nachher].add(this);
+		Reha.instance.desktops[nachher].add(this);
 
 		this.setLocation(20,10);
-		Reha.thisClass.desktops[nachher].validate();		
-		Reha.thisClass.desktops[nachher].updateUI();
-		Reha.thisClass.desktops[nachher].repaint();
+		Reha.instance.desktops[nachher].validate();		
+		Reha.instance.desktops[nachher].updateUI();
+		Reha.instance.desktops[nachher].repaint();
 		this.desktop = nachher;
 		this.addInternalFrameListener(this);
 		try {
@@ -577,7 +577,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 		}
 
 		frameAktivieren(this.getName());
-		////System.out.println("Layer nach dem Wechsel" +Reha.thisClass.desktops[nachher].getLayer(this));		
+		////System.out.println("Layer nach dem Wechsel" +Reha.instance.desktops[nachher].getLayer(this));		
 		/*
 		try {
 			setSelected(true);
@@ -623,7 +623,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 	}
 	private void sizeAnpassen(){
 		this.setLocation(new Point(2,2));
-		this.setSize(Reha.thisClass.desktops[this.desktop].getWidth()-2,Reha.thisClass.desktops[this.desktop].getHeight()-2);
+		this.setSize(Reha.instance.desktops[this.desktop].getWidth()-2,Reha.instance.desktops[this.desktop].getHeight()-2);
 	}
 	public boolean getImmerGross(){
 		return this.stetsgross;
@@ -638,7 +638,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 
 				int deskaktiv=this.desktop;
 				int deskinaktiv = (deskaktiv==0 ? 1 : 0);
-				JInternalFrame[] frm = Reha.thisClass.desktops[deskaktiv].getAllFrames();
+				JInternalFrame[] frm = Reha.instance.desktops[deskaktiv].getAllFrames();
 				////System.out.println("Anzahl Fenster auf Desktop "+deskaktiv+" = "+frm.length);
 				
 				for(int i = 0; i < frm.length;i++){
@@ -653,7 +653,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 						}
 				}
 				
-				JInternalFrame[] frmin = Reha.thisClass.desktops[deskinaktiv].getAllFrames();
+				JInternalFrame[] frmin = Reha.instance.desktops[deskinaktiv].getAllFrames();
 				////System.out.println("Anzahl Fenster auf Desktop "+deskinaktiv+" = "+frmin.length);				
 				for(int i = 0; i < frmin.length;i++){
 					
@@ -692,8 +692,8 @@ class RehaInternal extends BasicInternalFrameTitlePane{
 	public RehaInternal(JInternalFrame f,String titel,ImageIcon img1,ImageIcon img2,ImageIcon img3,int pp) {
 	
 		super(f);
-		gp1 = Reha.thisClass.gp1;//new GradientPaint(0,0,new Color(112,141,255),0,25,Color.WHITE,true);	
-		gp2 = Reha.thisClass.gp1;//new GradientPaint(0,0,new Color(112,141,120),0,25,Color.WHITE,true);
+		gp1 = Reha.instance.gp1;//new GradientPaint(0,0,new Color(112,141,255),0,25,Color.WHITE,true);	
+		gp2 = Reha.instance.gp1;//new GradientPaint(0,0,new Color(112,141,120),0,25,Color.WHITE,true);
 		this.titel = titel;
 		this.img1 = img1.getImage();
 		this.img2 = img2.getImage();

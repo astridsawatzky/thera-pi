@@ -34,9 +34,9 @@ public class JBeteiligungInternal extends JRehaInternal implements RehaEventList
 	@Override
 	public void internalFrameClosed(InternalFrameEvent arg0) {
 		//JInternalFram von Desktop lösen
-		Reha.thisClass.desktops[this.desktop].remove(this);
+		Reha.instance.desktops[this.desktop].remove(this);
 		//nächsten JInternalFrame aktivieren
-		Reha.thisClass.aktiviereNaechsten(this.desktop);		
+		Reha.instance.aktiviereNaechsten(this.desktop);		
 		//Listener deaktivieren
 		rEvent.removeRehaEventListener(this);
 		//hier die Aufräumenfunktion
@@ -58,7 +58,7 @@ public class JBeteiligungInternal extends JRehaInternal implements RehaEventList
 		 	   {
 		 		//System.out.println("LöscheFenster "+name);   
 				AktiveFenster.loescheFenster(name);
-				Reha.thisClass.progLoader.loescheBeteiligung();
+				Reha.instance.progLoader.loescheBeteiligung();
 		 	   }
 		});
 

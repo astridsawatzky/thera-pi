@@ -24,7 +24,7 @@ public class SysUtilVorlage extends JXPanel implements KeyListener, ActionListen
 		super(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     JLabel jlbl = new JLabel("");
 	     jlbl.setIcon(img);

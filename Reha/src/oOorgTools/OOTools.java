@@ -86,7 +86,7 @@ import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -1234,7 +1234,7 @@ public class OOTools{
 				xtextDocument.getFrame().setFocus();
 			}
 		});
-		//Reha.thisFrame.setCursor(Reha.thisClass.normalCursor);
+		//Reha.thisFrame.setCursor(Reha.instance.normalCursor);
 
 	}
 
@@ -1628,15 +1628,15 @@ public class OOTools{
 					textDocument = (ITextDocument)document;
 					textDocument.close();
 					System.err.println("Initiales Dokument wurde produziert und wieder geschlossen");
-					Reha.thisClass.messageLabel.setForeground(Color.BLACK);
-					Reha.thisClass.messageLabel.setText("OpenOffice.org: Init o.k.");
+					Reha.instance.messageLabel.setForeground(Color.BLACK);
+					Reha.instance.messageLabel.setText("OpenOffice.org: Init o.k.");
 				}
 				catch (OfficeApplicationException exception) {
-					Reha.thisClass.messageLabel.setText("OO.org: nicht Verfügbar");
+					Reha.instance.messageLabel.setText("OO.org: nicht Verfügbar");
 					exception.printStackTrace();
 				}
 				catch (NOAException exception) {
-					Reha.thisClass.messageLabel.setText("OO.org: nicht Verfügbar");
+					Reha.instance.messageLabel.setText("OO.org: nicht Verfügbar");
 					exception.printStackTrace();
 				}
 				Reha.getThisFrame().setCursor(Cursors.normalCursor);

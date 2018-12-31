@@ -44,6 +44,7 @@ import events.PatStammEvent;
 import events.PatStammEventClass;
 import events.RehaTPEvent;
 import events.RehaTPEventListener;
+import gui.Cursors;
 import systemEinstellungen.SystemConfig;
 
 public class SuchenDialog extends JXDialog implements RehaTPEventListener{
@@ -367,7 +368,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		pEvt.setPatStammEvent("PatSuchen");
 		pEvt.setDetails(s1,s2,fname) ;
 		PatStammEventClass.firePatStammEvent(pEvt);
-		Reha.thisClass.lastSelectedPat = jtable.getSelectedRow();
+		Reha.instance.lastSelectedPat = jtable.getSelectedRow();
 	}
 	public void sucheBeenden(){
 		PatSuchenDlgIniSave();
@@ -378,7 +379,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		pEvt.setPatStammEvent("PatSuchen");
 		pEvt.setDetails(s1,s2,fname) ;
 		PatStammEventClass.firePatStammEvent(pEvt);
-		Reha.thisClass.lastSelectedPat = -1;
+		Reha.instance.lastSelectedPat = -1;
 	}
 	// Lemmi 20101212: Merken der Defaultwerte für den nächsten Aufruf
 	// speichere Dimension und Suchart in der INI-Datei für nächsten Aufruf
@@ -848,7 +849,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener{
 		//System.out.println(sstmt);
 		try {
 
-			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 				rs = stmt.executeQuery(sstmt);

@@ -94,7 +94,7 @@ public class TagWahlNeu extends RehaSmartDialog implements  FocusListener, Actio
 
 			@Override
 			protected Void doInBackground() throws Exception {
-			     jcc.setBackgroundPainter(Reha.thisClass.compoundPainter.get("TagWahlNeu"));
+			     jcc.setBackgroundPainter(Reha.instance.compoundPainter.get("TagWahlNeu"));
 				return null;
 			}
 
@@ -369,8 +369,8 @@ private void zurueck(){
 
 
         	}else{
-    			Reha.thisClass.terminpanel.datGewaehlt = akttag;
-    			Reha.thisClass.terminpanel.suchSchonMal();
+    			Reha.instance.terminpanel.datGewaehlt = akttag;
+    			Reha.instance.terminpanel.suchSchonMal();
         	}
 
 

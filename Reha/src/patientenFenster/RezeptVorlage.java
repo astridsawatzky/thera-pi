@@ -65,7 +65,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 		super(null,"RezeptVorlage");
 
 		// Ermittlung der Rezept-Daten zu diesem Patienten
-		String strPatIntern = Reha.thisClass.patpanel.vecaktrez.get(0);
+		String strPatIntern = Reha.instance.patpanel.vecaktrez.get(0);
 
 		String cmd = "SELECT DISTINCT SUBSTR(REZ_NR,1,2) as diszi from " +
 					"(SELECT \"lza\", `PAT_INTERN`,`REZ_NR`, `REZ_DATUM` FROM `lza` lza WHERE `PAT_INTERN` = " + strPatIntern +
@@ -95,7 +95,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 
 			@Override
 			protected Void doInBackground() throws Exception {
-			     rgb.setBackgroundPainter(Reha.thisClass.compoundPainter.get("RezNeuanlage"));
+			     rgb.setBackgroundPainter(Reha.instance.compoundPainter.get("RezNeuanlage"));
 				return null;
 			}
 		}.execute();
@@ -120,7 +120,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 		if ( vecDiszi.size() < 2 ) {
 			if ( vecDiszi.size() == 1 ) strSelectedDiszi = vecDiszi.get( 0 );
 			// mit der Disziplin such wir jetzt noch das konkrete letzte Rezept zu dieser Disziplin
-			starteSucheVorlage( Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
+			starteSucheVorlage( Reha.instance.patpanel.vecaktrez.get(0), strSelectedDiszi );
 			this.dispose();
 			bHasSelfDisposed = true;
 			return;
@@ -152,7 +152,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 
 
 		try {
-			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			
@@ -300,7 +300,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 		
 		if(arg0.getActionCommand().equals("kopieren")){
 			// hier wird vecResult gefüllt
-			starteSucheVorlage( Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
+			starteSucheVorlage( Reha.instance.patpanel.vecaktrez.get(0), strSelectedDiszi );
 //			Vector<String> vecTest = new Vector<String>();
 //			vecTest = vecResult;
 			this.dispose();
@@ -308,7 +308,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 		if( vecDiszi.contains( arg0.getActionCommand()) ) {  // Wenn eine der gefundenen Disziplinen angewählt worden ist
 			strSelectedDiszi = arg0.getActionCommand();
 			// hier wird vecResult gefüllt
-			starteSucheVorlage( Reha.thisClass.patpanel.vecaktrez.get(0), strSelectedDiszi );
+			starteSucheVorlage( Reha.instance.patpanel.vecaktrez.get(0), strSelectedDiszi );
 			this.dispose();
 		}
 		if(arg0.getActionCommand().equals("abbrechen")){
@@ -324,8 +324,8 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 		StringBuffer buf = new StringBuffer();
 		buf.append("insert into rgaffaktura set ");
 		buf.append("rnr='"+afrNummer+"', ");
-		buf.append("reznr='"+(String)Reha.thisClass.patpanel.vecaktrez.get(1)+"', ");
-		buf.append("pat_intern='"+(String)Reha.thisClass.patpanel.vecaktrez.get(0)+"', ");
+		buf.append("reznr='"+(String)Reha.instance.patpanel.vecaktrez.get(1)+"', ");
+		buf.append("pat_intern='"+(String)Reha.instance.patpanel.vecaktrez.get(0)+"', ");
 		buf.append("rgesamt='"+(String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("roffen='"+(String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 		buf.append("rdatum='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"'");
@@ -342,7 +342,7 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 			buf2.append("r_datum='" + DatFunk.sDatInSQL(DatFunk.sHeute())+"', ");
 
 			// Patienten-Name holen und eintragen
-			String cmd = "select n_name, v_name from pat5 where id='" + (String)Reha.thisClass.patpanel.vecaktrez.get(0) + "'";
+			String cmd = "select n_name, v_name from pat5 where id='" + (String)Reha.instance.patpanel.vecaktrez.get(0) + "'";
 			//System.out.println(cmd);
 			Vector<Vector<String>> vec = SqlInfo.holeFelder(cmd);
 			if(vec.size() <= 0) strHelp = "Patient, unbekannt";
@@ -350,14 +350,14 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 			buf2.append("r_kasse='" + strHelp + "', ");
 
 			// Hole die ersten beiden Buchstaben aus der Rezeptnummer als "Klasse"
-			strHelp = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+			strHelp = (String)Reha.instance.patpanel.vecaktrez.get(1);
 			buf2.append("r_klasse='" + strHelp.substring(0, 2) + "', ");
 
 			buf2.append("r_betrag='" + (String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 			buf2.append("r_offen='" + (String)SystemConfig.hmAdrAFRDaten.get("<AFRgesamt>").replace(",",".")+"', ");
 			buf2.append("r_zuzahl='0.00', ");
-			buf2.append("pat_intern='" + (String)Reha.thisClass.patpanel.vecaktrez.get(0) + "', ");
-			buf2.append("ikktraeger='" + (String)Reha.thisClass.patpanel.vecaktrez.get(1) + "'");  // Rezept-Nummer, z.B. ER23
+			buf2.append("pat_intern='" + (String)Reha.instance.patpanel.vecaktrez.get(0) + "', ");
+			buf2.append("ikktraeger='" + (String)Reha.instance.patpanel.vecaktrez.get(1) + "'");  // Rezept-Nummer, z.B. ER23
 			sqlTools.SqlInfo.sqlAusfuehren(buf2.toString());
 			// ^^^ Lemmi 20101220: Eintrag der RGR auch in Tabelle "rliste" (Offene Posten & Mahnungen)
 		}
@@ -366,9 +366,9 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 	private void macheMemoEintrag(){
 		StringBuffer sb = new StringBuffer();
 		sb.append(DatFunk.sHeute()+" - unentschuldigt oder zu spät abgesagt - Rechnung!!\n");
-		sb.append(Reha.thisClass.patpanel.pmemo[1].getText());
-		Reha.thisClass.patpanel.pmemo[1].setText(sb.toString());
-		String cmd = "update pat5 set pat_text='"+sb.toString()+"' where pat_intern = '"+Reha.thisClass.patpanel.aktPatID+"'";
+		sb.append(Reha.instance.patpanel.pmemo[1].getText());
+		Reha.instance.patpanel.pmemo[1].setText(sb.toString());
+		String cmd = "update pat5 set pat_text='"+sb.toString()+"' where pat_intern = '"+Reha.instance.patpanel.aktPatID+"'";
 		new ExUndHop().setzeStatement(cmd);
 	}
 	private void macheAFRHmap(){
@@ -393,16 +393,16 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 			mapkurz = "<AFRkurz"+(i+1)+">";
 			maplang = "<AFRlang"+(i+1)+">";
 			if(leistung[i].isSelected()){
-				Double preis = new Double( (String)Reha.thisClass.patpanel.vecaktrez.get(18+i));
+				Double preis = new Double( (String)Reha.instance.patpanel.vecaktrez.get(18+i));
 				String s = df.format( preis);
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
 				SystemConfig.hmAdrAFRDaten.put(mappreis,s);
 				gesamt = gesamt+preis;
 
-				spos = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = (String)Reha.instance.patpanel.vecaktrez.get(8+i);
+				sart = (String)Reha.instance.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 				SystemConfig.hmAdrAFRDaten.put(maplang,inpos[0]);
 				SystemConfig.hmAdrAFRDaten.put(mapkurz,inpos[1]);
@@ -410,10 +410,10 @@ public class RezeptVorlage extends RehaSmartDialog implements ActionListener{
 				////System.out.println(inpos[1]);
 
 			}else{
-				spos = (String)Reha.thisClass.patpanel.vecaktrez.get(8+i);
-				sart = (String)Reha.thisClass.patpanel.vecaktrez.get(1);
+				spos = (String)Reha.instance.patpanel.vecaktrez.get(8+i);
+				sart = (String)Reha.instance.patpanel.vecaktrez.get(1);
 				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.thisClass.patpanel.vecaktrez.get(41))-1;
+				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
 				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
 
 				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());

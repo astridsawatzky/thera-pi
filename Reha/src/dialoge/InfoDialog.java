@@ -683,7 +683,7 @@ public class InfoDialog extends JDialog implements WindowListener{
 		bdata.append("<span "+getSpanStyle("14","")+"Merkmale für diesen Patient</span><br>\n");
 		int durchlauf = 0;
 		for(int i = 62; i > 56;i--){
-			if(Reha.thisClass.patpanel.patDaten.get(i).equals("T")){
+			if(Reha.instance.patpanel.patDaten.get(i).equals("T")){
 				if(SystemConfig.vPatMerkerIconFile.get(durchlauf) != null){
 					bdata.append("<img src='file:///"+SystemConfig.vPatMerkerIconFile.get(durchlauf)+"'>&nbsp;&nbsp;");
 				}
@@ -979,7 +979,7 @@ public class InfoDialog extends JDialog implements WindowListener{
         public void run(){
 
 			try {
-				stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+				stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 	                    ResultSet.CONCUR_UPDATABLE );
 				/*
 				for(int i = 0; i < suchkrit.length;i++){

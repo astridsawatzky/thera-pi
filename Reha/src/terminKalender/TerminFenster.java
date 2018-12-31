@@ -239,12 +239,12 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		ViewPanel.addFocusListener(new java.awt.event.FocusAdapter() {
 			@Override
             public void focusLost(java.awt.event.FocusEvent e) {
-				//Reha.thisClass.shiftLabel.setText("VP Focus weg");
+				//Reha.instance.shiftLabel.setText("VP Focus weg");
 
 			}
 			@Override
             public void focusGained(java.awt.event.FocusEvent e) {
-				//Reha.thisClass.shiftLabel.setText("VP Focus da");
+				//Reha.instance.shiftLabel.setText("VP Focus da");
 
 			}
 		});
@@ -254,11 +254,11 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		GrundFlaeche.addFocusListener(new java.awt.event.FocusAdapter() {
 			@Override
             public void focusLost(java.awt.event.FocusEvent e) {
-				//Reha.thisClass.shiftLabel.setText("GF Focus weg");
+				//Reha.instance.shiftLabel.setText("GF Focus weg");
 			}
 			@Override
             public void focusGained(java.awt.event.FocusEvent e) {
-				//Reha.thisClass.shiftLabel.setText("GF Focus da");
+				//Reha.instance.shiftLabel.setText("GF Focus da");
 
 				holeFocus();
 			}
@@ -293,17 +293,17 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		ViewPanel.addFocusListener(new java.awt.event.FocusAdapter() {
 			@Override
             public void focusLost(java.awt.event.FocusEvent e) {
-				//Reha.thisClass.shiftLabel.setText("VP Focus weg");
+				//Reha.instance.shiftLabel.setText("VP Focus weg");
 
 			}
 			@Override
             public void focusGained(java.awt.event.FocusEvent e) {
-				//Reha.thisClass.shiftLabel.setText("VP Focus da");
-				Reha.thisClass.terminpanel.eltern.feuereEvent(25554);
-				Reha.thisClass.terminpanel.eltern.feuereEvent(25554);
-				if(! Reha.thisClass.terminpanel.eltern.isSelected()){
+				//Reha.instance.shiftLabel.setText("VP Focus da");
+				Reha.instance.terminpanel.eltern.feuereEvent(25554);
+				Reha.instance.terminpanel.eltern.feuereEvent(25554);
+				if(! Reha.instance.terminpanel.eltern.isSelected()){
 					try {
-						Reha.thisClass.terminpanel.eltern.setSelected(true);
+						Reha.instance.terminpanel.eltern.setSelected(true);
 					} catch (PropertyVetoException e1) {
 						e1.printStackTrace();
 					}
@@ -393,7 +393,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	}
 	private void setzeStatement(){
 		try {
-			this.privstmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			this.privstmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 					ResultSet.CONCUR_UPDATABLE); //ResultSet.CONCUR_READ_ONLY);//
 			this.privstmt.setQueryTimeout(1);
 
@@ -529,7 +529,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 					if(e.getKeyCode()==68 && e.isControlDown()){
 						//Terminplan drucken
 						DruckeViewPanel dvp = new DruckeViewPanel();
-						dvp.setPrintPanel(Reha.thisClass.terminpanel.ViewPanel);
+						dvp.setPrintPanel(Reha.instance.terminpanel.ViewPanel);
 						break;
 					}
 					if ( (e.getKeyCode()==87) && (e.isControlDown()) ){
@@ -604,8 +604,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             public void focusGained(java.awt.event.FocusEvent e) {
 				focusHandling(0,1);
 				try{
-					if(!Reha.thisClass.terminpanel.eltern.isActive){
-						Reha.thisClass.terminpanel.eltern.feuereEvent(25554);
+					if(!Reha.instance.terminpanel.eltern.isActive){
+						Reha.instance.terminpanel.eltern.feuereEvent(25554);
 					}
 				}catch(Exception ex){
 
@@ -866,19 +866,19 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 */
 	public static void setDurchlass(float alf){
 		try{
-			if(! (Reha.thisClass.terminpanel.oSpalten == null)){
+			if(! (Reha.instance.terminpanel.oSpalten == null)){
 				for(int i = 0; i < 7;i++){
-					Reha.thisClass.terminpanel.oSpalten[i].setAlpha(alf);
-					Reha.thisClass.terminpanel.oSpalten[i].setBackground(SystemConfig.KalenderHintergrund);
-					Reha.thisClass.terminpanel.oSpalten[i].repaint();
-					Reha.thisClass.terminpanel.oCombo[i].getParent().setBackground(SystemConfig.KalenderHintergrund);
+					Reha.instance.terminpanel.oSpalten[i].setAlpha(alf);
+					Reha.instance.terminpanel.oSpalten[i].setBackground(SystemConfig.KalenderHintergrund);
+					Reha.instance.terminpanel.oSpalten[i].repaint();
+					Reha.instance.terminpanel.oCombo[i].getParent().setBackground(SystemConfig.KalenderHintergrund);
 				}
-				Reha.thisClass.terminpanel.ViewPanel.setBackground(SystemConfig.KalenderHintergrund);
-				Reha.thisClass.terminpanel.GrundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
-				Reha.thisClass.terminpanel.ComboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
-				Reha.thisClass.terminpanel.TerminFlaeche.setBackground(SystemConfig.KalenderHintergrund);
-				Reha.thisClass.terminpanel.ViewPanel.validate();
-				Reha.thisClass.terminpanel.ViewPanel.repaint();
+				Reha.instance.terminpanel.ViewPanel.setBackground(SystemConfig.KalenderHintergrund);
+				Reha.instance.terminpanel.GrundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+				Reha.instance.terminpanel.ComboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+				Reha.instance.terminpanel.TerminFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+				Reha.instance.terminpanel.ViewPanel.validate();
+				Reha.instance.terminpanel.ViewPanel.repaint();
 			}
 		}catch(java.lang.NullPointerException n){
 			//fare niente - Terminkalender läuft nicht!!
@@ -908,7 +908,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						}
 						if(ec==68 && e.isControlDown()){
 							DruckeViewPanel dvp = new DruckeViewPanel();
-							dvp.setPrintPanel(Reha.thisClass.terminpanel.ViewPanel);
+							dvp.setPrintPanel(Reha.instance.terminpanel.ViewPanel);
 							break;
 						}
 						if ( (ec==123) && (ansicht != MASKEN_ANSICHT) ){
@@ -1445,7 +1445,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			oSpalten[tspalte].addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
 				@Override
                 public void mouseDragged(java.awt.event.MouseEvent e) {
-					//Reha.thisClass.shiftLabel.setText("Spalte"+tspalte+"  / Drag:X="+e.getX()+" Y="+e.getY());
+					//Reha.instance.shiftLabel.setText("Spalte"+tspalte+"  / Drag:X="+e.getX()+" Y="+e.getY());
 					if(fgp != null){
 						if(!fgp.isVisible()){
 							fgp.setVisible(true);
@@ -1476,8 +1476,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                 public void focusGained(java.awt.event.FocusEvent e) {
 					focusHandling(1,1);
 					try{
-						if(!Reha.thisClass.terminpanel.eltern.isActive){
-							Reha.thisClass.terminpanel.eltern.feuereEvent(25554);
+						if(!Reha.instance.terminpanel.eltern.isActive){
+							Reha.instance.terminpanel.eltern.feuereEvent(25554);
 						}
 					}catch(Exception ex){
 
@@ -1590,7 +1590,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 					Terminedespatsuchen.setEnabled(true);
 					Tauschemitvorherigem.setEnabled(true);
 					Tauschemitnachfolger.setEnabled(true);
-					if (Reha.thisClass.copyLabel.getText().length()!=0){ Paste.setEnabled(true);
+					if (Reha.instance.copyLabel.getText().length()!=0){ Paste.setEnabled(true);
 					} else { Paste.setEnabled(false);
 					}
 					if(ansicht ==NORMAL_ANSICHT){
@@ -1602,7 +1602,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						Tagesdialog.setEnabled(true);
 						Tagvor.setText("einen Tag vorwärts blättern");
 						Tagzurueck.setText("einen Tag rückwärts blättern");
-						if ( ((Rechte.hatRecht(Rechte.Kalender_terminconfirminpast, false)) || (this.getAktuellerTag().equals(DatFunk.sHeute()))) && (Reha.thisClass.copyLabel.getText().length()!=0) ){
+						if ( ((Rechte.hatRecht(Rechte.Kalender_terminconfirminpast, false)) || (this.getAktuellerTag().equals(DatFunk.sHeute()))) && (Reha.instance.copyLabel.getText().length()!=0) ){
 							Confirm.setEnabled(true);
 						} else {
 							Confirm.setEnabled(false);
@@ -2523,9 +2523,9 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	public void setUpdateVerbot(boolean lwert){
 		this.updateverbot = lwert;
 		if(lwert){
-			//Reha.thisClass.shiftLabel.setText("Update-Verbot");
+			//Reha.instance.shiftLabel.setText("Update-Verbot");
 		}else{
-			//Reha.thisClass.shiftLabel.setText("Update ok.");
+			//Reha.instance.shiftLabel.setText("Update ok.");
 		}
 		return;
 	}
@@ -2636,7 +2636,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	}
 	public void startTitel(){
 		String stag = DatFunk.sHeute();
-		Reha.thisClass.terminpanel.eltern.setTitle(DatFunk.WochenTag(stag)+" "+stag+" -- KW: "+DatFunk.KalenderWoche(stag)+" -- [Normalansicht]");
+		Reha.instance.terminpanel.eltern.setTitle(DatFunk.WochenTag(stag)+" "+stag+" -- KW: "+DatFunk.KalenderWoche(stag)+" -- [Normalansicht]");
 
 	}
 	public void setzeFocus(){
@@ -2647,11 +2647,11 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		Integer.toString(aktiveSpalte[1])+","+
 		Integer.toString(aktiveSpalte[2])+","+
 		Integer.toString(aktiveSpalte[3]);
-		Reha.thisClass.messageLabel.setText(ss);
+		Reha.instance.messageLabel.setText(ss);
 	}
 	private void holeFocus(){
 		oSpalten[aktiveSpalte[2]].requestFocus();
-		//Reha.thisClass.messageLabel.setText("in hole");
+		//Reha.instance.messageLabel.setText("in hole");
 	}
 	private void focusHandling(int panel,int plusminus){
 		focus[panel] = focus[panel]+plusminus;
@@ -2691,7 +2691,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				macheStatement(sstate,iansicht);
 				/*******bislang aktiv*********/
 				if (! (ViewPanel.getParent()==null) ){
-					Reha.thisClass.terminpanel.eltern.setTitle(DatFunk.WochenTag(stag)+" "+stag+" -- KW: "+DatFunk.KalenderWoche(stag)+" -- [Normalansicht]");
+					Reha.instance.terminpanel.eltern.setTitle(DatFunk.WochenTag(stag)+" "+stag+" -- KW: "+DatFunk.KalenderWoche(stag)+" -- [Normalansicht]");
 				}
 				/****************/
 				this.wocheAktuellerTag = "";
@@ -2714,7 +2714,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				" AND behandler = '"+sbehandler+
 				"BEHANDLER'";
 				macheStatement(sstate,iansicht);
-				Reha.thisClass.terminpanel.eltern.setTitle(DatFunk.WochenTag(serster)+" "+serster+"  bis  "+DatFunk.WochenTag(sletzter)+" "+sletzter+"-----Behandler:"+sbehandler+"-----KW:"+DatFunk.KalenderWoche(serster)+" ----- [Wochenansicht]");
+				Reha.instance.terminpanel.eltern.setTitle(DatFunk.WochenTag(serster)+" "+serster+"  bis  "+DatFunk.WochenTag(sletzter)+" "+sletzter+"-----Behandler:"+sbehandler+"-----KW:"+DatFunk.KalenderWoche(serster)+" ----- [Wochenansicht]");
 			}
 			return sstate;
 		}
@@ -2736,7 +2736,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		//Reha.datecounts = 0;
 
 		try {
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 			rs = stmt.executeQuery(sstmt);
@@ -2826,7 +2826,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		if (ex.getSQLState().equals("08003")){
     		int nochmals = JOptionPane.showConfirmDialog(null,"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?","Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
     		if(nochmals == JOptionPane.YES_OPTION){
-    			Reha.thisClass.ladenach();
+    			Reha.instance.ladenach();
     		}
 
 
@@ -2861,7 +2861,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		ResultSet rs = null;
 		try {
 
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			try{
 			rs = stmt.executeQuery(sstmt);
@@ -3060,26 +3060,26 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		return lockStatement;
 	}
 	public static String getLockMaschine(){
-		return Reha.thisClass.terminpanel.lockowner;
+		return Reha.instance.terminpanel.lockowner;
 	}
 
 	public static String getLockSpalte(){
-		return Reha.thisClass.terminpanel.lockspalte;
+		return Reha.instance.terminpanel.lockspalte;
 	}
 
 	public static void setLockMaschine(String maschine){
-		Reha.thisClass.terminpanel.lockowner = maschine;
+		Reha.instance.terminpanel.lockowner = maschine;
 	}
 
 	public static void setLockSpalte(String spalte){
-		Reha.thisClass.terminpanel.lockspalte = spalte;
+		Reha.instance.terminpanel.lockspalte = spalte;
 	}
 
 	public static synchronized void setLockOk(int lock,String message){
-		Reha.thisClass.terminpanel.lockok = lock;
-		Reha.thisClass.terminpanel.lockmessage = message;
+		Reha.instance.terminpanel.lockok = lock;
+		Reha.instance.terminpanel.lockmessage = message;
 		/*
-		if (Reha.thisClass.terminpanel.lockok < 0 && Reha.thisClass.terminpanel.zf != null){
+		if (Reha.instance.terminpanel.lockok < 0 && Reha.instance.terminpanel.zf != null){
 
 		}
 		*/
@@ -3087,7 +3087,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
 
 	public static TerminFenster getThisClass(){
-		return Reha.thisClass.terminpanel;
+		return Reha.instance.terminpanel;
 	}
 
 	private void sperreAnzeigen(String programmteil){
@@ -3106,12 +3106,12 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		datenSpeicher[0]= String.valueOf(daten[0]);
 		datenSpeicher[1]= String.valueOf(daten[1]);
 		datenSpeicher[3]= String.valueOf(daten[2]);
-		Reha.thisClass.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
+		Reha.instance.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
 	}
 	private void getDatenVonExternInSpeicherNehmen(){
-		if(Reha.thisClass.bunker.getText().indexOf("°") >= 0 ){
+		if(Reha.instance.bunker.getText().indexOf("°") >= 0 ){
 			try{
-				String[] teilen = Reha.thisClass.bunker.getText().split("°");
+				String[] teilen = Reha.instance.bunker.getText().split("°");
 				if(teilen.length <= 0){return;}
 				teilen[3] = teilen[3].toUpperCase();
 				teilen[3] = teilen[3].replaceAll(" MIN.", "");
@@ -3119,8 +3119,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				datenSpeicher[0]= teilen[1];
 				datenSpeicher[1]= teilen[2];
 				datenSpeicher[3]= teilen[3];
-				Reha.thisClass.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
-				Reha.thisClass.shiftLabel.setText("bereit für F2= "+datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
+				Reha.instance.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
+				Reha.instance.shiftLabel.setText("bereit für F2= "+datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"Fehler bei der Vorbereitung des Datenspeichers");
 			}
@@ -3144,8 +3144,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		datenSpeicher[1]= (String) ((Vector)((ArrayList)vTerm.get(aktbehandler)).get(1)).get(aktblock);
 		datenSpeicher[3]= (String) ((Vector)((ArrayList)vTerm.get(aktbehandler)).get(3)).get(aktblock);
 
-		Reha.thisClass.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
-		Reha.thisClass.bunker.setText("TERMDATEXT°"+datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
+		Reha.instance.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
+		Reha.instance.bunker.setText("TERMDATEXT°"+datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
 	}
 	private String[] datenInDragSpeicherNehmen(){
 		String[] srueck = {null,null,null,null,null};
@@ -3175,7 +3175,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		datenSpeicher[0]= speicher[0];
 		datenSpeicher[1]= speicher[1];
 		datenSpeicher[3]= speicher[3];
-		Reha.thisClass.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
+		Reha.instance.copyLabel.setText(datenSpeicher[0]+"°"+datenSpeicher[1]+"°"+datenSpeicher[3]+" Min.");
 	}
 	/********
 	 *  Shift+Einfg.
@@ -3387,9 +3387,9 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	}
 	public static void setDialogRet(int iret, String[] sret){
 
-		Reha.thisClass.terminpanel.dialogRetInt = iret;
-		Reha.thisClass.terminpanel.dialogRetData[0] = sret[0];
-		Reha.thisClass.terminpanel.dialogRetData[1] = sret[1];
+		Reha.instance.terminpanel.dialogRetInt = iret;
+		Reha.instance.terminpanel.dialogRetData[0] = sret[0];
+		Reha.instance.terminpanel.dialogRetData[1] = sret[1];
 	}
 /******************
 * Nachfolgend das Blockhandling
@@ -3496,13 +3496,13 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		  df.setMaximumFractionDigits(2);
 		  df.setMinimumFractionDigits(2);
 		  for(int tage=0;tage<7;tage++){
-			  anzahl = ((Vector<?>)((ArrayList<?>) Reha.thisClass.terminpanel.vTerm.get(tage)).get(0)).size();
+			  anzahl = ((Vector<?>)((ArrayList<?>) Reha.instance.terminpanel.vTerm.get(tage)).get(0)).size();
 			  minuten_tag = 0;
 			  for(int i=0;i<anzahl;i++){
 
-				  if(! ((String) ((Vector<?>)((ArrayList<?>) Reha.thisClass.terminpanel.vTerm.get(tage)).get(1)).get(i)).trim().contains("@FREI")){
-					  //minuten_tag = minuten_tag + Integer.valueOf( ((String) ((Vector<?>)((ArrayList<?>)Reha.thisClass.terminpanel.vTerm.get(tage)).get(3)).get(i)).trim());
-					  minuten_tag = minuten_tag + Integer.parseInt( ((String) ((Vector<?>)((ArrayList<?>)Reha.thisClass.terminpanel.vTerm.get(tage)).get(3)).get(i)).trim());
+				  if(! ((String) ((Vector<?>)((ArrayList<?>) Reha.instance.terminpanel.vTerm.get(tage)).get(1)).get(i)).trim().contains("@FREI")){
+					  //minuten_tag = minuten_tag + Integer.valueOf( ((String) ((Vector<?>)((ArrayList<?>)Reha.instance.terminpanel.vTerm.get(tage)).get(3)).get(i)).trim());
+					  minuten_tag = minuten_tag + Integer.parseInt( ((String) ((Vector<?>)((ArrayList<?>)Reha.instance.terminpanel.vTerm.get(tage)).get(3)).get(i)).trim());
 				  }
 			  }
 			  stunden = 0.00+minuten_tag;
@@ -3510,7 +3510,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			  titel = titel + wochensicht[tage]+df.format(stunden/60)+" - ";
 		  }
 		  titel = titel + "Wochenstunden: "+df.format(stunden_woche/60);
-		  Reha.thisClass.terminpanel.eltern.setTitle(titel);
+		  Reha.instance.terminpanel.eltern.setTitle(titel);
 		}
 
 /***********
@@ -3812,7 +3812,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				@Override
                 protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 					long whilezeit = System.currentTimeMillis();
 					while( (xpatient == null) ){
 						Thread.sleep(20);
@@ -3831,31 +3831,31 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
 					String s1 = "#PATSUCHEN";
 					String s2 = xpat_int;
-					PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
+					PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
 					pEvt.setPatStammEvent("PatSuchen");
 					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 					PatStammEventClass.firePatStammEvent(pEvt);
 					if(xinhistorie){
-						Reha.thisClass.patpanel.getTab().setSelectedIndex(1);
+						Reha.instance.patpanel.getTab().setSelectedIndex(1);
 					}else{
-						Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
+						Reha.instance.patpanel.getTab().setSelectedIndex(0);
 					}
 					return null;
 				}
 
 			}.execute();
 		}else{
-			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
-			PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
+			PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
 			pEvt.setPatStammEvent("PatSuchen");
 			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 			PatStammEventClass.firePatStammEvent(pEvt);
 			if(xinhistorie){
-				Reha.thisClass.patpanel.getTab().setSelectedIndex(1);
+				Reha.instance.patpanel.getTab().setSelectedIndex(1);
 			}else{
-				Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
+				Reha.instance.patpanel.getTab().setSelectedIndex(0);
 			}
 
 		}
@@ -4018,11 +4018,11 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			}
 		}
 		if(terminVergabe.size() > 0){
-			Reha.thisClass.mousePositionLabel.setForeground(Color.RED);
-			Reha.thisClass.mousePositionLabel.setText(Integer.toString(terminVergabe.size())+" * "+terminVergabe.get(0)[8]+" in Liste");
+			Reha.instance.mousePositionLabel.setForeground(Color.RED);
+			Reha.instance.mousePositionLabel.setText(Integer.toString(terminVergabe.size())+" * "+terminVergabe.get(0)[8]+" in Liste");
 		}else{
-			Reha.thisClass.mousePositionLabel.setForeground(Color.BLACK);
-			Reha.thisClass.mousePositionLabel.setText("Druckliste = leer");
+			Reha.instance.mousePositionLabel.setForeground(Color.BLACK);
+			Reha.instance.mousePositionLabel.setText("Druckliste = leer");
 		}
 	}
 	// wird gebraucht für Rechtetest gibt name des Termines zurück
@@ -4083,10 +4083,10 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			}
 			if(gleiche){
 				try{
-					Reha.thisClass.shiftLabel.setText("bereit für F2= "+nametext+"°"+reztext+"°"+sdauer+" Min.");
+					Reha.instance.shiftLabel.setText("bereit für F2= "+nametext+"°"+reztext+"°"+sdauer+" Min.");
 				}catch(Exception ex){
 					ex.printStackTrace();
-					Reha.thisClass.shiftLabel.setText("");
+					Reha.instance.shiftLabel.setText("");
 				}
 				return;
 			}
@@ -4112,22 +4112,22 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			sTerminVergabe[3] = sTerminVergabe[3]+sTerminVergabe[2];
 			terminVergabe.add(sTerminVergabe.clone());
 			if(terminVergabe.size() > 0){
-				Reha.thisClass.mousePositionLabel.setForeground(Color.RED);
-				Reha.thisClass.mousePositionLabel.setText(Integer.toString(terminVergabe.size())+" * "+terminVergabe.get(0)[8]+" in Liste");
+				Reha.instance.mousePositionLabel.setForeground(Color.RED);
+				Reha.instance.mousePositionLabel.setText(Integer.toString(terminVergabe.size())+" * "+terminVergabe.get(0)[8]+" in Liste");
 			}else{
-				Reha.thisClass.mousePositionLabel.setForeground(Color.BLACK);
-				Reha.thisClass.mousePositionLabel.setText("Druckliste = leer");
+				Reha.instance.mousePositionLabel.setForeground(Color.BLACK);
+				Reha.instance.mousePositionLabel.setText("Druckliste = leer");
 			}
 			try{
-				Reha.thisClass.shiftLabel.setText("bereit für F2= "+sTerminVergabe[8]+"°"+sTerminVergabe[9]+"°"+sTerminVergabe[4]+" Min.");
+				Reha.instance.shiftLabel.setText("bereit für F2= "+sTerminVergabe[8]+"°"+sTerminVergabe[9]+"°"+sTerminVergabe[4]+" Min.");
 			}catch(Exception ex){
 				ex.printStackTrace();
 			}
 		}catch(Exception ex){
 			terminVergabe.clear();
-			Reha.thisClass.mousePositionLabel.setForeground(Color.BLACK);
-			Reha.thisClass.mousePositionLabel.setText("Druckliste = leer");
-			Reha.thisClass.shiftLabel.setText("");
+			Reha.instance.mousePositionLabel.setForeground(Color.BLACK);
+			Reha.instance.mousePositionLabel.setText("Druckliste = leer");
+			Reha.instance.shiftLabel.setText("");
 		}
 
 
@@ -4795,8 +4795,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						oSpalten[aktiveSpalte[2]].repaint();
 						JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 						if(patient != null){
-							if(Reha.thisClass.patpanel.aktRezept.rezAngezeigt.equals(swreznum)){
-								Reha.thisClass.patpanel.aktRezept.updateEinzelTermine(termbuf.toString());
+							if(Reha.instance.patpanel.aktRezept.rezAngezeigt.equals(swreznum)){
+								Reha.instance.patpanel.aktRezept.updateEinzelTermine(termbuf.toString());
 							}
 						}
 					}else{
@@ -4989,11 +4989,11 @@ class LockRecord implements Runnable{
 					new Thread(new SetLock()).start();
 					TerminFenster.setLockOk(1,"");
 					TerminFenster.setLockSpalte(TerminFenster.getLockStatement());
-					Reha.thisClass.messageLabel.setText("Lock erfolgreich == 1");
+					Reha.instance.messageLabel.setText("Lock erfolgreich == 1");
 				}else{
 					TerminFenster.setLockOk(-1,rs.getString("maschine"));
-					Reha.thisClass.messageLabel.setText("Lock misslungen");
-					Reha.thisClass.messageLabel.setText("Lock misslungen == -1");
+					Reha.instance.messageLabel.setText("Lock misslungen");
+					Reha.instance.messageLabel.setText("Lock misslungen == -1");
 				}
 
 		}catch(SQLException ex) {
@@ -5003,7 +5003,7 @@ class LockRecord implements Runnable{
 				//System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
 
 				TerminFenster.setLockOk(-1," Durch Fehler in SQL-Statement:" +ex.getMessage());
-				Reha.thisClass.messageLabel.setText("Lock misslungen");
+				Reha.instance.messageLabel.setText("Lock misslungen");
 
 		}
 
@@ -5044,7 +5044,7 @@ class SetLock implements Runnable{
 
 			}catch(SQLException ex) {
 				SqlInfo.sqlAusfuehren("delete from flexlock where maschine like '%"+SystemConfig.dieseMaschine+"%'");
-				Reha.thisClass.messageLabel.setText("Entsperren misslungen");
+				Reha.instance.messageLabel.setText("Entsperren misslungen");
 				TerminFenster.setLockOk(-1," Durch Fehler in SQL-Statement:" +ex.getMessage());
 			}
 	  }
@@ -5077,12 +5077,12 @@ class DirectLockRecord implements Runnable{
 					this.gesperrt = this.sState.execute("COMMIT");
 					TerminFenster.setLockOk(1,"");
 					TerminFenster.setLockSpalte(TerminFenster.getLockStatement());
-					Reha.thisClass.messageLabel.setText("Lock erfolgreich");
+					Reha.instance.messageLabel.setText("Lock erfolgreich");
 				}else{
 					SqlInfo.sqlAusfuehren("delete from flexlock where maschine like '%"+SystemConfig.dieseMaschine+"%'");
 					//new ExUndHop().setzeStatement("delete from flexlock where maschine like '%"+SystemConfig.dieseMaschine+"%'");
 					TerminFenster.setLockOk(-1,rs.getString("maschine"));
-					Reha.thisClass.messageLabel.setText("Lock misslungen");
+					Reha.instance.messageLabel.setText("Lock misslungen");
 				}
 
 			}catch(SQLException ex) {
@@ -5093,7 +5093,7 @@ class DirectLockRecord implements Runnable{
 				SqlInfo.sqlAusfuehren("delete from flexlock where maschine like '%"+SystemConfig.dieseMaschine+"%'");
 				//new ExUndHop().setzeStatement("delete from flexlock where maschine like '%"+SystemConfig.dieseMaschine+"%'");
 				TerminFenster.setLockOk(-1," Durch Fehler in SQL-Statement:" +ex.getMessage());
-				Reha.thisClass.messageLabel.setText("Lock misslungen");
+				Reha.instance.messageLabel.setText("Lock misslungen");
 
 			}
 	  }
@@ -5115,11 +5115,11 @@ private int gelesen;
 	    		}
 	    		if (!TerminFenster.getThisClass().getUpdateVerbot()){
 	    			try{
-	    			//Reha.thisClass.shiftLabel.setText("in Update...");
+	    			//Reha.instance.shiftLabel.setText("in Update...");
 	    			TerminFenster.getThisClass().setUpdateVerbot(true);
 	    			TerminFenster.getThisClass().aktualisieren();
 	    			TerminFenster.getThisClass().setUpdateVerbot(false);
-	    			//Reha.thisClass.shiftLabel.setText("Update ok.");
+	    			//Reha.instance.shiftLabel.setText("Update ok.");
 	    			gelesen++;
 	    			}catch(Exception ex){
 	    				SqlInfo.loescheLocksMaschine();
@@ -5175,7 +5175,7 @@ class DragAndMove extends Thread {
 			protected Void doInBackground() throws Exception {
 
 				while(PixelzuMinute >= 0){
-					//Reha.thisClass.shiftLabel.setText(""+PixelzuMinute);
+					//Reha.instance.shiftLabel.setText(""+PixelzuMinute);
 					sleep(40);
 				}
 
@@ -5211,7 +5211,7 @@ class DropSupport implements DropTargetListener
     @Override
     public void dragOver(DropTargetDragEvent dtde)
     {
-    	//Reha.thisClass.shiftLabel.setText(dtde.getLocation().toString());
+    	//Reha.instance.shiftLabel.setText(dtde.getLocation().toString());
     	////System.out.println("Drag-Support"+dtde);
     	if (!fAccept) return;
 

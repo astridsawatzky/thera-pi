@@ -46,7 +46,7 @@ import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 
@@ -78,7 +78,7 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
 		//System.out.println("Aufruf SysUtilKasse");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 	     
 	     JScrollPane jscr = new JScrollPane();
 	     jscr.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));

@@ -53,7 +53,7 @@ public class BerichtDrucken extends JXPanel implements ActionListener, KeyListen
 
 			@Override
 			protected Void doInBackground() throws Exception {
-			    setBackgroundPainter(Reha.thisClass.compoundPainter.get("GutachtenWahl"));
+			    setBackgroundPainter(Reha.instance.compoundPainter.get("GutachtenWahl"));
 				return null;
 			}
 			

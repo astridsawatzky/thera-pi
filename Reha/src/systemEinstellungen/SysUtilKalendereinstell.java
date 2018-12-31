@@ -55,7 +55,7 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 		//System.out.println("Aufruf SysUtilKalendereinstell");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 	     add(getVorlagenSeite());
 	     SwingUtilities.invokeLater(new Runnable(){
@@ -207,11 +207,11 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
 				SystemConfig.KalenderLangesMenue = langmenu.isSelected();
 				SystemConfig.KalenderZeitLabelZeigen = Boolean.valueOf(zeitzeigen.isSelected());
 				SystemConfig.KalenderTimeLineZeigen = Boolean.valueOf(timelinezeigen.isSelected());
-				if(Reha.thisClass.terminpanel != null){
+				if(Reha.instance.terminpanel != null){
 					try{
-						Reha.thisClass.terminpanel.regleZeitLabel();
-						Reha.thisClass.terminpanel.setTimeLine(SystemConfig.KalenderTimeLineZeigen);
-						Reha.thisClass.terminpanel.getViewPanel().repaint();
+						Reha.instance.terminpanel.regleZeitLabel();
+						Reha.instance.terminpanel.setTimeLine(SystemConfig.KalenderTimeLineZeigen);
+						Reha.instance.terminpanel.getViewPanel().repaint();
 					}catch(Exception ex){
 						ex.printStackTrace();
 					}

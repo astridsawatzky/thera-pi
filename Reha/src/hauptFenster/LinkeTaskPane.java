@@ -60,6 +60,7 @@ import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import generalSplash.RehaSplash;
+import gui.Cursors;
 import kurzAufrufe.KurzAufrufe;
 import oOorgTools.OOTools;
 import rechteTools.Rechte;
@@ -99,7 +100,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		mitUserTask = testUserTask();
 		this.setBorder(null);
 		this.setBackground(Color.WHITE);
-		//this.eltern = Reha.thisClass;
+		//this.eltern = Reha.instance;
 		this.setPreferredSize(new Dimension(200,500));
 
 		GridBagConstraints gridBagConstraints = new GridBagConstraints() ;
@@ -208,7 +209,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			    	  }
 			    	  doPatientDrop(mitgebracht.split("°")[2].trim());
 			    	  //ProgLoader.ProgRoogleFenster(0, mitgebracht);
-			    	  //Reha.thisClass.progLoader.ProgRoogleFenster(0, mitgebracht);
+			    	  //Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
 			      }
 			      ////System.out.println(mitgebracht+" auf Patientenstamm gedropt");
 			    } catch (Throwable t) { t.printStackTrace(); }
@@ -294,7 +295,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			    		  return;
 			    	  }
 			    	  //ProgLoader.ProgRoogleFenster(0, mitgebracht);
-			    	  Reha.thisClass.progLoader.ProgRoogleFenster(0, mitgebracht);
+			    	  Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
 			      }
 			      ////System.out.println(mitgebracht);
 			    } catch (Throwable t) { t.printStackTrace(); }
@@ -597,7 +598,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						return;
 					}
 					aktTag = wahlTag;
-					Reha.thisClass.progLoader.ProgTerminFenster(1, 0);
+					Reha.instance.progLoader.ProgTerminFenster(1, 0);
 					TerminFenster.getThisClass().springeAufDatum(aktTag);
 				}else{
 					Date dat = monthView.getSelectionDate();
@@ -609,7 +610,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						return;
 					}
 					aktTag = wahlTag;
-					Reha.thisClass.progLoader.ProgTerminFenster(1, 0);
+					Reha.instance.progLoader.ProgTerminFenster(1, 0);
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
                         public void run(){
@@ -689,7 +690,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						try{
 							Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 							//ProgLoader.SystemInitialisierung();
-							Reha.thisClass.progLoader.SystemInit(1, "");
+							Reha.instance.progLoader.SystemInit(1, "");
 							Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						}catch(Exception ex){
 							ex.printStackTrace();
@@ -712,7 +713,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
 					protected Void doInBackground() throws Exception {
 						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-						Reha.thisClass.progLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
+						Reha.instance.progLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
 						//ProgLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
 						Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						return null;
@@ -726,7 +727,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
 					protected Void doInBackground() throws Exception {
 						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-						Reha.thisClass.progLoader.ProgTerminFenster(1, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
+						Reha.instance.progLoader.ProgTerminFenster(1, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
 						//ProgLoader.ProgTerminFenster(1,0);
 						Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						return null;
@@ -739,7 +740,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
 					protected Void doInBackground() throws Exception {
 						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-						Reha.thisClass.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
+						Reha.instance.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
 						//ProgLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
 						Reha.getThisFrame().setCursor(Cursors.normalCursor);
 						return null;
@@ -755,7 +756,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					"Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
 					return;
 				}
-				Reha.thisClass.progLoader.ProgTerminFenster(0, 2);
+				Reha.instance.progLoader.ProgTerminFenster(0, 2);
 				//ProgLoader.ProgTerminFenster(0,2);
 				//MaskenErstellen();
 				break;
@@ -781,11 +782,11 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 
 			if (cmd.equals("Benutzerverwaltung")){
-				Reha.thisClass.progLoader.BenutzerrechteFenster(1,"");
+				Reha.instance.progLoader.BenutzerrechteFenster(1,"");
 				break;
 			}
 			if (cmd.equals("[Ru:gl] - Die Terminsuchmaschine")){
-				Reha.thisClass.progLoader.ProgRoogleFenster(0,null);
+				Reha.instance.progLoader.ProgRoogleFenster(0,null);
 				//ProgLoader.ProgRoogleFenster(0,null);
 				break;
 			}
@@ -849,8 +850,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
 					protected Void doInBackground() throws Exception {
 						setCursor(Cursors.wartenCursor);
-						Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
-						//Reha.thisClass.progLoader.ProgTerminFenster(0, 1);
+						Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+						//Reha.instance.progLoader.ProgTerminFenster(0, 1);
 						//ProgLoader.ProgPatientenVerwaltung(1);
 						setCursor(Cursors.normalCursor);
 						return null;
@@ -1122,7 +1123,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		String behandler = "";
 		Statement stmt = null;
 		try{
-			stmt = Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE );
 			for(int i=1;i<61;i++){
 				for(int t=1;t<8;t++){
@@ -1193,7 +1194,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				@Override
                 protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 					while( (xpatient == null) ){
 						Thread.sleep(20);
 						xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
@@ -1204,14 +1205,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 					String s1 = "#PATSUCHEN";
 					String s2 = xpat_int;
-					PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
+					PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
 					pEvt.setPatStammEvent("PatSuchen");
 					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 					PatStammEventClass.firePatStammEvent(pEvt);
 					if(xinhistorie){
-						Reha.thisClass.patpanel.getTab().setSelectedIndex(1);
+						Reha.instance.patpanel.getTab().setSelectedIndex(1);	
 					}else{
-						Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
+						Reha.instance.patpanel.getTab().setSelectedIndex(0);
 					}
 
 					return null;
@@ -1219,17 +1220,17 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 			}.execute();
 		}else{
-			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
-			PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
+			PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
 			pEvt.setPatStammEvent("PatSuchen");
 			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 			PatStammEventClass.firePatStammEvent(pEvt);
 			if(xinhistorie){
-				Reha.thisClass.patpanel.getTab().setSelectedIndex(1);
+				Reha.instance.patpanel.getTab().setSelectedIndex(1);	
 			}else{
-				Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
+				Reha.instance.patpanel.getTab().setSelectedIndex(0);
 			}
 
 		}

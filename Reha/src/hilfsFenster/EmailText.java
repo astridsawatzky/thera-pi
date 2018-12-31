@@ -34,7 +34,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import dialoge.RehaSmartDialog;
 import environment.Path;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SysUtilDruckvorlage;

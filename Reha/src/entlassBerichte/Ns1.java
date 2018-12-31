@@ -36,7 +36,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import hauptFenster.Cursors;
+import gui.Cursors;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
@@ -113,11 +113,11 @@ public class Ns1 implements ActionListener,ComponentListener {
 										throws Exception {
 									try{
 									eltern.setCursor(Cursors.wartenCursor);
-									Reha.thisClass.progressStarten(true);	
+									Reha.instance.progressStarten(true);	
 						 			laden();
 						 			eltern.btf[0].requestFocusInWindow();
 						 			jscr.scrollRectToVisible(new Rectangle(0,0,0,0));
-						 			Reha.thisClass.progressStarten(false);
+						 			Reha.instance.progressStarten(false);
 						 			eltern.setCursor(Cursors.normalCursor);
 						 			inGuiInit = false;
 									testeIK();
@@ -1064,7 +1064,7 @@ public class Ns1 implements ActionListener,ComponentListener {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt =  Reha.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+			stmt =  Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -1141,12 +1141,12 @@ public class Ns1 implements ActionListener,ComponentListener {
 	 * 
 	 */
 	private void doKopfNeu(){
-		eltern.btf[2].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(2))+
-				", "+StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(3)));
-		eltern.btf[3].setText(DatFunk.sDatInDeutsch(Reha.thisClass.patpanel.patDaten.get(4)));
-		eltern.btf[4].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(21)));
-		eltern.btf[5].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(23)));
-		eltern.btf[6].setText(StringTools.EGross(Reha.thisClass.patpanel.patDaten.get(24)));		
+		eltern.btf[2].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(2))+
+				", "+StringTools.EGross(Reha.instance.patpanel.patDaten.get(3)));
+		eltern.btf[3].setText(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
+		eltern.btf[4].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(21)));
+		eltern.btf[5].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(23)));
+		eltern.btf[6].setText(StringTools.EGross(Reha.instance.patpanel.patDaten.get(24)));		
 	}
 	/************************
 	 * 

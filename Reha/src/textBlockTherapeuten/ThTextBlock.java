@@ -112,7 +112,7 @@ public class ThTextBlock extends RehaSmartDialog{
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
-					grundPanel.setBackgroundPainter(Reha.thisClass.compoundPainter.get("TextBlock"));
+					grundPanel.setBackgroundPainter(Reha.instance.compoundPainter.get("TextBlock"));
 
 					macheSysVars1();
 					macheSysVars2();
@@ -668,7 +668,7 @@ public class ThTextBlock extends RehaSmartDialog{
 		private String testeAufSysVars(String text){
 			String replacement ="";
 			String origtext= "";
-			boolean frau = (Reha.thisClass.patpanel.patDaten.get(0).equalsIgnoreCase("FRAU") ? true : false);
+			boolean frau = (Reha.instance.patpanel.patDaten.get(0).equalsIgnoreCase("FRAU") ? true : false);
 			origtext = text;
 			try{
 				for(int i = 0; i < sysVars1.size();i++){

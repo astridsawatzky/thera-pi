@@ -124,7 +124,7 @@ public static String searchAbteilung(int dbzeile){
 }
 
 public static void Init(){
-	Reha obj = Reha.thisClass;
+	Reha obj = Reha.instance;
 	Statement stmt = null;
 	ResultSet rs = null;
 	if(vKKollegen.size() > 0){
@@ -244,7 +244,7 @@ public static void Init(){
 
 public static void Passwort() {
 	
-	Reha obj = Reha.thisClass;
+	Reha obj = Reha.instance;
 	Statement stmt = null;
 	ResultSet rs = null;
 	if(pKollegen.size() > 0){

@@ -61,7 +61,7 @@ public class SysUtilJahresUmstellung extends JXPanel implements KeyListener, Act
 		////System.out.println("Aufruf SysUtilKalenderanlagen");
 		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
 		/****/
-		setBackgroundPainter(Reha.thisClass.compoundPainter.get("SystemInit"));
+		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
 		/****/
 		/*
 	     JScrollPane jscr = new JScrollPane();
