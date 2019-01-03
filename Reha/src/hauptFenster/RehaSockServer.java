@@ -7,15 +7,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**************************/
-class RehaSockServer{
+class RehaSockServer implements Runnable{
 	ServerSocket serv = null;
-	RehaSockServer() throws IOException{
+	RehaSockServer() {
+
+	}
+	@Override
+	public void run() {
 		try {
 			serv = new ServerSocket(1235);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return;
-		}
+
 		Socket client = null;
 		while(true){
 			try {
@@ -63,5 +64,9 @@ class RehaSockServer{
 			////System.out.println("Socket war bereits geschlossen");
 		}
 		return;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
 	}
 }

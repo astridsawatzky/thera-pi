@@ -128,26 +128,12 @@ public class SystemConfig {
 	public static HashMap<String,String> hmRgkDaten = new HashMap<String,String>();
 
 
-	/*
-	public static List<String> lAdrKDaten = null;
-	public static List<String> lAdrADaten = null;
-	public static List<String> lAdrPDaten = null;
-	public static List<String> lAdrRDaten = null;
-	*/
+
 	public static HashMap<String,Integer> hmContainer = null;
 
 
 
-	/*
-	public static Vector<String> vPreisGruppen;
-	public static Vector<Integer> vHMRAbrechnung;
-	public static Vector<Integer> vZuzahlRegeln;
-	public static Vector<String> vPreisGueltig;
-	public static Vector <Vector<String>> vNeuePreiseAb;
-	public static Vector<Vector<Integer>> vNeuePreiseRegel;
-	public static Vector<Vector<String>> vHBRegeln;
-	public static Vector<String> vBerichtRegeln;
-	*/
+
 
 	public static Vector<String> vPatMerker = null;
 	public static Vector<ImageIcon> vPatMerkerIcon = null;
@@ -282,10 +268,11 @@ public class SystemConfig {
 	public void SystemInit(int i){
 		switch(i){
 		case 1:
-			HauptFenster();
+
 			break;
 		case 2:
 			DatenBank();
+			phoneservice();
 			break;
 		case 3:
 			TerminKalender();
@@ -370,6 +357,11 @@ public class SystemConfig {
 			ex.printStackTrace();
 		}
 		/*********************************/
+
+
+		return;
+	}
+	private void phoneservice() {
 		try{
 			File f = new File(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "phoneservice.ini");
 			if(f.exists()){
@@ -451,11 +443,9 @@ public class SystemConfig {
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der phoneserver.ini!\nFehlertext: "+ex.getMessage());
 		}
-
-		return;
 	}
 
-	private void HauptFenster(){
+	public void HauptFenster(){
 		try{
 			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 			boolean mustsave = false;
@@ -466,22 +456,14 @@ public class SystemConfig {
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","FensterTitel"));
 			aHauptFenster.add(ini.getStringProperty("HauptFenster","LookAndFeel"));
 
-			if ( ini.getStringProperty("HauptFenster", "HorizontalTeilen") != null ){
-				desktopHorizontal = (ini.getIntegerProperty("HauptFenster", "HorizontalTeilen") == 1 ? true : false) ;
-			}else{
+			if ( ini.getStringProperty("HauptFenster", "HorizontalTeilen") == null ) {
 				ini.setStringProperty("HauptFenster", "HorizontalTeilen","1",null);
 				mustsave = true;
 
+			} else {
+				desktopHorizontal = (ini.getIntegerProperty("HauptFenster", "HorizontalTeilen") == 1 ? true : false) ;
 			}
-			if ( ini.getStringProperty("HauptFenster", "TP1Offen") != null ){
-				if ( ini.getStringProperty("HauptFenster", "TP7Offen") == null ){
-					ini.setStringProperty("HauptFenster", "TP7Offen","1",null);
-					mustsave = true;
-				}
-				for(int i = 1; i < 8; i++){
-					taskPaneCollapsed[i-1] = (ini.getStringProperty("HauptFenster", "TP"+Integer.toString(i)+"Offen").equals("1") ? true : false);
-				}
-			}else{
+			if ( ini.getStringProperty("HauptFenster", "TP1Offen") == null ) {
 				ini.setStringProperty("HauptFenster", "TP1Offen","0",null);
 				ini.setStringProperty("HauptFenster", "TP2Offen","0",null);
 				ini.setStringProperty("HauptFenster", "TP3Offen","1",null);
@@ -490,46 +472,51 @@ public class SystemConfig {
 				ini.setStringProperty("HauptFenster", "TP6Offen","1",null);
 				ini.setStringProperty("HauptFenster", "TP7Offen","1",null);
 				mustsave = true;
+			} else {
+				if ( ini.getStringProperty("HauptFenster", "TP7Offen") == null ){
+					ini.setStringProperty("HauptFenster", "TP7Offen","1",null);
+					mustsave = true;
+				}
+				for(int i = 1; i < 8; i++){
+					taskPaneCollapsed[i-1] = (ini.getStringProperty("HauptFenster", "TP"+Integer.toString(i)+"Offen").equals("1") ? true : false);
+				}
 			}
 			if(mustsave){
 				INITool.saveIni(ini);
 			}
 
 
-			OpenOfficePfad = ini.getStringProperty("OpenOffice.org","OfficePfad");
-			if(!pfadOk(OpenOfficePfad)){
-				String meldung = "Es konnte keine gültige OpenOffice-Installation entdeckt werden\n"+
-				"Bislang zeigt der Pfad auf OO.org auf "+OpenOfficePfad+"\n\n"+
-				"Öffnen Sie bitte in Thera-Pi die System-Initialisierung und\n"+
-				"gehen Sie dann auf die Seite -> sonsige Einstellungen -> Fremdprogramme.\n\n"+
-				"Stellen Sie dann bitte auf dieser Seite den Pfad zu OpenOffice.org ein\n\n"+
-				"Auf der selben Seite stellen Sie dann bitte Ihren PDF-Reader ein\n\n"+
-				"Abschließend beenden Sie bitte Thera-Pi und starten Sie dann Thera-Pi erneut\n\n"+
-				"Everything should then be fine - wie der Schwabe zu sagen pflegt!";
-				JOptionPane.showMessageDialog(null, meldung);
-			}
-			OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org","OfficeNativePfad");
 
-			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "nachrichten.ini");
-			timerdelay = ini.getLongProperty("RehaNachrichten", "NachrichtenTimer");
-			timerpopup = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenPopUp") <= 0 ? false : true);
-			timerprogressbar = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenProgressbar") <= 0 ? false : true);
-
-			wissenURL = ini.getStringProperty("WWW-Services","RTA-Wissen");
-			homePageURL = ini.getStringProperty("WWW-Services","HomePage");
-			homeDir = Path.Instance.getProghome();
 		}catch(Exception ex){
 			JOptionPane.showMessageDialog(null,"Fehler bei der Verarbeitung der rehajava.ini, Mehode:HauptFenster!\nFehlertext: "+ex.getMessage());
 			ex.printStackTrace();
 		}
 		return;
 	}
-	private static boolean pfadOk(String pfad){
-		File f = new File(pfad);
-		return f.exists();
+	public void openoffice() {
+		OpenOfficePfad = ini.getStringProperty("OpenOffice.org","OfficePfad");
+		if(!new File(OpenOfficePfad).exists()){
+			String meldung = "Es konnte keine gültige OpenOffice-Installation entdeckt werden\n"+
+			"Bislang zeigt der Pfad auf OO.org auf "+OpenOfficePfad+"\n\n"+
+			"Öffnen Sie bitte in Thera-Pi die System-Initialisierung und\n"+
+			"gehen Sie dann auf die Seite -> sonsige Einstellungen -> Fremdprogramme.\n\n"+
+			"Stellen Sie dann bitte auf dieser Seite den Pfad zu OpenOffice.org ein\n\n"+
+			"Auf der selben Seite stellen Sie dann bitte Ihren PDF-Reader ein\n\n"+
+			"Abschließend beenden Sie bitte Thera-Pi und starten Sie dann Thera-Pi erneut\n\n"+
+			"Everything should then be fine - wie der Schwabe zu sagen pflegt!";
+			JOptionPane.showMessageDialog(null, meldung);
+		}
+		OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org","OfficeNativePfad");
+
+		ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "nachrichten.ini");
+		timerdelay = ini.getLongProperty("RehaNachrichten", "NachrichtenTimer");
+		timerpopup = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenPopUp") <= 0 ? false : true);
+		timerprogressbar = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenProgressbar") <= 0 ? false : true);
+
+		wissenURL = ini.getStringProperty("WWW-Services","RTA-Wissen");
+		homePageURL = ini.getStringProperty("WWW-Services","HomePage");
+		homeDir = Path.Instance.getProghome();
 	}
-
-
 	private void TerminKalender(){
 		try{
 			INIFile termkalini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "terminkalender.ini");

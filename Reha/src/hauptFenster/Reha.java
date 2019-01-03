@@ -310,7 +310,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static java.util.Timer nachrichtenTimer = null;
 	public static boolean nachrichtenLaeuft = false;
 	public static boolean nachrichtenInBearbeitung = false;
-	//final public JProgressBar rehaNachrichtenprogress = new JProgressBar();
 
 	public static boolean updatesBereit = false;
 	public static boolean updatesChecken = true;
@@ -382,7 +381,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public void start() {
 
 
-		startWithMandantSet(mandant);
+		startWithMandantSet();
 
 	}
 
@@ -404,19 +403,18 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			 mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+DefaultMandant),
 			inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+DefaultMandant));
 		}
-		 new Reha(mainMandant);
-		startWithMandantSet(mainMandant);
+		 new Reha(mainMandant).start();
 
 
 	}
-	private static void startWithMandantSet(Mandant mainMandant) {
-		aktIK =mainMandant.ik();
-		aktMandant=mainMandant.name();
+	private void startWithMandantSet() {
+		aktIK =mandant.ik();
+		aktMandant=mandant.name();
 
 
-		String iniPath = Path.Instance.getProghome()+"ini/"+ mainMandant.ik()+"/";
+		String iniPath = Path.Instance.getProghome()+"ini/"+ mandant.ik()+"/";
 		try {
-			RehaSettings ini = new RehaSettings(mainMandant);
+			RehaSettings ini = new RehaSettings(mandant);
 		} catch (IOException e) {
 			logger.error("ReheajavaIni could not be created",e);
 		}
@@ -428,18 +426,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		Titel2 = "  -->  [Mandant: "+getAktMandant()+"]";
 		//System.out.println(Titel2);
 		/**************************/
-		Thread rehasockeThread = new Thread(){
-			@Override
-            public  void run(){
-				try {
-					new RehaSockServer();
-				} catch (IOException e) {
-					System.out.println("Kann RehaSocket-Server nicht starten");
-					e.printStackTrace();
-				}
-			}
-		};
-		rehasockeThread.start();
+		Thread rehasockeThread= new Thread(new RehaSockServer(),"RehaSocketServer");
+		 rehasockeThread .start();
 		/**************************/
 		new Thread(){
 			@Override
@@ -465,7 +453,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				}
 			}
 		}.start();
-		int i=0;
 		try {
 			rehasockeThread.join(5000);
 		} catch (InterruptedException e2) {
@@ -499,7 +486,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 		sysConf.SystemStart(Path.Instance.getProghome());
 
-		sysConf.SystemInit(1);
+		sysConf.HauptFenster();
+		sysConf.openoffice();
 
 		sysConf.SystemInit(2);
 
@@ -558,7 +546,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				instance.sqlInfo = new SqlInfo();
 				instance.sqlInfo.setDieseMaschine(SystemConfig.dieseMaschine);
 				rehaBackImg = new ImageIcon(Path.Instance.getProghome()+"icons/therapieMT1.gif");
-				instance = instance;
+
 				RehaEventClass rehaEvent = new RehaEventClass();
 			    rehaEvent.addRehaEventListener(instance);
 				new Thread(new DatenbankStarten()).start();
@@ -610,12 +598,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			}
 		}.execute();
 	}
-	public void ende()	{
-		try {
-			Runtime.getRuntime().exec("cmd /c start.bat");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+	private void saveAktuelleFensterAnordnung() {
 		try{
 			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",jSplitLR.getDividerLocation(),null );
@@ -632,15 +616,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}catch(NullPointerException ex){
 			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
 		}
-		if(rehaCommServer != null){
-			try {
-				rehaCommServer.serv.close();
-				System.out.println("RehaComm-SocketServer geschlossen");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		System.exit(0);
 	}
 	public void beendeSofort(){
 		doCloseEverything();
@@ -699,22 +674,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 			}
 		}
-		try{
-			INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
-			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1",jSplitLR.getDividerLocation(),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2",jSplitRechtsOU.getDividerLocation(),null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",LinkeTaskPane.tp1.isCollapsed() ? "1" : "0",null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",LinkeTaskPane.tp4.isCollapsed() ? "1" : "0",null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",LinkeTaskPane.tp3.isCollapsed() ? "1" : "0",null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",LinkeTaskPane.tp5.isCollapsed() ? "1" : "0",null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",LinkeTaskPane.tp2.isCollapsed() ? "1" : "0",null );
-			SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",LinkeTaskPane.tp6.isCollapsed() ? "1" : "0",null );
-			if(LinkeTaskPane.mitUserTask){
-				SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",LinkeTaskPane.tp7.isCollapsed() ? "1" : "0",null );
-			}
-		}catch(NullPointerException ex){
-			JOptionPane.showMessageDialog(null,"Fehler beim Speichern der aktuellen Fensteranordnung!");
-		}
+		saveAktuelleFensterAnordnung();
 
 	}
 
@@ -2875,24 +2835,6 @@ public void activateWebCam(){
 		}
 	}.execute();
 }
-public void mustReloadDb(){
-	Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.getThisFrame(),"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?",
-			"Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
-	/*
-	new SwingWorker<Void,Void>(){
-		@Override
-
-		protected Void doInBackground() throws java.lang.Exception {
-			try{
-
-			}catch(NullPointerException ex){
-				ex.printStackTrace();
-			}
-			return null;
-		}
-	}.execute();
-	*/
-}
 
 
 
@@ -3057,6 +2999,7 @@ final class DatenbankStarten implements Runnable{
 				e.printStackTrace();
 			}
 		}
+		new SocketClient().setzeInitStand("Datenbank starten");
 		StarteDB();
 		if (Reha.DbOk){
 			Date zeit = new Date();
@@ -3065,7 +3008,7 @@ final class DatenbankStarten implements Runnable{
 			try {
 				Thread.sleep(50);
 
-				new SocketClient().setzeInitStand("Datenbank starten");
+
 
 				new SocketClient().setzeInitStand("Datenbank ok");
 
@@ -3254,7 +3197,8 @@ final class DbNachladen implements Runnable{
     	catch (final SQLException ex) {
     		Reha.DbOk = false;
 			Reha.nachladenDB = -1;
-			Reha.instance.mustReloadDb();
+			Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.getThisFrame(),"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?",
+			"Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
 
     		while(Reha.nachladenDB < 0){
     			try {
@@ -3390,24 +3334,7 @@ final class ErsterLogin implements Runnable{
 final class PreisListenLaden implements Runnable{
 	private void Einlesen(){
 
-		/*
-		ParameterLaden.PreiseEinlesen("KG");
 
-		ParameterLaden.PreiseEinlesen("MA");
-
-		ParameterLaden.PreiseEinlesen("ER");
-
-		ParameterLaden.PreiseEinlesen("LO");
-
-		ParameterLaden.PreiseEinlesen("RH");
-
-		ParameterLaden.PreiseEinlesen("RS");
-
-		ParameterLaden.PreiseEinlesen("FT");
-
-		MachePreisListe.preiseFuellenNeu();
-
-		*/
 		try{
 
 		while(Reha.instance == null || Reha.instance.jxLinks == null || Reha.instance.jxRechts == null){
@@ -3422,8 +3349,6 @@ final class PreisListenLaden implements Runnable{
 				e.printStackTrace();
 			}
 		}
-		//Reha.instance.jxLinks.setAlpha(1.0f);
-		//Reha.instance.jxRechts.setAlpha(1.0f);
 		if(isAktiv("Physio")){
 			new SocketClient().setzeInitStand("Preisliste Physio einlesen");
 			SystemPreislisten.ladePreise("Physio");
@@ -3546,6 +3471,10 @@ class SocketClient {
 final class HilfeDatenbankStarten implements Runnable{
 
 	void StarteDB(){
+
+	}
+	@Override
+    public void run() {
 		final Reha obj = Reha.instance;
 
 //		final String sDB = "SQL";
@@ -3573,9 +3502,5 @@ final class HilfeDatenbankStarten implements Runnable{
 	    	return;
 	    }
         return;
-	}
-	@Override
-    public void run() {
-		StarteDB();
 	}
 }
