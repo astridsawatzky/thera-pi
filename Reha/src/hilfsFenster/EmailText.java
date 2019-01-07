@@ -48,7 +48,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 	RehaSmartDialog rSmart = null;
 	int iAktion = 1;
 	public EmailText(){
-		RehaTP jtp = new RehaTP(0); 
+		RehaTP jtp = new RehaTP();
 		jtp.setBorder(null);
 		jtp.setTitle("EmailText");
 		jtp.setContentContainer(getForm());
@@ -66,28 +66,28 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 		//int y = (screenSize.height - rSmart.getHeight()) / 2;
 		/****************************************************************/
 		/****************************************************************/
-		rSmart.setLocationRelativeTo(null); 
+		rSmart.setLocationRelativeTo(null);
 		rSmart.setVisible(true);
 		SysUtilDruckvorlage.thisClass.setCursor(Cursors.normalCursor);
 
-				
+
 	}
 
 	private JXPanel getForm(){
- 
-		FormLayout layout = 
+
+		FormLayout layout =
 			new FormLayout("10dlu,p:g,10dlu",
 			"10dlu,p,3dlu,p,3dlu,p,3dlu,p,3dlu,p,5dlu");
 			//new FormLayout("10dlu,p,4dlu,p,50dlu,p",
 			//		"10dlu,p,3dlu,p,3dlu,p,3dlu,p");
-		
+
 		JXPanel xbuilder = new JXPanel();
 		xbuilder.setBorder(null);
 		xbuilder.setLayout(new BorderLayout());
 		xbuilder.setVisible(true);
 		//xbuilder.addFocusListener(this);
 		xbuilder.addKeyListener(this);
-		
+
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.getPanel().setBackground(Color.WHITE);
 		//builder.getPanel().setPreferredSize(new Dimension(400,150));
@@ -133,37 +133,37 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 					"abgesagt werden.\n\nIhr Planungs-Team vom RTA";
 	      }
 		ta.setText(text);
-		
+
 		JPanel tapan = new JPanel(new BorderLayout());
 		tapan.setBorder(BorderFactory.createEmptyBorder(10,10,0,10));
 				tapan.add(new JScrollPane(ta),BorderLayout.CENTER);
 
 		builder.add(tapan,cc.xy(2,2));
 		xbuilder.add(builder.getPanel(),BorderLayout.NORTH);
-		
-		FormLayout lay = 
+
+		FormLayout lay =
 			new FormLayout("10dlu,p,25dlu,p,50dlu,p",
 					"0dlu,p,10dlu,p,3dlu,p,3dlu,p,15dlu,p");
-		
+
 		PanelBuilder build = new PanelBuilder(layout);
 		build.getPanel().setLayout(lay);
 		build.getPanel().setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
 		CellConstraints ccx = new CellConstraints();
 		jb[0] = new JXButton("Speichern");
-		jb[0].setActionCommand("Speichern"); 
+		jb[0].setActionCommand("Speichern");
 		jb[0].setMnemonic(KeyEvent.VK_S);
 		jb[0].addKeyListener(this);
 		jb[0].addActionListener(this);
 		jb[0].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		build.add(jb[0],ccx.xy(2,2));		
+		build.add(jb[0],ccx.xy(2,2));
 
 		jb[1] = new JXButton("Abbruch");
-		jb[1].setActionCommand("Abbruch");		
+		jb[1].setActionCommand("Abbruch");
 		jb[1].addKeyListener(this);
 		jb[1].addActionListener(this);
 		jb[1].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		build.add(jb[1],cc.xy(4,2));		
-		
+		build.add(jb[1],cc.xy(4,2));
+
 		build.add(new JXLabel(""),cc.xy(4,3));
 
 		xbuilder.add(build.getPanel(),BorderLayout.CENTER);
@@ -185,19 +185,19 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		////System.out.println(arg0.getSource());
 		//String sAktion = ((AbstractButton) arg0.getSource()).getText();
 		////System.out.println("In Text abspeichern");
@@ -205,27 +205,27 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 		for (int i = 0 ; i < 1 ; i++){
 
 			if(arg0.getActionCommand().equals("Speichern")){
-		
+
 				FileWriter w = null;
 
 				 try {
 				        w = new FileWriter(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/EmailTerminliste.txt");
 				        w.write(ta.getText());
-				 
+
 				    } catch (IOException e) {
 				        e.printStackTrace();
-				 
+
 				    } finally {
 				        if (w != null) {
 				            try {
 				                w.close();
 				            } catch (IOException e) {
-				                
+
 				                e.printStackTrace();
 				            }
 				        }
 				    }
-				rSmart.dispose();				    
+				rSmart.dispose();
 				break;
 			}
 			if(arg0.getActionCommand().equals("Abbruch")){
@@ -233,7 +233,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 				break;
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -241,7 +241,7 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 		////System.out.println(arg0);
 		if(arg0.getSource() instanceof JRadioButton){
 			((AbstractButton) arg0.getSource()).setSelected(true);
-			String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
+			String sAktion = ((AbstractButton) arg0.getSource()).getText();
 			for (int i = 0 ; i < 1 ; i++){
 				if( (sAktion =="Termin auf verf�gbare Dauer k�rzen")){
 					iAktion = 1;
@@ -253,14 +253,14 @@ public class EmailText implements KeyListener, ActionListener, FocusListener{
 				}
 			}
 		}
-		
-		
+
+
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		
-		
+
+
 	}
 
 }

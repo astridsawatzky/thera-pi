@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -18,7 +16,6 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
@@ -42,32 +39,30 @@ import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
-public class Floskeln extends JXDialog implements FocusListener, ActionListener, MouseListener, WindowListener, KeyListener,RehaTPEventListener{
+public class Floskeln extends JXDialog implements ActionListener, MouseListener, WindowListener, KeyListener,RehaTPEventListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 151598806426374786L;
-	
+
 	private JXTitledPanel jtp = null;
 	private MouseAdapter mymouse = null;
 	private PinPanel pinPanel = null;
 	private JXPanel content = null;
 	private RehaTPEventClass rtp = null;
-	
+
 	private JButton abfeuern = null;
-	
+
 	private JXTable tab = null;
 
 	DefaultTableModel tblDataModel = null;
 	PatientMemoPanel memopan = null;
-	
+
 	public Floskeln(JXFrame owner,String titel, PatientMemoPanel aktFocus){
 		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
 		this.setUndecorated(true);
-		this.setName("Floskeln");	
-		//this.jList.addKeyListener(this);
-		//this.jList.addMouseListener(this);
-	
+		this.setName("Floskeln");
+
 		this.jtp = new JXTitledPanel();
 		this.jtp.setName("Floskeln");
 		this.mymouse = new DragWin(this);
@@ -88,22 +83,9 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 		this.rtp.addRehaTPEventListener(this);
 		this.memopan = aktFocus;
 		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		SwingUtilities.invokeLater(new Runnable(){
-			@Override
-            public void run(){
-				setzeFocus();
-			}
-		});
+
 	}
-	private void setzeFocus(){
-		SwingUtilities.invokeLater(new Runnable(){
-			@Override
-            public void run(){
-				//jList.requestFocus();
-				//jList.setSelectedIndex(0);
-			}
-		});
-	}
+
 	private JXPanel getContent(){
 		content = new JXPanel(new BorderLayout());
 		content.add(new JScrollPane(), BorderLayout.CENTER);
@@ -124,24 +106,24 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 		JScrollPane scr = JCompTools.getTransparentScrollPane(tab);
 		scr.validate();
 		content.add(scr,BorderLayout.CENTER);
-		
+
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
-					fuellen();					
+					fuellen();
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
 				return null;
 			}
-			
+
 		}.execute();
 		return content;
 	}
 
 	private void fuellen(){
-		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "floskeln.ini"); 
+		INIFile ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "floskeln.ini");
 		int floskeln = Integer.parseInt(ini.getStringProperty("Floskeln", "FloskelAnzahl"));
 		Vector<String> vec = new Vector<String>();
 		for(int i = 0; i < floskeln;i++){
@@ -156,13 +138,13 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 		}
 		tab.requestFocus();
 	}
-	
+
 	/************************************/
 	/************************************/
 	private void auswerten(){
-		
+
 	}
-	
+
 	/************************************/
 	/************************************/
 
@@ -179,7 +161,7 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 		}catch(NullPointerException ne){
 
 		}
-		
+
 	}
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -259,14 +241,9 @@ public class Floskeln extends JXDialog implements FocusListener, ActionListener,
 				memopan.setNewText( String.valueOf(tab.getValueAt(tab.getSelectedRow(), 1)));
 			}
 		}catch(Exception ex){
-			
+
 		}
 	}
-	@Override
-	public void focusGained(FocusEvent e) {
-	}
-	@Override
-	public void focusLost(FocusEvent e) {
-	}
+
 
 }

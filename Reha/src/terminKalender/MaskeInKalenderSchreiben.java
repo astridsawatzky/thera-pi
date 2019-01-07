@@ -235,7 +235,7 @@ public JScrollPane eingabePanel(){
 
 
 private JXPanel titlePanel(){
-	jp = new RehaTP(0);
+	jp = new RehaTP();
 	jp.setName(dieserName);
 	jtp = (JXPanel) jp.getContentContainer();
 	jtp.setSize(new Dimension(200,200));
@@ -250,7 +250,7 @@ public String dieserName(){
 
 @Override
 public void rehaTPEventOccurred(RehaTPEvent evt) {
-	
+
 	//System.out.println("****************das darf doch nicht wahr sein in DruckFenster**************");
 	String ss =  this.getName();
 	//System.out.println("MaskeInKalenderSchreiben "+this.getName()+" Eltern "+ss);
@@ -343,12 +343,12 @@ public void keyPressed(KeyEvent arg0) {
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
-	
+
 
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
-	
+
 	if(arg0.getKeyCode() == 27){
 		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
@@ -419,7 +419,7 @@ public void maskenEintragen(){
 		try {
 			Thread.sleep(2);
 		} catch (InterruptedException e) {
-			
+
 			e.printStackTrace();
 		}
 	}

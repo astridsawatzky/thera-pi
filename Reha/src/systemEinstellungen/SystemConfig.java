@@ -271,8 +271,7 @@ public class SystemConfig {
 
 			break;
 		case 2:
-			DatenBank();
-			phoneservice();
+
 			break;
 		case 3:
 			TerminKalender();
@@ -311,7 +310,7 @@ public class SystemConfig {
 		return;
 	}
 
-	private void DatenBank(){
+	public void DatenBank(){
 		try{
 			ini = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "rehajava.ini");
 			int lesen;
@@ -361,7 +360,7 @@ public class SystemConfig {
 
 		return;
 	}
-	private void phoneservice() {
+	public void phoneservice() {
 		try{
 			File f = new File(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "phoneservice.ini");
 			if(f.exists()){

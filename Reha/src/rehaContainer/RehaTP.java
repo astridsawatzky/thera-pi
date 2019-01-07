@@ -17,75 +17,67 @@ import events.RehaTPEventListener;
 
 public class RehaTP extends JXTitledPanel implements RehaTPEventListener,FocusListener,MouseListener{
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = -2594000954785231427L;
 	/**
-	 * 
+	 *
 	 */
-	
+
 	RehaTPEventClass rEvent = null;
 	private RehaTP thisClass = null;
-	public int setOben; 
 	private PinPanel pinPanel = null;
-	public String eigenerName = ""; 
-	public RehaTP(int setOben){
+	public String eigenerName = "";
+	public RehaTP(){
 		super();
 		thisClass = this;
 		this.setTitleForeground(Color.WHITE);
 		this.addFocusListener(this);
 		this.addMouseListener(this);
-		this.setOben = setOben;
-		/*
-		this.addKeyListener(new java.awt.event.KeyAdapter() {
-			public void keyPressed(java.awt.event.KeyEvent e) {
-			}
-		});
-		*/	
-			
+
 		this.addFocusListener(new java.awt.event.FocusAdapter() {
 			@Override
-            public void focusGained(java.awt.event.FocusEvent e) {    
+            public void focusGained(java.awt.event.FocusEvent e) {
 				if(thisClass.pinPanel != null){
 					thisClass.pinPanel.SetzeAktivButton(true);
-					RehaTPEvent tPEvent = new RehaTPEvent(this);   
-					tPEvent.setRehaEvent("FocusRequest");  
+					RehaTPEvent tPEvent = new RehaTPEvent(this);
+					tPEvent.setRehaEvent("FocusRequest");
 					tPEvent.setDetails(thisClass.getName(), "RequestFocus");
 					RehaTPEventClass.fireRehaTPEvent(tPEvent);
 				}
-			}   
+			}
 			@Override
-            public void focusLost(java.awt.event.FocusEvent e) {    
+            public void focusLost(java.awt.event.FocusEvent e) {
 				if(thisClass.pinPanel != null){
 					thisClass.pinPanel.SetzeAktivButton(false);
 				}
-			}   
-		});	
+			}
+		});
 
 
 
 	}
 	public void setzePinPanel(){
-		
+
 	}
 	public void setzeName(String sname){
 		this.setName(sname);
 		this.eigenerName = sname;
 		this.getContentContainer().setName(sname);
 		if (this.pinPanel != null){
-			this.pinPanel.setzeName(sname);			
+			this.pinPanel.setzeName(sname);
 		}
 	}
 	public void aktiviereIcon(){
 		if(pinPanel != null){
-			pinPanel.SetzeAktivButton(true);			
+			pinPanel.SetzeAktivButton(true);
 		}
 	}
 	public void deaktiviereIcon(){
 		if(pinPanel != null){
 			pinPanel.SetzeAktivButton(false);
-		}	
-	}	
+		}
+	}
 	public void setPinPanel (PinPanel pinPanel){
 		this.pinPanel = pinPanel;
 	}
@@ -110,8 +102,8 @@ public class RehaTP extends JXTitledPanel implements RehaTPEventListener,FocusLi
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		thisClass.pinPanel.SetzeAktivButton(true);
-		RehaTPEvent tPEvent = new RehaTPEvent(this);   
-		tPEvent.setRehaEvent("FocusRequest");  
+		RehaTPEvent tPEvent = new RehaTPEvent(this);
+		tPEvent.setRehaEvent("FocusRequest");
 		tPEvent.setDetails(thisClass.getName(), "RequestFocus");
 		RehaTPEventClass.fireRehaTPEvent(tPEvent);
 	}

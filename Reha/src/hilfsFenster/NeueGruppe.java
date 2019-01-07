@@ -48,7 +48,7 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 	    this.abwann = abwann;
 	    this.dauer = dauer;
 	    this.neu = neu;
-		RehaTP jtp = new RehaTP(0); 
+		RehaTP jtp = new RehaTP();
 		jtp.setBorder(null);
 		jtp.setTitle(titel);
 		jtp.setContentContainer(getForm());
@@ -66,27 +66,27 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 		/****************************************************************/
 		//JXPanel tv = TerminFenster.getThisClass().getViewPanel();
 
-		rSmart.setLocationRelativeTo(Reha.getThisFrame()); 
+		rSmart.setLocationRelativeTo(Reha.getThisFrame());
 		rSmart.setVisible(true);
 
-		//jrb[0].requestFocus();		
+		//jrb[0].requestFocus();
 	}
 
 	private JXPanel getForm(){
- 
-		FormLayout layout = 
+
+		FormLayout layout =
 			new FormLayout("10dlu,right:max(20dlu;p),2dlu,60dlu,10dlu,p,2dlu,p,100dlu",
 			"20dlu,p,3dlu,p,3dlu,p,15dlu,5dlu");
 			//new FormLayout("10dlu,p,4dlu,p,50dlu,p",
 			//		"10dlu,p,3dlu,p,3dlu,p,3dlu,p");
-		
+
 		JXPanel xbuilder = new JXPanel();
 		xbuilder.setBorder(null);
 		xbuilder.setLayout(new BorderLayout());
 		xbuilder.setVisible(true);
 		//xbuilder.addFocusListener(this);
 		xbuilder.addKeyListener(this);
-		
+
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.getPanel().setBackground(Color.WHITE);
 		//builder.getPanel().setPreferredSize(new Dimension(400,150));
@@ -99,57 +99,57 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 		jrtaf[0].setEnabled(true);
 		jrtaf[0].setText(this.gruppe);
 		builder.add(jrtaf[0],cc.xy(4,2));
-		
+
 		builder.add(new JXLabel("Dauer im Kalender"),cc.xy(2,4));
 		jrtaf[1] = new JRtaTextField("ZAHLEN",true);
 		//jrtaf[1].setPreferredSize(new Dimension(25,20));
 		jrtaf[1].setEnabled(true);
-		jrtaf[1].setText(this.dauer);		
+		jrtaf[1].setText(this.dauer);
 		builder.add(jrtaf[1],cc.xy(4,4));
-		
+
 
 		if(this.aktuell){
 			builder.add(new JXLabel("gültig ab"),cc.xy(2,6));
 		}else{
-			builder.add(new JXLabel("gültig bis"),cc.xy(2,6));			
+			builder.add(new JXLabel("gültig bis"),cc.xy(2,6));
 		}
 		jrtaf[2] = new JRtaTextField("DATUM",false);
 		//jrtaf[1].setPreferredSize(new Dimension(25,20));
 		jrtaf[2].setEnabled(true);
-		jrtaf[2].setText(this.abwann);		
+		jrtaf[2].setText(this.abwann);
 		builder.add(jrtaf[2],cc.xy(4,6));
-		
+
 
 		builder.add(new JXLabel(""),cc.xy(2,8));
 
 		xbuilder.add(builder.getPanel(),BorderLayout.NORTH);
 
-		layout = 
+		layout =
 			new FormLayout("10dlu,p,25dlu,p,50dlu,p",
 					"5dlu,p,10dlu,p,3dlu,p,3dlu,p,15dlu,p");
 		builder = new PanelBuilder(layout);
-		
+
 		jb[0] = new JXButton("Ok");
 		jb[0].addKeyListener(this);
 		jb[0].addActionListener(this);
 		jb[0].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		builder.add(jb[0],cc.xy(2,2));		
+		builder.add(jb[0],cc.xy(2,2));
 
 		jb[1] = new JXButton("Abbruch");
 		jb[1].addKeyListener(this);
 		jb[1].addActionListener(this);
 		jb[1].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		builder.add(jb[1],cc.xy(4,2));		
-		
+		builder.add(jb[1],cc.xy(4,2));
+
 		builder.add(new JXLabel(""),cc.xy(4,3));
-		
+
 		xbuilder.add(builder.getPanel(),BorderLayout.CENTER);
 		return xbuilder;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		if(e.getKeyCode()==10){
 			if(!endeRegeln()){e.consume();return;}
 			rSmart.dispose();
@@ -186,21 +186,21 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		////System.out.println(arg0.getSource());
-		String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
+		String sAktion = ((AbstractButton) arg0.getSource()).getText();
 		for (int i = 0 ; i < 1 ; i++){
 			if(sAktion=="Ok"){
 				if(!endeRegeln()){return;}
@@ -210,30 +210,30 @@ public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
 			if(sAktion=="Abbruch"){
 				SysUtilGruppenDef.neuGruppenName = "";
 				SysUtilGruppenDef.neuGruppenGueltigAb = "";
-				SysUtilGruppenDef.neuGruppenDauer = "0";				
+				SysUtilGruppenDef.neuGruppenDauer = "0";
 				rSmart.dispose();
 				break;
 			}
 		}
-		
+
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
 		////System.out.println(arg0);
 		if(arg0.getSource() instanceof JRadioButton){
 			((AbstractButton) arg0.getSource()).setSelected(true);
-			//String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
+			//String sAktion = ((AbstractButton) arg0.getSource()).getText();
 			for (int i = 0 ; i < 1 ; i++){
 			}
 		}
-		
-		
+
+
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		
-		
+
+
 	}
 
 }

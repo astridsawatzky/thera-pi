@@ -36,7 +36,7 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener{
 	String aktTag = "x";
 	String wahlTag = "y";
 	public DatumWahl(int x,int y){
-		RehaTP jtp = new RehaTP(0); 
+		RehaTP jtp = new RehaTP();
 		jtp.setBorder(null);
 		jtp.setTitle("Wohin mit dem Termin???");
 		jtp.setContentContainer(getForm());
@@ -44,7 +44,7 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener{
 
 
 		rSmart = new RehaSmartDialog(null,"WohinmitTermin");
-		
+
 		rSmart.setModal(false);
 		rSmart.setAlwaysOnTop(true);
 		rSmart.setResizable(false);
@@ -68,16 +68,16 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener{
 		x=20;
 		y=500;
 		/****************************************************************/
-		rSmart.setLocation(x, y); 
+		rSmart.setLocation(x, y);
 		rSmart.pack();
 		rSmart.setVisible(true);
 
-		//jrb[0].requestFocus();		
+		//jrb[0].requestFocus();
 	}
-	
+
 	private JXPanel getForm(){
-		/* 
-		FormLayout layout = 
+		/*
+		FormLayout layout =
 			new FormLayout("10dlu,p,10dlu,p,2dlu,p,100dlu,40dlu",
 			"10dlu,p,3dlu,p,3dlu,p,3dlu,p,3dlu,p,5dlu");
 			//new FormLayout("10dlu,p,4dlu,p,50dlu,p",
@@ -122,45 +122,45 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener{
 						@Override
                         public void run(){
 							TerminFenster.getThisClass().springeAufDatum(aktTag);
-							
+
 						}
 					});
 				}
-				
+
 			}
 		  };
 		  monthView.addActionListener(al);
 		  xbuilder.add(monthView,BorderLayout.CENTER);
 		return xbuilder;
-	}	
+	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		
-		
+
+
 	}
-}	
+}

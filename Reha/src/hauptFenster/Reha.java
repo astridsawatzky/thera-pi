@@ -33,6 +33,8 @@ import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+
+import static java.awt.event.KeyEvent.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -70,6 +72,7 @@ import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.format.YUVFormat;
+import javax.sql.DataSource;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -119,6 +122,8 @@ import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.FireRehaError;
+import CommonTools.GenericObservable;
+import CommonTools.GenericObservable.GenericObserver;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
@@ -143,6 +148,8 @@ import entlassBerichte.EBerichtPanel;
 import environment.Path;
 import geraeteInit.BarCodeScanner;
 import gui.Cursors;
+import hauptFenster.login.Login;
+import hauptFenster.login.User;
 import krankenKasse.KassenPanel;
 import kurzAufrufe.KurzAufrufe;
 import logging.Logging;
@@ -225,15 +232,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public UIFSplitPane jSplitRechtsOU = null;
 	public JXTitledPanel jxTitelOben = null;
 	public JXTitledPanel jxTitelUnten = null;
-	public static Reha instance;
-	private static JXFrame thisFrame;
 
-	public static JXFrame getThisFrame() {
-		return thisFrame;
-	}
-	public static void setThisFrame(JXFrame thisFrame) {
-		Reha.thisFrame = thisFrame;
-	}
 	public JXPanel jInhaltOben = null;
 	public JXPanel jInhaltUnten = null;
 	public JXPanel jEventTargetOben = null;
@@ -269,8 +268,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static CompoundPainter[] RehaPainter = {null,null,null,null,null};
 	public Vector<Object> aktiveFenster = new Vector<Object>();
 	public final String NULL_DATE = "  .  .    ";
-	private static String aktIK = "000000000";
-	private static String aktMandant = "Übungs-Mandant";
 	public static String aktUser = "";
 	public static String kalMin = "";
 	public static String kalMax = "";
@@ -354,7 +351,25 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
 	private static Logger logger = LoggerFactory.getLogger(Reha.class);
+
+
+	private final static Mandant nullMandant = new Mandant("000000000", "Übungs-Mandant");
 	private Mandant mandant;
+	private static String aktIK=nullMandant.ik();
+	private static String aktMandant=nullMandant.name();
+
+	public static Reha instance=new Reha(nullMandant);
+	private static JXFrame thisFrame;
+
+	private RehaSettings settings;
+	private DataSource dataSource;
+
+	public static JXFrame getThisFrame() {
+		return thisFrame;
+	}
+	public static void setThisFrame(JXFrame thisFrame) {
+		Reha.thisFrame = thisFrame;
+	}
 
 
 	/*
@@ -414,11 +429,22 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 		String iniPath = Path.Instance.getProghome()+"ini/"+ mandant.ik()+"/";
 		try {
-			RehaSettings ini = new RehaSettings(mandant);
+			settings = new RehaSettings(mandant);
+
+
 		} catch (IOException e) {
-			logger.error("ReheajavaIni could not be created",e);
+			logger.error("RehaSettings could not be created",e);
 		}
 
+		dataSource = settings.datasource();
+		try {
+			dataSource.getConnection();
+		} catch (SQLException e) {
+			logger.error("Connection could not be established",e);
+		}
+
+
+		User user = new Login(dataSource).login();
 
 		INITool.init(iniPath);
 		logger.info("Insgesamt sind "+Integer.toString(INITool.getDBInis().length)+" INI-Dateien in der Tabelle inidatei abgelegt");
@@ -489,8 +515,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		sysConf.HauptFenster();
 		sysConf.openoffice();
 
-		sysConf.SystemInit(2);
-
+		sysConf.DatenBank();
+		sysConf.phoneservice();
 		try {
 			  aktLookAndFeel = SystemConfig.getLookAndFeel();
 			UIManager.setLookAndFeel(aktLookAndFeel);
@@ -1689,22 +1715,22 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			stammMenu.setText("Stammdaten");
 			JMenuItem men = new JMenuItem("Patienten Rezepte etc.");
 			men.setActionCommand("patient");
-			men.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, Event.CTRL_MASK, false));
-			men.setMnemonic(KeyEvent.VK_P);
+			men.setAccelerator(KeyStroke.getKeyStroke(VK_P, Event.CTRL_MASK, false));
+			men.setMnemonic(VK_P);
 			men.addActionListener(this);
 			stammMenu.add(men);
 			stammMenu.addSeparator();
 			men = new JMenuItem("Krankenkassen");
 			men.setActionCommand("kasse");
-			men.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Event.CTRL_MASK, false));
-			men.setMnemonic(KeyEvent.VK_K);
+			men.setAccelerator(KeyStroke.getKeyStroke(VK_K, Event.CTRL_MASK, false));
+			men.setMnemonic(VK_K);
 			men.addActionListener(this);
 			stammMenu.add(men);
 			stammMenu.addSeparator();
 			men = new JMenuItem("Ärzte");
 			men.setActionCommand("arzt");
-			men.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, Event.CTRL_MASK, false));
-			men.setMnemonic(KeyEvent.VK_A);
+			men.setAccelerator(KeyStroke.getKeyStroke(VK_A, Event.CTRL_MASK, false));
+			men.setMnemonic(VK_A);
 			men.addActionListener(this);
 			stammMenu.add(men);
 
@@ -1965,77 +1991,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
             Reha.instance.messageLabel = new JLabel("OO.org nicht verfügbar!!!");
         }
 
-    	/*
-    	final String OPEN_OFFICE_ORG_PATH = SystemConfig.OpenOfficePfad;
-        try{
-        	if(Reha.isStarted){
-        		JOptionPane.showMessageDialog(null,"Zur Info die UNO-Runtime wird neu gestartet!");
-        	}
 
-			String path = OPEN_OFFICE_ORG_PATH;
-
-            ILazyApplicationInfo info =  OfficeApplicationRuntime.getApplicationAssistant(SystemConfig.OpenOfficeNativePfad).findLocalApplicationInfo(SystemConfig.OpenOfficePfad);
-            String[] names = info.getProperties().getPropertyNames();
-            for(int i = 0; i < names.length;i++){
-            	System.out.println(names[i]+" = "+info.getProperties().getPropertyValue(names[i]));
-            	if(info.getProperties().getPropertyValue(names[i]).contains("LibreOffice")){
-            		Reha.instance.isLibreOffice = true;
-            	}
-            }
-            Map <String, Object>config = new HashMap<String, Object>();
-            config.put(IOfficeApplication.APPLICATION_HOME_KEY, SystemConfig.OpenOfficePfad);
-            config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-            if(Reha.instance.isLibreOffice){
-                config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY,
-                		new String[] {"--nodefault","--nologo",
-                		"--nofirststartwizard",
-                		"--nocrashreport",
-                		"--norestore"
-                		});
-
-            }else{
-                config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY,
-                		new String[] {"-nodefault","-nologo",
-                		"-nofirststartwizard",
-                		"-nocrashreport",
-                		"-norestore"
-                		});
-
-            }
-            System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH,SystemConfig.OpenOfficeNativePfad);
-            try{
-            	officeapplication = OfficeApplicationRuntime.getApplication(config);
-            }catch(NullPointerException ex){
-            	ex.printStackTrace();
-            }
-            officeapplication.activate();
-            try{
-            	officeapplication.getDesktopService().addTerminateListener(new VetoTerminateListener() {
-            	public void queryTermination(ITerminateEvent terminateEvent) {
-            		super.queryTermination(terminateEvent);
-            	    try {
-            	      IDocument[] docs = officeapplication.getDocumentService().getCurrentDocuments();
-            	      if (docs.length ==  1  ) {
-              	        docs[0].close();
-            	      }
-            	    }catch (DocumentException e) {
-            	    	e.printStackTrace();
-            	    	Reha.instance.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
-            	    } catch (OfficeApplicationException e) {
-						e.printStackTrace();
-						Reha.instance.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
-					}
-            	  }
-            	});
-            }catch(NullPointerException ex){
-            	ex.printStackTrace();
-            }
-            Reha.instance.Rehaprogress.setIndeterminate(false);
-        }catch (OfficeApplicationException e) {
-			Reha.instance.messageLabel = new JLabel("OO.org nicht Verfügbar!!!");
-            e.printStackTrace();
-        }
-        */
     }
 
     private void setKeyboardActions() {
@@ -2049,10 +2005,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
                     	return;
                     }
                     if(keyEvent.isAltDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==88) {  // Ctrl-P
+                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_X) {
                         }
                     if(keyEvent.isControlDown() &&
-                       keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==80) {  // Ctrl-P
+                       keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_P) {
         				new SwingWorker<Void,Void>(){
         					@Override
         					protected Void doInBackground() throws Exception {
@@ -2062,14 +2018,14 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
         					}
         				}.execute();
                     }
-                    if(keyEvent.isAltDown() && keyEvent.getID()== KeyEvent.KEY_PRESSED
-                    		&& keyEvent.getKeyCode() ==	KeyEvent.VK_R){
+                    if(keyEvent.isAltDown() && keyEvent.getID()== KEY_PRESSED
+                    		&& keyEvent.getKeyCode() ==	VK_R){
                     	new RezeptFahnder(true);
                     	return;
 
                     }
                     if(keyEvent.isAltDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==88) {  // Ctrl-P
+                            keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_X) {
                     		Reha.aktUser = "";
                     		SwingUtilities.invokeLater(new Runnable(){
                     			@Override
@@ -2079,11 +2035,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
                     				}
                     			}
                     		});
-                            ProgLoader.PasswortDialog(0);
+                            ProgLoader.PasswortDialog();
                     }
 
                     if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==84) {  // Ctrl-P
+                            keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_T) {
         					JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
         					if(termin == null){
         						//
@@ -2092,16 +2048,16 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
         					}
                     }
                     if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==79) {  // Ctrl-P
+                            keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_O) {
 
                     }
                     if(keyEvent.isControlDown() &&
-                    		keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==75) {  // Ctrl-K
+                    		keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_K) {
     					//JComponent kasse = AktiveFenster.getFensterAlle("KrankenKasse");
 
                     }
                     if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==65) {  // Ctrl-K
+                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_A) {
     					//JComponent arzt = AktiveFenster.getFensterAlle("ArztVerwaltung");
 
 						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
@@ -2110,22 +2066,22 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
                     }
 
                     if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==37) {  // Ctrl-Pfeil nach links
+                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_LEFT) {
                     		setDivider(1);
                     		keyEvent.consume();
                     }
                     if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==39) {  // Ctrl-Pfeil nach rechts
+                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_RIGHT) {
                     		setDivider(2);
                     		keyEvent.consume();
                     }
                     if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==38) {  // Ctrl-Pfeil nach oben
+                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_UP) {
                     		setDivider(3);
                     		keyEvent.consume();
                     }
                     if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==40) {  // Ctrl-Pfeil nach unten
+                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_DOWN) {
                 			setDivider(4);
                     		keyEvent.consume();
                     }
@@ -3226,7 +3182,7 @@ final class ErsterLogin implements Runnable{
 			OOTools.ooOrgAnmelden();
 			}
 		}.start();
-		ProgLoader.PasswortDialog(0);
+		ProgLoader.PasswortDialog();
 	}
 	@Override
     public void run() {

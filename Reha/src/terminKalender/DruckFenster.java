@@ -153,7 +153,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener{
 			Comparator<Vector> comparator = new Comparator<Vector>() {
 				@Override
 				public int compare(Vector o1, Vector o2) {
-					
+
 					String s1 = (String)o1.get(3);
 					String s2 = (String)o2.get(3);
 					return s1.compareTo(s2);
@@ -280,7 +280,7 @@ private DruckFenster getInstance(){
 	return this;
 }
 private JXPanel titlePanel(){
-	jp = new RehaTP(0);
+	jp = new RehaTP();
 	jp.setName(dieserName);
 	jtp = (JXPanel) jp.getContentContainer();
 	jtp.setSize(new Dimension(200,200));
@@ -350,7 +350,7 @@ public String dieserName(){
 
 @Override
 public void rehaTPEventOccurred(RehaTPEvent evt) {
-	
+
 	////System.out.println("****************das darf doch nicht wahr sein in DruckFenster**************");
 	//String ss =  this.getName();
 	////System.out.println("Durckerlistenfenster "+this.getName()+" Eltern "+ss);
@@ -484,17 +484,17 @@ public void keyPressed(KeyEvent arg0) {
 		rtp = null;
 		FensterSchliessen(null);
 	}
-	
+
 
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
-	
+
 
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
-	
+
 	if(arg0.getKeyCode() == 27){
 		rtp.removeRehaTPEventListener(this);
 		rtp = null;
@@ -696,7 +696,7 @@ public void run(){
 						textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertPageBreak();
 						textDocument.getViewCursorService().getViewCursor().getTextCursorFromEnd().insertDocument(url) ;
 					} catch (NOAException e) {
-						
+
 						JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 						e.printStackTrace();
 					}
@@ -714,7 +714,7 @@ public void run(){
 							try {
 								placeholders = textFieldService.getPlaceholderFields();
 							} catch (TextException e) {
-								
+
 								JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 								e.printStackTrace();
 							}
@@ -733,7 +733,7 @@ public void run(){
 					try {
 						textTable = textDocument.getTextTableService().getTextTable(tabName[aktTabelle]);
 					} catch (TextException e) {
-						
+
 						JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 						e.printStackTrace();
 					}
@@ -844,28 +844,28 @@ public void run(){
 		*/
 		//Reha.officeapplication.getDesktopService().dispose();
 	} catch (OfficeApplicationException e) {
-		
+
 		e.printStackTrace();
 		DruckFenster.OOoFertig = 0;
 		DruckFenster.buttonsEinschalten();
 		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (DocumentException e) {
-		
+
 		e.printStackTrace();
 		DruckFenster.OOoFertig = 0;
 		DruckFenster.buttonsEinschalten();
 		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (NOAException e) {
-		
+
 		DruckFenster.OOoFertig = 0;
 		DruckFenster.buttonsEinschalten();
 		e.printStackTrace();
 		JOptionPane.showMessageDialog(null,"Fehler bei der Erstellung des Terminplanes\nFehlermeldung: "+e.getMessage());
 		return;
 	} catch (TextException e) {
-		
+
 		DruckFenster.OOoFertig = 0;
 		e.printStackTrace();
 		DruckFenster.buttonsEinschalten();
@@ -1007,7 +1007,7 @@ final class sendeTermine extends Thread{
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				
+
 				e.printStackTrace();
 			}
 			f = new File(anhang[0]);

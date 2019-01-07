@@ -37,7 +37,7 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 	int iAktion = 1;
 	JXPanel tv;
 	public TerminEinpassen(int x,int y){
-		RehaTP jtp = new RehaTP(0); 
+		RehaTP jtp = new RehaTP();
 		jtp.setBorder(null);
 		jtp.setTitle("Wohin mit dem Termin???");
 		jtp.setContentContainer(getForm());
@@ -63,28 +63,28 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 			y=y-145;
 		}
 		/****************************************************************/
-		rSmart.setLocation(x, y); 
+		rSmart.setLocation(x, y);
 		rSmart.pack();
 		rSmart.setVisible(true);
 
-		jrb[0].requestFocus();		
+		jrb[0].requestFocus();
 	}
 
 	private JXPanel getForm(){
- 
-		FormLayout layout = 
+
+		FormLayout layout =
 			new FormLayout("10dlu,p,10dlu,p,2dlu,p,100dlu,40dlu",
 			"10dlu,p,3dlu,p,3dlu,p,3dlu,p,3dlu,p,5dlu");
 			//new FormLayout("10dlu,p,4dlu,p,50dlu,p",
 			//		"10dlu,p,3dlu,p,3dlu,p,3dlu,p");
-		
+
 		JXPanel xbuilder = new JXPanel();
 		xbuilder.setBorder(null);
 		xbuilder.setLayout(new BorderLayout());
 		xbuilder.setVisible(true);
 		//xbuilder.addFocusListener(this);
 		xbuilder.addKeyListener(this);
-		
+
 		PanelBuilder builder = new PanelBuilder(layout);
 		builder.getPanel().setBackground(Color.WHITE);
 		//builder.getPanel().setPreferredSize(new Dimension(400,150));
@@ -99,39 +99,39 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 		builder.add(jrb[0],cc.xyw(2,2,7));
 		jrb[1] = new JRadioButton("Nachfolgenden Termin kürzen");
 		jrb[1].setBackground(Color.WHITE);
-		jrb[1].addKeyListener(this);	
+		jrb[1].addKeyListener(this);
 		jrb[1].addActionListener(this);
-		jrb[1].addFocusListener(this);		
+		jrb[1].addFocusListener(this);
 		jrbg.add(jrb[1]);
 		builder.add(jrb[1],cc.xyw(2,4,6));
 		xbuilder.add(builder.getPanel(),BorderLayout.NORTH);
-		
-		layout = 
+
+		layout =
 			new FormLayout("10dlu,p,25dlu,p,50dlu,p",
 					"5dlu,p,10dlu,p,3dlu,p,3dlu,p,15dlu,p");
 		builder = new PanelBuilder(layout);
-		
+
 		jb[0] = new JXButton("Ok");
 		jb[0].addKeyListener(this);
 		jb[0].addActionListener(this);
 		jb[0].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		builder.add(jb[0],cc.xy(2,2));		
+		builder.add(jb[0],cc.xy(2,2));
 
 		jb[1] = new JXButton("Abbruch");
 		jb[1].addKeyListener(this);
 		jb[1].addActionListener(this);
 		jb[1].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		builder.add(jb[1],cc.xy(4,2));		
-		
+		builder.add(jb[1],cc.xy(4,2));
+
 		builder.add(new JXLabel(""),cc.xy(4,3));
-		
+
 		xbuilder.add(builder.getPanel(),BorderLayout.CENTER);
 		return xbuilder;
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
+
 		if(e.getKeyCode()==38){
 			//auf
 			((Component) e.getSource()).transferFocusBackward();
@@ -144,7 +144,7 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 			String [] sret = {null,null};
 			TerminFenster.setDialogRet(iAktion,sret);
 			rSmart.dispose();
-			tv = null; 
+			tv = null;
 		}
 		if(e.getKeyCode()==27){
 			String [] sret = {null,null};
@@ -157,21 +157,21 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
-		
+
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
+
 		////System.out.println(arg0.getSource());
-		String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
+		String sAktion = ((AbstractButton) arg0.getSource()).getText();
 		for (int i = 0 ; i < 1 ; i++){
 			if( (sAktion =="Termin auf verfügbare Dauer kürzen")){
 				iAktion = 1;
@@ -195,7 +195,7 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 				break;
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 		////System.out.println(arg0);
 		if(arg0.getSource() instanceof JRadioButton){
 			((AbstractButton) arg0.getSource()).setSelected(true);
-			String sAktion = ((AbstractButton) arg0.getSource()).getText(); 
+			String sAktion = ((AbstractButton) arg0.getSource()).getText();
 			for (int i = 0 ; i < 1 ; i++){
 				if( (sAktion =="Termin auf verfügbare Dauer kürzen")){
 					iAktion = 1;
@@ -215,14 +215,14 @@ public class TerminEinpassen implements KeyListener, ActionListener, FocusListen
 				}
 			}
 		}
-		
-		
+
+
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		
-		
+
+
 	}
 
 }

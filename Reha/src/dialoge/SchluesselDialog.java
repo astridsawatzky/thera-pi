@@ -3,6 +3,7 @@ package dialoge;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
@@ -35,7 +36,7 @@ import systemTools.ListenerTools;
 public class SchluesselDialog extends JDialog implements WindowListener{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private String schluessel;
@@ -51,15 +52,16 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 		//super(owner, name);
 		//this.setName(name);
 		super();
-		
+
 		schluessel = xschluessel;
 		addWindowListener(this);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		kli = new KeyListener(){
+		kli = new KeyAdapter() {
+
 			@Override
 			public void keyPressed(KeyEvent e) {
-				
-				if(e.getKeyCode() == 10){
+
+				if(e.getKeyCode() == KeyEvent.VK_ENTER){
 					if(e.getSource() instanceof JButton){
 						if(((JComponent)e.getSource()).getName().equals("ok")){
 							doErledigt();
@@ -68,23 +70,13 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 						}
 					}
 				}
-				if(e.getKeyCode() == 27){
+				if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
 					e.consume();
 					doAbbrechen();
 				}
 
 			}
-			@Override
-			public void keyReleased(KeyEvent e) {
-				
-				
-			}
 
-			@Override
-			public void keyTyped(KeyEvent e) {
-				
-				
-			}
 		};
 		 acli = new ActionListener(){
 				@Override
@@ -118,7 +110,7 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 		buts[1].setName("abbrechen");
 		buts[1].addActionListener(acli);
 
-		
+
 		FormLayout lay = new FormLayout("0dlu,right:max(40dlu;p),10dlu,120dlu,50dlu","10dlu,p,10dlu,p,10dlu,p,10dlu,p,10dlu");
 		PanelBuilder pb = new PanelBuilder(lay);
 		CellConstraints cc = new CellConstraints();
@@ -153,7 +145,7 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 		vec.clear();
 		vec = null;
 	}
-	
+
 	private void doErledigt(){
 		if(ausgabe){
 			if(tfs[0].getText().trim().equals("") || tfs[1].getText().trim().equals("")){
@@ -207,34 +199,34 @@ public class SchluesselDialog extends JDialog implements WindowListener{
 	}
 	@Override
 	public void windowActivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowClosing(WindowEvent arg0) {
 		//System.out.println("In windowClosing.....");
 		this.dispose();
-		
+
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowIconified(WindowEvent arg0) {
-		
-		
+
+
 	}
 	@Override
 	public void windowOpened(WindowEvent arg0) {
-		
-		
+
+
 	}
-	
+
 }
