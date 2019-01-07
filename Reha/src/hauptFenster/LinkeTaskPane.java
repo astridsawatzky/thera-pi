@@ -63,19 +63,20 @@ import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.TestePatStamm;
 import terminKalender.TerminFenster;
+import textBausteine.textbaus;
 import wecker.Wecker;
 
 public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentListener, DropTargetListener {
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	//private Reha eltern;
-	private static JXTaskPaneContainer jxTPcontainer = null; 
+	private static JXTaskPaneContainer jxTPcontainer = null;
 	public static JXTaskPane tp1 = null;
 	public static JXTaskPane tp2 = null;
-	public static JXTaskPane tp3 = null;	
-	public static JXTaskPane tp4 = null;	
+	public static JXTaskPane tp3 = null;
+	public static JXTaskPane tp4 = null;
 	public static JXTaskPane tp5 = null;
 	public static JXTaskPane tp6 = null;
 	public static JXTaskPane tp7 = null;
@@ -96,7 +97,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		this.setBackground(Color.WHITE);
 		//this.eltern = Reha.thisClass;
 		this.setPreferredSize(new Dimension(200,500));
-		
+
 		GridBagConstraints gridBagConstraints = new GridBagConstraints() ;
 		gridBagConstraints.gridx = 0;
 		gridBagConstraints.anchor = GridBagConstraints.CENTER;
@@ -106,10 +107,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		gridBagConstraints.weightx = 1.0D;
 		gridBagConstraints.weighty = 1.0D;
 		gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-		
+
 		this.setLayout(new GridBagLayout());
 
-		
+
 		/**
 		 * Zuerst die Scrollpane generieren falls der
 		 * sp�tere TaskPane-Container die y-Dimension des Fensters �bersteigt.
@@ -128,19 +129,19 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxTPcontainer =	new JXTaskPaneContainer();
 		jxTPcontainer.setBackground(new Color(106,130,218));
 		//jxTPcontainer.setPreferredSize(new Dimension(250,0));
-		
-		
+
+
 		jxTPcontainer.add( (Component) getPatientenStamm());
-		
+
 		jxTPcontainer.add( (Component) getTerminKalender());
-		
+
 		jxTPcontainer.add( (Component) getOpenOfficeOrg());
-		
-		jxTPcontainer.add( (Component) getNuetzliches());		
-		
+
+		jxTPcontainer.add( (Component) getNuetzliches());
+
 		jxTPcontainer.add( (Component) getSystemEinstellungen());
 		jxTPcontainer.add( (Component) getMonatsUebersicht());
-		
+
 		if(mitUserTask){
 			jxTPcontainer.add( (Component) getUserTasks());
 		}
@@ -158,14 +159,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	 * Task-Pane f�r den Patientenstamm erstellen
 	 * @return
 	 */
-	
+
 	private JXTaskPane getPatientenStamm(){
 		Image img = null;
 		tp1 = new JXTaskPane();
 		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
 		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
 		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.foreground",Color.BLUE);		
+		UIManager.put("TaskPane.foreground",Color.BLUE);
 		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
 		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
 		tp1.setUI(wui);
@@ -174,7 +175,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setText("Patienten und Rezepte");
 		jxLink.setToolTipText("Strg+P = Patienten-/Rezeptstamm starten");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/kontact_contacts.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
 		jxLink.setEnabled(true);
@@ -217,18 +218,18 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
 		} catch (TooManyListenersException e1) {
-			
+
 			e1.printStackTrace();
 		}
 		jxLink.setDropTarget(dndt);
-		
+
 		tp1.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("Ärzte");
 		jxLink.setActionCommand("Arztstamm");
 		jxLink.setToolTipText("Strg+A = Arztstamm starten");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/system-users.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));				
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
 		//jxLink.setEnabled(false);
@@ -237,14 +238,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setText("Krankenkassen");
 		jxLink.setToolTipText("Strg+K = Kassenstamm starten");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/krankenkasse.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));				
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
 		tp1.add(jxLink);
 		tp1.setCollapsed(SystemConfig.taskPaneCollapsed[0]);
 		return tp1;
 	}
-	
+
 	private JXTaskPane getTerminKalender(){
 		Image img = null;
 		tp4 = new JXTaskPane();
@@ -253,9 +254,9 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		UIManager.put("TaskPane.background",new Color(214,223,247));
 		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
 		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp4.setUI(wui);		
+		tp4.setUI(wui);
 		tp4.setTitle("Termin-Management");
-		tp4.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/table_mode.png"));				
+		tp4.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/table_mode.png"));
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Terminkalender starten");
 		jxLink.setToolTipText("Strg+T = Terminkalender starten");
@@ -303,7 +304,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
 		} catch (TooManyListenersException e1) {
-			
+
 			e1.printStackTrace();
 		}
 		jxLink.setDropTarget(dndt);
@@ -315,7 +316,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		//jxLink.setText("[Ru:gl] - Die Terminsuchmaschine");
 		jxLink.setToolTipText("Strg+R = [Ru:gl] starten");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/orca.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.setActionCommand("[Ru:gl] - Die Terminsuchmaschine");
 		jxLink.addActionListener(this);
@@ -323,7 +324,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		jxLink.setText("Wochenarbeitszeiten definieren");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/alacarte.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
 		tp4.add(jxLink);
@@ -331,15 +332,15 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setText("Akutliste - kurzfristige Termine");
 		jxLink.setActionCommand("Akutliste");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/vcalendar.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
 		tp4.add(jxLink);
-		
+
 		jxLink = new JXHyperlink();
 		jxLink.setText("Thera-\u03C0"+" Erinnerungs-System");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/chronometer.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("neuerwecker");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
@@ -381,18 +382,18 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
 		} catch (TooManyListenersException e1) {
-			
+
 			e1.printStackTrace();
 		}
 		jxLink.setDropTarget(dndt);
 		jxLink.setName("Rugl");
-		
+
 		tp4.add(jxLink);
 		tp4.setCollapsed(SystemConfig.taskPaneCollapsed[1]);
 		//tp4.setExpanded(true);
 		return tp4;
 	}
-	
+
 
 	private JXTaskPane getOpenOfficeOrg(){
 		tp3 = new JXTaskPane();
@@ -403,7 +404,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
 		tp3.setUI(wui);
 		tp3.setTitle("OpenOffice.org");
-		tp3.setIcon(SystemConfig.hmSysIcons.get("openoffice"));				
+		tp3.setIcon(SystemConfig.hmSysIcons.get("openoffice"));
 		oo1 = new JXHyperlink();
 		oo1.setText("OpenOffice-Writer");
 		oo1.setClickedColor(new Color(0, 0x33, 0xFF));
@@ -413,19 +414,19 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		oo2 = new JXHyperlink();
 		oo2.setIcon(SystemConfig.hmSysIcons.get("ooocalc"));
 		oo2.setText("OpenOffice-Calc");
-		oo2.setClickedColor(new Color(0, 0x33, 0xFF));		
+		oo2.setClickedColor(new Color(0, 0x33, 0xFF));
 		oo2.addActionListener(this);
 		tp3.add(oo2);
 		oo2 = new JXHyperlink();
 		oo2.setIcon(SystemConfig.hmSysIcons.get("oooimpress"));
 		oo2.setText("OpenOffice-Impress");
-		oo2.setClickedColor(new Color(0, 0x33, 0xFF));		
+		oo2.setClickedColor(new Color(0, 0x33, 0xFF));
 		oo2.addActionListener(this);
 		tp3.add(oo2);
 		tp3.setCollapsed(SystemConfig.taskPaneCollapsed[2]);
 		return tp3;
 	}
-	
+
 	private JXTaskPane getNuetzliches(){
 		Image img = null;
 		tp5 = new JXTaskPane();
@@ -435,21 +436,21 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
 		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
 		tp5.setUI(wui);
-		
+
 		tp5.setTitle("Nützliches...");
-		//tp3.setIcon(new ImageIcon("icons/pdf.gif"));				
+		//tp3.setIcon(new ImageIcon("icons/pdf.gif"));
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Thera-PI - Nachrichten");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/emblem-mail.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.addActionListener(this);
 		tp5.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("Thera-PI - Browser");
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/home.gif").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.addActionListener(this);
 		tp5.add(jxLink);
 		jxLink = new JXHyperlink();
@@ -463,7 +464,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp5.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("piHelp - Hifetextgenerator");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/fragezeichenklein.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piHelp");
@@ -472,7 +473,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp5.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("Textbausteine - Therapiebericht");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piTextb");
@@ -482,7 +483,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 		jxLink = new JXHyperlink();
 		jxLink.setText("Textbausteine - Gutachten");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piArztTextb");
@@ -492,7 +493,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 		jxLink = new JXHyperlink();
 		jxLink.setText("ICD-10 Recherche");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/mag.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setActionCommand("piIcd10");
@@ -503,7 +504,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		if(f.exists()){
 			jxLink = new JXHyperlink();
 			jxLink.setText("QM-Handbuch");
-			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 			img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 			jxLink.setIcon(new ImageIcon(img));
 			jxLink.setActionCommand("piQM");
@@ -515,7 +516,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		if(f.exists()){
 			jxLink = new JXHyperlink();
 			jxLink.setText("QM-Auswertungen");
-			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));	
+			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 			img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
 			jxLink.setIcon(new ImageIcon(img));
 			jxLink.setActionCommand("piAW");
@@ -523,7 +524,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			//jxLink.setEnabled(false);
 			tp5.add(jxLink);
 		}
-		
+
 		tp5.setCollapsed(SystemConfig.taskPaneCollapsed[3]);
 		return tp5;
 	}
@@ -538,16 +539,16 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
 		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
 		tp2.setUI(wui);
-		
+
 		tp2.setTitle("Systemeinstellungen");
-		tp2.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/pdf.gif"));				
+		tp2.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/pdf.gif"));
 		JXHyperlink jxLink = new JXHyperlink();
 		jxLink.setText("Benutzerverwaltung");
 		img = new ImageIcon(Path.Instance.getProghome()+"icons/contact-new.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));		
+		jxLink.setIcon(new ImageIcon(img));
 		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
 		jxLink.addActionListener(this);
-		jxLink.setEnabled(true);	
+		jxLink.setEnabled(true);
 		tp2.add(jxLink);
 		jxLink = new JXHyperlink();
 		jxLink.setText("System Initialisierung");
@@ -564,7 +565,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp2.setCollapsed(SystemConfig.taskPaneCollapsed[4]);
 		return tp2;
 	}
-	
+
 	private JXTaskPane getMonatsUebersicht(){
 		tp6 = new JXTaskPane();
 		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
@@ -609,11 +610,11 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						@Override
                         public void run(){
 							TerminFenster.getThisClass().springeAufDatum(aktTag);
-							
+
 						}
 					});
 				}
-				
+
 			}
 		  };
 		  monthView.addActionListener(al);
@@ -622,7 +623,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		  tp6.setCollapsed(SystemConfig.taskPaneCollapsed[5]);
 		return tp6;
 	}
-	
+
 	private JXTaskPane getUserTasks(){
 		tp7 = new JXTaskPane();
 		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
@@ -634,7 +635,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp7.setTitle("Benutzer-Tasks");
 		Image img = null;
 		//img = new ImageIcon("bildle").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		//tp7.setIcon(new ImageIcon(img));	
+		//tp7.setIcon(new ImageIcon(img));
 		for(int i = 0; i < SystemConfig.vUserTasks.size();i++){
 			JXHyperlink jxLink = new JXHyperlink();
 			jxLink.setText(SystemConfig.vUserTasks.get(i).get(0));
@@ -643,21 +644,21 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			jxLink.setActionCommand("UserTask-"+Integer.toString(i));
 			jxLink.addActionListener(this);
 			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-			//jxLink.setEnabled();	
+			//jxLink.setEnabled();
 			tp7.add(jxLink);
 		}
 		tp7.setCollapsed(SystemConfig.taskPaneCollapsed[6]);
 		return tp7;
-	}	
+	}
 
-	
+
 	public static void UpdateUI(){
 		jxTPcontainer.updateUI();
 		tp1.updateUI();
-		tp2.updateUI();		
+		tp2.updateUI();
 		tp3.updateUI();
 		tp4.updateUI();
-		tp5.updateUI();	
+		tp5.updateUI();
 		tp6.updateUI();
 		////System.out.println("TaskPane-Container L&F");
 	}
@@ -675,8 +676,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				eUh.setzeStatement("delete from flexlock");
 				//ProgLoader.ProgLookAndFeel(0);
 				break;
-			} 
-			
+			}
+
 			if (cmd.equals("System Initialisierung")){
 				new SwingWorker<Void,Void>(){
 					@Override
@@ -691,7 +692,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						}
 						return null;
 					}
-					
+
 				}.execute();
 
 				/*SystemUtil sysUtil = new SystemUtil(Reha.thisFrame);
@@ -701,7 +702,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				*/
 				break;
 			}
-			
+
 			if (cmd.equals("Krankenkassen")){
 				new SwingWorker<Void,Void>(){
 					@Override
@@ -715,7 +716,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				}.execute();
 				break;
 			}
-			
+
 			if (cmd.equals("Terminkalender starten")){
 				new SwingWorker<Void,Void>(){
 					@Override
@@ -759,12 +760,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new DatumWahl(200,200);
 				break;
 			}
-			
+
 			if (cmd.equals("OpenOffice-Writer")){
 				OOTools.starteLeerenWriter();
 				break;
 			}
-			
+
 			if (cmd.equals("OpenOffice-Calc")){
 				OOTools.starteLeerenCalc();
 				break;
@@ -791,7 +792,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new Thread(){
 					@Override
                     public void run(){
-						new LadeProg(Path.Instance.getProghome()+"RehaWissen.jar");		
+						new LadeProg(Path.Instance.getProghome()+"RehaWissen.jar");
 					}
 				}.start();
 				new SwingWorker<Void,Void>(){
@@ -808,10 +809,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						rspl.dispose();
 						return null;
 					}
-					
+
 				}.execute();
 
-				
+
 				break;
 			}
 			if (cmd.equals("Thera-PI - Nachrichten")){
@@ -822,17 +823,17 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					new Thread(){
 						@Override
                         public void run(){
-							new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));		
+							new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));
 						}
 					}.start();
-					
+
 				}else{
 					if(Reha.aktUser.startsWith("Therapeut")){return;}
 					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
 				}
-				
-				
-					
+
+
+
 			}
 			if (cmd.equals("Neuer Wissensbeitrag anlegen")){
 				JOptionPane.showMessageDialog (null, "Achtung!!!!! \n\nDer Wissens-Generator ist auf diesem System\n\n" +
@@ -864,8 +865,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 							ex.printStackTrace();
 						}
 					}
-				}.start();				
-				
+				}.start();
+
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -880,17 +881,24 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						rspl.dispose();
 						return null;
 					}
-					
+
 				}.execute();
 				break;
 			}
 			if (cmd.equals("piTool")){
-				new LadeProg(Path.Instance.getProghome()+"piTool.jar");				
+				new LadeProg(Path.Instance.getProghome()+"piTool.jar");
 				break;
 			}
 			if (cmd.equals("piTextb")){
-				new LadeProg(Path.Instance.getProghome()+"TBedit.jar "+
-						Path.Instance.getProghome()+" "+Reha.aktIK);	
+				textbaus.main(new String[] {
+						Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini",
+						Path.Instance.getProghome()+"ini/thbericht.ini"
+
+
+				});
+//				new LadeProg(Path.Instance.getProghome()+"TBedit.jar "+
+//										Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
+//										Path.Instance.getProghome()+"ini/textbaustein.ini");
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -905,9 +913,9 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						rspl.dispose();
 						return null;
 					}
-					
+
 				}.execute();
-				
+
 				break;
 			}
 			if (cmd.equals("piArztTextb")){
@@ -918,10 +926,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
                     public void run(){
 						new LadeProg(Path.Instance.getProghome()+"ArztBaustein.jar "+
-								Path.Instance.getProghome()+" "+Reha.aktIK);	
+								Path.Instance.getProghome()+" "+Reha.aktIK);
 					}
 				}.start();
-				
+
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -937,7 +945,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						return null;
 					}
 				}.execute();
-				
+
 				break;
 			}
 			if (cmd.equals("piIcd10")){
@@ -947,7 +955,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new Thread(){
 					@Override
                     public void run(){
-						new LadeProg(Path.Instance.getProghome()+"QMHandbuch.jar");		
+						new LadeProg(Path.Instance.getProghome()+"QMHandbuch.jar");
 					}
 				}.start();
 				new SwingWorker<Void,Void>(){
@@ -964,15 +972,15 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						rspl.dispose();
 						return null;
 					}
-					
-				}.execute();				
-				
+
+				}.execute();
+
 			}
 			if (cmd.equals("piAW")){
 				new Thread(){
 					@Override
                     public void run(){
-						new LadeProg(Path.Instance.getProghome()+"QMAuswertung.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);		
+						new LadeProg(Path.Instance.getProghome()+"QMAuswertung.jar"+" "+Path.Instance.getProghome()+" "+Reha.aktIK);
 					}
 				}.start();
 				new SwingWorker<Void,Void>(){
@@ -989,12 +997,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						rspl.dispose();
 						return null;
 					}
-					
-				}.execute();				
-				
+
+				}.execute();
+
 			}
-			
-			
+
+
 			if (cmd.equals("Akutliste")){
 				if(SqlInfo.holeEinzelFeld("select id from pat5 where akutpat='T' LIMIT 1").equals("")){
 					JOptionPane.showMessageDialog(null,"Keine Akutpatienten im Patientenstamm vermerkt");
@@ -1013,7 +1021,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						return null;
 					}
 				}.execute();
-				
+
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -1028,7 +1036,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 						rspl.dispose();
 						return null;
 					}
-					
+
 				}.execute();
 				break;
 			}
@@ -1050,29 +1058,29 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			}
 
 		}
-		
-		
+
+
 	}
 	@Override
 	public void componentHidden(ComponentEvent e) {
-		
-		
+
+
 	}
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		
-		
+
+
 	}
 	@Override
 	public void componentResized(ComponentEvent e) {
-		
+
 		////System.out.println("Linke-Task-Pane: "+e);
-		
+
 	}
 	@Override
 	public void componentShown(ComponentEvent e) {
-		
-		
+
+
 	}
 	private boolean testUserTask(){
 		File f = new File(Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/usertask.ini");
@@ -1103,7 +1111,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		//LinkeTaskPane.thisClass.oo1.setEnabled(true);
 		//LinkeTaskPane.thisClass.oo2.setEnabled(true);
 	}
-	
+
 	public void MaskenErstellen(){
 		String sstmt = "";
 		String behandler = "";
@@ -1119,21 +1127,21 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					try {
 						stmt.execute(sstmt);
 					} catch (SQLException e) {
-						
+
 						e.printStackTrace();
-					} 
-				}	
+					}
+				}
 			}
-					
+
 		} catch (SQLException e) {
-			
+
 			e.printStackTrace();
 		}finally {
 				if (stmt != null) {
 					try {
 						stmt.close();
 					} catch (SQLException e) {
-						
+
 						e.printStackTrace();
 					}
 				}
@@ -1153,7 +1161,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		if(ind >= 0){
 			reznr = reznr.substring(0,ind);
 		}
-		
+
 		Vector<String> vec = SqlInfo.holeSatz("verordn", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
 		if(vec.size() == 0){
 			vec = SqlInfo.holeSatz("lza", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
@@ -1188,7 +1196,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					while(  (!AktuelleRezepte.initOk) ){
 						Thread.sleep(20);
 					}
-					
+
 					String s1 = "#PATSUCHEN";
 					String s2 = xpat_int;
 					PatStammEvent pEvt = new PatStammEvent(Reha.thisClass.terminpanel);
@@ -1196,14 +1204,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 					PatStammEventClass.firePatStammEvent(pEvt);
 					if(xinhistorie){
-						Reha.thisClass.patpanel.getTab().setSelectedIndex(1);	
+						Reha.thisClass.patpanel.getTab().setSelectedIndex(1);
 					}else{
 						Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
 					}
 
 					return null;
 				}
-				
+
 			}.execute();
 		}else{
 			Reha.thisClass.progLoader.ProgPatientenVerwaltung(1);
@@ -1214,47 +1222,47 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
 			PatStammEventClass.firePatStammEvent(pEvt);
 			if(xinhistorie){
-				Reha.thisClass.patpanel.getTab().setSelectedIndex(1);	
+				Reha.thisClass.patpanel.getTab().setSelectedIndex(1);
 			}else{
 				Reha.thisClass.patpanel.getTab().setSelectedIndex(0);
 			}
 
-		}		
+		}
 	}
-	
+
 /************************************************************/
 
 /************************************************************/
 
 @Override
 public void dragEnter(DropTargetDragEvent arg0) {
-	
+
 	////System.out.println("Enter---->"+arg0);
 	////System.out.println(((JComponent)arg0.getSource()).getName());
-	
+
 }
 @Override
 public void dragExit(DropTargetEvent arg0) {
-	
-	
+
+
 }
 @Override
 public void dragOver(DropTargetDragEvent arg0) {
-	
-	
+
+
 }
 @Override
 public void drop(DropTargetDropEvent arg0) {
-	
+
 	////System.out.println(arg0);
-	
+
 }
 @Override
 public void dropActionChanged(DropTargetDragEvent arg0) {
-	
-	
+
+
 }
-	
+
 /************************************************************/
 }
 

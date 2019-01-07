@@ -42,11 +42,11 @@ import sqlTools.SqlInfo;
 import sqlTools.SystemEinstellungen;
 
 public class testbauoberflaeche extends JXPanel implements ActionListener,ListSelectionListener, FocusListener{
-	
+
 	JCheckBox[]checkbox = {null, null, null, null, null};
 	JTextArea jtbf = null;
 	JScrollPane jscr = null;
-	JButton bnr1;	
+	JButton bnr1;
 	JButton bnr2;
 	JButton bnr3;
 	JButton bnr4;
@@ -56,7 +56,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	TableModel Tabelle;
 	MyTBTableModel tbmod = null;
 	JXTable tbtab = null;
-	Vector<Vector<String>> tbvec = new Vector<Vector<String>>(); 
+	Vector<Vector<String>> tbvec = new Vector<Vector<String>>();
 	ButtonGroup bg = new ButtonGroup();
 
 	JComboBox combobox;
@@ -65,7 +65,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	JComboBox rang;
 	JRtaTextField tftitel;
 	JButton sysvars;
-	
+
 	String aktuellediszi = "Physio";
 	String[] dbs = {"tbkg","tbma","tber","tblo","tbrh","tbpo"};
 	List allediszis;
@@ -77,18 +77,18 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	int lastCurPos=0;
 	public testbauoberflaeche(){
 		super();
-		
+
 			setOpaque(false);
 			allediszis = Arrays.asList(new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo"});
 	FormLayout laybau = new FormLayout("10dlu,fill:0:grow,10dlu",
-	 		
+
 	"10dlu,p,10dlu,fill:0:grow(1.0),10dlu,p,10dlu,p,10dlu,fill:0:grow(0.5),10dlu,p,10dlu");
 			CellConstraints cb = new CellConstraints();
 			setLayout(laybau);
-	
-			
-			
-			
+
+
+
+
 			add(getCheckbox(),cb.xy(2,2));
 			add(getTextarea(),cb.xy(2,4,CellConstraints.FILL,CellConstraints.FILL));
 			add(getBottons(),cb.xy(2,6));
@@ -101,7 +101,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 			regleCheckBoxen(0);
 			regleButtons(new int[] {1,1,1,0,0});
 	}
-	
+
 	private JPanel getCheckbox(){              // 1     2    3     4    5     6    7     8     9   10    11
 		FormLayout checkboxPan = new FormLayout("right:60dlu,6dlu,60dlu,6dlu,right:60dlu,6dlu,60dlu,6dlu,right:60dlu,6dlu,60dlu","p");
 		PanelBuilder pcbox = new PanelBuilder(checkboxPan);
@@ -119,19 +119,19 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		/*
 		checkbox[0] = new JCheckBox("Physio");
 		pcbox.add(checkbox[0],ccbox.xy(1, 1));
-		
+
 		checkbox[1] = new JCheckBox("Massage");
 		pcbox.add(checkbox[1],ccbox.xy(3, 1));
-		
+
 		checkbox[2] = new JCheckBox("Ergotherapie");
 		pcbox.add(checkbox[2],ccbox.xy(5, 1));
-		
+
 		checkbox[3] = new JCheckBox("Logopädie");
 		pcbox.add(checkbox[3],ccbox.xy(7, 1));
-		
+
 		checkbox[4] = new JCheckBox("Reha");
 		pcbox.add(checkbox[4],ccbox.xy(9, 1));
-		
+
 		for(int i = 0; i < 5; i++){
 			checkbox[i].setEnabled(false);
 		}
@@ -141,41 +141,41 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		rang.setEnabled(false);
 		pcbox.getPanel().validate();
 		return pcbox.getPanel();
-	
+
 	}
-	
+
 	private JPanel getCombobox(){
 		FormLayout comboboxPan = new FormLayout("126dlu,6dlu,192dlu","p");
 		PanelBuilder pcombox = new PanelBuilder(comboboxPan);
 		pcombox.getPanel().setOpaque(false);
 		CellConstraints ccombox = new CellConstraints();
-	
+
 			combobox = new JComboBox();
 			combobox.setName("thema");
 			combobox.addActionListener(this);
-			
+
 			tftitel = new JRtaTextField("nix",true);
 			tftitel.setEnabled(false);
 			pcombox.add(tftitel,ccombox.xy(3,1));
-			
+
 			pcombox.add(combobox,ccombox.xy(1,1));
-		
-		
-	
+
+
+
 		pcombox.getPanel().validate();
 		return pcombox.getPanel();
 	}
-		
-		
+
+
 	private JPanel getTextarea(){
 		FormLayout textareaPan = new FormLayout("fill:0:grow","p:g");
 		PanelBuilder ptarea = new PanelBuilder(textareaPan);
 		ptarea.getPanel().setOpaque(false);
 		CellConstraints ctarea = new CellConstraints();
-	
-	
-		
-		
+
+
+
+
 		jtbf = new JTextArea();
 		jtbf.setFont(new Font("Courier New",Font.PLAIN,12));
 		jtbf.setLineWrap(true);
@@ -187,25 +187,25 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		jtbf.setEnabled(false);
 		jtbf.setDisabledTextColor(Color.RED);
 		jtbf.addFocusListener(this);
-		
+
 		jscr = JCompTools.getTransparentScrollPane(jtbf);
 		jscr.validate();
 		ptarea.add(jscr,ctarea.xy(1,1,CellConstraints.FILL,CellConstraints.FILL));
-	
-	
-	
+
+
+
 		ptarea.getPanel().validate();
 		return ptarea.getPanel();
 	}
-	
-	
-	
+
+
+
 	private JPanel getBottons(){
 		FormLayout bottonsPan = new FormLayout("60dlu,6dlu,60dlu,6dlu,60dlu,6dlu,60dlu,6dlu,60dlu","p");
 		PanelBuilder pbottons = new PanelBuilder(bottonsPan);
 		pbottons.getPanel().setOpaque(false);
 		CellConstraints cbottons = new CellConstraints();
-	
+
 		bnr1 = new JButton("neu");
 		bnr1.setActionCommand("neu");
 		bnr1.addActionListener(this);
@@ -235,8 +235,8 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		pbottons.getPanel().validate();
 		return pbottons.getPanel();
 	}
-	
-	
+
+
 	private JPanel getTabelle(){
 		FormLayout tabellePan = new FormLayout("fill:0:grow","fill:0:grow(0.5)");
 		PanelBuilder ptabelle = new PanelBuilder(tabellePan);
@@ -255,29 +255,29 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		tbtab.getColumn(3).setMaxWidth(75);
 		tbtab.getColumn(4).setMaxWidth(40);
 		tbtab.getSelectionModel().addListSelectionListener( new TBListSelectionHandler());
-		
+
 		JScrollPane scrollpane = new JScrollPane(tbtab);
-	      
+
 	    ptabelle.add(scrollpane,ctabelle.xy(1,1,CellConstraints.FILL,CellConstraints.FILL));
-		
-		
+
+
 		ptabelle.getPanel().validate();
-		return ptabelle.getPanel();	
+		return ptabelle.getPanel();
 	}
-	
-	
+
+
 	class TBListSelectionHandler implements ListSelectionListener {
 
 	    @Override
         public void valueChanged(ListSelectionEvent e) {
-	    	
+
 	        ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-	        
+
 	        boolean isAdjusting = e.getValueIsAdjusting();
 	        if(isAdjusting){
 	        	return;
 	        }
-		
+
 	        if (lsm.isSelectionEmpty()) {
 
 	        } else {
@@ -301,7 +301,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 								}
 								return null;
 							}
-	                		
+
 	                	}.execute();
 	                    break;
 	                }
@@ -309,9 +309,9 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	        }
 	        //System.out.println(output.toString());
 	    }
-	}	
-	
-	
+	}
+
+
 	private JPanel getRadios(){
 		FormLayout radioPan = new FormLayout("p,6dlu,p,6dlu,p,6dlu,p,6dlu,p,6dlu,p","p");
 		PanelBuilder pb = new PanelBuilder(radioPan);
@@ -322,20 +322,20 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		jrbtb[0].addActionListener(this);
 		jrbtb[0].setSelected(true);
 		bg.add(jrbtb[0]);
-		
-		
+
+
 		pb.add(jrbtb[0],ccrad.xy(1,1));
 		jrbtb[1] = new JRtaRadioButton("Massage");
 		jrbtb[1].setActionCommand("Massage");
 		bg.add(jrbtb[1]);
 		jrbtb[1].addActionListener(this);
-		
+
 		pb.add(jrbtb[1],ccrad.xy(3,1));
 		jrbtb[2] = new JRtaRadioButton("Ergotherapie");
 		jrbtb[2].setActionCommand("Ergo");
 		bg.add(jrbtb[2]);
 		jrbtb[2].addActionListener(this);
-		
+
 		pb.add(jrbtb[2],ccrad.xy(5,1));
 		jrbtb[3] = new JRtaRadioButton("Logopädie");
 		jrbtb[3].setActionCommand("Logo");
@@ -348,20 +348,20 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		bg.add(jrbtb[4]);
 		jrbtb[4].addActionListener(this);
 		pb.add(jrbtb[4],ccrad.xy(9,1));
-		
+
 		jrbtb[5] = new JRtaRadioButton("Podo");
 		jrbtb[5].setActionCommand("Podo");
 		bg.add(jrbtb[5]);
 		jrbtb[5].addActionListener(this);
 		pb.add(jrbtb[5],ccrad.xy(11,1));
-		
+
 		pb.getPanel().validate();
 		return pb.getPanel();
 	}
-	
+
 	class MyTBTableModel extends DefaultTableModel{
 		   /**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 1L;
 
@@ -381,14 +381,14 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		      }
 			@Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-				String theData = (String) ((Vector)getDataVector().get(rowIndex)).get(columnIndex); 
+				String theData = (String) ((Vector)getDataVector().get(rowIndex)).get(columnIndex);
 				Object result = null;
 				//result = theData.toUpperCase();
 				result = theData;
 				return result;
 			}
-		    
-		   
+
+
 	}
 	public void setSysVar(String svar){
 		System.out.println("Eingang = "+svar);
@@ -402,7 +402,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 			this.jtbf.setText(svar+xtext);
 		}
 	}
-	
+
 	public void ladeDaten(String db,String thema){
 		tbvec = SqlInfo.holeSaetze(db, "TBTITEL,TBBLOCK,TBRANG,TBOBER,id", "tbthema='"+thema+"' ORDER BY TBTITEL", Arrays.asList(new String[]{}));
 		int lang = tbvec.size();
@@ -411,7 +411,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		//System.out.println("Insgesamgt gefundene Textbausteine = "+tbvec.size());
 		for(int i = 0; i < lang; i++){
 			//System.out.println("Insgesamgt gefundene Textbausteine = "+tbvec.size()+" derzeitig Stand "+i);
-			tbmod.addRow(tbvec.get(i));			
+			tbmod.addRow(tbvec.get(i));
 		}
 		if(tbmod.getRowCount() > 0){
 			tbtab.setRowSelectionInterval(0, 0);
@@ -422,11 +422,17 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	}
 	public void ladeCombo(String disziplin){
 		combobox.removeAllItems();
+		try {
 		int anzahl = SystemEinstellungen.hmThema.get(disziplin).size();
-		for(int i = 0; i < anzahl; i++){
-			combobox.addItem(SystemEinstellungen.hmThema.get(disziplin).get(i));
+
+			for(int i = 0; i < anzahl; i++){
+				combobox.addItem(SystemEinstellungen.hmThema.get(disziplin).get(i));
+			}
+			ladeOberbegriff(disziplin);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		ladeOberbegriff(disziplin);
 	}
 	public void ladeOberbegriff(String disziplin){
 		oberbegriff.removeAllItems();
@@ -434,11 +440,11 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		for(int i = 0; i < anzahl; i++){
 			oberbegriff.addItem(SystemEinstellungen.hmOberbegriff.get(disziplin).get(i));
 		}
-		
+
 	}
-	
+
 	public void ladeText(int row){
-			String wert = (String) tbtab.getValueAt(row, 4); 
+			String wert = (String) tbtab.getValueAt(row, 4);
 			Vector<Vector<String>> tbtext = SqlInfo.holeSaetze(aktuelledb, "TBTEXT", "id='"+wert+"'", Arrays.asList(new String[]{}));
 			int lang = tbtext.size();
 				if(lang >0){
@@ -449,18 +455,18 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 					tftitel.setText((String) tbtab.getValueAt(row, 0));
 				}
 			}
-	
+
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		String cmd = arg0.getActionCommand();
-		
+
 		if(allediszis.contains(cmd)){
 			aktuellediszi = cmd;
 			ladeCombo(cmd);
@@ -508,14 +514,14 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 				try{
 					aktuelledb = dbs[pos];
 					//ladeDaten(dbs[pos],(String)allediszis.get(combobox.getSelectedIndex()) );
-					ladeDaten(dbs[pos],(String) combobox.getSelectedItem());				
+					ladeDaten(dbs[pos],(String) combobox.getSelectedItem());
 					System.out.println(dbs[pos]);
-					
+
 				}catch(Exception ex){
 					System.out.println("Datenbank = "+dbs[pos]);
 					System.out.println("ausgewählt = "+combobox.getSelectedIndex());
 					JOptionPane.showMessageDialog(null,"Fehler, bitte wählen Sie erneut aus...");
-					
+
 				}
 			}
 
@@ -565,10 +571,10 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
             public void run(){
-				jtbf.requestFocus();		
+				jtbf.requestFocus();
 			}
 		});
-		
+
 	}
 	private void schliesseVars(){
 		if(textVariable == null){return;}
@@ -576,7 +582,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		textVariable.dispose();
 		textVariable = null;
 	}
-	
+
 	private void doLoeschen(){
 		int row = tbtab.getSelectedRow();
 		if(row < 0){
@@ -637,9 +643,9 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		}
 		String sthema = (combobox.getSelectedItem()==null ? "Allgemein" : (String) combobox.getSelectedItem());
 		String sober = (oberbegriff.getSelectedItem()==null ? "Allgemein" : (String) oberbegriff.getSelectedItem());
-		String stitel = (tftitel.getText().startsWith(sober+" - ") ?  tftitel.getText().trim() : 
-			sober+" - "+tftitel.getText().trim()	); 
-		
+		String stitel = (tftitel.getText().startsWith(sober+" - ") ?  tftitel.getText().trim() :
+			sober+" - "+tftitel.getText().trim()	);
+
 		cmd = cmd+"TBKLASSE='"+klasse[getPos()]+"', TBTHEMA='"+sthema+"', "+
 		"TBBLOCK='"+textblock.getSelectedItem()+"', TBRANG='"+rang.getSelectedItem()+"', "+
 		"TBOBER='"+sober+"', TBTEXT='"+jtbf.getText()+"', "+
@@ -676,19 +682,19 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 				int xrow = tbtab.convertRowIndexToModel(row);
 				System.out.println("Tabelle wird aktualisiert...."+stitel);
 				System.out.println("Aktualisiere Row = "+xrow);
-				tbmod.setValueAt(stitel, xrow, 0);	
+				tbmod.setValueAt(stitel, xrow, 0);
 				tbmod.setValueAt(textblock.getSelectedItem(), xrow, 1);
 				tbmod.setValueAt(rang.getSelectedItem(), xrow, 2);
 				tbmod.setValueAt(sober, xrow, 3);
 				tbtab.validate();
 				tftitel.setText((String)tbmod.getValueAt(xrow,0));
-			
+
 				tbtab.setRowSelectionInterval(row, row);
 			}
 
 		}
 		doAbbrechen();
-		
+
 	}
 	/*************************************/
 	private void doAbbrechen(){
@@ -700,12 +706,12 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 		this.textblock.setEnabled(false);
 		this.rang.setEnabled(false);
 		this.akteditid = "";
-		
+
 		int row = -1;
 		if( (row = this.tbtab.getSelectedRow()) >= 0){
 			this.ladeText(row);
 		}
-		
+
 	}
 
 	private void regleCheckBoxen(int box){
@@ -724,7 +730,7 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 	}
 	private int getPos(){
 		return allediszis.indexOf(aktuellediszi);
-	} 
+	}
 	private String getDb(){
 		int pos = allediszis.indexOf(aktuellediszi);
 		if(pos >= 0){
@@ -735,15 +741,15 @@ public class testbauoberflaeche extends JXPanel implements ActionListener,ListSe
 
 	@Override
 	public void focusGained(FocusEvent arg0) {
-		
-		
+
+
 	}
 
 	@Override
 	public void focusLost(FocusEvent arg0) {
-		
+
 		lastCurPos = this.jtbf.getCaretPosition();
-		
+
 	}
-	
+
 }
