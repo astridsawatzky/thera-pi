@@ -28,7 +28,7 @@ public class textbaus implements WindowListener{
 	/*
 	 * Ab hier Deklaration der Klassenobjekte und -Variablen
 	 * 
-	 */
+	 */  
 	JFrame jFrame;
 	public static textbaus thisClass = null;
 	public static boolean DbOk; 
@@ -120,8 +120,7 @@ public class textbaus implements WindowListener{
 				e.printStackTrace();
 			}
 		}
-		System.exit(0);
-		
+		 
 	}
 
 	@Override
