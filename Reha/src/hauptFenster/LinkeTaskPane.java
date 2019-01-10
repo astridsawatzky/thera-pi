@@ -55,13 +55,13 @@ import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import arztBaustein.ArztBaustein;
+import ag.ion.bion.officelayer.text.TextException;
 import dialoge.DatumWahl;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import generalSplash.RehaSplash;
 import gui.Cursors;
-import kurzAufrufe.KurzAufrufe;
 import oOorgTools.OOTools;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
@@ -1019,7 +1019,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					protected Void doInBackground() throws Exception {
 						try{
 							Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-							KurzAufrufe.starteFunktion("Akutliste",null,null);
+							 try {
+						                new AkutListe();
+						            } catch (TextException e) {
+
+						                e.printStackTrace();
+						            }
 							Reha.getThisFrame().setCursor(Cursors.cdefault);
 						}catch(Exception ex){
 							ex.printStackTrace();

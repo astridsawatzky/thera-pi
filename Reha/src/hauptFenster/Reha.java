@@ -145,6 +145,7 @@ import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import ag.ion.bion.officelayer.text.TextException;
 import anmeldungUmsatz.Anmeldungen;
 import anmeldungUmsatz.Umsaetze;
 import arztFenster.ArztPanel;
@@ -158,7 +159,6 @@ import environment.Path;
 import geraeteInit.BarCodeScanner;
 import gui.Cursors;
 import krankenKasse.KassenPanel;
-import kurzAufrufe.KurzAufrufe;
 import logging.Logging;
 import mandant.Mandant;
 import menus.TerminMenu;
@@ -2531,7 +2531,12 @@ public void actionPerformed(ActionEvent arg0) {
                         JOptionPane.showMessageDialog(null, "Bislang sind noch keine F3 / F2-Termine aufgezeichnet");
                         return null;
                     }
-                    KurzAufrufe.starteFunktion("RettungsAnker", null, null);
+                    try {
+                        new F2RettungsAnker();
+                    } catch (TextException e) {
+                        e.printStackTrace();
+                    }
+                    
                     return null;
                 }
             }.execute();

@@ -80,7 +80,6 @@ import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import hilfsFenster.TerminEinpassen;
 import hilfsFenster.TerminObenUntenAnschliessen;
-import kurzAufrufe.KurzAufrufe;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import stammDatenTools.RezTools;
@@ -3741,7 +3740,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		new SwingWorker<Void,Void>(){
 			@Override
 			protected Void doInBackground() throws Exception {
-				KurzAufrufe.starteFunktion("Telefonliste",vTerm.get(fxaktBehandler),null);
+				 new TelefonListe(vTerm.get(fxaktBehandler));
 				return null;
 			}
 		}.execute();
