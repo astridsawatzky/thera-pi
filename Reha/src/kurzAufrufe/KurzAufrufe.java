@@ -32,31 +32,33 @@ import hauptFenster.Reha;
 import oOorgTools.OOTools;
 
 public class KurzAufrufe {
-	public static void starteFunktion(String funktion, Object obj1,Object obj2){
-		if(funktion.equals("Akutliste")){
-			try {
-				new AkutListe();
-			} catch (TextException e) {
-				
-				e.printStackTrace();
-			}
-		}
-		if(funktion.equals("Telefonliste")){
-			try {
-				new TelefonListe(obj1);
-			} catch (TextException e) {
-				
-				e.printStackTrace();
-			}
-		}
-		if(funktion.equals("RettungsAnker")){
-			try {
-				new F2RettungsAnker();
-			} catch (TextException e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    public static void starteFunktion(String funktion, Object obj1, Object obj2) {
+        switch (funktion) {
+        case "Akutliste":
+            try {
+                new AkutListe();
+            } catch (TextException e) {
+
+                e.printStackTrace();
+            }
+            break;
+        case "Telefonliste":
+            try {
+                new TelefonListe(obj1);
+            } catch (TextException e) {
+
+                e.printStackTrace();
+            }
+            break;
+        case "RettungsAnker":
+            try {
+                new F2RettungsAnker();
+            } catch (TextException e) {
+                e.printStackTrace();
+            }
+            break;
+        }
+    }
 }
 /*******************************************************************************************************/
 class AkutListe{
@@ -94,19 +96,7 @@ class AkutListe{
 			*/
 			try {
 				OOTools.setzePapierFormat(textDocument, 21000, 29700);
-			} catch (NoSuchElementException e1) {
-				
-				e1.printStackTrace();
-			} catch (WrappedTargetException e1) {
-				
-				e1.printStackTrace();
-			} catch (UnknownPropertyException e1) {
-				
-				e1.printStackTrace();
-			} catch (PropertyVetoException e1) {
-				
-				e1.printStackTrace();
-			} catch (IllegalArgumentException e1) {
+			} catch (NoSuchElementException | WrappedTargetException | UnknownPropertyException | PropertyVetoException | IllegalArgumentException e1) {
 				
 				e1.printStackTrace();
 			}
