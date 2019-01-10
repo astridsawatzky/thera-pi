@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
 
 import javax.swing.ImageIcon;
@@ -29,6 +28,7 @@ import entlassBerichte.EBerichtPanel;
 import environment.Path;
 import events.RehaTPEvent;
 import gui.Cursors;
+import hauptFenster.login.LoginSmartDialog;
 import krankenKasse.KassenPanel;
 import rechteTools.Rechte;
 import rehaContainer.RehaTP;
@@ -52,7 +52,6 @@ import rehaInternalFrame.JVerkaufInternal;
 import roogle.RoogleFenster;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
-import systemTools.PassWort;
 import systemTools.WinNum;
 import terminKalender.TerminFenster;
 import urlaubBeteiligung.Beteiligung;
@@ -947,34 +946,12 @@ public static void PasswortDialog() {
 	}
 	Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 	String name = "PasswortDialog"+WinNum.NeueNummer();
-	RehaTP jtp = new RehaTP();
-	jtp.setBorder(null);
-	jtp.setTitle("Passwort-Eingabe");
-	jtp.setContentContainer(new PassWort().getPanel());
-	jtp.getContentContainer().setName(name);
-    jtp.setVisible(true);
-	RehaSmartDialog rSmart = new RehaSmartDialog(null,name);
+	
+	RehaSmartDialog rSmart = new LoginSmartDialog(null,name, SystemConfig.fullSizePwDialog);
 
-	rSmart.setAlwaysOnTop(false);
-	if(SystemConfig.fullSizePwDialog){
-		Dimension ssize = Toolkit.getDefaultToolkit().getScreenSize();
-		rSmart.setSize(new Dimension(ssize.width,ssize.height));
-	}else{
-		rSmart.setSize(new Dimension(700,300));
-	}
-	rSmart.setModal(true);
-
-	//rSmart.getTitledPanel().setTitle("Passwort-Eingabe");
-	rSmart.setContentPanel(jtp.getContentContainer());
-	Toolkit toolkit = Toolkit.getDefaultToolkit();
-	Dimension screenSize = toolkit.getScreenSize();
-	//Calculate the frame location
-	int x = (screenSize.width - rSmart.getWidth()) / 2;
-	int y = (screenSize.height - rSmart.getHeight()) / 2;
-	rSmart.setLocation(x, y);
-	rSmart.toFront();
-	rSmart.setVisible(true);
-	rSmart.toFront();
+	 rSmart.setVisible(true);
+	        rSmart.toFront();
+	
 	Reha.getThisFrame().setCursor(new Cursor((Cursor.DEFAULT_CURSOR)));
 	if(Reha.progRechte.equals("")){
 		System.exit(0);

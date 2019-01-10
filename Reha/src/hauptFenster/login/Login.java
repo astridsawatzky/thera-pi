@@ -2,9 +2,6 @@ package hauptFenster.login;
 
 import javax.sql.DataSource;
 
-import CommonTools.GenericObservable;
-import CommonTools.GenericObservable.GenericObserver;
-
 public class Login {
 
 	private static final int MAX_TRY = 3;

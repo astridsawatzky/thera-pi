@@ -157,8 +157,6 @@ import entlassBerichte.EBerichtPanel;
 import environment.Path;
 import geraeteInit.BarCodeScanner;
 import gui.Cursors;
-import hauptFenster.login.Login;
-import hauptFenster.login.User;
 import krankenKasse.KassenPanel;
 import kurzAufrufe.KurzAufrufe;
 import logging.Logging;
@@ -453,7 +451,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}
 
 
-		User user = new Login(dataSource).login();
+		
 
 		INITool.init(iniPath);
 		logger.info("Insgesamt sind "+Integer.toString(INITool.getDBInis().length)+" INI-Dateien in der Tabelle inidatei abgelegt");
@@ -2513,241 +2511,228 @@ public static void testeNummernKreis(){
 @Override
 public void actionPerformed(ActionEvent arg0) {
 	String cmd = arg0.getActionCommand();
-	if(cmd.equals("ueberTheraPi")){
-		new SwingWorker<Void,Void>(){
-			@Override
-			protected Void doInBackground() throws java.lang.Exception {
-				AboutDialog aboutFenster = new AboutDialog(jFrame,aboutMenuItem.getText());
-				aboutFenster.setVisible(true);
-				aboutFenster.setFocus();
-				return null;
-			}
-		}.execute();
-	}
-	if(cmd.equals("f2Rescue")){
-		new SwingWorker<Void,Void>(){
-			@Override
-			protected Void doInBackground() throws java.lang.Exception {
-				if(Reha.terminLookup.size() <= 0){
-					JOptionPane.showMessageDialog(null,"Bislang sind noch keine F3 / F2-Termine aufgezeichnet");
-					return null;
-				}
-				KurzAufrufe.starteFunktion("RettungsAnker",null,null);
-				return null;
-			}
-		}.execute();
-	}
-	if(cmd.equals("testeFango")){
-		new SwingWorker<Void,Void>(){
-			@Override
-			protected Void doInBackground() throws java.lang.Exception {
-				Wecker.testeWecker();
-				return null;
-			}
-		}.execute();
-	}
-	if(cmd.equals("patient")){
-		new SwingWorker<Void,Void>(){
-			@Override
-			protected Void doInBackground() throws Exception {
-				progLoader.ProgPatientenVerwaltung(1);
-				Reha.instance.progressStarten(false);
-				return null;
-			}
-		}.execute();
-		return;
-	}
-	if(cmd.equals("kasse")){
-		Reha.instance.progLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
-		return;
-	}
-	if(cmd.equals("arzt")){
-		Reha.instance.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
-		return;
-	}
-	if(cmd.equals("hmabrechnung")){
-		try{
-			if(SystemConfig.hmEmailExtern.get("SenderAdresse") == null || SystemConfig.hmEmailExtern.get("SenderAdresse").trim().equals("")){
-				JOptionPane.showMessageDialog(null,"<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
-				return;
-			}
-		}catch(NullPointerException ex){
-			JOptionPane.showMessageDialog(null,"<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
-			return;
-		}
-		Reha.instance.progLoader.AbrechnungFenster(1);
-		return;
-	}
-	if(cmd.equals("rehaabrechnung")){
-		Reha.instance.progLoader.RehaabrechnungFenster(1,"");
-		return;
-	}
-	if(cmd.equals("barkasse")){
-		Reha.instance.progLoader.BarkassenFenster(1,"");
-		return;
-	}
-	if(cmd.equals("anmeldezahlen")){
-		Reha.instance.progLoader.AnmeldungenFenster(1,"");
-		return;
-	}
-	if(cmd.equals("tagesumsatz")){
-		Reha.instance.progLoader.UmsatzFenster(1,"");
-		return;
-	}
-	if(cmd.equals("verkauf")){
-		Reha.instance.progLoader.VerkaufFenster(1,"");
-		return;
-	}
-	if(cmd.equals("urlaub")){
-		if(! Rechte.hatRecht(Rechte.Funktion_urlaubueberstunden, true)){
-			return;
-		}
-		new LadeProg(Path.Instance.getProghome()+"RehaUrlaub.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
-		return;
-	}
-	if(cmd.equals("umsatzbeteiligung")){
-		Reha.instance.progLoader.BeteiligungFenster(1,"");
-		return;
-	}
-	if(cmd.equals("lvastatistik")){
-		new LadeProg(Path.Instance.getProghome()+"RehaStatistik.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
-		return;
-	}
-	/*****************************/
-	if(cmd.equals("offeneposten")){
-		if(!Rechte.hatRecht(Rechte.Funktion_offeneposten, true)){
-			return;
-		}
-		if(! RehaIOServer.offenePostenIsActive){
-			new LadeProg(Path.Instance.getProghome()+"OffenePosten.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport);
-		}else{
-			new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
-		}
-		return;
-	}
-	/*****************************/
-	if(cmd.equals("rezeptfahnder")){
-		new RezeptFahnder(true);
-		return;
-	}
-	/*****************************/
-	if(cmd.equals("rgaffaktura")){
-		if(! Rechte.hatRecht(Rechte.Funktion_barkasse, false)){
-			JOptionPane.showMessageDialog(null, "Keine Berechtigung -> Funktion Ausbuchen RGAF-Faktura");
-			return;
-		}
-		if(! RehaIOServer.rgAfIsActive){
-			new LadeProg(Path.Instance.getProghome()+"OpRgaf.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport);
-		}else{
-			new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
-		}
-		return;
-	}
-	/*****************************/
-	if(cmd.equals("kassenbuch")){
-		if(!Rechte.hatRecht(Rechte.Funktion_kassenbuch, true)){
-			return;
-		}
-		new LadeProg(Path.Instance.getProghome()+"RehaKassenbuch.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
-		return;
-	}
-	if(cmd.equals("geburtstagsbriefe")){
-		if(!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)){
-			return;
-		}
-		new LadeProg(Path.Instance.getProghome()+"GBriefe.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
-		return;
-	}
-	/*****************************/
-	if(cmd.equals("sqlmodul")){
-
-		if(!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)){
-			return;
-		}
-
-		if(!RehaIOServer.rehaSqlIsActive){
-			new LadeProg(Path.Instance.getProghome()+"RehaSql.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+
-					String.valueOf(Integer.toString(Reha.xport))+ (!Rechte.hatRecht(Rechte.BenutzerSuper_user,false) ? " readonly" : " full"));
-		}else{
-			new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );
-		}
-
-		return;
-	}
-	/*****************************/
-	if(cmd.equals("fallsteuerung")){
-		if(!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)){
-			return;
-		}
-		if(RehaIOServer.reha301IsActive){
-			JOptionPane.showMessageDialog(null,"Das 301-er Modul läuft bereits");
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public void run(){
-					new ReverseSocket().setzeRehaNachricht(RehaIOServer.reha301reversePort,"Reha301#"+RehaIOMessages.MUST_GOTOFRONT );
-				}
-			});
-			return;
-		}
-		new LadeProg(Path.Instance.getProghome()+"Reha301.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
-		//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
-		return;
-	}
-	/*****************************/
-	if(cmd.equals("workflow")){
-		if(!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)){
-			return;
-		}
-		if(RehaIOServer.rehaWorkFlowIsActive){
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public void run(){
-					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaWorkFlowreversePort,"ZeigeFrame#"+RehaIOMessages.MUST_GOTOFRONT );
-				}
-			});
-			return;
-		}
-		new LadeProg(Path.Instance.getProghome()+"WorkFlow.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
-		//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
-		return;
-	}
-	if(cmd.equals("hmrsearch")){
-		System.out.println("isActive = "+RehaIOServer.rehaHMKIsActive);
-		if(RehaIOServer.rehaHMKIsActive){
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public void run(){
-					String searchrez = (Reha.instance.patpanel != null ? " "+Reha.instance.patpanel.vecaktrez.get(1) : "");
-					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT );
-					if(!searchrez.isEmpty()){
-						new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,"Reha#"+RehaIOMessages.MUST_REZFIND+"#"+searchrez );
-					}
-				}
-			});
-			return;
-		}
-		new LadeProg(Path.Instance.getProghome()+"RehaHMK.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport))+(Reha.instance.patpanel != null ? " "+Reha.instance.patpanel.vecaktrez.get(1) : "") );
-		//System.out.println("Übergebe Rezeptnummer: "+SystemConfig.hmAdrRDaten.get("Rnummer"));
-		//Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
-		return;
-	}
-	if(cmd.equals("iniedit")){
-		if(!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)){
-			return;
-		}
-		new LadeProg(Path.Instance.getProghome()+"RehaIniedit.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.getAktIK() );
-		return;
-
-	}
-	if(cmd.equals("ocr")){
-		new LadeProg(Path.Instance.getProghome()+"RehaOCR.jar "+
-				" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );
-		return;
-	}
+        switch (cmd) {
+        case "ueberTheraPi":
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws java.lang.Exception {
+                    AboutDialog aboutFenster = new AboutDialog(jFrame, aboutMenuItem.getText());
+                    aboutFenster.setVisible(true);
+                    aboutFenster.setFocus();
+                    return null;
+                }
+            }.execute();
+            break;
+        case "f2Rescue":
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws java.lang.Exception {
+                    if (Reha.terminLookup.size() <= 0) {
+                        JOptionPane.showMessageDialog(null, "Bislang sind noch keine F3 / F2-Termine aufgezeichnet");
+                        return null;
+                    }
+                    KurzAufrufe.starteFunktion("RettungsAnker", null, null);
+                    return null;
+                }
+            }.execute();
+            break;
+        case "testeFango":
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws java.lang.Exception {
+                    Wecker.testeWecker();
+                    return null;
+                }
+            }.execute();
+            break;
+        case "patient":
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    progLoader.ProgPatientenVerwaltung(1);
+                    Reha.instance.progressStarten(false);
+                    return null;
+                }
+            }.execute();
+            return;
+        case "kasse":
+            Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
+            return;
+        case "arzt":
+            Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
+            return;
+        case "hmabrechnung":
+            try {
+                if (SystemConfig.hmEmailExtern.get("SenderAdresse") == null
+                        || SystemConfig.hmEmailExtern.get("SenderAdresse").trim().equals("")) {
+                    JOptionPane.showMessageDialog(null,
+                            "<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
+                    return;
+                }
+            } catch (NullPointerException ex) {
+                JOptionPane.showMessageDialog(null,
+                        "<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
+                return;
+            }
+            Reha.instance.progLoader.AbrechnungFenster(1);
+            return;
+        case "rehaabrechnung":
+            Reha.instance.progLoader.RehaabrechnungFenster(1, "");
+            return;
+        case "barkasse":
+            Reha.instance.progLoader.BarkassenFenster(1, "");
+            return;
+        case "anmeldezahlen":
+            Reha.instance.progLoader.AnmeldungenFenster(1, "");
+            return;
+        case "tagesumsatz":
+            Reha.instance.progLoader.UmsatzFenster(1, "");
+            return;
+        case "verkauf":
+            Reha.instance.progLoader.VerkaufFenster(1, "");
+            return;
+        case "urlaub":
+            if (!Rechte.hatRecht(Rechte.Funktion_urlaubueberstunden, true)) {
+                return;
+            }
+            new LadeProg(Path.Instance.getProghome() + "RehaUrlaub.jar" + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK());
+            return;
+        case "umsatzbeteiligung":
+            Reha.instance.progLoader.BeteiligungFenster(1, "");
+            return;
+        case "lvastatistik":
+            new LadeProg(Path.Instance.getProghome() + "RehaStatistik.jar" + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK());
+            return;
+        case "offeneposten":
+            if (!Rechte.hatRecht(Rechte.Funktion_offeneposten, true)) {
+                return;
+            }
+            if (!RehaIOServer.offenePostenIsActive) {
+                new LadeProg(Path.Instance.getProghome() + "OffenePosten.jar" + " " + Path.Instance.getProghome() + " "
+                        + Reha.getAktIK() + " " + Reha.xport);
+            } else {
+                new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,
+                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+            }
+            return;
+        case "rezeptfahnder":
+            new RezeptFahnder(true);
+            return;
+        case "rgaffaktura":
+            if (!Rechte.hatRecht(Rechte.Funktion_barkasse, false)) {
+                JOptionPane.showMessageDialog(null, "Keine Berechtigung -> Funktion Ausbuchen RGAF-Faktura");
+                return;
+            }
+            if (!RehaIOServer.rgAfIsActive) {
+                new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
+                        + Reha.getAktIK() + " " + Reha.xport);
+            } else {
+                new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,
+                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+            }
+            return;
+        case "kassenbuch":
+            if (!Rechte.hatRecht(Rechte.Funktion_kassenbuch, true)) {
+                return;
+            }
+            new LadeProg(Path.Instance.getProghome() + "RehaKassenbuch.jar" + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK());
+            return;
+        case "geburtstagsbriefe":
+            if (!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)) {
+                return;
+            }
+            new LadeProg(Path.Instance.getProghome() + "GBriefe.jar" + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK());
+            return;
+        case "sqlmodul":
+            if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
+                return;
+            }
+            if (!RehaIOServer.rehaSqlIsActive) {
+                new LadeProg(Path.Instance.getProghome() + "RehaSql.jar" + " " + Path.Instance.getProghome() + " "
+                        + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
+                        + (!Rechte.hatRecht(Rechte.BenutzerSuper_user, false) ? " readonly" : " full"));
+            } else {
+                new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,
+                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+            }
+            return;
+        case "fallsteuerung":
+            if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
+                return;
+            }
+            if (RehaIOServer.reha301IsActive) {
+                JOptionPane.showMessageDialog(null, "Das 301-er Modul läuft bereits");
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.reha301reversePort,
+                                "Reha301#" + RehaIOMessages.MUST_GOTOFRONT);
+                    }
+                });
+                return;
+            }
+            new LadeProg(Path.Instance.getProghome() + "Reha301.jar " + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+            return;
+        case "workflow":
+            if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
+                return;
+            }
+            if (RehaIOServer.rehaWorkFlowIsActive) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaWorkFlowreversePort,
+                                "ZeigeFrame#" + RehaIOMessages.MUST_GOTOFRONT);
+                    }
+                });
+                return;
+            }
+            new LadeProg(Path.Instance.getProghome() + "WorkFlow.jar " + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+            return;
+        case "hmrsearch":
+            System.out.println("isActive = " + RehaIOServer.rehaHMKIsActive);
+            if (RehaIOServer.rehaHMKIsActive) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        String searchrez = (Reha.instance.patpanel != null
+                                ? " " + Reha.instance.patpanel.vecaktrez.get(1)
+                                : "");
+                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
+                                "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+                        if (!searchrez.isEmpty()) {
+                            new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
+                                    "Reha#" + RehaIOMessages.MUST_REZFIND + "#" + searchrez);
+                        }
+                    }
+                });
+                return;
+            }
+            new LadeProg(Path.Instance.getProghome() + "RehaHMK.jar " + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
+                    + (Reha.instance.patpanel != null ? " " + Reha.instance.patpanel.vecaktrez.get(1) : ""));
+            // System.out.println("Übergebe Rezeptnummer:
+            // "+SystemConfig.hmAdrRDaten.get("Rnummer"));
+            // Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
+            return;
+        case "iniedit":
+            if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
+                return;
+            }
+            new LadeProg(Path.Instance.getProghome() + "RehaIniedit.jar " + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK());
+            return;
+        case "ocr":
+            new LadeProg(Path.Instance.getProghome() + "RehaOCR.jar " + " " + Path.Instance.getProghome() + " "
+                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+            return;
+        }
 
 
 }
@@ -2901,17 +2886,6 @@ final class DatenbankStarten implements Runnable{
 				e1.printStackTrace();
 
 			}
-			/*
-			Reha.instance.mustReloadDb();
-
-			while(Reha.nachladenDB < 0){
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			*/
 
 			if(Reha.nachladenDB == JOptionPane.YES_OPTION){
 				new Thread(new DbNachladen()).start();
@@ -2925,23 +2899,7 @@ final class DatenbankStarten implements Runnable{
 					e.printStackTrace();
 				}
 				new SocketClient().setzeInitStand("INITENDE");
-				/*
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws java.lang.Exception {
-						//JOptionPane.showMessageDialog(null,"Die Datenbank ist nicht erreichbar");
-						Reha.dbLoadError=0;
-						return null;
-					}
-				}.execute();
-				while(Reha.dbLoadError == 1){
-					try {
-						Thread.sleep(25);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				*/
+				
 				System.exit(0);
 
 			}

@@ -30,7 +30,7 @@ public class LoginPanel extends JPanel {
         initPanel(listener);
     }
 
-    public KeyListener consumeInput = new KeyAdapter() {
+    KeyListener consumeInput = new KeyAdapter() {
 
         @Override
         public void keyPressed(KeyEvent e) {
