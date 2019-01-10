@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
-import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -49,7 +48,6 @@ import events.RehaTPEventClass;
 import hauptFenster.Reha;
 import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
-import systemTools.LeistungTools;
 import uk.co.mmscomputing.device.scanner.Scanner;
 import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
@@ -70,7 +68,6 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 	public JRtaComboBox[] jcmbscan = {null,null,null,null,null};
 	public JRtaCheckBox[] jcbscan = {null,null,null,null,null};
 	Scanner scanner;
-	//PinPanel pinPanel;
 	public ScannerUtil(Point pt){
 		super(null,"ScannerUtil");
 
@@ -93,16 +90,6 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 
 			@Override
 			protected Void doInBackground() throws Exception {
-				/*
-				Point2D start = new Point2D.Float(0, 0);
-			     Point2D end = new Point2D.Float(PatGrundPanel.thisClass.getWidth(),100);
-			     float[] dist = {0.0f, 0.75f};
-			     Color[] colors = {Color.WHITE,Colors.Gray.alpha(0.05f)};
-			     LinearGradientPaint p =
-			         new LinearGradientPaint(start, end, dist, colors);
-			     MattePainter mp = new MattePainter(p);
-			     rgb.setBackgroundPainter(new CompoundPainter(mp));
-			     */
 			     rgb.setBackgroundPainter(Reha.instance.compoundPainter.get("ScannerUtil"));
 				return null;
 			}
@@ -114,7 +101,6 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 		getSmartTitledPanel().getContentContainer().setName("ScannerUtil");
 		setName("ScannerUtil");
 		setModal(true);
-	    //Point lpt = new Point(pt.x-125,pt.y+30);
 		Point lpt = new Point(pt.x-150,pt.y+30);
 	    setLocation(lpt);
 
@@ -153,12 +139,7 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 	}
 
 /****************************************************/
-	/*
-	public JButton okknopf;
-	public JRtaTextField gegeben;
-	public JLabel rueckgeld;
-	public JCheckBox direktdruck;
-	*/
+	
 
 	private JPanel getGebuehren(){     // 1        2               3   4     5   6    7
 		FormLayout lay = new FormLayout("40dlu, right:max(70dlu;p),5dlu,p,fill:0:grow(1.00)",
@@ -220,8 +201,6 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 		pb2.add(uebernahme,cc2.xy(2,2));
 		pb2.add(abbrechen,cc2.xy(4,2));
 		pb.add(pb2.getPanel(),cc.xyw(1, 14,5));
-		//public JRtaComboBox[] jcmbscan = {null,null,null,null,null};
-		//public JRtaCheckBox[] jcbscan = {null,null,null,null,null};
 
 		pb.getPanel().validate();
 		return pb.getPanel();
@@ -333,66 +312,9 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener{
 
 	}
 
-	private void macheAFRHmap(){
-		String mappos = "";
-		String mappreis = "";
-		String mapkurz = "";
-		String maplang = "";
-		String[] inpos = {null,null};
-		String spos = "";
-		String sart = "";
-		int preisgruppe = 0;
-		Double gesamt = new Double(0.00);
-		/*
-		List<String> lAdrAFRDaten = Arrays.asList(new String[]{"<AFRposition1>","<AFRposition2>","<AFRposition3>"
-				,"<AFRposition4>","<AFRpreis1>","<AFRpreis2>","<AFRpreis3>","<AFRpreis4>","<AFRgesamt>","<AFRnummer>"});
-		*/
-		DecimalFormat df = new DecimalFormat( "0.00" );
-
-		for(int i = 0 ; i < 4; i++){
-			mappos = "<AFRposition"+(i+1)+">";
-			mappreis = "<AFRpreis"+(i+1)+">";
-			mapkurz = "<AFRkurz"+(i+1)+">";
-			maplang = "<AFRlang"+(i+1)+">";
-			if(leistung[i].isSelected()){
-				Double preis = new Double( Reha.instance.patpanel.vecaktrez.get(18+i));
-				String s = df.format( preis);
-				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
-				SystemConfig.hmAdrAFRDaten.put(mappreis,s);
-				gesamt = gesamt+preis;
-				//spos = art_dbeh1 etc.
-				spos = Reha.instance.patpanel.vecaktrez.get(8+i);
-				//sart = rezeptnummer;
-				sart = Reha.instance.patpanel.vecaktrez.get(1);
-				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
-				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
-				SystemConfig.hmAdrAFRDaten.put(maplang,inpos[0]);
-				SystemConfig.hmAdrAFRDaten.put(mapkurz,inpos[1]);
-				////System.out.println(inpos[0]);
-				////System.out.println(inpos[1]);
-
-			}else{
-				spos = Reha.instance.patpanel.vecaktrez.get(8+i);
-				sart = Reha.instance.patpanel.vecaktrez.get(1);
-				sart = sart.substring(0,2);
-				preisgruppe = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41))-1;
-				inpos = LeistungTools.getLeistung(sart, spos,preisgruppe);
-
-				SystemConfig.hmAdrAFRDaten.put(mappos,leistung[i].getText());
-				SystemConfig.hmAdrAFRDaten.put(mappreis,"0,00");
-				SystemConfig.hmAdrAFRDaten.put(maplang,(!inpos[0].equals("") ? inpos[0] : "----") );
-				SystemConfig.hmAdrAFRDaten.put(mapkurz,(!inpos[1].equals("") ? inpos[1] : "----") );
-
-			}
-
-		}
-		SystemConfig.hmAdrAFRDaten.put("<AFRgesamt>",df.format( gesamt));
-		SystemConfig.hmAdrAFRDaten.put("<AFRnummer>","AF-010101");
-	}
 	@Override
     public void keyPressed(KeyEvent event) {
-		if(event.getKeyCode()==10){
+		if(event.getKeyCode()==KeyEvent.VK_ENTER){
 			event.consume();
 			if( ((JComponent)event.getSource()).getName().equals("uebernahme")){
 				//doUebernahme();
