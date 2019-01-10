@@ -1,5 +1,18 @@
 package hauptFenster;
 
+import static java.awt.event.KeyEvent.KEY_PRESSED;
+import static java.awt.event.KeyEvent.VK_A;
+import static java.awt.event.KeyEvent.VK_DOWN;
+import static java.awt.event.KeyEvent.VK_K;
+import static java.awt.event.KeyEvent.VK_LEFT;
+import static java.awt.event.KeyEvent.VK_O;
+import static java.awt.event.KeyEvent.VK_P;
+import static java.awt.event.KeyEvent.VK_R;
+import static java.awt.event.KeyEvent.VK_RIGHT;
+import static java.awt.event.KeyEvent.VK_T;
+import static java.awt.event.KeyEvent.VK_UP;
+import static java.awt.event.KeyEvent.VK_X;
+
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -33,8 +46,6 @@ import java.awt.event.ContainerListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-
-import static java.awt.event.KeyEvent.*;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -122,8 +133,6 @@ import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.FireRehaError;
-import CommonTools.GenericObservable;
-import CommonTools.GenericObservable.GenericObserver;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
