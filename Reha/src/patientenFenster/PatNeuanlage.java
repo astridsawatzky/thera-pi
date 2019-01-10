@@ -80,7 +80,6 @@ import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;
-import kvKarte.KVKWrapper;
 import oOorgTools.OOTools;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
@@ -110,15 +109,15 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	JXTable doclist = null;
 	MyDocTableModel docmod = null;
-	JButton knopf0 = null;
-	JButton knopf1 = null;
-	JButton knopf3 = null;
-	JButton knopf4 = null;
-	JButton knopf5 = null;
+	JButton delDocButton = null;
+	JButton addDocButton = null;
+	JButton chipButton = null;
+	JButton speichernButton = null;
+	JButton abbrechenButton = null;
 	JButton hbRoute = null;
-	JButton pic0 = null;
-	JButton pic1 = null;
-	JButton pic2 = null;
+	JButton picVerwerfenButton = null;
+	JButton picAufnehmenButton = null;
+	JButton picBildDateiButton = null;
 
 	JRtaComboBox cbanrede = null;
 
@@ -180,8 +179,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
 	boolean editvoll = false;
 	private JRtaTextField formularid = new JRtaTextField("NIX", false);
-
-	private KVKWrapper kvw;
 
 	boolean startMitBild = false;
 	boolean updateBild = false;
@@ -247,12 +244,12 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 						}
 					}
 					doclist.setEnabled(false);
-					pic0.setEnabled(false);
-					pic1.setEnabled(false);
-					pic2.setEnabled(false);
-					knopf0.setEnabled(false);
-					knopf1.setEnabled(false);
-					knopf3.setEnabled(false);
+					picVerwerfenButton.setEnabled(false);
+					picAufnehmenButton.setEnabled(false);
+					picBildDateiButton.setEnabled(false);
+					delDocButton.setEnabled(false);
+					addDocButton.setEnabled(false);
+					chipButton.setEnabled(false);
 					cbanrede.setEnabled(false);
 					jcheck[1].setEnabled(true);
 					jtf[7].setEnabled(true);
@@ -353,15 +350,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			jtf[12].setText("?");
 			jtf[17].setText("?");
 		}
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-            public void run() {
-				if (SystemConfig.sReaderAktiv.equals("1")) {
-					kvw = new KVKWrapper(SystemConfig.sReaderName);
-					kvw.KVK_Einlesen();
-				}
-			}
-		});
+		
 		UIManager.put("TabbedPane.tabsOpaque", Boolean.TRUE);
 		UIManager.put("TabbedPane.contentOpaque", Boolean.TRUE);
 
@@ -733,32 +722,32 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		but.setOpaque(false);
 		but.setDoubleBuffered(true);
 
-		knopf3 = new JButton("Chipkarte");
-		knopf3.setPreferredSize(new Dimension(70, 20));
-		knopf3.addActionListener(this);
-		knopf3.setActionCommand("einlesen");
-		knopf3.setName("einlesen");
-		knopf3.addKeyListener(this);
-		knopf3.setMnemonic(KeyEvent.VK_C);
+		chipButton = new JButton("Chipkarte");
+		chipButton.setPreferredSize(new Dimension(70, 20));
+		chipButton.addActionListener(this);
+		chipButton.setActionCommand("einlesen");
+		chipButton.setName("einlesen");
+		chipButton.addKeyListener(this);
+		chipButton.setMnemonic(KeyEvent.VK_C);
 		// if(SystemConfig.sReaderAktiv.equals("0")){
-		knopf3.setEnabled(false);
+		chipButton.setEnabled(false);
 		// }
 
-		knopf4 = new JButton("speichern");
-		knopf4.setPreferredSize(new Dimension(70, 20));
-		knopf4.addActionListener(this);
-		knopf4.setActionCommand("speichern");
-		knopf4.setName("speichern");
-		knopf4.addKeyListener(this);
-		knopf4.setMnemonic(KeyEvent.VK_S);
+		speichernButton = new JButton("speichern");
+		speichernButton.setPreferredSize(new Dimension(70, 20));
+		speichernButton.addActionListener(this);
+		speichernButton.setActionCommand("speichern");
+		speichernButton.setName("speichern");
+		speichernButton.addKeyListener(this);
+		speichernButton.setMnemonic(KeyEvent.VK_S);
 
-		knopf5 = new JButton("abbrechen");
-		knopf5.setPreferredSize(new Dimension(70, 20));
-		knopf5.addActionListener(this);
-		knopf5.setActionCommand("abbrechen");
-		knopf5.setName("abbrechen");
-		knopf5.addKeyListener(this);
-		knopf5.setMnemonic(KeyEvent.VK_A);
+		abbrechenButton = new JButton("abbrechen");
+		abbrechenButton.setPreferredSize(new Dimension(70, 20));
+		abbrechenButton.addActionListener(this);
+		abbrechenButton.setActionCommand("abbrechen");
+		abbrechenButton.setName("abbrechen");
+		abbrechenButton.addKeyListener(this);
+		abbrechenButton.setMnemonic(KeyEvent.VK_A);
 
 		// 1. 2. 3. 4. 5. 6. 7
 		FormLayout lay = new FormLayout(
@@ -770,9 +759,9 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		builder.getPanel().setOpaque(false);
 
 		CellConstraints cc = new CellConstraints();
-		builder.add(knopf3, cc.xy(2, 2));
-		builder.add(knopf4, cc.xy(4, 2));
-		builder.add(knopf5, cc.xy(6, 2));
+		builder.add(chipButton, cc.xy(2, 2));
+		builder.add(speichernButton, cc.xy(4, 2));
+		builder.add(abbrechenButton, cc.xy(6, 2));
 
 		but.add(builder.getPanel(), BorderLayout.CENTER);
 		return but;
@@ -988,11 +977,11 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 				jcheck[i] = null;
 			}
 		}
-		ListenerTools.removeListeners(knopf0);
-		ListenerTools.removeListeners(knopf1);
-		ListenerTools.removeListeners(knopf3);
-		ListenerTools.removeListeners(knopf4);
-		ListenerTools.removeListeners(knopf5);
+		ListenerTools.removeListeners(delDocButton);
+		ListenerTools.removeListeners(addDocButton);
+		ListenerTools.removeListeners(chipButton);
+		ListenerTools.removeListeners(speichernButton);
+		ListenerTools.removeListeners(abbrechenButton);
 		xfelder = null;
 		checks = null;
 		doclist = null;
@@ -1206,18 +1195,18 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		JScrollPane docscr = JCompTools.getTransparentScrollPane(doclist);
 		docscr.validate();
 
-		knopf0 = new JButton("entfernen");
-		knopf0.setPreferredSize(new Dimension(70, 20));
-		knopf0.addActionListener(this);
-		knopf0.setName("entfernen");
-		knopf0.setActionCommand("deldoc");
-		knopf0.addKeyListener(this);
-		knopf1 = new JButton("hinzu");
-		knopf1.setPreferredSize(new Dimension(70, 20));
-		knopf1.addActionListener(this);
-		knopf1.setName("hinzu");
-		knopf1.setActionCommand("adddoc");
-		knopf1.addKeyListener(this);
+		delDocButton = new JButton("entfernen");
+		delDocButton.setPreferredSize(new Dimension(70, 20));
+		delDocButton.addActionListener(this);
+		delDocButton.setName("entfernen");
+		delDocButton.setActionCommand("deldoc");
+		delDocButton.addKeyListener(this);
+		addDocButton = new JButton("hinzu");
+		addDocButton.setPreferredSize(new Dimension(70, 20));
+		addDocButton.addActionListener(this);
+		addDocButton.setName("hinzu");
+		addDocButton.setActionCommand("adddoc");
+		addDocButton.addKeyListener(this);
 
 		FormLayout lay22 = new FormLayout(
 				"right:max(80dlu;p), 4dlu, 60dlu,right:max(60dlu;p), 4dlu, 60dlu",
@@ -1245,9 +1234,9 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		builder22.addSeparator("Ärzteliste des Patienten", cc22.xyw(1, 9, 6));
 		builder22.add(docscr, cc22.xyw(1, 11, 6));
 		builder22.addLabel("Arzt aufnehmen", cc22.xy(1, 13));
-		builder22.add(knopf1, cc22.xy(3, 13));
+		builder22.add(addDocButton, cc22.xy(3, 13));
 		builder22.addLabel("Arzt entfernen", cc22.xy(4, 13));
-		builder22.add(knopf0, cc22.xy(6, 13));
+		builder22.add(delDocButton, cc22.xy(6, 13));
 
 		JScrollPane jscrzusatz = JCompTools.getTransparentScrollPane(builder22
 				.getPanel());
@@ -1275,21 +1264,21 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		pat31.setOpaque(false);
 		pat31.setDoubleBuffered(true);
 
-		pic0 = new JButton("verwerfen");
-		pic0.setPreferredSize(new Dimension(70, 20));
-		pic0.addActionListener(this);
-		pic0.setActionCommand("delpic");
-		pic0.addKeyListener(this);
-		pic1 = new JButton("Aufnahme");
-		pic1.setPreferredSize(new Dimension(70, 20));
-		pic1.addActionListener(this);
-		pic1.setActionCommand("addpic");
-		pic1.addKeyListener(this);
-		pic2 = new JButton("Bilddatei");
-		pic2.setPreferredSize(new Dimension(70, 20));
-		pic2.addActionListener(this);
-		pic2.setActionCommand("addjpg");
-		pic2.addKeyListener(this);
+		picVerwerfenButton = new JButton("verwerfen");
+		picVerwerfenButton.setPreferredSize(new Dimension(70, 20));
+		picVerwerfenButton.addActionListener(this);
+		picVerwerfenButton.setActionCommand("delpic");
+		picVerwerfenButton.addKeyListener(this);
+		picAufnehmenButton = new JButton("Aufnahme");
+		picAufnehmenButton.setPreferredSize(new Dimension(70, 20));
+		picAufnehmenButton.addActionListener(this);
+		picAufnehmenButton.setActionCommand("addpic");
+		picAufnehmenButton.addKeyListener(this);
+		picBildDateiButton = new JButton("Bilddatei");
+		picBildDateiButton.setPreferredSize(new Dimension(70, 20));
+		picBildDateiButton.addActionListener(this);
+		picBildDateiButton.setActionCommand("addjpg");
+		picBildDateiButton.addKeyListener(this);
 
 		FormLayout lay31 = new FormLayout(
 				"right:max(80dlu;p), 4dlu, 175px,right:max(60dlu;p), 4dlu, 60dlu",
@@ -1316,15 +1305,15 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 				"fill:0:grow(0.5),2px,fill:0:grow(0.5)", "p");
 		pan.setLayout(lay2);
 		CellConstraints cc2 = new CellConstraints();
-		pan.add(pic1,
+		pan.add(picAufnehmenButton,
 				cc2.xy(1, 1, CellConstraints.FILL, CellConstraints.DEFAULT));
-		pan.add(pic2,
+		pan.add(picBildDateiButton,
 				cc2.xy(3, 1, CellConstraints.FILL, CellConstraints.DEFAULT));
 		builder31.add(pan, cc31.xy(3, 5));
 		/****/
 		// builder31.add(pic1, cc31.xy(3,5));
 		builder31.addLabel("Bild verwerfen", cc31.xy(4, 5));
-		builder31.add(pic0, cc31.xy(6, 5));
+		builder31.add(picVerwerfenButton, cc31.xy(6, 5));
 		new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() throws Exception {
@@ -1587,7 +1576,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		if (SystemConfig.sReaderAktiv.equals("0")) {
 			return;
 		}
-		knopf3.setEnabled(true);
+		chipButton.setEnabled(true);
 		einlesen();
 	}
 
@@ -1595,7 +1584,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		if (SystemConfig.sReaderAktiv.equals("0")) {
 			return;
 		}
-		knopf3.setEnabled(false);
+		chipButton.setEnabled(false);
 	}
 
 	private void einlesen() {
@@ -1614,9 +1603,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 			return;
 		}
 		// //System.out.println("Aufruf der KVK");
-		KVKWrapper kvw = new KVKWrapper(SystemConfig.sReaderName);
-		int ret = kvw.KVK_Einlesen();
-		if (ret == 0) {
+		if (!SystemConfig.hmKVKDaten.isEmpty()) {
 			KVKRohDaten kvkr = new KVKRohDaten(this);
 			kvkr.setModal(true);
 			kvkr.setLocationRelativeTo(this);
@@ -1632,46 +1619,52 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 		}
 	}
 
-	@Override
+    @Override
 	public void actionPerformed(ActionEvent arg0) {
 		
 		String com = arg0.getActionCommand();
-		if (com.equals("einlesen")) {
-			if (SystemConfig.sReaderAktiv.equals("0")) {
+		switch (com) {
+        case "einlesen":
+            if (SystemConfig.sReaderAktiv.equals("0")) {
 				return;
 			}
-			einlesen();
-		} else if (com.equals("speichern")) {
-			schreibeInDb();
-		} else if (com.equals("abbrechen")) {
-			// Lemmi 20110103: Verhinderung von Datenverlust bei
+            einlesen();
+            break;
+        case "speichern":
+            schreibeInDb();
+            break;
+        case "abbrechen":
+            // Lemmi 20110103: Verhinderung von Datenverlust bei
 			// unbeabsichtigtem Zumachen des geänderten Patientent-Dialoges
 			// if ( HasChanged() && askForCancelUsaved() == 1 )
 			// return;
 			finalise();
-			((JXDialog) this.getParent().getParent().getParent().getParent()
+            ((JXDialog) this.getParent().getParent().getParent().getParent()
 					.getParent()).dispose();
-		} else if (com.equals("adddoc")) {
-			arztInListeAuswahl();
-		} else if (com.equals("deldoc")) {
-			int row = -1;
-			if ((row = doclist.getSelectedRow()) < 0) {
+            break;
+        case "adddoc":
+            arztInListeAuswahl();
+            break;
+        case "deldoc":
+            int row = -1;
+            if ((row = doclist.getSelectedRow()) < 0) {
 				return;
 			} else {
 				TableTool.loescheRow(doclist, row);
 			}
-
-		} else if (com.equals("u18ignore")) {
-
-		} else if (com.equals("vorjahrfrei")) {
-			// System.out.println("in checkBox Vorjahrfrei");
+            break;
+        case "u18ignore":
+            break;
+        case "vorjahrfrei":
+            // System.out.println("in checkBox Vorjahrfrei");
 			if (jcheck[10].isSelected()) {
 				jtf[35].setText("");
 			} else {
 				jtf[35].setText(SystemConfig.vorJahr);
 			}
-		} else if (com.equals("delpic")) {
-			if (lblbild.getIcon() != null && !inNeu) {
+            break;
+        case "delpic":
+            if (lblbild.getIcon() != null && !inNeu) {
 				int frage = JOptionPane.showConfirmDialog(null,
 						"Wollen Sie das Patientenfoto wirklich löschen?",
 						"Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
@@ -1682,34 +1675,35 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 					return;
 				}
 			}
-			lblbild.setIcon(null);
-			lblbild.setText("Kein Bild des Patienten vorhanden");
-			startMitBild = false;
-			updateBild = false;
-			return;
-		} else if (com.equals("addpic")) {
-			if (SystemConfig.sWebCamActive.equals("0")) {
+            lblbild.setIcon(null);
+            lblbild.setText("Kein Bild des Patienten vorhanden");
+            startMitBild = false;
+            updateBild = false;
+            return;
+        case "addpic":
+            if (SystemConfig.sWebCamActive.equals("0")) {
 				JOptionPane
 						.showMessageDialog(
 								null,
 								"WebCam entweder nicht aktiviert (System-Initialisierung)\noder nicht angeschlossen!");
 				return;
 			}
-			PatientenFoto foto = new PatientenFoto(null, "patBild", this);
-			foto.setModal(true);
-			foto.setLocationRelativeTo(null);
-			foto.pack();
-			foto.setVisible(true);
-			foto = null;
-			return;
-
-		} else if (com.equals("addjpg")) {
-			JOptionPane
+            PatientenFoto foto = new PatientenFoto(null, "patBild", this);
+            foto.setModal(true);
+            foto.setLocationRelativeTo(null);
+            foto.pack();
+            foto.setVisible(true);
+            foto = null;
+            return;
+        case "addjpg":
+            JOptionPane
 					.showMessageDialog(null,
 							"Aufnahme von fertigen Bilddateien (noch) nicht implementiert");
-		} else if(com.equals("route")) {
-			calcKilometer();
-		}
+            break;
+        case "route":
+            calcKilometer();
+            break;
+        }
 
 	}
 
