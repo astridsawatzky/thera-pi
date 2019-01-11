@@ -20,8 +20,6 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXHeader;
 
-import com.sun.star.awt.KeyModifier;
-
 import environment.Path;
 
 public class LoginPanel extends JPanel {
@@ -35,14 +33,9 @@ public class LoginPanel extends JPanel {
         @Override
         public void keyPressed(KeyEvent e) {
 
-            int code = e.getKeyCode();
-            if (code == KeyEvent.VK_ESCAPE) {
-                e.consume();
-            } else if (code == KeyEvent.VK_ENTER) {
-                e.consume();
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+               
                 pwButton.doClick();
-            } else if ((e.getModifiers() == KeyModifier.MOD1) || (e.getModifiers() == KeyModifier.MOD2)) {
-                e.consume();
             }
 
         }
@@ -72,10 +65,11 @@ public class LoginPanel extends JPanel {
 
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = GridBagConstraints.CENTER;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.ipadx = 0;
-        gridBagConstraints.gridy = 0;
+        
         gridBagConstraints.weightx = 1.0D;
         gridBagConstraints.weighty = 1.0D;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);
