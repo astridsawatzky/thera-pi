@@ -116,7 +116,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 
 			jFrame.addWindowListener(this);
 			jFrame.addWindowStateListener(this);
-			jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			jFrame.setPreferredSize(new Dimension(1024,800));
 
 			jFrame.setTitle("Bausteine für ärztlichen Entlassbericht anlegen / ändern");
@@ -124,7 +124,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 
 			jFrame.getContentPane().setPreferredSize(new Dimension(1024,800));
 			jFrame.getContentPane().setLayout(new GridLayout());
-			jFrame.getContentPane().add ( (arztbausteinpanel=new ArztBausteinPanel()));
+			jFrame.getContentPane().add ( arztbausteinpanel=new ArztBausteinPanel());
 
 			jFrame.setVisible(true);
 
@@ -153,7 +153,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 				e.printStackTrace();
 			}
 		}
-		System.exit(0);
+		
 
 	}
 	@Override
@@ -163,16 +163,7 @@ public class ArztBaustein implements WindowListener, WindowStateListener {
 			arztbausteinpanel.document = null;
 			System.out.println("Dokument wurde geschlossen");
 		}
-		if(conn != null){
-			try {
-				conn.close();
-				conn = null;
-				System.out.println("Datenbankverbindung wurde geschlossen");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		System.exit(0);
+		
 	}
 	@Override
 	public void windowDeactivated(WindowEvent arg0) {
