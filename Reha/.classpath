@@ -45,5 +45,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-classic-1.2.3.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-core-1.2.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/TextB"/>
+	<classpathentry kind="src" path="/ArztBaustein"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

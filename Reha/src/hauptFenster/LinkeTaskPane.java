@@ -45,6 +45,8 @@ import org.jdesktop.swingx.JXTaskPane;
 import org.jdesktop.swingx.JXTaskPaneContainer;
 import org.jdesktop.swingx.border.DropShadowBorder;
 import org.jdesktop.swingx.plaf.windows.WindowsTaskPaneUI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.LadeProg;
 
@@ -52,6 +54,7 @@ import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.text.ITextDocument;
+import arztBaustein.ArztBaustein;
 import dialoge.DatumWahl;
 import environment.Path;
 import events.PatStammEvent;
@@ -90,6 +93,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	private String wahlTag = "y";
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 	public static boolean mitUserTask = false;
+	Logger logger = LoggerFactory.getLogger(LinkeTaskPane.class);
 	public LinkeTaskPane(){
 		super();
 		mitUserTask = testUserTask();
@@ -925,8 +929,9 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new Thread(){
 					@Override
                     public void run(){
-						new LadeProg(Path.Instance.getProghome()+"ArztBaustein.jar "+
-								Path.Instance.getProghome()+" "+Reha.aktIK);
+					    ArztBaustein.main(new String[] {
+					            Path.Instance.getProghome(),
+					            Reha.aktIK});
 					}
 				}.start();
 
