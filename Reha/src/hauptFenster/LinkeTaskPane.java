@@ -54,8 +54,8 @@ import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.text.ITextDocument;
-import arztBaustein.ArztBaustein;
 import ag.ion.bion.officelayer.text.TextException;
+import arztBaustein.ArztBaustein;
 import dialoge.DatumWahl;
 import environment.Path;
 import events.PatStammEvent;
@@ -932,7 +932,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     public void run(){
 					    ArztBaustein.main(new String[] {
 					            Path.Instance.getProghome(),
-					            Reha.getAktIK});
+					            Reha.getAktIK()});
 					}
 				}.start();
 
