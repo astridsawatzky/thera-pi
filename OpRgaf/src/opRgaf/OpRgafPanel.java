@@ -455,11 +455,10 @@ public class OpRgafPanel extends JXPanel implements TableModelListener{
 		tabmod.setValueAt((Double)restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 4);
 		//
 
-		if(rgaf_rechnum.startsWith("RGR-")){
-			SqlInfo.sqlAusfuehren("update verordn set zzstatus='1' where rez_nr = '"+rgaf_reznum+"' LIMIT 1");
-			SqlInfo.sqlAusfuehren("update lza set zzstatus='1' where rez_nr = '"+rgaf_reznum+"' LIMIT 1");
+		if(rgaf_rechnum.startsWith("RGR-")){										// Rezept bezahlt setzen
+			SqlInfo.sqlAusfuehren("update verordn set zzstatus='1', rez_bez='T' where rez_nr = '"+rgaf_reznum+"' LIMIT 1");
+			SqlInfo.sqlAusfuehren("update lza set zzstatus='1', rez_bez='T' where rez_nr = '"+rgaf_reznum+"' LIMIT 1");
 		}
-
 
 
 		int id = (Integer) tabmod.getValueAt(tab.convertRowIndexToModel(row), 11);
