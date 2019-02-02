@@ -3,7 +3,6 @@ package theraPi;
 import java.io.File;
 import java.io.IOException;
 
-
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
 import org.slf4j.Logger;
@@ -11,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import environment.Path;
 import hauptFenster.Reha;
+import logging.Logging;
 import mandant.Mandant;
 
 public class TheraPi {
@@ -20,7 +20,7 @@ public class TheraPi {
 
     private static Logger logger = LoggerFactory.getLogger(Reha.class);
     public static void main(String[] args) throws InvalidFileFormatException, IOException   {
-
+        new Logging("Reha");
         setLookAndFeel();
 
         proghome = Path.Instance.getProghome();
