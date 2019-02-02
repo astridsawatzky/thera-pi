@@ -5,13 +5,6 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
@@ -29,9 +22,6 @@ import environment.Path;
 
 public class TheraPi {
 
-    /**
-     * @param args
-     */
     static JDialog jDiag = null;
     JXPanel contentPanel = null;
     static JLabel standDerDingelbl = null;
@@ -62,7 +52,6 @@ public class TheraPi {
             mand[0] = s1;
             mand[1] = s2;
             mandvec.add(mand);
-            // updateCheck();
             StartMandant = s1 + '@' + s2;
             RehaStarter rst = new RehaStarter();
             rst.execute();
@@ -86,7 +75,6 @@ public class TheraPi {
                 mand[1] = new String(inif.getStringProperty("TheraPiMandanten", "MAND-NAME" + (i + 1)));
                 mandvec.add(mand);
             }
-            // updateCheck(); XXX: where are available updates checked ?
             TheraPi application = new TheraPi();
             jDiag = application.getDialog();
 
@@ -137,32 +125,6 @@ public class TheraPi {
         xDiag.pack();
         return xDiag;
     }
-
-    public static void copy(String from, String to) throws IOException {
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            InputStream inFile = new FileInputStream(from);
-            in = new BufferedInputStream(inFile);
-            OutputStream outFile = new FileOutputStream(to);
-            out = new BufferedOutputStream(outFile);
-            while (true) {
-                int data = in.read();
-                if (data == -1) {
-                    break;
-                }
-                out.write(data);
-            }
-        } finally {
-            if (in != null) {
-                in.close();
-            }
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
-
 }
 
 class RehaStarter extends SwingWorker<Integer, Void> {
@@ -178,7 +140,6 @@ class RehaStarter extends SwingWorker<Integer, Void> {
             // FIXME: memsize of JVM should not be hard coded
             String memsizemin = "-Xms128m ";
             String memsizemax = "-Xmx256m ";
-            /****/
             String dummy = minif.getStringProperty("SystemIntern", "MinMemSize");
             if (dummy != null) {
                 memsizemin = "-Xms" + dummy + " ";
@@ -186,7 +147,6 @@ class RehaStarter extends SwingWorker<Integer, Void> {
                 minif.setStringProperty("SystemIntern", "MinMemSize", "128m", null);
                 minif.save();
             }
-            /****/
             dummy = minif.getStringProperty("SystemIntern", "MaxMemSize");
             if (dummy != null) {
                 memsizemax = "-Xmx" + String.valueOf(dummy) + " ";
@@ -194,26 +154,10 @@ class RehaStarter extends SwingWorker<Integer, Void> {
                 minif.setStringProperty("SystemIntern", "MaxMemSize", "256m", null);
                 minif.save();
             }
-            /****/
-            /*
-             * dummy = minif.getStringProperty("SystemIntern", "MaxMemThread"); if(dummy !=
-             * null){ memsizethread = "-Xxs"+String.valueOf(dummy)+" "; }else{
-             * minif.setStringProperty("SystemIntern", "MaxMemThread", "2046k",null);
-             * minif.save(); }
-             */
-
-            // String start = new String("java -jar
-            // "+memsizemin+memsizemax+memsizethread+TheraPi.proghome+"Reha.jar
-            // "+TheraPi.StartMandant /*+" >
-            // "+TheraPi.proghome+TheraPi.StartMandant.split("@")[0]+".log" */);
             String start = new String("java -jar -Djava.net.preferIPv4Stack=true " + memsizemin + memsizemax
                     + TheraPi.proghome + "Reha.jar " + TheraPi.StartMandant);
-            // String start = new String("cmd.exe /C start
-            // "+TheraPi.proghome.replace("/",File.separator)+"runtherapi.bat
-            // "+TheraPi.StartMandant+" "+TheraPi.StartMandant.split("@")[0]+".log");
 
             System.out.println("Kommando ist " + start);
-            // JOptionPane.showMessageDialog(null, start);
             Runtime.getRuntime().exec(start);
             System.out.println("Reha gestartet");
             System.out.println(start);
