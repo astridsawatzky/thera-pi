@@ -5,13 +5,7 @@ package rehaSql;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.math.BigDecimal;
+import java.awt.event.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -19,7 +13,6 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -62,9 +55,7 @@ import CommonTools.DoubleTableCellRenderer;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import RehaIO.RehaIOMessages;
@@ -75,100 +66,76 @@ import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
-import ag.ion.bion.officelayer.text.ITextDocument;
-import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.noa.NOAException;
 
 
-public class RehaSqlPanel extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener  {
+public class RehaSqlPanel extends JXPanel implements ListSelectionListener,  TableModelListener  {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5545910505665721828L;
+
+    private JXPanel content = null;
+
+    private JRtaComboBox chbstatement = null;
+	private final JButton[] buts = {null,null,null,null};
 	
-	RehaSqlTab elternTab = null;
-	JXPanel content = null;
-	JRtaTextField[] tfs = {null,null,null,null,null,null,null,null};
-	JRtaCheckBox originalChb = null;
+
+	private ActionListener al = null;
 	
-	JRtaComboBox chbstatement = null;
-	JButton[] buts = {null,null,null,null};
+	private SqlTableModel tabmod = null;
+	private JXTable tab = null;
 	
-	KeyListener kl = null;
-	ActionListener al = null;
+	private DefaultTableModel alletablemod = null;
+	private JXTable alletabletab = null;
 	
-	SqlTableModel tabmod = null;
-	JXTable tab = null;
-	
-	DefaultTableModel alletablemod = null;
-	JXTable alletabletab = null;
-	
-	JTextArea textArea = null;
-	JLabel labgefunden = null;
+	private JTextArea textArea = null;
+	private JLabel labgefunden = null;
 	
 	//Vector<Vector<String>> feldNamen = null; 
 
-	JLabel rnummerAlt = null;
-	JLabel rbetragAlt = null;
-	JLabel rbetragNeu = null;
-	JLabel rdatumAlt = null;
-	Double ibetragNeu = Double.parseDouble("0.00");
-	int originalPositionen = -1;
-	
-	BigDecimal rechnungGesamt = null;
+
 
 	
-	Vector<String> colName = new Vector<String>();
-	Vector<String> colClassName = new Vector<String>();
-	Vector<Integer> colType = new Vector<Integer>();
-	Vector<Boolean> colAutoinc = new Vector<Boolean>();
-	Vector<String> colTypeName = new Vector<String>();
-	Vector<Integer> colVisible = new Vector<Integer>();
+	private final Vector<String> colName = new Vector<String>();
+	private final Vector<String> colClassName = new Vector<String>();
+	private final Vector<Integer> colType = new Vector<Integer>();
+	private final Vector<Boolean> colAutoinc = new Vector<Boolean>();
+	private final Vector<String> colTypeName = new Vector<String>();
+	private final Vector<Integer> colVisible = new Vector<Integer>();
 	
-	Vector<Vector<String>> vecStatements = new Vector<Vector<String>>();
+	private final Vector<Vector<String>> vecStatements = new Vector<Vector<String>>();
 	
-	int autoIncCol = -1;
-	boolean isUpdateable = false;
-	String aktuelleTabelle = "";
+	private int autoIncCol = -1;
+	private boolean isUpdateable = false;
+	private String aktuelleTabelle = "";
+
+    private JScrollPane jscr = null;
 	
-	HashMap<String,String> hmAdresse = new HashMap<String,String>(); 
+	private final CommonTools.DateTableCellEditor tabDateEditor = new CommonTools.DateTableCellEditor();
+	private final DateTableCellRenderer tabDateRenderer = new DateTableCellRenderer();
 	
-	ITextTable textTable = null;
-	ITextTable textEndbetrag = null;
-	ITextDocument textDocument = null;
-	int aktuellePosition = 0;
-	int patKilometer = 0;	
+	private final DblCellEditor tabDoubleEditor = new DblCellEditor();
+	private final DoubleTableCellRenderer tabDoubleRenderer = new DoubleTableCellRenderer();
 	
-	JScrollPane jscr = null;
+	private final IntTableCellEditor tabIntegerEditor = new IntTableCellEditor();
+	private final IntTableCellRenderer tabIntegerRenderer = new IntTableCellRenderer();
 	
-	CommonTools.DateTableCellEditor tabDateEditor = new CommonTools.DateTableCellEditor();
-	DateTableCellRenderer tabDateRenderer = new DateTableCellRenderer();
+	private JTextArea sqlstatement = null;
 	
-	DblCellEditor tabDoubleEditor = new DblCellEditor();
-	DoubleTableCellRenderer tabDoubleRenderer = new DoubleTableCellRenderer();
+	private final DecimalFormat dcf = new DecimalFormat("##########0.00");
+	private final SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy"); //Konv.
+
+    private ISpreadsheetDocument spreadsheetDocument = null;
+    private XSheetCellCursor cellCursor = null;
+	private String sheetName = null;
 	
-	IntTableCellEditor tabIntegerEditor = new IntTableCellEditor();
-	IntTableCellRenderer tabIntegerRenderer = new IntTableCellRenderer();
+	private long starttime = 0;
 	
-	//JRtaTextField sqlstatement = null;
-	JTextArea sqlstatement = null;
-	
-	DecimalFormat dcf = new DecimalFormat("##########0.00");
-	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy"); //Konv.
-	
-	int calcrow = 0;	
-	ISpreadsheetDocument spreadsheetDocument = null;
-	IDocument document  = null;
-	XSheetCellCursor cellCursor = null;
-	String sheetName = null;
-	
-	long starttime = 0;
-	
-	public RehaSqlPanel(RehaSqlTab eltern){
+	RehaSqlPanel(){
 		super();
-		elternTab = eltern;
-		setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
 		activateActionListener();
 		add(getContent(),BorderLayout.CENTER);
 		
@@ -176,7 +143,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		content.validate();
 		new SwingWorker<Void,Void>(){
 			@Override
-			protected Void doInBackground() throws Exception {
+			protected Void doInBackground() {
 				long zeit = System.currentTimeMillis();
 				while(! RehaSql.DbOk){
 					try {
@@ -203,7 +170,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		CellConstraints cc = new CellConstraints();
 		content = new JXPanel();
 		content.setLayout(lay);
-		//content.add(getEdits(),cc.xy(1,2));
+
 		content.add(getSqlPanel(),cc.xy(2,2,CellConstraints.FILL,CellConstraints.FILL));
 		content.add(getAlleTabellenPanel(),cc.xy(1,2,CellConstraints.FILL,CellConstraints.FILL));
 		content.revalidate();
@@ -226,7 +193,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			@Override
             public void mousePressed(MouseEvent me){
 				if(me.getClickCount()==2){
-					if(!RehaSql.isReadOnly){
+					if(!RehaSql.isReadOnly()){
 						sqlstatement.setText("describe "+alletabletab.getValueAt(alletabletab.getSelectedRow(), 0).toString());
 						doStatementAuswerten();
 					}
@@ -236,7 +203,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		
 		new SwingWorker<Void,Void>(){
 			@Override
-			protected Void doInBackground() throws Exception {
+			protected Void doInBackground() {
 				long zeit = System.currentTimeMillis();
 				while(! RehaSql.DbOk){
 					try {
@@ -249,11 +216,11 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 					}
 				}
 				Vector<Vector<String>> vec = SqlInfo.holeFelder("show tables");
-				if(!RehaSql.isReadOnly){
-					for(int i = 0;i<vec.size();i++){
-						alletablemod.addRow(vec.get(i));	
-					}
-					if(vec.size() > 0){
+				if(!RehaSql.isReadOnly()){
+                    for (Vector<String> strings : vec) {
+                        alletablemod.addRow(strings);
+                    }
+					if(!vec.isEmpty()){
 						alletabletab.setRowSelectionInterval(0, 0);
 					}
 				}
@@ -282,7 +249,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		lab.setForeground(Color.BLUE);
 		jpan.add(lab,cc.xyw(2,2,3));
 		
-		//jpan.add(sqlstatement = new JRtaTextField("nix",true),cc.xy(4,2));
+
 		sqlstatement = new JTextArea();
 		sqlstatement.setFont(new Font("Courier",Font.PLAIN,12));
 		sqlstatement.setLineWrap(true);
@@ -291,8 +258,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		sqlstatement.setOpaque(false);
 		sqlstatement.setName("sqlstatement");
 		sqlstatement.setFont(new Font("Courier New",Font.PLAIN,12));
-		sqlstatement.addKeyListener(kl);
-		if(RehaSql.isReadOnly){
+
+		if(RehaSql.isReadOnly()){
 			sqlstatement.setEditable(false);
 		}
 		JScrollPane scrstmt = JCompTools.getTransparentScrollPane(sqlstatement);
@@ -303,8 +270,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		lab = new JLabel("Statement ausführen (execute):");
 		lab.setForeground(Color.RED);
 		jpan.add(lab,cc.xyw(2,5,3));
-		
-		buts[0] = ButtonTools.macheButton("execute", "exekutieren", al);
+        JButton jbExecute = ButtonTools.macheButton("execute", "exekutieren", al);
+        buts[0] = jbExecute;
 		buts[0].setMnemonic('e');
 		buts[0].setForeground(Color.RED);
 		jpan.add(buts[0],cc.xy(6,5));
@@ -378,7 +345,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		jpan.add(chbstatement,cc.xy(2,2));
 		new SwingWorker<Void,Void>(){
 			@Override
-			protected Void doInBackground() throws Exception {
+			protected Void doInBackground() {
 				doFillStatementBox();
 				return null;
 			}
@@ -399,14 +366,14 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			}
 		}
 		try{
-			String iniFile = (RehaSql.isReadOnly ? "sqlmodulro.ini" : "sqlmodul.ini"); 
+			String iniFile = (RehaSql.isReadOnly() ? "sqlmodulro.ini" : "sqlmodul.ini"); 
 			INIFile inif =INITool.openIni(RehaSql.progHome+"ini/"+RehaSql.aktIK+"/", iniFile);
 			Vector<String> vecstmts = new Vector<String>();
 			int anzahl = inif.getIntegerProperty("SqlStatements", "StatementsAnzahl");
 			for(int i = 0; i < anzahl;i++){
 				vecstmts.clear();
-				vecstmts.add(inif.getStringProperty("SqlStatements", "StatementTitel"+Integer.toString(i+1)));
-				vecstmts.add(inif.getStringProperty("SqlStatements", "Statement"+Integer.toString(i+1)));
+				vecstmts.add(inif.getStringProperty("SqlStatements", "StatementTitel"+ (i + 1)));
+				vecstmts.add(inif.getStringProperty("SqlStatements", "Statement"+ (i + 1)));
 				vecStatements.add( ((Vector<String>)vecstmts.clone()) );
 			}
 			chbstatement.setDataVectorWithStartElement(vecStatements, 0, 1, "./.");
@@ -420,28 +387,36 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	private void benachrichtigeReha(final int row){
 		new SwingWorker<Void,Void>(){
 			@Override
-			protected Void doInBackground() throws Exception {
+			protected Void doInBackground() {
 				int spalten = tabmod.getColumnCount();
 				int relativerow = tab.convertRowIndexToModel(row);
 				String pat="",rez="";
 				for(int i = 0; i < spalten;i++){
-					if(tabmod.getColumnName(i).toString().trim().toLowerCase().equals("rez_nr") ||
-							tabmod.getColumnName(i).toString().trim().equals("reznr")){
+					if(tabmod.getColumnName(i).trim().toLowerCase().equals("rez_nr") ||
+							tabmod.getColumnName(i).trim().equals("reznr")){
 						rez = tabmod.getValueAt(relativerow, i).toString();
-					}else if(tabmod.getColumnName(i).toString().trim().toLowerCase().equals("pat_intern")){
+					}else if(tabmod.getColumnName(i).trim().toLowerCase().equals("pat_intern")){
 						pat = tabmod.getValueAt(relativerow, i).toString();
 					}
 				}
-				if((!pat.equals("")) || (!rez.equals(""))){
-					if( (!pat.equals("")) && (rez.equals("")) ){
-						new SocketClient().setzeRehaNachricht(RehaSql.rehaReversePort,"RehaSql#"+RehaIOMessages.MUST_PATFIND+"#"+pat);
-					}else if( (!pat.equals("")) && (!rez.equals("")) ){
-						new SocketClient().setzeRehaNachricht(RehaSql.rehaReversePort,"RehaSql#"+RehaIOMessages.MUST_PATANDREZFIND+"#"+pat+"#"+rez);
-					}else if( (pat.equals("")) && (!rez.equals("")) ){
-						new SocketClient().setzeRehaNachricht(RehaSql.rehaReversePort,"RehaSql#"+RehaIOMessages.MUST_REZFIND+"#"+rez);
-					}
-				}
-				return null;
+                String xnachricht;
+                if (pat.equals("")) {
+                    if (rez.equals("")) {
+                        return null;
+                    } else {
+                        xnachricht = "RehaSql#" + RehaIOMessages.MUST_REZFIND + "#" + rez;
+                    }
+                } else {
+                     if(rez.equals("")){
+                         xnachricht = "RehaSql#" + RehaIOMessages.MUST_PATFIND + "#" + pat;
+
+                    } else {
+                         xnachricht = "RehaSql#" + RehaIOMessages.MUST_PATANDREZFIND + "#" + pat + "#" + rez;
+
+                     }
+                }
+                new SocketClient().setzeRehaNachricht(RehaSql.rehaReversePort, xnachricht);
+                return null;
 			}
 			
 		}.execute();
@@ -456,20 +431,17 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	        if(isAdjusting){
 	        	return;
 	        }
-	        if (lsm.isSelectionEmpty()) {
-
-	        } else {
-	            int minIndex = lsm.getMinSelectionIndex();
-	            int maxIndex = lsm.getMaxSelectionIndex();
-	            for (int i = minIndex; i <= maxIndex; i++) {
-	                if (lsm.isSelectedIndex(i)) {
-	                	benachrichtigeReha(i);
-	                    break;
-	                }
-	            }
-	        }
-
-	    }
+            if (!lsm.isSelectionEmpty()) {
+                int minIndex = lsm.getMinSelectionIndex();
+                int maxIndex = lsm.getMaxSelectionIndex();
+                for (int i = minIndex; i <= maxIndex; i++) {
+                    if (lsm.isSelectedIndex(i)) {
+                        benachrichtigeReha(i);
+                        break;
+                    }
+                }
+            }
+        }
 	}
 	private void activateActionListener(){
 		al = new ActionListener(){
@@ -547,40 +519,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			}
 			
 		};
-		kl = new KeyListener(){
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10 && arg0.isShiftDown()){
-					return;
-				}
-				if(arg0.getKeyCode()==10){
-					if( ((JComponent)arg0.getSource()).getName().equals("sqlstatement") ){
-						/*
-						doStatementAuswerten();
-						SwingUtilities.invokeLater(new Runnable(){
-							public void run(){
-								sqlstatement.requestFocus();
-							}
-						});
-						*/
-					}
-				}
-				
-			}
 
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				
-				
-			}
-
-			@Override
-			public void keyTyped(KeyEvent arg0) {
-				
-				
-			}
-			
-		};
 	}
 	private void doLoeschenSatz(){
 		if(!isUpdateable || aktuelleTabelle.trim().equals("")){
@@ -607,7 +546,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			return;
 		}
 		String prepstatement = vecStatements.get(ind-1).get(1);
-		if(prepstatement.indexOf("^") >= 0 || prepstatement.indexOf("where")>=0){
+		if(prepstatement.contains("^") || prepstatement.contains("where")){
 			prepstatement = testeAufPlatzhalter(prepstatement);
 			System.out.println("prepstatement="+prepstatement);
 			if(prepstatement.equals("")){
@@ -620,43 +559,41 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	}
 	private String testeAufPlatzhalter(String text){
 		String sret = "";
-		//int lang = text.length();
+
 		String stext = text;
-		int start = 0;
-		//int end = 0;
+		int start;
+
 		String dummy;
-		int vars = 0;
-		//int sysvar = -1;
-		boolean noendfound = false;
+
+		boolean noendfound;
 		while ((start = stext.indexOf("^")) >= 0){
 			noendfound = true;
 			for(int i = 1;i < 350;i++){
 				if(stext.substring(start+i,start+(i+1)).equals("^")){
 					dummy = stext.substring(start,start+(i+1));
-					String sanweisung = dummy.toString().replace("^", "");
-					Object ret = JOptionPane.showInputDialog(null,"<html>Bitte Wert eingeben für: --\u003E<b> "+sanweisung+" </b> &nbsp; </html>","Platzhalter gefunden", 1);
+					String sanweisung = dummy.replace("^", "");
+					String ret = JOptionPane.showInputDialog(null, "<html>Bitte Wert eingeben für: --\u003E<b> "+sanweisung+" </b> &nbsp; </html>", "Platzhalter gefunden", 1);
 					if(ret==null){
 						return "";
-							//sucheErsetze(dummy,"");
+
 					}else{
-						//sucheErsetze(document,dummy,((String)ret).trim(),false);
-						if( ((String)ret).trim().length()==10 && ((String)ret).trim().indexOf(".") ==2 &&
-										((String)ret).trim().lastIndexOf(".") == 5 ) {
+
+						if( ret.trim().length()==10 && ret.trim().indexOf(".") ==2 &&
+										ret.trim().lastIndexOf(".") == 5 ) {
 
 								
 							try{
-								ret = DatFunk.sDatInSQL((String)ret);
+								ret = DatFunk.sDatInSQL(ret);
 							}catch(Exception ex){
 								JOptionPane.showMessageDialog(null,"Fehler in der Konvertierung des Datums");
 							}
 							
 						}
-						sret = stext.replace(dummy, ((String)ret).trim());
+						sret = stext.replace(dummy, ret.trim());
 						stext = sret;
 					}
 					noendfound = false;
-					vars++;
-					break;
+                    break;
 				}
 			}
 			if(noendfound){
@@ -676,11 +613,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	}
 
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		
-	}
+
 
 
 	@Override
@@ -737,50 +670,38 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 				JOptionPane.showMessageDialog(null,"Fehler in der Dateneingbe");
 			}
 			
-			return;
+
 		}
-		if(arg0.getType() == TableModelEvent.DELETE){
-			//System.out.println(arg0.getFirstRow()+" / "+arg0.getColumn());
-			//System.out.println("ID des zu löschenden Satzes = "+tabmod.getValueAt(arg0.getFirstRow(),tabmod.getColumnCount()-1));
-		}
+
 
 	}
 
 	private void doExecuteOnly(){
-		Statement stmt = null;
-		//ToDo auf delete und update testen und wenn ja auf Limit 1 testen und wenn nein SuperUser-Passwort anfordern
-		try {
-			textArea.setText("Ihr Statement: ["+sqlstatement.getText().trim()+"]\n"+textArea.getText());
-			stmt =  RehaSql.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-			            ResultSet.CONCUR_UPDATABLE );
-			stmt.execute(sqlstatement.getText());
-			tabmod.setRowCount(0);
-			tab.validate();
-		} catch (SQLException e) {
-			textArea.setText(e.getMessage()+"\n"+textArea.getText());
-		}
-		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException sqlEx) { // ignore }
-					stmt = null;
-				}
-			}
-		}
-	}	
+        //ToDo auf delete und update testen und wenn ja auf Limit 1 testen und wenn nein SuperUser-Passwort anfordern
+        textArea.setText("Ihr Statement: ["+sqlstatement.getText().trim()+"]\n"+textArea.getText());
+        try (Statement stmt = RehaSql.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                                                                     ResultSet.CONCUR_UPDATABLE)) {
+            stmt.execute(sqlstatement.getText());
+            tabmod.setRowCount(0);
+            tab.validate();
+        } catch (SQLException e) {
+            textArea.setText(e.getMessage() + "\n" + textArea.getText());
+        }
+
+    }
 	private void doExecuteStatement(){
-		Statement stmt = null;
+
 		//ToDo auf delete und update testen und wenn ja auf Limit 1 testen und wenn nein SuperUser-Passwort anfordern
 		if(sqlstatement.getText().toLowerCase().contains("delete") || 
 				sqlstatement.getText().toLowerCase().contains("update")){
 			if(!sqlstatement.getText().toLowerCase().contains("limit")){
-				//hier Super-User-Paswort abfragen
+				// TODO hier Super-User-Paswort abfragen
 			}
 		}
-
+        textArea.setText("Ihr Statement: ["+sqlstatement.getText().trim()+"]\n"+textArea.getText());
+        Statement stmt = null;
 		try {
-			textArea.setText("Ihr Statement: ["+sqlstatement.getText().trim()+"]\n"+textArea.getText());
+
 			stmt =  RehaSql.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
 			            ResultSet.CONCUR_UPDATABLE );
 			stmt.executeUpdate(sqlstatement.getText());
@@ -845,12 +766,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 			return;
 		}
 		
-		/*
-		if(sqlstatement.getText().trim().toLowerCase().startsWith("select") || sqlstatement.getText().trim().toLowerCase().startsWith("show") ||
-				sqlstatement.getText().trim().toLowerCase().startsWith("describe")){
-			doExecuteStatement();
-		}
-		*/
+
 		autoIncCol = -1;
 		tabmod.removeTableModelListener(this);
 		tabmod.setRowCount(0);
@@ -864,8 +780,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		
 		Statement stmt = null;
 		ResultSet rs = null;
-		//ResultSet md = null;
-		ResultSetMetaData md = null;
+
+		ResultSetMetaData md;
 
 			
 		try {
@@ -1027,7 +943,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 	}
 	
 	private void doSetAbfrageErgebnis(){
-		labgefunden.setText("Abfrageergebnis: Datensätze = "+Integer.toString(tab.getRowCount())+" / Spalten = "+Integer.toString(tab.getColumnCount())+" - "+Long.toString(System.currentTimeMillis()-starttime)+" Millisekunden");
+		labgefunden.setText("Abfrageergebnis: Datensätze = "+ tab.getRowCount() +" / Spalten = "+ tab.getColumnCount() +" - "+ (System.currentTimeMillis() - starttime) +" Millisekunden");
 	}
 	class SqlTableModel extends DefaultTableModel{
 		   /**
@@ -1057,12 +973,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 
 		@Override
         public boolean isCellEditable(int row, int col) {
-			
-			if(colAutoinc.get(col)){
-				return false;				
-			}
-			return true;
-		}
+            return !colAutoinc.get(col);
+        }
 	}
 	
 	private void starteExport(){
@@ -1085,8 +997,8 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 					OOTools.doColNumberFormat(spreadsheetDocument, sheetName, i, i, 2);
 				}
 			}
-			Object obj = null;
-			int relativerow = -1;
+			Object obj;
+			int relativerow;
 			for(int i = 0; i < rowcount;i++){
 				for(int y = 0;y < colVisible.size();y++){
 					relativerow = tab.convertRowIndexToModel(i);
@@ -1118,24 +1030,10 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 					}
 				}
 			}
-		} catch (NoSuchElementException e) {
-			e.printStackTrace();
-		} catch (WrappedTargetException e) {
-			e.printStackTrace();
-		} catch (UnknownPropertyException e) {
-			e.printStackTrace();
-		} catch (PropertyVetoException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (OfficeApplicationException e) {
-			e.printStackTrace();
-		} catch (NOAException e) {
-			e.printStackTrace();
-		} catch (IndexOutOfBoundsException e) {
+		} catch (NoSuchElementException | IndexOutOfBoundsException | NOAException | OfficeApplicationException | IllegalArgumentException | PropertyVetoException | UnknownPropertyException | WrappedTargetException e) {
 			e.printStackTrace();
 		}
-	}
+    }
 	
 	private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException, WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException{
 		if(!RehaSql.officeapplication.isActive()){
@@ -1143,9 +1041,9 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Acti
 		}
 		IDocumentService documentService = RehaSql.officeapplication.getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
-       	//docdescript.setHidden(true);
+
         docdescript.setAsTemplate(true);
-		document = documentService.constructNewDocument(IDocument.CALC, docdescript);
+        IDocument document = documentService.constructNewDocument(IDocument.CALC, docdescript);
 		spreadsheetDocument = (ISpreadsheetDocument) document;
 		OOTools.setzePapierFormatCalc(spreadsheetDocument, 21000, 29700);
 		OOTools.setzeRaenderCalc(spreadsheetDocument, 1000,1000, 1000, 1000);

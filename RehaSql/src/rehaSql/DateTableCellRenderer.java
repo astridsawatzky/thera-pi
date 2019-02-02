@@ -13,7 +13,7 @@ public class DateTableCellRenderer extends DefaultTableCellRenderer
 	 *
 	 */
 	private static final long serialVersionUID = -1029644753226393604L;
-	SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy");
+	private final SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy");
 	//DecimalFormat dform = new DecimalFormat("####0.00");
 	@Override
     public Component getTableCellRendererComponent(final JTable table, final

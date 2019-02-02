@@ -6,20 +6,19 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class SocketClient {
-	String nachricht = "";
-	Socket client = null;
-	int port = -1;
+	private String nachricht = "";
+    private int port = -1;
 	public void setzeRehaNachricht(int xport,String xnachricht){
 		this.nachricht = xnachricht;
 		this.port = xport;
 		run();
 	}
-	public void run() {
+	private void run() {
 		serverStarten();
 	}
 	private void serverStarten(){
 		try{
-			this.client = new Socket("localhost",this.port);
+            Socket client = new Socket("localhost", this.port);
 			OutputStream output = client.getOutputStream();
 			InputStream input = client.getInputStream();
 
@@ -36,10 +35,8 @@ public class SocketClient {
 			client.close();
 			input.close();
 			output.close();
-		}catch(NullPointerException ex){
+		}catch(NullPointerException | IOException ex){
 			ex.printStackTrace();
-		}catch (IOException e) {
-			e.printStackTrace();
 		}
-	}
+    }
 }

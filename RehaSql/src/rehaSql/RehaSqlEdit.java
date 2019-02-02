@@ -16,10 +16,10 @@ public class RehaSqlEdit extends JXPanel implements ListSelectionListener, Actio
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	RehaSqlTab eltern = null;
-	public RehaSqlEdit(RehaSqlTab xeltern){
+
+    public RehaSqlEdit(){
 		super();
-		eltern = xeltern;
+
 	}
 
 	@Override

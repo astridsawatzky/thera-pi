@@ -2,7 +2,6 @@ package RehaIO;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -16,73 +15,61 @@ import rehaSql.RehaSql;
 
 public class RehaReverseServer extends SwingWorker<Void,Void>{
 	public ServerSocket serv = null;
-	StringBuffer sb = new StringBuffer();
-	InputStream input = null;
-	OutputStream output = null;
-	//public int port = 6000;
-	public static boolean RehaSqlIsActive = false;
-	public static boolean offenePostenIsActive = false;
-	
-	public RehaReverseServer(int x){
-		RehaSql.xport = x;
+	private final StringBuffer sb = new StringBuffer();
+
+    public RehaReverseServer(int x){
+		RehaSql.setXport(x);
 		execute();
-	}	
-		
-	public String getPort(){
-		return Integer.toString(RehaSql.xport);
 	}
-	
-	private void doReha(String op){
+
+    private void doReha(String op){
 		if(op.split("#")[1].equals(RehaIOMessages.MUST_GOTOFRONT)){
 			RehaSql.thisFrame.setVisible(true);
-		}else if(op.split("#")[1].equals(RehaIOMessages.MUST_REZFIND)){
-			
 		}
 
 	}
 	@Override
 	protected Void doInBackground() throws Exception {
 			
-			while(RehaSql.xport < 7050){
+			while(RehaSql.getXport() < 7050){
 				try {
-					serv = new ServerSocket(RehaSql.xport);
+					serv = new ServerSocket(RehaSql.getXport());
 					break;
 				} catch (Exception e) {
-					//System.out.println("In Exception währen der Portsuche - 1");
+
 					if(serv != null){
 						try {
 							serv.close();
 						} catch (IOException e1) {
-							//System.out.println("In Exception währen der Portsuche - 2");
+
 							e1.printStackTrace();
 						}
 						serv = null;
 					}
-					RehaSql.xport++;
+					RehaSql.setXport(RehaSql.getXport() + 1);
 				}
 			}
-			if(RehaSql.xport==7050){
+			if(RehaSql.getXport()==7050){
 				JOptionPane.showMessageDialog(null, "Fehler bei der Initialisierung des IO-Servers (kein Port frei!)");
-				RehaSql.xport = -1;
+				RehaSql.setXport(-1);
 				serv = null;
 				return null;
 			}
-			RehaSql.xportOk = true;
-			Socket client = null;
+        Socket client;
 
 			while(true){
 				try {
 					client = serv.accept();
 				} catch (SocketException se) {
-					//se.printStackTrace();
+
 					return null;
 				}
 				sb.setLength(0);
 				sb.trimToSize();
-				input = client.getInputStream();
-				//output = client.getOutputStream();
+                InputStream input = client.getInputStream();
+
 				int byteStream;
-				//String test = "";
+
 				try {
 					while( (byteStream =  input.read()) > -1){
 						char b = (char)byteStream;
@@ -95,16 +82,14 @@ public class RehaReverseServer extends SwingWorker<Void,Void>{
 				/***************************/
 				
 				if(sb.toString().startsWith("Reha#")){
-					doReha(String.valueOf(sb.toString()) );
+					doReha(sb.toString());
 				}
 			}
 
 //			return null;
 
 		}
-	private RehaReverseServer getInstance(){
-		return this;
-	}
+	
 	
 	
 }

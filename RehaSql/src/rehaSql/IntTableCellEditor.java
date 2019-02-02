@@ -26,9 +26,9 @@ public class IntTableCellEditor extends AbstractCellEditor implements KeyListene
 	/**
 	 * 
 	 */
-	
-	JComponent component = new JRtaTextField("ZAHLEN",true);
-    boolean mitMaus = false;
+
+    private final JComponent component = new JRtaTextField("ZAHLEN", true);
+    private boolean mitMaus = false;
     public IntTableCellEditor(){
     	component.addKeyListener(this);
     	((JRtaTextField)component).listenerLoeschen();
