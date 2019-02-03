@@ -31,6 +31,7 @@ final class MandantSelector extends JDialog {
 
 	public MandantSelector(MandantList liste) {
 		setModal(true);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		setUndecorated(true);
 		setPreferredSize(new Dimension(450, 200));

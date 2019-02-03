@@ -15,11 +15,11 @@ import mandant.Mandant;
 
 public class TheraPi {
 
-
     public static String proghome;
 
     private static Logger logger = LoggerFactory.getLogger(Reha.class);
-    public static void main(String[] args) throws InvalidFileFormatException, IOException   {
+
+    public static void main(String[] args) throws InvalidFileFormatException, IOException {
         new Logging("Reha");
         setLookAndFeel();
 
@@ -30,17 +30,21 @@ public class TheraPi {
 
         MandantList liste = new MandantList(mandantenIni);
 
-        MandantSelector mandantSelector = new MandantSelector(liste);
         if (liste.showAllways()) {
+            MandantSelector mandantSelector = new MandantSelector(liste);
             mandantSelector.validate();
             mandantSelector.pack();
             mandantSelector.setLocationRelativeTo(null);
             mandantSelector.setVisible(true);
-        };
+            Mandant current = mandantSelector.chosen();
+            logger.debug(current.toString());
+            startReha(current);
+        } else {
+            logger.debug(liste.defaultMandant().toString());
+            startReha(liste.defaultMandant());
 
-        Mandant current = mandantSelector.chosen();
-        System.out.println(current);
-        startReha(current);
+        }
+
     }
 
     private static void startReha(Mandant mandant) {
@@ -54,10 +58,10 @@ public class TheraPi {
 
                 try {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                } catch (Exception ignored) {
+                } catch (Exception justLog) {
                     // cannot happen, we searched, if it is there, but anyways
-                	// ignore if it cannot be set default will be used, so we ignore
-                    logger.debug("plasticxp L&F could not be set", ignored);
+                    // ignore if it cannot be set default will be used, so we ignore
+                    logger.debug("plasticxp L&F could not be set", justLog);
                 }
 
                 break;
@@ -68,6 +72,3 @@ public class TheraPi {
     }
 
 }
-
-
-
