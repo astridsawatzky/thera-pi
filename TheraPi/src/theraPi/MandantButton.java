@@ -7,13 +7,13 @@ import mandant.Mandant;
 class MandantButton extends JButton {
 	private Mandant mandant;
 
-	public MandantButton(Mandant mandant) {
+	MandantButton(Mandant mandant) {
 		this.mandant= mandant;
 		this.setText(mandant.name() + " - IK" + mandant.ik());
 
 	}
 
-	public Mandant mandant() {
+	Mandant mandant() {
 		return mandant;
 	}
 }

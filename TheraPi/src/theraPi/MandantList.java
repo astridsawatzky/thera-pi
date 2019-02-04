@@ -8,7 +8,7 @@ import org.ini4j.Ini;
 
 import mandant.Mandant;
 
-public class MandantList {
+class MandantList {
 	List<Mandant> list;
 	private int defIndex=0;
 	private boolean showAlways;
@@ -47,7 +47,7 @@ public class MandantList {
 
    
 
-    public List<Mandant> asList() {
+    List<Mandant> asList() {
         return Collections.unmodifiableList(list);
     }
 

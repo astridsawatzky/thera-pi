@@ -30,7 +30,7 @@ final class MandantSelector extends JDialog {
 		}
 	};
 
-	public MandantSelector(MandantList liste, ImageIcon imageIcon) {
+	MandantSelector(MandantList liste, ImageIcon imageIcon) {
 		setModal(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -59,7 +59,7 @@ final class MandantSelector extends JDialog {
 		return panel;
 	}
 
-	public Mandant chosen() {
+	Mandant chosen() {
 		return chosen;
 	}
 }
