@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import org.ini4j.Ini;
 import org.ini4j.InvalidFileFormatException;
@@ -21,6 +22,12 @@ public class TheraPi {
    private static Logger logger = LoggerFactory.getLogger(TheraPi.class);
 
     public static void main(String[] args) throws InvalidFileFormatException, IOException {
+        
+        
+      if( ! handleJavaversion() ) {
+          System.exit(-1);
+      };
+        
         setLookAndFeel();
          String proghome = Path.Instance.getProghome();
 
@@ -43,8 +50,35 @@ public class TheraPi {
             startReha(liste.defaultMandant());
 
         }
+      
+    }
+
+    protected static boolean handleJavaversion() {
+        RunnningVersion version = new RunnningVersion();
+       
+
+        if (version.isSupported()) {
+            
+            int result = JOptionPane.showConfirmDialog(null,
+                    "Version" +  version.current() + 
+                    "  wird nicht unterstützt,\nSie brauchen eine " + version.required() +
+                    " Java-Version!\nWollen Sie trotzdem weitermachen",
+
+                    "Version" + version.current() + "  wird nicht unterstützt", JOptionPane.YES_NO_OPTION);
+
+            if (result == JOptionPane.OK_OPTION) {
+                JOptionPane.showMessageDialog(null, "Eine Wirklich Blöde Idee!\n Aber sind ja Ihre Daten\n ");
+                logger.error(version.current() + " ! User hat es so gewollt");
+                return true;
+            }
+            return false;
+        }
+        return true;
+        
 
     }
+
+   
 
     private static void startReha(Mandant mandant) {
         new Reha(mandant).start();
