@@ -178,6 +178,7 @@ import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
 import terminKalender.ParameterLaden;
 import terminKalender.TerminFenster;
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
@@ -430,6 +431,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	}
 	private void startWithMandantSet() {
+	        SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
 		aktIK =mandant.ik();
 		aktMandant=mandant.name();
 
