@@ -7,13 +7,11 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 
-
 public class Main {
 
 	private static String API_KEY = "";
 
 	public static void main(String[] args) throws Exception {
-
 		List<String> ini = readFileInList("./ini/openroute.ini");
 		API_KEY = ini.get(0);
 
@@ -31,7 +29,7 @@ public class Main {
 
 	/**
 	 * removes the comma between plz and City in the string sent by Reha.
-	 *
+	 * 
 	 * @param adresseFromReha
 	 * @return
 	 */

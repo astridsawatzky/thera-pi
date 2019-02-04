@@ -99,4 +99,11 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
+    <target name="TheraPiUpdates">
+        <java classname="org.thera_pi.updates.TheraPiUpdates" failonerror="true" fork="yes">
+            <jvmarg line="-Djava.net.preferIPv4Stack=true"/>
+            <arg line="TheraPiStarten"/>
+            <classpath refid="TheraPiUpdates.classpath"/>
+        </java>
+    </target>
 </project>

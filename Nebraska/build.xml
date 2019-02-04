@@ -120,4 +120,25 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
+    <target name="NebraskaKeystoreTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="org.thera_pi.nebraska.crypto.test.NebraskaKeystoreTest" todir="${junit.output.dir}"/>
+            <classpath refid="Nebraska.classpath"/>
+        </junit>
+    </target>
+    <target name="TestMain">
+        <java classname="org.thera_pi.nebraska.crypto.test.TestMain" failonerror="true" fork="yes">
+            <classpath refid="Nebraska.classpath"/>
+        </java>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
 </project>

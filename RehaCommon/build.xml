@@ -7,19 +7,11 @@
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
     <property name="ArztBaustein.location" value="../ArztBaustein"/>
-    <property name="BMIRechner.location" value="../BMIRechner"/>
-    <property name="FahrdienstExporter.location" value="../FahrdienstExporter"/>
-    <property name="GeburtstagsBriefe.location" value="../GeburtstagsBriefe"/>
-    <property name="ICDSuche.location" value="../ICDSuche"/>
-    <property name="LVA-Bedingmit.location" value="../LVAEntlassmitteilung"/>
     <property name="Nebraska.location" value="../Nebraska"/>
     <property name="OffenePosten.location" value="../OffenePosten"/>
     <property name="OpRgaf.location" value="../OpRgaf"/>
-    <property name="PDFtest2.location" value="../PDFLoader"/>
-    <property name="PiTool.location" value="../PiTool"/>
     <property name="Reha.location" value="../Reha"/>
     <property name="Reha301.location" value="../Reha301"/>
-    <property name="RehaBillEdit.location" value="../RehaBillEdit"/>
     <property name="RehaHMK.location" value="../RehaHMK"/>
     <property name="RehaIniedit.location" value="../RehaIniedit"/>
     <property name="RehaKassenbuch.location" value="../RehaKassenbuch"/>
@@ -27,15 +19,6 @@
     <property name="RehaSql.location" value="../RehaSql"/>
     <property name="RehaStatistik.location" value="../RehaStatistik"/>
     <property name="RehaUrlaub.location" value="../RehaUrlaub"/>
-    <property name="RehaWissen.location" value="../RehaWissen"/>
-    <property name="SMSService.location" value="../SMSService"/>
-    <property name="TextB.location" value="../TextB"/>
-    <property name="TheraPi.location" value="../TheraPi"/>
-    <property name="TheraPiDBAdmin.location" value="../TheraPiDBAdmin"/>
-    <property name="TheraPiHilfe.location" value="../TheraPiHilfe"/>
-    <property name="TheraPiUpdates.location" value="../TheraPiUpdates"/>
-    <property name="ECLIPSE_HOME" value="../../../../eclipse/java-latest-released/eclipse/"/>
-    <property name="Files.location" value="../Files"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
@@ -49,6 +32,7 @@
         <pathelement location="${Libraries.location}/lib/openofficeorg/java_uno_accessbridge.jar"/>
         <pathelement location="${Libraries.location}/lib/openofficeorg/java_uno.jar"/>
         <pathelement location="${Libraries.location}/lib/openofficeorg/juh.jar"/>
+        <pathelement location="${Libraries.location}/lib/openofficeorg/junit-3.8.1.jar"/>
         <pathelement location="${Libraries.location}/lib/openofficeorg/jurt.jar"/>
         <pathelement location="${Libraries.location}/lib/openofficeorg/jut.jar"/>
         <pathelement location="${Libraries.location}/lib/openofficeorg/officebean.jar"/>
@@ -59,25 +43,11 @@
         <pathelement location="${Libraries.location}/lib/openofficeorg/unoloader.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swingx-1.6.jar"/>
-        <pathelement location="${Libraries.location}/lib/logging/logback-classic-1.2.3.jar"/>
-        <pathelement location="${Libraries.location}/lib/logging/logback-core-1.2.3.jar"/>
-        <pathelement location="${Libraries.location}/lib/logging/slf4j-api-1.7.25.jar"/>
-        <pathelement location="${Libraries.location}/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
-        <pathelement location="${Libraries.location}/lib/jna_junit/junit-4.5.jar"/>
-    </path>
-    <path id="run.RehaCommon.classpath">
-        <path refid="RehaCommon.classpath"/>
-        <pathelement location="${Files.location}/configuration"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="tests">
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -92,43 +62,12 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
             <src path="src"/>
-            <src path="tests"/>
             <classpath refid="RehaCommon.classpath"/>
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
         <ant antfile="build.xml" dir="${ArztBaustein.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${ArztBaustein.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${BMIRechner.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${BMIRechner.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${FahrdienstExporter.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${FahrdienstExporter.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${GeburtstagsBriefe.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${GeburtstagsBriefe.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${ICDSuche.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${ICDSuche.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${LVA-Bedingmit.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${LVA-Bedingmit.location}" inheritAll="false" target="build">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
@@ -151,18 +90,6 @@
                 <propertyref name="build.compiler"/>
             </propertyset>
         </ant>
-        <ant antfile="build.xml" dir="${PDFtest2.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${PDFtest2.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${PiTool.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${PiTool.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
         <ant antfile="build.xml" dir="${Reha.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${Reha.location}" inheritAll="false" target="build">
             <propertyset>
@@ -171,12 +98,6 @@
         </ant>
         <ant antfile="build.xml" dir="${Reha301.location}" inheritAll="false" target="clean"/>
         <ant antfile="build.xml" dir="${Reha301.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${RehaBillEdit.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${RehaBillEdit.location}" inheritAll="false" target="build">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
@@ -223,48 +144,6 @@
                 <propertyref name="build.compiler"/>
             </propertyset>
         </ant>
-        <ant antfile="build.xml" dir="${RehaWissen.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${RehaWissen.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${SMSService.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${SMSService.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${TextB.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${TextB.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${TheraPi.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${TheraPi.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${TheraPiDBAdmin.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${TheraPiDBAdmin.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${TheraPiHilfe.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${TheraPiHilfe.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
-        <ant antfile="build.xml" dir="${TheraPiUpdates.location}" inheritAll="false" target="clean"/>
-        <ant antfile="build.xml" dir="${TheraPiUpdates.location}" inheritAll="false" target="build">
-            <propertyset>
-                <propertyref name="build.compiler"/>
-            </propertyset>
-        </ant>
     </target>
     <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
         <copy todir="${ant.library.dir}">
@@ -279,73 +158,10 @@
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
     </target>
-    <target name="DatFunkTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="CommonTools.DatFunkTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="RehaCommon.classpath"/>
-        </junit>
-    </target>
-    <target name="INIFile">
-        <java classname="CommonTools.INIFile" failonerror="true" fork="yes">
-            <classpath refid="RehaCommon.classpath"/>
-        </java>
-    </target>
-    <target name="INIFileTest (1)">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="tools.INIFileTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="RehaCommon.classpath"/>
-        </junit>
-    </target>
-    <target name="INIFileTest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="ini.INIFileTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="RehaCommon.classpath"/>
-        </junit>
-    </target>
-    <target name="readertest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="ini.readertest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="RehaCommon.classpath"/>
-        </junit>
-    </target>
-    <target name="readertest.readinitest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="ini.readertest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="RehaCommon.classpath"/>
-        </junit>
-    </target>
     <target name="RehaCommon">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="CommonTools.DatFunkTest" todir="${junit.output.dir}"/>
-            <test name="CommonTools.VerschluesselnTest" todir="${junit.output.dir}"/>
-            <test name="tools.INIFileTest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
-            <classpath refid="run.RehaCommon.classpath"/>
-        </junit>
-    </target>
-    <target name="RehajavaINITest">
-        <mkdir dir="${junit.output.dir}"/>
-        <junit fork="yes" printsummary="withOutAndErr">
-            <formatter type="xml"/>
-            <test name="ini.RehajavaINITest" todir="${junit.output.dir}"/>
-            <jvmarg line="-ea"/>
             <classpath refid="RehaCommon.classpath"/>
         </junit>
     </target>

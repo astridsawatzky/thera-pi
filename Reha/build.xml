@@ -192,6 +192,7 @@
     </target>
     <target name="Reha">
         <java classname="hauptFenster.Reha" failonerror="true" fork="yes">
+            <jvmarg line="-Djava.net.preferIPv4Stack=true"/>
             <classpath refid="Reha.classpath"/>
         </java>
     </target>
