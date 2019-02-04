@@ -47,6 +47,11 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import abrechnung.Disziplinen;
 import environment.Path;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;

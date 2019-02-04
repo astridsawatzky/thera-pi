@@ -57,6 +57,7 @@
         <pathelement location="${Libraries.location}/lib/bcmail-jdk16-145.jar"/>
         <pathelement location="${Libraries.location}/lib/iText-2.1.6.jar"/>
         <pathelement location="${Libraries.location}/lib/pdf-renderer-1.0.5.jar"/>
+        <pathelement location="${Libraries.location}/lib/pdf-renderer-1.0.5.jar"/>
         <pathelement location="${Libraries.location}/lib/swingx/swing-worker.jar"/>
         <pathelement location="${Libraries.location}/lib/openofficeorg/ag.ion.noa_2.2.3.jar"/>
         <path refid="RehaCommon.classpath"/>
