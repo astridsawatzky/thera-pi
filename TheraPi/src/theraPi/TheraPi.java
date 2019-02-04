@@ -20,7 +20,7 @@ public class TheraPi {
     private static Logger logger = LoggerFactory.getLogger(Reha.class);
 
     public static void main(String[] args) throws InvalidFileFormatException, IOException {
-        new Logging("Reha");
+        new Logging("reha");
         setLookAndFeel();
 
         proghome = Path.Instance.getProghome();
