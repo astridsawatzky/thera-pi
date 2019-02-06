@@ -11,19 +11,27 @@ import org.ini4j.InvalidFileFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ch.qos.logback.classic.util.ContextInitializer;
 import environment.Path;
 import hauptFenster.Reha;
 import mandant.Mandant;
+import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
+
 
 public class TheraPi {
 
      
 
-   private static Logger logger = LoggerFactory.getLogger(TheraPi.class);
+   private static Logger logger;
 
     public static void main(String[] args) throws InvalidFileFormatException, IOException {
+       
+        String path = "./logs/conf/reha.xml";
+        System.setProperty(ContextInitializer.CONFIG_FILE_PROPERTY, path);
+
+        SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
         
-        
+         logger = LoggerFactory.getLogger(TheraPi.class);
       if( ! handleJavaversion() ) {
           System.exit(-1);
       };
@@ -81,7 +89,10 @@ public class TheraPi {
    
 
     private static void startReha(Mandant mandant) {
-        new Reha(mandant).start();
+        Reha.initializeLogging();
+        Reha reha = new Reha(mandant);
+       
+        reha.start();
     }
 
     private static void setLookAndFeel() {

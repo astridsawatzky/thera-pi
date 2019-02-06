@@ -178,7 +178,6 @@ import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
 import terminKalender.ParameterLaden;
 import terminKalender.TerminFenster;
-import uk.org.lidalia.sysoutslf4j.context.SysOutOverSLF4J;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
@@ -358,9 +357,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean bHatMerkmale;
 
 	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
-	private static Logger logger = LoggerFactory.getLogger(Reha.class);
-
-
+	
 	private final static Mandant nullMandant = new Mandant("000000000", "Übungs-Mandant");
 	private Mandant mandant;
 	private static String aktIK=nullMandant.ik();
@@ -371,6 +368,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	private RehaSettings settings;
 	private DataSource dataSource;
+    private static Logger logger;
 
 	public static JXFrame getThisFrame() {
 		return thisFrame;
@@ -402,7 +400,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	}
 	public void start() {
-
+	        
 
 		startWithMandantSet();
 
@@ -412,9 +410,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 
 	public static void main(String[] args) {
-
 		System.setProperty("java.net.preferIPv4Stack" , "true");
-		new Logging("reha");
+	        new Logging("reha");
+		initializeLogging();
 		Mandant mainMandant;
 		 String[] parameter = args;
 		if(parameter.length > 0){
@@ -430,8 +428,12 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 
 	}
+    public static void initializeLogging() {
+
+		logger = LoggerFactory.getLogger(Reha.class);
+    }
 	private void startWithMandantSet() {
-	        SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
+	      
 		aktIK =mandant.ik();
 		aktMandant=mandant.name();
 
