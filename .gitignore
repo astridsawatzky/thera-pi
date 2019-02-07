@@ -33,6 +33,9 @@ core
 # erzeugte  binaries nicht versionieren ...
 bin
 *.jar
+#eclipse export build.xml nicht synchronisieren
+build.xml
+
 # ... aber die benutzten Libs, wenn sich da was ändert
 !/Libraries/
 !/Libraries/lib/
@@ -51,7 +54,7 @@ bin
 #510841109
 dist
 stash
-.gitignor*
+
 
 # ignores from old projectdir end
 /.metadata/
