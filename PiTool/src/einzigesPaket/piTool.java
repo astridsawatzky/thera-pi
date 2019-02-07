@@ -79,6 +79,7 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import CommonTools.INIFile;
 import CommonTools.Verschluesseln;
 import environment.Path;
+import logging.Logging;
 
 
 public class piTool implements MouseListener,ActionListener,WindowListener, ChangeListener {
@@ -143,7 +144,7 @@ public static HashMap<String,String> hmEmailIntern;
 public String gimpCommand = "C:/Programme/GIMP-2.0/bin/gimp-2.6.exe";
 
 	public static void main(String[] args) {
-
+	    new Logging("pitool");
 
 		System.out.println("ProgHome = "+ Path.Instance.getProghome());
 

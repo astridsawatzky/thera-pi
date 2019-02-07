@@ -20,6 +20,7 @@ import org.jdesktop.swingx.JXPanel;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import logging.Logging;
 import rtaWissen.BrowserFenster;
 
 
@@ -39,6 +40,7 @@ public class RehaWissen  {
 	public Connection hilfeConn = null;
 	
 	public static void main(String[] args) {
+	    new Logging("rehawissen");
 		RehaWissen application = new RehaWissen();
 		
   	  	try {

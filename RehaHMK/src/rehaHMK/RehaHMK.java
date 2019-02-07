@@ -39,6 +39,7 @@ import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import logging.Logging;
 
 public class RehaHMK implements WindowListener {
 	public static boolean DbOk;
@@ -91,6 +92,7 @@ public class RehaHMK implements WindowListener {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+	    new Logging("hmk");
 		RehaHMK application = new RehaHMK();
 		
 		application.getInstance();

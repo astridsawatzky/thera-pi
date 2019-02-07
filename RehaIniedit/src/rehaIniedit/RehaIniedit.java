@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.Verschluesseln;
+import logging.Logging;
 
 
 
@@ -41,6 +42,7 @@ public class RehaIniedit implements WindowListener {
 	SqlInfo sqlInfo = null;
 	
 	public static void main(String[] args) {
+	    new Logging("iniedit");
 		try {
 			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
 			UIManager.put("TabbedPane.contentOpaque", Boolean.FALSE);

@@ -46,6 +46,7 @@ import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.ITerminateEvent;
 import ag.ion.bion.officelayer.event.VetoTerminateListener;
 import environment.Path;
+import logging.Logging;
 
 
 
@@ -80,6 +81,7 @@ public static IOfficeApplication officeapplication;
 	 * @param args
 	 */
 	public static void main(String[] args) {
+	    new Logging("pihelp");
 		proghome = Path.Instance.getProghome();
 
 				/************Für die Entwicklung dieses Teil benutzen********/

@@ -26,6 +26,7 @@ import CommonTools.StartOOApplication;
 import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import logging.Logging;
 import reha301Panels.RehaIOMessages;
 
 public class Reha301 implements WindowListener  {
@@ -91,6 +92,7 @@ public class Reha301 implements WindowListener  {
 	public static boolean testcase = false;
 	
 	public static void main(String[] args) {
+	    new Logging("reha301");
 		Reha301 application = new Reha301();
 		application.getInstance();
 		application.getInstance().sqlInfo = new SqlInfo();

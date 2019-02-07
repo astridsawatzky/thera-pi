@@ -22,6 +22,7 @@ import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
+import logging.Logging;
 
 public class RehaUrlaub implements WindowListener {
 
@@ -67,6 +68,7 @@ public class RehaUrlaub implements WindowListener {
 	SqlInfo sqlInfo = null;
 	
 	public static void main(String[] args) {
+	    new Logging("urlaub");
 		RehaUrlaub application = new RehaUrlaub();
 		application.getInstance();
 		application.getInstance().sqlInfo = new SqlInfo();

@@ -21,6 +21,7 @@ import CommonTools.Verschluesseln;
 import Tools.SystemPreislisten;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import logging.Logging;
 
 
 
@@ -62,6 +63,7 @@ public class RehaStatistik implements WindowListener{
 	public SqlInfo sqlInfo;
 	
 	public static void main(String[] args) {
+	        new Logging("statistik");
 		RehaStatistik application = new RehaStatistik();
 		application.getInstance();
 		application.getInstance().sqlInfo = new SqlInfo();

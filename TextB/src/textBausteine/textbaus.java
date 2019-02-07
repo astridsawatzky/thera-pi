@@ -43,7 +43,7 @@ public class textbaus implements WindowListener{
 	 *
 	 */
 	public static void main(String[] args) {
-		new Logging("TBedit");
+		new Logging("tbedit");
 		System.out.println(" Name des Betriebssystems: "+System.getProperty("os.name"));
 		System.out.println("      Benutzerverzeichnis: "+java.lang.System.getProperty("user.dir").replaceAll("\\\\","/"));
 		System.out.println("Installierte Java-Version: "+java.lang.System.getProperty("java.version"));

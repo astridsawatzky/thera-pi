@@ -28,7 +28,7 @@ public class Nebraska {
 	public static JTabbedPaneOrganizer jtbo;
 
 	public static void main(String[] args) throws Exception{
-		new Logging("Nebraska");
+		new Logging("nebraska");
 		if(System.getProperty("os.name").contains("Windows")){
 			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 		}
