@@ -587,29 +587,8 @@ public class ArztBausteinPanel extends JXPanel {
 	}
 	private void holeTextBaustein(String id){
 		InputStream ins = SqlInfo.holeStream("tbar", "tbtext", "id='"+id+"'");
-/*****/
-		/*
-	    File f=new File(ArztBausteine.proghome+"tbout.tb");
-	    f.deleteOnExit();
-	    OutputStream out;
-		try {
-			out = new FileOutputStream(f);
-		    byte buf[]=new byte[8192];
-		    int len;
-		    while((len=ins.read(buf))>0)
-		    out.write(buf,0,len);
-		    out.close();
-		    ins.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		*/
 
-/*****/
 
-		//String instring = SqlInfo.holeEinzelFeld("select tbtext from tbar where id='"+id+"' LIMIT 1");
 		document.getTextService().getText().setText("");
 
 		ITextCursor textCursor = null;
@@ -618,13 +597,10 @@ public class ArztBausteinPanel extends JXPanel {
 			textCursor = document.getTextService().getCursorService().getTextCursor();
 			textCursor.insertDocument(ins, OpenDocumentFilter.FILTER);
 
-			//textCursor.insertDocument(ArztBausteine.proghome+"tbout.tb");
-			//textCursor.insertDocument(ins, RTFFilter.FILTER);
 			textCursor.gotoStart(false);
 			viewCursor = document.getViewCursorService().getViewCursor();
 			viewCursor.getPageCursor().jumpToFirstPage();
 			viewCursor.getPageCursor().jumpToStartOfPage();
-			//ins.close();
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -641,7 +617,7 @@ public class ArztBausteinPanel extends JXPanel {
 		        	@Override
                     public void run(){
 		        		try{
-		        			//Workaround für Java 7
+		        			//XXX: Workaround für Java 7
 		        			new TopWindow(document);
 		        		}catch(Exception ex){
 		        			JOptionPane.showMessageDialog(null,"Achtung!, der TopWindow-Listener (wichtig für Java 7) konnte nicht korrekt gestartet werden");

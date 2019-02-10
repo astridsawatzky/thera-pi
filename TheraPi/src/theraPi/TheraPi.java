@@ -29,7 +29,9 @@ public class TheraPi {
         SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
 
         logger = LoggerFactory.getLogger(TheraPi.class);
-        if (handleJavaversion()) {
+        
+        
+        if (isAcceptedJavaversion()) {
             setLookAndFeel();
             String proghome = Path.Instance.getProghome();
 
@@ -57,7 +59,7 @@ public class TheraPi {
         }
     }
 
-    protected static boolean handleJavaversion() {
+    protected static boolean isAcceptedJavaversion() {
         RunnningVersion version = new RunnningVersion();
 
         if (version.isSupported()) {
