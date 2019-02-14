@@ -156,7 +156,6 @@ public class ArztBausteinPanel extends JXPanel {
     private ArztBaustein arztbaustein;
 
 	public ArztBausteinPanel(ArztBaustein baustein){
-		super();
 		arztbaustein =baustein;
 		setSize(1024,800);
 		setPreferredSize(new Dimension(1024,800));
@@ -169,8 +168,7 @@ public class ArztBausteinPanel extends JXPanel {
 			protected Void doInBackground() throws Exception {
 				try{
 					noaDummy.add(getOOorgPanel());
-					//noaPanel.setVisible(true);
-					fillNOAPanel();
+					fillNOAPanel(arztbaustein.officeapplication);
 				}catch(Exception ex){
 					ex.printStackTrace();
 				}
@@ -589,12 +587,12 @@ public class ArztBausteinPanel extends JXPanel {
 			ex.printStackTrace();
 		}
 	}
-	private void fillNOAPanel() {
+	private void fillNOAPanel(IOfficeApplication office) {
 	    if (noaPanel != null) {
 		      try {
 		    	  System.out.println("Konstruiere das NOA-Panel");
-		        officeFrame = constructOOOFrame(ArztBaustein.officeapplication, noaPanel);
-		        document = (ITextDocument) ArztBaustein.officeapplication.getDocumentService().constructNewDocument(officeFrame,
+		        officeFrame = constructOOOFrame(office, noaPanel);
+		        document = (ITextDocument)office .getDocumentService().constructNewDocument(officeFrame,
 		            IDocument.WRITER,
 		            DocumentDescriptor.DEFAULT);
 		        SwingUtilities.invokeLater(new Runnable(){
@@ -750,7 +748,6 @@ public class ArztBausteinPanel extends JXPanel {
 		Statement stmt = null;
 		ResultSet rs = null;
 		Vector<String> retvec = new Vector<String>();
-		int bausteine = 0;
 		bausteinmod.setRowCount(0);
 		try {
 			stmt =  arztbaustein.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
@@ -778,19 +775,6 @@ public class ArztBausteinPanel extends JXPanel {
 				retvec.add( (rs.getString(4)==null  ? "" :  rs.getString(4)) );
 				bausteinmod.addRow((Vector<?>)retvec.clone());
 
-				if(bausteine==0){
-				    //XXX: nothing happening here
-					final String id = retvec.get(3).toString();
-					new SwingWorker<Void,Void>(){
-						@Override
-						protected Void doInBackground() throws Exception {
-							//bausteintbl.setRowSelectionInterval(0, 0);
-							return null;
-						}
-					}.execute();
-				}
-
-				bausteine++;
 			
 			}
 			}
@@ -857,7 +841,16 @@ public class ArztBausteinPanel extends JXPanel {
 	}
 
 
-	/*****************************************/
+	public void closeDocument() {
+        if(document != null){
+        		document.close();
+        		document = null;
+        		System.out.println("Dokument wurde geschlossen");
+        	}
+    }
+
+
+    /*****************************************/
 	class MyBausteinTableModel extends DefaultTableModel{
 		   /**
 		 *

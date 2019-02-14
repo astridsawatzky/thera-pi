@@ -62,6 +62,7 @@ import events.PatStammEvent;
 import events.PatStammEventClass;
 import generalSplash.RehaSplash;
 import gui.Cursors;
+import mandant.IK;
 import oOorgTools.OOTools;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
@@ -931,9 +932,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
                     public void run(){
 					    try {
-                            ArztBaustein.main(new String[] {
-                                    Path.Instance.getProghome(),
-                                    Reha.getAktIK()});
+                            ArztBaustein.start(new IK(Reha.getAktIK()),Reha.officeapplication);
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
