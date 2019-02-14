@@ -24,6 +24,7 @@
     <target description="Build the same target for all subprojects." name="subprojects">
     	<ant dir="${dir.therapi.common}" target="${build.target}"/>
     	<ant dir="${dir.reha.common}" target="${build.target}"/>
+    	<ant dir="${dir.therapi.database}" target="${build.target}"/>
         <ant dir="${dir.nebraska}" target="${build.target}"/>
     	<ant dir="${dir.calcKilometer}" target="${build.target}"/>
         <ant dir="${dir.fahrdienst.exporter}" target="${build.target}"/>
