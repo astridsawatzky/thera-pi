@@ -28,9 +28,8 @@ public class ArztBaustein {
 
 	
 
-	IOfficeApplication officeapplication = null;
+	private IOfficeApplication officeapplication;
 	Connection conn = null;
-	//static ArztBaustein thisClass = null;
 
 	JXFrame jFrame = null;
 
@@ -107,7 +106,7 @@ public class ArztBaustein {
 
 			jFrame.getContentPane().setPreferredSize(new Dimension(1024,800));
 			jFrame.getContentPane().setLayout(new GridLayout());
-			jFrame.getContentPane().add ( arztbausteinpanel=new ArztBausteinPanel(this));
+			jFrame.getContentPane().add ( arztbausteinpanel=new ArztBausteinPanel(this,  this.officeapplication));
 			WindowListener wl = new ArztBausteinWindowlistener(arztbausteinpanel);
                         jFrame.addWindowListener(wl);
 			jFrame.setVisible(true);
