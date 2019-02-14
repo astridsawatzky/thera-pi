@@ -1,10 +1,9 @@
 package mandant;
 
 public class Mandant {
-	private String ik;
+	private IK ik;
 	public Mandant(String ik, String name) {
-		super();
-		this.ik = ik;
+		this.ik = new IK(ik);
 		this.name = name;
 	}
 	private String name;
@@ -12,13 +11,13 @@ public class Mandant {
 		return name;
 	}
 	public String ik() {
-		return ik;
+		return ik.asString();
 	}
 
 	@Override
 	public String toString() {
 
-		return name + " - IK"+ ik;
+		return name + " - IK"+ ik.asString();
 	}
 
 }

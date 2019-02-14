@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/logging/slf4j-api-1.7.25.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/ini/ini4j-0.5.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

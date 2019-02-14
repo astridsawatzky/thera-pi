@@ -930,9 +930,13 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				new Thread(){
 					@Override
                     public void run(){
-					    ArztBaustein.main(new String[] {
-					            Path.Instance.getProghome(),
-					            Reha.getAktIK()});
+					    try {
+                            ArztBaustein.main(new String[] {
+                                    Path.Instance.getProghome(),
+                                    Reha.getAktIK()});
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
 					}
 				}.start();
 
