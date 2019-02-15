@@ -53,7 +53,7 @@ public class ArztBaustein {
    
         if (args.length > 0) {
             System.out.println("hole daten aus INI-Datei " + proghome);
-            INIFile ini = new INIFile(proghome + "ini/" +ik.asString() + "/rehajava.ini");
+            INIFile ini = new INIFile(proghome + "ini/" +ik.digitString() + "/rehajava.ini");
 
           
             OpenOfficePfad = ini.getStringProperty("OpenOffice.org", "OfficePfad");
