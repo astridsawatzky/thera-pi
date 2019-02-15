@@ -479,7 +479,7 @@ public void actionPerformed(ActionEvent arg0) {
 }
 @Override
 public void keyPressed(KeyEvent arg0) {
-	if(arg0.getKeyCode() == 27){
+	if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 		rtp.removeRehaTPEventListener(this);
 		rtp = null;
 		FensterSchliessen(null);
@@ -495,7 +495,7 @@ public void keyReleased(KeyEvent arg0) {
 @Override
 public void keyTyped(KeyEvent arg0) {
 
-	if(arg0.getKeyCode() == 27){
+	if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 		rtp.removeRehaTPEventListener(this);
 		rtp = null;
 		FensterSchliessen(null);

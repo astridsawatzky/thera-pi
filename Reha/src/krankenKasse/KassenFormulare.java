@@ -211,7 +211,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 	public void keyPressed(KeyEvent arg0) {
 		
 		//System.out.println(arg0.getKeyCode());
-		if (arg0.getKeyCode()==10){
+		if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			//arg0.consume();
 			if(ret != -1){
 				//System.out.println("Beendet mit oben "+jList1.getSelectedIndex());
@@ -227,7 +227,7 @@ public class KassenFormulare extends JXDialog implements FocusListener, ActionLi
 				return;
 			}	
 		}
-		if (arg0.getKeyCode()==27){
+		if (arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			//System.out.println("ESC gedr�ckt");	
 			tfrueck.setText(Integer.toString(-1));
 			//KassenPanel.thisClass.iformular = -1;

@@ -315,11 +315,11 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
 	public void keyPressed(KeyEvent arg0) {
 		
 		////System.out.println("in DateTableCellEditor "+arg0.getKeyCode());
-		if(arg0.getKeyCode()==127){
+		if(arg0.getKeyCode()==KeyEvent.VK_DELETE){
 			((JFormattedTextField)arg0.getSource()).setText("  .  .    ");
 			((JFormattedTextField)arg0.getSource()).setCaretPosition(0);
 		}
-		if(arg0.getKeyCode()==10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			//fireEditingStopped();
 		}
 		//System.out.println("Caret gesetzt auf ->"+ftf.getCaretPosition());

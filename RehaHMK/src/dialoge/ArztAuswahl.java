@@ -422,23 +422,23 @@ private RehaTPEventClass rtp = null;
 
 		@Override
 		public void keyPressed(KeyEvent arg0) {
-			if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode() == 10){
+			if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 				fuelleTabelle(tf.getText().trim());
-			}else if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode() == 40){
+			}else if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode()==KeyEvent.VK_DOWN){
 				if(arztwahltbl.getRowCount() <= 0){return;}
 				arztwahltbl.requestFocus();
 				arztwahltbl.setRowSelectionInterval(0, 0);
-			}else if(((JComponent)arg0.getSource()).getName().equals("arzttabelle") && arg0.getKeyCode() == 10){
+			}else if(((JComponent)arg0.getSource()).getName().equals("arzttabelle") && arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 				werteUebergeben();
-			}else if(((JComponent)arg0.getSource()).getName().equals("neuarzt") && arg0.getKeyCode() == 10){
+			}else if(((JComponent)arg0.getSource()).getName().equals("neuarzt") && arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 				neuAnlageArzt();
 			}
 
 			
-			if(arg0.getKeyCode() == 27){
+			if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 				arg0.consume();
 				doAbbrechen();
 			}

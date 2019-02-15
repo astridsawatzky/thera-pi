@@ -1327,12 +1327,12 @@ public class AbrechnungPrivat extends JXDialog implements FocusListener, ActionL
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(arg0.getKeyCode()==27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			this.rueckgabe = -1;
 			FensterSchliessen("dieses");
 			return;
 		}
-		if(arg0.getKeyCode()==10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			if(((JComponent)arg0.getSource()) instanceof JButton){
 				if(((JComponent)arg0.getSource()).getName().equals("abbrechen")){
 					this.rueckgabe = -1;

@@ -280,9 +280,9 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		tabaktterm.addKeyListener(new KeyAdapter(){
 			@Override
             public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				}
-				if(arg0.getKeyCode()==27){
+				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 				}
 			}
 			
@@ -342,10 +342,10 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
 		tabhistorie.addKeyListener(new KeyAdapter(){
 			@Override
             public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 				}
-				if(arg0.getKeyCode()==27){
+				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 					arg0.consume();
 				}
 			}

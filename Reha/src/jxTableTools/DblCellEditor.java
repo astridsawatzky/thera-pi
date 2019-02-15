@@ -91,7 +91,7 @@ public class DblCellEditor extends AbstractCellEditor implements KeyListener,Tab
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
-		if(mitMaus && arg0.getKeyCode()==10){
+		if(mitMaus && arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			////System.out.println("in Maus + Return gedrückt");
 			this.fireEditingStopped();
 		}

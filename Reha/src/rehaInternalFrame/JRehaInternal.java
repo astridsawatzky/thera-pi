@@ -398,19 +398,19 @@ public class JRehaInternal extends JInternalFrame implements ActionListener,Comp
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(arg0.getKeyCode()==27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			this.dispose();
 		}
 	}
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		if(arg0.getKeyCode()==27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			this.dispose();
 		}
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
-		if(arg0.getKeyCode()==27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			this.dispose();
 		}
 	}

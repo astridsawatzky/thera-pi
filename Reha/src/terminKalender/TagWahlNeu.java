@@ -406,7 +406,7 @@ public void componentShown(ComponentEvent arg0) {
 public void keyPressed(KeyEvent arg0) {
 	////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource()+"Key Event");
 	for(int i = 0;i<1;i++){
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 			rtp.removeRehaTPEventListener(this);
 			this.dispose();
@@ -414,7 +414,7 @@ public void keyPressed(KeyEvent arg0) {
 			break;
 			//FensterSchliessen(null);
 		}
-		if(arg0.getKeyCode() == 10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			//if(arg0.getSource() instanceof JRtaTextField){
 			arg0.consume();
 				((JComponent) arg0.getSource()).requestFocus();
@@ -423,7 +423,7 @@ public void keyPressed(KeyEvent arg0) {
 			//}
 			break;
 		}
-		if(arg0.getKeyCode() == 33){
+		if(arg0.getKeyCode() == KeyEvent.VK_PAGE_UP){
 			////System.out.println("tag + tag");
 			akttag = DatFunk.sDatPlusTage(akttag,1);
 			datePick.setDate(machePickerDatum(akttag));
@@ -436,7 +436,7 @@ public void keyPressed(KeyEvent arg0) {
 			//arg0.consume();
 			break;
 		}
-		if(arg0.getKeyCode() == 34){
+		if(arg0.getKeyCode() == KeyEvent.VK_PAGE_DOWN){
 			////System.out.println("tag - tag");
 			akttag = DatFunk.sDatPlusTage(akttag,-1);
 			datePick.setDate(machePickerDatum(akttag));

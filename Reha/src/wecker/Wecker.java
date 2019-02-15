@@ -246,11 +246,11 @@ public class Wecker extends RehaSmartDialog{
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				if(((JComponent)arg0.getSource()).getName().equals("terminneu") &&
-						arg0.getKeyCode() == 10){
+						arg0.getKeyCode()==KeyEvent.VK_ENTER){
 						doNeuTermin();
 						return;
 				}
-				if(arg0.getKeyCode()==27){
+				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 					thisClass.dispose();
 				}
 
@@ -531,7 +531,7 @@ final class TerminAbgelaufen extends RehaSmartDialog{
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				String cname = ((JComponent)arg0.getSource()).getName();
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					if(cname.equals("pwfield") || cname.equals("ok")){
 						testeOk();
 					}

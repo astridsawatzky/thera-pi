@@ -166,7 +166,7 @@ public class VorBerichte extends RehaSmartDialog implements ActionListener{
 		tabbericht.addKeyListener(new KeyAdapter(){
 			@Override
             public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					doUebernahme();
 				}
 			}

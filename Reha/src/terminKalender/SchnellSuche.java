@@ -482,11 +482,11 @@ public void suchenFocus(){
 @Override
 public void keyPressed(KeyEvent arg0) {
 	////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource());
-	if(arg0.getKeyCode() == 27){
+	if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
 	}
-	if(arg0.getKeyCode() == 10 && (!arg0.isControlDown())){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER && (!arg0.isControlDown())){
 		if(arg0.getComponent().getName() != null){
 			if(arg0.getComponent().getName().equals("SucheFeld")){
 				vTdata.clear();
@@ -497,7 +497,7 @@ public void keyPressed(KeyEvent arg0) {
 		}
 
 	}
-	if(arg0.getKeyCode() == 10 && (arg0.isControlDown())){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER && (arg0.isControlDown())){
 		int selrow = -1;
 		if((selrow=ttbl.getSelectedRow()) < 0){
 			return;
@@ -527,7 +527,7 @@ public void keyReleased(KeyEvent arg0) {
 @Override
 public void keyTyped(KeyEvent arg0) {
 
-	if(arg0.getKeyCode() == 27){
+	if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 		rtp.removeRehaTPEventListener(this);
 		FensterSchliessen(null);
 	}

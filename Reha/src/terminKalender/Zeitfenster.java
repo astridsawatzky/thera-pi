@@ -321,30 +321,30 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 
 	@Override
     public void keyPressed(KeyEvent arg0) {
-		if (arg0.getKeyCode() == 27){
+		if (arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 			Beenden(0);
 			return;
 		}
 		if(((JComponent)arg0.getSource()).getName().equals("Ok")){
-			if (arg0.getKeyCode()==10){
+			if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 	    		Beenden(1);
 				return;
 	    	}
-	    	if (arg0.getKeyCode()==20){
+	    	if (arg0.getKeyCode()==KeyEvent.VK_CAPS_LOCK){
 				arg0.consume();
 	    		Beenden(0);
 				return;
 	    	}
 		}
 		if(((JComponent)arg0.getSource()).getName().equals("Abbruch")){
-			if (arg0.getKeyCode()==10){
+			if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 	    		Beenden(0);
 				return;
 	    	}
-	    	if (arg0.getKeyCode()==20){
+	    	if (arg0.getKeyCode()==KeyEvent.VK_CAPS_LOCK){
 				arg0.consume();
 	    		Beenden(0);
 				return;
@@ -354,7 +354,7 @@ public class Zeitfenster extends JDialog implements KeyListener,FocusListener,Ac
 		if(name=="Dauer" || name=="BeginnStunde" || name=="BeginnMinute"
 			|| name=="EndeStunde" || name=="EndeMinute" || name=="Abbruch"
 			|| name=="Rezeptnummer" || name=="NamePatient"){
-	    	if (arg0.getKeyCode()==20){
+	    	if (arg0.getKeyCode()==KeyEvent.VK_CAPS_LOCK){
 				arg0.consume();
 	    		Beenden(0);
 				return;

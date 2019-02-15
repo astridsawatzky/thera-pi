@@ -524,11 +524,11 @@ public class Dokumentation extends JXPanel implements ActionListener, TableModel
 		tabdokus.addKeyListener(new KeyAdapter(){
 			@Override
             public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 					//neuanlageRezept(false,"");
 				}
-				if(arg0.getKeyCode()==27){
+				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 					arg0.consume();
 				}
 			}

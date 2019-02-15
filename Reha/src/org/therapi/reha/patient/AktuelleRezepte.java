@@ -525,15 +525,15 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		tabaktrez.addKeyListener(new KeyAdapter(){
 			@Override
             public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 					if(rezGeschlossen()){return;}
 					neuanlageRezept(false,"","");
 				}
-				if(arg0.getKeyCode()==27){
+				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 					arg0.consume();
 				}
-				if(arg0.getKeyCode()==65 && arg0.isControlDown()){
+				if(arg0.getKeyCode()==KeyEvent.VK_A && arg0.isControlDown()){
 					arg0.consume();
 				}
 				if(arg0.getKeyCode()==KeyEvent.VK_F1){
@@ -852,7 +852,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		tabaktterm.addKeyListener(new KeyAdapter(){
 			public void keyPressed(KeyEvent arg0) {
 				try{
-					if(arg0.getKeyCode()==10){
+					if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 						System.out.println("Tippen = "+SystemConfig.behdatumTippen);
 						if(SystemConfig.behdatumTippen){
 							arg0.consume();
@@ -868,7 +868,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 								}
 							});
 						}
-					}else if(arg0.getKeyCode()==27){
+					}else if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 						tbl.cancelCellEditing();
 					}else{
 						System.out.println("Taste "+arg0.getKeyCode()+" gedrückt");

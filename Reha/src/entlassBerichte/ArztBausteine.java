@@ -181,12 +181,12 @@ public class ArztBausteine extends JDialog implements WindowListener{
 			@Override
 			public void keyPressed(KeyEvent arg0) {
 				if(arg0.getSource() instanceof JRtaTextField){
-					if(arg0.getKeyCode()==10){
+					if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 						((JComponent)arg0.getSource()).requestFocus();
 						doKeyTest();
 					}
 				}else if(arg0.getSource() instanceof JButton){
-					if(arg0.getKeyCode()==10){
+					if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 						suchenach.requestFocus();
 						doKeyTest();
 					}

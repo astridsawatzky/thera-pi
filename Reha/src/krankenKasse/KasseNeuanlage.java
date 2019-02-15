@@ -216,7 +216,7 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 	}
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(arg0.getKeyCode() == 10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			arg0.consume();
 			if(((JComponent)arg0.getSource()).getName().equals("speichern")){
 				datenSpeichern();
@@ -227,7 +227,7 @@ public class KasseNeuanlage extends JXPanel implements ActionListener, KeyListen
 				fensterSchliessen();
 			}		
 		}
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			fensterSchliessen();
 		}
 		if( ((JComponent)arg0.getSource()).getName().equals("KUERZEL")){

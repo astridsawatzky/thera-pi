@@ -246,21 +246,21 @@ public void Markiere(String[] fundstelle){
 @Override
 public void keyPressed(KeyEvent arg0) {
 	
-	if(arg0.getKeyCode() == 10){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 		arg0.consume();
 	}	
 }
 @Override
 public void keyReleased(KeyEvent arg0) {
 	
-	if(arg0.getKeyCode() == 10){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 		arg0.consume();
 	}	
 }
 @Override
 public void keyTyped(KeyEvent arg0) {
 	
-	if(arg0.getKeyCode() == 10){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 		arg0.consume();
 	}	
 }

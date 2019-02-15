@@ -308,7 +308,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 				}
 				
 				//System.out.println(" in Tabelle "+arg0.getKeyCode());
-				if(arg0.getKeyCode()== 10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 					int row = arzttbl.getSelectedRow();
 					if(row >= 0){
@@ -454,7 +454,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		if(arg0.getSource() instanceof JRtaTextField){
-			if(arg0.getKeyCode() == 10 && ((JComponent)arg0.getSource()).getName().equals("suchen")){
+			if(arg0.getKeyCode()==KeyEvent.VK_ENTER && ((JComponent)arg0.getSource()).getName().equals("suchen")){
 				atblm.setRowCount(0);
 				arzttbl.validate();
 				//new HoleKassen(suchen.getText().trim());
@@ -466,7 +466,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener,TableMo
 							new String[] {"nachname","vorname","ort","facharzt","klinik"}));
 				}
 			}
-			if(arg0.getKeyCode() == 40 && ((JComponent)arg0.getSource()).getName().equals("suchen")){
+			if(arg0.getKeyCode()==KeyEvent.VK_DOWN && ((JComponent)arg0.getSource()).getName().equals("suchen")){
 				if(arzttbl.getRowCount()<=0){
 					suchen.requestFocus();
 					return;

@@ -528,7 +528,7 @@ private JPanel getKnopfPanel(){
 			   @Override
             public void keyPressed(KeyEvent arg0) {
 					//System.out.println("********Button in KeyPressed*********");	
-					if(arg0.getKeyCode()== 10){
+					if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 						arg0.consume();
 						stopCellEditing();
 					}

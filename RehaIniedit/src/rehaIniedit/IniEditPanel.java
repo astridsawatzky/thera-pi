@@ -254,10 +254,10 @@ public class IniEditPanel extends JXPanel{
 		kl = new KeyListener(){
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10 && arg0.isShiftDown()){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER && arg0.isShiftDown()){
 					return;
 				}
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				}
 				
 			}

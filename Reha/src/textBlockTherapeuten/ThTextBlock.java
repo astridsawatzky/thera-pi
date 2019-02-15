@@ -238,7 +238,7 @@ public class ThTextBlock extends RehaSmartDialog{
 			suchenach.addKeyListener(new KeyAdapter(){
 				@Override
                 public void keyPressed(KeyEvent arg0) {
-					if(arg0.getKeyCode()==10){
+					if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 						arg0.consume();
 						suchenach.requestFocus();
 						new SwingWorker<Void,Void>(){
@@ -257,11 +257,11 @@ public class ThTextBlock extends RehaSmartDialog{
 						}.execute();
 					}
 
-					if(arg0.getKeyCode()==27){
+					if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 						arg0.consume();
 						FensterSchliessen("null");
 					}
-					if (arg0.getKeyCode() == 40){
+					if (arg0.getKeyCode()==KeyEvent.VK_DOWN){
 						arg0.consume();
 						if (textblock.getRowCount() > 0){
 							textblock.requestFocus();
@@ -306,11 +306,11 @@ public class ThTextBlock extends RehaSmartDialog{
 			textblock.addKeyListener(new KeyAdapter(){
 				@Override
                 public void keyPressed(KeyEvent arg0) {
-					if(arg0.getKeyCode()==10){
+					if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 						arg0.consume();
 						tbCheckundStart();
 					}
-					if(arg0.getKeyCode()==27){
+					if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 						FensterSchliessen("null");
 					}
 

@@ -450,7 +450,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
     public void keyPressed(KeyEvent arg0) {
 //		System.out.println("KeyPressed "+arg0.getKeyCode()+" - "+arg0.getSource());
 		if(arg0.getSource() instanceof JFormattedTextField ){
-			if(arg0.getKeyCode() == 10){
+			if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 				//System.out.println("In KeyPressed");
 				try{
@@ -460,21 +460,21 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
 					ex.printStackTrace();
 				}
 			}
-			if(arg0.getKeyCode() == 40){
+			if(arg0.getKeyCode()==KeyEvent.VK_DOWN){
 				tblgefunden.setRowSelectionInterval(0, 0);
 				tblgefunden.requestFocus();
 			}
 
-			if(arg0.getKeyCode() == 27){
+			if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 				arg0.consume();
 			}
 		}
 
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 			FensterSchliessen(null);
 		}
-		if(arg0.getKeyCode() == 10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 		}
 	}
@@ -484,7 +484,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
     public void keyReleased(KeyEvent arg0) {
 		
 		//System.out.println("KeyReleased "+arg0);
-		if(arg0.getKeyCode() == 10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			arg0.consume();
 		}
 	}
@@ -494,7 +494,7 @@ public class BrowserFenster extends JFrame implements MouseListener,MouseMotionL
     public void keyTyped(KeyEvent arg0) {
 		
 		//System.out.println("KeyTyped "+arg0);
-		if(arg0.getKeyCode() == 10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			arg0.consume();
 		}
 	}

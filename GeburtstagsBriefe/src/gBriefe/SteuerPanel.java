@@ -481,7 +481,7 @@ public class SteuerPanel extends JXPanel implements ActionListener,MouseListener
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
-		if(arg0.getKeyCode() == 10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			if(((JComponent)arg0.getSource()).getName().equals("Geburtstage")){
 				arg0.consume();
 				starteDruck();

@@ -249,7 +249,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener{
 		kl = new KeyListener(){
 			@Override
 			public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 					if( ((JComponent)arg0.getSource()).getName().equals("suchen")){
 						sucheEinleiten();

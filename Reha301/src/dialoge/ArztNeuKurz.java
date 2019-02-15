@@ -271,14 +271,14 @@ public class ArztNeuKurz extends JXPanel implements ActionListener,KeyListener,F
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 			panelWechsel(false);
 			eltern.zurueckZurTabelle(null);
 			return;
 		}
 		try{
-			if(arg0.getKeyCode() == 10){
+			if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 
 			if(((JComponent)arg0.getSource()).getName().equals("speichern")){
@@ -297,14 +297,14 @@ public class ArztNeuKurz extends JXPanel implements ActionListener,KeyListener,F
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 		
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 		}
 	}
 	@Override
 	public void keyTyped(KeyEvent arg0) {
 		
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 		}
 	}

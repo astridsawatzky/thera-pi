@@ -238,13 +238,13 @@ public class ToolsDialog extends JXDialog implements FocusListener, ActionListen
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		if(arg0.getKeyCode()==10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			if( ((JComponent)arg0.getSource()) instanceof JList){
 				Reha.toolsDlgRueckgabe = Integer.valueOf(jList.getSelectedIndex());
 				FensterSchliessen("dieses");
 			}
 		}
-		if(arg0.getKeyCode()==27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			Reha.toolsDlgRueckgabe = Integer.valueOf(-1);
 			FensterSchliessen("dieses");			
 		}

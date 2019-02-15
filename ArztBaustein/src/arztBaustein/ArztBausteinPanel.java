@@ -414,12 +414,12 @@ public class ArztBausteinPanel extends JXPanel {
         	@Override
         	public void keyPressed(KeyEvent arg0) {
         		if(arg0.getSource() instanceof JRtaTextField){
-        			if(arg0.getKeyCode()==10){
+        			if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
         				((JComponent)arg0.getSource()).requestFocus();
         				doSearch();
         			}
         		}else if(arg0.getSource() instanceof JButton){
-        			if(arg0.getKeyCode()==10){
+        			if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
         				//suchenach.requestFocus();
         				doSearch();
         			}

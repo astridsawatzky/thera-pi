@@ -168,7 +168,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 	public void keyPressed(KeyEvent arg0) {
 		
 		////System.out.println(arg0.getKeyCode());
-		if (arg0.getKeyCode()==10){
+		if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			//arg0.consume();
 			if(ret != -1){
 				////System.out.println("Beendet mit oben "+jList1.getSelectedIndex());
@@ -182,7 +182,7 @@ public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener
 				return;
 			}	
 		}
-		if (arg0.getKeyCode()==27){
+		if (arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			////System.out.println("ESC gedrückt");			
 			eltern.swSetWahl = -1;
 			DialogBeenden(-1);

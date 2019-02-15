@@ -401,22 +401,22 @@ public class KassenAuswahl extends RehaSmartDialog{
 		@Override
 		public void keyPressed(KeyEvent arg0) {
 			
-			if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode() == 10){
+			if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 				fuelleTabelle(tf.getText().trim());
-			}else if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode() == 40){
+			}else if(((JComponent)arg0.getSource()).getName().equals("suchfeld") && arg0.getKeyCode()==KeyEvent.VK_DOWN){
 				kassenwahltbl.requestFocus();
 				kassenwahltbl.setRowSelectionInterval(0, 0);
-			}else if(((JComponent)arg0.getSource()).getName().equals("kassentabelle") && arg0.getKeyCode() == 10){
+			}else if(((JComponent)arg0.getSource()).getName().equals("kassentabelle") && arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 				werteUebergeben();
-			}else if(((JComponent)arg0.getSource()).getName().equals("neuarzt") && arg0.getKeyCode() == 10){
+			}else if(((JComponent)arg0.getSource()).getName().equals("neuarzt") && arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 				neuAnlageKassen();
 			}
 
 			
-			if(arg0.getKeyCode() == 27){
+			if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 				arg0.consume();
 				if(kassenbisher.length() <= 1){
 					//////System.out.println("Arzt = "+arztbisher);

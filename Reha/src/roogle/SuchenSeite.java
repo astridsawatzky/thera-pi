@@ -2501,7 +2501,7 @@ Vector mit Normal-Termin
 public void keyPressed(KeyEvent arg0) {
 	////System.out.println("********Button in KeyPressed*********");
 	////System.out.println(((JComponent)arg0.getSource()).getName());
-	if(arg0.getKeyCode()== 10 || arg0.getKeyCode()==0){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER || arg0.getKeyCode()==KeyEvent.VK_UNDEFINED){
 		arg0.consume();
 	}
 }
@@ -2509,7 +2509,7 @@ public void keyPressed(KeyEvent arg0) {
 @Override
 public void keyReleased(KeyEvent arg0) {
 	String csource = "";
-	if(arg0.getKeyCode() == 10 || arg0.getKeyCode() == 0){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER || arg0.getKeyCode()==KeyEvent.VK_UNDEFINED){
 		csource = ((JComponent)arg0.getSource()).getName();
 		arg0.consume();
 	}else{
@@ -2548,7 +2548,7 @@ public void keyReleased(KeyEvent arg0) {
 
 @Override
 public void keyTyped(KeyEvent arg0) {
-	if(arg0.getKeyCode() == 10 || arg0.getKeyCode() == 0){
+	if(arg0.getKeyCode()==KeyEvent.VK_ENTER || arg0.getKeyCode()==KeyEvent.VK_UNDEFINED){
 		arg0.consume();
 	}else{
 		return;

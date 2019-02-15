@@ -138,11 +138,11 @@ public class ZahlTableCellEditor extends AbstractCellEditor implements KeyListen
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
-		if(arg0.getKeyCode()==10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			////System.out.println("in Maus + Return gedrückt");
 			this.fireEditingStopped();
 		}
-		if(arg0.getKeyCode()==27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			this.cancelCellEditing();
 		}
 	}

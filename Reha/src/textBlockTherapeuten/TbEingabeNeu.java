@@ -93,11 +93,11 @@ public class TbEingabeNeu extends JXPanel implements ActionListener,KeyListener,
 		tbeingabe.addKeyListener(new KeyAdapter(){
 			@Override
             public void keyPressed(KeyEvent arg0) {
-				if(arg0.getKeyCode()==10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 					machText();
 				}
-				if(arg0.getKeyCode()==27){
+				if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 					arg0.consume();
 					rueck.setText("");
 					thbl.wechsleRueckwaerts();
@@ -337,7 +337,7 @@ public class TbEingabeNeu extends JXPanel implements ActionListener,KeyListener,
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
-		if(arg0.getKeyCode()==10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 			if( ((JComponent)arg0.getSource()).getName() != null) {
 				if( ((JComponent)arg0.getSource()).getName().equals("abbrechen")){
 					this.rueck.setText("");

@@ -305,7 +305,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 				}
 				
 				//System.out.println(" in Tabelle "+arg0.getKeyCode());
-				if(arg0.getKeyCode()== 10){
+				if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 					int row = kassentbl.getSelectedRow();
 					if(row >= 0){
@@ -458,13 +458,13 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener,Table
 		//System.out.println(arg0.getKeyCode());
 
 		if(arg0.getSource() instanceof JRtaTextField){
-			if(arg0.getKeyCode() == 10 && ((JComponent)arg0.getSource()).getName().equals("suchen")){
+			if(arg0.getKeyCode()==KeyEvent.VK_ENTER && ((JComponent)arg0.getSource()).getName().equals("suchen")){
 				ktblm.setRowCount(0);
 				kassentbl.validate();
 				new HoleKassen(suchen.getText().trim(),getInstance());
 				//testeTabelle();
 			}
-			if(arg0.getKeyCode() == 40 && ((JComponent)arg0.getSource()).getName().equals("suchen")){
+			if(arg0.getKeyCode()==KeyEvent.VK_DOWN && ((JComponent)arg0.getSource()).getName().equals("suchen")){
 				if(kassentbl.getRowCount()<=0){
 					suchen.requestFocus();
 					return;

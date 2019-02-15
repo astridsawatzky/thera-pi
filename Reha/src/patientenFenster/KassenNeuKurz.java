@@ -474,14 +474,14 @@ public class KassenNeuKurz extends JXPanel implements ActionListener,KeyListener
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 			panelWechsel(false);
 			eltern.zurueckZurTabelle(null);
 			return;
 		}
 		try{
-			if(arg0.getKeyCode() == 10){
+			if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 				arg0.consume();
 
 			if(((JComponent)arg0.getSource()).getName().equals("speichern")){

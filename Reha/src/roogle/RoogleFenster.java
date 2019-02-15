@@ -1472,12 +1472,12 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		////System.out.println(arg0.getKeyCode()+" - "+arg0.getSource()+"Roogle");
-		if(arg0.getKeyCode() == 27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 			rtp.removeRehaTPEventListener(this);
 			FensterSchliessen(null);
 		}
-		if(arg0.getKeyCode() == 10){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER){
 					arg0.consume();
 		}
 	}

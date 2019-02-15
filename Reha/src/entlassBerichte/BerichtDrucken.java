@@ -160,7 +160,7 @@ public class BerichtDrucken extends JXPanel implements ActionListener, KeyListen
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 
-		if(arg0.getKeyCode()== 10 || arg0.getKeyCode()==0){
+		if(arg0.getKeyCode()==KeyEvent.VK_ENTER || arg0.getKeyCode()==KeyEvent.VK_UNDEFINED){
 			arg0.consume();
 			String name = ((JComponent)arg0.getSource()).getName(); 
 			if( name != null){
@@ -168,7 +168,7 @@ public class BerichtDrucken extends JXPanel implements ActionListener, KeyListen
 			}
 			//System.out.println("Return gedrückt");
 		}
-		if(arg0.getKeyCode()==27){
+		if(arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
 			arg0.consume();
 			//System.out.println("ESC gedrückt");
 			((JXDialog)this.getParent().getParent().getParent().getParent().getParent()).setVisible(false);
