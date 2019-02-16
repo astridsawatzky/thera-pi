@@ -28,7 +28,7 @@ import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import krankenKasse.KasseNeuanlage;
 
-public class MlaKassenChecker extends JXDialog implements  WindowListener, KeyListener,RehaTPEventListener{
+public class MlaKassenChecker extends JXDialog implements   RehaTPEventListener{
 	/**
 	 * 
 	 */
@@ -62,7 +62,6 @@ public class MlaKassenChecker extends JXDialog implements  WindowListener, KeyLi
 		this.mymouse = new DragWin(this);
 		this.jtp.addMouseListener(mymouse);
 		this.jtp.addMouseMotionListener(mymouse);
-		this.jtp.addKeyListener(this);
 		this.jtp.setContentContainer(getContent());
 		this.jtp.setTitleForeground(Color.WHITE);
 		this.jtp.setTitle("Checker");
@@ -86,7 +85,6 @@ public class MlaKassenChecker extends JXDialog implements  WindowListener, KeyLi
 		content = new JXPanel();
 		content.setBackground(Color.WHITE);
 		content.setLayout(lay);
-		content.addKeyListener(this);
 		return content;
 	}
 	private void installListener(){
@@ -106,58 +104,7 @@ public class MlaKassenChecker extends JXDialog implements  WindowListener, KeyLi
 		};
 	}
 
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowActivated(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowClosing(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowDeactivated(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowDeiconified(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowIconified(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowOpened(WindowEvent arg0) {
-		
-		
-	}
+	
 	@Override
 	public void rehaTPEventOccurred(RehaTPEvent evt) {
 		FensterSchliessen("KassenCheker");
