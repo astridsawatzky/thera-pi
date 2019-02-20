@@ -11,15 +11,16 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 public class FileTools {
-	public static boolean deleteAllFiles(File dir){
-		File[] files = dir.listFiles();
-		for (int x=0;x<files.length;x++){
-			////System.out.println(files[x]);
-			files[x].delete();
-		}
-		
-		return true;
-	}	
+    public static void deleteAllFiles(File dir) {
+        if (dir.exists()) {
+            File[] files = dir.listFiles();
+            if (files != null) {
+                for (int x = 0; x < files.length; x++) {
+                    files[x].delete();
+                }
+            }
+        }
+    }	
 
 	public static boolean delDirAndFile(File dir){
 		if (dir.isDirectory()){
