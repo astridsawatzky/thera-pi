@@ -48,5 +48,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/TextB"/>
 	<classpathentry kind="src" path="/ArztBaustein"/>
 	<classpathentry kind="lib" path="/Libraries/lib/ini/ini4j-0.5.4.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/ocf/apduio.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/ocf/ocf-cc.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
