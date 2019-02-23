@@ -31,7 +31,6 @@ import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.painter.MattePainter;
-import org.therapi.reha.patient.LadeProg;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -46,6 +45,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import abrechnung.Disziplinen;
+import environment.LadeProg;
 import environment.Path;
 
 import com.jgoodies.forms.builder.PanelBuilder;

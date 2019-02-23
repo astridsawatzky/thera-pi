@@ -23,6 +23,7 @@ import CommonTools.StringTools;
 import dialoge.EmailDialog;
 import dialoge.SMSDialog;
 import dialoge.ToolsDialog;
+import environment.LadeProg;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;

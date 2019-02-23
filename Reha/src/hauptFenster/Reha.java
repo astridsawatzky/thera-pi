@@ -119,7 +119,6 @@ import org.jdesktop.swingx.painter.MattePainter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thera_pi.updates.TestForUpdates;
-import org.therapi.reha.patient.LadeProg;
 import org.therapi.reha.patient.PatientHauptPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -155,6 +154,7 @@ import dialoge.AboutDialog;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
+import environment.LadeProg;
 import environment.Path;
 import geraeteInit.BarCodeScanner;
 import gui.Cursors;
@@ -357,7 +357,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean bHatMerkmale;
 
 	public static Vector<Vector<List<String>>> terminLookup = new Vector<Vector<List<String>>>();
-	
+
 	private final static Mandant nullMandant = new Mandant("000000000", "Übungs-Mandant");
 	private Mandant mandant;
 	private static String aktIK=nullMandant.ik();
@@ -368,7 +368,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	private RehaSettings settings;
 	private DataSource dataSource;
-    private static Logger logger;
+	private static Logger logger;
 
 	public static JXFrame getThisFrame() {
 		return thisFrame;
@@ -384,7 +384,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	 * 2670, 2671,2714,2928,2929
 	public static int datecounts = 0;
 	public static long startmillis = 0;
-	*/
+	 */
 
 
 	public static String getAktIK() {
@@ -400,7 +400,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	}
 	public void start() {
-	        
+
 
 		startWithMandantSet();
 
@@ -411,29 +411,29 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	public static void main(String[] args) {
 		System.setProperty("java.net.preferIPv4Stack" , "true");
-	        new Logging("reha");
+		new Logging("reha");
 		initializeLogging();
 		Mandant mainMandant;
-		 String[] parameter = args;
+		String[] parameter = args;
 		if(parameter.length > 0){
 			String[] split = parameter[0].split("@");
-			 mainMandant = new Mandant(split[0],split[1]);
+			mainMandant = new Mandant(split[0],split[1]);
 		}else{
 			INIFile inif = new INIFile(Path.Instance.getProghome()+"ini/mandanten.ini");
 			int DefaultMandant = inif.getIntegerProperty("TheraPiMandanten", "DefaultMandant");
-			 mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+DefaultMandant),
-			inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+DefaultMandant));
+			mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK"+DefaultMandant),
+					inif.getStringProperty("TheraPiMandanten", "MAND-NAME"+DefaultMandant));
 		}
-		 new Reha(mainMandant).start();
+		new Reha(mainMandant).start();
 
 
 	}
-    public static void initializeLogging() {
+	public static void initializeLogging() {
 
 		logger = LoggerFactory.getLogger(Reha.class);
-    }
+	}
 	private void startWithMandantSet() {
-	      
+
 		aktIK =mandant.ik();
 		aktMandant=mandant.name();
 
@@ -455,7 +455,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}
 
 
-		
+
 
 		INITool.init(iniPath);
 		logger.info("Insgesamt sind "+Integer.toString(INITool.getDBInis().length)+" INI-Dateien in der Tabelle inidatei abgelegt");
@@ -464,11 +464,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		//System.out.println(Titel2);
 		/**************************/
 		Thread rehasockeThread= new Thread(new RehaSockServer(),"RehaSocketServer");
-		 rehasockeThread .start();
+		rehasockeThread .start();
 		/**************************/
 		new Thread(){
 			@Override
-            public  void run(){
+			public  void run(){
 				Process process;
 				try {
 					System.out.println("Starte RehaxSwing.jar");
@@ -499,7 +499,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 		new Thread(){
 			@Override
-            public void run(){
+			public void run(){
 
 				new SocketClient().setzeInitStand("System-Icons laden");
 				while(! Reha.DbOk){
@@ -529,7 +529,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		sysConf.DatenBank();
 		sysConf.phoneservice();
 		try {
-			  aktLookAndFeel = SystemConfig.getLookAndFeel();
+			aktLookAndFeel = SystemConfig.getLookAndFeel();
 			UIManager.setLookAndFeel(aktLookAndFeel);
 		} catch (ClassNotFoundException e1) {
 			e1.printStackTrace();
@@ -577,47 +577,47 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
-            public void run() {
+			public void run() {
 				try{
 
-				instance.sqlInfo = new SqlInfo();
-				instance.sqlInfo.setDieseMaschine(SystemConfig.dieseMaschine);
-				rehaBackImg = new ImageIcon(Path.Instance.getProghome()+"icons/therapieMT1.gif");
+					instance.sqlInfo = new SqlInfo();
+					instance.sqlInfo.setDieseMaschine(SystemConfig.dieseMaschine);
+					rehaBackImg = new ImageIcon(Path.Instance.getProghome()+"icons/therapieMT1.gif");
 
-				RehaEventClass rehaEvent = new RehaEventClass();
-			    rehaEvent.addRehaEventListener(instance);
-				new Thread(new DatenbankStarten()).start();
-				instance.getJFrame();
-
-
-				Reha.getThisFrame().setIconImage( Toolkit.getDefaultToolkit().getImage( Path.Instance.getProghome()+"icons/Pi_1_0.png" ) );
+					RehaEventClass rehaEvent = new RehaEventClass();
+					rehaEvent.addRehaEventListener(instance);
+					new Thread(new DatenbankStarten()).start();
+					instance.getJFrame();
 
 
-				Reha.instance.doCompoundPainter();
-				Reha.instance.starteTimer();
-				if(SystemConfig.timerdelay > 0){
-					Reha.instance.starteNachrichtenTimer();
-				}
+					Reha.getThisFrame().setIconImage( Toolkit.getDefaultToolkit().getImage( Path.Instance.getProghome()+"icons/Pi_1_0.png" ) );
 
-			    SwingUtilities.invokeLater(new Runnable(){
-			    	@Override
-                    public void run(){
-			    		try{
-			    			Reha.instance.rehaIOServer = new RehaIOServer(6000);
-			    			System.out.println("RehaIOServer wurde initialisiert");
-							SystemConfig.AktiviereLog();
+
+					Reha.instance.doCompoundPainter();
+					Reha.instance.starteTimer();
+					if(SystemConfig.timerdelay > 0){
+						Reha.instance.starteNachrichtenTimer();
+					}
+
+					SwingUtilities.invokeLater(new Runnable(){
+						@Override
+						public void run(){
 							try{
-								if(SystemConfig.activateSMS){
-									Reha.instance.rehaCommServer = new RehaCommServer(Integer.parseInt(SystemConfig.hmSMS.get("COMM")));
+								Reha.instance.rehaIOServer = new RehaIOServer(6000);
+								System.out.println("RehaIOServer wurde initialisiert");
+								SystemConfig.AktiviereLog();
+								try{
+									if(SystemConfig.activateSMS){
+										Reha.instance.rehaCommServer = new RehaCommServer(Integer.parseInt(SystemConfig.hmSMS.get("COMM")));
+									}
+								}catch(NullPointerException ex){
+									Reha.instance.rehaCommServer = null;
 								}
 							}catch(NullPointerException ex){
-								Reha.instance.rehaCommServer = null;
+								System.out.println("RehaCommServer = null");
 							}
-			    		}catch(NullPointerException ex){
-			    			System.out.println("RehaCommServer = null");
-			    		}
-			    	}
-			    });
+						}
+					});
 				}catch(NullPointerException ex){
 					ex.printStackTrace();
 					System.out.println("Fehler beim Systemstart");
@@ -705,8 +705,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		}
 		if(SystemConfig.sReaderAktiv.equals("1") && Reha.instance.ocKVK != null){
 			try{
-			Reha.instance.ocKVK.TerminalDeaktivieren();
-			System.out.println("Card-Terminal deaktiviert");
+				Reha.instance.ocKVK.TerminalDeaktivieren();
+				System.out.println("Card-Terminal deaktiviert");
 			}catch(NullPointerException ex){
 
 			}
@@ -721,264 +721,264 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			@Override
 			protected Void doInBackground() throws Exception {
 				try{
-				CompoundPainter<Object> cp = null;
-				MattePainter mp = null;
-				LinearGradientPaint p = null;
-				/*****************/
-				Point2D start = new Point2D.Float(0, 0);
-				Point2D end = new Point2D.Float(960,100);
-			    float[] dist = {0.0f, 0.75f};
-			    Color[] colors = {Color.WHITE,Colors.PiOrange.alpha(0.25f)};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("PatNeuanlage",cp);
-				/*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,100);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,new Color(231,120,23)};
-			    p =       new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("SuchePanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,15);//vorher 45
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Colors.PiOrange.alpha(0.5f),Color.WHITE};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("ButtonPanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,40);
-			    dist = new float[] {0.0f, 1.00f};
-			    colors = new Color[] {Colors.PiOrange.alpha(0.5f),Color.WHITE};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("StammDatenPanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,100);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new  Color[] {Colors.PiOrange.alpha(0.70f),Color.WHITE};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("AnredePanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,150);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new  Color[] {Color.WHITE,Colors.PiOrange.alpha(0.5f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("HauptPanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,150);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.PiOrange.alpha(0.5f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("FliessText",cp);
-			    /*****************/
-			    start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,150);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.PiOrange.alpha(0.5f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("getTabs",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,450);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new  Color[] {Colors.PiOrange.alpha(0.25f),Color.WHITE};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("getTabs2",cp);
-				/*****************/
-			    start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(350,290);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Yellow.alpha(0.05f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("RezeptGebuehren",cp);
-			    /*****************/
-			    start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(400,550);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Gray.alpha(0.15f)};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("EBerichtPanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-				end = new Point2D.Float(600,350);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Yellow.alpha(0.25f)};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("ArztBericht",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(600,750);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new  Color[] {Color.WHITE,Colors.Yellow.alpha(0.05f)};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("RezNeuanlage",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(300,100);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new  Color[] {Color.WHITE,Colors.Gray.alpha(0.05f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("ScannerUtil",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,400);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.TaskPaneBlau.alpha(0.45f)};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("ArztAuswahl",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-				end = new Point2D.Float(0,400);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Green.alpha(0.45f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("KassenAuswahl",cp);
-			    /*****************/
-			    start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(900,100);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.PiOrange.alpha(0.25f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("KVKRohDaten",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(600,550);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.TaskPaneBlau.alpha(0.45f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("ArztPanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(400,100);
-			    dist = new  float[]{0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Blue.alpha(0.15f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("ArztNeuanlage",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(400,100);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Green.alpha(0.25f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("KasseNeuanlage",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(600,550);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Green.alpha(0.5f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("KassenPanel",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(200,120);
-			    dist = new  float[] {0.0f, 0.5f};
-			    colors = new  Color[] {Colors.TaskPaneBlau.alpha(1.0f), Color.WHITE};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("SuchenSeite",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(300,270);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Color.WHITE,Colors.Gray.alpha(0.15f)};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("GutachtenWahl",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(900,100);
-			    dist = new  float[] {0.0f, 0.75f};
-			    colors = new  Color[] {Color.WHITE,Colors.Yellow.alpha(0.05f)};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("VorBerichte",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(0,600);
-			    dist = new float[] {0.0f, 0.75f};
-			    colors = new Color[] {Colors.Yellow.alpha(0.15f),Color.WHITE};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("TextBlock",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(200,120);
-			    dist = new  float[] {0.0f, 0.5f};
-			    colors = new  Color[] {Colors.TaskPaneBlau.alpha(1.0f), Color.WHITE};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("TagWahlNeu",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(390,180);
-			    dist = new  float[] {0.0f, 0.5f};
-			    colors = new  Color[] {Colors.TaskPaneBlau.alpha(1.0f), Color.WHITE};
-			    p = new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("Zeitfenster",cp);
-			    /*****************/
-				start = new Point2D.Float(0, 0);
-			    end = new Point2D.Float(400,500);
-			    dist = new float[] {0.0f, 0.5f};
-			    colors = new Color[] {Color.WHITE,Colors.Gray.alpha(0.15f)};
-			    p =  new LinearGradientPaint(start, end, dist, colors);
-			    mp = new MattePainter(p);
-			    cp = new CompoundPainter<Object>(mp);
-			    Reha.instance.compoundPainter.put("SystemInit",cp);
+					CompoundPainter<Object> cp = null;
+					MattePainter mp = null;
+					LinearGradientPaint p = null;
+					/*****************/
+					Point2D start = new Point2D.Float(0, 0);
+					Point2D end = new Point2D.Float(960,100);
+					float[] dist = {0.0f, 0.75f};
+					Color[] colors = {Color.WHITE,Colors.PiOrange.alpha(0.25f)};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("PatNeuanlage",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,100);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,new Color(231,120,23)};
+					p =       new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("SuchePanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,15);//vorher 45
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Colors.PiOrange.alpha(0.5f),Color.WHITE};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("ButtonPanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,40);
+					dist = new float[] {0.0f, 1.00f};
+					colors = new Color[] {Colors.PiOrange.alpha(0.5f),Color.WHITE};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("StammDatenPanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,100);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new  Color[] {Colors.PiOrange.alpha(0.70f),Color.WHITE};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("AnredePanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,150);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new  Color[] {Color.WHITE,Colors.PiOrange.alpha(0.5f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("HauptPanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,150);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.PiOrange.alpha(0.5f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("FliessText",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,150);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.PiOrange.alpha(0.5f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("getTabs",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,450);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new  Color[] {Colors.PiOrange.alpha(0.25f),Color.WHITE};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("getTabs2",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(350,290);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Yellow.alpha(0.05f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("RezeptGebuehren",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(400,550);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Gray.alpha(0.15f)};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("EBerichtPanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(600,350);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Yellow.alpha(0.25f)};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("ArztBericht",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(600,750);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new  Color[] {Color.WHITE,Colors.Yellow.alpha(0.05f)};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("RezNeuanlage",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(300,100);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new  Color[] {Color.WHITE,Colors.Gray.alpha(0.05f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("ScannerUtil",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,400);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.TaskPaneBlau.alpha(0.45f)};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("ArztAuswahl",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,400);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Green.alpha(0.45f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("KassenAuswahl",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(900,100);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.PiOrange.alpha(0.25f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("KVKRohDaten",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(600,550);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.TaskPaneBlau.alpha(0.45f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("ArztPanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(400,100);
+					dist = new  float[]{0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Blue.alpha(0.15f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("ArztNeuanlage",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(400,100);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Green.alpha(0.25f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("KasseNeuanlage",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(600,550);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Green.alpha(0.5f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("KassenPanel",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(200,120);
+					dist = new  float[] {0.0f, 0.5f};
+					colors = new  Color[] {Colors.TaskPaneBlau.alpha(1.0f), Color.WHITE};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("SuchenSeite",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(300,270);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Color.WHITE,Colors.Gray.alpha(0.15f)};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("GutachtenWahl",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(900,100);
+					dist = new  float[] {0.0f, 0.75f};
+					colors = new  Color[] {Color.WHITE,Colors.Yellow.alpha(0.05f)};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("VorBerichte",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(0,600);
+					dist = new float[] {0.0f, 0.75f};
+					colors = new Color[] {Colors.Yellow.alpha(0.15f),Color.WHITE};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("TextBlock",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(200,120);
+					dist = new  float[] {0.0f, 0.5f};
+					colors = new  Color[] {Colors.TaskPaneBlau.alpha(1.0f), Color.WHITE};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("TagWahlNeu",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(390,180);
+					dist = new  float[] {0.0f, 0.5f};
+					colors = new  Color[] {Colors.TaskPaneBlau.alpha(1.0f), Color.WHITE};
+					p = new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("Zeitfenster",cp);
+					/*****************/
+					start = new Point2D.Float(0, 0);
+					end = new Point2D.Float(400,500);
+					dist = new float[] {0.0f, 0.5f};
+					colors = new Color[] {Color.WHITE,Colors.Gray.alpha(0.15f)};
+					p =  new LinearGradientPaint(start, end, dist, colors);
+					mp = new MattePainter(p);
+					cp = new CompoundPainter<Object>(mp);
+					Reha.instance.compoundPainter.put("SystemInit",cp);
 
-			    /*****************/
-			    progLoader = new ProgLoader();
+					/*****************/
+					progLoader = new ProgLoader();
 
 				}catch(NullPointerException ex){
 					ex.printStackTrace();
@@ -992,26 +992,26 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	}
 	/***************************************/
 	private void starteNachrichtenTimer(){
-			Reha.nachrichtenTimer = new java.util.Timer();
-			TimerTask task = new TimerTask() {
-				@Override
-                public void run() {
-					if(!nachrichtenInBearbeitung){
-						//nur wenn das Nachrichtentool nich läuft
-						if(!RehaIOServer.rehaMailIsActive){
-							nachrichtenInBearbeitung = true;
-							/**************/
-								if( (!Reha.aktUser.equals("")) && (checkForMails()) && (Reha.officeapplication != null)){
-									nachrichtenRegeln();
-								}
-							/*************/
+		Reha.nachrichtenTimer = new java.util.Timer();
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+				if(!nachrichtenInBearbeitung){
+					//nur wenn das Nachrichtentool nich läuft
+					if(!RehaIOServer.rehaMailIsActive){
+						nachrichtenInBearbeitung = true;
+						/**************/
+						if( (!Reha.aktUser.equals("")) && (checkForMails()) && (Reha.officeapplication != null)){
+							nachrichtenRegeln();
 						}
-						nachrichtenInBearbeitung = false;
+						/*************/
 					}
+					nachrichtenInBearbeitung = false;
 				}
-			};
-			//start des Timers:
-			Reha.nachrichtenTimer.scheduleAtFixedRate(task, SystemConfig.timerdelay, SystemConfig.timerdelay);
+			}
+		};
+		//start des Timers:
+		Reha.nachrichtenTimer.scheduleAtFixedRate(task, SystemConfig.timerdelay, SystemConfig.timerdelay);
 	}
 	public static void nachrichtenRegeln(){
 		//System.out.println(Reha.aktUser);
@@ -1129,8 +1129,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			jxRechts.setBorder(BorderFactory.createEmptyBorder(5,0,5,5));
 
 			jSplitLR =  UIFSplitPane.createStrippedSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-	        		jxRechts,
-	        		jxLinks);
+					jxRechts,
+					jxLinks);
 			jSplitLR.setBackground(Color.WHITE);
 			jSplitLR.setDividerSize(7);
 			jSplitLR.addPropertyChangeListener(new PropertyChangeListener(){
@@ -1159,10 +1159,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			float[] dist = {0.2f, 0.7f, 1.0f};
 			Color[] colors = {Colors.TaskPaneBlau.alpha(1.0f), Color.WHITE, Colors.TaskPaneBlau.alpha(1.0f)};
 			LinearGradientPaint p =
-		         new LinearGradientPaint(start, end, dist, colors);
-		     MattePainter mp = new MattePainter(p);
+					new LinearGradientPaint(start, end, dist, colors);
+			MattePainter mp = new MattePainter(p);
 
-		     DropShadowBorder dropShadow = new DropShadowBorder(Color.BLACK, 10, 1, 5, false, true, true, true);
+			DropShadowBorder dropShadow = new DropShadowBorder(Color.BLACK, 10, 1, 5, false, true, true, true);
 
 			/**
 			 * Jetzt die Panels für die rechte Seite oben und unten erstellen,
@@ -1198,8 +1198,8 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 			jpOben.add(desktops[0]);
 
-		    jp2.add(jpOben,BorderLayout.CENTER);
-		    jxRechtsOben.add(jp2,BorderLayout.CENTER);
+			jp2.add(jpOben,BorderLayout.CENTER);
+			jxRechtsOben.add(jp2,BorderLayout.CENTER);
 			jxRechtsOben.validate();
 			jxRechtsOben.updateUI();
 
@@ -1217,7 +1217,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			jp2.setBorder(dropShadow);
 			jp2.addComponentListener(this);
 
-		    jpUnten = new JXPanel(new BorderLayout());
+			jpUnten = new JXPanel(new BorderLayout());
 			jpUnten.setBorder(null);
 			jpUnten.setBackgroundPainter(new CompoundPainter(mp));
 			jpUnten.setName("PanelUnten");
@@ -1236,21 +1236,21 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 			//desktops[1].add(new WorkFlow("WorkFlow",null,1));
 
-		    jpUnten.add(desktops[1]);
-		    jp2.add(jpUnten,BorderLayout.CENTER);
-		    jxRechtsUnten.add(jp2,BorderLayout.CENTER);
+			jpUnten.add(desktops[1]);
+			jp2.add(jpUnten,BorderLayout.CENTER);
+			jxRechtsUnten.add(jp2,BorderLayout.CENTER);
 			jxRechtsUnten.validate();
 			jxRechtsUnten.updateUI();
 			/********************************/
 
 			if(SystemConfig.desktopHorizontal){
 				jSplitRechtsOU = UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT,
-			             jxRechtsOben,
-			             jxRechtsUnten);
+						jxRechtsOben,
+						jxRechtsUnten);
 			}else{
 				jSplitRechtsOU = UIFSplitPane.createStrippedSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-			             jxRechtsOben,
-			             jxRechtsUnten);
+						jxRechtsOben,
+						jxRechtsUnten);
 
 			}
 			jSplitRechtsOU.addPropertyChangeListener(new PropertyChangeListener(){
@@ -1284,7 +1284,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 					e.printStackTrace();
 				}
 			}
-			jxLinks.add(new LinkeTaskPane(),BorderLayout.CENTER);
+			jxLinks.add(new LinkeTaskPane(conn), BorderLayout.CENTER);
 			jxLinks.validate();
 			jFrame.getContentPane().validate();
 			/*
@@ -1302,7 +1302,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 					jFrame.getContentPane().validate();
 				}
 			}.start();
-			*/
+			 */
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws java.lang.Exception {
@@ -1338,7 +1338,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 						}
 						new Thread(){
 							@Override
-                            public void run(){
+							public void run(){
 								try{
 									TestForUpdates tfupd = null;
 									tfupd = new TestForUpdates();
@@ -1386,10 +1386,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		setFocusWatcher();
 
 
-	    AktiveFenster.Init();
+		AktiveFenster.Init();
 
 
-	    /*
+		/*
 	    rehaEvent.addRehaEventListener(new RehaEventListener() {
 			@Override
 			public void RehaEventOccurred(RehaEvent evt) {
@@ -1397,9 +1397,9 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				//System.out.println("Event Nachricht: = "+ evt.getRehaEvent());
 			}
 	    });
-		*/
+		 */
 
-	    return jFrame;
+		return jFrame;
 	}
 	public static void setSystemConfig(SystemConfig sysConf){
 		Reha.sysConf = sysConf;
@@ -1420,7 +1420,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			jXStatusBar.setLayout(new BorderLayout());
 
 			FormLayout sblay = new FormLayout("10dlu,fill:0:grow(0.16),4dlu,fill:0:grow(0.16),4dlu,fill:0:grow(0.16),4dlu,fill:0:grow(0.16),4dlu,fill:0:grow(0.16),4dlu,fill:0:grow(0.16),10dlu",
-												"fill:0:grow(0.5),18px,fill:0:grow(0.5)");
+					"fill:0:grow(0.5),18px,fill:0:grow(0.5)");
 			CellConstraints sbcc = new CellConstraints();
 			JXPanel sbkomplett = new JXPanel();
 			sbkomplett.setBorder(BorderFactory.createEmptyBorder(1,0,1,0));
@@ -1473,11 +1473,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			bar2.setOpaque(false);
 			bar2.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 			mousePositionLabel = new javax.swing.JLabel("Druckliste = leer");
-	        mousePositionLabel.setHorizontalAlignment(SwingConstants.LEFT);
-	        mousePositionLabel.setVerticalAlignment(SwingConstants.CENTER);
-	        bar2.add(mousePositionLabel);
-	        bar.add(bar2);
-	        sbkomplett.add(bar,sbcc.xy(6, 2));
+			mousePositionLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			mousePositionLabel.setVerticalAlignment(SwingConstants.CENTER);
+			bar2.add(mousePositionLabel);
+			bar.add(bar2);
+			sbkomplett.add(bar,sbcc.xy(6, 2));
 
 			/**************4 Container****************************/
 
@@ -1487,16 +1487,16 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			bar2 = new JXPanel(new BorderLayout());
 			bar2.setOpaque(false);
 			bar2.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
-	        Rehaprogress = new JProgressBar();
-	        Rehaprogress.setOpaque(false);
-	        Rehaprogress.setIndeterminate(true);
-	        Rehaprogress.setForeground(Color.RED);
-	        Rehaprogress.setBorder(null);
-	        Rehaprogress.setBorderPainted(false);
+			Rehaprogress = new JProgressBar();
+			Rehaprogress.setOpaque(false);
+			Rehaprogress.setIndeterminate(true);
+			Rehaprogress.setForeground(Color.RED);
+			Rehaprogress.setBorder(null);
+			Rehaprogress.setBorderPainted(false);
 
-	        bar2.add(Rehaprogress);
-	        bar.add(bar2);
-	        sbkomplett.add(bar,sbcc.xy(8, 2));
+			bar2.add(Rehaprogress);
+			bar.add(bar2);
+			sbkomplett.add(bar,sbcc.xy(8, 2));
 
 			/***************5 Container***************************/
 
@@ -1507,14 +1507,14 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			bar2.setOpaque(false);
 			bar2.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
 
-	        shiftLabel = new JLabel("Standard User");
-	        shiftLabel.setForeground(Color.RED);
-	        shiftLabel.setVerticalAlignment(SwingConstants.CENTER);
-	        shiftLabel.setHorizontalAlignment(SwingConstants.LEFT);
-	        shiftLabel.setForeground(Color.RED);
-	        bar2.add(shiftLabel,BorderLayout.WEST);
-	        bar.add(bar2);
-	        sbkomplett.add(bar,sbcc.xy(10,2));
+			shiftLabel = new JLabel("Standard User");
+			shiftLabel.setForeground(Color.RED);
+			shiftLabel.setVerticalAlignment(SwingConstants.CENTER);
+			shiftLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			shiftLabel.setForeground(Color.RED);
+			bar2.add(shiftLabel,BorderLayout.WEST);
+			bar.add(bar2);
+			sbkomplett.add(bar,sbcc.xy(10,2));
 
 			/******************************************/
 
@@ -1524,10 +1524,10 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			bar2 = new JXPanel(new BorderLayout());
 			bar2.setOpaque(false);
 			bar2.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
-	        copyLabel = new JLabel("");
-	        copyLabel.setHorizontalAlignment(SwingConstants.LEFT);
-	        copyLabel.setVerticalAlignment(SwingConstants.CENTER);
-	        new SwingWorker<Void,Void>(){
+			copyLabel = new JLabel("");
+			copyLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			copyLabel.setVerticalAlignment(SwingConstants.CENTER);
+			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws Exception {
 					while(! iconsOk){
@@ -1540,63 +1540,63 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 					copyLabel.setIcon(SystemConfig.hmSysIcons.get("bunker"));
 					return null;
 				}
-	        }.execute();
+			}.execute();
 			DropTarget dndt = new DropTarget();
 			DropTargetListener dropTargetListener =
-				 new DropTargetListener() {
-				  @Override
-                public void dragEnter(DropTargetDragEvent e) {}
-				  @Override
-                public void dragExit(DropTargetEvent e) {}
-				  @Override
-                public void dragOver(DropTargetDragEvent e) {}
-				  @Override
-                public void drop(DropTargetDropEvent e) {
-					  String mitgebracht = "";
-				    try {
-				      Transferable tr = e.getTransferable();
-				      //Ursprüngliche Routine
-				      /*
+					new DropTargetListener() {
+				@Override
+				public void dragEnter(DropTargetDragEvent e) {}
+				@Override
+				public void dragExit(DropTargetEvent e) {}
+				@Override
+				public void dragOver(DropTargetDragEvent e) {}
+				@Override
+				public void drop(DropTargetDropEvent e) {
+					String mitgebracht = "";
+					try {
+						Transferable tr = e.getTransferable();
+						//Ursprüngliche Routine
+						/*
 				      DataFlavor[] flavors = tr.getTransferDataFlavors();
 				      for (int i = 0; i < flavors.length; i++){
 				        	mitgebracht  = String.valueOf((String) tr.getTransferData(flavors[i]).toString());
 				      }
-				      */
-				      if(Path.Instance.isLinux()){
-				    	  if(Reha.dragDropComponent instanceof JRtaTextField){
-				    		  mitgebracht = ((JRtaTextField)Reha.dragDropComponent).getText();
-				    	  }
-				      }else{
-					      DataFlavor[] flavors = tr.getTransferDataFlavors();
-					      for (int i = 0; i < flavors.length; i++){
-					        	mitgebracht  = String.valueOf(tr.getTransferData(flavors[i]).toString());
-					      }
-				      }
+						 */
+						if(Path.Instance.isLinux()){
+							if(Reha.dragDropComponent instanceof JRtaTextField){
+								mitgebracht = ((JRtaTextField)Reha.dragDropComponent).getText();
+							}
+						}else{
+							DataFlavor[] flavors = tr.getTransferDataFlavors();
+							for (int i = 0; i < flavors.length; i++){
+								mitgebracht  = String.valueOf(tr.getTransferData(flavors[i]).toString());
+							}
+						}
 
-				      if(mitgebracht.indexOf("°") >= 0){
-			    		  String[] labs = mitgebracht.split("°");
-				    	  if(labs[0].contains("TERMDAT")){
-				    		  copyLabel.setText(labs[1]+"°"+labs[2]+"°"+labs[3]);
-				    		  bunker.setText("TERMDATEXT°"+copyLabel.getText());
-				    		  e.dropComplete(true);
-				    		  return;
-				    	  }else if(labs[0].contains("PATDAT")){
-				    		  copyLabel.setText("");
-				    		  bunker.setText("");
-				    		  e.dropComplete(true);
-				    	  }else{
-				    		  copyLabel.setText("");
-				    		  bunker.setText("");
-				    		  e.dropComplete(true);
-				    		  return;
-				    	  }
-				      }
-				    } catch (Throwable t) { t.printStackTrace(); }
-				    e.dropComplete(true);
-				  }
-				  @Override
-                public void dropActionChanged(
-				         DropTargetDragEvent e) {}
+						if(mitgebracht.indexOf("°") >= 0){
+							String[] labs = mitgebracht.split("°");
+							if(labs[0].contains("TERMDAT")){
+								copyLabel.setText(labs[1]+"°"+labs[2]+"°"+labs[3]);
+								bunker.setText("TERMDATEXT°"+copyLabel.getText());
+								e.dropComplete(true);
+								return;
+							}else if(labs[0].contains("PATDAT")){
+								copyLabel.setText("");
+								bunker.setText("");
+								e.dropComplete(true);
+							}else{
+								copyLabel.setText("");
+								bunker.setText("");
+								e.dropComplete(true);
+								return;
+							}
+						}
+					} catch (Throwable t) { t.printStackTrace(); }
+					e.dropComplete(true);
+				}
+				@Override
+				public void dropActionChanged(
+						DropTargetDragEvent e) {}
 			};
 			try {
 				dndt.addDropTargetListener(dropTargetListener);
@@ -1605,70 +1605,70 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			}
 			copyLabel.setDropTarget(dndt);
 
-		    final String propertyName = "text";
-		    bunker = new JLabel();
-		    bunker.setName("bunker");
-		    bunker.setTransferHandler(new TransferHandler(propertyName));
-		    copyLabel.setTransferHandler(new TransferHandler(propertyName));
-		    copyLabel.setName("copyLabel");
-		    /*********************/
-		    if(Path.Instance.isLinux()){
-		    	DragGestureListener dragGestureListener = new DragGestureListener() {
-		    	     @Override
-                    public void dragGestureRecognized(
-		    	       DragGestureEvent e) {
-		    	    	 StringSelection selection = new StringSelection(copyLabel.getText());
-		    			    //if(Reha.osVersion.contains("Linux")){
-					    		  Reha.dragDropComponent = bunker;
-					    		  if(!Rechte.hatRecht(Rechte.Kalender_termindragdrop, false)){
-						        		return;
-					    		  }
-						            JComponent comp = copyLabel;
-						            if( ((JLabel)comp).getText().equals("") ){
-						            	return;
-						            }
-						            if(bunker.getText().startsWith("TERMDAT")){
-						            	TerminFenster.setDragMode(0);
-						            }
-				            //}
-		    	       e.startDrag(null, selection,  null);
-		       	     }
-		     };
+			final String propertyName = "text";
+			bunker = new JLabel();
+			bunker.setName("bunker");
+			bunker.setTransferHandler(new TransferHandler(propertyName));
+			copyLabel.setTransferHandler(new TransferHandler(propertyName));
+			copyLabel.setName("copyLabel");
+			/*********************/
+			if(Path.Instance.isLinux()){
+				DragGestureListener dragGestureListener = new DragGestureListener() {
+					@Override
+					public void dragGestureRecognized(
+							DragGestureEvent e) {
+						StringSelection selection = new StringSelection(copyLabel.getText());
+						//if(Reha.osVersion.contains("Linux")){
+						Reha.dragDropComponent = bunker;
+						if(!Rechte.hatRecht(Rechte.Kalender_termindragdrop, false)){
+							return;
+						}
+						JComponent comp = copyLabel;
+						if( ((JLabel)comp).getText().equals("") ){
+							return;
+						}
+						if(bunker.getText().startsWith("TERMDAT")){
+							TerminFenster.setDragMode(0);
+						}
+						//}
+						e.startDrag(null, selection,  null);
+					}
+				};
 
-		     DragSource dragSource = new DragSource();
+				DragSource dragSource = new DragSource();
 
 
-			dragSource.createDefaultDragGestureRecognizer(
-		    	    		copyLabel,
-		    	    		DnDConstants.ACTION_COPY,
-		    	    		dragGestureListener);
-		    }
-		    /*********************/
+				dragSource.createDefaultDragGestureRecognizer(
+						copyLabel,
+						DnDConstants.ACTION_COPY,
+						dragGestureListener);
+			}
+			/*********************/
 
-		    copyLabel.addMouseListener(new MouseAdapter() {
-		        @Override
-                public void mousePressed(MouseEvent evt) {
-		        	if(!Rechte.hatRecht(Rechte.Kalender_termindragdrop, false)){
-		        		return;
-		        	}
-		            JComponent comp = (JComponent)evt.getSource();
-		            if( ((JLabel)comp).getText().equals("") ){
-		            	return;
-		            }
-		            if(bunker.getText().startsWith("TERMDAT")){
-		            	TerminFenster.setDragMode(0);
-		            }
-		            TransferHandler th = bunker.getTransferHandler();
-		            th.exportAsDrag(bunker, evt, TransferHandler.COPY);
-		        }
-		    });
-		    bar2.add(copyLabel);
-		    bar.add(bar2);
-		    sbkomplett.add(bar,sbcc.xy(12,2));
-		    sbkomplett.validate();
-		    jXStatusBar.add(sbkomplett,BorderLayout.CENTER);
-	        jXStatusBar.validate();
-	        jXStatusBar.setVisible(true);
+			copyLabel.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent evt) {
+					if(!Rechte.hatRecht(Rechte.Kalender_termindragdrop, false)){
+						return;
+					}
+					JComponent comp = (JComponent)evt.getSource();
+					if( ((JLabel)comp).getText().equals("") ){
+						return;
+					}
+					if(bunker.getText().startsWith("TERMDAT")){
+						TerminFenster.setDragMode(0);
+					}
+					TransferHandler th = bunker.getTransferHandler();
+					th.exportAsDrag(bunker, evt, TransferHandler.COPY);
+				}
+			});
+			bar2.add(copyLabel);
+			bar.add(bar2);
+			sbkomplett.add(bar,sbcc.xy(12,2));
+			sbkomplett.validate();
+			jXStatusBar.add(sbkomplett,BorderLayout.CENTER);
+			jXStatusBar.validate();
+			jXStatusBar.setVisible(true);
 
 		}
 		return jXStatusBar;
@@ -1680,7 +1680,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			protected Void doInBackground() throws Exception {
 				new Thread(){
 					@Override
-                    public void run(){
+					public void run(){
 						Rehaprogress.setIndeterminate(xstarten);
 					}
 				}.start();
@@ -1842,7 +1842,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			men.addActionListener(this);
 			toolsMenu.add(men);
 			toolsMenu.addSeparator();
-			*/
+			 */
 			men = new JMenuItem("§301 Reha Fall-Steuerung");
 			men.setActionCommand("fallsteuerung");
 			men.addActionListener(this);
@@ -1915,7 +1915,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			exitMenuItem.setText("Thera-Pi beenden");
 			exitMenuItem.addActionListener(new ActionListener() {
 				@Override
-                public void actionPerformed(ActionEvent e) {
+				public void actionPerformed(ActionEvent e) {
 					askCloseOrRestart();
 				}
 			});
@@ -1925,26 +1925,26 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 
 	protected void askCloseOrRestart() {
 		Runtime r = Runtime.getRuntime();
-	    r.gc();
+		r.gc();
 		switch (JOptionPane.showOptionDialog(null, "thera-\u03C0 wirklich schließen?", "Bitte bestätigen",
 				JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null,new String[]{"Ja", "Nein", "Restart"}, "Ja")){
-		case JOptionPane.YES_OPTION:		// schließen
-			if(Reha.DbOk &&  (Reha.instance.conn != null) ){
-				Date zeit = new Date();
-				String stx = "Insert into eingeloggt set comp='"+SystemConfig.dieseMaschine+"', zeit='"+zeit.toString()+"', einaus='aus'";
-				SqlInfo.sqlAusfuehren(stx);
-			}
-			beendeSofort();
-			break;
-		case JOptionPane.CANCEL_OPTION:		// restart
-			doCloseEverything();
-			try {
-				Runtime.getRuntime().exec("java -jar "+Path.Instance.getProghome()+"TheraPi.jar");		// restart einleiten
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			System.exit(0);
-			break;
+				case JOptionPane.YES_OPTION:		// schließen
+					if(Reha.DbOk &&  (Reha.instance.conn != null) ){
+						Date zeit = new Date();
+						String stx = "Insert into eingeloggt set comp='"+SystemConfig.dieseMaschine+"', zeit='"+zeit.toString()+"', einaus='aus'";
+						SqlInfo.sqlAusfuehren(stx);
+					}
+					beendeSofort();
+					break;
+				case JOptionPane.CANCEL_OPTION:		// restart
+					doCloseEverything();
+					try {
+						Runtime.getRuntime().exec("java -jar "+Path.Instance.getProghome()+"TheraPi.jar");		// restart einleiten
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					System.exit(0);
+					break;
 		}
 	}
 
@@ -1968,275 +1968,275 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	}
 
 	public void setzeUi(String sUI,JScrollPane panel){
-	      try {
-	    	  SystemConfig.UpdateIni("rehajava.ini","HauptFenster","LookAndFeel",sUI);
-	    	  UIManager.setLookAndFeel((aktLookAndFeel = sUI));
-	    	  SwingUtilities.updateComponentTreeUI(getThisFrame());
-	    	  SwingUtilities.updateComponentTreeUI(this.jxRechtsOben);
-	    	  SwingUtilities.updateComponentTreeUI(this.jxRechtsUnten);
-	    	  SwingUtilities.updateComponentTreeUI(this.jSplitLR);
-	    	  SwingUtilities.updateComponentTreeUI(this.jxLinks);
-	    	  SwingUtilities.updateComponentTreeUI(this.jxRechts);
-	    	  LinkeTaskPane.UpdateUI();
-			}catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			} catch (InstantiationException e1) {
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				e1.printStackTrace();
-			} catch (UnsupportedLookAndFeelException e1) {
-				e1.printStackTrace();
-			}
+		try {
+			SystemConfig.UpdateIni("rehajava.ini","HauptFenster","LookAndFeel",sUI);
+			UIManager.setLookAndFeel((aktLookAndFeel = sUI));
+			SwingUtilities.updateComponentTreeUI(getThisFrame());
+			SwingUtilities.updateComponentTreeUI(this.jxRechtsOben);
+			SwingUtilities.updateComponentTreeUI(this.jxRechtsUnten);
+			SwingUtilities.updateComponentTreeUI(this.jSplitLR);
+			SwingUtilities.updateComponentTreeUI(this.jxLinks);
+			SwingUtilities.updateComponentTreeUI(this.jxRechts);
+			LinkeTaskPane.UpdateUI();
+		}catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (InstantiationException e1) {
+			e1.printStackTrace();
+		} catch (IllegalAccessException e1) {
+			e1.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 
 
-    public static void starteOfficeApplication(){
-        try
-        {
+	public static void starteOfficeApplication(){
+		try
+		{
 			officeapplication = new StartOOApplication(SystemConfig.OpenOfficePfad,SystemConfig.OpenOfficeNativePfad).start(false);
-			 System.out.println("OpenOffice ist gestartet und aktiv = "+officeapplication.isActive());
-			 Reha.instance.Rehaprogress.setIndeterminate(false);
-        }catch (OfficeApplicationException e) {
-            e.printStackTrace();
-            Reha.instance.messageLabel = new JLabel("OO.org nicht verfügbar!!!");
-        }
+			System.out.println("OpenOffice ist gestartet und aktiv = "+officeapplication.isActive());
+			Reha.instance.Rehaprogress.setIndeterminate(false);
+		}catch (OfficeApplicationException e) {
+			e.printStackTrace();
+			Reha.instance.messageLabel = new JLabel("OO.org nicht verfügbar!!!");
+		}
 
 
-    }
+	}
 
-    private void setKeyboardActions() {
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        toolkit.addAWTEventListener(new AWTEventListener() {
-            @Override
-            public void eventDispatched(AWTEvent event)  {
-                if(event instanceof KeyEvent) {
-                    KeyEvent keyEvent = (KeyEvent) event;
-                    if(progRechte.equals("")){
-                    	return;
-                    }
-                    if(keyEvent.isAltDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_X) {
-                        }
-                    if(keyEvent.isControlDown() &&
-                       keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_P) {
-        				new SwingWorker<Void,Void>(){
-        					@Override
-        					protected Void doInBackground() throws Exception {
-        						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-        						Reha.getThisFrame().setCursor(Cursors.normalCursor);
-        						return null;
-        					}
-        				}.execute();
-                    }
-                    if(keyEvent.isAltDown() && keyEvent.getID()== KEY_PRESSED
-                    		&& keyEvent.getKeyCode() ==	VK_R){
-                    	new RezeptFahnder(true);
-                    	return;
+	private void setKeyboardActions() {
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		toolkit.addAWTEventListener(new AWTEventListener() {
+			@Override
+			public void eventDispatched(AWTEvent event)  {
+				if(event instanceof KeyEvent) {
+					KeyEvent keyEvent = (KeyEvent) event;
+					if(progRechte.equals("")){
+						return;
+					}
+					if(keyEvent.isAltDown() &&
+							keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_X) {
+					}
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_P) {
+						new SwingWorker<Void,Void>(){
+							@Override
+							protected Void doInBackground() throws Exception {
+								Reha.getThisFrame().setCursor(Cursors.wartenCursor);
+								Reha.getThisFrame().setCursor(Cursors.normalCursor);
+								return null;
+							}
+						}.execute();
+					}
+					if(keyEvent.isAltDown() && keyEvent.getID()== KEY_PRESSED
+							&& keyEvent.getKeyCode() ==	VK_R){
+						new RezeptFahnder(true);
+						return;
 
-                    }
-                    if(keyEvent.isAltDown() &&
-                            keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_X) {
-                    		Reha.aktUser = "";
-                    		SwingUtilities.invokeLater(new Runnable(){
-                    			@Override
-                                public void run(){
-                    				if(RehaIOServer.rehaMailIsActive){
-                    					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort, "Reha#"+RehaIOMessages.MUST_RESET);
-                    				}
-                    			}
-                    		});
-                            ProgLoader.PasswortDialog();
-                    }
+					}
+					if(keyEvent.isAltDown() &&
+							keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_X) {
+						Reha.aktUser = "";
+						SwingUtilities.invokeLater(new Runnable(){
+							@Override
+							public void run(){
+								if(RehaIOServer.rehaMailIsActive){
+									new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort, "Reha#"+RehaIOMessages.MUST_RESET);
+								}
+							}
+						});
+						ProgLoader.PasswortDialog();
+					}
 
-                    if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_T) {
-        					JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
-        					if(termin == null){
-        						//
-        					}else{
-        						//ProgLoader.ProgTerminFenster(0,0);//
-        					}
-                    }
-                    if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_O) {
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_T) {
+						JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
+						if(termin == null){
+							//
+						}else{
+							//ProgLoader.ProgTerminFenster(0,0);//
+						}
+					}
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_O) {
 
-                    }
-                    if(keyEvent.isControlDown() &&
-                    		keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_K) {
-    					//JComponent kasse = AktiveFenster.getFensterAlle("KrankenKasse");
+					}
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KEY_PRESSED && keyEvent.getKeyCode()==VK_K) {
+						//JComponent kasse = AktiveFenster.getFensterAlle("KrankenKasse");
 
-                    }
-                    if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_A) {
-    					//JComponent arzt = AktiveFenster.getFensterAlle("ArztVerwaltung");
+					}
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_A) {
+						//JComponent arzt = AktiveFenster.getFensterAlle("ArztVerwaltung");
 
 						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 						Reha.instance.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
 						Reha.getThisFrame().setCursor(Cursors.normalCursor);
-                    }
+					}
 
-                    if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_LEFT) {
-                    		setDivider(1);
-                    		keyEvent.consume();
-                    }
-                    if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_RIGHT) {
-                    		setDivider(2);
-                    		keyEvent.consume();
-                    }
-                    if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_UP) {
-                    		setDivider(3);
-                    		keyEvent.consume();
-                    }
-                    if(keyEvent.isControlDown() &&
-                            keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_DOWN) {
-                			setDivider(4);
-                    		keyEvent.consume();
-                    }
-                }
-            }
-        }, AWTEvent.KEY_EVENT_MASK);
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_LEFT) {
+						setDivider(1);
+						keyEvent.consume();
+					}
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_RIGHT) {
+						setDivider(2);
+						keyEvent.consume();
+					}
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_UP) {
+						setDivider(3);
+						keyEvent.consume();
+					}
+					if(keyEvent.isControlDown() &&
+							keyEvent.getID() == KeyEvent.KEY_PRESSED && keyEvent.getKeyCode()==VK_DOWN) {
+						setDivider(4);
+						keyEvent.consume();
+					}
+				}
+			}
+		}, AWTEvent.KEY_EVENT_MASK);
 
-    }
-    public void setVertDivider(final int variante){
-    	//System.out.println("Variante = "+variante);
-    	//Diese Funktion wäre etwas für Michael Schuett
-    	/*
-    	 * Im Grunde wuerde es genuegen wenn Strg+Pfeil-Links/oder Rechts gedrueckt wird,
-    	 * die Arbeitsflächen entweder hälftig oder voll sichtbar darzustellen
-    	 * den Rest muesste man dann einfach mit der Maus herstellen.
-    	 *
-    	 */
-    	SwingUtilities.invokeLater(new Runnable(){
-    		@Override
-            public void run(){
-    			//links
-    			//System.out.println("Variante = "+variante);
-    			//System.out.println("Vollsichtbar = "+vollsichtbar);
-    	    	if(variante==1){
+	}
+	public void setVertDivider(final int variante){
+		//System.out.println("Variante = "+variante);
+		//Diese Funktion wäre etwas für Michael Schuett
+		/*
+		 * Im Grunde wuerde es genuegen wenn Strg+Pfeil-Links/oder Rechts gedrueckt wird,
+		 * die Arbeitsflächen entweder hälftig oder voll sichtbar darzustellen
+		 * den Rest muesste man dann einfach mit der Maus herstellen.
+		 *
+		 */
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public void run(){
+				//links
+				//System.out.println("Variante = "+variante);
+				//System.out.println("Vollsichtbar = "+vollsichtbar);
+				if(variante==1){
 
 
-    	        	if(desktops[0].getWidth() <= 25){
-    	        		jSplitRechtsOU.setDividerLocation(0);
-    	        		vollsichtbar = 1;
-    	        		return;
-    	        	}else if(desktops[0].getWidth() > 25){
-    	    			jSplitRechtsOU.setDividerLocation((jSplitRechtsOU.getDividerLocation()-25));
-    	    			vollsichtbar = -1;
-    	    			return;
-    	    		}
+					if(desktops[0].getWidth() <= 25){
+						jSplitRechtsOU.setDividerLocation(0);
+						vollsichtbar = 1;
+						return;
+					}else if(desktops[0].getWidth() > 25){
+						jSplitRechtsOU.setDividerLocation((jSplitRechtsOU.getDividerLocation()-25));
+						vollsichtbar = -1;
+						return;
+					}
 
-    	        //rechts
-    	    	}else if(variante==2){
-    	    		if(desktops[1].getWidth() <= 25){
-    	        		jSplitRechtsOU.setDividerLocation(jSplitRechtsOU.getWidth()-7);
-    	        		vollsichtbar = 0;
-    	        		return;
-    	    		}else{
-    	    			jSplitRechtsOU.setDividerLocation((jSplitRechtsOU.getDividerLocation()+25));
-    	    			vollsichtbar = -1;
-    	    			return;
-    	    		}
-    	    	}else if(variante==5){
-    	    		jSplitRechtsOU.setDividerLocation(jSplitRechtsOU.getWidth()-7);
-    	    	}else if(variante==6){
+					//rechts
+				}else if(variante==2){
+					if(desktops[1].getWidth() <= 25){
+						jSplitRechtsOU.setDividerLocation(jSplitRechtsOU.getWidth()-7);
+						vollsichtbar = 0;
+						return;
+					}else{
+						jSplitRechtsOU.setDividerLocation((jSplitRechtsOU.getDividerLocation()+25));
+						vollsichtbar = -1;
+						return;
+					}
+				}else if(variante==5){
+					jSplitRechtsOU.setDividerLocation(jSplitRechtsOU.getWidth()-7);
+				}else if(variante==6){
 
-    	    		jSplitRechtsOU.setDividerLocation(0);
+					jSplitRechtsOU.setDividerLocation(0);
 
-    	    	}
-    	    	vollsichtbar = -1;
+				}
+				vollsichtbar = -1;
 
-    		}
-    	});
-    }
-    public void setDivider(int variante){
-    	final int xvariante = variante;
-    	//System.out.println("Variante = "+variante);
+			}
+		});
+	}
+	public void setDivider(int variante){
+		final int xvariante = variante;
+		//System.out.println("Variante = "+variante);
 		//System.out.println("Vollsichtbar = "+vollsichtbar);
-    	SwingUtilities.invokeLater(new Runnable(){
-      	   @Override
-        public  void run()
-      	   {
-      		   if(!SystemConfig.desktopHorizontal){
-      			   setVertDivider(xvariante);
-      			   return;
-      		   }
-      		   int i;
-      		   for(i=0;i<1;i++){
-      			   //links
-      			   if(xvariante==1){
-      				   if(jSplitLR.getDividerLocation()>250){
-      					   jSplitLR.setDividerLocation(dividerLocLR-10);
-      				   }else{
-      					   if(dividerLocLR-10 < 0){
-      						   jSplitLR.setDividerLocation(0);
-      					   }else{
-      						   jSplitLR.setDividerLocation(dividerLocLR-10);
-      					   }
-      				   }
-      				   break;
-      			   }
-      			   //rechts
-      			   if(xvariante==2){
-      				   if(jSplitLR.getDividerLocation()<250){
-      					   jSplitLR.setDividerLocation(dividerLocLR+10);
-      				   }else{
-      					   if(dividerLocLR+10 > getThisFrame().getRootPane().getWidth()-7){
-      						   jSplitLR.setDividerLocation(getThisFrame().getRootPane().getWidth()-7);
-      					   }else{
-      						   jSplitLR.setDividerLocation(dividerLocLR+10);
-      					   }
-      				   }
-      				   break;
-      			   }
-      			   if(xvariante==3){
-      				   // nach oben
-      				   if(jSplitRechtsOU.getDividerLocation() > (getThisFrame().getRootPane().getHeight()/2)-3){
-      					   jSplitRechtsOU.setDividerLocation((jxLinks.getHeight()/2)-3);
-          				   vollsichtbar = -1;
-      				   }else{
-      					   jSplitRechtsOU.setDividerLocation(0);
-          				   vollsichtbar = 1;
-      				   }
-      			   }
-      			   if(xvariante==4){
-      				   // nach unten
-      				   if(jSplitRechtsOU.getDividerLocation() < (jxLinks.getHeight()/2)-3 ){
-      					   jSplitRechtsOU.setDividerLocation((jxLinks.getHeight()/2)-3);
-          				   vollsichtbar = -1;
-      				   }else{
-      					   jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane().getHeight()-7);
-          				   vollsichtbar = 0;
-      				   }
-      				   break;
-      			   }
-      			   if(xvariante==5){
-      				   // oben Vollbild
-      				   vollsichtbar = 0;
-      				   jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane().getHeight()-7);
-      				   break;
-      			   }
-      			   if(xvariante==6){
-      				   // unten Vollbild
-      				   vollsichtbar = 1;
-  					   jSplitRechtsOU.setDividerLocation(0);
-      				   break;
-      			   }
-      			   if(xvariante==7){
-      				   vollsichtbar = 1;
-  					   jSplitRechtsOU.setDividerLocation(0);
-      				   break;
-      			   }
-      		   }
-      	   }
-     	});
+		SwingUtilities.invokeLater(new Runnable(){
+			@Override
+			public  void run()
+			{
+				if(!SystemConfig.desktopHorizontal){
+					setVertDivider(xvariante);
+					return;
+				}
+				int i;
+				for(i=0;i<1;i++){
+					//links
+					if(xvariante==1){
+						if(jSplitLR.getDividerLocation()>250){
+							jSplitLR.setDividerLocation(dividerLocLR-10);
+						}else{
+							if(dividerLocLR-10 < 0){
+								jSplitLR.setDividerLocation(0);
+							}else{
+								jSplitLR.setDividerLocation(dividerLocLR-10);
+							}
+						}
+						break;
+					}
+					//rechts
+					if(xvariante==2){
+						if(jSplitLR.getDividerLocation()<250){
+							jSplitLR.setDividerLocation(dividerLocLR+10);
+						}else{
+							if(dividerLocLR+10 > getThisFrame().getRootPane().getWidth()-7){
+								jSplitLR.setDividerLocation(getThisFrame().getRootPane().getWidth()-7);
+							}else{
+								jSplitLR.setDividerLocation(dividerLocLR+10);
+							}
+						}
+						break;
+					}
+					if(xvariante==3){
+						// nach oben
+						if(jSplitRechtsOU.getDividerLocation() > (getThisFrame().getRootPane().getHeight()/2)-3){
+							jSplitRechtsOU.setDividerLocation((jxLinks.getHeight()/2)-3);
+							vollsichtbar = -1;
+						}else{
+							jSplitRechtsOU.setDividerLocation(0);
+							vollsichtbar = 1;
+						}
+					}
+					if(xvariante==4){
+						// nach unten
+						if(jSplitRechtsOU.getDividerLocation() < (jxLinks.getHeight()/2)-3 ){
+							jSplitRechtsOU.setDividerLocation((jxLinks.getHeight()/2)-3);
+							vollsichtbar = -1;
+						}else{
+							jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane().getHeight()-7);
+							vollsichtbar = 0;
+						}
+						break;
+					}
+					if(xvariante==5){
+						// oben Vollbild
+						vollsichtbar = 0;
+						jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane().getHeight()-7);
+						break;
+					}
+					if(xvariante==6){
+						// unten Vollbild
+						vollsichtbar = 1;
+						jSplitRechtsOU.setDividerLocation(0);
+						break;
+					}
+					if(xvariante==7){
+						vollsichtbar = 1;
+						jSplitRechtsOU.setDividerLocation(0);
+						break;
+					}
+				}
+			}
+		});
 
-    }
-    public int getSichtbar(){
-    	/*
+	}
+	public int getSichtbar(){
+		/*
 		System.out.println("\n\nDivider-Location = "+jSplitRechtsOU.getDividerLocation());
 		System.out.println("Divider-Ok 		 = "+Reha.dividerOk);
 		System.out.println("Höhe der RootPane = "+thisFrame.getRootPane().getHeight()+"\n");
@@ -2244,7 +2244,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 		System.out.println("Höhe von Desktop[1] = "+desktops[1].getHeight());
 		System.out.println("Breite von Desktop[0] = "+desktops[0].getWidth());
 		System.out.println("Breite von Desktop[1] = "+desktops[1].getWidth());
-		*/
+		 */
 		if(SystemConfig.desktopHorizontal){
 			if(desktops[0].getHeight() <= 10){
 				return 1;
@@ -2258,11 +2258,11 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			}else if(desktops[1].getWidth() <= 10){
 				return 0;
 			}
-			*/
+			 */
 		}
 		return -1;
-    }
-    public void setFocusWatcher() {
+	}
+	public void setFocusWatcher() {
 		long mask = AWTEvent.FOCUS_EVENT_MASK;
 		/*
 			AWTEvent.ACTION_EVENT_MASK
@@ -2275,14 +2275,14 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			| AWTEvent.WINDOW_FOCUS_EVENT_MASK
 			| AWTEvent.WINDOW_STATE_EVENT_MASK
 			| AWTEvent.COMPONENT_EVENT_MASK;
-		*/
-        	Toolkit toolkit = Toolkit.getDefaultToolkit();
-        	toolkit.addAWTEventListener(new AWTEventListener(){
+		 */
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		toolkit.addAWTEventListener(new AWTEventListener(){
 
-            @Override
-            public void eventDispatched(AWTEvent event)  {
-                if(event instanceof FocusEvent) {
-                	/*
+			@Override
+			public void eventDispatched(AWTEvent event)  {
+				if(event instanceof FocusEvent) {
+					/*
                     FocusEvent focusEvent = (FocusEvent) event;
                     System.out.println("\n*************************************************");
                     System.out.println("***Klasse = "+ ((FocusEvent) event).getComponent().getClass().toString());
@@ -2290,24 +2290,24 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
                 	System.out.println("***hat Focus = " +((FocusEvent) event).getComponent().hasFocus());
                 	System.out.println("***Name des Focused Windows = "+KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow().getName());
                     System.out.println("*************************************************");
-                    */
-                }
-            }
-        }, mask);
+					 */
+				}
+			}
+		}, mask);
 	}
 
 	@Override
-    public void componentHidden(ComponentEvent arg0) {
-	}
-
-
-	@Override
-    public void componentMoved(ComponentEvent arg0) {
+	public void componentHidden(ComponentEvent arg0) {
 	}
 
 
 	@Override
-    public void componentResized(ComponentEvent arg0) {
+	public void componentMoved(ComponentEvent arg0) {
+	}
+
+
+	@Override
+	public void componentResized(ComponentEvent arg0) {
 		//Größe einstellen
 		try{
 			if(((JComponent)arg0.getSource()).getName() != null){
@@ -2323,7 +2323,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				for(int i = 0;i< frm.length;i++){
 					if(((JRehaInternal)frm[i]).getImmerGross()){
 						frm[i].setBounds(2,2,Reha.instance.jpOben.getWidth()-2,
-									Reha.instance.jpOben.getHeight()-2);
+								Reha.instance.jpOben.getHeight()-2);
 					}
 					((JRehaInternal)frm[i]).setCompOrder(i);
 					((JRehaInternal)frm[i]).setzeIcon();
@@ -2332,7 +2332,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 				for(int i = 0;i< frm.length;i++){
 					if(((JRehaInternal)frm[i]).getImmerGross()){
 						frm[i].setBounds(2,2,Reha.instance.jpUnten.getWidth()-2,
-									Reha.instance.jpUnten.getHeight()-2);
+								Reha.instance.jpUnten.getHeight()-2);
 					}
 					((JRehaInternal)frm[i]).setCompOrder(i);
 					((JRehaInternal)frm[i]).setzeIcon();
@@ -2353,40 +2353,40 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	/************Motion Event******************/
 
 	@Override
-    public void mouseClicked(MouseEvent arg0) {
+	public void mouseClicked(MouseEvent arg0) {
 	}
 	@Override
-    public void mouseEntered(MouseEvent arg0) {
+	public void mouseEntered(MouseEvent arg0) {
 	}
 	@Override
-    public void mouseExited(MouseEvent arg0) {
+	public void mouseExited(MouseEvent arg0) {
 	}
 	@Override
-    public void mousePressed(MouseEvent arg0) {
+	public void mousePressed(MouseEvent arg0) {
 	}
 	@Override
-    public void mouseReleased(MouseEvent arg0) {
+	public void mouseReleased(MouseEvent arg0) {
 	}
-/************Motion für DragEvent******************/
+	/************Motion für DragEvent******************/
 	@Override
-    public void mouseDragged(MouseEvent arg0) {
-	}
-	@Override
-    public void mouseMoved(MouseEvent arg0) {
-	}
-/************KeyListener*************************/
-	@Override
-    public void keyPressed(KeyEvent arg0) {
+	public void mouseDragged(MouseEvent arg0) {
 	}
 	@Override
-    public void keyReleased(KeyEvent arg0) {
+	public void mouseMoved(MouseEvent arg0) {
+	}
+	/************KeyListener*************************/
+	@Override
+	public void keyPressed(KeyEvent arg0) {
 	}
 	@Override
-    public void keyTyped(KeyEvent arg0) {
+	public void keyReleased(KeyEvent arg0) {
+	}
+	@Override
+	public void keyTyped(KeyEvent arg0) {
 	}
 
 	@Override
-    public void rehaEventOccurred(RehaEvent evt) {
+	public void rehaEventOccurred(RehaEvent evt) {
 		//System.out.println("Event angekommen - Event="+evt.getRehaEvent());
 		if(evt.getRehaEvent().equals("PatSuchen")){
 		}
@@ -2458,342 +2458,342 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	@Override
 	public void componentRemoved(ContainerEvent arg0) {
 	}
-/***************************/
-public void starteTimer(){
-	Reha.fangoTimer = new Timer(60000,this);
-	Reha.fangoTimer.setActionCommand("testeFango");
-	Reha.fangoTimer.start();
-	Reha.timerLaeuft = true;
-}
-public static void testeStrictMode(){
-	try{
-		String cmd = "show variables like 'sql_mode%'";
-		Vector<Vector<String>> vecfeld = SqlInfo.holeFelder(cmd);
-		System.out.println("sql_mode="+vecfeld.get(0).get(1).trim());
-		if(!vecfeld.get(0).get(1).trim().equals("")){
-			String meldung = "Achtung der MySql-Server wird im Modus: "+vecfeld.get(0).get(1).trim()+" betrieben!\n"+
-			"In diesem Modus kann Thera-Pi nicht fehlerfrei betrieben werden.\n\n"+
-			"Beenden Sie Thera-Pi und stellen Sie in der Datei my.ini (Linux=my.cnf) den Wert sql_mode='' ein\n"+
-			"Die Datei befindet sich in dem Verzeichnis indem der MySql-Server installiert wurde";
-			JOptionPane.showMessageDialog(null,meldung);
+	/***************************/
+	public void starteTimer(){
+		Reha.fangoTimer = new Timer(60000,this);
+		Reha.fangoTimer.setActionCommand("testeFango");
+		Reha.fangoTimer.start();
+		Reha.timerLaeuft = true;
+	}
+	public static void testeStrictMode(){
+		try{
+			String cmd = "show variables like 'sql_mode%'";
+			Vector<Vector<String>> vecfeld = SqlInfo.holeFelder(cmd);
+			System.out.println("sql_mode="+vecfeld.get(0).get(1).trim());
+			if(!vecfeld.get(0).get(1).trim().equals("")){
+				String meldung = "Achtung der MySql-Server wird im Modus: "+vecfeld.get(0).get(1).trim()+" betrieben!\n"+
+						"In diesem Modus kann Thera-Pi nicht fehlerfrei betrieben werden.\n\n"+
+						"Beenden Sie Thera-Pi und stellen Sie in der Datei my.ini (Linux=my.cnf) den Wert sql_mode='' ein\n"+
+						"Die Datei befindet sich in dem Verzeichnis indem der MySql-Server installiert wurde";
+				JOptionPane.showMessageDialog(null,meldung);
+			}
+		}catch(NullPointerException ex){
+			ex.printStackTrace();
 		}
-	}catch(NullPointerException ex){
-		ex.printStackTrace();
 	}
-}
-public static void testeMaxAllowed(){
-	try{
-		String cmd = "show variables like 'max_allowed_packet%'";
-		Vector<Vector<String>> vecfeld = SqlInfo.holeFelder(cmd);
+	public static void testeMaxAllowed(){
+		try{
+			String cmd = "show variables like 'max_allowed_packet%'";
+			Vector<Vector<String>> vecfeld = SqlInfo.holeFelder(cmd);
 
-		int dfeld = (Integer.valueOf(vecfeld.get(0).get(1))/1024)/1024;
-		System.out.println("max_allowed_packet="+Integer.toString(dfeld)+" MB");
-		if( dfeld < 16){
-			String meldung = "Achtung die MySql-Server Einstellung 'max_allowed_packet' ist bei Ihnen auf "+Integer.toString(dfeld)+" MB eingestellt\n"+
-			"Dieser Wert ist möglicherweise zu niedrig wenn Sie größere Dokumentationen scannen wollen.\n\n"+
-			"Wir empfehlen Ihnen einen Wert von >= 32MB.\nEingestellt wird dieser Wert in der Datei my.ini (Linux=my.cnf)\n"+
-			"Diese Datei befindet sich in dem Verzeichnis indem der MySql-Server installiert wurde\n";
-			JOptionPane.showMessageDialog(null,meldung);
+			int dfeld = (Integer.valueOf(vecfeld.get(0).get(1))/1024)/1024;
+			System.out.println("max_allowed_packet="+Integer.toString(dfeld)+" MB");
+			if( dfeld < 16){
+				String meldung = "Achtung die MySql-Server Einstellung 'max_allowed_packet' ist bei Ihnen auf "+Integer.toString(dfeld)+" MB eingestellt\n"+
+						"Dieser Wert ist möglicherweise zu niedrig wenn Sie größere Dokumentationen scannen wollen.\n\n"+
+						"Wir empfehlen Ihnen einen Wert von >= 32MB.\nEingestellt wird dieser Wert in der Datei my.ini (Linux=my.cnf)\n"+
+						"Diese Datei befindet sich in dem Verzeichnis indem der MySql-Server installiert wurde\n";
+				JOptionPane.showMessageDialog(null,meldung);
+			}
+		}catch(NullPointerException ex){
+			ex.printStackTrace();
 		}
-	}catch(NullPointerException ex){
-		ex.printStackTrace();
 	}
-}
 
-public static void testeNummernKreis(){
-	String cmd = "select mandant from nummern LIMIT 1";
-	Vector<Vector<String>> vecnummern = SqlInfo.holeFelder(cmd);
-	if(vecnummern.size() <= 0){
-		cmd = "insert into nummern set pat='1',kg='1',ma='1',er='1',"+
-		"lo='1',rh='1',rnr='1',esol='1',bericht='1',afrnr='1',rgrnr='1',doku='1',"+
-		"dfue='1',mandant='"+Reha.getAktIK()+"'";
-		//System.out.println(cmd);
-		SqlInfo.sqlAusfuehren(cmd);
+	public static void testeNummernKreis(){
+		String cmd = "select mandant from nummern LIMIT 1";
+		Vector<Vector<String>> vecnummern = SqlInfo.holeFelder(cmd);
+		if(vecnummern.size() <= 0){
+			cmd = "insert into nummern set pat='1',kg='1',ma='1',er='1',"+
+					"lo='1',rh='1',rnr='1',esol='1',bericht='1',afrnr='1',rgrnr='1',doku='1',"+
+					"dfue='1',mandant='"+Reha.getAktIK()+"'";
+			//System.out.println(cmd);
+			SqlInfo.sqlAusfuehren(cmd);
+		}
 	}
-}
-/**********Actions**********/
-@Override
-public void actionPerformed(ActionEvent arg0) {
-	String cmd = arg0.getActionCommand();
-        switch (cmd) {
-        case "ueberTheraPi":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    AboutDialog aboutFenster = new AboutDialog(jFrame, aboutMenuItem.getText());
-                    aboutFenster.setVisible(true);
-                    aboutFenster.setFocus();
-                    return null;
-                }
-            }.execute();
-            break;
-        case "f2Rescue":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    if (Reha.terminLookup.size() <= 0) {
-                        JOptionPane.showMessageDialog(null, "Bislang sind noch keine F3 / F2-Termine aufgezeichnet");
-                        return null;
-                    }
-                    try {
-                        new F2RettungsAnker();
-                    } catch (TextException e) {
-                        e.printStackTrace();
-                    }
-                    
-                    return null;
-                }
-            }.execute();
-            break;
-        case "testeFango":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    Wecker.testeWecker();
-                    return null;
-                }
-            }.execute();
-            break;
-        case "patient":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    progLoader.ProgPatientenVerwaltung(1);
-                    Reha.instance.progressStarten(false);
-                    return null;
-                }
-            }.execute();
-            return;
-        case "kasse":
-            Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
-            return;
-        case "arzt":
-            Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
-            return;
-        case "hmabrechnung":
-            try {
-                if (SystemConfig.hmEmailExtern.get("SenderAdresse") == null
-                        || SystemConfig.hmEmailExtern.get("SenderAdresse").trim().equals("")) {
-                    JOptionPane.showMessageDialog(null,
-                            "<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
-                    return;
-                }
-            } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(null,
-                        "<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
-                return;
-            }
-            Reha.instance.progLoader.AbrechnungFenster(1);
-            return;
-        case "rehaabrechnung":
-            Reha.instance.progLoader.RehaabrechnungFenster(1, "");
-            return;
-        case "barkasse":
-            Reha.instance.progLoader.BarkassenFenster(1, "");
-            return;
-        case "anmeldezahlen":
-            Reha.instance.progLoader.AnmeldungenFenster(1, "");
-            return;
-        case "tagesumsatz":
-            Reha.instance.progLoader.UmsatzFenster(1, "");
-            return;
-        case "verkauf":
-            Reha.instance.progLoader.VerkaufFenster(1, "");
-            return;
-        case "urlaub":
-            if (!Rechte.hatRecht(Rechte.Funktion_urlaubueberstunden, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaUrlaub.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "umsatzbeteiligung":
-            Reha.instance.progLoader.BeteiligungFenster(1, "");
-            return;
-        case "lvastatistik":
-            new LadeProg(Path.Instance.getProghome() + "RehaStatistik.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "offeneposten":
-            if (!Rechte.hatRecht(Rechte.Funktion_offeneposten, true)) {
-                return;
-            }
-            if (!RehaIOServer.offenePostenIsActive) {
-                new LadeProg(Path.Instance.getProghome() + "OffenePosten.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + Reha.xport);
-            } else {
-                new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,
-                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-            }
-            return;
-        case "rezeptfahnder":
-            new RezeptFahnder(true);
-            return;
-        case "rgaffaktura":
-            if (!Rechte.hatRecht(Rechte.Funktion_barkasse, false)) {
-                JOptionPane.showMessageDialog(null, "Keine Berechtigung -> Funktion Ausbuchen RGAF-Faktura");
-                return;
-            }
-            if (!RehaIOServer.rgAfIsActive) {
-                new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + Reha.xport);
-            } else {
-                new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,
-                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-            }
-            return;
-        case "kassenbuch":
-            if (!Rechte.hatRecht(Rechte.Funktion_kassenbuch, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaKassenbuch.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "geburtstagsbriefe":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "GBriefe.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "sqlmodul":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
-                return;
-            }
-            if (!RehaIOServer.rehaSqlIsActive) {
-                new LadeProg(Path.Instance.getProghome() + "RehaSql.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
-                        + (!Rechte.hatRecht(Rechte.BenutzerSuper_user, false) ? " readonly" : " full"));
-            } else {
-                new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,
-                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-            }
-            return;
-        case "fallsteuerung":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
-                return;
-            }
-            if (RehaIOServer.reha301IsActive) {
-                JOptionPane.showMessageDialog(null, "Das 301-er Modul läuft bereits");
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.reha301reversePort,
-                                "Reha301#" + RehaIOMessages.MUST_GOTOFRONT);
-                    }
-                });
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "Reha301.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
-            return;
-        case "workflow":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
-                return;
-            }
-            if (RehaIOServer.rehaWorkFlowIsActive) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaWorkFlowreversePort,
-                                "ZeigeFrame#" + RehaIOMessages.MUST_GOTOFRONT);
-                    }
-                });
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "WorkFlow.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
-            return;
-        case "hmrsearch":
-            System.out.println("isActive = " + RehaIOServer.rehaHMKIsActive);
-            if (RehaIOServer.rehaHMKIsActive) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String searchrez = (Reha.instance.patpanel != null
-                                ? " " + Reha.instance.patpanel.vecaktrez.get(1)
-                                : "");
-                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
-                                "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-                        if (!searchrez.isEmpty()) {
-                            new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
-                                    "Reha#" + RehaIOMessages.MUST_REZFIND + "#" + searchrez);
-                        }
-                    }
-                });
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaHMK.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
-                    + (Reha.instance.patpanel != null ? " " + Reha.instance.patpanel.vecaktrez.get(1) : ""));
-            // System.out.println("Übergebe Rezeptnummer:
-            // "+SystemConfig.hmAdrRDaten.get("Rnummer"));
-            // Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
-            return;
-        case "iniedit":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaIniedit.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "ocr":
-            new LadeProg(Path.Instance.getProghome() + "RehaOCR.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
-            return;
-        }
-
-
-}
-/****************/
-/***************/
-public void activateWebCam(){
-
-	new SwingWorker<Void,Void>(){
-
-		@Override
-		protected Void doInBackground() throws java.lang.Exception {
-
-			try{
-				try{
-
-					Class c = Class.forName("javax.media.Manager");
-		        }catch (ClassNotFoundException e){
-		        	SystemConfig.sWebCamActive = "0";
-		        	JOptionPane.showMessageDialog(null, "Java Media Framework (JMF) ist nicht installiert"+
-		        			"\nWebCam kann nicht gestartet werden");
-
-		        }
-
-				Vector<CaptureDeviceInfo> deviceList = javax.media.cdm.CaptureDeviceManager.getDeviceList(new YUVFormat());
-				if(deviceList == null){
-					JOptionPane.showMessageDialog(null,"Keine WebCam verfügbar!!");
-					SystemConfig.sWebCamActive = "0";
+	/**********Actions**********/
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		String cmd = arg0.getActionCommand();
+		switch (cmd) {
+		case "ueberTheraPi":
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws java.lang.Exception {
+					AboutDialog aboutFenster = new AboutDialog(jFrame, aboutMenuItem.getText());
+					aboutFenster.setVisible(true);
+					aboutFenster.setFocus();
 					return null;
 				}
-				device = deviceList.firstElement();
-				ml = device.getLocator();
-				Manager.setHint(Manager.LIGHTWEIGHT_RENDERER, new Boolean(true));
-				player = Manager.createRealizedPlayer(ml);
-			}catch(NullPointerException ex){
-				ex.printStackTrace();
-				SystemConfig.sWebCamActive = "0";
-			}catch (NoPlayerException e) {
-				e.printStackTrace();
-				SystemConfig.sWebCamActive = "0";
-			} catch (CannotRealizeException e) {
-				e.printStackTrace();
-				SystemConfig.sWebCamActive = "0";
-			} catch (IOException e) {
-				e.printStackTrace();
-				SystemConfig.sWebCamActive = "0";
+			}.execute();
+			break;
+		case "f2Rescue":
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws java.lang.Exception {
+					if (Reha.terminLookup.size() <= 0) {
+						JOptionPane.showMessageDialog(null, "Bislang sind noch keine F3 / F2-Termine aufgezeichnet");
+						return null;
+					}
+					try {
+						new F2RettungsAnker();
+					} catch (TextException e) {
+						e.printStackTrace();
+					}
+
+					return null;
+				}
+			}.execute();
+			break;
+		case "testeFango":
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws java.lang.Exception {
+					Wecker.testeWecker();
+					return null;
+				}
+			}.execute();
+			break;
+		case "patient":
+			new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progressStarten(false);
+					return null;
+				}
+			}.execute();
+			return;
+		case "kasse":
+			Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
+			return;
+		case "arzt":
+			Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
+			return;
+		case "hmabrechnung":
+			try {
+				if (SystemConfig.hmEmailExtern.get("SenderAdresse") == null
+						|| SystemConfig.hmEmailExtern.get("SenderAdresse").trim().equals("")) {
+					JOptionPane.showMessageDialog(null,
+							"<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
+					return;
+				}
+			} catch (NullPointerException ex) {
+				JOptionPane.showMessageDialog(null,
+						"<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
+				return;
 			}
-			System.out.println("Web-Cam erfolgreich gestartet");
-			return null;
-
+			Reha.instance.progLoader.AbrechnungFenster(1);
+			return;
+		case "rehaabrechnung":
+			Reha.instance.progLoader.RehaabrechnungFenster(1, "");
+			return;
+		case "barkasse":
+			Reha.instance.progLoader.BarkassenFenster(1, "");
+			return;
+		case "anmeldezahlen":
+			Reha.instance.progLoader.AnmeldungenFenster(1, "");
+			return;
+		case "tagesumsatz":
+			Reha.instance.progLoader.UmsatzFenster(1, "");
+			return;
+		case "verkauf":
+			Reha.instance.progLoader.VerkaufFenster(1, "");
+			return;
+		case "urlaub":
+			if (!Rechte.hatRecht(Rechte.Funktion_urlaubueberstunden, true)) {
+				return;
+			}
+			new LadeProg(Path.Instance.getProghome() + "RehaUrlaub.jar" + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK());
+			return;
+		case "umsatzbeteiligung":
+			Reha.instance.progLoader.BeteiligungFenster(1, "");
+			return;
+		case "lvastatistik":
+			new LadeProg(Path.Instance.getProghome() + "RehaStatistik.jar" + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK());
+			return;
+		case "offeneposten":
+			if (!Rechte.hatRecht(Rechte.Funktion_offeneposten, true)) {
+				return;
+			}
+			if (!RehaIOServer.offenePostenIsActive) {
+				new LadeProg(Path.Instance.getProghome() + "OffenePosten.jar" + " " + Path.Instance.getProghome() + " "
+						+ Reha.getAktIK() + " " + Reha.xport);
+			} else {
+				new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,
+						"Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+			}
+			return;
+		case "rezeptfahnder":
+			new RezeptFahnder(true);
+			return;
+		case "rgaffaktura":
+			if (!Rechte.hatRecht(Rechte.Funktion_barkasse, false)) {
+				JOptionPane.showMessageDialog(null, "Keine Berechtigung -> Funktion Ausbuchen RGAF-Faktura");
+				return;
+			}
+			if (!RehaIOServer.rgAfIsActive) {
+				new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
+						+ Reha.getAktIK() + " " + Reha.xport);
+			} else {
+				new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,
+						"Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+			}
+			return;
+		case "kassenbuch":
+			if (!Rechte.hatRecht(Rechte.Funktion_kassenbuch, true)) {
+				return;
+			}
+			new LadeProg(Path.Instance.getProghome() + "RehaKassenbuch.jar" + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK());
+			return;
+		case "geburtstagsbriefe":
+			if (!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)) {
+				return;
+			}
+			new LadeProg(Path.Instance.getProghome() + "GBriefe.jar" + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK());
+			return;
+		case "sqlmodul":
+			if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
+				return;
+			}
+			if (!RehaIOServer.rehaSqlIsActive) {
+				new LadeProg(Path.Instance.getProghome() + "RehaSql.jar" + " " + Path.Instance.getProghome() + " "
+						+ Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
+						+ (!Rechte.hatRecht(Rechte.BenutzerSuper_user, false) ? " readonly" : " full"));
+			} else {
+				new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,
+						"Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+			}
+			return;
+		case "fallsteuerung":
+			if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
+				return;
+			}
+			if (RehaIOServer.reha301IsActive) {
+				JOptionPane.showMessageDialog(null, "Das 301-er Modul läuft bereits");
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						new ReverseSocket().setzeRehaNachricht(RehaIOServer.reha301reversePort,
+								"Reha301#" + RehaIOMessages.MUST_GOTOFRONT);
+					}
+				});
+				return;
+			}
+			new LadeProg(Path.Instance.getProghome() + "Reha301.jar " + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+			return;
+		case "workflow":
+			if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
+				return;
+			}
+			if (RehaIOServer.rehaWorkFlowIsActive) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaWorkFlowreversePort,
+								"ZeigeFrame#" + RehaIOMessages.MUST_GOTOFRONT);
+					}
+				});
+				return;
+			}
+			new LadeProg(Path.Instance.getProghome() + "WorkFlow.jar " + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+			return;
+		case "hmrsearch":
+			System.out.println("isActive = " + RehaIOServer.rehaHMKIsActive);
+			if (RehaIOServer.rehaHMKIsActive) {
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						String searchrez = (Reha.instance.patpanel != null
+								? " " + Reha.instance.patpanel.vecaktrez.get(1)
+								: "");
+						new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
+								"Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+						if (!searchrez.isEmpty()) {
+							new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
+									"Reha#" + RehaIOMessages.MUST_REZFIND + "#" + searchrez);
+						}
+					}
+				});
+				return;
+			}
+			new LadeProg(Path.Instance.getProghome() + "RehaHMK.jar " + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
+					+ (Reha.instance.patpanel != null ? " " + Reha.instance.patpanel.vecaktrez.get(1) : ""));
+			// System.out.println("Übergebe Rezeptnummer:
+			// "+SystemConfig.hmAdrRDaten.get("Rnummer"));
+			// Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
+			return;
+		case "iniedit":
+			if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
+				return;
+			}
+			new LadeProg(Path.Instance.getProghome() + "RehaIniedit.jar " + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK());
+			return;
+		case "ocr":
+			new LadeProg(Path.Instance.getProghome() + "RehaOCR.jar " + " " + Path.Instance.getProghome() + " "
+					+ Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
+			return;
 		}
-	}.execute();
-}
+
+
+	}
+	/****************/
+	/***************/
+	public void activateWebCam(){
+
+		new SwingWorker<Void,Void>(){
+
+			@Override
+			protected Void doInBackground() throws java.lang.Exception {
+
+				try{
+					try{
+
+						Class c = Class.forName("javax.media.Manager");
+					}catch (ClassNotFoundException e){
+						SystemConfig.sWebCamActive = "0";
+						JOptionPane.showMessageDialog(null, "Java Media Framework (JMF) ist nicht installiert"+
+								"\nWebCam kann nicht gestartet werden");
+
+					}
+
+					Vector<CaptureDeviceInfo> deviceList = javax.media.cdm.CaptureDeviceManager.getDeviceList(new YUVFormat());
+					if(deviceList == null){
+						JOptionPane.showMessageDialog(null,"Keine WebCam verfügbar!!");
+						SystemConfig.sWebCamActive = "0";
+						return null;
+					}
+					device = deviceList.firstElement();
+					ml = device.getLocator();
+					Manager.setHint(Manager.LIGHTWEIGHT_RENDERER, new Boolean(true));
+					player = Manager.createRealizedPlayer(ml);
+				}catch(NullPointerException ex){
+					ex.printStackTrace();
+					SystemConfig.sWebCamActive = "0";
+				}catch (NoPlayerException e) {
+					e.printStackTrace();
+					SystemConfig.sWebCamActive = "0";
+				} catch (CannotRealizeException e) {
+					e.printStackTrace();
+					SystemConfig.sWebCamActive = "0";
+				} catch (IOException e) {
+					e.printStackTrace();
+					SystemConfig.sWebCamActive = "0";
+				}
+				System.out.println("Web-Cam erfolgreich gestartet");
+				return null;
+
+			}
+		}.execute();
+	}
 
 
 
@@ -2801,7 +2801,7 @@ public void activateWebCam(){
 
 
 
-/*********************************************/
+	/*********************************************/
 }
 
 /**************
@@ -2820,7 +2820,7 @@ final class DatenbankStarten implements Runnable{
 		final String sDB = "SQL";
 		if (obj.conn != null){
 			try{
-			obj.conn.close();}
+				obj.conn.close();}
 			catch(final SQLException e){}
 		}
 		try{
@@ -2828,8 +2828,8 @@ final class DatenbankStarten implements Runnable{
 				new SocketClient().setzeInitStand("Datenbanktreiber installieren");
 				Class.forName(SystemConfig.vDatenBank.get(0).get(0)).newInstance();
 			}
-    	}
-    	catch (InstantiationException e) {
+		}
+		catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
@@ -2843,44 +2843,44 @@ final class DatenbankStarten implements Runnable{
 				new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
 				obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
 						SystemConfig.vDatenBank.get(0).get(3),SystemConfig.vDatenBank.get(0).get(4));
-				}
-				int nurmaschine = SystemConfig.dieseMaschine.toString().lastIndexOf("/");
-				obj.sqlInfo.setConnection(obj.conn);
-				new ExUndHop().setzeStatement("delete from flexlock where maschine like '%"+SystemConfig.dieseMaschine.toString().substring(0, nurmaschine)+"%'");
-				//geht leider nicht, erfordert root-Rechte
-				//SqlInfo.sqlAusfuehren("SET GLOBAL sql_mode = ''");
-				//sql_mode ging zwar mit SET SESSION, aber dann haben wir max_allowed... immer noch nicht gelöst.
-				//SqlInfo.sqlAusfuehren("SET GLOBAL max_allowed_packet = 32*1024*1024");
-				String db = SystemConfig.vDatenBank.get(0).get(1).replace("jdbc:mysql://", "");
-				db = db.substring(0,db.indexOf("/"));
-				final String xdb = db;
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground()
-							throws java.lang.Exception {
-						try{
-							while(Reha.getThisFrame() == null || Reha.getThisFrame().getStatusBar()==null || Reha.instance.dbLabel == null){
-								Thread.sleep(25);
-							}
-							Reha.instance.dbLabel.setText(Reha.aktuelleVersion+xdb);
-						}catch(NullPointerException ex){
-							ex.printStackTrace();
+			}
+			int nurmaschine = SystemConfig.dieseMaschine.toString().lastIndexOf("/");
+			obj.sqlInfo.setConnection(obj.conn);
+			new ExUndHop().setzeStatement("delete from flexlock where maschine like '%"+SystemConfig.dieseMaschine.toString().substring(0, nurmaschine)+"%'");
+			//geht leider nicht, erfordert root-Rechte
+			//SqlInfo.sqlAusfuehren("SET GLOBAL sql_mode = ''");
+			//sql_mode ging zwar mit SET SESSION, aber dann haben wir max_allowed... immer noch nicht gelöst.
+			//SqlInfo.sqlAusfuehren("SET GLOBAL max_allowed_packet = 32*1024*1024");
+			String db = SystemConfig.vDatenBank.get(0).get(1).replace("jdbc:mysql://", "");
+			db = db.substring(0,db.indexOf("/"));
+			final String xdb = db;
+			new SwingWorker<Void,Void>(){
+				@Override
+				protected Void doInBackground()
+						throws java.lang.Exception {
+					try{
+						while(Reha.getThisFrame() == null || Reha.getThisFrame().getStatusBar()==null || Reha.instance.dbLabel == null){
+							Thread.sleep(25);
 						}
-						return null;
+						Reha.instance.dbLabel.setText(Reha.aktuelleVersion+xdb);
+					}catch(NullPointerException ex){
+						ex.printStackTrace();
 					}
-
-				}.execute();
-
-
-				Reha.DbOk = true;
-				try{
-					Reha.testeNummernKreis();
-				    Reha.testeStrictMode();
-				    Reha.testeMaxAllowed();
-
-				}catch(java.lang.ArrayIndexOutOfBoundsException ex){
-					ex.printStackTrace();
+					return null;
 				}
+
+			}.execute();
+
+
+			Reha.DbOk = true;
+			try{
+				Reha.testeNummernKreis();
+				Reha.testeStrictMode();
+				Reha.testeMaxAllowed();
+
+			}catch(java.lang.ArrayIndexOutOfBoundsException ex){
+				ex.printStackTrace();
+			}
 
 		}catch (final SQLException ex) {
 			System.out.println("SQLException: " + ex.getMessage());
@@ -2908,7 +2908,7 @@ final class DatenbankStarten implements Runnable{
 					e.printStackTrace();
 				}
 				new SocketClient().setzeInitStand("INITENDE");
-				
+
 				System.exit(0);
 
 			}
@@ -2917,7 +2917,7 @@ final class DatenbankStarten implements Runnable{
 		return;
 	}
 	@Override
-    public void run() {
+	public void run() {
 		int i=0;
 		while (!Reha.instance.splashok){
 			i = i+1;
@@ -3079,9 +3079,9 @@ final class DatenbankStarten implements Runnable{
 
 
 			}catch (InterruptedException e1) {
-					e1.printStackTrace();
+				e1.printStackTrace();
 			}catch (NullPointerException e2) {
-					e2.printStackTrace();
+				e2.printStackTrace();
 			}
 		}else{
 			new SwingWorker<Void,Void>(){
@@ -3098,7 +3098,7 @@ final class DatenbankStarten implements Runnable{
 
 final class DbNachladen implements Runnable{
 	@Override
-    public void run(){
+	public void run(){
 		final String sDB = "SQL";
 		final Reha obj = Reha.instance;
 		if(Reha.instance.conn != null){
@@ -3109,7 +3109,7 @@ final class DbNachladen implements Runnable{
 			}
 		}
 
-    	try {
+		try {
 			if (sDB=="SQL"){
 				new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
 				obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0).get(1)+"?jdbcCompliantTruncation=false",
@@ -3123,29 +3123,29 @@ final class DbNachladen implements Runnable{
 				obj.dbLabel.setText(Reha.aktuelleVersion+db);
 			}
 			obj.sqlInfo.setConnection(obj.conn);
-    		Reha.DbOk = true;
+			Reha.DbOk = true;
 
-    	}
-    	catch (final SQLException ex) {
-    		Reha.DbOk = false;
+		}
+		catch (final SQLException ex) {
+			Reha.DbOk = false;
 			Reha.nachladenDB = -1;
 			Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.getThisFrame(),"Die Datenbank konnte nicht gestartet werden, erneuter Versuch?",
-			"Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
+					"Wichtige Benuterzinfo",JOptionPane.YES_NO_OPTION);
 
-    		while(Reha.nachladenDB < 0){
-    			try {
-    				Thread.sleep(25);
-    			} catch (InterruptedException e) {
-    				e.printStackTrace();
-    			}
-    		}
+			while(Reha.nachladenDB < 0){
+				try {
+					Thread.sleep(25);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 
-    		if(Reha.nachladenDB == JOptionPane.YES_OPTION){
-    			new Thread(new DbNachladen()).start();
-    		}
-    		return;
-    	}
-    return;
+			if(Reha.nachladenDB == JOptionPane.YES_OPTION){
+				new Thread(new DbNachladen()).start();
+			}
+			return;
+		}
+		return;
 	}
 }
 
@@ -3153,19 +3153,19 @@ final class ErsterLogin implements Runnable{
 	private void Login(){
 		new Thread(){
 			@Override
-            public void run(){
-			Reha.starteOfficeApplication();
-			OOTools.ooOrgAnmelden();
+			public void run(){
+				Reha.starteOfficeApplication();
+				OOTools.ooOrgAnmelden();
 			}
 		}.start();
 		ProgLoader.PasswortDialog();
 	}
 	@Override
-    public void run() {
+	public void run() {
 		Login();
 		SwingUtilities.invokeLater(new Runnable(){
 			@Override
-            public  void run(){
+			public  void run(){
 				Reha.getThisFrame().setMinimumSize(new Dimension(800,600));
 				Reha.getThisFrame().setPreferredSize(new Dimension(800,600));
 				Reha.getThisFrame().setExtendedState(JXFrame.MAXIMIZED_BOTH);
@@ -3209,44 +3209,44 @@ final class ErsterLogin implements Runnable{
 							//JOptionPane.showMessageDialog(null,System.getProperty("java.version"));
 
 
-						//SCR335
-						//ctpcsc31kv
+							//SCR335
+							//ctpcsc31kv
 
-						if(SystemConfig.sReaderAktiv.equals("1")){
-							try{
+							if(SystemConfig.sReaderAktiv.equals("1")){
+								try{
 
-								System.out.println("Aktiviere Reader: "+SystemConfig.sReaderName+"\n"+
-										"CT-API Bibliothek: "+SystemConfig.sReaderCtApiLib);
-								Reha.instance.ocKVK = new OcKVK(SystemConfig.sReaderName.trim().replace(" ", "_"),
-									SystemConfig.sReaderCtApiLib,SystemConfig.sReaderDeviceID,false);
-							}catch(CardTerminalException ex){
-								disableReader("Fehlerstufe rc = -8 = CardTerminal reagiert nicht\n"+ex.getMessage());
-							} catch (CardServiceException e) {
-								disableReader("Fehlerstufe rc = -2 oder -4  = Karte wird nicht unterstützt\n"+e.getMessage());
-							} catch (ClassNotFoundException e) {
-								disableReader("Fehlerstufe rc = -1 = CT-API läßt sich nicht initialisieren\n"+e.getMessage());
-							} catch (java.lang.Exception e) {
-								if(e.getMessage().contains("property file")){
-									disableReader("Anderweitiger Fehler\n"+"Die Datei opencard.properties befindet sich nicht im Java-Verzeichnis ../lib."+
-											"Das Kartenlesegerät kann nicht verwendet werden.");
-								}else{
-									disableReader("Anderweitiger Fehler\n"+e.getMessage());
+									System.out.println("Aktiviere Reader: "+SystemConfig.sReaderName+"\n"+
+											"CT-API Bibliothek: "+SystemConfig.sReaderCtApiLib);
+									Reha.instance.ocKVK = new OcKVK(SystemConfig.sReaderName.trim().replace(" ", "_"),
+											SystemConfig.sReaderCtApiLib,SystemConfig.sReaderDeviceID,false);
+								}catch(CardTerminalException ex){
+									disableReader("Fehlerstufe rc = -8 = CardTerminal reagiert nicht\n"+ex.getMessage());
+								} catch (CardServiceException e) {
+									disableReader("Fehlerstufe rc = -2 oder -4  = Karte wird nicht unterstützt\n"+e.getMessage());
+								} catch (ClassNotFoundException e) {
+									disableReader("Fehlerstufe rc = -1 = CT-API läßt sich nicht initialisieren\n"+e.getMessage());
+								} catch (java.lang.Exception e) {
+									if(e.getMessage().contains("property file")){
+										disableReader("Anderweitiger Fehler\n"+"Die Datei opencard.properties befindet sich nicht im Java-Verzeichnis ../lib."+
+												"Das Kartenlesegerät kann nicht verwendet werden.");
+									}else{
+										disableReader("Anderweitiger Fehler\n"+e.getMessage());
+									}
 								}
-							}
-							if(Reha.instance.ocKVK != null){
-								Vector<Vector<String>> vec = Reha.instance.ocKVK.getReaderList();
-								for(int i = 0; i < vec.get(0).size();i++){
-									System.out.println("*******************");
-									System.out.println(vec.get(0).get(i)+" - "+
-											vec.get(1).get(i)+" - "+
-											vec.get(2).get(i)+" - "+
-											vec.get(3).get(i));
-								}
+								if(Reha.instance.ocKVK != null){
+									Vector<Vector<String>> vec = Reha.instance.ocKVK.getReaderList();
+									for(int i = 0; i < vec.get(0).size();i++){
+										System.out.println("*******************");
+										System.out.println(vec.get(0).get(i)+" - "+
+												vec.get(1).get(i)+" - "+
+												vec.get(2).get(i)+" - "+
+												vec.get(3).get(i));
+									}
 
+								}
+								//KVKWrapper kvw = new KVKWrapper(SystemConfig.sReaderName);
+								//kvw.KVK_Einlesen();
 							}
-							//KVKWrapper kvw = new KVKWrapper(SystemConfig.sReaderName);
-							//kvw.KVK_Einlesen();
-						}
 						}catch(NullPointerException ex){
 							ex.printStackTrace();
 						}
@@ -3269,56 +3269,56 @@ final class PreisListenLaden implements Runnable{
 
 		try{
 
-		while(Reha.instance == null || Reha.instance.jxLinks == null || Reha.instance.jxRechts == null){
-			long zeit = System.currentTimeMillis();
-			try {
-				Thread.sleep(50);
-				if(System.currentTimeMillis()-zeit > 20000){
-					JOptionPane.showMessageDialog(null,"Fehler beim Starten des Systems ");
-					System.exit(0);
+			while(Reha.instance == null || Reha.instance.jxLinks == null || Reha.instance.jxRechts == null){
+				long zeit = System.currentTimeMillis();
+				try {
+					Thread.sleep(50);
+					if(System.currentTimeMillis()-zeit > 20000){
+						JOptionPane.showMessageDialog(null,"Fehler beim Starten des Systems ");
+						System.exit(0);
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
 			}
-		}
-		if(isAktiv("Physio")){
-			new SocketClient().setzeInitStand("Preisliste Physio einlesen");
-			SystemPreislisten.ladePreise("Physio");
-		}
-		if(isAktiv("Massage")){
-			new SocketClient().setzeInitStand("Preisliste Massage einlesen");
-			SystemPreislisten.ladePreise("Massage");
-		}
-		if(isAktiv("Ergo")){
-			new SocketClient().setzeInitStand("Preisliste Ergo einlesen");
-			SystemPreislisten.ladePreise("Ergo");
-		}
-		if(isAktiv("Logo")){
-			new SocketClient().setzeInitStand("Preisliste Logo einlesen");
-			SystemPreislisten.ladePreise("Logo");
-		}
-		if(isAktiv("Reha")){
-			new SocketClient().setzeInitStand("Preisliste Reha einlesen");
-			SystemPreislisten.ladePreise("Reha");
-		}
-		if(isAktiv("Podo")){
-			new SocketClient().setzeInitStand("Preisliste Podologie einlesen");
-			SystemPreislisten.ladePreise("Podo");
-		}
-		if(SystemConfig.mitRs){
-			if(isAktiv("Rsport")){
-				new SocketClient().setzeInitStand("Preisliste Rehasport einlesen");
-				SystemPreislisten.ladePreise("Rsport");
+			if(isAktiv("Physio")){
+				new SocketClient().setzeInitStand("Preisliste Physio einlesen");
+				SystemPreislisten.ladePreise("Physio");
 			}
-			if(isAktiv("Ftrain")){
-				new SocketClient().setzeInitStand("Preisliste Funktionstraining einlesen");
-				SystemPreislisten.ladePreise("Ftrain");
+			if(isAktiv("Massage")){
+				new SocketClient().setzeInitStand("Preisliste Massage einlesen");
+				SystemPreislisten.ladePreise("Massage");
 			}
-		}
+			if(isAktiv("Ergo")){
+				new SocketClient().setzeInitStand("Preisliste Ergo einlesen");
+				SystemPreislisten.ladePreise("Ergo");
+			}
+			if(isAktiv("Logo")){
+				new SocketClient().setzeInitStand("Preisliste Logo einlesen");
+				SystemPreislisten.ladePreise("Logo");
+			}
+			if(isAktiv("Reha")){
+				new SocketClient().setzeInitStand("Preisliste Reha einlesen");
+				SystemPreislisten.ladePreise("Reha");
+			}
+			if(isAktiv("Podo")){
+				new SocketClient().setzeInitStand("Preisliste Podologie einlesen");
+				SystemPreislisten.ladePreise("Podo");
+			}
+			if(SystemConfig.mitRs){
+				if(isAktiv("Rsport")){
+					new SocketClient().setzeInitStand("Preisliste Rehasport einlesen");
+					SystemPreislisten.ladePreise("Rsport");
+				}
+				if(isAktiv("Ftrain")){
+					new SocketClient().setzeInitStand("Preisliste Funktionstraining einlesen");
+					SystemPreislisten.ladePreise("Ftrain");
+				}
+			}
 
-		SystemPreislisten.ladePreise("Common");
+			SystemPreislisten.ladePreise("Common");
 
-		System.out.println("Preislisten einlesen abgeschlossen");
+			System.out.println("Preislisten einlesen abgeschlossen");
 		}catch(NullPointerException ex){
 			ex.printStackTrace();
 		}
@@ -3342,7 +3342,7 @@ final class PreisListenLaden implements Runnable{
 		return false;
 	}
 	@Override
-    public void run() {
+	public void run() {
 		Einlesen();
 		int i=0;
 		while (!Reha.instance.initok){
@@ -3406,33 +3406,33 @@ final class HilfeDatenbankStarten implements Runnable{
 
 	}
 	@Override
-    public void run() {
+	public void run() {
 		final Reha obj = Reha.instance;
 
-//		final String sDB = "SQL";
+		//		final String sDB = "SQL";
 		if (obj.hilfeConn != null){
 			try{
-			obj.hilfeConn.close();}
+				obj.hilfeConn.close();}
 			catch(final SQLException e){}
 		}
 		try{
-				Class.forName(SystemConfig.hmHilfeServer.get("HilfeDBTreiber")).newInstance();
-				Reha.HilfeDbOk = true;
-    	}catch (InstantiationException e) {
-				e.printStackTrace();
+			Class.forName(SystemConfig.hmHilfeServer.get("HilfeDBTreiber")).newInstance();
+			Reha.HilfeDbOk = true;
+		}catch (InstantiationException e) {
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+			e.printStackTrace();
 		}
-	    try {
-	        		Reha.instance.hilfeConn =
-	        			DriverManager.getConnection(SystemConfig.hmHilfeServer.get("HilfeDBLogin"),
-	        					SystemConfig.hmHilfeServer.get("HilfeDBUser"),SystemConfig.hmHilfeServer.get("HilfeDBPassword"));
-	    }catch (final SQLException ex) {
-	    	Reha.HilfeDbOk = false;
-	    	return;
-	    }
-        return;
+		try {
+			Reha.instance.hilfeConn =
+					DriverManager.getConnection(SystemConfig.hmHilfeServer.get("HilfeDBLogin"),
+							SystemConfig.hmHilfeServer.get("HilfeDBUser"),SystemConfig.hmHilfeServer.get("HilfeDBPassword"));
+		}catch (final SQLException ex) {
+			Reha.HilfeDbOk = false;
+			return;
+		}
+		return;
 	}
 }

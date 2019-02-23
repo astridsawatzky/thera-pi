@@ -60,7 +60,6 @@ import org.jdesktop.swingx.renderer.IconValues;
 import org.jdesktop.swingx.renderer.MappedValue;
 import org.jdesktop.swingx.renderer.StringValues;
 import org.jdesktop.swingx.table.TableColumnExt;
-import org.therapi.reha.patient.LadeProg;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -76,6 +75,7 @@ import CommonTools.ZeitFunk;
 import abrechnung.AbrechnungDlg;
 import dialoge.EmailDialog;
 import dialoge.InfoDialog;
+import environment.LadeProg;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;

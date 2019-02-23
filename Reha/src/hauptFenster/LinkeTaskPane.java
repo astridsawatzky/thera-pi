@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -48,15 +49,18 @@ import org.jdesktop.swingx.plaf.windows.WindowsTaskPaneUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
-import org.therapi.reha.patient.LadeProg;
+
+import com.sun.media.protocol.avi.DataSource;
 
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
+import Suchen.ICDrahmen;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.TextException;
 import arztBaustein.ArztBaustein;
 import dialoge.DatumWahl;
+import environment.LadeProg;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -96,8 +100,11 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 	public static boolean mitUserTask = false;
 	Logger logger = LoggerFactory.getLogger(LinkeTaskPane.class);
-	public LinkeTaskPane(){
+	private Connection conn;
+
+	public LinkeTaskPane(Connection conn) {
 		super();
+		this.conn = conn;
 		mitUserTask = testUserTask();
 		this.setBorder(null);
 		this.setBackground(Color.WHITE);
@@ -187,39 +194,39 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setEnabled(true);
 		DropTarget dndt = new DropTarget();
 		DropTargetListener dropTargetListener =
-			 new DropTargetListener() {
-			  @Override
-            public void dragEnter(DropTargetDragEvent e) {}
-			  @Override
-            public void dragExit(DropTargetEvent e) {}
-			  @Override
-            public void dragOver(DropTargetDragEvent e) {}
-			  @Override
-            public void drop(DropTargetDropEvent e) {
-				  String mitgebracht = "";
-			    try {
-			      Transferable tr = e.getTransferable();
-			      DataFlavor[] flavors = tr.getTransferDataFlavors();
-			      for (int i = 0; i < flavors.length; i++){
-			        	mitgebracht  = (String) tr.getTransferData(flavors[i]);
-			      }
-			      ////System.out.println(mitgebracht);
-			      if(mitgebracht.indexOf("°") >= 0){
-			    	  if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
-			    		  return;
-			    	  }
-			    	  doPatientDrop(mitgebracht.split("°")[2].trim());
-			    	  //ProgLoader.ProgRoogleFenster(0, mitgebracht);
-			    	  //Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
-			      }
-			      ////System.out.println(mitgebracht+" auf Patientenstamm gedropt");
-			    } catch (Throwable t) { t.printStackTrace(); }
-			    // Ein Problem ist aufgetreten
-			    e.dropComplete(true);
-			  }
-			  @Override
-            public void dropActionChanged(
-			         DropTargetDragEvent e) {}
+				new DropTargetListener() {
+			@Override
+			public void dragEnter(DropTargetDragEvent e) {}
+			@Override
+			public void dragExit(DropTargetEvent e) {}
+			@Override
+			public void dragOver(DropTargetDragEvent e) {}
+			@Override
+			public void drop(DropTargetDropEvent e) {
+				String mitgebracht = "";
+				try {
+					Transferable tr = e.getTransferable();
+					DataFlavor[] flavors = tr.getTransferDataFlavors();
+					for (int i = 0; i < flavors.length; i++){
+						mitgebracht  = (String) tr.getTransferData(flavors[i]);
+					}
+					////System.out.println(mitgebracht);
+					if(mitgebracht.indexOf("°") >= 0){
+						if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
+							return;
+						}
+						doPatientDrop(mitgebracht.split("°")[2].trim());
+						//ProgLoader.ProgRoogleFenster(0, mitgebracht);
+						//Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
+					}
+					////System.out.println(mitgebracht+" auf Patientenstamm gedropt");
+				} catch (Throwable t) { t.printStackTrace(); }
+				// Ein Problem ist aufgetreten
+				e.dropComplete(true);
+			}
+			@Override
+			public void dropActionChanged(
+					DropTargetDragEvent e) {}
 		};
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
@@ -274,38 +281,38 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink = new JXHyperlink();
 		DropTarget dndt = new DropTarget();
 		DropTargetListener dropTargetListener =
-			 new DropTargetListener() {
-			  @Override
-            public void dragEnter(DropTargetDragEvent e) {}
-			  @Override
-            public void dragExit(DropTargetEvent e) {}
-			  @Override
-            public void dragOver(DropTargetDragEvent e) {}
-			  @Override
-            public void drop(DropTargetDropEvent e) {
-				  String mitgebracht = "";
-			    try {
-			      Transferable tr = e.getTransferable();
-			      DataFlavor[] flavors = tr.getTransferDataFlavors();
-			      for (int i = 0; i < flavors.length; i++){
-			        	mitgebracht  = (String) tr.getTransferData(flavors[i]);
-			      }
-			      //System.out.println("Es wurde mitgebracht "+mitgebracht);
-			      if(mitgebracht.indexOf("°") >= 0){
-			    	  if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
-			    		  return;
-			    	  }
-			    	  //ProgLoader.ProgRoogleFenster(0, mitgebracht);
-			    	  Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
-			      }
-			      ////System.out.println(mitgebracht);
-			    } catch (Throwable t) { t.printStackTrace(); }
-			    // Ein Problem ist aufgetreten
-			    e.dropComplete(true);
-			  }
-			  @Override
-            public void dropActionChanged(
-			         DropTargetDragEvent e) {}
+				new DropTargetListener() {
+			@Override
+			public void dragEnter(DropTargetDragEvent e) {}
+			@Override
+			public void dragExit(DropTargetEvent e) {}
+			@Override
+			public void dragOver(DropTargetDragEvent e) {}
+			@Override
+			public void drop(DropTargetDropEvent e) {
+				String mitgebracht = "";
+				try {
+					Transferable tr = e.getTransferable();
+					DataFlavor[] flavors = tr.getTransferDataFlavors();
+					for (int i = 0; i < flavors.length; i++){
+						mitgebracht  = (String) tr.getTransferData(flavors[i]);
+					}
+					//System.out.println("Es wurde mitgebracht "+mitgebracht);
+					if(mitgebracht.indexOf("°") >= 0){
+						if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
+							return;
+						}
+						//ProgLoader.ProgRoogleFenster(0, mitgebracht);
+						Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
+					}
+					////System.out.println(mitgebracht);
+				} catch (Throwable t) { t.printStackTrace(); }
+				// Ein Problem ist aufgetreten
+				e.dropComplete(true);
+			}
+			@Override
+			public void dropActionChanged(
+					DropTargetDragEvent e) {}
 		};
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
@@ -316,8 +323,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.setDropTarget(dndt);
 		jxLink.setName("Rugl");
 		String srugl = "<html><font color='#000000'>[</font><font color='#0000ff'>R</font><font color='#ff0000'>u</font>"+
-		"<font color='#00ffff'><b>:</b></font><font color='#0000ff'>g</font><font color='#00ff00'>l</font>"+
-		"<font color='#000000'>]</font>&nbsp;- Die Terminsuchmaschine";
+				"<font color='#00ffff'><b>:</b></font><font color='#0000ff'>g</font><font color='#00ff00'>l</font>"+
+				"<font color='#000000'>]</font>&nbsp;- Die Terminsuchmaschine";
 		jxLink.setText(srugl);
 		//jxLink.setText("[Ru:gl] - Die Terminsuchmaschine");
 		jxLink.setToolTipText("Strg+R = [Ru:gl] starten");
@@ -352,38 +359,38 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		jxLink.addActionListener(this);
 		dndt = new DropTarget();
 		dropTargetListener =
-			 new DropTargetListener() {
-			  @Override
-            public void dragEnter(DropTargetDragEvent e) {}
-			  @Override
-            public void dragExit(DropTargetEvent e) {}
-			  @Override
-            public void dragOver(DropTargetDragEvent e) {}
-			  @Override
-            public void drop(DropTargetDropEvent e) {
-				  String mitgebracht = "";
-			    try {
-			      Transferable tr = e.getTransferable();
-			      DataFlavor[] flavors = tr.getTransferDataFlavors();
-			      for (int i = 0; i < flavors.length; i++){
-			        	mitgebracht  = (String) tr.getTransferData(flavors[i]);
-			      }
-			      ////System.out.println(mitgebracht);
-			      if(mitgebracht.indexOf("°") >= 0){
-			    	  if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
-			    		  return;
-			    	  }
-			    	  //ProgLoader.ProgRoogleFenster(0, mitgebracht);
-			    	  doWeckerDrop(mitgebracht);
-			      }
-			      ////System.out.println(mitgebracht);
-			    } catch (Throwable t) { t.printStackTrace(); }
-			    // Ein Problem ist aufgetreten
-			    e.dropComplete(true);
-			  }
-			  @Override
-            public void dropActionChanged(
-			         DropTargetDragEvent e) {}
+				new DropTargetListener() {
+			@Override
+			public void dragEnter(DropTargetDragEvent e) {}
+			@Override
+			public void dragExit(DropTargetEvent e) {}
+			@Override
+			public void dragOver(DropTargetDragEvent e) {}
+			@Override
+			public void drop(DropTargetDropEvent e) {
+				String mitgebracht = "";
+				try {
+					Transferable tr = e.getTransferable();
+					DataFlavor[] flavors = tr.getTransferDataFlavors();
+					for (int i = 0; i < flavors.length; i++){
+						mitgebracht  = (String) tr.getTransferData(flavors[i]);
+					}
+					////System.out.println(mitgebracht);
+					if(mitgebracht.indexOf("°") >= 0){
+						if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
+							return;
+						}
+						//ProgLoader.ProgRoogleFenster(0, mitgebracht);
+						doWeckerDrop(mitgebracht);
+					}
+					////System.out.println(mitgebracht);
+				} catch (Throwable t) { t.printStackTrace(); }
+				// Ein Problem ist aufgetreten
+				e.dropComplete(true);
+			}
+			@Override
+			public void dropActionChanged(
+					DropTargetDragEvent e) {}
 		};
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
@@ -582,11 +589,11 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		tp6.setUI(wui);
 		tp6.setTitle("Monatsübersicht");
 		final JXMonthView monthView = new JXMonthView ();
-		  monthView.setPreferredColumnCount (1);
-		  monthView.setPreferredRowCount (1);
-		  monthView.setTraversable(true);
-		  monthView.setShowingWeekNumber(true);
-		  al = new ActionListener(){
+		monthView.setPreferredColumnCount (1);
+		monthView.setPreferredRowCount (1);
+		monthView.setTraversable(true);
+		monthView.setShowingWeekNumber(true);
+		al = new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(TerminFenster.getThisClass()!= null){
@@ -614,7 +621,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					Reha.instance.progLoader.ProgTerminFenster(1, 0);
 					SwingUtilities.invokeLater(new Runnable(){
 						@Override
-                        public void run(){
+						public void run(){
 							TerminFenster.getThisClass().springeAufDatum(aktTag);
 
 						}
@@ -622,11 +629,11 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				}
 
 			}
-		  };
-		  monthView.addActionListener(al);
-		  tp6.add(monthView);
-		  tp6.setCollapsed(true);
-		  tp6.setCollapsed(SystemConfig.taskPaneCollapsed[5]);
+		};
+		monthView.addActionListener(al);
+		tp6.add(monthView);
+		tp6.setCollapsed(true);
+		tp6.setCollapsed(SystemConfig.taskPaneCollapsed[5]);
 		return tp6;
 	}
 
@@ -673,7 +680,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 	 * 	@Override
 	 */
 	@Override
-    public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 		String cmd = e.getActionCommand();
 		int i;
 		for(i=0;i<1;i++){
@@ -705,7 +712,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				sysUtil.setSize(800,600);
 				sysUtil.setLocation(100,75);
 				sysUtil.setVisible(true);
-				*/
+				 */
 				break;
 			}
 
@@ -753,8 +760,8 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
 				if(termin != null){
 					JOptionPane.showMessageDialog (null, "Achtung!!!!! \n\nWährend der Arbeitszeit-Definition\n" +
-					"darf der Terminkalender aus Sicherheitsgründen nicht geöffnet sein.\n"+
-					"Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
+							"darf der Terminkalender aus Sicherheitsgründen nicht geöffnet sein.\n"+
+							"Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
 					return;
 				}
 				Reha.instance.progLoader.ProgTerminFenster(0, 2);
@@ -797,7 +804,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			if (cmd.equals("Thera-PI - Browser")){
 				new Thread(){
 					@Override
-                    public void run(){
+					public void run(){
 						new LadeProg(Path.Instance.getProghome()+"RehaWissen.jar");
 					}
 				}.start();
@@ -828,7 +835,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					Reha.getThisFrame().setCursor(Cursors.wartenCursor);
 					new Thread(){
 						@Override
-                        public void run(){
+						public void run(){
 							new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));		
 						}
 					}.start();
@@ -863,7 +870,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			if (cmd.equals("piHelp")){
 				new Thread(){
 					@Override
-                    public void run(){
+					public void run(){
 						try{
 							new LadeProg(Path.Instance.getProghome()+"piHelp.jar "+
 									Path.Instance.getProghome()+" "+Reha.getAktIK());
@@ -902,9 +909,9 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 
 				});
-//				new LadeProg(Path.Instance.getProghome()+"TBedit.jar "+
-//										Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
-//										Path.Instance.getProghome()+"ini/textbaustein.ini");
+				//				new LadeProg(Path.Instance.getProghome()+"TBedit.jar "+
+				//										Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
+				//										Path.Instance.getProghome()+"ini/textbaustein.ini");
 				new SwingWorker<Void,Void>(){
 					@Override
 					protected Void doInBackground() throws Exception {
@@ -930,12 +937,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				}
 				new Thread(){
 					@Override
-                    public void run(){
-					    try {
-                            ArztBaustein.start(new IK(Reha.getAktIK()),Reha.officeapplication);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+					public void run(){
+						try {
+							ArztBaustein.start(new IK(Reha.getAktIK()),Reha.officeapplication);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 					}
 				}.start();
 
@@ -958,12 +965,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				break;
 			}
 			if (cmd.equals("piIcd10")){
-				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
+				SwingUtilities.invokeLater(new ICDrahmen(conn));
 			}
 			if (cmd.equals("piQM")){
 				new Thread(){
 					@Override
-                    public void run(){
+					public void run(){
 						new LadeProg(Path.Instance.getProghome()+"QMHandbuch.jar");
 					}
 				}.start();
@@ -988,7 +995,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			if (cmd.equals("piAW")){
 				new Thread(){
 					@Override
-                    public void run(){
+					public void run(){
 						new LadeProg(Path.Instance.getProghome()+"QMAuswertung.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());		
 					}
 				}.start();
@@ -1022,12 +1029,12 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					protected Void doInBackground() throws Exception {
 						try{
 							Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-							 try {
-						                new AkutListe();
-						            } catch (TextException e) {
+							try {
+								new AkutListe();
+							} catch (TextException e) {
 
-						                e.printStackTrace();
-						            }
+								e.printStackTrace();
+							}
 							Reha.getThisFrame().setCursor(Cursors.cdefault);
 						}catch(Exception ex){
 							ex.printStackTrace();
@@ -1132,7 +1139,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		Statement stmt = null;
 		try{
 			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE );
+					ResultSet.CONCUR_UPDATABLE );
 			for(int i=1;i<61;i++){
 				for(int t=1;t<8;t++){
 					behandler  = (i<10 ? "0"+i+"BEHANDLER" : Integer.toString(i)+"BEHANDLER");
@@ -1151,14 +1158,14 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 			e.printStackTrace();
 		}finally {
-				if (stmt != null) {
-					try {
-						stmt.close();
-					} catch (SQLException e) {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (SQLException e) {
 
-						e.printStackTrace();
-					}
+					e.printStackTrace();
 				}
+			}
 		}
 	}
 	private void doWeckerDrop(String drops){
@@ -1200,7 +1207,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 			final String xpat_int = pat_int;
 			new SwingWorker<Void,Void>(){
 				@Override
-                protected Void doInBackground() throws Exception {
+				protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
 					while( (xpatient == null) ){
@@ -1244,40 +1251,40 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 		}
 	}
 
-/************************************************************/
+	/************************************************************/
 
-/************************************************************/
+	/************************************************************/
 
-@Override
-public void dragEnter(DropTargetDragEvent arg0) {
+	@Override
+	public void dragEnter(DropTargetDragEvent arg0) {
 
-	////System.out.println("Enter---->"+arg0);
-	////System.out.println(((JComponent)arg0.getSource()).getName());
+		////System.out.println("Enter---->"+arg0);
+		////System.out.println(((JComponent)arg0.getSource()).getName());
 
-}
-@Override
-public void dragExit(DropTargetEvent arg0) {
-
-
-}
-@Override
-public void dragOver(DropTargetDragEvent arg0) {
+	}
+	@Override
+	public void dragExit(DropTargetEvent arg0) {
 
 
-}
-@Override
-public void drop(DropTargetDropEvent arg0) {
-
-	////System.out.println(arg0);
-
-}
-@Override
-public void dropActionChanged(DropTargetDragEvent arg0) {
+	}
+	@Override
+	public void dragOver(DropTargetDragEvent arg0) {
 
 
-}
+	}
+	@Override
+	public void drop(DropTargetDropEvent arg0) {
 
-/************************************************************/
+		////System.out.println(arg0);
+
+	}
+	@Override
+	public void dropActionChanged(DropTargetDragEvent arg0) {
+
+
+	}
+
+	/************************************************************/
 }
 
 

@@ -24,8 +24,8 @@ import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
-import org.therapi.reha.patient.LadeProg;
 
+import environment.LadeProg;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
