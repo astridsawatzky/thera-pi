@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -44,6 +45,7 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Suchen.ICDrahmen;
 import abrechnung.Disziplinen;
 import environment.LadeProg;
 import environment.Path;
@@ -177,8 +179,9 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 	private Component eingabeVerordnArt = null;
 	private Component eingabeVerordn1 = null;
 	private Component eingabeICD = null;
+	private Connection connection;
 	
-	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname){
+	public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname,Connection connection){
 		super();
 		try{
 			this.neu = neu;
@@ -1201,7 +1204,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 					"HMR-Check nicht möglich!<br><br>"+
 					"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 			if(frage==JOptionPane.YES_OPTION){
-				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
+				SwingUtilities.invokeLater(new ICDrahmen(connection));
 			}
 			if(welcher==1){
 				jtf[cICD10].setText("");

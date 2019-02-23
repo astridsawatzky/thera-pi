@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,6 +57,7 @@ import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Suchen.ICDrahmen;
 import abrechnung.AbrechnungDlg;
 import ag.ion.bion.officelayer.desktop.IFrame;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -233,6 +235,8 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public List<String> sysVarList = null;
 	public List<String> sysVarInhalt = null;
 
+	private Connection connection;
+
 	public static String NeueRvVarianteAb = "01.01.2015";
 	public static boolean UseNeueRvVariante = false;
 
@@ -241,7 +245,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 	public static boolean UseKTL2015 = false;
 
 
-	public EBerichtPanel(JGutachtenInternal xjry,String xpat_intern,int xberichtid,String xberichttyp,boolean xneu,String xempfaenger,int xuebernahmeid ){
+	public EBerichtPanel(JGutachtenInternal xjry,String xpat_intern,int xberichtid,String xberichttyp,boolean xneu,String xempfaenger,int xuebernahmeid,Connection connection){
 		setBorder(null);
 
 		this.jry = xjry;
@@ -617,7 +621,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 			}
 		}
 		if(cmd.equals("guttools")){
-			new ToolsDlgEbericht("",gutbut[3].getLocationOnScreen());
+			new ToolsDlgEbericht("",gutbut[3].getLocationOnScreen(),connection);
 		}
 		if(cmd.equals("guttext")){
 			new SwingWorker<Void,Void>(){
@@ -2019,7 +2023,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 
 	/********************************************/
 	class ToolsDlgEbericht{
-		public ToolsDlgEbericht(String command,Point pt){
+		public ToolsDlgEbericht(String command,Point pt, Connection connection){
 
 			Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
 			icons.put("Textbausteine abrufen",SystemConfig.hmSysIcons.get("arztbericht"));
@@ -2050,8 +2054,7 @@ public class EBerichtPanel extends JXPanel implements ChangeListener,RehaEventLi
 				new LadeProg(Path.Instance.getProghome()+"BMIRechner.jar");
 				break;
 			case 2:
-
-				new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
+				SwingUtilities.invokeLater(new ICDrahmen(connection));
 				break;
 			case 3:
 				new LadeProg(Path.Instance.getProghome()+"RehaOCR.jar "+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+String.valueOf(Integer.toString(Reha.xport)) );

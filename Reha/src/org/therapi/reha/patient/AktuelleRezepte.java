@@ -2340,7 +2340,6 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 						if(frage==JOptionPane.YES_OPTION){
 							
 							SwingUtilities.invokeLater(new ICDrahmen(connection));
-							new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 						}
 						return;
 
@@ -2353,7 +2352,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 									"HMR-Check nicht möglich!<br><br>"+
 									"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 							if(frage==JOptionPane.YES_OPTION){
-								new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
+								SwingUtilities.invokeLater(new ICDrahmen(connection));
 							}
 							return;
 						}
@@ -3012,7 +3011,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				}
 				// ^^^ Lemmi 20110101: Kopieren des letzten Rezepts des selben Patienten bei Rezept-Neuanlage
 
-				RezNeuanlage rezNeuAn = new RezNeuanlage((Vector<String>)vecKopiervorlage.clone(),lneu,feldname);
+				RezNeuanlage rezNeuAn = new RezNeuanlage((Vector<String>)vecKopiervorlage.clone(),lneu,feldname,connection);
 				neuRez.getSmartTitledPanel().setContentContainer( rezNeuAn );
 				//if ( rezNeuAn.strKopiervorlage.isEmpty() )
 				if ( vecKopiervorlage.size() < 1 )
@@ -3021,7 +3020,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					neuRez.getSmartTitledPanel().setTitle("Rezept Neuanlage als Kopie von <-- " + vecKopiervorlage.get(1) );
 
 			}else{  // Lemmi Doku: Hier wird ein existierendes Rezept mittels Doppelklick geöffnet:
-				neuRez.getSmartTitledPanel().setContentContainer(new RezNeuanlage(Reha.instance.patpanel.vecaktrez,lneu,feldname));
+				neuRez.getSmartTitledPanel().setContentContainer(new RezNeuanlage(Reha.instance.patpanel.vecaktrez,lneu,feldname,connection));
 				neuRez.getSmartTitledPanel().setTitle("editieren Rezept ---> "+Reha.instance.patpanel.vecaktrez.get(1));
 			}
 			neuRez.getSmartTitledPanel().getContentContainer().setName("RezeptNeuanlage");

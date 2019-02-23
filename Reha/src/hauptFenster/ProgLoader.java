@@ -330,7 +330,7 @@ public void GutachenFenster(int setPos,String pat_intern,int berichtid,String be
 	gutjry.setName(name);
 	gutjry.setSize(new Dimension(900,Reha.instance.desktops[containerNr].getHeight()-20));
 	gutjry.setPreferredSize(new Dimension(900,Reha.instance.desktops[containerNr].getHeight()-20));
-	Reha.instance.eberichtpanel = new EBerichtPanel(gutjry,pat_intern,berichtid,berichttyp,neu,empfaenger,uebernahmeid );
+	Reha.instance.eberichtpanel = new EBerichtPanel(gutjry,pat_intern,berichtid,berichttyp,neu,empfaenger,uebernahmeid ,connection);
 	gutjry.setContent(Reha.instance.eberichtpanel);
 	gutjry.addComponentListener(Reha.instance);
 	int comps = Reha.instance.desktops[containerNr].getComponentCount();
