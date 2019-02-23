@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -84,10 +85,13 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener{
 	TerminFenster eltern;
 	public JXDatePicker datePicker = null;
 	SchnellSucheListSelectionHandler ssucheselect = new SchnellSucheListSelectionHandler();
+	private Connection connection;
 
-	public SchnellSuche(JXFrame owner,TerminFenster eltern){
+	SchnellSuche(JXFrame owner,TerminFenster eltern,Connection connection){
+		
 		//super(frame, titlePanel());
 		super(owner,"SchnellSuche");
+		this.connection = connection;
 		dieserName = "SchnellSuche";
 		setName(dieserName);
 		getSmartTitledPanel().setName(dieserName);
@@ -166,8 +170,10 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener{
 /*******************************************************/
 /*********************************************************/
     class SchnellSucheListSelectionHandler implements ListSelectionListener {
+    	private Connection connection;
 
-        @Override
+       
+		@Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             boolean isAdjusting = e.getValueIsAdjusting();
@@ -187,15 +193,17 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener{
                 		if(reznr.trim().length()>=2){
                 			if("KGMAERLORHPO".indexOf(reznr.substring(0,2)) >= 0){
                 				new SwingWorker<Void,Void>(){
+									
+
 									@Override
 									protected Void doInBackground()
 											throws Exception {
 										//todo = "Farbsignale mit \XY  vor der Suche abtrennen
 										int index = reznr.indexOf("\\");
 										if(index >= 0){
-											new RezeptFahnder(false).doFahndung(reznr.substring(0,index));
+											new RezeptFahnder(false,connection).doFahndung(reznr.substring(0,index), connection);
 										}else{
-											new RezeptFahnder(false).doFahndung(reznr);
+											new RezeptFahnder(false,connection).doFahndung(reznr,connection);
 										}
 		                				//in Spalte 1 des TK den Behandler aufrufen
 		                				//und den markierten Termin auf den angewählten Termin setzen.

@@ -11,6 +11,7 @@ import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.TooManyListenersException;
 import java.util.Vector;
@@ -57,7 +58,7 @@ public class PatientStammDatenPanel extends JXPanel{
 	StringBuffer buf2 = new StringBuffer();
 	StringBuffer buf3 = new StringBuffer();
 	PatientStammDatenLogic stammDatenLogic = null;
-	public PatientStammDatenPanel(PatientHauptPanel patHauptPanel){
+	public PatientStammDatenPanel(PatientHauptPanel patHauptPanel, Connection connection){
 		super();
 		stammDatenLogic = new PatientStammDatenLogic(patHauptPanel,this);
 		createLinkListener();
@@ -69,7 +70,7 @@ public class PatientStammDatenPanel extends JXPanel{
 		
 		//getStammDatenPanel();
 		//add(getStammDatenPanel(),BorderLayout.CENTER);
-		add(getHTMLPanel(),BorderLayout.CENTER);
+		add(getHTMLPanel(connection),BorderLayout.CENTER);
 		setPreferredSize(new Dimension(200,0));
 		validate();
 	}
@@ -93,7 +94,7 @@ public class PatientStammDatenPanel extends JXPanel{
 			}
 		};
 	}
-	private JScrollPane getHTMLPanel(){
+	private JScrollPane getHTMLPanel( Connection connection){
 		htmlPane = new JEditorPane(/*initialURL*/);
         htmlPane.setContentType("text/html");
         htmlPane.setEditable(false);
@@ -125,7 +126,7 @@ public class PatientStammDatenPanel extends JXPanel{
 			    	  if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
 			    		  return;
 			    	  }
-			    	  doPatientDrop(mitgebracht.split("°")[2].trim());
+			    	  doPatientDrop(mitgebracht.split("°")[2].trim(),connection);
 			      }
 			      ////System.out.println(mitgebracht+" auf Patientenstamm gedropt");
 			    } catch (Throwable t) { t.printStackTrace(); }
@@ -434,7 +435,7 @@ public class PatientStammDatenPanel extends JXPanel{
 		
 	}
 	
-	private void doPatientDrop(String rez_nr){
+	private void doPatientDrop(String rez_nr, Connection connection){
 		String pat_int = "";
 		String reznr = rez_nr;
 		boolean inhistorie = false;
@@ -469,7 +470,7 @@ public class PatientStammDatenPanel extends JXPanel{
 				@Override
                 protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection);
 					while( (xpatient == null) ){
 						Thread.sleep(20);
 						xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
@@ -495,7 +496,7 @@ public class PatientStammDatenPanel extends JXPanel{
 				
 			}.execute();
 		}else{
-			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
 			PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);

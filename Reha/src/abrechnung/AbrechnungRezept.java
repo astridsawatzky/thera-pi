@@ -18,6 +18,7 @@ import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -280,8 +281,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	boolean inParseHtml = false;
 
 	boolean kannAbhaken = false;
+	private Connection connection;
 
-	public AbrechnungRezept(AbrechnungGKV xeltern){
+	public AbrechnungRezept(AbrechnungGKV xeltern, Connection conn){
+		this.connection = conn;
 		eltern = xeltern;
 		setLayout(new BorderLayout());
 		cmbkuerzel = new JRtaComboBox( vec_kuerzel,0,1);
@@ -2705,7 +2708,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener,Actio
 	    		if(anfrage == JOptionPane.YES_OPTION){
 	    			eltern.loescheKnoten();
 	    		}
-	    		SucheNachAllem.doPatSuchen(vec_rez.get(0).get(0).trim(), vec_rez.get(0).get(1),this);
+	    		SucheNachAllem.doPatSuchen(vec_rez.get(0).get(0).trim(), vec_rez.get(0).get(1),this,this.connection);
 
 	    	}
 	    	if(event.getURL().toString().contains("nozz.de")){
@@ -4417,7 +4420,8 @@ class MyDate2CellEditor extends AbstractCellEditor implements TableCellEditor {
 }
 
 class SucheNachAllem{
-	public static void doPatSuchen(String patint,String reznr,Object source){
+	public static void doPatSuchen(String patint,String reznr,Object source, Connection connection){
+		Connection connection1 =connection;
 		String pat_int;
 		pat_int = patint;
 		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
@@ -4429,7 +4433,7 @@ class SucheNachAllem{
 				@Override
                 protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection1);
 					while( (xpatient == null) ){
 						try {
 							Thread.sleep(20);
@@ -4457,7 +4461,7 @@ class SucheNachAllem{
 
 			}.execute();
 		}else{
-			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection1);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
 			PatStammEvent pEvt = new PatStammEvent(source);

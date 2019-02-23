@@ -18,6 +18,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,6 +75,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import Suchen.ICDrahmen;
 import abrechnung.AbrechnungPrivat;
 import abrechnung.AbrechnungRezept;
 import abrechnung.Disziplinen;
@@ -156,10 +158,10 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 	InfoDialog infoDlg = null;
 	String sRezNumNeu = "";
+	private Connection connection;
 	//public boolean lneu = false;
-	public AktuelleRezepte(PatientHauptPanel eltern){
-		super();
-		//aktRez = this;
+	public AktuelleRezepte(PatientHauptPanel eltern, Connection connection){
+		this.connection = connection;
 
 		setOpaque(false);
 		setBorder(null);
@@ -2059,10 +2061,10 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				formulareAuswerten();
 			}
 			if(cmd.equals("rezeptabschliessen")){
-				rezeptAbschliessen();
+				rezeptAbschliessen(connection);
 			}
 			if(cmd.equals("werkzeuge")){
-				new ToolsDlgAktuelleRezepte("",aktrbut[3].getLocationOnScreen());
+				new ToolsDlgAktuelleRezepte("",aktrbut[3].getLocationOnScreen(), connection);
 			}
 			if(cmd.equals("deletebehandlungen")){
 				doDeleteBehandlungen();
@@ -2155,7 +2157,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 
 	}
 
-	private void rezeptAbschliessen(){
+	private void rezeptAbschliessen(Connection connection){
 		try{
 			if(this.neuDlgOffen){return;}
 			int pghmr = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(41));
@@ -2167,7 +2169,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 				JOptionPane.showMessageDialog(null,meldung);
 				return;
 			}
-			doAbschlussTest();
+			doAbschlussTest(connection);
 			if(Reha.instance.abrechnungpanel != null){
 				/*
 				String[] diszis = null;
@@ -2226,7 +2228,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		doRezeptGebuehr( aktrbut[3].getLocationOnScreen() );
 	}
 
-	private void doAbschlussTest(){
+	private void doAbschlussTest(Connection connection){
 		int currow = tabaktrez.getSelectedRow();
 		if(currow < 0){return;}
 			if(dtblm.getValueAt(currow,5)==null){
@@ -2336,6 +2338,8 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 								"HMR-Check nicht möglich!<br><br>"+
 								"Wollen Sie jetzt das ICD-10-Tool starten?<br><br></html>", "falscher ICD-10",JOptionPane.YES_NO_OPTION);
 						if(frage==JOptionPane.YES_OPTION){
+							
+							SwingUtilities.invokeLater(new ICDrahmen(connection));
 							new LadeProg(Path.Instance.getProghome()+"ICDSuche.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());
 						}
 						return;
@@ -3287,7 +3291,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 		Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
 		String[] adressParams = null;
 
-		abrRez = new AbrechnungRezept(null);
+		abrRez = new AbrechnungRezept(null,connection);
 		if(adrvec.get(0).get(0).equals("T")){
 			adressParams = abrRez.holeAbweichendeAdresse(adrvec.get(0).get(1));
 		}else{
@@ -3325,7 +3329,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 /**********************************************/
 
 	class ToolsDlgAktuelleRezepte{
-		public ToolsDlgAktuelleRezepte(String command,Point pt){
+		public ToolsDlgAktuelleRezepte(String command,Point pt, Connection connection){
 			//boolean testcase = true;
 			Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
 			icons.put("Rezeptgebühren kassieren",SystemConfig.hmSysIcons.get("rezeptgebuehr"));
@@ -3388,7 +3392,7 @@ public class AktuelleRezepte  extends JXPanel implements ListSelectionListener,T
 					return;
 				}else if(Reha.toolsDlgRueckgabe==3){
 					tDlg = null;
-					rezeptAbschliessen();
+					rezeptAbschliessen(connection);
 					return;
 				}else if(Reha.toolsDlgRueckgabe==4){
 					tDlg = null;

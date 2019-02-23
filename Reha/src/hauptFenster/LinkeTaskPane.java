@@ -858,7 +858,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 					@Override
 					protected Void doInBackground() throws Exception {
 						setCursor(Cursors.wartenCursor);
-						Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+						Reha.instance.progLoader.ProgPatientenVerwaltung(1,conn);
 						//Reha.instance.progLoader.ProgTerminFenster(0, 1);
 						//ProgLoader.ProgPatientenVerwaltung(1);
 						setCursor(Cursors.normalCursor);
@@ -1209,7 +1209,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 				@Override
 				protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1,conn);
 					while( (xpatient == null) ){
 						Thread.sleep(20);
 						xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
@@ -1235,7 +1235,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
 			}.execute();
 		}else{
-			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1,conn);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
 			PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);

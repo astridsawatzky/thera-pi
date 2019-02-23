@@ -2031,7 +2031,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 					}
 					if(keyEvent.isAltDown() && keyEvent.getID()== KEY_PRESSED
 							&& keyEvent.getKeyCode() ==	VK_R){
-						new RezeptFahnder(true);
+						new RezeptFahnder(true,conn);
 						return;
 
 					}
@@ -2558,7 +2558,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					progLoader.ProgPatientenVerwaltung(1);
+					progLoader.ProgPatientenVerwaltung(1,conn);
 					Reha.instance.progressStarten(false);
 					return null;
 				}
@@ -2583,7 +2583,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 						"<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
 				return;
 			}
-			Reha.instance.progLoader.AbrechnungFenster(1);
+			Reha.instance.progLoader.AbrechnungFenster(1,conn);
 			return;
 		case "rehaabrechnung":
 			Reha.instance.progLoader.RehaabrechnungFenster(1, "");
@@ -2592,7 +2592,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			Reha.instance.progLoader.BarkassenFenster(1, "");
 			return;
 		case "anmeldezahlen":
-			Reha.instance.progLoader.AnmeldungenFenster(1, "");
+			Reha.instance.progLoader.AnmeldungenFenster(1, "",conn);
 			return;
 		case "tagesumsatz":
 			Reha.instance.progLoader.UmsatzFenster(1, "");
@@ -2627,7 +2627,7 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 			}
 			return;
 		case "rezeptfahnder":
-			new RezeptFahnder(true);
+			new RezeptFahnder(true,conn);
 			return;
 		case "rgaffaktura":
 			if (!Rechte.hatRecht(Rechte.Funktion_barkasse, false)) {

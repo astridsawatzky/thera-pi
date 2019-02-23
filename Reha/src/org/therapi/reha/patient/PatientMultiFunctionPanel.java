@@ -2,6 +2,7 @@ package org.therapi.reha.patient;
 
 import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
+import java.sql.Connection;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTabbedPane;
@@ -20,18 +21,18 @@ public class PatientMultiFunctionPanel extends JXPanel{
 	private static final long serialVersionUID = -1284209871875228012L;
 	PatientHauptPanel patientHauptPanel = null;
 	
-	public PatientMultiFunctionPanel(PatientHauptPanel patHauptPanel){
+	public PatientMultiFunctionPanel(PatientHauptPanel patHauptPanel, Connection connection){
 		super();
 		setLayout(new BorderLayout());
 		setOpaque(false);
 		this.patientHauptPanel = patHauptPanel;
-		add(getTabs(),BorderLayout.CENTER);
+		add(getTabs(connection),BorderLayout.CENTER);
 	}
 	public void fireAufraeumen(){
 		patientHauptPanel = null;
 	}
 	
-	private synchronized JXPanel getTabs(){
+	private synchronized JXPanel getTabs(Connection connection){
 		JXPanel rechts = new JXPanel(new BorderLayout());
 		rechts.setOpaque(false);
 		rechts.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
@@ -50,7 +51,7 @@ public class PatientMultiFunctionPanel extends JXPanel{
 		tabpan.setBorder(BorderFactory.createEmptyBorder(0,0, 0, 0));
 		tabpan.setOpaque(true);
 		tabpan.setBackgroundPainter(Reha.instance.compoundPainter.get("getTabs2"));
-		patientHauptPanel.aktRezept = new AktuelleRezepte(patientHauptPanel);
+		patientHauptPanel.aktRezept = new AktuelleRezepte(patientHauptPanel, connection);
 	    tabpan.add(patientHauptPanel.aktRezept);
 	    patientHauptPanel.multiTab.addTab(patientHauptPanel.tabTitel[0]+" - 0", tabpan);
 	    patientHauptPanel.multiTab.setMnemonicAt(0, KeyEvent.VK_A);

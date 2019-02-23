@@ -5,6 +5,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.beans.PropertyVetoException;
+import java.sql.Connection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -84,6 +85,7 @@ public JDta301Internal dta301jry = null;
 	}
 
 protected static RehaSmartDialog xsmart;
+private Connection connection;
 
 /**************Patient suchen (Test)**********************************/
 public static void ProgPatSuche(boolean setPos){
@@ -136,8 +138,8 @@ public void ProgTerminFenster(int setPos,int ansicht) {
 			}
 			terminjry.setName(name);
 			((JRehaInternal)terminjry).setImmerGross((SystemConfig.hmContainer.get("KalenderOpti")==1 ? true : false));
-			Reha.instance.terminpanel = new TerminFenster();
-			terminjry.setContent(Reha.instance.terminpanel.init(containerNr, xansicht,terminjry));
+			Reha.instance.terminpanel = new TerminFenster(connection);
+			terminjry.setContent(Reha.instance.terminpanel.init(containerNr, xansicht,terminjry,connection));
 			if(SystemConfig.hmContainer.get("KalenderOpti")==1){
 				terminjry.setLocation(new Point(0,0));
 				//Reha.instance.jpOben muss noch ersetzt werden durch Reha.instance.desktops[containerNr]
@@ -344,8 +346,9 @@ public void loescheGutachten(){
 	Reha.instance.eberichtpanel = null;
 }
 
-/******************************************/
-public void AbrechnungFenster(int setPos) {
+/**
+ * @param connection ****************************************/
+public void AbrechnungFenster(int setPos, Connection connection) {
 	if(! Reha.DbOk){
 		return;
 	}
@@ -376,7 +379,7 @@ public void AbrechnungFenster(int setPos) {
 	abrechjry.setName(name);
 	abrechjry.setSize(new Dimension(850,700));
 	abrechjry.setPreferredSize(new Dimension(850,700));
-	Reha.instance.abrechnungpanel = new AbrechnungGKV(abrechjry);
+	Reha.instance.abrechnungpanel = new AbrechnungGKV(abrechjry, connection);
 	abrechjry.setContent(Reha.instance.abrechnungpanel);
 	abrechjry.addComponentListener(Reha.instance);
 	int comps = Reha.instance.desktops[containerNr].getComponentCount();
@@ -393,8 +396,10 @@ public void loescheAbrechnung(){
 	abrechjry = null;
 	Reha.instance.abrechnungpanel = null;
 }
-/**********************Neuanmeldungen****************************/
-public void AnmeldungenFenster(int setPos,String sparam) {
+/**********************Neuanmeldungen
+ * @param connection ****************************/
+public void AnmeldungenFenster(int setPos,String sparam, Connection connection) {
+	this.connection = connection;
 	if(! Reha.DbOk){
 		return;
 	}
@@ -425,7 +430,7 @@ public void AnmeldungenFenster(int setPos,String sparam) {
 	anmeldungenjry.setName(name);
 	anmeldungenjry.setSize(new Dimension(570,500));
 	anmeldungenjry.setPreferredSize(new Dimension(570,500));
-	Reha.instance.anmeldungenpanel = new Anmeldungen(anmeldungenjry);
+	Reha.instance.anmeldungenpanel = new Anmeldungen(anmeldungenjry,connection);
 	anmeldungenjry.setContent(Reha.instance.anmeldungenpanel);
 	anmeldungenjry.addComponentListener(Reha.instance);
 	int comps = Reha.instance.desktops[containerNr].getComponentCount();
@@ -843,8 +848,9 @@ public static void InternalGut2(){
 }
 */
 
-/**************Patientenverwaltung Echtfunktion***********************/
-public void ProgPatientenVerwaltung(int setPos) {
+/**************Patientenverwaltung Echtfunktion
+ * @param connection ***********************/
+public void ProgPatientenVerwaltung(int setPos, Connection connection) {
 	if(! Reha.DbOk){
 		Reha.instance.progressStarten(false);
 		return;
@@ -900,7 +906,7 @@ public void ProgPatientenVerwaltung(int setPos) {
 	/***************************/
 	//Definition der Größe und der Position - Ende
 	/***************************/
-	Reha.instance.patpanel = new PatientHauptPanel(name,patjry);
+	Reha.instance.patpanel = new PatientHauptPanel(name,patjry, connection);
 	patjry.setContent(Reha.instance.patpanel);
 	patjry.addComponentListener(Reha.instance);
 	patjry.pack();

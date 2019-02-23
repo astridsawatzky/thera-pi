@@ -35,6 +35,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyVetoException;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -226,7 +227,12 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	public static String[] tooltip = {"","","","","","",""};
 	FinalGlassPane fgp = null;
 
-	public JXPanel init(int setOben,int ansicht,JRehaInternal eltern) {
+	private Connection connection;
+
+	public TerminFenster(Connection connection) {
+		this.connection = connection;
+	}
+	public JXPanel init(int setOben,int ansicht,JRehaInternal eltern, Connection connection) {
 
 		this.eltern = eltern;
 		this.setOben = setOben;
@@ -249,7 +255,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		});
 		ViewPanel.setName(eltern.getName());
 
-		GrundFlaeche = getGrundFlaeche();
+		GrundFlaeche = getGrundFlaeche(connection);
 		GrundFlaeche.addFocusListener(new java.awt.event.FocusAdapter() {
 			@Override
             public void focusLost(java.awt.event.FocusEvent e) {
@@ -276,7 +282,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		TerminFlaeche.setDropTarget(dndt);
 
 		/****************************/
-		setCombos();
+		setCombos(connection);
 
 
 		this.aktuellerTag = DatFunk.sHeute();
@@ -407,7 +413,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
 		}
 	}
-	private JXPanel	getGrundFlaeche(){
+	private JXPanel	getGrundFlaeche(Connection connection){
 		if(GrundFlaeche == null){
 			GridBagConstraints gridBagConstraints0 = new GridBagConstraints() ;
 			gridBagConstraints0.gridx = 0;
@@ -440,7 +446,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
 			GrundFlaeche.setLayout(new GridBagLayout());
 			GrundFlaeche.add(getComboFlaeche(),gridBagConstraints1);
-			GrundFlaeche.add(getTerminFlaeche(),gridBagConstraints0);
+			GrundFlaeche.add(getTerminFlaeche(connection),gridBagConstraints0);
 
 		}
 		return GrundFlaeche;
@@ -479,7 +485,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
  * Jetzt die Listener f�r die Combos installieren
  *
  */
-	private void comboListenerInit(final int welche){
+	private void comboListenerInit(final int welche,Connection connection){
 		oCombo[welche].setPopupVisible(false);
 		oCombo[welche].addKeyListener(new java.awt.event.KeyAdapter() {
 			@Override
@@ -522,7 +528,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 					}
 					if (e.getKeyCode()==122 && (!e.isShiftDown()) && (ansicht < MASKEN_ANSICHT) ){
 						//F11 ohne Shift
-						schnellSuche();
+						schnellSuche(connection);
 						break;
 					}
 					if(e.getKeyCode()==68 && e.isControlDown()){
@@ -542,7 +548,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						break;
 					}
 					if(e.getKeyCode()==80 && e.isAltDown()){
-						doPatSuchen();
+						doPatSuchen(connection);
 					}
 
 				}
@@ -702,7 +708,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		}
 	}
 
-	public void setCombos(){
+	public void setCombos(Connection connection){
 		int von = 0;
 		int bis = ParameterLaden.vKKollegen.size();
 
@@ -742,7 +748,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 		}
 		/**jetzt noch die Listener initialisieren**/
 		for(int i = 0; i < 7; i++){
-			comboListenerInit(i);
+			comboListenerInit(i,connection);
 		}
 	}
 
@@ -750,7 +756,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
  *
  * @return
  */
-	private JXPanel	getTerminFlaeche(){
+	private JXPanel	getTerminFlaeche(Connection connection){
 		if(TerminFlaeche==null){
 			TerminFlaeche = new JXPanel();
 			TerminFlaeche.setBackground(SystemConfig.KalenderHintergrund);
@@ -826,7 +832,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				  });
 				oSpalten[i].add(dragLab[i]);
 
-				PanelListenerInit(i);
+				PanelListenerInit(i,connection);
 				oSpalten[i].ListenerSetzen(i);
 				cb.add(oSpalten[i],BorderLayout.CENTER);
 				TerminFlaeche.add(cb);
@@ -886,9 +892,10 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	}
 	public void altCtrlAus(){
 	}
-	private void PanelListenerInit(final int tspalte){
-
+	private void PanelListenerInit(final int tspalte,Connection connection){
+		
 			oSpalten[tspalte].addKeyListener(new java.awt.event.KeyAdapter() {
+				
 				@Override
                 public void keyPressed(java.awt.event.KeyEvent e) {
 					int ec = e.getKeyCode();
@@ -1030,7 +1037,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 							break;
 						}
 						if(ec==80 && e.isAltDown()){
-							doPatSuchen();
+							doPatSuchen(connection);
 						}
 						/*****************/
 						//ursprünglich an dieser Stelle
@@ -1240,7 +1247,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 						if (e.getKeyCode()==122 && (!e.isShiftDown()) && (!e.isControlDown())
 								&& (!e.isAltDown())){
 							//nur F11 ohne Shift etc.
-							schnellSuche();
+							schnellSuche(connection);
 							break;
 						}
 						if(e.isControlDown() && ec == 79){
@@ -3561,7 +3568,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				break;
 			}
 			if(((AbstractButton) arg0.getSource()).getText() == "Schnellsuche (Heute + 4 Tage)"){
-				schnellSuche();
+				schnellSuche(connection);
 				break;
 			}
 			if( (((AbstractButton) arg0.getSource()).getText() == "einen Tag vorwärts blättern") ||
@@ -3628,7 +3635,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				break;
 			}
 			if(((AbstractButton) arg0.getSource()).getText() == "Patient suchen (über Rezept-Nummer)"){
-				doPatSuchen();
+				doPatSuchen(connection);
 			}
 			if(((AbstractButton) arg0.getSource()).getText() == "Telefonliste aller Patienten (über Rezept-Nummer)"){
 				doTelefonListe();
@@ -3760,7 +3767,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 			}
 		}.execute();
 	}
-	private void doPatSuchen(){
+	private void doPatSuchen(Connection connection ){
 		String pat_int;
 		int xaktBehandler= 0;
 		boolean inhistorie = false;
@@ -3811,7 +3818,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 				@Override
                 protected Void doInBackground() throws Exception {
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection);
 					long whilezeit = System.currentTimeMillis();
 					while( (xpatient == null) ){
 						Thread.sleep(20);
@@ -3844,7 +3851,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
 			}.execute();
 		}else{
-			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_int;
 			PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
@@ -4210,13 +4217,13 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 	public int getAktiveSpalte(int index){
 		return aktiveSpalte[index];
 	}
-	public void schnellSuche(){
+	public void schnellSuche(Connection connection){
 		SwingUtilities.invokeLater(new Runnable(){
 		 	   @Override
             public  void run()
 		 	   {
 		 		   try{
-			 			sf = new SchnellSuche(Reha.getThisFrame(),getTerminFensterInstance());
+			 			sf = new SchnellSuche(Reha.getThisFrame(),getTerminFensterInstance(),connection);
 					 	sf.setSize(new Dimension(720,400));
 			 			sf.setLocation(new Point(250,200));
 			 			sf.setVisible(true);

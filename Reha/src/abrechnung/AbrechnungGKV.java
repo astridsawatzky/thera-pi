@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.cert.X509Certificate;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -176,9 +177,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 	public static boolean directCall = false;
 
 	public Disziplinen disziSelect = null;
+	private Connection connection;
 
-	public AbrechnungGKV(JAbrechnungInternal xjry){
+	public AbrechnungGKV(JAbrechnungInternal xjry, Connection connection){
 		super();
+		this.connection = connection;
 		this.setJry(xjry);
 		setLayout(new BorderLayout());
 		if (disziSelect == null) {
@@ -188,7 +191,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 
 		jSplitLR =  UIFSplitPane.createStrippedSplitPane(JSplitPane.HORIZONTAL_SPLIT,
         		getLeft(),
-        		getRight());
+        		getRight(connection));
 		jSplitLR.setDividerSize(7);
 		jSplitLR.setDividerBorderVisible(true);
 		jSplitLR.setName("BrowserSplitLinksRechts");
@@ -345,8 +348,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener,Acti
 		//cmbDiszi.setSelectedIndex(cmbDiszi.getSelectedIndex());
 		return jscr;
 	}
-	private JXPanel getRight(){
-		this.abrRez = new AbrechnungRezept(this);
+	private JXPanel getRight(Connection connection){
+		this.abrRez = new AbrechnungRezept(this, connection);
 		this.abrRez.setRechtsAufNull();
 		return abrRez;
 	}

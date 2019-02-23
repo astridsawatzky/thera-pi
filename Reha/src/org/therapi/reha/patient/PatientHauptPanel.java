@@ -12,6 +12,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -137,8 +138,9 @@ public class PatientHauptPanel extends JXPanel{
 	
 	
 	InfoDialog infoDlg = null;
-	/*******************************************************/
-	public PatientHauptPanel(String name,JPatientInternal internal){
+	/**
+	 * @param connection *****************************************************/
+	public PatientHauptPanel(String name,JPatientInternal internal, Connection connection){
 		super();
 		setName(name);
 		setDoubleBuffered(true);
@@ -160,7 +162,7 @@ public class PatientHauptPanel extends JXPanel{
 		setLayout(lay);
 		
 		add(getToolBarPatient(),cc.xyw(1, 2, 3));
-		add(constructSplitPaneLR(),cc.xyw(1,3,3));
+		add(constructSplitPaneLR(connection),cc.xyw(1,3,3));
 		setVisible(true);
 		setzeFocus();
 	}
@@ -178,10 +180,10 @@ public class PatientHauptPanel extends JXPanel{
 		patientInternal = null;
 	}
 
-	private UIFSplitPane constructSplitPaneLR(){
+	private UIFSplitPane constructSplitPaneLR(Connection connection){
 		UIFSplitPane jSplitLR =  UIFSplitPane.createStrippedSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-        		getStammDatenPatient(),
-        		constructSplitPaneOU());
+        		getStammDatenPatient(connection),
+        		constructSplitPaneOU(connection));
 		jSplitLR.setOpaque(false);
 		jSplitLR.setDividerSize(7);
 		jSplitLR.setDividerBorderVisible(true);
@@ -192,10 +194,10 @@ public class PatientHauptPanel extends JXPanel{
 		jSplitLR.validate();
 		return jSplitLR;
 	}
-	private UIFSplitPane constructSplitPaneOU(){
+	private UIFSplitPane constructSplitPaneOU(Connection connection){
 		UIFSplitPane jSplitRechtsOU =  UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT,
         		getMemosPatient(),
-        		getMultiFunctionTab());
+        		getMultiFunctionTab(connection));
 		jSplitRechtsOU.setOpaque(false);
 		jSplitRechtsOU.setDividerSize(7);
 		jSplitRechtsOU.setDividerBorderVisible(true);
@@ -206,8 +208,8 @@ public class PatientHauptPanel extends JXPanel{
 		jSplitRechtsOU.validate();
 		return jSplitRechtsOU;
 	}
-	private JScrollPane getStammDatenPatient(){
-		stammDatenPanel = new PatientStammDatenPanel(this);
+	private JScrollPane getStammDatenPatient(Connection connection){
+		stammDatenPanel = new PatientStammDatenPanel(this,connection);
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(stammDatenPanel );
 		jscr.validate();
 		JScrollPane jscr2 = JCompTools.getTransparent2ScrollPane(jscr);
@@ -220,8 +222,8 @@ public class PatientHauptPanel extends JXPanel{
 		jscr.validate();
 		return jscr;
 	}
-	private synchronized JScrollPane getMultiFunctionTab(){
-		patMultiFunctionPanel = new PatientMultiFunctionPanel(this);
+	private synchronized JScrollPane getMultiFunctionTab(Connection connection){
+		patMultiFunctionPanel = new PatientMultiFunctionPanel(this, connection);
 		JScrollPane jscr = JCompTools.getTransparentScrollPane(patMultiFunctionPanel);
 		jscr.validate();
 		return jscr;		

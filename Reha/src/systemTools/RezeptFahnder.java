@@ -1,5 +1,7 @@
 package systemTools;
 
+import java.sql.Connection;
+
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -13,17 +15,17 @@ import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 
 public class RezeptFahnder {
-	public RezeptFahnder(boolean showDialog){
+	public RezeptFahnder(boolean showDialog, Connection connection){
 		if(showDialog){
 			Object ret = JOptionPane.showInputDialog(null, "Geben Sie bitte die Rezeptnummer ein", "");
 			if(ret == null){
 				return;
 			}
-			doFahndung(ret.toString().trim());
+			doFahndung(ret.toString().trim(), connection);
 		}
 	}
 	
-	public void doFahndung(String rez_nr){
+	public void doFahndung(String rez_nr, Connection connection){
 		boolean inhistorie = false;
 		String pat_intern = SqlInfo.holeEinzelFeld("select pat_intern from verordn where rez_nr = '"+rez_nr+"' LIMIT 1");
 		if(pat_intern.equals("")){
@@ -47,7 +49,7 @@ public class RezeptFahnder {
                 protected Void doInBackground() throws Exception {
 					try{
 					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+					Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection);
 					while( (xpatient == null) ){
 						Thread.sleep(20);
 						xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
@@ -77,7 +79,7 @@ public class RezeptFahnder {
 			}.execute();
 		}else{
 			try{
-			Reha.instance.progLoader.ProgPatientenVerwaltung(1);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(1,connection);
 			String s1 = "#PATSUCHEN";
 			String s2 = pat_intern;
 			PatStammEvent pEvt = new PatStammEvent(this);

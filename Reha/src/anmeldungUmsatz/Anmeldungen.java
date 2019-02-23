@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -75,11 +76,13 @@ public class Anmeldungen extends JXPanel{
 	JAnmeldungenInternal internal;
 	ActionListener al = null;
 	MouseListener tblmouse = null;
+	private Connection connection;
 	
 	
-	public Anmeldungen(JAnmeldungenInternal jai){
+	public Anmeldungen(JAnmeldungenInternal jai, Connection connection){
 		super();
 		this.internal = jai;
+		this.connection = connection;
 		this.setLayout(new BorderLayout());
 		this.makeListeners();
 		this.add(getContent(),BorderLayout.CENTER);
@@ -259,7 +262,7 @@ public class Anmeldungen extends JXPanel{
 					//int mod = anmeldetbl.convertRowIndexToModel(row);
 					String reznum = anmeldetbl.getValueAt(row, 1).toString();
 					String pat_intern = anmeldetbl.getValueAt(row, 4).toString();
-					doRezeptZeigen(pat_intern,reznum);
+					doRezeptZeigen(pat_intern,reznum, connection);
 				}
 			}
 			@Override
@@ -279,7 +282,7 @@ public class Anmeldungen extends JXPanel{
 	
 	}
 
-	private void doRezeptZeigen(String pat_intern,String reznum){
+	private void doRezeptZeigen(String pat_intern,String reznum, Connection connection){
 		//System.out.println("Hole Daten von Patient "+pat_intern+" Rezept "+reznum);
 		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
 		if(patient != null){
@@ -292,7 +295,7 @@ public class Anmeldungen extends JXPanel{
 			//Reha.instance.patpanel.aktRezept.holeRezepte(pat_intern, reznum);
 			return;
 		}else{
-			Reha.instance.progLoader.ProgPatientenVerwaltung(0);
+			Reha.instance.progLoader.ProgPatientenVerwaltung(0,connection);
 			long zeit = System.currentTimeMillis();
 			while((patient = AktiveFenster.getFensterAlle("PatientenVerwaltung"))==null){
 				try {
