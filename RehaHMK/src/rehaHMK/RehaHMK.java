@@ -12,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -39,6 +41,7 @@ import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import environment.SWTJarLoader;
 import logging.Logging;
 
 public class RehaHMK implements WindowListener {
@@ -93,6 +96,12 @@ public class RehaHMK implements WindowListener {
 	 */
 	public static void main(String[] args) {
 	    new Logging("hmk");
+	    try {
+			SwingUtilities.invokeAndWait( new SWTJarLoader());
+		} catch (InvocationTargetException | InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		RehaHMK application = new RehaHMK();
 		
 		application.getInstance();

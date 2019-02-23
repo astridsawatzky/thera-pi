@@ -3,6 +3,7 @@ package rehaWissen;
 
 
 import java.awt.Cursor;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,6 +21,7 @@ import org.jdesktop.swingx.JXPanel;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import environment.SWTJarLoader;
 import logging.Logging;
 import rtaWissen.BrowserFenster;
 
@@ -41,6 +43,11 @@ public class RehaWissen  {
 	
 	public static void main(String[] args) {
 	    new Logging("rehawissen");
+	    try {
+			SwingUtilities.invokeAndWait(new SWTJarLoader());
+		} catch (InvocationTargetException | InterruptedException e1) {
+			e1.printStackTrace();
+		}
 		RehaWissen application = new RehaWissen();
 		
   	  	try {

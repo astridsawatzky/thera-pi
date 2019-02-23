@@ -765,21 +765,6 @@ public class RezTools {
 	}
 	
 	
-	/*	
-	class ZuzahlModell{
-		public int gesamtZahl;
-		public boolean allefrei;
-		public boolean allezuzahl;
-		public boolean anfangfrei;
-		public int teil1;
-		public int teil2;
-		public boolean hausbes;
-		public boolean mithausbes;
-		public ZuzahlModell(int gesamt,boolean allefrei){
-			
-		}
-	}
-*/
 	public static boolean neuePreisNachRezeptdatumOderStichtag(String aktDisziplin,int tarifgruppe,String rez_datum,boolean neuanlage,Vector<String> rezvec){
 		try{
 			String datum = SystemPreislisten.hmNeuePreiseAb.get(aktDisziplin).get(tarifgruppe);
