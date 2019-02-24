@@ -2,28 +2,16 @@ package Suchen;
 
 import java.awt.Dimension;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import javax.swing.JFrame;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-
-import logging.Logging;
-import mandant.IK;
-import sql.Datenquelle;
-
-
 
 public class ICDrahmen implements Runnable{
 
-
-
 	private JFrame jFrame;
 	Connection conn;
-
-	private IK ik;
 	
 //	public static void main(String[] args) throws SQLException {
+//		private IK ik;
 //		new Logging("icd");
 //		setLaF();
 //
@@ -46,25 +34,7 @@ public class ICDrahmen implements Runnable{
 		getJFrame();
 		
 	}
-	private static void setLaF() {
-		try {
-			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-		} catch (ClassNotFoundException e) {
-
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-
-			e.printStackTrace();
-		} catch (UnsupportedLookAndFeelException e) {
-
-			e.printStackTrace();
-		}
-	}
-
-
+	
 	public JFrame getJFrame(){
 		
 		jFrame = new JFrame();
@@ -78,9 +48,5 @@ public class ICDrahmen implements Runnable{
 		jFrame.setVisible(true);
 		return jFrame;
 	}
-
-
-	
-
 
 }
