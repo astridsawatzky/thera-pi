@@ -43,6 +43,9 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * INIFile class provides methods for manipulating (Read/Write) windows ini files.
@@ -74,12 +77,16 @@ public final class INIFile
     /** Variable to hold environment variables **/
     private Properties mpropEnv;
 
+    Logger logger = LoggerFactory.getLogger(INIFile.class);
     /**
      * Create a iniFile object from the file named in the parameter.
      * @param pstrPathAndName The full path and name of the ini file to be used.
      */
     public INIFile(String pstrPathAndName)
     {
+    	if(!new File(pstrPathAndName).exists()) {
+    		logger.error("Inifile does not exist:" + pstrPathAndName);
+    	}
         this.mpropEnv = getEnvVars();
         this.mhmapSections = new LinkedHashMap<String, INISection>();
         this.mstrFile = pstrPathAndName;
@@ -90,6 +97,9 @@ public final class INIFile
 
 	public INIFile(InputStream istream,String pstrPathAndName)
     {
+		if(!new File(pstrPathAndName).exists()) {
+    		logger.error("Inifile does not exist:" + pstrPathAndName);
+    	}
         this.mpropEnv = getEnvVars();
         this.mhmapSections = new LinkedHashMap<String, INISection>();
         this.mstrFile = pstrPathAndName;
