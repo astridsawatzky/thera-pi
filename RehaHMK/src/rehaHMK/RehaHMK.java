@@ -34,7 +34,6 @@ import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
 import CommonTools.Verschluesseln;
-import RehaIO.RehaIOMessages;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -42,6 +41,7 @@ import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import environment.SWTJarLoader;
+import io.RehaIOMessages;
 import logging.Logging;
 
 public class RehaHMK implements WindowListener {

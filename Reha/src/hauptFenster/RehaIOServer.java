@@ -14,6 +14,7 @@ import javax.swing.SwingWorker;
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import gui.Cursors;
+import io.RehaIOMessages;
 
 public class RehaIOServer extends SwingWorker<Void,Void>{
 	public ServerSocket serv = null;

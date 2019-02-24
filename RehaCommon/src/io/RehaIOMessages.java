@@ -1,4 +1,4 @@
-package RehaIO;
+package io;
 
 public class RehaIOMessages {
 	public static String IS_STARTET = "GESTARTET";
@@ -13,5 +13,6 @@ public class RehaIOMessages {
 	public static String MUST_RESET = "RESET";
 	public static String MUST_SEARCHFORMAIL = "SEARCHMAIL";
 	public static String MUST_CHANGEUSER = "CHANGEUSER";
+	public static String NEED_AKTUSER = "SENDUSER";
 	public static String WANT_PATMESSAGE = "WANTPATMESSAGE";
 }

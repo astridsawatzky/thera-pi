@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.swingworker.SwingWorker;
 
+import io.RehaIOMessages;
+
 
 public class RehaReverseServer extends SwingWorker<Void,Void>{
 	public ServerSocket serv = null;

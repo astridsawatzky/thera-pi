@@ -66,12 +66,12 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import RehaIO.RehaIOMessages;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.NativeView;
 import ag.ion.bion.officelayer.desktop.IFrame;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.text.ITextDocument;
+import io.RehaIOMessages;
 
 public class NewMail extends JFrame  implements WindowListener  {
 

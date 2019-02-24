@@ -47,8 +47,8 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
 import CommonTools.SqlInfo;
-import RehaIO.RehaIOMessages;
 import RehaIO.SocketClient;
+import io.RehaIOMessages;
 
 public class OffenepostenPanel extends JXPanel implements TableModelListener{
 

@@ -5,7 +5,10 @@ package rehaSql;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -58,7 +61,6 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
-import RehaIO.RehaIOMessages;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -67,6 +69,7 @@ import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
+import io.RehaIOMessages;
 
 
 public class RehaSqlPanel extends JXPanel implements ListSelectionListener,  TableModelListener  {

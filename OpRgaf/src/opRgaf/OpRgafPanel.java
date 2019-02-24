@@ -57,7 +57,6 @@ import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import RehaIO.RehaIOMessages;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -69,6 +68,7 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
+import io.RehaIOMessages;
 
 public class OpRgafPanel extends JXPanel implements TableModelListener{
 

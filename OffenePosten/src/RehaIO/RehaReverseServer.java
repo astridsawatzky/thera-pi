@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.swingworker.SwingWorker;
 
+import io.RehaIOMessages;
 import offenePosten.OffenePosten;
 
 

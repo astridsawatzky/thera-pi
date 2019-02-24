@@ -1,15 +1,6 @@
 package rehaMail;
 
 
-
-
-
-
-
-
-
-
-
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -42,21 +33,15 @@ import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
 import CommonTools.Verschluesseln;
-import RehaIO.RehaIOMessages;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import io.RehaIOMessages;
 import logging.Logging;
 
 public class RehaMail implements WindowListener {
 
-	/**
-	 * @param args
-	 */
-	/**
-	 * @param args
-	 */
 	public static boolean DbOk;
 	JFrame jFrame;
 	public static JFrame thisFrame = null;
@@ -69,13 +54,7 @@ public class RehaMail implements WindowListener {
 	public static boolean inPatMessage = false;
 	public static String sidPatMessage = "-1";
 	public static String sidRezMessage = "-1";
-	/*
-	public static String dbIpAndName = null;
-	public static String dbUser = null;
-	public static String dbPassword = null;
 
-
-*/
 	public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
 	public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
@@ -83,30 +62,10 @@ public class RehaMail implements WindowListener {
 	public static String dbUser = "rtauser";
 	public static String dbPassword = "rtacurie";
 	public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
-	//public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
-	public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-	public static String progHome = "C:/RehaVerwaltung/";
-	public static String aktIK = "510841109";
 
-	/*
-	public static String hmRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	public static String hmRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	public static String rhRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	public static String rhRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	*/
-	/*
-	public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
-	public static String dbUser = "rtauser";
-	public static String dbPassword = "rtacurie";
-	public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
 	public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
 	public static String progHome = "C:/RehaVerwaltung/";
 	public static String aktIK = "510841109";
-	public static String hmRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	public static String hmRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	public static String rhRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	public static String rhRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
-	*/
 
 	public static int xport = 7000;
 	public static boolean xportOk = false;
@@ -233,11 +192,7 @@ public class RehaMail implements WindowListener {
 			new SwingWorker<Void,Void>(){
 				@Override
 				protected Void doInBackground() throws java.lang.Exception {
-					try{
-
-					}catch(Exception ex){
-						ex.printStackTrace();
-					}
+					
 					xapplication.starteDB();
 					long zeit = System.currentTimeMillis();
 					while(! DbOk){
