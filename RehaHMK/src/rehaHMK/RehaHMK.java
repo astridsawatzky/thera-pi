@@ -99,7 +99,6 @@ public class RehaHMK implements WindowListener {
 	    try {
 			SwingUtilities.invokeAndWait( new SWTJarLoader());
 		} catch (InvocationTargetException | InterruptedException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		RehaHMK application = new RehaHMK();
