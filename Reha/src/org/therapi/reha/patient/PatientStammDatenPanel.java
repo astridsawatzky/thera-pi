@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -105,13 +106,7 @@ public class PatientStammDatenPanel extends JXPanel{
         jscr.validate();
         DropTarget dndt = new DropTarget();
 		DropTargetListener dropTargetListener =
-			 new DropTargetListener() {
-			  @Override
-            public void dragEnter(DropTargetDragEvent e) {}
-			  @Override
-            public void dragExit(DropTargetEvent e) {}
-			  @Override
-            public void dragOver(DropTargetDragEvent e) {}
+			 new DropTargetAdapter() {
 			  @Override
             public void drop(DropTargetDropEvent e) {
 				  String mitgebracht = "";
@@ -133,9 +128,6 @@ public class PatientStammDatenPanel extends JXPanel{
 			    // Ein Problem ist aufgetreten
 			    e.dropComplete(true);
 			  }
-			  @Override
-            public void dropActionChanged(
-			         DropTargetDragEvent e) {}
 		};
 		try {
 			dndt.addDropTargetListener(dropTargetListener);
