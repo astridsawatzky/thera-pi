@@ -19,7 +19,7 @@ class SqlInfo {
 
 		Statement stmt = null;
 		ResultSet rs = null;
-		Vector<String> retvec = new Vector<String>();
+
 		Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();
 		try {
 			stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -33,14 +33,14 @@ class SqlInfo {
 			rs = stmt.executeQuery(sstmt);
 
 			while (rs.next()) {
-				retvec.clear();
+				Vector<String> retvec = new Vector<String>();
 				ResultSetMetaData rsMetaData = rs.getMetaData();
 				int numberOfColumns = rsMetaData.getColumnCount() + 1;
 				for (int i = 1; i < numberOfColumns; i++) {
 					retvec.add((rs.getString(i) == null ? "" : rs.getString(i)));
 
 				}
-				retkomplett.add((Vector<String>) retvec.clone());
+				retkomplett.add(retvec);
 			}
 
 		} catch (SQLException ev) {
@@ -66,26 +66,27 @@ class SqlInfo {
 		return (Vector<Vector<String>>) retkomplett.clone();
 	}
 
-	Vector<Vector<String>> suchICD(String select, String suchtext, boolean sucheNachSchluessel, String limit) {
+	Vector<Vector<String>> suchICD(String suchtext, SearchType searchType, int ilimit) {
+
+		SearchParameter param = new SearchParameter(searchType, suchtext, ilimit);
+
+
+		String slimit = (param.limit() > 0 ? "LIMIT " + Integer.toString(param.limit()) : "");
 		String where;
-		if(suchtext.indexOf(' ') >= 0){
-			//Suche nach mehreren Begiffen
-			if (sucheNachSchluessel) {
-				where = SqlInfo.macheWhereKlausel("", suchtext, new String[] {"schluessel2"});				
-			}else{
-				where = SqlInfo.macheWhereKlausel("", suchtext, new String[] {"icdtext"});				
+			switch (searchType) {
+			case ICD:
+				where = SqlInfo.macheWhereKlausel(suchtext, "schluessel2");
+				break;
+			case TEXT:
+				where = SqlInfo.macheWhereKlausel(suchtext, "icdtext");
+				break;
+			default:
+				where="";
 			}
-		}else{
-			if (sucheNachSchluessel) {
-				where = "schluessel2 LIKE '%"+suchtext+"%'";
-			}else{
-				where = "icdtext LIKE '%"+suchtext+"%'";				
-			}
-		}	
-		String cmd = select+where+limit;
-		final String xcmd = cmd;
-	
-		return holeFelder(xcmd);
+
+
+		String cmd = "select schluessel2,titelzeile,id,icdtext from icd10 where "+where+slimit;
+		return holeFelder(cmd);
 	}
 
 	static String macheWhereKlausel(String praefix, String test, String[] suchein) {
@@ -105,14 +106,14 @@ class SqlInfo {
 		 * if(split.length==1){ ret = ret +" ("; for(int i = 0; i < felder.length;i++){
 		 * ret = ret+felder[i]+" like '%"+cmd+"%'"; if(i < felder.length-1){ ret = ret+
 		 * " OR "; } } ret = ret +") "; return ret; }
-		 * 
-		 * 
+		 *
+		 *
 		 * ret = ret +"( "; for(int i = 0; i < split.length;i++){ if(!
 		 * split[i].equals("")){ ret = ret +" ("; for(int i2 = 0; i2 <
 		 * felder.length;i2++){ ret = ret+felder[i2]+" like '%"+split[i]+"%'"; if(i2 <
 		 * felder.length-1){ ret = ret+ " OR "; } } ret = ret +") "; if(i <
 		 * split.length-1){ ret = ret+ " AND "; } }
-		 * 
+		 *
 		 * } ret = ret +") "; return ret;
 		 */
 		String[] felder = suchein;
@@ -147,6 +148,38 @@ class SqlInfo {
 
 		}
 		ret = ret + ") ";
+		return ret;
+
+	}
+
+	public static String macheWhereKlausel(String test, String feld) {
+
+		String cmd = test.trim();
+
+		cmd = new String(cmd.replaceAll("\\s+", " "));
+
+
+		String[] split = cmd.split(" ");
+
+
+		String ret = "";
+		for (int i = 0; i < split.length; i++) {
+			if (!split[i].equals("")) {
+				ret = ret + " (";
+
+					ret = ret + feld + " like '%" + split[i] + "%'";
+
+
+				ret = ret + ") ";
+				if (i < split.length - 1) {
+					ret = ret + " AND ";
+				}
+			}
+
+		}
+
+		if (split.length >1)
+			ret = "( " + ret + ") ";
 		return ret;
 
 	}

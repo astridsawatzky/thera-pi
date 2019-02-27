@@ -2,27 +2,32 @@ package Suchen;
 
 import java.awt.Dimension;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
+
+import logging.Logging;
+import mandant.IK;
+import sql.Datenquelle;
 
 public class ICDrahmen implements Runnable{
 
 	private JFrame jFrame;
 	Connection conn;
-	
-//	public static void main(String[] args) throws SQLException {
-//		private IK ik;
-//		new Logging("icd");
-//		setLaF();
-//
-//		IK ik = new IK("123456789");
-//
-//		Connection conn = new Datenquelle(ik).connection();
-//		System.out.println(conn.isClosed());
-//		ICDrahmen icd = new ICDrahmen(conn);
-//		icd.getJFrame();
-//
-//	}
+
+	public static void main(String[] args) throws SQLException {
+
+		new Logging("icd");
+
+
+		IK ik = new IK("123456789");
+
+		Connection conn = new Datenquelle(ik).connection();
+		System.out.println(conn.isClosed());
+		ICDrahmen icd = new ICDrahmen(conn);
+		icd.getJFrame();
+
+	}
 
 
 	public ICDrahmen(Connection conn) {
@@ -32,11 +37,11 @@ public class ICDrahmen implements Runnable{
 	@Override
 	public void run() {
 		getJFrame();
-		
+
 	}
-	
+
 	public JFrame getJFrame(){
-		
+
 		jFrame = new JFrame();
 		jFrame.setSize(650,600);
 		jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

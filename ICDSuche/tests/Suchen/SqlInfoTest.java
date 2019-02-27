@@ -30,4 +30,20 @@ public class SqlInfoTest {
 
 	}
 
+	@Test
+	public void whereclauseSimpleString() throws Exception {
+		String feld =  "felder";
+		assertEquals(" (felder like '%test%') ", SqlInfo.macheWhereKlausel("test", feld));
+
+		String mehrereSuchbegriffe = "criteria1 criteria2";
+		assertEquals("(  (felder like '%criteria1%')  AND  (felder like '%criteria2%') ) ",
+				SqlInfo.macheWhereKlausel(mehrereSuchbegriffe, feld));
+
+		String vieleLeerZeichen = "criteria1   criteria2    wasn        du";
+		assertEquals(
+				"(  (felder like '%criteria1%')  AND  (felder like '%criteria2%')  AND  (felder like '%wasn%')  AND  (felder like '%du%') ) ",
+				SqlInfo.macheWhereKlausel(vieleLeerZeichen, feld));
+
+	}
+
 }
