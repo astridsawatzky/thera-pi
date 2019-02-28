@@ -69,6 +69,7 @@ import org.therapi.reha.patient.AktuelleRezepte;
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import CommonTools.ZeitFunk;
 import dialoge.InfoDialog;
 import environment.Path;
 import events.PatStammEvent;

@@ -17,12 +17,13 @@ import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
 
+import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 public class kalenderPanel extends JXPanel{
 /**
-	 * 
+	 *
 	 */
 private static final long serialVersionUID = 7354087866079956906L;
 private JXPanel kPanel;
@@ -37,7 +38,7 @@ private int i;
 private int zeitSpanneVon;
 private int zeitSpanneBis;
 private int minutenInsgesamt;
-private float fPixelProMinute; 
+private float fPixelProMinute;
 private int iPixelProMinute;
 private int iMaxHoehe;
 private int yDifferenz;
@@ -68,7 +69,7 @@ int pfeily;
 //public Composite xoriginal;
 //public AlphaComposite xac1;
 public  kalenderPanel KalenderPanel() {
-		
+
 		this.setBackground(SystemConfig.KalenderHintergrund);
 		kPanel = new JXPanel();
 		kPanel.setBorder(null);
@@ -85,7 +86,7 @@ public void  ListenerSetzen(int aktPanel){
 }
 
 @Override
-public void paintComponent( Graphics g ) { 
+public void paintComponent( Graphics g ) {
 		//super.paintComponent( g );
 		Graphics2D g2d = (Graphics2D)g;
 
@@ -94,7 +95,7 @@ public void paintComponent( Graphics g ) {
 		if (vectorzahl > 0){
 			String sName=""; //Namenseintrag
 			String sReznr=""; //Rezeptnummer
-			String sStart=""; //Startzeit			
+			String sStart=""; //Startzeit
 			int dauer;    //Termin Dauer
 			String sEnde=""; //Endzeit
 
@@ -110,8 +111,8 @@ public void paintComponent( Graphics g ) {
 			g2d.setFont(SystemFarben.fon3);
 
 			//g.setColor( new Color(0x80,0x9f,0xff));
-		
-			
+
+
 			/*if(inGruppierung){
 				g2d.drawLine(2, 100, this.getWidth()-2, 150);
 				//g.draw3DRect(2, 100, this.getWidth()-2, 100, false);
@@ -120,7 +121,7 @@ public void paintComponent( Graphics g ) {
 
 
 			/**********************************************/
-		
+
 			/**********************************************/
 			/*
 			if((!this.spalteAktiv) || (!Reha.instance.terminpanel.dragStart)){
@@ -151,15 +152,15 @@ public void paintComponent( Graphics g ) {
 					////System.out.println("ArrayIndexOutOfBoundsException");
 					break;
 				}
-				//if ( test != null){ 
+				//if ( test != null){
 					if((sName = (String)((Vector)dat.get(0)).get(i))==null){
 						sName="";
-					}	
+					}
 					if((sReznr = (String)((Vector)dat.get(1)).get(i))==null){
 						sReznr="";
-					}	
+					}
 					sStart = (String)((Vector)dat.get(2)).get(i);
-					sEnde = (String)((Vector)dat.get(2)).get(i);					
+					sEnde = (String)((Vector)dat.get(2)).get(i);
 					dauer = Integer.parseInt((String)((Vector)dat.get(3)).get(i));
 					yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
 
@@ -172,29 +173,29 @@ public void paintComponent( Graphics g ) {
 					for(i1=0;i1<1;i1++){
 					/*
 					if(yDifferenz <= 5){
-						
+
 						g2d.setFont(g2d.getFont().deriveFont(6.5f));
 						baseline = (int) (fEndePix - (((fDifferenz -6.5)/2)+1.0) );
 						break;
-					}	
+					}
 					*/
 
 					if(yDifferenz <= 8){
 						g2d.setFont(g2d.getFont().deriveFont(8.5f));
-						baseline = (int) (fEndePix - (((fDifferenz -8.5)/2)+1.0) );				
+						baseline = (int) (fEndePix - (((fDifferenz -8.5)/2)+1.0) );
 						break;
-					}	
+					}
 					/*
 					if(yDifferenz <= 13){
 						//g2d.setFont(g2d.getFont().deriveFont(9.5f));
 						//baseline = (int) (fEndePix - (((fDifferenz -9.5)/2)+1.0) );
 						break;
-					}	
+					}
 					if(yDifferenz <= 21){
 						//g2d.setFont(g2d.getFont().deriveFont(11.5f));
 						//baseline = (int) (fEndePix - (((fDifferenz -11.5)/2)+1.0) );
 						break;
-					}	
+					}
 					if(yDifferenz <= 30){
 						//g2d.setFont(g2d.getFont().deriveFont(12.0f));
 						//baseline = (int) (fEndePix - (((fDifferenz -12.0)/2)+1.0) );
@@ -202,14 +203,14 @@ public void paintComponent( Graphics g ) {
 					}
 					*/
 					g2d.setFont(g2d.getFont().deriveFont(11.5f));
-					baseline = (int) (fEndePix - (((fDifferenz -11.5)/2)+1.0) );				
+					baseline = (int) (fEndePix - (((fDifferenz -11.5)/2)+1.0) );
 
 					//g2d.setFont(g2d.getFont().deriveFont(12f));
-					//baseline = (int) (fEndePix - (((fDifferenz -12.0)/2)+1.0) );					
+					//baseline = (int) (fEndePix - (((fDifferenz -12.0)/2)+1.0) );
 
 					//g2d.setFont(g2d.getFont().deriveFont(8.5f));
-					//baseline = (int) (fEndePix - (((fDifferenz -8.5)/2)+1.0) );				
-					}	
+					//baseline = (int) (fEndePix - (((fDifferenz -8.5)/2)+1.0) );
+					}
 
 					for(i1=0;i1<1;i1++){
 
@@ -229,11 +230,11 @@ public void paintComponent( Graphics g ) {
 								Reha.instance.terminpanel.dragLab[this.panelNummer].setText("");
 
 								g2d.drawString(/*yEndeMin-yStartMin+"s2 "+*/sName, 5, (baseline));
-						
+
 								g2d.draw3DRect(xStart, yStartMin, xEnde-3, yDifferenz-1, true);
 							}else{
 								if(this.spalteAktiv){
-									
+
 									if((!sName.equals("") || Reha.instance.terminpanel.ansicht==Reha.instance.terminpanel.MASKEN_ANSICHT) ){
 										if(yDifferenz < 12){
 											////System.out.println("Y-Differenz ist kleiner 12: "+yDifferenz);
@@ -269,17 +270,17 @@ public void paintComponent( Graphics g ) {
 										g2d.drawString(sStart.substring(0,5)+"-"+
 												sName
 												, 5, (baseline));
-									
+
 										g2d.draw3DRect(xStart, yStartMin, xEnde-3, yDifferenz-1, true);
 										Reha.instance.terminpanel.dragLab[this.panelNummer].setIcon(null);
 										Reha.instance.terminpanel.dragLab[this.panelNummer].setText("");
 									}
-									
+
 								}else{
 									g2d.drawString(sStart.substring(0,5)+"-"+
 											sName
 											, 5, (baseline));
-								
+
 									g2d.draw3DRect(xStart, yStartMin, xEnde-3, yDifferenz-1, true);
 								}
 							}
@@ -293,7 +294,7 @@ public void paintComponent( Graphics g ) {
 							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor( SystemFarben.colWeiss);
 							if (sReznr.contains("@FREI")){
-								g2d.drawString(sName, 5, (baseline));								
+								g2d.drawString(sName, 5, (baseline));
 							}else{
 								g2d.drawString(sStart.substring(0,5)+"-"+
 										sName
@@ -301,7 +302,7 @@ public void paintComponent( Graphics g ) {
 							}
 							break;
 						}
-					//Wenn Rezeptnummer leer und Name leer	
+					//Wenn Rezeptnummer leer und Name leer
 					if((sReznr.trim().isEmpty()) && (sName.trim().isEmpty())){
 						g2d.setColor(SystemConfig.aktTkCol.get("Freitermin")[0]);
 						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
@@ -315,7 +316,7 @@ public void paintComponent( Graphics g ) {
 						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz );
 						g2d.setColor(SystemConfig.aktTkCol.get("AusserAZ")[1]);
 						g2d.drawString(sName, 5, (baseline));
-						
+
 						break;
 					}
 					//Wenn Rezeptnummer @INTERN ist und der Name -RTA- enthält
@@ -341,14 +342,14 @@ public void paintComponent( Graphics g ) {
 						}else{
 							g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[0]);
 							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
-							g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[1]);						
+							g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
 									, 5, (baseline));
 							break;
 						}
 					}
-					
+
 					//Wenn Rezeptnummer kleiner als zwei Zeichen ist und der Name leer ist
 					if((sReznr.length() <= 2) && (sName.isEmpty())){
 						if(sReznr.trim().startsWith("RH")){
@@ -374,7 +375,7 @@ public void paintComponent( Graphics g ) {
 					if(sReznr.contains("\\")){
 						if(sReznr.contains("\\H")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColH")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColH")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -383,7 +384,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\F")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColF")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColF")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -392,7 +393,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\M")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColM")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColM")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -401,7 +402,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\A")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColA")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColA")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -410,7 +411,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\B")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColB")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColA")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -419,7 +420,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\C")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColC")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColC")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -428,7 +429,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\D")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColD")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColD")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -437,7 +438,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\E")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColE")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColE")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -446,7 +447,7 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\F")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColF")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColF")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
@@ -455,20 +456,20 @@ public void paintComponent( Graphics g ) {
 						}
 						if(sReznr.contains("\\G")){
 							g2d.setColor(SystemConfig.aktTkCol.get("ColG")[0]);
-							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+							g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 							g2d.setColor(SystemConfig.aktTkCol.get("ColG")[1]);
 							g2d.drawString(sStart.substring(0,5)+"-"+
 									sName
 									, 5, (baseline));
 							break;
 						}
-						
-						
+
+
 					}
 					//Sonderprogramm für Rehatermine
 					if(sReznr.contains("RH")){
 						g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[0]);
-						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 						g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
@@ -478,7 +479,7 @@ public void paintComponent( Graphics g ) {
 					//Sonderprogramm für Rehatermine
 					if(dauer==15){
 						g2d.setColor(SystemConfig.aktTkCol.get("15min")[0]);
-						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 						g2d.setColor(SystemConfig.aktTkCol.get("15min")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
@@ -486,8 +487,8 @@ public void paintComponent( Graphics g ) {
 						break;
 					}
 					if(dauer==20){
-						g2d.setColor(SystemConfig.aktTkCol.get("20min")[0]);						
-						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+						g2d.setColor(SystemConfig.aktTkCol.get("20min")[0]);
+						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 						g2d.setColor(SystemConfig.aktTkCol.get("20min")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
@@ -495,8 +496,8 @@ public void paintComponent( Graphics g ) {
 						break;
 					}
 					if(dauer==25){
-						g2d.setColor(SystemConfig.aktTkCol.get("25min")[0]);						
-						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+						g2d.setColor(SystemConfig.aktTkCol.get("25min")[0]);
+						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 						g2d.setColor(SystemConfig.aktTkCol.get("25min")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
@@ -504,8 +505,8 @@ public void paintComponent( Graphics g ) {
 						break;
 					}
 					if(dauer==30){
-						g2d.setColor(SystemConfig.aktTkCol.get("30min")[0]);						
-						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+						g2d.setColor(SystemConfig.aktTkCol.get("30min")[0]);
+						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 						g2d.setColor(SystemConfig.aktTkCol.get("30min")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
@@ -515,7 +516,7 @@ public void paintComponent( Graphics g ) {
 					if(dauer==40){
 						g2d.setColor(SystemConfig.aktTkCol.get("40min")[0]);
 						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
-						g2d.setColor(SystemConfig.aktTkCol.get("40min")[1]);						
+						g2d.setColor(SystemConfig.aktTkCol.get("40min")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
 								, 5, (baseline));
@@ -524,7 +525,7 @@ public void paintComponent( Graphics g ) {
 					if(dauer==45){
 						g2d.setColor(SystemConfig.aktTkCol.get("45min")[0]);
 						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
-						g2d.setColor(SystemConfig.aktTkCol.get("45min")[1]);						
+						g2d.setColor(SystemConfig.aktTkCol.get("45min")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
 								, 5, (baseline));
@@ -532,7 +533,7 @@ public void paintComponent( Graphics g ) {
 					}
 					if(dauer==50){
 						g2d.setColor(SystemConfig.aktTkCol.get("50min")[0]);
-						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);						
+						g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
 						g2d.setColor(SystemConfig.aktTkCol.get("50min")[1]);
 						g2d.drawString(sStart.substring(0,5)+"-"+
 								sName
@@ -558,8 +559,8 @@ public void paintComponent( Graphics g ) {
 						break;
 					}
 					g2d.setColor(SystemConfig.aktTkCol.get("unbekmin")[0]);
-					g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);	
-					g2d.setColor(SystemConfig.aktTkCol.get("unbekmin")[1]);					
+					g2d.fillRect( xStart, yStartMin, xEnde, yDifferenz);
+					g2d.setColor(SystemConfig.aktTkCol.get("unbekmin")[1]);
 					g2d.drawString(sStart.substring(0,5)+"-"+
 							sName
 							, 5, (baseline));
@@ -577,7 +578,7 @@ public void paintComponent( Graphics g ) {
 				g2d.fillRect( 0, 0, this.getWidth(), this.getHeight());
 			}
 			if(this.inGruppierung){
-				
+
 				g2d.setColor( Color.BLACK);
 				Composite original = g2d.getComposite();
 				AlphaComposite ac1
@@ -586,7 +587,7 @@ public void paintComponent( Graphics g ) {
 				g2d.setComposite(ac1);
 				g2d.fillRect(rahmen[0],rahmen[1],rahmen[2],rahmen[3]);
 				g2d.setComposite(original);
-							
+
 			}
 			/***********************************/
 			if(showTimeLine){
@@ -598,7 +599,7 @@ public void paintComponent( Graphics g ) {
 				//g2d.drawLine(1, pfeily-4, 1, pfeily+4);
 				//g2d.drawLine(1, pfeily-4, 5, pfeily);
 				//g2d.drawLine(5, pfeily, 1, pfeily+4);
-				
+
 				int xCoord[] = {1, 1, 6, 1};    //die x-Koordinaten
 				int yCoord[] ={pfeily-5, pfeily+5, pfeily, pfeily-5};    // die y-Koordinaten
 				int anz = xCoord.length;
@@ -607,17 +608,17 @@ public void paintComponent( Graphics g ) {
 				g.setColor(Color.black);
 				g.drawPolygon(xCoord,yCoord,anz );
 			}
-			
+
 
 		////System.out.println("Anzahl = "+anzahl);
-	} 	
+	}
 	public void setShowTimeLine(boolean show) {
 		this.showTimeLine = show;
 	}
 
 	/*******Klammer der paint-Methode**********/
 	public void datenZeichnen(Vector vect,int therapeut){
-		if(vect.size() > 0 && therapeut >= 0){	
+		if(vect.size() > 0 && therapeut >= 0){
 		dat.clear();
 		dat.addElement( ((ArrayList)vect.get(therapeut)).get(0) );
 		dat.addElement( ((ArrayList)vect.get(therapeut)).get(1) );
@@ -644,7 +645,7 @@ public void paintComponent( Graphics g ) {
 		positionScreen[0]=posInScreen.x;
 		positionScreen[1]=posInScreen.y;
 		positionScreen[2]=posInScreen.x+this.getWidth();
-		positionScreen[3]=posInScreen.y+this.getHeight();		
+		positionScreen[3]=posInScreen.y+this.getHeight();
 		this.repaint();
 	}
 	private Image skaliereImage(int faktor){
@@ -666,7 +667,7 @@ public void paintComponent( Graphics g ) {
 	public int[] BlockTest(int x,int y,int[] spdaten){
 		int[] ret = spdaten;
 		if ( (vectorzahl = ((Vector<?>)dat).size()) > 0){
-			String sStart=""; //Startzeit			
+			String sStart=""; //Startzeit
 			int dauer;    //Termin Dauer
 			//String sEnde=""; //Endzeit
 			int yStartMin;
@@ -675,14 +676,14 @@ public void paintComponent( Graphics g ) {
 			float fEndePix;
 			//float fDifferenz;
 			//float fStart;
-			//final zeitFunk zStart = new zeitFunk();			
+			//final zeitFunk zStart = new zeitFunk();
 			this.blockAktiv = -1;
 			this.spalteAktiv = false;
 			for(i=0;i<anzahl;i++){
 				sStart = (String)((Vector<?>)dat.get(2)).get(i);
-				//sEnde = (String)((Vector<?>)dat.get(2)).get(i);					
+				//sEnde = (String)((Vector<?>)dat.get(2)).get(i);
 				dauer = Integer.parseInt((String)((Vector<?>)dat.get(3)).get(i));
-				
+
 				yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
 				fStartPix = (yStartMin)*fPixelProMinute;
 				fEndePix  = fStartPix+(dauer * fPixelProMinute);
@@ -704,12 +705,12 @@ public void paintComponent( Graphics g ) {
 		}
 		return ret.clone();
 	}
-	
+
 /********************************/
 	public int[] BlockTestOhneAktivierung(int x,int y){
 		int[] ret = {-1,-1,-1,-1};
 		if ( (vectorzahl = ((Vector<?>)dat).size()) > 0){
-			String sStart=""; //Startzeit			
+			String sStart=""; //Startzeit
 			int dauer;    //Termin Dauer
 			int yStartMin;
 			float fStartPix;
@@ -717,7 +718,7 @@ public void paintComponent( Graphics g ) {
 			for(i=0;i<anzahl;i++){
 				sStart = (String)((Vector<?>)dat.get(2)).get(i);
 				dauer = Integer.parseInt((String)((Vector<?>)dat.get(3)).get(i));
-				
+
 				yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
 				fStartPix = (yStartMin)*fPixelProMinute;
 				fEndePix  = fStartPix+(dauer * fPixelProMinute);
@@ -727,17 +728,17 @@ public void paintComponent( Graphics g ) {
 					ret[1] = i;
 					ret[0] = i;
 					break;
-				}	
+				}
 			}
 		}
 		return ret.clone();
 	}
 /********************************/
-		
+
 	public int blockInSpalte(int x,int y,int spalte){
 		int trefferblock = -1;
 		if ( (vectorzahl = ((Vector<?>)dat).size()) > 0){
-			String sStart=""; //Startzeit			
+			String sStart=""; //Startzeit
 			int dauer;    //Termin Dauer
 			//String sEnde=""; //Endzeit
 			int yStartMin;
@@ -746,9 +747,9 @@ public void paintComponent( Graphics g ) {
 			float fEndePix;
 			for(i=0;i<anzahl;i++){
 				sStart = (String)((Vector<?>)dat.get(2)).get(i);
-				//sEnde = (String)((Vector<?>)dat.get(2)).get(i);					
+				//sEnde = (String)((Vector<?>)dat.get(2)).get(i);
 				dauer = Integer.parseInt((String)((Vector<?>)dat.get(3)).get(i));
-				
+
 				yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart))-zeitSpanneVon  ;
 				fStartPix = (yStartMin)*fPixelProMinute;
 				fEndePix  = fStartPix+(dauer * fPixelProMinute);
@@ -760,9 +761,9 @@ public void paintComponent( Graphics g ) {
 		}
 		return trefferblock;
 	}
-	
-	
-/********************************/	
+
+
+/********************************/
 	public int  blockGeklickt(int block){
 		if (block > -1 && anzahl > 0){
 			////System.out.println("Block >1, Block = "+block+" Anzahl="+anzahl);
@@ -779,7 +780,7 @@ public void paintComponent( Graphics g ) {
 			aktivPunkt[1] = -1;
 			aktivPunkt[2] = -1;
 			aktivPunkt[3] = -1;
-			
+
 
 		}
 		return this.maleSchwarz;
@@ -799,10 +800,10 @@ public void paintComponent( Graphics g ) {
 			Reha.instance.terminpanel.dragLab[this.panelNummer].setIcon(null);
 	}
 	public void  setSpalteaktiv(boolean aktiv){
-		
+
 		this.spalteAktiv = aktiv;
 	}
-	
+
 	public void schwarzAbgleich(int block, int schwarz){
 		this.blockAktiv = block;
 		this.maleSchwarz = schwarz;
@@ -822,7 +823,7 @@ public void paintComponent( Graphics g ) {
 		this.setShiftGedrueckt(sg);
 	}
 	public void gruppierungZeichnen(int[] gruppe){
-		String sStart=""; //Startzeit			
+		String sStart=""; //Startzeit
 		String sEnde="";
 		int yStartMin;
 		int dauer;    //Termin Dauer
@@ -833,19 +834,19 @@ public void paintComponent( Graphics g ) {
 		block2 = gruppe[1];
 		if(!this.inGruppierung){
 			this.inGruppierung = true;
-		}	
+		}
 			if(block1 > block2){
 				this.gruppe[0]= block2;
-   				this.gruppe[1]= block1;				                       
+   				this.gruppe[1]= block1;
 			}else{
 				this.gruppe[0] = block1;
 				this.gruppe[1] = block2;
 			}
 			////System.out.println("Startblock="+this.gruppe[0]+" / Endblock="+this.gruppe[1] );
-			 
+
 			sStart = (String)((Vector)dat.get(2)).get(this.gruppe[0]);
 			yStartMin = (int) ZeitFunk.MinutenSeitMitternacht(sStart)-zeitSpanneVon;
-			sEnde = (String)((Vector)dat.get(4)).get(this.gruppe[1]);					
+			sEnde = (String)((Vector)dat.get(4)).get(this.gruppe[1]);
 			dauer = (int)ZeitFunk.ZeitDifferenzInMinuten(sStart, sEnde);
 
 			////System.out.println("Start = "+sStart+" / Ende = "+sEnde);
@@ -854,12 +855,12 @@ public void paintComponent( Graphics g ) {
 			//fEndePix  = fStartPix+((float) dauer * fPixelProMinute);
 			yStartMin = ((int) (fStartPix));
 			//yEndeMin = ((int) (fEndePix));
-			
+
 			yEndeMin = (int) ((dauer)*fPixelProMinute);
 			rahmen[0] = 0;
 			rahmen[1] = yStartMin;
 			rahmen[2] = this.getWidth();
-			rahmen[3] = yEndeMin;			
+			rahmen[3] = yEndeMin;
 			////System.out.println("Parameter = "+rahmen[0]+" / "+rahmen[1]+" / "+rahmen[2]+" / "+rahmen[3]);
 			//y-start berechnen;
 			//y-ende berechnen;

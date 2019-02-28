@@ -34,6 +34,7 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import CommonTools.ZeitFunk;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;
