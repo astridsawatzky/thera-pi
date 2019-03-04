@@ -10,17 +10,17 @@ public class SWTJarLoader implements Runnable{
 		new SWTJarLoader().loadSwtJar();
 	}
 	public SWTJarLoader() {
-		
+
 	}
 
 private void loadSwtJar() {
-   
+
 
     String osName = System.getProperty("os.name").toLowerCase();
     String osArch = System.getProperty("os.arch").toLowerCase();
 
     //NOTE - I have not added the mac and *nix swt jars.
-    String osPart = 
+    String osPart =
         osName.contains("win") ? "win" :
         osName.contains("mac") ? "cocoa" :
         osName.contains("linux") || osName.contains("nix") ? "gtk" :
@@ -35,7 +35,7 @@ private void loadSwtJar() {
 
     String swtFileName = "swt-" +osPart + archPart +"-3.7.jar";
     String workingDir = System.getProperty("user.dir");
-    String libDir = "\\C:\\repos\\develop\\Libraries\\lib\\djnative\\";
+    String libDir = environment.Path.Instance.getProghome() + "Libraries\\lib\\djnative\\";
     File file = new File(libDir, swtFileName);
     if (!file.exists ())
         System.out.println("Can't locate SWT Jar " + file.getAbsolutePath());
@@ -56,6 +56,6 @@ private void loadSwtJar() {
 @Override
 public void run() {
 	loadSwtJar();
-	
+
 }
 }
