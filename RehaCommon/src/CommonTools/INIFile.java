@@ -84,9 +84,9 @@ public final class INIFile
      */
     public INIFile(String pstrPathAndName)
     {
-    	if(!new File(pstrPathAndName).exists()) {
-    		logger.error("Inifile does not exist:" + pstrPathAndName);
-    	}
+        if(!new File(pstrPathAndName).exists()) {
+            logger.error("Inifile does not exist:" + pstrPathAndName);
+        }
         this.mpropEnv = getEnvVars();
         this.mhmapSections = new LinkedHashMap<String, INISection>();
         this.mstrFile = pstrPathAndName;
@@ -95,11 +95,11 @@ public final class INIFile
     }
 
 
-	public INIFile(InputStream istream,String pstrPathAndName)
+    public INIFile(InputStream istream,String pstrPathAndName)
     {
-		if(!new File(pstrPathAndName).exists()) {
-    		logger.error("Inifile does not exist:" + pstrPathAndName);
-    	}
+        if(!new File(pstrPathAndName).exists()) {
+            logger.debug("loading from Stream:" + pstrPathAndName);
+        }
         this.mpropEnv = getEnvVars();
         this.mhmapSections = new LinkedHashMap<String, INISection>();
         this.mstrFile = pstrPathAndName;
@@ -131,7 +131,7 @@ public final class INIFile
         return this.mstrFile;
     }
     public InputStream getInputStream(){
-    	return this.streamin;
+        return this.streamin;
     }
 
     /**
@@ -445,7 +445,7 @@ public final class INIFile
      * @pstrVal the string value to be persisted
      */
     public void setStringProperty(String pstrSection, String pstrProp,
-                    				String pstrVal, String pstrComments)
+                                    String pstrVal, String pstrComments)
     {
         INISection objSec   = null;
 
@@ -465,7 +465,7 @@ public final class INIFile
      * @param pblnVal the boolean value to be persisted
      */
     public void setBooleanProperty(String pstrSection, String pstrProp,
-                    				boolean pblnVal, String pstrComments)
+                                    boolean pblnVal, String pstrComments)
     {
         INISection objSec   = null;
 
@@ -488,7 +488,7 @@ public final class INIFile
      * @param pintVal the int property to be persisted.
      */
     public void setIntegerProperty(String pstrSection, String pstrProp,
-                    				int pintVal, String pstrComments)
+                                    int pintVal, String pstrComments)
     {
         INISection objSec   = null;
 
@@ -508,7 +508,7 @@ public final class INIFile
      * @param plngVal the long value to be persisted.
      */
     public void setLongProperty(String pstrSection, String pstrProp,
-                    			long plngVal, String pstrComments)
+                                long plngVal, String pstrComments)
     {
         INISection objSec   = null;
 
@@ -528,7 +528,7 @@ public final class INIFile
      * @param pdblVal the double value to be persisted.
      */
     public void setDoubleProperty(String pstrSection, String pstrProp,
-                    				double pdblVal, String pstrComments)
+                                    double pdblVal, String pstrComments)
     {
         INISection objSec   = null;
 
@@ -548,7 +548,7 @@ public final class INIFile
      * @param pdtVal the date value to be persisted.
      */
     public void setDateProperty(String pstrSection, String pstrProp,
-                    			Date pdtVal, String pstrComments)
+                                Date pdtVal, String pstrComments)
     {
         INISection objSec   = null;
 
@@ -559,7 +559,7 @@ public final class INIFile
             this.mhmapSections.put(pstrSection, objSec);
         }
         objSec.setProperty(pstrProp, utilDateToStr(pdtVal, this.mstrDateFmt),
-                        	pstrComments);
+                            pstrComments);
     }
 
     /**
@@ -569,7 +569,7 @@ public final class INIFile
      * @param ptsVal the timestamp value to be persisted.
      */
     public void setTimestampProperty(String pstrSection, String pstrProp,
-                    					Timestamp ptsVal, String pstrComments)
+                                        Timestamp ptsVal, String pstrComments)
     {
         INISection objSec   = null;
 
@@ -580,7 +580,7 @@ public final class INIFile
             this.mhmapSections.put(pstrSection, objSec);
         }
         objSec.setProperty(pstrProp, timeToStr(ptsVal, this.mstrTimeStampFmt),
-                        	pstrComments);
+                            pstrComments);
     }
 
     /**
@@ -744,7 +744,7 @@ public final class INIFile
         }
         catch (IOException exIgnore)
         {
-        	exIgnore.printStackTrace();
+            exIgnore.printStackTrace();
         }
         finally
         {
@@ -1465,11 +1465,11 @@ public final class INIFile
                     if (strVal != null)
                     {
                         strRet = strRet.substring(0, intStart) + strVal +
-                        		strRet.substring(intEnd + 1);
+                                strRet.substring(intEnd + 1);
                     }
                 }
             }catch(Exception ex){
-            	return strRet;
+                return strRet;
             }
             return strRet;
         }
