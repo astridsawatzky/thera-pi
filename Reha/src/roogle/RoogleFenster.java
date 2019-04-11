@@ -1413,7 +1413,7 @@ public class RoogleFenster extends RehaSmartDialog implements TableModelListener
 	    			Reha.instance.terminpanel.aktualisieren();
 	    			Reha.instance.terminpanel.setUpdateVerbot(false);
 	    	    	//TerminFenster.thisClass.getViewPanel().requestFocus();
-	    			Reha.instance.terminpanel.altCtrlAus();
+
 
 
 	    			/*
