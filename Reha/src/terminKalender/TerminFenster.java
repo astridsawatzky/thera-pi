@@ -70,7 +70,7 @@ import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
-import dialoge.InfoDialog;
+import dialoge.InfoDialogTerminInfo;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -221,7 +221,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     public boolean terminBreak = false;
     public JRehaInternal eltern;
 
-    public InfoDialog infoDlg = null;
+    public InfoDialogTerminInfo infoDlg = null;
 
     public static String[] dayname = {"Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"};
     public static String[] dayshortname = {"Mo - ","Di - ","Mi - ","Do - ","Fr - ","Sa - ","So - "};
@@ -1266,7 +1266,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                                 reznummer = (String) ((Vector)((ArrayList)vTerm.get(aktiveSpalte[2])).get(1)).get(aktiveSpalte[0]);
                             }
                             //String reznummer = (String) ((Vector)((ArrayList)vTerm.get(belegung[aktiveSpalte[2]])).get(1)).get(aktiveSpalte[0]);
-                            infoDlg = new InfoDialog(reznummer,"terminInfo",null);
+                            //infoDlg = new InfoDialog(reznummer,"terminInfo",null);
+                            infoDlg = new InfoDialogTerminInfo(reznummer,null);
                             infoDlg.pack();
                             infoDlg.setLocationRelativeTo(TerminFlaeche);
                             infoDlg.setVisible(true);
