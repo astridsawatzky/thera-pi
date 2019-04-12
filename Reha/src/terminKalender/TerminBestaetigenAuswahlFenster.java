@@ -14,6 +14,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+import javax.swing.JRootPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
@@ -144,14 +145,9 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
         //this.setAlwaysOnTop(true); //gefährlich in Java, außer in begründeten Ausnahmefenstern eigentlich nur anzuwenden bei NON-Modalen Fenstern
         //this.setModal(true); //Wenn man Modal in der aufrufenden Methode setzt hat man noch die Chance den Focus zu setzten.
         validate();
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                setzeFocus();
-            }
-        });
-
-    }
+        JRootPane rootPane = SwingUtilities.getRootPane(okbut);
+        rootPane.setDefaultButton(okbut);
+   }
     public void setzeFocus(){
         SwingUtilities.invokeLater(new Runnable(){
             @Override
