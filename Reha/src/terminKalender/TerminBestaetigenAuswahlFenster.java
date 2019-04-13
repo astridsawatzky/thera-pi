@@ -4,17 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import javax.swing.JRootPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.WindowConstants;
@@ -41,7 +42,7 @@ import systemTools.WinNum;
 //Drud 110418
 //TODO 6. Anpassung des Umsatzbeteiligung-Moduls, um nur die tatsächlich geleisteten Heilmittel anzuzeigen
 
-public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements   ActionListener, ItemListener{
+public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements    ItemListener{
     private static final long serialVersionUID = -2972115133247099975L;
     /**
     *
@@ -143,19 +144,12 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
         jcc.validate();
 
         //this.setAlwaysOnTop(true); //gefährlich in Java, außer in begründeten Ausnahmefenstern eigentlich nur anzuwenden bei NON-Modalen Fenstern
-        //this.setModal(true); //Wenn man Modal in der aufrufenden Methode setzt hat man noch die Chance den Focus zu setzten.
+        this.setModal(true);
         validate();
-        JRootPane rootPane = SwingUtilities.getRootPane(okbut);
-        rootPane.setDefaultButton(okbut);
+        getRootPane().setDefaultButton(okbut);
+
+
    }
-    public void setzeFocus(){
-        SwingUtilities.invokeLater(new Runnable(){
-            @Override
-            public void run(){
-                okbut.requestFocus();
-            }
-        });
-    }
     private JXPanel getTerminBest(JXPanel jp){
                                     // 1    2       3   4        5   6      7    8      9   10   11 12 13 14
         FormLayout lay = new FormLayout("6px,center:p,6px,right:p,6px,right:p,6px,right:p,6px,66px,6px,p,6px,p",
@@ -190,34 +184,46 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
         CellConstraints cc = new CellConstraints();
         JXPanel pan = new JXPanel();
         pan.setLayout(lay);
-        okbut = new JXButton("ok");
+        okbut = new JXButton(oKAction);
         okbut.setActionCommand("ok");
-        okbut.addActionListener(this);
-        abbruchbut = new JXButton("abbrechen");
+
+
+
+        abbruchbut = new JXButton(cancelAction);
         abbruchbut.setActionCommand("abbruch");
-        abbruchbut.addActionListener(this);
+        abbruchbut.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), "abbruch");
+        abbruchbut.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0), "abbruch");
+        abbruchbut.getActionMap().put("abbruch",cancelAction);
+
+
         pan.add(okbut,cc.xy(2,2));
         pan.add(abbruchbut,cc.xy(4,2));
-        pan.addKeyListener(this);
         pan.validate();
 
         return pan;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        if(arg0.getActionCommand().equals("ok")){
-            new Thread(){
-                @Override
-                public void run(){
-                    zurueck();
-                }
-            }.start();
+
+
+    Action oKAction = new AbstractAction("ok") {
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            zurueck();
+
         }
-        if(arg0.getActionCommand().equals("abbruch")){
+    };
+    Action cancelAction = new AbstractAction("abbrechen") {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
             reset();
+
         }
-    }
+    };
+
+
     private void zurueck(){
         int counter = 0;
         for (int i=0; i < btm.length; i++){
@@ -250,48 +256,6 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
         this.dispose();
     }
 
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-        if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE){
-            arg0.consume();
-            reset();
-        }
-        if(arg0.getKeyCode() == KeyEvent.VK_ENTER ){
-            ((JComponent) arg0.getSource()).requestFocus();
-            arg0.consume();
-            zurueck();
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        /*
-        if(e.getKeyCode() == KeyEvent.VK_ENTER){
-            ((JComponent) e.getSource()).requestFocus();
-            e.consume();
-            zurueck();
-        }
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            e.consume();
-            reset();
-        }
-        */
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        /*
-        if(e.getKeyCode() == KeyEvent.VK_ENTER){
-            ((JComponent) e.getSource()).requestFocus();
-            e.consume();
-            zurueck();
-        }
-        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            e.consume();
-            reset();
-        }
-        */
-    }
 
     @Override
     public void windowClosed(WindowEvent arg0) {

@@ -2468,9 +2468,6 @@ public class RezTools {
                             }else{
                                 termBestAusw.setLocation(pt);
                             }
-                            //
-                            termBestAusw.setzeFocus();
-                            termBestAusw.setModal(true);
                             termBestAusw.setVisible(true);
                             if(RezTools.DIALOG_WERT==RezTools.DIALOG_ABBRUCH){
                                 retObj[0] = String.valueOf(termbuf.toString());
