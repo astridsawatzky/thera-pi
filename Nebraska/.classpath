@@ -24,6 +24,7 @@
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swingx-1.6.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/itext/iText-2.1.6.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/jgoodies/forms-1.3.0.jar"/>
-	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/junit-4.5.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/hamcrest-all-1.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -28,7 +28,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/mmscomputing/uk.co.mmscomputing.device.twain.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/mmscomputing/uk.co.mmscomputing.device.sane.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/jgoodies/looks-2.3.1.jar"/>
-	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/jna_WindowUtils.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/net/smtp.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/net/mail.jar"/>
@@ -51,5 +50,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/ocf/apduio.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/ocf/ocf-cc.jar"/>
 	<classpathentry kind="src" path="/ICDSuche"/>
+	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/junit-4.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
