@@ -84,7 +84,7 @@ public final class INIFile
      */
     public INIFile(String pstrPathAndName)
     {
-        if(!new File(pstrPathAndName).exists()) {
+        if(pstrPathAndName ==null || !new File(pstrPathAndName).exists()) {
             logger.error("Inifile does not exist:" + pstrPathAndName);
         }
         this.mpropEnv = getEnvVars();

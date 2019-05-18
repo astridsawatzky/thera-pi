@@ -6,33 +6,33 @@ import junit.framework.TestCase;
 
 public class NebraskaUtilTest extends TestCase {
 
-	@Override
+    @Override
     protected void setUp() throws Exception {
-		super.setUp();
-	}
+        super.setUp();
+    }
 
-	@Override
+    @Override
     protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+        super.tearDown();
+    }
 
-	public void testGetSubjectDN() {
-		assertEquals("C=DE,O=ITSG TrustCenter fuer sonstige Leistungserbringer,OU=Test Institution,OU=IK123456789,CN=Max Mustermann",
-				NebraskaUtil.getSubjectDN("123456789", "Test Institution", "Max Mustermann"));
-		assertEquals("C=DE,O=ITSG TrustCenter fuer sonstige Leistungserbringer,OU=Logopaedie Semmelweiss,OU=IK000123456,CN=Waeaenae Broesel",
-				NebraskaUtil.getSubjectDN("IK 000123456", "Łógòpädie Sèmméłweiß", "Wäänä Brösel"));
-	}
+    public void testGetSubjectDN() {
+        assertEquals("CN=Max Mustermann, OU=IK123456789, OU=Test Institution, O=ITSG TrustCenter fuer sonstige Leistungserbringer, C=DE",
+                NebraskaUtil.getSubjectDN("123456789", "Test Institution", "Max Mustermann"));
+        assertEquals("CN=Wäänä Brösel, OU=IK000123456, OU=Łógòpädie Sèmméłweiß, O=ITSG TrustCenter fuer sonstige Leistungserbringer, C=DE",
+                NebraskaUtil.getSubjectDN("IK 000123456", "Łógòpädie Sèmméłweiß", "Wäänä Brösel"));
+    }
 
-	public void testNormalizeDnField() {
-		assertEquals("Meissen", NebraskaUtil.normalizeDnField("Meißen"));
-		assertEquals("alpha beta gamma", NebraskaUtil.normalizeDnField("alpha,beta,gamma"));
-		assertEquals("aens zwo drei", NebraskaUtil.normalizeDnField("æns, zwø, dreí"));
-	}
+    public void testNormalizeDnField() {
+        assertEquals("Meissen", NebraskaUtil.normalizeDnField("Meißen"));
+        assertEquals("alpha beta gamma", NebraskaUtil.normalizeDnField("alpha,beta,gamma"));
+        assertEquals("aens zwo drei", NebraskaUtil.normalizeDnField("æns, zwø, dreí"));
+    }
 
-	public void testNormalizeIK() {
-		assertEquals("123456789", NebraskaUtil.normalizeIK("123456789"));
-		assertEquals("100200300", NebraskaUtil.normalizeIK("IK100200300"));
-		assertEquals("111222333", NebraskaUtil.normalizeIK("IK 111222333"));
-	}
+    public void testNormalizeIK() {
+        assertEquals("123456789", NebraskaUtil.normalizeIK("123456789"));
+        assertEquals("100200300", NebraskaUtil.normalizeIK("IK100200300"));
+        assertEquals("111222333", NebraskaUtil.normalizeIK("IK 111222333"));
+    }
 
 }
