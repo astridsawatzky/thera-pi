@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.thera_pi.nebraska.crypto.test;
+package org.thera_pi.nebraska.crypto;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

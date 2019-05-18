@@ -1,4 +1,4 @@
-package org.thera_pi.nebraska.crypto.test;
+package org.thera_pi.nebraska.crypto;
 
 import org.thera_pi.nebraska.crypto.NebraskaUtil;
 
