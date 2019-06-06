@@ -305,8 +305,6 @@ public class Reha implements FocusListener,ComponentListener,ContainerListener,M
 	public static boolean demoversion = false;
 	public static boolean vollbetrieb = true;
 
-	public static String aktuelleVersion = "2018-09-20-DB=";
-
 	public static Vector<Vector<Object>> timerVec = new Vector<Vector<Object>>();
 	public static Timer fangoTimer = null;
 	public static boolean timerLaeuft = false;
@@ -2863,7 +2861,7 @@ final class DatenbankStarten implements Runnable{
 						while(Reha.getThisFrame() == null || Reha.getThisFrame().getStatusBar()==null || Reha.instance.dbLabel == null){
 							Thread.sleep(25);
 						}
-						Reha.instance.dbLabel.setText(Reha.aktuelleVersion+xdb);
+						Reha.instance.dbLabel.setText(Version.aktuelleVersion+xdb);
 					}catch(NullPointerException ex){
 						ex.printStackTrace();
 					}
@@ -3121,7 +3119,7 @@ final class DbNachladen implements Runnable{
 			if(obj.dbLabel != null){
 				String db = SystemConfig.vDatenBank.get(0).get(1).replace("jdbc:mysql://", "");
 				db = db.substring(0,db.indexOf("/"));
-				obj.dbLabel.setText(Reha.aktuelleVersion+db);
+				obj.dbLabel.setText(Version.aktuelleVersion+db);
 			}
 			obj.sqlInfo.setConnection(obj.conn);
 			Reha.DbOk = true;
