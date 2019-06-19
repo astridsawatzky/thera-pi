@@ -608,15 +608,6 @@ public class HMRCheck {
                             if(testvec.get(idxVorg).get(5).length() > 0){                                // es sind termine eingetragen
                                 enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(idxVorg).get(5));
                             }
-                            if (chkIsAdR(voArt)) {                                                        // wenn die Uebersprungene eine AdR-VO ist -> Abbruch
-                                return shouldBeAdR(rezVoArt);
-                            }
-                            idxVorg++;                                                                    // jetzt Index auf Vorgänger setzen
-                        }
-                        if(idxVorg < testvec.size()){                                                    // es ist (immer) noch ein Vorgänger vorhanden und
-                            if(testvec.get(idxVorg).get(5).length() > 0){                                // es sind termine eingetragen
-                                enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(idxVorg).get(5));
-                            }
                         }else{                                                                            // aeltestes Rezept erreicht
                             enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(i).get(5));        // dummy (damit die Berechnung durchlaeuft?)
                         }
