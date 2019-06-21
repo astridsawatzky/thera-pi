@@ -1,27 +1,18 @@
 package systemTools;
 
 public class IntegerTools {
-	
-	public static int trailNullAndRetInt(String zahl){
-		int ret = 0;
-		if(zahl==null){
-			return ret;
-		}
-		int lang = zahl.length(); 
-		if(lang == 0){
-			return ret;
-		}
-		int i  = 0;
-		for(i = 0; i < lang;i++){
-			if(! zahl.substring(i,i+1).equals("0")){
-				break;
-			}
-		}
-		if(i==(lang-1)){
-			return ret;
-		}
-		ret = Integer.parseInt(zahl.substring(i));
-		return ret;
-	}
+
+    public static int trailNullAndRetInt(String zahl){
+        if(zahl==null || zahl.isEmpty()){
+            return 0;
+        }
+
+
+        int parseInt = Integer.parseInt(zahl);
+        if (parseInt==0) {
+            throw new NumberFormatException();
+        }
+        return  parseInt <10 ? 0 : parseInt;
+    }
 
 }
