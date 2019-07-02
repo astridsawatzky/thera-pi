@@ -83,6 +83,7 @@ import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.format.YUVFormat;
+import javax.smartcardio.CardException;
 import javax.sql.DataSource;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -153,6 +154,7 @@ import benutzerVerwaltung.BenutzerRechte;
 import dialoge.AboutDialog;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
+import egk.EgkReader;
 import entlassBerichte.EBerichtPanel;
 import environment.LadeProg;
 import environment.Path;
@@ -165,8 +167,6 @@ import mandant.Mandant;
 import menus.TerminMenu;
 import oOorgTools.OOTools;
 import ocf.OcKVK;
-import opencard.core.service.CardServiceException;
-import opencard.core.terminal.CardTerminalException;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
@@ -365,6 +365,8 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
     public static Reha instance = new Reha(nullMandant);
     private static JXFrame thisFrame;
 
+    private RehaSettings settings;
+    private DataSource dataSource;
     private static Logger logger;
 
     public static JXFrame getThisFrame() {
@@ -431,6 +433,11 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         aktMandant = mandant.name();
 
         String iniPath = Path.Instance.getProghome() + "ini/" + mandant.ik() + "/";
+        try {
+            settings = new RehaSettings(mandant);
+        } catch (IOException e) {
+            logger.error("RehaSettings could not be created",e);
+        }
 
         INITool.init(iniPath);
         logger.info("Insgesamt sind " + Integer.toString(INITool.getDBInis().length)
@@ -1278,10 +1285,20 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             jFrame.getContentPane()
                   .validate();
             /*
-             * new Thread(){ public void run(){ while((!Reha.iconsOk) && (!Reha.DbOk)){ try
-             * { Thread.sleep(25); } catch (InterruptedException e) { e.printStackTrace(); }
-             * } jxLinks.add(new LinkeTaskPane(),BorderLayout.CENTER); jxLinks.validate();
-             * jFrame.getContentPane().validate(); } }.start();
+            new  Thread(){
+                public void run(){
+                    while((!Reha.iconsOk) && (!Reha.DbOk)){
+                        try {
+                            Thread.sleep(25);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    jxLinks.add(new LinkeTaskPane(),BorderLayout.CENTER);
+                    jxLinks.validate();
+                    jFrame.getContentPane().validate();
+                }
+            }.start();
              */
             new SwingWorker<Void, Void>() {
                 @Override
@@ -1385,7 +1402,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
 
         /*
          * rehaEvent.addRehaEventListener(new RehaEventListener() {
-         * 
+         *
          * @Override public void RehaEventOccurred(RehaEvent evt) {
          * //System.out.println("Event getSource: = "+evt.getSource());
          * //System.out.println("Event Nachricht: = "+ evt.getRehaEvent()); } });
@@ -2865,7 +2882,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
 /**************
  *
  * Thread zum Start der Datenbank
- * 
+ *
  * @author admin
  *
  */
@@ -3303,8 +3320,6 @@ final class ErsterLogin implements Runnable {
                     @Override
                     protected Void doInBackground() throws Exception {
                         try {
-                            // JOptionPane.showMessageDialog(null,System.getProperty("java.home"));
-                            // JOptionPane.showMessageDialog(null,System.getProperty("java.version"));
 
                             // SCR335
                             // ctpcsc31kv
@@ -3314,13 +3329,19 @@ final class ErsterLogin implements Runnable {
 
                                     System.out.println("Aktiviere Reader: " + SystemConfig.sReaderName + "\n"
                                             + "CT-API Bibliothek: " + SystemConfig.sReaderCtApiLib);
-                                    Reha.instance.ocKVK = new OcKVK(SystemConfig.sReaderName.trim()
-                                                                                            .replace(" ", "_"),
-                                            SystemConfig.sReaderCtApiLib, SystemConfig.sReaderDeviceID, false);
-                                } catch (CardTerminalException ex) {
-                                    disableReader(
-                                            "Fehlerstufe rc = -8 = CardTerminal reagiert nicht\n" + ex.getMessage());
-                                } catch (CardServiceException e) {
+
+                                    Reha.instance.ocKVK = new OcKVK();
+
+                                    EgkReader target = new EgkReader(SystemConfig.sReaderName);
+                                    target.addCardListener(Reha.instance.ocKVK);
+                                    Thread egk= new Thread(
+                                     target);
+
+                                    egk.setDaemon(true);
+                                    egk.setName("EGK");
+                                    egk.start();
+
+                                } catch (CardException e) {
                                     disableReader("Fehlerstufe rc = -2 oder -4  = Karte wird nicht unterstützt\n"
                                             + e.getMessage());
                                 } catch (ClassNotFoundException e) {
@@ -3336,24 +3357,8 @@ final class ErsterLogin implements Runnable {
                                         disableReader("Anderweitiger Fehler\n" + e.getMessage());
                                     }
                                 }
-                                if (Reha.instance.ocKVK != null) {
-                                    Vector<Vector<String>> vec = Reha.instance.ocKVK.getReaderList();
-                                    for (int i = 0; i < vec.get(0)
-                                                           .size(); i++) {
-                                        System.out.println("*******************");
-                                        System.out.println(vec.get(0)
-                                                              .get(i)
-                                                + " - " + vec.get(1)
-                                                             .get(i)
-                                                + " - " + vec.get(2)
-                                                             .get(i)
-                                                + " - " + vec.get(3)
-                                                             .get(i));
-                                    }
 
-                                }
-                                // KVKWrapper kvw = new KVKWrapper(SystemConfig.sReaderName);
-                                // kvw.KVK_Einlesen();
+
                             }
                         } catch (NullPointerException ex) {
                             ex.printStackTrace();

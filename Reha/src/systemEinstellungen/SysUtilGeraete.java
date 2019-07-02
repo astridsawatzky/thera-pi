@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.smartcardio.CardTerminal;
+import javax.smartcardio.TerminalFactory;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -36,7 +38,7 @@ import uk.co.mmscomputing.device.scanner.ScannerIOException;
 
 public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     JCheckBox kvkakt = null;
@@ -284,16 +286,16 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
             if (antwort == JOptionPane.OK_OPTION) {
                 reader = kvkgeraet.getSelectedItem()
                                   .toString()
-                                  .trim()
-                                  .replace(" ", "_")
-                        + "test";
+                                  .trim();
+
                 api = SystemConfig.hmGeraete.get("CTApi")[kvkgeraet.getSelectedIndex()];
                 System.out.println("Starte Test mit Reader=" + reader + " und API=" + api);
 
-                ocKVK = new OcKVK(reader, api, "0", true);
+                ocKVK = new OcKVK();
                 if (ocKVK.terminalOk) {
                     SystemConfig.hmKVKDaten.clear();
-                    ocKVK.lesen();
+                    CardTerminal terminal = TerminalFactory.getDefault().terminals().getTerminal(reader);
+                    ocKVK.lesen(terminal);
                     if (!SystemConfig.hmKVKDaten.isEmpty()) {
                         // ocKVK.TerminalDeaktivieren();
                         Set<?> entries = SystemConfig.hmKVKDaten.entrySet();
@@ -328,9 +330,7 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
         }
         if (ocAktive) {
             try {
-                Reha.instance.ocKVK = new OcKVK(SystemConfig.sReaderName.trim()
-                                                                        .replace(" ", "_"),
-                        SystemConfig.sReaderCtApiLib, SystemConfig.sReaderDeviceID, false);
+                Reha.instance.ocKVK = new OcKVK();
             } catch (Exception e) {
                 e.printStackTrace();
             }

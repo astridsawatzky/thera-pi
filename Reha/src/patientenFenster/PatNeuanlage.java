@@ -35,6 +35,8 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 import javax.smartcardio.CardException;
+import javax.smartcardio.CardTerminal;
+import javax.smartcardio.TerminalFactory;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -84,6 +86,7 @@ import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;
 import oOorgTools.OOTools;
+import ocf.OcKVK;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
 import stammDatenTools.ZuzahlTools;
@@ -1599,10 +1602,16 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         if (SystemConfig.sReaderAktiv.equals("0")) {
             return;
         }
-        if (!Reha.instance.ocKVK.isCardReady) {
-            JOptionPane.showMessageDialog(null, "Chipkarten-Lesegerät ist nicht bereit");
-            return;
+        else {
+            CardTerminal terminal = TerminalFactory.getDefault().terminals().getTerminal(SystemConfig.sReaderName);
+            try {
+                Reha.instance.ocKVK.lesen(terminal);
+            } catch (UnsatisfiedLinkError | Exception e) {
+                // TODO Auto-generated catch block
+                logger.error("bad things happen here",e);
+            }
         }
+
         if (SystemConfig.hmKVKDaten.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Daten der Chipkarte konnten nicht gelesen werden");
             return;

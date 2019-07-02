@@ -6,18 +6,25 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Properties;
 import java.util.Vector;
 import java.util.zip.GZIPInputStream;
 
+import javax.smartcardio.ATR;
+import javax.smartcardio.Card;
+import javax.smartcardio.CardChannel;
+import javax.smartcardio.CardException;
+import javax.smartcardio.CardTerminal;
+import javax.smartcardio.CommandAPDU;
+import javax.smartcardio.ResponseAPDU;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
@@ -25,24 +32,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import CommonTools.StringTools;
+import egk.CardListener;
+import egk.CardTerminalEvent;
 import environment.Path;
 import hauptFenster.Reha;
-import opencard.core.event.CTListener;
-import opencard.core.event.CardTerminalEvent;
-import opencard.core.event.EventGenerator;
-import opencard.core.service.CardRequest;
-import opencard.core.service.CardServiceException;
-import opencard.core.service.SmartCard;
-import opencard.core.terminal.CardID;
-import opencard.core.terminal.CardTerminal;
-import opencard.core.terminal.CardTerminalException;
-import opencard.core.terminal.CardTerminalRegistry;
-import opencard.core.terminal.CommandAPDU;
-import opencard.core.terminal.ResponseAPDU;
-import opencard.opt.util.PassThruCardService;
 import systemEinstellungen.SystemConfig;
 
-public class OcKVK {
+public class OcKVK implements CardListener{
+
     // CLA || INS || P1 || P2 || Le (= erwartete Länge der Daten)
     final byte[] CMD_READ_BINARY = { (byte) 0x00, (byte) 0xB0, (byte) 0x00, (byte) 0x00, (byte) 0x00 };
     final byte[] CMD_READ_BINARY_EF = { (byte) 0x00, (byte) 0xB0, (byte) 0x81, (byte) 0x00, (byte) 0x02 };
@@ -58,7 +55,6 @@ public class OcKVK {
     ByteArrayInputStream in = null;
     ByteArrayOutputStream out = null;
 
-    private static final int MAX_APDU_SIZE = 0x300; // bytes
     // Wird später ersetzt durch kvkTags
     final static String[] hmProperty = { "Rohdaten", "Krankenkasse", "Kassennummer", "Kartennummer",
             "Versichertennummer", "Status", "Statusext", "Titel", "Vorname", "Namenszusatz", "Nachname", "Geboren",
@@ -88,16 +84,10 @@ public class OcKVK {
     public boolean cardOk = false;
 
     public Vector<Vector<String>> vecreader = new Vector<Vector<String>>();
-    public String aktReaderName;
-    public String aktDllName;
-    public String aktDeviceId;
+    // public String aktDeviceId;
 
-    private PassThruCardService ptcs;
-    public SmartCard sc;
     private CommandAPDU command;
-    public CardListener clistener;
-    private CardRequest cr;
-    private byte[] i;
+    private ATR i;
     private int n, x;
     private String s, satrId;
 
@@ -110,43 +100,39 @@ public class OcKVK {
     String namektraeger = "";
 
     BufferedReader br = null;
-    String resultString = null;
+
     StringBuffer neustring = new StringBuffer();
 
     public static boolean lastCardIsEGK = false;
-
-    public OcKVK(String readerName, String dllName, String deviceid, boolean test)
-            throws Exception, UnsatisfiedLinkError {
+    CardListener listen;
+    private Logger  logger = LoggerFactory.getLogger(OcKVK.class);
+    public OcKVK() throws Exception, UnsatisfiedLinkError {
         // SCR335
         // ctpcsc31kv
         // nur in der Testphase der testphase
         SystemConfig.hmKVKDaten = new HashMap<String, String>();
         // danach wird das Gedönse in der SystemConfig initialisiert.
 
-        this.aktReaderName = readerName;
-        this.aktDllName = dllName;
-        this.aktDeviceId = deviceid;
-        initProperties();
-        initTerminal(test);
         systemStarted = true;
         terminalOk = true;
-        Properties sysProps = System.getProperties();
-        sysProps.put("OpenCard.services", "de.cardcontact.opencard.factory.IsoCardServiceFactory");
+        listen = new CardListener(this);
+
     }
 
-    public int lesen() throws CardTerminalException, CardServiceException, ClassNotFoundException {
-        int ret = 0;
+    public void lesen(CardTerminal cardTerminal) throws ClassNotFoundException, CardException {
         lastCardIsEGK = false;
         blockIKKasse = false;
-        sc = SmartCard.waitForCard(cr);
-        ptcs = (PassThruCardService) sc.getCardService(PassThruCardService.class, true);
+
+        // Establish a connection with the card:
+        Card sc = cardTerminal.connect("*");
+        CardChannel ptcs = sc.getBasicChannel();
+        // (PassThruCardService) sc.getCardService(PassThruCardService.class, true);
         /***** Karte testen *****/
-        CardID cardID = sc.getCardID();
-        i = cardID.getATR();
+        i = sc.getATR();
         s = "";
         satrId = "";
-        for (n = 0; n < i.length; n++) {
-            x = 0x000000FF & i[n];
+        for (n = 0; n < i.getBytes().length; n++) {
+            x = 0x000000FF & i.getBytes()[n];
             s = Integer.toHexString(x)
                        .toUpperCase();
             if (s.length() == 1)
@@ -157,50 +143,40 @@ public class OcKVK {
                   .equals("AAFFFFFF")) {
             System.out.println("keine KV-Karte oder Karte defekt");
             // Karte ist keine KV-Karte, sondern eine x-beliebige Speicherkarte
-            sc.close();
-            return -1;
+            sc.disconnect(false);
+            ;
         }
-        command = new CommandAPDU(MAX_APDU_SIZE);
-        command.append(CMD_SELECT_KVKFILE);
-        response = ptcs.sendCommandAPDU(command);
+        command = new CommandAPDU(CMD_SELECT_KVKFILE);
+
+        response = ptcs.transmit(command);
         if (response == null || response.getBytes().length == 0) {
             System.out.println("keine KV-Karte oder Karte defekt");
-            sc.close();
-            return -1;
+            sc.disconnect(false);
         }
 
         if (getResponseValue(response.getBytes()).equals("9000")) {
             // es ist eine KVK
-            command.setLength(0);
-            command.append(CMD_READ_BINARY);
-            response = ptcs.sendCommandAPDU(command);
+            command = new CommandAPDU(CMD_READ_BINARY);
+            response = ptcs.transmit(command);
 
-            if (response.getByte(0) == (byte) 0x60) { // Nach ASN.1 Standard der KVK
+            if (response.getBytes()[0] == (byte) 0x60) { // Nach ASN.1 Standard der KVK
                 checkKVK_ASN1(response.getBytes(), kvkTags);
-                sc.close();
+                sc.disconnect(false);
             } else {
                 // Hier entweder neue Routine, falls betriebsintern
                 // noch anderweitige Chipkarten eingesetzt werden z.B. Zugangskontrolle etc.
                 // oder Fehlermeldung daß Karte keine KV-Karte ist.
-                ret = -1;
-                sc.close();
+                sc.disconnect(false);
             }
         } else {
-//                try{
-//                    ptcs.getCard().reset(true);
-//                }catch(Exception ex){
-//                    ex.printStackTrace();
-//                }
             // Hier testen ob es eine eGK ist
-            command.setLength(0);
-            command.append(CMD_SELECT_EGK_HDC);
-            response = ptcs.sendCommandAPDU(command);
+            command = new CommandAPDU(CMD_SELECT_EGK_HDC);
+            response = ptcs.transmit(command);
             if (getResponseValue(response.getBytes()).equals("9000")) {
                 // ja es ist eine eGK;
                 lastCardIsEGK = true;
-                command.setLength(0);
-                command.append(this.CMD_READ_BINARY_EF);
-                response = ptcs.sendCommandAPDU(command);
+                command = new CommandAPDU(this.CMD_READ_BINARY_EF);
+                response = ptcs.transmit(command);
                 // System.out.println("Response = "+getResponseValue(response.getBytes()));
                 /*********** PD-Daten ********************/
                 byte[] resultpd = new byte[850];
@@ -210,17 +186,16 @@ public class OcKVK {
                 int zaehler = 0;
                 try {
                     for (int of = 0; of < 4; of++) {
-                        command.setLength(0);
                         cmd[2] = offset[of];
-                        command.append(cmd);
-                        response = ptcs.sendCommandAPDU(command);
+                        command = new CommandAPDU(cmd);
+                        response = ptcs.transmit(command);
                         /*********************/
-                        bytes = response.getLength();
+                        bytes = response.getBytes().length;
                         for (n = 0; n < bytes; n++) {
                             if ((n < (bytes - 2))) {
                                 try {
                                     if (((of == 0 && n > 1) || (of > 0)) /* && (zaehler < lang) */ ) {
-                                        resultpd[zaehler] = (byte) response.getByte(n);
+                                        resultpd[zaehler] = (byte) response.getBytes()[n];
                                         zaehler++;
                                     }
                                 } catch (Exception ex) {
@@ -233,6 +208,7 @@ public class OcKVK {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
+                String resultString = null;
                 try {
 
                     in = new ByteArrayInputStream(resultpd);
@@ -247,39 +223,13 @@ public class OcKVK {
                                                                 .replace("vsda:", "")
                                                                 .replace("vsdg:", "")
                                                                 .replace("vsd:", "");
-                    // System.out.println(resultString);
-                    /*************
-                    *
-                    *
-                    */
                     SystemConfig.hmKVKDaten.clear();
-                    XML_PD_Parser();
+                    XML_PD_Parser(resultString.getBytes());
 
-                    /************
-                    *
-                    *
-                    */
-                    /*
-                     * if(mustdebug){
-                     * System.out.println("**************** PD - Daten **********************");
-                     * System.out.println(resultString); } SystemConfig.hmKVKDaten.clear(); if(
-                     * countChar(resultString, '\n' ) >= 21 ){ if(mustdebug){
-                     * System.out.println("*************Daten enthalten Zeilenumbrüche ************"
-                     * ); } readAndParseXML(new ByteArrayInputStream(resultString.getBytes()),0);
-                     * }else{ if(resultString.indexOf("\n") >= 0){ //elende Arschgeigen resultString
-                     * = resultString.replace("\n", ""); } if( createLineBrake(resultString) ){
-                     * if(mustdebug){ System.out.
-                     * println("*************Daten enthalten keine(!!!) Zeilenumbrüche ************"
-                     * ); System.out.println(neustring.toString()); } readAndParseXML(new
-                     * ByteArrayInputStream(neustring.toString().getBytes()),0); }else{
-                     * if(mustdebug){ System.out.
-                     * println("*************Daten enthalten keine(!!!) Zeilenumbrüche  und createLineBrake meldet Fehler ************"
-                     * ); } } }
-                     */
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     SystemConfig.hmKVKDaten.clear();
-                    sc.close();
+                    sc.disconnect(false);
                     try {
                         in.close();
                         out.flush();
@@ -287,7 +237,6 @@ public class OcKVK {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    return -1;
                 }
                 /*******************************
                  * VD-Daten**************************
@@ -297,25 +246,23 @@ public class OcKVK {
                 ikktraeger = "";
                 namektraeger = "";
 
-                command.setLength(0);
-                command.append(this.CMD_SELCT_VD);
-                response = ptcs.sendCommandAPDU(command);
+                command = new CommandAPDU(this.CMD_SELCT_VD);
+                response = ptcs.transmit(command);
                 byte[] resultvd = new byte[1250];
                 zaehler = 0;
 
                 /**********************************************************/
                 for (int of = 0; of < 5; of++) {
-                    command.setLength(0);
                     cmd[2] = offset[of];
-                    command.append(cmd);
-                    response = ptcs.sendCommandAPDU(command);
+                    command = new CommandAPDU(cmd);
+                    response = ptcs.transmit(command);
                     /*********************/
-                    bytes = response.getLength();
+                    bytes = response.getBytes().length;
                     for (n = 0; n < bytes; n++) {
                         if ((n < (bytes - 2))) {
                             try {
                                 if (((of == 0 && n > 7) || (of > 0))) {
-                                    resultvd[zaehler] = (byte) response.getByte(n);
+                                    resultvd[zaehler] = (byte) response.getBytes()[n];
                                     zaehler++;
                                 }
 
@@ -421,29 +368,10 @@ public class OcKVK {
                         System.out.println("4\n" + SystemConfig.hmKVKDaten);
                     }
 
-                    /*
-                     * if(mustdebug){
-                     * System.out.println("**************** VD - Daten **********************");
-                     * System.out.println(resultString); }
-                     *
-                     * if( countChar(resultString, '\n' ) >= 36 ){ if(mustdebug){
-                     * System.out.println("*************Daten enthalten Zeilenumbrüche ************"
-                     * ); } readAndParseXML(new ByteArrayInputStream(resultString.getBytes()),1);
-                     * }else{ if(resultString.indexOf("\n") >= 0 ){ //die Arschgeigen halten sich
-                     * wieder mal an nix, alles löschen resultString =
-                     * resultString.replace("\n",""); } if( createLineBrake(resultString) ){
-                     * if(mustdebug){ System.out.
-                     * println("*************Daten enthalten keine(!!!) Zeilenumbrüche ************"
-                     * ); System.out.println(neustring.toString()); } readAndParseXML(new
-                     * ByteArrayInputStream(neustring.toString().getBytes()),1); }else{
-                     * if(mustdebug){ System.out.
-                     * println("*************Daten enthalten keine(!!!) Zeilenumbrüche  und createLineBrake meldet Fehler ************"
-                     * ); } } }
-                     */
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     SystemConfig.hmKVKDaten.clear();
-                    sc.close();
+                    sc.disconnect(false);
                     try {
                         in.close();
                         out.flush();
@@ -451,13 +379,11 @@ public class OcKVK {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    return -1;
                 }
-                sc.close();
+                sc.disconnect(false);
             } else {
                 // es ist auch keine eGK;
-                ret = -1;
-                sc.close();
+                sc.disconnect(false);
                 try {
                     in.close();
                     out.flush();
@@ -465,15 +391,13 @@ public class OcKVK {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                return -1;
             }
 
         }
-        sc.close();
-        return ret;
+        sc.disconnect(false);
     }
 
-    private void XML_PD_Parser() {
+    private void XML_PD_Parser(byte[] result) {
         DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
         domFactory.setValidating(false);
         DocumentBuilder builder = null;
@@ -496,7 +420,7 @@ public class OcKVK {
                 }
 
             });
-            org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(resultString.getBytes()));
+            org.w3c.dom.Document doc = builder.parse(new ByteArrayInputStream(result));
             Node node = doc.getLastChild();
             NodeList nodeList = node.getChildNodes();
             NodeList subNodeList = null;
@@ -810,178 +734,103 @@ public class OcKVK {
 
     }
 
-    private int initProperties() {
-        int ret = 0;
-        try {
-            Properties sysProps = System.getProperties();
-            sysProps.put("OpenCard.terminals", "de.cardcontact.opencard.terminal.ctapi4ocf.CTAPICardTerminalFactory|"
-                    + aktReaderName + "|CTAPI|" + aktDeviceId + "|" + aktDllName);
-            sysProps.put("OpenCard.services", "opencard.opt.util.PassThruCardServiceFactory");
-        } catch (Exception ex) {
-            return -1;
-        }
-        return ret;
-    }
-
-    private void initTerminal(boolean test)
-            throws Exception, ClassNotFoundException, CardTerminalException, UnsatisfiedLinkError {
-        SmartCard.start();
-        if (!test) {
-            clistener = new CardListener(this);
-            clistener.register();
-        }
-        cr = new CardRequest(CardRequest.ANYCARD, null, PassThruCardService.class);
-        cr.setTimeout(0);
-    }
-
-    /********
-     *
-     * ermittelt die angeschlossenen CardReader und legt die Daten im Instanz-Vector
-     * vecreader ab
-     *
-     * @return
-     */
-    public Vector<Vector<String>> getReaderList() {
-        vecreader.clear();
-        Vector<String> vname = new Vector<String>();
-        Vector<String> vadress = new Vector<String>();
-        Vector<String> vslots = new Vector<String>();
-        Vector<String> vtype = new Vector<String>();
-        try {
-            Enumeration<?> terminals = CardTerminalRegistry.getRegistry()
-                                                           .getCardTerminals();
-            CardTerminal terminal = null;
-            while (terminals.hasMoreElements()) {
-                terminal = (CardTerminal) terminals.nextElement();
-                vname.add(String.valueOf(terminal.getName()));
-                vadress.add(String.valueOf(terminal.getAddress()));
-                vslots.add(String.valueOf(terminal.getSlots()));
-                vtype.add(String.valueOf(terminal.getType()));
-            }
-        } catch (Exception e) {
-            // e.printStackTrace();
-            return vecreader;
-        }
-        vecreader.add(vname);
-        vecreader.add(vadress);
-        vecreader.add(vslots);
-        vecreader.add(vtype);
-        return vecreader;
-    }
-
     public void TerminalDeaktivieren() {
-        if (sc != null) {
-            try {
-                clistener.unregister();
-                sc.close();
-                SmartCard.shutdown();
-                clistener = null;
-                sc = null;
-            } catch (CardTerminalException e) {
-                e.printStackTrace();
+        // TODO Auto-generated method stub
+
+    }
+
+   public class CardListener  {
+        private Card smartcard = null;
+        private CardTerminal terminal = null;
+        private int slotID = 0;
+        OcKVK eltern = null;
+
+        public CardListener(OcKVK xeltern) {
+            eltern = xeltern;
+        }
+
+        public void cardInserted(CardTerminalEvent event) throws CardException {
+            if (!eltern.systemStarted) {
+                JOptionPane.showMessageDialog(null,
+                        "Im Kartenlesegerät steckt noch eine Chipkarte!!!!\n\nBitte entnehmen und Eigentümer aushändigen\n");
+                return;
             }
-        } else {
-            clistener.unregister();
-            clistener = null;
-            try {
-                SmartCard.shutdown();
-            } catch (CardTerminalException e) {
-                e.printStackTrace();
+            System.out.println("karte eingesteckt");
+            if (smartcard == null) {
+
+                smartcard = event.getSmartCard();
+                terminal = event.getCardTerminal();
+                slotID = event.getSlotID();
+                eltern.isCardReady = false;
+                try {
+                    eltern.lesen(terminal);
+                    eltern.isCardReady = true;
+                    if (Reha.instance.patpanel != null) {
+                        if (Reha.instance.patpanel.getLogic().pneu != null) {
+                            new SwingWorker<Void, Void>() {
+                                @Override
+                                protected Void doInBackground() throws Exception {
+                                    Reha.instance.patpanel.getLogic().pneu.enableReaderButton();
+                                    return null;
+                                }
+                            }.execute();
+                        }
+                    }
+                } catch (CardException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                smartcard = event.getSmartCard();
+                terminal = event.getCardTerminal();
+                slotID = event.getSlotID();
+                eltern.isCardReady = false;
             }
         }
-    }
-}
 
-class CardListener implements CTListener {
-    private SmartCard smartcard = null;
-    private CardTerminal terminal = null;
-    private int slotID = 0;
-    OcKVK eltern = null;
-
-    public CardListener(OcKVK xeltern) {
-        eltern = xeltern;
-    }
-
-    public void register() {
-        EventGenerator.getGenerator()
-                      .addCTListener(this);
-        try {
-            EventGenerator.getGenerator()
-                          .createEventsForPresentCards(this);
-        } catch (Exception e) {
-            e.printStackTrace(System.err);
-        }
-    }
-
-    public void unregister() {
-        EventGenerator.getGenerator()
-                      .removeCTListener(this);
-    }
-
-    @Override
-    public void cardInserted(CardTerminalEvent event) throws CardTerminalException {
-        if (!eltern.systemStarted) {
-            JOptionPane.showMessageDialog(null,
-                    "Im Kartenlesegerät steckt noch eine Chipkarte!!!!\n\nBitte entnehmen und Eigentümer aushändigen\n");
-            return;
-        }
-        // System.out.println("karte eingesteckt");
-        if (smartcard == null) {
-
-            smartcard = SmartCard.getSmartCard(event);
-            terminal = event.getCardTerminal();
-            slotID = event.getSlotID();
-            eltern.isCardReady = false;
-            try {
-                eltern.lesen();
-                eltern.isCardReady = true;
+        public void cardRemoved(CardTerminalEvent event) {
+             System.out.println("karte ausgezogen");
+            if ((event.getSlotID() == slotID) && (event.getCardTerminal() == terminal)) {
+                smartcard = null;
+                terminal = null;
+                slotID = -1;
+                eltern.isCardReady = false;
                 if (Reha.instance.patpanel != null) {
                     if (Reha.instance.patpanel.getLogic().pneu != null) {
                         new SwingWorker<Void, Void>() {
                             @Override
                             protected Void doInBackground() throws Exception {
-                                Reha.instance.patpanel.getLogic().pneu.enableReaderButton();
+                                Reha.instance.patpanel.getLogic().pneu.disableReaderButton();
                                 return null;
                             }
                         }.execute();
                     }
                 }
-            } catch (CardServiceException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
+
+            } else {
+                // System.out.println("anderer Slot oder anderer Terminal");
             }
-        } else {
-            smartcard = SmartCard.getSmartCard(event);
-            terminal = event.getCardTerminal();
-            slotID = event.getSlotID();
-            eltern.isCardReady = false;
         }
+
     }
 
-    @Override
-    public void cardRemoved(CardTerminalEvent event) {
-        // System.out.println("karte ausgezogen");
-        if ((event.getSlotID() == slotID) && (event.getCardTerminal() == terminal)) {
-            smartcard = null;
-            terminal = null;
-            slotID = -1;
-            eltern.isCardReady = false;
-            if (Reha.instance.patpanel != null) {
-                if (Reha.instance.patpanel.getLogic().pneu != null) {
-                    new SwingWorker<Void, Void>() {
-                        @Override
-                        protected Void doInBackground() throws Exception {
-                            Reha.instance.patpanel.getLogic().pneu.disableReaderButton();
-                            return null;
-                        }
-                    }.execute();
-                }
-            }
+@Override
+public void cardInserted(CardTerminalEvent cardTerminalEvent) {
+    System.out.println("yay in ockvk");
 
-        } else {
-            // System.out.println("anderer Slot oder anderer Terminal");
-        }
+    logger.debug(cardTerminalEvent.getCardTerminal().getName());
+    try {
+        listen.cardInserted(cardTerminalEvent);
+    } catch (CardException e) {
+        System.out.println(e);
     }
 
+}
+
+@Override
+public void cardRemoved(CardTerminalEvent cardTerminalEvent) {
+   listen.cardRemoved(cardTerminalEvent);
+
+}
 }
