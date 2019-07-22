@@ -28,192 +28,192 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * This object can be used to encrypt data with the certificate of a specified receiver.
- * Optionally it can add an encryption using the sender's certificate to allow 
+ * Optionally it can add an encryption using the sender's certificate to allow
  * decryption by the sender.
- * 
+ *
  * @author bodo
  *
  */
 public class NebraskaEncryptor {
-	private String receiverIK;
-	private X509Certificate receiverCert;
-	private X509Certificate senderCert;
-	private PrivateKey senderKey;
-	private CertStore certificateChain;
-	private boolean encryptToSelf;
-	private boolean use256Hash;
-	
-	public boolean isEncryptToSelf() {
-		return encryptToSelf;
-	}
+    private String receiverIK;
+    private X509Certificate receiverCert;
+    private X509Certificate senderCert;
+    private PrivateKey senderKey;
+    private CertStore certificateChain;
+    private boolean encryptToSelf;
+    private boolean use256Hash;
 
-	public void setEncryptToSelf(boolean encryptToSelf) {
-		this.encryptToSelf = encryptToSelf;
-	}
+    public boolean isEncryptToSelf() {
+        return encryptToSelf;
+    }
 
-	/**
-	 * Create a Nebraska encryptor for specified receiver.
-	 * 
-	 * @param IK receiver ID (IK)
-	 * @param nebraskaKeystore reference to NebraskaKeystore object for access to the keys
-	 * @throws NebraskaCryptoException on cryptography related errors
-	 * @throws NebraskaNotInitializedException if institution ID, institution name 
-	 */
-	NebraskaEncryptor(String IK, NebraskaKeystore nebraskaKeystore) throws NebraskaCryptoException, NebraskaNotInitializedException {
-		receiverIK = NebraskaUtil.normalizeIK(IK);
-		receiverCert = nebraskaKeystore.getCertificate(receiverIK);
-		senderKey = nebraskaKeystore.getSenderKey();
-		senderCert = nebraskaKeystore.getSenderCertificate();
-		certificateChain = nebraskaKeystore.getSenderCertChain();
-		use256Hash = nebraskaKeystore.is256Algorithm();
-	}
+    public void setEncryptToSelf(boolean encryptToSelf) {
+        this.encryptToSelf = encryptToSelf;
+    }
 
-	/**
-	 * Sign and encrypt data from input file and write result to output file.
-	 *  
-	 * @param inFileName input file
-	 * @param outFileName output file
-	 * @return size of resulting output file
-	 * @throws NebraskaCryptoException on cryptography related errors
-	 * @throws NebraskaFileException on I/O related errors
-	 */
-	public long encrypt(String inFileName, String outFileName) throws NebraskaCryptoException, NebraskaFileException {
-		InputStream inStream;
-		OutputStream outStream;
-		File outFile;
-		try {
-			inStream = new FileInputStream(inFileName);
-			outFile = new File(outFileName);
-			outStream = new FileOutputStream(outFile);
-		} catch (FileNotFoundException e) {
-			throw new NebraskaFileException(e);
-		}
-		encrypt(inStream, outStream);
-		try {
-			outStream.close();
-			inStream.close();
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
-		return outFile.length();
-	}
+    /**
+    * Create a Nebraska encryptor for specified receiver.
+    *
+    * @param IK receiver ID (IK)
+    * @param nebraskaKeystore reference to NebraskaKeystore object for access to the keys
+    * @throws NebraskaCryptoException on cryptography related errors
+    * @throws NebraskaNotInitializedException if institution ID, institution name
+    */
+    NebraskaEncryptor(String IK, NebraskaKeystore nebraskaKeystore) throws NebraskaCryptoException, NebraskaNotInitializedException {
+        receiverIK = NebraskaUtil.normalizeIK(IK);
+        receiverCert = nebraskaKeystore.getCertificate(receiverIK);
+        senderKey = nebraskaKeystore.getSenderKey();
+        senderCert = nebraskaKeystore.getSenderCertificate();
+        certificateChain = nebraskaKeystore.getSenderCertChain();
+        use256Hash = nebraskaKeystore.is256Algorithm();
+    }
 
-	/**
-	 * Sign and encrypt data from input stream and write to output stream.
-	 * Input stream will be copied to a byte array using a ByteArrayOutputStream
-	 * for further processing.
-	 * 
-	 * @param inStream plain text data stream
-	 * @param outStream encrypted data stream
-	 * @throws NebraskaCryptoException on cryptography related errors
-	 * @throws NebraskaFileException on I/O related errors
-	 */
-	public void encrypt(InputStream inStream, OutputStream outStream) throws NebraskaCryptoException, NebraskaFileException {
-		/*
-		 * To get the input as byte array we copy all data to a 
-		 * ByteArrayOutputStream and retrieve the byte array from it.
-		 */
-		Provider provBC = Security.getProvider(NebraskaConstants.SECURITY_PROVIDER);
-		Provider bcProvider = null;
-		
-		if(provBC==null){
-			bcProvider = new BouncyCastleProvider();
-			Security.addProvider(bcProvider);			 
-		} else {
-			bcProvider = provBC;
-		}
+    /**
+    * Sign and encrypt data from input file and write result to output file.
+    *
+    * @param inFileName input file
+    * @param outFileName output file
+    * @return size of resulting output file
+    * @throws NebraskaCryptoException on cryptography related errors
+    * @throws NebraskaFileException on I/O related errors
+    */
+    public long encrypt(String inFileName, String outFileName) throws NebraskaCryptoException, NebraskaFileException {
+        InputStream inStream;
+        OutputStream outStream;
+        File outFile;
+        try {
+            inStream = new FileInputStream(inFileName);
+            outFile = new File(outFileName);
+            outStream = new FileOutputStream(outFile);
+        } catch (FileNotFoundException e) {
+            throw new NebraskaFileException(e);
+        }
+        encrypt(inStream, outStream);
+        try {
+            outStream.close();
+            inStream.close();
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
+        return outFile.length();
+    }
 
-		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-		CMSProcessable plainContent;
-		try {
-			byte[] buffer = new byte[1024];
-			int len;
-			while((len = inStream.read(buffer)) > 0)
-			{
-				byteStream.write(buffer, 0, len);
-			}
-			byteStream.flush();
-		
-			// generate needs a CMSProcessable
-			plainContent = new CMSProcessableByteArray(byteStream.toByteArray());
-			byteStream.close();
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
+    /**
+    * Sign and encrypt data from input stream and write to output stream.
+    * Input stream will be copied to a byte array using a ByteArrayOutputStream
+    * for further processing.
+    *
+    * @param inStream plain text data stream
+    * @param outStream encrypted data stream
+    * @throws NebraskaCryptoException on cryptography related errors
+    * @throws NebraskaFileException on I/O related errors
+    */
+    public void encrypt(InputStream inStream, OutputStream outStream) throws NebraskaCryptoException, NebraskaFileException {
+        /*
+        * To get the input as byte array we copy all data to a
+        * ByteArrayOutputStream and retrieve the byte array from it.
+        */
+        Provider provBC = Security.getProvider(NebraskaConstants.SECURITY_PROVIDER);
+        Provider bcProvider = null;
 
-		// first processing step: sign data
-		
-		CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
-		generator.addSigner(senderKey, senderCert,
-				(use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1)  );
+        if(provBC==null){
+            bcProvider = new BouncyCastleProvider();
+            Security.addProvider(bcProvider);
+        } else {
+            bcProvider = provBC;
+        }
 
-		try {
-			generator.addCertificatesAndCRLs(certificateChain);
-		} catch (CertStoreException e) {
-			throw new NebraskaCryptoException(e);
-		} catch (CMSException e) {
-			throw new NebraskaCryptoException(e);
-		}
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        CMSProcessable plainContent;
+        try {
+            byte[] buffer = new byte[1024];
+            int len;
+            while((len = inStream.read(buffer)) > 0)
+            {
+                byteStream.write(buffer, 0, len);
+            }
+            byteStream.flush();
 
-		CMSSignedData signedData;
-		try {
-			signedData = generator.generate(plainContent, true, 
-					NebraskaConstants.SECURITY_PROVIDER);
-		} catch (NoSuchAlgorithmException e) {
-			throw new NebraskaCryptoException(e);
-		} catch (NoSuchProviderException e) {
-			throw new NebraskaCryptoException(e);
-		} catch (CMSException e) {
-			throw new NebraskaCryptoException(e);
-		}
+            // generate needs a CMSProcessable
+            plainContent = new CMSProcessableByteArray(byteStream.toByteArray());
+            byteStream.close();
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
 
-		// DER encoded output
-		byte[] encodedSignedData = null;
-		try {
-			encodedSignedData = signedData.getEncoded();
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
+        // first processing step: sign data
 
-		// second processing step: encrypt data
-		
-		CMSEnvelopedDataGenerator envelopedGenerator = new CMSEnvelopedDataGenerator();
-		
-		// the receiver must be able to decrypt the data
-		envelopedGenerator.addKeyTransRecipient(receiverCert);
-		
-		// optionally the sender may also decrypt it
-		if(encryptToSelf) {
-			envelopedGenerator.addKeyTransRecipient(senderCert);
-		}
-		
-		CMSProcessable signedContent;
-		signedContent = new CMSProcessableByteArray(encodedSignedData);
-		CMSEnvelopedData envelopedData;
-		try {
-			envelopedData = envelopedGenerator.generate(signedContent, 
-					CMSEnvelopedDataGenerator.DES_EDE3_CBC, 
-					NebraskaConstants.SECURITY_PROVIDER);
-		} catch (NoSuchAlgorithmException e) {
-			throw new NebraskaCryptoException(e);
-		} catch (NoSuchProviderException e) {
-			throw new NebraskaCryptoException(e);
-		} catch (CMSException e) {
-			throw new NebraskaCryptoException(e);
-		}
-		byte[] encodedEnvelopedData;
-		try {
-			encodedEnvelopedData = envelopedData.getEncoded();
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
-		
-		// write result to output
-		try {
-			outStream.write(encodedEnvelopedData);
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
-	}
-	
+        CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
+        generator.addSigner(senderKey, senderCert,
+                (use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1)  );
+
+        try {
+            generator.addCertificatesAndCRLs(certificateChain);
+        } catch (CertStoreException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (CMSException e) {
+            throw new NebraskaCryptoException(e);
+        }
+
+        CMSSignedData signedData;
+        try {
+            signedData = generator.generate(plainContent, true,
+                    NebraskaConstants.SECURITY_PROVIDER);
+        } catch (NoSuchAlgorithmException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (NoSuchProviderException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (CMSException e) {
+            throw new NebraskaCryptoException(e);
+        }
+
+        // DER encoded output
+        byte[] encodedSignedData = null;
+        try {
+            encodedSignedData = signedData.getEncoded();
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
+
+        // second processing step: encrypt data
+
+        CMSEnvelopedDataGenerator envelopedGenerator = new CMSEnvelopedDataGenerator();
+
+        // the receiver must be able to decrypt the data
+        envelopedGenerator.addKeyTransRecipient(receiverCert);
+
+        // optionally the sender may also decrypt it
+        if(encryptToSelf) {
+            envelopedGenerator.addKeyTransRecipient(senderCert);
+        }
+
+        CMSProcessable signedContent;
+        signedContent = new CMSProcessableByteArray(encodedSignedData);
+        CMSEnvelopedData envelopedData;
+        try {
+            envelopedData = envelopedGenerator.generate(signedContent,
+                    CMSEnvelopedDataGenerator.AES256_CBC,
+                    NebraskaConstants.SECURITY_PROVIDER);
+        } catch (NoSuchAlgorithmException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (NoSuchProviderException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (CMSException e) {
+            throw new NebraskaCryptoException(e);
+        }
+        byte[] encodedEnvelopedData;
+        try {
+            encodedEnvelopedData = envelopedData.getEncoded();
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
+
+        // write result to output
+        try {
+            outStream.write(encodedEnvelopedData);
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
+    }
+
 }
