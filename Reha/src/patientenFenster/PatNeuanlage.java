@@ -1593,19 +1593,19 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
 
     private void einlesen() {
 
-//        if (SystemConfig.sReaderAktiv.equals("0")) {
-//            return;
-//        }
-//        if (!Reha.instance.ocKVK.isCardReady) {
-//            JOptionPane.showMessageDialog(null,
-//                    "Chipkarten-Lesegerät ist nicht bereit");
-//            return;
-//        }
-//        if (SystemConfig.hmKVKDaten.isEmpty()) {
-//            JOptionPane.showMessageDialog(null,
-//                    "Daten der Chipkarte konnten nicht gelesen werden");
-//            return;
-//        }
+        if (SystemConfig.sReaderAktiv.equals("0")) {
+            return;
+        }
+        if (!Reha.instance.ocKVK.isCardReady) {
+            JOptionPane.showMessageDialog(null,
+                    "Chipkarten-Lesegerät ist nicht bereit");
+            return;
+        }
+        if (SystemConfig.hmKVKDaten.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Daten der Chipkarte konnten nicht gelesen werden");
+            return;
+        }
       System.out.println("Aufruf der KVK");
         if (!SystemConfig.hmKVKDaten.isEmpty()) {
             KVKRohDaten kvkr = new KVKRohDaten(this);
@@ -1629,19 +1629,12 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener,
         String com = arg0.getActionCommand();
         switch (com) {
         case "einlesen":
-//            if (SystemConfig.sReaderAktiv.equals("0")) {
-//                return;
-//            }
-            try {
-                Reha.instance.ocKVK.lesen();
-                einlesen();
-            } catch (ClassNotFoundException e) {
-                // TODO Auto-generated catch block
-                logger.error("bad things happen here",e);
-            } catch (CardException e) {
-                // TODO Auto-generated catch block
-                logger.error("bad things happen here",e);
+            if (SystemConfig.sReaderAktiv.equals("0")) {
+                return;
             }
+
+                einlesen();
+
 
             break;
         case "speichern":
