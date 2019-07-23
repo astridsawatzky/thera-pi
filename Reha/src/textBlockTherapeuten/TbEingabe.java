@@ -15,46 +15,46 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.JRtaTextField;
 import dialoge.RehaSmartDialog;
 
-public class TbEingabe extends RehaSmartDialog implements ActionListener{
+public class TbEingabe extends RehaSmartDialog implements ActionListener {
 
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	private ThTextBlock thb = null;
-	public JRtaTextField rueck = null;
-	Vector<String> tbvec = null;
-	int tbaktid;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private ThTextBlock thb = null;
+    public JRtaTextField rueck = null;
+    Vector<String> tbvec = null;
+    int tbaktid;
 
-	public TbEingabe(JXFrame owner, String name,ThTextBlock thb,Vector<String> vtbs,int akttbid,JRtaTextField rueck) {
-		super(owner, name);
-		this.thb = thb;
-		this.tbvec = vtbs;
-		this.tbaktid = akttbid;
-		this.rueck = rueck;
+    public TbEingabe(JXFrame owner, String name, ThTextBlock thb, Vector<String> vtbs, int akttbid,
+            JRtaTextField rueck) {
+        super(owner, name);
+        this.thb = thb;
+        this.tbvec = vtbs;
+        this.tbaktid = akttbid;
+        this.rueck = rueck;
 
-		super.getSmartTitledPanel().setName(name);
-		super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
-		String xtitel = "<html>Text für Platzhalter eingeben";
-	    super.getSmartTitledPanel().setTitle(xtitel);
-		setName(name);
-		super.getSmartTitledPanel().setContentContainer(getEingabe());
-		setLocationRelativeTo(this.thb);
-		setModal(true);
-		pack();
+        super.getSmartTitledPanel().setName(name);
+        super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
+        String xtitel = "<html>Text für Platzhalter eingeben";
+        super.getSmartTitledPanel().setTitle(xtitel);
+        setName(name);
+        super.getSmartTitledPanel().setContentContainer(getEingabe());
+        setLocationRelativeTo(this.thb);
+        setModal(true);
+        pack();
 
+    }
 
-	}
-	private JPanel getEingabe(){
-		FormLayout lay = new FormLayout("","");
-		PanelBuilder pb = new PanelBuilder(lay);
-		return pb.getPanel();
-	}
+    private JPanel getEingabe() {
+        FormLayout lay = new FormLayout("", "");
+        PanelBuilder pb = new PanelBuilder(lay);
+        return pb.getPanel();
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
 
-	}
+    }
 
 }

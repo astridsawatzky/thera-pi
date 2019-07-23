@@ -13,51 +13,48 @@ import com.sun.pdfview.PDFPage;
 import com.sun.pdfview.PDFRenderer;
 
 public class PDFPrintPage implements Printable {
-	  private PDFFile file;
-	  PDFPrintPage(PDFFile file) {
-	    this.file = file;
-	  }
-	  @Override
-	  public int print(Graphics g, PageFormat format, int index)
-	    throws PrinterException {
-	    int pagenum = index + 1;
+    private PDFFile file;
 
+    PDFPrintPage(PDFFile file) {
+        this.file = file;
+    }
 
-	    if ((pagenum >= 1) && (pagenum <= file.getNumPages())) {
+    @Override
+    public int print(Graphics g, PageFormat format, int index) throws PrinterException {
+        int pagenum = index + 1;
 
-	      Graphics2D g2 = (Graphics2D)g;
-	      PDFPage page = file.getPage(pagenum);
+        if ((pagenum >= 1) && (pagenum <= file.getNumPages())) {
 
-	      double pwidth = 595.f;
-	      double pheight = 842.f;
+            Graphics2D g2 = (Graphics2D) g;
+            PDFPage page = file.getPage(pagenum);
 
-	      Dimension dim;
-          dim = page.getUnstretchedSize ((int) pwidth,
-                                            (int) pheight,
-                                            page.getBBox ());
+            double pwidth = 595.f;
+            double pheight = 842.f;
 
+            Dimension dim;
+            dim = page.getUnstretchedSize((int) pwidth, (int) pheight, page.getBBox());
 
-	      double aspect = page.getAspectRatio();
-	      //System.out.println("Aspect = "+aspect);
+            double aspect = page.getAspectRatio();
+            // System.out.println("Aspect = "+aspect);
 
-	      double paperaspect = pwidth / pheight;
-	      //System.out.println("Paperaspect = "+paperaspect);
+            double paperaspect = pwidth / pheight;
+            // System.out.println("Paperaspect = "+paperaspect);
 
-	      Rectangle imgbounds;
+            Rectangle imgbounds;
 
-	      imgbounds = new Rectangle(0,0,(int)pwidth,(int)pheight);
+            imgbounds = new Rectangle(0, 0, (int) pwidth, (int) pheight);
 
+            // render the page
+            PDFRenderer pgs = new PDFRenderer(page, g2, imgbounds, null, null);
+            try {
+                page.waitForFinish();
+                pgs.run();
+            } catch (InterruptedException ie) {
+            }
 
-	      // render the page
-	      PDFRenderer pgs = new PDFRenderer(page, g2, imgbounds, null, null);
-	      try {
-	        page.waitForFinish();
-	        pgs.run();
-	      } catch (InterruptedException ie) {}
-
-	      return PAGE_EXISTS;
-	    } else {
-	      return NO_SUCH_PAGE;
-	    }
-	  }
-	}
+            return PAGE_EXISTS;
+        } else {
+            return NO_SUCH_PAGE;
+        }
+    }
+}

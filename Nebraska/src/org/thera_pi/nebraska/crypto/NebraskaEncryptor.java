@@ -27,9 +27,9 @@ import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
- * This object can be used to encrypt data with the certificate of a specified receiver.
- * Optionally it can add an encryption using the sender's certificate to allow
- * decryption by the sender.
+ * This object can be used to encrypt data with the certificate of a specified
+ * receiver. Optionally it can add an encryption using the sender's certificate
+ * to allow decryption by the sender.
  *
  * @author bodo
  *
@@ -52,14 +52,16 @@ public class NebraskaEncryptor {
     }
 
     /**
-    * Create a Nebraska encryptor for specified receiver.
-    *
-    * @param IK receiver ID (IK)
-    * @param nebraskaKeystore reference to NebraskaKeystore object for access to the keys
-    * @throws NebraskaCryptoException on cryptography related errors
-    * @throws NebraskaNotInitializedException if institution ID, institution name
-    */
-    NebraskaEncryptor(String IK, NebraskaKeystore nebraskaKeystore) throws NebraskaCryptoException, NebraskaNotInitializedException {
+     * Create a Nebraska encryptor for specified receiver.
+     *
+     * @param IK               receiver ID (IK)
+     * @param nebraskaKeystore reference to NebraskaKeystore object for access to
+     *                         the keys
+     * @throws NebraskaCryptoException         on cryptography related errors
+     * @throws NebraskaNotInitializedException if institution ID, institution name
+     */
+    NebraskaEncryptor(String IK, NebraskaKeystore nebraskaKeystore)
+            throws NebraskaCryptoException, NebraskaNotInitializedException {
         receiverIK = NebraskaUtil.normalizeIK(IK);
         receiverCert = nebraskaKeystore.getCertificate(receiverIK);
         senderKey = nebraskaKeystore.getSenderKey();
@@ -69,14 +71,14 @@ public class NebraskaEncryptor {
     }
 
     /**
-    * Sign and encrypt data from input file and write result to output file.
-    *
-    * @param inFileName input file
-    * @param outFileName output file
-    * @return size of resulting output file
-    * @throws NebraskaCryptoException on cryptography related errors
-    * @throws NebraskaFileException on I/O related errors
-    */
+     * Sign and encrypt data from input file and write result to output file.
+     *
+     * @param inFileName  input file
+     * @param outFileName output file
+     * @return size of resulting output file
+     * @throws NebraskaCryptoException on cryptography related errors
+     * @throws NebraskaFileException   on I/O related errors
+     */
     public long encrypt(String inFileName, String outFileName) throws NebraskaCryptoException, NebraskaFileException {
         InputStream inStream;
         OutputStream outStream;
@@ -99,24 +101,25 @@ public class NebraskaEncryptor {
     }
 
     /**
-    * Sign and encrypt data from input stream and write to output stream.
-    * Input stream will be copied to a byte array using a ByteArrayOutputStream
-    * for further processing.
-    *
-    * @param inStream plain text data stream
-    * @param outStream encrypted data stream
-    * @throws NebraskaCryptoException on cryptography related errors
-    * @throws NebraskaFileException on I/O related errors
-    */
-    public void encrypt(InputStream inStream, OutputStream outStream) throws NebraskaCryptoException, NebraskaFileException {
+     * Sign and encrypt data from input stream and write to output stream. Input
+     * stream will be copied to a byte array using a ByteArrayOutputStream for
+     * further processing.
+     *
+     * @param inStream  plain text data stream
+     * @param outStream encrypted data stream
+     * @throws NebraskaCryptoException on cryptography related errors
+     * @throws NebraskaFileException   on I/O related errors
+     */
+    public void encrypt(InputStream inStream, OutputStream outStream)
+            throws NebraskaCryptoException, NebraskaFileException {
         /*
-        * To get the input as byte array we copy all data to a
-        * ByteArrayOutputStream and retrieve the byte array from it.
-        */
+         * To get the input as byte array we copy all data to a ByteArrayOutputStream
+         * and retrieve the byte array from it.
+         */
         Provider provBC = Security.getProvider(NebraskaConstants.SECURITY_PROVIDER);
         Provider bcProvider = null;
 
-        if(provBC==null){
+        if (provBC == null) {
             bcProvider = new BouncyCastleProvider();
             Security.addProvider(bcProvider);
         } else {
@@ -128,8 +131,7 @@ public class NebraskaEncryptor {
         try {
             byte[] buffer = new byte[1024];
             int len;
-            while((len = inStream.read(buffer)) > 0)
-            {
+            while ((len = inStream.read(buffer)) > 0) {
                 byteStream.write(buffer, 0, len);
             }
             byteStream.flush();
@@ -145,7 +147,7 @@ public class NebraskaEncryptor {
 
         CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
         generator.addSigner(senderKey, senderCert,
-                (use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1)  );
+                (use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1));
 
         try {
             generator.addCertificatesAndCRLs(certificateChain);
@@ -157,8 +159,7 @@ public class NebraskaEncryptor {
 
         CMSSignedData signedData;
         try {
-            signedData = generator.generate(plainContent, true,
-                    NebraskaConstants.SECURITY_PROVIDER);
+            signedData = generator.generate(plainContent, true, NebraskaConstants.SECURITY_PROVIDER);
         } catch (NoSuchAlgorithmException e) {
             throw new NebraskaCryptoException(e);
         } catch (NoSuchProviderException e) {
@@ -183,7 +184,7 @@ public class NebraskaEncryptor {
         envelopedGenerator.addKeyTransRecipient(receiverCert);
 
         // optionally the sender may also decrypt it
-        if(encryptToSelf) {
+        if (encryptToSelf) {
             envelopedGenerator.addKeyTransRecipient(senderCert);
         }
 
@@ -191,8 +192,7 @@ public class NebraskaEncryptor {
         signedContent = new CMSProcessableByteArray(encodedSignedData);
         CMSEnvelopedData envelopedData;
         try {
-            envelopedData = envelopedGenerator.generate(signedContent,
-                    CMSEnvelopedDataGenerator.AES256_CBC,
+            envelopedData = envelopedGenerator.generate(signedContent, CMSEnvelopedDataGenerator.AES256_CBC,
                     NebraskaConstants.SECURITY_PROVIDER);
         } catch (NoSuchAlgorithmException e) {
             throw new NebraskaCryptoException(e);

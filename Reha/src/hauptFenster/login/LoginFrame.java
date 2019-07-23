@@ -3,7 +3,7 @@ package hauptFenster.login;
 import rehaContainer.RehaTP;
 import systemTools.PassWort;
 
-class LoginFrame extends RehaTP{
+class LoginFrame extends RehaTP {
 
     LoginFrame(String name) {
         super();
@@ -13,6 +13,5 @@ class LoginFrame extends RehaTP{
         setContentContainer(new PassWort().getPanel());
         getContentContainer().setName(name);
     }
-    
 
 }

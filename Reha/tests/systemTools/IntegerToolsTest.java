@@ -26,8 +26,7 @@ public class IntegerToolsTest {
         assertEquals(123, IntegerTools.trailNullAndRetInt("0000000000123"));
     }
 
-
-    //einzelne Ziffern werden geschluckt
+    // einzelne Ziffern werden geschluckt
     @Test
     public void singlenumbersAreTrimmrdTo0() throws Exception {
 
@@ -35,7 +34,7 @@ public class IntegerToolsTest {
 
     }
 
-    //alles nullen wirft Exception
+    // alles nullen wirft Exception
     @Test(expected = NumberFormatException.class)
     public void repeatet0ValuesReturn0() throws Exception {
 

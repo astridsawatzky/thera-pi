@@ -41,9 +41,9 @@ import ag.ion.bion.officelayer.event.ICloseListener;
 import ag.ion.bion.officelayer.event.IEvent;
 
 /**
- * The close listener that should be used for all snippets. The details of the listener 
- * are discussed in Snippet04.
- * This listener is used in all Snippets starting from Snippet05.
+ * The close listener that should be used for all snippets. The details of the
+ * listener are discussed in Snippet04. This listener is used in all Snippets
+ * starting from Snippet05.
  * 
  * @author Sebastian R�sgen
  * @version $Revision: 1.2 $
@@ -51,72 +51,70 @@ import ag.ion.bion.officelayer.event.IEvent;
  */
 public class XRehaDocumentCloseListener implements ICloseListener {
 
-	public IOfficeApplication officeAplication = null;
-	
-  //----------------------------------------------------------------------------
-	/**
-	 * Constructs a new SnippetDocumentCloseListener
-	 * 
-	 * @author Sebastian R�sgen
-	 * @date 17.03.2006
-	 */
-	public XRehaDocumentCloseListener(IOfficeApplication officeAplication) {
-		this.officeAplication = officeAplication;
-	}
-  //----------------------------------------------------------------------------
-  /**
-   * Is called when someone tries to close a listened object. Not needed in
-   * here.
-   * 
-   * @param closeEvent close event
-   * @param getsOwnership information about the ownership
-   * 
-   * @author Sebastian R�sgen
-	 * @date 17.03.2006
-   */ 
-	@Override
+    public IOfficeApplication officeAplication = null;
+
+    // ----------------------------------------------------------------------------
+    /**
+     * Constructs a new SnippetDocumentCloseListener
+     * 
+     * @author Sebastian R�sgen
+     * @date 17.03.2006
+     */
+    public XRehaDocumentCloseListener(IOfficeApplication officeAplication) {
+        this.officeAplication = officeAplication;
+    }
+
+    // ----------------------------------------------------------------------------
+    /**
+     * Is called when someone tries to close a listened object. Not needed in here.
+     * 
+     * @param closeEvent    close event
+     * @param getsOwnership information about the ownership
+     * 
+     * @author Sebastian R�sgen
+     * @date 17.03.2006
+     */
+    @Override
     public void queryClosing(ICloseEvent closeEvent, boolean getsOwnership) {
-		//nothing to do in here
-	}
-  //----------------------------------------------------------------------------
-  /**
-   * Is called when the listened object is closed really.
-   * 
-   * @param closeEvent close event
-   * 
-   * @author Sebastian R�sgen
-	 * @date 17.03.2006
-   */
+        // nothing to do in here
+    }
 
+    // ----------------------------------------------------------------------------
+    /**
+     * Is called when the listened object is closed really.
+     * 
+     * @param closeEvent close event
+     * 
+     * @author Sebastian R�sgen
+     * @date 17.03.2006
+     */
 
-	@Override
+    @Override
     public void notifyClosing(ICloseEvent closeEvent) {
-		/*try {
-			//officeAplication.deactivate(); // this is really necessary
-			//System.out.println("Office application deactivated.");
-			//System.out.println(closeEvent.getSourceObject());
-		}/* 	 
-		catch (OfficeApplicationException exception) {
-			System.err.println("Error closing office application!");
-			exception.printStackTrace();
-		}*/			
-	}
-	
+        /*
+         * try { //officeAplication.deactivate(); // this is really necessary
+         * //System.out.println("Office application deactivated.");
+         * //System.out.println(closeEvent.getSourceObject()); }/* catch
+         * (OfficeApplicationException exception) {
+         * System.err.println("Error closing office application!");
+         * exception.printStackTrace(); }
+         */
+    }
 
-  //----------------------------------------------------------------------------
-  /**
-   * Is called when the broadcaster is about to be disposed. 
-   * 
-   * @param event source event
-   * 
-   * @author Sebastian R�sgen
-	 * @date 17.03.2006
-   */
-	@Override
+    // ----------------------------------------------------------------------------
+    /**
+     * Is called when the broadcaster is about to be disposed.
+     * 
+     * @param event source event
+     * 
+     * @author Sebastian R�sgen
+     * @date 17.03.2006
+     */
+    @Override
     public void disposing(IEvent event) {
 
-		//nothing to do in here
-	}
-  //----------------------------------------------------------------------------
-	
+        // nothing to do in here
+    }
+    // ----------------------------------------------------------------------------
+
 }

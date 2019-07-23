@@ -9,63 +9,61 @@ import javax.swing.JOptionPane;
 
 import environment.Path;
 
-
 public class KasseEinlesen {
-	
-	public KasseEinlesen(){
-		oeffneKostentraeger();
-	    //System.out.println("Austritt aus KasseEinlesen");
- 			
 
-	}
-	private void oeffneKostentraeger(){
-		final JFileChooser chooser = new JFileChooser("Kostenträger-Datei wählen");
-	    chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-	    chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-	    final File file = new File(Path.Instance.getProghome()+"KostenTraeger/");
+    public KasseEinlesen() {
+        oeffneKostentraeger();
+        // System.out.println("Austritt aus KasseEinlesen");
 
-	    chooser.setCurrentDirectory(file);
+    }
 
-	    chooser.addPropertyChangeListener(new PropertyChangeListener() {
-	        @Override
+    private void oeffneKostentraeger() {
+        final JFileChooser chooser = new JFileChooser("Kostenträger-Datei wählen");
+        chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        final File file = new File(Path.Instance.getProghome() + "KostenTraeger/");
+
+        chooser.setCurrentDirectory(file);
+
+        chooser.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
             public void propertyChange(PropertyChangeEvent e) {
-	            if (e.getPropertyName().equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
-	                    || e.getPropertyName().equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-	                
-					final File f = (File) e.getNewValue();
-	            }
-	        }
-	    });
-	    chooser.setVisible(true);
+                if (e.getPropertyName()
+                     .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
+                        || e.getPropertyName()
+                            .equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
 
-	    final int result = chooser.showOpenDialog(null);
+                    final File f = (File) e.getNewValue();
+                }
+            }
+        });
+        chooser.setVisible(true);
 
-	    if (result == JFileChooser.APPROVE_OPTION) {
-	        File inputVerzFile = chooser.getSelectedFile();
-	        String inputVerzStr = inputVerzFile.getPath();
-	        //System.out.println("Eingabepfad:" + inputVerzStr);
-	        if(inputVerzStr.trim().toUpperCase().indexOf(".KE") < 0){
-	        	JOptionPane.showMessageDialog(null,"Keine gültige Kostenträgerdatei!");
-	        }else{
-	        	/*
-	        	try {
-					
-				} catch (IOException e1) {
-					
-					e1.printStackTrace();
-				}
-				*/
+        final int result = chooser.showOpenDialog(null);
 
-	        }
-	 
-	    //System.out.println("Abbruch");
-	    chooser.setVisible(false); 			
-		
-	    }
-		
-	}
-}	
-	
-	
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File inputVerzFile = chooser.getSelectedFile();
+            String inputVerzStr = inputVerzFile.getPath();
+            // System.out.println("Eingabepfad:" + inputVerzStr);
+            if (inputVerzStr.trim()
+                            .toUpperCase()
+                            .indexOf(".KE") < 0) {
+                JOptionPane.showMessageDialog(null, "Keine gültige Kostenträgerdatei!");
+            } else {
+                /*
+                 * try {
+                 * 
+                 * } catch (IOException e1) {
+                 * 
+                 * e1.printStackTrace(); }
+                 */
 
+            }
 
+            // System.out.println("Abbruch");
+            chooser.setVisible(false);
+
+        }
+
+    }
+}

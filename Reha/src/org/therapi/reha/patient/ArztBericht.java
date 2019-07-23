@@ -62,1175 +62,1262 @@ import systemTools.AdressTools;
 import terminKalender.ParameterLaden;
 import textBlockTherapeuten.ThTextBlock;
 
-
-public class ArztBericht extends RehaSmartDialog implements ActionListener{
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	private RehaTPEventClass rtp = null;
-	private boolean neu;
-	private String reznr;
-	private int berichtid;
-	private int aufrufvon;
-	private JXPanel grundPanel;
-	private JPanel content;
-	private JLabel[] rlab = {null,null,null,null,null,null,null,null,null,null,null,null};
-	private JTextArea diagnose;
-	private JRtaComboBox tbwahl;
-	private JComboBox verfasser;
-	public int vorberichtid = -1;
-	public boolean vorberichtdiagnose = false;
-	int arztid;
-	JButton jbutbericht = null;
-	public  JRtaTextField[] jtf = {null,null,null};
-	//private JTextPane[] icfblock = {null,null,null,null};
-	private JTextArea[] icfblock = {null,null,null,null};
-	private ThTextBlock thblock = null;
-	private String disziplin = null;
-	private int zuletztaktiv = -1;
-	private boolean gespeichert = false;
-	private boolean ishmnull = true;
-	private String pat_intern = "";
-	String altverfasser = "";
-	String diag = "";
-	int tblreihe;
-	String rezdatum = "";
-	boolean initok = false;
-	FocusListener fl = null;
-	//PinPanel pinPanel = null;
-	public ArztBericht(JXFrame owner, String name,boolean bneu,String reznr,int iberichtid,int aufruf,String xverfasser,String xdiag,int row) {
-		super(owner, name);
-		super.getSmartTitledPanel().setName(name);
-		super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
-		String xtitel = "<html>Arztbericht erstellen / ändern   -->&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#ffffff'>Tip:&nbsp;&nbsp;&nbsp;&nbsp;entscheiden Sie sich für das ICF-Schema</font></b>&nbsp;&nbsp;<img src='file:///"+Path.Instance.getProghome()+"icons/Haken_klein.gif'>";
-	    super.getSmartTitledPanel().setTitle(xtitel);
-		this.setName(name);
-		addKeyListener(this);
-		pinPanel = new PinPanel();
-		pinPanel.getGruen().setVisible(false);
-		pinPanel.setName(name);
-		setPinPanel(pinPanel);
-		getPinPanel().setName(name);
-
-		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener(this);
-
-		this.berichtid = iberichtid;
-		this.neu = bneu;
-		this.reznr = reznr;
-		this.aufrufvon = aufruf;
-		this.altverfasser = xverfasser;
-		this.diag = xdiag;
-		this.tblreihe = row;
-		this.pat_intern = Reha.instance.patpanel.patDaten.get(29);
-		/**
-		 *
-		 * this.disziplin = this.reznr.substring(0,2);
-		 * hier den Fall für ohne Rezeptbezug einbauen!!!!!
-		 * JXFrame owner, String name,boolean bneu,String reznr,int iberichtid,int aufruf,String xverfasser,String xdiag,int row) {
-		 */
-		//System.out.println("In Arztbericht erstellen - ändern -> "+berichtid+" - "+neu+" - "+reznr);
-		//System.out.println("Die BerichtsID = ----------------->"+iberichtid);
-		//System.out.println("Die Rezeptnummer = --------------->"+reznr);
-		//System.out.println("Neuer Bericht = ------------------>"+bneu);
-		//System.out.println("Der Verfasser = ------------------>"+xverfasser);
-		//System.out.println("Aufruf aus Fenser Nr. = ---------->"+aufruf);
-		//System.out.println("Tabellenreihe = ------------------>"+row);
-
-		setSize(new Dimension(950,650));
-
-	    grundPanel = new JXPanel(new BorderLayout());
-	    new SwingWorker<Void,Void>(){
-			@Override
-			protected Void doInBackground() throws Exception {
-				/************BackgroundPainter basteln************/
-				grundPanel.setBackgroundPainter(Reha.instance.compoundPainter.get("ArztBericht"));
-			    return null;
-			}
-	    }.execute();
-		content = getBerichtPanel();
-		grundPanel.add(content,BorderLayout.CENTER);
-		grundPanel.add(getFunktionsPanel(),BorderLayout.WEST);
-		getSmartTitledPanel().setContentContainer(grundPanel);
-		new Thread(){
-			@Override
-            public void run(){
-
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						fuelleBericht();
-						return null;
-					}
-				}.execute();
-			}
-		}.start();
-		final JXPanel ab = grundPanel;
-		SwingUtilities.invokeLater(new Runnable(){
-			@Override
-            public  void run(){
-				KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0);
-				ab.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(stroke, "doTextBausteine");
-				ab.getActionMap().put("doTextBausteine", new TextBausteine());
-				setzeHmAufNull();
-				setzeRezDatum();
-	   	  	}
-		});
-		//System.out.println("vor Pack");
-		pack();
-		setFocusListener();
-		for(int i = 0; i < 4;i++){
-			icfblock[i].addFocusListener(fl);
-		}
-		initok = true;
-	}
-	public void setFocusListener(){
-		fl = new FocusListener(){
-			@Override
-			public void focusGained(FocusEvent arg0) {
-				for(int i = 0;i < 4;i++){
-					if( ((JComponent)arg0.getSource()).equals(icfblock[i]) ){
-						zuletztaktiv = i;
-						break;
-					}
-				}
-
-			}
-
-			@Override
-			public void focusLost(FocusEvent arg0) {
-				
-
-			}
-
-		};
-	}
-	private void setzeRezDatum(){
-		Vector<String> vec = null;
-		if(  (vec = SqlInfo.holeSatz("verordn", "rez_datum", "rez_nr='"+this.reznr+"'", Arrays.asList(new String[] {}) )).size() > 0 ){
-			rezdatum = vec.get(0);
-		}else if((vec = SqlInfo.holeSatz("lza", "rez_datum", "rez_nr='"+this.reznr+"'", Arrays.asList(new String[] {}) )).size() > 0){
-			rezdatum = vec.get(0);
-		}else{
-			rezdatum = "nicht relevant";
-		}
-
-		//rezdatum = SqlInfo
-	}
-	private void fuelleBericht(){
-		if(this.berichtid <= 0){
-			return;
-		}
-		String felder = "BERSTAND,BERBESO,BERPROG,BERVORS";
-		Vector<String> vec = SqlInfo.holeSatz("bericht1",felder , "berichtid='"+Integer.toString(this.berichtid)+"'", Arrays.asList(new String[]{}));
-		for(int i = 0;i < 4;i++){
-			icfblock[i].setText(vec.get(i));
-		}
-	}
-	private JPanel getBerichtPanel(){  // 1   2     3                  4              5              6
-		FormLayout lay = new FormLayout("0dlu,p,fill:0:grow(1.00),right:max(40dlu;p),30dlu,right:max(50dlu;p),0dlu",
-		//1   2   3       4            5    6   7        8             9  10 11         12          13   14 15       16
-		"0dlu,p,2dlu,fill:0:grow(0.27),4dlu,p ,2dlu,fill:0:grow(0.27),4dlu,p,2dlu,fill:0:grow(0.27),4dlu,p,2dlu,fill:0:grow(0.15)");
-		Font fon = new Font("Courier New", Font.PLAIN,12);
-		PanelBuilder pb = new PanelBuilder(lay);
-		CellConstraints cc = new CellConstraints();
-		pb.getPanel().setOpaque(false);
-		pb.getPanel().setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-		//String lbltext = "<html>1.Block: akuteller Funktionsstatus&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Körperfunktionen und -strukturen)</font></b>";
-		String lbltext = "<html>1.Block: "+SystemConfig.berichttitel[0]+"&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Körperfunktionen und -strukturen)</font></b>";
-		JLabel lab = new JLabel(lbltext);
-		pb.add(lab,cc.xy(2,2));
-		lab = new JLabel("F2 für Textblock-Aufruf");
-		pb.add(lab,cc.xy(6,2));
-		//icfblock[0] = new JTextPane();
-		icfblock[0] = new JTextArea();
-		icfblock[0].setWrapStyleWord(true);
-		icfblock[0].setLineWrap(true);
-		icfblock[0].setFont(fon);
-		icfblock[0].setForeground(Color.BLUE);
-		JScrollPane span = JCompTools.getTransparentScrollPane(icfblock[0]);
-		span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
-		pb.add(span,cc.xyw(2,4,5));
-		//lbltext ="<html>2.Block: weitere therapierelevante Aspekte&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Aktivitäten / Teilhabe)</font></b>";
-		lbltext ="<html>2.Block: "+SystemConfig.berichttitel[1]+"&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Aktivitäten / Teilhabe)</font></b>";
-		lab = new JLabel(lbltext);
-		pb.add(lab,cc.xy(2,6));
-		//icfblock[1] = new JTextPane();
-		icfblock[1] = new JTextArea();
-		icfblock[1].setWrapStyleWord(true);
-		icfblock[1].setLineWrap(true);
-		icfblock[1].setFont(fon);
-		icfblock[1].setForeground(Color.BLUE);
-		span = JCompTools.getTransparentScrollPane(icfblock[1]);
-		span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
-		pb.add(span,cc.xyw(2,8,5));
-		//lbltext = "<html>3.Block: prognostische Einschätzung&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Umweltfaktoren)</font></b>";
-		lbltext = "<html>3.Block: "+SystemConfig.berichttitel[2]+"&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Umweltfaktoren)</font></b>";
-		lab = new JLabel(lbltext);
-		pb.add(lab,cc.xy(2,10));
-		//icfblock[2] = new JTextPane();
-		icfblock[2] = new JTextArea();
-		icfblock[2].setWrapStyleWord(true);
-		icfblock[2].setLineWrap(true);
-		icfblock[2].setFont(fon);
-		icfblock[2].setForeground(Color.BLUE);
-		span = JCompTools.getTransparentScrollPane(icfblock[2]);
-		span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
-		pb.add(span,cc.xyw(2,12,5));
-		//lbltext = "<html>4.Block: Reserveblock&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - personbezogene Faktoren)</font></b>";
-		lbltext = "<html>4.Block: "+SystemConfig.berichttitel[3]+"&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - personbezogene Faktoren)</font></b>";
-		lab = new JLabel(lbltext);
-		pb.add(lab,cc.xy(2,14));
-		//icfblock[3] = new JTextPane();
-		icfblock[3] = new JTextArea();
-		icfblock[3].setWrapStyleWord(true);
-		icfblock[3].setLineWrap(true);
-		icfblock[3].setFont(fon);
-		icfblock[3].setForeground(Color.BLUE);
-		span = JCompTools.getTransparentScrollPane(icfblock[3]);
-		span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
-		pb.add(span,cc.xyw(2,16,5));
-		//System.out.println("Rückgabe des JPanels");
-		return pb.getPanel();
-	}
-
-	public static String stripLFV(String string){
-		return string.substring(string.indexOf("$$LFV$$"),string.lastIndexOf("$$")+2);
-	}
-
-	private JScrollPane getFunktionsPanel(){
-
-		FormLayout lay = new FormLayout(
-        //  1 2  3   4       5
-		"2dlu,p,2dlu,30dlu,0dlu",
-		// 1  2  3   4  5   6  7    8  9   10  11  12  13   14  15   16  17   18    19   20  21   22  23   24
-		"5dlu,p,2dlu,p,0dlu,p,10dlu,p,10dlu,p ,2dlu,p ,1dlu, p,10dlu, p,10dlu, p, 2dlu,  p, 5dlu, p, 1dlu,40dlu,"+
-		//25   26  27   28   29  30  31   32  33  34 35  36  37   38 39  40 41   42   43 44 45  46
-		"10dlu, p,10dlu, p, 2dlu,p, 10dlu,p,10dlu,p,2dlu, p,10dlu,p,20dlu,p,5dlu,p, 5dlu,p,10dlu,p"
-		);
-		PanelBuilder pb = new PanelBuilder(lay);
-		CellConstraints cc = new CellConstraints();
-		pb.getPanel().setOpaque(false);
-		pb.getPanel().setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0));
-		JLabel lab = new JLabel("Arzbericht für Patient:");
-		pb.add(lab,cc.xy(2,2));
-
-		String name = Reha.instance.patpanel.patDaten.get(2)+", "+Reha.instance.patpanel.patDaten.get(3);
-		rlab[0] = new JLabel(name);
-		rlab[0].setForeground(Color.BLUE);
-		pb.add(rlab[0],cc.xy(2, 4));
-		rlab[1] = new JLabel(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
-		rlab[1].setForeground(Color.BLUE);
-		pb.add(rlab[1],cc.xy(2,6));
-
-		pb.addSeparator("",cc.xyw(2,8,3));
-
-		lab = new JLabel("Berichtsempfänger");
-		pb.add(lab,cc.xy(2,10));
-		// hier testen ob ohne Rezeptbezug, wenn ja kann der Vector nicht verwendet werden
-		if((! this.reznr.equals("")) && (this.aufrufvon < 1)){
-			name = Reha.instance.patpanel.vecaktrez.get(15);
-			arztid = Integer.valueOf(Reha.instance.patpanel.vecaktrez.get(16));
-		}else if((! this.reznr.equals("")) && (this.aufrufvon == 1)){
-			try{
-				name = SqlInfo.holeEinzelFeld("select arzt from lza where rez_nr = '"+this.reznr+"' LIMIT 1");
-				//name = (String)Reha.instance.patpanel.historie..patDaten.get(25);
-				arztid = Integer.valueOf(SqlInfo.holeEinzelFeld("select arztid from lza where rez_nr = '"+this.reznr+"' LIMIT 1"));
-				//arztid = Integer.valueOf((String)Reha.instance.patpanel.patDaten.get(26));
-			}catch(java.lang.NumberFormatException ex){
-				arztid = Integer.valueOf(-1);
-			}
-		}else if((this.reznr.equals("")) && (this.aufrufvon < 3)){
-			name = Reha.instance.patpanel.patDaten.get(25);
-			try{
-				arztid = Integer.valueOf(Reha.instance.patpanel.patDaten.get(26));
-			}catch(java.lang.NumberFormatException ex){
-				arztid = Integer.valueOf(-1);
-			}
-		}else{
-			Vector<String> vec;
-			name =  (vec = SqlInfo.holeSatz("berhist", "empfaenger,empfid", "berichtid='"+Integer.toString(this.berichtid)+"'", Arrays.asList(new String[] {}))).get(0) ;
-			arztid =StringTools.ZahlTest(vec.get(1));
-		}
-		rlab[2] = new JLabel(name);
-		rlab[2].setForeground(Color.BLUE);
-		pb.add(rlab[2],cc.xy(2,12));
-
-		JButton jbut = new JButton("Empfänger ändern");
-		jbut.setActionCommand("neuerempfaenger");
-		jbut.addActionListener(this);
-		pb.add(jbut,cc.xy(2, 14));
-
-		pb.addSeparator("",cc.xyw(2,16,3));
-
-		pb.addLabel("Rezeptnummer",cc.xy(2,18));
-		name = "";
-		if(! this.reznr.equals("")){
-			name = this.reznr;
-			this.disziplin = RezTools.putRezNrGetDisziplin(name.substring(0,2));
-		}else{
-			name = "ohne Rezeptbezug";
-		}
-		rlab[3] = new JLabel(name);
-		rlab[3].setForeground(Color.BLUE);
-		pb.add(rlab[3],cc.xy(2,20));
-
-		pb.addLabel("Diagnose",cc.xy(2,22));
-
-		diagnose = new JTextArea();
-		diagnose.setFont(new Font("Courier",Font.PLAIN,11));
-		diagnose.setLineWrap(true);
-		diagnose.setWrapStyleWord(true);
-		diagnose.setEditable(true);
-		diagnose.setOpaque(false);
-		diagnose.setForeground(Color.BLUE);
-		try{
-			String xdiagnose = "";
-			if((! this.reznr.equals("")) && (this.aufrufvon == 0)){
-				xdiagnose = Reha.instance.patpanel.vecaktrez.get(23);
-				if(xdiagnose.equals("") ){
-					xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"+
-							Integer.toString(this.berichtid)+"' LIMIT 1");
-				}
-				if(xdiagnose.indexOf("$$LFV$$") >= 0){
-					xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
-				}
-				diagnose.setText(xdiagnose);
-			}else if((!this.reznr.equals("")) && (this.aufrufvon == 1)){
-				xdiagnose = Reha.instance.patpanel.vecakthistor.get(23);
-				if(xdiagnose.equals("") ){
-					xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"+
-							Integer.toString(this.berichtid)+"' LIMIT 1");
-				}
-				if(xdiagnose.indexOf("$$LFV$$") >= 0){
-					xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
-				}
-				diagnose.setText(xdiagnose);
-
-			}else{
-				Vector<String> vec = null;
-				vec = SqlInfo.holeSatz("verordn", "diagnose", "rez_nr='"+this.reznr+"'", Arrays.asList(new String[] {}));
-				if(vec.size() > 0){
-					xdiagnose = vec.get(0);
-					try{
-						if(xdiagnose.equals("") ){
-							xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"+
-									Integer.toString(this.berichtid)+"' LIMIT 1");
-						}
-					}catch(Exception ex){
-						ex.printStackTrace();
-						diagnose.setText("Diagnose kann nicht ermittelt werden bitte von Originalrezept übernehmen!!!!!!!!!");
-					}
-					if(xdiagnose.indexOf("$$LFV$$") >= 0){
-						xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
-					}
-					diagnose.setText(xdiagnose);
-				}else{
-					vec = SqlInfo.holeSatz("lza", "diagnose", "rez_nr='"+this.reznr+"'", Arrays.asList(new String[] {}));
-					if(vec.size()>0){
-						xdiagnose = vec.get(0);
-						if(xdiagnose.indexOf("$$LFV$$") >= 0){
-							xdiagnose = xdiagnose.replace(stripLFV(xdiagnose),"");
-						}
-						diagnose.setText(vec.get(0));
-					}else{
-						diagnose.setText("Diagnose kann nicht ermittelt werden bitte von Originalrezept übernehmen!!!!!!!!!");
-					}
-				}
-			}
-		}catch(Exception ex){
-			JOptionPane.showMessageDialog(null,"Fehler bei der Ermittlung der Diagnose");
-		}
-		JScrollPane span = JCompTools.getTransparentScrollPane(diagnose);
-		pb.add(span,cc.xyw(2,24,3));
-
-		pb.addSeparator("",cc.xyw(2,26,3));
-
-		pb.addLabel("Textbausteine für",cc.xy(2,28));
-
-		try{
-			tbwahl = new JRtaComboBox(SystemConfig.hmTherapBausteine.get(this.disziplin));
-		}catch(java.lang.ArrayIndexOutOfBoundsException ex){
-			tbwahl = new JRtaComboBox();
-		}
-		tbwahl.setActionCommand("tbladen");
-		tbwahl.addActionListener(this);
-		pb.add(tbwahl,cc.xy(2,30));
-
-		pb.addSeparator("",cc.xyw(2,32,3));
-
-		pb.addLabel("Verfasser des Berichtes",cc.xy(2,34));
-		verfasser = new JComboBox();
-		/*
-		new SwingWorker<Void,Void>(){
-			@Override
-			protected Void doInBackground() throws Exception {
-			*/
-				int lang = ParameterLaden.vKKollegen.size();
-				for(int i =0; i < lang;i++){
-					verfasser.addItem(ParameterLaden.getMatchcode(i)  );
-				}
-				if(!neu){
-					//System.out.println("Verfasser bisher = "+altverfasser);
-					verfasser.setSelectedItem(altverfasser);
-					tbwahl.setSelectedItem(diag);
-				}
-			/*
-				return null;
-			}
-
-		}.execute();
-		*/
-		pb.add(verfasser,cc.xy(2,36));
-
-		pb.addSeparator("",cc.xyw(2,38,3));
-
-		jbut = new JButton("Bericht speichern");
-		jbut.setActionCommand("berichtspeichern");
-		jbut.addActionListener(this);
-		pb.add(jbut,cc.xy(2, 40));
-
-		jbutbericht = new JButton("Bericht drucken");
-		jbutbericht.setActionCommand("berichtdrucken");
-		jbutbericht.addActionListener(this);
-		if(this.neu){
-			jbutbericht.setEnabled(false);
-		}
-		pb.add(jbutbericht,cc.xy(2, 42));
-
-		jbut = new JButton("Text aus Vorbericht");
-		jbut.setActionCommand("berichtvorbericht");
-		jbut.addActionListener(this);
-		pb.add(jbut,cc.xy(2, 44));
-
-		jbut = new JButton("abbrechen / zurück");
-		jbut.setActionCommand("berichtabbrechen");
-		jbut.addActionListener(this);
-		pb.add(jbut,cc.xy(2, 46));
-
-		span = JCompTools.getTransparentScrollPane(pb.getPanel());
-		span.validate();
-		return span;
-
-
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		String cmd = arg0.getActionCommand();
-		if(cmd.equals("neuerempfaenger")){
-			neuerArzt();
-			return;
-		}
-		if(cmd.equals("tbladen")){
-			if(thblock != null){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						thblock.fuelleTabelle((String)tbwahl.getSelectedItem());
-						thblock.setzeSucheAufNull();
-						return null;
-					}
-
-				}.execute();
-			}
-		}
-		if(cmd.equals("berichtspeichern")){
-			// unterscheidung alt und neu
-			if(this.neu){
-				SwingUtilities.invokeLater(new Runnable(){
-					@Override
-                    public  void run(){
-						if(doSpeichernNeu()){
-							neu = false;
-							gespeichert = true;
-							jbutbericht.setEnabled(true);
-							JOptionPane.showMessageDialog(null, "Therapiebericht wurde erfolgreich gespeichert");
-							return;
-						}
-			   	  	}
-				});
-			}else{
-				SwingUtilities.invokeLater(new Runnable(){
-					@Override
-                    public  void run(){
-						if(doSpeichernAlt()){
-							neu = false;
-							gespeichert = true;
-							jbutbericht.setEnabled(true);
-							return;
-						}
-			   	  	}
-				});
-			}
-		}
-		if(cmd.equals("berichtvorbericht")){
-			doBerichtVorbericht(arg0);
-		}
-		if(cmd.equals("berichtdrucken")){
-			Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-			doBerichtDrucken();
-		}
-		if(cmd.equals("berichtabbrechen")){
-			this.dispose();
-		}
-
-
-
-	}
-	private void doBerichtVorbericht(ActionEvent arg0){
-		vorberichtid = -1;
-		vorberichtdiagnose = false;
-		int wieviel = SqlInfo.zaehleSaetze("berhist", "pat_intern='"+Reha.instance.patpanel.patDaten.get(29)+"'");
-		if(wieviel > 0){
-			//System.out.println("Bericht bereits vorhanden: "+wieviel);
-			Point pos = ((JComponent)arg0.getSource()).getLocation();
-			pos.x = pos.x+40;
-			VorBerichte vbe = new VorBerichte(false, false, pos,this);
-			vbe.setModal(true);
-			vbe.setVisible(true);
-			//System.out.println("Rückgabewerte = "+vorberichtid+"  auch diagnose = "+vorberichtdiagnose);
-			if(vorberichtid > 0){
-				if(vorberichtid == this.berichtid){
-					JOptionPane.showMessageDialog(null,"Sie können nicht den akutellen Bericht auf sich selbst kopieren....\n"+
-							"(das wäre ganz nebenbei bemerkt auch reichlich idiotisch)");
-				}else{
-					final String xvorberichtid = Integer.toString(vorberichtid);
-					final boolean xvorberichtdiagnose = vorberichtdiagnose;
-					new SwingWorker<Void,Void>(){
-						@Override
-						protected Void doInBackground() throws Exception {
-							Vector<String> vec = SqlInfo.holeSatz("bericht1",
-									"berstand,berbeso,berprog,bervors,diagnose",
-									"berichtid='"+vorberichtid+"'",
-									Arrays.asList(new String[] {})
-									);
-
-							for(int i = 0; i < 4; i++){
-								if(! vec.get(i).trim().equals("") ){
-									StringBuffer stbuf = new StringBuffer();
-									stbuf.append("**********Anfang übernommener Text**************\n");
-									stbuf.append(vec.get(i).trim()+"\n");
-									stbuf.append("**********Ende übernommener Text**************\n\n");
-									stbuf.append(icfblock[i].getText().trim());
-									icfblock[i].setText(stbuf.toString());
-								}
-							}
-							if(xvorberichtdiagnose){
-								StringBuffer stbuf = new StringBuffer();
-								stbuf.append("**********Anfang übernommene Diagnose**************\n");
-								stbuf.append(vec.get(4).trim()+"\n");
-								stbuf.append("**********Ende übernommene Diagnose**************\n\n");
-								stbuf.append(diagnose.getText());
-								diagnose.setText(stbuf.toString());
-							}
-							//System.out.println(vec);
-							return null;
-						}
-
-					}.execute();
-
-				}
-			}
-
-		}else{
-			JOptionPane.showMessageDialog(null,"Für diesen Patient wurden noch keine Berichte angelegt!");
-			return;
-		}
-		/*
-			//JOptionPane.showMessageDialog(null, "Funktion ist noch nicht implementiert");
-			 *
-			 */
-	}
-	private void neuerArzt(){
-		jtf[0] = new JRtaTextField("nix",false);
-		jtf[1] = new JRtaTextField("nix",false);
-		jtf[2] = new JRtaTextField("nix",false);
-		ArztAuswahl awahl = new ArztAuswahl(null,"arztwahlfuerbericht",
-				new String[] {rlab[2].getText(),Integer.toString(arztid)},
-				jtf,rlab[2].getText());
-		awahl.setModal(true);
-		awahl.setLocationRelativeTo(this);
-		awahl.setVisible(true);
-		if(!jtf[2].getText().equals("")){
-			rlab[2].setText(jtf[0].getText());
-			if(!jtf[2].getText().equals("")){
-				arztid = Integer.valueOf(jtf[2].getText());
-			}else{
-				arztid = -1;
-			}
-		}
-	}
-	private boolean doSpeichernNeu(){
-		boolean saveok = true;
-		if(arztid <= 0){
-			JOptionPane.showMessageDialog(null,"Fehler - Angabe des Empfängers ist ungültig!\nBitte neuen Arzt auswählen");
-			return false;
-		}
-		//verfasser testen
-		String xverfasser = (String)verfasser.getSelectedItem();
-		if(xverfasser.equals("./.")){
-			JOptionPane.showMessageDialog(null,"Fehler - Angabe des Verfassers ist ungültig!");
-			return false;
-		}
-		//testen ob alles leer
-		boolean gefuellt = false;
-		for(int i = 0; i < 3; i++){
-			if(! icfblock[i].getText().trim().equals("")){
-				gefuellt = true;
-				break;
-			}
-		}
-		if(!gefuellt){
-			JOptionPane.showMessageDialog(null,"Ein bisschen Text zum Speichern wäre nicht schlecht....");
-			return false;
-		}
-		//id holen
-		int berichtnr = SqlInfo.erzeugeNummer("bericht");
-
-		if(berichtnr < 0){
-			JOptionPane.showMessageDialog(null,"Schwerwiegender Fehler beim Bezug einer neuen Berichts-ID!");
-			return false;
-		}
-		this.berichtid = berichtnr;
-		if(this.aufrufvon == 0){
-			Reha.instance.patpanel.vecaktrez.set(54,Integer.toString(berichtnr));
-			Reha.instance.patpanel.rezlabs[7].setForeground(Color.BLACK);
-			Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
-		}else if(this.aufrufvon == 1){
-			Reha.instance.patpanel.historie.jpan1.rezlabs[7].setForeground(Color.BLACK);
-			Reha.instance.patpanel.historie.jpan1.rezlabs[7].setText("Therapiebericht o.k.");
-			Reha.instance.patpanel.historie.jpan1.vecaktrez.set(54,Integer.toString(berichtnr));
-		}
-
-		////System.out.println("************************************************************************************");
-		String tbs = (String) tbwahl.getSelectedItem();
-		String cmd = "insert into berhist set erstelldat='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"', verfasser='"+xverfasser+"', "+
-		"bertitel='"+"Bericht zu "+this.reznr+" ("+tbs+")', "+
-		"empfaenger='"+rlab[2].getText()+"', empfid='"+arztid+"', berichtid='"+berichtnr+"', "+
-		"pat_intern='"+this.pat_intern+"'";
-		//SqlInfo.sqlAusfuehren(String.valueOf(cmd));
-		new ExUndHop().setzeStatement(String.valueOf(cmd));
-		long zeit = System.currentTimeMillis();
-		while(! ExUndHop.processdone){
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if((System.currentTimeMillis() - zeit) > 2500){
-				return false;
-			}
-		}
-
-		//System.out.println("Bericht-Historie wurde gespeichert");
-		////System.out.println(cmd);
-		////System.out.println("************************************************************************************");
-		cmd = "insert into bericht1 set verfasser='"+xverfasser+"', krbild='"+tbs+"', diagnose='"+StringTools.Escaped(diagnose.getText())+"' ,"+
-		"berstand='"+StringTools.Escaped(icfblock[0].getText())+"' , berbeso='"+StringTools.Escaped(icfblock[1].getText())+"', "+
-		"berprog='"+StringTools.Escaped(icfblock[2].getText())+"', "+
-		"bervors='"+StringTools.Escaped(icfblock[3].getText())+"', berichtid='"+berichtnr+"', pat_intern='"+this.pat_intern+"', "+
-		"bertyp='"+reznr+"'";
-		while(! ExUndHop.processdone){
-			try {
-				Thread.sleep(20);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			if((System.currentTimeMillis() - zeit) > 2500){
-				return false;
-			}
-		}
-
-		new ExUndHop().setzeStatement(String.valueOf(cmd));
-		//System.out.println("Bericht-wurde gespeichert");
-
-		final int xberichtnr = berichtnr;
-		// hier war vorher ein SwinWorker aufruf;
-				if(aufrufvon==0){
-					while(! ExUndHop.processdone){
-						try {
-							Thread.sleep(20);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						if((System.currentTimeMillis() - zeit) > 2500){
-							JOptionPane.showMessageDialog(null, "Abbruch der Speichernfunktion - 3");
-							return false;
-						}
-					}
-					cmd = "update verordn set berid='"+Integer.toString(xberichtnr)+"' where rez_nr='"+reznr+"'";
-					new ExUndHop().setzeStatement(cmd);
-					cmd = "update lza set berid='"+Integer.toString(xberichtnr)+"' where rez_nr='"+reznr+"'";
-					new ExUndHop().setzeStatement(cmd);
-
-					//System.out.println("BerichtNr - "+xberichtnr+" - wurde in verordn und lza gespeichert");
-					Reha.instance.patpanel.berichte.holeBerichte(Reha.instance.patpanel.patDaten.get(29), "");
-					//return null;
-					this.neu = false;
-					return true;
-				}
-				if(aufrufvon==1){
-					while(! ExUndHop.processdone){
-						try {
-							Thread.sleep(20);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
-						if((System.currentTimeMillis() - zeit) > 2500){
-							return false;
-						}
-					}
-					cmd = "update lza set berid='"+Integer.toString(xberichtnr)+"' where rez_nr='"+reznr+"'";
-					new ExUndHop().setzeStatement(cmd);
-					//System.out.println("BerichtNr - "+xberichtnr+" - wurde nur in lza gespeichert");
-					Reha.instance.patpanel.berichte.holeBerichte(Reha.instance.patpanel.patDaten.get(29), "");
-					//return null;
-					this.neu = false;
-					return true;
-				}
-
-		return true;
-	}
-	private boolean doSpeichernAlt(){
-		String empfaenger = "";
-		if(arztid <= 0){
-			String cmd = "Der angegebene Arzt kann als Berichtsempfänger nicht verwendet werden.\n\n"+
-			"Bitte wählen Sie den korrekten Arzt aus.";
-			JOptionPane.showMessageDialog(null,cmd);
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public  void run(){
-					neuerArzt();
-		   	  	}
-			});
-			return false;
-		}else{
-			empfaenger = rlab[2].getText();
-		}
-
-		String xverf = (String)verfasser.getSelectedItem();
-		if(xverf.equals("./.")){
-			xverf = (String)verfasser.getItemAt(1);
-		}
-		////System.out.println("************************************************************************************");
-		String tbs = (String) tbwahl.getSelectedItem();
-		String cmd = "update berhist set editdat='"+DatFunk.sDatInSQL(DatFunk.sHeute())+"', verfasser='"+xverf+"', "+
-		"bertitel='"+"Bericht zu "+this.reznr+" ("+tbs+")', "+
-		"empfaenger='"+empfaenger+"', empfid='"+arztid+"' where berichtid='"+this.berichtid+"'";
-		new ExUndHop().setzeStatement(cmd);
-		////System.out.println(cmd);
-		////System.out.println("************************************************************************************");
-		///*****************hier noch die Tabelle aktualisieren*******************/
-		cmd = "update bericht1 set verfasser='"+xverf+"', krbild='"+tbs+"', diagnose='"+StringTools.Escaped(diagnose.getText())+"' ,"+
-		"berstand='"+StringTools.Escaped(icfblock[0].getText())+"' , berbeso='"+StringTools.Escaped(icfblock[1].getText())+"', "+
-		"berprog='"+StringTools.Escaped(icfblock[2].getText())+"', "+
-		"bervors='"+StringTools.Escaped(icfblock[3].getText())+"', bertyp='"+reznr+"' where berichtid='"+this.berichtid+"'";
-		new ExUndHop().setzeStatement(cmd);
-		////System.out.println(cmd);
-		////System.out.println("************************************************************************************");
-		JOptionPane.showMessageDialog(null,"Der Bericht wurde erfolgreich gespeichert");
-		final String xtbs = tbs;
-		final String xxverf = xverf;
-		final String xempfaenger = empfaenger;
-
-		new SwingWorker<Void,Void>(){
-			@Override
-			protected Void doInBackground() throws Exception {
-
-				if(aufrufvon==3){
-					//tabbericht
-					//{"ID","Titel","Verfasser","erstellt","Empf�nger","letzte �nderung",""};
-					Reha.instance.patpanel.berichte.dtblm.setValueAt("Bericht zu "+reznr+" ("+xtbs+")", tblreihe, 1);
-					Reha.instance.patpanel.berichte.dtblm.setValueAt(xxverf, tblreihe, 2);
-					Reha.instance.patpanel.berichte.dtblm.setValueAt(xempfaenger, tblreihe,4);
-					Reha.instance.patpanel.berichte.dtblm.setValueAt(DatFunk.sHeute(), tblreihe,5);
-					Reha.instance.patpanel.berichte.tabbericht.revalidate();
-				}else if(aufrufvon==0){
-
-				}
-
-				return null;
-			}
-
-		}.execute();
-		return true;
-
-	}
-
-	public void doBerichtDrucken(){
-		try{
-			/*
-			List<String> lAdrBDaten = Arrays.asList(new String[]{"<Badr1>","<Badr2>","<Badr3>","<Badr4>","<Badr5>","<Banrede>",
-					"<Bdisziplin>","<Bdiagnose>","<Breznr>","<Brezdatum>","<Bblock1>","<Bblock2>","<Bblock3>","<Bblock4>"});
-					"<Btitel1>","<Btitel2>","<Btitel3>","<Btitel4>"});
-			*/
-			Vector<String> vec = SqlInfo.holeSatz("arzt",
-					"anrede,titel,nachname,vorname,strasse,plz,ort,fax,email1",
-					" id='"+arztid+"'",
-					Arrays.asList(new String[] {}));
-			if(vec.size()<=0){
-				JOptionPane.showMessageDialog(null,"Der zugeordnete Arzt ist nicht gültig bitte wählen Sie einen neuen Arzt!");
-				return;
-			}
-			String[] str = AdressTools.machePrivatAdresse(vec.toArray(),false);
-			/*
-			for(int i = 0; i < str.length; i++){
-				//System.out.println("Ergebnis von str"+i+" = "+str[i]);
-			}
-			*/
-			SystemConfig.hmAdrBDaten.put("<Badr1>", str[0]);
-			SystemConfig.hmAdrBDaten.put("<Badr2>", str[1]);
-			SystemConfig.hmAdrBDaten.put("<Badr3>", str[2]);
-			SystemConfig.hmAdrBDaten.put("<Badr4>", str[3]);
-			SystemConfig.hmAdrBDaten.put("<Bbanrede>", str[4]);
-			try{
-				SystemConfig.hmAdrBDaten.put("<Barztfax>", vec.get(7));
-				SystemConfig.hmAdrBDaten.put("<Barztemail>", vec.get(8));
-			}catch(Exception ex){
-				ex.printStackTrace();
-			}
-			if(Reha.instance.patpanel.patDaten.get(0).toUpperCase().equals("HERR")){
-				SystemConfig.hmAdrBDaten.put("<Bihrenpat>", "Ihren Patienten");
-			}else{
-				SystemConfig.hmAdrBDaten.put("<Bihrenpat>", "Ihre Patientin");
-			}
-			for(int i = 0; i < 4; i++){
-				SystemConfig.hmAdrBDaten.put("<Btitel"+(i+1)+">", SystemConfig.berichttitel[i]);
-				if(this.icfblock[i].getText().trim().equals("")){
-					SystemConfig.hmAdrBDaten.put("<Bblock"+(i+1)+">", "");
-					SystemConfig.hmAdrBDaten.put("<Btitel"+(i+1)+">", "");
-				}else{
-					String sblock = icfblock[i].getText().replace(System.getProperty("line.separator"),"\n");
-
-					sblock = sblock.replace("\f\r","");
-					sblock = sblock.replace("\f","");
-					sblock = sblock.replace("\n\r","");
-					sblock = sblock.replace("\r\n","");
-					//sblock = sblock.replace("\\r",System.getProperty("line.separator") );
-					sblock = sblock.replace("\r","" );
-
-					sblock = sblock +"\n";
-					/*
-					if(i==1){
-						for(int y = 0; y < sblock.length();y++){
-							System.out.println(sblock.substring(y,y+1));
-							System.out.println((int)sblock.substring(y,y+1).toCharArray()[0]);
-						}
-					}
-					*/
-					//String sblock = icfblock[i].getText()+"\n";
-					SystemConfig.hmAdrBDaten.put("<Bblock"+(i+1)+">",sblock);
-					SystemConfig.hmAdrBDaten.put("<Btitel"+(i+1)+">", SystemConfig.berichttitel[i]);
-				}
-
-			}
-			SystemConfig.hmAdrBDaten.put("<Bnname>", StringTools.EGross(Reha.instance.patpanel.patDaten.get(2)));
-			SystemConfig.hmAdrBDaten.put("<Bvname>", StringTools.EGross(Reha.instance.patpanel.patDaten.get(3)));
-			SystemConfig.hmAdrBDaten.put("<Bgeboren>", DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
-			SystemConfig.hmAdrBDaten.put("<Brezdatum>", DatFunk.sDatInDeutsch(rezdatum));
-			SystemConfig.hmAdrBDaten.put("<Breznr>",reznr);
-			String sblock = diagnose.getText().replaceAll("\\n", "");
-			SystemConfig.hmAdrBDaten.put("<Bdiagnose>",sblock);
-			SystemConfig.hmAdrBDaten.put("<Btherapeut>",(String) verfasser.getSelectedItem());
-			//System.out.println("Berichtsdatei = ------->"+SystemConfig.thberichtdatei);
-
-			/*
-			Set entries = SystemConfig.hmAdrBDaten.entrySet();
-		    Iterator it = entries.iterator();
-		    while (it.hasNext()) {
-		      Map.Entry entry = (Map.Entry) it.next();
-		      //System.out.println("Key = "+(String)entry.getKey()+"\n"+"Wert = "+entry.getValue());
-		    }
-		    */
-			if(aufrufvon==0){
-				//aus aktuellen Rezepten
-				//"<Berstdat>","<Bletztdat>","<Banzahl1>","<Banzahl2>","<Banzahl3>","<Banzahl4>",
-				//"<Bposition1>","<Bposition2>","<Bposition3>","<Bposition4>"});
-				SystemConfig.hmAdrBDaten.put("<Berstdat>",SystemConfig.hmAdrRDaten.get("<Rerstdat>"));
-				SystemConfig.hmAdrBDaten.put("<Bletztdat>",SystemConfig.hmAdrRDaten.get("<Rletztdat>"));
-				SystemConfig.hmAdrBDaten.put("<Banzahl1>",SystemConfig.hmAdrRDaten.get("<Ranzahl1>"));
-				SystemConfig.hmAdrBDaten.put("<Banzahl2>",SystemConfig.hmAdrRDaten.get("<Ranzahl2>"));
-				SystemConfig.hmAdrBDaten.put("<Banzahl3>",SystemConfig.hmAdrRDaten.get("<Ranzahl3>"));
-				SystemConfig.hmAdrBDaten.put("<Banzahl4>",SystemConfig.hmAdrRDaten.get("<Ranzahl4>"));
-				/*
-				SystemConfig.hmAdrBDaten.put("<Blang1>",SystemConfig.hmAdrRDaten.get("<Rposition1>"));
-				SystemConfig.hmAdrBDaten.put("<Blang2>",SystemConfig.hmAdrRDaten.get("<Rposition2>"));
-				SystemConfig.hmAdrBDaten.put("<Blang3>",SystemConfig.hmAdrRDaten.get("<Rposition3>"));
-				SystemConfig.hmAdrBDaten.put("<Blang4>",SystemConfig.hmAdrRDaten.get("<Rposition4>"));
-				*/
-				String diszi = RezTools.putRezNrGetDisziplin(reznr);
-				regleBHashMap(diszi,Reha.instance.patpanel.vecaktrez.get(41),
-						Reha.instance.patpanel.vecaktrez.get(8),Reha.instance.patpanel.vecaktrez.get(9),
-						Reha.instance.patpanel.vecaktrez.get(10),Reha.instance.patpanel.vecaktrez.get(11));
-			}else{
-				//
-				String diszi = RezTools.putRezNrGetDisziplin(reznr);
-				Vector<Vector<String>> veclza = SqlInfo.holeFelder("select termine,preisgruppe,anzahl1,anzahl2,"+
-						"anzahl3,anzahl4,art_dbeh1,art_dbeh2,art_dbeh3,art_dbeh4 from verordn where rez_nr='"+reznr+"' LIMIT 1");
-				if( veclza.size() <= 0){
-					veclza = SqlInfo.holeFelder("select termine,preisgruppe,anzahl1,anzahl2,"+
-							"anzahl3,anzahl4,art_dbeh1,art_dbeh2,art_dbeh3,art_dbeh4 from lza where rez_nr='"+reznr+"' LIMIT 1");
-				}
-
-				if(veclza.size()>0){
-					Vector<String> termvec = RezTools.holeEinzelTermineAusRezept("", veclza.get(0).get(0));
-					if(termvec.size()>0){
-						SystemConfig.hmAdrBDaten.put("<Berstdat>",termvec.get(0));
-						SystemConfig.hmAdrBDaten.put("<Bletztdat>",termvec.get(termvec.size()-1));
-					}else{
-						SystemConfig.hmAdrBDaten.put("<Berstdat>","");
-						SystemConfig.hmAdrBDaten.put("<Bletztdat>","");
-					}
-					SystemConfig.hmAdrBDaten.put("<Banzahl1>",veclza.get(0).get(2));
-					SystemConfig.hmAdrBDaten.put("<Banzahl2>",veclza.get(0).get(3));
-					SystemConfig.hmAdrBDaten.put("<Banzahl3>",veclza.get(0).get(4));
-					SystemConfig.hmAdrBDaten.put("<Banzahl4>",veclza.get(0).get(5));
-					regleBHashMap(diszi,veclza.get(0).get(1),
-							veclza.get(0).get(6),veclza.get(0).get(7),
-							veclza.get(0).get(8),veclza.get(0).get(9));
-
-				}
-			}
-		    OOTools.starteTherapieBericht(SystemConfig.thberichtdatei);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-
-
-	}
-	private void regleBHashMap(String disziplin,String preisgruppe,String id1,String id2,String id3, String id4){
-		int ipg = Integer.parseInt(preisgruppe);
-		String dummy = "";
-		//System.out.println(disziplin+"-"+preisgruppe+"-"+id1+"-"+id2+"-"+id3+"-"+id4);
-		for(int i = 1; i < 5; i++){
-			SystemConfig.hmAdrBDaten.put("<Blang"+Integer.toString(i)+">","");
-		}
-		if(! id1.equals("0")){
-			dummy = RezTools.getLangtextFromID(id1, Integer.toString(ipg-1), SystemPreislisten.hmPreise.get(disziplin).get(ipg-1));
-			SystemConfig.hmAdrBDaten.put("<Blang1>",String.valueOf(dummy));
-		}
-		if(! id2.equals("0")){
-			dummy = RezTools.getLangtextFromID(id2, Integer.toString(ipg-1), SystemPreislisten.hmPreise.get(disziplin).get(ipg-1));
-			SystemConfig.hmAdrBDaten.put("<Blang2>",String.valueOf(dummy));
-		}
-		if(! id3.equals("0")){
-			dummy = RezTools.getLangtextFromID(id3, Integer.toString(ipg-1), SystemPreislisten.hmPreise.get(disziplin).get(ipg-1));
-			SystemConfig.hmAdrBDaten.put("<Blang3>",String.valueOf(dummy));
-		}
-		if(! id4.equals("0")){
-			dummy = RezTools.getLangtextFromID(id4, Integer.toString(ipg-1), SystemPreislisten.hmPreise.get(disziplin).get(ipg-1));
-			SystemConfig.hmAdrBDaten.put("<Blang4>",String.valueOf(dummy));
-		}
-		/*
-		System.out.println(SystemConfig.hmAdrBDaten.get("<Blang1>"));
-		System.out.println(SystemConfig.hmAdrBDaten.get("<Blang2>"));
-		System.out.println(SystemConfig.hmAdrBDaten.get("<Blang3>"));
-		System.out.println(SystemConfig.hmAdrBDaten.get("<Blang4>"));
-		*/
-	}
-	public ArztBericht getInstance(){
-		return this;
-	}
-
-	public void schreibeTextBlock(int block,String text){
-		String icftext = icfblock[block].getText();
-		if(icftext.equals("")){
-			icfblock[block].setText(text);
-			zuletztaktiv = block;
-			final int xblock = block;
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public  void run(){
-					icfblock[xblock].requestFocus();
-					//icfblock[xblock].setCaretPosition(icfblock[xblock].getText().length()-1);
-		   	  	}
-			});
-		}else{
-			icfblock[block].setText(icftext+text);
-			zuletztaktiv = block;
-			final int xblock = block;
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public  void run(){
-					icfblock[xblock].requestFocus();
-					//icfblock[xblock].setCaretPosition( icfblock[xblock].getText().length()-1 );
-		   	  	}
-			});
-		}
-	}
-class TextBausteine extends AbstractAction {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -6869230574347804165L;
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		if(thblock == null){
-			//System.out.println("thblock == null");
-			initok = false;
-			thblock = new ThTextBlock(null,"textblock",(String)tbwahl.getSelectedItem(),getInstance(),reznr,zuletztaktiv);
-			thblock.setModal(true);
-			thblock.setLocationRelativeTo(grundPanel);
-			thblock.pack();
-			thblock.setVisible(true);
-			if(thblock != null){
-				thblock.dispose();
-				thblock = null;
-			}
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public  void run(){
-					icfblock[zuletztaktiv].requestFocus();
-					try{
-					icfblock[zuletztaktiv].setCaretPosition(icfblock[zuletztaktiv].getText().length());
-					}catch(java.lang.IllegalArgumentException ex){
-						ex.printStackTrace();
-					}
-		   	  	}
-			});
-
-		}else{
-			//System.out.println("thblock != null");
-			thblock.setVisible(true);
-			SwingUtilities.invokeLater(new Runnable(){
-				@Override
-                public  void run(){
-					icfblock[zuletztaktiv].requestFocus();
-					try{
-						icfblock[zuletztaktiv].setCaretPosition(icfblock[zuletztaktiv].getText().length());
-					}catch(java.lang.IllegalArgumentException ex){
-						// da passiert jetzt halt nix
-					}
-		   	  	}
-			});
-
-		}
-	}
-
-}
-
-/*********************************
- *
- *
- * Nachfolgend die Standards f�r RehaSmartDialog
- *
- */
-	@Override
-	public void rehaTPEventOccurred(RehaTPEvent evt) {
-		
-		try{
-			if(evt.getDetails()[0].equals(this.getName())){
-				new Thread(){
-					@Override
-                    public void run(){
-						if(! ishmnull){
-							setzeHmAufNull();
-						}
-						if(aufrufvon==0){
-							//System.out.println("Aufgerufen von "+aufrufvon);
-							Reha.instance.patpanel.aktRezept.setRezeptDaten();
-						}else if(aufrufvon==1){
-							Reha.instance.patpanel.historie.setRezeptDaten();
-							//Historie.historie.setRezeptDaten();
-						}
-						rtp.removeRehaTPEventListener(getInstance());
-						rtp = null;
-						getInstance().dispose();
-						removeWindowListener(getInstance());
-						//System.out.println("****************Arztbericht -> Listener entfernt**************"+this.getName());
-					}
-				}.start();
-			}
-
-
-		}catch(NullPointerException ne){
-			ne.printStackTrace();
-		}
-	}
-	@Override
-	public void windowClosing(WindowEvent arg0) {
-		if(rtp != null){
-			rtp.removeRehaTPEventListener(this);
-			rtp = null;
-			pinPanel = null;
-			new Thread(){
-				@Override
-                public void run(){
-					if(! ishmnull){
-						setzeHmAufNull();
-					}
-					if(aufrufvon==0){
-						//System.out.println("Aufgerufen von "+aufrufvon);
-						Reha.instance.patpanel.aktRezept.setRezeptDaten();
-					}else if(aufrufvon==1){
-						Reha.instance.patpanel.historie.setRezeptDaten();
-						//Historie.historie.setRezeptDaten();
-					}
-					removeWindowListener(getInstance());
-					//this.dispose();
-					//super.dispose();
-					//System.out.println("****************Arztbericht -> Listener entfernt (in Closing)**********"+this.getName());
-
-				}
-			}.start();
-		}
-
-	}
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-		if(!initok){
-			//System.out.println("Return --> In window Closed - Arztbericht");
-			return;
-		}
-		//System.out.println("In window Closed - Arztbericht");
-		this.removeWindowListener(this);
-		if(rtp != null){
-			rtp.removeRehaTPEventListener(this);
-			rtp = null;
-			pinPanel = null;
-			new Thread(){
-				@Override
-                public void run(){
-					if(! ishmnull){
-						setzeHmAufNull();
-					}
-					if(aufrufvon==0){
-						//System.out.println("Aufgerufen von "+aufrufvon);
-						Reha.instance.patpanel.aktRezept.setRezeptDaten();
-					}else if(aufrufvon==1){
-						Reha.instance.patpanel.historie.setRezeptDaten();
-						//Historie.historie.setRezeptDaten();
-					}
-					removeWindowListener(getInstance());
-				}
-			}.start();
-			//this.dispose();
-			//super.dispose();
-			//System.out.println("****************Arztbericht -> Listener entfernt (Closed)**********"+this.getName());
-		}
-
-
-	}
-
-	private void setzeHmAufNull(){
-		Set entries = SystemConfig.hmAdrBDaten.entrySet();
-	    Iterator it = entries.iterator();
-	    while (it.hasNext()) {
-	      Map.Entry entry = (Map.Entry) it.next();
-	      SystemConfig.hmAdrBDaten.put((String)entry.getKey(),"");
-
-	    }
-	    ishmnull = true;
-	}
-	/*********************************
-	 *
-	 *
-	 * Ende der Standards f�r RehaSmartDialog
-	 *
-	 */
+public class ArztBericht extends RehaSmartDialog implements ActionListener {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private RehaTPEventClass rtp = null;
+    private boolean neu;
+    private String reznr;
+    private int berichtid;
+    private int aufrufvon;
+    private JXPanel grundPanel;
+    private JPanel content;
+    private JLabel[] rlab = { null, null, null, null, null, null, null, null, null, null, null, null };
+    private JTextArea diagnose;
+    private JRtaComboBox tbwahl;
+    private JComboBox verfasser;
+    public int vorberichtid = -1;
+    public boolean vorberichtdiagnose = false;
+    int arztid;
+    JButton jbutbericht = null;
+    public JRtaTextField[] jtf = { null, null, null };
+    // private JTextPane[] icfblock = {null,null,null,null};
+    private JTextArea[] icfblock = { null, null, null, null };
+    private ThTextBlock thblock = null;
+    private String disziplin = null;
+    private int zuletztaktiv = -1;
+    private boolean gespeichert = false;
+    private boolean ishmnull = true;
+    private String pat_intern = "";
+    String altverfasser = "";
+    String diag = "";
+    int tblreihe;
+    String rezdatum = "";
+    boolean initok = false;
+    FocusListener fl = null;
+
+    // PinPanel pinPanel = null;
+    public ArztBericht(JXFrame owner, String name, boolean bneu, String reznr, int iberichtid, int aufruf,
+            String xverfasser, String xdiag, int row) {
+        super(owner, name);
+        super.getSmartTitledPanel().setName(name);
+        super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
+        String xtitel = "<html>Arztbericht erstellen / ändern   -->&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#ffffff'>Tip:&nbsp;&nbsp;&nbsp;&nbsp;entscheiden Sie sich für das ICF-Schema</font></b>&nbsp;&nbsp;<img src='file:///"
+                + Path.Instance.getProghome() + "icons/Haken_klein.gif'>";
+        super.getSmartTitledPanel().setTitle(xtitel);
+        this.setName(name);
+        addKeyListener(this);
+        pinPanel = new PinPanel();
+        pinPanel.getGruen()
+                .setVisible(false);
+        pinPanel.setName(name);
+        setPinPanel(pinPanel);
+        getPinPanel().setName(name);
+
+        rtp = new RehaTPEventClass();
+        rtp.addRehaTPEventListener(this);
+
+        this.berichtid = iberichtid;
+        this.neu = bneu;
+        this.reznr = reznr;
+        this.aufrufvon = aufruf;
+        this.altverfasser = xverfasser;
+        this.diag = xdiag;
+        this.tblreihe = row;
+        this.pat_intern = Reha.instance.patpanel.patDaten.get(29);
+        /**
+         *
+         * this.disziplin = this.reznr.substring(0,2); hier den Fall für ohne
+         * Rezeptbezug einbauen!!!!! JXFrame owner, String name,boolean bneu,String
+         * reznr,int iberichtid,int aufruf,String xverfasser,String xdiag,int row) {
+         */
+        // System.out.println("In Arztbericht erstellen - ändern -> "+berichtid+" -
+        // "+neu+" - "+reznr);
+        // System.out.println("Die BerichtsID = ----------------->"+iberichtid);
+        // System.out.println("Die Rezeptnummer = --------------->"+reznr);
+        // System.out.println("Neuer Bericht = ------------------>"+bneu);
+        // System.out.println("Der Verfasser = ------------------>"+xverfasser);
+        // System.out.println("Aufruf aus Fenser Nr. = ---------->"+aufruf);
+        // System.out.println("Tabellenreihe = ------------------>"+row);
+
+        setSize(new Dimension(950, 650));
+
+        grundPanel = new JXPanel(new BorderLayout());
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                /************ BackgroundPainter basteln ************/
+                grundPanel.setBackgroundPainter(Reha.instance.compoundPainter.get("ArztBericht"));
+                return null;
+            }
+        }.execute();
+        content = getBerichtPanel();
+        grundPanel.add(content, BorderLayout.CENTER);
+        grundPanel.add(getFunktionsPanel(), BorderLayout.WEST);
+        getSmartTitledPanel().setContentContainer(grundPanel);
+        new Thread() {
+            @Override
+            public void run() {
+
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        fuelleBericht();
+                        return null;
+                    }
+                }.execute();
+            }
+        }.start();
+        final JXPanel ab = grundPanel;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0);
+                ab.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                  .put(stroke, "doTextBausteine");
+                ab.getActionMap()
+                  .put("doTextBausteine", new TextBausteine());
+                setzeHmAufNull();
+                setzeRezDatum();
+            }
+        });
+        // System.out.println("vor Pack");
+        pack();
+        setFocusListener();
+        for (int i = 0; i < 4; i++) {
+            icfblock[i].addFocusListener(fl);
+        }
+        initok = true;
+    }
+
+    public void setFocusListener() {
+        fl = new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent arg0) {
+                for (int i = 0; i < 4; i++) {
+                    if (((JComponent) arg0.getSource()).equals(icfblock[i])) {
+                        zuletztaktiv = i;
+                        break;
+                    }
+                }
+
+            }
+
+            @Override
+            public void focusLost(FocusEvent arg0) {
+
+            }
+
+        };
+    }
+
+    private void setzeRezDatum() {
+        Vector<String> vec = null;
+        if ((vec = SqlInfo.holeSatz("verordn", "rez_datum", "rez_nr='" + this.reznr + "'",
+                Arrays.asList(new String[] {}))).size() > 0) {
+            rezdatum = vec.get(0);
+        } else if ((vec = SqlInfo.holeSatz("lza", "rez_datum", "rez_nr='" + this.reznr + "'",
+                Arrays.asList(new String[] {}))).size() > 0) {
+            rezdatum = vec.get(0);
+        } else {
+            rezdatum = "nicht relevant";
+        }
+
+        // rezdatum = SqlInfo
+    }
+
+    private void fuelleBericht() {
+        if (this.berichtid <= 0) {
+            return;
+        }
+        String felder = "BERSTAND,BERBESO,BERPROG,BERVORS";
+        Vector<String> vec = SqlInfo.holeSatz("bericht1", felder,
+                "berichtid='" + Integer.toString(this.berichtid) + "'", Arrays.asList(new String[] {}));
+        for (int i = 0; i < 4; i++) {
+            icfblock[i].setText(vec.get(i));
+        }
+    }
+
+    private JPanel getBerichtPanel() { // 1 2 3 4 5 6
+        FormLayout lay = new FormLayout("0dlu,p,fill:0:grow(1.00),right:max(40dlu;p),30dlu,right:max(50dlu;p),0dlu",
+                // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+                "0dlu,p,2dlu,fill:0:grow(0.27),4dlu,p ,2dlu,fill:0:grow(0.27),4dlu,p,2dlu,fill:0:grow(0.27),4dlu,p,2dlu,fill:0:grow(0.15)");
+        Font fon = new Font("Courier New", Font.PLAIN, 12);
+        PanelBuilder pb = new PanelBuilder(lay);
+        CellConstraints cc = new CellConstraints();
+        pb.getPanel()
+          .setOpaque(false);
+        pb.getPanel()
+          .setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        // String lbltext = "<html>1.Block: akuteller
+        // Funktionsstatus&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF -
+        // Körperfunktionen und -strukturen)</font></b>";
+        String lbltext = "<html>1.Block: " + SystemConfig.berichttitel[0]
+                + "&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Körperfunktionen und -strukturen)</font></b>";
+        JLabel lab = new JLabel(lbltext);
+        pb.add(lab, cc.xy(2, 2));
+        lab = new JLabel("F2 für Textblock-Aufruf");
+        pb.add(lab, cc.xy(6, 2));
+        // icfblock[0] = new JTextPane();
+        icfblock[0] = new JTextArea();
+        icfblock[0].setWrapStyleWord(true);
+        icfblock[0].setLineWrap(true);
+        icfblock[0].setFont(fon);
+        icfblock[0].setForeground(Color.BLUE);
+        JScrollPane span = JCompTools.getTransparentScrollPane(icfblock[0]);
+        span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
+        pb.add(span, cc.xyw(2, 4, 5));
+        // lbltext ="<html>2.Block: weitere therapierelevante
+        // Aspekte&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Aktivitäten /
+        // Teilhabe)</font></b>";
+        lbltext = "<html>2.Block: " + SystemConfig.berichttitel[1]
+                + "&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Aktivitäten / Teilhabe)</font></b>";
+        lab = new JLabel(lbltext);
+        pb.add(lab, cc.xy(2, 6));
+        // icfblock[1] = new JTextPane();
+        icfblock[1] = new JTextArea();
+        icfblock[1].setWrapStyleWord(true);
+        icfblock[1].setLineWrap(true);
+        icfblock[1].setFont(fon);
+        icfblock[1].setForeground(Color.BLUE);
+        span = JCompTools.getTransparentScrollPane(icfblock[1]);
+        span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
+        pb.add(span, cc.xyw(2, 8, 5));
+        // lbltext = "<html>3.Block: prognostische
+        // Einschätzung&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF -
+        // Umweltfaktoren)</font></b>";
+        lbltext = "<html>3.Block: " + SystemConfig.berichttitel[2]
+                + "&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - Umweltfaktoren)</font></b>";
+        lab = new JLabel(lbltext);
+        pb.add(lab, cc.xy(2, 10));
+        // icfblock[2] = new JTextPane();
+        icfblock[2] = new JTextArea();
+        icfblock[2].setWrapStyleWord(true);
+        icfblock[2].setLineWrap(true);
+        icfblock[2].setFont(fon);
+        icfblock[2].setForeground(Color.BLUE);
+        span = JCompTools.getTransparentScrollPane(icfblock[2]);
+        span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
+        pb.add(span, cc.xyw(2, 12, 5));
+        // lbltext = "<html>4.Block: Reserveblock&nbsp;&nbsp;&nbsp;&nbsp;<b><font
+        // color='#e77817'>(ICF - personbezogene Faktoren)</font></b>";
+        lbltext = "<html>4.Block: " + SystemConfig.berichttitel[3]
+                + "&nbsp;&nbsp;&nbsp;&nbsp;<b><font color='#e77817'>(ICF - personbezogene Faktoren)</font></b>";
+        lab = new JLabel(lbltext);
+        pb.add(lab, cc.xy(2, 14));
+        // icfblock[3] = new JTextPane();
+        icfblock[3] = new JTextArea();
+        icfblock[3].setWrapStyleWord(true);
+        icfblock[3].setLineWrap(true);
+        icfblock[3].setFont(fon);
+        icfblock[3].setForeground(Color.BLUE);
+        span = JCompTools.getTransparentScrollPane(icfblock[3]);
+        span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
+        pb.add(span, cc.xyw(2, 16, 5));
+        // System.out.println("Rückgabe des JPanels");
+        return pb.getPanel();
+    }
+
+    public static String stripLFV(String string) {
+        return string.substring(string.indexOf("$$LFV$$"), string.lastIndexOf("$$") + 2);
+    }
+
+    private JScrollPane getFunktionsPanel() {
+
+        FormLayout lay = new FormLayout(
+                // 1 2 3 4 5
+                "2dlu,p,2dlu,30dlu,0dlu",
+                // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24
+                "5dlu,p,2dlu,p,0dlu,p,10dlu,p,10dlu,p ,2dlu,p ,1dlu, p,10dlu, p,10dlu, p, 2dlu,  p, 5dlu, p, 1dlu,40dlu,"
+                        +
+                        // 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
+                        "10dlu, p,10dlu, p, 2dlu,p, 10dlu,p,10dlu,p,2dlu, p,10dlu,p,20dlu,p,5dlu,p, 5dlu,p,10dlu,p");
+        PanelBuilder pb = new PanelBuilder(lay);
+        CellConstraints cc = new CellConstraints();
+        pb.getPanel()
+          .setOpaque(false);
+        pb.getPanel()
+          .setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0));
+        JLabel lab = new JLabel("Arzbericht für Patient:");
+        pb.add(lab, cc.xy(2, 2));
+
+        String name = Reha.instance.patpanel.patDaten.get(2) + ", " + Reha.instance.patpanel.patDaten.get(3);
+        rlab[0] = new JLabel(name);
+        rlab[0].setForeground(Color.BLUE);
+        pb.add(rlab[0], cc.xy(2, 4));
+        rlab[1] = new JLabel(DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
+        rlab[1].setForeground(Color.BLUE);
+        pb.add(rlab[1], cc.xy(2, 6));
+
+        pb.addSeparator("", cc.xyw(2, 8, 3));
+
+        lab = new JLabel("Berichtsempfänger");
+        pb.add(lab, cc.xy(2, 10));
+        // hier testen ob ohne Rezeptbezug, wenn ja kann der Vector nicht verwendet
+        // werden
+        if ((!this.reznr.equals("")) && (this.aufrufvon < 1)) {
+            name = Reha.instance.patpanel.vecaktrez.get(15);
+            arztid = Integer.valueOf(Reha.instance.patpanel.vecaktrez.get(16));
+        } else if ((!this.reznr.equals("")) && (this.aufrufvon == 1)) {
+            try {
+                name = SqlInfo.holeEinzelFeld("select arzt from lza where rez_nr = '" + this.reznr + "' LIMIT 1");
+                // name = (String)Reha.instance.patpanel.historie..patDaten.get(25);
+                arztid = Integer.valueOf(
+                        SqlInfo.holeEinzelFeld("select arztid from lza where rez_nr = '" + this.reznr + "' LIMIT 1"));
+                // arztid = Integer.valueOf((String)Reha.instance.patpanel.patDaten.get(26));
+            } catch (java.lang.NumberFormatException ex) {
+                arztid = Integer.valueOf(-1);
+            }
+        } else if ((this.reznr.equals("")) && (this.aufrufvon < 3)) {
+            name = Reha.instance.patpanel.patDaten.get(25);
+            try {
+                arztid = Integer.valueOf(Reha.instance.patpanel.patDaten.get(26));
+            } catch (java.lang.NumberFormatException ex) {
+                arztid = Integer.valueOf(-1);
+            }
+        } else {
+            Vector<String> vec;
+            name = (vec = SqlInfo.holeSatz("berhist", "empfaenger,empfid",
+                    "berichtid='" + Integer.toString(this.berichtid) + "'", Arrays.asList(new String[] {}))).get(0);
+            arztid = StringTools.ZahlTest(vec.get(1));
+        }
+        rlab[2] = new JLabel(name);
+        rlab[2].setForeground(Color.BLUE);
+        pb.add(rlab[2], cc.xy(2, 12));
+
+        JButton jbut = new JButton("Empfänger ändern");
+        jbut.setActionCommand("neuerempfaenger");
+        jbut.addActionListener(this);
+        pb.add(jbut, cc.xy(2, 14));
+
+        pb.addSeparator("", cc.xyw(2, 16, 3));
+
+        pb.addLabel("Rezeptnummer", cc.xy(2, 18));
+        name = "";
+        if (!this.reznr.equals("")) {
+            name = this.reznr;
+            this.disziplin = RezTools.putRezNrGetDisziplin(name.substring(0, 2));
+        } else {
+            name = "ohne Rezeptbezug";
+        }
+        rlab[3] = new JLabel(name);
+        rlab[3].setForeground(Color.BLUE);
+        pb.add(rlab[3], cc.xy(2, 20));
+
+        pb.addLabel("Diagnose", cc.xy(2, 22));
+
+        diagnose = new JTextArea();
+        diagnose.setFont(new Font("Courier", Font.PLAIN, 11));
+        diagnose.setLineWrap(true);
+        diagnose.setWrapStyleWord(true);
+        diagnose.setEditable(true);
+        diagnose.setOpaque(false);
+        diagnose.setForeground(Color.BLUE);
+        try {
+            String xdiagnose = "";
+            if ((!this.reznr.equals("")) && (this.aufrufvon == 0)) {
+                xdiagnose = Reha.instance.patpanel.vecaktrez.get(23);
+                if (xdiagnose.equals("")) {
+                    xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"
+                            + Integer.toString(this.berichtid) + "' LIMIT 1");
+                }
+                if (xdiagnose.indexOf("$$LFV$$") >= 0) {
+                    xdiagnose = xdiagnose.replace(stripLFV(xdiagnose), "");
+                }
+                diagnose.setText(xdiagnose);
+            } else if ((!this.reznr.equals("")) && (this.aufrufvon == 1)) {
+                xdiagnose = Reha.instance.patpanel.vecakthistor.get(23);
+                if (xdiagnose.equals("")) {
+                    xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"
+                            + Integer.toString(this.berichtid) + "' LIMIT 1");
+                }
+                if (xdiagnose.indexOf("$$LFV$$") >= 0) {
+                    xdiagnose = xdiagnose.replace(stripLFV(xdiagnose), "");
+                }
+                diagnose.setText(xdiagnose);
+
+            } else {
+                Vector<String> vec = null;
+                vec = SqlInfo.holeSatz("verordn", "diagnose", "rez_nr='" + this.reznr + "'",
+                        Arrays.asList(new String[] {}));
+                if (vec.size() > 0) {
+                    xdiagnose = vec.get(0);
+                    try {
+                        if (xdiagnose.equals("")) {
+                            xdiagnose = SqlInfo.holeEinzelFeld("select diagnose from bericht1 where berichtid='"
+                                    + Integer.toString(this.berichtid) + "' LIMIT 1");
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        diagnose.setText(
+                                "Diagnose kann nicht ermittelt werden bitte von Originalrezept übernehmen!!!!!!!!!");
+                    }
+                    if (xdiagnose.indexOf("$$LFV$$") >= 0) {
+                        xdiagnose = xdiagnose.replace(stripLFV(xdiagnose), "");
+                    }
+                    diagnose.setText(xdiagnose);
+                } else {
+                    vec = SqlInfo.holeSatz("lza", "diagnose", "rez_nr='" + this.reznr + "'",
+                            Arrays.asList(new String[] {}));
+                    if (vec.size() > 0) {
+                        xdiagnose = vec.get(0);
+                        if (xdiagnose.indexOf("$$LFV$$") >= 0) {
+                            xdiagnose = xdiagnose.replace(stripLFV(xdiagnose), "");
+                        }
+                        diagnose.setText(vec.get(0));
+                    } else {
+                        diagnose.setText(
+                                "Diagnose kann nicht ermittelt werden bitte von Originalrezept übernehmen!!!!!!!!!");
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Fehler bei der Ermittlung der Diagnose");
+        }
+        JScrollPane span = JCompTools.getTransparentScrollPane(diagnose);
+        pb.add(span, cc.xyw(2, 24, 3));
+
+        pb.addSeparator("", cc.xyw(2, 26, 3));
+
+        pb.addLabel("Textbausteine für", cc.xy(2, 28));
+
+        try {
+            tbwahl = new JRtaComboBox(SystemConfig.hmTherapBausteine.get(this.disziplin));
+        } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
+            tbwahl = new JRtaComboBox();
+        }
+        tbwahl.setActionCommand("tbladen");
+        tbwahl.addActionListener(this);
+        pb.add(tbwahl, cc.xy(2, 30));
+
+        pb.addSeparator("", cc.xyw(2, 32, 3));
+
+        pb.addLabel("Verfasser des Berichtes", cc.xy(2, 34));
+        verfasser = new JComboBox();
+        /*
+         * new SwingWorker<Void,Void>(){
+         * 
+         * @Override protected Void doInBackground() throws Exception {
+         */
+        int lang = ParameterLaden.vKKollegen.size();
+        for (int i = 0; i < lang; i++) {
+            verfasser.addItem(ParameterLaden.getMatchcode(i));
+        }
+        if (!neu) {
+            // System.out.println("Verfasser bisher = "+altverfasser);
+            verfasser.setSelectedItem(altverfasser);
+            tbwahl.setSelectedItem(diag);
+        }
+        /*
+         * return null; }
+         * 
+         * }.execute();
+         */
+        pb.add(verfasser, cc.xy(2, 36));
+
+        pb.addSeparator("", cc.xyw(2, 38, 3));
+
+        jbut = new JButton("Bericht speichern");
+        jbut.setActionCommand("berichtspeichern");
+        jbut.addActionListener(this);
+        pb.add(jbut, cc.xy(2, 40));
+
+        jbutbericht = new JButton("Bericht drucken");
+        jbutbericht.setActionCommand("berichtdrucken");
+        jbutbericht.addActionListener(this);
+        if (this.neu) {
+            jbutbericht.setEnabled(false);
+        }
+        pb.add(jbutbericht, cc.xy(2, 42));
+
+        jbut = new JButton("Text aus Vorbericht");
+        jbut.setActionCommand("berichtvorbericht");
+        jbut.addActionListener(this);
+        pb.add(jbut, cc.xy(2, 44));
+
+        jbut = new JButton("abbrechen / zurück");
+        jbut.setActionCommand("berichtabbrechen");
+        jbut.addActionListener(this);
+        pb.add(jbut, cc.xy(2, 46));
+
+        span = JCompTools.getTransparentScrollPane(pb.getPanel());
+        span.validate();
+        return span;
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+
+        String cmd = arg0.getActionCommand();
+        if (cmd.equals("neuerempfaenger")) {
+            neuerArzt();
+            return;
+        }
+        if (cmd.equals("tbladen")) {
+            if (thblock != null) {
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        thblock.fuelleTabelle((String) tbwahl.getSelectedItem());
+                        thblock.setzeSucheAufNull();
+                        return null;
+                    }
+
+                }.execute();
+            }
+        }
+        if (cmd.equals("berichtspeichern")) {
+            // unterscheidung alt und neu
+            if (this.neu) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (doSpeichernNeu()) {
+                            neu = false;
+                            gespeichert = true;
+                            jbutbericht.setEnabled(true);
+                            JOptionPane.showMessageDialog(null, "Therapiebericht wurde erfolgreich gespeichert");
+                            return;
+                        }
+                    }
+                });
+            } else {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (doSpeichernAlt()) {
+                            neu = false;
+                            gespeichert = true;
+                            jbutbericht.setEnabled(true);
+                            return;
+                        }
+                    }
+                });
+            }
+        }
+        if (cmd.equals("berichtvorbericht")) {
+            doBerichtVorbericht(arg0);
+        }
+        if (cmd.equals("berichtdrucken")) {
+            Reha.getThisFrame()
+                .setCursor(Cursors.wartenCursor);
+            doBerichtDrucken();
+        }
+        if (cmd.equals("berichtabbrechen")) {
+            this.dispose();
+        }
+
+    }
+
+    private void doBerichtVorbericht(ActionEvent arg0) {
+        vorberichtid = -1;
+        vorberichtdiagnose = false;
+        int wieviel = SqlInfo.zaehleSaetze("berhist", "pat_intern='" + Reha.instance.patpanel.patDaten.get(29) + "'");
+        if (wieviel > 0) {
+            // System.out.println("Bericht bereits vorhanden: "+wieviel);
+            Point pos = ((JComponent) arg0.getSource()).getLocation();
+            pos.x = pos.x + 40;
+            VorBerichte vbe = new VorBerichte(false, false, pos, this);
+            vbe.setModal(true);
+            vbe.setVisible(true);
+            // System.out.println("Rückgabewerte = "+vorberichtid+" auch diagnose =
+            // "+vorberichtdiagnose);
+            if (vorberichtid > 0) {
+                if (vorberichtid == this.berichtid) {
+                    JOptionPane.showMessageDialog(null,
+                            "Sie können nicht den akutellen Bericht auf sich selbst kopieren....\n"
+                                    + "(das wäre ganz nebenbei bemerkt auch reichlich idiotisch)");
+                } else {
+                    final String xvorberichtid = Integer.toString(vorberichtid);
+                    final boolean xvorberichtdiagnose = vorberichtdiagnose;
+                    new SwingWorker<Void, Void>() {
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            Vector<String> vec = SqlInfo.holeSatz("bericht1",
+                                    "berstand,berbeso,berprog,bervors,diagnose", "berichtid='" + vorberichtid + "'",
+                                    Arrays.asList(new String[] {}));
+
+                            for (int i = 0; i < 4; i++) {
+                                if (!vec.get(i)
+                                        .trim()
+                                        .equals("")) {
+                                    StringBuffer stbuf = new StringBuffer();
+                                    stbuf.append("**********Anfang übernommener Text**************\n");
+                                    stbuf.append(vec.get(i)
+                                                    .trim()
+                                            + "\n");
+                                    stbuf.append("**********Ende übernommener Text**************\n\n");
+                                    stbuf.append(icfblock[i].getText()
+                                                            .trim());
+                                    icfblock[i].setText(stbuf.toString());
+                                }
+                            }
+                            if (xvorberichtdiagnose) {
+                                StringBuffer stbuf = new StringBuffer();
+                                stbuf.append("**********Anfang übernommene Diagnose**************\n");
+                                stbuf.append(vec.get(4)
+                                                .trim()
+                                        + "\n");
+                                stbuf.append("**********Ende übernommene Diagnose**************\n\n");
+                                stbuf.append(diagnose.getText());
+                                diagnose.setText(stbuf.toString());
+                            }
+                            // System.out.println(vec);
+                            return null;
+                        }
+
+                    }.execute();
+
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Für diesen Patient wurden noch keine Berichte angelegt!");
+            return;
+        }
+        /*
+         * //JOptionPane.showMessageDialog(null,
+         * "Funktion ist noch nicht implementiert");
+         *
+         */
+    }
+
+    private void neuerArzt() {
+        jtf[0] = new JRtaTextField("nix", false);
+        jtf[1] = new JRtaTextField("nix", false);
+        jtf[2] = new JRtaTextField("nix", false);
+        ArztAuswahl awahl = new ArztAuswahl(null, "arztwahlfuerbericht",
+                new String[] { rlab[2].getText(), Integer.toString(arztid) }, jtf, rlab[2].getText());
+        awahl.setModal(true);
+        awahl.setLocationRelativeTo(this);
+        awahl.setVisible(true);
+        if (!jtf[2].getText()
+                   .equals("")) {
+            rlab[2].setText(jtf[0].getText());
+            if (!jtf[2].getText()
+                       .equals("")) {
+                arztid = Integer.valueOf(jtf[2].getText());
+            } else {
+                arztid = -1;
+            }
+        }
+    }
+
+    private boolean doSpeichernNeu() {
+        boolean saveok = true;
+        if (arztid <= 0) {
+            JOptionPane.showMessageDialog(null,
+                    "Fehler - Angabe des Empfängers ist ungültig!\nBitte neuen Arzt auswählen");
+            return false;
+        }
+        // verfasser testen
+        String xverfasser = (String) verfasser.getSelectedItem();
+        if (xverfasser.equals("./.")) {
+            JOptionPane.showMessageDialog(null, "Fehler - Angabe des Verfassers ist ungültig!");
+            return false;
+        }
+        // testen ob alles leer
+        boolean gefuellt = false;
+        for (int i = 0; i < 3; i++) {
+            if (!icfblock[i].getText()
+                            .trim()
+                            .equals("")) {
+                gefuellt = true;
+                break;
+            }
+        }
+        if (!gefuellt) {
+            JOptionPane.showMessageDialog(null, "Ein bisschen Text zum Speichern wäre nicht schlecht....");
+            return false;
+        }
+        // id holen
+        int berichtnr = SqlInfo.erzeugeNummer("bericht");
+
+        if (berichtnr < 0) {
+            JOptionPane.showMessageDialog(null, "Schwerwiegender Fehler beim Bezug einer neuen Berichts-ID!");
+            return false;
+        }
+        this.berichtid = berichtnr;
+        if (this.aufrufvon == 0) {
+            Reha.instance.patpanel.vecaktrez.set(54, Integer.toString(berichtnr));
+            Reha.instance.patpanel.rezlabs[7].setForeground(Color.BLACK);
+            Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
+        } else if (this.aufrufvon == 1) {
+            Reha.instance.patpanel.historie.jpan1.rezlabs[7].setForeground(Color.BLACK);
+            Reha.instance.patpanel.historie.jpan1.rezlabs[7].setText("Therapiebericht o.k.");
+            Reha.instance.patpanel.historie.jpan1.vecaktrez.set(54, Integer.toString(berichtnr));
+        }
+
+        //// System.out.println("************************************************************************************");
+        String tbs = (String) tbwahl.getSelectedItem();
+        String cmd = "insert into berhist set erstelldat='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', verfasser='"
+                + xverfasser + "', " + "bertitel='" + "Bericht zu " + this.reznr + " (" + tbs + ")', " + "empfaenger='"
+                + rlab[2].getText() + "', empfid='" + arztid + "', berichtid='" + berichtnr + "', " + "pat_intern='"
+                + this.pat_intern + "'";
+        // SqlInfo.sqlAusfuehren(String.valueOf(cmd));
+        new ExUndHop().setzeStatement(String.valueOf(cmd));
+        long zeit = System.currentTimeMillis();
+        while (!ExUndHop.processdone) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if ((System.currentTimeMillis() - zeit) > 2500) {
+                return false;
+            }
+        }
+
+        // System.out.println("Bericht-Historie wurde gespeichert");
+        //// System.out.println(cmd);
+        //// System.out.println("************************************************************************************");
+        cmd = "insert into bericht1 set verfasser='" + xverfasser + "', krbild='" + tbs + "', diagnose='"
+                + StringTools.Escaped(diagnose.getText()) + "' ," + "berstand='"
+                + StringTools.Escaped(icfblock[0].getText()) + "' , berbeso='"
+                + StringTools.Escaped(icfblock[1].getText()) + "', " + "berprog='"
+                + StringTools.Escaped(icfblock[2].getText()) + "', " + "bervors='"
+                + StringTools.Escaped(icfblock[3].getText()) + "', berichtid='" + berichtnr + "', pat_intern='"
+                + this.pat_intern + "', " + "bertyp='" + reznr + "'";
+        while (!ExUndHop.processdone) {
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if ((System.currentTimeMillis() - zeit) > 2500) {
+                return false;
+            }
+        }
+
+        new ExUndHop().setzeStatement(String.valueOf(cmd));
+        // System.out.println("Bericht-wurde gespeichert");
+
+        final int xberichtnr = berichtnr;
+        // hier war vorher ein SwinWorker aufruf;
+        if (aufrufvon == 0) {
+            while (!ExUndHop.processdone) {
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if ((System.currentTimeMillis() - zeit) > 2500) {
+                    JOptionPane.showMessageDialog(null, "Abbruch der Speichernfunktion - 3");
+                    return false;
+                }
+            }
+            cmd = "update verordn set berid='" + Integer.toString(xberichtnr) + "' where rez_nr='" + reznr + "'";
+            new ExUndHop().setzeStatement(cmd);
+            cmd = "update lza set berid='" + Integer.toString(xberichtnr) + "' where rez_nr='" + reznr + "'";
+            new ExUndHop().setzeStatement(cmd);
+
+            // System.out.println("BerichtNr - "+xberichtnr+" - wurde in verordn und lza
+            // gespeichert");
+            Reha.instance.patpanel.berichte.holeBerichte(Reha.instance.patpanel.patDaten.get(29), "");
+            // return null;
+            this.neu = false;
+            return true;
+        }
+        if (aufrufvon == 1) {
+            while (!ExUndHop.processdone) {
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if ((System.currentTimeMillis() - zeit) > 2500) {
+                    return false;
+                }
+            }
+            cmd = "update lza set berid='" + Integer.toString(xberichtnr) + "' where rez_nr='" + reznr + "'";
+            new ExUndHop().setzeStatement(cmd);
+            // System.out.println("BerichtNr - "+xberichtnr+" - wurde nur in lza
+            // gespeichert");
+            Reha.instance.patpanel.berichte.holeBerichte(Reha.instance.patpanel.patDaten.get(29), "");
+            // return null;
+            this.neu = false;
+            return true;
+        }
+
+        return true;
+    }
+
+    private boolean doSpeichernAlt() {
+        String empfaenger = "";
+        if (arztid <= 0) {
+            String cmd = "Der angegebene Arzt kann als Berichtsempfänger nicht verwendet werden.\n\n"
+                    + "Bitte wählen Sie den korrekten Arzt aus.";
+            JOptionPane.showMessageDialog(null, cmd);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    neuerArzt();
+                }
+            });
+            return false;
+        } else {
+            empfaenger = rlab[2].getText();
+        }
+
+        String xverf = (String) verfasser.getSelectedItem();
+        if (xverf.equals("./.")) {
+            xverf = (String) verfasser.getItemAt(1);
+        }
+        //// System.out.println("************************************************************************************");
+        String tbs = (String) tbwahl.getSelectedItem();
+        String cmd = "update berhist set editdat='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', verfasser='" + xverf
+                + "', " + "bertitel='" + "Bericht zu " + this.reznr + " (" + tbs + ")', " + "empfaenger='" + empfaenger
+                + "', empfid='" + arztid + "' where berichtid='" + this.berichtid + "'";
+        new ExUndHop().setzeStatement(cmd);
+        //// System.out.println(cmd);
+        //// System.out.println("************************************************************************************");
+        /// *****************hier noch die Tabelle aktualisieren*******************/
+        cmd = "update bericht1 set verfasser='" + xverf + "', krbild='" + tbs + "', diagnose='"
+                + StringTools.Escaped(diagnose.getText()) + "' ," + "berstand='"
+                + StringTools.Escaped(icfblock[0].getText()) + "' , berbeso='"
+                + StringTools.Escaped(icfblock[1].getText()) + "', " + "berprog='"
+                + StringTools.Escaped(icfblock[2].getText()) + "', " + "bervors='"
+                + StringTools.Escaped(icfblock[3].getText()) + "', bertyp='" + reznr + "' where berichtid='"
+                + this.berichtid + "'";
+        new ExUndHop().setzeStatement(cmd);
+        //// System.out.println(cmd);
+        //// System.out.println("************************************************************************************");
+        JOptionPane.showMessageDialog(null, "Der Bericht wurde erfolgreich gespeichert");
+        final String xtbs = tbs;
+        final String xxverf = xverf;
+        final String xempfaenger = empfaenger;
+
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+
+                if (aufrufvon == 3) {
+                    // tabbericht
+                    // {"ID","Titel","Verfasser","erstellt","Empf�nger","letzte �nderung",""};
+                    Reha.instance.patpanel.berichte.dtblm.setValueAt("Bericht zu " + reznr + " (" + xtbs + ")",
+                            tblreihe, 1);
+                    Reha.instance.patpanel.berichte.dtblm.setValueAt(xxverf, tblreihe, 2);
+                    Reha.instance.patpanel.berichte.dtblm.setValueAt(xempfaenger, tblreihe, 4);
+                    Reha.instance.patpanel.berichte.dtblm.setValueAt(DatFunk.sHeute(), tblreihe, 5);
+                    Reha.instance.patpanel.berichte.tabbericht.revalidate();
+                } else if (aufrufvon == 0) {
+
+                }
+
+                return null;
+            }
+
+        }.execute();
+        return true;
+
+    }
+
+    public void doBerichtDrucken() {
+        try {
+            /*
+             * List<String> lAdrBDaten = Arrays.asList(new
+             * String[]{"<Badr1>","<Badr2>","<Badr3>","<Badr4>","<Badr5>","<Banrede>",
+             * "<Bdisziplin>","<Bdiagnose>","<Breznr>","<Brezdatum>","<Bblock1>","<Bblock2>"
+             * ,"<Bblock3>","<Bblock4>"});
+             * "<Btitel1>","<Btitel2>","<Btitel3>","<Btitel4>"});
+             */
+            Vector<String> vec = SqlInfo.holeSatz("arzt", "anrede,titel,nachname,vorname,strasse,plz,ort,fax,email1",
+                    " id='" + arztid + "'", Arrays.asList(new String[] {}));
+            if (vec.size() <= 0) {
+                JOptionPane.showMessageDialog(null,
+                        "Der zugeordnete Arzt ist nicht gültig bitte wählen Sie einen neuen Arzt!");
+                return;
+            }
+            String[] str = AdressTools.machePrivatAdresse(vec.toArray(), false);
+            /*
+             * for(int i = 0; i < str.length; i++){
+             * //System.out.println("Ergebnis von str"+i+" = "+str[i]); }
+             */
+            SystemConfig.hmAdrBDaten.put("<Badr1>", str[0]);
+            SystemConfig.hmAdrBDaten.put("<Badr2>", str[1]);
+            SystemConfig.hmAdrBDaten.put("<Badr3>", str[2]);
+            SystemConfig.hmAdrBDaten.put("<Badr4>", str[3]);
+            SystemConfig.hmAdrBDaten.put("<Bbanrede>", str[4]);
+            try {
+                SystemConfig.hmAdrBDaten.put("<Barztfax>", vec.get(7));
+                SystemConfig.hmAdrBDaten.put("<Barztemail>", vec.get(8));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            if (Reha.instance.patpanel.patDaten.get(0)
+                                               .toUpperCase()
+                                               .equals("HERR")) {
+                SystemConfig.hmAdrBDaten.put("<Bihrenpat>", "Ihren Patienten");
+            } else {
+                SystemConfig.hmAdrBDaten.put("<Bihrenpat>", "Ihre Patientin");
+            }
+            for (int i = 0; i < 4; i++) {
+                SystemConfig.hmAdrBDaten.put("<Btitel" + (i + 1) + ">", SystemConfig.berichttitel[i]);
+                if (this.icfblock[i].getText()
+                                    .trim()
+                                    .equals("")) {
+                    SystemConfig.hmAdrBDaten.put("<Bblock" + (i + 1) + ">", "");
+                    SystemConfig.hmAdrBDaten.put("<Btitel" + (i + 1) + ">", "");
+                } else {
+                    String sblock = icfblock[i].getText()
+                                               .replace(System.getProperty("line.separator"), "\n");
+
+                    sblock = sblock.replace("\f\r", "");
+                    sblock = sblock.replace("\f", "");
+                    sblock = sblock.replace("\n\r", "");
+                    sblock = sblock.replace("\r\n", "");
+                    // sblock = sblock.replace("\\r",System.getProperty("line.separator") );
+                    sblock = sblock.replace("\r", "");
+
+                    sblock = sblock + "\n";
+                    /*
+                     * if(i==1){ for(int y = 0; y < sblock.length();y++){
+                     * System.out.println(sblock.substring(y,y+1));
+                     * System.out.println((int)sblock.substring(y,y+1).toCharArray()[0]); } }
+                     */
+                    // String sblock = icfblock[i].getText()+"\n";
+                    SystemConfig.hmAdrBDaten.put("<Bblock" + (i + 1) + ">", sblock);
+                    SystemConfig.hmAdrBDaten.put("<Btitel" + (i + 1) + ">", SystemConfig.berichttitel[i]);
+                }
+
+            }
+            SystemConfig.hmAdrBDaten.put("<Bnname>", StringTools.EGross(Reha.instance.patpanel.patDaten.get(2)));
+            SystemConfig.hmAdrBDaten.put("<Bvname>", StringTools.EGross(Reha.instance.patpanel.patDaten.get(3)));
+            SystemConfig.hmAdrBDaten.put("<Bgeboren>", DatFunk.sDatInDeutsch(Reha.instance.patpanel.patDaten.get(4)));
+            SystemConfig.hmAdrBDaten.put("<Brezdatum>", DatFunk.sDatInDeutsch(rezdatum));
+            SystemConfig.hmAdrBDaten.put("<Breznr>", reznr);
+            String sblock = diagnose.getText()
+                                    .replaceAll("\\n", "");
+            SystemConfig.hmAdrBDaten.put("<Bdiagnose>", sblock);
+            SystemConfig.hmAdrBDaten.put("<Btherapeut>", (String) verfasser.getSelectedItem());
+            // System.out.println("Berichtsdatei = ------->"+SystemConfig.thberichtdatei);
+
+            /*
+             * Set entries = SystemConfig.hmAdrBDaten.entrySet(); Iterator it =
+             * entries.iterator(); while (it.hasNext()) { Map.Entry entry = (Map.Entry)
+             * it.next();
+             * //System.out.println("Key = "+(String)entry.getKey()+"\n"+"Wert = "+entry.
+             * getValue()); }
+             */
+            if (aufrufvon == 0) {
+                // aus aktuellen Rezepten
+                // "<Berstdat>","<Bletztdat>","<Banzahl1>","<Banzahl2>","<Banzahl3>","<Banzahl4>",
+                // "<Bposition1>","<Bposition2>","<Bposition3>","<Bposition4>"});
+                SystemConfig.hmAdrBDaten.put("<Berstdat>", SystemConfig.hmAdrRDaten.get("<Rerstdat>"));
+                SystemConfig.hmAdrBDaten.put("<Bletztdat>", SystemConfig.hmAdrRDaten.get("<Rletztdat>"));
+                SystemConfig.hmAdrBDaten.put("<Banzahl1>", SystemConfig.hmAdrRDaten.get("<Ranzahl1>"));
+                SystemConfig.hmAdrBDaten.put("<Banzahl2>", SystemConfig.hmAdrRDaten.get("<Ranzahl2>"));
+                SystemConfig.hmAdrBDaten.put("<Banzahl3>", SystemConfig.hmAdrRDaten.get("<Ranzahl3>"));
+                SystemConfig.hmAdrBDaten.put("<Banzahl4>", SystemConfig.hmAdrRDaten.get("<Ranzahl4>"));
+                /*
+                 * SystemConfig.hmAdrBDaten.put("<Blang1>",SystemConfig.hmAdrRDaten.get(
+                 * "<Rposition1>"));
+                 * SystemConfig.hmAdrBDaten.put("<Blang2>",SystemConfig.hmAdrRDaten.get(
+                 * "<Rposition2>"));
+                 * SystemConfig.hmAdrBDaten.put("<Blang3>",SystemConfig.hmAdrRDaten.get(
+                 * "<Rposition3>"));
+                 * SystemConfig.hmAdrBDaten.put("<Blang4>",SystemConfig.hmAdrRDaten.get(
+                 * "<Rposition4>"));
+                 */
+                String diszi = RezTools.putRezNrGetDisziplin(reznr);
+                regleBHashMap(diszi, Reha.instance.patpanel.vecaktrez.get(41), Reha.instance.patpanel.vecaktrez.get(8),
+                        Reha.instance.patpanel.vecaktrez.get(9), Reha.instance.patpanel.vecaktrez.get(10),
+                        Reha.instance.patpanel.vecaktrez.get(11));
+            } else {
+                //
+                String diszi = RezTools.putRezNrGetDisziplin(reznr);
+                Vector<Vector<String>> veclza = SqlInfo.holeFelder("select termine,preisgruppe,anzahl1,anzahl2,"
+                        + "anzahl3,anzahl4,art_dbeh1,art_dbeh2,art_dbeh3,art_dbeh4 from verordn where rez_nr='" + reznr
+                        + "' LIMIT 1");
+                if (veclza.size() <= 0) {
+                    veclza = SqlInfo.holeFelder("select termine,preisgruppe,anzahl1,anzahl2,"
+                            + "anzahl3,anzahl4,art_dbeh1,art_dbeh2,art_dbeh3,art_dbeh4 from lza where rez_nr='" + reznr
+                            + "' LIMIT 1");
+                }
+
+                if (veclza.size() > 0) {
+                    Vector<String> termvec = RezTools.holeEinzelTermineAusRezept("", veclza.get(0)
+                                                                                           .get(0));
+                    if (termvec.size() > 0) {
+                        SystemConfig.hmAdrBDaten.put("<Berstdat>", termvec.get(0));
+                        SystemConfig.hmAdrBDaten.put("<Bletztdat>", termvec.get(termvec.size() - 1));
+                    } else {
+                        SystemConfig.hmAdrBDaten.put("<Berstdat>", "");
+                        SystemConfig.hmAdrBDaten.put("<Bletztdat>", "");
+                    }
+                    SystemConfig.hmAdrBDaten.put("<Banzahl1>", veclza.get(0)
+                                                                     .get(2));
+                    SystemConfig.hmAdrBDaten.put("<Banzahl2>", veclza.get(0)
+                                                                     .get(3));
+                    SystemConfig.hmAdrBDaten.put("<Banzahl3>", veclza.get(0)
+                                                                     .get(4));
+                    SystemConfig.hmAdrBDaten.put("<Banzahl4>", veclza.get(0)
+                                                                     .get(5));
+                    regleBHashMap(diszi, veclza.get(0)
+                                               .get(1),
+                            veclza.get(0)
+                                  .get(6),
+                            veclza.get(0)
+                                  .get(7),
+                            veclza.get(0)
+                                  .get(8),
+                            veclza.get(0)
+                                  .get(9));
+
+                }
+            }
+            OOTools.starteTherapieBericht(SystemConfig.thberichtdatei);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+    }
+
+    private void regleBHashMap(String disziplin, String preisgruppe, String id1, String id2, String id3, String id4) {
+        int ipg = Integer.parseInt(preisgruppe);
+        String dummy = "";
+        // System.out.println(disziplin+"-"+preisgruppe+"-"+id1+"-"+id2+"-"+id3+"-"+id4);
+        for (int i = 1; i < 5; i++) {
+            SystemConfig.hmAdrBDaten.put("<Blang" + Integer.toString(i) + ">", "");
+        }
+        if (!id1.equals("0")) {
+            dummy = RezTools.getLangtextFromID(id1, Integer.toString(ipg - 1), SystemPreislisten.hmPreise.get(disziplin)
+                                                                                                         .get(ipg - 1));
+            SystemConfig.hmAdrBDaten.put("<Blang1>", String.valueOf(dummy));
+        }
+        if (!id2.equals("0")) {
+            dummy = RezTools.getLangtextFromID(id2, Integer.toString(ipg - 1), SystemPreislisten.hmPreise.get(disziplin)
+                                                                                                         .get(ipg - 1));
+            SystemConfig.hmAdrBDaten.put("<Blang2>", String.valueOf(dummy));
+        }
+        if (!id3.equals("0")) {
+            dummy = RezTools.getLangtextFromID(id3, Integer.toString(ipg - 1), SystemPreislisten.hmPreise.get(disziplin)
+                                                                                                         .get(ipg - 1));
+            SystemConfig.hmAdrBDaten.put("<Blang3>", String.valueOf(dummy));
+        }
+        if (!id4.equals("0")) {
+            dummy = RezTools.getLangtextFromID(id4, Integer.toString(ipg - 1), SystemPreislisten.hmPreise.get(disziplin)
+                                                                                                         .get(ipg - 1));
+            SystemConfig.hmAdrBDaten.put("<Blang4>", String.valueOf(dummy));
+        }
+        /*
+         * System.out.println(SystemConfig.hmAdrBDaten.get("<Blang1>"));
+         * System.out.println(SystemConfig.hmAdrBDaten.get("<Blang2>"));
+         * System.out.println(SystemConfig.hmAdrBDaten.get("<Blang3>"));
+         * System.out.println(SystemConfig.hmAdrBDaten.get("<Blang4>"));
+         */
+    }
+
+    public ArztBericht getInstance() {
+        return this;
+    }
+
+    public void schreibeTextBlock(int block, String text) {
+        String icftext = icfblock[block].getText();
+        if (icftext.equals("")) {
+            icfblock[block].setText(text);
+            zuletztaktiv = block;
+            final int xblock = block;
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    icfblock[xblock].requestFocus();
+                    // icfblock[xblock].setCaretPosition(icfblock[xblock].getText().length()-1);
+                }
+            });
+        } else {
+            icfblock[block].setText(icftext + text);
+            zuletztaktiv = block;
+            final int xblock = block;
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    icfblock[xblock].requestFocus();
+                    // icfblock[xblock].setCaretPosition( icfblock[xblock].getText().length()-1 );
+                }
+            });
+        }
+    }
+
+    class TextBausteine extends AbstractAction {
+        /**
+         *
+         */
+        private static final long serialVersionUID = -6869230574347804165L;
+
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            if (thblock == null) {
+                // System.out.println("thblock == null");
+                initok = false;
+                thblock = new ThTextBlock(null, "textblock", (String) tbwahl.getSelectedItem(), getInstance(), reznr,
+                        zuletztaktiv);
+                thblock.setModal(true);
+                thblock.setLocationRelativeTo(grundPanel);
+                thblock.pack();
+                thblock.setVisible(true);
+                if (thblock != null) {
+                    thblock.dispose();
+                    thblock = null;
+                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        icfblock[zuletztaktiv].requestFocus();
+                        try {
+                            icfblock[zuletztaktiv].setCaretPosition(icfblock[zuletztaktiv].getText()
+                                                                                          .length());
+                        } catch (java.lang.IllegalArgumentException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
+            } else {
+                // System.out.println("thblock != null");
+                thblock.setVisible(true);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        icfblock[zuletztaktiv].requestFocus();
+                        try {
+                            icfblock[zuletztaktiv].setCaretPosition(icfblock[zuletztaktiv].getText()
+                                                                                          .length());
+                        } catch (java.lang.IllegalArgumentException ex) {
+                            // da passiert jetzt halt nix
+                        }
+                    }
+                });
+
+            }
+        }
+
+    }
+
+    /*********************************
+     *
+     *
+     * Nachfolgend die Standards f�r RehaSmartDialog
+     *
+     */
+    @Override
+    public void rehaTPEventOccurred(RehaTPEvent evt) {
+
+        try {
+            if (evt.getDetails()[0].equals(this.getName())) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        if (!ishmnull) {
+                            setzeHmAufNull();
+                        }
+                        if (aufrufvon == 0) {
+                            // System.out.println("Aufgerufen von "+aufrufvon);
+                            Reha.instance.patpanel.aktRezept.setRezeptDaten();
+                        } else if (aufrufvon == 1) {
+                            Reha.instance.patpanel.historie.setRezeptDaten();
+                            // Historie.historie.setRezeptDaten();
+                        }
+                        rtp.removeRehaTPEventListener(getInstance());
+                        rtp = null;
+                        getInstance().dispose();
+                        removeWindowListener(getInstance());
+                        // System.out.println("****************Arztbericht -> Listener
+                        // entfernt**************"+this.getName());
+                    }
+                }.start();
+            }
+
+        } catch (NullPointerException ne) {
+            ne.printStackTrace();
+        }
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+        if (rtp != null) {
+            rtp.removeRehaTPEventListener(this);
+            rtp = null;
+            pinPanel = null;
+            new Thread() {
+                @Override
+                public void run() {
+                    if (!ishmnull) {
+                        setzeHmAufNull();
+                    }
+                    if (aufrufvon == 0) {
+                        // System.out.println("Aufgerufen von "+aufrufvon);
+                        Reha.instance.patpanel.aktRezept.setRezeptDaten();
+                    } else if (aufrufvon == 1) {
+                        Reha.instance.patpanel.historie.setRezeptDaten();
+                        // Historie.historie.setRezeptDaten();
+                    }
+                    removeWindowListener(getInstance());
+                    // this.dispose();
+                    // super.dispose();
+                    // System.out.println("****************Arztbericht -> Listener entfernt (in
+                    // Closing)**********"+this.getName());
+
+                }
+            }.start();
+        }
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent arg0) {
+        if (!initok) {
+            // System.out.println("Return --> In window Closed - Arztbericht");
+            return;
+        }
+        // System.out.println("In window Closed - Arztbericht");
+        this.removeWindowListener(this);
+        if (rtp != null) {
+            rtp.removeRehaTPEventListener(this);
+            rtp = null;
+            pinPanel = null;
+            new Thread() {
+                @Override
+                public void run() {
+                    if (!ishmnull) {
+                        setzeHmAufNull();
+                    }
+                    if (aufrufvon == 0) {
+                        // System.out.println("Aufgerufen von "+aufrufvon);
+                        Reha.instance.patpanel.aktRezept.setRezeptDaten();
+                    } else if (aufrufvon == 1) {
+                        Reha.instance.patpanel.historie.setRezeptDaten();
+                        // Historie.historie.setRezeptDaten();
+                    }
+                    removeWindowListener(getInstance());
+                }
+            }.start();
+            // this.dispose();
+            // super.dispose();
+            // System.out.println("****************Arztbericht -> Listener entfernt
+            // (Closed)**********"+this.getName());
+        }
+
+    }
+
+    private void setzeHmAufNull() {
+        Set entries = SystemConfig.hmAdrBDaten.entrySet();
+        Iterator it = entries.iterator();
+        while (it.hasNext()) {
+            Map.Entry entry = (Map.Entry) it.next();
+            SystemConfig.hmAdrBDaten.put((String) entry.getKey(), "");
+
+        }
+        ishmnull = true;
+    }
+    /*********************************
+     *
+     *
+     * Ende der Standards f�r RehaSmartDialog
+     *
+     */
 
 }

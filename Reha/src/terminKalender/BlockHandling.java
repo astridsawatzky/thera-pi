@@ -13,624 +13,657 @@ import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
-
-
-
 public class BlockHandling {
-	
-	final int T_NAME = 0;
-	final int T_NUMMER = 1;
-	final int T_START = 2;
-	final int T_DAUER = 3;
-	final int T_END = 4;
-	final int T_CONTROL = 5;
-	
-	
-	int ret = -1;
-	int wasTun = -1;
-	Vector<?> vterm = null;
-	int kollege;
-	int spalte;
-	int block;
-	String[] datum = null;
-	int dbBehandler;
-	String[] daten = null;
-	Felder datenfeld = new Felder();
-	BlockHandling(int wasTun ,Vector<?> vterm ,int kollege ,int spalte, int block,
-			String[] datum,int dbBehandler,String[] daten){
-		this.wasTun = wasTun;
-		this.vterm = vterm;
-		this.kollege = kollege;
-		this.spalte = spalte;
-		this.block = block;
-		this.datum = datum;
-		this.dbBehandler = dbBehandler;
-		this.daten = daten;
 
-		debugTermin();
-		
-		datenfeld.Init(vterm);
+    final int T_NAME = 0;
+    final int T_NUMMER = 1;
+    final int T_START = 2;
+    final int T_DAUER = 3;
+    final int T_END = 4;
+    final int T_CONTROL = 5;
 
-	}
-	
-	public void debugTermin(){
-		try{
-			String s = "";
-			String[] tAlt = {"","","","",""};
-			String[] tNeu = daten.clone();
-			String[] tCont = {"","","","","",""};
-			
-			int xkoll = StringTools.holeZahlVorneNullen(((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_CONTROL)).get(2)).substring(0,2));
-			tCont[0] = ParameterLaden.getKollegenUeberDBZeile(xkoll);
-			tCont[1] = datum[spalte];
-			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-			tCont[2] = sdf.format(new Date());
-			tCont[3] = DatFunk.sHeute();
-			tCont[4] = Reha.aktUser;
-					
-			
-			tAlt[0] = (((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NAME)).get(block)).equals("") ? "<leer>" : ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NAME)).get(block)));
-			tAlt[1] = (((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NUMMER)).get(block)).equals("") ? "<leer>" : ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_NUMMER)).get(block)));
-			tAlt[2] = ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_START)).get(block)).substring(0,5);
-			tAlt[3] = ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_DAUER)).get(block));
-			tAlt[4] = ((String) ((Vector<?>)((ArrayList<?>) vterm.get(kollege)).get(T_END)).get(block)).substring(0,5);
+    int ret = -1;
+    int wasTun = -1;
+    Vector<?> vterm = null;
+    int kollege;
+    int spalte;
+    int block;
+    String[] datum = null;
+    int dbBehandler;
+    String[] daten = null;
+    Felder datenfeld = new Felder();
 
-			if(wasTun == 11){
-				//Daten löschen
-				tNeu[0]="<F8-gelöscht>"; tNeu[1] = "";tNeu[2] = "";tNeu[3] = "";tNeu[4] = "";
-				tCont[5] = "F8";
-			}else if(wasTun == 2 || wasTun == 5){
-				//oben anschließen oder manuelle Eingabe
-				tNeu[4] = ZeitFunk.ZeitPlusMinuten(tNeu[2], tNeu[3]).substring(0,5); tNeu[2] = tNeu[2].substring(0,5);
-				tCont[5] = "F2";
-			}else if(wasTun == 3){
-				//unten anschließen
-				tNeu[2] = ZeitFunk.ZeitMinusMinuten(tNeu[4], tNeu[3]).substring(0,5); tNeu[4] = tNeu[4].substring(0,5);
-				tCont[5] = "F2";
-			}else if(wasTun == 10){
-				//@FREI setzen
-				tNeu[0] = (tAlt[0].equals("") ? "<leer>" : tAlt[0]);
-				tNeu[1] = "@FREI";
-				tNeu[2] = "";
-				tNeu[3] = "";
-				tNeu[4] = "";
-				tCont[5] = "F9";
-			}else{
-				tNeu[2] = tNeu[2].substring(0,5);
-				tNeu[4] = tNeu[4].substring(0,5);
-				tCont[5] = "F2";
-			}
-			//String neu = tNeu[0]+" - "+tNeu[1]+" - "+tNeu[2]+" - "+tNeu[3]+" - "+tNeu[4];
-			Vector<List<String>> vec = new Vector<List<String>>();
-			vec.add(Arrays.asList(tCont));
-			vec.add(Arrays.asList(tAlt));
-			vec.add(Arrays.asList(tNeu));
+    BlockHandling(int wasTun, Vector<?> vterm, int kollege, int spalte, int block, String[] datum, int dbBehandler,
+            String[] daten) {
+        this.wasTun = wasTun;
+        this.vterm = vterm;
+        this.kollege = kollege;
+        this.spalte = spalte;
+        this.block = block;
+        this.datum = datum;
+        this.dbBehandler = dbBehandler;
+        this.daten = daten;
 
-			Reha.terminLookup.add(0, vec);
-			if(Reha.terminLookup.size() >= 21){
-				Reha.terminLookup.remove(20);
-			}
-			//System.out.println(Reha.terminLookup);
-			
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-	}
-	
-	public int init(){
-		for(int i = 0;i<1;i++){
-			if(this.wasTun==1){
-				////System.out.println("in Block passt genau");
-				this.ret = blockPasstGenau();
-				break;
-			}
-			if(this.wasTun==2){
-				////System.out.println("in Block oben aschlie�en");				
-				this.ret = blockObenAnschliessen();
-				break;
-			}
-			if(this.wasTun==3){
-				////System.out.println("in Block unten aschlie�en");
-				this.ret = blockUntenAnschliessen();
-				break;
-			}
-			if(this.wasTun==4){
-				////System.out.println("in Block ausehnen");
-				this.ret = blockAusdehnen();
-				break;
-			}
-			if(this.wasTun==5){
-				////System.out.println("in Block manueller Start");
-				this.ret = blockManuellStarten();
-				break;
-			}
-			if(this.wasTun==6){
-				////System.out.println("in Block Nachfolgeblock k�rzen");
-				this.ret = blockNachfolgeKuerzen();
-				break;
-			}
-			if(this.wasTun==7){
-				////System.out.println("in Block Vorg�ngerblock k�rzen");
-				//this.ret = blockVorblockKuerzen();
-				break;
-			}
-			if(this.wasTun==8){
-				////System.out.println("in Block Zusammenfassen");
-				this.ret = blockZusammenFassen();
-				break;
-			}
-			if(this.wasTun==10){
-				////System.out.println("in Freitermin eintragen");
-				this.ret = blockFreiTermin();
-				break;
-			}
-			if(this.wasTun==11){
-				////System.out.println("in Blocklöschen");
-				this.ret = blockLoeschen();
-				break;
-			}			
-			if(this.wasTun==12){
-				////System.out.println("in mit Vorgänger tauschen");
-				this.ret = blockTauschen(-1);
-				break;
-			}			
-			if(this.wasTun==13){
-				////System.out.println("in mit Nachfolger tauschen");
-				this.ret = blockTauschen(1);
-				break;
-			}			
-			if(this.wasTun==999){
-				////System.out.println("Tag komplett löschen und auf null setzen");
-				this.ret = blockAufNull();
-				break;
-			}			
+        debugTermin();
 
-			
+        datenfeld.Init(vterm);
 
-		}
-		return this.ret;
-	}
-/*****************************************/	
-	private int blockPasstGenau(){
-			////System.out.println("Kollege = "+this.kollege);
-			datenfeld.setFeld(kollege,0,block,daten[0]);
-			datenfeld.setFeld(kollege,1,block,daten[1]);
-			datenfeld.setFeld(kollege,2,block,daten[2]);
-			datenfeld.setFeld(kollege,3,block,daten[3]);
-			datenfeld.setFeld(kollege,4,block,daten[4]);
-			
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
-		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		//TerminFenster.starteUnlock();
-		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
-		return 1;
-	}
-/*****************************************/	
-	private int blockObenAnschliessen(){
-		String [] alteDaten = {null,null,null,null,null};
-		//int aktBlockzahl;
-			//Zuerste bisherige Blockdaten sichern
-			alteDaten[0] = datenfeld.getFeld(kollege,0,block);
-			alteDaten[1] = datenfeld.getFeld(kollege,1,block);
-			alteDaten[2] = datenfeld.getFeld(kollege,2,block);
-			alteDaten[3] = datenfeld.getFeld(kollege,3,block);
-			alteDaten[4] = datenfeld.getFeld(kollege,4,block);
-			String neueEndzeit = ZeitFunk.MinutenZuZeit((int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[2])+Integer.parseInt(daten[3])) );
-			int differenz = Integer.parseInt(alteDaten[3])-Integer.parseInt(daten[3]); 
-			// jetzt bisherige daten mit neuen Daten �berschreiben
-			datenfeld.setFeld(kollege,0,block,daten[0]);
-			datenfeld.setFeld(kollege,1,block,daten[1]);
-			datenfeld.setFeld(kollege,2,block,daten[2]);
-			datenfeld.setFeld(kollege,3,block,daten[3]);
-			datenfeld.setFeld(kollege,4,block,neueEndzeit);
-			//Blockzahl ermitteln und dann neuen Block einf�gen
-			int bloecke = block+1;
-			int maxblock = datenfeld.getAnzahlBloecke(kollege);
-			datenfeld.einfuegenBlock(kollege, bloecke);
-			datenfeld.setAnzahlBloecke(kollege,maxblock+1);	
-			// jetzt den neuen Block mit alten Daten schreiben
-			datenfeld.setFeld(kollege,0,bloecke,alteDaten[0]);
-			datenfeld.setFeld(kollege,1,bloecke,alteDaten[1]);
-			datenfeld.setFeld(kollege,2,bloecke,datenfeld.getFeld(kollege,4,block));
-			datenfeld.setFeld(kollege,3,bloecke,Integer.toString(differenz));
-			datenfeld.setFeld(kollege,4,bloecke,alteDaten[4]);
+    }
 
+    public void debugTermin() {
+        try {
+            String s = "";
+            String[] tAlt = { "", "", "", "", "" };
+            String[] tNeu = daten.clone();
+            String[] tCont = { "", "", "", "", "", "" };
 
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
-		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
-		////System.out.println("0="+alteDaten[0]+"1="+alteDaten[1]+"2="+alteDaten[2]+"3="+alteDaten[3]+"4="+alteDaten[4]);
-		//TerminFenster.starteUnlock();
-		return 1;
-	}
+            int xkoll = StringTools.holeZahlVorneNullen(
+                    ((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_CONTROL)).get(2)).substring(0, 2));
+            tCont[0] = ParameterLaden.getKollegenUeberDBZeile(xkoll);
+            tCont[1] = datum[spalte];
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            tCont[2] = sdf.format(new Date());
+            tCont[3] = DatFunk.sHeute();
+            tCont[4] = Reha.aktUser;
 
-	/*****************************************/	
-	private int blockUntenAnschliessen(){
-		String [] alteDaten = {null,null,null,null,null};
-		//int aktBlockzahl;
-			//Zuerste bisherige Blockdaten sichern
-			alteDaten[0] = datenfeld.getFeld(kollege,0,block);
-			alteDaten[1] = datenfeld.getFeld(kollege,1,block);
-			alteDaten[2] = datenfeld.getFeld(kollege,2,block);
-			alteDaten[3] = datenfeld.getFeld(kollege,3,block);
-			alteDaten[4] = datenfeld.getFeld(kollege,4,block);
-			
-			String neueEndzeit = ZeitFunk.MinutenZuZeit((int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[4])-Integer.parseInt(daten[3])) );
-			////System.out.println("neue Endzeit "+neueEndzeit );
-			int differenz = Integer.parseInt(alteDaten[3])-Integer.parseInt(daten[3]); 
-			////System.out.println("Zeitdifferenz "+differenz );
-			// jetzt bisherige daten mit alten (korrigierten) Daten �berschreiben
-			datenfeld.setFeld(kollege,0,block,alteDaten[0]);
-			datenfeld.setFeld(kollege,1,block,alteDaten[1]);
-			datenfeld.setFeld(kollege,2,block,alteDaten[2]);
-			datenfeld.setFeld(kollege,3,block,Integer.toString(differenz));
-			datenfeld.setFeld(kollege,4,block,neueEndzeit);
-			
-			//Blockzahl ermitteln und dann neuen Block einf�gen
-			int bloecke = block+1;
-			int maxblock = datenfeld.getAnzahlBloecke(kollege);
-			datenfeld.einfuegenBlock(kollege, bloecke);
-			datenfeld.setAnzahlBloecke(kollege,maxblock+1);	
-			// jetzt den neuen Block mit alten Daten schreiben
-			datenfeld.setFeld(kollege,0,bloecke,daten[0]);
-			datenfeld.setFeld(kollege,1,bloecke,daten[1]);
-			datenfeld.setFeld(kollege,2,bloecke,neueEndzeit);
-			datenfeld.setFeld(kollege,3,bloecke,daten[3]);
-			datenfeld.setFeld(kollege,4,bloecke,alteDaten[4]);
-			
+            tAlt[0] = (((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_NAME)).get(block)).equals("")
+                    ? "<leer>"
+                    : ((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_NAME)).get(block)));
+            tAlt[1] = (((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_NUMMER)).get(block)).equals("")
+                    ? "<leer>"
+                    : ((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_NUMMER)).get(block)));
+            tAlt[2] = ((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_START)).get(block)).substring(0,
+                    5);
+            tAlt[3] = ((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_DAUER)).get(block));
+            tAlt[4] = ((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_END)).get(block)).substring(0,
+                    5);
 
+            if (wasTun == 11) {
+                // Daten löschen
+                tNeu[0] = "<F8-gelöscht>";
+                tNeu[1] = "";
+                tNeu[2] = "";
+                tNeu[3] = "";
+                tNeu[4] = "";
+                tCont[5] = "F8";
+            } else if (wasTun == 2 || wasTun == 5) {
+                // oben anschließen oder manuelle Eingabe
+                tNeu[4] = ZeitFunk.ZeitPlusMinuten(tNeu[2], tNeu[3])
+                                  .substring(0, 5);
+                tNeu[2] = tNeu[2].substring(0, 5);
+                tCont[5] = "F2";
+            } else if (wasTun == 3) {
+                // unten anschließen
+                tNeu[2] = ZeitFunk.ZeitMinusMinuten(tNeu[4], tNeu[3])
+                                  .substring(0, 5);
+                tNeu[4] = tNeu[4].substring(0, 5);
+                tCont[5] = "F2";
+            } else if (wasTun == 10) {
+                // @FREI setzen
+                tNeu[0] = (tAlt[0].equals("") ? "<leer>" : tAlt[0]);
+                tNeu[1] = "@FREI";
+                tNeu[2] = "";
+                tNeu[3] = "";
+                tNeu[4] = "";
+                tCont[5] = "F9";
+            } else {
+                tNeu[2] = tNeu[2].substring(0, 5);
+                tNeu[4] = tNeu[4].substring(0, 5);
+                tCont[5] = "F2";
+            }
+            // String neu = tNeu[0]+" - "+tNeu[1]+" - "+tNeu[2]+" - "+tNeu[3]+" - "+tNeu[4];
+            Vector<List<String>> vec = new Vector<List<String>>();
+            vec.add(Arrays.asList(tCont));
+            vec.add(Arrays.asList(tAlt));
+            vec.add(Arrays.asList(tNeu));
 
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
-		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.instance.terminpanel.terminAufnehmen(kollege,bloecke);
-		////System.out.println("0="+alteDaten[0]+"1="+alteDaten[1]+"2="+alteDaten[2]+"3="+alteDaten[3]+"4="+alteDaten[4]);
-		//TerminFenster.starteUnlock();
-		return 1;
-	}
-/*****************************************/	
-	private int blockAusdehnen(){
-			////System.out.println("Kollege = "+this.kollege);
-			datenfeld.setFeld(kollege,0,block,daten[0]);
-			datenfeld.setFeld(kollege,1,block,daten[1]);
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
-		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.instance.terminpanel.setAktiverBlock(block);
-		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
-		//TerminFenster.starteUnlock();
-		return 1;
-	}
-/*****************************************/	
-	private int blockManuellStarten(){
-		String [] alteDaten = {null,null,null,null,null};
-		//int aktBlockzahl;
-			////System.out.println("Blockanzahl zu Beginn: "+datenfeld.getAnzahlBloecke(kollege));
-			//Zuerste bisherige Blockdaten sichern
-			alteDaten[0] = datenfeld.getFeld(kollege,0,block);//Text
-			alteDaten[1] = datenfeld.getFeld(kollege,1,block);//RezNr.
-			alteDaten[2] = datenfeld.getFeld(kollege,2,block);//Start
-			alteDaten[3] = datenfeld.getFeld(kollege,3,block);//Dauer
-			alteDaten[4] = datenfeld.getFeld(kollege,4,block);//Ende
-			int dummy = (int) (ZeitFunk.MinutenSeitMitternacht(daten[2])-ZeitFunk.MinutenSeitMitternacht(alteDaten[2]));
-			// jetzt bisherige daten mit alten (korrigierten) Daten �berschreiben
-			datenfeld.setFeld(kollege,0,block,alteDaten[0]);
-			datenfeld.setFeld(kollege,1,block,alteDaten[1]);
-			datenfeld.setFeld(kollege,2,block,alteDaten[2]);
-			datenfeld.setFeld(kollege,3,block,Integer.valueOf(dummy).toString());
-			String neueEndzeit = ZeitFunk.MinutenZuZeit((int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[2])+dummy) );
-			datenfeld.setFeld(kollege,4,block,neueEndzeit);
-			//Blockzahl ermitteln und dann neuen Block einf�gen
-			int bloecke = block+1;
-			int maxblock = datenfeld.getAnzahlBloecke(kollege);
-			datenfeld.einfuegenBlock(kollege, bloecke);
-			datenfeld.setAnzahlBloecke(kollege,maxblock+1);	
-			// jetzt den neuen Block mit alten Daten schreiben
-			datenfeld.setFeld(kollege,0,bloecke,daten[0]);
-			datenfeld.setFeld(kollege,1,bloecke,daten[1]);
-			datenfeld.setFeld(kollege,2,bloecke,neueEndzeit);
-			datenfeld.setFeld(kollege,3,bloecke,daten[3]);
-			neueEndzeit = ZeitFunk.MinutenZuZeit((int) (ZeitFunk.MinutenSeitMitternacht(daten[2])+Integer.parseInt(daten[3])) );			
-			datenfeld.setFeld(kollege,4,bloecke,neueEndzeit);
-			//Blockzahl ermitteln und dann neuen Block einf�gen
-			bloecke = bloecke+1;
-			maxblock++;
-			datenfeld.einfuegenBlock(kollege, bloecke);
-			datenfeld.setAnzahlBloecke(kollege,maxblock+1);
-			
-			datenfeld.setFeld(kollege,0,bloecke,alteDaten[0]);
-			datenfeld.setFeld(kollege,1,bloecke,alteDaten[1]);
-			datenfeld.setFeld(kollege,2,bloecke,neueEndzeit);
-			int differenz = (int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[4])-ZeitFunk.MinutenSeitMitternacht(neueEndzeit));
-			datenfeld.setFeld(kollege,3,bloecke,Integer.toString(differenz));
-			datenfeld.setFeld(kollege,4,bloecke,alteDaten[4]);
-			
-		
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
-		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.instance.terminpanel.terminAufnehmen(kollege,bloecke-1);
-		Reha.instance.terminpanel.setAktiverBlock(bloecke-1);
-		return 1;
-	}
-/*****************************************/	
-	private int blockNachfolgeKuerzen(){
-		String [] alteDaten = {null,null,null,null,null};
+            Reha.terminLookup.add(0, vec);
+            if (Reha.terminLookup.size() >= 21) {
+                Reha.terminLookup.remove(20);
+            }
+            // System.out.println(Reha.terminLookup);
 
-			//Zuerste bisherige Blockdaten sichern
-			alteDaten[0] = datenfeld.getFeld(kollege,0,block+1);//Text
-			alteDaten[1] = datenfeld.getFeld(kollege,1,block+1);//RezNr.
-			alteDaten[2] = datenfeld.getFeld(kollege,2,block+1);//Start
-			alteDaten[3] = datenfeld.getFeld(kollege,3,block+1);//Dauer
-			alteDaten[4] = datenfeld.getFeld(kollege,4,block+1);//Ende
-			int dummy = (int) (ZeitFunk.MinutenSeitMitternacht(daten[2])-ZeitFunk.MinutenSeitMitternacht(alteDaten[2]));
-			// jetzt bisherige daten mit alten (korrigierten) Daten �berschreiben
-			datenfeld.setFeld(kollege,0,block,daten[0]);
-			datenfeld.setFeld(kollege,1,block,daten[1]);
-			datenfeld.setFeld(kollege,2,block,daten[2]);
-			datenfeld.setFeld(kollege,3,block,daten[3]);
-			String neueEndzeit = ZeitFunk.MinutenZuZeit((int) (ZeitFunk.MinutenSeitMitternacht(daten[2]) +Integer.parseInt(daten[3])) );
-			datenfeld.setFeld(kollege,4,block,neueEndzeit);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-			datenfeld.setFeld(kollege,0,block+1,alteDaten[0]);
-			datenfeld.setFeld(kollege,1,block+1,alteDaten[1]);
-			datenfeld.setFeld(kollege,2,block+1,datenfeld.getFeld(kollege,4,block));
-			dummy = (int) ZeitFunk.MinutenSeitMitternacht(datenfeld.getFeld(kollege,4,block+1)) -
-				(int) ZeitFunk.MinutenSeitMitternacht(datenfeld.getFeld(kollege,2,block+1));
-			datenfeld.setFeld(kollege,3,block+1,Integer.toString(dummy));
-						
-			
-		
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		////System.out.println("Vermutlich falsch------>Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
-		kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-		Reha.instance.terminpanel.terminAufnehmen(kollege,block);
-		return 1;
-	}
-	/*****************************************/	
-	private int blockZusammenFassen(){
-		//String [] alteDaten = {null,null,null,null,null};
-		//int aktBlockzahl;
-		int [] grundDaten = TerminFenster.getThisClass().getGruppierenClipBoard();
-		int startBlock,endBlock;//,anzahlBloecke,anzahlGesamt;
-		////System.out.println("in Block-Handling"+grundDaten[0]+"/"+grundDaten[1]+"/"+grundDaten[2]+"/"+grundDaten[3]);
+    public int init() {
+        for (int i = 0; i < 1; i++) {
+            if (this.wasTun == 1) {
+                //// System.out.println("in Block passt genau");
+                this.ret = blockPasstGenau();
+                break;
+            }
+            if (this.wasTun == 2) {
+                //// System.out.println("in Block oben aschlie�en");
+                this.ret = blockObenAnschliessen();
+                break;
+            }
+            if (this.wasTun == 3) {
+                //// System.out.println("in Block unten aschlie�en");
+                this.ret = blockUntenAnschliessen();
+                break;
+            }
+            if (this.wasTun == 4) {
+                //// System.out.println("in Block ausehnen");
+                this.ret = blockAusdehnen();
+                break;
+            }
+            if (this.wasTun == 5) {
+                //// System.out.println("in Block manueller Start");
+                this.ret = blockManuellStarten();
+                break;
+            }
+            if (this.wasTun == 6) {
+                //// System.out.println("in Block Nachfolgeblock k�rzen");
+                this.ret = blockNachfolgeKuerzen();
+                break;
+            }
+            if (this.wasTun == 7) {
+                //// System.out.println("in Block Vorg�ngerblock k�rzen");
+                // this.ret = blockVorblockKuerzen();
+                break;
+            }
+            if (this.wasTun == 8) {
+                //// System.out.println("in Block Zusammenfassen");
+                this.ret = blockZusammenFassen();
+                break;
+            }
+            if (this.wasTun == 10) {
+                //// System.out.println("in Freitermin eintragen");
+                this.ret = blockFreiTermin();
+                break;
+            }
+            if (this.wasTun == 11) {
+                //// System.out.println("in Blocklöschen");
+                this.ret = blockLoeschen();
+                break;
+            }
+            if (this.wasTun == 12) {
+                //// System.out.println("in mit Vorgänger tauschen");
+                this.ret = blockTauschen(-1);
+                break;
+            }
+            if (this.wasTun == 13) {
+                //// System.out.println("in mit Nachfolger tauschen");
+                this.ret = blockTauschen(1);
+                break;
+            }
+            if (this.wasTun == 999) {
+                //// System.out.println("Tag komplett löschen und auf null setzen");
+                this.ret = blockAufNull();
+                break;
+            }
 
-		if(grundDaten[0] > grundDaten[1]){
-			startBlock = grundDaten[1];
-			endBlock = grundDaten[0];
-		}else{
-			startBlock = grundDaten[0];
-			endBlock = grundDaten[1];
-		}
+        }
+        return this.ret;
+    }
 
-		//anzahlGesamt = Integer.parseInt(datenfeld.getFeld(grundDaten[3],5,0));
-		String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(grundDaten[3],5,4));
-		String db_behandler = datenfeld.getFeld(grundDaten[3],5,2);
-		int ibehandler = (db_behandler.substring(0,1).equals("0") ?
-						Integer.parseInt(db_behandler.substring(1,2)) :
-							Integer.parseInt(db_behandler.substring(0,2))	);
-		//anzahlBloecke = (endBlock - startBlock) +1;
-		String termin = datenfeld.getFeld(grundDaten[3],0, grundDaten[0]);
-		String reznummer = datenfeld.getFeld(grundDaten[3],1, grundDaten[0]);
-		String startuhr =  datenfeld.getFeld(grundDaten[3],2, startBlock);
-		String endeuhr = datenfeld.getFeld(grundDaten[3],4,endBlock);
-		int startMinuten = (int) ZeitFunk.ZeitDifferenzInMinuten(startuhr,
-				endeuhr) ;
-		String minuten = Integer.toString(startMinuten);
-	
-		datenfeld.setFeld(grundDaten[3],0,startBlock,termin);
-		datenfeld.setFeld(grundDaten[3],1,startBlock,reznummer);
-		datenfeld.setFeld(grundDaten[3],2,startBlock,startuhr );
-		datenfeld.setFeld(grundDaten[3],3,startBlock,minuten);
-		datenfeld.setFeld(grundDaten[3],4,startBlock,endeuhr);	
-		for (int ii = endBlock; ii > startBlock; ii--){
-			datenfeld.loeschenBlock(grundDaten[3],ii);
-		}
+    /*****************************************/
+    private int blockPasstGenau() {
+        //// System.out.println("Kollege = "+this.kollege);
+        datenfeld.setFeld(kollege, 0, block, daten[0]);
+        datenfeld.setFeld(kollege, 1, block, daten[1]);
+        datenfeld.setFeld(kollege, 2, block, daten[2]);
+        datenfeld.setFeld(kollege, 3, block, daten[3]);
+        datenfeld.setFeld(kollege, 4, block, daten[4]);
 
-		
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		kbs.KalenderDaten(this.datenfeld,grundDaten[3] ,db_datum,ibehandler);
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        //// System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+"
+        //// dbBehandler="+dbBehandler);
+        kbs.KalenderDaten(this.datenfeld, kollege, datum[spalte], dbBehandler);
+        // TerminFenster.starteUnlock();
+        Reha.instance.terminpanel.terminAufnehmen(kollege, block);
+        return 1;
+    }
 
-		return 1;
-	}	
-	/*****************************************/	
-	private int blockFreiTermin(){
-		String [] alteDaten = {null,null,null,null,null};
-		
-		String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(kollege,5,4));
-		String db_behandler = datenfeld.getFeld(kollege,5,2);
-		int ibehandler = (db_behandler.substring(0,1).equals("0") ?
-				Integer.parseInt(db_behandler.substring(1,2)) :
-					Integer.parseInt(db_behandler.substring(0,2))	);		
-		
-		alteDaten[0] = datenfeld.getFeld(kollege,0,block);//Text
-		alteDaten[1] = datenfeld.getFeld(kollege,1,block);//RezNr.
-		alteDaten[2] = datenfeld.getFeld(kollege,2,block);//Start
-		alteDaten[3] = datenfeld.getFeld(kollege,3,block);//Dauer
-		alteDaten[4] = datenfeld.getFeld(kollege,4,block);//Ende
+    /*****************************************/
+    private int blockObenAnschliessen() {
+        String[] alteDaten = { null, null, null, null, null };
+        // int aktBlockzahl;
+        // Zuerste bisherige Blockdaten sichern
+        alteDaten[0] = datenfeld.getFeld(kollege, 0, block);
+        alteDaten[1] = datenfeld.getFeld(kollege, 1, block);
+        alteDaten[2] = datenfeld.getFeld(kollege, 2, block);
+        alteDaten[3] = datenfeld.getFeld(kollege, 3, block);
+        alteDaten[4] = datenfeld.getFeld(kollege, 4, block);
+        String neueEndzeit = ZeitFunk.MinutenZuZeit(
+                (int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[2]) + Integer.parseInt(daten[3])));
+        int differenz = Integer.parseInt(alteDaten[3]) - Integer.parseInt(daten[3]);
+        // jetzt bisherige daten mit neuen Daten �berschreiben
+        datenfeld.setFeld(kollege, 0, block, daten[0]);
+        datenfeld.setFeld(kollege, 1, block, daten[1]);
+        datenfeld.setFeld(kollege, 2, block, daten[2]);
+        datenfeld.setFeld(kollege, 3, block, daten[3]);
+        datenfeld.setFeld(kollege, 4, block, neueEndzeit);
+        // Blockzahl ermitteln und dann neuen Block einf�gen
+        int bloecke = block + 1;
+        int maxblock = datenfeld.getAnzahlBloecke(kollege);
+        datenfeld.einfuegenBlock(kollege, bloecke);
+        datenfeld.setAnzahlBloecke(kollege, maxblock + 1);
+        // jetzt den neuen Block mit alten Daten schreiben
+        datenfeld.setFeld(kollege, 0, bloecke, alteDaten[0]);
+        datenfeld.setFeld(kollege, 1, bloecke, alteDaten[1]);
+        datenfeld.setFeld(kollege, 2, bloecke, datenfeld.getFeld(kollege, 4, block));
+        datenfeld.setFeld(kollege, 3, bloecke, Integer.toString(differenz));
+        datenfeld.setFeld(kollege, 4, bloecke, alteDaten[4]);
 
-		datenfeld.setFeld(kollege,1,block,"@FREI");
-		TerminFenster.getThisClass().setDatenSpeicher(alteDaten);
-		
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		kbs.KalenderDaten(this.datenfeld,kollege ,db_datum,ibehandler);
-		
-	return 1;	
-	}
-	/*****************************************/	
-	private int blockLoeschen(){
-		try{
-		String [] alteDaten = {null,null,null,null,null};
-		String test1="";
-		String test2="";
-		String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(kollege,5,4));
-		String db_behandler = datenfeld.getFeld(kollege,5,2);
-		int ibehandler = (db_behandler.substring(0,1)=="0" ?
-				Integer.parseInt(db_behandler.substring(1,2)) :
-					Integer.parseInt(db_behandler.substring(0,2))	);		
-		
-		int maxblock = Integer.parseInt(datenfeld.getFeld(kollege,5,0))-1;
-		
-		alteDaten[0] = datenfeld.getFeld(kollege,0,block);//Text
-		alteDaten[1] = datenfeld.getFeld(kollege,1,block);//RezNr.
-		alteDaten[2] = datenfeld.getFeld(kollege,2,block);//Start
-		alteDaten[3] = datenfeld.getFeld(kollege,3,block);//Dauer
-		alteDaten[4] = datenfeld.getFeld(kollege,4,block);//Ende
-		TerminFenster.getThisClass().setDatenSpeicher(alteDaten);
-		//String termin = "";
-		//String reznummer = "";
-		int startBlock = block;
-		int endBlock = block;
-		
-		if(block > 0){
-			test1 = datenfeld.getFeld(kollege,0,block-1);//Text
-			test2 = datenfeld.getFeld(kollege,1,block-1);//Text
-			if( test1.trim().equals("") && test2.trim().equals("") ){
-				startBlock= block-1;
-				Reha.instance.terminpanel.setAktiverBlock(startBlock);
-				//System.out.println("startBlock = "+startBlock);
-				alteDaten[2] = datenfeld.getFeld(kollege,2,block-1);//Start
-			}
-		}
-		if(block < maxblock){
-			test1 = datenfeld.getFeld(kollege,0,block+1);//Text
-			test2 = datenfeld.getFeld(kollege,1,block+1);//Text
-			if( test1.trim().equals("") && test2.trim().equals("") ){
-				endBlock= block+1;
-				//System.out.println("endBlock = "+endBlock);
-				alteDaten[4] = datenfeld.getFeld(kollege,4,block+1);//Ende
-			}
-		}
-		datenfeld.setFeld(kollege,0,startBlock,"");
-		datenfeld.setFeld(kollege,1,startBlock,"");
-		datenfeld.setFeld(kollege,2,startBlock,alteDaten[2]);		
-		int dauer = (int) ZeitFunk.ZeitDifferenzInMinuten(alteDaten[2], alteDaten[4]);
-		String sdauer = Integer.toString(dauer);
-		datenfeld.setFeld(kollege,3,startBlock,sdauer);		
-		datenfeld.setFeld(kollege,4,startBlock,alteDaten[4]);		
-		
-		for (int ii = endBlock; ii > startBlock; ii--){
-			datenfeld.loeschenBlock(kollege,ii);
-		}
-		////System.out.println("Aktiver Block 0 = "+TerminFenster.thisClass.getAktiverBlock()[0]);
-		////System.out.println("Aktiver Block 2 = "+TerminFenster.thisClass.getAktiverBlock()[2]);
-		////System.out.println("Block in löschenBlock = "+block);
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        //// System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+"
+        //// dbBehandler="+dbBehandler);
+        kbs.KalenderDaten(this.datenfeld, kollege, datum[spalte], dbBehandler);
+        Reha.instance.terminpanel.terminAufnehmen(kollege, block);
+        //// System.out.println("0="+alteDaten[0]+"1="+alteDaten[1]+"2="+alteDaten[2]+"3="+alteDaten[3]+"4="+alteDaten[4]);
+        // TerminFenster.starteUnlock();
+        return 1;
+    }
 
-		KalenderBeschreiben kbs = new KalenderBeschreiben();
-		kbs.KalenderDaten(this.datenfeld,kollege ,db_datum,ibehandler);
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return -10;
-		}
-		
-	return 1;	
-	}
+    /*****************************************/
+    private int blockUntenAnschliessen() {
+        String[] alteDaten = { null, null, null, null, null };
+        // int aktBlockzahl;
+        // Zuerste bisherige Blockdaten sichern
+        alteDaten[0] = datenfeld.getFeld(kollege, 0, block);
+        alteDaten[1] = datenfeld.getFeld(kollege, 1, block);
+        alteDaten[2] = datenfeld.getFeld(kollege, 2, block);
+        alteDaten[3] = datenfeld.getFeld(kollege, 3, block);
+        alteDaten[4] = datenfeld.getFeld(kollege, 4, block);
 
-	private int blockTauschen(int richtung){
-		// -1 = mit Vorgänger
-		// +1 = mit Nachfolger
-		String[][] tauschTermine = {{null,null,null,null,null},{null,null,null,null,null}};
-		int [] bloecke = {block,block+richtung}; 
-		String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(kollege,5,4));
-		String db_behandler = datenfeld.getFeld(kollege,5,2);
-		int ibehandler = (db_behandler.substring(0,1).equals("0") ?
-				Integer.parseInt(db_behandler.substring(1,2)) :
-					Integer.parseInt(db_behandler.substring(0,2))	);		
+        String neueEndzeit = ZeitFunk.MinutenZuZeit(
+                (int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[4]) - Integer.parseInt(daten[3])));
+        //// System.out.println("neue Endzeit "+neueEndzeit );
+        int differenz = Integer.parseInt(alteDaten[3]) - Integer.parseInt(daten[3]);
+        //// System.out.println("Zeitdifferenz "+differenz );
+        // jetzt bisherige daten mit alten (korrigierten) Daten �berschreiben
+        datenfeld.setFeld(kollege, 0, block, alteDaten[0]);
+        datenfeld.setFeld(kollege, 1, block, alteDaten[1]);
+        datenfeld.setFeld(kollege, 2, block, alteDaten[2]);
+        datenfeld.setFeld(kollege, 3, block, Integer.toString(differenz));
+        datenfeld.setFeld(kollege, 4, block, neueEndzeit);
 
-		for(int x = 0;x<2;x++){
-			for(int y = 0;y<5;y++){
-				tauschTermine[x][y] = datenfeld.getFeld(kollege,y,bloecke[x]);//Text
- 			}
-		}
-		//String name = "";
-		//String reznr = "";
-		if(richtung < 0){
-			// mit Vorgängerblock tauschen
-			//bisheriger Vorgänger
-			//name = datenfeld.getFeld(kollege,0,bloecke[1]);
-			//reznr = datenfeld.getFeld(kollege,1,bloecke[1]);
-			datenfeld.setFeld(kollege,0,bloecke[1],tauschTermine[0][0]);
-			datenfeld.setFeld(kollege,1,bloecke[1],tauschTermine[0][1]);
-			datenfeld.setFeld(kollege,2,bloecke[1],tauschTermine[1][2]);
-			datenfeld.setFeld(kollege,3,bloecke[1],tauschTermine[0][3]);
-			/// rechnen aus startzeit und dauer 
-			int StartAktuell = (int) ZeitFunk.MinutenSeitMitternacht(tauschTermine[1][2]);
-			StartAktuell = StartAktuell + Integer.parseInt(tauschTermine[0][3]);
-			String EndeUhr = ZeitFunk.MinutenZuZeit(StartAktuell);		
-			datenfeld.setFeld(kollege,4,bloecke[1],EndeUhr);
-			/********/
-			//derzeit aktueller
-			datenfeld.setFeld(kollege,0,bloecke[0],tauschTermine[1][0]);
-			datenfeld.setFeld(kollege,1,bloecke[0],tauschTermine[1][1]);
-			datenfeld.setFeld(kollege,2,bloecke[0],EndeUhr);
-			datenfeld.setFeld(kollege,3,bloecke[0],tauschTermine[1][3]);
-			datenfeld.setFeld(kollege,4,bloecke[0],tauschTermine[0][4]);
-			/*
-			if(name.equals("") && reznr.equals("")){
-				System.out.println("Mit Vorgängerblock tauschen leere Blöcke müssen zusammengefasst werden");
-			}
-			*/
-			KalenderBeschreiben kbs = new KalenderBeschreiben();
-			kbs.KalenderDaten(this.datenfeld,kollege ,db_datum,ibehandler);
-			//TerminFenster.thisClass.neuerBlockAktiv(bloecke[0]);
-			return 1;
-		}else{
-			//mit Nachfolgeblock tauschen
-			//bisheriger Vorgänger
-			//name = datenfeld.getFeld(kollege,0,bloecke[0]);
-			//reznr = datenfeld.getFeld(kollege,1,bloecke[0]);
-			datenfeld.setFeld(kollege,0,bloecke[0],tauschTermine[1][0]);
-			datenfeld.setFeld(kollege,1,bloecke[0],tauschTermine[1][1]);
-			datenfeld.setFeld(kollege,2,bloecke[0],tauschTermine[0][2]);
-			datenfeld.setFeld(kollege,3,bloecke[0],tauschTermine[1][3]);
-			/// rechnen aus startzeit und dauer 
-			int StartAktuell = (int) ZeitFunk.MinutenSeitMitternacht(tauschTermine[0][2]);
-			StartAktuell = StartAktuell + Integer.parseInt(tauschTermine[1][3]);
-			String EndeUhr = ZeitFunk.MinutenZuZeit(StartAktuell);		
-			datenfeld.setFeld(kollege,4,bloecke[0],EndeUhr);
-			/********/
-			//derzeit aktueller
-			datenfeld.setFeld(kollege,0,bloecke[1],tauschTermine[0][0]);
-			datenfeld.setFeld(kollege,1,bloecke[1],tauschTermine[0][1]);
-			datenfeld.setFeld(kollege,2,bloecke[1],EndeUhr);
-			datenfeld.setFeld(kollege,3,bloecke[1],tauschTermine[0][3]);
-			datenfeld.setFeld(kollege,4,bloecke[1],tauschTermine[1][4]);
-			/*
-			if(name.equals("") && reznr.equals("")){
-				System.out.println("Mit Nachfolgetermin tauschen leere Blöcke müssen zusammengefasst werden");
-			}
-			*/
-			KalenderBeschreiben kbs = new KalenderBeschreiben();
-			kbs.KalenderDaten(this.datenfeld,kollege ,db_datum,ibehandler);
-			//TerminFenster.thisClass.neuerBlockAktiv(bloecke[1]); 
-			return 1;
-		}
-		//return -1;
-	}
-	
-	
-	private void sucheNachLeerBlock(){
-		
-		
-	}
-	private int blockAufNull(){
-		////System.out.println("Kollege = "+this.kollege);
-		datenfeld.setFeld(kollege,0,0,"");
-		datenfeld.setFeld(kollege,1,0,"@FREI");
-		datenfeld.setFeld(kollege,2,0,SystemConfig.KalenderUmfang[0]);
-		long dauer = SystemConfig.KalenderMilli[1] - SystemConfig.KalenderMilli[0]; 
-		datenfeld.setFeld(kollege,3,0,Long.toString(dauer));
-		datenfeld.setFeld(kollege,4,0,SystemConfig.KalenderUmfang[1]);
-		while(datenfeld.getAnzahlBloecke(kollege)> 1){
-			datenfeld.loeschenBlock(kollege, 1);
-		}
-		datenfeld.setAnzahlBloecke(kollege,1);
-	KalenderBeschreiben kbs = new KalenderBeschreiben();
-	////System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
-	kbs.KalenderDaten(this.datenfeld, kollege,datum[spalte],dbBehandler);
-			return 1;
-}
+        // Blockzahl ermitteln und dann neuen Block einf�gen
+        int bloecke = block + 1;
+        int maxblock = datenfeld.getAnzahlBloecke(kollege);
+        datenfeld.einfuegenBlock(kollege, bloecke);
+        datenfeld.setAnzahlBloecke(kollege, maxblock + 1);
+        // jetzt den neuen Block mit alten Daten schreiben
+        datenfeld.setFeld(kollege, 0, bloecke, daten[0]);
+        datenfeld.setFeld(kollege, 1, bloecke, daten[1]);
+        datenfeld.setFeld(kollege, 2, bloecke, neueEndzeit);
+        datenfeld.setFeld(kollege, 3, bloecke, daten[3]);
+        datenfeld.setFeld(kollege, 4, bloecke, alteDaten[4]);
+
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        //// System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+"
+        //// dbBehandler="+dbBehandler);
+        kbs.KalenderDaten(this.datenfeld, kollege, datum[spalte], dbBehandler);
+        Reha.instance.terminpanel.terminAufnehmen(kollege, bloecke);
+        //// System.out.println("0="+alteDaten[0]+"1="+alteDaten[1]+"2="+alteDaten[2]+"3="+alteDaten[3]+"4="+alteDaten[4]);
+        // TerminFenster.starteUnlock();
+        return 1;
+    }
+
+    /*****************************************/
+    private int blockAusdehnen() {
+        //// System.out.println("Kollege = "+this.kollege);
+        datenfeld.setFeld(kollege, 0, block, daten[0]);
+        datenfeld.setFeld(kollege, 1, block, daten[1]);
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        //// System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+"
+        //// dbBehandler="+dbBehandler);
+        kbs.KalenderDaten(this.datenfeld, kollege, datum[spalte], dbBehandler);
+        Reha.instance.terminpanel.setAktiverBlock(block);
+        Reha.instance.terminpanel.terminAufnehmen(kollege, block);
+        // TerminFenster.starteUnlock();
+        return 1;
+    }
+
+    /*****************************************/
+    private int blockManuellStarten() {
+        String[] alteDaten = { null, null, null, null, null };
+        // int aktBlockzahl;
+        //// System.out.println("Blockanzahl zu Beginn:
+        // "+datenfeld.getAnzahlBloecke(kollege));
+        // Zuerste bisherige Blockdaten sichern
+        alteDaten[0] = datenfeld.getFeld(kollege, 0, block);// Text
+        alteDaten[1] = datenfeld.getFeld(kollege, 1, block);// RezNr.
+        alteDaten[2] = datenfeld.getFeld(kollege, 2, block);// Start
+        alteDaten[3] = datenfeld.getFeld(kollege, 3, block);// Dauer
+        alteDaten[4] = datenfeld.getFeld(kollege, 4, block);// Ende
+        int dummy = (int) (ZeitFunk.MinutenSeitMitternacht(daten[2]) - ZeitFunk.MinutenSeitMitternacht(alteDaten[2]));
+        // jetzt bisherige daten mit alten (korrigierten) Daten �berschreiben
+        datenfeld.setFeld(kollege, 0, block, alteDaten[0]);
+        datenfeld.setFeld(kollege, 1, block, alteDaten[1]);
+        datenfeld.setFeld(kollege, 2, block, alteDaten[2]);
+        datenfeld.setFeld(kollege, 3, block, Integer.valueOf(dummy)
+                                                    .toString());
+        String neueEndzeit = ZeitFunk.MinutenZuZeit((int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[2]) + dummy));
+        datenfeld.setFeld(kollege, 4, block, neueEndzeit);
+        // Blockzahl ermitteln und dann neuen Block einf�gen
+        int bloecke = block + 1;
+        int maxblock = datenfeld.getAnzahlBloecke(kollege);
+        datenfeld.einfuegenBlock(kollege, bloecke);
+        datenfeld.setAnzahlBloecke(kollege, maxblock + 1);
+        // jetzt den neuen Block mit alten Daten schreiben
+        datenfeld.setFeld(kollege, 0, bloecke, daten[0]);
+        datenfeld.setFeld(kollege, 1, bloecke, daten[1]);
+        datenfeld.setFeld(kollege, 2, bloecke, neueEndzeit);
+        datenfeld.setFeld(kollege, 3, bloecke, daten[3]);
+        neueEndzeit = ZeitFunk.MinutenZuZeit(
+                (int) (ZeitFunk.MinutenSeitMitternacht(daten[2]) + Integer.parseInt(daten[3])));
+        datenfeld.setFeld(kollege, 4, bloecke, neueEndzeit);
+        // Blockzahl ermitteln und dann neuen Block einf�gen
+        bloecke = bloecke + 1;
+        maxblock++;
+        datenfeld.einfuegenBlock(kollege, bloecke);
+        datenfeld.setAnzahlBloecke(kollege, maxblock + 1);
+
+        datenfeld.setFeld(kollege, 0, bloecke, alteDaten[0]);
+        datenfeld.setFeld(kollege, 1, bloecke, alteDaten[1]);
+        datenfeld.setFeld(kollege, 2, bloecke, neueEndzeit);
+        int differenz = (int) (ZeitFunk.MinutenSeitMitternacht(alteDaten[4])
+                - ZeitFunk.MinutenSeitMitternacht(neueEndzeit));
+        datenfeld.setFeld(kollege, 3, bloecke, Integer.toString(differenz));
+        datenfeld.setFeld(kollege, 4, bloecke, alteDaten[4]);
+
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        //// System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+"
+        //// dbBehandler="+dbBehandler);
+        kbs.KalenderDaten(this.datenfeld, kollege, datum[spalte], dbBehandler);
+        Reha.instance.terminpanel.terminAufnehmen(kollege, bloecke - 1);
+        Reha.instance.terminpanel.setAktiverBlock(bloecke - 1);
+        return 1;
+    }
+
+    /*****************************************/
+    private int blockNachfolgeKuerzen() {
+        String[] alteDaten = { null, null, null, null, null };
+
+        // Zuerste bisherige Blockdaten sichern
+        alteDaten[0] = datenfeld.getFeld(kollege, 0, block + 1);// Text
+        alteDaten[1] = datenfeld.getFeld(kollege, 1, block + 1);// RezNr.
+        alteDaten[2] = datenfeld.getFeld(kollege, 2, block + 1);// Start
+        alteDaten[3] = datenfeld.getFeld(kollege, 3, block + 1);// Dauer
+        alteDaten[4] = datenfeld.getFeld(kollege, 4, block + 1);// Ende
+        int dummy = (int) (ZeitFunk.MinutenSeitMitternacht(daten[2]) - ZeitFunk.MinutenSeitMitternacht(alteDaten[2]));
+        // jetzt bisherige daten mit alten (korrigierten) Daten �berschreiben
+        datenfeld.setFeld(kollege, 0, block, daten[0]);
+        datenfeld.setFeld(kollege, 1, block, daten[1]);
+        datenfeld.setFeld(kollege, 2, block, daten[2]);
+        datenfeld.setFeld(kollege, 3, block, daten[3]);
+        String neueEndzeit = ZeitFunk.MinutenZuZeit(
+                (int) (ZeitFunk.MinutenSeitMitternacht(daten[2]) + Integer.parseInt(daten[3])));
+        datenfeld.setFeld(kollege, 4, block, neueEndzeit);
+
+        datenfeld.setFeld(kollege, 0, block + 1, alteDaten[0]);
+        datenfeld.setFeld(kollege, 1, block + 1, alteDaten[1]);
+        datenfeld.setFeld(kollege, 2, block + 1, datenfeld.getFeld(kollege, 4, block));
+        dummy = (int) ZeitFunk.MinutenSeitMitternacht(datenfeld.getFeld(kollege, 4, block + 1))
+                - (int) ZeitFunk.MinutenSeitMitternacht(datenfeld.getFeld(kollege, 2, block + 1));
+        datenfeld.setFeld(kollege, 3, block + 1, Integer.toString(dummy));
+
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        //// System.out.println("Vermutlich falsch------>Kollege="+kollege+" Datum ist
+        //// gleich="+datum[spalte]+" dbBehandler="+dbBehandler);
+        kbs.KalenderDaten(this.datenfeld, kollege, datum[spalte], dbBehandler);
+        Reha.instance.terminpanel.terminAufnehmen(kollege, block);
+        return 1;
+    }
+
+    /*****************************************/
+    private int blockZusammenFassen() {
+        // String [] alteDaten = {null,null,null,null,null};
+        // int aktBlockzahl;
+        int[] grundDaten = TerminFenster.getThisClass()
+                                        .getGruppierenClipBoard();
+        int startBlock, endBlock;// ,anzahlBloecke,anzahlGesamt;
+        //// System.out.println("in
+        //// Block-Handling"+grundDaten[0]+"/"+grundDaten[1]+"/"+grundDaten[2]+"/"+grundDaten[3]);
+
+        if (grundDaten[0] > grundDaten[1]) {
+            startBlock = grundDaten[1];
+            endBlock = grundDaten[0];
+        } else {
+            startBlock = grundDaten[0];
+            endBlock = grundDaten[1];
+        }
+
+        // anzahlGesamt = Integer.parseInt(datenfeld.getFeld(grundDaten[3],5,0));
+        String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(grundDaten[3], 5, 4));
+        String db_behandler = datenfeld.getFeld(grundDaten[3], 5, 2);
+        int ibehandler = (db_behandler.substring(0, 1)
+                                      .equals("0") ? Integer.parseInt(db_behandler.substring(1, 2))
+                                              : Integer.parseInt(db_behandler.substring(0, 2)));
+        // anzahlBloecke = (endBlock - startBlock) +1;
+        String termin = datenfeld.getFeld(grundDaten[3], 0, grundDaten[0]);
+        String reznummer = datenfeld.getFeld(grundDaten[3], 1, grundDaten[0]);
+        String startuhr = datenfeld.getFeld(grundDaten[3], 2, startBlock);
+        String endeuhr = datenfeld.getFeld(grundDaten[3], 4, endBlock);
+        int startMinuten = (int) ZeitFunk.ZeitDifferenzInMinuten(startuhr, endeuhr);
+        String minuten = Integer.toString(startMinuten);
+
+        datenfeld.setFeld(grundDaten[3], 0, startBlock, termin);
+        datenfeld.setFeld(grundDaten[3], 1, startBlock, reznummer);
+        datenfeld.setFeld(grundDaten[3], 2, startBlock, startuhr);
+        datenfeld.setFeld(grundDaten[3], 3, startBlock, minuten);
+        datenfeld.setFeld(grundDaten[3], 4, startBlock, endeuhr);
+        for (int ii = endBlock; ii > startBlock; ii--) {
+            datenfeld.loeschenBlock(grundDaten[3], ii);
+        }
+
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        kbs.KalenderDaten(this.datenfeld, grundDaten[3], db_datum, ibehandler);
+
+        return 1;
+    }
+
+    /*****************************************/
+    private int blockFreiTermin() {
+        String[] alteDaten = { null, null, null, null, null };
+
+        String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(kollege, 5, 4));
+        String db_behandler = datenfeld.getFeld(kollege, 5, 2);
+        int ibehandler = (db_behandler.substring(0, 1)
+                                      .equals("0") ? Integer.parseInt(db_behandler.substring(1, 2))
+                                              : Integer.parseInt(db_behandler.substring(0, 2)));
+
+        alteDaten[0] = datenfeld.getFeld(kollege, 0, block);// Text
+        alteDaten[1] = datenfeld.getFeld(kollege, 1, block);// RezNr.
+        alteDaten[2] = datenfeld.getFeld(kollege, 2, block);// Start
+        alteDaten[3] = datenfeld.getFeld(kollege, 3, block);// Dauer
+        alteDaten[4] = datenfeld.getFeld(kollege, 4, block);// Ende
+
+        datenfeld.setFeld(kollege, 1, block, "@FREI");
+        TerminFenster.getThisClass()
+                     .setDatenSpeicher(alteDaten);
+
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        kbs.KalenderDaten(this.datenfeld, kollege, db_datum, ibehandler);
+
+        return 1;
+    }
+
+    /*****************************************/
+    private int blockLoeschen() {
+        try {
+            String[] alteDaten = { null, null, null, null, null };
+            String test1 = "";
+            String test2 = "";
+            String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(kollege, 5, 4));
+            String db_behandler = datenfeld.getFeld(kollege, 5, 2);
+            int ibehandler = (db_behandler.substring(0, 1) == "0" ? Integer.parseInt(db_behandler.substring(1, 2))
+                    : Integer.parseInt(db_behandler.substring(0, 2)));
+
+            int maxblock = Integer.parseInt(datenfeld.getFeld(kollege, 5, 0)) - 1;
+
+            alteDaten[0] = datenfeld.getFeld(kollege, 0, block);// Text
+            alteDaten[1] = datenfeld.getFeld(kollege, 1, block);// RezNr.
+            alteDaten[2] = datenfeld.getFeld(kollege, 2, block);// Start
+            alteDaten[3] = datenfeld.getFeld(kollege, 3, block);// Dauer
+            alteDaten[4] = datenfeld.getFeld(kollege, 4, block);// Ende
+            TerminFenster.getThisClass()
+                         .setDatenSpeicher(alteDaten);
+            // String termin = "";
+            // String reznummer = "";
+            int startBlock = block;
+            int endBlock = block;
+
+            if (block > 0) {
+                test1 = datenfeld.getFeld(kollege, 0, block - 1);// Text
+                test2 = datenfeld.getFeld(kollege, 1, block - 1);// Text
+                if (test1.trim()
+                         .equals("")
+                        && test2.trim()
+                                .equals("")) {
+                    startBlock = block - 1;
+                    Reha.instance.terminpanel.setAktiverBlock(startBlock);
+                    // System.out.println("startBlock = "+startBlock);
+                    alteDaten[2] = datenfeld.getFeld(kollege, 2, block - 1);// Start
+                }
+            }
+            if (block < maxblock) {
+                test1 = datenfeld.getFeld(kollege, 0, block + 1);// Text
+                test2 = datenfeld.getFeld(kollege, 1, block + 1);// Text
+                if (test1.trim()
+                         .equals("")
+                        && test2.trim()
+                                .equals("")) {
+                    endBlock = block + 1;
+                    // System.out.println("endBlock = "+endBlock);
+                    alteDaten[4] = datenfeld.getFeld(kollege, 4, block + 1);// Ende
+                }
+            }
+            datenfeld.setFeld(kollege, 0, startBlock, "");
+            datenfeld.setFeld(kollege, 1, startBlock, "");
+            datenfeld.setFeld(kollege, 2, startBlock, alteDaten[2]);
+            int dauer = (int) ZeitFunk.ZeitDifferenzInMinuten(alteDaten[2], alteDaten[4]);
+            String sdauer = Integer.toString(dauer);
+            datenfeld.setFeld(kollege, 3, startBlock, sdauer);
+            datenfeld.setFeld(kollege, 4, startBlock, alteDaten[4]);
+
+            for (int ii = endBlock; ii > startBlock; ii--) {
+                datenfeld.loeschenBlock(kollege, ii);
+            }
+            //// System.out.println("Aktiver Block 0 =
+            //// "+TerminFenster.thisClass.getAktiverBlock()[0]);
+            //// System.out.println("Aktiver Block 2 =
+            //// "+TerminFenster.thisClass.getAktiverBlock()[2]);
+            //// System.out.println("Block in löschenBlock = "+block);
+
+            KalenderBeschreiben kbs = new KalenderBeschreiben();
+            kbs.KalenderDaten(this.datenfeld, kollege, db_datum, ibehandler);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return -10;
+        }
+
+        return 1;
+    }
+
+    private int blockTauschen(int richtung) {
+        // -1 = mit Vorgänger
+        // +1 = mit Nachfolger
+        String[][] tauschTermine = { { null, null, null, null, null }, { null, null, null, null, null } };
+        int[] bloecke = { block, block + richtung };
+        String db_datum = DatFunk.sDatInDeutsch(datenfeld.getFeld(kollege, 5, 4));
+        String db_behandler = datenfeld.getFeld(kollege, 5, 2);
+        int ibehandler = (db_behandler.substring(0, 1)
+                                      .equals("0") ? Integer.parseInt(db_behandler.substring(1, 2))
+                                              : Integer.parseInt(db_behandler.substring(0, 2)));
+
+        for (int x = 0; x < 2; x++) {
+            for (int y = 0; y < 5; y++) {
+                tauschTermine[x][y] = datenfeld.getFeld(kollege, y, bloecke[x]);// Text
+            }
+        }
+        // String name = "";
+        // String reznr = "";
+        if (richtung < 0) {
+            // mit Vorgängerblock tauschen
+            // bisheriger Vorgänger
+            // name = datenfeld.getFeld(kollege,0,bloecke[1]);
+            // reznr = datenfeld.getFeld(kollege,1,bloecke[1]);
+            datenfeld.setFeld(kollege, 0, bloecke[1], tauschTermine[0][0]);
+            datenfeld.setFeld(kollege, 1, bloecke[1], tauschTermine[0][1]);
+            datenfeld.setFeld(kollege, 2, bloecke[1], tauschTermine[1][2]);
+            datenfeld.setFeld(kollege, 3, bloecke[1], tauschTermine[0][3]);
+            /// rechnen aus startzeit und dauer
+            int StartAktuell = (int) ZeitFunk.MinutenSeitMitternacht(tauschTermine[1][2]);
+            StartAktuell = StartAktuell + Integer.parseInt(tauschTermine[0][3]);
+            String EndeUhr = ZeitFunk.MinutenZuZeit(StartAktuell);
+            datenfeld.setFeld(kollege, 4, bloecke[1], EndeUhr);
+            /********/
+            // derzeit aktueller
+            datenfeld.setFeld(kollege, 0, bloecke[0], tauschTermine[1][0]);
+            datenfeld.setFeld(kollege, 1, bloecke[0], tauschTermine[1][1]);
+            datenfeld.setFeld(kollege, 2, bloecke[0], EndeUhr);
+            datenfeld.setFeld(kollege, 3, bloecke[0], tauschTermine[1][3]);
+            datenfeld.setFeld(kollege, 4, bloecke[0], tauschTermine[0][4]);
+            /*
+             * if(name.equals("") && reznr.equals("")){ System.out.
+             * println("Mit Vorgängerblock tauschen leere Blöcke müssen zusammengefasst werden"
+             * ); }
+             */
+            KalenderBeschreiben kbs = new KalenderBeschreiben();
+            kbs.KalenderDaten(this.datenfeld, kollege, db_datum, ibehandler);
+            // TerminFenster.thisClass.neuerBlockAktiv(bloecke[0]);
+            return 1;
+        } else {
+            // mit Nachfolgeblock tauschen
+            // bisheriger Vorgänger
+            // name = datenfeld.getFeld(kollege,0,bloecke[0]);
+            // reznr = datenfeld.getFeld(kollege,1,bloecke[0]);
+            datenfeld.setFeld(kollege, 0, bloecke[0], tauschTermine[1][0]);
+            datenfeld.setFeld(kollege, 1, bloecke[0], tauschTermine[1][1]);
+            datenfeld.setFeld(kollege, 2, bloecke[0], tauschTermine[0][2]);
+            datenfeld.setFeld(kollege, 3, bloecke[0], tauschTermine[1][3]);
+            /// rechnen aus startzeit und dauer
+            int StartAktuell = (int) ZeitFunk.MinutenSeitMitternacht(tauschTermine[0][2]);
+            StartAktuell = StartAktuell + Integer.parseInt(tauschTermine[1][3]);
+            String EndeUhr = ZeitFunk.MinutenZuZeit(StartAktuell);
+            datenfeld.setFeld(kollege, 4, bloecke[0], EndeUhr);
+            /********/
+            // derzeit aktueller
+            datenfeld.setFeld(kollege, 0, bloecke[1], tauschTermine[0][0]);
+            datenfeld.setFeld(kollege, 1, bloecke[1], tauschTermine[0][1]);
+            datenfeld.setFeld(kollege, 2, bloecke[1], EndeUhr);
+            datenfeld.setFeld(kollege, 3, bloecke[1], tauschTermine[0][3]);
+            datenfeld.setFeld(kollege, 4, bloecke[1], tauschTermine[1][4]);
+            /*
+             * if(name.equals("") && reznr.equals("")){ System.out.
+             * println("Mit Nachfolgetermin tauschen leere Blöcke müssen zusammengefasst werden"
+             * ); }
+             */
+            KalenderBeschreiben kbs = new KalenderBeschreiben();
+            kbs.KalenderDaten(this.datenfeld, kollege, db_datum, ibehandler);
+            // TerminFenster.thisClass.neuerBlockAktiv(bloecke[1]);
+            return 1;
+        }
+        // return -1;
+    }
+
+    private void sucheNachLeerBlock() {
+
+    }
+
+    private int blockAufNull() {
+        //// System.out.println("Kollege = "+this.kollege);
+        datenfeld.setFeld(kollege, 0, 0, "");
+        datenfeld.setFeld(kollege, 1, 0, "@FREI");
+        datenfeld.setFeld(kollege, 2, 0, SystemConfig.KalenderUmfang[0]);
+        long dauer = SystemConfig.KalenderMilli[1] - SystemConfig.KalenderMilli[0];
+        datenfeld.setFeld(kollege, 3, 0, Long.toString(dauer));
+        datenfeld.setFeld(kollege, 4, 0, SystemConfig.KalenderUmfang[1]);
+        while (datenfeld.getAnzahlBloecke(kollege) > 1) {
+            datenfeld.loeschenBlock(kollege, 1);
+        }
+        datenfeld.setAnzahlBloecke(kollege, 1);
+        KalenderBeschreiben kbs = new KalenderBeschreiben();
+        //// System.out.println("Kollege="+kollege+" Datum ist gleich="+datum[spalte]+"
+        //// dbBehandler="+dbBehandler);
+        kbs.KalenderDaten(this.datenfeld, kollege, datum[spalte], dbBehandler);
+        return 1;
+    }
 
 }

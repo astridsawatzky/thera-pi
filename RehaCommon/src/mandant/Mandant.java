@@ -6,6 +6,7 @@ public class Mandant {
 
     private IK ik;
     private String name;
+
     public Mandant(String ik, String name) {
         this.ik = new IK(ik);
         this.name = name;
@@ -14,6 +15,7 @@ public class Mandant {
     public String name() {
         return name;
     }
+
     public String ik() {
         return ik.digitString();
     }
@@ -21,8 +23,9 @@ public class Mandant {
     @Override
     public String toString() {
 
-        return name + " - IK"+ ik.digitString();
+        return name + " - IK" + ik.digitString();
     }
+
     @Override
     public int hashCode() {
         return Objects.hash(ik, name);

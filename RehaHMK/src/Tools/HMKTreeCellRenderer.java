@@ -12,109 +12,102 @@ import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import sun.swing.DefaultLookup;
 
-public class HMKTreeCellRenderer extends DefaultTreeCellRenderer{
-/**
-	 *
-	 */
-	private static final long serialVersionUID = -5690508896668147474L;
-	private JTree tree;
-	private boolean isDropCell;
-	private IndiKey indi;
-	private JXHMKTreeTableNode node ;
-	//DefaultTreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
-	   public HMKTreeCellRenderer(){
-		   super();
-	   }
+public class HMKTreeCellRenderer extends DefaultTreeCellRenderer {
+    /**
+    	 *
+    	 */
+    private static final long serialVersionUID = -5690508896668147474L;
+    private JTree tree;
+    private boolean isDropCell;
+    private IndiKey indi;
+    private JXHMKTreeTableNode node;
 
+    // DefaultTreeCellRenderer defaultRenderer = new DefaultTreeCellRenderer();
+    public HMKTreeCellRenderer() {
+        super();
+    }
 
-	   public Component getTableCellRendererComponent(JTree table,
-	                                                  Object value,
-	                                                  boolean isSelected,
-	                                                  boolean hasFocus,
-	                                                  int row,
-	                                                  int column) {
-		   System.out.println("in treecell renderer");
-		   setBackground(Color.BLACK);
-		   return this;
+    public Component getTableCellRendererComponent(JTree table, Object value, boolean isSelected, boolean hasFocus,
+            int row, int column) {
+        System.out.println("in treecell renderer");
+        setBackground(Color.BLACK);
+        return this;
 
-	   }
-	    @Override
-        public Component getTreeCellRendererComponent(JTree tree, Object value,
-                boolean sel,
-                boolean expanded,
-                boolean leaf, int row,
-                boolean hasFocus) {
-	    	String stringValue = null;
-	    	if(((JXHMKTreeTableNode)value).key != null){
-	    		node = ((JXHMKTreeTableNode)value);
-	    		indi = ((JXHMKTreeTableNode)value).key;
-	    		stringValue = indi.indischl;
-	    		setBackgroundSelectionColor((indi.ungerade ? HighlighterFactory.QUICKSILVER : HighlighterFactory.CLASSIC_LINE_PRINTER) );
-	    		setBackgroundNonSelectionColor((indi.ungerade ? HighlighterFactory.BEIGE : HighlighterFactory.CLASSIC_LINE_PRINTER) );
-	    		setBackground((indi.ungerade ? HighlighterFactory.BEIGE : HighlighterFactory.CLASSIC_LINE_PRINTER));
-	    		setTextSelectionColor(Color.RED);
-	    		//jXTreeTable.getColumnModel().getColumn(1).setCellEditor(myDate);
-	    	}else{
-	    		indi = null;
-	    		stringValue = tree.convertValueToText(value, sel,   expanded, leaf, row, hasFocus);
-	    	}
+    }
 
-	    	this.tree = tree;
+    @Override
+    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf,
+            int row, boolean hasFocus) {
+        String stringValue = null;
+        if (((JXHMKTreeTableNode) value).key != null) {
+            node = ((JXHMKTreeTableNode) value);
+            indi = ((JXHMKTreeTableNode) value).key;
+            stringValue = indi.indischl;
+            setBackgroundSelectionColor(
+                    (indi.ungerade ? HighlighterFactory.QUICKSILVER : HighlighterFactory.CLASSIC_LINE_PRINTER));
+            setBackgroundNonSelectionColor(
+                    (indi.ungerade ? HighlighterFactory.BEIGE : HighlighterFactory.CLASSIC_LINE_PRINTER));
+            setBackground((indi.ungerade ? HighlighterFactory.BEIGE : HighlighterFactory.CLASSIC_LINE_PRINTER));
+            setTextSelectionColor(Color.RED);
+            // jXTreeTable.getColumnModel().getColumn(1).setCellEditor(myDate);
+        } else {
+            indi = null;
+            stringValue = tree.convertValueToText(value, sel, expanded, leaf, row, hasFocus);
+        }
 
-	    	this.hasFocus = hasFocus;
-	    	setText(stringValue);
+        this.tree = tree;
 
-	    	Color fg = null;
-	    	isDropCell = false;
+        this.hasFocus = hasFocus;
+        setText(stringValue);
 
-	    	JTree.DropLocation dropLocation = tree.getDropLocation();
-	    	if (dropLocation != null
-	    			&& dropLocation.getChildIndex() == -1
-	    			&& tree.getRowForPath(dropLocation.getPath()) == row) {
+        Color fg = null;
+        isDropCell = false;
 
-	    		Color col = DefaultLookup.getColor(this, ui, "Tree.dropCellForeground");
-	    		if (col != null) {
-	    			fg = col;
-	    		} else {
-	    			fg = getTextSelectionColor();
-	    		}
+        JTree.DropLocation dropLocation = tree.getDropLocation();
+        if (dropLocation != null && dropLocation.getChildIndex() == -1
+                && tree.getRowForPath(dropLocation.getPath()) == row) {
 
-	    		isDropCell = true;
-	    	} else if (sel) {
-	    		fg = getTextSelectionColor();
-	    	} else {
-	    		fg = getTextNonSelectionColor();
-	    	}
+            Color col = DefaultLookup.getColor(this, ui, "Tree.dropCellForeground");
+            if (col != null) {
+                fg = col;
+            } else {
+                fg = getTextSelectionColor();
+            }
 
-	    	setForeground(fg);
+            isDropCell = true;
+        } else if (sel) {
+            fg = getTextSelectionColor();
+        } else {
+            fg = getTextNonSelectionColor();
+        }
 
-	    	Icon icon = null;
-	    	if (leaf) {
-	    		icon = getLeafIcon();
-	    	} else if (expanded) {
-	    		icon = getOpenIcon();
-	    	} else {
-	    		icon = getClosedIcon();
-	    	}
+        setForeground(fg);
 
-	    	if (!tree.isEnabled()) {
-	    		setEnabled(false);
-	    		LookAndFeel laf = UIManager.getLookAndFeel();
-	    		Icon disabledIcon = laf.getDisabledIcon(tree, icon);
-	    		if (disabledIcon != null) icon = disabledIcon;
-	    		setDisabledIcon(icon);
-	    	} else {
-	    		setEnabled(true);
-	    		setIcon(icon);
-	    	}
-	    	setComponentOrientation(tree.getComponentOrientation());
+        Icon icon = null;
+        if (leaf) {
+            icon = getLeafIcon();
+        } else if (expanded) {
+            icon = getOpenIcon();
+        } else {
+            icon = getClosedIcon();
+        }
 
-	    	selected = sel;
+        if (!tree.isEnabled()) {
+            setEnabled(false);
+            LookAndFeel laf = UIManager.getLookAndFeel();
+            Icon disabledIcon = laf.getDisabledIcon(tree, icon);
+            if (disabledIcon != null)
+                icon = disabledIcon;
+            setDisabledIcon(icon);
+        } else {
+            setEnabled(true);
+            setIcon(icon);
+        }
+        setComponentOrientation(tree.getComponentOrientation());
 
+        selected = sel;
 
-	    	return this;
-	    }
-
-
+        return this;
+    }
 
 }

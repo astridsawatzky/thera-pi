@@ -21,14 +21,14 @@ public class RehaSettings {
     private DataSource ds;
 
     public RehaSettings(Mandant mainMandant) throws IOException {
-        String iniPath = environment.Path.Instance.getProghome()+"ini/"+ mainMandant.ik()+"/rehajava.ini";
+        String iniPath = environment.Path.Instance.getProghome() + "ini/" + mainMandant.ik() + "/rehajava.ini";
         Path inifile = Paths.get(iniPath);
         if (Files.exists(inifile)) {
             ini = new Ini(inifile.toFile());
         } else {
             throw new FileNotFoundException(iniPath);
         }
-        ds =  extractservername();
+        ds = extractservername();
     }
 
     private DataSource extractservername() {
@@ -38,7 +38,8 @@ public class RehaSettings {
         MysqlDataSource mds = new MysqlDataSource();
         mds.setUrl(connectionUrl);
         mds.setUser(ini.get("DatenBank", "DBBenutzer1"));
-        mds.setPassword(Verschluesseln.getInstance().decrypt(ini.get("DatenBank", "DBPasswort1")));
+        mds.setPassword(Verschluesseln.getInstance()
+                                      .decrypt(ini.get("DatenBank", "DBPasswort1")));
         return mds;
     }
 
@@ -47,7 +48,4 @@ public class RehaSettings {
 
     }
 
-
-
 }
-

@@ -15,45 +15,42 @@ import org.jdesktop.swingx.JXPanel;
 import hauptFenster.Reha;
 
 public class SysUtilVorlage extends JXPanel implements KeyListener, ActionListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-	public SysUtilVorlage(ImageIcon img){
-		super(new BorderLayout());
-		this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
-		/****/
-		setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
-		/****/
-	     JLabel jlbl = new JLabel("");
-	     jlbl.setIcon(img);
-	     add(jlbl,BorderLayout.CENTER);
-	     //add(getVorlagenSeite());
-		return;
-	}
-	@Override
-	public void keyPressed(KeyEvent e) {
-		
-		
-	}
+    public SysUtilVorlage(ImageIcon img) {
+        super(new BorderLayout());
+        this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
+        /****/
+        setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
+        /****/
+        JLabel jlbl = new JLabel("");
+        jlbl.setIcon(img);
+        add(jlbl, BorderLayout.CENTER);
+        // add(getVorlagenSeite());
+        return;
+    }
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		
-		
-	}
+    @Override
+    public void keyPressed(KeyEvent e) {
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		
-		
-	}
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		
-	}
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
 
 }

@@ -31,209 +31,215 @@ import rehaContainer.RehaTP;
 import systemEinstellungen.SysUtilGruppenDef;
 import systemEinstellungen.SystemConfig;
 
-public class NeueGruppe implements KeyListener, ActionListener, FocusListener{
+public class NeueGruppe implements KeyListener, ActionListener, FocusListener {
 
-	//JRadioButton [] jrb = {null,null,null,null};
-	JXButton [] jb = {null,null};
-	JRtaTextField [] jrtaf = {null,null,null};
-	ButtonGroup jrbg = new ButtonGroup();
-	RehaSmartDialog rSmart = null;
-	boolean aktuell;
-	boolean neu;
-	int iAktion = 1;
-	String gruppe,abwann,dauer;
-	public NeueGruppe(String titel,String gruppe,String abwann,String dauer,boolean aktuell,boolean neu){
-	    this.aktuell = aktuell;
-	    this.gruppe = gruppe;
-	    this.abwann = abwann;
-	    this.dauer = dauer;
-	    this.neu = neu;
-		RehaTP jtp = new RehaTP();
-		jtp.setBorder(null);
-		jtp.setTitle(titel);
-		jtp.setContentContainer(getForm());
-	    jtp.setVisible(true);
-		rSmart = new RehaSmartDialog(null,"GruppenAnlage");
-		rSmart.setModal(true);
-		rSmart.setResizable(false);
-		rSmart.setSize(new Dimension(225,200));
-		rSmart.getTitledPanel().setTitle(titel);
-		rSmart.setContentPanel(jtp.getContentContainer());
-		//Toolkit toolkit = Toolkit.getDefaultToolkit();
-		//Dimension screenSize = toolkit.getScreenSize();
-		//int x = (screenSize.width - rSmart.getWidth()) / 2;
-		//int y = (screenSize.height - rSmart.getHeight()) / 2;
-		/****************************************************************/
-		//JXPanel tv = TerminFenster.getThisClass().getViewPanel();
+    // JRadioButton [] jrb = {null,null,null,null};
+    JXButton[] jb = { null, null };
+    JRtaTextField[] jrtaf = { null, null, null };
+    ButtonGroup jrbg = new ButtonGroup();
+    RehaSmartDialog rSmart = null;
+    boolean aktuell;
+    boolean neu;
+    int iAktion = 1;
+    String gruppe, abwann, dauer;
 
-		rSmart.setLocationRelativeTo(Reha.getThisFrame());
-		rSmart.setVisible(true);
+    public NeueGruppe(String titel, String gruppe, String abwann, String dauer, boolean aktuell, boolean neu) {
+        this.aktuell = aktuell;
+        this.gruppe = gruppe;
+        this.abwann = abwann;
+        this.dauer = dauer;
+        this.neu = neu;
+        RehaTP jtp = new RehaTP();
+        jtp.setBorder(null);
+        jtp.setTitle(titel);
+        jtp.setContentContainer(getForm());
+        jtp.setVisible(true);
+        rSmart = new RehaSmartDialog(null, "GruppenAnlage");
+        rSmart.setModal(true);
+        rSmart.setResizable(false);
+        rSmart.setSize(new Dimension(225, 200));
+        rSmart.getTitledPanel()
+              .setTitle(titel);
+        rSmart.setContentPanel(jtp.getContentContainer());
+        // Toolkit toolkit = Toolkit.getDefaultToolkit();
+        // Dimension screenSize = toolkit.getScreenSize();
+        // int x = (screenSize.width - rSmart.getWidth()) / 2;
+        // int y = (screenSize.height - rSmart.getHeight()) / 2;
+        /****************************************************************/
+        // JXPanel tv = TerminFenster.getThisClass().getViewPanel();
 
-		//jrb[0].requestFocus();
-	}
+        rSmart.setLocationRelativeTo(Reha.getThisFrame());
+        rSmart.setVisible(true);
 
-	private JXPanel getForm(){
+        // jrb[0].requestFocus();
+    }
 
-		FormLayout layout =
-			new FormLayout("10dlu,right:max(20dlu;p),2dlu,60dlu,10dlu,p,2dlu,p,100dlu",
-			"20dlu,p,3dlu,p,3dlu,p,15dlu,5dlu");
-			//new FormLayout("10dlu,p,4dlu,p,50dlu,p",
-			//		"10dlu,p,3dlu,p,3dlu,p,3dlu,p");
+    private JXPanel getForm() {
 
-		JXPanel xbuilder = new JXPanel();
-		xbuilder.setBorder(null);
-		xbuilder.setLayout(new BorderLayout());
-		xbuilder.setVisible(true);
-		//xbuilder.addFocusListener(this);
-		xbuilder.addKeyListener(this);
+        FormLayout layout = new FormLayout("10dlu,right:max(20dlu;p),2dlu,60dlu,10dlu,p,2dlu,p,100dlu",
+                "20dlu,p,3dlu,p,3dlu,p,15dlu,5dlu");
+        // new FormLayout("10dlu,p,4dlu,p,50dlu,p",
+        // "10dlu,p,3dlu,p,3dlu,p,3dlu,p");
 
-		PanelBuilder builder = new PanelBuilder(layout);
-		builder.getPanel().setBackground(Color.WHITE);
-		//builder.getPanel().setPreferredSize(new Dimension(400,150));
-		builder.getPanel().setOpaque(true);
+        JXPanel xbuilder = new JXPanel();
+        xbuilder.setBorder(null);
+        xbuilder.setLayout(new BorderLayout());
+        xbuilder.setVisible(true);
+        // xbuilder.addFocusListener(this);
+        xbuilder.addKeyListener(this);
 
-		CellConstraints cc = new CellConstraints();
-		builder.add(new JLabel("Gruppenname"),cc.xy(2,2));
-		jrtaf[0] = new JRtaTextField("GROSS",true);
-		//jrtaf[0].setPreferredSize(new Dimension(25,20));
-		jrtaf[0].setEnabled(true);
-		jrtaf[0].setText(this.gruppe);
-		builder.add(jrtaf[0],cc.xy(4,2));
+        PanelBuilder builder = new PanelBuilder(layout);
+        builder.getPanel()
+               .setBackground(Color.WHITE);
+        // builder.getPanel().setPreferredSize(new Dimension(400,150));
+        builder.getPanel()
+               .setOpaque(true);
 
-		builder.add(new JXLabel("Dauer im Kalender"),cc.xy(2,4));
-		jrtaf[1] = new JRtaTextField("ZAHLEN",true);
-		//jrtaf[1].setPreferredSize(new Dimension(25,20));
-		jrtaf[1].setEnabled(true);
-		jrtaf[1].setText(this.dauer);
-		builder.add(jrtaf[1],cc.xy(4,4));
+        CellConstraints cc = new CellConstraints();
+        builder.add(new JLabel("Gruppenname"), cc.xy(2, 2));
+        jrtaf[0] = new JRtaTextField("GROSS", true);
+        // jrtaf[0].setPreferredSize(new Dimension(25,20));
+        jrtaf[0].setEnabled(true);
+        jrtaf[0].setText(this.gruppe);
+        builder.add(jrtaf[0], cc.xy(4, 2));
 
+        builder.add(new JXLabel("Dauer im Kalender"), cc.xy(2, 4));
+        jrtaf[1] = new JRtaTextField("ZAHLEN", true);
+        // jrtaf[1].setPreferredSize(new Dimension(25,20));
+        jrtaf[1].setEnabled(true);
+        jrtaf[1].setText(this.dauer);
+        builder.add(jrtaf[1], cc.xy(4, 4));
 
-		if(this.aktuell){
-			builder.add(new JXLabel("gültig ab"),cc.xy(2,6));
-		}else{
-			builder.add(new JXLabel("gültig bis"),cc.xy(2,6));
-		}
-		jrtaf[2] = new JRtaTextField("DATUM",false);
-		//jrtaf[1].setPreferredSize(new Dimension(25,20));
-		jrtaf[2].setEnabled(true);
-		jrtaf[2].setText(this.abwann);
-		builder.add(jrtaf[2],cc.xy(4,6));
+        if (this.aktuell) {
+            builder.add(new JXLabel("gültig ab"), cc.xy(2, 6));
+        } else {
+            builder.add(new JXLabel("gültig bis"), cc.xy(2, 6));
+        }
+        jrtaf[2] = new JRtaTextField("DATUM", false);
+        // jrtaf[1].setPreferredSize(new Dimension(25,20));
+        jrtaf[2].setEnabled(true);
+        jrtaf[2].setText(this.abwann);
+        builder.add(jrtaf[2], cc.xy(4, 6));
 
+        builder.add(new JXLabel(""), cc.xy(2, 8));
 
-		builder.add(new JXLabel(""),cc.xy(2,8));
+        xbuilder.add(builder.getPanel(), BorderLayout.NORTH);
 
-		xbuilder.add(builder.getPanel(),BorderLayout.NORTH);
+        layout = new FormLayout("10dlu,p,25dlu,p,50dlu,p", "5dlu,p,10dlu,p,3dlu,p,3dlu,p,15dlu,p");
+        builder = new PanelBuilder(layout);
 
-		layout =
-			new FormLayout("10dlu,p,25dlu,p,50dlu,p",
-					"5dlu,p,10dlu,p,3dlu,p,3dlu,p,15dlu,p");
-		builder = new PanelBuilder(layout);
+        jb[0] = new JXButton("Ok");
+        jb[0].addKeyListener(this);
+        jb[0].addActionListener(this);
+        jb[0].setPreferredSize(new Dimension(75, jb[0].getPreferredSize().height));
+        builder.add(jb[0], cc.xy(2, 2));
 
-		jb[0] = new JXButton("Ok");
-		jb[0].addKeyListener(this);
-		jb[0].addActionListener(this);
-		jb[0].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		builder.add(jb[0],cc.xy(2,2));
+        jb[1] = new JXButton("Abbruch");
+        jb[1].addKeyListener(this);
+        jb[1].addActionListener(this);
+        jb[1].setPreferredSize(new Dimension(75, jb[0].getPreferredSize().height));
+        builder.add(jb[1], cc.xy(4, 2));
 
-		jb[1] = new JXButton("Abbruch");
-		jb[1].addKeyListener(this);
-		jb[1].addActionListener(this);
-		jb[1].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		builder.add(jb[1],cc.xy(4,2));
+        builder.add(new JXLabel(""), cc.xy(4, 3));
 
-		builder.add(new JXLabel(""),cc.xy(4,3));
+        xbuilder.add(builder.getPanel(), BorderLayout.CENTER);
+        return xbuilder;
+    }
 
-		xbuilder.add(builder.getPanel(),BorderLayout.CENTER);
-		return xbuilder;
-	}
+    @Override
+    public void keyPressed(KeyEvent e) {
 
-	@Override
-	public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == 10) {
+            if (!endeRegeln()) {
+                e.consume();
+                return;
+            }
+            rSmart.dispose();
+        }
+        if (e.getKeyCode() == 27) {
+            e.consume();
+            SysUtilGruppenDef.neuGruppenName = "";
+            SysUtilGruppenDef.neuGruppenGueltigAb = "";
+            SysUtilGruppenDef.neuGruppenDauer = "0";
+            rSmart.dispose();
+        }
 
-		if(e.getKeyCode()==10){
-			if(!endeRegeln()){e.consume();return;}
-			rSmart.dispose();
-		}
-		if(e.getKeyCode()==27){
-			e.consume();
-			SysUtilGruppenDef.neuGruppenName = "";
-			SysUtilGruppenDef.neuGruppenGueltigAb = "";
-			SysUtilGruppenDef.neuGruppenDauer = "0";
-			rSmart.dispose();
-		}
+    }
 
-	}
+    private boolean endeRegeln() {
+        // String [] sret = {jrtaf[0].getText(),jrtaf[1].getText()};
+        if (this.neu) {
+            if (SystemConfig.oGruppen.gruppenNamen.contains(jrtaf[0].getText()
+                                                                    .trim())) {
+                JOptionPane.showMessageDialog(null, "Dieser Gruppenname ist bereits vorhanden!");
+                jrtaf[0].requestFocus();
+                return false;
+            }
+        }
+        if (jrtaf[0].getText()
+                    .trim()
+                    .equals("")) {
+            JOptionPane.showMessageDialog(null, "Der Gruppenname darf nicht leer sein!");
+            jrtaf[0].requestFocus();
+            return false;
+        }
+        SysUtilGruppenDef.neuGruppenName = jrtaf[0].getText()
+                                                   .trim();
+        SysUtilGruppenDef.neuGruppenDauer = jrtaf[1].getText();
+        SysUtilGruppenDef.neuGruppenGueltigAb = jrtaf[2].getText();
 
-	private boolean endeRegeln(){
-		//String [] sret = {jrtaf[0].getText(),jrtaf[1].getText()};
-		if(this.neu){
-			if(SystemConfig.oGruppen.gruppenNamen.contains(jrtaf[0].getText().trim())){
-				JOptionPane.showMessageDialog(null,"Dieser Gruppenname ist bereits vorhanden!");
-				jrtaf[0].requestFocus();
-				return false;
-			}
-		}
-		if(jrtaf[0].getText().trim().equals("")){
-			JOptionPane.showMessageDialog(null,"Der Gruppenname darf nicht leer sein!");
-			jrtaf[0].requestFocus();
-			return false;
-		}
-		SysUtilGruppenDef.neuGruppenName = jrtaf[0].getText().trim();
-		SysUtilGruppenDef.neuGruppenDauer = jrtaf[1].getText();
-		SysUtilGruppenDef.neuGruppenGueltigAb = jrtaf[2].getText();
+        return true;
+    }
 
-		return true;
-	}
-	@Override
-	public void keyReleased(KeyEvent e) {
+    @Override
+    public void keyReleased(KeyEvent e) {
 
+    }
 
-	}
+    @Override
+    public void keyTyped(KeyEvent e) {
 
-	@Override
-	public void keyTyped(KeyEvent e) {
+    }
 
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
 
-	}
+        //// System.out.println(arg0.getSource());
+        String sAktion = ((AbstractButton) arg0.getSource()).getText();
+        for (int i = 0; i < 1; i++) {
+            if (sAktion == "Ok") {
+                if (!endeRegeln()) {
+                    return;
+                }
+                rSmart.dispose();
+                break;
+            }
+            if (sAktion == "Abbruch") {
+                SysUtilGruppenDef.neuGruppenName = "";
+                SysUtilGruppenDef.neuGruppenGueltigAb = "";
+                SysUtilGruppenDef.neuGruppenDauer = "0";
+                rSmart.dispose();
+                break;
+            }
+        }
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
+    }
 
-		////System.out.println(arg0.getSource());
-		String sAktion = ((AbstractButton) arg0.getSource()).getText();
-		for (int i = 0 ; i < 1 ; i++){
-			if(sAktion=="Ok"){
-				if(!endeRegeln()){return;}
-				rSmart.dispose();
-				break;
-			}
-			if(sAktion=="Abbruch"){
-				SysUtilGruppenDef.neuGruppenName = "";
-				SysUtilGruppenDef.neuGruppenGueltigAb = "";
-				SysUtilGruppenDef.neuGruppenDauer = "0";
-				rSmart.dispose();
-				break;
-			}
-		}
+    @Override
+    public void focusGained(FocusEvent arg0) {
+        //// System.out.println(arg0);
+        if (arg0.getSource() instanceof JRadioButton) {
+            ((AbstractButton) arg0.getSource()).setSelected(true);
+            // String sAktion = ((AbstractButton) arg0.getSource()).getText();
+            for (int i = 0; i < 1; i++) {
+            }
+        }
 
-	}
-	@Override
-	public void focusGained(FocusEvent arg0) {
-		////System.out.println(arg0);
-		if(arg0.getSource() instanceof JRadioButton){
-			((AbstractButton) arg0.getSource()).setSelected(true);
-			//String sAktion = ((AbstractButton) arg0.getSource()).getText();
-			for (int i = 0 ; i < 1 ; i++){
-			}
-		}
+    }
 
+    @Override
+    public void focusLost(FocusEvent arg0) {
 
-	}
-
-	@Override
-	public void focusLost(FocusEvent arg0) {
-
-
-	}
+    }
 
 }

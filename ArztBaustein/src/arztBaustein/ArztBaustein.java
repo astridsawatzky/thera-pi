@@ -1,7 +1,5 @@
 package arztBaustein;
 
-
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
@@ -26,123 +24,111 @@ import sql.Datenquelle;
 
 public class ArztBaustein {
 
-	
+    private IOfficeApplication officeapplication;
+    Connection conn = null;
 
-	private IOfficeApplication officeapplication;
-	Connection conn = null;
+    JXFrame jFrame = null;
 
-	JXFrame jFrame = null;
-
-
-
-	ArztBausteinPanel arztbausteinpanel = null;
+    ArztBausteinPanel arztbausteinpanel = null;
 
     public ArztBaustein(Connection connection, IOfficeApplication officeapplication) {
-        conn=connection;
-        this.officeapplication=officeapplication;
+        conn = connection;
+        this.officeapplication = officeapplication;
     }
 
     public static void main(String[] args) throws SQLException {
         new Logging("arztbaustein");
         String proghome = args[0];
-        IK  ik = new IK(args[1]);
-        
-        
+        IK ik = new IK(args[1]);
+
         String OpenOfficePfad = "C:/Program Files (x86)/OpenOffice.org 3";
         String OpenOfficeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg";
-   
+
         if (args.length > 0) {
             System.out.println("hole daten aus INI-Datei " + proghome);
-            INIFile ini = new INIFile(proghome + "ini/" +ik.digitString() + "/rehajava.ini");
+            INIFile ini = new INIFile(proghome + "ini/" + ik.digitString() + "/rehajava.ini");
 
-          
             OpenOfficePfad = ini.getStringProperty("OpenOffice.org", "OfficePfad");
             OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
         }
 
-       IOfficeApplication officeapp = starteOfficeApplication(OpenOfficePfad, OpenOfficeNativePfad);
-       
-        start(ik,officeapp);
+        IOfficeApplication officeapp = starteOfficeApplication(OpenOfficePfad, OpenOfficeNativePfad);
+
+        start(ik, officeapp);
 
     }
 
     public static void start(IK ik, IOfficeApplication officeapplication) throws SQLException {
         Datenquelle dq = new Datenquelle(ik);
-      
+
         Connection connection = dq.connection();
-        ArztBaustein arztbaustein = new ArztBaustein(connection,officeapplication);
+        ArztBaustein arztbaustein = new ArztBaustein(connection, officeapplication);
         arztbaustein.getJFrame();
     }
 
-	public JXFrame getJFrame(){
-		if (jFrame == null) {
-			jFrame = new JXFrame();
+    public JXFrame getJFrame() {
+        if (jFrame == null) {
+            jFrame = new JXFrame();
 
+            try {
+                UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (UnsupportedLookAndFeelException e) {
+                e.printStackTrace();
+            }
 
+            jFrame.addWindowListener(new WindowAdapter() {
+                public void windowClosed(WindowEvent arg0) {
+                    closeconnection();
+                }
+            });
+            jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            jFrame.setPreferredSize(new Dimension(1024, 800));
 
-			try {
-				UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (UnsupportedLookAndFeelException e) {
-				e.printStackTrace();
-			}
+            jFrame.setTitle("Bausteine für ärztlichen Entlassbericht anlegen / ändern");
 
-			
-			jFrame.addWindowListener(new WindowAdapter() {
-			    public void windowClosed(WindowEvent arg0) {
-		                closeconnection();
-		        }
-                        });
-			jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			jFrame.setPreferredSize(new Dimension(1024,800));
+            jFrame.getContentPane()
+                  .setPreferredSize(new Dimension(1024, 800));
+            jFrame.getContentPane()
+                  .setLayout(new GridLayout());
+            jFrame.getContentPane()
+                  .add(arztbausteinpanel = new ArztBausteinPanel(this, this.officeapplication));
+            WindowListener wl = new ArztBausteinWindowlistener(arztbausteinpanel);
+            jFrame.addWindowListener(wl);
+            jFrame.setVisible(true);
 
-			jFrame.setTitle("Bausteine für ärztlichen Entlassbericht anlegen / ändern");
+            jFrame.pack();
 
-
-			jFrame.getContentPane().setPreferredSize(new Dimension(1024,800));
-			jFrame.getContentPane().setLayout(new GridLayout());
-			jFrame.getContentPane().add ( arztbausteinpanel=new ArztBausteinPanel(this,  this.officeapplication));
-			WindowListener wl = new ArztBausteinWindowlistener(arztbausteinpanel);
-                        jFrame.addWindowListener(wl);
-			jFrame.setVisible(true);
-
-			jFrame.pack();
-
-		}
-		return jFrame;
-	}
-
-
-
-	public void closeconnection() {
-        if(conn != null){
-			try {
-				conn.close();
-				System.out.println("Datenbankverbindung wurde geschlossen-2");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+        }
+        return jFrame;
     }
-	
 
-    public static IOfficeApplication starteOfficeApplication(String ooPath, String ooNativePath)
-    {
-    	IOfficeApplication application =null;
+    public void closeconnection() {
+        if (conn != null) {
+            try {
+                conn.close();
+                System.out.println("Datenbankverbindung wurde geschlossen-2");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static IOfficeApplication starteOfficeApplication(String ooPath, String ooNativePath) {
+        IOfficeApplication application = null;
         try {
-			 application  = new StartOOApplication(ooPath,ooNativePath).start();
-			 System.out.println("OpenOffice ist gestartet und Active ="+application.isActive());
-		} catch (OfficeApplicationException e1) {
-			e1.printStackTrace();
-		}
-    	return application;
+            application = new StartOOApplication(ooPath, ooNativePath).start();
+            System.out.println("OpenOffice ist gestartet und Active =" + application.isActive());
+        } catch (OfficeApplicationException e1) {
+            e1.printStackTrace();
+        }
+        return application;
 
     }
-
 
 }

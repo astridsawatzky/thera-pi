@@ -15,57 +15,61 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import hauptFenster.Reha;
 
-public class RehaSplash extends JXDialog{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2264881674273471822L;
-	public JLabel lbl = null;
-	public RehaSplash thisClass;
-	public RehaSplash(Image img,String string){
-		super((JComponent)Reha.getThisFrame().getGlassPane());
-		thisClass = this;
-		this.setUndecorated(true);
-		this.setSize(550,75);
-		this.getContentPane().add(getSplash(img,string));
-		this.setLocationRelativeTo(null);
-		this.setModal(false);
-		toFront();
-		this.setVisible(true);
+public class RehaSplash extends JXDialog {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -2264881674273471822L;
+    public JLabel lbl = null;
+    public RehaSplash thisClass;
 
-		
-	}
-	private JXPanel getSplash(Image img,String string){
-		JXPanel jpan = new JXPanel();
-		jpan.setBorder(null);
-		jpan.setBackground(Color.WHITE);
-		FormLayout lay = new FormLayout("fill:0:grow(0.50),p,fill:0:grow(0.50)","fill:0:grow(0.50),p,fill:0:grow(0.50)");
-		CellConstraints cc = new CellConstraints();
-		jpan.setLayout(lay);
-		lbl = new JLabel(string);
-		lbl.setForeground(Color.RED);
-		lbl.setFont(new Font("Tahoma",Font.BOLD,12));
-		jpan.add(lbl,cc.xy(2,2));
-		return jpan;
-	}
-	
-	public void setNewText(String txt){
-		lbl.setText(txt);
-		lbl.repaint();
-		try {
-			Thread.sleep(30);
-		} catch (InterruptedException e) {
-			
-			e.printStackTrace();
-		}
+    public RehaSplash(Image img, String string) {
+        super((JComponent) Reha.getThisFrame()
+                               .getGlassPane());
+        thisClass = this;
+        this.setUndecorated(true);
+        this.setSize(550, 75);
+        this.getContentPane()
+            .add(getSplash(img, string));
+        this.setLocationRelativeTo(null);
+        this.setModal(false);
+        toFront();
+        this.setVisible(true);
 
-	}
-	
-	public void splashBeenden(boolean beenden){
-		if(beenden){
-			setVisible(false);
-			dispose();
-		}
-	}
+    }
+
+    private JXPanel getSplash(Image img, String string) {
+        JXPanel jpan = new JXPanel();
+        jpan.setBorder(null);
+        jpan.setBackground(Color.WHITE);
+        FormLayout lay = new FormLayout("fill:0:grow(0.50),p,fill:0:grow(0.50)",
+                "fill:0:grow(0.50),p,fill:0:grow(0.50)");
+        CellConstraints cc = new CellConstraints();
+        jpan.setLayout(lay);
+        lbl = new JLabel(string);
+        lbl.setForeground(Color.RED);
+        lbl.setFont(new Font("Tahoma", Font.BOLD, 12));
+        jpan.add(lbl, cc.xy(2, 2));
+        return jpan;
+    }
+
+    public void setNewText(String txt) {
+        lbl.setText(txt);
+        lbl.repaint();
+        try {
+            Thread.sleep(30);
+        } catch (InterruptedException e) {
+
+            e.printStackTrace();
+        }
+
+    }
+
+    public void splashBeenden(boolean beenden) {
+        if (beenden) {
+            setVisible(false);
+            dispose();
+        }
+    }
 
 }

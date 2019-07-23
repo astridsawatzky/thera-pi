@@ -1,54 +1,71 @@
 package mandant;
 
-
-
 import java.util.Objects;
 import java.util.regex.Pattern;
-/** Das IK ist ein eindeutiges Merkmal für die Abrechnung medizinischer und rehabilitativer
- * Leistungen mit den Traegern der Sozialversicherung (Krankenkassen, Berufsgenossen-
- * schaften, Unfallkassen, Rentenversicherung, Bundesagentur fuer Arbeit). <p>
+
+/**
+ * Das IK ist ein eindeutiges Merkmal für die Abrechnung medizinischer und
+ * rehabilitativer Leistungen mit den Traegern der Sozialversicherung
+ * (Krankenkassen, Berufsgenossen- schaften, Unfallkassen, Rentenversicherung,
+ * Bundesagentur fuer Arbeit).
+ * <p>
  *
- * Das IK besteht aus den Buchstaben "IK" driekt gefolgt von 9 Ziffern<p>
+ * Das IK besteht aus den Buchstaben "IK" driekt gefolgt von 9 Ziffern
+ * <p>
  *
- * Ziffer<p>
- * 1-2 Klassifikation <p>
- * 3-4 Regionalbereich <p>
- * 5-8 Seriennummer <p>
- * 9 Pruefziffer (aus den Stellen 3 bis 8) <p>
+ * Ziffer
+ * <p>
+ * 1-2 Klassifikation
+ * <p>
+ * 3-4 Regionalbereich
+ * <p>
+ * 5-8 Seriennummer
+ * <p>
+ * 9 Pruefziffer (aus den Stellen 3 bis 8)
+ * <p>
  *
- * Klassifikation: <p>
- * Die Stellen 1 und 2 bezeichnen die Art
- * der Institution oder die Personengruppe.<p>
+ * Klassifikation:
+ * <p>
+ * Die Stellen 1 und 2 bezeichnen die Art der Institution oder die
+ * Personengruppe.
+ * <p>
  *
- * Regionalbereich: <p>
- * Die Stellen 3 und 4 bezeichnen den Regionalbereich.<p>
+ * Regionalbereich:
+ * <p>
+ * Die Stellen 3 und 4 bezeichnen den Regionalbereich.
+ * <p>
  *
- * Seriennummer: <p>
- * Die Stellen 5 bis 8 enthalten die Seriennummer. Die
- * Seriennummern sind grundsaetzlich frei verwendbar, sofern nicht
- * Seriennummern- Kontingente festgelegt worden sind.<p>
+ * Seriennummer:
+ * <p>
+ * Die Stellen 5 bis 8 enthalten die Seriennummer. Die Seriennummern sind
+ * grundsaetzlich frei verwendbar, sofern nicht Seriennummern- Kontingente
+ * festgelegt worden sind.
+ * <p>
  *
- * Pruefziffer: <p>
- * Die Stelle 9 enthält die aus den Stellen 3 bis 8 errechnete
- * Pruefziffer (also ohne Einbeziehung der Klassifikation). Die Berechnung
- * erfolgt nach dem Modulo-10-Verfahren von rechts beginnend mit der Gewich-
- * tung 1.2.1.2.1.2.<p> Quelle :arge-ik.de
+ * Pruefziffer:
+ * <p>
+ * Die Stelle 9 enthält die aus den Stellen 3 bis 8 errechnete Pruefziffer (also
+ * ohne Einbeziehung der Klassifikation). Die Berechnung erfolgt nach dem
+ * Modulo-10-Verfahren von rechts beginnend mit der Gewich- tung 1.2.1.2.1.2.
+ * <p>
+ * Quelle :arge-ik.de
  **/
 public class IK {
-   private static final Pattern IK_FORMAT = Pattern.compile("\\d{9}");
+    private static final Pattern IK_FORMAT = Pattern.compile("\\d{9}");
     private final String ik_ziffern;
     private final String wellFormed;
 
     /**
-    *
-    * @param ik ein 9-stelliger String der ausschliesslich aus Ziffern besteht.
-    */
+     *
+     * @param ik ein 9-stelliger String der ausschliesslich aus Ziffern besteht.
+     */
     public IK(String ik) {
-        if(!IK_FORMAT.matcher(ik).matches()) {
+        if (!IK_FORMAT.matcher(ik)
+                      .matches()) {
             throw new IllegalArgumentException(ik + " is not a valid IK");
         }
         this.ik_ziffern = ik;
-        this.wellFormed = "IK"+ ik;
+        this.wellFormed = "IK" + ik;
 
     }
 
@@ -60,23 +77,20 @@ public class IK {
         return wellFormed;
     }
 
-
     /**
      *
      * @return true wenn die Nummer das Modulo-10-Verfahren besteht.
      */
     public boolean isValid() {
         char[] digitschar = ik_ziffern.toCharArray();
-        int sum=0;
-        for (int i =3 ;i<=8; i++) {
-            int numericValue = Character.getNumericValue(digitschar[i-1]);
-            int locSum = numericValue +numericValue*(i%2);
-            sum += locSum>9 ? locSum -9 : locSum;
+        int sum = 0;
+        for (int i = 3; i <= 8; i++) {
+            int numericValue = Character.getNumericValue(digitschar[i - 1]);
+            int locSum = numericValue + numericValue * (i % 2);
+            sum += locSum > 9 ? locSum - 9 : locSum;
         }
-        return sum%10==Character.getNumericValue(digitschar[8]);
+        return sum % 10 == Character.getNumericValue(digitschar[8]);
     }
-
-
 
     @Override
     public String toString() {
@@ -99,8 +113,5 @@ public class IK {
         IK other = (IK) obj;
         return Objects.equals(ik_ziffern, other.ik_ziffern);
     }
-
-
-
 
 }

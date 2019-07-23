@@ -34,7 +34,7 @@ public class LoginPanel extends JPanel {
         public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-               
+
                 pwButton.doClick();
             }
 
@@ -69,7 +69,7 @@ public class LoginPanel extends JPanel {
         gridBagConstraints.anchor = GridBagConstraints.CENTER;
         gridBagConstraints.fill = GridBagConstraints.NONE;
         gridBagConstraints.ipadx = 0;
-        
+
         gridBagConstraints.weightx = 1.0D;
         gridBagConstraints.weighty = 1.0D;
         gridBagConstraints.insets = new Insets(10, 10, 10, 10);

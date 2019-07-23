@@ -19,7 +19,8 @@ public class LoginSmartDialog extends RehaSmartDialog {
         jtp.setVisible(true);
         setAlwaysOnTop(false);
         if (fullsize) {
-            setSize(Toolkit.getDefaultToolkit().getScreenSize());
+            setSize(Toolkit.getDefaultToolkit()
+                           .getScreenSize());
         } else {
             setSize(new Dimension(700, 300));
         }

@@ -29,8 +29,7 @@ public class TheraPi {
         SysOutOverSLF4J.sendSystemOutAndErrToSLF4J();
 
         logger = LoggerFactory.getLogger(TheraPi.class);
-        
-        
+
         if (isAcceptedJavaversion()) {
             setLookAndFeel();
             String proghome = Path.Instance.getProghome();
@@ -51,7 +50,8 @@ public class TheraPi {
                 logger.debug(current.toString());
                 startReha(current);
             } else {
-                logger.debug(liste.defaultMandant().toString());
+                logger.debug(liste.defaultMandant()
+                                  .toString());
                 startReha(liste.defaultMandant());
 
             }
@@ -91,7 +91,8 @@ public class TheraPi {
     private static void setLookAndFeel() {
         for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 
-            if (info.getName().contains("PlasticXP")) {
+            if (info.getName()
+                    .contains("PlasticXP")) {
 
                 try {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());

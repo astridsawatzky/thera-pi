@@ -1,4 +1,5 @@
 package therapiHilfe;
+
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -26,98 +27,100 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 
 public class SimpleApp extends JFrame {
 
-  private IOfficeApplication officeApplication = null;
-  private IFrame             officeFrame       = null;
-  private ITextDocument      document          = null;
-  private JPanel             noaPanel          = null;
+    private IOfficeApplication officeApplication = null;
+    private IFrame officeFrame = null;
+    private ITextDocument document = null;
+    private JPanel noaPanel = null;
 
-  public SimpleApp() {
-    super(SimpleApp.class.getName());
-    getContentPane().setLayout(new GridLayout());
-    noaPanel = new JPanel();
-    getContentPane().add(noaPanel);
-    setSize(500, 500);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setVisible(true);
-    fillNOAPanel();
-    
-    addWindowListener(new WindowAdapter() {
-      @Override
-    public void windowClosing(WindowEvent windowEvent) {
-        try {
-          if (document != null)
-            document.close();
-          document = null;
-          if (officeApplication != null) {
-            officeApplication.deactivate();
-            //officeApplication.dispose();
-            officeApplication = null;
-          }
-        }
-        catch (OfficeApplicationException applicationException) {
-          //do not consume
-        }
-      }
-    });
-  }
+    public SimpleApp() {
+        super(SimpleApp.class.getName());
+        getContentPane().setLayout(new GridLayout());
+        noaPanel = new JPanel();
+        getContentPane().add(noaPanel);
+        setSize(500, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        fillNOAPanel();
 
-  private void fillNOAPanel() {
-    if (noaPanel != null) {
-      try {
-        if (officeApplication == null)
-          officeApplication = startOOO();
-        officeFrame = constructOOOFrame(officeApplication, noaPanel);
-        document = (ITextDocument) officeApplication.getDocumentService().constructNewDocument(officeFrame,
-            IDocument.WRITER,
-            DocumentDescriptor.DEFAULT);
-
-        noaPanel.setVisible(true);
-      }
-      catch (Throwable throwable) {
-        noaPanel.add(new JLabel("An error occured while creating the NOA panel: " + throwable.getMessage()));
-      }
-    }
-  }
-
-  private IOfficeApplication startOOO() throws Throwable {
-	  IApplicationAssistant applicationAssistant = new ApplicationAssistant("C:\\RehaVerwaltung\\RTAJars\\openofficeorg");
-	  //IApplicationAssistant applicationAssistant = new ApplicationAssistant(System.getProperty("user.dir") + "\\lib");
-    ILazyApplicationInfo[] appInfos = applicationAssistant.getLocalApplications();
-    for(int i = 0; i < appInfos.length;i++){
-    	//System.out.println(appInfos[i]);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                try {
+                    if (document != null)
+                        document.close();
+                    document = null;
+                    if (officeApplication != null) {
+                        officeApplication.deactivate();
+                        // officeApplication.dispose();
+                        officeApplication = null;
+                    }
+                } catch (OfficeApplicationException applicationException) {
+                    // do not consume
+                }
+            }
+        });
     }
 
-    if (appInfos.length < 1)
-      throw new Throwable("No OpenOffice.org Application found.");
-    HashMap configuration = new HashMap();
-    configuration.put(IOfficeApplication.APPLICATION_HOME_KEY, appInfos[0].getHome());
-    configuration.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
-    IOfficeApplication officeAplication = OfficeApplicationRuntime.getApplication(configuration);
+    private void fillNOAPanel() {
+        if (noaPanel != null) {
+            try {
+                if (officeApplication == null)
+                    officeApplication = startOOO();
+                officeFrame = constructOOOFrame(officeApplication, noaPanel);
+                document = (ITextDocument) officeApplication.getDocumentService()
+                                                            .constructNewDocument(officeFrame, IDocument.WRITER,
+                                                                    DocumentDescriptor.DEFAULT);
 
-    officeAplication.setConfiguration(configuration);
-    officeAplication.activate();
-    return officeAplication;
-  }
+                noaPanel.setVisible(true);
+            } catch (Throwable throwable) {
+                noaPanel.add(new JLabel("An error occured while creating the NOA panel: " + throwable.getMessage()));
+            }
+        }
+    }
 
-  private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent)
-      throws Throwable {
-    final NativeView nativeView = new NativeView("C:\\RehaVerwaltung\\RTAJars\\openofficeorg");
-    parent.add(nativeView);
-    parent.addComponentListener(new ComponentAdapter() {
-      @Override
-    public void componentResized(ComponentEvent e) {
+    private IOfficeApplication startOOO() throws Throwable {
+        IApplicationAssistant applicationAssistant = new ApplicationAssistant(
+                "C:\\RehaVerwaltung\\RTAJars\\openofficeorg");
+        // IApplicationAssistant applicationAssistant = new
+        // ApplicationAssistant(System.getProperty("user.dir") + "\\lib");
+        ILazyApplicationInfo[] appInfos = applicationAssistant.getLocalApplications();
+        for (int i = 0; i < appInfos.length; i++) {
+            // System.out.println(appInfos[i]);
+        }
+
+        if (appInfos.length < 1)
+            throw new Throwable("No OpenOffice.org Application found.");
+        HashMap configuration = new HashMap();
+        configuration.put(IOfficeApplication.APPLICATION_HOME_KEY, appInfos[0].getHome());
+        configuration.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
+        IOfficeApplication officeAplication = OfficeApplicationRuntime.getApplication(configuration);
+
+        officeAplication.setConfiguration(configuration);
+        officeAplication.activate();
+        return officeAplication;
+    }
+
+    private IFrame constructOOOFrame(IOfficeApplication officeApplication, final Container parent) throws Throwable {
+        final NativeView nativeView = new NativeView("C:\\RehaVerwaltung\\RTAJars\\openofficeorg");
+        parent.add(nativeView);
+        parent.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
+                parent.getLayout()
+                      .layoutContainer(parent);
+            }
+        });
         nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
-        parent.getLayout().layoutContainer(parent);
-      }
-    });
-    nativeView.setPreferredSize(new Dimension(parent.getWidth() - 5, parent.getHeight() - 5));
-    parent.getLayout().layoutContainer(parent);
-    IFrame officeFrame = officeApplication.getDesktopService().constructNewOfficeFrame(nativeView);
-    parent.validate();
-    return officeFrame;
-  }
+        parent.getLayout()
+              .layoutContainer(parent);
+        IFrame officeFrame = officeApplication.getDesktopService()
+                                              .constructNewOfficeFrame(nativeView);
+        parent.validate();
+        return officeFrame;
+    }
 
-  public static void main(String[] argv) {
-    new SimpleApp();
-  }
+    public static void main(String[] argv) {
+        new SimpleApp();
+    }
 }

@@ -36,7 +36,6 @@ import logging.Logging;
 
 public class RehaSql implements WindowListener {
 
-    
     public static boolean DbOk;
     public static JFrame thisFrame = null;
     public Connection conn;
@@ -52,12 +51,11 @@ public class RehaSql implements WindowListener {
     static String progHome = C_REHA_VERWALTUNG;
     static String aktIK = RTA_IK;
 
-   
     private static int xport = -1;
     private RehaReverseServer rehaReverseServer = null;
     static int rehaReversePort = -1;
     private SqlInfo sqlInfo = null;
-    static boolean hasEditRights =true;
+    static boolean hasEditRights = true;
 
     public static void main(String[] args) {
         boolean argumentsGiven = args.length > 0;
@@ -66,7 +64,7 @@ public class RehaSql implements WindowListener {
                     "Keine Datenbankparameter übergeben!\nReha-Sql kann nicht gestartet werden");
             return;
         }
-        
+
         final String path = args[0];
         final String aktik = args[1];
         final String port = args[2];
@@ -85,13 +83,12 @@ public class RehaSql implements WindowListener {
         RehaSql application = new RehaSql();
         application.getInstance();
         application.getInstance().sqlInfo = new SqlInfo();
-        
-        if (argumentsGiven ) {
-            
 
-                start(path, aktik, application);
+        if (argumentsGiven) {
+
+            start(path, aktik, application);
         } else {
-   
+
         }
 
     }
@@ -118,34 +115,32 @@ public class RehaSql implements WindowListener {
         aktIK = aktik;
         INITool.init(progHome + "ini/" + aktIK + "/");
 
-         
-
-         final RehaSql xapplication = application;
-         new SwingWorker<Void, Void>() {
-        @Override
-        protected Void doInBackground() {
-            xapplication.starteDB();
-            long zeit = System.currentTimeMillis();
-            while (!DbOk) {
-                try {
-                    Thread.sleep(20);
-                    if (System.currentTimeMillis() - zeit > 10000) {
-                        System.exit(0);
+        final RehaSql xapplication = application;
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() {
+                xapplication.starteDB();
+                long zeit = System.currentTimeMillis();
+                while (!DbOk) {
+                    try {
+                        Thread.sleep(20);
+                        if (System.currentTimeMillis() - zeit > 10000) {
+                            System.exit(0);
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+                if (!DbOk) {
+                    JOptionPane.showMessageDialog(null,
+                            "Datenbank konnte nicht geöffnet werden!\nReha-Sql kann nicht gestartet werden");
+                }
+                RehaSql.starteOfficeApplication();
+                return null;
             }
-            if (!DbOk) {
-                JOptionPane.showMessageDialog(null,
-                        "Datenbank konnte nicht geöffnet werden!\nReha-Sql kann nicht gestartet werden");
-            }
-            RehaSql.starteOfficeApplication();
-            return null;
-        }
 
-         }.execute();
-         application.getJFrame();
+        }.execute();
+        application.getJFrame();
     }
 
     /********************/
@@ -210,7 +205,8 @@ public class RehaSql implements WindowListener {
                 + "] - Äußerste Vorsicht ist geboten!!!");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
-        jFrame.getContentPane().add(new RehaSqlTab());
+        jFrame.getContentPane()
+              .add(new RehaSqlTab());
         jFrame.setVisible(true);
         thisFrame = jFrame;
         try {
@@ -250,7 +246,8 @@ public class RehaSql implements WindowListener {
                 }
             }
             try {
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
+                Class.forName("com.mysql.jdbc.Driver")
+                     .newInstance();
             } catch (InstantiationException | ClassNotFoundException | IllegalAccessException e) {
                 e.printStackTrace();
                 System.out.println(sDB + "Treiberfehler: " + e.getMessage());
@@ -339,8 +336,8 @@ public class RehaSql implements WindowListener {
 
     public static void starteOfficeApplication() {
         try {
-            officeapplication = new StartOOApplication(RehaSql.officeProgrammPfad, RehaSql.officeNativePfad)
-                    .start(false);
+            officeapplication = new StartOOApplication(RehaSql.officeProgrammPfad, RehaSql.officeNativePfad).start(
+                    false);
             System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
         } catch (OfficeApplicationException e1) {
             e1.printStackTrace();

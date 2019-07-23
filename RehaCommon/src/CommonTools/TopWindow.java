@@ -12,73 +12,68 @@ import com.sun.star.uno.UnoRuntime;
 
 import ag.ion.bion.officelayer.document.IDocument;
 
-public class TopWindow implements XTopWindowListener{
-	XWindow xWindow = null;
-	XExtendedToolkit myExtToolkit = null;
-	IDocument xdocument = null;
-	
-	public TopWindow(IDocument doc){
-		
-		//Scheißworkaround wg. Java 7
-		xdocument = doc;
-		
-		
-		XWindowPeer myWindowPeer = UnoRuntime.queryInterface (XWindowPeer.class,xdocument.getFrame().getXFrame().getContainerWindow());
+public class TopWindow implements XTopWindowListener {
+    XWindow xWindow = null;
+    XExtendedToolkit myExtToolkit = null;
+    IDocument xdocument = null;
 
-    	XToolkit myToolkit = myWindowPeer.getToolkit();
-    	
-    	myExtToolkit = UnoRuntime.queryInterface (XExtendedToolkit.class, myToolkit);
-    	
-    	myExtToolkit.addTopWindowListener(this);
-		
-	}
-	@Override
-	public void disposing(EventObject arg0) {
-		
-		
-	}
+    public TopWindow(IDocument doc) {
 
-	@Override
-	public void windowActivated(EventObject arg0) {
-    	KeyboardFocusManager focman = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-    	focman.clearGlobalFocusOwner();
-	}
+        // Scheißworkaround wg. Java 7
+        xdocument = doc;
 
-	@Override
-	public void windowClosed(EventObject arg0) {
-		myExtToolkit.removeTopWindowListener(this);
-		
-	}
+        XWindowPeer myWindowPeer = UnoRuntime.queryInterface(XWindowPeer.class, xdocument.getFrame()
+                                                                                         .getXFrame()
+                                                                                         .getContainerWindow());
 
-	@Override
-	public void windowClosing(EventObject arg0) {
-		
-		
-	}
+        XToolkit myToolkit = myWindowPeer.getToolkit();
 
-	@Override
-	public void windowDeactivated(EventObject arg0) {
-		
-		
-	}
+        myExtToolkit = UnoRuntime.queryInterface(XExtendedToolkit.class, myToolkit);
 
-	@Override
-	public void windowMinimized(EventObject arg0) {
-		
-		
-	}
+        myExtToolkit.addTopWindowListener(this);
 
-	@Override
-	public void windowNormalized(EventObject arg0) {
-		
-		
-	}
+    }
 
-	@Override
-	public void windowOpened(EventObject arg0) {
-		
-		
-	}
-	
+    @Override
+    public void disposing(EventObject arg0) {
+
+    }
+
+    @Override
+    public void windowActivated(EventObject arg0) {
+        KeyboardFocusManager focman = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        focman.clearGlobalFocusOwner();
+    }
+
+    @Override
+    public void windowClosed(EventObject arg0) {
+        myExtToolkit.removeTopWindowListener(this);
+
+    }
+
+    @Override
+    public void windowClosing(EventObject arg0) {
+
+    }
+
+    @Override
+    public void windowDeactivated(EventObject arg0) {
+
+    }
+
+    @Override
+    public void windowMinimized(EventObject arg0) {
+
+    }
+
+    @Override
+    public void windowNormalized(EventObject arg0) {
+
+    }
+
+    @Override
+    public void windowOpened(EventObject arg0) {
+
+    }
 
 }

@@ -38,288 +38,296 @@ import events.RehaTPEventClass;
 import events.RehaTPEventListener;
 import hauptFenster.Reha;
 
-public class KassenFormulare extends JXDialog implements FocusListener, ActionListener, WindowListener, KeyListener,RehaTPEventListener{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1061187207556100041L;
-	String eigenName = null;
-	KassenFormulare thisClass;
-	JXPanel jcc;
-	JXPanel jpan;
-	JList jList1;
-	int ret = -1;
-	private JButton okButton = null;
-	private JButton abbruchButton = null;
-	private MouseAdapter mymouse = null;
-	private RehaTPEventClass rtp = null;
-	int wahl;
-	Vector<String>titel = null;
-	Vector<String>formular = null;
-	private JXTitledPanel jtp = null;
-	private JRtaTextField tfrueck = null;
-	public KassenFormulare(JXFrame owner,Vector<String>titel,JRtaTextField rueckform){
-		super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
-		this.titel = titel;
-		//this.formular = formular;
-		tfrueck = rueckform;
-		tfrueck.setText("");
-		this.setUndecorated(true);
-		this.setName("KFormularWahl");
-		jtp = new JXTitledPanel();
-		this.jtp.setName("KFormularWahl");
-		mymouse = new DragWin(this);
-		jtp.addMouseListener(mymouse);
-		jtp.addMouseMotionListener(mymouse);
-		jtp.setContentContainer(getSetWahl());
-		jtp.setTitleForeground(Color.WHITE);
-		jtp.setTitle("Brief / Formular auswählen");
-		PinPanel pinPanel = new PinPanel();
-		pinPanel.getGruen().setVisible(false);
-		pinPanel.setName("KFormularWahl");
-		jtp.setRightDecoration(pinPanel);
-		
-		this.setContentPane(jtp);
-		
-		
-		setModal(true);
-		setResizable(false);
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+public class KassenFormulare extends JXDialog
+        implements FocusListener, ActionListener, WindowListener, KeyListener, RehaTPEventListener {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1061187207556100041L;
+    String eigenName = null;
+    KassenFormulare thisClass;
+    JXPanel jcc;
+    JXPanel jpan;
+    JList jList1;
+    int ret = -1;
+    private JButton okButton = null;
+    private JButton abbruchButton = null;
+    private MouseAdapter mymouse = null;
+    private RehaTPEventClass rtp = null;
+    int wahl;
+    Vector<String> titel = null;
+    Vector<String> formular = null;
+    private JXTitledPanel jtp = null;
+    private JRtaTextField tfrueck = null;
 
-		thisClass = this;
-		setSize(250,250);
-		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener(this);
-		validate();
-		
-		SwingUtilities.invokeLater(new Runnable(){
-			@Override
-            public void run(){
-				setzeFocus();
-			}
-		});
+    public KassenFormulare(JXFrame owner, Vector<String> titel, JRtaTextField rueckform) {
+        super(owner, (JComponent) Reha.getThisFrame()
+                                      .getGlassPane());
+        this.titel = titel;
+        // this.formular = formular;
+        tfrueck = rueckform;
+        tfrueck.setText("");
+        this.setUndecorated(true);
+        this.setName("KFormularWahl");
+        jtp = new JXTitledPanel();
+        this.jtp.setName("KFormularWahl");
+        mymouse = new DragWin(this);
+        jtp.addMouseListener(mymouse);
+        jtp.addMouseMotionListener(mymouse);
+        jtp.setContentContainer(getSetWahl());
+        jtp.setTitleForeground(Color.WHITE);
+        jtp.setTitle("Brief / Formular auswählen");
+        PinPanel pinPanel = new PinPanel();
+        pinPanel.getGruen()
+                .setVisible(false);
+        pinPanel.setName("KFormularWahl");
+        jtp.setRightDecoration(pinPanel);
 
+        this.setContentPane(jtp);
 
-	}
-	public void aufErsteElement(){
-		SwingUtilities.invokeLater(new Runnable(){
-			@Override
-            public void run(){
-				setzeFocus();
-			}
-		});
-	}
-	private void setzeFocus(){
-		SwingUtilities.invokeLater(new Runnable(){
-			@Override
-            public void run(){
-				jList1.requestFocus();
-				jList1.setSelectedIndex(0);
-			}
-		});
-	}		
+        setModal(true);
+        setResizable(false);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-	public KassenFormulare getInstance(){
-		return this;
-	}
-	private JXPanel getSetWahl(){
-		JXPanel jpan = new JXPanel(new BorderLayout());
-		jpan.add(new JScrollPane(getJList1()), BorderLayout.CENTER);
-		JXPanel dummy = new JXPanel(new BorderLayout());
-		dummy.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-		//dummy.addMouseListener(this);
-		dummy.addKeyListener(this);
+        thisClass = this;
+        setSize(250, 250);
+        rtp = new RehaTPEventClass();
+        rtp.addRehaTPEventListener(this);
+        validate();
 
-		JXPanel dummy2 = new JXPanel( new GridLayout(1,4,7,10));
-		dummy2.setName("dummy2");
-		//dummy2.addMouseListener(this);
-		dummy2.addKeyListener(this);
-		dummy2.add(new JLabel(""));
-		okButton = new JButton("Ok");
-		okButton.setActionCommand("ok");
-		okButton.addActionListener(this);
-		dummy2.add(okButton);
-		abbruchButton = new JButton("Abbruch");
-		abbruchButton.setActionCommand("abbrechen");		
-		abbruchButton.addActionListener(this);
-		dummy2.add(abbruchButton);
-		dummy2.add(new JLabel(""));
-		dummy.add(dummy2,BorderLayout.CENTER);
-		jpan.add(dummy,BorderLayout.SOUTH);
-		return jpan;
-	}
-	private JList getJList1() {
-		final DefaultListModel model = new DefaultListModel();
-		if (jList1 == null) {
-			jList1 = new JList(model);
-			jList1.addKeyListener(this);
-			jList1.addMouseListener(new MouseAdapter(){
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					
-					if (arg0.getClickCount() == 2){
-						tfrueck.setText(Integer.toString(jList1.getSelectedIndex()));
-						//KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
-						getInstance().FensterSchliessen("dieses");
-						//KassenFormulare.thisClass.FensterSchliessen("dieses");
-					}
-				}
-			});
-			ListeFuellen(model);
-		}
-		return jList1;
-	}
-	private void ListeFuellen(DefaultListModel model){
-		int i,max = 0;
-		//max = KassenPanel.thisClass.titel.size();
-		max = titel.size();
-		//String[] fach = new String[max];
-		for(i=0;i<max;i++){
-			//model.add(i,(String)KassenPanel.thisClass.titel.get(i));
-			model.add(i,titel.get(i));
-		}
-		return;
-	}
-	
-	public void FensterSchliessen(String welches){
-		this.jtp.removeMouseListener(mymouse);
-		this.jtp.removeMouseMotionListener(this.mymouse);
-		mymouse = null; 
-		if(rtp != null){
-			rtp.removeRehaTPEventListener(this);
-			rtp=null;			
-		}
-		setVisible(false);
-		this.dispose();
-	}	
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setzeFocus();
+            }
+        });
 
-	private void DialogBeenden(int wie){
-		FensterSchliessen("dieses");
-	}
+    }
 
-	@Override
-	public void focusGained(FocusEvent arg0) {
-		
-		
-	}
-	@Override
-	public void focusLost(FocusEvent arg0) {
-		
-		
-	}
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		
-		//System.out.println(arg0.getKeyCode());
-		if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
-			//arg0.consume();
-			if(ret != -1){
-				//System.out.println("Beendet mit oben "+jList1.getSelectedIndex());
-				tfrueck.setText(Integer.toString(jList1.getSelectedIndex()));
-				//KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
-				FensterSchliessen("Dieses");
-				return;
-			}else{
-				//System.out.println("Beendet mit unten "+jList1.getSelectedIndex());
-				tfrueck.setText(Integer.toString(jList1.getSelectedIndex()));
-				//KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
-				FensterSchliessen("Dieses");
-				return;
-			}	
-		}
-		if (arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
-			//System.out.println("ESC gedr�ckt");	
-			tfrueck.setText(Integer.toString(-1));
-			//KassenPanel.thisClass.iformular = -1;
-			DialogBeenden(-1);
-			return;
-		}
-		
-	}
-	@Override
-	public void keyReleased(KeyEvent arg0) {
+    public void aufErsteElement() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                setzeFocus();
+            }
+        });
+    }
 
-		
-		
-	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		
-	}	
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-		if(rtp != null){
-			rtp.removeRehaTPEventListener(this);
-			//System.out.println("EventListener geschlossen");	
-		}
-		if(mymouse != null){
-			jtp.removeMouseListener(mymouse);
-			mymouse = null;			
-		}
-	}
-	
-	@Override
+    private void setzeFocus() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                jList1.requestFocus();
+                jList1.setSelectedIndex(0);
+            }
+        });
+    }
+
+    public KassenFormulare getInstance() {
+        return this;
+    }
+
+    private JXPanel getSetWahl() {
+        JXPanel jpan = new JXPanel(new BorderLayout());
+        jpan.add(new JScrollPane(getJList1()), BorderLayout.CENTER);
+        JXPanel dummy = new JXPanel(new BorderLayout());
+        dummy.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        // dummy.addMouseListener(this);
+        dummy.addKeyListener(this);
+
+        JXPanel dummy2 = new JXPanel(new GridLayout(1, 4, 7, 10));
+        dummy2.setName("dummy2");
+        // dummy2.addMouseListener(this);
+        dummy2.addKeyListener(this);
+        dummy2.add(new JLabel(""));
+        okButton = new JButton("Ok");
+        okButton.setActionCommand("ok");
+        okButton.addActionListener(this);
+        dummy2.add(okButton);
+        abbruchButton = new JButton("Abbruch");
+        abbruchButton.setActionCommand("abbrechen");
+        abbruchButton.addActionListener(this);
+        dummy2.add(abbruchButton);
+        dummy2.add(new JLabel(""));
+        dummy.add(dummy2, BorderLayout.CENTER);
+        jpan.add(dummy, BorderLayout.SOUTH);
+        return jpan;
+    }
+
+    private JList getJList1() {
+        final DefaultListModel model = new DefaultListModel();
+        if (jList1 == null) {
+            jList1 = new JList(model);
+            jList1.addKeyListener(this);
+            jList1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent arg0) {
+
+                    if (arg0.getClickCount() == 2) {
+                        tfrueck.setText(Integer.toString(jList1.getSelectedIndex()));
+                        // KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
+                        getInstance().FensterSchliessen("dieses");
+                        // KassenFormulare.thisClass.FensterSchliessen("dieses");
+                    }
+                }
+            });
+            ListeFuellen(model);
+        }
+        return jList1;
+    }
+
+    private void ListeFuellen(DefaultListModel model) {
+        int i, max = 0;
+        // max = KassenPanel.thisClass.titel.size();
+        max = titel.size();
+        // String[] fach = new String[max];
+        for (i = 0; i < max; i++) {
+            // model.add(i,(String)KassenPanel.thisClass.titel.get(i));
+            model.add(i, titel.get(i));
+        }
+        return;
+    }
+
+    public void FensterSchliessen(String welches) {
+        this.jtp.removeMouseListener(mymouse);
+        this.jtp.removeMouseMotionListener(this.mymouse);
+        mymouse = null;
+        if (rtp != null) {
+            rtp.removeRehaTPEventListener(this);
+            rtp = null;
+        }
+        setVisible(false);
+        this.dispose();
+    }
+
+    private void DialogBeenden(int wie) {
+        FensterSchliessen("dieses");
+    }
+
+    @Override
+    public void focusGained(FocusEvent arg0) {
+
+    }
+
+    @Override
+    public void focusLost(FocusEvent arg0) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent arg0) {
+
+        // System.out.println(arg0.getKeyCode());
+        if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+            // arg0.consume();
+            if (ret != -1) {
+                // System.out.println("Beendet mit oben "+jList1.getSelectedIndex());
+                tfrueck.setText(Integer.toString(jList1.getSelectedIndex()));
+                // KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
+                FensterSchliessen("Dieses");
+                return;
+            } else {
+                // System.out.println("Beendet mit unten "+jList1.getSelectedIndex());
+                tfrueck.setText(Integer.toString(jList1.getSelectedIndex()));
+                // KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
+                FensterSchliessen("Dieses");
+                return;
+            }
+        }
+        if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            // System.out.println("ESC gedr�ckt");
+            tfrueck.setText(Integer.toString(-1));
+            // KassenPanel.thisClass.iformular = -1;
+            DialogBeenden(-1);
+            return;
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent arg0) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent arg0) {
+        if (rtp != null) {
+            rtp.removeRehaTPEventListener(this);
+            // System.out.println("EventListener geschlossen");
+        }
+        if (mymouse != null) {
+            jtp.removeMouseListener(mymouse);
+            mymouse = null;
+        }
+    }
+
+    @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		
-		//System.out.println("****************Schließen des KassenFormular **************");
-		String ss =  getName();
-		//System.out.println(getName()+" Eltern "+ss);
-		try{
-			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
-				FensterSchliessen(evt.getDetails()[0]);
-				rtp.removeRehaTPEventListener(this);
-			}	
-		}catch(NullPointerException ne){
-			//System.out.println("Schließen des KassenFormular" +evt);
-		}
-	}
 
-	@Override
-	public void windowActivated(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowClosing(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowDeactivated(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowDeiconified(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowIconified(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowOpened(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		String cmd = arg0.getActionCommand();
-		if(cmd.equals("ok")){
-			tfrueck.setText(Integer.valueOf(jList1.getSelectedIndex()).toString());
-			//KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
-			FensterSchliessen("Dieses");
-		}
-		if(cmd.equals("abbrechen")){
-			tfrueck.setText(Integer.toString(-1));
-			//KassenPanel.thisClass.iformular = -1;
-			FensterSchliessen("Dieses");
-		}
-	}
-	
-	
+        // System.out.println("****************Schließen des KassenFormular
+        // **************");
+        String ss = getName();
+        // System.out.println(getName()+" Eltern "+ss);
+        try {
+            if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1] == "ROT") {
+                FensterSchliessen(evt.getDetails()[0]);
+                rtp.removeRehaTPEventListener(this);
+            }
+        } catch (NullPointerException ne) {
+            // System.out.println("Schließen des KassenFormular" +evt);
+        }
+    }
+
+    @Override
+    public void windowActivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+
+        String cmd = arg0.getActionCommand();
+        if (cmd.equals("ok")) {
+            tfrueck.setText(Integer.valueOf(jList1.getSelectedIndex())
+                                   .toString());
+            // KassenPanel.thisClass.iformular = jList1.getSelectedIndex();
+            FensterSchliessen("Dieses");
+        }
+        if (cmd.equals("abbrechen")) {
+            tfrueck.setText(Integer.toString(-1));
+            // KassenPanel.thisClass.iformular = -1;
+            FensterSchliessen("Dieses");
+        }
+    }
 
 }

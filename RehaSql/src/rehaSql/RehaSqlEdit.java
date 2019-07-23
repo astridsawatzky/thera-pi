@@ -10,34 +10,31 @@ import javax.swing.event.TableModelListener;
 
 import org.jdesktop.swingx.JXPanel;
 
-public class RehaSqlEdit extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener  {
+public class RehaSqlEdit extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
 
-    public RehaSqlEdit(){
-		super();
+    public RehaSqlEdit() {
+        super();
 
-	}
+    }
 
-	@Override
-	public void valueChanged(ListSelectionEvent arg0) {
-		
-		
-	}
+    @Override
+    public void valueChanged(ListSelectionEvent arg0) {
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		
-	}
+    }
 
-	@Override
-	public void tableChanged(TableModelEvent arg0) {
-		
-		
-	} 
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+
+    }
+
+    @Override
+    public void tableChanged(TableModelEvent arg0) {
+
+    }
 
 }

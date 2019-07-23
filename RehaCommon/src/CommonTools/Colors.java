@@ -2,58 +2,53 @@ package CommonTools;
 
 import java.awt.Color;
 
-  
-
 /**
-
-* Colors is an enumeration class that makes it easier to work with colors. Methods are provided for
-
-* conversion to hex strings, and for getting alpha channel colors.
-
-*
-
-* @author Nazmul Idris
-
-* @version 1.0
-
-* @since Apr 21, 2007, 12:55:24 PM
-
-*/
+ * 
+ * Colors is an enumeration class that makes it easier to work with colors.
+ * Methods are provided for
+ * 
+ * conversion to hex strings, and for getting alpha channel colors.
+ *
+ * 
+ * 
+ * @author Nazmul Idris
+ * 
+ * @version 1.0
+ * 
+ * @since Apr 21, 2007, 12:55:24 PM
+ * 
+ */
 
 public enum Colors {
-
-  
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 // various colors in the pallete
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-Pink(255, 175, 175),
+    Pink(255, 175, 175),
 
-Green(159, 205, 20),
+    Green(159, 205, 20),
 
-Orange(213, 113, 13),
+    Orange(213, 113, 13),
 
-Yellow(Color.yellow),
+    Yellow(Color.yellow),
 
-Red(189, 67, 67),
+    Red(189, 67, 67),
 
-LightBlue(208, 223, 245),
+    LightBlue(208, 223, 245),
 
-Blue(Color.blue),
+    Blue(Color.blue),
 
-Black(0, 0, 0),
+    Black(0, 0, 0),
 
-White(255, 255, 255),
+    White(255, 255, 255),
 
-TaskPaneBlau(112,141,223),
+    TaskPaneBlau(112, 141, 223),
 
-PiOrange(231,120,23),
+    PiOrange(231, 120, 23),
 
-Gray(Color.gray.getRed(), Color.gray.getGreen(), Color.gray.getBlue());
-
-  
+    Gray(Color.gray.getRed(), Color.gray.getGreen(), Color.gray.getBlue());
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -61,39 +56,29 @@ Gray(Color.gray.getRed(), Color.gray.getGreen(), Color.gray.getBlue());
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-   
+    Colors(Color c) {
 
-Colors(Color c) {
+        _myColor = c;
 
-_myColor = c;
+    }
 
-}
+    Colors(int r, int g, int b) {
 
-  
+        _myColor = new Color(r, g, b);
 
-Colors(int r, int g, int b) {
+    }
 
-_myColor = new Color(r, g, b);
+    Colors(int r, int g, int b, int alpha) {
 
-}
+        _myColor = new Color(r, g, b, alpha);
 
-  
+    }
 
-Colors(int r, int g, int b, int alpha) {
+    Colors(float r, float g, float b, float alpha) {
 
-_myColor = new Color(r, g, b, alpha);
+        _myColor = new Color(r, g, b, alpha);
 
-}
-
-  
-
-Colors(float r, float g, float b, float alpha) {
-
-_myColor = new Color(r, g, b, alpha);
-
-}
-
-
+    }
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -101,11 +86,7 @@ _myColor = new Color(r, g, b, alpha);
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-  
-
-private Color _myColor;
-
-  
+    private Color _myColor;
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
@@ -113,80 +94,67 @@ private Color _myColor;
 
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-  
+    public Color alpha(float t) {
 
-public Color alpha(float t) {
+        return new Color(_myColor.getRed(), _myColor.getGreen(), _myColor.getBlue(), (int) (t * 255f));
 
-return new Color(_myColor.getRed(), _myColor.getGreen(), _myColor.getBlue(), (int) (t * 255f));
+    }
 
-}
+    public static Color alpha(Color c, float t) {
 
-  
+        return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int) (t * 255f));
 
-public static Color alpha(Color c, float t) {
+    }
 
-return new Color(c.getRed(), c.getGreen(), c.getBlue(), (int) (t * 255f));
+    public Color color() {
+        return _myColor;
+    }
 
-}
+    public Color color(float f) {
 
-  
+        return alpha(f);
 
-public Color color() { return _myColor; }
+    }
 
-  
+    @Override
+    public String toString() {
 
-public Color color(float f) {
+        StringBuilder sb = new StringBuilder();
 
-return alpha(f);
+        sb.append("r=")
 
-}
+          .append(_myColor.getRed())
 
-  
+          .append(", g=")
 
-@Override
-public String toString() {
+          .append(_myColor.getGreen())
 
-StringBuilder sb = new StringBuilder();
+          .append(", b=")
 
-sb.append("r=")
+          .append(_myColor.getBlue())
 
-.append(_myColor.getRed())
+          .append("\n");
 
-.append(", g=")
+        return sb.toString();
 
-.append(_myColor.getGreen())
+    }
 
-.append(", b=")
-
-.append(_myColor.getBlue())
-
-.append("\n");
-
-return sb.toString();
-
-}
-
-  
-
-public String toHexString() {
+    public String toHexString() {
 
 //Color c = _myColor;
 
-StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-sb.append("#");
+        sb.append("#");
 
-sb.append(Integer.toHexString(_myColor.getRed()));
+        sb.append(Integer.toHexString(_myColor.getRed()));
 
-sb.append(Integer.toHexString(_myColor.getGreen()));
+        sb.append(Integer.toHexString(_myColor.getGreen()));
 
-sb.append(Integer.toHexString(_myColor.getBlue()));
+        sb.append(Integer.toHexString(_myColor.getBlue()));
 
-return sb.toString();
+        return sb.toString();
 
-}
+    }
 
-
-
-}//end enum Colors
-
+}// end enum Colors

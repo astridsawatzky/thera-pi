@@ -14,7 +14,7 @@ import javax.crypto.NoSuchPaddingException;
 import nebraska.Constants;
 
 public class DESCryptoTest {
-    
+
     public static void main(String[] args) {
         Security.addProvider(new com.sun.crypto.provider.SunJCE());
         try {

@@ -1,25 +1,27 @@
 package Suchen;
 
 public class SearchParameter {
-	SearchType type = SearchType.TEXT;
-	public SearchType type() {
-		return type;
-	}
+    SearchType type = SearchType.TEXT;
 
-	public String[] criteria() {
-		return criteria;
-	}
+    public SearchType type() {
+        return type;
+    }
 
-	public int limit() {
-		return limit;
-	}
+    public String[] criteria() {
+        return criteria;
+    }
 
-	String[] criteria = {};
-	int limit = 0;
+    public int limit() {
+        return limit;
+    }
 
-	public SearchParameter(SearchType type, String searchtext, int limit) {
-		this.type = type;
-		this.criteria = searchtext.trim().split(" ");
-		this.limit = limit;
-	}
+    String[] criteria = {};
+    int limit = 0;
+
+    public SearchParameter(SearchType type, String searchtext, int limit) {
+        this.type = type;
+        this.criteria = searchtext.trim()
+                                  .split(" ");
+        this.limit = limit;
+    }
 }

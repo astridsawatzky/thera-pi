@@ -1,7 +1,5 @@
 package hauptFenster;
 
-
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -77,1215 +75,1320 @@ import textBausteine.textbaus;
 import wecker.Wecker;
 
 public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentListener, DropTargetListener {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = 1L;
-	//private Reha eltern;
-	private static JXTaskPaneContainer jxTPcontainer = null;
-	public static JXTaskPane tp1 = null;
-	public static JXTaskPane tp2 = null;
-	public static JXTaskPane tp3 = null;
-	public static JXTaskPane tp4 = null;
-	public static JXTaskPane tp5 = null;
-	public static JXTaskPane tp6 = null;
-	public static JXTaskPane tp7 = null;
-	private JXHyperlink oo1 = null;
-	private JXHyperlink oo2 = null;
-	public static boolean OOok = true;
-	public static LinkeTaskPane thisClass = null;
-	public static ITextDocument itestdocument = null;
-	private ActionListener al;
-	private String aktTag = "x";
-	private String wahlTag = "y";
-	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-	public static boolean mitUserTask = false;
-	Logger logger = LoggerFactory.getLogger(LinkeTaskPane.class);
-	private Connection conn;
-
-	public LinkeTaskPane(Connection conn) {
-		super();
-		this.conn = conn;
-		mitUserTask = testUserTask();
-		this.setBorder(null);
-		this.setBackground(Color.WHITE);
-		//this.eltern = Reha.instance;
-		this.setPreferredSize(new Dimension(200,500));
-
-		GridBagConstraints gridBagConstraints = new GridBagConstraints() ;
-		gridBagConstraints.gridx = 0;
-		gridBagConstraints.anchor = GridBagConstraints.CENTER;
-		gridBagConstraints.fill = GridBagConstraints.BOTH;
-		gridBagConstraints.ipadx = 0;
-		gridBagConstraints.gridy = 0;
-		gridBagConstraints.weightx = 1.0D;
-		gridBagConstraints.weighty = 1.0D;
-		gridBagConstraints.insets = new Insets(5, 2, 5, 2);
-
-		this.setLayout(new GridBagLayout());
-
-
-		/**
-		 * Zuerst die Scrollpane generieren falls der
-		 * sp�tere TaskPane-Container die y-Dimension des Fensters �bersteigt.
-		 */
-		JScrollPane jScrp = new JScrollPane();
-		jScrp.setBorder(null);
-		jScrp.setViewportBorder(null);
-		jScrp.setBackground(Color.white);
-		jScrp.setPreferredSize(new Dimension(180, 100));
-		DropShadowBorder dropShadow = new DropShadowBorder(Color.BLACK, 10, 1, 5, false, true, true, true);
-		jScrp.setBorder(dropShadow);
-		jScrp.getVerticalScrollBar().setUnitIncrement(15);
-		/**
-		 * Jetz generieren wir den Taskpane-Container anschlie�end die TaskPanes
-		 */
-		jxTPcontainer =	new JXTaskPaneContainer();
-		jxTPcontainer.setBackground(new Color(106,130,218));
-		//jxTPcontainer.setPreferredSize(new Dimension(250,0));
-
-
-		jxTPcontainer.add( (Component) getPatientenStamm());
-
-		jxTPcontainer.add( (Component) getTerminKalender());
-
-		jxTPcontainer.add( (Component) getOpenOfficeOrg());
-
-		jxTPcontainer.add( (Component) getNuetzliches());
-
-		jxTPcontainer.add( (Component) getSystemEinstellungen());
-		jxTPcontainer.add( (Component) getMonatsUebersicht());
-
-		if(mitUserTask){
-			jxTPcontainer.add( (Component) getUserTasks());
-		}
-		/**
-		 * dann f�gen wir den TaskpaneContainer der ScrollPane hinzu
-		 */
-		jScrp.setViewportView(jxTPcontainer);
-		jScrp.setVisible(true);
-		jScrp.revalidate();
-		this.add(jScrp,gridBagConstraints);
-		this.validate();
-		thisClass = this;
-	}
-	/**
-	 * Task-Pane f�r den Patientenstamm erstellen
-	 * @return
-	 */
-
-	private JXTaskPane getPatientenStamm(){
-		Image img = null;
-		tp1 = new JXTaskPane();
-		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
-		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
-		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.foreground",Color.BLUE);
-		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
-		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp1.setUI(wui);
-		tp1.setTitle("Stammdaten");
-		JXHyperlink jxLink = new JXHyperlink();
-		jxLink.setText("Patienten und Rezepte");
-		jxLink.setToolTipText("Strg+P = Patienten-/Rezeptstamm starten");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/kontact_contacts.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		jxLink.setEnabled(true);
-		DropTarget dndt = new DropTarget();
-		DropTargetListener dropTargetListener =
-				new DropTargetListener() {
-			@Override
-			public void dragEnter(DropTargetDragEvent e) {}
-			@Override
-			public void dragExit(DropTargetEvent e) {}
-			@Override
-			public void dragOver(DropTargetDragEvent e) {}
-			@Override
-			public void drop(DropTargetDropEvent e) {
-				String mitgebracht = "";
-				try {
-					Transferable tr = e.getTransferable();
-					DataFlavor[] flavors = tr.getTransferDataFlavors();
-					for (int i = 0; i < flavors.length; i++){
-						mitgebracht  = (String) tr.getTransferData(flavors[i]);
-					}
-					////System.out.println(mitgebracht);
-					if(mitgebracht.indexOf("°") >= 0){
-						if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
-							return;
-						}
-						doPatientDrop(mitgebracht.split("°")[2].trim());
-						//ProgLoader.ProgRoogleFenster(0, mitgebracht);
-						//Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
-					}
-					////System.out.println(mitgebracht+" auf Patientenstamm gedropt");
-				} catch (Throwable t) { t.printStackTrace(); }
-				// Ein Problem ist aufgetreten
-				e.dropComplete(true);
-			}
-			@Override
-			public void dropActionChanged(
-					DropTargetDragEvent e) {}
-		};
-		try {
-			dndt.addDropTargetListener(dropTargetListener);
-		} catch (TooManyListenersException e1) {
-
-			e1.printStackTrace();
-		}
-		jxLink.setDropTarget(dndt);
-
-		tp1.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("Ärzte");
-		jxLink.setActionCommand("Arztstamm");
-		jxLink.setToolTipText("Strg+A = Arztstamm starten");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/system-users.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		//jxLink.setEnabled(false);
-		tp1.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("Krankenkassen");
-		jxLink.setToolTipText("Strg+K = Kassenstamm starten");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/krankenkasse.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		tp1.add(jxLink);
-		tp1.setCollapsed(SystemConfig.taskPaneCollapsed[0]);
-		return tp1;
-	}
-
-	private JXTaskPane getTerminKalender(){
-		Image img = null;
-		tp4 = new JXTaskPane();
-		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
-		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
-		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
-		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp4.setUI(wui);
-		tp4.setTitle("Termin-Management");
-		tp4.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/table_mode.png"));
-		JXHyperlink jxLink = new JXHyperlink();
-		jxLink.setText("Terminkalender starten");
-		jxLink.setToolTipText("Strg+T = Terminkalender starten");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/evolution-addressbook.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		tp4.add(jxLink);
-		jxLink = new JXHyperlink();
-		DropTarget dndt = new DropTarget();
-		DropTargetListener dropTargetListener =
-				new DropTargetListener() {
-			@Override
-			public void dragEnter(DropTargetDragEvent e) {}
-			@Override
-			public void dragExit(DropTargetEvent e) {}
-			@Override
-			public void dragOver(DropTargetDragEvent e) {}
-			@Override
-			public void drop(DropTargetDropEvent e) {
-				String mitgebracht = "";
-				try {
-					Transferable tr = e.getTransferable();
-					DataFlavor[] flavors = tr.getTransferDataFlavors();
-					for (int i = 0; i < flavors.length; i++){
-						mitgebracht  = (String) tr.getTransferData(flavors[i]);
-					}
-					//System.out.println("Es wurde mitgebracht "+mitgebracht);
-					if(mitgebracht.indexOf("°") >= 0){
-						if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
-							return;
-						}
-						//ProgLoader.ProgRoogleFenster(0, mitgebracht);
-						Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
-					}
-					////System.out.println(mitgebracht);
-				} catch (Throwable t) { t.printStackTrace(); }
-				// Ein Problem ist aufgetreten
-				e.dropComplete(true);
-			}
-			@Override
-			public void dropActionChanged(
-					DropTargetDragEvent e) {}
-		};
-		try {
-			dndt.addDropTargetListener(dropTargetListener);
-		} catch (TooManyListenersException e1) {
-
-			e1.printStackTrace();
-		}
-		jxLink.setDropTarget(dndt);
-		jxLink.setName("Rugl");
-		String srugl = "<html><font color='#000000'>[</font><font color='#0000ff'>R</font><font color='#ff0000'>u</font>"+
-				"<font color='#00ffff'><b>:</b></font><font color='#0000ff'>g</font><font color='#00ff00'>l</font>"+
-				"<font color='#000000'>]</font>&nbsp;- Die Terminsuchmaschine";
-		jxLink.setText(srugl);
-		//jxLink.setText("[Ru:gl] - Die Terminsuchmaschine");
-		jxLink.setToolTipText("Strg+R = [Ru:gl] starten");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/orca.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.setActionCommand("[Ru:gl] - Die Terminsuchmaschine");
-		jxLink.addActionListener(this);
-		tp4.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("Wochenarbeitszeiten definieren");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/alacarte.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		tp4.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("Akutliste - kurzfristige Termine");
-		jxLink.setActionCommand("Akutliste");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/vcalendar.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		tp4.add(jxLink);
-
-		jxLink = new JXHyperlink();
-		jxLink.setText("Thera-\u03C0"+" Erinnerungs-System");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/chronometer.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setActionCommand("neuerwecker");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		dndt = new DropTarget();
-		dropTargetListener =
-				new DropTargetListener() {
-			@Override
-			public void dragEnter(DropTargetDragEvent e) {}
-			@Override
-			public void dragExit(DropTargetEvent e) {}
-			@Override
-			public void dragOver(DropTargetDragEvent e) {}
-			@Override
-			public void drop(DropTargetDropEvent e) {
-				String mitgebracht = "";
-				try {
-					Transferable tr = e.getTransferable();
-					DataFlavor[] flavors = tr.getTransferDataFlavors();
-					for (int i = 0; i < flavors.length; i++){
-						mitgebracht  = (String) tr.getTransferData(flavors[i]);
-					}
-					////System.out.println(mitgebracht);
-					if(mitgebracht.indexOf("°") >= 0){
-						if( ! mitgebracht.split("°")[0].contains("TERMDAT")){
-							return;
-						}
-						//ProgLoader.ProgRoogleFenster(0, mitgebracht);
-						doWeckerDrop(mitgebracht);
-					}
-					////System.out.println(mitgebracht);
-				} catch (Throwable t) { t.printStackTrace(); }
-				// Ein Problem ist aufgetreten
-				e.dropComplete(true);
-			}
-			@Override
-			public void dropActionChanged(
-					DropTargetDragEvent e) {}
-		};
-		try {
-			dndt.addDropTargetListener(dropTargetListener);
-		} catch (TooManyListenersException e1) {
-
-			e1.printStackTrace();
-		}
-		jxLink.setDropTarget(dndt);
-		jxLink.setName("Rugl");
-
-		tp4.add(jxLink);
-		tp4.setCollapsed(SystemConfig.taskPaneCollapsed[1]);
-		//tp4.setExpanded(true);
-		return tp4;
-	}
-
-
-	private JXTaskPane getOpenOfficeOrg(){
-		tp3 = new JXTaskPane();
-		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
-		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
-		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
-		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp3.setUI(wui);
-		tp3.setTitle("OpenOffice.org");
-		tp3.setIcon(SystemConfig.hmSysIcons.get("openoffice"));
-		oo1 = new JXHyperlink();
-		oo1.setText("OpenOffice-Writer");
-		oo1.setClickedColor(new Color(0, 0x33, 0xFF));
-		oo1.setIcon(SystemConfig.hmSysIcons.get("ooowriter"));
-		oo1.addActionListener(this);
-		tp3.add(oo1);
-		oo2 = new JXHyperlink();
-		oo2.setIcon(SystemConfig.hmSysIcons.get("ooocalc"));
-		oo2.setText("OpenOffice-Calc");
-		oo2.setClickedColor(new Color(0, 0x33, 0xFF));
-		oo2.addActionListener(this);
-		tp3.add(oo2);
-		oo2 = new JXHyperlink();
-		oo2.setIcon(SystemConfig.hmSysIcons.get("oooimpress"));
-		oo2.setText("OpenOffice-Impress");
-		oo2.setClickedColor(new Color(0, 0x33, 0xFF));
-		oo2.addActionListener(this);
-		tp3.add(oo2);
-		tp3.setCollapsed(SystemConfig.taskPaneCollapsed[2]);
-		return tp3;
-	}
-
-	private JXTaskPane getNuetzliches(){
-		Image img = null;
-		tp5 = new JXTaskPane();
-		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
-		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
-		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
-		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp5.setUI(wui);
-
-		tp5.setTitle("Nützliches...");
-		//tp3.setIcon(new ImageIcon("icons/pdf.gif"));
-		JXHyperlink jxLink = new JXHyperlink();
-		jxLink.setText("Thera-PI - Nachrichten");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/emblem-mail.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.addActionListener(this);
-		tp5.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("Thera-PI - Browser");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/home.gif").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.addActionListener(this);
-		tp5.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("piTool - ScreenShots");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/camera_unmount.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setActionCommand("piTool");
-		jxLink.addActionListener(this);
-		//jxLink.setEnabled(false);
-		tp5.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("piHelp - Hifetextgenerator");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/fragezeichenklein.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setActionCommand("piHelp");
-		jxLink.addActionListener(this);
-		//jxLink.setEnabled(false);
-		tp5.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("Textbausteine - Therapiebericht");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setActionCommand("piTextb");
-		jxLink.addActionListener(this);
-		//jxLink.setEnabled(false);
-		tp5.add(jxLink);
-
-		jxLink = new JXHyperlink();
-		jxLink.setText("Textbausteine - Gutachten");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setActionCommand("piArztTextb");
-		jxLink.addActionListener(this);
-		//jxLink.setEnabled(false);
-		tp5.add(jxLink);
-
-		jxLink = new JXHyperlink();
-		jxLink.setText("ICD-10 Recherche");
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/mag.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setActionCommand("piIcd10");
-		jxLink.addActionListener(this);
-		//jxLink.setEnabled(false);
-		tp5.add(jxLink);
-		File f = new File(Path.Instance.getProghome()+"QMHandbuch.jar");
-		if(f.exists()){
-			jxLink = new JXHyperlink();
-			jxLink.setText("QM-Handbuch");
-			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-			img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-			jxLink.setIcon(new ImageIcon(img));
-			jxLink.setActionCommand("piQM");
-			jxLink.addActionListener(this);
-			//jxLink.setEnabled(false);
-			tp5.add(jxLink);
-		}
-		f = new File(Path.Instance.getProghome()+"QMAuswertung.jar");
-		if(f.exists()){
-			jxLink = new JXHyperlink();
-			jxLink.setText("QM-Auswertungen");
-			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-			img = new ImageIcon(Path.Instance.getProghome()+"icons/abiword.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-			jxLink.setIcon(new ImageIcon(img));
-			jxLink.setActionCommand("piAW");
-			jxLink.addActionListener(this);
-			//jxLink.setEnabled(false);
-			tp5.add(jxLink);
-		}
-
-		tp5.setCollapsed(SystemConfig.taskPaneCollapsed[3]);
-		return tp5;
-	}
-
-
-	private JXTaskPane getSystemEinstellungen(){
-		Image img = null;
-		tp2 = new JXTaskPane();
-		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
-		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
-		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
-		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp2.setUI(wui);
-
-		tp2.setTitle("Systemeinstellungen");
-		tp2.setIcon(new ImageIcon(Path.Instance.getProghome()+"icons/pdf.gif"));
-		JXHyperlink jxLink = new JXHyperlink();
-		jxLink.setText("Benutzerverwaltung");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/contact-new.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		jxLink.setEnabled(true);
-		tp2.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("System Initialisierung");
-		img = new ImageIcon(Path.Instance.getProghome()+"icons/galternatives.png").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		jxLink.setIcon(new ImageIcon(img));
-		jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-		jxLink.addActionListener(this);
-		tp2.add(jxLink);
-		jxLink = new JXHyperlink();
-		jxLink.setText("Look & Feel");
-		jxLink.addActionListener(this);
-		jxLink.setEnabled(false);
-		tp2.add(jxLink);
-		tp2.setCollapsed(SystemConfig.taskPaneCollapsed[4]);
-		return tp2;
-	}
-
-	private JXTaskPane getMonatsUebersicht(){
-		tp6 = new JXTaskPane();
-		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
-		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
-		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
-		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp6.setUI(wui);
-		tp6.setTitle("Monatsübersicht");
-		final JXMonthView monthView = new JXMonthView ();
-		monthView.setPreferredColumnCount (1);
-		monthView.setPreferredRowCount (1);
-		monthView.setTraversable(true);
-		monthView.setShowingWeekNumber(true);
-		al = new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(TerminFenster.getThisClass()!= null){
-					Date dat = monthView.getSelectionDate();
-					if(dat==null){
-						return;
-					}
-					wahlTag = sdf.format(monthView.getSelectionDate());
-					if(wahlTag.equals(aktTag)){
-						return;
-					}
-					aktTag = wahlTag;
-					Reha.instance.progLoader.ProgTerminFenster(1, 0);
-					TerminFenster.getThisClass().springeAufDatum(aktTag);
-				}else{
-					Date dat = monthView.getSelectionDate();
-					if(dat==null){
-						return;
-					}
-					wahlTag = sdf.format(monthView.getSelectionDate());
-					if(wahlTag.equals(aktTag)){
-						return;
-					}
-					aktTag = wahlTag;
-					Reha.instance.progLoader.ProgTerminFenster(1, 0);
-					SwingUtilities.invokeLater(new Runnable(){
-						@Override
-						public void run(){
-							TerminFenster.getThisClass().springeAufDatum(aktTag);
-
-						}
-					});
-				}
-
-			}
-		};
-		monthView.addActionListener(al);
-		tp6.add(monthView);
-		tp6.setCollapsed(true);
-		tp6.setCollapsed(SystemConfig.taskPaneCollapsed[5]);
-		return tp6;
-	}
-
-	private JXTaskPane getUserTasks(){
-		tp7 = new JXTaskPane();
-		UIManager.put("TaskPane.titleBackgroundGradientStart",Color.WHITE);
-		UIManager.put("TaskPane.titleBackgroundGradientEnd",new Color(200,212,247));
-		UIManager.put("TaskPane.background",new Color(214,223,247));
-		UIManager.put("TaskPane.useGradient", Boolean.TRUE);
-		WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
-		tp7.setUI(wui);
-		tp7.setTitle("Benutzer-Tasks");
-		Image img = null;
-		//img = new ImageIcon("bildle").getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-		//tp7.setIcon(new ImageIcon(img));
-		for(int i = 0; i < SystemConfig.vUserTasks.size();i++){
-			JXHyperlink jxLink = new JXHyperlink();
-			jxLink.setText(SystemConfig.vUserTasks.get(i).get(0));
-			img = new ImageIcon(SystemConfig.vUserTasks.get(i).get(1)).getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-			jxLink.setIcon(new ImageIcon(img));
-			jxLink.setActionCommand("UserTask-"+Integer.toString(i));
-			jxLink.addActionListener(this);
-			jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-			//jxLink.setEnabled();
-			tp7.add(jxLink);
-		}
-		tp7.setCollapsed(SystemConfig.taskPaneCollapsed[6]);
-		return tp7;
-	}
-
-
-	public static void UpdateUI(){
-		jxTPcontainer.updateUI();
-		tp1.updateUI();
-		tp2.updateUI();
-		tp3.updateUI();
-		tp4.updateUI();
-		tp5.updateUI();
-		tp6.updateUI();
-		////System.out.println("TaskPane-Container L&F");
-	}
-	/**
-	 * Eigener Event-Handler man wird sehen ob das vern�ftig ist.
-	 * 	@Override
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String cmd = e.getActionCommand();
-		int i;
-		for(i=0;i<1;i++){
-			if (cmd.equals("Look & Feel")) {
-				ExUndHop eUh = new ExUndHop();
-				eUh.setzeStatement("delete from flexlock");
-				//ProgLoader.ProgLookAndFeel(0);
-				break;
-			}
-
-			if (cmd.equals("System Initialisierung")){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						try{
-							Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-							//ProgLoader.SystemInitialisierung();
-							Reha.instance.progLoader.SystemInit(1, "");
-							Reha.getThisFrame().setCursor(Cursors.normalCursor);
-						}catch(Exception ex){
-							ex.printStackTrace();
-						}
-						return null;
-					}
-
-				}.execute();
-
-				/*SystemUtil sysUtil = new SystemUtil(Reha.thisFrame);
-				sysUtil.setSize(800,600);
-				sysUtil.setLocation(100,75);
-				sysUtil.setVisible(true);
-				 */
-				break;
-			}
-
-			if (cmd.equals("Krankenkassen")){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-						Reha.instance.progLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
-						//ProgLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
-						Reha.getThisFrame().setCursor(Cursors.normalCursor);
-						return null;
-					}
-				}.execute();
-				break;
-			}
-
-			if (cmd.equals("Terminkalender starten")){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-						Reha.instance.progLoader.ProgTerminFenster(1, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
-						//ProgLoader.ProgTerminFenster(1,0);
-						Reha.getThisFrame().setCursor(Cursors.normalCursor);
-						return null;
-					}
-				}.execute();
-				break;
-			}
-			if (cmd.equals("Arztstamm")){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-						Reha.instance.progLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
-						//ProgLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
-						Reha.getThisFrame().setCursor(Cursors.normalCursor);
-						return null;
-					}
-				}.execute();
-				break;
-			}
-			if (cmd.equals("Wochenarbeitszeiten definieren")){
-				JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
-				if(termin != null){
-					JOptionPane.showMessageDialog (null, "Achtung!!!!! \n\nWährend der Arbeitszeit-Definition\n" +
-							"darf der Terminkalender aus Sicherheitsgründen nicht geöffnet sein.\n"+
-							"Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
-					return;
-				}
-				Reha.instance.progLoader.ProgTerminFenster(0, 2);
-				//ProgLoader.ProgTerminFenster(0,2);
-				//MaskenErstellen();
-				break;
-			}
-			if (cmd.equals("monthview")){
-				new DatumWahl(200,200);
-				break;
-			}
-
-			if (cmd.equals("OpenOffice-Writer")){
-				OOTools.starteLeerenWriter();
-				break;
-			}
-
-			if (cmd.equals("OpenOffice-Calc")){
-				OOTools.starteLeerenCalc();
-				break;
-			}
-
-			if (cmd.equals("OpenOffice-Impress")){
-				OOTools.starteLeerenImpress();
-				break;
-			}
-
-			if (cmd.equals("Benutzerverwaltung")){
-				Reha.instance.progLoader.BenutzerrechteFenster(1,"");
-				break;
-			}
-			if (cmd.equals("[Ru:gl] - Die Terminsuchmaschine")){
-				Reha.instance.progLoader.ProgRoogleFenster(0,null);
-				//ProgLoader.ProgRoogleFenster(0,null);
-				break;
-			}
-			if (cmd.equals("RTA-Wisssen das Universalwissen")){
-				break;
-			}
-			if (cmd.equals("Thera-PI - Browser")){
-				new Thread(){
-					@Override
-					public void run(){
-						new LadeProg(Path.Instance.getProghome()+"RehaWissen.jar");
-					}
-				}.start();
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						RehaSplash rspl = new RehaSplash(null,"Hilfebrowser laden....dieser Vorgang kann einige Sekunden dauern...");
-						long zeit = System.currentTimeMillis();
-						while(true){
-							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 6000){
-								break;
-							}
-						}
-						rspl.dispose();
-						return null;
-					}
-
-				}.execute();
-
-
-				break;
-			}
-			if (cmd.equals("Thera-PI - Nachrichten")){
-				//Reha.nachrichtenRegeln();
-				if(! RehaIOServer.rehaMailIsActive){
-					if(Reha.aktUser.startsWith("Therapeut")){return;}
-					Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-					new Thread(){
-						@Override
-						public void run(){
-							new LadeProg(Path.Instance.getProghome()+"RehaMail.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK()+" "+Reha.xport+" "+Reha.aktUser.replace(" ", "#"));		
-						}
-					}.start();
-
-				}else{
-					if(Reha.aktUser.startsWith("Therapeut")){return;}
-					new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort,"Reha#"+RehaIOMessages.MUST_GOTOFRONT);
-				}
-
-
-
-			}
-			if (cmd.equals("Neuer Wissensbeitrag anlegen")){
-				JOptionPane.showMessageDialog (null, "Achtung!!!!! \n\nDer Wissens-Generator ist auf diesem System\n\n" +
-						"nicht installiert - oder konnte nicht gefunden werden...\n\n");
-				break;
-			}
-			if (cmd.equals("Patienten und Rezepte")){
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						setCursor(Cursors.wartenCursor);
-						Reha.instance.progLoader.ProgPatientenVerwaltung(1,conn);
-						//Reha.instance.progLoader.ProgTerminFenster(0, 1);
-						//ProgLoader.ProgPatientenVerwaltung(1);
-						setCursor(Cursors.normalCursor);
-						return null;
-					}
-				}.execute();
-				break;
-			}
-			if (cmd.equals("piHelp")){
-				new Thread(){
-					@Override
-					public void run(){
-						try{
-							new LadeProg(Path.Instance.getProghome()+"piHelp.jar "+
-									Path.Instance.getProghome()+" "+Reha.getAktIK());
-						}catch(Exception ex){
-							ex.printStackTrace();
-						}
-					}
-				}.start();
-
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						RehaSplash rspl = new RehaSplash(null,"piHelp - Hilfetextgenerator laden....dieser Vorgang kann einige Sekunden dauern...");
-						long zeit = System.currentTimeMillis();
-						while(true){
-							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 2000){
-								break;
-							}
-						}
-						rspl.dispose();
-						return null;
-					}
-
-				}.execute();
-				break;
-			}
-			if (cmd.equals("piTool")){
-				new LadeProg(Path.Instance.getProghome()+"piTool.jar");
-				break;
-			}
-			if (cmd.equals("piTextb")){
-				textbaus.main(new String[] {
-						Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/rehajava.ini",
-						Path.Instance.getProghome()+"ini/thbericht.ini"
-
-
-				});
-				//				new LadeProg(Path.Instance.getProghome()+"TBedit.jar "+
-				//										Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
-				//										Path.Instance.getProghome()+"ini/textbaustein.ini");
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						RehaSplash rspl = new RehaSplash(null,"Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
-						long zeit = System.currentTimeMillis();
-						while(true){
-							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 2000){
-								break;
-							}
-						}
-						rspl.dispose();
-						return null;
-					}
-
-				}.execute();
-
-				break;
-			}
-			if (cmd.equals("piArztTextb")){
-				if(!Rechte.hatRecht(Rechte.Sonstiges_textbausteinegutachten, true)){
-					return;
-				}
-				new Thread(){
-					@Override
-					public void run(){
-						try {
-							ArztBaustein.start(new IK(Reha.getAktIK()),Reha.officeapplication);
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-					}
-				}.start();
-
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						RehaSplash rspl = new RehaSplash(null,"Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
-						long zeit = System.currentTimeMillis();
-						while(true){
-							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 2000){
-								break;
-							}
-						}
-						rspl.dispose();
-						return null;
-					}
-				}.execute();
-
-				break;
-			}
-			if (cmd.equals("piIcd10")){
-				SwingUtilities.invokeLater(new ICDrahmen(conn));
-			}
-			if (cmd.equals("piQM")){
-				new Thread(){
-					@Override
-					public void run(){
-						new LadeProg(Path.Instance.getProghome()+"QMHandbuch.jar");
-					}
-				}.start();
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						RehaSplash rspl = new RehaSplash(null,"QM-Handbuch laden....dieser Vorgang kann einige Sekunden dauern...");
-						long zeit = System.currentTimeMillis();
-						while(true){
-							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 4000){
-								break;
-							}
-						}
-						rspl.dispose();
-						return null;
-					}
-
-				}.execute();
-
-			}
-			if (cmd.equals("piAW")){
-				new Thread(){
-					@Override
-					public void run(){
-						new LadeProg(Path.Instance.getProghome()+"QMAuswertung.jar"+" "+Path.Instance.getProghome()+" "+Reha.getAktIK());		
-					}
-				}.start();
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						RehaSplash rspl = new RehaSplash(null,"QM-Auswertung laden....dieser Vorgang kann einige Sekunden dauern...");
-						long zeit = System.currentTimeMillis();
-						while(true){
-							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 4000){
-								break;
-							}
-						}
-						rspl.dispose();
-						return null;
-					}
-
-				}.execute();
-
-			}
-
-
-			if (cmd.equals("Akutliste")){
-				if(SqlInfo.holeEinzelFeld("select id from pat5 where akutpat='T' LIMIT 1").equals("")){
-					JOptionPane.showMessageDialog(null,"Keine Akutpatienten im Patientenstamm vermerkt");
-					return;
-				}
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						try{
-							Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-							try {
-								new AkutListe();
-							} catch (TextException e) {
-
-								e.printStackTrace();
-							}
-							Reha.getThisFrame().setCursor(Cursors.cdefault);
-						}catch(Exception ex){
-							ex.printStackTrace();
-						}
-						return null;
-					}
-				}.execute();
-
-				new SwingWorker<Void,Void>(){
-					@Override
-					protected Void doInBackground() throws Exception {
-						RehaSplash rspl = new RehaSplash(null,"Akutliste starten -  dieser Vorgang kann einige Sekunden dauern...");
-						long zeit = System.currentTimeMillis();
-						while(true){
-							Thread.sleep(20);
-							if(System.currentTimeMillis()-zeit > 2000){
-								break;
-							}
-						}
-						rspl.dispose();
-						return null;
-					}
-
-				}.execute();
-				break;
-			}
-			if (cmd.equals("neuerwecker")){
-				Wecker wecker = new Wecker(null);
-				wecker.pack();
-				wecker.setVisible(true);
-				wecker = null;
-				break;
-			}
-			if(cmd.startsWith("UserTask-")){
-				try{
-					int taskNummer = Integer.parseInt(cmd.toString().split("-")[1]);
-					Runtime.getRuntime().exec(SystemConfig.vUserTasks.get(taskNummer).get(2));
-				}catch(Exception ex){
-					ex.printStackTrace();
-				}
-				break;
-			}
-
-		}
-
-
-	}
-	@Override
-	public void componentHidden(ComponentEvent e) {
-
-
-	}
-	@Override
-	public void componentMoved(ComponentEvent e) {
-
-
-	}
-	@Override
-	public void componentResized(ComponentEvent e) {
-
-		////System.out.println("Linke-Task-Pane: "+e);
-
-	}
-	@Override
-	public void componentShown(ComponentEvent e) {
-
-
-	}
-	private boolean testUserTask(){
-		File f = new File(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/usertask.ini");
-		if(! f.exists()){
-			return false;
-		}
-		try{
-			INIFile utask = new INIFile(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/usertask.ini");
-			int tasks = Integer.parseInt(utask.getStringProperty("UserTasks", "AnzahlUserTasks"));
-			if(tasks == 0){
-				return false;
-			}
-			Vector<String> dummy = new Vector<String>();
-			for( int i = 0; i < tasks; i++){
-				dummy.clear();
-				dummy.add(utask.getStringProperty("UserTasks", "UserTaskTitel"+Integer.toString(i+1)) );
-				dummy.add(utask.getStringProperty("UserTasks", "UserIcon"+Integer.toString(i+1)) );
-				dummy.add(utask.getStringProperty("UserTasks", "UserTaskExecute"+Integer.toString(i+1)) );
-				SystemConfig.vUserTasks.add((Vector<String>)dummy.clone());
-			}
-		}catch(Exception ex){
-			ex.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	public static void OoOk(){
-		//LinkeTaskPane.thisClass.oo1.setEnabled(true);
-		//LinkeTaskPane.thisClass.oo2.setEnabled(true);
-	}
-
-	public void MaskenErstellen(){
-		String sstmt = "";
-		String behandler = "";
-		Statement stmt = null;
-		try{
-			stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-					ResultSet.CONCUR_UPDATABLE );
-			for(int i=1;i<61;i++){
-				for(int t=1;t<8;t++){
-					behandler  = (i<10 ? "0"+i+"BEHANDLER" : Integer.toString(i)+"BEHANDLER");
-					sstmt = "insert into masken set behandler='"+behandler+"' , art = '"+t+"' ,belegt='1', N1='@FREI', TS1='07:00:00', TD1='900', TE1='22:00:00'";
-					////System.out.println(sstmt);
-					try {
-						stmt.execute(sstmt);
-					} catch (SQLException e) {
-
-						e.printStackTrace();
-					}
-				}
-			}
-
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		}finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	private void doWeckerDrop(String drops){
-		Wecker wecker = new Wecker(drops);
-		wecker.pack();
-		wecker.setVisible(true);
-		wecker = null;
-	}
-	private void doPatientDrop(String rez_nr){
-		String pat_int = "";
-		String reznr = rez_nr;
-		boolean inhistorie = false;
-		int ind = reznr.indexOf("\\");
-		if(ind >= 0){
-			reznr = reznr.substring(0,ind);
-		}
-
-		Vector<String> vec = SqlInfo.holeSatz("verordn", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
-		if(vec.size() == 0){
-			vec = SqlInfo.holeSatz("lza", "pat_intern", "rez_nr='"+reznr+"'",new ArrayList<String>() );
-			if(vec.size() == 0){
-				JOptionPane.showMessageDialog(null,"Rezept weder im aktuellen Rezeptstamm noch in der Historie vorhanden!\nIst die eingetragene Rezeptnummer korrekt?");
-				return;
-			}else{
-				JOptionPane.showMessageDialog(null,"Rezept ist bereits abgerechnet und somit in der Historie des Patienten!");
-				inhistorie = true;
-			}
-		}
-		vec = SqlInfo.holeSatz("pat5", "pat_intern", "pat_intern='"+vec.get(0)+"'",new ArrayList<String>() );
-		if(vec.size() == 0){
-			JOptionPane.showMessageDialog(null,"Patient mit zugeordneter Rezeptnummer -> "+reznr+" <- wurde nicht gefunden");
-			return;
-		}
-		pat_int = vec.get(0);
-		JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-		final String xreznr = reznr;
-		final boolean xinhistorie = inhistorie;
-		if(patient == null){
-			final String xpat_int = pat_int;
-			new SwingWorker<Void,Void>(){
-				@Override
-				protected Void doInBackground() throws Exception {
-					JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					Reha.instance.progLoader.ProgPatientenVerwaltung(1,conn);
-					while( (xpatient == null) ){
-						Thread.sleep(20);
-						xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
-					}
-					while(  (!AktuelleRezepte.initOk) ){
-						Thread.sleep(20);
-					}
-
-					String s1 = "#PATSUCHEN";
-					String s2 = xpat_int;
-					PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
-					pEvt.setPatStammEvent("PatSuchen");
-					pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
-					PatStammEventClass.firePatStammEvent(pEvt);
-					if(xinhistorie){
-						Reha.instance.patpanel.getTab().setSelectedIndex(1);	
-					}else{
-						Reha.instance.patpanel.getTab().setSelectedIndex(0);
-					}
-
-					return null;
-				}
-
-			}.execute();
-		}else{
-			Reha.instance.progLoader.ProgPatientenVerwaltung(1,conn);
-			String s1 = "#PATSUCHEN";
-			String s2 = pat_int;
-			PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
-			pEvt.setPatStammEvent("PatSuchen");
-			pEvt.setDetails(s1,s2,"#REZHOLEN-"+xreznr) ;
-			PatStammEventClass.firePatStammEvent(pEvt);
-			if(xinhistorie){
-				Reha.instance.patpanel.getTab().setSelectedIndex(1);	
-			}else{
-				Reha.instance.patpanel.getTab().setSelectedIndex(0);
-			}
-
-		}
-	}
-
-	/************************************************************/
-
-	/************************************************************/
-
-	@Override
-	public void dragEnter(DropTargetDragEvent arg0) {
-
-		////System.out.println("Enter---->"+arg0);
-		////System.out.println(((JComponent)arg0.getSource()).getName());
-
-	}
-	@Override
-	public void dragExit(DropTargetEvent arg0) {
-
-
-	}
-	@Override
-	public void dragOver(DropTargetDragEvent arg0) {
-
-
-	}
-	@Override
-	public void drop(DropTargetDropEvent arg0) {
-
-		////System.out.println(arg0);
-
-	}
-	@Override
-	public void dropActionChanged(DropTargetDragEvent arg0) {
-
-
-	}
-
-	/************************************************************/
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    // private Reha eltern;
+    private static JXTaskPaneContainer jxTPcontainer = null;
+    public static JXTaskPane tp1 = null;
+    public static JXTaskPane tp2 = null;
+    public static JXTaskPane tp3 = null;
+    public static JXTaskPane tp4 = null;
+    public static JXTaskPane tp5 = null;
+    public static JXTaskPane tp6 = null;
+    public static JXTaskPane tp7 = null;
+    private JXHyperlink oo1 = null;
+    private JXHyperlink oo2 = null;
+    public static boolean OOok = true;
+    public static LinkeTaskPane thisClass = null;
+    public static ITextDocument itestdocument = null;
+    private ActionListener al;
+    private String aktTag = "x";
+    private String wahlTag = "y";
+    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    public static boolean mitUserTask = false;
+    Logger logger = LoggerFactory.getLogger(LinkeTaskPane.class);
+    private Connection conn;
+
+    public LinkeTaskPane(Connection conn) {
+        super();
+        this.conn = conn;
+        mitUserTask = testUserTask();
+        this.setBorder(null);
+        this.setBackground(Color.WHITE);
+        // this.eltern = Reha.instance;
+        this.setPreferredSize(new Dimension(200, 500));
+
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.anchor = GridBagConstraints.CENTER;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0D;
+        gridBagConstraints.weighty = 1.0D;
+        gridBagConstraints.insets = new Insets(5, 2, 5, 2);
+
+        this.setLayout(new GridBagLayout());
+
+        /**
+         * Zuerst die Scrollpane generieren falls der sp�tere TaskPane-Container die
+         * y-Dimension des Fensters �bersteigt.
+         */
+        JScrollPane jScrp = new JScrollPane();
+        jScrp.setBorder(null);
+        jScrp.setViewportBorder(null);
+        jScrp.setBackground(Color.white);
+        jScrp.setPreferredSize(new Dimension(180, 100));
+        DropShadowBorder dropShadow = new DropShadowBorder(Color.BLACK, 10, 1, 5, false, true, true, true);
+        jScrp.setBorder(dropShadow);
+        jScrp.getVerticalScrollBar()
+             .setUnitIncrement(15);
+        /**
+         * Jetz generieren wir den Taskpane-Container anschlie�end die TaskPanes
+         */
+        jxTPcontainer = new JXTaskPaneContainer();
+        jxTPcontainer.setBackground(new Color(106, 130, 218));
+        // jxTPcontainer.setPreferredSize(new Dimension(250,0));
+
+        jxTPcontainer.add((Component) getPatientenStamm());
+
+        jxTPcontainer.add((Component) getTerminKalender());
+
+        jxTPcontainer.add((Component) getOpenOfficeOrg());
+
+        jxTPcontainer.add((Component) getNuetzliches());
+
+        jxTPcontainer.add((Component) getSystemEinstellungen());
+        jxTPcontainer.add((Component) getMonatsUebersicht());
+
+        if (mitUserTask) {
+            jxTPcontainer.add((Component) getUserTasks());
+        }
+        /**
+         * dann f�gen wir den TaskpaneContainer der ScrollPane hinzu
+         */
+        jScrp.setViewportView(jxTPcontainer);
+        jScrp.setVisible(true);
+        jScrp.revalidate();
+        this.add(jScrp, gridBagConstraints);
+        this.validate();
+        thisClass = this;
+    }
+
+    /**
+     * Task-Pane f�r den Patientenstamm erstellen
+     * 
+     * @return
+     */
+
+    private JXTaskPane getPatientenStamm() {
+        Image img = null;
+        tp1 = new JXTaskPane();
+        UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
+        UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
+        UIManager.put("TaskPane.background", new Color(214, 223, 247));
+        UIManager.put("TaskPane.foreground", Color.BLUE);
+        UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+        WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+        tp1.setUI(wui);
+        tp1.setTitle("Stammdaten");
+        JXHyperlink jxLink = new JXHyperlink();
+        jxLink.setText("Patienten und Rezepte");
+        jxLink.setToolTipText("Strg+P = Patienten-/Rezeptstamm starten");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/kontact_contacts.png").getImage()
+                                                                                       .getScaledInstance(24, 24,
+                                                                                               Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        jxLink.setEnabled(true);
+        DropTarget dndt = new DropTarget();
+        DropTargetListener dropTargetListener = new DropTargetListener() {
+            @Override
+            public void dragEnter(DropTargetDragEvent e) {
+            }
+
+            @Override
+            public void dragExit(DropTargetEvent e) {
+            }
+
+            @Override
+            public void dragOver(DropTargetDragEvent e) {
+            }
+
+            @Override
+            public void drop(DropTargetDropEvent e) {
+                String mitgebracht = "";
+                try {
+                    Transferable tr = e.getTransferable();
+                    DataFlavor[] flavors = tr.getTransferDataFlavors();
+                    for (int i = 0; i < flavors.length; i++) {
+                        mitgebracht = (String) tr.getTransferData(flavors[i]);
+                    }
+                    //// System.out.println(mitgebracht);
+                    if (mitgebracht.indexOf("°") >= 0) {
+                        if (!mitgebracht.split("°")[0].contains("TERMDAT")) {
+                            return;
+                        }
+                        doPatientDrop(mitgebracht.split("°")[2].trim());
+                        // ProgLoader.ProgRoogleFenster(0, mitgebracht);
+                        // Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
+                    }
+                    //// System.out.println(mitgebracht+" auf Patientenstamm gedropt");
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+                // Ein Problem ist aufgetreten
+                e.dropComplete(true);
+            }
+
+            @Override
+            public void dropActionChanged(DropTargetDragEvent e) {
+            }
+        };
+        try {
+            dndt.addDropTargetListener(dropTargetListener);
+        } catch (TooManyListenersException e1) {
+
+            e1.printStackTrace();
+        }
+        jxLink.setDropTarget(dndt);
+
+        tp1.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("Ärzte");
+        jxLink.setActionCommand("Arztstamm");
+        jxLink.setToolTipText("Strg+A = Arztstamm starten");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/system-users.png").getImage()
+                                                                                   .getScaledInstance(24, 24,
+                                                                                           Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        // jxLink.setEnabled(false);
+        tp1.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("Krankenkassen");
+        jxLink.setToolTipText("Strg+K = Kassenstamm starten");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/krankenkasse.png").getImage()
+                                                                                   .getScaledInstance(24, 24,
+                                                                                           Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        tp1.add(jxLink);
+        tp1.setCollapsed(SystemConfig.taskPaneCollapsed[0]);
+        return tp1;
+    }
+
+    private JXTaskPane getTerminKalender() {
+        Image img = null;
+        tp4 = new JXTaskPane();
+        UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
+        UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
+        UIManager.put("TaskPane.background", new Color(214, 223, 247));
+        UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+        WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+        tp4.setUI(wui);
+        tp4.setTitle("Termin-Management");
+        tp4.setIcon(new ImageIcon(Path.Instance.getProghome() + "icons/table_mode.png"));
+        JXHyperlink jxLink = new JXHyperlink();
+        jxLink.setText("Terminkalender starten");
+        jxLink.setToolTipText("Strg+T = Terminkalender starten");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/evolution-addressbook.png").getImage()
+                                                                                            .getScaledInstance(24, 24,
+                                                                                                    Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        tp4.add(jxLink);
+        jxLink = new JXHyperlink();
+        DropTarget dndt = new DropTarget();
+        DropTargetListener dropTargetListener = new DropTargetListener() {
+            @Override
+            public void dragEnter(DropTargetDragEvent e) {
+            }
+
+            @Override
+            public void dragExit(DropTargetEvent e) {
+            }
+
+            @Override
+            public void dragOver(DropTargetDragEvent e) {
+            }
+
+            @Override
+            public void drop(DropTargetDropEvent e) {
+                String mitgebracht = "";
+                try {
+                    Transferable tr = e.getTransferable();
+                    DataFlavor[] flavors = tr.getTransferDataFlavors();
+                    for (int i = 0; i < flavors.length; i++) {
+                        mitgebracht = (String) tr.getTransferData(flavors[i]);
+                    }
+                    // System.out.println("Es wurde mitgebracht "+mitgebracht);
+                    if (mitgebracht.indexOf("°") >= 0) {
+                        if (!mitgebracht.split("°")[0].contains("TERMDAT")) {
+                            return;
+                        }
+                        // ProgLoader.ProgRoogleFenster(0, mitgebracht);
+                        Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
+                    }
+                    //// System.out.println(mitgebracht);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+                // Ein Problem ist aufgetreten
+                e.dropComplete(true);
+            }
+
+            @Override
+            public void dropActionChanged(DropTargetDragEvent e) {
+            }
+        };
+        try {
+            dndt.addDropTargetListener(dropTargetListener);
+        } catch (TooManyListenersException e1) {
+
+            e1.printStackTrace();
+        }
+        jxLink.setDropTarget(dndt);
+        jxLink.setName("Rugl");
+        String srugl = "<html><font color='#000000'>[</font><font color='#0000ff'>R</font><font color='#ff0000'>u</font>"
+                + "<font color='#00ffff'><b>:</b></font><font color='#0000ff'>g</font><font color='#00ff00'>l</font>"
+                + "<font color='#000000'>]</font>&nbsp;- Die Terminsuchmaschine";
+        jxLink.setText(srugl);
+        // jxLink.setText("[Ru:gl] - Die Terminsuchmaschine");
+        jxLink.setToolTipText("Strg+R = [Ru:gl] starten");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/orca.png").getImage()
+                                                                           .getScaledInstance(24, 24,
+                                                                                   Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.setActionCommand("[Ru:gl] - Die Terminsuchmaschine");
+        jxLink.addActionListener(this);
+        tp4.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("Wochenarbeitszeiten definieren");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/alacarte.png").getImage()
+                                                                               .getScaledInstance(24, 24,
+                                                                                       Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        tp4.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("Akutliste - kurzfristige Termine");
+        jxLink.setActionCommand("Akutliste");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/vcalendar.png").getImage()
+                                                                                .getScaledInstance(24, 24,
+                                                                                        Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        tp4.add(jxLink);
+
+        jxLink = new JXHyperlink();
+        jxLink.setText("Thera-\u03C0" + " Erinnerungs-System");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/chronometer.png").getImage()
+                                                                                  .getScaledInstance(24, 24,
+                                                                                          Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setActionCommand("neuerwecker");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        dndt = new DropTarget();
+        dropTargetListener = new DropTargetListener() {
+            @Override
+            public void dragEnter(DropTargetDragEvent e) {
+            }
+
+            @Override
+            public void dragExit(DropTargetEvent e) {
+            }
+
+            @Override
+            public void dragOver(DropTargetDragEvent e) {
+            }
+
+            @Override
+            public void drop(DropTargetDropEvent e) {
+                String mitgebracht = "";
+                try {
+                    Transferable tr = e.getTransferable();
+                    DataFlavor[] flavors = tr.getTransferDataFlavors();
+                    for (int i = 0; i < flavors.length; i++) {
+                        mitgebracht = (String) tr.getTransferData(flavors[i]);
+                    }
+                    //// System.out.println(mitgebracht);
+                    if (mitgebracht.indexOf("°") >= 0) {
+                        if (!mitgebracht.split("°")[0].contains("TERMDAT")) {
+                            return;
+                        }
+                        // ProgLoader.ProgRoogleFenster(0, mitgebracht);
+                        doWeckerDrop(mitgebracht);
+                    }
+                    //// System.out.println(mitgebracht);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+                // Ein Problem ist aufgetreten
+                e.dropComplete(true);
+            }
+
+            @Override
+            public void dropActionChanged(DropTargetDragEvent e) {
+            }
+        };
+        try {
+            dndt.addDropTargetListener(dropTargetListener);
+        } catch (TooManyListenersException e1) {
+
+            e1.printStackTrace();
+        }
+        jxLink.setDropTarget(dndt);
+        jxLink.setName("Rugl");
+
+        tp4.add(jxLink);
+        tp4.setCollapsed(SystemConfig.taskPaneCollapsed[1]);
+        // tp4.setExpanded(true);
+        return tp4;
+    }
+
+    private JXTaskPane getOpenOfficeOrg() {
+        tp3 = new JXTaskPane();
+        UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
+        UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
+        UIManager.put("TaskPane.background", new Color(214, 223, 247));
+        UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+        WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+        tp3.setUI(wui);
+        tp3.setTitle("OpenOffice.org");
+        tp3.setIcon(SystemConfig.hmSysIcons.get("openoffice"));
+        oo1 = new JXHyperlink();
+        oo1.setText("OpenOffice-Writer");
+        oo1.setClickedColor(new Color(0, 0x33, 0xFF));
+        oo1.setIcon(SystemConfig.hmSysIcons.get("ooowriter"));
+        oo1.addActionListener(this);
+        tp3.add(oo1);
+        oo2 = new JXHyperlink();
+        oo2.setIcon(SystemConfig.hmSysIcons.get("ooocalc"));
+        oo2.setText("OpenOffice-Calc");
+        oo2.setClickedColor(new Color(0, 0x33, 0xFF));
+        oo2.addActionListener(this);
+        tp3.add(oo2);
+        oo2 = new JXHyperlink();
+        oo2.setIcon(SystemConfig.hmSysIcons.get("oooimpress"));
+        oo2.setText("OpenOffice-Impress");
+        oo2.setClickedColor(new Color(0, 0x33, 0xFF));
+        oo2.addActionListener(this);
+        tp3.add(oo2);
+        tp3.setCollapsed(SystemConfig.taskPaneCollapsed[2]);
+        return tp3;
+    }
+
+    private JXTaskPane getNuetzliches() {
+        Image img = null;
+        tp5 = new JXTaskPane();
+        UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
+        UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
+        UIManager.put("TaskPane.background", new Color(214, 223, 247));
+        UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+        WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+        tp5.setUI(wui);
+
+        tp5.setTitle("Nützliches...");
+        // tp3.setIcon(new ImageIcon("icons/pdf.gif"));
+        JXHyperlink jxLink = new JXHyperlink();
+        jxLink.setText("Thera-PI - Nachrichten");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/emblem-mail.png").getImage()
+                                                                                  .getScaledInstance(24, 24,
+                                                                                          Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.addActionListener(this);
+        tp5.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("Thera-PI - Browser");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/home.gif").getImage()
+                                                                           .getScaledInstance(24, 24,
+                                                                                   Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.addActionListener(this);
+        tp5.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("piTool - ScreenShots");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/camera_unmount.png").getImage()
+                                                                                     .getScaledInstance(24, 24,
+                                                                                             Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setActionCommand("piTool");
+        jxLink.addActionListener(this);
+        // jxLink.setEnabled(false);
+        tp5.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("piHelp - Hifetextgenerator");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/fragezeichenklein.png").getImage()
+                                                                                        .getScaledInstance(24, 24,
+                                                                                                Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setActionCommand("piHelp");
+        jxLink.addActionListener(this);
+        // jxLink.setEnabled(false);
+        tp5.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("Textbausteine - Therapiebericht");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/abiword.png").getImage()
+                                                                              .getScaledInstance(24, 24,
+                                                                                      Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setActionCommand("piTextb");
+        jxLink.addActionListener(this);
+        // jxLink.setEnabled(false);
+        tp5.add(jxLink);
+
+        jxLink = new JXHyperlink();
+        jxLink.setText("Textbausteine - Gutachten");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/abiword.png").getImage()
+                                                                              .getScaledInstance(24, 24,
+                                                                                      Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setActionCommand("piArztTextb");
+        jxLink.addActionListener(this);
+        // jxLink.setEnabled(false);
+        tp5.add(jxLink);
+
+        jxLink = new JXHyperlink();
+        jxLink.setText("ICD-10 Recherche");
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/mag.png").getImage()
+                                                                          .getScaledInstance(24, 24,
+                                                                                  Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setActionCommand("piIcd10");
+        jxLink.addActionListener(this);
+        // jxLink.setEnabled(false);
+        tp5.add(jxLink);
+        File f = new File(Path.Instance.getProghome() + "QMHandbuch.jar");
+        if (f.exists()) {
+            jxLink = new JXHyperlink();
+            jxLink.setText("QM-Handbuch");
+            jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+            img = new ImageIcon(Path.Instance.getProghome() + "icons/abiword.png").getImage()
+                                                                                  .getScaledInstance(24, 24,
+                                                                                          Image.SCALE_SMOOTH);
+            jxLink.setIcon(new ImageIcon(img));
+            jxLink.setActionCommand("piQM");
+            jxLink.addActionListener(this);
+            // jxLink.setEnabled(false);
+            tp5.add(jxLink);
+        }
+        f = new File(Path.Instance.getProghome() + "QMAuswertung.jar");
+        if (f.exists()) {
+            jxLink = new JXHyperlink();
+            jxLink.setText("QM-Auswertungen");
+            jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+            img = new ImageIcon(Path.Instance.getProghome() + "icons/abiword.png").getImage()
+                                                                                  .getScaledInstance(24, 24,
+                                                                                          Image.SCALE_SMOOTH);
+            jxLink.setIcon(new ImageIcon(img));
+            jxLink.setActionCommand("piAW");
+            jxLink.addActionListener(this);
+            // jxLink.setEnabled(false);
+            tp5.add(jxLink);
+        }
+
+        tp5.setCollapsed(SystemConfig.taskPaneCollapsed[3]);
+        return tp5;
+    }
+
+    private JXTaskPane getSystemEinstellungen() {
+        Image img = null;
+        tp2 = new JXTaskPane();
+        UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
+        UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
+        UIManager.put("TaskPane.background", new Color(214, 223, 247));
+        UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+        WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+        tp2.setUI(wui);
+
+        tp2.setTitle("Systemeinstellungen");
+        tp2.setIcon(new ImageIcon(Path.Instance.getProghome() + "icons/pdf.gif"));
+        JXHyperlink jxLink = new JXHyperlink();
+        jxLink.setText("Benutzerverwaltung");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/contact-new.png").getImage()
+                                                                                  .getScaledInstance(24, 24,
+                                                                                          Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        jxLink.setEnabled(true);
+        tp2.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("System Initialisierung");
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/galternatives.png").getImage()
+                                                                                    .getScaledInstance(24, 24,
+                                                                                            Image.SCALE_SMOOTH);
+        jxLink.setIcon(new ImageIcon(img));
+        jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+        jxLink.addActionListener(this);
+        tp2.add(jxLink);
+        jxLink = new JXHyperlink();
+        jxLink.setText("Look & Feel");
+        jxLink.addActionListener(this);
+        jxLink.setEnabled(false);
+        tp2.add(jxLink);
+        tp2.setCollapsed(SystemConfig.taskPaneCollapsed[4]);
+        return tp2;
+    }
+
+    private JXTaskPane getMonatsUebersicht() {
+        tp6 = new JXTaskPane();
+        UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
+        UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
+        UIManager.put("TaskPane.background", new Color(214, 223, 247));
+        UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+        WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+        tp6.setUI(wui);
+        tp6.setTitle("Monatsübersicht");
+        final JXMonthView monthView = new JXMonthView();
+        monthView.setPreferredColumnCount(1);
+        monthView.setPreferredRowCount(1);
+        monthView.setTraversable(true);
+        monthView.setShowingWeekNumber(true);
+        al = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (TerminFenster.getThisClass() != null) {
+                    Date dat = monthView.getSelectionDate();
+                    if (dat == null) {
+                        return;
+                    }
+                    wahlTag = sdf.format(monthView.getSelectionDate());
+                    if (wahlTag.equals(aktTag)) {
+                        return;
+                    }
+                    aktTag = wahlTag;
+                    Reha.instance.progLoader.ProgTerminFenster(1, 0);
+                    TerminFenster.getThisClass()
+                                 .springeAufDatum(aktTag);
+                } else {
+                    Date dat = monthView.getSelectionDate();
+                    if (dat == null) {
+                        return;
+                    }
+                    wahlTag = sdf.format(monthView.getSelectionDate());
+                    if (wahlTag.equals(aktTag)) {
+                        return;
+                    }
+                    aktTag = wahlTag;
+                    Reha.instance.progLoader.ProgTerminFenster(1, 0);
+                    SwingUtilities.invokeLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            TerminFenster.getThisClass()
+                                         .springeAufDatum(aktTag);
+
+                        }
+                    });
+                }
+
+            }
+        };
+        monthView.addActionListener(al);
+        tp6.add(monthView);
+        tp6.setCollapsed(true);
+        tp6.setCollapsed(SystemConfig.taskPaneCollapsed[5]);
+        return tp6;
+    }
+
+    private JXTaskPane getUserTasks() {
+        tp7 = new JXTaskPane();
+        UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
+        UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
+        UIManager.put("TaskPane.background", new Color(214, 223, 247));
+        UIManager.put("TaskPane.useGradient", Boolean.TRUE);
+        WindowsTaskPaneUI wui = new WindowsTaskPaneUI();
+        tp7.setUI(wui);
+        tp7.setTitle("Benutzer-Tasks");
+        Image img = null;
+        // img = new ImageIcon("bildle").getImage().getScaledInstance(24, 24,
+        // Image.SCALE_SMOOTH);
+        // tp7.setIcon(new ImageIcon(img));
+        for (int i = 0; i < SystemConfig.vUserTasks.size(); i++) {
+            JXHyperlink jxLink = new JXHyperlink();
+            jxLink.setText(SystemConfig.vUserTasks.get(i)
+                                                  .get(0));
+            img = new ImageIcon(SystemConfig.vUserTasks.get(i)
+                                                       .get(1)).getImage()
+                                                               .getScaledInstance(24, 24, Image.SCALE_SMOOTH);
+            jxLink.setIcon(new ImageIcon(img));
+            jxLink.setActionCommand("UserTask-" + Integer.toString(i));
+            jxLink.addActionListener(this);
+            jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
+            // jxLink.setEnabled();
+            tp7.add(jxLink);
+        }
+        tp7.setCollapsed(SystemConfig.taskPaneCollapsed[6]);
+        return tp7;
+    }
+
+    public static void UpdateUI() {
+        jxTPcontainer.updateUI();
+        tp1.updateUI();
+        tp2.updateUI();
+        tp3.updateUI();
+        tp4.updateUI();
+        tp5.updateUI();
+        tp6.updateUI();
+        //// System.out.println("TaskPane-Container L&F");
+    }
+
+    /**
+     * Eigener Event-Handler man wird sehen ob das vern�ftig ist.
+     * 
+     * @Override
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String cmd = e.getActionCommand();
+        int i;
+        for (i = 0; i < 1; i++) {
+            if (cmd.equals("Look & Feel")) {
+                ExUndHop eUh = new ExUndHop();
+                eUh.setzeStatement("delete from flexlock");
+                // ProgLoader.ProgLookAndFeel(0);
+                break;
+            }
+
+            if (cmd.equals("System Initialisierung")) {
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        try {
+                            Reha.getThisFrame()
+                                .setCursor(Cursors.wartenCursor);
+                            // ProgLoader.SystemInitialisierung();
+                            Reha.instance.progLoader.SystemInit(1, "");
+                            Reha.getThisFrame()
+                                .setCursor(Cursors.normalCursor);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        return null;
+                    }
+
+                }.execute();
+
+                /*
+                 * SystemUtil sysUtil = new SystemUtil(Reha.thisFrame);
+                 * sysUtil.setSize(800,600); sysUtil.setLocation(100,75);
+                 * sysUtil.setVisible(true);
+                 */
+                break;
+            }
+
+            if (cmd.equals("Krankenkassen")) {
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
+                        // ProgLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.normalCursor);
+                        return null;
+                    }
+                }.execute();
+                break;
+            }
+
+            if (cmd.equals("Terminkalender starten")) {
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.ProgTerminFenster(1,
+                                (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
+                        // ProgLoader.ProgTerminFenster(1,0);
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.normalCursor);
+                        return null;
+                    }
+                }.execute();
+                break;
+            }
+            if (cmd.equals("Arztstamm")) {
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
+                        // ProgLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.normalCursor);
+                        return null;
+                    }
+                }.execute();
+                break;
+            }
+            if (cmd.equals("Wochenarbeitszeiten definieren")) {
+                JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
+                if (termin != null) {
+                    JOptionPane.showMessageDialog(null,
+                            "Achtung!!!!! \n\nWährend der Arbeitszeit-Definition\n"
+                                    + "darf der Terminkalender aus Sicherheitsgründen nicht geöffnet sein.\n"
+                                    + "Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
+                    return;
+                }
+                Reha.instance.progLoader.ProgTerminFenster(0, 2);
+                // ProgLoader.ProgTerminFenster(0,2);
+                // MaskenErstellen();
+                break;
+            }
+            if (cmd.equals("monthview")) {
+                new DatumWahl(200, 200);
+                break;
+            }
+
+            if (cmd.equals("OpenOffice-Writer")) {
+                OOTools.starteLeerenWriter();
+                break;
+            }
+
+            if (cmd.equals("OpenOffice-Calc")) {
+                OOTools.starteLeerenCalc();
+                break;
+            }
+
+            if (cmd.equals("OpenOffice-Impress")) {
+                OOTools.starteLeerenImpress();
+                break;
+            }
+
+            if (cmd.equals("Benutzerverwaltung")) {
+                Reha.instance.progLoader.BenutzerrechteFenster(1, "");
+                break;
+            }
+            if (cmd.equals("[Ru:gl] - Die Terminsuchmaschine")) {
+                Reha.instance.progLoader.ProgRoogleFenster(0, null);
+                // ProgLoader.ProgRoogleFenster(0,null);
+                break;
+            }
+            if (cmd.equals("RTA-Wisssen das Universalwissen")) {
+                break;
+            }
+            if (cmd.equals("Thera-PI - Browser")) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        new LadeProg(Path.Instance.getProghome() + "RehaWissen.jar");
+                    }
+                }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Hilfebrowser laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            Thread.sleep(20);
+                            if (System.currentTimeMillis() - zeit > 6000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+
+                break;
+            }
+            if (cmd.equals("Thera-PI - Nachrichten")) {
+                // Reha.nachrichtenRegeln();
+                if (!RehaIOServer.rehaMailIsActive) {
+                    if (Reha.aktUser.startsWith("Therapeut")) {
+                        return;
+                    }
+                    Reha.getThisFrame()
+                        .setCursor(Cursors.wartenCursor);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            new LadeProg(Path.Instance.getProghome() + "RehaMail.jar" + " "
+                                    + Path.Instance.getProghome() + " " + Reha.getAktIK() + " " + Reha.xport + " "
+                                    + Reha.aktUser.replace(" ", "#"));
+                        }
+                    }.start();
+
+                } else {
+                    if (Reha.aktUser.startsWith("Therapeut")) {
+                        return;
+                    }
+                    new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort,
+                            "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
+                }
+
+            }
+            if (cmd.equals("Neuer Wissensbeitrag anlegen")) {
+                JOptionPane.showMessageDialog(null, "Achtung!!!!! \n\nDer Wissens-Generator ist auf diesem System\n\n"
+                        + "nicht installiert - oder konnte nicht gefunden werden...\n\n");
+                break;
+            }
+            if (cmd.equals("Patienten und Rezepte")) {
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.ProgPatientenVerwaltung(1, conn);
+                        // Reha.instance.progLoader.ProgTerminFenster(0, 1);
+                        // ProgLoader.ProgPatientenVerwaltung(1);
+                        setCursor(Cursors.normalCursor);
+                        return null;
+                    }
+                }.execute();
+                break;
+            }
+            if (cmd.equals("piHelp")) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            new LadeProg(Path.Instance.getProghome() + "piHelp.jar " + Path.Instance.getProghome() + " "
+                                    + Reha.getAktIK());
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }.start();
+
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "piHelp - Hilfetextgenerator laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            Thread.sleep(20);
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+                break;
+            }
+            if (cmd.equals("piTool")) {
+                new LadeProg(Path.Instance.getProghome() + "piTool.jar");
+                break;
+            }
+            if (cmd.equals("piTextb")) {
+                textbaus.main(new String[] { Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/rehajava.ini",
+                        Path.Instance.getProghome() + "ini/thbericht.ini"
+
+                });
+                // new LadeProg(Path.Instance.getProghome()+"TBedit.jar "+
+                // Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
+                // Path.Instance.getProghome()+"ini/textbaustein.ini");
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            Thread.sleep(20);
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+
+                break;
+            }
+            if (cmd.equals("piArztTextb")) {
+                if (!Rechte.hatRecht(Rechte.Sonstiges_textbausteinegutachten, true)) {
+                    return;
+                }
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            ArztBaustein.start(new IK(Reha.getAktIK()), Reha.officeapplication);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }.start();
+
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            Thread.sleep(20);
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+                }.execute();
+
+                break;
+            }
+            if (cmd.equals("piIcd10")) {
+                SwingUtilities.invokeLater(new ICDrahmen(conn));
+            }
+            if (cmd.equals("piQM")) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        new LadeProg(Path.Instance.getProghome() + "QMHandbuch.jar");
+                    }
+                }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "QM-Handbuch laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            Thread.sleep(20);
+                            if (System.currentTimeMillis() - zeit > 4000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+
+            }
+            if (cmd.equals("piAW")) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        new LadeProg(Path.Instance.getProghome() + "QMAuswertung.jar" + " "
+                                + Path.Instance.getProghome() + " " + Reha.getAktIK());
+                    }
+                }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "QM-Auswertung laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            Thread.sleep(20);
+                            if (System.currentTimeMillis() - zeit > 4000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+
+            }
+
+            if (cmd.equals("Akutliste")) {
+                if (SqlInfo.holeEinzelFeld("select id from pat5 where akutpat='T' LIMIT 1")
+                           .equals("")) {
+                    JOptionPane.showMessageDialog(null, "Keine Akutpatienten im Patientenstamm vermerkt");
+                    return;
+                }
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        try {
+                            Reha.getThisFrame()
+                                .setCursor(Cursors.wartenCursor);
+                            try {
+                                new AkutListe();
+                            } catch (TextException e) {
+
+                                e.printStackTrace();
+                            }
+                            Reha.getThisFrame()
+                                .setCursor(Cursors.cdefault);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                        return null;
+                    }
+                }.execute();
+
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Akutliste starten -  dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            Thread.sleep(20);
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+                break;
+            }
+            if (cmd.equals("neuerwecker")) {
+                Wecker wecker = new Wecker(null);
+                wecker.pack();
+                wecker.setVisible(true);
+                wecker = null;
+                break;
+            }
+            if (cmd.startsWith("UserTask-")) {
+                try {
+                    int taskNummer = Integer.parseInt(cmd.toString()
+                                                         .split("-")[1]);
+                    Runtime.getRuntime()
+                           .exec(SystemConfig.vUserTasks.get(taskNummer)
+                                                        .get(2));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                break;
+            }
+
+        }
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentResized(ComponentEvent e) {
+
+        //// System.out.println("Linke-Task-Pane: "+e);
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    private boolean testUserTask() {
+        File f = new File(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/usertask.ini");
+        if (!f.exists()) {
+            return false;
+        }
+        try {
+            INIFile utask = new INIFile(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/usertask.ini");
+            int tasks = Integer.parseInt(utask.getStringProperty("UserTasks", "AnzahlUserTasks"));
+            if (tasks == 0) {
+                return false;
+            }
+            Vector<String> dummy = new Vector<String>();
+            for (int i = 0; i < tasks; i++) {
+                dummy.clear();
+                dummy.add(utask.getStringProperty("UserTasks", "UserTaskTitel" + Integer.toString(i + 1)));
+                dummy.add(utask.getStringProperty("UserTasks", "UserIcon" + Integer.toString(i + 1)));
+                dummy.add(utask.getStringProperty("UserTasks", "UserTaskExecute" + Integer.toString(i + 1)));
+                SystemConfig.vUserTasks.add((Vector<String>) dummy.clone());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public static void OoOk() {
+        // LinkeTaskPane.thisClass.oo1.setEnabled(true);
+        // LinkeTaskPane.thisClass.oo2.setEnabled(true);
+    }
+
+    public void MaskenErstellen() {
+        String sstmt = "";
+        String behandler = "";
+        Statement stmt = null;
+        try {
+            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            for (int i = 1; i < 61; i++) {
+                for (int t = 1; t < 8; t++) {
+                    behandler = (i < 10 ? "0" + i + "BEHANDLER" : Integer.toString(i) + "BEHANDLER");
+                    sstmt = "insert into masken set behandler='" + behandler + "' , art = '" + t
+                            + "' ,belegt='1', N1='@FREI', TS1='07:00:00', TD1='900', TE1='22:00:00'";
+                    //// System.out.println(sstmt);
+                    try {
+                        stmt.execute(sstmt);
+                    } catch (SQLException e) {
+
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        } finally {
+            if (stmt != null) {
+                try {
+                    stmt.close();
+                } catch (SQLException e) {
+
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void doWeckerDrop(String drops) {
+        Wecker wecker = new Wecker(drops);
+        wecker.pack();
+        wecker.setVisible(true);
+        wecker = null;
+    }
+
+    private void doPatientDrop(String rez_nr) {
+        String pat_int = "";
+        String reznr = rez_nr;
+        boolean inhistorie = false;
+        int ind = reznr.indexOf("\\");
+        if (ind >= 0) {
+            reznr = reznr.substring(0, ind);
+        }
+
+        Vector<String> vec = SqlInfo.holeSatz("verordn", "pat_intern", "rez_nr='" + reznr + "'",
+                new ArrayList<String>());
+        if (vec.size() == 0) {
+            vec = SqlInfo.holeSatz("lza", "pat_intern", "rez_nr='" + reznr + "'", new ArrayList<String>());
+            if (vec.size() == 0) {
+                JOptionPane.showMessageDialog(null,
+                        "Rezept weder im aktuellen Rezeptstamm noch in der Historie vorhanden!\nIst die eingetragene Rezeptnummer korrekt?");
+                return;
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Rezept ist bereits abgerechnet und somit in der Historie des Patienten!");
+                inhistorie = true;
+            }
+        }
+        vec = SqlInfo.holeSatz("pat5", "pat_intern", "pat_intern='" + vec.get(0) + "'", new ArrayList<String>());
+        if (vec.size() == 0) {
+            JOptionPane.showMessageDialog(null,
+                    "Patient mit zugeordneter Rezeptnummer -> " + reznr + " <- wurde nicht gefunden");
+            return;
+        }
+        pat_int = vec.get(0);
+        JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
+        final String xreznr = reznr;
+        final boolean xinhistorie = inhistorie;
+        if (patient == null) {
+            final String xpat_int = pat_int;
+            new SwingWorker<Void, Void>() {
+                @Override
+                protected Void doInBackground() throws Exception {
+                    JComponent xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
+                    Reha.instance.progLoader.ProgPatientenVerwaltung(1, conn);
+                    while ((xpatient == null)) {
+                        Thread.sleep(20);
+                        xpatient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
+                    }
+                    while ((!AktuelleRezepte.initOk)) {
+                        Thread.sleep(20);
+                    }
+
+                    String s1 = "#PATSUCHEN";
+                    String s2 = xpat_int;
+                    PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
+                    pEvt.setPatStammEvent("PatSuchen");
+                    pEvt.setDetails(s1, s2, "#REZHOLEN-" + xreznr);
+                    PatStammEventClass.firePatStammEvent(pEvt);
+                    if (xinhistorie) {
+                        Reha.instance.patpanel.getTab()
+                                              .setSelectedIndex(1);
+                    } else {
+                        Reha.instance.patpanel.getTab()
+                                              .setSelectedIndex(0);
+                    }
+
+                    return null;
+                }
+
+            }.execute();
+        } else {
+            Reha.instance.progLoader.ProgPatientenVerwaltung(1, conn);
+            String s1 = "#PATSUCHEN";
+            String s2 = pat_int;
+            PatStammEvent pEvt = new PatStammEvent(Reha.instance.terminpanel);
+            pEvt.setPatStammEvent("PatSuchen");
+            pEvt.setDetails(s1, s2, "#REZHOLEN-" + xreznr);
+            PatStammEventClass.firePatStammEvent(pEvt);
+            if (xinhistorie) {
+                Reha.instance.patpanel.getTab()
+                                      .setSelectedIndex(1);
+            } else {
+                Reha.instance.patpanel.getTab()
+                                      .setSelectedIndex(0);
+            }
+
+        }
+    }
+
+    /************************************************************/
+
+    /************************************************************/
+
+    @Override
+    public void dragEnter(DropTargetDragEvent arg0) {
+
+        //// System.out.println("Enter---->"+arg0);
+        //// System.out.println(((JComponent)arg0.getSource()).getName());
+
+    }
+
+    @Override
+    public void dragExit(DropTargetEvent arg0) {
+
+    }
+
+    @Override
+    public void dragOver(DropTargetDragEvent arg0) {
+
+    }
+
+    @Override
+    public void drop(DropTargetDropEvent arg0) {
+
+        //// System.out.println(arg0);
+
+    }
+
+    @Override
+    public void dropActionChanged(DropTargetDragEvent arg0) {
+
+    }
+
+    /************************************************************/
 }
-
-

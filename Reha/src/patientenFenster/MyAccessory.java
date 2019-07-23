@@ -14,50 +14,49 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 
 public class MyAccessory extends JComponent implements PropertyChangeListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2626268910546018039L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 2626268910546018039L;
 
-	private Image image;
+    private Image image;
 
-	public MyAccessory(JFileChooser chooser) {
+    public MyAccessory(JFileChooser chooser) {
 
-		chooser.addPropertyChangeListener(this);
+        chooser.addPropertyChangeListener(this);
 
-		setPreferredSize(new Dimension(150, 150));
-		this.setBounds(0, 10, 0, 0);
-		this.setBorder(BorderFactory.createEtchedBorder());
-	}
+        setPreferredSize(new Dimension(150, 150));
+        this.setBounds(0, 10, 0, 0);
+        this.setBorder(BorderFactory.createEtchedBorder());
+    }
 
-
-	@Override
+    @Override
     public void propertyChange(PropertyChangeEvent evt) {
-		if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(evt
-				.getPropertyName())) {
-			// Get the new selected file
-			File newFile = (File) evt.getNewValue();
+        if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(evt.getPropertyName())) {
+            // Get the new selected file
+            File newFile = (File) evt.getNewValue();
 
-			// Prepare the preview data based on the new selected file
-			try {
-				image = Toolkit.getDefaultToolkit()
-						.getImage(newFile.toString()).getScaledInstance(150, 150, Image.SCALE_FAST);
-				MediaTracker mediaTracker = new MediaTracker(this);
-				mediaTracker.addImage(image, 0);
-				mediaTracker.waitForID(0);
-			} catch (Exception ie) {
-			}
-			
-			repaint();
-		}
-	}
+            // Prepare the preview data based on the new selected file
+            try {
+                image = Toolkit.getDefaultToolkit()
+                               .getImage(newFile.toString())
+                               .getScaledInstance(150, 150, Image.SCALE_FAST);
+                MediaTracker mediaTracker = new MediaTracker(this);
+                mediaTracker.addImage(image, 0);
+                mediaTracker.waitForID(0);
+            } catch (Exception ie) {
+            }
 
-	@Override
+            repaint();
+        }
+    }
+
+    @Override
     public void paint(Graphics g) {
-		try {
-			g.drawImage(image, 10, 0, 150, 150, this.getBackground(), null);
-		} catch (NullPointerException np) {
+        try {
+            g.drawImage(image, 10, 0, 150, 150, this.getBackground(), null);
+        } catch (NullPointerException np) {
 
-		}
-	}
+        }
+    }
 }

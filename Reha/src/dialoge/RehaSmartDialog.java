@@ -35,7 +35,8 @@ import gui.Cursors;
 import hauptFenster.Reha;
 import systemTools.ListenerTools;
 
-public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowListener,MouseMotionListener,MouseListener,KeyListener{
+public class RehaSmartDialog extends JXDialog
+        implements ISmartDialog, WindowListener, MouseMotionListener, MouseListener, KeyListener {
 //public class RehaSmartDialog extends JXDialog implements RehaTPEventListener{
 
     /**
@@ -51,36 +52,34 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
     public boolean insize;
 
-    public int[] waagrecht = {0,0};
-    public int[] senkrecht = {0,0};
-    public int[] orgbounds = {0,0};
+    public int[] waagrecht = { 0, 0 };
+    public int[] senkrecht = { 0, 0 };
+    public int[] orgbounds = { 0, 0 };
     public int hilfsint = 0;
     public int sizeart;
     public JXTitledPanel jtp = null;
-    public RehaTPEventClass xEvent;  //  @jve:decl-index=0:
-    public PinPanel pinPanel =  null;
-    public String name = "";  //  @jve:decl-index=0:
+    public RehaTPEventClass xEvent; // @jve:decl-index=0:
+    public PinPanel pinPanel = null;
+    public String name = ""; // @jve:decl-index=0:
     public boolean ignorereturn = false;
 
     /**
-    * @param
-    */
-    public RehaSmartDialog(JXFrame owner,String name) {
-        //super();
+     * @param
+     */
+    public RehaSmartDialog(JXFrame owner, String name) {
+        // super();
 
-
-        super(owner, (JComponent)Reha.getThisFrame().getGlassPane());
-        //super(owner,null);
+        super(owner, (JComponent) Reha.getThisFrame()
+                                      .getGlassPane());
+        // super(owner,null);
         this.name = name;
         this.setName(name);
-        //this.setAlwaysOnTop(true);
+        // this.setAlwaysOnTop(true);
         setName(name);
-
 
         initialize();
 
-        //KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
-
+        // KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
 
         try {
 
@@ -103,7 +102,7 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
         final ActionListener listener = new ActionListener() {
             @Override
             public final void actionPerformed(final ActionEvent e) {
-                if(hasFocus()){
+                if (hasFocus()) {
                     setVisible(false);
                     dispose();
                 }
@@ -111,65 +110,60 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
         };
         /*
-        final KeyStroke keyStroke =
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
-        getRootPane().registerKeyboardAction(listener, keyStroke,
-                JComponent.WHEN_IN_FOCUSED_WINDOW);
-    */
-        final KeyStroke keyStroke =
-            KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
-        getRootPane().registerKeyboardAction(listener, keyStroke,
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+         * final KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0,
+         * true); getRootPane().registerKeyboardAction(listener, keyStroke,
+         * JComponent.WHEN_IN_FOCUSED_WINDOW);
+         */
+        final KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, true);
+        getRootPane().registerKeyboardAction(listener, keyStroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
 
     }
 
     /**
-    * This method initializes this
-    *
-    * @return void
-    */
+     * This method initializes this
+     *
+     * @return void
+     */
     private void initialize() {
         this.setUndecorated(true);
         this.setSize(700, 500);
         this.setContentPane(getJContentPane());
-        //thisClass = this;
+        // thisClass = this;
         this.setModal(false);
         this.setResizable(true);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        //this.addKeyListener(this);
+        // this.addKeyListener(this);
         this.addWindowListener(this);
         getRootPane().addKeyListener(this);
         addKeyListener(this);
         // vorher eingeschaltet //xEvent = new RehaTPEventClass();
 
-
-
     }
 
     /**
-    * This method initializes jContentPane
-    *
-    * @return javax.swing.JPanel
-    */
+     * This method initializes jContentPane
+     *
+     * @return javax.swing.JPanel
+     */
     private JPanel getJContentPane() {
         if (jContentPane == null) {
             jContentPane = new JXPanel();
             jContentPane.setLayout(new BorderLayout());
             jContentPane.setBorder(null);
-            jContentPane.add(getJXTitledPanel(),BorderLayout.CENTER);
+            jContentPane.add(getJXTitledPanel(), BorderLayout.CENTER);
         }
         return jContentPane;
     }
 
     /**
-    * This method initializes JXTitledPanel
-    *
-    * @return org.jdesktop.swingx.JXTitledPanel
-    */
+     * This method initializes JXTitledPanel
+     *
+     * @return org.jdesktop.swingx.JXTitledPanel
+     */
     private JXTitledPanel getJXTitledPanel() {
         if (jtp == null) {
             jtp = new JXTitledPanel();
-            //jtp.addKeyListener(this);
+            // jtp.addKeyListener(this);
             jtp.setTitleForeground(Color.WHITE);
             jtp.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
             jtp.addMouseListener(this);
@@ -180,63 +174,68 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
     }
 
     @Override
-    public JXTitledPanel getSmartTitledPanel(){
+    public JXTitledPanel getSmartTitledPanel() {
         return jtp;
     }
 
-    public boolean WertZwischen(int punkt,int kleinerWert,int grosserWert){
-        if (punkt < kleinerWert){
+    public boolean WertZwischen(int punkt, int kleinerWert, int grosserWert) {
+        if (punkt < kleinerWert) {
             return false;
         }
-        if (punkt > grosserWert){
+        if (punkt > grosserWert) {
             return false;
         }
         return true;
     }
 
     @Override
-    public JXTitledPanel getTitledPanel(){
+    public JXTitledPanel getTitledPanel() {
         return jtp;
     }
 
     @Override
-    public void setContentPanel(Container cont){
+    public void setContentPanel(Container cont) {
         this.jtp.setContentContainer(cont);
-        //this.jtp.setRightDecoration(new PinPanel());
+        // this.jtp.setRightDecoration(new PinPanel());
         this.jtp.setPreferredSize(cont.getPreferredSize());
-        this.setName(this.jtp.getContentContainer().getName());
+        this.setName(this.jtp.getContentContainer()
+                             .getName());
 
     }
-    public Container getContentPanel(){
+
+    public Container getContentPanel() {
         return this.jtp.getContentContainer();
     }
 
     @Override
-    public void aktiviereIcon(){
-        if(pinPanel != null){
+    public void aktiviereIcon() {
+        if (pinPanel != null) {
             pinPanel.SetzeAktivButton(true);
         }
     }
+
     @Override
-    public void deaktiviereIcon(){
-        if(pinPanel != null){
+    public void deaktiviereIcon() {
+        if (pinPanel != null) {
             pinPanel.SetzeAktivButton(false);
         }
     }
+
     @Override
-    public void setPinPanel (PinPanel pinPanel){
+    public void setPinPanel(PinPanel pinPanel) {
         this.pinPanel = pinPanel;
         this.jtp.setRightDecoration(this.pinPanel);
     }
+
     @Override
-    public PinPanel getPinPanel (){
+    public PinPanel getPinPanel() {
         return this.pinPanel;
     }
 
     @Override
-    public void ListenerSchliessen(){
-        ////System.out.println("In ListenerSchließen - Basisklasse");
-        if(xEvent != null){
+    public void ListenerSchliessen() {
+        //// System.out.println("In ListenerSchließen - Basisklasse");
+        if (xEvent != null) {
             xEvent.removeRehaTPEventListener(this);
             xEvent = null;
             ListenerTools.removeListeners(this);
@@ -244,14 +243,15 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
             getRootPane().removeKeyListener(this);
         }
     }
-    public void Schliessen(){
-        ////System.out.println("In Schliessen-Funktion der basisklasse");
-        try{
+
+    public void Schliessen() {
+        //// System.out.println("In Schliessen-Funktion der basisklasse");
+        try {
             ListenerTools.removeListeners(this);
             this.removeWindowListener(this);
             getRootPane().removeKeyListener(this);
-            //Vorher einegeschaltet //xEvent.removeRehaTPEventListener(this);
-        }catch(java.lang.NullPointerException ex){
+            // Vorher einegeschaltet //xEvent.removeRehaTPEventListener(this);
+        } catch (java.lang.NullPointerException ex) {
 
         }
         this.dispose();
@@ -260,28 +260,28 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-        ////System.out.println("In SmartDialog evt = "+evt);
-        try{
-                if(evt.getDetails()[1].equals("ROT")){
-                    ////System.out.println("RehaSmartDialog hat EventListener gelöscht");
-                    xEvent.removeRehaTPEventListener(this);
-                    xEvent = null;
-                    this.dispose();
-                }
+        //// System.out.println("In SmartDialog evt = "+evt);
+        try {
+            if (evt.getDetails()[1].equals("ROT")) {
+                //// System.out.println("RehaSmartDialog hat EventListener gelöscht");
+                xEvent.removeRehaTPEventListener(this);
+                xEvent = null;
+                this.dispose();
+            }
 
-        }catch(java.lang.NullPointerException e){
-            ////System.out.println("Event = "+evt.getDetails()[1]);
-            ////System.out.println("In RehaSmartDialog - Null Pointerexception = "+e);
+        } catch (java.lang.NullPointerException e) {
+            //// System.out.println("Event = "+evt.getDetails()[1]);
+            //// System.out.println("In RehaSmartDialog - Null Pointerexception = "+e);
 
         }
     }
 
-
     @Override
     public void windowActivated(java.awt.event.WindowEvent e) {
-        //Reha.instance.shiftLabel.setText("Dialog -Focus da");
-        if(pinPanel != null){
-            jtp.getContentContainer().requestFocus();
+        // Reha.instance.shiftLabel.setText("Dialog -Focus da");
+        if (pinPanel != null) {
+            jtp.getContentContainer()
+               .requestFocus();
             pinPanel.SetzeAktivButton(true);
         }
     }
@@ -291,22 +291,21 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
         ListenerSchliessen();
         this.removeWindowListener(this);
-        //System.out.println("Basisklasse wird geschlossen - "+getName()+" IgnoreReturn = "+ignorereturn);
-
+        // System.out.println("Basisklasse wird geschlossen - "+getName()+" IgnoreReturn
+        // = "+ignorereturn);
 
     }
 
     @Override
     public void windowClosing(WindowEvent arg0) {
-        //System.out.println("In Closing der Elternklasse "+arg0);
-
+        // System.out.println("In Closing der Elternklasse "+arg0);
 
     }
 
     @Override
     public void windowDeactivated(java.awt.event.WindowEvent e) {
-        //Reha.instance.shiftLabel.setText("Dialog -Focus weg");
-        if(pinPanel != null){
+        // Reha.instance.shiftLabel.setText("Dialog -Focus weg");
+        if (pinPanel != null) {
             pinPanel.SetzeAktivButton(false);
         }
     }
@@ -314,18 +313,15 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
     @Override
     public void windowDeiconified(WindowEvent arg0) {
 
-
     }
 
     @Override
     public void windowIconified(WindowEvent arg0) {
 
-
     }
 
     @Override
     public void windowOpened(WindowEvent arg0) {
-
 
     }
 
@@ -333,53 +329,50 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
     public void setIgnoreReturn(boolean ignore) {
         this.ignorereturn = ignore;
 
-
     }
 
     @Override
     public void mouseClicked(MouseEvent arg0) {
-        ////System.out.println("In Click Klick Y bei "+arg0);
-
+        //// System.out.println("In Click Klick Y bei "+arg0);
 
     }
 
     @Override
     public void mouseEntered(MouseEvent arg0) {
 
-
     }
 
     @Override
     public void mouseExited(MouseEvent arg0) {
 
-
     }
-    public void setClicks(int x,int y){
+
+    public void setClicks(int x, int y) {
         clickY = x;
         clickX = y;
     }
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        ////System.out.println("Klick bei "+e.getY());
-        if (e.getY() <= 25){
+        //// System.out.println("Klick bei "+e.getY());
+        if (e.getY() <= 25) {
             clickY = e.getY();
             clickX = e.getX();
-            hilfsint = getWidth()/2;
-            waagrecht[0] = hilfsint-15;
-            waagrecht[1] = hilfsint+15;
-            hilfsint = getHeight()/2;
-            senkrecht[0] = hilfsint-15;
-            senkrecht[1] = hilfsint+15;
+            hilfsint = getWidth() / 2;
+            waagrecht[0] = hilfsint - 15;
+            waagrecht[1] = hilfsint + 15;
+            hilfsint = getHeight() / 2;
+            senkrecht[0] = hilfsint - 15;
+            senkrecht[1] = hilfsint + 15;
         }
     }
 
     @Override
     public void mouseReleased(java.awt.event.MouseEvent e) {
-        //final java.awt.event.MouseEvent ex = e;
-        SwingUtilities.invokeLater(new Runnable(){
+        // final java.awt.event.MouseEvent ex = e;
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public  void run(){
+            public void run() {
                 setCursor(Cursors.cdefault);
                 clickX = -1;
                 clickY = -1;
@@ -387,39 +380,37 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
                 orgbounds[1] = -1;
                 insize = false;
                 setCursor(Cursors.cdefault);
-                hilfsint = getWidth()/2;
-                waagrecht[0] = hilfsint-15;
-                waagrecht[1] = hilfsint+15;
-                hilfsint = getHeight()/2;
-                senkrecht[0] = hilfsint-15;
-                senkrecht[1] = hilfsint+15;
-                }
+                hilfsint = getWidth() / 2;
+                waagrecht[0] = hilfsint - 15;
+                waagrecht[1] = hilfsint + 15;
+                hilfsint = getHeight() / 2;
+                senkrecht[0] = hilfsint - 15;
+                senkrecht[1] = hilfsint + 15;
+            }
         });
-
 
     }
 
     @Override
     public void mouseDragged(java.awt.event.MouseEvent e) {
-        //int center = (int) getSize().getHeight();
-        ////System.out.println("in Mousedragged");
-        ////System.out.println("Insize = "+insize+" clickY="+clickY);
-        ////System.out.println("Klick Y bei "+e.getY());
-        //clickX = e.getX();
-        if (! insize && clickY > 0){
-            //RehaSmartDialog.thisClass.getLocationOnScreen();
-            ////System.out.println("in Mousedragged");
+        // int center = (int) getSize().getHeight();
+        //// System.out.println("in Mousedragged");
+        //// System.out.println("Insize = "+insize+" clickY="+clickY);
+        //// System.out.println("Klick Y bei "+e.getY());
+        // clickX = e.getX();
+        if (!insize && clickY > 0) {
+            // RehaSmartDialog.thisClass.getLocationOnScreen();
+            //// System.out.println("in Mousedragged");
             final java.awt.event.MouseEvent ex = e;
-            SwingUtilities.invokeLater(new Runnable(){
+            SwingUtilities.invokeLater(new Runnable() {
                 @Override
-                public  void run(){
+                public void run() {
                     setCursor(Cursors.cmove);
-                    setLocation(ex.getXOnScreen()-clickX,ex.getYOnScreen()-clickY);
+                    setLocation(ex.getXOnScreen() - clickX, ex.getYOnScreen() - clickY);
                 }
             });
 
-
-        }else if (insize){
+        } else if (insize) {
             final java.awt.event.MouseEvent ex = e;
 //            SwingUtilities.invokeLater(new Runnable(){
 //                public  void run(){
@@ -427,96 +418,102 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
             Dimension dim = getSize();
             int oX = ex.getXOnScreen();
             int oY = ex.getYOnScreen();
-            for(int i = 0;i<1;i++){
-                if(sizeart==1){ //nord-west
-                    dim.width = (oX > orgbounds[0] ? dim.width-(oX-orgbounds[0]) : dim.width+(orgbounds[0]-oX));
-                    dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));
+            for (int i = 0; i < 1; i++) {
+                if (sizeart == 1) { // nord-west
+                    dim.width = (oX > orgbounds[0] ? dim.width - (oX - orgbounds[0]) : dim.width + (orgbounds[0] - oX));
+                    dim.height = (oY > orgbounds[1] ? dim.height - (oY - orgbounds[1])
+                            : dim.height + (orgbounds[1] - oY));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen(),ex.getYOnScreen());
+                    setLocation(ex.getXOnScreen(), ex.getYOnScreen());
                     setCursor(Cursors.cnwsize);
                     break;
                 }
-                if(sizeart==2){ //nord-ost
-                    dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
-                    dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));
+                if (sizeart == 2) { // nord-ost
+                    dim.width = (oX > orgbounds[0] ? dim.width + (oX - orgbounds[0]) : dim.width - (orgbounds[0] - oX));
+                    dim.height = (oY > orgbounds[1] ? dim.height - (oY - orgbounds[1])
+                            : dim.height + (orgbounds[1] - oY));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen()-dim.width,ex.getYOnScreen());
+                    setLocation(ex.getXOnScreen() - dim.width, ex.getYOnScreen());
                     setCursor(Cursors.cnesize);
                     break;
                 }
-                if(sizeart==3){ //nord
-                    dim.height = (oY > orgbounds[1] ? dim.height-(oY-orgbounds[1]) : dim.height+(orgbounds[1]-oY));
+                if (sizeart == 3) { // nord
+                    dim.height = (oY > orgbounds[1] ? dim.height - (oY - orgbounds[1])
+                            : dim.height + (orgbounds[1] - oY));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen()-ex.getX(),ex.getYOnScreen());
+                    setLocation(ex.getXOnScreen() - ex.getX(), ex.getYOnScreen());
                     setCursor(Cursors.cnsize);
                     break;
                 }
-                if(sizeart==4){ //süd-west
-                    dim.width = (oX > orgbounds[0] ? dim.width-(oX-orgbounds[0]) : dim.width+(orgbounds[0]-oX));
-                    dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
+                if (sizeart == 4) { // süd-west
+                    dim.width = (oX > orgbounds[0] ? dim.width - (oX - orgbounds[0]) : dim.width + (orgbounds[0] - oX));
+                    dim.height = (oY > orgbounds[1] ? dim.height + (oY - orgbounds[1])
+                            : dim.height - (orgbounds[1] - oY));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen(),ex.getYOnScreen()-dim.height);
+                    setLocation(ex.getXOnScreen(), ex.getYOnScreen() - dim.height);
                     setCursor(Cursors.cswsize);
                     break;
                 }
-                if(sizeart==5){ //west
-                    dim.width = (oX > orgbounds[0] ? dim.width-(oX-orgbounds[0]) : dim.width+(orgbounds[0]-oX));
+                if (sizeart == 5) { // west
+                    dim.width = (oX > orgbounds[0] ? dim.width - (oX - orgbounds[0]) : dim.width + (orgbounds[0] - oX));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen(),ex.getYOnScreen()-ex.getY());
+                    setLocation(ex.getXOnScreen(), ex.getYOnScreen() - ex.getY());
                     setCursor(Cursors.cwsize);
                     break;
                 }
-                if(sizeart==6){ //süd-ost
-                    dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
-                    dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
+                if (sizeart == 6) { // süd-ost
+                    dim.width = (oX > orgbounds[0] ? dim.width + (oX - orgbounds[0]) : dim.width - (orgbounds[0] - oX));
+                    dim.height = (oY > orgbounds[1] ? dim.height + (oY - orgbounds[1])
+                            : dim.height - (orgbounds[1] - oY));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen()-dim.width,ex.getYOnScreen()-dim.height);
+                    setLocation(ex.getXOnScreen() - dim.width, ex.getYOnScreen() - dim.height);
                     setCursor(Cursors.cwsize);
                     break;
                 }
-                if(sizeart==7){ //süd
-                    dim.height = (oY > orgbounds[1] ? dim.height+(oY-orgbounds[1]) : dim.height-(orgbounds[1]-oY));
+                if (sizeart == 7) { // süd
+                    dim.height = (oY > orgbounds[1] ? dim.height + (oY - orgbounds[1])
+                            : dim.height - (orgbounds[1] - oY));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen()-ex.getX(),ex.getYOnScreen()-dim.height);
+                    setLocation(ex.getXOnScreen() - ex.getX(), ex.getYOnScreen() - dim.height);
                     setCursor(Cursors.cssize);
                     break;
                 }
-                if(sizeart==8){ //ost
-                    dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) : dim.width-(orgbounds[0]-oX));
+                if (sizeart == 8) { // ost
+                    dim.width = (oX > orgbounds[0] ? dim.width + (oX - orgbounds[0]) : dim.width - (orgbounds[0] - oX));
                     dim.width = (dim.width < 185 ? 185 : dim.width);
                     dim.height = (dim.height < 125 ? 125 : dim.height);
                     orgbounds[0] = oX;
                     orgbounds[1] = oY;
                     setSize(dim);
-                    setLocation(ex.getXOnScreen()-ex.getX(),ex.getYOnScreen()-ex.getY());
+                    setLocation(ex.getXOnScreen() - ex.getX(), ex.getYOnScreen() - ex.getY());
                     setCursor(Cursors.cesize);
                     break;
                 }
@@ -524,10 +521,10 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
                 insize = false;
                 setCursor(Cursors.cdefault);
             }
-        //    }
-            //});
+            // }
+            // });
 
-        }else{
+        } else {
 
             insize = false;
             setCursor(Cursors.cdefault);
@@ -536,71 +533,73 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
 
     @Override
     public void mouseMoved(java.awt.event.MouseEvent e) {
-        for(int i = 0; i < 1; i++){
-            sizeart=-1;
+        for (int i = 0; i < 1; i++) {
+            sizeart = -1;
             setCursor(Cursors.cdefault);
-            if ((e.getX() <= 4 && e.getY() <= 4)){ //nord-west
+            if ((e.getX() <= 4 && e.getY() <= 4)) { // nord-west
                 insize = true;
                 sizeart = 1;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.cnwsize);
                 break;
             }
-            if( (e.getX()>=  (((JComponent) e.getSource()).getWidth()-4)) && e.getY() <= 4){//nord-ost
+            if ((e.getX() >= (((JComponent) e.getSource()).getWidth() - 4)) && e.getY() <= 4) {// nord-ost
                 insize = true;
                 sizeart = 2;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.cnesize);
                 break;
             }
-            if(e.getY() <= 6 && WertZwischen(e.getX(),waagrecht[0],waagrecht[1])){//nord
+            if (e.getY() <= 6 && WertZwischen(e.getX(), waagrecht[0], waagrecht[1])) {// nord
                 insize = true;
                 sizeart = 3;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.cnsize);
                 break;
             }
-            if ((e.getX() <= 4 && e.getY() >= (((JComponent) e.getSource()).getHeight()-4))){ //s�d-west
+            if ((e.getX() <= 4 && e.getY() >= (((JComponent) e.getSource()).getHeight() - 4))) { // s�d-west
                 insize = true;
                 sizeart = 4;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.cswsize);
                 break;
             }
-            if ((e.getX() <= 6) && WertZwischen(e.getY(),senkrecht[0],senkrecht[1])){ //west
+            if ((e.getX() <= 6) && WertZwischen(e.getY(), senkrecht[0], senkrecht[1])) { // west
                 insize = true;
                 sizeart = 5;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.cwsize);
                 break;
             }
-            if ((e.getX()>=  (((JComponent) e.getSource()).getWidth()-4)) && //s�d-ost
-                    e.getY() >= (((JComponent) e.getSource()).getHeight()-4)){
+            if ((e.getX() >= (((JComponent) e.getSource()).getWidth() - 4)) && // s�d-ost
+                    e.getY() >= (((JComponent) e.getSource()).getHeight() - 4)) {
                 insize = true;
                 sizeart = 6;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.csesize);
                 break;
             }
-            if (e.getY() >= (((JComponent) e.getSource()).getHeight()-4) && WertZwischen(e.getX(),waagrecht[0],waagrecht[1])){ //s�d
+            if (e.getY() >= (((JComponent) e.getSource()).getHeight() - 4)
+                    && WertZwischen(e.getX(), waagrecht[0], waagrecht[1])) { // s�d
                 insize = true;
                 sizeart = 7;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.cssize);
                 break;
             }
-            if (e.getX() >= (((JComponent) e.getSource()).getWidth()-6) && WertZwischen(e.getY(),senkrecht[0],senkrecht[1])){ //ost
+            if (e.getX() >= (((JComponent) e.getSource()).getWidth() - 6)
+                    && WertZwischen(e.getY(), senkrecht[0], senkrecht[1])) { // ost
                 insize = true;
                 sizeart = 8;
-                orgbounds[0]=e.getXOnScreen();
-                orgbounds[1]=e.getYOnScreen();
+                orgbounds[0] = e.getXOnScreen();
+                orgbounds[1] = e.getYOnScreen();
                 setCursor(Cursors.cesize);
                 break;
             }
@@ -612,30 +611,22 @@ public class RehaSmartDialog extends JXDialog implements ISmartDialog,WindowList
         }
     }
 
-
     @Override
     public void keyPressed(KeyEvent arg0) {
 
-        ////System.out.println("SmartDialog Pressed "+arg0.getKeyCode());
+        //// System.out.println("SmartDialog Pressed "+arg0.getKeyCode());
     }
-
 
     @Override
     public void keyReleased(KeyEvent arg0) {
 
-        ////System.out.println("SmartDialog Released "+arg0);
+        //// System.out.println("SmartDialog Released "+arg0);
     }
-
 
     @Override
     public void keyTyped(KeyEvent arg0) {
 
-        ////System.out.println("SmartDialog Typed "+arg0);
+        //// System.out.println("SmartDialog Typed "+arg0);
     }
 
-
-
-
-
-
-}  //  @jve:decl-index=0:visual-constraint="387,36"
+} // @jve:decl-index=0:visual-constraint="387,36"

@@ -6,15 +6,11 @@ import javax.swing.JOptionPane;
 import environment.Path;
 
 public class AaarghHinweis {
-	public AaarghHinweis(String hinweis,String title){
-		Object[] options = {"Ja - jetzt Benutzer-Gehirn auf Normalbetrieb umschalten"};
-		JOptionPane.showOptionDialog(null,
-				hinweis,
-				title,
-				JOptionPane.YES_OPTION,
-				JOptionPane.QUESTION_MESSAGE,
-				new ImageIcon(Path.Instance.getProghome()+"/icons/strauss.png"),     //do not use a custom Icon
-				options,  //the titles of buttons
-				options[0]); //default button title
-	}
+    public AaarghHinweis(String hinweis, String title) {
+        Object[] options = { "Ja - jetzt Benutzer-Gehirn auf Normalbetrieb umschalten" };
+        JOptionPane.showOptionDialog(null, hinweis, title, JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE,
+                new ImageIcon(Path.Instance.getProghome() + "/icons/strauss.png"), // do not use a custom Icon
+                options, // the titles of buttons
+                options[0]); // default button title
+    }
 }

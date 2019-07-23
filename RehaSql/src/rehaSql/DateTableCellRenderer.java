@@ -9,26 +9,27 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class DateTableCellRenderer extends DefaultTableCellRenderer
 
 {
-	/**
-	 *
-	 */
-	private static final long serialVersionUID = -1029644753226393604L;
-	private final SimpleDateFormat datumsFormat = new SimpleDateFormat ("dd.MM.yyyy");
-	//DecimalFormat dform = new DecimalFormat("####0.00");
-	@Override
-    public Component getTableCellRendererComponent(final JTable table, final
-			Object value,boolean isSelected,boolean hasFocus,int row,int column){
-			super.getTableCellRendererComponent(table, value, isSelected, hasFocus,row, column);
-			setHorizontalAlignment(javax.swing.SwingConstants. RIGHT);
-			if(value instanceof java.util.Date){
-				setText(datumsFormat.format(value));
-			}else{
-				if(value==null){
-					setText(null);
-				}else{
-					setText(value.toString());
-				}
-			}
-			return this;
-	}
+    /**
+     *
+     */
+    private static final long serialVersionUID = -1029644753226393604L;
+    private final SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
+
+    // DecimalFormat dform = new DecimalFormat("####0.00");
+    @Override
+    public Component getTableCellRendererComponent(final JTable table, final Object value, boolean isSelected,
+            boolean hasFocus, int row, int column) {
+        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+        setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        if (value instanceof java.util.Date) {
+            setText(datumsFormat.format(value));
+        } else {
+            if (value == null) {
+                setText(null);
+            } else {
+                setText(value.toString());
+            }
+        }
+        return this;
+    }
 }

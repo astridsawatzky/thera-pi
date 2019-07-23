@@ -1,4 +1,5 @@
 package CommonTools;
+
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -27,12 +28,14 @@ public class DatFunk {
     }
 
     public static String sDatInSQL(String sDeutschDat) {
-       return LocalDate.parse(sDeutschDat, inFormatter).format(reverseHyphonFormatter);
+        return LocalDate.parse(sDeutschDat, inFormatter)
+                        .format(reverseHyphonFormatter);
 
     }
 
     public static String sHeute() {
-        return LocalDate.now().format(outFormatter);
+        return LocalDate.now()
+                        .format(outFormatter);
 
     }
 
@@ -45,14 +48,16 @@ public class DatFunk {
 
     public static String WochenTag(String datum) {
         LocalDate datum1 = LocalDate.parse(datum, inFormatter);
-        return datum1.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.GERMAN);
+        return datum1.getDayOfWeek()
+                     .getDisplayName(TextStyle.FULL, Locale.GERMAN);
 
     }
 
     public static int TagDerWoche(String sdatum) {
 
         LocalDate datum = LocalDate.parse(sdatum, inFormatter);
-        return datum.getDayOfWeek().getValue();
+        return datum.getDayOfWeek()
+                    .getValue();
 
     }
 
@@ -65,24 +70,28 @@ public class DatFunk {
 
     public static String WocheErster(String sdatum) {
         LocalDate ld = LocalDate.parse(sdatum, inFormatter);
-        return ld.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).format(outFormatter);
+        return ld.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+                 .format(outFormatter);
     }
 
     public static String WocheLetzter(String sdatum) {
         LocalDate ld = LocalDate.parse(sdatum, inFormatter);
-        return ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)).format(outFormatter);
+        return ld.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+                 .format(outFormatter);
 
     }
 
     public static int KalenderWoche(String sdatum) {
         LocalDate ld = LocalDate.parse(sdatum, inFormatter);
-        return ld.get(WeekFields.of(Locale.GERMANY).weekOfYear());
+        return ld.get(WeekFields.of(Locale.GERMANY)
+                                .weekOfYear());
     }
 
     /**
      * converts a given date into its long value (milliseconds since 01011970)
      *
      * if the date is separated with hyphons it needs to be in format yyyy-M-d
+     * 
      * @param sdatum
      * @return
      */
@@ -96,7 +105,9 @@ public class DatFunk {
         }
 
         ZoneId zoneId = ZoneId.systemDefault();
-        return ld.atStartOfDay(zoneId).toInstant().toEpochMilli();
+        return ld.atStartOfDay(zoneId)
+                 .toInstant()
+                 .toEpochMilli();
     }
 
     public static String WertInDatum(long ldatum) {
@@ -107,12 +118,15 @@ public class DatFunk {
         } else {
             inst = Instant.ofEpochMilli(ldatum);
         }
-        return inst.atZone(ZoneId.systemDefault()).toLocalDate().format(outFormatter);
+        return inst.atZone(ZoneId.systemDefault())
+                   .toLocalDate()
+                   .format(outFormatter);
     }
 
     public static boolean GeradeWoche(String sdatum) {
-        return (KalenderWoche(sdatum) % 2) == 0 ;
+        return (KalenderWoche(sdatum) % 2) == 0;
     }
+
     public static boolean Unter18(String bezugdat, String geburtstag) {
         LocalDate geb = LocalDate.parse(geburtstag, outFormatter);
         LocalDate bezug = LocalDate.parse(bezugdat, outFormatter);

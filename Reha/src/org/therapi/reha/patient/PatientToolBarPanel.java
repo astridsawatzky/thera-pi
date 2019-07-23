@@ -25,186 +25,200 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import systemEinstellungen.SystemConfig;
 
-public class PatientToolBarPanel extends JXPanel{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8491959397526727602L;
-	PatientHauptPanel patientHauptPanel = null;
-	PatientToolBarLogic patToolLogic = null;
-	public JLabel sucheLabel = null;
-	private String kriterium[]={"Nachname Vorname","Patienten-ID","Vorname Nachname",
-			"Telefon privat","Telefon geschäftl.","Telefon mobil","Notizen", "Patienten mit aktuellen Rezepten"};
+public class PatientToolBarPanel extends JXPanel {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 8491959397526727602L;
+    PatientHauptPanel patientHauptPanel = null;
+    PatientToolBarLogic patToolLogic = null;
+    public JLabel sucheLabel = null;
+    private String kriterium[] = { "Nachname Vorname", "Patienten-ID", "Vorname Nachname", "Telefon privat",
+            "Telefon geschäftl.", "Telefon mobil", "Notizen", "Patienten mit aktuellen Rezepten" };
 
-	public String getKritAsString(int idx){
-		return 	kriterium[idx];
-	}
-	
-	public int getNnVnIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Nachname Vorname");
-	}
+    public String getKritAsString(int idx) {
+        return kriterium[idx];
+    }
 
-	public int getPatIdIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Patienten-ID");
-	}
+    public int getNnVnIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Nachname Vorname");
+    }
 
-	public int getVnNnIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Vorname Nachname");
-	}
+    public int getPatIdIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Patienten-ID");
+    }
 
-	public int getTelPIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Telefon privat");
-	}
+    public int getVnNnIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Vorname Nachname");
+    }
 
-	public int getTelGIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Telefon geschäftl.");
-	}
+    public int getTelPIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Telefon privat");
+    }
 
-	public int getTelMIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Telefon mobil");
-	}
+    public int getTelGIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Telefon geschäftl.");
+    }
 
-	public int getNoteIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Notizen");
-	}
+    public int getTelMIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Telefon mobil");
+    }
 
-	public int getAktRezIdx(){
-		return 	Arrays.asList(kriterium).indexOf("Patienten mit aktuellen Rezepten");
-	}
+    public int getNoteIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Notizen");
+    }
 
+    public int getAktRezIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("Patienten mit aktuellen Rezepten");
+    }
 
+    public PatientToolBarPanel(PatientHauptPanel patHauptPanel) {
+        super();
+        setOpaque(false);
+        this.patientHauptPanel = patHauptPanel;
+        patToolLogic = new PatientToolBarLogic(patHauptPanel, this);
+        setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        // setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        FormLayout lay = new FormLayout(
+                "3dlu,right:max(35dlu;p),3dlu,p,45dlu,fill:0:grow(0.10),0dlu ,right:max(39dlu;p),3dlu, p,45dlu,7dlu," +
+                // 2-teSpalte (13) 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
+                        "right:max(39dlu;p),3dlu,p,90,fill:0:grow(0.60),0dlu,7dlu,right:max(39dlu;p),3dlu,p,40dlu,2dlu,p,50dlu,fill:0:grow(0.30),5dlu,10dlu",
+                // 1 2 3 4 5 6 7 8 9 10 11
+                "fill:0:grow(0.50),p,fill:0:grow(0.50)");
+        CellConstraints cc = new CellConstraints();
+        setLayout(lay);
+        JLabel lbl = new JLabel("Kriterium:");
+        add(lbl, cc.xy(2, 2));
 
-	public PatientToolBarPanel(PatientHauptPanel patHauptPanel){
-		super();
-		setOpaque(false);
-		this.patientHauptPanel = patHauptPanel;
-		patToolLogic = new PatientToolBarLogic(patHauptPanel,this);
-		setBorder(BorderFactory.createLineBorder(Color.WHITE));
-		//setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-		FormLayout lay = new FormLayout("3dlu,right:max(35dlu;p),3dlu,p,45dlu,fill:0:grow(0.10),0dlu ,right:max(39dlu;p),3dlu, p,45dlu,7dlu,"+
-				//  2-teSpalte (13)  14  15 16     17            18   19      20             21   22  23    24 25  26      27                28
-				"right:max(39dlu;p),3dlu,p,90,fill:0:grow(0.60),0dlu,7dlu,right:max(39dlu;p),3dlu,p,40dlu,2dlu,p,50dlu,fill:0:grow(0.30),5dlu,10dlu",
-				// 1                 2  3  4   5  6	  7  8   9 10     11
-		"fill:0:grow(0.50),p,fill:0:grow(0.50)");
-		CellConstraints cc = new CellConstraints();
-		setLayout(lay);
-		JLabel lbl = new JLabel("Kriterium:");
-		add(lbl,cc.xy(2,2));
-		
-		// Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
-		patientHauptPanel.jcom = new JComboBox(kriterium);
-			
-		// Lemmi 20101212: Die letzte benutzte Suchart aus der INI-Datei holen und wieder setzen
-		int suchart = SystemConfig.hmPatientenSuchenDlgIni.get("suchart");
-		patientHauptPanel.jcom.setSelectedIndex(suchart);
-		
-		patientHauptPanel.jcom.setBackground(new Color(247,209,176));
-		add(patientHauptPanel.jcom,cc.xyw(4,2,8));
-		patientHauptPanel.jcom.addActionListener(patientHauptPanel.toolBarAction);
-		
-		sucheLabel = new JLabel("finde Pat. -->");
-		sucheLabel.setName("Suchen");
-		sucheLabel.setIcon(SystemConfig.hmSysIcons.get("find"));
-		sucheLabel.addMouseListener(patientHauptPanel.toolBarMouse);
-		sucheLabel.addFocusListener(patientHauptPanel.toolBarFocus);
+        // Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
+        patientHauptPanel.jcom = new JComboBox(kriterium);
 
-		patientHauptPanel.dropTargetListener =
-			 new DropTargetListener() {
-			  @Override
+        // Lemmi 20101212: Die letzte benutzte Suchart aus der INI-Datei holen und
+        // wieder setzen
+        int suchart = SystemConfig.hmPatientenSuchenDlgIni.get("suchart");
+        patientHauptPanel.jcom.setSelectedIndex(suchart);
+
+        patientHauptPanel.jcom.setBackground(new Color(247, 209, 176));
+        add(patientHauptPanel.jcom, cc.xyw(4, 2, 8));
+        patientHauptPanel.jcom.addActionListener(patientHauptPanel.toolBarAction);
+
+        sucheLabel = new JLabel("finde Pat. -->");
+        sucheLabel.setName("Suchen");
+        sucheLabel.setIcon(SystemConfig.hmSysIcons.get("find"));
+        sucheLabel.addMouseListener(patientHauptPanel.toolBarMouse);
+        sucheLabel.addFocusListener(patientHauptPanel.toolBarFocus);
+
+        patientHauptPanel.dropTargetListener = new DropTargetListener() {
+            @Override
             public void dragEnter(DropTargetDragEvent e) {
-				  if(!patientHauptPanel.tfsuchen.getText().equals("")){
-					  patientHauptPanel.tfsuchen.setText("");					  
-				  }
-			  }
-			  @Override
-            public void dragExit(DropTargetEvent e) {}
-			  @Override
-            public void dragOver(DropTargetDragEvent e) {}
-			  @Override
+                if (!patientHauptPanel.tfsuchen.getText()
+                                               .equals("")) {
+                    patientHauptPanel.tfsuchen.setText("");
+                }
+            }
+
+            @Override
+            public void dragExit(DropTargetEvent e) {
+            }
+
+            @Override
+            public void dragOver(DropTargetDragEvent e) {
+            }
+
+            @Override
             public void drop(DropTargetDropEvent e) {
-				  //String mitgebracht = "";
-				    try {
-					    patientHauptPanel.patientLogic.starteSuche();
-					    //System.out.println("erhalte Drop = "+mitgebracht);
-				    } catch (Throwable t) {
-				    	t.printStackTrace();
-						System.out.println("Fehler***************1********");
-				    }
-			    	e.dropComplete(true);
-			  	}
-			  @Override
-            public void dropActionChanged(
-			         DropTargetDragEvent e) {System.out.println(e);}
-		};	
-		//sucheLabel.setDropTarget(dndt);
-		add(sucheLabel,cc.xy(13,2));
-		patientHauptPanel.tfsuchen = new JFormattedTextField();
-		patientHauptPanel.tfsuchen.setFont(new Font("Tahoma",Font.BOLD,11));
-		//patientHauptPanel.tfsuchen.setBackground(Colors.PiOrange.alpha(0.15f));
-		patientHauptPanel.tfsuchen.setOpaque(false);
-		patientHauptPanel.tfsuchen.setForeground(new Color(136,136,136));
-		patientHauptPanel.tfsuchen.setName("suchenach");
-		patientHauptPanel.tfsuchen.addKeyListener(patientHauptPanel.toolBarKeys);
-		patientHauptPanel.tfsuchen.addFocusListener(patientHauptPanel.toolBarFocus);
-		//patientHauptPanel.tfsuchen.setDropTarget(dndt);
-		try {
-			patientHauptPanel.tfsuchen.getDropTarget().addDropTargetListener(patientHauptPanel.dropTargetListener);
-		} catch (TooManyListenersException e1) {
-			e1.printStackTrace();
-		}
-		add(patientHauptPanel.tfsuchen,cc.xyw(15, 2, 3));
-		
-		JToolBar jtb = new JToolBar();
-		jtb.setRollover(true);
-		jtb.setBorder(null);
-		jtb.setOpaque(false);
+                // String mitgebracht = "";
+                try {
+                    patientHauptPanel.patientLogic.starteSuche();
+                    // System.out.println("erhalte Drop = "+mitgebracht);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                    System.out.println("Fehler***************1********");
+                }
+                e.dropComplete(true);
+            }
 
-		patientHauptPanel.jbut[0] = new JButton();
-		patientHauptPanel.jbut[0].setIcon(SystemConfig.hmSysIcons.get("neu"));
-		patientHauptPanel.jbut[0].setToolTipText("neuen Patient anlegen (Alt+N)");
-		patientHauptPanel.jbut[0].setActionCommand("neu");
-		patientHauptPanel.jbut[0].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[0]);
+            @Override
+            public void dropActionChanged(DropTargetDragEvent e) {
+                System.out.println(e);
+            }
+        };
+        // sucheLabel.setDropTarget(dndt);
+        add(sucheLabel, cc.xy(13, 2));
+        patientHauptPanel.tfsuchen = new JFormattedTextField();
+        patientHauptPanel.tfsuchen.setFont(new Font("Tahoma", Font.BOLD, 11));
+        // patientHauptPanel.tfsuchen.setBackground(Colors.PiOrange.alpha(0.15f));
+        patientHauptPanel.tfsuchen.setOpaque(false);
+        patientHauptPanel.tfsuchen.setForeground(new Color(136, 136, 136));
+        patientHauptPanel.tfsuchen.setName("suchenach");
+        patientHauptPanel.tfsuchen.addKeyListener(patientHauptPanel.toolBarKeys);
+        patientHauptPanel.tfsuchen.addFocusListener(patientHauptPanel.toolBarFocus);
+        // patientHauptPanel.tfsuchen.setDropTarget(dndt);
+        try {
+            patientHauptPanel.tfsuchen.getDropTarget()
+                                      .addDropTargetListener(patientHauptPanel.dropTargetListener);
+        } catch (TooManyListenersException e1) {
+            e1.printStackTrace();
+        }
+        add(patientHauptPanel.tfsuchen, cc.xyw(15, 2, 3));
 
-		patientHauptPanel.jbut[1] = new JButton();
-		patientHauptPanel.jbut[1].setIcon(SystemConfig.hmSysIcons.get("edit"));
-		patientHauptPanel.jbut[1].setToolTipText("aktuellen Patient ändern/editieren (Alt+E)");		
-		patientHauptPanel.jbut[1].setActionCommand("edit");
-		patientHauptPanel.jbut[1].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[1]);
+        JToolBar jtb = new JToolBar();
+        jtb.setRollover(true);
+        jtb.setBorder(null);
+        jtb.setOpaque(false);
 
-		patientHauptPanel.jbut[2] = new JButton();
-		patientHauptPanel.jbut[2].setIcon(SystemConfig.hmSysIcons.get("delete"));
-		patientHauptPanel.jbut[2].setToolTipText("Patient löschen (Alt+L)");
-		patientHauptPanel.jbut[2].setActionCommand("delete");
-		patientHauptPanel.jbut[2].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[2]);
+        patientHauptPanel.jbut[0] = new JButton();
+        patientHauptPanel.jbut[0].setIcon(SystemConfig.hmSysIcons.get("neu"));
+        patientHauptPanel.jbut[0].setToolTipText("neuen Patient anlegen (Alt+N)");
+        patientHauptPanel.jbut[0].setActionCommand("neu");
+        patientHauptPanel.jbut[0].addActionListener(patientHauptPanel.toolBarAction);
+        jtb.add(patientHauptPanel.jbut[0]);
 
-		jtb.addSeparator(new Dimension(30,0));
+        patientHauptPanel.jbut[1] = new JButton();
+        patientHauptPanel.jbut[1].setIcon(SystemConfig.hmSysIcons.get("edit"));
+        patientHauptPanel.jbut[1].setToolTipText("aktuellen Patient ändern/editieren (Alt+E)");
+        patientHauptPanel.jbut[1].setActionCommand("edit");
+        patientHauptPanel.jbut[1].addActionListener(patientHauptPanel.toolBarAction);
+        jtb.add(patientHauptPanel.jbut[1]);
 
-		patientHauptPanel.jbut[3] = new JButton();
-		patientHauptPanel.jbut[3].setIcon(SystemConfig.hmSysIcons.get("print"));
-		patientHauptPanel.jbut[3].setToolTipText("Brief/Formular für Patient erstellen (Alt+B)");
-		patientHauptPanel.jbut[3].setActionCommand("formulare");
-		patientHauptPanel.jbut[3].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[3]);
+        patientHauptPanel.jbut[2] = new JButton();
+        patientHauptPanel.jbut[2].setIcon(SystemConfig.hmSysIcons.get("delete"));
+        patientHauptPanel.jbut[2].setToolTipText("Patient löschen (Alt+L)");
+        patientHauptPanel.jbut[2].setActionCommand("delete");
+        patientHauptPanel.jbut[2].addActionListener(patientHauptPanel.toolBarAction);
+        jtb.add(patientHauptPanel.jbut[2]);
 
-		jtb.addSeparator(new Dimension(30,0));
-		
-		patientHauptPanel.jbut[4] = new JButton();
-		patientHauptPanel.jbut[4].setIcon(SystemConfig.hmSysIcons.get("tools"));
-		patientHauptPanel.jbut[4].setToolTipText("Werkzeugkiste für aktuellen Patient");
-		patientHauptPanel.jbut[4].setActionCommand("werkzeuge");
-		patientHauptPanel.jbut[4].addActionListener(patientHauptPanel.toolBarAction);
-		jtb.add(patientHauptPanel.jbut[4]);
-		
-		add(jtb,cc.xyw(20,2,8));
-	}
-	public PatientToolBarLogic getLogic(){
-		return patToolLogic;
-	}
-	
+        jtb.addSeparator(new Dimension(30, 0));
+
+        patientHauptPanel.jbut[3] = new JButton();
+        patientHauptPanel.jbut[3].setIcon(SystemConfig.hmSysIcons.get("print"));
+        patientHauptPanel.jbut[3].setToolTipText("Brief/Formular für Patient erstellen (Alt+B)");
+        patientHauptPanel.jbut[3].setActionCommand("formulare");
+        patientHauptPanel.jbut[3].addActionListener(patientHauptPanel.toolBarAction);
+        jtb.add(patientHauptPanel.jbut[3]);
+
+        jtb.addSeparator(new Dimension(30, 0));
+
+        patientHauptPanel.jbut[4] = new JButton();
+        patientHauptPanel.jbut[4].setIcon(SystemConfig.hmSysIcons.get("tools"));
+        patientHauptPanel.jbut[4].setToolTipText("Werkzeugkiste für aktuellen Patient");
+        patientHauptPanel.jbut[4].setActionCommand("werkzeuge");
+        patientHauptPanel.jbut[4].addActionListener(patientHauptPanel.toolBarAction);
+        jtb.add(patientHauptPanel.jbut[4]);
+
+        add(jtb, cc.xyw(20, 2, 8));
+    }
+
+    public PatientToolBarLogic getLogic() {
+        return patToolLogic;
+    }
 
 }
-
-

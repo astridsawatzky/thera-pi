@@ -7,70 +7,71 @@ import javax.swing.JLabel;
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 
 public class HMKTreeTableModel extends DefaultTreeTableModel {
-	//SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-	DecimalFormat dfx = new DecimalFormat( "0.00" );
-	
+    // SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    DecimalFormat dfx = new DecimalFormat("0.00");
+
     public HMKTreeTableModel(JXHMKTreeTableNode jXHMKTreeTableNode) {
         super(jXHMKTreeTableNode);
     }
-    
-    public int getRow(Object node){
-    	JXHMKTreeTableNode jXHMKreeTableNode = (JXHMKTreeTableNode) node;
-    	return jXHMKreeTableNode.getIndex((JXHMKTreeTableNode)node);
+
+    public int getRow(Object node) {
+        JXHMKTreeTableNode jXHMKreeTableNode = (JXHMKTreeTableNode) node;
+        return jXHMKreeTableNode.getIndex((JXHMKTreeTableNode) node);
     }
+
     @Override
     public Object getValueAt(Object node, int column) {
-    	JXHMKTreeTableNode jXHMKreeTableNode = (JXHMKTreeTableNode) node;
+        JXHMKTreeTableNode jXHMKreeTableNode = (JXHMKTreeTableNode) node;
 
-    	IndiKey o = null;
+        IndiKey o = null;
 
-    	try{
-    		o =  (IndiKey) jXHMKreeTableNode.getUserObject();
-    	}catch(ClassCastException cex){
-    		return super.getValueAt(node, column);
-    	}
+        try {
+            o = (IndiKey) jXHMKreeTableNode.getUserObject();
+        } catch (ClassCastException cex) {
+            return super.getValueAt(node, column);
+        }
 
         switch (column) {
-        	case 0:
-        		return o.indischl;
-        	case 1:
-                return o.grunddaten;
-            case 2:
-                return o.vorrangig;
-            case 3:
-                return o.ergaenzend;
+        case 0:
+            return o.indischl;
+        case 1:
+            return o.grunddaten;
+        case 2:
+            return o.vorrangig;
+        case 3:
+            return o.ergaenzend;
         }
         return super.getValueAt(node, column);
     }
-    
+
     @Override
-    public void setValueAt(Object value, Object node, int column){
-    	JXHMKTreeTableNode jXTreeTableNode = (JXHMKTreeTableNode) node;
-    	IndiKey o;
-    	
-       	try{
-        	o =  (IndiKey) jXTreeTableNode.getUserObject();
-        }catch(ClassCastException cex){
-        	return;
-        } 
+    public void setValueAt(Object value, Object node, int column) {
+        JXHMKTreeTableNode jXTreeTableNode = (JXHMKTreeTableNode) node;
+        IndiKey o;
+
+        try {
+            o = (IndiKey) jXTreeTableNode.getUserObject();
+        } catch (ClassCastException cex) {
+            return;
+        }
         switch (column) {
         case 0:
-			o.indischl =(((JLabel)value).getText()) ;
-			break;
+            o.indischl = (((JLabel) value).getText());
+            break;
         case 1:
-			o.grunddaten =((String) value) ;
-        	break;
+            o.grunddaten = ((String) value);
+            break;
         case 2:
-        	o.vorrangig = ((String) value);
-        	break;
+            o.vorrangig = ((String) value);
+            break;
         case 3:
-        	o.ergaenzend = ((String) value);
-        	break;
+            o.ergaenzend = ((String) value);
+            break;
         }
     }
 
     @Override
-    public boolean isCellEditable(java.lang.Object node,int column){
+    public boolean isCellEditable(java.lang.Object node, int column) {
         switch (column) {
         case 0:
             return false;
@@ -84,7 +85,7 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
             return false;
         }
     }
-    
+
     @Override
     public Class<?> getColumnClass(int column) {
         switch (column) {
@@ -107,7 +108,6 @@ public class HMKTreeTableModel extends DefaultTreeTableModel {
     public int getColumnCount() {
         return 4;
     }
-
 
     @Override
     public String getColumnName(int column) {

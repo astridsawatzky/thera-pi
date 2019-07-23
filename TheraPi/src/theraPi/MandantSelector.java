@@ -17,49 +17,48 @@ import mandant.Mandant;
 
 final class MandantSelector extends JDialog {
 
-	private Mandant chosen;
-	private ActionListener listener = new ActionListener() {
+    private Mandant chosen;
+    private ActionListener listener = new ActionListener() {
 
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			MandantButton but = (MandantButton) e.getSource();
-			chosen = but.mandant();
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            MandantButton but = (MandantButton) e.getSource();
+            chosen = but.mandant();
 
-			dispose();
+            dispose();
 
-		}
-	};
+        }
+    };
 
-	MandantSelector(MandantList liste, ImageIcon imageIcon) {
-		setModal(true);
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout(0, 0));
-		setUndecorated(true);
-		setPreferredSize(new Dimension(450, 200));
-		getContentPane().add(center(liste.asList()));
+    MandantSelector(MandantList liste, ImageIcon imageIcon) {
+        setModal(true);
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        getContentPane().setLayout(new BorderLayout(0, 0));
+        setUndecorated(true);
+        setPreferredSize(new Dimension(450, 200));
+        getContentPane().add(center(liste.asList()));
 
-		JLabel lblTop = new JLabel("", JLabel.CENTER);
-		lblTop.setPreferredSize(new Dimension(0, 55));
-		lblTop.setIcon(imageIcon);
-		getContentPane().add(lblTop, BorderLayout.NORTH);
+        JLabel lblTop = new JLabel("", JLabel.CENTER);
+        lblTop.setPreferredSize(new Dimension(0, 55));
+        lblTop.setIcon(imageIcon);
+        getContentPane().add(lblTop, BorderLayout.NORTH);
 
-		chosen = liste.defaultMandant();
-		
+        chosen = liste.defaultMandant();
 
-	}
+    }
 
-	private Component center(List<Mandant> liste) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(liste.size(), 1));
-		for (Mandant man : liste) {
-			MandantButton button = new MandantButton(man);
-			button.addActionListener(listener);
-			panel.add(button);
-		}
-		return panel;
-	}
+    private Component center(List<Mandant> liste) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(liste.size(), 1));
+        for (Mandant man : liste) {
+            MandantButton button = new MandantButton(man);
+            button.addActionListener(listener);
+            panel.add(button);
+        }
+        return panel;
+    }
 
-	Mandant chosen() {
-		return chosen;
-	}
+    Mandant chosen() {
+        return chosen;
+    }
 }

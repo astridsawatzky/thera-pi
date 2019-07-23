@@ -37,276 +37,278 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.WinNum;
 
-public class SetWahlNeu extends JDialog implements  MouseListener, FocusListener, ActionListener, WindowListener, KeyListener,RehaTPEventListener{
-	String eigenName = null;
-	//SetWahlNeu thisClass;
-	JXPanel jcc;
-	JXPanel jpan;
-	JList jList1;
-	int ret = -1;
-	private JButton okButton = null;
-	private JButton abbruchButton = null;
-	
-	private RehaTPEventClass rtp = null;
-	private TerminFenster eltern;
-	int wahl;
-	PinPanel pinPanel;
-	public SetWahlNeu(TerminFenster xeltern){
-		this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		this.setSize(293,247);
-		this.setContentPane(new JXTitledPanel());
-		eltern = xeltern;
+public class SetWahlNeu extends JDialog
+        implements MouseListener, FocusListener, ActionListener, WindowListener, KeyListener, RehaTPEventListener {
+    String eigenName = null;
+    // SetWahlNeu thisClass;
+    JXPanel jcc;
+    JXPanel jpan;
+    JList jList1;
+    int ret = -1;
+    private JButton okButton = null;
+    private JButton abbruchButton = null;
 
-		eigenName = "TagWahl"+WinNum.NeueNummer(); 
-		this.setModal(true);
-		this.setUndecorated(true);
-		this.setAlwaysOnTop(true);
-		this.addFocusListener(this);
-		this.addWindowListener(this);
-		this.addKeyListener(this);
-		this.addMouseListener(this);		
-		jcc = new JXPanel(new GridLayout(1,1));
-		jcc.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-		jcc.setDoubleBuffered(true);
-		jcc.setName(eigenName);
+    private RehaTPEventClass rtp = null;
+    private TerminFenster eltern;
+    int wahl;
+    PinPanel pinPanel;
 
-		
-		jcc.setBackground(Color.WHITE);
-		jcc.setBorder(null);
-		jcc.addKeyListener(this);
-		jcc.addFocusListener(this);
-		jcc.addMouseListener(this);
-		
+    public SetWahlNeu(TerminFenster xeltern) {
+        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setSize(293, 247);
+        this.setContentPane(new JXTitledPanel());
+        eltern = xeltern;
 
-	
-		
-		pinPanel = new PinPanel();
-		pinPanel.getGruen().setVisible(false);
-		pinPanel.setName(eigenName);
-		pinPanel.setzeName(eigenName);
-		pinPanel.addKeyListener(this);
-		
-		rtp = new RehaTPEventClass();
-		rtp.addRehaTPEventListener(this);
-		
-		jcc.add(getSetWahl(jpan = new JXPanel(new BorderLayout())));
-		jcc.validate();
-		((JXTitledPanel)this.getContentPane()).getContentContainer().setBackground(Color.WHITE);
-		((JComponent) ((JXTitledPanel)this.getContentPane()).getContentContainer()).setBorder(null);
-		((JXTitledPanel)this.getContentPane()).getContentContainer().add(jcc,BorderLayout.CENTER);
-		
-		
-		this.wahl = Reha.instance.terminpanel.aktuellesSet();
-		this.jList1.setSelectedIndex(this.wahl);
-		this.validate();
-		
-	
-	}
-	private JXPanel getSetWahl(JXPanel jpan){
-		jpan.add(new JScrollPane(getJList1()), BorderLayout.CENTER);
-		JXPanel dummy = new JXPanel(new BorderLayout());
-		dummy.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-		dummy.addMouseListener(this);
-		dummy.addKeyListener(this);
+        eigenName = "TagWahl" + WinNum.NeueNummer();
+        this.setModal(true);
+        this.setUndecorated(true);
+        this.setAlwaysOnTop(true);
+        this.addFocusListener(this);
+        this.addWindowListener(this);
+        this.addKeyListener(this);
+        this.addMouseListener(this);
+        jcc = new JXPanel(new GridLayout(1, 1));
+        jcc.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        jcc.setDoubleBuffered(true);
+        jcc.setName(eigenName);
 
-		JXPanel dummy2 = new JXPanel( new GridLayout(1,4,7,10));
-		dummy2.setName("dummy2");
-		dummy2.addMouseListener(this);
-		dummy2.addKeyListener(this);
-		dummy2.add(new JLabel(""));
-		okButton = new JButton("Ok");
-		okButton.setActionCommand("ok");
-		okButton.addActionListener(this);
-		dummy2.add(okButton);
-		abbruchButton = new JButton("Abbruch");
-		abbruchButton.setActionCommand("abbrechen");		
-		abbruchButton.addActionListener(this);
-		dummy2.add(abbruchButton);
-		dummy2.add(new JLabel(""));
-		dummy.add(dummy2,BorderLayout.CENTER);
-		jpan.add(dummy,BorderLayout.SOUTH);
-		return jpan;
-	}
-	private JList getJList1() {
-		final DefaultListModel model = new DefaultListModel();
-		if (jList1 == null) {
-			jList1 = new JList(model);
-			jList1.addKeyListener(this);
-			jList1.addMouseListener(this);
+        jcc.setBackground(Color.WHITE);
+        jcc.setBorder(null);
+        jcc.addKeyListener(this);
+        jcc.addFocusListener(this);
+        jcc.addMouseListener(this);
 
-			ListeFuellen(model);
-		}
-		return jList1;
-	}
-	private void ListeFuellen(DefaultListModel model){
-		int i,max = 0;
-		max = SystemConfig.aTerminKalender.size();
-		for(i=0;i<max;i++){
-			model.add(i,((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0));
-		}
-		return;
-	}
-	
-	private void DialogBeenden(int wie){
-		this.ret = wie;
-		FensterSchliessen("dieses");
-		this.setVisible(false);
-		this.dispose();
-	}
+        pinPanel = new PinPanel();
+        pinPanel.getGruen()
+                .setVisible(false);
+        pinPanel.setName(eigenName);
+        pinPanel.setzeName(eigenName);
+        pinPanel.addKeyListener(this);
 
-	@Override
-	public void focusGained(FocusEvent arg0) {
-		
-		
-	}
-	@Override
-	public void focusLost(FocusEvent arg0) {
-		
-		
-	}
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		
-		////System.out.println(arg0.getKeyCode());
-		if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
-			//arg0.consume();
-			if(ret != -1){
-				////System.out.println("Beendet mit oben "+jList1.getSelectedIndex());
-				eltern.swSetWahl = jList1.getSelectedIndex();
-				FensterSchliessen("Dieses");
-				return;
-			}else{
-				////System.out.println("Beendet mit unten "+jList1.getSelectedIndex());
-				eltern.swSetWahl = jList1.getSelectedIndex();
-				FensterSchliessen("Dieses");
-				return;
-			}	
-		}
-		if (arg0.getKeyCode()==KeyEvent.VK_ESCAPE){
-			////System.out.println("ESC gedrückt");			
-			eltern.swSetWahl = -1;
-			DialogBeenden(-1);
-			return;
-		}
-		
-	}
-	@Override
-	public void keyReleased(KeyEvent arg0) {
+        rtp = new RehaTPEventClass();
+        rtp.addRehaTPEventListener(this);
 
-		
-		
-	}
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		
-	}	
-	@Override
-	public void windowClosed(WindowEvent arg0) {
-		if(rtp != null){
-			rtp.removeRehaTPEventListener(this);
-			rtp = null;
-		}
-		if(pinPanel != null){
-			pinPanel = null;
-		}
-	}
-	
-	@Override
+        jcc.add(getSetWahl(jpan = new JXPanel(new BorderLayout())));
+        jcc.validate();
+        ((JXTitledPanel) this.getContentPane()).getContentContainer()
+                                               .setBackground(Color.WHITE);
+        ((JComponent) ((JXTitledPanel) this.getContentPane()).getContentContainer()).setBorder(null);
+        ((JXTitledPanel) this.getContentPane()).getContentContainer()
+                                               .add(jcc, BorderLayout.CENTER);
+
+        this.wahl = Reha.instance.terminpanel.aktuellesSet();
+        this.jList1.setSelectedIndex(this.wahl);
+        this.validate();
+
+    }
+
+    private JXPanel getSetWahl(JXPanel jpan) {
+        jpan.add(new JScrollPane(getJList1()), BorderLayout.CENTER);
+        JXPanel dummy = new JXPanel(new BorderLayout());
+        dummy.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        dummy.addMouseListener(this);
+        dummy.addKeyListener(this);
+
+        JXPanel dummy2 = new JXPanel(new GridLayout(1, 4, 7, 10));
+        dummy2.setName("dummy2");
+        dummy2.addMouseListener(this);
+        dummy2.addKeyListener(this);
+        dummy2.add(new JLabel(""));
+        okButton = new JButton("Ok");
+        okButton.setActionCommand("ok");
+        okButton.addActionListener(this);
+        dummy2.add(okButton);
+        abbruchButton = new JButton("Abbruch");
+        abbruchButton.setActionCommand("abbrechen");
+        abbruchButton.addActionListener(this);
+        dummy2.add(abbruchButton);
+        dummy2.add(new JLabel(""));
+        dummy.add(dummy2, BorderLayout.CENTER);
+        jpan.add(dummy, BorderLayout.SOUTH);
+        return jpan;
+    }
+
+    private JList getJList1() {
+        final DefaultListModel model = new DefaultListModel();
+        if (jList1 == null) {
+            jList1 = new JList(model);
+            jList1.addKeyListener(this);
+            jList1.addMouseListener(this);
+
+            ListeFuellen(model);
+        }
+        return jList1;
+    }
+
+    private void ListeFuellen(DefaultListModel model) {
+        int i, max = 0;
+        max = SystemConfig.aTerminKalender.size();
+        for (i = 0; i < max; i++) {
+            model.add(i, ((ArrayList) SystemConfig.aTerminKalender.get(i)
+                                                                  .get(0)).get(0));
+        }
+        return;
+    }
+
+    private void DialogBeenden(int wie) {
+        this.ret = wie;
+        FensterSchliessen("dieses");
+        this.setVisible(false);
+        this.dispose();
+    }
+
+    @Override
+    public void focusGained(FocusEvent arg0) {
+
+    }
+
+    @Override
+    public void focusLost(FocusEvent arg0) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent arg0) {
+
+        //// System.out.println(arg0.getKeyCode());
+        if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+            // arg0.consume();
+            if (ret != -1) {
+                //// System.out.println("Beendet mit oben "+jList1.getSelectedIndex());
+                eltern.swSetWahl = jList1.getSelectedIndex();
+                FensterSchliessen("Dieses");
+                return;
+            } else {
+                //// System.out.println("Beendet mit unten "+jList1.getSelectedIndex());
+                eltern.swSetWahl = jList1.getSelectedIndex();
+                FensterSchliessen("Dieses");
+                return;
+            }
+        }
+        if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            //// System.out.println("ESC gedrückt");
+            eltern.swSetWahl = -1;
+            DialogBeenden(-1);
+            return;
+        }
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent arg0) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosed(WindowEvent arg0) {
+        if (rtp != null) {
+            rtp.removeRehaTPEventListener(this);
+            rtp = null;
+        }
+        if (pinPanel != null) {
+            pinPanel = null;
+        }
+    }
+
+    @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-		
-		String ss =  this.getName();
-		try{
-			if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1]=="ROT"){
-				FensterSchliessen(evt.getDetails()[0]);
-				rtp.removeRehaTPEventListener(this);
-				rtp = null;
-			}	
-		}catch(NullPointerException ne){
-			////System.out.println("In RoogleFenster" +evt);
-		}
-	}
 
-	public void FensterSchliessen(String welches){
-		this.setVisible(false);
-		this.dispose();	
-	}	
+        String ss = this.getName();
+        try {
+            if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1] == "ROT") {
+                FensterSchliessen(evt.getDetails()[0]);
+                rtp.removeRehaTPEventListener(this);
+                rtp = null;
+            }
+        } catch (NullPointerException ne) {
+            //// System.out.println("In RoogleFenster" +evt);
+        }
+    }
 
-	class Task   extends TimerTask  
-	{
-	    @Override
-        public void run()  
-	  {
-	    	while(!jList1.hasFocus()){
-	    		jList1.grabFocus();
-	    		jList1.requestFocus();
-			}	
-	  }
-	}
+    public void FensterSchliessen(String welches) {
+        this.setVisible(false);
+        this.dispose();
+    }
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		
-		if (arg0.getClickCount() == 2){
-			eltern.swSetWahl = jList1.getSelectedIndex();
-			FensterSchliessen("Dieses");
-			////System.out.println("In Mausdoppelklick");
-			////System.out.println(arg0.getSource());
-		}
-	}
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		
-		
-	}
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		
-		
-	}
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		
-		
-	}
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowActivated(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowClosing(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowDeactivated(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowDeiconified(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowIconified(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void windowOpened(WindowEvent arg0) {
-		
-		
-	}
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		
-		
-	}
+    class Task extends TimerTask {
+        @Override
+        public void run() {
+            while (!jList1.hasFocus()) {
+                jList1.grabFocus();
+                jList1.requestFocus();
+            }
+        }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent arg0) {
+
+        if (arg0.getClickCount() == 2) {
+            eltern.swSetWahl = jList1.getSelectedIndex();
+            FensterSchliessen("Dieses");
+            //// System.out.println("In Mausdoppelklick");
+            //// System.out.println(arg0.getSource());
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent arg0) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent arg0) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent arg0) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent arg0) {
+
+    }
+
+    @Override
+    public void windowActivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowClosing(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowDeactivated(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowDeiconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowIconified(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void windowOpened(WindowEvent arg0) {
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+
+    }
 
 }

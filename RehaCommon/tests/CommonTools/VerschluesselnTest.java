@@ -13,53 +13,53 @@ public class VerschluesselnTest {
         assertNotSame(Verschluesseln.getInstance(), Verschluesseln.getInstance());
     }
 
- 
     @Test
     public void testEncrypt() {
         Verschluesseln ver = Verschluesseln.getInstance();
-       assertEquals("OK1VGAz2LN15juNtHxkcbg==",  ver.encrypt("Bastie"));
-       assertEquals("OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9" + 
-               "g2j9dbigyQ==",  ver.encrypt("Bastie_hateinengroßenH\u00fctehund"));
+        assertEquals("OK1VGAz2LN15juNtHxkcbg==", ver.encrypt("Bastie"));
+        assertEquals("OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9" + "g2j9dbigyQ==",
+                ver.encrypt("Bastie_hateinengroßenH\u00fctehund"));
 
     }
 
     @Test
     public void testDecrypt() throws SecurityException {
         Verschluesseln ver = Verschluesseln.getInstance();
-       assertEquals("Bastie",ver.decrypt("OK1VGAz2LN15juNtHxkcbg=="));
-       assertEquals("Bastie_hateinengroßenH\u00fctehund",
-                   ver.decrypt("OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9\r\n" + 
-               "g2j9dbigyQ=="));
+        assertEquals("Bastie", ver.decrypt("OK1VGAz2LN15juNtHxkcbg=="));
+        assertEquals("Bastie_hateinengroßenH\u00fctehund", ver.decrypt(
+                "OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9\r\n" + "g2j9dbigyQ=="));
     }
-    
+
     @Test
     public void testEncryptDecrypt() {
         Verschluesseln ver = Verschluesseln.getInstance();
-        assertEquals("Bastie_hateinengroßenH\u00fctehund",ver.decrypt(ver.encrypt("Bastie_hateinengroßenHütehund")));
+        assertEquals("Bastie_hateinengroßenH\u00fctehund", ver.decrypt(ver.encrypt("Bastie_hateinengroßenHütehund")));
 
-        assertEquals("Bastie_hateinengroßenH\u00fctehund",ver.decrypt(ver.encrypt("Bastie_hateinengroßenH\u00fctehund")));
-        assertEquals("Bastie",ver.decrypt(ver.encrypt("Bastie")));
-        
+        assertEquals("Bastie_hateinengroßenH\u00fctehund",
+                ver.decrypt(ver.encrypt("Bastie_hateinengroßenH\u00fctehund")));
+        assertEquals("Bastie", ver.decrypt(ver.encrypt("Bastie")));
+
     }
-    
+
     @Test
     public void testDecryptencrypt() {
         Verschluesseln ver = Verschluesseln.getInstance();
-   
-        assertEquals("OK1VGAz2LN15juNtHxkcbg==",ver.encrypt(ver.decrypt("OK1VGAz2LN15juNtHxkcbg==")));
-        assertEquals("OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9" + 
-                "g2j9dbigyQ==",ver.encrypt(ver.decrypt("OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9\r\n" + 
-                        "g2j9dbigyQ==")));
+
+        assertEquals("OK1VGAz2LN15juNtHxkcbg==", ver.encrypt(ver.decrypt("OK1VGAz2LN15juNtHxkcbg==")));
+        assertEquals("OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9" + "g2j9dbigyQ==",
+                ver.encrypt(
+                        ver.decrypt("OK1VGAz2LN0M6y0ozt7lVkY4qMZrBXX/gztR+1m/CtP4NW8aP2AMjHIwEaci2J3AuHqzdnsrKwq9\r\n"
+                                + "g2j9dbigyQ==")));
     }
-  
+
     @Test
     public void testGetPassword() {
         Verschluesseln ver = Verschluesseln.getInstance();
         assertEquals(password, ver.getPassword());
-        
+
         Verschluesseln verBlubb = Verschluesseln.getInstance("blubb");
         assertEquals("blubb", verBlubb.getPassword());
-        
+
     }
 
 }

@@ -39,228 +39,227 @@ import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SysUtilDruckvorlage;
 
-public class EmailText implements KeyListener, ActionListener, FocusListener{
+public class EmailText implements KeyListener, ActionListener, FocusListener {
 
-	JRadioButton [] jrb = {null,null,null,null};
-	JXButton [] jb = {null,null};
-	JTextPane ta = null;
-	ButtonGroup jrbg = new ButtonGroup();
-	RehaSmartDialog rSmart = null;
-	int iAktion = 1;
-	public EmailText(){
-		RehaTP jtp = new RehaTP();
-		jtp.setBorder(null);
-		jtp.setTitle("EmailText");
-		jtp.setContentContainer(getForm());
-	    jtp.setVisible(true);
+    JRadioButton[] jrb = { null, null, null, null };
+    JXButton[] jb = { null, null };
+    JTextPane ta = null;
+    ButtonGroup jrbg = new ButtonGroup();
+    RehaSmartDialog rSmart = null;
+    int iAktion = 1;
 
+    public EmailText() {
+        RehaTP jtp = new RehaTP();
+        jtp.setBorder(null);
+        jtp.setTitle("EmailText");
+        jtp.setContentContainer(getForm());
+        jtp.setVisible(true);
 
-		rSmart = new RehaSmartDialog(null,"EmailText");
-		rSmart.setModal(true);
-		rSmart.setResizable(false);
-		rSmart.setSize(new Dimension(650,400));
-		rSmart.getTitledPanel().setTitle("Dieser Text wird im -->Emailtext<-- angezeigt wenn Sie einen Terminplan per Email versenden");
-		rSmart.setContentPanel(jtp.getContentContainer());
+        rSmart = new RehaSmartDialog(null, "EmailText");
+        rSmart.setModal(true);
+        rSmart.setResizable(false);
+        rSmart.setSize(new Dimension(650, 400));
+        rSmart.getTitledPanel()
+              .setTitle("Dieser Text wird im -->Emailtext<-- angezeigt wenn Sie einen Terminplan per Email versenden");
+        rSmart.setContentPanel(jtp.getContentContainer());
 
-		//int x = (screenSize.width - rSmart.getWidth()) / 2;
-		//int y = (screenSize.height - rSmart.getHeight()) / 2;
-		/****************************************************************/
-		/****************************************************************/
-		rSmart.setLocationRelativeTo(null);
-		rSmart.setVisible(true);
-		SysUtilDruckvorlage.thisClass.setCursor(Cursors.normalCursor);
+        // int x = (screenSize.width - rSmart.getWidth()) / 2;
+        // int y = (screenSize.height - rSmart.getHeight()) / 2;
+        /****************************************************************/
+        /****************************************************************/
+        rSmart.setLocationRelativeTo(null);
+        rSmart.setVisible(true);
+        SysUtilDruckvorlage.thisClass.setCursor(Cursors.normalCursor);
 
+    }
 
-	}
+    private JXPanel getForm() {
 
-	private JXPanel getForm(){
+        FormLayout layout = new FormLayout("10dlu,p:g,10dlu", "10dlu,p,3dlu,p,3dlu,p,3dlu,p,3dlu,p,5dlu");
+        // new FormLayout("10dlu,p,4dlu,p,50dlu,p",
+        // "10dlu,p,3dlu,p,3dlu,p,3dlu,p");
 
-		FormLayout layout =
-			new FormLayout("10dlu,p:g,10dlu",
-			"10dlu,p,3dlu,p,3dlu,p,3dlu,p,3dlu,p,5dlu");
-			//new FormLayout("10dlu,p,4dlu,p,50dlu,p",
-			//		"10dlu,p,3dlu,p,3dlu,p,3dlu,p");
+        JXPanel xbuilder = new JXPanel();
+        xbuilder.setBorder(null);
+        xbuilder.setLayout(new BorderLayout());
+        xbuilder.setVisible(true);
+        // xbuilder.addFocusListener(this);
+        xbuilder.addKeyListener(this);
 
-		JXPanel xbuilder = new JXPanel();
-		xbuilder.setBorder(null);
-		xbuilder.setLayout(new BorderLayout());
-		xbuilder.setVisible(true);
-		//xbuilder.addFocusListener(this);
-		xbuilder.addKeyListener(this);
+        PanelBuilder builder = new PanelBuilder(layout);
+        builder.getPanel()
+               .setBackground(Color.WHITE);
+        // builder.getPanel().setPreferredSize(new Dimension(400,150));
+        builder.getPanel()
+               .setOpaque(true);
+        CellConstraints cc = new CellConstraints();
+        builder = new PanelBuilder(layout);
+        ta = new JTextPane();
+        ta.setFont(new Font("Courier New", Font.PLAIN, 12));
+        ta.setPreferredSize(new Dimension(600, 280));
 
-		PanelBuilder builder = new PanelBuilder(layout);
-		builder.getPanel().setBackground(Color.WHITE);
-		//builder.getPanel().setPreferredSize(new Dimension(400,150));
-		builder.getPanel().setOpaque(true);
-		CellConstraints cc = new CellConstraints();
-		builder = new PanelBuilder(layout);
-		ta = new JTextPane();
-		ta.setFont(new Font("Courier New",Font.PLAIN,12));
-		ta.setPreferredSize(new Dimension(600,280));
+        String text = "";
+        /*********/
+        File file = new File(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmailTerminliste.txt");
+        try {
+            // FileReader zum Lesen aus Datei
+            FileReader fr = new FileReader(file);
+            // Der String, der am Ende ausgegeben wird
+            String gelesen;
+            // char-Array als Puffer fuer das Lesen. Die
+            // Laenge ergibt sich aus der Groesse der Datei
+            char[] temp = new char[(int) file.length()];
+            // Lesevorgang
+            fr.read(temp);
+            // Umwandlung des char-Arrays in einen String
+            gelesen = String.valueOf(temp);
+            text = gelesen;
+            // Ausgabe des Strings
+            //// System.out.println(gelesen);
+            // Ressourcen freigeben
+            fr.close();
+        } catch (FileNotFoundException e1) {
+            // die Datei existiert nicht
+            System.err.println("Datei nicht gefunden: ");
+        } catch (IOException e2) {
+            // andere IOExceptions abfangen.
+            e2.printStackTrace();
+        }
+        /*********/
+        if (text.equals("")) {
+            text = "Sehr geehrte Damen und Herren,\n"
+                    + "im Dateianhang finden Sie die von Ihnen gew�nschten Behandlungstermine.\n\n"
+                    + "Termine die Sie nicht einhalten bzw. wahrnehmen k�nnen, m��en 24 Stunden vorher\n"
+                    + "abgesagt werden.\n\nIhr Planungs-Team vom RTA";
+        }
+        ta.setText(text);
 
-		String text = "";
-		/*********/
-		 File file = new File(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/EmailTerminliste.txt");
-	      try {
-	         // FileReader zum Lesen aus Datei
-	         FileReader fr = new FileReader(file);
-	         // Der String, der am Ende ausgegeben wird
-	         String gelesen;
-	         // char-Array als Puffer fuer das Lesen. Die
-	         // Laenge ergibt sich aus der Groesse der Datei
-	         char[] temp = new char[(int) file.length()];
-	         // Lesevorgang
-	         fr.read(temp);
-	         // Umwandlung des char-Arrays in einen String
-	         gelesen = String.valueOf(temp);
-	         text = gelesen;
-	         //Ausgabe des Strings
-	         ////System.out.println(gelesen);
-	         // Ressourcen freigeben
-	         fr.close();
-	      } catch (FileNotFoundException e1) {
-	         // die Datei existiert nicht
-	         System.err.println("Datei nicht gefunden: ");
-	      } catch (IOException e2) {
-	         // andere IOExceptions abfangen.
-	         e2.printStackTrace();
-	      }
-		/*********/
-	      if (text.equals("")){
-	    	  text = "Sehr geehrte Damen und Herren,\n"+
-					"im Dateianhang finden Sie die von Ihnen gew�nschten Behandlungstermine.\n\n"+
-					"Termine die Sie nicht einhalten bzw. wahrnehmen k�nnen, m��en 24 Stunden vorher\n"+
-					"abgesagt werden.\n\nIhr Planungs-Team vom RTA";
-	      }
-		ta.setText(text);
+        JPanel tapan = new JPanel(new BorderLayout());
+        tapan.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
+        tapan.add(new JScrollPane(ta), BorderLayout.CENTER);
 
-		JPanel tapan = new JPanel(new BorderLayout());
-		tapan.setBorder(BorderFactory.createEmptyBorder(10,10,0,10));
-				tapan.add(new JScrollPane(ta),BorderLayout.CENTER);
+        builder.add(tapan, cc.xy(2, 2));
+        xbuilder.add(builder.getPanel(), BorderLayout.NORTH);
 
-		builder.add(tapan,cc.xy(2,2));
-		xbuilder.add(builder.getPanel(),BorderLayout.NORTH);
+        FormLayout lay = new FormLayout("10dlu,p,25dlu,p,50dlu,p", "0dlu,p,10dlu,p,3dlu,p,3dlu,p,15dlu,p");
 
-		FormLayout lay =
-			new FormLayout("10dlu,p,25dlu,p,50dlu,p",
-					"0dlu,p,10dlu,p,3dlu,p,3dlu,p,15dlu,p");
+        PanelBuilder build = new PanelBuilder(layout);
+        build.getPanel()
+             .setLayout(lay);
+        build.getPanel()
+             .setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+        CellConstraints ccx = new CellConstraints();
+        jb[0] = new JXButton("Speichern");
+        jb[0].setActionCommand("Speichern");
+        jb[0].setMnemonic(KeyEvent.VK_S);
+        jb[0].addKeyListener(this);
+        jb[0].addActionListener(this);
+        jb[0].setPreferredSize(new Dimension(75, jb[0].getPreferredSize().height));
+        build.add(jb[0], ccx.xy(2, 2));
 
-		PanelBuilder build = new PanelBuilder(layout);
-		build.getPanel().setLayout(lay);
-		build.getPanel().setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
-		CellConstraints ccx = new CellConstraints();
-		jb[0] = new JXButton("Speichern");
-		jb[0].setActionCommand("Speichern");
-		jb[0].setMnemonic(KeyEvent.VK_S);
-		jb[0].addKeyListener(this);
-		jb[0].addActionListener(this);
-		jb[0].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		build.add(jb[0],ccx.xy(2,2));
+        jb[1] = new JXButton("Abbruch");
+        jb[1].setActionCommand("Abbruch");
+        jb[1].addKeyListener(this);
+        jb[1].addActionListener(this);
+        jb[1].setPreferredSize(new Dimension(75, jb[0].getPreferredSize().height));
+        build.add(jb[1], cc.xy(4, 2));
 
-		jb[1] = new JXButton("Abbruch");
-		jb[1].setActionCommand("Abbruch");
-		jb[1].addKeyListener(this);
-		jb[1].addActionListener(this);
-		jb[1].setPreferredSize(new Dimension (75, jb[0].getPreferredSize().height));
-		build.add(jb[1],cc.xy(4,2));
+        build.add(new JXLabel(""), cc.xy(4, 3));
 
-		build.add(new JXLabel(""),cc.xy(4,3));
+        xbuilder.add(build.getPanel(), BorderLayout.CENTER);
+        return xbuilder;
+    }
 
-		xbuilder.add(build.getPanel(),BorderLayout.CENTER);
-		return xbuilder;
-	}
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == 10) {
+            // String [] sret = {null,null};
+            rSmart.dispose();
+        }
+        if (e.getKeyCode() == 27) {
+            // String [] sret = {null,null};
+            rSmart.dispose();
+        }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyCode()==10){
-			//String [] sret = {null,null};
-			rSmart.dispose();
-		}
-		if(e.getKeyCode()==27){
-			//String [] sret = {null,null};
-			rSmart.dispose();
-		}
+    }
 
-	}
+    @Override
+    public void keyReleased(KeyEvent e) {
 
-	@Override
-	public void keyReleased(KeyEvent e) {
+    }
 
+    @Override
+    public void keyTyped(KeyEvent e) {
 
-	}
+    }
 
-	@Override
-	public void keyTyped(KeyEvent e) {
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
 
+        //// System.out.println(arg0.getSource());
+        // String sAktion = ((AbstractButton) arg0.getSource()).getText();
+        //// System.out.println("In Text abspeichern");
+        //// System.out.println("ActionCommand = "+arg0.getActionCommand());
+        for (int i = 0; i < 1; i++) {
 
-	}
+            if (arg0.getActionCommand()
+                    .equals("Speichern")) {
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
+                FileWriter w = null;
 
-		////System.out.println(arg0.getSource());
-		//String sAktion = ((AbstractButton) arg0.getSource()).getText();
-		////System.out.println("In Text abspeichern");
-		////System.out.println("ActionCommand = "+arg0.getActionCommand());
-		for (int i = 0 ; i < 1 ; i++){
+                try {
+                    w = new FileWriter(
+                            Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/EmailTerminliste.txt");
+                    w.write(ta.getText());
 
-			if(arg0.getActionCommand().equals("Speichern")){
+                } catch (IOException e) {
+                    e.printStackTrace();
 
-				FileWriter w = null;
+                } finally {
+                    if (w != null) {
+                        try {
+                            w.close();
+                        } catch (IOException e) {
 
-				 try {
-				        w = new FileWriter(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/EmailTerminliste.txt");
-				        w.write(ta.getText());
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                rSmart.dispose();
+                break;
+            }
+            if (arg0.getActionCommand()
+                    .equals("Abbruch")) {
+                rSmart.dispose();
+                break;
+            }
+        }
 
-				    } catch (IOException e) {
-				        e.printStackTrace();
+    }
 
-				    } finally {
-				        if (w != null) {
-				            try {
-				                w.close();
-				            } catch (IOException e) {
+    @Override
+    public void focusGained(FocusEvent arg0) {
+        //// System.out.println(arg0);
+        if (arg0.getSource() instanceof JRadioButton) {
+            ((AbstractButton) arg0.getSource()).setSelected(true);
+            String sAktion = ((AbstractButton) arg0.getSource()).getText();
+            for (int i = 0; i < 1; i++) {
+                if ((sAktion == "Termin auf verf�gbare Dauer k�rzen")) {
+                    iAktion = 1;
+                    break;
+                }
+                if ((sAktion == "Nachfolgenden Termin k�rzen")) {
+                    iAktion = 2;
+                    break;
+                }
+            }
+        }
 
-				                e.printStackTrace();
-				            }
-				        }
-				    }
-				rSmart.dispose();
-				break;
-			}
-			if(arg0.getActionCommand().equals("Abbruch")){
-				rSmart.dispose();
-				break;
-			}
-		}
+    }
 
-	}
+    @Override
+    public void focusLost(FocusEvent arg0) {
 
-	@Override
-	public void focusGained(FocusEvent arg0) {
-		////System.out.println(arg0);
-		if(arg0.getSource() instanceof JRadioButton){
-			((AbstractButton) arg0.getSource()).setSelected(true);
-			String sAktion = ((AbstractButton) arg0.getSource()).getText();
-			for (int i = 0 ; i < 1 ; i++){
-				if( (sAktion =="Termin auf verf�gbare Dauer k�rzen")){
-					iAktion = 1;
-					break;
-				}
-				if( (sAktion== "Nachfolgenden Termin k�rzen")){
-					iAktion = 2;
-					break;
-				}
-			}
-		}
-
-
-	}
-
-	@Override
-	public void focusLost(FocusEvent arg0) {
-
-
-	}
+    }
 
 }

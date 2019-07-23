@@ -1,7 +1,5 @@
 package CommonTools;
 
-
-
 import java.awt.Component;
 import java.util.Vector;
 
@@ -10,70 +8,75 @@ import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.table.TableCellEditor;
 
+public class MyTableComboBox extends AbstractCellEditor implements TableCellEditor {
+    // This is the component that will handle the editing of the cell value
+    /**
+     * 
+     */
+    JComponent component = null;
 
-public class MyTableComboBox extends AbstractCellEditor implements TableCellEditor{ 
-	// This is the component that will handle the editing of the cell value 
-	/**
-	 * 
-	 */
-	JComponent component =null;
-	public MyTableComboBox(){
-		component = new JRtaComboBox();
-	}
-	
-	public MyTableComboBox(JRtaComboBox comboParam){
-		component = comboParam;
-	}
-	private static final long serialVersionUID = 1L;
- 
-	 
-	// This method is called when a cell value is edited by the user. 
-	@Override
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex, int vColIndex) {
-		if (isSelected)	{ 
-			if(((JRtaComboBox)component).vec != null){
-				((JRtaComboBox)component).setSelectedVecIndex(0, (String)table.getValueAt(rowIndex,vColIndex) );
-				((JRtaComboBox)component).setVisible(true);
-			}else{
-				((JRtaComboBox)component).setSelectedItem( table.getValueAt(rowIndex,vColIndex) );
-			}
-			return component;
-		} // This method is called when editing is completed. 
-		return null;
-		
-	}
-	public Component getComponent(){
-		return component;
-	}
+    public MyTableComboBox() {
+        component = new JRtaComboBox();
+    }
 
-	public void setVector(Vector<Vector<String>> vec,int disp,int ret){
-		((JRtaComboBox)component).setDataVectorVector(vec, disp, ret);
-	}
-	// 'value' is value contained in the cell located at (rowIndex, vColIndex) 
-	// It must return the new value to be stored in the cell. 
-	@Override
-    public Object getCellEditorValue() { 
-		try{
-			if(((JRtaComboBox)component).vec != null){
-				return ( ((JRtaComboBox)component).getValueAt(0)  );	
-			}else{
-				return ( ((JRtaComboBox)component).getSelectedItem() );
-			}
-		}catch(Exception ex){
-			return null;
-		}
-	} 
+    public MyTableComboBox(JRtaComboBox comboParam) {
+        component = comboParam;
+    }
 
-	 @Override
+    private static final long serialVersionUID = 1L;
+
+    // This method is called when a cell value is edited by the user.
+    @Override
+    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int rowIndex,
+            int vColIndex) {
+        if (isSelected) {
+            if (((JRtaComboBox) component).vec != null) {
+                ((JRtaComboBox) component).setSelectedVecIndex(0, (String) table.getValueAt(rowIndex, vColIndex));
+                ((JRtaComboBox) component).setVisible(true);
+            } else {
+                ((JRtaComboBox) component).setSelectedItem(table.getValueAt(rowIndex, vColIndex));
+            }
+            return component;
+        } // This method is called when editing is completed.
+        return null;
+
+    }
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public void setVector(Vector<Vector<String>> vec, int disp, int ret) {
+        ((JRtaComboBox) component).setDataVectorVector(vec, disp, ret);
+    }
+
+    // 'value' is value contained in the cell located at (rowIndex, vColIndex)
+    // It must return the new value to be stored in the cell.
+    @Override
+    public Object getCellEditorValue() {
+        try {
+            if (((JRtaComboBox) component).vec != null) {
+                return (((JRtaComboBox) component).getValueAt(0));
+            } else {
+                return (((JRtaComboBox) component).getSelectedItem());
+            }
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+    @Override
     public boolean stopCellEditing() {
-		 try{
-		 fireEditingStopped();
-		 }catch(Exception ex){}
-		 return super.stopCellEditing();
-	 }
-	 @Override
+        try {
+            fireEditingStopped();
+        } catch (Exception ex) {
+        }
+        return super.stopCellEditing();
+    }
+
+    @Override
     public void cancelCellEditing() {
-		 fireEditingCanceled();
-	    	super.cancelCellEditing();
-	    }
+        fireEditingCanceled();
+        super.cancelCellEditing();
+    }
 }

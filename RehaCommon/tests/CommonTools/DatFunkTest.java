@@ -11,9 +11,9 @@ public class DatFunkTest extends DatFunk {
 
     @Test
     public void testSDatInDeutsch() {
-       assertEquals("  .  .    ", DatFunk.sDatInDeutsch(null));
-       assertEquals("21.03.2012", DatFunk.sDatInDeutsch("2012-03-21"));
-       assertEquals("1.1.2012", DatFunk.sDatInDeutsch("2012-1-1"));
+        assertEquals("  .  .    ", DatFunk.sDatInDeutsch(null));
+        assertEquals("21.03.2012", DatFunk.sDatInDeutsch("2012-03-21"));
+        assertEquals("1.1.2012", DatFunk.sDatInDeutsch("2012-1-1"));
 
     }
 
@@ -27,36 +27,36 @@ public class DatFunkTest extends DatFunk {
         LocalDate date = LocalDate.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-       assertEquals(date.format(dtf), DatFunk.sHeute());
+        assertEquals(date.format(dtf), DatFunk.sHeute());
     }
 
     @Test
     public void testSDatPlusTage() {
-       assertEquals("02.03.2011", DatFunk.sDatPlusTage("28.02.2011", 2));
-       assertEquals("01.03.2012", DatFunk.sDatPlusTage("28.02.2012", 2));
-       assertEquals("01.03.2000",DatFunk.sDatPlusTage("28.02.2000", 2));
+        assertEquals("02.03.2011", DatFunk.sDatPlusTage("28.02.2011", 2));
+        assertEquals("01.03.2012", DatFunk.sDatPlusTage("28.02.2012", 2));
+        assertEquals("01.03.2000", DatFunk.sDatPlusTage("28.02.2000", 2));
     }
 
     @Test
     public void testWochenTag() {
-       assertEquals("Montag",DatFunk.WochenTag("28.02.2011"));
-       assertEquals("Sonntag",DatFunk.WochenTag("06.02.2011"));
+        assertEquals("Montag", DatFunk.WochenTag("28.02.2011"));
+        assertEquals("Sonntag", DatFunk.WochenTag("06.02.2011"));
     }
 
     @Test
     public void testTagDerWoche() {
-        assertEquals(1,DatFunk.TagDerWoche("28.02.2011"));
-        assertEquals(7,DatFunk.TagDerWoche("6.02.2011"));
+        assertEquals(1, DatFunk.TagDerWoche("28.02.2011"));
+        assertEquals(7, DatFunk.TagDerWoche("6.02.2011"));
 
     }
 
     @Test
     public void testTageDifferenz() {
-        assertEquals(365,DatFunk.TageDifferenz("28.02.2011","28.02.2012"));
-        assertEquals(366,DatFunk.TageDifferenz("28.02.2012","28.02.2013"));
-        assertEquals(365,DatFunk.TageDifferenz("28.02.2013","28.02.2014"));
+        assertEquals(365, DatFunk.TageDifferenz("28.02.2011", "28.02.2012"));
+        assertEquals(366, DatFunk.TageDifferenz("28.02.2012", "28.02.2013"));
+        assertEquals(365, DatFunk.TageDifferenz("28.02.2013", "28.02.2014"));
 
-        assertEquals(-8,DatFunk.TageDifferenz("28.02.2013","20.02.2013"));
+        assertEquals(-8, DatFunk.TageDifferenz("28.02.2013", "20.02.2013"));
 
     }
 
@@ -76,7 +76,6 @@ public class DatFunkTest extends DatFunk {
         assertEquals("03.03.2013", DatFunk.WocheLetzter("28.02.2013"));
 
     }
-
 
     @Test
     public void testKalenderWoche() {
@@ -116,8 +115,8 @@ public class DatFunkTest extends DatFunk {
     @Test
     public void testUnter18() {
         assertEquals(false, DatFunk.Unter18("20.02.2018", "19.02.2000"));
-         assertEquals(true, DatFunk.Unter18("20.02.2018", "21.02.2000"));
-         assertEquals(false, DatFunk.Unter18("20.02.2018", "20.02.2000"));
+        assertEquals(true, DatFunk.Unter18("20.02.2018", "21.02.2000"));
+        assertEquals(false, DatFunk.Unter18("20.02.2018", "20.02.2000"));
     }
 
     @Test
@@ -135,8 +134,8 @@ public class DatFunkTest extends DatFunk {
         assertEquals(18, DatFunk.JahreDifferenz("20.02.2018", "20.02.2000"));
         assertEquals(17, DatFunk.JahreDifferenz("20.02.2018", "21.02.2000"));
         assertEquals(18, DatFunk.JahreDifferenz("20.02.2018", "21.02.1999"));
-        assertEquals(0,  DatFunk.JahreDifferenz("01.01.2018", "31.12.2017"));
-        assertEquals(0,  DatFunk.JahreDifferenz("31.12.2017", "01.01.2018"));
+        assertEquals(0, DatFunk.JahreDifferenz("01.01.2018", "31.12.2017"));
+        assertEquals(0, DatFunk.JahreDifferenz("31.12.2017", "01.01.2018"));
 
     }
 

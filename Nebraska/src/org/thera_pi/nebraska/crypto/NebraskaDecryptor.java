@@ -27,163 +27,164 @@ import org.bouncycastle.cms.SignerInformationStore;
 
 public class NebraskaDecryptor {
 
-	private X509Certificate certificate;
-	private PrivateKey privateKey;
-	private String issuer;
-	private BigInteger serial;
-	private boolean use256Hash;
+    private X509Certificate certificate;
+    private PrivateKey privateKey;
+    private String issuer;
+    private BigInteger serial;
+    private boolean use256Hash;
 
-	/**
-	 * Create a Nebraska decryptor for self
-	 * 
-	 * @param nebraskaKeystore reference to NebraskaKeystore object that contains the key store
-	 * @throws NebraskaCryptoException 
-	 * @throws NebraskaNotInitializedException 
-	 */
-	NebraskaDecryptor(NebraskaKeystore nebraskaKeystore) throws NebraskaCryptoException, NebraskaNotInitializedException {
-		certificate = nebraskaKeystore.getSenderCertificate();
-		privateKey = nebraskaKeystore.getSenderKey();
-		issuer = certificate.getIssuerDN().getName();
-		serial = certificate.getSerialNumber();
-		use256Hash = nebraskaKeystore.is256Algorithm();
-	}
-	
-	/**
-	 * Decrypt data and check signature.
-	 * 
-	 * @param inStream encrypted data stream
-	 * @param outStream plain text data stream
-	 * @throws NebraskaFileException 
-	 * @throws NebraskaCryptoException 
-	 */
-	public void decrypt(InputStream inStream, OutputStream outStream) throws NebraskaCryptoException, NebraskaFileException {
-		CMSEnvelopedDataParser parser;
-		try {
-			parser = new CMSEnvelopedDataParser(inStream);
-		} catch (CMSException e) {
-			throw new NebraskaCryptoException(e);
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
-		RecipientInformationStore  recipients = parser.getRecipientInfos();
-	      Collection<?>  c = recipients.getRecipients();
-	      Iterator<?> it = c.iterator();
+    /**
+     * Create a Nebraska decryptor for self
+     * 
+     * @param nebraskaKeystore reference to NebraskaKeystore object that contains
+     *                         the key store
+     * @throws NebraskaCryptoException
+     * @throws NebraskaNotInitializedException
+     */
+    NebraskaDecryptor(NebraskaKeystore nebraskaKeystore)
+            throws NebraskaCryptoException, NebraskaNotInitializedException {
+        certificate = nebraskaKeystore.getSenderCertificate();
+        privateKey = nebraskaKeystore.getSenderKey();
+        issuer = certificate.getIssuerDN()
+                            .getName();
+        serial = certificate.getSerialNumber();
+        use256Hash = nebraskaKeystore.is256Algorithm();
+    }
 
-	      NebraskaPrincipal myPrincipal = new NebraskaPrincipal(this.issuer);
-	      while (it.hasNext())
-	      {
-	          RecipientInformation   recipient = (RecipientInformation)it.next();
-	          RecipientId rid = recipient.getRID();
-	          String issuer = rid.getIssuer().getName();
-	          BigInteger serial = rid.getSerialNumber();
+    /**
+     * Decrypt data and check signature.
+     * 
+     * @param inStream  encrypted data stream
+     * @param outStream plain text data stream
+     * @throws NebraskaFileException
+     * @throws NebraskaCryptoException
+     */
+    public void decrypt(InputStream inStream, OutputStream outStream)
+            throws NebraskaCryptoException, NebraskaFileException {
+        CMSEnvelopedDataParser parser;
+        try {
+            parser = new CMSEnvelopedDataParser(inStream);
+        } catch (CMSException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
+        RecipientInformationStore recipients = parser.getRecipientInfos();
+        Collection<?> c = recipients.getRecipients();
+        Iterator<?> it = c.iterator();
 
-	          NebraskaPrincipal receiverPrincipal = new NebraskaPrincipal(issuer);
-	          if(myPrincipal.equals(receiverPrincipal) && this.serial.equals(serial))
-	          {
-		          CMSTypedStream recData = null;
-		          try {
-					recData = recipient.getContentStream(privateKey, 
-							  NebraskaConstants.SECURITY_PROVIDER);
-		          } catch (NoSuchProviderException e) {
-		        	  throw new NebraskaCryptoException(e);
-		          } catch (CMSException e) {
-		        	  throw new NebraskaCryptoException(e);
-		          }
-		          processSignedData(recData.getContentStream(), outStream);
-		          break;
-	          }
-	      }
-	}
+        NebraskaPrincipal myPrincipal = new NebraskaPrincipal(this.issuer);
+        while (it.hasNext()) {
+            RecipientInformation recipient = (RecipientInformation) it.next();
+            RecipientId rid = recipient.getRID();
+            String issuer = rid.getIssuer()
+                               .getName();
+            BigInteger serial = rid.getSerialNumber();
 
-	/**
-	 * Process the signed data stream created by the decryption step
-	 * and check the validity of the signature.
-	 * 
-	 * @param signedContentStream signed data stream
-	 * @param outStream stream to write the plain data to
-	 * @throws NebraskaCryptoException
-	 * @throws NebraskaFileException
-	 */
-	public void processSignedData(InputStream signedContentStream, OutputStream outStream) throws NebraskaCryptoException, NebraskaFileException {
-		CMSSignedDataParser parser;
-		try {
-			parser = new CMSSignedDataParser(signedContentStream);
-		} catch (CMSException e) {
-			throw new NebraskaCryptoException(e);
-		}
+            NebraskaPrincipal receiverPrincipal = new NebraskaPrincipal(issuer);
+            if (myPrincipal.equals(receiverPrincipal) && this.serial.equals(serial)) {
+                CMSTypedStream recData = null;
+                try {
+                    recData = recipient.getContentStream(privateKey, NebraskaConstants.SECURITY_PROVIDER);
+                } catch (NoSuchProviderException e) {
+                    throw new NebraskaCryptoException(e);
+                } catch (CMSException e) {
+                    throw new NebraskaCryptoException(e);
+                }
+                processSignedData(recData.getContentStream(), outStream);
+                break;
+            }
+        }
+    }
 
-		CMSTypedStream signedContent = parser.getSignedContent();
-		
-		InputStream contentStream = signedContent.getContentStream();
-		
-		try {
-			byte[] buffer = new byte[1024];
-			int len;
-			while((len = contentStream.read(buffer)) > 0)
-			{
-				outStream.write(buffer, 0, len);
-			}
-			outStream.flush();
-		
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
+    /**
+     * Process the signed data stream created by the decryption step and check the
+     * validity of the signature.
+     * 
+     * @param signedContentStream signed data stream
+     * @param outStream           stream to write the plain data to
+     * @throws NebraskaCryptoException
+     * @throws NebraskaFileException
+     */
+    public void processSignedData(InputStream signedContentStream, OutputStream outStream)
+            throws NebraskaCryptoException, NebraskaFileException {
+        CMSSignedDataParser parser;
+        try {
+            parser = new CMSSignedDataParser(signedContentStream);
+        } catch (CMSException e) {
+            throw new NebraskaCryptoException(e);
+        }
 
-		try {
-			signedContent.drain();
-		} catch (IOException e) {
-			throw new NebraskaFileException(e);
-		}
+        CMSTypedStream signedContent = parser.getSignedContent();
 
-		CertStore certs = null;
-		SignerInformationStore signerInformation = null;
-		try {
-			certs = parser.getCertificatesAndCRLs(NebraskaConstants.CERTSTORE_TYPE, NebraskaConstants.SECURITY_PROVIDER);
-			signerInformation = parser.getSignerInfos();
-		} catch (NoSuchAlgorithmException e) {
-      	  throw new NebraskaCryptoException(e);
-		} catch (NoSuchProviderException e) {
-      	  throw new NebraskaCryptoException(e);
-		} catch (CMSException e) {
-      	  throw new NebraskaCryptoException(e);
-		}
+        InputStream contentStream = signedContent.getContentStream();
 
-		Collection<?> signerColl = signerInformation.getSigners();
-		Iterator<?> signerIterator = signerColl.iterator();
+        try {
+            byte[] buffer = new byte[1024];
+            int len;
+            while ((len = contentStream.read(buffer)) > 0) {
+                outStream.write(buffer, 0, len);
+            }
+            outStream.flush();
 
-		while (signerIterator.hasNext())
-		{
-			SignerInformation signer = (SignerInformation)signerIterator.next();
-			Collection<?> certCollection;
-			try {
-				certCollection = certs.getCertificates(signer.getSID());
-			} catch (CertStoreException e) {
-	      	  throw new NebraskaCryptoException(e);
-			}
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
 
-			Iterator<?> certIterator = certCollection.iterator();
-			X509Certificate cert = (X509Certificate)certIterator.next();
+        try {
+            signedContent.drain();
+        } catch (IOException e) {
+            throw new NebraskaFileException(e);
+        }
 
-			boolean verified = false;
-			try {
-				verified = signer.verify(cert, NebraskaConstants.SECURITY_PROVIDER);
-			} catch (CertificateExpiredException e) {
-		      	  throw new NebraskaCryptoException(e);
-			} catch (CertificateNotYetValidException e) {
-		      	  throw new NebraskaCryptoException(e);
-			} catch (NoSuchAlgorithmException e) {
-		      	  throw new NebraskaCryptoException(e);
-			} catch (NoSuchProviderException e) {
-		      	  throw new NebraskaCryptoException(e);
-			} catch (CMSException e) {
-		      	  throw new NebraskaCryptoException(e);
-			}
-			if(!verified)
-			{
-				throw new NebraskaCryptoException(new Exception("signature verification failed"));
-			}
-		}
+        CertStore certs = null;
+        SignerInformationStore signerInformation = null;
+        try {
+            certs = parser.getCertificatesAndCRLs(NebraskaConstants.CERTSTORE_TYPE,
+                    NebraskaConstants.SECURITY_PROVIDER);
+            signerInformation = parser.getSignerInfos();
+        } catch (NoSuchAlgorithmException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (NoSuchProviderException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (CMSException e) {
+            throw new NebraskaCryptoException(e);
+        }
 
-	}
+        Collection<?> signerColl = signerInformation.getSigners();
+        Iterator<?> signerIterator = signerColl.iterator();
+
+        while (signerIterator.hasNext()) {
+            SignerInformation signer = (SignerInformation) signerIterator.next();
+            Collection<?> certCollection;
+            try {
+                certCollection = certs.getCertificates(signer.getSID());
+            } catch (CertStoreException e) {
+                throw new NebraskaCryptoException(e);
+            }
+
+            Iterator<?> certIterator = certCollection.iterator();
+            X509Certificate cert = (X509Certificate) certIterator.next();
+
+            boolean verified = false;
+            try {
+                verified = signer.verify(cert, NebraskaConstants.SECURITY_PROVIDER);
+            } catch (CertificateExpiredException e) {
+                throw new NebraskaCryptoException(e);
+            } catch (CertificateNotYetValidException e) {
+                throw new NebraskaCryptoException(e);
+            } catch (NoSuchAlgorithmException e) {
+                throw new NebraskaCryptoException(e);
+            } catch (NoSuchProviderException e) {
+                throw new NebraskaCryptoException(e);
+            } catch (CMSException e) {
+                throw new NebraskaCryptoException(e);
+            }
+            if (!verified) {
+                throw new NebraskaCryptoException(new Exception("signature verification failed"));
+            }
+        }
+
+    }
 
 }

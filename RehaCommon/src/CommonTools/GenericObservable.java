@@ -76,7 +76,7 @@ public class GenericObservable<T> {
 
     public void notifyObservers(final T value) {
         ArrayList<GenericObserver<? super T>> toNotify = null;
-        synchronized(observers) {
+        synchronized (observers) {
             if (!changed) {
                 return;
             }

@@ -17,9 +17,11 @@ public class NebraskaUtilTest extends TestCase {
     }
 
     public void testGetSubjectDN() {
-        assertEquals("CN=Max Mustermann, OU=IK123456789, OU=Test Institution, O=ITSG TrustCenter fuer sonstige Leistungserbringer, C=DE",
+        assertEquals(
+                "CN=Max Mustermann, OU=IK123456789, OU=Test Institution, O=ITSG TrustCenter fuer sonstige Leistungserbringer, C=DE",
                 NebraskaUtil.getSubjectDN("123456789", "Test Institution", "Max Mustermann"));
-        assertEquals("CN=Wäänä Brösel, OU=IK000123456, OU=Łógòpädie Sèmméłweiß, O=ITSG TrustCenter fuer sonstige Leistungserbringer, C=DE",
+        assertEquals(
+                "CN=Wäänä Brösel, OU=IK000123456, OU=Łógòpädie Sèmméłweiß, O=ITSG TrustCenter fuer sonstige Leistungserbringer, C=DE",
                 NebraskaUtil.getSubjectDN("IK 000123456", "Łógòpädie Sèmméłweiß", "Wäänä Brösel"));
     }
 

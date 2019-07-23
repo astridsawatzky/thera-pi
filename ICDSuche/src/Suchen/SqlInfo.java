@@ -63,7 +63,7 @@ class SqlInfo {
                 }
             }
         }
-        return  retkomplett;
+        return retkomplett;
     }
 
     Vector<Vector<String>> suchICD(String suchtext, SearchType searchType, int ilimit) {

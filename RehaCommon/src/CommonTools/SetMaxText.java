@@ -7,55 +7,53 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 public class SetMaxText extends PlainDocument {
-	  /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private int limit;
-	  // optional uppercase conversion
-	  private boolean toUppercase = false;
-	  private Color normalFg = Color.BLACK;
-	  private Color errorFg = Color.RED;
-	  
-	  public SetMaxText(int limit) {
-	   super();
-	   this.limit = limit;
-	   }
-	   
-	  public SetMaxText(int limit, boolean upper) {
-	   super();
-	   this.limit = limit;
-	   toUppercase = upper;
-	   }
-	  
-	  public SetMaxText(int limit, boolean upper,Color normalFg,Color errorFg) {
-		   super();
-		   this.limit = limit;
-		   this.toUppercase = upper;
-		   this.normalFg = normalFg;
-		   this.errorFg = errorFg;
-	  }
+    /**
+    * 
+    */
+    private static final long serialVersionUID = 1L;
+    private int limit;
+    // optional uppercase conversion
+    private boolean toUppercase = false;
+    private Color normalFg = Color.BLACK;
+    private Color errorFg = Color.RED;
 
-	 
-	  @Override
-    public void insertString
-	    (int offset, String  str, AttributeSet attr)
-	      throws BadLocationException {
-		  if (str == null) return;
+    public SetMaxText(int limit) {
+        super();
+        this.limit = limit;
+    }
 
-		  if ((getLength() + str.length()) <= limit) {
-			  if (toUppercase) str = str.toUpperCase();
-			  //StyleConstants.setForeground((MutableAttributeSet) attr, Color.BLUE);
-			  super.insertString(offset, str, attr);
-		  }else{
-			  //if (toUppercase) str = str.toUpperCase();
-			  //StyleConstants.setForeground((MutableAttributeSet) attr, Color.RED);
-			  if(str.length() > limit){
-				  super.insertString(0, str.substring(0,limit), attr);  
-			  }
-			  
-			  
-		  }
-		   
-	   }
+    public SetMaxText(int limit, boolean upper) {
+        super();
+        this.limit = limit;
+        toUppercase = upper;
+    }
+
+    public SetMaxText(int limit, boolean upper, Color normalFg, Color errorFg) {
+        super();
+        this.limit = limit;
+        this.toUppercase = upper;
+        this.normalFg = normalFg;
+        this.errorFg = errorFg;
+    }
+
+    @Override
+    public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+        if (str == null)
+            return;
+
+        if ((getLength() + str.length()) <= limit) {
+            if (toUppercase)
+                str = str.toUpperCase();
+            // StyleConstants.setForeground((MutableAttributeSet) attr, Color.BLUE);
+            super.insertString(offset, str, attr);
+        } else {
+            // if (toUppercase) str = str.toUpperCase();
+            // StyleConstants.setForeground((MutableAttributeSet) attr, Color.RED);
+            if (str.length() > limit) {
+                super.insertString(0, str.substring(0, limit), attr);
+            }
+
+        }
+
+    }
 }
