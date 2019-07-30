@@ -732,12 +732,7 @@ public class OcKVK implements CardListener{
 
     }
 
-    public void TerminalDeaktivieren() {
-        // TODO Auto-generated method stub
-
-    }
-
-   public class CardListener  {
+    public class CardListener  {
         private Card smartcard = null;
         private CardTerminal terminal = null;
         private int slotID = 0;

@@ -694,7 +694,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         }
         if (SystemConfig.sReaderAktiv.equals("1") && Reha.instance.ocKVK != null) {
             try {
-                Reha.instance.ocKVK.TerminalDeaktivieren();
                 System.out.println("Card-Terminal deaktiviert");
             } catch (NullPointerException ex) {
 

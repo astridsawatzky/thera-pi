@@ -278,7 +278,6 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
         // überhaupt existiert.
         try {
             if (Reha.instance.ocKVK != null) {
-                Reha.instance.ocKVK.TerminalDeaktivieren();
                 ocAktive = true;
             }
             int antwort = JOptionPane.showConfirmDialog(null, "Bitte KV-Karte einlegen und ok. drücken",
