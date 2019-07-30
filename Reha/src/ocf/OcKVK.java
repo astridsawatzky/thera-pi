@@ -92,7 +92,6 @@ public class OcKVK implements CardListener{
     private String s, satrId;
 
     public boolean isCardReady;
-    public boolean systemStarted = false;
 
     ResponseAPDU response;
     boolean blockIKKasse = false;
@@ -113,7 +112,6 @@ public class OcKVK implements CardListener{
         SystemConfig.hmKVKDaten = new HashMap<String, String>();
         // danach wird das Gedönse in der SystemConfig initialisiert.
 
-        systemStarted = true;
         terminalOk = true;
         listen = new CardListener(this);
 
@@ -750,11 +748,7 @@ public class OcKVK implements CardListener{
         }
 
         public void cardInserted(CardTerminalEvent event) throws CardException {
-            if (!eltern.systemStarted) {
-                JOptionPane.showMessageDialog(null,
-                        "Im Kartenlesegerät steckt noch eine Chipkarte!!!!\n\nBitte entnehmen und Eigentümer aushändigen\n");
-                return;
-            }
+
             System.out.println("karte eingesteckt");
             if (smartcard == null) {
 

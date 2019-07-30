@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class EgkReader implements Runnable {
 
-    protected final static Logger logger = LoggerFactory.getLogger(EgkReader.class);
+    private final static Logger logger = LoggerFactory.getLogger(EgkReader.class);
     private final String terminalname;
     private CardListener listener;
 
@@ -110,25 +110,4 @@ public class EgkReader implements Runnable {
 
     }
 
-    public static void main(String[] args) throws CardException {
-
-        CardListener cardListener = new CardListener() {
-
-            @Override
-            public void cardInserted(CardTerminalEvent cardTerminalEvent) {
-                logger.info("yay");
-
-            }
-
-            @Override
-            public void cardRemoved(CardTerminalEvent cardTerminalEvent) {
-                logger.info("duh");
-
-            }
-
-        };
-        EgkReader egkReader = new EgkReader("Identiv uTrust 2700 R Smart Card Reader 0");
-        egkReader.addCardListener(cardListener);
-        egkReader.run();
-    }
 }
