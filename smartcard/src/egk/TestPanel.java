@@ -29,17 +29,19 @@ public class TestPanel extends JPanel {
             public void run() {
                 try {
 
-                    JFrame frame = new JFrame();
+                    JFrame frame = new JFrame("Available smartcardterminals");
 
                     TestPanel panel = new TestPanel(TerminalFactory.getDefault()
                                                                    .terminals()
                                                                    .list());
                     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
                     frame.add(panel);
-                    frame.setMinimumSize(new Dimension(600, 400));
                     frame.pack();
+                    frame.setSize(new Dimension(600, 400));
+
                     frame.setVisible(true);
                 } catch (Exception e) {
+
                     e.printStackTrace();
                 }
             }
@@ -69,15 +71,13 @@ public class TestPanel extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     Toolkit.getDefaultToolkit()
-                    .getSystemClipboard()
-                    .setContents(
-                            new StringSelection(e.getSource().toString()),
-                            null
-                    );
-                    super.mouseClicked(e);
+                           .getSystemClipboard()
+                           .setContents(new StringSelection(e.getSource()
+                                                             .toString()),
+                                   null);
                 }
             };
-            label.addMouseListener(copytoclipboard );
+            label.addMouseListener(copytoclipboard);
             TestLabel lblNewLabel = new TestLabel("nix los hier");
             lblNewLabel.setBounds(300, y, 131, 64);
 

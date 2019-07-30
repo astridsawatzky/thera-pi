@@ -5,10 +5,10 @@ import javax.smartcardio.CardTerminal;
 
 public interface CardTerminalEvent {
 
-     CardTerminal getCardTerminal();
+    CardTerminal getCardTerminal();
 
-     int getSlotID();
+    int getSlotID();
 
-     Card getSmartCard();
+    Card getSmartCard();
 
 }
