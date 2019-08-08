@@ -60,9 +60,10 @@ public class TheraPi {
     }
 
     protected static boolean isAcceptedJavaversion() {
+
         RunnningVersion version = new RunnningVersion();
 
-        if (version.isSupported()) {
+        if (!version.isSupported()) {
 
             int result = JOptionPane.showConfirmDialog(null,
                     "Version" + version.current() + "  wird nicht unterstützt,\nSie brauchen eine " + version.required()
