@@ -2,6 +2,7 @@ package hauptFenster;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,6 +20,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -169,7 +173,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
     /**
      * Task-Pane f�r den Patientenstamm erstellen
-     * 
+     *
      * @return
      */
 
@@ -566,6 +570,10 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.addActionListener(this);
         // jxLink.setEnabled(false);
         tp5.add(jxLink);
+        JXHyperlink paypal = createPaypalLink();
+        tp5.add(paypal);
+
+
         File f = new File(Path.Instance.getProghome() + "QMHandbuch.jar");
         if (f.exists()) {
             jxLink = new JXHyperlink();
@@ -597,6 +605,31 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
         tp5.setCollapsed(SystemConfig.taskPaneCollapsed[3]);
         return tp5;
+    }
+
+    private JXHyperlink createPaypalLink() {
+        Image img;
+        JXHyperlink paypal = new JXHyperlink();
+        paypal.setText("Thera-Pi unterstützen");
+        paypal.setClickedColor(new Color(0, 0x33, 0xFF));
+        img = new ImageIcon(Path.Instance.getProghome() + "icons/pp_cc_mark_37x23.jpg").getImage()
+                                                                          .getScaledInstance(24, 24,
+                                                                                  Image.SCALE_SMOOTH);
+        paypal.setIcon(new ImageIcon(img));
+        paypal.setActionCommand("piIcd10");
+        paypal.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               try {
+                open(new URI("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BDMYY86QLM9XG&source=url"));
+            } catch (URISyntaxException e1) {
+                logger.error("url zu paypal fehlerhaft",e1);
+            }
+
+            }
+        });
+        return paypal;
     }
 
     private JXTaskPane getSystemEinstellungen() {
@@ -743,7 +776,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
     /**
      * Eigener Event-Handler man wird sehen ob das vern�ftig ist.
-     * 
+     *
      * @Override
      */
     @Override
@@ -1389,6 +1422,21 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
     public void dropActionChanged(DropTargetDragEvent arg0) {
 
     }
-
+    private static void open(URI uri) {
+        if (Desktop.isDesktopSupported()) {
+          Desktop desktop = Desktop.getDesktop();
+          try {
+            desktop.browse(uri);
+          } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                "Failed to launch the link, your computer is likely misconfigured.",
+                "Cannot Launch Link",JOptionPane.WARNING_MESSAGE);
+          }
+        } else {
+          JOptionPane.showMessageDialog(null,
+              "Java is not able to launch links on your computer.",
+              "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
+        }
+      }
     /************************************************************/
 }
