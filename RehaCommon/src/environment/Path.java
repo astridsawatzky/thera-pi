@@ -23,7 +23,7 @@ public enum Path {
     }
 
     public boolean isLinux() {
-        return currentOS.is(OS.Linux);
+        return currentOS.is(OS.LINUX);
     }
 
     public boolean isWindows() {
@@ -42,7 +42,7 @@ public enum Path {
             String prog = java.lang.System.getProperty("user.dir");
             setProghome(prog.substring(0, 2) + "/RehaVerwaltung/");
             break;
-        case Linux:
+        case LINUX:
             setProghome("/opt/RehaVerwaltung/");
             break;
         case MAC:
@@ -75,7 +75,7 @@ public enum Path {
         String osVersion = System.getProperty("os.name");
 
         if (osVersion.contains("Linux")) {
-            return OS.Linux;
+            return OS.LINUX;
         } else if (osVersion.contains("Windows")) {
             return OS.WIN;
         } else if (osVersion.contains("Mac OS X")) {
