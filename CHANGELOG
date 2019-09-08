@@ -3,17 +3,20 @@ Alle nennenswerten Änderungen werden in dieser Datei dokumentitert.
 
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
-## [1.1.1]
+## [1.1.1] - 2019-09-02
 ### added
 - Die neue smartcard.jar kann gestaret werden und zeigt die gefundenen Smartcardterminals an.
+- Paypallink unter nützliches in der Werkzeugleiste
 
 ### changed
 - Die elektronische Krankenkassenkarte wird jetzt mit java Bordmitteln gelesen.
 - Code komplett formatiert, damit es git merge nicht mehr so weh tut.
 
 ### fixed
+- benutze neuen Key für update fixes #175
 - ICD-Suche funktioniert wieder mit und ohne Punkt 
 - Nebraska verschlüsselt wieder mit AES256 #159
+- Javakompatibilitätscheck 
 
 
 ## [1.1.0] - 2019-06-01
