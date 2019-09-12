@@ -17,8 +17,12 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SqlInfo {
 
+    private static Logger logger = LoggerFactory.getLogger(SqlInfo.class);
     private static JFrame frame = null;
     static Connection conn = null;
     private static InetAddress dieseMaschine;
@@ -950,7 +954,7 @@ public class SqlInfo {
             retvec.clear();
             retvec = null;
         } catch (SQLException ev) {
-            System.out.println("SQLException: " + ev.getMessage());
+          logger.error("",  ev);
             // System.out.println("SQLState: " + ev.getSQLState());
             // System.out.println("VendorError: " + ev.getErrorCode());
         }
