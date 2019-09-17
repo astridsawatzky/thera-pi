@@ -20,6 +20,8 @@ import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -97,7 +99,6 @@ public class AbrechnungGKV extends JXPanel
     String aktDfue;
     String aktRechnung;
     String aktDisziplin = "";
-//	String[] diszis = {"KG","MA","ER","LO","PO","RS","FT"};		// McM: weg
 
     boolean annahmeAdresseOk = false;
     /******* Controls für die linke Seite *********/
@@ -110,9 +111,6 @@ public class AbrechnungGKV extends JXPanel
     FileWriter fw;
     BufferedWriter bw;
     AbrechnungDlg abrDlg = null;
-
-//	public DefaultMutableTreeNode rootKasse;
-//	public DefaultTreeModel treeModelKasse;
 
     public JXTTreeNode rootKasse;
     public KassenTreeModel treeModelKasse;
@@ -180,11 +178,9 @@ public class AbrechnungGKV extends JXPanel
     public static boolean directCall = false;
 
     public Disziplinen disziSelect = null;
-    private Connection connection;
 
     public AbrechnungGKV(JAbrechnungInternal xjry, Connection connection) {
         super();
-        this.connection = connection;
         this.setJry(xjry);
         setLayout(new BorderLayout());
         if (disziSelect == null) {
@@ -210,14 +206,13 @@ public class AbrechnungGKV extends JXPanel
                 if (SystemConfig.certState > 0) {
                     abrRez.tbbuts[3].setEnabled(false);
                 }
-                // System.out.println(SystemConfig.hmAbrechnung);
-                // System.out.println("CertState = "+SystemConfig.certState);
+
                 return null;
             }
         }.execute();
         originalTitel = this.jry.getTitel();
         setEncryptTitle();
-        // cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
+
         disziSelect.setCurrDiszi(SystemConfig.initRezeptKlasse); // Kassentree füllen
 
     }
@@ -246,11 +241,10 @@ public class AbrechnungGKV extends JXPanel
                 if (dn.length == 5) {
                     ik = dn[3].split("=")[1];
                     if (ik.equals(alias)) {
-                        String verfall = certs.get(i)
-                                              .getNotAfter()
-                                              .toLocaleString()
-                                              .split(" ")[0].trim();
-                        tage = DatFunk.TageDifferenz(DatFunk.sHeute(), verfall);
+                        Date verfall = certs.get(i)
+                                            .getNotAfter();
+                        tage = verfall.toInstant()
+                                      .until(Instant.now(), ChronoUnit.DAYS);
                         if (tage <= 0) {
                             JOptionPane.showMessageDialog(null,
                                     "Ihr Zertifikat ist abgelaufen.\nEine Verschlüsselung mit diesem Zertifikat ist nicht mehr möglich");
@@ -262,11 +256,10 @@ public class AbrechnungGKV extends JXPanel
                         }
                         return SystemConfig.certOK;
                     } else {
-                        String verfall = certs.get(i)
-                                              .getNotAfter()
-                                              .toLocaleString()
-                                              .split(" ")[0].trim();
-                        tage = DatFunk.TageDifferenz(DatFunk.sHeute(), verfall);
+                        Date verfall = certs.get(i)
+                                            .getNotAfter();
+                        tage = verfall.toInstant()
+                                      .until(Instant.now(), ChronoUnit.DAYS);
                         if (tage <= 0) {
                             JOptionPane.showMessageDialog(null,
                                     "Mindestens ein Zertifikat im Keystore ist abgelaufen.\nVerschlüsselung und damit die 302-er Abrechnung wird daher gesperrt");
@@ -324,14 +317,14 @@ public class AbrechnungGKV extends JXPanel
           .setBackground(Color.WHITE);
         // pb.add(getIVPanel(),cc.xy(2,1));
         pb.addLabel("Heilmittel auswählen", cc.xy(2, 2));
-//		if(SystemConfig.mitRs){
-//			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept","Rehasport-Rezept","Funktionstraining-Rezept"});
-//		}else{
-//			cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept"});
-//		}
+//        if(SystemConfig.mitRs){
+//            cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept","Rehasport-Rezept","Funktionstraining-Rezept"});
+//        }else{
+//            cmbDiszi = new JRtaComboBox(new String[] {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","Podologie-Rezept"});
+//        }
 
         cmbDiszi.setActionCommand("einlesen");
-//		cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
+//        cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
         pb.add(cmbDiszi, cc.xy(2, 4));
 
         rootKasse = new JXTTreeNode(new KnotenObjekt("Abrechnung für Kasse...", "", false, "", ""), true);
@@ -410,7 +403,7 @@ public class AbrechnungGKV extends JXPanel
         String cmd = arg0.getActionCommand();
         if (cmd.equals("einlesen")) {
             // rootKasse.removeAllChildren();
-//			aktDisziplin = getCurrDiszi();
+//            aktDisziplin = getCurrDiszi();
             aktDisziplin = disziSelect.getCurrDiszi();
             // System.out.println("aktDisziplin = "+aktDisziplin);
             if (abrRez.rezeptSichtbar) {
@@ -429,7 +422,7 @@ public class AbrechnungGKV extends JXPanel
 
     public void einlesenErneuern(String neueReznr) {
         directCall = false;
-//		aktDisziplin = getCurrDiszi();
+//        aktDisziplin = getCurrDiszi();
         aktDisziplin = disziSelect.getCurrDiszi();
         // abrRez.setKuerzelVec(reznr[cmbDiszi.getSelectedIndex()]);
         if (abrRez.rezeptSichtbar) {
@@ -617,7 +610,7 @@ public class AbrechnungGKV extends JXPanel
                     }.execute();
                     existiertschon.clear();
                     customIconList.clear();
-//					String dsz = diszis[cmbDiszi.getSelectedIndex()];		// McM: kann weg (OK)
+//                    String dsz = diszis[cmbDiszi.getSelectedIndex()];        // McM: kann weg (OK)
                     String dsz = disziSelect.getCurrRezClass();
 
                     // String cmd = "select name1,ikktraeger,ikkasse,id from fertige where
@@ -727,7 +720,7 @@ public class AbrechnungGKV extends JXPanel
 
     private void rezepteAnhaengen(int knoten) {
         String ktraeger = ((JXTTreeNode) rootKasse.getChildAt(knoten)).knotenObjekt.ktraeger;
-//		String dsz = diszis[cmbDiszi.getSelectedIndex()];		// McM: kann weg (OK)
+//        String dsz = diszis[cmbDiszi.getSelectedIndex()];        // McM: kann weg (OK)
         String dsz = disziSelect.getCurrRezClass();
         String cmd = "select rez_nr,pat_intern,ediok,ikkasse from fertige where rezklasse='" + dsz
                 + "' AND ikktraeger='" + ktraeger + "' ORDER BY id,pat_intern";
@@ -1998,7 +1991,7 @@ public class AbrechnungGKV extends JXPanel
         rechnungBuf.append("r_datum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', ");
         rechnungBuf.append(
                 "r_kasse='" + hmKostentraeger.get("name1") + ", " + "esol0" + hmKostentraeger.get("aktesol") + "', ");
-//		rechnungBuf.append("r_klasse='"+diszis[cmbDiszi.getSelectedIndex()]+"', ");		// McM: weg
+//        rechnungBuf.append("r_klasse='"+diszis[cmbDiszi.getSelectedIndex()]+"', ");        // McM: weg
         rechnungBuf.append("r_klasse='" + disziSelect.getCurrRezClass() + "', ");
         rechnungBuf.append("r_betrag='" + dfx.format(preis00[0])
                                              .replace(",", ".")

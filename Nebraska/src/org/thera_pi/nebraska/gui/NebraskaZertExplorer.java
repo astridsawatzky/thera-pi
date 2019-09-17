@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -44,9 +46,11 @@ import utils.JCompTools;
 
 public class NebraskaZertExplorer extends JXPanel implements ListSelectionListener, ActionListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -7368787318044651022L;
+    private static final DateTimeFormatter  ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
     public static X509Certificate[] annahmeCerts = null;
     JXPanel content = null;
     public MyCertTableModel tabmod = new MyCertTableModel();
@@ -236,7 +240,7 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
                  * try { keystore.exportKey("C:/privkey",
                  * NebraskaMain.keyStoreParameter.get(index-1).get(1)); } catch
                  * (NebraskaNotInitializedException e) {
-                 * 
+                 *
                  * e.printStackTrace(); }
                  */
 
@@ -333,7 +337,7 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
                       .toString()
                       .split(",");
             /*
-             * 
+             *
              * for(int i2 = 0; i2 < dn.length; i2++){
              * System.out.println("Zertifikat "+(i+1)+"  Bestandteil "+(i2+1)+" = "+dn[i2]);
              * }
@@ -352,6 +356,7 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
                         vec.add(certs.get(i)
                                      .getNotAfter()
                                      .toLocaleString());
+
                         tabmod.addRow((Vector<?>) vec.clone());
                     } else {
                         if (!ownCertOk) {
@@ -456,7 +461,7 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
 
     class MyCertTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
