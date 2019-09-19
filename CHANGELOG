@@ -2,6 +2,12 @@
 Alle nennenswerten Änderungen werden in dieser Datei dokumentitert.
 
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
+# noch nicht released
+
+### fixed
+- Falsche Anrede auf Verkaufsrechnung #84
+
 
 ## [1.1.1] - 2019-09-02
 ### added

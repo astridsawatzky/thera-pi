@@ -3,12 +3,14 @@ package verkauf;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.sql.Date;
 import java.text.DecimalFormat;
 
@@ -25,6 +27,8 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -86,6 +90,7 @@ public class VerkaufGUI extends JXPanel {
     VerkaufTab owner;
     boolean debug = false;
 
+    private Logger logger = LoggerFactory.getLogger(VerkaufGUI.class);
     public VerkaufGUI(VerkaufTab owner) {
         super();
         this.owner = owner;
@@ -211,7 +216,8 @@ public class VerkaufGUI extends JXPanel {
              .setMinWidth(0);
         vktab.getColumn(lastcol)
              .setMaxWidth(0);
-        vktab.addMouseListener(new MouseListener() {
+        vktab.addMouseListener(new MouseAdapter() {
+
 
             @Override
             public void mouseClicked(MouseEvent arg0) {
@@ -219,23 +225,6 @@ public class VerkaufGUI extends JXPanel {
                     aktiviereFunktion(VerkaufTab.edit);
                 }
 
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
             }
 
         });
@@ -437,10 +426,9 @@ public class VerkaufGUI extends JXPanel {
     private void activateListener() {
         this.al = this.owner.al;
 
-        kl = new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent arg0) {
-            }
+        kl = new KeyAdapter() {
+
+
 
             @Override
             public void keyReleased(KeyEvent arg0) {
@@ -454,11 +442,7 @@ public class VerkaufGUI extends JXPanel {
                     edits[8].setText(df.format(verkauf.getBetragBrutto()));
                     String[][] werte = verkauf.liefereTabDaten();
                     setzeTabellenWerte(werte);
-                    /*
-                     * vkmod.setDataVector(verkauf.liefereTabDaten(), column);
-                     * vktab.getColumn(lastcol).setMinWidth(0);
-                     * vktab.getColumn(lastcol).setMaxWidth(0);
-                     */
+
 
                 }
             }
@@ -474,11 +458,11 @@ public class VerkaufGUI extends JXPanel {
             }
         };
 
-        fl = new FocusListener() {
-            @Override
-            public void focusGained(FocusEvent arg0) {
+        fl = new FocusAdapter() {
 
-            }
+
+
+
 
             @Override
             public void focusLost(FocusEvent arg0) {
@@ -491,7 +475,7 @@ public class VerkaufGUI extends JXPanel {
                             edits[3].setText(aktuellerArtikel.getBeschreibung());
                             edits[4].setText(df.format(aktuellerArtikel.getPreis()));
                             einheitAnzahlLabel.setText("Anzahl / " + aktuellerArtikel.getEinheit());
-                            // TODO prüfen ob das Fenster grade Aktiv ist!; Rechnung vorschau?
+                            // TODO: prüfen ob das Fenster grade Aktiv ist!; Rechnung vorschau?
                         } else {
                             edits[0].removeFocusListener(fl);
                             // edits[0].requestFocus();
@@ -529,6 +513,7 @@ public class VerkaufGUI extends JXPanel {
                         return;
                     }
                 } catch (Exception e) {
+                    logger.error("something bad happened",e);
                 }
             }
 
@@ -753,7 +738,7 @@ public class VerkaufGUI extends JXPanel {
                                          .setText("Sehr geehrte Damen und Herren");
                             } else {
                                 felder[i].getTextRange()
-                                         .setText("Sehr geehrter Frau " + name);
+                                         .setText("Sehr geehrte Frau " + name);
                             }
                         } else if (felder[i].getDisplayText()
                                             .equals("<Padr>")) {
