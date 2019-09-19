@@ -14,7 +14,6 @@ import javax.imageio.ImageWriter;
 import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXPanel;
-
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.star.beans.PropertyValue;
@@ -136,7 +135,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void> {
                  * graphicInfo = new GraphicInfo(imagePath, new Float(fx).intValue(), false, new
                  * Float(fy).intValue(), false, VertOrientation.TOP, HoriOrientation.LEFT,
                  * TextContentAnchorType.AS_CHARACTER);
-                 * 
+                 *
                  * System.out.println(graphicInfo.getUrl());
                  */
 
@@ -166,7 +165,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void> {
                  */
 
                 /*
-                 * 
+                 *
                  * Object oFCProvider =
                  * _xMCF.createInstanceWithContext("com.sun.star.ucb.FileContentProvider",
                  * this.m_xContext); XFileIdentifierConverter xFileIdentifierConverter =
@@ -175,10 +174,10 @@ public class DruckeViewPanel extends SwingWorker<Void, Void> {
                  * String sImageUrl =
                  * xFileIdentifierConverter.getFileURLFromSystemPath(_sImageSystemPath,
                  * oFile.getAbsolutePath());
-                 * 
+                 *
                  * Object oFCProvider = multiServiceFactory.createInstanceWithContext(
                  * "com.sun.star.ucb.FileContentProvider", xText);
-                 * 
+                 *
                  * XFileIdentifierConverter xFileIdentifierConverter =
                  * (XFileIdentifierConverter)
                  * UnoRuntime.queryInterface(XFileIdentifierConverter.class, oFCProvider);
@@ -194,11 +193,11 @@ public class DruckeViewPanel extends SwingWorker<Void, Void> {
             /*
              * ITextContentService textContentService = textDocument.getTextService()
              * .getTextContentService();
-             * 
+             *
              * ITextCursor textCursor = textDocument.getTextService().getText()
              * .getTextCursorService().getTextCursor();
-             * 
-             * 
+             *
+             *
              * Thread.sleep(100); ITextDocumentImage textDocumentImage = textContentService
              * .constructNewImage(graphicInfo);
              * textContentService.insertTextContent(textCursor.getEnd(), textDocumentImage);
@@ -291,7 +290,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void> {
     }
 
     private void speichernQualitaet(String stitel, Float fQuality) {
-//		img, "jpg", new File("C:\\ScreenShots\\"+stitel+".jpg")
+
         IIOImage imgq = new IIOImage(bufimg, null, null);
         ImageWriter writer = ImageIO.getImageWritersBySuffix("jpg")
                                     .next();

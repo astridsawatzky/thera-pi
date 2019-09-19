@@ -1607,8 +1607,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             try {
                 Reha.instance.ocKVK.lesen(terminal);
             } catch (UnsatisfiedLinkError | Exception e) {
-                // TODO Auto-generated catch block
-                logger.error("bad things happen here",e);
+                logger.error("Probably library not found, shouldn't happen at all anymore",e);
             }
         }
 
