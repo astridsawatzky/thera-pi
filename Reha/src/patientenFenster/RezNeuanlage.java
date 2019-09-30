@@ -179,7 +179,6 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private String nummer = null;
     private String rezKlasse = null;
     private String[] farbcodes = { null, null, null, null, null, null, null, null, null, null };
-    private String[] farbcodes = {null,null,null,null,null,null,null,null,null,null};
 
     private String aktuelleDisziplin = "";
     private int preisgruppen[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -366,7 +365,6 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                                {
                             jtf[cKTRAEG].requestFocus();
                         }
                     });

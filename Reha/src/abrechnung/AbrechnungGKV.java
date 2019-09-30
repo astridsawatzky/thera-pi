@@ -660,7 +660,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         String cmd = "select rez_nr,pat_intern,ediok,ikkasse from fertige where rezklasse='" + dsz
                 + "' AND ikktraeger='" + ktraeger + "' ORDER BY id,pat_intern";
 
-        Vector<Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
+        Vector <Vector<String>> vecRezepte = SqlInfo.holeFelder(cmd);
 
         JXTTreeNode node = (JXTTreeNode) rootKasse.getChildAt(knoten);
         // JXTTreeNode treeitem = null;

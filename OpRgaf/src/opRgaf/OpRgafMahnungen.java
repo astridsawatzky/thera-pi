@@ -309,7 +309,6 @@ public class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
     }
 
     private JPanel getSuchEinstellungPanel(){
-        FormLayout lay = new FormLayout(
         //                 1     2      3    4     5    6       7    8      9   10    11    
         String xwerte = "15dlu,140dlu,2dlu,60dlu,2dlu,60dlu:g,2dlu,189dlu,2dlu,50dlu,1dlu";
         // 1 2 3
