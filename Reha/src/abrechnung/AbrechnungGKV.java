@@ -243,8 +243,7 @@ public class AbrechnungGKV extends JXPanel
                     if (ik.equals(alias)) {
                         Date verfall = certs.get(i)
                                             .getNotAfter();
-                        tage = verfall.toInstant()
-                                      .until(Instant.now(), ChronoUnit.DAYS);
+                        tage = verbleibendeGueltigeTage(verfall);
                         if (tage <= 0) {
                             JOptionPane.showMessageDialog(null,
                                     "Ihr Zertifikat ist abgelaufen.\nEine Verschlüsselung mit diesem Zertifikat ist nicht mehr möglich");
@@ -258,8 +257,7 @@ public class AbrechnungGKV extends JXPanel
                     } else {
                         Date verfall = certs.get(i)
                                             .getNotAfter();
-                        tage = verfall.toInstant()
-                                      .until(Instant.now(), ChronoUnit.DAYS);
+                        tage = verbleibendeGueltigeTage(verfall);
                         if (tage <= 0) {
                             JOptionPane.showMessageDialog(null,
                                     "Mindestens ein Zertifikat im Keystore ist abgelaufen.\nVerschlüsselung und damit die 302-er Abrechnung wird daher gesperrt");
@@ -272,6 +270,10 @@ public class AbrechnungGKV extends JXPanel
             return SystemConfig.certNotFound;
         }
         return SystemConfig.certNotFound;
+    }
+
+    static long verbleibendeGueltigeTage(Date verfall) {
+        return Instant.now().until(verfall.toInstant(), ChronoUnit.DAYS);
     }
 
     /**********
