@@ -2,6 +2,15 @@
 Alle nennenswerten Änderungen werden in dieser Datei dokumentitert.
 
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
+## [1.1.1] - 2019-09-02
+
+### changed
+- Datenaustausch 302 TA1 Version 12 #250
+
+### fixed
+- Falsche Anrede auf Verkaufsrechnung #84
+
 
 
 ## branch mcm_dev - 2019-09-16

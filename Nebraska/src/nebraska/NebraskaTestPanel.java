@@ -837,7 +837,7 @@ public class NebraskaTestPanel extends JPanel implements ActionListener {
          * inform.getRID();
          * System.out.println("KeyIdetifier = "+inform.getRID().getKeyIdentifier());
          * System.out.println("RIDCertifikat = "+inform.getRID().getCertificate());
-         * 
+         *
          * Enumeration<?> en = store.aliases(); while (en.hasMoreElements()){ String
          * aliases = (String)en.nextElement(); if(aliases != null){ X509Certificate
          * xcert = (X509Certificate) store.getCertificate(aliases); String serial =
@@ -970,7 +970,7 @@ public class NebraskaTestPanel extends JPanel implements ActionListener {
          * inform.getRID();
          * System.out.println("KeyIdetifier = "+inform.getRID().getKeyIdentifier());
          * System.out.println("RIDCertifikat = "+inform.getRID().getCertificate());
-         * 
+         *
          * Enumeration<?> en = store.aliases(); while (en.hasMoreElements()){ String
          * aliases = (String)en.nextElement(); if(aliases != null){ X509Certificate
          * xcert = (X509Certificate) store.getCertificate(aliases); String serial =
@@ -1105,7 +1105,6 @@ public class NebraskaTestPanel extends JPanel implements ActionListener {
         Vector<X509Certificate> certVec = new Vector<X509Certificate>();
         Vector<String> certAlias = new Vector<String>();
         Enumeration<?> en = store.aliases();
-        int durchlauf = 0;
         while (en.hasMoreElements()) {
             String aliases = (String) en.nextElement();
             if (aliases != null) {
@@ -1118,7 +1117,6 @@ public class NebraskaTestPanel extends JPanel implements ActionListener {
                     certVec.add((X509Certificate) store.getCertificate(aliases));
                     certAlias.add(aliases);
                 }
-            } else {
             }
 
         }
@@ -1298,12 +1296,12 @@ public class NebraskaTestPanel extends JPanel implements ActionListener {
          * System.out.println("Fingerprint von Certifikation-Request:"+BCStatics2.
          * getMD5fromByte(derob.getDEREncoded())); PublicKey key =
          * csr.getPublicKey("BC");
-         * 
+         *
          * System.out.println(key);
          * System.out.println("Fingerprint vom Public-Key: "+BCStatics2.getMD5fromByte(
          * key.getEncoded()));
-         * 
-         * 
+         *
+         *
          * CertificationRequestInfo csrInfo = csr.getCertificationRequestInfo();
          * System.out.println("SubjectDN: "+csrInfo.getSubject());
          * System.out.println("SubjectDN: "+csrInfo.getSubjectPublicKeyInfo().
@@ -1390,18 +1388,18 @@ public class NebraskaTestPanel extends JPanel implements ActionListener {
                 Constants.PRAXIS_KS_PW);
         /*
          * PublicKey pairDb = null; KeyPair pairPem = null; PublicKey pairSt = null;
-         * 
+         *
          * X509Certificate cert = null; X509Certificate storedcert = null;
-         * 
+         *
          * cert = BCStatics2.readSingleCert(keystoreDir); pairDb = cert.getPublicKey();
-         * 
+         *
          * KeyStore store = BCStatics2.loadStore(keystoreDir + File.separator
          * +"540840108",praxisPassw); storedcert = (X509Certificate)
          * store.getCertificate("IK540840108"); pairSt = storedcert.getPublicKey();
-         * 
+         *
          * pairPem = BCStatics2.getBothFromPem(keystoreDir + File.separator +
          * "540840108");
-         * 
+         *
          * System.out.println("Public-Key aus .p7b-File    = "+pairDb);
          * System.out.println("Public-Key im PEM-File      = "+pairPem.getPublic());
          * System.out.println("Public-Key KeyStore-File    = "+pairSt);

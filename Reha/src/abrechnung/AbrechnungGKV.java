@@ -23,6 +23,8 @@ import java.security.cert.X509Certificate;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -107,7 +109,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
     String aktDfue;
     String aktRechnung;
     String aktDisziplin = "";
-//    String[] diszis = {"KG","MA","ER","LO","PO","RS","FT"};        // McM: weg
 
     boolean annahmeAdresseOk = false;
     /******* Controls für die linke Seite *********/
@@ -120,9 +121,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
     FileWriter fw;
     BufferedWriter bw;
     AbrechnungDlg abrDlg = null;
-
-//    public DefaultMutableTreeNode rootKasse;
-//    public DefaultTreeModel treeModelKasse;
 
     public JXTTreeNode rootKasse;
     public KassenTreeModel treeModelKasse;
@@ -202,7 +200,6 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
 
     public AbrechnungGKV(JAbrechnungInternal xjry, Connection connection) {
         super();
-        this.connection = connection;
         this.setJry(xjry);
         setLayout(new BorderLayout());
         if (disziSelect == null) {
@@ -2577,8 +2574,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                     if(dn.length==5){
                         ik = (String)dn[3].split("=")[1];
                         if(ik.equals(alias)){    // gesuchtes Zertifikat gefunden
-                            String verfall = certs.get(i).getNotAfter().toLocaleString().split(" ")[0].trim();
-                            tage = DatFunk.TageDifferenz(DatFunk.sHeute(),verfall); 
+                            Date verfall = certs.get(i).getNotAfter();
+                            tage = verfall.toInstant()
+                                          .until(Instant.now(), ChronoUnit.DAYS);
                             return (int) tage;
                         }
                     }

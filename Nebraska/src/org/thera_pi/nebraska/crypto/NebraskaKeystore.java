@@ -39,6 +39,7 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -56,6 +57,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
 import org.bouncycastle.openssl.PEMWriter;
 import org.bouncycastle.x509.X509V3CertificateGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NebraskaKeystore {
     private BouncyCastleProvider bcProvider;
@@ -82,6 +85,8 @@ public class NebraskaKeystore {
     private String keyCertAlias;
 
     private boolean useSHA256;
+
+    private static final Logger logger = LoggerFactory.getLogger(NebraskaKeystore.class);
 
     /**
      * Initialize key store for specified principal using specified file. This
@@ -337,7 +342,7 @@ public class NebraskaKeystore {
     /**
      * Create key pair and save to keystore. Overwrite existing key pair only if
      * requested.
-     * 
+     *
      * @param overwrite flag to allow overwriting existing key pair
      *
      * @throws NebraskaCryptoException         on cryptography related errors
@@ -608,23 +613,13 @@ public class NebraskaKeystore {
         }
 
         // read certificate collection from file
-        File certFile = new File(fileName);
-        InputStream certStream;
-        try {
-            certStream = new FileInputStream(certFile);
-        } catch (FileNotFoundException e) {
-            throw new NebraskaFileException(e);
-        }
         Collection<?> certColl;
-        try {
+        try (InputStream certStream = new FileInputStream(new File(fileName));) {
+
             CertificateFactory certFactory = CertificateFactory.getInstance(NebraskaConstants.CERTIFICATE_TYPE,
                     NebraskaConstants.SECURITY_PROVIDER);
             certColl = certFactory.generateCertificates(certStream);
-        } catch (CertificateException e) {
-            throw new NebraskaCryptoException(e);
-        } catch (NoSuchProviderException e) {
-            throw new NebraskaCryptoException(e);
-        }
+
 
         // convert to an array and check institution ID
         boolean matches = false;
@@ -666,11 +661,16 @@ public class NebraskaKeystore {
 
         // save changes to file
         saveKeystore();
-        try {
-            certStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (CertificateException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (NoSuchProviderException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (FileNotFoundException e) {
+            throw new NebraskaFileException(e);
+        } catch (IOException e1) {
+            logger.error("closing certstream",e1);
         }
+
     }
 
     /**
@@ -693,12 +693,12 @@ public class NebraskaKeystore {
         } catch (FileNotFoundException e) {
             throw new NebraskaFileException(e);
         }
-        BufferedReader receiverCertReader = new BufferedReader(new InputStreamReader(receiverCertStream));
+
 
         StringBuffer certBuf = new StringBuffer(certHeader + separator);
         String line;
         boolean empty = true;
-        try {
+        try(BufferedReader receiverCertReader = new BufferedReader(new InputStreamReader(receiverCertStream));) {
             while ((line = receiverCertReader.readLine()) != null) {
                 // end of certificate
                 if (line.trim()
@@ -875,7 +875,7 @@ public class NebraskaKeystore {
 
     /**
      * Retrieve my private key from the keystore.
-     * 
+     *
      * @return the private key
      * @throws NebraskaCryptoException         on cryptography related errors
      * @throws NebraskaNotInitializedException if institution ID, institution name
@@ -1065,11 +1065,10 @@ public class NebraskaKeystore {
 
         Vector<X509Certificate> certs = new Vector<X509Certificate>();
         try {
-            Enumeration<?> en = keyStore.aliases();
+            Enumeration<String> en = keyStore.aliases();
 
-            en = keyStore.aliases();
             while (en.hasMoreElements()) {
-                String aliases = (String) en.nextElement();
+                String aliases = en.nextElement();
                 if (aliases != null) {
 
                     if (keyStore.isCertificateEntry(aliases)) {
@@ -1113,6 +1112,7 @@ public class NebraskaKeystore {
         try {
             Enumeration<?> en = keyStore.aliases();
             en = keyStore.aliases();
+            Collections.list(en);
             while (en.hasMoreElements()) {
                 String aliases = (String) en.nextElement();
                 if (aliases != null) {
@@ -1127,7 +1127,6 @@ public class NebraskaKeystore {
 
     public boolean doesCertExist(String alias) {
 
-        Vector<X509Certificate> certs = new Vector<X509Certificate>();
         try {
             Enumeration<?> en = keyStore.aliases();
             en = keyStore.aliases();
@@ -1224,22 +1223,13 @@ public class NebraskaKeystore {
          */
         // read certificate collection from file
         File certFile = new File(fileName);
-        InputStream certStream;
-        try {
-            certStream = new FileInputStream(certFile);
-        } catch (FileNotFoundException e) {
-            throw new NebraskaFileException(e);
-        }
+
         Collection<?> certColl;
-        try {
+        try ( InputStream certStream = new FileInputStream(certFile);){
             CertificateFactory certFactory = CertificateFactory.getInstance(NebraskaConstants.CERTIFICATE_TYPE,
                     NebraskaConstants.SECURITY_PROVIDER);
             certColl = certFactory.generateCertificates(certStream);
-        } catch (CertificateException e) {
-            throw new NebraskaCryptoException(e);
-        } catch (NoSuchProviderException e) {
-            throw new NebraskaCryptoException(e);
-        }
+
         int i = 1;
         for (Iterator<?> certIt = certColl.iterator(); certIt.hasNext();) {
             X509Certificate cert = (X509Certificate) certIt.next();
@@ -1263,13 +1253,19 @@ public class NebraskaKeystore {
             // certs.add(cert);
         }
 
-        try {
+
             saveKeystore();
-            certStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+
+        } catch (CertificateException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (NoSuchProviderException e) {
+            throw new NebraskaCryptoException(e);
+        } catch (FileNotFoundException e1) {
+            // TODO Auto-generated catch block
+            logger.error("bad things happen here",e1);
+        } catch (IOException e1) {
+            // TODO Auto-generated catch block
+            logger.error("bad things happen here",e1);
         }
     }
 

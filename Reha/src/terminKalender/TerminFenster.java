@@ -37,6 +37,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -86,7 +89,7 @@ import systemTools.ListenerTools;
 
 public class TerminFenster extends Observable
         implements RehaTPEventListener, ActionListener, DropTargetListener, DragSourceListener, DragGestureListener {
-
+    private static final DateTimeFormatter  ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
     private int setOben;
 
     private String FensterName = "";
@@ -624,7 +627,7 @@ public class TerminFenster extends Observable
 
         /*
          * oCombo[welche].addItemListener(new ItemListener(){
-         * 
+         *
          * @Override public void itemStateChanged(ItemEvent e) { //String arg =
          * ((String) ((JComboBox) e.getSource()).getActionCommand()); if(ansicht !=
          * WOCHEN_ANSICHT){ //((JComboBox)e.getSource()).setToolTipText();
@@ -634,31 +637,31 @@ public class TerminFenster extends Observable
          * sDatPlusTage(wocheErster,welche)); tooltip[welche] =
          * "<html>"+dayname[welche]+"<br>"+DatFunk.sDatPlusTage(wocheErster,welche)+
          * "</html>"; ((JComboBox)e.getSource()).setToolTipText(tooltip[welche]); }
-         * 
+         *
          * }
-         * 
+         *
          * });
          */
 
         /*
-         * 
+         *
          * oCombo[welche].addPopupMenuListener( new PopupMenuListener() {
-         * 
+         *
          * @Override public void popupMenuCanceled(PopupMenuEvent arg0) {
          * ((JComboBox)arg0.getSource()).setToolTipText("Cancel-Kalenderbenutzer: "
          * +oCombo[welche].getSelectedItem()); }
-         * 
+         *
          * @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
          * if(ansicht != WOCHEN_ANSICHT){
          * ((JComboBox)arg0.getSource()).setToolTipText("Kalenderbenutzer: "+oCombo[
          * welche].getSelectedItem()); }else{
-         * 
+         *
          * tooltip[welche] =
          * "<html>"+dayname[welche]+"<br>"+DatFunk.sDatPlusTage(wocheErster,welche)+
          * "</html>"; ((JComboBox)arg0.getSource()).setToolTipText(tooltip[welche]); }
-         * 
+         *
          * }
-         * 
+         *
          * @Override public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
          * ((JComboBox)arg0.getSource()).
          * setToolTipText("Become-Invisible Kalenderbenutzer: "+oCombo[welche].
@@ -2527,10 +2530,11 @@ public class TerminFenster extends Observable
 
     public static void schreibeLog(final String[] talt, final String[] tneu) {
         new Thread() {
+
+
             @Override
             public void run() {
-                Date dat = new Date(System.currentTimeMillis());
-                String cmd = "insert into vlog set datum='" + dat.toLocaleString() + "', benutzer='" + Reha.aktUser
+                String cmd = "insert into vlog set datum='" + LocalDateTime.now().format(ddmmyyy_hhmmss ) + "', benutzer='" + Reha.aktUser
                         + "', maschine='" + SystemConfig.dieseMaschine + "', vname='" + talt[0] + "', " + "vreznr='"
                         + talt[1] + "', vdauer='" + talt[3] + "', vstart='" + talt[2] + "', " + "vend='" + talt[4]
                         + "', nname='" + tneu[0] + "', nreznr='" + tneu[1] + "', ndauer='" + tneu[3] + "', "
@@ -3231,7 +3235,7 @@ public class TerminFenster extends Observable
         /*
          * if (Reha.instance.terminpanel.lockok < 0 && Reha.instance.terminpanel.zf !=
          * null){
-         * 
+         *
          * }
          */
     }
