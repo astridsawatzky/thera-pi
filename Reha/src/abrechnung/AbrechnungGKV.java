@@ -1,4 +1,4 @@
-package abrechnung;
+﻿package abrechnung;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -197,6 +197,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
     private RezFromDB RezFromDB;
     KeyStore keyStore = null;
     static int noCertFound = 0xfff;    // max. 0x448 (3 Jahre) gültig
+    OwnCertState myCert = null;
 
     public AbrechnungGKV(JAbrechnungInternal xjry, Connection connection) {
         super();
@@ -219,6 +220,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         SllaVersion = "12"; //( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
 
         keyStore = new KeyStore();
+        myCert = new OwnCertState();
         /* Änderung im Ablauf:
          * hier wird nur das (eigene) Zertifikat geprüft, das für die Abrechnung zum Einsatz kommt
          * Keine pauschale Prüfung aller Zertifikate im Keystore mehr.
@@ -909,7 +911,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
             if (aktuellerKassenKnoten != (JXTTreeNode)aktuellerKnoten.getParent()){
                 // VO gehört zu einem anderen Kassenknoten
                 aktuellerKassenKnoten = (JXTTreeNode)aktuellerKnoten.getParent();
-                SystemConfig.certState = keyStore.checkCertKT(getaktuellerKassenKnoten().knotenObjekt);
+                if (myCert.isValid()) {      // solange eigenes Zert. nicht OK, kann nicht abgerechnet werden
+                    SystemConfig.certState = keyStore.checkCertKT(getaktuellerKassenKnoten().knotenObjekt);
+                }
             }
             int pgr = -1;
             if (!node.knotenObjekt.preisgruppe.trim()
@@ -933,7 +937,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                     //////System.out.println("Aktueller Knoten ist ein Kassenknoten");
                     if (aktuellerKassenKnoten != aktuellerKnoten){
                         aktuellerKassenKnoten = aktuellerKnoten;
-                        SystemConfig.certState = keyStore.checkCertKT(getaktuellerKassenKnoten().knotenObjekt);
+                        if (myCert.isValid()) {
+                            SystemConfig.certState = keyStore.checkCertKT(getaktuellerKassenKnoten().knotenObjekt);
+                        }
                     }
                 }
                 //////System.out.println("Pfad zu Parent = "+new TreePath(aktuellerKnoten.getParent()).toString());
@@ -2575,8 +2581,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                         ik = (String)dn[3].split("=")[1];
                         if(ik.equals(alias)){    // gesuchtes Zertifikat gefunden
                             Date verfall = certs.get(i).getNotAfter();
-                            tage = verfall.toInstant()
-                                          .until(Instant.now(), ChronoUnit.DAYS);
+                            tage = Instant.now()
+                                          .until(verfall.toInstant(), ChronoUnit.DAYS);
                             return (int) tage;
                         }
                     }
@@ -2600,23 +2606,24 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                 protected Void doInBackground() throws Exception {
                     int daysLeft = getCertDaysValid(alias);
                     if(daysLeft <= 0){
-                        JOptionPane.showMessageDialog(null,"Ihr Zertifikat ist abgelaufen.\nEine Verschlüsselung mit diesem Zertifikat ist nicht mehr möglich");
+                        JOptionPane.showMessageDialog(null,"Ihr Zertifikat ist abgelaufen.\nEine Verschlüsselung mit diesem Zertifikat ist nicht mehr möglich. Die Abrechnung ist gesperrt.");
                         SystemConfig.certState = SystemConfig.certIsExpired;
                     }else if(daysLeft <= 30){
-                        JOptionPane.showMessageDialog(null,"Achtung!!!\nIhr Zertifikat läuft in "+Long.toString(daysLeft)+" Tage(n) ab.\nBitte rechtzeitig neues Zertifikat beantragen");
+                        JOptionPane.showMessageDialog(null,"Achtung!!!\nIhr Zertifikat läuft in "+Long.toString(daysLeft)+" Tage(n) ab.\nBitte rechtzeitig neues Zertifikat beantragen!");
                         SystemConfig.certState = SystemConfig.certWillExpire;
                         abrRez.erlaubeAbrechnung();
                     }else if(daysLeft == noCertFound){
-                        JOptionPane.showMessageDialog(null,"Kein Zertifikat für IK"+alias+" gefunden!.\nVerschlüsselung und damit die 302-er Abrechnung ist nicht möglich");
+                        JOptionPane.showMessageDialog(null,"Kein Zertifikat für IK"+alias+" gefunden!.\nVerschlüsselung und damit die 302-er Abrechnung ist nicht möglich.");
                         SystemConfig.certState = SystemConfig.certNotFound;
                     }else{
                         SystemConfig.certState = SystemConfig.certOK;
                         abrRez.erlaubeAbrechnung();
                     }
+                    myCert.setState(SystemConfig.certState);
                     return null;
                 }
             }.execute();
-            return SystemConfig.certState;
+            return SystemConfig.certNotFound;
         }
         /**********
          * 
@@ -2667,6 +2674,26 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
             } else {
                 lastIkPap = ik;
                 return true;
+            }
+        }
+    }
+
+    /*****************************************/
+    private class OwnCertState {
+        /**
+         * merkt sich den Zustand des eigenen Zertifikates
+         */
+        private boolean ownCertIsValid = false;
+
+        public boolean isValid() {
+            return ownCertIsValid;
+        }
+
+        public void setState(int state) {
+            if ((state ==  SystemConfig.certOK) || (state == SystemConfig.certWillExpire)) {
+                ownCertIsValid = true;
+            } else {
+                ownCertIsValid = false;
             }
         }
     }
