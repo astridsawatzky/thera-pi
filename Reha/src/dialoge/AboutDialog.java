@@ -57,7 +57,8 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
     JButton[] buts = { null, null };
 
     enum btIdx {
-        detail, ok
+        detail,
+        ok
     }
 
     int btDetail = btIdx.detail.ordinal();

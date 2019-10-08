@@ -436,7 +436,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         try {
             settings = new RehaSettings(mandant);
         } catch (IOException e) {
-            logger.error("RehaSettings could not be created",e);
+            logger.error("RehaSettings could not be created", e);
         }
 
         INITool.init(iniPath);
@@ -1284,20 +1284,10 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             jFrame.getContentPane()
                   .validate();
             /*
-            new  Thread(){
-                public void run(){
-                    while((!Reha.iconsOk) && (!Reha.DbOk)){
-                        try {
-                            Thread.sleep(25);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    jxLinks.add(new LinkeTaskPane(),BorderLayout.CENTER);
-                    jxLinks.validate();
-                    jFrame.getContentPane().validate();
-                }
-            }.start();
+             * new Thread(){ public void run(){ while((!Reha.iconsOk) && (!Reha.DbOk)){ try
+             * { Thread.sleep(25); } catch (InterruptedException e) { e.printStackTrace(); }
+             * } jxLinks.add(new LinkeTaskPane(),BorderLayout.CENTER); jxLinks.validate();
+             * jFrame.getContentPane().validate(); } }.start();
              */
             new SwingWorker<Void, Void>() {
                 @Override
@@ -3333,8 +3323,7 @@ final class ErsterLogin implements Runnable {
 
                                     EgkReader target = new EgkReader(SystemConfig.sReaderName);
                                     target.addCardListener(Reha.instance.ocKVK);
-                                    Thread egk= new Thread(
-                                     target);
+                                    Thread egk = new Thread(target);
 
                                     egk.setDaemon(true);
                                     egk.setName("EGK");
@@ -3356,7 +3345,6 @@ final class ErsterLogin implements Runnable {
                                         disableReader("Anderweitiger Fehler\n" + e.getMessage());
                                     }
                                 }
-
 
                             }
                         } catch (NullPointerException ex) {

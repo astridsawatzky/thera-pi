@@ -771,14 +771,15 @@ public class Historie extends JXPanel implements ActionListener, TableModelListe
                 zzbild = Integer.valueOf((String) ((Vector) vec.get(i)).get(1));
             }
 
-            final String testreznum = String.valueOf(vec.get(i).get(0)); 
+            final String testreznum = String.valueOf(vec.get(i)
+                                                        .get(0));
             iconKey = stammDatenTools.ZuzahlTools.getIconKey(zzbild, testreznum);
 
-            dtblm.addRow((Vector)vec.get(i));
-            
+            dtblm.addRow((Vector) vec.get(i));
+
 //            dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[zzbild], i, 1);
-            dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(iconKey), i, 1);                        
-            if(i==0) {
+            dtblm.setValueAt(stammDatenTools.ZuzahlTools.getZzIcon(iconKey), i, 1);
+            if (i == 0) {
                 final int ix = i;
                 new Thread() {
                     @Override

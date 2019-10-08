@@ -620,47 +620,46 @@ public class NebraskaKeystore {
                     NebraskaConstants.SECURITY_PROVIDER);
             certColl = certFactory.generateCertificates(certStream);
 
-
-        // convert to an array and check institution ID
-        boolean matches = false;
-        ArrayList<X509Certificate> certs = new ArrayList<X509Certificate>();
-        // TODO rearrange certificates if they are not in the correct order
-        String certIK = "";
-        for (Iterator<?> certIt = certColl.iterator(); certIt.hasNext();) {
-            X509Certificate cert = (X509Certificate) certIt.next();
-            X500Principal subject = cert.getSubjectX500Principal();
-            certIK = new NebraskaPrincipal(subject.getName()).getInstitutionID();
-            // System.out.println("ZertIK = "+certIK+" InstitutionID =
-            // "+this.institutionID);
-            if (certIK != null && certIK.contains(this.institutionID)) {
-                // FIXME check if certificate matches private key
-                matches = true;
+            // convert to an array and check institution ID
+            boolean matches = false;
+            ArrayList<X509Certificate> certs = new ArrayList<X509Certificate>();
+            // TODO rearrange certificates if they are not in the correct order
+            String certIK = "";
+            for (Iterator<?> certIt = certColl.iterator(); certIt.hasNext();) {
+                X509Certificate cert = (X509Certificate) certIt.next();
+                X500Principal subject = cert.getSubjectX500Principal();
+                certIK = new NebraskaPrincipal(subject.getName()).getInstitutionID();
+                // System.out.println("ZertIK = "+certIK+" InstitutionID =
+                // "+this.institutionID);
+                if (certIK != null && certIK.contains(this.institutionID)) {
+                    // FIXME check if certificate matches private key
+                    matches = true;
+                }
+                certs.add(cert);
             }
-            certs.add(cert);
-        }
 
-        if (!matches) {
-            // System.out.println("ZertIK = "+certIK+" InstitutionID =
-            // "+this.institutionID);
-            throw new NebraskaCryptoException(new Exception("certificate does not match my institution ID"));
-        }
+            if (!matches) {
+                // System.out.println("ZertIK = "+certIK+" InstitutionID =
+                // "+this.institutionID);
+                throw new NebraskaCryptoException(new Exception("certificate does not match my institution ID"));
+            }
 
-        X509Certificate[] chain = new X509Certificate[certs.size()];
-        chain = certs.toArray(chain);
+            X509Certificate[] chain = new X509Certificate[certs.size()];
+            chain = certs.toArray(chain);
 
-        // overwrite the private key entry with new certificate chain
-        KeyStore.PrivateKeyEntry entry = getPrivateKeyEntry();
+            // overwrite the private key entry with new certificate chain
+            KeyStore.PrivateKeyEntry entry = getPrivateKeyEntry();
 
-        try {
-            keyStore.setKeyEntry(getKeyCertAlias(), entry.getPrivateKey(), keyPassword.toCharArray(), chain);
-        } catch (IllegalStateException e) {
-            throw new NebraskaCryptoException(e);
-        } catch (KeyStoreException e) {
-            throw new NebraskaCryptoException(e);
-        }
+            try {
+                keyStore.setKeyEntry(getKeyCertAlias(), entry.getPrivateKey(), keyPassword.toCharArray(), chain);
+            } catch (IllegalStateException e) {
+                throw new NebraskaCryptoException(e);
+            } catch (KeyStoreException e) {
+                throw new NebraskaCryptoException(e);
+            }
 
-        // save changes to file
-        saveKeystore();
+            // save changes to file
+            saveKeystore();
         } catch (CertificateException e) {
             throw new NebraskaCryptoException(e);
         } catch (NoSuchProviderException e) {
@@ -668,7 +667,7 @@ public class NebraskaKeystore {
         } catch (FileNotFoundException e) {
             throw new NebraskaFileException(e);
         } catch (IOException e1) {
-            logger.error("closing certstream",e1);
+            logger.error("closing certstream", e1);
         }
 
     }
@@ -694,11 +693,10 @@ public class NebraskaKeystore {
             throw new NebraskaFileException(e);
         }
 
-
         StringBuffer certBuf = new StringBuffer(certHeader + separator);
         String line;
         boolean empty = true;
-        try(BufferedReader receiverCertReader = new BufferedReader(new InputStreamReader(receiverCertStream));) {
+        try (BufferedReader receiverCertReader = new BufferedReader(new InputStreamReader(receiverCertStream));) {
             while ((line = receiverCertReader.readLine()) != null) {
                 // end of certificate
                 if (line.trim()
@@ -1225,34 +1223,33 @@ public class NebraskaKeystore {
         File certFile = new File(fileName);
 
         Collection<?> certColl;
-        try ( InputStream certStream = new FileInputStream(certFile);){
+        try (InputStream certStream = new FileInputStream(certFile);) {
             CertificateFactory certFactory = CertificateFactory.getInstance(NebraskaConstants.CERTIFICATE_TYPE,
                     NebraskaConstants.SECURITY_PROVIDER);
             certColl = certFactory.generateCertificates(certStream);
 
-        int i = 1;
-        for (Iterator<?> certIt = certColl.iterator(); certIt.hasNext();) {
-            X509Certificate cert = (X509Certificate) certIt.next();
-            X500Principal subject = cert.getSubjectX500Principal();
-            String certIK = "IK" + new NebraskaPrincipal(subject.getName()).getInstitutionID();
-            System.out.println("Durchlauf " + i + " - " + realIkToAdd);
-            System.out.println("certzIK " + i + " - " + certIK);
+            int i = 1;
+            for (Iterator<?> certIt = certColl.iterator(); certIt.hasNext();) {
+                X509Certificate cert = (X509Certificate) certIt.next();
+                X500Principal subject = cert.getSubjectX500Principal();
+                String certIK = "IK" + new NebraskaPrincipal(subject.getName()).getInstitutionID();
+                System.out.println("Durchlauf " + i + " - " + realIkToAdd);
+                System.out.println("certzIK " + i + " - " + certIK);
 
-            i++;
-            if (certIK.equals(realIkToAdd)) {
-                System.out.println("In Funktion AddCert");
-                // FIXME check if certificate matches private key
-                try {
-                    System.out.println("Die gewünschte IK " + realIkToAdd + " ist in der Datei enthalten");
-                    storeCertificate(cert);
-                } catch (IllegalStateException e) {
-                    throw new NebraskaCryptoException(e);
+                i++;
+                if (certIK.equals(realIkToAdd)) {
+                    System.out.println("In Funktion AddCert");
+                    // FIXME check if certificate matches private key
+                    try {
+                        System.out.println("Die gewünschte IK " + realIkToAdd + " ist in der Datei enthalten");
+                        storeCertificate(cert);
+                    } catch (IllegalStateException e) {
+                        throw new NebraskaCryptoException(e);
+                    }
+
                 }
-
+                // certs.add(cert);
             }
-            // certs.add(cert);
-        }
-
 
             saveKeystore();
 
@@ -1262,10 +1259,10 @@ public class NebraskaKeystore {
             throw new NebraskaCryptoException(e);
         } catch (FileNotFoundException e1) {
             // TODO Auto-generated catch block
-            logger.error("bad things happen here",e1);
+            logger.error("bad things happen here", e1);
         } catch (IOException e1) {
             // TODO Auto-generated catch block
-            logger.error("bad things happen here",e1);
+            logger.error("bad things happen here", e1);
         }
     }
 

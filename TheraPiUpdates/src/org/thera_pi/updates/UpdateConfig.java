@@ -42,7 +42,8 @@ public class UpdateConfig {
             UpdateConfig.isrta = false;
             INIFile ini = new INIFile(proghome + "/ini/tpupdateneu.ini");
 
-            Verschluesseln man = Verschluesseln.getInstance(NONRTASPEZIALSCHLUESSEL);;
+            Verschluesseln man = Verschluesseln.getInstance(NONRTASPEZIALSCHLUESSEL);
+            ;
             updateHost = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdateFTP"));
             updateDir = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdateVerzeichnis"));
             updateUser = man.decrypt(ini.getStringProperty("TheraPiUpdates", "UpdateUser"));
@@ -60,8 +61,7 @@ public class UpdateConfig {
             updateUser = ini.getStringProperty("TheraPiUpdates", "UpdateUser");
 
             String pw = ini.getStringProperty("TheraPiUpdates", "UpdatePasswd");
-            Verschluesseln man= Verschluesseln.getInstance();
-
+            Verschluesseln man = Verschluesseln.getInstance();
 
             if (pw.length() <= 20) {
                 ini.setStringProperty("TheraPiUpdates", "UpdatePasswd", man.encrypt(String.valueOf(pw)), null);

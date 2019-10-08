@@ -95,7 +95,7 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
         add(jscr, BorderLayout.CENTER);
 //      add(getKnopfPanel(),BorderLayout.SOUTH);
         AbbruchOderSpeichern footer = new AbbruchOderSpeichern(this);
-        this.add(footer.getPanel(),BorderLayout.SOUTH);
+        this.add(footer.getPanel(), BorderLayout.SOUTH);
 
         new SwingWorker<Void, Void>() {
             @Override
@@ -136,52 +136,40 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
             gruppen.setRowSelectionInterval(0, 0);
         }
         gruppen.validate();
-        
+
         vorlagen.readFromIni();
-/*
-        INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "arzt.ini");
-        int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
-        vec = new Vector<String>();
-        for (int i = 1; i <= forms; i++) {
-            vec.clear();
-            vec.add(inif.getStringProperty("Formulare", "AFormularText" + i));
-            vec.add(inif.getStringProperty("Formulare", "AFormularName" + i));
-            modvorl.addRow((Vector<?>) vec.clone());
-        }
-        if (modvorl.getRowCount() > 0) {
-            vorlagen.setRowSelectionInterval(0, 0);
-        }
-        vorlagen.validate();
- */ 
-    }   
-/*
-    private JPanel getKnopfPanel() {
-
-        button[5] = new JButton("abbrechen");
-        button[5].setActionCommand("abbrechen");
-        button[5].addActionListener(this);
-        button[6] = new JButton("speichern");
-        button[6].setActionCommand("speichern");
-        button[6].addActionListener(this);
-        // 1. 2. 3. 4. 5. 6. 7. 8. 9.
-        FormLayout jpanlay = new FormLayout("right:max(126dlu;p), 60dlu, 40dlu, 4dlu, 40dlu",
-                // 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21.
-                // 22. 23.
-                "p, 10dlu, p");
-
-        PanelBuilder jpan = new PanelBuilder(jpanlay);
-        jpan.getPanel()
-            .setOpaque(false);
-        CellConstraints jpancc = new CellConstraints();
-
-        jpan.addSeparator("", jpancc.xyw(1, 1, 5));
-        jpan.add(button[5], jpancc.xy(3, 3));
-        jpan.add(button[6], jpancc.xy(5, 3));
-        jpan.addLabel("Änderungen übernehmen?", jpancc.xy(1, 3));
-
-        return jpan.getPanel();
+        /*
+         * INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" +
+         * Reha.getAktIK() + "/", "arzt.ini"); int forms =
+         * inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl"); vec = new
+         * Vector<String>(); for (int i = 1; i <= forms; i++) { vec.clear();
+         * vec.add(inif.getStringProperty("Formulare", "AFormularText" + i));
+         * vec.add(inif.getStringProperty("Formulare", "AFormularName" + i));
+         * modvorl.addRow((Vector<?>) vec.clone()); } if (modvorl.getRowCount() > 0) {
+         * vorlagen.setRowSelectionInterval(0, 0); } vorlagen.validate();
+         */
     }
- */ 
+    /*
+     * private JPanel getKnopfPanel() {
+     * 
+     * button[5] = new JButton("abbrechen");
+     * button[5].setActionCommand("abbrechen"); button[5].addActionListener(this);
+     * button[6] = new JButton("speichern");
+     * button[6].setActionCommand("speichern"); button[6].addActionListener(this);
+     * // 1. 2. 3. 4. 5. 6. 7. 8. 9. FormLayout jpanlay = new
+     * FormLayout("right:max(126dlu;p), 60dlu, 40dlu, 4dlu, 40dlu", // 1. 2. 3. 4.
+     * 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. // 22. 23.
+     * "p, 10dlu, p");
+     * 
+     * PanelBuilder jpan = new PanelBuilder(jpanlay); jpan.getPanel()
+     * .setOpaque(false); CellConstraints jpancc = new CellConstraints();
+     * 
+     * jpan.addSeparator("", jpancc.xyw(1, 1, 5)); jpan.add(button[5], jpancc.xy(3,
+     * 3)); jpan.add(button[6], jpancc.xy(5, 3));
+     * jpan.addLabel("Änderungen übernehmen?", jpancc.xy(1, 3));
+     * 
+     * return jpan.getPanel(); }
+     */
 
     /**************
      * Beginn der Methode f�r die Objekterstellung und -platzierung
@@ -217,61 +205,54 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
         gruppen.setSortable(true);
         // gruppen.setSortOrder(0, SortOrder.ASCENDING);
 
-        //modvorl = new MyVorlagenTableModel();
-        //modvorl.setColumnIdentifiers(new String[] {"Titel der Vorlage","Vorlagendatei"});
-        //vorlagen = new JXTable(modvorl);
-        //vorlagen.getColumn(0)
-        //        .setCellEditor(new TitelEditor());
-        //vorlagen.setSortable(false);
+        // modvorl = new MyVorlagenTableModel();
+        // modvorl.setColumnIdentifiers(new String[] {"Titel der
+        // Vorlage","Vorlagendatei"});
+        // vorlagen = new JXTable(modvorl);
+        // vorlagen.getColumn(0)
+        // .setCellEditor(new TitelEditor());
+        // vorlagen.setSortable(false);
         vorlagen = new SysUtilVorlagen(this);
-        vorlagen.setVPfad(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
+        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
 //      INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "arzt.ini");
 //      vorlagen.setInif(inif);
-        vorlagen.setIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK(), "arzt.ini");
-        vorlagen.setLabels("Formulare","ArztFormulareAnzahl","AFormular");
+        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK(), "arzt.ini");
+        vorlagen.setLabels("Formulare", "ArztFormulareAnzahl", "AFormular");
         vorlagen.activateEditing();
-/*      
-        vorlagen.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
-
-                if (arg0.getClickCount() == 2 && arg0.getButton() == 1) {
-                    int row = vorlagen.getSelectedRow();
-                    row = vorlagen.convertRowIndexToModel(row);
-                    int col = vorlagen.getSelectedColumn();
-                    if (col == 1) {
-                        setCursor(Cursors.wartenCursor);
-                        String svorlage = dateiDialog(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
-                        if (svorlage.equals("")) {
-                            return;
-                        }
-                        modvorl.setValueAt(svorlage, row, col);
-                        vorlagen.validate();
-                    }
-                }
-            }
-        });
- */
+        /*
+         * vorlagen.addMouseListener(new MouseAdapter() {
+         * 
+         * @Override public void mouseClicked(MouseEvent arg0) {
+         * 
+         * if (arg0.getClickCount() == 2 && arg0.getButton() == 1) { int row =
+         * vorlagen.getSelectedRow(); row = vorlagen.convertRowIndexToModel(row); int
+         * col = vorlagen.getSelectedColumn(); if (col == 1) {
+         * setCursor(Cursors.wartenCursor); String svorlage =
+         * dateiDialog(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK()); if
+         * (svorlage.equals("")) { return; } modvorl.setValueAt(svorlage, row, col);
+         * vorlagen.validate(); } } } });
+         */
         newgroup = new JRtaTextField("GROSS", true);
         newdoc = new JRtaTextField("GROSS", true);
 
-        //                                      1.             2.       3.     4.     5.    6.     7. 
+        // 1. 2. 3. 4. 5. 6. 7.
         FormLayout lay = new FormLayout("right:max(120dlu;p), 20dlu:g, 40dlu, 70dlu, 4dlu, 10dlu, 15dlu",
-       //1.   2.  3.  4.   5.  6.    7.  8.     9.    10.  11. 12.  13.   14.  15. 16.   17. 18.  
-        "p, 2dlu, p, 10dlu,p, 10dlu, p, 10dlu, 80dlu, 2dlu,p, 0dlu,0dlu, 2dlu, p, 10dlu, p, 10dlu");
+                // 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18.
+                "p, 2dlu, p, 10dlu,p, 10dlu, p, 10dlu, 80dlu, 2dlu,p, 0dlu,0dlu, 2dlu, p, 10dlu, p, 10dlu");
 
         PanelBuilder builder = new PanelBuilder(lay);
-        //PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel());        // debug mode
+        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
+        // mode
         builder.setDefaultDialogBorder();
         builder.getPanel()
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        builder.addLabel("Fenster startet im ..." , cc.xy(1, 1, CellConstraints.LEFT, CellConstraints.BOTTOM));
-        builder.addLabel((SystemConfig.desktopHorizontal ? "oberen" : "linken"), 
+        builder.addLabel("Fenster startet im ...", cc.xy(1, 1, CellConstraints.LEFT, CellConstraints.BOTTOM));
+        builder.addLabel((SystemConfig.desktopHorizontal ? "oberen" : "linken"),
                 cc.xyw(3, 1, 2, CellConstraints.RIGHT, CellConstraints.BOTTOM));
         builder.add(oben, cc.xy(6, 1, CellConstraints.RIGHT, CellConstraints.BOTTOM));
-        builder.addLabel((SystemConfig.desktopHorizontal ? "unteren" : "rechten")+ " Container", 
+        builder.addLabel((SystemConfig.desktopHorizontal ? "unteren" : "rechten") + " Container",
                 cc.xyw(3, 3, 2, CellConstraints.RIGHT, CellConstraints.BOTTOM));
         builder.add(unten, cc.xy(6, 3, CellConstraints.RIGHT, CellConstraints.BOTTOM));
         builder.addLabel("Fenstergröße automatisch optimieren", cc.xy(1, 5));
@@ -283,37 +264,31 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
                 .setUnitIncrement(15);
         jscrPane.validate();
         builder.add(jscrPane, cc.xyw(1, 9, 6));
-/*      
-        builder.addLabel("aus Liste entfernen", cc.xy(1,11));
-        builder.add(button[0], cc.xy(6, 11));
-        // builder.addLabel("neuer Gruppenname", cc.xy(1, 13));
-        // builder.add(newgroup, cc.xyw(3, 13, 4));
-        builder.addLabel("zu Liste hinzufügen", cc.xy(1, 15));
-        builder.add(button[1], cc.xy(6, 15));
- */
-        AddOrRemove addRemoveButtons = new AddOrRemove(this,1);
+        /*
+         * builder.addLabel("aus Liste entfernen", cc.xy(1,11)); builder.add(button[0],
+         * cc.xy(6, 11)); // builder.addLabel("neuer Gruppenname", cc.xy(1, 13)); //
+         * builder.add(newgroup, cc.xyw(3, 13, 4));
+         * builder.addLabel("zu Liste hinzufügen", cc.xy(1, 15)); builder.add(button[1],
+         * cc.xy(6, 15));
+         */
+        AddOrRemove addRemoveButtons = new AddOrRemove(this, 1);
         builder.add(addRemoveButtons.getPanel(), cc.xyw(1, 11, 6));
 
         builder.add(vorlagen.getPanel(), cc.xyw(1, 17, 7));
-/*
-        builder.addSeparator("Vorlagen-Verwaltung", cc.xyw(1, 17, 6));
-        jscrPane = JCompTools.getTransparentScrollPane(vorlagen);
-        jscrPane.getVerticalScrollBar()
-                .setUnitIncrement(15);
-        jscrPane.validate();
-        builder.add(jscrPane, cc.xyw(1, 19, 6));
-/*
-        builder.addLabel("aus Liste entfernen", cc.xy(1, 21));
-        builder.add(button[2], cc.xy(6, 21));
-        // builder.addLabel("Vorlagenbezeichnung", cc.xy(1, 23));
-        // builder.add(newdoc, cc.xyw(3, 23, 4));
-        // builder.addLabel("Vorlage ausw�hlen", cc.xy(1,25));
-        // builder.addLabel("Dateiname", cc.xy(3,25,CellConstraints.RIGHT,
-        // CellConstraints.BOTTOM));
-        // builder.add(button[3], cc.xy(6,25));
-        builder.addLabel("zu Liste hinzufügen", cc.xy(1, 27));
-        builder.add(button[4], cc.xy(6, 27));
- */
+        /*
+         * builder.addSeparator("Vorlagen-Verwaltung", cc.xyw(1, 17, 6)); jscrPane =
+         * JCompTools.getTransparentScrollPane(vorlagen);
+         * jscrPane.getVerticalScrollBar() .setUnitIncrement(15); jscrPane.validate();
+         * builder.add(jscrPane, cc.xyw(1, 19, 6)); /*
+         * builder.addLabel("aus Liste entfernen", cc.xy(1, 21)); builder.add(button[2],
+         * cc.xy(6, 21)); // builder.addLabel("Vorlagenbezeichnung", cc.xy(1, 23)); //
+         * builder.add(newdoc, cc.xyw(3, 23, 4)); //
+         * builder.addLabel("Vorlage ausw�hlen", cc.xy(1,25)); //
+         * builder.addLabel("Dateiname", cc.xy(3,25,CellConstraints.RIGHT, //
+         * CellConstraints.BOTTOM)); // builder.add(button[3], cc.xy(6,25));
+         * builder.addLabel("zu Liste hinzufügen", cc.xy(1, 27)); builder.add(button[4],
+         * cc.xy(6, 27));
+         */
 //      AddOrRemove addRemoveButtons2 = new AddOrRemove(this,2);
 //      builder.add(addRemoveButtons2.getPanel(), cc.xyw(1, 21, 6));
 
@@ -343,83 +318,69 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
                 loescheFachgebiet();
                 break;
             }
-            if(cmd.equals("neugruppen")){
+            if (cmd.equals("neugruppen")) {
                 addFachgebiet();
                 break;
             }
         }
     }
+
     private void addFachgebiet() {
         Vector<String> vec = new Vector<String>();
         vec.add("");
-        modarzt.addRow((Vector<?>)vec.clone());
+        modarzt.addRow((Vector<?>) vec.clone());
         gruppen.validate();
         gruppen.setRowSelectionInterval(0, 0);
-        SwingUtilities.invokeLater(new Runnable(){
-               public  void run(){
-                  gruppen.requestFocus();
-                  startCellEditing(gruppen,0);
-               }
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                gruppen.requestFocus();
+                startCellEditing(gruppen, 0);
+            }
         });
     }
-    private void loescheFachgebiet() {
-                int row = gruppen.getSelectedRow();
-                int frage = JOptionPane.showConfirmDialog(null,
-                        "Wollen Sie die ausgewählte Tabellenzeile wirklich löschen?", "Wichtige Benutzeranfrage",
-                        JOptionPane.YES_NO_OPTION);
-                if (frage == JOptionPane.NO_OPTION) {
-                    return;
-                }
-                if (row >= 0) {
-                    TableTool.loescheRowAusModel(gruppen, row);
-                }
-            }
-/*
-    private void loescheVorlage() {
-                int row = vorlagen.getSelectedRow();
-                int frage = JOptionPane.showConfirmDialog(null,
-                        "Wollen Sie die ausgewählte Tabellenzeile wirklich löschen?", "Wichtige Benutzeranfrage",
-                        JOptionPane.YES_NO_OPTION);
-                if (frage == JOptionPane.NO_OPTION) {
-                    return;
-                }
-                if (row >= 0) {
-                    TableTool.loescheRow(vorlagen.getTable(), row);
-                }
-            }
-        
-    private void neueVorlage() {
-        Reha.getThisFrame().setCursor(Cursors.wartenCursor);
-        String svorlage = dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
-        if(svorlage.equals("")){
-                    return;
-                }
 
-                Vector<String> vec = new Vector<String>();
-                vec.add("");
-                vec.add(svorlage);
-                modvorl.addRow((Vector<?>) vec.clone());
-                vorlagen.validate();
-                int rows = modvorl.getRowCount();
-                final int xrows = rows - 1;
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        vorlagen.requestFocus();
-                        vorlagen.setRowSelectionInterval(xrows, xrows);
-                        startCellEditing(vorlagen, xrows);
-                    }
-                });
+    private void loescheFachgebiet() {
+        int row = gruppen.getSelectedRow();
+        int frage = JOptionPane.showConfirmDialog(null, "Wollen Sie die ausgewählte Tabellenzeile wirklich löschen?",
+                "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
+        if (frage == JOptionPane.NO_OPTION) {
+            return;
+        }
+        if (row >= 0) {
+            TableTool.loescheRowAusModel(gruppen, row);
+        }
     }
- */
-    private void doSpeichern(){
-        try{
+
+    /*
+     * private void loescheVorlage() { int row = vorlagen.getSelectedRow(); int
+     * frage = JOptionPane.showConfirmDialog(null,
+     * "Wollen Sie die ausgewählte Tabellenzeile wirklich löschen?",
+     * "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION); if (frage ==
+     * JOptionPane.NO_OPTION) { return; } if (row >= 0) {
+     * TableTool.loescheRow(vorlagen.getTable(), row); } }
+     * 
+     * private void neueVorlage() {
+     * Reha.getThisFrame().setCursor(Cursors.wartenCursor); String svorlage =
+     * dateiDialog(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
+     * if(svorlage.equals("")){ return; }
+     * 
+     * Vector<String> vec = new Vector<String>(); vec.add(""); vec.add(svorlage);
+     * modvorl.addRow((Vector<?>) vec.clone()); vorlagen.validate(); int rows =
+     * modvorl.getRowCount(); final int xrows = rows - 1;
+     * SwingUtilities.invokeLater(new Runnable() {
+     * 
+     * @Override public void run() { vorlagen.requestFocus();
+     * vorlagen.setRowSelectionInterval(xrows, xrows); startCellEditing(vorlagen,
+     * xrows); } }); }
+     */
+    private void doSpeichern() {
+        try {
             String wert = "";
             INIFile inif = vorlagen.getInif();
-            if (inif == null){      // sollte nie vorkommen
-                INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "arzt.ini");                
+            if (inif == null) { // sollte nie vorkommen
+                INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "arzt.ini");
             }
-            //System.out.println(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/patient.ini");
+            // System.out.println(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/patient.ini");
 
             wert = (unten.isSelected() ? "1" : "0");
             SystemConfig.hmContainer.put("Arzt", Integer.valueOf(wert));
@@ -430,39 +391,27 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
             inif.setStringProperty("Container", "ImmerOptimieren", wert, null);
 
             formok = vorlagen.saveToIni();
-/*          int rows = vorlagen.getRowCount();
-
-            formok = true;
-            for (int i = 0; i < rows; i++) {
-                String test = (String) vorlagen.getValueAt(i, 0);
-                if (test.equals("")) {
-                    String datei = (String) vorlagen.getValueAt(i, 1);
-                    String msg = "Für Vorlagendatei " + datei
-                            + " wurde kein Titel eingegeben!\nDie Vorlagen werden nicht(!!!) gespeichert.";
-                    JOptionPane.showMessageDialog(null, msg);
-                    formok = false;
-                    break;
-                } else {
-                    formok = true;
-                    inif.setStringProperty("Formulare", "ArztFormulareAnzahl", Integer.valueOf(rows)
-                                                                                      .toString(),
-                            null);
-                }
-            }
-            if (formok) {
-                for (int i = 0; i < rows; i++) {
-                    inif.setStringProperty("Formulare", "AFormularText" + (i + 1), (String) vorlagen.getValueAt(i, 0),
-                            null);
-                    inif.setStringProperty("Formulare", "AFormularName" + (i + 1), (String) vorlagen.getValueAt(i, 1),
-                            null);
-                }
-            }
- */
+            /*
+             * int rows = vorlagen.getRowCount();
+             * 
+             * formok = true; for (int i = 0; i < rows; i++) { String test = (String)
+             * vorlagen.getValueAt(i, 0); if (test.equals("")) { String datei = (String)
+             * vorlagen.getValueAt(i, 1); String msg = "Für Vorlagendatei " + datei +
+             * " wurde kein Titel eingegeben!\nDie Vorlagen werden nicht(!!!) gespeichert.";
+             * JOptionPane.showMessageDialog(null, msg); formok = false; break; } else {
+             * formok = true; inif.setStringProperty("Formulare", "ArztFormulareAnzahl",
+             * Integer.valueOf(rows) .toString(), null); } } if (formok) { for (int i = 0; i
+             * < rows; i++) { inif.setStringProperty("Formulare", "AFormularText" + (i + 1),
+             * (String) vorlagen.getValueAt(i, 0), null);
+             * inif.setStringProperty("Formulare", "AFormularName" + (i + 1), (String)
+             * vorlagen.getValueAt(i, 1), null); } }
+             */
             int rows = gruppen.getRowCount();
             inif.setStringProperty("ArztGruppen", "AnzahlGruppen", Integer.valueOf(rows)
-                                                                          .toString() , null);      
-            for(int i = 0; i < rows; i++) {
-                inif.setStringProperty("ArztGruppen", "Gruppe" + (i + 1), (String) gruppen.getValueAt(i, 0) , null);
+                                                                          .toString(),
+                    null);
+            for (int i = 0; i < rows; i++) {
+                inif.setStringProperty("ArztGruppen", "Gruppe" + (i + 1), (String) gruppen.getValueAt(i, 0), null);
             }
 
             INITool.saveIni(inif);
@@ -484,52 +433,35 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
         });
     }
 
-/*
-    private String dateiDialog(String pfad) {
-        String sret = "";
-        final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
-        chooser.setDialogType(JFileChooser.OPEN_DIALOG);
-        chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-        final File file = new File(pfad);
-
-        chooser.setCurrentDirectory(file);
-
-        chooser.addPropertyChangeListener(new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                if (e.getPropertyName()
-                     .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
-                        || e.getPropertyName()
-                            .equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-                    // final File f = (File) e.getNewValue();
-                }
-            }
-
-        });
-        chooser.setVisible(true);
-        setCursor(Cursors.normalCursor);
-        final int result = chooser.showOpenDialog(null);
-
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File inputVerzFile = chooser.getSelectedFile();
-            // String inputVerzStr = inputVerzFile.getPath();
-
-            if (inputVerzFile.getName()
-                             .trim()
-                             .equals("")) {
-                sret = "";
-            } else {
-                sret = inputVerzFile.getName()
-                                    .trim();
-            }
-        } else {
-            sret = ""; // vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
-        }
-        chooser.setVisible(false);
-
-        return sret;
-    }
- */
+    /*
+     * private String dateiDialog(String pfad) { String sret = ""; final
+     * JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
+     * chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+     * chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES); final File
+     * file = new File(pfad);
+     * 
+     * chooser.setCurrentDirectory(file);
+     * 
+     * chooser.addPropertyChangeListener(new PropertyChangeListener() {
+     * 
+     * @Override public void propertyChange(PropertyChangeEvent e) { if
+     * (e.getPropertyName() .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY) ||
+     * e.getPropertyName() .equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) { //
+     * final File f = (File) e.getNewValue(); } }
+     * 
+     * }); chooser.setVisible(true); setCursor(Cursors.normalCursor); final int
+     * result = chooser.showOpenDialog(null);
+     * 
+     * if (result == JFileChooser.APPROVE_OPTION) { File inputVerzFile =
+     * chooser.getSelectedFile(); // String inputVerzStr = inputVerzFile.getPath();
+     * 
+     * if (inputVerzFile.getName() .trim() .equals("")) { sret = ""; } else { sret =
+     * inputVerzFile.getName() .trim(); } } else { sret = ""; //
+     * vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate); }
+     * chooser.setVisible(false);
+     * 
+     * return sret; }
+     */
 
     class MyVorlagenTableModel extends DefaultTableModel {
         /**
@@ -626,14 +558,17 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
     public void Abbruch() {
         SystemInit.abbrechen();
     }
+
     @Override
     public void Speichern() {
         doSpeichern();
     }
+
     @Override
     public void AddEntry(int instance) {
         addFachgebiet();
     }
+
     @Override
     public void RemoveEntry(int instance) {
         loescheFachgebiet();

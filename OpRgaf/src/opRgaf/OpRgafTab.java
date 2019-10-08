@@ -110,7 +110,7 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
     public void stateChanged(ChangeEvent arg0) {
         JTabbedPane pane = (JTabbedPane) arg0.getSource();
         int sel = pane.getSelectedIndex();
-        try{
+        try {
             if (sel == 0) {
                 // oppanel.setzeFocus();
                 opRgafPanel.initSelection();

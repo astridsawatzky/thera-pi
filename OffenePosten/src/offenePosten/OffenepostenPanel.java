@@ -67,7 +67,13 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
     JRtaTextField offen = null;
     JRtaTextField[] tfs = { null, null, null, null };
     JButton[] buts = { null, null, null };
-    enum btIdx {ausbuchen,suchen,dummy};
+
+    enum btIdx {
+        ausbuchen,
+        suchen,
+        dummy
+    };
+
     int btAusbuchen = btIdx.ausbuchen.ordinal();
     int btSuchen = btIdx.suchen.ordinal();
     JRtaComboBox combo = null;
@@ -77,11 +83,10 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
 
     MyOffenePostenTableModel tabmod = null;
     JXTable tab = null;
-/*    JLabel summeOffen;
-    JLabel summeRechnung;
-    JLabel summeGesamtOffen;
-    JLabel anzahlSaetze;
-*/    
+    /*
+     * JLabel summeOffen; JLabel summeRechnung; JLabel summeGesamtOffen; JLabel
+     * anzahlSaetze;
+     */
     BigDecimal gesamtOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
     BigDecimal suchOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
     BigDecimal suchGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
@@ -96,7 +101,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
     private OpShowGesamt sumPan;
 
     private JRtaCheckBox bar = null;
-    
+
     public OffenepostenPanel(OffenepostenTab xeltern) {
         super();
         this.eltern = xeltern;
@@ -122,47 +127,46 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
         });
     }
 
-    private JPanel getContent(){
+    private JPanel getContent() {
         FormLayout lay = new FormLayout(
-        // 1    2     3    4     5    6  7    8       9     10   11    12   13    14   15    16   17    18   19
-        "10dlu,50dlu,2dlu,90dlu,10dlu,p,2dlu,70dlu:g,40dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,10dlu,p",    // xwerte,
-        //  1   2  3     4       5   6  7     8   9  10   11
-         "10dlu,p,5dlu,160dlu:g,8dlu,p,10dlu,2dlu,p,0dlu,0dlu"                                                        // ywerte
+                // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+                "10dlu,50dlu,2dlu,90dlu,10dlu,p,2dlu,70dlu:g,40dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,10dlu,p", // xwerte,
+                // 1 2 3 4 5 6 7 8 9 10 11
+                "10dlu,p,5dlu,160dlu:g,8dlu,p,10dlu,2dlu,p,0dlu,0dlu" // ywerte
         );
         PanelBuilder builder = new PanelBuilder(lay);
-        //PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel());        // debug mode
-        builder.getPanel().setOpaque(false);
+        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
+        // mode
+        builder.getPanel()
+               .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        int colCnt=2, rowCnt=2;
-        
-        builder.addLabel("Suchkriterium", cc.xy(colCnt++, rowCnt));            // 2,2
-        
-        String[] args = {"Rechnungsnummer =","Rechnungsnummer >=","Rechnungsnummer <=",
-                "Rechnungsbetrag =","Rechnungsbetrag >=","Rechnungsbetrag <=",
-                "Noch offen =","Noch offen >=","Noch offen <=",
-                "Name enthält",
-                "Rezeptnummer =",
-                "Rechnungsdatum =","Rechnungsdatum >=","Rechnungsdatum <=",
-                "Krankenkasse enthält",};
-        
+        int colCnt = 2, rowCnt = 2;
+
+        builder.addLabel("Suchkriterium", cc.xy(colCnt++, rowCnt)); // 2,2
+
+        String[] args = { "Rechnungsnummer =", "Rechnungsnummer >=", "Rechnungsnummer <=", "Rechnungsbetrag =",
+                "Rechnungsbetrag >=", "Rechnungsbetrag <=", "Noch offen =", "Noch offen >=", "Noch offen <=",
+                "Name enthält", "Rezeptnummer =", "Rechnungsdatum =", "Rechnungsdatum >=", "Rechnungsdatum <=",
+                "Krankenkasse enthält", };
+
         int vorauswahl = OffenePosten.getVorauswahl(args.length);
         combo = new JRtaComboBox(args);
-        combo.setSelectedIndex( vorauswahl ); 
-        builder.add(combo, cc.xy(++colCnt,rowCnt));                            // 4,2
+        combo.setSelectedIndex(vorauswahl);
+        builder.add(combo, cc.xy(++colCnt, rowCnt)); // 4,2
 
         ++colCnt;
-        builder.addLabel("finde:", cc.xy(++colCnt, rowCnt));                // 6,2
+        builder.addLabel("finde:", cc.xy(++colCnt, rowCnt)); // 6,2
         ++colCnt;
-        suchen = new JRtaTextField("nix",true);
+        suchen = new JRtaTextField("nix", true);
         suchen.setName("suchen");
         suchen.addKeyListener(kl);
-        builder.add(suchen,cc.xy(++colCnt, rowCnt,CellConstraints.FILL,CellConstraints.DEFAULT));    // 8,2
+        builder.add(suchen, cc.xy(++colCnt, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 8,2
 
         buts[btSuchen] = ButtonTools.macheButton("suchen", "suchen", al);
         buts[btSuchen].setMnemonic('s');
-        colCnt +=9;
-        builder.add(buts[btSuchen],cc.xy(colCnt,rowCnt));                    // 17,2
+        colCnt += 9;
+        builder.add(buts[btSuchen], cc.xy(colCnt, rowCnt)); // 17,2
 
         while (!OffenePosten.DbOk) {
 
@@ -208,42 +212,43 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
         tab.setHighlighters(HighlighterFactory.createSimpleStriping(HighlighterFactory.CLASSIC_LINE_PRINTER));
 
         JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
-        rowCnt +=2;
-        builder.add(jscr,cc.xyw(2,rowCnt++,17));        // 2,4
+        rowCnt += 2;
+        builder.add(jscr, cc.xyw(2, rowCnt++, 17)); // 2,4
 
         colCnt = 11;
-        //colCnt = 13;    // ohne 'bar in Kasse'
-        builder.addLabel("Geldeingang:", cc.xy(colCnt++, ++rowCnt,CellConstraints.RIGHT,CellConstraints.TOP));    // 12,6
+        // colCnt = 13; // ohne 'bar in Kasse'
+        builder.addLabel("Geldeingang:", cc.xy(colCnt++, ++rowCnt, CellConstraints.RIGHT, CellConstraints.TOP)); // 12,6
 
-        tfs[0] = new JRtaTextField("F",true,"6.2","");
+        tfs[0] = new JRtaTextField("F", true, "6.2", "");
         tfs[0].setHorizontalAlignment(SwingConstants.RIGHT);
         tfs[0].setText("0,00");
         tfs[0].setName("offen");
         tfs[0].addKeyListener(kl);
-        //content.add(tfs[0],cc.xy(14,2));
-        builder.add(tfs[0],cc.xy(++colCnt,rowCnt));                                                                // 14,6
+        // content.add(tfs[0],cc.xy(14,2));
+        builder.add(tfs[0], cc.xy(++colCnt, rowCnt)); // 14,6
 
         ++colCnt;
-        bar  = (JRtaCheckBox) builder.add(new JRtaCheckBox("bar in Kasse"), cc.xy(++colCnt,rowCnt));
+        bar = (JRtaCheckBox) builder.add(new JRtaCheckBox("bar in Kasse"), cc.xy(++colCnt, rowCnt));
         bar.setEnabled(OffenePosten.getBarAusbuchenErlaubt());
-        if(!bar.isEnabled()){
+        if (!bar.isEnabled()) {
             bar.setToolTipText("disabled (see System-Init)");
-            }
+        }
 
-        colCnt +=2;
-        buts[btAusbuchen] = (JButton) builder.add(ButtonTools.macheButton("ausbuchen", "ausbuchen", al),cc.xy(colCnt,rowCnt));
+        colCnt += 2;
+        buts[btAusbuchen] = (JButton) builder.add(ButtonTools.macheButton("ausbuchen", "ausbuchen", al),
+                cc.xy(colCnt, rowCnt));
         buts[btAusbuchen].setMnemonic('a');
-        
-        rowCnt +=2;
+
+        rowCnt += 2;
         colCnt = 1;
-        builder.add(new JSeparator(SwingConstants.HORIZONTAL), cc.xyw(colCnt,rowCnt++,17));
-        
+        builder.add(new JSeparator(SwingConstants.HORIZONTAL), cc.xyw(colCnt, rowCnt++, 17));
+
         sumPan = new OpShowGesamt();
-        builder.add(sumPan.getPanel(),cc.xyw(colCnt, rowCnt,2,CellConstraints.LEFT,CellConstraints.TOP));    //2,2
+        builder.add(sumPan.getPanel(), cc.xyw(colCnt, rowCnt, 2, CellConstraints.LEFT, CellConstraints.TOP)); // 2,2
 
         ermittleGesamtOffen();
-        
-        return builder.getPanel();        
+
+        return builder.getPanel();
     }
 
     private OffenepostenPanel getInstance() {
@@ -360,27 +365,34 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
         suchOffen = suchOffen.subtract(eingang);
         gesamtOffen = gesamtOffen.subtract(eingang);
 
-        if(bar.isSelected()){            // Buchung in Bar-Kasse
-            String op_rechnum = tabmod.getValueAt(tab.convertRowIndexToModel(row), 0).toString();
-            String op_patId = tabmod.getValueAt(tab.convertRowIndexToModel(row), 13).toString();
-            if(op_patId.equals("")){                // wenn leer war's 'ne Rechnung an 'ne Kasse
-                JOptionPane.showMessageDialog(null,"Die Kasse hat bar gezahlt? - Glaub' ich nicht! \nAusbuchen abgebrochen!");
+        if (bar.isSelected()) { // Buchung in Bar-Kasse
+            String op_rechnum = tabmod.getValueAt(tab.convertRowIndexToModel(row), 0)
+                                      .toString();
+            String op_patId = tabmod.getValueAt(tab.convertRowIndexToModel(row), 13)
+                                    .toString();
+            if (op_patId.equals("")) { // wenn leer war's 'ne Rechnung an 'ne Kasse
+                JOptionPane.showMessageDialog(null,
+                        "Die Kasse hat bar gezahlt? - Glaub' ich nicht! \nAusbuchen abgebrochen!");
                 bar.setSelected(false);
-                return;                
+                return;
             }
-            String op_patient = tabmod.getValueAt(tab.convertRowIndexToModel(row), 2).toString();         // bei Privatrechng steht hier 'Name,Vorname'
-            String op_sparte = tabmod.getValueAt(tab.convertRowIndexToModel(row), 4).toString();
-            String op_reznum = SqlInfo.holeEinzelFeld("select rez_nr from faktura where rnummer='"+op_rechnum+"' LIMIT 1");
+            String op_patient = tabmod.getValueAt(tab.convertRowIndexToModel(row), 2)
+                                      .toString(); // bei Privatrechng steht hier 'Name,Vorname'
+            String op_sparte = tabmod.getValueAt(tab.convertRowIndexToModel(row), 4)
+                                     .toString();
+            String op_reznum = SqlInfo.holeEinzelFeld(
+                    "select rez_nr from faktura where rnummer='" + op_rechnum + "' LIMIT 1");
 
-            String cmd = "insert into kasse set einnahme='"+dcf.format(eingang).replace(",", ".")+"', "
-                    + "datum='"+ DatFunk.sDatInSQL(DatFunk.sHeute())+"', " 
-                    + "ktext='R-"+ op_sparte + " " + op_rechnum+","+ op_patient +"', rez_nr='"+op_reznum+"'";
-            //System.out.println(cmd);
+            String cmd = "insert into kasse set einnahme='" + dcf.format(eingang)
+                                                                 .replace(",", ".")
+                    + "', " + "datum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', " + "ktext='R-" + op_sparte + " "
+                    + op_rechnum + "," + op_patient + "', rez_nr='" + op_reznum + "'";
+            // System.out.println(cmd);
             SqlInfo.sqlAusfuehren(cmd);
 
             bar.setSelected(false);
         }
-        
+
         tabmod.setValueAt(restbetrag.doubleValue(), tab.convertRowIndexToModel(row), 6);
         tabmod.setValueAt(new Date(), tab.convertRowIndexToModel(row), 7);
 
@@ -670,11 +682,12 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
         /*
          * ausgewaehlte Spalten dem Inhalt anpassen
          */
-        int columns2adjust[]={0, 2, 4, 6, 8};    // Rechn.Nr., Kasse, Sparte, Offen, Zuzahlung
-        for(int col:columns2adjust){
+        int columns2adjust[] = { 0, 2, 4, 6, 8 }; // Rechn.Nr., Kasse, Sparte, Offen, Zuzahlung
+        for (int col : columns2adjust) {
             tab.packColumn(col, 5);
         }
     }
+
     /*****************************************************/
     class OPListSelectionHandler implements ListSelectionListener {
 

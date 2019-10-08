@@ -54,7 +54,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
+public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
 
     /**
      * 
@@ -82,7 +82,7 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
 
     DecimalFormat dcf = new DecimalFormat("#######0.00");
     private Boolean settingsLocked = false;
-    private RgVkPrSelect selPan = null; 
+    private RgVkPrSelect selPan = null;
 
     public Barkasse(JBarkassenInternal bki) {
         super();
@@ -109,117 +109,121 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
             }
         });
     }
-    private JPanel getContent(){
+
+    private JPanel getContent() {
         FormLayout lay = new FormLayout(
-                //  1              2    3     4     5    6    7     8     9     10    11    12    13
-                "fill:0:grow(0.5),5dlu,22dlu,64dlu,5dlu,9dlu,20dlu,11dlu,60dlu,14dlu,60dlu,5dlu,fill:0:grow(0.5)",                    // xwerte,
-                //  1  2  3   4  5   6  7   8 9   10  11 12  13 14 15  16 17  18 19  20 21  22 23  24  25 26  27 28  29 30
-                "10dlu,p,3dlu,p,7dlu,p,2dlu,p,2dlu,p,7dlu,p,2dlu,p,2dlu,p,2dlu,p,2dlu,p,2dlu,p,7dlu,p,2dlu,p,2dlu,p,2dlu,p,2dlu,p"    // ywerte
+                // 1 2 3 4 5 6 7 8 9 10 11 12 13
+                "fill:0:grow(0.5),5dlu,22dlu,64dlu,5dlu,9dlu,20dlu,11dlu,60dlu,14dlu,60dlu,5dlu,fill:0:grow(0.5)", // xwerte,
+                // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29
+                // 30
+                "10dlu,p,3dlu,p,7dlu,p,2dlu,p,2dlu,p,7dlu,p,2dlu,p,2dlu,p,2dlu,p,2dlu,p,2dlu,p,7dlu,p,2dlu,p,2dlu,p,2dlu,p,2dlu,p" // ywerte
         );
         PanelBuilder builder = new PanelBuilder(lay);
-        //PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel());        // debug mode
-        builder.getPanel().setOpaque(false);
+        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
+        // mode
+        builder.getPanel()
+               .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        int colLeft=3, colRight=8, rowCnt=2, colCnt=3;
+        int colLeft = 3, colRight = 8, rowCnt = 2, colCnt = 3;
 
         lab = new JLabel("Erfassungszeitraum");
-        builder.add(lab,cc.xyw(colLeft,rowCnt++,5));        // 3,2
-        
+        builder.add(lab, cc.xyw(colLeft, rowCnt++, 5)); // 3,2
+
         lab = new JLabel("von...");
-        builder.add(lab,cc.xy(colLeft,++rowCnt));            // 3,4 
-        tfs[0] = new JRtaTextField("DATUM",false);
+        builder.add(lab, cc.xy(colLeft, ++rowCnt)); // 3,4
+        tfs[0] = new JRtaTextField("DATUM", false);
         tfs[0].setText(DatFunk.sHeute());
-        builder.add(tfs[0],cc.xyw(4,rowCnt,2));                // 4,4
-        
+        builder.add(tfs[0], cc.xyw(4, rowCnt, 2)); // 4,4
+
         lab = new JLabel("bis...");
-        builder.add(lab,cc.xy(7,rowCnt));                    // 7,4 
-        tfs[1] = new JRtaTextField("DATUM",false);
+        builder.add(lab, cc.xy(7, rowCnt)); // 7,4
+        tfs[1] = new JRtaTextField("DATUM", false);
         tfs[1].setText(DatFunk.sHeute());
-        builder.add(tfs[1],cc.xyw(colRight,rowCnt++,2));    // 8,4 
+        builder.add(tfs[1], cc.xyw(colRight, rowCnt++, 2)); // 8,4
 
         // Auswahl RGR_AFR/Verkauf/PrivR
-        selPan = new RgVkPrSelect("berücksichtige Einnahmen aus");            // Subpanel mit Checkboxen anlegen
-        selPan.setCallBackObj(this);                                        // callBack registrieren
+        selPan = new RgVkPrSelect("berücksichtige Einnahmen aus"); // Subpanel mit Checkboxen anlegen
+        selPan.setCallBackObj(this); // callBack registrieren
         initSelection();
 
-        builder.add(selPan.getPanel(),cc.xywh(colCnt, ++rowCnt,5,1,CellConstraints.LEFT,CellConstraints.DEFAULT));    //10..15,1..3
+        builder.add(selPan.getPanel(), cc.xywh(colCnt, ++rowCnt, 5, 1, CellConstraints.LEFT, CellConstraints.DEFAULT)); // 10..15,1..3
         // Ende Auswahl
 
-        builder.add((buts[0]=ButtonTools.macheButton("ermitteln", "ermitteln", al)),cc.xy(11,rowCnt++));
+        builder.add((buts[0] = ButtonTools.macheButton("ermitteln", "ermitteln", al)), cc.xy(11, rowCnt++));
 
         lab = new JLabel("ermittelte Einnahmen");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+
         einlab = new JLabel("0,00");
         einlab.setForeground(Color.BLUE);
-        builder.add(einlab,cc.xyw(colRight,rowCnt++,2,CellConstraints.RIGHT,CellConstraints.DEFAULT));
+        builder.add(einlab, cc.xyw(colRight, rowCnt++, 2, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 
         lab = new JLabel("ermittelte Ausgaben");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+
         auslab = new JLabel("0,00");
         auslab.setForeground(Color.BLUE);
-        builder.add(auslab,cc.xyw(colRight,rowCnt++,2,CellConstraints.RIGHT,CellConstraints.DEFAULT));
+        builder.add(auslab, cc.xyw(colRight, rowCnt++, 2, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 
         lab = new JLabel("Anfangsbestand");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        tfzahlen[0] = new JRtaTextField("FL",true,"6.2","RECHTS");
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        tfzahlen[0] = new JRtaTextField("FL", true, "6.2", "RECHTS");
         tfzahlen[0].setText("0,00");
-        builder.add(tfzahlen[0],cc.xyw(colRight,rowCnt++,2));
+        builder.add(tfzahlen[0], cc.xyw(colRight, rowCnt++, 2));
 
         lab = new JLabel("zusätzliche Einnahmen");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        tfzahlen[1] = new JRtaTextField("FL",true,"6.2","RECHTS");
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        tfzahlen[1] = new JRtaTextField("FL", true, "6.2", "RECHTS");
         tfzahlen[1].setText("0,00");
-        builder.add(tfzahlen[1],cc.xyw(colRight,rowCnt++,2));
-        
+        builder.add(tfzahlen[1], cc.xyw(colRight, rowCnt++, 2));
+
         lab = new JLabel("zusätzliche Ausgaben");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        tfzahlen[2] = new JRtaTextField("FL",true,"6.2","RECHTS");
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        tfzahlen[2] = new JRtaTextField("FL", true, "6.2", "RECHTS");
         tfzahlen[2].setText("0,00");
-        builder.add(tfzahlen[2],cc.xyw(colRight,rowCnt++,2));
+        builder.add(tfzahlen[2], cc.xyw(colRight, rowCnt++, 2));
 
         lab = new JLabel("Wert der Scheckeinnahmen");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        tfzahlen[3] = new JRtaTextField("FL",true,"6.2","RECHTS");
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        tfzahlen[3] = new JRtaTextField("FL", true, "6.2", "RECHTS");
         tfzahlen[3].setText("0,00");
-        builder.add(tfzahlen[3],cc.xyw(colRight,rowCnt++,2));
-        
+        builder.add(tfzahlen[3], cc.xyw(colRight, rowCnt++, 2));
+
         lab = new JLabel("gezählter Bargeldbestand (Ist)");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        tfzahlen[4] = new JRtaTextField("FL",true,"6.2","RECHTS");
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        tfzahlen[4] = new JRtaTextField("FL", true, "6.2", "RECHTS");
         tfzahlen[4].setText("0,00");
-        builder.add(tfzahlen[4],cc.xyw(colRight,rowCnt++,2));
+        builder.add(tfzahlen[4], cc.xyw(colRight, rowCnt++, 2));
 
         lab = new JLabel("Kassenbestand Soll");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
         kasselab = new JLabel("0,00");
         kasselab.setForeground(Color.RED);
-        builder.add(kasselab,cc.xyw(colRight,rowCnt++,2,CellConstraints.RIGHT,CellConstraints.DEFAULT));
+        builder.add(kasselab, cc.xyw(colRight, rowCnt++, 2, CellConstraints.RIGHT, CellConstraints.DEFAULT));
 
         lab = new JLabel("Bargeldbestand Soll");
         lab.setForeground(Color.BLUE);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
         barlab = new JLabel("0,00");
         barlab.setForeground(Color.RED);
-        builder.add(barlab,cc.xyw(colRight,rowCnt++,2,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        
+        builder.add(barlab, cc.xyw(colRight, rowCnt++, 2, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+
         lab = new JLabel("Differenz im Bargeldbestand!!!");
         lab.setForeground(Color.RED);
-        builder.add(lab,cc.xyw(4,++rowCnt,3,CellConstraints.RIGHT,CellConstraints.DEFAULT));
+        builder.add(lab, cc.xyw(4, ++rowCnt, 3, CellConstraints.RIGHT, CellConstraints.DEFAULT));
         differenzlab = new JLabel("0,00");
         differenzlab.setForeground(Color.RED);
-        builder.add(differenzlab,cc.xyw(colRight,rowCnt++,2,CellConstraints.RIGHT,CellConstraints.DEFAULT));
-        builder.add((buts[1]=ButtonTools.macheButton("drucken", "drucken", al)),cc.xy(11,++rowCnt));
+        builder.add(differenzlab, cc.xyw(colRight, rowCnt++, 2, CellConstraints.RIGHT, CellConstraints.DEFAULT));
+        builder.add((buts[1] = ButtonTools.macheButton("drucken", "drucken", al)), cc.xy(11, ++rowCnt));
 
         return builder.getPanel();
     }
@@ -272,13 +276,16 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
             return;
         }
 
-        if (selPan.useRGR()){    // zuerst die Rezeptgebühren ermitteln ...
+        if (selPan.useRGR()) { // zuerst die Rezeptgebühren ermitteln ...
             Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select sum(einnahme),sum(ausgabe) from kasse where datum>='"+dat1+"' AND datum<='"+dat2+"' "
-                + "AND ktext not like 'R-%' AND ktext not like 'VR-%' AND ktext not like 'VB-%'"
-                );
-            if(vec.get(0).get(0).trim() != ""){
-                einnahmen = einnahmen + Double.parseDouble(vec.get(0).get(0).trim());
+                    "select sum(einnahme),sum(ausgabe) from kasse where datum>='" + dat1 + "' AND datum<='" + dat2
+                            + "' " + "AND ktext not like 'R-%' AND ktext not like 'VR-%' AND ktext not like 'VB-%'");
+            if (vec.get(0)
+                   .get(0)
+                   .trim() != "") {
+                einnahmen = einnahmen + Double.parseDouble(vec.get(0)
+                                                              .get(0)
+                                                              .trim());
             }
             if (vec.get(0)
                    .get(1)
@@ -288,36 +295,46 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
                                                             .trim());
             }
         }
-        if (selPan.useVKR()){    // ... dann die Verkaufserlöse ...
-             Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                     "select sum(v_betrag) from verkliste where v_datum>='"+dat1+"' AND v_datum<='"+dat2+"' AND v_nummer like 'VB-%'"  // ... der Verkäufe mit Bon ...
-                     );
-            if(vec.get(0).get(0).trim() != ""){
-                einnahmen = einnahmen + Double.parseDouble(vec.get(0).get(0).trim());
+        if (selPan.useVKR()) { // ... dann die Verkaufserlöse ...
+            Vector<Vector<String>> vec = SqlInfo.holeFelder("select sum(v_betrag) from verkliste where v_datum>='"
+                    + dat1 + "' AND v_datum<='" + dat2 + "' AND v_nummer like 'VB-%'" // ... der Verkäufe mit Bon ...
+            );
+            if (vec.get(0)
+                   .get(0)
+                   .trim() != "") {
+                einnahmen = einnahmen + Double.parseDouble(vec.get(0)
+                                                              .get(0)
+                                                              .trim());
             }
-/*             vec = SqlInfo.holeFelder(
-                     "select sum(v_betrag) from verkliste where v_bezahldatum>='"+dat1+"' AND v_bezahldatum<='"+dat2+
-                         "' AND v_nummer like 'VR-%'  AND v_offen = '0'"  // ... der Verkäufe gegen Rechnung, bereits bezahlt (keine Möglichk. zum Ausbuchen) ...
-                     );
-            if(vec.get(0).get(0).trim() != ""){
-                einnahmen = einnahmen + Double.parseDouble(vec.get(0).get(0).trim());
-            }
- */
-             vec = SqlInfo.holeFelder(
-                     "select sum(einnahme) from kasse where datum>='"+dat1+"' AND datum<='"+dat2+"' "
-                             + "AND ktext like 'VR-%'"                      // ... der Verkäufe gegen Rechnung, 'bar an Kasse' gebucht
-                     );
-            if(vec.get(0).get(0).trim() != ""){
-                einnahmen = einnahmen + Double.parseDouble(vec.get(0).get(0).trim());
+            /*
+             * vec = SqlInfo.holeFelder(
+             * "select sum(v_betrag) from verkliste where v_bezahldatum>='"
+             * +dat1+"' AND v_bezahldatum<='"+dat2+
+             * "' AND v_nummer like 'VR-%'  AND v_offen = '0'" // ... der Verkäufe gegen
+             * Rechnung, bereits bezahlt (keine Möglichk. zum Ausbuchen) ... );
+             * if(vec.get(0).get(0).trim() != ""){ einnahmen = einnahmen +
+             * Double.parseDouble(vec.get(0).get(0).trim()); }
+             */
+            vec = SqlInfo.holeFelder("select sum(einnahme) from kasse where datum>='" + dat1 + "' AND datum<='" + dat2
+                    + "' " + "AND ktext like 'VR-%'" // ... der Verkäufe gegen Rechnung, 'bar an Kasse' gebucht
+            );
+            if (vec.get(0)
+                   .get(0)
+                   .trim() != "") {
+                einnahmen = einnahmen + Double.parseDouble(vec.get(0)
+                                                              .get(0)
+                                                              .trim());
             }
         }
-        if (selPan.usePR()){    // ... und schließlich bar bezahlte Rechnungen
-            Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select sum(einnahme) from kasse where datum>='"+dat1+"' AND datum<='"+dat2+"' "
-                + "AND ktext like 'R-%'"
-                );
-            if(vec.get(0).get(0).trim() != ""){
-                einnahmen = einnahmen + Double.parseDouble(vec.get(0).get(0).trim());
+        if (selPan.usePR()) { // ... und schließlich bar bezahlte Rechnungen
+            Vector<Vector<String>> vec = SqlInfo.holeFelder("select sum(einnahme) from kasse where datum>='" + dat1
+                    + "' AND datum<='" + dat2 + "' " + "AND ktext like 'R-%'");
+            if (vec.get(0)
+                   .get(0)
+                   .trim() != "") {
+                einnahmen = einnahmen + Double.parseDouble(vec.get(0)
+                                                              .get(0)
+                                                              .trim());
             }
         }
 
@@ -334,6 +351,7 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
         doRechnen();
 
     }
+
     private void doDrucken() throws DocumentException {
         try {
             starteOO();
@@ -376,10 +394,11 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
         }
         return Double.parseDouble(dbl.replace(",", "."));
     }
-    private void starteOO() throws OfficeApplicationException, NOAException, TextException, DocumentException{
+
+    private void starteOO() throws OfficeApplicationException, NOAException, TextException, DocumentException {
         IDocumentService documentService = null;
         String url = null;
-        if(!Reha.officeapplication.isActive()){
+        if (!Reha.officeapplication.isActive()) {
             Reha.starteOfficeApplication();
         }
         documentService = Reha.officeapplication.getDocumentService();
@@ -387,46 +406,80 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
 
         DocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setAsTemplate(true);
-        //docdescript.setHidden(true);
-        url = Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK()+"/Barkasse.ott";
-        document = documentService.loadDocument(url,docdescript);
+        // docdescript.setHidden(true);
+        url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/Barkasse.ott";
+        document = documentService.loadDocument(url, docdescript);
 
         docdescript.setHidden(hideOfficeInBackground);
-        //ITextTable[] tbl = null;
-        ITextDocument textDocument = (ITextDocument)document;
-        //tbl = textDocument.getTextTableService().getTextTables();
+        // ITextTable[] tbl = null;
+        ITextDocument textDocument = (ITextDocument) document;
+        // tbl = textDocument.getTextTableService().getTextTables();
         ITextTable textTable = null;
-        textTable = textDocument.getTextTableService().getTextTable("Tabelle1");
-        textTable.getCell(2,0).getTextService().getText().setText(einlab.getText()+" €");
-        textTable.getCell(2,1).getTextService().getText().setText(auslab.getText()+" €");
-        textTable.getCell(2,2).getTextService().getText().setText(tfzahlen[0].getText()+" €");
-        textTable.getCell(2,3).getTextService().getText().setText(tfzahlen[1].getText()+" €");
-        textTable.getCell(2,4).getTextService().getText().setText(tfzahlen[2].getText()+" €");
-        textTable.getCell(2,5).getTextService().getText().setText(tfzahlen[3].getText()+" €");
-        textTable.getCell(2,6).getTextService().getText().setText(tfzahlen[4].getText()+" €");
-        textTable.getCell(2,7).getTextService().getText().setText(kasselab.getText()+" €");
-        textTable.getCell(2,8).getTextService().getText().setText(barlab.getText()+" €");
-        textTable.getCell(2,9).getTextService().getText().setText(differenzlab.getText()+" €");
+        textTable = textDocument.getTextTableService()
+                                .getTextTable("Tabelle1");
+        textTable.getCell(2, 0)
+                 .getTextService()
+                 .getText()
+                 .setText(einlab.getText() + " €");
+        textTable.getCell(2, 1)
+                 .getTextService()
+                 .getText()
+                 .setText(auslab.getText() + " €");
+        textTable.getCell(2, 2)
+                 .getTextService()
+                 .getText()
+                 .setText(tfzahlen[0].getText() + " €");
+        textTable.getCell(2, 3)
+                 .getTextService()
+                 .getText()
+                 .setText(tfzahlen[1].getText() + " €");
+        textTable.getCell(2, 4)
+                 .getTextService()
+                 .getText()
+                 .setText(tfzahlen[2].getText() + " €");
+        textTable.getCell(2, 5)
+                 .getTextService()
+                 .getText()
+                 .setText(tfzahlen[3].getText() + " €");
+        textTable.getCell(2, 6)
+                 .getTextService()
+                 .getText()
+                 .setText(tfzahlen[4].getText() + " €");
+        textTable.getCell(2, 7)
+                 .getTextService()
+                 .getText()
+                 .setText(kasselab.getText() + " €");
+        textTable.getCell(2, 8)
+                 .getTextService()
+                 .getText()
+                 .setText(barlab.getText() + " €");
+        textTable.getCell(2, 9)
+                 .getTextService()
+                 .getText()
+                 .setText(differenzlab.getText() + " €");
 
-        //document.getFrame().getXFrame().getContainerWindow().setVisible(true);
-        if(hideOfficeInBackground) {
-/*
- * keine Drucker-settings in ini/Systeminitialisierung -> Einstellungen aus Vorlage verwenden
- */
+        // document.getFrame().getXFrame().getContainerWindow().setVisible(true);
+        if (hideOfficeInBackground) {
+            /*
+             * keine Drucker-settings in ini/Systeminitialisierung -> Einstellungen aus
+             * Vorlage verwenden
+             */
 //            String druckername = settings.getStringProperty(propSection, "Drucker");
             IPrinter drucker = null;
 //            if(druckername == null) {
-                drucker = textDocument.getPrintService().getActivePrinter();
+            drucker = textDocument.getPrintService()
+                                  .getActivePrinter();
 //            } else {
 //                drucker = textDocument.getPrintService().createPrinter(druckername);
 //            }
 //            textDocument.getPrintService().setActivePrinter(drucker);
 //            short exemplare = settings.getIntegerProperty(propSection, "Exemplare").shortValue();
 //            final PrintProperties printprop = new PrintProperties(exemplare, null);
-                final PrintProperties printprop = new PrintProperties((short) 1, null);
-                textDocument.getPrintService().print(printprop);
+            final PrintProperties printprop = new PrintProperties((short) 1, null);
+            textDocument.getPrintService()
+                        .print(printprop);
             final ITextDocument xdoc = textDocument;
-            new SwingWorker<Void,Void>() {
+            new SwingWorker<Void, Void>() {
 
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -435,13 +488,14 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
                     Thread.sleep(100);
                     return null;
                 }
-                
+
             };
-        }else{
+        } else {
             OOTools.bringDocToFront(documentService, textDocument, docdescript, url);
         }
 
     }
+
     public void doAufraeumen() {
         buts[0].removeActionListener(al);
         buts[1].removeActionListener(al);
@@ -468,19 +522,20 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
             incPR = inif.getBooleanProperty("BarKasse", "privRechng");
             settingsLocked = inif.getBooleanProperty("BarKasse", "lockSettings");
         } else {
-            // Default-Werte setzen (Verhalten wie vor Erweiterung um Verkäufe u. Privatrechnung)
+            // Default-Werte setzen (Verhalten wie vor Erweiterung um Verkäufe u.
+            // Privatrechnung)
             incRG = true;
             incVerk = false;
             incPR = false;
         }
-        if ( inif.getStringProperty("BarKasse", "SofortDrucken") != null ){                        // unabhaeng. (spaeter hinzugekommen)
-            hideOfficeInBackground = inif.getBooleanProperty("BarKasse", "SofortDrucken") ;
-        }else{
+        if (inif.getStringProperty("BarKasse", "SofortDrucken") != null) { // unabhaeng. (spaeter hinzugekommen)
+            hideOfficeInBackground = inif.getBooleanProperty("BarKasse", "SofortDrucken");
+        } else {
             hideOfficeInBackground = false;
         }
-        if ( inif.getStringProperty("BarKasse", "SofortDrucken") != null ){                        // unabhäng. (später hinzugekommen)
-            hideOfficeInBackground = inif.getBooleanProperty("BarKasse", "SofortDrucken") ;
-        }else{
+        if (inif.getStringProperty("BarKasse", "SofortDrucken") != null) { // unabhäng. (später hinzugekommen)
+            hideOfficeInBackground = inif.getBooleanProperty("BarKasse", "SofortDrucken");
+        } else {
             hideOfficeInBackground = false;
         }
     }
@@ -489,22 +544,24 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
      * schreibt die zuletzt verwandten Checkbox-Einstellungen (falls geändert) in
      * die bedienung.ini
      */
-    private void saveLastSelection(){
-        if ( ! settingsLocked ){                                                                // ini-Eintraege  duerfen aktualisiert werden
+    private void saveLastSelection() {
+        if (!settingsLocked) { // ini-Eintraege duerfen aktualisiert werden
             readLastSelection();
-            INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "bedienung.ini");
-            if ( ( selPan.useRGR() != incRG ) || ( selPan.useVKR() != incVerk ) || ( selPan.usePR() != incPR ) ){
-                inif.setBooleanProperty("BarKasse", "Rezeptgebuehren", selPan.useRGR(), "Abrechnung Barkasse beruecksichtigt");
+            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                    "bedienung.ini");
+            if ((selPan.useRGR() != incRG) || (selPan.useVKR() != incVerk) || (selPan.usePR() != incPR)) {
+                inif.setBooleanProperty("BarKasse", "Rezeptgebuehren", selPan.useRGR(),
+                        "Abrechnung Barkasse beruecksichtigt");
                 inif.setBooleanProperty("BarKasse", "Verkaeufe", selPan.useVKR(), null);
                 inif.setBooleanProperty("BarKasse", "privRechng", selPan.usePR(), null);
-                
-                if (inif.getStringProperty("BarKasse", "lockSettings") == null ){
-                    inif.setBooleanProperty("BarKasse", "lockSettings",false, "Aktualisieren der Eintraege gesperrt");
+
+                if (inif.getStringProperty("BarKasse", "lockSettings") == null) {
+                    inif.setBooleanProperty("BarKasse", "lockSettings", false, "Aktualisieren der Eintraege gesperrt");
                 }
-            INITool.saveIni(inif);
+                INITool.saveIni(inif);
+            }
         }
     }
-     }
 
     public void initSelection() {
         if (incRG) {
@@ -516,8 +573,8 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
         if (incPR) {
             selPan.setPR(true);
         }
-        if (!selPan.useRGR() && !selPan.useVKR() && !selPan.usePR()){
-            selPan.setRGR(true);    // einer sollte immer ausgewählt sein
+        if (!selPan.useRGR() && !selPan.useVKR() && !selPan.usePR()) {
+            selPan.setRGR(true); // einer sollte immer ausgewählt sein
         }
     }
 
@@ -525,12 +582,14 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack{
     public void useRGAVR(boolean rgafr) {
         incRG = rgafr;
     }
+
     @Override
     public void useVKR(boolean vkr) {
         incVerk = vkr;
     }
+
     @Override
     public void usePR(boolean pr) {
         incPR = pr;
     }
- }
+}

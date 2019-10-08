@@ -1601,13 +1601,14 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
         if (SystemConfig.sReaderAktiv.equals("0")) {
             return;
-        }
-        else {
-            CardTerminal terminal = TerminalFactory.getDefault().terminals().getTerminal(SystemConfig.sReaderName);
+        } else {
+            CardTerminal terminal = TerminalFactory.getDefault()
+                                                   .terminals()
+                                                   .getTerminal(SystemConfig.sReaderName);
             try {
                 Reha.instance.ocKVK.lesen(terminal);
             } catch (UnsatisfiedLinkError | Exception e) {
-                logger.error("Probably library not found, shouldn't happen at all anymore",e);
+                logger.error("Probably library not found, shouldn't happen at all anymore", e);
             }
         }
 

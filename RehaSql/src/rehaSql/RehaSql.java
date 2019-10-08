@@ -205,7 +205,9 @@ public class RehaSql implements WindowListener {
         jFrame.setSize(1000, 700);
         jFrame.setTitle("Thera-Pi  Sql-Modul  [IK: " + aktIK + "] " + "[Server-IP: " + dbIpAndName
                 + "] - Äußerste Vorsicht ist geboten!!!");
-		jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage( System.getProperty("user.dir")+File.separator+"icons"+File.separator+"SQL-Modul.png" ) );
+        jFrame.setIconImage(Toolkit.getDefaultToolkit()
+                                   .getImage(System.getProperty("user.dir") + File.separator + "icons" + File.separator
+                                           + "SQL-Modul.png"));
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         jFrame.getContentPane()

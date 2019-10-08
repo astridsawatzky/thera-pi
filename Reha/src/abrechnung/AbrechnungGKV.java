@@ -91,7 +91,8 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
-public class AbrechnungGKV extends JXPanel implements PatStammEventListener, ActionListener, TreeSelectionListener, MouseListener, KeyListener{
+public class AbrechnungGKV extends JXPanel
+        implements PatStammEventListener, ActionListener, TreeSelectionListener, MouseListener, KeyListener {
     /**
      *
      */
@@ -196,7 +197,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
     protected InfoDialog infoDlg;
     private RezFromDB RezFromDB;
     KeyStore keyStore = null;
-    static int noCertFound = 0xfff;    // max. 0x448 (3 Jahre) gültig
+    static int noCertFound = 0xfff; // max. 0x448 (3 Jahre) gültig
     OwnCertState myCert = null;
 
     public AbrechnungGKV(JAbrechnungInternal xjry, Connection connection) {
@@ -216,31 +217,35 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         jSplitLR.setDividerLocation(230);
         add(jSplitLR, BorderLayout.CENTER);
         mandantenCheck();
-        SlgaVersion = "12"; //( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
-        SllaVersion = "12"; //( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
+        SlgaVersion = "12"; // ( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
+        SllaVersion = "12"; // ( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
 
         keyStore = new KeyStore();
         myCert = new OwnCertState();
-        /* Änderung im Ablauf:
-         * hier wird nur das (eigene) Zertifikat geprüft, das für die Abrechnung zum Einsatz kommt
-         * Keine pauschale Prüfung aller Zertifikate im Keystore mehr.
-         * Prüfung der Zertifikate der Datenannahmestellen erfolgt nach Bedarf, wenn eine Kasse im Kassentree ausgewählt wird.
-         * (warum soll das abgelaufene Zert einer Kasse, für die gar keine Rezepte existieren, die Kassenabrechnung blockieren?)
+        /*
+         * Änderung im Ablauf: hier wird nur das (eigene) Zertifikat geprüft, das für
+         * die Abrechnung zum Einsatz kommt Keine pauschale Prüfung aller Zertifikate im
+         * Keystore mehr. Prüfung der Zertifikate der Datenannahmestellen erfolgt nach
+         * Bedarf, wenn eine Kasse im Kassentree ausgewählt wird. (warum soll das
+         * abgelaufene Zert einer Kasse, für die gar keine Rezepte existieren, die
+         * Kassenabrechnung blockieren?)
          */
-        SystemConfig.certState = keyStore.checkOwnCert(zertifikatVon/*"IK"+Reha.aktIK*/);
-        
+        SystemConfig.certState = keyStore.checkOwnCert(zertifikatVon/* "IK"+Reha.aktIK */);
+
         originalTitel = this.jry.getTitel();
         setEncryptTitle();
-        //cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
+        // cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
         disziSelect.setCurrDiszi(SystemConfig.initRezeptKlasse);
-        jry.setAbrRezInstance(abrRez);                                // JAbrechnungInternal mitteilen, welche Instanz cleanup() enthält
+        jry.setAbrRezInstance(abrRez); // JAbrechnungInternal mitteilen, welche Instanz cleanup() enthält
         RezFromDB = new RezFromDB();
     }
-    
-    public void setEncryptTitle(){
-        this.jry.setzeTitel(originalTitel+ " [Abrechnung für IK: "+Reha.getAktIK()+" - Zertifikat von IK: "+zertifikatVon.replace("IK","")+"]");
+
+    public void setEncryptTitle() {
+        this.jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
+                + zertifikatVon.replace("IK", "") + "]");
         this.jry.repaint();
     }
+
     /**********
      *
      * Linke Seite
@@ -302,10 +307,9 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                  .addTreeSelectionListener(this);
         treeKasse.setCellRenderer(new MyRenderer(SystemConfig.hmSysIcons.get("zuzahlok")));
         treeKasse.addMouseListener(this);
-        
+
         treeKasse.addKeyListener((KeyListener) this);
-        
-        
+
         JScrollPane jscrk = JCompTools.getTransparentScrollPane(treeKasse);
         jscrk.validate();
         pb.add(jscrk, cc.xy(2, 6));
@@ -398,14 +402,14 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
             abrRez.setRechtsAufNull();
             aktuellerPat = "";
         }
-        //System.out.println("aktDisziplin");
-        //System.out.println(RezTools.putRezNrGetDisziplin(neueReznr));
-        if(neueReznr != null){                        // Rezept zum Baum hinzufügen
-            if( ! aktDisziplin.equals(RezTools.putRezNrGetDisziplin(neueReznr)) ){
-                doEinlesen(null,neueReznr);            // andere Disziplin -> Kassenbaum neu aufbauen
-            }else{
-                directCall = true;                    // in Baum der akt. Disziplin einsortieren
-                //treeKasse.getSelectionModel().removeTreeSelectionListener(this);
+        // System.out.println("aktDisziplin");
+        // System.out.println(RezTools.putRezNrGetDisziplin(neueReznr));
+        if (neueReznr != null) { // Rezept zum Baum hinzufügen
+            if (!aktDisziplin.equals(RezTools.putRezNrGetDisziplin(neueReznr))) {
+                doEinlesen(null, neueReznr); // andere Disziplin -> Kassenbaum neu aufbauen
+            } else {
+                directCall = true; // in Baum der akt. Disziplin einsortieren
+                // treeKasse.getSelectionModel().removeTreeSelectionListener(this);
                 final int xindex = doEinlesenEinzeln(neueReznr);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
@@ -421,22 +425,32 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                 });
                 // treeKasse.getSelectionModel().addTreeSelectionListener(this);
             }
-        } else {                                        // Rezept aus Baum entfernen
+        } else { // Rezept aus Baum entfernen
             doEinlesen(null, neueReznr);
         }
 
     }
 
-    public int doEinlesenEinzeln(String neueReznr){
-        //String cmd = "select name1,ikktraeger,ikkasse,id from fertige where rez_nr='"+neueReznr+"' Limit 1";
+    public int doEinlesenEinzeln(String neueReznr) {
+        // String cmd = "select name1,ikktraeger,ikkasse,id from fertige where
+        // rez_nr='"+neueReznr+"' Limit 1";
         // das Gleiche, mit Papierannahmestelle:
-        String cmd = sucheFertige + "WHERE rez_nr='"+neueReznr+"' Limit 1";
-        Vector <Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
+        String cmd = sucheFertige + "WHERE rez_nr='" + neueReznr + "' Limit 1";
+        Vector<Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
         treeKasse.setEnabled(true);
-        String kas = vecKassen.get(0).get(0).trim().toUpperCase();
-        String ktraeger = vecKassen.get(0).get(1).trim();
-        String ikkasse = vecKassen.get(0).get(2).trim();
-        String ikpapier = vecKassen.get(0).get(4).trim();
+        String kas = vecKassen.get(0)
+                              .get(0)
+                              .trim()
+                              .toUpperCase();
+        String ktraeger = vecKassen.get(0)
+                                   .get(1)
+                                   .trim();
+        String ikkasse = vecKassen.get(0)
+                                  .get(2)
+                                  .trim();
+        String ikpapier = vecKassen.get(0)
+                                   .get(4)
+                                   .trim();
         int usesSameIkPapier = 0;
         int aeste = rootKasse.getChildCount();
         int aktuellerAst = 0;
@@ -449,11 +463,12 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                 node = ((JXTTreeNode) rootKasse.getChildAt(i));
                 aktuellerAst = i;
                 break;
-            } else if(((JXTTreeNode)rootKasse.getChildAt(i)).knotenObjekt.getIkPap().equals(ikpapier)){
-                usesSameIkPapier = i; 
+            } else if (((JXTTreeNode) rootKasse.getChildAt(i)).knotenObjekt.getIkPap()
+                                                                           .equals(ikpapier)) {
+                usesSameIkPapier = i;
             }
         }
-        if(neuerKnoten) {
+        if (neuerKnoten) {
             if (usesSameIkPapier != 0) {
                 node = astEinhaengen(kas, ktraeger, ikkasse, ikpapier, ++usesSameIkPapier);
             } else {
@@ -576,9 +591,11 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
 //                    String dsz = diszis[cmbDiszi.getSelectedIndex()];        // McM: kann weg (OK)
                     String dsz = disziSelect.getCurrRezClass();
 
-                    //String cmd = "select name1,ikktraeger,ikkasse,id from fertige where rezklasse='"+dsz+"' ORDER BY ikktraeger , id";
+                    // String cmd = "select name1,ikktraeger,ikkasse,id from fertige where
+                    // rezklasse='"+dsz+"' ORDER BY ikktraeger , id";
                     // das Gleiche, sortiert nach Papierannahmestellen:
-                    String cmd = sucheFertige + "WHERE rezklasse='"+dsz+"' GROUP by ikktraeger ORDER BY t2.ik_papier, t1.name1, t1.ikktraeger, t1.id";
+                    String cmd = sucheFertige + "WHERE rezklasse='" + dsz
+                            + "' GROUP by ikktraeger ORDER BY t2.ik_papier, t1.name1, t1.ikktraeger, t1.id";
 
                     Vector<Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
 
@@ -607,7 +624,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
 //                    KeepIkPap myIkPap = new KeepIkPap(ikpapier);
 
                     int aeste = 0;
-                    KnotenObjekt newNode = astAnhaengen(kas,ktraeger,ikkasse,ikpapier).getObject();
+                    KnotenObjekt newNode = astAnhaengen(kas, ktraeger, ikkasse, ikpapier).getObject();
                     rezepteAnhaengen(aeste);
                     /*
                      * System.out.println(ktraeger);
@@ -618,15 +635,23 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                      */
                     aeste++;
 
-                    for(int i = 0; i < vecKassen.size();i++){
-                        ktraeger = vecKassen.get(i).get(1).trim();
-                        if(! existiertschon.contains(ktraeger)){
-                            kas = vecKassen.get(i).get(0).trim().toUpperCase();
-                            //ktraeger = vecKassen.get(i).get(1);
-                            ikkasse = vecKassen.get(i).get(2);
-                            ikpapier = vecKassen.get(i).get(4).trim();
+                    for (int i = 0; i < vecKassen.size(); i++) {
+                        ktraeger = vecKassen.get(i)
+                                            .get(1)
+                                            .trim();
+                        if (!existiertschon.contains(ktraeger)) {
+                            kas = vecKassen.get(i)
+                                           .get(0)
+                                           .trim()
+                                           .toUpperCase();
+                            // ktraeger = vecKassen.get(i).get(1);
+                            ikkasse = vecKassen.get(i)
+                                               .get(2);
+                            ikpapier = vecKassen.get(i)
+                                                .get(4)
+                                                .trim();
                             existiertschon.add(ktraeger);
-                            astAnhaengen(kas,ktraeger,ikkasse,ikpapier);
+                            astAnhaengen(kas, ktraeger, ikkasse, ikpapier);
                             rezepteAnhaengen(aeste);
                             aeste++;
 
@@ -659,74 +684,80 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         String cmd = "select rez_nr,pat_intern,ediok,ikkasse from fertige where rezklasse='" + dsz
                 + "' AND ikktraeger='" + ktraeger + "' ORDER BY id,pat_intern";
 
-        Vector <Vector<String>> vecRezepte = SqlInfo.holeFelder(cmd);
+        Vector<Vector<String>> vecRezepte = SqlInfo.holeFelder(cmd);
 
         JXTTreeNode node = (JXTTreeNode) rootKasse.getChildAt(knoten);
         // JXTTreeNode treeitem = null;
 
         JXTTreeNode meinitem = null;
-        for(int i = 0;i<vecRezepte.size();i++){
-            try{
-                cmd = "select n_name from pat5 where pat_intern='"+
-                vecRezepte.get(i).get(1)+"' LIMIT 1";
+        for (int i = 0; i < vecRezepte.size(); i++) {
+            try {
+                cmd = "select n_name from pat5 where pat_intern='" + vecRezepte.get(i)
+                                                                               .get(1)
+                        + "' LIMIT 1";
 
-                String thisRezNr = vecRezepte.get(i).get(0);
-                String thisPatInt = vecRezepte.get(i).get(1);
+                String thisRezNr = vecRezepte.get(i)
+                                             .get(0);
+                String thisPatInt = vecRezepte.get(i)
+                                              .get(1);
                 String name = SqlInfo.holeEinzelFeld(cmd);
 //                name = SqlInfo.holeFelder(cmd).get(0).get(0);
-                cmd = "select preisgruppe from verordn where rez_nr='"+thisRezNr+"' LIMIT 1";;
-                ////System.out.println(cmd);
+                cmd = "select preisgruppe from verordn where rez_nr='" + thisRezNr + "' LIMIT 1";
+                ;
+                //// System.out.println(cmd);
                 String preisgr = SqlInfo.holeEinzelFeld(cmd);
-                ////System.out.println("Preisgruppe="+preisgr);
+                //// System.out.println("Preisgruppe="+preisgr);
 
-                KnotenObjekt rezeptknoten = new KnotenObjekt(thisRezNr+"-"+name,
-                        vecRezepte.get(i).get(0),
-                        (vecRezepte.get(i).get(2).equals("T")? true : false),
-                        vecRezepte.get(i).get(3),
+                KnotenObjekt rezeptknoten = new KnotenObjekt(thisRezNr + "-" + name, vecRezepte.get(i)
+                                                                                               .get(0),
+                        (vecRezepte.get(i)
+                                   .get(2)
+                                   .equals("T") ? true : false),
+                        vecRezepte.get(i)
+                                  .get(3),
                         preisgr);
                 rezeptknoten.ktraeger = ktraeger;
                 rezeptknoten.pat_intern = thisPatInt;
-                meinitem = new JXTTreeNode(rezeptknoten,true);
+                meinitem = new JXTTreeNode(rezeptknoten, true);
 
                 treeModelKasse.insertNodeInto(meinitem, node, node.getChildCount());
                 treeKasse.validate();
-                
-                if(RezTools.isLate(thisRezNr)){
-                    lateVOList.add(thisRezNr);            // letzte Behandlung ist > 10 Monate her -> Kasse u. Rezept rot markieren
-                    if (lateKtList.contains(ktraeger)){    
-                    }else{
-                        lateKtList.add(ktraeger);                        
+
+                if (RezTools.isLate(thisRezNr)) {
+                    lateVOList.add(thisRezNr); // letzte Behandlung ist > 10 Monate her -> Kasse u. Rezept rot markieren
+                    if (lateKtList.contains(ktraeger)) {
+                    } else {
+                        lateKtList.add(ktraeger);
                     }
                 }
-            }catch(Exception ex){
+            } catch (Exception ex) {
 
             }
         }
 
     }
-    private JXTTreeNode astEinhaengen(String ast,String ktraeger,String ikkasse, String ikpapier, int usesSameIkPap){
-        KnotenObjekt knoten = new KnotenObjekt(ast,"",false,"","");
+
+    private JXTTreeNode astEinhaengen(String ast, String ktraeger, String ikkasse, String ikpapier, int usesSameIkPap) {
+        KnotenObjekt knoten = new KnotenObjekt(ast, "", false, "", "");
         knoten.ktraeger = ktraeger;
         knoten.ikkasse = ikkasse;
         knoten.setIkPap(ikpapier);
-        String cmd = "select ik_nutzer from kass_adr where ik_kasse='"+ikkasse+"' Limit 1";
+        String cmd = "select ik_nutzer from kass_adr where ik_kasse='" + ikkasse + "' Limit 1";
         knoten.setIkNutzer(SqlInfo.holeEinzelFeld(cmd));
-        JXTTreeNode node = new JXTTreeNode(knoten,true);
+        JXTTreeNode node = new JXTTreeNode(knoten, true);
         treeModelKasse.insertNodeInto(node, rootKasse, usesSameIkPap);
         treeKasse.validate();
         return (node);
     }
-    private JXTTreeNode astAnhaengen(String ast,String ktraeger,String ikkasse, String ikpapier){
-/*        KnotenObjekt knoten = new KnotenObjekt(ast,"",false,"","");
-        knoten.ktraeger = ktraeger;
-        knoten.ikkasse = ikkasse;
-        knoten.setIkPap(ikpapier);
-        JXTTreeNode node = new JXTTreeNode(knoten,true);
-        treeModelKasse.insertNodeInto(node, rootKasse, rootKasse.getChildCount());
-        treeKasse.validate();
-        return (node);
- */
-        return (astEinhaengen(ast,ktraeger,ikkasse,ikpapier, rootKasse.getChildCount()));
+
+    private JXTTreeNode astAnhaengen(String ast, String ktraeger, String ikkasse, String ikpapier) {
+        /*
+         * KnotenObjekt knoten = new KnotenObjekt(ast,"",false,"",""); knoten.ktraeger =
+         * ktraeger; knoten.ikkasse = ikkasse; knoten.setIkPap(ikpapier); JXTTreeNode
+         * node = new JXTTreeNode(knoten,true); treeModelKasse.insertNodeInto(node,
+         * rootKasse, rootKasse.getChildCount()); treeKasse.validate(); return (node);
+         */
+        return (astEinhaengen(ast, ktraeger, ikkasse, ikpapier, rootKasse.getChildCount()));
 
     }
 
@@ -790,16 +821,15 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         }
         this.aktuellerKassenKnoten.getNextNode();
 //        int anzahlrez = this.aktuellerKassenKnoten.getChildCount();
-        if(!removeKassenNode(this.aktuellerKassenKnoten)){
+        if (!removeKassenNode(this.aktuellerKassenKnoten)) {
             this.rechneKasse(this.aktuellerKassenKnoten);
         }
-/*        
-        else{
-            treeModelKasse.removeNodeFromParent(this.aktuellerKassenKnoten);
-        }
- */
+        /*
+         * else{ treeModelKasse.removeNodeFromParent(this.aktuellerKassenKnoten); }
+         */
         this.abrRez.setRechtsAufNull();
     }
+
     private boolean removeKassenNode(JXTTreeNode aktKassNode) {
         if (aktKassNode.getChildCount() > 0) {
             return Boolean.FALSE;
@@ -808,84 +838,91 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         JXTTreeNode prevKNode = getPrevKassenKnoten(aktKassNode);
         JXTTreeNode nextKNode = getNextKassenKnoten(aktKassNode);
         treeModelKasse.removeNodeFromParent(aktKassNode);
-        if(nodeWithSameIK != null) {                                        // Nachfolger o. Vorgänger hat gleiches IKpapier -> icons können bleiben
-            aktKassNode = nodeWithSameIK;                                    // ... wird aktueller Knoten
-            int aktNodeIdx = 1+ treeModelKasse.getIndexOfChild(rootKasse, aktKassNode);
-            //treeKasse.setSelectionInterval(aktNodeIdx, aktNodeIdx);        // KEINEN neuen akt. Knoten selektieren (Anzeige des gerade aufgeschlossenen Rezeptes im Patientenfenster)
-            //treeKasse.validate();
-            treeKasse.repaint();                                            // Anzeige aktualisieren
+        if (nodeWithSameIK != null) { // Nachfolger o. Vorgänger hat gleiches IKpapier -> icons können bleiben
+            aktKassNode = nodeWithSameIK; // ... wird aktueller Knoten
+            int aktNodeIdx = 1 + treeModelKasse.getIndexOfChild(rootKasse, aktKassNode);
+            // treeKasse.setSelectionInterval(aktNodeIdx, aktNodeIdx); // KEINEN neuen akt.
+            // Knoten selektieren (Anzeige des gerade aufgeschlossenen Rezeptes im
+            // Patientenfenster)
+            // treeKasse.validate();
+            treeKasse.repaint(); // Anzeige aktualisieren
         } else if (!prevKNode.equals(null) && !nextKNode.equals(null)) {
-            //doEinlesen(null,null);                                            // Vorgänger u. Nachfolger haben gleiche Farbe -> Tree neu aufbauen
-            kassenIconsNeuAnzeigen();                                        // neu anzeigen - ist schneller als neu aufbauen
+            // doEinlesen(null,null); // Vorgänger u. Nachfolger haben gleiche Farbe -> Tree
+            // neu aufbauen
+            kassenIconsNeuAnzeigen(); // neu anzeigen - ist schneller als neu aufbauen
         }
         return Boolean.TRUE;
     }
-    private JXTTreeNode sameIkPap (JXTTreeNode aktNode){
-        /* Testkram ...
-        JXTTreeNode prevKassenNode, nextKassenNode;
-        String tmpK = aktNode.getObject().titel;    //ok
-        String tmpIK = ((KnotenObjekt)aktNode.getUserObject()).ikkasse;    // auch
-        System.out.println("Akt Node = "+tmpK+" "+tmpIK);
-        prevKassenNode = (JXTTreeNode) aktNode.getPreviousSibling();
-        if(prevKassenNode != null) {
-            tmpK = (prevKassenNode.getObject().titel);
-            tmpIK = ((KnotenObjekt)prevKassenNode.getUserObject()).ikkasse;
-            System.out.println("Prev Node = "+tmpK+" "+tmpIK);            
-        } else {
-            System.out.println("Prev Node = empty ");                        
-        }
-        nextKassenNode =(JXTTreeNode)aktNode.getNextSibling(); 
-        if(nextKassenNode != null) {
-            tmpK = nextKassenNode.getObject().titel;
-            tmpIK = ((KnotenObjekt)nextKassenNode.getUserObject()).ikkasse;
-            System.out.println("Next Node = "+tmpK+" "+tmpIK);
-        } else {
-            System.out.println("Next Node = empty ");                        
-        }
-        // ... Ende Testkram */
+
+    private JXTTreeNode sameIkPap(JXTTreeNode aktNode) {
+        /*
+         * Testkram ... JXTTreeNode prevKassenNode, nextKassenNode; String tmpK =
+         * aktNode.getObject().titel; //ok String tmpIK =
+         * ((KnotenObjekt)aktNode.getUserObject()).ikkasse; // auch
+         * System.out.println("Akt Node = "+tmpK+" "+tmpIK); prevKassenNode =
+         * (JXTTreeNode) aktNode.getPreviousSibling(); if(prevKassenNode != null) { tmpK
+         * = (prevKassenNode.getObject().titel); tmpIK =
+         * ((KnotenObjekt)prevKassenNode.getUserObject()).ikkasse;
+         * System.out.println("Prev Node = "+tmpK+" "+tmpIK); } else {
+         * System.out.println("Prev Node = empty "); } nextKassenNode
+         * =(JXTTreeNode)aktNode.getNextSibling(); if(nextKassenNode != null) { tmpK =
+         * nextKassenNode.getObject().titel; tmpIK =
+         * ((KnotenObjekt)nextKassenNode.getUserObject()).ikkasse;
+         * System.out.println("Next Node = "+tmpK+" "+tmpIK); } else {
+         * System.out.println("Next Node = empty "); } // ... Ende Testkram
+         */
 
         JXTTreeNode prevKNode = getPrevKassenKnoten(aktNode);
         JXTTreeNode nextKNode = getNextKassenKnoten(aktNode);
         if (nextKNode != null) {
-            if (nextKNode.knotenObjekt.getIkPap().equals(aktNode.knotenObjekt.getIkPap())) {    // nächster Knoten hat gleiches IKpapier
+            if (nextKNode.knotenObjekt.getIkPap()
+                                      .equals(aktNode.knotenObjekt.getIkPap())) { // nächster Knoten hat gleiches
+                                                                                  // IKpapier
                 return nextKNode;
             }
         }
         if (prevKNode != null) {
-            if (prevKNode.knotenObjekt.getIkPap().equals(aktNode.knotenObjekt.getIkPap())) {    // Vorläuferknoten hat gleiches IKpapier
+            if (prevKNode.knotenObjekt.getIkPap()
+                                      .equals(aktNode.knotenObjekt.getIkPap())) { // Vorläuferknoten hat gleiches
+                                                                                  // IKpapier
                 return prevKNode;
             }
         }
         return null;
     }
-    private JXTTreeNode getPrevKassenKnoten (JXTTreeNode aktNode){
+
+    private JXTTreeNode getPrevKassenKnoten(JXTTreeNode aktNode) {
         return (JXTTreeNode) aktNode.getPreviousSibling();
     }
-    private JXTTreeNode getNextKassenKnoten (JXTTreeNode aktNode){
+
+    private JXTTreeNode getNextKassenKnoten(JXTTreeNode aktNode) {
         return (JXTTreeNode) aktNode.getNextSibling();
     }
-    private void kassenIconsNeuAnzeigen(){
+
+    private void kassenIconsNeuAnzeigen() {
         JXTTreeNode rootNode = (JXTTreeNode) treeModelKasse.getRoot();
         JXTTreeNode aktKasse = (JXTTreeNode) rootNode.getChildAt(0);
         KnotenObjekt knAktKasse = aktKasse.getObject();
-        
-        if (customIconList.contains(knAktKasse.ktraeger)){    
+
+        if (customIconList.contains(knAktKasse.ktraeger)) {
             toggleIcons = 1;
-        }else{
+        } else {
             toggleIcons = 0;
         }
         customIconList.clear();
-        
+
         KeepIkPap myIkPap = new KeepIkPap(knAktKasse.ikpapier);
         while (aktKasse != null) {
             knAktKasse = aktKasse.getObject();
-            if (myIkPap.newIkPap(knAktKasse.ikpapier)){
+            if (myIkPap.newIkPap(knAktKasse.ikpapier)) {
                 // Hintergrund- oder Icon-Farbe ändern
-                toggleIcons = (++toggleIcons)&1;
-                // System.out.println("Wechsel IK-Papier: "+knAktKasse.ikpapier+" Hintergrund oder Icon-Farbe ändern @: "+ knAktKasse.titel);
-            };
-            if (toggleIcons == 1 ){
-                customIconList.add(knAktKasse.ktraeger);                                
+                toggleIcons = (++toggleIcons) & 1;
+                // System.out.println("Wechsel IK-Papier: "+knAktKasse.ikpapier+" Hintergrund
+                // oder Icon-Farbe ändern @: "+ knAktKasse.titel);
+            }
+            ;
+            if (toggleIcons == 1) {
+                customIconList.add(knAktKasse.ktraeger);
             }
             aktKasse = (JXTTreeNode) aktKasse.getNextSibling();
         }
@@ -893,6 +930,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         treeKasse.validate();
         treeKasse.repaint();
     }
+
     @Override
     public void valueChanged(TreeSelectionEvent arg0) {
         // TreePath path = arg0.getNewLeadSelectionPath();
@@ -904,14 +942,15 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         }
         JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
         String rez_nr = node.knotenObjekt.rez_num;
-        if(!rez_nr.trim().equals("")){        // Knoten enthält ein Rezept
+        if (!rez_nr.trim()
+                   .equals("")) { // Knoten enthält ein Rezept
             aktuellerKnoten = node;
             doKassenTreeAuswerten(node.knotenObjekt);
             aktuellerPat = node.knotenObjekt.pat_intern;
-            if (aktuellerKassenKnoten != (JXTTreeNode)aktuellerKnoten.getParent()){
+            if (aktuellerKassenKnoten != (JXTTreeNode) aktuellerKnoten.getParent()) {
                 // VO gehört zu einem anderen Kassenknoten
-                aktuellerKassenKnoten = (JXTTreeNode)aktuellerKnoten.getParent();
-                if (myCert.isValid()) {      // solange eigenes Zert. nicht OK, kann nicht abgerechnet werden
+                aktuellerKassenKnoten = (JXTTreeNode) aktuellerKnoten.getParent();
+                if (myCert.isValid()) { // solange eigenes Zert. nicht OK, kann nicht abgerechnet werden
                     SystemConfig.certState = keyStore.checkCertKT(getaktuellerKassenKnoten().knotenObjekt);
                 }
             }
@@ -928,22 +967,24 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                 JOptionPane.showMessageDialog(null,
                         "Achtung Preisgruppe kann nicht ermittelt werden!\nBitte dieses Rezept nicht abrechnen!");
             }
-            ////System.out.println("Preisguppe = "+Integer.toString(pgr)+"\nZuhahlmodus = "+(zuzahlModusDefault ? "Normal" : "Bayrisch"));
-        }else{        // Knoten ist ein Kassenknoten
+            //// System.out.println("Preisguppe = "+Integer.toString(pgr)+"\nZuhahlmodus =
+            //// "+(zuzahlModusDefault ? "Normal" : "Bayrisch"));
+        } else { // Knoten ist ein Kassenknoten
             abrRez.setRechtsAufNull();
             aktuellerKnoten = node;
-            if(aktuellerKnoten.getParent() != null){
-                if(((JXTTreeNode)aktuellerKnoten.getParent()).isRoot()){
-                    //////System.out.println("Aktueller Knoten ist ein Kassenknoten");
-                    if (aktuellerKassenKnoten != aktuellerKnoten){
+            if (aktuellerKnoten.getParent() != null) {
+                if (((JXTTreeNode) aktuellerKnoten.getParent()).isRoot()) {
+                    ////// System.out.println("Aktueller Knoten ist ein Kassenknoten");
+                    if (aktuellerKassenKnoten != aktuellerKnoten) {
                         aktuellerKassenKnoten = aktuellerKnoten;
                         if (myCert.isValid()) {
                             SystemConfig.certState = keyStore.checkCertKT(getaktuellerKassenKnoten().knotenObjekt);
                         }
                     }
                 }
-                //////System.out.println("Pfad zu Parent = "+new TreePath(aktuellerKnoten.getParent()).toString());
-            }else{
+                ////// System.out.println("Pfad zu Parent = "+new
+                ////// TreePath(aktuellerKnoten.getParent()).toString());
+            } else {
                 aktuellerKassenKnoten = null;
             }
             aktuellerPat = "";
@@ -1426,7 +1467,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                 doUebertragen();
                 abrDlg.setzeLabel("organisiere Abrechnungsprogramm");
             }
-        loescheFertigeRezepteAusKassenNode();
+            loescheFertigeRezepteAusKassenNode();
             Reha.instance.progressStarten(false);
 
             abrDlg.setVisible(false);
@@ -1517,27 +1558,24 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
     }
 
     /********************************************************************/
-    private void loescheFertigeRezepteAusKassenNode(){
-        try{
+    private void loescheFertigeRezepteAusKassenNode() {
+        try {
             int lang = aktuellerKassenKnoten.getChildCount();
             JXTTreeNode node;
             for (int i = (lang - 1); i >= 0; i--) {
                 node = (JXTTreeNode) aktuellerKassenKnoten.getChildAt(i);
-                if(node.knotenObjekt.fertig){
-                    //////System.out.println("Lösche KindKnoten an "+i);
+                if (node.knotenObjekt.fertig) {
+                    ////// System.out.println("Lösche KindKnoten an "+i);
                     treeModelKasse.removeNodeFromParent(node);
                 }
             }
             removeKassenNode(this.aktuellerKassenKnoten);
-/*
-            if(aktuellerKassenKnoten.getChildCount() <= 0){
-                JXTTreeNode newKNode = sameIkPap(this.aktuellerKassenKnoten);
-                treeModelKasse.removeNodeFromParent(aktuellerKassenKnoten);
-                if(newKNode != null) {
-                    doEinlesen(null,newKNode.getObject().rez_num);
-            }
-            }
- */
+            /*
+             * if(aktuellerKassenKnoten.getChildCount() <= 0){ JXTTreeNode newKNode =
+             * sameIkPap(this.aktuellerKassenKnoten);
+             * treeModelKasse.removeNodeFromParent(aktuellerKassenKnoten); if(newKNode !=
+             * null) { doEinlesen(null,newKNode.getObject().rez_num); } }
+             */
             treeKasse.validate();
             this.treeKasse.repaint();
         } catch (Exception ex) {
@@ -1604,8 +1642,8 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
 
                 /***
                  *
-             * In der Echtfunktion muß das Loeschen in der rezept-Datenbank eingeschaltet werden
-             * und das sofortige Löschen aus der Historie auschgeschaltet werden
+                 * In der Echtfunktion muß das Loeschen in der rezept-Datenbank eingeschaltet
+                 * werden und das sofortige Löschen aus der Historie auschgeschaltet werden
                  *
                  */
 
@@ -1777,7 +1815,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                                            .substring(2, 8)/* Reha.aktIK.substring(2,8) */
                 + "S" + getEdiMonat();
         unbBuf.append(abrDateiName + plus);
-        //unbBuf.append("0"+EOL);   // Testdatei
+        // unbBuf.append("0"+EOL); // Testdatei
         unbBuf.append("2" + EOL);
         // unbBuf.append(aktDfue+plus+"B"+plus+"SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat()+plus+"2"+EOL);
 
@@ -1824,10 +1862,10 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         return this;
     }
 
-    public AbrechnungRezept getInstanceAbrechnungRezept (){
+    public AbrechnungRezept getInstanceAbrechnungRezept() {
         return abrRez;
     }
-    
+
     /***************************************************************/
 
     private String holeNameKostentraeger() {
@@ -2472,15 +2510,19 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
             this.ikkasse = ikkasse;
             this.preisgruppe = preisgruppe;
         }
-        public void setIkPap (String ikpapier){
+
+        public void setIkPap(String ikpapier) {
             this.ikpapier = ikpapier;
         }
-        public String getIkPap (){
+
+        public String getIkPap() {
             return this.ikpapier;
         }
+
         public void setIkNutzer(String iknutzer) {
             this.ikNutzer = iknutzer;
         }
+
         public String getIkNutzer() {
             return this.ikNutzer;
         }
@@ -2542,80 +2584,96 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
     }
 
     /*****************************************/
-    private class KeyStore  {
+    private class KeyStore {
         /**
          * Zertifikatshandling
          */
         NebraskaKeystore keyStore = null;
         Vector<X509Certificate> certs = null;
-        
-        public void keyStore() throws NebraskaCryptoException, NebraskaFileException{
+
+        public void keyStore() throws NebraskaCryptoException, NebraskaFileException {
             this.init();
         }
+
         /**********
          * 
-         * Keystore öffnen 
+         * Keystore öffnen
          */
-        public void init() throws NebraskaCryptoException, NebraskaFileException{
-            if(this.keyStore == null){    // (evtl. zusätzlich Überwachung des Dateidatums um auf Aktualisierung reagieren zu können)
-                String keyStoreLoc = SystemConfig.hmAbrechnung.get("hmkeystorefile");    //Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
-                this.keyStore = new NebraskaKeystore(keyStoreLoc, SystemConfig.hmAbrechnung.get("hmkeystorepw"),"123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof").replace("IK", ""));                
-                this.certs = keyStore.getAllCerts();            
+        public void init() throws NebraskaCryptoException, NebraskaFileException {
+            if (this.keyStore == null) { // (evtl. zusätzlich Überwachung des Dateidatums um auf Aktualisierung
+                                         // reagieren zu können)
+                String keyStoreLoc = SystemConfig.hmAbrechnung.get("hmkeystorefile"); // Reha.proghome+"keystore/"+Reha.aktIK+"/"+Reha.aktIK+".p12";
+                this.keyStore = new NebraskaKeystore(keyStoreLoc, SystemConfig.hmAbrechnung.get("hmkeystorepw"),
+                        "123456", SystemConfig.hmAbrechnung.get("hmkeystoreusecertof")
+                                                           .replace("IK", ""));
+                this.certs = keyStore.getAllCerts();
             }
         }
+
         /**********
          * 
          * Restlaufzeit eines Zertifikates ermitteln
-         * @param  alias String - IK des gesuchten Zertifikates
-         * @return int Anz. Tage, wie lange das Zert noch gültig ist oder noCertFound, falls kein Zertifikat gefunden wurde.
+         * 
+         * @param alias String - IK des gesuchten Zertifikates
+         * @return int Anz. Tage, wie lange das Zert noch gültig ist oder noCertFound,
+         *         falls kein Zertifikat gefunden wurde.
          */
-        public int getCertDaysValid(String alias){
-            try{
+        public int getCertDaysValid(String alias) {
+            try {
                 this.init();
                 String[] dn = null;
                 String ik;
                 long tage;
-                for(int i = 0; i < certs.size();i++){
-                    dn=certs.get(i).getSubjectDN().toString().split(",");
-                    if(dn.length==5){
-                        ik = (String)dn[3].split("=")[1];
-                        if(ik.equals(alias)){    // gesuchtes Zertifikat gefunden
-                            Date verfall = certs.get(i).getNotAfter();
+                for (int i = 0; i < certs.size(); i++) {
+                    dn = certs.get(i)
+                              .getSubjectDN()
+                              .toString()
+                              .split(",");
+                    if (dn.length == 5) {
+                        ik = (String) dn[3].split("=")[1];
+                        if (ik.equals(alias)) { // gesuchtes Zertifikat gefunden
+                            Date verfall = certs.get(i)
+                                                .getNotAfter();
                             tage = Instant.now()
                                           .until(verfall.toInstant(), ChronoUnit.DAYS);
                             return (int) tage;
                         }
                     }
                 }
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 return noCertFound;
             }
             return noCertFound;
         }
-        
+
         /**********
          * 
          * Eigenes Zertifikat auf Gültigkeit prüfen
-         * @param  alias String - IK des eigenen Zertifikates
+         * 
+         * @param alias String - IK des eigenen Zertifikates
          * @return SystemConfig.certState
          */
-        public int checkOwnCert(String alias){
-            abrRez.sperreAbrechnung();        // Abrechnung bleibt gesperrt bis Zertifikat geprüft ist
-            new SwingWorker<Void,Void>(){
+        public int checkOwnCert(String alias) {
+            abrRez.sperreAbrechnung(); // Abrechnung bleibt gesperrt bis Zertifikat geprüft ist
+            new SwingWorker<Void, Void>() {
                 @Override
                 protected Void doInBackground() throws Exception {
                     int daysLeft = getCertDaysValid(alias);
-                    if(daysLeft <= 0){
-                        JOptionPane.showMessageDialog(null,"Ihr Zertifikat ist abgelaufen.\nEine Verschlüsselung mit diesem Zertifikat ist nicht mehr möglich. Die Abrechnung ist gesperrt.");
+                    if (daysLeft <= 0) {
+                        JOptionPane.showMessageDialog(null,
+                                "Ihr Zertifikat ist abgelaufen.\nEine Verschlüsselung mit diesem Zertifikat ist nicht mehr möglich. Die Abrechnung ist gesperrt.");
                         SystemConfig.certState = SystemConfig.certIsExpired;
-                    }else if(daysLeft <= 30){
-                        JOptionPane.showMessageDialog(null,"Achtung!!!\nIhr Zertifikat läuft in "+Long.toString(daysLeft)+" Tage(n) ab.\nBitte rechtzeitig neues Zertifikat beantragen!");
+                    } else if (daysLeft <= 30) {
+                        JOptionPane.showMessageDialog(null,
+                                "Achtung!!!\nIhr Zertifikat läuft in " + Long.toString(daysLeft)
+                                        + " Tage(n) ab.\nBitte rechtzeitig neues Zertifikat beantragen!");
                         SystemConfig.certState = SystemConfig.certWillExpire;
                         abrRez.erlaubeAbrechnung();
-                    }else if(daysLeft == noCertFound){
-                        JOptionPane.showMessageDialog(null,"Kein Zertifikat für IK"+alias+" gefunden!.\nVerschlüsselung und damit die 302-er Abrechnung ist nicht möglich.");
+                    } else if (daysLeft == noCertFound) {
+                        JOptionPane.showMessageDialog(null, "Kein Zertifikat für IK" + alias
+                                + " gefunden!.\nVerschlüsselung und damit die 302-er Abrechnung ist nicht möglich.");
                         SystemConfig.certState = SystemConfig.certNotFound;
-                    }else{
+                    } else {
                         SystemConfig.certState = SystemConfig.certOK;
                         abrRez.erlaubeAbrechnung();
                     }
@@ -2625,29 +2683,35 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
             }.execute();
             return SystemConfig.certNotFound;
         }
+
         /**********
          * 
-         * Zertifikat einer Kasse (bzw. von deren Datenannahmestelle) auf Gültigkeit prüfen
-         * @param  currNode KnotenObjekt - Knoten im Kassenbaum 
+         * Zertifikat einer Kasse (bzw. von deren Datenannahmestelle) auf Gültigkeit
+         * prüfen
+         * 
+         * @param currNode KnotenObjekt - Knoten im Kassenbaum
          * @return SystemConfig.certState
          */
-        public int checkCertKT(KnotenObjekt currNode){
-            abrRez.sperreAbrechnung();        // Abrechnung bleibt gesperrt bis Zertifikat dieser Kasse geprüft ist
-            new SwingWorker<Void,Void>(){
+        public int checkCertKT(KnotenObjekt currNode) {
+            abrRez.sperreAbrechnung(); // Abrechnung bleibt gesperrt bis Zertifikat dieser Kasse geprüft ist
+            new SwingWorker<Void, Void>() {
                 String txtKasse = currNode.titel;
-                String ikNutzer = "IK"+currNode.getIkNutzer();
+                String ikNutzer = "IK" + currNode.getIkNutzer();
+
                 @Override
                 protected Void doInBackground() throws Exception {
                     int daysLeft = getCertDaysValid(ikNutzer);
-                    if( daysLeft <= 0){
-                        JOptionPane.showMessageDialog(null,"Das für "+txtKasse+" zuständige Zertifikat im Keystore ist abgelaufen.\nVerschlüsselung und damit die 302-er Abrechnung wird daher gesperrt.");
-                        SystemConfig.certState =  SystemConfig.certIsExpired;
-                    }else if(daysLeft == noCertFound){
-                        JOptionPane.showMessageDialog(null,"Kein für "+txtKasse+" zuständiges Zertifikat im Keystore gefunden!.\nVerschlüsselung und damit die 302-er Abrechnung ist nicht möglich");
+                    if (daysLeft <= 0) {
+                        JOptionPane.showMessageDialog(null, "Das für " + txtKasse
+                                + " zuständige Zertifikat im Keystore ist abgelaufen.\nVerschlüsselung und damit die 302-er Abrechnung wird daher gesperrt.");
+                        SystemConfig.certState = SystemConfig.certIsExpired;
+                    } else if (daysLeft == noCertFound) {
+                        JOptionPane.showMessageDialog(null, "Kein für " + txtKasse
+                                + " zuständiges Zertifikat im Keystore gefunden!.\nVerschlüsselung und damit die 302-er Abrechnung ist nicht möglich");
                         SystemConfig.certState = SystemConfig.certNotFound;
-                    }else{
+                    } else {
                         SystemConfig.certState = SystemConfig.certOK;
-                        abrRez.erlaubeAbrechnung();                    
+                        abrRez.erlaubeAbrechnung();
                     }
                     return null;
                 }
@@ -2656,7 +2720,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         }
 
     }
-    
+
     /*****************************************/
     private class KeepIkPap {
         /**
@@ -2690,7 +2754,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         }
 
         public void setState(int state) {
-            if ((state ==  SystemConfig.certOK) || (state == SystemConfig.certWillExpire)) {
+            if ((state == SystemConfig.certOK) || (state == SystemConfig.certWillExpire)) {
                 ownCertIsValid = true;
             } else {
                 ownCertIsValid = false;
@@ -2711,24 +2775,15 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
         }
 
         @Override
-        public Component getTreeCellRendererComponent(
-        JTree tree,
-        Object value,
-        boolean sel,
-        boolean expanded,
-        boolean leaf,
-        int row,
-        boolean hasFocus) {
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded,
+                boolean leaf, int row, boolean hasFocus) {
 
-        super.getTreeCellRendererComponent(
-        tree, value, sel,
-        expanded, leaf, row,
-        hasFocus);
-        KnotenObjekt o = ((JXTTreeNode)value).knotenObjekt;
-        this.setText(o.titel);
-        if (leaf && istFertig(value)) {
-            setIcon(fertigIcon);
-            setToolTipText("Verordnung "+o.rez_num+" kann dirket abgerechnet werden.");
+            super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+            KnotenObjekt o = ((JXTTreeNode) value).knotenObjekt;
+            this.setText(o.titel);
+            if (leaf && istFertig(value)) {
+                setIcon(fertigIcon);
+                setToolTipText("Verordnung " + o.rez_num + " kann dirket abgerechnet werden.");
             } else {
                 this.setText(o.titel);
             }
@@ -2739,13 +2794,13 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
                 } else {
                     setIcon(getIcon());
                 }
-            if (lateKtList.contains(o.ktraeger)){
-                this.setForeground(Color.red);        // Kasse sollte zeitnah abgerechnet werden (enthält VO nahe am MHD).
-            }
-        }else{
-            if (lateVOList.contains(o.rez_num)){
-                this.setForeground(Color.red);        // VO nahe am MHD - umgehend abrechnen!
-            }
+                if (lateKtList.contains(o.ktraeger)) {
+                    this.setForeground(Color.red); // Kasse sollte zeitnah abgerechnet werden (enthält VO nahe am MHD).
+                }
+            } else {
+                if (lateVOList.contains(o.rez_num)) {
+                    this.setForeground(Color.red); // VO nahe am MHD - umgehend abrechnen!
+                }
             }
             return this;
         }
@@ -2777,7 +2832,7 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (e.getButton() == 3) {                    // Rechtsklick auf Rezept im Tree
+        if (e.getButton() == 3) { // Rechtsklick auf Rezept im Tree
             TreePath tp = treeKasse.getSelectionPath();
 
             // kontrollierteRezepte = 0;
@@ -2836,39 +2891,41 @@ public class AbrechnungGKV extends JXPanel implements PatStammEventListener, Act
     public void mouseExited(MouseEvent e) {
 
     }
+
     @Override
     public void keyTyped(KeyEvent e) {
-        
+
     }
+
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode()==KeyEvent.VK_F1){
-            TreePath tp =  treeKasse.getSelectionPath();
-            if(tp==null){
+        if (e.getKeyCode() == KeyEvent.VK_F1) {
+            TreePath tp = treeKasse.getSelectionPath();
+            if (tp == null) {
                 return;
             }
-            if(infoDlg != null){
+            if (infoDlg != null) {
                 return;
             }
 
             String ikKasse = getaktuellerKassenKnoten().knotenObjekt.ikkasse;
             String kassenName = getaktuellerKassenKnoten().knotenObjekt.titel;
-            
+
             Vector<Vector<String>> vecInArbeit = RezFromDB.getPendingVO(ikKasse);
-            ////System.out.println("VO in Arbeit: "+ vecInArbeit);
-            if(vecInArbeit.size() >= 0){
-                infoDlg = new InfoDialogVOinArbeit(kassenName,vecInArbeit,this.connection);
+            //// System.out.println("VO in Arbeit: "+ vecInArbeit);
+            if (vecInArbeit.size() >= 0) {
+                infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, this.connection);
                 infoDlg.pack();
                 infoDlg.setLocationRelativeTo(null);
                 infoDlg.setVisible(true);
-                infoDlg = null;        
+                infoDlg = null;
             }
         }
     }
-    
+
     @Override
     public void keyReleased(KeyEvent e) {
-        
+
     }
 
 }

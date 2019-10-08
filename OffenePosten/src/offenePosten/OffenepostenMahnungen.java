@@ -89,7 +89,6 @@ public class OffenepostenMahnungen extends JXPanel {
     MyMahnungenTableModel tabmod = null;
     JXTable tab = null;
 
-
     DBFReader dbfreader = null;
     File f = null;
     Font fontfett = new Font("Tahoma", Font.BOLD, 10);

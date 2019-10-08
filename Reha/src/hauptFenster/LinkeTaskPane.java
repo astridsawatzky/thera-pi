@@ -573,7 +573,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         JXHyperlink paypal = createPaypalLink();
         tp5.add(paypal);
 
-
         File f = new File(Path.Instance.getProghome() + "QMHandbuch.jar");
         if (f.exists()) {
             jxLink = new JXHyperlink();
@@ -613,19 +612,20 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         paypal.setText("Thera-Pi unterstützen");
         paypal.setClickedColor(new Color(0, 0x33, 0xFF));
         img = new ImageIcon(Path.Instance.getProghome() + "icons/pp_cc_mark_37x23.jpg").getImage()
-                                                                          .getScaledInstance(24, 24,
-                                                                                  Image.SCALE_SMOOTH);
+                                                                                       .getScaledInstance(24, 24,
+                                                                                               Image.SCALE_SMOOTH);
         paypal.setIcon(new ImageIcon(img));
         paypal.setActionCommand("piIcd10");
         paypal.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-               try {
-                open(new URI("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BDMYY86QLM9XG&source=url"));
-            } catch (URISyntaxException e1) {
-                logger.error("url zu paypal fehlerhaft",e1);
-            }
+                try {
+                    open(new URI(
+                            "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BDMYY86QLM9XG&source=url"));
+                } catch (URISyntaxException e1) {
+                    logger.error("url zu paypal fehlerhaft", e1);
+                }
 
             }
         });
@@ -1422,21 +1422,20 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
     public void dropActionChanged(DropTargetDragEvent arg0) {
 
     }
+
     private static void open(URI uri) {
         if (Desktop.isDesktopSupported()) {
-          Desktop desktop = Desktop.getDesktop();
-          try {
-            desktop.browse(uri);
-          } catch (IOException e) {
-            JOptionPane.showMessageDialog(null,
-                "Failed to launch the link, your computer is likely misconfigured.",
-                "Cannot Launch Link",JOptionPane.WARNING_MESSAGE);
-          }
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                desktop.browse(uri);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Failed to launch the link, your computer is likely misconfigured.",
+                        "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
+            }
         } else {
-          JOptionPane.showMessageDialog(null,
-              "Java is not able to launch links on your computer.",
-              "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Java is not able to launch links on your computer.",
+                    "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
         }
-      }
+    }
     /************************************************************/
 }

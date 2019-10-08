@@ -293,7 +293,9 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
                 ocKVK = new OcKVK();
                 if (ocKVK.terminalOk) {
                     SystemConfig.hmKVKDaten.clear();
-                    CardTerminal terminal = TerminalFactory.getDefault().terminals().getTerminal(reader);
+                    CardTerminal terminal = TerminalFactory.getDefault()
+                                                           .terminals()
+                                                           .getTerminal(reader);
                     ocKVK.lesen(terminal);
                     if (!SystemConfig.hmKVKDaten.isEmpty()) {
                         // ocKVK.TerminalDeaktivieren();

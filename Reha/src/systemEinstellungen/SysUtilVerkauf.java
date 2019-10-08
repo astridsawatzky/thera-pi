@@ -24,7 +24,6 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-
 import CommonTools.ButtonTools;
 import CommonTools.INIFile;
 import CommonTools.INITool;
@@ -64,7 +63,6 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
     private ActionListener al;
 
     SysUtilVorlagen vorlagen = null;
-    
 
     SysUtilVerkauf() {
         super(new BorderLayout());
@@ -84,106 +82,102 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
         jscr.setViewportView(getContent());
         jscr.validate();
 
-        //inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "verkauf.ini");
+        // inif =
+        // INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/",
+        // "verkauf.ini");
         inif = vorlagen.getInif();
 
-        //add(getContent(),BorderLayout.CENTER);
+        // add(getContent(),BorderLayout.CENTER);
         ladeEinstellungen();
-        this.add(jscr,BorderLayout.CENTER);
+        this.add(jscr, BorderLayout.CENTER);
 //      this.add(getKnopfPanel(),BorderLayout.SOUTH);
         AbbruchOderSpeichern footer = new AbbruchOderSpeichern(this);
-        this.add(footer.getPanel(),BorderLayout.SOUTH);
-        System.out.println(getWidth()+"/"+getHeight());
+        this.add(footer.getPanel(), BorderLayout.SOUTH);
+        System.out.println(getWidth() + "/" + getHeight());
     }
-/*  
-    private JPanel getKnopfPanel(){
-        abbruch = ButtonTools.macheButton("abbrechen", "abbrechen", al);
-        speichern = ButtonTools.macheButton("speichern", "speicher", al);
-                                    //      1.                      2.    3.    4.     5.     6.    7.      8.     9.
-        FormLayout jpanlay = new FormLayout("right:max(150dlu;p), 60dlu:g, 60dlu, 4dlu, 60dlu, 20dlu",
-       //1.    2. 3.   4.   5.   6.     7.    8. 9.  10.  11. 12. 13.  14.  15. 16.  17. 18.  19.   20.    21.   22.   23.
-                "10dlu,p, 10dlu, p");
-
-        PanelBuilder jpan = new PanelBuilder(jpanlay);
-        jpan.getPanel()
-            .setOpaque(false);
-        CellConstraints jpancc = new CellConstraints();
-
-        jpan.addSeparator("", jpancc.xyw(1, 2, 5));
-        jpan.add(abbruch, jpancc.xy(3, 4));
-        jpan.add(speichern, jpancc.xy(5, 4));
-        jpan.addLabel("Änderungen übernehmen?", jpancc.xy(1, 4));
-
-        jpan.getPanel()
-            .validate();
-        return jpan.getPanel();
-    }
- */    
+    /*
+     * private JPanel getKnopfPanel(){ abbruch =
+     * ButtonTools.macheButton("abbrechen", "abbrechen", al); speichern =
+     * ButtonTools.macheButton("speichern", "speicher", al); // 1. 2. 3. 4. 5. 6. 7.
+     * 8. 9. FormLayout jpanlay = new
+     * FormLayout("right:max(150dlu;p), 60dlu:g, 60dlu, 4dlu, 60dlu, 20dlu", //1. 2.
+     * 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. 22. 23.
+     * "10dlu,p, 10dlu, p");
+     * 
+     * PanelBuilder jpan = new PanelBuilder(jpanlay); jpan.getPanel()
+     * .setOpaque(false); CellConstraints jpancc = new CellConstraints();
+     * 
+     * jpan.addSeparator("", jpancc.xyw(1, 2, 5)); jpan.add(abbruch, jpancc.xy(3,
+     * 4)); jpan.add(speichern, jpancc.xy(5, 4));
+     * jpan.addLabel("Änderungen übernehmen?", jpancc.xy(1, 4));
+     * 
+     * jpan.getPanel() .validate(); return jpan.getPanel(); }
+     */
 
     /**
      * @return
      */
     private JPanel getContent() {
 
-        //                 1      2     3      4     5        6
+        // 1 2 3 4 5 6
         String xwerte = "15dlu, 3dlu, 80dlu, 5dlu, 40dlu:g, 15dlu";
-        //                 1   2    3   4    5   6    7   8    9  10   11  12   13  14   15  16   17  18   19  20
+        // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
         String ywerte = "5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p," +
-        // ""     21  22   23  24   25  26   27  28   29  30   31  32   33  34   35  36   37  38   39  40
+        // "" 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40
                 "5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p," +
-        //        41  42   43   44  45  46  47   48   49  50   51  52   53
+                // 41 42 43 44 45 46 47 48 49 50 51 52 53
                 "5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu, p, 5dlu";
         FormLayout lay = new FormLayout(xwerte, ywerte);
         CellConstraints cc = new CellConstraints();
-        int rowCnt=2;
+        int rowCnt = 2;
         PanelBuilder pane = new PanelBuilder(lay);
-        //PanelBuilder pane = new PanelBuilder(lay, new FormDebugPanel());        // debug mode
+        // PanelBuilder pane = new PanelBuilder(lay, new FormDebugPanel()); // debug
+        // mode
         pane.setDefaultDialogBorder();
         pane.getPanel()
             .setOpaque(false);
 
-        PrintService[] printers = PrinterJob.lookupPrintServices();     // Druckerliste
+        PrintService[] printers = PrinterJob.lookupPrintServices(); // Druckerliste
         druckernamen = new String[printers.length];
         for (int i = 0; i < printers.length; i++) {
             druckernamen[i] = printers[i].getName();
         }
 
-        
         vorlagen = new SysUtilVorlagen(this);
-        vorlagen.setVPfad(Path.Instance.getProghome()+"vorlagen/"+Reha.getAktIK());
-        vorlagen.setIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK(), "verkauf.ini");
-        vorlagen.setLabels("Formulare","FormulareAnzahl","Formular");
+        vorlagen.setVPfad(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK());
+        vorlagen.setIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK(), "verkauf.ini");
+        vorlagen.setLabels("Formulare", "FormulareAnzahl", "Formular");
         vorlagen.activateEditing();
-        
-        pane.add(vorlagen.getPanel(), cc.xyw(1, rowCnt++, 6));        // 1,2
-        
-        pane.addSeparator("Rechnungsdruck", cc.xyw(1,++rowCnt,5));    // 1,4
+
+        pane.add(vorlagen.getPanel(), cc.xyw(1, rowCnt++, 6)); // 1,2
+
+        pane.addSeparator("Rechnungsdruck", cc.xyw(1, ++rowCnt, 5)); // 1,4
         rowCnt++;
 
         JXLabel lab = new JXLabel("Sofort drucken?");
-        pane.add(lab, cc.xy(3, ++rowCnt));                            // 3,6
+        pane.add(lab, cc.xy(3, ++rowCnt)); // 3,6
         String toolTip = "Ausnahme: 'Adresseingabe von Hand' wird im Verkaufsmodul gewählt";
         lab.setToolTipText(toolTip);
-        
+
         sofortDrucken = new JRtaCheckBox();
-        pane.add(sofortDrucken, cc.xy(5, rowCnt++));                // 5,6
+        pane.add(sofortDrucken, cc.xy(5, rowCnt++)); // 5,6
         sofortDrucken.setToolTipText(toolTip);
 
         lab = new JXLabel("Drucker:");
-        pane.add(lab, cc.xy(3, ++rowCnt));                            // 3,8
-        
+        pane.add(lab, cc.xy(3, ++rowCnt)); // 3,8
+
         rechnungDrucker = new JComboBox(druckernamen);
-        pane.add(rechnungDrucker, cc.xy(5, rowCnt++));                // 5,8
+        pane.add(rechnungDrucker, cc.xy(5, rowCnt++)); // 5,8
 
         lab = new JXLabel("Vorlage:");
-        pane.add(lab, cc.xy(3, ++rowCnt));                            // 3,10
+        pane.add(lab, cc.xy(3, ++rowCnt)); // 3,10
 
         rechnungVorlage = new JRtaTextField("nix", false);
         rechnungVorlage.setLayout(new BorderLayout());
         rechnungVorlage.add(rechnungVorlageB = new JXButton("auswählen"), BorderLayout.EAST);
         rechnungVorlageB.setActionCommand("vorlageRechnung");
         rechnungVorlageB.addActionListener(al);
-        pane.add(rechnungVorlage, cc.xy(5, rowCnt++));              // 5,10
+        pane.add(rechnungVorlage, cc.xy(5, rowCnt++)); // 5,10
 
         lab = new JXLabel("Anzahl Spalten:");
         pane.add(lab, cc.xy(3, ++rowCnt));
@@ -233,10 +227,9 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
         rechnungExemplare = new JRtaTextField("ZAHLEN", false);
         pane.add(rechnungExemplare, cc.xy(5, rowCnt++));
 
+        rowCnt++;
+        pane.addSeparator("Bondruck", cc.xyw(1, rowCnt++, 5));
 
-        rowCnt ++;
-        pane.addSeparator("Bondruck", cc.xyw(1,rowCnt++,5));
-        
         lab = new JXLabel("Bondruck erlaubt?");
         pane.add(lab, cc.xy(3, ++rowCnt));
         toolTip = "wenn nicht können nur Rechnungen erstellt werden";
@@ -312,7 +305,7 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
 
         lab = new JXLabel("Seitenlänge pro Artikel:");
         pane.add(lab, cc.xy(3, ++rowCnt));
-        
+
         bonSeitenlaenge = new JRtaTextField("nix", false);
         bonSeitenlaenge.setLayout(new BorderLayout());
         bonSeitenlaenge.add(new JXLabel("mm * 100"), BorderLayout.EAST);
@@ -445,7 +438,7 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                if(arg0.getActionCommand()
+                if (arg0.getActionCommand()
                         .equals("vorlageRechnung")) {
                     String sdummy = dateiWaehlen();
                     rechnungVorlage.setText((sdummy.equals("") ? rechnungVorlage.getText() : sdummy));
@@ -460,8 +453,8 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
 
     @Override
     public void Abbruch() {
-                    SystemInit.abbrechen();
-                }
+        SystemInit.abbrechen();
+    }
 
     @Override
     public void Speichern() {
@@ -471,12 +464,12 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
     @Override
     public void AddEntry(int instanceNb) {
         // TODO Auto-generated method stub
-        
-            }
+
+    }
 
     @Override
     public void RemoveEntry(int instanceNb) {
         // TODO Auto-generated method stub
-        
+
     }
 }

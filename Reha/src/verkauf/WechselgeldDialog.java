@@ -46,7 +46,7 @@ public class WechselgeldDialog extends RehaSmartDialog {
     RehaTPEventClass rtp = null;
 
     PinPanel pinPanel = null;
-	boolean gotCash = false;
+    boolean gotCash = false;
 
     public WechselgeldDialog(Frame owner, Point position, double summe) {
         super(null, "WechselGeld");
@@ -119,8 +119,8 @@ public class WechselgeldDialog extends RehaSmartDialog {
             gegebenFeld.addKeyListener(kl);
             pane.add(gegebenFeld, cc.xy(4, 5));
 
-		JXButton close = new JXButton("Bon drucken & buchen");
-		close.setActionCommand("printNbook");
+            JXButton close = new JXButton("Bon drucken & buchen");
+            close.setActionCommand("printNbook");
             close.addActionListener(al);
             pane.add(close, cc.xyw(2, 9, 3));
 
@@ -150,11 +150,11 @@ public class WechselgeldDialog extends RehaSmartDialog {
 
             @Override
             public void keyPressed(KeyEvent arg0) {
-                if(arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
                     continuePayment();
                     return;
-                }else if(arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    endPayment();       // Abbruch mit ESC
+                } else if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    endPayment(); // Abbruch mit ESC
                     return;
                 }
             }
@@ -181,7 +181,7 @@ public class WechselgeldDialog extends RehaSmartDialog {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                if(arg0.getActionCommand()
+                if (arg0.getActionCommand()
                         .equals("printNbook")) {
                     continuePayment();
                 }
@@ -194,11 +194,11 @@ public class WechselgeldDialog extends RehaSmartDialog {
         rtp.addRehaTPEventListener(this);
     }
 
-	private void endPayment() {
+    private void endPayment() {
         this.setVisible(false);
-		rtp.removeRehaTPEventListener(this);
-		rtp = null;
-		pinPanel = null;
+        rtp.removeRehaTPEventListener(this);
+        rtp = null;
+        pinPanel = null;
         this.dispose();
     }
 
@@ -206,22 +206,20 @@ public class WechselgeldDialog extends RehaSmartDialog {
         gotCash = true;
         endPayment();
     }
-    
-    public boolean processPayment(){
+
+    public boolean processPayment() {
         return gotCash;
     }
-    
+
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
         try {
             if (evt.getDetails()[0].equals("WechselGeld")) {
                 endPayment();
-/*              this.setVisible(false); 
-                rtp.removeRehaTPEventListener(this);
-                rtp = null;
-                pinPanel = null;
-                this.dispose();
- */
+                /*
+                 * this.setVisible(false); rtp.removeRehaTPEventListener(this); rtp = null;
+                 * pinPanel = null; this.dispose();
+                 */
             }
         } catch (NullPointerException ne) {
         }

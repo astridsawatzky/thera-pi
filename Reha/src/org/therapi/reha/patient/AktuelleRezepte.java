@@ -156,7 +156,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 
     AbrechnungRezept abrRez = null;
 
-    InfoDialogTerminInfo infoDlg = null;    
+    InfoDialogTerminInfo infoDlg = null;
     String sRezNumNeu = "";
     private Connection connection;
 
@@ -268,15 +268,15 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         }.start();
 
     }
-/* McM scheint unbenutzt:    
-    public void getAktDates() {
 
-    }
-
-    public void setDtblmValues(ImageIcon ico, int row, int col) {
-        dtblm.setValueAt(ico, row, col);
-    }
- */
+    /*
+     * McM scheint unbenutzt: public void getAktDates() {
+     * 
+     * }
+     * 
+     * public void setDtblmValues(ImageIcon ico, int row, int col) {
+     * dtblm.setValueAt(ico, row, col); }
+     */
     public void formulareAuswerten() {
         int row = tabaktrez.getSelectedRow();
         if (row >= 0) {
@@ -2070,46 +2070,66 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 } // befreit? raus!!
                 int currow = tabaktrez.getSelectedRow();
                 String xreznr;
-                if(currow >=0) {
-                    xreznr = (String)tabaktrez.getValueAt(currow, 0);
-                    //String xcmd = "update verordn set zzstatus='2', befr='F', rez_geb='0.00',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1"; 
-                    //dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[2],currow,1);
-                    //doVectorAktualisieren(new int[]{12,13,14,39},new String[] {"F","0.00","F","2"});    // befr,rez_geb, rez_bez,zzstatus (zuzahlnichtok)
+                if (currow >= 0) {
+                    xreznr = (String) tabaktrez.getValueAt(currow, 0);
+                    // String xcmd = "update verordn set zzstatus='2', befr='F',
+                    // rez_geb='0.00',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1";
+                    // dtblm.setValueAt(Reha.thisClass.patpanel.imgzuzahl[2],currow,1);
+                    // doVectorAktualisieren(new int[]{12,13,14,39},new String[]
+                    // {"F","0.00","F","2"}); // befr,rez_geb, rez_bez,zzstatus (zuzahlnichtok)
 
                     // McM: sollte der Dialog vom Befreiungs-Status nicht besser die Finger lassen?
-                    // (wenn nicht, dann sollte die $302-Abrechnung den gesetzten Status auch verwenden. Bisher ist das nicht der Fall...)
-                    doVectorAktualisieren(new int[]{13, 14, 39},new String[] {"0.00","F","2"});    //rez_geb, rez_bez,zzstatus (zuzahlnichtok)
-                    String xcmd = "update verordn set zzstatus='2', rez_geb='0.00',rez_bez='F' where rez_nr='"+xreznr+"' LIMIT 1"; 
+                    // (wenn nicht, dann sollte die $302-Abrechnung den gesetzten Status auch
+                    // verwenden. Bisher ist das nicht der Fall...)
+                    doVectorAktualisieren(new int[] { 13, 14, 39 }, new String[] { "0.00", "F", "2" }); // rez_geb,
+                                                                                                        // rez_bez,zzstatus
+                                                                                                        // (zuzahlnichtok)
+                    String xcmd = "update verordn set zzstatus='2', rez_geb='0.00',rez_bez='F' where rez_nr='" + xreznr
+                            + "' LIMIT 1";
                     SqlInfo.sqlAusfuehren(xcmd);
-                    
-                    if(SystemConfig.useStornieren) {
-                        if(stammDatenTools.ZuzahlTools.existsRGR(xreznr)) {
-                            //SqlInfo.sqlAusfuehren("delete from rgaffaktura where reznr='"+xreznr+"' and rnr like 'RGR-%' LIMIT 1");    // löscht RGR
+
+                    if (SystemConfig.useStornieren) {
+                        if (stammDatenTools.ZuzahlTools.existsRGR(xreznr)) {
+                            // SqlInfo.sqlAusfuehren("delete from rgaffaktura where reznr='"+xreznr+"' and
+                            // rnr like 'RGR-%' LIMIT 1"); // löscht RGR
                             /**
-                             * McM: stellt in Tabelle rgaffaktura 'storno_' vor Rechnungsnummer u. hängt 'S' an Rezeptnummer an, 
-                             * dadurch wird record bei der Suche nach Rechnungs-/Rezeptnummer nicht mehr gefunden
-                             * <roffen> wird nicht 0 gesetzt, falls schon eine Teilzahlung gebucht wurde o.ä. - in OP taucht er deshalb noch auf
+                             * McM: stellt in Tabelle rgaffaktura 'storno_' vor Rechnungsnummer u. hängt 'S'
+                             * an Rezeptnummer an, dadurch wird record bei der Suche nach
+                             * Rechnungs-/Rezeptnummer nicht mehr gefunden <roffen> wird nicht 0 gesetzt,
+                             * falls schon eine Teilzahlung gebucht wurde o.ä. - in OP taucht er deshalb
+                             * noch auf
                              */
-                            xcmd = "UPDATE rgaffaktura SET rnr=CONCAT('storno_',rnr), reznr=CONCAT(reznr,'S') where reznr='"+xreznr+"' AND rnr like 'RGR-%' LIMIT 1"; 
-                            SqlInfo.sqlAusfuehren(xcmd);                                                            // storniert RGR in 'rgaffaktura'
-                            // McM: storno auch in 'kasse' (falls RGR schon als 'bar bezahlt' verbucht wurde)
-                            // auf einnahme = 0 u. 'storno_RGR...' ändern (da Kassenabrechnung nach 'RGR-%' sucht)
+                            xcmd = "UPDATE rgaffaktura SET rnr=CONCAT('storno_',rnr), reznr=CONCAT(reznr,'S') where reznr='"
+                                    + xreznr + "' AND rnr like 'RGR-%' LIMIT 1";
+                            SqlInfo.sqlAusfuehren(xcmd); // storniert RGR in 'rgaffaktura'
+                            // McM: storno auch in 'kasse' (falls RGR schon als 'bar bezahlt' verbucht
+                            // wurde)
+                            // auf einnahme = 0 u. 'storno_RGR...' ändern (da Kassenabrechnung nach 'RGR-%'
+                            // sucht)
                             if (stammDatenTools.ZuzahlTools.existsRgrBarInKasse(xreznr)) {
                                 // TODO ?? user & IK auf den stornierenden ändern?
-                                xcmd = "UPDATE kasse SET einnahme='0.00', ktext=CONCAT('storno_',ktext) where rez_nr='"+xreznr+"' AND ktext like 'RGR-%' LIMIT 1"; 
-                                SqlInfo.sqlAusfuehren(xcmd);                                                        // storniert RGR in 'kasse'                            
+                                xcmd = "UPDATE kasse SET einnahme='0.00', ktext=CONCAT('storno_',ktext) where rez_nr='"
+                                        + xreznr + "' AND ktext like 'RGR-%' LIMIT 1";
+                                SqlInfo.sqlAusfuehren(xcmd); // storniert RGR in 'kasse'
                             }
                         } else {
-                            //SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");            // löscht Bar-Zuzahlung    (besser: stornieren)            
-                            xcmd = "UPDATE kasse SET einnahme='0.00', ktext=CONCAT('storno_',ktext) where rez_nr='"+xreznr+"' AND ktext not like 'storno%' LIMIT 1"; 
-                            SqlInfo.sqlAusfuehren(xcmd);                                                            // storniert Bar-Zuzahlung in 'kasse'                            
+                            // SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");
+                            // // löscht Bar-Zuzahlung (besser: stornieren)
+                            xcmd = "UPDATE kasse SET einnahme='0.00', ktext=CONCAT('storno_',ktext) where rez_nr='"
+                                    + xreznr + "' AND ktext not like 'storno%' LIMIT 1";
+                            SqlInfo.sqlAusfuehren(xcmd); // storniert Bar-Zuzahlung in 'kasse'
                         }
-                        //SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");                // löscht Bar-Zuzahlung    _und_ bar bez. RGR
-                    } else {        // Ursprungs-Variante (Steinhilber)
-                        if(stammDatenTools.ZuzahlTools.existsRGR(xreznr)) {
-                            SqlInfo.sqlAusfuehren("delete from rgaffaktura where reznr='"+xreznr+"' and rnr like 'RGR-%' LIMIT 1");    // löscht RGR
+                        // SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");
+                        // // löscht Bar-Zuzahlung _und_ bar bez. RGR
+                    } else { // Ursprungs-Variante (Steinhilber)
+                        if (stammDatenTools.ZuzahlTools.existsRGR(xreznr)) {
+                            SqlInfo.sqlAusfuehren("delete from rgaffaktura where reznr='" + xreznr
+                                    + "' and rnr like 'RGR-%' LIMIT 1"); // löscht RGR
                         }
-                        SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='"+xreznr+"' LIMIT 1");                // löscht Bar-Zuzahlung    _und_ bar bez. RGR                        
+                        SqlInfo.sqlAusfuehren("delete from kasse where rez_nr='" + xreznr + "' LIMIT 1"); // löscht
+                                                                                                          // Bar-Zuzahlung
+                                                                                                          // _und_ bar
+                                                                                                          // bez. RGR
                     }
 
                     // ZZ-Icon in akt. Zeile setzen
@@ -3293,8 +3313,9 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 //                        dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[Integer.parseInt((String)Reha.instance.patpanel.vecaktrez.get(39))],
 //                                            tabaktrez.getSelectedRow(),1);
 
-                        // falls typ des zzstatus (@idx 39) im vecaktrez auf typ ZZStat umgestellt wird, oder get-Methoden erstellt werden, 
-                        // sind die beiden Hilfsvariablen obsolet:
+                            // falls typ des zzstatus (@idx 39) im vecaktrez auf typ ZZStat umgestellt wird,
+                            // oder get-Methoden erstellt werden,
+                            // sind die beiden Hilfsvariablen obsolet:
                             int iZzStat = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(39));
                             String sRezNr = Reha.instance.patpanel.vecaktrez.get(1);
 
@@ -3478,7 +3499,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             if (anfrage != JOptionPane.YES_OPTION) {
                 return;
             }
-            buchen = false;        // hier in RGR-Kopie verzweigen! (Wozu RGR erstellen u. evtl. die Preise ändern? - Ist keine Kopie!)
+            buchen = false; // hier in RGR-Kopie verzweigen! (Wozu RGR erstellen u. evtl. die Preise ändern?
+                            // - Ist keine Kopie!)
         } else {
             // vvv Prüfungen aus der Bar-Quittung auch hier !
             if (Reha.instance.patpanel.vecaktrez.get(39)
@@ -3618,9 +3640,12 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             // boolean testcase = true;
             Map<Object, ImageIcon> icons = new HashMap<Object, ImageIcon>();
             icons.put("Rezeptgebühren kassieren", SystemConfig.hmSysIcons.get("rezeptgebuehr"));
-            // Lemmi 20101218: angehängt  Rezeptgebühr-Rechnung aus dem Rezept heraus erzeugen
-            //icons.put("Rezeptgebühr-Rechnung erstellen", SystemConfig.hmSysIcons.get("privatrechnung"));
-            // McM: 'thematisch einsortiert' u. mit eigenem Icon (match mit Anzeige in Rezeptliste):
+            // Lemmi 20101218: angehängt Rezeptgebühr-Rechnung aus dem Rezept heraus
+            // erzeugen
+            // icons.put("Rezeptgebühr-Rechnung erstellen",
+            // SystemConfig.hmSysIcons.get("privatrechnung"));
+            // McM: 'thematisch einsortiert' u. mit eigenem Icon (match mit Anzeige in
+            // Rezeptliste):
             icons.put("Rezeptgebühr-Rechnung erstellen", SystemConfig.hmSysIcons.get("rezeptgebuehrrechnung"));
             icons.put("BarCode auf Rezept drucken", SystemConfig.hmSysIcons.get("barcode"));
             icons.put("Ausfallrechnung drucken", SystemConfig.hmSysIcons.get("ausfallrechnung"));
@@ -3631,11 +3656,10 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             icons.put("§301 Reha-Fallsteuerung", SystemConfig.hmSysIcons.get("abrdreieins"));
 
             // create a list with some test data
-            JList list = new JList(    new Object[] {"Rezeptgebühren kassieren",  "Rezeptgebühr-Rechnung erstellen",
-                      "BarCode auf Rezept drucken", "Ausfallrechnung drucken", 
-                      "Rezept ab-/aufschließen",      "Privat-/BG-/Nachsorge-Rechnung erstellen",
-                      "Behandlungstage in Clipboard", "Transfer in Historie", 
-                      "§301 Reha-Fallsteuerung" });   
+            JList list = new JList(new Object[] { "Rezeptgebühren kassieren", "Rezeptgebühr-Rechnung erstellen",
+                    "BarCode auf Rezept drucken", "Ausfallrechnung drucken", "Rezept ab-/aufschließen",
+                    "Privat-/BG-/Nachsorge-Rechnung erstellen", "Behandlungstage in Clipboard", "Transfer in Historie",
+                    "§301 Reha-Fallsteuerung" });
             list.setCellRenderer(new IconListRenderer(icons));
             Reha.toolsDlgRueckgabe = -1;
             ToolsDialog tDlg = new ToolsDialog(Reha.getThisFrame(), "Werkzeuge: aktuelle Rezepte", list);
@@ -3660,21 +3684,24 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                     rezeptGebuehr();
                     return;
                 }
-                // Lemmi 20101218: neuer if Block:  Rezeptgebühr-Rechnung aus dem Rezept heraus erzeugen
-                else if(Reha.toolsDlgRueckgabe == 1){
+                // Lemmi 20101218: neuer if Block: Rezeptgebühr-Rechnung aus dem Rezept heraus
+                // erzeugen
+                else if (Reha.toolsDlgRueckgabe == 1) {
                     tDlg = null;
-                    if(!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)){return;}
+                    if (!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
+                        return;
+                    }
                     PointerInfo info = MouseInfo.getPointerInfo();
                     Point location = info.getLocation();
                     doRezeptgebuehrRechnung(location);
-                    
+
 //                    abrRez = new AbrechnungRezept(null);
 //                    this.abrRez.setRechtsAufNull();
 //                    return abrRez;
 //                    abrRez.doRezeptgebuehrRechnung(location);
 
                     return;
-                }else if(Reha.toolsDlgRueckgabe == 2){
+                } else if (Reha.toolsDlgRueckgabe == 2) {
                     tDlg = null;
                     if (!Rechte.hatRecht(Rechte.Rezept_gebuehren, true)) {
                         return;

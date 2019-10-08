@@ -8,7 +8,7 @@ public class Version {
     public static final int revision = 3;
 
     public static String number() {
-        return String.format("%d.%d.%d", major, minor,revision);
+        return String.format("%d.%d.%d", major, minor, revision);
     }
 
 }

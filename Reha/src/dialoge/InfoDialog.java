@@ -25,7 +25,6 @@ import systemEinstellungen.SystemConfig;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-
 public class InfoDialog extends JDialog implements WindowListener {
     /**
      *
@@ -65,7 +64,7 @@ public class InfoDialog extends JDialog implements WindowListener {
     JButton[] buts = { null, null, null };
 
 //    public InfoDialog(String arg1, String infoArt, Vector<Vector<String>> data) {
-    public InfoDialog(String arg1,Vector<Vector<String>> data) {
+    public InfoDialog(String arg1, Vector<Vector<String>> data) {
         super();
         /*
          * System.out.println(arg1); System.out.println(infoArt);
@@ -82,7 +81,7 @@ public class InfoDialog extends JDialog implements WindowListener {
 //        } else if (this.infoArt.equals("offenRGAF")){
 //            this.setContentPane(getOffeneRechnungenInfoContent(data));
 //        } else {    
-            this.setContentPane(getContent());
+        this.setContentPane(getContent());
 //        }
 
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -92,8 +91,8 @@ public class InfoDialog extends JDialog implements WindowListener {
             .validate();
     }
 
-    void activateListener(){
-        kl = new KeyListener(){
+    void activateListener() {
+        kl = new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
             }
@@ -173,15 +172,16 @@ public class InfoDialog extends JDialog implements WindowListener {
     public void windowDeactivated(WindowEvent e) {
     }
 
-    
-    public static String macheNummer(String string){
-        if(string.indexOf("\\") >= 0){
-            return string.substring(0,string.indexOf("\\"));
+    public static String macheNummer(String string) {
+        if (string.indexOf("\\") >= 0) {
+            return string.substring(0, string.indexOf("\\"));
         }
         return string;
     }
-    protected String getSpanStyle(String pix,String color){
-        return "style='font-family: Arial, Helvetica, sans-serif; font-size: "+pix+"px;"+(color.length()>0 ? "color: "+color+";" : "")+ " '>";
+
+    protected String getSpanStyle(String pix, String color) {
+        return "style='font-family: Arial, Helvetica, sans-serif; font-size: " + pix + "px;"
+                + (color.length() > 0 ? "color: " + color + ";" : "") + " '>";
     }
 
     final StringBuffer bufhead = new StringBuffer();
@@ -191,7 +191,8 @@ public class InfoDialog extends JDialog implements WindowListener {
         bufhead.append("<html>\n<head>\n");
         bufhead.append("<STYLE TYPE=\"text/css\">\n");
         bufhead.append("<!--\n");
-        bufhead.append("A{text-decoration:none;background-color:transparent;border:none;font-weight: bold;}\n");    // besser text-decoration:underline?
+        bufhead.append("A{text-decoration:none;background-color:transparent;border:none;font-weight: bold;}\n"); // besser
+                                                                                                                 // text-decoration:underline?
         bufhead.append("A.even{text-decoration:underline;color: #000000; background-color:transparent;border:none}\n");
         bufhead.append("A.odd{text-decoration:underline;color: #FFFFFF;background-color:transparent;border:none}\n");
         bufhead.append("TR.head{font-family: Arial; font-size: 14pt; vertical-align: top;white-space: nowrap; \n");

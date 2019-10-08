@@ -41,6 +41,7 @@ public class OffenepostenTab extends JXPanel implements ChangeListener {
     OffenepostenMahnungen omahnpanel = null;
     OffenepostenEinstellungen oeinstellungpanel = null;
     RehaBillPanel rehaBillPanel = null;
+
     public OffenepostenTab() {
         super();
         setOpaque(false);

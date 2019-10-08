@@ -226,6 +226,7 @@ public class OOTools {
         }
         return arrayList;
     }
+
     /*******************************************************************************************/
     private static boolean sucheNachPlatzhalter(ITextDocument document) {
         IText text = document.getTextService()
@@ -368,41 +369,49 @@ public class OOTools {
         topWindow.toFront();
     }
 
-	/*
-	 * workaround um ausgefülltes Formular in den Vordergrund zu holen:
-	 * legt ein temporäres Dokument an (neue Dokumente werden im Vordergrund geöffnet)
-	 * setzt anschließend den Fokus auf das 'eigentliche' Dokument und 
-	 * schließt das temporäre Dokument wieder
-	 */
-	public static void bringDocToFront(IDocumentService iDocumentService, ITextDocument doc, IDocumentDescriptor descriptor, String url) {
-		final IDocumentService xService = iDocumentService;
-		final ITextDocument xdoc = doc;
-		final IDocumentDescriptor xDescriptor = descriptor;
-		final String xUrl = url;
-		
-		SwingUtilities.invokeLater(new Runnable(){
-			public void run(){
-				IDocument dummyDocument;
-				try {
-					dummyDocument = xService.loadDocument(xUrl, xDescriptor);
-					xdoc.getFrame().getXFrame().getContainerWindow().setVisible(true);
-					xdoc.getFrame().getXFrame().getComponentWindow().setFocus();
-/*
-					if (dummyDocument.getFrame().getXFrame().isTop()){
-						System.out.println("dummyDocument on Top");
-					}else{
-						System.out.println("dummyDocument NOT on Top");
-					}
- */
-					dummyDocument.getFrame().getXFrame().getContainerWindow().setVisible(false);
-					dummyDocument.close();
-				} catch (NOAException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	
-			}
-		});
-	}
+    /*
+     * workaround um ausgefülltes Formular in den Vordergrund zu holen: legt ein
+     * temporäres Dokument an (neue Dokumente werden im Vordergrund geöffnet) setzt
+     * anschließend den Fokus auf das 'eigentliche' Dokument und schließt das
+     * temporäre Dokument wieder
+     */
+    public static void bringDocToFront(IDocumentService iDocumentService, ITextDocument doc,
+            IDocumentDescriptor descriptor, String url) {
+        final IDocumentService xService = iDocumentService;
+        final ITextDocument xdoc = doc;
+        final IDocumentDescriptor xDescriptor = descriptor;
+        final String xUrl = url;
+
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                IDocument dummyDocument;
+                try {
+                    dummyDocument = xService.loadDocument(xUrl, xDescriptor);
+                    xdoc.getFrame()
+                        .getXFrame()
+                        .getContainerWindow()
+                        .setVisible(true);
+                    xdoc.getFrame()
+                        .getXFrame()
+                        .getComponentWindow()
+                        .setFocus();
+                    /*
+                     * if (dummyDocument.getFrame().getXFrame().isTop()){
+                     * System.out.println("dummyDocument on Top"); }else{
+                     * System.out.println("dummyDocument NOT on Top"); }
+                     */
+                    dummyDocument.getFrame()
+                                 .getXFrame()
+                                 .getContainerWindow()
+                                 .setVisible(false);
+                    dummyDocument.close();
+                } catch (NOAException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
     public static void druckerSetzen(ITextDocument textDocument, String drucker) {
         /**********************/
@@ -650,11 +659,14 @@ public class OOTools {
 
     /*******************************************************/
 }
-class TheraPiDocListener implements IDocumentListener{
+
+class TheraPiDocListener implements IDocumentListener {
     Object document = null;
-    public TheraPiDocListener(IDocument document){
+
+    public TheraPiDocListener(IDocument document) {
         this.document = document;
     }
+
     @Override
     public void disposing(IEvent arg0) {
         System.out.println("disposing");
@@ -749,6 +761,6 @@ class TheraPiDocListener implements IDocumentListener{
     public void onUnload(IDocumentEvent arg0) {
         System.out.println("onUnload");
     }
-    
+
 }
 /**************************************/

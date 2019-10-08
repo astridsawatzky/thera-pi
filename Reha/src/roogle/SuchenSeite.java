@@ -159,7 +159,7 @@ public class SuchenSeite extends JXPanel
     public RoogleFenster eltern;
     public boolean nachfolgerloeschen = false;
 
-	public InfoDialogTerminInfo infoDlg = null;
+    public InfoDialogTerminInfo infoDlg = null;
     public KeyListener kl = null;
 
     public AbrechnungDlg abrDlg = null;
@@ -386,7 +386,7 @@ public class SuchenSeite extends JXPanel
                         return;
                     }
                     // infoDlg = new InfoDialog(reznummer, "terminInfo", null);
-                    infoDlg = new InfoDialogTerminInfo(reznummer,null);
+                    infoDlg = new InfoDialogTerminInfo(reznummer, null);
                     infoDlg.pack();
                     infoDlg.setLocationRelativeTo(null);
                     infoDlg.setVisible(true);

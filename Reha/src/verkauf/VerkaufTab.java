@@ -44,7 +44,7 @@ public class VerkaufTab extends JXPanel implements ChangeListener {
     public static int bonEnde = 5;
     public static int suche = 6;
     public static int reload = 7;
-	public static int verkFormulare = 8;
+    public static int verkFormulare = 8;
 
     private static final long serialVersionUID = 1L;
     JVerkaufInternal eltern;
@@ -180,20 +180,20 @@ public class VerkaufTab extends JXPanel implements ChangeListener {
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() throws Exception {
-                        try{
+                        try {
                             String aCmd = e.getActionCommand();
-                            if(aCmd.equals("neu")) {
+                            if (aCmd.equals("neu")) {
                                 aktiviereFunktion(VerkaufTab.neu);
-                            } else if(aCmd.equals("edit")) {
+                            } else if (aCmd.equals("edit")) {
                                 aktiviereFunktion(VerkaufTab.edit);
-                            } else if(aCmd.equals("delete")) {
+                            } else if (aCmd.equals("delete")) {
                                 aktiviereFunktion(VerkaufTab.delete);
-                            } else if(aCmd.equals("bonEnde")) {
+                            } else if (aCmd.equals("bonEnde")) {
                                 aktiviereFunktion(VerkaufTab.bonEnde);
-                            } else if(aCmd.equals("rechnungEnde")) {
+                            } else if (aCmd.equals("rechnungEnde")) {
                                 aktiviereFunktion(VerkaufTab.rechnungEnde);
-							} else if(aCmd.equals("verkFormulare")) {
-								aktiviereFunktion(VerkaufTab.verkFormulare);
+                            } else if (aCmd.equals("verkFormulare")) {
+                                aktiviereFunktion(VerkaufTab.verkFormulare);
                             }
                         } catch (Exception ex) {
                             ex.printStackTrace();

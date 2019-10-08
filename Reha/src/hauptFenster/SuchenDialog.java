@@ -292,9 +292,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             if (suchart == toolBar.getAktRezIdx()) { // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
                 reiheVector.addElement("Rezepte");
             }
-            if(suchart==toolBar.getTelPIdx() 
-                    || suchart==toolBar.getTelGIdx() 
-                    || suchart==toolBar.getTelMIdx()){   // McM 2017-10: eigene Spalten für Telefonnummern
+            if (suchart == toolBar.getTelPIdx() || suchart == toolBar.getTelGIdx() || suchart == toolBar.getTelMIdx()) { // McM
+                                                                                                                         // 2017-10:
+                                                                                                                         // eigene
+                                                                                                                         // Spalten
+                                                                                                                         // für
+                                                                                                                         // Telefonnummern
                 reiheVector.addElement("Telefon");
                 jlb.setText("Telefonnummer suchen: ");
             }
@@ -435,13 +438,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             // Lemmi 20101212: Erweitert um "Patienten mit aktuellen Rezepten"
             String titel = "Suche ";
             String kriterium = toolBar.getKritAsString(suchart);
-            if(suchart==toolBar.getTelPIdx()
-                    || suchart==toolBar.getTelGIdx() 
-                    || suchart==toolBar.getTelMIdx()){
-                titel = titel + "Nummer... "+this.fname+" in ";
+            if (suchart == toolBar.getTelPIdx() || suchart == toolBar.getTelGIdx() || suchart == toolBar.getTelMIdx()) {
+                titel = titel + "Nummer... " + this.fname + " in ";
             } else {
-                titel = titel + "Patient..."+this.fname+" in ";
-            };
+                titel = titel + "Patient..." + this.fname + " in ";
+            }
+            ;
             titel = titel + kriterium;
             jXTitledPanel.setTitle(titel);
             jXTitledPanel.setTitleForeground(Color.WHITE);
@@ -823,34 +825,30 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             }
             // ---- Suchstring zusammensetzen
             sTmp = "";
-        for (String c: sSuchPattern){
-            if (sTmp.isEmpty()){
-                sTmp = fieldname+" LIKE '"+c+"%'";
-            } else {
-                sTmp = sTmp+" OR "+fieldname+" LIKE '"+c+"%'";
-            }
-        }
-        
-        /*
-        // ergibt ein absolut "ungewöhnliches" Ergebnis. 
-        for (int i2 = 0; i2 < sSuchPattern.size();i2++){
-            if(i2 == 2){
-                //steht lediglich ein Vokal was zu einer größeren Menge nicht gewünschter Datensätze führt
-                // ... damit fallen die Pat. unter den Tisch, die mit Umlaut in der DB stehen, aber nach Kassenwechsel wieder die Umschreibung auf der GK haben:
-                //   st jü -> [jü, jue, ju] => v_name LIKE 'jü%' OR v_name LIKE 'jue%'        <- hier bringt's was
-                //   st ju -> [ju, jue, jü] => v_name LIKE 'ju%' OR v_name LIKE 'jue%'        <- hier werden die entscheidenden Treffer ausgeschlossen :-(
-
-                    break;
-                }
+            for (String c : sSuchPattern) {
                 if (sTmp.isEmpty()) {
-                    sTmp = fieldname + " LIKE '" + sSuchPattern.get(i2) + "%'";
+                    sTmp = fieldname + " LIKE '" + c + "%'";
                 } else {
-                    sTmp = sTmp + " OR " + fieldname + " LIKE '" + sSuchPattern.get(i2) + "%'";
+                    sTmp = sTmp + " OR " + fieldname + " LIKE '" + c + "%'";
                 }
             }
-        */        
 
-        // System.out.println("Suchstring: "+sTmp);
+            /*
+             * // ergibt ein absolut "ungewöhnliches" Ergebnis. for (int i2 = 0; i2 <
+             * sSuchPattern.size();i2++){ if(i2 == 2){ //steht lediglich ein Vokal was zu
+             * einer größeren Menge nicht gewünschter Datensätze führt // ... damit fallen
+             * die Pat. unter den Tisch, die mit Umlaut in der DB stehen, aber nach
+             * Kassenwechsel wieder die Umschreibung auf der GK haben: // st jü -> [jü, jue,
+             * ju] => v_name LIKE 'jü%' OR v_name LIKE 'jue%' <- hier bringt's was // st ju
+             * -> [ju, jue, jü] => v_name LIKE 'ju%' OR v_name LIKE 'jue%' <- hier werden
+             * die entscheidenden Treffer ausgeschlossen :-(
+             * 
+             * break; } if (sTmp.isEmpty()) { sTmp = fieldname + " LIKE '" +
+             * sSuchPattern.get(i2) + "%'"; } else { sTmp = sTmp + " OR " + fieldname +
+             * " LIKE '" + sSuchPattern.get(i2) + "%'"; } }
+             */
+
+            // System.out.println("Suchstring: "+sTmp);
             return sTmp;
         }
 
@@ -872,44 +870,70 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             if (suchart == toolBar.getNnVnIdx()) { // "Name Vorname"
                 // 2015-08 McM auf Suche nach Umlaut-Umschreibung erweitert
                 // (besser mit tmp-var für Eingabe (dann reicht 1x trim ...))
-            if (eingabe.contains(" ") ){
-                // sstmt = "Select n_name,v_name,ADS_Date(geboren),pat_intern  from pat5 where n_name LIKE '"+StringTools.Escaped(suche[0].trim()) +"%' AND v_name LIKE '"+StringTools.Escaped(suche[1].trim())+"%' order by n_name,v_name";
-                sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern  from pat5 where ("+SucheKlang("n_name",suche[0])+") AND ("+SucheKlang("v_name",suche[1])+") order by n_name,v_name";
-            } else {
-                sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern from pat5 where ("+SucheKlang("n_name",suche[0])+") order by n_name,v_name,geboren";
-            }
-
-        } else if (suchart == toolBar.getPatIdIdx()){    // "Patienten-ID"
-            sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where pat_intern = '"+suche[0]+"' LIMIT 1";
-        } else if (suchart == toolBar.getVnNnIdx()){  // "Vorname Name"  (Erweiterung von Drud) + Umlaut-Suche (McM)
-
-            if (eingabe.contains(" ") ){
-                sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern  from pat5 where ("+SucheKlang("v_name",suche[0])+") AND ("+SucheKlang("n_name",suche[1])+") order by n_name,v_name";
-            } else {
-                sstmt = "Select n_name,v_name,"+ADS_Date()+",pat_intern from pat5 where ("+SucheKlang("v_name",suche[0])+") order by n_name,v_name,geboren";
-            }
-
-        } else if (suchart == toolBar.getTelPIdx()){ // Telfon privat
-            //sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as geboren,pat_intern from pat5 where telefonp LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
-            sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefonp from pat5 where telefonp LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
-        } else if (suchart == toolBar.getTelGIdx()){// Telefon geschäftilich
-            //sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefong) as geboren,pat_intern from pat5 where telefong LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
-            sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefong from pat5 where telefong LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
-        } else if (suchart == toolBar.getTelMIdx()){// Telefon mobil
-            //sstmt = "select n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as geboren,pat_intern from pat5 where telefonm LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
-            sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y' as geboren,pat_intern,telefonm from pat5 where telefonm LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
-        } else if (suchart == toolBar.getNoteIdx()){ // In Notizen
-            if(suche.length > 1){
-                //Umbauen zur oder- bzw. und-Suche
-                if(suche[1].contains("|")){
-                    sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' OR anamnese LIKE '%"+suche[1].replace("|","")+ "%' ORDER BY n_name,v_name,geboren";
+                if (eingabe.contains(" ")) {
+                    // sstmt = "Select n_name,v_name,ADS_Date(geboren),pat_intern from pat5 where
+                    // n_name LIKE '"+StringTools.Escaped(suche[0].trim()) +"%' AND v_name LIKE
+                    // '"+StringTools.Escaped(suche[1].trim())+"%' order by n_name,v_name";
+                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern  from pat5 where ("
+                            + SucheKlang("n_name", suche[0]) + ") AND (" + SucheKlang("v_name", suche[1])
+                            + ") order by n_name,v_name";
                 } else {
-                    sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' AND anamnese LIKE '%"+suche[1]+ "%' ORDER BY n_name,v_name,geboren";
+                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern from pat5 where ("
+                            + SucheKlang("n_name", suche[0]) + ") order by n_name,v_name,geboren";
                 }
-            } else {
-                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"+suche[0]+"%' ORDER BY n_name,v_name,geboren";
-            }
-        } else if (suchart == toolBar.getAktRezIdx()){            // Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
+
+            } else if (suchart == toolBar.getPatIdIdx()) { // "Patienten-ID"
+                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where pat_intern = '"
+                        + suche[0] + "' LIMIT 1";
+            } else if (suchart == toolBar.getVnNnIdx()) { // "Vorname Name" (Erweiterung von Drud) + Umlaut-Suche (McM)
+
+                if (eingabe.contains(" ")) {
+                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern  from pat5 where ("
+                            + SucheKlang("v_name", suche[0]) + ") AND (" + SucheKlang("n_name", suche[1])
+                            + ") order by n_name,v_name";
+                } else {
+                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern from pat5 where ("
+                            + SucheKlang("v_name", suche[0]) + ") order by n_name,v_name,geboren";
+                }
+
+            } else if (suchart == toolBar.getTelPIdx()) { // Telfon privat
+                // sstmt = "select
+                // n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as
+                // geboren,pat_intern from pat5 where telefonp LIKE '%"+suche[0]+"%' ORDER BY
+                // n_name,v_name,geboren";
+                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefonp from pat5 where telefonp LIKE '%"
+                        + suche[0] + "%' ORDER BY n_name,v_name,geboren";
+            } else if (suchart == toolBar.getTelGIdx()) {// Telefon geschäftilich
+                // sstmt = "select
+                // n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefong) as
+                // geboren,pat_intern from pat5 where telefong LIKE '%"+suche[0]+"%' ORDER BY
+                // n_name,v_name,geboren";
+                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefong from pat5 where telefong LIKE '%"
+                        + suche[0] + "%' ORDER BY n_name,v_name,geboren";
+            } else if (suchart == toolBar.getTelMIdx()) {// Telefon mobil
+                // sstmt = "select
+                // n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as
+                // geboren,pat_intern from pat5 where telefonm LIKE '%"+suche[0]+"%' ORDER BY
+                // n_name,v_name,geboren";
+                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y' as geboren,pat_intern,telefonm from pat5 where telefonm LIKE '%"
+                        + suche[0] + "%' ORDER BY n_name,v_name,geboren";
+            } else if (suchart == toolBar.getNoteIdx()) { // In Notizen
+                if (suche.length > 1) {
+                    // Umbauen zur oder- bzw. und-Suche
+                    if (suche[1].contains("|")) {
+                        sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"
+                                + suche[0] + "%' OR anamnese LIKE '%" + suche[1].replace("|", "")
+                                + "%' ORDER BY n_name,v_name,geboren";
+                    } else {
+                        sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"
+                                + suche[0] + "%' AND anamnese LIKE '%" + suche[1] + "%' ORDER BY n_name,v_name,geboren";
+                    }
+                } else {
+                    sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"
+                            + suche[0] + "%' ORDER BY n_name,v_name,geboren";
+                }
+            } else if (suchart == toolBar.getAktRezIdx()) { // Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen
+                                                            // Rezepten"
                 sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, GROUP_CONCAT(r.rez_nr ORDER BY r.rez_nr ASC SEPARATOR ', ') FROM verordn AS r INNER JOIN pat5 AS p where p.pat_intern = r.pat_intern GROUP BY p.pat_intern ORDER BY p.n_name";
             } else {
                 return;
@@ -922,10 +946,11 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                     rs = stmt.executeQuery(sstmt);
                     Vector<String> rowVector = new Vector<String>();
 //                int reihen = (suchart == toolBar.getAktRezIdx() ? 5 : 4 );
-                int reihen = rs.getMetaData().getColumnCount();
-                while( rs.next()){
-                    rowVector.clear();
-                    for(int i = 1; i <= reihen ; i++){  // Lemmi 20101212: optional von 4 auf 5 erweitert
+                    int reihen = rs.getMetaData()
+                                   .getColumnCount();
+                    while (rs.next()) {
+                        rowVector.clear();
+                        for (int i = 1; i <= reihen; i++) { // Lemmi 20101212: optional von 4 auf 5 erweitert
                             rowVector.addElement(rs.getString(i) != null ? rs.getString(i) : "");
                         }
                         setzeReihe((Vector<String>) rowVector.clone());

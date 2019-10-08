@@ -38,7 +38,7 @@ import environment.Path;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
-public class OcKVK implements CardListener{
+public class OcKVK implements CardListener {
 
     // CLA || INS || P1 || P2 || Le (= erwartete Länge der Daten)
     final byte[] CMD_READ_BINARY = { (byte) 0x00, (byte) 0xB0, (byte) 0x00, (byte) 0x00, (byte) 0x00 };
@@ -104,7 +104,8 @@ public class OcKVK implements CardListener{
 
     public static boolean lastCardIsEGK = false;
     CardListener listen;
-    private Logger  logger = LoggerFactory.getLogger(OcKVK.class);
+    private Logger logger = LoggerFactory.getLogger(OcKVK.class);
+
     public OcKVK() throws Exception, UnsatisfiedLinkError {
         // SCR335
         // ctpcsc31kv
@@ -732,7 +733,7 @@ public class OcKVK implements CardListener{
 
     }
 
-    public class CardListener  {
+    public class CardListener {
         private Card smartcard = null;
         private CardTerminal terminal = null;
         private int slotID = 0;
@@ -779,7 +780,7 @@ public class OcKVK implements CardListener{
         }
 
         public void cardRemoved(CardTerminalEvent event) {
-             System.out.println("karte ausgezogen");
+            System.out.println("karte ausgezogen");
             if ((event.getSlotID() == slotID) && (event.getCardTerminal() == terminal)) {
                 smartcard = null;
                 terminal = null;
@@ -804,22 +805,23 @@ public class OcKVK implements CardListener{
 
     }
 
-@Override
-public void cardInserted(CardTerminalEvent cardTerminalEvent) {
-    System.out.println("yay in ockvk");
+    @Override
+    public void cardInserted(CardTerminalEvent cardTerminalEvent) {
+        System.out.println("yay in ockvk");
 
-    logger.debug(cardTerminalEvent.getCardTerminal().getName());
-    try {
-        listen.cardInserted(cardTerminalEvent);
-    } catch (CardException e) {
-        System.out.println(e);
+        logger.debug(cardTerminalEvent.getCardTerminal()
+                                      .getName());
+        try {
+            listen.cardInserted(cardTerminalEvent);
+        } catch (CardException e) {
+            System.out.println(e);
+        }
+
     }
 
-}
+    @Override
+    public void cardRemoved(CardTerminalEvent cardTerminalEvent) {
+        listen.cardRemoved(cardTerminalEvent);
 
-@Override
-public void cardRemoved(CardTerminalEvent cardTerminalEvent) {
-   listen.cardRemoved(cardTerminalEvent);
-
-}
+    }
 }

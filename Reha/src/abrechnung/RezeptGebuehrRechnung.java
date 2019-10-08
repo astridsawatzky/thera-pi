@@ -145,11 +145,12 @@ public class RezeptGebuehrRechnung extends JXDialog
         tfs[3].setText(hmRezgeb.get("<rgpauschale>"));
         tfs[4].setText(hmRezgeb.get("<rgbehandlung>"));
     }
-    private void setzeFelderOhneBuchung(){
-        try{
-            String cmd = "select reznr,rdatum,rgbetrag,rpbetrag from rgaffaktura where reznr='"+
-                        hmRezgeb.get("<rgreznum>")+"' and rnr like 'RGR-%' LIMIT 1";
-            //System.out.println(cmd);
+
+    private void setzeFelderOhneBuchung() {
+        try {
+            String cmd = "select reznr,rdatum,rgbetrag,rpbetrag from rgaffaktura where reznr='"
+                    + hmRezgeb.get("<rgreznum>") + "' and rnr like 'RGR-%' LIMIT 1";
+            // System.out.println(cmd);
             Vector<Vector<String>> vec = SqlInfo.holeFelder(cmd);
             if (vec.size() <= 0) {
                 JOptionPane.showMessageDialog(null,

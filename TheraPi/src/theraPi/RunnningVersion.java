@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 
 public class RunnningVersion {
     protected int unterstuetzte = 8;
-    private Logger logger =LoggerFactory.getLogger(RunnningVersion.class);;
+    private Logger logger = LoggerFactory.getLogger(RunnningVersion.class);;
 
     boolean isSupported() {
         try {
 
-            return versionnumber() >=required();
+            return versionnumber() >= required();
 
         } catch (Exception e) {
 
@@ -21,12 +21,15 @@ public class RunnningVersion {
 
     private int versionnumber() {
         String version = current();
-        if(version.startsWith("1.")) {
+        if (version.startsWith("1.")) {
             version = version.substring(2, 3);
         } else {
             int dot = version.indexOf(".");
-            if(dot != -1) { version = version.substring(0, dot); }
-        } return Integer.parseInt(version);
+            if (dot != -1) {
+                version = version.substring(0, dot);
+            }
+        }
+        return Integer.parseInt(version);
     }
 
     int required() {
@@ -35,7 +38,7 @@ public class RunnningVersion {
 
     String current() {
         return Runtime.class.getPackage()
-                .getSpecificationVersion();
+                            .getSpecificationVersion();
     }
 
 }

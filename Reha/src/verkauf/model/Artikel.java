@@ -172,36 +172,8 @@ public class Artikel {
         return SqlInfo.gibtsSchon(sql);
     }
 
-	private static Vector<Vector<String>> formatiereArtikelDaten(Vector<String> artikelIDs) {
-		DecimalFormat df = new DecimalFormat("0.00");
-		Vector<Vector<String>> daten = new Vector<Vector<String>>();
-		//System.out.println(artikelIDs.size());
-		while(!artikelIDs.isEmpty()) {
-			Vector<String> artikel = new Vector<String>();
-			Artikel a = new Artikel(Integer.parseInt(artikelIDs.get(0)));
-			artikelIDs.remove(0);
-			artikel.add(String.valueOf(a.getEan()));
-			artikel.add(String.valueOf(a.getBeschreibung()));
-			artikel.add(df.format(a.getPreis()));
-			artikel.add(df.format(a.getEinkaufspreis()));
-			artikel.add(df.format(a.getMwst()));
-			if(a.getLieferant() != -1) {
-				artikel.add(new Lieferant(a.getLieferant()).toString());
-			} else {
-				artikel.add("");
-			}
-			artikel.add(df.format(a.getLagerstand()));
-			artikel.add(String.valueOf(a.id));
-			daten.add(artikel);
-		}
-		return daten;		
-	}
-	
-    public static Vector<Vector<String>> liefereArtikelDaten() {
-        String sql = "SELECT verkartikel.verkartikelID FROM verkartikel;";
-//		DecimalFormat df = new DecimalFormat("0.00");
-        Vector<String> artikelIDs = SqlInfo.holeFeld(sql);
-/*
+    private static Vector<Vector<String>> formatiereArtikelDaten(Vector<String> artikelIDs) {
+        DecimalFormat df = new DecimalFormat("0.00");
         Vector<Vector<String>> daten = new Vector<Vector<String>>();
         // System.out.println(artikelIDs.size());
         while (!artikelIDs.isEmpty()) {
@@ -222,10 +194,29 @@ public class Artikel {
             artikel.add(String.valueOf(a.id));
             daten.add(artikel);
         }
-        // System.out.println("Austritt aus liefereArtikelDaten");
         return daten;
- */
-		return(formatiereArtikelDaten(artikelIDs));
+    }
+
+    public static Vector<Vector<String>> liefereArtikelDaten() {
+        String sql = "SELECT verkartikel.verkartikelID FROM verkartikel;";
+//		DecimalFormat df = new DecimalFormat("0.00");
+        Vector<String> artikelIDs = SqlInfo.holeFeld(sql);
+        /*
+         * Vector<Vector<String>> daten = new Vector<Vector<String>>(); //
+         * System.out.println(artikelIDs.size()); while (!artikelIDs.isEmpty()) {
+         * Vector<String> artikel = new Vector<String>(); Artikel a = new
+         * Artikel(Integer.parseInt(artikelIDs.get(0))); artikelIDs.remove(0);
+         * artikel.add(String.valueOf(a.getEan()));
+         * artikel.add(String.valueOf(a.getBeschreibung()));
+         * artikel.add(df.format(a.getPreis()));
+         * artikel.add(df.format(a.getEinkaufspreis()));
+         * artikel.add(df.format(a.getMwst())); if (a.getLieferant() != -1) {
+         * artikel.add(new Lieferant(a.getLieferant()).toString()); } else {
+         * artikel.add(""); } artikel.add(df.format(a.getLagerstand()));
+         * artikel.add(String.valueOf(a.id)); daten.add(artikel); } //
+         * System.out.println("Austritt aus liefereArtikelDaten"); return daten;
+         */
+        return (formatiereArtikelDaten(artikelIDs));
     }
 
     public static Vector<Vector<String>> sucheArtikelDaten(String filter) {
@@ -234,30 +225,21 @@ public class Artikel {
         // System.out.println(sql);
 //      DecimalFormat df = new DecimalFormat("0.00");
         Vector<String> artikelIDs = SqlInfo.holeFeld(sql);
-        //System.out.println(artikelIDs.size());
-/*
-        Vector<Vector<String>> daten = new Vector<Vector<String>>();
-        while (!artikelIDs.isEmpty()) {
-            Vector<String> artikel = new Vector<String>();
-            Artikel a = new Artikel(Integer.parseInt(artikelIDs.get(0)));
-            artikelIDs.remove(0);
-            artikel.add(String.valueOf(a.getEan()));
-            artikel.add(String.valueOf(a.getBeschreibung()));
-            artikel.add(df.format(a.getPreis()));
-            artikel.add(df.format(a.getEinkaufspreis()));
-            if (a.getLieferant() != -1) {
-                artikel.add(new Lieferant(a.getLieferant()).toString());
-            } else {
-                artikel.add("");
-            }
-            artikel.add(String.valueOf(a.getLagerstand()));
-            artikel.add(String.valueOf(a.id));
-            daten.add(artikel);
-        }
-        // System.out.println("Austritt aus sucheArtikelDaten");
-        return daten;
- */
-		return(formatiereArtikelDaten(artikelIDs));
+        // System.out.println(artikelIDs.size());
+        /*
+         * Vector<Vector<String>> daten = new Vector<Vector<String>>(); while
+         * (!artikelIDs.isEmpty()) { Vector<String> artikel = new Vector<String>();
+         * Artikel a = new Artikel(Integer.parseInt(artikelIDs.get(0)));
+         * artikelIDs.remove(0); artikel.add(String.valueOf(a.getEan()));
+         * artikel.add(String.valueOf(a.getBeschreibung()));
+         * artikel.add(df.format(a.getPreis()));
+         * artikel.add(df.format(a.getEinkaufspreis())); if (a.getLieferant() != -1) {
+         * artikel.add(new Lieferant(a.getLieferant()).toString()); } else {
+         * artikel.add(""); } artikel.add(String.valueOf(a.getLagerstand()));
+         * artikel.add(String.valueOf(a.id)); daten.add(artikel); } //
+         * System.out.println("Austritt aus sucheArtikelDaten"); return daten;
+         */
+        return (formatiereArtikelDaten(artikelIDs));
     }
 
     public static void entferneLieferant(int lieferantID) {
@@ -265,9 +247,10 @@ public class Artikel {
         SqlInfo.sqlAusfuehren(sql);
     }
 
-	public static String getNeuesteArtikelID (){
-		String sql = "SELECT verkartikel.ean FROM verkartikel where verkartikel.verkartikelID = (select max(verkartikel.verkartikelID) FROM verkartikel)";
-		String newest = SqlInfo.holeFeld(sql).firstElement();
-		return newest;
-	}
+    public static String getNeuesteArtikelID() {
+        String sql = "SELECT verkartikel.ean FROM verkartikel where verkartikel.verkartikelID = (select max(verkartikel.verkartikelID) FROM verkartikel)";
+        String newest = SqlInfo.holeFeld(sql)
+                               .firstElement();
+        return newest;
+    }
 }

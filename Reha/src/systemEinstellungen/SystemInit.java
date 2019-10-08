@@ -260,7 +260,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
          * solange dies so ist werden die OffenenPosten wieder zurückgebaut auf deren
          * ursprüngliche Fassung
          */
-        treeitem = new DefaultMutableTreeNode( "Offene Posten & Mahnung");
+        treeitem = new DefaultMutableTreeNode("Offene Posten & Mahnung");
         node.add(treeitem);
         root.add(node);
 

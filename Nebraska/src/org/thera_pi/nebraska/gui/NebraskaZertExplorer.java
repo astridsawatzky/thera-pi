@@ -49,7 +49,7 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
      *
      */
     private static final long serialVersionUID = -7368787318044651022L;
-    private static final DateTimeFormatter  ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     public static X509Certificate[] annahmeCerts = null;
     JXPanel content = null;

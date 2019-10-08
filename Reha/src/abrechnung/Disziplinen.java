@@ -61,13 +61,14 @@ public class Disziplinen {
         listTypeOfVO.toArray(typeOfVerordnung); // ... und fuellen
         this.cmbDiszi = new JRtaComboBox(typeOfVerordnung);
         String initVal = SystemConfig.initRezeptKlasse;
-        if (initVal.equals(null) || initVal.isEmpty()){
-            initVal = SystemConfig.rezeptKlassenAktiv.get(0).get(0);
+        if (initVal.equals(null) || initVal.isEmpty()) {
+            initVal = SystemConfig.rezeptKlassenAktiv.get(0)
+                                                     .get(0);
         }
-        if (initVal.equals(null) || initVal.isEmpty()){
+        if (initVal.equals(null) || initVal.isEmpty()) {
             initVal = listTypeOfVO.get(0);
         }
-        cmbDiszi.setSelectedItem(initVal);                        // default setzen
+        cmbDiszi.setSelectedItem(initVal); // default setzen
 
         // weitere ComboBox mit nur den aktiven Rezeptklassen erzeugen
         listActiveTypeOfVO = new ArrayList<String>();
@@ -112,7 +113,7 @@ public class Disziplinen {
     }
 
     /**
-     * liefert Index der als Kurzbezeichnung (z.B. "Physio") uebergebenen Disziplin 
+     * liefert Index der als Kurzbezeichnung (z.B. "Physio") uebergebenen Disziplin
      */
     public int getIndex(String Disziplin) {
         return diszis.indexOf(Disziplin);
@@ -150,7 +151,7 @@ public class Disziplinen {
     }
 
     /**
-     * liefert den Rezeptklasse-Prefix (z.B. "KG") fuer die uebergebene Disziplin 
+     * liefert den Rezeptklasse-Prefix (z.B. "KG") fuer die uebergebene Disziplin
      */
     public String getRezClass(int Disziplin) {
         return rezeptKlassen[Disziplin];

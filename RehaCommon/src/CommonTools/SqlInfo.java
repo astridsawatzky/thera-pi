@@ -954,7 +954,7 @@ public class SqlInfo {
             retvec.clear();
             retvec = null;
         } catch (SQLException ev) {
-          logger.error("",  ev);
+            logger.error("", ev);
             // System.out.println("SQLState: " + ev.getSQLState());
             // System.out.println("VendorError: " + ev.getErrorCode());
         }

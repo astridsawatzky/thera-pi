@@ -20,7 +20,11 @@ import systemEinstellungen.SystemPreislisten;
 public class ZuzahlTools {
     /** EnumMap anlegen, mit ZuZahlStatus als key, Icon als value **/
     public enum ZZStat {
-        ZUZAHLFREI, ZUZAHLOK, ZUZAHLNICHTOK, ZUZAHLRGR, ZUZAHLNOTSET
+        ZUZAHLFREI,
+        ZUZAHLOK,
+        ZUZAHLNICHTOK,
+        ZUZAHLRGR,
+        ZUZAHLNOTSET
     }
 
     static EnumMap<ZZStat, ImageIcon> zzIcon = new EnumMap<ZZStat, ImageIcon>(ZZStat.class); // ersetzt das imgzuzahl[]

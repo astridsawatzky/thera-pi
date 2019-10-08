@@ -148,15 +148,12 @@ import systemEinstellungen.SystemPreislisten;
 import systemTools.AdressTools;
 import systemTools.ListenerTools;
 
-
-
-
 /**
  * @author Admin
  *
  */
-public class AbrechnungRezept extends JXPanel 
-        implements HyperlinkListener, ActionListener, MouseListener, PopupMenuListener, PropertyChangeListener, ComponentListener{
+public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener, MouseListener,
+        PopupMenuListener, PropertyChangeListener, ComponentListener {
     /**
      *
      */
@@ -182,9 +179,9 @@ public class AbrechnungRezept extends JXPanel
 
     Vector<Vector<String>> vectage = null;
     Rezept aktRezept = new Rezept();
-    Vector<Vector<String>>vec_pat = null;
-    Vector<Vector<String>>vec_term = null;
-    Vector<Vector<String>>vec_hb = null;
+    Vector<Vector<String>> vec_pat = null;
+    Vector<Vector<String>> vec_term = null;
+    Vector<Vector<String>> vec_hb = null;
 
     Vector<Vector<String>> vec_kuerzel = new Vector<Vector<String>>();
     Vector<String> kundid = new Vector<String>();
@@ -307,7 +304,7 @@ public class AbrechnungRezept extends JXPanel
     boolean ohneDrecksPauschale = false;
 
     boolean inParseHtml = false;
-    private boolean vec_rez_valid = false;        // flag, ob vec_rez gültig ist 
+    private boolean vec_rez_valid = false; // flag, ob vec_rez gültig ist
 
     private TageTreeSize tts = null;
     private String currBerichtId = "";
@@ -323,21 +320,23 @@ public class AbrechnungRezept extends JXPanel
         cmbkuerzel.setActionCommand("cmbkuerzel");
         cmbkuerzel.addActionListener(this);
         JXPanel tmp = getSplitPane();
-        add(tmp,BorderLayout.CENTER);
+        add(tmp, BorderLayout.CENTER);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void run(){
-                jSplitOU.setDividerLocation(getHeight()-200);
-                if (SystemConfig.hmAbrechnung.get("keepTTSize").equals("1")) {                // TageTreeSize Werte in ini gespeichert (McM)
+            public void run() {
+                jSplitOU.setDividerLocation(getHeight() - 200);
+                if (SystemConfig.hmAbrechnung.get("keepTTSize")
+                                             .equals("1")) { // TageTreeSize Werte in ini gespeichert (McM)
                     int maxBehTage = Integer.parseInt(SystemConfig.hmAbrechnung.get("maxBehTage"));
-                    INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "abrechnung.ini");
+                    INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                            "abrechnung.ini");
                     String section = "HMGKVRechnung";
-                    for(int i = 1;i <= maxBehTage ;i++){
-                        String key = "TTS_"+i;
-                        if ( inif.getStringProperty(section, key) != null ){                // Eintrag in ini vorhanden?
-                            tts.setDaysAndSize(i,inif.getIntegerProperty(section, key));
-                            System.out.println("read TTS_"+i+ " = " + inif.getIntegerProperty(section, key));
+                    for (int i = 1; i <= maxBehTage; i++) {
+                        String key = "TTS_" + i;
+                        if (inif.getStringProperty(section, key) != null) { // Eintrag in ini vorhanden?
+                            tts.setDaysAndSize(i, inif.getIntegerProperty(section, key));
+                            System.out.println("read TTS_" + i + " = " + inif.getIntegerProperty(section, key));
                         }
                     }
                 }
@@ -346,55 +345,57 @@ public class AbrechnungRezept extends JXPanel
         tmp.addComponentListener(this);
     }
 
-    private JXPanel getSplitPane(){
+    private JXPanel getSplitPane() {
         JXPanel jpan = new JXPanel();
         jpan.setLayout(new BorderLayout());
-        jSplitOU =  UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT,
-                getHTMLPanel(),
-                getTageTree() ); 
+        jSplitOU = UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT, getHTMLPanel(), getTageTree());
         jSplitOU.setDividerSize(7);
         jSplitOU.setDividerBorderVisible(true);
         jSplitOU.setName("BrowserSplitObenUnten");
         jSplitOU.setOneTouchExpandable(true);
-        //jSplitOU.setDividerLocation(jpan.getHeight());
+        // jSplitOU.setDividerLocation(jpan.getHeight());
 
         jSplitOU.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, this);
 
-        jpan.add(getToolbar(),BorderLayout.NORTH);
-        jpan.add(jSplitOU,BorderLayout.CENTER);
-        //jpan.addComponentListener(this);
+        jpan.add(getToolbar(), BorderLayout.NORTH);
+        jpan.add(jSplitOU, BorderLayout.CENTER);
+        // jpan.addComponentListener(this);
 
         return jpan;
     }
 
-    private void keepDayTreeSize(UIFSplitPane sPane){
-        if (SystemConfig.hmAbrechnung.get("keepTTSize").equals("0")) {    // Fkt. abgeschaltet?
+    private void keepDayTreeSize(UIFSplitPane sPane) {
+        if (SystemConfig.hmAbrechnung.get("keepTTSize")
+                                     .equals("0")) { // Fkt. abgeschaltet?
             return;
         }
         int yPos = sPane.getDividerLocation();
-        int max = sPane.getHeight()-sPane.getDividerSize();
-        if ((yPos > 0) && (yPos < max)){
-            tts.setTageTreeSize(yPos,max);                        
+        int max = sPane.getHeight() - sPane.getDividerSize();
+        if ((yPos > 0) && (yPos < max)) {
+            tts.setTageTreeSize(yPos, max);
         }
     }
-    
-     /* 
+
+    /*
      * überwacht Veränderungen am Split-Panel Divider
+     * 
      * @author McM 1606
      */
-        @Override
-        public void propertyChange(PropertyChangeEvent pce) {
-            String dummy = pce.getPropertyName();
-            if (pce.getPropertyName() == JSplitPane.DIVIDER_LOCATION_PROPERTY){    // ? lastDividerLocation ?
-                // resize TageTree, passend zur Anzahl der Behandlungstage -> merken für divider Positionierung (McM)
-                // außer 0 u. jSplitOU.getHeight()-jSplitOU.getDividerSize() (= ganzes Fenster)
-                //System.out.println("Split Pane "+pce.getPropertyName()+": "+jSplitOU.getDividerLocation()+" von "+jSplitOU.getHeight());
-                keepDayTreeSize(jSplitOU);
-            }
+    @Override
+    public void propertyChange(PropertyChangeEvent pce) {
+        String dummy = pce.getPropertyName();
+        if (pce.getPropertyName() == JSplitPane.DIVIDER_LOCATION_PROPERTY) { // ? lastDividerLocation ?
+            // resize TageTree, passend zur Anzahl der Behandlungstage -> merken für divider
+            // Positionierung (McM)
+            // außer 0 u. jSplitOU.getHeight()-jSplitOU.getDividerSize() (= ganzes Fenster)
+            // System.out.println("Split Pane "+pce.getPropertyName()+":
+            // "+jSplitOU.getDividerLocation()+" von "+jSplitOU.getHeight());
+            keepDayTreeSize(jSplitOU);
         }
+    }
 
-    private JScrollPane getHTMLPanel(){
-        htmlPane = new JEditorPane(/*initialURL*/);
+    private JScrollPane getHTMLPanel() {
+        htmlPane = new JEditorPane(/* initialURL */);
         htmlPane.setContentType("text/html");
         htmlPane.setEditable(false);
         htmlPane.setOpaque(false);
@@ -498,9 +499,9 @@ public class AbrechnungRezept extends JXPanel
                 return s1.compareTo(s2);
             }
         };
-        Collections.sort(vec_kuerzel,comparator);
-        //////System.out.println("Aus Funktion setKuerzelVec="+vec_kuerzel);
-        mycomb2.setVector(vec_kuerzel,0,1);
+        Collections.sort(vec_kuerzel, comparator);
+        ////// System.out.println("Aus Funktion setKuerzelVec="+vec_kuerzel);
+        mycomb2.setVector(vec_kuerzel, 0, 1);
 
     }
 
@@ -511,13 +512,16 @@ public class AbrechnungRezept extends JXPanel
     public void setTageDrucken(boolean drucken) {
         this.tagedrucken = drucken;
     }
-    public void sperreAbrechnung(){
+
+    public void sperreAbrechnung() {
         tbbuts[3].setEnabled(false);
     }
-    public void erlaubeAbrechnung(){
+
+    public void erlaubeAbrechnung() {
         tbbuts[3].setEnabled(true);
     }
-    public boolean setNewRez(String rez,boolean schonfertig,String aktDisziplin){
+
+    public boolean setNewRez(String rez, boolean schonfertig, String aktDisziplin) {
 //        try{
 //            String dummy1 = rez.split(",")[2];
 //            String dummy2 = dummy1.split("-")[0];
@@ -531,7 +535,7 @@ public class AbrechnungRezept extends JXPanel
             aktRezNum.setText(rez);
             setKuerzelVec(rez, preisgr);
             setWerte(rez);
-                regleAbrechnungsModus();        // sucheRezept() läuft gar nicht? Nö, macht scheinbar setWerte()
+            regleAbrechnungsModus(); // sucheRezept() läuft gar nicht? Nö, macht scheinbar setWerte()
             Reha.instance.progressStarten(false);
         } else {
             ////// System.out.println("Einlesen aus Edifact-Daten");
@@ -550,7 +554,7 @@ public class AbrechnungRezept extends JXPanel
                 doTreeRezeptWertermitteln();
 
                 regleAbrechnungsModus();
-                    parseHTMLuniq(rez);
+                parseHTMLuniq(rez);
 
                 doPositionenErmitteln();
             } else {
@@ -559,14 +563,17 @@ public class AbrechnungRezept extends JXPanel
             }
 
         }
-            if (SystemConfig.hmAbrechnung.get("keepTTSize").equals("1")) {
-                //int allePositionen = vec_tabelle.size();            // alle Behandl. (x/Tag) + HB + Arztber. (16160: 13)
-                //int behTage = jXTreeTable.getRowCount();            // 16160: 6 (ok) -> hmap für divider Positionierung (McM)
-                int rows = jXTreeTable.getRowCount();                // akt Anz. Zeilen in TageTree
-                //System.out.println("AbrechnungRezept->setNewRez: "+rows+" Zeilen");
-                tts.setAnzTage(rows);
-                jSplitOU.setDividerLocation(tts.getTageTreeSize(rows));
-            }
+        if (SystemConfig.hmAbrechnung.get("keepTTSize")
+                                     .equals("1")) {
+            // int allePositionen = vec_tabelle.size(); // alle Behandl. (x/Tag) + HB +
+            // Arztber. (16160: 13)
+            // int behTage = jXTreeTable.getRowCount(); // 16160: 6 (ok) -> hmap für divider
+            // Positionierung (McM)
+            int rows = jXTreeTable.getRowCount(); // akt Anz. Zeilen in TageTree
+            // System.out.println("AbrechnungRezept->setNewRez: "+rows+" Zeilen");
+            tts.setAnzTage(rows);
+            jSplitOU.setDividerLocation(tts.getTageTreeSize(rows));
+        }
         rezeptSichtbar = true;
         /*
          * }catch(Exception ex){ ex.printStackTrace(); JOptionPane.showMessageDialog(
@@ -612,8 +619,8 @@ public class AbrechnungRezept extends JXPanel
 
         jXTreeTable.setOpaque(true);
         jXTreeTable.setRootVisible(false);
-        
-      //ComboBox von Behandlungsart
+
+        // ComboBox von Behandlungsart
         mycomb2 = new MyTableComboBox();
         ((JRtaComboBox) mycomb2.getComponent()).setActionCommand("kuerzel");
         ((JRtaComboBox) mycomb2.getComponent()).addActionListener(this);
@@ -667,17 +674,11 @@ public class AbrechnungRezept extends JXPanel
                            getVectorFromNodes();
                            doTreeRezeptWertermitteln();
 //                doPositionenErmitteln();
-/*
-                while(inParseHtml){
-                               try {
-                                   Thread.sleep(25);
-                               } catch (InterruptedException ex) {
-                                   ex.printStackTrace();
-                               }
-                           }
-                parseHTML(aktRezept.getRezNb());    
- */
-                parseHTMLuniq(aktRezept.getRezNb());
+                           /*
+                            * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+                            * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+                            */
+                           parseHTMLuniq(aktRezept.getRezNb());
                        }
 
                        @Override
@@ -779,16 +780,10 @@ public class AbrechnungRezept extends JXPanel
         jXTreeTable.repaint();
         // aktualisiereTree();
         doTreeRezeptWertermitteln();
-/*
-        while(inParseHtml){
-            try {
-                Thread.sleep(25);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-        parseHTML(aktRezept.getRezNb());    
- */
+        /*
+         * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+         * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+         */
         parseHTMLuniq(aktRezept.getRezNb());
     }
 
@@ -859,9 +854,9 @@ public class AbrechnungRezept extends JXPanel
             rezeptFertig = false;
             new SwingWorker<Void, Void>() {
                 @Override
-                protected Void doInBackground()
-                        throws Exception {
-                    SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"+aktRezept.getRezNb()+"' LIMIT 1");
+                protected Void doInBackground() throws Exception {
+                    SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"
+                            + aktRezept.getRezNb() + "' LIMIT 1");
                     eltern.setKassenUmsatzNeu();
                     return null;
                 }
@@ -886,9 +881,10 @@ public class AbrechnungRezept extends JXPanel
                 rezeptFertig = true;
                 new SwingWorker<Void, Void>() {
                     @Override
-                    protected Void doInBackground()
-                            throws Exception {
-                        SqlInfo.sqlAusfuehren("update fertige set ediok='T',edifact='"+StringTools.Escaped(edibuf.toString())+"' where rez_nr='"+aktRezept.getRezNb()+"' LIMIT 1");
+                    protected Void doInBackground() throws Exception {
+                        SqlInfo.sqlAusfuehren(
+                                "update fertige set ediok='T',edifact='" + StringTools.Escaped(edibuf.toString())
+                                        + "' where rez_nr='" + aktRezept.getRezNb() + "' LIMIT 1");
                         eltern.setKassenUmsatzNeu();
                         return null;
                     }
@@ -899,9 +895,9 @@ public class AbrechnungRezept extends JXPanel
                 rezeptFertig = false;
                 new SwingWorker<Void, Void>() {
                     @Override
-                    protected Void doInBackground()
-                            throws Exception {
-                        SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"+aktRezept.getRezNb()+"' LIMIT 1");
+                    protected Void doInBackground() throws Exception {
+                        SqlInfo.sqlAusfuehren("update fertige set ediok='F',edifact='' where rez_nr='"
+                                + aktRezept.getRezNb() + "' LIMIT 1");
                         return null;
                     }
 
@@ -1195,19 +1191,13 @@ public class AbrechnungRezept extends JXPanel
         if (tog.isSelected()) {
             eltern.abrechnungsModus = eltern.ABR_MODE_IV;
             tog.setIcon(SystemConfig.hmSysIcons.get("abriv"));
-            if(this.jXTreeTable.getRowCount() > 0){
+            if (this.jXTreeTable.getRowCount() > 0) {
                 String ivkasse = aktRezept.getKtraeger();
                 macheHashMapIV(ivkasse);
-/*
-                while(inParseHtml){
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                parseHTML(aktRezept.getRezNb());    
- */
+                /*
+                 * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+                 * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+                 */
                 parseHTMLuniq(aktRezept.getRezNb());
             }
             if (SystemConfig.certState > 0) {
@@ -1217,36 +1207,29 @@ public class AbrechnungRezept extends JXPanel
             eltern.abrechnungsModus = eltern.ABR_MODE_302;
             this.setTageDrucken(false);
             tog.setIcon(SystemConfig.hmSysIcons.get("abrdreizwei"));
-            //eltern.hmAlternativeKasse.clear();
-            if(this.jXTreeTable.getRowCount() > 0){
+            // eltern.hmAlternativeKasse.clear();
+            if (this.jXTreeTable.getRowCount() > 0) {
                 int waitTimes = 20;
                 int maxWait = waitTimes;
-                while((vec_rez_valid == false) && (maxWait > 0)){        // sucheRezept() ist noch nicht fertig...
+                while ((vec_rez_valid == false) && (maxWait > 0)) { // sucheRezept() ist noch nicht fertig...
                     try {
                         Thread.sleep(25);
-                        maxWait--;                                        // Abbruchbedingung, falls Suche nix liefert
+                        maxWait--; // Abbruchbedingung, falls Suche nix liefert
                     } catch (InterruptedException ex) {
                         ex.printStackTrace();
                     }
                 }
-                if(maxWait == 0) {
-                    System.out.println("AbrechnungRezept: sucheRezept() ohne Ergebnis");                    
+                if (maxWait == 0) {
+                    System.out.println("AbrechnungRezept: sucheRezept() ohne Ergebnis");
                 }
-/*
-                if(maxWait < waitTimes) {
-                    System.out.println("AbrechnungRezept: maxWait: "+maxWait);                    
-                }
- */
-/*
-                while(inParseHtml){
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                parseHTML(aktRezept.getRezNb());    
- */
+                /*
+                 * if(maxWait < waitTimes) {
+                 * System.out.println("AbrechnungRezept: maxWait: "+maxWait); }
+                 */
+                /*
+                 * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+                 * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+                 */
                 parseHTMLuniq(aktRezept.getRezNb());
             }
             if (SystemConfig.certState > 0) {
@@ -1259,15 +1242,22 @@ public class AbrechnungRezept extends JXPanel
         String cmd = "select kassen_nam1,kassen_nam2,strasse,plz,ort,id from kass_adr where id='" + id.trim()
                 + "' LIMIT 1";
         Vector<Vector<String>> iv_vec = SqlInfo.holeFelder(cmd);
-        eltern.hmAlternativeKasse.put("<Ivnam1>", iv_vec.get(0).get(0) );
-        eltern.hmAlternativeKasse.put("<Ivnam2>", iv_vec.get(0).get(1) );
-        eltern.hmAlternativeKasse.put("<Ivstrasse>", iv_vec.get(0).get(2) );
-        eltern.hmAlternativeKasse.put("<Ivplz>", iv_vec.get(0).get(3) );
-        eltern.hmAlternativeKasse.put("<Ivort>", iv_vec.get(0).get(4) );
-        eltern.hmAlternativeKasse.put("<Ivid>", iv_vec.get(0).get(5) );
-        
+        eltern.hmAlternativeKasse.put("<Ivnam1>", iv_vec.get(0)
+                                                        .get(0));
+        eltern.hmAlternativeKasse.put("<Ivnam2>", iv_vec.get(0)
+                                                        .get(1));
+        eltern.hmAlternativeKasse.put("<Ivstrasse>", iv_vec.get(0)
+                                                           .get(2));
+        eltern.hmAlternativeKasse.put("<Ivplz>", iv_vec.get(0)
+                                                       .get(3));
+        eltern.hmAlternativeKasse.put("<Ivort>", iv_vec.get(0)
+                                                       .get(4));
+        eltern.hmAlternativeKasse.put("<Ivid>", iv_vec.get(0)
+                                                      .get(5));
+
     }
-    public void setRechtsAufNull(){
+
+    public void setRechtsAufNull() {
 //        while( root.getChildCount() > 0){
 //            demoTreeTableModel.removeNodeFromParent((MutableTreeTableNode) root.getChildAt(0));
 //        }
@@ -1295,7 +1285,7 @@ public class AbrechnungRezept extends JXPanel
 
     }
 
-    public void setHtmlText(String text){
+    public void setHtmlText(String text) {
         htmlPane.setText(text);
     }
 
@@ -1305,64 +1295,48 @@ public class AbrechnungRezept extends JXPanel
             return;
         }
 
-        vec_rez_valid = Boolean.FALSE;            //ungültig bis neu belegt
+        vec_rez_valid = Boolean.FALSE; // ungültig bis neu belegt
         sucheRezept(rez_nr);
-/*
-        String cmd = "select * from verordn where rez_nr='"+rez_nr.trim()+"' LIMIT 1";
-        //////System.out.println("Kommando = "+cmd);
-        aktRezept.setVec_rez(SqlInfo.holeFelder(cmd));
-        //////System.out.println("RezeptVektor = "+vec_rez);
-        aktRezept.init(rez_nr.trim());
-        vec_rez_valid = Boolean.TRUE;
- */
-        if(aktRezept.getVecSize()<=0){
+        /*
+         * String cmd =
+         * "select * from verordn where rez_nr='"+rez_nr.trim()+"' LIMIT 1";
+         * //////System.out.println("Kommando = "+cmd);
+         * aktRezept.setVec_rez(SqlInfo.holeFelder(cmd));
+         * //////System.out.println("RezeptVektor = "+vec_rez);
+         * aktRezept.init(rez_nr.trim()); vec_rez_valid = Boolean.TRUE;
+         */
+        if (aktRezept.getVecSize() <= 0) {
             return;
         }
-/*
-        gebuehrBezahlt = aktRezept.getGebuehrBezahlt();
-        gebuehrBetrag = aktRezept.getGebuehrBetrag();
-        //                0         1         2          3          4      5 
-        String cmd = "select  t1.n_name,t1.v_name,t1.geboren,t1.strasse,t1.plz,t1.ort,"+
-        //          6           7            8               9          10        11         12
-                "t1.v_nummer,t1.kv_status,t1.kv_nummer,"+"t1.befreit,t1.bef_ab,t1.bef_dat,t1.jahrfrei,"+
-        //          13          14      15         16          
-                "t2.nachname,t2.bsnr,t2.arztnum,t3.kassen_nam1 from pat5 t1,arzt t2,kass_adr t3 where t1.pat_intern='"+
-                aktRezept.getPatIntern()+"' AND t2.id ='"+aktRezept.getArztId()+"' AND t3.id='"+aktRezept.getKtraeger()+"' LIMIT 1";
-        ////System.out.println(cmd);
-        vec_pat = SqlInfo.holeFelder(cmd);
-        ////System.out.println(vec_pat);
- */
+        /*
+         * gebuehrBezahlt = aktRezept.getGebuehrBezahlt(); gebuehrBetrag =
+         * aktRezept.getGebuehrBetrag(); // 0 1 2 3 4 5 String cmd =
+         * "select  t1.n_name,t1.v_name,t1.geboren,t1.strasse,t1.plz,t1.ort,"+ // 6 7 8
+         * 9 10 11 12 "t1.v_nummer,t1.kv_status,t1.kv_nummer,"+
+         * "t1.befreit,t1.bef_ab,t1.bef_dat,t1.jahrfrei,"+ // 13 14 15 16
+         * "t2.nachname,t2.bsnr,t2.arztnum,t3.kassen_nam1 from pat5 t1,arzt t2,kass_adr t3 where t1.pat_intern='"
+         * + aktRezept.getPatIntern()+"' AND t2.id ='"+aktRezept.getArztId()
+         * +"' AND t3.id='"+aktRezept.getKtraeger()+"' LIMIT 1";
+         * ////System.out.println(cmd); vec_pat = SqlInfo.holeFelder(cmd);
+         * ////System.out.println(vec_pat);
+         */
         int barcodeform = 0;
-        try{
-            barcodeform = aktRezept.getBarcodeform();    
-        }catch(NullPointerException ex){
+        try {
+            barcodeform = aktRezept.getBarcodeform();
+        } catch (NullPointerException ex) {
 
         }
         this.tbcombo.setSelectedIndex(barcodeform <= 1 ? barcodeform : 0);
-/*
-        if(vec_pat.size() <= 0){
-            JOptionPane.showMessageDialog(null, "Diesem Rezept ist eine unbrauchbare Kasse und/oder Arzt zugeordnet. Bitte korrigieren");
-            return;
-        }
-        if (vec_pat.get(0)
-                   .get(9)
-                   .equals("T")) {
-            patAktuellFrei = true;
-        } else {
-            patAktuellFrei = false;
-        }
-        if (!vec_pat.get(0)
-                    .get(12)
-                    .trim()
-                    .equals("")) {
-            patVorjahrFrei = true;
-        } else {
-            patVorjahrFrei = false;
-        }
-        patFreiAb = vec_pat.get(0).get(10);
-        patFreiBis = vec_pat.get(0).get(11);
-        patU18 = DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(vec_pat.get(0).get(2)));
- */
+        /*
+         * if(vec_pat.size() <= 0){ JOptionPane.showMessageDialog(null,
+         * "Diesem Rezept ist eine unbrauchbare Kasse und/oder Arzt zugeordnet. Bitte korrigieren"
+         * ); return; } if (vec_pat.get(0) .get(9) .equals("T")) { patAktuellFrei =
+         * true; } else { patAktuellFrei = false; } if (!vec_pat.get(0) .get(12) .trim()
+         * .equals("")) { patVorjahrFrei = true; } else { patVorjahrFrei = false; }
+         * patFreiAb = vec_pat.get(0).get(10); patFreiBis = vec_pat.get(0).get(11);
+         * patU18 = DatFunk.Unter18(DatFunk.sHeute(),
+         * DatFunk.sDatInDeutsch(vec_pat.get(0).get(2)));
+         */
         ermittleAbrechnungsfall(true);
         if (hausbesuch) {
             doHausbesuchKomplett();
@@ -1372,17 +1346,22 @@ public class AbrechnungRezept extends JXPanel
         ////// "+vec_tabelle.size());
         // Hier den TheraPiebericht einbauen;
         doGebuehren();
-        String therapiebericht = SystemPreislisten.hmBerichtRegeln.get(this.aktDisziplin).get(Integer.parseInt(preisgruppe)-1) ;
-        if(therapiebericht != null){
-            if(!therapiebericht.equals("") && aktRezept.getArztbericht()){
+        String therapiebericht = SystemPreislisten.hmBerichtRegeln.get(this.aktDisziplin)
+                                                                  .get(Integer.parseInt(preisgruppe) - 1);
+        if (therapiebericht != null) {
+            if (!therapiebericht.equals("") && aktRezept.getArztbericht()) {
                 String berichtid = aktRezept.getArztBerichtID();
-                if(!AbrechnungGKV.directCall){
+                if (!AbrechnungGKV.directCall) {
                     showTbInfo(aktRezept.getArztBerichtID());
-/*                    String dlgcmd = "<html>Für dieses Rezept wurde ein Therapiebericht angefordert!<br>"+
-                            (berichtid.equals("") ? "Es wurde aber <b><font color=#FF0000>kein</font> Therapiebericht erstellt</b>" :    "Der Therapiebericht wurde <b>bereits erstellt</b>")+
-                                "<br><br>Position Therapiebericht wird an den letzten Behandlungstag angehängt</html>";
-                    JOptionPane.showMessageDialog(null, dlgcmd);
- */                            doTherapieBericht(therapiebericht);
+                    /*
+                     * String dlgcmd =
+                     * "<html>Für dieses Rezept wurde ein Therapiebericht angefordert!<br>"+
+                     * (berichtid.equals("") ?
+                     * "Es wurde aber <b><font color=#FF0000>kein</font> Therapiebericht erstellt</b>"
+                     * : "Der Therapiebericht wurde <b>bereits erstellt</b>")+
+                     * "<br><br>Position Therapiebericht wird an den letzten Behandlungstag angehängt</html>"
+                     * ; JOptionPane.showMessageDialog(null, dlgcmd);
+                     */ doTherapieBericht(therapiebericht);
                     this.getVectorFromNodes();
                     doTarifWechselCheck();
                     if (berichtid.equals("")) {
@@ -1396,8 +1375,8 @@ public class AbrechnungRezept extends JXPanel
         }
         doPositionenErmitteln();
         doTreeRezeptWertermitteln();
-        parseHTMLuniq(rez_nr);    
-        try{
+        parseHTMLuniq(rez_nr);
+        try {
 
             if (rezeptWert <= zuzahlungWert) {
                 String deppenAnsage = "<html><font color=#FF0000><b>Achtung, Achtung, Achtung !</b></font><br><br>"
@@ -1418,26 +1397,31 @@ public class AbrechnungRezept extends JXPanel
     }
 
     /*
-     *  verhindert die mehrfache Anzeige der TB-Meldung im Fall 
-     *  'Rezept abschließen bei geöffnetem Abrechnungspanel' wenn 'AutoOKwenn302offen = 0' eingestellt ist
-     *  (workaround; eleganter wäre setWerte() nur einmal zu durchlaufen... )
+     * verhindert die mehrfache Anzeige der TB-Meldung im Fall 'Rezept abschließen
+     * bei geöffnetem Abrechnungspanel' wenn 'AutoOKwenn302offen = 0' eingestellt
+     * ist (workaround; eleganter wäre setWerte() nur einmal zu durchlaufen... )
      */
-    private void showTbInfo(final String berichtId){
-        if (currBerichtId.equals(berichtId)){ return; };    // Info fÃ¼r diesen Bericht wird bereits angezeigt
+    private void showTbInfo(final String berichtId) {
+        if (currBerichtId.equals(berichtId)) {
+            return;
+        }
+        ; // Info fÃ¼r diesen Bericht wird bereits angezeigt
         currBerichtId = berichtId;
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                String dlgcmd = "<html>Für dieses Rezept wurde ein Therapiebericht angefordert!<br>"+
-                        (berichtId.equals("") ? "Es wurde aber <b><font color=#FF0000>kein</font> Therapiebericht erstellt</b>" :    "Der Therapiebericht wurde <b>bereits erstellt</b>")+
-                        "<br><br>Position Therapiebericht wird an den letzten Behandlungstag angehängt</html>";
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                String dlgcmd = "<html>Für dieses Rezept wurde ein Therapiebericht angefordert!<br>"
+                        + (berichtId.equals("")
+                                ? "Es wurde aber <b><font color=#FF0000>kein</font> Therapiebericht erstellt</b>"
+                                : "Der Therapiebericht wurde <b>bereits erstellt</b>")
+                        + "<br><br>Position Therapiebericht wird an den letzten Behandlungstag angehängt</html>";
                 JOptionPane.showMessageDialog(null, dlgcmd);
                 currBerichtId = "";
             }
         });
     }
-    
-    private void setToClipboard(final String xcrez ){
-        new SwingWorker<Void,Void>(){
+
+    private void setToClipboard(final String xcrez) {
+        new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws java.lang.Exception {
                 String cmd = "select rez_nr,Substring_index(Substring_index(Substring_index(Substring_index(termine, '\n',-4),'\n',1),'@',-4),'@',1 )as reststring "
@@ -1473,34 +1457,35 @@ public class AbrechnungRezept extends JXPanel
     }
 
     /*****************************************************************************************/
-    private void ermittleAbrechnungsfall(boolean construct){
-        try{
-        //vectage = RezTools.macheTerminVector( aktRezept.getVecVec_rez().get(0).get(34));    // OK - den hier löschen!
-        vectage = RezTools.macheTerminVector( aktRezept.getTermine());
+    private void ermittleAbrechnungsfall(boolean construct) {
+        try {
+            // vectage = RezTools.macheTerminVector(
+            // aktRezept.getVecVec_rez().get(0).get(34)); // OK - den hier löschen!
+            vectage = RezTools.macheTerminVector(aktRezept.getTermine());
 
-        //Vector<Vector<String>> vecabrfaelle = new Vector<Vector<String>>();
-        //Vector<String> vecabrfall = new Vector<String>();
+            // Vector<Vector<String>> vecabrfaelle = new Vector<Vector<String>>();
+            // Vector<String> vecabrfall = new Vector<String>();
             vec_tabelle.clear();
             vec_poskuerzel.clear();
             vec_posanzahl.clear();
             vec_pospos.clear();
             String[] behandlungen = null;
-        ////System.out.println("Anzahl Tage = "+vectage.size());
-        ////System.out.println("Anzahl Tage im einzelnen"+vectage.size());
-        preisgruppe = aktRezept.getPreisgruppe();
-        int anzahlbehandlungen = 0;
-/*
-        int[] ids = {Integer.parseInt(aktRezept.getVec_rez().get(0).get(8)),
-                Integer.parseInt(aktRezept.getVec_rez().get(0).get(9)),
-                Integer.parseInt(aktRezept.getVec_rez().get(0).get(10)),
-                Integer.parseInt(aktRezept.getVec_rez().get(0).get(11)) };
-        for(int i = 0; i < 4; i++){
-            if(ids[i] > 0 ){
- */
-        for(int i = 1; i <= 4; i++){
-            if(!aktRezept.getArtDBehandl(i).equals("0") ){        // <- passt das?
-                anzahlbehandlungen++;                // Anz. Heilmittel im Rezept
-            }else{
+            //// System.out.println("Anzahl Tage = "+vectage.size());
+            //// System.out.println("Anzahl Tage im einzelnen"+vectage.size());
+            preisgruppe = aktRezept.getPreisgruppe();
+            int anzahlbehandlungen = 0;
+            /*
+             * int[] ids = {Integer.parseInt(aktRezept.getVec_rez().get(0).get(8)),
+             * Integer.parseInt(aktRezept.getVec_rez().get(0).get(9)),
+             * Integer.parseInt(aktRezept.getVec_rez().get(0).get(10)),
+             * Integer.parseInt(aktRezept.getVec_rez().get(0).get(11)) }; for(int i = 0; i <
+             * 4; i++){ if(ids[i] > 0 ){
+             */
+            for (int i = 1; i <= 4; i++) {
+                if (!aktRezept.getArtDBehandl(i)
+                              .equals("0")) { // <- passt das?
+                    anzahlbehandlungen++; // Anz. Heilmittel im Rezept
+                } else {
                     break;
                 }
             }
@@ -1510,67 +1495,72 @@ public class AbrechnungRezept extends JXPanel
             // int anzahlposhb = 0;
             // boolean hausbesuch = false;
 
-/*
-        if(aktRezept.getVec_rez().get(0).get(43).equals("T")){
-            hausbesuch= true;
-            if(RezTools.zweiPositionenBeiHB(aktDisziplin,preisgruppe)){
+            /*
+             * if(aktRezept.getVec_rez().get(0).get(43).equals("T")){ hausbesuch= true;
+             * if(RezTools.zweiPositionenBeiHB(aktDisziplin,preisgruppe)){ anzahlposhb = 2;
+             * anzahlhb=Integer.valueOf(aktRezept.getVec_rez().get(0).get(64)); }else{
+             * anzahlposhb = 1;
+             * anzahlhb=Integer.valueOf(aktRezept.getVec_rez().get(0).get(64)); } } else {
+             * hausbesuch = false; }
+             */
+            hausbesuch = aktRezept.getHausbesuch();
+            anzahlhb = aktRezept.getAnzHB();
+            if (RezTools.zweiPositionenBeiHB(aktDisziplin, preisgruppe)) {
                 anzahlposhb = 2;
-                anzahlhb=Integer.valueOf(aktRezept.getVec_rez().get(0).get(64));
-            }else{
-                anzahlposhb = 1;
-                anzahlhb=Integer.valueOf(aktRezept.getVec_rez().get(0).get(64));
-                }
             } else {
-                hausbesuch = false;
+                anzahlposhb = 1;
             }
- */
-        hausbesuch = aktRezept.getHausbesuch();
-        anzahlhb = aktRezept.getAnzHB();
-        if(RezTools.zweiPositionenBeiHB(aktDisziplin,preisgruppe)){
-            anzahlposhb = 2;
-        }else{
-            anzahlposhb = 1;
-        }
 
-        String splitvec = null;
-        if(construct){
+            String splitvec = null;
+            if (construct) {
 //            while( root.getChildCount() > 0){
 //                demoTreeTableModel.removeNodeFromParent((MutableTreeTableNode) root.getChildAt(0));
 //            }
-            baumLoeschen();
+                baumLoeschen();
             }
             boolean toomuchhinweis = false;
             for (int i = 0; i < vectage.size(); i++) {
                 splitvec = vectage.get(i)
                                   .get(3);
                 behandlungen = splitvec.split(",");
-            ////System.out.println(vectage.size());
-            ////System.out.println(vectage.get(i).get(0));
-            int anzahlBehandlungen = aktRezept.getAnzBeh(1);
-            if(behandlungen.length > 0 && (!splitvec.trim().equals(""))){
-                //Es stehen Behandlungsdaten im Terminblatt;
-                //Positionen = length+hbposanzahl;
-                ////System.out.println("Länge des Feldes = "+behandlungen.length);
-                //anzahlbehandlungen = behandlungen.length;
+                //// System.out.println(vectage.size());
+                //// System.out.println(vectage.get(i).get(0));
+                int anzahlBehandlungen = aktRezept.getAnzBeh(1);
+                if (behandlungen.length > 0 && (!splitvec.trim()
+                                                         .equals(""))) {
+                    // Es stehen Behandlungsdaten im Terminblatt;
+                    // Positionen = length+hbposanzahl;
+                    //// System.out.println("Länge des Feldes = "+behandlungen.length);
+                    // anzahlbehandlungen = behandlungen.length;
 //                if((i+1) <= Integer.parseInt(aktRezept.getVec_rez().get(0).get(3))){
-                if((i+1) <= anzahlBehandlungen){
-                    ////System.out.println("in if");
-                    constructTagVector(vectage.get(i).get(0),behandlungen,behandlungen.length,anzahlhb,i,false);
-                }else{                // if((i+1) > anzahlBehandlungen)
-                    ////System.out.println("in else if");
-                    constructTagVector(vectage.get(i).get(0),behandlungen,behandlungen.length,anzahlhb,i,true);
-                    toomuchhinweis = true;
-                }
-            }else{
-                //Es sind keine  Behandlungsformen im Terminblatt verzeichnet;
-                //in anzahlbehandlungen steht die tatsächliche Anzahl
-                ////System.out.println("Keine Behandlungen im Terminblatt = "+anzahlbehandlungen);
-                ////System.out.println("Anzahl-Hausbesuch  keine Beh. im Terminblatt= "+anzahlhb);
-                ////System.out.println("Konstruiere Abrechnungsfall aus Rezeptangaben");
-                if((i+1) <= anzahlBehandlungen){
-                    constructTagVector(vectage.get(i).get(0),null,anzahlbehandlungen,anzahlhb,i,false);    
-                }else{                // if((i+1) > anzahlBehandlungen)
-                    constructTagVector(vectage.get(i).get(0),null,anzahlbehandlungen,anzahlhb,i,true);
+                    if ((i + 1) <= anzahlBehandlungen) {
+                        //// System.out.println("in if");
+                        constructTagVector(vectage.get(i)
+                                                  .get(0),
+                                behandlungen, behandlungen.length, anzahlhb, i, false);
+                    } else { // if((i+1) > anzahlBehandlungen)
+                        //// System.out.println("in else if");
+                        constructTagVector(vectage.get(i)
+                                                  .get(0),
+                                behandlungen, behandlungen.length, anzahlhb, i, true);
+                        toomuchhinweis = true;
+                    }
+                } else {
+                    // Es sind keine Behandlungsformen im Terminblatt verzeichnet;
+                    // in anzahlbehandlungen steht die tatsächliche Anzahl
+                    //// System.out.println("Keine Behandlungen im Terminblatt =
+                    // "+anzahlbehandlungen);
+                    //// System.out.println("Anzahl-Hausbesuch keine Beh. im Terminblatt=
+                    // "+anzahlhb);
+                    //// System.out.println("Konstruiere Abrechnungsfall aus Rezeptangaben");
+                    if ((i + 1) <= anzahlBehandlungen) {
+                        constructTagVector(vectage.get(i)
+                                                  .get(0),
+                                null, anzahlbehandlungen, anzahlhb, i, false);
+                    } else { // if((i+1) > anzahlBehandlungen)
+                        constructTagVector(vectage.get(i)
+                                                  .get(0),
+                                null, anzahlbehandlungen, anzahlhb, i, true);
                         toomuchhinweis = true;
                     }
 
@@ -1845,11 +1835,11 @@ public class AbrechnungRezept extends JXPanel
                 return;
             }
         }
-        if(regel==2){
-            //Rezeptdatum >= Stichtag
-            if(DatFunk.TageDifferenz(datum, DatFunk.sDatInDeutsch(aktRezept.getRezeptDatum())) < 0){
-                //setze alle auf alten Tarif
-                setTarif(true,false,"");
+        if (regel == 2) {
+            // Rezeptdatum >= Stichtag
+            if (DatFunk.TageDifferenz(datum, DatFunk.sDatInDeutsch(aktRezept.getRezeptDatum())) < 0) {
+                // setze alle auf alten Tarif
+                setTarif(true, false, "");
                 return;
             }
         }
@@ -1999,10 +1989,12 @@ public class AbrechnungRezept extends JXPanel
     private void doHausbesuchKomplett() {
 
         int insgesamthb = anzahlhb;
-        vec_hb = SqlInfo.holeFelder("select heimbewohn,kilometer from pat5 where pat_intern='"+
-                aktRezept.getPatIntern()+"' LIMIT 1");
+        vec_hb = SqlInfo.holeFelder(
+                "select heimbewohn,kilometer from pat5 where pat_intern='" + aktRezept.getPatIntern() + "' LIMIT 1");
         boolean vollepackung = aktRezept.getHbVoll();
-        boolean heimbewohner = vec_hb.get(0).get(0).equals("T");
+        boolean heimbewohner = vec_hb.get(0)
+                                     .get(0)
+                                     .equals("T");
         double anzahlkm = 0.00;
         hbstrecke = -1;
         hbkmpos = "";
@@ -2120,12 +2112,15 @@ public class AbrechnungRezept extends JXPanel
         }
 
     }
-    private void doHausbesuchEinzeln(JXTTreeTableNode node,int basisindex){
-        vec_hb = SqlInfo.holeFelder("select heimbewohn,kilometer from pat5 where pat_intern='"+
-                aktRezept.getPatIntern()+"' LIMIT 1");
+
+    private void doHausbesuchEinzeln(JXTTreeTableNode node, int basisindex) {
+        vec_hb = SqlInfo.holeFelder(
+                "select heimbewohn,kilometer from pat5 where pat_intern='" + aktRezept.getPatIntern() + "' LIMIT 1");
         int insgesamthb = anzahlhb;
         boolean vollepackung = aktRezept.getHbVoll();
-        boolean heimbewohner = vec_hb.get(0).get(0).equals("T");
+        boolean heimbewohner = vec_hb.get(0)
+                                     .get(0)
+                                     .equals("T");
         double anzahlkm = 0.00;
         int maxanzahl = root.getChildCount();
 
@@ -2377,13 +2372,20 @@ public class AbrechnungRezept extends JXPanel
                 }
             } else {
 
-            for(int i = 0; i < anzahlbehandlungen;i++){
-                abrfall[i] = RezTools.getKurzformFromID(                        // alt (weg, wenn neu ok)
-                        aktRezept.getVecVec_rez().get(0).get(i+8),preisvec).toString();
-                id[i]= aktRezept.getVecVec_rez().get(0).get(i+8).toString();
-                
-                id[i]= aktRezept.getArtDBehandl(i+1);                            // neu
-                abrfall[i] = RezTools.getKurzformFromID(id[i],preisvec);
+                for (int i = 0; i < anzahlbehandlungen; i++) {
+                    abrfall[i] = RezTools.getKurzformFromID( // alt (weg, wenn neu ok)
+                            aktRezept.getVecVec_rez()
+                                     .get(0)
+                                     .get(i + 8),
+                            preisvec)
+                                         .toString();
+                    id[i] = aktRezept.getVecVec_rez()
+                                     .get(0)
+                                     .get(i + 8)
+                                     .toString();
+
+                    id[i] = aktRezept.getArtDBehandl(i + 1); // neu
+                    abrfall[i] = RezTools.getKurzformFromID(id[i], preisvec);
 
                     //// System.out.println(""+i+". Behandlung aus RezeptTabelle = "+abrfall[i]);
                 }
@@ -2397,13 +2399,15 @@ public class AbrechnungRezept extends JXPanel
                 if (!abrfall[i].trim()
                                .equals("")) {
                     vecdummy.clear();
-                //Hier testen ob Anzahlen unterschiedlich sind
-                //posanzahl = Integer.parseInt(aktRezept.getVecVec_rez().get(0).get(3)); //Original OK
-                posanzahl = aktRezept.getAnzBeh(1);
-                try{
-                    //posanzahlbegleitend = Integer.parseInt(aktRezept.getVecVec_rez().get(0).get(3+i));      //Original OK
-                    posanzahlbegleitend = aktRezept.getAnzBeh(1+i);     
-                }catch(NumberFormatException ex){
+                    // Hier testen ob Anzahlen unterschiedlich sind
+                    // posanzahl = Integer.parseInt(aktRezept.getVecVec_rez().get(0).get(3));
+                    // //Original OK
+                    posanzahl = aktRezept.getAnzBeh(1);
+                    try {
+                        // posanzahlbegleitend =
+                        // Integer.parseInt(aktRezept.getVecVec_rez().get(0).get(3+i)); //Original OK
+                        posanzahlbegleitend = aktRezept.getAnzBeh(1 + i);
+                    } catch (NumberFormatException ex) {
                         posanzahlbegleitend = posanzahl;
                     }
                     if ((i + 1) <= posanzahl || (posanzahl == 1 && posanzahlbegleitend == 1)) {
@@ -2717,7 +2721,7 @@ public class AbrechnungRezept extends JXPanel
      * @param rez
      */
     public void parseHTMLuniq(String rez) {
-        while(inParseHtml){
+        while (inParseHtml) {
             try {
                 Thread.sleep(25);
             } catch (InterruptedException e) {
@@ -2726,7 +2730,8 @@ public class AbrechnungRezept extends JXPanel
         }
         parseHTML(rez.trim());
     }
-    private void parseHTML(String rez_nr){
+
+    private void parseHTML(String rez_nr) {
         inParseHtml = true;
         try {
             if (rez_nr == null) {
@@ -2779,9 +2784,14 @@ public class AbrechnungRezept extends JXPanel
             buf1.append("<td class=\"spalte1\" align=\"right\">");
             buf1.append("Indikationsschlüssel / ICD-10");
             buf1.append("</td><td class=\"spalte2\" align=\"left\">");
-            buf1.append((aktRezept.getIndiSchluessel().startsWith("kein Indi") ? "<b><font color=#FF0000>"+aktRezept.getIndiSchluessel()+"</font></b>" : aktRezept.getIndiSchluessel())+
-                    (aktRezept.getICD10().equals("") ? " / <b>n.a.</b>" : " / <b>"+aktRezept.getICD10()+"</b>")+
-                    (aktRezept.getICD10_2().equals("") ? " " : "<b>, "+aktRezept.getICD10_2()+"</b>"));
+            buf1.append((aktRezept.getIndiSchluessel()
+                                  .startsWith("kein Indi")
+                                          ? "<b><font color=#FF0000>" + aktRezept.getIndiSchluessel() + "</font></b>"
+                                          : aktRezept.getIndiSchluessel())
+                    + (aktRezept.getICD10()
+                                .equals("") ? " / <b>n.a.</b>" : " / <b>" + aktRezept.getICD10() + "</b>")
+                    + (aktRezept.getICD10_2()
+                                .equals("") ? " " : "<b>, " + aktRezept.getICD10_2() + "</b>"));
             buf1.append("</td>");
             buf1.append("</tr>");
             /*******/
@@ -3051,25 +3061,31 @@ public class AbrechnungRezept extends JXPanel
         htmlposbuf.append("<td class=\"spalte1\" align=\"right\">");
         htmlposbuf.append("Zuzahlung");
         htmlposbuf.append("</td><td class=\"spalte2\" align=\"left\">");
-        //Hier muß überprüft werden ob Geld in der Kasse oder Rechnung geschrieben wurde
+        // Hier muß überprüft werden ob Geld in der Kasse oder Rechnung geschrieben
+        // wurde
 
-        if(aktRezept.getGebuehrBezahlt() && (SqlInfo.holeEinzelFeld("select id from kasse where rez_nr ='"+aktRezept.getRezNb()+"' LIMIT 1").length() > 0)){
-            //Rezept auf bezahlt gesetzt und Geld in der Kasse
-            htmlposbuf.append("<b>"+dfx.format(zuzahlungWert)+"</b>");
+        if (aktRezept.getGebuehrBezahlt()
+                && (SqlInfo.holeEinzelFeld("select id from kasse where rez_nr ='" + aktRezept.getRezNb() + "' LIMIT 1")
+                           .length() > 0)) {
+            // Rezept auf bezahlt gesetzt und Geld in der Kasse
+            htmlposbuf.append("<b>" + dfx.format(zuzahlungWert) + "</b>");
             kannAbhaken = true;
         } else if (zuzahlungWert <= 0) {
             htmlposbuf.append("<b>" + dfx.format(zuzahlungWert) + "</b>");
             kannAbhaken = true;
-        }else{
-            //ist eine Rechnung erstellt worden?
-            Vector<Vector<String>> xrgaf = SqlInfo.holeFelder("select rnr,roffen,rdatum from rgaffaktura where reznr='"+aktRezept.getRezNb()+"' and rnr like 'RGR-%' LIMIT 1");
-            //System.out.println("select rnr,roffen,rdatum from rgaffaktura where reznr='"+vec_rez.get(0).get(1)+"' and rnr like 'RGR-%' LIMIT 1");
-            //System.out.println(xrgaf);
-            if(xrgaf.size() <= 0){
-                //nein es wurde auch keine rechnung erstellt.
-                htmlposbuf.append(getNoZuZahl(1,null));
-                //Abrechnung trotz unbezahlter Rezeptgebühren und keine Rechnung erstellt?
-                if(SystemConfig.hmAbrechnung.get("hmgkvfreigabeerzwingen").equals("1")){
+        } else {
+            // ist eine Rechnung erstellt worden?
+            Vector<Vector<String>> xrgaf = SqlInfo.holeFelder("select rnr,roffen,rdatum from rgaffaktura where reznr='"
+                    + aktRezept.getRezNb() + "' and rnr like 'RGR-%' LIMIT 1");
+            // System.out.println("select rnr,roffen,rdatum from rgaffaktura where
+            // reznr='"+vec_rez.get(0).get(1)+"' and rnr like 'RGR-%' LIMIT 1");
+            // System.out.println(xrgaf);
+            if (xrgaf.size() <= 0) {
+                // nein es wurde auch keine rechnung erstellt.
+                htmlposbuf.append(getNoZuZahl(1, null));
+                // Abrechnung trotz unbezahlter Rezeptgebühren und keine Rechnung erstellt?
+                if (SystemConfig.hmAbrechnung.get("hmgkvfreigabeerzwingen")
+                                             .equals("1")) {
                     kannAbhaken = true;
                 } else {
                     kannAbhaken = false;
@@ -3118,7 +3134,7 @@ public class AbrechnungRezept extends JXPanel
                 if (anfrage == JOptionPane.YES_OPTION) {
                     eltern.loescheKnoten();
                 }
-                PatUndVOsuchen.doPatSuchen(aktRezept.getPatIntern(), aktRezept.getRezNb(),this,this.connection);
+                PatUndVOsuchen.doPatSuchen(aktRezept.getPatIntern(), aktRezept.getRezNb(), this, this.connection);
             }
             if (event.getURL()
                      .toString()
@@ -3133,37 +3149,21 @@ public class AbrechnungRezept extends JXPanel
                 doNeueKasseFuerIV();
             }
 
-            if(event.getURL().toString().contains("tagedrucken.de")){        // toggle Druck d. Behandlungstage
-/*
-                if(!this.tagedrucken){
-                    this.tagedrucken = true;
-                    while (inParseHtml) {
-                        try {
-                            Thread.sleep(25);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                    parseHTML(aktRezept.getRezNb());
-                    htmlPaneScrollToEnd();
-                    return;
-                }
-                this.tagedrucken = false;
-                while (inParseHtml) {
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                parseHTML(aktRezept.getRezNb());
-                htmlPaneScrollToEnd();
-                return;
- */
-                if(this.tagedrucken){
-                    this.tagedrucken = false;                    
+            if (event.getURL()
+                     .toString()
+                     .contains("tagedrucken.de")) { // toggle Druck d. Behandlungstage
+                /*
+                 * if(!this.tagedrucken){ this.tagedrucken = true; while (inParseHtml) { try {
+                 * Thread.sleep(25); } catch (InterruptedException ex) { ex.printStackTrace(); }
+                 * } parseHTML(aktRezept.getRezNb()); htmlPaneScrollToEnd(); return; }
+                 * this.tagedrucken = false; while (inParseHtml) { try { Thread.sleep(25); }
+                 * catch (InterruptedException ex) { ex.printStackTrace(); } }
+                 * parseHTML(aktRezept.getRezNb()); htmlPaneScrollToEnd(); return;
+                 */
+                if (this.tagedrucken) {
+                    this.tagedrucken = false;
                 } else {
-                    this.tagedrucken = true;                    
+                    this.tagedrucken = true;
                 }
                 parseHTMLuniq(aktRezept.getRezNb());
                 htmlPaneScrollToEnd();
@@ -3203,26 +3203,26 @@ public class AbrechnungRezept extends JXPanel
         kwahl.pack();
         kwahl.setModal(true);
         kwahl.setVisible(true);
-        ////System.out.println(aKasse[0].getText());
-        ////System.out.println(aKasse[1].getText());
-        ////System.out.println(aKasse[2].getText());
+        //// System.out.println(aKasse[0].getText());
+        //// System.out.println(aKasse[1].getText());
+        //// System.out.println(aKasse[2].getText());
 
-        if(!aKasse[2].getText().trim().equals(suchegleichnach[1]) && !aKasse[2].getText().trim().equals("")){
-            ////System.out.println("Es wurde eine neue Kasse gewählt");
-            macheHashMapIV(aKasse[2].getText().trim());
-/*
-            while(inParseHtml){
-                try {
-                    Thread.sleep(25);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-            }
-            parseHTML(aktRezept.getRezNb());
- */
+        if (!aKasse[2].getText()
+                      .trim()
+                      .equals(suchegleichnach[1])
+                && !aKasse[2].getText()
+                             .trim()
+                             .equals("")) {
+            //// System.out.println("Es wurde eine neue Kasse gewählt");
+            macheHashMapIV(aKasse[2].getText()
+                                    .trim());
+            /*
+             * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+             * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+             */
             parseHTMLuniq(aktRezept.getRezNb());
-        }else{
-            ////System.out.println("kasse ist gleich geblieben");
+        } else {
+            //// System.out.println("kasse ist gleich geblieben");
         }
     }
 
@@ -3247,62 +3247,66 @@ public class AbrechnungRezept extends JXPanel
         HashMap<String, String> hmRezgeb = new HashMap<String, String>();
         int rueckgabe = -1;
         String behandl = "";
-        for(int i = 0; i < vec_poskuerzel.size();i++){
-            //behandl=behandl+vec_posanzahl.get(i)+"*"+vec_poskuerzel.get(i).substring(0,2)+(i < (vec_poskuerzel.size()-1) ? "," : "" );
-            behandl=behandl+vec_posanzahl.get(i)+"*"+vec_poskuerzel.get(i)+(i < (vec_poskuerzel.size()-1) ? "," : "" );
+        for (int i = 0; i < vec_poskuerzel.size(); i++) {
+            // behandl=behandl+vec_posanzahl.get(i)+"*"+vec_poskuerzel.get(i).substring(0,2)+(i
+            // < (vec_poskuerzel.size()-1) ? "," : "" );
+            behandl = behandl + vec_posanzahl.get(i) + "*" + vec_poskuerzel.get(i)
+                    + (i < (vec_poskuerzel.size() - 1) ? "," : "");
         }
-        //anr=17,titel=18,nname=0,vname=1,strasse=3,plz=4,ort=5,abwadress=19
-        //"anrede,titel,nachname,vorname,strasse,plz,ort"
+        // anr=17,titel=18,nname=0,vname=1,strasse=3,plz=4,ort=5,abwadress=19
+        // "anrede,titel,nachname,vorname,strasse,plz,ort"
 
-        String cmd = "select abwadress,id from pat5 where pat_intern='"+aktRezept.getPatIntern()+"' LIMIT 1";
+        String cmd = "select abwadress,id from pat5 where pat_intern='" + aktRezept.getPatIntern() + "' LIMIT 1";
         Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
         String[] adressParams = null;
-        if(adrvec.get(0).get(0).equals("T")){
-            adressParams = holeAbweichendeAdresse(adrvec.get(0).get(1));
-        }else{
-            adressParams = getAdressParams(adrvec.get(0).get(1));
+        if (adrvec.get(0)
+                  .get(0)
+                  .equals("T")) {
+            adressParams = holeAbweichendeAdresse(adrvec.get(0)
+                                                        .get(1));
+        } else {
+            adressParams = getAdressParams(adrvec.get(0)
+                                                 .get(1));
         }
-        //System.out.println("Zuzhlungwert = "+zuzahlungWert);
-        hmRezgeb.put("<rgreznum>",aktRezNum.getText());
-        hmRezgeb.put("<rgbehandlung>",behandl);
-        hmRezgeb.put("<rgdatum>",DatFunk.sDatInDeutsch(aktRezept.getRezeptDatum()));
-        hmRezgeb.put("<rgbetrag>",dfx.format(zuzahlungWert));
-        //hmRezgeb.put("<rgpauschale>","5,00");
-        hmRezgeb.put("<rgpauschale>",SystemConfig.hmAbrechnung.get("rgrpauschale"));
-        hmRezgeb.put("<rggesamt>","0,00");
-        hmRezgeb.put("<rganrede>",adressParams[0]);
-        hmRezgeb.put("<rgname>",adressParams[1]);
-        hmRezgeb.put("<rgstrasse>",adressParams[2]);
-        hmRezgeb.put("<rgort>",adressParams[3]);
-        hmRezgeb.put("<rgbanrede>",adressParams[4]);
-        hmRezgeb.put("<rgpatintern>",aktRezept.getPatIntern());
-        //Hier müssen noch Patienten Namen
-        //hmRezgeb.put("<rgpatintern>",vec_rez.get(0).get(0));
-        hmRezgeb.put("<rgpatnname>", StringTools.EGross(vec_pat.get(0).get(0)));
-        hmRezgeb.put("<rgpatvname>", StringTools.EGross(vec_pat.get(0).get(1)));
-        hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(vec_pat.get(0).get(2)));
-        RezeptGebuehrRechnung rgeb = new RezeptGebuehrRechnung(Reha.getThisFrame(),"Nachberechnung Rezeptgebühren",rueckgabe,hmRezgeb,buchen);
-        rgeb.setSize(new Dimension(250,300));
-        rgeb.setLocation(location.x-50,location.y-50);
+        // System.out.println("Zuzhlungwert = "+zuzahlungWert);
+        hmRezgeb.put("<rgreznum>", aktRezNum.getText());
+        hmRezgeb.put("<rgbehandlung>", behandl);
+        hmRezgeb.put("<rgdatum>", DatFunk.sDatInDeutsch(aktRezept.getRezeptDatum()));
+        hmRezgeb.put("<rgbetrag>", dfx.format(zuzahlungWert));
+        // hmRezgeb.put("<rgpauschale>","5,00");
+        hmRezgeb.put("<rgpauschale>", SystemConfig.hmAbrechnung.get("rgrpauschale"));
+        hmRezgeb.put("<rggesamt>", "0,00");
+        hmRezgeb.put("<rganrede>", adressParams[0]);
+        hmRezgeb.put("<rgname>", adressParams[1]);
+        hmRezgeb.put("<rgstrasse>", adressParams[2]);
+        hmRezgeb.put("<rgort>", adressParams[3]);
+        hmRezgeb.put("<rgbanrede>", adressParams[4]);
+        hmRezgeb.put("<rgpatintern>", aktRezept.getPatIntern());
+        // Hier müssen noch Patienten Namen
+        // hmRezgeb.put("<rgpatintern>",vec_rez.get(0).get(0));
+        hmRezgeb.put("<rgpatnname>", StringTools.EGross(vec_pat.get(0)
+                                                               .get(0)));
+        hmRezgeb.put("<rgpatvname>", StringTools.EGross(vec_pat.get(0)
+                                                               .get(1)));
+        hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(vec_pat.get(0)
+                                                                    .get(2)));
+        RezeptGebuehrRechnung rgeb = new RezeptGebuehrRechnung(Reha.getThisFrame(), "Nachberechnung Rezeptgebühren",
+                rueckgabe, hmRezgeb, buchen);
+        rgeb.setSize(new Dimension(250, 300));
+        rgeb.setLocation(location.x - 50, location.y - 50);
         rgeb.pack();
         rgeb.setVisible(true);
-/*
-        while(inParseHtml){
-            try {
-                Thread.sleep(25);
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
-            }
-        }
-        parseHTML(aktRezNum.getText());
- */
+        /*
+         * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+         * { ex.printStackTrace(); } } parseHTML(aktRezNum.getText());
+         */
         parseHTMLuniq(aktRezept.getRezNb());
-        //this.aktRezNum.getText()
-        //Positionenvec_poskuerzel.get(i)
-        //vec_posanzahl.get(i)
-        //AusstellungsDatum DatFunk.sDatInDeutsch(vec_rez.get(0).get(2))
-        //zuzahlung zuzahlungWert
-        //Bearbeitungsgebühr
+        // this.aktRezNum.getText()
+        // Positionenvec_poskuerzel.get(i)
+        // vec_posanzahl.get(i)
+        // AusstellungsDatum DatFunk.sDatInDeutsch(vec_rez.get(0).get(2))
+        // zuzahlung zuzahlungWert
+        // Bearbeitungsgebühr
 
     }
 
@@ -3695,26 +3699,26 @@ public class AbrechnungRezept extends JXPanel
             }
 
         }
-        if(cmd.equals("kuerzel")){
-            if(aktRezept.getVec_rez()==null){return;}
+        if (cmd.equals("kuerzel")) {
+            if (aktRezept.getVec_rez() == null) {
+                return;
+            }
             final ActionEvent arg0X = arg0;
-            SwingUtilities.invokeLater(new Runnable(){
-                public void run(){
-                    if(aktRow < 0 || aktRezept.getVec_rez().size()<=0){return;}
-                    setEinzelPreis((String)((JRtaComboBox)arg0X.getSource()).getValueAt(0),(String)((JRtaComboBox)arg0X.getSource()).getValueAt(1));
+            SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    if (aktRow < 0 || aktRezept.getVec_rez()
+                                               .size() <= 0) {
+                        return;
+                    }
+                    setEinzelPreis((String) ((JRtaComboBox) arg0X.getSource()).getValueAt(0),
+                            (String) ((JRtaComboBox) arg0X.getSource()).getValueAt(1));
                     getVectorFromNodes();
                     doTreeRezeptWertermitteln();
                     doPositionenErmitteln();
-/*
-                    while(inParseHtml){
-                        try {
-                            Thread.sleep(25);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                    parseHTML(aktRezept.getRezNb());
- */
+                    /*
+                     * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+                     * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+                     */
                     parseHTMLuniq(aktRezept.getRezNb());
                 }
             });
@@ -3743,16 +3747,10 @@ public class AbrechnungRezept extends JXPanel
                     }
                     doAkttarif((String) ((JRtaComboBox) arg0X.getSource()).getSelectedItem());
                     doTreeRezeptWertermitteln();
-/*
-                    while(inParseHtml){
-                        try {
-                            Thread.sleep(25);
-                        } catch (InterruptedException ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-                    parseHTML(aktRezept.getRezNb());
- */
+                    /*
+                     * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+                     * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+                     */
                     parseHTMLuniq(aktRezept.getRezNb());
                 }
             });
@@ -3955,16 +3953,10 @@ public class AbrechnungRezept extends JXPanel
                 doTitelRepair();
                 jXTreeTable.repaint();
                 doPositionenErmitteln();
-/*
-                while(inParseHtml){
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                parseHTML(aktRezept.getRezNb());
- */
+                /*
+                 * while(inParseHtml){ try { Thread.sleep(25); } catch (InterruptedException ex)
+                 * { ex.printStackTrace(); } } parseHTML(aktRezept.getRezNb());
+                 */
                 parseHTMLuniq(aktRezept.getRezNb());
                 return null;
             }
@@ -3973,9 +3965,10 @@ public class AbrechnungRezept extends JXPanel
 
     private JXTTreeTableNode macheTag(String tag, int einfuegen) {
         JXTTreeTableNode node = null;
-        //AbrFall fall= null;
-        //////System.out.println(vec_rez.get(0).get(34));
-        String[] tage = aktRezept.getTermine().split("\n");
+        // AbrFall fall= null;
+        ////// System.out.println(vec_rez.get(0).get(34));
+        String[] tage = aktRezept.getTermine()
+                                 .split("\n");
         int zaehler = 0;
         String alletage = "";
         for (int i = 0; i < root.getChildCount() + 1; i++) {
@@ -3986,9 +3979,11 @@ public class AbrechnungRezept extends JXPanel
                 zaehler++;
             }
         }
-        //////System.out.println(alletage);
-        aktRezept.getVecVec_rez().get(0).set(34,alletage);
-        /******Entscheidender Funktionsaufruf****************************/
+        ////// System.out.println(alletage);
+        aktRezept.getVecVec_rez()
+                 .get(0)
+                 .set(34, alletage);
+        /****** Entscheidender Funktionsaufruf ****************************/
         ermittleAbrechnungsfall(false);
 
         AbrFall abr = null;
@@ -4238,8 +4233,8 @@ public class AbrechnungRezept extends JXPanel
         return retnode;
     }
 
-    private void abrfallAnhaengen(int tagindex, JXTTreeTableNode node,String tag,String position,
-            double anzahl,boolean immerfrei){
+    private void abrfallAnhaengen(int tagindex, JXTTreeTableNode node, String tag, String position, double anzahl,
+            boolean immerfrei) {
         AbrFall abr;
 //        public AbrFall(String titel,String datum,String bezeichnung,Double anzahl,Double preis,
 //                boolean zuzahlung,double rezgeb,String unterbrechung,String alterpreis,String sqldatum,String preisid){
@@ -4410,13 +4405,20 @@ public class AbrechnungRezept extends JXPanel
                     "Die Länge des Versichertenstatus ist falsch, oder es wurden Leerzeichen im Status angegeben!\nRezept kann nicht abgerechnet werden");
             return false;
         }
-        edibuf.append(test.trim()+plus+plus);
-        edibuf.append(aktRezept.getRezNb()+EOL);
-        edibuf.append("NAD+"+hochKomma(vec_pat.get(0).get(0).trim())+plus);
-        edibuf.append(hochKomma(vec_pat.get(0).get(1).trim())+plus);
-        test = ediDatumFromSql(vec_pat.get(0).get(2));
-        if(test.length()==0){
-            JOptionPane.showMessageDialog(null,"Geburtsdatum nicht angegeben");
+        edibuf.append(test.trim() + plus + plus);
+        edibuf.append(aktRezept.getRezNb() + EOL);
+        edibuf.append("NAD+" + hochKomma(vec_pat.get(0)
+                                                .get(0)
+                                                .trim())
+                + plus);
+        edibuf.append(hochKomma(vec_pat.get(0)
+                                       .get(1)
+                                       .trim())
+                + plus);
+        test = ediDatumFromSql(vec_pat.get(0)
+                                      .get(2));
+        if (test.length() == 0) {
+            JOptionPane.showMessageDialog(null, "Geburtsdatum nicht angegeben");
             return false;
         }
         edibuf.append(test + plus);
@@ -4502,9 +4504,9 @@ public class AbrechnungRezept extends JXPanel
             if (!testeZahl(test)) {
                 test = "999999999";
             }
-            edibuf.append(test+plus);    
-            edibuf.append(ediDatumFromSql(aktRezept.getRezeptDatum())+plus); 
-            edibuf.append(zuZahlungsPos+EOL);
+            edibuf.append(test + plus);
+            edibuf.append(ediDatumFromSql(aktRezept.getRezeptDatum()) + plus);
+            edibuf.append(zuZahlungsPos + EOL);
 
         } else {
             edibuf.append("ZHE+");
@@ -4529,12 +4531,12 @@ public class AbrechnungRezept extends JXPanel
             if (!testeZahl(test)) {
                 test = "999999999";
             }
-            edibuf.append(test+plus);
-            edibuf.append(ediDatumFromSql(aktRezept.getRezeptDatum())+plus); 
-            edibuf.append(zuZahlungsPos+plus);
+            edibuf.append(test + plus);
+            edibuf.append(ediDatumFromSql(aktRezept.getRezeptDatum()) + plus);
+            edibuf.append(zuZahlungsPos + plus);
             test = aktRezept.getIndiSchluessel();
-            if(test.startsWith("kein Indi")){
-                JOptionPane.showMessageDialog(null,"Kein Indikationsschlüssel angegeben");
+            if (test.startsWith("kein Indi")) {
+                JOptionPane.showMessageDialog(null, "Kein Indikationsschlüssel angegeben");
                 return false;
             } else if (test.equals("k.A.")) {
                 test = "9999";
@@ -4542,65 +4544,83 @@ public class AbrechnungRezept extends JXPanel
 
             edibuf.append(test.replace(" ", "") + plus);
             /************************************************/
-/*            // McM vor dentist-test:
-            //edibuf.append(voIndex[Integer.parseInt(aktRezept.getVec_rez().get(0).get(27))]+EOL);
-            //  -> edibuf.append(voIndex[aktRezept.getRezArt()]+EOL);
-
-            if(AktuelleRezepte.isDentist(test)){
-                edibuf.append(voIndex[aktRezept.getRezArt()]+plus);
-                edibuf.append("1"+EOL);
-                System.out.println("Zahnarztverordnung");
-            }else{
-                edibuf.append(voIndex[aktRezept.getRezArt()]+EOL);
-            }
- */
+            /*
+             * // McM vor dentist-test:
+             * //edibuf.append(voIndex[Integer.parseInt(aktRezept.getVec_rez().get(0).get(27
+             * ))]+EOL); // -> edibuf.append(voIndex[aktRezept.getRezArt()]+EOL);
+             * 
+             * if(AktuelleRezepte.isDentist(test)){
+             * edibuf.append(voIndex[aktRezept.getRezArt()]+plus); edibuf.append("1"+EOL);
+             * System.out.println("Zahnarztverordnung"); }else{
+             * edibuf.append(voIndex[aktRezept.getRezArt()]+EOL); }
+             */
             edibuf.append(voIndex[aktRezept.getRezArt()]);
-            if(AktuelleRezepte.isDentist(test)){
-                edibuf.append(plus+"1");
+            if (AktuelleRezepte.isDentist(test)) {
+                edibuf.append(plus + "1");
                 System.out.println("Zahnarztverordnung");
             }
-            edibuf.append(EOL);    
+            edibuf.append(EOL);
         }
 
-        //an dieser Stelle muß der ICD-10 eingebaut werden, sofern vorhanden
-        //DIA+....
-        if(aktRezept.getICD10().length() > 0){
-            edibuf.append( "DIA+" + hochKomma(aktRezept.getICD10()) + EOL);
+        // an dieser Stelle muß der ICD-10 eingebaut werden, sofern vorhanden
+        // DIA+....
+        if (aktRezept.getICD10()
+                     .length() > 0) {
+            edibuf.append("DIA+" + hochKomma(aktRezept.getICD10()) + EOL);
         }
-        if(aktRezept.getICD10_2().length() > 0){
-            edibuf.append( "DIA+" + hochKomma(aktRezept.getICD10_2()) + EOL);
+        if (aktRezept.getICD10_2()
+                     .length() > 0) {
+            edibuf.append("DIA+" + hochKomma(aktRezept.getICD10_2()) + EOL);
         }
 
-        //an dieser Stelle müssen Daten zur Bewilligung eingebaut werden sofern vorhanden
-        //SKZ+....
+        // an dieser Stelle müssen Daten zur Bewilligung eingebaut werden sofern
+        // vorhanden
+        // SKZ+....
 
-        //Ramsch mit der Genehmigung von LFV und Rehasport/Funktionstraining
+        // Ramsch mit der Genehmigung von LFV und Rehasport/Funktionstraining
 
-        //String[] genehmigung = RezNeuanlage.holeLFV("diagnose", "verordn", "rez_nr",aktRezept.getRezNb() , aktRezept.getVecVec_rez().get(0).get(1).substring(0,2).toUpperCase());
-        String[] genehmigung = RezNeuanlage.holeLFV("diagnose", "verordn", "rez_nr",aktRezept.getRezNb() , aktRezept.getRezClass());
-        String[] skz = {"","","","","","",""};
-        if( disziplinGruppe.equals("61") || disziplinGruppe.equals("62")){
-            //String genehmigung = SqlInfo.holeEinzelFeld("select diagnose from verordn wehere rez_nr = '"+vec_rez.get(0).get(1)+"' Limit 1").trim();
-            if(!genehmigung[0].equals("")){
-                try{
+        // String[] genehmigung = RezNeuanlage.holeLFV("diagnose", "verordn",
+        // "rez_nr",aktRezept.getRezNb() ,
+        // aktRezept.getVecVec_rez().get(0).get(1).substring(0,2).toUpperCase());
+        String[] genehmigung = RezNeuanlage.holeLFV("diagnose", "verordn", "rez_nr", aktRezept.getRezNb(),
+                aktRezept.getRezClass());
+        String[] skz = { "", "", "", "", "", "", "" };
+        if (disziplinGruppe.equals("61") || disziplinGruppe.equals("62")) {
+            // String genehmigung = SqlInfo.holeEinzelFeld("select diagnose from verordn
+            // wehere rez_nr = '"+vec_rez.get(0).get(1)+"' Limit 1").trim();
+            if (!genehmigung[0].equals("")) {
+                try {
                     skz = genehmigung[0].split(Pattern.quote("$$"));
-                    if(skz[3].trim().equals("")){
-                        skz[3]= vec_pat.get(0).get(6);
+                    if (skz[3].trim()
+                              .equals("")) {
+                        skz[3] = vec_pat.get(0)
+                                        .get(6);
                     }
-                    edibuf.append("SKZ"+plus+hochKomma(skz[3])+plus+DatFunk.sDatInSQL(skz[4]).replace("-", "") +plus+(disziplinGruppe.equals("61") ? "H1" : "I1")+EOL );
-                }catch(NullPointerException ex){
-                    edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(aktRezept.getRezeptDatum())+plus+(disziplinGruppe.equals("61") ? "H1" : "I1")+EOL );    
-                    JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
-                }catch(ArrayIndexOutOfBoundsException aex){
-                    edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(aktRezept.getRezeptDatum())+plus+(disziplinGruppe.equals("61") ? "H1" : "I1")+EOL );
-                    JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+                    edibuf.append("SKZ" + plus + hochKomma(skz[3]) + plus + DatFunk.sDatInSQL(skz[4])
+                                                                                   .replace("-", "")
+                            + plus + (disziplinGruppe.equals("61") ? "H1" : "I1") + EOL);
+                } catch (NullPointerException ex) {
+                    edibuf.append("SKZ" + plus + hochKomma(vec_pat.get(0)
+                                                                  .get(6))
+                            + plus + ediDatumFromSql(aktRezept.getRezeptDatum()) + plus
+                            + (disziplinGruppe.equals("61") ? "H1" : "I1") + EOL);
+                    JOptionPane.showMessageDialog(null,
+                            "Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+                } catch (ArrayIndexOutOfBoundsException aex) {
+                    edibuf.append("SKZ" + plus + hochKomma(vec_pat.get(0)
+                                                                  .get(6))
+                            + plus + ediDatumFromSql(aktRezept.getRezeptDatum()) + plus
+                            + (disziplinGruppe.equals("61") ? "H1" : "I1") + EOL);
+                    JOptionPane.showMessageDialog(null,
+                            "Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
                 }
-            }else{
-                JOptionPane.showMessageDialog(null,"Achtung für Rehasport und/oder Funktionstraining muß eine Genehmigung vermerkt sein.\nRezept bitte nicht abrechnen!!!!!");
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Achtung für Rehasport und/oder Funktionstraining muß eine Genehmigung vermerkt sein.\nRezept bitte nicht abrechnen!!!!!");
             }
-        }else{
-            if(!genehmigung[0].equals("")){
-                try{
+        } else {
+            if (!genehmigung[0].equals("")) {
+                try {
                     skz = genehmigung[0].split(Pattern.quote("$$"));
                     if (skz[3].trim()
                               .equals("")) {
@@ -4629,25 +4649,37 @@ public class AbrechnungRezept extends JXPanel
                             + plus + (genehmigungADR ? "B1" : "B2") + EOL);
                 } catch (NullPointerException ex) {
                     ex.printStackTrace();
-                    edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(aktRezept.getRezeptDatum())+plus+"B2"+EOL );
-                    JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
-                }catch(ArrayIndexOutOfBoundsException aex){
+                    edibuf.append("SKZ" + plus + hochKomma(vec_pat.get(0)
+                                                                  .get(6))
+                            + plus + ediDatumFromSql(aktRezept.getRezeptDatum()) + plus + "B2" + EOL);
+                    JOptionPane.showMessageDialog(null,
+                            "Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+                } catch (ArrayIndexOutOfBoundsException aex) {
                     aex.printStackTrace();
-                    edibuf.append("SKZ"+plus+hochKomma(vec_pat.get(0).get(6))+plus+ediDatumFromSql(aktRezept.getRezeptDatum())+plus+"B2"+EOL );
-                    JOptionPane.showMessageDialog(null,"Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
+                    edibuf.append("SKZ" + plus + hochKomma(vec_pat.get(0)
+                                                                  .get(6))
+                            + plus + ediDatumFromSql(aktRezept.getRezeptDatum()) + plus + "B2" + EOL);
+                    JOptionPane.showMessageDialog(null,
+                            "Fehler im Segment Kostenzusage, Verordnung bitte keinesfalls abrechnen!!");
                 }
             }
         }
         edibuf.append("BES+");
-        edibuf.append(dfx.format(gesamt)+plus);
-        edibuf.append(dfx.format(rez+pauschal)+plus);
-        edibuf.append(dfx.format(rez)+plus);
-        edibuf.append(dfx.format(pauschal)+EOL);
-        
-        String kopfzeile = "PG="+preisgruppe+":PATINTERN="+aktRezept.getPatIntern()+":REZNUM="+aktRezept.getRezNb()+
-            ":GESAMT="+dfx.format(gesamt)+":REZGEB="+dfx.format(rez+pauschal)+
-            ":REZANTEIL="+dfx.format(rez)+":REZPAUSCHL="+dfx.format(pauschal)+":KASSENID="+aktRezept.getKtraeger()+
-            ":ARZTID="+aktRezept.getArztId()+":PATIENT="+vec_pat.get(0).get(0)+", "+vec_pat.get(0).get(1)+":STATUS="+vec_pat.get(0).get(7)+":HB="+hausbesuch+":ZZINDEX="+zuZahlungsIndex+"\n";
+        edibuf.append(dfx.format(gesamt) + plus);
+        edibuf.append(dfx.format(rez + pauschal) + plus);
+        edibuf.append(dfx.format(rez) + plus);
+        edibuf.append(dfx.format(pauschal) + EOL);
+
+        String kopfzeile = "PG=" + preisgruppe + ":PATINTERN=" + aktRezept.getPatIntern() + ":REZNUM="
+                + aktRezept.getRezNb() + ":GESAMT=" + dfx.format(gesamt) + ":REZGEB=" + dfx.format(rez + pauschal)
+                + ":REZANTEIL=" + dfx.format(rez) + ":REZPAUSCHL=" + dfx.format(pauschal) + ":KASSENID="
+                + aktRezept.getKtraeger() + ":ARZTID=" + aktRezept.getArztId() + ":PATIENT=" + vec_pat.get(0)
+                                                                                                      .get(0)
+                + ", " + vec_pat.get(0)
+                                .get(1)
+                + ":STATUS=" + vec_pat.get(0)
+                                      .get(7)
+                + ":HB=" + hausbesuch + ":ZZINDEX=" + zuZahlungsIndex + "\n";
 
         /*
          * edibuf.append("BES+"); edibuf.append(dfx.format(gesamt)+plus);
@@ -4741,17 +4773,21 @@ public class AbrechnungRezept extends JXPanel
         basis = basis - countWordsFromRowStart(zeilen, "SKZ+");
 
         /*
-        System.out.println("Zeilenlänge insgesamt:"+zeilen.length);
-        System.out.println("Anzahl DIA+ Segmente:"+countWords(edibuf.toString(),"DIA+"));
-        System.out.println("Anzahl SKZ+ Segmente:"+countWords(edibuf.toString(),"SKZ+"));
-        System.out.println("Anzahl DIA+ Segmente:"+countWordsFromRowStart(zeilen,"DIA+"));
-        System.out.println("Anzahl SKZ+ Segmente:"+countWordsFromRowStart(zeilen,"SKZ+"));
-        */
+         * System.out.println("Zeilenlänge insgesamt:"+zeilen.length);
+         * System.out.println("Anzahl DIA+ Segmente:"+countWords(edibuf.toString(),
+         * "DIA+"));
+         * System.out.println("Anzahl SKZ+ Segmente:"+countWords(edibuf.toString(),
+         * "SKZ+"));
+         * System.out.println("Anzahl DIA+ Segmente:"+countWordsFromRowStart(zeilen,
+         * "DIA+"));
+         * System.out.println("Anzahl SKZ+ Segmente:"+countWordsFromRowStart(zeilen,
+         * "SKZ+"));
+         */
 
-        //System.out.println("Basis = "+basis);
+        // System.out.println("Basis = "+basis);
 
-        if(zeilen[ basis ].split("\\+").length < 5){
-            JOptionPane.showMessageDialog(null,"Fehler in holeEDIFACT, falsche Länge im Segment ZHE");
+        if (zeilen[basis].split("\\+").length < 5) {
+            JOptionPane.showMessageDialog(null, "Fehler in holeEDIFACT, falsche Länge im Segment ZHE");
             return false;
         }
 
@@ -4770,8 +4806,8 @@ public class AbrechnungRezept extends JXPanel
         int lang = zeilen.length;
 
         final String xrez_nr = rez_nr;
-        vec_rez_valid = Boolean.FALSE;            //ungültig bis neu belegt
-        new SwingWorker<Void,Void>(){
+        vec_rez_valid = Boolean.FALSE; // ungültig bis neu belegt
+        new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
                 inworker = true;
@@ -4785,7 +4821,7 @@ public class AbrechnungRezept extends JXPanel
         vec_posanzahl.clear();
         macheVector(vec_posanzahl, zeilen[2], 1);
         vec_poskuerzel.clear();
-        macheVector(vec_poskuerzel,zeilen[3],0);
+        macheVector(vec_poskuerzel, zeilen[3], 0);
 
         baumLoeschen();
         vecdummy.clear();
@@ -4897,41 +4933,46 @@ public class AbrechnungRezept extends JXPanel
         }
     }
 
-    private void sucheRezept(String rez_nr){
-/*
-        String cmd = "select * from verordn where rez_nr='"+rez_nr.trim()+"' LIMIT 1";
-        //////System.out.println("Kommando = "+cmd);
-        aktRezept.setVecVec_rez(SqlInfo.holeFelder(cmd));
-        //////System.out.println("RezeptVektor = "+vec_rez);
- */
+    private void sucheRezept(String rez_nr) {
+        /*
+         * String cmd =
+         * "select * from verordn where rez_nr='"+rez_nr.trim()+"' LIMIT 1";
+         * //////System.out.println("Kommando = "+cmd);
+         * aktRezept.setVecVec_rez(SqlInfo.holeFelder(cmd));
+         * //////System.out.println("RezeptVektor = "+vec_rez);
+         */
         aktRezept.init(rez_nr.trim());
 //        if(aktRezept.getVec_rez().size()<=0){
-        if(aktRezept.getVecSize()<=0){
-            System.out.println("AbrechnungRezept->sucheRezept:  Abbruch vec_rez.size = 0");                    
-            System.out.println("RezeptVektor = "+aktRezept.getVec_rez());
+        if (aktRezept.getVecSize() <= 0) {
+            System.out.println("AbrechnungRezept->sucheRezept:  Abbruch vec_rez.size = 0");
+            System.out.println("RezeptVektor = " + aktRezept.getVec_rez());
             vec_rez_valid = true;
             return;
         }
         gebuehrBezahlt = aktRezept.getGebuehrBezahlt();
         gebuehrBetrag = aktRezept.getGebuehrBetrag();
-        //                  0         1         2             3     4       5 
-        String cmd = "select  t1.n_name,t1.v_name,t1.geboren,t1.strasse,t1.plz,t1.ort,"+
-        //            6             7            8              9     10         11        12
-                "t1.v_nummer,t1.kv_status,t1.kv_nummer,"+"t1.befreit,t1.bef_ab,t1.bef_dat,t1.jahrfrei,"+
-        //           13         14         15       16              
-                "t2.nachname,t2.bsnr,t2.arztnum,t3.kassen_nam1 from pat5 t1,arzt t2,kass_adr t3 where t1.pat_intern='"+
-                aktRezept.getPatIntern()+"' AND t2.id ='"+aktRezept.getArztId()+"' AND t3.id='"+aktRezept.getKtraeger()+"' LIMIT 1";
-        ////System.out.println(cmd);
+        // 0 1 2 3 4 5
+        String cmd = "select  t1.n_name,t1.v_name,t1.geboren,t1.strasse,t1.plz,t1.ort," +
+        // 6 7 8 9 10 11 12
+                "t1.v_nummer,t1.kv_status,t1.kv_nummer," + "t1.befreit,t1.bef_ab,t1.bef_dat,t1.jahrfrei," +
+                // 13 14 15 16
+                "t2.nachname,t2.bsnr,t2.arztnum,t3.kassen_nam1 from pat5 t1,arzt t2,kass_adr t3 where t1.pat_intern='"
+                + aktRezept.getPatIntern() + "' AND t2.id ='" + aktRezept.getArztId() + "' AND t3.id='"
+                + aktRezept.getKtraeger() + "' LIMIT 1";
+        //// System.out.println(cmd);
         vec_pat = SqlInfo.holeFelder(cmd);
-        ////System.out.println(vec_pat);
+        //// System.out.println(vec_pat);
 
-        if(vec_pat.size() <= 0){
-            JOptionPane.showMessageDialog(null, "Diesem Rezept ist eine unbrauchbare Kasse und/oder Arzt zugeordnet. Bitte korrigieren");
+        if (vec_pat.size() <= 0) {
+            JOptionPane.showMessageDialog(null,
+                    "Diesem Rezept ist eine unbrauchbare Kasse und/oder Arzt zugeordnet. Bitte korrigieren");
             vec_rez_valid = true;
             return;
         }
-        
-        if(vec_pat.get(0).get(9).equals("T")){
+
+        if (vec_pat.get(0)
+                   .get(9)
+                   .equals("T")) {
             patAktuellFrei = true;
         } else {
             patAktuellFrei = false;
@@ -4944,24 +4985,35 @@ public class AbrechnungRezept extends JXPanel
         } else {
             patVorjahrFrei = false;
         }
-        patFreiAb = vec_pat.get(0).get(10);
-        patFreiBis = vec_pat.get(0).get(11);
-        patU18 = DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(vec_pat.get(0).get(2)));
+        patFreiAb = vec_pat.get(0)
+                           .get(10);
+        patFreiBis = vec_pat.get(0)
+                            .get(11);
+        patU18 = DatFunk.Unter18(DatFunk.sHeute(), DatFunk.sDatInDeutsch(vec_pat.get(0)
+                                                                                .get(2)));
         vec_rez_valid = true;
     }
 
-    // ComponentListener methods (handle window resize) McM 1606 
+    // ComponentListener methods (handle window resize) McM 1606
     @Override
     public void componentResized(ComponentEvent e) {
-        //String tmp = e.getComponent().getName();
-        //System.out.println("Component "+tmp+" resize detected ");
+        // String tmp = e.getComponent().getName();
+        // System.out.println("Component "+tmp+" resize detected ");
         keepDayTreeSize(jSplitOU);
         jSplitOU.setDividerLocation(tts.getCurrTageTreeSize());
     }
 
-    @Override public void componentMoved(ComponentEvent e) {/* empty */}
-    @Override public void componentShown(ComponentEvent e) {/* empty */}
-    @Override public void componentHidden(ComponentEvent e) {/* empty */}
+    @Override
+    public void componentMoved(ComponentEvent e) {
+        /* empty */}
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+        /* empty */}
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
+        /* empty */}
 
     public void cleanUp() {
         // Aktionen beim Schließen des Abrechnungsfensters
@@ -4973,28 +5025,32 @@ public class AbrechnungRezept extends JXPanel
     }
 
     /*
-     * TageTreeSize Werte in abrechnung.ini schreiben 
-     * ? in eigene Klasse?
+     * TageTreeSize Werte in abrechnung.ini schreiben ? in eigene Klasse?
+     * 
      * @author McM
-    */
+     */
     private void writeTTS2ini() {
-        if (!SystemConfig.hmAbrechnung.get("TTSizeLocked").equals("1")) {
-            //String path2IniFile = TheraPiLocations.getMandantIniPath(null);
-            //INIFile inif = new INIFile (path2IniFile);
+        if (!SystemConfig.hmAbrechnung.get("TTSizeLocked")
+                                      .equals("1")) {
+            // String path2IniFile = TheraPiLocations.getMandantIniPath(null);
+            // INIFile inif = new INIFile (path2IniFile);
             boolean mustsave = false;
-            INIFile inif = INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/", "abrechnung.ini");
+            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                    "abrechnung.ini");
             String section = "HMGKVRechnung";
-            for(Entry<Integer, Integer> e : tts.getHmTageTreeSize().entrySet()){
+            for (Entry<Integer, Integer> e : tts.getHmTageTreeSize()
+                                                .entrySet()) {
                 int key = e.getKey();
-                String val = e.getValue().toString();
-                System.out.println("save TTS_"+key+ " = " + val);
-                if (tts.getTTSchanged(key)){
-                    inif.setStringProperty(section, "TTS_"+key, val, null);    
+                String val = e.getValue()
+                              .toString();
+                System.out.println("save TTS_" + key + " = " + val);
+                if (tts.getTTSchanged(key)) {
+                    inif.setStringProperty(section, "TTS_" + key, val, null);
                     mustsave = true;
                 }
             }
-            if(mustsave){
-                INITool.saveIni(inif);                
+            if (mustsave) {
+                INITool.saveIni(inif);
             }
         }
     }

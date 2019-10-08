@@ -89,7 +89,7 @@ import systemTools.ListenerTools;
 
 public class TerminFenster extends Observable
         implements RehaTPEventListener, ActionListener, DropTargetListener, DragSourceListener, DragGestureListener {
-    private static final DateTimeFormatter  ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
     private int setOben;
 
     private String FensterName = "";
@@ -1315,8 +1315,8 @@ public class TerminFenster extends Observable
                         }
                         // String reznummer = (String)
                         // ((Vector)((ArrayList)vTerm.get(belegung[aktiveSpalte[2]])).get(1)).get(aktiveSpalte[0]);
-                        //infoDlg = new InfoDialog(reznummer,"terminInfo",null);
-                        infoDlg = new InfoDialogTerminInfo(reznummer,null);
+                        // infoDlg = new InfoDialog(reznummer,"terminInfo",null);
+                        infoDlg = new InfoDialogTerminInfo(reznummer, null);
                         infoDlg.pack();
                         infoDlg.setLocationRelativeTo(TerminFlaeche);
                         infoDlg.setVisible(true);
@@ -2531,14 +2531,14 @@ public class TerminFenster extends Observable
     public static void schreibeLog(final String[] talt, final String[] tneu) {
         new Thread() {
 
-
             @Override
             public void run() {
-                String cmd = "insert into vlog set datum='" + LocalDateTime.now().format(ddmmyyy_hhmmss ) + "', benutzer='" + Reha.aktUser
-                        + "', maschine='" + SystemConfig.dieseMaschine + "', vname='" + talt[0] + "', " + "vreznr='"
-                        + talt[1] + "', vdauer='" + talt[3] + "', vstart='" + talt[2] + "', " + "vend='" + talt[4]
-                        + "', nname='" + tneu[0] + "', nreznr='" + tneu[1] + "', ndauer='" + tneu[3] + "', "
-                        + "nstart='" + tneu[2] + "', nend='" + tneu[4] + "'";
+                String cmd = "insert into vlog set datum='" + LocalDateTime.now()
+                                                                           .format(ddmmyyy_hhmmss)
+                        + "', benutzer='" + Reha.aktUser + "', maschine='" + SystemConfig.dieseMaschine + "', vname='"
+                        + talt[0] + "', " + "vreznr='" + talt[1] + "', vdauer='" + talt[3] + "', vstart='" + talt[2]
+                        + "', " + "vend='" + talt[4] + "', nname='" + tneu[0] + "', nreznr='" + tneu[1] + "', ndauer='"
+                        + tneu[3] + "', " + "nstart='" + tneu[2] + "', nend='" + tneu[4] + "'";
                 SqlInfo.sqlAusfuehren(cmd);
             }
         }.start();

@@ -2941,23 +2941,29 @@ public class RezTools {
         return retObj;
     }
 
-
-    private static int welcheIstMaxInt(int i1,int i2){
-        if(i1 > i2){return 1;}
-        if(i1==i2){return 0;}
+    private static int welcheIstMaxInt(int i1, int i2) {
+        if (i1 > i2) {
+            return 1;
+        }
+        if (i1 == i2) {
+            return 0;
+        }
         return 2;
     }
 
     /*
-     * pruefen, ob Rezept dringend abgerechnet werden sollte (Jahresfrist nach letzter Behandlung)
+     * pruefen, ob Rezept dringend abgerechnet werden sollte (Jahresfrist nach
+     * letzter Behandlung)
      */
     public static boolean isLate(String thisRezNr) {
         int tageBisWarnung = 310;
-        String cmd = "select termine from verordn where rez_nr='"+thisRezNr+"' LIMIT 1";;
+        String cmd = "select termine from verordn where rez_nr='" + thisRezNr + "' LIMIT 1";
+        ;
         String termineDB = SqlInfo.holeEinzelFeld(cmd);
         String[] behDat = termineDB.split("\n");
-        String letzteBeh = behDat[behDat.length-1].split("@")[0];
-        if (DatFunk.TageDifferenz(letzteBeh,DatFunk.sHeute()) > tageBisWarnung){    // Warnmarkierung wenn die letzte Behandlung zu lange her ist
+        String letzteBeh = behDat[behDat.length - 1].split("@")[0];
+        if (DatFunk.TageDifferenz(letzteBeh, DatFunk.sHeute()) > tageBisWarnung) { // Warnmarkierung wenn die letzte
+                                                                                   // Behandlung zu lange her ist
             return true;
         }
         return false;
