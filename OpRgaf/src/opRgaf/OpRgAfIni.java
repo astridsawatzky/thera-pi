@@ -2,8 +2,6 @@ package opRgaf;
 
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.INIFile;

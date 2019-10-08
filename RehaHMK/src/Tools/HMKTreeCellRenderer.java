@@ -8,6 +8,7 @@ import javax.swing.JTree;
 import javax.swing.LookAndFeel;
 import javax.swing.UIManager;
 import javax.swing.tree.DefaultTreeCellRenderer;
+
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 import sun.swing.DefaultLookup;

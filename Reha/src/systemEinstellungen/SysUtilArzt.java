@@ -7,11 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.EventObject;
 import java.util.Vector;
 
@@ -21,7 +17,6 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -36,13 +31,7 @@ import javax.swing.table.TableCellEditor;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import CommonTools.JCompTools;
-import CommonTools.JRtaTextField;
-import CommonTools.INIFile;
-import CommonTools.INITool;
-
 import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -51,7 +40,6 @@ import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import environment.Path;
-import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 

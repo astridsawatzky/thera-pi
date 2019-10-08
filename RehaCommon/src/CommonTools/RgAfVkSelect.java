@@ -2,14 +2,6 @@ package CommonTools;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  * kleine Tabelle mit 3 Checkboxen zur Auswahl, ob RGR, AFR, oder/und

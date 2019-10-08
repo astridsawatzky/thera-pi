@@ -5,13 +5,11 @@ import java.awt.Component;
 import java.awt.Font;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.Vector;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 

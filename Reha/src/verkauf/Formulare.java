@@ -5,14 +5,12 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
-import krankenKasse.KassenFormulare;
-import hauptFenster.Reha;
-
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import hauptFenster.Reha;
+import krankenKasse.KassenFormulare;
 
 public class Formulare {
 

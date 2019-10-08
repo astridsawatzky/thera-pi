@@ -84,7 +84,6 @@ import dialoge.InfoDialogTerminInfo;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import dialoge.ToolsDialog;
-import environment.LadeProg;
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;

@@ -3,9 +3,6 @@ package dialoge;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Vector;
@@ -13,24 +10,19 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.jdesktop.swingx.JXPanel;
 
-import patientenFenster.PatUndVOsuchen;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import CommonTools.DatFunk;
-import CommonTools.INIFile;
-import CommonTools.INITool;
-import CommonTools.JCompTools;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
+import CommonTools.JCompTools;
 import commonData.Rezept;
+import patientenFenster.PatUndVOsuchen;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
 
 public class InfoDialogVOinArbeit extends InfoDialog implements HyperlinkListener {
 

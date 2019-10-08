@@ -1,19 +1,16 @@
 package hmrCheck;
 
-import hauptFenster.Reha;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
 import CommonTools.DatFunk;
-import abrechnung.Disziplinen;
 import CommonTools.SqlInfo;
+import abrechnung.Disziplinen;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;

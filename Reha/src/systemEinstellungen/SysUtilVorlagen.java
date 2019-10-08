@@ -1,14 +1,10 @@
 package systemEinstellungen;
 
-import gui.Cursors;
-import hauptFenster.Reha;
-
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
@@ -29,20 +25,20 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
-import jxTableTools.TableTool;
-
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import verkauf.Formulare;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import gui.Cursors;
+import hauptFenster.Reha;
+import jxTableTools.TableTool;
+import verkauf.Formulare;
 
 public class SysUtilVorlagen extends JXPanel implements ActionListener, SysInitCommon_If {
     private JXTable vorlagen;

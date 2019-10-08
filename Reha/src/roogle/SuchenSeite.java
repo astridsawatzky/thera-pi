@@ -79,7 +79,6 @@ import dialoge.InfoDialogTerminInfo;
 import environment.LadeProg;
 import environment.Path;
 import gui.Cursors;
-import dialoge.InfoDialogTerminInfo;
 import hauptFenster.Reha;
 import jxTableTools.ToolTipRenderer;
 import jxTableTools.ZahlTableCellEditor;

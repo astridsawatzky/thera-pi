@@ -2,9 +2,6 @@ package patientenFenster;
 
 import java.sql.Connection;
 
-import hauptFenster.AktiveFenster;
-import hauptFenster.Reha;
-
 import javax.swing.JComponent;
 import javax.swing.SwingWorker;
 
@@ -14,6 +11,8 @@ import com.sun.star.uno.Exception;
 
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import hauptFenster.AktiveFenster;
+import hauptFenster.Reha;
 
 public class PatUndVOsuchen {
     public static void doPatSuchen(String patint, String reznr, Object source, Connection connection) {

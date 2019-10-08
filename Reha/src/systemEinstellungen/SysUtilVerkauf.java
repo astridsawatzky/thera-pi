@@ -24,19 +24,12 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
 import environment.Path;
 import hauptFenster.Reha;
-import CommonTools.JCompTools;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
 

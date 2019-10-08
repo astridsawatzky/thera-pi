@@ -14,6 +14,7 @@ import javax.imageio.ImageWriter;
 import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXPanel;
+
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 import com.sun.star.beans.PropertyValue;

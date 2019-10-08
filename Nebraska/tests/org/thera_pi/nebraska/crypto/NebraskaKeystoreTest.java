@@ -1,16 +1,15 @@
 package org.thera_pi.nebraska.crypto;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.junit.Before;
-import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
-import org.thera_pi.nebraska.crypto.NebraskaFileException;
-import org.thera_pi.nebraska.crypto.NebraskaKeystore;
-import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 
 public class NebraskaKeystoreTest {
     private static final String personName = "Max Mustermann";

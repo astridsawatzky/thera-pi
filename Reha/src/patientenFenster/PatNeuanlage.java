@@ -34,7 +34,6 @@ import java.util.Scanner;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 import javax.swing.BorderFactory;
@@ -86,7 +85,6 @@ import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import krankenKasse.KassenFormulare;
 import oOorgTools.OOTools;
-import ocf.OcKVK;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
 import stammDatenTools.ZuzahlTools;

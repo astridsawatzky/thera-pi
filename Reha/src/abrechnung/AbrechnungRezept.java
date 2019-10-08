@@ -73,15 +73,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import jxTableTools.DblCellEditor;
-import jxTableTools.DoubleTableCellRenderer;
-import jxTableTools.MitteRenderer;
-import jxTableTools.MyTableCheckBox;
-import jxTableTools.MyTableComboBox;
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
-
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
@@ -103,14 +94,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.uno.Exception;
 
 import CommonTools.DatFunk;
-import patientenFenster.KassenAuswahl;
-import patientenFenster.PatUndVOsuchen;
-import patientenFenster.RezNeuanlage;
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import systemTools.AdressTools;
-import systemTools.ListenerTools;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
@@ -122,16 +105,8 @@ import CommonTools.StringTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-import environment.Path;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.sun.star.uno.Exception;
-
 import commonData.Rezept;
-import events.PatStammEvent;
-import events.PatStammEventClass;
-import hauptFenster.AktiveFenster;
+import environment.Path;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 import jxTableTools.DblCellEditor;
@@ -141,6 +116,7 @@ import jxTableTools.MyTableCheckBox;
 import jxTableTools.MyTableComboBox;
 import oOorgTools.OOTools;
 import patientenFenster.KassenAuswahl;
+import patientenFenster.PatUndVOsuchen;
 import patientenFenster.RezNeuanlage;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;

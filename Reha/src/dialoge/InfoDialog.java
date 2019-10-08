@@ -20,10 +20,10 @@ import javax.swing.JScrollPane;
 
 import org.jdesktop.swingx.JXPanel;
 
-import systemEinstellungen.SystemConfig;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import systemEinstellungen.SystemConfig;
 
 public class InfoDialog extends JDialog implements WindowListener {
     /**

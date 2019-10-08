@@ -24,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
@@ -43,7 +42,6 @@ import com.sun.star.text.XTextFieldsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.XRefreshable;
 
-import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.DblCellEditor;
 import CommonTools.DoubleTableCellRenderer;

@@ -21,12 +21,15 @@ import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXPanel;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
-import rehaInternalFrame.JBarkassenInternal;
-import systemTools.ButtonTools;
+import CommonTools.OOTools;
 import CommonTools.RgVkPrSelect;
 import CommonTools.RgVkPr_IfCallBack;
 import CommonTools.SqlInfo;
@@ -39,20 +42,12 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
+import ag.ion.noa.internal.printing.PrintProperties;
+import ag.ion.noa.printing.IPrinter;
 import environment.Path;
 import hauptFenster.Reha;
 import rehaInternalFrame.JBarkassenInternal;
-import ag.ion.noa.internal.printing.PrintProperties;
-import ag.ion.noa.printing.IPrinter;
-
-import com.jgoodies.forms.debug.FormDebugPanel;
-
-import CommonTools.OOTools;
 import systemTools.ButtonTools;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
 

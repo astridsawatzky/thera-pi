@@ -1,17 +1,16 @@
 package systemEinstellungen;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import CommonTools.ButtonTools;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.ButtonTools;
 
 public class AbbruchOderSpeichern {
     private JButton btSpeichern, btAbbruch;

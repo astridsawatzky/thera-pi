@@ -1,7 +1,5 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,25 +31,25 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 
-import stammDatenTools.RezTools;
-import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
-import systemTools.ListenerTools;
-import terminKalender.ParameterLaden;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
 import environment.Path;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import events.RehaTPEventListener;
+import hauptFenster.Reha;
+import stammDatenTools.RezTools;
+import systemEinstellungen.SystemConfig;
+import systemEinstellungen.SystemPreislisten;
+import systemTools.ListenerTools;
+import terminKalender.ParameterLaden;
 
 public class InfoDialogTerminInfo extends InfoDialog {
 

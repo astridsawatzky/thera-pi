@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -37,6 +36,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -45,13 +45,13 @@ import CommonTools.DatFunk;
 import CommonTools.DateTableCellEditor;
 import CommonTools.DblCellEditor;
 import CommonTools.DoubleTableCellRenderer;
-import CommonTools.OpCommon;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
 import CommonTools.OOTools;
+import CommonTools.OpCommon;
 import CommonTools.RgAfVkSelect;
 import CommonTools.RgAfVk_IfCallBack;
 import CommonTools.SqlInfo;
@@ -67,12 +67,6 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-import ag.ion.noa.internal.printing.PrintProperties;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 

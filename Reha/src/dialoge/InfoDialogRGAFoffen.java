@@ -1,11 +1,7 @@
 package dialoge;
 
-import hauptFenster.Reha;
-
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -14,12 +10,13 @@ import javax.swing.JLabel;
 
 import org.jdesktop.swingx.JXPanel;
 
-import systemEinstellungen.SystemConfig;
-import CommonTools.DatFunk;
-import CommonTools.JCompTools;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import CommonTools.DatFunk;
+import CommonTools.JCompTools;
+import hauptFenster.Reha;
+import systemEinstellungen.SystemConfig;
 
 public class InfoDialogRGAFoffen extends InfoDialog {
 

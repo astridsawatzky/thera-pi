@@ -1,10 +1,5 @@
 ﻿package systemEinstellungen;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.Collections;
-import java.util.Vector;
-
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
@@ -19,28 +14,20 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
-import offenePosten.OffenePosten;
-import opRgaf.OpRgAfIni;
-
 import javax.swing.SwingWorker;
+
 import org.jdesktop.swingx.JXPanel;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaCheckBoxR;
-import CommonTools.SqlInfo;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
 import environment.Path;
 import hauptFenster.Reha;
+import opRgaf.OpRgAfIni;
 import systemTools.ButtonTools;
 
 // Lemmi 20101228 neue Klasse in der System-Inititalisierung

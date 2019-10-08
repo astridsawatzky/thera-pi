@@ -4,7 +4,6 @@
 package abrechnung;
 
 import java.util.HashMap;
-import java.util.Vector;
 
 /**
  * merkt sich die Größeneinstellung des 'TageTree' Panel für versch. Anzahlen

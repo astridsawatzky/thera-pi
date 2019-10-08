@@ -43,12 +43,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import jxTableTools.DateTableCellEditor;
-import jxTableTools.TableTool;
-import oOorgTools.OOTools;
-
-import javax.swing.SwingWorker;
-
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;

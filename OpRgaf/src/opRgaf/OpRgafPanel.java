@@ -23,7 +23,6 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,6 +41,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
+import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -50,15 +50,12 @@ import CommonTools.DatFunk;
 import CommonTools.DateTableCellEditor;
 import CommonTools.DblCellEditor;
 import CommonTools.DoubleTableCellRenderer;
-
-import CommonTools.OpShowGesamt;
-import CommonTools.RgAfVkSelect;
-import CommonTools.RgAfVk_IfCallBack;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.MitteRenderer;
+import CommonTools.OpShowGesamt;
 import CommonTools.RgAfVkSelect;
 import CommonTools.RgAfVk_IfCallBack;
 import CommonTools.SqlInfo;
@@ -75,8 +72,6 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import io.RehaIOMessages;
-
-import com.jgoodies.forms.builder.PanelBuilder;
 
 public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
 

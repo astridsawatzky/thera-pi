@@ -1,9 +1,5 @@
 package CommonTools;
 
-import java.awt.Container;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-
 import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 

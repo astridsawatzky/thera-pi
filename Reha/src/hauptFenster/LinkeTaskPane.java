@@ -52,8 +52,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 
-import com.sun.media.protocol.avi.DataSource;
-
 import CommonTools.ExUndHop;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;

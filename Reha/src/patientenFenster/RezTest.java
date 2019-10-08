@@ -1,6 +1,7 @@
 package patientenFenster;
 
 import java.awt.event.WindowEvent;
+
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
