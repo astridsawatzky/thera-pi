@@ -11,14 +11,11 @@ import java.awt.Insets;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -76,12 +73,9 @@ import terminKalender.TerminFenster;
 import textBausteine.textbaus;
 import wecker.Wecker;
 
-public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentListener, DropTargetListener {
-    /**
-     *
-     */
+public class LinkeTaskPane extends JXPanel implements ActionListener {
+
     private static final long serialVersionUID = 1L;
-    // private Reha eltern;
     private static JXTaskPaneContainer jxTPcontainer = null;
     public static JXTaskPane tp1 = null;
     public static JXTaskPane tp2 = null;
@@ -143,17 +137,17 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxTPcontainer = new JXTaskPaneContainer();
         jxTPcontainer.setBackground(new Color(106, 130, 218));
         // jxTPcontainer.setPreferredSize(new Dimension(250,0));
+        tp1 = getPatientenStamm();
+        jxTPcontainer.add(tp1);
 
-        jxTPcontainer.add((Component) getPatientenStamm());
+        jxTPcontainer.add(getTerminKalender());
 
-        jxTPcontainer.add((Component) getTerminKalender());
+        jxTPcontainer.add(getOpenOfficeOrg());
 
-        jxTPcontainer.add((Component) getOpenOfficeOrg());
+        jxTPcontainer.add(getNuetzliches());
 
-        jxTPcontainer.add((Component) getNuetzliches());
-
-        jxTPcontainer.add((Component) getSystemEinstellungen());
-        jxTPcontainer.add((Component) getMonatsUebersicht());
+        jxTPcontainer.add(getSystemEinstellungen());
+        jxTPcontainer.add(getMonatsUebersicht());
 
         if (mitUserTask) {
             jxTPcontainer.add((Component) getUserTasks());
@@ -177,7 +171,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
     private JXTaskPane getPatientenStamm() {
         Image img = null;
-        tp1 = new JXTaskPane();
+        JXTaskPane tp1 = new JXTaskPane();
         UIManager.put("TaskPane.titleBackgroundGradientStart", Color.WHITE);
         UIManager.put("TaskPane.titleBackgroundGradientEnd", new Color(200, 212, 247));
         UIManager.put("TaskPane.background", new Color(214, 223, 247));
@@ -197,18 +191,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.addActionListener(this);
         jxLink.setEnabled(true);
         DropTarget dndt = new DropTarget();
-        DropTargetListener dropTargetListener = new DropTargetListener() {
-            @Override
-            public void dragEnter(DropTargetDragEvent e) {
-            }
-
-            @Override
-            public void dragExit(DropTargetEvent e) {
-            }
-
-            @Override
-            public void dragOver(DropTargetDragEvent e) {
-            }
+        DropTargetListener dropTargetListener = new DropTargetAdapter() {
 
             @Override
             public void drop(DropTargetDropEvent e) {
@@ -219,25 +202,16 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     for (int i = 0; i < flavors.length; i++) {
                         mitgebracht = (String) tr.getTransferData(flavors[i]);
                     }
-                    //// System.out.println(mitgebracht);
                     if (mitgebracht.indexOf("°") >= 0) {
                         if (!mitgebracht.split("°")[0].contains("TERMDAT")) {
                             return;
                         }
                         doPatientDrop(mitgebracht.split("°")[2].trim());
-                        // ProgLoader.ProgRoogleFenster(0, mitgebracht);
-                        // Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
                     }
-                    //// System.out.println(mitgebracht+" auf Patientenstamm gedropt");
                 } catch (Throwable t) {
                     t.printStackTrace();
                 }
-                // Ein Problem ist aufgetreten
                 e.dropComplete(true);
-            }
-
-            @Override
-            public void dropActionChanged(DropTargetDragEvent e) {
             }
         };
         try {
@@ -259,7 +233,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.setIcon(new ImageIcon(img));
         jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
         jxLink.addActionListener(this);
-        // jxLink.setEnabled(false);
         tp1.add(jxLink);
         jxLink = new JXHyperlink();
         jxLink.setText("Krankenkassen");
@@ -298,18 +271,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         tp4.add(jxLink);
         jxLink = new JXHyperlink();
         DropTarget dndt = new DropTarget();
-        DropTargetListener dropTargetListener = new DropTargetListener() {
-            @Override
-            public void dragEnter(DropTargetDragEvent e) {
-            }
-
-            @Override
-            public void dragExit(DropTargetEvent e) {
-            }
-
-            @Override
-            public void dragOver(DropTargetDragEvent e) {
-            }
+        DropTargetListener dropTargetListener = new DropTargetAdapter() {
 
             @Override
             public void drop(DropTargetDropEvent e) {
@@ -320,25 +282,18 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     for (int i = 0; i < flavors.length; i++) {
                         mitgebracht = (String) tr.getTransferData(flavors[i]);
                     }
-                    // System.out.println("Es wurde mitgebracht "+mitgebracht);
                     if (mitgebracht.indexOf("°") >= 0) {
                         if (!mitgebracht.split("°")[0].contains("TERMDAT")) {
                             return;
                         }
-                        // ProgLoader.ProgRoogleFenster(0, mitgebracht);
                         Reha.instance.progLoader.ProgRoogleFenster(0, mitgebracht);
                     }
-                    //// System.out.println(mitgebracht);
                 } catch (Throwable t) {
                     t.printStackTrace();
                 }
-                // Ein Problem ist aufgetreten
                 e.dropComplete(true);
             }
 
-            @Override
-            public void dropActionChanged(DropTargetDragEvent e) {
-            }
         };
         try {
             dndt.addDropTargetListener(dropTargetListener);
@@ -352,7 +307,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                 + "<font color='#00ffff'><b>:</b></font><font color='#0000ff'>g</font><font color='#00ff00'>l</font>"
                 + "<font color='#000000'>]</font>&nbsp;- Die Terminsuchmaschine";
         jxLink.setText(srugl);
-        // jxLink.setText("[Ru:gl] - Die Terminsuchmaschine");
         jxLink.setToolTipText("Strg+R = [Ru:gl] starten");
         img = new ImageIcon(Path.Instance.getProghome() + "icons/orca.png").getImage()
                                                                            .getScaledInstance(24, 24,
@@ -392,18 +346,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
         jxLink.addActionListener(this);
         dndt = new DropTarget();
-        dropTargetListener = new DropTargetListener() {
-            @Override
-            public void dragEnter(DropTargetDragEvent e) {
-            }
-
-            @Override
-            public void dragExit(DropTargetEvent e) {
-            }
-
-            @Override
-            public void dragOver(DropTargetDragEvent e) {
-            }
+        dropTargetListener = new DropTargetAdapter() {
 
             @Override
             public void drop(DropTargetDropEvent e) {
@@ -414,25 +357,18 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     for (int i = 0; i < flavors.length; i++) {
                         mitgebracht = (String) tr.getTransferData(flavors[i]);
                     }
-                    //// System.out.println(mitgebracht);
                     if (mitgebracht.indexOf("°") >= 0) {
                         if (!mitgebracht.split("°")[0].contains("TERMDAT")) {
                             return;
                         }
-                        // ProgLoader.ProgRoogleFenster(0, mitgebracht);
                         doWeckerDrop(mitgebracht);
                     }
-                    //// System.out.println(mitgebracht);
                 } catch (Throwable t) {
                     t.printStackTrace();
                 }
-                // Ein Problem ist aufgetreten
                 e.dropComplete(true);
             }
 
-            @Override
-            public void dropActionChanged(DropTargetDragEvent e) {
-            }
         };
         try {
             dndt.addDropTargetListener(dropTargetListener);
@@ -445,7 +381,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
         tp4.add(jxLink);
         tp4.setCollapsed(SystemConfig.taskPaneCollapsed[1]);
-        // tp4.setExpanded(true);
         return tp4;
     }
 
@@ -492,7 +427,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         tp5.setUI(wui);
 
         tp5.setTitle("Nützliches...");
-        // tp3.setIcon(new ImageIcon("icons/pdf.gif"));
         JXHyperlink jxLink = new JXHyperlink();
         jxLink.setText("Thera-PI - Nachrichten");
         jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
@@ -520,7 +454,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.setIcon(new ImageIcon(img));
         jxLink.setActionCommand("piTool");
         jxLink.addActionListener(this);
-        // jxLink.setEnabled(false);
         tp5.add(jxLink);
         jxLink = new JXHyperlink();
         jxLink.setText("piHelp - Hifetextgenerator");
@@ -531,7 +464,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.setIcon(new ImageIcon(img));
         jxLink.setActionCommand("piHelp");
         jxLink.addActionListener(this);
-        // jxLink.setEnabled(false);
         tp5.add(jxLink);
         jxLink = new JXHyperlink();
         jxLink.setText("Textbausteine - Therapiebericht");
@@ -542,7 +474,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.setIcon(new ImageIcon(img));
         jxLink.setActionCommand("piTextb");
         jxLink.addActionListener(this);
-        // jxLink.setEnabled(false);
         tp5.add(jxLink);
 
         jxLink = new JXHyperlink();
@@ -554,7 +485,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.setIcon(new ImageIcon(img));
         jxLink.setActionCommand("piArztTextb");
         jxLink.addActionListener(this);
-        // jxLink.setEnabled(false);
         tp5.add(jxLink);
 
         jxLink = new JXHyperlink();
@@ -566,7 +496,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         jxLink.setIcon(new ImageIcon(img));
         jxLink.setActionCommand("piIcd10");
         jxLink.addActionListener(this);
-        // jxLink.setEnabled(false);
         tp5.add(jxLink);
         JXHyperlink paypal = createPaypalLink();
         tp5.add(paypal);
@@ -582,7 +511,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
             jxLink.setIcon(new ImageIcon(img));
             jxLink.setActionCommand("piQM");
             jxLink.addActionListener(this);
-            // jxLink.setEnabled(false);
             tp5.add(jxLink);
         }
         f = new File(Path.Instance.getProghome() + "QMAuswertung.jar");
@@ -596,7 +524,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
             jxLink.setIcon(new ImageIcon(img));
             jxLink.setActionCommand("piAW");
             jxLink.addActionListener(this);
-            // jxLink.setEnabled(false);
             tp5.add(jxLink);
         }
 
@@ -740,9 +667,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         tp7.setUI(wui);
         tp7.setTitle("Benutzer-Tasks");
         Image img = null;
-        // img = new ImageIcon("bildle").getImage().getScaledInstance(24, 24,
-        // Image.SCALE_SMOOTH);
-        // tp7.setIcon(new ImageIcon(img));
         for (int i = 0; i < SystemConfig.vUserTasks.size(); i++) {
             JXHyperlink jxLink = new JXHyperlink();
             jxLink.setText(SystemConfig.vUserTasks.get(i)
@@ -754,7 +678,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
             jxLink.setActionCommand("UserTask-" + Integer.toString(i));
             jxLink.addActionListener(this);
             jxLink.setClickedColor(new Color(0, 0x33, 0xFF));
-            // jxLink.setEnabled();
             tp7.add(jxLink);
         }
         tp7.setCollapsed(SystemConfig.taskPaneCollapsed[6]);
@@ -769,7 +692,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         tp4.updateUI();
         tp5.updateUI();
         tp6.updateUI();
-        //// System.out.println("TaskPane-Container L&F");
     }
 
     /**
@@ -785,7 +707,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
             if (cmd.equals("Look & Feel")) {
                 ExUndHop eUh = new ExUndHop();
                 eUh.setzeStatement("delete from flexlock");
-                // ProgLoader.ProgLookAndFeel(0);
                 break;
             }
 
@@ -796,7 +717,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                         try {
                             Reha.getThisFrame()
                                 .setCursor(Cursors.wartenCursor);
-                            // ProgLoader.SystemInitialisierung();
                             Reha.instance.progLoader.SystemInit(1, "");
                             Reha.getThisFrame()
                                 .setCursor(Cursors.normalCursor);
@@ -808,11 +728,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
                 }.execute();
 
-                /*
-                 * SystemUtil sysUtil = new SystemUtil(Reha.thisFrame);
-                 * sysUtil.setSize(800,600); sysUtil.setLocation(100,75);
-                 * sysUtil.setVisible(true);
-                 */
                 break;
             }
 
@@ -823,7 +738,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                         Reha.getThisFrame()
                             .setCursor(Cursors.wartenCursor);
                         Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
-                        // ProgLoader.KassenFenster(0,TestePatStamm.PatStammKasseID());
+
                         Reha.getThisFrame()
                             .setCursor(Cursors.normalCursor);
                         return null;
@@ -840,7 +755,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                             .setCursor(Cursors.wartenCursor);
                         Reha.instance.progLoader.ProgTerminFenster(1,
                                 (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
-                        // ProgLoader.ProgTerminFenster(1,0);
+
                         Reha.getThisFrame()
                             .setCursor(Cursors.normalCursor);
                         return null;
@@ -855,7 +770,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                         Reha.getThisFrame()
                             .setCursor(Cursors.wartenCursor);
                         Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
-                        // ProgLoader.ArztFenster(0,TestePatStamm.PatStammArztID());
+
                         Reha.getThisFrame()
                             .setCursor(Cursors.normalCursor);
                         return null;
@@ -873,8 +788,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     return;
                 }
                 Reha.instance.progLoader.ProgTerminFenster(0, 2);
-                // ProgLoader.ProgTerminFenster(0,2);
-                // MaskenErstellen();
+
                 break;
             }
             if (cmd.equals("monthview")) {
@@ -903,7 +817,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
             }
             if (cmd.equals("[Ru:gl] - Die Terminsuchmaschine")) {
                 Reha.instance.progLoader.ProgRoogleFenster(0, null);
-                // ProgLoader.ProgRoogleFenster(0,null);
+
                 break;
             }
             if (cmd.equals("RTA-Wisssen das Universalwissen")) {
@@ -937,7 +851,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                 break;
             }
             if (cmd.equals("Thera-PI - Nachrichten")) {
-                // Reha.nachrichtenRegeln();
+
                 if (!RehaIOServer.rehaMailIsActive) {
                     if (Reha.aktUser.startsWith("Therapeut")) {
                         return;
@@ -973,8 +887,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     protected Void doInBackground() throws Exception {
                         setCursor(Cursors.wartenCursor);
                         Reha.instance.progLoader.ProgPatientenVerwaltung(1, conn);
-                        // Reha.instance.progLoader.ProgTerminFenster(0, 1);
-                        // ProgLoader.ProgPatientenVerwaltung(1);
+
                         setCursor(Cursors.normalCursor);
                         return null;
                     }
@@ -1022,9 +935,7 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                         Path.Instance.getProghome() + "ini/thbericht.ini"
 
                 });
-                // new LadeProg(Path.Instance.getProghome()+"TBedit.jar "+
-                // Path.Instance.getProghome()+"ini/"+Reha.aktIK+"/rehajava.ini"+" "+
-                // Path.Instance.getProghome()+"ini/textbaustein.ini");
+
                 new SwingWorker<Void, Void>() {
                     @Override
                     protected Void doInBackground() throws Exception {
@@ -1206,28 +1117,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
 
     }
 
-    @Override
-    public void componentHidden(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) {
-
-    }
-
-    @Override
-    public void componentResized(ComponentEvent e) {
-
-        //// System.out.println("Linke-Task-Pane: "+e);
-
-    }
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-
-    }
-
     private boolean testUserTask() {
         File f = new File(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/usertask.ini");
         if (!f.exists()) {
@@ -1239,24 +1128,19 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
             if (tasks == 0) {
                 return false;
             }
-            Vector<String> dummy = new Vector<String>();
+
             for (int i = 0; i < tasks; i++) {
-                dummy.clear();
+                Vector<String> dummy = new Vector<String>();
                 dummy.add(utask.getStringProperty("UserTasks", "UserTaskTitel" + Integer.toString(i + 1)));
                 dummy.add(utask.getStringProperty("UserTasks", "UserIcon" + Integer.toString(i + 1)));
                 dummy.add(utask.getStringProperty("UserTasks", "UserTaskExecute" + Integer.toString(i + 1)));
-                SystemConfig.vUserTasks.add((Vector<String>) dummy.clone());
+                SystemConfig.vUserTasks.add(dummy);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
         return true;
-    }
-
-    public static void OoOk() {
-        // LinkeTaskPane.thisClass.oo1.setEnabled(true);
-        // LinkeTaskPane.thisClass.oo2.setEnabled(true);
     }
 
     public void MaskenErstellen() {
@@ -1270,7 +1154,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     behandler = (i < 10 ? "0" + i + "BEHANDLER" : Integer.toString(i) + "BEHANDLER");
                     sstmt = "insert into masken set behandler='" + behandler + "' , art = '" + t
                             + "' ,belegt='1', N1='@FREI', TS1='07:00:00', TD1='900', TE1='22:00:00'";
-                    //// System.out.println(sstmt);
                     try {
                         stmt.execute(sstmt);
                     } catch (SQLException e) {
@@ -1387,40 +1270,6 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
         }
     }
 
-    /************************************************************/
-
-    /************************************************************/
-
-    @Override
-    public void dragEnter(DropTargetDragEvent arg0) {
-
-        //// System.out.println("Enter---->"+arg0);
-        //// System.out.println(((JComponent)arg0.getSource()).getName());
-
-    }
-
-    @Override
-    public void dragExit(DropTargetEvent arg0) {
-
-    }
-
-    @Override
-    public void dragOver(DropTargetDragEvent arg0) {
-
-    }
-
-    @Override
-    public void drop(DropTargetDropEvent arg0) {
-
-        //// System.out.println(arg0);
-
-    }
-
-    @Override
-    public void dropActionChanged(DropTargetDragEvent arg0) {
-
-    }
-
     private static void open(URI uri) {
         if (Desktop.isDesktopSupported()) {
             Desktop desktop = Desktop.getDesktop();
@@ -1435,5 +1284,4 @@ public class LinkeTaskPane extends JXPanel implements ActionListener, ComponentL
                     "Cannot Launch Link", JOptionPane.WARNING_MESSAGE);
         }
     }
-    /************************************************************/
 }
