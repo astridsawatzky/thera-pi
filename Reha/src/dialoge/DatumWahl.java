@@ -4,10 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -23,7 +19,7 @@ import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import terminKalender.TerminFenster;
 
-public class DatumWahl implements KeyListener, ActionListener, FocusListener {
+public class DatumWahl {
 
     JRadioButton[] jrb = { null, null, null, null };
     JXButton[] jb = { null, null };
@@ -54,29 +50,18 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener {
         rSmart.getTitledPanel()
               .setTitle("Monatsübersicht");
         rSmart.setContentPanel(jtp.getContentContainer());
-        /****************************************************************/
-        /*
-         * tv = TerminFenster.getThisClass().getViewPanel(); int xvp =
-         * tv.getLocationOnScreen().x+tv.getWidth(); if((x+225+10) > xvp){ x=x-225; }
-         * int yvp = tv.getLocationOnScreen().y+tv.getHeight(); if(y+145 > yvp){
-         * y=y-145; }
-         */
+
         x = 20;
         y = 500;
-        /****************************************************************/
         rSmart.setLocation(x, y);
         rSmart.pack();
         rSmart.setVisible(true);
 
-        // jrb[0].requestFocus();
+
     }
 
     private JXPanel getForm() {
-        /*
-         * FormLayout layout = new FormLayout("10dlu,p,10dlu,p,2dlu,p,100dlu,40dlu",
-         * "10dlu,p,3dlu,p,3dlu,p,3dlu,p,3dlu,p,5dlu"); //new
-         * FormLayout("10dlu,p,4dlu,p,50dlu,p", // "10dlu,p,3dlu,p,3dlu,p,3dlu,p");
-         */
+
         JXPanel xbuilder = new JXPanel();
         xbuilder.setBorder(null);
         xbuilder.setLayout(new BorderLayout());
@@ -130,33 +115,4 @@ public class DatumWahl implements KeyListener, ActionListener, FocusListener {
         return xbuilder;
     }
 
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-
-    }
-
-    @Override
-    public void focusGained(FocusEvent arg0) {
-
-    }
-
-    @Override
-    public void focusLost(FocusEvent arg0) {
-
-    }
 }
