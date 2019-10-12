@@ -110,7 +110,7 @@ public class ProgLoader {
             }
             ////// System.out.println("Der Terminkalender befindet sich in Container
             ////// "+((JTerminInternal)termin).getDesktop());
-            containerHandling(((JTerminInternal) termin).getDesktop());
+            Reha.containerHandling(((JTerminInternal) termin).getDesktop());
             ((JTerminInternal) termin).aktiviereDiesenFrame(((JTerminInternal) termin).getName());
             if (((JTerminInternal) termin).isIcon()) {
                 try {
@@ -129,7 +129,7 @@ public class ProgLoader {
                 String name = "TerminFenster" + WinNum.NeueNummer();
 
                 int containerNr = SystemConfig.hmContainer.get("Kalender");
-                containerHandling(containerNr);
+                Reha.containerHandling(containerNr);
                 LinkeTaskPane.thisClass.setCursor(Cursors.wartenCursor);
                 terminjry = null;
                 if (xansicht != 2) {
@@ -227,7 +227,7 @@ public class ProgLoader {
         }
         JComponent kasse = AktiveFenster.getFensterAlle("KrankenKasse");
         if (kasse != null) {
-            containerHandling(((JKasseInternal) kasse).getDesktop());
+            Reha.containerHandling(((JKasseInternal) kasse).getDesktop());
             ((JKasseInternal) kasse).aktiviereDiesenFrame(((JKasseInternal) kasse).getName());
             ((JKasseInternal) kasse).starteKasseID(kid);
             if (((JKasseInternal) kasse).isIcon()) {
@@ -243,7 +243,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "KrankenKasse" + WinNum.NeueNummer();
         int containerNr = SystemConfig.hmContainer.get("Kasse");
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         kassejry = new JKasseInternal("thera-\u03C0 Krankenkassen-Verwaltung ",
                 SystemConfig.hmSysIcons.get("kassenstamm"), containerNr);
         AktiveFenster.setNeuesFenster(name, kassejry, containerNr, kassejry.getContentPane());
@@ -279,7 +279,7 @@ public class ProgLoader {
         }
         JComponent arzt = AktiveFenster.getFensterAlle("ArztVerwaltung");
         if (arzt != null) {
-            containerHandling(((JArztInternal) arzt).getDesktop());
+            Reha.containerHandling(((JArztInternal) arzt).getDesktop());
             ((JArztInternal) arzt).aktiviereDiesenFrame(((JArztInternal) arzt).getName());
             ((JArztInternal) arzt).starteArztID(aid);
             if (((JArztInternal) arzt).isIcon()) {
@@ -295,7 +295,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "ArztVerwaltung" + WinNum.NeueNummer();
         int containerNr = SystemConfig.hmContainer.get("Arzt");
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         // arztjry = new JArztInternal("thera-\u03C0 Ärzte-Verwaltung || F3 = Daten in
         // Zwischenablage | F2 = Daten aus
         // Zwischenablage",SystemConfig.hmSysIcons.get("arztstamm"),containerNr) ;
@@ -339,7 +339,7 @@ public class ProgLoader {
         }
         JComponent gutachten = AktiveFenster.getFensterAlle("GutachtenFenster");
         if (gutachten != null) {
-            containerHandling(((JGutachtenInternal) gutachten).getDesktop());
+            Reha.containerHandling(((JGutachtenInternal) gutachten).getDesktop());
             ((JGutachtenInternal) gutachten).aktiviereDiesenFrame(((JGutachtenInternal) gutachten).getName());
 
             if (((JGutachtenInternal) gutachten).isIcon()) {
@@ -355,7 +355,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "GutachtenFenster" + WinNum.NeueNummer();
         int containerNr = SystemConfig.hmContainer.get("Arzt");
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         gutjry = new JGutachtenInternal("thera-\u03C0 Gutachten ", SystemConfig.hmSysIcons.get("drvlogo"), containerNr);
         AktiveFenster.setNeuesFenster(name, gutjry, containerNr, gutjry.getContentPane());
         gutjry.setName(name);
@@ -393,7 +393,7 @@ public class ProgLoader {
         JComponent abrech1 = AktiveFenster.getFensterAlle("Abrechnung");
         if (abrech1 != null) {
             //// System.out.println("InternalFrame Kassenabrechnung bereits geöffnet");
-            containerHandling(((JAbrechnungInternal) abrech1).getDesktop());
+            Reha.containerHandling(((JAbrechnungInternal) abrech1).getDesktop());
             ((JAbrechnungInternal) abrech1).aktiviereDiesenFrame(((JAbrechnungInternal) abrech1).getName());
             if (((JAbrechnungInternal) abrech1).isIcon()) {
                 try {
@@ -409,7 +409,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "Abrechnung" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         abrechjry = new JAbrechnungInternal("thera-\u03C0  - Kassen-Abrechnung nach §302 ",
                 SystemConfig.hmSysIcons.get("bomb24"), 1);
         AktiveFenster.setNeuesFenster(name, abrechjry, 1, abrechjry.getContentPane());
@@ -453,7 +453,7 @@ public class ProgLoader {
         JComponent anmeld = AktiveFenster.getFensterAlle("Anmeldungen");
         if (anmeld != null) {
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JAnmeldungenInternal) anmeld).getDesktop());
+            Reha.containerHandling(((JAnmeldungenInternal) anmeld).getDesktop());
             ((JAnmeldungenInternal) anmeld).aktiviereDiesenFrame(((JAnmeldungenInternal) anmeld).getName());
             if (((JAnmeldungenInternal) anmeld).isIcon()) {
                 try {
@@ -469,7 +469,7 @@ public class ProgLoader {
         String name = "Anmeldungen" + WinNum.NeueNummer();
         // int containerNr = SystemConfig.hmContainer.get("Arzt");
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         anmeldungenjry = new JAnmeldungenInternal("thera-\u03C0  - Ermittlung des Anmeldevolumens ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, anmeldungenjry, 1, anmeldungenjry.getContentPane());
@@ -508,7 +508,7 @@ public class ProgLoader {
         JComponent umsatz = AktiveFenster.getFensterAlle("Umsaetze");
         if (umsatz != null) {
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JUmsaetzeInternal) umsatz).getDesktop());
+            Reha.containerHandling(((JUmsaetzeInternal) umsatz).getDesktop());
             ((JUmsaetzeInternal) umsatz).aktiviereDiesenFrame(((JUmsaetzeInternal) umsatz).getName());
             if (((JUmsaetzeInternal) umsatz).isIcon()) {
                 try {
@@ -523,7 +523,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "Umsaetze" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         umsaetzejry = new JUmsaetzeInternal("thera-\u03C0  - Ermittlung der realisierten Umsätze ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, umsaetzejry, 1, umsaetzejry.getContentPane());
@@ -561,7 +561,7 @@ public class ProgLoader {
         JComponent vk = AktiveFenster.getFensterAlle("Verkauf");
         if (vk != null) {
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JVerkaufInternal) vk).getDesktop());
+            Reha.containerHandling(((JVerkaufInternal) vk).getDesktop());
             ((JVerkaufInternal) vk).aktiviereDiesenFrame(((JVerkaufInternal) vk).getName());
             if (((JVerkaufInternal) vk).isIcon()) {
                 try {
@@ -576,7 +576,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "Verkauf" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         verkaufjry = new JVerkaufInternal("thera-\u03C0  - Verkäufe tätigen ", SystemConfig.hmSysIcons.get("arztstamm"),
                 1);
         AktiveFenster.setNeuesFenster(name, verkaufjry, 1, verkaufjry.getContentPane());
@@ -616,7 +616,7 @@ public class ProgLoader {
             Reha.instance.dta301panel.aktualisieren(sparam);
             // Reha.instance.dta301panel.aktualisieren(Reha.instance.patpanel.vecaktrez.get(1));
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JDta301Internal) vk).getDesktop());
+            Reha.containerHandling(((JDta301Internal) vk).getDesktop());
             ((JDta301Internal) vk).aktiviereDiesenFrame(((JDta301Internal) vk).getName());
             if (((JDta301Internal) vk).isIcon()) {
                 try {
@@ -631,7 +631,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "DTA301" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         dta301jry = new JDta301Internal("thera-\u03C0  - Fallsteuerung nach §301 ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, dta301jry, 1, dta301jry.getContentPane());
@@ -668,7 +668,7 @@ public class ProgLoader {
         JComponent bk = AktiveFenster.getFensterAlle("Barkasse");
         if (bk != null) {
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JBarkassenInternal) bk).getDesktop());
+            Reha.containerHandling(((JBarkassenInternal) bk).getDesktop());
             ((JBarkassenInternal) bk).aktiviereDiesenFrame(((JBarkassenInternal) bk).getName());
             if (((JBarkassenInternal) bk).isIcon()) {
                 try {
@@ -684,7 +684,7 @@ public class ProgLoader {
         String name = "Barkasse" + WinNum.NeueNummer();
         //// System.out.println("Neues Barkassenfenster = "+name);
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         // barkassenjry = new JBarkassenInternal("thera-\u03C0 - Barkasse abrechnen
         // ",SystemConfig.hmSysIcons.get("arztstamm"),1) ;
         barkassenjry = new JBarkassenInternal("thera-\u03C0  - Barkasse abrechnen ",
@@ -721,7 +721,7 @@ public class ProgLoader {
         }
         JComponent rab = AktiveFenster.getFensterAlle("Rehaabrechnung");
         if (rab != null) {
-            containerHandling(((JRehaabrechnungInternal) rab).getDesktop());
+            Reha.containerHandling(((JRehaabrechnungInternal) rab).getDesktop());
             ((JRehaabrechnungInternal) rab).aktiviereDiesenFrame(((JRehaabrechnungInternal) rab).getName());
             if (((JRehaabrechnungInternal) rab).isIcon()) {
                 try {
@@ -736,7 +736,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "Rehaabrechnung" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         rehaabrechnungjry = new JRehaabrechnungInternal("thera-\u03C0  - ganztägig ambulante Reha abrechnen ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, rehaabrechnungjry, 1, rehaabrechnungjry.getContentPane());
@@ -772,7 +772,7 @@ public class ProgLoader {
         JComponent beteiligung = AktiveFenster.getFensterAlle("Beteiligung");
         if (beteiligung != null) {
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JBeteiligungInternal) beteiligung).getDesktop());
+            Reha.containerHandling(((JBeteiligungInternal) beteiligung).getDesktop());
             ((JBeteiligungInternal) beteiligung).aktiviereDiesenFrame(((JBeteiligungInternal) beteiligung).getName());
             if (((JBeteiligungInternal) beteiligung).isIcon()) {
                 try {
@@ -787,7 +787,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "Beteiligung" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         beteiligungjry = new JBeteiligungInternal("thera-\u03C0  - Ermittlung der Umsatzbeteiligungen ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, beteiligungjry, 1, beteiligungjry.getContentPane());
@@ -824,7 +824,7 @@ public class ProgLoader {
         JComponent benutzer = AktiveFenster.getFensterAlle("Benutzerrechte");
         if (benutzer != null) {
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JBenutzerInternal) benutzer).getDesktop());
+            Reha.containerHandling(((JBenutzerInternal) benutzer).getDesktop());
             ((JBenutzerInternal) benutzer).aktiviereDiesenFrame(((JBenutzerInternal) benutzer).getName());
             if (((JBenutzerInternal) benutzer).isIcon()) {
                 try {
@@ -839,7 +839,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "Benutzerrechte" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         benutzerjry = new JBenutzerInternal("thera-\u03C0  - Benutzer- und Rechteverwaltung ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, benutzerjry, 1, benutzerjry.getContentPane());
@@ -872,7 +872,7 @@ public class ProgLoader {
         JComponent urlaub = AktiveFenster.getFensterAlle("Urlaub");
         if (urlaub != null) {
             //// System.out.println("InternalFrame Anmeldungen bereits geöffnet");
-            containerHandling(((JUrlaubInternal) urlaub).getDesktop());
+            Reha.containerHandling(((JUrlaubInternal) urlaub).getDesktop());
             ((JUrlaubInternal) urlaub).aktiviereDiesenFrame(((JUrlaubInternal) urlaub).getName());
             if (((JUrlaubInternal) urlaub).isIcon()) {
                 try {
@@ -887,7 +887,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "Urlaub" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         urlaubjry = new JUrlaubInternal("thera-\u03C0  - Bearbeitung von Urlaub und Überstunden ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, urlaubjry, 1, urlaubjry.getContentPane());
@@ -941,7 +941,7 @@ public class ProgLoader {
         try {
             JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
             if (patient != null) {
-                containerHandling(((JPatientInternal) patient).getDesktop());
+                Reha.containerHandling(((JPatientInternal) patient).getDesktop());
                 ((JPatientInternal) patient).aktiviereDiesenFrame(((JPatientInternal) patient).getName());
                 if (((JPatientInternal) patient).isIcon()) {
                     try {
@@ -959,7 +959,7 @@ public class ProgLoader {
             LinkeTaskPane.thisClass.setCursor(Cursors.wartenCursor);
             String name = "PatientenVerwaltung" + WinNum.NeueNummer();
             int containerNr = SystemConfig.hmContainer.get("Patient");
-            containerHandling(containerNr);
+            Reha.containerHandling(containerNr);
             patjry = new JPatientInternal(
                     "thera-\u03C0 Patientenverwaltung " + Reha.instance.desktops[1].getComponentCount() + 1,
                     SystemConfig.hmSysIcons.get("patstamm"), containerNr);
@@ -1072,7 +1072,7 @@ public class ProgLoader {
         JComponent sysinit = AktiveFenster.getFensterAlle("SystemInit");
         if (sysinit != null) {
             //// System.out.println("InternalFrame SystemInit bereits geöffnet");
-            containerHandling(((JSysteminitInternal) sysinit).getDesktop());
+            Reha.containerHandling(((JSysteminitInternal) sysinit).getDesktop());
             ((JSysteminitInternal) sysinit).aktiviereDiesenFrame(((JSysteminitInternal) sysinit).getName());
             if (((JSysteminitInternal) sysinit).isIcon()) {
                 try {
@@ -1087,7 +1087,7 @@ public class ProgLoader {
             .setCursor(Cursors.wartenCursor);
         String name = "SystemInit" + WinNum.NeueNummer();
         int containerNr = setPos;
-        containerHandling(containerNr);
+        Reha.containerHandling(containerNr);
         systeminitjry = new JSysteminitInternal("thera-\u03C0  - System-Initialisierung und Einstellungen ",
                 SystemConfig.hmSysIcons.get("arztstamm"), 1);
         AktiveFenster.setNeuesFenster(name, systeminitjry, 1, systeminitjry.getContentPane());
@@ -1197,37 +1197,6 @@ public class ProgLoader {
             return 0;
         }
         return pos;
-    }
-
-    public static void containerHandling(int cont) {
-        if (Reha.instance.vollsichtbar == -1 || (!SystemConfig.desktopHorizontal)) {
-            // System.out.println("Location =
-            // "+Reha.instance.jSplitRechtsOU.getDividerLocation());
-            // System.out.println("Width = "+Reha.instance.jSplitRechtsOU.getWidth());
-            if (cont == 0) {
-                if (Reha.instance.jSplitRechtsOU.getDividerLocation() == 0) {
-                    Reha.instance.setDivider(5);
-                }
-            } else if (cont == 1) {
-                if (Reha.instance.jSplitRechtsOU.getDividerLocation() == Reha.instance.jSplitRechtsOU.getWidth() - 7) {
-                    Reha.instance.setDivider(6);
-                }
-            }
-
-            return;
-        }
-        if ((Reha.instance.vollsichtbar == 1 && cont == 1) || (Reha.instance.vollsichtbar == 0 && cont == 0)) {
-            return;
-        }
-        if (Reha.instance.vollsichtbar == 0 && cont == 1) {
-            Reha.instance.setDivider(6);
-            return;
-        }
-        if (Reha.instance.vollsichtbar == 1 && cont == 0) {
-            Reha.instance.setDivider(5);
-            return;
-        }
-
     }
 
 }

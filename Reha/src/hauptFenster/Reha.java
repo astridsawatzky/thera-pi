@@ -63,10 +63,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
@@ -84,7 +81,6 @@ import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.format.YUVFormat;
-import javax.smartcardio.CardException;
 import javax.sql.DataSource;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -130,10 +126,6 @@ import com.jgoodies.looks.Options;
 import com.sun.star.uno.Exception;
 
 import CommonTools.Colors;
-import CommonTools.DatFunk;
-import CommonTools.ExUndHop;
-import CommonTools.FileTools;
-import CommonTools.FireRehaError;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
@@ -158,7 +150,6 @@ import dialoge.AboutDialog;
 import dialoge.DatumWahl;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
-import egk.EgkReader;
 import entlassBerichte.EBerichtPanel;
 import environment.LadeProg;
 import environment.Path;
@@ -179,11 +170,9 @@ import rehaInternalFrame.OOODesktopManager;
 import roogle.RoogleFenster;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
-import systemEinstellungen.SystemPreislisten;
 import systemTools.RehaPainters;
 import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
-import terminKalender.ParameterLaden;
 import terminKalender.TerminFenster;
 import textBausteine.textbaus;
 import urlaubBeteiligung.Beteiligung;
@@ -723,8 +712,8 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     Reha.getThisFrame()
                         .setCursor(Cursors.wartenCursor);
                     try {
-                        new AkutListe();
-                    } catch (TextException e) {
+                        new AkutListe(Reha.officeapplication.getDocumentService());
+                    } catch (TextException | OfficeApplicationException e) {
 
                         e.printStackTrace();
                     }
@@ -1463,7 +1452,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     ((JRehaInternal) frame[i]).setActive(true);
                     ((JRehaInternal) frame[i]).getContent()
                                               .requestFocus();
-                    ProgLoader.containerHandling(1);
+                    Reha.containerHandling(1);
                     if (i == 0) {
                         break;
                     }
@@ -1475,7 +1464,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     ((JRehaInternal) frame[i]).setActive(true);
                     ((JRehaInternal) frame[i]).getContent()
                                               .requestFocus();
-                    ProgLoader.containerHandling(0);
+                    Reha.containerHandling(0);
                     if (i == 0) {
                         break;
                     }
@@ -3268,691 +3257,36 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         }.execute();
     }
 
+    public static void containerHandling(int cont) {
+        if (instance.vollsichtbar == -1 || (!SystemConfig.desktopHorizontal)) {
+            // System.out.println("Location =
+            // "+Reha.instance.jSplitRechtsOU.getDividerLocation());
+            // System.out.println("Width = "+Reha.instance.jSplitRechtsOU.getWidth());
+            if (cont == 0) {
+                if (instance.jSplitRechtsOU.getDividerLocation() == 0) {
+                    instance.setDivider(5);
+                }
+            } else if (cont == 1) {
+                if (instance.jSplitRechtsOU.getDividerLocation() == instance.jSplitRechtsOU.getWidth() - 7) {
+                    instance.setDivider(6);
+                }
+            }
+
+            return;
+        }
+        if ((instance.vollsichtbar == 1 && cont == 1) || (instance.vollsichtbar == 0 && cont == 0)) {
+            return;
+        }
+        if (instance.vollsichtbar == 0 && cont == 1) {
+            instance.setDivider(6);
+            return;
+        }
+        if (instance.vollsichtbar == 1 && cont == 0) {
+            instance.setDivider(5);
+            return;
+        }
+
+    }
+
     /*********************************************/
-}
-
-/**************
- *
- * Thread zum Start der Datenbank
- *
- * @author admin
- *
- */
-
-final class DatenbankStarten implements Runnable {
-    Logger logger = LoggerFactory.getLogger(DatenbankStarten.class);
-
-    private void StarteDB() {
-        final Reha obj = Reha.instance;
-
-        final String sDB = "SQL";
-        if (obj.conn != null) {
-            try {
-                obj.conn.close();
-            } catch (final SQLException e) {
-            }
-        }
-        try {
-            if (sDB == "SQL") {
-                new SocketClient().setzeInitStand("Datenbanktreiber installieren");
-                Class.forName(SystemConfig.vDatenBank.get(0)
-                                                     .get(0))
-                     .newInstance();
-            }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (sDB == "SQL") {
-
-                // obj.conn = (Connection)
-                // DriverManager.getConnection("jdbc:mysql://194.168.1.8:3306/dbf","entwickler","entwickler");
-                new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-                obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0)
-                                                                              .get(1)
-                        + "?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
-                        SystemConfig.vDatenBank.get(0)
-                                               .get(3),
-                        SystemConfig.vDatenBank.get(0)
-                                               .get(4));
-            }
-            int nurmaschine = SystemConfig.dieseMaschine.toString()
-                                                        .lastIndexOf("/");
-            obj.sqlInfo.setConnection(obj.conn);
-            new ExUndHop().setzeStatement("delete from flexlock where maschine like '%"
-                    + SystemConfig.dieseMaschine.toString()
-                                                .substring(0, nurmaschine)
-                    + "%'");
-            // geht leider nicht, erfordert root-Rechte
-            // SqlInfo.sqlAusfuehren("SET GLOBAL sql_mode = ''");
-            // sql_mode ging zwar mit SET SESSION, aber dann haben wir max_allowed... immer
-            // noch nicht gelöst.
-            // SqlInfo.sqlAusfuehren("SET GLOBAL max_allowed_packet = 32*1024*1024");
-            String db = SystemConfig.vDatenBank.get(0)
-                                               .get(1)
-                                               .replace("jdbc:mysql://", "");
-            db = db.substring(0, db.indexOf("/"));
-            final String xdb = db;
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    try {
-                        while (Reha.getThisFrame() == null || Reha.getThisFrame()
-                                                                  .getStatusBar() == null
-                                || Reha.instance.dbLabel == null) {
-                            Thread.sleep(25);
-                        }
-                        Reha.instance.dbLabel.setText(Version.aktuelleVersion + xdb);
-                    } catch (NullPointerException ex) {
-                        ex.printStackTrace();
-                    }
-                    return null;
-                }
-
-            }.execute();
-
-            Reha.DbOk = true;
-            try {
-                Reha.testeNummernKreis();
-                Reha.testeStrictMode();
-                Reha.testeMaxAllowed();
-
-            } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
-                ex.printStackTrace();
-            }
-
-        } catch (final SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            Reha.DbOk = false;
-            Reha.nachladenDB = -1;
-            System.out.println("Fehler bei der Initialisierung der Datenbank");
-            new FireRehaError(RehaEvent.ERROR_EVENT, "Datenbankfehler!",
-                    new String[] { "Datenabankfehler, Fehlertext:", ex.getMessage() });
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e1) {
-
-                e1.printStackTrace();
-
-            }
-
-            if (Reha.nachladenDB == JOptionPane.YES_OPTION) {
-                new Thread(new DbNachladen()).start();
-            } else {
-                // new FireRehaError(this,"Datenbankfehler",new String[] {"Fehlertext:","Die
-                // Datenbank kann nicht gestartet werden"});
-                new SocketClient().setzeInitStand(
-                        "Fehler!!!! Datenbank kann nicht gestartet werden - Thera-Pi wird beendet");
-
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                new SocketClient().setzeInitStand("INITENDE");
-
-                System.exit(0);
-
-            }
-            return;
-        }
-        return;
-    }
-
-    @Override
-    public void run() {
-        int i = 0;
-        while (!Reha.instance.splashok) {
-            i = i + 1;
-            if (i > 10) {
-                break;
-            }
-            try {
-                Thread.sleep(300);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        new SocketClient().setzeInitStand("Datenbank starten");
-        StarteDB();
-        if (Reha.DbOk) {
-            Date zeit = new Date();
-            String stx = "Insert into eingeloggt set comp='" + SystemConfig.dieseMaschine + "', zeit='"
-                    + zeit.toString() + "', einaus='ein'";
-            new ExUndHop().setzeStatement(stx);
-            try {
-                Thread.sleep(50);
-
-                new SocketClient().setzeInitStand("Datenbank ok");
-
-                ParameterLaden.Init();
-                new SocketClient().setzeInitStand("Systemparameter laden");
-
-                Reha.sysConf.SystemInit(3);
-
-                ParameterLaden.Passwort();
-                new SocketClient().setzeInitStand("Systemparameter ok");
-
-                new SocketClient().setzeInitStand("Native Interface ok");
-
-                Reha.sysConf.SystemInit(4);
-
-                new SocketClient().setzeInitStand("Emailparameter");
-
-                Reha.sysConf.SystemInit(6);
-
-                new SocketClient().setzeInitStand("Roogle-Gruppen ok!");
-
-                Reha.sysConf.SystemInit(7);
-
-                new SocketClient().setzeInitStand("Verzeichnisse");
-
-                new SocketClient().setzeInitStand("Mandanten-Daten einlesen");
-
-                Reha.sysConf.SystemInit(11);
-
-                Reha.sysConf.SystemInit(9);
-
-                Thread.sleep(50);
-
-                new SocketClient().setzeInitStand("HashMaps initialisieren");
-
-                SystemConfig.HashMapsVorbereiten();
-
-                Thread.sleep(50);
-
-                new SocketClient().setzeInitStand("Desktop konfigurieren");
-
-                SystemConfig.DesktopLesen();
-
-                Thread.sleep(50);
-
-                new SocketClient().setzeInitStand("Patientenstamm init");
-
-                SystemConfig.PatientLesen();
-
-                Thread.sleep(50);
-
-                new SocketClient().setzeInitStand("Gerätetreiber initialiseieren");
-
-                SystemConfig.GeraeteInit();
-
-                Thread.sleep(50);
-
-                new SocketClient().setzeInitStand("Arztgruppen einlesen");
-
-                SystemConfig.ArztGruppenInit();
-
-                Thread.sleep(50);
-
-                new SocketClient().setzeInitStand("Rezeptparameter einlesen");
-
-                SystemConfig.RezeptInit();
-
-                new SocketClient().setzeInitStand("Bausteine für Therapie-Berichte laden");
-
-                SystemConfig.TherapBausteinInit();
-
-                // SystemConfig.compTest();
-
-                new SocketClient().setzeInitStand("Fremdprogramme überprüfen");
-
-                SystemConfig.FremdProgs();
-
-                new SocketClient().setzeInitStand("Geräteliste erstellen");
-
-                SystemConfig.GeraeteListe();
-
-                SystemConfig.CompanyInit();
-
-                FileTools.deleteAllFiles(new File(SystemConfig.hmVerzeichnisse.get("Temp")));
-                if (SystemConfig.sBarcodeAktiv.equals("1")) {
-                    try {
-                        Reha.barcodeScanner = new BarCodeScanner(SystemConfig.sBarcodeCom);
-                    } catch (Exception e) {
-                        //// System.out.println("Barcode-Scanner konnte nicht installiert werden");
-                    } catch (java.lang.Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                new SocketClient().setzeInitStand("Firmendaten einlesen");
-
-                Vector<Vector<String>> vec = SqlInfo.holeFelder("select min(datum),max(datum) from flexkc");
-
-                try {
-                    Reha.kalMin = DatFunk.sDatInDeutsch((vec.get(0)
-                                                            .get(0)));
-                    Reha.kalMax = DatFunk.sDatInDeutsch((vec.get(0)
-                                                            .get(1)));
-                } catch (java.lang.Exception e) {
-                    logger.info("kalmin und kalmax nicht gesetzt", e);
-                }
-
-                SystemConfig.FirmenDaten();
-
-                new SocketClient().setzeInitStand("Gutachten Parameter einlesen");
-
-                SystemConfig.GutachtenInit();
-
-                SystemConfig.AbrechnungParameter();
-
-                SystemConfig.BedienungIni_ReadFromIni();
-
-                SystemConfig.OffenePostenIni_ReadFromIni();
-
-                SystemConfig.JahresUmstellung();
-
-                SystemConfig.Feiertage();
-
-                // notwendig bis alle Überhangsrezepte der BKK-Gesundheit abgearbeitet sind.
-                SystemConfig.ArschGeigenTest();
-
-                SystemConfig.EigeneDokuvorlagenLesen();
-
-                SystemConfig.IcalSettings();
-
-                new Thread(new PreisListenLaden()).start();
-
-                if (SystemConfig.sWebCamActive.equals("1")) {
-                    Reha.instance.activateWebCam();
-                }
-
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            } catch (NullPointerException e2) {
-                e2.printStackTrace();
-            }
-        } else {
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    new SocketClient().setzeInitStand("INITENDE");
-                    return null;
-                }
-            }.execute();
-
-        }
-    }
-}
-
-final class DbNachladen implements Runnable {
-    @Override
-    public void run() {
-        final String sDB = "SQL";
-        final Reha obj = Reha.instance;
-        if (Reha.instance.conn != null) {
-            try {
-                Reha.instance.conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try {
-            if (sDB == "SQL") {
-                new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-                obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0)
-                                                                              .get(1)
-                        + "?jdbcCompliantTruncation=false",
-                        SystemConfig.vDatenBank.get(0)
-                                               .get(3),
-                        SystemConfig.vDatenBank.get(0)
-                                               .get(4));
-            }
-            int nurmaschine = SystemConfig.dieseMaschine.toString()
-                                                        .lastIndexOf("/");
-            new ExUndHop().setzeStatement("delete from flexlock where maschine like '%"
-                    + SystemConfig.dieseMaschine.toString()
-                                                .substring(0, nurmaschine)
-                    + "%'");
-            if (obj.dbLabel != null) {
-                String db = SystemConfig.vDatenBank.get(0)
-                                                   .get(1)
-                                                   .replace("jdbc:mysql://", "");
-                db = db.substring(0, db.indexOf("/"));
-                obj.dbLabel.setText(Version.aktuelleVersion + db);
-            }
-            obj.sqlInfo.setConnection(obj.conn);
-            Reha.DbOk = true;
-
-        } catch (final SQLException ex) {
-            Reha.DbOk = false;
-            Reha.nachladenDB = -1;
-            Reha.nachladenDB = JOptionPane.showConfirmDialog(Reha.getThisFrame(),
-                    "Die Datenbank konnte nicht gestartet werden, erneuter Versuch?", "Wichtige Benuterzinfo",
-                    JOptionPane.YES_NO_OPTION);
-
-            while (Reha.nachladenDB < 0) {
-                try {
-                    Thread.sleep(25);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            if (Reha.nachladenDB == JOptionPane.YES_OPTION) {
-                new Thread(new DbNachladen()).start();
-            }
-            return;
-        }
-        return;
-    }
-}
-
-final class ErsterLogin implements Runnable {
-    private void Login() {
-        new Thread() {
-            @Override
-            public void run() {
-                Reha.starteOfficeApplication();
-                OOTools.ooOrgAnmelden();
-            }
-        }.start();
-        ProgLoader.PasswortDialog();
-    }
-
-    @Override
-    public void run() {
-        Login();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                Reha.getThisFrame()
-                    .setMinimumSize(new Dimension(800, 600));
-                Reha.getThisFrame()
-                    .setPreferredSize(new Dimension(800, 600));
-                Reha.getThisFrame()
-                    .setExtendedState(JXFrame.MAXIMIZED_BOTH);
-                Reha.getThisFrame()
-                    .setVisible(true);
-                INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
-                        "rehajava.ini");
-                if (inif.getIntegerProperty("HauptFenster", "Divider1") != null) {
-                    Reha.instance.jSplitLR.setDividerLocation(
-                            (Reha.divider1 = inif.getIntegerProperty("HauptFenster", "Divider1")));
-                    Reha.instance.jSplitRechtsOU.setDividerLocation(
-                            (Reha.divider2 = inif.getIntegerProperty("HauptFenster", "Divider2")));
-                    // System.out.println("Divider gesetzt");
-                    // System.out.println("Divider 1 = "+inif.getIntegerProperty("HauptFenster",
-                    // "Divider1"));
-                    // System.out.println("Divider 2 = "+inif.getIntegerProperty("HauptFenster",
-                    // "Divider2")+"\n\n");
-                    Reha.dividerOk = true;
-                    // Hier mußt noch eine funktion getSichtbar() entwickelt werden
-                    // diese ersetzt die nächste Zeile
-                    // System.out.println("Sichtbar Variante = "+Reha.instance.getSichtbar());
-                } else {
-                    // System.out.println("Divider-Angaben sind noch null");
-                    Reha.instance.setDivider(5);
-                }
-
-                Reha.getThisFrame()
-                    .getRootPane()
-                    .validate();
-                Reha.isStarted = true;
-
-                Reha.getThisFrame()
-                    .setVisible(true);
-
-                if (Reha.dividerOk) {
-                    Reha.instance.vollsichtbar = Reha.instance.getSichtbar();
-                    if (!SystemConfig.desktopHorizontal) {
-                        Reha.instance.jSplitRechtsOU.setDividerLocation((Reha.divider2));
-                    }
-                    // System.out.println("Wert für Vollsichtbar = "+Reha.instance.vollsichtbar);
-                }
-
-                // Reha.thisFrame.pack();
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        try {
-
-                            // SCR335
-                            // ctpcsc31kv
-
-                            if (SystemConfig.sReaderAktiv.equals("1")) {
-                                try {
-
-                                    System.out.println("Aktiviere Reader: " + SystemConfig.sReaderName + "\n"
-                                            + "CT-API Bibliothek: " + SystemConfig.sReaderCtApiLib);
-
-                                    Reha.instance.ocKVK = new OcKVK();
-
-                                    EgkReader target = new EgkReader(SystemConfig.sReaderName);
-                                    target.addCardListener(Reha.instance.ocKVK);
-                                    Thread egk = new Thread(target);
-
-                                    egk.setDaemon(true);
-                                    egk.setName("EGK");
-                                    egk.start();
-
-                                } catch (CardException e) {
-                                    disableReader("Fehlerstufe rc = -2 oder -4  = Karte wird nicht unterstützt\n"
-                                            + e.getMessage());
-                                } catch (ClassNotFoundException e) {
-                                    disableReader("Fehlerstufe rc = -1 = CT-API läßt sich nicht initialisieren\n"
-                                            + e.getMessage());
-                                } catch (java.lang.Exception e) {
-                                    if (e.getMessage()
-                                         .contains("property file")) {
-                                        disableReader("Anderweitiger Fehler\n"
-                                                + "Die Datei opencard.properties befindet sich nicht im Java-Verzeichnis ../lib."
-                                                + "Das Kartenlesegerät kann nicht verwendet werden.");
-                                    } else {
-                                        disableReader("Anderweitiger Fehler\n" + e.getMessage());
-                                    }
-                                }
-
-                            }
-                        } catch (NullPointerException ex) {
-                            ex.printStackTrace();
-                        }
-                        return null;
-                    }
-                }.execute();
-            }
-        });
-    }
-
-    private void disableReader(String error) {
-        SystemConfig.sReaderAktiv = "0";
-        Reha.instance.ocKVK = null;
-        JOptionPane.showMessageDialog(null, error);
-    }
-}
-
-final class PreisListenLaden implements Runnable {
-    private void Einlesen() {
-
-        try {
-
-            while (Reha.instance == null || Reha.instance.jxLinks == null || Reha.instance.jxRechts == null) {
-                long zeit = System.currentTimeMillis();
-                try {
-                    Thread.sleep(50);
-                    if (System.currentTimeMillis() - zeit > 20000) {
-                        JOptionPane.showMessageDialog(null, "Fehler beim Starten des Systems ");
-                        System.exit(0);
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (isAktiv("Physio")) {
-                new SocketClient().setzeInitStand("Preisliste Physio einlesen");
-                SystemPreislisten.ladePreise("Physio");
-            }
-            if (isAktiv("Massage")) {
-                new SocketClient().setzeInitStand("Preisliste Massage einlesen");
-                SystemPreislisten.ladePreise("Massage");
-            }
-            if (isAktiv("Ergo")) {
-                new SocketClient().setzeInitStand("Preisliste Ergo einlesen");
-                SystemPreislisten.ladePreise("Ergo");
-            }
-            if (isAktiv("Logo")) {
-                new SocketClient().setzeInitStand("Preisliste Logo einlesen");
-                SystemPreislisten.ladePreise("Logo");
-            }
-            if (isAktiv("Reha")) {
-                new SocketClient().setzeInitStand("Preisliste Reha einlesen");
-                SystemPreislisten.ladePreise("Reha");
-            }
-            if (isAktiv("Podo")) {
-                new SocketClient().setzeInitStand("Preisliste Podologie einlesen");
-                SystemPreislisten.ladePreise("Podo");
-            }
-            if (SystemConfig.mitRs) {
-                if (isAktiv("Rsport")) {
-                    new SocketClient().setzeInitStand("Preisliste Rehasport einlesen");
-                    SystemPreislisten.ladePreise("Rsport");
-                }
-                if (isAktiv("Ftrain")) {
-                    new SocketClient().setzeInitStand("Preisliste Funktionstraining einlesen");
-                    SystemPreislisten.ladePreise("Ftrain");
-                }
-            }
-
-            SystemPreislisten.ladePreise("Common");
-
-            System.out.println("Preislisten einlesen abgeschlossen");
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        }
-        try {
-            new SocketClient().setzeInitStand("System-Init abgeschlossen!");
-            Reha.instance.setzeInitEnde();
-            Reha.instance.initok = true;
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        }
-
-    }
-
-    public boolean isAktiv(String disziplin) {
-
-        for (int i = 0; i < SystemConfig.rezeptKlassenAktiv.size(); i++) {
-            if (SystemConfig.rezeptKlassenAktiv.get(i)
-                                               .get(0)
-                                               .toLowerCase()
-                                               .startsWith(disziplin.toLowerCase())
-                    || (disziplin.equals("Rsport") && SystemConfig.rezeptKlassenAktiv.get(i)
-                                                                                     .get(0)
-                                                                                     .toLowerCase()
-                                                                                     .startsWith("rehasport"))
-                    || (disziplin.equals("Ftrain") && SystemConfig.rezeptKlassenAktiv.get(i)
-                                                                                     .get(0)
-                                                                                     .toLowerCase()
-                                                                                     .startsWith("funktionstrai"))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public void run() {
-        Einlesen();
-        int i = 0;
-        while (!Reha.instance.initok) {
-            i = i + 1;
-            if (i > 10) {
-                break;
-            }
-            try {
-                Thread.sleep(100);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        new Thread(new ErsterLogin()).start();
-    }
-
-}
-
-class SocketClient {
-    String stand = "";
-    Socket server = null;
-
-    public void setzeInitStand(String stand) {
-        this.stand = stand;
-        run();
-    }
-
-    public void run() {
-        serverStarten();
-    }
-
-    private void serverStarten() {
-        try {
-            this.server = new Socket("localhost", 1234);
-            OutputStream output = server.getOutputStream();
-            InputStream input = server.getInputStream();
-
-            byte[] bytes = this.stand.getBytes();
-
-            output.write(bytes);
-            output.flush();
-            int zahl = input.available();
-            if (zahl > 0) {
-                byte[] lesen = new byte[zahl];
-                input.read(lesen);
-            }
-
-            server.close();
-            input.close();
-            output.close();
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
-
-/*******************************************/
-final class HilfeDatenbankStarten implements Runnable {
-
-    void StarteDB() {
-
-    }
-
-    @Override
-    public void run() {
-        final Reha obj = Reha.instance;
-
-        // final String sDB = "SQL";
-        if (obj.hilfeConn != null) {
-            try {
-                obj.hilfeConn.close();
-            } catch (final SQLException e) {
-            }
-        }
-        try {
-            Class.forName(SystemConfig.hmHilfeServer.get("HilfeDBTreiber"))
-                 .newInstance();
-            Reha.HilfeDbOk = true;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
-            Reha.instance.hilfeConn = DriverManager.getConnection(SystemConfig.hmHilfeServer.get("HilfeDBLogin"),
-                    SystemConfig.hmHilfeServer.get("HilfeDBUser"), SystemConfig.hmHilfeServer.get("HilfeDBPassword"));
-        } catch (final SQLException ex) {
-            Reha.HilfeDbOk = false;
-            return;
-        }
-        return;
-    }
 }

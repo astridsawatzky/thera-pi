@@ -14,7 +14,6 @@ import com.sun.star.lang.WrappedTargetException;
 
 import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentService;
@@ -30,20 +29,12 @@ public class AkutListe {
     Vector<Vector<String>> vec = null;
     String felder = "therapeut,n_name,v_name,telefonp,telefong,telefonm,emaila,termine1,termine2,akutdat,akutbis";
 
-    public AkutListe() throws TextException {
+    public AkutListe(IDocumentService documentService2) throws TextException {
         vec = SqlInfo.holeSaetze("pat5", felder, "akutpat='T' order by therapeut", Arrays.asList(new String[] {}));
         int lang;
         if ((lang = vec.size()) > 0) {
-            IDocumentService documentService = null;
-            try {
-                if (!Reha.officeapplication.isActive()) {
-                    Reha.starteOfficeApplication();
-                }
-                documentService = Reha.officeapplication.getDocumentService();
-            } catch (OfficeApplicationException e) {
-                System.out.println("Die Java-Access-Bridge ist zusammengebrochen...");
-                e.printStackTrace();
-            }
+            IDocumentService documentService = documentService2;
+
             IDocument document = null;
             try {
                 DocumentDescriptor docdecript = new DocumentDescriptor();
