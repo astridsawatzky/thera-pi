@@ -320,7 +320,6 @@ public class RezTools {
         return retobj;
     }
 
-    @SuppressWarnings("unchecked")
     public static String holeErstenTermin(String xreznr, String termine) {
         try {
             Vector<String> xvec = null;
@@ -352,7 +351,6 @@ public class RezTools {
         return "";
     }
 
-    @SuppressWarnings("unchecked")
     public static String holeLetztenTermin(String xreznr, String termine) {
         try {
             Vector<String> xvec = null;

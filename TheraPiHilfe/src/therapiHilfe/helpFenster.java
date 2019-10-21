@@ -485,7 +485,7 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
         tblThemen.setEnabled(true);
         helpFenster.thisClass.stitel.setText((String) tblThemen.getValueAt(tblThemen.getSelectedRow(), 0));
 
-//		stitel.setText("");
+//        stitel.setText("");
         stitel.setEnabled(false);
     }
 
@@ -610,7 +610,7 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
          * ftpt.schreibeDatei(arbild.get(i), arbild.get(i), new
          * Long(arbild.get(i+2)),jprogress); try { Thread.sleep(100); } catch
          * (InterruptedException e) {
-         * 
+         *
          * e.printStackTrace(); } }
          */
         ftpt = null;
@@ -758,7 +758,7 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
          * 3. Dann Tempdateien HTML - in Datenbank transferieren 4. Nachsehen ob
          * Bilddateien eingebunden sind 5. Falls ja die Bilddateien in ArrayEinlesen 6.
          * jede Bilddatei in ByteArray Verwandeln und in Datenbank transferieren.
-         * 
+         *
          */
 
         while (!ftpfertig) {
@@ -1166,7 +1166,7 @@ public class helpFenster extends JXPanel implements TableModelListener, Componen
 
 class MyDefaultTableModel extends DefaultTableModel {
     /**
-    * 
+    *
     */
     private static final long serialVersionUID = 1L;
 
@@ -1204,9 +1204,6 @@ final class WorkerTitel extends SwingWorker<Void, Void> {
         execute();
     }
 
-    public void setEnde() {
-
-    }
 
     @Override
     protected Void doInBackground() throws Exception {

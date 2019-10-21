@@ -1,31 +1,31 @@
 /*
  * Copyright (c) 2000-2006 JGoodies Karsten Lentzsch. All Rights Reserved.
  *
- * Redistribution and use in source and binary forms, with or without 
+ * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
- * 
- *  o Redistributions of source code must retain the above copyright notice, 
- *    this list of conditions and the following disclaimer. 
- *     
- *  o Redistributions in binary form must reproduce the above copyright notice, 
- *    this list of conditions and the following disclaimer in the documentation 
- *    and/or other materials provided with the distribution. 
- *     
- *  o Neither the name of JGoodies Karsten Lentzsch nor the names of 
- *    its contributors may be used to endorse or promote products derived 
- *    from this software without specific prior written permission. 
- *     
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; 
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
- * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ *
+ *  o Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ *  o Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ *  o Neither the name of JGoodies Karsten Lentzsch nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+ * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 package therapiHilfe;
 
@@ -45,10 +45,10 @@ import javax.swing.plaf.basic.BasicSplitPaneUI;
  * feature is not supported by all look&amp;feels. Some look&amp;feel
  * implementation will always show a divider border, and conversely, others will
  * never show a divider border.
- * 
+ *
  * @author Karsten Lentzsch
  * @version $Revision: 1.1 $
- * 
+ *
  * @see javax.swing.plaf.basic.BasicSplitPaneUI
  */
 
@@ -57,7 +57,7 @@ public final class UIFSplitPane extends JSplitPane {
     /**
      * Holds the name of the bound property that tries to show or hide the split
      * pane's divider border.
-     * 
+     *
      * @see #isDividerBorderVisible()
      * @see #setDividerBorderVisible(boolean)
      */
@@ -66,7 +66,7 @@ public final class UIFSplitPane extends JSplitPane {
     /**
      * Determines whether the divider border shall be removed when the UI is
      * updated.
-     * 
+     *
      * @see #isDividerBorderVisible()
      * @see #setDividerBorderVisible(boolean)
      */
@@ -117,7 +117,7 @@ public final class UIFSplitPane extends JSplitPane {
     /**
      * Constructs a <code>UIFSplitPane</code> with the specified orientation and the
      * given componenents.
-     * 
+     *
      * @param orientation    <code>JSplitPane.HORIZONTAL_SPLIT</code> or
      *                       <code>JSplitPane.VERTICAL_SPLIT</code>
      * @param leftComponent  the <code>Component</code> that will appear on the left
@@ -160,7 +160,7 @@ public final class UIFSplitPane extends JSplitPane {
     /**
      * Constructs a <code>UIFSplitPane</code>, i.e. a <code>JSplitPane</code> that
      * has no borders. Also disabled the one touch exandable property.
-     * 
+     *
      * @param orientation    <code>JSplitPane.HORIZONTAL_SPLIT</code> or
      *                       <code>JSplitPane.VERTICAL_SPLIT</code>
      * @param leftComponent  the <code>Component</code> that will appear on the left
@@ -187,7 +187,7 @@ public final class UIFSplitPane extends JSplitPane {
      * Note that this feature is not supported by all look&amp;feels. Some
      * look&amp;feel implementation will always show a divider border, and
      * conversely, others will never show a divider border.
-     * 
+     *
      * @return the desired (but potentially inaccurate) divider border visiblity
      */
     public boolean isDividerBorderVisible() {
@@ -199,7 +199,7 @@ public final class UIFSplitPane extends JSplitPane {
      * supported by all look&amp;feels. Some look&amp;feel implementation will
      * always show a divider border, and conversely, others will never show a
      * divider border.
-     * 
+     *
      * @param newVisibility true for visible, false for invisible
      */
     public void setDividerBorderVisible(boolean newVisibility) {
@@ -237,18 +237,6 @@ public final class UIFSplitPane extends JSplitPane {
         }
     }
 
-    public Component setDividerColor(Color col) {
 
-        SplitPaneUI splitPaneUI = getUI();
-        if (splitPaneUI instanceof BasicSplitPaneUI) {
-            BasicSplitPaneUI basicUI = (BasicSplitPaneUI) splitPaneUI;
-            basicUI.getDivider()
-                   .setBackground(col);
-            basicUI.getDivider()
-                   .setForeground(col);
-            super.updateUI();
-        }
-        return null;
-    }
 
 }

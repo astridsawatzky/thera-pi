@@ -73,7 +73,7 @@ public class ooPanel {
         /*
          * try { //configureOOOFrame(piHelp.officeapplication,officeFrame); } catch
          * (Throwable e) {
-         * 
+         *
          * e.printStackTrace(); }
          */
 
@@ -181,40 +181,9 @@ public class ooPanel {
         return officeFrame;
     }
 
-    public static void configureOOOFrame(IOfficeApplication officeApplication, IFrame officeFrame) throws Throwable {
-        ILayoutManager layoutManager = officeFrame.getLayoutManager();
-        layoutManager.hideAll();
-        layoutManager.showElement(ILayoutManager.URL_TOOLBAR_STANDARDBAR);
-        layoutManager.showElement(ILayoutManager.URL_TOOLBAR_TEXTOBJECTBAR);
-        layoutManager.showElement(ILayoutManager.URL_STATUSBAR);
+    
 
-        officeFrame.disableDispatch(GlobalCommands.CLOSE_DOCUMENT);
-        officeFrame.disableDispatch(GlobalCommands.CLOSE_WINDOW);
-        officeFrame.disableDispatch(GlobalCommands.QUIT_APPLICATION);
-        officeFrame.disableDispatch(GlobalCommands.NEW_MENU);
-        officeFrame.disableDispatch(GlobalCommands.NEW_DOCUMENT);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_DOCUMENT);
-        officeFrame.disableDispatch(GlobalCommands.EDIT_DOCUMENT);
-        officeFrame.disableDispatch(GlobalCommands.DIREKT_EXPORT_DOCUMENT);
-        officeFrame.disableDispatch(GlobalCommands.MAIL_DOCUMENT);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_HYPERLINK_DIALOG);
-        officeFrame.disableDispatch(GlobalCommands.EDIT_HYPERLINK);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_DRAW_TOOLBAR);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_NAVIGATOR);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_GALLERY);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_DATASOURCES);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_STYLE_SHEET);
-        officeFrame.disableDispatch(GlobalCommands.OPEN_HELP);
-        // officeFrame.disableDispatch(GlobalCommands.PRINT_PREVIEW);
-
-        officeFrame.updateDispatches();
-
-        // officeFrame.getDispatch(".uno:PrintLayout").dispatch();
-    }
-
-    public static void allesOOZu() {
-
-    }
+  
 
     public static void schliesseText() {
         try {
@@ -239,44 +208,9 @@ public class ooPanel {
         thisClass.fillNOAPanel();
     }
 
-    /*********************************************************/
-    public static void starteNeuenText() {
-        try {
-            DocumentDescriptor d = new DocumentDescriptor();
-            document = (ITextDocument) piHelp.officeapplication.getDocumentService()
-                                                               .constructNewDocument(officeFrame, IDocument.WRITER, d);
-            ansicht = ANSICHT_DOKUMENT;
-        } catch (NOAException e) {
 
-            e.printStackTrace();
-        } catch (OfficeApplicationException e) {
 
-            e.printStackTrace();
-        }
 
-    }
-
-    /*********************************************************/
-    public static void erzeugeAusByteArray(byte[] bhtml, String datei, boolean alsweb) {
-        FileOutputStream fileOut;
-        String indatei = datei;
-        if (!indatei.contains(".html")) {
-            indatei = indatei + ".html";
-        }
-        try {
-            fileOut = new FileOutputStream(indatei);
-            fileOut.write(bhtml);
-            fileOut.flush();
-            fileOut.close();
-            extrahiereBilder(datei);
-        } catch (FileNotFoundException e1) {
-
-            e1.printStackTrace();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        }
-    }
 
     /********************************************************/
 
@@ -358,7 +292,7 @@ public class ooPanel {
              * File tempFile; try { tempFile = File.createTempFile("noatemp" +
              * System.currentTimeMillis(), "html"); tempFile.deleteOnExit(); outputStream =
              * new FileOutputStream(tempFile); } catch (IOException e) {
-             * 
+             *
              * e.printStackTrace(); }
              */
 
@@ -376,7 +310,7 @@ public class ooPanel {
                 File f = new File(datei);
                 /*
                  * try {
-                 * 
+                 *
                  * ITextDocument textDocument = document; XTextGraphicObjectsSupplier
                  * graphicObjSupplier = (XTextGraphicObjectsSupplier)
                  * UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
@@ -428,7 +362,7 @@ public class ooPanel {
                 File f = new File(datei);
                 /*
                  * try {
-                 * 
+                 *
                  * IWebDocument textDocument = webdocument; XTextGraphicObjectsSupplier
                  * graphicObjSupplier = (XTextGraphicObjectsSupplier)
                  * UnoRuntime.queryInterface(XTextGraphicObjectsSupplier.class,
@@ -458,7 +392,7 @@ public class ooPanel {
                  * (WrappedTargetException e) { e.printStackTrace(); } catch
                  * (UnknownPropertyException e) { e.printStackTrace(); } catch (Exception e) {
                  * e.printStackTrace(); }
-                 * 
+                 *
                  */
                 if (f.exists()) {
                     // System.out.println("IWeb - Datei wird nur gespeichert");
@@ -672,7 +606,7 @@ class DokumentListener implements IDocumentListener {
          * try {
          * Reha.officeapplication.getDesktopService().removeDocumentListener(this); }
          * catch (OfficeApplicationException e) {
-         * 
+         *
          * e.printStackTrace(); }
          */
     }

@@ -198,7 +198,7 @@ public class piHelp implements WindowListener, WindowStateListener, ComponentLis
          * try { piHelp.officeapplication.deactivate();
          * //System.out.println("OpenOffice deaktiviert"); } catch
          * (OfficeApplicationException e) {
-         * 
+         *
          * e.printStackTrace(); }
          */
         // System.out.println("Programm Exit(0)");
@@ -372,14 +372,8 @@ final class DatenbankStarten implements Runnable {
 final class WorkerGruppen extends SwingWorker<Void, Void> {
     JComboBox jcom;
 
-    public void init(JComboBox jcom) {
-        this.jcom = jcom;
-        // execute();
-    }
 
-    public void setEnde() {
 
-    }
 
     @Override
     protected Void doInBackground() throws Exception {

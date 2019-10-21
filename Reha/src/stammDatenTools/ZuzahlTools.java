@@ -81,7 +81,7 @@ public class ZuzahlTools {
             return ret;
         }
 
-        Comparator comparator = new Comparator<String>() {
+        Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
                 String strings1 = DatFunk.sDatInSQL(s1);
@@ -298,7 +298,7 @@ public class ZuzahlTools {
 
     /**
      * füllt die EnumMap: ZuZahlStatus als key, Icon als value
-     * 
+     *
      * @author McM
      */
     public static void setZzIcons() {
@@ -312,10 +312,10 @@ public class ZuzahlTools {
 
     /**
      * liefert Icon passend zum (ZZStat-)Key
-     * 
+     *
      * @param Zuzahlstatus
      * @return das zugehörige Icon
-     * 
+     *
      * @author McM
      */
     public static ImageIcon getZzIcon(ZZStat key) {
@@ -324,7 +324,7 @@ public class ZuzahlTools {
 
     /**
      * liefert zum bisher verwandten Integer-Index den passenden ZZStat
-     * 
+     *
      * @param oldIdx
      * @param rezNr
      * @return
@@ -353,10 +353,10 @@ public class ZuzahlTools {
 
     /**
      * Prüfung, ob es zum Rezept bereits eine RG-Rechnung gibt
-     * 
+     *
      * @param String Rezeptnummer
      * @return true/false
-     * 
+     *
      * @author McM
      */
     public static boolean existsRGR(String rezNb) {
@@ -370,10 +370,10 @@ public class ZuzahlTools {
 
     /**
      * Nummer der RG-Rechnung zu einem Rezept ermitteln
-     * 
+     *
      * @param xreznr
      * @return Rechnungsnummer
-     * 
+     *
      * @author McM
      */
     public static String getRgr(String rezNb) {
@@ -387,10 +387,10 @@ public class ZuzahlTools {
 
     /**
      * Vorhandensein der RG-Rechnung zu einem Rezept bestätigen
-     * 
+     *
      * @param xreznr
      * @return OK-String (enthält HTML-Tags!)
-     * 
+     *
      * @author McM
      */
     public static String rgrOK(String rezNb) {
@@ -403,10 +403,10 @@ public class ZuzahlTools {
 
     /**
      * Prüfung, ob eine RG-Rechnung bar bezahlt wurde
-     * 
+     *
      * @param xreznr
      * @return true/false
-     * 
+     *
      * @author McM
      */
     public static boolean existsRgrBarInKasse(String rezNb) {
@@ -420,10 +420,10 @@ public class ZuzahlTools {
 
     /**
      * Prüfung, ob die Zuzahlung für ein Rezept bar bezahlt wurde
-     * 
+     *
      * @param xreznr
      * @return true/false
-     * 
+     *
      * @author McM
      */
     public static boolean existsBarQuittung(String rezNb) {
@@ -441,10 +441,10 @@ public class ZuzahlTools {
     /**
      * Prüfung, ob die Zuzahlung für ein Rezept kassiert oder eine RGR erstellt
      * wurde
-     * 
+     *
      * @param xreznr
      * @return true/false
-     * 
+     *
      * @author McM
      */
     public static boolean bereitsBezahlt(String rezNb) {
