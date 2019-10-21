@@ -20,7 +20,7 @@ public class IntegerTools {
         for (i = 0; i < lang; i++) {
             // FIXME I think a String (substring) is never equal to number 0
             if (!zahl.substring(i, i + 1)
-                     .equals(0)) {
+                     .equals("0")) {
                 break;
             }
         }

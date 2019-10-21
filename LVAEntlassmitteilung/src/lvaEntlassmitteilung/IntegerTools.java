@@ -14,7 +14,7 @@ public class IntegerTools {
         int i = 0;
         for (i = 0; i < lang; i++) {
             if (!zahl.substring(i, i + 1)
-                     .equals(0)) {
+                     .equals("0")) {
                 break;
             }
         }

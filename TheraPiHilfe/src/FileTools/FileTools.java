@@ -64,7 +64,7 @@ public class FileTools {
                     break;
                 }
                 if ((meinweb.substring(i, i + 1)
-                            .equals(ende))
+                            .equals(String.valueOf(ende)))
                         && (start)) {
                     start = false;
                     ende = i;

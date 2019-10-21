@@ -163,9 +163,9 @@ public class Dta301CodeListen {
     private static String[][] codeB15 = { { "1", "JA" }, { "2", "NEIN" } };
 
     /***********
-     * 
+     *
      * Es folgen die A-CodeListen
-     * 
+     *
      */
     // Anreise
     private static String[][] codeA01 = {
@@ -244,9 +244,9 @@ public class Dta301CodeListen {
     // Zwischenrechnung erlaubt
     private static String[][] codeA14 = { { "J", "JA" }, { "N", "NEIN" } };
     /***********
-     * 
+     *
      * Es folgen die C-CodeListen
-     * 
+     *
      */
     // Arbeitshaltung im Stehen (nur RV)
     private static String[][] codeC01 = { { "1", "Keine Angaben" }, { "2", "Ständig" }, { "3", "Überwiegend" },
@@ -436,16 +436,7 @@ public class Dta301CodeListen {
         return ret;
     }
 
-    public static String getCodeText(String codeListe, String codeNumber) {
-        String sret = "";
-        String[][] codeliste = getCodeListe(codeListe);
-        for (int i = 0; i < codeliste.length; i++) {
-            if (codeliste[0].equals(codeNumber)) {
-                return String.valueOf(codeliste[1]);
-            }
-        }
-        return sret;
-    }
+
 
     public static boolean mussFettDruck(String string) {
         for (int i = 0; i < fettListe.size(); i++) {

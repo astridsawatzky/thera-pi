@@ -80,9 +80,9 @@ public class Dta301CodeListen {
             { "2", "Diabetes mellitus Typ 2" }, { "3", "Brustkrebs" }, { "4", "KHK" },
             { "5", "Asthma bronchiale / COPD" }, { "6", "mehrere DMP's" }, { "7", "andere DMP's" }, };
     /***********
-     * 
+     *
      * Es folgen die A-CodeListen
-     * 
+     *
      */
     // Anreise
     public static String[][] codeA01 = {
@@ -246,15 +246,6 @@ public class Dta301CodeListen {
         return ret;
     }
 
-    public static String getCodeText(String codeListe, String codeNumber) {
-        String sret = "";
-        String[][] codeliste = getCodeListe(codeListe);
-        for (int i = 0; i < codeliste.length; i++) {
-            if (codeliste[0].equals(codeNumber)) {
-                return String.valueOf(codeliste[1]);
-            }
-        }
-        return sret;
-    }
+
 
 }

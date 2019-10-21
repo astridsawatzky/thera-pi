@@ -826,7 +826,7 @@ public class AbrechnungReha extends JXPanel {
 
         if ((jcmbpat[0].getSelectedIndex() == 0) || (tfpatanzahl[0].getText()
                                                                    .trim()
-                                                                   .equals(0))) {
+                                                                   .equals("0"))) {
             JOptionPane.showMessageDialog(null, "Fehler - Eigenenanteilsrechnung kann nicht erstellt werden");
             abrechnungOk = false;
             return;

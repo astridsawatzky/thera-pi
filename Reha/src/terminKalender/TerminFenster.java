@@ -331,6 +331,7 @@ public class TerminFenster extends Observable
                 if (SystemConfig.aTerminKalender.get(i)
                                                 .get(0)
                                                 .contains(SystemConfig.KalenderStartNADefaultSet)) {
+                    //XXX: bogus compare, if thie does not work, why does it work at all?
                     pos = i;
                     break;
                 }

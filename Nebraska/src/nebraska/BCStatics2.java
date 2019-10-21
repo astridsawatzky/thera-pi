@@ -1076,24 +1076,20 @@ public class BCStatics2 {
             System.out.println("*****************Chain of certs Anzahl = " + newCerts.size());
             System.out.println("End Chain of certs******************************");
         }
-        if (newCerts != null) {
-            keyStore.setKeyEntry(alias, privKey, keyPassword.toCharArray(),
-                    newCerts.toArray(new X509Certificate[newCerts.size()]));
-            // Notify listeners that a new certificate has been created
-            for (CertificateEventListener listener : listeners) {
-                try {
-                    listener.certificateSigned(keyStore, alias, newCerts);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+
+        keyStore.setKeyEntry(alias, privKey, keyPassword.toCharArray(),
+                newCerts.toArray(new X509Certificate[newCerts.size()]));
+        // Notify listeners that a new certificate has been created
+        for (CertificateEventListener listener : listeners) {
+            try {
+                listener.certificateSigned(keyStore, alias, newCerts);
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            System.out.println("Returnwert von installReply != null " + true);
-            return true;
-        } else {
-            System.out.println("New Certs == null");
-            System.out.println("Returnwert von installReply" + newCerts);
-            return false;
         }
+        System.out.println("Returnwert von installReply != null " + true);
+        return true;
+
     }
 
     /***************************************************/

@@ -33,8 +33,9 @@ public class OpCommon {
             hmMahnPar.put("frist3", (Integer) 11);
         }
         if (inif.getIntegerProperty("General", "EinzelMahnung") != null) {
-            hmMahnPar.put("einzelmahnung", (Boolean) (inif.getIntegerProperty("General", "EinzelMahnung")
-                                                          .equals("1") ? Boolean.TRUE : Boolean.FALSE));
+            hmMahnPar.put("einzelmahnung",
+                    (Boolean) (inif.getIntegerProperty("General", "EinzelMahnung") == 1 ? Boolean.TRUE
+                            : Boolean.FALSE));
         } else {
             hmMahnPar.put("einzelmahnung", Boolean.FALSE);
         }
@@ -49,8 +50,9 @@ public class OpCommon {
             hmMahnPar.put("einzelmahnung", (Integer) 2);
         }
         if (inif.getStringProperty("General", "InOfficeStarten") != null) {
-            hmMahnPar.put("inofficestarten", (Boolean) (inif.getIntegerProperty("General", "InOfficeStarten")
-                                                            .equals("1") ? Boolean.TRUE : Boolean.FALSE));
+            hmMahnPar.put("inofficestarten",
+                    (Boolean) (inif.getIntegerProperty("General", "InOfficeStarten") == 1 ? Boolean.TRUE
+                            : Boolean.FALSE));
         } else {
             hmMahnPar.put("inofficestarten", Boolean.TRUE);
         }
