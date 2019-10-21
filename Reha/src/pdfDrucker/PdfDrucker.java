@@ -86,11 +86,8 @@ public class PdfDrucker {
             e.printStackTrace();
         }
         raf.close();
-        /*******************************
-         *
-         *
-         *
-         */
+        fis.close();
+
     }
 
 }

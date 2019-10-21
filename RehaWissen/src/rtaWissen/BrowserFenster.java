@@ -421,8 +421,8 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
 
             /*
              * tree.setModel(new DefaultTreeModel(root));
-             * 
-             * 
+             *
+             *
              */
             /*
             */
@@ -445,7 +445,7 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
 
     @Override
     public void keyPressed(KeyEvent arg0) {
-//		System.out.println("KeyPressed "+arg0.getKeyCode()+" - "+arg0.getSource());
+//        System.out.println("KeyPressed "+arg0.getKeyCode()+" - "+arg0.getSource());
         if (arg0.getSource() instanceof JFormattedTextField) {
             if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
                 arg0.consume();
@@ -665,92 +665,47 @@ final class FuelleTree extends SwingWorker<Void, Void> {
         return (Vector) vec.clone();
     }
 
-    /**********************************************************************/
     private void holeTitel() {
         int i;
-        Statement stmtx = null;
-        ResultSet rsx = null;
 
-        try {
-            stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE);
+        try (Statement stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);) {
+
+            for (i = 0; i < gruppen.size(); i++) {
+                try (ResultSet rsx = stmtx.executeQuery(
+                        "select titel,gruppe,datei from htitel where gruppe='" + gruppen.get(i)
+                                                                                        .trim()
+                                + "'");) {
+
+                    DefaultMutableTreeNode treeitem = null;
+                    DefaultMutableTreeNode node = new DefaultMutableTreeNode(gruppen.get(i));
+                    boolean hatitems = false;
+                    Vector<String> items = new Vector<String>();
+                    while (rsx.next()) {
+                        hatitems = true;
+                        items.clear();
+                        treeitem = new DefaultMutableTreeNode(rsx.getString(1));
+                        node.add(treeitem);
+
+
+                        items.add(rsx.getString(1));
+                        items.add(rsx.getString(2));
+                        items.add(rsx.getString(3));
+                        BrowserFenster.hilfsDateien((Vector) items.clone());
+                    }
+                    BrowserFenster.root.add(node);
+                    BrowserFenster.thisClass.tree.validate();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        for (i = 0; i < gruppen.size(); i++) {
-            /*******/
-            try {
-                rsx = stmtx.executeQuery("select titel,gruppe,datei from htitel where gruppe='" + gruppen.get(i)
-                                                                                                         .trim()
-                        + "'");
-                try {
-                    stmtx = RehaWissen.thisClass.hilfeConn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                            ResultSet.CONCUR_UPDATABLE);
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-                /*
-                 * DefaultMutableTreeNode node = new DefaultMutableTreeNode( "Terminkalender");
-                 * treeitem = new DefaultMutableTreeNode("Grundlagen der Bedienung");
-                 * node.add(treeitem ); treeitem = new
-                 * DefaultMutableTreeNode("Kalenderbenutzer anlegen"); node.add(treeitem );
-                 * treeitem = new DefaultMutableTreeNode("Was sind Behandlersets");
-                 * node.add(treeitem ); treeitem = new
-                 * DefaultMutableTreeNode("Behandlersets anlegen"); node.add(treeitem );
-                 * root.add(node);
-                 * 
-                 * node = new DefaultMutableTreeNode( "Ru:gl"); treeitem = new
-                 * DefaultMutableTreeNode("Grundlagen der Bedienung"); node.add(treeitem );
-                 * root.add(node);
-                 */
-                DefaultMutableTreeNode treeitem = null;
-                DefaultMutableTreeNode node = new DefaultMutableTreeNode(gruppen.get(i));
-                boolean hatitems = false;
-                Vector<String> items = new Vector<String>();
-                // System.out.println("Gruppe: " + gruppen.get(i).trim() );
-                while (rsx.next()) {
-                    hatitems = true;
-                    items.clear();
-                    treeitem = new DefaultMutableTreeNode(rsx.getString(1));
-                    node.add(treeitem);
-
-                    /*************/
-
-                    items.add(rsx.getString(1));
-                    items.add(rsx.getString(2));
-                    items.add(rsx.getString(3));
-                    BrowserFenster.hilfsDateien((Vector) items.clone());
-                    // System.out.println(items);
-                }
-                BrowserFenster.root.add(node);
-                BrowserFenster.thisClass.tree.validate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            /*******/
-        }
-
-        if (rsx != null) {
-            try {
-                rsx.close();
-            } catch (SQLException sqlEx) { // ignore }
-                rsx = null;
-            }
-        }
-        if (stmtx != null) {
-            try {
-                stmtx.close();
-            } catch (SQLException sqlEx) { // ignore }
-                stmtx = null;
-            }
-        }
         BrowserFenster.thisClass.tree.expandRow(0);
         BrowserFenster.thisClass.tree.validate();
-        // BrowserFenster.thisClass.tree.setExpandsSelectedPaths(true);
 
     }
 
@@ -759,9 +714,6 @@ final class FuelleTree extends SwingWorker<Void, Void> {
 /**************************************/
 
 class MyDefaultTableModel extends DefaultTableModel {
-    /**
-    *
-    */
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -769,11 +721,9 @@ class MyDefaultTableModel extends DefaultTableModel {
         if (columnIndex == 0) {
             return String.class;
         }
-        /* if(columnIndex==1){return JLabel.class;} */
         else {
             return String.class;
         }
-        // return (columnIndex == 0) ? Boolean.class : String.class;
     }
 
     @Override
@@ -925,7 +875,7 @@ final class MachSuche extends SwingWorker<Void, Void> {
 
             } /*
                * else{ rsx = stmtx.executeQuery(xstmt2);
-               * 
+               *
                * while(rsx.next()){ gesamtVec.clear(); gesamtVec.add(rsx.getString("titel"));
                * gesamtVec.add(rsx.getInt("id")); gesamtVec.add(rsx.getString("datei"));
                * //System.out.println(rsx.getString("inhalt"));
@@ -935,7 +885,7 @@ final class MachSuche extends SwingWorker<Void, Void> {
                * url = (String)BrowserFenster.thisClass.tblgefunden.getValueAt(0,2);
                * BrowserFenster.thisClass.rtaWissen.Navigiere(SystemConfig.HilfeServer+url);
                * //BrowserFenster.thisClass.rtaWissen.Markiere(fundstelle);
-               * 
+               *
                * } }
                */
 

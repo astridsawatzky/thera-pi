@@ -114,6 +114,7 @@ public class BCStatics3 {
                 break;
             }
         }
+        in.close();
         return new Object[] { certcount, certs };
     }
 
@@ -170,11 +171,11 @@ public class BCStatics3 {
      * Exception("Certificate reply and certificate in keystore are identical"); } }
      * Map<Principal, List<X509Certificate>> knownCerts = new Hashtable<Principal,
      * List<X509Certificate>>();
-     * 
+     *
      * if (keyStore.size() > 0) { knownCerts.putAll(getCertsByIssuer(keyStore)); }
      * if (trustCACerts && trustStore.size() > 0) {
      * knownCerts.putAll(getCertsByIssuer(trustStore));
-     * 
+     *
      * } LinkedList<X509Certificate> answer = new LinkedList<X509Certificate>(); if
      * (buildChain(certReply, answer, knownCerts)) {
      * System.out.println("Returnwert von establishCertChain "+answer); return

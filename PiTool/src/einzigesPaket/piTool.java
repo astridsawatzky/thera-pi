@@ -251,7 +251,7 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
 
         FormLayout lay = new FormLayout("5px,140px,15px",
 //           clipb        vorlab      vorsch           titlab       edit       rad1      rad2        speich    progr       vscroll       lade      inet       lösch   email
-//		 1    2      3     4     5    	6        7      8     	9    10    11   12   13   14    5     16    17   18    19    	20        21   22   23    24   25  26  27   28
+//         1    2      3     4     5        6        7      8         9    10    11   12   13   14    5     16    17   18    19        20        21   22   23    24   25  26  27   28
                 "5px,20px,  4px , 20px, 4px,  15px, 2px,  100px   , 5px,   15px,   5px, 20px, 12px, 17px ,3px,17px  ,10px, 20px ,5px, 15px, 2px,  120dlu:g ,  5px, 5px, 20px ,5px,20px,8px,20px,8px");
         knopf.setLayout(lay);
         CellConstraints cc = new CellConstraints();
@@ -647,7 +647,7 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
     }
 
     private void speichernQualitaet(String stitel, Float fQuality) {
-//		img, "jpg", new File("C:\\ScreenShots\\"+stitel+".jpg")
+//        img, "jpg", new File("C:\\ScreenShots\\"+stitel+".jpg")
         IIOImage imgq = new IIOImage((RenderedImage) img, null, null);
         ImageWriter writer = ImageIO.getImageWritersBySuffix("jpeg")
                                     .next();
@@ -1160,16 +1160,14 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
 class holeShots extends SwingWorker<Void, Void> {
 
     @Override
-    protected Void doInBackground() throws Exception {
-        Statement stmt = null;
-        ResultSet rs = null;
+    protected Void doInBackground() {
+
         int bilder = 0;
 
-        // piTool.app.conn.setAutoCommit(true);
-        try {
-            stmt = piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        try (Statement stmt = piTool.app.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);) {
             String test = "select count(*) as zaehler from sshots";
-            rs = stmt.executeQuery(test);
+            ResultSet rs = stmt.executeQuery(test);
             bilder = 0;
             if (rs.next()) {
                 bilder = rs.getInt("zaehler");
@@ -1179,24 +1177,22 @@ class holeShots extends SwingWorker<Void, Void> {
                 piTool.pBarInit(0, bilder);
                 piTool.vbilder = new Image[bilder];
                 test = "select vorschau,id,titel from sshots ORDER by id";
-                rs = stmt.executeQuery(test);
+                ResultSet rs1 = stmt.executeQuery(test);
                 int lauf = 0;
-                while (rs.next()) {
+                while (rs1.next()) {
                     piTool.pBarAkt(lauf + 1);
-                    Thread.sleep(20);
-                    piTool.vbilder[lauf] = ImageIO.read(new ByteArrayInputStream(rs.getBytes("vorschau")));
-                    System.out.println("Länge des Bildes ist " + rs.getBytes("vorschau").length);
-                    Vector ar = new Vector();
-                    ar.add(rs.getInt("id"));
-                    ar.add(rs.getString("titel"));
-                    piTool.shotvec.add(ar.clone());
-                    // piTool.vbilder[lauf] = ImageIO.read(new
-                    // ByteArrayInputStream(rs.getBlob("vorschau")));
-                    // JLabel label = new JLabel();
-                    // label.setIcon(new ImageIcon( ImageIO.read(new
-                    // ByteArrayInputStream(rs.getBytes("vorschau"))) ));
-                    // piTool.app.jroller.add(label);
+                    try {
+                        Thread.sleep(20);
+                    } catch (InterruptedException e) {
+                        // just delaying
 
+                    }
+                    piTool.vbilder[lauf] = ImageIO.read(new ByteArrayInputStream(rs1.getBytes("vorschau")));
+                    System.out.println("Länge des Bildes ist " + rs1.getBytes("vorschau").length);
+                    Vector ar = new Vector();
+                    ar.add(rs1.getInt("id"));
+                    ar.add(rs1.getString("titel"));
+                    piTool.shotvec.add(ar.clone());
                     lauf++;
 
                 }
@@ -1206,21 +1202,7 @@ class holeShots extends SwingWorker<Void, Void> {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-                if (stmt != null) {
-                    try {
-                        stmt.close();
-                    } catch (SQLException sqlEx) { // ignore }
-                        stmt = null;
-                    }
-                }
-            }
+
         }
 
         piTool.macheScroll();
@@ -1317,13 +1299,7 @@ class MacheBufferedImage extends JFrame {
         runner.start();
     }
 
-    /**
-     * @param args
-     */
-
 }
-
-/**********************************/
 
 class passwortEncrypt extends JDialog {
     JPasswordField pf = new JPasswordField();
@@ -1385,7 +1361,7 @@ class ShotSenden extends JDialog {
     JLabel lbl = new JLabel("Empfängeradresse: ");
     JTextPane ta = new JTextPane();
 
-    JComboBox comb = new JComboBox(
+    JComboBox<String> comb = new JComboBox<>(
             new String[] { piTool.hmEmailIntern.get("SenderAdresse"), piTool.hmEmailExtern.get("SenderAdresse") });
     JButton but = new JButton("Senden");
 
@@ -1490,7 +1466,7 @@ class ShotSenden extends JDialog {
         }
 
         /*
-         * 
+         *
          * String[] anhang = {null,null}; for(int i = 1; i <= DruckFenster.seiten;i++){
          * anhang[0] = SystemConfig.hmVerzeichnisse.get("Temp")+"Terminplan.pdf";
          * anhang[1] = "Terminplan.pdf";
@@ -1510,7 +1486,7 @@ class ShotSenden extends JDialog {
          * "Termine die Sie nicht einhalten bzw. wahrnehmen können, müßen 24 Stunden vorher\n"
          * + "abgesagt werden.\n\nIhr Planungs-Team vom RTA"; } String smtpHost =
          * SystemConfig.hmEmailExtern.get("SmtpHost");
-         * 
+         *
          * EmailSendenExtern oMail = new EmailSendenExtern(); try{
          * oMail.sendMail(smtpHost, username, password, senderAddress,
          * recipientsAddress, subject, text,attachments); }catch(Exception e){

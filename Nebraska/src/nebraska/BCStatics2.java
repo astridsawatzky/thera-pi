@@ -167,7 +167,7 @@ public class BCStatics2 {
          * new KeyUsage(KeyUsage.digitalSignature | KeyUsage.keyEncipherment));
          * certGen.addExtension(X509Extensions.ExtendedKeyUsage,true, new
          * ExtendedKeyUsage(KeyPurposeId.id_kp_serverAuth));
-         * 
+         *
          * Date d = new Date(BCStatics2.certifikatsDatum(DatFunk.sHeute(), 0)); Time
          * time = new Time(d.getTime());
          */
@@ -318,7 +318,7 @@ public class BCStatics2 {
         int zertifikate = 0;
         int eingelesen = 0;
         reader = new FileReader(pfad + File.separator + sret);
-        BufferedReader in = new BufferedReader(reader);// new BufferedReader(new FileReader(pfad+sret));
+        BufferedReader in = new BufferedReader(reader);
 
         StringBuffer buf = new StringBuffer();
         String zeile = "";
@@ -345,6 +345,7 @@ public class BCStatics2 {
                 break;
             }
         }
+        in.close();
         return certcount;
     }
 
@@ -781,6 +782,7 @@ public class BCStatics2 {
             ASN1InputStream aIn = new ASN1InputStream(cert.getPublicKey()
                                                           .getEncoded());
             SubjectPublicKeyInfo sub = SubjectPublicKeyInfo.getInstance(aIn.readObject());
+            aIn.close();
 
             String sha = getSHA1fromByte(sub.getPublicKeyData()
                                             .getBytes());

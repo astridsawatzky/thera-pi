@@ -130,8 +130,8 @@ public class SMSFrame extends JFrame {
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         fc.showOpenDialog(null);
         File f = fc.getSelectedFile();
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(f));
+        try (BufferedReader in = new BufferedReader(new FileReader(f));){
+
             String numbers = "";
             String zeile = null;
             while ((zeile = in.readLine()) != null) {

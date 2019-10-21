@@ -1031,14 +1031,17 @@ public class NebraskaTestPanel extends JPanel implements ActionListener {
         }
         byte[] b = cert.getExtensionValue("2.5.29.19");
         if (b != null) {
-            aIn = new ASN1InputStream(b);
-            ASN1OctetString extnValue = (ASN1OctetString) aIn.readObject();
+            ASN1InputStream aIn2 = new ASN1InputStream(b);
+            ASN1OctetString extnValue = (ASN1OctetString) aIn2.readObject();
             certInfo = certInfo + "    ExtensionValue = " + extnValue + "\n";
-            aIn = new ASN1InputStream(extnValue.getOctets());
-            DERObject extensionType = aIn.readObject();
+            aIn2.close();
+            ASN1InputStream aIn3 = new ASN1InputStream(extnValue.getOctets());
+            DERObject extensionType = aIn3.readObject();
             certInfo = certInfo + "    ExtensionType = " + extensionType + "\n";
             System.out.println(extensionType);
+            aIn3.close();
         }
+       aIn.close();
         JOptionPane.showMessageDialog(null, certInfo);
 
     }

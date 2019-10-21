@@ -20,8 +20,8 @@ public class PDFDrucker {
     public static void setup(String fname) throws IOException {
 
         /******************************
-         * 
-         *         
+         *
+         *
          */
         File f = new File(fname);
         FileInputStream fis = new FileInputStream(f);
@@ -55,11 +55,7 @@ public class PDFDrucker {
 
             e.printStackTrace();
         }
-        /*******************************
-         * 
-         *         
-         *         
-         */
+        fis.close();
     }
 
     public static void main(final String[] args) {

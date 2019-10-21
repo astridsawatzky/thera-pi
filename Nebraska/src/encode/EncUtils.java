@@ -109,29 +109,6 @@ public class EncUtils {
         return BigInteger.valueOf(Long.valueOf("-1"));
     }
 
-    private static byte[] encodeObj(DEREncodable obj) throws IOException {
-        if (obj != null) {
-            ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-            ASN1OutputStream aOut = new ASN1OutputStream(bOut);
-
-            aOut.writeObject(obj);
-
-            return bOut.toByteArray();
-        }
-
-        return null;
-    }
-
-    private static DERObject makeObj(byte[] encoding) throws IOException {
-        if (encoding == null) {
-            return null;
-        }
-
-        ASN1InputStream aIn = new ASN1InputStream(encoding);
-
-        return aIn.readObject();
-    }
-
     public static void encrypt2(PublicKey publicKey/* String publicKeyFile */, String inputFile, String outputFile) {
         try {
             KeyGenerator keygen = KeyGenerator.getInstance("AES");

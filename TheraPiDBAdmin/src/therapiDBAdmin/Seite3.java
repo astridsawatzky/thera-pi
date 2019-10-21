@@ -30,7 +30,7 @@ import com.jgoodies.forms.layout.FormLayout;
 public class Seite3 extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     MySqlTab eltern = null;
@@ -119,8 +119,8 @@ public class Seite3 extends JXPanel {
 
         String thisLine, sqlQuery;
         Statement stmt = null;
-        try {
-            BufferedReader d = new BufferedReader(new FileReader(sqlFile.getText()));
+        try (  BufferedReader d = new BufferedReader(new FileReader(sqlFile.getText()));){
+
             stmt = TheraPiDbAdmin.conn_db.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             sqlQuery = "";

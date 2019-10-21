@@ -46,7 +46,7 @@ import reha301.Reha301Tab;
 public class Reha301Einlesen {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -1515,7 +1515,7 @@ public class Reha301Einlesen {
         long length = file.length();
 
         if (length > Integer.MAX_VALUE) {
-            // System.out.println("Datei zu groß zum einlesen");
+            is.close();
             return null;
         }
 
@@ -1526,6 +1526,7 @@ public class Reha301Einlesen {
             offset += numRead;
         }
         if (offset < bytes.length) {
+            is.close();
             throw new IOException("Datei konnte nicht komplett gelesen werden " + file.getName());
         }
         is.close();

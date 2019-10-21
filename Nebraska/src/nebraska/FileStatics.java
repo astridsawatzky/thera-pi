@@ -20,6 +20,7 @@ public class FileStatics {
 
         if (length > Integer.MAX_VALUE) {
             System.out.println("Datei zu groß zum einlesen");
+            is.close();
             return null;
         }
 
@@ -30,6 +31,7 @@ public class FileStatics {
             offset += numRead;
         }
         if (offset < bytes.length) {
+            is.close();
             throw new IOException("Datei konnte nicht komplett gelesen werden " + file.getName());
         }
         is.close();

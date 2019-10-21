@@ -24,10 +24,12 @@ import org.bouncycastle.openssl.PEMReader;
 
 public class PKCSIn {
     public static void main(String[] args) {
-        try {
+        try (PEMReader pemReader = new PEMReader(
+                new InputStreamReader(new FileInputStream("C:/Nebraska/" + "510841109.pem")));
+                ASN1InputStream ain =
 
-            PEMReader pemReader = new PEMReader(
-                    new InputStreamReader(new FileInputStream("C:/Nebraska/" + "510841109.pem")));
+                        new ASN1InputStream(new FileInputStream("C:/Nebraska/" + "510841109.p10"));
+                ) {
 
             PKCS10CertificationRequest certRequest = (PKCS10CertificationRequest) pemReader.readObject();
             // System.out.println(new String(certRequest.getDEREncoded()));
@@ -36,9 +38,7 @@ public class PKCSIn {
 //         System.out.println("Aus Pem "+info.getDERObject());
             ASN1Encodable aenc = info.getDERObject();
             System.out.println(new String(aenc.getDEREncoded()));
-            ASN1InputStream ain =
 
-                    new ASN1InputStream(new FileInputStream("C:/Nebraska/" + "510841109.p10"));
             // ain.readObject();
 
             DERObject derob = ain.readObject();
@@ -100,6 +100,7 @@ public class PKCSIn {
                                                                         .getEncoded());
 
                         System.out.println(ASN1Dump.dumpAsString(aIn.readObject()));
+                        aIn.close();
                     }
                 }
             }

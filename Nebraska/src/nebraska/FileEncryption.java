@@ -24,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Utility class for encrypting/decrypting files.
- * 
+ *
  * @author Michael Lones
  */
 public class FileEncryption {
@@ -60,9 +60,11 @@ public class FileEncryption {
     public void loadKey(File in, File privateKeyFile) throws GeneralSecurityException, IOException {
         // read private key to be used to decrypt the AES key
         byte[] encodedKey = new byte[(int) privateKeyFile.length()];
-        // XXX : where is this reading to and FileInputStream is never closed
-        new FileInputStream(privateKeyFile).read(encodedKey);
 
+        FileInputStream fileInputStream = new FileInputStream(privateKeyFile);
+
+        fileInputStream.read(encodedKey);
+        fileInputStream.close();
         // create private key
         PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(encodedKey);
         KeyFactory kf = KeyFactory.getInstance(Constants.PUBLIC_KEY_ALGORITHM);
@@ -73,6 +75,7 @@ public class FileEncryption {
         aesKey = new byte[Constants.AES_Key_Size / 8];
         CipherInputStream is = new CipherInputStream(new FileInputStream(in), pkCipher);
         is.read(aesKey);
+        is.close();
         aeskeySpec = new SecretKeySpec(aesKey, Constants.SECRET_KEY_ALGORITHM);
     }
 
@@ -82,9 +85,9 @@ public class FileEncryption {
     public void saveKey(File out, File publicKeyFile) throws IOException, GeneralSecurityException {
         // read public key to be used to encrypt the AES key
         byte[] encodedKey = new byte[(int) publicKeyFile.length()];
-        // XXX : where is this reading to and FileInputStream is never closed
-        new FileInputStream(publicKeyFile).read(encodedKey);
-
+        FileInputStream fileInputStream = new FileInputStream(publicKeyFile);
+        fileInputStream.read(encodedKey);
+        fileInputStream.close();
         // create public key
         X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(encodedKey);
         KeyFactory kf = KeyFactory.getInstance(Constants.PUBLIC_KEY_ALGORITHM);

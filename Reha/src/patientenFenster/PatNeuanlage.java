@@ -2242,87 +2242,90 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
     }
 
     private void calcKilometer() {
-        try {
-            if (jtf[4].getText()
-                      .trim()
-                      .equals("")
-                    || jtf[5].getText()
-                             .trim()
-                             .equals("")
-                    || jtf[6].getText()
-                             .trim()
-                             .equals("")
-                    || SystemConfig.hmFirmenDaten.get("Strasse")
-                                                 .equals("")
-                    || SystemConfig.hmFirmenDaten.get("Plz")
-                                                 .equals("")
-                    || SystemConfig.hmFirmenDaten.get("Ort")
-                                                 .equals("")) {
-                JOptionPane.showMessageDialog(this, "Patientenadresse oder Firmenadresse sind unvollständig");
-                return;
-            }
-            File f = new File(Path.Instance.getProghome() + "CalcKilometer.jar");
-            if (!f.exists()) {
-                JOptionPane.showMessageDialog(this, "Die Software zur Kilometerermittlung ist nicht installiert");
-                return;
-            }
-            String patientAdr = jtf[4].getText() + "," + jtf[5].getText() + "," + jtf[6].getText();
-            patientAdr = patientAdr.toUpperCase()
-                                   .replace(" ", "%20")
-                                   .replace("ß", "SS")
-                                   .replace("Ü", "UE")
-                                   .replace("Ö", "OE")
-                                   .replace("Ä", "AE");
-            /*
-             * patientAdr = patientAdr.replaceAll("ß", "SS"); patientAdr =
-             * patientAdr.replaceAll("Ü", "UE"); patientAdr = patientAdr.replaceAll("Ö",
-             * "OE"); patientAdr = patientAdr.replaceAll("Ä", "AE");
-             */
-            String mandAdr = SystemConfig.hmFirmenDaten.get("Strasse") + "," + SystemConfig.hmFirmenDaten.get("Plz")
-                    + "," + SystemConfig.hmFirmenDaten.get("Ort");
-            mandAdr = mandAdr.toUpperCase()
-                             .replace(" ", "%20")
-                             .replace("ß", "SS")
-                             .replace("Ü", "UE")
-                             .replace("Ö", "OE")
-                             .replace("Ä", "AE");
-            /*
-             * mandAdr = mandAdr.replaceAll("ß", "SS"); mandAdr = mandAdr.replaceAll("Ü",
-             * "UE"); mandAdr = mandAdr.replaceAll("Ö", "OE"); mandAdr =
-             * mandAdr.replaceAll("Ä", "AE");
-             */
-            // System.out.println(mandAdr);
-            // System.out.println(patientAdr);
-            ArrayList<String> alist = new ArrayList<String>();
-            alist.add("CalcKilometer.jar");
-            alist.add(patientAdr);
-            alist.add(mandAdr);
-            alist.add(0, "-jar");
-            alist.add(0, "java");
-            Process p = new ProcessBuilder(alist).start();
-            Scanner s = new Scanner(new InputStreamReader(p.getInputStream(), "windows-1252")).useDelimiter("\\Z");
-            String result = s.next();
-            String[] ergebnis = result.split(";");
-            s.close();
-            p.destroy();
-            p = null;
-            int kmGesamt = Integer.parseInt(ergebnis[0]);
-            int minuten = Integer.parseInt(ergebnis[1]);
-            String copy = ergebnis[2];
 
-            Object[] options = { "Übernehmen", "Nö!" };
-            int answer = JOptionPane.showOptionDialog(null,
-                    "<html>openMaps hat für Hin- und Rückweg (gerundet) <b><u>" + kmGesamt
-                            + " km</u></b> errechnet.<br>Fahrzeit: " + minuten + " min <br>" + copy + "</html>",
-                    "openMaps sagt", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
-                    options[0]);
-            if (answer == JOptionPane.YES_OPTION) {
-                jtf[31].setText(String.valueOf(kmGesamt));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Fehler beim Bezug der Routenangaben");
+        if (patientenAdresseUnvollständig()) {
+            JOptionPane.showMessageDialog(this, "Patientenadresse oder Firmenadresse sind unvollständig");
+            return;
         }
+        File f = new File(Path.Instance.getProghome() + "CalcKilometer.jar");
+        if (!f.exists()) {
+            JOptionPane.showMessageDialog(this, "Die Software zur Kilometerermittlung ist nicht installiert");
+            return;
+        }
+        String patientAdr = jtf[4].getText() + "," + jtf[5].getText() + "," + jtf[6].getText();
+        patientAdr = patientAdr.toUpperCase()
+                               .replace(" ", "%20")
+                               .replace("ß", "SS")
+                               .replace("Ü", "UE")
+                               .replace("Ö", "OE")
+                               .replace("Ä", "AE");
+
+        String mandAdr = SystemConfig.hmFirmenDaten.get("Strasse") + "," + SystemConfig.hmFirmenDaten.get("Plz") + ","
+                + SystemConfig.hmFirmenDaten.get("Ort");
+        mandAdr = mandAdr.toUpperCase()
+                         .replace(" ", "%20")
+                         .replace("ß", "SS")
+                         .replace("Ü", "UE")
+                         .replace("Ö", "OE")
+                         .replace("Ä", "AE");
+
+        ArrayList<String> alist = new ArrayList<String>();
+        alist.add("CalcKilometer.jar");
+        alist.add(patientAdr);
+        alist.add(mandAdr);
+        alist.add(0, "-jar");
+        alist.add(0, "java");
+        Process p;
+        try {
+            p = new ProcessBuilder(alist).start();
+
+            try (InputStreamReader source = new InputStreamReader(p.getInputStream(), "windows-1252");
+
+                    Scanner s = new Scanner(source).useDelimiter("\\Z");) {
+
+                String result = s.next();
+                String[] ergebnis = result.split(";");
+                s.close();
+                p.destroy();
+                p = null;
+                int kmGesamt = Integer.parseInt(ergebnis[0]);
+                int minuten = Integer.parseInt(ergebnis[1]);
+                String copy = ergebnis[2];
+
+                Object[] options = { "Übernehmen", "Nö!" };
+                int answer = JOptionPane.showOptionDialog(null,
+                        "<html>openMaps hat für Hin- und Rückweg (gerundet) <b><u>" + kmGesamt
+                                + " km</u></b> errechnet.<br>Fahrzeit: " + minuten + " min <br>" + copy + "</html>",
+                        "openMaps sagt", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options,
+                        options[0]);
+                if (answer == JOptionPane.YES_OPTION) {
+                    jtf[31].setText(String.valueOf(kmGesamt));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Fehler beim Bezug der Routenangaben");
+            }
+        } catch (IOException e1) {
+            logger.error("externer CalKilometer konnte nicht gestartet werden:" + patientAdr +"\n" +mandAdr, e1);
+        }
+    }
+
+    private boolean patientenAdresseUnvollständig() {
+        return jtf[4].getText()
+                     .trim()
+                     .equals("")
+                || jtf[5].getText()
+                         .trim()
+                         .equals("")
+                || jtf[6].getText()
+                         .trim()
+                         .equals("")
+                || SystemConfig.hmFirmenDaten.get("Strasse")
+                                             .equals("")
+                || SystemConfig.hmFirmenDaten.get("Plz")
+                                             .equals("")
+                || SystemConfig.hmFirmenDaten.get("Ort")
+                                             .equals("");
     }
 
     @Override

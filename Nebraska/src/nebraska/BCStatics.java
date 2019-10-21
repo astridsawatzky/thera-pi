@@ -220,9 +220,7 @@ public class BCStatics {
         providerTest();
 
         int eingelesen = 0;
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(pfad + File.separator + sret));
-
+        try (BufferedReader in = new BufferedReader(new FileReader(pfad + File.separator + sret));) {
             StringBuffer buf = new StringBuffer();
             String zeile = "";
             String separator = System.getProperty("line.separator");
@@ -245,17 +243,7 @@ public class BCStatics {
                     break;
                 }
             }
-            /*
-             * PEMReader pemReader = new PEMReader(reader); Object o; while( (o =
-             * pemReader.readObject()) != null){ //Object o = pemReader.readObject(); if (o
-             * instanceof X509Certificate){ X509Certificate cert = (X509Certificate) o;
-             * jta.setText(jta.getText()+"\n************************************"+ cert);
-             * jta.setText(jta.getText()+"\n"+ cert.getIssuerDN());
-             * jta.setText(jta.getText()+"\n"+ cert.getSubjectDN()); zertifikate++; }else{ }
-             * } pemReader.close();
-             * System.out.println("Insgesamt eingelesene Zertifikate = "+eingelesen);
-             * System.out.println("Insgesamt importierte Zertifikate = "+zertifikate);
-             */
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -392,10 +380,7 @@ public class BCStatics {
                     System.out.println("Public Key:\n" + cert.getPublicKey());
                     System.out.println("Issuer-DN:\n" + cert.getIssuerDN());
                     System.out.println("Subject-DN:\n" + cert.getSubjectDN());
-                    // System.out.println("Public-Key:\n"+pub);
-                    // System.out.println("Exponent:\n"+pue_bi);
-                    // System.out.println("Hex Exponent:\n"+HexString.hexify(pub_exp));
-                    // System.out.println("Bouncy Exponent:\n"+pub.getPublicExponent());
+
                     System.out.println("Schlüsselformat: " + pub.getFormat());
                     System.out.println("Public-Key SerienNr. " + RSAPublicKey.serialVersionUID);
                     MessageDigest messageDigest = MessageDigest.getInstance(Constants.HASH_ALGORITHM_MD5,
@@ -413,8 +398,7 @@ public class BCStatics {
                         }
                     }
                     System.out.println("MD5-AS-Hex: " + hex);
-                    // System.out.println( "\nDigest: " );
-                    // System.out.println( messageDigest.digest() );
+
 
                     messageDigest = MessageDigest.getInstance(Constants.HASH_ALGORITHM_SHA_1,
                             Constants.SECURITY_PROVIDER);
@@ -431,8 +415,7 @@ public class BCStatics {
                         }
                     }
                     System.out.println("SHA1-AS-Hex: " + hex);
-                    // System.out.println( "\nDigest: " );
-                    // System.out.println( messageDigest.digest() );
+
 
                 } else if (store.isKeyEntry(alias)) {
                     System.out.println("KeyEntry");
@@ -598,6 +581,7 @@ public class BCStatics {
             offset += numRead;
         }
         if (offset < bytes.length) {
+            is.close();
             throw new IOException("Could not completely read file " + file.getName());
         }
         is.close();
