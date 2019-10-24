@@ -182,7 +182,7 @@ public class ZuzahlTools {
             return ret;
         }
 
-        Comparator comparator = new Comparator<String>() {
+        Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
                 String strings1 = DatFunk.sDatInSQL(s1);

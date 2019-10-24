@@ -38,8 +38,9 @@ public class SystemPreislisten {
     private static Vector<String> dummy = new Vector<String>();
     private static Vector<Integer> intdummy = new Vector<Integer>();
     private static Vector<Vector<String>> hbdummy = new Vector<Vector<String>>();
-    private static Vector<String> hbdummy_1 = new Vector<String>();
-    private static Vector<Vector<String>> preisliste = new Vector<Vector<String>>();
+
+    // private static Vector<Vector<String>> preisliste = new
+    // Vector<Vector<String>>();
 
     public static void ladePreise(String disziplin) {
         String[] diszis = { "Physio", "Massage", "Ergo", "Logo", "Reha", "Common" };
@@ -53,7 +54,7 @@ public class SystemPreislisten {
         INIFile inif = new INIFile(RehaStatistik.proghome + "ini/" + RehaStatistik.aktIK + "/preisgruppen.ini");
         int tarife = inif.getIntegerProperty("PreisGruppen_" + diszis[treffer], "AnzahlPreisGruppen");
 
-        Comparator<Vector> comparator = new Comparator<Vector>() {
+        Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
             @Override
             public int compare(Vector o1, Vector o2) {
 
@@ -65,15 +66,15 @@ public class SystemPreislisten {
             }
         };
 
-        if (treffer == 0) {
+        switch (treffer) {
+        case 0:
             vKGPreise.clear();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from kgtarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vKGPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder(
+                        "select * from kgtarif" + Integer.toString(i + 1));
+                Collections.sort(preisliste, comparator);
+                vKGPreise.add( preisliste);
             }
-            preisliste.clear();
             hmPreise.put("Physio", vKGPreise);
             dummy.clear();
             getPreisGruppen(inif, "Physio", tarife);
@@ -104,18 +105,14 @@ public class SystemPreislisten {
             hmBerichtRegeln.put("Physio", (Vector<String>) dummy.clone());
             dummy.clear();
             return;
-        }
-
-        /***************************************************/
-        if (treffer == 1) {
+        case 1:
             vMAPreise.clear();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from matarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vMAPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder(
+                        "select * from matarif" + Integer.toString(i + 1));
+                Collections.sort(preisliste, comparator);
+                vMAPreise.add(preisliste);
             }
-            preisliste.clear();
             hmPreise.put("Massage", vMAPreise);
             dummy.clear();
             getPreisGruppen(inif, "Massage", tarife);
@@ -147,17 +144,14 @@ public class SystemPreislisten {
             hmBerichtRegeln.put("Massage", (Vector<String>) dummy.clone());
             dummy.clear();
             return;
-        }
-        /***************************************************/
-        if (treffer == 2) {
+        case 2:
             vERPreise.clear();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from ertarif" + Integer.toString(i + 1));
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder(
+                        "select * from ertarif" + Integer.toString(i + 1));
                 Collections.sort((Vector) preisliste, comparator);
-                vERPreise.add((Vector<Vector<String>>) preisliste.clone());
+                vERPreise.add((Vector<Vector<String>>) preisliste);
             }
-            preisliste.clear();
             hmPreise.put("Ergo", vERPreise);
             dummy.clear();
             getPreisGruppen(inif, "Ergo", tarife);
@@ -189,17 +183,14 @@ public class SystemPreislisten {
             hmBerichtRegeln.put("Ergo", (Vector<String>) dummy.clone());
             dummy.clear();
             return;
-        }
-        /***************************************************/
-        if (treffer == 3) {
+        case 3:
             vLOPreise.clear();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from lotarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vLOPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder(
+                        "select * from lotarif" + Integer.toString(i + 1));
+                Collections.sort( preisliste, comparator);
+                vLOPreise.add( preisliste);
             }
-            preisliste.clear();
             hmPreise.put("Logo", vLOPreise);
             dummy.clear();
             getPreisGruppen(inif, "Logo", tarife);
@@ -231,17 +222,15 @@ public class SystemPreislisten {
             hmBerichtRegeln.put("Logo", (Vector<String>) dummy.clone());
             dummy.clear();
             return;
-        }
-        /***************************************************/
-        if (treffer == 4) {
+        case 4:
             vRHPreise.clear();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from rhtarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vRHPreise.add((Vector<Vector<String>>) preisliste.clone());
+
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder(
+                        "select * from rhtarif" + Integer.toString(i + 1));
+                Collections.sort( preisliste, comparator);
+                vRHPreise.add( preisliste);
             }
-            preisliste.clear();
             hmPreise.put("Reha", vRHPreise);
             dummy.clear();
             getPreisGruppen(inif, "Reha", tarife);
@@ -273,19 +262,19 @@ public class SystemPreislisten {
             hmBerichtRegeln.put("Reha", (Vector<String>) dummy.clone());
             dummy.clear();
             return;
-        }
-        if (treffer == 5) {
+        case 5:
             dummy.clear();
             getPreisGruppen(inif, "Common", tarife);
             hmPreisGruppen.put("Common", (Vector<String>) dummy.clone());
             dummy.clear();
+            break;
         }
 
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * @param f
      * @param disziplin
      * @param tarife
@@ -318,15 +307,15 @@ public class SystemPreislisten {
 
     public static void getHBRegeln(INIFile f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
+            Vector<String> hbdummy_1 = new Vector<String>();
             hbdummy_1.clear();
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBPosVoll" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBPosMit" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBKilometer" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBPauschal" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBHeimMitZuZahl" + (i + 1)));
-            hbdummy.add((Vector<String>) hbdummy_1.clone());
+            hbdummy.add( hbdummy_1);
         }
-        hbdummy_1.clear();
     }
 
     public static void getNeuePreiseRegeln(INIFile f, String disziplin, int tarife) {

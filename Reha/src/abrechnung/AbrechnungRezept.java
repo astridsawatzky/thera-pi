@@ -354,7 +354,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
     /*
      * überwacht Veränderungen am Split-Panel Divider
-     * 
+     *
      * @author McM 1606
      */
     @Override
@@ -1673,7 +1673,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         //// Position = "+newYear[1]+" / Rezept vollständig im Vorjahr = "+newYear[2]);
         /*
          * int wechselfall = 0; int altfall = 0; int neufall = 0;
-         * 
+         *
          * for(int i = 0; i < newYear.length;i++){
          * //System.out.println("Werte von newYear = "+newYear[i]); }
          */
@@ -4171,9 +4171,9 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
     private void sortiereVector(Vector vec, int dimension) {
         final int xdimension = dimension;
-        Comparator<Vector> comparator = new Comparator<Vector>() {
+        Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
             @Override
-            public int compare(Vector o1, Vector o2) {
+            public int compare(Vector<String> o1, Vector<String> o2) {
                 String s1 = DatFunk.sDatInSQL((String) o1.get(xdimension));
                 String s2 = DatFunk.sDatInSQL((String) o2.get(xdimension));
                 return s1.compareTo(s2);
@@ -4524,7 +4524,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
              * // McM vor dentist-test:
              * //edibuf.append(voIndex[Integer.parseInt(aktRezept.getVec_rez().get(0).get(27
              * ))]+EOL); // -> edibuf.append(voIndex[aktRezept.getRezArt()]+EOL);
-             * 
+             *
              * if(AktuelleRezepte.isDentist(test)){
              * edibuf.append(voIndex[aktRezept.getRezArt()]+plus); edibuf.append("1"+EOL);
              * System.out.println("Zahnarztverordnung"); }else{
@@ -4661,7 +4661,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
          * edibuf.append("BES+"); edibuf.append(dfx.format(gesamt)+plus);
          * edibuf.append(dfx.format(rez)+plus); edibuf.append(dfx.format(rez)+plus);
          * edibuf.append("0,00"+EOL);
-         * 
+         *
          * String kopfzeile =
          * "PG="+preisgruppe+":PATINTERN="+vec_rez.get(0).get(0).trim()+":REZNUM="+
          * vec_rez.get(0).get(1)+
@@ -5002,7 +5002,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
     /*
      * TageTreeSize Werte in abrechnung.ini schreiben ? in eigene Klasse?
-     * 
+     *
      * @author McM
      */
     private void writeTTS2ini() {
