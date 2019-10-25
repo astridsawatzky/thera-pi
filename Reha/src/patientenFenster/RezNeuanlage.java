@@ -191,6 +191,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private Component eingabeVerordnArt = null;
     private Component eingabeVerordn1 = null;
     private Component eingabeICD = null;
+    private Component eingabeDiag = null;
     private Connection connection;
 
     private Rezept myRezept = null;
@@ -739,7 +740,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
             jpan.addLabel("Indikationsschlüssel", cc.xy(1, 31));
             jcmb[cINDI] = new JRtaComboBox();
-            jtf[cDAUER].addKeyListener(this);
+            jcmb[cINDI].addKeyListener(this);
+            allowShortCut((Component)jcmb[cINDI],"Indikationsschluessel");
             jpan.add(jcmb[cINDI], cc.xy(3, 31));
 
             klassenReady = true;
@@ -782,6 +784,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jta.setEditable(true);
             jta.setBackground(Color.WHITE);
             jta.setForeground(Color.RED);
+            eingabeDiag = jta;
             JScrollPane span = JCompTools.getTransparentScrollPane(jta);
             span.setBorder(BorderFactory.createLineBorder(Colors.PiOrange.alpha(0.25f)));
             jpan.add(span, cc.xywh(1, 41, 7, 2));
@@ -1561,6 +1564,9 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
             doAbbrechen();
         }
+        if (arg0.getKeyCode() == KeyEvent.VK_CONTROL) {
+            ctrlIsPressed = true;
+        }
     }
 
     @Override
@@ -1627,7 +1633,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                 }
                 return;
             }
-            if (componentName.equals("Indikationsschlüssel") && jumpForward) {
+            if (componentName.equals("Indikationsschluessel") && jumpForward) {
                 if (ctrlIsPressed) {
                     eingabeICD.requestFocusInWindow();
                 } // zur Eingabe ICD10-Code springen
@@ -1636,6 +1642,9 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             if (componentName.equals("icd10")) {
                 String text = jtf[cICD10].getText();
                 jtf[cICD10].setText(chkIcdFormat(text));
+                if (ctrlIsPressed & jumpForward) {
+                    eingabeDiag.requestFocusInWindow();
+                }
                 return;
             }
             if (componentName.equals("icd10_2")) {
