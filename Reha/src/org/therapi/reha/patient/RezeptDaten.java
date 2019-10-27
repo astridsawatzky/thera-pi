@@ -31,6 +31,8 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaLabel;
 import CommonTools.JRtaTextField;
 import CommonTools.StringTools;
+import commonData.ArztVec;
+import commonData.Rezept;
 import environment.Path;
 import hauptFenster.Reha;
 import rechteTools.Rechte;
@@ -100,6 +102,8 @@ public class RezeptDaten extends JXPanel implements ActionListener {
     public void setRezeptDaten(String reznummer, String sid) {
         RezeptDaten.feddisch = false;
         boolean reha = false;
+        ArztVec verordnenderArzt = new ArztVec();
+        Rezept dieseVO = new Rezept();
         // reznum.setText(reznummer);
         // reznum.repaint();
         final String xreznummer = reznummer;

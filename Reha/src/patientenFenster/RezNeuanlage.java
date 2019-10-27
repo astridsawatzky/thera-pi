@@ -46,6 +46,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import abrechnung.Disziplinen;
+import commonData.ArztVec;
 import commonData.Rezept;
 import environment.LadeProg;
 import environment.Path;
@@ -196,6 +197,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
     private Rezept myRezept = null;
     private Rezept tmpRezept = null;
+    private ArztVec verordnenderArzt = null;
     private Disziplinen diszis = null;
 
     public RezNeuanlage(Vector<String> vec, boolean neu, String sfeldname, Connection connection) { // McM: sfeldname
@@ -209,6 +211,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             this.feldname = sfeldname;
             this.vec = vec; // Lemmi 20110106 Wird auch fuer das Kopieren verwendet !!!!
             myRezept = new Rezept();
+            verordnenderArzt = new ArztVec();
+            //            myRezept.init("KG18330");    // Bsp.
             myRezept.setVec_rez(vec);
             diszis = new Disziplinen();
 

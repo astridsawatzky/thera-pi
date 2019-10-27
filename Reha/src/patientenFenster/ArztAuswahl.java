@@ -36,6 +36,7 @@ import CommonTools.Colors;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import commonData.ArztVec;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
@@ -63,6 +64,7 @@ public class ArztAuswahl extends RehaSmartDialog {
     ArztNeuKurz ank = null;
     public JXPanel grundPanel = null;
     public String arztbisher;
+    private ArztVec myArzt = null;
     final int cNachname = 0, cVorname = 1, cStrasse = 2, cOrt = 3, cArztnum = 4, cBs = 5, cId = 6;
 
     /*************/
@@ -91,6 +93,12 @@ public class ArztAuswahl extends RehaSmartDialog {
         this.setPinPanel(pinPanel);
         rtp = new RehaTPEventClass();
         rtp.addRehaTPEventListener(this);
+        myArzt = new ArztVec();
+        if (suchid.length() > 0) {
+            myArzt.init(suchid);            
+        } else {
+            myArzt.createEmptyVec();
+        }
 
         /**************************/
         // ((JXPanel)super.getSmartTitledPanel().getContentContainer()).setBackgroundPainter(new
@@ -365,6 +373,10 @@ public class ArztAuswahl extends RehaSmartDialog {
             setzeFocus();
         }
     }
+
+    public ArztVec getArztRecord () {
+       return myArzt;
+   }
 
     /************************************************************/
     public void neuAnlageArzt() {
