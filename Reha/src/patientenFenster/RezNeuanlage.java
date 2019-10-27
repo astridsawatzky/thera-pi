@@ -847,6 +847,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                                                .toString()
                                                .trim());
             }
+            verordnenderArzt.init(myRezept.getArztId());
             copyVecToForm();
 
             jscr.validate();
@@ -1655,11 +1656,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private void arztAuswahl(String[] suchenach) {
         jtf[cREZDAT].requestFocusInWindow();
         JRtaTextField tfArztNum = new JRtaTextField("", false);
-        // einbauen A-Name +" - " +LANR;
+        JRtaTextField lanr = new JRtaTextField("",false);
         ArztAuswahl awahl = new ArztAuswahl(null, "ArztAuswahl", suchenach,
-                new JRtaTextField[] { jtf[cARZT], new JRtaTextField("", false), jtf[cARZTID] },
-                String.valueOf(jtf[cARZT].getText()
-                                         .trim()));
+                new JRtaTextField[] { jtf[cARZT], lanr, jtf[cARZTID] }, String.valueOf(jtf[cARZT].getText()
+                                                                                                 .trim()));
         awahl.setModal(true);
         awahl.setLocationRelativeTo(this);
         awahl.setVisible(true);
@@ -1669,13 +1669,13 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             }
         });
         try {
-            String aneu = "";
+            verordnenderArzt = awahl.getArztRecord();
+            jtf[cARZT].setText(verordnenderArzt.getNNameLanr());
+            String aIdNeu = verordnenderArzt.getIdS();
             if (!Reha.instance.patpanel.patDaten.get(63)
-                                                .contains(("@" + (aneu = jtf[cARZTID].getText()
-                                                                                     .trim())
-                                                        + "@\n"))) {
-                String aliste = Reha.instance.patpanel.patDaten.get(63) + "@" + aneu + "@\n";
-                Reha.instance.patpanel.patDaten.set(63, aliste + "@" + aneu + "@\n");
+                                                 .contains(("@" + aIdNeu + "@\n"))) {
+                String aliste = Reha.instance.patpanel.patDaten.get(63) + "@" + aIdNeu + "@\n";
+                Reha.instance.patpanel.patDaten.set(63, aliste + "@" + aIdNeu + "@\n");
                 Reha.instance.patpanel.getLogic()
                                       .arztListeSpeichernString(aliste, false, Reha.instance.patpanel.aktPatID);
                 SwingUtilities.invokeLater(new Runnable() {
@@ -1801,9 +1801,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
         thisRezept.createEmptyVec();
         initRezeptAll(thisRezept);
 
-        thisRezept.setArzt(Reha.instance.patpanel.patDaten.get(25) + " - " + Reha.instance.patpanel.patDaten.get(26)); // Hausarzt
-                                                                                                                     // als
-                                                                                                                     // default
+        thisRezept.setArzt(Reha.instance.patpanel.patDaten.get(25)); // Hausarzt als default
         thisRezept.setArztId(Reha.instance.patpanel.patDaten.get(67));
         thisRezept.setKm(Reha.instance.patpanel.patDaten.get(48));
         thisRezept.setPatIdS(Reha.instance.patpanel.patDaten.get(66));
@@ -1839,8 +1837,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
         test = StringTools.NullTest(myRezept.getKtraeger());
         jtf[cKASID].setText(test); // kid
         test = StringTools.NullTest(myRezept.getArzt());
-        jtf[cARZT].setText(test); // arzt (hier sollte "arzt - LANR" zusammengesetzt werden)
-        test = StringTools.NullTest(myRezept.getArztId()); // LANR
+        jtf[cARZT].setText(verordnenderArzt.getNNameLanr()); // arzt - LANR
+        test = StringTools.NullTest(myRezept.getArztId());
         jtf[cARZTID].setText(test); // arztid
         test = StringTools.NullTest(myRezept.getRezeptDatum());
         if (!test.equals("")) {
@@ -1948,7 +1946,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
             thisRezept.setKtrName(jtf[cKTRAEG].getText());
             thisRezept.setKtraeger(jtf[cKASID].getText());
-            thisRezept.setArzt(jtf[cARZT].getText());   // LANR wieder ausblenden!
+            String[] arzt = (jtf[cARZT].getText()).split(" - ");
+            thisRezept.setArzt(arzt[0]);   // LANR wieder ausblenden
             thisRezept.setArztId(jtf[cARZTID].getText());
 
             stest = jtf[cREZDAT].getText()

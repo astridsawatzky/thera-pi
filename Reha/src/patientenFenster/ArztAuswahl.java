@@ -77,10 +77,10 @@ public class ArztAuswahl extends RehaSmartDialog {
         super(owner, name);
         // setSize(430,300);
         setSize(550, 350);
-        this.suchkrit = suchegleichnach[0];
+        this.suchkrit = suchegleichnach[0].split(" - ")[0];
         this.suchid = suchegleichnach[1];
         this.elterntfs = elterntf;
-        this.arztbisher = arzt;
+        this.arztbisher = arzt.split(" - ")[0];
         super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
         super.getSmartTitledPanel().setTitle("Arzt auswählen");
         /**********************/
@@ -356,10 +356,11 @@ public class ArztAuswahl extends RehaSmartDialog {
         int i = arztwahltbl.getSelectedRow();
         if (i >= 0) {
             int model = arztwahltbl.convertRowIndexToModel(i);
-            elterntfs[0].setText((String) arztwahlmod.getValueAt(model, this.cNachname) + " - "
-                    + (String) arztwahlmod.getValueAt(model, this.cArztnum));
+            elterntfs[0].setText((String) arztwahlmod.getValueAt(model, this.cNachname));
             elterntfs[1].setText((String) arztwahlmod.getValueAt(model, this.cArztnum));
             elterntfs[2].setText((String) arztwahlmod.getValueAt(model, this.cId));
+            String id = (String) arztwahlmod.getValueAt(model, this.cId);
+            myArzt.init(id);
             if (rtp != null) {
                 rtp.removeRehaTPEventListener(this);
                 rtp = null;
@@ -428,6 +429,8 @@ public class ArztAuswahl extends RehaSmartDialog {
         if (arztbisher.length() <= 1) {
             elterntfs[0].setText("***nachtragen!!!***");
             elterntfs[1].setText("999999999");
+            myArzt.setNName("***nachtragen!!!***");
+            myArzt.setLANR("999999999");
 
         } else {
             elterntfs[0].setText(arztbisher);
