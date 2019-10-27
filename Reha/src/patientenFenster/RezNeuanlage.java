@@ -46,6 +46,7 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import Suchen.ICDrahmen;
 import abrechnung.Disziplinen;
+import commonData.Arzt;
 import commonData.Rezept;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
@@ -190,6 +191,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private Connection connection;
 
     private Rezept myRezept = null;
+    private Arzt verordnenderArzt = null;
     private Disziplinen diszis = null;
 
     public RezNeuanlage(Vector<String> vec, boolean neu, String sfeldname, Connection connection) { // McM: sfeldname
@@ -203,8 +205,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             this.feldname = sfeldname;
             this.vec = vec; // Lemmi 20110106 Wird auch fuer das Kopieren verwendet !!!!
             myRezept = new Rezept();
-//            myRezept.init("KG18330");    // Bsp.
+            verordnenderArzt = new Arzt();
+            //            myRezept.init("KG18330");    // Bsp.
             myRezept.setVec_rez(vec);
+            verordnenderArzt.init(myRezept.getArztId());
             diszis = new Disziplinen();
 
             if (vec.size() > 0 && this.neu) {
@@ -863,6 +867,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                     }
 
                 }
+                verordnenderArzt.init(myRezept.getArztId());
             } else {
                 this.holePreisGruppe(myRezept.getKtraeger());
                 this.ladePreisliste(jcmb[cRKLASSE].getSelectedItem()
@@ -872,9 +877,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                 this.fuelleIndis(jcmb[cRKLASSE].getSelectedItem()
                                                .toString()
                                                .trim());
-//              copyVecToForm();
             }
-            copyVecToForm(); // McM: hier sollte copyVecToForm() in beiden Faellen stattfinden
+            copyVecToForm();
 
             jscr.validate();
         } catch (Exception ex) {
@@ -1741,11 +1745,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private void arztAuswahl(String[] suchenach) {
         jtf[cREZDAT].requestFocus();
         JRtaTextField tfArztNum = new JRtaTextField("", false);
-        // einbauen A-Name +" - " +LANR;
+        JRtaTextField lanr = new JRtaTextField("",false);
         ArztAuswahl awahl = new ArztAuswahl(null, "ArztAuswahl", suchenach,
-                new JRtaTextField[] { jtf[cARZT], new JRtaTextField("", false), jtf[cARZTID] },
-                String.valueOf(jtf[cARZT].getText()
-                                         .trim()));
+                new JRtaTextField[] { jtf[cARZT], lanr, jtf[cARZTID] }, String.valueOf(jtf[cARZT].getText()
+                                                                                                 .trim()));
         awahl.setModal(true);
         awahl.setLocationRelativeTo(this);
         awahl.setVisible(true);
@@ -1755,13 +1758,13 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             }
         });
         try {
-            String aneu = "";
+            verordnenderArzt = awahl.getArztRecord();
+            jtf[cARZT].setText(verordnenderArzt.getNNameLanr());
+            String aIdNeu = verordnenderArzt.getIdS();
             if (!Reha.instance.patpanel.patDaten.get(63)
-                                                .contains(("@" + (aneu = jtf[cARZTID].getText()
-                                                                                     .trim())
-                                                        + "@\n"))) {
-                String aliste = Reha.instance.patpanel.patDaten.get(63) + "@" + aneu + "@\n";
-                Reha.instance.patpanel.patDaten.set(63, aliste + "@" + aneu + "@\n");
+                                                 .contains(("@" + aIdNeu + "@\n"))) {
+                String aliste = Reha.instance.patpanel.patDaten.get(63) + "@" + aIdNeu + "@\n";
+                Reha.instance.patpanel.patDaten.set(63, aliste + "@" + aIdNeu + "@\n");
                 Reha.instance.patpanel.getLogic()
                                       .arztListeSpeichernString(aliste, false, Reha.instance.patpanel.aktPatID);
                 SwingUtilities.invokeLater(new Runnable() {
@@ -1917,7 +1920,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             JOptionPane.showMessageDialog(null,
                     "Achtung - kann Preisgruppe nicht ermitteln - Rezept kann später nicht abgerechnet werden!");
         }
-        jtf[cARZT].setText(Reha.instance.patpanel.patDaten.get(25) + " - " + Reha.instance.patpanel.patDaten.get(26));
+        jtf[cARZT].setText(Reha.instance.patpanel.patDaten.get(25));
         // einbauen A-Name +" - " +LANR;
         jtf[cARZTID].setText(Reha.instance.patpanel.patDaten.get(67)); // arztid // McM: wozu ändern? Es ist 'ne
                                                                        // Rezeptkopie
@@ -1969,9 +1972,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
         myRezept.createEmptyVec();
         initRezeptAll();
 
-        myRezept.setArzt(Reha.instance.patpanel.patDaten.get(25) + " - " + Reha.instance.patpanel.patDaten.get(26)); // Hausarzt
-                                                                                                                     // als
-                                                                                                                     // default
+        myRezept.setArzt(Reha.instance.patpanel.patDaten.get(25));        // Hausarzt als default
         myRezept.setArztId(Reha.instance.patpanel.patDaten.get(67));
         myRezept.setKm(Reha.instance.patpanel.patDaten.get(48));
         myRezept.setPatIdS(Reha.instance.patpanel.patDaten.get(66));
@@ -1988,7 +1989,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private void initRezeptKopie() {
         initRezeptAll();
 
-//        myRezept.setArzt(Reha.instance.patpanel.patDaten.get(25)+ " - "+Reha.instance.patpanel.patDaten.get(26));        // 'ne Rezeptkopie hat gute Chancen, vom gleichen Arzt zu stammen
+//        myRezept.setArzt(Reha.instance.patpanel.patDaten.get(25));        // 'ne Rezeptkopie hat gute Chancen, vom gleichen Arzt zu stammen
 //        myRezept.setArztId(Reha.instance.patpanel.patDaten.get(67));
 
         // war Lemmis 'Löschen der auf jeden Fall "falsch weil alt" Komponenten'
@@ -2010,7 +2011,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
         test = StringTools.NullTest(myRezept.getKtraeger());
         jtf[cKASID].setText(test); // kid
         test = StringTools.NullTest(myRezept.getArzt());
-        jtf[cARZT].setText(test); // arzt
+        jtf[cARZT].setText(verordnenderArzt.getNNameLanr()); // arzt - LANR
         test = StringTools.NullTest(myRezept.getArztId());
         jtf[cARZTID].setText(test); // arztid
         test = StringTools.NullTest(myRezept.getRezeptDatum());
