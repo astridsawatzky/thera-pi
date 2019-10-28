@@ -50,7 +50,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
     private static final long serialVersionUID = 1L;
     private JXPanel jContentPane = null;
     private JXTitledPanel jXTitledPanel = null;
-    private JXPanel jContent = null; // @jve:decl-index=0:visual-constraint="10,10"
+    private JXPanel jContent = null;
     private JXButton jButton = null;
     private JXTable jtable = null;
     public JTextField jTextField = null;
@@ -152,8 +152,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
      */
     private void initialize() {
 
-        // Lemmi 20101212: zuletzt eingestellte und gemerkte Dimension des Suchfensters
-        // zurückholen
+        // Lemmi 20101212: zuletzt eingestellte und gemerkte Dimension des Suchfensters zurückholen
         Dimension dim = new Dimension(300, 400); // Diese Defaultwerte haben keine Wirkung !
 
         dim.width = SystemConfig.hmPatientenSuchenDlgIni.get("fensterbreite");
@@ -211,22 +210,13 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             JXPanel jp1 = new JXPanel(new FlowLayout());
             jp1.setBorder(null);
 
-            // Lemmi 20101212: Das Labelfeld für einen Hinweis auf aktuelle Rezepte
-            // "mißbraucht"
-            JLabel jlb = new JLabel(
-                    suchart == toolBar.getAktRezIdx() ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: "); // Lemmi
-                                                                                                                        // 20101212:
-                                                                                                                        // Prompt
-                                                                                                                        // für
-                                                                                                                        // die
-                                                                                                                        // Eingabe
-                                                                                                                        // eines
-                                                                                                                        // Suchkriteriums
+            // Lemmi 20101212: Das Labelfeld für einen Hinweis auf aktuelle Rezepte "mißbraucht"
+            JLabel jlb = new JLabel(    // Lemmi 20101212: Prompt für die Eingabe eines Suchkriteriums
+                    suchart == toolBar.getAktRezIdx() ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: ");
             jp1.add(jlb);
 
             jtext = getJTextField();
-            // Lemmi 20101212: Das Such-Eingabefeld unsichtbar gemacht - wird hier nicht
-            // benötigt
+            // Lemmi 20101212: Das Such-Eingabefeld unsichtbar gemacht - wird hier nicht benötigt
             if (suchart == toolBar.getAktRezIdx()) {
                 jtext.setPreferredSize(new Dimension(0, 0));
             } else {
@@ -235,7 +225,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             jtext.addKeyListener(new java.awt.event.KeyAdapter() {
                 @Override
                 public void keyPressed(java.awt.event.KeyEvent e) {
-                    if (e.getKeyCode() == 10) { // RETURN gedrückt
+                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                         e.consume();
                         new SwingWorker<Void, Void>() {
 
@@ -248,14 +238,14 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                         }.execute();
 
                     }
-                    if (e.getKeyCode() == 27) { // ESC gedrückt
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                         e.consume();
                         setVisible(false);
                         aufrufer.setLastRow(-1);
                         sucheBeenden();
                     }
 
-                    if (e.getKeyCode() == 40) { // Lemmi: was meint das ?
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN) { // ArrDwn gedrückt
                         e.consume();
                         if (jtable.getRowCount() > 0) {
                             jtable.requestFocus();
@@ -290,12 +280,8 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             if (suchart == toolBar.getAktRezIdx()) { // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
                 reiheVector.addElement("Rezepte");
             }
-            if (suchart == toolBar.getTelPIdx() || suchart == toolBar.getTelGIdx() || suchart == toolBar.getTelMIdx()) { // McM
-                                                                                                                         // 2017-10:
-                                                                                                                         // eigene
-                                                                                                                         // Spalten
-                                                                                                                         // für
-                                                                                                                         // Telefonnummern
+            if (suchart == toolBar.getTelPIdx() || suchart == toolBar.getTelGIdx() || suchart == toolBar.getTelMIdx()) {
+                // McM 2017-10: eigene Spalten für Telefonnummern
                 reiheVector.addElement("Telefon");
                 jlb.setText("Telefonnummer suchen: ");
             }
@@ -311,14 +297,14 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                        .setMaxWidth(0); // Breite der Spalte pat_intern
 
             // Lemmi 20101212: Einige maximale Spaltenbreiten fixiert
-            if (suchart == toolBar.getAktRezIdx()) { // Spielereine, funktioniert alles
+            if (suchart == toolBar.getAktRezIdx()) {
                 this.jtable.getColumn(2)
                            .setPreferredWidth(80); // Geboren
                 this.jtable.getColumn(2)
                            .setMaxWidth(100); // Geboren
                 this.jtable.getColumn(4)
                            .setPreferredWidth(100); // Rezepte
-//                this.jtable.setGridColor(Color.red);
+//                this.jtable.setGridColor(Color.red);  // Debughilfe
             }
 
             InputMap inputMap = jtable.getInputMap(JComponent.WHEN_FOCUSED);
@@ -337,13 +323,13 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                         e.consume();
                         setVisible(false);
                     }
-                    if (e.getKeyCode() == 40 || e.getKeyCode() == 38) { // ArrDwn, ArrUp
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) { 
                         // sucheAbfeuern();
                     }
-                    if (e.getKeyCode() == KeyEvent.VK_F && e.isAltDown()) { // [Taste-??]
+                    if (e.getKeyCode() == KeyEvent.VK_F && e.isAltDown()) { // [ALT]-[F]
                         jTextField.requestFocus();
                     }
-                    if (e.getKeyCode() == 27) { // ESC
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                         e.consume();
                         setVisible(false);
                         sucheBeenden();
@@ -490,7 +476,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                             setCursor(cnsize);
                             break;
                         }
-                        if ((e.getX() <= 4 && e.getY() >= (((JComponent) e.getSource()).getHeight() - 4))) { // s�d-west
+                        if ((e.getX() <= 4 && e.getY() >= (((JComponent) e.getSource()).getHeight() - 4))) { // süd-west
                             insize = true;
                             sizeart = 4;
                             orgbounds[0] = e.getXOnScreen();
@@ -506,7 +492,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                             setCursor(cwsize);
                             break;
                         }
-                        if ((e.getX() >= (((JComponent) e.getSource()).getWidth() - 4)) && // s�d-ost
+                        if ((e.getX() >= (((JComponent) e.getSource()).getWidth() - 4)) && // süd-ost
                         e.getY() >= (((JComponent) e.getSource()).getHeight() - 4)) {
                             insize = true;
                             sizeart = 6;
@@ -515,7 +501,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                             setCursor(csesize);
                             break;
                         }
-                        if (e.getY() >= (((JComponent) e.getSource()).getHeight() - 2)) { // s�d
+                        if (e.getY() >= (((JComponent) e.getSource()).getHeight() - 2)) { // süd
                             insize = true;
                             sizeart = 7;
                             orgbounds[0] = e.getXOnScreen();
@@ -593,7 +579,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                                 setCursor(cnsize);
                                 break;
                             }
-                            if (sizeart == 4) { // s�d-west
+                            if (sizeart == 4) { // süd-west
                                 dim.width = (oX > orgbounds[0] ? dim.width - (oX - orgbounds[0])
                                         : dim.width + (orgbounds[0] - oX));
                                 dim.height = (oY > orgbounds[1] ? dim.height + (oY - orgbounds[1])
@@ -621,7 +607,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                                 setCursor(cwsize);
                                 break;
                             }
-                            if (sizeart == 6) { // s�d-ost
+                            if (sizeart == 6) { // süd-ost
                                 dim.width = (oX > orgbounds[0] ? dim.width + (oX - orgbounds[0])
                                         : dim.width - (orgbounds[0] - oX));
                                 dim.height = (oY > orgbounds[1] ? dim.height + (oY - orgbounds[1])
@@ -636,7 +622,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                                 setCursor(cwsize);
                                 break;
                             }
-                            if (sizeart == 7) { // s�d
+                            if (sizeart == 7) { // süd
                                 // dim.width = (oX > orgbounds[0] ? dim.width+(oX-orgbounds[0]) :
                                 // dim.width-(orgbounds[0]-oX));
                                 dim.height = (oY > orgbounds[1] ? dim.height + (oY - orgbounds[1])
@@ -771,54 +757,52 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 
             sTmp = val.toLowerCase();
             sSuchPattern.add(val.toLowerCase()); // Original merken
-            if (systemEinstellungen.SystemConfig.searchExtended()) {
-                // ---- könnte Ende Teil einer Umlaut-Umschreibung sein?
-                if (sTmp.endsWith("a")) {
-                    sSuchPattern.add(sTmp.concat("e"));
-                } else if (sTmp.endsWith("o")) {
-                    sSuchPattern.add(sTmp.concat("e"));
-                } else if (sTmp.endsWith("u")) {
-                    sSuchPattern.add(sTmp.concat("e"));
-                } else if (sTmp.endsWith("s")) {
-                    sSuchPattern.add(sTmp.concat("s"));
-                } else if (sTmp.endsWith("s")) {
-                    sSuchPattern.add(sTmp.concat("z"));
+            // ---- könnte Ende Teil einer Umlaut-Umschreibung sein?
+            if (sTmp.endsWith("a")) {
+                sSuchPattern.add(sTmp.concat("e"));
+            } else if (sTmp.endsWith("o")) {
+                sSuchPattern.add(sTmp.concat("e"));
+            } else if (sTmp.endsWith("u")) {
+                sSuchPattern.add(sTmp.concat("e"));
+            } else if (sTmp.endsWith("s")) {
+                sSuchPattern.add(sTmp.concat("s"));
+            } else if (sTmp.endsWith("s")) {
+                sSuchPattern.add(sTmp.concat("z"));
+            }
+            i = sSuchPattern.size();
+            // ---- ersetzt Umlaut <-> Umschreibung
+            for (int k = 0; k < i; k++) {
+                sTmp = sSuchPattern.get(k);
+                if (sTmp.indexOf("ä") >= 0) {
+                    sSuchPattern.add(sTmp.replace("ä", "ae")); // Umschreibung
+                    sSuchPattern.add(sTmp.replace("ä", "a")); // ohne Umlaut geschrieben
                 }
-                i = sSuchPattern.size();
-                // ---- ersetzt Umlaut <-> Umschreibung
-                for (int k = 0; k < i; k++) {
-                    sTmp = sSuchPattern.get(k);
-                    if (sTmp.indexOf("ä") >= 0) {
-                        sSuchPattern.add(sTmp.replace("ä", "ae")); // Umschreibung
-                        sSuchPattern.add(sTmp.replace("ä", "a")); // ohne Umlaut geschrieben
-                    }
-                    if (sTmp.indexOf("ö") >= 0) {
-                        sSuchPattern.add(sTmp.replace("ö", "oe"));
-                        sSuchPattern.add(sTmp.replace("ö", "o"));
-                    }
-                    if (sTmp.indexOf("ü") >= 0) {
-                        sSuchPattern.add(sTmp.replace("ü", "ue"));
-                        sSuchPattern.add(sTmp.replace("ü", "u"));
-                    }
-                    if (sTmp.indexOf("ß") >= 0) {
-                        sSuchPattern.add(sTmp.replace("ß", "ss"));
-                        sSuchPattern.add(sTmp.replace("ß", "sz"));
-                    }
-                    if (sTmp.indexOf("ae") >= 0) {
-                        sSuchPattern.add(sTmp.replace("ae", "ä"));
-                    }
-                    if (sTmp.indexOf("oe") >= 0) {
-                        sSuchPattern.add(sTmp.replace("oe", "ö"));
-                    }
-                    if (sTmp.indexOf("ue") >= 0) {
-                        sSuchPattern.add(sTmp.replace("ue", "ü"));
-                    }
-                    if (sTmp.indexOf("ss") >= 0) {
-                        sSuchPattern.add(sTmp.replace("ss", "ß"));
-                    }
-                    if (sTmp.indexOf("sz") >= 0) {
-                        sSuchPattern.add(sTmp.replace("sz", "ß"));
-                    }
+                if (sTmp.indexOf("ö") >= 0) {
+                    sSuchPattern.add(sTmp.replace("ö", "oe"));
+                    sSuchPattern.add(sTmp.replace("ö", "o"));
+                }
+                if (sTmp.indexOf("ü") >= 0) {
+                    sSuchPattern.add(sTmp.replace("ü", "ue"));
+                    sSuchPattern.add(sTmp.replace("ü", "u"));
+                }
+                if (sTmp.indexOf("ß") >= 0) {
+                    sSuchPattern.add(sTmp.replace("ß", "ss"));
+                    sSuchPattern.add(sTmp.replace("ß", "sz"));
+                }
+                if (sTmp.indexOf("ae") >= 0) {
+                    sSuchPattern.add(sTmp.replace("ae", "ä"));
+                }
+                if (sTmp.indexOf("oe") >= 0) {
+                    sSuchPattern.add(sTmp.replace("oe", "ö"));
+                }
+                if (sTmp.indexOf("ue") >= 0) {
+                    sSuchPattern.add(sTmp.replace("ue", "ü"));
+                }
+                if (sTmp.indexOf("ss") >= 0) {
+                    sSuchPattern.add(sTmp.replace("ss", "ß"));
+                }
+                if (sTmp.indexOf("sz") >= 0) {
+                    sSuchPattern.add(sTmp.replace("sz", "ß"));
                 }
             }
             // ---- Suchstring zusammensetzen
@@ -830,22 +814,6 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                     sTmp = sTmp + " OR " + fieldname + " LIKE '" + c + "%'";
                 }
             }
-
-            /*
-             * // ergibt ein absolut "ungewöhnliches" Ergebnis. for (int i2 = 0; i2 <
-             * sSuchPattern.size();i2++){ if(i2 == 2){ //steht lediglich ein Vokal was zu
-             * einer größeren Menge nicht gewünschter Datensätze führt // ... damit fallen
-             * die Pat. unter den Tisch, die mit Umlaut in der DB stehen, aber nach
-             * Kassenwechsel wieder die Umschreibung auf der GK haben: // st jü -> [jü, jue,
-             * ju] => v_name LIKE 'jü%' OR v_name LIKE 'jue%' <- hier bringt's was // st ju
-             * -> [ju, jue, jü] => v_name LIKE 'ju%' OR v_name LIKE 'jue%' <- hier werden
-             * die entscheidenden Treffer ausgeschlossen :-(
-             * 
-             * break; } if (sTmp.isEmpty()) { sTmp = fieldname + " LIKE '" +
-             * sSuchPattern.get(i2) + "%'"; } else { sTmp = sTmp + " OR " + fieldname +
-             * " LIKE '" + sSuchPattern.get(i2) + "%'"; } }
-             */
-
             // System.out.println("Suchstring: "+sTmp);
             return sTmp;
         }
@@ -867,11 +835,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 
             if (suchart == toolBar.getNnVnIdx()) { // "Name Vorname"
                 // 2015-08 McM auf Suche nach Umlaut-Umschreibung erweitert
-                // (besser mit tmp-var für Eingabe (dann reicht 1x trim ...))
                 if (eingabe.contains(" ")) {
-                    // sstmt = "Select n_name,v_name,ADS_Date(geboren),pat_intern from pat5 where
-                    // n_name LIKE '"+StringTools.Escaped(suche[0].trim()) +"%' AND v_name LIKE
-                    // '"+StringTools.Escaped(suche[1].trim())+"%' order by n_name,v_name";
                     sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern  from pat5 where ("
                             + SucheKlang("n_name", suche[0]) + ") AND (" + SucheKlang("v_name", suche[1])
                             + ") order by n_name,v_name";
@@ -895,24 +859,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                 }
 
             } else if (suchart == toolBar.getTelPIdx()) { // Telfon privat
-                // sstmt = "select
-                // n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonp) as
-                // geboren,pat_intern from pat5 where telefonp LIKE '%"+suche[0]+"%' ORDER BY
-                // n_name,v_name,geboren";
                 sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefonp from pat5 where telefonp LIKE '%"
                         + suche[0] + "%' ORDER BY n_name,v_name,geboren";
             } else if (suchart == toolBar.getTelGIdx()) {// Telefon geschäftilich
-                // sstmt = "select
-                // n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefong) as
-                // geboren,pat_intern from pat5 where telefong LIKE '%"+suche[0]+"%' ORDER BY
-                // n_name,v_name,geboren";
                 sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefong from pat5 where telefong LIKE '%"
                         + suche[0] + "%' ORDER BY n_name,v_name,geboren";
             } else if (suchart == toolBar.getTelMIdx()) {// Telefon mobil
-                // sstmt = "select
-                // n_name,v_name,concat(DATE_FORMAT(geboren,'%d.%m.%Y'),'-',telefonm) as
-                // geboren,pat_intern from pat5 where telefonm LIKE '%"+suche[0]+"%' ORDER BY
-                // n_name,v_name,geboren";
                 sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y' as geboren,pat_intern,telefonm from pat5 where telefonm LIKE '%"
                         + suche[0] + "%' ORDER BY n_name,v_name,geboren";
             } else if (suchart == toolBar.getNoteIdx()) { // In Notizen
@@ -943,12 +895,11 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                 try {
                     rs = stmt.executeQuery(sstmt);
                     Vector<String> rowVector = new Vector<String>();
-//                int reihen = (suchart == toolBar.getAktRezIdx() ? 5 : 4 );
                     int reihen = rs.getMetaData()
                                    .getColumnCount();
                     while (rs.next()) {
                         rowVector.clear();
-                        for (int i = 1; i <= reihen; i++) { // Lemmi 20101212: optional von 4 auf 5 erweitert
+                        for (int i = 1; i <= reihen; i++) {
                             rowVector.addElement(rs.getString(i) != null ? rs.getString(i) : "");
                         }
                         setzeReihe((Vector<String>) rowVector.clone());
@@ -1026,4 +977,4 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
         this.dispose();
     }
 
-} // @jve:decl-index=0:visual-constraint="387,36"
+}
