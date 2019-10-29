@@ -323,6 +323,9 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
                     ocKVK = null;
                 }
             }
+        } catch (CardNotPresentException nocard) {
+            JOptionPane.showMessageDialog(null, "in der Anweisung stand ja \"Bitte KV-Karte einlegen\" \n" + reader
+                    + " \n funktioniert aber trotzdem.");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null,
                     "Card-Reader konnte nicht angesprochen werden oder keine KV-Karte im Reader - Fehler:3");
