@@ -1,4 +1,3 @@
-
 package systemEinstellungen;
 
 import java.awt.BorderLayout;
@@ -11,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import javax.smartcardio.CardNotPresentException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 import javax.swing.BorderFactory;
