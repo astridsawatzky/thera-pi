@@ -23,7 +23,7 @@ public class UpdateConfig {
 
     private static String proghome = Path.Instance.getProghome();
 
-    private UpdateConfig() {
+    public UpdateConfig() {
         readIniFile();
     }
 

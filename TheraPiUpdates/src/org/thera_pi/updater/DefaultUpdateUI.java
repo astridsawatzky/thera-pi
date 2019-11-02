@@ -5,8 +5,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.SwingUtilities;
 
-import com.sun.javafx.tk.Toolkit;
-
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.control.ChoiceDialog;
@@ -18,34 +16,33 @@ public class DefaultUpdateUI extends ChoiceDialog<UpdateConsent> implements Upda
     private static UpdateConsent donothing = new UpdateConsent(false, false);
 
     public DefaultUpdateUI() {
-        super(both, both, donothing, downloadOnly);
+        super(both, both, downloadOnly, donothing);
     }
 
     @Override
     public UpdateConsent askForConsent() {
 
-
         return showAndWait().get();
     }
 
-public static void main(String[] args) throws InterruptedException {
-    initToolkit();
-    Platform.runLater(() -> {
-    DefaultUpdateUI dialog = new DefaultUpdateUI();
-    dialog.askForConsent();
-    });
-}
-private static void initToolkit() throws InterruptedException
-{
-    final CountDownLatch latch = new CountDownLatch(1);
-    SwingUtilities.invokeLater(() -> {
-        new JFXPanel(); // initializes JavaFX environment
-        latch.countDown();
-    });
+    public static void main(String[] args) throws InterruptedException {
+        initToolkit();
+        Platform.runLater(() -> {
+            DefaultUpdateUI dialog = new DefaultUpdateUI();
+          System.out.println(  dialog.askForConsent());
+          Platform.exit();
+        });
 
-    if (!latch.await(5L, TimeUnit.SECONDS))
-        throw new ExceptionInInitializerError();
-}
-}
+    }
 
+     static void initToolkit() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+        SwingUtilities.invokeLater(() -> {
+            new JFXPanel(); // initializes JavaFX environment
+            latch.countDown();
+        });
 
+        if (!latch.await(5L, TimeUnit.SECONDS))
+            throw new ExceptionInInitializerError();
+    }
+}
