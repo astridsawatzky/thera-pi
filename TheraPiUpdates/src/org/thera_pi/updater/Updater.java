@@ -1,6 +1,7 @@
 package org.thera_pi.updater;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -9,12 +10,11 @@ import java.util.concurrent.CountDownLatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.application.Platform;
+
 public class Updater implements Callable<Integer> {
-    public static void main(String[] args) {
 
-    }
-
-    private Logger logger = LoggerFactory.getLogger(Updater.class);
+    private static final Logger logger = LoggerFactory.getLogger(Updater.class);
 
     private Stoppable myParent;
 
@@ -22,7 +22,7 @@ public class Updater implements Callable<Integer> {
 
     private CountDownLatch latch = new CountDownLatch(1);
 
-    private UpdateUI ui ;
+    private UpdateUI ui;
 
     private List<File> neededList;
 
@@ -115,4 +115,26 @@ public class Updater implements Callable<Integer> {
         this.ui = ui;
     }
 
+    public static void main(String[] args) throws Exception {
+        DefaultUpdateUI.initToolkit();
+
+        Platform.runLater(() -> {
+            DefaultUpdateUI userinterface;
+            userinterface = new DefaultUpdateUI();
+
+            Updater updater;
+            try {
+                updater = new UpdaterFactory().withRepository(new FTPRepository())
+                                              .withUI(userinterface)
+                                              .build();
+                updater.call();
+                Platform.exit();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                logger.error("bad things happen here", e);
+            }
+
+        });
+
+    }
 }
