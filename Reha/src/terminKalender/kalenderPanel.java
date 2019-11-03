@@ -11,6 +11,7 @@ import java.awt.Point;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -61,6 +62,7 @@ public class kalenderPanel extends JXPanel {
     float yTimeLine = .0f;
     boolean showTimeLine = false;
     int pfeily;
+    private Color[] defaultColors = new Color[] { Color.WHITE, Color.BLACK };
 
     public kalenderPanel KalenderPanel() {
 
@@ -108,9 +110,9 @@ public class kalenderPanel extends JXPanel {
             g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
             for (i = 0; i < anzahl; i++) {
-                String test = "";
+
                 try {
-                    if ((test = (String) ((Vector) dat.get(0)).get(i)) == null) {
+                    if (((String) ((Vector) dat.get(0)).get(i)) == null) {
                         g2d.setColor(SystemConfig.KalenderHintergrund);
                         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
                         break;
@@ -126,6 +128,7 @@ public class kalenderPanel extends JXPanel {
                 if ((sReznr = (String) ((Vector) dat.get(1)).get(i)) == null) {
                     sReznr = "";
                 }
+
                 sStart = (String) ((Vector) dat.get(2)).get(i);
                 sEnde = (String) ((Vector) dat.get(2)).get(i);
                 dauer = Integer.parseInt((String) ((Vector) dat.get(3)).get(i));
@@ -137,14 +140,12 @@ public class kalenderPanel extends JXPanel {
                 yEndeMin = ((int) (fEndePix));
                 yDifferenz = yEndeMin - yStartMin;
                 fDifferenz = fEndePix - fStartPix;
-                for (i1 = 0; i1 < 1; i1++) {
 
-                    if (yDifferenz <= 8) {
-                        g2d.setFont(g2d.getFont()
-                                       .deriveFont(8.5f));
-                        baseline = (int) (fEndePix - (((fDifferenz - 8.5) / 2) + 1.0));
-                        break;
-                    }
+                if (yDifferenz <= 8) {
+                    g2d.setFont(g2d.getFont()
+                                   .deriveFont(8.5f));
+                    baseline = (int) (fEndePix - (((fDifferenz - 8.5) / 2) + 1.0));
+                } else {
                     g2d.setFont(g2d.getFont()
                                    .deriveFont(11.5f));
                     baseline = (int) (fEndePix - (((fDifferenz - 11.5) / 2) + 1.0));
@@ -163,11 +164,9 @@ public class kalenderPanel extends JXPanel {
                         aktivPunkt[2] = xEnde;
                         aktivPunkt[3] = yDifferenz;
                         if (sReznr.contains("@FREI")) {
-                            // TerminFenster.thisClass.dragLab[this.panelNummer].setVisible(false);
-                            // TerminFenster.thisClass.dragLab[this.panelNummer].setIcon(null);
                             Reha.instance.terminpanel.dragLab[this.panelNummer].setText("");
 
-                            g2d.drawString(/* yEndeMin-yStartMin+"s2 "+ */sName, 5, (baseline));
+                            g2d.drawString(sName, 5, (baseline));
 
                             g2d.draw3DRect(xStart, yStartMin, xEnde - 3, yDifferenz - 1, true);
                         } else {
@@ -176,26 +175,15 @@ public class kalenderPanel extends JXPanel {
                                 if ((!sName.equals("")
                                         || Reha.instance.terminpanel.ansicht == Reha.instance.terminpanel.MASKEN_ANSICHT)) {
                                     if (yDifferenz < 12) {
-                                        //// System.out.println("Y-Differenz ist kleiner 12: "+yDifferenz);
                                         if (yDifferenz > 0) {
                                             Reha.instance.terminpanel.dragLab[this.panelNummer].setBounds(xStart + 1,
                                                     yStartMin, xStart + 13, yDifferenz - 1);
                                             g2d.drawImage(this.dragImage.getImage(), xStart + 1,
                                                     yStartMin + (yDifferenz / 2) - (this.dragImage.getIconHeight() / 2),
                                                     null);
-                                        } else {
-                                            //// System.out.println("Y-Differenz ist kleiner 12 und kleiner 0:
-                                            //// "+yDifferenz);
-                                            // TerminFenster.thisClass.dragLab[this.panelNummer].setIcon(null);
-                                            // TerminFenster.thisClass.dragLab[this.panelNummer].setText("");
                                         }
                                         g2d.drawString(sStart.substring(0, 5) + "-" + sName, xStart + 16, (baseline));
-                                        /*
-                                         * g2d.drawString(sStart.substring(0,5)+"-"+ sName , xStart+(yDifferenz),
-                                         * (baseline)-2);
-                                         */
                                     } else {
-                                        //// System.out.println("Y-Differenz ist gr��er 12: "+yDifferenz);
                                         Reha.instance.terminpanel.dragLab[this.panelNummer].setBounds(xStart + 1,
                                                 yStartMin, xStart + 13, yDifferenz - 1);
                                         g2d.drawImage(this.dragImage.getImage(), xStart + 1,
@@ -205,7 +193,6 @@ public class kalenderPanel extends JXPanel {
 
                                     }
                                     g2d.draw3DRect(xStart, yStartMin, xEnde - 3, yDifferenz - 1, true);
-                                    // gezeichnet = true;
 
                                 } else {
                                     g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
@@ -226,7 +213,6 @@ public class kalenderPanel extends JXPanel {
                     }
 
                     if ((this.blockAktiv >= 0) && (this.blockAktiv == i) && (this.spalteAktiv)) {
-                        //// System.out.println("in aktiv zeichnen");
                         g2d.setColor(SystemFarben.colGrau1);
                         g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
                         g2d.setColor(SystemFarben.colWeiss);
@@ -305,79 +291,21 @@ public class kalenderPanel extends JXPanel {
                     }
                     /*************************************/
                     // ab hier die Definitionen mit den Farbsignalen
-                    if (sReznr.contains("\\")) {
-                        if (sReznr.contains("\\H")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColH")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColH")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\F")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColF")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColF")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\M")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColM")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColM")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\A")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColA")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColA")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\B")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColB")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColA")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\C")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColC")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColC")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\D")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColD")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColD")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\E")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColE")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColE")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\F")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColF")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColF")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
-                        if (sReznr.contains("\\G")) {
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColG")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("ColG")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                            break;
-                        }
+                    int indexOf = sReznr.indexOf("\\");
+                    if (sReznr.length() > (indexOf + 1)) {
+                        String colcode = sReznr.substring(indexOf + 1)
+                                               .trim();
 
+                        Color[] colors = Optional.ofNullable(SystemConfig.aktTkCol.get("Col" + colcode))
+                                                 .orElse(defaultColors);
+
+                        g2d.setColor(colors[0]);
+                        g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
+                        g2d.setColor(colors[1]);
+                        g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
+                        break;
                     }
+
                     // Sonderprogramm für Rehatermine
                     if (sReznr.contains("RH")) {
                         g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[0]);
@@ -386,7 +314,6 @@ public class kalenderPanel extends JXPanel {
                         g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
                         break;
                     }
-                    // Sonderprogramm für Rehatermine
                     if (dauer == 15) {
                         g2d.setColor(SystemConfig.aktTkCol.get("15min")[0]);
                         g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
@@ -482,7 +409,6 @@ public class kalenderPanel extends JXPanel {
             yTimeLine = ((ZeitFunk.MinutenSeitMitternacht(sdf.format(new Date()))) - zeitSpanneVon) * fPixelProMinute;
             pfeily = Math.round(yTimeLine);
 
-
             int xCoord[] = { 1, 1, 6, 1 }; // die x-Koordinaten
             int yCoord[] = { pfeily - 5, pfeily + 5, pfeily, pfeily - 5 }; // die y-Koordinaten
             int anz = xCoord.length;
@@ -491,7 +417,6 @@ public class kalenderPanel extends JXPanel {
             g.setColor(Color.black);
             g.drawPolygon(xCoord, yCoord, anz);
         }
-
 
     }
 
@@ -723,7 +648,6 @@ public class kalenderPanel extends JXPanel {
         yStartMin = (int) ZeitFunk.MinutenSeitMitternacht(sStart) - zeitSpanneVon;
         sEnde = (String) ((Vector) dat.get(4)).get(this.gruppe[1]);
         dauer = (int) ZeitFunk.ZeitDifferenzInMinuten(sStart, sEnde);
-
 
         fStartPix = (yStartMin) * fPixelProMinute;
         yStartMin = ((int) (fStartPix));

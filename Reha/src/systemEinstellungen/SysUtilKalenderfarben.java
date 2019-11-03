@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
@@ -40,13 +38,13 @@ import jxTableTools.ColorRenderer;
 import jxTableTools.JLabelRenderer;
 import terminKalender.TerminFenster;
 
-public class SysUtilKalenderfarben extends JXPanel implements KeyListener, ActionListener, CellEditorListener {
+public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
 
     JXTable FarbTab = null;
-    JComboBox standard = null;
+    JComboBox<String> colorSetCombo = null;
     JComboBox alphawahl = null;
-    JButton knopf1 = null;
-    JButton knopf2 = null;
+    JButton anwendenButton = null;
+    JButton abbrechenButton = null;
     Vector columnData = new Vector();
     String colorset = null;
     JButton defaultSave = null;
@@ -72,7 +70,7 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
         jscroll.validate();
         add(jscroll);
 
-//	     add(getVorlagenSeite());
+//         add(getVorlagenSeite());
         validate();
         // setVisible(true);
         return;
@@ -82,92 +80,40 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
      * Beginn der Methode f�r die Objekterstellung und -platzierung
      *********/
     private JPanel getVorlagenSeite() {
-        knopf1 = new JButton("anwenden");
-        knopf1.setPreferredSize(new Dimension(70, 20));
-        knopf1.addActionListener(this);
-        knopf1.setActionCommand("anwenden");
-        knopf1.addKeyListener(this);
+        anwendenButton = new JButton("anwenden");
+        anwendenButton.setPreferredSize(new Dimension(70, 20));
+        anwendenButton.addActionListener(this);
+        anwendenButton.setActionCommand("anwenden");
 
-        knopf2 = new JButton("abbrechen");
-        knopf2.setPreferredSize(new Dimension(70, 20));
-        knopf2.addActionListener(this);
-        knopf2.setActionCommand("abbrechen");
-        knopf2.addKeyListener(this);
+        abbrechenButton = new JButton("abbrechen");
+        abbrechenButton.setPreferredSize(new Dimension(70, 20));
+        abbrechenButton.addActionListener(this);
+        abbrechenButton.setActionCommand("abbrechen");
 
-        // String[] colorset = {"akt. Einstellung", "Neutral", "OpenSea", "Freak",
-        // "Sundown"};
-        int lang = SystemConfig.vSysDefNamen.size();
-        standard = new JComboBox();
-        standard.addItem("akt. Einstellung");
-        for (int i = 0; i < lang; i++) {
-            standard.addItem(SystemConfig.vSysDefNamen.get(i));
+        colorSetCombo = new JComboBox<String>();
+        colorSetCombo.addItem("akt. Einstellung");
+
+        for (String sysdefname : SystemConfig.vSysDefNamen) {
+            colorSetCombo.addItem(sysdefname);
+
         }
-        standard.setSelectedIndex(0);
-        standard.setActionCommand("defwechsel");
-        standard.addActionListener(this);
+
+        colorSetCombo.setSelectedIndex(0);
+        colorSetCombo.setActionCommand("defwechsel");
+        colorSetCombo.addActionListener(this);
         String[] alf = { "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0" };
         alphawahl = new JComboBox(alf);
         alphawahl.setSelectedItem(new Float(SystemConfig.KalenderAlpha).toString());
         alphawahl.setActionCommand("alpha");
         alphawahl.addActionListener(this);
 
-        FarbTab = new JXTable();
-
         ftm = new KalenderFarbenModel();
-//		SwingUtilities.invokeLater(new Runnable(){
-        // public void run()
-        // {
+
         String[] dat = { "Code", "Bedeutung", "Hintergrund", "Schriftfarbe", "Darstellung" };
-        ftm.setDataVector((Vector) SystemConfig.vSysColDlg.clone(),
-                new Vector(Arrays.asList(dat))/* getColumnData(dat) */);
-        FarbTab.setModel(ftm);
-        FarbTab.setColumnSelectionAllowed(false);
-        FarbTab.setRowSelectionAllowed(true);
-        FarbTab.setCellSelectionEnabled(true);
-        FarbTab.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-                arg0.consume();
-            }
+        ftm.setDataVector((Vector) SystemConfig.vSysColDlg.clone(), new Vector(Arrays.asList(dat)));
+        FarbTab = new FarbTabelle(ftm);
 
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
-                arg0.consume();
-                System.out.println("Im eigenen Mouseadapter");
-                if (arg0.getClickCount() == 2) {
-                    int row = FarbTab.getSelectedRow();
-                    int col = FarbTab.getSelectedColumn();
-                    startCellEditing(FarbTab, row, col);
-                }
-                if (arg0.getClickCount() == 1) {
-                    int row = FarbTab.getSelectedRow();
-                    int col = FarbTab.getSelectedColumn();
-                    FarbTab.setRowSelectionInterval(row, row);
-                }
-            }
-        });
-
-        FarbTab.getColumn(2)
-               .setCellEditor(new ColorEditor());
-        FarbTab.getColumn(2)
-               .setCellRenderer(new ColorRenderer(true));
-        FarbTab.getColumn(2)
-               .getCellEditor()
-               .addCellEditorListener(this);
-        FarbTab.getColumn(3)
-               .setCellEditor(new ColorEditor());
-        FarbTab.getColumn(3)
-               .setCellRenderer(new ColorRenderer(true));
-        FarbTab.getColumn(3)
-               .getCellEditor()
-               .addCellEditorListener(this);
-        FarbTab.getColumn(4)
-               .setCellRenderer(new JLabelRenderer());
-        FarbTab.setSortable(false);
         FarbTab.validate();
-
-//		 	   }
-        // });
 
         JScrollPane listscr = new JScrollPane(FarbTab);
         listscr.setOpaque(true);
@@ -190,131 +136,67 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
         // builder.getPanel().validate();
 
         builder.addLabel("Farbset zur Bearbeitung auswählen", cc.xy(1, 2));
-        builder.add(standard, cc.xy(3, 2));
+        builder.add(colorSetCombo, cc.xy(3, 2));
 
         builder.add(listscr, cc.xyw(1, 4, 3));
 
         builder.addLabel("Bearbeitung abbrechen, bisheriges Farbschema bleibt erhalten", cc.xy(1, 6));
-        builder.add(knopf2, cc.xy(3, 6));
+        builder.add(abbrechenButton, cc.xy(3, 6));
 
         builder.addLabel("Farbschema auf Kalender anwenden", cc.xy(1, 8));
-        builder.add(knopf1, cc.xy(3, 8));
+        builder.add(anwendenButton, cc.xy(3, 8));
 
         builder.addSeparator("Optional: Transparenz einstellen", cc.xyw(1, 10, 3));
 
         builder.addLabel("Transparenz wählen", cc.xy(1, 12));
         builder.add(alphawahl, cc.xy(3, 12));
         builder.addLabel("Der eingestellte Wert ist sofort im Kalender sichtbar.", cc.xy(1, 14));
-        /*****************************/
-        // dieser Knopf nur solange bis die Defaults entwickelt wurden
-        /*
-         * defaultSave = new
-         * JButton("eingestelltes Default abspeichern nur zur Entwicklung");
-         * defaultSave.setActionCommand("defaultsave");
-         * defaultSave.addActionListener(this); builder.add(defaultSave, cc.xyw(1,
-         * 16,3));
-         */
+
         return builder.getPanel();
-
-    }
-
-    private void startCellEditing(JXTable table, int row, int col) {
-        final int xrows = row;
-        final int xcols = col;
-        final JXTable xtable = table;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                xtable.setRowSelectionInterval(xrows, xrows);
-                xtable.setColumnSelectionInterval(xcols, xcols);
-                xtable.scrollRowToVisible(xrows);
-                xtable.editCellAt(xrows, xcols);
-            }
-        });
-    }
-
-    private Vector getColumnData(String[] datx) {
-        Vector col = new Vector();
-        for (int i = 0; i < datx.length; i++) {
-            col.add(datx[i]);
-        }
-        return col;
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        int i;
-        for (i = 0; i < 1; i++) {
-            if (e.getActionCommand()
-                 .equals("alpha")) {
-                TerminFenster.setDurchlass(new Float((String) alphawahl.getSelectedItem()));
-                break;
-            }
-            if (e.getActionCommand()
-                 .equals("defwechsel")) {
-                setColorData(standard.getSelectedIndex());
-                break;
-            }
-            if (e.getActionCommand()
-                 .equals("defaultsave")) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                saveColorData(standard.getSelectedIndex());
-                            }
-                        }.start();
-                    }
-                });
-                break;
-            }
-            if (e.getActionCommand()
-                 .equals("anwenden")) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                saveColorData(0);
-                            }
-                        }.start();
-                    }
-                });
-                break;
-            }
-            if (e.getActionCommand()
-                 .equals("abbrechen")) {
-                SystemInit.abbrechen();
-                // SystemUtil.thisClass.parameterScroll.requestFocus();
-            }
+        switch (e.getActionCommand()) {
+        case "alpha":
+            TerminFenster.setDurchlass(new Float((String) alphawahl.getSelectedItem()));
+            break;
+        case "defwechsel":
+            setColorData(colorSetCombo.getSelectedIndex());
+            break;
+        case "defaultsave":
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
 
+                    saveColorData(colorSetCombo.getSelectedIndex());
+
+                }
+            });
+            break;
+        case "anwenden":
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+
+                    saveColorData(0);
+
+                }
+            });
+            break;
+        case "abbrechen":
+            SystemInit.abbrechen();
+            break;
         }
 
     }
 
     private void saveColorData(int def) {
         try {
-            String defName = ((String) standard.getSelectedItem()).trim();
-            int defNum = standard.getSelectedIndex();
+            String defName = ((String) colorSetCombo.getSelectedItem()).trim();
+            int defNum = colorSetCombo.getSelectedIndex();
             int lang = SystemConfig.vSysColsNamen.size();
             Color hg, vg;
             String farbsplit;
@@ -335,7 +217,6 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
                         ((String) FarbTab.getValueAt(i, 1)), null);
                 SystemConfig.vSysColsObject.get(def)
                                            .set(i, new Color[] { hg, vg });
-                // vSysColsBedeut.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenBedeutung"+(i+1))));
                 SystemConfig.aktTkCol.put(SystemConfig.vSysColsNamen.get(i), new Color[] { hg, vg });
 
             }
@@ -394,16 +275,6 @@ public class SysUtilKalenderfarben extends JXPanel implements KeyListener, Actio
         return (Vector) vec.clone();
     }
 
-    @Override
-    public void editingCanceled(ChangeEvent arg0) {
-
-    }
-
-    @Override
-    public void editingStopped(ChangeEvent arg0) {
-
-    }
-
     /********* Vor Ende Klassenklammer ***************/
 }
 
@@ -422,28 +293,22 @@ class KalenderFarbenModel extends DefaultTableModel {
 
     @Override
     public boolean isCellEditable(int row, int col) {
-        // Note that the data/cell address is constant,
-        // no matter where the cell appears onscreen.
-        if (col == 2) {
+        switch (col) {
+        case 2:
             return true;
-        }
-        if (col == 3) {
+        case 3:
             return true;
-        }
-
-        /*
-         * if(col==3 && (row <=1)){ return false; } if(col==3 && (row > 1)){ return
-         * true; }
-         */
-
-        if (col == 4) {
+        case 4:
+            return false;
+        case 1:
+            if (row >= 14 && row <= 22) {
+                return true;
+            }
+            return false;
+        default:
             return false;
         }
-        if (col == 1 && (row >= 14 && row <= 22)) {
-            return true;
-        }
 
-        return false;
     }
 
 }

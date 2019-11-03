@@ -92,8 +92,8 @@ public class TerminFenster extends Observable
 
     private String FensterName = "";
 
-    private JXPanel GrundFlaeche = null;
-    private JXPanel ComboFlaeche = null;
+    private JXPanel grundFlaeche = null;
+    private JXPanel comboFlaeche = null;
     private JXPanel TerminFlaeche = null;
     public JXPanel ViewPanel = null;
 
@@ -255,8 +255,8 @@ public class TerminFenster extends Observable
         });
         ViewPanel.setName(eltern.getName());
 
-        GrundFlaeche = getGrundFlaeche(connection);
-        GrundFlaeche.addFocusListener(new java.awt.event.FocusAdapter() {
+        grundFlaeche = getGrundFlaeche(connection);
+        grundFlaeche.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusLost(java.awt.event.FocusEvent e) {
                 // Reha.instance.shiftLabel.setText("GF Focus weg");
@@ -270,7 +270,7 @@ public class TerminFenster extends Observable
             }
         });
 
-        ViewPanel.add(GrundFlaeche, BorderLayout.CENTER);
+        ViewPanel.add(grundFlaeche, BorderLayout.CENTER);
         ViewPanel.setBackground(SystemConfig.KalenderHintergrund);
         /****************************/
         DropTarget dndt = new DropTarget();
@@ -317,7 +317,7 @@ public class TerminFenster extends Observable
             }
         });
 
-        GrundFlaeche.revalidate();
+        grundFlaeche.revalidate();
         ViewPanel.revalidate();
 
         if (ansicht == WOCHEN_ANSICHT) {
@@ -331,7 +331,7 @@ public class TerminFenster extends Observable
                 if (SystemConfig.aTerminKalender.get(i)
                                                 .get(0)
                                                 .contains(SystemConfig.KalenderStartNADefaultSet)) {
-                    //XXX: bogus compare, if thie does not work, why does it work at all?
+                    //XXX: bogus compare, if this does not work, why does it work at all?
                     pos = i;
                     break;
                 }
@@ -389,17 +389,17 @@ public class TerminFenster extends Observable
                 ListenerTools.removeListeners(ViewPanel);
                 ViewPanel = null;
             }
-            if (ComboFlaeche != null) {
-                ListenerTools.removeListeners(ComboFlaeche);
-                ComboFlaeche = null;
+            if (comboFlaeche != null) {
+                ListenerTools.removeListeners(comboFlaeche);
+                comboFlaeche = null;
             }
             if (TerminFlaeche != null) {
                 ListenerTools.removeListeners(TerminFlaeche);
                 TerminFlaeche = null;
             }
-            if (GrundFlaeche != null) {
-                ListenerTools.removeListeners(GrundFlaeche);
-                GrundFlaeche = null;
+            if (grundFlaeche != null) {
+                ListenerTools.removeListeners(grundFlaeche);
+                grundFlaeche = null;
             }
         }
     }
@@ -407,7 +407,7 @@ public class TerminFenster extends Observable
     private void setzeStatement() {
         try {
             this.privstmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE); // ResultSet.CONCUR_READ_ONLY);//
+                    ResultSet.CONCUR_UPDATABLE);
             this.privstmt.setQueryTimeout(1);
 
         } catch (SQLException ex) {
@@ -416,48 +416,46 @@ public class TerminFenster extends Observable
         if (SystemConfig.UpdateIntervall > 0 && this.ansicht < 2) {
             db_Aktualisieren = new Thread(new sperrTest());
             db_Aktualisieren.start();
-        } else if (this.ansicht == 2) {
-
         }
     }
 
     private JXPanel getGrundFlaeche(Connection connection) {
-        if (GrundFlaeche == null) {
-            GridBagConstraints gridBagConstraints0 = new GridBagConstraints();
-            gridBagConstraints0.gridx = 0;
-            gridBagConstraints0.weighty = 150.0D;
-            gridBagConstraints0.weightx = 1.0D;
-            gridBagConstraints0.fill = GridBagConstraints.BOTH;
-            gridBagConstraints0.insets = new Insets(0, 0, 0, 0);
-            gridBagConstraints0.gridwidth = 0;
-            gridBagConstraints0.gridheight = 1;
-            gridBagConstraints0.anchor = GridBagConstraints.CENTER;
-            gridBagConstraints0.gridy = 1;
-            gridBagConstraints0.gridx = 0;
+        if (grundFlaeche == null) {
+            GridBagConstraints terminflaecheConstraints = new GridBagConstraints();
+            terminflaecheConstraints.gridx = 0;
+            terminflaecheConstraints.weighty = 150.0D;
+            terminflaecheConstraints.weightx = 1.0D;
+            terminflaecheConstraints.fill = GridBagConstraints.BOTH;
+            terminflaecheConstraints.insets = new Insets(0, 0, 0, 0);
+            terminflaecheConstraints.gridwidth = 0;
+            terminflaecheConstraints.gridheight = 1;
+            terminflaecheConstraints.anchor = GridBagConstraints.CENTER;
+            terminflaecheConstraints.gridy = 1;
+            terminflaecheConstraints.gridx = 0;
 
-            GridBagConstraints gridBagConstraints1 = new GridBagConstraints();
-            gridBagConstraints1.gridx = 0;
-            gridBagConstraints1.weighty = 1.0D;
-            gridBagConstraints1.weightx = 1.0D;
-            gridBagConstraints1.fill = GridBagConstraints.HORIZONTAL;
-            gridBagConstraints1.insets = new Insets(0, 0, 0, 0);
-            gridBagConstraints1.gridwidth = 0;
-            gridBagConstraints1.gridheight = 1;
-            gridBagConstraints1.anchor = GridBagConstraints.NORTH;
-            gridBagConstraints1.gridy = 0;
-            gridBagConstraints1.gridx = 0;
+            GridBagConstraints ComboflaecheConstraints = new GridBagConstraints();
+            ComboflaecheConstraints.gridx = 0;
+            ComboflaecheConstraints.weighty = 1.0D;
+            ComboflaecheConstraints.weightx = 1.0D;
+            ComboflaecheConstraints.fill = GridBagConstraints.HORIZONTAL;
+            ComboflaecheConstraints.insets = new Insets(0, 0, 0, 0);
+            ComboflaecheConstraints.gridwidth = 0;
+            ComboflaecheConstraints.gridheight = 1;
+            ComboflaecheConstraints.anchor = GridBagConstraints.NORTH;
+            ComboflaecheConstraints.gridy = 0;
+            ComboflaecheConstraints.gridx = 0;
 
-            GrundFlaeche = new JXPanel();
-            GrundFlaeche.setDoubleBuffered(true);
-            GrundFlaeche.setBorder(null);
-            GrundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+            grundFlaeche = new JXPanel();
+            grundFlaeche.setDoubleBuffered(true);
+            grundFlaeche.setBorder(null);
+            grundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
 
-            GrundFlaeche.setLayout(new GridBagLayout());
-            GrundFlaeche.add(getComboFlaeche(), gridBagConstraints1);
-            GrundFlaeche.add(getTerminFlaeche(connection), gridBagConstraints0);
+            grundFlaeche.setLayout(new GridBagLayout());
+            grundFlaeche.add(getComboFlaeche(), ComboflaecheConstraints);
+            grundFlaeche.add(getTerminFlaeche(connection), terminflaecheConstraints);
 
         }
-        return GrundFlaeche;
+        return grundFlaeche;
     }
 
     public String getAktuellerTag() {
@@ -465,15 +463,15 @@ public class TerminFenster extends Observable
     }
 
     private JXPanel getComboFlaeche() {
-        if (ComboFlaeche == null) {
+        if (comboFlaeche == null) {
             DropShadowBorder dropShadow = new DropShadowBorder(Color.BLACK, 5, 1, 3, true, true, false, true);
-            ComboFlaeche = new JXPanel();
-            ComboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+            comboFlaeche = new JXPanel();
+            comboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
             GridLayout gridLayout = new GridLayout();
             gridLayout.setRows(1);
-            ComboFlaeche.setLayout(gridLayout);
-            ComboFlaeche.setDoubleBuffered(true);
-            ComboFlaeche.setBorder(null);
+            comboFlaeche.setLayout(gridLayout);
+            comboFlaeche.setDoubleBuffered(true);
+            comboFlaeche.setBorder(null);
             JXPanel cb = null;
             for (int i = 0; i < 7; i++) {
                 cb = new JXPanel(new BorderLayout());
@@ -483,11 +481,11 @@ public class TerminFenster extends Observable
                 oCombo[i].setName("Combo" + i);
                 cb.add(oCombo[i], BorderLayout.CENTER);
                 cb.addMouseListener(new comboToolTip(i));
-                ComboFlaeche.add(cb);
+                comboFlaeche.add(cb);
             }
-            ComboFlaeche.revalidate();
+            comboFlaeche.revalidate();
         }
-        return ComboFlaeche;
+        return comboFlaeche;
     }
 
     /***
@@ -624,48 +622,7 @@ public class TerminFenster extends Observable
             }
         });
 
-        /*
-         * oCombo[welche].addItemListener(new ItemListener(){
-         *
-         * @Override public void itemStateChanged(ItemEvent e) { //String arg =
-         * ((String) ((JComboBox) e.getSource()).getActionCommand()); if(ansicht !=
-         * WOCHEN_ANSICHT){ //((JComboBox)e.getSource()).setToolTipText();
-         * tooltip[welche] = "Kalenderbenutzer: "+oCombo[welche].getSelectedItem();
-         * }else{
-         * //((JComboBox)e.getSource()).setToolTipText(dayname[welche]+"\n"+DatFunk.
-         * sDatPlusTage(wocheErster,welche)); tooltip[welche] =
-         * "<html>"+dayname[welche]+"<br>"+DatFunk.sDatPlusTage(wocheErster,welche)+
-         * "</html>"; ((JComboBox)e.getSource()).setToolTipText(tooltip[welche]); }
-         *
-         * }
-         *
-         * });
-         */
 
-        /*
-         *
-         * oCombo[welche].addPopupMenuListener( new PopupMenuListener() {
-         *
-         * @Override public void popupMenuCanceled(PopupMenuEvent arg0) {
-         * ((JComboBox)arg0.getSource()).setToolTipText("Cancel-Kalenderbenutzer: "
-         * +oCombo[welche].getSelectedItem()); }
-         *
-         * @Override public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-         * if(ansicht != WOCHEN_ANSICHT){
-         * ((JComboBox)arg0.getSource()).setToolTipText("Kalenderbenutzer: "+oCombo[
-         * welche].getSelectedItem()); }else{
-         *
-         * tooltip[welche] =
-         * "<html>"+dayname[welche]+"<br>"+DatFunk.sDatPlusTage(wocheErster,welche)+
-         * "</html>"; ((JComboBox)arg0.getSource()).setToolTipText(tooltip[welche]); }
-         *
-         * }
-         *
-         * @Override public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-         * ((JComboBox)arg0.getSource()).
-         * setToolTipText("Become-Invisible Kalenderbenutzer: "+oCombo[welche].
-         * getSelectedItem()); } });
-         */
 
     }
 
@@ -888,7 +845,7 @@ public class TerminFenster extends Observable
                     oSpalten[4].zeitSpanne();
                     oSpalten[5].zeitSpanne();
                     oSpalten[6].zeitSpanne();
-                    GrundFlaeche.revalidate();
+                    grundFlaeche.revalidate();
                     int iMaxHoehe = TerminFlaeche.getHeight();
                     fPixelProMinute = iMaxHoehe;
                     fPixelProMinute = fPixelProMinute / 900;
@@ -921,8 +878,8 @@ public class TerminFenster extends Observable
                                                        .setBackground(SystemConfig.KalenderHintergrund);
                 }
                 Reha.instance.terminpanel.ViewPanel.setBackground(SystemConfig.KalenderHintergrund);
-                Reha.instance.terminpanel.GrundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
-                Reha.instance.terminpanel.ComboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+                Reha.instance.terminpanel.grundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+                Reha.instance.terminpanel.comboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
                 Reha.instance.terminpanel.TerminFlaeche.setBackground(SystemConfig.KalenderHintergrund);
                 Reha.instance.terminpanel.ViewPanel.validate();
                 Reha.instance.terminpanel.ViewPanel.repaint();
@@ -3168,7 +3125,7 @@ public class TerminFenster extends Observable
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
         try {
-            if (evt.getDetails()[0].equals(this.GrundFlaeche.getParent()
+            if (evt.getDetails()[0].equals(this.grundFlaeche.getParent()
                                                             .getName())) {
                 if (evt.getDetails()[1] == "ROT") {
                     // String fname = evt.getDetails()[0];

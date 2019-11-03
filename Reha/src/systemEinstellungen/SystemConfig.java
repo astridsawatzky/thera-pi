@@ -874,12 +874,7 @@ public class SystemConfig {
                         String.valueOf(colini.getStringProperty("Terminkalender", "FarbenDefaultNamen" + (i + 1))));
                 // defnames.add(String.valueOf(colini.getStringProperty("Terminkalender","FarbenDefaultNamen")));
             }
-            /*
-             * public static Vector<Vector<Color[]>> hmDefaultCols; public static
-             * Vector<Color[]> vSysColsObject; public static Vector<String> vSysColsNamen;
-             * public static Vector<String> vSysDefNamen; public static Vector<String>
-             * vSysColsBedeut;
-             */
+
 
             vSysColsObject = new Vector<Vector<Color[]>>();
 
