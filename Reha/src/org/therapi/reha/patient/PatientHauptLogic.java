@@ -153,16 +153,7 @@ public class PatientHauptLogic {
 
             // Lemmi 20101212: Anzahl der zu erwartenden Datensätze eingebaut
             int suchart = patientHauptPanel.jcom.getSelectedIndex();
-            // if(suchart==6){
-            if (suchart == patientHauptPanel.patToolBarPanel.getAktRezIdx()) {
-                /*
-                 * - lädt eh ALLE Patienten mit akt. Rezept -> brauch 'mer also auch nich
-                 * meckern... //sstmt = "SELECT COUNT(*) from verordn"; // err: listet Anz. der
-                 * akt. Rezepte sstmt =
-                 * "SELECT COUNT(*) FROM (SELECT * FROM verordn GROUP BY pat_intern) AS t1"; //
-                 * ok: Anz. der Pat. mit akt. Rezept strStamm = "aktiven Rezeptstamm";
-                 */
-            } else {
+            if (!patientHauptPanel.patToolBarPanel.getSucheOhneEingabe(suchart)) {
                 sstmt = "SELECT COUNT(*) from pat5";
                 strStamm = "Patientenstamm";
 

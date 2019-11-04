@@ -33,8 +33,8 @@ public class PatientToolBarPanel extends JXPanel {
     PatientHauptPanel patientHauptPanel = null;
     PatientToolBarLogic patToolLogic = null;
     public JLabel sucheLabel = null;
-    private String kriterium[] = { "Nachname Vorname", "Patienten-ID", "Vorname Nachname", "Telefon privat",
-            "Telefon geschäftl.", "Telefon mobil", "Notizen", "Patienten mit aktuellen Rezepten" };
+    private String kriterium[] = { "Nachname Vorname", "Telefon", "Notizen", "Patienten-ID",
+            "volle, nicht abgeschlossene Rezepte", "abgebrochene Rezepte (> 21 Tage inaktiv)", "Patienten mit aktuellen Rezepten" };
 
     public String getKritAsString(int idx) {
         return kriterium[idx];
@@ -55,19 +55,9 @@ public class PatientToolBarPanel extends JXPanel {
                      .indexOf("Vorname Nachname");
     }
 
-    public int getTelPIdx() {
+    public int getTelIdx() {
         return Arrays.asList(kriterium)
-                     .indexOf("Telefon privat");
-    }
-
-    public int getTelGIdx() {
-        return Arrays.asList(kriterium)
-                     .indexOf("Telefon geschäftl.");
-    }
-
-    public int getTelMIdx() {
-        return Arrays.asList(kriterium)
-                     .indexOf("Telefon mobil");
+                     .indexOf("Telefon");
     }
 
     public int getNoteIdx() {
@@ -75,10 +65,28 @@ public class PatientToolBarPanel extends JXPanel {
                      .indexOf("Notizen");
     }
 
+    public int getVolleVoIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("volle, nicht abgeschlossene Rezepte");
+    }
+
+    public int getAbgebrVoIdx() {
+        return Arrays.asList(kriterium)
+                     .indexOf("abgebrochene Rezepte (> 21 Tage inaktiv)");
+    }
+
     public int getAktRezIdx() {
         return Arrays.asList(kriterium)
                      .indexOf("Patienten mit aktuellen Rezepten");
     }
+
+    public boolean getSucheOhneEingabe(int idxKriterium) {
+        if (idxKriterium == getVolleVoIdx() || idxKriterium == getAbgebrVoIdx() || idxKriterium == getAktRezIdx()) {
+            return true;
+        }
+        return false;
+    }
+
 
     public PatientToolBarPanel(PatientHauptPanel patHauptPanel) {
         super();
@@ -109,6 +117,8 @@ public class PatientToolBarPanel extends JXPanel {
         patientHauptPanel.jcom.setBackground(new Color(247, 209, 176));
         add(patientHauptPanel.jcom, cc.xyw(4, 2, 8));
         patientHauptPanel.jcom.addActionListener(patientHauptPanel.toolBarAction);
+        patientHauptPanel.jcom.addKeyListener(patientHauptPanel.toolBarKeys);
+        patientHauptPanel.jcom.setName("Suchkriterium");
 
         sucheLabel = new JLabel("finde Pat. -->");
         sucheLabel.setName("Suchen");

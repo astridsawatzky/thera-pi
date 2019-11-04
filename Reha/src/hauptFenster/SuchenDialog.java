@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.InputMap;
@@ -52,6 +53,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
     private JXTitledPanel jXTitledPanel = null;
     private JXPanel jContent = null;
     private JXButton jButton = null;
+    private JXButton jButtonEx = null;
     private JXTable jtable = null;
     public JTextField jTextField = null;
 
@@ -77,7 +79,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
     private String[] sEventDetails = { null, null };
 
     public JComponent focusBack = null;
-    private String fname = ""; // @jve:decl-index=0:
+    private String fname = "";
     public DefaultTableModel tblDataModel;
     public boolean jumpok = false;
     public int suchart = 0;
@@ -120,7 +122,6 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
     public void setzeReihe(Vector<?> vec) {
         tblDataModel.addRow(vec);
         jtable.validate();
-
     }
 
     @Override
@@ -206,22 +207,36 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 
             jContent = new JXPanel(new BorderLayout());
             jContent.setSize(new Dimension(286, 162));
-            jContent.add(getJButton(), BorderLayout.SOUTH);
+            if (suchart == toolBar.getVolleVoIdx() || suchart == toolBar.getAbgebrVoIdx()) {
+              // mit export-Button
+              JXPanel buttonPane = new JXPanel();
+              buttonPane.setLayout( new FlowLayout());
+              buttonPane.setBorder(null);
+              JXButton exportButton = (JXButton) buttonPane.add(getJButtonExport());
+              exportButton.setEnabled(false);               // solange der Export noch nicht funktioniert
+              buttonPane.add(getJButton());
+              jContent.add(buttonPane, BorderLayout.SOUTH);
+            } else {
+               jContent.add(getJButton(), BorderLayout.SOUTH);                    
+           }
             JXPanel jp1 = new JXPanel(new FlowLayout());
             jp1.setBorder(null);
 
-            // Lemmi 20101212: Das Labelfeld für einen Hinweis auf aktuelle Rezepte "mißbraucht"
-            JLabel jlb = new JLabel(    // Lemmi 20101212: Prompt für die Eingabe eines Suchkriteriums
-                    suchart == toolBar.getAktRezIdx() ? "<html>Nur die <b>aktuellen</b> Rezepte" : "Patient suchen: ");
-            jp1.add(jlb);
-
+            JLabel jlb = new JLabel();
             jtext = getJTextField();
-            // Lemmi 20101212: Das Such-Eingabefeld unsichtbar gemacht - wird hier nicht benötigt
+            jtext.setPreferredSize(new Dimension(0, 0));    // keine Eingabemöglichkeit
             if (suchart == toolBar.getAktRezIdx()) {
-                jtext.setPreferredSize(new Dimension(0, 0));
+                jlb.setText("<html>Nur die <b>aktuellen</b> Rezepte </html>");
+            } else if (suchart == toolBar.getVolleVoIdx()) {
+                jlb.setText("<html>Patienten mit <b>vollen</b> Rezepten </html>");
+            } else if (suchart == toolBar.getAbgebrVoIdx()) {
+                jlb.setText("<html>Patienten mit <b>abgebrochenen</b> Rezepten </html>");
             } else {
+                jlb.setText("Patient suchen: ");                
                 jtext.setPreferredSize(new Dimension(100, 20));
             }
+            jp1.add(jlb);
+
             jtext.addKeyListener(new java.awt.event.KeyAdapter() {
                 @Override
                 public void keyPressed(java.awt.event.KeyEvent e) {
@@ -279,14 +294,24 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             reiheVector.addElement("Pat-Nr.");
             if (suchart == toolBar.getAktRezIdx()) { // Lemmi 20101212: komplettes if mit neuer Spalte "Rezepte" ergänzt
                 reiheVector.addElement("Rezepte");
-            }
-            if (suchart == toolBar.getTelPIdx() || suchart == toolBar.getTelGIdx() || suchart == toolBar.getTelMIdx()) {
+            } else if (suchart == toolBar.getTelIdx()) {
                 // McM 2017-10: eigene Spalten für Telefonnummern
-                reiheVector.addElement("Telefon");
+                reiheVector.addAll(Arrays.asList("Telefon priv.", "Telefon gesch.", "Telefon mobil"));
                 jlb.setText("Telefonnummer suchen: ");
+            } else if (suchart == toolBar.getVolleVoIdx()) {
+                reiheVector.addAll(Arrays.asList("Rezept", "Behandler"));
+                jlb.setText("volle Rezepte suchen: ");
+            } else if (suchart == toolBar.getAbgebrVoIdx()) {
+                reiheVector.addAll(Arrays.asList("Rezept", "letzte Behandlung", "Behandler"));
+                jlb.setText("abgebrochene Rezepte suchen: ");
             }
+
             tblDataModel = new DefaultTableModel();
             tblDataModel.setColumnIdentifiers(reiheVector);
+            Dimension dim = SuchenDialog.this.getSize();
+            int minWidth = 90 * reiheVector.size();
+            dim.width = minWidth;
+            this.setSize(dim);                
             jtable = new JXTable(tblDataModel);
             this.jtable.getColumnModel()
                        .getColumn(0)
@@ -305,6 +330,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                 this.jtable.getColumn(4)
                            .setPreferredWidth(100); // Rezepte
 //                this.jtable.setGridColor(Color.red);  // Debughilfe
+                this.jtable.getColumn(4).sizeWidthToFit();
             }
 
             InputMap inputMap = jtable.getInputMap(JComponent.WHEN_FOCUSED);
@@ -422,8 +448,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             // Lemmi 20101212: Erweitert um "Patienten mit aktuellen Rezepten"
             String titel = "Suche ";
             String kriterium = toolBar.getKritAsString(suchart);
-            if (suchart == toolBar.getTelPIdx() || suchart == toolBar.getTelGIdx() || suchart == toolBar.getTelMIdx()) {
+            if (suchart == toolBar.getTelIdx()) {
                 titel = titel + "Nummer... " + this.fname + " in ";
+                // || suchart == toolBar.getVolleVoIdx() || suchart == toolBar.getAbgebrVoIdx()
             } else {
                 titel = titel + "Patient..." + this.fname + " in ";
             }
@@ -714,6 +741,21 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
         return jButton;
     }
 
+    private JXButton getJButtonExport() {
+        if (jButtonEx == null) {
+            jButtonEx = new JXButton();
+            jButtonEx.setText("Export In OO-Calc");
+            jButtonEx.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent e) {
+                    // table export ala rehaSql.RehaSqlPanel.starteExport() / rehaSql.RehaSqlPanel.starteCalc()
+                    //OOTools.exportTab2Calc(jtable);
+                }
+            });
+        }
+        return jButtonEx;
+    }
+
     /**
      * This method initializes jTextField
      *
@@ -824,6 +866,9 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             String sstmt = "", eingabe = "";
 
             String[] suche = { null };
+            String select1 = "Select n_name,v_name," + ADS_Date() + ",pat_intern  from pat5 where (";
+            String orderResult = ") order by n_name,v_name,geboren";
+            
             setCursor(Cursors.wartenCursor);
 
             eingabe = jTextField.getText()
@@ -836,52 +881,68 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             if (suchart == toolBar.getNnVnIdx()) { // "Name Vorname"
                 // 2015-08 McM auf Suche nach Umlaut-Umschreibung erweitert
                 if (eingabe.contains(" ")) {
-                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern  from pat5 where ("
-                            + SucheKlang("n_name", suche[0]) + ") AND (" + SucheKlang("v_name", suche[1])
-                            + ") order by n_name,v_name";
+                    sstmt = select1 + SucheKlang("n_name", suche[0]) + ") AND (" + SucheKlang("v_name", suche[1])
+                            + orderResult;
                 } else {
-                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern from pat5 where ("
-                            + SucheKlang("n_name", suche[0]) + ") order by n_name,v_name,geboren";
+                    sstmt = select1 + SucheKlang("n_name", suche[0]) + orderResult;
                 }
 
-            } else if (suchart == toolBar.getPatIdIdx()) { // "Patienten-ID"
-                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren,pat_intern from pat5 where pat_intern = '"
-                        + suche[0] + "' LIMIT 1";
+            } else if (suchart == toolBar.getPatIdIdx()) { // "Patienten-ID" 
+                sstmt = select1 + "pat_intern = '" + suche[0] + "') LIMIT 1";
             } else if (suchart == toolBar.getVnNnIdx()) { // "Vorname Name" (Erweiterung von Drud) + Umlaut-Suche (McM)
 
                 if (eingabe.contains(" ")) {
-                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern  from pat5 where ("
-                            + SucheKlang("v_name", suche[0]) + ") AND (" + SucheKlang("n_name", suche[1])
-                            + ") order by n_name,v_name";
+                    sstmt = select1 + SucheKlang("v_name", suche[0]) + ") AND (" + SucheKlang("n_name", suche[1])
+                            + orderResult;
                 } else {
-                    sstmt = "Select n_name,v_name," + ADS_Date() + ",pat_intern from pat5 where ("
-                            + SucheKlang("v_name", suche[0]) + ") order by n_name,v_name,geboren";
+                    sstmt = select1 + SucheKlang("v_name", suche[0]) + orderResult;
                 }
 
-            } else if (suchart == toolBar.getTelPIdx()) { // Telfon privat
-                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefonp from pat5 where telefonp LIKE '%"
-                        + suche[0] + "%' ORDER BY n_name,v_name,geboren";
-            } else if (suchart == toolBar.getTelGIdx()) {// Telefon geschäftilich
-                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern,telefong from pat5 where telefong LIKE '%"
-                        + suche[0] + "%' ORDER BY n_name,v_name,geboren";
-            } else if (suchart == toolBar.getTelMIdx()) {// Telefon mobil
-                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y' as geboren,pat_intern,telefonm from pat5 where telefonm LIKE '%"
-                        + suche[0] + "%' ORDER BY n_name,v_name,geboren";
+            } else if (suchart == toolBar.getTelIdx()) { // Telefon privat, geschäftlich oder mobil
+                sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren, pat_intern, telefonp, telefong, telefonm "
+                        + "from pat5 where (telefonp LIKE '%" + suche[0] + "%' "
+                        + "OR telefong LIKE '%" + suche[0] + "%' "
+                        + "OR telefonm LIKE '%" + suche[0] + "%' "
+                        + orderResult;
             } else if (suchart == toolBar.getNoteIdx()) { // In Notizen
                 if (suche.length > 1) {
-                    // Umbauen zur oder- bzw. und-Suche
                     if (suche[1].contains("|")) {
-                        sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"
-                                + suche[0] + "%' OR anamnese LIKE '%" + suche[1].replace("|", "")
-                                + "%' ORDER BY n_name,v_name,geboren";
+                        sstmt = select1 + "anamnese LIKE '%" + suche[0] + "%' OR anamnese LIKE '%"
+                                + suche[1].replace("|", "") + "%'" + orderResult;
                     } else {
-                        sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"
-                                + suche[0] + "%' AND anamnese LIKE '%" + suche[1] + "%' ORDER BY n_name,v_name,geboren";
+                        sstmt = select1 + "anamnese LIKE '%" + suche[0] + "%' AND anamnese LIKE '%" + suche[1] + "%'"
+                                + orderResult;
                     }
                 } else {
-                    sstmt = "select n_name,v_name,DATE_FORMAT(geboren,'%d.%m.%Y') as geboren,pat_intern from pat5 where anamnese LIKE '%"
-                            + suche[0] + "%' ORDER BY n_name,v_name,geboren";
+                    sstmt = select1 + "anamnese LIKE '%" + suche[0] + "%'" + orderResult;
                 }
+            } else if (suchart == toolBar.getVolleVoIdx()) { // Patienten mit vollen, nicht abgeschlossenen Rezepten (® by Norbart/Astrid)
+                sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, v.behandler "
+                        + "FROM (volle AS v left outer join fertige AS f ON v.rez_nr = f.rez_nr)"
+                        + "LEFT JOIN pat5 AS p ON v.pat_intern = p.pat_intern "
+                        + "WHERE f.rez_nr IS NULL ORDER BY v.behandler, v.rez_nr";
+            } else if (suchart == toolBar.getAbgebrVoIdx()) { // Patienten mit abgebrochenen Rezepten (® by MSc) 
+                sstmt = "(SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, "
+                        +   "str_to_date(substring(v.termine FROM (character_length(v.termine)-10)),'%Y-%m-%d') AS LetzteBehandlung, "
+                        +   "substring(substring(right(v.termine,length(v.termine)/ (length(v.termine)-length(replace(v.termine,'\n','')))),"
+                        +     "locate('@',right(v.termine,length(v.termine)/(LENGTH(v.termine)-length(replace(v.termine,'\n','')))))+1 ),1 ,"
+                        +     "locate('@',substring(right(v.termine,length(v.termine)/ (length(v.termine)-length(replace(v.termine,'\n','')))),"
+                        +     "locate('@',right(v.termine,length(v.termine)/(length(v.termine)-length(replace(v.termine,'\n','')))))+1 ))-1 ) AS LetzterTherapeut "
+                        + "FROM ("
+                        +   "SELECT v1.pat_intern, v1.rez_nr, v1.termine, v1.abschluss FROM verordn AS v1 "
+                        +   "WHERE str_to_date(substring(v1.termine FROM (character_length(v1.termine)-10)),'%Y-%m-%d') <= '2019-09-25' "
+                        + ") AS v LEFT JOIN pat5 AS p ON (v.pat_intern=p.pat_intern) "
+                        + "WHERE !(v.termine='') AND !(v.termine is null) AND (v.abschluss='F') "
+                        + "ORDER BY substring(v.termine FROM (character_length(v.termine)-10))"
+                        + ") UNION ("   // + nie angefangene Rezepte
+                        + "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, rez_nr, "
+                        +     "'  - ' AS LetzteBehandlung, '' AS LetzterTherapeut "
+                        + "FROM ("
+                        +   " SELECT v1.pat_intern, v1.rez_nr, v1.termine, v1.abschluss FROM verordn AS v1 "
+                        +   "WHERE v1.rez_datum  <= '2019-09-25' "
+                        + ") as v LEFT JOIN pat5 AS p ON (v.pat_intern=p.pat_intern) "
+                        + "WHERE (v.termine='') OR (v.termine is null)"
+                        + ") ORDER BY LetzteBehandlung DESC, rez_nr, n_name";
             } else if (suchart == toolBar.getAktRezIdx()) { // Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen
                                                             // Rezepten"
                 sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, GROUP_CONCAT(r.rez_nr ORDER BY r.rez_nr ASC SEPARATOR ', ') FROM verordn AS r INNER JOIN pat5 AS p where p.pat_intern = r.pat_intern GROUP BY p.pat_intern ORDER BY p.n_name";
