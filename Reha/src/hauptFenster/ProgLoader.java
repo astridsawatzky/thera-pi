@@ -146,7 +146,7 @@ public class ProgLoader {
                 ((JRehaInternal) terminjry).setImmerGross(
                         (SystemConfig.hmContainer.get("KalenderOpti") == 1 ? true : false));
                 Reha.instance.terminpanel = new TerminFenster(connection);
-                terminjry.setContent(Reha.instance.terminpanel.init(containerNr, xansicht, terminjry, connection));
+                terminjry.setContent(Reha.instance.terminpanel.init(xansicht, terminjry, connection));
                 if (SystemConfig.hmContainer.get("KalenderOpti") == 1) {
                     terminjry.setLocation(new Point(0, 0));
                     // Reha.instance.jpOben muss noch ersetzt werden durch

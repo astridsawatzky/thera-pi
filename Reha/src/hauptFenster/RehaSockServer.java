@@ -18,7 +18,7 @@ class RehaSockServer implements Runnable {
     public void run() {
         try {
             serv = new ServerSocket(1235);
-
+            serv.setReuseAddress(true);
             Socket client = null;
             while (true) {
                 try {

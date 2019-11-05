@@ -4,10 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class SocketClient {
     String stand = "";
-    Socket server = null;
+    private static final Logger logger = LoggerFactory.getLogger(SocketClient.class);
 
     public void setzeInitStand(String stand) {
         this.stand = stand;
@@ -19,10 +23,9 @@ class SocketClient {
     }
 
     private void serverStarten() {
-        try {
-            this.server = new Socket("localhost", 1234);
-            OutputStream output = server.getOutputStream();
-            InputStream input = server.getInputStream();
+        try (Socket server = new Socket("localhost", 1234);
+                OutputStream output = server.getOutputStream();
+                InputStream input = server.getInputStream();) {
 
             byte[] bytes = this.stand.getBytes();
 
@@ -34,13 +37,13 @@ class SocketClient {
                 input.read(lesen);
             }
 
-            server.close();
-            input.close();
-            output.close();
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (UnknownHostException ex) {
+
+            logger.error("Server not found: ", ex);
+
+        } catch (IOException ex) {
+
+            logger.error("I/O error: ", ex);
         }
     }
 }

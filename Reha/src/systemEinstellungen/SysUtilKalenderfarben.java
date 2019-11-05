@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -33,9 +31,6 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import environment.Path;
 import hauptFenster.Reha;
-import jxTableTools.ColorEditor;
-import jxTableTools.ColorRenderer;
-import jxTableTools.JLabelRenderer;
 import terminKalender.TerminFenster;
 
 public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
@@ -54,11 +49,8 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
 
     public SysUtilKalenderfarben() {
         super(new GridLayout(1, 1));
-        // System.out.println("Aufruf SysUtilKalenderfarben");
         this.setBorder(BorderFactory.createEmptyBorder(15, 40, 15, 0));
-        /****/
         setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
-        /****/
         jscroll = new JScrollPane();
         jscroll.setOpaque(false);
         jscroll.getViewport()
@@ -70,9 +62,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
         jscroll.validate();
         add(jscroll);
 
-//         add(getVorlagenSeite());
         validate();
-        // setVisible(true);
         return;
     }
 
@@ -256,26 +246,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
         }
     }
 
-    private Vector getColorData() {
-        Vector vec = new Vector();
-        JLabel BeispielDummi = new JLabel("so sieht's aus");
-        int i, lang;
-        lang = SystemConfig.vSysColsNamen.size();
-        for (i = 0; i < lang; i++) {
-            Vector ovec = new Vector();
-            ovec.add(SystemConfig.vSysColsCode.get(i));
-            ovec.add(SystemConfig.vSysColsBedeut.get(i));
-            ovec.add(SystemConfig.vSysColsObject.get(0)
-                                                .get(i)[0]);
-            ovec.add(SystemConfig.vSysColsObject.get(0)
-                                                .get(i)[1]);
-            ovec.add(BeispielDummi);
-            vec.add(ovec.clone());
-        }
-        return (Vector) vec.clone();
-    }
 
-    /********* Vor Ende Klassenklammer ***************/
 }
 
 class KalenderFarbenModel extends DefaultTableModel {
