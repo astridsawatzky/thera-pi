@@ -5,13 +5,10 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 
 ## unveröffentlicht
-### changed
-- Farbkodierung im Kalender erweitert, es können jetzt alle Buchstaben einstellig zur Kodierung benutzt werden also(F\X).
-
-###fixed
-- Im Kalender wird statt Farbcode B Farbcode A angezeigt #265
-
 ## [1.1.3] alpha
+
+
+
 ### added
  Verkaufs-Modul:
 - Möglichkeit aus mehreren Druckformularen auszuwählen 
@@ -36,6 +33,8 @@ OpRgaf ausbuchen:
 
  
 ### changed
+- Farbkodierung im Kalender erweitert, es können jetzt alle Buchstaben einstellig zur Kodierung benutzt werden also(F\X).
+
 Verkaufs-Modul:
 - Barverkauf (Bondruck) (de-)aktivierbar (SystemInitialisierung -> sonstige Einstellungen -> Verkauf)
  
@@ -62,9 +61,12 @@ OP/OpRgaf:
 
 OP ausbuchen: 
 - (Privat-)Rechnung ausbuchen 'bar an Kasse' möglich (SystemInitialisierung -> Abrechnung -> Offene Posten und Mahnung)
+
+
+###fixed
+- ICD-10 Recherche bei geöffnetem Rezept nicht aufrufbar. #208
+- Im Kalender wird statt Farbcode B Farbcode A angezeigt #265
  
- 
-### fixed
 Verkaufs-Modul:
 - Artikelverwaltung: Sortierung nach ID u. Aufruf des Editor (doppelklick) führte zu Absturz 
    (Sortierung nach numer. Spalten noch nicht korrekt)
