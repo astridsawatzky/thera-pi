@@ -37,11 +37,7 @@ import systemTools.ListenerTools;
 
 public class RehaSmartDialog extends JXDialog
         implements ISmartDialog, WindowListener, MouseMotionListener, MouseListener, KeyListener {
-//public class RehaSmartDialog extends JXDialog implements RehaTPEventListener{
 
-    /**
-    *
-    */
     private static final long serialVersionUID = -8192593796486061674L;
 
     private JXPanel jContentPane = null;
@@ -71,6 +67,7 @@ public class RehaSmartDialog extends JXDialog
 
         super(owner, (JComponent) Reha.getThisFrame()
                                       .getGlassPane());
+        setModalityType(ModalityType.DOCUMENT_MODAL);
         // super(owner,null);
         this.name = name;
         this.setName(name);
