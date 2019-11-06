@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Vector;
 
@@ -20,7 +23,6 @@ public class FahrdienstExporter {
     /**
      * @param args
      */
-    public static String rohdatei;
     public static String fertigdatei;
     public Vector<Object[]> termine = new Vector<Object[]>();
     Vector<String> dummy = new Vector<String>();
@@ -30,14 +32,19 @@ public class FahrdienstExporter {
         FahrdienstExporter application = new FahrdienstExporter();
         application.getInstance();
 
+        String rohdatei;
+        String datum = LocalDateTime.now()
+                                    .format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
+        String fertigDateiName = "FPSort" + datum + ".dbf";
         if (args.length > 0) {
             INIFile file = new INIFile(args[0]);
             rohdatei = file.getStringProperty("Verzeichnisse", "Fahrdienstrohdatei") + "FPSort.txt";
-            fertigdatei = file.getStringProperty("Verzeichnisse", "Fahrdienstliste") + "FPSort.dbf";
+            fertigdatei = file.getStringProperty("Verzeichnisse", "Fahrdienstliste") + fertigDateiName;
         } else {
             rohdatei = "C:\\FPSort.txt";
-            fertigdatei = "C:\\FPSort.dbf";
+            fertigdatei = "C:\\" + fertigDateiName;
         }
+
         application.getInstance()
                    .einlesen(rohdatei);
         application.getInstance()
@@ -53,7 +60,7 @@ public class FahrdienstExporter {
 
     public void einlesen(String datei) {
         try {
-            FileReader reader = new FileReader(rohdatei);
+            FileReader reader = new FileReader(datei);
             BufferedReader in = new BufferedReader(reader);
             String zeile = null;
             while ((zeile = in.readLine()) != null) {
@@ -85,7 +92,6 @@ public class FahrdienstExporter {
                 }
             }
             termine.add(obj.clone());
-            // termine.add(((Vector<Object>)dummy.clone()));
         }
     }
 
