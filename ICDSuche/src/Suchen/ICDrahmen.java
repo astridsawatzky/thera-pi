@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import gui.LaF;
 import logging.Logging;
 import mandant.IK;
-import sql.Datenquelle;
+import sql.DatenquellenFactory;
 
 public class ICDrahmen implements Runnable {
 
@@ -25,7 +25,7 @@ public class ICDrahmen implements Runnable {
         } else {
             ik = new IK("123456789");
         }
-        Connection conn = new Datenquelle(ik).connection();
+        Connection conn = new DatenquellenFactory().with(ik).createConnection();
         System.out.println(conn.isClosed());
         ICDrahmen icd = new ICDrahmen(conn);
         icd.getJFrame();

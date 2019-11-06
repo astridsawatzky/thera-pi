@@ -17,7 +17,7 @@ public class Datenquelle {
     private static final String DATEN_BANK = "DatenBank";
     MysqlDataSource dataSource;
 
-    public Datenquelle(IK ik) {
+    Datenquelle(IK ik) {
         File f = new File(environment.Path.Instance.getProghome() + "ini/" + ik.digitString() + "/rehajava.ini");
         Ini ini;
         try {

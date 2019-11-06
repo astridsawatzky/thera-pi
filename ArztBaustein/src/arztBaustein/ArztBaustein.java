@@ -20,7 +20,7 @@ import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import logging.Logging;
 import mandant.IK;
-import sql.Datenquelle;
+import sql.DatenquellenFactory;
 
 public class ArztBaustein {
 
@@ -59,9 +59,8 @@ public class ArztBaustein {
     }
 
     public static void start(IK ik, IOfficeApplication officeapplication) throws SQLException {
-        Datenquelle dq = new Datenquelle(ik);
 
-        Connection connection = dq.connection();
+        Connection connection = new DatenquellenFactory().with(ik).createConnection();
         ArztBaustein arztbaustein = new ArztBaustein(connection, officeapplication);
         arztbaustein.getJFrame();
     }
