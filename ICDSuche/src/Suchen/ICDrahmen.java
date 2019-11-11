@@ -44,13 +44,19 @@ public class ICDrahmen implements Runnable {
     }
 
     public JFrame getJFrame() {
+        int xWidth = 800, yWidth = 600, xPos = 200, yPos = 200;
 
         jFrame = new JFrame();
-        jFrame.setSize(800, 600);
+        jFrame.setSize(xWidth, yWidth);
         jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        jFrame.setPreferredSize(new Dimension(800, 600));
-        jFrame.setTitle("ICD-Suche");
+        jFrame.setPreferredSize(new Dimension(xWidth, yWidth));
+        jFrame.setTitle("ICD-Recherche");
         jFrame.setContentPane(new ICDoberflaeche(new SqlInfo(conn)));
+        
+        Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize(); 
+        xPos = (int)(screensize.getWidth()/2 - xWidth/2 - 50);
+        jFrame.setLocation(xPos, yPos);
+
         jFrame.pack();
         jFrame.setVisible(true);
         return jFrame;
