@@ -44,11 +44,11 @@ import terminKalender.ParameterLaden;
 
 public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, ActionListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     /**
-     * 
+     *
      */
 
     JComboBox jcomboWahl = null;
@@ -85,18 +85,10 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
     private int speichernKalZeile = 0;
 
     SysUtilKalenderBenutzer() {
-        // super(new GridLayout(1,1));
         super(new BorderLayout());
-        // super(new FlowLayout(FlowLayout.CENTER));
-        // System.out.println("Aufruf SysUtilKalenderBenutzer");
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
-        /****/
         setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
-        /****/
 
-        /******* Karteireiter erzeugen und Seite 1 in Scrollpane legen **********/
-        // JTabbedPane tabbedPane = new JTabbedPane();
-        // tabbedPane.setUI(new WindowsTabbedPaneUI());
         abteil[0] = " ";
         abteil[1] = "KG";
         abteil[2] = "MA";
@@ -118,24 +110,9 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                .setUnitIncrement(15);
         jscroll.setViewportView(panel1);
 
-        /*
-         * tabbedPane.addTab("Seite 1", null, jscroll,
-         * "Alle Felder dieser Seite sind Pflichtfelder"); tabbedPane.setMnemonicAt(0,
-         * KeyEvent.VK_1);
-         */
-        /*********** ab hier Seite 2 *************/
-        /*
-         * panel1 = getForm2(); tabbedPane.addTab("Seite 2", null, panel1,
-         * "Zusatzfelder f�r die Personalabteilung"); tabbedPane.setMnemonicAt(1,
-         * KeyEvent.VK_2);
-         * 
-         * this.add(tabbedPane);
-         */
         this.add(jscroll, BorderLayout.CENTER);
-        // this.add(panel1);
         this.addKeyListener(this);
 
-        // setVisible(true);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -146,7 +123,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         return;
     }
 
-    /**************************************************************************/
     private JPanel getForm1() {
         // 1. 2. 3. 4. 5. 6. 7. 8. 9.
         FormLayout lay = new FormLayout("right:max(60dlu;p), 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu",
@@ -158,7 +134,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        // buttons
         knopf1 = new JButton("neu");
         knopf1.setPreferredSize(new Dimension(70, 20));
         knopf1.addActionListener(this);
@@ -195,7 +170,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         knopf6.setActionCommand("liste");
         knopf6.addKeyListener(this);
 
-        // checkbox "nicht anzeigen"
         naz = new JCheckBox("");
 
         builder.addLabel("Benutzer auswählen", cc.xy(1, 1));
@@ -230,8 +204,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         arbstd = new JRtaTextField("FL", true, "10.2", "RECHTS");
         builder.add(arbstd, cc.xyw(3, 13, 1));
         builder.addLabel(Abt, cc.xy(7, 11));
-        // String[] items = {" " ,"KG","MA","ER","LO","SP","GR"};
-        // abteilung = new JComboBox(abteil);
         abteilung = new JComboBox(abteil);
         abteilung.setSelectedIndex(0);
         builder.add(abteilung, cc.xy(9, 11));
@@ -241,10 +213,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                 "Dieses Feld ist für eine spätere Erweiterung gedacht und hat derzeit noch keinen Einfluß auf den Programmablauf!");
         builder.add(deftakt, cc.xyw(3, 15, 1));
 
-        // builder.addLabel("Kal.-Zeile", cc.xy(7, 15));
         kalzeile = new JRtaTextField("NORMAL", true);
-        // kalzeile.setEditable(false);
-        // builder.add(kalzeile, cc.xyw(9, 15, 1));
 
         builder.addLabel("nicht anzeigen", cc.xy(7, 15));
         builder.add(naz, cc.xy(9, 15));
@@ -265,12 +234,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
 
     }
 
-    /**************************************************************************/
-    private JPanel getForm2() {
-        return new JPanel();
-    }
-
-    /**************************************************************************/
     private void comboFuellen() {
         int von = 0;
         int bis = ParameterLaden.vKKollegen.size();
@@ -286,7 +249,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         jcomboWahl.requestFocus();
     }
 
-    /**************************************************************************/
     private void knopfGedoense(int[] knopfstatus) {
         knopf1.setEnabled((knopfstatus[0] == 0 ? false : true));
         knopf2.setEnabled((knopfstatus[1] == 0 ? false : true));
@@ -295,7 +257,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         knopf5.setEnabled((knopfstatus[4] == 0 ? false : true));
     }
 
-    /**************************************************************************/
     private void comboAuswerten() {
         if (jcomboWahl.getSelectedIndex() > 0) {
             holeKollege((String) jcomboWahl.getSelectedItem());
@@ -312,7 +273,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         felderEinschalten(false);
     }
 
-    /**************************************************************************/
     private void felderEinschalten(boolean einschalten) {
         anrede.setEnabled(einschalten);
         anrede.validate();
@@ -327,7 +287,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
 
     }
 
-    /**************************************************************************/
     private void felderFuellen(ArrayList<String> felder) {
         anrede.setText(felder.get(0));
         vorname.setText(felder.get(1));
@@ -344,7 +303,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                                .equals("T") ? true : false));
     }
 
-    /**************************************************************************/
     private void neuHandeln() {
         if (ParameterLaden.vKKollegen.size() == 99) {
             JOptionPane.showMessageDialog(null,
@@ -362,7 +320,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         anrede.requestFocus();
     }
 
-    /**************************************************************************/
     private void speichernHandeln() {
         if (matchcode.getText()
                      .trim()
@@ -457,7 +414,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
 
     }
 
-    /**************************************************************************/
     private void loeschenHandeln() {
         knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
         lneu = false;
@@ -493,7 +449,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         lneu = false;
     }
 
-    /**************************************************************************/
     private void abbrechenHandeln() {
         knopfGedoense(new int[] { 1, 0, 1, 0, 0 });
         lneu = false;
@@ -503,10 +458,8 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         felderEinschalten(false);
         comboAuswerten();
         SystemInit.abbrechen();
-        // SystemUtil.thisClass.parameterScroll.requestFocus();
     }
 
-    /**************************************************************************/
     private void listeHandeln() {
         IDocumentService documentService = null;
         try {
@@ -577,7 +530,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         }
     }
 
-    /**************************************************************************/
     @Override
     public void actionPerformed(ActionEvent arg0) {
         if (arg0.getActionCommand()
@@ -639,7 +591,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
 
     }
 
-    /***********************************************************/
     private boolean testObNeueKalZeile() {
         boolean ret = false;
         if ((ParameterLaden.vKKollegen.size() >= (ParameterLaden.maxKalZeile + 1))) {
@@ -653,14 +604,11 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
             testeKollegen();
             ret = false;
         }
-        //// System.out.println("vkkollgen.size = "+ParameterLaden.vKKollegen.size());
-        //// System.out.println("maxKalZeile = "+ParameterLaden.maxKalZeile);
         return ret;
     }
 
     /***********************************************************/
     private void holeKollege(String match) {
-        // Reha obj = Reha.instance;
         Statement stmt = null;
         ResultSet rs = null;
         try {
@@ -688,23 +636,21 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                 kollegenDaten.add(String.valueOf((test != null ? test : "")));
                 test = rs.getString("Nicht_zeig");
                 kollegenDaten.add(String.valueOf((test != null ? test : "F")));
-                // System.out.println(test);
             }
 
         } catch (SQLException ex) {
-            // System.out.println("Kollegen2="+ex);
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException sqlEx) { // ignorieren }
+                } catch (SQLException sqlEx) {
                     rs = null;
                 }
             }
             if (stmt != null) {
                 try {
                     stmt.close();
-                } catch (SQLException sqlEx) { // ignorieren }
+                } catch (SQLException sqlEx) {
                     stmt = null;
                 }
             }
@@ -712,7 +658,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         }
     }
 
-    /***********************************************************/
     private int testeKollegen() {
         Statement stmt = null;
         ResultSet rs = null;
@@ -742,19 +687,18 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
             }
 
         } catch (SQLException ex) {
-            // System.out.println("Kollegen2="+ex);
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException sqlEx) { // ignorieren }
+                } catch (SQLException sqlEx) {
                     rs = null;
                 }
             }
             if (stmt != null) {
                 try {
                     stmt.close();
-                } catch (SQLException sqlEx) { // ignorieren }
+                } catch (SQLException sqlEx) {
                     stmt = null;
                 }
             }
@@ -763,7 +707,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         return itest;
     }
 
-    /**************************************************************/
     private void executeStatement(String match) {
         Statement stmt = null;
         try {
@@ -771,19 +714,17 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
             stmt.execute(match);
 
         } catch (SQLException ex) {
-            // System.out.println("Kollegen2="+ex);
         } finally {
             if (stmt != null) {
                 try {
                     stmt.close();
-                } catch (SQLException sqlEx) { // ignorieren }
+                } catch (SQLException sqlEx) {
                     stmt = null;
                 }
             }
         }
     }
 
-    /***********************************************************/
     private boolean matchVorhanden(String match) {
         Statement stmt = null;
         ResultSet rs = null;
@@ -801,22 +742,20 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                     ret = false;
                 }
             } catch (SQLException ex) {
-                // System.out.println("Kollegen2="+ex);
             }
         } catch (SQLException ex) {
-            // System.out.println("Kollegen2="+ex);
         } finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException sqlEx) { // ignore }
+                } catch (SQLException sqlEx) {
                     rs = null;
                 }
             }
             if (stmt != null) {
                 try {
                     stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
+                } catch (SQLException sqlEx) {
                     stmt = null;
                 }
             }
@@ -824,6 +763,5 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         }
         return ret;
     }
-    /***********************************************************/
 
 }
