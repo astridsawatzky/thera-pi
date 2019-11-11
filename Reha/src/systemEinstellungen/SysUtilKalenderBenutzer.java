@@ -609,12 +609,14 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
 
     /***********************************************************/
     private void holeKollege(String match) {
-        Statement stmt = null;
-        ResultSet rs = null;
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery("SELECT * FROM kollegen2 where Matchcode='" + match + "'");
-            kollegenDaten.clear();
+        try( Statement  stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet   rs = stmt.executeQuery("SELECT * FROM kollegen2 where Matchcode='" + match + "'");
+
+
+                )
+
+        {
+                     kollegenDaten.clear();
 
             String test = null;
             while (rs.next()) {
@@ -639,33 +641,14 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
             }
 
         } catch (SQLException ex) {
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) {
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) {
-                    stmt = null;
-                }
-            }
-
         }
     }
 
     private int testeKollegen() {
-        Statement stmt = null;
-        ResultSet rs = null;
         int itest = 0;
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-
-            rs = stmt.executeQuery("SELECT KALZEILE FROM kollegen2 ORDER BY KALZEILE");
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery("SELECT KALZEILE FROM kollegen2 ORDER BY KALZEILE");) {
             int durchlauf = 0;
 
             while (rs.next()) {
@@ -687,80 +670,40 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
             }
 
         } catch (SQLException ex) {
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) {
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) {
-                    stmt = null;
-                }
-            }
 
         }
         return itest;
     }
 
     private void executeStatement(String match) {
-        Statement stmt = null;
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);) {
             stmt.execute(match);
 
         } catch (SQLException ex) {
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) {
-                    stmt = null;
-                }
-            }
         }
     }
 
+    /**
+     * Ueberprueft, ob der eingebene Matchcode bereits benutzt wird.
+     *
+     * @param match mtchcode des Mitarbeiters
+     * @return true wenn der matchcode schon vorhanden ist.
+     */
     private boolean matchVorhanden(String match) {
-        Statement stmt = null;
-        ResultSet rs = null;
         boolean ret = true;
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                int anz = 0;
-                rs = stmt.executeQuery("select count(*) from kollegen2 where matchcode='" + match + "'");
-                if (rs.next()) {
-                    anz = rs.getInt(1);
-                }
-                rs.close();
-                if (anz == 0) {
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery("select count(*) from kollegen2 where matchcode='" + match + "'");) {
+            if (rs.next()) {
+                if (rs.getInt(1) == 0) {
                     ret = false;
                 }
-            } catch (SQLException ex) {
             }
         } catch (SQLException ex) {
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) {
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) {
-                    stmt = null;
-                }
-            }
 
         }
+
         return ret;
     }
 
