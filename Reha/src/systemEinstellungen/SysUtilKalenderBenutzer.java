@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.sql.ResultSet;
@@ -42,7 +43,7 @@ import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import terminKalender.ParameterLaden;
 
-public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, ActionListener {
+public class SysUtilKalenderBenutzer extends JXPanel {
     /**
      *
      */
@@ -111,7 +112,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         jscroll.setViewportView(panel1);
 
         this.add(jscroll, BorderLayout.CENTER);
-        this.addKeyListener(this);
+        this.addKeyListener(keyadapter);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -136,39 +137,51 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
 
         knopf1 = new JButton("neu");
         knopf1.setPreferredSize(new Dimension(70, 20));
-        knopf1.addActionListener(this);
+        knopf1.addActionListener(e->neuHandeln());
         knopf1.setActionCommand("neu");
-        knopf1.addKeyListener(this);
+        knopf1.addKeyListener(keyadapter);
 
         knopf2 = new JButton("löschen");
         knopf2.setPreferredSize(new Dimension(70, 20));
-        knopf2.addActionListener(this);
+        knopf2.addActionListener(e->loeschenHandeln());
         knopf2.setActionCommand("loeschen");
-        knopf2.addKeyListener(this);
+        knopf2.addKeyListener(keyadapter);
 
         knopf3 = new JButton("ändern");
         knopf3.setPreferredSize(new Dimension(70, 20));
-        knopf3.addActionListener(this);
+        knopf3.addActionListener(e-> aendernHandeln());
         knopf3.setActionCommand("aendern");
-        knopf3.addKeyListener(this);
+        knopf3.addKeyListener(keyadapter);
 
         knopf4 = new JButton("speichern");
         knopf4.setPreferredSize(new Dimension(70, 20));
-        knopf4.addActionListener(this);
+        knopf4.addActionListener(e->speichernHandeln());
         knopf4.setActionCommand("speichern");
-        knopf4.addKeyListener(this);
+        knopf4.addKeyListener(keyadapter);
 
         knopf5 = new JButton("abbrechen");
         knopf5.setPreferredSize(new Dimension(70, 20));
-        knopf5.addActionListener(this);
+        knopf5.addActionListener(e->abbrechenHandeln());
         knopf5.setActionCommand("abbrechen");
-        knopf5.addKeyListener(this);
+        knopf5.addKeyListener(keyadapter);
 
         knopf6 = new JButton("export");
         knopf6.setPreferredSize(new Dimension(70, 20));
-        knopf6.addActionListener(this);
+        knopf6.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        listeHandeln();
+                    }
+                }.start();
+
+            }
+        });
         knopf6.setActionCommand("liste");
-        knopf6.addKeyListener(this);
+        knopf6.addKeyListener(keyadapter);
 
         naz = new JCheckBox("");
 
@@ -180,7 +193,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                 comboFuellen();
             }
         });
-        jcomboWahl.addActionListener(this);
+        jcomboWahl.addActionListener(e-> comboAuswerten());
         jcomboWahl.setActionCommand("comboaktion");
         builder.add(jcomboWahl, cc.xyw(3, 1, 3));
 
@@ -229,7 +242,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         knopfGedoense(new int[] { 1, 0, 0, 0, 0 });
         felderEinschalten(false);
         builder.getPanel()
-               .addKeyListener(this);
+               .addKeyListener(keyadapter);
         return builder.getPanel();
 
     }
@@ -404,7 +417,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         jcomboWahl.setSelectedItem(aktuell);
         comboAuswerten();
         felderEinschalten(false);
-        // System.out.println(statement);
         JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
         if (termin != null) {
             Reha.instance.terminpanel.setCombosOutside();
@@ -437,11 +449,9 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
                 }
 
             }
-            // System.out.println(statement);
         }
     }
 
-    /**************************************************************************/
     private void aendernHandeln() {
         felderEinschalten(true);
         knopfGedoense(new int[] { 0, 0, 0, 1, 1 });
@@ -474,9 +484,6 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
             e.printStackTrace();
         }
         ITextDocument textDocument = (ITextDocument) document;
-        /*
-         * Saichtext basteln und einsetzen
-         */
         ITextTable textTable = null;
         try {
             textTable = textDocument.getTextTableService()
@@ -530,42 +537,8 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         }
     }
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        if (arg0.getActionCommand()
-                .equals("comboaktion")) {
-            comboAuswerten();
-        }
-        if (arg0.getActionCommand()
-                .equals("neu")) {
-            neuHandeln();
-        }
-        if (arg0.getActionCommand()
-                .equals("aendern")) {
-            aendernHandeln();
-        }
-        if (arg0.getActionCommand()
-                .equals("abbrechen")) {
-            abbrechenHandeln();
-        }
-        if (arg0.getActionCommand()
-                .equals("speichern")) {
-            speichernHandeln();
-        }
-        if (arg0.getActionCommand()
-                .equals("loeschen")) {
-            loeschenHandeln();
-        }
-        if (arg0.getActionCommand()
-                .equals("liste")) {
-            new Thread() {
-                @Override
-                public void run() {
-                    listeHandeln();
-                }
-            }.start();
-        }
-    }
+
+ KeyListener keyadapter = new KeyAdapter() {
 
     @Override
     public void keyPressed(KeyEvent arg0) {
@@ -590,7 +563,7 @@ public class SysUtilKalenderBenutzer extends JXPanel implements KeyListener, Act
         }
 
     }
-
+ };
     private boolean testObNeueKalZeile() {
         boolean ret = false;
         if ((ParameterLaden.vKKollegen.size() >= (ParameterLaden.maxKalZeile + 1))) {
