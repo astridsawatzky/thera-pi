@@ -1,6 +1,9 @@
 package Suchen;
 
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -57,6 +60,9 @@ public class ICDrahmen implements Runnable {
         xPos = (int)(screensize.getWidth()/2 - xWidth/2 - 50);
         jFrame.setLocation(xPos, yPos);
 
+        jFrame.setIconImage(Toolkit.getDefaultToolkit()
+                                   .getImage(System.getProperty("user.dir") + File.separator + "icons" + File.separator
+                                           + "mag.png").getScaledInstance(44, 44, Image.SCALE_SMOOTH));
         jFrame.pack();
         jFrame.setVisible(true);
         return jFrame;
