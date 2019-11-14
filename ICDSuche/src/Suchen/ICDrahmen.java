@@ -47,7 +47,10 @@ public class ICDrahmen implements Runnable {
     }
 
     public JFrame getJFrame() {
-        int xWidth = 800, yWidth = 600, xPos = 200, yPos = 200;
+        int xWidth = 800;
+        int yWidth = 600;
+        int xPos = 200;
+        int yPos = 200;
 
         jFrame = new JFrame();
         jFrame.setSize(xWidth, yWidth);
