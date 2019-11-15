@@ -14,7 +14,7 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class AbrechnungDlg extends JDialog {
+public class UpdateDlg extends JDialog {
     /**
      * 
      */
@@ -23,7 +23,7 @@ public class AbrechnungDlg extends JDialog {
     private JLabel bildlab;
     Font font = new Font("Arial", Font.PLAIN, 12);
 
-    public AbrechnungDlg() {
+    public UpdateDlg() {
         super();
         setUndecorated(true);
         setModal(false);

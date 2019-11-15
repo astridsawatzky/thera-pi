@@ -69,7 +69,7 @@ public class UpdatePanel extends JXPanel {
     public JProgressBar pbar = null;
 
     public JTextArea ta = null;
-    public AbrechnungDlg abrdlg;
+    public UpdateDlg abrdlg;
 
     DecimalFormat dcf = new DecimalFormat("##########0.00");
     SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm:ss"); // Konv.
@@ -931,7 +931,7 @@ public class UpdatePanel extends JXPanel {
                                             @Override
                                             protected Void doInBackground() throws Exception {
                                                 // System.out.println("Starte AbrDlg");
-                                                abrdlg = new AbrechnungDlg();
+                                                abrdlg = new UpdateDlg();
                                                 abrdlg.setzeLabel("<html>Beziehe Log-Datei für "
                                                         + tabmod.getValueAt(imodi, 0)
                                                                 .toString()
