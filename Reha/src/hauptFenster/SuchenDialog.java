@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.InputMap;
@@ -44,6 +46,9 @@ import events.PatStammEventClass;
 import events.RehaTPEvent;
 import events.RehaTPEventListener;
 import gui.Cursors;
+import mandant.IK;
+import suchen.PatMitVollenVOs;
+import suchen.PatWithMatchingVo;
 import systemEinstellungen.SystemConfig;
 
 public class SuchenDialog extends JXDialog implements RehaTPEventListener {
@@ -299,7 +304,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                 reiheVector.addAll(Arrays.asList("Telefon priv.", "Telefon gesch.", "Telefon mobil"));
                 jlb.setText("Telefonnummer suchen: ");
             } else if (suchart == toolBar.getVolleVoIdx()) {
-                reiheVector.addAll(Arrays.asList("Rezept", "Behandler"));
+                reiheVector.addAll(Arrays.asList("Rezept", "letzte Behandlung", "Behandler"));
                 jlb.setText("volle Rezepte suchen: ");
             } else if (suchart == toolBar.getAbgebrVoIdx()) {
                 reiheVector.addAll(Arrays.asList("Rezept", "letzte Behandlung", "Behandler"));
@@ -870,6 +875,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             String orderResult = ") order by n_name,v_name,geboren";
             
             setCursor(Cursors.wartenCursor);
+            Vector<Vector<String>> extErgebnis = null;
 
             eingabe = jTextField.getText()
                                 .trim();
@@ -917,10 +923,12 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                     sstmt = select1 + "anamnese LIKE '%" + suche[0] + "%'" + orderResult;
                 }
             } else if (suchart == toolBar.getVolleVoIdx()) { // Patienten mit vollen, nicht abgeschlossenen Rezepten (® by Norbart/Astrid)
-                sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, v.behandler "
-                        + "FROM (volle AS v left outer join fertige AS f ON v.rez_nr = f.rez_nr)"
-                        + "LEFT JOIN pat5 AS p ON v.pat_intern = p.pat_intern "
-                        + "WHERE f.rez_nr IS NULL ORDER BY v.behandler, v.rez_nr";
+//                sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, v.behandler "
+//                        + "FROM (volle AS v left outer join fertige AS f ON v.rez_nr = f.rez_nr)"
+//                        + "LEFT JOIN pat5 AS p ON v.pat_intern = p.pat_intern "
+//                        + "WHERE f.rez_nr IS NULL ORDER BY v.behandler, v.rez_nr";
+                PatMitVollenVOs treffer = new PatMitVollenVOs(new IK(Reha.getAktIK()));
+                extErgebnis = treffer.getPatList();
             } else if (suchart == toolBar.getAbgebrVoIdx()) { // Patienten mit abgebrochenen Rezepten (® by MSc) 
                 sstmt = "(SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, "
                         +   "str_to_date(substring(v.termine FROM (character_length(v.termine)-10)),'%Y-%m-%d') AS LetzteBehandlung, "
@@ -954,16 +962,23 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 
                 stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 try {
-                    rs = stmt.executeQuery(sstmt);
-                    Vector<String> rowVector = new Vector<String>();
-                    int reihen = rs.getMetaData()
-                                   .getColumnCount();
-                    while (rs.next()) {
-                        rowVector.clear();
-                        for (int i = 1; i <= reihen; i++) {
-                            rowVector.addElement(rs.getString(i) != null ? rs.getString(i) : "");
+                    if (extErgebnis == null) {
+                        rs = stmt.executeQuery(sstmt);
+                        Vector<String> rowVector = new Vector<String>();
+                        int reihen = rs.getMetaData()
+                                       .getColumnCount();
+                        while (rs.next()) {
+                            rowVector.clear();
+                            for (int i = 1; i <= reihen; i++) {
+                                rowVector.addElement(rs.getString(i) != null ? rs.getString(i) : "");
+                            }
+                            setzeReihe((Vector<String>) rowVector.clone());
                         }
-                        setzeReihe((Vector<String>) rowVector.clone());
+                    } else {
+                        Iterator<Vector<String>> i = extErgebnis.iterator();
+                        while (i.hasNext()) {
+                            setzeReihe(i.next());
+                        }
                     }
 
                     setCursor(Cursors.normalCursor);
