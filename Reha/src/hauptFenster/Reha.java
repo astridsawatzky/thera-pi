@@ -168,6 +168,7 @@ import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
 import roogle.RoogleFenster;
+import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
 import systemTools.RehaPainters;
@@ -883,7 +884,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                         e.printStackTrace();
                     }
                 }
-                SystemConfig.SystemIconsInit();
+                ImageRepository.SystemIconsInit();
                 iconsOk = true;
                 new SocketClient().setzeInitStand("System-Config initialisieren");
             }

@@ -55,6 +55,7 @@ import ag.ion.bion.officelayer.text.ITextDocument;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
+import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import terminKalender.TerminFenster;
 import wecker.Wecker;
@@ -521,14 +522,11 @@ public class LinkeTaskPane extends JXPanel {
     }
 
     private JXHyperlink createPaypalLink() {
-        Image img;
+
         JXHyperlink paypal = new JXHyperlink();
         paypal.setText("Thera-Pi unterstützen");
         paypal.setClickedColor(new Color(0, 0x33, 0xFF));
-        img = new ImageIcon(Path.Instance.getProghome() + "icons/pp_cc_mark_37x23.jpg").getImage()
-                                                                                       .getScaledInstance(24, 24,
-                                                                                               Image.SCALE_SMOOTH);
-        paypal.setIcon(new ImageIcon(img));
+        paypal.setIcon(ImageRepository.paypalIcon());
         paypal.setActionCommand("piIcd10");
         paypal.addActionListener(new ActionListener() {
 

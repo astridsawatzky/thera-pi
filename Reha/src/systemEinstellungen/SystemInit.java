@@ -36,7 +36,7 @@ import rehaInternalFrame.JSysteminitInternal;
 public class SystemInit extends JXPanel implements TreeSelectionListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 4349616039904531899L;
     private JXHeader header = null;
@@ -817,10 +817,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
                 break;
             }
 
-            if (SystemConfig.hmSysIcons.get("werkzeuge") == null) {
-                SystemConfig.hmSysIcons.put("werkzeuge",
-                        new ImageIcon(Path.Instance.getProghome() + "icons/werkzeug.gif"));
-            }
+
             jxInhaltRechts = new SysUtilVorlage(SystemConfig.hmSysIcons.get("werkzeuge"));
             jxInhaltRechts.setVisible(true);
             jxRechts.add(jxInhaltRechts, BorderLayout.CENTER);
@@ -834,10 +831,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
 
     /*******************************************/
     private void doAccessDenied() {
-        if (SystemConfig.hmSysIcons.get("noaccess") == null) {
-            SystemConfig.hmSysIcons.put("noaccess",
-                    new ImageIcon(Path.Instance.getProghome() + "icons/" + "noaccess.gif"));
-        }
+
         jxInhaltRechts = new SysUtilVorlage(SystemConfig.hmSysIcons.get("noaccess"));
         jxInhaltRechts.setVisible(true);
         jxRechts.add(jxInhaltRechts, BorderLayout.CENTER);

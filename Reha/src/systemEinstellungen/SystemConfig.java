@@ -1,7 +1,6 @@
 package systemEinstellungen;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -163,7 +162,7 @@ public class SystemConfig {
 
     public static String[] berichttitel = { null, null, null, null };
     public static String thberichtdatei = "";
-    public static HashMap<String, ImageIcon> hmSysIcons = null;
+   final public static ImageRepository hmSysIcons = new ImageRepository();
 
     public static Vector<String> vGutachtenEmpfaenger;
     public static Vector<String> vGutachtenIK;
@@ -1580,8 +1579,8 @@ public class SystemConfig {
             boolean mustsave = false;
             inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "bedienung.ini");
 
-//			if ( inif.IsFileLoaded() )
-//				int x = 5;
+//            if ( inif.IsFileLoaded() )
+//                int x = 5;
             // funktioniert auch mit Defaultwerten, wenn die INI-Datei bis dato NICHT
             // existiert. In BedienungIni_WriteToIni()
             // wird dann eine komplette INI angelegt !
@@ -1732,7 +1731,7 @@ public class SystemConfig {
          * "WerkzeugaufrufButtonZeigen",
          * (Boolean)hmPatientenWerkzeugDlgIni.get("ToolsDlgShowButton") ? 1 : 0,
          * "Zusatzknopf im Werkzeugdialog");
-         * 
+         *
          * inidb.WritePropInteger("bedienung.ini", "PatientenSuche",
          * "SuchFensterBreite", hmPatientenSuchenDlgIni.get("fensterbreite"),
          * "letzte Breite des Suchfensters"); inidb.WritePropInteger("bedienung.ini",
@@ -2182,13 +2181,13 @@ public class SystemConfig {
     /**
      * checkt, ob Schlüssel iniKey in der ini-Datei enthalten ist, liefert dessen
      * int-Wert oder 0
-     * 
+     *
      * @param ini2use zu prüfende ini-Datei
      * @param iniSect zu prüfende Sektion in der Datei
      * @param iniKey  gesuchter Schlüssel
      * @return Wert
      */
-    private static int testIntIni(INIFile ini2use, String iniSect, String iniKey) {
+    static int testIntIni(INIFile ini2use, String iniSect, String iniKey) {
         int xscale = 0;
         try {
             // System.out.println("try " + ini2use.getFileName() + " for "+ iniKey);
@@ -2199,97 +2198,6 @@ public class SystemConfig {
             // ex.printStackTrace();
         }
         return xscale;
-    }
-
-    public static void SystemIconsInit() {
-        String[] bilder = { "neu", "edit", "delete", "print", "save", "find", "stop", "zuzahlfrei", "zuzahlok",
-                "zuzahlRGR", "zuzahlnichtok", "nichtgesperrt", "rezeptgebuehr", "rezeptgebuehrrechnung",
-                "ausfallrechnung", "arztbericht", "privatrechnung", "sort", "historieumsatz", "historietage",
-                "historieinfo", "keinerezepte", "hausbesuch", "historie", "kvkarte", "ooowriter", "ooocalc",
-                "oooimpress", "openoffice", "barcode", "info", "scanner", "email", "sms", "tools", "links", "rechts",
-                "abbruch", "pdf", "euro", "einzeltage", "info2", "bild", "patbild", "bunker", "camera", "oofiles",
-                "kleinehilfe", "achtung", "vorschau", "patstamm", "arztstamm", "kassenstamm", "drvlogo", "personen16",
-                "forward", "wecker16", "mond", "roogle", "scannergross", "rot", "gruen", "inaktiv", "buttonrot",
-                "buttongruen", "statusoffen", "statuszu", "statusset", "abschliessen", "bombe", "bomb24",
-                "openoffice26", "tporgklein", "information", "undo", "redo", "abrdreizwei", "abriv", "att", "close",
-                "confirm", "copy", "cut", "day", "dayselect", "down", "left", "minimize", "paste", "patsearch",
-                "quicksearch", "refresh", "right", "search", "tellist", "termin", "upw", "week", "abrdreieins",
-                "ebcheck", "hbmehrere", "verkaufArtikel", "verkaufLieferant", "verkaufTuten", "patnachrichten", "ocr",
-                "BarKasse" };
-        INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "icons.ini");
-        INIFile iniFallBack = INITool.openIniFallback(Path.Instance.getProghome() + "defaults/ini/", "icons.ini"); // lokale
-                                                                                                                   // ini
-                                                                                                                   // (falls
-                                                                                                                   // aktive
-                                                                                                                   // ini
-                                                                                                                   // in
-                                                                                                                   // DB
-                                                                                                                   // abgelegt
-                                                                                                                   // ist)
-        INIFile iniDefault = new INIFile(Path.Instance.getProghome() + "defaults/ini/icons.ini"); // ini im
-                                                                                                  // defaults-Pfad, die
-                                                                                                  // ist immer da
-
-        hmSysIcons = new HashMap<String, ImageIcon>();
-        Image ico = null;
-
-        int xscale = 0;
-        int yscale = 0;
-        int lang = bilder.length;
-        int i;
-        for (i = 0; i < lang; i++) {
-            INIFile use_ini = inif;
-            xscale = testIntIni(use_ini, "Icons", bilder[i] + "ScaleX");
-            if (xscale == 0) { // nicht in ini; nur '-1' u. Werte >0 sind 'Treffer'
-                if (iniFallBack != null) { // aktive ini liegt in der DB
-                    use_ini = iniFallBack; // lokale Kopie checken
-                    xscale = testIntIni(use_ini, "Icons", bilder[i] + "ScaleX");
-                }
-                if (xscale == 0) {
-                    use_ini = iniDefault; // letzterVersuch: default-ini
-                    xscale = testIntIni(use_ini, "Icons", bilder[i] + "ScaleX");
-                }
-            }
-            if (xscale != 0) {
-                if (use_ini != inif) {
-                    System.out.println("found " + bilder[i] + " in " + use_ini.getFileName());
-                }
-                yscale = use_ini.getIntegerProperty("Icons", bilder[i] + "ScaleY");
-            } else {
-                System.out.println("Fehler!!!!!!!!! bei Bild: " + bilder[i]
-                        + ". Fehler->Bilddatei existiert nicht, oder ist nicht in icons.ini vermerkt");
-            }
-
-            if ((xscale > 0) && (yscale > 0)) {
-                ico = new ImageIcon(Path.Instance.getProghome() + "icons/"
-                        + use_ini.getStringProperty("Icons", bilder[i])).getImage()
-                                                                        .getScaledInstance(xscale, yscale,
-                                                                                Image.SCALE_SMOOTH);
-                hmSysIcons.put(bilder[i], new ImageIcon(ico));
-            } else {
-                hmSysIcons.put(bilder[i], new ImageIcon(
-                        Path.Instance.getProghome() + "icons/" + use_ini.getStringProperty("Icons", bilder[i])));
-            }
-            ico = null;
-            /*
-             * Wenn das Icon im default-Pfad gefunden wurde, sollte es hier in die icons.ini
-             * vom IK (egal ob file oder in DB) übernommen werden: INITool.addIcon(String
-             * key, String file, int xDim, int yDim); INITool.addIcon("Icons", "dummy.png",
-             * xscale, yscale); public Integer getIntegerProperty(String pstrSection, String
-             * pstrProp) public void setIntegerProperty(String pstrSection, String pstrProp,
-             * int pintVal, String pstrComments)
-             *
-             * public String getStringProperty(String pstrSection, String pstrProp) public
-             * void setStringProperty(String pstrSection, String pstrProp, String pstrVal,
-             * String pstrComments)
-             *
-             * inif.setStringProperty("Icons", bilder[i], "", "");
-             * inif.setIntegerProperty("Icons", bilder[i]+"ScaleX", xscale, "")
-             * inif.setIntegerProperty("Icons", bilder[i]+"ScaleY", yscale, "")
-             */
-        }
-        // Reha.instance.copyLabel.setDropTarget(true);
-        //// System.out.println("System-Icons wurden geladen");
     }
 
     public static void Feiertage() {
@@ -2303,11 +2211,11 @@ public class SystemConfig {
      * ve2.add("1"); vec.add((Vector)ve2.clone()); ve2.clear(); ve2.add("Ammann");
      * ve2.add("2"); vec.add((Vector)ve2.clone()); Comparator<Vector> comparator =
      * new Comparator<Vector>() {
-     * 
+     *
      * @Override public int compare(Vector o1, Vector o2) { String s1 =
      * (String)o1.get(0); String s2 = (String)o2.get(0); return s1.compareTo(s2); }
      * }; Collections.sort(vec,comparator);
-     * 
+     *
      * }
      */
 
