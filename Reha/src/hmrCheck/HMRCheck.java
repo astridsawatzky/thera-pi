@@ -16,7 +16,6 @@ import commonData.Rezept;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
-import systemEinstellungen.SystemPreislisten;
 
 public class HMRCheck {
     Vector<Integer> anzahl = null;
@@ -28,7 +27,6 @@ public class HMRCheck {
     final String maxanzahl = "Die Höchstmenge pro Rezept bei ";
     final String rotein = "<>";
     boolean testok = true;
-    //String fehlertext = "";
     FehlerTxt fehlertext = null;
     int rezeptart;
     String reznummer = null;
@@ -105,7 +103,7 @@ public class HMRCheck {
         fehlertext = new FehlerTxt();
     }
 
-    /*
+    /**
      *
      * Abhängig vom Indikationsschlüssel muß geprüft werden <p>
      * 1. Ist die Anzahl pro Rezept o.k.<p>
@@ -114,7 +112,7 @@ public class HMRCheck {
      *
      */
     public boolean check() {
-        if (reznummer.startsWith("RS") || reznummer.startsWith("FT") || reznummer.startsWith("RH")) { 
+        if (reznummer.startsWith("RS") || reznummer.startsWith("FT") || reznummer.startsWith("RH")) {
             // McM: ist das korrekt? (Reha taucht im HMK nicht auf)
             return true;
         }
@@ -392,56 +390,7 @@ public class HMRCheck {
         return "";
     }
 
-    /************************/
 
-    public static String X_holeLetztMoeglichenTag(boolean erstebehandlung, String disziplin, int preisgruppe,
-            String referenz) {
-        int frist = (Integer) ((Vector<?>) SystemPreislisten.hmFristen.get(disziplin)
-                                                                      .get((erstebehandlung ? 0 : 2))).get(preisgruppe);
-        boolean kalendertage = (Boolean) ((Vector<?>) SystemPreislisten.hmFristen.get(disziplin)
-                                                                                 .get((erstebehandlung ? 1 : 3))).get(
-                                                                                         preisgruppe);
-        boolean mitsamstag = (Boolean) ((Vector<?>) SystemPreislisten.hmFristen.get(disziplin)
-                                                                               .get((erstebehandlung ? 4 : 5))).get(
-                                                                                       preisgruppe);
-        if (kalendertage) {
-            return DatFunk.sDatPlusTage(referenz, frist);
-        }
-        return hmrLetztesDatum(referenz, frist, mitsamstag);
-    }
-
-    public static long X_hmrTageErmitteln(int preisgruppe, String reznum, String rezdatum, String testdatum,
-            String letzter) {
-        long differenz = DatFunk.TageDifferenz(rezdatum, testdatum);
-        int wotag = DatFunk.TagDerWoche(rezdatum);
-       
-        if (preisgruppe != 1 && differenz > 10) {
-            if (wotag >= 3) {
-                differenz -= 2;
-            } else {
-                differenz -= 1;
-            }
-        }
-
-        return differenz;
-    }
-
-    public static int[] XX_hmrArbeitsTage(Date start, Date ende, boolean samstagWochenende, boolean checkFeiertage) {
-        int[] ret = { 0, 0, 0 }; // 0=Arbeitstag,1=wochenende,2=Feiertag
-
-        for (Date date = start; date.compareTo(ende) <= 0; date = new Date(date.getTime() + 24 * 60 * 60 * 1000)) {
-            if (date.getDay() % 7 == 0) {
-                ret[1]++;
-            } else if (checkFeiertage && istFeiertag(date)) { 
-                ret[2]++;
-            } else {
-                ret[0]++;
-            }
-        }
-        return ret;
-    }
-
-    /******************************************/
     public static int hmrTageDifferenz(String referenzdatum, String vergleichsdatum, int differenz,
             boolean samstagistwerktag) {
         int ret = 1;
@@ -455,14 +404,11 @@ public class HMRCheck {
         return ret;
     }
 
-    /******************************************/
-
     public static String hmrLetztesDatum(String startdatum, int differenz, boolean samstagistwerktag) {
-       
-        int i = 0;
+
         int werktage = 0;
         Date date = null;
-     
+
 
         try {
             date = sdDeutsch.parse(startdatum);
@@ -470,7 +416,7 @@ public class HMRCheck {
             e.printStackTrace();
         }
 
-       
+
         while (true) {
             // System.out.println("Getestetes Datum = "+sd.format(date));
             if ((!(date.getDay() % 7 == 0)) && (samstagistwerktag)) {
@@ -488,48 +434,20 @@ public class HMRCheck {
                     werktage++;
                 }
             }
-            i++;
+
             date = new Date(date.getTime() + (24 * 60 * 60 * 1000));
         }
     }
 
-    public static int XX_hmrAnzahlTageLetztesDatum(String startdatum, int differenz) {
-        
-        int i = 0;
-        int werktage = 0;
-
-        Date date = null;
-      
-
-        try {
-            date = sdDeutsch.parse(startdatum);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-       
-        while (true) {
-            
-            if (!(date.getDay() % 7 == 0)) {
-                if (!istFeiertag(date)) {
-                    if (werktage == differenz) {
-                        return Integer.valueOf(i);
-                    }
-                    werktage++;
-                }
-            }
-            i++;
-            date = new Date(date.getTime() + (24 * 60 * 60 * 1000));
-        }
-    }
 
     public static boolean istFeiertag(Date date) {
-       
+
         if (SystemConfig.vFeiertage.contains(sdSql.format(date))) {
             return true;
         }
         return false;
     }
+
     /**
     * Leerzeichen zw. Diagnosengruppe (2 oder 3 Zeichen) u. Leitsymptomatik
     *
@@ -537,10 +455,10 @@ public class HMRCheck {
     private String separiereLeitsymptomatik(String indiSchl) {
         String tmp = indiSchl.trim();
         if ("abcdef".indexOf(indiSchl.substring(indiSchl.length() - 1, indiSchl.length())) >= 0) {
-            
+
             tmp = indiSchl.substring(0, indiSchl.length() - 1) + " " + indiSchl.substring(indiSchl.length() - 1);
         } else {
-           
+
             // Norm bei Ergo/Logo - wird hier als Text angegeben
         }
         return tmp;
@@ -585,7 +503,7 @@ public class HMRCheck {
     }
 
     public boolean checkeVoFolgeKorrekt() {
-        
+
         String patintern = null;
         String aktindischl = indischluessel;
         int index = 0;
@@ -596,11 +514,11 @@ public class HMRCheck {
         try {
 
             aktindischl = separiereLeitsymptomatik(indischluessel);
-           
+
 
             if (Reha.instance.patpanel != null) {
                 patintern = Reha.instance.patpanel.patDaten.get(29);
-                String selFieldsFrom = "select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from "; 
+                String selFieldsFrom = "select rez_datum,rez_nr,rezeptart,anzahl1,indikatschl,termine,pat_intern from ";
                 String selCond = "where pat_intern = '" + patintern + "'" + " and rez_nr like '"
                         + diszis.getRezClass(disziplin) + "%' and " + mkIndiSearch(aktindischl);
                 String stmt = "(" + selFieldsFrom + " verordn " + selCond + ")" + " union " + "(" + selFieldsFrom
@@ -634,7 +552,7 @@ public class HMRCheck {
                 int rezDiagGrpIdx = getDiagGrpIdx(aktindischl);
                 boolean neudummy = Boolean.valueOf(neurezept);
                 String currRezVoArt = null,  vorgaengerVoArt = null;
-               
+
                 if (neudummy) {
                     // Daten aus Formular in testvec einfügen
                     Vector<String> neuRez = new Vector<String>();
@@ -656,7 +574,7 @@ public class HMRCheck {
                             testvec.get(i).set(ANZAHL, String.valueOf(anzahl.get(0)));
                             testvec.get(i).set(INDIKATSCHL, aktindischl);
                             // rez_nr, termine u. pat_intern koennen im Formular nicht geändert werden
-                           
+
                             currRezVoArt = testvec.get(i)
                                                   .get(REZEPTART);
                         }
@@ -669,7 +587,7 @@ public class HMRCheck {
                         }
 
                         // erst prüfen ob zwischen letzter Behandlung des alten Rezeptes und dem ersten
-                        // Termin der neuen VO 12 Wochen Therapiepause lagen, 
+                        // Termin der neuen VO 12 Wochen Therapiepause lagen,
                         // sofern ja -> nicht summieren (muesste dann Erstverordnung sein)
                             idxVorg = i + 1;
                             aktanzahl = Integer.parseInt(testvec.get(i)
@@ -698,7 +616,7 @@ public class HMRCheck {
                                 }
                                 idxVorg++; // jetzt Index auf Vorgänger setzen
                             }
-                            
+
                             if (idxVorg >= testvec.size()) {
                                 if (chkIsErstVO(currRezVoArt)) {
                                     return true;
@@ -710,17 +628,17 @@ public class HMRCheck {
                                               .get(TERMINE)
                                               .length() == 0) {
                                 // Vorgänger enthält (auch) keine Behandlungen
-                                enddatum_alt = RezTools.holeLetztenTermin(null, 
+                                enddatum_alt = RezTools.holeLetztenTermin(null,
                                         testvec.get(i)
                                                .get(TERMINE)); // dummy (damit die Berechnung durchlaeuft)
                             } else { // Vorgänger ist vorhanden und es sind Termine eingetragen
                                 enddatum_alt = RezTools.holeLetztenTermin(null, testvec.get(idxVorg)
                                                                                        .get(TERMINE));
                             }
-                          
+
 
                             gesamt = gesamt + aktanzahl;
-                          
+
                             if (gesamt > maxprofall) {
                                 fehlertext.add("<br><b><font color='#ff0000'>Höchstverordnungsmenge ist überschritten -> "
                                         + Integer.toString(gesamt) + " Behandlungen"
@@ -735,7 +653,7 @@ public class HMRCheck {
                             vorgaengerVoArt = testvec.get(idxVorg)
                                                      .get(REZEPTART);
 
-                          
+
                             if (tagedifferenz > therapiepause) { // Therapiepause ueberschritten
                                 if (chkIsErstVO(currRezVoArt)) {
                                     return true;
@@ -756,8 +674,6 @@ public class HMRCheck {
                             i = --idxVorg; // Index anpassen, falls Neurezept oder Rezepte uebersprungen wurden
                         }
 
-                    } else {
-                      
                     }
                 }
             }
@@ -778,7 +694,7 @@ public class HMRCheck {
                             + reznummer + "</font></b> gefunden.<br>");
         } else {
             return true;
-        }        
+        }
     }
 
     private boolean chkIf2AdrVO(String currRezVoArt, String vorgaengerVoNr) {
@@ -824,10 +740,6 @@ public class HMRCheck {
         } else {
             return false;
         }
-    }
-
-    private boolean chkIsFolgeVO(String rezeptArt) {
-        return chkIsFolgeVO(Integer.parseInt(rezeptArt));
     }
 
     private boolean shouldBeFolgeVO(int rezeptArt, String why) {
