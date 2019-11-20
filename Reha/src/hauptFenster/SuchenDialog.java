@@ -47,6 +47,7 @@ import events.RehaTPEvent;
 import events.RehaTPEventListener;
 import gui.Cursors;
 import mandant.IK;
+import suchen.PatMitAbgebrochenenVOs;
 import suchen.PatMitVollenVOs;
 import suchen.PatWithMatchingVo;
 import systemEinstellungen.SystemConfig;
@@ -930,27 +931,29 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                 PatMitVollenVOs treffer = new PatMitVollenVOs(new IK(Reha.getAktIK()));
                 extErgebnis = treffer.getPatList();
             } else if (suchart == toolBar.getAbgebrVoIdx()) { // Patienten mit abgebrochenen Rezepten (® by MSc) 
-                sstmt = "(SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, "
-                        +   "str_to_date(substring(v.termine FROM (character_length(v.termine)-10)),'%Y-%m-%d') AS LetzteBehandlung, "
-                        +   "substring(substring(right(v.termine,length(v.termine)/ (length(v.termine)-length(replace(v.termine,'\n','')))),"
-                        +     "locate('@',right(v.termine,length(v.termine)/(LENGTH(v.termine)-length(replace(v.termine,'\n','')))))+1 ),1 ,"
-                        +     "locate('@',substring(right(v.termine,length(v.termine)/ (length(v.termine)-length(replace(v.termine,'\n','')))),"
-                        +     "locate('@',right(v.termine,length(v.termine)/(length(v.termine)-length(replace(v.termine,'\n','')))))+1 ))-1 ) AS LetzterTherapeut "
-                        + "FROM ("
-                        +   "SELECT v1.pat_intern, v1.rez_nr, v1.termine, v1.abschluss FROM verordn AS v1 "
-                        +   "WHERE str_to_date(substring(v1.termine FROM (character_length(v1.termine)-10)),'%Y-%m-%d') <= '2019-09-25' "
-                        + ") AS v LEFT JOIN pat5 AS p ON (v.pat_intern=p.pat_intern) "
-                        + "WHERE !(v.termine='') AND !(v.termine is null) AND (v.abschluss='F') "
-                        + "ORDER BY substring(v.termine FROM (character_length(v.termine)-10))"
-                        + ") UNION ("   // + nie angefangene Rezepte
-                        + "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, rez_nr, "
-                        +     "'  - ' AS LetzteBehandlung, '' AS LetzterTherapeut "
-                        + "FROM ("
-                        +   " SELECT v1.pat_intern, v1.rez_nr, v1.termine, v1.abschluss FROM verordn AS v1 "
-                        +   "WHERE v1.rez_datum  <= '2019-09-25' "
-                        + ") as v LEFT JOIN pat5 AS p ON (v.pat_intern=p.pat_intern) "
-                        + "WHERE (v.termine='') OR (v.termine is null)"
-                        + ") ORDER BY LetzteBehandlung DESC, rez_nr, n_name";
+//                sstmt = "(SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, "
+//                        +   "str_to_date(substring(v.termine FROM (character_length(v.termine)-10)),'%Y-%m-%d') AS LetzteBehandlung, "
+//                        +   "substring(substring(right(v.termine,length(v.termine)/ (length(v.termine)-length(replace(v.termine,'\n','')))),"
+//                        +     "locate('@',right(v.termine,length(v.termine)/(LENGTH(v.termine)-length(replace(v.termine,'\n','')))))+1 ),1 ,"
+//                        +     "locate('@',substring(right(v.termine,length(v.termine)/ (length(v.termine)-length(replace(v.termine,'\n','')))),"
+//                        +     "locate('@',right(v.termine,length(v.termine)/(length(v.termine)-length(replace(v.termine,'\n','')))))+1 ))-1 ) AS LetzterTherapeut "
+//                        + "FROM ("
+//                        +   "SELECT v1.pat_intern, v1.rez_nr, v1.termine, v1.abschluss FROM verordn AS v1 "
+//                        +   "WHERE str_to_date(substring(v1.termine FROM (character_length(v1.termine)-10)),'%Y-%m-%d') <= '2019-09-25' "
+//                        + ") AS v LEFT JOIN pat5 AS p ON (v.pat_intern=p.pat_intern) "
+//                        + "WHERE !(v.termine='') AND !(v.termine is null) AND (v.abschluss='F') "
+//                        + "ORDER BY substring(v.termine FROM (character_length(v.termine)-10))"
+//                        + ") UNION ("   // + nie angefangene Rezepte
+//                        + "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, rez_nr, "
+//                        +     "'  - ' AS LetzteBehandlung, '' AS LetzterTherapeut "
+//                        + "FROM ("
+//                        +   " SELECT v1.pat_intern, v1.rez_nr, v1.termine, v1.abschluss FROM verordn AS v1 "
+//                        +   "WHERE v1.rez_datum  <= '2019-09-25' "
+//                        + ") as v LEFT JOIN pat5 AS p ON (v.pat_intern=p.pat_intern) "
+//                        + "WHERE (v.termine='') OR (v.termine is null)"
+//                        + ") ORDER BY LetzteBehandlung DESC, rez_nr, n_name";
+                PatMitAbgebrochenenVOs treffer = new PatMitAbgebrochenenVOs(new IK(Reha.getAktIK()));
+                extErgebnis = treffer.getPatList();
             } else if (suchart == toolBar.getAktRezIdx()) { // Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen
                                                             // Rezepten"
                 sstmt = "SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, p.pat_intern, GROUP_CONCAT(r.rez_nr ORDER BY r.rez_nr ASC SEPARATOR ', ') FROM verordn AS r INNER JOIN pat5 AS p where p.pat_intern = r.pat_intern GROUP BY p.pat_intern ORDER BY p.n_name";
