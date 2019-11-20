@@ -5,6 +5,11 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 
 ## unveröffentlicht
+Patientenfenster:
+- nur 1 Suchkriterium für Tel (sucht in allen 3 Spalten)
+- Suche nach vollen und abgebrochenen VOs möglich
+Abrechnung $302:
+- InfoDialog (F1) markiert volle/abgebrochene VOs farbig
 
 
 ## [1.1.3] - 2019-12-05

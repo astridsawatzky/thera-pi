@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.sql.Connection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -35,9 +36,15 @@ public class InfoDialogVOinArbeit extends InfoDialog implements HyperlinkListene
     Font font = new Font("Arial", Font.PLAIN, 12);
 
     private Connection connection;
+    
+    private List<String> grueneVOs = null;
+    private List<String> roteVOs = null;
 
-    public InfoDialogVOinArbeit(String arg1, Vector<Vector<String>> data, Connection connection) {
+    public InfoDialogVOinArbeit(String arg1, Vector<Vector<String>> data, List<String> volleVOs,
+            List<String> abgebrocheneVOs, Connection connection) {
         super(arg1, data);
+        this.grueneVOs = volleVOs;
+        this.roteVOs = abgebrocheneVOs;
         this.connection = connection;
 
         activateListener();
@@ -125,6 +132,8 @@ public class InfoDialogVOinArbeit extends InfoDialog implements HyperlinkListene
         StringBuffer tdata = new StringBuffer();
         hmVO.clear();
         String complete = ladehead();
+        String style = null;
+        
         tdata.append("<table width='100%' border-collapse: collapse; padding:none;>\n");
 
         tdata.append("<tr class='head'" + getSpanStyle("16", "")
@@ -142,8 +151,14 @@ public class InfoDialogVOinArbeit extends InfoDialog implements HyperlinkListene
             int behandlungen = myRezept.getAnzBeh(1);
             Vector<String> termine = RezTools.holeEinzelTermineAusRezept(thisNb, myRezept.getTermine());
             int abgearbeitet = termine.size();
+            style = "";
+            if (grueneVOs.contains(thisNb)) {
+                style = "style=\"color: green\"";
+            } else if (roteVOs.contains(thisNb)) {
+                style = "style=\"color: red\"";
+            }
             tdata.append("<tr" + getSpanStyle("12", "") + "\n");
-            tdata.append("<td><a href=\"http://vo_suche." + thisNb + ".de\">" + thisNb + "</a></td> \n");
+            tdata.append("<td><a " + style + " href=\"http://vo_suche." + thisNb + ".de\">" + thisNb + "</a></td> \n");
             tdata.append("<td align=\"center\" >" + abgearbeitet + "</td><td align=\"center\" >" + behandlungen
                     + "</td></tr>\n");
         }

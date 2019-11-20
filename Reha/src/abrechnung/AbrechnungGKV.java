@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.ButtonGroup;
@@ -80,8 +81,11 @@ import gui.Cursors;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
+import mandant.IK;
 import rehaInternalFrame.JAbrechnungInternal;
 import stammDatenTools.RezTools;
+import suchen.PatMitAbgebrochenenVOs;
+import suchen.PatMitVollenVOs;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
@@ -193,6 +197,8 @@ public class AbrechnungGKV extends JXPanel
     KeyStore keyStore = null;
     static int noCertFound = 0xfff; // max. 0x448 (3 Jahre) gültig
     OwnCertState myCert = null;
+    private List<String> volleVOs;
+    private List<String> abgebrocheneVOs;
 
     public AbrechnungGKV(JAbrechnungInternal xjry, Connection connection) {
         super();
@@ -232,6 +238,15 @@ public class AbrechnungGKV extends JXPanel
         disziSelect.setCurrDiszi(SystemConfig.initRezeptKlasse);
         jry.setAbrRezInstance(abrRez); // JAbrechnungInternal mitteilen, welche Instanz cleanup() enthält
         RezFromDB = new RezFromDB();
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                volleVOs = new PatMitVollenVOs(new IK(Reha.getAktIK())).getVoList();
+                abgebrocheneVOs = new PatMitAbgebrochenenVOs(new IK(Reha.getAktIK())).getVoList();
+                return null;
+            }
+
+        }.execute();
     }
 
     public void setEncryptTitle() {
@@ -2908,7 +2923,7 @@ public class AbrechnungGKV extends JXPanel
             Vector<Vector<String>> vecInArbeit = RezFromDB.getPendingVO(ikKasse);
             //// System.out.println("VO in Arbeit: "+ vecInArbeit);
             if (vecInArbeit.size() >= 0) {
-                infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, this.connection);
+                infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, volleVOs, abgebrocheneVOs, this.connection);
                 infoDlg.pack();
                 infoDlg.setLocationRelativeTo(null);
                 infoDlg.setVisible(true);
