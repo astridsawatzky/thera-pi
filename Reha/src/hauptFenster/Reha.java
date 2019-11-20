@@ -16,8 +16,6 @@ import static java.awt.event.KeyEvent.VK_X;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.FlowLayout;
@@ -33,28 +31,21 @@ import java.awt.dnd.DragGestureEvent;
 import java.awt.dnd.DragGestureListener;
 import java.awt.dnd.DragSource;
 import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDropEvent;
-import java.awt.dnd.DropTargetEvent;
 import java.awt.dnd.DropTargetListener;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.WindowStateListener;
 import java.awt.geom.Point2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -67,8 +58,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TimerTask;
 import java.util.TooManyListenersException;
@@ -81,7 +70,6 @@ import javax.media.MediaLocator;
 import javax.media.NoPlayerException;
 import javax.media.Player;
 import javax.media.format.YUVFormat;
-import javax.sql.DataSource;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -181,8 +169,7 @@ import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
 import wecker.Wecker;
 
-public class Reha implements FocusListener, ComponentListener, ContainerListener, MouseListener, MouseMotionListener,
-        KeyListener, RehaEventListener, WindowListener, WindowStateListener, ActionListener {
+public class Reha implements RehaEventListener {
 
     public PatientHauptPanel patpanel = null;
     public EBerichtPanel eberichtpanel = null;
@@ -363,22 +350,20 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
     private static JXFrame thisFrame;
 
     private RehaSettings settings;
-    private DataSource dataSource;
     private static Logger logger;
     private LinkeTaskPane linkeTaskPane;
     ActionListener ltplistener = new ActionListener() {
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
 
+            String cmd = e.getActionCommand();
+            switch (cmd) {
 
-        String cmd = e.getActionCommand();
-        switch (cmd) {
-
-        case "System Initialisierung":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
+            case "System Initialisierung":
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
 
                         Reha.getThisFrame()
                             .setCursor(Cursors.wartenCursor);
@@ -386,386 +371,377 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                         Reha.getThisFrame()
                             .setCursor(Cursors.normalCursor);
 
-                    return null;
-                }
-
-            }.execute();
-            break;
-        case "Krankenkassen":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.wartenCursor);
-                    Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
-
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.normalCursor);
-                    return null;
-                }
-            }.execute();
-            break;
-        case "Terminkalender starten":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.wartenCursor);
-                    Reha.instance.progLoader.ProgTerminFenster(1, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
-
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.normalCursor);
-                    return null;
-                }
-            }.execute();
-            break;
-        case "Arztstamm":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    getThisFrame()
-                        .setCursor(Cursors.wartenCursor);
-                    Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
-
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.normalCursor);
-                    return null;
-                }
-            }.execute();
-            break;
-        case "Wochenarbeitszeiten definieren":
-            JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
-            if (termin != null) {
-                JOptionPane.showMessageDialog(null,
-                        "Achtung!!!!! \n\nWährend der Arbeitszeit-Definition\n"
-                                + "darf der Terminkalender aus Sicherheitsgründen nicht geöffnet sein.\n"
-                                + "Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
-                return;
-            }
-            Reha.instance.progLoader.ProgTerminFenster(0, 2);
-            break;
-        case "monthview":
-            new DatumWahl(200, 200);
-            break;
-        case "OpenOffice-Writer":
-            OOTools.starteLeerenWriter();
-            break;
-        case "OpenOffice-Calc":
-            OOTools.starteLeerenCalc();
-            break;
-        case "OpenOffice-Impress":
-            OOTools.starteLeerenImpress();
-            break;
-        case "Benutzerverwaltung":
-            Reha.instance.progLoader.BenutzerrechteFenster(1, "");
-            break;
-        case "[Ru:gl] - Die Terminsuchmaschine":
-            Reha.instance.progLoader.ProgRoogleFenster(0, null);
-            break;
-        case "RTA-Wisssen das Universalwissen":
-            break;
-        case "Thera-PI - Browser":
-            new Thread() {
-                @Override
-                public void run() {
-                    new LadeProg(Path.Instance.getProghome() + "RehaWissen.jar");
-                }
-            }.start();
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    RehaSplash rspl = new RehaSplash(null,
-                            "Hilfebrowser laden....dieser Vorgang kann einige Sekunden dauern...");
-                    long zeit = System.currentTimeMillis();
-                    while (true) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            logger.error("bad things happen here",e);
-                        }
-                        if (System.currentTimeMillis() - zeit > 6000) {
-                            break;
-                        }
+                        return null;
                     }
-                    rspl.dispose();
-                    return null;
-                }
 
-            }.execute();
-            break;
-        case "Thera-PI - Nachrichten":
-            if (!RehaIOServer.rehaMailIsActive) {
-                if (Reha.aktUser.startsWith("Therapeut")) {
+                }.execute();
+                break;
+            case "Krankenkassen":
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
+
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.normalCursor);
+                        return null;
+                    }
+                }.execute();
+                break;
+            case "Terminkalender starten":
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.ProgTerminFenster(1,
+                                (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
+
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.normalCursor);
+                        return null;
+                    }
+                }.execute();
+                break;
+            case "Arztstamm":
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        getThisFrame().setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
+
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.normalCursor);
+                        return null;
+                    }
+                }.execute();
+                break;
+            case "Wochenarbeitszeiten definieren":
+                JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
+                if (termin != null) {
+                    JOptionPane.showMessageDialog(null,
+                            "Achtung!!!!! \n\nWährend der Arbeitszeit-Definition\n"
+                                    + "darf der Terminkalender aus Sicherheitsgründen nicht geöffnet sein.\n"
+                                    + "Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
                     return;
                 }
-                Reha.getThisFrame()
-                    .setCursor(Cursors.wartenCursor);
+                Reha.instance.progLoader.ProgTerminFenster(0, 2);
+                break;
+            case "monthview":
+                new DatumWahl(200, 200);
+                break;
+            case "OpenOffice-Writer":
+                OOTools.starteLeerenWriter();
+                break;
+            case "OpenOffice-Calc":
+                OOTools.starteLeerenCalc();
+                break;
+            case "OpenOffice-Impress":
+                OOTools.starteLeerenImpress();
+                break;
+            case "Benutzerverwaltung":
+                Reha.instance.progLoader.BenutzerrechteFenster(1, "");
+                break;
+            case "[Ru:gl] - Die Terminsuchmaschine":
+                Reha.instance.progLoader.ProgRoogleFenster(0, null);
+                break;
+            case "RTA-Wisssen das Universalwissen":
+                break;
+            case "Thera-PI - Browser":
                 new Thread() {
                     @Override
                     public void run() {
-                        new LadeProg(Path.Instance.getProghome() + "RehaMail.jar" + " " + Path.Instance.getProghome()
-                                + " " + Reha.getAktIK() + " " + Reha.xport + " " + Reha.aktUser.replace(" ", "#"));
+                        new LadeProg(Path.Instance.getProghome() + "RehaWissen.jar");
                     }
                 }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Hilfebrowser laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                logger.error("thread was interrupted", e);
+                            }
+                            if (System.currentTimeMillis() - zeit > 6000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
 
-            } else {
-                if (Reha.aktUser.startsWith("Therapeut")) {
-                    return;
+                }.execute();
+                break;
+            case "Thera-PI - Nachrichten":
+                if (!RehaIOServer.rehaMailIsActive) {
+                    if (Reha.aktUser.startsWith("Therapeut")) {
+                        return;
+                    }
+                    Reha.getThisFrame()
+                        .setCursor(Cursors.wartenCursor);
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            new LadeProg(Path.Instance.getProghome() + "RehaMail.jar" + " "
+                                    + Path.Instance.getProghome() + " " + Reha.getAktIK() + " " + Reha.xport + " "
+                                    + Reha.aktUser.replace(" ", "#"));
+                        }
+                    }.start();
+
+                } else {
+                    if (Reha.aktUser.startsWith("Therapeut")) {
+                        return;
+                    }
+                    new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort,
+                            "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
                 }
-                new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort,
-                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-            }
-            break;
-        case "Neuer Wissensbeitrag anlegen":
-            JOptionPane.showMessageDialog(null, "Achtung!!!!! \n\nDer Wissens-Generator ist auf diesem System\n\n"
-                    + "nicht installiert - oder konnte nicht gefunden werden...\n\n");
-            break;
-        case "Patienten und Rezepte":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    setCursor(Cursors.wartenCursor);
-                    Reha.instance.progLoader.ProgPatientenVerwaltung(1, conn);
+                break;
+            case "Neuer Wissensbeitrag anlegen":
+                JOptionPane.showMessageDialog(null, "Achtung!!!!! \n\nDer Wissens-Generator ist auf diesem System\n\n"
+                        + "nicht installiert - oder konnte nicht gefunden werden...\n\n");
+                break;
+            case "Patienten und Rezepte":
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Reha.thisFrame.setCursor(Cursors.wartenCursor);
+                        Reha.instance.progLoader.ProgPatientenVerwaltung(1, conn);
 
-                    setCursor(Cursors.normalCursor);
-                    return null;
-                }
+                        Reha.thisFrame.setCursor(Cursors.normalCursor);
+                        return null;
+                    }
 
-                private void setCursor(Cursor wartencursor) {
-                    // TODO Auto-generated method stub
-
-                }
-            }.execute();
-            break;
-        case "piHelp":
-            new Thread() {
-                @Override
-                public void run() {
+                }.execute();
+                break;
+            case "piHelp":
+                new Thread() {
+                    @Override
+                    public void run() {
 
                         new LadeProg(Path.Instance.getProghome() + "piHelp.jar " + Path.Instance.getProghome() + " "
                                 + Reha.getAktIK());
-                }
-            }.start();
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    RehaSplash rspl = new RehaSplash(null,
-                            "piHelp - Hilfetextgenerator laden....dieser Vorgang kann einige Sekunden dauern...");
-                    long zeit = System.currentTimeMillis();
-                    while (true) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            logger.error("bad things happen here",e);
+                    }
+                }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "piHelp - Hilfetextgenerator laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                logger.error("thread was interrupted", e);
+                            }
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
                         }
-                        if (System.currentTimeMillis() - zeit > 2000) {
-                            break;
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+                break;
+            case "piTool":
+                new LadeProg(Path.Instance.getProghome() + "piTool.jar");
+                break;
+            case "piTextb":
+                textbaus.main(new String[] { Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/rehajava.ini",
+                        Path.Instance.getProghome() + "ini/thbericht.ini"
+
+                });
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                logger.error("thread was interrupted", e);
+                            }
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+                break;
+            case "piArztTextb":
+                if (!Rechte.hatRecht(Rechte.Sonstiges_textbausteinegutachten, true)) {
+                    return;
+                }
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            ArztBaustein.start(new IK(Reha.getAktIK()), Reha.officeapplication);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
                         }
                     }
-                    rspl.dispose();
-                    return null;
-                }
-
-            }.execute();
-            break;
-        case "piTool":
-            new LadeProg(Path.Instance.getProghome() + "piTool.jar");
-            break;
-        case "piTextb":
-            textbaus.main(new String[] { Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/rehajava.ini",
-                    Path.Instance.getProghome() + "ini/thbericht.ini"
-
-            });
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    RehaSplash rspl = new RehaSplash(null,
-                            "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
-                    long zeit = System.currentTimeMillis();
-                    while (true) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            logger.error("bad things happen here",e);
+                }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                logger.error("thread was interrupted", e);
+                            }
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
                         }
-                        if (System.currentTimeMillis() - zeit > 2000) {
-                            break;
-                        }
+                        rspl.dispose();
+                        return null;
                     }
-                    rspl.dispose();
-                    return null;
-                }
+                }.execute();
+                break;
+            case "piIcd10":
+                SwingUtilities.invokeLater(new ICDrahmen(conn));
+                break;
+            case "piQM":
+                new Thread() {
+                    @Override
+                    public void run() {
+                        new LadeProg(Path.Instance.getProghome() + "QMHandbuch.jar");
+                    }
+                }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "QM-Handbuch laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                logger.error("thread was interrupted", e);
+                            }
+                            if (System.currentTimeMillis() - zeit > 4000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
 
-            }.execute();
-            break;
-        case "piArztTextb":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_textbausteinegutachten, true)) {
-                return;
+                }.execute();
+                break;
+            case "piAW":
+                new Thread() {
+                    @Override
+                    public void run() {
+                        new LadeProg(Path.Instance.getProghome() + "QMAuswertung.jar" + " "
+                                + Path.Instance.getProghome() + " " + Reha.getAktIK());
+                    }
+                }.start();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "QM-Auswertung laden....dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                logger.error("thread was interrupted", e);
+                            }
+                            if (System.currentTimeMillis() - zeit > 4000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+                break;
+            case "Akutliste":
+                if (SqlInfo.holeEinzelFeld("select id from pat5 where akutpat='T' LIMIT 1")
+                           .equals("")) {
+                    JOptionPane.showMessageDialog(null, "Keine Akutpatienten im Patientenstamm vermerkt");
+                    return;
+                }
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.wartenCursor);
+                        try {
+                            new AkutListe(Reha.officeapplication.getDocumentService());
+                        } catch (TextException | OfficeApplicationException e) {
+
+                            e.printStackTrace();
+                        }
+                        Reha.getThisFrame()
+                            .setCursor(Cursors.cdefault);
+                        return null;
+                    }
+                }.execute();
+                new SwingWorker<Void, Void>() {
+                    @Override
+                    protected Void doInBackground() throws Exception {
+                        RehaSplash rspl = new RehaSplash(null,
+                                "Akutliste starten -  dieser Vorgang kann einige Sekunden dauern...");
+                        long zeit = System.currentTimeMillis();
+                        while (true) {
+                            try {
+                                Thread.sleep(20);
+                            } catch (InterruptedException e) {
+                                logger.error("thread was interrupted", e);
+                            }
+                            if (System.currentTimeMillis() - zeit > 2000) {
+                                break;
+                            }
+                        }
+                        rspl.dispose();
+                        return null;
+                    }
+
+                }.execute();
+                break;
+            case "neuerwecker":
+                Wecker wecker = new Wecker(null);
+                wecker.pack();
+                wecker.setVisible(true);
+                wecker = null;
+                break;
             }
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        ArztBaustein.start(new IK(Reha.getAktIK()), Reha.officeapplication);
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+            if (cmd.startsWith("UserTask-")) {
+                try {
+                    int taskNummer = Integer.parseInt(cmd.toString()
+                                                         .split("-")[1]);
+                    Runtime.getRuntime()
+                           .exec(SystemConfig.vUserTasks.get(taskNummer)
+                                                        .get(2));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
                 }
-            }.start();
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    RehaSplash rspl = new RehaSplash(null,
-                            "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
-                    long zeit = System.currentTimeMillis();
-                    while (true) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            logger.error("bad things happen here",e);
-                        }
-                        if (System.currentTimeMillis() - zeit > 2000) {
-                            break;
-                        }
-                    }
-                    rspl.dispose();
-                    return null;
-                }
-            }.execute();
-            break;
-        case "piIcd10":
-            SwingUtilities.invokeLater(new ICDrahmen(conn));
-            break;
-        case "piQM":
-            new Thread() {
-                @Override
-                public void run() {
-                    new LadeProg(Path.Instance.getProghome() + "QMHandbuch.jar");
-                }
-            }.start();
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    RehaSplash rspl = new RehaSplash(null,
-                            "QM-Handbuch laden....dieser Vorgang kann einige Sekunden dauern...");
-                    long zeit = System.currentTimeMillis();
-                    while (true) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            logger.error("bad things happen here",e);
-                        }
-                        if (System.currentTimeMillis() - zeit > 4000) {
-                            break;
-                        }
-                    }
-                    rspl.dispose();
-                    return null;
-                }
-
-            }.execute();
-            break;
-        case "piAW":
-            new Thread() {
-                @Override
-                public void run() {
-                    new LadeProg(Path.Instance.getProghome() + "QMAuswertung.jar" + " " + Path.Instance.getProghome()
-                            + " " + Reha.getAktIK());
-                }
-            }.start();
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    RehaSplash rspl = new RehaSplash(null,
-                            "QM-Auswertung laden....dieser Vorgang kann einige Sekunden dauern...");
-                    long zeit = System.currentTimeMillis();
-                    while (true) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            logger.error("bad things happen here",e);
-                        }
-                        if (System.currentTimeMillis() - zeit > 4000) {
-                            break;
-                        }
-                    }
-                    rspl.dispose();
-                    return null;
-                }
-
-            }.execute();
-            break;
-        case "Akutliste":
-            if (SqlInfo.holeEinzelFeld("select id from pat5 where akutpat='T' LIMIT 1")
-                       .equals("")) {
-                JOptionPane.showMessageDialog(null, "Keine Akutpatienten im Patientenstamm vermerkt");
-                return;
             }
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.wartenCursor);
-                    try {
-                        new AkutListe(Reha.officeapplication.getDocumentService());
-                    } catch (TextException | OfficeApplicationException e) {
 
-                        e.printStackTrace();
-                    }
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.cdefault);
-                    return null;
-                }
-            }.execute();
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    RehaSplash rspl = new RehaSplash(null,
-                            "Akutliste starten -  dieser Vorgang kann einige Sekunden dauern...");
-                    long zeit = System.currentTimeMillis();
-                    while (true) {
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            // TODO Auto-generated catch block
-                            logger.error("bad things happen here",e);
-                        }
-                        if (System.currentTimeMillis() - zeit > 2000) {
-                            break;
-                        }
-                    }
-                    rspl.dispose();
-                    return null;
-                }
-
-            }.execute();
-            break;
-        case "neuerwecker":
-            Wecker wecker = new Wecker(null);
-            wecker.pack();
-            wecker.setVisible(true);
-            wecker = null;
-            break;
         }
-        if (cmd.startsWith("UserTask-")) {
-            try {
-                int taskNummer = Integer.parseInt(cmd.toString()
-                                                     .split("-")[1]);
-                Runtime.getRuntime()
-                       .exec(SystemConfig.vUserTasks.get(taskNummer)
-                                                    .get(2));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-
-    }};
+    };
 
     public static JXFrame getThisFrame() {
         return thisFrame;
@@ -930,24 +906,23 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         javax.swing.plaf.FontUIResource fontUIDresource = new FontUIResource("Tahoma", Font.PLAIN, 11);
         UIDefaults defs = (UIDefaults) UIManager.getLookAndFeelDefaults()
                                                 .clone();
-        for (Iterator ii = new HashSet(defs.keySet()).iterator(); ii.hasNext();) {
-            Object key = ii.next();
-            if (key.equals("FormattedTextField.font")) {
+        for (Object key : defs.keySet()) {
+            if ("FormattedTextField.font".equals(key)) {
                 UIManager.put(key, fontUIDresource);
             }
-            if (key.equals("TextField.font")) {
+            if ("TextField.font".equals(key)) {
                 UIManager.put(key, fontUIDresource);
             }
-            if (key.equals("Label.font")) {
+            if ("Label.font".equals(key)) {
                 UIManager.put(key, fontUIDresource);
             }
-            if (key.equals("Button.font")) {
+            if ("Button.font".equals(key)) {
                 UIManager.put(key, fontUIDresource);
             }
-            if (key.equals("Table.font")) {
+            if ("Table.font".equals(key)) {
                 UIManager.put(key, fontUIDresource);
             }
-            if (key.equals("ComboBox.font")) {
+            if ("ComboBox.font".equals(key)) {
                 UIManager.put(key, fontUIDresource);
             }
         }
@@ -996,8 +971,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                         }
                     });
                 } catch (NullPointerException ex) {
-                    ex.printStackTrace();
-                    System.out.println("Fehler beim Systemstart");
+                    logger.error("Fehler beim Systemstart", ex);
                 }
 
             }
@@ -1020,15 +994,21 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     "rehajava.ini");
             SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1", jSplitLR.getDividerLocation(), null);
             SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2", jSplitRechtsOU.getDividerLocation(), null);
-            SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen", linkeTaskPane.patientenstammPanel.isCollapsed() ? "1" : "0", null);
-            SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen", linkeTaskPane.terminManagementPanel.isCollapsed() ? "1" : "0", null);
-            SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen", linkeTaskPane.openofficePanel.isCollapsed() ? "1" : "0", null);
-            SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen", linkeTaskPane.nuetzlichesPanel.isCollapsed() ? "1" : "0", null);
-            SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen", linkeTaskPane.systemeinstellungpanel.isCollapsed() ? "1" : "0", null);
-            SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen", linkeTaskPane.monatsuebersichtPanel.isCollapsed() ? "1" : "0", null);
+            SystemConfig.UpdateIni(inif, "HauptFenster", "TP1Offen",
+                    linkeTaskPane.patientenstammPanel.isCollapsed() ? "1" : "0", null);
+            SystemConfig.UpdateIni(inif, "HauptFenster", "TP2Offen",
+                    linkeTaskPane.terminManagementPanel.isCollapsed() ? "1" : "0", null);
+            SystemConfig.UpdateIni(inif, "HauptFenster", "TP3Offen",
+                    linkeTaskPane.openofficePanel.isCollapsed() ? "1" : "0", null);
+            SystemConfig.UpdateIni(inif, "HauptFenster", "TP4Offen",
+                    linkeTaskPane.nuetzlichesPanel.isCollapsed() ? "1" : "0", null);
+            SystemConfig.UpdateIni(inif, "HauptFenster", "TP5Offen",
+                    linkeTaskPane.systemeinstellungpanel.isCollapsed() ? "1" : "0", null);
+            SystemConfig.UpdateIni(inif, "HauptFenster", "TP6Offen",
+                    linkeTaskPane.monatsuebersichtPanel.isCollapsed() ? "1" : "0", null);
             if (LinkeTaskPane.mitUserTask) {
-                SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen", linkeTaskPane.userTaskPanel.isCollapsed() ? "1" : "0",
-                        null);
+                SystemConfig.UpdateIni(inif, "HauptFenster", "TP7Offen",
+                        linkeTaskPane.userTaskPanel.isCollapsed() ? "1" : "0", null);
             }
         } catch (NullPointerException ex) {
             JOptionPane.showMessageDialog(null, "Fehler beim Speichern der aktuellen Fensteranordnung!");
@@ -1041,7 +1021,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
     }
 
     private void doCloseEverything() {
-        this.jFrame.removeWindowListener(this);
+        this.jFrame.removeWindowListener(windowlistener);
         if (Reha.instance.conn != null) {
             try {
                 Reha.instance.conn.close();
@@ -1481,10 +1461,8 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
 
             sqlInfo.setFrame(jFrame);
             // thisClass = this;
-            jFrame.addWindowListener(this);
-            jFrame.addWindowStateListener(this);
-            jFrame.addComponentListener(this);
-            jFrame.addContainerListener(this);
+            jFrame.addWindowListener(windowlistener);
+            jFrame.addComponentListener(componentListener);
 
             JDesktopPane desk = new JDesktopPane();
             desk.setName("desk");
@@ -1543,7 +1521,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             jFrame.getContentPane()
                   .add(desktop);
             jFrame.getContentPane()
-                  .addComponentListener(this);
+                  .addComponentListener(componentListener);
 
             /********* den BackgroundPainter basteln *********/
             Point2D start = new Point2D.Float(0, 0);
@@ -1574,18 +1552,14 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             jpOben.setBorder(null);
             jpOben.setBackgroundPainter(new CompoundPainter(mp));
             jpOben.setName("PanelOben");
-            jpOben.addComponentListener(this);
+            jpOben.addComponentListener(componentListener);
 
             desktops[0] = new Hintergrund(Reha.rehaBackImg);
             desktops[0].setName("DesktopOben");
             desktops[0].setOpaque(false);
             desktops[0].setSize(2000, 2000);
             desktops[0].setDesktopManager(new OOODesktopManager(0));
-            desktops[0].addFocusListener(this);
-            desktops[0].addMouseListener(this);
-            desktops[0].addMouseMotionListener(this);
-            desktops[0].addComponentListener(this);
-            desktops[0].addContainerListener(this);
+            desktops[0].addComponentListener(componentListener);
 
             jpOben.add(desktops[0]);
 
@@ -1605,26 +1579,20 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             jp2 = new JXPanel(new BorderLayout());
             jp2.setBackground(Color.WHITE);
             jp2.setBorder(dropShadow);
-            jp2.addComponentListener(this);
+            jp2.addComponentListener(componentListener);
 
             jpUnten = new JXPanel(new BorderLayout());
             jpUnten.setBorder(null);
             jpUnten.setBackgroundPainter(new CompoundPainter(mp));
             jpUnten.setName("PanelUnten");
-            jpUnten.addComponentListener(this);
+            jpUnten.addComponentListener(componentListener);
 
             desktops[1] = new Hintergrund(Reha.rehaBackImg);
             desktops[1].setName("DesktopUnten");
             desktops[1].setOpaque(false);
             desktops[1].setSize(2000, 2000);
             desktops[1].setDesktopManager(new OOODesktopManager(1));
-            desktops[1].addFocusListener(this);
-            desktops[1].addMouseListener(this);
-            desktops[1].addMouseMotionListener(this);
-            desktops[1].addComponentListener(this);
-            desktops[1].addContainerListener(this);
-
-            // desktops[1].add(new WorkFlow("WorkFlow",null,1));
+            desktops[1].addComponentListener(componentListener);
 
             jpUnten.add(desktops[1]);
             jp2.add(jpUnten, BorderLayout.CENTER);
@@ -1641,12 +1609,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                         jxRechtsUnten);
 
             }
-            jSplitRechtsOU.addPropertyChangeListener(new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent arg0) {
-                    // dividerLocOU = jSplitRechtsOU.getDividerLocation();
-                }
-            });
 
             jSplitRechtsOU.setDividerBorderVisible(false);
             jSplitRechtsOU.setDividerSize(7);
@@ -1658,7 +1620,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             jSplitRechtsOU.setOneTouchExpandable(true);
             jxRechts.add(jSplitRechtsOU, BorderLayout.CENTER); // bislang o.k.
 
-            jxRechts.addComponentListener(this);
+            jxRechts.addComponentListener(componentListener);
             jxRechts.validate();
 
             /**
@@ -1671,7 +1633,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     e.printStackTrace();
                 }
             }
-            linkeTaskPane = new LinkeTaskPane(conn,ltplistener);
+            linkeTaskPane = new LinkeTaskPane(conn, ltplistener);
             jxLinks.add(linkeTaskPane, BorderLayout.CENTER);
             jxLinks.validate();
             jFrame.getContentPane()
@@ -1720,9 +1682,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                             ex.printStackTrace();
                         }
                         try {
-                            Reha.updatesChecken = (updateini.getIntegerProperty("TheraPiUpdates", "UpdateChecken") > 0
-                                    ? true
-                                    : false);
+                            Reha.updatesChecken = updateini.getIntegerProperty("TheraPiUpdates", "UpdateChecken") > 0;
                             System.out.println("System soll nach Updates suchen = " + Reha.updatesChecken);
                         } catch (NullPointerException ex) {
                             Reha.updatesChecken = true;
@@ -1770,25 +1730,10 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         jxLinks.setAlpha(1.0f);
         jxRechts.setAlpha(1.0f);
 
-        // jxLinks.setAlpha(0.3f);
-        // jxRechts.setAlpha(0.3f);
-
-        // new Thread(new DatenbankStarten()).start();
-
         jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
 
         setKeyboardActions();
-        setFocusWatcher();
-
         AktiveFenster.Init();
-
-        /*
-         * rehaEvent.addRehaEventListener(new RehaEventListener() {
-         *
-         * @Override public void RehaEventOccurred(RehaEvent evt) {
-         * //System.out.println("Event getSource: = "+evt.getSource());
-         * //System.out.println("Event Nachricht: = "+ evt.getRehaEvent()); } });
-         */
 
         return jFrame;
     }
@@ -1828,7 +1773,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             versionbar.setOpaque(false);
             versionbar.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
             dbLabel = new JLabel(" ");
-            // JLabel lab = new JLabel("Benutzer: Admin");
             dbLabel.setVerticalAlignment(JLabel.CENTER);
             dbLabel.setHorizontalAlignment(JLabel.LEFT);
             versionbar.add(dbLabel);
@@ -1935,30 +1879,14 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                 }
             }.execute();
             DropTarget dndt = new DropTarget();
-            DropTargetListener dropTargetListener = new DropTargetListener() {
-                @Override
-                public void dragEnter(DropTargetDragEvent e) {
-                }
-
-                @Override
-                public void dragExit(DropTargetEvent e) {
-                }
-
-                @Override
-                public void dragOver(DropTargetDragEvent e) {
-                }
+            DropTargetListener dropTargetListener = new DropTargetAdapter() {
 
                 @Override
                 public void drop(DropTargetDropEvent e) {
                     String mitgebracht = "";
                     try {
                         Transferable tr = e.getTransferable();
-                        // Ursprüngliche Routine
-                        /*
-                         * DataFlavor[] flavors = tr.getTransferDataFlavors(); for (int i = 0; i <
-                         * flavors.length; i++){ mitgebracht = String.valueOf((String)
-                         * tr.getTransferData(flavors[i]).toString()); }
-                         */
+
                         if (Path.Instance.isLinux()) {
                             if (Reha.dragDropComponent instanceof JRtaTextField) {
                                 mitgebracht = ((JRtaTextField) Reha.dragDropComponent).getText();
@@ -1994,10 +1922,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     }
                     e.dropComplete(true);
                 }
-
-                @Override
-                public void dropActionChanged(DropTargetDragEvent e) {
-                }
             };
             try {
                 dndt.addDropTargetListener(dropTargetListener);
@@ -2018,7 +1942,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     @Override
                     public void dragGestureRecognized(DragGestureEvent e) {
                         StringSelection selection = new StringSelection(copyLabel.getText());
-                        // if(Reha.osVersion.contains("Linux")){
                         Reha.dragDropComponent = bunker;
                         if (!Rechte.hatRecht(Rechte.Kalender_termindragdrop, false)) {
                             return;
@@ -2032,7 +1955,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                                   .startsWith("TERMDAT")) {
                             TerminFenster.setDragMode(0);
                         }
-                        // }
                         e.startDrag(null, selection, null);
                     }
                 };
@@ -2041,7 +1963,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
 
                 dragSource.createDefaultDragGestureRecognizer(copyLabel, DnDConstants.ACTION_COPY, dragGestureListener);
             }
-            /*********************/
 
             copyLabel.addMouseListener(new MouseAdapter() {
                 @Override
@@ -2129,21 +2050,21 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             men.setActionCommand("patient");
             men.setAccelerator(KeyStroke.getKeyStroke(VK_P, Event.CTRL_MASK, false));
             men.setMnemonic(VK_P);
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             stammMenu.add(men);
             stammMenu.addSeparator();
             men = new JMenuItem("Krankenkassen");
             men.setActionCommand("kasse");
             men.setAccelerator(KeyStroke.getKeyStroke(VK_K, Event.CTRL_MASK, false));
             men.setMnemonic(VK_K);
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             stammMenu.add(men);
             stammMenu.addSeparator();
             men = new JMenuItem("Ärzte");
             men.setActionCommand("arzt");
             men.setAccelerator(KeyStroke.getKeyStroke(VK_A, Event.CTRL_MASK, false));
             men.setMnemonic(VK_A);
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             stammMenu.add(men);
 
         }
@@ -2157,36 +2078,36 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             abrechnungMenu.setText("Abrechnung");
             JMenuItem men = new JMenuItem("Heilmittel-Abrechnung nach §302 SGB V");
             men.setActionCommand("hmabrechnung");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             abrechnungMenu.add(men);
             abrechnungMenu.addSeparator();
             men = new JMenuItem("Reha-Abrechnung");
             men.setActionCommand("rehaabrechnung");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             abrechnungMenu.add(men);
             abrechnungMenu.addSeparator();
             men = new JMenuItem("Barkasse abrechnen");
             men.setActionCommand("barkasse");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             abrechnungMenu.add(men);
             abrechnungMenu.addSeparator();
             men = new JMenuItem("Anmeldezahlen ermitteln");
             men.setActionCommand("anmeldezahlen");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             abrechnungMenu.add(men);
             men = new JMenuItem("Tagesumsätze ermitteln");
             men.setActionCommand("tagesumsatz");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             abrechnungMenu.add(men);
             abrechnungMenu.addSeparator();
             men = new JMenuItem("Offene Posten / Mahnwesen");
             men.setActionCommand("offeneposten");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             abrechnungMenu.add(men);
             abrechnungMenu.addSeparator();
             men = new JMenuItem("OP Rezeptgebühr-/Ausfall-/Verkaufsrechnung");
             men.setActionCommand("rgaffaktura");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             abrechnungMenu.add(men);
         }
         return abrechnungMenu;
@@ -2199,7 +2120,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             statistikMenu.setText("Statistiken");
             JMenuItem men = new JMenuItem("LVA/BfA Statistik");
             men.setActionCommand("lvastatistik");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             statistikMenu.add(men);
         }
         return statistikMenu;
@@ -2221,22 +2142,22 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             toolsMenu.setText("Tools");
             JMenuItem men = new JMenuItem("Rezeptnummer suchen");
             men.setActionCommand("rezeptfahnder");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
             toolsMenu.addSeparator();
             men = new JMenuItem("Kassenbuch erstellen");
             men.setActionCommand("kassenbuch");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
             toolsMenu.addSeparator();
             men = new JMenuItem("Geburtstagsbriefe erstellen");
             men.setActionCommand("geburtstagsbriefe");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
             toolsMenu.addSeparator();
             men = new JMenuItem("Sql-Modul");
             men.setActionCommand("sqlmodul");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
             /*
              * men = new JMenuItem("INI-Editor"); men.setActionCommand("iniedit");
@@ -2244,21 +2165,21 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
              */
             men = new JMenuItem("§301 Reha Fall-Steuerung");
             men.setActionCommand("fallsteuerung");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
             toolsMenu.addSeparator();
             men = new JMenuItem("Work-Flow Manager");
             men.setActionCommand("workflow");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
             toolsMenu.addSeparator();
             men = new JMenuItem("Heilmittelrichtlinien-Tool");
             men.setActionCommand("hmrsearch");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
             men = new JMenuItem("Thera-Pi OCR-Modul");
             men.setActionCommand("ocr");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             toolsMenu.add(men);
 
         }
@@ -2272,7 +2193,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             verkaufMenu.setText("Verkauf");
             JMenuItem men = new JMenuItem("Verkaufsmodul starten");
             men.setActionCommand("verkauf");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             verkaufMenu.add(men);
         }
         return verkaufMenu;
@@ -2285,12 +2206,12 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             urlaubMenu.setText("Urlaub/Überstunden");
             JMenuItem men = new JMenuItem("Urlaub-/Überstunden verwalten");
             men.setActionCommand("urlaub");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             urlaubMenu.add(men);
             urlaubMenu.addSeparator();
             men = new JMenuItem("Umsatzbeteiligung ermitteln");
             men.setActionCommand("umsatzbeteiligung");
-            men.addActionListener(this);
+            men.addActionListener(actionListener);
             urlaubMenu.add(men);
         }
         return urlaubMenu;
@@ -2355,7 +2276,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             aboutMenuItem = new JMenuItem();
             aboutMenuItem.setText("über Thera-\u03C0");
             aboutMenuItem.setActionCommand("ueberTheraPi");
-            aboutMenuItem.addActionListener(this);
+            aboutMenuItem.addActionListener(actionListener);
         }
         return aboutMenuItem;
     }
@@ -2365,7 +2286,7 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             aboutF2RescueMenuItem = new JMenuItem();
             aboutF2RescueMenuItem.setText("F2 - Rettungsanker");
             aboutF2RescueMenuItem.setActionCommand("f2Rescue");
-            aboutF2RescueMenuItem.addActionListener(this);
+            aboutF2RescueMenuItem.addActionListener(actionListener);
         }
         return aboutF2RescueMenuItem;
     }
@@ -2564,82 +2485,73 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
                     setVertDivider(xvariante);
                     return;
                 }
-                int i;
-                for (i = 0; i < 1; i++) {
-                    // links
-                    if (xvariante == 1) {
-                        if (jSplitLR.getDividerLocation() > 250) {
+                switch (xvariante) {
+                case 1:
+                    if (jSplitLR.getDividerLocation() > 250) {
+                        jSplitLR.setDividerLocation(dividerLocLR - 10);
+                    } else {
+                        if (dividerLocLR - 10 < 0) {
+                            jSplitLR.setDividerLocation(0);
+                        } else {
                             jSplitLR.setDividerLocation(dividerLocLR - 10);
-                        } else {
-                            if (dividerLocLR - 10 < 0) {
-                                jSplitLR.setDividerLocation(0);
-                            } else {
-                                jSplitLR.setDividerLocation(dividerLocLR - 10);
-                            }
-                        }
-                        break;
-                    }
-                    // rechts
-                    if (xvariante == 2) {
-                        if (jSplitLR.getDividerLocation() < 250) {
-                            jSplitLR.setDividerLocation(dividerLocLR + 10);
-                        } else {
-                            if (dividerLocLR + 10 > getThisFrame().getRootPane()
-                                                                  .getWidth()
-                                    - 7) {
-                                jSplitLR.setDividerLocation(getThisFrame().getRootPane()
-                                                                          .getWidth()
-                                        - 7);
-                            } else {
-                                jSplitLR.setDividerLocation(dividerLocLR + 10);
-                            }
-                        }
-                        break;
-                    }
-                    if (xvariante == 3) {
-                        // nach oben
-                        if (jSplitRechtsOU.getDividerLocation() > (getThisFrame().getRootPane()
-                                                                                 .getHeight()
-                                / 2) - 3) {
-                            jSplitRechtsOU.setDividerLocation((jxLinks.getHeight() / 2) - 3);
-                            vollsichtbar = -1;
-                        } else {
-                            jSplitRechtsOU.setDividerLocation(0);
-                            vollsichtbar = 1;
                         }
                     }
-                    if (xvariante == 4) {
-                        // nach unten
-                        if (jSplitRechtsOU.getDividerLocation() < (jxLinks.getHeight() / 2) - 3) {
-                            jSplitRechtsOU.setDividerLocation((jxLinks.getHeight() / 2) - 3);
-                            vollsichtbar = -1;
-                        } else {
-                            jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane()
-                                                                            .getHeight()
+                    break;
+                case 2:
+                    if (jSplitLR.getDividerLocation() < 250) {
+                        jSplitLR.setDividerLocation(dividerLocLR + 10);
+                    } else {
+                        if (dividerLocLR + 10 > getThisFrame().getRootPane()
+                                                              .getWidth()
+                                - 7) {
+                            jSplitLR.setDividerLocation(getThisFrame().getRootPane()
+                                                                      .getWidth()
                                     - 7);
-                            vollsichtbar = 0;
+                        } else {
+                            jSplitLR.setDividerLocation(dividerLocLR + 10);
                         }
-                        break;
                     }
-                    if (xvariante == 5) {
-                        // oben Vollbild
-                        vollsichtbar = 0;
+                    break;
+                case 3:
+                    // nach oben
+                    if (jSplitRechtsOU.getDividerLocation() > (getThisFrame().getRootPane()
+                                                                             .getHeight()
+                            / 2) - 3) {
+                        jSplitRechtsOU.setDividerLocation((jxLinks.getHeight() / 2) - 3);
+                        vollsichtbar = -1;
+                    } else {
+                        jSplitRechtsOU.setDividerLocation(0);
+                        vollsichtbar = 1;
+                    }
+                    break;
+                case 4:
+                    // nach unten
+                    if (jSplitRechtsOU.getDividerLocation() < (jxLinks.getHeight() / 2) - 3) {
+                        jSplitRechtsOU.setDividerLocation((jxLinks.getHeight() / 2) - 3);
+                        vollsichtbar = -1;
+                    } else {
                         jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane()
                                                                         .getHeight()
                                 - 7);
-                        break;
+                        vollsichtbar = 0;
                     }
-                    if (xvariante == 6) {
-                        // unten Vollbild
-                        vollsichtbar = 1;
-                        jSplitRechtsOU.setDividerLocation(0);
-                        break;
-                    }
-                    if (xvariante == 7) {
-                        vollsichtbar = 1;
-                        jSplitRechtsOU.setDividerLocation(0);
-                        break;
-                    }
+                    break;
+                case 5:
+                    // oben Vollbild
+                    vollsichtbar = 0;
+                    jSplitRechtsOU.setDividerLocation(getThisFrame().getRootPane()
+                                                                    .getHeight()
+                            - 7);
+                    break;
+                case 6:
+                    // unten Vollbild
+                    vollsichtbar = 1;
+                    jSplitRechtsOU.setDividerLocation(0);
+                    break;
+                case 7:
+                    vollsichtbar = 1;
+                    jSplitRechtsOU.setDividerLocation(0);
+                    break;
                 }
             }
         });
@@ -2672,136 +2584,56 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         return -1;
     }
 
-    public void setFocusWatcher() {
-        long mask = AWTEvent.FOCUS_EVENT_MASK;
-        /*
-         * AWTEvent.ACTION_EVENT_MASK | AWTEvent.MOUSE_EVENT_MASK |
-         * AWTEvent.FOCUS_EVENT_MASK | AWTEvent.MOUSE_MOTION_EVENT_MASK |
-         * AWTEvent.MOUSE_WHEEL_EVENT_MASK | AWTEvent.TEXT_EVENT_MASK |
-         * AWTEvent.WINDOW_EVENT_MASK | AWTEvent.WINDOW_FOCUS_EVENT_MASK |
-         * AWTEvent.WINDOW_STATE_EVENT_MASK | AWTEvent.COMPONENT_EVENT_MASK;
-         */
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        toolkit.addAWTEventListener(new AWTEventListener() {
+    ComponentListener componentListener = new ComponentAdapter() {
 
-            @Override
-            public void eventDispatched(AWTEvent event) {
-                if (event instanceof FocusEvent) {
-                    /*
-                     * FocusEvent focusEvent = (FocusEvent) event;
-                     * System.out.println("\n*************************************************");
-                     * System.out.println("***Klasse = "+ ((FocusEvent)
-                     * event).getComponent().getClass().toString());
-                     * System.out.println("***Name = "+ ((FocusEvent)
-                     * event).getComponent().getName()); System.out.println("***hat Focus = "
-                     * +((FocusEvent) event).getComponent().hasFocus());
-                     * System.out.println("***Name des Focused Windows = "+KeyboardFocusManager.
-                     * getCurrentKeyboardFocusManager().getActiveWindow().getName());
-                     * System.out.println("*************************************************");
-                     */
-                }
-            }
-        }, mask);
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent arg0) {
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent arg0) {
-    }
-
-    @Override
-    public void componentResized(ComponentEvent arg0) {
-        // Größe einstellen
-        try {
-            if (((JComponent) arg0.getSource()).getName() != null) {
-                if (((JComponent) arg0.getSource()).getName()
-                                                   .equals("PanelOben")) {
-                    desktops[0].setBounds(0, 0, Reha.instance.jpOben.getWidth(), Reha.instance.jpOben.getHeight());
-                }
-                if (((JComponent) arg0.getSource()).getName()
-                                                   .equals("PanelUnten")) {
-                    desktops[1].setBounds(0, 0, Reha.instance.jpUnten.getWidth(), Reha.instance.jpUnten.getHeight());
-                }
-                JInternalFrame[] frm = Reha.instance.desktops[0].getAllFrames();
-                for (int i = 0; i < frm.length; i++) {
-                    if (((JRehaInternal) frm[i]).getImmerGross()) {
-                        frm[i].setBounds(2, 2, Reha.instance.jpOben.getWidth() - 2,
-                                Reha.instance.jpOben.getHeight() - 2);
+        @Override
+        public void componentResized(ComponentEvent arg0) {
+            // Größe einstellen
+            try {
+                if (((JComponent) arg0.getSource()).getName() != null) {
+                    if (((JComponent) arg0.getSource()).getName()
+                                                       .equals("PanelOben")) {
+                        desktops[0].setBounds(0, 0, Reha.instance.jpOben.getWidth(), Reha.instance.jpOben.getHeight());
                     }
-                    ((JRehaInternal) frm[i]).setCompOrder(i);
-                    ((JRehaInternal) frm[i]).setzeIcon();
-                }
-                frm = Reha.instance.desktops[1].getAllFrames();
-                for (int i = 0; i < frm.length; i++) {
-                    if (((JRehaInternal) frm[i]).getImmerGross()) {
-                        frm[i].setBounds(2, 2, Reha.instance.jpUnten.getWidth() - 2,
-                                Reha.instance.jpUnten.getHeight() - 2);
+                    if (((JComponent) arg0.getSource()).getName()
+                                                       .equals("PanelUnten")) {
+                        desktops[1].setBounds(0, 0, Reha.instance.jpUnten.getWidth(),
+                                Reha.instance.jpUnten.getHeight());
                     }
-                    ((JRehaInternal) frm[i]).setCompOrder(i);
-                    ((JRehaInternal) frm[i]).setzeIcon();
+                    JInternalFrame[] frm = Reha.instance.desktops[0].getAllFrames();
+                    for (int i = 0; i < frm.length; i++) {
+                        if (((JRehaInternal) frm[i]).getImmerGross()) {
+                            frm[i].setBounds(2, 2, Reha.instance.jpOben.getWidth() - 2,
+                                    Reha.instance.jpOben.getHeight() - 2);
+                        }
+                        ((JRehaInternal) frm[i]).setCompOrder(i);
+                        ((JRehaInternal) frm[i]).setzeIcon();
+                    }
+                    frm = Reha.instance.desktops[1].getAllFrames();
+                    for (int i = 0; i < frm.length; i++) {
+                        if (((JRehaInternal) frm[i]).getImmerGross()) {
+                            frm[i].setBounds(2, 2, Reha.instance.jpUnten.getWidth() - 2,
+                                    Reha.instance.jpUnten.getHeight() - 2);
+                        }
+                        ((JRehaInternal) frm[i]).setCompOrder(i);
+                        ((JRehaInternal) frm[i]).setzeIcon();
+                    }
+
                 }
+            } catch (java.lang.ClassCastException cex) {
 
             }
-        } catch (java.lang.ClassCastException cex) {
+            jSplitLR.validate();
+            desktop.setBounds(0, 0, getThisFrame().getContentPane()
+                                                  .getWidth(),
+                    getThisFrame().getContentPane()
+                                  .getHeight());
+            desktop.validate();
+            jFrame.getContentPane()
+                  .validate();
 
         }
-        jSplitLR.validate();
-        desktop.setBounds(0, 0, getThisFrame().getContentPane()
-                                              .getWidth(),
-                getThisFrame().getContentPane()
-                              .getHeight());
-        desktop.validate();
-        jFrame.getContentPane()
-              .validate();
-
-    }
-
-    /************ Motion Event ******************/
-
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-    }
-
-    /************ Motion für DragEvent ******************/
-    @Override
-    public void mouseDragged(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent arg0) {
-    }
-
-    /************ KeyListener *************************/
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-    }
-
-    @Override
-    public void keyReleased(KeyEvent arg0) {
-    }
-
-    @Override
-    public void keyTyped(KeyEvent arg0) {
-    }
+    };
 
     @Override
     public void rehaEventOccurred(RehaEvent evt) {
@@ -2822,12 +2654,6 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         }
     }
 
-    static Component WerHatFocus() {
-        final Component focusOwner = null;
-        // focusOwner = FocusManager.getCurrentManager.getFocusedWindow();
-        return focusOwner;
-    }
-
     public void ladenach() {
         int nochmals = JOptionPane.showConfirmDialog(null,
                 "Die Datenbank konnte nicht gestartet werden, erneuter Versuch?", "Wichtige Benuterzinfo",
@@ -2837,77 +2663,37 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         }
     }
 
-    public void addSbContainer(String simage, String sname, JComponent jcomponent) {
-    }
-
     public void setzeInitStand(String stand) {
         new SocketClient().setzeInitStand(stand);
     }
 
-    @Override
-    public void windowActivated(WindowEvent arg0) {
-        desktop.setBounds(0, 0, getThisFrame().getContentPane()
-                                              .getWidth(),
-                getThisFrame().getContentPane()
-                              .getHeight());
-    }
+    WindowListener windowlistener = new WindowAdapter() {
 
-    @Override
-    public void windowClosed(WindowEvent arg0) {
-        if (Reha.barcodeScanner != null) {
-            BarCodeScanner.serialPort.close();
-            System.out.println("Serielle Schnittstelle wurde geschlossen");
+        @Override
+        public void windowActivated(WindowEvent arg0) {
+            desktop.setBounds(0, 0, getThisFrame().getContentPane()
+                                                  .getWidth(),
+                    getThisFrame().getContentPane()
+                                  .getHeight());
         }
-    }
 
-    @Override
-    public void windowClosing(WindowEvent arg0) {
-        askCloseOrRestart();
-    }
+        @Override
+        public void windowClosed(WindowEvent arg0) {
+            if (Reha.barcodeScanner != null) {
+                BarCodeScanner.serialPort.close();
+                System.out.println("Serielle Schnittstelle wurde geschlossen");
+            }
+        }
+        @Override
+        public void windowClosing(WindowEvent arg0) {
+            askCloseOrRestart();
+        }
 
-    @Override
-    public void windowDeactivated(WindowEvent arg0) {
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent arg0) {
-    }
-
-    @Override
-    public void windowIconified(WindowEvent arg0) {
-    }
-
-    @Override
-    public void windowOpened(WindowEvent arg0) {
-    }
-
-    @Override
-    public void windowStateChanged(WindowEvent arg0) {
-    }
-
-    @Override
-    public void focusGained(FocusEvent e) {
-    }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-    }
-
-    @Override
-    public void componentShown(ComponentEvent arg0) {
-    }
-
-    @Override
-    public void componentAdded(ContainerEvent arg0) {
-    }
-
-    @Override
-    public void componentRemoved(ContainerEvent arg0) {
-    }
+    };
 
     /***************************/
     public void starteTimer() {
-        Reha.fangoTimer = new Timer(60000, this);
+        Reha.fangoTimer = new Timer(60000, actionListener);
         Reha.fangoTimer.setActionCommand("testeFango");
         Reha.fangoTimer.start();
         Reha.timerLaeuft = true;
@@ -2971,7 +2757,9 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
         }
     }
 
-    /********** Actions **********/
+ActionListener actionListener = new ActionListener() {
+
+
     @Override
     public void actionPerformed(ActionEvent arg0) {
         String cmd = arg0.getActionCommand();
@@ -3205,10 +2993,8 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
             return;
         }
 
-    }
+    }};
 
-    /****************/
-    /***************/
     public void activateWebCam() {
 
         new SwingWorker<Void, Void>() {
@@ -3289,5 +3075,8 @@ public class Reha implements FocusListener, ComponentListener, ContainerListener
 
     }
 
-    /*********************************************/
+    ComponentListener getComponentListener() {
+        return componentListener;
+    }
+
 }

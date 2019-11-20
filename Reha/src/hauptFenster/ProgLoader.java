@@ -252,7 +252,7 @@ public class ProgLoader {
         kassejry.setPreferredSize(new Dimension(650, 500));
         Reha.instance.kassenpanel = new KassenPanel(kassejry, kid);
         kassejry.setContent(Reha.instance.kassenpanel);
-        kassejry.addComponentListener(Reha.instance);
+        kassejry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         kassejry.setLocation(comps * 10, comps * 10);
         kassejry.pack();
@@ -307,7 +307,7 @@ public class ProgLoader {
         arztjry.setPreferredSize(new Dimension(650, 500));
         Reha.instance.arztpanel = new ArztPanel(arztjry, aid);
         arztjry.setContent(Reha.instance.arztpanel);
-        arztjry.addComponentListener(Reha.instance);
+        arztjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         arztjry.setLocation(comps * 10, comps * 10);
         arztjry.pack();
@@ -364,7 +364,7 @@ public class ProgLoader {
         Reha.instance.eberichtpanel = new EBerichtPanel(gutjry, pat_intern, berichtid, berichttyp, neu, empfaenger,
                 uebernahmeid, connection);
         gutjry.setContent(Reha.instance.eberichtpanel);
-        gutjry.addComponentListener(Reha.instance);
+        gutjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         gutjry.setLocation(comps * 10, comps * 10);
         gutjry.pack();
@@ -418,7 +418,7 @@ public class ProgLoader {
         abrechjry.setPreferredSize(new Dimension(850, 700));
         Reha.instance.abrechnungpanel = new AbrechnungGKV(abrechjry, connection);
         abrechjry.setContent(Reha.instance.abrechnungpanel);
-        abrechjry.addComponentListener(Reha.instance);
+        abrechjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         abrechjry.setLocation(comps * 15, comps * 15);
         abrechjry.pack();
@@ -439,7 +439,7 @@ public class ProgLoader {
 
     /**********************
      * Neuanmeldungen
-     * 
+     *
      * @param connection
      ****************************/
     public void AnmeldungenFenster(int setPos, String sparam, Connection connection) {
@@ -478,7 +478,7 @@ public class ProgLoader {
         anmeldungenjry.setPreferredSize(new Dimension(570, 500));
         Reha.instance.anmeldungenpanel = new Anmeldungen(anmeldungenjry, connection);
         anmeldungenjry.setContent(Reha.instance.anmeldungenpanel);
-        anmeldungenjry.addComponentListener(Reha.instance);
+        anmeldungenjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         anmeldungenjry.setLocation(comps * 15, comps * 15);
         anmeldungenjry.pack();
@@ -532,7 +532,7 @@ public class ProgLoader {
         umsaetzejry.setPreferredSize(new Dimension(500, 150));
         Reha.instance.umsaetzepanel = new Umsaetze(umsaetzejry);
         umsaetzejry.setContent(Reha.instance.umsaetzepanel);
-        umsaetzejry.addComponentListener(Reha.instance);
+        umsaetzejry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         umsaetzejry.setLocation(comps * 15, comps * 15);
         umsaetzejry.pack();
@@ -585,7 +585,7 @@ public class ProgLoader {
         verkaufjry.setPreferredSize(new Dimension(700, 600));
         Reha.instance.verkaufpanel = new VerkaufTab(verkaufjry);
         verkaufjry.setContent(Reha.instance.verkaufpanel);
-        verkaufjry.addComponentListener(Reha.instance);
+        verkaufjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         verkaufjry.setLocation(comps * 15, comps * 15);
         verkaufjry.pack();
@@ -640,7 +640,7 @@ public class ProgLoader {
         dta301jry.setPreferredSize(new Dimension(820, 600));
         Reha.instance.dta301panel = new Dta301(dta301jry, sparam);
         dta301jry.setContent(Reha.instance.dta301panel);
-        dta301jry.addComponentListener(Reha.instance);
+        dta301jry.addComponentListener(Reha.instance.getComponentListener());
         // int comps = Reha.instance.desktops[containerNr].getComponentCount();
         // dta301jry.setLocation(comps*15, comps*15);
         dta301jry.setLocation(150, 200);
@@ -695,7 +695,7 @@ public class ProgLoader {
         barkassenjry.setPreferredSize(new Dimension(500, 430));
         Reha.instance.barkassenpanel = new Barkasse(barkassenjry);
         barkassenjry.setContent(Reha.instance.barkassenpanel);
-        barkassenjry.addComponentListener(Reha.instance);
+        barkassenjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         barkassenjry.setLocation(comps * 15, comps * 15);
         barkassenjry.pack();
@@ -745,7 +745,7 @@ public class ProgLoader {
         rehaabrechnungjry.setPreferredSize(new Dimension(500, 430));
         Reha.instance.rehaabrechnungpanel = new AbrechnungReha(rehaabrechnungjry);
         rehaabrechnungjry.setContent(Reha.instance.rehaabrechnungpanel);
-        rehaabrechnungjry.addComponentListener(Reha.instance);
+        rehaabrechnungjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         rehaabrechnungjry.setLocation(comps * 25, comps * 25);
         rehaabrechnungjry.pack();
@@ -795,7 +795,7 @@ public class ProgLoader {
         beteiligungjry.setSize(new Dimension(500, 500));
         Reha.instance.beteiligungpanel = new Beteiligung(beteiligungjry);
         beteiligungjry.setContent(Reha.instance.beteiligungpanel);
-        beteiligungjry.addComponentListener(Reha.instance);
+        beteiligungjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         beteiligungjry.setLocation(comps * 15, comps * 15);
         beteiligungjry.pack();
@@ -848,7 +848,7 @@ public class ProgLoader {
         benutzerjry.setPreferredSize(new Dimension(800, 500));
         Reha.instance.benutzerrechtepanel = new BenutzerRechte(benutzerjry);
         benutzerjry.setContent(Reha.instance.benutzerrechtepanel);
-        benutzerjry.addComponentListener(Reha.instance);
+        benutzerjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         benutzerjry.setLocation(comps * 15, comps * 15);
         benutzerjry.pack();
@@ -896,7 +896,7 @@ public class ProgLoader {
         urlaubjry.setPreferredSize(new Dimension(500, 500));
         Reha.instance.urlaubpanel = new Urlaub(urlaubjry);
         urlaubjry.setContent(Reha.instance.urlaubpanel);
-        urlaubjry.addComponentListener(Reha.instance);
+        urlaubjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         urlaubjry.setLocation(comps * 15, comps * 15);
         urlaubjry.pack();
@@ -921,16 +921,16 @@ public class ProgLoader {
      * Reha.instance.desktops[1].add(iframe); OOIFTest oif = new OOIFTest();
      * iframe.getContentPane().add(oif); iframe.setVisible(true); iframe.toFront();
      * try { iframe.setSelected(true); } catch (PropertyVetoException e) {
-     * 
+     *
      * e.printStackTrace(); }
-     * 
-     * 
+     *
+     *
      * }
      */
 
     /**************
      * Patientenverwaltung Echtfunktion
-     * 
+     *
      * @param connection
      ***********************/
     public void ProgPatientenVerwaltung(int setPos, Connection connection) {
@@ -995,7 +995,7 @@ public class ProgLoader {
             /***************************/
             Reha.instance.patpanel = new PatientHauptPanel(name, patjry, connection);
             patjry.setContent(Reha.instance.patpanel);
-            patjry.addComponentListener(Reha.instance);
+            patjry.addComponentListener(Reha.instance.getComponentListener());
             patjry.pack();
             patjry.setVisible(true);
             Reha.instance.desktops[containerNr].add(patjry);
@@ -1096,7 +1096,7 @@ public class ProgLoader {
         systeminitjry.setPreferredSize(new Dimension(850, 620));
         Reha.instance.systeminitpanel = new SystemInit(systeminitjry);
         systeminitjry.setContent(Reha.instance.systeminitpanel);
-        systeminitjry.addComponentListener(Reha.instance);
+        systeminitjry.addComponentListener(Reha.instance.getComponentListener());
         int comps = Reha.instance.desktops[containerNr].getComponentCount();
         systeminitjry.setLocation(comps * 15, comps * 15);
         systeminitjry.pack();
