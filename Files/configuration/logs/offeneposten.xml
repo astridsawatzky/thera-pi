@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true">
     <property name="logfile" value="offeneposten" />
-    <statusListener
+     <statusListener
         class="ch.qos.logback.core.status.NopStatusListener" />
     <appender name="STDOUT"
         class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder
             by default -->
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}
-                [%file:%line]- %msg%n
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line]- %msg%n
             </pattern>
         </encoder>
     </appender>
@@ -28,11 +27,9 @@
 
         </rollingPolicy>
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}
-                [%file:%line] - %msg%n
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} [%file:%line]- %msg%n
             </pattern>
         </encoder>
     </appender>
     <include file="./logs/conf/_schalter.xml" />
-
 </configuration>
