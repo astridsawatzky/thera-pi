@@ -11,6 +11,7 @@ import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thera_pi.updater.Version;
 
 import com.sun.star.uno.Exception;
 

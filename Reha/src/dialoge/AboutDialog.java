@@ -34,13 +34,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 
+import org.thera_pi.updater.Version;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ButtonTools;
 import environment.Path;
-import hauptFenster.Version;
 
 /**
  * This class shall give credit to where credit is due. Anyone is free to add
@@ -173,7 +174,7 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         strBuf.setLength(0);
         strBuf.trimToSize();
         strBuf.append("<html>");
-        strBuf.append("Thera-\u03C0 v" + Version.number() + " vom " + Version.aktuelleVersion.replace("-DB=", "")
+        strBuf.append("Thera-\u03C0 v" +new  Version().number() + " vom " + Version.aktuelleVersion.replace("-DB=", "")
                 + "<br>nach einer Idee von Jürgen Steinhilber<br><br>");
 
         // insert credits here:
