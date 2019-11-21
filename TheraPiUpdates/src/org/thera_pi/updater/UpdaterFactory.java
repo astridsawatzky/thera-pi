@@ -9,17 +9,17 @@ public class UpdaterFactory {
 
 
     UpdateRepository  emptyrepo =new EmptyRepository();
-    private UpdateRepository repo=emptyrepo;
-    private Stoppable killme = (latch) -> latch.countDown();
+    private UpdateRepository repository=emptyrepo;
+    private Stoppable toBeKilled = (latch) -> latch.countDown();
     private UpdateUI ui = () -> (new UpdateConsent(true, true));
-
+    private DateiSieb sieb = filesList -> filesList;
     public UpdaterFactory withRepository(UpdateRepository repo) {
-        this.repo = repo;
+        this.repository = repo;
         return this;
     }
 
     public UpdaterFactory withStoppable(Stoppable killme) {
-        this.killme = killme;
+        this.toBeKilled = killme;
         return this;
     }
 
@@ -28,11 +28,17 @@ public class UpdaterFactory {
         return this;
     }
 
+    public UpdaterFactory withDateiSieb(DateiSieb dateiSieb) {
+        this.sieb=dateiSieb;
+        return this;
+    }
+
     public Updater build() {
         Updater updater = new Updater();
-        updater.setRepo(repo);
-        updater.setMyParent(killme);
+        updater.setRepo(repository);
+        updater.setMyParent(toBeKilled);
         updater.setUi(ui);
+        updater.SetDateiSieb(sieb);
         return updater;
     }
     private static final class EmptyRepository implements UpdateRepository {

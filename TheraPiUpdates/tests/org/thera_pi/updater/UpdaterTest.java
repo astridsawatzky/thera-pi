@@ -1,6 +1,8 @@
 package org.thera_pi.updater;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -110,8 +112,9 @@ public class UpdaterTest {
             @Override
             public int downloadFiles(List<File> neededList, Path path) {
                 for (File file : neededList) {
+
                 }
-                // TODO Auto-generated method stub
+
                 return 0;
             }
         };

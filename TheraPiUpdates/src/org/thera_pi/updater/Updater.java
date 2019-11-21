@@ -1,7 +1,6 @@
 package org.thera_pi.updater;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -25,6 +24,8 @@ public class Updater implements Callable<Integer> {
     private UpdateUI ui;
 
     private List<File> neededList;
+
+    private DateiSieb sieb;
 
     Updater(UpdateRepository repo, Stoppable killme) {
         this.setRepo(repo);
@@ -50,7 +51,7 @@ public class Updater implements Callable<Integer> {
 
     public List<File> needsFrom(List<File> filesList) {
 
-        return filesList;
+        return sieb.select(filesList);
     }
 
     public UpdateConsent askUserforConsent() {
@@ -136,5 +137,9 @@ public class Updater implements Callable<Integer> {
 
         });
 
+    }
+
+    public void SetDateiSieb(DateiSieb dateiSieb) {
+        sieb = dateiSieb;
     }
 }
