@@ -848,23 +848,28 @@ public class Reha implements RehaEventListener {
             logger.error("rehasocketthread could not be joined");
         }
 
-        new Thread() {
-            @Override
-            public void run() {
+        try {
+            new Thread() {
+                @Override
+                public void run() {
 
-                new SocketClient().setzeInitStand("System-Icons laden");
-                while (!Reha.DbOk) {
-                    try {
-                        Thread.sleep(25);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    new SocketClient().setzeInitStand("System-Icons laden");
+                    while (!Reha.DbOk) {
+                        try {
+                            Thread.sleep(25);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    ImageRepository.SystemIconsInit();
+                    iconsOk = true;
+                    new SocketClient().setzeInitStand("System-Config initialisieren");
                 }
-                ImageRepository.SystemIconsInit();
-                iconsOk = true;
-                new SocketClient().setzeInitStand("System-Config initialisieren");
-            }
-        }.start();
+            }.start();
+        } catch (java.lang.Exception e) {
+
+            logger.error("caught unexplainable Exception",e);
+        }
 
         /*********/
 
