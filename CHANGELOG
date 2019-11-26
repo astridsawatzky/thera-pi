@@ -68,7 +68,8 @@ OP ausbuchen:
 ###fixed
 - ICD-10 Recherche bei geöffnetem Rezept nicht aufrufbar. #208
 - Im Kalender wird statt Farbcode B Farbcode A angezeigt #265
- 
+- log-Dateien rollen jetzt täglich bis zu 3 gb gesamt speicherplatz (fixes #124) 
+
 Verkaufs-Modul:
 - Artikelverwaltung: Sortierung nach ID u. Aufruf des Editor (doppelklick) führte zu Absturz 
    (Sortierung nach numer. Spalten noch nicht korrekt)
