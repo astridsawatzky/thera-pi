@@ -35,8 +35,6 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 //import org.jdesktop.swingx.decorator.SortOrder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -58,8 +56,10 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
      *
      */
     private static final long serialVersionUID = -3482074172384055074L;
+    private int setOben;
 
     private RehaTPEventClass rtp = null;
+    private JXPanel jp1 = null;
     private static ArrayList<String[]> termine = new ArrayList<String[]>();
     private static JXPanel jtp = null;
     private static String dieserName = "";
@@ -82,11 +82,10 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
     public JXDatePicker datePicker = null;
     SchnellSucheListSelectionHandler ssucheselect = new SchnellSucheListSelectionHandler();
     private Connection connection;
-    private static final Logger logger = LoggerFactory.getLogger(SchnellSuche.class);
-
 
     SchnellSuche(JXFrame owner, TerminFenster eltern, Connection connection) {
 
+        // super(frame, titlePanel());
         super(owner, "SchnellSuche");
         this.connection = connection;
         dieserName = "SchnellSuche";
@@ -104,6 +103,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
         jp1.setBorder(null);
         jp1.setBackground(Color.WHITE);
         jp1.setLayout(new BorderLayout());
+        // jp1.setLayout(new VerticalLayout(1));
         String ss = "icons/header-image.png";
         JXHeader header = new JXHeader("Mit dieser Schnellsuche....",
                 "....können Sie auf einfache Weise einen Namen oder eine Rezeptnummer suchen ('Roogle' ist zwar besser, aber diese Funktion ist schneller).\n"
@@ -116,7 +116,15 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
 
         SchnellSuche.jtp.add(jp1, BorderLayout.NORTH);
         JScrollPane jscr = new JScrollPane();
+        /*
+         * tae = new JTextArea();
+         */
+        /*
+         * tae.setFont(new Font("Courier New",Font.PLAIN,12)); tae.addKeyListener(this);
+         * jscr.setViewportView(tae);
+         */
         ttbl = new JXTable();
+        // tae.setFont(new Font("Courier New",Font.PLAIN,12));
         ttbl.addKeyListener(this);
         SchnellSucheTableModel myTable = new SchnellSucheTableModel();
         String[] column = { "Tag", "Datum", "Uhrzeit", "Name", "Rez.Nummer", "Therapeut", "" };
@@ -164,14 +172,17 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
     /*********************************************************/
     class SchnellSucheListSelectionHandler implements ListSelectionListener {
         private Connection connection;
-          @Override
+
+        @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
             boolean isAdjusting = e.getValueIsAdjusting();
             if (isAdjusting) {
                 return;
             }
-            if (!lsm.isSelectionEmpty()) {
+            if (lsm.isSelectionEmpty()) {
+
+            } else {
                 int minIndex = lsm.getMinSelectionIndex();
                 int maxIndex = lsm.getMaxSelectionIndex();
                 for (int i = minIndex; i <= maxIndex; i++) {
@@ -212,9 +223,14 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
                                             .toString(),
                                         ttbl.getValueAt(ttbl.getSelectedRow(), 5)
                                             .toString());
-
+                                /*
+                                 * System.out.println(eltern.getAktiveSpalte(0));
+                                 * System.out.println(eltern.getAktiveSpalte(1));
+                                 * System.out.println(eltern.getAktiveSpalte(2));
+                                 */
+                                // eltern.terminBestaetigen(eltern.getAktiveSpalte(2),false);
                             } catch (Exception ex) {
-                                logger.error("aktuellerTermin setzen " , ex);
+
                             }
 
                         }
@@ -227,6 +243,8 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
     }
 
     public void FensterSchliessen(String welches) {
+        //// System.out.println("Eltern-->"+this.getParent().getParent().getParent().getParent().getParent());
+        // webBrowser.dispose();
         this.dispose();
     }
 
@@ -266,6 +284,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
         datePicker = new JXDatePicker();
         datePicker.setDate(new Date());
         datePicker.setName("datePicker");
+        // datePicker.addActionListener(this);
 
         datePicker.addActionListener(new ActionListener() {
 
@@ -273,6 +292,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
             public void actionPerformed(ActionEvent e) {
                 newStart = datePicker.getDate();
                 startdatum = sdf.format(newStart);
+                // System.out.println("Neues Startdatum = "+startdatum);
                 heute.setText(startdatum);
                 heute4.setText(startdatum + " + 4 Tage");
             }
@@ -315,6 +335,8 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
             .setMaxWidth(0); // Datenvector
         ttbl.setEditable(false);
         ttbl.setSortable(true);
+        // SortOrder setSort = SortOrder.ASCENDING;
+        // ttbl.setSortOrder(6,(SortOrder) setSort);
         ttbl.setSelectionMode(0);
 
     }
@@ -387,6 +409,8 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
                 .setMaxWidth(0); // Datenvector
             ttbl.setEditable(false);
             ttbl.setSortable(true);
+            // SortOrder setSort = SortOrder.ASCENDING;
+            // ttbl.setSortOrder(6,(SortOrder) setSort);
             ttbl.setSelectionMode(0);
 
             String[] stmts = { null };
@@ -417,10 +441,12 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
                 .setMaxWidth(0); // Datenvector
             ttbl.setEditable(false);
             ttbl.setSortable(true);
+            // SortOrder setSort = SortOrder.ASCENDING;
+            // ttbl.setSortOrder(6,(SortOrder) setSort);
             ttbl.setSelectionMode(0);
             String[] stmts = { null, null, null, null, null };
             String sdatum = "";
-            aktDatum = startdatum;
+            aktDatum = startdatum; // DatFunk.sDatPlusTage(DatFunk.sHeute(), 0);
             sdatum = DatFunk.sDatInSQL(aktDatum);
             String stmt = "select * from flexkc where datum = '" + sdatum + "'";
             setLabelDatum(aktDatum);
@@ -437,6 +463,9 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
             aktDatum = DatFunk.sDatPlusTage(aktDatum, 1);
             stmt = "select * from flexkc where datum = '" + DatFunk.sDatInSQL(aktDatum) + "'";
             stmts[4] = stmt;
+            /*
+             * for(int i=0;i<5;i++){ //System.out.println("Befehl = "+stmts[i]); }
+             */
             SuchenInTagen sIt = new SuchenInTagen();
             sIt.setzeStatement(stmts.clone(), suchkrit);
         }
@@ -458,10 +487,18 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
                 tfSuche.requestFocus();
             }
         });
+        /*
+         * Verschluesseln man = Verschluesseln.getInstance();
+         * man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(),
+         * man.getIterations()); final String encrypted = man.encrypt("s1b2rta");
+         * //System.out.println ("Verschl�sselt :"+encrypted); final String decrypted =
+         * man.decrypt (encrypted); //System.out.println("Entschl�sselt :"+decrypted);
+         */
     }
 
     @Override
     public void keyPressed(KeyEvent arg0) {
+        //// System.out.println(arg0.getKeyCode()+" - "+arg0.getSource());
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
             rtp.removeRehaTPEventListener(this);
             FensterSchliessen(null);
@@ -492,7 +529,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
                                                                                   .toString()
                     + " - als behandelt bestätigen?", "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
             if (frage == JOptionPane.YES_OPTION) {
-                eltern.terminBestaetigen(false);
+                eltern.terminBestaetigen(eltern.getAktiveSpalte(2), false);
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -518,10 +555,11 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
         }
     }
 
+    /*******************************************/
 }
 
+/******************************************/
 final class SuchenInTagen extends Thread {
-    private static final int ANZAHL_BELEGTE_BLOECKE = 301;
     Statement stmt = null;
     ResultSet rs = null;
     String sergebnis = "";
@@ -529,7 +567,6 @@ final class SuchenInTagen extends Thread {
     String[] exStatement = null;
     String suchkrit = "";
     ArrayList<String> atermine = new ArrayList<String>();
-    private static final Logger logger = LoggerFactory.getLogger(SchnellSuche.class);
 
     public void setzeStatement(String[] exStatement, String suchkrit) {
         this.exStatement = exStatement;
@@ -545,8 +582,11 @@ final class SuchenInTagen extends Thread {
             for (int i = 0; i < exStatement.length; i++) {
                 try {
                     rs = stmt.executeQuery(exStatement[i]);
+                    //// System.out.println("Nach for..."+exStatement[i]);
+                    // SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
                     while (rs.next()) {
-                        int belegt = rs.getInt(ANZAHL_BELEGTE_BLOECKE);
+                        /* in Spalte 301 steht die Anzahl der belegten Bl�cke */
+                        int belegt = rs.getInt(301);
                         SchnellSuche.thisClass.setLabelDatum(DatFunk.sDatInDeutsch(rs.getString(305)));
                         String name = "";
                         String nummer = "";
@@ -572,9 +612,11 @@ final class SuchenInTagen extends Thread {
                                 sorigdatum = rs.getString(305);
                                 sdatum = DatFunk.sDatInDeutsch(sorigdatum);
                                 skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
+                                // skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 
                                 termin = DatFunk.WochenTag(sdatum) + " - " + sdatum + " - " + uhrzeit + "  -  " + name
                                         + " - " + nummer + " - " + skollege;
+                                // SchnellSuche.thisClass.setTextAreaText(termin);
                                 atermine.add(DatFunk.WochenTag(sdatum));
                                 atermine.add(sdatum);
                                 atermine.add(uhrzeit.substring(0, 5));
@@ -583,6 +625,7 @@ final class SuchenInTagen extends Thread {
                                 atermine.add(skollege);
                                 atermine.add(sorigdatum + uhrzeit.substring(0, 5));
                                 treadVect.addElement(atermine.clone());
+                                // SchnellSuche.thisClass.setTerminTable((ArrayList) atermine.clone());
                                 atermine.clear();
                             } else if (suchkrit.equals("!®") && (!SystemConfig.isAndi)) {
                                 try {
@@ -595,9 +638,11 @@ final class SuchenInTagen extends Thread {
                                         sorigdatum = rs.getString(305);
                                         sdatum = DatFunk.sDatInDeutsch(sorigdatum);
                                         skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
+                                        // skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 
                                         termin = DatFunk.WochenTag(sdatum) + " - " + sdatum + " - " + uhrzeit + "  -  "
                                                 + name + " - " + nummer + " - " + skollege;
+                                        // SchnellSuche.thisClass.setTextAreaText(termin);
                                         atermine.add(DatFunk.WochenTag(sdatum));
                                         atermine.add(sdatum);
                                         atermine.add(uhrzeit.substring(0, 5));
@@ -617,25 +662,27 @@ final class SuchenInTagen extends Thread {
                     }
 
                 } catch (SQLException ev) {
-                    logger.error("Schnellsuche Resultset", ev);
+                    // System.out.println("SQLException: " + ev.getMessage());
+                    // System.out.println("SQLState: " + ev.getSQLState());
+                    // System.out.println("VendorError: " + ev.getErrorCode());
                 }
             }
             SchnellSuche.thisClass.setTerminTable((Vector) treadVect.clone());
         } catch (SQLException ex) {
-            logger.error("Schnellsuche Statement", ex);
+            // System.out.println("von stmt -SQLState: " + ex.getSQLState());
         }
 
         finally {
             if (rs != null) {
                 try {
                     rs.close();
-                } catch (SQLException sqlEx) {
+                } catch (SQLException sqlEx) { // ignore }
                     rs = null;
                 }
                 if (stmt != null) {
                     try {
                         stmt.close();
-                    } catch (SQLException sqlEx) {
+                    } catch (SQLException sqlEx) { // ignore }
                         stmt = null;
                     }
                 }
@@ -649,9 +696,12 @@ final class SuchenInTagen extends Thread {
 class SchnellSucheTableModel extends AbstractTableModel {
     private static final boolean DEBUG = false;
 
+    // public String[] columnNames = null;
+    // public Object[][] data = null;
 
     public String[] columnNames = { "", "", };
 
+    // public Object[][] data = {{"","","","","","",-1,-1}};
     public Vector<ArrayList> data = null;
 
     @Override
@@ -665,10 +715,12 @@ class SchnellSucheTableModel extends AbstractTableModel {
     }
 
     public void deleteRow(int row) {
+        //// System.out.println("Wert = "+getValueAt(row,3));
         printDebugData();
         data.remove(row);
         fireTableDataChanged();
         printDebugData();
+        // fireTableChanged(null);
     }
 
     @Override
@@ -689,8 +741,12 @@ class SchnellSucheTableModel extends AbstractTableModel {
     @Override
     public Class getColumnClass(int c) {
         return String.class;
+        // return getValueAt(0, c).getClass();
     }
 
+    /*
+     * Don't need to implement this method unless your table's editable.
+     */
     @Override
     public boolean isCellEditable(int row, int col) {
         // Note that the data/cell address is constant,
@@ -702,11 +758,22 @@ class SchnellSucheTableModel extends AbstractTableModel {
         }
     }
 
+    /*
+     * Don't need to implement this method unless your table's data can change.
+     */
     @Override
     public void setValueAt(Object value, int row, int col) {
+        // if (DEBUG) {
+        // System.out.println("Setting value at " + row + "," + col
+        // + " to " + value + " (an instance of "
+        // + value.getClass() + ")");
+        // }
+
+        // data.set(row)[col] = value;
         fireTableCellUpdated(row, col);
 
         if (DEBUG) {
+            // System.out.println("New value of data:");
             printDebugData();
         }
     }

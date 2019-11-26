@@ -256,10 +256,10 @@ public class TermineErfassen implements Runnable {
         boolean ret;
         /*
          * alleterm = new Vector();
-         *
+         * 
          * alleterm = SqlInfo.holeSaetze("flexkc", " * ",
          * "datum='"+DatFunk.sDatInSQL(heute)+"'", Arrays.asList(new String[] {}));
-         *
+         * 
          */
         alleterm = SqlInfo.holeFelder("select * from flexkc where datum='" + DatFunk.sDatInSQL(DatFunk.sHeute())
                 + "' LIMIT " + Integer.toString(ParameterLaden.maxKalZeile));
@@ -310,7 +310,8 @@ public class TermineErfassen implements Runnable {
 
                     JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
                     if (termin != null) {
-                        if ((Reha.instance.terminpanel.ansicht) == 0) {
+                        int ansicht;
+                        if ((ansicht = Reha.instance.terminpanel.ansicht) == 0) {
                             if (Reha.instance.terminpanel.getAktuellerTag()
                                                          .equals(DatFunk.sHeute())) {
                                 int iblock = Integer.valueOf(sblock) - 1;
@@ -660,6 +661,25 @@ public class TermineErfassen implements Runnable {
         // String cmd = "update verordn set termine='"+sbuftermine.toString()+"' where
         // rez_nr='"+scanrez+"'";
         // new ExUndHop().setzeStatement(cmd);
+    }
+
+    /********************/
+    private String macheNeuTermin(String text) {
+        String ret = DatFunk.sHeute() + "@" + this.kollege + "@" + text + "@" + vec.get(1) + (vec.get(2)
+                                                                                                 .trim()
+                                                                                                 .equals("")
+                                                                                                         ? ""
+                                                                                                         : "," + (vec.get(
+                                                                                                                 2)))
+                + (vec.get(3)
+                      .trim()
+                      .equals("") ? "" : "," + (vec.get(3)))
+                + (vec.get(4)
+                      .trim()
+                      .equals("") ? "" : "," + (vec.get(4)))
+                + "@" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "\n";
+        return ret;
+
     }
 
     public static String macheNeuTermin2(String pos1, String pos2, String pos3, String pos4, String xkollege,

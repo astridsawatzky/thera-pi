@@ -57,14 +57,14 @@ public class RehaMail implements WindowListener {
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
-    public static String dbIpAndName;
-    public static String dbUser;
-    public static String dbPassword;
+    public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
+    public static String dbUser = "rtauser";
+    public static String dbPassword = "rtacurie";
     public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
 
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
     public static String progHome = "C:/RehaVerwaltung/";
-    public static String aktIK;
+    public static String aktIK = "510841109";
 
     public static int xport = 7000;
     public static boolean xportOk = false;
@@ -78,16 +78,16 @@ public class RehaMail implements WindowListener {
 
     public static Cursor WAIT_CURSOR = new Cursor(Cursor.WAIT_CURSOR);
     public static Cursor DEFAULT_CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
-    public final Cursor cmove = new Cursor(Cursor.MOVE_CURSOR);
-    public final Cursor cnsize = new Cursor(Cursor.N_RESIZE_CURSOR);
-    public final Cursor cnwsize = new Cursor(Cursor.NW_RESIZE_CURSOR);
-    public final Cursor cnesize = new Cursor(Cursor.NE_RESIZE_CURSOR);
-    public final Cursor cswsize = new Cursor(Cursor.SW_RESIZE_CURSOR);
-    public final Cursor cwsize = new Cursor(Cursor.W_RESIZE_CURSOR);
-    public final Cursor csesize = new Cursor(Cursor.SE_RESIZE_CURSOR);
-    public final Cursor cssize = new Cursor(Cursor.S_RESIZE_CURSOR);
-    public final Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR);
-    public final Cursor cdefault = new Cursor(Cursor.DEFAULT_CURSOR);
+    public final Cursor cmove = new Cursor(Cursor.MOVE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cnsize = new Cursor(Cursor.N_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cnwsize = new Cursor(Cursor.NW_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cnesize = new Cursor(Cursor.NE_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cswsize = new Cursor(Cursor.SW_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cwsize = new Cursor(Cursor.W_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor csesize = new Cursor(Cursor.SE_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cssize = new Cursor(Cursor.S_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR); // @jve:decl-index=0:
+    public final Cursor cdefault = new Cursor(Cursor.DEFAULT_CURSOR); // @jve:decl-index=0:
 
     public static int BenutzerSuper_user = 2;
     public static int Sonstiges_NachrichtenLoeschen = 102;
@@ -96,6 +96,7 @@ public class RehaMail implements WindowListener {
     public static ImageIcon[] attachmentIco = { null, null, null, null, null, null, null, null, null };
     public static int toolsDlgRueckgabe;
     public MailTab mtab = null;
+    // public MailPanel mpanel = null;
     public static ImageIcon[] icoPinPanel = { null, null, null };
 
     public static String pdfReader = null;
@@ -148,6 +149,8 @@ public class RehaMail implements WindowListener {
                     decrypted = new String("");
                 }
                 dbPassword = decrypted.toString();
+                // inif = new INIFile(args[0]+"ini/"+args[1]+"/rehajava.ini");
+                // inif = INITool.openIni(args[0]+"ini/"+args[1]+"/","rehajava.ini");
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 progHome = args[0];
@@ -232,6 +235,8 @@ public class RehaMail implements WindowListener {
                     gruppenMail = SqlInfo.holeFelder("select groupname,groupmembers,id from pimailgroup");
                     Collections.sort(gruppenMail, comparator);
                     setRechte();
+                    // System.out.println(einzelMail);
+                    // System.out.println(gruppenMail);
                     /*********************************/
                     if (!DbOk) {
                         JOptionPane.showMessageDialog(null,
@@ -296,6 +301,7 @@ public class RehaMail implements WindowListener {
                                             .trim()
                                             .equals(""))) {
                             getMTab().mailPanel.checkForNewMail(true);
+                            // getMTab().mailPanel.allesAufNull();
                             SwingUtilities.invokeAndWait(new Runnable() {
                                 @Override
                                 public void run() {
@@ -733,7 +739,9 @@ public class RehaMail implements WindowListener {
 
     }
 
-
+    /**
+     * @throws Throwable
+     *************************/
 
     public static void starteOfficeApplication() {
 

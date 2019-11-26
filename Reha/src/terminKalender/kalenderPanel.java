@@ -24,7 +24,9 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 public class kalenderPanel extends JXPanel {
-
+    /**
+        *
+        */
     private static final long serialVersionUID = 7354087866079956906L;
     private JXPanel kPanel;
 
@@ -92,6 +94,7 @@ public class kalenderPanel extends JXPanel {
             String sReznr = ""; // Rezeptnummer
             String sStart = ""; // Startzeit
             int dauer; // Termin Dauer
+            String sEnde = ""; // Endzeit
 
             int yStartMin;
             float fStartPix;
@@ -127,6 +130,7 @@ public class kalenderPanel extends JXPanel {
                 }
 
                 sStart = (String) ((Vector) dat.get(2)).get(i);
+                sEnde = (String) ((Vector) dat.get(2)).get(i);
                 dauer = Integer.parseInt((String) ((Vector) dat.get(3)).get(i));
                 yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart)) - zeitSpanneVon;
 
@@ -420,7 +424,7 @@ public class kalenderPanel extends JXPanel {
         this.showTimeLine = show;
     }
 
-
+    /******* Klammer der paint-Methode **********/
     public void datenZeichnen(Vector vect, int therapeut) {
         if (vect.size() > 0 && therapeut >= 0) {
             dat.clear();
@@ -438,7 +442,7 @@ public class kalenderPanel extends JXPanel {
         this.repaint();
     }
 
-
+    /**********************************/
     public void zeitSpanne() {
         iMaxHoehe = this.getSize().height;
         fPixelProMinute = iMaxHoehe;
@@ -452,6 +456,12 @@ public class kalenderPanel extends JXPanel {
         positionScreen[2] = posInScreen.x + this.getWidth();
         positionScreen[3] = posInScreen.y + this.getHeight();
         this.repaint();
+    }
+
+    private Image skaliereImage(int faktor) {
+        Image skal = this.dragImage.getImage()
+                                   .getScaledInstance(faktor - 2, faktor - 2, Image.SCALE_FAST);
+        return skal;
     }
 
     public int[] getPosInScreen() {
@@ -494,6 +504,7 @@ public class kalenderPanel extends JXPanel {
                     ret[1] = i;
                     ret[0] = i;
                     break;
+                } else if (!this.spalteAktiv) {
                 }
             }
         }

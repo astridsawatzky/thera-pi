@@ -104,4 +104,20 @@ public class TerminMenu {
         return waz;
     }
 
+    private JMenuItem getRehaplanToIcal() {
+        JMenuItem ical = new JMenuItem();
+        ical.setText("Rehaplandaten -> iCalendar");
+        ical.addActionListener(new java.awt.event.ActionListener() {
+            @Override
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                try {
+                    new iCalRehaExporter();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        return ical;
+    }
+
 }
