@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * Tries to guess the programs execution home based on the OS it is running on
  * and defaults to c:/RehaVerwaltung/
- * 
+ *
  * This guessing is at the moment (sep.2018) scattered through the code. This
  * class is probably temporary until the program does finding its files how it
  * should
@@ -62,6 +62,11 @@ public enum Path {
             break;
         }
         if (!new File(getProghome()).exists()) {
+            String prog = java.lang.System.getProperty("user.dir");
+            String path = prog.replace("Reha", "dist") +"\\";
+            if (new File(path).exists()) {
+                setProghome(path);
+            } else
             // program wasn't started from within its installation directory, probably
             // developer.
             // we assume standardpath until this mess is fixed
