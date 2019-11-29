@@ -64,15 +64,19 @@ public class kalenderPanel extends JXPanel {
     int pfeily;
     private Color[] defaultColors = new Color[] { Color.WHITE, Color.BLACK };
 
-    public kalenderPanel KalenderPanel() {
 
-        this.setBackground(SystemConfig.KalenderHintergrund);
-        kPanel = new JXPanel();
-        kPanel.setBorder(null);
-        kPanel.setLayout(null);
-        kPanel.setBackground(SystemConfig.KalenderHintergrund);
-        return this;
+
+    public kalenderPanel() {
+
+
+       setBorder(null);
+       setLayout(null);
+        setBackground(SystemConfig.KalenderHintergrund);
+
+
     }
+
+
 
     public void ListenerSetzen(int aktPanel) {
         this.panelNummer = aktPanel;
@@ -262,12 +266,6 @@ public class kalenderPanel extends JXPanel {
                             g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
                             g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[1]);
                             g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-
-                        } else {
-                            g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
                             break;
                         }
                     }
@@ -280,14 +278,8 @@ public class kalenderPanel extends JXPanel {
                             g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
                             g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[1]);
                             g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-
-                        } else {
-                            g2d.setColor(SystemConfig.aktTkCol.get("Freitermin")[0]);
-                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                            g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[1]);
-                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
+                            break;
                         }
-                        break;
                     }
                     /*************************************/
                     // ab hier die Definitionen mit den Farbsignalen
