@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import CommonTools.INIFile;
+import environment.Path;
 
 public class SystemConfig {
     public static java.net.InetAddress dieseMaschine = null;
@@ -17,13 +18,13 @@ public class SystemConfig {
     public static String HilfeServer = null;
     public static boolean HilfeServerIstDatenServer;
     public static HashMap<String, String> hmHilfeServer;
-
+    
     public SystemConfig() {
 
     }
 
     public static void InetSeitenEinlesen() {
-        INIFile inif = new INIFile(RehaWissen.proghome + "ini/rehabrowser.ini");
+        INIFile inif = new INIFile( Path.Instance.getProghome()+ "ini/rehabrowser.ini");
         int seitenanzahl = inif.getIntegerProperty("RehaBrowser", "SeitenAnzahl");
         InetSeiten = new Vector<ArrayList<String>>();
         ArrayList<String> seite = null;

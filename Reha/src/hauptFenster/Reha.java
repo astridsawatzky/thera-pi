@@ -155,6 +155,7 @@ import ocf.OcKVK;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
+import rehaWissen.RehaWissen;
 import roogle.RoogleFenster;
 import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
@@ -453,7 +454,7 @@ public class Reha implements RehaEventListener {
                 new Thread() {
                     @Override
                     public void run() {
-                        new LadeProg(Path.Instance.getProghome() + "RehaWissen.jar");
+                        RehaWissen.main(new String[0]);
                     }
                 }.start();
                 new SwingWorker<Void, Void>() {

@@ -16,6 +16,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
@@ -29,12 +31,11 @@ public class RehaWissen {
     static JLabel standDerDingelbl = null;
     public static RehaWissen thisClass = null;
     static boolean socketoffen = false;
-    public static String proghome;
     public boolean HilfeDbOk;
     public Connection hilfeConn = null;
+    private static  Logger logger = LoggerFactory.getLogger(RehaWissen.class);
 
     public static void main(String[] args) {
-        new Logging("rehawissen");
         try {
             SwingUtilities.invokeAndWait(new SWTJarLoader());
         } catch (InvocationTargetException | InterruptedException e1) {
@@ -61,12 +62,10 @@ public class RehaWissen {
         NativeInterface.initialize();
         JWebBrowser.useXULRunnerRuntime();
         NativeInterface.open();
-        NativeInterface.runEventPump();
+        new Thread(()-> NativeInterface.runEventPump() ,"eventpump");
+
         final RehaWissen xapplication = application;
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("ProgHome = " + proghome);
+
                 jDiag = xapplication.getDialog();
 
                 jDiag.validate();
@@ -75,8 +74,7 @@ public class RehaWissen {
                 jDiag.setExtendedState(JXFrame.MAXIMIZED_BOTH);
                 jDiag.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 jDiag.setVisible(true);
-            }
-        });
+
 
     }
 
@@ -96,6 +94,7 @@ public class RehaWissen {
             }
         }
         if (!HilfeDbOk) {
+            logger .error("HilfeDatenbank startet nicht");
             // System.exit(0);
         }
         return new BrowserFenster(null, "RehaWissen");
@@ -142,7 +141,7 @@ final class HilfeDatenbankStarten implements Runnable {
         /*
          * if (obj.hilfeConn != null){ try{ obj.hilfeConn.close();} catch(final
          * SQLException e){} } try{
-         * 
+         *
          * Class.forName(SystemConfig.hmHilfeServer.get("HilfeDBTreiber")).newInstance()
          * ; RehaWissen.thisClass.HilfeDbOk = true; } catch ( final Exception e ){
          * System.out.println(sDB+"-Treiberfehler: " + e.getMessage());

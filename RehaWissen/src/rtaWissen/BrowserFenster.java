@@ -59,6 +59,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
+import environment.Path;
 import rehaWissen.RehaWissen;
 import rehaWissen.SystemConfig;
 import rehaWissen.UIFSplitPane;
@@ -209,12 +210,12 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
                                        .equals("")) {
                 lab = new JXLabel(SystemConfig.InetSeiten.get(i)
                                                          .get(0));
-                lab.setIcon(new ImageIcon(RehaWissen.proghome + "icons/eye_16x16.gif"));
+                lab.setIcon(new ImageIcon(Path.Instance.getProghome() + "icons/eye_16x16.gif"));
                 lab.setIconTextGap(10);
             } else {
                 lab = new JXLabel(SystemConfig.InetSeiten.get(i)
                                                          .get(0));
-                lab.setIcon(new ImageIcon(RehaWissen.proghome + "icons/" + SystemConfig.InetSeiten.get(i)
+                lab.setIcon(new ImageIcon(Path.Instance.getProghome() + "icons/" + SystemConfig.InetSeiten.get(i)
                                                                                                   .get(1)));
                 lab.setIconTextGap(10);
             }
@@ -575,7 +576,7 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
                 for (i = 0; i < dateien.size(); i++) {
                     if (((String) ((Vector) dateien.get(i)).get(0)).equals(sitem)
                             && ((String) ((Vector) dateien.get(i)).get(1)).equals(sgruppe)) {
-                        String pfad = RehaWissen.proghome + "howto";
+                        String pfad = Path.Instance.getProghome() + "howto";
                         File file = new File(pfad, sitem + ".html");
                         if (file.exists()) {
                             RtaWissen.highlight = true;

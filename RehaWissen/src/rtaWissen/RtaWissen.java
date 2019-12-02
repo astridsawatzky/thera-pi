@@ -27,11 +27,12 @@ import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserNavigationEvent;
+import environment.Path;
 import rehaWissen.RehaWissen;
 
 public class RtaWissen extends JXPanel implements KeyListener, ComponentListener, ActionListener, AncestorListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -3482074172384055074L;
     private int setOben;
@@ -105,7 +106,7 @@ public class RtaWissen extends JXPanel implements KeyListener, ComponentListener
              * + "\" in a database?\n(Not for real of course!)",
              * "Data received from the web browser", JOptionPane.YES_NO_OPTION) ==
              * JOptionPane.YES_OPTION) {
-             * 
+             *
              * } } }
              */
 
@@ -180,7 +181,7 @@ public class RtaWissen extends JXPanel implements KeyListener, ComponentListener
                  .equals("")) {
             String zusatz = new String("highlightSearchTerms('" + high + "');");
             try {
-                String javascript = readFileToString(RehaWissen.proghome + "tools/highlight.js");
+                String javascript = readFileToString(Path.Instance.getProghome()+ "tools/highlight.js");
                 javascript = javascript + "\n" + zusatz;
                 webBro.executeJavascript(javascript);
             } catch (IOException e) {
