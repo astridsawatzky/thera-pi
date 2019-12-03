@@ -3,6 +3,8 @@ package verkauf;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -33,7 +35,7 @@ import systemEinstellungen.SystemConfig;
 public class VerkaufTab extends JXPanel implements ChangeListener {
 
     /**
-     * 
+     *
      */
 
     /** Konstanten für aktiviereFunktion **/
@@ -75,12 +77,18 @@ public class VerkaufTab extends JXPanel implements ChangeListener {
         pane.setUI(new WindowsTabbedPaneUI());
         pane.addChangeListener(this);
         pane.addTab("Verkäufe tätigen", SystemConfig.hmSysIcons.get("verkaufTuten"), new VerkaufGUI(this));
-        pane.addTab("Lager- und Artikelverwaltung", SystemConfig.hmSysIcons.get("verkaufArtikel"), new LagerGUI(this));
+        LagerGUI lagertab = new LagerGUI(this);
+
+        pane.addTab("Lager- und Artikelverwaltung", SystemConfig.hmSysIcons.get("verkaufArtikel"), lagertab);
         pane.addTab("Lieferantenverwaltung", SystemConfig.hmSysIcons.get("verkaufLieferant"), new LieferantGUI(this));
         pane.addChangeListener(new ChangeListener() {
 
             @Override
             public void stateChanged(ChangeEvent arg0) {
+                if(pane.getSelectedComponent() == lagertab) {
+                    System.out.println("gotcha");
+                    lagertab.aktiviereFunktion(reload);
+                }
                 int index = pane.getSelectedIndex();
                 if (index == 0 || index == 1) {
                     sucheLabel.setText("Artikel suchen:");

@@ -20,13 +20,14 @@ public class Formulare {
     private JRtaTextField formularid = new JRtaTextField("NIX", false);
     private KassenFormulare kf = null;
     INIFile myInif = null;
-    private String nbOfEntriesLabel = null;
-    private String entryTextLabel = null;
-    private String entryNameLabel = null;
-    private String sectionLabel = null;
+    private String nbOfEntriesLabel = "FormulareAnzahl";
+    private String entryTextLabel = "FormularText";
+    private String entryNameLabel = "FormularName";
+    private String sectionLabel =  "Formulare";
+
+
 
     public Formulare() {
-        setDefaultLabels();
     }
 
     public void holeFormulare() {
@@ -58,12 +59,7 @@ public class Formulare {
 
     }
 
-    public void setDefaultLabels() {
-        nbOfEntriesLabel = "FormulareAnzahl";
-        entryTextLabel = "FormularText";
-        entryNameLabel = "FormularName";
-        sectionLabel = "Formulare";
-    }
+
 
     public void setLabels(String sectionLabel, String nbOfEntriesLabel, String entryTextLabel, String entryNameLabel) {
         this.nbOfEntriesLabel = nbOfEntriesLabel;

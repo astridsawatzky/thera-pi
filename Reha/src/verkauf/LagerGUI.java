@@ -245,11 +245,6 @@ public class LagerGUI extends JXPanel {
         adlg = null;
     }
 
-    public void aufraeumen() {
-        // hier sollten die Listener removed werden
-        // anschließend die Listener genullt
-    }
-
     private void setLastRowSelected() {
         if (this.lgmod.getRowCount() > 0) {
             this.lgtab.setRowSelectionInterval(this.lgmod.getRowCount() - 1, this.lgmod.getRowCount() - 1);
