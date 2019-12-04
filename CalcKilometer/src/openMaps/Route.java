@@ -1,10 +1,8 @@
 package openMaps;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
-public class Route {
+class Route {
     Coordinate coordStart = new Coordinate("0", "90");
     Coordinate coordEnd = new Coordinate("0", "90");
 
@@ -12,43 +10,13 @@ public class Route {
     }
 
     public Route withStart(String address) throws IOException {
-        coordStart = getCoordsForAddressFromNominatim(address);
+        coordStart = new Nominatim().getCoordsForAddressFromNominatim(address);
         return this;
     }
 
     public Route withEnd(String address) throws IOException {
-        coordEnd = getCoordsForAddressFromNominatim(address);
+        coordEnd = new Nominatim().getCoordsForAddressFromNominatim(address);
         return this;
-    }
-
-    private Coordinate getCoordsForAddressFromNominatim(String client) throws IOException {
-        try {
-            client = URLEncoder.encode(client, "UTF-8");
-        } catch (UnsupportedEncodingException e1) {
-            // will never happen
-        }
-        String urlstart = "https://nominatim.openstreetmap.org/search?q=";
-        UrlReader reader = new UrlReader();
-        String[] args2 = { urlstart + client + "&format=xml" };
-        String ergebnis;
-        String lat = null;
-        String lon = null;
-
-        ergebnis = reader.readfromUrlt(args2);
-
-        String[] splitted = ergebnis.split(" ");
-
-        for (String test : splitted) {
-            if (test.startsWith("lat=")) {
-                lat = test.substring(5, test.length() - 1);
-
-            } else if (test.startsWith("lon=")) {
-                lon = test.substring(5, test.length() - 1);
-            }
-
-        }
-
-        return new Coordinate(lon, lat);
     }
 
     Distance getDistanceFromOpenRouteService(String api_key) {

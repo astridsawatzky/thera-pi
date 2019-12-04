@@ -1,25 +1,72 @@
 package openMaps;
 
-public class Coordinate {
-    private String latitude;
-    private String longitude;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Objects;
 
-    public Coordinate(String lon, String lat) {
-        this.longitude = lon;
-        this.latitude = lat;
+
+class Coordinate {
+    private Double latitude;
+    private Double longitude;
+    DecimalFormat NACHKOMMA5 = new DecimalFormat(".00000");
+    private String display="";
+    {
+        NACHKOMMA5.setRoundingMode(RoundingMode.FLOOR);
     }
 
-    public String getLatitude() {
+    public Coordinate(String lon, String lat) {
+        this.longitude = Double.valueOf(lon);
+        this.latitude = Double.valueOf(lat);
+    }
+
+    public Coordinate(String lon, String lat, String beschreibung) {
+        this(lon,lat);
+        this.display =beschreibung;
+    }
+
+    public Double getLatitude() {
         return latitude;
     }
 
-    public String getLongitude() {
+    public Double getLongitude() {
         return longitude;
+    }
+
+    public String getShortLatitude() {
+        return NACHKOMMA5.format(latitude);
+    }
+
+    public String getShortLongitude() {
+        return NACHKOMMA5.format(longitude);
     }
 
     @Override
     public String toString() {
-        return "Coordinate [" + longitude + "," + latitude + "]";
+        return "Coordinate [" + getShortLongitude() + "," + getShortLatitude() + "]";
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getShortLatitude(), getShortLongitude());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Coordinate other = (Coordinate) obj;
+        return Objects.equals(getShortLatitude(), other.getShortLatitude())
+                && Objects.equals(getShortLongitude(), other.getShortLongitude());
+    }
+
+    public String getDisplay() {
+        return display;
+    }
+
+
 
 }

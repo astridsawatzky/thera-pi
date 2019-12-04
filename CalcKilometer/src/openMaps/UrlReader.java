@@ -8,7 +8,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.stream.Collectors;
 
-public class UrlReader {
+ class UrlReader {
     public String readfromUrlt(String[] args) throws IOException {
         String urlString = args[0];
         URL url = new URL(urlString);

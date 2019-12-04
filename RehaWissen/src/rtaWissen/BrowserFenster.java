@@ -592,7 +592,6 @@ public class BrowserFenster extends JFrame implements MouseListener, MouseMotion
         } catch (java.lang.NullPointerException npex) {
 
         }
-
     }
 
     @Override

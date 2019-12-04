@@ -24,8 +24,8 @@ public class Distance {
         return this;
     }
 
-    private Distance withDistance(double distanceInM) {
-        this.distanceInM = (int) distanceInM;
+    private Distance withDistance(double distanceInMetern) {
+        this.distanceInM = (int) distanceInMetern;
         return this;
     }
 
@@ -44,6 +44,12 @@ public class Distance {
 
     public int getDurationInMinutes() {
         return seconds / 60;
+    }
+
+    @Override
+    public String toString() {
+        return "Distance [getMeter()=" + getMeter() + ", getDuration()=" + getDuration() + ", getKilometer()="
+                + getKilometer() + ", getDurationInMinutes()=" + getDurationInMinutes() + "]";
     }
 
 }
