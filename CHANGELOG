@@ -5,9 +5,9 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 
 ## unveröffentlicht
-## [1.1.3] alpha
 
 
+## [1.1.3] - 2019-12-05
 
 ### added
  Verkaufs-Modul:
@@ -34,6 +34,7 @@ OpRgaf ausbuchen:
  
 ### changed
 - Farbkodierung im Kalender erweitert, es können jetzt alle Buchstaben einstellig zur Kodierung benutzt werden also(F\X).
+- sprechendere Fehlermeldung, wenn keine eGK im Kartenleser ist.
 
 Verkaufs-Modul:
 - Barverkauf (Bondruck) (de-)aktivierbar (SystemInitialisierung -> sonstige Einstellungen -> Verkauf)
@@ -67,8 +68,12 @@ OP ausbuchen:
 
 ###fixed
 - ICD-10 Recherche bei geöffnetem Rezept nicht aufrufbar. #208
+- ICD-10 Eingabe auch ohne punkt #153
 - Im Kalender wird statt Farbcode B Farbcode A angezeigt #265
 - log-Dateien rollen jetzt täglich bis zu 3 gb gesamt speicherplatz (fixes #124) 
+- hacky fix für calckilometer findet den falschen Ort #276
+- close open streams an vielen Stellen im Code.
+
 
 Verkaufs-Modul:
 - Artikelverwaltung: Sortierung nach ID u. Aufruf des Editor (doppelklick) führte zu Absturz 
