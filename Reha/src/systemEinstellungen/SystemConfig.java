@@ -19,6 +19,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import CommonTools.DatFunk;
 import CommonTools.FireRehaError;
 import CommonTools.INIFile;
@@ -234,6 +237,7 @@ public class SystemConfig {
     public static boolean fullSizePwDialog = false;
 
     public static Vector<Vector<String>> vUserTasks = new Vector<Vector<String>>();
+    private Logger logger = LoggerFactory.getLogger(SystemConfig.class);
 
     public SystemConfig() {
 
@@ -930,6 +934,7 @@ public class SystemConfig {
             }
             KalenderHintergrund = aktTkCol.get("AusserAZ")[0];
         } catch (Exception ex) {
+            logger .error("color ini konnte nicht gelesen werden ", ex);
             JOptionPane.showMessageDialog(null,
                     "Fehler bei der Verarbeitung der color.ini, Mehode:TKFarben!\nFehlertext: " + ex.getMessage());
         }

@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.Vector;
 
@@ -18,8 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import javax.swing.event.CellEditorListener;
-import javax.swing.event.ChangeEvent;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.JXPanel;
@@ -33,9 +29,6 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import environment.Path;
 import hauptFenster.Reha;
-import jxTableTools.ColorEditor;
-import jxTableTools.ColorRenderer;
-import jxTableTools.JLabelRenderer;
 import terminKalender.TerminFenster;
 
 public class SysUtilKalenderfarben extends JXPanel implements ActionListener {

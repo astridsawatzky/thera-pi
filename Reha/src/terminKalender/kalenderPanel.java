@@ -18,6 +18,8 @@ import javax.swing.ImageIcon;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
@@ -63,6 +65,7 @@ public class kalenderPanel extends JXPanel {
     boolean showTimeLine = false;
     int pfeily;
     private Color[] defaultColors = new Color[] { Color.WHITE, Color.BLACK };
+    private  static final Logger logger = LoggerFactory.getLogger(kalenderPanel.class);
 
 
 
@@ -284,12 +287,17 @@ public class kalenderPanel extends JXPanel {
                     /*************************************/
                     // ab hier die Definitionen mit den Farbsignalen
                     int indexOf = sReznr.indexOf("\\");
-                    if (sReznr.length() > (indexOf + 1)) {
+                    if ((indexOf != -1) && sReznr.length() > (indexOf + 1)) {
                         String colcode = sReznr.substring(indexOf + 1)
                                                .trim();
 
-                        Color[] colors = Optional.ofNullable(SystemConfig.aktTkCol.get("Col" + colcode))
-                                                 .orElse(defaultColors);
+                        Color[] value = SystemConfig.aktTkCol.get("Col" + colcode);
+                        Color[] colors = defaultColors;
+                        if (value == null ) {
+                            logger.error("Colorcode " + colcode +" nicht gefunden. Benutze Defaultfarben");
+                        }else {
+                            colors = value;
+                        }
 
                         g2d.setColor(colors[0]);
                         g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
