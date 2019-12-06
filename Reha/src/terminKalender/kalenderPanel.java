@@ -11,7 +11,6 @@ import java.awt.Point;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Optional;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -27,8 +26,8 @@ import systemEinstellungen.SystemConfig;
 
 public class kalenderPanel extends JXPanel {
     /**
-        *
-        */
+     *
+     */
     private static final long serialVersionUID = 7354087866079956906L;
     private JXPanel kPanel;
 
@@ -64,22 +63,17 @@ public class kalenderPanel extends JXPanel {
     float yTimeLine = .0f;
     boolean showTimeLine = false;
     int pfeily;
-    private Color[] defaultColors = new Color[] { Color.WHITE, Color.BLACK };
-    private  static final Logger logger = LoggerFactory.getLogger(kalenderPanel.class);
+    private Logger logger = LoggerFactory.getLogger(kalenderPanel.class);
 
+    public kalenderPanel KalenderPanel() {
 
-
-    public kalenderPanel() {
-
-
-       setBorder(null);
-       setLayout(null);
-        setBackground(SystemConfig.KalenderHintergrund);
-
-
+        this.setBackground(SystemConfig.KalenderHintergrund);
+        kPanel = new JXPanel();
+        kPanel.setBorder(null);
+        kPanel.setLayout(null);
+        kPanel.setBackground(SystemConfig.KalenderHintergrund);
+        return this;
     }
-
-
 
     public void ListenerSetzen(int aktPanel) {
         this.panelNummer = aktPanel;
@@ -87,6 +81,7 @@ public class kalenderPanel extends JXPanel {
         this.setDragImage2(SystemConfig.hmSysIcons.get("buttongruen")
                                                   .getImage()
                                                   .getScaledInstance(8, 8, Image.SCALE_SMOOTH));
+        // this.
         return;
     }
 
@@ -117,9 +112,9 @@ public class kalenderPanel extends JXPanel {
             g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
             for (i = 0; i < anzahl; i++) {
-
+                String test = "";
                 try {
-                    if (((String) ((Vector) dat.get(0)).get(i)) == null) {
+                    if ((test = (String) ((Vector) dat.get(0)).get(i)) == null) {
                         g2d.setColor(SystemConfig.KalenderHintergrund);
                         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
                         break;
@@ -135,7 +130,6 @@ public class kalenderPanel extends JXPanel {
                 if ((sReznr = (String) ((Vector) dat.get(1)).get(i)) == null) {
                     sReznr = "";
                 }
-
                 sStart = (String) ((Vector) dat.get(2)).get(i);
                 sEnde = (String) ((Vector) dat.get(2)).get(i);
                 dauer = Integer.parseInt((String) ((Vector) dat.get(3)).get(i));
@@ -147,15 +141,19 @@ public class kalenderPanel extends JXPanel {
                 yEndeMin = ((int) (fEndePix));
                 yDifferenz = yEndeMin - yStartMin;
                 fDifferenz = fEndePix - fStartPix;
+                for (i1 = 0; i1 < 1; i1++) {
 
-                if (yDifferenz <= 8) {
-                    g2d.setFont(g2d.getFont()
-                                   .deriveFont(8.5f));
-                    baseline = (int) (fEndePix - (((fDifferenz - 8.5) / 2) + 1.0));
-                } else {
+                    if (yDifferenz <= 8) {
+                        g2d.setFont(g2d.getFont()
+                                       .deriveFont(8.5f));
+                        baseline = (int) (fEndePix - (((fDifferenz - 8.5) / 2) + 1.0));
+                        break;
+                    }
+
                     g2d.setFont(g2d.getFont()
                                    .deriveFont(11.5f));
                     baseline = (int) (fEndePix - (((fDifferenz - 11.5) / 2) + 1.0));
+
                 }
 
                 for (i1 = 0; i1 < 1; i1++) {
@@ -173,7 +171,7 @@ public class kalenderPanel extends JXPanel {
                         if (sReznr.contains("@FREI")) {
                             Reha.instance.terminpanel.dragLab[this.panelNummer].setText("");
 
-                            g2d.drawString(sName, 5, (baseline));
+                            g2d.drawString(/* yEndeMin-yStartMin+"s2 "+ */sName, 5, (baseline));
 
                             g2d.draw3DRect(xStart, yStartMin, xEnde - 3, yDifferenz - 1, true);
                         } else {
@@ -230,7 +228,6 @@ public class kalenderPanel extends JXPanel {
                         }
                         break;
                     }
-                    // Wenn Rezeptnummer leer und Name leer
                     if ((sReznr.trim()
                                .isEmpty())
                             && (sName.trim()
@@ -241,7 +238,6 @@ public class kalenderPanel extends JXPanel {
                         g2d.drawString(sStart.substring(0, 5), 5, (baseline));
                         break;
                     }
-                    // Wenn Rezeptnummer mit @FREI belegt
                     if (sReznr.contains("@FREI")) {
                         g2d.setColor(SystemConfig.aktTkCol.get("AusserAZ")[0]);
                         g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
@@ -250,7 +246,6 @@ public class kalenderPanel extends JXPanel {
 
                         break;
                     }
-                    // Wenn Rezeptnummer @INTERN ist und der Name -RTA- enthält
                     if (sReznr.contains("@INTERN") && sName.contains("-RTA-")) {
                         g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[0]);
                         g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
@@ -258,7 +253,6 @@ public class kalenderPanel extends JXPanel {
                         g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
                         break;
                     }
-                    // Wenn Rezeptnummer kleiner als zwei Zeichen ist und der Name nicht leer ist
                     if ((sReznr.trim()
                                .length() <= 2)
                             && (!sName.trim()
@@ -269,11 +263,16 @@ public class kalenderPanel extends JXPanel {
                             g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
                             g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[1]);
                             g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
+
+                        } else {
+                            g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[0]);
+                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
+                            g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[1]);
+                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
                             break;
                         }
                     }
 
-                    // Wenn Rezeptnummer kleiner als zwei Zeichen ist und der Name leer ist
                     if ((sReznr.length() <= 2) && (sName.isEmpty())) {
                         if (sReznr.trim()
                                   .startsWith("RH")) {
@@ -281,31 +280,27 @@ public class kalenderPanel extends JXPanel {
                             g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
                             g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[1]);
                             g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
+
+                        } else {
+                            g2d.setColor(SystemConfig.aktTkCol.get("Freitermin")[0]);
+                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
+                            g2d.setColor(SystemConfig.aktTkCol.get("unvollst")[1]);
+                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
+                        }
+                        break;
+                    }
+                    /*************************************/
+                    if (sReznr.contains("\\")) {
+                        String letter = extractColLetter(sReznr);
+                        Color[] colors = SystemConfig.aktTkCol.get("Col" + letter);
+                        if (colors != null) {
+                            g2d.setColor(colors[0]);
+                            g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
+                            g2d.setColor(colors[1]);
+                            g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
                             break;
                         }
                     }
-                    /*************************************/
-                    // ab hier die Definitionen mit den Farbsignalen
-                    int indexOf = sReznr.indexOf("\\");
-                    if ((indexOf != -1) && sReznr.length() > (indexOf + 1)) {
-                        String colcode = sReznr.substring(indexOf + 1)
-                                               .trim();
-
-                        Color[] value = SystemConfig.aktTkCol.get("Col" + colcode);
-                        Color[] colors = defaultColors;
-                        if (value == null ) {
-                            logger.error("Colorcode " + colcode +" nicht gefunden. Benutze Defaultfarben");
-                        }else {
-                            colors = value;
-                        }
-
-                        g2d.setColor(colors[0]);
-                        g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                        g2d.setColor(colors[1]);
-                        g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
-                        break;
-                    }
-
                     // Sonderprogramm für Rehatermine
                     if (sReznr.contains("RH")) {
                         g2d.setColor(SystemConfig.aktTkCol.get("Rehapat")[0]);
@@ -314,6 +309,7 @@ public class kalenderPanel extends JXPanel {
                         g2d.drawString(sStart.substring(0, 5) + "-" + sName, 5, (baseline));
                         break;
                     }
+                    // Sonderprogramm für Rehatermine
                     if (dauer == 15) {
                         g2d.setColor(SystemConfig.aktTkCol.get("15min")[0]);
                         g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
@@ -420,6 +416,16 @@ public class kalenderPanel extends JXPanel {
 
     }
 
+    String extractColLetter(String sReznr) {
+
+        try {
+            return sReznr.substring(sReznr.indexOf("\\") + 1, sReznr.indexOf("\\") + 2);
+        } catch (Exception e) {
+            logger.error("bad things happen here", e);
+            return "";
+        }
+    }
+
     public void setShowTimeLine(boolean show) {
         this.showTimeLine = show;
     }
@@ -435,7 +441,6 @@ public class kalenderPanel extends JXPanel {
             dat.addElement(((ArrayList) vect.get(therapeut)).get(4));
             dat.addElement(((ArrayList) vect.get(therapeut)).get(5));
             anzahl = ((Vector) dat.get(0)).size();
-            //// System.out.println("Vektor-Gr��e="+anzahl);
         } else {
             anzahl = 0;
         }
@@ -456,12 +461,6 @@ public class kalenderPanel extends JXPanel {
         positionScreen[2] = posInScreen.x + this.getWidth();
         positionScreen[3] = posInScreen.y + this.getHeight();
         this.repaint();
-    }
-
-    private Image skaliereImage(int faktor) {
-        Image skal = this.dragImage.getImage()
-                                   .getScaledInstance(faktor - 2, faktor - 2, Image.SCALE_FAST);
-        return skal;
     }
 
     public int[] getPosInScreen() {
@@ -504,7 +503,6 @@ public class kalenderPanel extends JXPanel {
                     ret[1] = i;
                     ret[0] = i;
                     break;
-                } else if (!this.spalteAktiv) {
                 }
             }
         }
@@ -649,6 +647,7 @@ public class kalenderPanel extends JXPanel {
         sEnde = (String) ((Vector) dat.get(4)).get(this.gruppe[1]);
         dauer = (int) ZeitFunk.ZeitDifferenzInMinuten(sStart, sEnde);
 
+
         fStartPix = (yStartMin) * fPixelProMinute;
         yStartMin = ((int) (fStartPix));
 
@@ -701,4 +700,5 @@ public class kalenderPanel extends JXPanel {
         return dragImage2;
     }
 
+    /********* Klassen-ENDE-Klammer **************/
 }
