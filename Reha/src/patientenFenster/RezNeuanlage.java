@@ -14,6 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Vector;
 import java.util.regex.Pattern;
@@ -169,7 +170,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     public boolean feldergefuellt = false;
     private String nummer = null;
     private String rezKlasse = null;
-    private String[] farbcodes = new String[27];
+    private ArrayList<String> farbcodes = new ArrayList<>();
 
 
     private String aktuelleDisziplin = "";
@@ -267,15 +268,16 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
     public void macheFarbcodes() {
         try {
-            farbcodes[0] = "kein Farbcode";
-            jcmb[cFARBCOD].addItem(farbcodes[0]);
+            farbcodes.add("kein Farbcode");
+            jcmb[cFARBCOD].addItem(farbcodes.get(0));
             Vector<String> farbnamen = SystemConfig.vSysColsNamen;
             for (int i = 0; i < farbnamen.size(); i++) {
                 if (farbnamen.get(i).startsWith("Col")) {
-                farbcodes[i + 1] = SystemConfig.vSysColsBedeut.get(i);
+                String bedeutung = SystemConfig.vSysColsBedeut.get(i);
+                farbcodes.add(bedeutung);
 
 
-                jcmb[cFARBCOD].addItem(farbcodes[i + 1]);
+                jcmb[cFARBCOD].addItem(bedeutung);
                 }
             }
             if (!this.neu) {
