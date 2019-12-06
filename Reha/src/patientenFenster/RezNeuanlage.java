@@ -169,7 +169,8 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     public boolean feldergefuellt = false;
     private String nummer = null;
     private String rezKlasse = null;
-    private String[] farbcodes = { null, null, null, null, null, null, null, null, null, null };
+    private String[] farbcodes = new String[27];
+
 
     private String aktuelleDisziplin = "";
     private int preisgruppen[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -209,7 +210,6 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             this.feldname = sfeldname;
             this.vec = vec; // Lemmi 20110106 Wird auch fuer das Kopieren verwendet !!!!
             myRezept = new Rezept();
-//            myRezept.init("KG18330");    // Bsp.
             myRezept.setVec_rez(vec);
             diszis = new Disziplinen();
 
@@ -269,10 +269,14 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
         try {
             farbcodes[0] = "kein Farbcode";
             jcmb[cFARBCOD].addItem(farbcodes[0]);
+            Vector<String> farbnamen = SystemConfig.vSysColsNamen;
+            for (int i = 0; i < farbnamen.size(); i++) {
+                if (farbnamen.get(i).startsWith("Col")) {
+                farbcodes[i + 1] = SystemConfig.vSysColsBedeut.get(i);
 
-            for (int i = 0; i < 9; i++) {
-                farbcodes[i + 1] = SystemConfig.vSysColsBedeut.get(i + 14);
+
                 jcmb[cFARBCOD].addItem(farbcodes[i + 1]);
+                }
             }
             if (!this.neu) {
                 int itest = myRezept.getFarbCode();
@@ -1204,7 +1208,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     }
 
     /*
-     * Test Rezeptdatum 
+     * Test Rezeptdatum
      */
     private boolean neuDateTest() {
         long dattest = DatFunk.TageDifferenz(DatFunk.sHeute(), jtf[cREZDAT].getText()
