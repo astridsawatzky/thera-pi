@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swingx-1.6.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swing-worker.jar"/>
@@ -24,5 +25,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/sandbox.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
 	<classpathentry kind="src" path="/datenbank"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/filesystem"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
