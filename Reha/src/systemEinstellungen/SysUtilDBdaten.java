@@ -28,7 +28,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JRtaTextField;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;
 

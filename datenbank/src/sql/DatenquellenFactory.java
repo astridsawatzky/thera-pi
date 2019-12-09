@@ -11,17 +11,12 @@ public class DatenquellenFactory {
     private static final ConcurrentMap<IK, Datenquelle> grube = new ConcurrentHashMap<>();
     private IK ik;
 
-    public DatenquellenFactory() {
+    public DatenquellenFactory(IK ik) {
+        this.ik = ik;
     }
 
-     public DatenquellenFactory with(IK ik) {
-         this.ik = ik;
-         return this;
-     }
-
-
      public Connection createConnection() throws SQLException {
-         grube.computeIfAbsent(ik,k -> new Datenquelle(k));
+         grube.computeIfAbsent(ik,k -> new Datenquelle(ik.digitString()));
             return grube.get(ik).connection();
      }
 

@@ -29,7 +29,6 @@
  */
 package therapiHilfe;
 
-import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.BorderFactory;

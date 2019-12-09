@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/sql/mysql-connector-java-5.1.5-bin.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swing-worker.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/swingx/swingx-1.6.jar"/>
+	<classpathentry kind="src" path="/datenbank"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -14,7 +14,7 @@ public class DatenquelleTest {
     public void constructor() throws SQLException {
 
         IK ik = new IK("123456789");
-        Datenquelle dq = new Datenquelle(ik);
+        Datenquelle dq = new Datenquelle(ik.digitString());
         assertFalse(dq.connection()
                       .isClosed());
         dq.connection()

@@ -50,13 +50,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.INIFile;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import environment.Path;
 
 public class UpdatePanel extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 8445390544969581869L;
     private static final String PROGHOME = Path.Instance.getProghome();
@@ -862,7 +862,7 @@ public class UpdatePanel extends JXPanel {
 
     class UpdateTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 

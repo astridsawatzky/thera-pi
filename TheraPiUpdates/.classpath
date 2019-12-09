@@ -11,5 +11,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/apachecommons/commons-net-3.4.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/sql/jpmdbc.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
+	<classpathentry kind="src" path="/datenbank"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

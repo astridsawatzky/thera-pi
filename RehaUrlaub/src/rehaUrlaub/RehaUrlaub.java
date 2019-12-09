@@ -18,10 +18,10 @@ import org.jdesktop.swingworker.SwingWorker;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
+import crypt.Verschluesseln;
 import logging.Logging;
 
 public class RehaUrlaub implements WindowListener {
@@ -45,8 +45,8 @@ public class RehaUrlaub implements WindowListener {
     /*
      * public static String dbIpAndName = null; public static String dbUser = null;
      * public static String dbPassword = null;
-     * 
-     * 
+     *
+     *
      */
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -224,7 +224,7 @@ public class RehaUrlaub implements WindowListener {
     }
 
     /**********************************************************
-     * 
+     *
      */
     final class DatenbankStarten implements Runnable {
         private void StarteDB() {
@@ -280,7 +280,7 @@ public class RehaUrlaub implements WindowListener {
     }
 
     /*****************************************************************
-     * 
+     *
      */
 
     @Override

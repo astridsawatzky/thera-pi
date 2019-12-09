@@ -28,7 +28,7 @@ public class ICDrahmen implements Runnable {
         } else {
             ik = new IK("123456789");
         }
-        Connection conn = new DatenquellenFactory().with(ik).createConnection();
+        Connection conn = new DatenquellenFactory(ik).createConnection();
         System.out.println(conn.isClosed());
         ICDrahmen icd = new ICDrahmen(conn);
         icd.getJFrame();
@@ -58,8 +58,8 @@ public class ICDrahmen implements Runnable {
         jFrame.setPreferredSize(new Dimension(xWidth, yWidth));
         jFrame.setTitle("ICD-Recherche");
         jFrame.setContentPane(new ICDoberflaeche(new SqlInfo(conn)));
-        
-        Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize(); 
+
+        Dimension screensize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
         xPos = (int)(screensize.getWidth()/2 - xWidth/2 - 50);
         jFrame.setLocation(xPos, yPos);
 

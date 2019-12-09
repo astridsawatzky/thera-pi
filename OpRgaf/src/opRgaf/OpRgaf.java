@@ -21,11 +21,11 @@ import org.jdesktop.swingworker.SwingWorker;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import CommonTools.Verschluesseln;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
 
@@ -178,7 +178,7 @@ public class OpRgaf implements WindowListener {
         jFrame = new JFrame() {
 
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -289,7 +289,7 @@ public class OpRgaf implements WindowListener {
     }
 
     /**********************************************************
-     * 
+     *
      */
     final class DatenbankStarten implements Runnable {
         private void StarteDB() {
@@ -346,7 +346,7 @@ public class OpRgaf implements WindowListener {
     }
 
     /*****************************************************************
-     * 
+     *
      */
 
     @Override

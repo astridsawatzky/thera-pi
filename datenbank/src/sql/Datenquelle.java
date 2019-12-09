@@ -9,16 +9,20 @@ import org.ini4j.Ini;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
-import CommonTools.Verschluesseln;
-import mandant.IK;
+import crypt.Verschluesseln;
 
 public class Datenquelle {
 
     private static final String DATEN_BANK = "DatenBank";
     MysqlDataSource dataSource;
 
-    Datenquelle(IK ik) {
-        File f = new File(environment.Path.Instance.getProghome() + "ini/" + ik.digitString() + "/rehajava.ini");
+    Datenquelle(String digitString) {
+        initialize(digitString);
+
+    }
+
+    private void initialize(String digitString) {
+        File f = new File(environment.Path.Instance.getProghome() + "ini/" + digitString + "/rehajava.ini");
         Ini ini;
         try {
             ini = new Ini(f);
@@ -32,7 +36,6 @@ public class Datenquelle {
         String pw = Verschluesseln.getInstance()
                                   .decrypt(ini.get(DATEN_BANK, "DBPasswort1"));
         dataSource.setPassword(pw);
-
     }
 
     public Connection connection() throws SQLException {

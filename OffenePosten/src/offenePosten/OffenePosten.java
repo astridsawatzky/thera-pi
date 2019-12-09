@@ -24,11 +24,11 @@ import CommonTools.INITool;
 import CommonTools.OpCommon;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import CommonTools.Verschluesseln;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
 
@@ -49,8 +49,8 @@ public class OffenePosten implements WindowListener {
     /*
      * public static String dbIpAndName = null; public static String dbUser = null;
      * public static String dbPassword = null;
-     * 
-     * 
+     *
+     *
      */
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -196,22 +196,22 @@ public class OffenePosten implements WindowListener {
                          * if(forms.indexOf("/") > 0){ forms =
                          * forms.substring(forms.lastIndexOf("/")+1); } mahnParameter.put("formular1",
                          * (String) progHome+"vorlagen/"+aktIK+"/"+forms );
-                         * 
+                         *
                          * forms = oinif.getStringProperty("General","FormularMahnung2") ;
                          * if(forms.indexOf("/") > 0){ forms =
                          * forms.substring(forms.lastIndexOf("/")+1); } mahnParameter.put("formular2",
                          * (String) progHome+"vorlagen/"+aktIK+"/"+forms );
-                         * 
+                         *
                          * forms = oinif.getStringProperty("General","FormularMahnung3") ;
                          * if(forms.indexOf("/") > 0){ forms =
                          * forms.substring(forms.lastIndexOf("/")+1); } mahnParameter.put("formular3",
                          * (String) progHome+"vorlagen/"+aktIK+"/"+forms );
-                         * 
+                         *
                          * forms = oinif.getStringProperty("General","FormularMahnung4") ;
                          * if(forms.indexOf("/") > 0){ forms =
                          * forms.substring(forms.lastIndexOf("/")+1); } mahnParameter.put("formular4",
                          * (String) progHome+"vorlagen/"+aktIK+"/"+forms );
-                         * 
+                         *
                          */
                         // System.out.println(mahnParameter.get("formular1"));
                         // System.out.println(mahnParameter.get("formular2"));
@@ -605,11 +605,11 @@ public class OffenePosten implements WindowListener {
          * config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY, new String[]
          * {"--nodefault","--nologo", "--nofirststartwizard", "--nocrashreport",
          * "--norestore" });
-         * 
+         *
          * }else{ config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY, new String[]
          * {"-nodefault","-nologo", "-nofirststartwizard", "-nocrashreport",
          * "-norestore" });
-         * 
+         *
          * } System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH,path); try{
          * officeapplication = OfficeApplicationRuntime.getApplication(config);
          * }catch(NullPointerException ex){ ex.printStackTrace(); }
@@ -622,7 +622,7 @@ public class OffenePosten implements WindowListener {
          * e.printStackTrace(); } catch (OfficeApplicationException e) {
          * e.printStackTrace(); } } }); }catch(NullPointerException ex){
          * ex.printStackTrace(); }
-         * 
+         *
          * }catch (OfficeApplicationException e) { e.printStackTrace(); }
          */
 

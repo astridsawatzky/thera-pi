@@ -11,7 +11,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import logging.Logging;
 
 public class LVArahmen implements WindowListener {

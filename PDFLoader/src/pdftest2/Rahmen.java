@@ -8,11 +8,11 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 
 import CommonTools.INIFile;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 
 public class Rahmen extends JApplet {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2251834036922672353L;
     public static boolean DbOk;

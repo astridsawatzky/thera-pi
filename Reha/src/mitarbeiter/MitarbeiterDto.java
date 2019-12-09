@@ -31,7 +31,7 @@ public class MitarbeiterDto {
     List<Mitarbeiter> all() {
 
         List<Mitarbeiter> mitarbeiterListe = new LinkedList<Mitarbeiter>();
-        try (Connection con = new DatenquellenFactory().with(ik)
+        try (Connection con = new DatenquellenFactory(ik)
                                                        .createConnection();) {
             ResultSet rs = con.createStatement()
                               .executeQuery(SelectAllSql);
@@ -51,7 +51,7 @@ public class MitarbeiterDto {
     public Optional<Mitarbeiter> byMatchcode(String matchcode) {
         String sql = "SELECT * FROM kollegen2 WHERE matchcode LIKE '" + matchcode + "';";
         Mitarbeiter mitarbeiter = null;
-        try (Connection con = new DatenquellenFactory().with(ik)
+        try (Connection con = new DatenquellenFactory(ik)
                                                        .createConnection();
 
                 ResultSet rs = con.createStatement()
@@ -109,7 +109,7 @@ public class MitarbeiterDto {
                                                             .collect(Collectors.toList());
         logger.debug("updating " + mitarbeiterUpdateSql.size() + " Mitarbeiter in Database");
 
-        try (Connection con = new DatenquellenFactory().with(ik)
+        try (Connection con = new DatenquellenFactory(ik)
                                                        .createConnection();
                 Statement stmt = con.createStatement()) {
 
@@ -124,7 +124,7 @@ public class MitarbeiterDto {
         List<Mitarbeiter> list = mitarbeiterparts.get(true);
         logger.debug("inserting " + list.size() + " Mitarbeiter into Database");
 
-        try (Connection con = new DatenquellenFactory().with(ik)
+        try (Connection con = new DatenquellenFactory(ik)
                                                        .createConnection();
                 Statement statement = con.createStatement();) {
 

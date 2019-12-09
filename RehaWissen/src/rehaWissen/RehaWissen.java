@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import environment.SWTJarLoader;
-import logging.Logging;
 import rtaWissen.BrowserFenster;
 
 public class RehaWissen {

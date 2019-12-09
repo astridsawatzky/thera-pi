@@ -23,5 +23,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Nebraska"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
+	<classpathentry kind="src" path="/datenbank"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

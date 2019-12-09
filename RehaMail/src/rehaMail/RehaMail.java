@@ -31,11 +31,11 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import CommonTools.Verschluesseln;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
 

@@ -29,13 +29,13 @@ import CommonTools.Colors;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import CommonTools.Verschluesseln;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import crypt.Verschluesseln;
 import environment.SWTJarLoader;
 import io.RehaIOMessages;
 import logging.Logging;
@@ -265,7 +265,7 @@ public class RehaHMK implements WindowListener {
         jFrame = new JFrame() {
 
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -416,7 +416,7 @@ public class RehaHMK implements WindowListener {
     }
 
     /**********************************************************
-     * 
+     *
      */
     final class DatenbankStarten implements Runnable {
         private void StarteDB() {

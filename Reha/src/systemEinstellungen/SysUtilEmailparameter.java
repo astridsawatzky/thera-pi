@@ -28,7 +28,7 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import emailHandling.EmailSendenExtern;
 import environment.Path;
 import hauptFenster.Reha;

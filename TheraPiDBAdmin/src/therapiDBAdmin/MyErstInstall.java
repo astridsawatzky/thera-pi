@@ -29,12 +29,12 @@ import org.jdesktop.swingx.JXTitledPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 
 public class MyErstInstall extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -7924459762623527461L;
 
@@ -132,19 +132,19 @@ public class MyErstInstall extends JXPanel {
          * JFormattedTextField("192.168.1.100");
          * tfs[2].setToolTipText("hier bitte die Adresse des MySql-Servers eingeben");
          * pan.add(tfs[2],cc.xy(4, 8));
-         * 
+         *
          * pan.add(new
          * JLabel("Name der Datenbank"),cc.xy(2,10,CellConstraints.RIGHT,CellConstraints
          * .DEFAULT)); tfs[3] = new JFormattedTextField("kgprax");
          * tfs[3].setToolTipText("hier bitte den Datenbanknamen eingeben");
          * pan.add(tfs[3],cc.xy(4, 10));
-         * 
+         *
          * pan.add(new
          * JLabel("Name des Datenbank-Users"),cc.xy(2,12,CellConstraints.RIGHT,
          * CellConstraints.DEFAULT)); tfs[4] = new JFormattedTextField("kgprax");
          * tfs[4].setToolTipText("hier bitte den DB-Usernamens");
          * pan.add(tfs[4],cc.xy(4, 12));
-         * 
+         *
          * pan.add(new
          * JLabel("Passwort des Datenbank-Users"),cc.xy(2,14,CellConstraints.RIGHT,
          * CellConstraints.DEFAULT)); tfs[5] = new JFormattedTextField("ganzgeheim");

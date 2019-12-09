@@ -28,7 +28,6 @@ import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
 import chrriis.dj.nativeswing.swtimpl.components.WebBrowserNavigationEvent;
 import environment.Path;
-import rehaWissen.RehaWissen;
 
 public class RtaWissen extends JXPanel implements KeyListener, ComponentListener, ActionListener, AncestorListener {
     /**

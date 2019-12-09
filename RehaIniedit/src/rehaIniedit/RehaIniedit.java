@@ -15,7 +15,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import logging.Logging;
 
 public class RehaIniedit implements WindowListener {
@@ -94,7 +94,7 @@ public class RehaIniedit implements WindowListener {
         jFrame = new JFrame() {
 
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

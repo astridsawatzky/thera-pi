@@ -8,7 +8,6 @@ import java.awt.event.ComponentEvent;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -45,8 +44,6 @@ import ag.ion.bion.officelayer.filter.HTMLFilter;
 import ag.ion.bion.officelayer.internal.application.ApplicationAssistant;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.web.IWebDocument;
-import ag.ion.noa.NOAException;
-import ag.ion.noa.frame.ILayoutManager;
 
 public class ooPanel {
 

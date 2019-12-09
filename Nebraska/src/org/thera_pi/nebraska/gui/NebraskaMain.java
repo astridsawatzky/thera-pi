@@ -14,9 +14,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
-import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
+import crypt.Verschluesseln;
 
 public class NebraskaMain {
     public static IOfficeApplication officeapplication;

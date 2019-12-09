@@ -30,5 +30,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/unoil.jar"/>
 	<classpathentry kind="lib" path="/Libraries/lib/openofficeorg/unoloader.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
+	<classpathentry kind="src" path="/datenbank"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

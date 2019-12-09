@@ -15,7 +15,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
@@ -46,7 +45,6 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import Suchen.ICDrahmen;
 import abrechnung.Disziplinen;
 import commonData.Rezept;
 import environment.LadeProg;

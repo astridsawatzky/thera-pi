@@ -78,7 +78,7 @@ import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 import CommonTools.INIFile;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import environment.Path;
 import logging.Logging;
 

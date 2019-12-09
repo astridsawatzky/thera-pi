@@ -1,4 +1,4 @@
-package CommonTools;
+package crypt;
 
 import java.util.Base64;
 import java.util.Base64.Decoder;

@@ -12,7 +12,7 @@ import org.ini4j.Ini;
 
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import mandant.Mandant;
 
 public class RehaSettings {

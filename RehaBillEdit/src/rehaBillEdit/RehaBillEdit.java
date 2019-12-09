@@ -17,7 +17,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.INIFile;
-import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
@@ -25,6 +24,7 @@ import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.ITerminateEvent;
 import ag.ion.bion.officelayer.event.VetoTerminateListener;
+import crypt.Verschluesseln;
 
 public class RehaBillEdit implements WindowListener {
 
@@ -46,8 +46,8 @@ public class RehaBillEdit implements WindowListener {
     /*
      * public static String dbIpAndName = null; public static String dbUser = null;
      * public static String dbPassword = null;
-     * 
-     * 
+     *
+     *
      */
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -197,7 +197,7 @@ public class RehaBillEdit implements WindowListener {
     }
 
     /**********************************************************
-     * 
+     *
      */
     final class DatenbankStarten implements Runnable {
         private void StarteDB() {
@@ -252,7 +252,7 @@ public class RehaBillEdit implements WindowListener {
     }
 
     /*****************************************************************
-     * 
+     *
      */
 
     @Override
@@ -371,7 +371,7 @@ public class RehaBillEdit implements WindowListener {
          * inif.getStringProperty("KeyStores", "KeyStorePw"+Integer.toString(i+1));
          * decrypted = man.decrypt(pw); hmAbrechnung.put("hmkeystorepw", decrypted);
          * break; } }
-         * 
+         *
          * }catch(Exception ex){ JOptionPane.showMessageDialog(
          * null,"Zertifikatsdatenbank nicht vorhanden oder fehlerhaft.\nAbrechnung nach § 302 kann nicht durchgeführt werden."
          * ); }

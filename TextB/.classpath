@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="/Libraries/lib/jgoodies/jgoodies-common-0.9.9.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
 	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/junit-4.12.jar"/>
+	<classpathentry kind="src" path="/datenbank"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

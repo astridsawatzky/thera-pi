@@ -19,9 +19,9 @@ import org.jdesktop.swingworker.SwingWorker;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import CommonTools.Verschluesseln;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
+import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
 
@@ -38,7 +38,7 @@ public class Reha301 implements WindowListener {
     /*
      * public static String dbIpAndName = null; public static String dbUser = null;
      * public static String dbPassword = null;
-     * 
+     *
      */
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -165,7 +165,7 @@ public class Reha301 implements WindowListener {
         } else {
             /*
              * final Reha301 xapplication = application; new SwingWorker<Void,Void>(){
-             * 
+             *
              * @Override protected Void doInBackground() throws java.lang.Exception {
              * xapplication.starteDB(); long zeit = System.currentTimeMillis(); while(!
              * DbOk){ try { Thread.sleep(20); if(System.currentTimeMillis()-zeit > 5000){
@@ -173,7 +173,7 @@ public class Reha301 implements WindowListener {
              * if(!DbOk){ JOptionPane.showMessageDialog(null,
              * "Datenbank konnte nicht ge�ffnet werden!\nReha-Sql kann nicht gestartet werden"
              * ); } Reha301.starteOfficeApplication(); return null; }
-             * 
+             *
              * }.execute(); application.getJFrame();
              */
 
@@ -203,7 +203,7 @@ public class Reha301 implements WindowListener {
         jFrame = new JFrame() {
 
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -316,7 +316,7 @@ public class Reha301 implements WindowListener {
     }
 
     /**********************************************************
-     * 
+     *
      */
     final class DatenbankStarten implements Runnable {
         private void StarteDB() {
@@ -374,10 +374,10 @@ public class Reha301 implements WindowListener {
     }
 
     /*****************************************************************
-     * 
+     *
      */
     /**********************************************************
-     * 
+     *
      */
 
     @Override

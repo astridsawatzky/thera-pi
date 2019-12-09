@@ -48,7 +48,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.JRtaTextField;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import nebraska.BCStatics2;
 import nebraska.FileStatics;
 import nebraska.Nebraska;

@@ -51,7 +51,7 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import CommonTools.Verschluesseln;
+import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;
 import rehaInternalFrame.JBenutzerInternal;
