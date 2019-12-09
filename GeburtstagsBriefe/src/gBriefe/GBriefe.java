@@ -17,7 +17,6 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,15 +38,12 @@ import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.event.ITerminateEvent;
 import ag.ion.bion.officelayer.event.VetoTerminateListener;
-import crypt.Verschluesseln;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class GBriefe implements WindowStateListener, WindowListener, ComponentListener, ContainerListener {
-    public static String proghome;
-    public static String dbtreiber;
-    public static String dblogin;
-    public static String dbuser;
-    public static String dbpassword;
+
+
     public static String aktIK;
     public static String tempvz;
     public static String vorlagenvz;
@@ -68,14 +64,19 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
     public static IOfficeApplication officeapplication;
     public static boolean warten = true;
     public JXPanel contpan = null;
+
+    private String dblogin;
     public static RehaSockServer RehaSock = null;
 
     public static boolean testcase = false;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         new Logging("gbriefe");
+
+        String ikZiffern=args[1];
+        conn= new DatenquellenFactory(ikZiffern).createConnection();
         GBriefe application = new GBriefe();
-        String prog = java.lang.System.getProperty("user.dir");
+        String proghome = environment.Path.Instance.getProghome();
         try {
             UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
         } catch (ClassNotFoundException e1) {
@@ -92,19 +93,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
             e1.printStackTrace();
         }
         INIFile inif = null;
-        if (args.length <= 0 || testcase) {
-            int ind = prog.indexOf("GeburtstagsBriefe");
-            if (ind >= 0) {
-                prog = prog.substring(0, ind);
-            }
-            proghome = prog.replace('\\', '/');
-            if (!proghome.substring(proghome.length() - 1)
-                         .equals("/")) {
-                proghome = proghome + '/';
-            }
-        } else {
-            proghome = args[0];
-        }
+
 
         /**************************/
         new Thread() {
@@ -145,15 +134,9 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
         if (args.length > 0 || testcase) {
             System.out.println("Programmverzeichnis = " + proghome);
             inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-            dbtreiber = new String(inif.getStringProperty("DatenBank", "DBTreiber1"));
-            dblogin = new String(inif.getStringProperty("DatenBank", "DBKontakt1"));
-            dbuser = new String(inif.getStringProperty("DatenBank", "DBBenutzer1"));
 
-            String pw = new String(inif.getStringProperty("DatenBank", "DBPasswort1"));
-            Verschluesseln man = Verschluesseln.getInstance();
-            man = Verschluesseln.getInstance();
-            String decrypted = man.decrypt(pw);
-            dbpassword = new String(decrypted);
+
+
             tempvz = args[0] + "temp/" + args[1] + "/"; // new String(inif.getStringProperty("GBriefe", "TempVZ"));
             vorlagenvz = args[0] + "vorlagen/" + args[1] + "/"; // new String(inif.getStringProperty("GBriefe",
                                                                 // "VorlagenVZ"));
@@ -164,15 +147,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
         } else {
             System.out.println("Programmverzeichnis = " + proghome);
             inif = new INIFile(proghome + "ini/gbriefe.ini");
-            dbtreiber = new String(inif.getStringProperty("GBriefe", "DBTreiber"));
-            dblogin = new String(inif.getStringProperty("GBriefe", "DBLogin"));
-            dbuser = new String(inif.getStringProperty("GBriefe", "DBUser"));
 
-            String pw = new String(inif.getStringProperty("GBriefe", "DBPassword"));
-            Verschluesseln man = Verschluesseln.getInstance();
-            man = Verschluesseln.getInstance();
-            String decrypted = man.decrypt(pw);
-            dbpassword = new String(decrypted);
             tempvz = new String(inif.getStringProperty("GBriefe", "TempVZ"));
             vorlagenvz = new String(inif.getStringProperty("GBriefe", "VorlagenVZ"));
             OpenOfficePfad = new String(inif.getStringProperty("GBriefe", "OOPfad"));
@@ -223,8 +198,6 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
             jFrame.pack();
             new OOoPanel(jpan);
 
-            DatenbankStarten db = new DatenbankStarten();
-            db.StarteDB();
 
             jFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             // jFrame.setExtendedState(JXFrame.MAXIMIZED_BOTH);
@@ -348,6 +321,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
             System.out.println(GBriefe.OpenOfficePfad);
             System.out.println(GBriefe.OfficeNativePfad);
             String path = OPEN_OFFICE_ORG_PATH;
+
             Map<String, String> config = new HashMap<String, String>();
             config.put(IOfficeApplication.APPLICATION_HOME_KEY, path);
             config.put(IOfficeApplication.APPLICATION_TYPE_KEY, IOfficeApplication.LOCAL_APPLICATION);
@@ -391,62 +365,6 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 
 }
 
-/*************************************/
-final class DatenbankStarten implements Runnable {
-
-    void StarteDB() {
-        final GBriefe obj = GBriefe.thisClass;
-
-        final String sDB = "SQL";
-        if (GBriefe.conn != null) {
-            try {
-                GBriefe.conn.close();
-            } catch (final SQLException e) {
-            }
-        }
-        try {
-
-            // Class.forName("com.extendedsystems.jdbc.advantage.ADSDriver").newInstance();
-            System.out.println("new Instace() " + GBriefe.dbtreiber);
-            Class.forName(GBriefe.dbtreiber)
-                 .newInstance();
-            GBriefe.DbOk = true;
-        } catch (final Exception e) {
-            System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-            GBriefe.DbOk = false;
-            return;
-        }
-        try {
-            // GBriefe.conn = (Connection)
-            // DriverManager.getConnection("G:\\rta\\dbf"+";TableType=cdx","","");
-            // GBriefe.conn = (Connection)
-            // DriverManager.getConnection(GBriefe.adsconnection+";TableType=cdx","","");
-            // GBriefe.conn = (Connection)
-            // DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.1.101:2000/programme;TableType=cdx","","");
-            // GBriefe.conn = (Connection)
-            // DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.2.3:2000/programme;TableType=cdx","","");
-            // GBriefe.conn = (Connection)
-            // DriverManager.getConnection("jdbc:extendedsystems:advantage://192.168.2.3:2000/programme/projekte/rta/dbf;TableType=cdx","","");
-
-            GBriefe.conn = DriverManager.getConnection(GBriefe.dblogin, GBriefe.dbuser, GBriefe.dbpassword);
-
-        } catch (final SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-            GBriefe.DbOk = false;
-            return;
-        }
-        System.out.println("Datenbank - gestartet = " + GBriefe.dblogin);
-        return;
-    }
-
-    @Override
-    public void run() {
-        int i = 0;
-        StarteDB();
-    }
-}
 
 class SocketClient {
     String stand = "";

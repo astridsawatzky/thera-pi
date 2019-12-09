@@ -43,6 +43,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
+import environment.Path;
 
 public class SteuerPanel extends JXPanel implements ActionListener, MouseListener, KeyListener {
     public JFormattedTextField[] jtf = { null, null, null, null, null };
@@ -112,7 +113,7 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
             // img = (BufferedImage) new ImageIcon(ImageIO.read(new
             // File(GBriefe.proghome+"icons/rta.gif"))).getImage();
             img = (BufferedImage) new ImageIcon(
-                    ImageIO.read(new File(GBriefe.proghome + "icons/handschlag.gif"))).getImage();
+                    ImageIO.read(new File(Path.Instance.getProghome() + "icons/handschlag.gif"))).getImage();
         } catch (IOException e) {
 
             e.printStackTrace();
@@ -408,19 +409,19 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
                  * null,"Keine Anrede im Patientenstamm verhanden.\nBrief wird nicht gedruckt!!!"
                  * ); return; } if(nachtraeglich){ if(alter > 13){ datei = doku1+sex+"N.ott";
                  * }else{ datei = doku1+"KN.ott"; }
-                 * 
+                 *
                  * }else{ if(alter > 13){ datei = doku1+sex+"A.ott"; }else{ datei =
                  * doku1+"KA.ott"; }
-                 * 
+                 *
                  * } //System.out.println("Alter = "+alter+" / Datei die geladen wird "+datei);
                  * final String xdatei = datei; new SwingWorker<Void,Void>(){
-                 * 
+                 *
                  * @Override protected Void doInBackground() throws Exception {
-                 * 
+                 *
                  * //System.out.println(dtblm.getDataVector().get(jtab.getSelectedRow()));
                  * OOoPanel.thisClass.dokumentLaden(xdatei,(Vector)dtblm.getDataVector().get(
                  * jtab.getSelectedRow()),direktPrint.isSelected()); return null; }
-                 * 
+                 *
                  * }.execute();
                  */
             }
@@ -530,7 +531,7 @@ public class SteuerPanel extends JXPanel implements ActionListener, MouseListene
 
 class MyGbTableModel extends DefaultTableModel {
     /**
-    * 
+    *
     */
     private static final long serialVersionUID = 1L;
 
