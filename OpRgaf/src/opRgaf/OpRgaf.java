@@ -26,6 +26,7 @@ import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import crypt.Verschluesseln;
+import environment.Path;
 import io.RehaIOMessages;
 import logging.Logging;
 
@@ -58,12 +59,10 @@ public class OpRgaf implements WindowListener {
 
     public String dieseMaschine = null;
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
     public static String officeProgrammPfad = "C:/Program Files (x86)/LibreOffice 3";
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome = "C:/RehaVerwaltung/";
+
     public static String aktIK = "510841109";
 
     public static HashMap<String, String> hmAbrechnung = new HashMap<String, String>();
@@ -79,6 +78,7 @@ public class OpRgaf implements WindowListener {
     public static int rehaReversePort = -1;
     public SqlInfo sqlInfo;
     public static OpRgAfIni iniOpRgAf;
+    static String proghome;
 
     public static void main(String[] args) {
         new Logging("oprgaf");
@@ -86,24 +86,15 @@ public class OpRgaf implements WindowListener {
         application.getInstance();
         application.getInstance().sqlInfo = new SqlInfo();
         if (args.length > 0 || testcase) {
+            proghome = Path.Instance.getProghome();
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                String decrypted = null;
-                if (pw != null) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    decrypted = new String("");
-                }
-                dbPassword = decrypted.toString();
+
                 inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-                progHome = args[0];
+
                 aktIK = args[1];
 
                 iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "/oprgaf.ini");
@@ -120,37 +111,13 @@ public class OpRgaf implements WindowListener {
             if (testcase) {
                 System.out.println(iniOpRgAf.getMahnParameter());
                 System.out.println("TestCase = " + testcase);
-                AbrechnungParameter(progHome);
-                FirmenDaten(progHome);
+                AbrechnungParameter(proghome);
+                FirmenDaten(proghome);
 
             }
             final OpRgaf xOpRgaf = application;
-            new SwingWorker<Void, Void>() {
-                @Override
 
-                protected Void doInBackground() throws java.lang.Exception {
-                    xOpRgaf.starteDB();
-                    long zeit = System.currentTimeMillis();
-                    while (!DbOk) {
-                        try {
-                            Thread.sleep(20);
-                            if (System.currentTimeMillis() - zeit > 10000) {
-                                System.exit(0);
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (!DbOk) {
-                        JOptionPane.showMessageDialog(null,
-                                "Datenbank konnte nicht geöffnet werden!\nReha-Statistik kann nicht gestartet werden");
-                        System.exit(0);
-                    }
-                    OpRgaf.starteOfficeApplication();
-                    return null;
-                }
 
-            }.execute();
             application.getJFrame();
         } else {
             JOptionPane.showMessageDialog(null,
@@ -231,7 +198,7 @@ public class OpRgaf implements WindowListener {
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 675);
         jFrame.setTitle("Thera-Pi  Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen u. Mahnwesen  [IK: " + aktIK
-                + "] " + "[Server-IP: " + dbIpAndName + "]");
+                + "] " + "[Server-IP: " + "dbIpAndName" + "]"); //FIXME: dpipandname
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         otab = new OpRgafTab();
@@ -240,8 +207,7 @@ public class OpRgaf implements WindowListener {
 
         jFrame.getContentPane()
               .add(otab);
-        // jFrame.setIconImage( Toolkit.getDefaultToolkit().getImage(
-        // OpRgaf.progHome+"icons/Guldiner_I.png" ) );
+
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
                                    .getImage(System.getProperty("user.dir") + File.separator + "icons" + File.separator
                                            + "Guldiner_I.png"));
@@ -270,12 +236,6 @@ public class OpRgaf implements WindowListener {
         return this;
     }
 
-    /*******************/
-
-    public void starteDB() {
-        DatenbankStarten dbstart = new DatenbankStarten();
-        dbstart.run();
-    }
 
     /*******************/
 
@@ -288,66 +248,7 @@ public class OpRgaf implements WindowListener {
         }
     }
 
-    /**********************************************************
-     *
-     */
-    final class DatenbankStarten implements Runnable {
-        private void StarteDB() {
-            final OpRgaf obj = OpRgaf.thisClass;
 
-            final String sDB = "SQL";
-            if (obj.conn != null) {
-                try {
-                    obj.conn.close();
-                } catch (final SQLException e) {
-                }
-            }
-            try {
-                Class.forName("com.mysql.jdbc.Driver")
-                     .newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                OpRgaf.DbOk = false;
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                OpRgaf.DbOk = false;
-                return;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                OpRgaf.DbOk = false;
-                return;
-            }
-            try {
-
-                obj.conn = DriverManager.getConnection(dbIpAndName + "?jdbcCompliantTruncation=false", dbUser,
-                        dbPassword);
-                OpRgaf.thisClass.sqlInfo.setConnection(obj.conn);
-                OpRgaf.DbOk = true;
-                System.out.println("Datenbankkontakt hergestellt");
-            } catch (final SQLException ex) {
-                System.out.println("SQLException: " + ex.getMessage());
-                System.out.println("SQLState: " + ex.getSQLState());
-                System.out.println("VendorError: " + ex.getErrorCode());
-                OpRgaf.DbOk = false;
-
-            }
-            return;
-        }
-
-        @Override
-        public void run() {
-            StarteDB();
-        }
-
-    }
-
-    /*****************************************************************
-     *
-     */
 
     @Override
     public void windowActivated(WindowEvent arg0) {

@@ -48,7 +48,7 @@ import ag.ion.noa.NOAException;
 
 public class AusfallRechnung extends JDialog implements WindowListener, ActionListener, KeyListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -213,7 +213,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
                 protected Void doInBackground() throws Exception {
                     try {
                         starteAusfallRechnung(
-                                OpRgaf.progHome + "vorlagen/" + OpRgaf.aktIK + "/AusfallRechnung.ott.Kopie.ott");
+                                OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/AusfallRechnung.ott.Kopie.ott");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Fehler bei der Erstellung der Ausfallrechnung");
@@ -224,7 +224,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
             }.execute();
             /*
              * new SwingWorker<Void,Void>(){
-             * 
+             *
              * @Override protected Void doInBackground() throws Exception {
              * if(leistung[4].isSelected()){ macheMemoEintrag(); } return null; }
              * }.execute(); this.dispose();
@@ -457,7 +457,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
 
 class AusfallRechnungHintergrund extends JXPanel {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     ImageIcon hgicon;

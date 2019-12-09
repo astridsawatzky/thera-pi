@@ -75,9 +75,7 @@ import io.RehaIOMessages;
 
 public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
 
-    /**
-     *
-     */
+
     private static final long serialVersionUID = -7883557713071422132L;
 
     JRtaTextField suchen = null;
@@ -167,7 +165,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         String ywerte = "15dlu,p,15dlu,160dlu:g,8dlu,p,10dlu,2dlu,p,8dlu,0dlu";
         FormLayout lay = new FormLayout(xwerte, ywerte);
         PanelBuilder builder = new PanelBuilder(lay);
-        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug mode
+
         builder.getPanel()
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
@@ -985,7 +983,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                     // System.out.println(cmd);
                     SqlInfo.sqlAusfuehren(cmd);
                     tfs[0].setText(
-                            dcf.format((Double) tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen)));
+                            dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen)));
                 }
 
             } catch (Exception ex) {
@@ -1087,7 +1085,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                 SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
 
         // System.out.println(hmRezgeb);
-        String url = OpRgaf.progHome + "vorlagen/" + OpRgaf.aktIK + "/RezeptgebuehrRechnung.ott.Kopie.ott";
+        String url = OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/RezeptgebuehrRechnung.ott.Kopie.ott";
         try {
             officeStarten(url);
         } catch (OfficeApplicationException e) {
