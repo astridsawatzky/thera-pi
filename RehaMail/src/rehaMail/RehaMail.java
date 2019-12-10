@@ -38,6 +38,7 @@ import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class RehaMail implements WindowListener {
 
@@ -57,14 +58,12 @@ public class RehaMail implements WindowListener {
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
     public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
 
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome = "C:/RehaVerwaltung/";
-    public static String aktIK = "510841109";
+    public static String progHome ;
+    public static String aktIK ;
 
     public static int xport = 7000;
     public static boolean xportOk = false;
@@ -138,19 +137,7 @@ public class RehaMail implements WindowListener {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INITool.init(args[0] + "ini/" + args[1] + "/");
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                String decrypted = null;
-                if (pw != null) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    decrypted = new String("");
-                }
-                dbPassword = decrypted.toString();
-                // inif = new INIFile(args[0]+"ini/"+args[1]+"/rehajava.ini");
-                // inif = INITool.openIni(args[0]+"ini/"+args[1]+"/","rehajava.ini");
+
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 progHome = args[0];
@@ -549,7 +536,7 @@ public class RehaMail implements WindowListener {
             }
             try {
 
-                obj.conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
+                obj.conn = new DatenquellenFactory(aktIK).createConnection();
                 RehaMail.thisClass.sqlInfo.setConnection(obj.conn);
                 RehaMail.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
