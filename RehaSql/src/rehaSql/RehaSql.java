@@ -3,10 +3,6 @@ package rehaSql;
 import static CommonTools.StringLiterals.C_PROGRAMME_OPEN_OFFICE_ORG_3;
 import static CommonTools.StringLiterals.C_REHA_VERWALTUNG;
 import static CommonTools.StringLiterals.C_REHA_VERWALTUNG_LIBRARIES_LIB_OPENOFFICEORG;
-import static CommonTools.StringLiterals.DATEN_BANK_SECTION;
-import static CommonTools.StringLiterals.JDBC_MYSQL_192_168_2_3_3306_RTADATEN;
-import static CommonTools.StringLiterals.RTACURIE;
-import static CommonTools.StringLiterals.RTAUSER;
 import static CommonTools.StringLiterals.RTA_IK;
 
 import java.awt.Toolkit;
@@ -14,7 +10,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
@@ -32,9 +27,9 @@ import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class RehaSql implements WindowListener {
 
@@ -45,9 +40,7 @@ public class RehaSql implements WindowListener {
 
     public static IOfficeApplication officeapplication;
 
-    private static String dbIpAndName = JDBC_MYSQL_192_168_2_3_3306_RTADATEN;
-    private static String dbUser = RTAUSER;
-    private static String dbPassword = RTACURIE;
+
     private static String officeProgrammPfad = C_PROGRAMME_OPEN_OFFICE_ORG_3;
     private static String officeNativePfad = C_REHA_VERWALTUNG_LIBRARIES_LIB_OPENOFFICEORG;
     static String progHome = C_REHA_VERWALTUNG;
@@ -86,12 +79,10 @@ public class RehaSql implements WindowListener {
         application.getInstance();
         application.getInstance().sqlInfo = new SqlInfo();
 
-        if (argumentsGiven) {
+
 
             start(path, aktik, application);
-        } else {
 
-        }
 
     }
 
@@ -99,18 +90,7 @@ public class RehaSql implements WindowListener {
         System.out.println("hole daten aus INI-Datei " + path);
 
         INIFile inif = new INIFile(path + "ini/" + aktik + "/rehajava.ini");
-        dbIpAndName = inif.getStringProperty(DATEN_BANK_SECTION, "DBKontakt1");
-        dbUser = inif.getStringProperty(DATEN_BANK_SECTION, "DBBenutzer1");
-        String pw = inif.getStringProperty(DATEN_BANK_SECTION, "DBPasswort1");
-        String decrypted;
-        if (pw != null) {
-            Verschluesseln man = Verschluesseln.getInstance();
-            decrypted = man.decrypt(pw);
-        } else {
-            decrypted = "";
-        }
-        dbPassword = decrypted;
-        inif = new INIFile(path + "ini/" + aktik + "/rehajava.ini");
+
         officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
         officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
         progHome = path;
@@ -203,8 +183,7 @@ public class RehaSql implements WindowListener {
         sqlInfo.setFrame(jFrame);
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 700);
-        jFrame.setTitle("Thera-Pi  Sql-Modul  [IK: " + aktIK + "] " + "[Server-IP: " + dbIpAndName
-                + "] - Äußerste Vorsicht ist geboten!!!");
+        jFrame.setTitle("Thera-Pi  Sql-Modul  [IK: " + aktIK + "]  - Äußerste Vorsicht ist geboten!!!");
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
                                    .getImage(System.getProperty("user.dir") + File.separator + "icons" + File.separator
                                            + "SQL-Modul.png"));
@@ -260,9 +239,7 @@ public class RehaSql implements WindowListener {
                 return;
             }
             try {
-                RehaSql.thisClass.conn = DriverManager.getConnection(
-                        dbIpAndName + "?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull", dbUser,
-                        dbPassword);
+                RehaSql.thisClass.conn = new DatenquellenFactory(aktIK).createConnection();
                 RehaSql.thisClass.sqlInfo.setConnection(RehaSql.thisClass.conn);
                 RehaSql.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
