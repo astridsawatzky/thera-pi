@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -13,10 +12,10 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import CommonTools.INIFile;
 import CommonTools.SqlInfo;
-import crypt.Verschluesseln;
+import environment.Path;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class RehaIniedit implements WindowListener {
 
@@ -26,9 +25,7 @@ public class RehaIniedit implements WindowListener {
     public Connection conn;
     public static RehaIniedit thisClass;
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
 
     public static String progHome = "C:/RehaVerwaltung/";
     public static String aktIK = "510841109";
@@ -57,20 +54,11 @@ public class RehaIniedit implements WindowListener {
         if (args.length > 0) {
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                String decrypted = null;
-                if (pw != null) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    decrypted = new String("");
-                }
-                dbPassword = decrypted.toString();
-                inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                progHome = args[0];
+
+
+
+
+                progHome = Path.Instance.getProghome();
                 aktIK = args[1];
             }
         }
@@ -139,7 +127,7 @@ public class RehaIniedit implements WindowListener {
         jFrame.addWindowListener(this);
         jFrame.setSize(950, 650);
         jFrame.setPreferredSize(new Dimension(950, 650));
-        String sTitle = "Thera-Pi INI-Editor --> [IK: " + aktIK + "]-" + "[Server-IP: " + dbIpAndName + "]";
+        String sTitle = "Thera-Pi INI-Editor --> [IK: " + aktIK + "]" ;
         jFrame.setTitle(sTitle);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
@@ -183,7 +171,7 @@ public class RehaIniedit implements WindowListener {
             }
             try {
 
-                obj.conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
+                obj.conn = new DatenquellenFactory(aktIK).createConnection();
                 RehaIniedit.thisClass.sqlInfo.setConnection(obj.conn);
                 RehaIniedit.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
