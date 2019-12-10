@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
@@ -21,17 +20,12 @@ import CommonTools.StartOOApplication;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
-import crypt.Verschluesseln;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class RehaUrlaub implements WindowListener {
 
-    /**
-     * @param args
-     */
-    /**
-     * @param args
-     */
+
     public static boolean DbOk = false;
     JFrame jFrame;
     public static JFrame thisFrame = null;
@@ -42,22 +36,15 @@ public class RehaUrlaub implements WindowListener {
     public static boolean officeOk = false;
 
     public String dieseMaschine = null;
-    /*
-     * public static String dbIpAndName = null; public static String dbUser = null;
-     * public static String dbPassword = null;
-     *
-     *
-     */
+
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.3:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
     public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice 4";
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome = "C:/RehaVerwaltung/";
-    public static String aktIK = "510841109";
+    public static String progHome;
+    public static String aktIK ;
     public static String urlaubsDateiVorlage = "UrlaubUndStunden.ods";
     public boolean isLibreOffice;
 
@@ -76,24 +63,14 @@ public class RehaUrlaub implements WindowListener {
             if (args.length > 0 || testcase) {
                 if (!testcase) {
                     System.out.println("hole daten aus INI-Datei " + args[0]);
-                    INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                    dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                    dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                    String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                    String decrypted = null;
-                    if (pw != null) {
-                        Verschluesseln man = Verschluesseln.getInstance();
-                        decrypted = man.decrypt(pw);
-                    } else {
-                        decrypted = new String("");
-                    }
-                    dbPassword = decrypted.toString();
-                    inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                    officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-                    officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+                    INIFile rehjavaini = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
-                    inif = new INIFile(args[0] + "ini/" + args[1] + "/abrechnung.ini");
-                    String rechnung = inif.getStringProperty("HMPRIRechnung", "Pformular");
+
+                    officeProgrammPfad = rehjavaini.getStringProperty("OpenOffice.org", "OfficePfad");
+                    officeNativePfad = rehjavaini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+
+                    INIFile abrechnungini = new INIFile(args[0] + "ini/" + args[1] + "/abrechnung.ini");
+                    String rechnung = abrechnungini.getStringProperty("HMPRIRechnung", "Pformular");
                     rechnung = rechnung.replace(".ott", "");
                     rechnung = rechnung + "Kopie.ott";
                     // hmRechnungPrivat = rechnung;
@@ -182,7 +159,7 @@ public class RehaUrlaub implements WindowListener {
         jFrame.setSize(1000, 500);
         jFrame.setPreferredSize(new Dimension(1000, 500));
         jFrame.setTitle(
-                "Thera-Pi  Urlaub- / Überstundenverwaltung  [IK: " + aktIK + "] " + "[Server-IP: " + dbIpAndName + "]");
+                "Thera-Pi  Urlaub- / Überstundenverwaltung  [IK: " + aktIK + "] ");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         RehaUrlaubTab urlaubTab = new RehaUrlaubTab();
@@ -258,7 +235,7 @@ public class RehaUrlaub implements WindowListener {
             }
             try {
 
-                obj.conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
+                obj.conn = new DatenquellenFactory(aktIK).createConnection();
                 sqlInfo.setConnection(obj.conn);
                 RehaUrlaub.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
