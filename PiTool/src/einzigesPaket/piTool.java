@@ -157,9 +157,7 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
                 jFrame.setIconImage(Toolkit.getDefaultToolkit()
                                            .getImage(Path.Instance.getProghome() + "icons/camera.png"));
                 SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new Thread() {
+
                             @Override
                             public void run() {
                                 SystemStart();
@@ -172,8 +170,8 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
                                     JOptionPane.showMessageDialog(null, "Datenbank konnte nicht gestartet werden!");
                                 }
 
-                            }
-                        }.start();
+
+
 
                     }
                 });
@@ -1000,23 +998,23 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
         } else {
             System.out.println("Ihre pitool.ini befindet sich im richtigen Verzeichnis--> " + datei);
         }
-        INIFile ini = new INIFile(datei);
-        piTool.app.dbConnection = new String(ini.getStringProperty("DatenBank", "DBTreiber"));
-        piTool.app.dbParameter = new String(ini.getStringProperty("DatenBank", "DBKontakt"));
-        String pw = new String(ini.getStringProperty("EmailExtern", "Password"));
+       final INIFile piToolini = new INIFile(datei);
+        piTool.app.dbConnection = new String(piToolini.getStringProperty("DatenBank", "DBTreiber"));
+        piTool.app.dbParameter = new String(piToolini.getStringProperty("DatenBank", "DBKontakt"));
+        String pw = new String(piToolini.getStringProperty("EmailExtern", "Password"));
         hmEmailExtern = new HashMap<String, String>();
-        hmEmailExtern.put("SmtpHost", new String(ini.getStringProperty("EmailExtern", "SmtpHost")));
-        hmEmailExtern.put("SmtpAuth", new String(ini.getStringProperty("EmailExtern", "SmtpAuth")));
-        hmEmailExtern.put("Pop3Host", new String(ini.getStringProperty("EmailExtern", "Pop3Host")));
-        hmEmailExtern.put("Username", new String(ini.getStringProperty("EmailExtern", "Username")));
-        hmEmailExtern.put("SenderAdresse", new String(ini.getStringProperty("EmailExtern", "SenderAdresse")));
+        hmEmailExtern.put("SmtpHost", new String(piToolini.getStringProperty("EmailExtern", "SmtpHost")));
+        hmEmailExtern.put("SmtpAuth", new String(piToolini.getStringProperty("EmailExtern", "SmtpAuth")));
+        hmEmailExtern.put("Pop3Host", new String(piToolini.getStringProperty("EmailExtern", "Pop3Host")));
+        hmEmailExtern.put("Username", new String(piToolini.getStringProperty("EmailExtern", "Username")));
+        hmEmailExtern.put("SenderAdresse", new String(piToolini.getStringProperty("EmailExtern", "SenderAdresse")));
 
         if (pw.trim()
               .equals("")) {
             passwortEncrypt pe = new passwortEncrypt("Passwort für Externe-Email");
             pe.setLocationRelativeTo(jFrame);
             pe.setVisible(true);
-            pw = new String(ini.getStringProperty("EmailExtern", "Password"));
+            pw = new String(piToolini.getStringProperty("EmailExtern", "Password"));
             Verschluesseln man = Verschluesseln.getInstance();
             String decrypted = man.decrypt(pw);
             hmEmailExtern.put("Password", new String(decrypted));
@@ -1026,19 +1024,19 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
             hmEmailExtern.put("Password", new String(decrypted));
         }
         hmEmailIntern = new HashMap<String, String>();
-        hmEmailIntern.put("SmtpHost", new String(ini.getStringProperty("EmailIntern", "SmtpHost")));
-        hmEmailIntern.put("SmtpAuth", new String(ini.getStringProperty("EmailIntern", "SmtpAuth")));
-        hmEmailIntern.put("Pop3Host", new String(ini.getStringProperty("EmailIntern", "Pop3Host")));
-        hmEmailIntern.put("Username", new String(ini.getStringProperty("EmailIntern", "Username")));
-        hmEmailIntern.put("SenderAdresse", new String(ini.getStringProperty("EmailIntern", "SenderAdresse")));
+        hmEmailIntern.put("SmtpHost", new String(piToolini.getStringProperty("EmailIntern", "SmtpHost")));
+        hmEmailIntern.put("SmtpAuth", new String(piToolini.getStringProperty("EmailIntern", "SmtpAuth")));
+        hmEmailIntern.put("Pop3Host", new String(piToolini.getStringProperty("EmailIntern", "Pop3Host")));
+        hmEmailIntern.put("Username", new String(piToolini.getStringProperty("EmailIntern", "Username")));
+        hmEmailIntern.put("SenderAdresse", new String(piToolini.getStringProperty("EmailIntern", "SenderAdresse")));
 
-        pw = new String(ini.getStringProperty("EmailIntern", "Password"));
+        pw = new String(piToolini.getStringProperty("EmailIntern", "Password"));
         if (pw.trim()
               .equals("")) {
             passwortEncrypt pe = new passwortEncrypt("Passwort für Interne-Email");
             pe.setLocationRelativeTo(jFrame);
             pe.setVisible(true);
-            pw = new String(ini.getStringProperty("EmailIntern", "Password"));
+            pw = new String(piToolini.getStringProperty("EmailIntern", "Password"));
             Verschluesseln man = Verschluesseln.getInstance();
             String decrypted = man.decrypt(pw);
             hmEmailIntern.put("Password", new String(decrypted));
@@ -1447,14 +1445,7 @@ class ShotSenden extends JDialog {
                                      .trim();
         String subject = "ScreenShot-Email";
         String text = ta.getText();
-        /*
-         * System.out.println("Username = "+username);
-         * System.out.println("Passwort = "+password);
-         * System.out.println("SenderAdress = "+senderAddress);
-         * System.out.println("smtpHost = "+smtpHost);
-         * System.out.println("smtpAuth = "+smtpAuth);
-         * System.out.println("Recipients = "+recipientsAddress);
-         */
+
 
         EmailSendenExtern oMail = new EmailSendenExtern();
         try {
@@ -1465,34 +1456,7 @@ class ShotSenden extends JDialog {
             e.printStackTrace();
         }
 
-        /*
-         *
-         * String[] anhang = {null,null}; for(int i = 1; i <= DruckFenster.seiten;i++){
-         * anhang[0] = SystemConfig.hmVerzeichnisse.get("Temp")+"Terminplan.pdf";
-         * anhang[1] = "Terminplan.pdf";
-         * System.out.println("In DruckenFenster - Files = "+anhang[1]);
-         * attachments.add(anhang.clone()); } String username =
-         * SystemConfig.hmEmailExtern.get("Username"); String password =
-         * SystemConfig.hmEmailExtern.get("Password"); String senderAddress
-         * =SystemConfig.hmEmailExtern.get("SenderAdresse");
-         * System.out.println("Empfängeradresse = "+emailaddy); String recipientsAddress
-         * = emailaddy; String subject = "Ihre Behandlungstermine"; String text = "";
-         */
-        /*********/
-        /*
-         * text = "Sehr geehrte Damen und Herren,\n"+
-         * "im Dateianhang finden Sie die von Ihnen gewünschten Behandlungstermine.\n\n"
-         * +
-         * "Termine die Sie nicht einhalten bzw. wahrnehmen können, müßen 24 Stunden vorher\n"
-         * + "abgesagt werden.\n\nIhr Planungs-Team vom RTA"; } String smtpHost =
-         * SystemConfig.hmEmailExtern.get("SmtpHost");
-         *
-         * EmailSendenExtern oMail = new EmailSendenExtern(); try{
-         * oMail.sendMail(smtpHost, username, password, senderAddress,
-         * recipientsAddress, subject, text,attachments); }catch(Exception e){
-         * e.printStackTrace( ); } JOptionPane.showMessageDialog (null,
-         * "Die Terminliste wurde aufbereitet und per Email versandt\n");
-         */
+
         this.setVisible(false);
     }
 }
