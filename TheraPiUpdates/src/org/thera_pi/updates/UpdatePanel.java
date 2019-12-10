@@ -16,7 +16,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -50,8 +49,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.INIFile;
-import crypt.Verschluesseln;
 import environment.Path;
+import sql.DatenquellenFactory;
 
 public class UpdatePanel extends JXPanel {
 
@@ -96,12 +95,9 @@ public class UpdatePanel extends JXPanel {
     ImageIcon icoupdate;
     public FTPFile[] ffile = null;
 
-    static String dbIpAndName = "";
-    static String dbUser = "";
-    static String dbPassword = "";
 
     public static boolean DbOk;
-    public Connection conn;
+
     private JFrame jFrame;
 
     private int xaktrow;
@@ -751,26 +747,19 @@ public class UpdatePanel extends JXPanel {
                         "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
                 if (frage == JOptionPane.YES_OPTION) {
                     try {
-                        holeDBZugang(PROGHOME + "ini/" + ik + "/rehajava.ini");
-                        System.out.println("Mandant " + PROGHOME + "ini/" + ik + "/rehajava.ini");
-                        StarteDB();
+
+                       Connection  conn = new DatenquellenFactory(ik).createConnection();
                         for (int x = 0; x < vecstmt.size(); x++) {
                             try {
                                 System.out.println("Execute = " + vecstmt.get(x));
                                 SqlInfo.sqlAusfuehren(conn, vecstmt.get(x));
                                 System.out.println("Execute = " + vecstmt.get(x));
-                                // System.out.println("Warnings = "+conn.getWarnings().getSQLState());
                             } catch (Exception e) {
-                                // JOptionPane.showMessageDialog(null,"Fehler beim anlegen der
-                                // Tabelle\nBetroffene IK: "+ik+"\nDer Fehlertext lautet:
-                                // "+e.getMessage()+"\n\nStatement: "+vecstmt.get(x));
-                                // JOptionPane.showMessageDialog(null, "Fehler in der Ausführung des
-                                // Sql-Statements\n"+vecstmt.get(x));
-                                // e.printStackTrace();
+                                e.printStackTrace();
                             }
                         }
 
-                        StopeDB();
+                        conn.close();
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null, "Fehler beim öffnen der Datenbank\nBetroffene IK: " + ik
                                 + "\nFehlertext: " + (ex.getMessage() == null ? "nicht verfügbar" : ex.getMessage()));
@@ -789,81 +778,9 @@ public class UpdatePanel extends JXPanel {
         }
     }
 
-    /*******************************************************/
-    private void StopeDB() {
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (final SQLException e) {
-            }
-        }
-    }
-
-    private void StarteDB() {
-        final String sDB = "SQL";
-        if (conn != null) {
-            try {
-                conn.close();
-            } catch (final SQLException e) {
-            }
-        }
-        try {
-            Class.forName("com.mysql.jdbc.Driver")
-                 .newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-            DbOk = false;
-            return;
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-            DbOk = false;
-            return;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-            DbOk = false;
-            return;
-        }
-        try {
-
-            conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
-            DbOk = true;
-            System.out.println("Datenbankkontakt hergestellt");
-        } catch (final SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-            DbOk = false;
-
-        }
-        return;
-    }
-
-    private void holeDBZugang(String pfad) {
-        System.out.println("hole daten aus INI-Datei " + pfad);
-        INIFile inif = new INIFile(pfad);
-        dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-        dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-        String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-        String decrypted = null;
-
-        if (pw != null) {
-            Verschluesseln man = Verschluesseln.getInstance();
-            decrypted = man.decrypt(pw);
-        } else {
-            decrypted = new String("");
-        }
-        dbPassword = decrypted.toString();
-    }
-
-    /************************************************************************/
 
     class UpdateTableModel extends DefaultTableModel {
-        /**
-        *
-        */
+
         private static final long serialVersionUID = 1L;
 
         @Override
