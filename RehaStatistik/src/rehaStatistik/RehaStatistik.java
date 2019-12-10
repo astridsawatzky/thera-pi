@@ -4,7 +4,6 @@ import java.awt.Cursor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
@@ -20,8 +19,8 @@ import CommonTools.StartOOApplication;
 import Tools.SystemPreislisten;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import crypt.Verschluesseln;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class RehaStatistik implements WindowListener {
 
@@ -37,23 +36,16 @@ public class RehaStatistik implements WindowListener {
     public static IOfficeApplication officeapplication;
 
     public String dieseMaschine = null;
-    /*
-     * public static String dbIpAndName = null; public static String dbUser = null;
-     * public static String dbPassword = null;
-     *
-     *
-     */
+
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.3:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
     public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
 
     public static String proghome = "C:/RehaVerwaltung/";
-    public static String aktIK = "510841109";
+    public static String aktIK;
 
     public static boolean testcase = false;
     public SqlInfo sqlInfo;
@@ -69,18 +61,7 @@ public class RehaStatistik implements WindowListener {
                 proghome = args[0];
                 aktIK = args[1];
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                String decrypted = null;
-                if (pw != null) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    decrypted = new String("");
-                }
-                dbPassword = decrypted.toString();
-                inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
             }
@@ -186,35 +167,10 @@ public class RehaStatistik implements WindowListener {
         private void StarteDB() {
             final RehaStatistik obj = RehaStatistik.thisClass;
 
-            final String sDB = "SQL";
-            if (obj.conn != null) {
-                try {
-                    obj.conn.close();
-                } catch (final SQLException e) {
-                }
-            }
-            try {
-                Class.forName("com.mysql.jdbc.Driver")
-                     .newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaStatistik.DbOk = false;
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaStatistik.DbOk = false;
-                return;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                System.out.println(sDB + "Treiberfehler: " + e.getMessage());
-                RehaStatistik.DbOk = false;
-                return;
-            }
+
             try {
 
-                obj.conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
+                obj.conn = new DatenquellenFactory(aktIK).createConnection();
                 sqlInfo.setConnection(obj.conn);
                 RehaStatistik.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
