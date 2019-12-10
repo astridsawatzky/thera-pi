@@ -77,6 +77,7 @@ import ag.ion.noa.graphic.GraphicInfo;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
 import dialoge.ArztAuswahl;
+import environment.Path;
 import rehaHMK.RehaHMK;
 import rehaHMK.RehaHMKTab;
 import uk.co.mmscomputing.device.scanner.Scanner;
@@ -86,9 +87,7 @@ import uk.co.mmscomputing.device.scanner.ScannerListener;
 
 public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
 
-    /**
-     * 
-     */
+    protected static String progHome = Path.Instance.getProghome();
     private static final long serialVersionUID = 1L;
     RehaHMKTab eltern;
 
@@ -184,7 +183,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                      * File(RehaHMK.progHome+"ini/"+RehaHMK.aktIK+"/hmrmodul.ini")).exists()){
                      * f.createNewFile(); }
                      */
-                    inifile = new INIFile(RehaHMK.progHome + "ini/" + RehaHMK.aktIK + "/hmrmodul.ini");
+                    inifile = new INIFile(progHome + "ini/" + RehaHMK.aktIK + "/hmrmodul.ini");
                     add(getContent(), BorderLayout.CENTER);
                     add(getScannerSaich(), BorderLayout.SOUTH);
                     validate();
@@ -692,8 +691,8 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
         IDocument document = null;
 
         String url = (scanformat.getSelectedIndex() == 0
-                ? RehaHMK.progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A5-Rezepte.ott"
-                : RehaHMK.progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A4-Rezepte.ott");
+                ? progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A5-Rezepte.ott"
+                : progHome + "vorlagen/" + RehaHMK.aktIK + "/Rezeptkorrektur_A4-Rezepte.ott");
         try {
             document = documentService.loadDocument(url, docdescript);
         } catch (NOAException e) {
@@ -993,12 +992,12 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
     }
 
     /*************
-     * 
-     * 
+     *
+     *
      * Scanner-routine
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
 
     private void doScannen() {
@@ -1069,7 +1068,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
             // System.out.println("Status 4"+"\n");
             // System.out.println(metadata.getStateStr()+"\n");
             scanner.removeListener(this);
-            File file = new File(RehaHMK.progHome + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg");
+            File file = new File(progHome + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg");
             try {
                 FileOutputStream fout = new FileOutputStream(file);
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -1091,7 +1090,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
             }
             GraphicInfo graphicInfo = null;
             String imagePath = new File(
-                    RehaHMK.progHome + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg").getAbsolutePath();
+                    progHome + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg").getAbsolutePath();
             graphicInfo = new GraphicInfo(imagePath, 200, true, 200, true, VertOrientation.TOP, HoriOrientation.RIGHT,
                     TextContentAnchorType.AT_PAGE);
 
@@ -1133,13 +1132,8 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
                     xMSF.createInstance("com.sun.star.text.TextGraphicObject"));
             XPropertySet xProps = UnoRuntime.queryInterface(XPropertySet.class, xImage);
 
-            /*
-             * Property[] prop = xProps.getPropertySetInfo().getProperties(); for(int i = 0;
-             * i < prop.length;i++){ System.out.println(prop[i].Name);
-             * System.out.println(prop[i].Attributes); }
-             */
-            // url = "file:///"+RehaHMK.progHome+"ScreenShots/termin__temp.jpg";
-            url = "file:///" + RehaHMK.progHome + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg";
+
+            url = "file:///" + progHome + "temp/" + RehaHMK.aktIK + "/rezkorrekt.jpg";
 
             xBitmapContainer.insertByName("someID", url);
             // xBitmapContainer.insertByName("someID", grProps.getUrl());
@@ -1151,15 +1145,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
             xProps.setPropertyValue("Width", 14850);
             xProps.setPropertyValue("Height", 21000);
 
-            /*
-             * xProps.setPropertyValue("ContourOutside", Boolean.valueOf(true));
-             * 
-             * xProps.setPropertyValue("TextWrap", 1); xProps.setPropertyValue(
-             * "HoriOrientPosition", HoriOrientation.RIGHT ); xProps.setPropertyValue(
-             * "HoriOrient", HoriOrientation.RIGHT ); xProps.setPropertyValue(
-             * "HoriOrientRelation", 7 ); xProps.setPropertyValue( "VertOrientPosition",
-             * VertOrientation.TOP );
-             */
+
             xProps.setPropertyValue("TextWrap", 1);
             xProps.setPropertyValue("HoriOrientRelation", 7);
             xProps.setPropertyValue("HoriOrient", 0);
@@ -1169,10 +1155,6 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
             xProps.setPropertyValue("VertOrient", 0);
             xProps.setPropertyValue("VertOrientPosition", 609);
 
-            /*
-             * xProps.setPropertyValue( "HoriOrientPosition", 15014 );
-             * xProps.setPropertyValue( "LeftMargin", 15014 );
-             */
 
             xProps.setPropertyValue("Width", 14000);
             xProps.setPropertyValue("Height", 19798);

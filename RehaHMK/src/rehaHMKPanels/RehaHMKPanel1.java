@@ -47,13 +47,14 @@ import Tools.HMKTreeTableModel;
 import Tools.IndiKey;
 import Tools.JXHMKTreeTableNode;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import environment.Path;
 import rehaHMK.RehaHMK;
 import rehaHMK.RehaHMKTab;
 
 public class RehaHMKPanel1 extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     RehaHMKTab eltern;
@@ -486,10 +487,10 @@ public class RehaHMKPanel1 extends JXPanel {
          * IndiKey(vec.get(i).get(0),vec.get(i).get(1)+" max. pro Fall","","",i); node =
          * new JXHMKTreeTableNode("WS2a",key,true); node =
          * machDenRest(node,vec.get(i),i);
-         * 
+         *
          * this.hmkTreeTableModel.insertNodeInto(node, root, root.getChildCount()); }
          * jXTreeTable.validate();
-         * 
+         *
          * jXTreeTable.addTreeSelectionListener(tsl); if(root.getChildCount() > 0){
          * jXTreeTable.addRowSelectionInterval(0, 0); } //jXTreeTable.expandAll();
          */
@@ -657,7 +658,7 @@ public class RehaHMKPanel1 extends JXPanel {
 
     class IndiTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -711,28 +712,18 @@ public class RehaHMKPanel1 extends JXPanel {
 
     private String getPiLogo() {
         StringBuffer html = new StringBuffer();
-        html.append("<html><body><CENTER><div style='margin-top:100px;'>" + "<img src=file:///" + RehaHMK.progHome
+        html.append("<html><body><CENTER><div style='margin-top:100px;'>" + "<img src=file:///" + Path.Instance.getProghome()
                 + "icons/TPorg.png>" + "</div></CENTER></body></html>");
         html.append("<html><body>");
         html.append("<table width='100%' height='100%' border='0' cellpadding='0' cellspacing='0'>");
         html.append("<tr>");
         html.append("<td align='center' valign='middle'>");
-        html.append("<img src=file:///" + RehaHMK.progHome + "icons/TPorg.png>");
+        html.append("<img src=file:///" + Path.Instance.getProghome() + "icons/TPorg.png>");
         html.append("</td></td></table>");
         return html.toString();
     }
 
-    /******************************************************
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     *
-     */
+
     private int getNodeCount() {
         int ret = 0;
         int rootAnzahl;

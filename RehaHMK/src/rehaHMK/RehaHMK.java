@@ -10,7 +10,6 @@ import java.awt.geom.Point2D;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -35,10 +34,11 @@ import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import crypt.Verschluesseln;
+import environment.Path;
 import environment.SWTJarLoader;
 import io.RehaIOMessages;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class RehaHMK implements WindowListener {
     public static boolean DbOk;
@@ -67,12 +67,10 @@ public class RehaHMK implements WindowListener {
     public RehaReverseServer rehaReverseServer = null;
     public static int rehaReversePort = 6000;
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.3:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
     public static String officeProgrammPfad = "C:/Program Files (x86)/OpenOffice.org 3";
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome = "C:/RehaVerwaltung/";
+
     public static String aktIK = "510841109";
     public static CompoundPainter<Object> cp = null;
     public static CompoundPainter<Object> cparzt = null;
@@ -86,6 +84,8 @@ public class RehaHMK implements WindowListener {
 
     public static String[] arztGruppen = null;
     public static String hmkURL = null;
+    private static String proghome;
+
 
     // public static StartOOApplication ooStart = null;
     /**
@@ -107,24 +107,15 @@ public class RehaHMK implements WindowListener {
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                String decrypted = null;
-                if (pw != null) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    decrypted = new String("");
-                }
-                dbPassword = decrypted.toString();
-                inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+
+
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-                progHome = args[0];
+
                 aktIK = args[1];
 
-                INIFile hmrinif = new INIFile(RehaHMK.progHome + "ini/" + RehaHMK.aktIK + "/hmrmodul.ini");
+                proghome = Path.Instance.getProghome();
+                INIFile hmrinif = new INIFile(proghome + "ini/" + RehaHMK.aktIK + "/hmrmodul.ini");
                 hmkURL = hmrinif.getStringProperty("HMRModul", "HMKUrl");
 
                 if (args.length >= 3) {
@@ -134,8 +125,7 @@ public class RehaHMK implements WindowListener {
                 if (args.length >= 4) {
                     if (args[3].equals("info")) {
                         String meldung = "Pfad zur rehajava.ini = " + args[0] + "ini/" + args[1] + "/rehajava.ini\n"
-                                + "Aktuell verwendetes IK = " + aktIK + "\n" + "Connection-String = " + dbIpAndName
-                                + "\n" + "DB-Benutzername = " + dbUser + "\n" + "DB-Passwort = " + dbPassword + "\n"
+                                + "Aktuell verwendetes IK = " + aktIK + "\n"
                                 + "Pfad zu OpenOffice = " + officeProgrammPfad + "\n" + "Pfad zur NativeView.dll = "
                                 + officeNativePfad + "\n";
                         JOptionPane.showMessageDialog(null, meldung);
@@ -173,7 +163,13 @@ public class RehaHMK implements WindowListener {
             NativeInterface.initialize();
             JWebBrowser.useXULRunnerRuntime();
             NativeInterface.open();
-            NativeInterface.runEventPump();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    if (!NativeInterface.isEventPumpRunning())
+                        NativeInterface.runEventPump();
+                }
+            }).start();
 
             final RehaHMK xapplication = application;
             new SwingWorker<Void, Void>() {
@@ -218,7 +214,7 @@ public class RehaHMK implements WindowListener {
     }
 
     public static void ArztGruppenInit() {
-        INIFile inif = new INIFile(RehaHMK.progHome + "ini/" + RehaHMK.aktIK + "/arzt.ini");
+        INIFile inif = new INIFile(RehaHMK.proghome + "ini/" + RehaHMK.aktIK + "/arzt.ini");
         int ags;
         if ((ags = inif.getIntegerProperty("ArztGruppen", "AnzahlGruppen")) > 0) {
             arztGruppen = new String[ags];
@@ -231,21 +227,21 @@ public class RehaHMK implements WindowListener {
 
     public static void fuelleReferenz() {
         String[] diszis = { "Physio", "Massage", "Ergo", "Logo", "Podo" };
-        INIFile inif = new INIFile(progHome + "ini/" + aktIK + "/pgreferenz.ini");
+        INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/pgreferenz.ini");
         for (int i = 0; i < diszis.length; i++) {
             pgReferenz.put(diszis[i], inif.getIntegerProperty("HMR_ReferenzPreisGruppe", diszis[i]));
         }
-        icons.put("browser", new ImageIcon(RehaHMK.progHome + "icons/internet-web-browser.png"));
-        icons.put("key", new ImageIcon(RehaHMK.progHome + "icons/entry_pk.gif"));
-        icons.put("lupe", new ImageIcon(RehaHMK.progHome + "icons/mag.png"));
-        icons.put("erde", new ImageIcon(RehaHMK.progHome + "icons/earth.gif"));
-        icons.put("inaktiv", new ImageIcon(RehaHMK.progHome + "icons/inaktiv.png"));
-        icons.put("green", new ImageIcon(RehaHMK.progHome + "icons/green.png"));
-        icons.put("rot", new ImageIcon(RehaHMK.progHome + "icons/red.png"));
-        Image ico = new ImageIcon(RehaHMK.progHome + "icons/blitz.png").getImage()
+        icons.put("browser", new ImageIcon(RehaHMK.proghome + "icons/internet-web-browser.png"));
+        icons.put("key", new ImageIcon(RehaHMK.proghome + "icons/entry_pk.gif"));
+        icons.put("lupe", new ImageIcon(RehaHMK.proghome + "icons/mag.png"));
+        icons.put("erde", new ImageIcon(RehaHMK.proghome + "icons/earth.gif"));
+        icons.put("inaktiv", new ImageIcon(RehaHMK.proghome + "icons/inaktiv.png"));
+        icons.put("green", new ImageIcon(RehaHMK.proghome + "icons/green.png"));
+        icons.put("rot", new ImageIcon(RehaHMK.proghome + "icons/red.png"));
+        Image ico = new ImageIcon(RehaHMK.proghome + "icons/blitz.png").getImage()
                                                                        .getScaledInstance(26, 26, Image.SCALE_SMOOTH);
         icons.put("blitz", new ImageIcon(ico));
-        icons.put("strauss", new ImageIcon(RehaHMK.progHome + "icons/strauss_150.png"));
+        icons.put("strauss", new ImageIcon(RehaHMK.proghome + "icons/strauss_150.png"));
     }
 
     /********************/
@@ -316,7 +312,7 @@ public class RehaHMK implements WindowListener {
 
         jFrame.addWindowListener(this);
         jFrame.setSize(1020, 675);
-        jFrame.setTitle("Thera-Pi  Heilmittelkatalog  [IK: " + aktIK + "] " + "[Server-IP: " + dbIpAndName + "]");
+        jFrame.setTitle("Thera-Pi  Heilmittelkatalog  [IK: " + aktIK + "] " + "[Server-IP: " + "dbIpAndName" + "]"); //FIXME: info dpipandname
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         jFrame.getContentPane()
@@ -363,12 +359,7 @@ public class RehaHMK implements WindowListener {
             }
 
         }
-        /*
-         * if( (RehaHMK.officeapplication != null) ){ try{ new
-         * SocketClient().setzeRehaNachricht(RehaHMK.rehaReversePort,"RehaHMK#"+
-         * RehaIOMessages.IS_FINISHED); rehaReverseServer.serv.close(); }catch(Exception
-         * ex){ ex.printStackTrace(); } }
-         */
+
 
         System.exit(0);
     }
@@ -449,14 +440,13 @@ public class RehaHMK implements WindowListener {
                 return;
             }
             try {
-                obj.conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
+                obj.conn = new DatenquellenFactory(aktIK).createConnection();
                 RehaHMK.DbOk = true;
                 RehaHMK.thisClass.sqlInfo.setConnection(RehaHMK.thisClass.conn);
                 System.out.println("Datenbankkontakt hergestellt");
             } catch (final SQLException ex) {
                 JOptionPane.showMessageDialog(null,
-                        "Fehler im Datenbankkontakt\n" + "Ihr verwendeter Connection-String: " + dbIpAndName + "\n"
-                                + "Ihr verwendeter Benutzer-Name: " + dbUser);
+                        "Fehler im Datenbankkontakt\n für IK " + aktIK);
                 System.out.println("SQLException: " + ex.getMessage());
                 System.out.println("SQLState: " + ex.getSQLState());
                 System.out.println("VendorError: " + ex.getErrorCode());
