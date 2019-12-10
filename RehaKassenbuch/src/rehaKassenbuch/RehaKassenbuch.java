@@ -21,6 +21,7 @@ import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import crypt.Verschluesseln;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class RehaKassenbuch implements WindowListener {
 
@@ -39,22 +40,15 @@ public class RehaKassenbuch implements WindowListener {
     public static IOfficeApplication officeapplication;
 
     public String dieseMaschine = null;
-    /*
-     * public static String dbIpAndName = null; public static String dbUser = null;
-     * public static String dbPassword = null;
-     *
-     *
-     */
+
     public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
     public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
     public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome = "C:/RehaVerwaltung/";
-    public static String aktIK = "510841109";
+    public static String progHome ;
+    public static String aktIK ;
     /*
      * public static String hmRechnungPrivat =
      * "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott"; public static String
@@ -78,18 +72,7 @@ public class RehaKassenbuch implements WindowListener {
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                String decrypted = null;
-                if (pw != null) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    decrypted = new String("");
-                }
-                dbPassword = decrypted.toString();
-                // inif = new INIFile(args[0]+"ini/"+args[1]+"/rehajava.ini");
+
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 progHome = args[0];
@@ -155,8 +138,7 @@ public class RehaKassenbuch implements WindowListener {
         sqlInfo.setFrame(jFrame);
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 500);
-        jFrame.setTitle("Thera-Pi  Kassenbuch erstellen / bearbeiten  [IK: " + aktIK + "] " + "[Server-IP: "
-                + dbIpAndName + "]");
+        jFrame.setTitle("Thera-Pi  Kassenbuch erstellen / bearbeiten  [IK: " + aktIK + "] " );
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         RehaKassenbuchTab kbtab = new RehaKassenbuchTab();
@@ -233,7 +215,7 @@ public class RehaKassenbuch implements WindowListener {
             }
             try {
 
-                obj.conn = DriverManager.getConnection(dbIpAndName, dbUser, dbPassword);
+                obj.conn = new DatenquellenFactory(aktIK).createConnection();
                 sqlInfo.setConnection(obj.conn);
                 RehaKassenbuch.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
@@ -254,9 +236,7 @@ public class RehaKassenbuch implements WindowListener {
 
     }
 
-    /*****************************************************************
-     *
-     */
+
 
     @Override
     public void windowActivated(WindowEvent arg0) {
