@@ -13,6 +13,7 @@ import crypt.Verschluesseln;
 
 public class Datenquelle {
 
+    private static final Verschluesseln DECODER = Verschluesseln.getInstance();
     private static final String DATEN_BANK = "DatenBank";
     MysqlDataSource dataSource;
 
@@ -33,8 +34,7 @@ public class Datenquelle {
         dataSource = new MysqlDataSource();
         dataSource.setUrl(ini.get(DATEN_BANK, "DBKontakt1"));
         dataSource.setUser(ini.get(DATEN_BANK, "DBBenutzer1"));
-        String pw = Verschluesseln.getInstance()
-                                  .decrypt(ini.get(DATEN_BANK, "DBPasswort1"));
+        String pw = DECODER.decrypt(ini.get(DATEN_BANK, "DBPasswort1"));
         dataSource.setPassword(pw);
     }
 
