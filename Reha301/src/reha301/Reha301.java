@@ -6,7 +6,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
@@ -15,15 +14,17 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
+import sql.DatenquellenFactory;
 
 public class Reha301 implements WindowListener {
     public static boolean DbOk;
@@ -54,13 +55,10 @@ public class Reha301 implements WindowListener {
     public final Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR); // @jve:decl-index=0:
     public final Cursor cdefault = new Cursor(Cursor.DEFAULT_CURSOR); // @jve:decl-index=0:
 
-    public static String dbIpAndName = "jdbc:mysql://192.168.2.2:3306/rtadaten";
-    public static String dbUser = "rtauser";
-    public static String dbPassword = "rtacurie";
+
     public static String officeProgrammPfad = "C:/Program Files (x86)/LibreOffice 3";
-    // public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
-    public static String progHome = "C:/RehaVerwaltung/";// XXX: hard coded path for Reha301
+    public static String progHome = "C:/RehaVerwaltung/";
     public static String aktIK = "510841109";
     public static String hmRechnungPrivat = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
     public static String hmRechnungKasse = "C:/RehaVerwaltung/vorlagen/HMRechnungPrivatKopie.ott";
@@ -84,6 +82,7 @@ public class Reha301 implements WindowListener {
     public SqlInfo sqlInfo = null;
 
     public static boolean testcase = false;
+    private static Logger logger = LoggerFactory.getLogger(Reha301.class);
 
     public static void main(String[] args) {
         new Logging("reha301");
@@ -94,18 +93,7 @@ public class Reha301 implements WindowListener {
             if (!testcase) {
                 // System.out.println("hole daten aus INI-Datei "+args[0]);
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
-                dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
-                String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
-                String decrypted = null;
-                if (pw != null) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    decrypted = new String("");
-                }
-                dbPassword = decrypted.toString();
-                inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 progHome = args[0];
@@ -117,42 +105,22 @@ public class Reha301 implements WindowListener {
                     try {
                         rehaPort = Integer.parseInt(args[2]);
 
-                        // new SocketClient().setzeRehaNachricht(rehaPort,
-                        // "Reha301#IrgendEineNachricht");
-                        // JOptionPane.showMessageDialog(null, "Modul Reha301 registriert Port
-                        // "+Integer.toString(rehaPort));
+
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(null,
                                 "Fehler im Modul Reha301, kann den IO-Port nicht ermitteln");
                     }
                 }
             }
-            final Reha301 xapplication = application;
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    xapplication.starteDB();
-                    long zeit = System.currentTimeMillis();
-                    while (!DbOk) {
-                        try {
-                            Thread.sleep(20);
-                            if (System.currentTimeMillis() - zeit > 10000) {
-                                System.exit(0);
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if (!DbOk) {
-                        JOptionPane.showMessageDialog(null,
-                                "Datenbank konnte nicht geöffnet werden!\nReha-301 kann nicht gestartet werden");
-                    }
-                    Reha301.starteOfficeApplication();
 
-                    return null;
-                }
+            try {
+                application.  conn = new DatenquellenFactory(aktIK).createConnection();
 
-            }.execute();
+                application.sqlInfo.setConnection(application.  conn);
+                Reha301.DbOk = true;
+            } catch (SQLException e1) {
+                logger.error("Connection konnte nicht erstellt werden fuer " + aktIK,e1);
+            }
             application.getJFrame();
             new SocketClient().setzeRehaNachricht(rehaPort, "Reha301#" + RehaIOMessages.IS_STARTET);
             try {
@@ -160,22 +128,9 @@ public class Reha301 implements WindowListener {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            // new SocketClient().setzeRehaNachricht(rehaPort,
-            // "Reha301#"+RehaIOMessages.MUST_PATANDREZFIND+"#28222#RH7194");
+
         } else {
-            /*
-             * final Reha301 xapplication = application; new SwingWorker<Void,Void>(){
-             *
-             * @Override protected Void doInBackground() throws java.lang.Exception {
-             * xapplication.starteDB(); long zeit = System.currentTimeMillis(); while(!
-             * DbOk){ try { Thread.sleep(20); if(System.currentTimeMillis()-zeit > 5000){
-             * System.exit(0); } } catch (InterruptedException e) { e.printStackTrace(); } }
-             * if(!DbOk){ JOptionPane.showMessageDialog(null,
-             * "Datenbank konnte nicht ge�ffnet werden!\nReha-Sql kann nicht gestartet werden"
-             * ); } Reha301.starteOfficeApplication(); return null; }
-             *
-             * }.execute(); application.getJFrame();
-             */
+
 
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\nReha-Sql kann nicht gestartet werden");
@@ -247,7 +202,7 @@ public class Reha301 implements WindowListener {
         sqlInfo.setFrame(jFrame);
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 550);
-        jFrame.setTitle("Thera-Pi  §301-er  [IK: " + aktIK + "] " + "[Server-IP: " + dbIpAndName + "]");
+        jFrame.setTitle("Thera-Pi  §301-er  [IK: " + aktIK + "] ");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         jFrame.getContentPane()
@@ -271,8 +226,6 @@ public class Reha301 implements WindowListener {
                     if (Reha301.xportOk) {
                         new SocketClient().setzeRehaNachricht(rehaPort,
                                 "AppName#" + "Reha301#" + Integer.toString(Reha301.xport));
-                    } else {
-                        // System.out.println(Reha301.xport+" - "+Reha301.xportOk);
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -296,8 +249,6 @@ public class Reha301 implements WindowListener {
 
     public void starteDB() {
 
-        // piHelpDatenbankStarten dbstart = new piHelpDatenbankStarten();
-        // dbstart.run();
 
         DatenbankStarten dbstart = new DatenbankStarten();
         dbstart.run();
@@ -320,40 +271,11 @@ public class Reha301 implements WindowListener {
      */
     final class DatenbankStarten implements Runnable {
         private void StarteDB() {
-            final Reha301 obj = Reha301.thisClass;
 
-            // final String sDB = "SQL";
-            if (obj.conn != null) {
-                try {
-                    obj.conn.close();
-                } catch (final SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            try {
-                Class.forName("com.mysql.jdbc.Driver")
-                     .newInstance();
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-                // System.out.println(sDB+"Treiberfehler: " + e.getMessage());
-                Reha301.DbOk = false;
-                return;
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-                // System.out.println(sDB+"Treiberfehler: " + e.getMessage());
-                Reha301.DbOk = false;
-                return;
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                // System.out.println(sDB+"Treiberfehler: " + e.getMessage());
-                Reha301.DbOk = false;
-                return;
-            }
             try {
 
-                obj.conn = DriverManager.getConnection(dbIpAndName + "?jdbcCompliantTruncation=false", dbUser,
-                        dbPassword);
-                Reha301.thisClass.sqlInfo.setConnection(obj.conn);
+                conn = new DatenquellenFactory(aktIK).createConnection();
+                Reha301.thisClass.sqlInfo.setConnection(conn);
                 Reha301.DbOk = true;
             } catch (final SQLException ex) {
                 ex.printStackTrace();
