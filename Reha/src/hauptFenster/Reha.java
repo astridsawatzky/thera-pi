@@ -556,30 +556,10 @@ public class Reha implements RehaEventListener {
                 break;
             case "piTextb":
                 textbaus.main(new String[] { Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/rehajava.ini",
-                        Path.Instance.getProghome() + "ini/thbericht.ini"
+                        Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/thbericht.ini"
 
                 });
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        RehaSplash rspl = new RehaSplash(null,
-                                "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
-                        long zeit = System.currentTimeMillis();
-                        while (true) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                logger.error("thread was interrupted", e);
-                            }
-                            if (System.currentTimeMillis() - zeit > 2000) {
-                                break;
-                            }
-                        }
-                        rspl.dispose();
-                        return null;
-                    }
 
-                }.execute();
                 break;
             case "piArztTextb":
                 if (!Rechte.hatRecht(Rechte.Sonstiges_textbausteinegutachten, true)) {
