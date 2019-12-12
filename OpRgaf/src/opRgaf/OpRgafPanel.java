@@ -100,9 +100,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
     MyOpRgafTableModel tabmod = null;
     JXTable tab = null;
-//    JLabel summeOffen;
-//    JLabel summeRechnung;
-//    JLabel summeGesamtOffen;
     Component kopieButton;
     JRtaCheckBox bar = null;
     private boolean barWasSelected = false;
@@ -110,24 +107,12 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
     JButton kopie;
 
     BigDecimal gesamtOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
-
-//    BigDecimal suchOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
-//    BigDecimal suchGesamt = BigDecimal.valueOf(Double.parseDouble("0.00"));
-
     DecimalFormat dcf = new DecimalFormat("###0.00");
 
     int ccount = -2;
 
     private HashMap<String, String> hmRezgeb = new HashMap<String, String>();
     final String stmtString =
-            /*
-             * "select concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(geboren,'%d.%m.%Y')),"
-             * +
-             * "t1.rnr,t1.rdatum,t1.rgesamt,t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t3.kassen_nam1,t1.reznr,t1.id "
-             * +
-             * "from rgaffaktura as t1 inner join pat5 as t2 on (t1.pat_intern = t2.pat_intern) "
-             * + "left join kass_adr as t3 ON ( t2.kassenid = t3.id )";
-             */
             "SELECT concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(t2.geboren,'%d.%m.%Y')),t1.rnr,t1.rdatum,t1.rgesamt,"
                     + "t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t3.kassen_nam1,t1.reznr,t1.id,t1.pat_id "
                     + "FROM (SELECT v_nummer as rnr,v_datum as rdatum,v_betrag as rgesamt,v_offen as roffen,'' as rpbetrag,"
@@ -136,7 +121,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                     + "UNION SELECT rnr,rdatum,rgesamt,roffen,rpbetrag,rbezdatum,rmahndat1,rmahndat2,reznr,id as id,pat_intern as pat_id "
                     + "FROM rgaffaktura ) t1 LEFT JOIN pat5 AS t2 ON (t1.pat_id = t2.pat_intern) LEFT JOIN kass_adr AS t3 ON ( t2.kassenid = t3.id )";
 
-//    int gefunden;
     String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "bezahlt am", "1.Mahnung", "2.Mahnung", "Krankenkasse", "RezeptNr.", "id" };
     String[] colnamen = { "nix", "rnr", "rdatum", "rgesamt", "roffen", "rpbetrag", "rbezdatum", "rmahndat1",
@@ -215,7 +199,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         // Auswahl RGR/AFR/Verkauf
         colCnt += 2;
         selPan = new RgAfVkSelect("suche in  "); // Subpanel mit Checkboxen anlegen
-        // selPan.ask("Tabellen:");
         selPan.setCallBackObj(this); // callBack registrieren
         initSelection();
 
@@ -232,11 +215,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
         }
         tabmod = new MyOpRgafTableModel();
-        /*
-         * Vector<Vector<String>> felder = SqlInfo.holeFelder("describe rgaffaktura");
-         * String[] spalten = new String[felder.size()]; for(int i= 0; i <
-         * felder.size();i++){ spalten[i] = felder.get(i).get(0); }
-         */
         Vector<Vector<String>> felder = SqlInfo.holeFelder("describe verkliste");
         String[] cols = new String[felder.size()];
         HashMap types = new HashMap();
@@ -444,8 +422,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
                     try {
                         // System.out.println("in Ausfallrechnung");
-                        // (Point pt, String pat_intern,String rez_nr,String
-                        // rnummer,String rdatum){
                         String id = tab.getValueAt(tab.getSelectedRow(), 11)
                                        .toString();
                         String rez_nr = SqlInfo.holeEinzelFeld(
@@ -529,8 +505,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
             return;
         }
 
-//        suchOffen = suchOffen.subtract(eingang );
-//        sumPan.setGesamtOffen(sumPan.getGesamtOffen().subtract(eingang));
         sumPan.substFromGesamtOffen(eingang);
         sumPan.substFromSuchOffen(eingang);
 
@@ -575,9 +549,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                     + "', v_bezahldatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where verklisteID ='"
                     + Integer.toString(id) + "' LIMIT 1";
         }
-        /*
-         * if(!OpRgaf.testcase){ SqlInfo.sqlAusfuehren(cmd); }
-         */
         SqlInfo.sqlAusfuehren(cmd);
         schreibeAbfrage();
         tfs[0].setText("0,00");
@@ -585,17 +556,13 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
     private void schreibeAbfrage() {
         sumPan.schreibeGesamtOffen();
-//        sumPan.setSuchOffen(suchOffen);
         sumPan.schreibeSuchOffen();
-//        sumPan.setSuchGesamt(suchGesamt);
         sumPan.schreibeSuchGesamt();
-//        sumPan.setAnzRec(gefunden);
         sumPan.schreibeAnzRec();
     }
 
     public void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
         suchen.setText(rezept);
-        // combo.setSelectedIndex(8);
         combo.setSelectedItem("Rezeptnummer =");
         boolean useRGR = selPan.useRGR(); // Checkbox-Einstellung merken
         boolean useAFR = selPan.useAFR();
@@ -614,7 +581,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         }
         int suchart = combo.getSelectedIndex();
         OpRgaf.iniOpRgAf.setVorauswahl(suchart); // Auswahl merken
-        // String suchVal = combo.getItemAt(combo.getSelectedIndex()).toString();
+        String suchVal = combo.getItemAt(combo.getSelectedIndex()).toString();
         // System.out.println("OpRgafPanel-doSuchen-suche: " +'"' + suchVal + '"' + "("
         // + suchart + ")"); // s. String[] args
         String cmd = "";
@@ -775,9 +742,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
             sumPan.delSuchOffen();
             sumPan.delAnzRec();
             calcGesamtOffen();
-//            suchGesamt = sumPan.getSuchGesamt();
-//            suchOffen = sumPan.getSuchOffen();
-//            gefunden = sumPan.getAnzRec();
             ResultSetMetaData rsMetaData = null;
             while (rs.next()) {
                 vec.clear();
@@ -802,12 +766,8 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                                          .equals("java.lang.Integer")) {
                         vec.add(rs.getInt(i));
                     }
-                    // vec.add( (rs.getString(i)==null ? "" : rs.getString(i)) );//r_klasse
-                    // System.out.println(rsMetaData.getColumnClassName(i));
                 }
 
-//              suchOffen = suchOffen.add(rs.getBigDecimal(5));
-//              suchGesamt = suchGesamt.add(rs.getBigDecimal(4));
                 sumPan.setSuchGesamt(sumPan.getSuchGesamt()
                                            .add(rs.getBigDecimal(4)));
                 sumPan.setSuchOffen(sumPan.getSuchOffen()
@@ -824,7 +784,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                     }
                 }
                 durchlauf++;
-//                gefunden++;
                 sumPan.incAnzRec();
             }
 
@@ -909,7 +868,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                         } else {
                             bar.setEnabled(true);
                             bar.setToolTipText("");
-                            if (barWasSelected) { // // Status 'bar in Kasse' wieder herstellen
+                            if (barWasSelected) { // Status 'bar in Kasse' wieder herstellen
                                 bar.setSelected(true);
                                 barWasSelected = false;
                             }
@@ -1021,18 +980,12 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         String gesamt = SqlInfo.holeEinzelFeld("select rgesamt from rgaffaktura where id='" + id + "' LIMIT 1");
         // System.out.println("Rezeptnummer = "+rez_nr);
         new InitHashMaps();
-        /*
-         * Vector<String> patDaten = SqlInfo.holeSatz("pat5", " * ",
-         * "pat_intern='"+pat_intern+"'", Arrays.asList(new String[] {}));
-         * InitHashMaps.constructPatHMap(patDaten);
-         */
+
         String test = SqlInfo.holeEinzelFeld("select id from verordn where rez_nr = '" + rez_nr + "' LIMIT 1");
         Vector<String> vecaktrez = null;
         if (test.equals("")) {
             test = SqlInfo.holeEinzelFeld("select id from lza where rez_nr = '" + rez_nr + "' LIMIT 1");
             if (test.equals("")) {
-                // this.dispose();
-                // return;
             } else {
                 vecaktrez = SqlInfo.holeSatz("lza",
                         " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",
