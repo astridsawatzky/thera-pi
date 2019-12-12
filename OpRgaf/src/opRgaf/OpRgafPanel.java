@@ -161,14 +161,13 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
     }
 
     private JPanel getContent() {
-        // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+        //                  1     2    3     4     5  6   7     8       9   10    11   12    13   14    15   16    17    18 19
         String xwerte = "10dlu,50dlu,2dlu,90dlu,10dlu,p,2dlu,70dlu:g,40dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,10dlu,p";
-        // 1 2 3 4 5 6 7 8 9 10 11
+        //                  1  2    3      4      5  6    7    8  9  10   11
         String ywerte = "15dlu,p,15dlu,160dlu:g,8dlu,p,10dlu,2dlu,p,8dlu,0dlu";
         FormLayout lay = new FormLayout(xwerte, ywerte);
         PanelBuilder builder = new PanelBuilder(lay);
-        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
-        // mode
+        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug mode
         builder.getPanel()
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
@@ -224,9 +223,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
             types.put(cols[i], felder.get(i)
                                      .get(1));
         }
-        String dummy = types.get("v_betrag")
-                            .toString();
-        if (types.get("v_offen")
+        if (types.get("v_offen")    // Ändern: 'enthält NICHT "decimal(10,2)"
                  .toString()
                  .contains("double")
                 || types.get("v_betrag")
@@ -240,13 +237,12 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                         .contains("double")) {
             JOptionPane.showMessageDialog(null, "Struktur der Tabelle 'verkliste' veraltet. \nBitte aktualisieren!");
             return builder.getPanel();
-        }
+        }   // !! same for 'verkartikel' u. 'verkfaktura'
 
         tabmod.setColumnIdentifiers(spalten);
         tab = new JXTable(tabmod);
         tab.setHorizontalScrollEnabled(true);
 
-        // tab.getColumn(1).setCellEditor();
         DateTableCellEditor tble = new DateTableCellEditor();
         tab.getColumn(1)
            .setCellRenderer(new MitteRenderer());
@@ -925,11 +921,15 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                 }
                 String rnr = (String) tabmod.getValueAt(row, 1);
                 if (rnr.startsWith("VR-")) { // test ob VR -> Änderung in 'verkliste' schreiben
-                    if (colname.equals("rbezdatum")) { // (bisher) nur ändern des Buchungsdatums erlaubt
-                        String cmd = "update verkliste set v_bezahldatum ="
+                    HashMap<String, String> hmMap2VerkListe = new HashMap<String, String>();
+                    hmMap2VerkListe.put("rbezdatum", "v_bezahldatum");  // der Fluch der verbogenen Spaltennamen
+                    hmMap2VerkListe.put("roffen", "v_offen");
+                    hmMap2VerkListe.put("rgesamt", "v_betrag");
+                    if (hmMap2VerkListe.containsKey(colname)) { // Ändern dieser Spalte ist erlaubt
+                        String cmd = "update verkliste set " + hmMap2VerkListe.get(colname) + " ="
                                 + (value != null ? "'" + value + "'" : "null") + " where verklisteID='" + id
                                 + "' LIMIT 1";
-                        // System.out.println(cmd);
+                        System.out.println(cmd);
                         SqlInfo.sqlAusfuehren(cmd);
                     } else {
                         new SwingWorker<Void, Void>() { // andere 'rückgängig' machen (= Suche neu ausführen)
@@ -944,7 +944,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                             }
                         }.execute();
 
-                        JOptionPane.showMessageDialog(null, "Ändern in Verkaufsrechnungen ist nicht möglich!");
+                        JOptionPane.showMessageDialog(null, "Diese Änderung ist in Verkaufsrechnungen nicht möglich!");
                     }
                 } else {
                     String cmd = "update rgaffaktura set " + colname + "="
@@ -957,7 +957,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
             } catch (Exception ex) {
                 System.out.println(ex);
-                JOptionPane.showMessageDialog(null, "Fehler in der Dateneingbe");
+                JOptionPane.showMessageDialog(null, "Fehler in der Dateneingabe");
             }
             return;
         }
