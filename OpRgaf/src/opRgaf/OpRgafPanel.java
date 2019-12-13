@@ -214,30 +214,9 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
         }
         tabmod = new MyOpRgafTableModel();
-        Vector<Vector<String>> felder = SqlInfo.holeFelder("describe verkliste");
-        String[] cols = new String[felder.size()];
-        HashMap types = new HashMap();
-        for (int i = 0; i < felder.size(); i++) {
-            cols[i] = felder.get(i)
-                            .get(0);
-            types.put(cols[i], felder.get(i)
-                                     .get(1));
-        }
-        if (types.get("v_offen")    // Ändern: 'enthält NICHT "decimal(10,2)"
-                 .toString()
-                 .contains("double")
-                || types.get("v_betrag")
-                        .toString()
-                        .contains("double")
-                || types.get("v_mwst7")
-                        .toString()
-                        .contains("double")
-                || types.get("v_mwst19")
-                        .toString()
-                        .contains("double")) {
-            JOptionPane.showMessageDialog(null, "Struktur der Tabelle 'verkliste' veraltet. \nBitte aktualisieren!");
+        if (chkSalesTableStruct()) {
             return builder.getPanel();
-        }   // !! same for 'verkartikel' u. 'verkfaktura'
+        }
 
         tabmod.setColumnIdentifiers(spalten);
         tab = new JXTable(tabmod);
@@ -318,6 +297,60 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         calcGesamtOffen();
 
         return builder.getPanel();
+    }
+
+    private boolean chkSalesTableStruct() {
+        HashMap<String, String> hmMapNumFields = new HashMap<String, String>();
+        hmMapNumFields.put("v_offen", "verkliste");
+        hmMapNumFields.put("v_betrag", "verkliste");
+        hmMapNumFields.put("v_mwst7", "verkliste");
+        hmMapNumFields.put("v_mwst19", "verkliste");
+        hmMapNumFields.put("art_einzelpreis", "verkfaktura");
+        hmMapNumFields.put("art_mwst", "verkfaktura");
+        hmMapNumFields.put("anzahl", "verkfaktura");
+        hmMapNumFields.put("preis", "verkartikel");
+        hmMapNumFields.put("mwst", "verkartikel");
+        hmMapNumFields.put("lagerstand", "verkartikel");
+        hmMapNumFields.put("einkaufspreis", "verkartikel");
+        HashMap types = new HashMap();
+        Vector<Vector<String>> felder = SqlInfo.holeFelder("describe verkliste");
+        String[] cols = new String[felder.size()];
+        for (int i = 0; i < felder.size(); i++) {
+            cols[i] = felder.get(i)
+                            .get(0);
+            types.put(cols[i], felder.get(i)
+                                     .get(1));
+        }
+        felder = SqlInfo.holeFelder("describe verkartikel");
+        cols = new String[felder.size()];
+        for (int i = 0; i < felder.size(); i++) {
+            cols[i] = felder.get(i)
+                            .get(0);
+            types.put(cols[i], felder.get(i)
+                                     .get(1));
+        }
+        felder = SqlInfo.holeFelder("describe verkfaktura");
+        cols = new String[felder.size()];
+        for (int i = 0; i < felder.size(); i++) {
+            cols[i] = felder.get(i)
+                            .get(0);
+            types.put(cols[i], felder.get(i)
+                                     .get(1));
+        }
+
+        Set keys = hmMapNumFields.keySet();
+        for (Iterator it = keys.iterator(); it.hasNext();) {
+            String key = (String) it.next();
+            System.out.println("key: " + key + "  ist vom Typ: " + types.get(key).toString());
+            if (!types.get(key)
+                    .toString()
+                    .contains("decimal(10,2)")) {
+                JOptionPane.showMessageDialog(null, "Struktur der Tabelle '" + hmMapNumFields.get(key) + "' ist nicht aktuell. \nBitte wenden Sie sich an den Support!");
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
