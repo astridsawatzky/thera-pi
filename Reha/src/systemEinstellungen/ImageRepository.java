@@ -129,4 +129,9 @@ public class ImageRepository {
                     new ImageIcon(Path.Instance.getProghome() + "icons/" + "noaccess.gif"));
         }
     }
+
+    public void add(String string, ImageIcon image) {
+        SystemConfig.hmSysIcons.put(string, image);
+
+    }
 }
