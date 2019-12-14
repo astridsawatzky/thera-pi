@@ -2,7 +2,7 @@ package hauptFenster;
 
 public class Version {
 
-    public static final String aktuelleVersion = "2019-10-08-DB=";
+    public static final String aktuelleVersion = "2019-12-14-DB=";
     public static final int major = 1;
     public static final int minor = 1;
     public static final int revision = 3;
