@@ -86,7 +86,7 @@ public class TheraPi {
         Reha.initializeLogging();
         Reha reha = new Reha(mandant);
 
-        reha.start();
+        reha.startWithMandantSet();
     }
 
     private static void setLookAndFeel() {

@@ -1,4 +1,4 @@
-package tools;
+package CommonTools;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;

@@ -28,7 +28,7 @@ public class ICDrahmen implements Runnable {
         } else {
             ik = new IK("123456789");
         }
-        Connection conn = new DatenquellenFactory(ik).createConnection();
+        Connection conn = new DatenquellenFactory(ik.digitString()).createConnection();
         System.out.println(conn.isClosed());
         ICDrahmen icd = new ICDrahmen(conn);
         icd.getJFrame();

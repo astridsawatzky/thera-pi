@@ -8,15 +8,17 @@ import java.util.concurrent.ConcurrentMap;
 import mandant.IK;
 
 public class DatenquellenFactory {
-    private static final ConcurrentMap<IK, Datenquelle> grube = new ConcurrentHashMap<>();
-    private IK ik;
+    private static final ConcurrentMap<String, Datenquelle> grube = new ConcurrentHashMap<>();
+    private String ik;
 
-    public DatenquellenFactory(IK ik) {
+    public DatenquellenFactory(String ik) {
         this.ik = ik;
     }
 
-     public Connection createConnection() throws SQLException {
-         grube.computeIfAbsent(ik,k -> new Datenquelle(ik.digitString()));
+
+
+    public Connection createConnection() throws SQLException {
+         grube.computeIfAbsent(ik,k -> new Datenquelle(ik));
             return grube.get(ik).connection();
      }
 

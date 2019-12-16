@@ -60,7 +60,7 @@ public class ArztBaustein {
 
     public static void start(IK ik, IOfficeApplication officeapplication) throws SQLException {
 
-        Connection connection = new DatenquellenFactory(ik).createConnection();
+        Connection connection = new DatenquellenFactory(ik.digitString()).createConnection();
         ArztBaustein arztbaustein = new ArztBaustein(connection, officeapplication);
         arztbaustein.getJFrame();
     }

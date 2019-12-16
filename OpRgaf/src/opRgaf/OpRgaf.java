@@ -6,7 +6,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -16,8 +15,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jdesktop.swingworker.SwingWorker;
-
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
@@ -25,7 +22,6 @@ import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import crypt.Verschluesseln;
 import environment.Path;
 import io.RehaIOMessages;
 import logging.Logging;
@@ -98,15 +94,15 @@ public class OpRgaf implements WindowListener {
                 aktIK = args[1];
 
                 iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "/oprgaf.ini");
-                AbrechnungParameter(progHome);
-                FirmenDaten(progHome);
+                AbrechnungParameter(proghome);
+                FirmenDaten(proghome);
                 if (args.length >= 3) {
                     rehaReversePort = Integer.parseInt(args[2]);
                 }
             } else {
-                iniOpRgAf = new OpRgAfIni(progHome, "ini/", aktIK, "/oprgaf.ini");
-                AbrechnungParameter(progHome);
-                FirmenDaten(progHome);
+                iniOpRgAf = new OpRgAfIni(proghome, "ini/", aktIK, "/oprgaf.ini");
+                AbrechnungParameter(proghome);
+                FirmenDaten(proghome);
             }
             if (testcase) {
                 System.out.println(iniOpRgAf.getMahnParameter());

@@ -122,40 +122,31 @@ import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.StartOOApplication;
-import Suchen.ICDrahmen;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.text.TextException;
 import anmeldungUmsatz.Anmeldungen;
 import anmeldungUmsatz.Umsaetze;
-import arztBaustein.ArztBaustein;
 import arztFenster.ArztPanel;
 import barKasse.Barkasse;
 import benutzerVerwaltung.BenutzerRechte;
-import dialoge.AboutDialog;
-import dialoge.DatumWahl;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
 import environment.LadeProg;
 import environment.Path;
-import generalSplash.RehaSplash;
 import geraeteInit.BarCodeScanner;
 import gui.Cursors;
 import io.RehaIOMessages;
 import krankenKasse.KassenPanel;
 import logging.Logging;
-import mandant.IK;
 import mandant.Mandant;
 import menus.TerminMenu;
-import oOorgTools.OOTools;
 import ocf.OcKVK;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
-import rehaWissen.RehaWissen;
 import roogle.RoogleFenster;
 import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
@@ -164,11 +155,9 @@ import systemTools.RehaPainters;
 import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
 import terminKalender.TerminFenster;
-import textBausteine.textbaus;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
-import wecker.Wecker;
 
 public class Reha implements RehaEventListener {
 
@@ -191,7 +180,7 @@ public class Reha implements RehaEventListener {
     public Dta301 dta301panel = null;
 
     public final int patiddiff = 5746;
-    private JXFrame jFrame = null;
+    JXFrame jFrame = null;
 
     private JMenuBar jJMenuBar = null;
     private JMenu fileMenu = null;
@@ -204,7 +193,7 @@ public class Reha implements RehaEventListener {
     private JMenu urlaubMenu = null;
     private JMenu helpMenu = null;
     private JMenuItem exitMenuItem = null;
-    private JMenuItem aboutMenuItem = null;
+    JMenuItem aboutMenuItem = null;
     private JMenuItem aboutF2RescueMenuItem = null;
     public JXStatusBar jXStatusBar = null;
     private int dividerLocLR = 0;
@@ -348,381 +337,11 @@ public class Reha implements RehaEventListener {
     private static String aktMandant = nullMandant.name();
 
     public static Reha instance = new Reha(nullMandant);
-    private static JXFrame thisFrame;
+    static JXFrame thisFrame;
 
-    private RehaSettings settings;
-    private static Logger logger;
+    static Logger logger;
     private LinkeTaskPane linkeTaskPane;
-    ActionListener ltplistener = new ActionListener() {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-
-            String cmd = e.getActionCommand();
-            switch (cmd) {
-
-            case "System Initialisierung":
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.wartenCursor);
-                        Reha.instance.progLoader.SystemInit(1, "");
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.normalCursor);
-
-                        return null;
-                    }
-
-                }.execute();
-                break;
-            case "Krankenkassen":
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.wartenCursor);
-                        Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
-
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.normalCursor);
-                        return null;
-                    }
-                }.execute();
-                break;
-            case "Terminkalender starten":
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.wartenCursor);
-                        Reha.instance.progLoader.ProgTerminFenster(1,
-                                (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
-
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.normalCursor);
-                        return null;
-                    }
-                }.execute();
-                break;
-            case "Arztstamm":
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        getThisFrame().setCursor(Cursors.wartenCursor);
-                        Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
-
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.normalCursor);
-                        return null;
-                    }
-                }.execute();
-                break;
-            case "Wochenarbeitszeiten definieren":
-                JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
-                if (termin != null) {
-                    JOptionPane.showMessageDialog(null,
-                            "Achtung!!!!! \n\nWährend der Arbeitszeit-Definition\n"
-                                    + "darf der Terminkalender aus Sicherheitsgründen nicht geöffnet sein.\n"
-                                    + "Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
-                    return;
-                }
-                Reha.instance.progLoader.ProgTerminFenster(0, 2);
-                break;
-            case "monthview":
-                new DatumWahl(200, 200);
-                break;
-            case "OpenOffice-Writer":
-                OOTools.starteLeerenWriter();
-                break;
-            case "OpenOffice-Calc":
-                OOTools.starteLeerenCalc();
-                break;
-            case "OpenOffice-Impress":
-                OOTools.starteLeerenImpress();
-                break;
-            case "Benutzerverwaltung":
-                Reha.instance.progLoader.BenutzerrechteFenster(1, "");
-                break;
-            case "[Ru:gl] - Die Terminsuchmaschine":
-                Reha.instance.progLoader.ProgRoogleFenster(0, null);
-                break;
-            case "RTA-Wisssen das Universalwissen":
-                break;
-            case "Thera-PI - Browser":
-                new Thread() {
-                    @Override
-                    public void run() {
-                        RehaWissen.main(new String[0]);
-                    }
-                }.start();
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        RehaSplash rspl = new RehaSplash(null,
-                                "Hilfebrowser laden....dieser Vorgang kann einige Sekunden dauern...");
-                        long zeit = System.currentTimeMillis();
-                        while (true) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                logger.error("thread was interrupted", e);
-                            }
-                            if (System.currentTimeMillis() - zeit > 6000) {
-                                break;
-                            }
-                        }
-                        rspl.dispose();
-                        return null;
-                    }
-
-                }.execute();
-                break;
-            case "Thera-PI - Nachrichten":
-                if (!RehaIOServer.rehaMailIsActive) {
-                    if (Reha.aktUser.startsWith("Therapeut")) {
-                        return;
-                    }
-                    Reha.getThisFrame()
-                        .setCursor(Cursors.wartenCursor);
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            new LadeProg(Path.Instance.getProghome() + "RehaMail.jar" + " "
-                                    + Path.Instance.getProghome() + " " + Reha.getAktIK() + " " + Reha.xport + " "
-                                    + Reha.aktUser.replace(" ", "#"));
-                        }
-                    }.start();
-
-                } else {
-                    if (Reha.aktUser.startsWith("Therapeut")) {
-                        return;
-                    }
-                    new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaMailreversePort,
-                            "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-                }
-                break;
-            case "Neuer Wissensbeitrag anlegen":
-                JOptionPane.showMessageDialog(null, "Achtung!!!!! \n\nDer Wissens-Generator ist auf diesem System\n\n"
-                        + "nicht installiert - oder konnte nicht gefunden werden...\n\n");
-                break;
-            case "Patienten und Rezepte":
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        Reha.thisFrame.setCursor(Cursors.wartenCursor);
-                        Reha.instance.progLoader.ProgPatientenVerwaltung(1, conn);
-
-                        Reha.thisFrame.setCursor(Cursors.normalCursor);
-                        return null;
-                    }
-
-                }.execute();
-                break;
-            case "piHelp":
-                new Thread() {
-                    @Override
-                    public void run() {
-
-                        new LadeProg(Path.Instance.getProghome() + "piHelp.jar " + Path.Instance.getProghome() + " "
-                                + Reha.getAktIK());
-                    }
-                }.start();
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        RehaSplash rspl = new RehaSplash(null,
-                                "piHelp - Hilfetextgenerator laden....dieser Vorgang kann einige Sekunden dauern...");
-                        long zeit = System.currentTimeMillis();
-                        while (true) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                logger.error("thread was interrupted", e);
-                            }
-                            if (System.currentTimeMillis() - zeit > 2000) {
-                                break;
-                            }
-                        }
-                        rspl.dispose();
-                        return null;
-                    }
-
-                }.execute();
-                break;
-            case "piTool":
-                new LadeProg(Path.Instance.getProghome() + "piTool.jar");
-                break;
-            case "piTextb":
-                textbaus.main(new String[] { Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/rehajava.ini",
-                        Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/thbericht.ini"
-
-                });
-
-                break;
-            case "piArztTextb":
-                if (!Rechte.hatRecht(Rechte.Sonstiges_textbausteinegutachten, true)) {
-                    return;
-                }
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            ArztBaustein.start(new IK(Reha.getAktIK()), Reha.officeapplication);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        RehaSplash rspl = new RehaSplash(null,
-                                "Textbaustein-Editor laden....dieser Vorgang kann einige Sekunden dauern...");
-                        long zeit = System.currentTimeMillis();
-                        while (true) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                logger.error("thread was interrupted", e);
-                            }
-                            if (System.currentTimeMillis() - zeit > 2000) {
-                                break;
-                            }
-                        }
-                        rspl.dispose();
-                        return null;
-                    }
-                }.execute();
-                break;
-            case "piIcd10":
-                SwingUtilities.invokeLater(new ICDrahmen(conn));
-                break;
-            case "piQM":
-                new Thread() {
-                    @Override
-                    public void run() {
-                        new LadeProg(Path.Instance.getProghome() + "QMHandbuch.jar");
-                    }
-                }.start();
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        RehaSplash rspl = new RehaSplash(null,
-                                "QM-Handbuch laden....dieser Vorgang kann einige Sekunden dauern...");
-                        long zeit = System.currentTimeMillis();
-                        while (true) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                logger.error("thread was interrupted", e);
-                            }
-                            if (System.currentTimeMillis() - zeit > 4000) {
-                                break;
-                            }
-                        }
-                        rspl.dispose();
-                        return null;
-                    }
-
-                }.execute();
-                break;
-            case "piAW":
-                new Thread() {
-                    @Override
-                    public void run() {
-                        new LadeProg(Path.Instance.getProghome() + "QMAuswertung.jar" + " "
-                                + Path.Instance.getProghome() + " " + Reha.getAktIK());
-                    }
-                }.start();
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        RehaSplash rspl = new RehaSplash(null,
-                                "QM-Auswertung laden....dieser Vorgang kann einige Sekunden dauern...");
-                        long zeit = System.currentTimeMillis();
-                        while (true) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                logger.error("thread was interrupted", e);
-                            }
-                            if (System.currentTimeMillis() - zeit > 4000) {
-                                break;
-                            }
-                        }
-                        rspl.dispose();
-                        return null;
-                    }
-
-                }.execute();
-                break;
-            case "Akutliste":
-                if (SqlInfo.holeEinzelFeld("select id from pat5 where akutpat='T' LIMIT 1")
-                           .equals("")) {
-                    JOptionPane.showMessageDialog(null, "Keine Akutpatienten im Patientenstamm vermerkt");
-                    return;
-                }
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.wartenCursor);
-                        try {
-                            new AkutListe(Reha.officeapplication.getDocumentService());
-                        } catch (TextException | OfficeApplicationException e) {
-
-                            e.printStackTrace();
-                        }
-                        Reha.getThisFrame()
-                            .setCursor(Cursors.cdefault);
-                        return null;
-                    }
-                }.execute();
-                new SwingWorker<Void, Void>() {
-                    @Override
-                    protected Void doInBackground() throws Exception {
-                        RehaSplash rspl = new RehaSplash(null,
-                                "Akutliste starten -  dieser Vorgang kann einige Sekunden dauern...");
-                        long zeit = System.currentTimeMillis();
-                        while (true) {
-                            try {
-                                Thread.sleep(20);
-                            } catch (InterruptedException e) {
-                                logger.error("thread was interrupted", e);
-                            }
-                            if (System.currentTimeMillis() - zeit > 2000) {
-                                break;
-                            }
-                        }
-                        rspl.dispose();
-                        return null;
-                    }
-
-                }.execute();
-                break;
-            case "neuerwecker":
-                Wecker wecker = new Wecker(null);
-                wecker.pack();
-                wecker.setVisible(true);
-                wecker = null;
-                break;
-            }
-            if (cmd.startsWith("UserTask-")) {
-                try {
-                    int taskNummer = Integer.parseInt(cmd.toString()
-                                                         .split("-")[1]);
-                    Runtime.getRuntime()
-                           .exec(SystemConfig.vUserTasks.get(taskNummer)
-                                                        .get(2));
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-
-        }
-    };
+    ActionListener ltplistener = new LinkeTaskPaneListener(this);
 
     public static JXFrame getThisFrame() {
         return thisFrame;
@@ -746,11 +365,7 @@ public class Reha implements RehaEventListener {
 
     }
 
-    public void start() {
 
-        startWithMandantSet();
-
-    }
 
     public static void main(String[] args) {
         System.setProperty("java.net.preferIPv4Stack", "true");
@@ -767,26 +382,20 @@ public class Reha implements RehaEventListener {
             mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK" + DefaultMandant),
                     inif.getStringProperty("TheraPiMandanten", "MAND-NAME" + DefaultMandant));
         }
-        new Reha(mainMandant).start();
+        new Reha(mainMandant).startWithMandantSet();
 
     }
-
     public static void initializeLogging() {
 
         logger = LoggerFactory.getLogger(Reha.class);
     }
-
-    private void startWithMandantSet() {
+    public void startWithMandantSet() {
 
         aktIK = mandant.ik();
         aktMandant = mandant.name();
 
         String iniPath = Path.Instance.getProghome() + "ini/" + mandant.ik() + "/";
-        try {
-            settings = new RehaSettings(mandant);
-        } catch (IOException e) {
-            logger.error("RehaSettings could not be created", e);
-        }
+
 
         INITool.init(iniPath);
         logger.info("Insgesamt sind " + Integer.toString(INITool.getDBInis().length)
@@ -2743,243 +2352,7 @@ public class Reha implements RehaEventListener {
         }
     }
 
-ActionListener actionListener = new ActionListener() {
-
-
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        String cmd = arg0.getActionCommand();
-        switch (cmd) {
-        case "ueberTheraPi":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    AboutDialog aboutFenster = new AboutDialog(jFrame, aboutMenuItem.getText());
-                    aboutFenster.setVisible(true);
-                    aboutFenster.setFocus();
-                    return null;
-                }
-            }.execute();
-            break;
-        case "f2Rescue":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    if (Reha.terminLookup.size() <= 0) {
-                        JOptionPane.showMessageDialog(null, "Bislang sind noch keine F3 / F2-Termine aufgezeichnet");
-                        return null;
-                    }
-                    try {
-                        new F2RettungsAnker();
-                    } catch (TextException e) {
-                        e.printStackTrace();
-                    }
-
-                    return null;
-                }
-            }.execute();
-            break;
-        case "testeFango":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    Wecker.testeWecker();
-                    return null;
-                }
-            }.execute();
-            break;
-        case "patient":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    progLoader.ProgPatientenVerwaltung(1, conn);
-                    Reha.instance.progressStarten(false);
-                    return null;
-                }
-            }.execute();
-            return;
-        case "kasse":
-            Reha.instance.progLoader.KassenFenster(0, TestePatStamm.PatStammKasseID());
-            return;
-        case "arzt":
-            Reha.instance.progLoader.ArztFenster(0, TestePatStamm.PatStammArztID());
-            return;
-        case "hmabrechnung":
-            try {
-                if (SystemConfig.hmEmailExtern.get("SenderAdresse") == null
-                        || SystemConfig.hmEmailExtern.get("SenderAdresse")
-                                                     .trim()
-                                                     .equals("")) {
-                    JOptionPane.showMessageDialog(null,
-                            "<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
-                    return;
-                }
-            } catch (NullPointerException ex) {
-                JOptionPane.showMessageDialog(null,
-                        "<html>Bevor zum ersten Mal mit der GKV abgerechnet wird<br><br><b>muß(!) der Emailaccount in der System-Init konfiguriert werden.</b><br><br></html>");
-                return;
-            }
-            Reha.instance.progLoader.AbrechnungFenster(1, conn);
-            return;
-        case "rehaabrechnung":
-            Reha.instance.progLoader.RehaabrechnungFenster(1, "");
-            return;
-        case "barkasse":
-            Reha.instance.progLoader.BarkassenFenster(1, "");
-            return;
-        case "anmeldezahlen":
-            Reha.instance.progLoader.AnmeldungenFenster(1, "", conn);
-            return;
-        case "tagesumsatz":
-            Reha.instance.progLoader.UmsatzFenster(1, "");
-            return;
-        case "verkauf":
-            Reha.instance.progLoader.VerkaufFenster(1, "");
-            return;
-        case "urlaub":
-            if (!Rechte.hatRecht(Rechte.Funktion_urlaubueberstunden, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaUrlaub.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "umsatzbeteiligung":
-            Reha.instance.progLoader.BeteiligungFenster(1, "");
-            return;
-        case "lvastatistik":
-            new LadeProg(Path.Instance.getProghome() + "RehaStatistik.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "offeneposten":
-            if (!Rechte.hatRecht(Rechte.Funktion_offeneposten, true)) {
-                return;
-            }
-            if (!RehaIOServer.offenePostenIsActive) {
-                new LadeProg(Path.Instance.getProghome() + "OffenePosten.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + Reha.xport);
-            } else {
-                new ReverseSocket().setzeRehaNachricht(RehaIOServer.offenePostenreversePort,
-                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-            }
-            return;
-        case "rezeptfahnder":
-            new RezeptFahnder(true, conn);
-            return;
-        case "rgaffaktura":
-            if (!Rechte.hatRecht(Rechte.Funktion_barkasse, false)) {
-                JOptionPane.showMessageDialog(null, "Keine Berechtigung -> Funktion Ausbuchen RGAF-Faktura");
-                return;
-            }
-            if (!RehaIOServer.rgAfIsActive) {
-                new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + Reha.xport);
-            } else {
-                new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,
-                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-            }
-            return;
-        case "kassenbuch":
-            if (!Rechte.hatRecht(Rechte.Funktion_kassenbuch, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaKassenbuch.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "geburtstagsbriefe":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_geburtstagsbriefe, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "GBriefe.jar" + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "sqlmodul":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
-                return;
-            }
-            if (!RehaIOServer.rehaSqlIsActive) {
-                new LadeProg(Path.Instance.getProghome() + "RehaSql.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
-                        + (!Rechte.hatRecht(Rechte.BenutzerSuper_user, false) ? " readonly" : " full"));
-            } else {
-                new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaSqlreversePort,
-                        "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-            }
-            return;
-        case "fallsteuerung":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
-                return;
-            }
-            if (RehaIOServer.reha301IsActive) {
-                JOptionPane.showMessageDialog(null, "Das 301-er Modul läuft bereits");
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.reha301reversePort,
-                                "Reha301#" + RehaIOMessages.MUST_GOTOFRONT);
-                    }
-                });
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "Reha301.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
-            return;
-        case "workflow":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_Reha301, true)) {
-                return;
-            }
-            if (RehaIOServer.rehaWorkFlowIsActive) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaWorkFlowreversePort,
-                                "ZeigeFrame#" + RehaIOMessages.MUST_GOTOFRONT);
-                    }
-                });
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "WorkFlow.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
-            return;
-        case "hmrsearch":
-            System.out.println("isActive = " + RehaIOServer.rehaHMKIsActive);
-            if (RehaIOServer.rehaHMKIsActive) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        String searchrez = (Reha.instance.patpanel != null
-                                ? " " + Reha.instance.patpanel.vecaktrez.get(1)
-                                : "");
-                        new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
-                                "Reha#" + RehaIOMessages.MUST_GOTOFRONT);
-                        if (!searchrez.isEmpty()) {
-                            new ReverseSocket().setzeRehaNachricht(RehaIOServer.rehaHMKreversePort,
-                                    "Reha#" + RehaIOMessages.MUST_REZFIND + "#" + searchrez);
-                        }
-                    }
-                });
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaHMK.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport))
-                    + (Reha.instance.patpanel != null ? " " + Reha.instance.patpanel.vecaktrez.get(1) : ""));
-            // System.out.println("Übergebe Rezeptnummer:
-            // "+SystemConfig.hmAdrRDaten.get("Rnummer"));
-            // Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
-            return;
-        case "iniedit":
-            if (!Rechte.hatRecht(Rechte.Sonstiges_sqlmodul, true)) {
-                return;
-            }
-            new LadeProg(Path.Instance.getProghome() + "RehaIniedit.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK());
-            return;
-        case "ocr":
-            new LadeProg(Path.Instance.getProghome() + "RehaOCR.jar " + " " + Path.Instance.getProghome() + " "
-                    + Reha.getAktIK() + " " + String.valueOf(Integer.toString(Reha.xport)));
-            return;
-        }
-
-    }};
+ActionListener actionListener = new MenuActionListener(this);
 
     public void activateWebCam() {
 
