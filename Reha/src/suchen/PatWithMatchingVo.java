@@ -2,7 +2,6 @@ package suchen;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.Vector;
 
 import CommonTools.DatFunk;
 import mandant.IK;
-import mitarbeiter.Mitarbeiter;
 
 public class PatWithMatchingVo {
     String    nachname;
@@ -29,7 +27,6 @@ public class PatWithMatchingVo {
     }
     public Vector<Vector<String>> getPatList() {
         Vector<Vector<String>> result = new Vector<Vector<String>>();
-        PatWithMatchingVo pat = null;
         for (int i = 0; i < patientenListe.size(); i++ ) {
             Vector<String> currVec = new Vector<String>();
             currVec.addAll(Arrays.asList(patientenListe.get(i).nachname,
@@ -47,7 +44,6 @@ public class PatWithMatchingVo {
     }
     public List<String> getVoList() {
         List<String> rezepte = new LinkedList<String>();
-        PatWithMatchingVo pat = null;
         for (int i = 0; i < patientenListe.size(); i++ ) {
             rezepte.add(patientenListe.get(i).rezeptnummer);
         }
@@ -55,7 +51,7 @@ public class PatWithMatchingVo {
     }
     public PatWithMatchingVo ofResultset(ResultSet rs) throws SQLException {
         PatWithMatchingVo pat = new PatWithMatchingVo(this.ik);
-        
+
         pat.nachname = rs.getString(cNachname);
         pat.vorname = rs.getString(cVorname);
         pat.geboren = rs.getString(cGeboren);

@@ -3,13 +3,11 @@ package suchen;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.LinkedList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import hauptFenster.Reha;
 import mandant.IK;
 import sql.DatenquellenFactory;
 
@@ -25,15 +23,12 @@ public class PatMitVollenVOs extends PatWithMatchingVo {
     public PatMitVollenVOs(IK ik) {
         super(ik);
         patientenListe = new LinkedList<PatWithMatchingVo>();
-        try (Connection con = new DatenquellenFactory().with(ik)
+        try (Connection con = new DatenquellenFactory(ik.digitString())
                                                        .createConnection();) {
             ResultSet rs = con.createStatement()
                               .executeQuery(sstmt);
-            int spalten = rs.getMetaData()
-                    .getColumnCount();
-            int reihen = 0;
+
             while (rs.next()) {
-                reihen++;
                 patientenListe.add(ofResultset(rs));
             }
 

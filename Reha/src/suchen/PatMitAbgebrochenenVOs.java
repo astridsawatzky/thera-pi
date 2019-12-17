@@ -3,7 +3,6 @@ package suchen;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.LinkedList;
 
 import org.slf4j.Logger;
@@ -40,15 +39,12 @@ public class PatMitAbgebrochenenVOs extends PatWithMatchingVo {
         super(ik);
 
         patientenListe = new LinkedList<PatWithMatchingVo>();
-        try (Connection con = new DatenquellenFactory().with(ik)
+        try (Connection con = new DatenquellenFactory(ik.digitString())
                                                        .createConnection();) {
             ResultSet rs = con.createStatement()
                               .executeQuery(sstmt);
-            int spalten = rs.getMetaData()
-                    .getColumnCount();
-            int reihen = 0;
+
             while (rs.next()) {
-                reihen++;
                 patientenListe.add(ofResultset(rs));
             }
 
@@ -56,10 +52,7 @@ public class PatMitAbgebrochenenVOs extends PatWithMatchingVo {
             logger.error("could not retrieve clients with completed but unlocked VOs from Database", e);
         }
     }
-    
-    public static void main(String[] args) {
-//      PatMitVollenVOs result = new PatMitAbgebrochenenVOs(new IK(Reha.getAktIK()));
-      PatWithMatchingVo result = new PatMitAbgebrochenenVOs(new IK("441469326"));
-  }
+
+
 
 }
