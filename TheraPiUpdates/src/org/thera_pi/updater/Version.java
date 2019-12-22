@@ -1,8 +1,9 @@
 package org.thera_pi.updater;
 
+import java.util.Comparator;
 import java.util.Objects;
 
-public class Version {
+public class Version implements Comparable<Version>{
 
     public static final String aktuelleVersion = "2019-12-14-DB=";
     public  final int major;
@@ -61,6 +62,17 @@ public class Version {
             return false;
         Version other = (Version) obj;
         return major == other.major && minor == other.minor && revision == other.revision;
+    }
+
+    private static final Comparator<Version> NATURAL_ORDER_COMPARATOR =
+            Comparator.comparing(Version::getMajor)
+                      .thenComparing(Version::getMinor)
+                      .thenComparing(Version::getRevision);
+
+
+    @Override
+    public int compareTo(Version o) {
+       return NATURAL_ORDER_COMPARATOR.compare(this, o);
     }
 
 }
