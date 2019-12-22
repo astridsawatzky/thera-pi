@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class Version {
 
-    public static final String aktuelleVersion = "2019-10-08-DB=";
+    public static final String aktuelleVersion = "2019-12-14-DB=";
     public  final int major;
     public  final int minor ;
     public  final int revision ;
