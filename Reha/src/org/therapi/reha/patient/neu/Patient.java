@@ -12,12 +12,14 @@ public class Patient {
     LocalDate geburtstag;
     Telefonnummer privat;
     Telefonnummer geschaeft;
+    Telefonnummer mobil;
     Emailadresse email;
     Akut akut;
     PlanDaten daten;
     Krankenversicherung kv;
     Kollege behandler;
     Arzt hauptarzt;
+
 
     public Patient() {
 

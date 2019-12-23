@@ -16,6 +16,7 @@ public class PatientMapper {
         patient. geburtstag = dto.geboren;
         patient. privat =new Telefonnummer(dto.telefonp);
         patient. geschaeft = new Telefonnummer(dto.telefong);
+        patient.mobil = new Telefonnummer(dto.telefonm);
         patient. email =new Emailadresse(dto.emailA);
         patient. akut = new Akut(dto.akutDat,dto.akutbis);
         patient. daten = new PlanDaten(dto.termine1,dto.termine2);
