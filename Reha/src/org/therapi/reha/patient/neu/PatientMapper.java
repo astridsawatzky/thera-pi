@@ -1,12 +1,10 @@
 package org.therapi.reha.patient.neu;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.Optional;
 
 public class PatientMapper {
 
-    public Patient of(PatientDTO dto) {
+    public static Patient of(PatientDTO dto) {
 
 
         Patient patient = new Patient();
@@ -15,6 +13,7 @@ public class PatientMapper {
         patient. nachname =dto.nName;
         patient. vorname =dto.vName;
         patient. wohnadresse = new Adresse("",dto.strasse,new PLZ(dto.plz),dto.ort);
+        patient.hasAbweichendeAdresse = dto.abwAdress;
         patient.abweichende = new Adresse("",dto.abwStrasse,new PLZ(dto.abwPlz),dto.abwOrt);
         patient. geburtstag = dto.geboren;
         patient. privat =new Telefonnummer(dto.telefonp);
@@ -36,6 +35,12 @@ public class PatientMapper {
 
     };
 
+    static Optional<Patient> findbyPat_intern(String pat_intern, String aktIK) {
+
+        return PatientDTO.findbyPat_intern(pat_intern, aktIK)
+                         .map(dto -> PatientMapper.of(dto));
+    }
+
 //    PatientDTO of(Patient pat) {
 //        PatientDTO patient = new PatientDTO();
 //        patient.anrede = pat.anrede;
@@ -43,7 +48,7 @@ public class PatientMapper {
 //        patient.nName = pat.nachname;
 //        patient.vName = pat.vorname;
 //        patient.geboren =  pat.geburtstag;
-//        patient.abwAdress = pat.abwAdress;
+//        patient.abwAdress = pat.hasAbweichendeAdresse;
 //        patient.abwAnrede = pat.abwAnrede;
 //        patient.abwTitel = pat.abwTitel;
 //        patient.abwNName = pat.abwN_Name;

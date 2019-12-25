@@ -1,9 +1,16 @@
 package org.therapi.reha.patient.neu;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import sql.DatenquellenFactory;
 
 public class PatientDTO {
 
@@ -81,6 +88,7 @@ public class PatientDTO {
      String kassenid;
      String jahrfrei;
      boolean u18ignore;
+    private static final Logger logger =LoggerFactory .getLogger(PatientDTO.class);
 
     public static PatientDTO of(ResultSet rs) throws SQLException {
 
@@ -160,7 +168,21 @@ public class PatientDTO {
 
     }
 
-
+   static  Optional<PatientDTO> findbyPat_intern(String pat_intern, String aktIK) {
+        String sql = " SELECT * FROM pat5 where PAT_INTERN ='" + pat_intern + "';";
+        Optional<PatientDTO> result = Optional.empty();
+        DatenquellenFactory df = new DatenquellenFactory(aktIK);
+        try (Connection con = df.createConnection();
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);) {
+            if (rs.next()) {
+                result = Optional.of(PatientDTO.of(rs));
+            }
+        } catch (SQLException e) {
+            logger.error("bad things happen here", e);
+        }
+        return result;
+    }
 
 
 

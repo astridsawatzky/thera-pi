@@ -34,6 +34,7 @@ public class Patient {
 
     public int db_id;
     public LocalDate anlageDatum;
+    public boolean hasAbweichendeAdresse;
 
 
     public Patient() {
