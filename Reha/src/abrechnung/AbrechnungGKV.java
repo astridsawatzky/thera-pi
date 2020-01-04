@@ -434,10 +434,6 @@ public class AbrechnungGKV extends JXPanel
         String cmd = sucheFertige + "WHERE rez_nr='" + neueReznr + "' Limit 1";
         Vector<Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
         treeKasse.setEnabled(true);
-        String kas = vecKassen.get(0)
-                              .get(0)
-                              .trim()
-                              .toUpperCase();
         String ktraeger = vecKassen.get(0)
                                    .get(1)
                                    .trim();
@@ -447,6 +443,8 @@ public class AbrechnungGKV extends JXPanel
         String ikpapier = vecKassen.get(0)
                                    .get(4)
                                    .trim();
+        String kas = getKassenName(ikkasse);
+        
         int usesSameIkPapier = 0;
         int aeste = rootKasse.getChildCount();
         int aktuellerAst = 0;
@@ -563,6 +561,38 @@ public class AbrechnungGKV extends JXPanel
         return treeindex;
     }
 
+    private String getKassenName(String ikkasse) {
+        // Kostenträgerdatei kann fehlerhaft sein ...
+        // String cmd = "select name1, name2 from ktraeger where ik_kasse = " + ikkasse; 
+        // ... daher lokalen Kassenstamm verwenden
+        String cmd = "select kassen_nam1, kassen_nam2 from kass_adr where ik_kasse = " + ikkasse;
+        Vector<String> vecKassenName = SqlInfo.holeFelder(cmd).get(0);
+        String kname = vecKassenName.get(0)
+                                    .trim();
+        String kname2 = vecKassenName.get(1)
+                                    .trim();
+        // etwas Kosmetik:
+        String tst1 = kname.toUpperCase();
+        String tst2 = kname2.toUpperCase();
+        if (kname.contains("Die Gesundheitskasse")) {
+            kname = kname.replace("Die Gesundheitskasse", " ") + kname2;
+        } else if (tst1.endsWith("-")) {
+            kname = kname + kname2;
+        } else if (tst1.contentEquals("BETRIEBSKRANKENKASSE")
+                || tst1.contentEquals("BKK LANDESVERBAND")
+                || tst1.endsWith(" DER")
+                || tst1.endsWith(" DES")
+                || tst2.startsWith("KRANKENKASSE") 
+                || tst2.startsWith("BETRIEBSKRANKENKASSE")
+                || tst2.startsWith("UND ")) {
+            kname = kname + " " + kname2;
+        }
+
+        kname = kname.replace("Betriebskrankenkasse", "BKK");
+        kname = kname.replace("Berufsgenossenschaft", "BG");
+        return kname;
+    }
+
     /*********
      * Einlesen der abrechnungsdaten
      */
@@ -597,10 +627,6 @@ public class AbrechnungGKV extends JXPanel
                         return null;
                     }
                     treeKasse.setEnabled(true);
-                    String kas = vecKassen.get(0)
-                                          .get(0)
-                                          .trim()
-                                          .toUpperCase();
                     String ktraeger = vecKassen.get(0)
                                                .get(1)
                                                .trim();
@@ -610,6 +636,7 @@ public class AbrechnungGKV extends JXPanel
                     String ikpapier = vecKassen.get(0)
                                                .get(4)
                                                .trim();
+                    String kas = getKassenName(ikkasse);
                     existiertschon.add(ktraeger);
 //                    //customIconList.add(ktraeger); neee, der erste bleibt 'original'
 //                    toggleIcons = 0;
@@ -632,16 +659,12 @@ public class AbrechnungGKV extends JXPanel
                                             .get(1)
                                             .trim();
                         if (!existiertschon.contains(ktraeger)) {
-                            kas = vecKassen.get(i)
-                                           .get(0)
-                                           .trim()
-                                           .toUpperCase();
-                            // ktraeger = vecKassen.get(i).get(1);
                             ikkasse = vecKassen.get(i)
                                                .get(2);
                             ikpapier = vecKassen.get(i)
                                                 .get(4)
                                                 .trim();
+                            kas = getKassenName(ikkasse);
                             existiertschon.add(ktraeger);
                             astAnhaengen(kas, ktraeger, ikkasse, ikpapier);
                             rezepteAnhaengen(aeste);
