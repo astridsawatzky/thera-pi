@@ -19,6 +19,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
+import org.thera_pi.nebraska.gui.utils.FileStatics;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
 
 import com.jgoodies.forms.builder.PanelBuilder;
@@ -26,7 +27,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import nebraska.FileStatics;
 
 public class NebraskaToolPanel extends JXPanel {
 

@@ -1,10 +1,8 @@
-package nebraska;
+package org.thera_pi.nebraska.gui.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-
-import org.thera_pi.nebraska.gui.utils.NUtils;
 
 public class BCStatics2 {
     public static String getSHA256fromByte(byte[] b) {

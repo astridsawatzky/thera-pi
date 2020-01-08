@@ -21,8 +21,8 @@ import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import nebraska.FileStatics;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
+import org.thera_pi.nebraska.gui.utils.FileStatics;
 
 public class NebraskaReplyEinlesen extends JDialog {
 

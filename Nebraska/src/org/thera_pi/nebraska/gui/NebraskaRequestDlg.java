@@ -39,7 +39,9 @@ import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
+import org.thera_pi.nebraska.gui.utils.BCStatics2;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
+import org.thera_pi.nebraska.gui.utils.FileStatics;
 import org.thera_pi.nebraska.gui.utils.JRtaComboBox;
 import org.thera_pi.nebraska.gui.utils.MultiLineLabel;
 import org.thera_pi.nebraska.gui.utils.OOorgTools;
@@ -51,8 +53,6 @@ import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.JRtaTextField;
 import crypt.Verschluesseln;
-import nebraska.BCStatics2;
-import nebraska.FileStatics;
 
 public class NebraskaRequestDlg extends JDialog {
 

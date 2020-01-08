@@ -1,4 +1,4 @@
-package nebraska;
+package org.thera_pi.nebraska.gui.utils;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

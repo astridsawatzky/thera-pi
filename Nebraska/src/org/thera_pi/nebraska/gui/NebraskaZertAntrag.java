@@ -38,6 +38,7 @@ import org.jdesktop.swingx.JXPanel;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
+import org.thera_pi.nebraska.gui.utils.FileStatics;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
 import org.thera_pi.nebraska.gui.utils.JRtaCheckBox;
 import org.thera_pi.nebraska.gui.utils.JRtaRadioButton;
@@ -53,7 +54,6 @@ import com.lowagie.text.pdf.PdfStamper;
 import CommonTools.DatFunk;
 import CommonTools.INIFile;
 import CommonTools.JRtaTextField;
-import nebraska.FileStatics;
 
 public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener, ActionListener {
 
