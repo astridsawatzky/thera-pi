@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 
-import utils.NUtils;
+import org.thera_pi.nebraska.gui.utils.NUtils;
 
 public class BCStatics2 {
     public static String getSHA256fromByte(byte[] b) {

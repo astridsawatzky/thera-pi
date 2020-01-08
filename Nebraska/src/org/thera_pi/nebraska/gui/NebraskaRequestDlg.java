@@ -17,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.security.cert.X509Certificate;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -41,6 +42,7 @@ import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
 import org.thera_pi.nebraska.gui.utils.JRtaComboBox;
 import org.thera_pi.nebraska.gui.utils.MultiLineLabel;
+import org.thera_pi.nebraska.gui.utils.OOorgTools;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -51,8 +53,6 @@ import CommonTools.JRtaTextField;
 import crypt.Verschluesseln;
 import nebraska.BCStatics2;
 import nebraska.FileStatics;
-import nebraska.Nebraska;
-import utils.OOorgTools;
 
 public class NebraskaRequestDlg extends JDialog {
 
@@ -74,6 +74,8 @@ public class NebraskaRequestDlg extends JDialog {
     private String institution = null;
     private String person = null;
     NebraskaKeystore keystore = null;
+
+	public static HashMap<String, String> hmZertifikat = new HashMap<String, String>();
 
     public NebraskaRequestDlg(NebraskaZertAntrag zertantrag, boolean importiert, String therapidir) {
         super();
@@ -388,7 +390,7 @@ public class NebraskaRequestDlg extends JDialog {
     private void doGenerateRequest() {
         mlabs[3].setEnabled(false);
         buts[3].setEnabled(false);
-        Nebraska.hmZertifikat.clear();
+        NebraskaRequestDlg.hmZertifikat.clear();
         StringBuffer md5Buf = new StringBuffer();
         try {
             OutputStream out = new FileOutputStream(this.pathtokeystoredir + File.separator + this.ik + ".p10");
@@ -396,15 +398,15 @@ public class NebraskaRequestDlg extends JDialog {
             out.flush();
             out.close();
 
-            Nebraska.hmZertifikat.put("<Ikpraxis>", "IK" + keystore.getIK());
-            Nebraska.hmZertifikat.put("<Issuerc>", "C=DE");
-            Nebraska.hmZertifikat.put("<Issuero>", "O=" + NebraskaConstants.X500_PRINCIPAL_ORGANIZATION);
-            Nebraska.hmZertifikat.put("<Subjectc>", "C=DE");
-            Nebraska.hmZertifikat.put("<Subjecto>", "O=" + NebraskaConstants.X500_PRINCIPAL_ORGANIZATION);
-            Nebraska.hmZertifikat.put("<Subjectou1>", "OU=" + keystore.getCompanyName());
-            Nebraska.hmZertifikat.put("<Subjectou2>", "OU=" + "IK" + keystore.getIK());
-            Nebraska.hmZertifikat.put("<Subjectcn>", "CN=" + keystore.getCEO());
-            Nebraska.hmZertifikat.put("<Algorithm>", NebraskaConstants.KEY_ALGORITHM);
+            NebraskaRequestDlg.hmZertifikat.put("<Ikpraxis>", "IK" + keystore.getIK());
+            NebraskaRequestDlg.hmZertifikat.put("<Issuerc>", "C=DE");
+            NebraskaRequestDlg.hmZertifikat.put("<Issuero>", "O=" + NebraskaConstants.X500_PRINCIPAL_ORGANIZATION);
+            NebraskaRequestDlg.hmZertifikat.put("<Subjectc>", "C=DE");
+            NebraskaRequestDlg.hmZertifikat.put("<Subjecto>", "O=" + NebraskaConstants.X500_PRINCIPAL_ORGANIZATION);
+            NebraskaRequestDlg.hmZertifikat.put("<Subjectou1>", "OU=" + keystore.getCompanyName());
+            NebraskaRequestDlg.hmZertifikat.put("<Subjectou2>", "OU=" + "IK" + keystore.getIK());
+            NebraskaRequestDlg.hmZertifikat.put("<Subjectcn>", "CN=" + keystore.getCEO());
+            NebraskaRequestDlg.hmZertifikat.put("<Algorithm>", NebraskaConstants.KEY_ALGORITHM);
             // Nebraska.hmZertifikat.put("<Md5publickey>",md5Buf.toString().replace(":", "
             // "));
             PKCS10CertificationRequest request = keystore.getCertificateRequest();
@@ -427,29 +429,29 @@ public class NebraskaRequestDlg extends JDialog {
             // String sha1 = BCStatics2.getSHA1fromByte(spub.getPublicKeyData().getBytes());
             String sha1 = BCStatics2.getSHA256fromByte(spub.getPublicKeyData()
                                                            .getBytes());
-            Nebraska.hmZertifikat.put("<Sha1publickey>", BCStatics2.macheHexDump(sha1, 20, " "));
+            NebraskaRequestDlg.hmZertifikat.put("<Sha1publickey>", BCStatics2.macheHexDump(sha1, 20, " "));
 
             String md5 = BCStatics2.getMD5fromByte(spub.getPublicKeyData()
                                                        .getBytes());
-            Nebraska.hmZertifikat.put("<Md5publickey>", BCStatics2.macheHexDump(md5, 20, " "));
+            NebraskaRequestDlg.hmZertifikat.put("<Md5publickey>", BCStatics2.macheHexDump(md5, 20, " "));
 
             // sha1 = BCStatics2.getSHA1fromByte(request.getEncoded());
             sha1 = BCStatics2.getSHA256fromByte(request.getEncoded());
-            Nebraska.hmZertifikat.put("<Sha1certificate>", BCStatics2.macheHexDump(sha1, 20, " "));
+            NebraskaRequestDlg.hmZertifikat.put("<Sha1certificate>", BCStatics2.macheHexDump(sha1, 20, " "));
 
             md5 = BCStatics2.getMD5fromByte(request.getEncoded());
-            Nebraska.hmZertifikat.put("<Md5certificate>", BCStatics2.macheHexDump(md5, 20, " "));
+            NebraskaRequestDlg.hmZertifikat.put("<Md5certificate>", BCStatics2.macheHexDump(md5, 20, " "));
 
             java.security.interfaces.RSAPublicKey pub = (java.security.interfaces.RSAPublicKey) request.getPublicKey();
             String hexstring = new BigInteger(pub.getModulus()
                                                  .toByteArray()).toString(16);
             // System.out.println("Hexstring = "+hexstring);
             String modulus = BCStatics2.macheHexDump(hexstring, 20, " ");
-            Nebraska.hmZertifikat.put("<Modulus>", modulus);
+            NebraskaRequestDlg.hmZertifikat.put("<Modulus>", modulus);
 
             hexstring = new BigInteger(pub.getPublicExponent()
                                           .toByteArray()).toString(16);
-            Nebraska.hmZertifikat.put("<Exponent>", (hexstring.length() == 5 ? "0" + hexstring : hexstring));
+            NebraskaRequestDlg.hmZertifikat.put("<Exponent>", (hexstring.length() == 5 ? "0" + hexstring : hexstring));
             String vorlage = this.zertantrag.therapidir + "/defaults/vorlagen/ZertBegleitzettel-SHA256.ott";
             File f = new File(vorlage);
             if (!f.exists()) {

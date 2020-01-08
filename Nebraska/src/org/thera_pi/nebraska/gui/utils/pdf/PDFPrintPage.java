@@ -1,4 +1,4 @@
-package pdfDrucker;
+package org.thera_pi.nebraska.gui.utils.pdf;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

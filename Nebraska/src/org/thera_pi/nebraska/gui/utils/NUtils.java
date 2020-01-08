@@ -1,4 +1,4 @@
-package utils;
+package org.thera_pi.nebraska.gui.utils;
 
 public class NUtils {
     private static String digits = "0123456789abcdef";

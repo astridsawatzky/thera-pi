@@ -1,4 +1,4 @@
-package utils;
+package org.thera_pi.nebraska.gui.utils;
 
 import java.awt.Cursor;
 import java.util.Iterator;
@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.thera_pi.nebraska.gui.NebraskaMain;
+import org.thera_pi.nebraska.gui.NebraskaRequestDlg;
 
 import com.sun.star.frame.XController;
 import com.sun.star.text.XTextViewCursorSupplier;
@@ -24,7 +25,6 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.noa.printing.IPrinter;
-import nebraska.Nebraska;
 
 public class OOorgTools {
     public static void loescheLeerenPlatzhalter(ITextDocument textDocument, ITextField placeholders) {
@@ -85,7 +85,7 @@ public class OOorgTools {
             System.out.println(placeholderDisplayText);
 
             /*****************/
-            Set<Map.Entry<String, String>> entries = Nebraska.hmZertifikat.entrySet();
+            Set<Map.Entry<String, String>> entries = NebraskaRequestDlg.hmZertifikat.entrySet();
             Iterator<Entry<String, String>> it = entries.iterator();
             while (it.hasNext()) {
                 Map.Entry<String, String> entry = it.next();

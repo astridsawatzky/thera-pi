@@ -1,4 +1,4 @@
-package pdfDrucker;
+package org.thera_pi.nebraska.gui.utils.pdf;
 
 import java.awt.print.Book;
 import java.awt.print.PageFormat;
