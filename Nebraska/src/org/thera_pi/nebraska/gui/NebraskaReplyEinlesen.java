@@ -22,7 +22,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import nebraska.FileStatics;
-import utils.ButtonTools;
+import org.thera_pi.nebraska.gui.utils.ButtonTools;
 
 public class NebraskaReplyEinlesen extends JDialog {
 

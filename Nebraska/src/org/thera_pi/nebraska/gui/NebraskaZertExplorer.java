@@ -40,7 +40,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
 import nebraska.FileStatics;
-import utils.JCompTools;
+import org.thera_pi.nebraska.gui.utils.JCompTools;
 
 public class NebraskaZertExplorer extends JXPanel implements ListSelectionListener, ActionListener {
     /**
