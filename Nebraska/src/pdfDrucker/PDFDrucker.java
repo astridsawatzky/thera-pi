@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-import javax.swing.SwingUtilities;
-
 import com.sun.pdfview.PDFFile;
 
 public class PDFDrucker {
@@ -56,25 +54,5 @@ public class PDFDrucker {
             e.printStackTrace();
         }
         fis.close();
-    }
-
-    public static void main(final String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    if (args.length == 0) {
-                        System.out.println("Kein Dateiname zum Druck uebergeben\n-->System wird beendet");
-                        System.exit(0);
-                    } else {
-                        PDFDrucker.setup(args[0]);
-                        System.exit(0);
-                    }
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                    System.exit(0);
-                }
-            }
-        });
     }
 }

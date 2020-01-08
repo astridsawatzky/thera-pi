@@ -142,7 +142,6 @@ public class NebraskaReplyEinlesen extends JDialog {
         String replykurz = eltern.getIK()
                                  .substring(0, 8)
                 + ".p7c";
-        String annahme = "annahme-sha256.key";
         System.out.println("Replyfile = " + replykurz);
         File f = new File(this.eltern.therapidir + "/keystore/" + eltern.getIK() + "/" + replykurz);
         if (!f.exists()) {

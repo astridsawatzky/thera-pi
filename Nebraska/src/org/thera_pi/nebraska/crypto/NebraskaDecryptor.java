@@ -31,8 +31,7 @@ public class NebraskaDecryptor {
     private PrivateKey privateKey;
     private String issuer;
     private BigInteger serial;
-    private boolean use256Hash;
-
+    
     /**
      * Create a Nebraska decryptor for self
      * 
@@ -48,7 +47,7 @@ public class NebraskaDecryptor {
         issuer = certificate.getIssuerDN()
                             .getName();
         serial = certificate.getSerialNumber();
-        use256Hash = nebraskaKeystore.is256Algorithm();
+        nebraskaKeystore.is256Algorithm();
     }
 
     /**

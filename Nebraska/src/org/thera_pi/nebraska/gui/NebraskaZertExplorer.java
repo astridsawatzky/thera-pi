@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
-import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -48,8 +47,6 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
      *
      */
     private static final long serialVersionUID = -7368787318044651022L;
-    private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-
     public static X509Certificate[] annahmeCerts = null;
     JXPanel content = null;
     public MyCertTableModel tabmod = new MyCertTableModel();
