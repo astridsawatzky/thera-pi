@@ -49,7 +49,7 @@ import rehaInternalFrame.JPatientInternal;
  */
 public class PatientHauptPanel extends JXPanel {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 36015777152668128L;
 
@@ -278,7 +278,7 @@ public class PatientHauptPanel extends JXPanel {
     /****************************************************/
     /**
      * Installiert die ActionListeners für alle drei Panels
-     * 
+     *
      */
     private void createActionListeners() {
         toolBarAction = new ActionListener() {
@@ -300,7 +300,7 @@ public class PatientHauptPanel extends JXPanel {
     /****************************************************/
     /**
      * Installiert die KeyListeners für alle drei Panels
-     * 
+     *
      */
     private void createKeyListeners() {
         // PateintToolBar
@@ -339,7 +339,7 @@ public class PatientHauptPanel extends JXPanel {
     /****************************************************/
     /**
      * Installiert die MouseListeners für alle drei Panels
-     * 
+     *
      */
 
     private void createMouseListeners() {
@@ -393,9 +393,9 @@ public class PatientHauptPanel extends JXPanel {
 
     /****************************************************/
     /**
-     * 
+     *
      * Aufräumarbeiten zuerst die Listener entfernen
-     * 
+     *
      */
     public void allesAufraeumen() {
         stammDatenPanel.fireAufraeumen();
@@ -440,12 +440,27 @@ public class PatientHauptPanel extends JXPanel {
 
         }
     }
+
+    void allesAufNull() {
+
+        aktPatID = "";
+        autoPatid = -1;
+        getStammDaten().htmlPane.setText("");
+        aktRezept.setzeRezeptPanelAufNull(true);
+        historie.setzeHistoriePanelAufNull(true);
+        berichte.setzeBerichtPanelAufNull(true);
+        dokumentation.setzeDokuPanelAufNull(true);
+        gutachten.setzeGutachtenPanelAufNull(true);
+        // dann die Icons löschen
+        pmemo[0].setText("");
+        pmemo[1].setText("");
+    }
 }
 
 /*********** Inner-Class JPatTextField *************/
 class JPatTextField extends JRtaTextField {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2904164740273664807L;
 

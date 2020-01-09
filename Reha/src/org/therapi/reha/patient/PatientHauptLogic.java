@@ -439,34 +439,13 @@ public class PatientHauptLogic {
                     SqlInfo.sqlAusfuehren(stmt);
                 }
             }.start();
-            allesAufNull();
+            patientHauptPanel.allesAufNull();
             setzeFocus();
         } else {
             JOptionPane.showMessageDialog(null, "Welchen Patient bitteschön wollen Sie löschen?");
             setzeFocus();
             return;
         }
-    }
-
-    private void allesAufNull() {
-        /******************************************************************************/
-        // erst die sichtbaren Edits löschen
-        /*
-         * for(int i = 0; i <15;i++){ patientHauptPanel.ptfield[i].setText(""); }
-         */
-        // aktPatID zurücksetzten dann ist in weiteres löschen nicht mehr möglich
-        patientHauptPanel.aktPatID = "";
-        patientHauptPanel.autoPatid = -1;
-        // jetzt das RezeptPanel KeinRezept anhängen
-        patientHauptPanel.getStammDaten().htmlPane.setText("");
-        patientHauptPanel.aktRezept.setzeRezeptPanelAufNull(true);
-        patientHauptPanel.historie.setzeHistoriePanelAufNull(true);
-        patientHauptPanel.berichte.setzeBerichtPanelAufNull(true);
-        patientHauptPanel.dokumentation.setzeDokuPanelAufNull(true);
-        patientHauptPanel.gutachten.setzeGutachtenPanelAufNull(true);
-        // dann die Icons löschen
-        patientHauptPanel.pmemo[0].setText("");
-        patientHauptPanel.pmemo[1].setText("");
     }
 
     public void patStarteFormulare() {
