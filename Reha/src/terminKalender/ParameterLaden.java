@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -148,7 +149,7 @@ public class ParameterLaden {
                 // datum <= '2008-01-20' AND behandler = '05BEHANDLER'");
                 rs = stmt.executeQuery("SELECT Matchcode,Nachname,Nicht_Zeig,Kalzeile,Abteilung FROM kollegen2");
 
-//		Kollegen cKollegen[] = new Kollegen([anz+1]);
+//        Kollegen cKollegen[] = new Kollegen([anz+1]);
                 col = new String[anz + 1][4];
                 int i = 0;
                 int durchlauf = 0;
@@ -194,7 +195,7 @@ public class ParameterLaden {
                     // System.out.println("************ Max KalZeile = "+maxKalZeile);
                     // aKollegen.add(itest);
                     vKollegen.add((ArrayList) aKollegen.clone());
-                    vKKollegen.add(new Kollegen(rs.getString("Matchcode"), rs.getString("Nachname"),
+                    vKKollegen.add(new Kollegen(Optional.ofNullable(rs.getString("Matchcode")).orElse(""), rs.getString("Nachname"),
                             rs.getString("Nicht_Zeig"), itest, rs.getString("Abteilung"), aKollegen.get(2), durchlauf));
                     // vKKollegen.add(new
                     // Kollegen(rs.getString("Matchcode"),rs.getString("Nachname"),rs.getString("Nicht_Zeig"),durchlauf)
