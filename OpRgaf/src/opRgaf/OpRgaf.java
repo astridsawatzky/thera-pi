@@ -94,14 +94,14 @@ public class OpRgaf implements WindowListener {
 
                 aktIK = args[1];
 
-                iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "/oprgaf.ini");
+                iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
                 AbrechnungParameter(proghome);
                 FirmenDaten(proghome);
                 if (args.length >= 3) {
                     rehaReversePort = Integer.parseInt(args[2]);
                 }
             } else {
-                iniOpRgAf = new OpRgAfIni(proghome, "ini/", aktIK, "/oprgaf.ini");
+                iniOpRgAf = new OpRgAfIni(proghome, "ini/", aktIK, "oprgaf.ini");
                 AbrechnungParameter(proghome);
                 FirmenDaten(proghome);
             }
