@@ -235,7 +235,7 @@ public class AbrechnungGKV extends JXPanel
         originalTitel = this.jry.getTitel();
         setEncryptTitle();
         // cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
-        disziSelect.setCurrDiszi(SystemConfig.initRezeptKlasse);
+        disziSelect.setCurrTypeOfVO(SystemConfig.initRezeptKlasse);
         jry.setAbrRezInstance(abrRez); // JAbrechnungInternal mitteilen, welche Instanz cleanup() enthält
         RezFromDB = new RezFromDB();
         new SwingWorker<Void, Void>() {
@@ -377,7 +377,7 @@ public class AbrechnungGKV extends JXPanel
         if (cmd.equals("einlesen")) {
             // rootKasse.removeAllChildren();
 //            aktDisziplin = getCurrDiszi();
-            aktDisziplin = disziSelect.getCurrDiszi();
+            aktDisziplin = disziSelect.getCurrDisziKurz();
             // System.out.println("aktDisziplin = "+aktDisziplin);
             if (abrRez.rezeptSichtbar) {
                 abrRez.setRechtsAufNull();
@@ -395,7 +395,7 @@ public class AbrechnungGKV extends JXPanel
 
     public void einlesenErneuern(String neueReznr) {
         directCall = false;
-        aktDisziplin = disziSelect.getCurrDiszi();
+        aktDisziplin = disziSelect.getCurrDisziKurz();
         if (abrRez.rezeptSichtbar) {
             abrRez.setRechtsAufNull();
             aktuellerPat = "";
@@ -959,7 +959,7 @@ public class AbrechnungGKV extends JXPanel
                 //// System.out.println("Aktuelle Disziplin = "+getDiszis()+" / Aktuelle
                 //// Preisgruppe = "+pgr);
                 pgr = Integer.parseInt(node.knotenObjekt.preisgruppe.trim());
-                zuzahlModusDefault = (SystemPreislisten.hmZuzahlModus.get(disziSelect.getCurrDiszi())
+                zuzahlModusDefault = (SystemPreislisten.hmZuzahlModus.get(disziSelect.getCurrDisziKurz())
                                                                      .get(pgr - 1) == 1 ? true : false);
             }
             if (pgr < 0) {

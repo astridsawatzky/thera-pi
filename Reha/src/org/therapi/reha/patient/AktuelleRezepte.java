@@ -2301,7 +2301,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                     Reha.instance.abrechnungpanel.einlesenErneuern(null);
                 } else {
 //                    String aktDisziplin = diszis[Reha.instance.abrechnungpanel.cmbDiszi.getSelectedIndex()];
-                    String aktDisziplin = Reha.instance.abrechnungpanel.disziSelect.getCurrDiszi();
+                    String aktDisziplin = Reha.instance.abrechnungpanel.disziSelect.getCurrDisziKurz();
                     if (RezTools.putRezNrGetDisziplin(Reha.instance.patpanel.vecaktrez.get(1))
                                 .equals(aktDisziplin)) {
                         // Rezept gehört zu der Sparte, zur Sparte, die gerade im Abrechnungspanel
@@ -3396,7 +3396,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                              * String aktDisziplin =
                              * diszis[Reha.instance.abrechnungpanel.cmbDiszi.getSelectedIndex()];
                              */
-                            String aktDisziplin = Reha.instance.abrechnungpanel.disziSelect.getCurrDiszi();
+                            String aktDisziplin = Reha.instance.abrechnungpanel.disziSelect.getCurrDisziKurz();
                             if (RezTools.putRezNrGetDisziplin(xrez_nr)
                                         .equals(aktDisziplin)) {
                                 Reha.instance.abrechnungpanel.einlesenErneuern(null);

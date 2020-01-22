@@ -113,9 +113,6 @@ public class RezeptDaten extends JXPanel implements ActionListener {
             
             String diszi = RezTools.putRezNrGetDisziplin(dieseVO.getRezClass());
             int prgruppe = 0;
-            if (prgruppe < 0) {
-                prgruppe = 0;
-            }
             try {
                 prgruppe = Integer.parseInt(dieseVO.getPreisgruppe())-1;
             } catch (Exception ex) {

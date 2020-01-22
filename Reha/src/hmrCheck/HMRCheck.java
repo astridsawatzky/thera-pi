@@ -33,8 +33,6 @@ public class HMRCheck {
     String rezdatum = null;
     String letztbeginn = null;
     boolean isAdRrezept = false;
-    boolean isFolgerezept = false;  // 1x benutzt -> 0x
-    boolean isErstVO = false;       // 1x benutzt
     boolean neurezept = false;
     boolean doppelbehandlung = false;
     boolean unter18 = false;
@@ -55,6 +53,7 @@ public class HMRCheck {
     int maxprofall = 0;
     Disziplinen diszis = null;
 
+    // nur noch benutzt in 'doAbschlussTest' in aktRezepte
     public HMRCheck(String indi, int idiszi, Vector<Integer> vecanzahl, Vector<String> vecpositionen, int xpreisgruppe,
             Vector<Vector<String>> xpreisvec, int xrezeptart, String xreznr, String xrezdatum, String xletztbeginn) {
         indischluessel = indi;
@@ -76,12 +75,13 @@ public class HMRCheck {
         fehlertext = new FehlerTxt();
     }
 
-    public HMRCheck(Rezept rezept, String currDiszi, Vector<Vector<String>> xpreisvec) {
+    public HMRCheck(Rezept rezept, String currTypeOfVO, Vector<Vector<String>> xpreisvec) {
         diszis = new Disziplinen();
+        diszis.setCurrTypeOfVO(currTypeOfVO);
         anzahl = new Vector<Integer>();
         positionen = new Vector<String>();
         indischluessel = rezept.getIndiSchluessel().replace(" ", "");
-        disziplin = diszis.getIndex(currDiszi);
+        disziplin = diszis.getCurrDisziIdx();
         for (int i = 0; i < 4; i++) {
             String tmp = rezept.getHmPos(i + 1);
             if (tmp != "") {
@@ -116,20 +116,21 @@ public class HMRCheck {
             // McM: ist das korrekt? (Reha taucht im HMK nicht auf)
             return true;
         }
+        if (diszis.currIsRsport() || diszis.currIsFtrain()) { // noch nicht gespeicherte VOs haben noch keine reznummer 
+            return true;
+        }
         isAdRrezept = chkIsAdR(rezeptart);
-        isFolgerezept = chkIsFolgeVO(rezeptart);
-        isErstVO = chkIsErstVO(rezeptart);
 
-        if (reznummer.startsWith("PO") && isErstVO) {
+        if ((reznummer.startsWith("PO") || diszis.currIsPodo()) && chkIsErstVO(rezeptart)) {
             try {
-                if (Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(3)) > 3) {
+                if (anzahl.get(0) > 3) {
                     JOptionPane.showMessageDialog(null,
                             "Fehler!\nAnzahl der Behandlungen bei Erstverordnung Podologie sind maximal 3 erlaubt!");
                     return false;
                 }
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null,
-                        "Fehler bei der Mengenermittlung Podologie-Rezept und Erstverordnung!");
+                        "Fehler bei der Men genermittlung Podologie-Rezept und Erstverordnung!");
                 return false;
             }
         }
@@ -254,7 +255,7 @@ public class HMRCheck {
                                                    .get(2)) {
                                 boolean[] vorrUisoliert = stammDatenTools.RezTools.isVorrangigAndExtra(preisvec.get(j)
                                                                                                                .get(1),
-                                        reznummer);
+                                                                                                               diszis.getRezClass(disziplin));
                                 isoliertErlaubt = vorrUisoliert[1];
                             }
                         }

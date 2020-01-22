@@ -16,6 +16,7 @@ import javax.swing.SwingWorker;
 import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import abrechnung.Disziplinen;
 import environment.Path;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
@@ -140,7 +141,7 @@ public class RezTools {
 
             }
             positionen.add(String.valueOf(rezvec.get(i)));
-            bvorrangig = isVorrangigAndExtra(rezvec.get(i + 4), xreznr);
+            bvorrangig = isVorrangigAndExtra(rezvec.get(i + 4), xreznr.substring(0, 2));
             vorrangig.add(Boolean.valueOf(bvorrangig[0]));
             einzelerlaubt.add(Boolean.valueOf(bvorrangig[1]));
             anzahl.add(0);
@@ -248,23 +249,23 @@ public class RezTools {
         return ret;
     }
 
-    public static boolean[] isVorrangigAndExtra(String kuerzel, String xreznr) {
+    public static boolean[] isVorrangigAndExtra(String kuerzel, String rezClass) {
+        Disziplinen diszis = new Disziplinen();
+        final int VORRANGIG = 0, EXTRAOK = 1;
         boolean[] bret = { false, false };
-        Vector<Vector<String>> vec = SqlInfo.holeFelder("select vorrangig,extraok from kuerzel where kuerzel='"
-                + kuerzel + "' and disziplin ='" + xreznr.substring(0, 2) + "' LIMIT 1");
+        Vector<String> vec = SqlInfo.holeFelder("select vorrangig,extraok from kuerzel where kuerzel='"
+                + kuerzel + "' and disziplin ='" + rezClass + "' LIMIT 1").get(0);
         if (vec.size() <= 0) {
             String msg = "Achtung!\n\n" + "Ihre Kürzelzuordnung in den Preislisten ist nicht korrekt!!!!!\n"
-                    + "Kürzel: " + kuerzel + "\n" + "Disziplin: " + xreznr.substring(0, 2) + "\n\n"
+                    + "Kürzel: " + kuerzel + "\n" + "Disziplin: " + diszis.getDisziKurz(rezClass) + "\n\n"
                     + "Für die ausgewählte Diziplin ist das angegebene Kürzel nicht in der Kürzeltabelle vermerkt!";
             JOptionPane.showMessageDialog(null, msg);
             return null;
         }
-        bret[0] = vec.get(0)
-                     .get(0)
-                     .equals("T");
-        bret[1] = vec.get(0)
-                     .get(1)
-                     .equals("T");
+        bret[0] = vec.get(VORRANGIG)
+                .equals("T");
+        bret[1] = vec.get(EXTRAOK)
+                .equals("T");
         return bret;
     }
 

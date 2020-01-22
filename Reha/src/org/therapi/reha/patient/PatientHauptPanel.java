@@ -93,6 +93,7 @@ public class PatientHauptPanel extends JXPanel {
             "Gutachten", "Arzt & KK", "Plandaten" };
     public JLabel[] rezlabs = { null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null };
+    // Labels: 0-, 1-, 2-'angelegt von', 3-ktraeger, 4-Arzt, 5-Rezeptart, 6-BegrAdR, 7-TBericht
     public JTextArea rezdiag = null;
 
     public ImageIcon[] imgzuzahl = { null, null, null, null };
