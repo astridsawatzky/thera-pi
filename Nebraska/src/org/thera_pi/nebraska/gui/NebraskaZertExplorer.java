@@ -10,7 +10,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
-import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
@@ -33,6 +32,7 @@ import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
+import org.thera_pi.nebraska.gui.utils.FileStatics;
 import org.thera_pi.nebraska.gui.utils.JRtaCheckBox;
 import org.thera_pi.nebraska.gui.utils.JRtaComboBox;
 
@@ -40,16 +40,14 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import nebraska.FileStatics;
-import utils.JCompTools;
+
+import org.thera_pi.nebraska.gui.utils.JCompTools;
 
 public class NebraskaZertExplorer extends JXPanel implements ListSelectionListener, ActionListener {
     /**
      *
      */
     private static final long serialVersionUID = -7368787318044651022L;
-    private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-
     public static X509Certificate[] annahmeCerts = null;
     JXPanel content = null;
     public MyCertTableModel tabmod = new MyCertTableModel();

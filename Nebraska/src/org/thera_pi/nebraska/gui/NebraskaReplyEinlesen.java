@@ -21,8 +21,8 @@ import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import nebraska.FileStatics;
-import utils.ButtonTools;
+import org.thera_pi.nebraska.gui.utils.ButtonTools;
+import org.thera_pi.nebraska.gui.utils.FileStatics;
 
 public class NebraskaReplyEinlesen extends JDialog {
 
@@ -142,7 +142,6 @@ public class NebraskaReplyEinlesen extends JDialog {
         String replykurz = eltern.getIK()
                                  .substring(0, 8)
                 + ".p7c";
-        String annahme = "annahme-sha256.key";
         System.out.println("Replyfile = " + replykurz);
         File f = new File(this.eltern.therapidir + "/keystore/" + eltern.getIK() + "/" + replykurz);
         if (!f.exists()) {

@@ -1,6 +1,5 @@
-package pdfDrucker;
+package org.thera_pi.nebraska.gui.utils.pdf;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -30,15 +29,6 @@ public class PDFPrintPage implements Printable {
 
             double pwidth = 595.f;
             double pheight = 842.f;
-
-            Dimension dim;
-            dim = page.getUnstretchedSize((int) pwidth, (int) pheight, page.getBBox());
-
-            double aspect = page.getAspectRatio();
-            // System.out.println("Aspect = "+aspect);
-
-            double paperaspect = pwidth / pheight;
-            // System.out.println("Paperaspect = "+paperaspect);
 
             Rectangle imgbounds;
 
