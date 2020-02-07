@@ -773,7 +773,7 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
         }
         try {
             PdfReader reader = new PdfReader(vorlage);
-            outFile = vorlage + DatFunk.sHeute() + ".pdf";
+            outFile = vorlage.replace(".pdf", "_") + DatFunk.sHeute() + ".pdf";
             FileOutputStream out = new FileOutputStream(outFile);
             PdfStamper stamper = new PdfStamper(reader, out);
             AcroFields form = stamper.getAcroFields();
@@ -782,8 +782,10 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
             String fieldName = null;
             for (Iterator it = keys.iterator(); it.hasNext();) {
                 fieldName = (String) it.next();
+                String[] tmp = fieldName.split("[\\.\\[]");
+                String hmKey = tmp[4];
                 try {
-                    form.setField(fieldName, hmPdf.get(fieldName));
+                    form.setField(fieldName, hmPdf.get(hmKey));
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
