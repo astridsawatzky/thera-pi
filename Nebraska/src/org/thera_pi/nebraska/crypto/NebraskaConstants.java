@@ -20,15 +20,18 @@ public class NebraskaConstants {
     static final String CERTIFICATE_SIGNATURE_ALGORITHM_SHA256 = "SHA256WithRSAEncryption";
     public static final String CRQ_SIGNATURE_ALGORITHM_SHA256 = "SHA256withRSA";
 
-    static final String CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT = CERTIFICATE_SIGNATURE_ALGORITHM_SHA256;
-    public static final String CRQ_SIGNATURE_ALGORITHM_DEFAULT = CRQ_SIGNATURE_ALGORITHM_SHA256;
+    static final String CERTIFICATE_SIGNATURE_ALGORITHM_RSA_PSS = "SHA256WithRSAandMGF1";  // CMSSignedGenerator.ENCRYPTION_RSA_PSS  // 1.2.840.113549.1.1.10
+    public static final String CRQ_SIGNATURE_ALGORITHM_RSA_PSS = "SHA256WithRSAandMGF1";
+
+    static final String CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT = CERTIFICATE_SIGNATURE_ALGORITHM_SHA256;   // noch 'alter' Stand
+    public static final String CRQ_SIGNATURE_ALGORITHM_DEFAULT = CRQ_SIGNATURE_ALGORITHM_RSA_PSS;
 
     static final String FINGERPRINT_ALGORITHM = "MD5";
     static final String CERTIFICATE_TYPE = "X509";
     static final String CERTSTORE_TYPE = "Collection";
 
     static final int CERTIFICATE_YEARS = 3;
-    static final int KEY_LENGTH = 2048;
+    static final int KEY_LENGTH = 4096;
 
     // common part of X509 principal
     static final String X500_PRINCIPAL_COUNTRY = "DE";

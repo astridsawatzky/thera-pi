@@ -176,7 +176,7 @@ public class NebraskaMain {
         jf.setVisible(true);
 
         starteOfficeApplication();
-        new Constants();
+        //new Constants();    // Werte scheinen unbenutzt
         return jf;
     }
 

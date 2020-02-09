@@ -38,8 +38,8 @@ public class NebraskaReplyEinlesen extends JDialog {
     private JButton[] actionbuts = { null, null };
     private JButton[] buts = { null, null };
     private NebraskaZertAntrag eltern;
-    private String RECEIVER_KEY_FILE_2048 = "annahme-sha256.key";
-    private String receiverKeyFile2use = RECEIVER_KEY_FILE_2048;
+    private String RECEIVER_KEY_FILE = "annahme-rsa4096.key";
+    private String receiverKeyFile2use = RECEIVER_KEY_FILE;
 
     public NebraskaReplyEinlesen(NebraskaZertAntrag xeltern) {
         super();

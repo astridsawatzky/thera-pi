@@ -235,12 +235,14 @@ public class NebraskaEncryptor {
             break;
         case "SHA256WithRSAEncryption":
         case "2.16.840.1.101.3.4.2.1":
+        case "SHA256WithRSAandMGF1":    // solange neuer Signaturalgorithmus noch nicht programmiert ist
+        case "1.2.840.113549.1.1.10":   // erfolgt (Probe-)Verschlüsselung wie bisher
             // default bleibt
             break;
         default:
            System.out.println("NebraskaEncryptor.getDigest: unknown SignatureAlgorithm: " + signatureAlgorithm2use + ", use default");
         }
-        return null;
+        return retVal;
     }
 
 }

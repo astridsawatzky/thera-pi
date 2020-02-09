@@ -2,6 +2,7 @@ package org.thera_pi.nebraska.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -191,7 +192,10 @@ public class NebraskaRequestDlg extends JDialog {
                     return;
                 }
                 if (cmd.equals("generatekeypair")) {
+                    JOptionPane.showMessageDialog(null, "Schlüssel generieren benötigt ein paar Sekunden.\nBitte um etwas Geduld ...");
+                    setCursor(new Cursor(Cursor.WAIT_CURSOR));
                     doGenerateKeys();
+                    setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     return;
                 }
                 if (cmd.equals("generaterequest")) {
@@ -330,8 +334,6 @@ public class NebraskaRequestDlg extends JDialog {
     private void doGenerateKeys() {
         mlabs[2].setEnabled(false);
         buts[2].setEnabled(false);
-        mlabs[3].setEnabled(true);
-        buts[3].setEnabled(true);
         String privkeyfile = "privkey" + DatFunk.sDatInSQL(DatFunk.sHeute())
                                                 .replace("-", "");
         if (pw.getText()
@@ -372,6 +374,9 @@ public class NebraskaRequestDlg extends JDialog {
                 }
             }
             keystore.setCrqSignatureAlgorithm(NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_DEFAULT);
+            // ToDo:
+            // for RSASSA-PSS set PSS-parameters too
+            // McM 2020-02: default settings work - no action neccessary for now
             keystore.generateKeyPairAndSaveToFile(true, privkeyfile, pathtoprivkeydir);
             // keystore.generateKeyPairAndSaveToFile(false, privkeyfile, pathtoprivkeydir);
         } catch (NebraskaCryptoException e) {
@@ -385,6 +390,8 @@ public class NebraskaRequestDlg extends JDialog {
         } catch (NebraskaNotInitializedException e) {
             e.printStackTrace();
         }
+        mlabs[3].setEnabled(true);
+        buts[3].setEnabled(true);
     }
 
     private void doGenerateRequest() {
