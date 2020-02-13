@@ -371,7 +371,7 @@ public class NebraskaRequestDlg extends JDialog {
                     }
                 }
             }
-            keystore.set256Algorithm(true);
+            keystore.setCrqSignatureAlgorithm(NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_DEFAULT);
             keystore.generateKeyPairAndSaveToFile(true, privkeyfile, pathtoprivkeydir);
             // keystore.generateKeyPairAndSaveToFile(false, privkeyfile, pathtoprivkeydir);
         } catch (NebraskaCryptoException e) {

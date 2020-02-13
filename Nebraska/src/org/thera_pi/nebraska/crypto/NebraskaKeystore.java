@@ -52,6 +52,7 @@ import org.bouncycastle.asn1.ASN1Sequence;
 import org.bouncycastle.asn1.DERBitString;
 import org.bouncycastle.asn1.pkcs.CertificationRequestInfo;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.bouncycastle.jce.PKCS10CertificationRequest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openssl.PEMReader;
@@ -147,8 +148,14 @@ public class NebraskaKeystore {
      * The implementation is strange, it is related to variables in 
      * NebraskaContants.
      */
-    private boolean useSHA256;
+//    private boolean useSHA256;
 
+    /**
+     * set default for signature algorithm
+     */
+    private static String CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT;
+    private static String CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_DEFAULT;
+    
     private static final Logger logger = LoggerFactory.getLogger(NebraskaKeystore.class);
 
     /**
@@ -165,12 +172,6 @@ public class NebraskaKeystore {
      * @param IK               institution ID
      * @throws NebraskaCryptoException on cryptography related errors
      * @throws NebraskaFileException   on I/O related errors
-     */
-    /*
-     * public NebraskaKeystore(String keystoreFileName, String keystorePassword,
-     * String keyPassword, String IK) throws NebraskaCryptoException,
-     * NebraskaFileException { this(keystoreFileName, keystorePassword, keyPassword,
-     * IK, null, null); initSecurityProvider(); }
      */
     public NebraskaKeystore(String keystoreFileName, String keystorePassword, String keyPassword, String IK)
             throws NebraskaCryptoException, NebraskaFileException {
@@ -208,25 +209,29 @@ public class NebraskaKeystore {
 
     }
 
+    public void setCertSignatureAlgorithm(String certSignatureAlgorithm2use) {
+        CERTIFICATE_SIGNATURE_ALGORITHM_USED = certSignatureAlgorithm2use;        
+    }
     /* This function was added later and should be reworked. */
-    public void set256Algorithm(boolean use256) {
-        this.useSHA256 = use256;
-        if (this.useSHA256) {
-        	/* These static variables in  NebraskaConstants must be replaced 
-        	 * with object members here.
-        	 */
-            NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_NEW;
-            NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_NEW;
-        } else {
-            NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_OLD;
-            NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_OLD;
-        }
-
+    public void setCrqSignatureAlgorithm(String crqSignatureAlgorithm2use) {
+        CRQ_SIGNATURE_ALGORITHM_USED = crqSignatureAlgorithm2use;
+//        this.useSHA256 = use256;
+//        if (this.useSHA256) {
+//        	/* These static variables in  NebraskaConstants must be replaced 
+//        	 * with object members here.
+//        	 */
+//            CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_SHA256;
+//            CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_SHA256;
+//        } else {
+//            CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_SHA1;
+//            CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_SHA1;
+//        }
     }
 
     /* FIXME This function was added later and should be reworked. */
     public boolean is256Algorithm() {
-        return this.useSHA256;
+        return CRQ_SIGNATURE_ALGORITHM_USED.equals(NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_SHA256) ? true : false;
+//        return this.useSHA256;
     }
 
     /**
@@ -306,8 +311,6 @@ public class NebraskaKeystore {
                 keyStore.load(null, null);
                 saveKeystore();
             }
-
-            set256Algorithm(getAlgorithm());
 
         } catch (KeyStoreException e) {
             throw new NebraskaCryptoException(e);
@@ -443,7 +446,7 @@ public class NebraskaKeystore {
         } catch (NoSuchProviderException e) {
             throw new NebraskaCryptoException(e);
         }
-        kpGen.initialize(2048, new SecureRandom());
+        kpGen.initialize(NebraskaConstants.KEY_LENGTH, new SecureRandom());
         KeyPair keyPair = kpGen.generateKeyPair();
 
         X509Certificate cert = generateSelfSignedCert(keyPair);
@@ -517,7 +520,7 @@ public class NebraskaKeystore {
         certGen.setNotAfter(NebraskaUtil.certificateEnd(now));
         certGen.setSubjectDN(new X500Principal(subjectDN));
         certGen.setPublicKey(keyPair.getPublic());
-        certGen.setSignatureAlgorithm(NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_USED);
+        certGen.setSignatureAlgorithm(CERTIFICATE_SIGNATURE_ALGORITHM_USED);
 
         X509Certificate cert;
         try {
@@ -586,7 +589,7 @@ public class NebraskaKeystore {
 
         PKCS10CertificationRequest request;
         try {
-            request = new PKCS10CertificationRequest(NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED,
+            request = new PKCS10CertificationRequest(CRQ_SIGNATURE_ALGORITHM_USED,
                     new X500Principal(getSubjectDN()), publicKey, null, privateKey);
         } catch (InvalidKeyException e) {
             throw new NebraskaCryptoException(e);
@@ -1241,7 +1244,7 @@ public class NebraskaKeystore {
 
         PKCS10CertificationRequest request;
         try {
-            request = new PKCS10CertificationRequest(NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_USED,
+            request = new PKCS10CertificationRequest(CRQ_SIGNATURE_ALGORITHM_USED,
                     new X500Principal(getSubjectDN()), publicKey, null, privateKey);
         } catch (InvalidKeyException e) {
             throw new NebraskaCryptoException(e);
@@ -1263,7 +1266,7 @@ public class NebraskaKeystore {
             bret = (cert.getSigAlgName()
                         .toUpperCase()
                         .startsWith("SHA256WITHRSA") ? true : false);
-            // System.out.println("SHA-256 = "+bret);
+            System.out.println("SHA-256 = "+bret);
         }
         return bret;
     }

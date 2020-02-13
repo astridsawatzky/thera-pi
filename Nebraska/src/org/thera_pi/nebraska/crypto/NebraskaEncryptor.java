@@ -153,9 +153,12 @@ public class NebraskaEncryptor {
         // first processing step: sign data
 
         CMSSignedDataGenerator generator = new CMSSignedDataGenerator();
+        String digestOID = (use256Hash ?  CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1);
+        System.out.println("NebraskaEncryptor.encrypt generator.addSigner digest: " + digestOID);
         generator.addSigner(senderKey, senderCert,
-                (use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1));
-
+//                (use256Hash ? CMSSignedDataGenerator.DIGEST_SHA256 : CMSSignedDataGenerator.DIGEST_SHA1));
+                digestOID);
+        
         try {
             generator.addCertificatesAndCRLs(certificateChain);
         } catch (CertStoreException e) {
