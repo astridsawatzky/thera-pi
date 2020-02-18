@@ -148,10 +148,9 @@ public class NebraskaKeystore {
      * The implementation is strange, it is related to variables in 
      * NebraskaContants.
      */
-//    private boolean useSHA256;
 
     /**
-     * set default for signature algorithm
+     * set default for signature algorithms
      */
     private static String CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT;
     private static String CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_DEFAULT;
@@ -207,31 +206,18 @@ public class NebraskaKeystore {
         initSecurityProvider();
         initKeystore();
 
+        setCertSignatureAlgorithm(getAlgorithmOfCert(this.institutionID));
+
     }
 
     public void setCertSignatureAlgorithm(String certSignatureAlgorithm2use) {
         CERTIFICATE_SIGNATURE_ALGORITHM_USED = certSignatureAlgorithm2use;        
     }
-    /* This function was added later and should be reworked. */
+    public String getCertSignatureAlgorithm() {
+        return CERTIFICATE_SIGNATURE_ALGORITHM_USED;        
+    }
     public void setCrqSignatureAlgorithm(String crqSignatureAlgorithm2use) {
         CRQ_SIGNATURE_ALGORITHM_USED = crqSignatureAlgorithm2use;
-//        this.useSHA256 = use256;
-//        if (this.useSHA256) {
-//        	/* These static variables in  NebraskaConstants must be replaced 
-//        	 * with object members here.
-//        	 */
-//            CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_SHA256;
-//            CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_SHA256;
-//        } else {
-//            CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_SHA1;
-//            CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_SHA1;
-//        }
-    }
-
-    /* FIXME This function was added later and should be reworked. */
-    public boolean is256Algorithm() {
-        return CRQ_SIGNATURE_ALGORITHM_USED.equals(NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_SHA256) ? true : false;
-//        return this.useSHA256;
     }
 
     /**
@@ -311,7 +297,6 @@ public class NebraskaKeystore {
                 keyStore.load(null, null);
                 saveKeystore();
             }
-
         } catch (KeyStoreException e) {
             throw new NebraskaCryptoException(e);
         } catch (NoSuchProviderException e) {
@@ -1190,7 +1175,6 @@ public class NebraskaKeystore {
         try {
             Enumeration<?> en = keyStore.aliases();
             en = keyStore.aliases();
-            Collections.list(en);
             while (en.hasMoreElements()) {
                 String aliases = (String) en.nextElement();
                 if (aliases != null) {
@@ -1259,16 +1243,19 @@ public class NebraskaKeystore {
 
     }
 
-    public boolean getAlgorithm() {
-        boolean bret = false;
+    /**
+     * Get the signature algorithm, used in the cert represented by the given alias.
+     *
+     * @return algorithm used in the cert by name or OID as String 
+     */
+    public String getAlgorithmOfCert(String alias) {
+        String SigAlgName = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT;
         X509Certificate cert;
-        if (countCerts() > 0 && (cert = getCertByAlias(this.institutionID)) != null) {
-            bret = (cert.getSigAlgName()
-                        .toUpperCase()
-                        .startsWith("SHA256WITHRSA") ? true : false);
-            System.out.println("SHA-256 = "+bret);
+        if (countCerts() > 0 && (cert = getCertByAlias(alias)) != null) {
+            SigAlgName = cert.getSigAlgName();
+            System.out.println("keyStore.getAlgorithm of " + alias + ": " + SigAlgName);
         }
-        return bret;
+        return SigAlgName;
     }
 
     public X509Certificate getKeyCert() {
