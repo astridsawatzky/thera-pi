@@ -40,6 +40,7 @@ import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.crypto.NebraskaKeystore;
 import org.thera_pi.nebraska.crypto.NebraskaNotInitializedException;
+import org.thera_pi.nebraska.crypto.NebraskaUtil;
 import org.thera_pi.nebraska.gui.utils.BCStatics2;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
 import org.thera_pi.nebraska.gui.utils.FileStatics;
@@ -413,7 +414,7 @@ public class NebraskaRequestDlg extends JDialog {
             NebraskaRequestDlg.hmZertifikat.put("<Subjectou1>", "OU=" + keystore.getCompanyName());
             NebraskaRequestDlg.hmZertifikat.put("<Subjectou2>", "OU=" + "IK" + keystore.getIK());
             NebraskaRequestDlg.hmZertifikat.put("<Subjectcn>", "CN=" + keystore.getCEO());
-            NebraskaRequestDlg.hmZertifikat.put("<Algorithm>", NebraskaConstants.KEY_ALGORITHM);
+            NebraskaRequestDlg.hmZertifikat.put("<Algorithm>", NebraskaUtil.decodeHashAlgorithm(keystore.getCertSignatureAlgorithm())); 
             // Nebraska.hmZertifikat.put("<Md5publickey>",md5Buf.toString().replace(":", "
             // "));
             PKCS10CertificationRequest request = keystore.getCertificateRequest();
@@ -434,17 +435,17 @@ public class NebraskaRequestDlg extends JDialog {
             }
 
             // String sha1 = BCStatics2.getSHA1fromByte(spub.getPublicKeyData().getBytes());
-            String sha1 = BCStatics2.getSHA256fromByte(spub.getPublicKeyData()
+            String hash = BCStatics2.getSHA256fromByte(spub.getPublicKeyData()
                                                            .getBytes());
-            NebraskaRequestDlg.hmZertifikat.put("<Sha1publickey>", BCStatics2.macheHexDump(sha1, 20, " "));
+            NebraskaRequestDlg.hmZertifikat.put("<Sha1publickey>", BCStatics2.macheHexDump(hash, 20, " "));
 
             String md5 = BCStatics2.getMD5fromByte(spub.getPublicKeyData()
                                                        .getBytes());
             NebraskaRequestDlg.hmZertifikat.put("<Md5publickey>", BCStatics2.macheHexDump(md5, 20, " "));
 
             // sha1 = BCStatics2.getSHA1fromByte(request.getEncoded());
-            sha1 = BCStatics2.getSHA256fromByte(request.getEncoded());
-            NebraskaRequestDlg.hmZertifikat.put("<Sha1certificate>", BCStatics2.macheHexDump(sha1, 20, " "));
+            hash = BCStatics2.getSHA256fromByte(request.getEncoded());
+            NebraskaRequestDlg.hmZertifikat.put("<Sha1certificate>", BCStatics2.macheHexDump(hash, 20, " "));
 
             md5 = BCStatics2.getMD5fromByte(request.getEncoded());
             NebraskaRequestDlg.hmZertifikat.put("<Md5certificate>", BCStatics2.macheHexDump(md5, 20, " "));

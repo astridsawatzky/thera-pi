@@ -272,12 +272,12 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
             for (int i = 0; i < certs.size(); i++) {
                 try {
                     String hashAlgorithm = NebraskaUtil.decodeHashAlgorithm(certs.get(i)
-                                         .getSigAlgName()
-                                         .toString());
+                                                                                 .getSigAlgName()
+                                                                                 .toString());
                     ikSelectedRow = certs.get(i)
-                            .getSubjectDN()
-                            .toString()
-                            .split(",")[3].split("=")[1];
+                                         .getSubjectDN()
+                                         .toString()
+                                         .split(",")[3].split("=")[1];
                     if (ik.equals(ikSelectedRow)) {
                         if (ik.equals(ikStoreOwner)) {
                             showHash(ik, hashAlgorithm, true);
@@ -364,8 +364,8 @@ public class NebraskaZertExplorer extends JXPanel implements ListSelectionListen
                             ownCertOk = true;
                             try {
                                 String hashAlgorithm = NebraskaUtil.decodeHashAlgorithm(certs.get(i)
-                                        .getSigAlgName()
-                                        .toString());
+                                                                                             .getSigAlgName()
+                                                                                             .toString());
                                 showHash(ik, hashAlgorithm, true);
                             } catch (Exception ex) {
                             }
