@@ -155,6 +155,8 @@ public class NebraskaKeystore {
     private static String CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT;
     private static String CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_DEFAULT;
     
+    private int keyLengthOwnCert = NebraskaConstants.KEY_LENGTH;
+
     private static final Logger logger = LoggerFactory.getLogger(NebraskaKeystore.class);
 
     /**
@@ -205,19 +207,19 @@ public class NebraskaKeystore {
 
         initSecurityProvider();
         initKeystore();
-
-        setCertSignatureAlgorithm(getAlgorithmOfCert(this.institutionID));
-
     }
 
-    public void setCertSignatureAlgorithm(String certSignatureAlgorithm2use) {
-        CERTIFICATE_SIGNATURE_ALGORITHM_USED = certSignatureAlgorithm2use;        
-    }
     public String getCertSignatureAlgorithm() {
         return CERTIFICATE_SIGNATURE_ALGORITHM_USED;        
     }
     public void setCrqSignatureAlgorithm(String crqSignatureAlgorithm2use) {
         CRQ_SIGNATURE_ALGORITHM_USED = crqSignatureAlgorithm2use;
+    }
+    private void setOwnCertLength(int Bytes){
+        this.keyLengthOwnCert = 8 * Bytes;
+    }
+    public int getOwnCertLength(){
+        return this.keyLengthOwnCert;
     }
 
     /**
@@ -309,6 +311,24 @@ public class NebraskaKeystore {
             throw new NebraskaCryptoException(e);
         } catch (IOException e) {
             throw new NebraskaFileException(e);
+        }
+
+        X509Certificate ownCert = this.getCertificate(institutionID);
+        if (ownCert == null) {
+            PrivateKeyEntry privateKeyEntry;
+            try {
+                privateKeyEntry = getPrivateKeyEntry();
+                if (privateKeyEntry != null) {
+                    ownCert = (X509Certificate) privateKeyEntry.getCertificate();
+                }
+            } catch (NebraskaNotInitializedException e) {
+                // leerer keystore - ignorieren
+                e.printStackTrace();
+            }
+        }
+        if (ownCert != null) {
+            CERTIFICATE_SIGNATURE_ALGORITHM_USED = ownCert.getSigAlgName();
+            this.setOwnCertLength(ownCert.getSignature().length);
         }
     }
 
@@ -1241,21 +1261,6 @@ public class NebraskaKeystore {
         }
         return request;
 
-    }
-
-    /**
-     * Get the signature algorithm, used in the cert represented by the given alias.
-     *
-     * @return algorithm used in the cert by name or OID as String 
-     */
-    public String getAlgorithmOfCert(String alias) {
-        String SigAlgName = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT;
-        X509Certificate cert;
-        if (countCerts() > 0 && (cert = getCertByAlias(alias)) != null) {
-            SigAlgName = cert.getSigAlgName();
-            System.out.println("keyStore.getAlgorithm of " + alias + ": " + SigAlgName);
-        }
-        return SigAlgName;
     }
 
     public X509Certificate getKeyCert() {
