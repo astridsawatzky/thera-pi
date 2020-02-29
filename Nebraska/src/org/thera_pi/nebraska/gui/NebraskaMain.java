@@ -102,7 +102,7 @@ public class NebraskaMain {
                 OPENOFFICE_JARS = ini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
 
                 therapiIK = String.valueOf(args[0]);
-                INITool.init(progHome + "ini/" + therapiIK + "/");
+                INITool.init(progHome + "/ini/" + therapiIK + "/");
                 System.out.println("Öffne mit Parameter " + therapiIK);
             } catch (Exception ex) {
                 ex.printStackTrace();
