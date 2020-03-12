@@ -154,7 +154,8 @@ public class NebraskaKeystore {
      */
     private static String CERTIFICATE_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CERTIFICATE_SIGNATURE_ALGORITHM_DEFAULT;
     private static String CRQ_SIGNATURE_ALGORITHM_USED = NebraskaConstants.CRQ_SIGNATURE_ALGORITHM_DEFAULT;
-    
+    private static String DIGEST_ENCRYPTION_ALGORITHM_USED = NebraskaConstants.DIGEST_ENCRYPTION_ALGORITHM_DEFAULT;
+
     private int keyLengthOwnCert = NebraskaConstants.KEY_LENGTH;
 
     private static final Logger logger = LoggerFactory.getLogger(NebraskaKeystore.class);
@@ -327,8 +328,18 @@ public class NebraskaKeystore {
             }
         }
         if (ownCert != null) {
-            CERTIFICATE_SIGNATURE_ALGORITHM_USED = ownCert.getSigAlgName();
             this.setOwnCertLength(ownCert.getSignature().length);
+            CERTIFICATE_SIGNATURE_ALGORITHM_USED = ownCert.getSigAlgName();
+            int keyLen = getOwnCertLength(); 
+            switch (keyLen) {
+            case 2048:
+                break;
+            case 4096:
+                DIGEST_ENCRYPTION_ALGORITHM_USED = NebraskaConstants.DIGEST_ENCRYPTION_ALGORITHM_RSA_PSS;
+                break;
+            default:
+                System.out.println("NebraskaKeyStore.initKeystore(): unknown key lenght detected: " + keyLen);
+            }
         }
     }
 
