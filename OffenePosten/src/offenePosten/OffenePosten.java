@@ -97,6 +97,7 @@ public class OffenePosten implements WindowListener {
 
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+                starteOfficeApplication();
                 progHome = args[0];
                 aktIK = args[1];
                 path2IniFile = progHome + "ini/" + aktIK + "/";
