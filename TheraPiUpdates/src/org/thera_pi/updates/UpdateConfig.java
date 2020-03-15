@@ -2,9 +2,10 @@ package org.thera_pi.updates;
 
 import java.io.File;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import CommonTools.INIFile;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import crypt.Verschluesseln;
 import environment.Path;
 

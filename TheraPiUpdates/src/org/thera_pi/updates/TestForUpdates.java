@@ -9,9 +9,8 @@ import java.util.Vector;
 import javax.swing.*;
 
 import org.apache.commons.net.ftp.FTPFile;
-
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CommonTools.INIFile;
 import environment.Path;
