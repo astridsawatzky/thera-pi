@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
@@ -91,7 +92,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
 public class AbrechnungGKV extends JXPanel
-        implements   TreeSelectionListener, MouseListener {
+        implements   TreeSelectionListener {
     /**
      *
      */
@@ -310,7 +311,7 @@ public class AbrechnungGKV extends JXPanel
         treeKasse.getSelectionModel()
                  .addTreeSelectionListener(this);
         treeKasse.setCellRenderer(new MyRenderer(SystemConfig.hmSysIcons.get("zuzahlok")));
-        treeKasse.addMouseListener(this);
+        treeKasse.addMouseListener(mouseListener);
 
         treeKasse.addKeyListener( keyListener);
 
@@ -2759,69 +2760,71 @@ public class AbrechnungGKV extends JXPanel
 
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
 
-    }
+    MouseListener mouseListener = new MouseAdapter() {
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.getButton() == 3) { // Rechtsklick auf Rezept im Tree
-            TreePath tp = treeKasse.getSelectionPath();
+        @Override
+        public void mouseClicked(MouseEvent e) {
 
-            if (tp == null) {
-                return;
-            }
-            JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
-            String rez_nr = node.knotenObjekt.rez_num;
-            if (!rez_nr.trim()
-                       .equals("")) {
-                if (node.knotenObjekt.fertig) {
-                    String msg = "<html>Achtung Sie editieren im Anschluß den EDIFACT-Code!<br>"
-                            + "Wenn Sie den Code in unzulässiger Weise manipulieren<br>wird <b>der gesamte Abrechnungslauf unbrauchbar</b><br><br>"
-                            + "<b>Rufen Sie diese Funktion nur dann auf wenn Sie genau wissen was Sie tun!!!</b><br><br>"
-                            + "Soll die Funktion jetzt aufgerufen werden?<br></html>";
-                    int frage = JOptionPane.showConfirmDialog(null, msg, "Achtung wichtige Benutzeranfrage",
-                            JOptionPane.YES_NO_OPTION);
-                    if (frage != JOptionPane.YES_OPTION) {
-                        return;
-                    }
-                    PointerInfo info = MouseInfo.getPointerInfo();
-                    Point location = info.getLocation();
-                    EditEdifact editEdifact = new EditEdifact(Reha.getThisFrame(), "EDIFACT - editieren",
-                            rez_nr.trim());
-                    editEdifact.getContentPane()
-                               .setPreferredSize(new Dimension(600, 500));
-                    editEdifact.setLocation(e.getXOnScreen() - 50, e.getYOnScreen() - 50);
-                    // editEdifact.setLocation(location.x-50,location.y-50);
-                    editEdifact.pack();
-                    editEdifact.setVisible(true);
-                    this.abrRez.setNewRez(rez_nr, node.knotenObjekt.fertig, aktDisziplin);
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            "Abrechnungsdaten im Edifact-Format kann nur\nbei bereits markierten Rezepten manipuliert werden!");
-                }
-
-            }
         }
 
-    }
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getButton() == 3) { // Rechtsklick auf Rezept im Tree
+                TreePath tp = treeKasse.getSelectionPath();
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
+                if (tp == null) {
+                    return;
+                }
+                JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
+                String rez_nr = node.knotenObjekt.rez_num;
+                if (!rez_nr.trim()
+                           .equals("")) {
+                    if (node.knotenObjekt.fertig) {
+                        String msg = "<html>Achtung Sie editieren im Anschluß den EDIFACT-Code!<br>"
+                                + "Wenn Sie den Code in unzulässiger Weise manipulieren<br>wird <b>der gesamte Abrechnungslauf unbrauchbar</b><br><br>"
+                                + "<b>Rufen Sie diese Funktion nur dann auf wenn Sie genau wissen was Sie tun!!!</b><br><br>"
+                                + "Soll die Funktion jetzt aufgerufen werden?<br></html>";
+                        int frage = JOptionPane.showConfirmDialog(null, msg, "Achtung wichtige Benutzeranfrage",
+                                JOptionPane.YES_NO_OPTION);
+                        if (frage != JOptionPane.YES_OPTION) {
+                            return;
+                        }
+                        PointerInfo info = MouseInfo.getPointerInfo();
+                        Point location = info.getLocation();
+                        EditEdifact editEdifact = new EditEdifact(Reha.getThisFrame(), "EDIFACT - editieren",
+                                rez_nr.trim());
+                        editEdifact.getContentPane()
+                                   .setPreferredSize(new Dimension(600, 500));
+                        editEdifact.setLocation(e.getXOnScreen() - 50, e.getYOnScreen() - 50);
+                        editEdifact.pack();
+                        editEdifact.setVisible(true);
+                        abrRez.setNewRez(rez_nr, node.knotenObjekt.fertig, aktDisziplin);
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Abrechnungsdaten im Edifact-Format kann nur\nbei bereits markierten Rezepten manipuliert werden!");
+                    }
 
-    }
+                }
+            }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
+        }
 
-    }
+        @Override
+        public void mouseReleased(MouseEvent e) {
 
-    @Override
-    public void mouseExited(MouseEvent e) {
+        }
 
-    }
+        @Override
+        public void mouseEntered(MouseEvent e) {
 
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
+        }
+    };
     KeyListener keyListener = new KeyAdapter() {
 
         @Override
