@@ -937,7 +937,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                                 Reha.instance.progressStarten(true);
                                 eltern.abrDlg = new AbrechnungDlg();
                                 eltern.abrDlg.pack();
-                                eltern.abrDlg.setLocationRelativeTo(eltern.getInstance());
+                                eltern.abrDlg.setLocationRelativeTo(eltern);
                                 eltern.abrDlg.setzeLabel("starte Heilmittelabrechnung");
                                 eltern.starteAbrechnung();
                             } catch (NullPointerException ex) {

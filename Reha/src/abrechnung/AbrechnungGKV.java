@@ -4,9 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -1025,7 +1022,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                 try {
                     int lang = xaktKasse.getChildCount();
                     Reha.instance.progressStarten(true);
-                    getInstance().setCursor(Cursors.wartenCursor);
+                    setCursor(Cursors.wartenCursor);
                     for (int i = 0; i < lang; i++) {
                         if (((JXTTreeNode) xaktKasse.getChildAt(i)).knotenObjekt.fertig) {
                             kontrollierteRezepte++;
@@ -1034,7 +1031,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                     }
                     setHtmlLinksUnten(lang, kontrollierteRezepte);
                     Reha.instance.progressStarten(false);
-                    getInstance().setCursor(Cursors.cdefault);
+                   setCursor(Cursors.cdefault);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1649,7 +1646,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             protected Void doInBackground() throws Exception {
                 String s1 = String.valueOf("#PATSUCHEN");
                 String s2 = xpatid;
-                PatStammEvent pEvt = new PatStammEvent(getInstance());
+                PatStammEvent pEvt = new PatStammEvent(this);
                 pEvt.setPatStammEvent("PatSuchen");
                 pEvt.setDetails(s1, s2, "");
                 PatStammEventClass.firePatStammEvent(pEvt);
@@ -1765,7 +1762,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                 if (abrechnungsModus.equals(ABR_MODE_302)) {
                     try {
                         Thread.sleep(100);
-                        new BegleitzettelDrucken(getInstance(), abrechnungRezepte, ik_kostent, name_kostent, hmAnnahme,
+                        new BegleitzettelDrucken(AbrechnungGKV.this, abrechnungRezepte, ik_kostent, name_kostent, hmAnnahme,
                                 aktRechnung, Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
                                         + SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
                     } catch (Exception ex) {
@@ -1786,14 +1783,13 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             sgruppe = "B";
         }
 
-        unbBuf.append("UNB+UNOC:3+" + zertifikatVon.replace("IK", "")/* Reha.aktIK */ + plus + ik_nutzer + plus);
+        unbBuf.append("UNB+UNOC:3+" + zertifikatVon.replace("IK", "") + plus + ik_nutzer + plus);
         unbBuf.append(getEdiDatumFromDeutsch(DatFunk.sHeute()) + ":" + getEdiTimeString(false) + plus);
         unbBuf.append(aktDfue + plus + sgruppe + plus);
         abrDateiName = "SL" + zertifikatVon.replace("IK", "")
-                                           .substring(2, 8)/* Reha.aktIK.substring(2,8) */
+                                           .substring(2, 8)
                 + "S" + getEdiMonat();
         unbBuf.append(abrDateiName + plus);
-        // unbBuf.append("0"+EOL); // Testdatei
         unbBuf.append("2" + EOL);
         // unbBuf.append(aktDfue+plus+"B"+plus+"SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat()+plus+"2"+EOL);
 
@@ -1836,9 +1832,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
 
     /***************************************************************/
 
-    AbrechnungGKV getInstance() {
-        return this;
-    }
+
 
     public AbrechnungRezept getInstanceAbrechnungRezept() {
         return abrRez;
