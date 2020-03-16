@@ -15,7 +15,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -64,8 +63,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.TableCellEditor;
@@ -130,8 +127,8 @@ import systemTools.ListenerTools;
  * @author Admin
  *
  */
-public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener, MouseListener,
-        PopupMenuListener, PropertyChangeListener, ComponentListener {
+public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener,
+         PropertyChangeListener, ComponentListener {
     /**
      *
      */
@@ -4294,47 +4291,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
     }
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
 
-    }
 
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void popupMenuCanceled(PopupMenuEvent arg0) {
-
-    }
-
-    @Override
-    public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-        ////// System.out.println("Will become Invisible - "+arg0);
-
-    }
-
-    @Override
-    public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-        ////// System.out.println("Will become Visible - "+arg0);
-
-    }
 
     /************************************************************************/
 
@@ -4964,8 +4922,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     // ComponentListener methods (handle window resize) McM 1606
     @Override
     public void componentResized(ComponentEvent e) {
-        // String tmp = e.getComponent().getName();
-        // System.out.println("Component "+tmp+" resize detected ");
         keepDayTreeSize(jSplitOU);
         jSplitOU.setDividerLocation(tts.getCurrTageTreeSize());
     }
@@ -4987,7 +4943,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         cmbkuerzel.removeActionListener(this);
         jSplitOU.removePropertyChangeListener(this);
         htmlPane.removeHyperlinkListener(this);
-        jXTreeTable.addMouseListener(this);
         writeTTS2ini();
     }
 
@@ -4999,8 +4954,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     private void writeTTS2ini() {
         if (!SystemConfig.hmAbrechnung.get("TTSizeLocked")
                                       .equals("1")) {
-            // String path2IniFile = TheraPiLocations.getMandantIniPath(null);
-            // INIFile inif = new INIFile (path2IniFile);
             boolean mustsave = false;
             INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "abrechnung.ini");
