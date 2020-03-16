@@ -799,10 +799,7 @@ public class AbrechnungGKV extends JXPanel {
         if (nodeWithSameIK != null) { // Nachfolger o. Vorgänger hat gleiches IKpapier -> icons können bleiben
             aktKassNode = nodeWithSameIK; // ... wird aktueller Knoten
             int aktNodeIdx = 1 + treeModelKasse.getIndexOfChild(rootKasse, aktKassNode);
-            // treeKasse.setSelectionInterval(aktNodeIdx, aktNodeIdx); // KEINEN neuen akt.
-            // Knoten selektieren (Anzeige des gerade aufgeschlossenen Rezeptes im
-            // Patientenfenster)
-            // treeKasse.validate();
+
             treeKasse.repaint(); // Anzeige aktualisieren
         } else if (!prevKNode.equals(null) && !nextKNode.equals(null)) {
             kassenIconsNeuAnzeigen();

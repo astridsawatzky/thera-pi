@@ -492,10 +492,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     }
 
     public boolean setNewRez(String rez, boolean schonfertig, String aktDisziplin) {
-//        try{
-//            String dummy1 = rez.split(",")[2];
-//            String dummy2 = dummy1.split("-")[0];
-        ////// System.out.println("Neues Rezept = "+dummy2);
+
         String preisgr = SqlInfo.holeEinzelFeld("select preisgruppe from verordn where rez_nr='" + rez + "' LIMIT 1");
         this.aktDisziplin = aktDisziplin;
         rezeptFertig = schonfertig;
