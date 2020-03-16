@@ -212,8 +212,8 @@ public class AbrechnungGKV extends JXPanel {
         jSplitLR.setDividerLocation(230);
         add(jSplitLR, BorderLayout.CENTER);
         mandantenCheck();
-        SlgaVersion = "12"; // ( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
-        SllaVersion = "12"; // ( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
+        SlgaVersion = "12";
+        SllaVersion = "12";
 
         keyStore = new KeyStore();
         myCert = new OwnCertState();
@@ -229,7 +229,6 @@ public class AbrechnungGKV extends JXPanel {
 
         originalTitel = this.jry.getTitel();
         setEncryptTitle();
-        // cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
         disziSelect.setCurrTypeOfVO(SystemConfig.initRezeptKlasse);
         jry.setAbrRezInstance(abrRez); // JAbrechnungInternal mitteilen, welche Instanz cleanup() enthält
         RezFromDB = new RezFromDB();
@@ -367,10 +366,7 @@ public class AbrechnungGKV extends JXPanel {
         public void actionPerformed(ActionEvent arg0) {
             String cmd = arg0.getActionCommand();
             if (cmd.equals("einlesen")) {
-                // rootKasse.removeAllChildren();
-//                aktDisziplin = getCurrDiszi();
                 aktDisziplin = disziSelect.getCurrDisziKurz();
-                // System.out.println("aktDisziplin = "+aktDisziplin);
                 if (abrRez.rezeptSichtbar) {
                     abrRez.setRechtsAufNull();
                     aktuellerPat = "";
@@ -378,7 +374,6 @@ public class AbrechnungGKV extends JXPanel {
                 jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
                         + zertifikatVon.replace("IK", "") + "] [Disziplin: " + aktDisziplin + "]");
                 doEinlesen(null, null);
-                // setPreisVec(cmbDiszi.getSelectedIndex());
             }
             if (cmd.equals("alternativeadresse")) {
 
@@ -394,8 +389,6 @@ public class AbrechnungGKV extends JXPanel {
             abrRez.setRechtsAufNull();
             aktuellerPat = "";
         }
-        // System.out.println("aktDisziplin");
-        // System.out.println(RezTools.putRezNrGetDisziplin(neueReznr));
         if (neueReznr != null) { // Rezept zum Baum hinzufügen
             if (!aktDisziplin.equals(RezTools.putRezNrGetDisziplin(neueReznr))) {
                 doEinlesen(null, neueReznr); // andere Disziplin -> Kassenbaum neu aufbauen
@@ -422,8 +415,6 @@ public class AbrechnungGKV extends JXPanel {
     }
 
     public int doEinlesenEinzeln(String neueReznr) {
-        // String cmd = "select name1,ikktraeger,ikkasse,id from fertige where
-        // rez_nr='"+neueReznr+"' Limit 1";
         // das Gleiche, mit Papierannahmestelle:
         String cmd = sucheFertige + "WHERE rez_nr='" + neueReznr + "' Limit 1";
         Vector<Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
@@ -468,7 +459,6 @@ public class AbrechnungGKV extends JXPanel {
         vecKassen = SqlInfo.holeFelder(cmd);
         JXTTreeNode meinitem = null;
         for (int i = 0; i < vecKassen.size(); i++) {
-            // System.out.println("Durchlaufen: "+i+" von "+vecKassen.size());
             try {
                 cmd = "select n_name from pat5 where pat_intern='" + vecKassen.get(i)
                                                                               .get(1)
@@ -480,9 +470,7 @@ public class AbrechnungGKV extends JXPanel {
                 cmd = "select preisgruppe from verordn where rez_nr='" + vecKassen.get(i)
                                                                                   .get(0)
                         + "' LIMIT 1";
-                //// System.out.println(cmd);
                 String preisgr = SqlInfo.holeEinzelFeld(cmd);
-                //// System.out.println("Preisgruppe="+preisgr);
 
                 KnotenObjekt rezeptknoten = new KnotenObjekt(vecKassen.get(i)
                                                                       .get(0)
@@ -509,12 +497,8 @@ public class AbrechnungGKV extends JXPanel {
                 treeKasse.scrollPathToVisible(new TreePath(meinitem.getPath()));
                 for (int i2 = 0; i2 < aeste; i2++) {
                     if (treeKasse.isCollapsed(new TreePath(((JXTTreeNode) rootKasse.getChildAt(i2)).getPath()))) {
-                        // System.out.println("geschlossen "+i2+" -
-                        // "+((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.titel);
                         treeindex += 1;
                     } else {
-                        // System.out.println("expanded "+i2+" -
-                        // "+((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.titel);
                         treeindex += ((JXTTreeNode) rootKasse.getChildAt(i2)).getChildCount() + 1;
                     }
                     if (((JXTTreeNode) rootKasse.getChildAt(i2)).knotenObjekt.ktraeger.equals(ktraeger)) {
@@ -523,21 +507,12 @@ public class AbrechnungGKV extends JXPanel {
                 }
 
                 treeKasse.expandPath(new TreePath(node));
-                /*
-                 * System.out.println("****** TreeIndex: "+treeindex);
-                 * System.out.println("Root-Childs "+rootKasse.getChildCount());
-                 * System.out.println("GetIndex "+rootKasse.getIndex(meinitem));
-                 * System.out.println("IndexOfChild = "+treeModelKasse.getIndexOfChild(node,
-                 * meinitem));
-                 */
 
                 treeKasse.setSelectionPath(new TreePath(meinitem));
                 treeKasse.setSelectionInterval(treeindex, treeindex);
                 if (treeKasse.getSelectionPath() != null) {
                     if (!SystemConfig.hmAbrechnung.get("autoOk302")
                                                   .equals("0")) {
-                        // System.out.println("autoOk302: markiere Rezept "+neueReznr+" fertig zur
-                        // Abrechnung");
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -556,9 +531,6 @@ public class AbrechnungGKV extends JXPanel {
     }
 
     private String getKassenName(String ikkasse) {
-        // Kostenträgerdatei kann fehlerhaft sein ...
-        // String cmd = "select name1, name2 from ktraeger where ik_kasse = " + ikkasse;
-        // ... daher lokalen Kassenstamm verwenden
         String cmd = "select kassen_nam1, kassen_nam2 from kass_adr where ik_kasse = " + ikkasse;
         Vector<String> vecKassenName = SqlInfo.holeFelder(cmd).get(0);
         String kname = vecKassenName.get(0)
@@ -592,7 +564,6 @@ public class AbrechnungGKV extends JXPanel {
      */
     public void doEinlesen(JXTTreeNode aktKassenNode, String neueReznr) {
         directCall = false;
-        // final JXTTreeNode xaktKassenNode = aktKassenNode;
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -638,20 +609,10 @@ public class AbrechnungGKV extends JXPanel {
                         kassenName = getKassenName(ikkasse);
                     }
                     existiertschon.add(ktraeger);
-//                    //customIconList.add(ktraeger); neee, der erste bleibt 'original'
-//                    toggleIcons = 0;
-//                    KeepIkPap myIkPap = new KeepIkPap(ikpapier);
 
                     int aeste = 0;
                     KnotenObjekt newNode = astAnhaengen(kassenName, ktraeger, ikkasse, ikpapier).getObject();
                     rezepteAnhaengen(aeste);
-                    /*
-                     * System.out.println(ktraeger);
-                     * System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.
-                     * titel);
-                     * System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.
-                     * rez_num);
-                     */
                     aeste++;
 
                     for (int i = 0; i < vecKassen.size(); i++) {
@@ -670,7 +631,6 @@ public class AbrechnungGKV extends JXPanel {
                             rezepteAnhaengen(aeste);
                             aeste++;
 
-//                            treeKasse.repaint();
                         }
                     }
                     kassenIconsNeuAnzeigen();
@@ -701,7 +661,6 @@ public class AbrechnungGKV extends JXPanel {
         Vector<Vector<String>> vecRezepte = SqlInfo.holeFelder(cmd);
 
         JXTTreeNode node = (JXTTreeNode) rootKasse.getChildAt(knoten);
-        // JXTTreeNode treeitem = null;
 
         JXTTreeNode meinitem = null;
         for (int i = 0; i < vecRezepte.size(); i++) {
@@ -716,9 +675,7 @@ public class AbrechnungGKV extends JXPanel {
                                               .get(1);
                 String name = SqlInfo.holeEinzelFeld(cmd);
                 cmd = "select preisgruppe from verordn where rez_nr='" + thisRezNr + "' LIMIT 1";
-                //// System.out.println(cmd);
                 String preisgr = SqlInfo.holeEinzelFeld(cmd);
-                //// System.out.println("Preisgruppe="+preisgr);
 
                 KnotenObjekt rezeptknoten = new KnotenObjekt(thisRezNr + "-" + name, vecRezepte.get(i)
                                                                                                .get(0),
@@ -796,7 +753,6 @@ public class AbrechnungGKV extends JXPanel {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        //// System.out.println("Rezept "+node.rez_num+" fertig eingestellt");
         setCursor(Cursors.normalCursor);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -855,22 +811,7 @@ public class AbrechnungGKV extends JXPanel {
     }
 
     private JXTTreeNode sameIkPap(JXTTreeNode aktNode) {
-        /*
-         * Testkram ... JXTTreeNode prevKassenNode, nextKassenNode; String tmpK =
-         * aktNode.getObject().titel; //ok String tmpIK =
-         * ((KnotenObjekt)aktNode.getUserObject()).ikkasse; // auch
-         * System.out.println("Akt Node = "+tmpK+" "+tmpIK); prevKassenNode =
-         * (JXTTreeNode) aktNode.getPreviousSibling(); if(prevKassenNode != null) { tmpK
-         * = (prevKassenNode.getObject().titel); tmpIK =
-         * ((KnotenObjekt)prevKassenNode.getUserObject()).ikkasse;
-         * System.out.println("Prev Node = "+tmpK+" "+tmpIK); } else {
-         * System.out.println("Prev Node = empty "); } nextKassenNode
-         * =(JXTTreeNode)aktNode.getNextSibling(); if(nextKassenNode != null) { tmpK =
-         * nextKassenNode.getObject().titel; tmpIK =
-         * ((KnotenObjekt)nextKassenNode.getUserObject()).ikkasse;
-         * System.out.println("Next Node = "+tmpK+" "+tmpIK); } else {
-         * System.out.println("Next Node = empty "); } // ... Ende Testkram
-         */
+
 
         JXTTreeNode prevKNode = getPrevKassenKnoten(aktNode);
         JXTTreeNode nextKNode = getNextKassenKnoten(aktNode);
@@ -915,10 +856,7 @@ public class AbrechnungGKV extends JXPanel {
         while (aktKasse != null) {
             knAktKasse = aktKasse.getObject();
             if (myIkPap.newIkPap(knAktKasse.ikpapier)) {
-                // Hintergrund- oder Icon-Farbe ändern
                 toggleIcons = (++toggleIcons) & 1;
-                // System.out.println("Wechsel IK-Papier: "+knAktKasse.ikpapier+" Hintergrund
-                // oder Icon-Farbe ändern @: "+ knAktKasse.titel);
             }
             ;
             if (toggleIcons == 1) {
@@ -1165,7 +1103,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                     + " from kass_adr where ik_kasse='" + abzurechnendeKassenID + "' LIMIT 1";
             kassenIKs.clear();
             kassenIKs = SqlInfo.holeFelder(cmd);
-            //// System.out.println(cmd);
             if (kassenIKs.size() <= 0) {
                 Reha.instance.progressStarten(false);
                 abrDlg.setVisible(false);
@@ -1186,13 +1123,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             ik_papier = kassenIKs.get(0)
                                  .get(4);
             ik_email = SqlInfo.holeEinzelFeld("select email from ktraeger where ikkasse='" + ik_physika + "' LIMIT 1");
-            /*
-             * //System.out.println("  kasse = "+ik_kasse);
-             * //System.out.println("kostent = "+ik_kostent);
-             * //System.out.println(" nutzer = "+ik_nutzer);
-             * //System.out.println("physika = "+ik_physika);
-             * //System.out.println("  email = "+ik_email);
-             */
+
 
             if (abrechnungsModus.equals(ABR_MODE_302)) {
                 if (ik_email.equals("")) {
@@ -1329,10 +1260,8 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             holeEdifact();
             macheKopfDaten();
             macheEndeDaten();
-            /********
-             *
-             *
-             */
+
+
             gesamtBuf.append(unbBuf.toString());
             gesamtBuf.append(positionenBuf.toString());
             gesamtBuf.append(unzBuf.toString());
@@ -2804,7 +2733,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                 String kassenName = getaktuellerKassenKnoten().knotenObjekt.titel;
 
                 Vector<Vector<String>> vecInArbeit = RezFromDB.getPendingVO(ikKasse);
-                //// System.out.println("VO in Arbeit: "+ vecInArbeit);
                 if (vecInArbeit.size() >= 0) {
                     infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, volleVOs, abgebrocheneVOs,
                             connection);
