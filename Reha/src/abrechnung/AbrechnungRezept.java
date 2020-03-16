@@ -128,8 +128,7 @@ import systemTools.ListenerTools;
  * @author Admin
  *
  */
-public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener,
-         PropertyChangeListener {
+public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener {
     /**
      *
      */
@@ -331,7 +330,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         jSplitOU.setName("BrowserSplitObenUnten");
         jSplitOU.setOneTouchExpandable(true);
 
-        jSplitOU.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, this);
+        jSplitOU.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, splitPaneDiverChangeHandler);
 
         jpan.add(getToolbar(), BorderLayout.NORTH);
         jpan.add(jSplitOU, BorderLayout.CENTER);
@@ -356,19 +355,15 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
      *
      * @author McM 1606
      */
-    @Override
-    public void propertyChange(PropertyChangeEvent pce) {
-        String dummy = pce.getPropertyName();
-        if (pce.getPropertyName() == JSplitPane.DIVIDER_LOCATION_PROPERTY) { // ? lastDividerLocation ?
-            // resize TageTree, passend zur Anzahl der Behandlungstage -> merken für divider
-            // Positionierung (McM)
-            // außer 0 u. jSplitOU.getHeight()-jSplitOU.getDividerSize() (= ganzes Fenster)
-            // System.out.println("Split Pane "+pce.getPropertyName()+":
-            // "+jSplitOU.getDividerLocation()+" von "+jSplitOU.getHeight());
-            keepDayTreeSize(jSplitOU);
-        }
-    }
+     PropertyChangeListener splitPaneDiverChangeHandler = new PropertyChangeListener() {
 
+        @Override
+        public void propertyChange(PropertyChangeEvent pce) {
+            if (pce.getPropertyName() == JSplitPane.DIVIDER_LOCATION_PROPERTY) {
+                 keepDayTreeSize(jSplitOU);
+            }
+    }
+     };
     private JScrollPane getHTMLPanel() {
         htmlPane = new JEditorPane(/* initialURL */);
         htmlPane.setContentType("text/html");
@@ -4931,7 +4926,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     public void cleanUp() {
         // Aktionen beim Schließen des Abrechnungsfensters
         cmbkuerzel.removeActionListener(this);
-        jSplitOU.removePropertyChangeListener(this);
+        jSplitOU.removePropertyChangeListener(splitPaneDiverChangeHandler);
         htmlPane.removeHyperlinkListener(this);
         writeTTS2ini();
     }
