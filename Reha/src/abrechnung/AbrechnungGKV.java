@@ -90,7 +90,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
 public class AbrechnungGKV extends JXPanel
-        implements PatStammEventListener,  TreeSelectionListener, MouseListener, KeyListener {
+        implements   TreeSelectionListener, MouseListener, KeyListener {
     /**
      *
      */
@@ -352,11 +352,6 @@ public class AbrechnungGKV extends JXPanel
 
     public boolean getTageDrucken() {
         return this.abrRez.getTageDrucken();
-    }
-
-    @Override
-    public void patStammEventOccurred(PatStammEvent evt) {
-
     }
 
     public void setJry(JAbrechnungInternal jry) {
