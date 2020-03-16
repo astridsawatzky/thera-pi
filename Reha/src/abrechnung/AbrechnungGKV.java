@@ -78,7 +78,6 @@ import emailHandling.EmailSendenExtern;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
-import events.PatStammEventListener;
 import gui.Cursors;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
@@ -91,11 +90,8 @@ import suchen.PatMitVollenVOs;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
-public class AbrechnungGKV extends JXPanel
-        implements   TreeSelectionListener {
-    /**
-     *
-     */
+public class AbrechnungGKV extends JXPanel {
+
     private static final long serialVersionUID = -3580427603080353812L;
     private JAbrechnungInternal jry;
     private UIFSplitPane jSplitLR = null;
@@ -309,7 +305,7 @@ public class AbrechnungGKV extends JXPanel
         treeKasse.setModel(treeModelKasse);
         treeKasse.setName("kassentree");
         treeKasse.getSelectionModel()
-                 .addTreeSelectionListener(this);
+                 .addTreeSelectionListener(treeSelectionListener);
         treeKasse.setCellRenderer(new MyRenderer(SystemConfig.hmSysIcons.get("zuzahlok")));
         treeKasse.addMouseListener(mouseListener);
 
@@ -937,6 +933,8 @@ public class AbrechnungGKV extends JXPanel
         treeKasse.validate();
         treeKasse.repaint();
     }
+TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
+
 
     @Override
     public void valueChanged(TreeSelectionEvent arg0) {
@@ -1004,6 +1002,7 @@ public class AbrechnungGKV extends JXPanel
 
     }
 
+};
     public void setKassenUmsatzNeu() {
         kassenUmsatz[0] = 0.00;
         kassenUmsatz[1] = 0.00;
@@ -2790,8 +2789,8 @@ public class AbrechnungGKV extends JXPanel
                         if (frage != JOptionPane.YES_OPTION) {
                             return;
                         }
-                        PointerInfo info = MouseInfo.getPointerInfo();
-                        Point location = info.getLocation();
+
+
                         EditEdifact editEdifact = new EditEdifact(Reha.getThisFrame(), "EDIFACT - editieren",
                                 rez_nr.trim());
                         editEdifact.getContentPane()
