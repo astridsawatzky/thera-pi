@@ -7,7 +7,9 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -445,13 +447,9 @@ public class UpdatePanel extends JXPanel {
     }
 
     private String usingDateFormatterWithTimeZone(long input) {
-        Date date = new Date(input);
-        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss z");
-        sdf.setCalendar(cal);
-        cal.setTime(date);
-        return sdf.format(date);
-
+        ZonedDateTime gmt = Instant.ofEpochMilli(input).atZone(TimeZone.getTimeZone("GMT").toZoneId());
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss z");
+        return dateTimeFormatter.format(gmt);
     }
 
     // ************************************************************************
