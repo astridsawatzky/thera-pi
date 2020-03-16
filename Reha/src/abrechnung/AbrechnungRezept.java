@@ -86,6 +86,8 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableModel;
 import org.jdesktop.swingx.treetable.TreeTableNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.Historie;
 
@@ -286,6 +288,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     private String currBerichtId = "";
     boolean kannAbhaken = false;
     private Connection connection;
+    private static final Logger logger = LoggerFactory.getLogger(AbrechnungRezept.class);
 
     public AbrechnungRezept(AbrechnungGKV xeltern, Connection conn) {
         this.connection = conn;
@@ -329,13 +332,11 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         jSplitOU.setDividerBorderVisible(true);
         jSplitOU.setName("BrowserSplitObenUnten");
         jSplitOU.setOneTouchExpandable(true);
-        // jSplitOU.setDividerLocation(jpan.getHeight());
 
         jSplitOU.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, this);
 
         jpan.add(getToolbar(), BorderLayout.NORTH);
         jpan.add(jSplitOU, BorderLayout.CENTER);
-        // jpan.addComponentListener(this);
 
         return jpan;
     }
@@ -4677,7 +4678,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         edibuf.insert(0, vec_posanzahl.toString() + "\n");
         edibuf.insert(0, vec_pospos.toString() + "\n");
         edibuf.insert(0, kopfzeile);
-        System.out.println(edibuf.toString());
+        logger.debug(edibuf.toString());
         return ret;
     }
 
