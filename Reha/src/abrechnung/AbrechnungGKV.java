@@ -2738,11 +2738,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
     protected boolean istFertig(Object value) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         KnotenObjekt fertig = (KnotenObjekt) (node.getUserObject());
-        boolean istfertig = fertig.fertig;
-        if (istfertig) {
-            return true;
-        }
-        return false;
+        return fertig.fertig ;
     }
 
     private void rezepteUebertragen() {
