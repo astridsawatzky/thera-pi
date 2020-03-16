@@ -9,6 +9,7 @@ import java.awt.Point;
 import java.awt.PointerInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -90,7 +91,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
 public class AbrechnungGKV extends JXPanel
-        implements   TreeSelectionListener, MouseListener, KeyListener {
+        implements   TreeSelectionListener, MouseListener {
     /**
      *
      */
@@ -311,7 +312,7 @@ public class AbrechnungGKV extends JXPanel
         treeKasse.setCellRenderer(new MyRenderer(SystemConfig.hmSysIcons.get("zuzahlok")));
         treeKasse.addMouseListener(this);
 
-        treeKasse.addKeyListener((KeyListener) this);
+        treeKasse.addKeyListener( keyListener);
 
         JScrollPane jscrk = JCompTools.getTransparentScrollPane(treeKasse);
         jscrk.validate();
@@ -2821,40 +2822,33 @@ public class AbrechnungGKV extends JXPanel
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+    KeyListener keyListener = new KeyAdapter() {
 
-    }
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_F1) {
+                TreePath tp = treeKasse.getSelectionPath();
+                if (tp == null) {
+                    return;
+                }
+                if (infoDlg != null) {
+                    return;
+                }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_F1) {
-            TreePath tp = treeKasse.getSelectionPath();
-            if (tp == null) {
-                return;
-            }
-            if (infoDlg != null) {
-                return;
-            }
+                String ikKasse = getaktuellerKassenKnoten().knotenObjekt.ikkasse;
+                String kassenName = getaktuellerKassenKnoten().knotenObjekt.titel;
 
-            String ikKasse = getaktuellerKassenKnoten().knotenObjekt.ikkasse;
-            String kassenName = getaktuellerKassenKnoten().knotenObjekt.titel;
-
-            Vector<Vector<String>> vecInArbeit = RezFromDB.getPendingVO(ikKasse);
-            //// System.out.println("VO in Arbeit: "+ vecInArbeit);
-            if (vecInArbeit.size() >= 0) {
-                infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, volleVOs, abgebrocheneVOs, this.connection);
-                infoDlg.pack();
-                infoDlg.setLocationRelativeTo(null);
-                infoDlg.setVisible(true);
-                infoDlg = null;
+                Vector<Vector<String>> vecInArbeit = RezFromDB.getPendingVO(ikKasse);
+                //// System.out.println("VO in Arbeit: "+ vecInArbeit);
+                if (vecInArbeit.size() >= 0) {
+                    infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, volleVOs, abgebrocheneVOs,
+                            connection);
+                    infoDlg.pack();
+                    infoDlg.setLocationRelativeTo(null);
+                    infoDlg.setVisible(true);
+                    infoDlg = null;
+                }
             }
         }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
+    };
 }
