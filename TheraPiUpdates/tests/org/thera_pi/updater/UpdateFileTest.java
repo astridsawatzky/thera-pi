@@ -11,10 +11,11 @@ public class UpdateFileTest {
 
 
     @Test
-    public void renameMe() throws Exception {
+    public void versionsAreExtracted() throws Exception {
         File file = new File("therapi_1_0_0_1_1_1");
         UpdateFile ufile = new UpdateFile(file );
-        ufile.extractVersions();
+        assertEquals(new Version(1,0,0),ufile.from);
+        assertEquals(new Version(1,1,1),ufile.to);
 
     }
 
