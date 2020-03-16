@@ -4,7 +4,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 
 public class INITool {
-    static String[] dbInis = null;
+    static String[] dbInis = new String[] { "nix" };
 
     public static void setDBInis(String[] xdbini) {
         dbInis = xdbini;
@@ -34,7 +34,7 @@ public class INITool {
     /**
      * liefert INIFile Objekt mit aktuell verwandter ini, unabhaengig ob die eine
      * lokale Datei oder in der DB abgelegt ist
-     * 
+     *
      * @param path      Pfad zu lokaler ini
      * @param iniToOpen Name der ini-Datei
      * @return INIFile Objekt
@@ -58,7 +58,7 @@ public class INITool {
     /**
      * liefert INIFile Objekt mit lokaler ini-Datei, falls die ini in der DB
      * abgelegt ist, sonst null
-     * 
+     *
      * @param path      Pfad zu lokaler ini
      * @param iniToOpen Name der ini-Datei
      * @return INIFile Objekt

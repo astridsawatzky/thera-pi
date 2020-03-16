@@ -340,7 +340,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         return jpan;
     }
 
-    private void keepDayTreeSize(UIFSplitPane sPane) {
+     void keepDayTreeSize(UIFSplitPane sPane) {
         if (SystemConfig.hmAbrechnung.get("keepTTSize")
                                      .equals("0")) { // Fkt. abgeschaltet?
             return;
@@ -852,7 +852,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                         + SystemConfig.aktJahr + ")</b></html>");
                 return;
             }
-            if (macheEDIFACT(true)) {
+            if (macheEDIFACT()) {
                 jXTreeTable.setEditable(false);
                 rezeptFertig = true;
                 new SwingWorker<Void, Void>() {
@@ -4337,7 +4337,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
     /************************************************************************/
 
-    private boolean macheEDIFACT(boolean normal) {
+     boolean macheEDIFACT() {
         boolean ret = true;
         double gesamt = 0.00;
         double rez = 0.00;
@@ -4677,7 +4677,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         edibuf.insert(0, vec_posanzahl.toString() + "\n");
         edibuf.insert(0, vec_pospos.toString() + "\n");
         edibuf.insert(0, kopfzeile);
-        ////// System.out.println(edibuf.toString());
+        System.out.println(edibuf.toString());
         return ret;
     }
 
@@ -4857,13 +4857,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 vecdummy.add(DatFunk.sDatInSQL(datum));
                 vecdummy.add(id);
                 vecdummy.add((boolean) Boolean.valueOf(false));
-                ////// System.out.println(vecdummy);
                 vec_tabelle.add((Vector<Object>) vecdummy.clone());
                 vecdummy.clear();
-                // public AbrFall(String titel,String datum,String bezeichnung,Double
-                // anzahl,Double preis,
-                // boolean zuzahlung,double rezgeb,String unterbrechung,String alterpreis,String
-                // sqldatum,String preisid,boolean niezuzahl){
             }
 
         }
@@ -4885,6 +4880,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         int count = 0;
         Pattern pat = Pattern.compile(Pattern.quote(word));
         Matcher m = pat.matcher(text);
+
         while (m.find()) {
             count++;
         }
@@ -4909,16 +4905,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         }
     }
 
-    private void sucheRezept(String rez_nr) {
-        /*
-         * String cmd =
-         * "select * from verordn where rez_nr='"+rez_nr.trim()+"' LIMIT 1";
-         * //////System.out.println("Kommando = "+cmd);
-         * aktRezept.setVecVec_rez(SqlInfo.holeFelder(cmd));
-         * //////System.out.println("RezeptVektor = "+vec_rez);
-         */
+     void sucheRezept(String rez_nr) {
+
         aktRezept.init(rez_nr.trim());
-//        if(aktRezept.getVec_rez().size()<=0){
+
         if (aktRezept.getVecSize() <= 0) {
             System.out.println("AbrechnungRezept->sucheRezept:  Abbruch vec_rez.size = 0");
             System.out.println("RezeptVektor = " + aktRezept.getVec_rez());
