@@ -90,7 +90,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
 public class AbrechnungGKV extends JXPanel
-        implements PatStammEventListener, ActionListener, TreeSelectionListener, MouseListener, KeyListener {
+        implements PatStammEventListener,  TreeSelectionListener, MouseListener, KeyListener {
     /**
      *
      */
@@ -339,7 +339,7 @@ public class AbrechnungGKV extends JXPanel
 
         JScrollPane jscr = JCompTools.getTransparentScrollPane(pb.getPanel());
         jscr.validate();
-        cmbDiszi.addActionListener(this);
+        cmbDiszi.addActionListener(actionListener);
 
         return jscr;
     }
@@ -371,27 +371,31 @@ public class AbrechnungGKV extends JXPanel
         return aktuellerKassenKnoten;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        String cmd = arg0.getActionCommand();
-        if (cmd.equals("einlesen")) {
-            // rootKasse.removeAllChildren();
-//            aktDisziplin = getCurrDiszi();
-            aktDisziplin = disziSelect.getCurrDisziKurz();
-            // System.out.println("aktDisziplin = "+aktDisziplin);
-            if (abrRez.rezeptSichtbar) {
-                abrRez.setRechtsAufNull();
-                aktuellerPat = "";
-            }
-            this.jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
-                    + zertifikatVon.replace("IK", "") + "] [Disziplin: " + aktDisziplin + "]");
-            doEinlesen(null, null);
-            // setPreisVec(cmbDiszi.getSelectedIndex());
-        }
-        if (cmd.equals("alternativeadresse")) {
+    ActionListener actionListener = new ActionListener() {
 
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            String cmd = arg0.getActionCommand();
+            if (cmd.equals("einlesen")) {
+                // rootKasse.removeAllChildren();
+//                aktDisziplin = getCurrDiszi();
+                aktDisziplin = disziSelect.getCurrDisziKurz();
+                // System.out.println("aktDisziplin = "+aktDisziplin);
+                if (abrRez.rezeptSichtbar) {
+                    abrRez.setRechtsAufNull();
+                    aktuellerPat = "";
+                }
+                jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
+                        + zertifikatVon.replace("IK", "") + "] [Disziplin: " + aktDisziplin + "]");
+                doEinlesen(null, null);
+                // setPreisVec(cmbDiszi.getSelectedIndex());
+            }
+            if (cmd.equals("alternativeadresse")) {
+
+            }
         }
-    }
+    };
+
 
     public void einlesenErneuern(String neueReznr) {
         directCall = false;
@@ -444,7 +448,7 @@ public class AbrechnungGKV extends JXPanel
                                    .get(4)
                                    .trim();
         String kas = getKassenName(ikkasse);
-        
+
         int usesSameIkPapier = 0;
         int aeste = rootKasse.getChildCount();
         int aktuellerAst = 0;
@@ -563,7 +567,7 @@ public class AbrechnungGKV extends JXPanel
 
     private String getKassenName(String ikkasse) {
         // Kostenträgerdatei kann fehlerhaft sein ...
-        // String cmd = "select name1, name2 from ktraeger where ik_kasse = " + ikkasse; 
+        // String cmd = "select name1, name2 from ktraeger where ik_kasse = " + ikkasse;
         // ... daher lokalen Kassenstamm verwenden
         String cmd = "select kassen_nam1, kassen_nam2 from kass_adr where ik_kasse = " + ikkasse;
         Vector<String> vecKassenName = SqlInfo.holeFelder(cmd).get(0);
@@ -582,7 +586,7 @@ public class AbrechnungGKV extends JXPanel
                 || tst1.contentEquals("BKK LANDESVERBAND")
                 || tst1.endsWith(" DER")
                 || tst1.endsWith(" DES")
-                || tst2.startsWith("KRANKENKASSE") 
+                || tst2.startsWith("KRANKENKASSE")
                 || tst2.startsWith("BETRIEBSKRANKENKASSE")
                 || tst2.startsWith("UND ")) {
             kname = kname + " " + kname2;
@@ -2530,7 +2534,7 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Keystore öffnen
          */
         public void init() throws NebraskaCryptoException, NebraskaFileException {
@@ -2545,9 +2549,9 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Restlaufzeit eines Zertifikates ermitteln
-         * 
+         *
          * @param alias String - IK des gesuchten Zertifikates
          * @return int Anz. Tage, wie lange das Zert noch gültig ist oder noCertFound,
          *         falls kein Zertifikat gefunden wurde.
@@ -2581,9 +2585,9 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Eigenes Zertifikat auf Gültigkeit prüfen
-         * 
+         *
          * @param alias String - IK des eigenen Zertifikates
          * @return SystemConfig.certState
          */
@@ -2619,10 +2623,10 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Zertifikat einer Kasse (bzw. von deren Datenannahmestelle) auf Gültigkeit
          * prüfen
-         * 
+         *
          * @param currNode KnotenObjekt - Knoten im Kassenbaum
          * @return SystemConfig.certState
          */
