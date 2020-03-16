@@ -11,6 +11,7 @@ import java.awt.PointerInfo;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
@@ -128,7 +129,7 @@ import systemTools.ListenerTools;
  *
  */
 public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener,
-         PropertyChangeListener, ComponentListener {
+         PropertyChangeListener {
     /**
      *
      */
@@ -318,7 +319,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 }
             }
         });
-        tmp.addComponentListener(this);
+        tmp.addComponentListener(windowResizeHandler);
     }
 
     private JXPanel getSplitPane() {
@@ -4919,25 +4920,14 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         vec_rez_valid = true;
     }
 
-    // ComponentListener methods (handle window resize) McM 1606
-    @Override
-    public void componentResized(ComponentEvent e) {
-        keepDayTreeSize(jSplitOU);
-        jSplitOU.setDividerLocation(tts.getCurrTageTreeSize());
-    }
+    ComponentListener windowResizeHandler = new ComponentAdapter() {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            keepDayTreeSize(jSplitOU);
+            jSplitOU.setDividerLocation(tts.getCurrTageTreeSize());
+        }
 
-    @Override
-    public void componentMoved(ComponentEvent e) {
-        /* empty */}
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-        /* empty */}
-
-    @Override
-    public void componentHidden(ComponentEvent e) {
-        /* empty */}
-
+    };
     public void cleanUp() {
         // Aktionen beim Schließen des Abrechnungsfensters
         cmbkuerzel.removeActionListener(this);
