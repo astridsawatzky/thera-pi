@@ -1752,8 +1752,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                     JOptionPane.showMessageDialog(null, "Fehler im Rechnungsdruck - Fehler = abrDruck==null");
                 }
                 try {
-                    rezepteUebertragen();
-                    rechnungAnlegen();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null,
@@ -2741,21 +2739,9 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
         return fertig.fertig ;
     }
 
-    private void rezepteUebertragen() {
-
-    }
-
-    private void rechnungAnlegen() {
-
-    }
-
-
     MouseListener mouseListener = new MouseAdapter() {
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
 
-        }
 
         @Override
         public void mousePressed(MouseEvent e) {
@@ -2799,20 +2785,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
 
         }
 
-        @Override
-        public void mouseReleased(MouseEvent e) {
 
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
     };
     KeyListener keyListener = new KeyAdapter() {
 
