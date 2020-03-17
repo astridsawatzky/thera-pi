@@ -212,8 +212,8 @@ public class AbrechnungGKV extends JXPanel {
         jSplitLR.setDividerLocation(230);
         add(jSplitLR, BorderLayout.CENTER);
         mandantenCheck();
-        SlgaVersion = "12";
-        SllaVersion = "12";
+        SlgaVersion = "13";
+        SllaVersion = "13";
 
         keyStore = new KeyStore();
         myCert = new OwnCertState();
