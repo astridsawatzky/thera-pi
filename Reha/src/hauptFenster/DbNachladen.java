@@ -23,15 +23,13 @@ final class DbNachladen implements Runnable {
         }
 
         try {
+            Datenbank datenbank=new Datenbank();
             if (sDB == "SQL") {
                 new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-                obj.conn = DriverManager.getConnection(Datenbank.getvDatenBank().get(0)
-                                                                              .get(1)
-                        + "?jdbcCompliantTruncation=false",
-                        Datenbank.getvDatenBank().get(0)
-                                               .get(3),
-                        Datenbank.getvDatenBank().get(0)
-                                               .get(4));
+                obj.conn = DriverManager.getConnection(datenbank.jdbcDB()
+                        + "?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
+                        datenbank. user(),
+                        datenbank. password());
             }
             int nurmaschine = SystemConfig.dieseMaschine.toString()
                                                         .lastIndexOf("/");
@@ -40,8 +38,7 @@ final class DbNachladen implements Runnable {
                                                 .substring(0, nurmaschine)
                     + "%'");
             if (obj.dbLabel != null) {
-                String db = Datenbank.getvDatenBank().get(0)
-                                                   .get(1)
+                String db = datenbank.jdbcDB()
                                                    .replace("jdbc:mysql://", "");
                 db = db.substring(0, db.indexOf("/"));
                 obj.dbLabel.setText(Version.aktuelleVersion + db);

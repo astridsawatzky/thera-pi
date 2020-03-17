@@ -13,9 +13,9 @@ public class Datenbank {
 
     private static Vector<ArrayList<String>> vDatenBank = new Vector<ArrayList<String>>();
 
-    public static Vector<ArrayList<String>> getvDatenBank() {
-        return vDatenBank;
-    }
+//    public static Vector<ArrayList<String>> getvDatenBank() {
+//        return vDatenBank;
+//    }
 
     public String treiber() {
         return vDatenBank.get(0)
@@ -72,6 +72,11 @@ public class Datenbank {
             vDatenBank.add(aKontakt);
 
         }
+    }
+
+    public String typ() {
+        return vDatenBank.get(0)
+                         .get(2);
     }
 
 }
