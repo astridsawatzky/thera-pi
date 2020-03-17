@@ -33,6 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class INIFile {
 
+
     /**
      * Logger for logging any output via logging framework, instead of using
      * System.out.
@@ -80,6 +81,7 @@ public final class INIFile {
      * @param absoluteFileNamePath The full path and name of the ini file to be
      *                             used.
      */
+
     public INIFile(String absoluteFileNamePath) {
         if (absoluteFileNamePath == null) {
             throw new NullPointerException("Parameter [absoluteFileNamePath] must be NOT null!");
@@ -91,11 +93,13 @@ public final class INIFile {
 
         this.sectionMap = new LinkedHashMap<>();
         this.absoluteFileNamePath = absoluteFileNamePath;
+
         // Load the specified INI file.
         if (checkFile(absoluteFileNamePath)) {
             loadFile(absoluteFileNamePath);
         }
     }
+
 
     public INIFile(String contentAsSingleString, String absoluteFileNamePath) {
         if (absoluteFileNamePath == null) {
@@ -129,6 +133,7 @@ public final class INIFile {
      * @param propertyKey the property to be retrieved.
      * @return the string property value.
      */
+
     public String getStringProperty(String sectionKey, String propertyKey) {
         return getProperty(sectionKey, propertyKey, Function.identity());
     }
@@ -152,6 +157,7 @@ public final class INIFile {
      *         <code>false</code>, if there is no such value existing or the value
      *         can't be interpreted as boolean.
      */
+
     public boolean getBooleanProperty(String sectionKey, String propertyKey) {
         Boolean result = getProperty(sectionKey, propertyKey, s -> {
             if (s == null) {
@@ -175,6 +181,7 @@ public final class INIFile {
      * @param propertyKey the property to be retrieved.
      * @return the integer property value.
      */
+
     public Integer getIntegerProperty(String sectionKey, String propertyKey) {
         Integer result = null;
         try {
@@ -193,6 +200,7 @@ public final class INIFile {
      * @param propertyKey the property to be retrieved.
      * @return the long property value.
      */
+
     public Long getLongProperty(String sectionKey, String propertyKey) {
         Long result = null;
         try {
@@ -211,6 +219,7 @@ public final class INIFile {
      * @param propertyKey the property to be retrieved.
      * @return the double property value.
      */
+
     public Double getDoubleProperty(String sectionKey, String propertyKey) {
         Double result = null;
         try {
@@ -229,6 +238,7 @@ public final class INIFile {
     }
 
     /**
+
      * Returns the specified property from the specified sectionKey as
      * {@link LocalDate}.
      * 
@@ -238,6 +248,7 @@ public final class INIFile {
      *         <code>null</code>, if the property value can't be retrieved or
      *         parsed.
      */
+
     public LocalDate getDateProperty(String sectionKey, String propertyKey) {
         LocalDate result = null;
         try {
@@ -260,6 +271,7 @@ public final class INIFile {
      * @param propertyKey the property to be retrieved.
      * @return the date property value.
      */
+
     public Timestamp getTimestampProperty(String sectionKey, String propertyKey) {
         return getProperty(sectionKey, propertyKey, s -> {
             Timestamp result = null;
@@ -307,6 +319,7 @@ public final class INIFile {
      * @param comments   the comments.
      * @return The new created section.
      */
+
     public INISection addSection(String sectionKey, String comments) {
         return this.sectionMap.computeIfAbsent(sectionKey, key -> new INISection(key, comments));
     }
@@ -317,6 +330,7 @@ public final class INIFile {
      * @param sectionKey    the INI sectionKey name.
      * @param newSectionKey the new Section name to be set.
      */
+
     public void renameSection(String sectionKey, String newSectionKey, String comments) {
         INISection section = this.sectionMap.get(sectionKey);
         if (section != null) {
@@ -334,6 +348,7 @@ public final class INIFile {
      * @param value       the string value to be persisted
      * @param comments    A comment for the property.
      */
+
     public void setStringProperty(String sectionKey, String propertyKey, String value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, value, comments);
     }
@@ -357,6 +372,7 @@ public final class INIFile {
      * @param value       the boolean value to be persisted
      * @param comments    A comment for the property.
      */
+
     public void setBooleanProperty(String sectionKey, String propertyKey, boolean value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey,
                 value ? INI_FILE_BOOLEAN_VALUE_STRING_TRUE : INI_FILE_BOOLEAN_VALUE_STRING_FALSE, comments);
@@ -382,6 +398,7 @@ public final class INIFile {
      * @param value       the int property to be persisted.
      * @param comments    A comment for the property.
      */
+
     public void setIntegerProperty(String sectionKey, String propertyKey, int value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, Integer.toString(value), comments);
     }
@@ -405,6 +422,7 @@ public final class INIFile {
      * @param value       the long value to be persisted.
      * @param comments    A comment for the property.
      */
+
     public void setLongProperty(String sectionKey, String propertyKey, long value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, Long.toString(value), comments);
     }
@@ -428,6 +446,7 @@ public final class INIFile {
      * @param value       the double value to be persisted.
      * @param comments    A comment for the property.
      */
+
     public void setDoubleProperty(String sectionKey, String propertyKey, double value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, Double.toString(value), comments);
     }
@@ -451,6 +470,7 @@ public final class INIFile {
      * @param value       the date value to be persisted.
      * @param comments    A comment for the property.
      */
+
     public void setDateProperty(String sectionKey, String propertyKey, LocalDate value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey,
                 utilDateToString(value.atStartOfDay(), this.dateFormatString), comments);
@@ -475,6 +495,7 @@ public final class INIFile {
      * @param value       the timestamp value to be persisted.
      * @param comments    A comment for the property.
      */
+
     public void setTimestampProperty(String sectionKey, String propertyKey, Timestamp value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, timeToString(value, this.timeStampFormatString),
                 comments);
@@ -511,6 +532,7 @@ public final class INIFile {
      * @param dateFormatString the format string
      * @throws IllegalArgumentException if the if the given pattern is invalid
      */
+
     public void setDateFormat(String dateFormatString) {
         // check if the string is parsable. Go ahead when the format is ok, otherwise
         // throw an runtime exception.
@@ -524,6 +546,7 @@ public final class INIFile {
      * @param timeStampFormatString the format string.
      * @throws IllegalArgumentException if the if the given pattern is invalid.
      */
+
     public void setTimeStampFormat(String timeStampFormatString) {
         // check if the string is parsable. Go ahead when the format is ok, otherwise
         // throw a RuntimeException.
@@ -546,6 +569,7 @@ public final class INIFile {
      * @return the string array of sectionKey names
      */
     public String[] getAllSectionNames() {
+
         List<String> sectionNamesList = new ArrayList<>(this.sectionMap.keySet());
         return sectionNamesList.toArray(new String[0]);
     }
@@ -558,6 +582,7 @@ public final class INIFile {
      *                   to be retrieved.
      * @return the string array of property names.
      */
+
     public String[] getPropertyNames(String sectionKey) {
         String[] result = null;
         INISection section = this.sectionMap.get(sectionKey);
@@ -574,6 +599,7 @@ public final class INIFile {
      *                   retrieved.
      * @return the map of properties.
      */
+
     public Map<String, INIProperty> getProperties(String sectionKey) {
         Map<String, INIProperty> result = null;
         INISection section = this.sectionMap.get(sectionKey);
@@ -590,6 +616,7 @@ public final class INIFile {
      * @param sectionKey  the sectionKey name.
      * @param propertyKey the name of the property to be removed.
      */
+
     public void removeProperty(String sectionKey, String propertyKey) {
         INISection section = this.sectionMap.get(sectionKey);
         if (section != null) {
@@ -602,6 +629,7 @@ public final class INIFile {
      * 
      * @param sectionKey the name of the sectionKey to be removed.
      */
+
     public void removeSection(String sectionKey) {
         this.sectionMap.remove(sectionKey);
     }
@@ -611,6 +639,7 @@ public final class INIFile {
      * creates the new one.
      */
     public synchronized boolean save() {
+
         boolean result = false;
 
         File file = new File(this.absoluteFileNamePath);
@@ -663,6 +692,7 @@ public final class INIFile {
      * Helper functions
      *----------------------------------------------------------------------------*/
     /**
+
      * Helper function to check if the date time formats is parsable.
      * 
      * @param dateFormatString the date time format string to checked.
@@ -670,6 +700,7 @@ public final class INIFile {
      * @throws IllegalArgumentException if the format string is not parsable by a
      *                                  {@link DateTimeFormatter}.
      */
+
     private void checkIfTemporalFormatStringIsParsable(String dateFormatString) {
         DateTimeFormatter.ofPattern(dateFormatString);
     }
@@ -678,6 +709,7 @@ public final class INIFile {
      * Reads the INI file and load its contentens into a sectionKey collection after
      * parsing the file line by line.
      */
+
     private void loadFile(String absoluteFileNamePath) {
         try (FileInputStream inputStream = new FileInputStream(absoluteFileNamePath);
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -694,6 +726,7 @@ public final class INIFile {
             this.sectionMap.clear();
         }
     }
+
 
     private void loadFile(List<String> fileContent) {
         StringBuilder commentsBuilder = new StringBuilder();
@@ -806,6 +839,7 @@ public final class INIFile {
     /**
      * Converts a java.util.date into String
      * 
+
      * @param localDateTime Date that need to be converted to String
      * @param formatString  The date format pattern.
      * @return String
@@ -826,6 +860,7 @@ public final class INIFile {
      * Converts the given sql timestamp object to a string representation. The
      * format to be used is to be obtained from the configuration file.
      *
+
      * @param timestamp             the sql timestamp object to be converted.
      * @param timeStampFormatString If true formats the string using GMT timezone
      *                              otherwise using local timezone.
@@ -996,6 +1031,7 @@ public final class INIFile {
          * 
          * @return the value of this property.
          */
+
         String getPropValue() {
             final Pattern environmentVariableRegEx = Pattern.compile("%(?<environmentVariableKey>.+)%");
             String result;
