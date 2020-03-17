@@ -1,16 +1,22 @@
 package CommonTools;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -142,21 +148,73 @@ public class INIFileTest {
     }
 
     @Test
-    public void testSetDateProperty() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-        LocalDate ldateIn = LocalDate.parse("2013.12.31", formatter);
-        LocalDate ldateOut = LocalDate.parse("2013.01.31", formatter);
+    public void testSetDatePropertyWillAlsoCreateSectionAndPropertyIfNotAvailable() {
+        // Arrange
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        LocalDateTime dateIn = LocalDateTime.parse("2013.12.31 00:00:00", formatter);
 
-        Date dateIn = Date.from(ldateIn.atStartOfDay(ZoneId.systemDefault())
-                                       .toInstant());
-        Date dateOut = Date.from(ldateOut.atStartOfDay(ZoneId.systemDefault())
-                                         .toInstant());
+        INIFile inifile = new INIFile(null);
+
+        // Act
+        inifile.setDateProperty(DOUBLE_SECTION, DATE_SECTION, dateIn, null);
+
+        // Assert
+        Map<String, INIFile.INIProperty> section = inifile.getProperties(DOUBLE_SECTION);
+        assertThat(section, is(notNullValue()));
+
+        INIFile.INIProperty property = section.get(DATE_SECTION);
+        assertThat(property, is(notNullValue()));
+
+        assertThat(property.getPropValue(), is("31.12.2013"));
+    }
+
+
+    @Test
+    public void testSetDatePropertyWillOverwriteExistingPropertyInExistingSection() {
+        // Arrange
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        LocalDateTime dateIn = LocalDateTime.parse("2013.12.31 00:00:00", formatter);
+        LocalDateTime overwriteDate = LocalDateTime.parse("2020.03.09 00:00:00", formatter);
 
         INIFile inifile = new INIFile(null);
         inifile.setDateProperty(DOUBLE_SECTION, DATE_SECTION, dateIn, null);
 
-        // FIXME it should be expected to get the same date back
-        assertEquals(dateOut, inifile.getDateProperty(DOUBLE_SECTION, DATE_SECTION));
+        // Act
+        inifile.setDateProperty(DOUBLE_SECTION, DATE_SECTION, overwriteDate, null);
+
+        // Assert
+        Map<String, INIFile.INIProperty> section = inifile.getProperties(DOUBLE_SECTION);
+        INIFile.INIProperty property = section.get(DATE_SECTION);
+        assertThat(property.getPropValue(), is("09.03.2020"));
+    }
+
+    @Test
+    public void testGetDatePropertyAfterEntry() {
+        // Arrange
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
+        LocalDateTime dateIn = LocalDateTime.parse("2013.12.31 00:00:00", formatter);
+        LocalDate dateOut = LocalDate.parse("2013.12.31 00:00:00", formatter);
+
+        INIFile inifile = new INIFile(null);
+        inifile.setDateProperty(DOUBLE_SECTION, DATE_SECTION, dateIn, null);
+
+        // Act
+        LocalDate actual = inifile.getDateProperty(DOUBLE_SECTION, DATE_SECTION);
+
+        // Assert
+        assertThat(actual, is(dateOut));
+    }
+
+    @Test
+    public void testGetDatePropertyWhenNoValueIsAvailable() {
+        // Arrange
+        INIFile inifile = new INIFile(null);
+
+        // Act
+        LocalDate actual = inifile.getDateProperty(DOUBLE_SECTION, DATE_SECTION);
+
+        // Assert
+        assertThat(actual, is(nullValue()));
     }
 
     @Test
