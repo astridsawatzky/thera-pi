@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import CommonTools.ExUndHop;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.config.Datenbank;
 
 final class DbNachladen implements Runnable {
     @Override
@@ -24,12 +25,12 @@ final class DbNachladen implements Runnable {
         try {
             if (sDB == "SQL") {
                 new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-                obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0)
+                obj.conn = DriverManager.getConnection(Datenbank.getvDatenBank().get(0)
                                                                               .get(1)
                         + "?jdbcCompliantTruncation=false",
-                        SystemConfig.vDatenBank.get(0)
+                        Datenbank.getvDatenBank().get(0)
                                                .get(3),
-                        SystemConfig.vDatenBank.get(0)
+                        Datenbank.getvDatenBank().get(0)
                                                .get(4));
             }
             int nurmaschine = SystemConfig.dieseMaschine.toString()
@@ -39,7 +40,7 @@ final class DbNachladen implements Runnable {
                                                 .substring(0, nurmaschine)
                     + "%'");
             if (obj.dbLabel != null) {
-                String db = SystemConfig.vDatenBank.get(0)
+                String db = Datenbank.getvDatenBank().get(0)
                                                    .get(1)
                                                    .replace("jdbc:mysql://", "");
                 db = db.substring(0, db.indexOf("/"));

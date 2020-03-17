@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import CommonTools.RehaEvent;
 import CommonTools.SqlInfo;
 import geraeteInit.BarCodeScanner;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.config.Datenbank;
 import terminKalender.ParameterLaden;
 
 /**************
@@ -36,21 +38,21 @@ final class DatenbankStarten implements Runnable {
     Logger logger = LoggerFactory.getLogger(DatenbankStarten.class);
 
     private void StarteDB() {
-        final Reha obj = Reha.instance;
 
-        final String sDB = "SQL";
-        if (obj.conn != null) {
+        if (Reha.instance.conn != null) {
             try {
-                obj.conn.close();
+                Reha.instance.conn.close();
             } catch (final SQLException e) {
             }
         }
+        final String sDB = "SQL";
+        Datenbank datenbank = new Datenbank();
         try {
             if (sDB == "SQL") {
+
                 new SocketClient().setzeInitStand("Datenbanktreiber installieren");
-                Class.forName(SystemConfig.vDatenBank.get(0)
-                                                     .get(0))
-                     .newInstance();
+                Class.forName(datenbank. treiber())
+                .newInstance();
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -62,51 +64,39 @@ final class DatenbankStarten implements Runnable {
         try {
             if (sDB == "SQL") {
 
-                // obj.conn = (Connection)
-                // DriverManager.getConnection("jdbc:mysql://194.168.1.8:3306/dbf","entwickler","entwickler");
                 new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-                obj.conn = DriverManager.getConnection(SystemConfig.vDatenBank.get(0)
-                                                                              .get(1)
+                Reha.instance.conn = DriverManager.getConnection(datenbank.jdbcDB()
                         + "?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
-                        SystemConfig.vDatenBank.get(0)
-                                               .get(3),
-                        SystemConfig.vDatenBank.get(0)
-                                               .get(4));
+                        datenbank. user(),
+                        datenbank. password());
             }
             int nurmaschine = SystemConfig.dieseMaschine.toString()
                                                         .lastIndexOf("/");
-            obj.sqlInfo.setConnection(obj.conn);
+            Reha.instance.sqlInfo.setConnection(Reha.instance.conn);
             new ExUndHop().setzeStatement("delete from flexlock where maschine like '%"
                     + SystemConfig.dieseMaschine.toString()
                                                 .substring(0, nurmaschine)
                     + "%'");
-            // geht leider nicht, erfordert root-Rechte
-            // SqlInfo.sqlAusfuehren("SET GLOBAL sql_mode = ''");
-            // sql_mode ging zwar mit SET SESSION, aber dann haben wir max_allowed... immer
-            // noch nicht gelöst.
-            // SqlInfo.sqlAusfuehren("SET GLOBAL max_allowed_packet = 32*1024*1024");
-            String db = SystemConfig.vDatenBank.get(0)
-                                               .get(1)
+
+            String db =datenbank. jdbcDB()
                                                .replace("jdbc:mysql://", "");
             db = db.substring(0, db.indexOf("/"));
             final String xdb = db;
-            new SwingWorker<Void, Void>() {
+            SwingUtilities.invokeLater(new Runnable() {
+
                 @Override
-                protected Void doInBackground() throws java.lang.Exception {
+                public void run() {
+
                     try {
-                        while (Reha.getThisFrame() == null || Reha.getThisFrame()
-                                                                  .getStatusBar() == null
-                                || Reha.instance.dbLabel == null) {
-                            Thread.sleep(25);
-                        }
+
                         Reha.instance.dbLabel.setText(Version.aktuelleVersion + xdb);
                     } catch (NullPointerException ex) {
                         ex.printStackTrace();
                     }
-                    return null;
+
                 }
 
-            }.execute();
+            });
 
             Reha.DbOk = true;
             try {
@@ -155,6 +145,11 @@ final class DatenbankStarten implements Runnable {
         }
         return;
     }
+
+
+
+
+
 
     @Override
     public void run() {

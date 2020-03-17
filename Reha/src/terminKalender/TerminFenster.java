@@ -83,6 +83,7 @@ import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.config.Datenbank;
 import systemTools.ListenerTools;
 
 public class TerminFenster extends Observable
@@ -2784,7 +2785,7 @@ public class TerminFenster extends Observable
         int behandler;
         String sletzter, serster, sbehandler;
         if (this.ansicht == NORMAL_ANSICHT) {
-            if (!SystemConfig.vDatenBank.get(0)
+            if (!Datenbank.getvDatenBank().get(0)
                                         .get(2)
                                         .equals("ADS")) {
                 sstate = "SELECT * FROM flexkc WHERE datum = '" + DatFunk.sDatInSQL(stag) + "' LIMIT "
@@ -2872,7 +2873,7 @@ public class TerminFenster extends Observable
                     maxblock = maxblock + (ende + 5);
                     durchlauf = 1;
 
-                    if (!SystemConfig.vDatenBank.get(0)
+                    if (!Datenbank.getvDatenBank().get(0)
                                                 .get(2)
                                                 .equals("ADS")) {
                         for (i = 1; i < ende; i = i + 5) {
@@ -2996,7 +2997,7 @@ public class TerminFenster extends Observable
                     int ende = (5 * belegt);
                     maxblock = maxblock + (ende + 5);
                     durchlauf = 1;
-                    if (!SystemConfig.vDatenBank.get(0)
+                    if (!Datenbank.getvDatenBank().get(0)
                                                 .get(2)
                                                 .equals("ADS")) {
                         for (i = 1; i < ende; i = i + 5) {

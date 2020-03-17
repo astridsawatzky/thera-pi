@@ -51,6 +51,7 @@ import suchen.PatMitAbgebrochenenVOs;
 import suchen.PatMitVollenVOs;
 import suchen.PatWithMatchingVo;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.config.Datenbank;
 
 public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 
@@ -780,7 +781,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
         DefaultTableModel tblDataModel;
 
         public String ADS_Date() {
-            if (!SystemConfig.vDatenBank.get(0)
+            if (!Datenbank.getvDatenBank().get(0)
                                         .get(2)
                                         .equals("ADS")) {
                 return "DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren";

@@ -52,6 +52,7 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
+import systemEinstellungen.config.Datenbank;
 
 public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, ActionListener {
 
@@ -1120,7 +1121,7 @@ class HoleMasken {
                      * Titel.setText(rs.getString(305)); }
                      */
 
-                    if (!SystemConfig.vDatenBank.get(0)
+                    if (!Datenbank.getvDatenBank().get(0)
                                                 .get(2)
                                                 .equals("ADS")) {
                         for (i = 1; i < ende; i = i + 5) {

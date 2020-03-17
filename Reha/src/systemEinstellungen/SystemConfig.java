@@ -33,11 +33,11 @@ import environment.Path;
 import hauptFenster.Reha;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;
+import systemEinstellungen.config.Datenbank;
 import terminKalender.ParameterLaden;
 
 public class SystemConfig {
 
-    public static Vector<ArrayList<String>> vDatenBank;
     public static Vector<ArrayList<String>> vSystemKollegen;
     public static Vector<String> vComboKollegen;
     public static String aktJahr = "";
@@ -301,44 +301,7 @@ public class SystemConfig {
     public void DatenBank() {
         try {
             ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
-            int lesen;
-            int i;
-            ArrayList<String> aKontakt;
-            aKontakt = new ArrayList<String>();
-
-            vDatenBank = new Vector<ArrayList<String>>();
-            lesen = ini.getIntegerProperty("DatenBank", "AnzahlConnections");
-            for (i = 1; i < (lesen + 1); i++) {
-                aKontakt.add(String.valueOf(ini.getStringProperty("DatenBank", "DBTreiber" + i)));
-                aKontakt.add(String.valueOf(ini.getStringProperty("DatenBank", "DBKontakt" + i)));
-                aKontakt.add(String.valueOf(ini.getStringProperty("DatenBank", "DBType" + i)));
-                String sbenutzer = String.valueOf(ini.getStringProperty("DatenBank", "DBBenutzer" + i));
-                aKontakt.add(String.valueOf(sbenutzer));
-                String pw = String.valueOf(ini.getStringProperty("DatenBank", "DBPasswort" + i));
-                String decrypted = null;
-                if (pw == null) {
-                    decrypted = String.valueOf("");
-                    JOptionPane.showMessageDialog(null, "Passwort der MySql-Datenbank = null");
-                } else if (!pw.equals("")) {
-                    Verschluesseln man = Verschluesseln.getInstance();
-                    decrypted = man.decrypt(pw);
-                } else {
-                    Object ret = JOptionPane.showInputDialog(null,
-                            "Geben Sie bitte das Passwort für die MySql-Datenbank ein", "");
-                    if (ret == null) {
-                        decrypted = String.valueOf("");
-                    } else {
-                        decrypted = ((String) ret).trim();
-                        Verschluesseln man = Verschluesseln.getInstance();
-                        ini.setStringProperty("DatenBank", "DBPasswort" + i, man.encrypt(((String) ret)), null);
-                        INITool.saveIni(ini);
-                    }
-                }
-
-                aKontakt.add(decrypted);
-                vDatenBank.add((ArrayList<String>) aKontakt.clone());
-                aKontakt.clear();
-            }
+            new Datenbank().datenbankEinstellungeneinlesen(ini);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
