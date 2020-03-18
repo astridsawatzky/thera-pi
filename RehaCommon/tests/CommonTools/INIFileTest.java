@@ -8,20 +8,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
-
-import CommonTools.INIFile;
+import org.junit.rules.ExpectedException;
 
 public class INIFileTest {
 
@@ -31,74 +34,128 @@ public class INIFileTest {
     private static final String LONG_SECTION = "Longs";
     private static final String DOUBLE_SECTION = "Doubles";
     private static final String DATE_SECTION = "Dates";
-    private static final String TEST_RESOURCES_DIR = "tests/resources/";
-    private static final String TEST_RESOURCES_INIFILE_INI = TEST_RESOURCES_DIR + "IniFile.ini";
 
-    @Test
-    public void testINIFile() {
-        new INIFile(null);
-        // XXX: fails silently when File not found
-        new INIFile(TEST_RESOURCES_DIR);
-        // XXX: fails silently when File is in fact a directory
+    private Path tempIniTestDirectory;
+
+    private Path tempIniFilePath;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Before
+    public void setup() throws IOException {
+        this.tempIniFilePath = Files.createTempFile("IniFile", ".ini");
+        this.tempIniTestDirectory = Files.createTempDirectory("tempTestPath");
     }
 
     @Test
-    public void testINIFilewithArgs() {
+    public void testCreateIniFileWithNullValueAsParameterFailsWithException() {
+        // Arrange
 
-        new INIFile(TEST_RESOURCES_INIFILE_INI);
+        // Act
+        new INIFile(null);
+
+        // Assert
+        // no exception will be thrown is the expectation here
+    }
+
+    @Test
+    public void testCreateIniFileWithDirectoryAsFilePath() {
+        // Arrange
+        String path = this.tempIniTestDirectory.toString();
+
+        // Act
+        new INIFile(path);
+
+        // Assert
+        // no exception will be thrown is the expectation here
+    }
+
+    @Test
+    public void testINIFileWithArgs() {
+        // Arrange
+        String path =this.tempIniFilePath.toString();
+                // Act
+        new INIFile(path);
+
+        // Arrange
     }
 
     @Test
     public void testGetFileName() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
-        assertEquals(TEST_RESOURCES_INIFILE_INI, myIniFile.getFileName());
+        // Arrange
+        String path =this.tempIniFilePath.toString();
+
+        // Act
+        INIFile myIniFile = new INIFile(path);
+
+        // Arrange
+        assertEquals(path, myIniFile.getFileName());
     }
 
     @Test
     public void testGetStringProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        // Arrange
+        String path =this.tempIniFilePath.toString();
+
+        // Act
+        INIFile myIniFile = new INIFile(path);
+
+        // Arrange
         assertEquals("thisissimple", myIniFile.getStringProperty("Strings", "simpleString"));
         assertEquals("spaces in String", myIniFile.getStringProperty("Strings", "spacyString"));
 
     }
 
     @Test
-    public void testGetBooleanProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+    public void testGetKnownIntegerPropertyWillReturnExpectedValue() {
+        String path =this.tempIniFilePath.toString();
+
+        // Act
+        INIFile myIniFile = new INIFile(path);
+
+        // Arrange
         assertFalse("Non existing value is returned as FALSE",
-                myIniFile.getBooleanProperty("Verzeichnisse", "Fahrdienstrohdatei")
-                         .booleanValue());
-        assertTrue("true is returned as TRUE", myIniFile.getBooleanProperty(BOOL_SECTION, "right")
-                                                        .booleanValue());
-        assertFalse("false is returned as FALSE", myIniFile.getBooleanProperty(BOOL_SECTION, "wrong")
-                                                           .booleanValue());
-        assertFalse("invalid value is returned as false", myIniFile.getBooleanProperty(BOOL_SECTION, "invalid")
-                                                                   .booleanValue());
-        assertTrue("1 is returned as TRUE", myIniFile.getBooleanProperty(BOOL_SECTION, "one")
-                                                     .booleanValue());
-        assertFalse("0 is returned as FALSE", myIniFile.getBooleanProperty(BOOL_SECTION, "none")
-                                                       .booleanValue());
-        assertFalse("5 is returned as FALSE", myIniFile.getBooleanProperty(BOOL_SECTION, "five")
-                                                       .booleanValue());
+                myIniFile.getBooleanProperty("Verzeichnisse", "Fahrdienstrohdatei"));
+        assertTrue("true is returned as TRUE", myIniFile.getBooleanProperty(BOOL_SECTION, "right"));
+        assertFalse("false is returned as FALSE", myIniFile.getBooleanProperty(BOOL_SECTION, "wrong"));
+        assertFalse("invalid value is returned as false", myIniFile.getBooleanProperty(BOOL_SECTION, "invalid"));
+        assertTrue("1 is returned as TRUE", myIniFile.getBooleanProperty(BOOL_SECTION, "one"));
+        assertFalse("0 is returned as FALSE", myIniFile.getBooleanProperty(BOOL_SECTION, "none"));
+        assertFalse("5 is returned as FALSE", myIniFile.getBooleanProperty(BOOL_SECTION, "five"));
     }
 
     @Test
-    public void testIntegerProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
-        assertEquals(Integer.valueOf(1), myIniFile.getIntegerProperty(INTEGER_SECTION, "one"));
-        assertEquals(Integer.valueOf(2), myIniFile.getIntegerProperty(INTEGER_SECTION, "two"));
-        assertEquals(Integer.valueOf(-2134), myIniFile.getIntegerProperty(INTEGER_SECTION, "negativ"));
+    public void testGetUnknownIntegerPropertyWillReturnNull() {
+        String path =this.tempIniFilePath.toString();
 
+        // Act
+        INIFile myIniFile = new INIFile(path);
+
+        // Assert
         assertEquals(null, myIniFile.getIntegerProperty(INTEGER_SECTION, "invalid"));
-        assertEquals(null, myIniFile.getIntegerProperty(INTEGER_SECTION, "toobig"));
+    }
 
+    @Test
+    public void testSetIntegerProperty() {
+        // Arrange
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
+
+        // Act
         myIniFile.setIntegerProperty(INTEGER_SECTION, "vierganze", 4, null);
+
+        // Assert
+        Integer actual = myIniFile.getIntegerProperty(INTEGER_SECTION, "vierganze");
+        assertThat(actual, is(notNullValue()));
+        assertThat(actual, is(4));
     }
 
     @Test
     public void testLongProperty() {
 
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
         assertEquals(Long.valueOf(1), myIniFile.getLongProperty(LONG_SECTION, "one"));
         assertEquals(Long.valueOf(2), myIniFile.getLongProperty(LONG_SECTION, "two"));
         assertEquals(Long.valueOf(-2134), myIniFile.getLongProperty(LONG_SECTION, "negativ"));
@@ -112,7 +169,8 @@ public class INIFileTest {
 
     @Test
     public void testDoubleProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
 
         assertEquals(Double.valueOf(1), myIniFile.getDoubleProperty(DOUBLE_SECTION, "one"));
         assertEquals(Double.valueOf(2), myIniFile.getDoubleProperty(DOUBLE_SECTION, "two"));
@@ -136,14 +194,13 @@ public class INIFileTest {
 
     @Test
     public void testSetBooleanProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
 
         myIniFile.setBooleanProperty(DOUBLE_SECTION, "wahr", true, null);
         myIniFile.setBooleanProperty(DOUBLE_SECTION, "falsch", false, null);
-        assertTrue("true is returned as TRUE", myIniFile.getBooleanProperty(DOUBLE_SECTION, "wahr")
-                                                        .booleanValue());
-        assertFalse("false is returned as FALSE", myIniFile.getBooleanProperty(DOUBLE_SECTION, "falsch")
-                                                           .booleanValue());
+        assertTrue("true is returned as TRUE", myIniFile.getBooleanProperty(DOUBLE_SECTION, "wahr"));
+        assertFalse("false is returned as FALSE", myIniFile.getBooleanProperty(DOUBLE_SECTION, "falsch"));
 
     }
 
@@ -167,7 +224,6 @@ public class INIFileTest {
 
         assertThat(property.getPropValue(), is("31.12.2013"));
     }
-
 
     @Test
     public void testSetDatePropertyWillOverwriteExistingPropertyInExistingSection() {
@@ -231,20 +287,23 @@ public class INIFileTest {
 
     @Test
     public void testGetTotalSections() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
         assertEquals(Current_Section_count, myIniFile.getTotalSections());
     }
 
     @Test
     public void testGetAllSectionNames() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
         String[] names = { "Strings", "Bools", "Integer", "Longs", "Doubles", "Dates" };
         assertArrayEquals(names, myIniFile.getAllSectionNames());
     }
 
     @Test
     public void testGetPropertyNames() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
         String[] names = { "Strings", "Bools", "Integer" };
         String[] propertyNames = { "simpleString", "escapedString", "spacyString" };
 
@@ -254,7 +313,8 @@ public class INIFileTest {
     @Test
     public void testGetProperties() {
         INIFile expected = new INIFile(null);
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        String path =this.tempIniFilePath.toString();
+        INIFile myIniFile = new INIFile(path);
 
         expected.addSection(BOOL_SECTION, null);
         expected.setStringProperty(BOOL_SECTION, "right", "true", null);
@@ -302,21 +362,24 @@ public class INIFileTest {
     }
 
     @Test
-    public void testSave() {
-        String path = TEST_RESOURCES_DIR + "deleteme.ini";
-        File newFile = new File(path);
-        if (newFile.exists()) {
-            newFile.delete();
+    public void testSaveIntoNotExistingFile() throws IOException {
+        // Arrange
+        File newFile = File.createTempFile("IniFileSaveTest",".ini");
+        boolean deleted = newFile.delete();
+        if(!deleted){
+            fail("PreConditions are not ready.");
         }
-        assertFalse(newFile.exists());
-        INIFile myIniFile = new INIFile(path);
-        myIniFile.save();
-        assertFalse("empty File not written", newFile.exists());
-        myIniFile.setStringProperty("Section", "property", "Propertyval", "comment");
-        myIniFile.save();
-        assertTrue(newFile.exists());
-        newFile.delete();
 
+        INIFile fixture = new INIFile(newFile.getAbsolutePath());
+        fixture.setLongProperty(LONG_SECTION, "TEST", Long.MAX_VALUE, "Comments");
+
+        // Act
+        fixture.save();
+
+        // Assert
+        INIFile actual = new INIFile(newFile.getAbsolutePath());
+        Long actualLongValue = actual.getLongProperty(LONG_SECTION, "TEST");
+        assertThat(actualLongValue, is(Long.MAX_VALUE));
     }
 
     @Test
