@@ -18,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -143,7 +142,6 @@ public class INIFileTest {
     }
 
     @Test
-
     public void checkSaveToStringWillResultInSameString() {
         // Arrange
         String data = "[Integers]" + System.lineSeparator() + "IntegerMax = 2147483647" + System.lineSeparator()
