@@ -14,7 +14,6 @@ import javax.swing.event.ChangeListener;
 
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.JXTitledPanel;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
@@ -24,7 +23,7 @@ import rehaBillEdit.RehaBillPanel;
 public class OffenepostenTab extends JXPanel implements ChangeListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6012301447745950357L;
 
@@ -32,8 +31,6 @@ public class OffenepostenTab extends JXPanel implements ChangeListener {
     private Vector<String> vecdescript = new Vector<String>();
     private Vector<ImageIcon> vecimg = new Vector<ImageIcon>();
 
-    JTabbedPane offenPostenTab = null;
-    public JXTitledPanel jxTitel;
     public JTabbedPane jtb;
     public JXHeader jxh;
 
@@ -42,20 +39,21 @@ public class OffenepostenTab extends JXPanel implements ChangeListener {
     OffenepostenEinstellungen oeinstellungpanel = null;
     RehaBillPanel rehaBillPanel = null;
 
-    public OffenepostenTab() {
+
+    public OffenepostenTab(OffenePosten offenePosten) {
         super();
         setOpaque(false);
         setLayout(new BorderLayout());
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
 
-        oppanel = new OffenepostenPanel(this);
+        oppanel = new OffenepostenPanel(this, offenePosten);
         jtb.addTab("Rechnungen ausbuchen", oppanel);
 
-        rehaBillPanel = new RehaBillPanel(this);
+        rehaBillPanel = new RehaBillPanel(this,offenePosten.conn);
         jtb.addTab("Rechn. korrigieren / - Kopie", rehaBillPanel);
 
-        omahnpanel = new OffenepostenMahnungen(this);
+        omahnpanel = new OffenepostenMahnungen(this , offenePosten);
         jtb.addTab("Mahnungen erstellen", omahnpanel);
 
         oeinstellungpanel = new OffenepostenEinstellungen(this);

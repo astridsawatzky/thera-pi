@@ -2,51 +2,48 @@ package RehaIO;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.jdesktop.swingworker.SwingWorker;
 
 import io.RehaIOMessages;
-import offenePosten.OffenePosten;
 
 public class RehaReverseServer extends SwingWorker<Void, Void> {
     public ServerSocket serv = null;
     StringBuffer sb = new StringBuffer();
     InputStream input = null;
-    OutputStream output = null;
-    // public int port = 6000;
-    public static boolean OffenePostenIsActive = false;
-    public static boolean offenePostenIsActive = false;
 
-    public RehaReverseServer(int x) {
-        OffenePosten.xport = x;
+    private int xport;
+    private JFrame opFrame;
+
+
+    public RehaReverseServer(int x,JFrame opFrame) {
+        xport = x;
+        this.opFrame = opFrame;
         execute();
     }
 
     public String getPort() {
-        return Integer.toString(OffenePosten.xport);
+        return String.valueOf(serv.getLocalPort());
     }
 
     private void doReha(String op) {
         if (op.split("#")[1].equals(RehaIOMessages.MUST_GOTOFRONT)) {
-            OffenePosten.thisFrame.setVisible(true);
-        } else if (op.split("#")[1].equals(RehaIOMessages.MUST_REZFIND)) {
-
+            opFrame.setVisible(true);
         }
-
     }
 
     @Override
     protected Void doInBackground() throws Exception {
 
-        while (OffenePosten.xport < 7050) {
+        while (xport < 7050) {
             try {
-                serv = new ServerSocket(OffenePosten.xport);
+                serv = new ServerSocket(xport);
                 break;
             } catch (Exception e) {
                 // System.out.println("In Exception währen der Portsuche - 1");
@@ -59,16 +56,15 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
                     }
                     serv = null;
                 }
-                OffenePosten.xport++;
+                xport++;
             }
         }
-        if (OffenePosten.xport == 7050) {
+        if (xport == 7050) {
             JOptionPane.showMessageDialog(null, "Fehler bei der Initialisierung des IO-Servers (kein Port frei!)");
-            OffenePosten.xport = -1;
+            xport = -1;
             serv = null;
             return null;
         }
-        OffenePosten.xportOk = true;
         Socket client = null;
 
         while (true) {
@@ -97,16 +93,13 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
 
             if (sb.toString()
                   .startsWith("Reha#")) {
-                doReha(String.valueOf(sb.toString()));
+                doReha(sb.toString());
             }
         }
 
-//			return null;
 
     }
 
-    private RehaReverseServer getInstance() {
-        return this;
-    }
+
 
 }

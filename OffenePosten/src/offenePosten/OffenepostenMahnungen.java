@@ -6,7 +6,6 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -35,7 +34,6 @@ import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 
-import com.hexiong.jdbf.DBFReader;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.text.XTextFieldsSupplier;
@@ -69,7 +67,7 @@ import ag.ion.noa.internal.printing.PrintProperties;
 public class OffenepostenMahnungen extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 7011413450109922373L;
     ActionListener al = null;
@@ -87,18 +85,18 @@ public class OffenepostenMahnungen extends JXPanel {
     MyMahnungenTableModel tabmod = null;
     JXTable tab = null;
 
-    DBFReader dbfreader = null;
-    File f = null;
     Font fontfett = new Font("Tahoma", Font.BOLD, 10);
 
     DecimalFormat dcf = new DecimalFormat("###0.00");
 
     HashMap<String, String> mahnParameter = new HashMap<String, String>();
     ITextDocument textDocument;
+    private OffenePosten offenePosten;
 
-    public OffenepostenMahnungen(OffenepostenTab xeltern) {
+    public OffenepostenMahnungen(OffenepostenTab xeltern, OffenePosten offenePosten) {
         super();
         this.eltern = xeltern;
+        this.offenePosten = offenePosten;
         this.setLayout(new BorderLayout());
         activateActionListener();
         add(getContent(), BorderLayout.CENTER);
@@ -563,7 +561,7 @@ public class OffenepostenMahnungen extends JXPanel {
         ResultSet rs = null;
 
         try {
-            stmt = OffenePosten.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+            stmt = offenePosten.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -641,7 +639,7 @@ public class OffenepostenMahnungen extends JXPanel {
 
     class MyMahnungenTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -835,7 +833,6 @@ public class OffenepostenMahnungen extends JXPanel {
         try {
             document = documentService.loadDocument(url, docdescript);
         } catch (NOAException e) {
-
             e.printStackTrace();
         }
         textDocument = (ITextDocument) document;
