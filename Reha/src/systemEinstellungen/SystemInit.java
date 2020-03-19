@@ -24,6 +24,7 @@ import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
+import org.thera_pi.nebraska.gui.NebraskaMain;
 
 import environment.LadeProg;
 import environment.Path;
@@ -645,7 +646,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
                     @Override
                     protected Void doInBackground() throws Exception {
                         try {
-                            new LadeProg(Path.Instance.getProghome() + "Nebraska.jar " + Reha.getAktIK());
+                            NebraskaMain.main(new String[]{Reha.getAktIK()});
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
