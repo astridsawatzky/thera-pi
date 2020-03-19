@@ -467,7 +467,7 @@ public class INIFileTest {
 
     /*
      * getBooleanProperty
-     * 
+     *
      */
 
     @Test
@@ -1105,7 +1105,7 @@ public class INIFileTest {
 
     /*
      * getDateProperty
-     * 
+     *
      */
 
     @Test
@@ -1288,9 +1288,9 @@ public class INIFileTest {
     }
 
     /*
-     * 
+     *
      * getTimestampProperty
-     * 
+     *
      */
     @Test
     public void checkSetUnknownTimestampPropertyValue() {
