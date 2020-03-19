@@ -179,16 +179,23 @@ public class OffenePosten implements WindowListener {
             @Override
             public void setVisible(final boolean shallBeVisible) {
 
-
+                if (getState() != JFrame.NORMAL) {
                     setState(JFrame.NORMAL);
+                }
 
-
-
-                if (!(shallBeVisible && isVisible())) {
+                
+                if (!shallBeVisible || !isVisible()) {
                     super.setVisible(shallBeVisible);
                 }
+
                 if (shallBeVisible) {
-                    toFront();
+                    int state = super.getExtendedState();
+                    state &= ~JFrame.ICONIFIED;
+                    super.setExtendedState(state);
+                    super.setAlwaysOnTop(true);
+                    super.toFront();
+                    super.requestFocus();
+                    super.setAlwaysOnTop(false);
                 }
             }
 
