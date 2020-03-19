@@ -17,7 +17,8 @@ Abrechnung $302:
 Abrechnung $302
 - Verschlüsselung mit 4096er Schlüssellänge #315
 - Datenaustausch 302 TA1 Version 13 #250
-
+### fixed
+- Tastenkombination Alt + A funktioniert nicht bei RGR/AFR #330
 
 ## [1.1.3] - 2019-12-05
 
