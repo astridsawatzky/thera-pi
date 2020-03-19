@@ -1,12 +1,6 @@
 package CommonTools;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,15 +8,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,18 +19,32 @@ import org.slf4j.LoggerFactory;
 /**
  * INIFile class provides methods for manipulating (Read/Write) windows ini
  * files.
- *
- * @author Prasad P. Khandekar
- * @version 1.0
- * @since 1.0
  */
 public final class INIFile {
 
+    /**
+     * Logger for logging any output via logging framework, instead of using
+     * System.out.
+     */
     private static final Logger LOG = LoggerFactory.getLogger(INIFile.class);
 
+    /**
+     * Constant field, used as String representation for a boolean <code>true</code>
+     * value.
+     */
     private static final String INI_FILE_VALUE_STRING_TRUE = "TRUE";
+
+    /**
+     * Constant field, used as String representation for a boolean
+     * <code>false</code> value.
+     */
     private static final String INI_FILE_VALUE_STRING_FALSE = "FALSE";
-    private static final String PARSE_EXCEPTION_BASE_MESSAGE = "File {}: Unable to parse the value for sectionKey %s, property %s %s ";
+
+    /**
+     * Constant string part, used in error logging output about a parsing error of
+     * an string value into the target type.
+     */
+    private static final String PARSE_EXCEPTION_BASE_MESSAGE = "File %s: Unable to parse the value for sectionKey %s, property %s %s ";
 
     /** Variable to represent the date format */
     private String dateFormatString = "dd.MM.yyyy";
@@ -52,25 +55,19 @@ public final class INIFile {
     /** Variable to hold the ini file name and full path */
     private String absoluteFileNamePath;
 
-    /** Variable to hold input stream of the inifile-content in a table */
-    private InputStream inputStream;
-
     /** Variable to hold the sections in an ini file. */
     private LinkedHashMap<String, INISection> sectionMap;
-
-    /** Variable to hold environment variables **/
-    private Properties environment;
 
     /**
      * Create a iniFile object from the file named in the parameter.
      * 
-     * @param absoluteFileNamePath The full path and name of the ini file to be used.
+     * @param absoluteFileNamePath The full path and name of the ini file to be
+     *                             used.
      */
     public INIFile(String absoluteFileNamePath) {
         if (absoluteFileNamePath == null || !new File(absoluteFileNamePath).exists()) {
             LOG.error("Inifile does not exist: {}", absoluteFileNamePath);
         }
-        this.environment = getEnvVars();
         this.sectionMap = new LinkedHashMap<>();
         this.absoluteFileNamePath = absoluteFileNamePath;
         // Load the specified INI file.
@@ -78,17 +75,15 @@ public final class INIFile {
             loadFile();
     }
 
-    public INIFile(InputStream istream, String absoluteFileNamePath) {
+    public INIFile(InputStream inputStream, String absoluteFileNamePath) {
         if (!new File(absoluteFileNamePath).exists()) {
             LOG.debug("loading from Stream: {}", absoluteFileNamePath);
         }
-        this.environment = getEnvVars();
         this.sectionMap = new LinkedHashMap<>();
         this.absoluteFileNamePath = absoluteFileNamePath;
-        this.inputStream = istream;
         // read the specified INI file.
         if (inputStream != null)
-            readFile();
+            readFile(inputStream);
     }
 
     /**
@@ -98,10 +93,6 @@ public final class INIFile {
      */
     public String getFileName() {
         return this.absoluteFileNamePath;
-    }
-
-    public InputStream getInputStream() {
-        return this.inputStream;
     }
 
     /**
@@ -136,7 +127,8 @@ public final class INIFile {
         try {
             result = getProperty(sectionKey, propertyKey, Boolean::valueOf);
         } catch (NumberFormatException ex) {
-            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey, "as Boolean value!"), ex);
+            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
+                    "as Boolean value!"), ex);
         }
         return result;
     }
@@ -153,7 +145,8 @@ public final class INIFile {
         try {
             result = getProperty(sectionKey, propertyKey, Integer::valueOf);
         } catch (NumberFormatException ex) {
-            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey, "as Integer value!"), ex);
+            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
+                    "as Integer value!"), ex);
         }
         return result;
     }
@@ -170,7 +163,8 @@ public final class INIFile {
         try {
             result = getProperty(sectionKey, propertyKey, Long::valueOf);
         } catch (NumberFormatException ex) {
-            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, sectionKey, propertyKey, "as Long value!"), ex);
+            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
+                    "as Long value!"), ex);
         }
         return result;
     }
@@ -187,7 +181,8 @@ public final class INIFile {
         try {
             result = getProperty(sectionKey, propertyKey, Double::valueOf);
         } catch (NumberFormatException ex) {
-            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, sectionKey, propertyKey, "as Double value!"), ex);
+            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
+                    "as Double value!"), ex);
         }
         return result;
     }
@@ -211,7 +206,7 @@ public final class INIFile {
 
             });
         } catch (NumberFormatException ex) {
-            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, sectionKey, propertyKey,
+            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
                     "as LocalDate with format string" + this.dateFormatString + "!"), ex);
         }
         return result;
@@ -232,8 +227,8 @@ public final class INIFile {
                 Date dtTmp = dtFmt.parse(s);
                 result = new Timestamp(dtTmp.getTime());
             } catch (ParseException ex) {
-                LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, sectionKey, propertyKey,
-                        "with timestamp format " + this.timeStampFormatString + "!"), ex);
+                LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey,
+                        propertyKey, "with timestamp format " + this.timeStampFormatString + "!"), ex);
             }
             return result;
         });
@@ -375,7 +370,7 @@ public final class INIFile {
     }
 
     private void setPropertyOfTypeWithComments(String sectionKey, String propertyKey, String value, String comments) {
-        INISection section =  this.sectionMap.computeIfAbsent(sectionKey, s -> new INISection(sectionKey));
+        INISection section = this.sectionMap.computeIfAbsent(sectionKey, s -> new INISection(sectionKey));
         section.setProperty(propertyKey, value, comments);
     }
 
@@ -386,7 +381,8 @@ public final class INIFile {
      * @throws IllegalArgumentException if the if the given pattern is invalid
      */
     public void setDateFormat(String dateFormatString) {
-        // check if the string is parsable. Go ahead when the format is ok, otherwise throw an runtime exception.
+        // check if the string is parsable. Go ahead when the format is ok, otherwise
+        // throw an runtime exception.
         checkIfTemporalFormatStringIsParsable(dateFormatString);
         this.dateFormatString = dateFormatString;
     }
@@ -394,11 +390,12 @@ public final class INIFile {
     /**
      * Sets the format to be used to interpret timestamp values.
      * 
-     * @param timeStampFormatString the format string
-     * @throws IllegalArgumentException if the if the given pattern is invalid
+     * @param timeStampFormatString the format string.
+     * @throws IllegalArgumentException if the if the given pattern is invalid.
      */
     public void setTimeStampFormat(String timeStampFormatString) {
-        // check if the string is parsable. Go ahead when the format is ok, otherwise throw an runtime exception.
+        // check if the string is parsable. Go ahead when the format is ok, otherwise
+        // throw a RuntimeException.
         checkIfTemporalFormatStringIsParsable(dateFormatString);
         this.timeStampFormatString = timeStampFormatString;
     }
@@ -484,20 +481,37 @@ public final class INIFile {
         boolean blnRet = false;
 
         File objFile = new File(this.absoluteFileNamePath);
-        try (FileWriter objWriter = new FileWriter(objFile);) {
-            if (this.sectionMap.size() == 0)
+        try (FileWriter objWriter = new FileWriter(objFile)) {
+            if (this.sectionMap.size() == 0) {
+                LOG.warn("Nothing to save into file {}. The job is done!", this.absoluteFileNamePath);
                 return false;
-            if (objFile.exists())
-                objFile.delete();
+            }
+            if (objFile.exists()) {
+                LOG.warn("File {} is existing, will be deleted before saving the new content!",
+                        this.absoluteFileNamePath);
+                boolean deleted = objFile.delete();
+                if (deleted) {
+                    LOG.debug("File {} was deleted successfully. Starting the writing of the new content!",
+                            this.absoluteFileNamePath);
+                } else {
+                    LOG.warn("Unable to delete the file {} before saving the new content!", this.absoluteFileNamePath);
+                }
+            } else {
+                LOG.warn("File {} is not existing yet. Start saving the new content!", this.absoluteFileNamePath);
+            }
 
+            LOG.trace("Following content will be written into the file named {}.", this.absoluteFileNamePath);
             for (Map.Entry<String, INISection> entry : this.sectionMap.entrySet()) {
                 INISection section = entry.getValue();
-                objWriter.write(section.toString());
+                String sectionAsString = section.toString();
+                LOG.trace(sectionAsString);
+                objWriter.write(sectionAsString);
                 objWriter.write("\r\n");
             }
+            LOG.trace("Done! All content written into the file named {}.", this.absoluteFileNamePath);
             blnRet = true;
         } catch (IOException ex) {
-            LOG.error("Exception in save!", ex);
+            LOG.error("Error during saving INI Content into file " + this.absoluteFileNamePath + "!", ex);
         }
         return blnRet;
     }
@@ -507,7 +521,8 @@ public final class INIFile {
         try {
             for (Map.Entry<String, INISection> entry : this.sectionMap.entrySet()) {
                 INISection section = entry.getValue();
-                builder.append(section.toString()).append("\r\n");
+                builder.append(section.toString())
+                       .append("\r\n");
             }
         } catch (Exception ex) {
             LOG.error("Exception in saveToString!", ex);
@@ -519,39 +534,6 @@ public final class INIFile {
     /*------------------------------------------------------------------------------
      * Helper functions
      *----------------------------------------------------------------------------*/
-    /**
-     * Procedure to read environment variables. Thanx to
-     * http://www.rgagnon.com/howto.html for this implementation.
-     */
-    private Properties getEnvVars() {
-        Properties envVars = new Properties();
-        try {
-            Runtime r = Runtime.getRuntime();
-            String os = System.getProperty("os.name")
-                              .toLowerCase();
-            Process p;
-            if (os.contains("windows 9")) {
-                p = r.exec("command.com /c set");
-            } else if ((os.contains("nt")) || (os.contains("windows 2000")) || (os.contains("windows xp"))) {
-                p = r.exec("cmd.exe /c set");
-            } else {
-                // our last hope, we assume Unix (thanks to H. Ware for the fix)
-                p = r.exec("env");
-            }
-            BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line;
-            while ((line = br.readLine()) != null) {
-                int idx = line.indexOf('=');
-                String key = line.substring(0, idx);
-                String value = line.substring(idx + 1);
-                envVars.setProperty(key, value);
-            }
-        } catch (Exception ex) {
-            LOG.error("Exception in getEnvVars!", ex);
-        }
-        return envVars;
-    }
-
     /**
      * Helper function to check if the date time formats is parsable.
      * 
@@ -569,52 +551,15 @@ public final class INIFile {
      * parsing the file line by line.
      */
     private void loadFile() {
-
-        try (FileReader objFRdr = new FileReader(this.absoluteFileNamePath);
-                BufferedReader objBRdr = new BufferedReader(objFRdr)) {
-            String strSection = null;
-            INISection section = null;
-            String strRemarks = null;
-            while (objBRdr.ready()) {
-                int iPos;
-                String strLine = objBRdr.readLine()
-                                        .trim();
-                if (strLine.length() == 0) {
-                } else if (strLine.substring(0, 1)
-                                  .equals(";")) {
-                    if (strRemarks == null)
-                        strRemarks = strLine.substring(1);
-                    else if (strRemarks.length() == 0)
-                        strRemarks = strLine.substring(1);
-                    else
-                        strRemarks = strRemarks + "\r\n" + strLine.substring(1);
-                } else if (strLine.startsWith("[") && strLine.endsWith("]")) {
-                    // Section start reached create new sectionKey
-                    if (section != null)
-                        this.sectionMap.put(strSection.trim(), section);
-                    strSection = strLine.substring(1, strLine.length() - 1);
-                    section = new INISection(strSection.trim(), strRemarks);
-                    strRemarks = null;
-                } else if ((iPos = strLine.indexOf('=')) > 0 && section != null) {
-                    // read the key value pair 012345=789
-                    section.setProperty(strLine.substring(0, iPos)
-                                              .trim(),
-                            strLine.substring(iPos + 1)
-                                   .trim(),
-                            strRemarks);
-                    strRemarks = null;
-                }
-            }
-            if (section != null)
-                this.sectionMap.put(strSection.trim(), section);
-        } catch (NullPointerException | IOException exIgnore) {
+        try (FileInputStream inputStream = new FileInputStream(this.absoluteFileNamePath)) {
+            readFile(inputStream);
+        } catch (IOException ex) {
+            LOG.error("Exception in loadFile!", ex);
             this.sectionMap.clear();
-            LOG.error("Exception in loadFile!", exIgnore);
         }
     }
 
-    private void readFile() {
-
+    private void readFile(InputStream inputStream) {
         try (InputStreamReader objFRdr = new InputStreamReader(inputStream);
                 BufferedReader objBRdr = new BufferedReader(objFRdr)) {
             int iPos;
@@ -642,7 +587,7 @@ public final class INIFile {
                 } else if ((iPos = strLine.indexOf('=')) > 0 && section != null) {
                     // read the key value pair 012345=789
                     section.setProperty(strLine.substring(0, iPos)
-                                              .trim(),
+                                               .trim(),
                             strLine.substring(iPos + 1)
                                    .trim(),
                             strRemarks);
@@ -735,52 +680,7 @@ public final class INIFile {
         return src;
     }
 
-    /**
-     * This function adds a remark character ';' in source string.
-     * 
-     * @param src source string
-     * @return converted string.
-     */
-    private String addRemChars(String src) {
-        int intLen;
-        int intPos = 0;
-        int intPrev = 0;
 
-        String strLeft;
-        String strRight;
-
-        if (src == null)
-            return null;
-        while (intPos >= 0) {
-            intLen = 2;
-            intPos = src.indexOf("\r\n", intPrev);
-            if (intPos < 0) {
-                intLen = 1;
-                intPos = src.indexOf('\n', intPrev);
-                if (intPos < 0)
-                    intPos = src.indexOf('\r', intPrev);
-            }
-            if (intPos == 0) {
-                src = ";\r\n" + src.substring(intPos + intLen);
-                intPrev = intPos + intLen + 1;
-            } else if (intPos > 0) {
-                strLeft = src.substring(0, intPos);
-                strRight = src.substring(intPos + intLen);
-                if (strRight == null)
-                    src = strLeft;
-                else if (strRight.length() == 0)
-                    src = strLeft;
-                else
-                    src = strLeft + "\r\n;" + strRight;
-                intPrev = intPos + intLen + 1;
-            }
-        }
-        if (!src.substring(0, 1)
-                .equals(";"))
-            src = ";" + src;
-        src = src + "\r\n";
-        return src;
-    }
 
     /*------------------------------------------------------------------------------
      * Private class representing the INI Section.
@@ -869,7 +769,7 @@ public final class INIFile {
          */
         String[] getPropNames() {
             return this.iniSectionProperties.keySet()
-                                  .toArray(new String[0]);
+                                            .toArray(new String[0]);
         }
 
         /**
@@ -890,7 +790,7 @@ public final class INIFile {
         public String toString() {
             StringBuilder objBuf = new StringBuilder();
             if (this.sectionComment != null) {
-                objBuf.append(addRemChars(this.sectionComment));
+                objBuf.append(addRemarkCharacter(this.sectionComment));
             }
             objBuf.append("[")
                   .append(this.sectionName)
@@ -917,57 +817,111 @@ public final class INIFile {
      */
     class INIProperty {
         /** Variable to hold name of this property */
-        private String mstrName;
+        private String propertyKey;
         /** Variable to hold value of this property */
-        private String mstrValue;
+        private String propertyValue;
         /** Variable to hold comments associated with this property */
-        private String mstrComments;
+        private String comments;
 
         /**
          * Constructor
          * 
-         * @param pstrName  the name of this property.
-         * @param pstrValue the value of this property.
-         * @param comments  the comments associated with this property.
+         * @param propertyKey   the name of this property.
+         * @param propertyValue the value of this property.
+         * @param comments      the comments associated with this property.
          */
-        INIProperty(String pstrName, String pstrValue, String comments) {
-            this.mstrName = pstrName;
-            this.mstrValue = pstrValue;
-            this.mstrComments = delRemChars(comments);
+        INIProperty(String propertyKey, String propertyValue, String comments) {
+            this.propertyKey = propertyKey;
+            this.propertyValue = propertyValue;
+            this.comments = delRemChars(comments);
         }
 
         /**
          * Returns value of this property. If value contains a reference to environment
-         * avriable then this reference is replaced by actual value before the value is
+         * variable then this reference is replaced by actual value before the value is
          * returned.
          * 
          * @return the value of this property.
          */
         String getPropValue() {
-            String strRet = this.mstrValue;
-            int intStart = strRet.indexOf('%');
-            try {
-                if (intStart >= 0) {
-                    int intEnd = strRet.indexOf('%', intStart + 1);
-                    String strVar = strRet.substring(intStart + 1, intEnd);
-                    String strVal = environment.getProperty(strVar);
-                    if (strVal != null) {
-                        strRet = strRet.substring(0, intStart) + strVal + strRet.substring(intEnd + 1);
-                    }
+            final Pattern environmentVariableRegEx = Pattern.compile("%(?<environmentVariableKey>.+)%");
+            String result;
+            Matcher matcher = environmentVariableRegEx.matcher(this.propertyValue);
+            if (matcher.matches()) {
+                LOG.debug("Property value {} could be an environment variable, we will try to resolve the value.",
+                        this.propertyValue);
+                String environmentVariableKey = matcher.group("environmentVariableKey");
+                result = System.getenv(environmentVariableKey);
+                if (result == null) {
+                    LOG.debug(
+                            "Property value {} could not be resolved into an environment variable. The property value itself is returned.",
+                            this.propertyValue);
+                    result = this.propertyValue;
+                } else {
+                    LOG.debug("Property value {} is environment variable with value {}.", this.propertyValue, result);
                 }
-            } catch (Exception ex) {
-                LOG.error("Exception in getPropValue!", ex);
+            } else {
+                LOG.debug("Property value {} is no environment variable. The property value itself is returned.",
+                        this.propertyValue);
+                result = this.propertyValue;
             }
-            return strRet;
+            return result;
         }
 
         @Override
         public String toString() {
-            String strRet = "";
-            if (this.mstrComments != null) {
-                strRet = addRemChars(mstrComments);
+            String result = "";
+            if (this.comments != null) {
+                result = addRemarkCharacter(comments);
             }
-            return strRet + this.mstrName + " = " + this.mstrValue;
+            return result + this.propertyKey + " = " + this.propertyValue;
         }
+    }
+
+    /**
+     * This function adds a remark character ';' in source string.
+     *
+     * @param src source string
+     * @return converted string.
+     */
+    private String addRemarkCharacter(String src) {
+        int intLen;
+        int intPos = 0;
+        int intPrev = 0;
+
+        String strLeft;
+        String strRight;
+
+        if (src == null)
+            return null;
+        while (intPos >= 0) {
+            intLen = 2;
+            intPos = src.indexOf("\r\n", intPrev);
+            if (intPos < 0) {
+                intLen = 1;
+                intPos = src.indexOf('\n', intPrev);
+                if (intPos < 0)
+                    intPos = src.indexOf('\r', intPrev);
+            }
+            if (intPos == 0) {
+                src = ";\r\n" + src.substring(intPos + intLen);
+                intPrev = intPos + intLen + 1;
+            } else if (intPos > 0) {
+                strLeft = src.substring(0, intPos);
+                strRight = src.substring(intPos + intLen);
+                if (strRight == null)
+                    src = strLeft;
+                else if (strRight.length() == 0)
+                    src = strLeft;
+                else
+                    src = strLeft + "\r\n;" + strRight;
+                intPrev = intPos + intLen + 1;
+            }
+        }
+        if (!src.substring(0, 1)
+                .equals(";"))
+            src = ";" + src;
+        src = src + "\r\n";
+        return src;
     }
 }

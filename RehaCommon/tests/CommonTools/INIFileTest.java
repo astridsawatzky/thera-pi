@@ -1,23 +1,19 @@
 package CommonTools;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
@@ -74,8 +70,8 @@ public class INIFileTest {
     @Test
     public void testINIFileWithArgs() {
         // Arrange
-        String path =this.tempIniFilePath.toString();
-                // Act
+        String path = this.tempIniFilePath.toString();
+        // Act
         new INIFile(path);
 
         // Arrange
@@ -84,7 +80,7 @@ public class INIFileTest {
     @Test
     public void testGetFileName() {
         // Arrange
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
 
         // Act
         INIFile myIniFile = new INIFile(path);
@@ -96,7 +92,7 @@ public class INIFileTest {
     @Test
     public void testGetStringProperty() {
         // Arrange
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
 
         // Act
         INIFile myIniFile = new INIFile(path);
@@ -109,7 +105,7 @@ public class INIFileTest {
 
     @Test
     public void testGetKnownIntegerPropertyWillReturnExpectedValue() {
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
 
         // Act
         INIFile myIniFile = new INIFile(path);
@@ -127,7 +123,7 @@ public class INIFileTest {
 
     @Test
     public void testGetUnknownIntegerPropertyWillReturnNull() {
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
 
         // Act
         INIFile myIniFile = new INIFile(path);
@@ -139,7 +135,7 @@ public class INIFileTest {
     @Test
     public void testSetIntegerProperty() {
         // Arrange
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
 
         // Act
@@ -154,7 +150,7 @@ public class INIFileTest {
     @Test
     public void testLongProperty() {
 
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
         assertEquals(Long.valueOf(1), myIniFile.getLongProperty(LONG_SECTION, "one"));
         assertEquals(Long.valueOf(2), myIniFile.getLongProperty(LONG_SECTION, "two"));
@@ -169,7 +165,7 @@ public class INIFileTest {
 
     @Test
     public void testDoubleProperty() {
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
 
         assertEquals(Double.valueOf(1), myIniFile.getDoubleProperty(DOUBLE_SECTION, "one"));
@@ -194,7 +190,7 @@ public class INIFileTest {
 
     @Test
     public void testSetBooleanProperty() {
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
 
         myIniFile.setBooleanProperty(DOUBLE_SECTION, "wahr", true, null);
@@ -287,14 +283,14 @@ public class INIFileTest {
 
     @Test
     public void testGetTotalSections() {
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
         assertEquals(Current_Section_count, myIniFile.getTotalSections());
     }
 
     @Test
     public void testGetAllSectionNames() {
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
         String[] names = { "Strings", "Bools", "Integer", "Longs", "Doubles", "Dates" };
         assertArrayEquals(names, myIniFile.getAllSectionNames());
@@ -302,7 +298,7 @@ public class INIFileTest {
 
     @Test
     public void testGetPropertyNames() {
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
         String[] names = { "Strings", "Bools", "Integer" };
         String[] propertyNames = { "simpleString", "escapedString", "spacyString" };
@@ -313,7 +309,7 @@ public class INIFileTest {
     @Test
     public void testGetProperties() {
         INIFile expected = new INIFile(null);
-        String path =this.tempIniFilePath.toString();
+        String path = this.tempIniFilePath.toString();
         INIFile myIniFile = new INIFile(path);
 
         expected.addSection(BOOL_SECTION, null);
@@ -364,9 +360,9 @@ public class INIFileTest {
     @Test
     public void testSaveIntoNotExistingFile() throws IOException {
         // Arrange
-        File newFile = File.createTempFile("IniFileSaveTest",".ini");
+        File newFile = File.createTempFile("IniFileSaveTest", ".ini");
         boolean deleted = newFile.delete();
-        if(!deleted){
+        if (!deleted) {
             fail("PreConditions are not ready.");
         }
 
@@ -396,4 +392,57 @@ public class INIFileTest {
 
     }
 
+    @Test
+    public void checkGetEnvironmentVariableForPropertyReference() throws Exception {
+        // Arrange
+
+        // add the expected value to the environment.
+        Map<String, String> environment = System.getenv(); // this instance is immutable!
+        environment = new HashMap<>(environment); // let us create a mutable one ;)
+        environment.put("Hans","Wurst");
+        setEnvironment(environment);
+
+        // create the ini file to use
+        INIFile iniFile = new INIFile(this.tempIniFilePath.toString());
+        iniFile.setStringProperty("CheckThis", "Out", "%Hans%", "We expect to get the JAVA_HOME value.");
+
+        // Act
+        String actual = iniFile.getStringProperty("CheckThis", "Out");
+
+        // Assert
+        assertThat(actual, is("Wurst"));
+    }
+
+    /**
+     * Set an environment variable with some magic like reflection...
+     *
+     * @param newEnvironment The environment variables to set for the current process!
+     * @throws Exception when ever something is going wrong in here!
+     */
+    private void setEnvironment(Map<String, String> newEnvironment) throws Exception {
+        try {
+            Class<?> processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment");
+            Field theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment");
+            theEnvironmentField.setAccessible(true);
+            Map<String, String> env = (Map<String, String>) theEnvironmentField.get(null);
+            env.putAll(newEnvironment);
+            Field theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment");
+            theCaseInsensitiveEnvironmentField.setAccessible(true);
+            Map<String, String> cienv = (Map<String, String>)     theCaseInsensitiveEnvironmentField.get(null);
+            cienv.putAll(newEnvironment);
+        } catch (NoSuchFieldException e) {
+            Class<?>[] classes = Collections.class.getDeclaredClasses();
+            Map<String, String> env = System.getenv();
+            for(Class<?> cl : classes) {
+                if("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+                    Field field = cl.getDeclaredField("m");
+                    field.setAccessible(true);
+                    Object obj = field.get(env);
+                    Map<String, String> map = (Map<String, String>) obj;
+                    map.clear();
+                    map.putAll(newEnvironment);
+                }
+            }
+        }
+    }
 }
