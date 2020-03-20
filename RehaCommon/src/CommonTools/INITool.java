@@ -58,8 +58,8 @@ public class INITool {
         INIFile inif = null;
         try {
             if (iniFilesInDatabase.contains(iniToOpen)) {
-                InputStream stream = SqlInfo.liesIniAusTabelle(iniToOpen);
-                inif = new INIFile(stream, iniToOpen);
+                String contentAsSingleString = SqlInfo.liesIniAusTabelle(iniToOpen);
+                inif = new INIFile(contentAsSingleString, iniToOpen);
             } else {
                 inif = new INIFile(path + iniToOpen);
             }
@@ -96,8 +96,6 @@ public class INITool {
             if (iniFilesInDatabase.contains(iniToSave.getFileName())) {
                 SqlInfo.schreibeIniInTabelle(iniToSave.getFileName(), iniToSave.saveToString()
                                                                                .getBytes());
-                iniToSave.getInputStream()
-                         .close();
             } else {
                 iniToSave.save();
             }

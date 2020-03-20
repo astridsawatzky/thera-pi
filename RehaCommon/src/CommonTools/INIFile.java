@@ -1,6 +1,11 @@
 package CommonTools;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -8,7 +13,15 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -71,19 +84,22 @@ public final class INIFile {
         this.sectionMap = new LinkedHashMap<>();
         this.absoluteFileNamePath = absoluteFileNamePath;
         // Load the specified INI file.
-        if (checkFile(absoluteFileNamePath))
-            loadFile();
+        if (checkFile(absoluteFileNamePath)) {
+            loadFile(absoluteFileNamePath);
+        }
     }
 
-    public INIFile(InputStream inputStream, String absoluteFileNamePath) {
+    public INIFile(String contentAsSingleString, String absoluteFileNamePath) {
         if (!new File(absoluteFileNamePath).exists()) {
             LOG.debug("loading from Stream: {}", absoluteFileNamePath);
         }
         this.sectionMap = new LinkedHashMap<>();
         this.absoluteFileNamePath = absoluteFileNamePath;
         // read the specified INI file.
-        if (inputStream != null)
-            readFile(inputStream);
+        if (contentAsSingleString != null) {
+            String[] linesInFile = contentAsSingleString.split(System.lineSeparator());
+            loadFile(Arrays.asList(linesInFile));
+        }
     }
 
     /**
@@ -108,7 +124,8 @@ public final class INIFile {
 
     /**
      * Returns the specified boolean property from the specified sectionKey. This
-     * method considers the following values as boolean values.
+     * method considers the following values as boolean values. A none existing
+     * value is considered as false.
      * <ol>
      * <li>YES/yes/Yes - boolean true</li>
      * <li>NO/no/No - boolean false</li>
@@ -120,15 +137,27 @@ public final class INIFile {
      * 
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be retrieved.
-     * @return the boolean value
+     * @return The boolean value of the property values, if parsing is possible, or
+     *         <code>false</code>, if there is no such value existing or the value
+     *         can't be interpreted as boolean.
      */
-    public Boolean getBooleanProperty(String sectionKey, String propertyKey) {
-        Boolean result = null;
+    public boolean getBooleanProperty(String sectionKey, String propertyKey) {
+        boolean result;
         try {
-            result = getProperty(sectionKey, propertyKey, Boolean::valueOf);
+            Boolean propertyValue = getProperty(sectionKey, propertyKey, (s) -> {
+                if ("YES".equalsIgnoreCase(s) || "1".equalsIgnoreCase(s)) {
+                    return true;
+                } else if ("NO".equalsIgnoreCase(s) || "0".equalsIgnoreCase(s)) {
+                    return false;
+                } else {
+                    return Boolean.parseBoolean(s);
+                }
+            });
+            result = propertyValue != null ? propertyValue : false;
         } catch (NumberFormatException ex) {
             LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
                     "as Boolean value!"), ex);
+            result = false;
         }
         return result;
     }
@@ -263,14 +292,20 @@ public final class INIFile {
      * 
      * @param sectionKey the sectionKey name
      * @param comments   the comments.
+     * @return The new created section.
      */
-    public void addSection(String sectionKey, String comments) {
-        INISection section = this.sectionMap.get(sectionKey);
-        if (section == null) {
-            section = new INISection(sectionKey);
-            this.sectionMap.put(sectionKey, section);
-        }
-        section.setSecComments(delRemChars(comments));
+    public INISection addSection(String sectionKey, String comments) {
+        return this.sectionMap.computeIfAbsent(sectionKey, key -> new INISection(key, comments));
+    }
+
+    /**
+     * Sets the comments associated with a sectionKey.
+     *
+     * @param sectionKey the sectionKey name
+     * @return The new created section.
+     */
+    public INISection addSection(String sectionKey) {
+        return addSection(sectionKey, "");
     }
 
     /**
@@ -285,7 +320,7 @@ public final class INIFile {
         if (section != null) {
             this.sectionMap.put(newSectionKey, section);
             this.sectionMap.remove(sectionKey);
-            section.setSecComments(delRemChars(comments));
+            section.setSecComments(comments);
         }
     }
 
@@ -295,9 +330,21 @@ public final class INIFile {
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
      * @param value       the string value to be persisted
+     * @param comments
      */
     public void setStringProperty(String sectionKey, String propertyKey, String value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, value, comments);
+    }
+
+    /**
+     * Sets the specified string property.
+     *
+     * @param sectionKey  the INI sectionKey name.
+     * @param propertyKey the property to be set.
+     * @param value       the string value to be persisted
+     */
+    public void setStringProperty(String sectionKey, String propertyKey, String value) {
+        setStringProperty(sectionKey, propertyKey, value, "");
     }
 
     /**
@@ -550,55 +597,112 @@ public final class INIFile {
      * Reads the INI file and load its contentens into a sectionKey collection after
      * parsing the file line by line.
      */
-    private void loadFile() {
-        try (FileInputStream inputStream = new FileInputStream(this.absoluteFileNamePath)) {
-            readFile(inputStream);
+    private void loadFile(String absoluteFileNamePath) {
+        try (FileInputStream inputStream = new FileInputStream(absoluteFileNamePath);
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+
+            List<String> fileContent = new ArrayList<>();
+            while (bufferedReader.ready()) {
+                String nextLineInFile = bufferedReader.readLine();
+                fileContent.add(nextLineInFile);
+            }
+            loadFile(fileContent);
         } catch (IOException ex) {
             LOG.error("Exception in loadFile!", ex);
             this.sectionMap.clear();
         }
     }
 
-    private void readFile(InputStream inputStream) {
-        try (InputStreamReader objFRdr = new InputStreamReader(inputStream);
-                BufferedReader objBRdr = new BufferedReader(objFRdr)) {
-            int iPos;
-            String strSection = null;
-            INISection section = null;
-            String strRemarks = null;
-            while (objBRdr.ready()) {
-                String strLine = objBRdr.readLine()
-                                        .trim();
-                if (strLine.length() == 0) {
-                } else if (strLine.substring(0, 1)
-                                  .equals(";")) {
-                    if (strRemarks == null)
-                        strRemarks = strLine.substring(1);
-                    else if (strRemarks.length() == 0)
-                        strRemarks = strLine.substring(1);
-                    else
-                        strRemarks = strRemarks + "\r\n" + strLine.substring(1);
-                } else if (strLine.startsWith("[") && strLine.endsWith("]")) {
-                    // Section start reached create new sectionKey
-                    if (section != null)
-                        this.sectionMap.put(strSection.trim(), section);
-                    strSection = strLine.substring(1, strLine.length() - 1);
-                    section = new INISection(strSection.trim(), strRemarks);
-                } else if ((iPos = strLine.indexOf('=')) > 0 && section != null) {
-                    // read the key value pair 012345=789
-                    section.setProperty(strLine.substring(0, iPos)
-                                               .trim(),
-                            strLine.substring(iPos + 1)
-                                   .trim(),
-                            strRemarks);
-                }
+    private void loadFile(List<String> fileContent) {
+        StringBuilder commentsBuilder = new StringBuilder();
+        INISection currentSection = null;
+        for (String nextLineInFile : fileContent) {
+            // if the line is empty, we go ahead with the next line.
+            if (lineIsEmpty(nextLineInFile)) {
+                continue;
             }
-            if (section != null)
-                this.sectionMap.put(strSection.trim(), section);
-        } catch (IOException | NullPointerException ex) {
-            LOG.error("Exception in readFile!", ex);
-            this.sectionMap.clear();
+            currentSection = readFile(nextLineInFile, commentsBuilder, currentSection);
         }
+    }
+
+    private INISection readFile(String nextLineInFile, StringBuilder commentsBuilder, INISection section) {
+        final Pattern sectionPattern = Pattern.compile("\\[(?<SECTION>.+)\\]");
+        final Pattern propertyPattern = Pattern.compile("(?<PROPERTYKEY>.+)\\s*=\\s*(?<PROPERTYVALUE>.*+)");
+        final Pattern commentPattern = Pattern.compile(";(?<COMMENT>.*)");
+
+        // check if it a comment
+        Matcher commentMatcher = commentPattern.matcher(nextLineInFile);
+        // check if it a section
+        Matcher sectionMatcher = sectionPattern.matcher(nextLineInFile);
+        // check if it a property (key/value pair)
+        Matcher propertyMatcher = propertyPattern.matcher(nextLineInFile);
+
+        if (commentMatcher.matches()) {
+            // if we have a comment line, we need to check if it is the first or next line.
+            if (commentsBuilder == null) {
+                // for a first line, the commentsBuilder is expected to be <code>null</code>
+                commentsBuilder = new StringBuilder();
+            }
+            // in any case, we add the comment to the commentsBuilder and also add a new
+            // line sign;
+            aggregateCommentsLineForNextElement(commentsBuilder, commentMatcher);
+            LOG.trace("Read the following comment line: {}", nextLineInFile);
+        } else if (sectionMatcher.matches()) {
+            // if we have a new section, we add the section, together with the previously
+            // processed comments, if any.
+            section = createNewSection(commentsBuilder, sectionMatcher);
+            // after that, we throw away the comments processed before the section.
+            commentsBuilder.setLength(0);
+            LOG.trace("Read the following section: {}", section);
+        } else if (propertyMatcher.matches()) {
+            // if we have a new property, we add the property below the section, together
+            // with the previously processed comments, if any.
+            // NOTE! We expect to have a valid section here! otherwise we can't add the
+            // property. If there is no section available, we throw an exception and stop
+            // processing!
+            INIProperty property = extractPropertyForSection(commentsBuilder, section, nextLineInFile, propertyMatcher);
+            // after that, we throw away the comments processed before the section.
+            commentsBuilder.setLength(0);
+            LOG.trace("Read the following property: {} below section {}", property, section);
+        } else {
+            LOG.trace(
+                    "Found something strange in the file {}. Following line isn't a comment (;COMMENT), section ([SECTION]) or property (key = value): {}. Is there a bug inside the code or the line?",
+                    this.absoluteFileNamePath, nextLineInFile);
+        }
+        return section;
+    }
+
+    private boolean lineIsEmpty(String nextLineInFile) {
+        return nextLineInFile.trim()
+                             .length() == 0;
+    }
+
+    private void aggregateCommentsLineForNextElement(StringBuilder remarksBuilder, Matcher commentMatcher) {
+        String comment = commentMatcher.group("COMMENT")
+                                       .trim();
+        remarksBuilder.append(comment)
+                      .append(System.lineSeparator());
+    }
+
+    private INISection createNewSection(StringBuilder remarksBuilder, Matcher sectionMatcher) {
+        String sectionKey = sectionMatcher.group("SECTION")
+                                          .trim();
+        String remarks = remarksBuilder != null ? remarksBuilder.toString() : "";
+        return this.addSection(sectionKey, remarks);
+    }
+
+    private INIProperty extractPropertyForSection(StringBuilder remarksBuilder, INISection section, String strLine,
+            Matcher propertyMatcher) {
+        if (section == null) {
+            throw new IllegalStateException("The line " + strLine + " isn't written below a valid section!");
+        }
+        String propertyKey = propertyMatcher.group("PROPERTYKEY")
+                                            .trim();
+        String propertyValue = propertyMatcher.group("PROPERTYVALUE")
+                                              .trim();
+        String remarks = remarksBuilder != null ? remarksBuilder.toString() : "";
+        return section.setProperty(propertyKey, propertyValue, remarks);
     }
 
     /**
@@ -659,36 +763,13 @@ public final class INIFile {
         return strRet;
     }
 
-    /**
-     * This function deletes the remark characters ';' from source string
-     * 
-     * @param src the source string
-     * @return the converted string
-     */
-    private String delRemChars(String src) {
-        int intPos;
-
-        if (src == null)
-            return null;
-        while ((intPos = src.indexOf(';')) >= 0) {
-            if (intPos == 0) {
-                src = src.substring(intPos + 1);
-            } else {
-                src = src.substring(0, intPos) + src.substring(intPos + 1);
-            }
-        }
-        return src;
-    }
-
-
-
     /*------------------------------------------------------------------------------
      * Private class representing the INI Section.
      *----------------------------------------------------------------------------*/
     /**
      * Class to represent the individual ini file sectionKey.
      */
-    private class INISection {
+    class INISection {
 
         /** Variable to hold any comments associated with this sectionKey */
         private String sectionComment;
@@ -697,7 +778,7 @@ public final class INIFile {
         private String sectionName;
 
         /** Variable to hold the properties falling under this sectionKey. */
-        private LinkedHashMap<String, INIProperty> iniSectionProperties;
+        private Map<String, INIProperty> iniSectionProperties;
 
         /**
          * Construct a new sectionKey object identified by the name specified in
@@ -707,7 +788,7 @@ public final class INIFile {
          */
         INISection(String sectionKey) {
             this.sectionName = sectionKey;
-            this.iniSectionProperties = new LinkedHashMap<>();
+            this.iniSectionProperties = new HashMap<>();
         }
 
         /**
@@ -719,7 +800,6 @@ public final class INIFile {
          */
         INISection(String sectionKey, String comments) {
             this.sectionName = sectionKey;
-            this.sectionComment = delRemChars(comments);
             this.iniSectionProperties = new LinkedHashMap<>();
         }
 
@@ -729,7 +809,7 @@ public final class INIFile {
          * @param comments the comments
          */
         void setSecComments(String comments) {
-            this.sectionComment = delRemChars(comments);
+            this.sectionComment = comments;
         }
 
         /**
@@ -748,8 +828,8 @@ public final class INIFile {
          * @param pstrValue   The new value for the property.
          * @param comments    the associated comments
          */
-        void setProperty(String propertyKey, String pstrValue, String comments) {
-            this.iniSectionProperties.put(propertyKey, new INIProperty(propertyKey, pstrValue, comments));
+        INIProperty setProperty(String propertyKey, String pstrValue, String comments) {
+            return this.iniSectionProperties.put(propertyKey, new INIProperty(propertyKey, pstrValue, comments));
         }
 
         /**
@@ -775,15 +855,12 @@ public final class INIFile {
         /**
          * Returns underlying value of the specified property.
          * 
-         * @param propertyKey the property whose underlying value is to be etrieved.
-         * @return the property value.
+         * @param propertyKey the property whose underlying value is to be retrieved.
+         * @return the property value or <code>null</code>, if there is no property
+         *         available for the key.
          */
         INIProperty getProperty(String propertyKey) {
-            INIProperty objRet = null;
-            if (this.iniSectionProperties.containsKey(propertyKey)) {
-                objRet = this.iniSectionProperties.get(propertyKey);
-            }
-            return objRet;
+            return this.iniSectionProperties.get(propertyKey);
         }
 
         @Override
@@ -833,7 +910,7 @@ public final class INIFile {
         INIProperty(String propertyKey, String propertyValue, String comments) {
             this.propertyKey = propertyKey;
             this.propertyValue = propertyValue;
-            this.comments = delRemChars(comments);
+            this.comments = comments;
         }
 
         /**
@@ -881,47 +958,17 @@ public final class INIFile {
     /**
      * This function adds a remark character ';' in source string.
      *
-     * @param src source string
+     * @param comment source string
      * @return converted string.
      */
-    private String addRemarkCharacter(String src) {
-        int intLen;
-        int intPos = 0;
-        int intPrev = 0;
-
-        String strLeft;
-        String strRight;
-
-        if (src == null)
-            return null;
-        while (intPos >= 0) {
-            intLen = 2;
-            intPos = src.indexOf("\r\n", intPrev);
-            if (intPos < 0) {
-                intLen = 1;
-                intPos = src.indexOf('\n', intPrev);
-                if (intPos < 0)
-                    intPos = src.indexOf('\r', intPrev);
-            }
-            if (intPos == 0) {
-                src = ";\r\n" + src.substring(intPos + intLen);
-                intPrev = intPos + intLen + 1;
-            } else if (intPos > 0) {
-                strLeft = src.substring(0, intPos);
-                strRight = src.substring(intPos + intLen);
-                if (strRight == null)
-                    src = strLeft;
-                else if (strRight.length() == 0)
-                    src = strLeft;
-                else
-                    src = strLeft + "\r\n;" + strRight;
-                intPrev = intPos + intLen + 1;
-            }
+    private String addRemarkCharacter(String comment) {
+        String[] commentSlittedByNewLine = comment.split(System.lineSeparator());
+        StringBuilder commentsBlockBuilder = new StringBuilder();
+        for (String commentLine : commentSlittedByNewLine) {
+            commentsBlockBuilder.append(";")
+                                .append(commentLine)
+                                .append(System.lineSeparator());
         }
-        if (!src.substring(0, 1)
-                .equals(";"))
-            src = ";" + src;
-        src = src + "\r\n";
-        return src;
+        return commentsBlockBuilder.toString();
     }
 }
