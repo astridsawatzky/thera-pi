@@ -1,8 +1,5 @@
 package systemEinstellungen;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -10,19 +7,15 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
-
 public class AbbruchOderSpeichern {
-    private JButton btSpeichern, btAbbruch;
-    private ActionListener al;
+
     private JPanel footerArea;
-    private SysInitCommon_If ownedBy;
 
     public AbbruchOderSpeichern(SysInitCommon_If owner) {
-        this.ownedBy = owner;
-        activateListener();
-        btAbbruch = ButtonTools.macheButton("abbrechen", "abbrechen", al);
-        btSpeichern = ButtonTools.macheButton("speichern", "speichern", al);
+        JButton btAbbruch = new JButton("abbrechen");
+        btAbbruch.addActionListener(e -> owner.Abbruch());
+        JButton btSpeichern = new JButton("speichern");
+        btSpeichern.addActionListener(e -> owner.Speichern());
         // 1. 2. 3. 4. 5. 6. 7.
         FormLayout jpanlay = new FormLayout("p:g, right:max(150dlu;p), 60dlu, 60dlu, 4dlu, 60dlu, 20dlu",
                 // 1. 2. 3. 4.
@@ -42,23 +35,6 @@ public class AbbruchOderSpeichern {
             .validate();
 
         footerArea = jpan.getPanel();
-    }
-
-    private void activateListener() {
-        al = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                if (arg0.getActionCommand()
-                        .equals("speichern")) {
-                    ownedBy.Speichern();
-                } else if (arg0.getActionCommand()
-                               .equals("abbrechen")) {
-                    ownedBy.Abbruch();
-                    return;
-                }
-            }
-        };
     }
 
     public JPanel getPanel() {
