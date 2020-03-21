@@ -53,6 +53,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -539,10 +540,10 @@ public class Dokumentation extends JXPanel
                         setCursor(Cursors.wartenCursor);
                         /*
                          * final String xid = sid; new SwingWorker<Void,Void>(){
-                         * 
+                         *
                          * @Override protected Void doInBackground() throws Exception { long zeit =
                          * System.currentTimeMillis(); return null; }
-                         * 
+                         *
                          * }.execute();
                          */
                         holeDoku(sdatei, sid);
@@ -786,14 +787,14 @@ public class Dokumentation extends JXPanel
          * dokubut[1].setToolTipText("Scannereinstellungen ändern");
          * dokubut[1].setActionCommand("scanedit"); dokubut[1].addActionListener(this);
          * jtb.add(dokubut[1]);
-         * 
+         *
          * jtb.addSeparator(new Dimension(40,0)); dokubut[3] = new JButton();
          * dokubut[3].setIcon(SystemConfig.hmSysIcons.get("camera"));
          * dokubut[3].setToolTipText("Photo von DigiCam in Doku aufnehmen");
          * dokubut[3].setActionCommand("Digicam"); dokubut[3].addActionListener(this);
          * dokubut[3].setEnabled(false); jtb.add(dokubut[3]);
-         * 
-         * 
+         *
+         *
          * dokubut[4] = new JButton();
          * dokubut[4].setIcon(SystemConfig.hmSysIcons.get("openoffice26")); dokubut[4].
          * setToolTipText("OpenOffice-Dokument (Writer oder Calc) in Doku aufnehmen");
@@ -802,7 +803,7 @@ public class Dokumentation extends JXPanel
          */
 
         /*
-         * 
+         *
          * JLabel jlab = new JLabel("Patienten-Nummer eingeben ");
          * jlab.setOpaque(false); jtb.add(jlab); JXPanel tfp = new JXPanel(new
          * FlowLayout(FlowLayout.LEFT)); tfp.setOpaque(false); annika = new
@@ -863,7 +864,7 @@ public class Dokumentation extends JXPanel
             }
             try {
                 setzeDokuPanelAufNull(false);
-//				vollpanel.validate();
+//                vollpanel.validate();
                 if (scanner == null) {
                     // System.out.println("Neustart des Scannersystems erforderlich");
                     scanStarten();
@@ -1521,7 +1522,7 @@ public class Dokumentation extends JXPanel
      * void run(){ String reznr = (String)tabdokus.getValueAt(xrow,0); String id =
      * (String)tabdokus.getValueAt(xrow,6); //jpan1.setRezeptDaten(reznr,id);
      * //System.out.println("Aus Bericht....."+reznr+"....."+id); } });
-     * 
+     *
      * } }
      */
     /**************************************************
@@ -1854,7 +1855,7 @@ public class Dokumentation extends JXPanel
         // final String xdatname = datname;
         /*
          * new SwingWorker<Void,Void>(){
-         * 
+         *
          * @Override protected Void doInBackground() throws Exception { Process process
          * = new
          * ProcessBuilder(SystemConfig.hmFremdProgs.get("AcrobatReader"),"",xdatname).
@@ -1862,9 +1863,9 @@ public class Dokumentation extends JXPanel
          * new InputStreamReader(is); BufferedReader br = new BufferedReader(isr);
          * String line; while ((line = br.readLine()) != null) {
          * //System.out.println(line); } is.close(); isr.close(); br.close();
-         * 
+         *
          * return null; }
-         * 
+         *
          * }.execute();
          */
 
@@ -2061,9 +2062,11 @@ public class Dokumentation extends JXPanel
     public void holeDokus(String patint, String doku) {
         final String xpatint = patint;
 
-        new SwingWorker<Void, Void>() {
+        SwingUtilities.invokeLater(new Runnable() {
+
             @Override
-            protected Void doInBackground() throws Exception {
+            public void run() {
+
                 try {
                     // {"Doku-Id","Doku-Art","Titel","erfa�t am","von","",""};
                     // String sstmt = "select * from verordn where PAT_INTERN ='"+xpatint+"' ORDER
@@ -2138,12 +2141,11 @@ public class Dokumentation extends JXPanel
                     }
 
                 } catch (Exception ex) {
-                    // ex.printStackTrace();
+                    ex.printStackTrace();
                 }
-                return null;
             }
 
-        }.execute();
+        });
 
     }
 
@@ -2399,7 +2401,7 @@ public class Dokumentation extends JXPanel
                  * ps.setBytes(7, //dokutext - longtext ps.setBytes(8, //dokublob - longblog
                  * /bin�r ps.setBytes(9, //groesse - longtext ps.setBytes(10, //datei - longblog
                  * /bin�r
-                 * 
+                 *
                  * new String[]
                  * {datFunk.sDatInSQL(datFunk.sHeute()),"Eingescannte Papierdokumentation",Reha.
                  * aktUser,""},
@@ -2969,7 +2971,7 @@ class OoListener implements IDocumentListener {
          * doc.getLocationURL().toString().replaceAll("file:/", ""); if(geaendert &&
          * datei.equals(file)){ final String xfile = file; final int xid =
          * Integer.parseInt(id);
-         * 
+         *
          * Thread.sleep(50); new Thread(){ public void run(){ int frage =
          * JOptionPane.showConfirmDialog(null, "Die Dokumentationsdatei "
          * +xfile+" wurde geändert\n\nWollen Sie die geänderte Fassung in die Patienten-Dokumentation übernehmen?"
@@ -2978,22 +2980,22 @@ class OoListener implements IDocumentListener {
          * Reha.instance.patpanel.dokumentation.setCursor(Reha.instance.wartenCursor);
          * Dokumentation.speichernOoDocs(xid, -1, xfile, -1, null, neu); } catch
          * (Exception e) {
-         * 
+         *
          * e.printStackTrace(); }
-         * 
+         *
          * }
-         * 
+         *
          * //Reha.officeapplication.getDesktopService().removeDocumentListener(this);
          * //System.out.println("Listener entfernt - Datei geändert "+xfile); }
          * }.start(); doc.removeDocumentListener(this); }else if(datei.equals(file) &&
          * !geaendert){ doc.removeDocumentListener(this);
          * //System.out.println("Listener entfernt - Datei nicht geändert"+file); }
          * warschoninsave = true;
-         * 
+         *
          * } catch (ag.ion.bion.officelayer.document.DocumentException e) {
          * e.printStackTrace(); } catch (NumberFormatException e) { e.printStackTrace();
          * } catch (Exception e) { e.printStackTrace(); }
-         * 
+         *
          * }else{ //System.out.println("warschoninsave = "+warschoninsave); }
          */
 
