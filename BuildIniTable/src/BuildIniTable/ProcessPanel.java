@@ -248,13 +248,15 @@ public class ProcessPanel extends JXPanel {
         public void actionPerformed(ActionEvent e) {
           try {
             String cmd = e.getActionCommand();
-            if (cmd.equals("erzeugen"))
-              (new SwingWorker<Void, Void>() {
+            if (cmd.equals("erzeugen")) {
+              new SwingWorker<Void, Void>() {
+                  @Override
                   protected Void doInBackground() throws Exception {
-                    ProcessPanel.null.access$0(ProcessPanel.null.this).startAction();
+                    startAction();
                     return null;
                   }
-                }).execute(); 
+                }.execute();
+            }
           } catch (Exception e1) {
             e1.printStackTrace();
           } 

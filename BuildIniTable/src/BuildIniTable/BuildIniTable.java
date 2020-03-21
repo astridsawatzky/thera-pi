@@ -20,6 +20,12 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+/**
+ * Standalone tool um *.ini Dateien in die Datenbank zu übertragen
+ * 
+ * @author keith
+ *
+ */
 public class BuildIniTable implements WindowListener {
   public static BuildIniTable thisClass;
   
@@ -119,15 +125,22 @@ public class BuildIniTable implements WindowListener {
   private String dateiDialog(String pfad) {
     String sret = "";
     JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
-    chooser.setDialogType(0);
-    chooser.setFileSelectionMode(2);
-    File file = new File(pfad);
+    chooser.setDialogType(JFileChooser.OPEN_DIALOG);
+    chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    final File file = new File(pfad);
+    
     chooser.setCurrentDirectory(file);
+    
     chooser.addPropertyChangeListener(new PropertyChangeListener() {
-          public void propertyChange(PropertyChangeEvent e) {
-            if (e.getPropertyName().equals("SelectedFileChangedProperty") || 
-              e.getPropertyName().equals("directoryChanged"))
-              File file = (File)e.getNewValue(); 
+        @Override
+        public void propertyChange(PropertyChangeEvent e) {
+            if (e.getPropertyName()
+                 .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
+                 || e.getPropertyName()
+                     .equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
+              // This ain't gonna work: file is local... Need new concept here...
+              //  File file = (File)e.getNewValue();
+            }
           }
         });
     chooser.setVisible(true);
