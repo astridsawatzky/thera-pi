@@ -180,7 +180,7 @@ public class ProcessPanel extends JXPanel {
           String username = ini.getStringProperty("DatenBank", "DBBenutzer1");
           String pw = String.valueOf(ini.getStringProperty("DatenBank", "DBPasswort1"));
           Verschluesseln man = Verschluesseln.getInstance();
-          man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
+          // man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
           String password = man.decrypt(pw);
           setTextArea("Datenbankparameter o.k.");
           Thread.sleep(500L);
