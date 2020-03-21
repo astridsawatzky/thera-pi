@@ -5,6 +5,9 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 
 ## unveröffentlicht
+### added
+Patientenfenster:
+- Bild kann jetzt von Festplatte geladen werden
 
 ## [1.1.4] - 2020-03-18
 ### added
