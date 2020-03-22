@@ -293,9 +293,9 @@ public class Dokumentation extends JXPanel
         bilderPan = new JXPanel(new FlowLayout(FlowLayout.LEFT));
         // dummy1.setBackground(Color.RED);
         bilderPan.setOpaque(false);
-        JScrollPane bildscroll = JCompTools.getTransparentScrollPane(bilderPan);
-        bildscroll.validate();
-        return bildscroll;
+        JScrollPane bildscrolling = JCompTools.getTransparentScrollPane(bilderPan);
+        bildscrolling.validate();
+        return bildscrolling;
     }
 
     public JPanel getInfoPanel() { // 1 2 3 4 5 6 7 8 9 10
@@ -2166,27 +2166,14 @@ public class Dokumentation extends JXPanel
             boolean neu) throws Exception {
         Statement stmt = null;
         PreparedStatement ps = null;
-        // boolean ret = false;
-        // int bilder = 0;
-        // FileInputStream fis = null;
-        // piTool.app.conn.setAutoCommit(true);
+        
         try {
             stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             String select = "Insert into doku1 set dokuid = ? , datum = ?, dokutitel = ?,"
                     + "benutzer = ?, pat_intern = ?, format = ?," + "dokutext = ?, dokublob = ? , groesse = ? ";
             ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
-            /*
-             *
-             * ps.setBytes(1, //dokuid - integer ps.setBytes(2, //datum - date
-             * ps.setBytes(3, //dokutitel - longtext ps.setBytes(4, //benutzer - zeichen
-             * ps.setBytes(5, //pat_intern - integer ps.setBytes(6, //format - integer
-             * ps.setBytes(7, //dokutext - longtext ps.setBytes(8, //dokublob - longblog
-             * /bin�r new String[]
-             * {datFunk.sDatInSQL(datFunk.sHeute()),"Eingescannte Papierdokumentation",Reha.
-             * aktUser,""},
-             */
-            // System.out.println("Setze InputStream "+dateiname);
+           
             ps.setInt(1, dokuid);
             ps.setString(2, str[0]);
             ps.setString(3, str[1]);

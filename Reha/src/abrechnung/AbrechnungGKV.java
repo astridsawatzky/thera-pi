@@ -1318,7 +1318,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
 
                     } else {
 
-                        encryptedSize = doVerschluesseln(aktEsol + ".org");
+                        encryptedSize = doVerschluesseln();
 
                     }
 
@@ -1582,8 +1582,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
         }.execute();
     }
 
-    /***************************************************************/
-    private int doVerschluesseln(String datei) {
+    private int doVerschluesseln() {
         try {
             String keystore = SystemConfig.hmAbrechnung.get("hmkeystorefile");
 
