@@ -2,6 +2,7 @@ package BuildIniTable;
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
+import environment.Path;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -23,34 +24,26 @@ import javax.swing.UnsupportedLookAndFeelException;
 /**
  * Standalone tool um *.ini Dateien in die Datenbank zu übertragen
  * 
- * @author keith
+ * @author J.Steinhilber
  *
  */
 public class BuildIniTable implements WindowListener {
   public static BuildIniTable thisClass;
   
   SqlInfo sqlInfo = null;
-  
   JFrame jFrame = null;
-  
   Vector<String> mandantIkvec = new Vector<String>();
-  
   Vector<String> mandantNamevec = new Vector<String>();
-  
   public Connection conn;
-  
   public boolean DbOk;
+  public String pfadzurmandini;
+  public String pfadzurini;
+  public int anzahlmandanten;
   
   public String[] inis = new String[] { 
       "preisgruppen.ini", "terminkalender.ini", "gruppen.ini", "icons.ini", "fristen.ini", "color.ini", 
       "dta301.ini", "gutachten.ini", "ktraeger.ini", "sqlmodul.ini", 
       "thbericht.ini" };
-  
-  public String pfadzurmandini;
-  
-  public String pfadzurini;
-  
-  public int anzahlmandanten;
   
   public static void main(String[] args) {
     BuildIniTable application = new BuildIniTable();
@@ -100,11 +93,16 @@ public class BuildIniTable implements WindowListener {
     this.jFrame.setVisible(true);
     return this.jFrame;
   }
-  
+  /**
+   * Will test whether mandanten.ini exists in default progHome/ini/ directory.
+   * If not, the user will be presented a file-browser to choose one.
+   * Calls system.exit(0) should this also fail (this should be reconsidered 
+   * - exit status 0 often indicates OK - <> 0 should be error).
+   * 
+   * @return String - path to and including mandanten.ini
+   */
   private String mandantTesten() {
-    String mandini = System.getProperty("user.dir");
-    mandini = String.valueOf(mandini.replace("\\", "/")) + "/ini/mandanten.ini";
-    System.out.println(mandini);
+    String mandini =   Path.Instance.getProghome() + "ini/mandanten.ini";
     if (!mandIniExist(mandini)) {
       JOptionPane.showMessageDialog(null, "Das System kann die mandanten.ini nicht finden!\nBitte navigieren Sie in das Verzeichnis in dem sich die\nmandanten.ini befindet und wählen Sie die mandanten.ini aus!");
       String sret = dateiDialog(mandini);
@@ -145,7 +143,7 @@ public class BuildIniTable implements WindowListener {
         });
     chooser.setVisible(true);
     int result = chooser.showOpenDialog((Component)null);
-    if (result == 0) {
+    if (result == JFileChooser.APPROVE_OPTION) {
       File inputVerzFile = chooser.getSelectedFile();
       String inputVerzStr = inputVerzFile.getPath();
       if (inputVerzFile.getName().trim().equals("")) {

@@ -43,15 +43,10 @@ public class ProcessPanel extends JXPanel {
   private static final long serialVersionUID = 2467154459698276827L;
   
   public JRtaCheckBox[] check = new JRtaCheckBox[10];
-  
   public JButton[] buts = new JButton[3];
-  
   public JTextArea area = null;
-  
   public JXTable tab = null;
-  
   public MyIniTableModel tabmod = null;
-  
   public Vector<String> inivec = new Vector<String>();
   
   ActionListener al = null;
@@ -110,16 +105,21 @@ public class ProcessPanel extends JXPanel {
     getIniList();
     return pan;
   }
-  
+  /**
+   * Populate the ini-file-vector with ini-file, excluding some select files
+   */
   private void getIniList() {
     if (BuildIniTable.thisClass.anzahlmandanten <= 0)
       return; 
-    File dir = new File(String.valueOf(BuildIniTable.thisClass.pfadzurini) + "/" + (String)BuildIniTable.thisClass.mandantIkvec.get(0) + "/");
+    File dir = new File(String.valueOf(BuildIniTable.thisClass.pfadzurini) + "/"
+                        + (String)BuildIniTable.thisClass.mandantIkvec.get(0) + "/");
     File[] contents = dir.listFiles();
     this.inivec.clear();
     for (int i = 0; i < contents.length; i++) {
       if (contents[i].getName().endsWith(".ini") && 
-        !contents[i].getName().equals("rehajava.ini") && !contents[i].getName().equals("inicontrol.ini") && !contents[i].getName().equals("firmen.ini"))
+        !contents[i].getName().equals("rehajava.ini") &&
+        !contents[i].getName().equals("inicontrol.ini") &&
+        !contents[i].getName().equals("firmen.ini"))
         this.inivec.add(contents[i].getName()); 
     } 
     Comparator<String> comparator = new Comparator<String>() {
@@ -128,7 +128,7 @@ public class ProcessPanel extends JXPanel {
           String s2 = o2;
           return s1.compareTo(s2);
         }
-      };
+    };
     Collections.sort(this.inivec, comparator);
     Vector<Object> dummy = new Vector();
     boolean logwert = false;
@@ -180,7 +180,6 @@ public class ProcessPanel extends JXPanel {
           String username = ini.getStringProperty("DatenBank", "DBBenutzer1");
           String pw = String.valueOf(ini.getStringProperty("DatenBank", "DBPasswort1"));
           Verschluesseln man = Verschluesseln.getInstance();
-          // man.init(Verschluesseln.getPassword().toCharArray(), man.getSalt(), man.getIterations());
           String password = man.decrypt(pw);
           setTextArea("Datenbankparameter o.k.");
           Thread.sleep(500L);
