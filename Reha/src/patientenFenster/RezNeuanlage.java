@@ -13,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Vector;
@@ -64,6 +65,16 @@ import systemTools.ListenerTools;
 
 public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener, FocusListener, RehaTPEventListener {
 
+    private final class Icd10Listener extends MouseAdapter {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            System.out.println("gotcha");
+            super.mouseClicked(e);
+        }
+
+
+    }
+
     /**
      * McM '18: Umbau Struktur
      *     Konzept:
@@ -79,9 +90,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
      *
      */
     // Lemmi Doku: Das sind die Text-Eingabefgelder im Rezept
-    public JRtaTextField[] jtf = { null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            null };
+    public JRtaTextField[] jtf = new JRtaTextField[32];
     // Lemmi 20101231: Harte Index-Zahlen für "jtf" durch sprechende Konstanten
     // ersetzt !
     final int cKTRAEG = 0;
@@ -223,7 +232,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
             setName("RezeptNeuanlage");
             rtp = new RehaTPEventClass();
-            rtp.addRehaTPEventListener((RehaTPEventListener) this);
+            rtp.addRehaTPEventListener(this);
 
             addKeyListener(this);
 
@@ -285,7 +294,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             if (!this.neu) {
                 int itest = myRezept.getFarbCode();
                 if (itest >= 0) {
-                    jcmb[cFARBCOD].setSelectedItem((String) SystemConfig.vSysColsBedeut.get(itest));
+                    jcmb[cFARBCOD].setSelectedItem(SystemConfig.vSysColsBedeut.get(itest));
                 } else {
                     jcmb[cFARBCOD].setSelectedIndex(0);
                 }
@@ -423,12 +432,12 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
         // alle ComboBoxen
         for (i = 0; i < jcmb.length; i++) {
-            originale.add((Integer) jcmb[i].getSelectedIndex()); // Art d. Verordn. etc.
+            originale.add(jcmb[i].getSelectedIndex()); // Art d. Verordn. etc.
         }
 
         // alle CheckBoxen
         for (i = 0; i < jcb.length; i++) {
-            originale.add((Boolean) (jcb[i].isSelected())); //
+            originale.add((jcb[i].isSelected())); //
         }
     }
 
@@ -530,7 +539,12 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jtf[cZZSTAT] = new JRtaTextField("", false); // zzstatus
             jtf[cHEIMBEWPATSTAM] = new JRtaTextField("", false); // Heimbewohner aus PatStamm
             jtf[cICD10] = new JRtaTextField("GROSS", false); // 1. ICD10-Code
+            JRtaTextField TF_icd10_1 = jtf[cICD10];
+            MouseListener icd10Text = new Icd10Listener();
+            TF_icd10_1.addMouseListener(icd10Text );
             jtf[cICD10_2] = new JRtaTextField("GROSS", false); // 2. ICD10-Code
+            JRtaTextField TF_icd10_2 = jtf[cICD10];
+            TF_icd10_2.addMouseListener(icd10Text );
             jcmb[cRKLASSE] = new JRtaComboBox();
             int lang = SystemConfig.rezeptKlassenAktiv.size();
             strRezepklassenAktiv = diszis.getActiveRK();
@@ -545,7 +559,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jpan.add(jcmb[cRKLASSE], cc.xyw(3, 3, 5));
             jcmb[cRKLASSE].setActionCommand("rezeptklasse");
             jcmb[cRKLASSE].addActionListener(this);
-            allowShortCut((Component) jcmb[cRKLASSE], "RezeptClass");
+            allowShortCut(jcmb[cRKLASSE], "RezeptClass");
             /********************/
 
             if (this.neu) {
@@ -590,7 +604,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
             jtf[cKTRAEG].setName("ktraeger");
             jtf[cKTRAEG].addKeyListener(this);
-            allowShortCut((Component) jtf[cKTRAEG], "ktraeger");
+            allowShortCut(jtf[cKTRAEG], "ktraeger");
             jpan.add(kassenLab, cc.xy(1, 7));
             jpan.add(jtf[cKTRAEG], cc.xy(3, 7));
 
@@ -625,12 +639,12 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jpan.add(jtf[cARZT], cc.xy(7, 7));
 
             jtf[cREZDAT].setName("rez_datum");
-            allowShortCut((Component) jtf[cREZDAT], "rez_datum");
+            allowShortCut(jtf[cREZDAT], "rez_datum");
             jpan.addLabel("Rezeptdatum", cc.xy(1, 9));
             jpan.add(jtf[cREZDAT], cc.xy(3, 9));
             eingabeRezDate = jpan.add(jtf[cREZDAT], cc.xy(3, 9));
 
-            allowShortCut((Component) jtf[cBEGINDAT], "lastdate");
+            allowShortCut(jtf[cBEGINDAT], "lastdate");
             jpan.addLabel("spätester Beh.Beginn", cc.xy(5, 9));
             jpan.add(jtf[cBEGINDAT], cc.xy(7, 9));
 
@@ -638,14 +652,14 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                     new String[] { "Erstverordnung", "Folgeverordnung", "außerhalb des Regelfalles" });
             jcmb[cVERORD].setActionCommand("verordnungsart");
             jcmb[cVERORD].addActionListener(this);
-            allowShortCut((Component) jcmb[cVERORD], "selArtDerVerordn");
+            allowShortCut(jcmb[cVERORD], "selArtDerVerordn");
             jpan.addLabel("Art d. Verordn.", cc.xy(1, 11));
             eingabeVerordnArt = jpan.add(jcmb[cVERORD], cc.xy(3, 11));
 
             jcb[cBEGRADR] = new JRtaCheckBox("vorhanden");
             jcb[cBEGRADR].setOpaque(false);
             jcb[cBEGRADR].setEnabled(false);
-            allowShortCut((Component) jcb[cBEGRADR], "adrCheck");
+            allowShortCut(jcb[cBEGRADR], "adrCheck");
             jpan.addLabel("Begründ. für adR", cc.xy(5, 11));
             jpan.add(jcb[cBEGRADR], cc.xy(7, 11));
 
@@ -653,7 +667,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jcb[cHAUSB].setOpaque(false);
             jcb[cHAUSB].setActionCommand("Hausbesuche");
             jcb[cHAUSB].addActionListener(this);
-            allowShortCut((Component) jcb[cHAUSB], "hbCheck");
+            allowShortCut(jcb[cHAUSB], "hbCheck");
             jpan.addLabel("Hausbesuch", cc.xy(1, 13));
             jpan.add(jcb[cHAUSB], cc.xy(3, 13));
 
@@ -686,7 +700,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                     }
                 }
             }
-            allowShortCut((Component) jcb[cVOLLHB], "hbVollCheck");
+            allowShortCut(jcb[cVOLLHB], "hbVollCheck");
             jpan.add(jcb[cVOLLHB], cc.xy(7, 13));
 
             jcb[cTBANGEF] = new JRtaCheckBox("angefordert");
@@ -705,7 +719,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jcmb[cLEIST1] = new JRtaComboBox();
             jcmb[cLEIST1].setActionCommand("leistung1");
             jcmb[cLEIST1].addActionListener(this);
-            allowShortCut((Component) jcmb[cLEIST1], "leistung1");
+            allowShortCut(jcmb[cLEIST1], "leistung1");
             jpan.add(jcmb[cLEIST1], cc.xyw(5, 19, 3));
 
             jpan.addLabel("Anzahl / Heilmittel 2", cc.xy(1, 21));
@@ -714,7 +728,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jcmb[cLEIST2] = new JRtaComboBox();
             jcmb[cLEIST2].setActionCommand("leistung2");
             jcmb[cLEIST2].addActionListener(this);
-            allowShortCut((Component) jcmb[cLEIST2], "leistung2");
+            allowShortCut(jcmb[cLEIST2], "leistung2");
             jpan.add(jcmb[cLEIST2], cc.xyw(5, 21, 3));
 
             jpan.addLabel("Anzahl / Heilmittel 3", cc.xy(1, 23));
@@ -723,7 +737,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jcmb[cLEIST3] = new JRtaComboBox();
             jcmb[cLEIST3].setActionCommand("leistung3");
             jcmb[cLEIST3].addActionListener(this);
-            allowShortCut((Component) jcmb[cLEIST3], "leistung3");
+            allowShortCut(jcmb[cLEIST3], "leistung3");
             jpan.add(jcmb[cLEIST3], cc.xyw(5, 23, 3));
 
             jpan.addLabel("Anzahl / Heilmittel 4", cc.xy(1, 25));
@@ -748,7 +762,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             jpan.addLabel("Indikationsschlüssel", cc.xy(1, 31));
             jcmb[cINDI] = new JRtaComboBox();
             jcmb[cINDI].addKeyListener(this);
-            allowShortCut((Component)jcmb[cINDI],"Indikationsschluessel");
+            allowShortCut(jcmb[cINDI],"Indikationsschluessel");
             jpan.add(jcmb[cINDI], cc.xy(3, 31));
 
             klassenReady = true;
@@ -772,11 +786,11 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
             jpan.addSeparator("ICD-10 Codes", cc.xyw(1, 35, 7));
             jpan.addLabel("1. ICD-10-Code", cc.xy(1, 37));
-            allowShortCut((Component) jtf[cICD10], "icd10");
+            allowShortCut(jtf[cICD10], "icd10");
             eingabeICD = jpan.add(jtf[cICD10], cc.xy(3, 37));
 
             jpan.addLabel("2. ICD-10-Code", cc.xy(5, 37));
-            allowShortCut((Component) jtf[cICD10_2], "icd10_2");
+            allowShortCut(jtf[cICD10_2], "icd10_2");
             jpan.add(jtf[cICD10_2], cc.xy(7, 37));
 
             jpan.addSeparator("Ärztliche Diagnose laut Rezept", cc.xyw(1, 39, 7));
@@ -1746,10 +1760,10 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                                                               .get(i))
                             - 1;
                 }
-                preisgruppe = Integer.parseInt((String) vec.get(0)
+                preisgruppe = Integer.parseInt(vec.get(0)
                                                            .get(0))
                         - 1;
-                jtf[cPREISGR].setText((String) vec.get(0)
+                jtf[cPREISGR].setText(vec.get(0)
                                                   .get(0));
             } else {
                 JOptionPane.showMessageDialog(null,
@@ -1914,7 +1928,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
         itest = myRezept.getFarbCode();
         if (itest >= 0) {
-            jcmb[cFARBCOD].setSelectedItem((String) SystemConfig.vSysColsBedeut.get(itest));
+            jcmb[cFARBCOD].setSelectedItem(SystemConfig.vSysColsBedeut.get(itest));
         }
 
     }
@@ -2226,11 +2240,11 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
 
     private String[] holePreis(int ivec, int ipreisgruppe) {
         if (ivec > 0) {
-            int prid = Integer.valueOf((String) this.preisvec.get(ivec)
+            int prid = Integer.valueOf(this.preisvec.get(ivec)
                                                              .get(this.preisvec.get(ivec)
                                                                                .size()
                                                                      - 1));
-            Vector<?> xvec = ((Vector<?>) this.preisvec.get(ivec));
+            Vector<?> xvec = (this.preisvec.get(ivec));
             return new String[] { (String) xvec.get(3), (String) xvec.get(2) };
         } else {
             return new String[] { "0.00", "" };
@@ -2312,7 +2326,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             if (evt.getDetails()[0] != null) {
                 if (evt.getDetails()[0].equals(this.getName())) {
                     this.setVisible(false);
-                    rtp.removeRehaTPEventListener((RehaTPEventListener) this);
+                    rtp.removeRehaTPEventListener(this);
                     rtp = null;
                     aufraeumen();
                 }
@@ -2353,7 +2367,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                 ListenerTools.removeListeners(jta);
                 ListenerTools.removeListeners(getInstance());
                 if (rtp != null) {
-                    rtp.removeRehaTPEventListener((RehaTPEventListener) getInstance());
+                    rtp.removeRehaTPEventListener(getInstance());
                     rtp = null;
                 }
                 return null;

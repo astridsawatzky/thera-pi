@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import mandant.IK;
-
 public class DatenquellenFactory {
     private static final ConcurrentMap<String, Datenquelle> grube = new ConcurrentHashMap<>();
     private String ik;

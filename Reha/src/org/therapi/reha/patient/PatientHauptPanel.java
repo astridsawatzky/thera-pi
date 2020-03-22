@@ -70,9 +70,7 @@ public class PatientHauptPanel extends JXPanel {
     public DropTargetListener dropTargetListener;
 
     // StammDaten-Controls & Listener
-    public JPatTextField[] ptfield = { null, null, null, null, null, null, null, null, null, null, null, null, null,
-            null, null };
-    public MouseListener stammDatenMouse;
+    public JPatTextField[] ptfield = new JPatTextField[15];
     public KeyListener stammDatenKeys;
 
     // MemoPanel-Controls & Listener
@@ -91,13 +89,13 @@ public class PatientHauptPanel extends JXPanel {
     public Gutachten gutachten = null;
     public String[] tabTitel = { "aktuelle Rezepte", "Rezept-Historie", "Therapieberichte", "Dokumentation",
             "Gutachten", "Arzt & KK", "Plandaten" };
-    public JLabel[] rezlabs = { null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            null };
+    public JLabel[] rezlabs =  new JLabel[15];
+
     // Labels: 0-, 1-, 2-'angelegt von', 3-ktraeger, 4-Arzt, 5-Rezeptart, 6-BegrAdR, 7-TBericht
     public JTextArea rezdiag = null;
 
-    public ImageIcon[] imgzuzahl = { null, null, null, null };
-    public ImageIcon[] imgrezstatus = { null, null };
+    public ImageIcon[] imgzuzahl =  new ImageIcon[4];
+    public ImageIcon[] imgrezstatus = new ImageIcon[2];
     public Vector<String> patDaten = new Vector<String>();
     public Vector<String> vecaktrez = null;
     public Vector<String> vecakthistor = null;
@@ -131,9 +129,6 @@ public class PatientHauptPanel extends JXPanel {
 
     InfoDialogRGAFoffen infoDlg = null;
 
-    /**
-     * @param connection
-     *****************************************************/
     public PatientHauptPanel(String name, JPatientInternal internal, Connection connection) {
         super();
         setName(name);
@@ -150,7 +145,6 @@ public class PatientHauptPanel extends JXPanel {
         createFocusListeners();
 
         setBackgroundPainter(Reha.instance.compoundPainter.get("getTabs2"));
-        // setBackgroundPainter(Reha.instance.compoundPainter.get("HauptPanel"));
         FormLayout lay = new FormLayout("0dlu,fill:0:grow(0.33),fill:0:grow(0.66)", "0dlu,p,fill:0:grow(1.0)");
         CellConstraints cc = new CellConstraints();
         setLayout(lay);
@@ -161,7 +155,6 @@ public class PatientHauptPanel extends JXPanel {
         setzeFocus();
     }
 
-    /*******************************************************/
     public PatientHauptLogic getLogic() {
         return patientLogic;
     }
@@ -344,52 +337,15 @@ public class PatientHauptPanel extends JXPanel {
      */
 
     private void createMouseListeners() {
-        toolBarMouse = new MouseListener() {
+        toolBarMouse = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent arg0) {
                 patToolBarPanel.getLogic()
                                .reactOnMouseClicked(arg0);
             }
-
-            @Override
-            public void mouseEntered(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-            }
         };
 
-        stammDatenMouse = new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
 
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mousePressed(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-            }
-        };
     }
 
     /****************************************************/
@@ -413,14 +369,13 @@ public class PatientHauptPanel extends JXPanel {
         patientLogic.setzeFocus();
     }
 
-    public void holeWichtigeInfos(String xpatint, String string) {
+    public void holeWichtigeInfos(String xpatint) {
         String stmt = "select t1.rdatum,t1.rnr,t1.roffen,t1.pat_intern from rgaffaktura as t1 "
                 + "join pat5 as t2 on (t1.pat_intern=t2.pat_intern) " + "where t1.roffen > '0' and t1.pat_intern = '"
                 + xpatint + "' and NOT t1.rnr like 'sto%'" + "order by t1.rdatum";
         Vector<Vector<String>> vecoffen = SqlInfo.holeFelder(stmt);
         if (vecoffen.size() > 0 || Reha.bHatMerkmale) {
             try {
-//                infoDlg = new InfoDialog(xpatint,"offenRGAF",vecoffen);
                 infoDlg = new InfoDialogRGAFoffen(xpatint, vecoffen);
                 infoDlg.pack();
                 infoDlg.setLocationRelativeTo(this);
@@ -452,7 +407,6 @@ public class PatientHauptPanel extends JXPanel {
         berichte.setzeBerichtPanelAufNull(true);
         dokumentation.setzeDokuPanelAufNull(true);
         gutachten.setzeGutachtenPanelAufNull(true);
-        // dann die Icons löschen
         pmemo[0].setText("");
         pmemo[1].setText("");
     }
@@ -490,8 +444,4 @@ class JPatTextField extends JRtaTextField {
             }
         });
     }
-}
-
-/**************************************************/
-class DatenHolen {
 }

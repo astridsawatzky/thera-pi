@@ -1928,12 +1928,11 @@ public class Dokumentation extends JXPanel
     }
 
     public void setzeListener() {
-        mlist = new MouseListener() {
+        mlist = new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent arg0) {
                 if (arg0.getClickCount() == 2) {
-                    // System.out.println("LabeName = "+((JComponent)arg0.getSource()).getName());
                     int seite = Integer.valueOf(((JComponent) arg0.getSource()).getName()
                                                                                .split("-")[1]);
                     File file = null;
@@ -1982,8 +1981,6 @@ public class Dokumentation extends JXPanel
                             }
                         }
 
-                        // System.out.println("Starte :"+file.getAbsolutePath()+" "+datei);
-                        // Runtime.getRuntime().exec(datei.trim());
                         Runtime.getRuntime()
                                .exec(file.getAbsolutePath()
                                          .toString()
@@ -2005,25 +2002,6 @@ public class Dokumentation extends JXPanel
                     Labels.get(aktivesBild - 1)
                           .setBorder(BorderFactory.createLineBorder(Color.RED));
                 }
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent arg0) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent arg0) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent arg0) {
-            }
-
-            @Override
-            public void mouseClicked(MouseEvent arg0) {
 
             }
 
@@ -2049,14 +2027,7 @@ public class Dokumentation extends JXPanel
 
     private String macheHtmlTitel(int anz, String titel) {
 
-        String ret = titel + " - " + Integer.toString(anz);
-
-        /*
-         * String ret = "<html>"+titel+ (anz > 0 ?
-         * " - <font color='#ff0000'>"+Integer.valueOf(anz).toString()+"<font></html>" :
-         * " - <font color='#000000'>"+Integer.valueOf(anz).toString()+"</font>");
-         */
-        return ret;
+        return titel + " - " + Integer.toString(anz);
     }
 
     public void holeDokus(String patint, String doku) {
@@ -2068,9 +2039,6 @@ public class Dokumentation extends JXPanel
             public void run() {
 
                 try {
-                    // {"Doku-Id","Doku-Art","Titel","erfa�t am","von","",""};
-                    // String sstmt = "select * from verordn where PAT_INTERN ='"+xpatint+"' ORDER
-                    // BY REZ_DATUM";
                     String sortmode = (SystemConfig.hmDokuSortMode.get("sortmode")
                                                                   .equals("0") ? " dokuid " : " datum ");
                     String sortasc = (SystemConfig.hmDokuSortMode.get("sortasc")
@@ -2097,13 +2065,11 @@ public class Dokumentation extends JXPanel
                         }
                         dtblm.addRow(vec.get(i));
                         dtblm.setValueAt(tabIcons[zzbild], i, 1);
-                        // dtblm.setValueAt(Reha.instance.patpanel.imgzuzahl[zzbild], i, 1);
                     }
                     Reha.instance.patpanel.getTab()
                                           .setTitleAt(3, macheHtmlTitel(anz, "Dokumentation"));
                     if (anz > 0) {
                         setzeDokuPanelAufNull(false);
-                        // int anzeigen = -1;
                         anzahlDokus.setText("Anzahl gespeicherter Dokumentationen: " + anz);
                         tabdokus.setRowSelectionInterval(0, 0);
                         wechselPanel.revalidate();
@@ -2115,10 +2081,7 @@ public class Dokumentation extends JXPanel
                         }
                         dokubut[5].setEnabled(true);
                         dokubut[1].setEnabled(true);
-                        /*
-                         * dokubut[3].setEnabled(true); dokubut[4].setEnabled(true);
-                         * dokubut[5].setEnabled(true);
-                         */
+
 
                     } else {
                         setzeDokuPanelAufNull(true);
@@ -2133,10 +2096,7 @@ public class Dokumentation extends JXPanel
                         }
                         dokubut[1].setEnabled(true);
                         dokubut[5].setEnabled(false);
-                        /*
-                         * dokubut[3].setEnabled(true); dokubut[4].setEnabled(true);
-                         * dokubut[5].setEnabled(false);
-                         */
+
 
                     }
 
