@@ -4,13 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
@@ -76,7 +75,6 @@ import emailHandling.EmailSendenExtern;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
-import events.PatStammEventListener;
 import gui.Cursors;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
@@ -89,11 +87,8 @@ import suchen.PatMitVollenVOs;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
-public class AbrechnungGKV extends JXPanel
-        implements PatStammEventListener, ActionListener, TreeSelectionListener, MouseListener, KeyListener {
-    /**
-     *
-     */
+public class AbrechnungGKV extends JXPanel {
+
     private static final long serialVersionUID = -3580427603080353812L;
     private JAbrechnungInternal jry;
     private UIFSplitPane jSplitLR = null;
@@ -217,8 +212,8 @@ public class AbrechnungGKV extends JXPanel
         jSplitLR.setDividerLocation(230);
         add(jSplitLR, BorderLayout.CENTER);
         mandantenCheck();
-        SlgaVersion = "12"; // ( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
-        SllaVersion = "12"; // ( DatFunk.TageDifferenz("30.06.2019",DatFunk.sHeute()) <= 0 ? "11" : "12");
+        SlgaVersion = "13";
+        SllaVersion = "13";
 
         keyStore = new KeyStore();
         myCert = new OwnCertState();
@@ -234,7 +229,6 @@ public class AbrechnungGKV extends JXPanel
 
         originalTitel = this.jry.getTitel();
         setEncryptTitle();
-        // cmbDiszi.setSelectedItem(SystemConfig.initRezeptKlasse);
         disziSelect.setCurrTypeOfVO(SystemConfig.initRezeptKlasse);
         jry.setAbrRezInstance(abrRez); // JAbrechnungInternal mitteilen, welche Instanz cleanup() enthält
         RezFromDB = new RezFromDB();
@@ -307,11 +301,11 @@ public class AbrechnungGKV extends JXPanel
         treeKasse.setModel(treeModelKasse);
         treeKasse.setName("kassentree");
         treeKasse.getSelectionModel()
-                 .addTreeSelectionListener(this);
+                 .addTreeSelectionListener(treeSelectionListener);
         treeKasse.setCellRenderer(new MyRenderer(SystemConfig.hmSysIcons.get("zuzahlok")));
-        treeKasse.addMouseListener(this);
+        treeKasse.addMouseListener(mouseListener);
 
-        treeKasse.addKeyListener((KeyListener) this);
+        treeKasse.addKeyListener( keyListener);
 
         JScrollPane jscrk = JCompTools.getTransparentScrollPane(treeKasse);
         jscrk.validate();
@@ -339,7 +333,7 @@ public class AbrechnungGKV extends JXPanel
 
         JScrollPane jscr = JCompTools.getTransparentScrollPane(pb.getPanel());
         jscr.validate();
-        cmbDiszi.addActionListener(this);
+        cmbDiszi.addActionListener(actionListener);
 
         return jscr;
     }
@@ -354,11 +348,6 @@ public class AbrechnungGKV extends JXPanel
         return this.abrRez.getTageDrucken();
     }
 
-    @Override
-    public void patStammEventOccurred(PatStammEvent evt) {
-
-    }
-
     public void setJry(JAbrechnungInternal jry) {
         this.jry = jry;
     }
@@ -371,27 +360,27 @@ public class AbrechnungGKV extends JXPanel
         return aktuellerKassenKnoten;
     }
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        String cmd = arg0.getActionCommand();
-        if (cmd.equals("einlesen")) {
-            // rootKasse.removeAllChildren();
-//            aktDisziplin = getCurrDiszi();
-            aktDisziplin = disziSelect.getCurrDisziKurz();
-            // System.out.println("aktDisziplin = "+aktDisziplin);
-            if (abrRez.rezeptSichtbar) {
-                abrRez.setRechtsAufNull();
-                aktuellerPat = "";
-            }
-            this.jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
-                    + zertifikatVon.replace("IK", "") + "] [Disziplin: " + aktDisziplin + "]");
-            doEinlesen(null, null);
-            // setPreisVec(cmbDiszi.getSelectedIndex());
-        }
-        if (cmd.equals("alternativeadresse")) {
+    ActionListener actionListener = new ActionListener() {
 
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            String cmd = arg0.getActionCommand();
+            if (cmd.equals("einlesen")) {
+                aktDisziplin = disziSelect.getCurrDisziKurz();
+                if (abrRez.rezeptSichtbar) {
+                    abrRez.setRechtsAufNull();
+                    aktuellerPat = "";
+                }
+                jry.setzeTitel(originalTitel + " [Abrechnung für IK: " + Reha.getAktIK() + " - Zertifikat von IK: "
+                        + zertifikatVon.replace("IK", "") + "] [Disziplin: " + aktDisziplin + "]");
+                doEinlesen(null, null);
+            }
+            if (cmd.equals("alternativeadresse")) {
+
+            }
         }
-    }
+    };
+
 
     public void einlesenErneuern(String neueReznr) {
         directCall = false;
@@ -400,8 +389,6 @@ public class AbrechnungGKV extends JXPanel
             abrRez.setRechtsAufNull();
             aktuellerPat = "";
         }
-        // System.out.println("aktDisziplin");
-        // System.out.println(RezTools.putRezNrGetDisziplin(neueReznr));
         if (neueReznr != null) { // Rezept zum Baum hinzufügen
             if (!aktDisziplin.equals(RezTools.putRezNrGetDisziplin(neueReznr))) {
                 doEinlesen(null, neueReznr); // andere Disziplin -> Kassenbaum neu aufbauen
@@ -428,8 +415,6 @@ public class AbrechnungGKV extends JXPanel
     }
 
     public int doEinlesenEinzeln(String neueReznr) {
-        // String cmd = "select name1,ikktraeger,ikkasse,id from fertige where
-        // rez_nr='"+neueReznr+"' Limit 1";
         // das Gleiche, mit Papierannahmestelle:
         String cmd = sucheFertige + "WHERE rez_nr='" + neueReznr + "' Limit 1";
         Vector<Vector<String>> vecKassen = SqlInfo.holeFelder(cmd);
@@ -444,7 +429,7 @@ public class AbrechnungGKV extends JXPanel
                                    .get(4)
                                    .trim();
         String kas = getKassenName(ikkasse);
-        
+
         int usesSameIkPapier = 0;
         int aeste = rootKasse.getChildCount();
         int aktuellerAst = 0;
@@ -474,7 +459,6 @@ public class AbrechnungGKV extends JXPanel
         vecKassen = SqlInfo.holeFelder(cmd);
         JXTTreeNode meinitem = null;
         for (int i = 0; i < vecKassen.size(); i++) {
-            // System.out.println("Durchlaufen: "+i+" von "+vecKassen.size());
             try {
                 cmd = "select n_name from pat5 where pat_intern='" + vecKassen.get(i)
                                                                               .get(1)
@@ -486,9 +470,7 @@ public class AbrechnungGKV extends JXPanel
                 cmd = "select preisgruppe from verordn where rez_nr='" + vecKassen.get(i)
                                                                                   .get(0)
                         + "' LIMIT 1";
-                //// System.out.println(cmd);
                 String preisgr = SqlInfo.holeEinzelFeld(cmd);
-                //// System.out.println("Preisgruppe="+preisgr);
 
                 KnotenObjekt rezeptknoten = new KnotenObjekt(vecKassen.get(i)
                                                                       .get(0)
@@ -515,12 +497,8 @@ public class AbrechnungGKV extends JXPanel
                 treeKasse.scrollPathToVisible(new TreePath(meinitem.getPath()));
                 for (int i2 = 0; i2 < aeste; i2++) {
                     if (treeKasse.isCollapsed(new TreePath(((JXTTreeNode) rootKasse.getChildAt(i2)).getPath()))) {
-                        // System.out.println("geschlossen "+i2+" -
-                        // "+((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.titel);
                         treeindex += 1;
                     } else {
-                        // System.out.println("expanded "+i2+" -
-                        // "+((JXTTreeNode)rootKasse.getChildAt(i2)).knotenObjekt.titel);
                         treeindex += ((JXTTreeNode) rootKasse.getChildAt(i2)).getChildCount() + 1;
                     }
                     if (((JXTTreeNode) rootKasse.getChildAt(i2)).knotenObjekt.ktraeger.equals(ktraeger)) {
@@ -529,21 +507,12 @@ public class AbrechnungGKV extends JXPanel
                 }
 
                 treeKasse.expandPath(new TreePath(node));
-                /*
-                 * System.out.println("****** TreeIndex: "+treeindex);
-                 * System.out.println("Root-Childs "+rootKasse.getChildCount());
-                 * System.out.println("GetIndex "+rootKasse.getIndex(meinitem));
-                 * System.out.println("IndexOfChild = "+treeModelKasse.getIndexOfChild(node,
-                 * meinitem));
-                 */
 
                 treeKasse.setSelectionPath(new TreePath(meinitem));
                 treeKasse.setSelectionInterval(treeindex, treeindex);
                 if (treeKasse.getSelectionPath() != null) {
                     if (!SystemConfig.hmAbrechnung.get("autoOk302")
                                                   .equals("0")) {
-                        // System.out.println("autoOk302: markiere Rezept "+neueReznr+" fertig zur
-                        // Abrechnung");
                         SwingUtilities.invokeLater(new Runnable() {
                             @Override
                             public void run() {
@@ -562,9 +531,6 @@ public class AbrechnungGKV extends JXPanel
     }
 
     private String getKassenName(String ikkasse) {
-        // Kostenträgerdatei kann fehlerhaft sein ...
-        // String cmd = "select name1, name2 from ktraeger where ik_kasse = " + ikkasse; 
-        // ... daher lokalen Kassenstamm verwenden
         String cmd = "select kassen_nam1, kassen_nam2 from kass_adr where ik_kasse = " + ikkasse;
         Vector<String> vecKassenName = SqlInfo.holeFelder(cmd).get(0);
         String kname = vecKassenName.get(0)
@@ -582,7 +548,7 @@ public class AbrechnungGKV extends JXPanel
                 || tst1.contentEquals("BKK LANDESVERBAND")
                 || tst1.endsWith(" DER")
                 || tst1.endsWith(" DES")
-                || tst2.startsWith("KRANKENKASSE") 
+                || tst2.startsWith("KRANKENKASSE")
                 || tst2.startsWith("BETRIEBSKRANKENKASSE")
                 || tst2.startsWith("UND ")) {
             kname = kname + " " + kname2;
@@ -598,7 +564,6 @@ public class AbrechnungGKV extends JXPanel
      */
     public void doEinlesen(JXTTreeNode aktKassenNode, String neueReznr) {
         directCall = false;
-        // final JXTTreeNode xaktKassenNode = aktKassenNode;
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -644,20 +609,10 @@ public class AbrechnungGKV extends JXPanel
                         kassenName = getKassenName(ikkasse);
                     }
                     existiertschon.add(ktraeger);
-//                    //customIconList.add(ktraeger); neee, der erste bleibt 'original'
-//                    toggleIcons = 0;
-//                    KeepIkPap myIkPap = new KeepIkPap(ikpapier);
 
                     int aeste = 0;
                     KnotenObjekt newNode = astAnhaengen(kassenName, ktraeger, ikkasse, ikpapier).getObject();
                     rezepteAnhaengen(aeste);
-                    /*
-                     * System.out.println(ktraeger);
-                     * System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.
-                     * titel);
-                     * System.out.println(((JXTTreeNode)rootKasse.getChildAt(aeste)).knotenObjekt.
-                     * rez_num);
-                     */
                     aeste++;
 
                     for (int i = 0; i < vecKassen.size(); i++) {
@@ -676,7 +631,6 @@ public class AbrechnungGKV extends JXPanel
                             rezepteAnhaengen(aeste);
                             aeste++;
 
-//                            treeKasse.repaint();
                         }
                     }
                     kassenIconsNeuAnzeigen();
@@ -707,7 +661,6 @@ public class AbrechnungGKV extends JXPanel
         Vector<Vector<String>> vecRezepte = SqlInfo.holeFelder(cmd);
 
         JXTTreeNode node = (JXTTreeNode) rootKasse.getChildAt(knoten);
-        // JXTTreeNode treeitem = null;
 
         JXTTreeNode meinitem = null;
         for (int i = 0; i < vecRezepte.size(); i++) {
@@ -722,9 +675,7 @@ public class AbrechnungGKV extends JXPanel
                                               .get(1);
                 String name = SqlInfo.holeEinzelFeld(cmd);
                 cmd = "select preisgruppe from verordn where rez_nr='" + thisRezNr + "' LIMIT 1";
-                //// System.out.println(cmd);
                 String preisgr = SqlInfo.holeEinzelFeld(cmd);
-                //// System.out.println("Preisgruppe="+preisgr);
 
                 KnotenObjekt rezeptknoten = new KnotenObjekt(thisRezNr + "-" + name, vecRezepte.get(i)
                                                                                                .get(0),
@@ -802,7 +753,6 @@ public class AbrechnungGKV extends JXPanel
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        //// System.out.println("Rezept "+node.rez_num+" fertig eingestellt");
         setCursor(Cursors.normalCursor);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -849,10 +799,7 @@ public class AbrechnungGKV extends JXPanel
         if (nodeWithSameIK != null) { // Nachfolger o. Vorgänger hat gleiches IKpapier -> icons können bleiben
             aktKassNode = nodeWithSameIK; // ... wird aktueller Knoten
             int aktNodeIdx = 1 + treeModelKasse.getIndexOfChild(rootKasse, aktKassNode);
-            // treeKasse.setSelectionInterval(aktNodeIdx, aktNodeIdx); // KEINEN neuen akt.
-            // Knoten selektieren (Anzeige des gerade aufgeschlossenen Rezeptes im
-            // Patientenfenster)
-            // treeKasse.validate();
+
             treeKasse.repaint(); // Anzeige aktualisieren
         } else if (!prevKNode.equals(null) && !nextKNode.equals(null)) {
             kassenIconsNeuAnzeigen();
@@ -861,22 +808,7 @@ public class AbrechnungGKV extends JXPanel
     }
 
     private JXTTreeNode sameIkPap(JXTTreeNode aktNode) {
-        /*
-         * Testkram ... JXTTreeNode prevKassenNode, nextKassenNode; String tmpK =
-         * aktNode.getObject().titel; //ok String tmpIK =
-         * ((KnotenObjekt)aktNode.getUserObject()).ikkasse; // auch
-         * System.out.println("Akt Node = "+tmpK+" "+tmpIK); prevKassenNode =
-         * (JXTTreeNode) aktNode.getPreviousSibling(); if(prevKassenNode != null) { tmpK
-         * = (prevKassenNode.getObject().titel); tmpIK =
-         * ((KnotenObjekt)prevKassenNode.getUserObject()).ikkasse;
-         * System.out.println("Prev Node = "+tmpK+" "+tmpIK); } else {
-         * System.out.println("Prev Node = empty "); } nextKassenNode
-         * =(JXTTreeNode)aktNode.getNextSibling(); if(nextKassenNode != null) { tmpK =
-         * nextKassenNode.getObject().titel; tmpIK =
-         * ((KnotenObjekt)nextKassenNode.getUserObject()).ikkasse;
-         * System.out.println("Next Node = "+tmpK+" "+tmpIK); } else {
-         * System.out.println("Next Node = empty "); } // ... Ende Testkram
-         */
+
 
         JXTTreeNode prevKNode = getPrevKassenKnoten(aktNode);
         JXTTreeNode nextKNode = getNextKassenKnoten(aktNode);
@@ -921,10 +853,7 @@ public class AbrechnungGKV extends JXPanel
         while (aktKasse != null) {
             knAktKasse = aktKasse.getObject();
             if (myIkPap.newIkPap(knAktKasse.ikpapier)) {
-                // Hintergrund- oder Icon-Farbe ändern
                 toggleIcons = (++toggleIcons) & 1;
-                // System.out.println("Wechsel IK-Papier: "+knAktKasse.ikpapier+" Hintergrund
-                // oder Icon-Farbe ändern @: "+ knAktKasse.titel);
             }
             ;
             if (toggleIcons == 1) {
@@ -936,6 +865,8 @@ public class AbrechnungGKV extends JXPanel
         treeKasse.validate();
         treeKasse.repaint();
     }
+TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
+
 
     @Override
     public void valueChanged(TreeSelectionEvent arg0) {
@@ -1003,6 +934,7 @@ public class AbrechnungGKV extends JXPanel
 
     }
 
+};
     public void setKassenUmsatzNeu() {
         kassenUmsatz[0] = 0.00;
         kassenUmsatz[1] = 0.00;
@@ -1025,7 +957,7 @@ public class AbrechnungGKV extends JXPanel
                 try {
                     int lang = xaktKasse.getChildCount();
                     Reha.instance.progressStarten(true);
-                    getInstance().setCursor(Cursors.wartenCursor);
+                    setCursor(Cursors.wartenCursor);
                     for (int i = 0; i < lang; i++) {
                         if (((JXTTreeNode) xaktKasse.getChildAt(i)).knotenObjekt.fertig) {
                             kontrollierteRezepte++;
@@ -1034,7 +966,7 @@ public class AbrechnungGKV extends JXPanel
                     }
                     setHtmlLinksUnten(lang, kontrollierteRezepte);
                     Reha.instance.progressStarten(false);
-                    getInstance().setCursor(Cursors.cdefault);
+                   setCursor(Cursors.cdefault);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -1168,7 +1100,6 @@ public class AbrechnungGKV extends JXPanel
                     + " from kass_adr where ik_kasse='" + abzurechnendeKassenID + "' LIMIT 1";
             kassenIKs.clear();
             kassenIKs = SqlInfo.holeFelder(cmd);
-            //// System.out.println(cmd);
             if (kassenIKs.size() <= 0) {
                 Reha.instance.progressStarten(false);
                 abrDlg.setVisible(false);
@@ -1189,13 +1120,7 @@ public class AbrechnungGKV extends JXPanel
             ik_papier = kassenIKs.get(0)
                                  .get(4);
             ik_email = SqlInfo.holeEinzelFeld("select email from ktraeger where ikkasse='" + ik_physika + "' LIMIT 1");
-            /*
-             * //System.out.println("  kasse = "+ik_kasse);
-             * //System.out.println("kostent = "+ik_kostent);
-             * //System.out.println(" nutzer = "+ik_nutzer);
-             * //System.out.println("physika = "+ik_physika);
-             * //System.out.println("  email = "+ik_email);
-             */
+
 
             if (abrechnungsModus.equals(ABR_MODE_302)) {
                 if (ik_email.equals("")) {
@@ -1332,10 +1257,8 @@ public class AbrechnungGKV extends JXPanel
             holeEdifact();
             macheKopfDaten();
             macheEndeDaten();
-            /********
-             *
-             *
-             */
+
+
             gesamtBuf.append(unbBuf.toString());
             gesamtBuf.append(positionenBuf.toString());
             gesamtBuf.append(unzBuf.toString());
@@ -1649,7 +1572,7 @@ public class AbrechnungGKV extends JXPanel
             protected Void doInBackground() throws Exception {
                 String s1 = String.valueOf("#PATSUCHEN");
                 String s2 = xpatid;
-                PatStammEvent pEvt = new PatStammEvent(getInstance());
+                PatStammEvent pEvt = new PatStammEvent(this);
                 pEvt.setPatStammEvent("PatSuchen");
                 pEvt.setDetails(s1, s2, "");
                 PatStammEventClass.firePatStammEvent(pEvt);
@@ -1755,8 +1678,6 @@ public class AbrechnungGKV extends JXPanel
                     JOptionPane.showMessageDialog(null, "Fehler im Rechnungsdruck - Fehler = abrDruck==null");
                 }
                 try {
-                    rezepteUebertragen();
-                    rechnungAnlegen();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null,
@@ -1765,7 +1686,7 @@ public class AbrechnungGKV extends JXPanel
                 if (abrechnungsModus.equals(ABR_MODE_302)) {
                     try {
                         Thread.sleep(100);
-                        new BegleitzettelDrucken(getInstance(), abrechnungRezepte, ik_kostent, name_kostent, hmAnnahme,
+                        new BegleitzettelDrucken(AbrechnungGKV.this, abrechnungRezepte, ik_kostent, name_kostent, hmAnnahme,
                                 aktRechnung, Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
                                         + SystemConfig.hmAbrechnung.get("hmgkvbegleitzettel"));
                     } catch (Exception ex) {
@@ -1786,14 +1707,13 @@ public class AbrechnungGKV extends JXPanel
             sgruppe = "B";
         }
 
-        unbBuf.append("UNB+UNOC:3+" + zertifikatVon.replace("IK", "")/* Reha.aktIK */ + plus + ik_nutzer + plus);
+        unbBuf.append("UNB+UNOC:3+" + zertifikatVon.replace("IK", "") + plus + ik_nutzer + plus);
         unbBuf.append(getEdiDatumFromDeutsch(DatFunk.sHeute()) + ":" + getEdiTimeString(false) + plus);
         unbBuf.append(aktDfue + plus + sgruppe + plus);
         abrDateiName = "SL" + zertifikatVon.replace("IK", "")
-                                           .substring(2, 8)/* Reha.aktIK.substring(2,8) */
+                                           .substring(2, 8)
                 + "S" + getEdiMonat();
         unbBuf.append(abrDateiName + plus);
-        // unbBuf.append("0"+EOL); // Testdatei
         unbBuf.append("2" + EOL);
         // unbBuf.append(aktDfue+plus+"B"+plus+"SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat()+plus+"2"+EOL);
 
@@ -1836,9 +1756,7 @@ public class AbrechnungGKV extends JXPanel
 
     /***************************************************************/
 
-    AbrechnungGKV getInstance() {
-        return this;
-    }
+
 
     public AbrechnungRezept getInstanceAbrechnungRezept() {
         return abrRez;
@@ -2241,7 +2159,8 @@ public class AbrechnungGKV extends JXPanel
                     rechnungBuf.append("ort='" + hmAnnahme.get("<gkv4>")
                                                           .split(" ")[1]
                             + "', ");
-                    rechnungBuf.append("name='" + kopf[9].split("=")[1] + "', ");
+                    String patName = StringTools.Escaped(kopf[9].split("=")[1]);
+                    rechnungBuf.append("name='" + patName + "', ");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Fehler in der Adressaufbereitung - Tabelle=Faktura");
                     ex.printStackTrace();
@@ -2530,7 +2449,7 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Keystore öffnen
          */
         public void init() throws NebraskaCryptoException, NebraskaFileException {
@@ -2545,9 +2464,9 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Restlaufzeit eines Zertifikates ermitteln
-         * 
+         *
          * @param alias String - IK des gesuchten Zertifikates
          * @return int Anz. Tage, wie lange das Zert noch gültig ist oder noCertFound,
          *         falls kein Zertifikat gefunden wurde.
@@ -2581,9 +2500,9 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Eigenes Zertifikat auf Gültigkeit prüfen
-         * 
+         *
          * @param alias String - IK des eigenen Zertifikates
          * @return SystemConfig.certState
          */
@@ -2619,10 +2538,10 @@ public class AbrechnungGKV extends JXPanel
         }
 
         /**********
-         * 
+         *
          * Zertifikat einer Kasse (bzw. von deren Datenannahmestelle) auf Gültigkeit
          * prüfen
-         * 
+         *
          * @param currNode KnotenObjekt - Knoten im Kassenbaum
          * @return SystemConfig.certState
          */
@@ -2744,118 +2663,83 @@ public class AbrechnungGKV extends JXPanel
     protected boolean istFertig(Object value) {
         DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
         KnotenObjekt fertig = (KnotenObjekt) (node.getUserObject());
-        boolean istfertig = fertig.fertig;
-        if (istfertig) {
-            return true;
-        }
-        return false;
+        return fertig.fertig ;
     }
 
-    private void rezepteUebertragen() {
+    MouseListener mouseListener = new MouseAdapter() {
 
-    }
 
-    private void rechnungAnlegen() {
 
-    }
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if (e.getButton() == 3) { // Rechtsklick auf Rezept im Tree
+                TreePath tp = treeKasse.getSelectionPath();
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
+                if (tp == null) {
+                    return;
+                }
+                JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
+                String rez_nr = node.knotenObjekt.rez_num;
+                if (!rez_nr.trim()
+                           .equals("")) {
+                    if (node.knotenObjekt.fertig) {
+                        String msg = "<html>Achtung Sie editieren im Anschluß den EDIFACT-Code!<br>"
+                                + "Wenn Sie den Code in unzulässiger Weise manipulieren<br>wird <b>der gesamte Abrechnungslauf unbrauchbar</b><br><br>"
+                                + "<b>Rufen Sie diese Funktion nur dann auf wenn Sie genau wissen was Sie tun!!!</b><br><br>"
+                                + "Soll die Funktion jetzt aufgerufen werden?<br></html>";
+                        int frage = JOptionPane.showConfirmDialog(null, msg, "Achtung wichtige Benutzeranfrage",
+                                JOptionPane.YES_NO_OPTION);
+                        if (frage != JOptionPane.YES_OPTION) {
+                            return;
+                        }
 
-    }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.getButton() == 3) { // Rechtsklick auf Rezept im Tree
-            TreePath tp = treeKasse.getSelectionPath();
-
-            if (tp == null) {
-                return;
-            }
-            JXTTreeNode node = (JXTTreeNode) tp.getLastPathComponent();
-            String rez_nr = node.knotenObjekt.rez_num;
-            if (!rez_nr.trim()
-                       .equals("")) {
-                if (node.knotenObjekt.fertig) {
-                    String msg = "<html>Achtung Sie editieren im Anschluß den EDIFACT-Code!<br>"
-                            + "Wenn Sie den Code in unzulässiger Weise manipulieren<br>wird <b>der gesamte Abrechnungslauf unbrauchbar</b><br><br>"
-                            + "<b>Rufen Sie diese Funktion nur dann auf wenn Sie genau wissen was Sie tun!!!</b><br><br>"
-                            + "Soll die Funktion jetzt aufgerufen werden?<br></html>";
-                    int frage = JOptionPane.showConfirmDialog(null, msg, "Achtung wichtige Benutzeranfrage",
-                            JOptionPane.YES_NO_OPTION);
-                    if (frage != JOptionPane.YES_OPTION) {
-                        return;
+                        EditEdifact editEdifact = new EditEdifact(Reha.getThisFrame(), "EDIFACT - editieren",
+                                rez_nr.trim());
+                        editEdifact.getContentPane()
+                                   .setPreferredSize(new Dimension(600, 500));
+                        editEdifact.setLocation(e.getXOnScreen() - 50, e.getYOnScreen() - 50);
+                        editEdifact.pack();
+                        editEdifact.setVisible(true);
+                        abrRez.setNewRez(rez_nr, node.knotenObjekt.fertig, aktDisziplin);
+                    } else {
+                        JOptionPane.showMessageDialog(null,
+                                "Abrechnungsdaten im Edifact-Format kann nur\nbei bereits markierten Rezepten manipuliert werden!");
                     }
-                    PointerInfo info = MouseInfo.getPointerInfo();
-                    Point location = info.getLocation();
-                    EditEdifact editEdifact = new EditEdifact(Reha.getThisFrame(), "EDIFACT - editieren",
-                            rez_nr.trim());
-                    editEdifact.getContentPane()
-                               .setPreferredSize(new Dimension(600, 500));
-                    editEdifact.setLocation(e.getXOnScreen() - 50, e.getYOnScreen() - 50);
-                    // editEdifact.setLocation(location.x-50,location.y-50);
-                    editEdifact.pack();
-                    editEdifact.setVisible(true);
-                    this.abrRez.setNewRez(rez_nr, node.knotenObjekt.fertig, aktDisziplin);
-                } else {
-                    JOptionPane.showMessageDialog(null,
-                            "Abrechnungsdaten im Edifact-Format kann nur\nbei bereits markierten Rezepten manipuliert werden!");
+
+                }
+            }
+
+        }
+
+
+    };
+    KeyListener keyListener = new KeyAdapter() {
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_F1) {
+                TreePath tp = treeKasse.getSelectionPath();
+                if (tp == null) {
+                    return;
+                }
+                if (infoDlg != null) {
+                    return;
                 }
 
+                String ikKasse = getaktuellerKassenKnoten().knotenObjekt.ikkasse;
+                String kassenName = getaktuellerKassenKnoten().knotenObjekt.titel;
+
+                Vector<Vector<String>> vecInArbeit = RezFromDB.getPendingVO(ikKasse);
+                if (vecInArbeit.size() >= 0) {
+                    infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, volleVOs, abgebrocheneVOs,
+                            connection);
+                    infoDlg.pack();
+                    infoDlg.setLocationRelativeTo(null);
+                    infoDlg.setVisible(true);
+                    infoDlg = null;
+                }
             }
         }
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_F1) {
-            TreePath tp = treeKasse.getSelectionPath();
-            if (tp == null) {
-                return;
-            }
-            if (infoDlg != null) {
-                return;
-            }
-
-            String ikKasse = getaktuellerKassenKnoten().knotenObjekt.ikkasse;
-            String kassenName = getaktuellerKassenKnoten().knotenObjekt.titel;
-
-            Vector<Vector<String>> vecInArbeit = RezFromDB.getPendingVO(ikKasse);
-            //// System.out.println("VO in Arbeit: "+ vecInArbeit);
-            if (vecInArbeit.size() >= 0) {
-                infoDlg = new InfoDialogVOinArbeit(kassenName, vecInArbeit, volleVOs, abgebrocheneVOs, this.connection);
-                infoDlg.pack();
-                infoDlg.setLocationRelativeTo(null);
-                infoDlg.setVisible(true);
-                infoDlg = null;
-            }
-        }
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
+    };
 }

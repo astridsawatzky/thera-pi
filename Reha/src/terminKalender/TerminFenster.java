@@ -83,6 +83,7 @@ import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.config.Datenbank;
 import systemTools.ListenerTools;
 
 public class TerminFenster extends Observable
@@ -2751,46 +2752,33 @@ public class TerminFenster extends Observable
 
     private void holeFocus() {
         oSpalten[aktiveSpalte[2]].requestFocus();
-        // Reha.instance.messageLabel.setText("in hole");
     }
 
     private void focusHandling(int panel, int plusminus) {
         focus[panel] = focus[panel] + plusminus;
         if (focus[0] == 0 && focus[1] == 0) {
-            if (this.hasFocus) {
-            }
+
             this.hasFocus = false;
         } else {
             if (!this.hasFocus) {
                 this.hasFocus = true;
-                /*
-                 * if (this.setOben !=0){
-                 * //((JXPanel)this.GrundFlaeche.getParent().getParent()).aktiviereIcon(); }
-                 */
+
 
             }
         }
     }
 
-    /**
-     *
-     *
-     *
-     *
-     */
-    /****************** Bastelt das SQL-Statement ****************/
+
     public String ansichtStatement(int iansicht, String stag) {
         String sstate = "";
         int behandler;
         String sletzter, serster, sbehandler;
         if (this.ansicht == NORMAL_ANSICHT) {
-            if (!SystemConfig.vDatenBank.get(0)
-                                        .get(2)
-                                        .equals("ADS")) {
+            if ("ADS".equals(new Datenbank().typ())) {
+                sstate = "SELECT * FROM flexkc WHERE datum = '" + DatFunk.sDatInSQL(stag) + "'";
+            } else {
                 sstate = "SELECT * FROM flexkc WHERE datum = '" + DatFunk.sDatInSQL(stag) + "' LIMIT "
                         + ParameterLaden.maxKalZeile;
-            } else { // ADS
-                sstate = "SELECT * FROM flexkc WHERE datum = '" + DatFunk.sDatInSQL(stag) + "'";
             }
             macheStatement(sstate, iansicht);
             /******* bislang aktiv *********/
@@ -2849,7 +2837,6 @@ public class TerminFenster extends Observable
                 int maxbehandler;
                 if (ansicht == 0) {
                     maxbehandler = ParameterLaden.maxKalZeile;
-                    // maxbehandler = ParameterLaden.vKKollegen.size();
                 } else {
                     maxbehandler = 7;
                 }
@@ -2872,28 +2859,31 @@ public class TerminFenster extends Observable
                     maxblock = maxblock + (ende + 5);
                     durchlauf = 1;
 
-                    if (!SystemConfig.vDatenBank.get(0)
-                                                .get(2)
-                                                .equals("ADS")) {
-                        for (i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i));
-                            v2.addElement(rs.getString(i + 1));
-                            v3.addElement(rs.getString(i + 2));
-                            v4.addElement(rs.getString(i + 3));
-                            v5.addElement(rs.getString(i + 4));
-                            durchlauf = durchlauf + 1;
-                            // Reha.datecounts++;
-                        }
-                    } else { // ADS
-                        for (i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
-                            v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
-                            v3.addElement(rs.getString(i + 2));
-                            v4.addElement(rs.getString(i + 3));
-                            v5.addElement(rs.getString(i + 4));
-                            durchlauf = durchlauf + 1;
-                        }
-                    }
+                    if ("ADS"
+                                                .equals(new Datenbank().typ())) { // ADS
+                        int durchlauf1 = durchlauf;
+                                                    int i1;
+                                                    for (i1 = 1; i1 < ende; i1 = i1 + 5) {
+                                                        v1.addElement(rs.getString(i1) != null ? rs.getString(i1) : "");
+                                                        v2.addElement(rs.getString(i1 + 1) != null ? rs.getString(i1 + 1) : "");
+                                                        v3.addElement(rs.getString(i1 + 2));
+                                                        v4.addElement(rs.getString(i1 + 3));
+                                                        v5.addElement(rs.getString(i1 + 4));
+                                                        durchlauf1 = durchlauf1 + 1;
+
+                                                    }
+                        i = i1;
+                    } else {
+                  for (i = 1; i < ende; i = i + 5) {
+                     v1.addElement(rs.getString(i));
+                     v2.addElement(rs.getString(i + 1));
+                     v3.addElement(rs.getString(i + 2));
+                     v4.addElement(rs.getString(i + 3));
+                     v5.addElement(rs.getString(i + 4));
+                     durchlauf = durchlauf + 1;
+                     // Reha.datecounts++;
+                  }
+               }
 
                     v6.addElement(rs.getString(301)); // Anzahl
                     v6.addElement(rs.getString(302)); // Art
@@ -2996,28 +2986,19 @@ public class TerminFenster extends Observable
                     int ende = (5 * belegt);
                     maxblock = maxblock + (ende + 5);
                     durchlauf = 1;
-                    if (!SystemConfig.vDatenBank.get(0)
-                                                .get(2)
-                                                .equals("ADS")) {
-                        for (i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
-                            v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
-                            v3.addElement(rs.getString(i + 2));
-                            v4.addElement(rs.getString(i + 3));
-                            v5.addElement(rs.getString(i + 4));
-                            durchlauf = durchlauf + 1;
-                        }
-                    } else { // ADS
-                        for (i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
-                            v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
-                            v3.addElement(rs.getString(i + 2));
-                            v4.addElement(rs.getString(i + 3));
-                            v5.addElement(rs.getString(i + 4));
-                            durchlauf = durchlauf + 1;
+                    int durchlauf1 = durchlauf;
+                    int i1;
+                    for (i1 = 1; i1 < ende; i1 = i1 + 5) {
+                        v1.addElement(rs.getString(i1) != null ? rs.getString(i1) : "");
+                        v2.addElement(rs.getString(i1 + 1) != null ? rs.getString(i1 + 1) : "");
+                        v3.addElement(rs.getString(i1 + 2));
+                        v4.addElement(rs.getString(i1 + 3));
+                        v5.addElement(rs.getString(i1 + 4));
+                        durchlauf1 = durchlauf1 + 1;
 
-                        }
                     }
+                    i = i1;
+
 
                     v6.addElement(rs.getString(226)); // Anzahl
                     v6.addElement(rs.getString(227)); // Art
@@ -3090,15 +3071,6 @@ public class TerminFenster extends Observable
                         oSpalten[4].datenZeichnen(vTerm, belegung[4]);
                         oSpalten[5].datenZeichnen(vTerm, belegung[5]);
                         oSpalten[6].datenZeichnen(vTerm, belegung[6]);
-                        /**
-                         *
-                         * nur für Tests
-                         *
-                         */
-                        // System.out.println("feddisch nach
-                        // "+(System.currentTimeMillis()-Reha.startmillis)+" Millisekunden");
-                        // System.out.println("Anzahl verarbeitete Termine "+Reha.datecounts);
-
                     }
                 });
 

@@ -306,7 +306,7 @@ public class OOTools {
          * xStyleProps.getPropertySetInfo().getProperties(); for (int i = 0; i <
          * props.length; i++) { //System.out.println(props[i] .Name + " = " +
          * xStyleProps.getPropertyValue(props[i].Name)); } //z.B. für A5
-         * 
+         *
          */
         xStyleProps.setPropertyValue("Height", hoch);
         xStyleProps.setPropertyValue("Width", breit);
@@ -426,17 +426,14 @@ public class OOTools {
                 ex.printStackTrace();
             }
             // Wenn nicht gleich wie im Übergebenen Parameter angegeben -> Drucker wechseln
-            IPrinter iprint = null;
+
             if (!druckerName.equals(drucker)) {
                 try {
-                    iprint = textDocument.getPrintService()
+                    IPrinter printer = textDocument.getPrintService()
                                          .createPrinter(drucker);
-                } catch (NOAException e) {
-                    e.printStackTrace();
-                }
-                try {
+
                     textDocument.getPrintService()
-                                .setActivePrinter(iprint);
+                                .setActivePrinter(printer);
                 } catch (NOAException e) {
                     e.printStackTrace();
                 }

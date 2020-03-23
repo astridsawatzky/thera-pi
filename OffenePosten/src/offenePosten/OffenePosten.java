@@ -1,13 +1,11 @@
 package offenePosten;
 
-import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -28,7 +26,6 @@ import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
-
 import io.RehaIOMessages;
 import logging.Logging;
 import sql.DatenquellenFactory;
@@ -42,15 +39,9 @@ public class OffenePosten implements WindowListener {
     JFrame jFrame;
     public static JFrame thisFrame = null;
     public Connection conn;
-    public static OffenePosten thisClass;
+
 
     public static IOfficeApplication officeapplication;
-
-    public String dieseMaschine = null;
-
-    public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
-    public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-
 
     public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
     public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
@@ -69,12 +60,11 @@ public class OffenePosten implements WindowListener {
 
     OffenepostenTab otab = null;
 
-    public static int xport = -1;
-    public static boolean xportOk = false;
+
     public RehaReverseServer rehaReverseServer = null;
     public static int rehaReversePort = -1;
 
-    public boolean isLibreOffice;
+
     private static String path2IniFile;
     private static String path2TemplateFiles;
     private static int vorauswahlSuchkriterium = -1;
@@ -85,10 +75,9 @@ public class OffenePosten implements WindowListener {
 
     public static void main(String[] args) {
         new Logging("offeneposten");
-        OffenePosten application = new OffenePosten();
-        application.getInstance();
-        application.getInstance().sqlInfo = new SqlInfo();
-        System.out.println("OP main: " + application.getInstance());
+       OffenePosten instance = new OffenePosten();
+        instance.sqlInfo = new SqlInfo();
+        System.out.println("OP main: " + instance);
 
         if (args.length > 0 || testcase) {
             if (!testcase) {
@@ -105,7 +94,7 @@ public class OffenePosten implements WindowListener {
                 INITool.init(path2IniFile);
                 /*******************************************************/
 
-                     application.StarteDB();
+                     instance.StarteDB();
 
                 new SwingWorker<Void, Void>() {
                     @Override
@@ -165,7 +154,7 @@ public class OffenePosten implements WindowListener {
                 FirmenDaten(progHome);
 
             }
-            application.getJFrame();
+            instance.getJFrame();
         } else {
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
@@ -179,38 +168,27 @@ public class OffenePosten implements WindowListener {
     public JFrame getJFrame() {
         try {
             UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        thisClass = this;
         jFrame = new JFrame() {
 
-            /**
-             *
-             */
+
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void setVisible(final boolean visible) {
+            public void setVisible(final boolean shallBeVisible) {
 
                 if (getState() != JFrame.NORMAL) {
                     setState(JFrame.NORMAL);
                 }
 
-                if (visible) {
-                    // setDisposed(false);
-                }
-                if (!visible || !isVisible()) {
-                    super.setVisible(visible);
+                
+                if (!shallBeVisible || !isVisible()) {
+                    super.setVisible(shallBeVisible);
                 }
 
-                if (visible) {
+                if (shallBeVisible) {
                     int state = super.getExtendedState();
                     state &= ~JFrame.ICONIFIED;
                     super.setExtendedState(state);
@@ -234,7 +212,7 @@ public class OffenePosten implements WindowListener {
             }
         };
         try {
-            rehaReverseServer = new RehaReverseServer(7000);
+            rehaReverseServer = new RehaReverseServer(7000, jFrame);
         } catch (Exception ex) {
             rehaReverseServer = null;
             ex.printStackTrace();
@@ -242,12 +220,12 @@ public class OffenePosten implements WindowListener {
         sqlInfo.setFrame(jFrame);
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 750);
-        String string = "dbIpAndName"; // XXX:fixme name
+        String string =  "dbIpAndName"; // XXX:fixme name
         jFrame.setTitle(
                 "Thera-Pi  Offene-Posten / Mahnwesen  [IK: " + aktIK + "] " + "[Server-IP: " + string + "]");
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
-        otab = new OffenepostenTab();
+        otab = new OffenepostenTab(this);
         otab.setHeader(0);
 
         jFrame.getContentPane()
@@ -267,7 +245,7 @@ public class OffenePosten implements WindowListener {
 
         try {
             new SocketClient().setzeRehaNachricht(OffenePosten.rehaReversePort,
-                    "AppName#OffenePosten#" + Integer.toString(OffenePosten.xport));
+                    "AppName#OffenePosten#" + rehaReverseServer.getPort());
             new SocketClient().setzeRehaNachricht(OffenePosten.rehaReversePort,
                     "OffenePosten#" + RehaIOMessages.IS_STARTET);
         } catch (Exception ex) {
@@ -278,36 +256,13 @@ public class OffenePosten implements WindowListener {
         return jFrame;
     }
 
-    /********************/
-
-    public OffenePosten getInstance() {
-        thisClass = this;
-        return this;
-    }
-
-    /*******************/
-
-    public static void stoppeDB() {
-        try {
-            OffenePosten.thisClass.conn.close();
-            OffenePosten.thisClass.conn = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**********************************************************
-     *
-     */
-
-        private void StarteDB() {
-            final OffenePosten obj = OffenePosten.thisClass;
+    private void StarteDB() {
 
 
             try {
 
-                obj.conn = new DatenquellenFactory(aktIK).createConnection();
-                OffenePosten.thisClass.sqlInfo.setConnection(obj.conn);
+                conn = new DatenquellenFactory(aktIK).createConnection();
+                sqlInfo.setConnection(conn);
                 OffenePosten.DbOk = true;
                 System.out.println("Datenbankkontakt hergestellt");
             } catch (final SQLException ex) {
@@ -317,7 +272,6 @@ public class OffenePosten implements WindowListener {
                 OffenePosten.DbOk = false;
 
             }
-            return;
         }
 
 
@@ -336,19 +290,19 @@ public class OffenePosten implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        if (OffenePosten.thisClass.conn != null) {
+        if (conn != null) {
             try {
-                OffenePosten.thisClass.conn.close();
+                conn.close();
                 System.out.println("Datenbankverbindung wurde geschlossen");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        if (OffenePosten.thisClass.rehaReverseServer != null) {
+        if (rehaReverseServer != null) {
             new SocketClient().setzeRehaNachricht(OffenePosten.rehaReversePort,
                     "OffenePosten#" + RehaIOMessages.IS_FINISHED);
             try {
-                OffenePosten.thisClass.rehaReverseServer.serv.close();
+                rehaReverseServer.serv.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -359,19 +313,19 @@ public class OffenePosten implements WindowListener {
     @Override
     public void windowClosing(WindowEvent arg0) {
         saveLastSelection();
-        if (OffenePosten.thisClass.conn != null) {
+        if (conn != null) {
             try {
-                OffenePosten.thisClass.conn.close();
+                conn.close();
                 System.out.println("OP: Datenbankverbindung wurde geschlossen");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        if (OffenePosten.thisClass.rehaReverseServer != null) {
+        if (rehaReverseServer != null) {
             new SocketClient().setzeRehaNachricht(OffenePosten.rehaReversePort,
                     "OffenePosten#" + RehaIOMessages.IS_FINISHED);
             try {
-                OffenePosten.thisClass.rehaReverseServer.serv.close();
+                rehaReverseServer.serv.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -457,48 +411,7 @@ public class OffenePosten implements WindowListener {
             e1.printStackTrace();
         }
 
-        /*
-         * final String OPEN_OFFICE_ORG_PATH = OffenePosten.officeProgrammPfad; String
-         * path = OPEN_OFFICE_ORG_PATH; try {
-         * ////System.out.println("**********Open-Office wird gestartet***************"
-         * ); System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH,OffenePosten.
-         * officeNativePfad); ILazyApplicationInfo info =
-         * OfficeApplicationRuntime.getApplicationAssistant(OffenePosten.
-         * officeNativePfad).findLocalApplicationInfo(path); String[] names =
-         * info.getProperties().getPropertyNames(); for(int i = 0; i <
-         * names.length;i++){
-         * System.out.println(names[i]+" = "+info.getProperties().getPropertyValue(names
-         * [i]));
-         * if(info.getProperties().getPropertyValue(names[i]).contains("LibreOffice")){
-         * OffenePosten.thisClass.isLibreOffice = true; } } Map <String, Object>config =
-         * new HashMap<String, Object>();
-         * config.put(IOfficeApplication.APPLICATION_HOME_KEY, path);
-         * config.put(IOfficeApplication.APPLICATION_TYPE_KEY,
-         * IOfficeApplication.LOCAL_APPLICATION);
-         * if(OffenePosten.thisClass.isLibreOffice){
-         * config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY, new String[]
-         * {"--nodefault","--nologo", "--nofirststartwizard", "--nocrashreport",
-         * "--norestore" });
-         *
-         * }else{ config.put(IOfficeApplication.APPLICATION_ARGUMENTS_KEY, new String[]
-         * {"-nodefault","-nologo", "-nofirststartwizard", "-nocrashreport",
-         * "-norestore" });
-         *
-         * } System.setProperty(IOfficeApplication.NOA_NATIVE_LIB_PATH,path); try{
-         * officeapplication = OfficeApplicationRuntime.getApplication(config);
-         * }catch(NullPointerException ex){ ex.printStackTrace(); }
-         * officeapplication.activate(); try{
-         * officeapplication.getDesktopService().addTerminateListener(new
-         * VetoTerminateListener() { public void queryTermination(ITerminateEvent
-         * terminateEvent) { super.queryTermination(terminateEvent); try { IDocument[]
-         * docs = officeapplication.getDocumentService().getCurrentDocuments(); if
-         * (docs.length == 1 ) { docs[0].close(); } }catch (DocumentException e) {
-         * e.printStackTrace(); } catch (OfficeApplicationException e) {
-         * e.printStackTrace(); } } }); }catch(NullPointerException ex){
-         * ex.printStackTrace(); }
-         *
-         * }catch (OfficeApplicationException e) { e.printStackTrace(); }
-         */
+
 
     }
 
@@ -602,13 +515,5 @@ public class OffenePosten implements WindowListener {
                 INITool.saveIni(inif);
             }
         }
-    }
-
-    private static boolean isIniValuesValid() {
-        return iniValuesValid;
-    }
-
-    private static void setIniValuesValid(boolean iniValuesValid) {
-        OffenePosten.iniValuesValid = iniValuesValid;
     }
 }

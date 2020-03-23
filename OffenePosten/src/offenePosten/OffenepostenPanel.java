@@ -56,25 +56,24 @@ import io.RehaIOMessages;
 public class OffenepostenPanel extends JXPanel implements TableModelListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -7883557713071422132L;
 
     JRtaTextField suchen = null;
-    JRtaTextField offen = null;
     JRtaTextField[] tfs = { null, null, null, null };
     JButton[] buts = { null, null, null };
 
     enum btIdx {
         ausbuchen,
         suchen,
-        dummy
+
     };
 
     int btAusbuchen = btIdx.ausbuchen.ordinal();
     int btSuchen = btIdx.suchen.ordinal();
     JRtaComboBox combo = null;
-    JXPanel content = null;
+
     KeyListener kl = null;
     ActionListener al = null;
 
@@ -99,9 +98,12 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
 
     private JRtaCheckBox bar = null;
 
-    public OffenepostenPanel(OffenepostenTab xeltern) {
+    private OffenePosten offenePosten;
+
+    public OffenepostenPanel(OffenepostenTab xeltern, OffenePosten offenePosten) {
         super();
         this.eltern = xeltern;
+        this.offenePosten = offenePosten;
         startKeyListener();
         startActionListener();
         setLayout(new BorderLayout());
@@ -539,7 +541,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
 
     class MyOffenePostenTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -591,7 +593,7 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
         ResultSet rs = null;
 
         try {
-            stmt = OffenePosten.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+            stmt = offenePosten.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
 

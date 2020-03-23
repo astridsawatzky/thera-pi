@@ -8,7 +8,6 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.text.XTextTableCursor;
 
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
@@ -32,26 +31,22 @@ public class AbrechnungDrucken {
     ITextDocument textDocument = null;
     int positionen;
     String rechnungNummer;
-    String papierIK;
     DecimalFormat dfx = new DecimalFormat("0.00");
-    int zugabe = 0;
+
     BigDecimal rechnungsBetrag = new BigDecimal(Double.valueOf("0.00"));
     BigDecimal rechnungsGesamt = new BigDecimal(Double.valueOf("0.00"));
     BigDecimal rechnungsRezgeb = new BigDecimal(Double.valueOf("0.00"));
     HashMap<String, String> hmAdresse = new HashMap<String, String>();
     boolean mitTage = false;
-    // AbrechnungGKV eltern = null;
     int anzahlRezepte = 0;
 
-    public AbrechnungDrucken(/* AbrechnungGKV eltern, */String url, boolean mittage) throws Exception {
-        // this.eltern = eltern;
+    public AbrechnungDrucken(String url, boolean mittage) throws Exception {
 
         starteDokument(url);
         this.mitTage = mittage;
     }
 
-    public void setIKundRnr(String papierIk, String rnr, HashMap<String, String> hmap) {
-        this.papierIK = papierIk;
+    public void setIKundRnr(String rnr, HashMap<String, String> hmap) {
         this.rechnungNummer = rnr;
         this.hmAdresse = hmap;
 
@@ -184,9 +179,8 @@ public class AbrechnungDrucken {
                     7.f);
             OOTools.setOneCellProperty(textTable.getCell(1, aktuellePosition + (i + 2)), false, false, false, 0x00,
                     7.f);
-            // setOneCellProperty(textTable.getCell(1,aktuellePosition+(i+2)));
 
-            XTextTableCursor cursor = OOTools.doMergeCellsInTextTabel(textTable.getXTextTable(),
+             OOTools.doMergeCellsInTextTabel(textTable.getXTextTable(),
                     textTable.getCell(0, aktuellePosition + (i + 2))
                              .getName()
                              .getName()
@@ -206,9 +200,7 @@ public class AbrechnungDrucken {
             setPositionenCells(false, tcells);
 
         }
-        /****************/
 
-        /****************/
         aktuellePosition += (positionen + 2 + (mitTage ? 1 : 0));
     }
 
@@ -234,8 +226,6 @@ public class AbrechnungDrucken {
             XPropertySet xprops = props.getXPropertySet();
             xprops.setPropertyValue("TopBorderDistance", 0);
             xprops.setPropertyValue("BottomBorderDistance", 0);
-            // xprops.setPropertyValue("LeftBorderDistance", 0);
-            // xprops.setPropertyValue("RightBorderDistance", 0);
             tcells[i2].getCharacterProperties()
                       .setFontSize(8.f);
             tcells[i2].getCharacterProperties()
@@ -255,9 +245,7 @@ public class AbrechnungDrucken {
 
     }
 
-    public void druckeRechnung(int anzahl) {
 
-    }
 
     public void starteDokument(String url) throws Exception {
         IDocumentService documentService = null;

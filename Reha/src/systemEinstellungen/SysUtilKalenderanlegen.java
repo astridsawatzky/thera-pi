@@ -41,6 +41,8 @@ import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -52,6 +54,7 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
+import systemEinstellungen.config.Datenbank;
 
 public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, ActionListener {
 
@@ -721,8 +724,8 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
     }
 
     private void starteDbAppend() {
-//		new Thread(){
-//			public void run(){
+//        new Thread(){
+//            public void run(){
         int durchgang = 0;
         long zeit1 = System.currentTimeMillis();
         dblaeuft = true;
@@ -850,8 +853,8 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
          * System.out.println("KalMake.getText() = "+KalMake.getText());
          */
         // System.out.println("Kalenderspanne = von "+Reha.kalMin+" bis "+Reha.kalMax);
-//			}
-//		}.start();
+//            }
+//        }.start();
 
     }
 
@@ -1010,8 +1013,7 @@ class FeiertagTableModel extends DefaultTableModel {
 
 /***********************************/
 class HoleMaxDatum extends Thread {
-    Statement stmt = null;
-    ResultSet rs = null;
+
     String statement;
     boolean geklappt = false;
 
@@ -1023,227 +1025,132 @@ class HoleMaxDatum extends Thread {
     @Override
     public void run() {
 
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                rs = stmt.executeQuery(this.statement);
-                if (rs.next()) {
-                    if (rs.getString(1) != null) {
-                        String datum = rs.getString(1);
-                        int altjahr = Integer.valueOf(datum.substring(0, 4));
-                        SysUtilKalenderanlegen.KalBis.setText(Integer.valueOf(altjahr)
-                                                                     .toString());
-                        SysUtilKalenderanlegen.KalMake.setText(Integer.valueOf(altjahr + 1)
-                                                                      .toString());
-                        // SysUtilKalenderanlegen.setJahr(Integer.valueOf(altjahr+1).toString());
-                        SysUtilKalenderanlegen.setJahr(Integer.valueOf(altjahr + 1)
-                                                              .toString());
-                        SysUtilKalenderanlegen.jahrOk = true;
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
 
-                    } else {
-                        String datum = DatFunk.sHeute()
-                                              .substring(6);
-                        SysUtilKalenderanlegen.KalBis.setText("leer");
-                        SysUtilKalenderanlegen.KalMake.setText(datum);
-                        SysUtilKalenderanlegen.setJahr(datum);
-                        SysUtilKalenderanlegen.jahrOk = true;
-                    }
+                ResultSet rs = stmt.executeQuery(this.statement);) {
+            if (rs.next()) {
+                if (rs.getString(1) != null) {
+                    String datum = rs.getString(1);
+                    int altjahr = Integer.valueOf(datum.substring(0, 4));
+                    SysUtilKalenderanlegen.KalBis.setText(Integer.valueOf(altjahr)
+                                                                 .toString());
+                    SysUtilKalenderanlegen.KalMake.setText(Integer.valueOf(altjahr + 1)
+                                                                  .toString());
+                    // SysUtilKalenderanlegen.setJahr(Integer.valueOf(altjahr+1).toString());
+                    SysUtilKalenderanlegen.setJahr(Integer.valueOf(altjahr + 1)
+                                                          .toString());
+                    SysUtilKalenderanlegen.jahrOk = true;
+
+                } else {
+                    String datum = DatFunk.sHeute()
+                                          .substring(6);
+                    SysUtilKalenderanlegen.KalBis.setText("leer");
+                    SysUtilKalenderanlegen.KalMake.setText(datum);
+                    SysUtilKalenderanlegen.setJahr(datum);
+                    SysUtilKalenderanlegen.jahrOk = true;
                 }
-            } catch (SQLException ev) {
-                // System.out.println("SQLException: " + ev.getMessage());
-                // System.out.println("SQLState: " + ev.getSQLState());
-                // System.out.println("VendorError: " + ev.getErrorCode());
             }
 
         } catch (SQLException ex) {
             // System.out.println("von stmt -SQLState: " + ex.getSQLState());
         }
 
-        finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
-        }
     }
 
 }
 
-/******************************************************************************/
-/******************************/
+
 class HoleMasken {
+    private static Logger logger = LoggerFactory.getLogger(HoleMasken.class);
+
     HoleMasken(String sstmt) {
 
-        Statement stmt = null;
-        ResultSet rs = null;
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE); ResultSet rs = stmt.executeQuery(sstmt);) {
+            int i = 0;
+            int durchlauf = 0;
+            int maxbehandler = 7;
 
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                rs = stmt.executeQuery(sstmt);
-                int i = 0;
-                int durchlauf = 0;
-                int maxbehandler = 7;
+            int maxblock = 0;
+            int aktbehandler = 1;
+            ArrayList<Object> aKalList = new ArrayList<Object>();
+            Vector<Object> aMaskenDaten = new Vector<Object>();
+            // SysUtilKalenderanlegen.aMaskenDaten.clear();
+            // *******************SysUtilKalenderanlegen.aMaskenDaten.clear();
+            while ((rs.next())) {
+                Vector<String> v1 = new Vector<String>();
+                Vector<String> v2 = new Vector<String>();
+                Vector<String> v3 = new Vector<String>();
+                Vector<String> v4 = new Vector<String>();
+                Vector<String> v5 = new Vector<String>();
+                Vector<String> v6 = new Vector<String>();
 
-                int maxblock = 0;
-                int aktbehandler = 1;
-                ArrayList<Object> aKalList = new ArrayList<Object>();
-                Vector<Object> aMaskenDaten = new Vector<Object>();
-                // SysUtilKalenderanlegen.aMaskenDaten.clear();
-                // *******************SysUtilKalenderanlegen.aMaskenDaten.clear();
-                while ((rs.next())) {
-                    Vector<String> v1 = new Vector<String>();
-                    Vector<String> v2 = new Vector<String>();
-                    Vector<String> v3 = new Vector<String>();
-                    Vector<String> v4 = new Vector<String>();
-                    Vector<String> v5 = new Vector<String>();
-                    Vector<String> v6 = new Vector<String>();
+                /* in Spalte 301 steht die Anzahl der belegten Bl�cke */
+                int belegt = rs.getInt(226);
+                /* letzte zu durchsuchende Spalte festlegen */
+                int ende = (5 * belegt);
+                maxblock = maxblock + (ende + 5);
+                durchlauf = 1;
 
-                    /* in Spalte 301 steht die Anzahl der belegten Bl�cke */
-                    int belegt = rs.getInt(226);
-                    /* letzte zu durchsuchende Spalte festlegen */
-                    int ende = (5 * belegt);
-                    maxblock = maxblock + (ende + 5);
-                    durchlauf = 1;
-                    /*
-                     * abgeschaltet f�r Performance-Check if (aktbehandler == 1){
-                     * Titel.setText(rs.getString(305)); }
-                     */
-
-                    if (!SystemConfig.vDatenBank.get(0)
-                                                .get(2)
-                                                .equals("ADS")) {
-                        for (i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
-                            v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
-                            v3.addElement(rs.getString(i + 2));
-                            v4.addElement(rs.getString(i + 3));
-                            v5.addElement(rs.getString(i + 4));
-                            durchlauf = durchlauf + 1;
-                        }
-                    } else { // ADS
-                        for (i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
-                            v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
-                            v3.addElement(rs.getString(i + 2));
-                            v4.addElement(rs.getString(i + 3));
-                            v5.addElement(rs.getString(i + 4));
-                            durchlauf = durchlauf + 1;
-                        }
-                    }
-
-                    v6.addElement(rs.getString(226)); // Anzahl
-                    v6.addElement(rs.getString(227)); // Art
-                    v6.addElement(rs.getString(228)); // Behandler
-                    v6.addElement(rs.getString(229)); // MEMO
-                    v6.addElement(rs.getString(230)); // Datum
-
-                    aKalList.add(v1.clone());
-                    aKalList.add(v2.clone());
-                    aKalList.add(v3.clone());
-                    aKalList.add(v4.clone());
-                    aKalList.add(v5.clone());
-                    aKalList.add(v6.clone());
-                    aMaskenDaten.add(aKalList.clone());
-                    aKalList.clear();
-                    aktbehandler++;
+                for (i = 1; i < ende; i = i + 5) {
+                    int durchlauf1 = durchlauf;
+                    v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
+                    v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
+                    v3.addElement(rs.getString(i + 2));
+                    v4.addElement(rs.getString(i + 3));
+                    v5.addElement(rs.getString(i + 4));
+                    durchlauf1 = durchlauf1 + 1;
                 }
-                SysUtilKalenderanlegen.vecMasken.add(aMaskenDaten.clone());
-                // aSpaltenDaten.add(aKalList.clone());
 
-                if (maxblock > 0) {
-                    // datenZeichnen(aSpaltenDaten);
-                    // TerminFenster.rechneMaske();
-                    //// System.out.println("Anzahl Tage =
-                    // "+SysUtilKalenderanlegen.aMaskenDaten.size());
-                    //// System.out.println("Inhalt = "+SysUtilKalenderanlegen.aMaskenDaten);
-                }
-            } catch (SQLException ex) {
-                // System.out.println("von ResultSet SQLState: " + ex.getSQLState());
-                // System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());
-                // System.out.println("ErrorCode: " + ex.getErrorCode ());
-                // System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
+                v6.addElement(rs.getString(226)); // Anzahl
+                v6.addElement(rs.getString(227)); // Art
+                v6.addElement(rs.getString(228)); // Behandler
+                v6.addElement(rs.getString(229)); // MEMO
+                v6.addElement(rs.getString(230)); // Datum
+
+                aKalList.add(v1.clone());
+                aKalList.add(v2.clone());
+                aKalList.add(v3.clone());
+                aKalList.add(v4.clone());
+                aKalList.add(v5.clone());
+                aKalList.add(v6.clone());
+                aMaskenDaten.add(aKalList.clone());
+                aKalList.clear();
+                aktbehandler++;
             }
+            SysUtilKalenderanlegen.vecMasken.add(aMaskenDaten.clone());
 
         } catch (SQLException ex) {
-            // System.out.println("von stmt -SQLState: " + ex.getSQLState());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            logger.error("", ex);
         }
     }
 }
 
-/******************************/
 class TesteKalender {
     TesteKalender(String sstmt) {
 
-        Statement stmt = null;
-        ResultSet rs = null;
         int tage = 0;
 
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                rs = stmt.executeQuery(sstmt);
-                if (rs.next()) {
-                    tage = rs.getInt(1);
-                    if (tage != (SysUtilKalenderanlegen.kalTage * 60)) {
-                        JOptionPane.showMessageDialog(null,
-                                "Fehler!!!!! ---- Der Kalender wurde unvollständig angelegt!\n\n"
-                                        + "Zur Sicherheit wird der fehlerhafte Kalender wieder gelöscht\n\n"
-                                        + "Stellen Sie bei einem neuen Versuch die Einstellung\n"
-                                        + "'Art der Netzwerkverbindung' auf -> DSL");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Kalender wurde perfekt angelegt");
-                    }
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+
+                ResultSet rs = stmt.executeQuery(sstmt);) {
+            if (rs.next()) {
+                tage = rs.getInt(1);
+                if (tage != (SysUtilKalenderanlegen.kalTage * 60)) {
+                    JOptionPane.showMessageDialog(null,
+                            "Fehler!!!!! ---- Der Kalender wurde unvollständig angelegt!\n\n"
+                                    + "Zur Sicherheit wird der fehlerhafte Kalender wieder gelöscht\n\n"
+                                    + "Stellen Sie bei einem neuen Versuch die Einstellung\n"
+                                    + "'Art der Netzwerkverbindung' auf -> DSL");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Kalender wurde perfekt angelegt");
                 }
-            } catch (SQLException ex) {
-                // System.out.println("von ResultSet SQLState: " + ex.getSQLState());
-                // System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());
-                // System.out.println("ErrorCode: " + ex.getErrorCode ());
-                // System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
             }
 
         } catch (SQLException ex) {
             // System.out.println("von stmt -SQLState: " + ex.getSQLState());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
         }
     }
 }

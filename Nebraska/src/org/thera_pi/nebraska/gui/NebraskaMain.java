@@ -65,50 +65,7 @@ public class NebraskaMain {
         }
         Verschluesseln man = Verschluesseln.getInstance();
 
-        if (args.length > 0) {
-            try {
-                INIFile ini = new INIFile(INI_FILE);
-                int anzahl = ini.getIntegerProperty("KeyStores", "KeyStoreAnzahl");
-                Vector<String> dummy = new Vector<String>();
-                boolean speichern = false;
-                for (int i = 0; i < anzahl; i++) {
-
-                    String pw = "";
-                    pw = ini.getStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1));
-                    if (pw.length() <= 6) {
-                        ini.setStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1), man.encrypt(pw),
-                                null);
-                        pw = ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1));
-                        ini.setStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1), man.encrypt(pw),
-                                null);
-                        speichern = true;
-                    }
-
-                    dummy.clear();
-                    dummy.trimToSize();
-                    dummy.add(ini.getStringProperty("KeyStores", "KeyStoreFile" + Integer.toString(i + 1)));
-                    dummy.add(man.decrypt(ini.getStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1))));
-                    dummy.add(ini.getStringProperty("KeyStores", "KeyStoreAlias" + Integer.toString(i + 1)));
-                    dummy.add(
-                            man.decrypt(ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1))));
-                    keyStoreParameter.add((Vector<String>) dummy.clone());
-                }
-                if (speichern) {
-                    ini.save();
-                }
-
-                ini = new INIFile(progHome + "/ini/" + args[0] + "/rehajava.ini");
-                OPENOFFICE_HOME = ini.getStringProperty("OpenOffice.org", "OfficePfad");
-                OPENOFFICE_JARS = ini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-
-                therapiIK = String.valueOf(args[0]);
-                INITool.init(progHome + "/ini/" + therapiIK + "/");
-                System.out.println("Öffne mit Parameter " + therapiIK);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-
-        } else {
+        if (args.length <= 0) {
             int frage = JOptionPane.showConfirmDialog(null,
                     "Falls Sie einen Zertifikatsrequest für die ITSG erzeugen wollen,\n"
                             + "muß Nebraska über Thera-Pi gestartet werden!\n\n"
@@ -155,6 +112,49 @@ public class NebraskaMain {
             OPENOFFICE_HOME = ini.getStringProperty("Pfade", "OPENOFFICE_HOME");
             OPENOFFICE_JARS = ini.getStringProperty("Pfade", "OPENOFFICE_JARS");
             // ini.save();
+        } else {
+            try {
+                INIFile ini = new INIFile(INI_FILE);
+                int anzahl = ini.getIntegerProperty("KeyStores", "KeyStoreAnzahl");
+                Vector<String> dummy = new Vector<String>();
+                boolean speichern = false;
+                for (int i = 0; i < anzahl; i++) {
+
+                    String pw = "";
+                    pw = ini.getStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1));
+                    if (pw.length() <= 6) {
+                        ini.setStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1), man.encrypt(pw),
+                                null);
+                        pw = ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1));
+                        ini.setStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1), man.encrypt(pw),
+                                null);
+                        speichern = true;
+                    }
+
+                    dummy.clear();
+                    dummy.trimToSize();
+                    dummy.add(ini.getStringProperty("KeyStores", "KeyStoreFile" + Integer.toString(i + 1)));
+                    dummy.add(man.decrypt(ini.getStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1))));
+                    dummy.add(ini.getStringProperty("KeyStores", "KeyStoreAlias" + Integer.toString(i + 1)));
+                    dummy.add(
+                            man.decrypt(ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1))));
+                    keyStoreParameter.add((Vector<String>) dummy.clone());
+                }
+                if (speichern) {
+                    ini.save();
+                }
+
+                ini = new INIFile(progHome + "/ini/" + args[0] + "/rehajava.ini");
+                OPENOFFICE_HOME = ini.getStringProperty("OpenOffice.org", "OfficePfad");
+                OPENOFFICE_JARS = ini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+
+                therapiIK = String.valueOf(args[0]);
+                INITool.init(progHome + "/ini/" + therapiIK + "/");
+                System.out.println("Öffne mit Parameter " + therapiIK);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
         }
 
         NebraskaMain nebMain = new NebraskaMain();
@@ -170,7 +170,7 @@ public class NebraskaMain {
         jtbo = new NebraskaJTabbedPaneOrganizer();
         jf.setContentPane(jtbo);
         jtbo.setHeader(0);
-        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jf.pack();
         jtbo.erstTest();
         jf.setVisible(true);

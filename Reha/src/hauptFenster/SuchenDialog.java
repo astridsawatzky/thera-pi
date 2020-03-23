@@ -51,6 +51,7 @@ import suchen.PatMitAbgebrochenenVOs;
 import suchen.PatMitVollenVOs;
 import suchen.PatWithMatchingVo;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.config.Datenbank;
 
 public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 
@@ -223,7 +224,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
               buttonPane.add(getJButton());
               jContent.add(buttonPane, BorderLayout.SOUTH);
             } else {
-               jContent.add(getJButton(), BorderLayout.SOUTH);                    
+               jContent.add(getJButton(), BorderLayout.SOUTH);
            }
             JXPanel jp1 = new JXPanel(new FlowLayout());
             jp1.setBorder(null);
@@ -238,7 +239,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             } else if (suchart == toolBar.getAbgebrVoIdx()) {
                 jlb.setText("<html>Patienten mit <b>abgebrochenen</b> Rezepten </html>");
             } else {
-                jlb.setText("Patient suchen: ");                
+                jlb.setText("Patient suchen: ");
                 jtext.setPreferredSize(new Dimension(100, 20));
             }
             jp1.add(jlb);
@@ -317,7 +318,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             Dimension dim = SuchenDialog.this.getSize();
             int minWidth = 90 * reiheVector.size();
             dim.width = minWidth;
-            this.setSize(dim);                
+            this.setSize(dim);
             jtable = new JXTable(tblDataModel);
             this.jtable.getColumnModel()
                        .getColumn(0)
@@ -355,7 +356,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                         e.consume();
                         setVisible(false);
                     }
-                    if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) { 
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_UP) {
                         // sucheAbfeuern();
                     }
                     if (e.getKeyCode() == KeyEvent.VK_F && e.isAltDown()) { // [ALT]-[F]
@@ -780,14 +781,14 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
         DefaultTableModel tblDataModel;
 
         public String ADS_Date() {
-            if (!SystemConfig.vDatenBank.get(0)
-                                        .get(2)
-                                        .equals("ADS")) {
-                return "DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren";
-            } else { // ADS
+            if ("ADS".equals(new Datenbank().typ())) {
                 return "geboren";
+            } else {
+                return "DATE_FORMAT(geboren,'%d.%m.%Y') AS geboren";
             }
         }
+
+
 
         /**
          * Erzeugt für jeden, im Suchstring gefundenen, Umlaut einen weiteren Suchstring
@@ -874,7 +875,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             String[] suche = { null };
             String select1 = "Select n_name,v_name," + ADS_Date() + ",pat_intern  from pat5 where (";
             String orderResult = ") order by n_name,v_name,geboren";
-            
+
             setCursor(Cursors.wartenCursor);
             Vector<Vector<String>> extErgebnis = null;
 
@@ -894,7 +895,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
                     sstmt = select1 + SucheKlang("n_name", suche[0]) + orderResult;
                 }
 
-            } else if (suchart == toolBar.getPatIdIdx()) { // "Patienten-ID" 
+            } else if (suchart == toolBar.getPatIdIdx()) { // "Patienten-ID"
                 sstmt = select1 + "pat_intern = '" + suche[0] + "') LIMIT 1";
             } else if (suchart == toolBar.getVnNnIdx()) { // "Vorname Name" (Erweiterung von Drud) + Umlaut-Suche (McM)
 
@@ -930,7 +931,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
 //                        + "WHERE f.rez_nr IS NULL ORDER BY v.behandler, v.rez_nr";
                 PatMitVollenVOs treffer = new PatMitVollenVOs(new IK(Reha.getAktIK()));
                 extErgebnis = treffer.getPatList();
-            } else if (suchart == toolBar.getAbgebrVoIdx()) { // Patienten mit abgebrochenen Rezepten (® by MSc) 
+            } else if (suchart == toolBar.getAbgebrVoIdx()) { // Patienten mit abgebrochenen Rezepten (® by MSc)
 //                sstmt = "(SELECT p.n_name, p.v_name, DATE_FORMAT(p.geboren,'%d.%m.%Y') AS geboren, v.pat_intern, v.rez_nr, "
 //                        +   "str_to_date(substring(v.termine FROM (character_length(v.termine)-10)),'%Y-%m-%d') AS LetzteBehandlung, "
 //                        +   "substring(substring(right(v.termine,length(v.termine)/ (length(v.termine)-length(replace(v.termine,'\n','')))),"

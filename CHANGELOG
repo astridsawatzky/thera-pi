@@ -1,15 +1,39 @@
-﻿# Changelog
+# Changelog
 Alle nennenswerten Änderungen werden in dieser Datei dokumentitert.
 
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 
 ## unveröffentlicht
+### added
+Patientenfenster:
+- Bild kann jetzt von Festplatte geladen werden
+
+## [1.1.4] - 2020-03-18
+### added
 Patientenfenster:
 - nur 1 Suchkriterium für Tel (sucht in allen 3 Spalten)
 - Suche nach vollen und abgebrochenen VOs möglich
 Abrechnung $302:
 - InfoDialog (F1) markiert volle/abgebrochene VOs farbig
+### changed
+Abrechnung $302:
+- Verschlüsselung mit 4096bit Schlüssellänge + Signatur mit RSASSA-PSS #315
+- Datenaustausch 302 TA1 Version 13 #250
+- neue Vorlagen für Zertifikatsantrag
+- im Info-Dialog ([F1] im Kassenbaum) sind links auf volle und abgebrochene VOs farbig markiert
+ICD10-Recherche:
+- Layout geändert
+### fixed
+Patientenfenster:
+- Korrekturfax (HMR-Tool) kann wieder in Patientenakte vermerkt werden #309
+- HMR-Check für Podo-VOs ist wieder auf Stand der v1.0  #56, #314
+- doppelt angezeigte LANR behoben #313
+OpRgAf:
+- Tastenkombination Alt + A funktioniert nicht bei RGR/AFR #330
+- in VR können die Beträge editiert (also auch 0 gesetzt) werden
+Abrechnung $302:
+- im Kassenbaum werden die aktuellen Kassennamen angezeigt #302
 
 
 ## [1.1.3] - 2019-12-05

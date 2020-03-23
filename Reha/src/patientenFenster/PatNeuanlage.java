@@ -20,6 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +36,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -42,6 +44,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 import org.jdesktop.swingx.JXDialog;
@@ -84,6 +87,7 @@ import openMaps.Distance;
 import rechteTools.Rechte;
 import stammDatenTools.ArztTools;
 import stammDatenTools.ZuzahlTools;
+import sun.awt.image.ToolkitImage;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
 
@@ -97,7 +101,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
     *
     */
 
-    // private JXPanel Tab1 = null;
     public JRtaTextField[] jtf = { null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
             null, null, null, null, null }; // ,null,null,
@@ -585,16 +588,10 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                         + "Eventuell ändert sich dadurch der Zuzahlungsstatus vorhandener Rezepte. Bitte prüfen!!!");
             }
 
-            int zzregel = -1;
             boolean doof = false;
             if (!(freizumstart == freibeimspeichern)) {
-                if (((zzregel = ZuzahlTools.getZuzahlRegel(jtf[34].getText()
+                if (((ZuzahlTools.getZuzahlRegel(jtf[34].getText()
                                                                   .trim())) <= 0)) {
-                    // System.out.println("Zuzahlregel = "+zzregel+" Kassen-ID =
-                    // "+jtf[34].getText().trim());
-                    // if ( ((zzregel =
-                    // ZuzahlTools.getZuzahlRegel(jtf[34].getText().trim())) <=
-                    // 0) && freibeimspeichern){
                     JOptionPane.showMessageDialog(null,
                             "Sie haben einen Kostenträger gwählt der keine Zuzahlung verlangt und\n"
                                     + "jetzt wollen Sie im Feld Zuzahlungsbefreiung rummurksen???????\n\nNa ja.....");
@@ -625,33 +622,26 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                                                                                               .trim());
                         }
                     }
-                } else {
-                    // //System.out.println("Doof = true and zzregel = "+zzregel);
                 }
-
             }
         } else {
-            // Angelegt von aufgenommen werden
-            // int neuid = SqlInfo.holeId("pat5", "n_name");
-            patintern = SqlInfo.erzeugeNummer("pat"); // neuid+Reha.instance.patiddiff;
+            patintern = SqlInfo.erzeugeNummer("pat");
             if (patintern < 0) {
                 JOptionPane.showMessageDialog(null,
                         "Fehler beim Bezug einer neuen Patientennummer\nNeustart des Programmes vermutlich erforderlich");
                 return;
             }
-            globPat_intern = Integer.toString(patintern); // Integer.valueOf(patintern).toString();
+            globPat_intern = Integer.toString(patintern);
             buf.append(",anl_datum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' ");
-            buf.append(",pat_intern='" + globPat_intern + "'"); // where
-                                                                // id='"+Integer.valueOf(neuid).toString()+"'");
+            buf.append(",pat_intern='" + globPat_intern + "'");
             spatintern = Integer.toString(patintern);
         }
         SqlInfo.sqlAusfuehren(buf.toString());
-        // new ExUndHop().setzeStatement(buf.toString());
         if (updateBild) {
             new SwingWorker<Void, Void>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    speichernPatBild((((inNeu) || (!startMitBild)) ? true : false), (ImageIcon) lblbild.getIcon(),
+                    speichernPatBild((inNeu || !startMitBild), (ImageIcon) lblbild.getIcon(),
                             globPat_intern);
                     return null;
                 }
@@ -665,7 +655,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                         .getParent()
                         .getParent()
                         .getParent()).setVisible(false);
-        // final PatNeuanlage xthis = this;
 
         String rez_num = "";
         if (AktuelleRezepte.tabaktrez.getRowCount() > 0) {
@@ -685,9 +674,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                                       .arztListeSpeichernVector((Vector<?>) docmod.getDataVector()
                                                                                   .clone(),
                                               inNeu, String.valueOf(globPat_intern));
-                // new
-                // ArztListeSpeichern((Vector)docmod.getDataVector().clone(),inNeu,globPat_intern);
-                // System.out.println("Es wirde die ArztListe gespeichert.....");
                 finalise();
                 ((JXDialog) getInstance().getParent()
                                          .getParent()
@@ -709,7 +695,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     private JXPanel getButtonPanel() {
         JXPanel but = new JXPanel(new BorderLayout());
-        // but.add(new JLabel("Hier ist Raum f�r Buttons"));
         but.setOpaque(false);
         but.setDoubleBuffered(true);
 
@@ -720,9 +705,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         chipButton.setName("einlesen");
         chipButton.addKeyListener(this);
         chipButton.setMnemonic(KeyEvent.VK_C);
-        // if(SystemConfig.sReaderAktiv.equals("0")){
         chipButton.setEnabled(true);
-        // }
 
         speichernButton = new JButton("speichern");
         speichernButton.setPreferredSize(new Dimension(70, 20));
@@ -795,7 +778,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
     private JXPanel getDatenPanel12() {
 
         JXPanel pat12 = new JXPanel(new BorderLayout());
-        // but.setBorder(null);
         pat12.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         pat12.setOpaque(false);
         pat12.setDoubleBuffered(true);
@@ -805,8 +787,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         jtf[12].addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent arg0) {
-                // //System.out.println("code = "+arg0.getKeyCode());
-                // //System.out.println("char = "+arg0.getKeyChar());
                 if (arg0.getKeyChar() == '?') {
                     String suchkrit = jtf[12].getText()
                                              .replaceAll("\\?", "");
@@ -824,7 +804,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         jtf[14] = new JRtaTextField("GROSS", true);
         jtf[14].setName("v_nummer");
 
-        // jtf[15] = new JRtaTextField("ZAHLEN", true);
         jtf[15] = new JRtaTextField("GROSS", true);
         jtf[15].setName("kv_status");
 
@@ -990,7 +969,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     private JXPanel getDatenPanel21() {
         JXPanel pat21 = new JXPanel(new BorderLayout());
-        // but.setBorder(null);
         pat21.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         pat21.setOpaque(false);
         pat21.setDoubleBuffered(true);
@@ -1038,7 +1016,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         jcheck[10].setOpaque(false);
         jcheck[10].setName("vorjahrfrei");
         jcheck[10].setActionCommand("vorjahrfrei");
-        // jcheck[10].setEnabled(false);
         jcheck[10].addActionListener(this);
 
         jcheck[9] = new JRtaCheckBox();
@@ -1118,7 +1095,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     private JXPanel getDatenPanel22() {
         JXPanel pat22 = new JXPanel(new BorderLayout());
-        // but.setBorder(null);
         pat22.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         pat22.setOpaque(false);
         pat22.setDoubleBuffered(true);
@@ -1308,8 +1284,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         pan.add(picAufnehmenButton, cc2.xy(1, 1, CellConstraints.FILL, CellConstraints.DEFAULT));
         pan.add(picBildDateiButton, cc2.xy(3, 1, CellConstraints.FILL, CellConstraints.DEFAULT));
         builder31.add(pan, cc31.xy(3, 5));
-        /****/
-        // builder31.add(pic1, cc31.xy(3,5));
         builder31.addLabel("Bild verwerfen", cc31.xy(4, 5));
         builder31.add(picVerwerfenButton, cc31.xy(6, 5));
         new SwingWorker<Void, Void>() {
@@ -1350,13 +1324,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         return pat31;
     }
 
-    private ImageIcon getPatBild() {
-        return null;
-    }
-
     private JXPanel getDatenPanel32() {
         JXPanel pat32 = new JXPanel(new BorderLayout());
-        // but.setBorder(null);
         pat32.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         pat32.setOpaque(false);
         pat32.setDoubleBuffered(true);
@@ -1394,7 +1363,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     private JXPanel getDatenPanel11() {
         JXPanel pat11 = new JXPanel(new BorderLayout());
-        // but.setBorder(null);
         pat11.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         pat11.setOpaque(false);
         pat11.setDoubleBuffered(true);
@@ -1522,14 +1490,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         builder.getPanel()
                .validate();
         JScrollPane xjscr = JCompTools.getTransparentScrollPane(builder.getPanel());
-        // jscr = new JScrollPane();
-        // jscr.setOpaque(false);
-        // jscr.getViewport().setOpaque(false);
-        // jscr.setBorder(null);
-        // jscr.setViewportBorder(null);
         xjscr.getVerticalScrollBar()
              .setUnitIncrement(15);
-        // jscr.setViewportView(builder.getPanel());
 
         xjscr.validate();
         xjscr.addKeyListener(this);
@@ -1551,7 +1513,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         if (this.inNeu) {
             return;
         }
-        // System.out.println("in doArztListe");
         String aerzte = Reha.instance.patpanel.patDaten.get(63);
         String[] einzelarzt = null;
         String[] arztdaten = null;
@@ -1559,11 +1520,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         if (!aerzte.trim()
                    .equals("")) {
             einzelarzt = aerzte.split("\n");
-            // System.out.println("Anzahl Ärzte = "+einzelarzt.length);
             for (int i = 0; i < einzelarzt.length; i++) {
                 arztdaten = einzelarzt[i].split("@");
-                // docmod.setColumnIdentifiers(new String[]
-                // {"LANR","Nachname","Strasse","Ort","BSNR",""});
                 arztvec = SqlInfo.holeFelder("select arztnum,nachname,strasse,ort,bsnr,id  from arzt where id='"
                         + arztdaten[1] + "' LIMIT 1");
                 if (arztvec.size() > 0) {
@@ -1618,11 +1576,8 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             kvkr.setVisible(true);
             setzeFocus();
             kvkr = null;
-            // cbanrede.requestFocus();
         } else {
             String fehlertext = "Fehler beim einlesen der Versichertenkarte.\nBitte erneut einlesen\n\n";
-            // "Fehler-Code: "+SystemConfig.hmKVKDaten.get("Fehlercode")+"\n"+
-            // "Fehler-Text: "+SystemConfig.hmKVKDaten.get("Fehlertext")+"\n";
             JOptionPane.showMessageDialog(null, fehlertext);
         }
     }
@@ -1644,10 +1599,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             schreibeInDb();
             break;
         case "abbrechen":
-            // Lemmi 20110103: Verhinderung von Datenverlust bei
-            // unbeabsichtigtem Zumachen des geänderten Patientent-Dialoges
-            // if ( HasChanged() && askForCancelUsaved() == 1 )
-            // return;
             finalise();
             ((JXDialog) this.getParent()
                             .getParent()
@@ -1669,7 +1620,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         case "u18ignore":
             break;
         case "vorjahrfrei":
-            // System.out.println("in checkBox Vorjahrfrei");
             if (jcheck[10].isSelected()) {
                 jtf[35].setText("");
             } else {
@@ -1706,7 +1656,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             foto = null;
             return;
         case "addjpg":
-            JOptionPane.showMessageDialog(null, "Aufnahme von fertigen Bilddateien (noch) nicht implementiert");
+            bildLaden();
             break;
         case "route":
             calcKilometer();
@@ -1715,10 +1665,30 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     }
 
+    private void bildLaden() {
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("*.jpg", "jpg"));
+        if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                BufferedImage result = ImageIO.read(new File(file.getAbsolutePath()));
+
+                ImageIcon img = new ImageIcon(result);
+                img = new ImageIcon(img.getImage()
+                                       .getScaledInstance(175, 220, Image.SCALE_SMOOTH));
+                setNewPic(img);
+            } catch (IOException ex) {
+                System.out.println("Failed to save image!");
+            }
+        } else {
+            System.out.println("No file choosen!");
+        }
+    }
+
     @Override
     public void keyPressed(KeyEvent arg0) {
 
-        // //System.out.println("Neuanlage Pressed "+arg0.getKeyCode());
         if (arg0.getKeyCode() == KeyEvent.VK_ENTER || arg0.getKeyCode() == KeyEvent.VK_UNDEFINED) {
             arg0.consume();
             try {
@@ -1734,12 +1704,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                 }
                 if (((JComponent) arg0.getSource()).getName()
                                                    .equals("abbrechen")) {
-
-                    // Lemmi 20110103: Verhinderung von Datenverlust bei
-                    // unbeabsichtigtem Zumachen des geänderten
-                    // Patientent-Dialoges
-                    // if ( HasChanged() && askForCancelUsaved() == 1 )
-                    // return;
 
                     ((JXDialog) this.getParent()
                                     .getParent()
@@ -1761,11 +1725,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         }
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
 
-            // Lemmi 20110103: Verhinderung von Datenverlust bei
-            // unbeabsichtigtem Zumachen des geänderten Patientent-Dialoges
-            // if ( HasChanged() && askForCancelUsaved() == 1 )
-            // return;
-
             ((JXDialog) this.getParent()
                             .getParent()
                             .getParent()
@@ -1784,7 +1743,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
     @Override
     public void keyReleased(KeyEvent arg0) {
 
-        // //System.out.println("Neuanlage Released "+arg0);
         if (arg0.getKeyCode() == KeyEvent.VK_ENTER || arg0.getKeyCode() == KeyEvent.VK_UNDEFINED)
             arg0.consume();
     }
@@ -1792,7 +1750,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
     @Override
     public void keyTyped(KeyEvent arg0) {
 
-        // //System.out.println("Neuanlage Typed "+arg0);
         if (arg0.getKeyCode() == KeyEvent.VK_ENTER || arg0.getKeyCode() == KeyEvent.VK_UNDEFINED)
             arg0.consume();
     }
@@ -1800,21 +1757,10 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
     @Override
     public void focusGained(FocusEvent arg0) {
 
-        /*
-         * Rectangle rec1 =((JComponent)arg0.getSource()).getBounds(); Rectangle rec2 =
-         * jscr.getViewport().getViewRect(); JViewport vp = jscr.getViewport();
-         * Rectangle rec3 = vp.getVisibleRect();
-         * if((rec1.y+((JComponent)arg0.getSource()).getHeight()) >
-         * (rec2.y+rec2.height)){ vp.setViewPosition(new
-         * Point(rec1.x,(rec2.y+rec2.height)-rec1.height)); } if(rec1.y < (rec2.y)){
-         * vp.setViewPosition(new Point(rec1.x,rec1.y)); } jscr.validate();
-         * jscr.repaint();
-         */
         if (((JComponent) arg0.getSource()).getName() != null) {
             if (((JComponent) arg0.getSource()).getName()
                                                .equals("arzt")) {
                 if (testObDialog(jtf[17].getText())) {
-                    // System.out.println("Arzt-Dialog erforderlich");
                     String[] suchenach = null;
                     if (jtf[17].getText()
                                .trim()
@@ -1832,7 +1778,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             } else if (((JComponent) arg0.getSource()).getName()
                                                       .equals("kasse")) {
                 if (testObDialog(jtf[12].getText())) {
-                    // System.out.println("Kassen-Dialog erforderlich");
                     String[] suchenach = null;
                     if (jtf[12].getText()
                                .trim()
@@ -1853,9 +1798,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     @Override
     public void focusLost(FocusEvent arg0) {
-        if (((JComponent) arg0.getSource()).getName() != null) {
-            // System.out.println(((JComponent)arg0.getSource()).getName());
-        }
 
     }
 
@@ -1873,8 +1815,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    // System.out.println("Beginne ArztOrganisation mit Arzt ID
-                    // ="+jtf[33].getText());
                     aerzteOrganisieren(jtf[33].getText(), inNeu, docmod, doclist, true);
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -1938,7 +1878,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        // System.out.println("Beginne ArztOrganisation mit Arzt ID ="+xtf.getText());
                         aerzteOrganisieren(xtf.getText(), inNeu, docmod, doclist, false);
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -1954,7 +1893,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         int row = doclist.getSelectedRow();
         if (row >= 0) {
             formulareAuswerten(klick);
-            // ProgLoader.ArztFenster(0,(String)doclist.getValueAt(row,5) );
         }
 
     }
@@ -1966,7 +1904,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                 try {
                     INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                             "arzt.ini");
-                    // + Reha.aktIK + "/arzt.ini");
                     int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
                     for (int i = 1; i <= forms; i++) {
                         titel.add(inif.getStringProperty("Formulare", "AFormularText" + i));
@@ -2008,8 +1945,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                 }.execute();
 
             }
-
-            // System.out.println("Es wurde Formular "+iformular+" gew�hlt");
 
         } else {
             String mes = "Wenn man eine Kasse anschreiben möchte, empfiehlt es sich\n"
@@ -2058,8 +1993,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                     // System.out.println("Ändern Pat. Arzt bereits in der Liste enthalten");
                 }
             }
-        } else { // funktion wurde �ber Rezept aufgerufen
-
         }
     }
 
@@ -2095,62 +2028,35 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                   .length() == 0) {
             return false;
         }
-        if (string.substring(0, 1)
-                  .equals("?")) {
+        if ("?".equals(string.substring(0, 1))) {
             return true;
         }
         return false;
     }
 
     private void speichernPatBild(boolean neu, ImageIcon ico, String pat_intern) {
-        PreparedStatement ps = null;
 
-        try {
-            if (neu) {
-                String select = "Insert into patbild set bild = ? , pat_intern = ?, vorschau = ?";
-                ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
-                ps.setBytes(1, JpegWriter.bufferedImageToByteArray((BufferedImage) ico.getImage()));
-                ps.setString(2, pat_intern);
-                BufferedImage buf = new BufferedImage(35, 40, BufferedImage.TYPE_INT_RGB);
-                Graphics2D g = buf.createGraphics();
-                g.drawImage(ico.getImage()
-                               .getScaledInstance(35, 44, Image.SCALE_SMOOTH),
-                        null, null);
-                g.dispose();
-                ps.setBytes(3, JpegWriter.bufferedImageToByteArray(buf));
-                ps.execute();
-                buf = null;
-            } else {
-                String select = "Update patbild set bild = ? , vorschau = ?  where pat_intern = ?";
-                ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
-                ps.setBytes(1, JpegWriter.bufferedImageToByteArray((BufferedImage) ico.getImage()));
-                BufferedImage buf = new BufferedImage(35, 44, BufferedImage.TYPE_INT_RGB);
-                Graphics2D g = buf.createGraphics();
-                g.drawImage(ico.getImage()
-                               .getScaledInstance(35, 44, Image.SCALE_SMOOTH),
-                        null, null);
-                g.dispose();
-                ps.setBytes(2, JpegWriter.bufferedImageToByteArray(buf));
-                ps.setString(3, pat_intern);
-                ps.execute();
-                buf = null;
-            }
+        String sqlString;
+        if (neu) {
+            sqlString = "Insert into patbild set bild = ? , vorschau = ? , pat_intern = ?";
+        } else {
+            sqlString = "Update patbild set bild = ? , vorschau = ?  where pat_intern = ?";
+        }
+        try (PreparedStatement ps = (PreparedStatement) Reha.instance.conn.prepareStatement(sqlString);) {
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException sqlEx) {
-                    ps = null;
-                }
-            }
+            ps.setBytes(1, JpegWriter.bufferedImageToByteArray(((ToolkitImage) ico.getImage()).getBufferedImage()));
+            BufferedImage buf = new BufferedImage(35, 44, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = buf.createGraphics();
+            g.drawImage(ico.getImage()
+                           .getScaledInstance(35, 44, Image.SCALE_SMOOTH),
+                    null, null);
+            g.dispose();
+            ps.setBytes(2, JpegWriter.bufferedImageToByteArray(buf));
+            ps.setString(3, pat_intern);
+            ps.execute();
+            buf = null;
+        } catch (SQLException | IOException e) {
+            logger.error("Fehler beim Speichern des Patientenbilds", e);
         }
     }
 
@@ -2307,55 +2213,6 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
 
     }
 
-    /*
-     * MARIE-CURIE-STR.1,72760,REUTLINGEN THEODOR-FONTANE-STR.%204,72760,REUTLINGEN
-     *
-     * Lemmi ToDo: Den intransparente Handhabung mit jtf[0] und Anrede prüfen !!! //
-     * Lemmi 20110103: Merken der Originalwerte der eingelesenen Textfelder //
-     * ACHTUNG: Die Reihenfolge der Abfragen muß in SaveChangeStatus() und
-     * HasChanged() exakt identisch sein ! private void SaveChangeStatus(){ int i;
-     * originale.clear(); // vorherige Merkung wegwerfen
-     *
-     * // Alle Text-Eingabefelder for ( i = 0; i < jtf.length; i++ ) { //String
-     * strText = jtf[i].getText(); originale.add( jtf[i].getText() ); }
-     *
-     * // Einzelne Text-Felder // originale.add( jta.getText() );
-     *
-     * // alle ComboBoxen originale.add( (Integer)cbanrede.getSelectedIndex() );
-     *
-     * // alle CheckBoxen for ( i = 0; i < jcheck.length; i++ ) { originale.add(
-     * (Boolean)(jcheck[i].isSelected() ) ); // } }
-     *
-     * // Lemmi 20110103: prüft, ob sich Einträge geändert haben // ACHTUNG: Die
-     * Reihenfolge der Abfragen muß in SaveChangeStatus() und HasChanged() exakt
-     * identisch sein ! public Boolean HasChanged() { int i, idx = 0;
-     *
-     * // Alle Text-Eingabefelder for ( i = 0; i < jtf.length; i++) { String strTex1
-     * = ">" + jtf[i].getText() + "<    >" + originale.get(idx++) + "<"; if(!
-     * jtf[i].getText().equals( originale.get(idx++) ) ) return true; }
-     *
-     * // Einzelne Textfelder // if(! jta.getText().equals( originale.get(idx++) ) )
-     * // return true;
-     *
-     * // alle ComboBoxen if( cbanrede.getSelectedIndex() !=
-     * (Integer)originale.get(idx++) ) // Art d. Verordn. etc. return true;
-     *
-     * // alle CheckBoxen for ( i = 0; i < jcheck.length; i++) { // CheckBoxen if(
-     * jcheck[i].isSelected() != (Boolean)originale.get(idx++) ) // Begründung außer
-     * der Regel vorhanden ? ..... return true; }
-     *
-     * return false; }
-     *
-     * // Lemmi 20110103: Stndard-Abfrage nach Prüfung, ob sich Einträge geändert
-     * haben // fragt nach, ob wirklich ungesichert abgebrochen werden soll ! public
-     * int askForCancelUsaved(){ String[] strOptions = {"ja", "nein"}; //
-     * Defaultwert euf "nein" gesetzt ! return JOptionPane.showOptionDialog(null,
-     * "Es wurden Patienten-Anngaben geändert!\nWollen sie die Änderung(en) wirklich verwerfen?"
-     * , "Angaben wurden geändert", JOptionPane.YES_NO_OPTION,
-     * JOptionPane.QUESTION_MESSAGE, null, strOptions, strOptions[1] ); }
-     *
-     * }
-     */
 }
 
 class ArztListeSpeichern {

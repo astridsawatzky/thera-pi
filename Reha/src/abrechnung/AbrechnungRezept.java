@@ -11,11 +11,11 @@ import java.awt.PointerInfo;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -64,8 +64,6 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.TableCellEditor;
@@ -86,6 +84,8 @@ import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
 import org.jdesktop.swingx.treetable.MutableTreeTableNode;
 import org.jdesktop.swingx.treetable.TreeTableModel;
 import org.jdesktop.swingx.treetable.TreeTableNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 import org.therapi.reha.patient.Historie;
 
@@ -128,8 +128,7 @@ import systemTools.ListenerTools;
  * @author Admin
  *
  */
-public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener, MouseListener,
-        PopupMenuListener, PropertyChangeListener, ComponentListener {
+public class AbrechnungRezept extends JXPanel implements HyperlinkListener, ActionListener {
     /**
      *
      */
@@ -286,6 +285,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     private String currBerichtId = "";
     boolean kannAbhaken = false;
     private Connection connection;
+    private static final Logger logger = LoggerFactory.getLogger(AbrechnungRezept.class);
 
     public AbrechnungRezept(AbrechnungGKV xeltern, Connection conn) {
         this.connection = conn;
@@ -318,7 +318,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 }
             }
         });
-        tmp.addComponentListener(this);
+        tmp.addComponentListener(windowResizeHandler);
     }
 
     private JXPanel getSplitPane() {
@@ -329,18 +329,16 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         jSplitOU.setDividerBorderVisible(true);
         jSplitOU.setName("BrowserSplitObenUnten");
         jSplitOU.setOneTouchExpandable(true);
-        // jSplitOU.setDividerLocation(jpan.getHeight());
 
-        jSplitOU.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, this);
+        jSplitOU.addPropertyChangeListener(JSplitPane.DIVIDER_LOCATION_PROPERTY, splitPaneDiverChangeHandler);
 
         jpan.add(getToolbar(), BorderLayout.NORTH);
         jpan.add(jSplitOU, BorderLayout.CENTER);
-        // jpan.addComponentListener(this);
 
         return jpan;
     }
 
-    private void keepDayTreeSize(UIFSplitPane sPane) {
+     void keepDayTreeSize(UIFSplitPane sPane) {
         if (SystemConfig.hmAbrechnung.get("keepTTSize")
                                      .equals("0")) { // Fkt. abgeschaltet?
             return;
@@ -357,19 +355,15 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
      *
      * @author McM 1606
      */
-    @Override
-    public void propertyChange(PropertyChangeEvent pce) {
-        String dummy = pce.getPropertyName();
-        if (pce.getPropertyName() == JSplitPane.DIVIDER_LOCATION_PROPERTY) { // ? lastDividerLocation ?
-            // resize TageTree, passend zur Anzahl der Behandlungstage -> merken für divider
-            // Positionierung (McM)
-            // außer 0 u. jSplitOU.getHeight()-jSplitOU.getDividerSize() (= ganzes Fenster)
-            // System.out.println("Split Pane "+pce.getPropertyName()+":
-            // "+jSplitOU.getDividerLocation()+" von "+jSplitOU.getHeight());
-            keepDayTreeSize(jSplitOU);
-        }
-    }
+     PropertyChangeListener splitPaneDiverChangeHandler = new PropertyChangeListener() {
 
+        @Override
+        public void propertyChange(PropertyChangeEvent pce) {
+            if (pce.getPropertyName() == JSplitPane.DIVIDER_LOCATION_PROPERTY) {
+                 keepDayTreeSize(jSplitOU);
+            }
+    }
+     };
     private JScrollPane getHTMLPanel() {
         htmlPane = new JEditorPane(/* initialURL */);
         htmlPane.setContentType("text/html");
@@ -498,10 +492,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     }
 
     public boolean setNewRez(String rez, boolean schonfertig, String aktDisziplin) {
-//        try{
-//            String dummy1 = rez.split(",")[2];
-//            String dummy2 = dummy1.split("-")[0];
-        ////// System.out.println("Neues Rezept = "+dummy2);
+
         String preisgr = SqlInfo.holeEinzelFeld("select preisgruppe from verordn where rez_nr='" + rez + "' LIMIT 1");
         this.aktDisziplin = aktDisziplin;
         rezeptFertig = schonfertig;
@@ -852,7 +843,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                         + SystemConfig.aktJahr + ")</b></html>");
                 return;
             }
-            if (macheEDIFACT(true)) {
+            if (macheEDIFACT()) {
                 jXTreeTable.setEditable(false);
                 rezeptFertig = true;
                 new SwingWorker<Void, Void>() {
@@ -937,7 +928,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                                 Reha.instance.progressStarten(true);
                                 eltern.abrDlg = new AbrechnungDlg();
                                 eltern.abrDlg.pack();
-                                eltern.abrDlg.setLocationRelativeTo(eltern.getInstance());
+                                eltern.abrDlg.setLocationRelativeTo(eltern);
                                 eltern.abrDlg.setzeLabel("starte Heilmittelabrechnung");
                                 eltern.starteAbrechnung();
                             } catch (NullPointerException ex) {
@@ -4293,51 +4284,12 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
     }
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
 
-    }
 
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-
-    }
-
-    @Override
-    public void popupMenuCanceled(PopupMenuEvent arg0) {
-
-    }
-
-    @Override
-    public void popupMenuWillBecomeInvisible(PopupMenuEvent arg0) {
-        ////// System.out.println("Will become Invisible - "+arg0);
-
-    }
-
-    @Override
-    public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
-        ////// System.out.println("Will become Visible - "+arg0);
-
-    }
 
     /************************************************************************/
 
-    private boolean macheEDIFACT(boolean normal) {
+     boolean macheEDIFACT() {
         boolean ret = true;
         double gesamt = 0.00;
         double rez = 0.00;
@@ -4677,7 +4629,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         edibuf.insert(0, vec_posanzahl.toString() + "\n");
         edibuf.insert(0, vec_pospos.toString() + "\n");
         edibuf.insert(0, kopfzeile);
-        ////// System.out.println(edibuf.toString());
+        logger.debug(edibuf.toString());
         return ret;
     }
 
@@ -4857,13 +4809,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 vecdummy.add(DatFunk.sDatInSQL(datum));
                 vecdummy.add(id);
                 vecdummy.add((boolean) Boolean.valueOf(false));
-                ////// System.out.println(vecdummy);
                 vec_tabelle.add((Vector<Object>) vecdummy.clone());
                 vecdummy.clear();
-                // public AbrFall(String titel,String datum,String bezeichnung,Double
-                // anzahl,Double preis,
-                // boolean zuzahlung,double rezgeb,String unterbrechung,String alterpreis,String
-                // sqldatum,String preisid,boolean niezuzahl){
             }
 
         }
@@ -4885,6 +4832,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         int count = 0;
         Pattern pat = Pattern.compile(Pattern.quote(word));
         Matcher m = pat.matcher(text);
+
         while (m.find()) {
             count++;
         }
@@ -4909,16 +4857,10 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         }
     }
 
-    private void sucheRezept(String rez_nr) {
-        /*
-         * String cmd =
-         * "select * from verordn where rez_nr='"+rez_nr.trim()+"' LIMIT 1";
-         * //////System.out.println("Kommando = "+cmd);
-         * aktRezept.setVecVec_rez(SqlInfo.holeFelder(cmd));
-         * //////System.out.println("RezeptVektor = "+vec_rez);
-         */
+     void sucheRezept(String rez_nr) {
+
         aktRezept.init(rez_nr.trim());
-//        if(aktRezept.getVec_rez().size()<=0){
+
         if (aktRezept.getVecSize() <= 0) {
             System.out.println("AbrechnungRezept->sucheRezept:  Abbruch vec_rez.size = 0");
             System.out.println("RezeptVektor = " + aktRezept.getVec_rez());
@@ -4970,33 +4912,19 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         vec_rez_valid = true;
     }
 
-    // ComponentListener methods (handle window resize) McM 1606
-    @Override
-    public void componentResized(ComponentEvent e) {
-        // String tmp = e.getComponent().getName();
-        // System.out.println("Component "+tmp+" resize detected ");
-        keepDayTreeSize(jSplitOU);
-        jSplitOU.setDividerLocation(tts.getCurrTageTreeSize());
-    }
+    ComponentListener windowResizeHandler = new ComponentAdapter() {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            keepDayTreeSize(jSplitOU);
+            jSplitOU.setDividerLocation(tts.getCurrTageTreeSize());
+        }
 
-    @Override
-    public void componentMoved(ComponentEvent e) {
-        /* empty */}
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-        /* empty */}
-
-    @Override
-    public void componentHidden(ComponentEvent e) {
-        /* empty */}
-
+    };
     public void cleanUp() {
         // Aktionen beim Schließen des Abrechnungsfensters
         cmbkuerzel.removeActionListener(this);
-        jSplitOU.removePropertyChangeListener(this);
+        jSplitOU.removePropertyChangeListener(splitPaneDiverChangeHandler);
         htmlPane.removeHyperlinkListener(this);
-        jXTreeTable.addMouseListener(this);
         writeTTS2ini();
     }
 
@@ -5008,8 +4936,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
     private void writeTTS2ini() {
         if (!SystemConfig.hmAbrechnung.get("TTSizeLocked")
                                       .equals("1")) {
-            // String path2IniFile = TheraPiLocations.getMandantIniPath(null);
-            // INIFile inif = new INIFile (path2IniFile);
             boolean mustsave = false;
             INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "abrechnung.ini");

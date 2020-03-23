@@ -40,7 +40,8 @@ public enum Path {
         switch (currentOS) {
         case WIN:
             String prog = java.lang.System.getProperty("user.dir");
-            setProghome(prog.substring(0, 2) + "/RehaVerwaltung/");
+            String laufwerk = prog.substring(0, 2);
+            setProghome(laufwerk + "/RehaVerwaltung/");
             break;
         case LINUX:
             setProghome("/opt/RehaVerwaltung/");

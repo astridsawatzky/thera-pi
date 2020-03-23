@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -62,11 +62,9 @@ import ag.ion.bion.officelayer.text.TextException;
 import offenePosten.OffenePosten;
 import offenePosten.OffenepostenTab;
 
-public class RehaBillPanel extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener {
+public class RehaBillPanel extends JXPanel implements   TableModelListener {
 
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = -5545910505665721828L;
 
     OffenepostenTab elternTab = null;
@@ -75,7 +73,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
     JRtaCheckBox originalChb = null;
     JRtaCheckBox mittageChb = null;
 
-    KeyListener kl = null;
+
     ActionListener al = null;
 
     MyOffenePostenTableModel tabmod = null;
@@ -88,9 +86,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
     JLabel rnummerAlt = null;
     JLabel rbetragAlt = null;
     JLabel rbetragNeu = null;
-    JLabel rdatumAlt = null;
+
     Double ibetragNeu = Double.parseDouble("0.00");
-    int originalPositionen = -1;
+
     BigDecimal rechnungGesamt = null;
     JButton[] buts = { null, null, null, null };
 
@@ -109,16 +107,21 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
     ITextTable textEndbetrag = null;
     ITextDocument textDocument = null;
     int aktuellePosition = 0;
-    int patKilometer = 0;
 
-    int gkvForm;
+
+
     int ccount = -2;
 
     JCheckBox[] check = { null, null };
 
-    public RehaBillPanel(OffenepostenTab eltern) {
+    private Connection connection;
+
+  //  private OffenePosten offenePosten;
+
+    public RehaBillPanel(OffenepostenTab eltern, Connection connection) {
         super();
         elternTab = eltern;
+        this.connection = connection;
         setLayout(new BorderLayout());
         activateActionListener();
         add(getContent(), BorderLayout.CENTER);
@@ -598,18 +601,11 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         }
     }
 
-    @Override
-    public void valueChanged(ListSelectionEvent arg0) {
-    }
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-
-    }
 
     class MyOffenePostenTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -780,13 +776,9 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         ResultSet rs = null;
 
         try {
-            stmt = OffenePosten.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+            stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
 
-            e.printStackTrace();
-        }
-        try {
 
             rs = stmt.executeQuery(sstmt);
             Vector<Object> vec = new Vector<Object>();
@@ -949,10 +941,10 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                         + "' where r_nummer='" + rnummerAlt.getText()
                                                            .trim()
                         + "' LIMIT 1";
-//				cmd = "update rliste set r_betrag='"+dcf.format(rechnungGesamt).replace(",", ".")+"' where r_nummer='"+
-//				rnummerAlt.getText().trim()+"' LIMIT 1";
-//				System.out.println(cmd);
-//				SqlInfo.sqlAusfuehren(cmd);
+//                cmd = "update rliste set r_betrag='"+dcf.format(rechnungGesamt).replace(",", ".")+"' where r_nummer='"+
+//                rnummerAlt.getText().trim()+"' LIMIT 1";
+//                System.out.println(cmd);
+//                SqlInfo.sqlAusfuehren(cmd);
             }
             tabmod.addTableModelListener(this);
 
@@ -1042,7 +1034,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                                 doGKVWiederholungsdruck(reznr);
                             }
                             if (check[1].isSelected()) {
-                                doBegleitzetteldruck(reznr);
+                                doBegleitzetteldruck(OffenePosten.progHome);
                             }
                             return;
                         } else {
@@ -1223,11 +1215,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
         hmAdresse.put("<pri6>", (originalChb.isSelected() ? tfs[6].getText()
                                                                   .trim()
                 : DatFunk.sHeute()));
-        /*
-         * hmAdresse.put("<pri6>",rnummerAlt.getText() );
-         * hmAdresse.put("<pri8>",(originalChb.isSelected() ? tfs[6].getText().trim() :
-         * DatFunk.sHeute()) );
-         */
         Vector<String> vec = SqlInfo.holeSatz("pat5", "n_name,v_name,geboren",
                 "pat_intern='" + ((String) tabmod.getValueAt(0, 31)) + "'", Arrays.asList(new String[] {}));
         hmAdresse.put("<pri7>", vec.get(0));
@@ -1240,7 +1227,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
                 String langtext = RezTools.getLangtextFromID(Integer.toString(id), preisvec)
                                           .replace("30Min.", "")
                                           .replace("45Min.", "");
-                String preis = RezTools.getPreisAktFromID(Integer.toString(id), preisvec);
                 originalLangtext.add(langtext);
                 originalAnzahl.add(((Integer) tabmod.getValueAt(i, 11)));
                 einzelPreis.add(((Double) tabmod.getValueAt(i, 12)));
@@ -1256,7 +1242,6 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             System.out.println(einzelPreis);
             System.out.println(gesamtPreis);
             System.out.println(rechnungGesamt);
-            // System.out.println(OffenePosten.hmRechnungPrivat);
             starteDokument(OffenePosten.progHome + "vorlagen/" + OffenePosten.aktIK + "/"
                     + OffenePosten.hmAbrechnung.get("rehadrvformular") + ".Kopie.ott");
             System.out.println(OffenePosten.progHome + "vorlagen/" + OffenePosten.aktIK + "/"
@@ -1274,8 +1259,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
     }
 
-    /*********************************************************************/
-    public void doBegleitzetteldruck(String xreznr) {
+    public void doBegleitzetteldruck(String proghome) {
         String aktrezept = "";
         int rezanzahl = 0;
         int lang = tabmod.getRowCount();
@@ -1310,7 +1294,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
         try {
             new BegleitzettelDrucken(rezanzahl, ik_kostent, name_kostent, hmAdresse, rnummerAlt.getText(),
-                    OffenePosten.progHome + "vorlagen/" + OffenePosten.aktIK + "/"
+                    proghome + "vorlagen/" + OffenePosten.aktIK + "/"
                             + OffenePosten.hmAbrechnung.get("hmgkvbegleitzettel") + ".Kopie.ott");
         } catch (Exception e) {
             e.printStackTrace();
@@ -1453,7 +1437,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
             }
         }
         System.out.println("Mittage bei Aufruf = " + mittageChb.isSelected());
-        druckKopie.setIKundRnr(OffenePosten.aktIK, rnummerAlt.getText(), hmAdresse);
+        druckKopie.setIKundRnr(rnummerAlt.getText(), hmAdresse);
     }
 
     /*********************************************************************/
