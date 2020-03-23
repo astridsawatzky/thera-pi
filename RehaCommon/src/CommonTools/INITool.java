@@ -93,8 +93,7 @@ public class INITool {
         boolean ret = false;
         try {
             if (iniFilesInDatabase.contains(iniToSave.getFileName())) {
-                SqlInfo.schreibeIniInTabelle(iniToSave.getFileName(), iniToSave.saveToString()
-                                                                               .getBytes());
+                SqlInfo.schreibeIniInTabelle(iniToSave.getFileName(), iniToSave.saveToString().getBytes());
             } else {
                 iniToSave.save();
             }
