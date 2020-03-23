@@ -83,7 +83,6 @@ public class ProcessPanel extends JXPanel {
       lastY = 3 + j * 2 + 1;
       pan.add((Component)this.check[j], cc.xy(2, lastY));
     }
-    // j++;
     this.check[j] = new JRtaCheckBox("Tabelle(n) vorher löschen");
     lastY = 3 + j * 2 + 1;
     pan.add((Component)this.check[j], cc.xy(2, lastY));
@@ -164,7 +163,7 @@ public class ProcessPanel extends JXPanel {
     boolean tableDrop = false;
     
     if (this.check[BuildIniTable.thisClass.anzahlmandanten].isSelected()) {
-         System.out.println("Will kill table first");
+         // System.out.println("Will kill table first");
          tableDrop = true;
     }
     
@@ -196,7 +195,6 @@ public class ProcessPanel extends JXPanel {
           String password = man.decrypt(pw);
           setTextArea("Datenbankparameter o.k.");
           Thread.sleep(500L);
-          setTextArea("Checks: " + this.check.length);
           setTextArea("Öffne Datenbank für Mandant : " + (String)BuildIniTable.thisClass.mandantIkvec.get(i));
           testconn = BuildIniTable.thisClass.starteDB(ipanddb, username, password);
           Thread.sleep(500L);
