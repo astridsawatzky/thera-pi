@@ -7,21 +7,19 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -42,28 +40,33 @@ public final class INIFile {
     private static final Logger LOG = LoggerFactory.getLogger(INIFile.class);
 
     /**
-     * Constant field, used as String representation for a boolean <code>true</code>
-     * value.
-     */
-    private static final String INI_FILE_VALUE_STRING_TRUE = "TRUE";
-
-    /**
-     * Constant field, used as String representation for a boolean
-     * <code>false</code> value.
-     */
-    private static final String INI_FILE_VALUE_STRING_FALSE = "FALSE";
-
-    /**
      * Constant string part, used in error logging output about a parsing error of
      * an string value into the target type.
      */
     private static final String PARSE_EXCEPTION_BASE_MESSAGE = "File %s: Unable to parse the value for sectionKey %s, property %s %s ";
 
+    /**
+     * Constant field, used as String representation for a boolean <code>true</code>
+     * value.
+     */
+    static final String INI_FILE_BOOLEAN_VALUE_STRING_TRUE = "TRUE";
+
+    /**
+     * Constant field, used as String representation for a boolean
+     * <code>false</code> value.
+     */
+    static final String INI_FILE_BOOLEAN_VALUE_STRING_FALSE = "FALSE";
+
+    /**
+     * Constant field, used as String representation for am empty/not set comment.
+     */
+    static final String EMPTY_COMMENTS = "";
+
     /** Variable to represent the date format */
     private String dateFormatString = "dd.MM.yyyy";
 
     /** Variable to represent the timestamp format */
-    private String timeStampFormatString = "dd.MM.yyyy hh:mm:ss";
+    private String timeStampFormatString = "dd.MM.yyyy HH:mm:ss";
 
     /** Variable to hold the ini file name and full path */
     private String absoluteFileNamePath;
@@ -78,9 +81,14 @@ public final class INIFile {
      *                             used.
      */
     public INIFile(String absoluteFileNamePath) {
-        if (absoluteFileNamePath == null || !new File(absoluteFileNamePath).exists()) {
+        if (absoluteFileNamePath == null) {
+            throw new NullPointerException("Parameter [absoluteFileNamePath] must be NOT null!");
+        }
+
+        if (!new File(absoluteFileNamePath).exists()) {
             LOG.error("Inifile does not exist: {}", absoluteFileNamePath);
         }
+
         this.sectionMap = new LinkedHashMap<>();
         this.absoluteFileNamePath = absoluteFileNamePath;
         // Load the specified INI file.
@@ -90,6 +98,9 @@ public final class INIFile {
     }
 
     public INIFile(String contentAsSingleString, String absoluteFileNamePath) {
+        if (absoluteFileNamePath == null) {
+            throw new NullPointerException("Parameter [absoluteFileNamePath] must be NOT null!");
+        }
         if (!new File(absoluteFileNamePath).exists()) {
             LOG.debug("loading from Stream: {}", absoluteFileNamePath);
         }
@@ -142,24 +153,19 @@ public final class INIFile {
      *         can't be interpreted as boolean.
      */
     public boolean getBooleanProperty(String sectionKey, String propertyKey) {
-        boolean result;
-        try {
-            Boolean propertyValue = getProperty(sectionKey, propertyKey, (s) -> {
-                if ("YES".equalsIgnoreCase(s) || "1".equalsIgnoreCase(s)) {
-                    return true;
-                } else if ("NO".equalsIgnoreCase(s) || "0".equalsIgnoreCase(s)) {
-                    return false;
-                } else {
-                    return Boolean.parseBoolean(s);
-                }
-            });
-            result = propertyValue != null ? propertyValue : false;
-        } catch (NumberFormatException ex) {
-            LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
-                    "as Boolean value!"), ex);
-            result = false;
-        }
-        return result;
+        Boolean result = getProperty(sectionKey, propertyKey, s -> {
+            if (s == null) {
+                return false;
+            } else if ("YES".equalsIgnoreCase(s) || "1".equalsIgnoreCase(s)) {
+                return true;
+            } else if ("NO".equalsIgnoreCase(s) || "0".equalsIgnoreCase(s)) {
+                return false;
+            } else {
+                return Boolean.parseBoolean(s);
+            }
+        });
+
+        return result != null ? result : false;
     }
 
     /**
@@ -208,7 +214,13 @@ public final class INIFile {
     public Double getDoubleProperty(String sectionKey, String propertyKey) {
         Double result = null;
         try {
-            result = getProperty(sectionKey, propertyKey, Double::valueOf);
+            result = getProperty(sectionKey, propertyKey, s -> {
+                Double value = Double.valueOf(s);
+                if (Double.isInfinite(value)) {
+                    value = null;
+                }
+                return value;
+            });
         } catch (NumberFormatException ex) {
             LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
                     "as Double value!"), ex);
@@ -234,7 +246,7 @@ public final class INIFile {
                 return LocalDate.parse(s, dtFmt);
 
             });
-        } catch (NumberFormatException ex) {
+        } catch (IllegalArgumentException | DateTimeParseException ex) {
             LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey, propertyKey,
                     "as LocalDate with format string" + this.dateFormatString + "!"), ex);
         }
@@ -252,10 +264,10 @@ public final class INIFile {
         return getProperty(sectionKey, propertyKey, s -> {
             Timestamp result = null;
             try {
-                DateFormat dtFmt = new SimpleDateFormat(this.timeStampFormatString);
-                Date dtTmp = dtFmt.parse(s);
-                result = new Timestamp(dtTmp.getTime());
-            } catch (ParseException ex) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(this.timeStampFormatString);
+                LocalDateTime localDateTime = LocalDateTime.parse(s, formatter);
+                result = Timestamp.valueOf(localDateTime);
+            } catch (IllegalArgumentException | DateTimeParseException | NullPointerException ex) {
                 LOG.error(String.format(PARSE_EXCEPTION_BASE_MESSAGE, this.absoluteFileNamePath, sectionKey,
                         propertyKey, "with timestamp format " + this.timeStampFormatString + "!"), ex);
             }
@@ -263,7 +275,7 @@ public final class INIFile {
         });
     }
 
-    public <T> T getProperty(String sectionKey, String propertyKey, Function<String, T> converter) {
+    protected <T> T getProperty(String sectionKey, String propertyKey, Function<String, T> converter) {
         T result = null;
         INISection section = this.sectionMap.get(sectionKey);
         if (section != null) {
@@ -273,7 +285,8 @@ public final class INIFile {
                 if (strVal != null) {
                     result = converter.apply(strVal);
                 } else {
-                    LOG.debug("No property with name {} available in sectionKey {}!", propertyKey, sectionKey);
+                    LOG.debug("No property value for property key {} available in sectionKey {}!", propertyKey,
+                            sectionKey);
                 }
             } else {
                 LOG.debug("No property set  for sectionKey {}, property {}!", sectionKey, propertyKey);
@@ -299,22 +312,11 @@ public final class INIFile {
     }
 
     /**
-     * Sets the comments associated with a sectionKey.
-     *
-     * @param sectionKey the sectionKey name
-     * @return The new created section.
-     */
-    public INISection addSection(String sectionKey) {
-        return addSection(sectionKey, "");
-    }
-
-    /**
      * Sets the specified string property.
      * 
      * @param sectionKey    the INI sectionKey name.
      * @param newSectionKey the new Section name to be set.
      */
-
     public void renameSection(String sectionKey, String newSectionKey, String comments) {
         INISection section = this.sectionMap.get(sectionKey);
         if (section != null) {
@@ -330,7 +332,7 @@ public final class INIFile {
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
      * @param value       the string value to be persisted
-     * @param comments
+     * @param comments    A comment for the property.
      */
     public void setStringProperty(String sectionKey, String propertyKey, String value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, value, comments);
@@ -344,7 +346,7 @@ public final class INIFile {
      * @param value       the string value to be persisted
      */
     public void setStringProperty(String sectionKey, String propertyKey, String value) {
-        setStringProperty(sectionKey, propertyKey, value, "");
+        setStringProperty(sectionKey, propertyKey, value, EMPTY_COMMENTS);
     }
 
     /**
@@ -353,10 +355,23 @@ public final class INIFile {
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
      * @param value       the boolean value to be persisted
+     * @param comments    A comment for the property.
      */
     public void setBooleanProperty(String sectionKey, String propertyKey, boolean value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey,
-                value ? INI_FILE_VALUE_STRING_TRUE : INI_FILE_VALUE_STRING_FALSE, comments);
+                value ? INI_FILE_BOOLEAN_VALUE_STRING_TRUE : INI_FILE_BOOLEAN_VALUE_STRING_FALSE, comments);
+    }
+
+    /**
+     * Sets the specified boolean property.
+     *
+     * @param sectionKey  the INI sectionKey name.
+     * @param propertyKey the property to be set.
+     * @param value       the boolean value to be persisted
+     */
+    public void setBooleanProperty(String sectionKey, String propertyKey, boolean value) {
+        setPropertyOfTypeWithComments(sectionKey, propertyKey,
+                value ? INI_FILE_BOOLEAN_VALUE_STRING_TRUE : INI_FILE_BOOLEAN_VALUE_STRING_FALSE, EMPTY_COMMENTS);
     }
 
     /**
@@ -364,10 +379,22 @@ public final class INIFile {
      * 
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
-     * @param pintVal     the int property to be persisted.
+     * @param value       the int property to be persisted.
+     * @param comments    A comment for the property.
      */
-    public void setIntegerProperty(String sectionKey, String propertyKey, int pintVal, String comments) {
-        setPropertyOfTypeWithComments(sectionKey, propertyKey, Integer.toString(pintVal), comments);
+    public void setIntegerProperty(String sectionKey, String propertyKey, int value, String comments) {
+        setPropertyOfTypeWithComments(sectionKey, propertyKey, Integer.toString(value), comments);
+    }
+
+    /**
+     * Sets the specified integer property.
+     *
+     * @param sectionKey  the INI sectionKey name.
+     * @param propertyKey the property to be set.
+     * @param value       the int property to be persisted.
+     */
+    public void setIntegerProperty(String sectionKey, String propertyKey, int value) {
+        setIntegerProperty(sectionKey, propertyKey, value, EMPTY_COMMENTS);
     }
 
     /**
@@ -376,9 +403,21 @@ public final class INIFile {
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
      * @param value       the long value to be persisted.
+     * @param comments    A comment for the property.
      */
     public void setLongProperty(String sectionKey, String propertyKey, long value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, Long.toString(value), comments);
+    }
+
+    /**
+     * Sets the specified long property.
+     *
+     * @param sectionKey  the INI sectionKey name.
+     * @param propertyKey the property to be set.
+     * @param value       the long value to be persisted.
+     */
+    public void setLongProperty(String sectionKey, String propertyKey, long value) {
+        setLongProperty(sectionKey, propertyKey, value, EMPTY_COMMENTS);
     }
 
     /**
@@ -387,9 +426,21 @@ public final class INIFile {
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
      * @param value       the double value to be persisted.
+     * @param comments    A comment for the property.
      */
     public void setDoubleProperty(String sectionKey, String propertyKey, double value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, Double.toString(value), comments);
+    }
+
+    /**
+     * Sets the specified double property.
+     *
+     * @param sectionKey  the INI sectionKey name.
+     * @param propertyKey the property to be set.
+     * @param value       the double value to be persisted.
+     */
+    public void setDoubleProperty(String sectionKey, String propertyKey, double value) {
+        setDoubleProperty(sectionKey, propertyKey, value, EMPTY_COMMENTS);
     }
 
     /**
@@ -398,10 +449,22 @@ public final class INIFile {
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
      * @param value       the date value to be persisted.
+     * @param comments    A comment for the property.
      */
-    public void setDateProperty(String sectionKey, String propertyKey, LocalDateTime value, String comments) {
-        setPropertyOfTypeWithComments(sectionKey, propertyKey, utilDateToString(value, this.dateFormatString),
-                comments);
+    public void setDateProperty(String sectionKey, String propertyKey, LocalDate value, String comments) {
+        setPropertyOfTypeWithComments(sectionKey, propertyKey,
+                utilDateToString(value.atStartOfDay(), this.dateFormatString), comments);
+    }
+
+    /**
+     * Sets the specified java.util.Date property.
+     *
+     * @param sectionKey  the INI sectionKey name.
+     * @param propertyKey the property to be set.
+     * @param value       the date value to be persisted.
+     */
+    public void setDateProperty(String sectionKey, String propertyKey, LocalDate value) {
+        setDateProperty(sectionKey, propertyKey, value, EMPTY_COMMENTS);
     }
 
     /**
@@ -410,12 +473,33 @@ public final class INIFile {
      * @param sectionKey  the INI sectionKey name.
      * @param propertyKey the property to be set.
      * @param value       the timestamp value to be persisted.
+     * @param comments    A comment for the property.
      */
     public void setTimestampProperty(String sectionKey, String propertyKey, Timestamp value, String comments) {
         setPropertyOfTypeWithComments(sectionKey, propertyKey, timeToString(value, this.timeStampFormatString),
                 comments);
     }
 
+    /**
+     * Sets the specified java.sql.Timestamp property.
+     *
+     * @param sectionKey  the INI sectionKey name.
+     * @param propertyKey the property to be set.
+     * @param value       the timestamp value to be persisted.
+     */
+    public void setTimestampProperty(String sectionKey, String propertyKey, Timestamp value) {
+        setTimestampProperty(sectionKey, propertyKey, value, EMPTY_COMMENTS);
+    }
+
+    /**
+     * Set a property value, represented as string, for a property key into an
+     * section with a (maybe empty) comment.
+     * 
+     * @param sectionKey  The section key.
+     * @param propertyKey The property key.
+     * @param value       The value to set.
+     * @param comments    A (maybe) empty comment.
+     */
     private void setPropertyOfTypeWithComments(String sectionKey, String propertyKey, String value, String comments) {
         INISection section = this.sectionMap.computeIfAbsent(sectionKey, s -> new INISection(sectionKey));
         section.setProperty(propertyKey, value, comments);
@@ -443,13 +527,15 @@ public final class INIFile {
     public void setTimeStampFormat(String timeStampFormatString) {
         // check if the string is parsable. Go ahead when the format is ok, otherwise
         // throw a RuntimeException.
-        checkIfTemporalFormatStringIsParsable(dateFormatString);
+        checkIfTemporalFormatStringIsParsable(timeStampFormatString);
         this.timeStampFormatString = timeStampFormatString;
     }
 
-    /*------------------------------------------------------------------------------
-     * Public methods
-    ------------------------------------------------------------------------------*/
+    /**
+     * Get the amount of sections.
+     * 
+     * @return The amount of sections in the ini file.
+     */
     public int getTotalSections() {
         return this.sectionMap.size();
     }
@@ -473,12 +559,12 @@ public final class INIFile {
      * @return the string array of property names.
      */
     public String[] getPropertyNames(String sectionKey) {
-        String[] arrRet = null;
+        String[] result = null;
         INISection section = this.sectionMap.get(sectionKey);
         if (section != null) {
-            arrRet = section.getPropNames();
+            result = section.getPropNames();
         }
-        return arrRet;
+        return result;
     }
 
     /**
@@ -525,18 +611,18 @@ public final class INIFile {
      * creates the new one.
      */
     public synchronized boolean save() {
-        boolean blnRet = false;
+        boolean result = false;
 
-        File objFile = new File(this.absoluteFileNamePath);
-        try (FileWriter objWriter = new FileWriter(objFile)) {
+        File file = new File(this.absoluteFileNamePath);
+        try (FileWriter writer = new FileWriter(file)) {
             if (this.sectionMap.size() == 0) {
                 LOG.warn("Nothing to save into file {}. The job is done!", this.absoluteFileNamePath);
                 return false;
             }
-            if (objFile.exists()) {
+            if (file.exists()) {
                 LOG.warn("File {} is existing, will be deleted before saving the new content!",
                         this.absoluteFileNamePath);
-                boolean deleted = objFile.delete();
+                boolean deleted = file.delete();
                 if (deleted) {
                     LOG.debug("File {} was deleted successfully. Starting the writing of the new content!",
                             this.absoluteFileNamePath);
@@ -552,29 +638,24 @@ public final class INIFile {
                 INISection section = entry.getValue();
                 String sectionAsString = section.toString();
                 LOG.trace(sectionAsString);
-                objWriter.write(sectionAsString);
-                objWriter.write("\r\n");
+                writer.write(sectionAsString);
+                writer.write(System.lineSeparator());
             }
             LOG.trace("Done! All content written into the file named {}.", this.absoluteFileNamePath);
-            blnRet = true;
+            result = true;
         } catch (IOException ex) {
             LOG.error("Error during saving INI Content into file " + this.absoluteFileNamePath + "!", ex);
         }
-        return blnRet;
+        return result;
     }
 
     public synchronized String saveToString() {
         StringBuilder builder = new StringBuilder();
-        try {
-            for (Map.Entry<String, INISection> entry : this.sectionMap.entrySet()) {
-                INISection section = entry.getValue();
-                builder.append(section.toString())
-                       .append("\r\n");
-            }
-        } catch (Exception ex) {
-            LOG.error("Exception in saveToString!", ex);
+        for (Map.Entry<String, INISection> entry : this.sectionMap.entrySet()) {
+            INISection section = entry.getValue();
+            builder.append(section.toString())
+                   .append(System.lineSeparator());
         }
-
         return builder.toString();
     }
 
@@ -645,7 +726,7 @@ public final class INIFile {
                 commentsBuilder = new StringBuilder();
             }
             // in any case, we add the comment to the commentsBuilder and also add a new
-            // line sign;
+            // line sign.
             aggregateCommentsLineForNextElement(commentsBuilder, commentMatcher);
             LOG.trace("Read the following comment line: {}", nextLineInFile);
         } else if (sectionMatcher.matches()) {
@@ -688,7 +769,7 @@ public final class INIFile {
     private INISection createNewSection(StringBuilder remarksBuilder, Matcher sectionMatcher) {
         String sectionKey = sectionMatcher.group("SECTION")
                                           .trim();
-        String remarks = remarksBuilder != null ? remarksBuilder.toString() : "";
+        String remarks = remarksBuilder != null ? remarksBuilder.toString() : EMPTY_COMMENTS;
         return this.addSection(sectionKey, remarks);
     }
 
@@ -701,7 +782,7 @@ public final class INIFile {
                                             .trim();
         String propertyValue = propertyMatcher.group("PROPERTYVALUE")
                                               .trim();
-        String remarks = remarksBuilder != null ? remarksBuilder.toString() : "";
+        String remarks = remarksBuilder != null ? remarksBuilder.toString() : EMPTY_COMMENTS;
         return section.setProperty(propertyKey, propertyValue, remarks);
     }
 
@@ -725,16 +806,16 @@ public final class INIFile {
     /**
      * Converts a java.util.date into String
      * 
-     * @param pdt     Date that need to be converted to String
-     * @param pstrFmt The date format pattern.
+     * @param localDateTime Date that need to be converted to String
+     * @param formatString  The date format pattern.
      * @return String
      */
-    private String utilDateToString(LocalDateTime pdt, String pstrFmt) {
+    private String utilDateToString(LocalDateTime localDateTime, String formatString) {
         String strRet;
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pstrFmt);
-            strRet = pdt.format(formatter);
-        } catch (Exception ex) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatString);
+            strRet = localDateTime.format(formatter);
+        } catch (IllegalArgumentException | DateTimeException ex) {
             LOG.error("Exception in utilDateToString!", ex);
             strRet = null;
         }
@@ -745,22 +826,22 @@ public final class INIFile {
      * Converts the given sql timestamp object to a string representation. The
      * format to be used is to be obtained from the configuration file.
      *
-     * @param pobjTS  the sql timestamp object to be converted.
-     * @param pstrFmt If true formats the string using GMT timezone otherwise using
-     *                local timezone.
+     * @param timestamp             the sql timestamp object to be converted.
+     * @param timeStampFormatString If true formats the string using GMT timezone
+     *                              otherwise using local timezone.
      * @return the formatted string representation of the timestamp.
      */
-    private String timeToString(Timestamp pobjTS, String pstrFmt) {
-        String strRet;
+    private String timeToString(Timestamp timestamp, String timeStampFormatString) {
+        String result;
 
         try {
-            SimpleDateFormat dtFmt = new SimpleDateFormat(pstrFmt);
-            strRet = dtFmt.format(pobjTS);
+            SimpleDateFormat dtFmt = new SimpleDateFormat(timeStampFormatString);
+            result = dtFmt.format(timestamp);
         } catch (IllegalArgumentException | NullPointerException ex) {
             LOG.error("Exception in utilDateToString!", ex);
-            strRet = "";
+            result = "";
         }
-        return strRet;
+        return result;
     }
 
     /*------------------------------------------------------------------------------
@@ -865,38 +946,33 @@ public final class INIFile {
 
         @Override
         public String toString() {
-            StringBuilder objBuf = new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             if (this.sectionComment != null) {
-                objBuf.append(addRemarkCharacter(this.sectionComment));
+                stringBuilder.append(addRemarkCharacter(this.sectionComment));
             }
-            objBuf.append("[")
-                  .append(this.sectionName)
-                  .append("]\r\n");
-            Set<String> colKeys = this.iniSectionProperties.keySet();
-            for (String colKey : colKeys) {
-                INIProperty objProp = this.iniSectionProperties.get(colKey);
-                objBuf.append(objProp.toString());
-                objBuf.append("\r\n");
+            stringBuilder.append("[")
+                         .append(this.sectionName)
+                         .append("]")
+                         .append(System.lineSeparator());
+            for (INIProperty entry : this.iniSectionProperties.values()) {
+                stringBuilder.append(entry);
+                stringBuilder.append(System.lineSeparator());
             }
-            return objBuf.toString();
+            return stringBuilder.toString();
         }
     }
 
-    /*------------------------------------------------------------------------------
-     * Private class representing the INI Property.
-     *----------------------------------------------------------------------------*/
     /**
      * This class represents a key value pair called property in an INI file.
-     * 
-     * @author Prasad P. Khandekar
-     * @version 1.0
-     * @since 1.0
      */
     class INIProperty {
+
         /** Variable to hold name of this property */
         private String propertyKey;
+
         /** Variable to hold value of this property */
         private String propertyValue;
+
         /** Variable to hold comments associated with this property */
         private String comments;
 
@@ -945,13 +1021,20 @@ public final class INIFile {
             return result;
         }
 
+        String getComments() {
+            return this.comments;
+        }
+
         @Override
         public String toString() {
-            String result = "";
-            if (this.comments != null) {
-                result = addRemarkCharacter(comments);
+            StringBuilder result = new StringBuilder();
+            if (this.comments != null && !this.comments.isEmpty()) {
+                result.append(addRemarkCharacter(comments));
             }
-            return result + this.propertyKey + " = " + this.propertyValue;
+            return result.append(this.propertyKey)
+                         .append(" = ")
+                         .append(this.propertyValue)
+                         .toString();
         }
     }
 
