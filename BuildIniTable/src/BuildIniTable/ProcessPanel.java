@@ -68,19 +68,25 @@ public class ProcessPanel extends JXPanel {
     String x = "10dlu,125dlu,5dlu,p:g,10dlu";
     String y = "10dlu,p,20dlu,";
     for (int i = 0; i < BuildIniTable.thisClass.anzahlmandanten; i++)
-      y = String.valueOf(y) + "p,2dlu,"; 
-    y = String.valueOf(y) + "40dlu,p,5dlu,fill:0:grow(1.00),5dlu";
+      y = String.valueOf(y) + "p,2dlu,";
+    
+    y = String.valueOf(y) + "p,2dlu,40dlu,p,5dlu,fill:0:grow(1.00),5dlu";
     FormLayout lay = new FormLayout(x, y);
     CellConstraints cc = new CellConstraints();
     pan.setLayout((LayoutManager)lay);
     JLabel lab = new JLabel("<html><font size=+1><font color=#0000FF>Bitte kreuzen Sie links<u> die Mandanten</u> an, für die Sie die DB-Tabelle <b>'inidatei'</b> erzeugen wollen.&nbsp;&nbsp;In der Liste rechts sind bereits INI-Dateien für die Aufnahme in die DB-Tabelle markiert. Sie können zusätzliche INI-Dateien markieren (wird jedoch ausdrücklich nicht empfohlen /st.)</font></font></html>");
     pan.add(lab, cc.xyw(2, 2, 3, CellConstraints.FILL, CellConstraints.DEFAULT));
     int lastY = 0;
-    for (int j = 0; j < BuildIniTable.thisClass.anzahlmandanten; j++) {
+    int j;
+    for ( j = 0; j < BuildIniTable.thisClass.anzahlmandanten; j++) {
       this.check[j] = new JRtaCheckBox(String.valueOf(BuildIniTable.thisClass.mandantIkvec.get(j)) + " - " + (String)BuildIniTable.thisClass.mandantNamevec.get(j));
       lastY = 3 + j * 2 + 1;
       pan.add((Component)this.check[j], cc.xy(2, lastY));
-    } 
+    }
+    // j++;
+    this.check[j] = new JRtaCheckBox("Tabelle(n) vorher löschen");
+    lastY = 3 + j * 2 + 1;
+    pan.add((Component)this.check[j], cc.xy(2, lastY));
     this.buts[0] = ButtonTools.macheButton("Tabelle erzeugen", "erzeugen", this.al);
     pan.add(this.buts[0], cc.xy(2, lastY + 3));
     this.tabmod = new MyIniTableModel();
@@ -100,7 +106,7 @@ public class ProcessPanel extends JXPanel {
     JScrollPane span = JCompTools.getTransparentScrollPane(this.area);
     span.setBorder(BorderFactory.createLineBorder(Color.BLACK));
     span.validate();
-    pan.add(span, cc.xyw(2, lastY + 5, 3, CellConstraints.FILL, CellConstraints.FILL));
+    pan.add(span, cc.xyw(2, lastY + 5, 4, CellConstraints.FILL, CellConstraints.FILL));
     pan.validate();
     getIniList();
     return pan;
@@ -155,6 +161,13 @@ public class ProcessPanel extends JXPanel {
     INIFile inicontrol = null;
     int anzahl = 0;
     boolean overwrite = true;
+    boolean tableDrop = false;
+    
+    if (this.check[BuildIniTable.thisClass.anzahlmandanten].isSelected()) {
+         System.out.println("Will kill table first");
+         tableDrop = true;
+    }
+    
     for (int i = 0; i < BuildIniTable.thisClass.anzahlmandanten; i++) {
       try {
         Thread.sleep(1000L);
@@ -167,7 +180,7 @@ public class ProcessPanel extends JXPanel {
                 "Achtung wichtige Benutzeranfrage", 0);
             if (frage == 1)
               overwrite = false; 
-          } 
+          }
           if (overwrite) {
             inicontrol = new INIFile(String.valueOf(BuildIniTable.thisClass.pfadzurini) + "/" + (String)BuildIniTable.thisClass.mandantIkvec.get(i) + "/inicontrol.ini");
             inicontrol.addSection(kopf, null);
@@ -183,6 +196,7 @@ public class ProcessPanel extends JXPanel {
           String password = man.decrypt(pw);
           setTextArea("Datenbankparameter o.k.");
           Thread.sleep(500L);
+          setTextArea("Checks: " + this.check.length);
           setTextArea("Öffne Datenbank für Mandant : " + (String)BuildIniTable.thisClass.mandantIkvec.get(i));
           testconn = BuildIniTable.thisClass.starteDB(ipanddb, username, password);
           Thread.sleep(500L);
@@ -202,6 +216,19 @@ public class ProcessPanel extends JXPanel {
             } else {
               setTextArea("Tabelle inidatei existiert bereits");
               Thread.sleep(500L);
+              if (tableDrop) {
+                  setTextArea("Tabelle wird gelöscht");
+                  if (SqlInfo.sqlAusfuehren("DROP TABLE inidatei")) {
+                      setTextArea("Tabelle erfolgreich gelöscht");
+                      Thread.sleep(500L);
+                      SqlInfo.sqlAusfuehren(createIniTableStmt());
+                      setTextArea("Tabelle neu angelegt");
+                      Thread.sleep(500L);
+                  } else {
+                      setTextArea("Fehler beim löschen der Tabelle - bitte von Hand ausführen und Programm neu starten");
+                      System.exit(1);
+                  }
+              }
             } 
             int fehler = 0;
             for (int i2 = 0; i2 < this.tab.getRowCount(); i2++) {

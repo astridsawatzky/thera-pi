@@ -40,6 +40,7 @@ public class BuildIniTable implements WindowListener {
   public String pfadzurini;
   public int anzahlmandanten;
   
+  
   public String[] inis = new String[] { 
       "preisgruppen.ini", "terminkalender.ini", "gruppen.ini", "icons.ini", "fristen.ini", "color.ini", 
       "dta301.ini", "gutachten.ini", "ktraeger.ini", "sqlmodul.ini", 
@@ -129,18 +130,12 @@ public class BuildIniTable implements WindowListener {
     
     chooser.setCurrentDirectory(file);
     
-    chooser.addPropertyChangeListener(new PropertyChangeListener() {
-        @Override
-        public void propertyChange(PropertyChangeEvent e) {
-            if (e.getPropertyName()
-                 .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
-                 || e.getPropertyName()
-                     .equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-              // This ain't gonna work: file is local... Need new concept here...
-              //  File file = (File)e.getNewValue();
-            }
-          }
-        });
+    chooser.addPropertyChangeListener(e -> {
+        if (!e.getPropertyName()
+                .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {
+            e.getPropertyName();
+        }
+    });
     chooser.setVisible(true);
     int result = chooser.showOpenDialog((Component)null);
     if (result == JFileChooser.APPROVE_OPTION) {
