@@ -48,7 +48,6 @@ public class RezeptDaten extends JXPanel implements ActionListener {
      * 
      */
     private static final long serialVersionUID = -6994295488322966514L;
-    // public JLabel[] rezlabs = {null,null,null,null,null,null,null,null,null};
     public JRtaTextField reznum = null;
     public JRtaTextField draghandler = null;
     public ImageIcon hbimg = null;
@@ -104,8 +103,6 @@ public class RezeptDaten extends JXPanel implements ActionListener {
         boolean reha = false;
         ArztVec verordnenderArzt = new ArztVec();
         Rezept dieseVO = new Rezept();
-        // reznum.setText(reznummer);
-        // reznum.repaint();
         final String xreznummer = reznummer;
         try {
             dieseVO.setVec_rez(Reha.instance.patpanel.vecaktrez);
@@ -308,19 +305,6 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                         "Fehler in ConstructHashMap (Modul:RezeptDaten)\nBitte verständigen Sie den Administrator und notieren Sie zuvor die Fehlermeldung");
                 RezeptDaten.feddisch = true;
             }
-            /*
-             * new SwingWorker<Void,Void>(){
-             * 
-             * @Override protected Void doInBackground() throws Exception { try{
-             * RezTools.constructVirginHMap();
-             * ArztTools.constructArztHMap((String)Reha.instance.patpanel.vecaktrez.get(16))
-             * ;
-             * KasseTools.constructKasseHMap((String)Reha.instance.patpanel.vecaktrez.get(37
-             * )); RezeptDaten.feddisch = true; }catch(Exception ex){
-             * JOptionPane.showMessageDialog(null,
-             * "Fehler in ConstructHashMap (Modul:RezeptDaten)\nBitte verständigen Sie den Administrator und notieren Sie zuvor die Fehlermeldung"
-             * ); RezeptDaten.feddisch = true; } return null; } }.execute();
-             */
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -347,9 +331,8 @@ public class RezeptDaten extends JXPanel implements ActionListener {
     public JScrollPane getDatenPanel(PatientHauptPanel eltern) {
         JScrollPane jscr = null;
         FormLayout lay = new FormLayout("fill:0:grow(0.33),2px,fill:0:grow(0.33),2px,fill:0:grow(0.33)",
-                // FormLayout lay = new FormLayout("p,fill:0:grow(0.50),p,fill:0:grow(0.50),p",
-                // 1.Sep 2.Sep 3.Sep
-                // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
+                //      1.Sep                2.Sep                              3.Sep
+                //1  2  3  4   5  6   7  8   9 10   11 12 13  14 15  16  17 18  19 20  21 22  23 24    25
                 "p,1dlu,p,1dlu,p,1dlu,p,1dlu,p,1dlu,p,1dlu,p,1dlu,p, 1dlu,p,1dlu,p,1dlu,p,1dlu,p,38dlu,1px");
         CellConstraints cc = new CellConstraints();
         PanelBuilder jpan = new PanelBuilder(lay);
@@ -392,21 +375,11 @@ public class RezeptDaten extends JXPanel implements ActionListener {
         });
         draghandler = new JRtaTextField("GROSS", true);
         draghandler.setTransferHandler(new TransferHandler("text"));
-        /*
-         * Reha.instance.patpanel.rezlabs[0] = new JLabel();
-         * Reha.instance.patpanel.rezlabs[0].setFont(fontreznr);
-         * Reha.instance.patpanel.rezlabs[0].setName("rezeptnummer");
-         * Reha.instance.patpanel.rezlabs[0].setForeground(Color.BLUE);
-         * Reha.instance.patpanel.rezlabs[0].setText("KG57606");
-         */
 
         hblab = new JRtaLabel(" ");
         hblab.setName("hausbesuch");
         hblab.setIcon(hbimg);
-        /*
-         * eltern.rezlabs[1] = new JRtaLabel(" ");
-         * eltern.rezlabs[1].setName("hausbesuch"); eltern.rezlabs[1].setIcon(hbimg);
-         */
+
         eltern.rezlabs[2] = new JLabel(" ");
         eltern.rezlabs[2].setName("angelegt");
 
@@ -461,10 +434,8 @@ public class RezeptDaten extends JXPanel implements ActionListener {
         eltern.rezdiag.setEditable(false);
 
         jpan.add(reznum, cc.xy(1, 1));
-        // jpan.add(Reha.instance.patpanel.rezlabs[0],cc.xy(1, 1));
 
         jpan.add(hblab, cc.xy(3, 1));
-        // jpan.add(eltern.rezlabs[1],cc.xy(3, 1));
 
         jpan.add(eltern.rezlabs[2], cc.xy(5, 1));
 
@@ -489,14 +460,12 @@ public class RezeptDaten extends JXPanel implements ActionListener {
         jpan.addSeparator("", cc.xyw(1, 19, 5));
 
         jpan.add(eltern.rezlabs[13], cc.xy(1, 21));
-        // jpan.add(Reha.instance.patpanel.rezlabs[14],cc.xy(1, 23));
         JXPanel diagpan = new JXPanel(new BorderLayout());
         diagpan.setOpaque(false);
         JScrollPane jscrdiag = JCompTools.getTransparentScrollPane(eltern.rezdiag);
         jscrdiag.validate();
         diagpan.add(jscrdiag, BorderLayout.CENTER);
 
-        // jpan.add(jscrdiag,cc.xywh(3, 21,3,4));
         jpan.add(diagpan, cc.xywh(3, 21, 3, 4, CellConstraints.FILL, CellConstraints.FILL));
 
         jscr = JCompTools.getTransparentScrollPane(jpan.getPanel());
