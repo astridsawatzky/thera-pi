@@ -7,23 +7,24 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -32,13 +33,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
+import javax.xml.bind.DatatypeConverter;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
 import environment.Path;
 import hauptFenster.Version;
 
@@ -46,23 +49,18 @@ import hauptFenster.Version;
  * This class shall give credit to where credit is due. Anyone is free to add
  * their name to it IF they contribute. Please do not remove names from here.
  *
- * @author McM
  */
-public class AboutDialog extends JDialog implements ActionListener, KeyListener {
+public class AboutDialog extends JDialog implements ActionListener {
     private static final long serialVersionUID = 1L;
     private String myTitle;
     public JScrollPane scroller;
     public JTextArea text;
-    protected HashMap<String, String> md5Hashes = new HashMap<String, String>();
-    JButton[] buts = { null, null };
+   protected HashMap<String, String> md5Hashes = new HashMap<String, String>();
 
-    enum btIdx {
-        detail,
-        ok
-    }
 
-    int btDetail = btIdx.detail.ordinal();
-    int btOK = btIdx.ok.ordinal();
+
+
+
     AboutDialog currInstance = null;
     JFrame instJar = null;
     boolean processingMD5 = false;
@@ -73,11 +71,10 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         currInstance = this;
 
         setLayout(new BorderLayout());
-        add(getDialogFrame(), BorderLayout.CENTER);
+        add(getHintergrundPanel(), BorderLayout.CENTER);
 
         setSize(350, 200);
-        // setBackground( new Color( 0,0,230 ) );
-        setLocationRelativeTo(null); // center on screen
+        setLocationRelativeTo(null);
 
         try {
             calcMD5();
@@ -89,12 +86,16 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
             System.out.println("calcMD5:  IOException");
         }
 
-    } // end constructor
+    }
+
+    AboutDialog() {
+        //for testing
+    }
 
     /*
      * 'Hintergrund' des About-Dialogs
      */
-    private JPanel getDialogFrame() {
+    private JPanel getHintergrundPanel() {
         JPanel DialogFrame = new JPanel();
 
         FormLayout lay = new FormLayout(
@@ -104,19 +105,16 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
                 "5dlu,30dlu:g,10dlu,20dlu,5dlu" // ywerte
         );
         PanelBuilder builder = new PanelBuilder(lay);
-        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
-        // mode
+
         builder.getPanel()
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
         int colCnt = 2, rowCnt = 2;
 
-        // JPanel upper = new JPanel();
-        JPanel upper = createDialogArea();
+        JPanel upper = createDialogTextArea();
         builder.add(upper, cc.xy(colCnt, rowCnt++)); // 2,2
 
-        // JPanel lower = (JPanel)builder.add(new JPanel(), cc.xy(colCnt,++rowCnt));
         JPanel lower = getButtonRow();
         builder.add(lower, cc.xy(colCnt, ++rowCnt, CellConstraints.FILL, CellConstraints.FILL)); // 2,4
         builder.getPanel()
@@ -126,12 +124,8 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         return DialogFrame;
     }
 
-    /*
-     * Textbereich des About-Dialogs
-     */
-    protected JPanel createDialogArea() {
+    protected JPanel createDialogTextArea() {
         JPanel dialogArea = new JPanel(new GridBagLayout());
-        // dialogArea.setBackground(Color.yellow);
         GridBagConstraints gbc = new GridBagConstraints();
 
         ImageIcon icon = new ImageIcon(Path.Instance.getProghome() + "icons/Pi_1_0_64x64.png");
@@ -139,14 +133,14 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(20, 10, 5, 15); // top, left, bottom, right
+        gbc.insets = new Insets(20, 10, 5, 15);
         gbc.anchor = GridBagConstraints.NORTH;
         dialogArea.add(imgLbl, gbc);
 
         JLabel htmlPane = new JLabel(mkCreditsTxt().toString());
 
         scroller = new JScrollPane(htmlPane);
-        scroller.setBorder(null); // keine Umrandung
+        scroller.setBorder(null);
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.gridx = 1;
@@ -158,7 +152,6 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.anchor = GridBagConstraints.NORTH;
-        // gbc.gridheight = GridBagConstraints.REMAINDER;
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         dialogArea.add(scroller, gbc);
 
@@ -199,33 +192,41 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
                 "15dlu" // ywerte
         );
         PanelBuilder builder = new PanelBuilder(lay);
-        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
-        // mode
         builder.getPanel()
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
         int colCnt = 1, rowCnt = 1;
+        JButton details = new JButton("Installation Details");
+        details.setName("instDetail");
+        details.setActionCommand("instDetail");
+        details.addActionListener(this);
 
-        buts[btDetail] = ButtonTools.macheButton("Installation Details", "instDetail", this);
-        buts[btDetail].setMnemonic('d');
-        buts[btDetail].setToolTipText("Zeige MD5-Hashes der inst. JARs");
-        buts[btDetail] = (JButton) builder.add(buts[btDetail], cc.xy(colCnt++, rowCnt)); // 1,1
+        details.setMnemonic('d');
+        details.setToolTipText("Zeige MD5-Hashes der inst. JARs");
+        details = (JButton) builder.add(details, cc.xy(colCnt++, rowCnt));
+        addEnterToSpaceReaction(details);
+        okButton = new JButton("OK");
+        okButton.setName("quit");
+        okButton.setActionCommand("quit");
+        okButton.addActionListener(this); // 1,1
 
-        buts[btOK] = ButtonTools.macheButton("OK", "quit", this);
-        buts[btOK] = (JButton) builder.add(buts[btOK], cc.xy(++colCnt, rowCnt)); // 3,1
+        okButton = (JButton) builder.add(okButton, cc.xy(++colCnt, rowCnt)); // 3,1
 
-        for (JButton b : buts) {
-            b.addKeyListener(currInstance); // macht Tastaturbedienung möglich
-        }
 
         buttonArea.add(builder.getPanel());
 
         return buttonArea;
     }
 
+    protected void addEnterToSpaceReaction(JButton details) {
+        Object spaceMap = details.getInputMap().get(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE,0));
+
+        details. getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),spaceMap);
+    }
+
     public void setFocus() {
-        buts[btOK].requestFocus();
+        okButton.requestFocus();
     }
 
     /**
@@ -234,42 +235,44 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
      * @throws IOException
      */
     public void calcMD5() throws NoSuchAlgorithmException, FileNotFoundException, IOException {
-        new SwingWorker<Void, Void>() {
+   SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws java.lang.Exception {
                 processingMD5 = true;
-                MessageDigest md = MessageDigest.getInstance("MD5");
-                File dir = new File(Path.Instance.getProghome());
-                File[] files = dir.listFiles(new FilenameFilter() {
-                    @Override
-                    public boolean accept(File dir, String name) {
-                        return name.endsWith(".jar");
-                    }
-                });
-                md5Hashes.clear();
-                for (int i = 0; i < files.length; i++) { // HM aufbauen
-                    InputStream is = new FileInputStream(files[i]);
-                    byte[] daten = new byte[2048];
-                    int read = 0;
-                    md.reset();
-                    while ((read = is.read(daten)) > 0)
-                        md.update(daten, 0, read);
-                    byte[] hash = md.digest();
-                    BigInteger bi = new BigInteger(1, hash);
-                    is.close();
 
-                    md5Hashes.put(files[i].getName(), bi.toString(16));
+                File dir = new File(Path.Instance.getProghome());
+                List<File> files =  Arrays.asList(dir.listFiles( (dir1, name) -> name.endsWith(".jar")));
+
+                md5Hashes.clear();
+                for (File file : files) {
+                    String string = md5Hash(file);
+
+
+                    md5Hashes.put(file.getName(), string);
                 }
                 processingMD5 = false;
                 return null;
             }
-        }.execute();
+
+
+        };
+        worker.execute();
     }
+    protected String md5Hash(File file) throws NoSuchAlgorithmException, FileNotFoundException, IOException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+
+        md.update(Files.readAllBytes(Paths.get(file.getPath())));
+        byte[] digest = md.digest();
+        return DatatypeConverter
+          .printHexBinary(digest).toUpperCase();
+    }
+
 
     /*
      * Panel mit html-Tabelle erzeugen
      */
     private JPanel showMD5() {
+        JTextPane pane = new JTextPane();
         JPanel md5Table = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
 
@@ -313,7 +316,7 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         strBuf.append("<table>");
         strBuf.append("<tr><th>file</th><th>MD5</th><th>&nbsp;&nbsp;&nbsp;</th><th>file</th><th>MD5</th></tr>");
         List<String> jars = new ArrayList<String>(md5Hashes.keySet());
-        Collections.sort(jars);
+       Collections.sort(jars ,String.CASE_INSENSITIVE_ORDER);
         if ((jars.size() % 2) > 0) {
             jars.add("");
         }
@@ -344,14 +347,10 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
+        System.out.println(cmd);
         if (cmd.equals("instDetail")) {
-            // Window win = this.getOwner(); // <- Hauptfenster
-            // Container cntnr = this.getParent(); // <- liefert 'das Gleiche'
-            // win.removeAll(); // 'killt' alle Fkt. des Hauptfensters - keine gute Idee!
             if (!currInstance.equals(null)) {
 
-//                currInstance.setVisible(false);
-//                currInstance.removeAll();                // Fenster zeigt gar keinen Inhalt mehr (ohne remove steht createDialogArea _vor_ MD5-Liste)
                 currInstance.dispose(); // eleganter wäre das Panel neu zu füllen - krieg' ich aber nicht hin :-(
                 instJar = (new JFrame()); // deshalb: neuer Frame
                 instJar.setTitle(myTitle + ": installierte JARs");
@@ -361,18 +360,12 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
                 gbc.insets = new Insets(10, 15, 10, 15); // top, left, bottom, right
 
                 JPanel newContent = (showMD5());
-//                currInstance.add(new JPanel());
-//                JPanel newContent = showMD5();
-                // instJar.add(newContent,gbc); // neuen Inhalt in Frame einsetzen ...
                 instJar.setContentPane(newContent);
                 instJar.pack();
-                // instJar.setSize(new
-                // Dimension(instJar.getPreferredSize().height-200,instJar.getPreferredSize().width));//
-                // ... und Größe anpassen
                 instJar.setSize(30 + newContent.getWidth(), 40 + newContent.getHeight());
-                instJar.addKeyListener(this);
+                instJar.addKeyListener(keyListener);
 
-                instJar.setLocationRelativeTo(null); // center on screen
+                instJar.setLocationRelativeTo(null);
                 instJar.setVisible(true);
 
             }
@@ -384,11 +377,8 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         }
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // do nothing
+    KeyListener keyListener = new KeyAdapter() {
 
-    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -398,22 +388,13 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
             doQuit();
         }
         if (code == KeyEvent.VK_ENTER) {
-            processButtons();
-        }
-        if (code == KeyEvent.VK_CONTROL) {
-            // System.out.println("CTRL pressed");
-        }
-    }
+          if (getFocusOwner() instanceof JButton) {
+            ((JButton) getFocusOwner()).doClick();
+        } }
 
-    private void processButtons() {
-        for (JButton b : buts) {
-            if (b.hasFocus()) {
-                b.doClick(); // Button 'drücken'
-                break;
-            }
-        }
     }
-
+    };
+    private JButton okButton;
     private void doQuit() {
         if (instJar != null) {
             instJar.dispose(); // Dialog schließen
@@ -423,10 +404,8 @@ public class AboutDialog extends JDialog implements ActionListener, KeyListener 
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // do nothing
 
-    }
+
+
 
 } // end class panel

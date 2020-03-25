@@ -10,7 +10,7 @@ import javax.swing.SwingWorker;
 import com.sun.star.uno.Exception;
 
 import ag.ion.bion.officelayer.text.TextException;
-import dialoge.AboutDialog;
+import dialoge.About;
 import environment.LadeProg;
 import environment.Path;
 import io.RehaIOMessages;
@@ -38,15 +38,10 @@ final class MenuActionListener implements ActionListener {
         String cmd = arg0.getActionCommand();
         switch (cmd) {
         case "ueberTheraPi":
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    AboutDialog aboutFenster = new AboutDialog(reha.jFrame, reha.aboutMenuItem.getText());
-                    aboutFenster.setVisible(true);
-                    aboutFenster.setFocus();
-                    return null;
-                }
-            }.execute();
+            About dialog = new About();
+            dialog.collectValues();
+            dialog.setVisible(true);
+
             break;
         case "f2Rescue":
             new SwingWorker<Void, Void>() {
