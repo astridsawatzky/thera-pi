@@ -34,8 +34,7 @@ import org.slf4j.LoggerFactory;
 public final class INIFile {
 
     /**
-     * Logger for logging any output via logging framework, instead of using
-     * System.out.
+     * Logger for logging any output via logging framework.
      */
     private static final Logger LOG = LoggerFactory.getLogger(INIFile.class);
 
@@ -75,14 +74,14 @@ public final class INIFile {
     private LinkedHashMap<String, INISection> sectionMap;
 
     /**
-     * Create a iniFile object from the file named in the parameter.
+     * Create an iniFile object from the file named in the parameter.
      * 
      * @param absoluteFileNamePath The full path and name of the ini file to be
      *                             used.
      */
     public INIFile(String absoluteFileNamePath) {
         if (absoluteFileNamePath == null) {
-            throw new NullPointerException("Parameter [absoluteFileNamePath] must be NOT null!");
+            throw new NullPointerException("Parameter [absoluteFileNamePath] must not be null!");
         }
 
         if (!new File(absoluteFileNamePath).exists()) {
@@ -91,7 +90,6 @@ public final class INIFile {
 
         this.sectionMap = new LinkedHashMap<>();
         this.absoluteFileNamePath = absoluteFileNamePath;
-        // Load the specified INI file.
         if (checkFile(absoluteFileNamePath)) {
             loadFile(absoluteFileNamePath);
         }
