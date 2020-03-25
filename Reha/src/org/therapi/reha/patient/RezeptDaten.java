@@ -217,11 +217,9 @@ public class RezeptDaten extends JXPanel implements ActionListener {
             });
             reha = dieseVO.getRezNb().startsWith("RH");
             stest = StringTools.NullTest(dieseVO.getFrequenz());
+            int idxHM = 1;
 
-            Reha.instance.patpanel.rezlabs[8].setText(
-                    leistungTesten(0, preisvec, StringTools.ZahlTest(dieseVO.getArtDBehandl(1)))
-                            + (reha ? "" : "  " + (dieseVO.getHmPos(1)
-                                                          .equals("") ? "" : " (" + dieseVO.getHmPos(1) + ")")));
+            Reha.instance.patpanel.rezlabs[8].setText(showHM(dieseVO, preisvec, idxHM++));
 
             if (stest.equals("")) {
                 Reha.instance.patpanel.rezlabs[9].setForeground(Color.RED);
@@ -231,18 +229,9 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                 Reha.instance.patpanel.rezlabs[9].setText(stest + " / Wo.");
             }
 
-            Reha.instance.patpanel.rezlabs[10].setText(
-                    leistungTesten(0, preisvec, StringTools.ZahlTest(dieseVO.getArtDBehandl(2)))
-                            + (reha ? "" : "  " + (dieseVO.getHmPos(2)
-                                                          .equals("") ? "" : " (" + dieseVO.getHmPos(2) + ")")));
-            Reha.instance.patpanel.rezlabs[11].setText(
-                    leistungTesten(0, preisvec, StringTools.ZahlTest(dieseVO.getArtDBehandl(3)))
-                            + (reha ? "" : "  " + (dieseVO.getHmPos(3)
-                                                          .equals("") ? "" : " (" + dieseVO.getHmPos(3) + ")")));
-            Reha.instance.patpanel.rezlabs[12].setText(
-                    leistungTesten(0, preisvec, StringTools.ZahlTest(dieseVO.getArtDBehandl(4)))
-                            + (reha ? "" : "  " + (dieseVO.getHmPos(4)
-                                                          .equals("") ? "" : " (" + dieseVO.getHmPos(4) + ")")));
+            Reha.instance.patpanel.rezlabs[10].setText(showHM(dieseVO, preisvec, idxHM++));
+            Reha.instance.patpanel.rezlabs[11].setText(showHM(dieseVO, preisvec, idxHM++));
+            Reha.instance.patpanel.rezlabs[12].setText(showHM(dieseVO, preisvec, idxHM++));
             stest = StringTools.NullTest(dieseVO.getIndiSchluessel());
             if ((stest.equals("") || stest.equals("kein IndiSchl."))) {
                 if (!reha) {
@@ -311,21 +300,40 @@ public class RezeptDaten extends JXPanel implements ActionListener {
 
     }
 
-    public String leistungTesten(int leistung, Vector<Vector<String>> preisevec, int veczahl) {
-        String retwert = "----";
-        if (veczahl == -1 || veczahl == 0) {
-            return retwert;
-        }
-        for (int i = 0; i < preisevec.size(); i++) {
-            if (Integer.valueOf((String) ((Vector) preisevec.get(i)).get(preisevec.get(i)
-                                                                                  .size()
-                    - 1)) == veczahl) {
-                return StringTools.NullTest(Reha.instance.patpanel.vecaktrez.get(leistung + 3)) + "  *  "
-                        + (String) ((Vector) preisevec.get(i)).get(1);
+    /**
+     * @param dieseVO - Rezept-record
+     * @param preisvec - Preisliste
+     * @param idxHM - Index des HM im Rezept
+     * @return String 'anz * kuerzel (HM-Position)' oder Platzhalter '----'
+     */
+    private String showHM(Rezept dieseVO, Vector<Vector<String>> preisvec, int idxHM) {
+        String retVal = "----";
+        // indices for preisvec/priceListEntry access
+        final int KUERZEL = 1;
+        final int ID = 9; 
+        
+        if (!dieseVO.getHmPos(idxHM)
+                    .equals("")) {
+            int idOfPricelistEntry = StringTools.ZahlTest(dieseVO.getArtDBehandl(idxHM));
+            
+            if (idOfPricelistEntry > 0) {
+                for (int i = 0; i < preisvec.size(); i++) {
+                    String priceListEntry[] = new String[preisvec.get(i)
+                                                                 .size()];
+                    preisvec.get(i).toArray(priceListEntry);
+                    int thisID = Integer.valueOf(priceListEntry[ID]);
+                    if (thisID == idOfPricelistEntry) {
+                        retVal = StringTools.NullTest(dieseVO.getAnzBehS(idxHM)) + "  *  "
+                                + priceListEntry[KUERZEL];
+                        if (!dieseVO.getRezNb()
+                                    .startsWith("RH")) {
+                            retVal = retVal + " (" + dieseVO.getHmPos(idxHM) + ")";
+                        }
+                    }
+                }
             }
         }
-
-        return retwert;
+        return retVal;
     }
 
     public JScrollPane getDatenPanel(PatientHauptPanel eltern) {
