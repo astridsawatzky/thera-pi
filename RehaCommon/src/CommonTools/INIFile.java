@@ -1068,8 +1068,6 @@ public final class INIFile {
                     LOG.debug("Property value {} is environment variable with value {}.", this.propertyValue, result);
                 }
             } else {
-                LOG.debug("Property value {} is no environment variable. The property value itself is returned.",
-                        this.propertyValue);
                 result = this.propertyValue;
             }
             return result;
