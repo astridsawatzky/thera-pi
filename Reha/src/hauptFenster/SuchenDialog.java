@@ -15,7 +15,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.InputMap;
@@ -49,7 +48,6 @@ import gui.Cursors;
 import mandant.IK;
 import suchen.PatMitAbgebrochenenVOs;
 import suchen.PatMitVollenVOs;
-import suchen.PatWithMatchingVo;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
 

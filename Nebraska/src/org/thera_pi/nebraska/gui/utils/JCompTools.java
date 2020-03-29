@@ -1,8 +1,6 @@
 package org.thera_pi.nebraska.gui.utils;
 
 import java.awt.Component;
-import java.awt.LayoutManager;
-
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 

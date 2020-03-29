@@ -2,7 +2,6 @@ package org.thera_pi.nebraska.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -17,12 +16,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.bouncycastle.cms.CMSSignedDataGenerator;
 import org.jdesktop.swingx.JXPanel;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
 import org.thera_pi.nebraska.gui.utils.ButtonTools;
-import org.thera_pi.nebraska.gui.utils.FileStatics;
 import org.thera_pi.nebraska.gui.utils.JCompTools;
 
 import com.jgoodies.forms.builder.PanelBuilder;

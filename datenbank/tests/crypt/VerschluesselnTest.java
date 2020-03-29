@@ -5,8 +5,6 @@ import static org.junit.Assert.assertNotSame;
 
 import org.junit.Test;
 
-import crypt.Verschluesseln;
-
 public class VerschluesselnTest {
     final private transient static String password = "jeLaengerJeBesserPasswortRehaVerwaltung";
 

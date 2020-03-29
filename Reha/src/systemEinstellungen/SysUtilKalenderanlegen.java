@@ -54,7 +54,6 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
-import systemEinstellungen.config.Datenbank;
 
 public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, ActionListener {
 

@@ -45,7 +45,6 @@ import org.thera_pi.nebraska.gui.utils.JRtaRadioButton;
 import org.thera_pi.nebraska.gui.utils.pdf.PDFDrucker;
 
 import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.debug.FormDebugPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.lowagie.text.pdf.AcroFields;
