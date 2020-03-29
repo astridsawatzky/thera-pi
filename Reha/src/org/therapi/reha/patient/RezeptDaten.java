@@ -217,9 +217,13 @@ public class RezeptDaten extends JXPanel implements ActionListener {
             });
             reha = dieseVO.getRezNb().startsWith("RH");
             stest = StringTools.NullTest(dieseVO.getFrequenz());
-            int idxHM = 1;
+            final int INDEX_HEILMITTEL_1 = 1;
+            final int INDEX_HEILMITTEL_2 = 2;
+            final int INDEX_HEILMITTEL_3 = 3;
+            final int INDEX_HEILMITTEL_4 = 4;
 
-            Reha.instance.patpanel.rezlabs[8].setText(showHM(dieseVO, preisvec, idxHM++));
+            String anzeigeHMPosition1 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_1);
+            Reha.instance.patpanel.rezlabs[8].setText(anzeigeHMPosition1);
 
             if (stest.equals("")) {
                 Reha.instance.patpanel.rezlabs[9].setForeground(Color.RED);
@@ -229,9 +233,13 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                 Reha.instance.patpanel.rezlabs[9].setText(stest + " / Wo.");
             }
 
-            Reha.instance.patpanel.rezlabs[10].setText(showHM(dieseVO, preisvec, idxHM++));
-            Reha.instance.patpanel.rezlabs[11].setText(showHM(dieseVO, preisvec, idxHM++));
-            Reha.instance.patpanel.rezlabs[12].setText(showHM(dieseVO, preisvec, idxHM++));
+            String anzeigeHMPosition2 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_2);
+            Reha.instance.patpanel.rezlabs[10].setText(anzeigeHMPosition2);
+            String anzeigeHMPosition3 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_3);
+            Reha.instance.patpanel.rezlabs[11].setText(anzeigeHMPosition3);
+            String anzeigeHMPosition4 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_4);
+            Reha.instance.patpanel.rezlabs[12].setText(anzeigeHMPosition4);
+
             stest = StringTools.NullTest(dieseVO.getIndiSchluessel());
             if ((stest.equals("") || stest.equals("kein IndiSchl."))) {
                 if (!reha) {
