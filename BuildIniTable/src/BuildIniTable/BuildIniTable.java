@@ -20,14 +20,17 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
- * Standalone tool um *.ini Dateien in die Datenbank zu übertragen
+ * (Currently) Standalone tool um *.ini Dateien in die Datenbank zu übertragen
  * 
- * @author J.Steinhilber
  *
  */
 public class BuildIniTable implements WindowListener {
+  private static Logger logger = LoggerFactory.getLogger(BuildIniTable.class);
   public static BuildIniTable thisClass;
   
   SqlInfo sqlInfo = null;
@@ -39,12 +42,26 @@ public class BuildIniTable implements WindowListener {
   public String pfadzurmandini;
   public String pfadzurini;
   public int anzahlmandanten;
-  
-  
   public String[] inis = new String[] { 
-      "preisgruppen.ini", "terminkalender.ini", "gruppen.ini", "icons.ini", "fristen.ini", "color.ini", 
-      "dta301.ini", "gutachten.ini", "ktraeger.ini", "sqlmodul.ini", 
+      "preisgruppen.ini", "terminkalender.ini", "gruppen.ini", "icons.ini", "fristen.ini",
+      "color.ini", "dta301.ini", "gutachten.ini", "ktraeger.ini", "sqlmodul.ini", 
       "thbericht.ini" };
+  
+  // @VisibleForTesting
+  public BuildIniTable() {
+      this.pfadzurmandini = Path.Instance.getProghome() + "ini/mandanten.ini";
+      this.pfadzurini = this.pfadzurmandini.replace("mandanten.ini", "");
+  }
+  
+  //@VisibleForTesting
+  void setPfadzurmandini(String pfadZurMandIni) {
+      this.pfadzurmandini = pfadZurMandIni;
+  }
+  
+  //@VisibleForTesting
+  String getPfadzurmandini() {
+      return this.pfadzurmandini;
+  }
   
   public static void main(String[] args) {
     BuildIniTable application = new BuildIniTable();
@@ -68,17 +85,21 @@ public class BuildIniTable implements WindowListener {
     } catch (UnsupportedLookAndFeelException e) {
       e.printStackTrace();
     } 
-    int frage = JOptionPane.showConfirmDialog(null, "Haben Sie von Ihren Datenbanken eine Sicherungskopie erstellt?", "Achtung wichtige Benutzeranfrage", 0);
+    int frage = JOptionPane.showConfirmDialog(null, "Haben Sie von Ihren Datenbanken "
+            + "eine Sicherungskopie erstellt?", "Achtung wichtige Benutzeranfrage", 0);
     if (frage != 0)
       System.exit(0); 
     thisClass = this;
     thisClass.pfadzurmandini = thisClass.mandantTesten();
     thisClass.pfadzurini = thisClass.pfadzurmandini.replace("mandanten.ini", "");
     INIFile ini = new INIFile(thisClass.pfadzurmandini);
-    thisClass.anzahlmandanten = Integer.parseInt(ini.getStringProperty("TheraPiMandanten", "AnzahlMandanten"));
+    thisClass.anzahlmandanten = Integer.parseInt(ini.getStringProperty(
+                                                "TheraPiMandanten", "AnzahlMandanten"));
     for (int i = 0; i < thisClass.anzahlmandanten; i++) {
-      this.mandantIkvec.add(ini.getStringProperty("TheraPiMandanten", "MAND-IK" + Integer.toString(i + 1)));
-      this.mandantNamevec.add(ini.getStringProperty("TheraPiMandanten", "MAND-NAME" + Integer.toString(i + 1)));
+      this.mandantIkvec.add(ini.getStringProperty("TheraPiMandanten", "MAND-IK"
+                                                 + Integer.toString(i + 1)));
+      this.mandantNamevec.add(ini.getStringProperty("TheraPiMandanten", "MAND-NAME"
+                                                 + Integer.toString(i + 1)));
     } 
     this.jFrame = new JFrame();
     this.sqlInfo.setFrame(this.jFrame);
@@ -102,13 +123,19 @@ public class BuildIniTable implements WindowListener {
    * 
    * @return String - path to and including mandanten.ini
    */
-  private String mandantTesten() {
-    String mandini =   Path.Instance.getProghome() + "ini/mandanten.ini";
+  // @VisisbleForTesting
+  String mandantTesten() {
+    String mandini = this.pfadzurmandini;
+    logger.debug("Vorhandener mand-ini-Eintrag: " + mandini);
     if (!mandIniExist(mandini)) {
-      JOptionPane.showMessageDialog(null, "Das System kann die mandanten.ini nicht finden!\nBitte navigieren Sie in das Verzeichnis in dem sich die\nmandanten.ini befindet und wählen Sie die mandanten.ini aus!");
+      JOptionPane.showMessageDialog(null, "Das System kann die mandanten.ini nicht "
+              + "finden!\nBitte navigieren Sie in das Verzeichnis in dem sich die\n"
+              + "mandanten.ini befindet und wählen Sie die mandanten.ini aus!");
       String sret = dateiDialog(mandini);
       if (!sret.endsWith("/ini/mandanten.ini")) {
-        JOptionPane.showMessageDialog(null, "Sie haben die falsche(!!!) Datei ausgewählt, das Programm wird beendet!");
+        JOptionPane.showMessageDialog(null, "Sie haben die falsche(!!!) Datei ausgewählt, "
+                                          + "das Programm wird beendet!");
+        // ToDo: find elegant way to exit, if this is integrated into Thera-pi, we kill all
         System.exit(0);
       } 
       return sret;
@@ -116,7 +143,8 @@ public class BuildIniTable implements WindowListener {
     return mandini;
   }
   
-  private boolean mandIniExist(String abspath) {
+  //@VisisbleForTesting
+  static boolean mandIniExist(String abspath) {
     File f = new File(abspath);
     return f.exists();
   }
