@@ -1,10 +1,10 @@
 package opRgaf;
 
-import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -17,7 +17,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -25,6 +24,7 @@ import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import environment.Path;
 import io.RehaIOMessages;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class OpRgaf implements WindowListener {
@@ -32,19 +32,7 @@ public class OpRgaf implements WindowListener {
     /**
      * @param args
      */
-    public final Cursor wartenCursor = new Cursor(Cursor.WAIT_CURSOR);
-    public final Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-    public final Cursor kreuzCursor = new Cursor(Cursor.CROSSHAIR_CURSOR);
-    public final Cursor cmove = new Cursor(Cursor.MOVE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cnsize = new Cursor(Cursor.N_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cnwsize = new Cursor(Cursor.NW_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cnesize = new Cursor(Cursor.NE_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cswsize = new Cursor(Cursor.SW_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cwsize = new Cursor(Cursor.W_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor csesize = new Cursor(Cursor.SE_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cssize = new Cursor(Cursor.S_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cesize = new Cursor(Cursor.E_RESIZE_CURSOR); // @jve:decl-index=0:
-    public final Cursor cdefault = new Cursor(Cursor.DEFAULT_CURSOR); // @jve:decl-index=0:
+   
 
     public static boolean DbOk;
     JFrame jFrame;
@@ -52,13 +40,12 @@ public class OpRgaf implements WindowListener {
     public Connection conn;
     public static OpRgaf thisClass;
 
-    public static IOfficeApplication officeapplication;
+    public static final IOfficeApplication officeapplication = null ;
 
     public String dieseMaschine = null;
 
 
-    public static String officeProgrammPfad = "C:/Program Files (x86)/LibreOffice 3";
-    public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
+    
 
     public static String aktIK = "510841109";
 
@@ -89,9 +76,13 @@ public class OpRgaf implements WindowListener {
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
                 inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-                officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-
+               String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
+               String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+                try {
+					new OOService().start(officeNativePfad, officeProgrammPfad);
+				} catch (FileNotFoundException | OfficeApplicationException e) {
+					e.printStackTrace();
+				}
                 aktIK = args[1];
 
                 iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
@@ -112,7 +103,6 @@ public class OpRgaf implements WindowListener {
                 FirmenDaten(proghome);
 
             }
-            final OpRgaf xOpRgaf = application;
 
             application.StarteDB();
 
@@ -120,7 +110,6 @@ public class OpRgaf implements WindowListener {
         } else {
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
-            System.exit(0);
         }
 
     }
@@ -197,7 +186,7 @@ public class OpRgaf implements WindowListener {
         jFrame.setSize(1000, 675);
         jFrame.setTitle("Thera-Pi  Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen u. Mahnwesen  [IK: " + aktIK
                 + "] " + "[Server-IP: " + "dbIpAndName" + "]"); //FIXME: dpipandname
-        jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         otab = new OpRgafTab();
         otab.setHeader(0);
@@ -281,7 +270,6 @@ public class OpRgaf implements WindowListener {
                 e.printStackTrace();
             }
         }
-        System.exit(0);
     }
 
     @Override
@@ -305,7 +293,7 @@ public class OpRgaf implements WindowListener {
             }
 
         }
-        System.exit(0);
+       
     }
 
     @Override
@@ -375,13 +363,6 @@ public class OpRgaf implements WindowListener {
 
     /***************************/
 
-    public static void starteOfficeApplication() {
-        try {
-            officeapplication = new StartOOApplication(OpRgaf.officeProgrammPfad, OpRgaf.officeNativePfad).start(false);
-            System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
-        } catch (OfficeApplicationException e1) {
-            e1.printStackTrace();
-        }
-    }
+   
 
 }

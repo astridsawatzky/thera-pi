@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -16,11 +17,11 @@ import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class RehaUrlaub implements WindowListener {
@@ -319,10 +320,11 @@ public class RehaUrlaub implements WindowListener {
 
     public static void starteOfficeApplication() {
         try {
-            officeapplication = new StartOOApplication(RehaUrlaub.officeProgrammPfad,
-                    RehaUrlaub.officeNativePfad).start(false);
+        	new OOService().start(officeNativePfad, officeProgrammPfad);
+        	
+            officeapplication = new OOService().getOfficeapplication();
             RehaUrlaub.officeOk = true;
-        } catch (OfficeApplicationException e1) {
+        } catch (OfficeApplicationException | FileNotFoundException e1) {
             e1.printStackTrace();
         }
 

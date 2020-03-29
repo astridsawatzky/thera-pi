@@ -61,6 +61,7 @@ import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import offenePosten.OffenePosten;
 import offenePosten.OffenepostenTab;
+import office.OOService;
 
 public class RehaBillPanel extends JXPanel implements   TableModelListener {
 
@@ -1444,8 +1445,8 @@ public class RehaBillPanel extends JXPanel implements   TableModelListener {
     public void starteDokument(String url) throws Exception {
         System.out.println("Starte Dokument = " + url);
         IDocumentService documentService = null;
-        documentService = OffenePosten.officeapplication.getDocumentService();
-        IDocumentDescriptor docdescript = new DocumentDescriptor();
+        documentService = new OOService().getOfficeapplication().getDocumentService();
+                IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
         IDocument document = null;

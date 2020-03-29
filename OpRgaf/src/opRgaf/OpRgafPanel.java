@@ -2,7 +2,6 @@ package opRgaf;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -72,6 +71,7 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import io.RehaIOMessages;
+import office.OOService;
 
 public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
 
@@ -487,7 +487,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    OpRgaf.thisFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                     setzeFocus();
                     tabmod.removeTableModelListener(getInstance());
                     doSuchen();
@@ -499,12 +498,10 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Fehler beim einlesen der Datensätze");
-                    OpRgaf.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     setzeFocus();
                     suchen.setEnabled(true);
                     buts[btAusbuchen].setEnabled(true);
                 }
-                OpRgaf.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 setzeFocus();
                 return null;
             }
@@ -686,7 +683,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Korrekte Auflistung des Suchergebnisses fehlgeschlagen");
             }
-            OpRgaf.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
             suchen.setEnabled(true);
             buts[btAusbuchen].setEnabled(true);
@@ -1145,13 +1141,10 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
     private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException {
         IDocumentService documentService = null;
-        OpRgaf.thisFrame.setCursor(OpRgaf.thisClass.wartenCursor);
         //// System.out.println("Starte Datei -> "+url);
-        if (!OpRgaf.officeapplication.isActive()) {
-            OpRgaf.starteOfficeApplication();
-        }
+      
 
-        documentService = OpRgaf.officeapplication.getDocumentService();
+        documentService =   new OOService().getOfficeapplication().getDocumentService();
 
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
@@ -1196,7 +1189,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                     .getXFrame()
                     .getContainerWindow()
                     .setVisible(true);
-        OpRgaf.thisFrame.setCursor(OpRgaf.thisClass.normalCursor);
     }
 
     @Override

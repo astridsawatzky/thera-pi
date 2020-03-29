@@ -14,6 +14,7 @@ import dialoge.About;
 import environment.LadeProg;
 import environment.Path;
 import io.RehaIOMessages;
+import opRgaf.OpRgaf;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemTools.RezeptFahnder;
@@ -153,6 +154,8 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             if (!RehaIOServer.rgAfIsActive) {
+            	String[] args = new String[] {Path.Instance.getProghome(),
+            			 Reha.getAktIK() , String.valueOf(Reha.xport)};
                 new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
                         + Reha.getAktIK() + " " + Reha.xport);
             } else {

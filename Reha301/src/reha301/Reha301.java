@@ -4,6 +4,7 @@ import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,11 +20,11 @@ import org.slf4j.LoggerFactory;
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import io.RehaIOMessages;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class Reha301 implements WindowListener {
@@ -371,12 +372,16 @@ public class Reha301 implements WindowListener {
     public static void starteOfficeApplication() {
 
         try {
-            officeapplication = new StartOOApplication(Reha301.officeProgrammPfad, Reha301.officeNativePfad).start(
-                    false);
+        	new OOService().start(Reha301.officeNativePfad, Reha301.officeProgrammPfad);
+        	
+            officeapplication = new OOService().getOfficeapplication();
             System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
-        }
+        } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
     }
 

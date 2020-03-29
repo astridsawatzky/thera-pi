@@ -23,6 +23,7 @@ import ag.ion.bion.officelayer.text.ITextTableCell;
 import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.TextException;
 import offenePosten.OffenePosten;
+import office.OOService;
 
 public class AbrechnungDrucken {
     int aktuellePosition = 0;
@@ -249,7 +250,7 @@ public class AbrechnungDrucken {
 
     public void starteDokument(String url) throws Exception {
         IDocumentService documentService = null;
-        documentService = OffenePosten.officeapplication.getDocumentService();
+        documentService = new OOService().getOfficeapplication().getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);

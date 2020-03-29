@@ -3,14 +3,11 @@ package opRgaf;
 import java.io.File;
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.OpCommon;
-import environment.Path;
 
 public class OpRgAfIni {
     public static HashMap<String, Object> mahnParam;

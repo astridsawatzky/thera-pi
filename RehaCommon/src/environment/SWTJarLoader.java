@@ -34,7 +34,6 @@ public class SWTJarLoader implements Runnable {
         System.out.println("Architecture and OS == " + archPart + "bit " + osPart);
 
         String swtFileName = "swt-" + osPart + archPart + "-3.7.jar";
-        String workingDir = System.getProperty("user.dir");
         String libDir = environment.Path.Instance.getProghome() + "Libraries\\lib\\djnative\\";
         File file = new File(libDir, swtFileName);
         if (!file.exists())
@@ -47,7 +46,6 @@ public class SWTJarLoader implements Runnable {
 
             URL swtFileUrl = file.toURI()
                                  .toURL();
-            // System.out.println("Adding to classpath: " + swtFileUrl);
             addUrlMethod.invoke(classLoader, swtFileUrl);
         } catch (Exception e) {
             throw new RuntimeException("Unable to add the swt jar to the class path: " + file.getAbsoluteFile(), e);

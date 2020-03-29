@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.ini4j.Ini;
 
+import com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import crypt.Verschluesseln;
@@ -31,7 +32,7 @@ public class Datenquelle {
         } catch (IOException e) {
             throw new IllegalArgumentException(f.getPath());
         }
-        dataSource = new MysqlDataSource();
+        dataSource = new MysqlConnectionPoolDataSource();
         dataSource.setUrl(ini.get(DATEN_BANK, "DBKontakt1"));
         dataSource.setUser(ini.get(DATEN_BANK, "DBBenutzer1"));
         String pw = DECODER.decrypt(ini.get(DATEN_BANK, "DBPasswort1"));

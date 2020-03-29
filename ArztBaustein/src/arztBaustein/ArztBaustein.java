@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -15,11 +16,11 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingx.JXFrame;
 
 import CommonTools.INIFile;
-import CommonTools.StartOOApplication;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import logging.Logging;
 import mandant.IK;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class ArztBaustein {
@@ -121,11 +122,15 @@ public class ArztBaustein {
     public static IOfficeApplication starteOfficeApplication(String ooPath, String ooNativePath) {
         IOfficeApplication application = null;
         try {
-            application = new StartOOApplication(ooPath, ooNativePath).start();
+        	new OOService().start(ooNativePath, ooPath);
+            application = new OOService().getOfficeapplication();
             System.out.println("OpenOffice ist gestartet und Active =" + application.isActive());
         } catch (OfficeApplicationException e1) {
             e1.printStackTrace();
-        }
+        } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         return application;
 
     }

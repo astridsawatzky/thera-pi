@@ -48,8 +48,8 @@ import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
+import ag.ion.bion.officelayer.event.DocumentAdapter;
 import ag.ion.bion.officelayer.event.IDocumentEvent;
-import ag.ion.bion.officelayer.event.IDocumentListener;
 import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.bion.officelayer.text.IText;
@@ -427,14 +427,14 @@ public class OOTools {
             }
             // Wenn nicht gleich wie im Übergebenen Parameter angegeben -> Drucker wechseln
 
-            if (!druckerName.equals(drucker)) {
+            if (!drucker.equals(druckerName)) {
                 try {
                     IPrinter printer = textDocument.getPrintService()
-                                         .createPrinter(drucker);
+                                                   .createPrinter(drucker);
 
                     textDocument.getPrintService()
                                 .setActivePrinter(printer);
-                } catch (NOAException e) {
+                } catch (NullPointerException | NOAException e) {
                     e.printStackTrace();
                 }
             }
@@ -656,7 +656,7 @@ public class OOTools {
     /*******************************************************/
 }
 
-class TheraPiDocListener implements IDocumentListener {
+class TheraPiDocListener extends DocumentAdapter {
     Object document = null;
 
     public TheraPiDocListener(IDocument document) {
@@ -666,16 +666,6 @@ class TheraPiDocListener implements IDocumentListener {
     @Override
     public void disposing(IEvent arg0) {
         System.out.println("disposing");
-    }
-
-    @Override
-    public void onAlphaCharInput(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onFocus(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
     }
 
     @Override
@@ -706,56 +696,6 @@ class TheraPiDocListener implements IDocumentListener {
     @Override
     public void onModifyChanged(IDocumentEvent arg0) {
         System.out.println("onModifyChanged");
-    }
-
-    @Override
-    public void onMouseOut(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onMouseOver(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onNew(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onNonAlphaCharInput(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onSave(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onSaveAs(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onSaveAsDone(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onSaveDone(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onSaveFinished(IDocumentEvent arg0) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void onUnload(IDocumentEvent arg0) {
-        System.out.println("onUnload");
     }
 
 }

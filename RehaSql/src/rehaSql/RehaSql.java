@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -22,13 +23,13 @@ import org.jdesktop.swingworker.SwingWorker;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import io.RehaIOMessages;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class RehaSql implements WindowListener {
@@ -318,10 +319,10 @@ public class RehaSql implements WindowListener {
 
     public static void starteOfficeApplication() {
         try {
-            officeapplication = new StartOOApplication(RehaSql.officeProgrammPfad, RehaSql.officeNativePfad).start(
-                    false);
+        	new OOService().start(officeNativePfad, officeProgrammPfad);
+            officeapplication = new OOService().getOfficeapplication();
             System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
-        } catch (OfficeApplicationException e1) {
+        } catch (OfficeApplicationException | FileNotFoundException e1) {
             e1.printStackTrace();
         }
     }

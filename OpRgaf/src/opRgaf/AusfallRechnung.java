@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -45,6 +46,7 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
+import office.OOService;
 
 public class AusfallRechnung extends JDialog implements WindowListener, ActionListener, KeyListener {
     /**
@@ -212,8 +214,13 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        starteAusfallRechnung(
-                                OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/AusfallRechnung.ott.Kopie.ott");
+                        String url = OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/AusfallRechnung.ott.Kopie.ott";
+						if(new File(url).exists()) {
+							starteAusfallRechnung(
+							        url);
+						} else {
+							JOptionPane.showMessageDialog(null, "Vorlage " + url + " konnte nicht gefunden werden");
+						}
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Fehler bei der Erstellung der Ausfallrechnung");
@@ -342,13 +349,10 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
     }
 
     public static void starteAusfallRechnung(String url) {
-        IDocumentService documentService = null;
-        // System.out.println("Starte Datei -> "+url);
-        if (!OpRgaf.officeapplication.isActive()) {
-            OpRgaf.starteOfficeApplication();
-        }
+        IDocumentService documentService ;
+        
         try {
-            documentService = OpRgaf.officeapplication.getDocumentService();
+            documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null,

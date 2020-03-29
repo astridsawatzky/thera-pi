@@ -3,7 +3,6 @@ package rehaHMK;
 import CommonTools.Colors;
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -14,6 +13,7 @@ import environment.Path;
 import environment.SWTJarLoader;
 import io.RehaIOMessages;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 import java.awt.Color;
@@ -25,6 +25,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -387,9 +388,13 @@ public class RehaHMK implements WindowListener {
           officeProgrammPfad + "\n\n" + 
           "Dieser Pfad existiert: NEIN"); 
     try {
-      officeapplication = (new StartOOApplication(officeProgrammPfad, officeNativePfad)).start(false);
+    	new OOService().start(officeNativePfad, officeProgrammPfad);
+      officeapplication = new OOService().getOfficeapplication();
     } catch (OfficeApplicationException e1) {
       e1.printStackTrace();
-    } 
+    } catch (FileNotFoundException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	} 
   }
 }

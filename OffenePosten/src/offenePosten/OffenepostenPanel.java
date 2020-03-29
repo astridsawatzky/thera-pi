@@ -1,7 +1,6 @@
 package offenePosten;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -313,7 +312,6 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    OffenePosten.thisFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));
                     setzeFocus();
                     tabmod.removeTableModelListener(getInstance());
                     doSuchen();
@@ -325,12 +323,10 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Fehler beim einlesen der Datensätze");
-                    OffenePosten.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     setzeFocus();
                     suchen.setEnabled(true);
                     buts[0].setEnabled(true);
                 }
-                OffenePosten.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                 setzeFocus();
                 return null;
             }
@@ -504,7 +500,6 @@ public class OffenepostenPanel extends JXPanel implements TableModelListener {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Korrekte Auflistung des Suchergebnisses fehlgeschlagen");
             }
-            OffenePosten.thisFrame.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
             suchen.setEnabled(true);
             buts[0].setEnabled(true);

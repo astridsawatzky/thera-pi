@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -30,7 +31,6 @@ import org.jdesktop.swingworker.SwingWorker;
 import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -38,6 +38,7 @@ import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import crypt.Verschluesseln;
 import io.RehaIOMessages;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class RehaMail implements WindowListener {
@@ -734,10 +735,10 @@ public class RehaMail implements WindowListener {
 
         try {
             System.out.println(RehaMail.officeProgrammPfad + " / " + RehaMail.officeNativePfad);
-            officeapplication = new StartOOApplication(RehaMail.officeProgrammPfad, RehaMail.officeNativePfad).start(
-                    false);
+            new OOService().start(officeNativePfad, officeProgrammPfad);
+            officeapplication = new OOService().getOfficeapplication();
             System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
-        } catch (OfficeApplicationException e1) {
+        } catch (OfficeApplicationException | FileNotFoundException e1) {
             e1.printStackTrace();
         }
     }

@@ -51,6 +51,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -121,7 +122,6 @@ import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -144,6 +144,7 @@ import logging.Logging;
 import mandant.Mandant;
 import menus.TerminMenu;
 import ocf.OcKVK;
+import office.OOService;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
@@ -313,7 +314,7 @@ public class Reha implements RehaEventListener {
     public String lastSelectedValue = "";
     public int lastSelectedFloskel = -1;
 
-    public boolean isLibreOffice = false;
+  
     public SqlInfo sqlInfo = null;
     public static int nachladenDB = 0;
     public static int dbLoadError = 1;
@@ -1910,11 +1911,11 @@ public class Reha implements RehaEventListener {
 
     public static void starteOfficeApplication() {
         try {
-            officeapplication = new StartOOApplication(SystemConfig.OpenOfficePfad,
-                    SystemConfig.OpenOfficeNativePfad).start(false);
-            System.out.println("OpenOffice ist gestartet und aktiv = " + officeapplication.isActive());
+        	new OOService().start(SystemConfig.OpenOfficeNativePfad,SystemConfig.OpenOfficePfad );
+        	
+            officeapplication = new OOService().getOfficeapplication();
             Reha.instance.Rehaprogress.setIndeterminate(false);
-        } catch (OfficeApplicationException e) {
+        } catch (OfficeApplicationException | FileNotFoundException e) {
             e.printStackTrace();
             Reha.instance.messageLabel = new JLabel("OO.org nicht verfügbar!!!");
         }

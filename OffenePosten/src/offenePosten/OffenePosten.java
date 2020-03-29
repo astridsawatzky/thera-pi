@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,13 +22,13 @@ import CommonTools.INIFile;
 import CommonTools.INITool;
 import CommonTools.OpCommon;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import io.RehaIOMessages;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class OffenePosten implements WindowListener {
@@ -41,10 +42,7 @@ public class OffenePosten implements WindowListener {
     public Connection conn;
 
 
-    public static IOfficeApplication officeapplication;
 
-    public static String officeProgrammPfad = "C:/Programme/OpenOffice.org 3";
-    public static String officeNativePfad = "C:/RehaVerwaltung/Libraries/lib/openofficeorg/";
     public static String progHome = "C:/RehaVerwaltung/";
     public static String aktIK = "510841109";
 
@@ -84,9 +82,14 @@ public class OffenePosten implements WindowListener {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
-                officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-                officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-                starteOfficeApplication();
+                 String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad") ;
+                String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad") ;
+                try {
+					new OOService().start(officeNativePfad, officeProgrammPfad);
+				} catch (FileNotFoundException | OfficeApplicationException e) {
+					e.printStackTrace();
+				}
+                
                 progHome = args[0];
                 aktIK = args[1];
                 path2IniFile = progHome + "ini/" + aktIK + "/";
@@ -158,7 +161,6 @@ public class OffenePosten implements WindowListener {
         } else {
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
-            System.exit(0);
         }
 
     }
@@ -307,7 +309,6 @@ public class OffenePosten implements WindowListener {
                 e.printStackTrace();
             }
         }
-        System.exit(0);
     }
 
     @Override
@@ -331,7 +332,6 @@ public class OffenePosten implements WindowListener {
             }
         }
 
-        System.exit(0);
     }
 
     @Override
@@ -402,18 +402,7 @@ public class OffenePosten implements WindowListener {
 
     /***************************/
 
-    public static void starteOfficeApplication() {
-        try {
-            officeapplication = new StartOOApplication(OffenePosten.officeProgrammPfad,
-                    OffenePosten.officeNativePfad).start(false);
-            System.out.println("OpenOffice ist gestartet und Active =" + officeapplication.isActive());
-        } catch (OfficeApplicationException e1) {
-            e1.printStackTrace();
-        }
-
-
-
-    }
+  
 
     public static void setVorauswahl(int value) {
         vorauswahlSuchkriterium = value;

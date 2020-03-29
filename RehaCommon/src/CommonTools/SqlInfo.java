@@ -167,7 +167,7 @@ public class SqlInfo {
                 }
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return retvec;
     }
@@ -195,7 +195,7 @@ public class SqlInfo {
                 }
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return retvec;
     }
@@ -236,7 +236,7 @@ public class SqlInfo {
                 retvec.add((rs.getString(2) == null ? "" : rs.getString(2)));
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return retvec;
     }
@@ -268,11 +268,11 @@ public class SqlInfo {
                     }
                     retkomplett.add(retvec);
                 } catch (Exception ex) {
-                    // ex.printStackTrace();
+                    LOGGER.error(sstmt, ex);
                 }
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return retkomplett;
     }
@@ -435,7 +435,7 @@ public class SqlInfo {
     public static int erzeugeNummerMitMax(String nummer, int max) {
         int reznr = -1;
         /****** Zunächst eine neue Rezeptnummer holen ******/
-        Vector<String> numvec = null;
+        Vector<String> numvec = new Vector<String>();
         try {
             conn.setAutoCommit(false);
             numvec = SqlInfo.holeFeldForUpdate("nummern", nummer + ",id", " FOR UPDATE");
@@ -466,7 +466,6 @@ public class SqlInfo {
             }
 
         }
-        numvec = null;
         return reznr;
 
     }
@@ -482,7 +481,7 @@ public class SqlInfo {
                 retid = rs.getInt(1);
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return retid;
     }
@@ -494,7 +493,7 @@ public class SqlInfo {
         try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);) {
             stmt.execute(sstmt);
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return;
     }
@@ -507,7 +506,7 @@ public class SqlInfo {
 
             stmt.execute(sstmt);
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
     }
 
@@ -521,7 +520,7 @@ public class SqlInfo {
                 ret = (rs.getString(feld) == null ? "" : rs.getString(feld));
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return ret;
     }
@@ -536,7 +535,7 @@ public class SqlInfo {
             }
             return ret;
         } catch (SQLException ex) {
-            LOGGER.error(sstmt ,ex);
+            LOGGER.error(sstmt, ex);
         }
         return ret;
     }
@@ -558,10 +557,10 @@ public class SqlInfo {
                     retvec.add((rs.getString(i) == null ? "" : rs.getString(i)));
 
                 }
-                retkomplett.add( retvec);
+                retkomplett.add(retvec);
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
 
         return retkomplett;
@@ -582,7 +581,7 @@ public class SqlInfo {
                 ret = (rs.getString(feld) == null ? "" : rs.getString(feld));
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return ret;
     }
@@ -630,7 +629,7 @@ public class SqlInfo {
                 is = rs.getBinaryStream(1);
             }
         } catch (SQLException ev) {
-            LOGGER.error(sstmt ,ev);
+            LOGGER.error(sstmt, ev);
         }
         return is;
     }
@@ -697,7 +696,7 @@ public class SqlInfo {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.error(inifilename ,e);
+            LOGGER.error(inifilename, e);
         }
         return result;
     }

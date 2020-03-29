@@ -3,6 +3,7 @@ package rehaKassenbuch;
 import java.awt.Cursor;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -16,11 +17,11 @@ import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.INIFile;
 import CommonTools.SqlInfo;
-import CommonTools.StartOOApplication;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import crypt.Verschluesseln;
 import logging.Logging;
+import office.OOService;
 import sql.DatenquellenFactory;
 
 public class RehaKassenbuch implements WindowListener {
@@ -288,11 +289,14 @@ public class RehaKassenbuch implements WindowListener {
 
     public static void starteOfficeApplication() {
         try {
-            officeapplication = new StartOOApplication(RehaKassenbuch.officeProgrammPfad,
-                    RehaKassenbuch.officeNativePfad).start(false);
+        	new OOService().start( RehaKassenbuch.officeNativePfad, RehaKassenbuch.officeProgrammPfad);
+            officeapplication = new OOService().getOfficeapplication();
         } catch (OfficeApplicationException e1) {
             e1.printStackTrace();
-        }
+        } catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 }

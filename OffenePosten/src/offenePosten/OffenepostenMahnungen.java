@@ -63,6 +63,7 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
+import office.OOService;
 
 public class OffenepostenMahnungen extends JXPanel {
 
@@ -813,13 +814,10 @@ public class OffenepostenMahnungen extends JXPanel {
 
     private void starteMahnDruck(String url) {
         IDocumentService documentService = null;
-        // System.out.println("Starte Datei -> "+url);
-        if (!OffenePosten.officeapplication.isActive()) {
-            OffenePosten.starteOfficeApplication();
-        }
+   
         try {
-            documentService = OffenePosten.officeapplication.getDocumentService();
-        } catch (OfficeApplicationException e) {
+            documentService = new OOService().getOfficeapplication().getDocumentService();
+                 } catch (OfficeApplicationException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Fehler im OpenOffice-System - Mahnung kann nicht erstellt werden");
             return;
