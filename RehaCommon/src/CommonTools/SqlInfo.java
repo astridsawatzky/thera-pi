@@ -1,8 +1,5 @@
 package CommonTools;
 
-import static gui.Cursors.normalCursor;
-import static gui.Cursors.wartenCursor;
-
 import java.io.InputStream;
 import java.net.InetAddress;
 import java.sql.Connection;
@@ -21,31 +18,26 @@ import org.slf4j.LoggerFactory;
 
 public class SqlInfo {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SqlInfo.class);
-    private static JFrame frame = null;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SqlInfo.class);
     static Connection conn = null;
     private static InetAddress dieseMaschine;
 
     public SqlInfo(JFrame frame, Connection conn, InetAddress dieseMaschine) {
-        SqlInfo.frame = frame;
         SqlInfo.conn = conn;
         SqlInfo.dieseMaschine = dieseMaschine;
     }
 
     public SqlInfo(JFrame frame, Connection conn) {
-        SqlInfo.frame = frame;
         SqlInfo.conn = conn;
         SqlInfo.dieseMaschine = null;
     }
 
     public SqlInfo() {
-        SqlInfo.frame = null;
         SqlInfo.conn = null;
         SqlInfo.dieseMaschine = null;
     }
 
     public void setFrame(JFrame frame) {
-        SqlInfo.frame = frame;
     }
 
     public void setConnection(Connection conn) {
@@ -57,7 +49,7 @@ public class SqlInfo {
     }
 
     public JFrame getFrame() {
-        return SqlInfo.frame;
+        return null;
     }
 
     public Connection getConnection() {
@@ -79,133 +71,74 @@ public class SqlInfo {
 
     public static boolean gibtsSchon(String sstmt) {
         boolean gibtsschon = false;
-        Statement stmt = null;
-        ResultSet rs = null;
 
         try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            rs = stmt.executeQuery(sstmt);
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery(sstmt);
 
             if (rs.next()) {
                 gibtsschon = true;
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
 
         } catch (SQLException ev) {
             // System.out.println("SQLException: " + ev.getMessage());
             // System.out.println("SQLState: " + ev.getSQLState());
             // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
         }
         return gibtsschon;
     }
 
-    /*******************************************/
+    /**
+     * Deprecated use {@link ResultSet} getGeneratedKeys() .
+     * 
+     * @param tabelle
+     * @param feld
+     * @return
+     */
+    @Deprecated
     public static int holeId(String tabelle, String feld) {
         int retid = -1;
-        Statement stmt = null;
-        ResultSet rs = null;
 
         try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = null;
 
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt1 = "insert into " + tabelle + " set " + feld + " = '" + dieseMaschine + "'";
-            stmt.execute(sstmt1);
-            String sstmt2 = "select id from " + tabelle + " where " + feld + " = '" + dieseMaschine + "'";
-            rs = stmt.executeQuery(sstmt2);
+            String createID = "insert into " + tabelle + " set " + feld + " = '" + dieseMaschine + "'";
+            stmt.execute(createID);
+            String selectID = "select id from " + tabelle + " where " + feld + " = '" + dieseMaschine + "'";
+            rs = stmt.executeQuery(selectID);
             if (rs.next()) {
                 retid = rs.getInt("id");
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
             // System.out.println("SQLException: " + ev.getMessage());
             // System.out.println("SQLState: " + ev.getSQLState());
             // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
         }
         return retid;
     }
 
-    /*******************************/
+    /**
+     * 
+     * Deprecated use {@link ResultSet} getGeneratedKeys() .
+     **/
+    @Deprecated
     public static int holeIdSimple(String tabelle, String befehl) {
         int retid = -1;
-        Statement stmt = null;
-        ResultSet rs = null;
 
-        try {
-
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);) {
             stmt.execute(befehl);
-            rs = stmt.executeQuery("select max(id) from " + tabelle);
-            if (rs.next()) {
-                retid = rs.getInt(1);
-            }
-
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-
-        finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
+            try (ResultSet rs = stmt.executeQuery("select max(id) from " + tabelle);) {
+                if (rs.next()) {
+                    retid = rs.getInt(1);
                 }
+
+            } catch (SQLException e) {
+
+                e.printStackTrace();
             }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+        } catch (SQLException e1) {
+            e1.printStackTrace();
         }
         return retid;
     }
@@ -213,21 +146,12 @@ public class SqlInfo {
     /*******************************/
 
     public static Vector<String> holeSatz(String tabelle, String felder, String kriterium, List<?> ausschliessen) {
-        Statement stmt = null;
-        ResultSet rs = null;
         Vector<String> retvec = new Vector<String>();
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
+        String sstmt = "select " + felder + " from " + tabelle + " where " + kriterium + " LIMIT 1";
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
 
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "select " + felder + " from " + tabelle + " where " + kriterium + " LIMIT 1";
-            rs = stmt.executeQuery(sstmt);
             int nichtlesen = ausschliessen.size();
             if (rs.next()) {
                 ResultSetMetaData rsMetaData = rs.getMetaData();
@@ -242,52 +166,20 @@ public class SqlInfo {
                     }
                 }
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return retvec;
     }
 
-    /*****************************************/
-    /*******************************/
     public static Vector<String> holeSatzLimit(String tabelle, String felder, String kriterium, int[] limit,
             List<?> ausschliessen) {
-        Statement stmt = null;
-        ResultSet rs = null;
+        String sstmt = "select " + felder + " from " + tabelle + " " + kriterium + " LIMIT "
+                + Integer.toString(limit[0]) + "," + Integer.toString(limit[1]) + "";
         Vector<String> retvec = new Vector<String>();
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            // Reha.thisFrame.setCursor(Reha.instance.wartenCursor);
-            String sstmt = "select " + felder + " from " + tabelle + " " + kriterium + " LIMIT "
-                    + Integer.toString(limit[0]) + "," + Integer.toString(limit[1]) + "";
-            rs = stmt.executeQuery(sstmt);
             int nichtlesen = ausschliessen.size();
             if (rs.next()) {
                 ResultSetMetaData rsMetaData = rs.getMetaData();
@@ -302,28 +194,8 @@ public class SqlInfo {
                     }
                 }
             }
-            // Reha.thisFrame.setCursor(Reha.instance.normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return retvec;
     }
@@ -331,11 +203,9 @@ public class SqlInfo {
     /*****************************************/
     public static Vector<String> holeFeldNamen(String tabelle, boolean ausnahmen, List<?> lausnahmen) {
         Vector<String> vec = new Vector<String>();
-        Statement stmt = null;
-        ResultSet rs = null;
         try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            rs = stmt.executeQuery("describe " + tabelle);
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery("describe " + tabelle);
             while (rs.next()) {
                 if (ausnahmen) {
                     if (!lausnahmen.contains(rs.getString(1)
@@ -350,70 +220,23 @@ public class SqlInfo {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
         }
         return vec;
     }
 
     public static Vector<String> holeFeldForUpdate(String tabelle, String feld, String kriterium) {
-        Statement stmt = null;
-        ResultSet rs = null;
         Vector<String> retvec = new Vector<String>();
+        String sstmt = "select " + feld + " from " + tabelle + kriterium;
 
         try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "select " + feld + " from " + tabelle + kriterium;
-            rs = stmt.executeQuery(sstmt);
+            Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery(sstmt);
             if (rs.next()) {
                 retvec.add((rs.getString(1) == null ? "" : rs.getString(1)));
                 retvec.add((rs.getString(2) == null ? "" : rs.getString(2)));
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return retvec;
     }
@@ -422,27 +245,16 @@ public class SqlInfo {
 
     public static Vector<Vector<String>> holeSaetze(String tabelle, String felder, String kriterium,
             List<String> ausschliessen) {
-        Statement stmt = null;
-        ResultSet rs = null;
-        Vector<String> retvec = new Vector<String>();
         Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();
         ResultSetMetaData rsMetaData = null;
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "select " + felder + " from " + tabelle + " where " + kriterium;
-            rs = stmt.executeQuery(sstmt);
+        String sstmt = "select " + felder + " from " + tabelle + " where " + kriterium;
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
 
             int nichtlesen = ausschliessen.size();
             while (rs.next()) {
                 try {
-                    retvec.clear();
+                    Vector<String> retvec = new Vector<String>();
                     rsMetaData = rs.getMetaData();
                     int numberOfColumns = rsMetaData.getColumnCount() + 1;
                     for (int i = 1; i < numberOfColumns; i++) {
@@ -454,39 +266,13 @@ public class SqlInfo {
                             retvec.add((rs.getString(i) == null ? "" : rs.getString(i)));
                         }
                     }
-                    retkomplett.add((Vector<String>) ((Vector<?>) retvec.clone()));
+                    retkomplett.add(retvec);
                 } catch (Exception ex) {
                     // ex.printStackTrace();
                 }
             }
-            retvec.clear();
-            retvec = null;
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            ev.printStackTrace();
-            // JOptionPane.showMessageDialog(null, "Fehler in der
-            // MySqlFunktion-HoeleSaetze");
-        } finally {
-            if (rsMetaData != null) {
-                rsMetaData = null;
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return retkomplett;
     }
@@ -613,12 +399,7 @@ public class SqlInfo {
         Vector<String> numvec = null;
         try {
             conn.setAutoCommit(false);
-            // String numcmd = nummer+",id";
-            //// System.out.println("numcmd = "+numcmd);
-            // numvec = SqlInfo.holeFeldForUpdate("nummern", nummer+",id",
-            // "mandant='"+Reha.aktIK+"' FOR UPDATE");
             numvec = SqlInfo.holeFeldForUpdate("nummern", nummer + ",id", " FOR UPDATE");
-            //// System.out.println(Reha.aktIK);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -657,10 +438,7 @@ public class SqlInfo {
         Vector<String> numvec = null;
         try {
             conn.setAutoCommit(false);
-            // String numcmd = nummer+",id";
-            //// System.out.println("numcmd = "+numcmd);
             numvec = SqlInfo.holeFeldForUpdate("nummern", nummer + ",id", " FOR UPDATE");
-            //// System.out.println(Reha.aktIK);
         } catch (SQLException e) {
 
             e.printStackTrace();
@@ -670,12 +448,8 @@ public class SqlInfo {
             if ((reznr + 1) > max) {
                 reznr = 1;
             }
-            //// System.out.println("Neue Rezeptnummer = "+reznr);
             String cmd = "update nummern set " + nummer + "='" + (reznr + 1) + "' where id='" + numvec.get(1) + "'";
-            //// System.out.println("Kommando = "+cmd);
             new ExUndHop().setzeStatement(cmd);
-            //// System.out.println("bisherige Rezeptnummer = "+nummer.toUpperCase()+reznr+"
-            //// / neue Rezeptnummer = "+nummer.toUpperCase()+(reznr+1));
             try {
                 conn.setAutoCommit(true);
             } catch (SQLException e) {
@@ -700,192 +474,70 @@ public class SqlInfo {
     /*******************************************/
     public static int zaehleSaetze(String tabelle, String bedingung) {
         int retid = -1;
-        Statement stmt = null;
-        ResultSet rs = null;
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt1 = "select count(*) from " + tabelle + " where " + bedingung;
-            rs = stmt.executeQuery(sstmt1);
+        String sstmt = "select count(*) from " + tabelle + " where " + bedingung;
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
             if (rs.next()) {
                 retid = rs.getInt(1);
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return retid;
     }
 
     /*******************************/
     public static void aktualisiereSatz(String tabelle, String sets, String kriterium) {
-        Statement stmt = null;
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "update " + tabelle + " set " + sets + " where " + kriterium + " LIMIT 1";
-            //// System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
+        String sstmt = "update " + tabelle + " set " + sets + " where " + kriterium + " LIMIT 1";
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);) {
             stmt.execute(sstmt);
-            //// System.out.println(ret);
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return;
     }
 
     /*******************************/
     public static void aktualisiereSaetze(String tabelle, String sets, String kriterium) {
-        Statement stmt = null;
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
+        String sstmt = "update " + tabelle + " set " + sets + " where " + kriterium;
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);) {
 
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "update " + tabelle + " set " + sets + " where " + kriterium;
-            //// System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
             stmt.execute(sstmt);
-            //// System.out.println(ret);
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
-        return;
     }
 
-    /*****************************************/
-
-    /*****************************************/
     public static String holePatFeld(String feld, String kriterium) {
-        Statement stmt = null;
-        ResultSet rs = null;
         String ret = "";
-        // Vector<String> retvec = new Vector<String>();
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "select " + feld + " from pat5 where " + kriterium + " LIMIT 1";
-            rs = stmt.executeQuery(sstmt);
-
+        String sstmt = "select " + feld + " from pat5 where " + kriterium + " LIMIT 1";
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
             if (rs.next()) {
                 ret = (rs.getString(feld) == null ? "" : rs.getString(feld));
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return ret;
     }
 
     /*****************************************/
-    public static String holeEinzelFeld(String xstmt) {
+    public static String holeEinzelFeld(String sstmt) {
         String ret = "";
-        if (frame != null) {
-            frame.setCursor(wartenCursor);
-        }
         try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                ResultSet rs = stmt.executeQuery(xstmt)) {
+                ResultSet rs = stmt.executeQuery(sstmt)) {
             if (rs.next()) {
                 ret = (rs.getString(1) == null ? "" : rs.getString(1)).trim();
             }
             return ret;
         } catch (SQLException ex) {
-            LOG.error("SQLException: {}", ex.getMessage());
-            LOG.error("SQLState: {}", ex.getSQLState());
-            LOG.error("VendorError: " + ex.getErrorCode(), ex);
+            LOGGER.error(sstmt ,ex);
         }
-        if (frame != null)
-            frame.setCursor(normalCursor);
         return ret;
     }
 
@@ -893,66 +545,25 @@ public class SqlInfo {
 
     /*****************************************/
 
-    public static Vector<Vector<String>> holeFelder(String xstmt) {
-        Statement stmt = null;
-        ResultSet rs = null;
-        // String ret = "";
-        Vector<String> retvec = new Vector<String>();
+    public static Vector<Vector<String>> holeFelder(String sstmt) {
         Vector<Vector<String>> retkomplett = new Vector<Vector<String>>();
-        ResultSetMetaData rsMetaData = null;
         int numberOfColumns = 0;
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = xstmt;
-            rs = stmt.executeQuery(sstmt);
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
             while (rs.next()) {
-                retvec.clear();
-                rsMetaData = rs.getMetaData();
+                Vector<String> retvec = new Vector<String>();
+                ResultSetMetaData rsMetaData = rs.getMetaData();
                 numberOfColumns = rsMetaData.getColumnCount() + 1;
                 for (int i = 1; i < numberOfColumns; i++) {
                     retvec.add((rs.getString(i) == null ? "" : rs.getString(i)));
 
                 }
-                retkomplett.add(((Vector<String>) retvec.clone()));
+                retkomplett.add( retvec);
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
-            retvec.clear();
-            retvec = null;
         } catch (SQLException ev) {
-            LOG.error("", ev);
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            LOGGER.error(sstmt ,ev);
         }
 
-        finally {
-            if (rsMetaData != null) {
-                rsMetaData = null;
-            }
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
-        }
         return retkomplett;
     }
 
@@ -960,177 +571,66 @@ public class SqlInfo {
 
     /*****************************************/
     public static String holeRezFeld(String feld, String kriterium) {
-        Statement stmt = null;
-        ResultSet rs = null;
+
         String ret = "";
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "select " + feld + " from verordn where " + kriterium + " LIMIT 1";
-            rs = stmt.executeQuery(sstmt);
+        String sstmt = "select " + feld + " from verordn where " + kriterium + " LIMIT 1";
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
 
             if (rs.next()) {
                 ret = (rs.getString(feld) == null ? "" : rs.getString(feld));
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return ret;
     }
 
     public static Vector<String> holeFeld(String sstmt) {
-        Statement stmt = null;
-        ResultSet rs = null;
-        String ret = "";
+
         Vector<String> vecret = new Vector<String>();
-
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            rs = stmt.executeQuery(sstmt);
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
+            String ret = "";
 
             while (rs.next()) {
                 ret = (rs.getString(1) == null ? "" : rs.getString(1));
                 vecret.add(String.valueOf(ret));
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error("Could not execute: " + sstmt, ev);
         }
         return vecret;
     }
 
     /*****************************************/
     public static boolean sqlAusfuehren(String sstmt) {
-        Statement stmt = null;
+
         boolean ret = true;
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null,
-                    "Fehler bei der Ausführung des Statements\nMethode:sqlAusfuehren(" + sstmt + ")");
-            System.exit(0);
-        }
-        try {
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);) {
+
             stmt.execute(sstmt);
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
             ev.printStackTrace();
             JOptionPane.showMessageDialog(null, "Fehler bei der Ausführung des Statements\nMethode:sqlAusfuehren("
                     + sstmt + ")\n\nBitte informieren Sie sofort den Administrator!!!");
             ret = false;
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
         }
         return ret;
     }
 
     public static InputStream holeStream(String tabelle, String feld, String kriterium) {
-        Statement stmt = null;
-        ResultSet rs = null;
         InputStream is = null;
+        String sstmt = "select " + feld + " from " + tabelle + " where " + kriterium + " LIMIT 1";
 
-        try {
-            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-
-            e.printStackTrace();
-        }
-        try {
-            if (frame != null)
-                frame.setCursor(wartenCursor);
-            String sstmt = "select " + feld + " from " + tabelle + " where " + kriterium + " LIMIT 1";
-
-            rs = stmt.executeQuery(sstmt);
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
             if (rs.next()) {
                 is = rs.getBinaryStream(1);
             }
-            if (frame != null)
-                frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                    rs = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                    stmt = null;
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+            LOGGER.error(sstmt ,ev);
         }
         return is;
     }
@@ -1152,8 +652,6 @@ public class SqlInfo {
             }
         }
         transferBuf.append(" from " + sourcedb + " where " + dbfield + "='" + argument + "' LIMIT 1");
-        //// System.out.println(transferBuf.toString());
-        // System.out.println(transferBuf.toString());
         Vector<Vector<String>> vec = SqlInfo.holeFelder(transferBuf.toString());
 
         if (vec.size() <= 0) {
@@ -1178,7 +676,6 @@ public class SqlInfo {
                     }
                 }
             }
-            // System.out.println(insertBuf.toString());
             SqlInfo.sqlAusfuehren(insertBuf.toString());
             return true;
         } catch (Exception ex) {
@@ -1200,7 +697,7 @@ public class SqlInfo {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error(inifilename ,e);
         }
         return result;
     }
@@ -1216,11 +713,11 @@ public class SqlInfo {
             ps.execute();
             result = true;
         } catch (SQLException ex) {
-            LOG.error("Exception during performing sql statement " + insertOrUpdateStatementString
+            LOGGER.error("Exception during performing sql statement " + insertOrUpdateStatementString
                     + " with following values. dateiname=" + inifilename + ", inhalt=" + buf, ex);
             result = false;
         } catch (Exception ex) {
-            LOG.error("Exception during check if update or insert is needed!", ex);
+            LOGGER.error("Exception during check if update or insert is needed!", ex);
             result = false;
         }
         return result;
