@@ -20,6 +20,7 @@
 	</target>
 
 	<target name="jar-prepare">
+		<defaultexcludes  add="**/*logback-test.xml"/>
 		<path id="path.classpath.build.thirdparty" refid="${ant.project.name}.classpath"/>
 		<echo message="${ant.project.name}.classpath: ${toString:path.classpath.build.thirdparty}"/>
 		
