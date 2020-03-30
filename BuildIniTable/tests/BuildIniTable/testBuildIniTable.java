@@ -43,22 +43,6 @@ public class testBuildIniTable {
          */
         this.buildIniTable.thisClass = this.buildIniTable;
         this.buildIniTable.thisClass.pfadzurini = "./tests/resources/ini";
-        
-        // Use test-mandanten.ini to setup test-data:
-        /*
-        this.buildIniTable.thisClass.setPfadzurmandini("./tests/resources/ini/mandanten.ini");
-        INIFile ini = new INIFile("./tests/resources/ini/mandanten.ini");
-        this.buildIniTable.anzahlmandanten = Integer.parseInt(ini.getStringProperty(
-                                                     "TheraPiMandanten", "AnzahlMandanten"));
-        for (int i = 0; i < this.buildIniTable.anzahlmandanten; i++) {
-            this.buildIniTable.mandantIkvec.add(ini.getStringProperty("TheraPiMandanten", "MAND-IK" + Integer.toString(i + 1)));
-            this.buildIniTable.mandantNamevec.add(ini.getStringProperty("TheraPiMandanten", "MAND-NAME" + Integer.toString(i + 1)));
-        }
-        System.out.println("mandantIkvec: " + this.buildIniTable.mandantIkvec);
-        System.out.println("mandantNamevec: " + this.buildIniTable.mandantNamevec);
-        */
-        
-        // Hand-coded Mandant-data:
         this.buildIniTable.anzahlmandanten = 1;
         this.buildIniTable.mandantIkvec.add("123456789");
         this.buildIniTable.mandantNamevec.add("Test Mandant 1");
