@@ -45,7 +45,11 @@ public class ProcessPanel extends JXPanel {
   public JRtaCheckBox[] check = new JRtaCheckBox[10];
   public JButton[] buts = new JButton[3];
   public JTextArea area = null;
+  
   public JXTable tab = null;
+  private static final int JXTAB_ISSET = 0;
+  private static final int JXTAB_ININAME = 1;
+  
   public MyIniTableModel tabmod = null;
   public Vector<String> inivec = new Vector<String>();
   
@@ -186,14 +190,14 @@ public class ProcessPanel extends JXPanel {
     }
     
     for (int i = 0; i < BuildIniTable.thisClass.anzahlmandanten; i++) {
+      String mandIk = (String)BuildIniTable.thisClass.mandantIkvec.get(i);
       try {
         Thread.sleep(1000L);
         overwrite = true;
         anzahl = 0;
         if (this.check[i].isSelected()) {
           File testfile = new File(String.valueOf(BuildIniTable.thisClass.pfadzurini)
-                          + "/" + (String)BuildIniTable.thisClass.mandantIkvec.get(i)
-                          + "/inicontrol.ini");
+                          + "/" + mandIk + "/inicontrol.ini");
           if (testfile.exists()) {
             int frage = JOptionPane.showConfirmDialog(null, "Für diesen Mandanten "
                     + "existiert bereits eine 'inicontrol.ini'\n"
@@ -204,17 +208,14 @@ public class ProcessPanel extends JXPanel {
           }
           if (overwrite) {
             inicontrol = new INIFile(String.valueOf(BuildIniTable.thisClass.pfadzurini)
-                            + "/" + (String)BuildIniTable.thisClass.mandantIkvec.get(i)
-                            + "/inicontrol.ini");
+                            + "/" + mandIk + "/inicontrol.ini");
             inicontrol.addSection(kopf, null);
             inicontrol.setStringProperty(kopf, sanzahl, "0", null);
           } 
-          setTextArea("\n\nErmittle Datenbankparameter für Mandant: "
-                      + (String)BuildIniTable.thisClass.mandantIkvec.get(i));
+          setTextArea("\n\nErmittle Datenbankparameter für Mandant: " + mandIk);
           Thread.sleep(500L);
           INIFile ini = new INIFile(String.valueOf(BuildIniTable.thisClass.pfadzurini)
-                           + "/" + (String)BuildIniTable.thisClass.mandantIkvec.get(i)
-                           + "/rehajava.ini");
+                           + "/" + mandIk + "/rehajava.ini");
           String ipanddb = ini.getStringProperty("DatenBank", "DBKontakt1");
           String username = ini.getStringProperty("DatenBank", "DBBenutzer1");
           String pw = String.valueOf(ini.getStringProperty("DatenBank", "DBPasswort1"));
@@ -222,8 +223,7 @@ public class ProcessPanel extends JXPanel {
           String password = man.decrypt(pw);
           setTextArea("Datenbankparameter o.k.");
           Thread.sleep(500L);
-          setTextArea("Öffne Datenbank für Mandant : "
-                     + (String)BuildIniTable.thisClass.mandantIkvec.get(i));
+          setTextArea("Öffne Datenbank für Mandant : " + mandIk);
           testconn = BuildIniTable.thisClass.starteDB(ipanddb, username, password);
           Thread.sleep(500L);
           if (testconn != null) {
@@ -261,31 +261,26 @@ public class ProcessPanel extends JXPanel {
             } 
             int fehler = 0;
             for (int i2 = 0; i2 < this.tab.getRowCount(); i2++) {
+              String iniName = this.tab.getValueAt(i2, ProcessPanel.JXTAB_ININAME).toString();
               try {
-                if (this.tab.getValueAt(i2, 0) == Boolean.TRUE) {
-                  setTextArea("Schreibe INI in Tabelle -> "
-                              + this.tab.getValueAt(i2, 1).toString());
+                if (this.tab.getValueAt(i2, ProcessPanel.JXTAB_ISSET) == Boolean.TRUE) {
+                  
+                  setTextArea("Schreibe INI in Tabelle -> " + iniName);
                   Thread.sleep(500L);
                   dummyini = new INIFile(String.valueOf(
                                     BuildIniTable.thisClass.pfadzurini) + "/"
                                   + (String)BuildIniTable.thisClass.mandantIkvec.get(i)
-                                  + "/" + this.tab.getValueAt(i2, 1).toString());
-                  schreibeIniInTabelle(this.tab.getValueAt(i2, 1).toString(),
-                                   dummyini.saveToStringBuffer().toString().getBytes());
-                  setTextArea("Datensatz für " + this.tab.getValueAt(i2, 1).toString()
-                            + " erfolgreich erzeugt");
+                                  + "/" + iniName);
+                  schreibeIniInTabelle(iniName, dummyini.saveToStringBuffer().toString().getBytes());
+                  setTextArea("Datensatz für " + iniName + " erfolgreich erzeugt");
                   anzahl++;
                   if (overwrite)
-                    inicontrol.setStringProperty(kopf, "DBIni"
-                                             + Integer.toString(anzahl),
-                                               this.tab.getValueAt(i2, 1).toString(),
-                                               null); 
+                    inicontrol.setStringProperty(kopf, "DBIni" + Integer.toString(anzahl), iniName, null); 
                   Thread.sleep(500L);
                 } 
               } catch (Exception ex) {
                 fehler++;
-                setTextArea("Fehler bei der Erstellung des Datensatzes ----> "
-                           + this.tab.getValueAt(i2, 1).toString());
+                setTextArea("Fehler bei der Erstellung des Datensatzes ----> " + iniName);
               } 
             } 
             if (overwrite) {
