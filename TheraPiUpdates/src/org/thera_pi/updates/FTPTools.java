@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
@@ -301,6 +302,7 @@ class FTPTools {
     private boolean nurConnect() {
         try {
             if (ftpClient != null && !ftpClient.isConnected()) {
+                ftpClient.configure(new FTPClientConfig(FTPClientConfig.SYST_UNIX));
                 ftpClient.connect(updateConfig.getUpdateHost());
 
                 ftpClient.login(updateConfig.getUpdateUser(), updateConfig.getUpdatePasswd());
