@@ -665,19 +665,19 @@ public final class INIFile {
 
         File file = new File(this.absoluteFileNamePath);
         
-	    if (file.exists()) {
-	        LOG.warn("File {} exists and will be deleted before saving the new content!",
-	                this.absoluteFileNamePath);
-	        boolean deleted = file.delete();
-	        if (deleted) {
-	            LOG.debug("File {} was deleted successfully. Starting to write the new content!",
-	                    this.absoluteFileNamePath);
-	        } else {
-	            LOG.warn("Unable to delete the file {} before saving the new content!", this.absoluteFileNamePath);
-	        }
-	    } else {
-	        LOG.warn("File {} does not exist yet. Start saving the new content!", this.absoluteFileNamePath);
-	    }
+        if (file.exists()) {
+            LOG.warn("File {} exists and will be deleted before saving the new content!",
+                    this.absoluteFileNamePath);
+            boolean deleted = file.delete();
+            if (deleted) {
+                LOG.debug("File {} was deleted successfully. Starting to write the new content!",
+                        this.absoluteFileNamePath);
+            } else {
+                LOG.warn("Unable to delete the file {} before saving the new content!", this.absoluteFileNamePath);
+            }
+        } else {
+            LOG.warn("File {} does not exist yet. Start saving the new content!", this.absoluteFileNamePath);
+        }
       
         try (FileWriter writer = new FileWriter(file)) {
             if (this.sectionMap.size() == 0) {
