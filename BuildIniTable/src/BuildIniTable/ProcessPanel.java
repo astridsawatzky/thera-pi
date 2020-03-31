@@ -200,9 +200,9 @@ public class ProcessPanel extends JXPanel {
     Connection testconn = null;
     setTextArea("Starte Logbuch!");
     INIFile dummyini = null;
+    INIFile inicontrol = null;
     String kopf = "INIinDB";
     String sanzahl = "INIAnzahl";
-    INIFile inicontrol = null;
     int anzahl = 0;
     boolean overwrite = true;
     boolean tableDrop = false;
