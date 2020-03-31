@@ -403,42 +403,29 @@ public class Reha implements RehaEventListener {
                 + " INI-Dateien in der Tabelle inidatei abgelegt");
 
         Titel2 = "  -->  [Mandant: " + getAktMandant() + "]";
-        // System.out.println(Titel2);
-        /**************************/
+       
         Thread rehasockeThread = new Thread(new RehaSockServer(), "RehaSocketServer");
         rehasockeThread.start();
-        /**************************/
-        new Thread() {
-            @Override
-            public void run() {
-                Process process;
+        
+ 
                 try {
-                    System.out.println("Starte RehaxSwing.jar");
-                    process = new ProcessBuilder("java", "-Djava.net.preferIPv4Stack=true", "-jar",
-                            Path.Instance.getProghome() + "RehaxSwing.jar").start();
-                    InputStream is = process.getInputStream();
-
-                    InputStreamReader isr = new InputStreamReader(is);
-                    BufferedReader br = new BufferedReader(isr);
-
-                    while ((br.readLine()) != null) {
-                        System.out.println(br.readLine());
-                    }
-                    is.close();
-                    isr.close();
-                    br.close();
-                    System.out.println("RehaxSwing beendet");
+                    logger.info("Starte RehaxSwing.jar");
+                    ProcessBuilder processBuilder = new ProcessBuilder("java", "-Djava.net.preferIPv4Stack=true", "-jar",
+                            Path.Instance.getProghome() + "RehaxSwing.jar");
+                   
+                    processBuilder.inheritIO().start();
+                    logger.info("RehaxSwing beendet");
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-            }
-        }.start();
+                } 
+           
+      
+       
         try {
-            rehasockeThread.join(5000);
+            rehasockeThread.join(10000);
         } catch (InterruptedException e2) {
             logger.error("rehasocketthread could not be joined");
         }
-
         try {
             new Thread() {
                 @Override
