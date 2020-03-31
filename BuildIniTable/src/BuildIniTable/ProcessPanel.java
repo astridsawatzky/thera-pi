@@ -335,37 +335,7 @@ public class ProcessPanel extends JXPanel {
     buf.append(") ENGINE=InnoDB  COLLATE utf8_general_ci AUTO_INCREMENT=1");
     return buf.toString();
   }
-  
-  public static boolean schreibeIniInTabelle(INIFile file) {
-    boolean ret = false;
-    try {
-      schreibeIniInTabelle(file.getFileName(),
-                           file.saveToStringBuffer().toString().getBytes());
-      file.getInputStream().close();
-      file = null;
-      ret = true;
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    } 
-    return ret;
-  }
-  
-  public static boolean iniDateiTesten(String inidatei, String ik) {
-    boolean ret = false;
-    try {
-      if (SqlInfo.holeEinzelFeld("select dateiname from inidatei where dateiname = '"
-                                + inidatei + "' Limit 1").equals(""))
-        schreibeIniInTabelle(inidatei,
-                             FileTools.File2ByteArray(new File(String.valueOf(
-                                            BuildIniTable.thisClass.pfadzurini)
-                                            + "/" + ik + "/" + inidatei))); 
-      ret = true;
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    } 
-    return ret;
-  }
-  
+
   public static boolean schreibeIniInTabelle(String inifile, byte[] buf) {
     boolean ret = false;
     try {
