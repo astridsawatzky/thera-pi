@@ -8,6 +8,16 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 ### added
 Patientenfenster:
 - Bild kann jetzt von Festplatte geladen werden
+- Buildini Quellen zum Projekt hinzugefügt #341
+###changed
+- office öffnet nur noch eine Verbindung
+###fixes
+- Eclipse project calckilometer naming #337
+- logback-test.xml beim build nicht mehr in reha.jar #338
+- Nebraska hängt nach klick auf Zertifikat #339
+- schließen von Nebraska beendet Programm #342
+- Sonderzeichen im Patientennamen verhinderten Speichern von Datensätzen #343
+- Anzeige der Behanlungsanzahlen im Patientenfenster korrigiert #347
 
 ## [1.1.4] - 2020-03-18
 ### added
