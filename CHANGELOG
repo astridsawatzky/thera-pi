@@ -3,8 +3,11 @@ Alle nennenswerten Änderungen werden in dieser Datei dokumentitert.
 
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
+Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 ## unveröffentlicht
+
+## [1.1.5] - 2020-04-03
 ### added
 Patientenfenster:
 - Bild kann jetzt von Festplatte geladen werden
