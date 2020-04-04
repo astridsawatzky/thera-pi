@@ -293,7 +293,7 @@ public class ProcessPanel extends JXPanel {
                                     BuildIniTable.thisClass.pfadzurini) + "/"
                                   + (String)BuildIniTable.thisClass.mandantIkvec.get(i)
                                   + "/" + iniName);
-                  schreibeIniInTabelle(iniName, dummyini.saveToString().getBytes());
+                  schreibeIniInTabelle(iniName, dummyini.saveToStringBuffer().toString().getBytes());
                   setTextArea("Datensatz für " + iniName + " erfolgreich erzeugt");
                   anzahl++;
                   if (overwrite)
