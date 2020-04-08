@@ -85,7 +85,7 @@ public class UpdaterTest {
 
             @Override
             public List<File> filesList() {
-                return Collections.EMPTY_LIST;
+                return Collections.emptyList();
             }
 
             @Override
