@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,7 +38,8 @@ public class FileSystemRepository implements UpdateRepository {
             for (File file : neededList) {
 
                 try {
-                    Files.copy(file.toPath(), Paths.get(path.toString(), file.getName()));
+                    Files.copy(file.toPath(), Paths.get(path.toString(), file.getName()),
+                            StandardCopyOption.REPLACE_EXISTING);
                     anzahl++;
                 } catch (IOException e) {
                     logger.error("bad things happen here", e);

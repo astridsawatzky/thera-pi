@@ -40,7 +40,7 @@ public class FileSystemRepositoryTest {
                                     .map(f -> f.getName())
                                     .collect(Collectors.toList())
                                     .toArray(new String[0]);
-        String[] expected = {".gitkeep", "therapi_1_0_0_1_1_3.zip" };
+        String[] expected = { ".gitkeep", "therapi_1_0_0_1_1_3.zip" };
         assertArrayEquals(expected, filesList);
     }
 
@@ -50,7 +50,7 @@ public class FileSystemRepositoryTest {
                 new File("./tests/org/thera_pi/updater/filesin").toPath());
 
         List<File> neededList = filerep.filesList();
-        assertEquals(1, filerep.downloadFiles(neededList, new File("./tests/org/thera_pi/updater/filesout/").toPath()));
+        assertEquals(2, filerep.downloadFiles(neededList, new File("./tests/org/thera_pi/updater/filesout/").toPath()));
 
     }
 

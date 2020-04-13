@@ -79,7 +79,7 @@ public class Updater implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
 
-        List<File> downloadedFiles = Collections.EMPTY_LIST;
+        List<File> downloadedFiles = Collections.emptyList();
         Integer ausgepackte = 0;
         List<File> filesList = repo.filesList();
         neededList = needsFrom(filesList);
