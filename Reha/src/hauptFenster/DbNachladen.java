@@ -5,7 +5,6 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
-import org.thera_pi.updater.Version;
 
 import CommonTools.ExUndHop;
 import systemEinstellungen.SystemConfig;

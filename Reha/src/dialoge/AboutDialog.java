@@ -37,13 +37,12 @@ import javax.swing.KeyStroke;
 import javax.swing.SwingWorker;
 import javax.xml.bind.DatatypeConverter;
 
-import org.thera_pi.updater.Version;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import environment.Path;
+import hauptFenster.Version;
 
 /**
  * This class shall give credit to where credit is due. Anyone is free to add
