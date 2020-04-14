@@ -61,6 +61,7 @@ public class Version implements Comparable<Version>{
         if (getClass() != obj.getClass())
             return false;
         Version other = (Version) obj;
+        System.out.println(other);
         return major == other.major && minor == other.minor && revision == other.revision;
     }
 

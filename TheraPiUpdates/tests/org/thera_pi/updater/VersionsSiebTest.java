@@ -28,7 +28,7 @@ public class VersionsSiebTest {
 
         List<File> filesList = new LinkedList<>();
         filesList.add(new File("randomname"));
-        filesList.add(new File("therapi_1_1_0_1_1_1"));
+        filesList.add(new File("therapi_1_1_0_1_1_1.zip"));
         List<File> resultList = sieb.select(filesList);
         assertEquals(1, resultList.size());
     }
@@ -39,8 +39,8 @@ public class VersionsSiebTest {
 
         List<File> filesList = new LinkedList<>();
         filesList.add(new File("randomname"));
-        filesList.add(new File("therapi_1_1_0_1_1_1"));
-        filesList.add(new File("therapi_1_0_0_1_1_1"));
+        filesList.add(new File("therapi_1_1_0_0_1_1.zip"));
+        filesList.add(new File("therapi_1_0_0_0_1_1.zip"));
         VersionsSieb sieb = new VersionsSieb( new Version(1,1,0));
         assertEquals(1, sieb.select(filesList).size());
 
@@ -48,6 +48,24 @@ public class VersionsSiebTest {
         assertEquals(1, sieb1.select(filesList).size());
 
         VersionsSieb sieb2 = new VersionsSieb( new Version(2,1,0));
+        assertEquals(0, sieb2.select(filesList).size());
+    }
+
+    @Test
+    public void aFileMatchesWhenthelastPartIsBiggerThanTheversion() throws Exception {
+
+
+        List<File> filesList = new LinkedList<>();
+        filesList.add(new File("randomname"));
+        filesList.add(new File("therapi_0_1_0_2_1_1.zip"));
+        filesList.add(new File("therapi_0_0_0_4_1_1.zip"));
+        VersionsSieb sieb = new VersionsSieb( new Version(1,1,0));
+        assertEquals(2, sieb.select(filesList).size());
+
+        VersionsSieb sieb1 = new VersionsSieb( new Version(1,0,0));
+        assertEquals(2, sieb1.select(filesList).size());
+
+        VersionsSieb sieb2 = new VersionsSieb( new Version(5,1,0));
         assertEquals(0, sieb2.select(filesList).size());
     }
 

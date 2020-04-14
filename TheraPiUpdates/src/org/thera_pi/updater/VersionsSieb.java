@@ -17,9 +17,9 @@ public class VersionsSieb implements DateiSieb {
 
          List<File> result = filesList.stream()
                                      .filter(f -> f.getName()
-                                                   .matches("therapi_[\\d]+_[\\d]+_[\\d]+_[\\d]+_[\\d]+_[\\d]+"))
+                                                   .matches("therapi_[\\d]+_[\\d]+_[\\d]+_[\\d]+_[\\d]+_[\\d]+.zip"))
                                      .map(UpdateFile::new)
-                                     .filter(u-> u.from.equals(version))
+                                     .filter(u-> version.equals(u.from) || version.compareTo(u.to)<0)
                                      .map(u->u.file)
                                      .collect(Collectors.toList());
 
