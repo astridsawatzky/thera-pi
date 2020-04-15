@@ -16,9 +16,9 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemPreislisten;
 
 public class RezeptTest {
+    IK ik = new IK("123456789");
     @Test
     public void reztools() throws Exception {
-        IK ik = new IK("987654321");
         List<Rezept> rez = new RezeptDto(ik).allfromVerordn();
         SqlInfo sqlinf = new SqlInfo();
         Connection conn = new DatenquellenFactory(ik.digitString()).createConnection();
@@ -37,7 +37,6 @@ public class RezeptTest {
 
     @Test
     public void reztoolER1() throws Exception {
-        IK ik = new IK("987654321");
         SqlInfo sqlinf = new SqlInfo();
         Connection conn = new DatenquellenFactory(ik.digitString()).createConnection();
         sqlinf.setConnection(conn);
@@ -53,7 +52,6 @@ public class RezeptTest {
     }
     @Test
     public void reztoolER1424() throws Exception {
-        IK ik = new IK("987654321");
         SqlInfo sqlinf = new SqlInfo();
         Connection conn = new DatenquellenFactory(ik.digitString()).createConnection();
         sqlinf.setConnection(conn);
