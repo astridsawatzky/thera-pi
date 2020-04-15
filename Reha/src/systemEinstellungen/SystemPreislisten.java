@@ -57,6 +57,12 @@ public class SystemPreislisten {
     static INIFile inif = null;
 
     public static void ladePreise(String disziplin) {
+        String aktIK = Reha.getAktIK();
+        ladepreise(disziplin, aktIK);
+
+    }
+
+    public static void ladepreise(String disziplin, String aktIK) {
         String[] diszis = { "Physio", "Massage", "Ergo", "Logo", "Reha", "Common", "Podo", "Rsport", "Ftrain" };
 
         List<String> list = Arrays.asList(diszis);
@@ -67,9 +73,9 @@ public class SystemPreislisten {
         }
         int tarife = -1;
         try {
-            inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "preisgruppen.ini");
+            inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + aktIK + "/", "preisgruppen.ini");
             tarife = inif.getIntegerProperty("PreisGruppen_" + diszis[treffer], "AnzahlPreisGruppen");
-            fristenini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "fristen.ini");
+            fristenini = INITool.openIni(Path.Instance.getProghome() + "ini/" + aktIK + "/", "fristen.ini");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -493,12 +499,11 @@ public class SystemPreislisten {
         }
         inif = null;
         fristenini = null;
-
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * @param f
      * @param disziplin
      * @param tarife
@@ -706,8 +711,8 @@ public class SystemPreislisten {
     }
 
     /***
-     * 
-     * 
+     *
+     *
      * @param kategorie
      * @param item
      * @param retint

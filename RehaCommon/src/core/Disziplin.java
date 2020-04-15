@@ -10,6 +10,7 @@ public enum Disziplin {
     PO("Podo", "Podologie-Rezept", "7"),
     RS("Rsport", "Rehasport-Rezept", "8"),
     FT("Ftrain", "Funktionstraining-Rezept", ""),
+    RH("Reha","Reha",""),
     INV("invalid", "invalid", "");
 
     public final String medium;
