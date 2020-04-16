@@ -28,7 +28,6 @@ public class RezeptTest {
                  .filter(r -> r.REZ_NR != null)
                  .collect(Collectors.toList());
         for (Rezept rezept : rez) {
-            System.out.println(rezept);
             if (rezept.REZ_NR != null)
 
                 assertEquals(rezept.REZ_NR,rezept.positionenundanzahl().toString(), RezTools.Y_holePosUndAnzahlAusRezept(rezept.REZ_NR).toString());
@@ -44,11 +43,8 @@ public class RezeptTest {
         Optional<Rezept> rez = new RezeptDto(ik).byRezeptNr("ER1");
 
         Rezept rezept = rez.get();
-        System.out.println(rezept);
         if (rezept.REZ_NR != null)
-//[[54210, 54103], [9, 1], [5, 13]]
-            // [pos1,pos2],[anzahl1,anzahl2][artderbeh1,artderbeh2]
-            assertEquals(rezept.positionenundanzahl().toString(), RezTools.Y_holePosUndAnzahlAusRezept(rezept.REZ_NR).toString());
+            assertEquals(rezept.REZ_NR,rezept.positionenundanzahl().toString(), RezTools.Y_holePosUndAnzahlAusRezept(rezept.REZ_NR).toString());
     }
     @Test
     public void reztoolER1424() throws Exception {
@@ -59,10 +55,7 @@ public class RezeptTest {
         Optional<Rezept> rez = new RezeptDto(ik).byRezeptNr("ER1424");
 
         Rezept rezept = rez.get();
-        System.out.println(rezept);
         if (rezept.REZ_NR != null)
-//[[54210, 54103], [9, 1], [5, 13]]
-            // [pos1,pos2],[anzahl1,anzahl2][artderbeh1,artderbeh2]
-            assertEquals(rezept.positionenundanzahl().toString(), RezTools.Y_holePosUndAnzahlAusRezept(rezept.REZ_NR).toString());
+            assertEquals(rezept.REZ_NR,rezept.positionenundanzahl().toString(), RezTools.Y_holePosUndAnzahlAusRezept(rezept.REZ_NR).toString());
     }
 }
