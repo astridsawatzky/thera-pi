@@ -15,14 +15,14 @@ import environment.Path;
 import hauptFenster.Reha;
 
 public class SystemPreislisten {
-    public static Vector<Vector<Vector<String>>> vKGPreise = new Vector<Vector<Vector<String>>>();
-    public static Vector<Vector<Vector<String>>> vMAPreise = new Vector<Vector<Vector<String>>>();
-    public static Vector<Vector<Vector<String>>> vERPreise = new Vector<Vector<Vector<String>>>();
-    public static Vector<Vector<Vector<String>>> vLOPreise = new Vector<Vector<Vector<String>>>();
-    public static Vector<Vector<Vector<String>>> vRHPreise = new Vector<Vector<Vector<String>>>();
-    public static Vector<Vector<Vector<String>>> vPOPreise = new Vector<Vector<Vector<String>>>();
-    public static Vector<Vector<Vector<String>>> vRSPreise = new Vector<Vector<Vector<String>>>();
-    public static Vector<Vector<Vector<String>>> vFTPreise = new Vector<Vector<Vector<String>>>();
+
+
+
+
+
+
+
+
 
     public static HashMap<String, Vector<Vector<Vector<String>>>> hmPreise = new HashMap<String, Vector<Vector<Vector<String>>>>();
 
@@ -49,7 +49,7 @@ public class SystemPreislisten {
     private static Vector<Integer> intdummy = new Vector<Integer>();
     private static Vector<Vector<String>> hbdummy = new Vector<Vector<String>>();
     private static Vector<String> hbdummy_1 = new Vector<String>();
-    private static Vector<Vector<String>> preisliste = new Vector<Vector<String>>();
+
     private static Vector<Integer> modusdummy = new Vector<Integer>();
     public static HashMap<String, Vector<Object>> hmFristen = new HashMap<String, Vector<Object>>();
     private static Vector<Object> odummy = new Vector<Object>();
@@ -86,132 +86,134 @@ public class SystemPreislisten {
 
     private static void ladepreise(String disziplin, INIFile fristeninilocal, INIFile inif, int tarife) {
 
-        Comparator<Vector> comparator = new Comparator<Vector>() {
-            @Override
-            public int compare(Vector o1, Vector o2) {
 
-                String s1 = o1.get(0)
-                              .toString();
-                String s2 = o2.get(0)
-                              .toString();
-                return s1.compareTo(s2);
-            }
-        };
+
 
         Disziplin diszi = Disziplin.ofMedium(disziplin);
 
-        if (diszi == Disziplin.KG) {
-            vKGPreise.clear();
+        switch (diszi) {
+        case KG:
+        {
+
+            Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from kgtarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vKGPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder("select * from kgtarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                preise.add((Vector<Vector<String>>) preisliste);
             }
-            preisliste.clear();
-            String key = "Physio";
-            hmPreise.put(key, vKGPreise);
-            ladepreise(fristeninilocal, inif, tarife, key);
-        } else if (diszi == Disziplin.MA) {
-            vMAPreise.clear();
+
+
+            hmPreise.put(diszi.medium, preise);
+            ladepreise(fristeninilocal, inif, tarife, diszi.medium);}
+            break;
+        case MA:
+        {
+            Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from matarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vMAPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste  = SqlInfo.holeFelder("select * from matarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                preise.add((Vector<Vector<String>>) preisliste);
             }
-            preisliste.clear();
-            String key = "Massage";
-            hmPreise.put(key, vMAPreise);
-            ladepreise(fristeninilocal, inif, tarife, key);
-        } else if (diszi == Disziplin.ER) {
-            vERPreise.clear();
+
+
+            hmPreise.put(diszi.medium, preise);
+            ladepreise(fristeninilocal, inif, tarife, diszi.medium);}
+            break;
+        case ER:
+        {
+            Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from ertarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vERPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder("select * from ertarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                preise.add((Vector<Vector<String>>) preisliste);
             }
-            preisliste.clear();
-            String key = "Ergo";
-            hmPreise.put(key, vERPreise);
-            ladepreise(fristeninilocal, inif, tarife, key);
-        } else if (diszi == Disziplin.LO) {
-            vLOPreise.clear();
+
+
+            hmPreise.put(diszi.medium, preise);
+            ladepreise(fristeninilocal, inif, tarife, diszi.medium);}
+            break;
+        case LO:
+        {
+            Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from lotarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vLOPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste = SqlInfo.holeFelder("select * from lotarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                preise.add((Vector<Vector<String>>) preisliste);
             }
-            preisliste.clear();
-            String key = "Logo";
-            hmPreise.put(key, vLOPreise);
-            ladepreise(fristeninilocal, inif, tarife, key);
-            return;
-        } else if (diszi == Disziplin.RH) {
-            vRHPreise.clear();
+
+
+            hmPreise.put(diszi.medium, preise);
+            ladepreise(fristeninilocal, inif, tarife, diszi.medium);}
+        break;
+        case RH:
+        {
+            Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from rhtarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vRHPreise.add((Vector<Vector<String>>) preisliste.clone());
+                 Vector<Vector<String>> preisliste = SqlInfo.holeFelder("select * from rhtarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                preise.add((Vector<Vector<String>>) preisliste);
             }
-            preisliste.clear();
-            String key = "Reha";
-            hmPreise.put(key, vRHPreise);
-            ladepreise(fristeninilocal, inif, tarife, key);
-            return;
-        } else if (diszi == Disziplin.PO) {
-            vPOPreise.clear();
+
+
+            hmPreise.put(diszi.medium, preise);
+            ladepreise(fristeninilocal, inif, tarife, diszi.medium);}
+            break;
+        case PO:
+        {
+            Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
             for (int i = 0; i < tarife; i++) {
-                preisliste.clear();
-                preisliste = SqlInfo.holeFelder("select * from potarif" + Integer.toString(i + 1));
-                Collections.sort((Vector) preisliste, comparator);
-                vPOPreise.add((Vector<Vector<String>>) preisliste.clone());
+                Vector<Vector<String>> preisliste= SqlInfo.holeFelder("select * from potarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                preise.add((Vector<Vector<String>>) preisliste);
             }
-            preisliste.clear();
-            String key = "Podo";
-            hmPreise.put(key, vPOPreise);
-            ladepreise(fristeninilocal, inif, tarife, key);
-            return;
-        } else if (diszi == Disziplin.RS) {
+
+
+            hmPreise.put(diszi.medium, preise);
+            ladepreise(fristeninilocal, inif, tarife, diszi.medium);}
+            break;
+        case RS:
+        {
             try {
-                vRSPreise.clear();
+                Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
+
                 for (int i = 0; i < tarife; i++) {
-                    preisliste.clear();
-                    preisliste = SqlInfo.holeFelder("select * from rstarif" + Integer.toString(i + 1));
-                    Collections.sort((Vector) preisliste, comparator);
-                    vRSPreise.add((Vector<Vector<String>>) preisliste.clone());
+                    Vector<Vector<String>> preisliste  = SqlInfo.holeFelder("select * from rstarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                    preise.add((Vector<Vector<String>>) preisliste);
                 }
-                preisliste.clear();
-                String key = "Rsport";
-                hmPreise.put(key, vRSPreise);
-                ladepreise(fristeninilocal, inif, tarife, key);
+
+
+                hmPreise.put(diszi.medium, preise);
+                ladepreise(fristeninilocal, inif, tarife, diszi.medium);
             } catch (Exception ex) {
                 ex.printStackTrace();
-            }
-        } else if (diszi == Disziplin.FT) {
+            }}
+            break;
+        case FT:
+        {
             try {
-                vFTPreise.clear();
+                Vector<Vector<Vector<String>>> preise = new Vector<Vector<Vector<String>>>();
+
                 for (int i = 0; i < tarife; i++) {
-                    preisliste.clear();
-                    preisliste = SqlInfo.holeFelder("select * from fttarif" + Integer.toString(i + 1));
-                    Collections.sort((Vector) preisliste, comparator);
-                    vFTPreise.add((Vector<Vector<String>>) preisliste.clone());
+                    Vector<Vector<String>> preisliste  = SqlInfo.holeFelder("select * from fttarif" + Integer.toString(i + 1) + " order by LEISTUNG");
+
+                    preise.add((Vector<Vector<String>>) preisliste);
                 }
-                preisliste.clear();
-                String key = "Ftrain";
-                hmPreise.put(key, vFTPreise);
-                ladepreise(fristeninilocal, inif, tarife, key);
+
+
+                hmPreise.put(diszi.medium, preise);
+                ladepreise(fristeninilocal, inif, tarife, diszi.medium);
             } catch (Exception ex) {
                 ex.printStackTrace();
-            }
-        } else if (diszi == Disziplin.COMMON) {
+            }}
+            break;
+        case COMMON:
+        {
             dummy.clear();
             getPreisGruppen(inif, "Common", tarife);
             hmPreisGruppen.put("Common", (Vector<String>) dummy.clone());
-            dummy.clear();
+            dummy.clear();}
+            break;
         }
     }
 
@@ -362,7 +364,6 @@ public class SystemPreislisten {
         intdummy.clear();
         hbdummy.clear();
         hbdummy_1.clear();
-        preisliste.clear();
         hmFristen.clear();
         odummy.clear();
 
@@ -379,7 +380,6 @@ public class SystemPreislisten {
         intdummy.trimToSize();
         hbdummy.trimToSize();
         hbdummy_1.trimToSize();
-        preisliste.trimToSize();
 
     }
 
