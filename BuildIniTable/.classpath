@@ -21,13 +21,13 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4">
+	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-classic-1.2.3.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-core-1.2.3.jar"/>
+	<classpathentry kind="lib" path="/Libraries/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
+	<classpathentry kind="lib" path="/Libraries/tests/lib/jna_junit/hamcrest-all-1.3.jar">
 		<attributes>
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
-        <classpathentry kind="lib" path="/Libraries/lib/logging/logback-classic-1.2.3.jar"/>
-	<classpathentry kind="lib" path="/Libraries/lib/logging/logback-core-1.2.3.jar"/>
-	<classpathentry kind="lib" path="/Libraries/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
