@@ -136,7 +136,7 @@ public class SuchenSeite extends JXPanel
     public Vector<Vector<Object>> vecWahl = new Vector<Vector<Object>>();
     private boolean suchelaeuft = false;
     public Object[][] sucheKollegen = null;
-    public HashMap<String, Integer> hZeiten = null;
+    public HashMap<String, Integer> hZeiten = new HashMap<>();
     private int gewaehlt = 0;
     public ArrayList<Boolean> selbstGesperrt;
     public static boolean verarbeitenBeendet = false;
@@ -343,8 +343,10 @@ public class SuchenSeite extends JXPanel
     }
 
     public void tabelleEinschalten() {
-        jxSucheTable.setEditable(true);
-        jxSucheTable.setRowSelectionAllowed(true);
+        if (jxSucheTable != null) {
+            jxSucheTable.setEditable(true);
+            jxSucheTable.setRowSelectionAllowed(true);
+        }
     }
 
     void listenerEinschalten() {
@@ -727,7 +729,7 @@ public class SuchenSeite extends JXPanel
         jxSucheTable.addKeyListener(kl);
         /*
          * jxSucheTable.addKeyListener(new KeyListener(){
-         * 
+         *
          * @Override public void keyPressed(KeyEvent arg0) { if(arg0.getKeyCode() ==
          * KeyEvent.VK_SPACE){ //arg0.consume(); SwingUtilities.invokeLater(new
          * Runnable(){ public void run(){ String reznummer = (String)
@@ -735,17 +737,17 @@ public class SuchenSeite extends JXPanel
          * aktiveSpalte[0]); infoDlg = new InfoDialog(reznummer,"terminInfo");
          * infoDlg.pack(); infoDlg.setLocationRelativeTo(TerminFlaeche);
          * infoDlg.setVisible(true); infoDlg = null; } }); } }
-         * 
+         *
          * @Override public void keyReleased(KeyEvent arg0) {
-         * 
-         * 
+         *
+         *
          * }
-         * 
+         *
          * @Override public void keyTyped(KeyEvent arg0) {
-         * 
-         * 
+         *
+         *
          * }
-         * 
+         *
          * });
          */
 
@@ -1232,7 +1234,7 @@ public class SuchenSeite extends JXPanel
 
                 /*
                  * try { Reha.instance.conn.setAutoCommit(true); } catch (SQLException e) {
-                 * 
+                 *
                  * e.printStackTrace(); }
                  */
                 WorkerSuchenInKalenderTagen WsIT = new WorkerSuchenInKalenderTagen();
@@ -1242,7 +1244,7 @@ public class SuchenSeite extends JXPanel
                 /*
                  * SwingUtilities.invokeLater(new Runnable(){ public void run(){
                  * getInstance().workerfertig = false;
-                 * 
+                 *
                  * WorkerTabelle2 wt = new WorkerTabelle2(); wt.init(); wt.execute(); } });
                  */
 
@@ -1515,12 +1517,12 @@ public class SuchenSeite extends JXPanel
                     .setCursor(Cursors.wartenCursor);
                 /*
                  * new SwingWorker<Void,Void>(){
-                 * 
+                 *
                  * @Override protected Void doInBackground() throws Exception { abrDlg = new
                  * AbrechnungDlg(); abrDlg.pack();
                  * abrDlg.setzeLabel("starte Aufbereitung Termin-Email");
                  * abrDlg.setVisible(true); return null; }
-                 * 
+                 *
                  * }.execute();
                  */
 
@@ -4002,7 +4004,7 @@ public class SuchenSeite extends JXPanel
 
             /*
              * try { Reha.instance.conn.setAutoCommit(true); } catch (SQLException e1) {
-             * 
+             *
              * e1.printStackTrace(); }
              */
             try {
@@ -4029,7 +4031,7 @@ public class SuchenSeite extends JXPanel
                         // new ExUndHop().setzeStatement(String.valueOf(st));
                         /*
                          * try { Thread.sleep(10); } catch (InterruptedException e) {
-                         * 
+                         *
                          * e.printStackTrace(); }
                          */
                         return (0);
