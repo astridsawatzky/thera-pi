@@ -52,8 +52,8 @@ import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
 import CommonTools.JRtaTextField;
+import CommonTools.ini.INIFile;
 
 public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener, ActionListener {
 

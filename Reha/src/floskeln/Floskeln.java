@@ -27,9 +27,9 @@ import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTitledPanel;
 import org.therapi.reha.patient.PatientMemoPanel;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JCompTools;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import dialoge.DragWin;
 import dialoge.PinPanel;
 import environment.Path;

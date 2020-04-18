@@ -12,8 +12,8 @@ import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
 import crypt.Verschluesseln;

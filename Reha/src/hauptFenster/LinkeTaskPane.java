@@ -49,8 +49,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 
-import CommonTools.INIFile;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import environment.Path;
 import events.PatStammEvent;

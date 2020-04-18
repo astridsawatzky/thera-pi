@@ -3,9 +3,9 @@ package systemEinstellungen;
 import java.util.Vector;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.ZeitFunk;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import hauptFenster.Reha;
 

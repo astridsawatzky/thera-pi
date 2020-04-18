@@ -3,7 +3,7 @@ package sqlTools;
 import java.util.HashMap;
 import java.util.Vector;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 
 public class SystemEinstellungen {
     static String[] disziplinen = { "Physio", "Massage", "Ergo", "Logo", "Reha", "Podo" };

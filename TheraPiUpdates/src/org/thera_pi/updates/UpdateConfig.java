@@ -5,7 +5,7 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 import crypt.Verschluesseln;
 import environment.Path;
 

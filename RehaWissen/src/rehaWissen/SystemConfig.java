@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 import environment.Path;
 
 public class SystemConfig {

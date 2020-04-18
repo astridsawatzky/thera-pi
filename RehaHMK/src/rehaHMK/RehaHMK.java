@@ -1,8 +1,8 @@
 package rehaHMK;
 
 import CommonTools.Colors;
-import CommonTools.INIFile;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;

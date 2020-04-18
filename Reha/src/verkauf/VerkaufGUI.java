@@ -36,14 +36,14 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.awt.Size;
 
 import CommonTools.ButtonTools;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;

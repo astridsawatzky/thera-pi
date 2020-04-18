@@ -1,4 +1,4 @@
-package CommonTools;
+package CommonTools.ini;
 
 import java.io.File;
 import java.io.InputStream;
@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.ini4j.Ini;
+
+import CommonTools.SqlInfo;
 
 public class INITool {
     static List<String> inisInDb = new LinkedList<>();

@@ -8,7 +8,7 @@ import org.smslib.Service;
 import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 
 public class SMSService {
 

@@ -1,4 +1,4 @@
-package CommonTools;
+package CommonTools.ini;
 
 /*------------------------------------------------------------------------------
  * based on

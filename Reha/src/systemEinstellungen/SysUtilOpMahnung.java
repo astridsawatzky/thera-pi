@@ -22,9 +22,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaCheckBoxR;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import hauptFenster.Reha;
 import opRgaf.OpRgAfIni;

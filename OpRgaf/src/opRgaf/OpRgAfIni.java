@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import org.jdesktop.swingworker.SwingWorker;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.OpCommon;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 
 public class OpRgAfIni {
     public static HashMap<String, Object> mahnParam;

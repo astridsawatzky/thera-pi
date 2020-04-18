@@ -65,7 +65,6 @@ import com.sun.star.util.XRefreshable;
 
 import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
@@ -73,6 +72,7 @@ import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import CommonTools.ini.INIFile;
 import RehaIO.SocketClient;
 import Tools.ArztTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;

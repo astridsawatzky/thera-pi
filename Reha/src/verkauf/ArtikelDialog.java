@@ -19,9 +19,9 @@ import org.jdesktop.swingx.JXPanel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;

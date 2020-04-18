@@ -26,9 +26,9 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ExUndHop;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import hauptFenster.Reha;
 

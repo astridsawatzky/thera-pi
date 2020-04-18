@@ -7,8 +7,8 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.swingworker.SwingWorker;
 
-import CommonTools.INIFile;
 import CommonTools.JRtaTextField;
+import CommonTools.ini.INIFile;
 import hauptFenster.Reha;
 import krankenKasse.KassenFormulare;
 

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 import rehaStatistik.RehaStatistik;
 
 public class SystemPreislisten {

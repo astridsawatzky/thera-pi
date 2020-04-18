@@ -18,10 +18,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.OpCommon;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import RehaIO.RehaReverseServer;
 import RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;

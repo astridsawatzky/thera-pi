@@ -5,8 +5,8 @@ import java.awt.Point;
 
 import javax.swing.SwingWorker;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import systemEinstellungen.SystemConfig;
 

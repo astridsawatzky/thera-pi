@@ -75,7 +75,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.mysql.jdbc.PreparedStatement;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 import crypt.Verschluesseln;
 import environment.Path;
 import logging.Logging;

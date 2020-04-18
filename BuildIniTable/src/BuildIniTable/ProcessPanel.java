@@ -38,10 +38,10 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.mysql.jdbc.PreparedStatement;
 
 import CommonTools.ButtonTools;
-import CommonTools.INIFile;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
 import sql.DatenquellenFactory;
 
 public class ProcessPanel extends JXPanel {

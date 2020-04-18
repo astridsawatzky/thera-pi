@@ -5,8 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.ImageIcon;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import hauptFenster.Reha;
 

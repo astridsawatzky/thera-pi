@@ -29,11 +29,11 @@ import javax.swing.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;

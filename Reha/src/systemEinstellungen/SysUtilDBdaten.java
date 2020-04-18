@@ -25,9 +25,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;

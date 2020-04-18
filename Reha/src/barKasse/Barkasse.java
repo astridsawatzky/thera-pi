@@ -26,13 +26,13 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.OOTools;
 import CommonTools.RgVkPrSelect;
 import CommonTools.RgVkPr_IfCallBack;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;

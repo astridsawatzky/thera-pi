@@ -11,8 +11,8 @@ import org.jdesktop.swingx.JXFrame;
 
 import com.sun.star.uno.Exception;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import egk.EgkReader;
 import environment.Path;
 import oOorgTools.OOTools;

@@ -24,10 +24,10 @@ import org.slf4j.LoggerFactory;
 
 import CommonTools.DatFunk;
 import CommonTools.FireRehaError;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;

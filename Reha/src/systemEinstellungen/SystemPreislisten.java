@@ -7,9 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import core.Disziplin;
 import environment.Path;
 import hauptFenster.Reha;

@@ -14,7 +14,7 @@ import com.hexiong.jdbf.JDBFException;
 import com.hexiong.jdbf.JDBField;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 import logging.Logging;
 
 public class FahrdienstExporter {

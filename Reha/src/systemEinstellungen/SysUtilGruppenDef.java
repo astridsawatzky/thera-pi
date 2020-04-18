@@ -41,10 +41,10 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.ZeitFunk;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeueGruppe;

@@ -15,8 +15,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jdesktop.swingworker.SwingWorker;
 
-import CommonTools.INIFile;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;

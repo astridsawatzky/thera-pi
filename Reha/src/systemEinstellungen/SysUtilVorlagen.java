@@ -32,9 +32,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JCompTools;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;

@@ -1,7 +1,7 @@
 package systemEinstellungen;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 
 public class RWJedeIni {
     private static INIFile ini = null;

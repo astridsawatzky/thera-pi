@@ -1,4 +1,4 @@
-package CommonTools;
+package CommonTools.ini;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -10,6 +10,8 @@ import java.util.Arrays;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import CommonTools.ini.INIFile;
 
 public class INIFileTest {
 

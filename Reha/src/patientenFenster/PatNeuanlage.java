@@ -64,14 +64,14 @@ import com.mysql.jdbc.PreparedStatement;
 
 import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;

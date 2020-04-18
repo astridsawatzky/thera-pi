@@ -94,14 +94,14 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.sun.star.uno.Exception;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;

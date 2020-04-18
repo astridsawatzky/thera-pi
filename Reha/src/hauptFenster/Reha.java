@@ -115,13 +115,13 @@ import com.jgoodies.looks.Options;
 import com.sun.star.uno.Exception;
 
 import CommonTools.Colors;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JRtaTextField;
 import CommonTools.RehaEvent;
 import CommonTools.RehaEventClass;
 import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import ag.ion.bion.officelayer.application.IOfficeApplication;

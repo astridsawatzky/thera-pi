@@ -2,8 +2,8 @@ package systemEinstellungen.config;
 
 import javax.swing.JOptionPane;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import crypt.Verschluesseln;
 
 public class Datenbank {

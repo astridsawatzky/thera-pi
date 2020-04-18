@@ -33,14 +33,14 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
-import CommonTools.INITool;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;

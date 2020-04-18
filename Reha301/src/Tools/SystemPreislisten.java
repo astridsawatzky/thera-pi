@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
-import CommonTools.INIFile;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
 import reha301.Reha301;
 
 public class SystemPreislisten {

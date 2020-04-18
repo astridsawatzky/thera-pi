@@ -51,8 +51,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
-import CommonTools.INIFile;
 import CommonTools.JRtaTextField;
+import CommonTools.ini.INIFile;
 import crypt.Verschluesseln;
 
 public class NebraskaRequestDlg extends JDialog {

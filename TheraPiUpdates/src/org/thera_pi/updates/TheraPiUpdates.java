@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 import environment.Path;
 
 public class TheraPiUpdates extends WindowAdapter {

@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 
-import CommonTools.INIFile;
-import CommonTools.INITool;
+import CommonTools.ini.INIFile;
+import CommonTools.ini.INITool;
 import emailHandling.EmailSendenExtern;
 import environment.Path;
 import hauptFenster.Reha;

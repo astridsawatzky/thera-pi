@@ -21,8 +21,8 @@ import javax.swing.filechooser.FileFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import CommonTools.INIFile;
 import CommonTools.SqlInfo;
+import CommonTools.ini.INIFile;
 import environment.Path;
 
 /**

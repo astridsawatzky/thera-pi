@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import javax.swing.JApplet;
 import javax.swing.JFrame;
 
-import CommonTools.INIFile;
+import CommonTools.ini.INIFile;
 import crypt.Verschluesseln;
 
 public class Rahmen extends JApplet {
