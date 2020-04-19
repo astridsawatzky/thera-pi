@@ -1,18 +1,18 @@
 package org.therapi.reha.patient.neu;
 
-import static org.junit.Assert.*;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mandant.IK;
 import sql.DatenquellenFactory;
 
 public class ArztDto {
@@ -158,6 +158,22 @@ public class ArztDto {
         dto.bsnR = rs.getString("bsnr");
 
         return dto;
+    }
+
+    public static Optional<Arzt> findbyID(String arztid, IK ik) {
+         return findbyID(arztid, ik.digitString()).map(ArztDto::toArzt);
+
+    }
+
+    public static List<Arzt> findbyID(String[] arztIds, IK ik) {
+        List<Arzt> liste = new LinkedList<>();
+
+        for (String id :arztIds) {
+            findbyID(id, ik).ifPresent(liste::add);
+        }
+
+
+        return liste;
     }
 
 

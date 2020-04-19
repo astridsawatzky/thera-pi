@@ -89,17 +89,19 @@ public class PatientMapper {
 
 
         if(!dto.arztid.isEmpty()) {
-        Arzt arzt = new Arzt();
-            arzt.id = Integer.parseInt(dto.arztid);
-            arzt.arztnummer=new LANR(dto.arztNum);
-            arzt.nachname = dto.arzt;
-            arzt.email1= dto.emailA ;
-            patient. hauptarzt = Optional.of(arzt);
+
+
+
+            patient. hauptarzt = ArztDto.findbyID(dto.arztid, ik);
 
         }
         patient.merkmale = new Merkmale(dto.merk1,dto.merk2,dto.merk3,dto.merk4,dto.merk5,dto.merk6);
 
         patient.aerzte=dto.aerzte;
+
+        patient.arztListe = ArztDto.findbyID(dto.aerzte.replaceAll("\n", "")
+                .replaceAll("@@", "@")
+                .split("@"), ik);
         patient.patIntern=dto.patIntern;
         patient.anamnese=dto.anamnese ==null ? "":dto.anamnese;
         patient.memo =dto.patText ==null ? "":dto.patText;

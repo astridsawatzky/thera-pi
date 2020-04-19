@@ -1,6 +1,8 @@
 package org.therapi.reha.patient.neu;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -59,6 +61,7 @@ public class Patient {
     public int ber3;
     public int ber4;
     public String jahrfrei;
+    public List<Arzt> arztListe;
 
 
     public Patient(Adresse adresse) {
