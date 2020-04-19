@@ -47,7 +47,7 @@ public class SchluesselDialog extends JDialog implements WindowListener {
     private boolean ausgabe;
     private ActionListener acli;
     private KeyListener kli;
-    JPanel jpan = null;
+    private JPanel jpan = null;
 
     public SchluesselDialog(JXFrame owner, String name, String xschluessel) {
         // super(owner, name);

@@ -48,11 +48,11 @@ public class KuerzelNeu extends JXDialog implements WindowListener, KeyListener,
     private JRtaTextField[] tfs = { null, null };
     private JRtaCheckBox[] jbox = { null, null };
     private JButton[] buts = { null, null };
-    boolean neu;
-    JLabel labKurz = null;
-    JLabel labLang = null;
-    ActionListener al = null;
-    SysUtilKuerzel eltern = null;
+    private boolean neu;
+    private JLabel labKurz = null;
+    private JLabel labLang = null;
+    private ActionListener al = null;
+    private SysUtilKuerzel eltern = null;
 
     public KuerzelNeu(JXFrame owner, String titel, boolean xneu, SysUtilKuerzel xeltern) {
         super(owner, (JComponent) Reha.getThisFrame()
@@ -283,7 +283,7 @@ public class KuerzelNeu extends JXDialog implements WindowListener, KeyListener,
 
     }
 
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
         this.jtp.removeMouseListener(this.mymouse);
         this.jtp.removeMouseMotionListener(this.mymouse);
         this.mymouse = null;

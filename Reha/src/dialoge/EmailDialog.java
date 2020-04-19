@@ -63,31 +63,29 @@ import systemTools.IconListRenderer;
 public class EmailDialog extends JXDialog implements WindowListener, KeyListener, RehaTPEventListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
-    ActionListener al = null;
+    private ActionListener al = null;
     private RehaTPEventClass rtp = null;
     private JXTitledPanel jtp = null;
     private MouseAdapter mymouse = null;
     private PinPanel pinPanel = null;
     private JXPanel content = null;
-    private String titel;
     // PatientToolBarLogic eltern = null;
-    JButton[] buts = { null, null };
-    JRtaTextField[] tf = { null, null, null };
-    JRtaComboBox cmb = null;
+    private JButton[] buts = { null, null };
+    private JRtaTextField[] tf = { null, null, null };
+    private JRtaComboBox cmb = null;
     private JTextArea jta;
     private JList jList = null;
     // JXTable tab;
     // DefaultTableModel mod;
-    String recipients, betreff, mailtext;
-    int postfach = 0;
-    boolean direktsenden = false;
-    ArrayList<String[]> attachments;
+    private String recipients, betreff, mailtext;
+    private int postfach = 0;
+    private ArrayList<String[]> attachments;
     // private String info = null;
 
-    public AbrechnungDlg abrDlg = null;
+    private AbrechnungDlg abrDlg = null;
 
     public EmailDialog(JXFrame owner, String titel, String recipients, String betreff, String mailtext,
             ArrayList<String[]> attachments, int postfach, boolean direktsenden) {
@@ -96,7 +94,6 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         installListener();
         this.setUndecorated(true);
         this.setName("EMAILDlg");
-        this.titel = titel;
         this.recipients = recipients;
         if (postfach == 0) {
             this.recipients = this.recipients + ((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail")
@@ -111,7 +108,6 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         this.mailtext = mailtext;
         this.attachments = attachments;
         this.postfach = postfach;
-        this.direktsenden = direktsenden;
         // this.eltern = xeltern;
         // this.isSMS = SMS;
         // this.info = info;
@@ -232,11 +228,8 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         String sender = hmPostfach.get("SenderAdresse");
         String secure = hmPostfach.get("SmtpSecure");
         String useport = hmPostfach.get("SmtpPort");
-        // String recipient =
-        // "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
-        String recipient = emailaddy
-                + ((Boolean) SystemConfig.hmIcalSettings.get("aufeigeneemail") ? "," + hmPostfach.get("SenderAdresse")
-                        : "");
+        SystemConfig.hmIcalSettings.get("aufeigeneemail");
+        hmPostfach.get("SenderAdresse");
         // String text = "Ihre Behandlungstermine befinden sich im Dateianhang";
         boolean authx = (authent.equals("0") ? false : true);
         boolean bestaetigen = false;
@@ -436,7 +429,7 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
                 if (cmd.equals("senden")) {
                     /*
                      * new SwingWorker<Void,Void>(){
-                     * 
+                     *
                      * @Override protected Void doInBackground() throws Exception { abrDlg = new
                      * AbrechnungDlg(); abrDlg.pack(); abrDlg.setLocationRelativeTo(getInstance());
                      * abrDlg.setzeLabel("starte Aufbereitung Termin-Email");
@@ -490,7 +483,7 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
                      .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
                         || e.getPropertyName()
                             .equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-                    final File f = (File) e.getNewValue();
+                    e.getNewValue();
                 }
             }
         });
@@ -517,7 +510,7 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         chooser.setVisible(false);
     }
 
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
 
         this.jtp.removeMouseListener(this.mymouse);
         this.jtp.removeMouseMotionListener(this.mymouse);

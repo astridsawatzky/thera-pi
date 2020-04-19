@@ -57,7 +57,7 @@ public class InfoDialogTerminInfo extends InfoDialog {
     private JLabel textlab;
     private JLabel bildlab;
     private KeyListener kl;
-    Font font = new Font("Arial", Font.PLAIN, 12);
+
 
     public InfoDialogTerminInfo(String arg1, Vector<Vector<String>> data) {
 //		super(arg1, "terminInfo", data);
@@ -166,7 +166,6 @@ public class InfoDialogTerminInfo extends InfoDialog {
                 "select t1.lastdate,t1.termine,t2.n_name,t2.v_name,t1.kuerzel1,t1.anzahl1,t1.kuerzel2,t1.anzahl2,t1.kuerzel3,t1.anzahl3,t1.kuerzel4,t1.anzahl4,ktraeger,rezeptart,zzstatus,preisgruppe,rez_datum,arztbericht,berid from verordn as t1 join pat5 as t2 on(t2.pat_intern = t1.pat_intern) where t1.rez_nr = '"
                         + macheNummer(this.arg1) + "' LIMIT 1");
         if (vecResult.size() <= 0) {
-            this.historie = true;
             vecResult = SqlInfo.holeFelder(
                     "select t1.lastdate,t1.termine,t2.n_name,t2.v_name,t1.kuerzel1,t1.anzahl1,t1.kuerzel2,t1.anzahl2,t1.kuerzel3,t1.anzahl3,t1.kuerzel4,t1.anzahl4,ktraeger,rezeptart,zzstatus,preisgruppe,rez_datum,arztbericht,berid from lza as t1 join pat5 as t2 on(t2.pat_intern = t1.pat_intern) where t1.rez_nr = '"
                             + macheNummer(this.arg1) + "' LIMIT 1");
@@ -242,8 +241,8 @@ public class InfoDialogTerminInfo extends InfoDialog {
         }
     }
 
-    final StringBuffer bufhead = new StringBuffer();
-    final StringBuffer bufend = new StringBuffer();
+    private final StringBuffer bufhead = new StringBuffer();
+    private final StringBuffer bufend = new StringBuffer();
 
     public String ladehead() {
         bufhead.append("<html>\n<head>\n");
@@ -695,10 +694,10 @@ public class InfoDialogTerminInfo extends InfoDialog {
     }
 
     /***************************************/
-    class FolgeTermine extends RehaSmartDialog implements RehaTPEventListener, WindowListener {
+    private class FolgeTermine extends RehaSmartDialog implements RehaTPEventListener, WindowListener {
 
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
         private RehaTPEventClass rtp = null;
@@ -752,23 +751,22 @@ public class InfoDialogTerminInfo extends InfoDialog {
     }
 
     /**************************************************/
-    class FolgeTermineSuchen extends JXPanel implements KeyListener, FocusListener, RehaTPEventListener {
+    private class FolgeTermineSuchen extends JXPanel implements KeyListener, FocusListener, RehaTPEventListener {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
         private RehaTPEventClass rtp = null;
-        MyFolgeTermineTableModel mod = new MyFolgeTermineTableModel();
-        JXTable tab;
-        JRtaTextField tfstart;
-        JRtaTextField tfsuche;
-        JLabel lbstart;
-        JLabel lbaktuell;
+        private MyFolgeTermineTableModel mod = new MyFolgeTermineTableModel();
+        private JXTable tab;
+        private JRtaTextField tfstart;
+        private JRtaTextField tfsuche;
+        private JLabel lbaktuell;
 
-        String suchkrit;
-        String startdate;
-        String aktdate;
-        ActionListener al;
+        private String suchkrit;
+        private String startdate;
+
+        private ActionListener al;
 
         public FolgeTermineSuchen() {
 //			public RezNeuanlage(Vector<String> vec,boolean neu,String sfeldname, boolean bCtrlPressed){
@@ -889,13 +887,9 @@ public class InfoDialogTerminInfo extends InfoDialog {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            if (e.getKeyCode() == KeyEvent.VK_F1) {
-                isF1Released = true;
-                // System.out.println("F1 wurde losgelassen");
-            }
         }
 
-        public void starteSuche() {
+        private void starteSuche() {
             muststop = false;
             new SuchenInTagen().setzeStatement(lbaktuell, startdate, tfsuche.getText()
                                                                             .split(" "),
@@ -905,9 +899,9 @@ public class InfoDialogTerminInfo extends InfoDialog {
     }
 
     /*****************************************************/
-    class MyFolgeTermineTableModel extends DefaultTableModel {
+    private class MyFolgeTermineTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
@@ -939,20 +933,20 @@ public class InfoDialogTerminInfo extends InfoDialog {
     }
 
     /*****************************************************/
-    final class SuchenInTagen extends Thread implements Runnable {
-        Statement stmt = null;
-        ResultSet rs = null;
-        String sergebnis = "";
-        int belegt = 0;
-        String anzeigedatum;
-        String[] suchkrit = null;
-        JLabel lbaktuell;
-        String startdat;
-        MyFolgeTermineTableModel mod;
-        Vector<String> atermine = new Vector<String>();
-        int treffer = 1;
+    private final class SuchenInTagen extends Thread implements Runnable {
+        private Statement stmt = null;
+        private ResultSet rs = null;
 
-        public void setzeStatement(JLabel lbaktuell, String startdat, String[] suchkrit, MyFolgeTermineTableModel mod) {
+        private int belegt = 0;
+        private String anzeigedatum;
+        private String[] suchkrit = null;
+        private JLabel lbaktuell;
+        private String startdat;
+        private MyFolgeTermineTableModel mod;
+        private Vector<String> atermine = new Vector<String>();
+        private int treffer = 1;
+
+        private void setzeStatement(JLabel lbaktuell, String startdat, String[] suchkrit, MyFolgeTermineTableModel mod) {
             this.lbaktuell = lbaktuell;
             this.startdat = startdat;
             this.mod = mod;

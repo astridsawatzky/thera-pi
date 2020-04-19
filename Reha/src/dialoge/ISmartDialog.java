@@ -7,9 +7,9 @@ import org.jdesktop.swingx.JXTitledPanel;
 import events.RehaTPEvent;
 import events.RehaTPEventListener;
 
-public interface ISmartDialog extends RehaTPEventListener {
-    public PinPanel pinPanel = null;
-    public JXTitledPanel jtp = null;
+interface ISmartDialog extends RehaTPEventListener {
+
+
 
     public JXTitledPanel getSmartTitledPanel();
 
@@ -32,4 +32,4 @@ public interface ISmartDialog extends RehaTPEventListener {
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt);
 
-} // @jve:decl-index=0:visual-constraint="387,36"
+}

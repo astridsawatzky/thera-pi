@@ -7,11 +7,8 @@ import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JRadioButton;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingx.JXButton;
 import org.jdesktop.swingx.JXMonthView;
 import org.jdesktop.swingx.JXPanel;
 
@@ -21,16 +18,16 @@ import terminKalender.TerminFenster;
 
 public class DatumWahl {
 
-    JRadioButton[] jrb = { null, null, null, null };
-    JXButton[] jb = { null, null };
-    ActionListener al;
-    ButtonGroup jrbg = new ButtonGroup();
-    RehaSmartDialog rSmart = null;
-    int iAktion = 1;
-    JXPanel tv;
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-    String aktTag = "x";
-    String wahlTag = "y";
+
+
+    private ActionListener al;
+
+    private RehaSmartDialog rSmart = null;
+
+
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    private String aktTag = "x";
+    private String wahlTag = "y";
 
     public DatumWahl(int x, int y) {
         RehaTP jtp = new RehaTP();

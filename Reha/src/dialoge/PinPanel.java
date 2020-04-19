@@ -20,10 +20,10 @@ public class PinPanel extends JXPanel implements ActionListener {
     private PinPanel thisClass = null;
     private JXButton jb1, jb2 = null;
     private ImageIcon img1, img2, img3 = null;
-    public String fenstername = "";
+
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 7989339213283693863L;
 
@@ -46,7 +46,6 @@ public class PinPanel extends JXPanel implements ActionListener {
     }
 
     public void setzeName(String fenstername) {
-        this.fenstername = fenstername;
     }
 
     public void setFocusImage(boolean focus) {

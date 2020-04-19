@@ -42,23 +42,20 @@ public class RehaSmartDialog extends JXDialog
 
     private JXPanel jContentPane = null;
 
-    public int clickX;
-    public int clickY;
-    public boolean hilfsDlgOffen;
+    private int clickX;
+    private int clickY;
 
-    public boolean insize;
 
-    public int[] waagrecht = { 0, 0 };
-    public int[] senkrecht = { 0, 0 };
-    public int[] orgbounds = { 0, 0 };
-    public int hilfsint = 0;
-    public int sizeart;
-    public JXTitledPanel jtp = null;
-    public RehaTPEventClass xEvent; // @jve:decl-index=0:
+    private boolean insize;
+
+    private int[] waagrecht = { 0, 0 };
+    private int[] senkrecht = { 0, 0 };
+    private int[] orgbounds = { 0, 0 };
+    private int hilfsint = 0;
+    private int sizeart;
+    private JXTitledPanel jtp = null;
+    private RehaTPEventClass xEvent;
     public PinPanel pinPanel = null;
-    public String name = ""; // @jve:decl-index=0:
-    public boolean ignorereturn = false;
-
     /**
      * @param
      */
@@ -68,8 +65,6 @@ public class RehaSmartDialog extends JXDialog
         super(owner, (JComponent) Reha.getThisFrame()
                                       .getGlassPane());
         setModalityType(ModalityType.DOCUMENT_MODAL);
-        // super(owner,null);
-        this.name = name;
         this.setName(name);
         // this.setAlwaysOnTop(true);
         setName(name);
@@ -175,7 +170,7 @@ public class RehaSmartDialog extends JXDialog
         return jtp;
     }
 
-    public boolean WertZwischen(int punkt, int kleinerWert, int grosserWert) {
+    private boolean WertZwischen(int punkt, int kleinerWert, int grosserWert) {
         if (punkt < kleinerWert) {
             return false;
         }
@@ -324,7 +319,6 @@ public class RehaSmartDialog extends JXDialog
 
     @Override
     public void setIgnoreReturn(boolean ignore) {
-        this.ignorereturn = ignore;
 
     }
 

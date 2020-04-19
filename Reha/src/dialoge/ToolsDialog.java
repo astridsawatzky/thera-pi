@@ -268,7 +268,7 @@ public class ToolsDialog extends JXDialog
 
     }
 
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
         this.jtp.removeMouseListener(this.mymouse);
         this.jtp.removeMouseMotionListener(this.mymouse);
         this.jList.removeKeyListener(this);

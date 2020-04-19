@@ -31,7 +31,7 @@ public class About extends JDialog {
 
     }
 
-    public About(Frame frame) {
+    private About(Frame frame) {
         super(frame);
         setTitle("\u00fcber Thera-\u03C0");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);

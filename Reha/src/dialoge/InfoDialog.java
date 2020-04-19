@@ -33,7 +33,7 @@ public class InfoDialog extends JDialog implements WindowListener {
     private JLabel textlab;
     private JLabel bildlab;
     protected KeyListener kl;
-    Font font = new Font("Arial", Font.PLAIN, 12);
+    private Font font = new Font("Arial", Font.PLAIN, 12);
 
     protected String arg1 = null;
 
@@ -44,9 +44,9 @@ public class InfoDialog extends JDialog implements WindowListener {
     Vector<Vector<String>> vecResult = null;
     Vector<String> tage = null;
     Vector<Vector<String>> tageplus = null;
-    boolean historie = false;
-    boolean notfound = false;
-    String endhinweis = "";
+    
+    
+    
     JScrollPane scr1 = null;
     JScrollPane scr2 = null;
 
@@ -59,12 +59,12 @@ public class InfoDialog extends JDialog implements WindowListener {
 
     boolean muststop = false;
 
-    boolean isF1Released = false;
+    
 
     JButton[] buts = { null, null, null };
 
 //    public InfoDialog(String arg1, String infoArt, Vector<Vector<String>> data) {
-    public InfoDialog(String arg1, Vector<Vector<String>> data) {
+    InfoDialog(String arg1, Vector<Vector<String>> data) {
         super();
         /*
          * System.out.println(arg1); System.out.println(infoArt);
@@ -133,16 +133,7 @@ public class InfoDialog extends JDialog implements WindowListener {
 
     }
 
-    public void setzeLabel(String labelText) {
-        textlab.setText(labelText);
-        textlab.getParent()
-               .validate();
-        try {
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     @Override
     public void windowOpened(WindowEvent e) {
@@ -184,8 +175,8 @@ public class InfoDialog extends JDialog implements WindowListener {
                 + (color.length() > 0 ? "color: " + color + ";" : "") + " '>";
     }
 
-    final StringBuffer bufhead = new StringBuffer();
-    final StringBuffer bufend = new StringBuffer();
+    private final StringBuffer bufhead = new StringBuffer();
+    private final StringBuffer bufend = new StringBuffer();
 
     public String ladehead() {
         bufhead.append("<html>\n<head>\n");

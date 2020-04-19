@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import hauptFenster.Version;
 
-public class Credits extends JPanel {
+class Credits extends JPanel {
     private Logger logger = LoggerFactory.getLogger(Credits.class);
 
     public Credits() {

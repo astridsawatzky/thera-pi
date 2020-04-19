@@ -23,7 +23,7 @@ public class InfoDialogRGAFoffen extends InfoDialog {
     private static final long serialVersionUID = -4100786817400796515L;
     private JLabel textlab;
     private JLabel bildlab;
-    Font font = new Font("Arial", Font.PLAIN, 12);
+    
 
     public InfoDialogRGAFoffen(String arg1, Vector<Vector<String>> data) {
 //		super(arg1, "offenRGAF", data);
@@ -38,7 +38,7 @@ public class InfoDialogRGAFoffen extends InfoDialog {
             .validate();
     }
 
-    public JXPanel getOffeneRechnungenInfoContent(Vector<Vector<String>> vdata) {
+    private JXPanel getOffeneRechnungenInfoContent(Vector<Vector<String>> vdata) {
         JXPanel jpan = new JXPanel();
         jpan.addKeyListener(kl);
         // jpan.setPreferredSize(new Dimension(400,100));
@@ -79,7 +79,7 @@ public class InfoDialogRGAFoffen extends InfoDialog {
     }
 
     /***************************************************/
-    public void holeOffeneRechnungen(Vector<Vector<String>> data) {
+    private void holeOffeneRechnungen(Vector<Vector<String>> data) {
         String complete = ladehead();
         StringBuffer bdata = new StringBuffer();
         bdata.append("<span " + getSpanStyle("14", "") + "Offene RGR-/AFR-Rechnungen</span><br>\n");

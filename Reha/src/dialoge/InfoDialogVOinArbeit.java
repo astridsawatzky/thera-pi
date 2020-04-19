@@ -32,8 +32,8 @@ public class InfoDialogVOinArbeit extends InfoDialog implements HyperlinkListene
     private JLabel textlab;
     private JLabel bildlab;
     private String currKasse;
-    static HashMap<String, String> hmVO = new HashMap<String, String>();
-    Font font = new Font("Arial", Font.PLAIN, 12);
+    private static HashMap<String, String> hmVO = new HashMap<String, String>();
+    
 
     private Connection connection;
     

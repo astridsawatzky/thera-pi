@@ -14,8 +14,8 @@ import javax.swing.text.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Md5Panel extends JPanel implements ValuesReceiver {
-    static final Logger logger = LoggerFactory.getLogger(Md5Panel.class);
+class Md5Panel extends JPanel implements ValuesReceiver {
+    private static final Logger logger = LoggerFactory.getLogger(Md5Panel.class);
 
     public Md5Panel() {
         setName("md5");
@@ -24,7 +24,7 @@ public class Md5Panel extends JPanel implements ValuesReceiver {
         add(new JScrollPane(txtpnBob, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
     }
 
-    JTextPane txtpnBob = new JTextPane();
+    private JTextPane txtpnBob = new JTextPane();
 
     void collectValues() {
         new MD5gatherer(this).execute();

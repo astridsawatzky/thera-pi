@@ -40,21 +40,19 @@ import systemTools.ButtonTools;
 
 public class SMSDialog extends JXDialog implements WindowListener, KeyListener, RehaTPEventListener {
 
-    /**
-     * 
-     */
+
     private static final long serialVersionUID = -6736705768583236169L;
-    ActionListener al = null;
+    private ActionListener al = null;
     private RehaTPEventClass rtp = null;
     private JXTitledPanel jtp = null;
     private MouseAdapter mymouse = null;
     private PinPanel pinPanel = null;
     private JXPanel content = null;
     private String titel;
-    PatientToolBarLogic eltern = null;
-    JButton[] buts = { null, null };
-    JRtaTextField tf = null;
-    boolean isSMS = false;
+
+    private JButton[] buts = { null, null };
+    private JRtaTextField tf = null;
+    private boolean isSMS = false;
     private JTextArea jta;
     private String info = null;
     private String nummer = "";
@@ -68,7 +66,6 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
         this.setUndecorated(true);
         this.setName("SMSDlg");
         this.titel = titel;
-        this.eltern = xeltern;
         this.isSMS = SMS;
         this.info = info;
         this.nummer = nummer;
@@ -93,37 +90,6 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
         this.rtp = new RehaTPEventClass();
         this.rtp.addRehaTPEventListener(this);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        /*
-         * try { Enumeration<NetworkInterface> netInter =
-         * NetworkInterface.getNetworkInterfaces(); int n = 0;
-         * 
-         * while ( netInter.hasMoreElements() ) { NetworkInterface ni =
-         * netInter.nextElement(); if(ni != null){ System.out.println(
-         * "NetworkInterface " + n++ + ": " + ni.getDisplayName() );
-         * 
-         * for ( InetAddress iaddress : Collections.list(ni.getInetAddresses()) ) {
-         * System.out.println( "CanonicalHostName: " + iaddress.getCanonicalHostName()
-         * );
-         * 
-         * System.out.println( "IP: " + iaddress.getHostAddress() );
-         * 
-         * System.out.println( "Loopback? " + iaddress.isLoopbackAddress() );
-         * System.out.println( "SiteLocal? " + iaddress.isSiteLocalAddress() );
-         * System.out.println( "SiteRechable? " +InetAddress.getByName(
-         * iaddress.getHostAddress() ).isReachable( 1000 )); System.out.println();
-         * 
-         * } } }
-         * 
-         * } catch (SocketException e) {
-         * 
-         * e.printStackTrace(); } catch (UnknownHostException e) {
-         * 
-         * e.printStackTrace(); } catch (IOException e) {
-         * 
-         * e.printStackTrace(); }
-         */
-
     }
 
     public void setTextCursor(final int pos) {
@@ -231,7 +197,6 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
         buf.append(this.nummer);
         buf.append(b);
         buf.append(jta.getText());
-        // System.out.println("Setze SMS ab mit "+smscomplete);
         try {
             new SwingWorker<Void, Void>() {
                 @Override
@@ -258,7 +223,7 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
         }
     }
 
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
 
         this.jtp.removeMouseListener(this.mymouse);
         this.jtp.removeMouseMotionListener(this.mymouse);

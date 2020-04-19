@@ -10,15 +10,15 @@ import javax.swing.SwingUtilities;
 import gui.Cursors;
 
 public class DragWin extends MouseAdapter {
-    public int clickX;
-    public int clickY;
-    public boolean insize;
+    private int clickX;
+    private int clickY;
+    private boolean insize;
 
-    public int[] waagrecht = { 0, 0 };
-    public int[] senkrecht = { 0, 0 };
-    public int[] orgbounds = { 0, 0 };
-    public int hilfsint = 0;
-    public int sizeart;
+    private int[] waagrecht = { 0, 0 };
+    private int[] senkrecht = { 0, 0 };
+    private int[] orgbounds = { 0, 0 };
+    private int hilfsint = 0;
+    private int sizeart;
     private Container owner;
 
     public DragWin(Container xowner) {
@@ -35,14 +35,10 @@ public class DragWin extends MouseAdapter {
         return true;
     }
 
-    public void setClicks(int x, int y) {
-        clickY = x;
-        clickX = y;
-    }
+
 
     @Override
     public void mousePressed(java.awt.event.MouseEvent e) {
-        //// System.out.println("Klick bei "+e.getY()+" / "+e.getY());
         if (e.getY() <= 25) {
             clickY = e.getY();
             clickX = e.getX();

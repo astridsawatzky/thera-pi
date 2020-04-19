@@ -59,7 +59,7 @@ class MD5gatherer extends SwingWorker<Map<String, String>, String> {
         }
     }
 
-    protected String md5HashOf(File file) throws NoSuchAlgorithmException, FileNotFoundException, IOException {
+    private String md5HashOf(File file) throws NoSuchAlgorithmException, FileNotFoundException, IOException {
         MessageDigest md = MessageDigest.getInstance("MD5");
 
         md.update(Files.readAllBytes(Paths.get(file.getPath())));
