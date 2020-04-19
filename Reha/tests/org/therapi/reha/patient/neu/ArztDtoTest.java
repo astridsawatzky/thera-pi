@@ -26,14 +26,15 @@ public class ArztDtoTest {
     @Test
     public final void testFindbyId() throws Exception {
 
-        Optional<ArztDto> result = ArztDto.findbyID("1", "987654321");
+        Optional<ArztDto> result = ArztDto.findbyID("1", "123456789");
         assertTrue(result.isPresent());
+
     }
 
     @Test
     public void roundtripDtoToArztVonDB() throws Exception {
 
-        ArztDto in = ArztDto.findbyID("1", "987654321")
+        ArztDto in = ArztDto.findbyID("1", "123456789")
                             .get();
         ArztDto out = new ArztDto(in.toArzt());
         assertEquals(in.toString(), out.toString());
@@ -43,7 +44,7 @@ public class ArztDtoTest {
     @Test
     public void loadeachArzt() throws Exception {
         String sql = "select  id from arzt;";
-        String ik = "987654321";
+        String ik = "123456789";
         DatenquellenFactory dqf = new DatenquellenFactory(ik);
         Connection con = dqf.createConnection();
         Statement stmt = con.createStatement();
@@ -57,4 +58,5 @@ public class ArztDtoTest {
 
         }
     }
+
 }

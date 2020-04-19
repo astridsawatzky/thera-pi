@@ -11,7 +11,7 @@ public class PatientDTOTest {
     @Test
     public final void testFindbyPat_intern() throws Exception {
 
-      Optional<PatientDTO> result = PatientDTO.findbyPat_intern("1", "987654321");
+      Optional<PatientDTO> result = PatientDTO.findbyPat_intern("1", "123456789");
        assertTrue(result.isPresent());
     }
 
