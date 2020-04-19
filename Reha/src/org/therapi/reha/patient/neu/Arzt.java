@@ -1,5 +1,8 @@
 package org.therapi.reha.patient.neu;
 
+import java.util.Objects;
+import java.util.Optional;
+
 public class Arzt {
 
     int id;
@@ -11,8 +14,8 @@ public class Arzt {
     Adresse praxis;
     LANR arztnummer;
     String facharzt;
-    Telefonnummer telefon;
-    Telefonnummer fax;
+   Optional< Telefonnummer> telefon = Optional.empty();
+    Optional<Telefonnummer >fax = Optional.empty();
     String klinik;
     String mtext;
     Emailadresse email1 = Emailadresse.EMPTY;
@@ -43,10 +46,10 @@ public class Arzt {
         return facharzt;
     }
     public Telefonnummer getTelefon() {
-        return telefon;
+        return telefon.get();
     }
     public Telefonnummer getFax() {
-        return fax;
+        return fax.get();
     }
     public String getKlinik() {
         return klinik;
@@ -62,6 +65,35 @@ public class Arzt {
     }
     public String getBsnr() {
         return bsnr;
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(anrede, arztnummer, bsnr, email1, email2, facharzt, fax, id, klinik, mtext, nachname,
+                praxis, telefon, titel, vorname);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Arzt other = (Arzt) obj;
+        return Objects.equals(anrede, other.anrede) && Objects.equals(arztnummer, other.arztnummer)
+                && Objects.equals(bsnr, other.bsnr) && Objects.equals(email1, other.email1)
+                && Objects.equals(email2, other.email2) && Objects.equals(facharzt, other.facharzt)
+                && Objects.equals(fax, other.fax) && id == other.id && Objects.equals(klinik, other.klinik)
+                && Objects.equals(mtext, other.mtext) && Objects.equals(nachname, other.nachname)
+                && Objects.equals(praxis, other.praxis) && Objects.equals(telefon, other.telefon)
+                && Objects.equals(titel, other.titel) && Objects.equals(vorname, other.vorname);
+    }
+    @Override
+    public String toString() {
+        return "Arzt [id=" + id + ", anrede=" + anrede + ", titel=" + titel + ", vorname=" + vorname + ", nachname="
+                + nachname + ", praxis=" + praxis + ", arztnummer=" + arztnummer + ", facharzt=" + facharzt
+                + ", telefon=" + telefon + ", fax=" + fax + ", klinik=" + klinik + ", mtext=" + mtext + ", email1="
+                + email1 + ", email2=" + email2 + ", bsnr=" + bsnr + "]";
     }
 
 }

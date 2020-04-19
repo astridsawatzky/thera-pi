@@ -1,6 +1,6 @@
 package org.therapi.reha.patient.neu;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Optional;
 
@@ -18,6 +18,11 @@ public class PatientDTOTest {
 
 
 
+    }
+
+    @Test
+    public void allDtosAreCreatedEqual() throws Exception {
+        assertEquals(new PatientDTO(), new PatientDTO());
     }
 
 }

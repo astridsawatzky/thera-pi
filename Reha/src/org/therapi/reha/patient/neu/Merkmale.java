@@ -1,5 +1,7 @@
 package org.therapi.reha.patient.neu;
 
+import java.util.Objects;
+
 public class Merkmale {
 
 
@@ -37,6 +39,24 @@ public class Merkmale {
     }
     public boolean sechs() {
         return sechs;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(drei, eins, fuenf, sechs, vier, zwei);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Merkmale other = (Merkmale) obj;
+        return drei == other.drei && eins == other.eins && fuenf == other.fuenf && sechs == other.sechs
+                && vier == other.vier && zwei == other.zwei;
     }
 
 

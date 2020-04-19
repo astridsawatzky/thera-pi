@@ -1,5 +1,7 @@
 package org.therapi.reha.patient.neu;
 
+import java.util.Objects;
+
 /**
  * Die Arztnummer setzt sich aus insgesamt neun Ziffern zusammen:
  * <p>
@@ -26,5 +28,27 @@ public class LANR {
     }
 
    public final String lanr;
+
+@Override
+public int hashCode() {
+    return Objects.hash(lanr);
+}
+
+@Override
+public boolean equals(Object obj) {
+    if (this == obj)
+        return true;
+    if (obj == null)
+        return false;
+    if (getClass() != obj.getClass())
+        return false;
+    LANR other = (LANR) obj;
+    return Objects.equals(lanr, other.lanr);
+}
+
+@Override
+public String toString() {
+    return "LANR [lanr=" + lanr + "]";
+}
 
 }

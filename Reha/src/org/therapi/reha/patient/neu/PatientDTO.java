@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -84,7 +85,7 @@ public class PatientDTO {
     String patText;
     String anamnese;
      int id;
-     String arztid;
+     String arztid="";
      String kassenid;
      String jahrfrei;
      boolean u18ignore;
@@ -183,6 +184,83 @@ public class PatientDTO {
         }
         return result;
     }
+
+@Override
+public int hashCode() {
+    return Objects.hash(abschluss, abwAdress, abwAnrede, abwNName, abwOrt, abwPlz, abwStrasse, abwTitel, abwVName,
+            aerzte, afax, akutBeh, akutDat, akutPat, akutbis, anamnese, anlDatum, anrede, arzt, arztNum, arztid, atel,
+            befAb, befDat, befreit, behDauer, ber1, ber2, ber3, ber4, charfrei2, datfrei2, emailA, erDat, erJanein,
+            geboren, heimbewohn, id, jahrfrei, kasse, kassenid, kilometer, klinik, kvNummer, kvStatus, land, merk1,
+            merk2, merk3, merk4, merk5, merk6, nName, numfrei1, numfrei2, ort, patIntern, patText, plz, strasse,
+            telefong, telefonm, telefonp, termine1, termine2, therapeut, titel, u18ignore, vName, vNummer, vipPat);
+}
+
+@Override
+public boolean equals(Object obj) {
+    if (this == obj)
+        return true;
+    if (obj == null)
+        return false;
+    if (getClass() != obj.getClass())
+        return false;
+    PatientDTO other = (PatientDTO) obj;
+    return abschluss == other.abschluss && abwAdress == other.abwAdress && Objects.equals(abwAnrede, other.abwAnrede)
+            && Objects.equals(abwNName, other.abwNName) && Objects.equals(abwOrt, other.abwOrt)
+            && Objects.equals(abwPlz, other.abwPlz) && Objects.equals(abwStrasse, other.abwStrasse)
+            && Objects.equals(abwTitel, other.abwTitel) && Objects.equals(abwVName, other.abwVName)
+            && Objects.equals(aerzte, other.aerzte) && Objects.equals(afax, other.afax)
+            && Objects.equals(akutBeh, other.akutBeh) && Objects.equals(akutDat, other.akutDat)
+            && akutPat == other.akutPat && Objects.equals(akutbis, other.akutbis)
+
+            && Objects.equals(anamnese, other.anamnese) && Objects.equals(anlDatum, other.anlDatum)
+            && Objects.equals(anrede, other.anrede) && Objects.equals(arzt, other.arzt)
+            && Objects.equals(arztNum, other.arztNum)
+          && Objects.equals(arztid, other.arztid)
+            && Objects.equals(atel, other.atel) && Objects.equals(befAb, other.befAb)
+
+                        && Objects.equals(befDat, other.befDat) && befreit == other.befreit && behDauer == other.behDauer
+            && ber1 == other.ber1 && ber2 == other.ber2 && ber3 == other.ber3 && ber4 == other.ber4
+            && Objects.equals(charfrei2, other.charfrei2) && Objects.equals(datfrei2, other.datfrei2)
+            && Objects.equals(emailA, other.emailA) && Objects.equals(erDat, other.erDat) && erJanein == other.erJanein
+            && Objects.equals(geboren, other.geboren) && heimbewohn == other.heimbewohn && id == other.id
+            && Objects.equals(jahrfrei, other.jahrfrei) && Objects.equals(kasse, other.kasse)
+            && Objects.equals(kassenid, other.kassenid) && Objects.equals(kilometer, other.kilometer)
+            && Objects.equals(klinik, other.klinik) && Objects.equals(kvNummer, other.kvNummer)
+            && Objects.equals(kvStatus, other.kvStatus) && Objects.equals(land, other.land) && merk1 == other.merk1
+            && merk2 == other.merk2 && merk3 == other.merk3 && merk4 == other.merk4 && merk5 == other.merk5
+            && merk6 == other.merk6 && Objects.equals(nName, other.nName)
+            && Double.doubleToLongBits(numfrei1) == Double.doubleToLongBits(other.numfrei1)
+            && Double.doubleToLongBits(numfrei2) == Double.doubleToLongBits(other.numfrei2)
+            && Objects.equals(ort, other.ort) && patIntern == other.patIntern && Objects.equals(patText, other.patText)
+            && Objects.equals(plz, other.plz) && Objects.equals(strasse, other.strasse)
+            && Objects.equals(telefong, other.telefong) && Objects.equals(telefonm, other.telefonm)
+            && Objects.equals(telefonp, other.telefonp) && Objects.equals(termine1, other.termine1)
+            && Objects.equals(termine2, other.termine2) && Objects.equals(therapeut, other.therapeut)
+            && Objects.equals(titel, other.titel) && u18ignore == other.u18ignore && Objects.equals(vName, other.vName)
+            && Objects.equals(vNummer, other.vNummer) && vipPat == other.vipPat
+            ;
+}
+
+@Override
+public String toString() {
+    return "PatientDTO [anrede=" + anrede + ", titel=" + titel + ", nName=" + nName + ", vName=" + vName + ", geboren="
+            + geboren + ", abwAdress=" + abwAdress + ", abwAnrede=" + abwAnrede + ", abwTitel=" + abwTitel
+            + ", abwNName=" + abwNName + ", abwVName=" + abwVName + ", abwStrasse=" + abwStrasse + ", abwPlz=" + abwPlz
+            + ", abwOrt=" + abwOrt + ", kasse=" + kasse + ", kvNummer=" + kvNummer + ", kvStatus=" + kvStatus
+            + ", vNummer=" + vNummer + ", klinik=" + klinik + ", telefonp=" + telefonp + ", telefong=" + telefong
+            + ", telefonm=" + telefonm + ", strasse=" + strasse + ", land=" + land + ", plz=" + plz + ", ort=" + ort
+            + ", arzt=" + arzt + ", arztNum=" + arztNum + ", atel=" + atel + ", afax=" + afax + ", patIntern="
+            + patIntern + ", befreit=" + befreit + ", befDat=" + befDat + ", anlDatum=" + anlDatum + ", akutPat="
+            + akutPat + ", akutDat=" + akutDat + ", akutBeh=" + akutBeh + ", termine1=" + termine1 + ", termine2="
+            + termine2 + ", vipPat=" + vipPat + ", erJanein=" + erJanein + ", erDat=" + erDat + ", befAb=" + befAb
+            + ", numfrei1=" + numfrei1 + ", numfrei2=" + numfrei2 + ", heimbewohn=" + heimbewohn + ", abschluss="
+            + abschluss + ", akutbis=" + akutbis + ", datfrei2=" + datfrei2 + ", kilometer=" + kilometer
+            + ", charfrei2=" + charfrei2 + ", emailA=" + emailA + ", behDauer=" + behDauer + ", ber1=" + ber1
+            + ", ber2=" + ber2 + ", ber3=" + ber3 + ", ber4=" + ber4 + ", therapeut=" + therapeut + ", merk6=" + merk6
+            + ", merk5=" + merk5 + ", merk4=" + merk4 + ", merk3=" + merk3 + ", merk2=" + merk2 + ", merk1=" + merk1
+            + ", aerzte=" + aerzte + ", patText=" + patText + ", anamnese=" + anamnese + ", id=" + id + ", arztid="
+            + arztid + ", kassenid=" + kassenid + ", jahrfrei=" + jahrfrei + ", u18ignore=" + u18ignore + "]";
+}
 
 
 
