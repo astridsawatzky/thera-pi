@@ -6,21 +6,33 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mandant.IK;
+
 public class PatientMapper {
+    private IK ik;
+    public PatientMapper(IK mandant_ik) {
+            this.ik = mandant_ik;
+    }
 
     private static final Logger logger =LoggerFactory.getLogger(PatientMapper.class);
+    public  Optional<Patient> findbyPat_intern(String pat_intern, String aktIK) {
 
-    public static Patient of(PatientDTO dto) {
+        return PatientDTO.findbyPat_intern(pat_intern, aktIK)
+                         .map(dto -> of(dto));
+    }
 
 
-        Patient patient = new Patient(new Adresse("",dto.strasse,dto.plz,dto.ort));
+    public Patient of(PatientDTO dto) {
+
+        Patient patient = new Patient(new Adresse(null,dto.strasse,dto.plz,dto.ort));
+        patient.db_id=dto.patIntern;
         patient. anrede =dto.anrede;
         patient. titel =dto.titel;
         patient. nachname =dto.nName;
         patient. vorname =dto.vName;
-        if(dto.kilometer!=null &&  !dto.kilometer.isEmpty()) {
-            patient.entfernung = Integer.parseInt( dto.kilometer);
-        }
+
+            patient.entfernung =  dto.kilometer;
+
         patient.hasAbweichendeAdresse = dto.abwAdress;
         if (patient.hasAbweichendeAdresse) {
             patient.vertreter = Optional.of(new Person(dto.abwAnrede, dto.abwTitel, dto.abwNName, dto.abwVName));
@@ -40,7 +52,8 @@ public class PatientMapper {
         if(dto.emailA!=null) {
             patient. email =new Emailadresse(dto.emailA);
         }
-        patient. akut = new Akut(dto.akutDat,dto.akutbis);
+
+        patient. akut = new Akut(dto.akutPat,  dto.akutDat,dto.akutbis);
         patient. daten = new PlanDaten(dto.termine1,dto.termine2);
         Befreiung befreiung =null;
         if(dto.befAb!=null && dto.befDat!=null) {
@@ -51,11 +64,22 @@ public class PatientMapper {
             logger.debug("wenigstens ein BefreiungsDatum = null. Von: " +  dto.befAb + " Bis: " + dto.befDat + "befreit ist " + dto.befreit);
         }
 
+        Optional<Krankenkasse> kk;
         try {
-            patient. kv = Optional.of( new Krankenversicherung(new Krankenkasse(dto.kvNummer),dto.vNummer,dto.kvStatus,befreiung));
+            kk = new KrankenkasseDto().findbyId(Integer.parseInt( dto.kassenid),ik);
+        } catch (NumberFormatException e) {
+           kk=Optional.empty();
+            logger.error("kk konnte nicht angelegt werden " + dto.kassenid ,e);
+        }
+        try {
+
+
+
+            patient. kv = new Krankenversicherung(kk,dto.vNummer,dto.kvStatus,befreiung);
         } catch (Exception e1) {
-            patient.kv = Optional.empty();
-            logger.error("KV konnte nicht angelegt werden",e1);
+
+            patient.kv = new Krankenversicherung(Optional.empty(), dto.vNummer,dto.kvStatus, befreiung);
+            logger.error("KV konnte nicht angelegt werden ",e1);
         }
 
         if(dto.therapeut!=null) {
@@ -67,76 +91,43 @@ public class PatientMapper {
         if(!dto.arztid.isEmpty()) {
         Arzt arzt = new Arzt();
             arzt.id = Integer.parseInt(dto.arztid);
-        arzt.arztnummer=new LANR(dto.arztNum);
-        arzt.nachname = dto.arzt;
-        patient. hauptarzt = Optional.of(arzt);;
+            arzt.arztnummer=new LANR(dto.arztNum);
+            arzt.nachname = dto.arzt;
+            arzt.email1= dto.emailA ;
+            patient. hauptarzt = Optional.of(arzt);
+
         }
         patient.merkmale = new Merkmale(dto.merk1,dto.merk2,dto.merk3,dto.merk4,dto.merk5,dto.merk6);
+
+        patient.aerzte=dto.aerzte;
+        patient.patIntern=dto.patIntern;
+        patient.anamnese=dto.anamnese ==null ? "":dto.anamnese;
+        patient.memo =dto.patText ==null ? "":dto.patText;
+        patient.anlageDatum = dto.anlDatum;
+        patient. land =dto.land;
+        patient. akutBeh=dto.akutBeh;
+        patient. vip_Pat=dto.vipPat;
+        patient. er_Janein=dto.erJanein;
+        patient. er_Dat=dto.erDat;
+        patient. heimbewohn=dto.heimbewohn;
+        patient. numfrei1=dto.numfrei1;
+        patient. numfrei2=dto.numfrei2;
+        patient. abschluss=dto.abschluss;
+        patient. datfrei2=dto.datfrei2;
+        patient. charfrei2=dto.charfrei2;
+        patient. behDauer=dto.behDauer;
+        patient. ber1=dto.ber1;
+        patient. ber2=dto.ber2;
+        patient. ber3=dto.ber3;
+        patient. ber4=dto.ber4;
+        patient. jahrfrei=dto.jahrfrei;
 
         return patient;
 
     };
 
 
-//    public static PatientDTO of(Patient patient) {
-//
-//
-//        PatientDTO dto = new PatientDTO();
-//
-//        patient. anrede =dto.anrede;
-//        patient. titel =dto.titel;
-//        patient. nachname =dto.nName;
-//        patient. vorname =dto.vName;
-//        patient. wohnadresse = new Adresse("",dto.strasse,new PLZ(dto.plz),dto.ort);
-//        dto.kilometer = String.valueOf(  patient.entfernung);
-//
-//        patient.hasAbweichendeAdresse = dto.abwAdress;
-//        if (patient.hasAbweichendeAdresse) {
-//            patient.vertreter = Optional.of(new Person(dto.abwAnrede, dto.abwTitel, dto.abwNName, dto.abwVName));
-//            patient.abweichende = Optional.of(  new Adresse("", dto.abwStrasse, new PLZ(dto.abwPlz), dto.abwOrt));
-//        }
-//        patient. geburtstag = dto.geboren;
-//        patient. privat =new Telefonnummer(dto.telefonp);
-//        patient. geschaeft = new Telefonnummer(dto.telefong);
-//        patient.mobil = new Telefonnummer(dto.telefonm);
-//        patient. email =new Emailadresse(dto.emailA);
-//        patient. akut = new Akut(dto.akutDat,dto.akutbis);
-//        patient. daten = new PlanDaten(dto.termine1,dto.termine2);
-//        Befreiung befreiung =null;
-//        if(dto.befAb!=null && dto.befDat!=null) {
-//             befreiung = new Befreiung(dto.befAb,dto.befDat);
-//
-//        } else {
-//            logger.debug("wenigstens ein BefreiungsDatum = null. Von: " +  dto.befAb + " Bis: " + dto.befDat + "befreit ist " + dto.befreit);
-//        }
-//        if(patient.kv.isPresent()) {
-//            dto.kvNummer = patient.kv.get().kk.ik.digitString();
-//            dto.vNummer = patient.kv.get().versicherungsnummer;
-//            dto.kvStatus = patient.kv.get().getStatus();
-//        }
-//        patient. behandler= Optional.of(new Kollege(dto.therapeut));
-//        Arzt arzt = new Arzt();
-//       dto.arztid = String.valueOf( arzt.id);
-//        arzt.arztnummer=new LANR(dto.arztNum);
-//        arzt.nachname = dto.arzt;
-//        patient. hauptarzt = Optional.of(arzt);;
-//        patient.merkmale = new Merkmale(dto.merk1,dto.merk2,dto.merk3,dto.merk4,dto.merk5,dto.merk6);
-//        return dto;
-//
-//    };
-
-
-    public static Optional<Patient> findbyPat_intern(String pat_intern, String aktIK) {
-
-        return PatientDTO.findbyPat_intern(pat_intern, aktIK)
-                         .map(dto -> PatientMapper.of(dto));
-    }
-
-
-
-
-
-    static PatientDTO of(Patient pat) {
+    PatientDTO of(Patient pat) {
         PatientDTO patientdto = new PatientDTO();
         patientdto.anrede = pat.anrede;
         patientdto.titel = pat.titel;
@@ -144,31 +135,36 @@ public class PatientMapper {
         patientdto.vName = pat.vorname;
         patientdto.geboren =  pat.geburtstag;
 
-        patientdto.abwAdress = pat.hasAbweichendeAdresse;
-        patientdto.abwAnrede = pat.abwAnrede;
-        patientdto.abwTitel = pat.abwTitel;
-        patientdto.abwNName = pat.abwN_Name;
-        patientdto.abwVName = pat.abwV_Name;
 
         if (pat.abweichende.isPresent()) {
+            patientdto.abwAdress = true;
+            patientdto.abwAnrede = pat.vertreter.get().getAnrede();
+            patientdto.abwTitel = pat.vertreter.get().getTitel();
+            patientdto.abwNName = pat.vertreter.get().getnName();
+            patientdto.abwVName = pat.vertreter.get().getvName();
+
             Adresse abWeichendeAdresse = pat.abweichende.get();
             patientdto.abwStrasse = abWeichendeAdresse.strasse;
             patientdto.abwPlz = abWeichendeAdresse.plz.toString();
             patientdto.abwOrt = abWeichendeAdresse.ort;
         }
-        if (pat.kv.isPresent()) {
-            Krankenversicherung krankenversicherung = pat.kv.get();
-            patientdto.kasse = krankenversicherung.kk.name;
-            patientdto.kvNummer = krankenversicherung.kk.ik.digitString();
-            patientdto.kvStatus = krankenversicherung.status;
-            patientdto.vNummer = krankenversicherung.versicherungsnummer;
-            patientdto.kassenid = String.valueOf(krankenversicherung.kk.id);
-            if (krankenversicherung.befreit.isPresent()) {
-                Befreiung befreiung = krankenversicherung.befreit.get();
-                patientdto.befreit = befreiung.bis.isAfter(LocalDate.now());
-                patientdto.befDat = befreiung.bis;
-                patientdto.befAb = befreiung.von;
-            }
+        Krankenversicherung krankenversicherung = pat.kv;
+        if(krankenversicherung.kk.isPresent()){
+
+
+        patientdto.kasse = krankenversicherung.kk.get().name;
+        patientdto.kvNummer = krankenversicherung.kk.get().ik.digitString();
+        patientdto.kassenid = String.valueOf(krankenversicherung.kk.get().id);
+        }
+
+
+        patientdto.kvStatus = krankenversicherung.status;
+        patientdto.vNummer = krankenversicherung.versicherungsnummer;
+        if (krankenversicherung.befreit.isPresent()) {
+            Befreiung befreiung = krankenversicherung.befreit.get();
+            patientdto.befreit = befreiung.istbefreit(LocalDate.now());
+            patientdto.befDat = befreiung.bis;
+            patientdto.befAb = befreiung.von;
         }
         patientdto.klinik = pat.klinik;
 
@@ -193,12 +189,12 @@ public class PatientMapper {
             patientdto.arzt = hauptArzt.nachname;
             patientdto.arztNum = hauptArzt.arztnummer.lanr;
 
-            if (hauptArzt.telefon.isPresent()) {
-            patientdto.atel = hauptArzt.telefon.get().nummer;
-            }
-            if(hauptArzt.fax.isPresent())
-            patientdto.afax = hauptArzt.fax.get().nummer;
-            patientdto.emailA = hauptArzt.email1.adresse;
+
+            patientdto.atel = hauptArzt.telefon;
+
+
+            patientdto.afax = hauptArzt.fax;
+            patientdto.emailA = hauptArzt.email1;
             patientdto.arztid = String.valueOf(hauptArzt.id);
         }
         patientdto.patIntern = pat.patIntern;
@@ -219,8 +215,8 @@ public class PatientMapper {
         patientdto.heimbewohn = pat.heimbewohn;
         patientdto.abschluss = pat.abschluss;
         patientdto.akutbis = pat.akut.bis;
-        patientdto.datfrei2 = pat.datfrei;
-        patientdto.kilometer = pat.entfernung==0?null: String.valueOf(pat.entfernung);
+        patientdto.datfrei2 = pat.datfrei2;
+        patientdto.kilometer = pat.entfernung;
         patientdto.charfrei2 = pat.charfrei2;
 
         patientdto.behDauer = pat.behDauer;

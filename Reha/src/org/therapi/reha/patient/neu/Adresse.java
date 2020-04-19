@@ -35,6 +35,11 @@ public class Adresse {
                 && Objects.equals(strasse, other.strasse) && Objects.equals(zusatz, other.zusatz);
     }
 
+    @Override
+    public String toString() {
+        return "Adresse [zusatz=" + zusatz + ", strasse=" + strasse + ", plz=" + plz + ", ort=" + ort + "]";
+    }
+
 
 
 }

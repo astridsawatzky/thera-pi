@@ -1,7 +1,6 @@
 package org.therapi.reha.patient.neu;
 
 import java.util.Objects;
-import java.util.Optional;
 
 public class Arzt {
 
@@ -14,13 +13,15 @@ public class Arzt {
     Adresse praxis;
     LANR arztnummer;
     String facharzt;
-   Optional< Telefonnummer> telefon = Optional.empty();
-    Optional<Telefonnummer >fax = Optional.empty();
+   String telefon;
+    String fax ;
     String klinik;
     String mtext;
-    Emailadresse email1 = Emailadresse.EMPTY;
-    Emailadresse email2= Emailadresse.EMPTY;
+    String email1;
+    String email2;
     String bsnr;
+
+    public String matchcode;
     public int getId() {
         return id;
     }
@@ -45,11 +46,11 @@ public class Arzt {
     public String getFacharzt() {
         return facharzt;
     }
-    public Telefonnummer getTelefon() {
-        return telefon.get();
+    public String getTelefon() {
+        return telefon;
     }
-    public Telefonnummer getFax() {
-        return fax.get();
+    public String getFax() {
+        return fax;
     }
     public String getKlinik() {
         return klinik;
@@ -57,10 +58,10 @@ public class Arzt {
     public String getMtext() {
         return mtext;
     }
-    public Emailadresse getEmail1() {
+    public String getEmail1() {
         return email1;
     }
-    public Emailadresse getEmail2() {
+    public String getEmail2() {
         return email2;
     }
     public String getBsnr() {
@@ -68,8 +69,8 @@ public class Arzt {
     }
     @Override
     public int hashCode() {
-        return Objects.hash(anrede, arztnummer, bsnr, email1, email2, facharzt, fax, id, klinik, mtext, nachname,
-                praxis, telefon, titel, vorname);
+        return Objects.hash(anrede, arztnummer, bsnr, email1, email2, facharzt, fax, id, klinik, matchcode, mtext,
+                nachname, praxis, telefon, titel, vorname);
     }
     @Override
     public boolean equals(Object obj) {
@@ -84,16 +85,17 @@ public class Arzt {
                 && Objects.equals(bsnr, other.bsnr) && Objects.equals(email1, other.email1)
                 && Objects.equals(email2, other.email2) && Objects.equals(facharzt, other.facharzt)
                 && Objects.equals(fax, other.fax) && id == other.id && Objects.equals(klinik, other.klinik)
-                && Objects.equals(mtext, other.mtext) && Objects.equals(nachname, other.nachname)
-                && Objects.equals(praxis, other.praxis) && Objects.equals(telefon, other.telefon)
-                && Objects.equals(titel, other.titel) && Objects.equals(vorname, other.vorname);
+                && Objects.equals(matchcode, other.matchcode) && Objects.equals(mtext, other.mtext)
+                && Objects.equals(nachname, other.nachname) && Objects.equals(praxis, other.praxis)
+                && Objects.equals(telefon, other.telefon) && Objects.equals(titel, other.titel)
+                && Objects.equals(vorname, other.vorname);
     }
     @Override
     public String toString() {
         return "Arzt [id=" + id + ", anrede=" + anrede + ", titel=" + titel + ", vorname=" + vorname + ", nachname="
                 + nachname + ", praxis=" + praxis + ", arztnummer=" + arztnummer + ", facharzt=" + facharzt
                 + ", telefon=" + telefon + ", fax=" + fax + ", klinik=" + klinik + ", mtext=" + mtext + ", email1="
-                + email1 + ", email2=" + email2 + ", bsnr=" + bsnr + "]";
+                + email1 + ", email2=" + email2 + ", bsnr=" + bsnr + ", matchcode=" + matchcode + "]";
     }
 
 }

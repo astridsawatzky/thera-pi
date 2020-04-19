@@ -19,9 +19,9 @@ public class Patient {
     public Optional< Telefonnummer> geschaeft= Optional.empty();
     public Optional<Telefonnummer>mobil= Optional.empty();
     public Emailadresse email;
-    public Akut akut =new Akut(null, null);
+    public Akut akut =new Akut(false,null, null);
     public PlanDaten daten = new PlanDaten("", "");
-    public Optional<Krankenversicherung> kv = Optional.empty();
+    public Krankenversicherung kv = new Krankenversicherung(Optional.empty(), null,null, Optional.empty());
     public Optional<Kollege> behandler = Optional.empty();
     public Optional<Arzt> hauptarzt = Optional.empty();
     public String abwAnrede;
@@ -51,7 +51,7 @@ public class Patient {
     public double numfrei1;
     public double numfrei2;
     public boolean abschluss;
-    public LocalDate datfrei;
+    public LocalDate datfrei2;
     public String charfrei2;
     public int behDauer;
     public int ber1;
@@ -76,7 +76,7 @@ public class Patient {
     @Override
     public int hashCode() {
         return Objects.hash(abschluss, abwAnrede, abwN_Name, abwTitel, abwV_Name, abweichende, aerzte, akut, akutBeh,
-                anamnese, anlageDatum, anrede, behDauer, behandler, ber1, ber2, ber3, ber4, charfrei2, daten, datfrei,
+                anamnese, anlageDatum, anrede, behDauer, behandler, ber1, ber2, ber3, ber4, charfrei2, daten, 2,
                 db_id, email, entfernung, er_Dat, er_Janein, geburtstag, geschaeft, hasAbweichendeAdresse, hauptarzt,
                 heimbewohn, jahrfrei, klinik, kv, land, memo, merkmale, mobil, nachname, numfrei1, numfrei2, patIntern,
                 privat, titel, u18ignorieren, vertreter, vip_Pat, vorname, wohnadresse);
@@ -100,7 +100,7 @@ public class Patient {
                 && behDauer == other.behDauer && Objects.equals(behandler, other.behandler) && ber1 == other.ber1
                 && ber2 == other.ber2 && ber3 == other.ber3 && ber4 == other.ber4
                 && Objects.equals(charfrei2, other.charfrei2) && Objects.equals(daten, other.daten)
-                && Objects.equals(datfrei, other.datfrei) && db_id == other.db_id && Objects.equals(email, other.email)
+                && Objects.equals(datfrei2, other.datfrei2) && db_id == other.db_id && Objects.equals(email, other.email)
                 && entfernung == other.entfernung && Objects.equals(er_Dat, other.er_Dat)
                 && er_Janein == other.er_Janein && Objects.equals(geburtstag, other.geburtstag)
                 && Objects.equals(geschaeft, other.geschaeft) && hasAbweichendeAdresse == other.hasAbweichendeAdresse
@@ -130,7 +130,7 @@ public class Patient {
                 + entfernung + ", aerzte=" + aerzte + ", klinik=" + klinik + ", u18ignorieren=" + u18ignorieren
                 + ", land=" + land + ", akutBeh=" + akutBeh + ", vip_Pat=" + vip_Pat + ", er_Janein=" + er_Janein
                 + ", er_Dat=" + er_Dat + ", heimbewohn=" + heimbewohn + ", numfrei1=" + numfrei1 + ", numfrei2="
-                + numfrei2 + ", abschluss=" + abschluss + ", datfrei=" + datfrei + ", charfrei2=" + charfrei2
+                + numfrei2 + ", abschluss=" + abschluss + ", datfrei=" + datfrei2 + ", charfrei2=" + charfrei2
                 + ", behDauer=" + behDauer + ", ber1=" + ber1 + ", ber2=" + ber2 + ", ber3=" + ber3 + ", ber4=" + ber4
                 + ", jahrfrei=" + jahrfrei + "]";
     }

@@ -1,11 +1,15 @@
 package org.therapi.reha.patient.neu;
 
+import java.sql.ResultSet;
+
 import mandant.IK;
 
 public class Krankenkasse {
     public Krankenkasse(String kassenid) {
         ik= new IK(kassenid);
     }
+
+
     IK ik;
     String name;
     int id;
@@ -27,5 +31,6 @@ public class Krankenkasse {
     public void setId(int id) {
         this.id = id;
     }
+
 
 }

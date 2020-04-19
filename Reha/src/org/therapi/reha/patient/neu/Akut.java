@@ -4,32 +4,23 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Akut {
-   public static final Akut EMPTY = new Akut() {
-        @Override
-        public boolean isAkut() {
-          return false;
-        };
-    };
 
-    public Akut(LocalDate akutSeit , LocalDate akutBis) {
+private boolean akutPat;
+
+public final  LocalDate seit;
+public final  LocalDate bis;
+
+    Akut(boolean akutPat, LocalDate akutSeit , LocalDate akutBis) {
         seit = akutSeit;
         bis = akutBis;
+        this.akutPat = akutPat;
     }
 
 
-    private Akut() {
-    }
 
-
-    LocalDate seit;
-    LocalDate bis;
 
     public boolean isAkut() {
-        try {
-            return bis.isAfter(LocalDate.now());
-        } catch (Exception e) {
-           return false;
-        }
+       return akutPat;
 
     }
 

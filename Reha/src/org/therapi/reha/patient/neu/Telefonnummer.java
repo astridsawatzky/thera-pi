@@ -4,6 +4,8 @@ import java.util.Objects;
 
 public class Telefonnummer {
 
+
+
     public Telefonnummer(String telefon) {
         nummer = telefon;
     }

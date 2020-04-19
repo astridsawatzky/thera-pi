@@ -24,13 +24,13 @@ public class PatientDTO {
      String vName;
      LocalDate geboren;
      boolean abwAdress;
-     String abwAnrede;
-     String abwTitel;
-     String abwNName;
-     String abwVName;
-     String abwStrasse;
-     String abwPlz;
-     String abwOrt;
+     String abwAnrede="";
+     String abwTitel="";
+     String abwNName="";
+     String abwVName="";
+     String abwStrasse="";
+     String abwPlz="";
+     String abwOrt="";
      String kasse;
      String kvNummer;
      String kvStatus;
@@ -66,7 +66,7 @@ public class PatientDTO {
      boolean abschluss;
      LocalDate akutbis;
      LocalDate datfrei2;
-     String kilometer;
+     int kilometer;
      String charfrei2;
      String emailA;
      int behDauer;
@@ -86,7 +86,7 @@ public class PatientDTO {
     String anamnese;
      int id;
      String arztid="";
-     String kassenid;
+     String kassenid="";
      String jahrfrei;
      boolean u18ignore;
     private static final Logger logger =LoggerFactory .getLogger(PatientDTO.class);
@@ -142,7 +142,7 @@ public class PatientDTO {
         patient.abschluss = rs.getBoolean("abschluss");
         patient.akutbis = Optional.ofNullable(rs.getDate("akutbis")).map(d -> d.toLocalDate()).orElse(null);
         patient.datfrei2 = Optional.ofNullable(rs.getDate("datfrei2")).map(d -> d.toLocalDate()).orElse(null);
-        patient.kilometer = rs.getString("kilometer");
+        patient.kilometer = rs.getInt("kilometer");
         patient.charfrei2 = rs.getString("charfrei2");
         patient.emailA = rs.getString("emailA");
         patient.behDauer = rs.getInt("behDauer");
@@ -180,7 +180,7 @@ public class PatientDTO {
                 result = Optional.of(PatientDTO.of(rs));
             }
         } catch (SQLException e) {
-            logger.error("bad things happen here", e);
+            logger.error("could not get Patient for id = " + pat_intern  , e);
         }
         return result;
     }
@@ -223,7 +223,7 @@ public boolean equals(Object obj) {
             && Objects.equals(charfrei2, other.charfrei2) && Objects.equals(datfrei2, other.datfrei2)
             && Objects.equals(emailA, other.emailA) && Objects.equals(erDat, other.erDat) && erJanein == other.erJanein
             && Objects.equals(geboren, other.geboren) && heimbewohn == other.heimbewohn && id == other.id
-            && Objects.equals(jahrfrei, other.jahrfrei) && Objects.equals(kasse, other.kasse)
+            && Objects.equals(jahrfrei, other.jahrfrei)
             && Objects.equals(kassenid, other.kassenid) && Objects.equals(kilometer, other.kilometer)
             && Objects.equals(klinik, other.klinik) && Objects.equals(kvNummer, other.kvNummer)
             && Objects.equals(kvStatus, other.kvStatus) && Objects.equals(land, other.land) && merk1 == other.merk1
@@ -246,7 +246,7 @@ public String toString() {
     return "PatientDTO [anrede=" + anrede + ", titel=" + titel + ", nName=" + nName + ", vName=" + vName + ", geboren="
             + geboren + ", abwAdress=" + abwAdress + ", abwAnrede=" + abwAnrede + ", abwTitel=" + abwTitel
             + ", abwNName=" + abwNName + ", abwVName=" + abwVName + ", abwStrasse=" + abwStrasse + ", abwPlz=" + abwPlz
-            + ", abwOrt=" + abwOrt + ", kasse=" + kasse + ", kvNummer=" + kvNummer + ", kvStatus=" + kvStatus
+            + ", abwOrt=" + abwOrt + ", kvNummer=" + kvNummer + ", kvStatus=" + kvStatus
             + ", vNummer=" + vNummer + ", klinik=" + klinik + ", telefonp=" + telefonp + ", telefong=" + telefong
             + ", telefonm=" + telefonm + ", strasse=" + strasse + ", land=" + land + ", plz=" + plz + ", ort=" + ort
             + ", arzt=" + arzt + ", arztNum=" + arztNum + ", atel=" + atel + ", afax=" + afax + ", patIntern="
