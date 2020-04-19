@@ -67,7 +67,7 @@ public class KrankenkasseDto {
                 result = Optional.of(KrankenkasseDto.of(rs));
             }
         } catch (SQLException e) {
-            logger.error("bad things happen here", e);
+            logger.error("Krankenkassenid: " +id +" aus " + aktIK, e);
         }
         return result;
 

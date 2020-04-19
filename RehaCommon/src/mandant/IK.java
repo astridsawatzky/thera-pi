@@ -3,6 +3,9 @@ package mandant;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Das IK ist ein eindeutiges Merkmal für die Abrechnung medizinischer und
  * rehabilitativer Leistungen mit den Traegern der Sozialversicherung
@@ -54,6 +57,7 @@ public class IK {
     private static final Pattern IK_FORMAT = Pattern.compile("\\d{9}");
     private final String ik_ziffern;
     private final String wellFormed;
+    private Logger logger = LoggerFactory.getLogger(IK.class);
 
     /**
      *
@@ -62,7 +66,7 @@ public class IK {
     public IK(String ik) {
         if (!IK_FORMAT.matcher(ik)
                       .matches()) {
-            throw new IllegalArgumentException(ik + " is not a valid IK");
+            logger.error(ik + " is not a valid IK");
         }
         this.ik_ziffern = ik;
         this.wellFormed = "IK" + ik;
