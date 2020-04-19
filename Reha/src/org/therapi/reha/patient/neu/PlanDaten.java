@@ -8,4 +8,10 @@ public class PlanDaten {
     }
     String moeglicheTermine1;
     String moeglicheTermine2;
+    public String getMoeglicheTermine1() {
+        return moeglicheTermine1;
+    }
+    public String getMoeglicheTermine2() {
+        return moeglicheTermine2;
+    }
 }

@@ -10,5 +10,14 @@ public class Befreiung {
     }
     LocalDate von;
     LocalDate bis;
+    public LocalDate getVon() {
+        return von;
+    }
+    public LocalDate getBis() {
+        return bis;
+    }
+public boolean istbefreit(LocalDate wann) {
 
+   return  wann.isAfter(von) && wann.isBefore(bis);
+}
 }

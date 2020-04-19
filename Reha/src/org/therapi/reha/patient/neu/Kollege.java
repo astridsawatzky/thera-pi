@@ -7,5 +7,14 @@ public class Kollege {
     String nachname;
     String vorname;
     String matchcode;
+    public String getNachname() {
+        return nachname;
+    }
+    public String getVorname() {
+        return vorname;
+    }
+    public String getMatchcode() {
+        return matchcode;
+    }
 
 }

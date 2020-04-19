@@ -25,6 +25,6 @@ public class LANR {
         lanr = nummer;
     }
 
-    String lanr;
+   public final String lanr;
 
 }

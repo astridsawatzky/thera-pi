@@ -15,9 +15,54 @@ public class Arzt {
     Telefonnummer fax;
     String klinik;
     String mtext;
-    Emailadresse email1;
-    Emailadresse email2;
+    Emailadresse email1 = Emailadresse.EMPTY;
+    Emailadresse email2= Emailadresse.EMPTY;
     String bsnr;
+    public int getId() {
+        return id;
+    }
+    public String getAnrede() {
+        return anrede;
+    }
+    public String getTitel() {
+        return titel;
+    }
+    public String getVorname() {
+        return vorname;
+    }
+    public String getNachname() {
+        return nachname;
+    }
+    public Adresse getPraxis() {
+        return praxis;
+    }
+    public LANR getArztnummer() {
+        return arztnummer;
+    }
+    public String getFacharzt() {
+        return facharzt;
+    }
+    public Telefonnummer getTelefon() {
+        return telefon;
+    }
+    public Telefonnummer getFax() {
+        return fax;
+    }
+    public String getKlinik() {
+        return klinik;
+    }
+    public String getMtext() {
+        return mtext;
+    }
+    public Emailadresse getEmail1() {
+        return email1;
+    }
+    public Emailadresse getEmail2() {
+        return email2;
+    }
+    public String getBsnr() {
+        return bsnr;
+    }
 
 }
 /**

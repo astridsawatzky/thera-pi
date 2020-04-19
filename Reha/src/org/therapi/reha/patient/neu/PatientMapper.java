@@ -2,7 +2,12 @@ package org.therapi.reha.patient.neu;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class PatientMapper {
+
+    private static final Logger logger =LoggerFactory.getLogger(PatientMapper.class);
 
     public static Patient of(PatientDTO dto) {
 
@@ -14,7 +19,10 @@ public class PatientMapper {
         patient. vorname =dto.vName;
         patient. wohnadresse = new Adresse("",dto.strasse,new PLZ(dto.plz),dto.ort);
         patient.hasAbweichendeAdresse = dto.abwAdress;
-        patient.abweichende = new Adresse("",dto.abwStrasse,new PLZ(dto.abwPlz),dto.abwOrt);
+        if (patient.hasAbweichendeAdresse) {
+            patient.vertreter = Optional.of(new Person(dto.abwAnrede, dto.abwTitel, dto.abwNName, dto.abwVName));
+            patient.abweichende = Optional.of(  new Adresse("", dto.abwStrasse, new PLZ(dto.abwPlz), dto.abwOrt));
+        }
         patient. geburtstag = dto.geboren;
         patient. privat =new Telefonnummer(dto.telefonp);
         patient. geschaeft = new Telefonnummer(dto.telefong);
@@ -22,20 +30,26 @@ public class PatientMapper {
         patient. email =new Emailadresse(dto.emailA);
         patient. akut = new Akut(dto.akutDat,dto.akutbis);
         patient. daten = new PlanDaten(dto.termine1,dto.termine2);
+        Befreiung befreiung =null;
+        if(dto.befAb!=null && dto.befDat!=null) {
+             befreiung = new Befreiung(dto.befAb,dto.befDat);
 
-        Befreiung befreiung = new Befreiung(dto.befAb,dto.befDat);
-        patient. kv = new Krankenversicherung(new Krankenkasse(dto.kassenid),dto.vNummer,dto.kvStatus,befreiung);
-        patient. behandler= new Kollege(dto.therapeut);
+        } else {
+            logger.debug("wenigstens ein BefreiungsDatum = null. Von: " +  dto.befAb + " Bis: " + dto.befDat + "befreit ist " + dto.befreit);
+        }
+        patient. kv = Optional.of( new Krankenversicherung(new Krankenkasse(dto.kvNummer),dto.vNummer,dto.kvStatus,befreiung));
+        patient. behandler= Optional.of(new Kollege(dto.therapeut));
         Arzt arzt = new Arzt();
         arzt.id=Integer.parseInt(dto.arztid);
         arzt.arztnummer=new LANR(dto.arztNum);
         arzt.nachname = dto.arzt;
-        patient. hauptarzt = arzt;;
+        patient. hauptarzt = Optional.of(arzt);;
+        patient.merkmale = new Merkmale(dto.merk1,dto.merk2,dto.merk3,dto.merk4,dto.merk5,dto.merk6);
         return patient;
 
     };
 
-    static Optional<Patient> findbyPat_intern(String pat_intern, String aktIK) {
+    public static Optional<Patient> findbyPat_intern(String pat_intern, String aktIK) {
 
         return PatientDTO.findbyPat_intern(pat_intern, aktIK)
                          .map(dto -> PatientMapper.of(dto));

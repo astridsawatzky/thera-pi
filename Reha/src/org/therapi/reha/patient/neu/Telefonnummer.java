@@ -6,6 +6,6 @@ public class Telefonnummer {
         nummer = telefon;
     }
 
-    String nummer;
+public    String nummer;
 
 }

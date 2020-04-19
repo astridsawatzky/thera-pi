@@ -1,7 +1,7 @@
 package org.therapi.reha.patient.neu;
 
 public class PLZ {
-    String plz;
+  public  String plz;
 
 
     public PLZ(String PLZ) {
