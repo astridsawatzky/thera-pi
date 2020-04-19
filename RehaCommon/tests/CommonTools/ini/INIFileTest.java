@@ -11,8 +11,6 @@ import java.util.Arrays;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import CommonTools.ini.INIFile;
-
 public class INIFileTest {
 
     private static final int Current_Section_count = 6;
@@ -137,8 +135,6 @@ public class INIFileTest {
     @Test
     public void testGetProperties() {
         INIFile expected = new INIFile(null);
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
-
         expected.addSection(BOOL_SECTION, null);
         expected.setStringProperty(BOOL_SECTION, "right", "true", null);
         expected.setStringProperty(BOOL_SECTION, "wrong", "false", null);
@@ -166,7 +162,7 @@ public class INIFileTest {
         iniFile.removeSection(LONG_SECTION);
 
         assertFalse(Arrays.asList(iniFile.getAllSectionNames())
-                          .contains(LONG_SECTION)); 
+                          .contains(LONG_SECTION));
         assertTrue(Arrays.asList(iniFile.getAllSectionNames())
                          .contains(BOOL_SECTION));
 

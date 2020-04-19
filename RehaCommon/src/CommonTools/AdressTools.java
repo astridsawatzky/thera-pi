@@ -3,7 +3,7 @@ package CommonTools;
 import java.util.Vector;
 
 public class AdressTools {
-    public static String[] machePrivatAdresse(Object[] oin, boolean egross) {
+    private static String[] machePrivatAdresse(Object[] oin, boolean egross) {
         // "anrede,titel,nachname,vorname,strasse,plz,ort"
         String[] str = { null, null, null, null, null, null, null };
         String anrede = (((String) oin[0]) == null ? "" : ((String) oin[0])).trim();
@@ -97,10 +97,7 @@ public class AdressTools {
         }
     }
 
-    public static String[] macheFirmenAdresse() {
-        String[] str = null;
-        return str;
-    }
+    
 
     public static String[] holeAbweichendeAdresse(String patid) {
         // "anrede,titel,nachname,vorname,strasse,plz,ort"

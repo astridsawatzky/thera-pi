@@ -22,12 +22,7 @@ public class JRtaLabel extends JLabel {
         this.setToolTipText(" ");
     }
 
-    public JRtaLabel(String starttext, String toolTip) {
-        super();
-        setText(starttext);
-        this.setToolTipText(toolTip);
-        this.toolTipText = String.valueOf(toolTip);
-    }
+    
 
     @Override
     public String getToolTipText(MouseEvent event) {

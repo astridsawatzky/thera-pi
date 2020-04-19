@@ -18,7 +18,7 @@ import ag.ion.bion.officelayer.event.VetoTerminateListener;
 import ag.ion.bion.officelayer.runtime.IOfficeProgressMonitor;
 
 public class OOService {
-    final static CountDownLatch latch = new CountDownLatch(1);
+    private final static CountDownLatch latch = new CountDownLatch(1);
 
     private static IOfficeApplication officeapplication;
 

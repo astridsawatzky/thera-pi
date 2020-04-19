@@ -20,8 +20,8 @@ public class DblCellEditor extends AbstractCellEditor implements KeyListener, Ta
      * 
      */
     private static final long serialVersionUID = -2101893331215081609L;
-    JComponent component = new JRtaTextField("D", true, "6.2", "");
-    boolean mitMaus = false;
+    private JComponent component = new JRtaTextField("D", true, "6.2", "");
+    private boolean mitMaus = false;
 
     // This method is called when editing is completed.
     // It must return the new value to be stored in the cell.

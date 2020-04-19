@@ -3,11 +3,11 @@ package CommonTools;
 //Add the event registration and notification code to a class.
 public class RehaEventClass {
     // Create the listener list
-    protected static javax.swing.event.EventListenerList listenerList = new javax.swing.event.EventListenerList();
+    private static javax.swing.event.EventListenerList listenerList = new javax.swing.event.EventListenerList();
 
-    public Object RehaEventListener;
+    
 
-    public Object addRehaEventListener;
+    
 
     // This methods allows classes to unregister for RehaEvents
     public void removeRehaEventListener(RehaEventListener listener) {

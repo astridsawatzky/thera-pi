@@ -12,7 +12,7 @@ public class DateTableCellRenderer extends DefaultTableCellRenderer
     /**
      *
      */
-    int align;
+    private int align;
 
     public DateTableCellRenderer(boolean center) {
         super();
@@ -20,7 +20,7 @@ public class DateTableCellRenderer extends DefaultTableCellRenderer
     }
 
     private static final long serialVersionUID = -1029644753226393604L;
-    SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy");
 
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, boolean isSelected,

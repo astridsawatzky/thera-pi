@@ -2,14 +2,9 @@ package CommonTools;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.Locale;
-import java.util.logging.Logger;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultCellEditor;
@@ -17,18 +12,15 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.text.MaskFormatter;
 
 public class DateTableCellEditor extends DefaultCellEditor implements KeyListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
-    JFormattedTextField ftf;
-    NumberFormat integerFormat;
-    // private boolean DEBUG = false;
+    private JFormattedTextField ftf;
+
 
     public DateTableCellEditor() {
         super(new JFormattedTextField());
@@ -49,7 +41,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         ftf.getActionMap()
            .put("check", new AbstractAction() {
                /**
-                * 
+                *
                 */
                private static final long serialVersionUID = 1L;
 
@@ -83,7 +75,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         ftf.getActionMap()
            .put("escape", new AbstractAction() {
                /**
-                * 
+                *
                 */
                private static final long serialVersionUID = 1L;
 
@@ -96,35 +88,14 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
 
     }
 
-    protected MaskFormatter getDateMask() {
-        MaskFormatter formatter = null;
-        try {
-            if (Locale.getDefault()
-                      .getLanguage()
-                      .equals(Locale.GERMANY.getLanguage())) {
-                formatter = new MaskFormatter("##.##.####");
-            } else {
-                formatter = new MaskFormatter("####-##-##");
-            }
-            if (this.getPlaceHolder() != null) {
-                formatter.setPlaceholderCharacter(this.getPlaceHolder());
-            }
-        } catch (final ParseException ignored) {
-            Logger.getLogger(this.getClass()
-                                 .getName())
-                  .throwing(this.getClass()
-                                .getName(),
-                          "getDateMask", ignored);
-        }
-        return formatter;
-    }
+
 
     private Character placeholder = null;
 
     /**
      * Set an Empty Character for delete the Input. If Empty Character is null, a
      * valid value need to input.
-     * 
+     *
      * @param c Character
      */
     public void setPlaceholder(final Character c) {
@@ -133,7 +104,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
 
     /**
      * Return the char for delete the input or null if delete not allowed.
-     * 
+     *
      * @return Character
      */
     public Character getPlaceHolder() {
@@ -159,7 +130,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
      * boolean isSelected, int row, int column) { JFormattedTextField ftf =
      * (JFormattedTextField)super.getTableCellEditorComponent( table, value,
      * isSelected, row, column);
-     * 
+     *
      * String insstr = "  .  .    "; if(value == null){ insstr = "  .  .    ";
      * ftf.setText(insstr); }else if(((String)value).trim().equals("")){ insstr =
      * "  .  .    "; ftf.setText(insstr); }else{ insstr = (String)value;
@@ -168,8 +139,8 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
      * ftf.selectAll(); //ftf.setSelectionEnd(insstr.length()-1);
      * ftf.setCaretPosition(0);
      * //System.out.println("Caret gesetzt auf ->"+ftf.getCaretPosition());
-     * 
-     * 
+     *
+     *
      * return ftf; }
      */
     @Override
@@ -274,28 +245,7 @@ public class DateTableCellEditor extends DefaultCellEditor implements KeyListene
         super.cancelCellEditing();
     }
 
-    /**
-     * Lets the user know that the text they entered is bad. Returns true if the
-     * user elects to revert to the last good value. Otherwise, returns false,
-     * indicating that the user wants to continue editing.
-     */
-    protected boolean userSaysRevert() {
-        Toolkit.getDefaultToolkit()
-               .beep();
-        ftf.selectAll();
-        Object[] options = { "Edit", "Revert" };
-        int answer = JOptionPane.showOptionDialog(SwingUtilities.getWindowAncestor(ftf),
-                "The value must be an integer between " + "10" + " and " + "200" + ".\n"
-                        + "You can either continue editing " + "or revert to the last valid value.",
-                "Invalid Text Entered", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options,
-                options[1]);
 
-        if (answer == 1) { // Revert!
-            ftf.setValue(ftf.getValue());
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void keyPressed(KeyEvent arg0) {

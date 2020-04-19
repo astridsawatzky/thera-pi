@@ -8,7 +8,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 
 public class FileTools {
     public static void deleteAllFiles(File dir) {
@@ -22,24 +21,7 @@ public class FileTools {
         }
     }
 
-    public static boolean delDirAndFile(File dir) {
-        if (dir.isDirectory()) {
-            String[] entries = dir.list();
-            for (int x = 0; x < entries.length; x++) {
-                File aktFile = new File(dir.getPath(), entries[x]);
-                delDirAndFile(aktFile);
-            }
-            if (dir.delete())
-                return true;
-            else
-                return false;
-        } else {
-            if (dir.delete())
-                return true;
-            else
-                return false;
-        }
-    }
+    
 
     public static boolean delFileWithSuffixAndPraefix(File dir, String xpraefix, String xsuffix) {
         final String suffix = xsuffix;
@@ -81,26 +63,7 @@ public class FileTools {
         return (files.length == 0 || !ok ? false : true);
     }
 
-    public static ArrayList<File> searchFile(File dir, String find) {
-
-        File[] files = dir.listFiles();
-        ArrayList<File> matches = new ArrayList<File>();
-        if (files != null) {
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].getName()
-                            .equalsIgnoreCase(find)) { // überprüft ob der Dateiname mit dem Suchstring
-                    // übereinstimmt. Groß-/Kleinschreibung wird
-                    // ignoriert.
-                    matches.add(files[i]);
-                }
-                if (files[i].isDirectory()) {
-                    matches.addAll(searchFile(files[i], find)); // fügt der ArrayList die ArrayList mit den
-                    // Treffern aus dem Unterordner hinzu
-                }
-            }
-        }
-        return matches;
-    }
+    
 
     public static byte[] File2ByteArray(File file) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -181,42 +144,9 @@ public class FileTools {
         }
     }
 
-    /*******************************************/
-    public static byte[] readFileToByteArray(String originalFilePath) throws IOException {
+    
 
-        FileInputStream fis = new FileInputStream(originalFilePath);
-        byte[] buf = new byte[1024];
-        int numRead = 0;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        while ((numRead = fis.read(buf)) > 0) {
-            baos.write(buf, 0, numRead);
-            baos.flush();
-
-        }
-        fis.close();
-        byte[] returnVal = baos.toByteArray();
-        baos.close();
-        return returnVal.clone();
-    }
-
-    public static String readFileToString(String originalFilePath) throws IOException {
-
-        FileInputStream fis = new FileInputStream(originalFilePath);
-        byte[] buf = new byte[1024];
-        int numRead = 0;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        while ((numRead = fis.read(buf)) > 0) {
-            baos.write(buf, 0, numRead);
-            baos.flush();
-
-        }
-        fis.close();
-        byte[] returnVal = baos.toByteArray();
-        baos.close();
-        return new String(returnVal);
-    }
+    
 
     public static String testeString(String webstring, String fundstelle, String sbeginn, String sende) {
         int aktuell = 0;

@@ -5,7 +5,6 @@ import java.awt.KeyboardFocusManager;
 import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XTopWindowListener;
-import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
@@ -13,9 +12,9 @@ import com.sun.star.uno.UnoRuntime;
 import ag.ion.bion.officelayer.document.IDocument;
 
 public class TopWindow implements XTopWindowListener {
-    XWindow xWindow = null;
-    XExtendedToolkit myExtToolkit = null;
-    IDocument xdocument = null;
+    
+    private XExtendedToolkit myExtToolkit = null;
+    private IDocument xdocument = null;
 
     public TopWindow(IDocument doc) {
 

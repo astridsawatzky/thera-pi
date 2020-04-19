@@ -5,7 +5,7 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 
 public class StringTools {
-    public static String TRIGGER_EINRUECKEN = "          ";
+    private static String TRIGGER_EINRUECKEN = "          ";
 
     public static String EGross(String string) {
         if (string == null) {
@@ -50,7 +50,7 @@ public class StringTools {
                      * if(!test.substring(3,4).equals(" ")){ test =
                      * "Mac"+test.substring(3,4).toUpperCase()+test.substring(4).toLowerCase(); } }
                      * }catch(Exception ex){
-                     * 
+                     *
                      * } }
                      */
                     /***********/
@@ -305,10 +305,7 @@ public class StringTools {
         // return neuString.trim();
     }
 
-    public static String EGross2(String test) {
-        String retString = "";
-        return retString;
-    }
+
 
     public static String NullTest(String string) {
         if (string == null) {
@@ -584,20 +581,7 @@ public class StringTools {
         return ret;
     }
 
-    public static int killLeadingZero(String zahl) {
-        int ret = 0;
-        for (int i = 0; i < zahl.length(); i++) {
-            try {
-                if (!"0".contains(zahl.substring(i, i + 1))) {
-                    // System.out.println("Zahl = "+zahl.substring(i));
-                    return Integer.parseInt(zahl.substring(i));
-                }
-            } catch (Exception ex) {
-                return 0;
-            }
-        }
-        return ret;
-    }
+
 
     public static String richteNummer(String nummer) {
         try {

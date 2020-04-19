@@ -73,7 +73,7 @@ public class IK {
         return ik_ziffern;
     }
 
-    public String wellFormed() {
+    public String wellFormed() { // NO_UCD (unused code)
         return wellFormed;
     }
 

@@ -44,7 +44,7 @@ public enum Disziplin {
      *
      * @return
      */
-    public EnumSet<Disziplin> ohneReha() {
+    public EnumSet<Disziplin> ohneReha() { // NO_UCD (unused code)
         return EnumSet.of(KG, MA, ER, LO, PO);
     }
 }

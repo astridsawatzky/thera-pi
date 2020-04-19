@@ -2,17 +2,11 @@ package CommonTools;
 
 import java.util.EventObject;
 
-// Declare the event. It must extend EventObject.
 public class RehaEvent extends EventObject {
-    /**
-     * 
-     */
 
-    private Object source;
     private String sRehaEvent = "";
     private String[] sDetails = { "", "" };
 
-    private String name = "";
     private static final long serialVersionUID = 1L;
 
     public static final String ERROR_EVENT = "REHA_ERROR";

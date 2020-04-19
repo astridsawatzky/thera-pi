@@ -1,7 +1,6 @@
 package CommonTools;
 
 import java.awt.Component;
-import java.text.DecimalFormat;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -14,7 +13,7 @@ public class DoubleTableCellRenderer extends DefaultTableCellRenderer
      * 
      */
     private static final long serialVersionUID = 1L;
-    DecimalFormat dform = new DecimalFormat("####0.00");
+    
 
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, boolean isSelected,

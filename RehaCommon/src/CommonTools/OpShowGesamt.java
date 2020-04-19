@@ -24,7 +24,7 @@ public class OpShowGesamt {
     private int records;
     private JPanel auswertung;
 
-    DecimalFormat dcf = new DecimalFormat("###0.00");
+    private DecimalFormat dcf = new DecimalFormat("###0.00");
 
     public OpShowGesamt() {
         auswertung = new JPanel();
@@ -78,7 +78,7 @@ public class OpShowGesamt {
     /*
      * public void schreibeGesamtOffen(String betrag){ valGesamtOffen.setText(
      * betrag ); auswertung.validate(); }
-     * 
+     *
      * public void schreibeGesamtOffen(BigDecimal val){ valGesamtOffen.setText(
      * dcf.format(val) ); auswertung.validate(); }
      */
@@ -103,7 +103,6 @@ public class OpShowGesamt {
     public void ermittleGesamtOffen(boolean useRGR, boolean useAFR, boolean useVKR) {
         gesamtOffen = BigDecimal.ZERO;
         if (useRGR) {
-//		if (true) {
             String offen = SqlInfo.holeEinzelFeld(
                     "select sum(roffen) from rgaffaktura where roffen > '0.00' AND rnr LIKE 'RGR-%'");
             if (!offen.isEmpty()) {
@@ -111,17 +110,14 @@ public class OpShowGesamt {
             }
         }
         if (useAFR) {
-//		if (true) {
             String offen = SqlInfo.holeEinzelFeld(
                     "select sum(roffen) from rgaffaktura where roffen > '0.00' AND rnr LIKE 'AFR-%'");
-            boolean tmp = offen.isEmpty();
-            int tst = offen.length();
+
             if (!offen.isEmpty()) {
                 gesamtOffen = gesamtOffen.add(BigDecimal.valueOf(Double.parseDouble(offen)));
             }
         }
         if (useVKR) {
-//		if (true) {
             String offen = SqlInfo.holeEinzelFeld(
                     "select sum(v_offen) from verkliste where v_offen > '0.00' AND v_nummer LIKE 'VR-%'");
             if (!offen.isEmpty()) {
@@ -167,10 +163,7 @@ public class OpShowGesamt {
         suchGesamt = val;
     }
 
-    public void substFromSuchGesamt(BigDecimal val) {
-        suchGesamt.subtract(val);
-        schreibeSuchGesamt();
-    }
+
 
     public void delSuchGesamt() {
         suchGesamt = BigDecimal.ZERO;

@@ -6,8 +6,6 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-import org.jdesktop.swingworker.SwingWorker;
-
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
@@ -28,7 +26,6 @@ import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.style.XStyle;
 import com.sun.star.style.XStyleFamiliesSupplier;
-import com.sun.star.table.CellContentType;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
 import com.sun.star.text.XText;
@@ -44,26 +41,19 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.view.XLineCursor;
 
 import ag.ion.bion.officelayer.desktop.IFrame;
-import ag.ion.bion.officelayer.document.DocumentException;
 import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
-import ag.ion.bion.officelayer.event.DocumentAdapter;
-import ag.ion.bion.officelayer.event.IDocumentEvent;
-import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.bion.officelayer.text.IText;
 import ag.ion.bion.officelayer.text.ITextCursor;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import ag.ion.bion.officelayer.text.ITextField;
-import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.ITextRange;
 import ag.ion.bion.officelayer.text.ITextTableCell;
-import ag.ion.bion.officelayer.text.ITextTableCellProperties;
 import ag.ion.bion.officelayer.text.IViewCursor;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
-import ag.ion.noa.internal.printing.PrintProperties;
 import ag.ion.noa.printing.IPrinter;
 import ag.ion.noa.search.ISearchResult;
 import ag.ion.noa.search.SearchDescriptor;
@@ -123,71 +113,11 @@ public class OOTools {
 
     }
 
-    public static void setOneCellWidth(ITextTableCell cell, short width) throws Exception {
-        ITextTableCellProperties props = cell.getProperties();
-        XPropertySet xpropset = props.getXPropertySet();
-        xpropset.setPropertyValue("Width", width);
-    }
 
-    public static synchronized void printAndClose(final ITextDocument textDocument, final int exemplare) {
 
-        new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws java.lang.Exception {
-                try {
-                    Thread.sleep(100);
-                    PrintProperties printprop = new PrintProperties((short) exemplare, null);
-                    textDocument.getPrintService()
-                                .print(printprop);
-                    while (textDocument.getPrintService()
-                                       .isActivePrinterBusy()) {
-                        Thread.sleep(50);
-                    }
-                    Thread.sleep(150);
-                    textDocument.close();
-                    Thread.sleep(150);
-                } catch (InterruptedException e) {
-                    JOptionPane.showMessageDialog(null, "Fehler im Rechnungsdruck, Fehler = InterruptedException");
-                    e.printStackTrace();
-                } catch (DocumentException e) {
-                    JOptionPane.showMessageDialog(null, "Fehler im Rechnungsdruck, Fehler = DocumentException");
-                    e.printStackTrace();
-                } catch (NOAException e) {
-                    JOptionPane.showMessageDialog(null, "Fehler in der Abfrage isActivePrinterBusy()");
-                    e.printStackTrace();
-                }
-                return null;
-            }
 
-        }.execute();
-    }
 
-    public static synchronized ITextField[] holePlatzhalter(ITextDocument textDocument) {
-        ITextField[] placeholders = null;
-        ITextFieldService textFieldService = null;
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e1) {
-            e1.printStackTrace();
-        }
-        try {
-            textFieldService = textDocument.getTextFieldService();
 
-            Thread.sleep(50);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        try {
-            Thread.sleep(50);
-            placeholders = textFieldService.getPlaceholderFields();
-            Thread.sleep(75);
-        } catch (TextException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return placeholders.clone();
-    }
 
     /**************************************************************************************/
     private static ArrayList<XTextRange> testePlatzhalter(XTextDocument xTextDocument) {
@@ -234,7 +164,6 @@ public class OOTools {
         int start = 0;
         // int end = 0;
         String dummy;
-        int vars = 0;
         // int sysvar = -1;
         boolean noendfound = false;
         while ((start = stext.indexOf("^")) >= 0) {
@@ -257,7 +186,6 @@ public class OOTools {
                         stext = text.getText();
                     }
                     noendfound = false;
-                    vars++;
                     break;
                 }
             }
@@ -496,15 +424,7 @@ public class OOTools {
         }
     }
 
-    public static void doCellNumberFormat(XSheetCellCursor cellCursor, int col, int row, int cell_numberformat)
-            throws WrappedTargetException, IndexOutOfBoundsException, UnknownPropertyException, PropertyVetoException,
-            IllegalArgumentException {
-        XCell cell = cellCursor.getCellByPosition(col, row);
-        UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
-        com.sun.star.beans.XPropertySet xPropSet = null;
-        xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
-        xPropSet.setPropertyValue("NumberFormat", cell_numberformat);
-    }
+
 
     public static void doCellValue(XSheetCellCursor cellCursor, int col, int row, Object value)
             throws IndexOutOfBoundsException {
@@ -525,14 +445,7 @@ public class OOTools {
         }
     }
 
-    public static Object doGetCellValue(XSheetCellCursor cellCursor, int col, int row, Object value)
-            throws IndexOutOfBoundsException {
-        Object ret = null;
-        XCell cell = cellCursor.getCellByPosition(col, row);
-        cell.getType();
-        ret = CellContentType.getDefault();
-        return ret;
-    }
+
 
     public static void doCellFormula(XSheetCellCursor cellCursor, int col, int row, String formula)
             throws IndexOutOfBoundsException {
@@ -548,14 +461,7 @@ public class OOTools {
         com.sun.star.beans.XPropertySet xPropSet = null;
         xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
         xPropSet.setPropertyValue("CharColor", color);
-        /*
-         * Beispiel für Auflistung der Property-Namen
-         * //System.out.println("Start-CellPropertie*********************************");
-         * Property[] prop = xPropSet.getPropertySetInfo().getProperties(); for(int i =
-         * 0; i < prop.length;i++){ //System.out.println(prop[i].Name);
-         * //System.out.println(prop[i].Attributes); }
-         * //System.out.println("End-CellPropertie*********************************");
-         */
+
 
     }
 
@@ -574,14 +480,7 @@ public class OOTools {
          */
     }
 
-    public static void doCellFontItalic(XSheetCellCursor cellCursor, int col, int row) throws IndexOutOfBoundsException,
-            UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException {
-        XCell cell = cellCursor.getCellByPosition(col, row);
-        UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
-        com.sun.star.beans.XPropertySet xPropSet = null;
-        xPropSet = UnoRuntime.queryInterface(com.sun.star.beans.XPropertySet.class, cell);
-        xPropSet.setPropertyValue("CharPosture", com.sun.star.awt.FontSlant.ITALIC);
-    }
+
 
     public static String doOODate(String datum) {
         String aDateStr = null;
@@ -656,47 +555,4 @@ public class OOTools {
     /*******************************************************/
 }
 
-class TheraPiDocListener extends DocumentAdapter {
-    Object document = null;
 
-    public TheraPiDocListener(IDocument document) {
-        this.document = document;
-    }
-
-    @Override
-    public void disposing(IEvent arg0) {
-        System.out.println("disposing");
-    }
-
-    @Override
-    public void onInsertDone(IDocumentEvent arg0) {
-        System.out.println("onInsertDone");
-    }
-
-    @Override
-    public void onInsertStart(IDocumentEvent arg0) {
-        System.out.println("onInsertStart");
-    }
-
-    @Override
-    public void onLoad(IDocumentEvent arg0) {
-        System.out.println("onLoad");
-    }
-
-    @Override
-    public void onLoadDone(IDocumentEvent arg0) {
-        System.out.println("onLoadDone");
-    }
-
-    @Override
-    public void onLoadFinished(IDocumentEvent arg0) {
-        System.out.println("onLoadFinished");
-    }
-
-    @Override
-    public void onModifyChanged(IDocumentEvent arg0) {
-        System.out.println("onModifyChanged");
-    }
-
-}
-/**************************************/

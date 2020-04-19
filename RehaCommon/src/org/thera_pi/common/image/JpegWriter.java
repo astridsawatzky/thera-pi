@@ -24,7 +24,7 @@ public class JpegWriter {
         }
     }
 
-    public static ByteArrayOutputStream bufferedImageToOutputStream(BufferedImage img) throws IOException {
+    private static ByteArrayOutputStream bufferedImageToOutputStream(BufferedImage img) throws IOException {
         if (img != null) {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             

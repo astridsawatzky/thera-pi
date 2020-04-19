@@ -101,7 +101,7 @@ public class OpCommon {
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        int colCnt = 3, rowCnt = 2;
+        int colCnt = 3;
 
         builder.add((mahnbuts[1] = ButtonTools.macheButton(" << ", "vorheriger", al)), cc.xy(colCnt++, 2));
         colCnt++;

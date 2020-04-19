@@ -5,10 +5,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ExUndHop extends Thread {
-    Statement stmt = null;
-    ResultSet rs = null;
-    String statement;
-    boolean geklappt = false;
+    private Statement stmt = null;
+    private ResultSet rs = null;
+    private String statement;
+    
     public static boolean processdone = false;
 
     public void setzeStatement(String statement) {
@@ -24,7 +24,7 @@ public class ExUndHop extends Thread {
         try {
             stmt = SqlInfo.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             try {
-                geklappt = stmt.execute(this.statement);
+               stmt.execute(this.statement);
 
             } catch (SQLException ev) {
                 System.out.println("SQLException: " + ev.getMessage());

@@ -16,6 +16,6 @@ public class Cursors {
     public final static Cursor cesize = Cursor.getPredefinedCursor(Cursor.E_RESIZE_CURSOR);
     public final static Cursor cdefault = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
     public final static Cursor normalCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-    public final static Cursor kreuzCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
+    public final static Cursor kreuzCursor = Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR); // NO_UCD (unused code)
 
 }

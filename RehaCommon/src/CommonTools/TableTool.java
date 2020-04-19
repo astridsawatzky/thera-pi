@@ -6,9 +6,7 @@ import org.jdesktop.swingx.JXTable;
 
 public class TableTool {
 
-    public static void setzeRow(JXTable table) {
-
-    }
+    
 
     public static int loescheRow(JXTable table, int row) {
         // int ret = -1;

@@ -262,7 +262,7 @@ public class Rezeptvector {
      * 
      * @return Preis der Behandlung
      */
-    public String getPreis(int index) {
+    private String getPreis(int index) {
         return getStringAt(17 + index);
     }
 
@@ -512,7 +512,7 @@ public class Rezeptvector {
                                .toString());
     }
 
-    public String getvorJahrFrei() {
+    private String getvorJahrFrei() {
         return getStringAt(59);
     }
 

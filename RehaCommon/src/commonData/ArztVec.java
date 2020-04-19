@@ -7,23 +7,35 @@ import CommonTools.StringTools;
 
 public class ArztVec {
     private Vector<Vector<String>> vecvec_aerzte;
-    private Vector<String> vec_arzt;    
+    private Vector<String> vec_arzt;
 
     // Indices für Zugriffe auf vec_arzt
-    final int ANREDE = 0, TITEL = 1, NACHNAME = 2, VORNAME = 3, STRASSE = 4, PLZ = 5, ORT = 6, FACHARZT = 7,
-            TELEFON = 8, FAX = 9, MATCHCODE = 10, LANR = 11, KLINIK = 12, MTEXT = 13, EMAIL1 = 14, 
-            EMAIL2 = 15, ID = 16, BSNR = 17;
+    private final int ANREDE = 0;
+    private final int TITEL = 1;
+    private final int NACHNAME = 2;
+    private final int VORNAME = 3;
+    private final int STRASSE = 4;
+    private final int PLZ = 5;
+    private final int ORT = 6;
+    private final int FACHARZT = 7;
+    private final int TELEFON = 8;
+    private final int FAX = 9;
+    private final int MATCHCODE = 10;
+    private final int LANR = 11;
+    private final int KLINIK = 12;
+    private final int MTEXT = 13;
+    private final int EMAIL1 = 14;
+    private final int EMAIL2 = 15;
+    private final int ID = 16;
+    private final int BSNR = 17;
 
     public ArztVec() {
         vecvec_aerzte = new Vector<Vector<String>>();
         vec_arzt = new Vector<String>();
     }
-    
-    public boolean init(int idInDB) {
-        String cmd = "select * from arzt where id='" + idInDB + "' LIMIT 1";
-        return getRecord (cmd);
-    }
-    
+
+
+
     public boolean init(String idInDb) {
         String cmd = "select * from arzt where id ='" + idInDb + "' LIMIT 1";
         return getRecord (cmd);
@@ -68,10 +80,6 @@ public class ArztVec {
     private void setIntAt(int index, int data){
         this.vec_arzt.set(index, Integer.valueOf(data).toString());
     }
-    private void setIntAt(int index, String data){
-        this.vec_arzt.set(index, Integer.valueOf(data).toString());
-    }
-    
     private String getStringAt(int index){
         return this.vec_arzt.get(index).trim();
     }
@@ -79,13 +87,7 @@ public class ArztVec {
         this.vec_arzt.set(index, data.trim());
     }
 
-    /*
-     * Kompatibilitätsmodus
-     */
-    public void setvecvec_aerzte(Vector<Vector<String>> vecvec_tmp) {
-        this.vecvec_aerzte = vecvec_tmp;
-        setTo1stVec_arzt(this.vecvec_aerzte);
-    }
+
 
     public Vector<Vector<String>> getVecVec_aerzte() {
         return this.vecvec_aerzte;
@@ -99,7 +101,7 @@ public class ArztVec {
     public void setVec_arzt(Vector<String> vec_tmp) {
         this.vec_arzt = vec_tmp;
     }
-    
+
     public int getVecSize() {
         return vec_arzt.size();
     }
@@ -108,7 +110,7 @@ public class ArztVec {
         if (getVecSize() <= 0){
             return true;
         }else{
-            return false;           
+            return false;
         }
     }
 
@@ -243,15 +245,15 @@ public class ArztVec {
 
     public String getNNameLanr() {
         if (getLANR().length() > 0 ) {
-            return (getNName() + " - " + getLANR());            
+            return (getNName() + " - " + getLANR());
         } else {
             return getNName();
         }
     }
 
-    public void writeArzt2DB(){
+    private void writeArzt2DB(){
         StringBuffer cmd = new StringBuffer();
-        cmd.append("anrede='" + getAnrd() + "', "); 
+        cmd.append("anrede='" + getAnrd() + "', ");
         cmd.append("titel='" + getTitel() + "', ");
         cmd.append("nachname='" + getNName() + "', ");
         cmd.append("vorname='" + getVName() + "', ");

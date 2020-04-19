@@ -16,11 +16,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 
-public class DateInputVerifier extends InputVerifier {
-    JFormattedTextField input;
+class DateInputVerifier extends InputVerifier {
 
-    public DateInputVerifier(JFormattedTextField tf) {
-        this.input = tf;
+
+    DateInputVerifier(JFormattedTextField tf) {
+
     }
 
     @Override
@@ -36,7 +36,7 @@ public class DateInputVerifier extends InputVerifier {
     /**
      * Set an Empty Character for delete the Input. If Empty Character is null, a
      * valid value need to input.
-     * 
+     *
      * @param c Character
      */
     public void setPlaceholder(final Character c) {
@@ -45,14 +45,14 @@ public class DateInputVerifier extends InputVerifier {
 
     /**
      * Return the char for delete the input or null if delete not allowed.
-     * 
+     *
      * @return Character
      */
     public Character getPlaceHolder() {
         return this.placeholder;
     }
 
-    protected boolean isAlowedDate(final JFormattedTextField input) {
+    private boolean isAlowedDate(final JFormattedTextField input) {
         if (input.getText()
                  .equals("  .  .    ")) {
             return true;
@@ -102,7 +102,7 @@ public class DateInputVerifier extends InputVerifier {
         } catch (final ParseException notValidOrDelete) {
 
             /*
-             * 
+             *
              * if (((DateInputVerifier) input).getPlaceHolder() != null) { String
              * noMaskValue = null; if (Locale.getDefault ().getLanguage ().equals
              * (Locale.GERMANY.getLanguage ())) {
@@ -121,7 +121,7 @@ public class DateInputVerifier extends InputVerifier {
         }
     }
 
-    protected DateFormat getDateFormat() {
+    private DateFormat getDateFormat() {
         if (Locale.getDefault()
                   .getLanguage()
                   .equals(Locale.GERMANY.getLanguage())) {

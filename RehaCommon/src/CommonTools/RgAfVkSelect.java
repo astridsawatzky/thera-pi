@@ -6,13 +6,12 @@ import java.awt.event.ItemEvent;
 /**
  * kleine Tabelle mit 3 Checkboxen zur Auswahl, ob RGR, AFR, oder/und
  * Verkaufsrechnungenm bei der Bearbeitung berücksichtigt werden sollen
- * 
+ *
  * @author McM
  *
  */
 public class RgAfVkSelect extends Select3ChkBx {
-    // private static final long serialVersionUID = -7883557713071422232L;
-    public RgAfVk_IfCallBack callBackObjekt = null;
+    private RgAfVk_IfCallBack callBackObjekt = null;
 
     /**
      * @param ask beschreibt Zweck der Auswahl
@@ -59,10 +58,7 @@ public class RgAfVkSelect extends Select3ChkBx {
         return checkBoxArea;
     }
 
-    public void ask(String ask) {
-        askLabel.setText(ask);
-        checkBoxArea.validate();
-    }
+
 
     public void setCallBackObj(RgAfVk_IfCallBack callBackObj) // Referenz auf Klasse, die das Interface implementiert
     {

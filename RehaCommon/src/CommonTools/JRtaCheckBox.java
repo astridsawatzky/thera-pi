@@ -35,11 +35,7 @@ public class JRtaCheckBox extends JCheckBox
         setOpaque(false);
     }
 
-    public void listenerLoeschen() {
-        this.removeFocusListener(this);
-        this.removeKeyListener(this);
-        this.removeActionListener(this);
-    }
+    
 
     @Override
     public void propertyChange(PropertyChangeEvent arg0) {

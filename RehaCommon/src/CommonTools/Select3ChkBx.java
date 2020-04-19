@@ -2,21 +2,20 @@ package CommonTools;
 
 import java.awt.event.ItemListener;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-
-import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public abstract class Select3ChkBx implements ItemListener {
+abstract class Select3ChkBx implements ItemListener {
 
-    public JLabel askLabel;
-    public JPanel checkBoxArea;
-    public JXPanel ownedBy;
-    public JRtaCheckBox chkBxO = null, chkBxM = null, chkBxU = null;
+
+    JPanel checkBoxArea;
+
+    JRtaCheckBox chkBxO = null;
+    JRtaCheckBox chkBxM = null;
+    JRtaCheckBox chkBxU = null;
 
     /**
      * @param ask         - beschreibt Zweck der Auswahl
@@ -24,9 +23,8 @@ public abstract class Select3ChkBx implements ItemListener {
      * @param chkBxMLabel - Label der 2. checkBox
      * @param chkBxULabel - Label der 3. checkBox
      */
-    public Select3ChkBx(String ask, String chkBxOLabel, String chkBxMLabel, String chkBxULabel) {
+    Select3ChkBx(String ask, String chkBxOLabel, String chkBxMLabel, String chkBxULabel) {
         checkBoxArea = new JPanel();
-        askLabel = new JLabel();
 
         FormLayout lay = new FormLayout(
                 // 1 2 3 4 5
@@ -41,7 +39,7 @@ public abstract class Select3ChkBx implements ItemListener {
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        askLabel = builder.addLabel(ask, cc.xy(2, 2));
+        builder.addLabel(ask, cc.xy(2, 2));
 
         chkBxO = new JRtaCheckBox(chkBxOLabel);
         chkBxO.setName("includeRGR");

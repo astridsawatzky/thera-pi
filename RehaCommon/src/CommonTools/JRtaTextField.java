@@ -16,7 +16,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.InputVerifier;
@@ -37,7 +36,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
     private NumberFormat gleitDisplayFormat;
     private NumberFormat gleitEditFormat;
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 6776374376473011458L;
 
@@ -51,18 +50,10 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
         setDisabledTextColor(Color.RED);
     }
 
-    public JRtaTextField(String type, boolean selectWhenFocus, String text) {
 
-        super();
-        setRtaType(type, this, selectWhenFocus);
-        setText(text);
-        this.addFocusListener(this);
-        this.addKeyListener(this);
-        setDisabledTextColor(Color.RED);
-    }
 
     /*****************/
-    public static String toRtaUpper(String s) {
+    static String toRtaUpper(String s) {
         StringBuffer sbuf = new StringBuffer();
         char[] cha = s.toCharArray();
         int i, len = s.length();
@@ -117,17 +108,13 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
         return;
     }
 
-    private void setDisabledForeground(JFormattedTextField jcomp, Color c) {
-        jcomp.setDisabledTextColor(c);
-    }
-
     public void listenerLoeschen() {
         this.removeFocusListener(this);
         this.removeKeyListener(this);
         this.removePropertyChangeListener(this);
     }
 
-    protected MaskFormatter createFormatter(String s) {
+    private MaskFormatter createFormatter(String s) {
         MaskFormatter formatter = null;
         try {
             formatter = new MaskFormatter(s);
@@ -141,12 +128,12 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
 
     /*
      * public JRtaTextField JRtaTextField(String muster,String type,Container con){
-     * 
-     * 
+     *
+     *
      * JFormattedTextField comp = new JFormattedTextField(); return this; //return
      * comp; }
      */
-    public void setRtaType(String type, JRtaTextField feld, boolean selectWhenFocus) {
+    private void setRtaType(String type, JRtaTextField feld, boolean selectWhenFocus) {
         this.type = type;
         this.selectWhenFocus = selectWhenFocus;
 
@@ -192,10 +179,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
 
     }
 
-    public void setGleitType(String type, JRtaTextField feld, boolean selectWhenFocus, String gleitkomma) {
-        this.type = type;
-        this.selectWhenFocus = selectWhenFocus;
-    }
+
 
     public void setupFormat(int digits) {
         gleitDisplayFormat = NumberFormat.getInstance(Locale.GERMAN);
@@ -216,12 +200,12 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
         return this.selectWhenFocus;
     }
 
-    public void focusNachUnten() {
+    private void focusNachUnten() {
         this.transferFocus();
         return;
     }
 
-    public void focusNachOben() {
+    private void focusNachOben() {
         this.transferFocusBackward();
         return;
     }
@@ -268,36 +252,14 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
         }
     }
 
-    /***********************************************************/
-    protected MaskFormatter getDateMask() {
-        MaskFormatter formatter = null;
-        try {
-            if (Locale.getDefault()
-                      .getLanguage()
-                      .equals(Locale.GERMANY.getLanguage())) {
-                formatter = new MaskFormatter("##.##.####");
-            } else {
-                formatter = new MaskFormatter("####-##-##");
-            }
-            if (this.getPlaceHolder() != null) {
-                formatter.setPlaceholderCharacter(this.getPlaceHolder());
-            }
-        } catch (final ParseException ignored) {
-            Logger.getLogger(this.getClass()
-                                 .getName())
-                  .throwing(this.getClass()
-                                .getName(),
-                          "getDateMask", ignored);
-        }
-        return formatter;
-    }
+
 
     private Character placeholder = null;
 
     /**
      * Set an Empty Character for delete the Input. If Empty Character is null, a
      * valid value need to input.
-     * 
+     *
      * @param c Character
      */
     public void setPlaceholder(final Character c) {
@@ -306,7 +268,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
 
     /**
      * Return the char for delete the input or null if delete not allowed.
-     * 
+     *
      * @return Character
      */
     public Character getPlaceHolder() {
@@ -315,7 +277,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
 
     /*************************************************/
 
-    protected static class DateInputVerifier extends InputVerifier {
+    private static class DateInputVerifier extends InputVerifier {
         @Override
         public boolean verify(final JComponent input) {
             if (input instanceof JRtaTextField) {
@@ -325,7 +287,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
             }
         }
 
-        protected boolean isAlowedDate(final JRtaTextField input) {
+        private boolean isAlowedDate(final JRtaTextField input) {
             String inhalt = input.getText();
             if (inhalt.equals("  .  .    ")) {
                 return true;
@@ -391,7 +353,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
             }
         }
 
-        protected DateFormat getDateFormat() {
+        private DateFormat getDateFormat() {
             if (Locale.getDefault()
                       .getLanguage()
                       .equals(Locale.GERMANY.getLanguage())) {
@@ -541,7 +503,7 @@ public class JRtaTextField extends JFormattedTextField implements PropertyChange
 /*************************************************/
 class NurZahlenDocument extends javax.swing.text.PlainDocument {
     /**
-    	 * 
+    	 *
     	 */
     private static final long serialVersionUID = -29699654036665632L;
     private JTextField textField;
@@ -566,59 +528,19 @@ class NurZahlenDocument extends javax.swing.text.PlainDocument {
     }
 }
 
-/*************************************************/
 
-class NurNormalDocument extends javax.swing.text.PlainDocument {
-    /**
-    	 * 
-    	 */
-    private static final long serialVersionUID = -1708532746033381872L;
-    private JTextField textField;
-    private String text;
-
-    public NurNormalDocument(JFormattedTextField tf) {
-        textField = tf;
-    }
-
-    @Override
-    public void insertString(int offs, String str, javax.swing.text.AttributeSet a)
-            throws javax.swing.text.BadLocationException {
-        try {
-            text = textField.getText()
-                            .trim();
-            if (text.length() > 0) {
-                if (!str.substring(offs, 1)
-                        .equals(" ")) {
-                    super.insertString(offs, StringTools.EGross(str), a);
-                } else {
-                    super.insertString(offs, str, a);
-                }
-
-            } else {
-                super.insertString(offs, str, a);
-            }
-
-            return;
-            // Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            super.remove(offs, 1);
-            // Toolkit.getDefaultToolkit().beep();
-        }
-
-    }
-}
 
 /*************************************************/
 
 class NurGrossDocument extends javax.swing.text.PlainDocument {
     /**
-    	 * 
+    	 *
     	 */
     private static final long serialVersionUID = -1708532746033381872L;
-    private JTextField textField;
+
 
     public NurGrossDocument(JFormattedTextField tf) {
-        textField = tf;
+
     }
 
     @Override
@@ -639,13 +561,12 @@ class NurGrossDocument extends javax.swing.text.PlainDocument {
 
 class NurKleinDocument extends javax.swing.text.PlainDocument {
     /**
-    	 * 
+    	 *
     	 */
     private static final long serialVersionUID = -1708532746033381872L;
-    private JTextField textField;
+
 
     public NurKleinDocument(JFormattedTextField tf) {
-        textField = tf;
     }
 
     @Override
@@ -665,7 +586,7 @@ class NurKleinDocument extends javax.swing.text.PlainDocument {
 
 class NurStundenDocument extends javax.swing.text.PlainDocument {
     /**
-    	 * 
+    	 *
     	 */
     private static final long serialVersionUID = -29699654036665632L;
     private JTextField textField;
@@ -698,7 +619,7 @@ class NurStundenDocument extends javax.swing.text.PlainDocument {
 /*************************************************/
 class NurMinutenDocument extends javax.swing.text.PlainDocument {
     /**
-    	 * 
+    	 *
     	 */
     private static final long serialVersionUID = -29699654036665632L;
     private JTextField textField;
@@ -740,7 +661,7 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
     private JFormattedTextField textComponent; // Für Referenz auf das TextFeld
     private int newOffset; // Caret Position bei Trennern
     private boolean init = false;
-    SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy"); // Konv.
+    private SimpleDateFormat datumsFormat = new SimpleDateFormat("dd.MM.yyyy"); // Konv.
     // **** Attribute Ende
 
     // **** Konstruktor 1
@@ -762,19 +683,7 @@ class DateFieldDocument extends javax.swing.text.PlainDocument {
         }
     }
 
-    // **** Konstruktor 1 Ende
-    // **** Konstruktor 2
-    public DateFieldDocument(JRtaTextField textComponent, Calendar givenDate) {
-        this.textComponent = textComponent; // Hiermit wird jetzt gearbeitet
-        initDate = givenDate; // Kalender auf Parameter
-        initString = datumsFormat.format(initDate.getTime()); // Nach String
-        try { // Jetzt den Inhalt mit dem Datum
-            insertString(0, initString, null); // initialisieren
-        } catch (Exception KonstrEx) {
-            KonstrEx.printStackTrace();
-        }
-    }
-    // **** Konstruktor 2 Ende
+
 
     // **** Überschreiben Insert-Methode
     @Override

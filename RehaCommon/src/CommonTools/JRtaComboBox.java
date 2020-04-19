@@ -17,9 +17,9 @@ public class JRtaComboBox extends JComboBox implements PropertyChangeListener, F
     	 */
     private static final long serialVersionUID = 6867094510690570951L;
     public Vector<?> vec = null;
-    public int cmbdisplay;
-    public int cmbretvalue;
-    public String startElement = "";
+    private int cmbdisplay;
+    private int cmbretvalue;
+    private String startElement = "";
 
     public JRtaComboBox() {
         super();
@@ -66,24 +66,9 @@ public class JRtaComboBox extends JComboBox implements PropertyChangeListener, F
         addActionListener(this);
     }
 
-    public void listenerLoeschen() {
-        this.removeFocusListener(this);
-        this.removeKeyListener(this);
-        this.removeActionListener(this);
-    }
+    
 
-// Lemmi Doku: Der erste Wert sagt, was angezeigt wird, der zweite Wert ist der Rückgabewert bei der Benutzerauswahl
-    public void setDataVector2Dim(Vector<Vector<String>> ve, int item, int ret) {
-        this.removeAllItems();
-        this.vec = ve;
-        this.cmbdisplay = item;
-        this.cmbretvalue = ret;
-        if (this.vec.get(0) instanceof Vector<?>) {
-            fillCombo(this.vec);
-        } else {
-            fillOneDimension(this.vec);
-        }
-    }
+
 
     public void setDataVectorVector(Vector<Vector<String>> ve, int item, int ret) {
         this.removeAllItems();
