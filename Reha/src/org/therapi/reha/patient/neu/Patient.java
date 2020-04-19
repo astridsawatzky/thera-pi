@@ -27,7 +27,6 @@ public class Patient {
     public String abwTitel;
     public String abwN_Name;
     public String abwV_Name;
-    public Optional<Hausbesuch> hb = Optional.empty();
     public Merkmale merkmale =new Merkmale();
     public int patIntern;
     public String anamnese="";
@@ -37,6 +36,7 @@ public class Patient {
     public LocalDate anlageDatum;
     public boolean hasAbweichendeAdresse;
     public Optional<Person> vertreter = Optional.empty();
+    public int entfernung;
 
 
     public Patient() {
