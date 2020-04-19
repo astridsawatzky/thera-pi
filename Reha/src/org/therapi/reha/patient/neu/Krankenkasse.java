@@ -8,5 +8,6 @@ public class Krankenkasse {
     }
     IK ik;
     String name;
+    int id;
 
 }

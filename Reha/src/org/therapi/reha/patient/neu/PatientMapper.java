@@ -1,6 +1,8 @@
 package org.therapi.reha.patient.neu;
 
-
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Optional;
 
 public class PatientMapper {
 
@@ -13,6 +15,7 @@ public class PatientMapper {
         patient. nachname =dto.nName;
         patient. vorname =dto.vName;
         patient. wohnadresse = new Adresse("",dto.strasse,new PLZ(dto.plz),dto.ort);
+        patient.abweichende = new Adresse("",dto.abwStrasse,new PLZ(dto.abwPlz),dto.abwOrt);
         patient. geburtstag = dto.geboren;
         patient. privat =new Telefonnummer(dto.telefonp);
         patient. geschaeft = new Telefonnummer(dto.telefong);
@@ -24,17 +27,90 @@ public class PatientMapper {
         Befreiung befreiung = new Befreiung(dto.befAb,dto.befDat);
         patient. kv = new Krankenversicherung(new Krankenkasse(dto.kassenid),dto.vNummer,dto.kvStatus,befreiung);
         patient. behandler= new Kollege(dto.therapeut);
-        patient. hauptarzt = new Arzt(dto.arztid,dto.arztNum, dto.arzt);
+        Arzt arzt = new Arzt();
+        arzt.id=Integer.parseInt(dto.arztid);
+        arzt.arztnummer=new LANR(dto.arztNum);
+        arzt.nachname = dto.arzt;
+        patient. hauptarzt = arzt;;
         return patient;
 
     };
 
-    PatientDTO of(Patient pat) {
-        PatientDTO dto = new PatientDTO();
-
-
-        return dto;
-    }
+//    PatientDTO of(Patient pat) {
+//        PatientDTO patient = new PatientDTO();
+//        patient.anrede = pat.anrede;
+//        patient.titel = pat.titel;
+//        patient.nName = pat.nachname;
+//        patient.vName = pat.vorname;
+//        patient.geboren =  pat.geburtstag;
+//        patient.abwAdress = pat.abwAdress;
+//        patient.abwAnrede = pat.abwAnrede;
+//        patient.abwTitel = pat.abwTitel;
+//        patient.abwNName = pat.abwN_Name;
+//        patient.abwVName = pat.abwV_Name;
+//        patient.abwStrasse = pat.abweichende.strasse;
+//        patient.abwPlz = pat.abweichende.plz.toString();
+//        patient.abwOrt = pat.abweichende.ort;
+//        patient.kasse = pat.kv.kk.name;
+//        patient.kvNummer = pat.kv.kk.ik.digitString();
+//        patient.kvStatus = pat.kv.status;
+//        patient.vNummer = pat.kv.versicherungsnummer;
+//        patient.klinik = pat.klinik;
+//        patient.telefonp = pat.privat.nummer;
+//        patient.telefong = pat.geschaeft.nummer;
+//        patient.telefonm = pat.mobil.nummer;
+//        patient.strasse = pat.wohnadresse.strasse;
+//        patient.land = pat.land;
+//        patient.plz = pat.wohnadresse.plz.plz;
+//        patient.ort = pat.wohnadresse.ort;
+//        patient.arzt = pat.hauptarzt.nachname;
+//        patient.arztNum = pat.hauptarzt.arztnummer.lanr;
+//        patient.atel = pat.hauptarzt.telefon.nummer;
+//        patient.afax = pat.hauptarzt.fax.nummer;
+//        patient.patIntern = pat.patIntern;
+//        patient.befreit = pat.kv.befreit.bis.isAfter(LocalDate.now());
+//        patient.befDat = Optional.ofNullable(rs.getDate("bef_Dat")).map(d -> d.toLocalDate()).orElse(null);
+//        patient.anlDatum = pat.anlageDatum;;
+//        patient.akutPat = pat.akut.isAkut();
+//        patient.akutDat = pat.akut.seit;
+//        patient.akutBeh = pat.akutBeh;
+//        patient.termine1 = pat.daten.moeglicheTermine1;
+//        patient.termine2 = pat.daten.moeglicheTermine2;
+//        patient.vipPat = pat.vip_Pat;
+//        patient.erJanein = pat.er_Janein;
+//        patient.erDat = Optional.ofNullable(rs.getDate("er_Dat")).map(d -> d.toLocalDate()).orElse(null);
+//        patient.befAb = Optional.ofNullable(rs.getDate("bef_Ab")).map(d -> d.toLocalDate()).orElse(null);
+//        patient.numfrei1 = pat.numfrei1;
+//        patient.numfrei2 = pat.numfrei2;
+//        patient.heimbewohn = pat.heimbewohn;
+//        patient.abschluss = pat.abschluss;
+//        patient.akutbis = pat.akut.bis;
+//        patient.datfrei2 = Optional.ofNullable(rs.getDate("datfrei2")).map(d -> d.toLocalDate()).orElse(null);
+//        patient.kilometer = String.valueOf(pat.hb.entfernung);
+//        patient.charfrei2 = pat.charfrei2;
+//        patient.emailA = pat.hauptarzt.email1.adresse;
+//        patient.behDauer = pat.behDauer;
+//        patient.ber1 = pat.ber1;
+//        patient.ber2 = pat.ber2;
+//        patient.ber3 = pat.ber3;
+//        patient.ber4 = pat.ber4;
+//        patient.therapeut = pat.behandler.matchcode;
+//        patient.merk6 = pat.merkmale.sechs.gesetzt;
+//        patient.merk5 = pat.merkmale.fuenf.gesetzt;
+//        patient.merk4 = pat.merkmale.vier.gesetzt;
+//        patient.merk3 = pat.merkmale.drei.gesetzt;
+//        patient.merk2 = pat.merkmale.zwei.gesetzt;
+//        patient.merk1 = pat.merkmale.eins.gesetzt;
+//        patient.aerzte = pat.aerzte;
+//        patient.patText = pat.memo;
+//        patient.anamnese = pat.anamnese;
+//        patient.id = pat.db_id;
+//        patient.arztid = String.valueOf(pat.hauptarzt.id);
+//        patient.kassenid =String.valueOf(pat.kv.kk.id);
+//        patient.jahrfrei = pat.jahrfrei;
+//        patient.u18ignore = pat.u18ignore;
+//        return patient;
+//    }
 
 }
 /*

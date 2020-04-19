@@ -10,5 +10,10 @@ public class Akut {
     LocalDate seit;
     LocalDate bis;
 
+     boolean isAkut() {
+        return bis.isAfter(LocalDate.now());
+
+    }
+
 
 }

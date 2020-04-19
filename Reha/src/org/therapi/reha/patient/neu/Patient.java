@@ -1,6 +1,7 @@
 package org.therapi.reha.patient.neu;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Patient {
 
@@ -9,6 +10,7 @@ public class Patient {
     String nachname;
     String vorname;
     Adresse wohnadresse;
+    Adresse abweichende;
     LocalDate geburtstag;
     Telefonnummer privat;
     Telefonnummer geschaeft;
@@ -19,6 +21,19 @@ public class Patient {
     Krankenversicherung kv;
     Kollege behandler;
     Arzt hauptarzt;
+    String abwAnrede;
+    public String abwTitel;
+    public String abwN_Name;
+    public String abwV_Name;
+    public Hausbesuch hb;
+    public List<Merkmal> kennzeichen;
+    public Merkmale merkmale;
+    public int patIntern;
+    public String anamnese;
+    public String memo;
+
+    public int db_id;
+    public LocalDate anlageDatum;
 
 
     public Patient() {
