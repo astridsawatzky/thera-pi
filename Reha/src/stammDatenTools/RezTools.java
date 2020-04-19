@@ -278,7 +278,7 @@ public class RezTools {
             xvec = SqlInfo.holeSatz("verordn", "termine,pat_intern", "rez_nr='" + xreznr + "'",
                     Arrays.asList(new String[] {}));
             if (xvec.size() == 0) {
-                return (Vector<String>) retvec.clone();
+                return (Vector<String>) retvec;
             } else {
                 terms = xvec.get(0);
             }
@@ -286,10 +286,10 @@ public class RezTools {
             terms = termine;
         }
         if (terms == null) {
-            return (Vector<String>) retvec.clone();
+            return (Vector<String>) retvec;
         }
         if (terms.equals("")) {
-            return (Vector<String>) retvec.clone();
+            return (Vector<String>) retvec;
         }
         String[] tlines = terms.split("\n");
         int lines = tlines.length;
@@ -299,7 +299,7 @@ public class RezTools {
             // int ieinzel = terdat.length;
             retvec.add(terdat[3].trim());
         }
-        return (Vector<String>) retvec.clone();
+        return (Vector<String>) retvec;
     }
 
     public static Object[] holeTermineAnzahlUndLetzter(String termine) {

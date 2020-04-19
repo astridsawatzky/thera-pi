@@ -116,33 +116,12 @@ public class Rezept {
         ArrayList<String> arrayPos = new ArrayList<String>();
         ArrayList<Integer> anzahl = new ArrayList<Integer>();
         ArrayList<Integer> artderBeh = new ArrayList<>();
-        if (POS1 != null && !"".equals(POS1)) {
-            heilm.put(POS1, new Heilmittel(POS1, ANZAHL1, ART_DBEH1));
+        berechneGesamtHeilmittel(heilm, POS1, ANZAHL1, ART_DBEH1);
+        berechneGesamtHeilmittel(heilm, POS2, ANZAHL2, ART_DBEH2);
+        berechneGesamtHeilmittel(heilm, POS3, ANZAHL3, ART_DBEH3);
+        berechneGesamtHeilmittel(heilm, POS4, ANZAHL4, ART_DBEH4);
 
-        }
-        if (POS2 != null && !"".equals(POS2)) {
-            if (heilm.containsKey(POS2)) {
-                heilm.get(POS2).Anzahl += ANZAHL2;
-            } else {
-                heilm.put(POS2, new Heilmittel(POS2, ANZAHL2, ART_DBEH2));
-            }
-        }
-        if (POS3 != null && !"".equals(POS3)) {
-            if (heilm.containsKey(POS3)) {
-                heilm.get(POS3).Anzahl += ANZAHL3;
-            } else {
-                heilm.put(POS3, new Heilmittel(POS3, ANZAHL3, ART_DBEH3));
-            }
 
-        }
-        if (POS4 != null && !"".equals(POS4)) {
-            if (heilm.containsKey(POS4)) {
-                heilm.get(POS4).Anzahl += ANZAHL3;
-            } else {
-                heilm.put(POS4, new Heilmittel(POS4, ANZAHL4, ART_DBEH4));
-            }
-
-        }
 
         BiConsumer<? super String, ? super Heilmittel> action = new BiConsumer<String, Heilmittel>() {
 
@@ -160,6 +139,19 @@ public class Rezept {
         vec.add(anzahl);
         vec.add(artderBeh);
         return vec;
+    }
+
+    private void berechneGesamtHeilmittel(Map<String, Heilmittel> heilm, String positionsnummer  , int menge,
+            int artDerBehandlung) {
+        if (positionsnummer != null && !"".equals(positionsnummer)) {
+
+            if (heilm.containsKey(positionsnummer)) {
+                heilm.get(positionsnummer).Anzahl += menge;
+            } else {
+                heilm.put(positionsnummer, new Heilmittel(positionsnummer, menge, artDerBehandlung));
+            }
+
+        }
     }
 
 }
