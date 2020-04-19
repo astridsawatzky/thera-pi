@@ -60,7 +60,7 @@ import oOorgTools.OOTools;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 
-public class EmailDialog extends JXDialog implements WindowListener, KeyListener, RehaTPEventListener {
+public class EmailDialog extends JXDialog implements  RehaTPEventListener {
 
     /**
      *
@@ -117,7 +117,6 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         this.mymouse = new DragWin(this);
         this.jtp.addMouseListener(mymouse);
         this.jtp.addMouseMotionListener(mymouse);
-        this.jtp.addKeyListener(this);
         this.jtp.setContentContainer(getContent());
         this.jtp.setTitleForeground(Color.WHITE);
         this.jtp.setTitle("<html>" + "pi-Emailversand" + "</html>");
@@ -220,7 +219,6 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         } else {
             hmPostfach = (HashMap<String, String>) SystemConfig.hmEmailIntern.clone();
         }
-        String emailaddy = "";
         String smtphost = hmPostfach.get("SmtpHost");
         String authent = hmPostfach.get("SmtpAuth");
         String benutzer = hmPostfach.get("Username");
@@ -292,7 +290,6 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         content = new JXPanel();
         content.setBackground(Color.LIGHT_GRAY);
         content.setLayout(lay);
-        content.addKeyListener(this);
         content.add(new JLabel("Empfänger:"), cc.xy(2, 2));
         tf[0] = new JRtaTextField("normal", false);
         tf[0].setText(recipients);
@@ -316,7 +313,6 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         jta.setEditable(true);
         jta.setBackground(Color.WHITE);
         jta.setForeground(Color.BLUE);
-        jta.addKeyListener(this);
         jta.setText(mailtext);
         jta.setCaretPosition(0);
         JScrollPane span = JCompTools.getTransparentScrollPane(jta);
@@ -520,9 +516,7 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
             this.rtp.removeRehaTPEventListener(this);
             this.rtp = null;
         }
-        if (jta != null) {
-            jta.removeKeyListener(this);
-        }
+
         setVisible(false);
         this.dispose();
     }
@@ -532,55 +526,6 @@ public class EmailDialog extends JXDialog implements WindowListener, KeyListener
         FensterSchliessen("dieses");
     }
 
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowOpened(WindowEvent arg0) {
-
-    }
 
     private void starteAnhang(int wahl) {
         try {

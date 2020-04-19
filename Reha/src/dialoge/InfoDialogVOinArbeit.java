@@ -2,7 +2,6 @@ package dialoge;
 
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Font;
 import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;

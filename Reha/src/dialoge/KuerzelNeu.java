@@ -33,11 +33,9 @@ import hauptFenster.Reha;
 import systemEinstellungen.SysUtilKuerzel;
 import systemTools.ButtonTools;
 
-public class KuerzelNeu extends JXDialog implements WindowListener, KeyListener, RehaTPEventListener {
+public class KuerzelNeu extends JXDialog implements  KeyListener, RehaTPEventListener {
 
-    /**
-     * 
-     */
+
 
     private static final long serialVersionUID = 1L;
     private JXTitledPanel jtp = null;
@@ -203,40 +201,6 @@ public class KuerzelNeu extends JXDialog implements WindowListener, KeyListener,
         }
     }
 
-    @Override
-    public void windowActivated(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent arg0) {
-
-    }
-
-    @Override
-    public void windowOpened(WindowEvent arg0) {
-
-    }
 
     @Override
     public void keyPressed(KeyEvent arg0) {

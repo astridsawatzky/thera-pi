@@ -25,7 +25,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import systemEinstellungen.SystemConfig;
 
-public class InfoDialog extends JDialog implements WindowListener {
+public class InfoDialog extends JDialog {
     /**
      *
      */
@@ -44,9 +44,9 @@ public class InfoDialog extends JDialog implements WindowListener {
     Vector<Vector<String>> vecResult = null;
     Vector<String> tage = null;
     Vector<Vector<String>> tageplus = null;
-    
-    
-    
+
+
+
     JScrollPane scr1 = null;
     JScrollPane scr2 = null;
 
@@ -59,7 +59,7 @@ public class InfoDialog extends JDialog implements WindowListener {
 
     boolean muststop = false;
 
-    
+
 
     JButton[] buts = { null, null, null };
 
@@ -80,7 +80,7 @@ public class InfoDialog extends JDialog implements WindowListener {
 //            this.setContentPane(getTerminInfoContent());
 //        } else if (this.infoArt.equals("offenRGAF")){
 //            this.setContentPane(getOffeneRechnungenInfoContent(data));
-//        } else {    
+//        } else {
         this.setContentPane(getContent());
 //        }
 
@@ -133,35 +133,9 @@ public class InfoDialog extends JDialog implements WindowListener {
 
     }
 
-    
 
-    @Override
-    public void windowOpened(WindowEvent e) {
-    }
 
-    @Override
-    public void windowClosing(WindowEvent e) {
-    }
 
-    @Override
-    public void windowClosed(WindowEvent e) {
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-    }
 
     public static String macheNummer(String string) {
         if (string.indexOf("\\") >= 0) {

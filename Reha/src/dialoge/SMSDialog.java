@@ -4,11 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -38,7 +37,8 @@ import socketClients.SMSClient;
 import systemEinstellungen.SystemConfig;
 import systemTools.ButtonTools;
 
-public class SMSDialog extends JXDialog implements WindowListener, KeyListener, RehaTPEventListener {
+public class SMSDialog extends JXDialog implements  RehaTPEventListener {
+
 
 
     private static final long serialVersionUID = -6736705768583236169L;
@@ -74,7 +74,7 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
         this.mymouse = new DragWin(this);
         this.jtp.addMouseListener(mymouse);
         this.jtp.addMouseMotionListener(mymouse);
-        this.jtp.addKeyListener(this);
+        this.jtp.addKeyListener(keylistener);
         this.jtp.setContentContainer(getContent());
         this.jtp.setTitleForeground(Color.WHITE);
         this.jtp.setTitle((isSMS ? makeTitel(0) : "<html>" + this.titel + "</html>"));
@@ -117,7 +117,7 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
         content = new JXPanel();
         content.setBackground(Color.LIGHT_GRAY);
         content.setLayout(lay);
-        content.addKeyListener(this);
+        content.addKeyListener(keylistener);
         tf = new JRtaTextField("normal", false);
         tf.setText(this.info);
         tf.setEditable(false);
@@ -130,7 +130,7 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
         jta.setEditable(true);
         jta.setBackground(Color.WHITE);
         jta.setForeground(Color.BLUE);
-        jta.addKeyListener(this);
+        jta.addKeyListener(keylistener);
         JScrollPane span = JCompTools.getTransparentScrollPane(jta);
         span.validate();
         content.add(span, cc.xywh(2, 4, 5, 6));
@@ -234,7 +234,7 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
             this.rtp = null;
         }
         if (jta != null) {
-            jta.removeKeyListener(this);
+            jta.removeKeyListener(keylistener);
         }
         setVisible(false);
         this.dispose();
@@ -244,6 +244,9 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
     public void rehaTPEventOccurred(RehaTPEvent evt) {
         FensterSchliessen("dieses");
     }
+
+    private KeyListener keylistener = new KeyAdapter() {
+
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -255,7 +258,7 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
                 JOptionPane.showMessageDialog(null, "<html><b>Länge einer SMS ist auf 160 Zeichen begrenzt</b></html>");
                 e.consume();
             }
-            this.jtp.setTitle(this.makeTitel(jta.getText()
+            SMSDialog. this.jtp.setTitle(SMSDialog.this.makeTitel(jta.getText()
                                                 .length()));
         }
     }
@@ -269,40 +272,7 @@ public class SMSDialog extends JXDialog implements WindowListener, KeyListener, 
     public void keyReleased(KeyEvent e) {
 
     }
+    };
 
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
-    }
 
 }

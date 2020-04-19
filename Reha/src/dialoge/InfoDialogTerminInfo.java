@@ -3,7 +3,6 @@ package dialoge;
 import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Robot;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -751,7 +750,7 @@ public class InfoDialogTerminInfo extends InfoDialog {
     }
 
     /**************************************************/
-    private class FolgeTermineSuchen extends JXPanel implements KeyListener, FocusListener, RehaTPEventListener {
+    private class FolgeTermineSuchen extends JXPanel implements  RehaTPEventListener {
         /**
          *
          */
@@ -801,7 +800,6 @@ public class InfoDialogTerminInfo extends InfoDialog {
                 }
 
             };
-            addKeyListener(this);
             // 1 2 3 4 5 6 7 8 9 10 11 12
             String x = "5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,5dlu,p,2dlu,80dlu,0dlu:g,5dlu";
             // 1 2 3 4 5 6
@@ -869,25 +867,7 @@ public class InfoDialogTerminInfo extends InfoDialog {
 
         }
 
-        @Override
-        public void focusGained(FocusEvent e) {
-        }
 
-        @Override
-        public void focusLost(FocusEvent e) {
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-        }
 
         private void starteSuche() {
             muststop = false;
