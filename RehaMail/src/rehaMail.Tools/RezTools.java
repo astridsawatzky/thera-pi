@@ -1,4 +1,4 @@
-package Tools;
+package rehaMail.Tools;
 
 import java.util.Vector;
 
