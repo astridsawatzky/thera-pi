@@ -12,6 +12,7 @@ import javax.swing.KeyStroke;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import terminKalender.TerminFenster.Ansicht;
 import terminKalender.iCalRehaExporter;
 
 public class TerminMenu {
@@ -57,7 +58,7 @@ public class TerminMenu {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
-                    Reha.instance.progLoader.ProgTerminFenster(0, (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
+                    Reha.instance.progLoader.ProgTerminFenster(0, SystemConfig.KalenderStartWochenAnsicht ? Ansicht.WOCHE :  Ansicht.NORMAL);
                     // ProgLoader.ProgTerminFenster(0,0);
                     if (termin == null) {
 
@@ -97,7 +98,7 @@ public class TerminMenu {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 Reha.instance.messageLabel.setText("Wochenarbeitszeit definieren");
                 // ProgLoader.ProgTerminFenster(0,2);
-                Reha.instance.progLoader.ProgTerminFenster(0, 2);
+                Reha.instance.progLoader.ProgTerminFenster(0, Ansicht.MASKE);
             }
         });
 

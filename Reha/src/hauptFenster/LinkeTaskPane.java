@@ -58,6 +58,7 @@ import events.PatStammEventClass;
 import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import terminKalender.TerminFenster;
+import terminKalender.TerminFenster.Ansicht;
 import wecker.Wecker;
 
 public class LinkeTaskPane extends JXPanel {
@@ -606,7 +607,7 @@ public class LinkeTaskPane extends JXPanel {
                         return;
                     }
                     aktTag = wahlTag;
-                    Reha.instance.progLoader.ProgTerminFenster(1, 0);
+                    Reha.instance.progLoader.ProgTerminFenster(1, Ansicht.NORMAL);
                     TerminFenster.getThisClass()
                                  .springeAufDatum(aktTag);
                 } else {
@@ -619,7 +620,7 @@ public class LinkeTaskPane extends JXPanel {
                         return;
                     }
                     aktTag = wahlTag;
-                    Reha.instance.progLoader.ProgTerminFenster(1, 0);
+                    Reha.instance.progLoader.ProgTerminFenster(1, Ansicht.NORMAL);
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {

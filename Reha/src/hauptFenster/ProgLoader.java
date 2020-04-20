@@ -55,6 +55,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
 import systemTools.WinNum;
 import terminKalender.TerminFenster;
+import terminKalender.TerminFenster.Ansicht;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
@@ -92,19 +93,23 @@ public class ProgLoader {
 
     }
 
-    /************** Terminkalender Echtfunktion ****************************/
-    public void ProgTerminFenster(int setPos, int ansicht) {
+
+
+    /************** Terminkalender Echtfunktion
+     * @param ansichtenum TODO****************************/
+    public void ProgTerminFenster(int setPos, Ansicht ansichtenum) {
         if (!Reha.DbOk) {
             return;
         }
-        if (ansicht == 2) {
+        Ansicht ansParam = ansichtenum;
+        if (ansParam.value == Ansicht.MASKE.value) {
             if (!Rechte.hatRecht(Rechte.Masken_erstellen, true)) {
                 return;
             }
         }
         JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
         if (termin != null) {
-            if (ansicht == 2) {
+            if (ansParam.value == Ansicht.MASKE.value) {
                 JOptionPane.showMessageDialog(null,
                         "Um die Wochenarbeitszeit zu starten,\nschließen Sie bitte zunächst den Terminkalender");
             }
@@ -121,7 +126,7 @@ public class ProgLoader {
             }
             return;
         }
-        final int xansicht = ansicht;
+        final int xansicht = ansParam.value;
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

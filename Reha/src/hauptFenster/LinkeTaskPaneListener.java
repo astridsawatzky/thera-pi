@@ -29,12 +29,13 @@ import rechteTools.Rechte;
 import rehaWissen.RehaWissen;
 import systemEinstellungen.SystemConfig;
 import systemTools.TestePatStamm;
+import terminKalender.TerminFenster.Ansicht;
 import textBausteine.textbaus;
 import wecker.Wecker;
 
 final class LinkeTaskPaneListener implements ActionListener {
     /**
-     * 
+     *
      */
     private final Reha reha;
 
@@ -88,7 +89,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                     Reha.getThisFrame()
                         .setCursor(Cursors.wartenCursor);
                     Reha.instance.progLoader.ProgTerminFenster(1,
-                            (SystemConfig.KalenderStartWochenAnsicht ? 1 : 0));
+                            SystemConfig.KalenderStartWochenAnsicht ? Ansicht.WOCHE : Ansicht.NORMAL);
 
                     Reha.getThisFrame()
                         .setCursor(Cursors.normalCursor);
@@ -118,7 +119,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                                 + "Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
                 return;
             }
-            Reha.instance.progLoader.ProgTerminFenster(0, 2);
+            Reha.instance.progLoader.ProgTerminFenster(0, Ansicht.MASKE);
             break;
         case "monthview":
             new DatumWahl(200, 200);

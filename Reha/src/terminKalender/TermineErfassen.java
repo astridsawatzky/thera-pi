@@ -311,7 +311,7 @@ public class TermineErfassen implements Runnable {
                     JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
                     if (termin != null) {
                         int ansicht;
-                        if ((ansicht = Reha.instance.terminpanel.ansicht) == 0) {
+                        if ((ansicht = Reha.instance.terminpanel.getAnsicht()) == 0) {
                             if (Reha.instance.terminpanel.getAktuellerTag()
                                                          .equals(DatFunk.sHeute())) {
                                 int iblock = Integer.valueOf(sblock) - 1;
@@ -491,7 +491,7 @@ public class TermineErfassen implements Runnable {
                             JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
                             if (termin != null) {
                                 int ansicht;
-                                if ((ansicht = Reha.instance.terminpanel.ansicht) == 0) {
+                                if ((ansicht = Reha.instance.terminpanel.getAnsicht()) == 0) {
                                     if (Reha.instance.terminpanel.getAktuellerTag()
                                                                  .equals(DatFunk.sHeute())) {
                                         if (!termOk) {

@@ -178,7 +178,7 @@ public class kalenderPanel extends JXPanel {
                             if (this.spalteAktiv) {
 
                                 if ((!sName.equals("")
-                                        || Reha.instance.terminpanel.ansicht == Reha.instance.terminpanel.MASKEN_ANSICHT)) {
+                                        || Reha.instance.terminpanel.getAnsicht() == Reha.instance.terminpanel.getMASKEN_ANSICHT())) {
                                     if (yDifferenz < 12) {
                                         if (yDifferenz > 0) {
                                             Reha.instance.terminpanel.dragLab[this.panelNummer].setBounds(xStart + 1,

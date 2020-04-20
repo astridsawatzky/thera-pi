@@ -86,6 +86,7 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
 import systemTools.ListenerTools;
+import terminKalender.TerminFenster.Ansicht;
 
 public class TerminFenster extends Observable
         implements RehaTPEventListener, ActionListener, DropTargetListener, DragSourceListener, DragGestureListener {
@@ -99,8 +100,8 @@ public class TerminFenster extends Observable
     private JXPanel TerminFlaeche = null;
     public JXPanel ViewPanel = null;
 
-    private kalenderPanel[] oSpalten = { null, null, null, null, null, null, null };
-    private JComboBox[] oCombo = { null, null, null, null, null, null, null };
+    private kalenderPanel[] oSpalten = new kalenderPanel[7];
+    private JComboBox[] oCombo = new JComboBox[7];
 
     private JPopupMenu jPopupMenu = null;
     private JMenuItem Normalanzeige = null;
@@ -131,7 +132,9 @@ public class TerminFenster extends Observable
     private SchnellSuche sf;
     private MaskeInKalenderSchreiben mb = null;
 
-    public int ansicht = 0; // 0=Normalansicht 1=Wochenansicht
+
+
+
     private int[] belegung = { -1, -1, -1, -1, -1, -1, -1 }; // Welcher Kollege(Nr. ist in der jeweiligen Spalte
                                                              // sichtbar
     private int wochenbelegung = 0; // nimmt die KollegenNr auf dessen Woche angezeigt wird
@@ -155,9 +158,46 @@ public class TerminFenster extends Observable
     private int wocheBehandler;
     private int maskenBehandler;
     public int swSetWahl = -1;
-    final int NORMAL_ANSICHT = 0;
-    final int WOCHEN_ANSICHT = 1;
-    final int MASKEN_ANSICHT = 2;
+
+   public enum Ansicht {
+        NORMAL(0),
+        WOCHE(1),
+        MASKE(2);
+
+        public final int value;
+        private Ansicht(int val) {
+            value= val;
+        }
+        public static Ansicht ofIntValue(int ansicht) {
+            for (Ansicht i : Ansicht.values()) {
+                if (i.value == ansicht) {
+                    return i;
+                }
+            }
+            return null;
+        }
+    }
+    int getNORMAL_ANSICHT() {
+        return Ansicht.NORMAL.value;
+    }
+
+    int getWOCHEN_ANSICHT() {
+        return  Ansicht.WOCHE.value;
+    }
+
+    int getMASKEN_ANSICHT() {
+        return Ansicht.MASKE.value;
+    }
+    private Ansicht aktAnsicht;
+
+    public int getAnsicht() {
+        return this.aktAnsicht.value;
+    }
+    public void setAnsicht(int ansicht) {
+        this.aktAnsicht = Ansicht.ofIntValue(ansicht);
+
+    }
+
     public String[] terminangaben = { "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
             "" /* Endzeit */, "" /* BlockNr. */ };
     public String[] terminrueckgabe = { "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
@@ -229,6 +269,7 @@ public class TerminFenster extends Observable
 
     private Connection connection;
 
+
     public TerminFenster(Connection connection) {
         this.connection = connection;
     }
@@ -237,7 +278,7 @@ public class TerminFenster extends Observable
 
         this.eltern = eltern;
         this.setOben = setOben;
-        this.ansicht = ansicht;
+        this.setAnsicht(ansicht);
         xEvent = new RehaTPEventClass();
         xEvent.addRehaTPEventListener(this);
 
@@ -288,9 +329,9 @@ public class TerminFenster extends Observable
         setCombos(connection);
 
         this.aktuellerTag = DatFunk.sHeute();
-        if (this.ansicht < MASKEN_ANSICHT) {
-            String sstmt = ansichtStatement(this.ansicht, this.aktuellerTag);
-            macheStatement(sstmt, this.ansicht);
+        if (this.getAnsicht() < getMASKEN_ANSICHT()) {
+            String sstmt = ansichtStatement(this.getAnsicht(), this.aktuellerTag);
+            macheStatement(sstmt, this.getAnsicht());
         } else {
             String stmtmaske = "select from masken where behandler = '00BEHANDLER' ORDER BY art";
             maskenStatement(stmtmaske);
@@ -322,11 +363,11 @@ public class TerminFenster extends Observable
         grundFlaeche.revalidate();
         ViewPanel.revalidate();
 
-        if (ansicht == WOCHEN_ANSICHT) {
-            this.ansicht = NORMAL_ANSICHT;
+        if (ansicht == getWOCHEN_ANSICHT()) {
+            this.setAnsicht(getNORMAL_ANSICHT());
             oCombo[0].setSelectedItem(SystemConfig.KalenderStartWADefaultUser);
             setWochenanzeige();
-        } else if (ansicht == NORMAL_ANSICHT) {
+        } else if (ansicht == getNORMAL_ANSICHT()) {
             int lang = SystemConfig.aTerminKalender.size();
             int pos = -1;
             for (int i = 0; i < lang; i++) {
@@ -415,7 +456,7 @@ public class TerminFenster extends Observable
         } catch (SQLException ex) {
             SqlInfo.loescheLocksMaschine();
         }
-        if (SystemConfig.UpdateIntervall > 0 && this.ansicht < 2) {
+        if (SystemConfig.UpdateIntervall > 0 && this.getAnsicht() < 2) {
             db_Aktualisieren = new Thread(new sperrTest());
             db_Aktualisieren.start();
         }
@@ -501,7 +542,7 @@ public class TerminFenster extends Observable
             public void keyPressed(java.awt.event.KeyEvent e) {
                 for (int i = 0; i < 1; i++) {
 
-                    if ((e.getKeyCode() == VK_PAGE_UP || e.getKeyCode() == VK_PAGE_DOWN) && (ansicht < MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_PAGE_UP || e.getKeyCode() == VK_PAGE_DOWN) && (getAnsicht() < getMASKEN_ANSICHT())) {
                         e.consume();
                         // Neuer Tag soll gewählt werden
                         panelTastenAuswerten(e);
@@ -513,7 +554,7 @@ public class TerminFenster extends Observable
                         }
                         break;
                     }
-                    if ((e.getKeyCode() == VK_F12) && (ansicht < MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_F12) && (getAnsicht() < getMASKEN_ANSICHT())) {
                         setAufruf(null);
                         aktiveSpalte[2] = welche;
                         oSpalten[welche].requestFocus();
@@ -525,12 +566,12 @@ public class TerminFenster extends Observable
                         e.consume();
                         break;
                     }
-                    if ((e.getKeyCode() == VK_L) && (e.isControlDown()) && (ansicht < MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_L) && (e.isControlDown()) && (getAnsicht() < getMASKEN_ANSICHT())) {
                         e.consume();
                         terminListe();
                         break;
                     }
-                    if (e.getKeyCode() == KeyEvent.VK_F11 && (!e.isShiftDown()) && (ansicht < MASKEN_ANSICHT)) {
+                    if (e.getKeyCode() == VK_F11 && (!e.isShiftDown()) && (getAnsicht() < getMASKEN_ANSICHT())) {
                         // F11 ohne Shift
                         schnellSuche(connection);
                         break;
@@ -566,7 +607,7 @@ public class TerminFenster extends Observable
                 if (!oCombo[welche].isPopupVisible()) {
                     oCombo[welche].setPopupVisible(false);
                 }
-                if (ansicht == NORMAL_ANSICHT) {
+                if (getAnsicht() == getNORMAL_ANSICHT()) {
                     try {
                         belegung[welche] = ParameterLaden.vKKollegen.get(wahl).Reihe - 1;
                         oSpalten[welche].datenZeichnen(vTerm, belegung[welche]);
@@ -578,21 +619,21 @@ public class TerminFenster extends Observable
                     } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
                         SqlInfo.loescheLocksMaschine();
                     }
-                } else if (ansicht == WOCHEN_ANSICHT) {
+                } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                     try {
                         if (welche == 0) {
                             wochenbelegung = ParameterLaden.vKKollegen.get(wahl).Reihe;
                             if (wocheErster.equals("")) {
-                                ansichtStatement(ansicht, aktuellerTag);
+                                ansichtStatement(getAnsicht(), aktuellerTag);
                             } else {
-                                ansichtStatement(ansicht, wocheErster);
+                                ansichtStatement(getAnsicht(), wocheErster);
                             }
                         }
                     } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
                         SqlInfo.loescheLocksMaschine();
                     }
 
-                } else if (ansicht == MASKEN_ANSICHT) {
+                } else if (getAnsicht() == getMASKEN_ANSICHT()) {
 
                     maskenbelegung = ParameterLaden.vKKollegen.get(wahl).Reihe;
                     maskenwahl = wahl;
@@ -647,7 +688,7 @@ public class TerminFenster extends Observable
             oCombo[5].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
             oCombo[6].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
         }
-        if (ansicht < MASKEN_ANSICHT) {
+        if (getAnsicht() < getMASKEN_ANSICHT()) {
             oCombo[0].setMaximumRowCount(35);
             oCombo[0].setSelectedItem("./.");
             oCombo[1].setMaximumRowCount(35);
@@ -662,7 +703,7 @@ public class TerminFenster extends Observable
             oCombo[5].setSelectedItem("./.");
             oCombo[6].setMaximumRowCount(35);
             oCombo[6].setSelectedItem("./.");
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             oCombo[0].setMaximumRowCount(35);
             oCombo[0].setSelectedItem("./.");
             oCombo[1].setMaximumRowCount(35);
@@ -701,7 +742,7 @@ public class TerminFenster extends Observable
             oCombo[5].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
             oCombo[6].addItem(ParameterLaden.vKKollegen.get(von).Matchcode);
         }
-        if (this.ansicht < MASKEN_ANSICHT) {
+        if (this.getAnsicht() < getMASKEN_ANSICHT()) {
             oCombo[0].setMaximumRowCount(35);
             oCombo[0].setSelectedItem("./.");
             oCombo[1].setMaximumRowCount(35);
@@ -716,7 +757,7 @@ public class TerminFenster extends Observable
             oCombo[5].setSelectedItem("./.");
             oCombo[6].setMaximumRowCount(35);
             oCombo[6].setSelectedItem("./.");
-        } else if (this.ansicht == MASKEN_ANSICHT) {
+        } else if (this.getAnsicht() == getMASKEN_ANSICHT()) {
             oCombo[0].setMaximumRowCount(35);
             oCombo[0].setSelectedItem("./.");
             oCombo[1].setMaximumRowCount(35);
@@ -791,11 +832,11 @@ public class TerminFenster extends Observable
                             DRAG_MODE = DRAG_NONE;
                         }
                         int behandler = -1;
-                        if (ansicht == NORMAL_ANSICHT) {
+                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                             behandler = belegung[aktiveSpalte[2]];
-                        } else if (ansicht == WOCHEN_ANSICHT) {
+                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                             behandler = aktiveSpalte[2];
-                        } else if (ansicht == MASKEN_ANSICHT) {
+                        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                             behandler = aktiveSpalte[2];
                         }
                         if (behandler <= -1) {
@@ -911,7 +952,7 @@ public class TerminFenster extends Observable
                         dvp.setPrintPanel(Reha.instance.terminpanel.ViewPanel);
                         break;
                     }
-                    if ((e.getKeyCode() == VK_F12) && (ansicht != MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_F12) && (getAnsicht() != getMASKEN_ANSICHT())) {
                         setAufruf(null);
                         oSpalten[tspalte].requestFocus();
                         break;
@@ -962,11 +1003,11 @@ public class TerminFenster extends Observable
                         if (terminVergabe.size() > 0) {
                             terminVergabe.clear();
                         }
-                        if (ansicht == NORMAL_ANSICHT) {
+                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                             xaktBehandler = belegung[aktiveSpalte[2]];
-                        } else if (ansicht == WOCHEN_ANSICHT) {
+                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                             xaktBehandler = aktiveSpalte[2];
-                        } else if (ansicht == MASKEN_ANSICHT) {
+                        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                             xaktBehandler = aktiveSpalte[2];
                         }
                         terminAufnehmen(xaktBehandler, aktiveSpalte[0]);
@@ -992,7 +1033,7 @@ public class TerminFenster extends Observable
                             gruppierenBloecke[0] = aktiveSpalte[0];
                             gruppierenBloecke[1] = aktiveSpalte[0];
                             gruppierenSpalte = aktiveSpalte[2];
-                            gruppierenBehandler = (ansicht == NORMAL_ANSICHT ? belegung[aktiveSpalte[2]]
+                            gruppierenBehandler = (getAnsicht() == getNORMAL_ANSICHT() ? belegung[aktiveSpalte[2]]
                                     : aktiveSpalte[2]);
                             gruppierenKopiert = false;
                             oSpalten[gruppierenSpalte].setInGruppierung(true);
@@ -1094,11 +1135,11 @@ public class TerminFenster extends Observable
                         if (terminVergabe.size() > 0) {
                             terminVergabe.clear();
                         }
-                        if (ansicht == NORMAL_ANSICHT) {
+                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                             xaktBehandler = belegung[aktiveSpalte[2]];
-                        } else if (ansicht == WOCHEN_ANSICHT) {
+                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                             xaktBehandler = aktiveSpalte[2];
-                        } else if (ansicht == MASKEN_ANSICHT) {
+                        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                             xaktBehandler = aktiveSpalte[2];
                         }
                         terminAufnehmen(xaktBehandler, aktiveSpalte[0]);
@@ -1258,11 +1299,11 @@ public class TerminFenster extends Observable
                         }
                         String reznummer = "";
                         // TerminInfo aufrufen
-                        if (ansicht == NORMAL_ANSICHT) {
+                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                             // xaktBehandler = belegung[aktiveSpalte[2]];
                             reznummer = (String) ((Vector) ((ArrayList) vTerm.get(belegung[aktiveSpalte[2]])).get(
                                     1)).get(aktiveSpalte[0]);
-                        } else if (ansicht == WOCHEN_ANSICHT) {
+                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                             // xaktBehandler = aktiveSpalte[2];
                             reznummer = (String) ((Vector) ((ArrayList) vTerm.get(aktiveSpalte[2])).get(1)).get(
                                     aktiveSpalte[0]);
@@ -1363,7 +1404,7 @@ public class TerminFenster extends Observable
                         dragDaten.y = e.getY();
                         dragDaten.x = e.getX();
                         if (aktiveSpalte[0] >= 0) {
-                            if (ansicht == NORMAL_ANSICHT) {
+                            if (getAnsicht() == getNORMAL_ANSICHT()) {
                                 setLockStatement((belegung[tspalte] + 1 >= 10
                                         ? Integer.toString(belegung[tspalte] + 1) + "BEHANDLER"
                                         : "0" + (belegung[tspalte] + 1) + "BEHANDLER"), aktuellerTag);
@@ -1390,7 +1431,7 @@ public class TerminFenster extends Observable
                                     setUpdateVerbot(false);
                                     SqlInfo.loescheLocksMaschine();
                                 }
-                            } else if (ansicht == WOCHEN_ANSICHT) { // WOCHEN_ANSICHT muß noch entwickelt werden!
+                            } else if (getAnsicht() == getWOCHEN_ANSICHT()) { // WOCHEN_ANSICHT muß noch entwickelt werden!
                                 if (aktiveSpalte[2] == 0) {
 
                                     setLockStatement(
@@ -1427,7 +1468,7 @@ public class TerminFenster extends Observable
                                     setUpdateVerbot(false);
                                     SqlInfo.loescheLocksMaschine();
                                 }
-                            } else if (ansicht == MASKEN_ANSICHT) { // WOCHEN_ANSICHT mu� noch entwickelt werden!
+                            } else if (getAnsicht() == getMASKEN_ANSICHT()) { // WOCHEN_ANSICHT mu� noch entwickelt werden!
                                 //// System.out.println("Maskenansicht-Doppelklick");
                                 lockok = 1;
                                 Zeiteinstellen(e.getLocationOnScreen(), aktiveSpalte[2], aktiveSpalte[0]);
@@ -1516,7 +1557,7 @@ public class TerminFenster extends Observable
     private JPopupMenu getTerminPopupMenu() {
         if (jPopupMenu == null) {
             jPopupMenu = new JPopupMenu();
-            if (ansicht < MASKEN_ANSICHT) {
+            if (getAnsicht() < getMASKEN_ANSICHT()) {
                 jPopupMenu.add(getTagvor());
                 jPopupMenu.add(getTagzurueck());
                 jPopupMenu.add(getTagesdialog());
@@ -1559,14 +1600,14 @@ public class TerminFenster extends Observable
                 }
                 jPopupMenu.add(getNormalanzeige());
                 jPopupMenu.add(getWochenanzeige());
-            } else if (ansicht == MASKEN_ANSICHT) {
+            } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                 jPopupMenu.add(getGruppezusammenfassen());
                 jPopupMenu.addSeparator();
                 jPopupMenu.add(getKalenderschreiben());
             }
         }
         if (gruppierenAktiv) {
-            if (ansicht < MASKEN_ANSICHT) {
+            if (getAnsicht() < getMASKEN_ANSICHT()) {
                 Behandlerset.setEnabled(false);
                 Tagvor.setEnabled(false);
                 Tagzurueck.setEnabled(false);
@@ -1581,13 +1622,13 @@ public class TerminFenster extends Observable
                 Normalanzeige.setEnabled(false);
                 Tauschemitvorherigem.setEnabled(false);
                 Tauschemitnachfolger.setEnabled(false);
-            } else if (ansicht == MASKEN_ANSICHT) {
+            } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                 Interminkalenderschreiben.setEnabled(false);
                 Gruppezusammenfassen.setEnabled(true);
             }
             setGruppierenClipBoard();
         } else {
-            if (ansicht < MASKEN_ANSICHT) {
+            if (getAnsicht() < getMASKEN_ANSICHT()) {
                 Tagvor.setEnabled(true);
                 Tagzurueck.setEnabled(true);
                 Tagesdialog.setEnabled(true);
@@ -1605,7 +1646,7 @@ public class TerminFenster extends Observable
                 } else {
                     Paste.setEnabled(false);
                 }
-                if (ansicht == NORMAL_ANSICHT) {
+                if (getAnsicht() == getNORMAL_ANSICHT()) {
                     Behandlerset.setEnabled(true);
                     Wochenanzeige.setEnabled(true);
                     Normalanzeige.setEnabled(false);
@@ -1622,7 +1663,7 @@ public class TerminFenster extends Observable
                     } else {
                         Confirm.setEnabled(false);
                     }
-                } else if (ansicht == WOCHEN_ANSICHT) {
+                } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                     Behandlerset.setEnabled(false);
                     Wochenanzeige.setEnabled(false);
                     Normalanzeige.setEnabled(true);
@@ -1631,12 +1672,12 @@ public class TerminFenster extends Observable
                     Tagesdialog.setEnabled(false);
                     Confirm.setEnabled(false);
                 }
-            } else if (ansicht == MASKEN_ANSICHT) {
+            } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                 Interminkalenderschreiben.setEnabled(true);
                 Gruppezusammenfassen.setEnabled(false);
             }
         }
-        if (ansicht < MASKEN_ANSICHT) {
+        if (getAnsicht() < getMASKEN_ANSICHT()) {
             if ((!gruppierenAktiv) && (gruppierenKopiert)) {
                 Gruppeeinfuegen.setEnabled(true);
             } else {
@@ -1901,7 +1942,7 @@ public class TerminFenster extends Observable
     /**************************************/
     private void setNormalanzeige() {
         try {
-            if (ansicht == NORMAL_ANSICHT) {
+            if (getAnsicht() == getNORMAL_ANSICHT()) {
                 JOptionPane.showMessageDialog(null, "Sie sind bereits in der Normalanzeige....");
                 return;
             }
@@ -1921,10 +1962,10 @@ public class TerminFenster extends Observable
             oCombo[6].setSelectedItem(sbelegung[6]);
             oCombo[6].setEnabled(true);
 
-            ansicht = NORMAL_ANSICHT;
+            this.aktAnsicht = Ansicht.NORMAL;
 
             try {
-                showDaysInWeekView(ansicht);
+                showDaysInWeekView(getAnsicht());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -1936,7 +1977,7 @@ public class TerminFenster extends Observable
             for (int i = 0; i < 7; i++) {
                 oSpalten[i].spalteDeaktivieren();
             }
-            ansichtStatement(ansicht, aktuellerTag);
+            ansichtStatement(getAnsicht(), aktuellerTag);
             Normalanzeige.setEnabled(false);
             Wochenanzeige.setEnabled(true);
         } catch (Exception ex) {
@@ -1965,7 +2006,7 @@ public class TerminFenster extends Observable
 
     /**************************************/
     private void setWochenanzeige() {
-        if (ansicht == WOCHEN_ANSICHT) {
+        if (getAnsicht() == getWOCHEN_ANSICHT()) {
             JOptionPane.showMessageDialog(null, "Sie sind bereits in der Wochenanzeige....");
             return;
         }
@@ -1977,13 +2018,13 @@ public class TerminFenster extends Observable
         sbelegung[5] = (String) oCombo[5].getSelectedItem();
         sbelegung[6] = (String) oCombo[6].getSelectedItem();
 
-        ansicht = WOCHEN_ANSICHT;
+        this.aktAnsicht = Ansicht.WOCHE;
 
         oCombo[0].setSelectedItem(oCombo[aktiveSpalte[2]].getSelectedItem());
 
         this.wocheErster = DatFunk.WocheErster(aktuellerTag);
         try {
-            showDaysInWeekView(ansicht);
+            showDaysInWeekView(getAnsicht());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -2009,7 +2050,7 @@ public class TerminFenster extends Observable
         for (int i = 0; i < 7; i++) {
             oSpalten[i].spalteDeaktivieren();
         }
-        ansichtStatement(ansicht, aktuellerTag);
+        ansichtStatement(getAnsicht(), aktuellerTag);
         try {
             Normalanzeige.setEnabled(true);
             Wochenanzeige.setEnabled(false);
@@ -2027,11 +2068,11 @@ public class TerminFenster extends Observable
                           .toString()
                           .equals("./.")) {
                 oCombo[i].removeItemAt(0);
-                if (ansicht != WOCHEN_ANSICHT) {
+                if (ansicht != getWOCHEN_ANSICHT()) {
                     continue;
                 }
             }
-            if (ansicht == WOCHEN_ANSICHT) {
+            if (ansicht == getWOCHEN_ANSICHT()) {
                 oCombo[i].insertItemAt(dayshortname[i] + DatFunk.sDatPlusTage(wocheErster, i), 0);
                 oCombo[i].setSelectedIndex(0);
             }
@@ -2095,11 +2136,11 @@ public class TerminFenster extends Observable
                 try {
                     if (((aktiveSpalte[0] >= 0) && (aktiveSpalte[2] >= 0) && (belegung[aktiveSpalte[2]] >= 0))
                             || ((aktiveSpalte[0] >= 0) && (aktiveSpalte[2] >= 0) && (maskenbelegung >= 0))) {
-                        if (ansicht == NORMAL_ANSICHT) {
+                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                             anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(belegung[aktiveSpalte[2]])).get(0)).size();
-                        } else if (ansicht == WOCHEN_ANSICHT) {
+                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                             anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
-                        } else if (ansicht == MASKEN_ANSICHT) {
+                        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                             anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
                         }
                         if (anz > 1) {
@@ -2124,11 +2165,11 @@ public class TerminFenster extends Observable
                 }
             } else {
                 try {
-                    if (ansicht == NORMAL_ANSICHT) {
+                    if (getAnsicht() == getNORMAL_ANSICHT()) {
                         anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(belegung[aktiveSpalte[2]])).get(0)).size();
-                    } else if (ansicht == WOCHEN_ANSICHT) {
+                    } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                         anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
-                    } else if (ansicht == MASKEN_ANSICHT) {
+                    } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                         anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
                     }
                     if ((gruppierenBloecke[1] > 0) && (anz > 0)) {
@@ -2150,15 +2191,15 @@ public class TerminFenster extends Observable
                 try {
                     if (((aktiveSpalte[0] >= 0) && (aktiveSpalte[2] >= 0) && (belegung[aktiveSpalte[2]] >= 0))
                             || ((aktiveSpalte[0] >= 0) && (aktiveSpalte[2] >= 0) && (maskenbelegung >= 0))) {
-                        if (ansicht == NORMAL_ANSICHT) {
+                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                             try {
                                 anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(belegung[aktiveSpalte[2]])).get(0)).size();
                             } catch (java.lang.ArrayIndexOutOfBoundsException ob) {
                                 // System.out.println("Spalte nicht belegt");
                             }
-                        } else if (ansicht == WOCHEN_ANSICHT) {
+                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                             anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
-                        } else if (ansicht == MASKEN_ANSICHT) {
+                        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                             anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
                         }
                         if (anz > 1) {
@@ -2186,11 +2227,11 @@ public class TerminFenster extends Observable
                     if (belegung[aktiveSpalte[2]] == -1) {
                         return;
                     }
-                    if (ansicht == NORMAL_ANSICHT) {
+                    if (getAnsicht() == getNORMAL_ANSICHT()) {
                         anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(belegung[aktiveSpalte[2]])).get(0)).size();
-                    } else if (ansicht == WOCHEN_ANSICHT) {
+                    } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                         anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
-                    } else if (ansicht == MASKEN_ANSICHT) {
+                    } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                         anz = ((Vector<?>) ((ArrayList<?>) vTerm.get(aktiveSpalte[2])).get(0)).size();
                     }
                     if ((gruppierenBloecke[1] < anz - 1) && anz > 0) {
@@ -2257,7 +2298,7 @@ public class TerminFenster extends Observable
             pPosition = oSpalten[aktiveSpalte[2]].getLocationOnScreen();
             x = pPosition.x + position[0] + (oSpalten[aktiveSpalte[2]].getWidth() / 2);
             y = pPosition.y + position[1];
-            if (ansicht == NORMAL_ANSICHT) {
+            if (getAnsicht() == getNORMAL_ANSICHT()) {
                 setLockStatement((belegung[aktiveSpalte[2]] + 1 >= 10
                         ? Integer.toString(belegung[aktiveSpalte[2]] + 1) + "BEHANDLER"
                         : "0" + (belegung[aktiveSpalte[2]] + 1) + "BEHANDLER"), aktuellerTag);
@@ -2291,7 +2332,7 @@ public class TerminFenster extends Observable
                     SqlInfo.loescheLocksMaschine();
                     interminEdit = false;
                 }
-            } else if (ansicht == WOCHEN_ANSICHT) {
+            } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                 if (aktiveSpalte[2] == 0) {
                     setLockStatement((wochenbelegung >= 10 ? Integer.toString(wochenbelegung) + "BEHANDLER"
                             : "0" + (wochenbelegung) + "BEHANDLER"), getWocheErster());
@@ -2331,7 +2372,7 @@ public class TerminFenster extends Observable
                     interminEdit = false;
                     SqlInfo.loescheLocksMaschine();
                 }
-            } else if (ansicht == MASKEN_ANSICHT) { // WOCHEN_ANSICHT muß noch entwickelt werden!
+            } else if (getAnsicht() == getMASKEN_ANSICHT()) { // WOCHEN_ANSICHT muß noch entwickelt werden!
                 e.consume();
                 lockok = 1;
                 if (intagWahl) {
@@ -2424,7 +2465,7 @@ public class TerminFenster extends Observable
                 }
             }
             if (update) {
-                if (lockok > 0 && ansicht == NORMAL_ANSICHT) {
+                if (lockok > 0 && getAnsicht() == getNORMAL_ANSICHT()) {
                     Tblock tbl = new Tblock();
                     spaltenDatumSetzen(true);
                     if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0],
@@ -2434,7 +2475,7 @@ public class TerminFenster extends Observable
                         oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, belegung[aktiveSpalte[2]]);
                         setUpdateVerbot(false);
                     }
-                } else if (lockok > 0 && ansicht == WOCHEN_ANSICHT) {
+                } else if (lockok > 0 && getAnsicht() == getWOCHEN_ANSICHT()) {
                     Tblock tbl = new Tblock();
                     spaltenDatumSetzen(false);
                     if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0], aktiveSpalte[2],
@@ -2444,7 +2485,7 @@ public class TerminFenster extends Observable
                         oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
                         setUpdateVerbot(false);
                     }
-                } else if (lockok > 0 && ansicht == MASKEN_ANSICHT) {
+                } else if (lockok > 0 && getAnsicht() == getMASKEN_ANSICHT()) {
                     Tblock tbl = new Tblock();
                     spaltenDatumSetzen(true);
                     if ((tbl.TblockInit(this, this.terminrueckgabe, aktiveSpalte[2], aktiveSpalte[0], aktiveSpalte[2],
@@ -2551,13 +2592,13 @@ public class TerminFenster extends Observable
     public void setzeRueckgabe() {
         int behandler = -1;
         int block = -1;
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             behandler = belegung[aktiveSpalte[2]];
             block = aktiveSpalte[0];
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             behandler = aktiveSpalte[2];
             block = aktiveSpalte[0];
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             behandler = aktiveSpalte[2];
             block = aktiveSpalte[0];
         }
@@ -2594,7 +2635,7 @@ public class TerminFenster extends Observable
      *
      */
     public int aktuelleAnsicht() {
-        return this.ansicht;
+        return this.getAnsicht();
     }
 
     public void start() {
@@ -2674,7 +2715,7 @@ public class TerminFenster extends Observable
      *
      */
     public void setAufruf(Point p) {
-        if (this.ansicht == 1) {
+        if (this.getAnsicht() == 1) {
             JOptionPane.showMessageDialog(null,
                     "Aufruf Terminset ist nur in der Normalansicht möglich (und sinnvoll...)");
             return;
@@ -2764,7 +2805,7 @@ public class TerminFenster extends Observable
         String sstate = "";
         int behandler;
         String sletzter, serster, sbehandler;
-        if (this.ansicht == NORMAL_ANSICHT) {
+        if (this.getAnsicht() == getNORMAL_ANSICHT()) {
             if ("ADS".equals(new Datenbank().typ())) {
                 sstate = "SELECT * FROM flexkc WHERE datum = '" + DatFunk.sDatInSQL(stag) + "'";
             } else {
@@ -2779,7 +2820,7 @@ public class TerminFenster extends Observable
             }
             /****************/
             this.wocheAktuellerTag = "";
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             behandler = wochenbelegung;
             if (behandler == 0) {
                 behandler = ParameterLaden.vKKollegen.get(
@@ -2954,7 +2995,7 @@ public class TerminFenster extends Observable
                 int i = 0;
                 int durchlauf = 0;
                 int maxbehandler;
-                if (ansicht == 0) {
+                if (getAnsicht() == 0) {
                     maxbehandler = ParameterLaden.vKKollegen.size();
                 } else {
                     maxbehandler = 7;
@@ -3011,7 +3052,7 @@ public class TerminFenster extends Observable
                 if (maxblock > 0) {
                     datenZeichnen(aSpaltenDaten);
                     TerminFenster.rechneMaske();
-                    if (ansicht == MASKEN_ANSICHT) {
+                    if (getAnsicht() == getMASKEN_ANSICHT()) {
                         oSpalten[aktiveSpalte[2]].requestFocus(true);
                         oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
                     }
@@ -3051,7 +3092,7 @@ public class TerminFenster extends Observable
         // ge�ndert
         vect = null;
         if (vTerm.size() > 0) {
-            if (this.ansicht == NORMAL_ANSICHT) {
+            if (this.getAnsicht() == getNORMAL_ANSICHT()) {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
@@ -3065,7 +3106,7 @@ public class TerminFenster extends Observable
                     }
                 });
 
-            } else if (ansicht == WOCHEN_ANSICHT || ansicht == MASKEN_ANSICHT) {
+            } else if (getAnsicht() == getWOCHEN_ANSICHT() || getAnsicht() == getMASKEN_ANSICHT()) {
                 new Thread(new KalZeichnen(oSpalten[0], vTerm, 0)).start();
                 new Thread(new KalZeichnen(oSpalten[1], vTerm, 1)).start();
                 new Thread(new KalZeichnen(oSpalten[2], vTerm, 2)).start();
@@ -3111,9 +3152,7 @@ public class TerminFenster extends Observable
         }
     }
 
-    public int getAnsicht() {
-        return this.ansicht;
-    }
+
 
     private String getName() {
         return this.FensterName;
@@ -3212,11 +3251,11 @@ public class TerminFenster extends Observable
 
     private void datenInSpeicherNehmen() {
         int aktbehandler = -1;
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             aktbehandler = belegung[aktiveSpalte[2]];
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             aktbehandler = aktiveSpalte[2];
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             aktbehandler = aktiveSpalte[2];
         }
         int aktblock = aktiveSpalte[0];
@@ -3236,11 +3275,11 @@ public class TerminFenster extends Observable
     private String[] datenInDragSpeicherNehmen() {
         String[] srueck = { null, null, null, null, null };
         int aktbehandler = -1;
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             aktbehandler = belegung[aktiveSpalte[2]];
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             aktbehandler = aktiveSpalte[2];
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             aktbehandler = aktiveSpalte[2];
         }
         int aktblock = aktiveSpalte[0];
@@ -3311,11 +3350,11 @@ public class TerminFenster extends Observable
                 }
             }
 
-            if (ansicht == NORMAL_ANSICHT) {
+            if (getAnsicht() == getNORMAL_ANSICHT()) {
                 aktbehandler = belegung[aktiveSpalte[2]];
-            } else if (ansicht == WOCHEN_ANSICHT) {
+            } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                 aktbehandler = aktiveSpalte[2];
-            } else if (ansicht == MASKEN_ANSICHT) {
+            } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                 aktbehandler = aktiveSpalte[2];
             }
             int aktblock = aktiveSpalte[0];
@@ -3518,24 +3557,24 @@ public class TerminFenster extends Observable
         } else {
             setUpdateVerbot(true);
             int rueck = -1;
-            if (ansicht == NORMAL_ANSICHT) {
+            if (getAnsicht() == getNORMAL_ANSICHT()) {
                 spaltenDatumSetzen(true);
                 BlockHandling bhd = new BlockHandling(wohin, vTerm, belegung[aktiveSpalte[2]], aktiveSpalte[2],
                         aktiveSpalte[0], spaltenDatum, 0, datenSpeicher);
                 rueck = bhd.init();
-            } else if (ansicht == WOCHEN_ANSICHT) {
+            } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                 spaltenDatumSetzen(false);
                 BlockHandling bhd = new BlockHandling(wohin, vTerm, aktiveSpalte[2], aktiveSpalte[2], aktiveSpalte[0],
                         spaltenDatum, this.wocheBehandler, datenSpeicher);
                 rueck = bhd.init();
-            } else if (ansicht == MASKEN_ANSICHT) {
+            } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                 spaltenDatumSetzen(true);
                 BlockHandling bhd = new BlockHandling(wohin, vTerm, aktiveSpalte[2], aktiveSpalte[2], aktiveSpalte[0],
                         spaltenDatum, maskenbelegung, datenSpeicher);
                 rueck = bhd.init();
             }
             if (rueck >= 0) {
-                if (ansicht == NORMAL_ANSICHT) {
+                if (getAnsicht() == getNORMAL_ANSICHT()) {
                     // in Datenzeichnen
                     if (wohin == 8 || wohin == 9) { // Block komplett zusammenfassen
                         aktiveSpalte[0] = Math.min(gruppierenClipBoard[0], gruppierenClipBoard[1]);
@@ -3547,7 +3586,7 @@ public class TerminFenster extends Observable
                     oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
                     oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, belegung[aktiveSpalte[2]]);
                     oSpalten[aktiveSpalte[2]].repaint();
-                } else if (ansicht == WOCHEN_ANSICHT) {
+                } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                     if (wohin == 8 || wohin == 9) { // Block komplett zusammenfassen
                         aktiveSpalte[0] = Math.min(gruppierenClipBoard[0], gruppierenClipBoard[1]);
                     }
@@ -3558,7 +3597,7 @@ public class TerminFenster extends Observable
                     oSpalten[aktiveSpalte[2]].schwarzAbgleich(aktiveSpalte[0], aktiveSpalte[0]);
                     oSpalten[aktiveSpalte[2]].datenZeichnen(vTerm, aktiveSpalte[2]);
                     oSpalten[aktiveSpalte[2]].repaint();
-                } else if (ansicht == MASKEN_ANSICHT) {
+                } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                     if (wohin == 8 || wohin == 9) { // Block komplett zusammenfassen
                         aktiveSpalte[0] = Math.min(gruppierenClipBoard[0], gruppierenClipBoard[1]);
                     }
@@ -3629,12 +3668,12 @@ public class TerminFenster extends Observable
      * ***************/
     private int lockVorbereiten() {
         lockok = 0;
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             setLockStatement(
                     (belegung[aktiveSpalte[2]] + 1 >= 10 ? Integer.toString(belegung[aktiveSpalte[2]] + 1) + "BEHANDLER"
                             : "0" + (belegung[aktiveSpalte[2]] + 1) + "BEHANDLER"),
                     aktuellerTag);
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             if (aktiveSpalte[2] == 0) {
                 setLockStatement((wochenbelegung >= 10 ? Integer.toString(wochenbelegung) + "BEHANDLER"
                         : "0" + (wochenbelegung) + "BEHANDLER"), getWocheErster());
@@ -3759,11 +3798,11 @@ public class TerminFenster extends Observable
                 if (terminVergabe.size() > 0) {
                     terminVergabe.clear();
                 }
-                if (ansicht == NORMAL_ANSICHT) {
+                if (getAnsicht() == getNORMAL_ANSICHT()) {
                     xaktBehandler = belegung[aktiveSpalte[2]];
-                } else if (ansicht == WOCHEN_ANSICHT) {
+                } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                     xaktBehandler = aktiveSpalte[2];
-                } else if (ansicht == MASKEN_ANSICHT) {
+                } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                     xaktBehandler = aktiveSpalte[2];
                 }
                 terminAufnehmen(xaktBehandler, aktiveSpalte[0]);
@@ -3848,11 +3887,11 @@ public class TerminFenster extends Observable
         if (aktiveSpalte[0] < 0) {
             return;
         }
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             xaktBehandler = belegung[aktiveSpalte[2]];
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             xaktBehandler = aktiveSpalte[2];
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             JOptionPane.showMessageDialog(null, "Patientenzuordnung in Definition der Wochenarbeitszeit nicht möglich");
             return;
         }
@@ -3893,11 +3932,11 @@ public class TerminFenster extends Observable
         if (aktiveSpalte[0] < 0) {
             return;
         }
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             xaktBehandler = belegung[aktiveSpalte[2]];
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             xaktBehandler = aktiveSpalte[2];
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             JOptionPane.showMessageDialog(null, "Patientenzuordnung in Definition der Wochenarbeitszeit nicht möglich");
             return;
         }
@@ -3999,11 +4038,11 @@ public class TerminFenster extends Observable
         }
         String[][] tauschTermine = { { null, null, null, null, null }, { null, null, null, null, null } };
         int behandler = -1, block = -1, blockanzahl = -1, blockmax;
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             behandler = belegung[aktiveSpalte[2]];
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             behandler = aktiveSpalte[2];
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             behandler = aktiveSpalte[2];
         }
         block = aktiveSpalte[0];
@@ -4044,12 +4083,12 @@ public class TerminFenster extends Observable
     public void springeAufDatum(String datum) {
         // tagBlaettern((int)DatFunk.TageDifferenz(this.aktuellerTag,datum));
         datGewaehlt = datum;
-        if (ansicht == WOCHEN_ANSICHT) {
+        if (getAnsicht() == getWOCHEN_ANSICHT()) {
             this.wocheAktuellerTag = DatFunk.WocheErster(datum);
             this.wocheErster = this.wocheAktuellerTag;
             setDayForToolTip();
             try {
-                showDaysInWeekView(ansicht);
+                showDaysInWeekView(getAnsicht());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -4061,7 +4100,7 @@ public class TerminFenster extends Observable
     private void tagSprung(String sprungdatum, int sprung) {
         datGewaehlt = null;
 
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             intagWahl = true;
             final String datwahl = (sprung != 0 ? DatFunk.sDatPlusTage(this.aktuellerTag, sprung) : this.aktuellerTag);
             TagWahlNeu tagWahlNeu = new TagWahlNeu(Reha.getThisFrame(), null, datwahl);
@@ -4076,7 +4115,7 @@ public class TerminFenster extends Observable
             dragLab[aktiveSpalte[2]].setIcon(null);
             dragLab[aktiveSpalte[2]].setText("");
             tagWahlNeu = null;
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             if (this.wocheAktuellerTag.isEmpty()) {
                 this.wocheAktuellerTag = this.aktuellerTag;
             }
@@ -4084,10 +4123,10 @@ public class TerminFenster extends Observable
             this.wocheErster = DatFunk.WocheErster(this.wocheAktuellerTag);
             dragLab[aktiveSpalte[2]].setIcon(null);
             dragLab[aktiveSpalte[2]].setText("");
-            String sstmt = ansichtStatement(this.ansicht, this.wocheAktuellerTag);
+            String sstmt = ansichtStatement(this.getAnsicht(), this.wocheAktuellerTag);
             setDayForToolTip();
             try {
-                showDaysInWeekView(ansicht);
+                showDaysInWeekView(getAnsicht());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -4098,27 +4137,27 @@ public class TerminFenster extends Observable
     public void suchSchonMal() {
         if (datGewaehlt != null && (!datGewaehlt.equals(this.aktuellerTag))) {
             this.aktuellerTag = datGewaehlt;
-            String sstmt = ansichtStatement(this.ansicht, this.aktuellerTag);
+            String sstmt = ansichtStatement(this.getAnsicht(), this.aktuellerTag);
         }
     }
 
     private void tagBlaettern(int richtung) {
-        if (ansicht == NORMAL_ANSICHT)/* Normalansicht */ {
+        if (getAnsicht() == getNORMAL_ANSICHT())/* Normalansicht */ {
             this.aktuellerTag = DatFunk.sDatPlusTage(this.aktuellerTag, +richtung);
-            String sstmt = ansichtStatement(this.ansicht, this.aktuellerTag);
+            String sstmt = ansichtStatement(this.getAnsicht(), this.aktuellerTag);
             this.oSpalten[0].requestFocus();
 
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             if (this.wocheAktuellerTag.isEmpty()) {
                 this.aktuellerTag = DatFunk.sDatPlusTage(this.aktuellerTag, +richtung);
                 this.wocheAktuellerTag = this.aktuellerTag;
             }
             this.wocheAktuellerTag = DatFunk.sDatPlusTage(this.wocheAktuellerTag, +(richtung * 7));
             this.wocheErster = DatFunk.WocheErster(this.wocheAktuellerTag);
-            String sstmt = ansichtStatement(this.ansicht, this.wocheAktuellerTag);
+            String sstmt = ansichtStatement(this.getAnsicht(), this.wocheAktuellerTag);
             setDayForToolTip();
             try {
-                showDaysInWeekView(ansicht);
+                showDaysInWeekView(getAnsicht());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -4129,13 +4168,13 @@ public class TerminFenster extends Observable
         int xblock;
         int xaktBehandler = 0;
         String xBehandler = "";
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             xaktBehandler = Integer.parseInt(Integer.toString(belegung[aktiveSpalte[2]]));
             xBehandler = ParameterLaden.getKollegenUeberReihe(xaktBehandler + 1);
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             xaktBehandler = Integer.parseInt(Integer.toString(aktiveSpalte[2]));
             xBehandler = ParameterLaden.getKollegenUeberReihe(wocheBehandler);
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             return;
         }
         xblock = Integer.parseInt(Integer.toString(aktiveSpalte[0]));
@@ -4190,11 +4229,11 @@ public class TerminFenster extends Observable
         }
         int testBehandler = -1;
         int block = aktiveSpalte[0];
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             testBehandler = belegung[aktiveSpalte[2]];
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             testBehandler = aktiveSpalte[2];
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             testBehandler = aktiveSpalte[2];
         }
         if (testBehandler <= 0) {
@@ -4210,7 +4249,7 @@ public class TerminFenster extends Observable
         String reztext = "";
         String sdauer = "";
         int xaktBehandler = behandler;
-        if (ansicht == MASKEN_ANSICHT) {
+        if (getAnsicht() == getMASKEN_ANSICHT()) {
             return;
         }
         if (terminVergabe.size() > 0) {
@@ -4250,10 +4289,10 @@ public class TerminFenster extends Observable
             sTerminVergabe[4] = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(xaktBehandler)).get(3)).get(block);
             sTerminVergabe[3] = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(xaktBehandler)).get(5)).get(4);
 
-            if (ansicht == NORMAL_ANSICHT) {
+            if (getAnsicht() == getNORMAL_ANSICHT()) {
                 sTerminVergabe[5] = ParameterLaden.getKollegenUeberReihe(xaktBehandler + 1);
                 sTerminVergabe[6] = Integer.toString(behandler + 1);
-            } else if (ansicht == WOCHEN_ANSICHT) {
+            } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                 sTerminVergabe[5] = ParameterLaden.getKollegenUeberReihe(wocheBehandler);
                 sTerminVergabe[6] = Integer.toString(wocheBehandler);
             }
@@ -4294,7 +4333,7 @@ public class TerminFenster extends Observable
     }
 
     public void setzeTerminAktuell(String adatum, String auhrzeit, String abehandler) {
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             boolean indarstellung = false;
             int setspalte = -1;
             for (int i = 0; i < 7; i++) {
@@ -4338,13 +4377,13 @@ public class TerminFenster extends Observable
     }
 
     public void aktualisieren() {
-        if (ansicht == NORMAL_ANSICHT) {
-            /* String sstmt = */ansichtStatement(this.ansicht, this.aktuellerTag);
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
+            /* String sstmt = */ansichtStatement(this.getAnsicht(), this.aktuellerTag);
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             if (this.wocheAktuellerTag.isEmpty()) {
                 this.wocheAktuellerTag = this.aktuellerTag;
             }
-            /* String sstmt = */ansichtStatement(this.ansicht, this.wocheAktuellerTag);
+            /* String sstmt = */ansichtStatement(this.getAnsicht(), this.wocheAktuellerTag);
         }
     }
 
@@ -4455,11 +4494,11 @@ public class TerminFenster extends Observable
                 if (TerminFenster.DRAG_MODE == TerminFenster.DRAG_MOVE) {
                 }
                 int behandler = -1;
-                if (ansicht == NORMAL_ANSICHT) {
+                if (getAnsicht() == getNORMAL_ANSICHT()) {
                     behandler = belegung[i];
-                } else if (ansicht == WOCHEN_ANSICHT) {
+                } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                     behandler = i;
-                } else if (ansicht == MASKEN_ANSICHT) {
+                } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                     behandler = i;
                 }
                 if (behandler <= -1) {
@@ -4576,10 +4615,10 @@ public class TerminFenster extends Observable
                                                     String altrezept = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(
                                                             behandler)).get(1)).get(i2);
                                                     String altbehandler = "";
-                                                    if (ansicht == NORMAL_ANSICHT) {
+                                                    if (getAnsicht() == getNORMAL_ANSICHT()) {
                                                         altbehandler = ParameterLaden.getKollegenUeberReihe(
                                                                 behandler + 1);
-                                                    } else if (ansicht == WOCHEN_ANSICHT) {
+                                                    } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                                                         altbehandler = ParameterLaden.getKollegenUeberReihe(
                                                                 wocheBehandler);
                                                     }
@@ -4602,11 +4641,11 @@ public class TerminFenster extends Observable
                                         int ialtbehandler = 0;
                                         int i2 = altaktiveSpalte[2];
                                         int ibehandlung = altaktiveSpalte[0];
-                                        if (ansicht == NORMAL_ANSICHT) {
+                                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                                             ialtbehandler = belegung[i2];
-                                        } else if (ansicht == WOCHEN_ANSICHT) {
+                                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                                             ialtbehandler = i2;
-                                        } else if (ansicht == MASKEN_ANSICHT) {
+                                        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
                                             ialtbehandler = i2;
                                         }
 
@@ -4622,9 +4661,9 @@ public class TerminFenster extends Observable
                                         String altrezept = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(
                                                 ialtbehandler)).get(1)).get(ibehandlung);
                                         String altbehandler = "";
-                                        if (ansicht == NORMAL_ANSICHT) {
+                                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                                             altbehandler = ParameterLaden.getKollegenUeberReihe(ialtbehandler + 1);
-                                        } else if (ansicht == WOCHEN_ANSICHT) {
+                                        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
                                             altbehandler = ParameterLaden.getKollegenUeberReihe(wocheBehandler);
                                         }
                                         //// System.out.println(
@@ -4749,7 +4788,7 @@ public class TerminFenster extends Observable
             return;
         }
 
-        if (ansicht == WOCHEN_ANSICHT) {
+        if (getAnsicht() == getWOCHEN_ANSICHT()) {
             // JOptionPane.showMessageDialog(null,"Behandlungsbestätigung ist nur für den
             // aktuellen Tag in der -> Normalansicht <- möglich");
             // gruppeAusschalten();
@@ -4791,13 +4830,13 @@ public class TerminFenster extends Observable
             return;
         }
         int xaktBehandler = 0;
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             xaktBehandler = belegung[aktiveSpalte[2]];
             // System.out.println("Tagesansicht xaktbehandler = "+ belegung[aktiveSpalte[2]]
             // );
-        } else if (ansicht == WOCHEN_ANSICHT) {
+        } else if (getAnsicht() == getWOCHEN_ANSICHT()) {
             xaktBehandler = wochenbelegung - 1;
-        } else if (ansicht == MASKEN_ANSICHT) {
+        } else if (getAnsicht() == getMASKEN_ANSICHT()) {
             JOptionPane.showMessageDialog(null, "Terminaufnahme in Definition der Wochenarbeitszeit nicht möglich");
             gruppeAusschalten();
             return;
@@ -4820,7 +4859,7 @@ public class TerminFenster extends Observable
          * ((String) ((Vector<?>)((ArrayList<?>)
          * vTerm.get(xaktBehandler)).get(5)).get(4));
          */
-        if (ansicht == NORMAL_ANSICHT) {
+        if (getAnsicht() == getNORMAL_ANSICHT()) {
             sname = ((String) ((Vector<?>) ((ArrayList<?>) vTerm.get(xaktBehandler)).get(0)).get(aktiveSpalte[0]));
             sreznum = ((String) ((Vector<?>) ((ArrayList<?>) vTerm.get(xaktBehandler)).get(1)).get(aktiveSpalte[0]));
             sorigreznum = sreznum;
@@ -5022,7 +5061,7 @@ public class TerminFenster extends Observable
                         /****
                          * hier müßte noch zwischen Wochen- und Normalansicht differenziert werden
                          ***/
-                        if (ansicht == NORMAL_ANSICHT) {
+                        if (getAnsicht() == getNORMAL_ANSICHT()) {
                             ((ArrayList<Vector<String>>) vTerm.get(swbehandler)).get(0)
                                                                                 .set(aktiveSpalte[0],
                                                                                         copyright + swname);
@@ -5160,7 +5199,7 @@ public class TerminFenster extends Observable
 
         @Override
         public void mouseEntered(MouseEvent e) {
-            if (ansicht == WOCHEN_ANSICHT) {
+            if (getAnsicht() == getWOCHEN_ANSICHT()) {
                 setDayForToolTip();
                 tooltip[welche] = "<html>" + dayname[welche] + "<br>" + DatFunk.sDatPlusTage(wocheErster, welche)
                         + "</html>";
@@ -5181,6 +5220,8 @@ public class TerminFenster extends Observable
             oSpalten[i].setShowTimeLine(zeigen);
         }
     }
+
+
 
     /********************************************************************************************/
 } // Ende Klasse
@@ -5498,13 +5539,5 @@ class DropSupport implements DropTargetListener {
     }
 }
 
-class DragSupport implements DragGestureListener {
 
-    @Override
-    public void dragGestureRecognized(DragGestureEvent arg0) {
 
-        //// System.out.println("in datGasture "+arg0);
-
-    }
-
-}

@@ -15,6 +15,7 @@ import org.jdesktop.swingx.JXPanel;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import terminKalender.TerminFenster;
+import terminKalender.TerminFenster.Ansicht;
 
 public class DatumWahl {
 
@@ -81,7 +82,7 @@ public class DatumWahl {
                         return;
                     }
                     aktTag = wahlTag;
-                    Reha.instance.progLoader.ProgTerminFenster(1, 0);
+                    Reha.instance.progLoader.ProgTerminFenster(1, Ansicht.NORMAL);
                     TerminFenster.getThisClass()
                                  .springeAufDatum(aktTag);
                 } else {
@@ -94,7 +95,7 @@ public class DatumWahl {
                         return;
                     }
                     aktTag = wahlTag;
-                    Reha.instance.progLoader.ProgTerminFenster(1, 0);
+                    Reha.instance.progLoader.ProgTerminFenster(1, Ansicht.NORMAL);
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {
