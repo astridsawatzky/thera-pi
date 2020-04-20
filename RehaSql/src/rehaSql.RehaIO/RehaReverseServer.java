@@ -1,4 +1,4 @@
-package RehaIO;
+package rehaSql.RehaIO;
 
 import java.io.IOException;
 import java.io.InputStream;
