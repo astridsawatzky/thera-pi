@@ -27,6 +27,7 @@ import java.awt.dnd.DropTargetListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import static java.awt.event.KeyEvent.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -500,31 +501,31 @@ public class TerminFenster extends Observable
             public void keyPressed(java.awt.event.KeyEvent e) {
                 for (int i = 0; i < 1; i++) {
 
-                    if ((e.getKeyCode() == 33 || e.getKeyCode() == 34) && (ansicht < MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_PAGE_UP || e.getKeyCode() == VK_PAGE_DOWN) && (ansicht < MASKEN_ANSICHT)) {
                         e.consume();
                         // Neuer Tag soll gewählt werden
                         panelTastenAuswerten(e);
                         break;
                     }
-                    if (e.getKeyCode() == 38 || e.getKeyCode() == 40) {
+                    if (e.getKeyCode() == VK_UP  || e.getKeyCode() == VK_DOWN) {
                         if (!oCombo[welche].isPopupVisible()) {
                             oCombo[welche].setPopupVisible(false);
                         }
                         break;
                     }
-                    if ((e.getKeyCode() == 123) && (ansicht < MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_F12) && (ansicht < MASKEN_ANSICHT)) {
                         setAufruf(null);
                         aktiveSpalte[2] = welche;
                         oSpalten[welche].requestFocus();
                         break;
                     }
-                    if (e.getKeyCode() == 27) {
+                    if (e.getKeyCode() == VK_ESCAPE) {
                         aktiveSpalte[2] = welche;
                         oSpalten[welche].requestFocus();
                         e.consume();
                         break;
                     }
-                    if ((e.getKeyCode() == 76) && (e.isControlDown()) && (ansicht < MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_L) && (e.isControlDown()) && (ansicht < MASKEN_ANSICHT)) {
                         e.consume();
                         terminListe();
                         break;
@@ -534,23 +535,23 @@ public class TerminFenster extends Observable
                         schnellSuche(connection);
                         break;
                     }
-                    if (e.getKeyCode() == 68 && e.isControlDown()) {
+                    if (e.getKeyCode() == VK_D && e.isControlDown()) {
                         // Terminplan drucken
                         DruckeViewPanel dvp = new DruckeViewPanel();
                         dvp.setPrintPanel(Reha.instance.terminpanel.ViewPanel);
                         break;
                     }
-                    if ((e.getKeyCode() == 87) && (e.isControlDown())) {
+                    if ((e.getKeyCode() == VK_W) && (e.isControlDown())) {
                         // Wochenansicht
                         setWochenanzeige();
                         break;
                     }
-                    if ((e.getKeyCode() == 78) && (e.isControlDown())) {
+                    if ((e.getKeyCode() == VK_N) && (e.isControlDown())) {
                         // Normalansicht
                         setNormalanzeige();
                         break;
                     }
-                    if (e.getKeyCode() == 80 && e.isAltDown()) {
+                    if (e.getKeyCode() == VK_P && e.isAltDown()) {
                         doPatSuchen(connection);
                     }
 
@@ -899,18 +900,18 @@ public class TerminFenster extends Observable
             public void keyPressed(java.awt.event.KeyEvent e) {
                 for (int i = 0; i < 1; i++) {
 
-                    if (e.getKeyCode() == 17) {
+                    if (e.getKeyCode() == VK_CONTROL) {
                         break;
                     }
-                    if (e.getKeyCode() == 18) {
+                    if (e.getKeyCode() == VK_ALT) {
                         break;
                     }
-                    if (e.getKeyCode() == 68 && e.isControlDown()) {
+                    if (e.getKeyCode() == VK_D && e.isControlDown()) {
                         DruckeViewPanel dvp = new DruckeViewPanel();
                         dvp.setPrintPanel(Reha.instance.terminpanel.ViewPanel);
                         break;
                     }
-                    if ((e.getKeyCode() == 123) && (ansicht != MASKEN_ANSICHT)) {
+                    if ((e.getKeyCode() == VK_F12) && (ansicht != MASKEN_ANSICHT)) {
                         setAufruf(null);
                         oSpalten[tspalte].requestFocus();
                         break;
@@ -919,9 +920,8 @@ public class TerminFenster extends Observable
                     *
                     *
                     */
-                    if ((e.getKeyCode() == 155 && e.isShiftDown())
+                    if ((e.getKeyCode() ==  KeyEvent.VK_INSERT && e.isShiftDown())
                             || (e.getKeyCode() == KeyEvent.VK_V && e.isControlDown())) {
-                        // Shift einfügen (Shift+Einfg / Strg+V)
                         // Daten in den Kalender schreiben (früher Aufruf über F3)
                         long zeit = System.currentTimeMillis();
                         boolean grobRaus = false;
@@ -954,10 +954,9 @@ public class TerminFenster extends Observable
                         break;
                     }
 
-                    if (((e.getKeyCode() == 155) && (e.isControlDown()))
+                    if (((e.getKeyCode() == KeyEvent.VK_INSERT) && (e.isControlDown()))
                             || ((e.getKeyCode() == KeyEvent.VK_C) && (e.isControlDown()))) {
-                        // Daten in Speicher (früher Aufruf über F3)
-                        //// System.out.println("Strg+Einfg / Strg+C");
+
                         int xaktBehandler = -1;
                         datenInSpeicherNehmen();
                         if (terminVergabe.size() > 0) {
@@ -979,7 +978,7 @@ public class TerminFenster extends Observable
                     *
                     *
                     */
-                    if (e.getKeyCode() == 16) {
+                    if (e.getKeyCode() == VK_SHIFT) {
                         if (!Rechte.hatRecht(Rechte.Kalender_termingroup, false)) {
                             gruppierenAktiv = false;
                             oSpalten[tspalte].shiftGedrueckt(true);
@@ -1001,13 +1000,13 @@ public class TerminFenster extends Observable
                         oSpalten[tspalte].shiftGedrueckt(true);
                         break;
                     }
-                    if (e.getKeyCode() == 27) {
+                    if (e.getKeyCode() == VK_ESCAPE) {
                         oCombo[tspalte].requestFocus();
                         e.consume();
                         break;
                     }
-                    if ((e.getKeyCode() == 33 || e.getKeyCode() == 38 || e.getKeyCode() == 34 || e.getKeyCode() == 40
-                            || e.getKeyCode() == 10 || e.getKeyCode() == 37 || e.getKeyCode() == 39)
+                    if ((e.getKeyCode() == VK_PAGE_UP || e.getKeyCode() == VK_UP || e.getKeyCode() == VK_PAGE_DOWN || e.getKeyCode() == VK_DOWN
+                            || e.getKeyCode() == VK_ENTER || e.getKeyCode() == VK_LEFT || e.getKeyCode() == VK_RIGHT)
                             && (!e.isControlDown() && (!e.isAltDown())) && (!e.isShiftDown())) {
                         // HauptAufgabe ist Weitergabe an Tastenauswerten
                         e.consume();
@@ -1015,7 +1014,7 @@ public class TerminFenster extends Observable
                         oSpalten[tspalte].requestFocus();
                         break;
                     }
-                    if ((e.getKeyCode() == 38 || e.getKeyCode() == 40) && (!e.isControlDown() && (!e.isAltDown()))
+                    if ((e.getKeyCode() == VK_UP || e.getKeyCode() == VK_DOWN) && (!e.isControlDown() && (!e.isAltDown()))
                             && (e.isShiftDown())) {
                         // HauptAufgabe ist Weitergabe und Tastenauswerten
                         // gruppierungMalen();
@@ -1023,17 +1022,17 @@ public class TerminFenster extends Observable
                         oSpalten[tspalte].requestFocus();
                         break;
                     }
-                    if ((e.getKeyCode() == 87) && (e.isControlDown())) {
+                    if ((e.getKeyCode() == VK_W) && (e.isControlDown())) {
                         // Wochenansicht
                         setWochenanzeige();
                         break;
                     }
-                    if ((e.getKeyCode() == 78) && (e.isControlDown())) {
+                    if ((e.getKeyCode() == VK_N) && (e.isControlDown())) {
                         // Normalansicht
                         setNormalanzeige();
                         break;
                     }
-                    if (e.getKeyCode() == 80 && e.isAltDown()) {
+                    if (e.getKeyCode() == VK_P && e.isAltDown()) {
                         doPatSuchen(connection);
                     }
                     /*****************/
@@ -1041,7 +1040,7 @@ public class TerminFenster extends Observable
                     //
                     /*****************/
                     /**********************************************/
-                    if ((e.getKeyCode() == 76) && (e.isControlDown())) {
+                    if ((e.getKeyCode() == VK_L) && (e.isControlDown())) {
                         /**** Neu seit 10.10.2014 *****/
                         e.consume();
                         gruppierenAktiv = false;
@@ -1053,10 +1052,10 @@ public class TerminFenster extends Observable
                         terminListe();
                         break;
                     }
-                    if (e.getKeyCode() == 112) {
+                    if (e.getKeyCode() == VK_F1) {
                         // F1
                     }
-                    if (e.getKeyCode() == 113) {
+                    if (e.getKeyCode() == VK_F2) {
                         // F2
                         long zeit = System.currentTimeMillis();
                         boolean grobRaus = false;
@@ -1088,7 +1087,7 @@ public class TerminFenster extends Observable
                         oSpalten[tspalte].requestFocus();
                         break;
                     }
-                    if (e.getKeyCode() == 114) {
+                    if (e.getKeyCode() == VK_F3) {
                         // F3 = Daten in Speicher nehmen
                         int xaktBehandler = -1;
                         datenInSpeicherNehmen();
@@ -1106,8 +1105,7 @@ public class TerminFenster extends Observable
 
                         break;
                     }
-                    if ((e.getKeyCode() == 118) && (e.isAltDown()) && (e.isShiftDown())) {
-                        // F7 + Schift + Alt = Radikalkur!!!!!!!
+                    if ((e.getKeyCode() == VK_F7) && (e.isAltDown()) && (e.isShiftDown())) {
                         if (!Rechte.hatRecht(Rechte.Kalender_termindelete, true)) {
                             wartenAufReady = false;
                             gruppierenAktiv = false;
@@ -1120,11 +1118,10 @@ public class TerminFenster extends Observable
                         oSpalten[tspalte].requestFocus();
                         break;
                     }
-                    if (e.getKeyCode() == 118) {
-                        // F7
+                    if (e.getKeyCode() == VK_F7) {
                         break;
                     }
-                    if ((e.getKeyCode() == 119) || (e.getKeyCode() == 127 && e.isShiftDown())
+                    if ((e.getKeyCode() == VK_F8) || (e.getKeyCode() == VK_DELETE && e.isShiftDown())
                             || (e.getKeyCode() == KeyEvent.VK_X && e.isControlDown() && (!e.isAltDown()))) {
                         // F8 / Shift-Entf / Strg-X
                         if ((!Rechte.hatRecht(Rechte.Kalender_termindelete, true))) {
@@ -1176,7 +1173,7 @@ public class TerminFenster extends Observable
                         oSpalten[tspalte].requestFocus();
                         break;
                     }
-                    if (e.getKeyCode() == 120) {
+                    if (e.getKeyCode() == VK_F9) {
                         // F9
                         if ((!Rechte.hatRecht(Rechte.Kalender_termindelete, false))) {
                             Rechte.hatRecht(Rechte.Kalender_termindelete, true);
@@ -1241,14 +1238,14 @@ public class TerminFenster extends Observable
                         schnellSuche(connection);
                         break;
                     }
-                    if (e.isControlDown() && e.getKeyCode() == 79) {
+                    if (e.isControlDown() && e.getKeyCode() == VK_O) {
                         // Termin nach oben
                         setUpdateVerbot(true);
                         tauscheTermin(-1);
                         setUpdateVerbot(false);
                         break;
                     }
-                    if (e.isControlDown() && e.getKeyCode() == 85) {
+                    if (e.isControlDown() && e.getKeyCode() == VK_U) {
                         // Termin nach unten
                         setUpdateVerbot(true);
                         tauscheTermin(1);
@@ -1289,11 +1286,8 @@ public class TerminFenster extends Observable
             @Override
             public void keyReleased(java.awt.event.KeyEvent e) {
 
-                if (e.getKeyCode() == 17) {
-                }
-                if (e.getKeyCode() == 18) {
-                }
-                if (e.getKeyCode() == 16) {
+
+                if (e.getKeyCode() == VK_SHIFT) {
                     gruppierenAktiv = false;
                     gruppierenBloecke[0] = -1;
                     gruppierenBloecke[1] = -1;
@@ -1307,9 +1301,6 @@ public class TerminFenster extends Observable
 
         oSpalten[tspalte].addMouseListener(new java.awt.event.MouseAdapter() {
 
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-            }
 
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -2068,7 +2059,7 @@ public class TerminFenster extends Observable
         e.consume();
         int anz = -1;
         switch (e.getKeyCode()) {
-        case 33: // Bild auf
+        case VK_PAGE_UP: // Bild auf
             if (interminEdit) {
                 return;
             }
@@ -2083,7 +2074,7 @@ public class TerminFenster extends Observable
             }
             intagWahl = false;
             break;
-        case 34: // Bild ab
+        case VK_PAGE_DOWN: // Bild ab
             if (interminEdit) {
                 return;
             }
@@ -2099,7 +2090,7 @@ public class TerminFenster extends Observable
             intagWahl = false;
             break;
 
-        case 38: // Pfeil auf
+        case VK_UP: // Pfeil auf
             if (!gruppierenAktiv) {
                 try {
                     if (((aktiveSpalte[0] >= 0) && (aktiveSpalte[2] >= 0) && (belegung[aktiveSpalte[2]] >= 0))
@@ -2154,7 +2145,7 @@ public class TerminFenster extends Observable
                 }
             }
             break;
-        case 40: // Pfeil ab
+        case VK_DOWN: // Pfeil ab
             if (!gruppierenAktiv) {
                 try {
                     if (((aktiveSpalte[0] >= 0) && (aktiveSpalte[2] >= 0) && (belegung[aktiveSpalte[2]] >= 0))
@@ -2216,7 +2207,7 @@ public class TerminFenster extends Observable
                 }
             }
             break;
-        case 37: // Pfeil nach links
+        case VK_LEFT: // Pfeil nach links
             if (aktiveSpalte[2] == 0) {
                 oSpalten[aktiveSpalte[2]].spalteDeaktivieren();
                 aktiveSpalte[2] = 6;
@@ -2236,7 +2227,7 @@ public class TerminFenster extends Observable
             }
             break;
 
-        case 39: // Pfeil nach rechts
+        case VK_RIGHT: // Pfeil nach rechts
             if (aktiveSpalte[2] == 6) {
                 oSpalten[aktiveSpalte[2]].spalteDeaktivieren();
                 aktiveSpalte[2] = 0;
@@ -2254,7 +2245,7 @@ public class TerminFenster extends Observable
             }
             break;
 
-        case 10: // ReturnTaste
+        case VK_ENTER: // ReturnTaste
             if (intagWahl) {
                 return;
             }
