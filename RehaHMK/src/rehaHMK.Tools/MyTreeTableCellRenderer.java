@@ -1,4 +1,4 @@
-package Tools;
+package rehaHMK.Tools;
 
 import java.awt.Component;
 import java.awt.Graphics;

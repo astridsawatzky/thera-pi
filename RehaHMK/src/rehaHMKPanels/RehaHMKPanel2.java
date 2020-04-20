@@ -74,7 +74,7 @@ import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ini.INIFile;
 import RehaIO.SocketClient;
-import Tools.ArztTools;
+import rehaHMK.Tools.ArztTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;

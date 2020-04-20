@@ -1,4 +1,4 @@
-package Tools;
+package rehaHMK.Tools;
 
 public class IndiKey {
     public String indischl;

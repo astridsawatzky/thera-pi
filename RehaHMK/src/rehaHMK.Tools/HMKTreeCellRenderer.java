@@ -1,4 +1,4 @@
-package Tools;
+package rehaHMK.Tools;
 
 import java.awt.Color;
 import java.awt.Component;
