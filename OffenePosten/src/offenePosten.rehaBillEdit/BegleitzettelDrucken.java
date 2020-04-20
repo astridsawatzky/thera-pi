@@ -1,4 +1,4 @@
-package rehaBillEdit;
+package offenePosten.rehaBillEdit;
 
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package rehaBillEdit;
+package offenePosten.rehaBillEdit;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -166,7 +166,7 @@ public class AbrechnungDrucken {
         System.out.println("Mittage = " + mitTage);
         if (mitTage) {
             String terms = SqlInfo.holeEinzelFeld("select termine from lza where rez_nr='" + rezNr + "' LIMIT 1");
-            Vector<String> tagevec = Tools.RezTools.holeEinzelTermineAusRezept(null, terms);
+            Vector<String> tagevec = offenePosten.Tools.RezTools.holeEinzelTermineAusRezept(null, terms);
             dummy = "Behandlungstage: ";
             for (int ii = 0; ii < tagevec.size(); ii++) {
                 if (ii == 0) {

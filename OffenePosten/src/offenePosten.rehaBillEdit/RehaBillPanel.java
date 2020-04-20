@@ -1,4 +1,4 @@
-package rehaBillEdit;
+package offenePosten.rehaBillEdit;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
