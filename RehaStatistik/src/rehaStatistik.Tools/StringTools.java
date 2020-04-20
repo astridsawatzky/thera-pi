@@ -1,4 +1,4 @@
-package Tools;
+package rehaStatistik.Tools;
 
 public class StringTools {
 

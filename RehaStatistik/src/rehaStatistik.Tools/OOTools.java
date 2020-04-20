@@ -1,4 +1,4 @@
-package Tools;
+package rehaStatistik.Tools;
 
 import java.io.IOException;
 import java.io.InputStream;

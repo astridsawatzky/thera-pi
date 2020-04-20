@@ -1,4 +1,4 @@
-package Tools;
+package rehaStatistik.Tools;
 
 import java.util.Arrays;
 import java.util.Collections;
