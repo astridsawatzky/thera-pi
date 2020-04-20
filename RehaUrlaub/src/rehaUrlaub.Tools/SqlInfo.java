@@ -1,4 +1,4 @@
-package Tools;
+package rehaUrlaub.Tools;
 
 import java.awt.Cursor;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package Tools;
+package rehaUrlaub.Tools;
 
 public class IntegerTools {
 

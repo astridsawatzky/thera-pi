@@ -1,4 +1,4 @@
-package Tools;
+package rehaUrlaub.Tools;
 
 import java.awt.Component;
 import java.text.DecimalFormat;

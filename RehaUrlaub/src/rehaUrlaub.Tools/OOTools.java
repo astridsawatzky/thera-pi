@@ -1,4 +1,4 @@
-package Tools;
+package rehaUrlaub.Tools;
 
 import java.io.IOException;
 import java.io.InputStream;
