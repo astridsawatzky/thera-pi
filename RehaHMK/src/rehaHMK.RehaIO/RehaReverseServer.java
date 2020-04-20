@@ -1,4 +1,4 @@
-package RehaIO;
+package rehaHMK.RehaIO;
 
 import java.io.IOException;
 import java.io.InputStream;
