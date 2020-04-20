@@ -12,6 +12,7 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
+
     <path id="RehaCommon.classpath">
         <pathelement location="${RehaCommon.location}/bin"/>
         <pathelement location="${RehaCommon.location}/bin-tests"/>

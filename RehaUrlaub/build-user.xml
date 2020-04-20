@@ -16,6 +16,11 @@
 
 	<!-- common targets for all projects -->
 	<import file="../Build/build-common.xml"/>
+
 	<!-- test targets for all projects -->
 	<import file="../Build/build-tests.xml"/>
+
+	<!-- coverage targets for all projects -->
+	<import file="../Build/build-jacoco.xml" />
 </project>
+

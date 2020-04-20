@@ -29,6 +29,9 @@
     <target name="JUnits">
 	<echo message="Empty stub for now"/>
     </target>
+    <target name="rebuild-cov">
+	<echo message="Empty cov-tast in Libraries"/>
+    </target>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">

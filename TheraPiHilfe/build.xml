@@ -3,7 +3,8 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="TheraPiHilfe">
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="TheraPiHilfe">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
     <property name="RehaCommon.location" value="../RehaCommon"/>
@@ -11,7 +12,6 @@
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
 
-    <import file="build-user.xml"/>
     <path id="RehaCommon.classpath">
         <pathelement location="${RehaCommon.location}/bin"/>
         <pathelement location="${RehaCommon.location}/bin-tests"/>
@@ -63,6 +63,7 @@
         <pathelement location="${Libraries.location}/lib/apachecommons/commons-net-3.4.jar"/>
         <path refid="RehaCommon.classpath"/>
     </path>
+	<import file="build-user.xml" />
     <target name="init">
         <mkdir dir="bin"/>
         <mkdir dir="bin-tests"/>

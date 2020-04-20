@@ -168,4 +168,8 @@
 	<target name="JUnits">
 		<echo message="Nothing to be done for JUnits"/>
 	</target>
+
+	<target name="rebuild-cov">
+        	<echo message="Nothing to be done for rebuild-cov" />
+    	</target>
 </project>

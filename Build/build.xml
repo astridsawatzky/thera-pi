@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<project basedir="." default="dist" name="Build">
+<project basedir="." default="dist" name="Build" xmlns:jacoco="antlib:org.jacoco.ant">
     <property file="../Build/build-common.properties"/>
 
     <import file="../Build/build-common.xml"/>
@@ -9,6 +9,7 @@
         <ant target="subprojects"/>
         <delete dir="${dir.dist}"/>
 	<delete dir="../dist-tests"/>
+		<delete dir="../bin-tests" />
     </target>
 
     <target name="dist" depends="jars,copyfiles"/>
@@ -29,9 +30,24 @@
     </target>
 
     <target description="Run all JUnit tests in all subprojects" name="JUnits">
-	<mkdir dir="../dist-tests"/>
+		<mkdir dir="../dist-tests/reports" />
 	<property name="build.target" value="JUnits"/>
 	<ant target="subprojects"/>
+		<junitreport todir="../dist-tests/reports">
+                        <fileset dir="../dist-tests">
+                                <include name="**/TEST-*.xml"/>
+                        </fileset>
+                        <report format="frames" todir="../dist-tests/reports/html"/>
+                </junitreport>
+	</target>
+
+	<target description="Run all CodeCoverage build n run tasks" name="CoCo-all">
+		<echo message="Runnign rebuild-cov for all subprojects" />
+		<mkdir dir="../bin-tests" />
+		<property name="build.target" value="rebuild-cov" />
+		<ant target="subprojects" />
+		<echo message="Merging all *.exec to one" />
+		<ant dir="${dir.therapi}" target="merge-cov" />
     </target>
 
     <target description="Build the same target for all subprojects." name="subprojects">

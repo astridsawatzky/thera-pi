@@ -3,7 +3,8 @@
               Any modifications will be overwritten.
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="OpRgaf">
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="OpRgaf">
     <property environment="env"/>
     <property name="Libraries.location" value="../Libraries"/>
     <property name="Reha.location" value="../Reha"/>
@@ -14,7 +15,6 @@
     <property name="target" value="1.8"/>
     <property name="source" value="1.8"/>
 
-    <import file="build-user.xml"/>
     <path id="RehaCommon.classpath">
         <pathelement location="${RehaCommon.location}/bin"/>
         <pathelement location="${Libraries.location}/lib/swingx/grad.jar"/>
@@ -70,6 +70,7 @@
         <pathelement location="${Libraries.location}/lib/logging/slf4j-api-1.7.25.jar"/>
         <pathelement location="${Libraries.location}/lib/logging/sysout-over-slf4j-1.0.2.jar"/>
     </path>
+	<import file="build-user.xml" />
     <target name="init">
         <mkdir dir="bin"/>
         <mkdir dir="bin-tests"/>
