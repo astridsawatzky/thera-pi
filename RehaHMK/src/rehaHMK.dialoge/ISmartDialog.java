@@ -1,4 +1,4 @@
-package dialoge;
+package rehaHMK.dialoge;
 
 import java.awt.Container;
 

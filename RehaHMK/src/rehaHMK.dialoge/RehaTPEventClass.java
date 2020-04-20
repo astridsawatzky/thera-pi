@@ -1,4 +1,4 @@
-package dialoge;
+package rehaHMK.dialoge;
 
 import java.util.ArrayList;
 import java.util.Iterator;

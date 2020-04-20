@@ -1,4 +1,4 @@
-package dialoge;
+package rehaHMK.dialoge;
 
 //import hauptFenster.SystemLookAndFeel;
 

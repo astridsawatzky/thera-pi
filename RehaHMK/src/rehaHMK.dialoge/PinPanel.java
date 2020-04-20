@@ -1,4 +1,4 @@
-package dialoge;
+package rehaHMK.dialoge;
 
 import java.awt.Component;
 import java.awt.Dimension;
