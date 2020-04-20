@@ -1,4 +1,4 @@
-package dialoge;
+package reha301.dialoge;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -39,8 +39,8 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import Tools.KTraegerTools;
-import Tools.SystemPreislisten;
+import reha301.Tools.KTraegerTools;
+import reha301.Tools.SystemPreislisten;
 import reha301.Reha301;
 
 public class KassenNeuKurz extends JXPanel implements ActionListener, KeyListener, FocusListener {

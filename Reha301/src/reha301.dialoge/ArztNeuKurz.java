@@ -1,4 +1,4 @@
-package dialoge;
+package reha301.dialoge;
 
 import java.awt.BorderLayout;
 import java.awt.Point;

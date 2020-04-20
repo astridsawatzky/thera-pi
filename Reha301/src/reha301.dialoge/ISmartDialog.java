@@ -1,4 +1,4 @@
-package dialoge;
+package reha301.dialoge;
 
 import java.awt.Container;
 
