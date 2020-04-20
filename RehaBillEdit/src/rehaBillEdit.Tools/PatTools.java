@@ -1,4 +1,4 @@
-package Tools;
+package rehaBillEdit.Tools;
 
 import java.util.Vector;
 
@@ -25,7 +25,7 @@ public class PatTools {
             // int lang = SystemConfig.hmAdrPDaten.hashCode();
             //// System.out.println(lang);
             // SystemConfig.hmAdrPDaten.put("<Padr1>", patDaten.get(0));
-            String anrede = Tools.StringTools.EGross(patDaten.get(0));
+            String anrede = rehaBillEdit.Tools.StringTools.EGross(patDaten.get(0));
             if (anrede.toUpperCase()
                       .equals("HERR")) {
                 isherr = true;

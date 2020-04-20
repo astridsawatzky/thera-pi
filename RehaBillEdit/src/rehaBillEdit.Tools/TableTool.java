@@ -1,4 +1,4 @@
-package Tools;
+package rehaBillEdit.Tools;
 
 import javax.swing.table.DefaultTableModel;
 

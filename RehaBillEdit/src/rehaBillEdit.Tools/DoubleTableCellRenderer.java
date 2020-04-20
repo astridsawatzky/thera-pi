@@ -1,4 +1,4 @@
-package Tools;
+package rehaBillEdit.Tools;
 
 import java.awt.Component;
 import java.text.DecimalFormat;
