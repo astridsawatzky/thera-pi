@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import terminKalender.TerminFenster.Ansicht;
 
 public class kalenderPanel extends JXPanel {
     /**
@@ -178,7 +179,7 @@ public class kalenderPanel extends JXPanel {
                             if (this.spalteAktiv) {
 
                                 if ((!sName.equals("")
-                                        || Reha.instance.terminpanel.getAnsicht() == Reha.instance.terminpanel.getMASKEN_ANSICHT())) {
+                                        || Reha.instance.terminpanel.aktAnsicht == Ansicht.MASKE)) {
                                     if (yDifferenz < 12) {
                                         if (yDifferenz > 0) {
                                             Reha.instance.terminpanel.dragLab[this.panelNummer].setBounds(xStart + 1,

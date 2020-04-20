@@ -95,26 +95,23 @@ public class ProgLoader {
 
 
 
-    /************** Terminkalender Echtfunktion
-     * @param ansichtenum TODO****************************/
-    public void ProgTerminFenster(int setPos, Ansicht ansichtenum) {
+
+    public void ProgTerminFenster(int setPos, Ansicht ansicht) {
         if (!Reha.DbOk) {
             return;
         }
-        Ansicht ansParam = ansichtenum;
-        if (ansParam.value == Ansicht.MASKE.value) {
+        if (ansicht == Ansicht.MASKE) {
             if (!Rechte.hatRecht(Rechte.Masken_erstellen, true)) {
                 return;
             }
         }
         JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
         if (termin != null) {
-            if (ansParam.value == Ansicht.MASKE.value) {
+            if (ansicht == Ansicht.MASKE) {
                 JOptionPane.showMessageDialog(null,
                         "Um die Wochenarbeitszeit zu starten,\nschließen Sie bitte zunächst den Terminkalender");
             }
-            ////// System.out.println("Der Terminkalender befindet sich in Container
-            ////// "+((JTerminInternal)termin).getDesktop());
+
             Reha.containerHandling(((JTerminInternal) termin).getDesktop());
             ((JTerminInternal) termin).aktiviereDiesenFrame(((JTerminInternal) termin).getName());
             if (((JTerminInternal) termin).isIcon()) {
@@ -126,8 +123,6 @@ public class ProgLoader {
             }
             return;
         }
-        final int xansicht = ansParam.value;
-
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -137,7 +132,7 @@ public class ProgLoader {
                 Reha.containerHandling(containerNr);
                 LinkeTaskPane.thisClass.setCursor(Cursors.wartenCursor);
                 terminjry = null;
-                if (xansicht != 2) {
+                if (ansicht != Ansicht.MASKE) {
                     String stag = DatFunk.sHeute();
                     String titel = DatFunk.WochenTag(stag) + " " + stag + " -- KW: " + DatFunk.KalenderWoche(stag)
                             + " -- [Normalansicht]";
@@ -151,7 +146,7 @@ public class ProgLoader {
                 ((JRehaInternal) terminjry).setImmerGross(
                         (SystemConfig.hmContainer.get("KalenderOpti") == 1 ? true : false));
                 Reha.instance.terminpanel = new TerminFenster(connection);
-                terminjry.setContent(Reha.instance.terminpanel.init(containerNr, xansicht, terminjry, connection));
+                terminjry.setContent(Reha.instance.terminpanel.init(containerNr, ansicht, terminjry, connection));
                 if (SystemConfig.hmContainer.get("KalenderOpti") == 1) {
                     terminjry.setLocation(new Point(0, 0));
                     // Reha.instance.jpOben muss noch ersetzt werden durch

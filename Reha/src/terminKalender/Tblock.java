@@ -12,6 +12,7 @@ import CommonTools.StringTools;
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import terminKalender.TerminFenster.Ansicht;
 
 class Tblock {
 
@@ -970,7 +971,7 @@ class KalenderBeschreiben extends Thread {
 
     @Override
     public void run() {
-        if (Reha.instance.terminpanel.getAnsicht() == 2) {
+        if (Reha.instance.terminpanel.aktAnsicht == Ansicht.MASKE) {
             //// System.out.println("vKalDaten="+this.vKalDaten);
             //// System.out.println("iKoll = "+this.iKoll);
             //// System.out.println("datum = "+this.datum);

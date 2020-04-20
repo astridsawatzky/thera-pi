@@ -16,6 +16,7 @@ import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
+import terminKalender.TerminFenster.Ansicht;
 
 public class TermineErfassen implements Runnable {
     String scanrez = null;
@@ -256,10 +257,10 @@ public class TermineErfassen implements Runnable {
         boolean ret;
         /*
          * alleterm = new Vector();
-         * 
+         *
          * alleterm = SqlInfo.holeSaetze("flexkc", " * ",
          * "datum='"+DatFunk.sDatInSQL(heute)+"'", Arrays.asList(new String[] {}));
-         * 
+         *
          */
         alleterm = SqlInfo.holeFelder("select * from flexkc where datum='" + DatFunk.sDatInSQL(DatFunk.sHeute())
                 + "' LIMIT " + Integer.toString(ParameterLaden.maxKalZeile));
@@ -310,8 +311,8 @@ public class TermineErfassen implements Runnable {
 
                     JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
                     if (termin != null) {
-                        int ansicht;
-                        if ((ansicht = Reha.instance.terminpanel.getAnsicht()) == 0) {
+
+                        if ( Reha.instance.terminpanel.aktAnsicht == Ansicht.NORMAL) {
                             if (Reha.instance.terminpanel.getAktuellerTag()
                                                          .equals(DatFunk.sHeute())) {
                                 int iblock = Integer.valueOf(sblock) - 1;
@@ -490,8 +491,7 @@ public class TermineErfassen implements Runnable {
 
                             JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
                             if (termin != null) {
-                                int ansicht;
-                                if ((ansicht = Reha.instance.terminpanel.getAnsicht()) == 0) {
+                                if (Reha.instance.terminpanel.aktAnsicht == Ansicht.NORMAL) {
                                     if (Reha.instance.terminpanel.getAktuellerTag()
                                                                  .equals(DatFunk.sHeute())) {
                                         if (!termOk) {
