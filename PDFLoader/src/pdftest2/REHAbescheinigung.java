@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.Vector;
 
 import CommonTools.DatFunk;
-import Tools.SqlInfo;
-import Tools.StringTools;
+import pdfLoader.Tools.SqlInfo;
+import pdfLoader.Tools.StringTools;
 
 public class REHAbescheinigung {
 

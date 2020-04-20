@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import CommonTools.DatFunk;
-import Tools.SqlInfo;
+import pdfLoader.Tools.SqlInfo;
 
 public class BFAAHBAufnahme {
     String xfdfFile = "";

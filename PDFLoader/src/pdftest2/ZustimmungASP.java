@@ -13,7 +13,7 @@ import java.util.Vector;
 import javax.swing.JTextField;
 
 import CommonTools.DatFunk;
-import Tools.SqlInfo;
+import pdfLoader.Tools.SqlInfo;
 
 public class ZustimmungASP {
 

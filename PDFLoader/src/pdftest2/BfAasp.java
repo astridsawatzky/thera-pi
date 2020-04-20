@@ -14,7 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 
 import CommonTools.DatFunk;
-import Tools.SqlInfo;
+import pdfLoader.Tools.SqlInfo;
 
 public class BfAasp {
 

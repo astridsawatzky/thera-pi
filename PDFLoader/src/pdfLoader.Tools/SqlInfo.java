@@ -1,4 +1,4 @@
-package Tools;
+package pdfLoader.Tools;
 
 import java.io.InputStream;
 import java.sql.ResultSet;

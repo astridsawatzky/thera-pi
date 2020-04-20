@@ -1,4 +1,4 @@
-package Tools;
+package pdfLoader.Tools;
 
 public class StringTools {
 
