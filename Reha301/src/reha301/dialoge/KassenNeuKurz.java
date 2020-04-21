@@ -39,9 +39,9 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import reha301.Reha301;
 import reha301.Tools.KTraegerTools;
 import reha301.Tools.SystemPreislisten;
-import reha301.Reha301;
 
 public class KassenNeuKurz extends JXPanel implements ActionListener, KeyListener, FocusListener {
 

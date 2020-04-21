@@ -59,7 +59,7 @@ import ag.ion.bion.officelayer.text.TextException;
 public class RehaBillPanel extends JXPanel implements ListSelectionListener, ActionListener, TableModelListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5545910505665721828L;
 
@@ -565,7 +565,7 @@ public class RehaBillPanel extends JXPanel implements ListSelectionListener, Act
 
     class MyOffenePostenTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
