@@ -22,7 +22,7 @@
 	<property name="Nebraska.location" value="../Nebraska" />
 	<property name="OffenePosten.location" value="../OffenePosten" />
 	<property name="OpRgaf.location" value="../OpRgaf" />
-	<property name="PDFtest2.location" value="../PDFLoader" />
+	<property name="PDFLoader.location" value="../PDFLoader" />
 	<property name="PiTool.location" value="../PiTool" />
 	<property name="Reha.location" value="../Reha" />
 	<property name="Reha301.location" value="../Reha301" />
@@ -183,9 +183,9 @@
 			inheritAll="false" target="clean" />
 		<ant antfile="build.xml" dir="${OpRgaf.location}"
 			inheritAll="false" target="build" />
-		<ant antfile="build.xml" dir="${PDFtest2.location}"
+		<ant antfile="build.xml" dir="${PDFLoader.location}"
 			inheritAll="false" target="clean" />
-		<ant antfile="build.xml" dir="${PDFtest2.location}"
+		<ant antfile="build.xml" dir="${PDFLoader.location}"
 			inheritAll="false" target="build" />
 		<ant antfile="build.xml" dir="${PiTool.location}"
 			inheritAll="false" target="clean" />
