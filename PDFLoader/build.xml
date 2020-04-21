@@ -3,7 +3,7 @@
 	To include a user specific buildfile here, simply create one in the same 
 	directory with the processing instruction <?eclipse.ant.import?> as the first 
 	entry and export the buildfile again. -->
-<project basedir="." default="build" name="PDFtest2">
+<project basedir="." default="build" name="PDFLoader">
 	<property environment="env" />
 	<property name="Libraries.location" value="../Libraries" />
 	<property name="RehaCommon.location" value="../RehaCommon" />
@@ -68,7 +68,7 @@
 		<pathelement
 			location="${Libraries.location}/lib/sql/mysql-connector-java-5.1.5-bin.jar" />
 	</path>
-	<path id="PDFtest2.classpath">
+	<path id="PDFLoader.classpath">
 		<pathelement location="bin" />
 		<pathelement location="bin-tests" />
 		<pathelement
@@ -127,7 +127,7 @@
 		<javac debug="true" debuglevel="${debuglevel}" destdir="bin"
 			includeantruntime="false" source="${source}" target="${target}">
 			<src path="src" />
-			<classpath refid="PDFtest2.classpath" />
+			<classpath refid="PDFLoader.classpath" />
 		</javac>
 	</target>
 	<target

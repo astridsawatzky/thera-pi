@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
-import pdftest2.Rahmen;
+import pdfLoader.Rahmen;
 
 public class SqlInfo {
 
