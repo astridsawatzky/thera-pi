@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

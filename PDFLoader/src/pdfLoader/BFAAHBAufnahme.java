@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,42 +10,73 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class ASPAnwesend {
-
+public class BFAAHBAufnahme {
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
+    String patid = null;
     String reader = null;
 
-    public ASPAnwesend(String bid, String pfad) {
+    public BFAAHBAufnahme(String bid, String pfad, String xpatid) {
         formularpfad = pfad;
+        patid = xpatid;
         doSuche(bid);
     }
 
     private void initHashMap() {
         hashMap = new HashMap<String, String>();
-        hashMap.put("Versicherungsnummer", "");
-        hashMap.put("Name", "");
+        hashMap.put("VERS_VSNR1_1", "");
+        hashMap.put("ANSCHRIFT_KRA_KA", "");
+        hashMap.put("NAME_VORNAME_PAT", "");
+        hashMap.put("PAT_GEBDAT", "");
+        hashMap.put("ANSCHRIFT_PAT", "");
+        hashMap.put("AUFNAHME_DAT", PDFTools.sechserDatum(DatFunk.sHeute()));
+        hashMap.put("NAME_AHB_EINRICHTUNG", "Reutlinger Therapie- &amp; Analysezentrum GmbH");
+        hashMap.put("ORT_DATUM", "Reutlingen, den " + DatFunk.sHeute());
+
     }
 
-    private void auswertenVector(Vector<Vector<String>> ergebnis) {
-        hashMap.put("Versicherungsnummer", ergebnis.get(0)
-                                                   .get(0));
-        hashMap.put("Name", ergebnis.get(0)
-                                    .get(1));
+    private void auswertenVector(Vector<Vector<String>> ergebnis, Vector<Vector<String>> kasse) {
+        hashMap.put("VERS_VSNR1_1", ergebnis.get(0)
+                                            .get(0));
+        if (kasse.size() > 0) {
+            hashMap.put("ANSCHRIFT_KRA_KA", kasse.get(0)
+                                                 .get(0)
+                    + "\nFAX-# " + kasse.get(0)
+                                        .get(1));
+        }
+        hashMap.put("NAME_VORNAME_PAT", ergebnis.get(0)
+                                                .get(1));
+        if (ergebnis.get(0)
+                    .get(2)
+                    .trim()
+                    .length() == 10) {
+            hashMap.put("PAT_GEBDAT", PDFTools.sechserDatum(ergebnis.get(0)
+                                                                    .get(2)));
+        }
+        hashMap.put("ANSCHRIFT_PAT", ergebnis.get(0)
+                                             .get(3)
+                + ", " + ergebnis.get(0)
+                                 .get(4)
+                + " " + ergebnis.get(0)
+                                .get(5));
     }
 
     private void doSuche(String bid) {
 
         initHashMap();
         Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select vnummer,namevor from bericht2 where berichtid='" + bid + "'");
+                "select vnummer,namevor,geboren,strasse,plz,ort from bericht2 where berichtid='" + bid + "' LIMIT 1");
+        String kassenid = SqlInfo.holePatFeld("kassenid", "pat_intern='" + patid + "'");
+        Vector<Vector<String>> vec2 = SqlInfo.holeFelder(
+                "select kassen_nam1,fax from kass_adr where id='" + kassenid + "' LIMIT 1");
         if (vec == null) {
             return;
         }
-        auswertenVector(vec);
+        auswertenVector(vec, vec2);
         doStart();
     }
 
@@ -63,7 +94,7 @@ public class ASPAnwesend {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\ASP-Anwesenheitsliste_NoRestriction.pdf'/>" + System.getProperty("line.separator")
+                    + "\\BfA-Aufnahmemitteilung_NoRestriction.pdf'/>" + System.getProperty("line.separator")
                     + "</xfdf>");
             fw.close();
         } catch (IOException e) {
@@ -111,6 +142,6 @@ public class ASPAnwesend {
             e.printStackTrace();
         }
         System.exit(0);
-    }
 
+    }
 }

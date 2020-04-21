@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,83 +10,52 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
-import pdfLoader.Tools.StringTools;
 
-public class REHAbescheinigung {
-
+public class IRENAAnwesend {
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
-    String patid = null;
     String reader = null;
 
-    public REHAbescheinigung(String bid, String pfad, String xpatid) {
+    public IRENAAnwesend(String bid, String pfad) {
         formularpfad = pfad;
-        patid = xpatid;
         doSuche(bid);
-    }
-
-    private void doSuche(String bid) {
-        initHashMap();
-        System.out.println();
-        Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select v_name,n_name,strasse,plz,ort,geboren from pat5 where pat_intern='" + patid + "'");
-        Vector<Vector<String>> vec2 = SqlInfo.holeFelder("select aufdat3 from bericht2 where berichtid='" + bid + "'");
-        if (vec == null) {
-            return;
-        }
-        auswertenVector(vec, vec2);
-        doStart();
-    }
-
-    private void auswertenVector(Vector<Vector<String>> ergebnis, Vector<Vector<String>> ergebnis2) {
-        hashMap.put("Vorname Name", StringTools.EGross(ergebnis.get(0)
-                                                               .get(0))
-                + " " + StringTools.EGross(ergebnis.get(0)
-                                                   .get(1)));
-        hashMap.put("Strasse", StringTools.EGross(ergebnis.get(0)
-                                                          .get(2)));
-        hashMap.put("Plz Ort", ergebnis.get(0)
-                                       .get(3)
-                + " " + StringTools.EGross(ergebnis.get(0)
-                                                   .get(4)));
-        hashMap.put("heute", DatFunk.sHeute());
-        hashMap.put("Derdie Patientin", StringTools.EGross(ergebnis.get(0)
-                                                                   .get(0))
-                + " " + StringTools.EGross(ergebnis.get(0)
-                                                   .get(1)));
-        if (ergebnis.get(0)
-                    .get(5)
-                    .trim()
-                    .length() == 10) {
-            hashMap.put("geb am", DatFunk.sDatInDeutsch(ergebnis.get(0)
-                                                                .get(5)));
-        }
-        if (ergebnis2.size() > 0) {
-            if (ergebnis2.get(0)
-                         .get(0)
-                         .trim()
-                         .length() == 10) {
-                hashMap.put("seitab dem", DatFunk.sDatInDeutsch(ergebnis2.get(0)
-                                                                         .get(0)));
-            }
-        }
     }
 
     private void initHashMap() {
         hashMap = new HashMap<String, String>();
-        hashMap.put("Vorname Name", "");
-        hashMap.put("Strasse", "");
-        hashMap.put("Plz Ort", "");
-        hashMap.put("heute", "");
-        hashMap.put("Derdie Patientin", "");
-        hashMap.put("geb am", "");
-        hashMap.put("seitab dem", "");
-        hashMap.put("für den", "");
-        hashMap.put("Die Maßnahme für og Patienten wurde aus medizinischen Gründen um", "");
-        hashMap.put("verlüngert Der Abschluß der Maßnahme ist nunmehr für den", "");
+        hashMap.put("VERS_VSNR1_1", "");
+        hashMap.put("14_BKZ", "");
+        hashMap.put("18_MSNR", "");
+        hashMap.put("DIAG_1", "");
+        hashMap.put("VERS_N_VN_1", "");
+        hashMap.put("STEMPEL", "");
+    }
+
+    private void auswertenVector(Vector<Vector<String>> ergebnis) {
+        hashMap.put("VERS_VSNR1_1", ergebnis.get(0)
+                                            .get(0));
+        hashMap.put("14_BKZ", ergebnis.get(0)
+                                      .get(1));
+        hashMap.put("18_MSNR", ergebnis.get(0)
+                                       .get(2));
+        hashMap.put("DIAG_1", "Hauptdiagnosegruppe: A");
+        hashMap.put("VERS_N_VN_1", ergebnis.get(0)
+                                           .get(3));
+        hashMap.put("STEMPEL", "Reutlinger Therapie- &amp;\nAnalysezentrum GmbH\nMarie-Curie-Str.1\n72760 Reutlingen");
+    }
+
+    private void doSuche(String bid) {
+
+        initHashMap();
+        Vector<Vector<String>> vec = SqlInfo.holeFelder(
+                "select vnummer,aigr,msnr,namevor from bericht2 where berichtid='" + bid + "'");
+        if (vec == null) {
+            return;
+        }
+        auswertenVector(vec);
+        doStart();
     }
 
     private void macheKopf(FileWriter fw) {
@@ -103,7 +72,8 @@ public class REHAbescheinigung {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\Rehabescheinigung.pdf'/>" + System.getProperty("line.separator") + "</xfdf>");
+                    + "\\Anwesenheitsliste für IRENA_NoRestriction.pdf'/>" + System.getProperty("line.separator")
+                    + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -150,5 +120,6 @@ public class REHAbescheinigung {
             e.printStackTrace();
         }
         System.exit(0);
+
     }
 }

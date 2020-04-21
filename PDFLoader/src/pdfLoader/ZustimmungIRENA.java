@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,59 +13,56 @@ import java.util.Vector;
 import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class LVAWiederEingliederung {
+public class ZustimmungIRENA {
 
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
-    String reader = null;
 
-    public LVAWiederEingliederung(String bid, String pfad) {
+    public ZustimmungIRENA(String bid, String pfad) {
         formularpfad = pfad;
         doSuche(bid);
-    }
-
-    private void initHashMap() {
-        hashMap = new HashMap<String, String>();
-        hashMap.put("Versicherungsnummer", "");
-        hashMap.put("Name", "");
-        hashMap.put("Geburtsdatum", "");
-        hashMap.put("Anschrift", "");
-        hashMap.put("Datum1", DatFunk.sHeute());
-        hashMap.put("Datum2", DatFunk.sHeute());
-    }
-
-    private void auswertenVector(Vector<Vector<String>> ergebnis) {
-        hashMap.put("Versicherungsnummer", ergebnis.get(0)
-                                                   .get(0));
-        hashMap.put("Name", ergebnis.get(0)
-                                    .get(1));
-        if (ergebnis.get(0)
-                    .get(2)
-                    .trim()
-                    .length() == 10) {
-            hashMap.put("Geburtsdatum", DatFunk.sDatInDeutsch(ergebnis.get(0)
-                                                                      .get(2))
-                                               .replace(".", ""));
-        }
-        hashMap.put("Anschrift", ergebnis.get(0)
-                                         .get(3)
-                + ", " + ergebnis.get(0)
-                                 .get(4)
-                + " " + ergebnis.get(0)
-                                .get(5));
     }
 
     private void doSuche(String bid) {
 
         initHashMap();
         Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select vnummer,namevor,geboren,strasse,plz,ort from bericht2 where berichtid='" + bid + "'");
+                "select vnummer,aigr,msnr,namevor from bericht2 where berichtid='" + bid + "'");
         if (vec == null) {
             return;
         }
         auswertenVector(vec);
         doStart();
+    }
+
+    private void auswertenVector(Vector<Vector<String>> ergebnis) {
+        hashMap.put("VERS_VSNR1_1", ergebnis.get(0)
+                                            .get(0));
+        hashMap.put("14_BKZ", ergebnis.get(0)
+                                      .get(1));
+        hashMap.put("18_MSNR", ergebnis.get(0)
+                                       .get(2));
+        hashMap.put("Anschrift", "Reutlinger Therapie- &amp; Analysezentrum\nMarie-Curie-Str.1\n72760 Reutlingen");
+        hashMap.put("VERS_N_VN_1", ergebnis.get(0)
+                                           .get(3));
+        hashMap.put("ORTDAT_1", "Reutlingen, den " + DatFunk.sHeute());
+        hashMap.put("AW_ZUSTIMMUNG", "Ja");
+
+    }
+
+    private void initHashMap() {
+        hashMap = new HashMap<String, String>();
+        hashMap.put("VERS_VSNR1_1", "");
+        hashMap.put("14_BKZ", "");
+        hashMap.put("18_MSNR", "");
+        hashMap.put("Anschrift", "");
+        hashMap.put("VERS_N_VN_1", "");
+        hashMap.put("ORTDAT_1", "");
+        hashMap.put("AW_ZUSTIMMUNG", "");
+        hashMap.put("AW_KEINE_WEITERLEITUNG", "");
+        hashMap.put("UNT_1", "");
+
     }
 
     private void macheKopf(FileWriter fw) {
@@ -82,8 +79,8 @@ public class LVAWiederEingliederung {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\Stufenweise Wiedereingliederung-LVA_NoRestriction.pdf'/>"
-                    + System.getProperty("line.separator") + "</xfdf>");
+                    + "\\Erklärung des Patienten für IRENA_NoRestriction.pdf'/>" + System.getProperty("line.separator")
+                    + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -97,7 +94,6 @@ public class LVAWiederEingliederung {
         FileWriter fw = null;
         try {
             xfdfFile = java.lang.System.getProperty("user.dir") + "/test.xfdf";
-            System.out.println(xfdfFile);
             fw = new FileWriter(new File(xfdfFile));
         } catch (IOException e) {
             e.printStackTrace();
@@ -131,4 +127,5 @@ public class LVAWiederEingliederung {
         }
         System.exit(0);
     }
+
 }

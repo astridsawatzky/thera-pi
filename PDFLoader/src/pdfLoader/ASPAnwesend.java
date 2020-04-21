@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,62 +10,38 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
-import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class BFAWiederEingliederung {
+public class ASPAnwesend {
+
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
     String reader = null;
 
-    public BFAWiederEingliederung(String bid, String pfad) {
+    public ASPAnwesend(String bid, String pfad) {
         formularpfad = pfad;
         doSuche(bid);
     }
 
     private void initHashMap() {
         hashMap = new HashMap<String, String>();
-        hashMap.put("VERS_VSNR1_1", "");
-        hashMap.put("14_BKZ", "");
-        hashMap.put("18_MSNR", "");
-        hashMap.put("NAME_1", "");
-        hashMap.put("14_Geb.datum", "");
-        hashMap.put("STASSE_1", "");
-
+        hashMap.put("Versicherungsnummer", "");
+        hashMap.put("Name", "");
     }
 
     private void auswertenVector(Vector<Vector<String>> ergebnis) {
-        hashMap.put("VERS_VSNR1_1", ergebnis.get(0)
-                                            .get(0));
-        hashMap.put("14_BKZ", ergebnis.get(0)
-                                      .get(1));
-        hashMap.put("18_MSNR", ergebnis.get(0)
-                                       .get(2));
-        hashMap.put("NAME_1", ergebnis.get(0)
-                                      .get(3));
-        if (ergebnis.get(0)
-                    .get(4)
-                    .trim()
-                    .length() == 10) {
-            String deutschdat = DatFunk.sDatInDeutsch(ergebnis.get(0)
-                                                              .get(4));
-            hashMap.put("14_Geb.datum",
-                    deutschdat.substring(0, 2) + deutschdat.substring(3, 5) + deutschdat.substring(8));
-        }
-        hashMap.put("STASSE_1", ergebnis.get(0)
-                                        .get(5)
-                + ", " + ergebnis.get(0)
-                                 .get(6)
-                + " " + ergebnis.get(0)
-                                .get(7));
+        hashMap.put("Versicherungsnummer", ergebnis.get(0)
+                                                   .get(0));
+        hashMap.put("Name", ergebnis.get(0)
+                                    .get(1));
     }
 
     private void doSuche(String bid) {
 
         initHashMap();
         Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select vnummer,aigr,msnr,namevor,geboren,strasse,plz,ort from bericht2 where berichtid='" + bid + "'");
+                "select vnummer,namevor from bericht2 where berichtid='" + bid + "'");
         if (vec == null) {
             return;
         }
@@ -87,7 +63,8 @@ public class BFAWiederEingliederung {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\BfA_Stufenplan_neu.pdf'/>" + System.getProperty("line.separator") + "</xfdf>");
+                    + "\\ASP-Anwesenheitsliste_NoRestriction.pdf'/>" + System.getProperty("line.separator")
+                    + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,6 +111,6 @@ public class BFAWiederEingliederung {
             e.printStackTrace();
         }
         System.exit(0);
-
     }
+
 }

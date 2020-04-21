@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -12,72 +12,81 @@ import java.util.Vector;
 
 import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
+import pdfLoader.Tools.StringTools;
 
-public class BFAAHBAufnahme {
+public class REHAbescheinigung {
+
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
     String patid = null;
     String reader = null;
 
-    public BFAAHBAufnahme(String bid, String pfad, String xpatid) {
+    public REHAbescheinigung(String bid, String pfad, String xpatid) {
         formularpfad = pfad;
         patid = xpatid;
         doSuche(bid);
     }
 
-    private void initHashMap() {
-        hashMap = new HashMap<String, String>();
-        hashMap.put("VERS_VSNR1_1", "");
-        hashMap.put("ANSCHRIFT_KRA_KA", "");
-        hashMap.put("NAME_VORNAME_PAT", "");
-        hashMap.put("PAT_GEBDAT", "");
-        hashMap.put("ANSCHRIFT_PAT", "");
-        hashMap.put("AUFNAHME_DAT", PDFTools.sechserDatum(DatFunk.sHeute()));
-        hashMap.put("NAME_AHB_EINRICHTUNG", "Reutlinger Therapie- &amp; Analysezentrum GmbH");
-        hashMap.put("ORT_DATUM", "Reutlingen, den " + DatFunk.sHeute());
-
-    }
-
-    private void auswertenVector(Vector<Vector<String>> ergebnis, Vector<Vector<String>> kasse) {
-        hashMap.put("VERS_VSNR1_1", ergebnis.get(0)
-                                            .get(0));
-        if (kasse.size() > 0) {
-            hashMap.put("ANSCHRIFT_KRA_KA", kasse.get(0)
-                                                 .get(0)
-                    + "\nFAX-# " + kasse.get(0)
-                                        .get(1));
-        }
-        hashMap.put("NAME_VORNAME_PAT", ergebnis.get(0)
-                                                .get(1));
-        if (ergebnis.get(0)
-                    .get(2)
-                    .trim()
-                    .length() == 10) {
-            hashMap.put("PAT_GEBDAT", PDFTools.sechserDatum(ergebnis.get(0)
-                                                                    .get(2)));
-        }
-        hashMap.put("ANSCHRIFT_PAT", ergebnis.get(0)
-                                             .get(3)
-                + ", " + ergebnis.get(0)
-                                 .get(4)
-                + " " + ergebnis.get(0)
-                                .get(5));
-    }
-
     private void doSuche(String bid) {
-
         initHashMap();
+        System.out.println();
         Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select vnummer,namevor,geboren,strasse,plz,ort from bericht2 where berichtid='" + bid + "' LIMIT 1");
-        String kassenid = SqlInfo.holePatFeld("kassenid", "pat_intern='" + patid + "'");
-        Vector<Vector<String>> vec2 = SqlInfo.holeFelder(
-                "select kassen_nam1,fax from kass_adr where id='" + kassenid + "' LIMIT 1");
+                "select v_name,n_name,strasse,plz,ort,geboren from pat5 where pat_intern='" + patid + "'");
+        Vector<Vector<String>> vec2 = SqlInfo.holeFelder("select aufdat3 from bericht2 where berichtid='" + bid + "'");
         if (vec == null) {
             return;
         }
         auswertenVector(vec, vec2);
         doStart();
+    }
+
+    private void auswertenVector(Vector<Vector<String>> ergebnis, Vector<Vector<String>> ergebnis2) {
+        hashMap.put("Vorname Name", StringTools.EGross(ergebnis.get(0)
+                                                               .get(0))
+                + " " + StringTools.EGross(ergebnis.get(0)
+                                                   .get(1)));
+        hashMap.put("Strasse", StringTools.EGross(ergebnis.get(0)
+                                                          .get(2)));
+        hashMap.put("Plz Ort", ergebnis.get(0)
+                                       .get(3)
+                + " " + StringTools.EGross(ergebnis.get(0)
+                                                   .get(4)));
+        hashMap.put("heute", DatFunk.sHeute());
+        hashMap.put("Derdie Patientin", StringTools.EGross(ergebnis.get(0)
+                                                                   .get(0))
+                + " " + StringTools.EGross(ergebnis.get(0)
+                                                   .get(1)));
+        if (ergebnis.get(0)
+                    .get(5)
+                    .trim()
+                    .length() == 10) {
+            hashMap.put("geb am", DatFunk.sDatInDeutsch(ergebnis.get(0)
+                                                                .get(5)));
+        }
+        if (ergebnis2.size() > 0) {
+            if (ergebnis2.get(0)
+                         .get(0)
+                         .trim()
+                         .length() == 10) {
+                hashMap.put("seitab dem", DatFunk.sDatInDeutsch(ergebnis2.get(0)
+                                                                         .get(0)));
+            }
+        }
+    }
+
+    private void initHashMap() {
+        hashMap = new HashMap<String, String>();
+        hashMap.put("Vorname Name", "");
+        hashMap.put("Strasse", "");
+        hashMap.put("Plz Ort", "");
+        hashMap.put("heute", "");
+        hashMap.put("Derdie Patientin", "");
+        hashMap.put("geb am", "");
+        hashMap.put("seitab dem", "");
+        hashMap.put("für den", "");
+        hashMap.put("Die Maßnahme für og Patienten wurde aus medizinischen Gründen um", "");
+        hashMap.put("verlüngert Der Abschluß der Maßnahme ist nunmehr für den", "");
     }
 
     private void macheKopf(FileWriter fw) {
@@ -94,8 +103,7 @@ public class BFAAHBAufnahme {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\BfA-Aufnahmemitteilung_NoRestriction.pdf'/>" + System.getProperty("line.separator")
-                    + "</xfdf>");
+                    + "\\Rehabescheinigung.pdf'/>" + System.getProperty("line.separator") + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,6 +150,5 @@ public class BFAAHBAufnahme {
             e.printStackTrace();
         }
         System.exit(0);
-
     }
 }

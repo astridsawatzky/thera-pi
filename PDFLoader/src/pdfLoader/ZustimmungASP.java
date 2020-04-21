@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -10,42 +10,35 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.JTextField;
+
 import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class RechnungASP {
+public class ZustimmungASP {
 
+    JTextField[] tf1 = { null };
     String xfdfFile = "";
-    HashMap<String, String> hashMap = null;
     String formularpfad = null;
-    String reader = null;
+    HashMap<String, String> hashMap = null;
 
-    public RechnungASP(String bid, String pfad) {
+    public ZustimmungASP(String bid, String pfad) {
         formularpfad = pfad;
         doSuche(bid);
     }
 
-    private void initHashMap() {
-        hashMap = new HashMap<String, String>();
-        hashMap.put("Versicherungsnummer", "");
-        hashMap.put("Name", "");
-        hashMap.put("Geburtsdatum", "");
-        hashMap.put("Straße", "");
-        hashMap.put("PLZ", "");
-        hashMap.put("Wohnort", "");
-        hashMap.put("von", "");
-        hashMap.put("bis", "");
-        hashMap.put("Betrag1", "600,00");
-        hashMap.put("Betrag2", "0,00");
-        hashMap.put("Betrag3", "120,00");
-
-        hashMap.put("Kontoinhaber", "Reutlinger Therapie- &amp; Analysezentrum GmbH");
-        hashMap.put("Bankinstitut", "Dresdner Bank Stuttgart, eine Marke der Commerzbank");
-        hashMap.put("Bankleizahl", "60080000");
-        hashMap.put("Kontonummer", "332325000");
-        hashMap.put("IK-Nummer", "510841109");
-        hashMap.put("Ort, Datum", "Reutlingen, den " + DatFunk.sHeute());
-
+    private void doSuche(String bid) {
+        // String bid = tf1[0].getText().trim();
+        initHashMap();
+        System.out.println(
+                "select vnummer,namevor,geboren,strasse,plz,ort from bericht2 where berichtid='" + bid + "'");
+        Vector<Vector<String>> vec = SqlInfo.holeFelder(
+                "select vnummer,namevor,geboren,strasse,plz,ort from bericht2 where berichtid='" + bid + "'");
+        if (vec == null) {
+            return;
+        }
+        auswertenVector(vec);
+        doStart();
     }
 
     private void auswertenVector(Vector<Vector<String>> ergebnis) {
@@ -65,37 +58,22 @@ public class RechnungASP {
                                       .get(3));
         hashMap.put("PLZ", ergebnis.get(0)
                                    .get(4));
-        hashMap.put("Wohnort", ergebnis.get(0)
-                                       .get(5));
-        if (ergebnis.get(0)
-                    .get(6)
-                    .trim()
-                    .length() == 10) {
-            hashMap.put("von", DatFunk.sDatInDeutsch(ergebnis.get(0)
-                                                             .get(6))
-                                      .replace(".", ""));
-        }
-        if (ergebnis.get(0)
-                    .get(7)
-                    .trim()
-                    .length() == 10) {
-            hashMap.put("bis", DatFunk.sDatInDeutsch(ergebnis.get(0)
-                                                             .get(7))
-                                      .replace(".", ""));
-        }
+        hashMap.put("Ort", ergebnis.get(0)
+                                   .get(5));
+        hashMap.put("Ort, Datum", "Reutlingen,den " + DatFunk.sHeute());
+
     }
 
-    private void doSuche(String bid) {
+    private void initHashMap() {
+        hashMap = new HashMap<String, String>();
+        hashMap.put("Versicherungsnummer", "");
+        hashMap.put("Name", "");
+        hashMap.put("Geburtsdatum", "");
+        hashMap.put("Straße", "");
+        hashMap.put("PLZ", "");
+        hashMap.put("ORT", "");
+        hashMap.put("Ort/Datum", "");
 
-        initHashMap();
-        Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select vnummer,namevor,geboren,strasse,plz,ort,aufdat3,entdat3 from bericht2 where berichtid='" + bid
-                        + "'");
-        if (vec == null) {
-            return;
-        }
-        auswertenVector(vec);
-        doStart();
     }
 
     private void macheKopf(FileWriter fw) {
@@ -112,8 +90,8 @@ public class RechnungASP {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\ASP-Abrechnungsformular_NoRestriction.pdf'/>" + System.getProperty("line.separator")
-                    + "</xfdf>");
+                    + "\\ASP Zustimmungserklärung des Patienten_NoRestriction.pdf'/>"
+                    + System.getProperty("line.separator") + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,7 +105,6 @@ public class RechnungASP {
         FileWriter fw = null;
         try {
             xfdfFile = java.lang.System.getProperty("user.dir") + "/test.xfdf";
-            System.out.println(xfdfFile);
             fw = new FileWriter(new File(xfdfFile));
         } catch (IOException e) {
             e.printStackTrace();
@@ -161,5 +138,4 @@ public class RechnungASP {
         }
         System.exit(0);
     }
-
 }

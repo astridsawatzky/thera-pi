@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,15 +13,29 @@ import java.util.Vector;
 import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class IRENABeginn {
+public class RechnungIRENA {
+
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
     String reader = null;
 
-    public IRENABeginn(String bid, String pfad) {
+    public RechnungIRENA(String bid, String pfad) {
         formularpfad = pfad;
         doSuche(bid);
+    }
+
+    private void doSuche(String bid) {
+
+        initHashMap();
+        Vector<Vector<String>> vec = SqlInfo.holeFelder(
+                "select vnummer,aigr,msnr,namevor,strasse,plz,ort,aufdat3,entdat3 from bericht2 where berichtid='" + bid
+                        + "'");
+        if (vec == null) {
+            return;
+        }
+        auswertenVector(vec);
+        doStart();
     }
 
     private void initHashMap() {
@@ -31,13 +45,22 @@ public class IRENABeginn {
         hashMap.put("18_MSNR", "");
         hashMap.put("VERS_N_VN_1", "");
         hashMap.put("STR_HA_PLZ_ORT1", "");
-        hashMap.put("AW1", "Ja");
-        hashMap.put("AUFN.DATUM", DatFunk.sHeute());
+        hashMap.put("VOM_1", "");
+        hashMap.put("VOM_2", "");
+        hashMap.put("ANZA_1", "24");
+        hashMap.put("ANZA_2", "24");
+        hashMap.put("BETRAG_1", "25,00");
+        hashMap.put("BETRAG_2", "600,00");
+        hashMap.put("BETRAG_3", "5,00");
+        hashMap.put("BETRAG_4", "120,00");
+        // hashMap.put("BETRAG_5","");
+        hashMap.put("NAME_GELD_1", "Dresdner Bank Stuttgart");
+        hashMap.put("BLZ_1", "60080000");
+        hashMap.put("KONTO_1", "332325000");
+        hashMap.put("KONTOINH_1", "Reutlinger Therapie- &amp; Analysezentrum GmbH");
+        hashMap.put("INST_KENNZ_1", "510841109");
+        hashMap.put("PAT_1", "");
         hashMap.put("ORTDAT_1", "Reutlingen, den " + DatFunk.sHeute());
-        hashMap.put("AW2", "Ja");
-        hashMap.put("ORTDAT_2", "Reutlingen, den " + DatFunk.sHeute());
-        hashMap.put("RE-NR", "95349");
-
     }
 
     private void auswertenVector(Vector<Vector<String>> ergebnis) {
@@ -45,8 +68,8 @@ public class IRENABeginn {
                                             .get(0));
         hashMap.put("14_BKZ", ergebnis.get(0)
                                       .get(1));
-        hashMap.put("18_MSNR", ergebnis.get(0)
-                                       .get(2));
+        hashMap.put("MSNR", ergebnis.get(0)
+                                    .get(2));
         hashMap.put("VERS_N_VN_1", ergebnis.get(0)
                                            .get(3));
         hashMap.put("STR_HA_PLZ_ORT1", ergebnis.get(0)
@@ -55,18 +78,20 @@ public class IRENABeginn {
                                  .get(5)
                 + " " + ergebnis.get(0)
                                 .get(6));
-    }
-
-    private void doSuche(String bid) {
-
-        initHashMap();
-        Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select vnummer,aigr,msnr,namevor,strasse,plz,ort from bericht2 where berichtid='" + bid + "'");
-        if (vec == null) {
-            return;
+        if (ergebnis.get(0)
+                    .get(7)
+                    .trim()
+                    .length() == 10) {
+            hashMap.put("VOM_1", DatFunk.sDatInDeutsch(ergebnis.get(0)
+                                                               .get(7)));
         }
-        auswertenVector(vec);
-        doStart();
+        if (ergebnis.get(0)
+                    .get(8)
+                    .trim()
+                    .length() == 10) {
+            hashMap.put("BIS_1", DatFunk.sDatInDeutsch(ergebnis.get(0)
+                                                               .get(8)));
+        }
     }
 
     private void macheKopf(FileWriter fw) {
@@ -83,13 +108,12 @@ public class IRENABeginn {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\Beginnmitteilung für IRENA_NoRestriction.pdf'/>" + System.getProperty("line.separator")
+                    + "\\Abrechnungsbogen für IRENA_NoRestriction.pdf'/>" + System.getProperty("line.separator")
                     + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void doStart() {

@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;

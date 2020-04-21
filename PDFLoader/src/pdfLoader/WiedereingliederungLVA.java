@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,17 +13,16 @@ import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class WiedereingliederungBfA {
+public class WiedereingliederungLVA {
 
     JButton bnr1;
     JTextField[] tf1 = { null };
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
 
-    public WiedereingliederungBfA(String bid) {
+    public WiedereingliederungLVA(String bid) {
         doSuche(bid);
     }
 
@@ -43,82 +42,81 @@ public class WiedereingliederungBfA {
     }
 
     private void auswertenVector(Vector<Vector<String>> ergebnis) {
-        hashMap.put("VERS_VSNR1_1", ergebnis.get(0)
-                                            .get(2));
-        hashMap.put("14_BKZ", ergebnis.get(0)
-                                      .get(10));
-        hashMap.put("18_MSNR", ergebnis.get(0)
-                                       .get(9));
-        hashMap.put("VERS_N_VN_1", ergebnis.get(0)
-                                           .get(3));
-        hashMap.put("ORTDAT_1", "Reutlingen,den " + DatFunk.sHeute());
-        // hashMap.put("AW_1",ergebnis.get(0).get(3));
-        hashMap.put("GEBDAT_1", ergebnis.get(0)
-                                        .get(4));
-        hashMap.put("STR_HA_PLZ_ORT1", ergebnis.get(0)
-                                               .get(5));
-        // hashMap.put("TÄTIG_1",ergebnis.get(0).get(3));
-        // hashMap.put("AZEIT_1",ergebnis.get(0).get(3));
-        // hashMap.put("VON_1",ergebnis.get(0).get(3));
-        // hashMap.put("VON_2",ergebnis.get(0).get(3));
-        // hashMap.put("VON_3",ergebnis.get(0).get(3));
-        // hashMap.put("VON_4",ergebnis.get(0).get(3));
-        // hashMap.put("BIS_1",ergebnis.get(0).get(3));
-        // hashMap.put("BIS_2",ergebnis.get(0).get(3));
-        // hashMap.put("BIS_3",ergebnis.get(0).get(3));
-        // hashMap.put("BIS_4",ergebnis.get(0).get(3));
-        // hashMap.put("AZEIT_2",ergebnis.get(0).get(3));
-        // hashMap.put("AZEIT_3",ergebnis.get(0).get(3));
-        // hashMap.put("AZEIT_4",ergebnis.get(0).get(3));
-        // hashMap.put("AZEIT_5",ergebnis.get(0).get(3));
-        // hashMap.put("ART_1",ergebnis.get(0).get(3));
-        // hashMap.put("ART_2",ergebnis.get(0).get(3));
-        // hashMap.put("ART_3",ergebnis.get(0).get(3));
-        // hashMap.put("ART_4",ergebnis.get(0).get(3));
-        // hashMap.put("AW_2",ergebnis.get(0).get(3));
-        // hashMap.put("TERMIN_1",ergebnis.get(0).get(3));
-        // hashMap.put("BEMERK_1",ergebnis.get(0).get(3));
-        // hashMap.put("Unterschrift",ergebnis.get(0).get(3));
-        // hashMap.put("DATUM_2",ergebnis.get(0).get(3));
+        hashMap.put("Versicherungsnummer", ergebnis.get(0)
+                                                   .get(2));
+        hashMap.put("Entlassdatum", ergebnis.get(0)
+                                            .get(16));
+        hashMap.put("Name", ergebnis.get(0)
+                                    .get(3));
+        hashMap.put("Geburtsdatum", ergebnis.get(0)
+                                            .get(4));
+        hashMap.put("Anschrift", ergebnis.get(0)
+                                         .get(5)
+                + ergebnis.get(0)
+                          .get(6)
+                + ergebnis.get(0)
+                          .get(7));
+        // hashMap.put("letzteTätigkeit",ergebnis.get(0).get(0));
+        // hashMap.put("tägl.Arbeitszeit",ergebnis.get(0).get(3));
+        // hashMap.put("vom1",ergebnis.get(0).get(3));
+        // hashMap.put("vom2",ergebnis.get(0).get(3));
+        // hashMap.put("vom3",ergebnis.get(0).get(3));
+        // hashMap.put("vom4",ergebnis.get(0).get(3));
+        // hashMap.put("bis1",ergebnis.get(0).get(3));
+        // hashMap.put("bis2",ergebnis.get(0).get(3));
+        // hashMap.put("bis3",ergebnis.get(0).get(3));
+        // hashMap.put("bis4",ergebnis.get(0).get(3));
+        // hashMap.put("Std.1",ergebnis.get(0).get(3));
+        // hashMap.put("Std.2",ergebnis.get(0).get(3));
+        // hashMap.put("Std.3",ergebnis.get(0).get(3));
+        // hashMap.put("Std.4",ergebnis.get(0).get(3));
+        // hashMap.put("Tätigkeit1",ergebnis.get(0).get(3));
+        // hashMap.put("Tätigkeit2",ergebnis.get(0).get(3));
+        // hashMap.put("Tätigkeit3",ergebnis.get(0).get(3));
+        // hashMap.put("Tätigkeit4",ergebnis.get(0).get(3));
+        // hashMap.put("Bemerkung",ergebnis.get(0).get(3));
+        // hashMap.put("Datum1",ergebnis.get(0).get(3));
+        // hashMap.put("Datum2",ergebnis.get(0).get(3));
+        // hashMap.put("Kontrollkästchen31",ergebnis.get(0).get(3));
+        // hashMap.put("Kontrollkästchen33",ergebnis.get(0).get(3));
+        // hashMap.put("Grund",ergebnis.get(0).get(3));
+        // hashMap.put("bis5",ergebnis.get(0).get(3));
+        // hashMap.put("Datum3",ergebnis.get(0).get(3));
 
     }
 
     private void initHashMap() {
-        hashMap = new HashMap<String, String>();
-        hashMap.put("VERS_VSNR1_1", "");
-        hashMap.put("14_BKZ", "");
-        hashMap.put("18_MSNR", "");
+        hashMap.put("Versicherungsnummer", "");
+        hashMap.put("Entlassdatum", "");
+        hashMap.put("Name", "");
+        hashMap.put("Geburtsdatum", "");
         hashMap.put("Anschrift", "");
-        hashMap.put("VERS_N_VN_1", "");
-        hashMap.put("ORTDAT_1", "");
-        hashMap.put("AW_ZUSTIMMUNG", "");
-        hashMap.put("AW_KEINE_WEITERLEITUNG", "");
-        hashMap.put("UNT_1", "");
-        hashMap.put("DATUM_1", "");
-        hashMap.put("DATUM_2", "");
-        hashMap.put("TÄTIG_1", "");
-        hashMap.put("AZEIT_1", "");
-        hashMap.put("VON_1", "");
-        hashMap.put("VON_2", "");
-        hashMap.put("VON_3", "");
-        hashMap.put("VON_4", "");
-        hashMap.put("BIS_1", "");
-        hashMap.put("BIS_2", "");
-        hashMap.put("BIS_3", "");
-        hashMap.put("BIS_4", "");
-        hashMap.put("AZEIT_2", "");
-        hashMap.put("AZEIT_3", "");
-        hashMap.put("AZEIT_4", "");
-        hashMap.put("AZEIT_5", "");
-        hashMap.put("ART_1", "");
-        hashMap.put("ART_2", "");
-        hashMap.put("ART_3", "");
-        hashMap.put("ART_4", "");
-        hashMap.put("AW_2", "");
-        hashMap.put("TERMIN_1", "");
-        hashMap.put("BEMERK_1", "");
-        hashMap.put("Unterschrift", "");
-        hashMap.put("DATUM_2", "");
+        hashMap.put("letzteTätigkeit", "");
+        hashMap.put("tägl.Arbeitszeit", "");
+        hashMap.put("vom1", "");
+        hashMap.put("vom2", "");
+        hashMap.put("vom3", "");
+        hashMap.put("vom4", "");
+        hashMap.put("bis1", "");
+        hashMap.put("bis2", "");
+        hashMap.put("bis3", "");
+        hashMap.put("bis4", "");
+        hashMap.put("Std.1", "");
+        hashMap.put("Std.2", "");
+        hashMap.put("Std.3", "");
+        hashMap.put("Std.4", "");
+        hashMap.put("Tätigkeit1", "");
+        hashMap.put("Tätigkeit2", "");
+        hashMap.put("Tätigkeit3", "");
+        hashMap.put("Tätigkeit4", "");
+        hashMap.put("Bemerkung", "");
+        hashMap.put("Datum1", "");
+        hashMap.put("Datum2", "");
+        hashMap.put("Kontrollkästchen31", "");
+        hashMap.put("Kontrollkästchen33", "");
+        hashMap.put("Grund", "");
+        hashMap.put("bis5", "");
+        hashMap.put("Datum3", "");
     }
 
     private void macheKopf(FileWriter fw) {
@@ -135,7 +133,7 @@ public class WiedereingliederungBfA {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator")
-                    + "<f href='C:\\Daten\\formulare\\Stufenplan_Wiedereingliederung_BfA_NoRestriction.pdf'/>"
+                    + "<f href='C:\\Daten\\formulare\\Stufenweise Wiedereingliederung-LVA_NoRestriction.pdf'/>"
                     + System.getProperty("line.separator") + "</xfdf>");
             fw.close();
         } catch (IOException e) {
@@ -190,7 +188,5 @@ public class WiedereingliederungBfA {
             e.printStackTrace();
         }
         System.exit(0);
-
     }
-
 }

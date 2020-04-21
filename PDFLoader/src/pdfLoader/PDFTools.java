@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 public class PDFTools {
     public static String sechserDatum(String datum) {

@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,7 +13,7 @@ import java.util.Vector;
 import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class DRVWiedereingliederungVerspaetet {
+public class DRVWiedereingliederungNeu {
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
@@ -27,7 +27,7 @@ public class DRVWiedereingliederungVerspaetet {
     final int plz = 6;
     final int ort = 7;
 
-    public DRVWiedereingliederungVerspaetet(String bid, String pfad) {
+    public DRVWiedereingliederungNeu(String bid, String pfad) {
         formularpfad = pfad;
         doSuche(bid);
     }
@@ -127,7 +127,7 @@ public class DRVWiedereingliederungVerspaetet {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\WiedereingliederungVerspaetet.pdf'/>" + System.getProperty("line.separator") + "</xfdf>");
+                    + "\\WiedereingliederungSammelmappe1.pdf'/>" + System.getProperty("line.separator") + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();

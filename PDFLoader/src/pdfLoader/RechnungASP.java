@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -13,48 +13,84 @@ import java.util.Vector;
 import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class BFARehaVerlaengerung {
+public class RechnungASP {
+
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
     String formularpfad = null;
     String reader = null;
 
-    public BFARehaVerlaengerung(String bid, String pfad) {
+    public RechnungASP(String bid, String pfad) {
         formularpfad = pfad;
         doSuche(bid);
     }
 
     private void initHashMap() {
         hashMap = new HashMap<String, String>();
-        hashMap.put("VERS_VSNR1_1", "");
-        hashMap.put("14_BKZ", "");
-        hashMap.put("18_MSNR", "");
-        hashMap.put("VERS_N_VN_1", "");
-        hashMap.put("SPEZIELL_1", DatFunk.sHeute());
-        hashMap.put("Telefax_1", "07121 9617-8");
-        hashMap.put("SPEZIELL_1_1", DatFunk.sHeute());
-        // hashMap.put("AW1","Ja");
-        // hashMap.put("AUFN.DATUM",DatFunk.sHeute());
+        hashMap.put("Versicherungsnummer", "");
+        hashMap.put("Name", "");
+        hashMap.put("Geburtsdatum", "");
+        hashMap.put("Straße", "");
+        hashMap.put("PLZ", "");
+        hashMap.put("Wohnort", "");
+        hashMap.put("von", "");
+        hashMap.put("bis", "");
+        hashMap.put("Betrag1", "600,00");
+        hashMap.put("Betrag2", "0,00");
+        hashMap.put("Betrag3", "120,00");
+
+        hashMap.put("Kontoinhaber", "Reutlinger Therapie- &amp; Analysezentrum GmbH");
+        hashMap.put("Bankinstitut", "Dresdner Bank Stuttgart, eine Marke der Commerzbank");
+        hashMap.put("Bankleizahl", "60080000");
+        hashMap.put("Kontonummer", "332325000");
+        hashMap.put("IK-Nummer", "510841109");
+        hashMap.put("Ort, Datum", "Reutlingen, den " + DatFunk.sHeute());
 
     }
 
     private void auswertenVector(Vector<Vector<String>> ergebnis) {
-        hashMap.put("VERS_VSNR1_1", ergebnis.get(0)
-                                            .get(0));
-        hashMap.put("14_BKZ", ergebnis.get(0)
-                                      .get(1));
-        hashMap.put("18_MSNR", ergebnis.get(0)
-                                       .get(2));
-        hashMap.put("VERS_N_VN_1", ergebnis.get(0)
-                                           .get(3));
-
+        hashMap.put("Versicherungsnummer", ergebnis.get(0)
+                                                   .get(0));
+        hashMap.put("Name", ergebnis.get(0)
+                                    .get(1));
+        if (ergebnis.get(0)
+                    .get(2)
+                    .trim()
+                    .length() == 10) {
+            hashMap.put("Geburtsdatum", DatFunk.sDatInDeutsch(ergebnis.get(0)
+                                                                      .get(2))
+                                               .replace(".", ""));
+        }
+        hashMap.put("Straße", ergebnis.get(0)
+                                      .get(3));
+        hashMap.put("PLZ", ergebnis.get(0)
+                                   .get(4));
+        hashMap.put("Wohnort", ergebnis.get(0)
+                                       .get(5));
+        if (ergebnis.get(0)
+                    .get(6)
+                    .trim()
+                    .length() == 10) {
+            hashMap.put("von", DatFunk.sDatInDeutsch(ergebnis.get(0)
+                                                             .get(6))
+                                      .replace(".", ""));
+        }
+        if (ergebnis.get(0)
+                    .get(7)
+                    .trim()
+                    .length() == 10) {
+            hashMap.put("bis", DatFunk.sDatInDeutsch(ergebnis.get(0)
+                                                             .get(7))
+                                      .replace(".", ""));
+        }
     }
 
     private void doSuche(String bid) {
 
         initHashMap();
         Vector<Vector<String>> vec = SqlInfo.holeFelder(
-                "select vnummer,aigr,msnr,namevor from bericht2 where berichtid='" + bid + "'");
+                "select vnummer,namevor,geboren,strasse,plz,ort,aufdat3,entdat3 from bericht2 where berichtid='" + bid
+                        + "'");
         if (vec == null) {
             return;
         }
@@ -76,7 +112,8 @@ public class BFARehaVerlaengerung {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator") + "<f href='" + formularpfad
-                    + "\\BfA-Rehaverlängerung_neu.pdf'/>" + System.getProperty("line.separator") + "</xfdf>");
+                    + "\\ASP-Abrechnungsformular_NoRestriction.pdf'/>" + System.getProperty("line.separator")
+                    + "</xfdf>");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,7 +160,6 @@ public class BFARehaVerlaengerung {
             e.printStackTrace();
         }
         System.exit(0);
-
     }
 
 }

@@ -1,4 +1,4 @@
-package pdftest2;
+package pdfLoader;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,14 +16,14 @@ import javax.swing.JTextField;
 import CommonTools.DatFunk;
 import pdfLoader.Tools.SqlInfo;
 
-public class Verlaengerung_BFA {
+public class WiedereingliederungBfA {
 
     JButton bnr1;
     JTextField[] tf1 = { null };
     String xfdfFile = "";
     HashMap<String, String> hashMap = null;
 
-    public Verlaengerung_BFA(String bid) {
+    public WiedereingliederungBfA(String bid) {
         doSuche(bid);
     }
 
@@ -49,16 +49,37 @@ public class Verlaengerung_BFA {
                                       .get(10));
         hashMap.put("18_MSNR", ergebnis.get(0)
                                        .get(9));
-        hashMap.put("Anschrift", "Reutlinger Theraphie- und Analysezentrum\nMarie-Curie-Str.1\n72760 Reutlingen");
         hashMap.put("VERS_N_VN_1", ergebnis.get(0)
                                            .get(3));
         hashMap.put("ORTDAT_1", "Reutlingen,den " + DatFunk.sHeute());
-        hashMap.put("DATUM_1", ergebnis.get(0)
-                                       .get(3));
-        hashMap.put("DATUM_2", ergebnis.get(0)
-                                       .get(3));
-        hashMap.put("DATUM_3", ergebnis.get(0)
-                                       .get(3));
+        // hashMap.put("AW_1",ergebnis.get(0).get(3));
+        hashMap.put("GEBDAT_1", ergebnis.get(0)
+                                        .get(4));
+        hashMap.put("STR_HA_PLZ_ORT1", ergebnis.get(0)
+                                               .get(5));
+        // hashMap.put("TÄTIG_1",ergebnis.get(0).get(3));
+        // hashMap.put("AZEIT_1",ergebnis.get(0).get(3));
+        // hashMap.put("VON_1",ergebnis.get(0).get(3));
+        // hashMap.put("VON_2",ergebnis.get(0).get(3));
+        // hashMap.put("VON_3",ergebnis.get(0).get(3));
+        // hashMap.put("VON_4",ergebnis.get(0).get(3));
+        // hashMap.put("BIS_1",ergebnis.get(0).get(3));
+        // hashMap.put("BIS_2",ergebnis.get(0).get(3));
+        // hashMap.put("BIS_3",ergebnis.get(0).get(3));
+        // hashMap.put("BIS_4",ergebnis.get(0).get(3));
+        // hashMap.put("AZEIT_2",ergebnis.get(0).get(3));
+        // hashMap.put("AZEIT_3",ergebnis.get(0).get(3));
+        // hashMap.put("AZEIT_4",ergebnis.get(0).get(3));
+        // hashMap.put("AZEIT_5",ergebnis.get(0).get(3));
+        // hashMap.put("ART_1",ergebnis.get(0).get(3));
+        // hashMap.put("ART_2",ergebnis.get(0).get(3));
+        // hashMap.put("ART_3",ergebnis.get(0).get(3));
+        // hashMap.put("ART_4",ergebnis.get(0).get(3));
+        // hashMap.put("AW_2",ergebnis.get(0).get(3));
+        // hashMap.put("TERMIN_1",ergebnis.get(0).get(3));
+        // hashMap.put("BEMERK_1",ergebnis.get(0).get(3));
+        // hashMap.put("Unterschrift",ergebnis.get(0).get(3));
+        // hashMap.put("DATUM_2",ergebnis.get(0).get(3));
 
     }
 
@@ -75,7 +96,29 @@ public class Verlaengerung_BFA {
         hashMap.put("UNT_1", "");
         hashMap.put("DATUM_1", "");
         hashMap.put("DATUM_2", "");
-        hashMap.put("DATUM_3", "");
+        hashMap.put("TÄTIG_1", "");
+        hashMap.put("AZEIT_1", "");
+        hashMap.put("VON_1", "");
+        hashMap.put("VON_2", "");
+        hashMap.put("VON_3", "");
+        hashMap.put("VON_4", "");
+        hashMap.put("BIS_1", "");
+        hashMap.put("BIS_2", "");
+        hashMap.put("BIS_3", "");
+        hashMap.put("BIS_4", "");
+        hashMap.put("AZEIT_2", "");
+        hashMap.put("AZEIT_3", "");
+        hashMap.put("AZEIT_4", "");
+        hashMap.put("AZEIT_5", "");
+        hashMap.put("ART_1", "");
+        hashMap.put("ART_2", "");
+        hashMap.put("ART_3", "");
+        hashMap.put("ART_4", "");
+        hashMap.put("AW_2", "");
+        hashMap.put("TERMIN_1", "");
+        hashMap.put("BEMERK_1", "");
+        hashMap.put("Unterschrift", "");
+        hashMap.put("DATUM_2", "");
     }
 
     private void macheKopf(FileWriter fw) {
@@ -92,7 +135,7 @@ public class Verlaengerung_BFA {
     private void macheFuss(FileWriter fw) {
         try {
             fw.write("</fields>" + System.getProperty("line.separator")
-                    + "<f href='C:\\Daten\\formulare\\BfA-Rehaverlängerung_NoRestriction.pdf'/>"
+                    + "<f href='C:\\Daten\\formulare\\Stufenplan_Wiedereingliederung_BfA_NoRestriction.pdf'/>"
                     + System.getProperty("line.separator") + "</xfdf>");
             fw.close();
         } catch (IOException e) {
@@ -147,5 +190,7 @@ public class Verlaengerung_BFA {
             e.printStackTrace();
         }
         System.exit(0);
+
     }
+
 }
