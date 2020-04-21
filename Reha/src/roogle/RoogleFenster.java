@@ -348,7 +348,7 @@ public class RoogleFenster extends RehaSmartDialog
          * new Thread(){ public void run(){ js.setViewportView(wahl1()); js.validate();
          * //wahl1.add(wahl1(),BorderLayout.CENTER); wahl1.add(js,BorderLayout.CENTER);
          * wahl1.validate();
-         * 
+         *
          * } }.start();
          */
         wahltabbedPane.addTab("Gruppenwahl", SystemConfig.hmSysIcons.get("personen16"), wahl1, "");
@@ -407,7 +407,7 @@ public class RoogleFenster extends RehaSmartDialog
         // Suchlauf");
         /*
          * //dummySuchen = new JXPanel(new BorderLayout());
-         * 
+         *
          * SwingUtilities.invokeLater(new Runnable(){ public void run(){
          * dummySuchen.add(new SuchenSeite(),BorderLayout.CENTER);
          * //dummySuchen.validate(); } }); tp2 = dummySuchen;
@@ -1830,7 +1830,8 @@ class MyRoogleTable1 extends AbstractTableModel {
      */
     @Override
     public Class<?> getColumnClass(int c) {
-        return getValueAt(0, c).getClass();
+        Object valueAt = getValueAt(0, c);
+        return valueAt!=null ? valueAt.getClass() : String.class;
     }
 
     /*
