@@ -30,7 +30,10 @@ public class Datenquelle {
     }
 
     private void initialize(String digitString) {
-        File datei = new File(environment.Path.Instance.getProghome() + "ini/" + digitString + "/rehajava.ini");
+        File datei = new File(environment.Path.Instance.getProghome() + File.separator
+                                                              + "ini" + File.separator
+                                                        + digitString + File.separator
+                                                        + "rehajava.ini");
         Ini ini;
         try {
             ini = new Ini(datei);
