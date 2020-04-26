@@ -1,52 +1,11 @@
 package terminKalender;
 
-import static java.awt.event.KeyEvent.VK_ALT;
-import static java.awt.event.KeyEvent.VK_CONTROL;
-import static java.awt.event.KeyEvent.VK_D;
-import static java.awt.event.KeyEvent.VK_DELETE;
-import static java.awt.event.KeyEvent.VK_DOWN;
-import static java.awt.event.KeyEvent.VK_ENTER;
-import static java.awt.event.KeyEvent.VK_ESCAPE;
-import static java.awt.event.KeyEvent.VK_F1;
-import static java.awt.event.KeyEvent.VK_F11;
-import static java.awt.event.KeyEvent.VK_F12;
-import static java.awt.event.KeyEvent.VK_F2;
-import static java.awt.event.KeyEvent.VK_F3;
-import static java.awt.event.KeyEvent.VK_F7;
-import static java.awt.event.KeyEvent.VK_F8;
-import static java.awt.event.KeyEvent.VK_F9;
-import static java.awt.event.KeyEvent.VK_L;
-import static java.awt.event.KeyEvent.VK_LEFT;
-import static java.awt.event.KeyEvent.VK_N;
-import static java.awt.event.KeyEvent.VK_O;
-import static java.awt.event.KeyEvent.VK_P;
-import static java.awt.event.KeyEvent.VK_PAGE_DOWN;
-import static java.awt.event.KeyEvent.VK_PAGE_UP;
-import static java.awt.event.KeyEvent.VK_RIGHT;
-import static java.awt.event.KeyEvent.VK_SHIFT;
-import static java.awt.event.KeyEvent.VK_U;
-import static java.awt.event.KeyEvent.VK_UP;
-import static java.awt.event.KeyEvent.VK_W;
+import static java.awt.event.KeyEvent.*;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.Window;
+import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DragGestureEvent;
-import java.awt.dnd.DragGestureListener;
-import java.awt.dnd.DragSourceDragEvent;
-import java.awt.dnd.DragSourceDropEvent;
-import java.awt.dnd.DragSourceEvent;
-import java.awt.dnd.DragSourceListener;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
@@ -57,7 +16,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -72,21 +30,12 @@ import java.util.Observable;
 import java.util.TooManyListenersException;
 import java.util.Vector;
 
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.TransferHandler;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.border.DropShadowBorder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 
 import CommonTools.DatFunk;
@@ -112,9 +61,16 @@ import systemEinstellungen.config.Datenbank;
 import systemTools.ListenerTools;
 
 public class TerminFenster extends Observable
-        implements RehaTPEventListener, ActionListener, DropTargetListener, DragSourceListener, DragGestureListener {
+        implements RehaTPEventListener, ActionListener, DropTargetListener {
+
+
+
     private static final int SPALTE_ANZ_BELGEGTE_BLOECKE = 301;
     private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+
+    DropTargetListener dndListerner = this;
+
+
     private JXPanel grundFlaeche;
     private JXPanel comboFlaeche;
     private JXPanel TerminFlaeche;
@@ -252,6 +208,7 @@ public class TerminFenster extends Observable
     private FinalGlassPane fgp;
 
     private Connection connection;
+    final static private Logger logger = LoggerFactory.getLogger(TerminFenster.class);
 
     public TerminFenster(Connection connection) {
         this.connection = connection;
@@ -2710,7 +2667,7 @@ public class TerminFenster extends Observable
                         }
                     }
 
-                    v6.addElement(rs.getString(301)); // Anzahl
+                    v6.addElement(rs.getString(SPALTE_ANZ_BELGEGTE_BLOECKE)); // Anzahl
                     v6.addElement(rs.getString(302)); // Art
                     v6.addElement(rs.getString(303)); // Behandler
                     v6.addElement(rs.getString(304)); // MEMO
@@ -2735,10 +2692,8 @@ public class TerminFenster extends Observable
                     datenZeichnen(aSpaltenDaten);
                 }
             } catch (SQLException ex) {
-                // System.out.println("Im Thread - Mache Statement");
-                // System.out.println("von ResultSet SQLState: " + ex.getSQLState());
-                // System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());
-                // System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
+                logger.error("einlesen der anzeigedaten",ex);
+
             }
         } catch (SQLException ex) {
             // System.out.println("Im Thread - Mache Statement");
@@ -2750,6 +2705,8 @@ public class TerminFenster extends Observable
                 if (nochmals == JOptionPane.YES_OPTION) {
                     Reha.instance.ladenach();
                 }
+            } else {
+                logger.error("einlesen der anzeigedaten",ex);
             }
         } finally {
             if (rs != null) {
@@ -2779,12 +2736,16 @@ public class TerminFenster extends Observable
             stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             try {
                 rs = stmt.executeQuery(sstmt);
+                int i = 0;
                 int durchlauf = 0;
+                int maxbehandler;
                 if (aktAnsicht == Ansicht.NORMAL) {
-                    ParameterLaden.vKKollegen.size();
+                    maxbehandler = ParameterLaden.vKKollegen.size();
                 } else {
+                    maxbehandler = 7;
                 }
                 int maxblock = 0;
+                int aktbehandler = 1;
                 ArrayList<Object> aKalList = new ArrayList<Object>();
                 aSpaltenDaten.clear();
                 while ((rs.next())) {
@@ -2812,6 +2773,9 @@ public class TerminFenster extends Observable
                         durchlauf1 = durchlauf1 + 1;
 
                     }
+                    i = i1;
+
+
                     v6.addElement(rs.getString(226)); // Anzahl
                     v6.addElement(rs.getString(227)); // Art
                     v6.addElement(rs.getString(228)); // Behandler
@@ -2826,6 +2790,7 @@ public class TerminFenster extends Observable
                     aKalList.add(v6.clone());
                     aSpaltenDaten.add(aKalList.clone());
                     aKalList.clear();
+                    aktbehandler++;
                 }
 
                 if (maxblock > 0) {
@@ -2837,13 +2802,14 @@ public class TerminFenster extends Observable
                     }
                 }
             } catch (SQLException ex) {
-                // System.out.println("von ResultSet SQLState: " + ex.getSQLState());
-                // System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());
-                // System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
+
+                 System.out.println("von ResultSet SQLState: " + ex.getSQLState());
+                 System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());
+                 System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
             }
 
         } catch (SQLException ex) {
-            // System.out.println("von stmt -SQLState: " + ex.getSQLState());
+             System.out.println("von stmt -SQLState: " + ex.getSQLState());
         } finally {
             if (rs != null) {
                 try {
@@ -2867,7 +2833,6 @@ public class TerminFenster extends Observable
 
     private void datenZeichnen(Vector<Object> vect) {
         vTerm = (Vector) vect.clone();
-        // ge�ndert
         vect = null;
         if (!vTerm.isEmpty()) {
             if (aktAnsicht == Ansicht.NORMAL) {
@@ -2933,12 +2898,6 @@ public class TerminFenster extends Observable
     static synchronized void setLockOk(int lock, String message) {
         Reha.instance.terminpanel.lockok = lock;
         Reha.instance.terminpanel.lockmessage = message;
-        /*
-         * if (Reha.instance.terminpanel.lockok < 0 && Reha.instance.terminpanel.zf !=
-         * null){
-         *
-         * }
-         */
     }
 
     public static TerminFenster getThisClass() {
@@ -4441,33 +4400,7 @@ public class TerminFenster extends Observable
         DRAG_MODE = mode;
     }
 
-    @Override
-    public void dropActionChanged(DropTargetDragEvent dtde) {
-    }
 
-    @Override
-    public void dragDropEnd(DragSourceDropEvent dsde) {
-    }
-
-    @Override
-    public void dragEnter(DragSourceDragEvent dsde) {
-    }
-
-    @Override
-    public void dragExit(DragSourceEvent dse) {
-    }
-
-    @Override
-    public void dragOver(DragSourceDragEvent dsde) {
-    }
-
-    @Override
-    public void dropActionChanged(DragSourceDragEvent dsde) {
-    }
-
-    @Override
-    public void dragGestureRecognized(DragGestureEvent arg0) {
-    }
 
     void terminBestaetigen(int spalte, boolean forceDlg) {
         if ((Rechte.hatRecht(Rechte.Kalender_terminconfirminpast, false)) || (this.getAktuellerTag()
@@ -4781,27 +4714,12 @@ public class TerminFenster extends Observable
         }
     }
 
-    private class comboToolTip implements MouseListener {
+    private class comboToolTip extends MouseAdapter {
         private int welche = -1;
 
         private comboToolTip(int welche) {
             super();
             this.welche = welche;
-        }
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-
         }
 
         @Override
@@ -4815,16 +4733,18 @@ public class TerminFenster extends Observable
 
         }
 
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
     }
 
     public void setTimeLine(boolean zeigen) {
         for (int i = 0; i < 7; i++) {
             oSpalten[i].setShowTimeLine(zeigen);
         }
+    }
+
+    @Override
+    public void dropActionChanged(DropTargetDragEvent dtde) {
+        // TODO Auto-generated method stub
+
     }
 }
 

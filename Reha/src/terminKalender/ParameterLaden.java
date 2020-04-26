@@ -195,8 +195,10 @@ public class ParameterLaden {
                     // System.out.println("************ Max KalZeile = "+maxKalZeile);
                     // aKollegen.add(itest);
                     vKollegen.add((ArrayList) aKollegen.clone());
-                    vKKollegen.add(new Kollegen(Optional.ofNullable(rs.getString("Matchcode")).orElse(""), rs.getString("Nachname"),
-                            rs.getString("Nicht_Zeig"), itest, rs.getString("Abteilung"), aKollegen.get(2), durchlauf));
+                    vKKollegen.add(new Kollegen(Optional.ofNullable(rs.getString("Matchcode"))
+                                                        .orElse(""),
+                            rs.getString("Nachname"), rs.getString("Nicht_Zeig"), itest, rs.getString("Abteilung"),
+                            aKollegen.get(2), durchlauf));
                     // vKKollegen.add(new
                     // Kollegen(rs.getString("Matchcode"),rs.getString("Nachname"),rs.getString("Nicht_Zeig"),durchlauf)
                     // );
@@ -242,125 +244,61 @@ public class ParameterLaden {
     public static void Passwort() {
 
         Reha obj = Reha.instance;
-        Statement stmt = null;
-        ResultSet rs = null;
+
         if (pKollegen.size() > 0) {
             pKollegen.clear();
         }
 
-        try {
-            stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                int anz = 0;
-                rs = stmt.executeQuery("select count(*) from kollegen2");
-                if (rs.next()) {
-                    anz = rs.getInt(1);
+        try (Statement stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rehaLoginRs = stmt.executeQuery("SELECT * from rehalogin");) {
+
+            Vector<String> aKollegen = new Vector<String>();
+            String test = "";
+            Verschluesseln man = Verschluesseln.getInstance();
+            while (rehaLoginRs.next()) {
+                try {
+
+                    test = rehaLoginRs.getString("user");
+                    aKollegen.add((test != null ? man.decrypt(test) : ""));
+                    test = rehaLoginRs.getString("password");
+                    aKollegen.add((test != null ? man.decrypt(test) : ""));
+                    test = rehaLoginRs.getString("rights");
+                    aKollegen.add((test != null ? man.decrypt(test) : ""));
+                    test = rehaLoginRs.getString("email");
+                    aKollegen.add((test != null ? test : ""));
+                    test = rehaLoginRs.getString("id");
+                    aKollegen.add((test != null ? test : ""));
+
+                } catch (Exception ex) {
+
+                    // System.out.println("Fehler in der Entschlüsselung");
+                    aKollegen.add("none");
+                    aKollegen.add("none");
+                    aKollegen.add("none");
+                    aKollegen.add("none");
+                    test = rehaLoginRs.getString("id");
+                    aKollegen.add((test != null ? test : ""));
+                    JOptionPane.showMessageDialog(null, "Fehler in der Entschlüsselung bei User ID = " + test);
+                    ex.printStackTrace();
+
                 }
-                rs.close();
-
-                rs = stmt.executeQuery("SELECT * from rehalogin");
-                Vector<String> aKollegen = new Vector<String>();
-                String test = "";
-                Verschluesseln man = Verschluesseln.getInstance();
-                while (rs.next()) {
-                    try {
-                        /*
-                         * test = rs.getString("user"); aKollegen.add((test != null ? test : "" )); test
-                         * = rs.getString("password"); aKollegen.add((test != null ? test : "" )); test
-                         * = rs.getString("rights"); aKollegen.add((test != null ? test : "" )); test =
-                         * rs.getString("email"); aKollegen.add((test != null ? test : "" )); test =
-                         * rs.getString("id"); aKollegen.add((test != null ? test : "" ));
-                         */
-
-                        test = rs.getString("user");
-                        aKollegen.add((test != null ? man.decrypt(test) : ""));
-                        test = rs.getString("password");
-                        aKollegen.add((test != null ? man.decrypt(test) : ""));
-                        test = rs.getString("rights");
-                        aKollegen.add((test != null ? man.decrypt(test) : ""));
-                        test = rs.getString("email");
-                        aKollegen.add((test != null ? test : ""));
-                        test = rs.getString("id");
-                        aKollegen.add((test != null ? test : ""));
-
-                    } catch (Exception ex) {
-
-                        // System.out.println("Fehler in der Entschlüsselung");
-                        aKollegen.add("none");
-                        aKollegen.add("none");
-                        aKollegen.add("none");
-                        aKollegen.add("none");
-                        test = rs.getString("id");
-                        aKollegen.add((test != null ? test : ""));
-                        JOptionPane.showMessageDialog(null, "Fehler in der Entschlüsselung bei User ID = " + test);
-                        ex.printStackTrace();
-
-                    }
-                    pKollegen.add((Vector<String>) aKollegen.clone());
-                    aKollegen.clear();
-                }
-                Comparator<Vector> comparator = new Comparator<Vector>() {
-                    @Override
-                    public int compare(Vector o1, Vector o2) {
-                        String s1 = (String) o1.get(0);
-                        String s2 = (String) o2.get(0);
-                        return s1.compareTo(s2);
-                    }
-                };
-                Collections.sort(pKollegen, comparator);
-
-            } catch (SQLException ex) {
-                // System.out.println("Kollegen1="+ex);
-
+                pKollegen.add((Vector<String>) aKollegen.clone());
+                aKollegen.clear();
             }
+            Comparator<Vector> comparator = new Comparator<Vector>() {
+                @Override
+                public int compare(Vector o1, Vector o2) {
+                    String s1 = (String) o1.get(0);
+                    String s2 = (String) o2.get(0);
+                    return s1.compareTo(s2);
+                }
+            };
+            Collections.sort(pKollegen, comparator);
+
         } catch (SQLException ex) {
             // System.out.println("Kollegen2="+ex);
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
-
         }
 
     }
-    /********************************************************/
 
-    /********************************************************/
-}
-
-class Kollegen implements Comparable<Kollegen> {
-    String Matchcode, Vorname, Nachname, Abteilung, Zeigen;
-    int Reihe, Position;
-
-    public Kollegen(String m, String n, String v, int r, String a, String z, int p) {
-        Matchcode = m;
-        Nachname = n;
-        Vorname = v;
-        Reihe = r;
-        Abteilung = a;
-        Zeigen = z;
-        Position = p;
-    }
-
-    @Override
-    public int compareTo(Kollegen o) {
-        // First order by name
-        int result = Matchcode.compareTo(o.Matchcode);
-        if (0 == result) {
-            // if names are equal order by age, youngest first
-            result = Reihe - o.Reihe;
-        }
-        return result;
-    }
 }

@@ -3,6 +3,7 @@ package terminKalender;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
@@ -702,4 +704,5 @@ public class kalenderPanel extends JXPanel {
     }
 
     /********* Klassen-ENDE-Klammer **************/
+
 }
