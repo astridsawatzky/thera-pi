@@ -16,7 +16,6 @@ import terminKalender.TerminFenster.Ansicht;
 
 class Tblock {
 
-    private String[] terminDat;
     private int Spalte;
     private int Block;
     private int Kollege;
@@ -28,27 +27,27 @@ class Tblock {
     private String Ende;
     private Vector vect = new Vector();
     private Felder feld;
-    private int iName, iNummer, iBeginn, iDauer, iEnde, iGesamt;
     private int AnzahlOrigBloecke;
     private int aktBlockNeu;
     private TerminFenster Eltern;
     private String[] aktDatum;
     private int dbBehandler;
 
+
+   public static final int     NAME =0;
+   public static final int     NUMMER=1;
+   public static final int     BEGINN=2;
+   public static final int     DAUER =3;
+   public static final int     ENDE  =4;
+
+
     public int TblockInit(TerminFenster parent, String[] tDaten, int iSpalte, int iBlock, int iKollege, Vector vterm,
             String[] datum, int iKoll) {
 
         int i;
-        this.iName = 0;
-        this.iNummer = 1;
-        this.iBeginn = 2;
-        this.iDauer = 3;
-        this.iEnde = 4;
-        this.iGesamt = 5;
 
         this.aktDatum = datum;
 
-        this.terminDat = tDaten;
         this.Spalte = iSpalte;
         this.Block = iBlock;
 
@@ -268,9 +267,9 @@ class Tblock {
 
     /******************************/
     private int BlockPasstGenau() {
-        String sBeginn = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
-        String sEnde = this.feld.getFeld(this.Kollege, iEnde, this.Block);
-        String sDauer = this.feld.getFeld(this.Kollege, iDauer, this.Block);
+        String sBeginn = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
+        String sEnde = this.feld.getFeld(this.Kollege, ENDE, this.Block);
+        String sDauer = this.feld.getFeld(this.Kollege, DAUER, this.Block);
         if (this.Beginn.equals(sBeginn) && this.Ende.equals(sEnde) && this.Dauer == Integer.parseInt(sDauer)) {
             return 0;
         }
@@ -279,8 +278,8 @@ class Tblock {
 
     /******************************/
     private void setzeBlockPasstGenau() {
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
         KalenderBeschreiben th = new KalenderBeschreiben();
         th.KalenderDaten(this.feld, this.Kollege, aktDatum[this.Spalte], this.dbBehandler);
         return;
@@ -288,9 +287,9 @@ class Tblock {
 
     /******************************/
     private int BlockPasstObenUntenNicht() {
-        String sBeginn = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
-        String sEnde = this.feld.getFeld(this.Kollege, iEnde, this.Block);
-        String sDauer = this.feld.getFeld(this.Kollege, iDauer, this.Block);
+        String sBeginn = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
+        String sEnde = this.feld.getFeld(this.Kollege, ENDE, this.Block);
+        String sDauer = this.feld.getFeld(this.Kollege, DAUER, this.Block);
         //// System.out.println("++++Beginn PasstObenUntenNicht++++++");
         if (this.Beginn.equals(sBeginn) && (!this.Ende.equals(sEnde))) {
             //// System.out.println("Ende Ungleich");
@@ -302,12 +301,12 @@ class Tblock {
                     /*** Wenn ja pr�fen ob wenigstens das Ende des Folgeblockes kleiner ist **/
                     //// System.out.println("Dies ist nicht der letzte Block");
                     if (ZeitFunk.MinutenSeitMitternacht(this.Ende) < ZeitFunk.MinutenSeitMitternacht(
-                            this.feld.getFeld(this.Kollege, iEnde, this.Block + 1))) {
+                            this.feld.getFeld(this.Kollege, ENDE, this.Block + 1))) {
                         //// System.out.println("Dies ist nicht der letzte Block und das Ende ist
                         //// kleiner oder gleich dem Ende des Folgeblockes - R�ckgabewert 1");
                         return 1;
                     } else if (ZeitFunk.MinutenSeitMitternacht(this.Ende) == ZeitFunk.MinutenSeitMitternacht(
-                            this.feld.getFeld(this.Kollege, iEnde, this.Block + 1))) {
+                            this.feld.getFeld(this.Kollege, ENDE, this.Block + 1))) {
                         return -1;
                     } else {
                         //// System.out.println("Dies ist nicht der letzte Block und das Ende ist gr��er
@@ -321,9 +320,9 @@ class Tblock {
                     // **das angegebene Ende ist vor dem Ende des letzten Blockes
                     //// System.out.println("Zeit1:"+zeitFunk.MinutenSeitMitternacht(this.Ende)+
                     // "
-                    //// Zeit2:"+zeitFunk.MinutenSeitMitternacht(this.feld.getFeld(this.Kollege,iEnde,this.Block)));
+                    //// Zeit2:"+zeitFunk.MinutenSeitMitternacht(this.feld.getFeld(this.Kollege,ENDE,this.Block)));
                     if (ZeitFunk.MinutenSeitMitternacht(this.Ende) <= ZeitFunk.MinutenSeitMitternacht(
-                            this.feld.getFeld(this.Kollege, iEnde, this.Block))) {
+                            this.feld.getFeld(this.Kollege, ENDE, this.Block))) {
                         //// System.out.println("Das Ende ist kleiner oder gleich des aktuellen
                         //// (letzten) Blockes - R�ckgabewert 3");
                         return 3;
@@ -347,16 +346,16 @@ class Tblock {
 
     /******************************/
     private void setzeBlockPasstObenUntenNicht() {
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
         return;
     }
 
     /******************************/
     private int BlockPasstUntenObenNicht() {
-        String sBeginn = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
-        String sEnde = this.feld.getFeld(this.Kollege, iEnde, this.Block);
-        String sDauer = this.feld.getFeld(this.Kollege, iDauer, this.Block);
+        String sBeginn = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
+        String sEnde = this.feld.getFeld(this.Kollege, ENDE, this.Block);
+        String sDauer = this.feld.getFeld(this.Kollege, DAUER, this.Block);
         //// System.out.println("++++Beginn PasstUntenObenNicht++++++");
         if (this.Ende.equals(sEnde) && (!this.Beginn.equals(sBeginn))) {
             /**** Das Ende gleich aber der Anfang nicht) ***/
@@ -379,8 +378,8 @@ class Tblock {
 
     /******************************/
     private void setzeBlockPasstUntenObenNicht() {
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
         KalenderBeschreiben th = new KalenderBeschreiben();
         th.KalenderDaten(this.feld, this.Kollege, aktDatum[this.Spalte], this.dbBehandler);
 
@@ -398,15 +397,15 @@ class Tblock {
         // String alteZeit,dummyZeit;
         String altesEnde;
 
-        endeBisher = this.feld.getFeld(this.Kollege, iEnde, this.Block);
+        endeBisher = this.feld.getFeld(this.Kollege, ENDE, this.Block);
         endeNeu = this.Ende;
-        beginnBisher = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
+        beginnBisher = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
         beginnNeu = this.Beginn;
-        dauerBisher = Integer.valueOf(this.feld.getFeld(this.Kollege, iDauer, this.Block));
+        dauerBisher = Integer.valueOf(this.feld.getFeld(this.Kollege, DAUER, this.Block));
         dauerNeu = this.Dauer;
         differenz = dauerBisher - dauerNeu;
-        aktName = this.feld.getFeld(this.Kollege, iName, this.Block);
-        aktNummer = this.feld.getFeld(this.Kollege, iNummer, this.Block);
+        aktName = this.feld.getFeld(this.Kollege, NAME, this.Block);
+        aktNummer = this.feld.getFeld(this.Kollege, NUMMER, this.Block);
 
         /****
          * Hier noch Test einbauen ob nachfolgender Block leer und ob zusammengefa�t
@@ -418,30 +417,30 @@ class Tblock {
         this.feld.einfuegenBlock(this.Kollege, neublocknum);
         if (!aktName.trim()
                     .isEmpty()) {
-            this.feld.setFeld(this.Kollege, iName, neublocknum, aktName);
+            this.feld.setFeld(this.Kollege, NAME, neublocknum, aktName);
         }
         // if (! aktNummer.trim().equals("@FREI")){
-        this.feld.setFeld(this.Kollege, iNummer, neublocknum, aktNummer);
+        this.feld.setFeld(this.Kollege, NUMMER, neublocknum, aktNummer);
         // }
         /**** neue Endezeit ist bisherige Endezeit **/
-        this.feld.setFeld(this.Kollege, iEnde, neublocknum, endeBisher);
-        this.feld.setFeld(this.Kollege, iDauer, neublocknum, Integer.toString(differenz));
+        this.feld.setFeld(this.Kollege, ENDE, neublocknum, endeBisher);
+        this.feld.setFeld(this.Kollege, DAUER, neublocknum, Integer.toString(differenz));
         minuten = (int) ZeitFunk.MinutenSeitMitternacht(endeBisher) - differenz;
         beginnZweitBlock = ZeitFunk.MinutenZuZeit(minuten);
-        this.feld.setFeld(this.Kollege, iBeginn, neublocknum, beginnZweitBlock);
+        this.feld.setFeld(this.Kollege, BEGINN, neublocknum, beginnZweitBlock);
 
         /****
          * Dann den bisherigen block mit den neu eingegebenen Daten beschreiben
          *****/
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
         // Eingabe Nummer eintragen
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
         // Beginn eintragen
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block, this.Beginn);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block, this.Beginn);
         // Eingabe Dauer eintragen
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(this.Dauer));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(this.Dauer));
         // Endzeit eintragen
-        this.feld.setFeld(this.Kollege, iEnde, this.Block, this.Ende);
+        this.feld.setFeld(this.Kollege, ENDE, this.Block, this.Ende);
 
         // Blockzahl erh�hen und eintragen
         AnzahlOrigBloecke++;
@@ -463,12 +462,12 @@ class Tblock {
         // String alteZeit,dummyZeit;
         String altesEnde;
 
-        beginnBisher = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
-        endeBisher = this.feld.getFeld(this.Kollege, iEnde, this.Block);
-        dauerBisher = Integer.parseInt(this.feld.getFeld(this.Kollege, iDauer, this.Block));
+        beginnBisher = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
+        endeBisher = this.feld.getFeld(this.Kollege, ENDE, this.Block);
+        dauerBisher = Integer.parseInt(this.feld.getFeld(this.Kollege, DAUER, this.Block));
 
-        aktName = this.feld.getFeld(this.Kollege, iName, this.Block);
-        aktNummer = this.feld.getFeld(this.Kollege, iNummer, this.Block);
+        aktName = this.feld.getFeld(this.Kollege, NAME, this.Block);
+        aktNummer = this.feld.getFeld(this.Kollege, NUMMER, this.Block);
 
         beginnNeu = this.Beginn;
         endeNeu = this.Ende;
@@ -478,15 +477,15 @@ class Tblock {
         /****
          * Als erstes den bisherigen block mit den neu eingegebenen Daten beschreiben
          *****/
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
         // Eingabe Nummer eintragen
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
         // Beginn eintragen
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block, this.Beginn);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block, this.Beginn);
         // Eingabe Dauer eintragen
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(this.Dauer));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(this.Dauer));
         // Endzeit eintragen
-        this.feld.setFeld(this.Kollege, iEnde, this.Block, this.Ende);
+        this.feld.setFeld(this.Kollege, ENDE, this.Block, this.Ende);
 
         /****
          * Dann den neuen Block vor den bisherigen Block einf�gen und beschreiben
@@ -495,16 +494,16 @@ class Tblock {
         this.feld.einfuegenBlock(this.Kollege, neublocknum);
         if (!aktName.trim()
                     .isEmpty()) {
-            this.feld.setFeld(this.Kollege, iName, neublocknum, aktName);
+            this.feld.setFeld(this.Kollege, NAME, neublocknum, aktName);
         }
         if (aktNummer.trim()
                      .equals("@FREI")) {
-            this.feld.setFeld(this.Kollege, iNummer, neublocknum, this.Nummer);
+            this.feld.setFeld(this.Kollege, NUMMER, neublocknum, this.Nummer);
         }
         /**** neue Beginnzeit ist bisherige Beginnzeit **/
-        this.feld.setFeld(this.Kollege, iBeginn, neublocknum, beginnBisher);
-        this.feld.setFeld(this.Kollege, iDauer, neublocknum, Integer.toString(differenz));
-        this.feld.setFeld(this.Kollege, iEnde, neublocknum, this.Beginn);
+        this.feld.setFeld(this.Kollege, BEGINN, neublocknum, beginnBisher);
+        this.feld.setFeld(this.Kollege, DAUER, neublocknum, Integer.toString(differenz));
+        this.feld.setFeld(this.Kollege, ENDE, neublocknum, this.Beginn);
 
         // Blockzahl erh�hen und eintragen
         AnzahlOrigBloecke++;
@@ -525,11 +524,11 @@ class Tblock {
         // String alteZeit,dummyZeit;
         String altesEnde;
 
-        aktName = this.feld.getFeld(this.Kollege, iName, this.Block);
-        aktNummer = this.feld.getFeld(this.Kollege, iNummer, this.Block);
-        beginnBisher = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
-        endeBisher = this.feld.getFeld(this.Kollege, iEnde, this.Block);
-        dauerBisher = Integer.parseInt(this.feld.getFeld(this.Kollege, iDauer, this.Block));
+        aktName = this.feld.getFeld(this.Kollege, NAME, this.Block);
+        aktNummer = this.feld.getFeld(this.Kollege, NUMMER, this.Block);
+        beginnBisher = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
+        endeBisher = this.feld.getFeld(this.Kollege, ENDE, this.Block);
+        dauerBisher = Integer.parseInt(this.feld.getFeld(this.Kollege, DAUER, this.Block));
 
         beginnNeu = this.Beginn;
         endeNeu = this.Ende;
@@ -540,26 +539,26 @@ class Tblock {
                 - ZeitFunk.MinutenSeitMitternacht(endeNeu));
         dauer_aktBlock = dauerNeu;
         /**** im bisherigen Block lediglich die Zeitdaten ver�ndern ***/
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block, beginnBisher);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block, beginnBisher);
         // Eingabe Dauer eintragen
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(dauer_vorBlock));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(dauer_vorBlock));
         // Endzeit eintragen diese entspricht der Beginnzeit des neuen Blocks
-        this.feld.setFeld(this.Kollege, iEnde, this.Block, this.Beginn);
+        this.feld.setFeld(this.Kollege, ENDE, this.Block, this.Beginn);
 
         /**** jetzt einen neuen Block setzen das ist jetzt unser aktiver Block ***/
         int neublocknum = this.Block + 1;
         this.feld.einfuegenBlock(this.Kollege, neublocknum);
 
         /**** diesen aktuellen Block mit den eingegebenen Datenbeschreiben **/
-        this.feld.setFeld(this.Kollege, iName, neublocknum, this.Name);
+        this.feld.setFeld(this.Kollege, NAME, neublocknum, this.Name);
         // Eingabe Nummer eintragen
-        this.feld.setFeld(this.Kollege, iNummer, neublocknum, this.Nummer);
+        this.feld.setFeld(this.Kollege, NUMMER, neublocknum, this.Nummer);
 
-        this.feld.setFeld(this.Kollege, iBeginn, neublocknum, this.Beginn);
+        this.feld.setFeld(this.Kollege, BEGINN, neublocknum, this.Beginn);
         // Eingabe Dauer eintragen
-        this.feld.setFeld(this.Kollege, iDauer, neublocknum, Integer.toString(dauer_aktBlock));
+        this.feld.setFeld(this.Kollege, DAUER, neublocknum, Integer.toString(dauer_aktBlock));
         // Endzeit eintragen diese entspricht der Beginnzeit des neuen Blocks
-        this.feld.setFeld(this.Kollege, iEnde, neublocknum, this.Ende);
+        this.feld.setFeld(this.Kollege, ENDE, neublocknum, this.Ende);
 
         /**** jetzt erneut einen neuen Block setzen das ist jetzt der Nachblock ***/
         neublocknum = neublocknum + 1;
@@ -570,16 +569,16 @@ class Tblock {
         // Eingabe Nummer eintragen
         if (!aktName.trim()
                     .isEmpty()) {
-            this.feld.setFeld(this.Kollege, iName, neublocknum, aktName);
+            this.feld.setFeld(this.Kollege, NAME, neublocknum, aktName);
         }
-        this.feld.setFeld(this.Kollege, iNummer, neublocknum, aktNummer);
+        this.feld.setFeld(this.Kollege, NUMMER, neublocknum, aktNummer);
 
-        this.feld.setFeld(this.Kollege, iBeginn, neublocknum, this.Ende);
+        this.feld.setFeld(this.Kollege, BEGINN, neublocknum, this.Ende);
         // Eingabe Dauer eintragen
-        this.feld.setFeld(this.Kollege, iDauer, neublocknum, Integer.toString(dauer_nachBlock));
+        this.feld.setFeld(this.Kollege, DAUER, neublocknum, Integer.toString(dauer_nachBlock));
         // Endzeit eintragen diese entspricht der Beginnzeit des neuen Blocks
         String sEndeNeu = ZeitFunk.MinutenZuZeit((int) ZeitFunk.MinutenSeitMitternacht(this.Ende) + dauer_nachBlock);
-        this.feld.setFeld(this.Kollege, iEnde, neublocknum, sEndeNeu);
+        this.feld.setFeld(this.Kollege, ENDE, neublocknum, sEndeNeu);
 
         // Blockzahl erh�hen und eintragen
         AnzahlOrigBloecke = AnzahlOrigBloecke + 2;
@@ -596,9 +595,9 @@ class Tblock {
         // Testen ob versucht wurde vor dem Kalender-Nullpunkt zu starten = 07:00:00;
         // Testen ob es sich um den ersten Block handelt;
         // Testen ob Start und Dauer des Vorblocks eine Reduzierung zul��t;
-        String sBeginn = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
-        String sEnde = this.feld.getFeld(this.Kollege, iEnde, this.Block);
-        String sDauer = this.feld.getFeld(this.Kollege, iDauer, this.Block);
+        String sBeginn = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
+        String sEnde = this.feld.getFeld(this.Kollege, ENDE, this.Block);
+        String sDauer = this.feld.getFeld(this.Kollege, DAUER, this.Block);
         int endeVorBlock;
         int startAktuell;
         if (this.Block == 0) {
@@ -608,11 +607,11 @@ class Tblock {
                     "Wichtige Mitteilung", JOptionPane.WARNING_MESSAGE);
             return -1;
         }
-        endeVorBlock = (int) ZeitFunk.MinutenSeitMitternacht(this.feld.getFeld(this.Kollege, iEnde, this.Block - 1));
+        endeVorBlock = (int) ZeitFunk.MinutenSeitMitternacht(this.feld.getFeld(this.Kollege, ENDE, this.Block - 1));
         startAktuell = (int) ZeitFunk.MinutenSeitMitternacht(this.Beginn);
 
         if ((int) ZeitFunk.MinutenSeitMitternacht(
-                this.feld.getFeld(this.Kollege, iBeginn, this.Block - 1)) > startAktuell) {
+                this.feld.getFeld(this.Kollege, BEGINN, this.Block - 1)) > startAktuell) {
             JOptionPane.showMessageDialog(null,
                     "Der gewünschte Starttermin würde sich mit dem voangegangenen\n"
                             + "Termin überschneiden und kann deshalb nicht geschrieben werden",
@@ -633,9 +632,9 @@ class Tblock {
             int endeAktuell, endeFolgeBlock, startFolgeBlock;
             endeAktuell = (int) ZeitFunk.MinutenSeitMitternacht(sEnde);
             endeFolgeBlock = (int) ZeitFunk.MinutenSeitMitternacht(
-                    this.feld.getFeld(this.Kollege, iEnde, this.Block + 1));
+                    this.feld.getFeld(this.Kollege, ENDE, this.Block + 1));
             startFolgeBlock = (int) ZeitFunk.MinutenSeitMitternacht(
-                    this.feld.getFeld(this.Kollege, iBeginn, this.Block + 1));
+                    this.feld.getFeld(this.Kollege, BEGINN, this.Block + 1));
             if ((int) ZeitFunk.MinutenSeitMitternacht(this.Ende) == startFolgeBlock) {
                 //// System.out.println("Ende aktuell == Start Folgeblock");
                 return 1;
@@ -656,7 +655,7 @@ class Tblock {
     /******************************/
     private void KuerzeVorBlock() {
 
-        String startVorblock = this.feld.getFeld(this.Kollege, iBeginn, this.Block - 1);
+        String startVorblock = this.feld.getFeld(this.Kollege, BEGINN, this.Block - 1);
         int dauerVorBlock = (int) ZeitFunk.ZeitDifferenzInMinuten(startVorblock, this.Beginn);
         if (dauerVorBlock == 0) {
             //// System.out.println("KuerzeVorBlock: Die Dauer w�re 0
@@ -670,26 +669,26 @@ class Tblock {
                             + "Ihr Terminwunsch kann daher nicht eingetragen werden!");
             return;
         }
-        this.feld.setFeld(this.Kollege, iEnde, this.Block - 1, this.Beginn);
+        this.feld.setFeld(this.Kollege, ENDE, this.Block - 1, this.Beginn);
 
-        this.feld.setFeld(this.Kollege, iDauer, this.Block - 1, Integer.toString(dauerVorBlock));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block - 1, Integer.toString(dauerVorBlock));
         // int dauerVorblock =
-        // Integer.valueOf(this.feld.getFeld(this.Kollege,iDauer,this.Block-1));
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block, this.Beginn);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(this.Dauer));
+        // Integer.valueOf(this.feld.getFeld(this.Kollege,DAUER,this.Block-1));
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block, this.Beginn);
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(this.Dauer));
         KalenderBeschreiben th = new KalenderBeschreiben();
         th.KalenderDaten(this.feld, this.Kollege, aktDatum[this.Spalte], this.dbBehandler);
     }
 
     /******************************/
     private void KuerzeVorBlockUndNeuBlock() {
-        String name = this.feld.getFeld(this.Kollege, iName, this.Block);
-        String nummer = this.feld.getFeld(this.Kollege, iNummer, this.Block);
-        String ende = this.feld.getFeld(this.Kollege, iEnde, this.Block);
+        String name = this.feld.getFeld(this.Kollege, NAME, this.Block);
+        String nummer = this.feld.getFeld(this.Kollege, NUMMER, this.Block);
+        String ende = this.feld.getFeld(this.Kollege, ENDE, this.Block);
 
-        String startVorblock = this.feld.getFeld(this.Kollege, iBeginn, this.Block - 1);
+        String startVorblock = this.feld.getFeld(this.Kollege, BEGINN, this.Block - 1);
         int dauerVorBlock = (int) ZeitFunk.ZeitDifferenzInMinuten(startVorblock, this.Beginn);
         if (dauerVorBlock == 0) {
             //// System.out.println("KuerzeVorBlockUndNeuBlock: Die Dauer w�re 0
@@ -703,26 +702,26 @@ class Tblock {
                             + "Ihr Terminwunsch kann daher nicht eingetragen werden!");
             return;
         }
-        this.feld.setFeld(this.Kollege, iEnde, this.Block - 1, this.Beginn);
+        this.feld.setFeld(this.Kollege, ENDE, this.Block - 1, this.Beginn);
         // int dauerVorBlock =
         // (int)zeitFunk.ZeitDifferenzInMinuten(startVorblock,this.Beginn);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block - 1, Integer.toString(dauerVorBlock));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block - 1, Integer.toString(dauerVorBlock));
 
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block, this.Beginn);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(this.Dauer));
-        this.feld.setFeld(this.Kollege, iEnde, this.Block, this.Ende);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block, this.Beginn);
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(this.Dauer));
+        this.feld.setFeld(this.Kollege, ENDE, this.Block, this.Ende);
 
         int neublocknum = this.Block + 1;
         this.feld.einfuegenBlock(this.Kollege, neublocknum);
 
-        this.feld.setFeld(this.Kollege, iName, neublocknum, name);
-        this.feld.setFeld(this.Kollege, iNummer, neublocknum, nummer);
-        this.feld.setFeld(this.Kollege, iBeginn, neublocknum, this.Ende);
+        this.feld.setFeld(this.Kollege, NAME, neublocknum, name);
+        this.feld.setFeld(this.Kollege, NUMMER, neublocknum, nummer);
+        this.feld.setFeld(this.Kollege, BEGINN, neublocknum, this.Ende);
         int neudauer = (int) ZeitFunk.ZeitDifferenzInMinuten(this.Ende, ende);
-        this.feld.setFeld(this.Kollege, iDauer, neublocknum, Integer.toString(neudauer));
-        this.feld.setFeld(this.Kollege, iEnde, neublocknum, ende);
+        this.feld.setFeld(this.Kollege, DAUER, neublocknum, Integer.toString(neudauer));
+        this.feld.setFeld(this.Kollege, ENDE, neublocknum, ende);
         this.feld.setAnzahlBloecke(this.Kollege, AnzahlOrigBloecke + 1);
         //// System.out.println("Zeitdifferenz "+neudauer);
         KalenderBeschreiben th = new KalenderBeschreiben();
@@ -731,7 +730,7 @@ class Tblock {
 
     /******************************/
     private void KuerzeVorUndNachBlock() {
-        String startVorblock = this.feld.getFeld(this.Kollege, iBeginn, this.Block - 1);
+        String startVorblock = this.feld.getFeld(this.Kollege, BEGINN, this.Block - 1);
         int dauerVorBlock = (int) ZeitFunk.ZeitDifferenzInMinuten(startVorblock, this.Beginn);
         if (dauerVorBlock == 0) {
             //// System.out.println("KuerzeVorUndNachBlock: Die Dauer w�re 0
@@ -745,24 +744,24 @@ class Tblock {
                             + "Ihr Terminwunsch kann daher nicht eingetragen werden!");
             return;
         }
-        this.feld.setFeld(this.Kollege, iEnde, this.Block - 1, this.Beginn);
+        this.feld.setFeld(this.Kollege, ENDE, this.Block - 1, this.Beginn);
         // int dauerVorBlock =
         // (int)zeitFunk.ZeitDifferenzInMinuten(startVorblock,this.Beginn);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block - 1, Integer.toString(dauerVorBlock));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block - 1, Integer.toString(dauerVorBlock));
         // int dauerVorblock =
-        // Integer.valueOf(this.feld.getFeld(this.Kollege,iDauer,this.Block-1));
+        // Integer.valueOf(this.feld.getFeld(this.Kollege,DAUER,this.Block-1));
 
-        String endeNachBlock = this.feld.getFeld(this.Kollege, iEnde, this.Block + 1);
+        String endeNachBlock = this.feld.getFeld(this.Kollege, ENDE, this.Block + 1);
 
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block, this.Beginn);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(this.Dauer));
-        this.feld.setFeld(this.Kollege, iEnde, this.Block, this.Ende);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block, this.Beginn);
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(this.Dauer));
+        this.feld.setFeld(this.Kollege, ENDE, this.Block, this.Ende);
 
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block + 1, this.Ende);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block + 1, this.Ende);
         int dauerNachBlock = (int) ZeitFunk.ZeitDifferenzInMinuten(this.Ende, endeNachBlock);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block + 1, Integer.toString(dauerNachBlock));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block + 1, Integer.toString(dauerNachBlock));
 
         KalenderBeschreiben th = new KalenderBeschreiben();
         th.KalenderDaten(this.feld, this.Kollege, aktDatum[this.Spalte], this.dbBehandler);
@@ -775,9 +774,9 @@ class Tblock {
         // Testen ob es sich um den letzten Block handelt;
         // Testen ob Ende und Dauer des Nachblocks eine Reduzierung zul��t;
         int ende = (int) ZeitFunk.MinutenSeitMitternacht(this.Ende);
-        String sende = this.feld.getFeld(this.Kollege, iEnde, this.Block);
+        String sende = this.feld.getFeld(this.Kollege, ENDE, this.Block);
         int aktende = (int) ZeitFunk.MinutenSeitMitternacht(sende);
-        String sbeginn = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
+        String sbeginn = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
         if (ende >= SystemConfig.KalenderMilli[1]) {
             JOptionPane.showMessageDialog(null,
                     "Die gewünschte Endzeit des Termines liegt nach der absoluten Endzeit\n"
@@ -795,7 +794,7 @@ class Tblock {
                 //// System.out.println("Termin�berlappung ist nicht erlaubt");
                 return -1;
             }
-            String sendefolge = this.feld.getFeld(this.Kollege, iEnde, this.Block + 1);
+            String sendefolge = this.feld.getFeld(this.Kollege, ENDE, this.Block + 1);
             int endefolge = (int) ZeitFunk.MinutenSeitMitternacht(sendefolge);
             // anfang gleich aber ende nach hinten verschoben = folgeblock k�rzen
             if ((this.Beginn.equals(sbeginn)) && (ende < endefolge)) {
@@ -815,17 +814,17 @@ class Tblock {
 
     /******************************/
     private void KuerzeNachBlock() {
-        String endeNachBlock = this.feld.getFeld(this.Kollege, iEnde, this.Block + 1);
+        String endeNachBlock = this.feld.getFeld(this.Kollege, ENDE, this.Block + 1);
 
-        this.feld.setFeld(this.Kollege, iName, this.Block, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, this.Block, this.Nummer);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(this.Dauer));
-        this.feld.setFeld(this.Kollege, iEnde, this.Block, this.Ende);
+        this.feld.setFeld(this.Kollege, NAME, this.Block, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, this.Block, this.Nummer);
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(this.Dauer));
+        this.feld.setFeld(this.Kollege, ENDE, this.Block, this.Ende);
 
-        this.feld.setFeld(this.Kollege, iBeginn, this.Block + 1, this.Ende);
+        this.feld.setFeld(this.Kollege, BEGINN, this.Block + 1, this.Ende);
 
         int iDauerNachBlock = (int) ZeitFunk.ZeitDifferenzInMinuten(this.Ende, endeNachBlock);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block + 1, Integer.toString(iDauerNachBlock));
+        this.feld.setFeld(this.Kollege, DAUER, this.Block + 1, Integer.toString(iDauerNachBlock));
 
         KalenderBeschreiben th = new KalenderBeschreiben();
         th.KalenderDaten(this.feld, this.Kollege, aktDatum[this.Spalte], this.dbBehandler);
@@ -834,31 +833,31 @@ class Tblock {
     /******************************/
     private void NeuVorBlockUndKuerzeNachBlock() {
         // xxxxx
-        String aktName = this.feld.getFeld(this.Kollege, iName, this.Block);
-        String aktNummer = this.feld.getFeld(this.Kollege, iNummer, this.Block);
-        String beginnBisher = this.feld.getFeld(this.Kollege, iBeginn, this.Block);
-        String endeBisher = this.feld.getFeld(this.Kollege, iEnde, this.Block);
-        int dauerBisher = Integer.parseInt(this.feld.getFeld(this.Kollege, iDauer, this.Block));
+        String aktName = this.feld.getFeld(this.Kollege, NAME, this.Block);
+        String aktNummer = this.feld.getFeld(this.Kollege, NUMMER, this.Block);
+        String beginnBisher = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
+        String endeBisher = this.feld.getFeld(this.Kollege, ENDE, this.Block);
+        int dauerBisher = Integer.parseInt(this.feld.getFeld(this.Kollege, DAUER, this.Block));
         int iDauerVorBlock = (int) ZeitFunk.ZeitDifferenzInMinuten(beginnBisher, this.Beginn);
 
-        this.feld.setFeld(this.Kollege, iEnde, this.Block, this.Beginn);
-        this.feld.setFeld(this.Kollege, iDauer, this.Block, Integer.toString(iDauerVorBlock));
+        this.feld.setFeld(this.Kollege, ENDE, this.Block, this.Beginn);
+        this.feld.setFeld(this.Kollege, DAUER, this.Block, Integer.toString(iDauerVorBlock));
 
         int neublocknum = this.Block + 1;
         this.feld.einfuegenBlock(this.Kollege, neublocknum);
 
-        this.feld.setFeld(this.Kollege, iName, neublocknum, this.Name);
-        this.feld.setFeld(this.Kollege, iNummer, neublocknum, this.Nummer);
-        this.feld.setFeld(this.Kollege, iBeginn, neublocknum, this.Beginn);
-        this.feld.setFeld(this.Kollege, iDauer, neublocknum, Integer.toString(this.Dauer));
-        this.feld.setFeld(this.Kollege, iEnde, neublocknum, this.Ende);
+        this.feld.setFeld(this.Kollege, NAME, neublocknum, this.Name);
+        this.feld.setFeld(this.Kollege, NUMMER, neublocknum, this.Nummer);
+        this.feld.setFeld(this.Kollege, BEGINN, neublocknum, this.Beginn);
+        this.feld.setFeld(this.Kollege, DAUER, neublocknum, Integer.toString(this.Dauer));
+        this.feld.setFeld(this.Kollege, ENDE, neublocknum, this.Ende);
 
         //// System.out.println(this.Name+"/"+this.Nummer+"/"+this.Beginn+"/"+Integer.valueOf(this.Dauer).toString()+"/"+this.Ende);
 
-        this.feld.setFeld(this.Kollege, iBeginn, neublocknum + 1, this.Ende);
-        String endeNachBlock = this.feld.getFeld(this.Kollege, iEnde, neublocknum + 1);
+        this.feld.setFeld(this.Kollege, BEGINN, neublocknum + 1, this.Ende);
+        String endeNachBlock = this.feld.getFeld(this.Kollege, ENDE, neublocknum + 1);
         int iDauerNachBlock = (int) ZeitFunk.ZeitDifferenzInMinuten(this.Ende, endeNachBlock);
-        this.feld.setFeld(this.Kollege, iDauer, neublocknum + 1, Integer.toString(iDauerNachBlock));
+        this.feld.setFeld(this.Kollege, DAUER, neublocknum + 1, Integer.toString(iDauerNachBlock));
 
         this.feld.setAnzahlBloecke(this.Kollege, AnzahlOrigBloecke + 1);
 
