@@ -26,6 +26,7 @@ import systemEinstellungen.SystemConfig;
 import terminKalender.TerminFenster.Ansicht;
 
 class kalenderPanel extends JXPanel {
+    private static final Font DIALOGFONT = new Font("Dialog", Font.PLAIN, 12);
     /**
      *
      */
@@ -97,7 +98,7 @@ class kalenderPanel extends JXPanel {
 
             float fDifferenz;
             int i1;
-            g2d.setFont(SystemFarben.fon3);
+            g2d.setFont( DIALOGFONT);
 
             g2d.setColor(SystemConfig.KalenderHintergrund);
             g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -208,9 +209,9 @@ class kalenderPanel extends JXPanel {
                     }
 
                     if ((this.blockAktiv >= 0) && (this.blockAktiv == i) && (this.spalteAktiv)) {
-                        g2d.setColor(SystemFarben.colGrau1);
+                        g2d.setColor(Color.GRAY);
                         g2d.fillRect(xStart, yStartMin, xEnde, yDifferenz);
-                        g2d.setColor(SystemFarben.colWeiss);
+                        g2d.setColor(Color.WHITE);
                         if (sReznr.contains("@FREI")) {
                             g2d.drawString(sName, 5, (baseline));
                         } else {
@@ -465,7 +466,6 @@ class kalenderPanel extends JXPanel {
         zeitSpanneVon = von;
         setZeitSpanneBis(bis);
         minutenInsgesamt = bis - von;
-        new SystemFarben();
     }
 
     public int[] BlockTest(int x, int y, int[] spdaten) {
