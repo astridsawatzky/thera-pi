@@ -30,7 +30,7 @@ import javax.swing.text.MaskFormatter;
  * @version 1.0
  * @since Java 1.5
  */
-public class DateInputTextField extends JFormattedTextField {
+class DateInputTextField extends JFormattedTextField {
 
     /**
      * 
@@ -73,7 +73,7 @@ public class DateInputTextField extends JFormattedTextField {
      * 
      * @return MaskFormatter
      */
-    protected MaskFormatter getDateMask() {
+    private MaskFormatter getDateMask() {
         MaskFormatter formatter = null;
         try {
             if (Locale.getDefault()
@@ -123,7 +123,7 @@ public class DateInputTextField extends JFormattedTextField {
      * @author Bastie - Sebastian Ritter
      * @version 1.0
      */
-    protected static class DateInputVerifier extends InputVerifier {
+    private static class DateInputVerifier extends InputVerifier {
         @Override
         public boolean verify(final JComponent input) {
             if (input instanceof DateInputTextField) {

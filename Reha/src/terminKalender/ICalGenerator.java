@@ -9,7 +9,7 @@ import java.util.UUID;
 import systemEinstellungen.SystemConfig;
 
 public class ICalGenerator {
-    static String CLRF = "=0D=0A";
+    
     /*
      * static String ort =
      * SystemConfig.hmFirmenDaten.get("Firma1")+(!SystemConfig.hmFirmenDaten.get(
@@ -19,10 +19,10 @@ public class ICalGenerator {
      * ("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+", CRLF"+
      * "Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon");
      */
-    static String ort = SystemConfig.hmFirmenDaten.get("Strasse") + " CRLF" + SystemConfig.hmFirmenDaten.get("Plz")
+    private static String ort = SystemConfig.hmFirmenDaten.get("Strasse") + " CRLF" + SystemConfig.hmFirmenDaten.get("Plz")
             + " " + SystemConfig.hmFirmenDaten.get("Ort");
 
-    static final SimpleDateFormat futc = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+    private static final SimpleDateFormat futc = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 
     public static String macheKopf() {
         return "BEGIN:VCALENDAR" + System.getProperty("line.separator") + "CALSCALE:GREGORIAN"
@@ -81,7 +81,7 @@ public class ICalGenerator {
         return buf.toString();
     }
 
-    public static String macheRehaVevent(String datum, String start, String end, String titel, String beschreibung,
+    static String macheRehaVevent(String datum, String start, String end, String titel, String beschreibung,
             boolean warnen) {
         StringBuffer buf = new StringBuffer();
         try {
@@ -122,7 +122,7 @@ public class ICalGenerator {
         return buf.toString();
     }
 
-    public static String macheWarnung(String warnung) {
+    private static String macheWarnung(String warnung) {
         StringBuffer buf = new StringBuffer();
         try {
             buf.append("BEGIN:VALARM" + System.getProperty("line.separator"));
@@ -137,7 +137,7 @@ public class ICalGenerator {
         return buf.toString();
     }
 
-    public static String macheUID() {
+    private static String macheUID() {
         UUID idOne = UUID.randomUUID();
         return idOne.toString();
     }
@@ -146,7 +146,7 @@ public class ICalGenerator {
         return "END:VCALENDAR" + System.getProperty("line.separator");
     }
 
-    public static String getUTC() {
+    private static String getUTC() {
         final SimpleDateFormat f = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
         f.setTimeZone(TimeZone.getTimeZone("UTC"));
         return f.format(new Date()) + "Z";
@@ -161,7 +161,7 @@ public class ICalGenerator {
      * "Bundesland"}; hmFirmenDaten = new HashMap<String,String>();
      */
 
-    public static String setUtcTime(String datumkomplett) {
+    private static String setUtcTime(String datumkomplett) {
         String ret = "";
         try {
             int year = Integer.parseInt(datumkomplett.substring(0, 4)); // jahr

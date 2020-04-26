@@ -28,11 +28,11 @@ import hauptFenster.Reha;
 import oOorgTools.OOTools;
 
 /*******************************************************************************************************/
-public class TelefonListe {
-    Vector<String[]> dvec = new Vector<String[]>();
-    Object tfobj = null;
+class TelefonListe {
+    private Vector<String[]> dvec = new Vector<String[]>();
+    private Object tfobj = null;
 
-    public TelefonListe(Object obj) throws TextException {
+    TelefonListe(Object obj) throws TextException {
         //// System.out.println("�bergebene Parameter = "+obj);
         //// System.out.println("Einzelner Termin "+((String) ((Vector)((ArrayList)
         //// obj).get(0)).get(1)) );

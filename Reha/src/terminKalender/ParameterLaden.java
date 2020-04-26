@@ -19,14 +19,14 @@ public class ParameterLaden {
     public static Vector<ArrayList<String>> vKollegen = new Vector<ArrayList<String>>();
     public static Vector<Kollegen> vKKollegen = new Vector<Kollegen>();
     public static Vector<Vector<String>> pKollegen = new Vector<Vector<String>>();
-    public static Vector<Kollegen> pKKollegen = new Vector<Kollegen>();
+    
 
-    public static String[][] col;
-    public static Kollegen[] cKollegen[];
+    private static String[][] col;
+    
 
     public static int maxKalZeile = 0;
 
-    public static int suchen(String ss) {
+    static int suchen(String ss) {
         int ret = -1;
         int lang = vKKollegen.size();
         int i;
@@ -58,9 +58,7 @@ public class ParameterLaden {
         return ret;
     }
 
-    public static Kollegen getKollegen(int i) {
-        return (vKKollegen.get(i));
-    }
+    
 
     public static String getKollegenUeberDBZeile(int reihe) {
         String ret = "";
@@ -76,31 +74,9 @@ public class ParameterLaden {
         return ret;
     }
 
-    public static int getPosUeberReihe(int reihe) {
-        int ret = 0;
-        int lang = vKKollegen.size();
-        int i;
-        for (i = 0; i < lang; i++) {
-            if (vKKollegen.get(i).Reihe == reihe) {
-                ret = vKKollegen.get(i).Position;
-                break;
-            }
-        }
-        return ret;
-    }
+    
 
-    public static int getPosUeberDB(int dbzeile) {
-        int ret = 0;
-        int lang = vKKollegen.size();
-        int i;
-        for (i = 0; i < lang; i++) {
-            if (vKKollegen.get(i).Position == dbzeile) {
-                ret = vKKollegen.get(i).Reihe;
-                break;
-            }
-        }
-        return ret;
-    }
+    
 
     public static String getMatchcode(int kollege) {
         return vKKollegen.get(kollege).Matchcode;

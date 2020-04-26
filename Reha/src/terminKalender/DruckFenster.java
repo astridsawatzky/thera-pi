@@ -67,7 +67,7 @@ import hauptFenster.Reha;
 import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
 
-public class DruckFenster extends RehaSmartDialog implements ActionListener {
+class DruckFenster extends RehaSmartDialog implements ActionListener {
     /**
      *
      */
@@ -81,17 +81,17 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
     private static String dieserName = "";
     private static JXTable pliste = null;
     private static JXTitledPanel jp;
-    public static int seiten = 1;
-    public static int OOoFertig = -1;
+    
+    private static int OOoFertig = -1;
     private static JButton jb1 = null;
     private static JButton jb2 = null;
     private static JButton jb3 = null;
     private static JButton jb4 = null;
-    public static DruckFenster thisClass;
+    private static DruckFenster thisClass;
 
-    public Vector<Vector<String>> termineVec = new Vector<Vector<String>>();
+    private Vector<Vector<String>> termineVec = new Vector<Vector<String>>();
 
-    public DruckFenster(JXFrame owner, ArrayList<String[]> terminVergabe) {
+    DruckFenster(JXFrame owner, ArrayList<String[]> terminVergabe) {
         // super(frame, titlePanel());
         super(owner, "DruckerListe");
         dieserName = "DruckerListe";
@@ -163,7 +163,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
         //// System.out.println(termineVec);
     }
 
-    public void cursorWait(boolean ein) {
+    private void cursorWait(boolean ein) {
         if (!ein) {
             this.setCursor(Cursors.normalCursor);
         } else {
@@ -171,7 +171,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
         }
     }
 
-    public void setFocusTabelle() {
+    void setFocusTabelle() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -191,7 +191,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
 
     /*********************************************************/
 
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
         if (rtp != null) {
             rtp.removeRehaTPEventListener(this);
         }
@@ -359,9 +359,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
         return jpliste;
     }
 
-    public String dieserName() {
-        return this.getName();
-    }
+    
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -529,7 +527,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
         }
     }
 
-    public static JXTable getTable() {
+    private static JXTable getTable() {
         return pliste;
     }
 
@@ -537,7 +535,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
         return termineVec;
     }
 
-    public static void buttonsEinschalten() {
+    private static void buttonsEinschalten() {
         jb1.setEnabled(true);
         jb2.setEnabled(true);
         jb3.setEnabled(true);
@@ -579,11 +577,11 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
         return ret;
     }
 
-    final class bestueckeOOo extends Thread {
-        JXTable jtable = null;
-        Vector<Vector<String>> oOTermine = null;
-        String aktion = "";
-        String exporturl = "";
+    private final class bestueckeOOo extends Thread {
+        private JXTable jtable = null;
+        private Vector<Vector<String>> oOTermine = null;
+        private String aktion = "";
+        private String exporturl = "";
 
         public void DruckenOderEmail(String aktion) {
             this.aktion = aktion;
@@ -990,11 +988,11 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
         }
     }
 
-    final class sendeTermine extends Thread {
-        Vector<Vector<String>> oOTermine = null;
-        String str = "";
-        String pat_intern = "";
-        String emailaddy = "";
+    private final class sendeTermine extends Thread {
+        private Vector<Vector<String>> oOTermine = null;
+        
+        private String pat_intern = "";
+        private String emailaddy = "";
 
         @Override
         public void run() {
@@ -1345,7 +1343,7 @@ public class DruckFenster extends RehaSmartDialog implements ActionListener {
     }
 
     /*******************************************/
-    class MyTerminTableModel extends DefaultTableModel {
+    private class MyTerminTableModel extends DefaultTableModel {
         /**
         *
         */

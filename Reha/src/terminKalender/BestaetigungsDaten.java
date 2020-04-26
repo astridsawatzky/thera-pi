@@ -9,8 +9,8 @@ public class BestaetigungsDaten {
     public boolean vorrangig;
     public boolean invOBelegt;
     public boolean einerOk;
-    public boolean danachVoll;
-    public boolean jetztVoll;
+
+    private boolean jetztVoll;
 
     public BestaetigungsDaten(boolean best, String hmPosNr, int anzBBT, int vOMenge, boolean vorrangig,
             boolean belegt) {
@@ -34,7 +34,6 @@ public class BestaetigungsDaten {
 
     public void danachVoll() {
         if (this.vOMenge == (this.anzBBT + 1)) {
-            this.danachVoll = true;
         }
     }
 

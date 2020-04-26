@@ -20,7 +20,7 @@ import org.jdesktop.swingx.JXTitledPanel;
 
 import systemEinstellungen.SystemConfig;
 
-public class SetWahl extends JDialog {
+class SetWahl extends JDialog {
 
     private static final long serialVersionUID = 1L;
     private JPanel jContentPane = null; // @jve:decl-index=0:visual-constraint="505,22"
@@ -31,7 +31,7 @@ public class SetWahl extends JDialog {
     private JList jList = null;
     private JButton jButton = null;
     private JButton jButton1 = null;
-    public int ret = 0;
+    int ret = 0;
     private JList jList1 = null;
     private int wahl;
     private TerminFenster eltern;
@@ -39,7 +39,7 @@ public class SetWahl extends JDialog {
     /**
      * @param owner
      */
-    public SetWahl(TerminFenster xeltern) {
+    SetWahl(TerminFenster xeltern) {
         super();
         eltern = xeltern;
         wahl = eltern.aktuellesSet();
@@ -244,11 +244,7 @@ public class SetWahl extends JDialog {
         return setname;
     }
 
-    public void setjList(JList jList) {
-        this.jList = jList;
-    }
+    
 
-    public JList getjList() {
-        return jList;
-    }
+    
 } // @jve:decl-index=0:visual-constraint="103,28"

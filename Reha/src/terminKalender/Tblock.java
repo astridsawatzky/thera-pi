@@ -875,9 +875,9 @@ class Tblock {
  */
 
 class Felder {
-    String srueck;
-    int dbKollege;
-    Vector tvect = new Vector();
+    
+    
+    private Vector tvect = new Vector();
 
     public Felder Init(Vector termv) {
         tvect = termv;
@@ -909,7 +909,7 @@ class Felder {
         return bloecke;
     }
 
-    public int getSize(int iKoll) {
+    private int getSize(int iKoll) {
         return (((ArrayList<Vector<String>>) tvect.get(iKoll)).get(0)
                                                               .size());
     }

@@ -51,7 +51,7 @@ import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
 import systemTools.RezeptFahnder;
 
-public class SchnellSuche extends RehaSmartDialog implements ActionListener {
+class SchnellSuche extends RehaSmartDialog implements ActionListener {
     /**
      *
      */
@@ -74,13 +74,13 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
     private JXTable ttbl = null;
     private String aktDatum = "";
     private Vector vTdata = new Vector();
-    public static SchnellSuche thisClass = null;
-    public String startdatum = DatFunk.sHeute();
-    SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-    Date newStart = null;
-    TerminFenster eltern;
-    public JXDatePicker datePicker = null;
-    SchnellSucheListSelectionHandler ssucheselect = new SchnellSucheListSelectionHandler();
+    static SchnellSuche thisClass = null;
+    private String startdatum = DatFunk.sHeute();
+    private SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+    private Date newStart = null;
+    private TerminFenster eltern;
+    private JXDatePicker datePicker = null;
+    private SchnellSucheListSelectionHandler ssucheselect = new SchnellSucheListSelectionHandler();
     private Connection connection;
 
     SchnellSuche(JXFrame owner, TerminFenster eltern, Connection connection) {
@@ -170,7 +170,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
 
     /*******************************************************/
     /*********************************************************/
-    class SchnellSucheListSelectionHandler implements ListSelectionListener {
+    private class SchnellSucheListSelectionHandler implements ListSelectionListener {
         private Connection connection;
 
         @Override
@@ -242,13 +242,13 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
         }
     }
 
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
         //// System.out.println("Eltern-->"+this.getParent().getParent().getParent().getParent().getParent());
         // webBrowser.dispose();
         this.dispose();
     }
 
-    public JXPanel eingabePanel() {
+    private JXPanel eingabePanel() {
         JXPanel eingabep = new JXPanel();
         eingabep.setBorder(null);
         eingabep.setPreferredSize(new Dimension(0, 31));
@@ -350,9 +350,7 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
         return jtp;
     }
 
-    public String dieserName() {
-        return this.getName();
-    }
+    
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -472,15 +470,11 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
 
     }
 
-    public static JXTable getTable() {
-        return pliste;
-    }
+    
 
-    public static ArrayList<String[]> getTermine() {
-        return termine;
-    }
+    
 
-    public void suchenFocus() {
+    private void suchenFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -560,13 +554,13 @@ public class SchnellSuche extends RehaSmartDialog implements ActionListener {
 
 /******************************************/
 final class SuchenInTagen extends Thread {
-    Statement stmt = null;
-    ResultSet rs = null;
-    String sergebnis = "";
-    boolean gesperrt = false;
-    String[] exStatement = null;
-    String suchkrit = "";
-    ArrayList<String> atermine = new ArrayList<String>();
+    private Statement stmt = null;
+    private ResultSet rs = null;
+    
+    
+    private String[] exStatement = null;
+    private String suchkrit = "";
+    private ArrayList<String> atermine = new ArrayList<String>();
 
     public void setzeStatement(String[] exStatement, String suchkrit) {
         this.exStatement = exStatement;
@@ -714,14 +708,7 @@ class SchnellSucheTableModel extends AbstractTableModel {
         return data.size();
     }
 
-    public void deleteRow(int row) {
-        //// System.out.println("Wert = "+getValueAt(row,3));
-        printDebugData();
-        data.remove(row);
-        fireTableDataChanged();
-        printDebugData();
-        // fireTableChanged(null);
-    }
+    
 
     @Override
     public String getColumnName(int col) {

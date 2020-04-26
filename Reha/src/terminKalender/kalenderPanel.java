@@ -3,7 +3,6 @@ package terminKalender;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Composite;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -15,7 +14,6 @@ import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
@@ -27,7 +25,7 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import terminKalender.TerminFenster.Ansicht;
 
-public class kalenderPanel extends JXPanel {
+class kalenderPanel extends JXPanel {
     /**
      *
      */
@@ -61,24 +59,16 @@ public class kalenderPanel extends JXPanel {
     private Font fon = new Font("Tahoma", Font.PLAIN, 10);
     private ImageIcon dragImage = null;
     private Image dragImage2 = null;
-    public boolean neuzeichnen;
-    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-    float yTimeLine = .0f;
-    boolean showTimeLine = false;
-    int pfeily;
+    
+    private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+    private float yTimeLine = .0f;
+    private boolean showTimeLine = false;
+    private int pfeily;
     private Logger logger = LoggerFactory.getLogger(kalenderPanel.class);
 
-    public kalenderPanel KalenderPanel() {
+    
 
-        this.setBackground(SystemConfig.KalenderHintergrund);
-        kPanel = new JXPanel();
-        kPanel.setBorder(null);
-        kPanel.setLayout(null);
-        kPanel.setBackground(SystemConfig.KalenderHintergrund);
-        return this;
-    }
-
-    public void ListenerSetzen(int aktPanel) {
+    void ListenerSetzen(int aktPanel) {
         this.panelNummer = aktPanel;
         this.dragImage = SystemConfig.hmSysIcons.get("buttongruen");
         this.setDragImage2(SystemConfig.hmSysIcons.get("buttongruen")
@@ -434,7 +424,7 @@ public class kalenderPanel extends JXPanel {
     }
 
     /******* Klammer der paint-Methode **********/
-    public void datenZeichnen(Vector vect, int therapeut) {
+    void datenZeichnen(Vector vect, int therapeut) {
         if (vect.size() > 0 && therapeut >= 0) {
             dat.clear();
             dat.addElement(((ArrayList) vect.get(therapeut)).get(0));
@@ -451,7 +441,7 @@ public class kalenderPanel extends JXPanel {
     }
 
     /**********************************/
-    public void zeitSpanne() {
+    void zeitSpanne() {
         iMaxHoehe = this.getSize().height;
         fPixelProMinute = iMaxHoehe;
         fPixelProMinute = fPixelProMinute / minutenInsgesamt;
@@ -474,7 +464,7 @@ public class kalenderPanel extends JXPanel {
         return this.fPixelProMinute;
     }
 
-    public void zeitInit(int von, int bis) {
+    void zeitInit(int von, int bis) {
         zeitSpanneVon = von;
         setZeitSpanneBis(bis);
         minutenInsgesamt = bis - von;
@@ -513,7 +503,7 @@ public class kalenderPanel extends JXPanel {
     }
 
     /********************************/
-    public int[] BlockTestOhneAktivierung(int x, int y) {
+    int[] BlockTestOhneAktivierung(int x, int y) {
         int[] ret = { -1, -1, -1, -1 };
         if ((vectorzahl = ((Vector<?>) dat).size()) > 0) {
             String sStart = ""; // Startzeit
@@ -540,34 +530,10 @@ public class kalenderPanel extends JXPanel {
         return ret.clone();
     }
 
-    /********************************/
-
-    public int blockInSpalte(int x, int y, int spalte) {
-        int trefferblock = -1;
-        if ((vectorzahl = ((Vector<?>) dat).size()) > 0) {
-            String sStart = ""; // Startzeit
-            int dauer; // Termin Dauer
-            int yStartMin;
-            float fStartPix;
-            float fEndePix;
-            for (i = 0; i < anzahl; i++) {
-                sStart = (String) ((Vector<?>) dat.get(2)).get(i);
-                dauer = Integer.parseInt((String) ((Vector<?>) dat.get(3)).get(i));
-
-                yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart)) - zeitSpanneVon;
-                fStartPix = (yStartMin) * fPixelProMinute;
-                fEndePix = fStartPix + (dauer * fPixelProMinute);
-                if ((y >= fStartPix) && (y <= fEndePix)) {
-                    trefferblock = i;
-                    break;
-                }
-            }
-        }
-        return trefferblock;
-    }
+    
 
     /********************************/
-    public int blockGeklickt(int block) {
+    int blockGeklickt(int block) {
         if (block > -1 && anzahl > 0) {
             this.maleSchwarz = block;
             this.spalteAktiv = true;
@@ -586,7 +552,7 @@ public class kalenderPanel extends JXPanel {
         return this.maleSchwarz;
     }
 
-    public void spalteDeaktivieren() {
+    void spalteDeaktivieren() {
         this.maleSchwarz = -1;
         this.spalteAktiv = false;
         this.blockAktiv = -1;
@@ -604,7 +570,7 @@ public class kalenderPanel extends JXPanel {
         this.spalteAktiv = aktiv;
     }
 
-    public void schwarzAbgleich(int block, int schwarz) {
+    void schwarzAbgleich(int block, int schwarz) {
         this.blockAktiv = block;
         this.maleSchwarz = schwarz;
         SwingUtilities.invokeLater(new Runnable() {
@@ -620,11 +586,11 @@ public class kalenderPanel extends JXPanel {
         return aktivPunkt;
     }
 
-    public void shiftGedrueckt(boolean sg) {
+    void shiftGedrueckt(boolean sg) {
         this.setShiftGedrueckt(sg);
     }
 
-    public void gruppierungZeichnen(int[] gruppe) {
+    void gruppierungZeichnen(int[] gruppe) {
         String sStart = ""; // Startzeit
         String sEnde = "";
         int yStartMin;
@@ -679,13 +645,11 @@ public class kalenderPanel extends JXPanel {
         return zeitSpanneBis;
     }
 
-    public void setiPixelProMinute(int iPixelProMinute) {
+    private void setiPixelProMinute(int iPixelProMinute) {
         this.iPixelProMinute = iPixelProMinute;
     }
 
-    public int getiPixelProMinute() {
-        return iPixelProMinute;
-    }
+    
 
     public void setShiftGedrueckt(boolean shiftGedrueckt) {
         this.shiftGedrueckt = shiftGedrueckt;

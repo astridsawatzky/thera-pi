@@ -3,16 +3,7 @@ package terminKalender;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -45,7 +36,7 @@ import hauptFenster.Reha;
 import systemTools.ListenerTools;
 import systemTools.WinNum;
 
-public class TagWahlNeu extends RehaSmartDialog implements FocusListener, ActionListener, ComponentListener {
+class TagWahlNeu extends RehaSmartDialog implements FocusListener, ActionListener, ComponentListener {
     /**
      *
      */
@@ -56,7 +47,7 @@ public class TagWahlNeu extends RehaSmartDialog implements FocusListener, Action
     private JXPanel jpan = null;
     private RehaTPEventClass rtp = null;
     private MeinPicker datePick = null;
-    public JRtaTextField datum;
+    private JRtaTextField datum;
     private String akttag;
     private String starttag;
     private JXLabel wochentag;
@@ -65,7 +56,7 @@ public class TagWahlNeu extends RehaSmartDialog implements FocusListener, Action
     private JXButton abbruchbut;
 
     // private String aktfocus = "";
-    public TagWahlNeu(JXFrame owner, String name, String aktday) {
+    TagWahlNeu(JXFrame owner, String name, String aktday) {
         super(owner, "Eltern-TagWahl" + WinNum.NeueNummer());
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         akttag = aktday;
@@ -168,7 +159,7 @@ public class TagWahlNeu extends RehaSmartDialog implements FocusListener, Action
         });
     }
 
-    public void setzeDatumFocus() {
+    private void setzeDatumFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -291,7 +282,7 @@ public class TagWahlNeu extends RehaSmartDialog implements FocusListener, Action
         return cal1.getTime();
     }
 
-    public void setzeFocus() {
+    private void setzeFocus() {
         jpan.requestFocus(true);
         datum.requestFocus();
         datum.setCaretPosition(0);
@@ -543,7 +534,7 @@ public class TagWahlNeu extends RehaSmartDialog implements FocusListener, Action
         }
     }
 
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
         this.dispose();
     }
 

@@ -13,25 +13,25 @@ import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
-public class BlockHandling {
+class BlockHandling {
 
-    final int T_NAME = 0;
-    final int T_NUMMER = 1;
-    final int T_START = 2;
-    final int T_DAUER = 3;
-    final int T_END = 4;
-    final int T_CONTROL = 5;
+    private final int T_NAME = 0;
+    private final int T_NUMMER = 1;
+    private final int T_START = 2;
+    private final int T_DAUER = 3;
+    private final int T_END = 4;
+    private final int T_CONTROL = 5;
 
-    int ret = -1;
-    int wasTun = -1;
-    Vector<?> vterm = null;
-    int kollege;
-    int spalte;
-    int block;
-    String[] datum = null;
-    int dbBehandler;
-    String[] daten = null;
-    Felder datenfeld = new Felder();
+    private int ret = -1;
+    private int wasTun = -1;
+    private Vector<?> vterm = null;
+    private int kollege;
+    private int spalte;
+    private int block;
+    private String[] datum = null;
+    private int dbBehandler;
+    private String[] daten = null;
+    private Felder datenfeld = new Felder();
 
     BlockHandling(int wasTun, Vector<?> vterm, int kollege, int spalte, int block, String[] datum, int dbBehandler,
             String[] daten) {
@@ -50,7 +50,7 @@ public class BlockHandling {
 
     }
 
-    public void debugTermin() {
+    private void debugTermin() {
         try {
             String s = "";
             String[] tAlt = { "", "", "", "", "" };

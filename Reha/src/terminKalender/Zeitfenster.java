@@ -34,7 +34,7 @@ import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import hauptFenster.UIFSplitPane;
 
-public class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionListener {
+class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionListener {
 
     private static final long serialVersionUID = 1L;
     private JXPanel jContentPane = null; // @jve:decl-index=0:visual-constraint="37,10"
@@ -56,12 +56,12 @@ public class Zeitfenster extends JDialog implements KeyListener, FocusListener, 
     private UIFSplitPane jSplitLR = null;
     private JXPanel panelRadio = null;
     private int dividerLocLR = 0;
-    ButtonGroup jrbg = new ButtonGroup(); // @jve:decl-index=0:
+    private ButtonGroup jrbg = new ButtonGroup(); // @jve:decl-index=0:
 
     /**
      * @param owner
      */
-    public Zeitfenster(TerminFenster owner) {
+    Zeitfenster(TerminFenster owner) {
         Eltern = owner;
 
         initialize();
@@ -295,7 +295,7 @@ public class Zeitfenster extends JDialog implements KeyListener, FocusListener, 
         }
     }
 
-    public void WerteSetzen(boolean aufName) {
+    private void WerteSetzen(boolean aufName) {
         String[] werte = Eltern.getWerte();
         NamePatient.setText(werte[0]);
         Rezeptnummer.setText(werte[1]);

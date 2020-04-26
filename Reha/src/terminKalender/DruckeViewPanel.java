@@ -14,11 +14,8 @@ import javax.swing.SwingWorker;
 
 import org.jdesktop.swingx.JXPanel;
 
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.graphic.XGraphic;
-import com.sun.star.graphic.XGraphicProvider;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.HoriOrientation;
 import com.sun.star.text.TextContentAnchorType;
@@ -28,7 +25,6 @@ import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
 
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -40,9 +36,9 @@ import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
 
-public class DruckeViewPanel extends SwingWorker<Void, Void> {
-    JXPanel printPan = null;
-    BufferedImage bufimg = null;
+class DruckeViewPanel extends SwingWorker<Void, Void> {
+    private JXPanel printPan = null;
+    private BufferedImage bufimg = null;
 
     public void setPrintPanel(JXPanel pan) {
         this.printPan = pan;
@@ -248,22 +244,7 @@ public class DruckeViewPanel extends SwingWorker<Void, Void> {
         }
     }
 
-    public XGraphic getGraphicFromURL(XComponentContext xContext, String sURL) {
-        XGraphic xGraphic = null;
-        try {
-            XGraphicProvider xGraphicProvider = UnoRuntime.queryInterface(XGraphicProvider.class,
-                    xContext.getServiceManager()
-                            .createInstanceWithContext("com.sun.star.graphic.GraphicProvider", xContext));
-            PropertyValue[] aMediaProperties = new PropertyValue[1];
-            aMediaProperties[0] = new PropertyValue();
-            aMediaProperties[0].Name = "URL";
-            aMediaProperties[0].Value = sURL;
-            xGraphic = xGraphicProvider.queryGraphic(aMediaProperties);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return xGraphic;
-    }
+    
 
     private void speichernQualitaet(String stitel, Float fQuality) {
 

@@ -68,7 +68,7 @@ public class TerminFenster extends Observable
     private static final int SPALTE_ANZ_BELGEGTE_BLOECKE = 301;
     private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
-    DropTargetListener dndListerner = this;
+
 
 
     private JXPanel grundFlaeche;
@@ -1228,7 +1228,6 @@ public class TerminFenster extends Observable
                 for (int i = 0; i < 1; i++) {
                     if ((e.getClickCount() == 1) && (e.getButton() == java.awt.event.MouseEvent.BUTTON1)) {
                         KlickSetzen(oSpalten[tspalte], e);
-                        oSpalten[tspalte].neuzeichnen = true;
                         oSpalten[tspalte].requestFocus();
                         dragLab[i].setVisible(true);
                         break;

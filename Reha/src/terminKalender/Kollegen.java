@@ -3,8 +3,13 @@ package terminKalender;
 import java.util.Comparator;
 
 class Kollegen implements Comparable<Kollegen> {
-    String Matchcode, Vorname, Nachname, Abteilung, Zeigen;
-    int Reihe, Position;
+    String Matchcode;
+    private String Vorname;
+    private String Nachname;
+    String Abteilung;
+    String Zeigen;
+    int Reihe;
+    int Position;
 
     public Kollegen(String m, String n, String v, int r, String a, String z, int p) {
         Matchcode = m;
@@ -16,13 +21,14 @@ class Kollegen implements Comparable<Kollegen> {
         Position = p;
     }
 
- public static final   Comparator<Kollegen> compareByMatchcode = Comparator.comparing(k -> k.Matchcode);
- public static final   Comparator<Kollegen> compareByAge = Comparator.comparing(k -> k.Reihe);
+    private static final Comparator<Kollegen> compareByMatchcode = Comparator.comparing(k -> k.Matchcode);
+    private static final Comparator<Kollegen> compareByAge = Comparator.comparing(k -> k.Reihe);
 
     @Override
     public int compareTo(Kollegen o) {
-        
-        return compareByMatchcode.thenComparing(compareByAge).compare(this, o);
-        
+
+        return compareByMatchcode.thenComparing(compareByAge)
+                                 .compare(this, o);
+
     }
 }

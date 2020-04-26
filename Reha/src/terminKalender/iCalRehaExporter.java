@@ -26,12 +26,12 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 public class iCalRehaExporter {
-    boolean fehler = false;
-    String plandatei = "";
-    Vector<String> veczeilen = new Vector<String>();
+    
+    private String plandatei = "";
+    private Vector<String> veczeilen = new Vector<String>();
     Vector<String> test = new Vector<String>();
-    String inhaber = "";
-    StringBuffer buf = new StringBuffer();
+    private String inhaber = "";
+    private StringBuffer buf = new StringBuffer();
 
     public iCalRehaExporter() {
         if ((plandatei = oeffneDateiDialog()).equals("")) {

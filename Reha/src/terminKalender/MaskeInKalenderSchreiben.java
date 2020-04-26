@@ -44,7 +44,7 @@ import rehaContainer.RehaTP;
 import systemEinstellungen.SystemConfig;
 import systemTools.WinNum;
 
-public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener {
+class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener {
     /**
      *
      */
@@ -70,15 +70,15 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
     private JXTitledPanel jp;
     private int maskenBehandler;
     private String sBehandler = "";
-    public boolean stopUebertrag = false;
+    private boolean stopUebertrag = false;
 
     private Vector vTerm = new Vector();
-    public static MaskeInKalenderSchreiben thisClass = null;
 
-    Vector<String> feiertagDatum = new Vector<String>();
-    Vector<String> feiertagName = new Vector<String>();
 
-    public MaskeInKalenderSchreiben(JXFrame owner, int maskenBehandler, Vector vTerm) {
+    private Vector<String> feiertagDatum = new Vector<String>();
+    private Vector<String> feiertagName = new Vector<String>();
+
+    MaskeInKalenderSchreiben(JXFrame owner, int maskenBehandler, Vector vTerm) {
         // super(frame, titlePanel());
         super(owner, "MaskeSchreiben");
         dieserName = "MaskeSchreiben" + WinNum.NeueNummer();
@@ -96,7 +96,6 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
         this.setName(dieserName);
         this.setContentPanel(titlePanel());
         this.jtp.setLayout(new BorderLayout());
-        thisClass = this;
         JXPanel jp1 = new JXPanel();
         jp1.setBorder(null);
         jp1.setBackground(Color.WHITE);
@@ -139,7 +138,6 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
         setPinPanel(pinPanel);
         rtp = new RehaTPEventClass();
         rtp.addRehaTPEventListener(this);
-        thisClass = this;
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -152,13 +150,13 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
 
     /*******************************************************/
     /*********************************************************/
-    public void FensterSchliessen(String welches) {
+    private void FensterSchliessen(String welches) {
         //// System.out.println("Eltern-->"+this.getParent().getParent().getParent().getParent().getParent());
         // webBrowser.dispose();
         this.dispose();
     }
 
-    public JScrollPane eingabePanel() {
+    private JScrollPane eingabePanel() {
         /*
          * private JRtaTextField startDatum = null; private JRtaTextField endDatum =
          * null; private JXLabel startLabel = null; private JXLabel endLabel = null;
@@ -239,9 +237,7 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
         return jtp;
     }
 
-    public String dieserName() {
-        return this.getName();
-    }
+    
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -382,7 +378,7 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
         }
     }
 
-    public void maskenEintragen() {
+    private void maskenEintragen() {
         stopUebertrag = false;
         String startTag = null;
         String stopTag = null;
@@ -500,7 +496,7 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
         return sret;
     }
 
-    public void startFocus() {
+    private void startFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -514,10 +510,10 @@ public class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionL
 
 /******************************************/
 final class SchreibeMaskeInKalender extends Thread {
-    Statement stmt = null;
-    ResultSet rs = null;
-    String statement;
-    boolean geklappt = false;
+    private Statement stmt = null;
+    private ResultSet rs = null;
+    private String statement;
+    private boolean geklappt = false;
 
     public void setzeStatement(String statement) {
         this.statement = statement;

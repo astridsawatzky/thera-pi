@@ -1,6 +1,5 @@
 package terminKalender;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,22 +18,22 @@ import systemEinstellungen.SystemConfig;
 import terminKalender.TerminFenster.Ansicht;
 
 public class TermineErfassen implements Runnable {
-    String scanrez = null;
-    Vector alleterm;
-    Vector<String> vec = null;
-    Vector vec2 = null;
-    String copyright = null;
-    String heute = null;
-    int erstfund = -1;
-    String kollege = "";
-    boolean firstfound;
-    boolean ergebnis = true;
-    public static boolean success = true;
-    public boolean unter18 = false;
-    public boolean vorjahrfrei = false;
-    public static int errorint = 0;
-    public StringBuffer sbuftermine = new StringBuffer();
-    static TermineErfassen thisClass = null;
+    private String scanrez = null;
+    private Vector alleterm;
+    private Vector<String> vec = null;
+
+    private String copyright = null;
+    private String heute = null;
+    private int erstfund = -1;
+    private String kollege = "";
+    private boolean firstfound;
+
+    private static boolean success = true;
+    private boolean unter18 = false;
+    private boolean vorjahrfrei = false;
+    private static int errorint = 0;
+    private StringBuffer sbuftermine = new StringBuffer();
+    private static TermineErfassen thisClass = null;
 
     public TermineErfassen(String reznr, Vector termvec) {
         scanrez = reznr.trim();
@@ -130,7 +129,6 @@ public class TermineErfassen implements Runnable {
                      */
                     // System.out.println("Rezept steht an diesem Tag nicht im Kalender");
                     setTerminSuccess(false);
-                    ergebnis = false;
                 }
                 if (firstfound && scanrez.startsWith("RH")) {
                     fahreFortMitTerminen();
@@ -139,7 +137,6 @@ public class TermineErfassen implements Runnable {
             } else {
                 if (ret > 0) {
                     setTerminSuccess(false);
-                    ergebnis = false;
                     // System.out.println("hier die Fehlerbehandlung einbauen---->Fehler = "+ret);
                     switch (ret) {
                     case 1:
@@ -189,7 +186,6 @@ public class TermineErfassen implements Runnable {
             }
         } catch (Exception e) {
             setTerminSuccess(false);
-            ergebnis = false;
 
         }
         // System.out.println("Terminerfassen beendet");
@@ -201,13 +197,9 @@ public class TermineErfassen implements Runnable {
         TermineErfassen.success = xsuccess;
     }
 
-    public static boolean getTerminSuccess() {
-        return success;
-    }
+    
 
-    public static int getTerminError() {
-        return errorint;
-    }
+    
 
     /********************/
     public int testeVerordnung() throws Exception {
@@ -241,15 +233,7 @@ public class TermineErfassen implements Runnable {
         return 0;
     }
 
-    /********************/
-    public void erfasseTermin() {
-        Vector<String> pat_int = SqlInfo.holeSatz("verordn", "pat_intern,anzahl1,termine", "rez_nr='" + scanrez + "'",
-                Arrays.asList(new String[] {}));
-        if (pat_int.size() == 0) {
-
-            return;
-        }
-    }
+    
 
     /********************/
     private boolean testeTermine() throws Exception {
@@ -535,7 +519,6 @@ public class TermineErfassen implements Runnable {
             // String termkollege =
             sbuftermine.setLength(0);
             sbuftermine.toString();
-            vec2 = null;
             if (!vec.get(0)
                     .trim()
                     .equals("")) {
@@ -714,263 +697,7 @@ public class TermineErfassen implements Runnable {
         return String.valueOf(ret);
     }
 
-    /***********************************************************************************/
-
-    public static Object[] BehandlungenAnalysieren(String swreznum, boolean doppeltOk, boolean xforceDlg,
-            boolean alletermine, Vector<String> vecx, Point pt, String datum) {
-
-        int i, j, count = 0;
-        boolean doppelBeh = false;
-        int doppelBehA = 0, doppelBehB = 0;
-        boolean springen = false; // unterdrückt die Anzeige des TeminBestätigenAuswahlFensters
-        Vector<BestaetigungsDaten> hMPos = new Vector<BestaetigungsDaten>();
-        hMPos.add(new BestaetigungsDaten(false, "./.", 0, 0, false, false));
-        hMPos.add(new BestaetigungsDaten(false, "./.", 0, 0, false, false));
-        hMPos.add(new BestaetigungsDaten(false, "./.", 0, 0, false, false));
-        hMPos.add(new BestaetigungsDaten(false, "./.", 0, 0, false, false));
-        Vector<String> vec = null;
-        String copyright = "\u00AE";
-        StringBuffer termbuf = new StringBuffer();
-
-        int iposindex = -1;
-        boolean erstedoppel = true;
-
-        Object[] retObj = { null, null, null };
-
-        try {
-            // die anzahlen 1-4 werden jetzt zusammenhängend ab index 11 abgerufen
-            if (vecx == null) {
-                vec = SqlInfo.holeSatz("verordn",
-                        "termine,pos1,pos2,pos3,pos4,hausbes,unter18,jahrfrei,pat_intern,preisgruppe,zzregel,anzahl1,anzahl2,anzahl3,anzahl4,preisgruppe",
-                        "rez_nr='" + swreznum + "'", Arrays.asList(new String[] {}));
-            } else {
-                vec = vecx;
-            }
-
-            if (vec.size() > 0) {
-                termbuf = new StringBuffer();
-                if (alletermine) {
-                    termbuf.append(vec.get(0));
-                }
-
-                Vector<ArrayList<?>> termine = RezTools.holePosUndAnzahlAusTerminen(swreznum);
-
-                for (i = 0; i <= 3; i++) {
-                    if (vec.get(1 + i)
-                           .toString()
-                           .trim()
-                           .equals("")) {
-                        hMPos.get(i).hMPosNr = "./.";
-                        hMPos.get(i).vOMenge = 0;
-                    } else {
-                        hMPos.get(i).hMPosNr = String.valueOf(vec.get(1 + i));
-                        hMPos.get(i).vOMenge = Integer.parseInt(vec.get(i + 11));
-                        hMPos.get(i).vorrangig = (Boolean) ((ArrayList<?>) ((Vector<?>) termine).get(2)).get(i);
-                        hMPos.get(i).invOBelegt = true;
-                    }
-                    count = 0; // Anzahl bereits bestätigter Termine mit dieser HMPosNr
-                    if (hMPos.get(i).invOBelegt) {
-                        // if (!hMPos.get(i).hMPosNr.equals("./.")){
-                        // Vector<ArrayList<?>> termine =
-                        // RezTools.holePosUndAnzahlAusTerminen(swreznum);
-                        if ((iposindex = termine.get(0)
-                                                .indexOf(hMPos.get(i).hMPosNr)) >= 0
-                                && (termine.get(0)
-                                           .lastIndexOf(hMPos.get(i).hMPosNr) == iposindex)) {
-                            // Einzeltermin
-                            count = Integer.parseInt(termine.get(1)
-                                                            .get(termine.get(0)
-                                                                        .indexOf(hMPos.get(i).hMPosNr))
-                                                            .toString());
-                        } else if ((iposindex = termine.get(0)
-                                                       .indexOf(hMPos.get(i).hMPosNr)) >= 0
-                                && (termine.get(0)
-                                           .lastIndexOf(hMPos.get(i).hMPosNr) != iposindex)) {
-                            // Doppeltermin
-                            if (!erstedoppel) {
-                                doppelBehB = i;
-                                count = Integer.parseInt(termine.get(1)
-                                                                .get(termine.get(0)
-                                                                            .lastIndexOf(hMPos.get(i).hMPosNr))
-                                                                .toString());
-                            } else {
-                                doppelBehA = i;
-                                doppelBeh = true;
-                                erstedoppel = false;
-                                count = Integer.parseInt(termine.get(1)
-                                                                .get(termine.get(0)
-                                                                            .indexOf(hMPos.get(i).hMPosNr))
-                                                                .toString());
-                            }
-                        }
-                    }
-                    hMPos.get(i).anzBBT = count; // außerhalb der if-Abfrage i.O. -> dann anzBBT = count(==0)
-                }
-
-                count = 0; // Prüfen, ob es nur eine HMPos gibt, bei der anzBBT < vOMenge; dann überspringe
-                           // AuswahlFenster und bestätige diese HMPos
-                // alternativ: nur die beiden Doppelbehandlungspositionen sind noch offen
-                for (i = 0; i <= 3; i++) {
-                    if (hMPos.get(i).anzBBT < hMPos.get(i).vOMenge) {
-                        count++;
-                    }
-                }
-                if (count == 1) {
-                    for (i = 0; i <= 3; i++) {
-                        if (hMPos.get(i).anzBBT < hMPos.get(i).vOMenge) {
-                            hMPos.get(i).best = true;
-                            springen = true;
-                            break;
-                        }
-                    }
-                } else if ((count >= 2) && doppelBeh
-                        && (hMPos.get(doppelBehA).anzBBT < hMPos.get(doppelBehA).vOMenge)) {
-                    hMPos.get(doppelBehA).best = true;
-                    hMPos.get(doppelBehB).best = true;
-                    springen = true; // false: Auswalfenster bei Doppelbehandlungen trotzdem anzeigen
-                }
-
-                count = 0; // Prüfen, ob alle HMPos bereits voll bestätigt sind
-                for (i = 0; i <= 3; i++) {
-                    if (hMPos.get(i).anzBBT == hMPos.get(i).vOMenge) {
-                        if (hMPos.get(i).vorrangig) {
-                            count = 4;
-                            break;
-                        }
-                        hMPos.get(i).best = false;
-                        count++;
-                    }
-                }
-
-                // Testen ob beide oder auch nur eine der Doppelbehandlungen voll ist.
-
-                if (doppelBeh) {
-
-                    int max = welcheIstMaxInt(hMPos.get(doppelBehA).vOMenge, hMPos.get(doppelBehB).vOMenge);
-                    if (max == 1 && hMPos.get(doppelBehA).anzBBT == hMPos.get(doppelBehA).vOMenge) {
-                        count = 4;
-                    }
-                    if (max == 2 && hMPos.get(doppelBehB).anzBBT == hMPos.get(doppelBehB).vOMenge) {
-                        count = 4;
-                    }
-                    if (max == 0 && hMPos.get(doppelBehB).anzBBT == hMPos.get(doppelBehB).vOMenge) {
-                        count = 4;
-                    }
-                }
-
-                if (count == 4) {
-                    // Rezept ist bereit jetzt voll neuer Termin nicht möglich
-                    retObj[0] = termbuf.toString();
-                    retObj[1] = 2; // bereits voll normalfall
-                    return retObj.clone();
-                }
-
-                count = 0; // Prüfen, ob eine oder mehrere HMPos bereits übervoll bestätigt sind
-                for (i = 0; i <= 3; i++) {
-                    if (hMPos.get(i).anzBBT > hMPos.get(i).vOMenge) {
-                        hMPos.get(i).best = false;
-                        count++;
-                    }
-                }
-                if (count != 0) {
-                    retObj[0] = termbuf.toString();
-                    retObj[1] = 3; // bereits übervoll
-                    return retObj.clone();
-
-                }
-                // TerminBestätigenAuswahlFenster anzeigen oder überspringen
-                if (xforceDlg || (!springen && (Boolean) SystemConfig.hmTerminBestaetigen.get("dlgzeigen"))) {
-
-                    TerminBestaetigenAuswahlFenster termBestAusw = new TerminBestaetigenAuswahlFenster(
-                            Reha.getThisFrame(), null, hMPos, swreznum, Integer.parseInt(vec.get(15)));
-                    termBestAusw.pack();
-                    if (pt == null) {
-                        termBestAusw.setLocationRelativeTo(null);
-                    } else {
-                        termBestAusw.setLocation(pt);
-                    }
-                    termBestAusw.setVisible(true);
-
-                } else {
-                    /*
-                     * Der Nutzer wünscht kein Auswahlfenster: bestätige alle noch offenen
-                     * Heilmittel
-                     *
-                     */
-                    for (i = 0; i <= 3; i++) {
-                        hMPos.get(i).best = (hMPos.get(i).anzBBT < hMPos.get(i).vOMenge);
-                        // hMPos.get(i).anzBBT += 1;
-                    }
-                }
-
-                count = 0; // Dialog abgebrochen
-
-                for (i = 0; i < 4; i++) {
-                    count += (hMPos.get(i).best ? 1 : 0);
-                }
-                if (count == 0) {
-                    retObj[0] = termbuf.toString();
-                    retObj[1] = 4; // abgebrochen
-                    return retObj.clone();
-
-                }
-
-                count = 0; // Prüfe, ob der oder die letzten offene(n) Termin(e) bestätigt werden sollen:
-                           // Hinweis, dass VO abgerechnet werden kann und in VolleTabelle schreiben
-                for (i = 0; i <= 3; i++) {
-                    if ((hMPos.get(i).anzBBT + (hMPos.get(i).best ? 1 : 0)) == hMPos.get(i).vOMenge) {
-                        hMPos.get(i).anzBBT += 1; // wird unten nochmals ausgewertet
-                        count++;
-                    }
-                    if (count == 4) {
-                        try {
-                            RezTools.fuelleVolleTabelle(swreznum, (thisClass == null ? "" : thisClass.kollege));
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, "Fehler beim Aufruf von 'fuelleVolleTabelle'");
-                        }
-
-                        termbuf.append(TermineErfassen.macheNeuTermin2(hMPos.get(0).best ? vec.get(1) : "",
-                                hMPos.get(1).best ? vec.get(2) : "", hMPos.get(2).best ? vec.get(3) : "",
-                                hMPos.get(3).best ? vec.get(4) : "", (thisClass == null ? null : thisClass.kollege),
-                                datum));
-                        // hier zunächst den neuen Termin basteln;
-                        retObj[0] = termbuf.toString();
-                        retObj[1] = 0; // normalfall mind. eine Bahndlung konnte noch eingetragen werden und jetz
-                                       // Rezept voll
-                        return retObj.clone();
-                    }
-                }
-                termbuf.append(TermineErfassen.macheNeuTermin2(hMPos.get(0).best ? vec.get(1) : "",
-                        hMPos.get(1).best ? vec.get(2) : "", hMPos.get(2).best ? vec.get(3) : "",
-                        hMPos.get(3).best ? vec.get(4) : "", (thisClass == null ? null : thisClass.kollege), datum));
-                // hier zunächst den neuen Termin basteln;
-                retObj[0] = termbuf.toString();
-                // dann nochmal testen ob ein vorrangiges Heilmittel die Mengengrenze erreicht
-                // hat.
-                for (i = 0; i <= 3; i++) {
-                    // System.out.println(hMPos.get(i).anzBBT+" / "+hMPos.get(i).vOMenge);
-                    if (hMPos.get(i).anzBBT == hMPos.get(i).vOMenge) {
-                        if (hMPos.get(i).vorrangig) {
-                            retObj[1] = 0;
-                            return retObj.clone();
-                        }
-                    }
-                }
-                retObj[1] = -1; // Behandlung(en) konnten eingetragen werden Rezept hat noch Luft nach oben
-                return retObj.clone();
-
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        } finally {
-            vec = null;
-            hMPos = null;
-        }
-        retObj[0] = termbuf.toString();
-        retObj[1] = 5; // Rezept wurde nicht gefunden
-        return retObj.clone();
-
-    }
+    
 
     private static int welcheIstMaxInt(int i1, int i2) {
         if (i1 > i2) {

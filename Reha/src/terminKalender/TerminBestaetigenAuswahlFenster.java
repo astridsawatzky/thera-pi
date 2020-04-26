@@ -212,7 +212,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
         return pan;
     }
 
-    Action oKAction = new AbstractAction("ok") {
+    private Action oKAction = new AbstractAction("ok") {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -220,7 +220,7 @@ public class TerminBestaetigenAuswahlFenster extends RehaSmartDialog implements 
 
         }
     };
-    Action cancelAction = new AbstractAction("abbrechen") {
+    private Action cancelAction = new AbstractAction("abbrechen") {
 
         @Override
         public void actionPerformed(ActionEvent e) {

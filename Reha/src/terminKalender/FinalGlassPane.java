@@ -4,7 +4,6 @@ import java.awt.AWTEvent;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -19,7 +18,7 @@ import javax.swing.SwingUtilities;
 import CommonTools.ZeitFunk;
 import systemEinstellungen.SystemConfig;
 
-public class FinalGlassPane extends JPanel implements AWTEventListener {
+class FinalGlassPane extends JPanel implements AWTEventListener {
     /**
      *
      */
@@ -29,9 +28,9 @@ public class FinalGlassPane extends JPanel implements AWTEventListener {
     private float fPixelZuMinute = 0.f;
     private String maxhoch = "0";
     private String uhrZeit = "00:00";
-    Font font = null;
+    
 
-    public FinalGlassPane(JInternalFrame frame) {
+    FinalGlassPane(JInternalFrame frame) {
         super();
         this.frame = frame;
         add(new JLabel("label"));
