@@ -466,21 +466,18 @@ public class SystemConfig {
             INIFile termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "terminkalender.ini");
             TKSettings.aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
-            ArrayList<String> aList1 = new ArrayList<String>();
-            ArrayList<String[]> aList2 = new ArrayList<String[]>();
-            ArrayList<ArrayList<ArrayList<String[]>>> aList3 = new ArrayList<ArrayList<ArrayList<String[]>>>();
             int lesen, i;
             lesen = Integer.parseInt(String.valueOf(termkalini.getStringProperty("Kalender", "AnzahlSets")));
             for (i = 1; i < (lesen + 1); i++) {
+                ArrayList<String> aList1 = new ArrayList<String>();
+                ArrayList<String[]> aList2 = new ArrayList<String[]>();
+                ArrayList<ArrayList<ArrayList<String[]>>> aList3 = new ArrayList<ArrayList<ArrayList<String[]>>>();
                 aList1.add(String.valueOf(termkalini.getStringProperty("Kalender", "NameSet" + i)));
                 aList2.add(String.valueOf(termkalini.getStringProperty("Kalender", "FeldSet" + i))
                                  .split(","));
                 aList3.add((ArrayList) aList1.clone());
                 aList3.add((ArrayList) aList2.clone());
                 TKSettings.aTerminKalender.add((ArrayList) aList3.clone());
-                aList1.clear();
-                aList2.clear();
-                aList3.clear();
             }
             TKSettings.KalenderUmfang[0] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderStart"));
             TKSettings.KalenderUmfang[1] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderEnde"));
@@ -491,8 +488,6 @@ public class SystemConfig {
                                          .equals("0") ? false : true);
             TKSettings.UpdateIntervall = Integer.valueOf(
                     String.valueOf(termkalini.getStringProperty("Kalender", "KalenderTimer")));
-            /* ParameterLaden kolLad = */new ParameterLaden();
-            TKSettings.AnzahlKollegen = ParameterLaden.vKKollegen.size() - 1;
             String s = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderHintergrundRGB"));
             String[] ss = s.split(",");
             TKSettings.KalenderHintergrund = new Color(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]));
