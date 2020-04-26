@@ -11,7 +11,7 @@ import javax.swing.KeyStroke;
 
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
-import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 import terminKalender.TerminFenster.Ansicht;
 import terminKalender.iCalRehaExporter;
 
@@ -58,7 +58,7 @@ public class TerminMenu {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
-                    Reha.instance.progLoader.ProgTerminFenster(0, SystemConfig.KalenderStartWochenAnsicht ? Ansicht.WOCHE :  Ansicht.NORMAL);
+                    Reha.instance.progLoader.ProgTerminFenster(0, TKSettings.KalenderStartWochenAnsicht ? Ansicht.WOCHE :  Ansicht.NORMAL);
                     // ProgLoader.ProgTerminFenster(0,0);
                     if (termin == null) {
 

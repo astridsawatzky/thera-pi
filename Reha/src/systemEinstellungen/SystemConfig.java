@@ -60,25 +60,6 @@ public class SystemConfig {
     public static HashMap<String, String> RoogleZeiten = null;
 
     public static boolean[] taskPaneCollapsed = { false, false, true, true, false, true, false };
-    /**
-     * nachfolgende static's sind notwendig für den Einsatz des Terminkalenders
-     */
-    public static ArrayList<ArrayList<ArrayList<String[]>>> aTerminKalender;
-    public static int AnzahlKollegen;
-    public static Color KalenderHintergrund = null;
-    public static boolean KalenderBarcode = false;
-    public static boolean KalenderLangesMenue = false;
-    public static boolean KalenderStartWochenAnsicht = false;
-    public static String KalenderStartWADefaultUser = "./.";
-    public static String KalenderStartNADefaultSet = "./.";
-    public static boolean KalenderZeitLabelZeigen = false;
-    public static boolean KalenderWochenTagZeigen = false;
-    public static boolean KalenderTimeLineZeigen = false;
-    public static String[] KalenderUmfang = { null, null };
-    public static long[] KalenderMilli = { 0, 0 };
-    public static int UpdateIntervall;
-    public static float KalenderAlpha = 0.0f;
-
     public static boolean AngelegtVonUser = false;
     public static boolean RezGebWarnung = true;
 
@@ -484,7 +465,7 @@ public class SystemConfig {
         try {
             INIFile termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "terminkalender.ini");
-            aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
+            TKSettings.aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
             ArrayList<String> aList1 = new ArrayList<String>();
             ArrayList<String[]> aList2 = new ArrayList<String[]>();
             ArrayList<ArrayList<ArrayList<String[]>>> aList3 = new ArrayList<ArrayList<ArrayList<String[]>>>();
@@ -496,26 +477,26 @@ public class SystemConfig {
                                  .split(","));
                 aList3.add((ArrayList) aList1.clone());
                 aList3.add((ArrayList) aList2.clone());
-                aTerminKalender.add((ArrayList) aList3.clone());
+                TKSettings.aTerminKalender.add((ArrayList) aList3.clone());
                 aList1.clear();
                 aList2.clear();
                 aList3.clear();
             }
-            KalenderUmfang[0] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderStart"));
-            KalenderUmfang[1] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderEnde"));
-            KalenderMilli[0] = ZeitFunk.MinutenSeitMitternacht(KalenderUmfang[0]);
-            KalenderMilli[1] = ZeitFunk.MinutenSeitMitternacht(KalenderUmfang[1]);
-            KalenderBarcode = (termkalini.getStringProperty("Kalender", "KalenderBarcode")
+            TKSettings.KalenderUmfang[0] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderStart"));
+            TKSettings.KalenderUmfang[1] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderEnde"));
+            TKSettings.KalenderMilli[0] = ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[0]);
+            TKSettings.KalenderMilli[1] = ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[1]);
+            TKSettings.KalenderBarcode = (termkalini.getStringProperty("Kalender", "KalenderBarcode")
                                          .trim()
                                          .equals("0") ? false : true);
-            UpdateIntervall = Integer.valueOf(
+            TKSettings.UpdateIntervall = Integer.valueOf(
                     String.valueOf(termkalini.getStringProperty("Kalender", "KalenderTimer")));
             /* ParameterLaden kolLad = */new ParameterLaden();
-            AnzahlKollegen = ParameterLaden.vKKollegen.size() - 1;
+            TKSettings.AnzahlKollegen = ParameterLaden.vKKollegen.size() - 1;
             String s = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderHintergrundRGB"));
             String[] ss = s.split(",");
-            KalenderHintergrund = new Color(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]));
-            KalenderAlpha = new Float(
+            TKSettings.KalenderHintergrund = new Color(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]));
+            TKSettings.KalenderAlpha = new Float(
                     String.valueOf(termkalini.getStringProperty("Kalender", "KalenderHintergrundAlpha")));
             //// System.out.println("Anzal Kollegen = "+AnzahlKollegen);
             oTerminListe = new TerminListe().init();
@@ -524,25 +505,25 @@ public class SystemConfig {
             // oGruppen = new GruppenEinlesen().init();
             try {
                 ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
-                KalenderLangesMenue = (ini.getStringProperty("Kalender", "LangesMenue")
+                TKSettings.KalenderLangesMenue = (ini.getStringProperty("Kalender", "LangesMenue")
                                           .trim()
                                           .equals("0") ? false : true);
-                KalenderStartWochenAnsicht = (ini.getStringProperty("Kalender", "StartWochenAnsicht")
+                TKSettings.KalenderStartWochenAnsicht = (ini.getStringProperty("Kalender", "StartWochenAnsicht")
                                                  .trim()
                                                  .equals("0") ? false : true);
-                KalenderStartWADefaultUser = (ini.getStringProperty("Kalender", "AnsichtDefault")
+                TKSettings.KalenderStartWADefaultUser = (ini.getStringProperty("Kalender", "AnsichtDefault")
                                                  .split("@")[0]);
-                KalenderStartNADefaultSet = (ini.getStringProperty("Kalender", "AnsichtDefault")
+                TKSettings.KalenderStartNADefaultSet = (ini.getStringProperty("Kalender", "AnsichtDefault")
                                                 .split("@")[1]);
-                KalenderZeitLabelZeigen = (ini.getStringProperty("Kalender", "ZeitLabelZeigen")
+                TKSettings.KalenderZeitLabelZeigen = (ini.getStringProperty("Kalender", "ZeitLabelZeigen")
                                               .trim()
                                               .equals("0") ? false : true);
                 if (ini.getStringProperty("Kalender", "ZeitLinieZeigen") == null) {
                     ini.setStringProperty("Kalender", "ZeitLinieZeigen", "0", null);
                     INITool.saveIni(ini);
-                    KalenderTimeLineZeigen = false;
+                    TKSettings.KalenderTimeLineZeigen = false;
                 } else {
-                    KalenderTimeLineZeigen = (ini.getStringProperty("Kalender", "ZeitLinieZeigen")
+                    TKSettings.KalenderTimeLineZeigen = (ini.getStringProperty("Kalender", "ZeitLinieZeigen")
                                                  .trim()
                                                  .equals("0") ? false : true);
                 }
@@ -568,8 +549,8 @@ public class SystemConfig {
     public static void NurSets() {
         try {
             ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "terminkalender.ini");
-            aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
-            aTerminKalender.clear();
+            TKSettings.aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
+            TKSettings.aTerminKalender.clear();
             ArrayList<String> aList1 = new ArrayList<String>();
             ArrayList<String[]> aList2 = new ArrayList<String[]>();
             ArrayList<ArrayList<ArrayList<String[]>>> aList3 = new ArrayList<ArrayList<ArrayList<String[]>>>();
@@ -581,7 +562,7 @@ public class SystemConfig {
                                  .split(","));
                 aList3.add((ArrayList) aList1.clone());
                 aList3.add((ArrayList) aList2.clone());
-                aTerminKalender.add((ArrayList) aList3.clone());
+                TKSettings.aTerminKalender.add((ArrayList) aList3.clone());
                 aList1.clear();
                 aList2.clear();
                 aList3.clear();
@@ -895,7 +876,7 @@ public class SystemConfig {
                                                    .get(i)[1] });
 
             }
-            KalenderHintergrund = aktTkCol.get("AusserAZ")[0];
+            TKSettings.KalenderHintergrund = aktTkCol.get("AusserAZ")[0];
         } catch (Exception ex) {
             logger .error("color ini konnte nicht gelesen werden ", ex);
             JOptionPane.showMessageDialog(null,

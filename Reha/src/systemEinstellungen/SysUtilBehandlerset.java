@@ -292,15 +292,15 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
     }
 
     private void comboFuellen(boolean erster, int index) {
-        int lang = SystemConfig.aTerminKalender.size();
+        int lang = TKSettings.aTerminKalender.size();
         int i, j;
         teilnehmer = new String[lang][7];
         fach = new String[lang];
         SetName.removeAllItems();
         for (i = 0; i < lang; i++) {
-            fach[i] = (String) ((ArrayList<?>) SystemConfig.aTerminKalender.get(i)
+            fach[i] = (String) ((ArrayList<?>) TKSettings.aTerminKalender.get(i)
                                                                            .get(0)).get(0);
-            teilnehmer[i] = SystemConfig.aTerminKalender.get(i)
+            teilnehmer[i] = TKSettings.aTerminKalender.get(i)
                                                         .get(1)
                                                         .get(0);
             SetName.addItem(String.valueOf(fach[i]));
@@ -478,7 +478,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
             SystemConfig.NurSets();
             // comboFuellen(false,setIndex);
             knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
-            int lang = SystemConfig.aTerminKalender.size();
+            int lang = TKSettings.aTerminKalender.size();
             comboFuellen(false, lang - 1);
             lspeichern = false;
             lneu = false;

@@ -86,6 +86,7 @@ import jxTableTools.ZeitCancelCellEditor;
 import jxTableTools.ZeitTableCellEditor;
 import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 import terminKalender.ICalGenerator;
 import terminKalender.ParameterLaden;
 
@@ -3413,8 +3414,8 @@ public class SuchenSeite extends JXPanel
             pbeginn = rs.getString("TS" + ii);
             pende = rs.getString("TE" + ii);
             wogerade = DatFunk.GeradeWoche(DatFunk.sDatInDeutsch(rs.getString("DATUM")));
-            kalanfang = SystemConfig.KalenderUmfang[0];
-            kalende = SystemConfig.KalenderUmfang[1];
+            kalanfang = TKSettings.KalenderUmfang[0];
+            kalende = TKSettings.KalenderUmfang[1];
 
             // Bearbeitet nur gerade Kalenderwochen
             uhr1 = schichtUhr[0];
@@ -3487,8 +3488,8 @@ public class SuchenSeite extends JXPanel
             wbeginn2 = selectUhr[2];
             wende2 = selectUhr[3];
 
-            kalanfang = SystemConfig.KalenderUmfang[0];
-            kalende = SystemConfig.KalenderUmfang[1];
+            kalanfang = TKSettings.KalenderUmfang[0];
+            kalende = TKSettings.KalenderUmfang[1];
 
             int[] selektparm1 = null;
             int[] selektparm2 = null;

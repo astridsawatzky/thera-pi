@@ -35,8 +35,8 @@ public class TerminObenUntenAnschliessen implements KeyListener, ActionListener,
     JRtaTextField[] jrtaf = { null, null };
     ButtonGroup jrbg = new ButtonGroup();
     RehaSmartDialog rSmart = null;
-    int iAktion = 1;
-    JXPanel tv;
+   private int iAktion = 1;
+   JXPanel tv;
 
     public TerminObenUntenAnschliessen(int x, int y) {
         RehaTP jtp = new RehaTP();
@@ -177,22 +177,20 @@ public class TerminObenUntenAnschliessen implements KeyListener, ActionListener,
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if (e.getKeyCode() == 38) {
-            // auf
+        if (e.getKeyCode() == KeyEvent.VK_UP) {
             ((Component) e.getSource()).transferFocusBackward();
-            // testSelected();
         }
-        if (e.getKeyCode() == 40) {
+        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
             // ab
             ((Component) e.getSource()).transferFocus();
             // testSelected();
         }
-        if (e.getKeyCode() == 10) {
+        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
             String[] sret = { jrtaf[0].getText(), jrtaf[1].getText() };
             TerminFenster.setDialogRet(iAktion, sret);
             rSmart.dispose();
         }
-        if (e.getKeyCode() == 27) {
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
             String[] sret = { null, null };
             TerminFenster.setDialogRet(0, sret);
             rSmart.dispose();

@@ -631,9 +631,9 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
         progress = 0;
         ProgressVerarbeiten pv = new ProgressVerarbeiten(Fortschritt2);
         pv.execute();
-        String tstart = SystemConfig.KalenderUmfang[0];
-        String tend = SystemConfig.KalenderUmfang[1];
-        String tdauer = new Long(SystemConfig.KalenderMilli[1] - SystemConfig.KalenderMilli[0]).toString();
+        String tstart = TKSettings.KalenderUmfang[0];
+        String tend = TKSettings.KalenderUmfang[1];
+        String tdauer = new Long(TKSettings.KalenderMilli[1] - TKSettings.KalenderMilli[0]).toString();
 
         for (i = 0; i < max; i++) {
             progress = i;
@@ -888,9 +888,9 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
                     + "', DATUM='" + sqldat + "' , BEHANDLER='" + sBehandler + "'";
         } else {
             //
-            String tstart = SystemConfig.KalenderUmfang[0];
-            String tend = SystemConfig.KalenderUmfang[1];
-            String tdauer = new Long(SystemConfig.KalenderMilli[1] - SystemConfig.KalenderMilli[0]).toString();
+            String tstart = TKSettings.KalenderUmfang[0];
+            String tend = TKSettings.KalenderUmfang[1];
+            String tdauer = new Long(TKSettings.KalenderMilli[1] - TKSettings.KalenderMilli[0]).toString();
             sret = "Insert into flexkc set ";
             sret = sret + "T1='', N1='@FREI', TS1='" + tstart + "', TD1='" + tdauer + "', TE1='" + tend + "',";
             sret = sret + "BELEGT='1', DATUM='" + sqldat + "' , BEHANDLER='" + sBehandler + "'";
@@ -928,9 +928,9 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
                     + "', DATUM='" + sqldat + "' , BEHANDLER='" + sBehandler + "'";
         } else {
             //
-            String tstart = SystemConfig.KalenderUmfang[0];
-            String tend = SystemConfig.KalenderUmfang[1];
-            String tdauer = new Long(SystemConfig.KalenderMilli[1] - SystemConfig.KalenderMilli[0]).toString();
+            String tstart = TKSettings.KalenderUmfang[0];
+            String tend = TKSettings.KalenderUmfang[1];
+            String tdauer = new Long(TKSettings.KalenderMilli[1] - TKSettings.KalenderMilli[0]).toString();
             // sret = "Insert into flexkc set ";
             sret = sret + "T1='', N1='@FREI', TS1='" + tstart + "', TD1='" + tdauer + "', TE1='" + tend + "',";
             sret = sret + "BELEGT='1', DATUM='" + sqldat + "' , BEHANDLER='" + sBehandler + "'";

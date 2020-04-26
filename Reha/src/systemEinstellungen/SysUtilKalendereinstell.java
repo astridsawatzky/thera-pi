@@ -95,25 +95,25 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
         refresh = new JComboBox(refreshtakt);
 
         scan = new JCheckBox();
-        scan.setSelected(SystemConfig.KalenderBarcode);
+        scan.setSelected(TKSettings.KalenderBarcode);
         langmenu = new JCheckBox();
-        langmenu.setSelected(SystemConfig.KalenderLangesMenue);
+        langmenu.setSelected(TKSettings.KalenderLangesMenue);
         zeitzeigen = new JCheckBox();
-        zeitzeigen.setSelected(SystemConfig.KalenderZeitLabelZeigen);
+        zeitzeigen.setSelected(TKSettings.KalenderZeitLabelZeigen);
         timelinezeigen = new JCheckBox();
-        timelinezeigen.setSelected(SystemConfig.KalenderTimeLineZeigen);
+        timelinezeigen.setSelected(TKSettings.KalenderTimeLineZeigen);
 
         STD1 = new JRtaTextField("STUNDEN", true);
-        STD1.setText(SystemConfig.KalenderUmfang[0].substring(0, 2));
+        STD1.setText(TKSettings.KalenderUmfang[0].substring(0, 2));
         STD2 = new JRtaTextField("STUNDEN", true);
-        STD2.setText(SystemConfig.KalenderUmfang[1].substring(0, 2));
+        STD2.setText(TKSettings.KalenderUmfang[1].substring(0, 2));
         MIN1 = new JRtaTextField("MINUTEN", true);
-        MIN1.setText(SystemConfig.KalenderUmfang[0].substring(3, 5));
+        MIN1.setText(TKSettings.KalenderUmfang[0].substring(3, 5));
         MIN1.setName("MIN1");
         // MIN1.addKeyListener(this);
         MIN1.addFocusListener(this);
         MIN2 = new JRtaTextField("MINUTEN", true);
-        MIN2.setText(SystemConfig.KalenderUmfang[1].substring(3, 5));
+        MIN2.setText(TKSettings.KalenderUmfang[1].substring(3, 5));
         MIN2.setName("MIN2");
         // MIN2.addKeyListener(this);
         MIN2.addFocusListener(this);
@@ -205,14 +205,14 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
                 ini.setStringProperty("Kalender", "ZeitLabelZeigen", (zeitzeigen.isSelected() ? "1" : "0"), null);
                 ini.setStringProperty("Kalender", "ZeitLinieZeigen", (timelinezeigen.isSelected() ? "1" : "0"), null);
                 INITool.saveIni(ini);
-                SystemConfig.KalenderBarcode = scan.isSelected();
-                SystemConfig.KalenderLangesMenue = langmenu.isSelected();
-                SystemConfig.KalenderZeitLabelZeigen = Boolean.valueOf(zeitzeigen.isSelected());
-                SystemConfig.KalenderTimeLineZeigen = Boolean.valueOf(timelinezeigen.isSelected());
+                TKSettings.KalenderBarcode = scan.isSelected();
+                TKSettings.KalenderLangesMenue = langmenu.isSelected();
+                TKSettings.KalenderZeitLabelZeigen = Boolean.valueOf(zeitzeigen.isSelected());
+                TKSettings.KalenderTimeLineZeigen = Boolean.valueOf(timelinezeigen.isSelected());
                 if (Reha.instance.terminpanel != null) {
                     try {
                         Reha.instance.terminpanel.regleZeitLabel();
-                        Reha.instance.terminpanel.setTimeLine(SystemConfig.KalenderTimeLineZeigen);
+                        Reha.instance.terminpanel.setTimeLine(TKSettings.KalenderTimeLineZeigen);
                         Reha.instance.terminpanel.getViewPanel()
                                                  .repaint();
                     } catch (Exception ex) {
@@ -251,7 +251,7 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
                 s2 = MIN1.getText()
                          .trim();
                 s3 = s1 + ":" + s2 + ":00";
-                if (!s3.equals(SystemConfig.KalenderUmfang[0])) {
+                if (!s3.equals(TKSettings.KalenderUmfang[0])) {
                     JOptionPane.showMessageDialog(null, "Sie haben die Kalenderanfangszeit verändert.\n\n"
                             + "Für die Neuorganisation des Terminkalenders können Sie schon mal einige Kannen Kaffee kochen!");
                     SwingUtilities.invokeLater(new Runnable() {
@@ -273,7 +273,7 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
                 s2 = MIN2.getText()
                          .trim();
                 s3 = s1 + ":" + s2 + ":00";
-                if (!s3.equals(SystemConfig.KalenderUmfang[1])) {
+                if (!s3.equals(TKSettings.KalenderUmfang[1])) {
                     JOptionPane.showMessageDialog(null, "Sie haben die Kalenderendzeit verändert.\n\n"
                             + "Für die Neuorganisation des Terminkalenders können Sie schon mal einige Kannen Kaffee kochen!");
                     kalNeuEnde = true;

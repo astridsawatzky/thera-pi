@@ -18,7 +18,7 @@ import javax.swing.WindowConstants;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 
 class SetWahl extends JDialog {
 
@@ -133,10 +133,10 @@ class SetWahl extends JDialog {
 
     private void ListeFuellen(DefaultListModel model) {
         int i, max = 0;
-        max = SystemConfig.aTerminKalender.size();
+        max = TKSettings.aTerminKalender.size();
         // String[] fach = new String[max];
         for (i = 0; i < max; i++) {
-            model.add(i, ((ArrayList) SystemConfig.aTerminKalender.get(i)
+            model.add(i, ((ArrayList) TKSettings.aTerminKalender.get(i)
                                                                   .get(0)).get(0));
             // fach[i] =
             // (String)((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0);

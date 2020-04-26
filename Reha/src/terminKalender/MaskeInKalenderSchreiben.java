@@ -41,7 +41,7 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
 import rehaContainer.RehaTP;
-import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 import systemTools.WinNum;
 
 class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener {
@@ -482,12 +482,12 @@ class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener
                                                .toUpperCase()
                 + "', ";
         sret = sret + "N1='@FREI', ";
-        sret = sret + "TS1='" + SystemConfig.KalenderUmfang[0] + "', ";
+        sret = sret + "TS1='" + TKSettings.KalenderUmfang[0] + "', ";
         sret = sret + "TD1='"
                 + Long.toString(
-                        ZeitFunk.ZeitDifferenzInMinuten(SystemConfig.KalenderUmfang[0], SystemConfig.KalenderUmfang[1]))
+                        ZeitFunk.ZeitDifferenzInMinuten(TKSettings.KalenderUmfang[0], TKSettings.KalenderUmfang[1]))
                 + "', ";
-        sret = sret + "TE1='" + SystemConfig.KalenderUmfang[1] + "', ";
+        sret = sret + "TE1='" + TKSettings.KalenderUmfang[1] + "', ";
         sret = sret + "BELEGT='1' WHERE DATUM='" + sqldat + "' AND BEHANDLER='" + this.sBehandler + "' LIMIT 1";
         // System.out.println(sret);
         return sret;

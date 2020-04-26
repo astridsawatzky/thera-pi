@@ -11,7 +11,7 @@ import CommonTools.DatFunk;
 import CommonTools.StringTools;
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
-import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 
 class BlockHandling {
 
@@ -651,10 +651,10 @@ class BlockHandling {
         //// System.out.println("Kollege = "+this.kollege);
         datenfeld.setFeld(kollege, 0, 0, "");
         datenfeld.setFeld(kollege, 1, 0, "@FREI");
-        datenfeld.setFeld(kollege, 2, 0, SystemConfig.KalenderUmfang[0]);
-        long dauer = SystemConfig.KalenderMilli[1] - SystemConfig.KalenderMilli[0];
+        datenfeld.setFeld(kollege, 2, 0, TKSettings.KalenderUmfang[0]);
+        long dauer = TKSettings.KalenderMilli[1] - TKSettings.KalenderMilli[0];
         datenfeld.setFeld(kollege, 3, 0, Long.toString(dauer));
-        datenfeld.setFeld(kollege, 4, 0, SystemConfig.KalenderUmfang[1]);
+        datenfeld.setFeld(kollege, 4, 0, TKSettings.KalenderUmfang[1]);
         while (datenfeld.getAnzahlBloecke(kollege) > 1) {
             datenfeld.loeschenBlock(kollege, 1);
         }

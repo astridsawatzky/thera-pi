@@ -38,6 +38,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 
+import com.sun.star.datatransfer.dnd.DNDConstants;
+import com.sun.star.i18n.Weekdays;
+
 import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
@@ -53,10 +56,12 @@ import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import hilfsFenster.TerminEinpassen;
 import hilfsFenster.TerminObenUntenAnschliessen;
+import javafx.scene.input.DragEvent;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 import systemEinstellungen.config.Datenbank;
 import systemTools.ListenerTools;
 
@@ -195,10 +200,12 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
     private InfoDialogTerminInfo infoDlg;
 
-    private static String[] dayname = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag",
+
+
+    private  String[] dayname = { "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag",
             "Sonntag" };
-    private static String[] dayshortname = { "Mo - ", "Di - ", "Mi - ", "Do - ", "Fr - ", "Sa - ", "So - " };
-    private static String[] tooltip = { "", "", "", "", "", "", "" };
+    private  String[] dayshortname = { "Mo - ", "Di - ", "Mi - ", "Do - ", "Fr - ", "Sa - ", "So - " };
+    private  String[] tooltip = { "", "", "", "", "", "", "" };
     private FinalGlassPane fgp;
 
     private Connection connection;
@@ -229,7 +236,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         });
 
         ViewPanel.add(grundFlaeche, BorderLayout.CENTER);
-        ViewPanel.setBackground(SystemConfig.KalenderHintergrund);
+        ViewPanel.setBackground(TKSettings.KalenderHintergrund);
         DropTarget dndt = new DropTarget();
         try {
             dndt.addDropTargetListener(this);
@@ -272,15 +279,15 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
         if (ansicht == Ansicht.WOCHE) {
             this.aktAnsicht = Ansicht.NORMAL;
-            oCombo[0].setSelectedItem(SystemConfig.KalenderStartWADefaultUser);
+            oCombo[0].setSelectedItem(TKSettings.KalenderStartWADefaultUser);
             setWochenanzeige();
         } else if (ansicht == Ansicht.NORMAL) {
-            int lang = SystemConfig.aTerminKalender.size();
+            int lang = TKSettings.aTerminKalender.size();
             int pos = -1;
             for (int i = 0; i < lang; i++) {
-                if (SystemConfig.aTerminKalender.get(i)
+                if (TKSettings.aTerminKalender.get(i)
                                                 .get(0)
-                                                .contains(SystemConfig.KalenderStartNADefaultSet)) {
+                                                .contains(TKSettings.KalenderStartNADefaultSet)) {
                     // XXX: bogus compare, if this does not work, why does it work at all?
                     pos = i;
                     break;
@@ -290,7 +297,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             if (pos >= 0) {
                 this.aktSet = pos;
                 String[] sSet;
-                sSet = SystemConfig.aTerminKalender.get(this.aktSet)
+                sSet = TKSettings.aTerminKalender.get(this.aktSet)
                                                    .get(1)
                                                    .get(0);
                 for (int i = 0; i < 7; i++) {
@@ -301,7 +308,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
         setzeStatement();
 
-        if (SystemConfig.KalenderZeitLabelZeigen) {
+        if (TKSettings.KalenderZeitLabelZeigen) {
             fgp = new FinalGlassPane(eltern);
             eltern.setGlassPane(fgp);
         }
@@ -311,10 +318,10 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     }
 
     public void regleZeitLabel() {
-        if (!SystemConfig.KalenderZeitLabelZeigen && fgp != null) {
+        if (!TKSettings.KalenderZeitLabelZeigen && fgp != null) {
             fgp.setVisible(false);
             fgp = null;
-        } else if (SystemConfig.KalenderZeitLabelZeigen && fgp == null) {
+        } else if (TKSettings.KalenderZeitLabelZeigen && fgp == null) {
             fgp = new FinalGlassPane(eltern);
             eltern.setGlassPane(fgp);
         }
@@ -360,7 +367,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         } catch (SQLException ex) {
             SqlInfo.loescheLocksMaschine();
         }
-        if (SystemConfig.UpdateIntervall > 0 && this.aktAnsicht != Ansicht.MASKE) {
+        if (TKSettings.UpdateIntervall > 0 && this.aktAnsicht != Ansicht.MASKE) {
             db_Aktualisieren = new Thread(new sperrTest());
             db_Aktualisieren.start();
         }
@@ -395,7 +402,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             grundFlaeche = new JXPanel();
             grundFlaeche.setDoubleBuffered(true);
             grundFlaeche.setBorder(null);
-            grundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+            grundFlaeche.setBackground(TKSettings.KalenderHintergrund);
 
             grundFlaeche.setLayout(new GridBagLayout());
             grundFlaeche.add(getComboFlaeche(), ComboflaecheConstraints);
@@ -412,7 +419,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         if (comboFlaeche == null) {
             DropShadowBorder dropShadow = new DropShadowBorder(Color.BLACK, 5, 1, 3, true, true, false, true);
             comboFlaeche = new JXPanel();
-            comboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+            comboFlaeche.setBackground(TKSettings.KalenderHintergrund);
             GridLayout gridLayout = new GridLayout();
             gridLayout.setRows(1);
             comboFlaeche.setLayout(gridLayout);
@@ -422,7 +429,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             for (int i = 0; i < 7; i++) {
                 cb = new JXPanel(new BorderLayout());
                 cb.setBorder(dropShadow);
-                cb.setBackground(SystemConfig.KalenderHintergrund);
+                cb.setBackground(TKSettings.KalenderHintergrund);
                 oCombo[i] = new JComboBox();
                 oCombo[i].setName("Combo" + i);
                 cb.add(oCombo[i], BorderLayout.CENTER);
@@ -653,7 +660,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     private JXPanel getTerminFlaeche(Connection connection) {
         if (TerminFlaeche == null) {
             TerminFlaeche = new JXPanel();
-            TerminFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+            TerminFlaeche.setBackground(TKSettings.KalenderHintergrund);
             GridLayout gridLayout = new GridLayout();
             gridLayout.setRows(1);
             TerminFlaeche.setLayout(gridLayout);
@@ -663,11 +670,11 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             for (int i = 0; i < 7; i++) {
                 cb = new JXPanel(new BorderLayout());
                 cb.setBorder(null);
-                cb.setBackground(SystemConfig.KalenderHintergrund);
+                cb.setBackground(TKSettings.KalenderHintergrund);
                 oSpalten[i] = new kalenderPanel();
                 oSpalten[i].setName("Spalte" + i);
                 oSpalten[i].setDoubleBuffered(true);
-                oSpalten[i].setAlpha(SystemConfig.KalenderAlpha);
+                oSpalten[i].setAlpha(TKSettings.KalenderAlpha);
 
                 dragLab[i] = new JLabel();
                 dragLab[i].setName("draLab-" + i);
@@ -758,7 +765,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                     fPixelProMinute = fPixelProMinute / 900;
                 }
             });
-            setTimeLine(SystemConfig.KalenderTimeLineZeigen);
+            setTimeLine(TKSettings.KalenderTimeLineZeigen);
             TerminFlaeche.revalidate();
         }
         return TerminFlaeche;
@@ -774,15 +781,15 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             if (!(Reha.instance.terminpanel.oSpalten == null)) {
                 for (int i = 0; i < 7; i++) {
                     Reha.instance.terminpanel.oSpalten[i].setAlpha(alf);
-                    Reha.instance.terminpanel.oSpalten[i].setBackground(SystemConfig.KalenderHintergrund);
+                    Reha.instance.terminpanel.oSpalten[i].setBackground(TKSettings.KalenderHintergrund);
                     Reha.instance.terminpanel.oSpalten[i].repaint();
                     Reha.instance.terminpanel.oCombo[i].getParent()
-                                                       .setBackground(SystemConfig.KalenderHintergrund);
+                                                       .setBackground(TKSettings.KalenderHintergrund);
                 }
-                Reha.instance.terminpanel.ViewPanel.setBackground(SystemConfig.KalenderHintergrund);
-                Reha.instance.terminpanel.grundFlaeche.setBackground(SystemConfig.KalenderHintergrund);
-                Reha.instance.terminpanel.comboFlaeche.setBackground(SystemConfig.KalenderHintergrund);
-                Reha.instance.terminpanel.TerminFlaeche.setBackground(SystemConfig.KalenderHintergrund);
+                Reha.instance.terminpanel.ViewPanel.setBackground(TKSettings.KalenderHintergrund);
+                Reha.instance.terminpanel.grundFlaeche.setBackground(TKSettings.KalenderHintergrund);
+                Reha.instance.terminpanel.comboFlaeche.setBackground(TKSettings.KalenderHintergrund);
+                Reha.instance.terminpanel.TerminFlaeche.setBackground(TKSettings.KalenderHintergrund);
                 Reha.instance.terminpanel.ViewPanel.validate();
                 Reha.instance.terminpanel.ViewPanel.repaint();
             }
@@ -856,19 +863,17 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                         if (terminVergabe.size() > 0) {
                             terminVergabe.clear();
                         }
-                        int xaktBehandler1 = xaktBehandler;
                         switch (aktAnsicht) {
                         case NORMAL:
-                            xaktBehandler1 = belegung[aktiveSpalte[2]];
+                            xaktBehandler = belegung[aktiveSpalte[2]];
                             break;
                         case WOCHE:
-                            xaktBehandler1 = aktiveSpalte[2];
+                            xaktBehandler = aktiveSpalte[2];
                             break;
                         case MASKE:
-                            xaktBehandler1 = aktiveSpalte[2];
+                            xaktBehandler = aktiveSpalte[2];
                             break;
                         }
-                        xaktBehandler = xaktBehandler1;
                         terminAufnehmen(xaktBehandler, aktiveSpalte[0]);
                         break;
                     }
@@ -1381,8 +1386,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             }
         });
 
-        oSpalten[tspalte].zeitInit((int) ZeitFunk.MinutenSeitMitternacht(SystemConfig.KalenderUmfang[0]),
-                (int) ZeitFunk.MinutenSeitMitternacht(SystemConfig.KalenderUmfang[1]));
+        oSpalten[tspalte].zeitInit((int) ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[0]),
+                (int) ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[1]));
 
         return;
     }
@@ -1436,7 +1441,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                 submenu.add(getCut());
                 submenu.add(getPaste());
                 submenu.add(getConfirm());
-                if (SystemConfig.KalenderLangesMenue) {
+                if (TKSettings.KalenderLangesMenue) {
                     jPopupMenu.add(submenu);
                     jPopupMenu.addSeparator();
                 }
@@ -2515,7 +2520,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         setUpdateVerbot(false);
         if (sw.ret >= 0) {
             this.aktSet = swSetWahl;
-            String[] sSet = SystemConfig.aTerminKalender.get(this.aktSet)
+            String[] sSet = TKSettings.aTerminKalender.get(this.aktSet)
                                                         .get(1)
                                                         .get(0);
             oCombo[0].setSelectedItem(sSet[0]);
@@ -2613,8 +2618,6 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
             try {
                 rs = stmt.executeQuery(sstmt);
-                int i = 0;
-                int durchlauf = 0;
                 int maxbehandler = behandlerMaxAnzahl;
                 int maxblock = 0;
                 int aktbehandler = 1;
@@ -2633,32 +2636,16 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                     /* letzte zu durchsuchende Spalte festlegen */
                     int ende = (5 * belegt);
                     maxblock = maxblock + (ende + 5);
-                    durchlauf = 1;
 
-                    if ("ADS".equals(new Datenbank().typ())) { // ADS
-                        int durchlauf1 = durchlauf;
-                        int i1;
-                        for (i1 = 1; i1 < ende; i1 = i1 + 5) {
-                            v1.addElement(rs.getString(i1) != null ? rs.getString(i1) : "");
-                            v2.addElement(rs.getString(i1 + 1) != null ? rs.getString(i1 + 1) : "");
-                            v3.addElement(rs.getString(i1 + 2));
-                            v4.addElement(rs.getString(i1 + 3));
-                            v5.addElement(rs.getString(i1 + 4));
-                            durchlauf1 = durchlauf1 + 1;
 
-                        }
-                        i = i1;
-                    } else {
-                        for (i = 1; i < ende; i = i + 5) {
-                            v1.addElement(rs.getString(i));
-                            v2.addElement(rs.getString(i + 1));
+                        for (int i = 1; i < ende; i = i + 5) {
+                            v1.addElement(rs.getString(i) != null ? rs.getString(i) : "");
+                            v2.addElement(rs.getString(i + 1) != null ? rs.getString(i + 1) : "");
                             v3.addElement(rs.getString(i + 2));
                             v4.addElement(rs.getString(i + 3));
                             v5.addElement(rs.getString(i + 4));
-                            durchlauf = durchlauf + 1;
-                            // Reha.datecounts++;
                         }
-                    }
+
 
                     v6.addElement(rs.getString(SPALTE_ANZ_BELGEGTE_BLOECKE)); // Anzahl
                     v6.addElement(rs.getString(302)); // Art
@@ -2667,12 +2654,12 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                     v6.addElement(rs.getString(305)); // Datum
                     v6.addElement(rs.getString(306)); // id
 
-                    aKalList.add(v1.clone());
-                    aKalList.add(v2.clone());
-                    aKalList.add(v3.clone());
-                    aKalList.add(v4.clone());
-                    aKalList.add(v5.clone());
-                    aKalList.add(v6.clone());
+                    aKalList.add(v1);
+                    aKalList.add(v2);
+                    aKalList.add(v3);
+                    aKalList.add(v4);
+                    aKalList.add(v5);
+                    aKalList.add(v6);
 
                     aSpaltenDaten.add(aKalList.clone());
                     aKalList.clear();
@@ -2860,7 +2847,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                 if (evt.getDetails()[1] == "ROT") {
                     // String fname = evt.getDetails()[0];
                     xEvent.removeRehaTPEventListener(this);
-                    if (SystemConfig.UpdateIntervall > 0 || db_Aktualisieren != null) {
+                    if (TKSettings.UpdateIntervall > 0 || db_Aktualisieren != null) {
                         db_Aktualisieren.stop();
                     }
                     finalise();
@@ -4672,13 +4659,13 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         try {
             float ypos = oSpalten[aktiveSpalte[2]].getFloatPixelProMinute()
                     * (Float.valueOf(ZeitFunk.MinutenSeitMitternacht(ende))
-                            - Float.valueOf(ZeitFunk.MinutenSeitMitternacht(SystemConfig.KalenderUmfang[0])));
+                            - Float.valueOf(ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[0])));
             // Zuerst Y-testen
             if (Math.round(p.y + ypos + ywin) > p.y + oSpalten[aktiveSpalte[2]].getHeight()) {
                 // Fenster würde nach unten ins Nirvana abtauchen
                 ypos = oSpalten[aktiveSpalte[2]].getFloatPixelProMinute()
                         * (Float.valueOf(ZeitFunk.MinutenSeitMitternacht(start))
-                                - Float.valueOf(ZeitFunk.MinutenSeitMitternacht(SystemConfig.KalenderUmfang[0])));
+                                - Float.valueOf(ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[0])));
                 p.y = Math.round((p.y + ypos) - ywin);
             } else {
                 p.y = Math.round(p.y + ypos);
@@ -4876,7 +4863,7 @@ final class sperrTest extends Thread {
             }
 
             try {
-                Thread.sleep(SystemConfig.UpdateIntervall);
+                Thread.sleep(TKSettings.UpdateIntervall);
             } catch (InterruptedException e) {
             }
         } while (true);

@@ -131,7 +131,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
         builder.addSeparator("", cc.xyw(1, 6, 5, CellConstraints.DEFAULT, CellConstraints.CENTER));
 
         startWochenAnz = new JCheckBox();
-        startWochenAnz.setSelected(SystemConfig.KalenderStartWochenAnsicht);
+        startWochenAnz.setSelected(TKSettings.KalenderStartWochenAnsicht);
         builder.addLabel("Terminkalender in der Wochenansicht starten", cc.xy(1, 7));
         builder.add(startWochenAnz, cc.xy(5, 7, CellConstraints.RIGHT, CellConstraints.BOTTOM));
 
@@ -184,24 +184,24 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
             defaultWA.addItem(ParameterLaden.getMatchcode(von));
         }
         if (bis >= 0) {
-            defaultWA.setSelectedItem(SystemConfig.KalenderStartWADefaultUser);
+            defaultWA.setSelectedItem(TKSettings.KalenderStartWADefaultUser);
         }
         defaultWA.requestFocus();
 
         von = 0;
-        bis = SystemConfig.aTerminKalender.size() + 1;
+        bis = TKSettings.aTerminKalender.size() + 1;
         String[] fach = new String[bis];
         if (defaultNA.getItemCount() > 0) {
             defaultNA.removeAllItems();
         }
         defaultNA.addItem("./.");
         for (von = 1; von < bis; von++) {
-            fach[von] = (String) ((ArrayList) SystemConfig.aTerminKalender.get(von - 1)
+            fach[von] = (String) ((ArrayList) TKSettings.aTerminKalender.get(von - 1)
                                                                           .get(0)).get(0);
             defaultNA.addItem(String.valueOf(fach[von]));
         }
         if (bis >= 0) {
-            defaultNA.setSelectedItem(SystemConfig.KalenderStartNADefaultSet);
+            defaultNA.setSelectedItem(TKSettings.KalenderStartNADefaultSet);
         }
         defaultNA.requestFocus();
     }
@@ -224,10 +224,10 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
             ini.setStringProperty("Kalender", "AnsichtDefault",
                     defaultWA.getSelectedItem() + "@" + defaultNA.getSelectedItem(), null);
             INITool.saveIni(ini);
-            SystemConfig.KalenderStartWochenAnsicht = startWochenAnz.isSelected();
-            SystemConfig.KalenderStartNADefaultSet = defaultNA.getSelectedItem()
+            TKSettings.KalenderStartWochenAnsicht = startWochenAnz.isSelected();
+            TKSettings.KalenderStartNADefaultSet = defaultNA.getSelectedItem()
                                                               .toString();
-            SystemConfig.KalenderStartWADefaultUser = defaultWA.getSelectedItem()
+            TKSettings.KalenderStartWADefaultUser = defaultWA.getSelectedItem()
                                                                .toString();
             JOptionPane.showMessageDialog(null, "Konfiguration in kalender.ini erfolgreich gespeichert");
         } catch (Exception ex) {

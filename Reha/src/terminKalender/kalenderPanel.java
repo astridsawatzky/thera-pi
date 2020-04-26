@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 import terminKalender.TerminFenster.Ansicht;
 
 class kalenderPanel extends JXPanel {
@@ -100,19 +101,19 @@ class kalenderPanel extends JXPanel {
             int i1;
             g2d.setFont( DIALOGFONT);
 
-            g2d.setColor(SystemConfig.KalenderHintergrund);
+            g2d.setColor(TKSettings.KalenderHintergrund);
             g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
             for (i = 0; i < anzahl; i++) {
                 String test = "";
                 try {
                     if ((test = (String) ((Vector) dat.get(0)).get(i)) == null) {
-                        g2d.setColor(SystemConfig.KalenderHintergrund);
+                        g2d.setColor(TKSettings.KalenderHintergrund);
                         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
                         break;
                     }
                 } catch (java.lang.ArrayIndexOutOfBoundsException bounds) {
-                    g2d.setColor(SystemConfig.KalenderHintergrund);
+                    g2d.setColor(TKSettings.KalenderHintergrund);
                     g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
                     break;
                 }
@@ -374,11 +375,11 @@ class kalenderPanel extends JXPanel {
                 }
             }
             if (anzahl == 0) {
-                g2d.setColor(SystemConfig.KalenderHintergrund);
+                g2d.setColor(TKSettings.KalenderHintergrund);
                 g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
             }
         } else {
-            g2d.setColor(SystemConfig.KalenderHintergrund);
+            g2d.setColor(TKSettings.KalenderHintergrund);
             g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
         }
         if (this.inGruppierung) {

@@ -12,6 +12,7 @@ import CommonTools.StringTools;
 import CommonTools.ZeitFunk;
 import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 import terminKalender.TerminFenster.Ansicht;
 
 class Tblock {
@@ -44,7 +45,6 @@ class Tblock {
     public int TblockInit(TerminFenster parent, String[] tDaten, int iSpalte, int iBlock, int iKollege, Vector vterm,
             String[] datum, int iKoll) {
 
-        int i;
 
         this.aktDatum = datum;
 
@@ -68,7 +68,8 @@ class Tblock {
         this.feld.Init(this.vect);
 
         AnzahlOrigBloecke = this.feld.getAnzahlBloecke(this.Kollege);
-        for (i = 0; i < 1; i++) {
+
+        for (int i = 0; i < 1; i++) {
 
             if ((result = BlockPasstGenau()) == 0) {
                 setzeBlockPasstGenau();
@@ -777,7 +778,7 @@ class Tblock {
         String sende = this.feld.getFeld(this.Kollege, ENDE, this.Block);
         int aktende = (int) ZeitFunk.MinutenSeitMitternacht(sende);
         String sbeginn = this.feld.getFeld(this.Kollege, BEGINN, this.Block);
-        if (ende >= SystemConfig.KalenderMilli[1]) {
+        if (ende >= TKSettings.KalenderMilli[1]) {
             JOptionPane.showMessageDialog(null,
                     "Die gewünschte Endzeit des Termines liegt nach der absoluten Endzeit\n"
                             + "des Terminkalenders und kann deshalb nicht geschrieben werden",

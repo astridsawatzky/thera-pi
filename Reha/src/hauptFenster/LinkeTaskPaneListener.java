@@ -28,6 +28,7 @@ import oOorgTools.OOTools;
 import rechteTools.Rechte;
 import rehaWissen.RehaWissen;
 import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 import systemTools.TestePatStamm;
 import terminKalender.TerminFenster.Ansicht;
 import textBausteine.textbaus;
@@ -89,7 +90,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                     Reha.getThisFrame()
                         .setCursor(Cursors.wartenCursor);
                     Reha.instance.progLoader.ProgTerminFenster(1,
-                            SystemConfig.KalenderStartWochenAnsicht ? Ansicht.WOCHE : Ansicht.NORMAL);
+                            TKSettings.KalenderStartWochenAnsicht ? Ansicht.WOCHE : Ansicht.NORMAL);
 
                     Reha.getThisFrame()
                         .setCursor(Cursors.normalCursor);

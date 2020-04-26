@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import CommonTools.ZeitFunk;
-import systemEinstellungen.SystemConfig;
+import systemEinstellungen.TKSettings;
 
 class FinalGlassPane extends JPanel implements AWTEventListener {
     /**
@@ -78,7 +78,7 @@ class FinalGlassPane extends JPanel implements AWTEventListener {
                                              .getHeight());
                 fPixelZuMinute = Float.valueOf(900.f / Float.valueOf(maxhoch));
                 uhrZeit = ZeitFunk.MinutenZuZeit(
-                        Long.valueOf(ZeitFunk.MinutenSeitMitternacht(SystemConfig.KalenderUmfang[0]))
+                        Long.valueOf(ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[0]))
                             .intValue() + Math.round(Float.valueOf(fPixelZuMinute * (me.getY()))));
 
                 /*

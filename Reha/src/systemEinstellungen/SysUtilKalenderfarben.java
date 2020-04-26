@@ -96,7 +96,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
         colorSetCombo.addActionListener(this);
         String[] alf = { "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "1.0" };
         alphawahl = new JComboBox(alf);
-        alphawahl.setSelectedItem(new Float(SystemConfig.KalenderAlpha).toString());
+        alphawahl.setSelectedItem(new Float(TKSettings.KalenderAlpha).toString());
         alphawahl.setActionCommand("alpha");
         alphawahl.addActionListener(this);
 
@@ -215,7 +215,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
             }
 
             if (def == 0) {
-                SystemConfig.KalenderHintergrund = SystemConfig.aktTkCol.get("AusserAZ")[0];
+                TKSettings.KalenderHintergrund = SystemConfig.aktTkCol.get("AusserAZ")[0];
             }
             TerminFenster.setDurchlass(Float.parseFloat((String) alphawahl.getSelectedItem()));
             SystemConfig.UpdateIni("terminkalender.ini", "Kalender", "KalenderHintergrundAlpha",
