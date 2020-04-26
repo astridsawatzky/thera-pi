@@ -358,8 +358,8 @@ class Tblock {
         String sEnde = this.feld.getFeld(this.Kollege, iEnde, this.Block);
         String sDauer = this.feld.getFeld(this.Kollege, iDauer, this.Block);
         //// System.out.println("++++Beginn PasstUntenObenNicht++++++");
-        if (this.Ende.equals(sEnde)
-                && (!this.Beginn.equals(sBeginn))) { /**** Das Ende gleich aber der Anfang nicht) ***/
+        if (this.Ende.equals(sEnde) && (!this.Beginn.equals(sBeginn))) {
+            /**** Das Ende gleich aber der Anfang nicht) ***/
             if (ZeitFunk.MinutenSeitMitternacht(sBeginn) < ZeitFunk.MinutenSeitMitternacht(
                     this.Beginn)) { /*** Die neue Beginnzeit sp�ter ist **/
                 //// System.out.println("Endzeit gleich aber Beginnzeit sp�ter als bislang");
@@ -875,8 +875,7 @@ class Tblock {
  */
 
 class Felder {
-    
-    
+
     private Vector tvect = new Vector();
 
     public Felder Init(Vector termv) {

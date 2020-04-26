@@ -60,16 +60,10 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
 import systemTools.ListenerTools;
 
-public class TerminFenster extends Observable
-        implements RehaTPEventListener, ActionListener, DropTargetListener {
-
-
+public class TerminFenster extends Observable implements RehaTPEventListener, ActionListener, DropTargetListener {
 
     private static final int SPALTE_ANZ_BELGEGTE_BLOECKE = 301;
     private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-
-
-
 
     private JXPanel grundFlaeche;
     private JXPanel comboFlaeche;
@@ -2691,7 +2685,7 @@ public class TerminFenster extends Observable
                     datenZeichnen(aSpaltenDaten);
                 }
             } catch (SQLException ex) {
-                logger.error("einlesen der anzeigedaten",ex);
+                logger.error("einlesen der anzeigedaten", ex);
 
             }
         } catch (SQLException ex) {
@@ -2705,7 +2699,7 @@ public class TerminFenster extends Observable
                     Reha.instance.ladenach();
                 }
             } else {
-                logger.error("einlesen der anzeigedaten",ex);
+                logger.error("einlesen der anzeigedaten", ex);
             }
         } finally {
             if (rs != null) {
@@ -2774,7 +2768,6 @@ public class TerminFenster extends Observable
                     }
                     i = i1;
 
-
                     v6.addElement(rs.getString(226)); // Anzahl
                     v6.addElement(rs.getString(227)); // Art
                     v6.addElement(rs.getString(228)); // Behandler
@@ -2802,13 +2795,13 @@ public class TerminFenster extends Observable
                 }
             } catch (SQLException ex) {
 
-                 System.out.println("von ResultSet SQLState: " + ex.getSQLState());
-                 System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode ());
-                 System.out.println("von ResultSet ErrorMessage: " + ex.getMessage ());
+                System.out.println("von ResultSet SQLState: " + ex.getSQLState());
+                System.out.println("von ResultSet ErrorCode: " + ex.getErrorCode());
+                System.out.println("von ResultSet ErrorMessage: " + ex.getMessage());
             }
 
         } catch (SQLException ex) {
-             System.out.println("von stmt -SQLState: " + ex.getSQLState());
+            System.out.println("von stmt -SQLState: " + ex.getSQLState());
         } finally {
             if (rs != null) {
                 try {
@@ -4398,8 +4391,6 @@ public class TerminFenster extends Observable
     public static void setDragMode(int mode) {
         DRAG_MODE = mode;
     }
-
-
 
     void terminBestaetigen(int spalte, boolean forceDlg) {
         if ((Rechte.hatRecht(Rechte.Kalender_terminconfirminpast, false)) || (this.getAktuellerTag()

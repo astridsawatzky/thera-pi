@@ -26,7 +26,7 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 
 public class iCalRehaExporter {
-    
+
     private String plandatei = "";
     private Vector<String> veczeilen = new Vector<String>();
     Vector<String> test = new Vector<String>();

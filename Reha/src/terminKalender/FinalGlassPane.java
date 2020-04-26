@@ -28,7 +28,6 @@ class FinalGlassPane extends JPanel implements AWTEventListener {
     private float fPixelZuMinute = 0.f;
     private String maxhoch = "0";
     private String uhrZeit = "00:00";
-    
 
     FinalGlassPane(JInternalFrame frame) {
         super();

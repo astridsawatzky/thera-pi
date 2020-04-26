@@ -244,7 +244,4 @@ class SetWahl extends JDialog {
         return setname;
     }
 
-    
-
-    
 } // @jve:decl-index=0:visual-constraint="103,28"

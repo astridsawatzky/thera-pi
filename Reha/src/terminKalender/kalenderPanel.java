@@ -59,14 +59,12 @@ class kalenderPanel extends JXPanel {
     private Font fon = new Font("Tahoma", Font.PLAIN, 10);
     private ImageIcon dragImage = null;
     private Image dragImage2 = null;
-    
+
     private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
     private float yTimeLine = .0f;
     private boolean showTimeLine = false;
     private int pfeily;
     private Logger logger = LoggerFactory.getLogger(kalenderPanel.class);
-
-    
 
     void ListenerSetzen(int aktPanel) {
         this.panelNummer = aktPanel;
@@ -170,8 +168,7 @@ class kalenderPanel extends JXPanel {
                         } else {
                             if (this.spalteAktiv) {
 
-                                if ((!sName.equals("")
-                                        || Reha.instance.terminpanel.aktAnsicht == Ansicht.MASKE)) {
+                                if ((!sName.equals("") || Reha.instance.terminpanel.aktAnsicht == Ansicht.MASKE)) {
                                     if (yDifferenz < 12) {
                                         if (yDifferenz > 0) {
                                             Reha.instance.terminpanel.dragLab[this.panelNummer].setBounds(xStart + 1,
@@ -530,8 +527,6 @@ class kalenderPanel extends JXPanel {
         return ret.clone();
     }
 
-    
-
     /********************************/
     int blockGeklickt(int block) {
         if (block > -1 && anzahl > 0) {
@@ -616,7 +611,6 @@ class kalenderPanel extends JXPanel {
         sEnde = (String) ((Vector) dat.get(4)).get(this.gruppe[1]);
         dauer = (int) ZeitFunk.ZeitDifferenzInMinuten(sStart, sEnde);
 
-
         fStartPix = (yStartMin) * fPixelProMinute;
         yStartMin = ((int) (fStartPix));
 
@@ -648,8 +642,6 @@ class kalenderPanel extends JXPanel {
     private void setiPixelProMinute(int iPixelProMinute) {
         this.iPixelProMinute = iPixelProMinute;
     }
-
-    
 
     public void setShiftGedrueckt(boolean shiftGedrueckt) {
         this.shiftGedrueckt = shiftGedrueckt;

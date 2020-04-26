@@ -197,10 +197,6 @@ public class TermineErfassen implements Runnable {
         TermineErfassen.success = xsuccess;
     }
 
-    
-
-    
-
     /********************/
     public int testeVerordnung() throws Exception {
         vec = SqlInfo.holeSatz("verordn",
@@ -232,8 +228,6 @@ public class TermineErfassen implements Runnable {
         // 0 = Tage ist noch nicht erfaßt
         return 0;
     }
-
-    
 
     /********************/
     private boolean testeTermine() throws Exception {
@@ -296,7 +290,7 @@ public class TermineErfassen implements Runnable {
                     JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
                     if (termin != null) {
 
-                        if ( Reha.instance.terminpanel.aktAnsicht == Ansicht.NORMAL) {
+                        if (Reha.instance.terminpanel.aktAnsicht == Ansicht.NORMAL) {
                             if (Reha.instance.terminpanel.getAktuellerTag()
                                                          .equals(DatFunk.sHeute())) {
                                 int iblock = Integer.valueOf(sblock) - 1;
@@ -696,8 +690,6 @@ public class TermineErfassen implements Runnable {
         }
         return String.valueOf(ret);
     }
-
-    
 
     private static int welcheIstMaxInt(int i1, int i2) {
         if (i1 > i2) {

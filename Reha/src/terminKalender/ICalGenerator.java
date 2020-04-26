@@ -9,7 +9,7 @@ import java.util.UUID;
 import systemEinstellungen.SystemConfig;
 
 public class ICalGenerator {
-    
+
     /*
      * static String ort =
      * SystemConfig.hmFirmenDaten.get("Firma1")+(!SystemConfig.hmFirmenDaten.get(
@@ -19,8 +19,8 @@ public class ICalGenerator {
      * ("Plz")+" "+SystemConfig.hmFirmenDaten.get("Ort")+", CRLF"+
      * "Telefon: "+SystemConfig.hmFirmenDaten.get("Telefon");
      */
-    private static String ort = SystemConfig.hmFirmenDaten.get("Strasse") + " CRLF" + SystemConfig.hmFirmenDaten.get("Plz")
-            + " " + SystemConfig.hmFirmenDaten.get("Ort");
+    private static String ort = SystemConfig.hmFirmenDaten.get("Strasse") + " CRLF"
+            + SystemConfig.hmFirmenDaten.get("Plz") + " " + SystemConfig.hmFirmenDaten.get("Ort");
 
     private static final SimpleDateFormat futc = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
 

@@ -19,10 +19,8 @@ public class ParameterLaden {
     public static Vector<ArrayList<String>> vKollegen = new Vector<ArrayList<String>>();
     public static Vector<Kollegen> vKKollegen = new Vector<Kollegen>();
     public static Vector<Vector<String>> pKollegen = new Vector<Vector<String>>();
-    
 
     private static String[][] col;
-    
 
     public static int maxKalZeile = 0;
 
@@ -58,8 +56,6 @@ public class ParameterLaden {
         return ret;
     }
 
-    
-
     public static String getKollegenUeberDBZeile(int reihe) {
         String ret = "";
         int lang = vKKollegen.size();
@@ -73,10 +69,6 @@ public class ParameterLaden {
         }
         return ret;
     }
-
-    
-
-    
 
     public static String getMatchcode(int kollege) {
         return vKKollegen.get(kollege).Matchcode;

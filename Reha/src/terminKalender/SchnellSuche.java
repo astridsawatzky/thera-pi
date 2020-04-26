@@ -350,8 +350,6 @@ class SchnellSuche extends RehaSmartDialog implements ActionListener {
         return jtp;
     }
 
-    
-
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
 
@@ -470,10 +468,6 @@ class SchnellSuche extends RehaSmartDialog implements ActionListener {
 
     }
 
-    
-
-    
-
     private void suchenFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -556,8 +550,7 @@ class SchnellSuche extends RehaSmartDialog implements ActionListener {
 final class SuchenInTagen extends Thread {
     private Statement stmt = null;
     private ResultSet rs = null;
-    
-    
+
     private String[] exStatement = null;
     private String suchkrit = "";
     private ArrayList<String> atermine = new ArrayList<String>();
@@ -707,8 +700,6 @@ class SchnellSucheTableModel extends AbstractTableModel {
     public int getRowCount() {
         return data.size();
     }
-
-    
 
     @Override
     public String getColumnName(int col) {

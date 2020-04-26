@@ -244,8 +244,6 @@ class DruckeViewPanel extends SwingWorker<Void, Void> {
         }
     }
 
-    
-
     private void speichernQualitaet(String stitel, Float fQuality) {
 
         IIOImage imgq = new IIOImage(bufimg, null, null);

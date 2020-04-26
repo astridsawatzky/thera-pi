@@ -81,7 +81,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
     private static String dieserName = "";
     private static JXTable pliste = null;
     private static JXTitledPanel jp;
-    
+
     private static int OOoFertig = -1;
     private static JButton jb1 = null;
     private static JButton jb2 = null;
@@ -358,8 +358,6 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
 
         return jpliste;
     }
-
-    
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
@@ -990,7 +988,7 @@ class DruckFenster extends RehaSmartDialog implements ActionListener {
 
     private final class sendeTermine extends Thread {
         private Vector<Vector<String>> oOTermine = null;
-        
+
         private String pat_intern = "";
         private String emailaddy = "";
 

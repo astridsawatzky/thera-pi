@@ -74,7 +74,6 @@ class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener
 
     private Vector vTerm = new Vector();
 
-
     private Vector<String> feiertagDatum = new Vector<String>();
     private Vector<String> feiertagName = new Vector<String>();
 
@@ -236,8 +235,6 @@ class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener
         jtp.setVisible(true);
         return jtp;
     }
-
-    
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
