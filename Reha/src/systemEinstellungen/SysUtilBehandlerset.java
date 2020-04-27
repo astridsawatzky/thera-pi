@@ -4,9 +4,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,16 +23,17 @@ import CommonTools.JRtaTextField;
 import hauptFenster.Reha;
 import terminKalender.ParameterLaden;
 
-public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionListener {
+public class SysUtilBehandlerset extends JXPanel implements  ActionListener {
+    private static final Dimension PREFERRED_BUTTONL_SIZE = new Dimension(70, 20);
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
-    JButton knopf1 = null;
-    JButton knopf2 = null;
-    JButton knopf3 = null;
-    JButton knopf4 = null;
-    JButton knopf5 = null;
+    JButton neuButton = null;
+    JButton loeschenButton = null;
+    JButton aendernButton = null;
+    JButton apeichernButton = null;
+    JButton abbrechenButton = null;
 
     JComboBox SetName = null;
     JComboBox Spalte1 = null;
@@ -81,11 +79,9 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
                 jscroll.validate();
                 add(jscroll);
                 validate();
-                // add(getSetSeite());
             }
         });
 
-        // this.setBackground(Color.YELLOW);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -105,9 +101,6 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
         }
     }
 
-    /**************
-     * Beginn der Methode f�r die Objekterstellung und -platzierung
-     *********/
     private JPanel getSetSeite() {
         // 1. 2. 3. 4. 5. 6. 7. 8. 9.
         FormLayout lay = new FormLayout("right:max(60dlu;p), 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu",
@@ -171,72 +164,57 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
         builder.addSeparator("", cc.xyw(1, 21, 9));
 
         // buttons
-        knopf1 = new JButton("neu");
-        knopf1.setPreferredSize(new Dimension(70, 20));
-        knopf1.addActionListener(this);
-        knopf1.setActionCommand("neu");
-        knopf1.addKeyListener(this);
+        neuButton = new JButton("neu");
+        neuButton.setPreferredSize(PREFERRED_BUTTONL_SIZE);
+        neuButton.addActionListener(this);
+        neuButton.setActionCommand("neu");
 
-        knopf2 = new JButton("löschen");
-        knopf2.setPreferredSize(new Dimension(70, 20));
-        knopf2.addActionListener(this);
-        knopf2.setActionCommand("loeschen");
-        knopf2.addKeyListener(this);
+        loeschenButton = new JButton("löschen");
+        loeschenButton.setPreferredSize(PREFERRED_BUTTONL_SIZE);
+        loeschenButton.addActionListener(this);
+        loeschenButton.setActionCommand("loeschen");
 
-        knopf3 = new JButton("ändern");
-        knopf3.setPreferredSize(new Dimension(70, 20));
-        knopf3.addActionListener(this);
-        knopf3.setActionCommand("aendern");
-        knopf3.addKeyListener(this);
+        aendernButton = new JButton("ändern");
+        aendernButton.setPreferredSize(PREFERRED_BUTTONL_SIZE);
+        aendernButton.addActionListener(this);
+        aendernButton.setActionCommand("aendern");
 
-        knopf4 = new JButton("speichern");
-        knopf4.setPreferredSize(new Dimension(70, 20));
-        knopf4.addActionListener(this);
-        knopf4.setActionCommand("speichern");
-        knopf4.addKeyListener(this);
+        apeichernButton = new JButton("speichern");
+        apeichernButton.setPreferredSize(PREFERRED_BUTTONL_SIZE);
+        apeichernButton.addActionListener(this);
+        apeichernButton.setActionCommand("speichern");
 
-        knopf5 = new JButton("abbrechen");
-        knopf5.setPreferredSize(new Dimension(70, 20));
-        knopf5.addActionListener(this);
-        knopf5.setActionCommand("abbrechen");
-        knopf5.addKeyListener(this);
+        abbrechenButton = new JButton("abbrechen");
+        abbrechenButton.setPreferredSize(PREFERRED_BUTTONL_SIZE);
+        abbrechenButton.addActionListener(this);
+        abbrechenButton.setActionCommand("abbrechen");
 
-        builder.add(knopf1, cc.xy(1, 23));
-        builder.add(knopf2, cc.xy(3, 23));
-        builder.add(knopf3, cc.xy(5, 23));
-        builder.add(knopf4, cc.xy(7, 23));
-        builder.add(knopf5, cc.xy(9, 23));
-        knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
+        builder.add(neuButton, cc.xy(1, 23));
+        builder.add(loeschenButton, cc.xy(3, 23));
+        builder.add(aendernButton, cc.xy(5, 23));
+        builder.add(apeichernButton, cc.xy(7, 23));
+        builder.add(abbrechenButton, cc.xy(9, 23));
+        setButtonsNonEdit();
         SetNeu.setEnabled(false);
 
         return builder.getPanel();
     }
 
+    private void setButtonsNonEdit() {
+        knopfGedoense(new boolean[] { true, true, true, false, false });
+    }
+
     /**************
      * Ende Methode f�r die Objekterstellung und -platzierung
      *********/
-    private void knopfGedoense(int[] knopfstatus) {
-        knopf1.setEnabled((knopfstatus[0] == 0 ? false : true));
-        knopf2.setEnabled((knopfstatus[1] == 0 ? false : true));
-        knopf3.setEnabled((knopfstatus[2] == 0 ? false : true));
-        knopf4.setEnabled((knopfstatus[3] == 0 ? false : true));
-        knopf5.setEnabled((knopfstatus[4] == 0 ? false : true));
+    private void knopfGedoense(boolean[] knopfstatus) {
+        neuButton.setEnabled((knopfstatus[0]));
+        loeschenButton.setEnabled((knopfstatus[1] ));
+        aendernButton.setEnabled((knopfstatus[2]));
+        apeichernButton.setEnabled((knopfstatus[3]));
+        abbrechenButton.setEnabled((knopfstatus[4]));
     }
 
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent arg0) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent arg0) {
-
-    }
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
@@ -292,18 +270,15 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
     }
 
     private void comboFuellen(boolean erster, int index) {
-        int lang = TKSettings.aTerminKalender.size();
-        int i, j;
+        int lang = BehandlerSets.alleBehandlersets().size();
         teilnehmer = new String[lang][7];
         fach = new String[lang];
         SetName.removeAllItems();
-        for (i = 0; i < lang; i++) {
-            fach[i] = (String) ((ArrayList<?>) TKSettings.aTerminKalender.get(i)
-                                                                           .get(0)).get(0);
-            teilnehmer[i] = TKSettings.aTerminKalender.get(i)
-                                                        .get(1)
-                                                        .get(0);
-            SetName.addItem(String.valueOf(fach[i]));
+        for (int i = 0; i < lang; i++) {
+            fach[i] = BehandlerSets.alleBehandlersets().get(i).getName();
+            teilnehmer[i] = BehandlerSets.alleBehandlersets().get(i).getMembers().toArray(new String[7]);
+
+            SetName.addItem(fach[i]);
         }
         if (erster) {
             SetName.setSelectedIndex(0);
@@ -315,7 +290,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
             SetNeu.setEnabled(false);
         }
 
-        for (j = 0; j < 7; j++) {
+        for (int j = 0; j < 7; j++) {
             /*
              * Spalten[j].setRenderer(new ComboBoxRenderer(Spalten[j].getRenderer(),
              * Spalten[j], UIManager.get("ComboBox.disabledForeground")));
@@ -332,23 +307,21 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
     }
 
     private void aendernHandeln() {
-        int j;
-        for (j = 0; j < 7; j++) {
+        for (int j = 0; j < 7; j++) {
             Spalten[j].setEnabled(true);
         }
         SetNeu.setEnabled(true);
         SetName.setEnabled(false);
-        knopfGedoense(new int[] { 0, 0, 0, 1, 1 });
+        setButtonsEdit();
         SetNeu.requestFocus();
     }
 
     private void abbrechenHandeln() {
-        int j;
-        for (j = 0; j < 7; j++) {
+        setButtonsNonEdit();
+        for (int j = 0; j < 7; j++) {
             Spalten[j].setEnabled(false);
         }
         SetNeu.setEnabled(false);
-        knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
         SetName.setEnabled(true);
         comboAuswerten();
         lspeichern = false;
@@ -359,18 +332,21 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
     }
 
     private void neuHandeln() {
-        int j;
         lneu = true;
         SetName.setSelectedIndex(0);
         SetName.setEnabled(false);
-        for (j = 0; j < 7; j++) {
+        for (int j = 0; j < 7; j++) {
             Spalten[j].setSelectedIndex(0);
             Spalten[j].setEnabled(true);
         }
         SetNeu.setText("");
         SetNeu.setEnabled(true);
-        knopfGedoense(new int[] { 0, 0, 0, 1, 1 });
+        setButtonsEdit();
         SetNeu.requestFocus();
+    }
+
+    private void setButtonsEdit() {
+        knopfGedoense(new boolean[] { false, false, false, true,true });
     }
 
     /***********************************************************************/
@@ -389,7 +365,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
                 SetNeu.setEnabled(false);
                 lspeichern = false;
                 urzustandHerstellen(SetName.getSelectedIndex());
-                knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
+                setButtonsNonEdit();
                 lneu = false;
                 return;
             }
@@ -409,7 +385,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
                 SetNeu.setEnabled(false);
                 lspeichern = false;
                 urzustandHerstellen(SetName.getSelectedIndex());
-                knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
+                setButtonsNonEdit();
                 lneu = false;
                 return;
             }
@@ -422,9 +398,8 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
             SystemConfig.UpdateIni("terminkalender.ini", "Kalender", setAktuellName, setXname);
             SystemConfig.UpdateIni("terminkalender.ini", "Kalender", setInhaltName, set);
 
-            SystemConfig.NurSets();
-            // comboFuellen(false,setIndex);
-            knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
+            BehandlerSets.behandlerSetsLaden();
+            setButtonsNonEdit();
             // int lang = SystemConfig.aTerminKalender.size();
             comboFuellen(false, setIndex);
             lspeichern = false;
@@ -439,7 +414,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
                 SetNeu.setEnabled(false);
                 lspeichern = false;
                 urzustandHerstellen(SetName.getSelectedIndex());
-                knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
+                setButtonsNonEdit();
                 lneu = false;
                 return;
             }
@@ -460,7 +435,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
                 SetNeu.setEnabled(false);
                 lspeichern = false;
                 urzustandHerstellen(SetName.getSelectedIndex());
-                knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
+                setButtonsNonEdit();
                 lneu = false;
                 return;
             }
@@ -475,10 +450,9 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
             SystemConfig.UpdateIni("terminkalender.ini", "Kalender", setAktuellName, setXname);
             SystemConfig.UpdateIni("terminkalender.ini", "Kalender", setInhaltName, set);
 
-            SystemConfig.NurSets();
-            // comboFuellen(false,setIndex);
-            knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
-            int lang = TKSettings.aTerminKalender.size();
+            BehandlerSets.behandlerSetsLaden();
+            setButtonsNonEdit();
+            int lang = BehandlerSets.alleBehandlersets().size();
             comboFuellen(false, lang - 1);
             lspeichern = false;
             lneu = false;
@@ -517,7 +491,7 @@ public class SysUtilBehandlerset extends JXPanel implements KeyListener, ActionL
             if (aktSet > 0) {
                 aktSet = aktSet - 1;
             }
-            SystemConfig.NurSets();
+            BehandlerSets.behandlerSetsLaden();
             // knopfGedoense(new int[]{1,1,1,0,0});
             SetName.setSelectedIndex(aktSet);
             // System.out.println("Aktuelles Set = "+aktSet);

@@ -67,7 +67,7 @@ public class SystemConfig {
 
     public static String OpenOfficePfad = null;
     public static String OpenOfficeNativePfad = null;
-    private static INIFile ini;
+    private static INIFile termkalini;
     private static INIFile colini;
     public static java.net.InetAddress dieseMaschine = null;
     public static String dieseCallbackIP = null;
@@ -225,8 +225,8 @@ public class SystemConfig {
     }
 
     public void SystemStart(String homedir) {
-        ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
-        PDFformularPfad = ini.getStringProperty("Formulare", "PDFFormularPfad");
+        termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
+        PDFformularPfad = termkalini.getStringProperty("Formulare", "PDFFormularPfad");
         try {
             dieseMaschine = java.net.InetAddress.getLocalHost();
         } catch (java.net.UnknownHostException uhe) {
@@ -258,9 +258,9 @@ public class SystemConfig {
         case 7:
             RoogleGruppen();
             break;
-        case 8:
-            NurSets();
-            break;
+//        case 8:
+//            NurSets();
+//            break;
         case 9:
             try {
                 TKFarben();
@@ -281,8 +281,8 @@ public class SystemConfig {
 
     public void DatenBank() {
         try {
-            ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
-            new Datenbank().datenbankEinstellungeneinlesen(ini);
+            termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
+            new Datenbank().datenbankEinstellungeneinlesen(termkalini);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
@@ -387,44 +387,44 @@ public class SystemConfig {
 
     public void HauptFenster() {
         try {
-            ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
+            termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
             boolean mustsave = false;
             aHauptFenster = new ArrayList<String>();
-            aHauptFenster.add(ini.getStringProperty("HauptFenster", "Hintergrundbild"));
-            aHauptFenster.add(ini.getStringProperty("HauptFenster", "Bildgroesse"));
-            aHauptFenster.add(ini.getStringProperty("HauptFenster", "FensterFarbeRGB"));
-            aHauptFenster.add(ini.getStringProperty("HauptFenster", "FensterTitel"));
-            aHauptFenster.add(ini.getStringProperty("HauptFenster", "LookAndFeel"));
+            aHauptFenster.add(termkalini.getStringProperty("HauptFenster", "Hintergrundbild"));
+            aHauptFenster.add(termkalini.getStringProperty("HauptFenster", "Bildgroesse"));
+            aHauptFenster.add(termkalini.getStringProperty("HauptFenster", "FensterFarbeRGB"));
+            aHauptFenster.add(termkalini.getStringProperty("HauptFenster", "FensterTitel"));
+            aHauptFenster.add(termkalini.getStringProperty("HauptFenster", "LookAndFeel"));
 
-            if (ini.getStringProperty("HauptFenster", "HorizontalTeilen") == null) {
-                ini.setStringProperty("HauptFenster", "HorizontalTeilen", "1", null);
+            if (termkalini.getStringProperty("HauptFenster", "HorizontalTeilen") == null) {
+                termkalini.setStringProperty("HauptFenster", "HorizontalTeilen", "1", null);
                 mustsave = true;
 
             } else {
-                desktopHorizontal = (ini.getIntegerProperty("HauptFenster", "HorizontalTeilen") == 1 ? true : false);
+                desktopHorizontal = (termkalini.getIntegerProperty("HauptFenster", "HorizontalTeilen") == 1 ? true : false);
             }
-            if (ini.getStringProperty("HauptFenster", "TP1Offen") == null) {
-                ini.setStringProperty("HauptFenster", "TP1Offen", "0", null);
-                ini.setStringProperty("HauptFenster", "TP2Offen", "0", null);
-                ini.setStringProperty("HauptFenster", "TP3Offen", "1", null);
-                ini.setStringProperty("HauptFenster", "TP4Offen", "1", null);
-                ini.setStringProperty("HauptFenster", "TP5Offen", "0", null);
-                ini.setStringProperty("HauptFenster", "TP6Offen", "1", null);
-                ini.setStringProperty("HauptFenster", "TP7Offen", "1", null);
+            if (termkalini.getStringProperty("HauptFenster", "TP1Offen") == null) {
+                termkalini.setStringProperty("HauptFenster", "TP1Offen", "0", null);
+                termkalini.setStringProperty("HauptFenster", "TP2Offen", "0", null);
+                termkalini.setStringProperty("HauptFenster", "TP3Offen", "1", null);
+                termkalini.setStringProperty("HauptFenster", "TP4Offen", "1", null);
+                termkalini.setStringProperty("HauptFenster", "TP5Offen", "0", null);
+                termkalini.setStringProperty("HauptFenster", "TP6Offen", "1", null);
+                termkalini.setStringProperty("HauptFenster", "TP7Offen", "1", null);
                 mustsave = true;
             } else {
-                if (ini.getStringProperty("HauptFenster", "TP7Offen") == null) {
-                    ini.setStringProperty("HauptFenster", "TP7Offen", "1", null);
+                if (termkalini.getStringProperty("HauptFenster", "TP7Offen") == null) {
+                    termkalini.setStringProperty("HauptFenster", "TP7Offen", "1", null);
                     mustsave = true;
                 }
                 for (int i = 1; i < 8; i++) {
                     taskPaneCollapsed[i
-                            - 1] = (ini.getStringProperty("HauptFenster", "TP" + Integer.toString(i) + "Offen")
+                            - 1] = (termkalini.getStringProperty("HauptFenster", "TP" + Integer.toString(i) + "Offen")
                                        .equals("1") ? true : false);
                 }
             }
             if (mustsave) {
-                INITool.saveIni(ini);
+                INITool.saveIni(termkalini);
             }
 
         } catch (Exception ex) {
@@ -437,7 +437,7 @@ public class SystemConfig {
     }
 
     public void openoffice() {
-        OpenOfficePfad = ini.getStringProperty("OpenOffice.org", "OfficePfad");
+        OpenOfficePfad = termkalini.getStringProperty("OpenOffice.org", "OfficePfad");
         if (!new File(OpenOfficePfad).exists()) {
             String meldung = "Es konnte keine gültige OpenOffice-Installation entdeckt werden\n"
                     + "Bislang zeigt der Pfad auf OO.org auf " + OpenOfficePfad + "\n\n"
@@ -449,15 +449,15 @@ public class SystemConfig {
                     + "Everything should then be fine - wie der Schwabe zu sagen pflegt!";
             JOptionPane.showMessageDialog(null, meldung);
         }
-        OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+        OpenOfficeNativePfad = termkalini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
 
-        ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "nachrichten.ini");
-        timerdelay = ini.getLongProperty("RehaNachrichten", "NachrichtenTimer");
-        timerpopup = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenPopUp") <= 0 ? false : true);
-        timerprogressbar = (ini.getIntegerProperty("RehaNachrichten", "NachrichtenProgressbar") <= 0 ? false : true);
+        termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "nachrichten.ini");
+        timerdelay = termkalini.getLongProperty("RehaNachrichten", "NachrichtenTimer");
+        timerpopup = (termkalini.getIntegerProperty("RehaNachrichten", "NachrichtenPopUp") <= 0 ? false : true);
+        timerprogressbar = (termkalini.getIntegerProperty("RehaNachrichten", "NachrichtenProgressbar") <= 0 ? false : true);
 
-        wissenURL = ini.getStringProperty("WWW-Services", "RTA-Wissen");
-        homePageURL = ini.getStringProperty("WWW-Services", "HomePage");
+        wissenURL = termkalini.getStringProperty("WWW-Services", "RTA-Wissen");
+        homePageURL = termkalini.getStringProperty("WWW-Services", "HomePage");
         homeDir = Path.Instance.getProghome();
     }
 
@@ -465,20 +465,7 @@ public class SystemConfig {
         try {
             INIFile termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "terminkalender.ini");
-            TKSettings.aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
-            int lesen, i;
-            lesen = Integer.parseInt(String.valueOf(termkalini.getStringProperty("Kalender", "AnzahlSets")));
-            for (i = 1; i < (lesen + 1); i++) {
-                ArrayList<String> aList1 = new ArrayList<String>();
-                ArrayList<String[]> aList2 = new ArrayList<String[]>();
-                ArrayList<ArrayList<ArrayList<String[]>>> aList3 = new ArrayList<ArrayList<ArrayList<String[]>>>();
-                aList1.add(String.valueOf(termkalini.getStringProperty("Kalender", "NameSet" + i)));
-                aList2.add(String.valueOf(termkalini.getStringProperty("Kalender", "FeldSet" + i))
-                                 .split(","));
-                aList3.add((ArrayList) aList1.clone());
-                aList3.add((ArrayList) aList2.clone());
-                TKSettings.aTerminKalender.add((ArrayList) aList3.clone());
-            }
+           BehandlerSets.behandlerSetsLaden(termkalini);
             TKSettings.KalenderUmfang[0] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderStart"));
             TKSettings.KalenderUmfang[1] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderEnde"));
             TKSettings.KalenderMilli[0] = ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[0]);
@@ -499,26 +486,26 @@ public class SystemConfig {
             GruppenLesen();
             // oGruppen = new GruppenEinlesen().init();
             try {
-                ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
-                TKSettings.KalenderLangesMenue = (ini.getStringProperty("Kalender", "LangesMenue")
+                termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
+                TKSettings.KalenderLangesMenue = (termkalini.getStringProperty("Kalender", "LangesMenue")
                                           .trim()
                                           .equals("0") ? false : true);
-                TKSettings.KalenderStartWochenAnsicht = (ini.getStringProperty("Kalender", "StartWochenAnsicht")
+                TKSettings.KalenderStartWochenAnsicht = (termkalini.getStringProperty("Kalender", "StartWochenAnsicht")
                                                  .trim()
                                                  .equals("0") ? false : true);
-                TKSettings.KalenderStartWADefaultUser = (ini.getStringProperty("Kalender", "AnsichtDefault")
+                TKSettings.KalenderStartWADefaultUser = (termkalini.getStringProperty("Kalender", "AnsichtDefault")
                                                  .split("@")[0]);
-                TKSettings.KalenderStartNADefaultSet = (ini.getStringProperty("Kalender", "AnsichtDefault")
+                TKSettings.defaultBehandlerSet = (termkalini.getStringProperty("Kalender", "AnsichtDefault")
                                                 .split("@")[1]);
-                TKSettings.KalenderZeitLabelZeigen = (ini.getStringProperty("Kalender", "ZeitLabelZeigen")
+                TKSettings.KalenderZeitLabelZeigen = (termkalini.getStringProperty("Kalender", "ZeitLabelZeigen")
                                               .trim()
                                               .equals("0") ? false : true);
-                if (ini.getStringProperty("Kalender", "ZeitLinieZeigen") == null) {
-                    ini.setStringProperty("Kalender", "ZeitLinieZeigen", "0", null);
-                    INITool.saveIni(ini);
+                if (termkalini.getStringProperty("Kalender", "ZeitLinieZeigen") == null) {
+                    termkalini.setStringProperty("Kalender", "ZeitLinieZeigen", "0", null);
+                    INITool.saveIni(termkalini);
                     TKSettings.KalenderTimeLineZeigen = false;
                 } else {
-                    TKSettings.KalenderTimeLineZeigen = (ini.getStringProperty("Kalender", "ZeitLinieZeigen")
+                    TKSettings.KalenderTimeLineZeigen = (termkalini.getStringProperty("Kalender", "ZeitLinieZeigen")
                                                  .trim()
                                                  .equals("0") ? false : true);
                 }
@@ -541,34 +528,6 @@ public class SystemConfig {
         return;
     }
 
-    public static void NurSets() {
-        try {
-            ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "terminkalender.ini");
-            TKSettings.aTerminKalender = new ArrayList<ArrayList<ArrayList<String[]>>>();
-            TKSettings.aTerminKalender.clear();
-            ArrayList<String> aList1 = new ArrayList<String>();
-            ArrayList<String[]> aList2 = new ArrayList<String[]>();
-            ArrayList<ArrayList<ArrayList<String[]>>> aList3 = new ArrayList<ArrayList<ArrayList<String[]>>>();
-            int lesen, i;
-            lesen = Integer.parseInt(String.valueOf(ini.getStringProperty("Kalender", "AnzahlSets")));
-            for (i = 1; i < (lesen + 1); i++) {
-                aList1.add(String.valueOf(ini.getStringProperty("Kalender", "NameSet" + i)));
-                aList2.add(String.valueOf(ini.getStringProperty("Kalender", "FeldSet" + i))
-                                 .split(","));
-                aList3.add((ArrayList) aList1.clone());
-                aList3.add((ArrayList) aList2.clone());
-                TKSettings.aTerminKalender.add((ArrayList) aList3.clone());
-                aList1.clear();
-                aList2.clear();
-                aList3.clear();
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,
-                    "Fehler bei der Verarbeitung der terminkalender.ini, Mehode:NurSets!\nFehlertext: "
-                            + ex.getMessage());
-            ex.printStackTrace();
-        }
-    }
 
     public static void RoogleGruppen() {
         try {
@@ -772,7 +731,7 @@ public class SystemConfig {
 
     private void Verzeichnisse() {
         try {
-            ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
+            termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
             hmVerzeichnisse = new HashMap<String, String>();
             hmVerzeichnisse.put("Programmverzeichnis", String.valueOf(Path.Instance.getProghome()));
             hmVerzeichnisse.put("Vorlagen",
@@ -780,9 +739,9 @@ public class SystemConfig {
             hmVerzeichnisse.put("Icons", String.valueOf(Path.Instance.getProghome() + "icons"));
             hmVerzeichnisse.put("Temp", String.valueOf(Path.Instance.getProghome() + "temp/" + Reha.getAktIK()));
             hmVerzeichnisse.put("Ini", String.valueOf(Path.Instance.getProghome() + "ini/" + Reha.getAktIK()));
-            hmVerzeichnisse.put("Rehaplaner", ini.getStringProperty("Verzeichnisse", "Rehaplaner"));
-            hmVerzeichnisse.put("Fahrdienstliste", ini.getStringProperty("Verzeichnisse", "Fahrdienstliste"));
-            hmVerzeichnisse.put("Fahrdienstrohdatei", ini.getStringProperty("Verzeichnisse", "Fahrdienstrohdatei"));
+            hmVerzeichnisse.put("Rehaplaner", termkalini.getStringProperty("Verzeichnisse", "Rehaplaner"));
+            hmVerzeichnisse.put("Fahrdienstliste", termkalini.getStringProperty("Verzeichnisse", "Fahrdienstliste"));
+            hmVerzeichnisse.put("Fahrdienstrohdatei", termkalini.getStringProperty("Verzeichnisse", "Fahrdienstrohdatei"));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
                     "Fehler bei der Verarbeitung der rehajava.ini, Mehode:Verzeichnisse!\nFehlertext: "
@@ -1661,9 +1620,9 @@ public class SystemConfig {
 
         // Daten wegschreiben
         INITool.saveIni(inif);
-        ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
-        ini.setStringProperty("HauptFenster", "HorizontalTeilen", (SystemConfig.desktopHorizontal ? "1" : "0"), null);
-        INITool.saveIni(ini);
+        termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rehajava.ini");
+        termkalini.setStringProperty("HauptFenster", "HorizontalTeilen", (SystemConfig.desktopHorizontal ? "1" : "0"), null);
+        INITool.saveIni(termkalini);
 
         /*
          * // Wegschreiben der INI-Parameter in die Datenbank TESTHALBER

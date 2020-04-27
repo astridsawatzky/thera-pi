@@ -42,7 +42,7 @@ class Tblock {
    public static final int     ENDE  =4;
 
 
-    public int TblockInit(TerminFenster parent, String[] tDaten, int iSpalte, int iBlock, int iKollege, Vector vterm,
+    public int TblockInit(TerminFenster parent, terminKalender.Block terminrueckgabe, int iSpalte, int iBlock, int iKollege, Vector vterm,
             String[] datum, int iKoll) {
 
 
@@ -55,11 +55,11 @@ class Tblock {
 
         this.dbBehandler = iKoll;
 
-        this.Name = tDaten[0];
-        this.Nummer = tDaten[1];
-        this.Beginn = tDaten[2];
-        this.Dauer = Integer.parseInt(tDaten[3]);
-        this.Ende = tDaten[4];
+        this.Name = terminrueckgabe.getName0();
+        this.Nummer = terminrueckgabe.getRezeptnr1();
+        this.Beginn = terminrueckgabe.getStartzeit2();
+        this.Dauer = Integer.parseInt(terminrueckgabe.getDauer3());
+        this.Ende = terminrueckgabe.getEndzeit4();
         this.aktBlockNeu = this.Block;
 
         this.Eltern = parent;

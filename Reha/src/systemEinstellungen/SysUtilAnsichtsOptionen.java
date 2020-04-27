@@ -36,19 +36,19 @@ import terminKalender.ParameterLaden;
 
 public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, ActionListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
     /**
-     * 
+     *
      */
     JCheckBox startWochenAnz = null;
     JComboBox defaultWA = null;
     JComboBox defaultNA = null;
     JRtaTextField[] jtfeld = { null, null, null, null, null, null, null };
 
-    JButton knopf1 = null;
-    JButton knopf2 = null;
+    JButton speichern = null;
+    JButton abbrechen = null;
 
     JRadioButton oben = null;
     JRadioButton unten = null;
@@ -78,7 +78,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                knopf2.requestFocus();
+                abbrechen.requestFocus();
             }
         });
 
@@ -98,17 +98,17 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
         CellConstraints cc = new CellConstraints();
 
         // buttons
-        knopf1 = new JButton("speichern");
-        knopf1.setPreferredSize(new Dimension(70, 20));
-        knopf1.addActionListener(this);
-        knopf1.setActionCommand("speichern");
-        knopf1.addKeyListener(this);
+        speichern = new JButton("speichern");
+        speichern.setPreferredSize(new Dimension(70, 20));
+        speichern.addActionListener(this);
+        speichern.setActionCommand("speichern");
+        speichern.addKeyListener(this);
 
-        knopf2 = new JButton("abbrechen");
-        knopf2.setPreferredSize(new Dimension(70, 20));
-        knopf2.addActionListener(this);
-        knopf2.setActionCommand("abbrechen");
-        knopf2.addKeyListener(this);
+        abbrechen = new JButton("abbrechen");
+        abbrechen.setPreferredSize(new Dimension(70, 20));
+        abbrechen.addActionListener(this);
+        abbrechen.setActionCommand("abbrechen");
+        abbrechen.addKeyListener(this);
 
         oben = new JRadioButton((SystemConfig.desktopHorizontal ? "oberen" : "linken") + " Container");
         oben.setHorizontalTextPosition(SwingConstants.LEFT);
@@ -151,8 +151,8 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
             }
         });
 
-        builder.add(knopf1, cc.xy(3, 13));
-        builder.add(knopf2, cc.xy(5, 13));
+        builder.add(speichern, cc.xy(3, 13));
+        builder.add(abbrechen, cc.xy(5, 13));
         builder.addSeparator("", cc.xyw(1, 15, 5));
 
         builder.getPanel()
@@ -167,11 +167,9 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
         } else {
             unten.setSelected(true);
         }
-        if (SystemConfig.hmContainer.get("KalenderOpti") == 0) {
-            optimize.setSelected(false);
-        } else {
-            optimize.setSelected(true);
-        }
+        boolean optimizeCalendar = SystemConfig.hmContainer.get("KalenderOpti") != 0;
+        optimize.setSelected(optimizeCalendar);
+
     }
 
     private void comboFuellen() {
@@ -189,19 +187,18 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
         defaultWA.requestFocus();
 
         von = 0;
-        bis = TKSettings.aTerminKalender.size() + 1;
+        bis = BehandlerSets.alleBehandlersets().size() + 1;
         String[] fach = new String[bis];
         if (defaultNA.getItemCount() > 0) {
             defaultNA.removeAllItems();
         }
         defaultNA.addItem("./.");
         for (von = 1; von < bis; von++) {
-            fach[von] = (String) ((ArrayList) TKSettings.aTerminKalender.get(von - 1)
-                                                                          .get(0)).get(0);
-            defaultNA.addItem(String.valueOf(fach[von]));
+            fach[von] =  BehandlerSets.alleBehandlersets().get(von - 1).getName();
+            defaultNA.addItem(fach[von]);
         }
         if (bis >= 0) {
-            defaultNA.setSelectedItem(TKSettings.KalenderStartNADefaultSet);
+            defaultNA.setSelectedItem(TKSettings.defaultBehandlerSet);
         }
         defaultNA.requestFocus();
     }
@@ -225,7 +222,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
                     defaultWA.getSelectedItem() + "@" + defaultNA.getSelectedItem(), null);
             INITool.saveIni(ini);
             TKSettings.KalenderStartWochenAnsicht = startWochenAnz.isSelected();
-            TKSettings.KalenderStartNADefaultSet = defaultNA.getSelectedItem()
+            TKSettings.defaultBehandlerSet = defaultNA.getSelectedItem()
                                                               .toString();
             TKSettings.KalenderStartWADefaultUser = defaultWA.getSelectedItem()
                                                                .toString();

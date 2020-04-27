@@ -1,12 +1,10 @@
 package systemEinstellungen;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 public final class TKSettings {
 
-    public static ArrayList<ArrayList<ArrayList<String[]>>> aTerminKalender;
-    public static String KalenderStartNADefaultSet = "./.";
+    public static String defaultBehandlerSet = "./.";
     public static Color KalenderHintergrund = null;
     public static boolean KalenderBarcode = false;
     public static boolean KalenderLangesMenue = false;

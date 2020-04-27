@@ -296,14 +296,14 @@ class Zeitfenster extends JDialog implements KeyListener, FocusListener, ActionL
     }
 
     private void WerteSetzen(boolean aufName) {
-        String[] werte = Eltern.getWerte();
-        NamePatient.setText(werte[0]);
-        Rezeptnummer.setText(werte[1]);
-        Dauer.setText(werte[3]);
-        BeginnStunde.setText(werte[2].split(":")[0]);
-        BeginnMinute.setText(werte[2].split(":")[1]);
-        EndeStunde.setText(werte[4].split(":")[0]);
-        EndeMinute.setText(werte[4].split(":")[1]);
+        Block werte = Eltern.getWerte();
+        NamePatient.setText(werte.getName0());
+        Rezeptnummer.setText(werte.getRezeptnr1());
+        Dauer.setText(werte.getDauer3());
+        BeginnStunde.setText(werte.getStartzeit2().split(":")[0]);
+        BeginnMinute.setText(werte.getStartzeit2().split(":")[1]);
+        EndeStunde.setText(werte.getEndzeit4().split(":")[0]);
+        EndeMinute.setText(werte.getEndzeit4().split(":")[1]);
         if (aufName) {
             NamePatient.requestFocus();
             NamePatient.setCaretPosition(0);

@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -18,7 +17,8 @@ import javax.swing.WindowConstants;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
 
-import systemEinstellungen.TKSettings;
+import systemEinstellungen.BehandlerSet;
+import systemEinstellungen.BehandlerSets;
 
 class SetWahl extends JDialog {
 
@@ -31,8 +31,8 @@ class SetWahl extends JDialog {
     private JList jList = null;
     private JButton jButton = null;
     private JButton jButton1 = null;
-    int ret = 0;
-    private JList jList1 = null;
+    String ret = "./.";
+    private JList<String> jList1 = null;
     private int wahl;
     private TerminFenster eltern;
 
@@ -75,9 +75,6 @@ class SetWahl extends JDialog {
             JXPanel jcon = (JXPanel) ((JXTitledPanel) jContentPane).getContentContainer();
             ((JXTitledPanel) jContentPane).setTitle("Behandler - Set auswählen....");
             ((JXTitledPanel) jContentPane).setTitleForeground(Color.WHITE);
-//			((JXTitledPanel) jContentPane).getContentContainer().setLayout(new BorderLayout());
-//			((JXTitledPanel) jContentPane).getContentContainer().add(getJPanelTasten(), BorderLayout.SOUTH);
-//			((JXTitledPanel) jContentPane).getContentContainer().add(getJScrollPane(), BorderLayout.CENTER);
             jcon.setBackground(Color.WHITE);
             jcon.setLayout(new BorderLayout());
             jcon.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -131,17 +128,10 @@ class SetWahl extends JDialog {
      * @return javax.swing.JList
      */
 
-    private void ListeFuellen(DefaultListModel model) {
-        int i, max = 0;
-        max = TKSettings.aTerminKalender.size();
-        // String[] fach = new String[max];
-        for (i = 0; i < max; i++) {
-            model.add(i, ((ArrayList) TKSettings.aTerminKalender.get(i)
-                                                                  .get(0)).get(0));
-            // fach[i] =
-            // (String)((ArrayList)SystemConfig.aTerminKalender.get(i).get(0)).get(0);
+    private void ListeFuellen(DefaultListModel<String> model) {
+        for (BehandlerSet set : BehandlerSets.alleBehandlersets()) {
+            model.addElement(set.getName());
         }
-        // jList.setName((String)((ArrayList)SystemConfig.aTerminKalender.get(0).get(0)).get(0));
         return;
     }
 
@@ -160,7 +150,7 @@ class SetWahl extends JDialog {
             jButton.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    DialogBeenden(jList1.getSelectedIndex());
+                    DialogBeenden(jList1.getSelectedValue());
                 }
             });
         }
@@ -181,16 +171,16 @@ class SetWahl extends JDialog {
             jButton1.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    DialogBeenden(-1);
+                    DialogBeenden("./.");
                 }
             });
         }
         return jButton1;
     }
 
-    private void DialogBeenden(int wie) {
-        eltern.swSetWahl = wie;
-        this.ret = wie;
+    private void DialogBeenden(String setName) {
+        eltern.setSwSetWahl(setName);
+        this.ret = setName;
         this.dispose();
     }
 
@@ -207,10 +197,10 @@ class SetWahl extends JDialog {
                 @Override
                 public void keyPressed(java.awt.event.KeyEvent e) {
                     if (e.getKeyCode() == 10) {
-                        DialogBeenden(jList1.getSelectedIndex());
+                        DialogBeenden(jList1.getSelectedValue());
                     }
                     if (e.getKeyCode() == 27) {
-                        DialogBeenden(-1);
+                        DialogBeenden("./.");
                     }
                 }
             });
@@ -218,7 +208,7 @@ class SetWahl extends JDialog {
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     if (e.getClickCount() == 2) {
-                        DialogBeenden(jList1.getSelectedIndex());
+                        DialogBeenden(jList1.getSelectedValue());
                     }
 
                 }

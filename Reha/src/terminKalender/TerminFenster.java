@@ -38,8 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
 
-import com.sun.star.datatransfer.dnd.DNDConstants;
-import com.sun.star.i18n.Weekdays;
 
 import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
@@ -56,10 +54,11 @@ import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
 import hilfsFenster.TerminEinpassen;
 import hilfsFenster.TerminObenUntenAnschliessen;
-import javafx.scene.input.DragEvent;
 import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import stammDatenTools.RezTools;
+import systemEinstellungen.BehandlerSet;
+import systemEinstellungen.BehandlerSets;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.TKSettings;
 import systemEinstellungen.config.Datenbank;
@@ -116,7 +115,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     /** Nimmt die KollegenNr auf dessen Maske erstellt/editiert wird. */
     private String[] sbelegung = { "./.", "./.", "./.", "./.", "./.", "./.", "./." };
     /** Welches Set soll dargestellt werden. */
-    private int aktSet;
+ //   private int aktSet;
 
     /** Nimmt die Termindaten auf. */
     private Vector<Object> aSpaltenDaten = new Vector<>();
@@ -134,7 +133,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     private String wocheAktuellerTag = "";
     private String wocheErster = "";
     private int wocheBehandler;
-    int swSetWahl = -1;
+    private String swSetWahl = "./.";
 
     public enum Ansicht {
         NORMAL(),
@@ -144,10 +143,10 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
     Ansicht aktAnsicht;
 
-    private String[] terminangaben = { "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
-            "" /* Endzeit */, "" /* BlockNr. */ };
-    private String[] terminrueckgabe = { "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
-            "" /* Endzeit */, "" /* BlockNr. */ };
+    private Block terminangaben = new Block( "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
+            "" /* Endzeit */, "" /* BlockNr. */ );
+    private Block terminrueckgabe = new Block( new String[]{ "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
+            "" /* Endzeit */, "" /* BlockNr. */ });
 
     private int focus[] = { 0, 0 };
     private boolean hasFocus;
@@ -210,6 +209,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
     private Connection connection;
     final static private Logger logger = LoggerFactory.getLogger(TerminFenster.class);
+    private BehandlerSet aktuellesSet;
 
     public TerminFenster(Connection connection) {
         this.connection = connection;
@@ -282,26 +282,19 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             oCombo[0].setSelectedItem(TKSettings.KalenderStartWADefaultUser);
             setWochenanzeige();
         } else if (ansicht == Ansicht.NORMAL) {
-            int lang = TKSettings.aTerminKalender.size();
-            int pos = -1;
-            for (int i = 0; i < lang; i++) {
-                if (TKSettings.aTerminKalender.get(i)
-                                                .get(0)
-                                                .contains(TKSettings.KalenderStartNADefaultSet)) {
-                    // XXX: bogus compare, if this does not work, why does it work at all?
-                    pos = i;
+            for (BehandlerSet set : BehandlerSets.alleBehandlersets()) {
+
+                if (set.getName().equals(TKSettings.defaultBehandlerSet)) {
+                    aktuellesSet = set;
                     break;
                 }
             }
             // Nur wenn Set-Name gefunden z.B. ! ./. für kein Set als Voreinstellung
-            if (pos >= 0) {
-                this.aktSet = pos;
-                String[] sSet;
-                sSet = TKSettings.aTerminKalender.get(this.aktSet)
-                                                   .get(1)
-                                                   .get(0);
+            if (aktuellesSet!=null) {
+
+
                 for (int i = 0; i < 7; i++) {
-                    oCombo[i].setSelectedItem(sSet[i]);
+                    oCombo[i].setSelectedItem(aktuellesSet.getMembers().get(i));
                 }
             }
         }
@@ -2236,20 +2229,21 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             starteUnlock();
             return;
         }
-        terminangaben[0] = ((ArrayList<Vector<String>>) vTerm.get(behandler)).get(0)
-                                                                             .get(block);
-        terminangaben[1] = ((ArrayList<Vector<String>>) vTerm.get(behandler)).get(1)
-                                                                             .get(block);
-        terminangaben[2] = ((ArrayList<Vector<String>>) vTerm.get(behandler)).get(2)
-                                                                             .get(block);
-        terminangaben[3] = ((ArrayList<Vector<String>>) vTerm.get(behandler)).get(3)
-                                                                             .get(block);
-        terminangaben[4] = ((ArrayList<Vector<String>>) vTerm.get(behandler)).get(4)
-                                                                             .get(block);
-        terminangaben[5] = Integer.toString(block);
+        ArrayList<Vector<String>> terminangabe = (ArrayList<Vector<String>>) vTerm.get(behandler);
+        terminangaben = new Block(terminangabe.get(0)
+                                                                             .get(block),
+        terminangabe.get(1)
+                                                          .get(block),
+        terminangabe.get(2)
+                                                          .get(block),
+        terminangabe.get(3)
+                                                          .get(block),
+        terminangabe.get(4)
+                                                          .get(block),
+        Integer.toString(block));
 
         /* Test der Berechtigungen */
-        if (!rechteTest(terminangaben[0])) {
+        if (!rechteTest(terminangaben.getName0())) {
             starteUnlock();
             wartenAufReady = false;
             setUpdateVerbot(false);
@@ -2278,9 +2272,9 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             zf.setVisible(true);
             boolean update = false;
 
-            if (!this.terminrueckgabe[2].isEmpty() && !this.terminrueckgabe[3].isEmpty()) {
+            if (!this.terminrueckgabe.getStartzeit2().isEmpty() && !this.terminrueckgabe.getDauer3().isEmpty()) {
                 for (int i = 0; i <= 4; i++) {
-                    if (!this.terminangaben[i].equals(this.terminrueckgabe[i])) {
+                    if (!this.terminangaben.equals(this.terminrueckgabe)) {
                         update = true;
                         break;
                     }
@@ -2326,7 +2320,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             this.zf = null;
             if ((SystemConfig.logVTermine || SystemConfig.logAlleTermine) && update) {
                 if (SystemConfig.logVTermine) {
-                    if ((terminangaben[0].startsWith("V?") || terminrueckgabe[0].startsWith("V?"))) {
+                    if ((terminangaben.getName0().startsWith("V?") || terminrueckgabe.getName0().startsWith("V?"))) {
                         // final String[] talt = terminangaben;
                         // final String[] tneu = terminrueckgabe;
                         schreibeLog(terminangaben, terminrueckgabe);
@@ -2339,7 +2333,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         } // von rlockok > 0
     }
 
-    private static void schreibeLog(final String[] talt, final String[] tneu) {
+    private static void schreibeLog(final Block alt, final Block neu) {
         new Thread() {
 
             @Override
@@ -2347,9 +2341,9 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                 String cmd = "insert into vlog set datum='" + LocalDateTime.now()
                                                                            .format(ddmmyyy_hhmmss)
                         + "', benutzer='" + Reha.aktUser + "', maschine='" + SystemConfig.dieseMaschine + "', vname='"
-                        + talt[0] + "', " + "vreznr='" + talt[1] + "', vdauer='" + talt[3] + "', vstart='" + talt[2]
-                        + "', " + "vend='" + talt[4] + "', nname='" + tneu[0] + "', nreznr='" + tneu[1] + "', ndauer='"
-                        + tneu[3] + "', " + "nstart='" + tneu[2] + "', nend='" + tneu[4] + "'";
+                        + alt.getName0() + "', " + "vreznr='" + alt.getRezeptnr1() + "', vdauer='" + alt.getDauer3() + "', vstart='" + alt.getStartzeit2()
+                        + "', " + "vend='" + alt.getEndzeit4() + "', nname='" + neu.getName0() + "', nreznr='" + neu.getRezeptnr1() + "', ndauer='"
+                        + neu.getDauer3() + "', " + "nstart='" + neu.getStartzeit2() + "', nend='" + neu.getEndzeit4() + "'";
                 SqlInfo.sqlAusfuehren(cmd);
             }
         }.start();
@@ -2395,12 +2389,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     }
 
     public void setWerte(String[] srueck) {
-        this.terminrueckgabe[0] = srueck[0];
-        this.terminrueckgabe[1] = srueck[1];
-        this.terminrueckgabe[2] = srueck[2];
-        this.terminrueckgabe[3] = srueck[3];
-        this.terminrueckgabe[4] = srueck[4];
-        this.terminrueckgabe[5] = srueck[5];
+        this.terminrueckgabe = new Block(srueck);
     }
 
     private void setzeRueckgabe() {
@@ -2421,24 +2410,21 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             break;
         }
         try {
-            terminrueckgabe[0] = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(behandler)).get(0)).get(block);
-            terminrueckgabe[1] = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(behandler)).get(1)).get(block);
-            terminrueckgabe[2] = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(behandler)).get(2)).get(block);
-            terminrueckgabe[3] = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(behandler)).get(3)).get(block);
-            terminrueckgabe[4] = (String) ((Vector<?>) ((ArrayList<?>) vTerm.get(behandler)).get(4)).get(block);
-            terminrueckgabe[5] = Integer.toString(block);
+            ArrayList<?> behandlerVector = (ArrayList<?>) vTerm.get(behandler);
+            terminrueckgabe = new Block( (String) ((Vector<?>) behandlerVector.get(0)).get(block),
+            (String) ((Vector<?>) behandlerVector.get(1)).get(block),
+            (String) ((Vector<?>) behandlerVector.get(2)).get(block),
+            (String) ((Vector<?>) behandlerVector.get(3)).get(block),
+            (String) ((Vector<?>) behandlerVector.get(4)).get(block),
+            Integer.toString(block));
         } catch (ArrayIndexOutOfBoundsException ex) {
-            terminrueckgabe[0] = "";
-            terminrueckgabe[1] = "";
-            terminrueckgabe[2] = "";
-            terminrueckgabe[3] = "";
-            terminrueckgabe[4] = "";
-            terminrueckgabe[5] = Integer.toString(-1);
+            terminrueckgabe = Block.EMPTYBLOCK;
+
             neuerBlockAktiv(((ArrayList) vTerm.get(behandler)).size());
         }
     }
 
-    public String[] getWerte() {
+    public Block getWerte() {
         return this.terminangaben;
     }
 
@@ -2455,7 +2441,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     }
 
     int aktuellesSet() {
-        return this.aktSet;
+        return aktuellesSet.index;
     }
 
     void neuerBlockAktiv(int neuBlock) {
@@ -2500,7 +2486,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         if (p == null) {
             xpoint = this.ViewPanel.getLocationOnScreen();
             setUpdateVerbot(true);
-            swSetWahl = -1;
+            setSwSetWahl("./.");
             sw = new SetWahl(this);
             xpoint.x = xpoint.x + (this.ViewPanel.getWidth() / 2) - (sw.getWidth() / 2);
             xpoint.y = xpoint.y + (this.ViewPanel.getHeight() / 2) - (sw.getHeight() / 2);
@@ -2508,7 +2494,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         } else {
             xpoint = p;
             setUpdateVerbot(true);
-            swSetWahl = -1;
+            setSwSetWahl("./.");
             sw = new SetWahl(this);
             xpoint.x = xpoint.x - (sw.getWidth() / 2);
             xpoint.y = xpoint.y - (sw.getHeight() / 2);
@@ -2518,11 +2504,9 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         sw.pack();
         sw.setVisible(true);
         setUpdateVerbot(false);
-        if (sw.ret >= 0) {
-            this.aktSet = swSetWahl;
-            String[] sSet = TKSettings.aTerminKalender.get(this.aktSet)
-                                                        .get(1)
-                                                        .get(0);
+        if (!"./.".equals(sw.ret)) {
+            aktuellesSet = BehandlerSets.find(sw.ret);
+            String[] sSet = aktuellesSet.getMembers().toArray(new String[0]);
             oCombo[0].setSelectedItem(sSet[0]);
             oCombo[1].setSelectedItem(sSet[1]);
             oCombo[2].setSelectedItem(sSet[2]);
@@ -4722,6 +4706,14 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     public void dropActionChanged(DropTargetDragEvent dtde) {
         // TODO Auto-generated method stub
 
+    }
+
+    String getSwSetWahl() {
+        return swSetWahl;
+    }
+
+    void setSwSetWahl(String setName) {
+        this.swSetWahl = setName;
     }
 }
 
