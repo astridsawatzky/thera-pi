@@ -32,8 +32,6 @@ class kalenderPanel extends JXPanel {
      *
      */
     private static final long serialVersionUID = 7354087866079956906L;
-    private JXPanel kPanel;
-
     private Vector dat = new Vector();
     private int anzahl = 0;
     private int vectorzahl = 0;
@@ -42,7 +40,6 @@ class kalenderPanel extends JXPanel {
     private int zeitSpanneBis;
     private int minutenInsgesamt;
     private float fPixelProMinute;
-    private int iPixelProMinute;
     private int iMaxHoehe;
     private int yDifferenz;
     private int xStart;
@@ -89,8 +86,6 @@ class kalenderPanel extends JXPanel {
             String sReznr = ""; // Rezeptnummer
             String sStart = ""; // Startzeit
             int dauer; // Termin Dauer
-            String sEnde = ""; // Endzeit
-
             int yStartMin;
             float fStartPix;
 
@@ -124,7 +119,7 @@ class kalenderPanel extends JXPanel {
                     sReznr = "";
                 }
                 sStart = (String) ((Vector) dat.get(2)).get(i);
-                sEnde = (String) ((Vector) dat.get(2)).get(i);
+
                 dauer = Integer.parseInt((String) ((Vector) dat.get(3)).get(i));
                 yStartMin = ((int) ZeitFunk.MinutenSeitMitternacht(sStart)) - zeitSpanneVon;
 
@@ -422,7 +417,6 @@ class kalenderPanel extends JXPanel {
         this.showTimeLine = show;
     }
 
-    /******* Klammer der paint-Methode **********/
     void datenZeichnen(Vector vect, int therapeut) {
         if (vect.size() > 0 && therapeut >= 0) {
             dat.clear();
@@ -641,7 +635,6 @@ class kalenderPanel extends JXPanel {
     }
 
     private void setiPixelProMinute(int iPixelProMinute) {
-        this.iPixelProMinute = iPixelProMinute;
     }
 
     public void setShiftGedrueckt(boolean shiftGedrueckt) {
