@@ -64,7 +64,7 @@ import systemEinstellungen.TKSettings;
 import systemEinstellungen.config.Datenbank;
 import systemTools.ListenerTools;
 
-public class TerminFenster extends Observable implements RehaTPEventListener, ActionListener, DropTargetListener {
+public class TerminFenster implements RehaTPEventListener, ActionListener, DropTargetListener {
 
     private static final int SPALTE_ANZ_BELGEGTE_BLOECKE = 301;
     private static final DateTimeFormatter ddmmyyy_hhmmss = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
@@ -145,8 +145,8 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
     private Block terminangaben = new Block( "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
             "" /* Endzeit */, "" /* BlockNr. */ );
-    private Block terminrueckgabe = new Block( new String[]{ "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
-            "" /* Endzeit */, "" /* BlockNr. */ });
+    private Block terminrueckgabe = new Block(  "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
+            "" /* Endzeit */, "" /* BlockNr. */ );
 
     private int focus[] = { 0, 0 };
     private boolean hasFocus;
@@ -254,7 +254,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             maskenStatement(stmtmaske);
         } else {
             String sstmt = ansichtStatement(this.aktuellerTag, ansicht);
-            macheStatement(sstmt, ansicht, aktAnsicht == Ansicht.NORMAL ? ParameterLaden.maxKalZeile : 7);
+            macheStatement(sstmt, aktAnsicht == Ansicht.NORMAL ? ParameterLaden.maxKalZeile : 7);
         }
 
         ViewPanel.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -282,17 +282,9 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
             oCombo[0].setSelectedItem(TKSettings.KalenderStartWADefaultUser);
             setWochenanzeige();
         } else if (ansicht == Ansicht.NORMAL) {
-            for (BehandlerSet set : BehandlerSets.alleBehandlersets()) {
 
-                if (set.getName().equals(TKSettings.defaultBehandlerSet)) {
-                    aktuellesSet = set;
-                    break;
-                }
-            }
-            // Nur wenn Set-Name gefunden z.B. ! ./. für kein Set als Voreinstellung
+            aktuellesSet = BehandlerSets.find(TKSettings.defaultBehandlerSet) ;
             if (aktuellesSet!=null) {
-
-
                 for (int i = 0; i < 7; i++) {
                     oCombo[i].setSelectedItem(aktuellesSet.getMembers().get(i));
                 }
@@ -768,8 +760,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
         return oSpalten[0].getPixels();
     }
 
-    /** Hier werden s�mtliche Listener f�r die Kalenderspalten installiert. */
-    public static void setDurchlass(float alf) {
+    public static void setTransparenz(float alf) {
         try {
             if (!(Reha.instance.terminpanel.oSpalten == null)) {
                 for (int i = 0; i < 7; i++) {
@@ -2450,7 +2441,6 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
     }
 
     private void KlickSetzen(kalenderPanel oPanel, MouseEvent e) {
-        // int spalte = 0;
         aktiveSpalte = oPanel.BlockTest(e.getX(), e.getY(), aktiveSpalte);
         if (aktiveSpalte[2] != aktiveSpalte[3]) {
             if (gruppierenAktiv) {
@@ -2548,7 +2538,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
                 sstate = "SELECT * FROM flexkc WHERE datum = '" + DatFunk.sDatInSQL(stag) + "' LIMIT "
                         + ParameterLaden.maxKalZeile;
             }
-            macheStatement(sstate, ansicht, aktAnsicht == Ansicht.NORMAL ? ParameterLaden.maxKalZeile : 7);
+            macheStatement(sstate, aktAnsicht == Ansicht.NORMAL ? ParameterLaden.maxKalZeile : 7);
             /* bislang aktiv */
             if (ViewPanel.getParent() != null) {
                 Reha.instance.terminpanel.eltern.setTitle(DatFunk.WochenTag(stag) + " " + stag + " -- KW: "
@@ -2570,7 +2560,7 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
             sstate = "SELECT * FROM flexkc WHERE datum >= '" + DatFunk.sDatInSQL(serster) + "'" + " AND datum <= '"
                     + DatFunk.sDatInSQL(sletzter) + "'" + " AND behandler = '" + sbehandler + "BEHANDLER'";
-            macheStatement(sstate, ansicht, aktAnsicht == Ansicht.NORMAL ? ParameterLaden.maxKalZeile : 7);
+            macheStatement(sstate, aktAnsicht == Ansicht.NORMAL ? ParameterLaden.maxKalZeile : 7);
             Reha.instance.terminpanel.eltern.setTitle(DatFunk.WochenTag(serster) + " " + serster + "  bis  "
                     + DatFunk.WochenTag(sletzter) + " " + sletzter + "-----Behandler:" + sbehandler + "-----KW:"
                     + DatFunk.KalenderWoche(serster) + " ----- [Wochenansicht]");
@@ -2590,12 +2580,11 @@ public class TerminFenster extends Observable implements RehaTPEventListener, Ac
 
     /***
      * Mache Statement.
-     *
-     * @param ansicht            TODO
      * @param behandlerMaxAnzahl TODO
+     * @param ansicht            TODO
      */
 
-    private void macheStatement(String sstmt, Ansicht ansicht, int behandlerMaxAnzahl) {
+    private void macheStatement(String sstmt, int behandlerMaxAnzahl) {
         Statement stmt = null;
         ResultSet rs = null;
         try {

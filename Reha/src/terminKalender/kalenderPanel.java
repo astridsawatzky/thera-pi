@@ -86,6 +86,9 @@ class kalenderPanel extends JXPanel {
             String sReznr = ""; // Rezeptnummer
             String sStart = ""; // Startzeit
             int dauer; // Termin Dauer
+
+
+
             int yStartMin;
             float fStartPix;
 
@@ -100,9 +103,8 @@ class kalenderPanel extends JXPanel {
             g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
             for (i = 0; i < anzahl; i++) {
-                String test = "";
                 try {
-                    if ((test = (String) ((Vector) dat.get(0)).get(i)) == null) {
+                    if (((Vector) dat.get(0)).get(i) == null) {
                         g2d.setColor(TKSettings.KalenderHintergrund);
                         g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
                         break;
@@ -112,6 +114,7 @@ class kalenderPanel extends JXPanel {
                     g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
                     break;
                 }
+
                 if ((sName = (String) ((Vector) dat.get(0)).get(i)) == null) {
                     sName = "";
                 }
@@ -417,15 +420,16 @@ class kalenderPanel extends JXPanel {
         this.showTimeLine = show;
     }
 
-    void datenZeichnen(Vector vect, int therapeut) {
-        if (vect.size() > 0 && therapeut >= 0) {
+    void datenZeichnen(Vector vectOfCurrentDate, int therapeut) {
+        if (vectOfCurrentDate.size() > 0 && therapeut >= 0) {
             dat.clear();
-            dat.addElement(((ArrayList) vect.get(therapeut)).get(0));
-            dat.addElement(((ArrayList) vect.get(therapeut)).get(1));
-            dat.addElement(((ArrayList) vect.get(therapeut)).get(2));
-            dat.addElement(((ArrayList) vect.get(therapeut)).get(3));
-            dat.addElement(((ArrayList) vect.get(therapeut)).get(4));
-            dat.addElement(((ArrayList) vect.get(therapeut)).get(5));
+            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(0));
+            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(1));
+            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(2));
+            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(3));
+            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(4));
+            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(5));
+
             anzahl = ((Vector) dat.get(0)).size();
         } else {
             anzahl = 0;

@@ -154,7 +154,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
 
         switch (e.getActionCommand()) {
         case "alpha":
-            TerminFenster.setDurchlass(new Float((String) alphawahl.getSelectedItem()));
+            TerminFenster.setTransparenz(new Float((String) alphawahl.getSelectedItem()));
             break;
         case "defwechsel":
             setColorData(colorSetCombo.getSelectedIndex());
@@ -217,7 +217,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
             if (def == 0) {
                 TKSettings.KalenderHintergrund = SystemConfig.aktTkCol.get("AusserAZ")[0];
             }
-            TerminFenster.setDurchlass(Float.parseFloat((String) alphawahl.getSelectedItem()));
+            TerminFenster.setTransparenz(Float.parseFloat((String) alphawahl.getSelectedItem()));
             SystemConfig.UpdateIni("terminkalender.ini", "Kalender", "KalenderHintergrundAlpha",
                     (String) alphawahl.getSelectedItem());
             INITool.saveIni(ini);
