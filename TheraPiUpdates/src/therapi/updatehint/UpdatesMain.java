@@ -3,6 +3,8 @@ package therapi.updatehint;
 import java.io.File;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thera_pi.updater.HTTPRepository;
 import org.thera_pi.updater.Version;
 import org.thera_pi.updater.VersionsSieb;
@@ -44,6 +46,9 @@ public class UpdatesMain implements Runnable {
         if(!updatefiles.isEmpty()) {
             Main.updatefiles = updatefiles;
             PlatformImpl.startup(new UpdatesMain());
+        } else {
+            Logger logger =LoggerFactory.getLogger(UpdatesMain.class);
+            logger.debug("No Updates found for Version: " + new Version().number());
         }
     }
 }

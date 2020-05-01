@@ -156,6 +156,7 @@ import systemTools.RehaPainters;
 import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
 import terminKalender.TerminFenster;
+import therapi.updatehint.UpdatesMain;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
@@ -1235,85 +1236,14 @@ public class Reha implements RehaEventListener {
     }
 
     private void searchForUpdates() {
-        new SwingWorker<Void, Void>() {
+        Thread updater = new Thread("Udpater") {
             @Override
-            protected Void doInBackground() throws java.lang.Exception {
-                try {
-                    INIFile updateini = null;
-                    File f = new File(Path.Instance.getProghome() + "ini/tpupdateneu.ini");
-                    if (f.exists()) {
-                        updateini = INITool.openIni(Path.Instance.getProghome() + "ini/", "tpupdateneu.ini");
-                    } else {
-                        updateini = INITool.openIni(Path.Instance.getProghome() + "ini/", "tpupdate.ini");
-                    }
-                    try {
-                        if (updateini.getStringProperty("TheraPiUpdates", "ProxyIP") != null
-                                && updateini.getStringProperty("TheraPiUpdates", "ProxyPort") != null
-                                && updateini.getStringProperty("TheraPiUpdates", "NoProxy") != null
-                                && updateini.getStringProperty("TheraPiUpdates", "ProxyIP")
-                                            .equals("")
-                                && updateini.getStringProperty("TheraPiUpdates", "ProxyPort")
-                                            .equals("")
-                                && updateini.getStringProperty("TheraPiUpdates", "NoProxy")
-                                            .equals("")) {
-                            System.setProperty("http.proxyHost",
-                                    updateini.getStringProperty("TheraPiUpdates", "ProxyIP"));
-                            System.setProperty("http.proxyPort",
-                                    updateini.getStringProperty("TheraPiUpdates", "ProxyPort"));
-                            System.setProperty("http.nonProxyHosts",
-                                    updateini.getStringProperty("TheraPiUpdates", "NoProxy"));
-                            System.setProperty("ftp.proxyHost",
-                                    updateini.getStringProperty("TheraPiUpdates", "ProxyIP"));
-                            System.setProperty("ftp.proxyPort",
-                                    updateini.getStringProperty("TheraPiUpdates", "ProxyPort"));
-                            System.setProperty("ftp.nonProxyHosts",
-                                    updateini.getStringProperty("TheraPiUpdates", "NoProxy"));
-                        }
-                    } catch (NullPointerException ex) {
-                        ex.printStackTrace();
-                    }
-                    try {
-                        Reha.updatesChecken = updateini.getIntegerProperty("TheraPiUpdates", "UpdateChecken") > 0;
-                        System.out.println("System soll nach Updates suchen = " + Reha.updatesChecken);
-                    } catch (NullPointerException ex) {
-                        Reha.updatesChecken = true;
-                    }
-                    if (!Reha.updatesChecken) {
-                        return null;
-                    }
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            try {
-                                TestForUpdates tfupd = null;
-                                tfupd = new TestForUpdates();
-
-                                Reha.updatesBereit = tfupd.doFtpTest();
-
-                                if (Reha.updatesBereit) {
-                                    JOptionPane.showMessageDialog(null,
-                                            "<html><b><font color='aa0000'>Es existieren Updates für Thera-Pi 1.0.</font></b><br><br>Bitte gehen Sie auf die Seite<br><br><b>System-Initialisierung -> 'Software-Updateservice'</b></html>");
-                                }
-                            } catch (NullPointerException ex) {
-                                System.out.println("Fehler bei der Updatesuche");
-                                ex.printStackTrace();
-                            }
-                        }
-                    }.start();
-
-                } catch (NullPointerException ex) {
-                    StackTraceElement[] element = ex.getStackTrace();
-                    String cmd = "";
-                    for (int i = 0; i < element.length; i++) {
-                        cmd = cmd + element[i] + "\n";
-                    }
-                    JOptionPane.showMessageDialog(null,
-                            "Suche nach Updates fehlgeschlagen!\nIst die Internetverbindung o.k.");
-                }
-                return null;
+            public void run() {
+                UpdatesMain.main(new String[0]);
             }
+        };
+        updater.start();
 
-        }.execute();
     }
 
     public static void setSystemConfig(SystemConfig sysConf) {
