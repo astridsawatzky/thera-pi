@@ -314,7 +314,6 @@ public class Reha implements RehaEventListener {
     public String lastSelectedValue = "";
     public int lastSelectedFloskel = -1;
 
-
     public SqlInfo sqlInfo = null;
     public static int nachladenDB = 0;
     public static int dbLoadError = 1;
@@ -366,8 +365,6 @@ public class Reha implements RehaEventListener {
 
     }
 
-
-
     public static void main(String[] args) {
         System.setProperty("java.net.preferIPv4Stack", "true");
         new Logging("reha");
@@ -386,10 +383,12 @@ public class Reha implements RehaEventListener {
         new Reha(mainMandant).startWithMandantSet();
 
     }
+
     public static void initializeLogging() {
 
         logger = LoggerFactory.getLogger(Reha.class);
     }
+
     public void startWithMandantSet() {
 
         aktIK = mandant.ik();
@@ -397,29 +396,25 @@ public class Reha implements RehaEventListener {
 
         String iniPath = Path.Instance.getProghome() + "ini/" + mandant.ik() + "/";
 
-
         INITool.init(iniPath);
-        logger.info("Insgesamt sind " + INITool.anzahlInisInDB()
-                + " INI-Dateien in der Tabelle inidatei abgelegt");
+        logger.info("Insgesamt sind " + INITool.anzahlInisInDB() + " INI-Dateien in der Tabelle inidatei abgelegt");
 
         Titel2 = "  -->  [Mandant: " + getAktMandant() + "]";
 
         Thread rehasockeThread = new Thread(new RehaSockServer(), "RehaSocketServer");
         rehasockeThread.start();
 
+        try {
+            logger.info("Starte RehaxSwing.jar");
+            ProcessBuilder processBuilder = new ProcessBuilder("java", "-Djava.net.preferIPv4Stack=true", "-jar",
+                    Path.Instance.getProghome() + "RehaxSwing.jar");
 
-                try {
-                    logger.info("Starte RehaxSwing.jar");
-                    ProcessBuilder processBuilder = new ProcessBuilder("java", "-Djava.net.preferIPv4Stack=true", "-jar",
-                            Path.Instance.getProghome() + "RehaxSwing.jar");
-
-                    processBuilder.inheritIO().start();
-                    logger.info("RehaxSwing beendet");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
+            processBuilder.inheritIO()
+                          .start();
+            logger.info("RehaxSwing beendet");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
             rehasockeThread.join(10000);
@@ -446,7 +441,7 @@ public class Reha implements RehaEventListener {
             }.start();
         } catch (java.lang.Exception e) {
 
-            logger.error("caught unexplainable Exception",e);
+            logger.error("caught unexplainable Exception", e);
         }
 
         /*********/
@@ -509,6 +504,8 @@ public class Reha implements RehaEventListener {
                 UIManager.put(key, fontUIDresource);
             }
         }
+        searchForUpdates();
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -1221,91 +1218,7 @@ public class Reha implements RehaEventListener {
             jxLinks.validate();
             jFrame.getContentPane()
                   .validate();
-            /*
-             * new Thread(){ public void run(){ while((!Reha.iconsOk) && (!Reha.DbOk)){ try
-             * { Thread.sleep(25); } catch (InterruptedException e) { e.printStackTrace(); }
-             * } jxLinks.add(new LinkeTaskPane(),BorderLayout.CENTER); jxLinks.validate();
-             * jFrame.getContentPane().validate(); } }.start();
-             */
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws java.lang.Exception {
-                    try {
-                        INIFile updateini = null;
-                        File f = new File(Path.Instance.getProghome() + "ini/tpupdateneu.ini");
-                        if (f.exists()) {
-                            updateini = INITool.openIni(Path.Instance.getProghome() + "ini/", "tpupdateneu.ini");
-                        } else {
-                            updateini = INITool.openIni(Path.Instance.getProghome() + "ini/", "tpupdate.ini");
-                        }
-                        try {
-                            if (updateini.getStringProperty("TheraPiUpdates", "ProxyIP") != null
-                                    && updateini.getStringProperty("TheraPiUpdates", "ProxyPort") != null
-                                    && updateini.getStringProperty("TheraPiUpdates", "NoProxy") != null
-                                    && updateini.getStringProperty("TheraPiUpdates", "ProxyIP")
-                                                .equals("")
-                                    && updateini.getStringProperty("TheraPiUpdates", "ProxyPort")
-                                                .equals("")
-                                    && updateini.getStringProperty("TheraPiUpdates", "NoProxy")
-                                                .equals("")) {
-                                System.setProperty("http.proxyHost",
-                                        updateini.getStringProperty("TheraPiUpdates", "ProxyIP"));
-                                System.setProperty("http.proxyPort",
-                                        updateini.getStringProperty("TheraPiUpdates", "ProxyPort"));
-                                System.setProperty("http.nonProxyHosts",
-                                        updateini.getStringProperty("TheraPiUpdates", "NoProxy"));
-                                System.setProperty("ftp.proxyHost",
-                                        updateini.getStringProperty("TheraPiUpdates", "ProxyIP"));
-                                System.setProperty("ftp.proxyPort",
-                                        updateini.getStringProperty("TheraPiUpdates", "ProxyPort"));
-                                System.setProperty("ftp.nonProxyHosts",
-                                        updateini.getStringProperty("TheraPiUpdates", "NoProxy"));
-                            }
-                        } catch (NullPointerException ex) {
-                            ex.printStackTrace();
-                        }
-                        try {
-                            Reha.updatesChecken = updateini.getIntegerProperty("TheraPiUpdates", "UpdateChecken") > 0;
-                            System.out.println("System soll nach Updates suchen = " + Reha.updatesChecken);
-                        } catch (NullPointerException ex) {
-                            Reha.updatesChecken = true;
-                        }
-                        if (!Reha.updatesChecken) {
-                            return null;
-                        }
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                try {
-                                    TestForUpdates tfupd = null;
-                                    tfupd = new TestForUpdates();
 
-                                    Reha.updatesBereit = tfupd.doFtpTest();
-
-                                    if (Reha.updatesBereit) {
-                                        JOptionPane.showMessageDialog(null,
-                                                "<html><b><font color='aa0000'>Es existieren Updates für Thera-Pi 1.0.</font></b><br><br>Bitte gehen Sie auf die Seite<br><br><b>System-Initialisierung -> 'Software-Updateservice'</b></html>");
-                                    }
-                                } catch (NullPointerException ex) {
-                                    System.out.println("Fehler bei der Updatesuche");
-                                    ex.printStackTrace();
-                                }
-                            }
-                        }.start();
-
-                    } catch (NullPointerException ex) {
-                        StackTraceElement[] element = ex.getStackTrace();
-                        String cmd = "";
-                        for (int i = 0; i < element.length; i++) {
-                            cmd = cmd + element[i] + "\n";
-                        }
-                        JOptionPane.showMessageDialog(null,
-                                "Suche nach Updates fehlgeschlagen!\nIst die Internetverbindung o.k.");
-                    }
-                    return null;
-                }
-
-            }.execute();
         }
 
         setThisFrame(jFrame);
@@ -1319,6 +1232,88 @@ public class Reha implements RehaEventListener {
         AktiveFenster.Init();
 
         return jFrame;
+    }
+
+    private void searchForUpdates() {
+        new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws java.lang.Exception {
+                try {
+                    INIFile updateini = null;
+                    File f = new File(Path.Instance.getProghome() + "ini/tpupdateneu.ini");
+                    if (f.exists()) {
+                        updateini = INITool.openIni(Path.Instance.getProghome() + "ini/", "tpupdateneu.ini");
+                    } else {
+                        updateini = INITool.openIni(Path.Instance.getProghome() + "ini/", "tpupdate.ini");
+                    }
+                    try {
+                        if (updateini.getStringProperty("TheraPiUpdates", "ProxyIP") != null
+                                && updateini.getStringProperty("TheraPiUpdates", "ProxyPort") != null
+                                && updateini.getStringProperty("TheraPiUpdates", "NoProxy") != null
+                                && updateini.getStringProperty("TheraPiUpdates", "ProxyIP")
+                                            .equals("")
+                                && updateini.getStringProperty("TheraPiUpdates", "ProxyPort")
+                                            .equals("")
+                                && updateini.getStringProperty("TheraPiUpdates", "NoProxy")
+                                            .equals("")) {
+                            System.setProperty("http.proxyHost",
+                                    updateini.getStringProperty("TheraPiUpdates", "ProxyIP"));
+                            System.setProperty("http.proxyPort",
+                                    updateini.getStringProperty("TheraPiUpdates", "ProxyPort"));
+                            System.setProperty("http.nonProxyHosts",
+                                    updateini.getStringProperty("TheraPiUpdates", "NoProxy"));
+                            System.setProperty("ftp.proxyHost",
+                                    updateini.getStringProperty("TheraPiUpdates", "ProxyIP"));
+                            System.setProperty("ftp.proxyPort",
+                                    updateini.getStringProperty("TheraPiUpdates", "ProxyPort"));
+                            System.setProperty("ftp.nonProxyHosts",
+                                    updateini.getStringProperty("TheraPiUpdates", "NoProxy"));
+                        }
+                    } catch (NullPointerException ex) {
+                        ex.printStackTrace();
+                    }
+                    try {
+                        Reha.updatesChecken = updateini.getIntegerProperty("TheraPiUpdates", "UpdateChecken") > 0;
+                        System.out.println("System soll nach Updates suchen = " + Reha.updatesChecken);
+                    } catch (NullPointerException ex) {
+                        Reha.updatesChecken = true;
+                    }
+                    if (!Reha.updatesChecken) {
+                        return null;
+                    }
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                TestForUpdates tfupd = null;
+                                tfupd = new TestForUpdates();
+
+                                Reha.updatesBereit = tfupd.doFtpTest();
+
+                                if (Reha.updatesBereit) {
+                                    JOptionPane.showMessageDialog(null,
+                                            "<html><b><font color='aa0000'>Es existieren Updates für Thera-Pi 1.0.</font></b><br><br>Bitte gehen Sie auf die Seite<br><br><b>System-Initialisierung -> 'Software-Updateservice'</b></html>");
+                                }
+                            } catch (NullPointerException ex) {
+                                System.out.println("Fehler bei der Updatesuche");
+                                ex.printStackTrace();
+                            }
+                        }
+                    }.start();
+
+                } catch (NullPointerException ex) {
+                    StackTraceElement[] element = ex.getStackTrace();
+                    String cmd = "";
+                    for (int i = 0; i < element.length; i++) {
+                        cmd = cmd + element[i] + "\n";
+                    }
+                    JOptionPane.showMessageDialog(null,
+                            "Suche nach Updates fehlgeschlagen!\nIst die Internetverbindung o.k.");
+                }
+                return null;
+            }
+
+        }.execute();
     }
 
     public static void setSystemConfig(SystemConfig sysConf) {
@@ -1898,7 +1893,7 @@ public class Reha implements RehaEventListener {
 
     public static void starteOfficeApplication() {
         try {
-        	new OOService().start(SystemConfig.OpenOfficeNativePfad,SystemConfig.OpenOfficePfad );
+            new OOService().start(SystemConfig.OpenOfficeNativePfad, SystemConfig.OpenOfficePfad);
 
             officeapplication = new OOService().getOfficeapplication();
             Reha.instance.Rehaprogress.setIndeterminate(false);
@@ -2267,6 +2262,7 @@ public class Reha implements RehaEventListener {
                 System.out.println("Serielle Schnittstelle wurde geschlossen");
             }
         }
+
         @Override
         public void windowClosing(WindowEvent arg0) {
             askCloseOrRestart();
@@ -2340,7 +2336,7 @@ public class Reha implements RehaEventListener {
         }
     }
 
-ActionListener actionListener = new MenuActionListener(this);
+    ActionListener actionListener = new MenuActionListener(this);
 
     public void activateWebCam() {
 
