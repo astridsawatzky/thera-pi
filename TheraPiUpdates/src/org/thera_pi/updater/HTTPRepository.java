@@ -56,7 +56,7 @@ public class HTTPRepository implements UpdateRepository {
 
         List<File> result = list.stream()
                                 .filter(s -> s.contains("TheraPi_"))
-                                .map(s->s.substring(s.indexOf("TheraPi"),s.indexOf("exe")+3))
+                                .map(s->s.substring(s.indexOf("TheraPi"),(s.contains("exe")?s.indexOf("exe"):s.indexOf("zip"))+3))
                                 .map(s -> new File(s))
                                 .collect(Collectors.toList());
         return result;
