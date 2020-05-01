@@ -1,7 +1,13 @@
 package org.thera_pi.updater;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class VersionsSieb implements DateiSieb {
@@ -15,17 +21,42 @@ public class VersionsSieb implements DateiSieb {
     @Override
     public List<File> select(List<File> filesList) {
 
-         List<File> result = filesList.stream()
-                                     .filter(f -> f.getName()
-                                                   .matches("therapi_[\\d]+_[\\d]+_[\\d]+_[\\d]+_[\\d]+_[\\d]+.zip"))
-                                     .map(UpdateFile::new)
-                                     .filter(u-> version.equals(u.from) || version.compareTo(u.to)<0)
-                                     .map(u->u.file)
-                                     .collect(Collectors.toList());
+        Predicate<? super File> predicate = new Predicate<File>() {
 
+            @Override
+            public boolean test(File f) {
+                return UpdateFile.ful.matcher(f.getName()
+                                               .toLowerCase())
+                                     .find()
+                        || UpdateFile.inc.matcher(f.getName()
+                                                   .toLowerCase())
+                                         .find();
 
-        return result;
+            }
+        };
+        Map<Boolean, List<UpdateFile>> result = filesList.stream()
+                                                         .filter(predicate)
+
+                                                         .map(UpdateFile::new)
+                                                         .collect(Collectors.<UpdateFile>partitioningBy(
+                                                                 uf -> uf.isFull()));
+
+        UpdateFile biggestFull = result.get(true)
+                                       .stream()
+                                       .max(Comparator.comparing(uf -> uf.to))
+                                       .get();
+
+        List<File> resultList= new LinkedList<>();
+        if (biggestFull.to.compareTo(version) > 0) {
+
+            UpdateFile resultFile = result.get(false)
+                                          .stream()
+                                          .filter(uf -> uf.from.equals(version))
+                                          .findAny()
+                                          .orElse(biggestFull);
+            resultList.add(resultFile.file);
+        }
+        return resultList;
     }
-
 
 }

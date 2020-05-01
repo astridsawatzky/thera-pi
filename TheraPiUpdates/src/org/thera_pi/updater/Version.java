@@ -3,26 +3,26 @@ package org.thera_pi.updater;
 import java.util.Comparator;
 import java.util.Objects;
 
-public class Version implements Comparable<Version>{
+public class Version implements Comparable<Version> {
 
     public static final String aktuelleVersion = "2019-12-14-DB=";
-    public  final int major;
-    public  final int minor ;
-    public  final int revision ;
+    public final int major;
+    public final int minor;
+    public final int revision;
 
     public Version() {
-         major = 1;
-         minor = 1;
-        revision = 3;
+        major = 1;
+        minor = 1;
+        revision = 5;
     }
 
     Version(int major, int minor, int revision) {
         this.major = major;
         this.minor = minor;
-       this.revision = revision;
+        this.revision = revision;
     }
 
-    public  String number() {
+    public String number() {
         return String.format("%d.%d.%d", major, minor, revision);
     }
 
@@ -30,15 +30,15 @@ public class Version implements Comparable<Version>{
         return aktuelleVersion;
     }
 
-    public  int getMajor() {
+    public int getMajor() {
         return major;
     }
 
-    public  int getMinor() {
+    public int getMinor() {
         return minor;
     }
 
-    public  int getRevision() {
+    public int getRevision() {
         return revision;
     }
 
@@ -61,19 +61,16 @@ public class Version implements Comparable<Version>{
         if (getClass() != obj.getClass())
             return false;
         Version other = (Version) obj;
-        System.out.println(other);
         return major == other.major && minor == other.minor && revision == other.revision;
     }
 
-    private static final Comparator<Version> NATURAL_ORDER_COMPARATOR =
-            Comparator.comparing(Version::getMajor)
-                      .thenComparing(Version::getMinor)
-                      .thenComparing(Version::getRevision);
-
+    private static final Comparator<Version> NATURAL_ORDER_COMPARATOR = Comparator.comparing(Version::getMajor)
+                                                                                  .thenComparing(Version::getMinor)
+                                                                                  .thenComparing(Version::getRevision);
 
     @Override
     public int compareTo(Version o) {
-       return NATURAL_ORDER_COMPARATOR.compare(this, o);
+        return NATURAL_ORDER_COMPARATOR.compare(this, o);
     }
 
 }

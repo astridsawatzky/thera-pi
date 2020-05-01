@@ -8,8 +8,13 @@ public class UpdateFile {
     final File file;
     Version from;
     Version to;
-    private static final Pattern inc = Pattern.compile("therapi_([\\d]+_[\\d]+_[\\d]+)_([\\d]+_[\\d]+_[\\d]+).zip");
-    private static final Pattern ful = Pattern.compile("therapi_([\\d]+_[\\d]+_[\\d]+).zip");
+    private boolean full;
+    public boolean isFull() {
+        return full;
+    }
+
+    public static final Pattern inc = Pattern.compile("therapi_([\\d]+_[\\d]+_[\\d]+)_([\\d]+_[\\d]+_[\\d]+).[zip|exe]");
+    public static final Pattern ful = Pattern.compile("therapi_([\\d]+_[\\d]+_[\\d]+).[zip|exe]");
 
     public UpdateFile(File file) {
         this.file = file;
@@ -19,10 +24,10 @@ public class UpdateFile {
 
     void extractVersions() {
 
-        Matcher incremental = inc.matcher(file.getName());
-        Matcher full = ful.matcher(file.getName());
+        Matcher incremental = inc.matcher(file.getName().toLowerCase());
+        Matcher full = ful.matcher(file.getName().toLowerCase());
         if (incremental.find()) {
-            System.out.println("incremental " +file.getName());
+
             String[] fromsplit = incremental.group(1)
                                             .split("_");
             from = new Version(Integer.parseInt(fromsplit[0]), Integer.parseInt(fromsplit[1]),
@@ -31,7 +36,7 @@ public class UpdateFile {
                                           .split("_");
             to = new Version(Integer.parseInt(toSplit[0]), Integer.parseInt(toSplit[1]), Integer.parseInt(toSplit[2]));
         } else if (full.find()) {
-            System.out.println("full " +file.getName());
+            this.full = true;
             String[] toSplit = full.group(1)
                                           .split("_");
             from = new Version(1,0,0);
@@ -42,4 +47,11 @@ public class UpdateFile {
             throw new IllegalArgumentException(file.getName());
         }
     }
+
+    @Override
+    public String toString() {
+        return "UpdateFile [file=" + file + ", from=" + from + ", to=" + to + "]";
+    }
+
+
 }
