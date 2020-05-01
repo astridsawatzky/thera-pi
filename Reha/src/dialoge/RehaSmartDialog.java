@@ -60,7 +60,6 @@ public class RehaSmartDialog extends JXDialog
      * @param
      */
     public RehaSmartDialog(JXFrame owner, String name) {
-        // super();
 
         super(owner, (JComponent) Reha.getThisFrame()
                                       .getGlassPane());

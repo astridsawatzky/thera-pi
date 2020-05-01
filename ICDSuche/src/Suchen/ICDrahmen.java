@@ -1,5 +1,6 @@
 package Suchen;
 
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -53,6 +54,7 @@ public class ICDrahmen implements Runnable {
         int yPos = 200;
 
         jFrame = new JFrame();
+        jFrame.setModalExclusionType(Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         jFrame.setSize(xWidth, yWidth);
         jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jFrame.setPreferredSize(new Dimension(xWidth, yWidth));
