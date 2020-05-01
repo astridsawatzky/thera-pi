@@ -35,16 +35,5 @@ public class HTTPRepositoryTest {
         assertEquals(list, repo.extractFilesFromResponse(lines));
     }
 
-    public static void main(String[] args) throws Exception {
-        URL therapi = new URL("https://www.thera-pi-software.de/Updates/");
-        URLConnection therapiCon = therapi.openConnection();
-        BufferedReader in = new BufferedReader(new InputStreamReader(therapiCon.getInputStream()));
-        String inputLine;
-        List<String> response = new LinkedList<>();
-        while ((inputLine = in.readLine()) != null)
-            response.add(inputLine);
-        in.close();
 
-        System.out.println(response);
-    }
 }
