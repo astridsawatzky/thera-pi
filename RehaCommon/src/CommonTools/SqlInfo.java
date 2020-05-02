@@ -97,9 +97,7 @@ public class SqlInfo {
                 frame.setCursor(normalCursor);
 
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -144,9 +142,7 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+           logger.error("setzen der maschinen ID",ev);
         } finally {
             if (rs != null) {
                 try {
@@ -242,9 +238,7 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+           logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -289,7 +283,7 @@ public class SqlInfo {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("something bad happens here", e);
         } finally {
             if (rs != null) {
                 try {
@@ -334,9 +328,7 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -371,7 +363,7 @@ public class SqlInfo {
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            logger.error("something bad happens here", e);
         }
         try {
             if (frame != null)
@@ -404,9 +396,8 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            ev.printStackTrace();
-            // JOptionPane.showMessageDialog(null, "Fehler in der
-            // MySqlFunktion-HoeleSaetze");
+            logger.error("something bad happens here", ev);
+
         } finally {
             if (rsMetaData != null) {
                 rsMetaData = null;
@@ -553,14 +544,10 @@ public class SqlInfo {
         Vector<String> numvec = null;
         try {
             conn.setAutoCommit(false);
-            // String numcmd = nummer+",id";
-            //// System.out.println("numcmd = "+numcmd);
-            // numvec = SqlInfo.holeFeldForUpdate("nummern", nummer+",id",
-            // "mandant='"+Reha.aktIK+"' FOR UPDATE");
+
             numvec = SqlInfo.holeFeldForUpdate("nummern", nummer + ",id", " FOR UPDATE");
-            //// System.out.println(Reha.aktIK);
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("something bad happens here", e);
         }
         if (numvec.size() > 0) {
             try {
@@ -597,30 +584,25 @@ public class SqlInfo {
         Vector<String> numvec = null;
         try {
             conn.setAutoCommit(false);
-            // String numcmd = nummer+",id";
-            //// System.out.println("numcmd = "+numcmd);
+
             numvec = SqlInfo.holeFeldForUpdate("nummern", nummer + ",id", " FOR UPDATE");
-            //// System.out.println(Reha.aktIK);
+
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            logger.error("something bad happens here", e);
         }
         if (numvec.size() > 0) {
             reznr = Integer.parseInt(numvec.get(0));
             if ((reznr + 1) > max) {
                 reznr = 1;
             }
-            //// System.out.println("Neue Rezeptnummer = "+reznr);
             String cmd = "update nummern set " + nummer + "='" + (reznr + 1) + "' where id='" + numvec.get(1) + "'";
-            //// System.out.println("Kommando = "+cmd);
             new ExUndHop().setzeStatement(cmd);
-            //// System.out.println("bisherige Rezeptnummer = "+nummer.toUpperCase()+reznr+"
-            //// / neue Rezeptnummer = "+nummer.toUpperCase()+(reznr+1));
             try {
                 conn.setAutoCommit(true);
             } catch (SQLException e) {
 
-                e.printStackTrace();
+                logger.error("something bad happens here", e);
             }
         } else {
             try {
@@ -628,7 +610,7 @@ public class SqlInfo {
                 conn.setAutoCommit(true);
             } catch (SQLException e) {
 
-                e.printStackTrace();
+                logger.error("something bad happens here", e);
             }
 
         }
@@ -660,9 +642,7 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -697,15 +677,11 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(wartenCursor);
             String sstmt = "update " + tabelle + " set " + sets + " where " + kriterium + " LIMIT 1";
-            //// System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
             stmt.execute(sstmt);
-            //// System.out.println(ret);
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (stmt != null) {
                 try {
@@ -733,15 +709,11 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(wartenCursor);
             String sstmt = "update " + tabelle + " set " + sets + " where " + kriterium;
-            //// System.out.println("SqlInfo-Statement:\n"+sstmt+"\n*************");
             stmt.execute(sstmt);
-            //// System.out.println(ret);
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
 
             if (stmt != null) {
@@ -763,7 +735,6 @@ public class SqlInfo {
         Statement stmt = null;
         ResultSet rs = null;
         String ret = "";
-        // Vector<String> retvec = new Vector<String>();
 
         try {
             stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
@@ -783,9 +754,7 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -831,9 +800,7 @@ public class SqlInfo {
                 frame.setCursor(normalCursor);
             return ret;
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -855,9 +822,6 @@ public class SqlInfo {
         return ret;
     }
 
-    /*****************************************/
-
-    /*****************************************/
 
     public static Vector<Vector<String>> holeFelder(String xstmt) {
         Statement stmt = null;
@@ -893,9 +857,7 @@ public class SqlInfo {
             retvec.clear();
             retvec = null;
         } catch (SQLException ev) {
-            logger.error("", ev);
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         }
 
         finally {
@@ -922,9 +884,6 @@ public class SqlInfo {
         return retkomplett;
     }
 
-    /*****************************************/
-
-    /*****************************************/
     public static String holeRezFeld(String feld, String kriterium) {
         Statement stmt = null;
         ResultSet rs = null;
@@ -943,14 +902,13 @@ public class SqlInfo {
             rs = stmt.executeQuery(sstmt);
 
             if (rs.next()) {
+
                 ret = (rs.getString(feld) == null ? "" : rs.getString(feld));
             }
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -996,9 +954,7 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -1020,7 +976,6 @@ public class SqlInfo {
         return vecret;
     }
 
-    /*****************************************/
     public static boolean sqlAusfuehren(String sstmt) {
         Statement stmt = null;
         boolean ret = true;
@@ -1077,9 +1032,7 @@ public class SqlInfo {
             if (frame != null)
                 frame.setCursor(normalCursor);
         } catch (SQLException ev) {
-            // System.out.println("SQLException: " + ev.getMessage());
-            // System.out.println("SQLState: " + ev.getSQLState());
-            // System.out.println("VendorError: " + ev.getErrorCode());
+            logger.error("something bad happens here", ev);
         } finally {
             if (rs != null) {
                 try {
@@ -1118,8 +1071,7 @@ public class SqlInfo {
             }
         }
         transferBuf.append(" from " + sourcedb + " where " + dbfield + "='" + argument + "' LIMIT 1");
-        //// System.out.println(transferBuf.toString());
-        // System.out.println(transferBuf.toString());
+
         Vector<Vector<String>> vec = SqlInfo.holeFelder(transferBuf.toString());
 
         if (vec.size() <= 0) {
@@ -1144,7 +1096,6 @@ public class SqlInfo {
                     }
                 }
             }
-            // System.out.println(insertBuf.toString());
             SqlInfo.sqlAusfuehren(insertBuf.toString());
             return true;
         } catch (Exception ex) {
@@ -1208,9 +1159,9 @@ public class SqlInfo {
                 ps.setBytes(2, buf);
                 ps.execute();
             } catch (SQLException e) {
-                e.printStackTrace();
+                logger.error("something bad happens here", e);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("something bad happens here", ex);
             } finally {
                 if (rs != null) {
                     try {
@@ -1232,7 +1183,7 @@ public class SqlInfo {
             }
             ret = true;
         } catch (Exception ex) {
-
+            logger.error("something bad happens here", ex);
         }
         return ret;
     }
