@@ -2,7 +2,7 @@ package terminKalender;
 
 import java.util.Comparator;
 
-class Kollegen implements Comparable<Kollegen> {
+public class Kollegen implements Comparable<Kollegen> {
     String Matchcode;
     private String Vorname;
     private String Nachname;
@@ -30,5 +30,13 @@ class Kollegen implements Comparable<Kollegen> {
         return compareByMatchcode.thenComparing(compareByAge)
                                  .compare(this, o);
 
+    }
+
+    public String getMatchcode() {
+        return Matchcode;
+    }
+
+    public String getKalenderZeile() {
+      return  String.format("%02d", Reihe);
     }
 }

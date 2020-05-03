@@ -50,8 +50,8 @@ import oOorgTools.OOTools;
 import rehaInternalFrame.JBeteiligungInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
+import terminKalender.Kollegen;
 import terminKalender.KollegenLaden;
-import terminKalender.Urlaubskollege;
 
 public class Beteiligung extends JXPanel {
 
@@ -167,14 +167,14 @@ public class Beteiligung extends JXPanel {
     }
 
     private Vector<Vector<String>> doKollegen() {
-        Vector<Urlaubskollege> urlaubsKollegen = KollegenLaden.getUrlaubsKollegen();
+        Vector<Kollegen> kollegen = KollegenLaden.getUrlaubsKollegen();
         Vector<Vector<String>> veckolls = new Vector<Vector<String>>();
-       for (Urlaubskollege urlaubsKollege : urlaubsKollegen) {
+       for (Kollegen kollege : kollegen) {
 
 
             Vector<String> vecdummy = new Vector<String>();
-            vecdummy.add(urlaubsKollege.getMatchcode());
-            vecdummy.add(urlaubsKollege.getKalenderZeile());
+            vecdummy.add(kollege.getMatchcode());
+            vecdummy.add(kollege.getKalenderZeile());
             veckolls.add(vecdummy);
         }
         Comparator<Vector<String>> cmpByMAtchCOde = new Comparator<Vector<String>>() {
