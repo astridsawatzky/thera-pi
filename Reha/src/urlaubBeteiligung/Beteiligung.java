@@ -51,6 +51,7 @@ import rehaInternalFrame.JBeteiligungInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
 import terminKalender.KollegenLaden;
+import terminKalender.Urlaubskollege;
 
 public class Beteiligung extends JXPanel {
 
@@ -79,7 +80,7 @@ public class Beteiligung extends JXPanel {
     int prozHb = 0;
     int prozWeg = 0;
 
-    Vector<Vector<String>> veckolls = new Vector<Vector<String>>();
+
 
     Vector<Vector<Vector<String>>> tagesvec = new Vector<Vector<Vector<String>>>();
 
@@ -166,19 +167,17 @@ public class Beteiligung extends JXPanel {
     }
 
     private Vector<Vector<String>> doKollegen() {
-        int lang = KollegenLaden.vKollegen.size();
-        veckolls.clear();
-        Vector<String> vecdummy = new Vector<String>();
-        for (int i = 0; i < lang; i++) {
-            vecdummy.clear();
-            System.out.println(KollegenLaden.vKKollegen.get(i));
-            vecdummy.add(KollegenLaden.vKollegen.get(i)
-                                                 .get(0));
-            vecdummy.add(KollegenLaden.vKollegen.get(i)
-                                                 .get(3));
-            veckolls.add((Vector<String>) vecdummy.clone());
+        Vector<Urlaubskollege> urlaubsKollegen = KollegenLaden.getUrlaubsKollegen();
+        Vector<Vector<String>> veckolls = new Vector<Vector<String>>();
+       for (Urlaubskollege urlaubsKollege : urlaubsKollegen) {
+
+
+            Vector<String> vecdummy = new Vector<String>();
+            vecdummy.add(urlaubsKollege.getMatchcode());
+            vecdummy.add(urlaubsKollege.getKalenderZeile());
+            veckolls.add(vecdummy);
         }
-        Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
+        Comparator<Vector<String>> cmpByMAtchCOde = new Comparator<Vector<String>>() {
             @Override
             public int compare(Vector<String> o1, Vector<String> o2) {
                 String s1 = o1.get(0);
@@ -186,7 +185,7 @@ public class Beteiligung extends JXPanel {
                 return s1.compareTo(s2);
             }
         };
-        Collections.sort(veckolls, comparator);
+        Collections.sort(veckolls, cmpByMAtchCOde);
         return veckolls;
     }
 

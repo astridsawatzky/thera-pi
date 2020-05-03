@@ -14,9 +14,10 @@ import org.slf4j.LoggerFactory;
 import hauptFenster.Reha;
 
 public class KollegenLaden {
+
     private static final Logger logger = LoggerFactory.getLogger(KollegenLaden.class);
     public static Vector<Kollegen> vKKollegen = new Vector<>();
-    public static Vector<ArrayList<String>> vKollegen = new Vector<>();
+    private static Vector<Urlaubskollege> urlaubsKollegen = new Vector<>();
 
     public static int maxKalZeile;
 
@@ -91,7 +92,7 @@ public class KollegenLaden {
 
         if (!vKKollegen.isEmpty()) {
             vKKollegen.clear();
-            vKollegen.clear();
+            urlaubsKollegen.clear();
             maxKalZeile = 0;
         }
 
@@ -100,36 +101,29 @@ public class KollegenLaden {
                         "SELECT Matchcode,Nachname,Nicht_Zeig,Kalzeile,Abteilung FROM kollegen2");) {
             int durchlauf = 0;
 
-            ArrayList<String> kollege = new ArrayList<>();
-            kollege.add("./.");
-            kollege.add("");
-            kollege.add("");
-            kollege.add("00");
-            vKollegen.add(kollege);
+            Urlaubskollege kollege = new Urlaubskollege("./.","","","00");
+            urlaubsKollegen.add(kollege);
 
             vKKollegen.add(new Kollegen("./.", "", "", 0, "", "F", 0));
 
             durchlauf++;
             while (kollegenRs.next()) {
-                int kalenderZeile = 0;
-                ArrayList<String> aKollegen1 = new ArrayList<>();
-                aKollegen1.add(kollegenRs.getString("Matchcode"));
-                String nachname = kollegenRs.getString("Nachname");
-                aKollegen1.add(nachname != null ? nachname : "");
-                String nichtzeig = kollegenRs.getString("Nicht_Zeig");
-                aKollegen1.add(nichtzeig != null ? nichtzeig : "F");
+                String matchcode = kollegenRs.getString("Matchcode");
+                String nachname = Optional.ofNullable(kollegenRs.getString("Nachname")).orElse("");
+                String nichtzeig = Optional.ofNullable(kollegenRs.getString("Nicht_Zeig")).orElse("F");
                 String kalzeileString = kollegenRs.getString("Kalzeile");
-                kalenderZeile = Integer.parseInt(kalzeileString);
-                if (kalenderZeile > maxKalZeile) {
-                    maxKalZeile = kalenderZeile;
-                }
+                String kalenderzeileFormatted = String.format("%02d", Integer.parseInt(kalzeileString));
 
-                aKollegen1.add(String.format("%02d", kalenderZeile));
-                vKollegen.add(aKollegen1);
-                vKKollegen.add(new Kollegen(Optional.ofNullable(kollegenRs.getString("Matchcode"))
+                Urlaubskollege aKollegen1 = new Urlaubskollege(matchcode, nachname, nichtzeig, kalenderzeileFormatted);
+                urlaubsKollegen.add(aKollegen1);
+
+                if (Integer.parseInt(kalzeileString) > maxKalZeile) {
+                    maxKalZeile = Integer.parseInt(kalzeileString);
+                }
+                vKKollegen.add(new Kollegen(Optional.ofNullable(matchcode)
                                                     .orElse(""),
-                        kollegenRs.getString("Nachname"), kollegenRs.getString("Nicht_Zeig"), kalenderZeile,
-                        kollegenRs.getString("Abteilung"), aKollegen1.get(2), durchlauf));
+                        kollegenRs.getString("Nachname"), kollegenRs.getString("Nicht_Zeig"), Integer.parseInt(kalzeileString),
+                        kollegenRs.getString("Abteilung"), aKollegen1.nichtzeig, durchlauf));
                 durchlauf++;
             }
             Collections.sort(vKKollegen);
@@ -138,4 +132,11 @@ public class KollegenLaden {
             logger.error("Laden der Mitarbeiter fehlgeschlagen.", ex);
         }
     }
+
+    public static Vector<Urlaubskollege> getUrlaubsKollegen() {
+        return urlaubsKollegen;
+    }
+
+
 }
+
