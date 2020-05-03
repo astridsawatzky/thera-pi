@@ -88,7 +88,7 @@ import rechteTools.Rechte;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.TKSettings;
 import terminKalender.ICalGenerator;
-import terminKalender.ParameterLaden;
+import terminKalender.KollegenLaden;
 
 public class SuchenSeite extends JXPanel
         implements TableModelListener, FocusListener, ActionListener, PropertyChangeListener, KeyListener {
@@ -1723,7 +1723,7 @@ public class SuchenSeite extends JXPanel
                 try {
                     kalzeile = Integer.parseInt(((String) vecWahl.get(i)
                                                                  .get(13)).substring(0, 2));
-                    gruppe = ParameterLaden.searchAbteilung(kalzeile);
+                    gruppe = KollegenLaden.searchAbteilung(kalzeile);
                     //// System.out.println(((Vector<String>)vecWahl.get(i)).get(6)+"/"+((Vector<String>)vecWahl.get(i)).get(10));
                 } catch (Exception ex) {
                     ex.printStackTrace();
@@ -3022,7 +3022,7 @@ public class SuchenSeite extends JXPanel
                             //// System.out.println(test);
                         } else {
                             test = "select * from flexkc where datum = '" + sqlAkt + "' LIMIT "
-                                    + ParameterLaden.maxKalZeile;
+                                    + KollegenLaden.maxKalZeile;
                         }
                         rs = stmt.executeQuery(test);
 
@@ -3048,7 +3048,7 @@ public class SuchenSeite extends JXPanel
 
                             /*************** Hier wird getestet ob die Kalender zeile belegt ist *****/
                             /******** wenn ein Benutzer gel�scht wurde kommt leer zur�ck *******/
-                            szeil = ParameterLaden.getKollegenUeberDBZeile(ikollege);
+                            szeil = KollegenLaden.getKollegenUeberDBZeile(ikollege);
                             //// System.out.println("Kollege �ber DBZeile = "+szeil);
                             if (!szeil.equals("")) {
 
@@ -3837,7 +3837,7 @@ public class SuchenSeite extends JXPanel
 
             sorigdatum = rs.getString(305);
             sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-            skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
+            skollege = KollegenLaden.getKollegenUeberReihe(ikollege);
             // {"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
             machevec.add(Boolean.valueOf(false));
             machevec.add(null);
@@ -3885,7 +3885,7 @@ public class SuchenSeite extends JXPanel
 
             sorigdatum = rs.getString(305);
             sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-            skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
+            skollege = KollegenLaden.getKollegenUeberReihe(ikollege);
             // {"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
             machevec.add(Boolean.valueOf(false));
             machevec.add(null);
@@ -3937,7 +3937,7 @@ public class SuchenSeite extends JXPanel
 
             sorigdatum = rs.getString(305);
             sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-            skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
+            skollege = KollegenLaden.getKollegenUeberReihe(ikollege);
             // {"x?","G!","Datum","Beginn","Ende","Min.","Namen","Rez.Nr.","Behandler","Druckzeit","Sort","Spalte","richtigesDatum","block","id-db"};
             machevec.add(Boolean.valueOf(false));
             machevec.add(null);

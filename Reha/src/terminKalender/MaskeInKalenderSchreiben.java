@@ -174,7 +174,7 @@ class MaskeInKalenderSchreiben extends RehaSmartDialog implements ActionListener
         CellConstraints cc = new CellConstraints();
 
         behandlerLabel = new JXLabel(
-                "Wochenarbeitszeit übertragen von  -->  " + ParameterLaden.getKollegenUeberDBZeile(maskenBehandler));
+                "Wochenarbeitszeit übertragen von  -->  " + KollegenLaden.getKollegenUeberDBZeile(maskenBehandler));
 
         behandlerLabel.setForeground(Color.RED);
         eingabep.add(behandlerLabel, cc.xyw(2, 2, 3));

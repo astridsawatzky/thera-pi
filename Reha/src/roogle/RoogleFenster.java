@@ -64,7 +64,7 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
 import systemTools.WinNum;
-import terminKalender.ParameterLaden;
+import terminKalender.KollegenLaden;
 
 public class RoogleFenster extends RehaSmartDialog
         implements TableModelListener, FocusListener, ActionListener, ComponentListener, ChangeListener {
@@ -110,7 +110,7 @@ public class RoogleFenster extends RehaSmartDialog
     public static boolean schicht = false;
     public static boolean select = false;
     public String[] kollegenAbteilung = null;
-    public boolean[] kollegenSuchen = new boolean[ParameterLaden.maxKalZeile + 1];
+    public boolean[] kollegenSuchen = new boolean[KollegenLaden.maxKalZeile + 1];
     private MouseAdapter mymouse = null;
     private JScrollPane js;
     private JScrollPane js2;
@@ -487,22 +487,22 @@ public class RoogleFenster extends RehaSmartDialog
 
         String[] column = { "suchen", "Kollege", "Abteilung", "DBZeile", "Zeigen" };
         int i, size;
-        size = ParameterLaden.vKKollegen.size() - 1;
+        size = KollegenLaden.vKKollegen.size() - 1;
         // Vector<Object[]> dataVector = new Vector<Object[]>();
         //// System.out.println("Ingesamt Recht = "+size);
         Object[][] dataVector = new Object[size][5];
         // Object[][] meinObj = new Object[size][3];
         //// System.out.println("Size*****************"+size);
         kollegenWahl = new Object[size][6];
-        kollegenAbteilung = new String[ParameterLaden.maxKalZeile + 1];
+        kollegenAbteilung = new String[KollegenLaden.maxKalZeile + 1];
         //// System.out.println("Derzeit maximale Kalenderzeitle =
         //// "+ParameterLaden.maxKalZeile);
         for (i = 1; i <= size; i++) {
             dataVector[i - 1][0] = Boolean.valueOf(false);
-            dataVector[i - 1][1] = ParameterLaden.getMatchcode(i);
-            dataVector[i - 1][2] = ParameterLaden.getAbteilung(i);
-            dataVector[i - 1][3] = Integer.toString(ParameterLaden.getDBZeile(i));
-            dataVector[i - 1][4] = ParameterLaden.getZeigen(i);
+            dataVector[i - 1][1] = KollegenLaden.getMatchcode(i);
+            dataVector[i - 1][2] = KollegenLaden.getAbteilung(i);
+            dataVector[i - 1][3] = Integer.toString(KollegenLaden.getDBZeile(i));
+            dataVector[i - 1][4] = KollegenLaden.getZeigen(i);
             kollegenAbteilung[Integer.parseInt((String) dataVector[i - 1][3])] = (String) dataVector[i - 1][2];
             /*
              * ////System.out.println(""+i+dataVector[i-1][4]);

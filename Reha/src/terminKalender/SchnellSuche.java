@@ -598,7 +598,7 @@ final class SuchenInTagen extends Thread {
                                 uhrzeit = rs.getString("TS" + (ii + 1));
                                 sorigdatum = rs.getString(305);
                                 sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-                                skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
+                                skollege = KollegenLaden.getKollegenUeberReihe(ikollege);
                                 // skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 
                                 termin = DatFunk.WochenTag(sdatum) + " - " + sdatum + " - " + uhrzeit + "  -  " + name
@@ -624,7 +624,7 @@ final class SuchenInTagen extends Thread {
                                         uhrzeit = rs.getString("TS" + (ii + 1));
                                         sorigdatum = rs.getString(305);
                                         sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-                                        skollege = ParameterLaden.getKollegenUeberReihe(ikollege);
+                                        skollege = KollegenLaden.getKollegenUeberReihe(ikollege);
                                         // skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 
                                         termin = DatFunk.WochenTag(sdatum) + " - " + sdatum + " - " + uhrzeit + "  -  "

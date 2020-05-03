@@ -26,7 +26,7 @@ import benutzer.Benutzer;
 import geraeteInit.BarCodeScanner;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
-import terminKalender.ParameterLaden;
+import terminKalender.KollegenLaden;
 
 /**************
  *
@@ -181,7 +181,7 @@ final class DatenbankStarten implements Runnable {
 
                 new SocketClient().setzeInitStand("Datenbank ok");
 
-                ParameterLaden.Init();
+                KollegenLaden.Init();
                 new SocketClient().setzeInitStand("Systemparameter laden");
 
                 Reha.sysConf.SystemInit(3);

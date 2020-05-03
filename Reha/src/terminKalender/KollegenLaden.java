@@ -13,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import hauptFenster.Reha;
 
-public class ParameterLaden {
-    private static final Logger logger = LoggerFactory.getLogger(ParameterLaden.class);
+public class KollegenLaden {
+    private static final Logger logger = LoggerFactory.getLogger(KollegenLaden.class);
     public static Vector<Kollegen> vKKollegen = new Vector<>();
     public static Vector<ArrayList<String>> vKollegen = new Vector<>();
 
@@ -118,15 +118,13 @@ public class ParameterLaden {
                 aKollegen1.add(nachname != null ? nachname : "");
                 String nichtzeig = kollegenRs.getString("Nicht_Zeig");
                 aKollegen1.add(nichtzeig != null ? nichtzeig : "F");
-                kalenderZeile = Integer.parseInt(kollegenRs.getString("Kalzeile"));
+                String kalzeileString = kollegenRs.getString("Kalzeile");
+                kalenderZeile = Integer.parseInt(kalzeileString);
                 if (kalenderZeile > maxKalZeile) {
                     maxKalZeile = kalenderZeile;
                 }
-                if (kalenderZeile < 10) {
-                    aKollegen1.add("0" + kalenderZeile);
-                } else {
-                    aKollegen1.add(Integer.toString(kalenderZeile));
-                }
+
+                aKollegen1.add(String.format("%02d", kalenderZeile));
                 vKollegen.add(aKollegen1);
                 vKKollegen.add(new Kollegen(Optional.ofNullable(kollegenRs.getString("Matchcode"))
                                                     .orElse(""),

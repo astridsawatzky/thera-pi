@@ -59,7 +59,7 @@ class BlockHandling {
 
             int xkoll = StringTools.holeZahlVorneNullen(
                     ((String) ((Vector<?>) ((ArrayList<?>) vterm.get(kollege)).get(T_CONTROL)).get(2)).substring(0, 2));
-            tCont[0] = ParameterLaden.getKollegenUeberDBZeile(xkoll);
+            tCont[0] = KollegenLaden.getKollegenUeberDBZeile(xkoll);
             tCont[1] = datum[spalte];
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
             tCont[2] = sdf.format(new Date());

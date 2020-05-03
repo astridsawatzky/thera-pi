@@ -50,12 +50,12 @@ import oOorgTools.OOTools;
 import rehaInternalFrame.JBeteiligungInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
-import terminKalender.ParameterLaden;
+import terminKalender.KollegenLaden;
 
 public class Beteiligung extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -5302438379722827660L;
 
@@ -166,15 +166,15 @@ public class Beteiligung extends JXPanel {
     }
 
     private Vector<Vector<String>> doKollegen() {
-        int lang = ParameterLaden.vKollegen.size();
+        int lang = KollegenLaden.vKollegen.size();
         veckolls.clear();
         Vector<String> vecdummy = new Vector<String>();
         for (int i = 0; i < lang; i++) {
             vecdummy.clear();
-            // System.outprintln(ParameterLaden.vKollegen.get(i));
-            vecdummy.add(ParameterLaden.vKollegen.get(i)
+            System.out.println(KollegenLaden.vKKollegen.get(i));
+            vecdummy.add(KollegenLaden.vKollegen.get(i)
                                                  .get(0));
-            vecdummy.add(ParameterLaden.vKollegen.get(i)
+            vecdummy.add(KollegenLaden.vKollegen.get(i)
                                                  .get(3));
             veckolls.add((Vector<String>) vecdummy.clone());
         }
@@ -737,7 +737,7 @@ public class Beteiligung extends JXPanel {
 
     /*
      * private void doBehandlung(){
-     * 
+     *
      * }
      */
     public void doAufraeumen() {
