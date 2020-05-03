@@ -23,6 +23,7 @@ public class MitarbeiterDto {
     private final IK ik;
     private Logger logger = LoggerFactory.getLogger(MitarbeiterDto.class);
     private String SelectAllSql = "SELECT * FROM kollegen2";
+    private String SelectAllActiveSql = "SELECT * FROM kollegen2 WHERE NICHT_ZEIG NOT LIKE 'T'";
 
     public MitarbeiterDto(IK ik) {
         this.ik = ik;
@@ -35,6 +36,27 @@ public class MitarbeiterDto {
                                                        .createConnection();) {
             ResultSet rs = con.createStatement()
                               .executeQuery(SelectAllSql);
+            while (rs.next()) {
+
+                mitarbeiterListe.add(ofResultset(rs));
+
+            }
+
+            return mitarbeiterListe;
+        } catch (SQLException e) {
+            logger.error("could not retrieve Mitarbeiter from Database", e);
+            return Collections.emptyList();
+        }
+
+    }
+
+    List<Mitarbeiter> allActive() {
+
+        List<Mitarbeiter> mitarbeiterListe = new LinkedList<Mitarbeiter>();
+        try (Connection con = new DatenquellenFactory(ik.digitString())
+                                                       .createConnection();) {
+            ResultSet rs = con.createStatement()
+                              .executeQuery(SelectAllActiveSql);
             while (rs.next()) {
 
                 mitarbeiterListe.add(ofResultset(rs));
