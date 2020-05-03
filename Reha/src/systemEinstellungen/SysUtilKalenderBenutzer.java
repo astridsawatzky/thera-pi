@@ -52,7 +52,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
      *
      */
 
-    JComboBox jcomboWahl = null;
+    JComboBox   mitarbeiterAuswahl = new JComboBox();
     JRtaTextField anrede = null;
     JRtaTextField vorname = null;
     JRtaTextField nachname = null;
@@ -63,22 +63,18 @@ public class SysUtilKalenderBenutzer extends JXPanel {
     JRtaTextField kalzeile = null;
     JRtaTextField[] jtfeld = { null, null, null, null, null, null, null };
 
-    String Abt = null;
-    String ListLabel = null;
-    {
-        Abt = String.valueOf("        Abteilung");
-        // Abt.setHorizontalAlignment(JTextField.RIGHT);
-        ListLabel = "         MA-Liste";
-        // ListLabel.setHorizontalAlignment(JTextField.RIGHT);
-    }
 
-    JButton knopf1 = null;
-    JButton knopf2 = null;
-    JButton knopf3 = null;
-    JButton knopf4 = null;
-    JButton knopf5 = null;
-    JButton knopf6 = null;
-    JCheckBox naz = null;
+
+
+
+    JButton neu = null;
+    JButton loeschen = null;
+    JButton aendern = null;
+    JButton speichern = null;
+    JButton abbrechen = null;
+    JButton export = null;
+    JCheckBox nichtAnzeigen = new JCheckBox("");
+
     String[] abteil = new String[6 + SystemConfig.oGruppen.gruppenNamen.size()];
 
     public ArrayList<String> kollegenDaten = new ArrayList<String>();
@@ -117,7 +113,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                jcomboWahl.requestFocus();
+                mitarbeiterAuswahl.requestFocus();
             }
         });
 
@@ -135,39 +131,39 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        knopf1 = new JButton("neu");
-        knopf1.setPreferredSize(new Dimension(70, 20));
-        knopf1.addActionListener(e->neuHandeln());
-        knopf1.setActionCommand("neu");
-        knopf1.addKeyListener(keyadapter);
+        neu = new JButton("neu");
+        neu.setPreferredSize(new Dimension(70, 20));
+        neu.addActionListener(e->neuHandeln());
+        neu.setActionCommand("neu");
+        neu.addKeyListener(keyadapter);
 
-        knopf2 = new JButton("löschen");
-        knopf2.setPreferredSize(new Dimension(70, 20));
-        knopf2.addActionListener(e->loeschenHandeln());
-        knopf2.setActionCommand("loeschen");
-        knopf2.addKeyListener(keyadapter);
+        loeschen = new JButton("löschen");
+        loeschen.setPreferredSize(new Dimension(70, 20));
+        loeschen.addActionListener(e->loeschenHandeln());
+        loeschen.setActionCommand("loeschen");
+        loeschen.addKeyListener(keyadapter);
 
-        knopf3 = new JButton("ändern");
-        knopf3.setPreferredSize(new Dimension(70, 20));
-        knopf3.addActionListener(e-> aendernHandeln());
-        knopf3.setActionCommand("aendern");
-        knopf3.addKeyListener(keyadapter);
+        aendern = new JButton("ändern");
+        aendern.setPreferredSize(new Dimension(70, 20));
+        aendern.addActionListener(e-> aendernHandeln());
+        aendern.setActionCommand("aendern");
+        aendern.addKeyListener(keyadapter);
 
-        knopf4 = new JButton("speichern");
-        knopf4.setPreferredSize(new Dimension(70, 20));
-        knopf4.addActionListener(e->speichernHandeln());
-        knopf4.setActionCommand("speichern");
-        knopf4.addKeyListener(keyadapter);
+        speichern = new JButton("speichern");
+        speichern.setPreferredSize(new Dimension(70, 20));
+        speichern.addActionListener(e->speichernHandeln());
+        speichern.setActionCommand("speichern");
+        speichern.addKeyListener(keyadapter);
 
-        knopf5 = new JButton("abbrechen");
-        knopf5.setPreferredSize(new Dimension(70, 20));
-        knopf5.addActionListener(e->abbrechenHandeln());
-        knopf5.setActionCommand("abbrechen");
-        knopf5.addKeyListener(keyadapter);
+        abbrechen = new JButton("abbrechen");
+        abbrechen.setPreferredSize(new Dimension(70, 20));
+        abbrechen.addActionListener(e->abbrechenHandeln());
+        abbrechen.setActionCommand("abbrechen");
+        abbrechen.addKeyListener(keyadapter);
 
-        knopf6 = new JButton("export");
-        knopf6.setPreferredSize(new Dimension(70, 20));
-        knopf6.addActionListener(new ActionListener() {
+        export = new JButton("export");
+        export.setPreferredSize(new Dimension(70, 20));
+        export.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -180,25 +176,23 @@ public class SysUtilKalenderBenutzer extends JXPanel {
 
             }
         });
-        knopf6.setActionCommand("liste");
-        knopf6.addKeyListener(keyadapter);
+        export.setActionCommand("liste");
+        export.addKeyListener(keyadapter);
 
-        naz = new JCheckBox("");
+
 
         builder.addLabel("Benutzer auswählen", cc.xy(1, 1));
-        jcomboWahl = new JComboBox();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 comboFuellen();
             }
         });
-        jcomboWahl.addActionListener(e-> comboAuswerten());
-        jcomboWahl.setActionCommand("comboaktion");
-        builder.add(jcomboWahl, cc.xyw(3, 1, 3));
-
-        builder.addLabel(ListLabel, cc.xy(7, 1));
-        builder.add(knopf6, cc.xy(9, 1));
+        mitarbeiterAuswahl.addActionListener(e-> comboAuswerten());
+        mitarbeiterAuswahl.setActionCommand("comboaktion");
+        builder.add(mitarbeiterAuswahl, cc.xyw(3, 1, 3));
+        builder.addLabel("         MA-Liste", cc.xy(7, 1));
+        builder.add(export, cc.xy(9, 1));
 
         builder.addLabel("Anrede", cc.xy(1, 3));
         anrede = new JRtaTextField("nix", true);
@@ -216,7 +210,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         builder.addLabel("Arbeitsstd.", cc.xy(1, 13));
         arbstd = new JRtaTextField("FL", true, "10.2", "RECHTS");
         builder.add(arbstd, cc.xyw(3, 13, 1));
-        builder.addLabel(Abt, cc.xy(7, 11));
+        builder.addLabel("        Abteilung", cc.xy(7, 11));
         abteilung = new JComboBox(abteil);
         abteilung.setSelectedIndex(0);
         builder.add(abteilung, cc.xy(9, 11));
@@ -229,15 +223,15 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         kalzeile = new JRtaTextField("NORMAL", true);
 
         builder.addLabel("nicht anzeigen", cc.xy(7, 15));
-        builder.add(naz, cc.xy(9, 15));
+        builder.add(nichtAnzeigen, cc.xy(9, 15));
 
         builder.addSeparator("", cc.xyw(1, 16, 9));
 
-        builder.add(knopf1, cc.xy(1, 18));
-        builder.add(knopf2, cc.xy(3, 18));
-        builder.add(knopf3, cc.xy(5, 18));
-        builder.add(knopf4, cc.xy(7, 18));
-        builder.add(knopf5, cc.xy(9, 18));
+        builder.add(neu, cc.xy(1, 18));
+        builder.add(loeschen, cc.xy(3, 18));
+        builder.add(aendern, cc.xy(5, 18));
+        builder.add(speichern, cc.xy(7, 18));
+        builder.add(abbrechen, cc.xy(9, 18));
 
         knopfGedoense(new int[] { 1, 0, 0, 0, 0 });
         felderEinschalten(false);
@@ -250,29 +244,29 @@ public class SysUtilKalenderBenutzer extends JXPanel {
     private void comboFuellen() {
         int von = 0;
         int bis = ParameterLaden.vKKollegen.size();
-        if (jcomboWahl.getItemCount() > 0) {
-            jcomboWahl.removeAllItems();
+        if (mitarbeiterAuswahl.getItemCount() > 0) {
+            mitarbeiterAuswahl.removeAllItems();
         }
         for (von = 0; von < bis; von++) {
-            jcomboWahl.addItem(ParameterLaden.getMatchcode(von));
+            mitarbeiterAuswahl.addItem(ParameterLaden.getMatchcode(von));
         }
         if (bis >= 0) {
-            jcomboWahl.setSelectedItem("./.");
+            mitarbeiterAuswahl.setSelectedItem("./.");
         }
-        jcomboWahl.requestFocus();
+        mitarbeiterAuswahl.requestFocus();
     }
 
     private void knopfGedoense(int[] knopfstatus) {
-        knopf1.setEnabled((knopfstatus[0] == 0 ? false : true));
-        knopf2.setEnabled((knopfstatus[1] == 0 ? false : true));
-        knopf3.setEnabled((knopfstatus[2] == 0 ? false : true));
-        knopf4.setEnabled((knopfstatus[3] == 0 ? false : true));
-        knopf5.setEnabled((knopfstatus[4] == 0 ? false : true));
+        neu.setEnabled((knopfstatus[0] == 0 ? false : true));
+        loeschen.setEnabled((knopfstatus[1] == 0 ? false : true));
+        aendern.setEnabled((knopfstatus[2] == 0 ? false : true));
+        speichern.setEnabled((knopfstatus[3] == 0 ? false : true));
+        abbrechen.setEnabled((knopfstatus[4] == 0 ? false : true));
     }
 
     private void comboAuswerten() {
-        if (jcomboWahl.getSelectedIndex() > 0) {
-            holeKollege((String) jcomboWahl.getSelectedItem());
+        if (mitarbeiterAuswahl.getSelectedIndex() > 0) {
+            holeKollege((String) mitarbeiterAuswahl.getSelectedItem());
             felderFuellen(kollegenDaten);
             knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
         } else {
@@ -296,7 +290,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         arbstd.setEnabled(einschalten);
         abteilung.setEnabled(einschalten);
         deftakt.setEnabled(einschalten);
-        naz.setEnabled(einschalten);
+        nichtAnzeigen.setEnabled(einschalten);
 
     }
 
@@ -312,7 +306,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         abteilung.setSelectedItem(felder.get(5));
         deftakt.setText(felder.get(6));
         kalzeile.setText(felder.get(7));
-        naz.setSelected((felder.get(8)
+        nichtAnzeigen.setSelected((felder.get(8)
                                .equals("T") ? true : false));
     }
 
@@ -373,7 +367,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                                                                                                               .equals("")
                                                                                                                       ? "0"
                                                                                                                       : deftakt.getText())
-                        + "', " + "Nicht_Zeig='" + (naz.isSelected() ? "T" : "F") + "', " + "Kalzeile='"
+                        + "', " + "Nicht_Zeig='" + (nichtAnzeigen.isSelected() ? "T" : "F") + "', " + "Kalzeile='"
                         + Integer.valueOf(speichernKalZeile)
                                  .toString()
                         + "'";
@@ -389,7 +383,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                                                                                                               .equals("")
                                                                                                                       ? "0"
                                                                                                                       : deftakt.getText())
-                        + "', " + "Nicht_Zeig='" + (naz.isSelected() ? "T" : "F") + "', " + "Kalzeile='"
+                        + "', " + "Nicht_Zeig='" + (nichtAnzeigen.isSelected() ? "T" : "F") + "', " + "Kalzeile='"
                         + Integer.valueOf(speichernKalZeile)
                                  .toString()
                         + "'";
@@ -405,7 +399,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                                                                                                           .equals("")
                                                                                                                   ? "0"
                                                                                                                   : deftakt.getText())
-                    + "', " + "Nicht_Zeig='" + (naz.isSelected() ? "T" : "F") + "'" + "where Kalzeile='"
+                    + "', " + "Nicht_Zeig='" + (nichtAnzeigen.isSelected() ? "T" : "F") + "'" + "where Kalzeile='"
                     + kalzeile.getText() + "'";
         }
         knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
@@ -414,7 +408,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         String aktuell = matchcode.getText();
         ParameterLaden.Init();
         comboFuellen();
-        jcomboWahl.setSelectedItem(aktuell);
+        mitarbeiterAuswahl.setSelectedItem(aktuell);
         comboAuswerten();
         felderEinschalten(false);
         JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
@@ -433,13 +427,13 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         int anfrage = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kalenderbenutzer wirklich löschen",
                 "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
         if (anfrage == JOptionPane.YES_OPTION) {
-            int aktwahl = jcomboWahl.getSelectedIndex();
+            int aktwahl = mitarbeiterAuswahl.getSelectedIndex();
             if (aktwahl > 0) {
                 statement = "Delete from kollegen2 where Kalzeile='" + kalzeile.getText() + "'";
                 executeStatement(statement);
                 ParameterLaden.Init();
                 comboFuellen();
-                jcomboWahl.setSelectedIndex(aktwahl - 1);
+                mitarbeiterAuswahl.setSelectedIndex(aktwahl - 1);
                 comboAuswerten();
                 JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
                 if (termin != null) {
