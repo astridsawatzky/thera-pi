@@ -15,14 +15,13 @@ import crypt.Verschluesseln;
 import hauptFenster.Reha;
 
 public class ParameterLaden {
-
-    public static Vector<ArrayList<String>> vKollegen = new Vector<ArrayList<String>>();
-    public static Vector<Kollegen> vKKollegen = new Vector<Kollegen>();
-    public static Vector<Vector<String>> pKollegen = new Vector<Vector<String>>();
+    public static Vector<ArrayList<String>> vKollegen = new Vector<>();
+    public static Vector<Kollegen> vKKollegen = new Vector<>();
+    public static Vector<Vector<String>> pKollegen = new Vector<>();
 
     private static String[][] col;
 
-    public static int maxKalZeile = 0;
+    public static int maxKalZeile;
 
     static int suchen(String ss) {
         int ret = -1;
@@ -97,7 +96,7 @@ public class ParameterLaden {
         Reha obj = Reha.instance;
         Statement stmt = null;
         ResultSet rs = null;
-        if (vKKollegen.size() > 0) {
+        if (!vKKollegen.isEmpty()) {
             vKKollegen.clear();
             vKollegen.clear();
             maxKalZeile = 0;
@@ -129,12 +128,12 @@ public class ParameterLaden {
                 // zeit2 = System.currentTimeMillis();
                 // jZeit.setText((zeit2-zeit1)+" ms");
                 // List<Player> players = new ArrayList<Player>();
-                ArrayList<String> aKollegen = new ArrayList<String>();
+                ArrayList<String> aKollegen = new ArrayList<>();
                 // aSpaltenDaten.clear();
-                aKollegen.add(String.valueOf("./."));
-                aKollegen.add(String.valueOf(""));
-                aKollegen.add(String.valueOf(""));
-                aKollegen.add(String.valueOf("00"));
+                aKollegen.add("./.");
+                aKollegen.add("");
+                aKollegen.add("");
+                aKollegen.add("00");
                 // aKollegen.add(durchlauf);
                 vKollegen.add((ArrayList) aKollegen.clone());
 
@@ -148,15 +147,15 @@ public class ParameterLaden {
                 while (rs.next()) {
                     aKollegen.add(rs.getString("Matchcode"));
                     test = rs.getString("Nachname");
-                    aKollegen.add((test != null ? test : ""));
+                    aKollegen.add(test != null ? test : "");
                     test = rs.getString("Nicht_Zeig");
-                    aKollegen.add((test != null ? test : "F"));
+                    aKollegen.add(test != null ? test : "F");
                     itest = Integer.parseInt(rs.getString("Kalzeile"));
                     if (itest > maxKalZeile) {
                         maxKalZeile = itest;
                     }
                     if (itest < 10) {
-                        aKollegen.add("0" + Integer.toString(itest));
+                        aKollegen.add("0" + itest);
                     } else {
                         aKollegen.add(Integer.toString(itest));
                     }
@@ -183,7 +182,6 @@ public class ParameterLaden {
                 //// System.out.println("Index von a-Wolf = "+suchen("Verwaltung"));
             } catch (SQLException ex) {
                 // System.out.println("Kollegen1="+ex);
-
             }
         } catch (SQLException ex) {
             // System.out.println("Kollegen2="+ex);
@@ -202,53 +200,45 @@ public class ParameterLaden {
                     stmt = null;
                 }
             }
-
         }
-
     }
 
-    /*********** Ende Klasse ************/
+    /** * Ende Klasse. */
 
     public static void Passwort() {
-
         Reha obj = Reha.instance;
 
-        if (pKollegen.size() > 0) {
+        if (!pKollegen.isEmpty()) {
             pKollegen.clear();
         }
 
         try (Statement stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                ResultSet rehaLoginRs = stmt.executeQuery("SELECT * from rehalogin");) {
-
-            Vector<String> aKollegen = new Vector<String>();
+                ResultSet rehaLoginRs = stmt.executeQuery("SELECT * from rehalogin")) {
+            Vector<String> aKollegen = new Vector<>();
             String test = "";
             Verschluesseln man = Verschluesseln.getInstance();
             while (rehaLoginRs.next()) {
                 try {
-
                     test = rehaLoginRs.getString("user");
-                    aKollegen.add((test != null ? man.decrypt(test) : ""));
+                    aKollegen.add(test != null ? man.decrypt(test) : "");
                     test = rehaLoginRs.getString("password");
-                    aKollegen.add((test != null ? man.decrypt(test) : ""));
+                    aKollegen.add(test != null ? man.decrypt(test) : "");
                     test = rehaLoginRs.getString("rights");
-                    aKollegen.add((test != null ? man.decrypt(test) : ""));
+                    aKollegen.add(test != null ? man.decrypt(test) : "");
                     test = rehaLoginRs.getString("email");
-                    aKollegen.add((test != null ? test : ""));
+                    aKollegen.add(test != null ? test : "");
                     test = rehaLoginRs.getString("id");
-                    aKollegen.add((test != null ? test : ""));
-
+                    aKollegen.add(test != null ? test : "");
                 } catch (Exception ex) {
-
                     // System.out.println("Fehler in der Entschlüsselung");
                     aKollegen.add("none");
                     aKollegen.add("none");
                     aKollegen.add("none");
                     aKollegen.add("none");
                     test = rehaLoginRs.getString("id");
-                    aKollegen.add((test != null ? test : ""));
+                    aKollegen.add(test != null ? test : "");
                     JOptionPane.showMessageDialog(null, "Fehler in der Entschlüsselung bei User ID = " + test);
                     ex.printStackTrace();
-
                 }
                 pKollegen.add((Vector<String>) aKollegen.clone());
                 aKollegen.clear();
@@ -262,11 +252,8 @@ public class ParameterLaden {
                 }
             };
             Collections.sort(pKollegen, comparator);
-
         } catch (SQLException ex) {
             // System.out.println("Kollegen2="+ex);
         }
-
     }
-
 }
