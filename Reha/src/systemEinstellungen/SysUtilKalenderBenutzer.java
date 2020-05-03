@@ -24,6 +24,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.jdesktop.swingx.JXPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -44,13 +46,10 @@ import hauptFenster.Reha;
 import terminKalender.ParameterLaden;
 
 public class SysUtilKalenderBenutzer extends JXPanel {
-    /**
-     *
-     */
+    private static final Logger logger = LoggerFactory.getLogger(SysUtilKalenderBenutzer.class);
+
     private static final long serialVersionUID = 1L;
-    /**
-     *
-     */
+
 
     JComboBox   mitarbeiterAuswahl = new JComboBox();
     JRtaTextField anrede = null;
@@ -583,10 +582,10 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                 )
 
         {
-                     kollegenDaten.clear();
 
             String test = null;
             while (rs.next()) {
+                kollegenDaten.clear();
                 test = rs.getString("Anrede");
                 kollegenDaten.add(String.valueOf((test != null ? test : "")));
                 test = rs.getString("Vorname");
@@ -608,6 +607,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
             }
 
         } catch (SQLException ex) {
+            logger.error("Something bad happened here",ex);
         }
     }
 
