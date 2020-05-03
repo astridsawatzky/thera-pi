@@ -11,15 +11,18 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import crypt.Verschluesseln;
 import hauptFenster.Reha;
 
 public class ParameterLaden {
-    public static Vector<ArrayList<String>> vKollegen = new Vector<>();
+    private static final Logger logger = LoggerFactory.getLogger(ParameterLaden.class);
     public static Vector<Kollegen> vKKollegen = new Vector<>();
-    public static Vector<Vector<String>> pKollegen = new Vector<>();
+    public static Vector<ArrayList<String>> vKollegen = new Vector<>();
 
-    private static String[][] col;
+    public static Vector<Vector<String>> pKollegen = new Vector<>();
 
     public static int maxKalZeile;
 
@@ -28,7 +31,6 @@ public class ParameterLaden {
         int lang = vKKollegen.size();
         int i;
         for (i = 0; i < lang; i++) {
-            //// System.out.println(vKKollegen.get(i).Matchcode);
             if (vKKollegen.get(i).Matchcode.equals(ss)) {
                 ret = i;
                 break;
@@ -46,7 +48,6 @@ public class ParameterLaden {
         int lang = vKKollegen.size();
         int i;
         for (i = 0; i < lang; i++) {
-            //// System.out.println(vKKollegen.get(i).Matchcode);
             if (vKKollegen.get(i).Reihe == reihe) {
                 ret = vKKollegen.get(i).Matchcode;
                 break;
@@ -60,7 +61,6 @@ public class ParameterLaden {
         int lang = vKKollegen.size();
         int i;
         for (i = 0; i < lang; i++) {
-            //// System.out.println(vKKollegen.get(i).Matchcode);
             if (vKKollegen.get(i).Reihe == reihe) {
                 ret = vKKollegen.get(i).Matchcode;
                 break;
@@ -94,112 +94,56 @@ public class ParameterLaden {
 
     public static void Init() {
         Reha obj = Reha.instance;
-        Statement stmt = null;
-        ResultSet rs = null;
+
         if (!vKKollegen.isEmpty()) {
             vKKollegen.clear();
             vKollegen.clear();
             maxKalZeile = 0;
-            // col = null;
         }
 
-        try {
-            stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                int anz = 0;
-                rs = stmt.executeQuery("select count(*) from kollegen2");
-                if (rs.next()) {
-                    anz = rs.getInt(1);
+        try (Statement stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet kollegenRs = stmt.executeQuery(
+                        "SELECT Matchcode,Nachname,Nicht_Zeig,Kalzeile,Abteilung FROM kollegen2");) {
+            int durchlauf = 0;
+
+            ArrayList<String> kollege = new ArrayList<>();
+            kollege.add("./.");
+            kollege.add("");
+            kollege.add("");
+            kollege.add("00");
+            vKollegen.add(kollege);
+
+            vKKollegen.add(new Kollegen("./.", "", "", 0, "", "F", 0));
+
+            durchlauf++;
+            while (kollegenRs.next()) {
+                int kalenderZeile = 0;
+                ArrayList<String> aKollegen1 = new ArrayList<>();
+                aKollegen1.add(kollegenRs.getString("Matchcode"));
+                String nachname = kollegenRs.getString("Nachname");
+                aKollegen1.add(nachname != null ? nachname : "");
+                String nichtzeig = kollegenRs.getString("Nicht_Zeig");
+                aKollegen1.add(nichtzeig != null ? nichtzeig : "F");
+                kalenderZeile = Integer.parseInt(kollegenRs.getString("Kalzeile"));
+                if (kalenderZeile > maxKalZeile) {
+                    maxKalZeile = kalenderZeile;
                 }
-                rs.close();
-                // rs = stmt.executeQuery("SELECT * FROM flexkc WHERE datum >= '2008-01-14' AND
-                // datum <= '2008-01-20' AND behandler = '05BEHANDLER'");
-                rs = stmt.executeQuery("SELECT Matchcode,Nachname,Nicht_Zeig,Kalzeile,Abteilung FROM kollegen2");
-
-//        Kollegen cKollegen[] = new Kollegen([anz+1]);
-                col = new String[anz + 1][4];
-                int i = 0;
-                int durchlauf = 0;
-                // int maxbehandler = 53;
-                int maxblock = 0;
-                int aktbehandler = 1;
-
-                // String sText = "";
-                // zeit2 = System.currentTimeMillis();
-                // jZeit.setText((zeit2-zeit1)+" ms");
-                // List<Player> players = new ArrayList<Player>();
-                ArrayList<String> aKollegen = new ArrayList<>();
-                // aSpaltenDaten.clear();
-                aKollegen.add("./.");
-                aKollegen.add("");
-                aKollegen.add("");
-                aKollegen.add("00");
-                // aKollegen.add(durchlauf);
-                vKollegen.add((ArrayList) aKollegen.clone());
-
-                vKKollegen.add(new Kollegen("./.", "", "", 0, "", "F", 0));
-
-                col[0][0] = aKollegen.get(0);
-                aKollegen.clear();
+                if (kalenderZeile < 10) {
+                    aKollegen1.add("0" + kalenderZeile);
+                } else {
+                    aKollegen1.add(Integer.toString(kalenderZeile));
+                }
+                vKollegen.add(aKollegen1);
+                vKKollegen.add(new Kollegen(Optional.ofNullable(kollegenRs.getString("Matchcode"))
+                                                    .orElse(""),
+                        kollegenRs.getString("Nachname"), kollegenRs.getString("Nicht_Zeig"), kalenderZeile,
+                        kollegenRs.getString("Abteilung"), aKollegen1.get(2), durchlauf));
                 durchlauf++;
-                String test = "";
-                int itest = 0;
-                while (rs.next()) {
-                    aKollegen.add(rs.getString("Matchcode"));
-                    test = rs.getString("Nachname");
-                    aKollegen.add(test != null ? test : "");
-                    test = rs.getString("Nicht_Zeig");
-                    aKollegen.add(test != null ? test : "F");
-                    itest = Integer.parseInt(rs.getString("Kalzeile"));
-                    if (itest > maxKalZeile) {
-                        maxKalZeile = itest;
-                    }
-                    if (itest < 10) {
-                        aKollegen.add("0" + itest);
-                    } else {
-                        aKollegen.add(Integer.toString(itest));
-                    }
-                    // System.out.println("************ Max KalZeile = "+maxKalZeile);
-                    // aKollegen.add(itest);
-                    vKollegen.add((ArrayList) aKollegen.clone());
-                    vKKollegen.add(new Kollegen(Optional.ofNullable(rs.getString("Matchcode"))
-                                                        .orElse(""),
-                            rs.getString("Nachname"), rs.getString("Nicht_Zeig"), itest, rs.getString("Abteilung"),
-                            aKollegen.get(2), durchlauf));
-                    // vKKollegen.add(new
-                    // Kollegen(rs.getString("Matchcode"),rs.getString("Nachname"),rs.getString("Nicht_Zeig"),durchlauf)
-                    // );
-                    col[durchlauf][0] = aKollegen.get(0);
-                    col[durchlauf][1] = aKollegen.get(1);
-                    col[durchlauf][2] = aKollegen.get(2);
-                    // col[durchlauf][3] = (String) aKollegen.get(3);
-                    aKollegen.clear();
-                    durchlauf++;
-                }
-                Collections.sort(vKKollegen);
-                //// System.out.println(vKKollegen);
+            }
+            Collections.sort(vKKollegen);
 
-                //// System.out.println("Index von a-Wolf = "+suchen("Verwaltung"));
-            } catch (SQLException ex) {
-                // System.out.println("Kollegen1="+ex);
-            }
         } catch (SQLException ex) {
-            // System.out.println("Kollegen2="+ex);
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignorieren }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignorieren }
-                    stmt = null;
-                }
-            }
+            logger.error("Laden der Mitarbeiter fehlgeschlagen.", ex);
         }
     }
 
@@ -230,7 +174,6 @@ public class ParameterLaden {
                     test = rehaLoginRs.getString("id");
                     aKollegen.add(test != null ? test : "");
                 } catch (Exception ex) {
-                    // System.out.println("Fehler in der Entschlüsselung");
                     aKollegen.add("none");
                     aKollegen.add("none");
                     aKollegen.add("none");
@@ -253,7 +196,6 @@ public class ParameterLaden {
             };
             Collections.sort(pKollegen, comparator);
         } catch (SQLException ex) {
-            // System.out.println("Kollegen2="+ex);
         }
     }
 }
