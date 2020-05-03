@@ -22,6 +22,7 @@ import CommonTools.FileTools;
 import CommonTools.FireRehaError;
 import CommonTools.RehaEvent;
 import CommonTools.SqlInfo;
+import benutzer.Benutzer;
 import geraeteInit.BarCodeScanner;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
@@ -185,7 +186,7 @@ final class DatenbankStarten implements Runnable {
 
                 Reha.sysConf.SystemInit(3);
 
-                ParameterLaden.Passwort();
+                Benutzer.benutzerLaden();
                 new SocketClient().setzeInitStand("Systemparameter ok");
 
                 new SocketClient().setzeInitStand("Native Interface ok");

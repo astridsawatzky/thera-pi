@@ -6,12 +6,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import benutzer.Benutzer;
 import dialoge.RehaSmartDialog;
 import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
 import hauptFenster.login.LoginPanel;
-import terminKalender.ParameterLaden;
 
 public class PassWort {
     ActionListener submitted = new ActionListener() {
@@ -36,14 +36,14 @@ public class PassWort {
         int size;
         boolean check = false;
         String name = "", rechte = "", pwToTest = String.valueOf(password);
-        size = ParameterLaden.pKollegen.size();
+        size = Benutzer.pKollegen.size();
         for (int i = 0; i < size; i++) {
             //// System.out.println(ParameterLaden.pKollegen.get(i).get(1));
-            if (pwToTest.equals(ParameterLaden.pKollegen.get(i)
+            if (pwToTest.equals(Benutzer.pKollegen.get(i)
                                                         .get(1))) {
-                name = ParameterLaden.pKollegen.get(i)
+                name = Benutzer.pKollegen.get(i)
                                                .get(0);
-                rechte = ParameterLaden.pKollegen.get(i)
+                rechte = Benutzer.pKollegen.get(i)
                                                  .get(2);
                 //// System.out.println("Rechte = "+rechte);
                 Reha.progRechte = rechte;

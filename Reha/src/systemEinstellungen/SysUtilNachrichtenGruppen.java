@@ -26,8 +26,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import benutzer.Benutzer;
 import hauptFenster.Reha;
-import terminKalender.ParameterLaden;
 
 public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener, KeyListener {
     /**
@@ -463,13 +463,13 @@ public class SysUtilNachrichtenGruppen extends JXPanel implements ActionListener
 
     private void macheKollegen() {
         int von = 0;
-        int bis = ParameterLaden.pKollegen.size();
+        int bis = Benutzer.pKollegen.size();
         vkollegen = new Vector();
         Vector vec = new Vector();
         // System.out.println(ParameterLaden.pKollegen);
         for (von = 0; von < bis; von++) {
             vec.clear();
-            vec.add(String.valueOf(ParameterLaden.pKollegen.get(von)
+            vec.add(String.valueOf(Benutzer.pKollegen.get(von)
                                                            .get(0)));
             // System.out.println(ParameterLaden.pKollegen.get(von).get(0));
             vkollegen.add((Vector<String>) vec.clone());

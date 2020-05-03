@@ -38,6 +38,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.ZeitFunk;
+import benutzer.Benutzer;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;
@@ -45,7 +46,6 @@ import events.RehaTPEvent;
 import events.RehaTPEventClass;
 import hauptFenster.Reha;
 import systemTools.ButtonTools;
-import terminKalender.ParameterLaden;
 
 public class Wecker extends RehaSmartDialog {
 
@@ -602,12 +602,12 @@ final class TerminAbgelaufen extends RehaSmartDialog {
         }
         boolean pwkorrekt = false;
         String pwuser = "";
-        for (int i = 0; i < ParameterLaden.pKollegen.size(); i++) {
-            if (pw.equals(ParameterLaden.pKollegen.get(i)
+        for (int i = 0; i < Benutzer.pKollegen.size(); i++) {
+            if (pw.equals(Benutzer.pKollegen.get(i)
                                                   .get(1)
                                                   .trim())) {
                 pwkorrekt = true;
-                pwuser = String.valueOf(ParameterLaden.pKollegen.get(i)
+                pwuser = String.valueOf(Benutzer.pKollegen.get(i)
                                                                 .get(0));
                 break;
             }

@@ -51,13 +51,13 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import benutzer.Benutzer;
 import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;
 import rehaInternalFrame.JBenutzerInternal;
 import systemEinstellungen.SystemConfig;
 import systemTools.ButtonTools;
-import terminKalender.ParameterLaden;
 
 public class BenutzerRechte extends JXPanel {
     /**
@@ -253,7 +253,7 @@ public class BenutzerRechte extends JXPanel {
         JLabel lab = new JLabel("Benutzer auswählen");
         jpan.add(lab, cc.xy(2, 2, CellConstraints.RIGHT, CellConstraints.DEFAULT));
         jcmb = new JRtaComboBox();
-        jcmb.setDataVectorWithStartElement(ParameterLaden.pKollegen, 0, 1, "./.");
+        jcmb.setDataVectorWithStartElement(Benutzer.pKollegen, 0, 1, "./.");
         jcmb.setActionCommand("benutzerwahl");
         jcmb.addActionListener(al);
         jpan.add(jcmb, cc.xy(4, 2));
@@ -349,7 +349,7 @@ public class BenutzerRechte extends JXPanel {
                                .toString());
 
             //// System.out.println(ParameterLaden.pKollegen.get(jcmb.getSelectedIndex()-1).get(0));
-            aktuelleRechte = ParameterLaden.pKollegen.get(jcmb.getSelectedIndex() - 1)
+            aktuelleRechte = Benutzer.pKollegen.get(jcmb.getSelectedIndex() - 1)
                                                      .get(2);
             if (!rechteTools.Rechte.hatRecht(rechteTools.Rechte.BenutzerSuper_user, false)
                     && rechteTools.Rechte.testeRecht(aktuelleRechte, rechteTools.Rechte.BenutzerSuper_user)) {
@@ -371,7 +371,7 @@ public class BenutzerRechte extends JXPanel {
             } else {
                 this.internal.setTitle(elternTitel);
             }
-            userid = ParameterLaden.pKollegen.get(jcmb.getSelectedIndex() - 1)
+            userid = Benutzer.pKollegen.get(jcmb.getSelectedIndex() - 1)
                                              .get(4);
             regleButtons("1101000");
             aktualisiereTree(false);
@@ -677,15 +677,15 @@ public class BenutzerRechte extends JXPanel {
                                 .trim();
             String name = String.valueOf(tfs[0].getText()
                                                .trim()); // (String) ParameterLaden.pKollegen.get(i).get(0);
-            int size = ParameterLaden.pKollegen.size();
+            int size = Benutzer.pKollegen.size();
             for (int i = 0; i < size; i++) {
-                if (test.equals(ParameterLaden.pKollegen.get(i)
+                if (test.equals(Benutzer.pKollegen.get(i)
                                                         .get(1)
                                                         .trim())) {
                     JOptionPane.showMessageDialog(null,
                             "Passwort " + test + " ist bereits vergeben, speichern nicht möglich");
                     return;
-                } else if (name.equals(ParameterLaden.pKollegen.get(i)
+                } else if (name.equals(Benutzer.pKollegen.get(i)
                                                                .get(0)
                                                                .trim())) {
                     JOptionPane.showMessageDialog(null,
@@ -718,9 +718,9 @@ public class BenutzerRechte extends JXPanel {
                     + Integer.toString(id) + "' LIMIT 1";
             SqlInfo.sqlAusfuehren(cmd);
         }
-        ParameterLaden.Passwort();
+        Benutzer.benutzerLaden();
         jcmb.removeActionListener(al);
-        jcmb.setDataVectorWithStartElement(ParameterLaden.pKollegen, 0, 1, "./.");
+        jcmb.setDataVectorWithStartElement(Benutzer.pKollegen, 0, 1, "./.");
         jcmb.addActionListener(al);
         jcmb.setSelectedItem(aktuelleruser);
 
