@@ -32,8 +32,7 @@ public class MitarbeiterDto {
     public List<Mitarbeiter> all() {
 
         List<Mitarbeiter> mitarbeiterListe = new LinkedList<Mitarbeiter>();
-        try (Connection con = new DatenquellenFactory(ik.digitString())
-                                                       .createConnection();) {
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();) {
             ResultSet rs = con.createStatement()
                               .executeQuery(SelectAllSql);
             while (rs.next()) {
@@ -53,8 +52,7 @@ public class MitarbeiterDto {
     List<Mitarbeiter> allActive() {
 
         List<Mitarbeiter> mitarbeiterListe = new LinkedList<Mitarbeiter>();
-        try (Connection con = new DatenquellenFactory(ik.digitString())
-                                                       .createConnection();) {
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();) {
             ResultSet rs = con.createStatement()
                               .executeQuery(SelectAllActiveSql);
             while (rs.next()) {
@@ -70,11 +68,11 @@ public class MitarbeiterDto {
         }
 
     }
+
     public Optional<Mitarbeiter> byMatchcode(String matchcode) {
         String sql = "SELECT * FROM kollegen2 WHERE matchcode LIKE '" + matchcode + "';";
         Mitarbeiter mitarbeiter = null;
-        try (Connection con = new DatenquellenFactory(ik.digitString())
-                                                       .createConnection();
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();
 
                 ResultSet rs = con.createStatement()
                                   .executeQuery(sql);) {
@@ -88,19 +86,23 @@ public class MitarbeiterDto {
 
         return Optional.ofNullable(mitarbeiter);
     }
+
     private Mitarbeiter ofResultset(ResultSet rs) throws SQLException {
         Mitarbeiter ma = new Mitarbeiter();
         ma.anrede = rs.getString("ANREDE");
         ma.vorname = rs.getString("VORNAME");
-        ma.nachname = rs.getString("NACHNAME");
+        ma.nachname = Optional.ofNullable(rs.getString("NACHNAME"))
+                              .orElse("");
         ma.strasse = rs.getString("STRASSE");
         ma.plz = rs.getString("PLZ");
         ma.ort = rs.getString("ORT");
         ma.telefon1 = rs.getString("TELEFON1");
         ma.telfon2 = rs.getString("TELFON2");
         ma.geboren = rs.getDate("GEBOREN") == null ? null
-                   : rs.getDate("GEBOREN") .toLocalDate();
-        ma.matchcode = Optional.ofNullable(rs.getString("matchcode")).orElse("");
+                : rs.getDate("GEBOREN")
+                    .toLocalDate();
+        ma.matchcode = Optional.ofNullable(rs.getString("matchcode"))
+                               .orElse("");
         ma.ztext = rs.getString("ZTEXT");
         ma.kal_teil = rs.getInt("KAL_TEIL");
         ma.pers_nr = rs.getInt("PERS_NR");
@@ -130,8 +132,7 @@ public class MitarbeiterDto {
                                                             .collect(Collectors.toList());
         logger.debug("updating " + mitarbeiterUpdateSql.size() + " Mitarbeiter in Database");
 
-        try (Connection con = new DatenquellenFactory(ik.digitString())
-                                                       .createConnection();
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();
                 Statement stmt = con.createStatement()) {
 
             for (String string : mitarbeiterUpdateSql) {
@@ -145,8 +146,7 @@ public class MitarbeiterDto {
         List<Mitarbeiter> list = mitarbeiterparts.get(true);
         logger.debug("inserting " + list.size() + " Mitarbeiter into Database");
 
-        try (Connection con = new DatenquellenFactory(ik.digitString())
-                                                       .createConnection();
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();
                 Statement statement = con.createStatement();) {
 
             for (Mitarbeiter mitarbeiter : list) {
@@ -260,6 +260,5 @@ public class MitarbeiterDto {
     private String einklammern(String value) {
         return value == null ? null : "'" + value + "'";
     }
-
 
 }

@@ -10,10 +10,10 @@ public class KollegenTest {
 
     @Test
     public void kollegenAreSortedByMatchcode() throws Exception {
-        Kollegen a = new Kollegen("a", "name", "vorname", 1, "abteil", "zeigen", 2);
-        Kollegen grossA = new Kollegen("A", "name", "vorname", 1, "abteil", "zeigen", 2);
+        Kollegen a = new Kollegen("a", "name", 1, "abteil", "zeigen");
+        Kollegen grossA = new Kollegen("A", "name", 1, "abteil", "zeigen");
 
-        Kollegen b = new Kollegen("b", "name", "vorname", 1, "abteil", "zeigen", 2);
+        Kollegen b = new Kollegen("b", "name", 1, "abteil", "zeigen");
 
 
         assertThat(a, lessThan(b));
@@ -23,8 +23,8 @@ public class KollegenTest {
 
     @Test
     public void kollegenWithSameMatchcodeAreComparedByReihe() throws Exception {
-        Kollegen a1 = new Kollegen("a", "name", "vorname", 1, "abteil", "zeigen", 2);
-        Kollegen a2 = new Kollegen("a", "name", "vorname", 2, "abteil", "zeigen", 2);
+        Kollegen a1 = new Kollegen("a", "name", 1, "abteil", "zeigen");
+        Kollegen a2 = new Kollegen("a", "name", 2, "abteil", "zeigen");
 
         assertThat(a1, lessThan(a2));
 

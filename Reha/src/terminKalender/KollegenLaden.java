@@ -17,8 +17,6 @@ public class KollegenLaden {
     private static final Logger logger = LoggerFactory.getLogger(KollegenLaden.class);
     public static Vector<Kollegen> vKKollegen = new Vector<>();
 
-    public static int maxKalZeile;
-
     static int suchen(String ss) {
         int ret = -1;
         int lang = vKKollegen.size();
@@ -50,16 +48,16 @@ public class KollegenLaden {
     }
 
     public static String getKollegenUeberDBZeile(int reihe) {
-        String ret = "";
-        int lang = vKKollegen.size();
-        int i;
-        for (i = 0; i < lang; i++) {
-            if (vKKollegen.get(i).Reihe == reihe) {
-                ret = vKKollegen.get(i).Matchcode;
-                break;
+        return byDBZeile(reihe).getMatchcode();
+    }
+
+    public static Kollegen byDBZeile(int reihe) {
+        for (Kollegen kollegen : vKKollegen) {
+            if (kollegen.Reihe == reihe) {
+                return kollegen;
             }
         }
-        return ret;
+        return Kollegen.NULL_KOLLEGE;
     }
 
     public static String getMatchcode(int kollege) {
@@ -85,39 +83,33 @@ public class KollegenLaden {
         return sret;
     }
 
+    public static int maxKalZeile = 0;
+
     public static void Init() {
         Reha obj = Reha.instance;
 
         if (!vKKollegen.isEmpty()) {
             vKKollegen.clear();
-            maxKalZeile = 0;
         }
 
+        vKKollegen.add(Kollegen.NULL_KOLLEGE);
         try (Statement stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 ResultSet kollegenRs = stmt.executeQuery(
                         "SELECT Matchcode,Nachname,Nicht_Zeig,Kalzeile,Abteilung FROM kollegen2");) {
-            int durchlauf = 0;
 
-            Kollegen nullKollege = new Kollegen("./.", "", "", 0, "", "F", 0);
-
-            vKKollegen.add(nullKollege);
-
-            durchlauf++;
             while (kollegenRs.next()) {
-                String matchcode = kollegenRs.getString("Matchcode");
-                String nichtzeig = Optional.ofNullable(kollegenRs.getString("Nicht_Zeig")).orElse("F");
-                String kalzeileString = kollegenRs.getString("Kalzeile");
-
-
-                if (Integer.parseInt(kalzeileString) > maxKalZeile) {
-                    maxKalZeile = Integer.parseInt(kalzeileString);
+                String matchCode = Optional.ofNullable(kollegenRs.getString("Matchcode"))
+                                           .orElse("");
+                String nachname = kollegenRs.getString("Nachname");
+                String nichtzeig = Optional.ofNullable(kollegenRs.getString("Nicht_Zeig"))
+                                           .orElse("F");
+                String abteilung = kollegenRs.getString("Abteilung");
+                int kalZeile = Integer.parseInt(kollegenRs.getString("Kalzeile"));
+                if (kalZeile > maxKalZeile) {
+                    maxKalZeile = kalZeile;
                 }
-                Kollegen kollege = new Kollegen(Optional.ofNullable(matchcode)
-                                                    .orElse(""),
-                        kollegenRs.getString("Nachname"), kollegenRs.getString("Nicht_Zeig"), Integer.parseInt(kalzeileString),
-                        kollegenRs.getString("Abteilung"), nichtzeig, durchlauf);
+                Kollegen kollege = new Kollegen(matchCode, nachname, kalZeile, abteilung, nichtzeig);
                 vKKollegen.add(kollege);
-                durchlauf++;
             }
             Collections.sort(vKKollegen);
 
@@ -130,6 +122,4 @@ public class KollegenLaden {
         return vKKollegen;
     }
 
-
 }
-
