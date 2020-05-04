@@ -9,6 +9,7 @@ import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -51,7 +52,7 @@ import rehaInternalFrame.JBeteiligungInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
 import terminKalender.Kollegen;
-import terminKalender.KollegenLaden;
+import terminKalender.KOllegenListe;
 
 public class Beteiligung extends JXPanel {
 
@@ -167,7 +168,7 @@ public class Beteiligung extends JXPanel {
     }
 
     private Vector<Vector<String>> doKollegen() {
-        Vector<Kollegen> kollegen = KollegenLaden.getUrlaubsKollegen();
+        List<Kollegen> kollegen = KOllegenListe.getUrlaubsKollegen();
         Vector<Vector<String>> veckolls = new Vector<Vector<String>>();
        for (Kollegen kollege : kollegen) {
 
@@ -177,15 +178,7 @@ public class Beteiligung extends JXPanel {
             vecdummy.add(kollege.getKalenderZeile());
             veckolls.add(vecdummy);
         }
-        Comparator<Vector<String>> cmpByMAtchCOde = new Comparator<Vector<String>>() {
-            @Override
-            public int compare(Vector<String> o1, Vector<String> o2) {
-                String s1 = o1.get(0);
-                String s2 = o2.get(0);
-                return s1.compareTo(s2);
-            }
-        };
-        Collections.sort(veckolls, cmpByMAtchCOde);
+
         return veckolls;
     }
 

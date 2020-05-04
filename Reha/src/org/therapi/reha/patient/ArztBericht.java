@@ -59,7 +59,7 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import systemTools.AdressTools;
-import terminKalender.KollegenLaden;
+import terminKalender.KOllegenListe;
 import textBlockTherapeuten.ThTextBlock;
 
 public class ArztBericht extends RehaSmartDialog implements ActionListener {
@@ -501,9 +501,9 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener {
          * 
          * @Override protected Void doInBackground() throws Exception {
          */
-        int lang = KollegenLaden.vKKollegen.size();
+        int lang = KOllegenListe.vKKollegen.size();
         for (int i = 0; i < lang; i++) {
-            verfasser.addItem(KollegenLaden.getMatchcode(i));
+            verfasser.addItem(KOllegenListe.getMatchcode(i));
         }
         if (!neu) {
             // System.out.println("Verfasser bisher = "+altverfasser);

@@ -241,7 +241,7 @@ public class TermineErfassen implements Runnable {
          *
          */
         alleterm = SqlInfo.holeFelder("select * from flexkc where datum='" + DatFunk.sDatInSQL(DatFunk.sHeute())
-                + "' LIMIT " + Integer.toString(KollegenLaden.maxKalZeile));
+                + "' LIMIT " + Integer.toString(KOllegenListe.maxKalZeile));
         /*******************************************/
         Object[] obj = untersucheTermine();
         /*******************************************/
@@ -351,7 +351,7 @@ public class TermineErfassen implements Runnable {
                 int bloecke = ((Vector) alleterm.get(0)).size();
                 int belegt = Integer.parseInt((String) ((Vector) alleterm.get(i)).get(bloecke - 6));
                 try {
-                    isKG = KollegenLaden.getAbteilung(
+                    isKG = KOllegenListe.getAbteilung(
                             getKollegenInt((String) ((Vector) alleterm.get(i)).get(bloecke - 4)))
                                          .equals("KG");
                 } catch (Exception ex) {
@@ -509,7 +509,7 @@ public class TermineErfassen implements Runnable {
                                     : Integer.valueOf(kollege.substring(0, 2)));
         try {
             //// System.out.println("Kollegen-Nummer = "+ikoll);
-            this.kollege = KollegenLaden.getKollegenUeberDBZeile(ikoll);
+            this.kollege = KOllegenListe.getKollegenUeberDBZeile(ikoll);
             // String termkollege =
             sbuftermine.setLength(0);
             sbuftermine.toString();

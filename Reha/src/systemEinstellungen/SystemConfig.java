@@ -34,7 +34,7 @@ import hauptFenster.Reha;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;
 import systemEinstellungen.config.Datenbank;
-import terminKalender.KollegenLaden;
+import terminKalender.KOllegenListe;
 
 public class SystemConfig {
 

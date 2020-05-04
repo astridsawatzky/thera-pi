@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Vector;
 
@@ -12,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import hauptFenster.Reha;
 
-public class KollegenLaden {
+public class KOllegenListe {
 
-    private static final Logger logger = LoggerFactory.getLogger(KollegenLaden.class);
-    public static Vector<Kollegen> vKKollegen = new Vector<>();
+    private static final Logger logger = LoggerFactory.getLogger(KOllegenListe.class);
+    public static List<Kollegen> vKKollegen = new Vector<>();
 
     static int suchen(String ss) {
         int ret = -1;
@@ -118,7 +119,7 @@ public class KollegenLaden {
         }
     }
 
-    public static Vector<Kollegen> getUrlaubsKollegen() {
+    public static List<Kollegen> getUrlaubsKollegen() {
         return vKKollegen;
     }
 
