@@ -1,8 +1,10 @@
 package mitarbeiter;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 
-public class Mitarbeiter {
+
+public class Mitarbeiter implements Comparable<Mitarbeiter> {
 
     String    anrede ;
     String    vorname ;
@@ -162,7 +164,16 @@ public class Mitarbeiter {
         return id == 0;
     }
 
+    private static final Comparator<Mitarbeiter> compareByMatchcode = Comparator.comparing(m -> m.matchcode);
+    private static final Comparator<Mitarbeiter> compareByAge = Comparator.comparing(m -> m.kalzeile);
 
+    @Override
+    public int compareTo(Mitarbeiter other) {
+
+        return compareByMatchcode.thenComparing(compareByAge)
+                                 .compare(this, other);
+
+    }
 
 
 }

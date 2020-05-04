@@ -29,7 +29,7 @@ public class MitarbeiterDto {
         this.ik = ik;
     }
 
-    List<Mitarbeiter> all() {
+    public List<Mitarbeiter> all() {
 
         List<Mitarbeiter> mitarbeiterListe = new LinkedList<Mitarbeiter>();
         try (Connection con = new DatenquellenFactory(ik.digitString())
@@ -100,7 +100,7 @@ public class MitarbeiterDto {
         ma.telfon2 = rs.getString("TELFON2");
         ma.geboren = rs.getDate("GEBOREN") == null ? null
                    : rs.getDate("GEBOREN") .toLocalDate();
-        ma.matchcode = rs.getString("matchcode");
+        ma.matchcode = Optional.ofNullable(rs.getString("matchcode")).orElse("");
         ma.ztext = rs.getString("ZTEXT");
         ma.kal_teil = rs.getInt("KAL_TEIL");
         ma.pers_nr = rs.getInt("PERS_NR");
@@ -261,13 +261,5 @@ public class MitarbeiterDto {
         return value == null ? null : "'" + value + "'";
     }
 
-    public static void main(String[] args) {
-        List<Mitarbeiter> result = new MitarbeiterDto(new IK("123456789")).all();
-        Mitarbeiter e = new Mitarbeiter();
-        e.nachname = "insertme";
-        result.add(e);
-        result.add(e);
-        new MitarbeiterDto(new IK("123456789")).save(result);
-    }
 
 }
