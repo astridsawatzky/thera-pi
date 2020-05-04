@@ -16,7 +16,7 @@ public class Mandant {
         return name;
     }
 
-    public String ik() {
+    public String ikDigitString() {
         return ik.digitString();
     }
 
