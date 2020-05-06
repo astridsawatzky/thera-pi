@@ -21,7 +21,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
 import hauptFenster.Reha;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class SysUtilBehandlerset extends JXPanel implements  ActionListener {
     private static final Dimension PREFERRED_BUTTONL_SIZE = new Dimension(70, 20);
@@ -94,10 +94,10 @@ public class SysUtilBehandlerset extends JXPanel implements  ActionListener {
 
     private void macheKollegen() {
         int von = 0;
-        int bis = KOllegenListe.vKKollegen.size();
+        int bis = KollegenListe.vKKollegen.size();
         kollegen = new String[bis];
         for (von = 0; von < bis; von++) {
-            kollegen[von] = KOllegenListe.getMatchcode(von);
+            kollegen[von] = KollegenListe.getMatchcode(von);
         }
     }
 

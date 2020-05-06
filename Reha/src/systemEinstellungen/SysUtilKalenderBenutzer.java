@@ -43,7 +43,7 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class SysUtilKalenderBenutzer extends JXPanel {
     private static final Logger logger = LoggerFactory.getLogger(SysUtilKalenderBenutzer.class);
@@ -242,12 +242,12 @@ public class SysUtilKalenderBenutzer extends JXPanel {
 
     private void comboFuellen() {
         int von = 0;
-        int bis = KOllegenListe.vKKollegen.size();
+        int bis = KollegenListe.vKKollegen.size();
         if (mitarbeiterAuswahl.getItemCount() > 0) {
             mitarbeiterAuswahl.removeAllItems();
         }
         for (von = 0; von < bis; von++) {
-            mitarbeiterAuswahl.addItem(KOllegenListe.getMatchcode(von));
+            mitarbeiterAuswahl.addItem(KollegenListe.getMatchcode(von));
         }
         if (bis >= 0) {
             mitarbeiterAuswahl.setSelectedItem("./.");
@@ -310,7 +310,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
     }
 
     private void neuHandeln() {
-        if (KOllegenListe.vKKollegen.size() == 99) {
+        if (KollegenListe.vKKollegen.size() == 99) {
             JOptionPane.showMessageDialog(null,
                     "Es existieren bereits 99 Kalenderbenutzer! Derezeit ist die Benutzeranzahl auf 99 limitiert!");
             return;
@@ -405,7 +405,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         lneu = false;
         executeStatement(statement);
         String aktuell = matchcode.getText();
-        KOllegenListe.Init();
+        KollegenListe.Init();
         comboFuellen();
         mitarbeiterAuswahl.setSelectedItem(aktuell);
         comboAuswerten();
@@ -430,7 +430,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
             if (aktwahl > 0) {
                 statement = "Delete from kollegen2 where Kalzeile='" + kalzeile.getText() + "'";
                 executeStatement(statement);
-                KOllegenListe.Init();
+                KollegenListe.Init();
                 comboFuellen();
                 mitarbeiterAuswahl.setSelectedIndex(aktwahl - 1);
                 comboAuswerten();
@@ -480,7 +480,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         ITextTable textTable = null;
         try {
             textTable = textDocument.getTextTableService()
-                                    .constructTextTable(KOllegenListe.vKKollegen.size() + 1, 3);
+                                    .constructTextTable(KollegenListe.vKKollegen.size() + 1, 3);
         } catch (TextException e) {
             e.printStackTrace();
         }
@@ -508,7 +508,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
             exception.printStackTrace();
         }
 
-        for (int i = 0; i < KOllegenListe.vKKollegen.size(); i++) {
+        for (int i = 0; i < KollegenListe.vKKollegen.size(); i++) {
             try {
                 textTable.getCell(0, i + 1)
                          .getTextService()
@@ -518,11 +518,11 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                 textTable.getCell(1, i + 1)
                          .getTextService()
                          .getText()
-                         .setText(KOllegenListe.getMatchcode(i));
+                         .setText(KollegenListe.getMatchcode(i));
                 textTable.getCell(2, i + 1)
                          .getTextService()
                          .getText()
-                         .setText(Integer.valueOf(KOllegenListe.getDBZeile(i))
+                         .setText(Integer.valueOf(KollegenListe.getDBZeile(i))
                                          .toString());
             } catch (TextException exception) {
                 exception.printStackTrace();
@@ -559,14 +559,14 @@ public class SysUtilKalenderBenutzer extends JXPanel {
  };
     private boolean testObNeueKalZeile() {
         boolean ret = false;
-        if ((KOllegenListe.vKKollegen.size() >= (KOllegenListe.maxKalZeile + 1))) {
-            // Es mu� eine neue Kalenderzeile belegt werden.
-            speichernKalZeile = KOllegenListe.maxKalZeile + 1;
+        if ((KollegenListe.vKKollegen.size() >= (KollegenListe.maxKalZeile + 1))) {
+            // Es muss eine neue Kalenderzeile belegt werden.
+            speichernKalZeile = KollegenListe.maxKalZeile + 1;
             ret = true;
             return ret;
 
         } else {
-            // Es mu� nach einer freien also unbelegten Kalenderzeile gesucht werden.
+            // Es muss nach einer freien also unbelegten Kalenderzeile gesucht werden.
             testeKollegen();
             ret = false;
         }

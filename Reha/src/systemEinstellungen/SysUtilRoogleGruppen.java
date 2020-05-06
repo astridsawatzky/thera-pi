@@ -27,7 +27,7 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
 import hauptFenster.Reha;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class SysUtilRoogleGruppen extends JXPanel implements ActionListener, KeyListener {
     /**
@@ -466,11 +466,11 @@ public class SysUtilRoogleGruppen extends JXPanel implements ActionListener, Key
 
     private void macheKollegen() {
         int von = 0;
-        int bis = KOllegenListe.vKKollegen.size();
+        int bis = KollegenListe.vKKollegen.size();
         vkollegen = new Vector();
         for (von = 1; von < bis; von++) {
             Vector vec = new Vector();
-            vec.add(String.valueOf(KOllegenListe.getMatchcode(von)));
+            vec.add(String.valueOf(KollegenListe.getMatchcode(von)));
             vkollegen.add(vec.clone());
         }
         //// System.out.println("Anzahl Kollegen nach f�llen = "+vkollegen.size());

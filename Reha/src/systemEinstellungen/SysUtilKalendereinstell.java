@@ -6,8 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -32,12 +30,12 @@ import CommonTools.ini.INITool;
 import environment.Path;
 import hauptFenster.Reha;
 
-public class SysUtilKalendereinstell extends JXPanel implements KeyListener, ActionListener, FocusListener {
+public class SysUtilKalendereinstell extends JXPanel implements ActionListener, FocusListener {
 
     JButton knopf1 = null;
     JButton knopf2 = null;
     JButton knopf3 = null;
-    JComboBox refresh = null;
+    JComboBox<String> refresh = null;
     static JProgressBar Fortschritt = null;
     JRtaTextField STD1 = null;
     JRtaTextField MIN1 = null;
@@ -78,21 +76,18 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
         knopf2.setPreferredSize(new Dimension(70, 20));
         knopf2.addActionListener(this);
         knopf2.setActionCommand("abbruch");
-        knopf2.addKeyListener(this);
         knopf1 = new JButton("speichern");
         knopf1.setPreferredSize(new Dimension(70, 20));
         knopf1.addActionListener(this);
         knopf1.setActionCommand("speichern");
-        knopf1.addKeyListener(this);
         knopf3 = new JButton("entsperren");
         knopf3.addActionListener(this);
         knopf3.setActionCommand("unlock");
-        knopf3.addKeyListener(this);
 
         Fortschritt = new JProgressBar();
 
         String[] refreshtakt = { "Einzel-PC", "LAN", "DSL" };
-        refresh = new JComboBox(refreshtakt);
+        refresh = new JComboBox<String>(refreshtakt);
 
         scan = new JCheckBox();
         scan.setSelected(TKSettings.KalenderBarcode);
@@ -170,20 +165,7 @@ public class SysUtilKalendereinstell extends JXPanel implements KeyListener, Act
         return builder.getPanel();
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
 
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

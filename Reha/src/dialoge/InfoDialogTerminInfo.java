@@ -48,7 +48,7 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import systemTools.ListenerTools;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class InfoDialogTerminInfo extends InfoDialog {
 
@@ -947,7 +947,7 @@ public class InfoDialogTerminInfo extends InfoDialog {
                     try {
                         rs = (ResultSet) stmt.executeQuery(
                                 "select * from flexkc where datum = '" + DatFunk.sDatInSQL(anzeigedatum) + "' LIMIT "
-                                        + Integer.toString(KOllegenListe.maxKalZeile));
+                                        + Integer.toString(KollegenListe.maxKalZeile));
                         //// System.out.println("Nach for..."+exStatement[i]);
                         // SchnellSuche.thisClass.setLabelDatum("nach ExecuteQuery");
 
@@ -980,7 +980,7 @@ public class InfoDialogTerminInfo extends InfoDialog {
                                             uhrzeit = rs.getString("TS" + (ii + 1));
                                             sorigdatum = rs.getString(305);
                                             sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-                                            skollege = (String) KOllegenListe.getKollegenUeberReihe(ikollege);
+                                            skollege = (String) KollegenListe.getKollegenUeberReihe(ikollege);
                                             // skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 
                                             termin = DatFunk.WochenTag(sdatum) + " - " + sdatum + " - " + uhrzeit
@@ -1006,7 +1006,7 @@ public class InfoDialogTerminInfo extends InfoDialog {
                                             uhrzeit = rs.getString("TS" + (ii + 1));
                                             sorigdatum = rs.getString(305);
                                             sdatum = DatFunk.sDatInDeutsch(sorigdatum);
-                                            skollege = (String) KOllegenListe.getKollegenUeberReihe(ikollege);
+                                            skollege = (String) KollegenListe.getKollegenUeberReihe(ikollege);
                                             // skollege = (String) ParameterLaden.vKollegen.get(ikollege).get(0);
 
                                             termin = DatFunk.WochenTag(sdatum) + " - " + sdatum + " - " + uhrzeit

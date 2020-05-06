@@ -4,19 +4,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hauptFenster.Reha;
 
-public class KOllegenListe {
+public class KollegenListe {
 
-    private static final Logger logger = LoggerFactory.getLogger(KOllegenListe.class);
-    public static List<Kollegen> vKKollegen = new Vector<>();
+    private static final Logger logger = LoggerFactory.getLogger(KollegenListe.class);
+    public static List<Kollegen> vKKollegen = new LinkedList<>();
 
     static int suchen(String ss) {
         int ret = -1;
@@ -48,7 +48,7 @@ public class KOllegenListe {
         return ret;
     }
 
-    public static String getKollegenUeberDBZeile(int reihe) {
+    public static String getMatchCodeUeberDBZeile(int reihe) {
         return byDBZeile(reihe).getMatchcode();
     }
 

@@ -50,7 +50,7 @@ import oOorgTools.OOTools;
 import rehaInternalFrame.JUmsaetzeInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class Umsaetze extends JXPanel {
 
@@ -498,17 +498,17 @@ public class Umsaetze extends JXPanel {
     /**********************/
 
     private int testeKalenderUser() {
-        int lang = KOllegenListe.vKKollegen.size();
+        int lang = KollegenListe.vKKollegen.size();
         Vector<Object> vec = new Vector<Object>();
         kalUsers.clear();
         kalUsers.trimToSize();
         for (int i = 0; i < lang; i++) {
-            if (!KOllegenListe.getMatchcode(i)
+            if (!KollegenListe.getMatchcode(i)
                                .trim()
                                .equals("./.")) {
                 vec.clear();
-                vec.add(KOllegenListe.getMatchcode(i));
-                vec.add(KOllegenListe.getDBZeile(i));
+                vec.add(KollegenListe.getMatchcode(i));
+                vec.add(KollegenListe.getDBZeile(i));
 
                 kalUsers.add((Vector<Object>) vec.clone());
             }

@@ -52,7 +52,7 @@ import rehaInternalFrame.JBeteiligungInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
 import terminKalender.Kollegen;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class Beteiligung extends JXPanel {
 
@@ -168,7 +168,7 @@ public class Beteiligung extends JXPanel {
     }
 
     private Vector<Vector<String>> doKollegen() {
-        List<Kollegen> kollegen = KOllegenListe.getUrlaubsKollegen();
+        List<Kollegen> kollegen = KollegenListe.getUrlaubsKollegen();
         Vector<Vector<String>> veckolls = new Vector<Vector<String>>();
        for (Kollegen kollege : kollegen) {
 

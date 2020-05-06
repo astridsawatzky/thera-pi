@@ -32,7 +32,7 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 import environment.Path;
 import hauptFenster.Reha;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, ActionListener {
     /**
@@ -174,12 +174,12 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
 
     private void comboFuellen() {
         int von = 0;
-        int bis = KOllegenListe.vKKollegen.size();
+        int bis = KollegenListe.vKKollegen.size();
         if (defaultWA.getItemCount() > 0) {
             defaultWA.removeAllItems();
         }
         for (von = 0; von < bis; von++) {
-            defaultWA.addItem(KOllegenListe.getMatchcode(von));
+            defaultWA.addItem(KollegenListe.getMatchcode(von));
         }
         if (bis >= 0) {
             defaultWA.setSelectedItem(TKSettings.KalenderStartWADefaultUser);

@@ -45,6 +45,8 @@ import org.jdesktop.swingx.JXLabel;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -64,12 +66,11 @@ import hauptFenster.Reha;
 import systemEinstellungen.SystemConfig;
 import systemTools.ListenerTools;
 import systemTools.WinNum;
-import terminKalender.KOllegenListe;
+import terminKalender.KollegenListe;
 
 public class RoogleFenster extends RehaSmartDialog
         implements TableModelListener, FocusListener, ActionListener, ComponentListener, ChangeListener {
-    /**
-     */
+
 
     private static final long serialVersionUID = 1L;
     // public static RoogleFenster thisClass;
@@ -82,7 +83,6 @@ public class RoogleFenster extends RehaSmartDialog
     private JXPanel wahl2 = null;
     private JXPanel wahl3 = null;
     private JXPanel wahl4 = null;
-    // private JXPanel dummySuchen = null;
     private JXPanel tp1 = null;
     private SuchenSeite tp2 = null;
     private JXPanel jpLinks = null;
@@ -110,21 +110,19 @@ public class RoogleFenster extends RehaSmartDialog
     public static boolean schicht = false;
     public static boolean select = false;
     public String[] kollegenAbteilung = null;
-    public boolean[] kollegenSuchen = new boolean[KOllegenListe.maxKalZeile + 1];
+    public boolean[] kollegenSuchen = new boolean[KollegenListe.maxKalZeile + 1];
     private MouseAdapter mymouse = null;
     private JScrollPane js;
     private JScrollPane js2;
     private JScrollPane js3;
     private JScrollPane js4;
+    private Logger logger = LoggerFactory.getLogger(RoogleFenster.class);
 
-    // PinPanel pinPanel;
     public RoogleFenster(JXFrame owner, String drops) {
         super(owner, "Roogle");
         setPreferredSize(new Dimension(300, 300));
-        // thisClass = this;
         if (!(drops == null)) {
             gedropt = true;
-            // sldrops = drops.split("�");
             String[] termdrops = drops.split("°");
             sldrops = new String[] { termdrops[1], termdrops[2], termdrops[3] };
 
@@ -152,17 +150,16 @@ public class RoogleFenster extends RehaSmartDialog
         jcc = new JXPanel(new GridLayout(1, 1));
         jcc.setDoubleBuffered(true);
         jcc.setName("contentPanel");
-        // jcc.setBackground(Color.WHITE);
         jcc.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jcc.addKeyListener(this);
         jcc.addFocusListener(this);
 
-        /** darauf mu� eine Tabedpane gelegt werden (Suchkriterium und suche) ****/
+        /** darauf muss eine Tabbedpane gelegt werden (Suchkriterium und suche) ****/
         macheTabedPane1(jcc);
-        /** die Tabedpane1 mu� mit einer JXPanel belegt werden **/
+        /** die Tabedpane1 muss mit einer JXPanel belegt werden **/
 
         /**
-         * diese wird unterteilt in links=JXTable und rechts ist neue TabedPane f�r
+         * diese wird unterteilt in links=JXTable und rechts ist neue TabedPane fuer
          * diverse Einstellungen
          **/
 
@@ -193,7 +190,6 @@ public class RoogleFenster extends RehaSmartDialog
         this.addWindowListener(this);
         this.addKeyListener(this);
 
-        // tp1.requestFocusInWindow();
         tabbedPane.setSelectedComponent(tp1);
 
         SwingUtilities.invokeLater(new Runnable() {
@@ -222,15 +218,12 @@ public class RoogleFenster extends RehaSmartDialog
                 if (Reha.instance.terminpanel != null) {
                     Reha.instance.terminpanel.setUpdateVerbot(true);
                 }
-                /*
-                 * for(int i = 0;i < kollegenSuchen.length;i++){ kollegenSuchen[i]= false; }
-                 */
+
 
             }
         });
         this.validate();
         setTableSelection(jxTable, 0, 0);
-        // thisClass = this;
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -248,12 +241,10 @@ public class RoogleFenster extends RehaSmartDialog
         });
     }
 
-    /******************************************/
     public RoogleFenster getInstance() {
         return this;
     }
 
-    /******************************************/
     public void doSchliessen() {
         this.setVisible(false);
         this.dispose();
@@ -281,11 +272,10 @@ public class RoogleFenster extends RehaSmartDialog
     private void macheTabedPane1(JXPanel haupt) {
         tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-        //// System.out.println(tabbedPane.getUI());
         try {
             tabbedPane.setUI(new WindowsTabbedPaneUI());
         } catch (Exception ex) {
-            // Kein KarstenLentzsch LAF
+            logger .error("konnte TabbedPaneUI nicht setzen", ex);
         }
         tabbedPane.addKeyListener(this);
         tabbedPane.addChangeListener(this);
@@ -334,8 +324,7 @@ public class RoogleFenster extends RehaSmartDialog
         jpRechts.add(dummy, BorderLayout.NORTH);
         wahltabbedPane = new JTabbedPane();
         wahltabbedPane.setUI(new WindowsTabbedPaneUI());
-        // wahltabbedPane.setTabPlacement(SwingConstants.BOTTOM);
-        /****************/
+
         wahl1 = new JXPanel(new BorderLayout());
         js = new JScrollPane();
         js.setBorder(null);
@@ -344,15 +333,9 @@ public class RoogleFenster extends RehaSmartDialog
         js.validate();
         wahl1.add(js, BorderLayout.CENTER);
         wahl1.validate();
-        /*
-         * new Thread(){ public void run(){ js.setViewportView(wahl1()); js.validate();
-         * //wahl1.add(wahl1(),BorderLayout.CENTER); wahl1.add(js,BorderLayout.CENTER);
-         * wahl1.validate();
-         *
-         * } }.start();
-         */
+
         wahltabbedPane.addTab("Gruppenwahl", SystemConfig.hmSysIcons.get("personen16"), wahl1, "");
-        /****************/
+
         wahl2 = new JXPanel(new BorderLayout());
         js2 = new JScrollPane();
         js2.setBorder(null);
@@ -402,16 +385,6 @@ public class RoogleFenster extends RehaSmartDialog
 
         tabbedPane.addTab("Einstellungen für die Suche", SystemConfig.hmSysIcons.get("tools"), tp1,
                 "Einstellungen für den Suchlauf");
-        // tabbedPane.addTab("Einstellungen f�r die Suche", new ImageIcon(
-        // getClass().getResource("icons/tools.gif")), tp1,"Einstellungen f�r den
-        // Suchlauf");
-        /*
-         * //dummySuchen = new JXPanel(new BorderLayout());
-         *
-         * SwingUtilities.invokeLater(new Runnable(){ public void run(){
-         * dummySuchen.add(new SuchenSeite(),BorderLayout.CENTER);
-         * //dummySuchen.validate(); } }); tp2 = dummySuchen;
-         */
         tp2 = new SuchenSeite(this);
         tp2.setName("RoogleSeite2");
         tp2.setDoubleBuffered(true);
@@ -437,18 +410,10 @@ public class RoogleFenster extends RehaSmartDialog
     }
 
     class RoogleAction extends AbstractAction {
-        /**
-        *
-        */
         private static final long serialVersionUID = 1L;
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            //// System.out.println("Roogle Action test");
-            //// System.out.println(e.paramString());
-            //// System.out.println((int) e.getActionCommand().toCharArray()[0]);
-            //// System.out.println(e.getActionCommand());
-            //// System.out.println(e.getID());
             if (e.getActionCommand()
                  .equals("i")) {
                 tabbedPane.setSelectedIndex(0);
@@ -478,67 +443,40 @@ public class RoogleFenster extends RehaSmartDialog
             table.addRowSelectionInterval(row, col);
             table.addColumnSelectionInterval(row, col);
         } catch (java.lang.IllegalArgumentException e) {
-            // do nothing
+            logger.error("could not add rowselection to table",e);
         }
     }
 
-    /******************************************/
     private void TabelleSetzen(int wert) {
 
         String[] column = { "suchen", "Kollege", "Abteilung", "DBZeile", "Zeigen" };
         int i, size;
-        size = KOllegenListe.vKKollegen.size() - 1;
-        // Vector<Object[]> dataVector = new Vector<Object[]>();
-        //// System.out.println("Ingesamt Recht = "+size);
+        size = KollegenListe.vKKollegen.size() - 1;
+
         Object[][] dataVector = new Object[size][5];
-        // Object[][] meinObj = new Object[size][3];
-        //// System.out.println("Size*****************"+size);
+
         kollegenWahl = new Object[size][6];
-        kollegenAbteilung = new String[KOllegenListe.maxKalZeile + 1];
-        //// System.out.println("Derzeit maximale Kalenderzeitle =
-        //// "+ParameterLaden.maxKalZeile);
+        kollegenAbteilung = new String[KollegenListe.maxKalZeile + 1];
+
         for (i = 1; i <= size; i++) {
             dataVector[i - 1][0] = Boolean.valueOf(false);
-            dataVector[i - 1][1] = KOllegenListe.getMatchcode(i);
-            dataVector[i - 1][2] = KOllegenListe.getAbteilung(i);
-            dataVector[i - 1][3] = Integer.toString(KOllegenListe.getDBZeile(i));
-            dataVector[i - 1][4] = KOllegenListe.getZeigen(i);
+            dataVector[i - 1][1] = KollegenListe.getMatchcode(i);
+            dataVector[i - 1][2] = KollegenListe.getAbteilung(i);
+            dataVector[i - 1][3] = Integer.toString(KollegenListe.getDBZeile(i));
+            dataVector[i - 1][4] = KollegenListe.getZeigen(i);
             kollegenAbteilung[Integer.parseInt((String) dataVector[i - 1][3])] = (String) dataVector[i - 1][2];
-            /*
-             * ////System.out.println(""+i+dataVector[i-1][4]);
-             * //System.out.println("*******Beginn*****");
-             * //System.out.println(""+i+" Inhalt 1 ="+
-             * Integer.valueOf((String)dataVector[i-1][3]));
-             * //System.out.println(""+i+" Inhalt 2 ="+ new Boolean(false));
-             * //System.out.println(""+i+" Inhalt 3 ="+ dataVector[i-1][2]);
-             * //System.out.println(""+i+" Inhalt 4 ="+ dataVector[i-1][1]);
-             * //System.out.println("L�nge von KollegenWahl = "+kollegenWahl.length);
-             * //System.out.println("*******Ende*******");
-             */
-            /*
-             * kollegenWahl[ Integer.valueOf((String)dataVector[i-1][3]) -1][0] =
-             * Integer.valueOf((String)dataVector[i-1][3]); kollegenWahl[
-             * Integer.valueOf((String)dataVector[i-1][3]) -1][1] = new Boolean(false);
-             * kollegenWahl[ Integer.valueOf((String)dataVector[i-1][3]) -1][2] =
-             * dataVector[i-1][2]; kollegenWahl[ Integer.valueOf((String)dataVector[i-1][3])
-             * -1][3] = dataVector[i-1][1];
-             */
+
 
             kollegenWahl[i - 1][0] = Integer.parseInt((String) dataVector[i - 1][3]); // dbzeile
-            kollegenWahl[i - 1][1] = Boolean.valueOf(false);// gew�hlt
+            kollegenWahl[i - 1][1] = Boolean.valueOf(false);// gewaehlt
             kollegenWahl[i - 1][2] = dataVector[i - 1][2];// Abreilung
             kollegenWahl[i - 1][3] = dataVector[i - 1][1];// Matchcode
             kollegenWahl[i - 1][4] = i; // Bezug zu vKKollegen
             kollegenWahl[i - 1][5] = Integer.parseInt((String) dataVector[i - 1][3]); // getDBZeile
-            //// System.out.println("Matchcode ="+kollegenWahl[ i-1][3]+" / DBZeile =
-            //// "+kollegenWahl[ i-1][5]);
+
 
         }
-        /*
-         * for(i=1;i<=size;i++){
-         * //System.out.println(""+i+" -Kollege:"+kollegenWahl[i-1][3]+" - Kalzeile:"
-         * +kollegenWahl[i-1][0]); }
-         */
+
         myTable = new MyRoogleTable1();
 
         myTable.columnNames = column;
@@ -547,8 +485,6 @@ public class RoogleFenster extends RehaSmartDialog
         jxTable.setModel(myTable);
 
         jxTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        // jxTable.addHighlighter(new ColorHighlighter(Color.LIGHT_GRAY,
-        // Color.WHITE,HighlightPredicate.EVEN));
         jxTable.getColumn(0)
                .setMinWidth(50);
         jxTable.getColumn(0)
@@ -566,8 +502,6 @@ public class RoogleFenster extends RehaSmartDialog
 
         jxTable.setColumnControlVisible(true);
 
-        // jxTable.getColumnExt("DBZeile").setVisible(false);
-        // jxTable.getColumnExt("Zeigen").setVisible(false);
         jxTable.setEditable(true);
         jxTable.setSortable(false);
         jxTable.validate();
@@ -605,7 +539,6 @@ public class RoogleFenster extends RehaSmartDialog
         int r, c;
         r = jxTable.getSelectedRow();
         c = 0;
-        //// System.out.println(jxTable.getValueAt(r,3));
         if (jxTable.getValueAt(r, c)
                    .toString()
                    .equals("true")) {
@@ -639,9 +572,6 @@ public class RoogleFenster extends RehaSmartDialog
 
     private JPanel wahl1() {
 
-//		right:max(60dlu;p), 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu",
-        // 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20.
-//			"p, 10dlu, p, 2dlu,p, 2dlu, p, 10dlu, p, 10dlu, p, 2dlu, p, 2dlu, p, 10dlu, 2dlu, p,  2dlu , p");
         String spalten = "20dlu,p,45dlu,p";
         String reihen = "10dlu,5dlu,p,2dlu,p,2dlu,p,2dlu,p,2dlu,p,5dlu,10dlu,5dlu,50dlu,5dlu,10dlu,5dlu,p";
         FormLayout lay = new FormLayout(spalten, reihen);
@@ -653,45 +583,38 @@ public class RoogleFenster extends RehaSmartDialog
         jb.setName("KG");
         jb.setMnemonic(KeyEvent.VK_K);
         setzeActionListener(jb);
-        // jb.addActionListener(this);
         gruppenCheck[0] = jb;
         builder.add(jb, cc.xy(2, 3));
         jb = new JRtaCheckBox("Alle Masseure wählen");
         jb.setName("MA");
         jb.setMnemonic(KeyEvent.VK_M);
         setzeActionListener(jb);
-        // jb.addActionListener(this);
         gruppenCheck[1] = jb;
         builder.add(jb, cc.xy(2, 5));
         jb = new JRtaCheckBox("Alle Ergotherapeuten wählen");
         jb.setName("ER");
         jb.setMnemonic(KeyEvent.VK_E);
         setzeActionListener(jb);
-        // jb.addActionListener(this);
         gruppenCheck[2] = jb;
         builder.add(jb, cc.xy(2, 7));
         jb = new JRtaCheckBox("Alle Logopäden wählen");
         jb.setName("LO");
         jb.setMnemonic(KeyEvent.VK_L);
         setzeActionListener(jb);
-        // jb.addActionListener(this);
         gruppenCheck[3] = jb;
         builder.add(jb, cc.xy(2, 9));
         jb = new JRtaCheckBox("Alle Sporttherapeuten wählen");
         jb.setName("SP");
         jb.setMnemonic(KeyEvent.VK_O);
         setzeActionListener(jb);
-        // jb.addActionListener(this);
         gruppenCheck[4] = jb;
         builder.add(jb, cc.xy(2, 11));
 
         String[] xstring = { "10", "15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65", "70", "75", "80",
                 "85", "90", "95", "100", "105", "110", "115", "120" };
-        // String[] xstring =
-        // {"10","15","20","25","30","35","40","45","50","55","60","90","120"};
-        JComboBox jc = null;
+        JComboBox<String> jc = null;
         try {
-            jc = new JComboBox(xstring);
+            jc = new JComboBox<>(xstring);
         } catch (Exception ex) {
 
         }
@@ -700,25 +623,25 @@ public class RoogleFenster extends RehaSmartDialog
         gruppenCombo[0] = jc;
         builder.add(jc, cc.xy(4, 3));
 
-        jc = new JComboBox(xstring);
+        jc = new JComboBox<>(xstring);
         jc.setSelectedItem(SystemConfig.RoogleZeiten.get("MA"));
         jc.setName("CMA");
         gruppenCombo[1] = jc;
         builder.add(jc, cc.xy(4, 5));
 
-        jc = new JComboBox(xstring);
+        jc = new JComboBox<>(xstring);
         jc.setSelectedItem(SystemConfig.RoogleZeiten.get("ER"));
         jc.setName("CER");
         gruppenCombo[2] = jc;
         builder.add(jc, cc.xy(4, 7));
 
-        jc = new JComboBox(xstring);
+        jc = new JComboBox<>(xstring);
         jc.setSelectedItem(SystemConfig.RoogleZeiten.get("LO"));
         jc.setName("CLO");
         gruppenCombo[3] = jc;
         builder.add(jc, cc.xy(4, 9));
 
-        jc = new JComboBox(xstring);
+        jc = new JComboBox<>(xstring);
         jc.setSelectedItem(SystemConfig.RoogleZeiten.get("SP"));
         jc.setName("CSP");
         gruppenCombo[4] = jc;
@@ -757,17 +680,13 @@ public class RoogleFenster extends RehaSmartDialog
         JXButton jbut = new JXButton("alles markieren");
         jbut.setName("allesmark");
         setzeActionListener(jbut);
-        // jbut.addActionListener(this);
         setzeKeyListener(jbut);
-        // jbut.addKeyListener(this);
         dummy.add(jbut, BorderLayout.WEST);
 
         jbut = new JXButton("Markierungen löschen");
         jbut.setName("allesentmark");
         setzeActionListener(jbut);
-        // jbut.addActionListener(this);
         setzeKeyListener(jbut);
-        // jbut.addKeyListener(this);
 
         dummy.add(jbut, BorderLayout.EAST);
 
@@ -794,7 +713,6 @@ public class RoogleFenster extends RehaSmartDialog
                 zeitraumCheck[0] = jb;
                 zeitraumCheck[0].setName("sucheab");
                 setzeActionListener(zeitraumCheck[0]);
-                // zeitraumCheck[0].addActionListener(this);
                 builder.add(zeitraumCheck[0], cc.xy(2, 3));
                 jb = new JRtaCheckBox("Suche beenden bei Datum...");
                 zeitraumCheck[1] = jb;
@@ -888,7 +806,6 @@ public class RoogleFenster extends RehaSmartDialog
                 uhrselectCheck[0] = jb;
                 uhrselectCheck[0].setName("uhr1");
                 setzeActionListener(uhrselectCheck[0]);
-                // uhrselectCheck[0].addActionListener(this);
                 builder.add(uhrselectCheck[0], cc.xy(2, 3));
                 JRtaTextField tf = new JRtaTextField("STUNDEN", true);
                 uhrselectEdit[0] = tf;
@@ -904,7 +821,6 @@ public class RoogleFenster extends RehaSmartDialog
                 uhrselectCheck[1] = jb;
                 uhrselectCheck[1].setName("uhr2");
                 setzeActionListener(uhrselectCheck[1]);
-                // uhrselectCheck[1].addActionListener(this);
                 builder.add(uhrselectCheck[1], cc.xy(2, 5));
                 tf = new JRtaTextField("STUNDEN", true);
                 uhrselectEdit[2] = tf;
@@ -922,7 +838,6 @@ public class RoogleFenster extends RehaSmartDialog
                 uhrselectCheck[2] = jb;
                 uhrselectCheck[2].setName("uhr3");
                 setzeActionListener(uhrselectCheck[2]);
-                // uhrselectCheck[2].addActionListener(this);
                 builder.add(uhrselectCheck[2], cc.xy(2, 9));
                 tf = new JRtaTextField("STUNDEN", true);
                 uhrselectEdit[4] = tf;
@@ -938,7 +853,6 @@ public class RoogleFenster extends RehaSmartDialog
                 uhrselectCheck[3] = jb;
                 uhrselectCheck[3].setName("uhr4");
                 setzeActionListener(uhrselectCheck[3]);
-                // uhrselectCheck[3].addActionListener(this);
                 builder.add(uhrselectCheck[3], cc.xy(2, 11));
                 tf = new JRtaTextField("STUNDEN", true);
                 uhrselectEdit[6] = tf;
@@ -973,9 +887,6 @@ public class RoogleFenster extends RehaSmartDialog
 
     /****************************************/
     private JPanel wahl4() {
-        // private JRtaCheckBox[] schichtCheck = {null,null};
-        // private JRtaRadioButton[] schichtRadio = {null,null,null,null};
-        // private JRtaTextField[] schichtEdit = {null,null,null,null};
         SwingWorker<JPanel, Void> worker = new SwingWorker<JPanel, Void>() {
             @Override
             public JPanel doInBackground() {
@@ -1084,7 +995,6 @@ public class RoogleFenster extends RehaSmartDialog
         String[] column = { "Gr.wählen", "Gruppenname" };
         Object[][] dataVector;
         int i;
-        // size = ParameterLaden.vKKollegen.size()-1;
         int lang = SystemConfig.aRoogleGruppen.size();
         if (lang > 0) {
             dataVector = new Object[lang][2];
@@ -1093,8 +1003,6 @@ public class RoogleFenster extends RehaSmartDialog
                 dataVector[i][1] = SystemConfig.aRoogleGruppen.get(i)
                                                               .get(0)
                                                               .get(0);
-                // String[] sSet =
-                // ((ArrayList<String[]>)SystemConfig.aRoogleGruppen.get(0).get(1)).get(0);
             }
         } else {
             dataVector = null;
@@ -1136,10 +1044,7 @@ public class RoogleFenster extends RehaSmartDialog
 
     /****************************************/
     public void FensterSchliessen(String welches) {
-        //// System.out.println("Eltern-->"+this.getParent().getParent().getParent().getParent().getParent());
-        // webBrowser.dispose();
         this.dispose();
-        // super.dispose();
     }
 
     @Override
@@ -1164,7 +1069,6 @@ public class RoogleFenster extends RehaSmartDialog
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        //// System.out.println(arg0);
         JComponent jcomp = (JComponent) arg0.getSource();
         for (int i = 0; i < 1; i++) {
             String cname = jcomp.getName();
@@ -1408,7 +1312,6 @@ public class RoogleFenster extends RehaSmartDialog
     public void windowClosed(WindowEvent arg0) {
 
         if (rtp != null) {
-            //// System.out.println("Entferne Listener in windowClosed");
             rtp.removeRehaTPEventListener(this);
             rtp = null;
             ListenerTools.removeListeners(this);
@@ -1428,7 +1331,6 @@ public class RoogleFenster extends RehaSmartDialog
         mymouse = null;
 
         if (tp2 != null) {
-            //// System.out.println("Setze SuchenSeite auf null");
             ListenerTools.removeListeners(tp2);
             tp2.sucheDaten.clear();
             tp2.sucheDaten = null;
@@ -1445,7 +1347,6 @@ public class RoogleFenster extends RehaSmartDialog
             tp2 = null;
         }
         if (tp1 != null) {
-            //// System.out.println("Setze RoogleFenster auf null");
             ListenerTools.removeListeners(tp1);
             ListenerTools.removeListeners(this);
             jxTable = null;
@@ -1455,7 +1356,6 @@ public class RoogleFenster extends RehaSmartDialog
             tp1 = null;
         }
         pinPanel = null;
-        // RoogleFenster.thisClass = null;
         Reha.instance.progLoader.loescheRoogle();
 
         if (Reha.instance.terminpanel != null) {
@@ -1464,28 +1364,15 @@ public class RoogleFenster extends RehaSmartDialog
                 public void run() {
                     Reha.instance.terminpanel.aktualisieren();
                     Reha.instance.terminpanel.setUpdateVerbot(false);
-                    // TerminFenster.thisClass.getViewPanel().requestFocus();
-
-                    /*
-                     * Runtime r = Runtime.getRuntime(); r.gc(); long freeMem = r.freeMemory();
-                     * //System.out.println("Freier Speicher nach  gc():    " + freeMem);
-                     */
                 }
             }.start();
         }
-        /*
-         * Reha.instance.progLoader.loescheRoogle();
-         * //System.out.println("TerminFenster.thisClass = null "); Runtime r =
-         * Runtime.getRuntime(); r.gc(); long freeMem = r.freeMemory();
-         * //System.out.println("Freier Speicher nach  gc():    " + freeMem);
-         */
     }
 
     @Override
     public void windowClosing(WindowEvent arg0) {
 
         rtp.removeRehaTPEventListener(this);
-        //// System.out.println("In Closing***********************>");
 
     }
 
@@ -1511,7 +1398,6 @@ public class RoogleFenster extends RehaSmartDialog
 
     @Override
     public void keyPressed(KeyEvent arg0) {
-        //// System.out.println(arg0.getKeyCode()+" - "+arg0.getSource()+"Roogle");
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
             arg0.consume();
             rtp.removeRehaTPEventListener(this);
@@ -1525,10 +1411,7 @@ public class RoogleFenster extends RehaSmartDialog
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
 
-        //// System.out.println("****************Schließen des
-        //// Roogle-Fensters**************");
         String ss = this.getName();
-        //// System.out.println("Roogle - "+this.getName()+" Eltern "+ss);
         try {
             if (evt.getDetails()[0].equals(ss) && evt.getDetails()[1] == "ROT") {
                 rtp.removeRehaTPEventListener(this);
@@ -1537,7 +1420,7 @@ public class RoogleFenster extends RehaSmartDialog
 
             }
         } catch (NullPointerException ne) {
-            // System.out.println("In RoogleFenster" +evt);
+            logger.error("Fehler beim schließen des Fensters", ne);
         }
     }
 
@@ -1557,10 +1440,6 @@ public class RoogleFenster extends RehaSmartDialog
                 if (arg0.getClickCount() == 2) {
                     testeGruppenMarker();
                 }
-                if (arg0.getClickCount() == 1) {
-                    //// System.out.println(jcom);
-                    // testeGruppenMarker();
-                }
             }
         } catch (NullPointerException ne) {
         }
@@ -1579,8 +1458,6 @@ public class RoogleFenster extends RehaSmartDialog
     @Override
     public void mousePressed(MouseEvent arg0) {
 
-        // setClicks(arg0.getX(),arg0.getY());
-        //// System.out.println("XY = "+arg0.getX()+" = "+arg0.getY());
     }
 
     @Override
@@ -1593,9 +1470,9 @@ public class RoogleFenster extends RehaSmartDialog
     public void tableChanged(TableModelEvent arg0) {
 
         /*
-         * //System.out.println("Art der �nderung : "+arg0.getType());
-         * //System.out.println("�nderung in Zeile: "+arg0.getFirstRow());
-         * //System.out.println("�nderung in Spalte: "+arg0.getColumn());
+         * //System.out.println("Art der Aenderung : "+arg0.getType());
+         * //System.out.println("Aenderung in Zeile: "+arg0.getFirstRow());
+         * //System.out.println("Aenderung in Spalte: "+arg0.getColumn());
          * //System.out.println("Source: "+arg0.getSource());
          * //System.out.println("Klasse: "+arg0.getSource().getClass().getSimpleName().
          * toString() );
@@ -1605,9 +1482,9 @@ public class RoogleFenster extends RehaSmartDialog
                 .getSimpleName()
                 .toString()
                 .equals("MyRoogleGruppe")) {
-            //// System.out.println("Art der �nderung : "+arg0.getType());
-            //// System.out.println("�nderung in Zeile: "+arg0.getFirstRow());
-            //// System.out.println("�nderung in Spalte: "+arg0.getColumn());
+             //System.out.println("Art der Aenderung : "+arg0.getType());
+            //System.out.println("Aenderung in Zeile: "+arg0.getFirstRow());
+             //System.out.println("Aenderung in Spalte: "+arg0.getColumn());
             if (arg0.getType() == TableModelEvent.UPDATE) {
                 //// System.out.println("Celle wurde updated");
             }
@@ -1625,12 +1502,7 @@ public class RoogleFenster extends RehaSmartDialog
         } else {
             if (arg0.getType() == TableModelEvent.UPDATE) {
                 kollegenWahl[arg0.getFirstRow()][1] = jxTable.getValueAt(arg0.getFirstRow(), 0);
-                /*
-                 * //System.out.println(kollegenWahl[arg0.getFirstRow()][1]+" - "+
-                 * kollegenWahl[arg0.getFirstRow()][3]+" - "+
-                 * kollegenWahl[arg0.getFirstRow()][0]+" - "+
-                 * kollegenWahl[arg0.getFirstRow()][2]);
-                 */
+
             }
         }
     }
@@ -1638,32 +1510,24 @@ public class RoogleFenster extends RehaSmartDialog
     @Override
     public void focusGained(FocusEvent arg0) {
 
-        //// System.out.println("Focus erhalten "+arg0);
 
     }
 
     @Override
     public void focusLost(FocusEvent arg0) {
 
-        //// System.out.println("Focus verloren "+arg0);
     }
 
     @Override
     public void stateChanged(ChangeEvent arg0) {
 
-        // Get current tab
-        //// System.out.println(arg0);
         JTabbedPane pane = (JTabbedPane) arg0.getSource();
         int sel = pane.getSelectedIndex();
-        //// System.out.println("Tab mit Index "+sel+" wurde selektiert");
 
         if (sel == 1) {
             gewaehlt = 0;
-            //// System.out.println("Zeitraum von = "+zeitraumEdit[0].getText());
-            //// System.out.println("Zeitraum bis = "+zeitraumEdit[1].getText());
             tp2.datumEinstellen();
             tp2.tageEinstellen();
-            // final JTabbedPane xpane = pane;
             SwingUtilities.invokeLater(new Runnable() {
 
                 @Override
@@ -1681,7 +1545,7 @@ public class RoogleFenster extends RehaSmartDialog
                     hm.put("SP", Integer.parseInt((String) gruppenCombo[4].getSelectedItem()));
                     hm.put("GR", 15);
 
-                    tp2.setKollegenZeiten(((HashMap<String, Integer>) hm.clone()));
+                    tp2.setKollegenZeiten(hm);
 
                     tp2.setKollegenAbteilung(kollegenAbteilung);
 
@@ -1689,9 +1553,6 @@ public class RoogleFenster extends RehaSmartDialog
                         schicht = false;
                     }
                     if (schicht) {
-                        // public static String[] schichtUhr = {null,null};
-                        // public static boolean[] schichtWal = {false,false};
-                        // public static boolean[] schichtVor = {false,false};
                         tp2.schichtWal[0] = schichtCheck[0].isSelected();
                         tp2.schichtWal[1] = schichtCheck[1].isSelected();
                         tp2.schichtVor[0] = (schichtRadio[0].isSelected() ? true : false);
@@ -1746,12 +1607,11 @@ public class RoogleFenster extends RehaSmartDialog
                     SuchenSeite.schicht = schicht;
                     SuchenSeite.selektiv = select;
                     for (i = 0; i < lang; i++) {
-                        if (((Boolean) jxTable.getValueAt(i, 0))) {
+                        Boolean rangImkalenderSuchen = (Boolean) jxTable.getValueAt(i, 0);
+                        if (rangImkalenderSuchen) {
                             gewaehlt = gewaehlt + 1;
-                            //// System.out.println("Rang im Kalender="+(i)+" / suchen = JA");
                             kollegenSuchen[Integer.valueOf((String) jxTable.getValueAt(i, 3))] = true;
                         } else {
-                            //// System.out.println("Rang im Kalender="+(i)+" / suchen = NEIN");
                             kollegenSuchen[Integer.valueOf((String) jxTable.getValueAt(i, 3))] = false;
                         }
 
@@ -1765,7 +1625,6 @@ public class RoogleFenster extends RehaSmartDialog
                         tp2.setGewaehlt(gewaehlt);
                     }
                     tp2.setKollegenSuchen(kollegenSuchen);
-                    //// System.out.println("Beim Umschalten sind gew�hlt "+gewaehlt+" Spalten");
                 }
             });
         }
@@ -1792,11 +1651,6 @@ class MyRoogleTable1 extends AbstractTableModel {
      *
      */
     private static final long serialVersionUID = 1L;
-
-    private static final boolean DEBUG = false;
-
-    // public String[] columnNames = null;
-    // public Object[][] data = null;
 
     public Object[] values = { Boolean.valueOf(false), "", "" };
     public String[] columnNames = { "", "", "", "", "" };
@@ -1854,33 +1708,10 @@ class MyRoogleTable1 extends AbstractTableModel {
     @Override
     public void setValueAt(Object value, int row, int col) {
 
-        if (DEBUG) {
-            // System.out.println("Setting value at " + row + "," + col
-            // + " to " + value + " (an instance of "
-//            + value.getClass() + ")");
-        }
 
         data[row][col] = value;
         fireTableCellUpdated(row, col);
 
-        if (DEBUG) {
-            // System.out.println("New value of data:");
-            printDebugData();
-        }
-    }
-
-    private void printDebugData() {
-        int numRows = getRowCount();
-        int numCols = getColumnCount();
-
-        for (int i = 0; i < numRows; i++) {
-            // System.out.print(" row " + i + ":");
-            for (int j = 0; j < numCols; j++) {
-                // System.out.print(" " + data[i][j]);
-            }
-            // System.out.println();
-        }
-        // System.out.println("--------------------------");
     }
 }
 
@@ -1890,11 +1721,6 @@ class MyRoogleGruppe extends AbstractTableModel {
      *
      */
     private static final long serialVersionUID = 1L;
-
-    private static final boolean DEBUG = false;
-
-    // public String[] columnNames = null;
-    // public Object[][] data = null;
 
     public Object[] values = { Boolean.valueOf(false), "", "" };
     public String[] columnNames = { "", "", "" };
@@ -1936,8 +1762,6 @@ class MyRoogleGruppe extends AbstractTableModel {
      */
     @Override
     public boolean isCellEditable(int row, int col) {
-        // Note that the data/cell address is constant,
-        // no matter where the cell appears onscreen.
         if (col > 0) {
             return false;
         } else {
@@ -1950,32 +1774,11 @@ class MyRoogleGruppe extends AbstractTableModel {
      */
     @Override
     public void setValueAt(Object value, int row, int col) {
-        if (DEBUG) {
-            // System.out.println("Setting value at " + row + "," + col
-            // + " to " + value + " (an instance of "
-            // + value.getClass() + ")");
-        }
 
         data[row][col] = value;
         fireTableCellUpdated(row, col);
 
-        if (DEBUG) {
-            // System.out.println("New value of data:");
-            printDebugData();
-        }
     }
 
-    private void printDebugData() {
-        int numRows = getRowCount();
-        int numCols = getColumnCount();
 
-        for (int i = 0; i < numRows; i++) {
-            // System.out.print(" row " + i + ":");
-            for (int j = 0; j < numCols; j++) {
-                // System.out.print(" " + data[i][j]);
-            }
-            // System.out.println();
-        }
-        // System.out.println("--------------------------");
-    }
 }
