@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -12,16 +14,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXPanel;
 import org.slf4j.Logger;
@@ -32,7 +30,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import CommonTools.StringTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -43,16 +40,32 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import hauptFenster.AktiveFenster;
 import hauptFenster.Reha;
+import mandant.IK;
+import mitarbeiter.Mitarbeiter;
+import mitarbeiter.MitarbeiterDto;
 import terminKalender.KollegenListe;
+
+class Swingma {
+    Mitarbeiter ma;
+
+    public Swingma(Mitarbeiter ma) {
+        this.ma = ma;
+
+    }
+
+    @Override
+    public String toString() {
+        return ma.getMatchcode();
+    }
+}
 
 public class SysUtilKalenderBenutzer extends JXPanel {
     private static final Logger logger = LoggerFactory.getLogger(SysUtilKalenderBenutzer.class);
 
     private static final long serialVersionUID = 1L;
 
-
-    JComboBox   mitarbeiterAuswahl = new JComboBox();
-    JRtaTextField anrede = null;
+    JComboBox mitarbeiterAuswahl = new JComboBox();
+    JTextField anrede = null;
     JRtaTextField vorname = null;
     JRtaTextField nachname = null;
     JRtaTextField matchcode = null;
@@ -62,10 +75,6 @@ public class SysUtilKalenderBenutzer extends JXPanel {
     JRtaTextField kalzeile = null;
     JRtaTextField[] jtfeld = { null, null, null, null, null, null, null };
 
-
-
-
-
     JButton neu = null;
     JButton loeschen = null;
     JButton aendern = null;
@@ -74,16 +83,39 @@ public class SysUtilKalenderBenutzer extends JXPanel {
     JButton export = null;
     JCheckBox nichtAnzeigen = new JCheckBox("");
 
-    String[] abteil = new String[6 + SystemConfig.oGruppen.gruppenNamen.size()];
+    String[] abteil = new String[6 + abteilungAnzahlFromConfig()];
+
+    private int abteilungAnzahlFromConfig() {
+        try {
+
+            return SystemConfig.oGruppen.gruppenNamen.size();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    private List<Mitarbeiter> ma;
 
     public ArrayList<String> kollegenDaten = new ArrayList<String>();
-    private boolean lneu = false;
-    private int speichernKalZeile = 0;
+    private IK ik;
 
+    /**
+     * @deprecated Use {@link #SysUtilKalenderBenutzer(IK)} instead
+     */
     SysUtilKalenderBenutzer() {
+        this(Reha.instance.mandant()
+                          .ik());
+    }
+
+    SysUtilKalenderBenutzer(IK ik) {
         super(new BorderLayout());
+        this.ik = ik;
+
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 0));
+
         setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
+
+        ma = new MitarbeiterDto(ik).all();
 
         abteil[0] = " ";
         abteil[1] = "KG";
@@ -91,7 +123,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         abteil[3] = "ER";
         abteil[4] = "LO";
         abteil[5] = "SP";
-        for (int i = 6; i < 6 + SystemConfig.oGruppen.gruppenNamen.size(); i++) {
+        for (int i = 6; i < 6 + abteilungAnzahlFromConfig(); i++) {
             abteil[i] = SystemConfig.oGruppen.gruppenNamen.get(i - 6);
         }
 
@@ -132,31 +164,31 @@ public class SysUtilKalenderBenutzer extends JXPanel {
 
         neu = new JButton("neu");
         neu.setPreferredSize(new Dimension(70, 20));
-        neu.addActionListener(e->neuHandeln());
+        neu.addActionListener(e -> neuHandeln());
         neu.setActionCommand("neu");
         neu.addKeyListener(keyadapter);
 
         loeschen = new JButton("löschen");
         loeschen.setPreferredSize(new Dimension(70, 20));
-        loeschen.addActionListener(e->loeschenHandeln());
+        loeschen.addActionListener(e -> loeschenHandeln());
         loeschen.setActionCommand("loeschen");
         loeschen.addKeyListener(keyadapter);
 
         aendern = new JButton("ändern");
         aendern.setPreferredSize(new Dimension(70, 20));
-        aendern.addActionListener(e-> aendernHandeln());
+        aendern.addActionListener(e -> aendernHandeln());
         aendern.setActionCommand("aendern");
         aendern.addKeyListener(keyadapter);
 
         speichern = new JButton("speichern");
         speichern.setPreferredSize(new Dimension(70, 20));
-        speichern.addActionListener(e->speichernHandeln());
+        speichern.addActionListener(e -> speichernHandeln());
         speichern.setActionCommand("speichern");
         speichern.addKeyListener(keyadapter);
 
         abbrechen = new JButton("abbrechen");
         abbrechen.setPreferredSize(new Dimension(70, 20));
-        abbrechen.addActionListener(e->abbrechenHandeln());
+        abbrechen.addActionListener(e -> abbrechenHandeln());
         abbrechen.setActionCommand("abbrechen");
         abbrechen.addKeyListener(keyadapter);
 
@@ -169,7 +201,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                 new Thread() {
                     @Override
                     public void run() {
-                        listeHandeln();
+                        listeDrucken();
                     }
                 }.start();
 
@@ -178,8 +210,6 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         export.setActionCommand("liste");
         export.addKeyListener(keyadapter);
 
-
-
         builder.addLabel("Benutzer auswählen", cc.xy(1, 1));
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -187,7 +217,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                 comboFuellen();
             }
         });
-        mitarbeiterAuswahl.addActionListener(e-> comboAuswerten());
+        mitarbeiterAuswahl.addActionListener(e -> comboAuswerten());
         mitarbeiterAuswahl.setActionCommand("comboaktion");
         builder.add(mitarbeiterAuswahl, cc.xyw(3, 1, 3));
         builder.addLabel("         MA-Liste", cc.xy(7, 1));
@@ -200,6 +230,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         vorname = new JRtaTextField("nix", true);
         builder.add(vorname, cc.xyw(3, 5, 3));
         builder.addLabel("Nachname", cc.xy(1, 7));
+
         nachname = new JRtaTextField("nix", true);
         builder.add(nachname, cc.xyw(3, 7, 3));
         builder.addSeparator("Kalenderstammdaten", cc.xyw(1, 9, 9));
@@ -232,11 +263,52 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         builder.add(speichern, cc.xy(7, 18));
         builder.add(abbrechen, cc.xy(9, 18));
 
-        knopfGedoense(new int[] { 1, 0, 0, 0, 0 });
-        felderEinschalten(false);
+        buttonsEmptyMode();
+        eingabenDeactivate();
         builder.getPanel()
                .addKeyListener(keyadapter);
+
+        Swingma[] swingmaarray = ma.stream()
+                                   .map(Swingma::new)
+                                   .collect(Collectors.toList())
+                                   .toArray(new Swingma[0]);
+
+        List<Abteilung> all = new AbteilungDTO(ik).all();
+        abteilCombo = new JComboBox<Abteilung>(all.toArray(new Abteilung[all.size()]));
+
+        maComboBox = new JComboBox<Swingma>(swingmaarray);
+        maComboBox.addItemListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    Swingma item = (Swingma) e.getItem();
+                    Mitarbeiter ma = item.ma;
+                    fillForm(ma);
+                }
+
+            }
+
+        });
+
+        builder.add(maComboBox, cc.xy(7, 5));
+        builder.add(abteilCombo, cc.xy(7, 13));
         return builder.getPanel();
+
+    }
+
+    private void fillForm(Mitarbeiter ma) {
+        anrede.setText(ma.getAnrede());
+        vorname.setText(ma.getVorname());
+        nachname.setText(ma.getNachname());
+        matchcode.setText(ma.getMatchcode());
+        arbstd.setText(String.valueOf(ma.getAstunden()));
+        deftakt.setText(String.valueOf(ma.getDeftakt()));
+        abteilung.setSelectedItem(ma.getAbteilung());
+
+        abteilCombo.getModel()
+                   .setSelectedItem(new Abteilung(ma.getAbteilung()));
+        nichtAnzeigen.setSelected(ma.isNicht_zeig());
 
     }
 
@@ -265,18 +337,26 @@ public class SysUtilKalenderBenutzer extends JXPanel {
 
     private void comboAuswerten() {
         if (mitarbeiterAuswahl.getSelectedIndex() > 0) {
-            holeKollege((String) mitarbeiterAuswahl.getSelectedItem());
+            holeKollegeByMatchcode((String) mitarbeiterAuswahl.getSelectedItem());
             felderFuellen(kollegenDaten);
-            knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
+            buttonsViewMode();
         } else {
             kollegenDaten.clear();
             for (int i = 0; i <= 8; i++) {
                 kollegenDaten.add("");
             }
             felderFuellen(kollegenDaten);
-            knopfGedoense(new int[] { 1, 0, 0, 0, 0 });
+            buttonsEmptyMode();
         }
+        eingabenDeactivate();
+    }
+
+    private void eingabenDeactivate() {
         felderEinschalten(false);
+    }
+
+    private void buttonsEmptyMode() {
+        knopfGedoense(new int[] { 1, 0, 0, 0, 0 });
     }
 
     private void felderEinschalten(boolean einschalten) {
@@ -306,29 +386,42 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         deftakt.setText(felder.get(6));
         kalzeile.setText(felder.get(7));
         nichtAnzeigen.setSelected((felder.get(8)
-                               .equals("T") ? true : false));
+                                         .equals("T") ? true : false));
+    }
+
+    private void felderleeren() {
+        maComboBox.setSelectedItem(null);
+        anrede.setText("");
+        vorname.setText("");
+        nachname.setText("");
+        matchcode.setText("");
+        arbstd.setText("");
+        deftakt.setText("");
+        abteilung.setSelectedItem("");
+
+        abteilCombo.getModel()
+                   .setSelectedItem(null);
+        nichtAnzeigen.setSelected(false);
+
     }
 
     private void neuHandeln() {
-        if (KollegenListe.vKKollegen.size() == 99) {
+
+        felderleeren();
+
+        if (ma.size() == 99) {
             JOptionPane.showMessageDialog(null,
                     "Es existieren bereits 99 Kalenderbenutzer! Derezeit ist die Benutzeranzahl auf 99 limitiert!");
             return;
         }
-        lneu = true;
-        knopfGedoense(new int[] { 0, 0, 0, 1, 1 });
-        kollegenDaten.clear();
-        for (int i = 0; i <= 8; i++) {
-            kollegenDaten.add("");
-        }
-        felderEinschalten(true);
-        felderFuellen(kollegenDaten);
+        buttonsEditMode();
+        eingabenActivate();
         anrede.requestFocus();
     }
 
     private void speichernHandeln() {
         if (matchcode.getText()
-                     .trim()
+
                      .contains(",")) {
             JOptionPane.showMessageDialog(null, "Ein Komma im Feld 'Matchcode' ist nicht erlaubt");
             return;
@@ -339,77 +432,79 @@ public class SysUtilKalenderBenutzer extends JXPanel {
             JOptionPane.showMessageDialog(null, "Das Feld 'Matchcode' darf nicht leer sein");
             return;
         }
-        boolean lneueZeile = false;
-        String statement = null;
-        if (lneu) {
-            if (matchVorhanden(matchcode.getText()
-                                        .trim())) {
-                JOptionPane.showMessageDialog(null, "Dieser 'Matchcode' ist bereits vorhanden");
-                return;
+        if (maComboBox.getSelectedIndex() == -1) {
+
+            Optional<Mitarbeiter> maxzeile = ma.stream()
+                                               .max(Comparator.comparingInt(Mitarbeiter::getKalzeile));
+            System.out.println(maxzeile);
+
+            int neueKalenderZeile;
+            Integer groesteKalenderzeile = maxzeile.map(mitarbeiter -> mitarbeiter.getKalzeile())
+                                                   .orElse(0);
+            if (ma.size() > groesteKalenderzeile) {
+                neueKalenderZeile = groesteKalenderzeile + 1;
+
+            } else {
+
+                neueKalenderZeile = findKalzeilenGapFromDB();
             }
 
-            lneueZeile = testObNeueKalZeile();
-            if (lneueZeile) {
-                statement = "Insert into kollegen2 set Anrede='" + StringTools.Escaped(anrede.getText()
-                                                                                             .trim())
-                        + "', " + "Vorname='" + StringTools.Escaped(vorname.getText()
-                                                                           .trim())
-                        + "', " + "Nachname='" + StringTools.Escaped(nachname.getText()
-                                                                             .trim())
-                        + "', " + "Matchcode='" + StringTools.Escaped(matchcode.getText()
-                                                                               .trim())
-                        + "', " + "Astunden='" + arbstd.getText()
-                                                       .trim()
-                                                       .replace(",", ".")
-                        + "', " + "Abteilung='" + abteilung.getSelectedItem() + "', " + "Deftakt='" + (deftakt.getText()
-                                                                                                              .trim()
-                                                                                                              .equals("")
-                                                                                                                      ? "0"
-                                                                                                                      : deftakt.getText())
-                        + "', " + "Nicht_Zeig='" + (nichtAnzeigen.isSelected() ? "T" : "F") + "', " + "Kalzeile='"
-                        + Integer.valueOf(speichernKalZeile)
-                                 .toString()
-                        + "'";
-            } else {
-                statement = "Insert into kollegen2 set Anrede='"
-                        + anrede.getText() + "', " + "Vorname='" + vorname.getText() + "', " + "Nachname='"
-                        + nachname.getText() + "', " + "Matchcode='" + matchcode.getText() + "', " + "Astunden='"
-                        + arbstd.getText()
-                                .trim()
-                                .replace(",", ".")
-                        + "', " + "Abteilung='" + abteilung.getSelectedItem() + "', " + "Deftakt='" + (deftakt.getText()
-                                                                                                              .trim()
-                                                                                                              .equals("")
-                                                                                                                      ? "0"
-                                                                                                                      : deftakt.getText())
-                        + "', " + "Nicht_Zeig='" + (nichtAnzeigen.isSelected() ? "T" : "F") + "', " + "Kalzeile='"
-                        + Integer.valueOf(speichernKalZeile)
-                                 .toString()
-                        + "'";
+            ;
+
+            Mitarbeiter neuerMitarbeiter = new Mitarbeiter();
+            neuerMitarbeiter.setAnrede(anrede.getText()
+                                             .trim());
+            neuerMitarbeiter.setVorname(vorname.getText()
+                                               .trim());
+            neuerMitarbeiter.setNachname(nachname.getText()
+                                                 .trim());
+            neuerMitarbeiter.setMatchcode(matchcode.getText()
+                                                   .trim());
+            double astunden;
+
+            try {
+                astunden = Double.parseDouble(arbstd.getText()
+                                                    .trim()
+                                                    .replace(",", "."));
+            } catch (NumberFormatException e) {
+                astunden = 0.0;
             }
+
+            neuerMitarbeiter.setAstunden(astunden);
+            neuerMitarbeiter.setKalzeile(neueKalenderZeile);
+
+            System.out.println(neuerMitarbeiter);
+            new MitarbeiterDto(ik).save(neuerMitarbeiter);
         } else {
-            statement = "Update kollegen2 set Anrede='" + anrede.getText() + "', " + "Vorname='" + vorname.getText()
-                    + "', " + "Nachname='" + nachname.getText() + "', " + "Matchcode='" + matchcode.getText() + "', "
-                    + "Astunden='" + arbstd.getText()
-                                           .trim()
-                                           .replace(",", ".")
-                    + "', " + "Abteilung='" + abteilung.getSelectedItem() + "', " + "Deftakt='" + (deftakt.getText()
-                                                                                                          .trim()
-                                                                                                          .equals("")
-                                                                                                                  ? "0"
-                                                                                                                  : deftakt.getText())
-                    + "', " + "Nicht_Zeig='" + (nichtAnzeigen.isSelected() ? "T" : "F") + "'" + "where Kalzeile='"
-                    + kalzeile.getText() + "'";
+            Mitarbeiter currentMa = maComboBox.getItemAt(maComboBox.getSelectedIndex()).ma;
+            currentMa.setAnrede(anrede.getText()
+                                      .trim());
+            currentMa.setVorname(vorname.getText()
+                                        .trim());
+            currentMa.setNachname(nachname.getText()
+                                          .trim());
+            currentMa.setMatchcode(matchcode.getText()
+                                            .trim());
+            double astunden;
+
+            try {
+                astunden = Double.parseDouble(arbstd.getText()
+                                                    .trim()
+                                                    .replace(",", "."));
+            } catch (NumberFormatException e) {
+                astunden = 0.0;
+            }
+            currentMa.setAstunden(astunden);
+            new MitarbeiterDto(ik).save(currentMa);
         }
-        knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
-        lneu = false;
-        executeStatement(statement);
+
+        buttonsViewMode();
         String aktuell = matchcode.getText();
         KollegenListe.Init();
         comboFuellen();
         mitarbeiterAuswahl.setSelectedItem(aktuell);
         comboAuswerten();
-        felderEinschalten(false);
+        eingabenDeactivate();
         JComponent termin = AktiveFenster.getFensterAlle("TerminFenster");
         if (termin != null) {
             Reha.instance.terminpanel.setCombosOutside();
@@ -419,9 +514,17 @@ public class SysUtilKalenderBenutzer extends JXPanel {
 
     }
 
-    private void loeschenHandeln() {
+    private int findKalzeilenGapFromDB() {
+
+        return new MitarbeiterDto(ik).findgap();
+    }
+
+    private void buttonsViewMode() {
         knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
-        lneu = false;
+    }
+
+    private void loeschenHandeln() {
+        buttonsViewMode();
         String statement = null;
         int anfrage = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kalenderbenutzer wirklich löschen",
                 "Achtung wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
@@ -446,52 +549,46 @@ public class SysUtilKalenderBenutzer extends JXPanel {
     }
 
     private void aendernHandeln() {
-        felderEinschalten(true);
-        knopfGedoense(new int[] { 0, 0, 0, 1, 1 });
+        eingabenActivate();
+        buttonsEditMode();
         anrede.requestFocus();
-        lneu = false;
+    }
+
+    private void eingabenActivate() {
+        felderEinschalten(true);
+    }
+
+    private void buttonsEditMode() {
+        knopfGedoense(new int[] { 0, 0, 0, 1, 1 });
     }
 
     private void abbrechenHandeln() {
-        knopfGedoense(new int[] { 1, 0, 1, 0, 0 });
-        lneu = false;
+        buttonsEmptyMode();
+        felderleeren();
+        eingabenDeactivate();
         for (int i = 0; i <= 7; i++) {
             kollegenDaten.add("");
         }
-        felderEinschalten(false);
         comboAuswerten();
         SystemInit.abbrechen();
     }
 
-    private void listeHandeln() {
+    private void listeDrucken() {
         IDocumentService documentService = null;
         try {
             documentService = Reha.officeapplication.getDocumentService();
-        } catch (OfficeApplicationException e) {
-            e.printStackTrace();
-        }
-        IDocument document = null;
-        try {
-            document = documentService.constructNewDocument(IDocument.WRITER, DocumentDescriptor.DEFAULT);
-        } catch (NOAException e) {
-            e.printStackTrace();
-        }
-        ITextDocument textDocument = (ITextDocument) document;
-        ITextTable textTable = null;
-        try {
+
+            ITextDocument textDocument = (ITextDocument) documentService.constructNewDocument(IDocument.WRITER,
+                    DocumentDescriptor.DEFAULT);
+            ITextTable textTable = null;
+
             textTable = textDocument.getTextTableService()
-                                    .constructTextTable(KollegenListe.vKKollegen.size() + 1, 3);
-        } catch (TextException e) {
-            e.printStackTrace();
-        }
-        try {
+                                    .constructTextTable(1, 3);
+
             textDocument.getTextService()
                         .getTextContentService()
                         .insertTextContent(textTable);
-        } catch (TextException e) {
-            e.printStackTrace();
-        }
-        try {
+
             textTable.getCell(0, 0)
                      .getTextService()
                      .getText()
@@ -504,82 +601,71 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                      .getTextService()
                      .getText()
                      .setText("Zeile im Kalender");
-        } catch (TextException exception) {
+
+            for (Mitarbeiter mitarbeiter : ma) {
+                textTable.addRow(1);
+                textTable.getCell(0, textTable.getRowCount() - 1)
+                         .getTextService()
+                         .getText()
+                         .setText(String.valueOf(textTable.getRowCount() - 1));
+                textTable.getCell(1, textTable.getRowCount() - 1)
+                         .getTextService()
+                         .getText()
+                         .setText(mitarbeiter.getMatchcode());
+                textTable.getCell(2, textTable.getRowCount() - 1)
+                         .getTextService()
+                         .getText()
+                         .setText(String.valueOf(mitarbeiter.getKalzeile()));
+
+            }
+
+        } catch (TextException | OfficeApplicationException | NOAException exception) {
             exception.printStackTrace();
         }
+    }
 
-        for (int i = 0; i < KollegenListe.vKKollegen.size(); i++) {
-            try {
-                textTable.getCell(0, i + 1)
-                         .getTextService()
-                         .getText()
-                         .setText(Integer.valueOf(i)
-                                         .toString());
-                textTable.getCell(1, i + 1)
-                         .getTextService()
-                         .getText()
-                         .setText(KollegenListe.getMatchcode(i));
-                textTable.getCell(2, i + 1)
-                         .getTextService()
-                         .getText()
-                         .setText(Integer.valueOf(KollegenListe.getDBZeile(i))
-                                         .toString());
-            } catch (TextException exception) {
-                exception.printStackTrace();
+    KeyListener keyadapter = new KeyAdapter() {
+
+        @Override
+        public void keyPressed(KeyEvent arg0) {
+            if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+                arg0.consume();
             }
-        }
-    }
 
-
- KeyListener keyadapter = new KeyAdapter() {
-
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-        if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-            arg0.consume();
         }
 
-    }
+        @Override
+        public void keyReleased(KeyEvent arg0) {
+            if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+                arg0.consume();
+            }
 
-    @Override
-    public void keyReleased(KeyEvent arg0) {
-        if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-            arg0.consume();
         }
 
-    }
+        @Override
+        public void keyTyped(KeyEvent arg0) {
+            if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
+                arg0.consume();
+            }
 
-    @Override
-    public void keyTyped(KeyEvent arg0) {
-        if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-            arg0.consume();
         }
+    };
 
-    }
- };
-    private boolean testObNeueKalZeile() {
-        boolean ret = false;
-        if ((KollegenListe.vKKollegen.size() >= (KollegenListe.maxKalZeile + 1))) {
-            // Es muss eine neue Kalenderzeile belegt werden.
-            speichernKalZeile = KollegenListe.maxKalZeile + 1;
-            ret = true;
-            return ret;
+    private JComboBox<Abteilung> abteilCombo;
 
-        } else {
-            // Es muss nach einer freien also unbelegten Kalenderzeile gesucht werden.
-            testeKollegen();
-            ret = false;
-        }
-        return ret;
-    }
+    private JComboBox<Swingma> maComboBox;
 
     /***********************************************************/
-    private void holeKollege(String match) {
-        try( Statement  stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                ResultSet   rs = stmt.executeQuery("SELECT * FROM kollegen2 where Matchcode='" + match + "'");
+    private void holeKollegeByMatchcode(String match) {
 
+        Optional<Mitarbeiter> ma = new MitarbeiterDto(Reha.instance.mandant()
+                                                                   .ik()).byMatchcode(match);
 
-                )
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery("SELECT * FROM kollegen2 where Matchcode='" + match + "'");
+
+        )
 
         {
 
@@ -607,7 +693,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
             }
 
         } catch (SQLException ex) {
-            logger.error("Something bad happened here",ex);
+            logger.error("Something bad happened here", ex);
         }
     }
 
@@ -622,12 +708,10 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                 if (durchlauf == 0) {
                     itest = rs.getInt("KALZEILE");
                     if (itest > 1) {
-                        speichernKalZeile = 1;
                         break;
                     }
                 } else {
                     if (rs.getInt("KALZEILE") > (itest + 1)) {
-                        speichernKalZeile = itest + 1;
                         break;
                     } else {
                         itest = rs.getInt("KALZEILE");
@@ -672,6 +756,19 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         }
 
         return ret;
+    }
+
+    public static void main(String[] args) {
+        SysUtilKalenderBenutzer comp = new SysUtilKalenderBenutzer(new IK("123456789"));
+        JFrame frame = new JFrame();
+        ;
+        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.setPreferredSize(new Dimension(600, 600));
+        frame.add(comp);
+        frame.pack();
+        frame.show();
+        ;
+
     }
 
 }

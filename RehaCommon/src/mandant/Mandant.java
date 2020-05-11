@@ -43,4 +43,8 @@ public class Mandant {
         return Objects.equals(ik, other.ik) && Objects.equals(name, other.name);
     }
 
+    public IK ik() {
+        return ik;
+    }
+
 }

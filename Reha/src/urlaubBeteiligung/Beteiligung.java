@@ -168,7 +168,7 @@ public class Beteiligung extends JXPanel {
     }
 
     private Vector<Vector<String>> doKollegen() {
-        List<Kollegen> kollegen = KollegenListe.getUrlaubsKollegen();
+        List<Kollegen> kollegen = KollegenListe.getKollegen();
         Vector<Vector<String>> veckolls = new Vector<Vector<String>>();
        for (Kollegen kollege : kollegen) {
 

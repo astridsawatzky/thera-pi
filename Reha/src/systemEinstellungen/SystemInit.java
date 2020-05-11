@@ -344,7 +344,7 @@ public class SystemInit extends JXPanel implements TreeSelectionListener {
                     doAccessDenied();
                     return;
                 }
-                jxInhaltRechts = new SysUtilKalenderBenutzer();
+                jxInhaltRechts = new SysUtilKalenderBenutzer(Reha.instance.mandant().ik());
                 jxInhaltRechts.setVisible(true);
                 jxRechts.add(jxInhaltRechts, BorderLayout.CENTER);
                 jxRechts.revalidate();

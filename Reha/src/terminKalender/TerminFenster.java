@@ -26,7 +26,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Observable;
 import java.util.TooManyListenersException;
 import java.util.Vector;
 
@@ -37,7 +36,6 @@ import org.jdesktop.swingx.border.DropShadowBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.therapi.reha.patient.AktuelleRezepte;
-
 
 import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
@@ -143,10 +141,10 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     Ansicht aktAnsicht;
 
-    private Block terminangaben = new Block( "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
-            "" /* Endzeit */, "" /* BlockNr. */ );
-    private Block terminrueckgabe = new Block(  "" /* Name */, "" /* RezeptNr. */ , "" /* Startzeit */ , "" /* Dauer */,
-            "" /* Endzeit */, "" /* BlockNr. */ );
+    private Block terminangaben = new Block( "" , "" , ""  , "" ,
+            "", ""  );
+    private Block terminrueckgabe = new Block(  "" , ""  , "" , "",
+            "", "" );
 
     private int focus[] = { 0, 0 };
     private boolean hasFocus;
@@ -2312,8 +2310,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             if ((SystemConfig.logVTermine || SystemConfig.logAlleTermine) && update) {
                 if (SystemConfig.logVTermine) {
                     if ((terminangaben.getName0().startsWith("V?") || terminrueckgabe.getName0().startsWith("V?"))) {
-                        // final String[] talt = terminangaben;
-                        // final String[] tneu = terminrueckgabe;
+
                         schreibeLog(terminangaben, terminrueckgabe);
                     }
                 } else if (SystemConfig.logAlleTermine) {

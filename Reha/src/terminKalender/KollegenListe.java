@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import hauptFenster.Reha;
+import mitarbeiter.Mitarbeiter;
+import mitarbeiter.MitarbeiterDto;
 
 public class KollegenListe {
 
@@ -94,32 +96,27 @@ public class KollegenListe {
         }
 
         vKKollegen.add(Kollegen.NULL_KOLLEGE);
-        try (Statement stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                ResultSet kollegenRs = stmt.executeQuery(
-                        "SELECT Matchcode,Nachname,Nicht_Zeig,Kalzeile,Abteilung FROM kollegen2");) {
 
-            while (kollegenRs.next()) {
-                String matchCode = Optional.ofNullable(kollegenRs.getString("Matchcode"))
-                                           .orElse("");
-                String nachname = kollegenRs.getString("Nachname");
-                String nichtzeig = Optional.ofNullable(kollegenRs.getString("Nicht_Zeig"))
-                                           .orElse("F");
-                String abteilung = kollegenRs.getString("Abteilung");
-                int kalZeile = Integer.parseInt(kollegenRs.getString("Kalzeile"));
-                if (kalZeile > maxKalZeile) {
-                    maxKalZeile = kalZeile;
-                }
-                Kollegen kollege = new Kollegen(matchCode, nachname, kalZeile, abteilung, nichtzeig);
-                vKKollegen.add(kollege);
-            }
-            Collections.sort(vKKollegen);
-
-        } catch (SQLException ex) {
-            logger.error("Laden der Mitarbeiter fehlgeschlagen.", ex);
-        }
+        ladeKollegenAusDB(obj);
     }
 
-    public static List<Kollegen> getUrlaubsKollegen() {
+    private static void ladeKollegenAusDB(Reha reha) {
+
+        List<Mitarbeiter> mitarbeiterListe= new MitarbeiterDto(reha.mandant().ik()).all();
+
+        for (Mitarbeiter mitarbeiter : mitarbeiterListe) {
+            vKKollegen.add(Kollegen.of(mitarbeiter));
+            if (mitarbeiter.getKalzeile() > maxKalZeile) {
+                maxKalZeile = mitarbeiter.getKalzeile();
+                }
+        }
+
+
+        Collections.sort(vKKollegen);
+
+    }
+
+    public static List<Kollegen> getKollegen() {
         return vKKollegen;
     }
 

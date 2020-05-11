@@ -336,10 +336,10 @@ public class Reha implements RehaEventListener {
 
     public void startWithMandantSet() {
 
-        aktIK = mandant.ikDigitString();
-        aktMandant = mandant.name();
+        aktIK = mandant().ikDigitString();
+        aktMandant = mandant().name();
 
-        String iniPath = Path.Instance.getProghome() + "ini/" + mandant.ikDigitString() + "/";
+        String iniPath = Path.Instance.getProghome() + "ini/" + mandant().ikDigitString() + "/";
 
         INITool.init(iniPath);
         logger.info("Insgesamt sind " + INITool.anzahlInisInDB() + " INI-Dateien in der Tabelle inidatei abgelegt");
@@ -2323,6 +2323,10 @@ public class Reha implements RehaEventListener {
 
     ComponentListener getComponentListener() {
         return componentListener;
+    }
+
+    public Mandant mandant() {
+        return mandant;
     }
 
 }

@@ -2932,7 +2932,6 @@ public class SuchenSeite extends JXPanel
         String aktDatum = null;
         ArrayList<String> atermine = new ArrayList<String>();
         public ArrayList<String> sperrDatum = new ArrayList<String>();
-        // private ArrayList<String> sperrDatum = new ArrayList<String>();
         ImageIcon img, img2;
         int schichtArt = -1;
         int selektivArt = -1;
@@ -3019,7 +3018,6 @@ public class SuchenSeite extends JXPanel
                         String test = "";
                         if (getGewaehlt() <= 20) {
                             test = macheStatement(sqlAkt);
-                            //// System.out.println(test);
                         } else {
                             test = "select * from flexkc where datum = '" + sqlAkt + "' LIMIT "
                                     + KollegenListe.maxKalZeile;
@@ -3028,7 +3026,7 @@ public class SuchenSeite extends JXPanel
 
                         while (rs.next()) {
 
-                            /* in Spalte 301 steht die Anzahl der belegten Bl�cke */
+                            /* in Spalte 301 steht die Anzahl der belegten Bloecke */
                             int belegt = rs.getInt(301);
 
                             String name = "";

@@ -3,6 +3,7 @@ package mitarbeiter;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,8 +13,6 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.sql.Statement;
 
 import mandant.IK;
 import sql.DatenquellenFactory;
@@ -28,6 +27,8 @@ public class MitarbeiterDto {
     public MitarbeiterDto(IK ik) {
         this.ik = ik;
     }
+
+
 
     public List<Mitarbeiter> all() {
 
@@ -116,6 +117,45 @@ public class MitarbeiterDto {
         ma.id = rs.getInt("ID");
         ma.isdirty = false;
         return ma;
+    }
+
+    boolean delete(Mitarbeiter ma) {
+
+        String sql = "DELETE FROM kollegen2 where id =" + ma.id + ";";
+
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();
+                Statement stmt = con.createStatement()) {
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            logger.error("coud not delete Mitarbeiter " + ma, e);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean save(Mitarbeiter ma) {
+        String sql;
+        if (ma.isNew()) {
+            sql = generateInsertSQL(ma);
+
+        } else {
+            sql = generateUpdateSQL(ma);
+        }
+
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();
+                Statement stmt = con.createStatement()) {
+            stmt.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs =  stmt.getGeneratedKeys();
+            if (rs.next()) {
+                ma.id=  rs.getInt(1);
+            }
+            System.out.println(ma);
+        } catch (SQLException e) {
+            logger.error("coud not save Mitarbeiter " + ma, e);
+            return false;
+        }
+        return true;
+
     }
 
     void save(List<Mitarbeiter> mitarbeiterListe) {
@@ -259,6 +299,26 @@ public class MitarbeiterDto {
 
     private String einklammern(String value) {
         return value == null ? null : "'" + value + "'";
+    }
+
+
+
+    public int findgap() {
+      String sql = "SELECT  ko.KALZEILE + 1 as gap , mi.KALZEILE  FROM    kollegen2 ko LEFT JOIN  kollegen2 mi on ko.KALZEILE+1=mi.KALZEILE WHERE mi.KALZEILE IS  NULL  order by gap;";
+      try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();) {
+          ResultSet rs = con.createStatement()
+                            .executeQuery(sql);
+          while (rs.next()) {
+
+             return  rs.getInt("gap");
+
+          }
+
+      } catch (SQLException e) {
+          logger.error("could not retrieve kalenzeilengap from Database", e);
+
+      }
+      return 0;
     }
 
 }

@@ -6,22 +6,24 @@ import java.util.Comparator;
 
 public class Mitarbeiter implements Comparable<Mitarbeiter> {
 
-    String    anrede ;
-    String    vorname ;
-    String    nachname;
-    String    strasse;
-    String    plz;
-    String    ort;
-    String    telefon1;
-    String    telfon2;
+
+
+    String    anrede="" ;
+    String    vorname ="";
+    String    nachname="";
+    String    strasse="";
+    String    plz="";
+    String    ort="";
+    String    telefon1="";
+    String    telfon2="";
     LocalDate geboren;
-    String    matchcode;
-    String    ztext;
+    String    matchcode ="./.";
+    String    ztext="";
     int    kal_teil;
     int    pers_nr;
     double   astunden;
     boolean    nicht_zeig;// enum('t','f') null default null,
-    String    abteilung;
+    String    abteilung="";
     int    deftakt;
     int    kalzeile;
     int    id =0;
@@ -173,6 +175,15 @@ public class Mitarbeiter implements Comparable<Mitarbeiter> {
         return compareByMatchcode.thenComparing(compareByAge)
                                  .compare(this, other);
 
+    }
+    @Override
+    public String toString() {
+        return "Mitarbeiter [anrede=" + anrede + ", vorname=" + vorname + ", nachname=" + nachname + ", strasse="
+                + strasse + ", plz=" + plz + ", ort=" + ort + ", telefon1=" + telefon1 + ", telfon2=" + telfon2
+                + ", geboren=" + geboren + ", matchcode=" + matchcode + ", ztext=" + ztext + ", kal_teil=" + kal_teil
+                + ", pers_nr=" + pers_nr + ", astunden=" + astunden + ", nicht_zeig=" + nicht_zeig + ", abteilung="
+                + abteilung + ", deftakt=" + deftakt + ", kalzeile=" + kalzeile + ", id=" + id + ", isdirty=" + isdirty
+                + "]";
     }
 
 
