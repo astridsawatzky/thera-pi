@@ -68,12 +68,12 @@ class SysUtilKalenderBenutzer extends JXPanel {
     private JFormattedTextField arbstd = null;
     private JRtaTextField deftakt = null;
 
-    private JButton neu = null;
-    private JButton loeschen = null;
-    private JButton aendern = null;
-    private JButton speichern = null;
-    private JButton abbrechen = null;
-    private JButton export = null;
+    private JButton neuBt = null;
+    private JButton loeschenBt = null;
+    private JButton aendernBt = null;
+    private JButton speichernBt = null;
+    private JButton abbrechenBt = null;
+    private JButton exportBt = null;
     private JCheckBox nichtAnzeigen = new JCheckBox("");
 
     private JComboBox<Abteilung> abteilCombo;
@@ -136,39 +136,39 @@ class SysUtilKalenderBenutzer extends JXPanel {
                .setOpaque(false);
         CellConstraints cc = new CellConstraints();
 
-        neu = new JButton("neu");
-        neu.setPreferredSize(new Dimension(70, 20));
-        neu.addActionListener(e -> neuHandeln());
-        neu.setActionCommand("neu");
-        neu.addKeyListener(keyadapter);
+        neuBt = new JButton("neu");
+        neuBt.setPreferredSize(new Dimension(70, 20));
+        neuBt.addActionListener(e -> neuHandeln());
+        neuBt.setActionCommand("neu");
+        neuBt.addKeyListener(keyadapter);
 
-        loeschen = new JButton("löschen");
-        loeschen.setPreferredSize(new Dimension(70, 20));
-        loeschen.addActionListener(e -> loeschenHandeln());
-        loeschen.setActionCommand("loeschen");
-        loeschen.addKeyListener(keyadapter);
+        loeschenBt = new JButton("löschen");
+        loeschenBt.setPreferredSize(new Dimension(70, 20));
+        loeschenBt.addActionListener(e -> loeschenHandeln());
+        loeschenBt.setActionCommand("loeschen");
+        loeschenBt.addKeyListener(keyadapter);
 
-        aendern = new JButton("ändern");
-        aendern.setPreferredSize(new Dimension(70, 20));
-        aendern.addActionListener(e -> aendernHandeln());
-        aendern.setActionCommand("aendern");
-        aendern.addKeyListener(keyadapter);
+        aendernBt = new JButton("ändern");
+        aendernBt.setPreferredSize(new Dimension(70, 20));
+        aendernBt.addActionListener(e -> aendernHandeln());
+        aendernBt.setActionCommand("aendern");
+        aendernBt.addKeyListener(keyadapter);
 
-        speichern = new JButton("speichern");
-        speichern.setPreferredSize(new Dimension(70, 20));
-        speichern.addActionListener(e -> speichernHandeln());
-        speichern.setActionCommand("speichern");
-        speichern.addKeyListener(keyadapter);
+        speichernBt = new JButton("speichern");
+        speichernBt.setPreferredSize(new Dimension(70, 20));
+        speichernBt.addActionListener(e -> speichernHandeln());
+        speichernBt.setActionCommand("speichern");
+        speichernBt.addKeyListener(keyadapter);
 
-        abbrechen = new JButton("abbrechen");
-        abbrechen.setPreferredSize(new Dimension(70, 20));
-        abbrechen.addActionListener(e -> abbrechenHandeln());
-        abbrechen.setActionCommand("abbrechen");
-        abbrechen.addKeyListener(keyadapter);
+        abbrechenBt = new JButton("abbrechen");
+        abbrechenBt.setPreferredSize(new Dimension(70, 20));
+        abbrechenBt.addActionListener(e -> abbrechenHandeln());
+        abbrechenBt.setActionCommand("abbrechen");
+        abbrechenBt.addKeyListener(keyadapter);
 
-        export = new JButton("export");
-        export.setPreferredSize(new Dimension(70, 20));
-        export.addActionListener(new ActionListener() {
+        exportBt = new JButton("export");
+        exportBt.setPreferredSize(new Dimension(70, 20));
+        exportBt.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -176,12 +176,12 @@ class SysUtilKalenderBenutzer extends JXPanel {
 
             }
         });
-        export.setActionCommand("liste");
-        export.addKeyListener(keyadapter);
+        exportBt.setActionCommand("liste");
+        exportBt.addKeyListener(keyadapter);
 
         builder.addLabel("Benutzer auswählen", cc.xy(1, 1));
         builder.addLabel("         MA-Liste", cc.xy(7, 1));
-        builder.add(export, cc.xy(9, 1));
+        builder.add(exportBt, cc.xy(9, 1));
 
         builder.addLabel("Anrede", cc.xy(1, 3));
         anrede = new JRtaTextField("nix", true);
@@ -218,11 +218,11 @@ class SysUtilKalenderBenutzer extends JXPanel {
 
         builder.addSeparator("", cc.xyw(1, 16, 9));
 
-        builder.add(neu, cc.xy(1, 18));
-        builder.add(loeschen, cc.xy(3, 18));
-        builder.add(aendern, cc.xy(5, 18));
-        builder.add(speichern, cc.xy(7, 18));
-        builder.add(abbrechen, cc.xy(9, 18));
+        builder.add(neuBt, cc.xy(1, 18));
+        builder.add(loeschenBt, cc.xy(3, 18));
+        builder.add(aendernBt, cc.xy(5, 18));
+        builder.add(speichernBt, cc.xy(7, 18));
+        builder.add(abbrechenBt, cc.xy(9, 18));
 
         buttonsEmptyMode();
         builder.getPanel()
@@ -247,13 +247,12 @@ class SysUtilKalenderBenutzer extends JXPanel {
 
                 if (swMitarbeiter == null) {
                     felderleeren();
-                    felderEinschalten(false);
                     buttonsEmptyMode();
                 } else {
                     fillForm(swMitarbeiter.getMitarbeiter());
                     buttonsViewMode();
-                    felderEinschalten(false);
                 }
+                eingabenDeactivate();
             }
 
         });
@@ -280,12 +279,19 @@ class SysUtilKalenderBenutzer extends JXPanel {
 
     }
 
+    /**
+     * @deprecated Use {@link #knopfGedoense(boolean,boolean, boolean, boolean, boolean)} instead
+     */
     private void knopfGedoense(int[] knopfstatus) {
-        neu.setEnabled((knopfstatus[0] == 0 ? false : true));
-        loeschen.setEnabled((knopfstatus[1] == 0 ? false : true));
-        aendern.setEnabled((knopfstatus[2] == 0 ? false : true));
-        speichern.setEnabled((knopfstatus[3] == 0 ? false : true));
-        abbrechen.setEnabled((knopfstatus[4] == 0 ? false : true));
+        knopfGedoense(knopfstatus[0] == 0 ? false : true, knopfstatus[1] == 0 ? false : true, knopfstatus[2] == 0 ? false : true, knopfstatus[3] == 0 ? false : true, knopfstatus[4] == 0 ? false : true);
+    }
+
+    private void knopfGedoense(boolean neu, boolean loeschen, boolean aendern, boolean speichern, boolean abbrechen) {
+        neuBt.setEnabled(neu);
+        loeschenBt.setEnabled(loeschen);
+        aendernBt.setEnabled(aendern);
+        speichernBt.setEnabled(speichern);
+        abbrechenBt.setEnabled(abbrechen);
     }
 
     private void eingabenDeactivate() {
@@ -293,8 +299,16 @@ class SysUtilKalenderBenutzer extends JXPanel {
     }
 
     private void buttonsEmptyMode() {
-        knopfGedoense(new int[] { 1, 0, 0, 0, 0 });
+        knopfGedoense(true, false,false,false,false);
     }
+
+    private void buttonsViewMode() {
+        knopfGedoense(true, true, true,false,false);
+    }
+    private void buttonsEditMode() {
+        knopfGedoense(false,false, false,true,true);
+    }
+
 
     private void felderEinschalten(boolean einschalten) {
         anrede.setEnabled(einschalten);
@@ -439,10 +453,6 @@ class SysUtilKalenderBenutzer extends JXPanel {
         return new MitarbeiterDto(ik).findgap();
     }
 
-    private void buttonsViewMode() {
-        knopfGedoense(new int[] { 1, 1, 1, 0, 0 });
-    }
-
     private void loeschenHandeln() {
         buttonsViewMode();
         int anfrage = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kalenderbenutzer wirklich löschen",
@@ -475,9 +485,6 @@ class SysUtilKalenderBenutzer extends JXPanel {
         felderEinschalten(true);
     }
 
-    private void buttonsEditMode() {
-        knopfGedoense(new int[] { 0, 0, 0, 1, 1 });
-    }
 
     private void abbrechenHandeln() {
         Object selectedItem = maComboBox.getSelectedItem();

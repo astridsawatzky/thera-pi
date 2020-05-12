@@ -55,7 +55,7 @@ import terminKalender.KollegenListe;
 public class Umsaetze extends JXPanel {
 
     /**
-     * 
+     *
      */
 
     private static final long serialVersionUID = -906652242216759628L;
@@ -498,7 +498,7 @@ public class Umsaetze extends JXPanel {
     /**********************/
 
     private int testeKalenderUser() {
-        int lang = KollegenListe.vKKollegen.size();
+        int lang = KollegenListe.size();
         Vector<Object> vec = new Vector<Object>();
         kalUsers.clear();
         kalUsers.trimToSize();

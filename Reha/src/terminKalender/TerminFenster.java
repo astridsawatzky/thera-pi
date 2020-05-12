@@ -495,17 +495,19 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         oCombo[welche].addActionListener(new java.awt.event.ActionListener() {
             @Override
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                int wahl = KollegenListe.suchen((String) oCombo[welche].getSelectedItem());
+                String matchcode = (String) oCombo[welche].getSelectedItem();
+                int wahl = KollegenListe.suchen(matchcode);
+                Kollegen kolWahl= KollegenListe.getByMatchcode(matchcode);
                 if (!oCombo[welche].isPopupVisible()) {
                     oCombo[welche].setPopupVisible(false);
                 }
                 if (TerminFenster.this.aktAnsicht == Ansicht.NORMAL) {
                     try {
-                        belegung[welche] = KollegenListe.vKKollegen.get(wahl).Reihe - 1;
+                        belegung[welche] = KollegenListe.vKKollegen.get(wahl).getReihe() - 1;
                         oSpalten[welche].datenZeichnen(vTerm, belegung[welche]);
                         oSpalten[aktiveSpalte[2]].requestFocus();
                         if (welche == 0) {
-                            wochenbelegung = KollegenListe.vKKollegen.get(wahl).Reihe;
+                            wochenbelegung = KollegenListe.vKKollegen.get(wahl).getReihe();
                         }
 
                     } catch (java.lang.ArrayIndexOutOfBoundsException ex) {
@@ -514,7 +516,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 } else if (TerminFenster.this.aktAnsicht == Ansicht.WOCHE) {
                     try {
                         if (welche == 0) {
-                            wochenbelegung = KollegenListe.vKKollegen.get(wahl).Reihe;
+                            wochenbelegung = KollegenListe.vKKollegen.get(wahl).getReihe();
                             if ("".equals(wocheErster)) {
                                 ansichtStatement(aktuellerTag, aktAnsicht);
                             } else {
@@ -527,7 +529,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
                 } else if (TerminFenster.this.aktAnsicht == Ansicht.MASKE) {
 
-                    maskenbelegung = KollegenListe.vKKollegen.get(wahl).Reihe;
+                    maskenbelegung = KollegenListe.vKKollegen.get(wahl).getReihe();
                     String maskenbehandler = (maskenbelegung < 10 ? "0" + maskenbelegung + "BEHANDLER"
                             : Integer.toString(maskenbelegung) + "BEHANDLER");
                     String stmtmaske = "select * from masken where behandler = '" + maskenbehandler + "' ORDER BY art";
@@ -565,13 +567,13 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             oCombo[i].removeAllItems();
         }
         for (von = 0; von < bis; von++) {
-            oCombo[0].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[1].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[2].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[3].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[4].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[5].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[6].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
+            oCombo[0].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[1].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[2].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[3].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[4].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[5].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[6].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
         }
         oCombo[0].setMaximumRowCount(35);
         oCombo[0].setSelectedItem("./.");
@@ -604,13 +606,13 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         // String cwert = null;
         for (von = 0; von < bis; von++) {
             // cwert = ParameterLaden.vKKollegen.get(von).Matchcode;
-            oCombo[0].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[1].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[2].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[3].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[4].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[5].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
-            oCombo[6].addItem(KollegenListe.vKKollegen.get(von).Matchcode);
+            oCombo[0].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[1].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[2].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[3].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[4].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[5].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
+            oCombo[6].addItem(KollegenListe.vKKollegen.get(von).getMatchcode());
         }
         oCombo[0].setMaximumRowCount(35);
         oCombo[0].setSelectedItem("./.");
@@ -2546,7 +2548,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             behandler = wochenbelegung;
             if (behandler == 0) {
                 behandler = KollegenListe.vKKollegen.get(
-                        KollegenListe.suchen((String) oCombo[0].getSelectedItem())).Reihe;
+                        KollegenListe.suchen((String) oCombo[0].getSelectedItem())).getReihe();
             }
             sbehandler = behandler < 10 ? "0" + behandler : "" + Integer.toString(behandler);
             serster = DatFunk.WocheErster(stag);

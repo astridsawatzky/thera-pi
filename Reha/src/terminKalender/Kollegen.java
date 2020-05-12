@@ -5,29 +5,31 @@ import java.util.Comparator;
 import mitarbeiter.Mitarbeiter;
 
 public class Kollegen implements Comparable<Kollegen> {
-    String Matchcode;
-    private String Nachname;
-    String Abteilung;
-    String Zeigen;
-    int Reihe;
-    static final Kollegen NULL_KOLLEGE = new Kollegen("./.", "", 0, "", "F");
-
-    Kollegen(String m, String n, int r, String a, String z) {
-        Matchcode = m;
-        Nachname = n;
-        Reihe = r;
-        Abteilung = a;
-        Zeigen = z;
+    private Mitarbeiter ma;
+    public Mitarbeiter getMa() {
+        return ma;
     }
 
-    private Kollegen() {
-        //for converter
+   private String Abteilung;
+  private  String Zeigen;
+    private int Reihe;
+    static final Mitarbeiter NULL_MITARBEITER = new Mitarbeiter();
+    static {
+        NULL_MITARBEITER.setMatchcode("./.");
+        NULL_MITARBEITER.setKalzeile(0);
+        NULL_MITARBEITER.setAbteilung("");
+        NULL_MITARBEITER.setNicht_zeig(false);
+    }
+    static final Kollegen NULL_KOLLEGE = Kollegen.of(NULL_MITARBEITER);
+
+
+
+    private Kollegen(Mitarbeiter mitarbeiter) {
+        ma = mitarbeiter;
     }
 
     static final Kollegen of(Mitarbeiter ma) {
-        Kollegen neuerKollege = new Kollegen();
-        neuerKollege.Matchcode=ma.getMatchcode();
-        neuerKollege.Nachname=ma.getNachname();
+        Kollegen neuerKollege = new Kollegen(ma);
         neuerKollege.Abteilung =ma.getAbteilung();
         neuerKollege.Zeigen=ma.isNicht_zeig()?"F":"T";
         neuerKollege.Reihe=ma.getKalzeile();
@@ -36,22 +38,36 @@ public class Kollegen implements Comparable<Kollegen> {
 
     }
 
-    private static final Comparator<Kollegen> compareByMatchcode = Comparator.comparing(k -> k.Matchcode);
-    private static final Comparator<Kollegen> compareByAge = Comparator.comparing(k -> k.Reihe);
+    private static final Comparator<Kollegen> compareByMitarbeiter = Comparator.comparing(Kollegen::getMa);
 
     @Override
-    public int compareTo(Kollegen o) {
+    public int compareTo(Kollegen other) {
 
-        return compareByMatchcode.thenComparing(compareByAge)
-                                 .compare(this, o);
+       return  compareByMitarbeiter.compare(this,other);
 
     }
 
     public String getMatchcode() {
-        return Matchcode;
+        return ma.getMatchcode();
     }
 
     public String getKalenderZeile() {
-      return  String.format("%02d", Reihe);
+      return  String.format("%02d", ma.getKalzeile());
+    }
+
+    String getAbteilung() {
+        return ma.getAbteilung();
+    }
+
+    String getZeigen() {
+        return ma.isNicht_zeig()?"T":"F";
+    }
+
+    int getReihe() {
+        return Reihe;
+    }
+
+    void setReihe(int reihe) {
+        Reihe = reihe;
     }
 }

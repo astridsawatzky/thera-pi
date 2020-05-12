@@ -1,12 +1,8 @@
 package terminKalender;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +13,8 @@ import mitarbeiter.MitarbeiterDto;
 
 public class KollegenListe {
 
+
+
     private static final Logger logger = LoggerFactory.getLogger(KollegenListe.class);
     public static List<Kollegen> vKKollegen = new LinkedList<>();
 
@@ -25,7 +23,7 @@ public class KollegenListe {
         int lang = vKKollegen.size();
         int i;
         for (i = 0; i < lang; i++) {
-            if (vKKollegen.get(i).Matchcode.equals(ss)) {
+            if (vKKollegen.get(i).getMatchcode().equals(ss)) {
                 ret = i;
                 break;
             }
@@ -34,7 +32,7 @@ public class KollegenListe {
     }
 
     public static int getDBZeile(int kollege) {
-        return vKKollegen.get(kollege).Reihe;
+        return vKKollegen.get(kollege).getReihe();
     }
 
     public static String getKollegenUeberReihe(int reihe) {
@@ -42,8 +40,8 @@ public class KollegenListe {
         int lang = vKKollegen.size();
         int i;
         for (i = 0; i < lang; i++) {
-            if (vKKollegen.get(i).Reihe == reihe) {
-                ret = vKKollegen.get(i).Matchcode;
+            if (vKKollegen.get(i).getReihe() == reihe) {
+                ret = vKKollegen.get(i).getMatchcode();
                 break;
             }
         }
@@ -54,9 +52,9 @@ public class KollegenListe {
         return byDBZeile(reihe).getMatchcode();
     }
 
-    public static Kollegen byDBZeile(int reihe) {
+    private static Kollegen byDBZeile(int reihe) {
         for (Kollegen kollegen : vKKollegen) {
-            if (kollegen.Reihe == reihe) {
+            if (kollegen.getReihe() == reihe) {
                 return kollegen;
             }
         }
@@ -64,22 +62,22 @@ public class KollegenListe {
     }
 
     public static String getMatchcode(int kollege) {
-        return vKKollegen.get(kollege).Matchcode;
+        return vKKollegen.get(kollege).getMatchcode();
     }
 
     public static String getZeigen(int kollege) {
-        return vKKollegen.get(kollege).Zeigen;
+        return vKKollegen.get(kollege).getZeigen();
     }
 
     public static String getAbteilung(int kollege) {
-        return vKKollegen.get(kollege).Abteilung;
+        return vKKollegen.get(kollege).getAbteilung();
     }
 
     public static String searchAbteilung(int dbzeile) {
         String sret = "";
         for (int i = 0; i < vKKollegen.size(); i++) {
-            if (vKKollegen.get(i).Reihe == dbzeile) {
-                sret = vKKollegen.get(i).Abteilung;
+            if (vKKollegen.get(i).getReihe() == dbzeile) {
+                sret = vKKollegen.get(i).getAbteilung();
                 break;
             }
         }
@@ -118,6 +116,14 @@ public class KollegenListe {
 
     public static List<Kollegen> getKollegen() {
         return vKKollegen;
+    }
+
+    public static int size() {
+        return vKKollegen.size();
+    }
+
+    public static Kollegen getByMatchcode(String matchcode) {
+        return Kollegen.of(new MitarbeiterDto(Reha.instance.mandant().ik()).byMatchcode(matchcode).get());
     }
 
 }
