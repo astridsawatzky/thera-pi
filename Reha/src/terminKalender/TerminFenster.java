@@ -4694,9 +4694,6 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     }
 
-    String getSwSetWahl() {
-        return swSetWahl;
-    }
 
     void setSwSetWahl(String setName) {
         this.swSetWahl = setName;

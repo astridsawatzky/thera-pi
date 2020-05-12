@@ -12,7 +12,7 @@ public class Kollegen implements Comparable<Kollegen> {
     int Reihe;
     static final Kollegen NULL_KOLLEGE = new Kollegen("./.", "", 0, "", "F");
 
-    public Kollegen(String m, String n, int r, String a, String z) {
+    Kollegen(String m, String n, int r, String a, String z) {
         Matchcode = m;
         Nachname = n;
         Reihe = r;
@@ -24,7 +24,7 @@ public class Kollegen implements Comparable<Kollegen> {
         //for converter
     }
 
-    public static final Kollegen of(Mitarbeiter ma) {
+    static final Kollegen of(Mitarbeiter ma) {
         Kollegen neuerKollege = new Kollegen();
         neuerKollege.Matchcode=ma.getMatchcode();
         neuerKollege.Nachname=ma.getNachname();

@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +39,7 @@ import mitarbeiter.MitarbeiterDto;
 import terminKalender.KollegenListe;
 
 class Swingma {
-    Mitarbeiter ma;
+    private Mitarbeiter ma;
 
     public Swingma(Mitarbeiter ma) {
         this.ma = ma;
@@ -57,30 +56,31 @@ class Swingma {
     }
 }
 
-public class SysUtilKalenderBenutzer extends JXPanel {
+class SysUtilKalenderBenutzer extends JXPanel {
     private static final Logger logger = LoggerFactory.getLogger(SysUtilKalenderBenutzer.class);
 
     private static final long serialVersionUID = 1L;
 
-    JTextField anrede = null;
-    JRtaTextField vorname = null;
-    JRtaTextField nachname = null;
-    JRtaTextField matchcode = null;
-    JFormattedTextField arbstd = null;
-    JRtaTextField deftakt = null;
-    JRtaTextField kalzeile = null;
+    private JTextField anrede = null;
+    private JRtaTextField vorname = null;
+    private JRtaTextField nachname = null;
+    private JRtaTextField matchcode = null;
+    private JFormattedTextField arbstd = null;
+    private JRtaTextField deftakt = null;
 
-    JButton neu = null;
-    JButton loeschen = null;
-    JButton aendern = null;
-    JButton speichern = null;
-    JButton abbrechen = null;
-    JButton export = null;
-    JCheckBox nichtAnzeigen = new JCheckBox("");
+    private JButton neu = null;
+    private JButton loeschen = null;
+    private JButton aendern = null;
+    private JButton speichern = null;
+    private JButton abbrechen = null;
+    private JButton export = null;
+    private JCheckBox nichtAnzeigen = new JCheckBox("");
+
+    private JComboBox<Abteilung> abteilCombo;
+    private JComboBox<Swingma> maComboBox;
 
     private List<Mitarbeiter> ma;
 
-    public ArrayList<String> kollegenDaten = new ArrayList<String>();
     private IK ik;
 
     /**
@@ -212,7 +212,6 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                 "Dieses Feld ist für eine spätere Erweiterung gedacht und hat derzeit noch keinen Einfluß auf den Programmablauf!");
         builder.add(deftakt, cc.xyw(3, 15, 1));
 
-        kalzeile = new JRtaTextField("NORMAL", true);
 
         builder.addLabel("nicht anzeigen", cc.xy(7, 15));
         builder.add(nichtAnzeigen, cc.xy(9, 15));
@@ -538,13 +537,13 @@ public class SysUtilKalenderBenutzer extends JXPanel {
                     }
 
                 } catch (TextException | OfficeApplicationException | NOAException exception) {
-                    exception.printStackTrace();
+                   logger.error("Could not create Mitarbeiterlistendokument",exception);
                 }
             }
         }.start();
     }
 
-    KeyListener keyadapter = new KeyAdapter() {
+    private KeyListener keyadapter = new KeyAdapter() {
 
         @Override
         public void keyPressed(KeyEvent arg0) {
@@ -571,20 +570,7 @@ public class SysUtilKalenderBenutzer extends JXPanel {
         }
     };
 
-    private JComboBox<Abteilung> abteilCombo;
 
-    private JComboBox<Swingma> maComboBox;
 
-    public static void main(String[] args) {
-        SysUtilKalenderBenutzer comp = new SysUtilKalenderBenutzer(new IK("123456789"));
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(600, 600));
-        frame.add(comp);
-        frame.pack();
-        frame.show();
-        ;
-
-    }
 
 }
