@@ -119,7 +119,7 @@ public class MitarbeiterDto {
         return ma;
     }
 
-    boolean delete(Mitarbeiter ma) {
+    public boolean delete(Mitarbeiter ma) {
 
         String sql = "DELETE FROM kollegen2 where id =" + ma.id + ";";
 
@@ -149,7 +149,6 @@ public class MitarbeiterDto {
             if (rs.next()) {
                 ma.id=  rs.getInt(1);
             }
-            System.out.println(ma);
         } catch (SQLException e) {
             logger.error("coud not save Mitarbeiter " + ma, e);
             return false;

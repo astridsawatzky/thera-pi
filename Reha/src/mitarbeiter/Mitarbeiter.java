@@ -166,7 +166,8 @@ public class Mitarbeiter implements Comparable<Mitarbeiter> {
         return id == 0;
     }
 
-    private static final Comparator<Mitarbeiter> compareByMatchcode = Comparator.comparing(m -> m.matchcode);
+
+    private static final Comparator<Mitarbeiter> compareByMatchcode = Comparator.comparing(m -> m.matchcode.toLowerCase());
     private static final Comparator<Mitarbeiter> compareByAge = Comparator.comparing(m -> m.kalzeile);
 
     @Override
