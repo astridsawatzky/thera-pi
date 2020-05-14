@@ -10,9 +10,7 @@ public class Kollegen implements Comparable<Kollegen> {
         return ma;
     }
 
-   private String Abteilung;
-  private  String Zeigen;
-    private int Reihe;
+
     static final Mitarbeiter NULL_MITARBEITER = new Mitarbeiter();
     static {
         NULL_MITARBEITER.setMatchcode("./.");
@@ -30,9 +28,6 @@ public class Kollegen implements Comparable<Kollegen> {
 
     static final Kollegen of(Mitarbeiter ma) {
         Kollegen neuerKollege = new Kollegen(ma);
-        neuerKollege.Abteilung =ma.getAbteilung();
-        neuerKollege.Zeigen=ma.isNicht_zeig()?"F":"T";
-        neuerKollege.Reihe=ma.getKalzeile();
 
         return neuerKollege;
 
@@ -64,10 +59,7 @@ public class Kollegen implements Comparable<Kollegen> {
     }
 
     int getReihe() {
-        return Reihe;
+        return ma.getKalzeile();
     }
 
-    void setReihe(int reihe) {
-        Reihe = reihe;
-    }
 }

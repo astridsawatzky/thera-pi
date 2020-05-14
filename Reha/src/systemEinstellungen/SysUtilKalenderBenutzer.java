@@ -1,18 +1,27 @@
 package systemEinstellungen;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FocusTraversalPolicy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 
 import org.jdesktop.swingx.JXPanel;
 import org.slf4j.Logger;
@@ -127,9 +136,10 @@ class SysUtilKalenderBenutzer extends JXPanel {
 
     private JPanel getForm1() {
         // 1. 2. 3. 4. 5. 6. 7. 8. 9.
-        FormLayout lay = new FormLayout("right:max(60dlu;p), 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu",
+        FormLayout lay = new FormLayout("right:max(60dlu;p), 4dlu, 40dlu, 4dlu, 40dlu, 4dlu, 40dlu, 40dlu, 40dlu",
                 // 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20.
-                "p, 10dlu, p, 2dlu,p, 2dlu, p, 10dlu, p, 10dlu, p, 2dlu, p, 2dlu, p, 10dlu, 10dlu, p,  2dlu , p");
+                "p, 10dlu, p, 2dlu,p, 2dlu, p, 10dlu, p,  2dlu, p, 10dlu,"
+                        + " 10dlu, p, 2dlu, p, 2dlu, p, 10dlu, 10dlu, p,  2dlu , p");
         PanelBuilder builder = new PanelBuilder(lay);
         builder.setDefaultDialogBorder();
         builder.getPanel()
@@ -178,9 +188,8 @@ class SysUtilKalenderBenutzer extends JXPanel {
         });
         exportBt.setActionCommand("liste");
         exportBt.addKeyListener(keyadapter);
-
         builder.addLabel("Benutzer auswählen", cc.xy(1, 1));
-        builder.addLabel("         MA-Liste", cc.xy(7, 1));
+        builder.addLabel("    MA-Liste", cc.xy(7, 1));
         builder.add(exportBt, cc.xy(9, 1));
 
         builder.addLabel("Anrede", cc.xy(1, 3));
@@ -194,35 +203,63 @@ class SysUtilKalenderBenutzer extends JXPanel {
         nachname = new JRtaTextField("nix", true);
         builder.add(nachname, cc.xyw(3, 7, 3));
 
-        builder.addSeparator("Kalenderstammdaten", cc.xyw(1, 9, 9));
-        builder.addLabel("Matchcode", cc.xy(1, 11));
+        builder.addLabel("geboren", cc.xy(7, 3));
+
+        geboren = new JFormattedTextField(newDateMask());
+        geboren.setDisabledTextColor(Color.red);
+        builder.add(geboren, cc.xy(9, 3));
+
+        builder.addLabel("Stra\u00dfe", cc.xy(7, 5));
+        strasse = new JTextField();
+        strasse.setDisabledTextColor(Color.red);
+        builder.add(strasse, cc.xyw(8, 5, 2));
+
+        builder.addLabel("PLZ   Ort", cc.xy(7, 7));
+        plz = new JTextField();
+        plz.setDisabledTextColor(Color.red);
+        builder.add(plz, cc.xy(8, 7));
+        ort = new JTextField();
+        ort.setDisabledTextColor(Color.red);
+        builder.add(ort, cc.xy(9, 7));
+
+        builder.addLabel("Tel", cc.xy(1, 9));
+        telefon1 = new JTextField();
+        telefon1.setDisabledTextColor(Color.red);
+        builder.add(telefon1, cc.xyw(3, 9, 3));
+        builder.addLabel("Tel", cc.xy(7, 9));
+        telefon2 = new JTextField();
+        telefon2.setDisabledTextColor(Color.red);
+        builder.add(telefon2, cc.xyw(8, 9, 2));
+
+        builder.addSeparator("Kalenderstammdaten", cc.xyw(1, 12, 9));
+        builder.addLabel("Matchcode", cc.xy(1, 14));
 
         matchcode = new JRtaTextField("nix", true);
-        builder.add(matchcode, cc.xyw(3, 11, 3));
-        builder.addLabel("Arbeitsstd.", cc.xy(1, 13));
+        builder.add(matchcode, cc.xyw(3, 14, 3));
+        builder.addLabel("Arbeitsstd.", cc.xy(1, 16));
 
         arbstd = new JRtaTextField("FL", true, "10.2", "RECHTS");
-        builder.add(arbstd, cc.xyw(3, 13, 1));
+        builder.add(arbstd, cc.xyw(3, 16, 1));
 
-        builder.addLabel("        Abteilung", cc.xy(7, 11));
-        builder.addLabel("Default-Takt", cc.xy(1, 15));
+        builder.addLabel("        Abteilung", cc.xy(7, 14));
+
+        builder.addLabel("Default-Takt", cc.xy(1, 18));
 
         deftakt = new JRtaTextField("ZAHLEN", true);
         deftakt.setToolTipText(
                 "Dieses Feld ist für eine spätere Erweiterung gedacht und hat derzeit noch keinen Einfluß auf den Programmablauf!");
-        builder.add(deftakt, cc.xyw(3, 15, 1));
+        builder.add(deftakt, cc.xyw(3, 18, 1));
 
+        builder.addLabel("nicht anzeigen", cc.xy(7, 18));
+        builder.add(nichtAnzeigen, cc.xy(9, 18));
 
-        builder.addLabel("nicht anzeigen", cc.xy(7, 15));
-        builder.add(nichtAnzeigen, cc.xy(9, 15));
+        builder.addSeparator("", cc.xyw(1, 19, 9));
 
-        builder.addSeparator("", cc.xyw(1, 16, 9));
-
-        builder.add(neuBt, cc.xy(1, 18));
-        builder.add(loeschenBt, cc.xy(3, 18));
-        builder.add(aendernBt, cc.xy(5, 18));
-        builder.add(speichernBt, cc.xy(7, 18));
-        builder.add(abbrechenBt, cc.xy(9, 18));
+        builder.add(neuBt, cc.xy(1, 21));
+        builder.add(loeschenBt, cc.xy(3, 21));
+        builder.add(aendernBt, cc.xy(5, 21));
+        builder.add(speichernBt, cc.xy(8, 21));
+        builder.add(abbrechenBt, cc.xy(9, 21));
 
         buttonsEmptyMode();
         builder.getPanel()
@@ -258,17 +295,64 @@ class SysUtilKalenderBenutzer extends JXPanel {
         });
 
         builder.add(maComboBox, cc.xyw(3, 1, 3));
-        builder.add(abteilCombo, cc.xy(9, 11));
+        builder.add(abteilCombo, cc.xy(9, 14));
 
         eingabenDeactivate();
+
+        traversal();
+        builder.getPanel().setFocusCycleRoot(true);
+        builder.getPanel()
+               .setFocusTraversalPolicy(traversal());
         return builder.getPanel();
 
+    }
+
+    private KalBenutzerTraversalPolicy traversal() {
+        List<Component> components = new LinkedList<>();
+        components.add(maComboBox);
+        components.add(anrede);
+        components.add(vorname);
+        components.add(nachname);
+        components.add(geboren);
+        components.add(strasse);
+        components.add(plz);
+        components.add(ort);
+        components.add(telefon1);
+        components.add(telefon2);
+        components.add(matchcode);
+        components.add(abteilCombo);
+        components.add(arbstd);
+        components.add(deftakt);
+        components.add(nichtAnzeigen);
+        return new KalBenutzerTraversalPolicy(components);
+    }
+
+    private MaskFormatter newDateMask() {
+        MaskFormatter mf = null;
+        try {
+            mf = new MaskFormatter("##.##.####");
+        } catch (ParseException e1) {
+            // Cannot happen
+        }
+        return mf;
     }
 
     private void fillForm(Mitarbeiter ma) {
         anrede.setText(ma.getAnrede());
         vorname.setText(ma.getVorname());
         nachname.setText(ma.getNachname());
+
+        strasse.setText(ma.getStrasse());
+        plz.setText(ma.getPlz());
+        ort.setText(ma.getOrt());
+
+        telefon1.setText(ma.getTelefon1());
+        telefon2.setText(ma.getTelfon2());
+
+        LocalDate geborenma = ma.getGeboren();
+        String format = geborenma == null ? null : geborenma.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        geboren.setText(format);
+
         matchcode.setText(ma.getMatchcode());
         arbstd.setText(String.valueOf(ma.getAstunden()));
         deftakt.setText(String.valueOf(ma.getDeftakt()));
@@ -280,10 +364,14 @@ class SysUtilKalenderBenutzer extends JXPanel {
     }
 
     /**
-     * @deprecated Use {@link #knopfGedoense(boolean,boolean, boolean, boolean, boolean)} instead
+     * @deprecated Use
+     *             {@link #knopfGedoense(boolean,boolean, boolean, boolean, boolean)}
+     *             instead
      */
     private void knopfGedoense(int[] knopfstatus) {
-        knopfGedoense(knopfstatus[0] == 0 ? false : true, knopfstatus[1] == 0 ? false : true, knopfstatus[2] == 0 ? false : true, knopfstatus[3] == 0 ? false : true, knopfstatus[4] == 0 ? false : true);
+        knopfGedoense(knopfstatus[0] == 0 ? false : true, knopfstatus[1] == 0 ? false : true,
+                knopfstatus[2] == 0 ? false : true, knopfstatus[3] == 0 ? false : true,
+                knopfstatus[4] == 0 ? false : true);
     }
 
     private void knopfGedoense(boolean neu, boolean loeschen, boolean aendern, boolean speichern, boolean abbrechen) {
@@ -299,16 +387,16 @@ class SysUtilKalenderBenutzer extends JXPanel {
     }
 
     private void buttonsEmptyMode() {
-        knopfGedoense(true, false,false,false,false);
+        knopfGedoense(true, false, false, false, false);
     }
 
     private void buttonsViewMode() {
-        knopfGedoense(true, true, true,false,false);
-    }
-    private void buttonsEditMode() {
-        knopfGedoense(false,false, false,true,true);
+        knopfGedoense(true, true, true, false, false);
     }
 
+    private void buttonsEditMode() {
+        knopfGedoense(false, false, false, true, true);
+    }
 
     private void felderEinschalten(boolean einschalten) {
         anrede.setEnabled(einschalten);
@@ -316,6 +404,13 @@ class SysUtilKalenderBenutzer extends JXPanel {
         vorname.setEnabled(einschalten);
         vorname.validate();
         nachname.setEnabled(einschalten);
+        geboren.setEnabled(einschalten);
+        strasse.setEnabled(einschalten);
+        plz.setEnabled(einschalten);
+        ort.setEnabled(einschalten);
+        telefon1.setEnabled(einschalten);
+        telefon2.setEnabled(einschalten);
+
         matchcode.setEnabled(einschalten);
         arbstd.setEnabled(einschalten);
         deftakt.setEnabled(einschalten);
@@ -329,6 +424,13 @@ class SysUtilKalenderBenutzer extends JXPanel {
         anrede.setText("");
         vorname.setText("");
         nachname.setText("");
+        geboren.setText("");
+        strasse.setText("");
+        plz.setText("");
+        ort.setText("");
+        telefon1.setText("");
+        telefon2.setText("");
+
         matchcode.setText("");
         arbstd.setText("");
         deftakt.setText("");
@@ -368,72 +470,24 @@ class SysUtilKalenderBenutzer extends JXPanel {
         }
         if (maComboBox.getSelectedIndex() == -1) {
 
-            Optional<Mitarbeiter> maxzeile = ma.stream()
-                                               .max(Comparator.comparingInt(Mitarbeiter::getKalzeile));
+            Mitarbeiter tempMitarbeiter = new Mitarbeiter();
+            fuelleWerteAusGUi(tempMitarbeiter);
 
-            int neueKalenderZeile;
-            Integer groesteKalenderzeile = maxzeile.map(mitarbeiter -> mitarbeiter.getKalzeile())
-                                                   .orElse(0);
-            if (ma.size() > groesteKalenderzeile) {
-                neueKalenderZeile = groesteKalenderzeile + 1;
+            int neueKalenderZeile = findAvailableKalZeile();
 
-            } else {
+            tempMitarbeiter.setKalzeile(neueKalenderZeile);
 
-                neueKalenderZeile = findKalzeilenGapFromDB();
-            }
+            new MitarbeiterDto(ik).save(tempMitarbeiter);
 
-            ;
-
-            Mitarbeiter neuerMitarbeiter = new Mitarbeiter();
-            neuerMitarbeiter.setAnrede(anrede.getText()
-                                             .trim());
-            neuerMitarbeiter.setVorname(vorname.getText()
-                                               .trim());
-            neuerMitarbeiter.setNachname(nachname.getText()
-                                                 .trim());
-            neuerMitarbeiter.setMatchcode(matchcode.getText()
-                                                   .trim());
-            double astunden;
-
-            try {
-                astunden = Double.parseDouble(arbstd.getText()
-                                                    .trim()
-                                                    .replace(",", "."));
-            } catch (NumberFormatException e) {
-                astunden = 0.0;
-            }
-
-            neuerMitarbeiter.setAstunden(astunden);
-            neuerMitarbeiter.setKalzeile(neueKalenderZeile);
-
-            new MitarbeiterDto(ik).save(neuerMitarbeiter);
-            Swingma newItem = new Swingma(neuerMitarbeiter);
+            Swingma newItem = new Swingma(tempMitarbeiter);
             maComboBox.addItem(newItem);
             maComboBox.setSelectedItem(newItem);
 
         } else {
-            Mitarbeiter currentMa = maComboBox.getItemAt(maComboBox.getSelectedIndex())
-                                              .getMitarbeiter();
-            currentMa.setAnrede(anrede.getText()
-                                      .trim());
-            currentMa.setVorname(vorname.getText()
-                                        .trim());
-            currentMa.setNachname(nachname.getText()
-                                          .trim());
-            currentMa.setMatchcode(matchcode.getText()
-                                            .trim());
-            double astunden;
-
-            try {
-                astunden = Double.parseDouble(arbstd.getText()
-                                                    .trim()
-                                                    .replace(",", "."));
-            } catch (NumberFormatException e) {
-                astunden = 0.0;
-                arbstd.setText("0");
-            }
-            currentMa.setAstunden(astunden);
-            new MitarbeiterDto(ik).save(currentMa);
+            Mitarbeiter tempMitarbeiter = maComboBox.getItemAt(maComboBox.getSelectedIndex())
+                                                    .getMitarbeiter();
+            fuelleWerteAusGUi(tempMitarbeiter);
+            new MitarbeiterDto(ik).save(tempMitarbeiter);
         }
 
         buttonsViewMode();
@@ -446,6 +500,73 @@ class SysUtilKalenderBenutzer extends JXPanel {
                     + "Die Behandlersets des aktiven Terminkalender wurden zurückgesetzt.");
         }
 
+    }
+
+    private int findAvailableKalZeile() {
+        Optional<Mitarbeiter> maxzeile = ma.stream()
+                                           .max(Comparator.comparingInt(Mitarbeiter::getKalzeile));
+
+        int neueKalenderZeile;
+        Integer groesteKalenderzeile = maxzeile.map(mitarbeiter -> mitarbeiter.getKalzeile())
+                                               .orElse(0);
+        if (ma.size() > groesteKalenderzeile) {
+            neueKalenderZeile = groesteKalenderzeile + 1;
+
+        } else {
+
+            neueKalenderZeile = findKalzeilenGapFromDB();
+        }
+        ;
+        return neueKalenderZeile;
+    }
+
+    private void fuelleWerteAusGUi(Mitarbeiter mitarbeiter) {
+        mitarbeiter.setAnrede(anrede.getText()
+                                    .trim());
+        mitarbeiter.setVorname(vorname.getText()
+                                      .trim());
+        mitarbeiter.setNachname(nachname.getText()
+                                        .trim());
+        mitarbeiter.setMatchcode(matchcode.getText()
+                                          .trim());
+
+        mitarbeiter.setGeboren(evaluateGeboren());
+
+        mitarbeiter.setStrasse(strasse.getText());
+        mitarbeiter.setPlz(plz.getText());
+        mitarbeiter.setOrt(ort.getText());
+        mitarbeiter.setTelefon1(telefon1.getText());
+        mitarbeiter.setTelfon2(telefon2.getText());
+
+        int selectedAbteil = abteilCombo.getSelectedIndex();
+        if (selectedAbteil != -1) {
+            mitarbeiter.setAbteilung(abteilCombo.getItemAt(selectedAbteil).bezeichnung);
+        }
+
+        mitarbeiter.setAstunden(evaluateArbeitstunden());
+
+    }
+
+    private LocalDate evaluateGeboren() {
+
+        String text = geboren.getText()
+                             .trim();
+        if (".  .".equals(text)) {
+            return null;
+        }
+        return LocalDate.parse(text);
+    }
+
+    private double evaluateArbeitstunden() {
+        double astunden;
+        try {
+            astunden = Double.parseDouble(arbstd.getText()
+                                                .trim()
+                                                .replace(",", "."));
+        } catch (NumberFormatException e) {
+            astunden = 0.0;
+        }
+        return astunden;
     }
 
     private int findKalzeilenGapFromDB() {
@@ -484,7 +605,6 @@ class SysUtilKalenderBenutzer extends JXPanel {
     private void eingabenActivate() {
         felderEinschalten(true);
     }
-
 
     private void abbrechenHandeln() {
         Object selectedItem = maComboBox.getSelectedItem();
@@ -544,7 +664,7 @@ class SysUtilKalenderBenutzer extends JXPanel {
                     }
 
                 } catch (TextException | OfficeApplicationException | NOAException exception) {
-                   logger.error("Could not create Mitarbeiterlistendokument",exception);
+                    logger.error("Could not create Mitarbeiterlistendokument", exception);
                 }
             }
         }.start();
@@ -577,7 +697,52 @@ class SysUtilKalenderBenutzer extends JXPanel {
         }
     };
 
+    private JFormattedTextField geboren;
 
+    private JTextField strasse;
 
+    private JTextField plz;
 
+    private JTextField ort;
+
+    private JTextField telefon1;
+
+    private JTextField telefon2;
+
+    public static class KalBenutzerTraversalPolicy extends FocusTraversalPolicy {
+        List<Component> order = new LinkedList<>();
+
+        public KalBenutzerTraversalPolicy(List<Component> components) {
+            this.order.addAll(components);
+        }
+
+        @Override
+        public Component getComponentAfter(Container focusCycleRoot, Component aComponent) {
+            int idx = (order.indexOf(aComponent) + 1) % order.size();
+            return order.get(idx);
+        }
+
+        @Override
+        public Component getComponentBefore(Container focusCycleRoot, Component aComponent) {
+            int idx = order.indexOf(aComponent) - 1;
+            if (idx < 0) {
+                idx = order.size() - 1;
+            }
+            return order.get(idx);
+        }
+
+        @Override
+        public Component getDefaultComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+
+        @Override
+        public Component getLastComponent(Container focusCycleRoot) {
+            return order.get(order.size() - 1);
+        }
+        @Override
+        public Component getFirstComponent(Container focusCycleRoot) {
+            return order.get(0);
+        }
+    }
 }
