@@ -6,9 +6,11 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 ## unveröffentlicht
+## [1.1.6] alpha 
 ### added
+- Hygienepauschale in Rezept aufgenommen #383
 - der Ausführungspfad (proghome) kann über die Umgebungsvariable THERAPIHOME gesetzt werden.
-- Die Quelle wird jetzt automatisch auf gitlab compiliert und getestet.
+- Gitlab: Quelle wird automatisch compiliert, getestet und artifakte erstellt.
 - Konvention Testdatenbank IK = 123456789
 - Feature Toggle ermöglicht das Schalten von neuen Features im Hauptbaum
 
@@ -16,6 +18,7 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - RehaHMK/src/rehaHMKPanels/RehaHMKPanel2.java no longer uses depr. sun.image.jpeg lib und compiliert jetzt auch mit openjdk
 
 ###fixed
+- Eigenanteil wird falsch berechnet #373 
 - Heilmittel Sparte wird korrekt in Rezeptkopie übernommen
 - OP öffnet sich nicht mehr #374
 
