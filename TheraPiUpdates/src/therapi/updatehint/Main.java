@@ -17,20 +17,19 @@ import javafx.stage.StageStyle;
 
 public class Main extends Application {
 
-	static List<File> updatefiles;
+    static List<File> updatefiles;
 
 
 
     @Override
-	public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) throws IOException {
 
 
 
         File updateFile=  updatefiles.get(0);
 
-	    primaryStage.initStyle(StageStyle.UNDECORATED);
-	    String resourcePath = "./UpdatesAvailable.fxml";
-        URL location = getClass().getResource(resourcePath);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        URL location = getClass().getResource("UpdatesAvailable.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Scene scene = new Scene(fxmlLoader.load(), 600, 400);
         UpdatesAvailable controller = fxmlLoader.<UpdatesAvailable>getController();
@@ -39,16 +38,16 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-	}
+    }
 
 
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
         updatefiles = new VersionsSieb(new Version()).select( new HTTPRepository().filesList());
         if(!updatefiles.isEmpty()) {
 
-		launch(args);
+        launch(args);
         }
-	}
+    }
 }

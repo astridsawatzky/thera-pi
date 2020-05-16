@@ -11,8 +11,8 @@ import javax.swing.text.StyledDocument;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thera_pi.updater.Version;
 
-import hauptFenster.Version;
 
 class Credits extends JPanel {
     private Logger logger = LoggerFactory.getLogger(Credits.class);
@@ -34,7 +34,7 @@ class Credits extends JPanel {
         try {
 
             document.insertString(document.getLength(),
-                    "Thera-\u03C0 v" + Version.number() + " \nvom\n " + Version.aktuelleVersion.replace("-DB=", ""),
+                    "Thera-\u03C0 v" + new Version().number() + " \nvom\n " + Version.aktuelleVersion.replace("-DB=", ""),
                     bold);
             document.insertString(document.getLength(), "\nnach einer Idee von J\u00fcrgen Steinhilber", sas);
             document.setParagraphAttributes(0, document.getLength(), sas, false);

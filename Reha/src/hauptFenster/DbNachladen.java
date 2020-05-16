@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import javax.swing.JOptionPane;
 
+import org.thera_pi.updater.Version;
 
 import CommonTools.ExUndHop;
 import systemEinstellungen.SystemConfig;
@@ -42,6 +43,7 @@ final class DbNachladen implements Runnable {
                 String db = datenbank.jdbcDB()
                                                    .replace("jdbc:mysql://", "");
                 db = db.substring(0, db.indexOf("/"));
+                new Version();
                 obj.dbLabel.setText(Version.aktuelleVersion + db);
             }
             obj.sqlInfo.setConnection(obj.conn);

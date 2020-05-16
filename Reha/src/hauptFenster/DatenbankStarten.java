@@ -12,6 +12,7 @@ import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thera_pi.updater.Version;
 
 import com.sun.star.uno.Exception;
 
@@ -89,7 +90,7 @@ final class DatenbankStarten implements Runnable {
 
                     try {
 
-                        Reha.instance.dbLabel.setText(Version.aktuelleVersion + xdb);
+                        Reha.instance.dbLabel.setText(new Version().aktuelleVersion + xdb);
                     } catch (NullPointerException ex) {
                         ex.printStackTrace();
                     }
