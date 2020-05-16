@@ -52,11 +52,11 @@ public class Disziplinen {
         listTypeOfVO.toArray(typeOfVerordnung); // ... und fuellen
         this.cmbDiszi = new JRtaComboBox(typeOfVerordnung);
         String initVal = SystemConfig.initRezeptKlasse;
-        if (initVal.equals(null) || initVal.isEmpty()) {
+        if (initVal == null || initVal.isEmpty()) {
             initVal = SystemConfig.rezeptKlassenAktiv.get(0)
                                                      .get(0);
         }
-        if (initVal.equals(null) || initVal.isEmpty()) {
+        if (initVal==null || initVal.isEmpty()) {
             initVal = listTypeOfVO.get(0);
         }
         cmbDiszi.setSelectedItem(initVal); // default setzen

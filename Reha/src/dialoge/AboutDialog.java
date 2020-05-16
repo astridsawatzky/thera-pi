@@ -338,7 +338,7 @@ public class AboutDialog extends JDialog implements ActionListener {
         String cmd = e.getActionCommand();
         System.out.println(cmd);
         if (cmd.equals("instDetail")) {
-            if (!currInstance.equals(null)) {
+            if (currInstance!=null) {
 
                 currInstance.dispose(); // eleganter wäre das Panel neu zu füllen - krieg' ich aber nicht hin :-(
                 instJar = (new JFrame()); // deshalb: neuer Frame

@@ -801,7 +801,7 @@ public class AbrechnungGKV extends JXPanel {
             int aktNodeIdx = 1 + treeModelKasse.getIndexOfChild(rootKasse, aktKassNode);
 
             treeKasse.repaint(); // Anzeige aktualisieren
-        } else if (!prevKNode.equals(null) && !nextKNode.equals(null)) {
+        } else if (prevKNode!=null && nextKNode!=null) {
             kassenIconsNeuAnzeigen();
         }
         return Boolean.TRUE;
