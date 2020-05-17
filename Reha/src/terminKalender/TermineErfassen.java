@@ -298,7 +298,7 @@ public class TermineErfassen implements Runnable {
                                                                                       .get(inum)).get(0)
                                                                                                  .set(iblock, copyright
                                                                                                          + (String) obj[4]);
-                                Reha.instance.terminpanel.ViewPanel.repaint();
+                                Reha.instance.terminpanel.viewPanel.repaint();
                             } else {
                                 // System.out.println("Aktueller Tag =
                                 // "+Reha.instance.terminpanel.getAktuellerTag());
@@ -497,7 +497,7 @@ public class TermineErfassen implements Runnable {
             }
         }
         if (termOk) {
-            Reha.instance.terminpanel.ViewPanel.repaint();
+            Reha.instance.terminpanel.viewPanel.repaint();
         }
         //// System.out.println("Anzahl zusätzlicher Fundstellen = "+mehrstellen);
     }

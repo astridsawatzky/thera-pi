@@ -607,7 +607,7 @@ public class LinkeTaskPane extends JXPanel {
                         return;
                     }
                     aktTag = wahlTag;
-                    Reha.instance.progLoader.ProgTerminFenster(1, Ansicht.NORMAL);
+                    Reha.instance.progLoader.ProgTerminFenster(Ansicht.NORMAL);
                     TerminFenster.getThisClass()
                                  .springeAufDatum(aktTag);
                 } else {
@@ -620,7 +620,7 @@ public class LinkeTaskPane extends JXPanel {
                         return;
                     }
                     aktTag = wahlTag;
-                    Reha.instance.progLoader.ProgTerminFenster(1, Ansicht.NORMAL);
+                    Reha.instance.progLoader.ProgTerminFenster(Ansicht.NORMAL);
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
                         public void run() {

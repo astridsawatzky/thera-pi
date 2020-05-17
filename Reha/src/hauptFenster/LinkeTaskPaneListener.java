@@ -89,8 +89,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                 protected Void doInBackground() throws Exception {
                     Reha.getThisFrame()
                         .setCursor(Cursors.wartenCursor);
-                    Reha.instance.progLoader.ProgTerminFenster(1,
-                            TKSettings.KalenderStartWochenAnsicht ? Ansicht.WOCHE : Ansicht.NORMAL);
+                    Reha.instance.progLoader.ProgTerminFenster(TKSettings.KalenderStartWochenAnsicht ? Ansicht.WOCHE : Ansicht.NORMAL);
 
                     Reha.getThisFrame()
                         .setCursor(Cursors.normalCursor);
@@ -120,7 +119,7 @@ final class LinkeTaskPaneListener implements ActionListener {
                                 + "Beenden Sie den Terminkalender und rufen Sie diese Funktion erneut auf.\n\n");
                 return;
             }
-            Reha.instance.progLoader.ProgTerminFenster(0, Ansicht.MASKE);
+            Reha.instance.progLoader.ProgTerminFenster(Ansicht.MASKE);
             break;
         case "monthview":
             new DatumWahl(200, 200);

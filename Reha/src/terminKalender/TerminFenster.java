@@ -70,9 +70,9 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
     private JXPanel grundFlaeche;
     private JXPanel comboFlaeche;
     private JXPanel TerminFlaeche;
-    JXPanel ViewPanel;
+    JXPanel viewPanel;
 
-    private kalenderPanel[] oSpalten = new kalenderPanel[7];
+    private KalenderPanel[] oSpalten = new KalenderPanel[7];
     private JComboBox<String>[] oCombo = new JComboBox[7];
 
     private JPopupMenu jPopupMenu;
@@ -219,9 +219,9 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         xEvent = new RehaTPEventClass();
         xEvent.addRehaTPEventListener(this);
 
-        ViewPanel = new JXPanel(new BorderLayout());
+        viewPanel = new JXPanel(new BorderLayout());
 
-        ViewPanel.setName(eltern.getName());
+        viewPanel.setName(eltern.getName());
 
         grundFlaeche = getGrundFlaeche(connection);
         grundFlaeche.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -233,8 +233,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             }
         });
 
-        ViewPanel.add(grundFlaeche, BorderLayout.CENTER);
-        ViewPanel.setBackground(TKSettings.KalenderHintergrund);
+        viewPanel.add(grundFlaeche, BorderLayout.CENTER);
+        viewPanel.setBackground(TKSettings.KalenderHintergrund);
         DropTarget dndt = new DropTarget();
         try {
             dndt.addDropTargetListener(this);
@@ -255,7 +255,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             macheStatement(sstmt, aktAnsicht == Ansicht.NORMAL ? KollegenListe.maxKalZeile : 7);
         }
 
-        ViewPanel.addFocusListener(new java.awt.event.FocusAdapter() {
+        viewPanel.addFocusListener(new java.awt.event.FocusAdapter() {
 
             @Override
             public void focusGained(java.awt.event.FocusEvent e) {
@@ -273,7 +273,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         });
 
         grundFlaeche.revalidate();
-        ViewPanel.revalidate();
+        viewPanel.revalidate();
 
         if (ansicht == Ansicht.WOCHE) {
             this.aktAnsicht = Ansicht.NORMAL;
@@ -296,7 +296,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             eltern.setGlassPane(fgp);
         }
         getDatenVonExternInSpeicherNehmen();
-        return ViewPanel;
+        return viewPanel;
 
     }
 
@@ -323,9 +323,9 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             ListenerTools.removeListeners(oCombo[i].getParent());
             ListenerTools.removeListeners(oCombo[i]);
             oCombo[i] = null;
-            if (ViewPanel != null) {
-                ListenerTools.removeListeners(ViewPanel);
-                ViewPanel = null;
+            if (viewPanel != null) {
+                ListenerTools.removeListeners(viewPanel);
+                viewPanel = null;
             }
             if (comboFlaeche != null) {
                 ListenerTools.removeListeners(comboFlaeche);
@@ -470,7 +470,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                     if (e.getKeyCode() == VK_D && e.isControlDown()) {
                         // Terminplan drucken
                         DruckeViewPanel dvp = new DruckeViewPanel();
-                        dvp.setPrintPanel(Reha.instance.terminpanel.ViewPanel);
+                        dvp.setPrintPanel(Reha.instance.terminpanel.viewPanel);
                         break;
                     }
                     if ((e.getKeyCode() == VK_W) && (e.isControlDown())) {
@@ -656,7 +656,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 cb = new JXPanel(new BorderLayout());
                 cb.setBorder(null);
                 cb.setBackground(TKSettings.KalenderHintergrund);
-                oSpalten[i] = new kalenderPanel();
+                oSpalten[i] = new KalenderPanel();
                 oSpalten[i].setName("Spalte" + i);
                 oSpalten[i].setDoubleBuffered(true);
                 oSpalten[i].setAlpha(TKSettings.KalenderAlpha);
@@ -770,12 +770,12 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                     Reha.instance.terminpanel.oCombo[i].getParent()
                                                        .setBackground(TKSettings.KalenderHintergrund);
                 }
-                Reha.instance.terminpanel.ViewPanel.setBackground(TKSettings.KalenderHintergrund);
+                Reha.instance.terminpanel.viewPanel.setBackground(TKSettings.KalenderHintergrund);
                 Reha.instance.terminpanel.grundFlaeche.setBackground(TKSettings.KalenderHintergrund);
                 Reha.instance.terminpanel.comboFlaeche.setBackground(TKSettings.KalenderHintergrund);
                 Reha.instance.terminpanel.TerminFlaeche.setBackground(TKSettings.KalenderHintergrund);
-                Reha.instance.terminpanel.ViewPanel.validate();
-                Reha.instance.terminpanel.ViewPanel.repaint();
+                Reha.instance.terminpanel.viewPanel.validate();
+                Reha.instance.terminpanel.viewPanel.repaint();
             }
         } catch (java.lang.NullPointerException n) {
             // fare niente - Terminkalender läuft nicht!!
@@ -797,7 +797,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                     }
                     if (e.getKeyCode() == VK_D && e.isControlDown()) {
                         DruckeViewPanel dvp = new DruckeViewPanel();
-                        dvp.setPrintPanel(Reha.instance.terminpanel.ViewPanel);
+                        dvp.setPrintPanel(Reha.instance.terminpanel.viewPanel);
                         break;
                     }
                     if ((e.getKeyCode() == VK_F12) && (aktAnsicht != Ansicht.MASKE)) {
@@ -2245,12 +2245,12 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             this.zf = new Zeitfenster(this);
             int x, y;
             x = position.x;
-            int xvp = this.ViewPanel.getLocationOnScreen().x + this.ViewPanel.getWidth();
+            int xvp = this.viewPanel.getLocationOnScreen().x + this.viewPanel.getWidth();
             if ((x + zf.getWidth() + 10) > xvp) {
                 x = x - zf.getWidth();
             }
             y = position.y;
-            int yvp = this.ViewPanel.getLocationOnScreen().y + this.ViewPanel.getHeight();
+            int yvp = this.viewPanel.getLocationOnScreen().y + this.viewPanel.getHeight();
             if (y + zf.getHeight() > yvp) {
                 y = y - zf.getHeight();
             } else {
@@ -2419,7 +2419,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
     }
 
     public JXPanel getViewPanel() {
-        return this.ViewPanel;
+        return this.viewPanel;
     }
 
     public void setUpdateVerbot(boolean lwert) {
@@ -2439,7 +2439,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         aktiveSpalte[1] = neuBlock;
     }
 
-    private void KlickSetzen(kalenderPanel oPanel, MouseEvent e) {
+    private void KlickSetzen(KalenderPanel oPanel, MouseEvent e) {
         aktiveSpalte = oPanel.BlockTest(e.getX(), e.getY(), aktiveSpalte);
         if (aktiveSpalte[2] != aktiveSpalte[3]) {
             if (gruppierenAktiv) {
@@ -2473,12 +2473,12 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         Point xpoint = null;
         SetWahl sw = null;
         if (p == null) {
-            xpoint = this.ViewPanel.getLocationOnScreen();
+            xpoint = this.viewPanel.getLocationOnScreen();
             setUpdateVerbot(true);
             setSwSetWahl("./.");
             sw = new SetWahl(this);
-            xpoint.x = xpoint.x + (this.ViewPanel.getWidth() / 2) - (sw.getWidth() / 2);
-            xpoint.y = xpoint.y + (this.ViewPanel.getHeight() / 2) - (sw.getHeight() / 2);
+            xpoint.x = xpoint.x + (this.viewPanel.getWidth() / 2) - (sw.getWidth() / 2);
+            xpoint.y = xpoint.y + (this.viewPanel.getHeight() / 2) - (sw.getHeight() / 2);
 
         } else {
             xpoint = p;
@@ -2539,7 +2539,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             }
             macheStatement(sstate, aktAnsicht == Ansicht.NORMAL ? KollegenListe.maxKalZeile : 7);
             /* bislang aktiv */
-            if (ViewPanel.getParent() != null) {
+            if (viewPanel.getParent() != null) {
                 Reha.instance.terminpanel.eltern.setTitle(DatFunk.WochenTag(stag) + " " + stag + " -- KW: "
                         + DatFunk.KalenderWoche(stag) + " -- [Normalansicht]");
             }
@@ -3346,7 +3346,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 1; i++) { // ich waer so gern ein switch
             if (((AbstractButton) arg0.getSource()).getText() == "Gruppierung zusammenfassen") {
                 blockSetzen(8);
                 oSpalten[aktiveSpalte[2]].repaint();
@@ -3744,7 +3744,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             tagWahlNeu.getSmartTitledPanel()
                       .setPreferredSize(new Dimension(240, 170));
             tagWahlNeu.pack();
-            tagWahlNeu.setLocationRelativeTo(ViewPanel);
+            tagWahlNeu.setLocationRelativeTo(viewPanel);
             tagWahlNeu.setVisible(true);
             tagWahlNeu.dispose();
             intagWahl = false;
@@ -4643,8 +4643,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 p.y = Math.round(p.y + ypos);
             }
             // Jetzt X-testen damit nichts nach rechts abhaut
-            if (p.x + xwin > ViewPanel.getLocationOnScreen().x + ViewPanel.getWidth()) {
-                p.x = (ViewPanel.getLocationOnScreen().x + ViewPanel.getWidth()) - xwin;
+            if (p.x + xwin > viewPanel.getLocationOnScreen().x + viewPanel.getWidth()) {
+                p.x = (viewPanel.getLocationOnScreen().x + viewPanel.getWidth()) - xwin;
             }
         } catch (Exception ex) {
             /* wird nicht ausgewertet */}
@@ -4705,11 +4705,11 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 /** Ende Klasse. */
 
 class KalZeichnen implements Runnable {
-    private kalenderPanel kPanel = null;
+    private KalenderPanel kPanel = null;
     private int belegung;
     private Vector vTerm = null;
 
-    public KalZeichnen(kalenderPanel kPanel, Vector vTerm, int belegung) {
+    public KalZeichnen(KalenderPanel kPanel, Vector vTerm, int belegung) {
         this.kPanel = kPanel;
         this.vTerm = vTerm;
         this.belegung = belegung;

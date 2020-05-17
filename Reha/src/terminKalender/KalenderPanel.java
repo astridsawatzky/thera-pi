@@ -26,7 +26,7 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.TKSettings;
 import terminKalender.TerminFenster.Ansicht;
 
-class kalenderPanel extends JXPanel {
+class KalenderPanel extends JXPanel {
     private static final Font DIALOGFONT = new Font("Dialog", Font.PLAIN, 12);
     /**
      *
@@ -63,7 +63,7 @@ class kalenderPanel extends JXPanel {
     private float yTimeLine = .0f;
     private boolean showTimeLine = false;
     private int pfeily;
-    private Logger logger = LoggerFactory.getLogger(kalenderPanel.class);
+    private Logger logger = LoggerFactory.getLogger(KalenderPanel.class);
 
     void ListenerSetzen(int aktPanel) {
         this.panelNummer = aktPanel;

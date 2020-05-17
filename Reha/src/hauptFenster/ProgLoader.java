@@ -96,7 +96,7 @@ public class ProgLoader {
 
 
 
-    public void ProgTerminFenster(int setPos, Ansicht ansicht) {
+    public void ProgTerminFenster(Ansicht ansicht) {
         if (!Reha.DbOk) {
             return;
         }
