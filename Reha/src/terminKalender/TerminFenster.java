@@ -497,7 +497,6 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 String matchcode = (String) oCombo[welche].getSelectedItem();
                 int wahl = KollegenListe.suchen(matchcode);
-                Kollegen kolWahl= KollegenListe.getByMatchcode(matchcode);
                 if (!oCombo[welche].isPopupVisible()) {
                     oCombo[welche].setPopupVisible(false);
                 }
