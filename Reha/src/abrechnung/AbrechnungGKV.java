@@ -50,6 +50,8 @@ import javax.swing.tree.TreePath;
 
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTree;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thera_pi.nebraska.crypto.NebraskaCryptoException;
 import org.thera_pi.nebraska.crypto.NebraskaEncryptor;
 import org.thera_pi.nebraska.crypto.NebraskaFileException;
@@ -532,7 +534,14 @@ public class AbrechnungGKV extends JXPanel {
 
     private String getKassenName(String ikkasse) {
         String cmd = "select kassen_nam1, kassen_nam2 from kass_adr where ik_kasse = " + ikkasse;
-        Vector<String> vecKassenName = SqlInfo.holeFelder(cmd).get(0);
+        Vector<Vector<String>> holeFelder = SqlInfo.holeFelder(cmd);
+        if(holeFelder.isEmpty()) {
+            Logger logger = LoggerFactory.getLogger(AbrechnungGKV.class);
+            logger.error("kassennamen nicht gefunden für KassenIK " + ikkasse);
+            return "_UNBEKANNT_";
+
+        }
+        Vector<String> vecKassenName = holeFelder.get(0);
         String kname = vecKassenName.get(0)
                                     .trim();
         String kname2 = vecKassenName.get(1)
