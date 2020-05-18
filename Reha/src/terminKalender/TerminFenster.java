@@ -72,7 +72,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
     private JXPanel TerminFlaeche;
     JXPanel viewPanel;
 
-    private KalenderPanel[] oSpalten = new KalenderPanel[7];
+    private TherapeutenTag[] oSpalten = new TherapeutenTag[7];
     private JComboBox<String>[] oCombo = new JComboBox[7];
 
     private JPopupMenu jPopupMenu;
@@ -318,7 +318,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         vTerm.clear();
         vTerm = null;
         for (int i = 0; i < 7; i++) {
-            ListenerTools.removeListeners(oSpalten[i]);
+
+            oSpalten[i].removeListeners();
             oSpalten[i] = null;
             ListenerTools.removeListeners(oCombo[i].getParent());
             ListenerTools.removeListeners(oCombo[i]);
@@ -424,7 +425,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         return comboFlaeche;
     }
 
-    /** Jetzt die Listener f�r die Combos installieren. */
+    /** Jetzt die Listener fuer die Combos installieren. */
     private void comboListenerInit(final int welche, Connection connection) {
         oCombo[welche].setPopupVisible(false);
         oCombo[welche].addKeyListener(new java.awt.event.KeyAdapter() {
@@ -655,10 +656,9 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 cb = new JXPanel(new BorderLayout());
                 cb.setBorder(null);
                 cb.setBackground(TKSettings.KalenderHintergrund);
-                oSpalten[i] = new KalenderPanel();
-                oSpalten[i].setName("Spalte" + i);
-                oSpalten[i].setDoubleBuffered(true);
-                oSpalten[i].setAlpha(TKSettings.KalenderAlpha);
+                String name = "Spalte" + i;
+                oSpalten[i] = new TherapeutenTag(name,true,TKSettings.KalenderAlpha);
+
 
                 dragLab[i] = new JLabel();
                 dragLab[i].setName("draLab-" + i);
@@ -729,7 +729,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
                 PanelListenerInit(i, connection);
                 oSpalten[i].ListenerSetzen(i);
-                cb.add(oSpalten[i], BorderLayout.CENTER);
+                cb.add(oSpalten[i].getDay(), BorderLayout.CENTER);
                 TerminFlaeche.add(cb);
             }
             TerminFlaeche.addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -763,9 +763,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         try {
             if (!(Reha.instance.terminpanel.oSpalten == null)) {
                 for (int i = 0; i < 7; i++) {
-                    Reha.instance.terminpanel.oSpalten[i].setAlpha(alf);
-                    Reha.instance.terminpanel.oSpalten[i].setBackground(TKSettings.KalenderHintergrund);
-                    Reha.instance.terminpanel.oSpalten[i].repaint();
+                    Reha.instance.terminpanel.oSpalten[i].setTransparenz(alf);
+
                     Reha.instance.terminpanel.oCombo[i].getParent()
                                                        .setBackground(TKSettings.KalenderHintergrund);
                 }
@@ -2438,8 +2437,8 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
         aktiveSpalte[1] = neuBlock;
     }
 
-    private void KlickSetzen(KalenderPanel oPanel, MouseEvent e) {
-        aktiveSpalte = oPanel.BlockTest(e.getX(), e.getY(), aktiveSpalte);
+    private void KlickSetzen(TherapeutenTag oSpalten2, MouseEvent e) {
+        aktiveSpalte = oSpalten2.BlockTest(e.getX(), e.getY(), aktiveSpalte);
         if (aktiveSpalte[2] != aktiveSpalte[3]) {
             if (gruppierenAktiv) {
                 gruppierenAktiv = false;
@@ -2448,7 +2447,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 gruppierenBloecke[0] = -1;
                 gruppierenBloecke[1] = -1;
             }
-            oPanel.blockGeklickt(aktiveSpalte[0]);
+            oSpalten2.blockGeklickt(aktiveSpalte[0]);
             oSpalten[aktiveSpalte[3]].blockGeklickt(-1);
         } else {
             if (gruppierenAktiv) {
@@ -2457,7 +2456,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 oSpalten[gruppierenSpalte].gruppierungZeichnen(gruppierenBloecke.clone());
                 oSpalten[gruppierenSpalte].requestFocus();
             } else {
-                oPanel.blockGeklickt(aktiveSpalte[0]);
+                oSpalten2.blockGeklickt(aktiveSpalte[0]);
             }
         }
         return;
@@ -4704,12 +4703,12 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 /** Ende Klasse. */
 
 class KalZeichnen implements Runnable {
-    private KalenderPanel kPanel = null;
+    private TherapeutenTag kPanel = null;
     private int belegung;
     private Vector vTerm = null;
 
-    public KalZeichnen(KalenderPanel kPanel, Vector vTerm, int belegung) {
-        this.kPanel = kPanel;
+    public KalZeichnen(TherapeutenTag oSpalten, Vector vTerm, int belegung) {
+        this.kPanel = oSpalten;
         this.vTerm = vTerm;
         this.belegung = belegung;
     }

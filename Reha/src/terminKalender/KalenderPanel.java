@@ -420,15 +420,15 @@ class KalenderPanel extends JXPanel {
         this.showTimeLine = show;
     }
 
-    void datenZeichnen(Vector vectOfCurrentDate, int therapeut) {
+    void datenZeichnen(Vector vectOfCurrentDate, int therapeut, ArrayList therapistsDate) {
         if (vectOfCurrentDate.size() > 0 && therapeut >= 0) {
             dat.clear();
-            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(0));
-            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(1));
-            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(2));
-            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(3));
-            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(4));
-            dat.addElement(((ArrayList) vectOfCurrentDate.get(therapeut)).get(5));
+            dat.addElement(therapistsDate.get(0));
+            dat.addElement(therapistsDate.get(1));
+            dat.addElement(therapistsDate.get(2));
+            dat.addElement(therapistsDate.get(3));
+            dat.addElement(therapistsDate.get(4));
+            dat.addElement(therapistsDate.get(5));
 
             anzahl = ((Vector) dat.get(0)).size();
         } else {
@@ -440,9 +440,7 @@ class KalenderPanel extends JXPanel {
     /**********************************/
     void zeitSpanne() {
         iMaxHoehe = this.getSize().height;
-        fPixelProMinute = iMaxHoehe;
-        fPixelProMinute = fPixelProMinute / minutenInsgesamt;
-        setiPixelProMinute(((int) (fPixelProMinute)));
+        fPixelProMinute = ((float) iMaxHoehe) / minutenInsgesamt;
         xStart = 2;
         xEnde = this.getSize().width;
         Point posInScreen = this.getLocationOnScreen();
@@ -636,9 +634,6 @@ class KalenderPanel extends JXPanel {
 
     public int getZeitSpanneBis() {
         return zeitSpanneBis;
-    }
-
-    private void setiPixelProMinute(int iPixelProMinute) {
     }
 
     public void setShiftGedrueckt(boolean shiftGedrueckt) {
