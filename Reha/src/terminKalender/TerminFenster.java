@@ -209,7 +209,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
     private Connection connection;
     final static private Logger logger = LoggerFactory.getLogger(TerminFenster.class);
-    private BehandlerSet aktuellesSet;
+    private BehandlerSet aktuellesSet = BehandlerSet.EMPTY;
 
     public TerminFenster(Connection connection) {
         this.connection = connection;
