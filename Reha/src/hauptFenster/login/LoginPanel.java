@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -38,14 +39,25 @@ public class LoginPanel extends JPanel {
                 pwButton.doClick();
             }
 
+            if (e.getKeyCode() == KeyEvent.VK_CAPS_LOCK) {
+                setCapsLockVisibility();
+
+            }
         }
 
     };
+
+
+    private void setCapsLockVisibility() {
+        capsLockLabel.setVisible(Toolkit.getDefaultToolkit()
+                                        .getLockingKeyState(KeyEvent.VK_CAPS_LOCK));
+    }
+
     private JPasswordField pwTextFeld;
     private JButton pwButton;
+    private JLabel capsLockLabel = new JLabel("DAS IST HIER ALLES GROSSGESTELLT");
 
     private void initPanel(ActionListener submitted) {
-
         setBorder(null);
         setLayout(new BorderLayout());
         ImageIcon imageIcon = new ImageIcon(Path.Instance.getProghome() + "icons/schluessel3.gif");
@@ -76,6 +88,9 @@ public class LoginPanel extends JPanel {
 
         JPanel jp = new JPanel(new FlowLayout());
         jp.setBorder(null);
+
+        jp.add(capsLockLabel);
+        setCapsLockVisibility();
         JLabel label = new JLabel("Bitte Passwort eingeben:  ");
         jp.add(label);
         pwTextFeld = new JPasswordField();
