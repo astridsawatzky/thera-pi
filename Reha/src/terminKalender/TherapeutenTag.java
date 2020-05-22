@@ -48,8 +48,12 @@ class TherapeutenTag  {
       }
 
       void datenZeichnen(Vector vectOfCurrentDate, int therapeut) {
-          if(vectOfCurrentDate.size() > 0 && therapeut >= 0)
-              day.datenZeichnen(vectOfCurrentDate, therapeut, (ArrayList) vectOfCurrentDate.get(therapeut));
+          if(vectOfCurrentDate.size() > 0 && therapeut >= 0) {
+            day.datenZeichnen(vectOfCurrentDate, therapeut, (ArrayList) vectOfCurrentDate.get(therapeut));
+        } else {
+              day.setAnzahl(0);
+          }
+
 
       }
 

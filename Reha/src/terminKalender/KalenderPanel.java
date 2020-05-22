@@ -102,7 +102,7 @@ class KalenderPanel extends JXPanel {
             g2d.setColor(TKSettings.KalenderHintergrund);
             g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-            for (i = 0; i < anzahl; i++) {
+            for (i = 0; i < getAnzahl(); i++) {
                 try {
                     if (((Vector) dat.get(0)).get(i) == null) {
                         g2d.setColor(TKSettings.KalenderHintergrund);
@@ -372,7 +372,7 @@ class KalenderPanel extends JXPanel {
                     /******* Klammer der k�nstlichen For-next ******/
                 }
             }
-            if (anzahl == 0) {
+            if (getAnzahl() == 0) {
                 g2d.setColor(TKSettings.KalenderHintergrund);
                 g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
             }
@@ -430,9 +430,9 @@ class KalenderPanel extends JXPanel {
             dat.addElement(therapistsDate.get(4));
             dat.addElement(therapistsDate.get(5));
 
-            anzahl = ((Vector) dat.get(0)).size();
+            setAnzahl(((Vector) dat.get(0)).size());
         } else {
-            anzahl = 0;
+            setAnzahl(0);
         }
         this.repaint();
     }
@@ -475,7 +475,7 @@ class KalenderPanel extends JXPanel {
             float fEndePix;
             this.blockAktiv = -1;
             this.spalteAktiv = false;
-            for (i = 0; i < anzahl; i++) {
+            for (i = 0; i < getAnzahl(); i++) {
                 sStart = (String) ((Vector<?>) dat.get(2)).get(i);
                 dauer = Integer.parseInt((String) ((Vector<?>) dat.get(3)).get(i));
 
@@ -505,7 +505,7 @@ class KalenderPanel extends JXPanel {
             int yStartMin;
             float fStartPix;
             float fEndePix;
-            for (i = 0; i < anzahl; i++) {
+            for (i = 0; i < getAnzahl(); i++) {
                 sStart = (String) ((Vector<?>) dat.get(2)).get(i);
                 dauer = Integer.parseInt((String) ((Vector<?>) dat.get(3)).get(i));
 
@@ -526,7 +526,7 @@ class KalenderPanel extends JXPanel {
 
     /********************************/
     int blockGeklickt(int block) {
-        if (block > -1 && anzahl > 0) {
+        if (block > -1 && getAnzahl() > 0) {
             this.maleSchwarz = block;
             this.spalteAktiv = true;
             this.repaint();
@@ -650,6 +650,15 @@ class KalenderPanel extends JXPanel {
 
     public Image getDragImage2() {
         return dragImage2;
+    }
+
+    public int getAnzahl() {
+        return anzahl;
+    }
+
+    public void setAnzahl(int anzahl) {
+        this.anzahl = anzahl;
+        repaint();
     }
 
     /********* Klassen-ENDE-Klammer **************/
