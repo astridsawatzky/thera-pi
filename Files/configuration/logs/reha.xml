@@ -15,7 +15,7 @@
     <appender name="FILE"
         class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-        <file>/logs/reha.log</file>
+        <file>./logs/reha.log</file>
         <rollingPolicy
             class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
