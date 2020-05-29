@@ -1,6 +1,7 @@
 package dialoge;
 
 import java.awt.GridLayout;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
@@ -34,7 +35,7 @@ class Credits extends JPanel {
         try {
 
             document.insertString(document.getLength(),
-                    "Thera-\u03C0 v" + new Version().number() + " \nvom\n " + Version.aktuelleVersion.replace("-DB=", ""),
+                    "Thera-\u03C0 v" + new Version().number() + " \nvom\n " +new Version().getReleaseDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                     bold);
             document.insertString(document.getLength(), "\nnach einer Idee von J\u00fcrgen Steinhilber", sas);
             document.setParagraphAttributes(0, document.getLength(), sas, false);

@@ -6,6 +6,10 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 ## unveröffentlicht
+### fixed
+- log Programm- und Javaversion on Startup #403
+- Aufnahme der Versionsnummer in die untere linke Ecke #410
+
 ## [1.1.6] - 2020-05-20
 ### added
 - Hygienepauschale in Rezept aufgenommen #383

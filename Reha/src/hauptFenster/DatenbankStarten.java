@@ -3,6 +3,7 @@ package hauptFenster;
 import java.io.File;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Vector;
 
@@ -91,7 +92,7 @@ final class DatenbankStarten implements Runnable {
 
                     try {
 
-                        Reha.instance.dbLabel.setText(new Version().aktuelleVersion + xdb);
+                        Reha.instance.dbLabel.setText("Version: " + new Version().number()+ " vom: " + new Version().getReleaseDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + " DB: " + xdb);
                     } catch (NullPointerException ex) {
                         ex.printStackTrace();
                     }

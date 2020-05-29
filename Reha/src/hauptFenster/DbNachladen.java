@@ -2,6 +2,7 @@ package hauptFenster;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 
@@ -15,7 +16,7 @@ final class DbNachladen implements Runnable {
     @Override
     public void run() {
         final String sDB = "SQL";
-        final Reha obj = Reha.instance;
+        final Reha rehaInstance = Reha.instance;
         if (Reha.instance.conn != null) {
             try {
                 Reha.instance.conn.close();
@@ -28,7 +29,7 @@ final class DbNachladen implements Runnable {
             Datenbank datenbank=new Datenbank();
             if (sDB == "SQL") {
                 new SocketClient().setzeInitStand("Datenbank initialisieren und öffnen");
-                obj.conn = DriverManager.getConnection(datenbank.jdbcDB()
+                rehaInstance.conn = DriverManager.getConnection(datenbank.jdbcDB()
                         + "?jdbcCompliantTruncation=false&zeroDateTimeBehavior=convertToNull&autoReconnect=true",
                         datenbank. user(),
                         datenbank. password());
@@ -39,14 +40,14 @@ final class DbNachladen implements Runnable {
                     + SystemConfig.dieseMaschine.toString()
                                                 .substring(0, nurmaschine)
                     + "%'");
-            if (obj.dbLabel != null) {
+            if (rehaInstance.dbLabel != null) {
                 String db = datenbank.jdbcDB()
                                                    .replace("jdbc:mysql://", "");
                 db = db.substring(0, db.indexOf("/"));
                 new Version();
-                obj.dbLabel.setText(Version.aktuelleVersion + db);
+                rehaInstance.dbLabel.setText(new Version().getReleaseDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + "-DB=" + db);
             }
-            obj.sqlInfo.setConnection(obj.conn);
+            rehaInstance.sqlInfo.setConnection(rehaInstance.conn);
             Reha.DbOk = true;
 
         } catch (final SQLException ex) {

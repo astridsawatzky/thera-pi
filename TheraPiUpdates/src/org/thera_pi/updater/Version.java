@@ -1,11 +1,13 @@
 package org.thera_pi.updater;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Objects;
 
 public class Version implements Comparable<Version> {
 
-    public static final String aktuelleVersion = "2020-05-20-DB=";
+    private final LocalDate releaseDate = LocalDate.of(2020, 05, 20);
+
     public final int major;
     public final int minor;
     public final int revision;
@@ -24,10 +26,6 @@ public class Version implements Comparable<Version> {
 
     public String number() {
         return String.format("%d.%d.%d", major, minor, revision);
-    }
-
-    public static String getAktuelleversion() {
-        return aktuelleVersion;
     }
 
     public int getMajor() {
@@ -71,6 +69,10 @@ public class Version implements Comparable<Version> {
     @Override
     public int compareTo(Version o) {
         return NATURAL_ORDER_COMPARATOR.compare(this, o);
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
     }
 
 }
