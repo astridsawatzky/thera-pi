@@ -50,6 +50,7 @@ import org.jdesktop.swingx.painter.CompoundPainter;
 import org.jdesktop.swingx.painter.MattePainter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.thera_pi.updater.Version;
 import org.therapi.reha.patient.PatientHauptPanel;
 
 import com.jgoodies.forms.layout.CellConstraints;
@@ -336,6 +337,8 @@ public class Reha implements RehaEventListener {
 
     public void startWithMandantSet() {
 
+        logger.info("Thera-Pi Version: " + new Version().number());
+        logger.info("Java Version:     " +System.getProperty("java.version"));
         aktIK = mandant().ikDigitString();
         aktMandant = mandant().name();
 
@@ -2233,12 +2236,12 @@ public class Reha implements RehaEventListener {
             logger.info("testeVoTableStruc: nix zu tun in Tabelle " + tableName + ".");
         }
     }
-    
+
     static void testeVoTables() {
         testeVoTableStruc ("lza");
         testeVoTableStruc ("verordn");
     }
-    
+
     ActionListener actionListener = new MenuActionListener(this);
 
     public void activateWebCam() {
