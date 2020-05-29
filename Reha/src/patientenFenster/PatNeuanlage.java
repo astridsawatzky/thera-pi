@@ -9,15 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -25,6 +17,9 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -61,6 +56,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 import com.mysql.jdbc.PreparedStatement;
+import com.sun.media.ui.MessageBox;
 
 import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
@@ -93,6 +89,7 @@ import systemTools.ListenerTools;
 
 public class PatNeuanlage extends JXPanel implements RehaTPEventListener, ActionListener, KeyListener, FocusListener {
 
+    private static final int TEXTFELD_INDEX_FUER_GEBURTSTAG = 11;
     /**
     *
     */
@@ -438,7 +435,9 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                                 // //System.out.println("Datum waere gewesen->"+datum+"
                                 // Laenge->"+datum.trim().length());
                                 jtf[fedits[i]].setText(DatFunk.sDatInDeutsch(datum));
+                                jtf[fedits[i]].setValue(DatFunk.sDatInDeutsch(datum));
                             }
+
                         } else {
                             jtf[fedits[i]].setText((String) felder.get(ffelder[i]));
                         }
@@ -1406,10 +1405,34 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         jtf[10] = new JRtaTextField("", true);
         jtf[10].setName("emaila");
 
-        jtf[11] = new JRtaTextField("DATUM", true);
-        jtf[11].setName("geboren");
-        jtf[11].setFont(font);
-        jtf[11].setForeground(Color.RED);
+        jtf[TEXTFELD_INDEX_FUER_GEBURTSTAG] = new JRtaTextField("DATUM", true);
+        jtf[TEXTFELD_INDEX_FUER_GEBURTSTAG].setName("geboren");
+        jtf[TEXTFELD_INDEX_FUER_GEBURTSTAG].setFont(font);
+        jtf[TEXTFELD_INDEX_FUER_GEBURTSTAG].setForeground(Color.RED);
+
+        jtf[TEXTFELD_INDEX_FUER_GEBURTSTAG].addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                    JRtaTextField textField = (JRtaTextField) e.getSource();
+                  String  inhalt = textField.getText();
+                    if(inhalt.replace(".","").isEmpty()) {
+
+                    } else {
+                        if (!textField.getValue().equals(inhalt)) {
+
+                            LocalDate birthday = LocalDate.parse(inhalt,DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                            long age = ChronoUnit.YEARS.between(birthday, LocalDate.now());
+                            if(age>100)
+                            {
+                                JOptionPane.showMessageDialog(null, age + "! Das ist wirklich alt");
+                            } else if (LocalDate.now().isBefore(birthday)) {
+                                JOptionPane.showMessageDialog(null, "Wird also geboren werden!");
+                            }
+                        }
+                    }
+            }
+        });
+
 
         jtf[27] = new JRtaTextField("DATUM", true);
         jtf[27].setName("akutbis");
@@ -1458,7 +1481,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
         builder.add(jtf[5], cc11.xy(3, 11));
         builder.add(jtf[6], cc11.xyw(4, 11, 3));
         builder.addLabel("Geburtstag *)", cc11.xy(1, 13));
-        builder.add(jtf[11], cc11.xy(3, 13));
+        builder.add(jtf[TEXTFELD_INDEX_FUER_GEBURTSTAG], cc11.xy(3, 13));
         builder.addLabel("Telefon priv.", cc11.xy(1, 15));
         builder.add(jtf[7], cc11.xyw(3, 15, 4));
         builder.addLabel("Telefon gesch.", cc11.xy(1, 17));
