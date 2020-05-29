@@ -73,14 +73,4 @@ public class VerkaufsTabellenUpdate extends Update {
         return itsOK;
 
     }
-
-    public static void main(String[] args) {
-
-        VerkaufsTabellenUpdate vu = new VerkaufsTabellenUpdate();
-        DueUpdates du = new DueUpdates(new DatenquellenFactory("123456789"));
-        du.add(vu);
-        du.execute();
-
-    }
-
 }
