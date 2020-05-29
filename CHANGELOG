@@ -6,11 +6,18 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 ## unveröffentlicht
-### fixed
+### added
+- Grossstelltastenwarnung beim Login #392
 - log Programm- und Javaversion on Startup #403
-- Aufnahme der Versionsnummer in die untere linke Ecke #410
-- VerkaufstabellenUpdate wird auch durchgeführt #273
 - Geburtsdatumcheck bei Patientenanlage #27
+
+### changed
+- Aufnahme der Versionsnummer in die untere linke Ecke #410
+
+### fixed
+- VerkaufstabellenUpdate wird auch durchgeführt #273
+- Variablenbelegung bei Taxierung #407
+- HMR Check Auswertung max pro Fall Korrigiert #406
 
 ## [1.1.6] - 2020-05-20
 ### added
