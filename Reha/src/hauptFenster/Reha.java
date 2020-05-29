@@ -94,6 +94,7 @@ import rechteTools.Rechte;
 import rehaInternalFrame.JRehaInternal;
 import rehaInternalFrame.OOODesktopManager;
 import roogle.RoogleFenster;
+import sql.DatenquellenFactory;
 import systemEinstellungen.ImageRepository;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemInit;
@@ -102,6 +103,7 @@ import systemTools.RezeptFahnder;
 import systemTools.TestePatStamm;
 import terminKalender.TerminFenster;
 import therapi.updatehint.UpdatesMain;
+import update.DueUpdates;
 import urlaubBeteiligung.Beteiligung;
 import urlaubBeteiligung.Urlaub;
 import verkauf.VerkaufTab;
@@ -342,6 +344,12 @@ public class Reha implements RehaEventListener {
         aktIK = mandant().ikDigitString();
         aktMandant = mandant().name();
 
+        DueUpdates du = new DueUpdates(new DatenquellenFactory(aktIK));
+        du.init();
+        du.execute();
+
+
+
         String iniPath = Path.Instance.getProghome() + "ini/" + mandant().ikDigitString() + "/";
 
         INITool.init(iniPath);
@@ -402,6 +410,9 @@ public class Reha implements RehaEventListener {
 
         sysConf.HauptFenster();
         sysConf.openoffice();
+
+
+
 
         sysConf.DatenBank();
         sysConf.phoneservice();

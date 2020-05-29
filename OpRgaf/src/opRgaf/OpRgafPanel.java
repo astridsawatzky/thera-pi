@@ -212,10 +212,6 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
         }
         tabmod = new MyOpRgafTableModel();
-        if (chkSalesTableStruct()) {
-            return builder.getPanel();
-        }
-
         tabmod.setColumnIdentifiers(spalten);
         tab = new JXTable(tabmod);
         tab.setHorizontalScrollEnabled(true);
@@ -298,59 +294,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         return builder.getPanel();
     }
 
-    private boolean chkSalesTableStruct() {
-        HashMap<String, String> hmMapNumFields = new HashMap<String, String>();
-        hmMapNumFields.put("v_offen", "verkliste");
-        hmMapNumFields.put("v_betrag", "verkliste");
-        hmMapNumFields.put("v_mwst7", "verkliste");
-        hmMapNumFields.put("v_mwst19", "verkliste");
-        hmMapNumFields.put("art_einzelpreis", "verkfaktura");
-        hmMapNumFields.put("art_mwst", "verkfaktura");
-        hmMapNumFields.put("anzahl", "verkfaktura");
-        hmMapNumFields.put("preis", "verkartikel");
-        hmMapNumFields.put("mwst", "verkartikel");
-        hmMapNumFields.put("lagerstand", "verkartikel");
-        hmMapNumFields.put("einkaufspreis", "verkartikel");
-        HashMap types = new HashMap();
-        Vector<Vector<String>> felder = SqlInfo.holeFelder("describe verkliste");
-        String[] cols = new String[felder.size()];
-        for (int i = 0; i < felder.size(); i++) {
-            cols[i] = felder.get(i)
-                            .get(0);
-            types.put(cols[i], felder.get(i)
-                                     .get(1));
-        }
-        felder = SqlInfo.holeFelder("describe verkartikel");
-        cols = new String[felder.size()];
-        for (int i = 0; i < felder.size(); i++) {
-            cols[i] = felder.get(i)
-                            .get(0);
-            types.put(cols[i], felder.get(i)
-                                     .get(1));
-        }
-        felder = SqlInfo.holeFelder("describe verkfaktura");
-        cols = new String[felder.size()];
-        for (int i = 0; i < felder.size(); i++) {
-            cols[i] = felder.get(i)
-                            .get(0);
-            types.put(cols[i], felder.get(i)
-                                     .get(1));
-        }
 
-        Set keys = hmMapNumFields.keySet();
-        for (Iterator it = keys.iterator(); it.hasNext();) {
-            String key = (String) it.next();
-            System.out.println("key: " + key + "  ist vom Typ: " + types.get(key).toString());
-            if (!types.get(key)
-                    .toString()
-                    .contains("decimal(10,2)")) {
-                JOptionPane.showMessageDialog(null, "Struktur der Tabelle '" + hmMapNumFields.get(key) + "' ist nicht aktuell. \nBitte wenden Sie sich an den Support!");
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     /**
      * letzte Checkbox-Auswahl wiederherstellen
@@ -545,7 +489,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
             if (ktext.length() > 35) { ktext = ktext.substring(0, 34);}
             cmd = "insert into kasse set einnahme='" + dcf.format(eingang)
                                                           .replace(",", ".")
-                    + "', datum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', ktext='" + ktext + "'," + 
+                    + "', datum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', ktext='" + ktext + "'," +
                     "rez_nr='" + rgaf_reznum + "'";
             // System.out.println(cmd);
             SqlInfo.sqlAusfuehren(cmd);
@@ -1142,7 +1086,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
     private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException {
         IDocumentService documentService = null;
         //// System.out.println("Starte Datei -> "+url);
-      
+
 
         documentService =   new OOService().getOfficeapplication().getDocumentService();
 
