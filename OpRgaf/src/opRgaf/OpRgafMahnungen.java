@@ -87,16 +87,16 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
  
     private ButtonGroup bgroup = new ButtonGroup();
-    ButtonGroup artgroup = new ButtonGroup();
+    
  
     private JRtaRadioButton[] rbMahnart = { null, null, null, null };
  
     private JButton suchen = null;
-    JButton kopie = null;
+    
 
  
     private JRtaTextField[] rtfs = { null, null, null, null, null, null, null, null, null, null, null, null };
-    JRtaCheckBox cbMahnsperre = null;
+    
  
     private int aktuelleMahnstufe = 1;
 
@@ -105,7 +105,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
  
     private JXTable tab = null;
 
-    File f = null;
+    
  
     private Font fontfett = new Font("Tahoma", Font.BOLD, 10);
 
@@ -130,12 +130,11 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                     + "INNER JOIN pat5 AS t2 ON (t1.pat_id = t2.pat_intern) LEFT JOIN kass_adr AS t3 ON ( t2.kassenid = t3.id ) ";
 //        "WHERE  ( t1.rnr like 'RGR-%'  OR t1.rnr like 'AFR-%'  OR t1.rnr like 'VR-%'  ) AND  t1.roffen >='1' ORDER by t1.id";
 
-    int gefunden;
+    
  
     private String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "Bezahldatum", "Mahndatum1", "Mahndatum2", "Krankenkasse", "RezeptNr.", "id" };
-    String[] colnamen = { "nix", "rnr", "rdatum", "rgesamt", "roffen", "rpbetrag", "rbezdatum", "rmahndat1",
-            "rmahndat2", "nix", "RezeptNr.", "id" };
+    
 
     private RgAfVkSelect selPan;
 

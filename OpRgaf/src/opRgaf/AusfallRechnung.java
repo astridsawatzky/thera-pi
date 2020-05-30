@@ -471,10 +471,10 @@ class AusfallRechnungHintergrund extends JXPanel {
      *
      */
     private static final long serialVersionUID = 1L;
-    ImageIcon hgicon;
-    int icx, icy;
-    AlphaComposite xac1 = null;
-    AlphaComposite xac2 = null;
+    
+    
+    
+    
 
     public AusfallRechnungHintergrund() {
         super();

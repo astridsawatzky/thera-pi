@@ -97,9 +97,6 @@ class AdressTools {
         }
     }
 
-    public static String[] macheFirmenAdresse() {
-        String[] str = null;
-        return str;
-    }
+    
 
 }

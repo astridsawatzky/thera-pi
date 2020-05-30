@@ -18,6 +18,7 @@ import org.jdesktop.swingx.JXTitledPanel;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
+//TODO: only public because of RehaIO
 public class OpRgafTab extends JXPanel implements ChangeListener {
 
     /**
@@ -29,8 +30,8 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
     private Vector<String> vecdescript = new Vector<String>();
     private Vector<ImageIcon> vecimg = new Vector<ImageIcon>();
 
-    JTabbedPane offenRgafTab = null;
-    public JXTitledPanel jxTitel;
+    
+    
 
     private JTabbedPane jtb;
 
@@ -149,37 +150,7 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
         return "1995-01-01";
     }
 
-    public int getFrist(int frist) {
-        if (frist == 1) {
-            try {
-                return 1;
-                // return Integer.parseInt(oeinstellungpanel.tfs[0].getText());
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Frist Tage f�r Mahnstufe 1, nehme 31 Tage");
-            }
-            return 31;
-        }
-        if (frist == 2) {
-            try {
-                return 2;
-                // return Integer.parseInt(oeinstellungpanel.tfs[1].getText());
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Frist Tage f�r Mahnstufe 1, nehme 11 Tage");
-            }
-            return 11;
-        }
-        if (frist == 3) {
-            try {
-                return 3;
-                // return Integer.parseInt(oeinstellungpanel.tfs[2].getText());
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Fehler beim Bezug der Frist Tage f�r Mahnstufe 3, nehme 11 Tage");
-            }
-            return 11;
-        }
-
-        return -1;
-    }
+    
 
     public void sucheRezept(String rezept) {
         opRgafPanel.sucheRezept(rezept);

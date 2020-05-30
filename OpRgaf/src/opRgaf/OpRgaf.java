@@ -41,9 +41,9 @@ public class OpRgaf implements WindowListener {
     Connection conn;
     public static OpRgaf thisClass;
 
-    public static final IOfficeApplication officeapplication = null ;
+    
 
-    public String dieseMaschine = null;
+    
 
 
 
@@ -54,13 +54,13 @@ public class OpRgaf implements WindowListener {
     private static HashMap<String, String> hmAbrechnung = new HashMap<String, String>();
  
     private static HashMap<String, String> hmFirmenDaten = null;
-    public static HashMap<String, String> hmAdrPDaten = new HashMap<String, String>();
+    
 
     private static boolean testcase = false;
     public OpRgafTab otab = null;
 
     public static int xport = -1;
-    public static boolean xportOk = false;
+    
  
     private RehaReverseServer rehaReverseServer = null;
     static int rehaReversePort = -1;
@@ -229,16 +229,7 @@ public class OpRgaf implements WindowListener {
     }
 
 
-    /*******************/
-
-    public static void stoppeDB() {
-        try {
-            OpRgaf.thisClass.conn.close();
-            OpRgaf.thisClass.conn = null;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    
 
     private void StarteDB() {
         final OpRgaf obj = OpRgaf.thisClass;
@@ -370,9 +361,7 @@ public class OpRgaf implements WindowListener {
         return testcase;
     }
 
-    public static void setTestcase(boolean testcase) {
-        OpRgaf.testcase = testcase;
-    }
+    
 
     /***************************/
 

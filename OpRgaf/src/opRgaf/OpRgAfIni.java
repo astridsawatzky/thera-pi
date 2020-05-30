@@ -12,7 +12,7 @@ import CommonTools.ini.INITool;
 public class OpRgAfIni {
  
     private static HashMap<String, Object> mahnParam;
-    public HashMap getMahnParameter;
+    
 
     // INIFile inif;
     private String path2IniFile;

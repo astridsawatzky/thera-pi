@@ -78,52 +78,52 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     private static final long serialVersionUID = -7883557713071422132L;
 
- 
+
     private JRtaTextField suchen = null;
-    JRtaTextField offen = null;
- 
+
+
     private JRtaTextField[] tfs = { null, null, null, null };
- 
+
     private JButton[] buts = { null, null, null };
 
     private enum btIdx {
         ausbuchen,
         suchen,
-        dummy
+
     };
 
- 
+
     private int btAusbuchen = btIdx.ausbuchen.ordinal();
- 
+
     private int btSuchen = btIdx.suchen.ordinal();
- 
+
     private JRtaComboBox combo = null;
-    JXPanel content = null;
- 
+
+
     private KeyListener kl = null;
- 
+
     private ActionListener al = null;
 
- 
+
     private MyOpRgafTableModel tabmod = null;
- 
+
     private JXTable tab = null;
- 
+
     private Component kopieButton;
- 
+
     private JRtaCheckBox bar = null;
     private boolean barWasSelected = false;
 
-    JButton kopie;
 
-    BigDecimal gesamtOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
- 
+
+
+
     private DecimalFormat dcf = new DecimalFormat("###0.00");
 
-    int ccount = -2;
+
 
     private HashMap<String, String> hmRezgeb = new HashMap<String, String>();
- 
+
     private final String stmtString =
             "SELECT concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(t2.geboren,'%d.%m.%Y')),t1.rnr,t1.rdatum,t1.rgesamt,"
                     + "t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t3.kassen_nam1,t1.reznr,t1.id,t1.pat_id "
@@ -133,22 +133,22 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     + "UNION SELECT rnr,rdatum,rgesamt,roffen,rpbetrag,rbezdatum,rmahndat1,rmahndat2,reznr,id as id,pat_intern as pat_id "
                     + "FROM rgaffaktura ) t1 LEFT JOIN pat5 AS t2 ON (t1.pat_id = t2.pat_intern) LEFT JOIN kass_adr AS t3 ON ( t2.kassenid = t3.id )";
 
- 
+
     private String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "bezahlt am", "1.Mahnung", "2.Mahnung", "Krankenkasse", "RezeptNr.", "id" };
- 
+
     private String[] colnamen = { "nix", "rnr", "rdatum", "rgesamt", "roffen", "rpbetrag", "rbezdatum", "rmahndat1",
             "rmahndat2", "nix", "nix", "id" };
- 
-    private OpRgafTab eltern = null;
+
+
 
     private class IdxCol { // Indices fuer sprechende Spaltenzugriffe
-     
-     
-     
-     
+
+
+
+
         static final short Name = 0, RNr = 1, RDat = 2, GBetr = 3, Offen = 4, BGeb = 5, bez = 6, mahn1 = 7, mahn2 = 8,
-             
+
                 kk = 9, RezNr = 10, id = 11;
     }
 
@@ -157,7 +157,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     OpRgafPanel(OpRgafTab xeltern) {
         super();
-        this.eltern = xeltern;
         startKeyListener();
         startActionListener();
         setLayout(new BorderLayout());
@@ -984,7 +983,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                         " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",
                         Arrays.asList(new String[] {}));
                 db = "lza";
-            } 
+            }
         } else {
             vecaktrez = SqlInfo.holeSatz("verordn",
                     " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",

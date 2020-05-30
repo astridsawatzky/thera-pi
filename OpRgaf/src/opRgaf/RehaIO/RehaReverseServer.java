@@ -16,14 +16,13 @@ import opRgaf.OpRgaf;
 
 public class RehaReverseServer extends SwingWorker<Void, Void> {
     public ServerSocket serv = null;
- 
+
     private StringBuffer sb = new StringBuffer();
- 
+
     private InputStream input = null;
-    OutputStream output = null;
-    // public int port = 6000;
-    public static boolean OpRgafIsActive = false;
-    public static boolean offenePostenIsActive = false;
+
+
+
 
     public RehaReverseServer(int x) {
         OpRgaf.xport = x;
@@ -70,7 +69,6 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
             serv = null;
             return null;
         }
-        OpRgaf.xportOk = true;
         Socket client = null;
 
         while (true) {
