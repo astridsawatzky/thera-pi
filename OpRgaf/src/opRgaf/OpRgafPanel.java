@@ -955,15 +955,14 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
         String test = SqlInfo.holeEinzelFeld("select id from verordn where rez_nr = '" + rez_nr + "' LIMIT 1");
         Vector<String> vecaktrez = null;
-        if (test.equals("")) {
+        if ("".equals(test)) {
             test = SqlInfo.holeEinzelFeld("select id from lza where rez_nr = '" + rez_nr + "' LIMIT 1");
-            if (test.equals("")) {
-            } else {
+            if (!"".equals(test)) {
                 vecaktrez = SqlInfo.holeSatz("lza",
                         " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",
                         Arrays.asList(new String[] {}));
                 db = "lza";
-            }
+            } 
         } else {
             vecaktrez = SqlInfo.holeSatz("verordn",
                     " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",

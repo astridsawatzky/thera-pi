@@ -32,7 +32,7 @@ public class OpRgaf implements WindowListener {
     /**
      * @param args
      */
-   
+
 
     public static boolean DbOk;
     JFrame jFrame;
@@ -45,7 +45,7 @@ public class OpRgaf implements WindowListener {
     public String dieseMaschine = null;
 
 
-    
+
 
     public static String aktIK = "510841109";
 
@@ -53,7 +53,7 @@ public class OpRgaf implements WindowListener {
     public static HashMap<String, String> hmFirmenDaten = null;
     public static HashMap<String, String> hmAdrPDaten = new HashMap<String, String>();
 
-    public static boolean testcase = false;
+    private static boolean testcase = false;
     public OpRgafTab otab = null;
 
     public static int xport = -1;
@@ -66,12 +66,15 @@ public class OpRgaf implements WindowListener {
 
     public static void main(String[] args) {
         new Logging("oprgaf");
-        OpRgaf application = new OpRgaf();
-        application.getInstance();
-        application.getInstance().sqlInfo = new SqlInfo();
-        if (args.length > 0 || testcase) {
+        if (args.length <= 0 && !isTestcase()) {
+            JOptionPane.showMessageDialog(null,
+                    "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
+        } else {
+            OpRgaf application = new OpRgaf();
+            application.getInstance();
+            application.getInstance().sqlInfo = new SqlInfo();
             proghome = Path.Instance.getProghome();
-            if (!testcase) {
+            if (!isTestcase()) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
@@ -79,10 +82,10 @@ public class OpRgaf implements WindowListener {
                String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 try {
-					new OOService().start(officeNativePfad, officeProgrammPfad);
-				} catch (FileNotFoundException | OfficeApplicationException e) {
-					e.printStackTrace();
-				}
+                    new OOService().start(officeNativePfad, officeProgrammPfad);
+                } catch (FileNotFoundException | OfficeApplicationException e) {
+                    e.printStackTrace();
+                }
                 aktIK = args[1];
 
                 iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
@@ -96,9 +99,9 @@ public class OpRgaf implements WindowListener {
                 AbrechnungParameter(proghome);
                 FirmenDaten(proghome);
             }
-            if (testcase) {
+            if (isTestcase()) {
                 System.out.println(iniOpRgAf.getMahnParameter());
-                System.out.println("TestCase = " + testcase);
+                System.out.println("TestCase = " + isTestcase());
                 AbrechnungParameter(proghome);
                 FirmenDaten(proghome);
 
@@ -107,9 +110,6 @@ public class OpRgaf implements WindowListener {
             application.StarteDB();
 
             application.getJFrame();
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
         }
 
     }
@@ -293,7 +293,7 @@ public class OpRgaf implements WindowListener {
             }
 
         }
-       
+
     }
 
     @Override
@@ -361,8 +361,16 @@ public class OpRgaf implements WindowListener {
         }
     }
 
+    public static boolean isTestcase() {
+        return testcase;
+    }
+
+    public static void setTestcase(boolean testcase) {
+        OpRgaf.testcase = testcase;
+    }
+
     /***************************/
 
-   
+
 
 }
