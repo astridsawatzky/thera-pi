@@ -51,9 +51,6 @@ class InitHashMaps {
         boolean isherr = false;
         boolean iskind = false;
         try {
-            // int lang = hmAdrPDaten.hashCode();
-            //// System.out.println(lang);
-            // hmAdrPDaten.put("<Padr1>", patDaten.get(0));
             String anrede = StringTools.EGross(patDaten.get(0));
             if ("HERR".equals(anrede.toUpperCase())) {
                 isherr = true;
@@ -69,7 +66,6 @@ class InitHashMaps {
                 return;
             }
 
-            // String nachname = StringTools.EGross(patDaten.get(2));
             String strasse = StringTools.EGross(patDaten.get(21));
             String plzort = patDaten.get(23) + " " + StringTools.EGross(patDaten.get(24));
             String geboren = DatFunk.sDatInDeutsch(patDaten.get(4));

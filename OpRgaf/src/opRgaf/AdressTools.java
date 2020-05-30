@@ -14,7 +14,6 @@ class AdressTools {
         String plz = ((String) oin[5] == null ? "" : (String) oin[5]).trim();
         String ort = ((String) oin[6] == null ? "" : (String) oin[6]).trim();
 
-        // String banrede = "";
         boolean isherr = false;
         boolean isnosex = false;
         if (egross) {

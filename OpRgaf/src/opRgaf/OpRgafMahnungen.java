@@ -686,7 +686,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         }
     }
 
-    private class MahnungListSelectionHandler implements ListSelectionListener { /** Zeile in Rechnungsliste gewählt. */
+    private class MahnungListSelectionHandler implements ListSelectionListener {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -764,7 +764,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     private void starteMahnDruck(String url) {
         IDocumentService documentService = null;
-        // System.out.println("Starte Datei -> "+url);
 
         try {
             documentService = new OOService().getOfficeapplication().getDocumentService();
@@ -801,7 +800,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         for (int i = 0; i < placeholders.length; i++) {
             boolean schonersetzt = false;
             String placeholderDisplayText = placeholders[i].getDisplayText().toLowerCase();
-            //// System.out.println(placeholderDisplayText);
             Set<Entry<String,String>> entries = mahnParameter.entrySet();
             Iterator<Entry<String, String>> it = entries.iterator();
             while (it.hasNext()) {

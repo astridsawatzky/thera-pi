@@ -13,6 +13,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -51,7 +52,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
 
     private JRtaCheckBox[] leistung = { null, null, null, null, null };
 
-    private AusfallRechnungHintergrund rgb;
 
     private JButton uebernahme;
 
@@ -308,14 +308,12 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
 
         }
         InitHashMaps.hmAdrAFRDaten.put("<AFRgesamt>", df.format(gesamt));
-        /// Hier muß noch die Rechnungsnummer bezogen und eingetragen werden
 
         InitHashMaps.hmAdrAFRDaten.put("<AFRnummer>", afrNummer);
         try {
             InitHashMaps.hmAdrAFRDaten.put("<AFRdatum>", DatFunk.sDatInDeutsch(afrDatum));
         } catch (Exception ex) {
         }
-        // System.out.println(InitHashMaps.hmAdrAFRDaten);
     }
 
     @Override
@@ -324,14 +322,12 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
             event.consume();
             if (((JComponent) event.getSource()).getName()
                                                 .equals("uebernahme")) {
-                // doUebernahme();
             }
             if (((JComponent) event.getSource()).getName()
                                                 .equals("abbrechen")) {
                 this.dispose();
             }
 
-            // System.out.println("Return Gedrückt");
         }
         if (event.getKeyCode() == 27) {
             this.dispose();
@@ -353,7 +349,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
         docdescript.setHidden(false);
         docdescript.setAsTemplate(true);
         IDocument document = null;
-        // ITextTable[] tbl = null;
         try {
             document = documentService.loadDocument(url, docdescript);
         } catch (NOAException e) {
@@ -372,10 +367,10 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
             boolean schonersetzt = false;
             String placeholderDisplayText = placeholders[i].getDisplayText()
                                                            .toLowerCase();
-            Set<?> entries = InitHashMaps.hmAdrPDaten.entrySet();
-            Iterator<?> it = entries.iterator();
+            Set<Entry<String, String>> patdaten = InitHashMaps.hmAdrPDaten.entrySet();
+            Iterator<Entry<String, String>> it = patdaten.iterator();
             while (it.hasNext()) {
-                Map.Entry<String, String> entry = ((Map.Entry<String, String>) it.next());
+                Map.Entry<String, String> entry = it.next();
                 if (entry.getKey()
                          .toLowerCase()
                          .equals(placeholderDisplayText)) {
@@ -385,14 +380,14 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
                     break;
                 }
             }
-            entries = InitHashMaps.hmAdrAFRDaten.entrySet();
-            it = entries.iterator();
-            while (it.hasNext() && (!schonersetzt)) {
-                Map.Entry entry = (Map.Entry) it.next();
-                if (((String) entry.getKey()).toLowerCase()
+            Set<Entry<String, String>>  afrDaten = InitHashMaps.hmAdrAFRDaten.entrySet();
+            Iterator<Entry<String, String>>   afrDatenIterator = afrDaten.iterator();
+            while (afrDatenIterator.hasNext() && (!schonersetzt)) {
+                Entry<String, String> entry =  afrDatenIterator.next();
+                if ( entry.getKey().toLowerCase()
                                              .equals(placeholderDisplayText)) {
                     placeholders[i].getTextRange()
-                                   .setText(((String) entry.getValue()));
+                                   .setText(entry.getValue());
                     schonersetzt = true;
                     break;
                 }

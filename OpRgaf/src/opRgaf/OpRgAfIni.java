@@ -38,8 +38,7 @@ public class OpRgAfIni {
             @Override
             protected Void doInBackground() throws Exception {
                 String section = "offenePosten";
-                INIFile inif = INITool.openIni(path2IniFile, iniFile); // keine Direktzugriffe aus ext. Modulen (mehr)
-                                                                       // erlaubt -> iniFile lokal öffnen
+                INIFile inif = INITool.openIni(path2IniFile, iniFile);
                 if (inif.getStringProperty(section, "lockSettings") != null) {
                     settingsLocked = inif.getBooleanProperty(section, "lockSettings");
                 }
@@ -73,11 +72,9 @@ public class OpRgAfIni {
             incVK = inif.getBooleanProperty(section, "Verkaeufe");
             vorauswahlSuchkriterium = inif.getIntegerProperty(section, "Suchkriterium");
         } else {
-            // Default-Werte setzen (Verhalten wie vor Erweiterung um Verkaufsrechnungen)
             incRG = true;
             incAR = true;
             incVK = false;
-            // int vorauswahlSuchkriterium = Arrays.asList(args).indexOf("Noch offen >=");
             vorauswahlSuchkriterium = 0;
         }
     }
