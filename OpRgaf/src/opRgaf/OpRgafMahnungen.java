@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -54,53 +55,53 @@ import ag.ion.noa.NOAException;
 import office.OOService;
 
 class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
- 
+
     private Logger logger = LoggerFactory.getLogger(OpRgafMahnungen.class);
 
     /**
      *
      */
     private static final long serialVersionUID = 7011413450109922373L;
- 
+
     private ActionListener al = null;
- 
+
     private OpRgafTab eltern = null;
- 
+
     private JXPanel content = null;
 
- 
-    private ButtonGroup bgroup = new ButtonGroup();
-    
- 
-    private JRtaRadioButton[] rbMahnart = { null, null, null, null };
- 
-    private JButton suchen = null;
-    
 
- 
+    private ButtonGroup bgroup = new ButtonGroup();
+
+
+    private JRtaRadioButton[] rbMahnart = { null, null, null, null };
+
+    private JButton suchen = null;
+
+
+
     private JRtaTextField[] rtfs = { null, null, null, null, null, null, null, null, null, null, null, null };
-    
- 
+
+
     private int aktuelleMahnstufe = 1;
 
- 
+
     private MyMahnungenTableModel tabmod = null;
- 
+
     private JXTable tab = null;
 
-    
- 
+
+
     private Font fontfett = new Font("Tahoma", Font.BOLD, 10);
 
- 
+
     private DecimalFormat dcf = new DecimalFormat("###0.00");
 
- 
+
     private HashMap<String, String> mahnParameter = new HashMap<String, String>();
- 
+
     private ITextDocument textDocument;
 
- 
+
     private final String stmtString =
             // findet OP in RGR,AFR u. VKR (außer Rechnungsverkauf 'an Kasse')
             "SELECT concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(t2.geboren,'%d.%m.%Y')),t1.rnr,t1.rdatum,t1.rgesamt,"
@@ -113,11 +114,11 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                     + "INNER JOIN pat5 AS t2 ON (t1.pat_id = t2.pat_intern) LEFT JOIN kass_adr AS t3 ON ( t2.kassenid = t3.id ) ";
 //        "WHERE  ( t1.rnr like 'RGR-%'  OR t1.rnr like 'AFR-%'  OR t1.rnr like 'VR-%'  ) AND  t1.roffen >='1' ORDER by t1.id";
 
-    
- 
+
+
     private String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "Bezahldatum", "Mahndatum1", "Mahndatum2", "Krankenkasse", "RezeptNr.", "id" };
-    
+
 
     private RgAfVkSelect selPan;
 
@@ -841,10 +842,10 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
             boolean schonersetzt = false;
             String placeholderDisplayText = placeholders[i].getDisplayText().toLowerCase();
             //// System.out.println(placeholderDisplayText);
-            Set entries = mahnParameter.entrySet();
-            Iterator it = entries.iterator();
+            Set<Entry<String,String>> entries = mahnParameter.entrySet();
+            Iterator<Entry<String, String>> it = entries.iterator();
             while (it.hasNext()) {
-                Map.Entry entry = (Map.Entry) it.next();
+                Map.Entry<String,String> entry = (Map.Entry<String,String>) it.next();
                 if (((String) entry.getKey()).toLowerCase().equals(placeholderDisplayText)) {
                     placeholders[i].getTextRange().setText(((String) entry.getValue()));
                     schonersetzt = true;

@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
@@ -133,9 +133,18 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
 
 
-        static final short Name = 0, RNr = 1, RDat = 2, GBetr = 3, Offen = 4, BGeb = 5, bez = 6, mahn1 = 7, mahn2 = 8,
-
-                kk = 9, RezNr = 10, id = 11;
+        static final short Name = 0;
+        static final short RNr = 1;
+        static final short RDat = 2;
+        static final short  GBetr = 3;
+        static final short  Offen = 4;
+        static final short  BGeb = 5;
+        static final short  bez = 6;
+        static final short  mahn1 = 7;
+        static final short  mahn2 = 8;
+        static final short  kk = 9;
+        static final short  RezNr = 10;
+        static final short  id = 11;
     }
 
     private OpShowGesamt sumPan;
@@ -557,9 +566,8 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         }
         int suchart = combo.getSelectedIndex();
         OpRgaf.iniOpRgAf.setVorauswahl(suchart); // Auswahl merken
-        String suchVal = combo.getItemAt(combo.getSelectedIndex()).toString();
-        // System.out.println("OpRgafPanel-doSuchen-suche: " +'"' + suchVal + '"' + "("
-        // + suchart + ")"); // s. String[] args
+        combo.getItemAt(combo.getSelectedIndex()).toString();
+
         String cmd = "";
         String tmpStr = selPan.bills2search("rnr");
         String whereToSearch = " WHERE ";
@@ -571,7 +579,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         }
 
         try {
-//            switch(suchVal){        // <- funktioniert erst ab Java 1.7
+
             switch (suchart) {
             case 0:
                 cmd = stmtString + " where rnr ='" + searchStr + "'";
@@ -627,7 +635,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         if (!cmd.equals("")) {
             buts[btAusbuchen].setEnabled(false);
             suchen.setEnabled(false);
-            // System.out.println("suche nach: "+'"'+cmd+'"');
             try {
                 starteSuche(cmd);
             } catch (Exception ex) {
@@ -1116,11 +1123,11 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         for (int i = 0; i < placeholders.length; i++) {
             placeholderDisplayText = placeholders[i].getDisplayText()
                                                     .toLowerCase();
-            Set<?> entries = hmRezgeb.entrySet();
-            Iterator<?> it = entries.iterator();
+            Set<Entry<String, String>> entries = hmRezgeb.entrySet();
+            Iterator<Entry<String, String>> it = entries.iterator();
             while (it.hasNext()) {
 
-                Map.Entry entry = (Map.Entry) it.next();
+                Entry<String, String> entry = it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
                     try {

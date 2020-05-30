@@ -10,9 +10,9 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 
 public class OpRgAfIni {
- 
+
     private static HashMap<String, Object> mahnParam;
-    
+
 
     // INIFile inif;
     private String path2IniFile;
@@ -25,7 +25,7 @@ public class OpRgAfIni {
 
     /**
      * liest Einträge aus 'oprgaf.ini'
-     * 
+     *
      * @param installationspfad, ini-verzeichnis, ik, filename
      */
     // args[0],"ini/",args[1],"oprgaf.ini"
@@ -55,7 +55,7 @@ public class OpRgAfIni {
                 iniValuesValid = true;
                 File f = new File(progHome + subPath + aktIK + "oprgaf.ini");
                 if (f.exists()) {
-                    boolean dummy = f.delete();
+                    f.delete();
                 }
                 return null;
             }

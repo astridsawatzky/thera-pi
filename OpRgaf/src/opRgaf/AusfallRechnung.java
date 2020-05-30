@@ -52,22 +52,21 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
      */
     private static final long serialVersionUID = 1L;
 
- 
+
     private JRtaCheckBox[] leistung = { null, null, null, null, null };
 
     private AusfallRechnungHintergrund rgb;
-    private JXPanel content;
- 
+
     private JButton uebernahme;
- 
+
     private JButton abbrechen;
- 
+
     private String afrNummer;
- 
+
     private String afrDatum;
- 
+
     private Vector<String> vecaktrez = null;
- 
+
     private Vector<String> patDaten = null;
 
     AusfallRechnung(Point pt, String pat_intern, String rez_nr, String rnummer, String rdatum) {
@@ -97,20 +96,13 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
 
         patDaten = SqlInfo.holeSatz("pat5", " * ", "pat_intern='" + pat_intern + "'", Arrays.asList(new String[] {}));
         InitHashMaps.constructPatHMap(patDaten);
-        // content.add(getGebuehren(),BorderLayout.CENTER);
-        // content.validate();
-        // this.getContentPane().add(getGebuehren(),BorderLayout.CENTER);
         this.add(getGebuehren());
 
         setName("Kopie - AusfallRechnung");
         setModal(true);
-        // Point lpt = new Point(pt.x-125,pt.y+30);
-        Point lpt = new Point(pt.x - 150, pt.y + 30);
-        // setLocation(lpt);
         this.setLocationRelativeTo(null);
 
         pack();
-        // setVisible(true);
 
     }
 
@@ -220,12 +212,12 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
                 protected Void doInBackground() throws Exception {
                     try {
                         String url = OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/AusfallRechnung.ott.Kopie.ott";
-						if(new File(url).exists()) {
-							starteAusfallRechnung(
-							        url);
-						} else {
-							JOptionPane.showMessageDialog(null, "Vorlage " + url + " konnte nicht gefunden werden");
-						}
+                        if(new File(url).exists()) {
+                            starteAusfallRechnung(
+                                    url);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Vorlage " + url + " konnte nicht gefunden werden");
+                        }
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null, "Fehler bei der Erstellung der Ausfallrechnung");
@@ -253,6 +245,8 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
         return this;
     }
 
+
+    //XXX: never used why ?
     private void doBuchen() {
         StringBuffer buf = new StringBuffer();
         buf.append("insert into rgaffaktura set ");
@@ -355,7 +349,7 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
 
     private static void starteAusfallRechnung(String url) {
         IDocumentService documentService ;
-        
+
         try {
             documentService = new OOService().getOfficeapplication().getDocumentService();
         } catch (OfficeApplicationException e) {
@@ -469,10 +463,10 @@ class AusfallRechnungHintergrund extends JXPanel {
      *
      */
     private static final long serialVersionUID = 1L;
-    
-    
-    
-    
+
+
+
+
 
     public AusfallRechnungHintergrund() {
         super();
