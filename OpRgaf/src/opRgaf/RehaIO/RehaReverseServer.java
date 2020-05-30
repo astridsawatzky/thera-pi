@@ -100,12 +100,9 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
             }
         }
 
-//			return null;
 
     }
 
-    private RehaReverseServer getInstance() {
-        return this;
-    }
+
 
 }
