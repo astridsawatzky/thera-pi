@@ -17,14 +17,13 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
-import opRgaf.RehaIO.RehaReverseServer;
-import opRgaf.RehaIO.SocketClient;
-import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import environment.Path;
 import io.RehaIOMessages;
 import logging.Logging;
 import office.OOService;
+import opRgaf.RehaIO.RehaReverseServer;
+import opRgaf.RehaIO.SocketClient;
 import sql.DatenquellenFactory;
 
 public class OpRgaf implements WindowListener {

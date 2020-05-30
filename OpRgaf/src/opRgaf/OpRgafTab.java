@@ -14,7 +14,6 @@ import javax.swing.event.ChangeListener;
 
 import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
-import org.jdesktop.swingx.JXTitledPanel;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 

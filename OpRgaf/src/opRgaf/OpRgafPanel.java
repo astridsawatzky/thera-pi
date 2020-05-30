@@ -44,22 +44,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
-import CommonTools.DatFunk;
-import CommonTools.DateTableCellEditor;
-import CommonTools.DblCellEditor;
-import CommonTools.DoubleTableCellRenderer;
-import CommonTools.JCompTools;
-import CommonTools.JRtaCheckBox;
-import CommonTools.JRtaComboBox;
-import CommonTools.JRtaTextField;
-import CommonTools.MitteRenderer;
-import CommonTools.OpShowGesamt;
-import CommonTools.RgAfVkSelect;
-import CommonTools.RgAfVk_IfCallBack;
-import CommonTools.SqlInfo;
-import CommonTools.StringTools;
-import opRgaf.RehaIO.SocketClient;
+import CommonTools.*;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -72,6 +57,7 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import io.RehaIOMessages;
 import office.OOService;
+import opRgaf.RehaIO.SocketClient;
 
 class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
 
