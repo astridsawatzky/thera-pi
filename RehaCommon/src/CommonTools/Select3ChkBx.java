@@ -8,14 +8,14 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-abstract class Select3ChkBx implements ItemListener {
+public abstract class Select3ChkBx implements ItemListener {
 
 
-    JPanel checkBoxArea;
+    protected JPanel checkBoxArea;
 
-    JRtaCheckBox chkBxO = null;
-    JRtaCheckBox chkBxM = null;
-    JRtaCheckBox chkBxU = null;
+    protected JRtaCheckBox chkBxO = null;
+    protected JRtaCheckBox chkBxM = null;
+    protected JRtaCheckBox chkBxU = null;
 
     /**
      * @param ask         - beschreibt Zweck der Auswahl
@@ -23,7 +23,7 @@ abstract class Select3ChkBx implements ItemListener {
      * @param chkBxMLabel - Label der 2. checkBox
      * @param chkBxULabel - Label der 3. checkBox
      */
-    Select3ChkBx(String ask, String chkBxOLabel, String chkBxMLabel, String chkBxULabel) {
+    protected Select3ChkBx(String ask, String chkBxOLabel, String chkBxMLabel, String chkBxULabel) {
         checkBoxArea = new JPanel();
 
         FormLayout lay = new FormLayout(

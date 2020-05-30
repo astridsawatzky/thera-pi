@@ -1,7 +1,9 @@
-package CommonTools;
+package opRgaf;
 
 import java.awt.Component;
 import java.awt.event.ItemEvent;
+
+import CommonTools.Select3ChkBx;
 
 /**
  * kleine Tabelle mit 3 Checkboxen zur Auswahl, ob RGR, AFR, oder/und

@@ -39,6 +39,8 @@ import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -465,7 +467,6 @@ tabmod = new MyOpRgafTableModel();
                                                           .replace(",", ".")
                     + "', datum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', ktext='" + ktext + "'," +
                     "rez_nr='" + rgaf_reznum + "'";
-            // System.out.println(cmd);
             SqlInfo.sqlAusfuehren(cmd);
         }
         tabmod.setValueAt(new Date(), tab.convertRowIndexToModel(row), IdxCol.bez);
@@ -655,7 +656,6 @@ tabmod = new MyOpRgafTableModel();
     private void starteSuche(String sstmt) {
         tabmod.setRowCount(0);
         tab.validate();
-        // tab.repaint();
         Statement stmt = null;
         ResultSet rs = null;
 
@@ -826,6 +826,9 @@ tabmod = new MyOpRgafTableModel();
                     } else {
                         String test = tabmod.getValueAt(row, col)
                                             .toString();
+                        if(".  .".equals(test.trim())) {
+                            value= null;
+                        } else
                         if (test.contains(".")) {
                             value = DatFunk.sDatInSQL(test);
                             if (value.equals("    -  -  ")) {
@@ -880,7 +883,8 @@ tabmod = new MyOpRgafTableModel();
                             dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen)));
                 }
             } catch (Exception ex) {
-                System.out.println(ex);
+                Logger logger = LoggerFactory.getLogger(OpRgafPanel.class);
+                logger.error("Fehler ind der Dateneingabe", ex);
                 JOptionPane.showMessageDialog(null, "Fehler in der Dateneingabe");
             }
         }
