@@ -47,11 +47,7 @@ import ag.ion.noa.NOAException;
 import office.OOService;
 
 class AusfallRechnung extends JDialog implements WindowListener, ActionListener, KeyListener {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
-
 
     private JRtaCheckBox[] leistung = { null, null, null, null, null };
 
@@ -105,8 +101,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
         pack();
 
     }
-
-    /****************************************************/
 
     private JPanel getGebuehren() { // 1 2 3 4 5 6 7
         FormLayout lay = new FormLayout("10dlu,fill:0:grow(0.50),right:80dlu,10dlu,80dlu,fill:0:grow(0.50),10dlu",
@@ -194,8 +188,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
         return pb.getPanel();
     }
 
-    /****************************************************/
-
     @Override
     public void windowClosed(WindowEvent arg0) {
 
@@ -245,8 +237,7 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
         return this;
     }
 
-
-    //XXX: never used why ?
+    /** XXX: never used why ? */
     private void doBuchen() {
         StringBuffer buf = new StringBuffer();
         buf.append("insert into rgaffaktura set ");
@@ -381,7 +372,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
             boolean schonersetzt = false;
             String placeholderDisplayText = placeholders[i].getDisplayText()
                                                            .toLowerCase();
-            /*****************/
             Set<?> entries = InitHashMaps.hmAdrPDaten.entrySet();
             Iterator<?> it = entries.iterator();
             while (it.hasNext()) {
@@ -395,7 +385,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
                     break;
                 }
             }
-            /*****************/
             entries = InitHashMaps.hmAdrAFRDaten.entrySet();
             it = entries.iterator();
             while (it.hasNext() && (!schonersetzt)) {
@@ -411,7 +400,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
             if (!schonersetzt) {
                 OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
             }
-            /*****************/
         }
 
     }
@@ -455,21 +443,12 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
     public void keyTyped(KeyEvent arg0) {
 
     }
-
 }
 
 class AusfallRechnungHintergrund extends JXPanel {
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
-
-
-
-
 
     public AusfallRechnungHintergrund() {
         super();
-
     }
 }

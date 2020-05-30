@@ -10,21 +10,19 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 
 public class OpRgAfIni {
-
     private static HashMap<String, Object> mahnParam;
 
-
-    // INIFile inif;
+    /** INIFile inif;. */
     private String path2IniFile;
     private String path2TemplateFiles;
     private String iniFile;
-    private boolean incRG = false, incAR = false, incVK = false, settingsLocked = false;
+    private boolean incRG, incAR, incVK, settingsLocked;
     private int vorauswahlSuchkriterium = -1;
     private String progHome, aktIK;
-    private boolean allowCashInSalesReceipt = false, allowCashSales = false, iniValuesValid = false;
+    private boolean allowCashInSalesReceipt, allowCashSales, iniValuesValid;
 
     /**
-     * liest Einträge aus 'oprgaf.ini'
+     * Liest Einträge aus 'oprgaf.ini'
      *
      * @param installationspfad, ini-verzeichnis, ik, filename
      */
@@ -38,14 +36,14 @@ public class OpRgAfIni {
         this.iniFile = file;
         new SwingWorker<Void, Void>() {
             @Override
-            protected Void doInBackground() throws java.lang.Exception {
+            protected Void doInBackground() throws Exception {
                 String section = "offenePosten";
                 INIFile inif = INITool.openIni(path2IniFile, iniFile); // keine Direktzugriffe aus ext. Modulen (mehr)
                                                                        // erlaubt -> iniFile lokal öffnen
                 if (inif.getStringProperty(section, "lockSettings") != null) {
                     settingsLocked = inif.getBooleanProperty(section, "lockSettings");
                 }
-                mahnParam = new HashMap<String, Object>();
+                mahnParam = new HashMap<>();
                 readLastSelectRgAfVk(inif);
                 OpCommon.readMahnParamCommon(inif, mahnParam);
                 readMahnParamRgAfVk(inif, mahnParam, path2TemplateFiles);
@@ -63,7 +61,7 @@ public class OpRgAfIni {
     }
 
     /**
-     * liest die zuletzt verwandten (Checkbox-)Einstellungen aus der oprgaf.ini ist
+     * Liest die zuletzt verwandten (Checkbox-)Einstellungen aus der oprgaf.ini ist
      * keine Einstellung vorhanden, werden hier die Defaults gesetzt
      */
     private void readLastSelectRgAfVk(INIFile inif) {
@@ -85,7 +83,7 @@ public class OpRgAfIni {
     }
 
     /**
-     * liest RgAfVk-spezif. Mahnparameter aus der ini-Datei ist keine Einstellung
+     * Liest RgAfVk-spezif. Mahnparameter aus der ini-Datei ist keine Einstellung
      * vorhanden, werden hier die Defaults gesetzt
      */
     private void readMahnParamRgAfVk(INIFile inif, HashMap<String, Object> mahnParam, String path2Templates) {
@@ -105,8 +103,8 @@ public class OpRgAfIni {
     }
 
     /**
-     * liest BarzahlungsEinstellungen aus der ini-Datei ist keine Einstellung
-     * vorhanden, werden hier die Defaults gesetzt
+     * Liest BarzahlungsEinstellungen aus der ini-Datei ist keine Einstellung
+     * vorhanden, werden hier die Defaults gesetzt.
      */
     private void readCashSettings(INIFile inif) {
         String section = "offenePosten";
@@ -122,7 +120,7 @@ public class OpRgAfIni {
 
     private boolean valuesValid() {
         int waitTimes = 20;
-        while ((!iniValuesValid) && (waitTimes-- > 1)) { // lesen aus ini ist noch nicht fertig...
+        while (!iniValuesValid && waitTimes-- > 1) { // lesen aus ini ist noch nicht fertig...
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
@@ -231,34 +229,31 @@ public class OpRgAfIni {
     }
 
     /**
-     * schreibt die zuletzt verwandten OpRgAf-Einstellungen (falls geändert) in die
+     * Schreibt die zuletzt verwandten OpRgAf-Einstellungen (falls geändert) in die
      * oprgaf.ini
      */
     void saveLastSelection() {
         INIFile inif = INITool.openIni(path2IniFile, iniFile);
         String section = "offenePosten";
-        if (!settingsLocked) { // ini-Einträge dürfen aktualisiert werden
-            if ((incRG != inif.getBooleanProperty(section, "Rezeptgebuehren"))
-                    || (incAR != inif.getBooleanProperty(section, "Ausfallrechnungen"))
-                    || (incVK != inif.getBooleanProperty(section, "Verkaeufe"))
-                    || (vorauswahlSuchkriterium != inif.getIntegerProperty(section, "Suchkriterium"))) {
+        if (!settingsLocked && (incRG != inif.getBooleanProperty(section, "Rezeptgebuehren")
+                || incAR != inif.getBooleanProperty(section, "Ausfallrechnungen")
+                || incVK != inif.getBooleanProperty(section, "Verkaeufe")
+                || vorauswahlSuchkriterium != inif.getIntegerProperty(section, "Suchkriterium"))) {
+            inif.setBooleanProperty(section, "Rezeptgebuehren", incRG, "offenePosten RgAfVk beruecksichtigt");
+            inif.setBooleanProperty(section, "Ausfallrechnungen", incAR, null);
+            inif.setBooleanProperty(section, "Verkaeufe", incVK, null);
 
-                inif.setBooleanProperty(section, "Rezeptgebuehren", incRG, "offenePosten RgAfVk beruecksichtigt");
-                inif.setBooleanProperty(section, "Ausfallrechnungen", incAR, null);
-                inif.setBooleanProperty(section, "Verkaeufe", incVK, null);
+            inif.setIntegerProperty(section, "Suchkriterium", vorauswahlSuchkriterium, "zuletzt gesucht");
 
-                inif.setIntegerProperty(section, "Suchkriterium", vorauswahlSuchkriterium, "zuletzt gesucht");
-
-                if (inif.getStringProperty(section, "lockSettings") == null) { // Wert noch nicht vorhanden?
-                    inif.setBooleanProperty(section, "lockSettings", false, "Aktualisieren der Eintraege gesperrt");
-                }
-                INITool.saveIni(inif);
+            if (inif.getStringProperty(section, "lockSettings") == null) { // Wert noch nicht vorhanden?
+        inif.setBooleanProperty(section, "lockSettings", false, "Aktualisieren der Eintraege gesperrt");
             }
-        }
+            INITool.saveIni(inif);
+         }
     }
 
     /**
-     * legt die Lock- und BarzahlungsEinstellungen in der oprgaf.ini mit
+     * Legt die Lock- und BarzahlungsEinstellungen in der oprgaf.ini mit
      * Defaultwerten an
      */
     private void initCashSettings() {
@@ -284,7 +279,7 @@ public class OpRgAfIni {
     }
 
     /**
-     * schreibt die zuletzt verwandten BarzahlungsEinstellungen (falls geändert) in
+     * Schreibt die zuletzt verwandten BarzahlungsEinstellungen (falls geändert) in
      * die oprgaf.ini
      */
     public boolean saveLastCashSettings() {
@@ -309,7 +304,7 @@ public class OpRgAfIni {
     }
 
     /**
-     * schreibt die zuletzt verwandten Lock-Einstellungen (falls geändert) in die
+     * Schreibt die zuletzt verwandten Lock-Einstellungen (falls geändert) in die
      * oprgaf.ini
      */
     public boolean saveLockSettings() {
@@ -332,5 +327,4 @@ public class OpRgAfIni {
         inif.setBooleanProperty("offenePosten", "erlaubeVRinBarkasse", allowCashInSalesReceipt,
                 "Verkaufsrechnungen duerfen in Barkasse gebucht werden");
     }
-
 }

@@ -17,30 +17,22 @@ import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
-//TODO: only public because of RehaIO
+/** TODO: only public because of RehaIO */
 public class OpRgafTab extends JXPanel implements ChangeListener {
-
-    /**
-     *
-     */
     private static final long serialVersionUID = -6012301447745950357L;
 
-    private Vector<String> vectitel = new Vector<String>();
-    private Vector<String> vecdescript = new Vector<String>();
-    private Vector<ImageIcon> vecimg = new Vector<ImageIcon>();
-
-    
-    
+    private Vector<String> vectitel = new Vector<>();
+    private Vector<String> vecdescript = new Vector<>();
+    private Vector<ImageIcon> vecimg = new Vector<>();
 
     private JTabbedPane jtb;
 
     private JXHeader jxh;
-    OpRgafPanel opRgafPanel = null;
+    OpRgafPanel opRgafPanel;
 
-    private OpRgafMahnungen opRgafMahnungen = null;
+    private OpRgafMahnungen opRgafMahnungen;
 
     public OpRgafTab() {
-        super();
         setOpaque(false);
         setLayout(new BorderLayout());
         jtb = new JTabbedPane();
@@ -62,7 +54,6 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
         jxh.validate();
         jtb.validate();
         validate();
-
     }
 
     public void setHeader(int header) {
@@ -106,7 +97,6 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
                 + "Hier werden die Funktionen die später Nebraska zu dem machen was Nebraske ist\n"
                 + "entwickelt und getestet");
         vecimg.add(ico);
-
     }
 
     @Override
@@ -114,15 +104,15 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
         JTabbedPane pane = (JTabbedPane) arg0.getSource();
         int sel = pane.getSelectedIndex();
         try {
-            if (sel == 0) {
-                // oppanel.setzeFocus();
+            switch (sel) {
+            case 0:
                 opRgafPanel.initSelection();
-            } else if (sel == 1) {
-                // rehaBillPanel.setzeFocus();
+                break;
+            case 1:
                 opRgafMahnungen.initSelection();
+                break;
             }
         } catch (Exception ex) {
-
         }
         jxh.setTitle(vectitel.get(sel));
         jxh.setDescription(vecdescript.get(sel));
@@ -142,17 +132,13 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
     public String getNotBefore() {
         try {
             return "2010-03-01";
-            // return DatFunk.sDatInSQL(oeinstellungpanel.tfs[4].getText());
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Fehler beim Bezug des Startdatums, nehme 01.01.1995");
         }
         return "1995-01-01";
     }
 
-    
-
-    public void sucheRezept(String rezept) {
+        public void sucheRezept(String rezept) {
         opRgafPanel.sucheRezept(rezept);
     }
-
 }

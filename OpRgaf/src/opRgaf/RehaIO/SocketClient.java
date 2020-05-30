@@ -6,11 +6,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class SocketClient {
- 
     private String nachricht = "";
- 
- 
-    private Socket client = null;
+
+     private Socket client;
     private int port = -1;
 
     public void setzeRehaNachricht(int xport, String xnachricht) {
@@ -42,9 +40,7 @@ public class SocketClient {
             client.close();
             input.close();
             output.close();
-        } catch (NullPointerException ex) {
-            ex.printStackTrace();
-        } catch (IOException e) {
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
     }

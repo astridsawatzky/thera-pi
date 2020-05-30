@@ -55,52 +55,37 @@ import ag.ion.noa.NOAException;
 import office.OOService;
 
 class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
-
     private Logger logger = LoggerFactory.getLogger(OpRgafMahnungen.class);
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 7011413450109922373L;
 
-    private ActionListener al = null;
+    private ActionListener al;
 
-    private OpRgafTab eltern = null;
+    private OpRgafTab eltern;
 
-    private JXPanel content = null;
-
+    private JXPanel content;
 
     private ButtonGroup bgroup = new ButtonGroup();
 
-
     private JRtaRadioButton[] rbMahnart = { null, null, null, null };
 
-    private JButton suchen = null;
-
-
+    private JButton suchen;
 
     private JRtaTextField[] rtfs = { null, null, null, null, null, null, null, null, null, null, null, null };
 
-
     private int aktuelleMahnstufe = 1;
 
+    private MyMahnungenTableModel tabmod;
 
-    private MyMahnungenTableModel tabmod = null;
-
-    private JXTable tab = null;
-
-
+    private JXTable tab;
 
     private Font fontfett = new Font("Tahoma", Font.BOLD, 10);
 
-
     private DecimalFormat dcf = new DecimalFormat("###0.00");
 
-
-    private HashMap<String, String> mahnParameter = new HashMap<String, String>();
+    private HashMap<String, String> mahnParameter = new HashMap<>();
 
     private ITextDocument textDocument;
-
 
     private final String stmtString =
             // findet OP in RGR,AFR u. VKR (außer Rechnungsverkauf 'an Kasse')
@@ -112,13 +97,10 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                     + "UNION SELECT rnr,rdatum,rgesamt,roffen,rpbetrag,rbezdatum,rmahndat1,rmahndat2,reznr,id as id,pat_intern as pat_id "
                     + "FROM rgaffaktura WHERE roffen > 0 ) t1 "
                     + "INNER JOIN pat5 AS t2 ON (t1.pat_id = t2.pat_intern) LEFT JOIN kass_adr AS t3 ON ( t2.kassenid = t3.id ) ";
-//        "WHERE  ( t1.rnr like 'RGR-%'  OR t1.rnr like 'AFR-%'  OR t1.rnr like 'VR-%'  ) AND  t1.roffen >='1' ORDER by t1.id";
-
-
+/**        "WHERE  ( t1.rnr like 'RGR-%'  OR t1.rnr like 'AFR-%'  OR t1.rnr like 'VR-%'  ) AND  t1.roffen >='1' ORDER by t1.id"; */
 
     private String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "Bezahldatum", "Mahndatum1", "Mahndatum2", "Krankenkasse", "RezeptNr.", "id" };
-
 
     private RgAfVkSelect selPan;
 
@@ -128,7 +110,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         this.setLayout(new BorderLayout());
         activateActionListener();
         add(getContent(), BorderLayout.CENTER);
-
     }
 
     private JXPanel getContent() {
@@ -273,7 +254,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
         rechnungpan.validate();
         return rechnungpan;
-
     }
 
     private JPanel getSuchEinstellungPanel() {
@@ -292,7 +272,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
         builder.addLabel("Bitte die gewünschte Mahnstufe einstellen:", cc.xy(colCnt++, rowCnt)); // 2,2
 
-        /********/
         JXPanel pan = new JXPanel();
         // pan.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         // 1 2 3
@@ -317,7 +296,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         pan.validate();
         ++colCnt;
         builder.add(pan, cc.xywh(colCnt++, rowCnt - 1, 1, 3, CellConstraints.FILL, CellConstraints.FILL)); // 4,1..3
-        /********/
 
         colCnt += 2;
         // Auswahl RGR/AFR/Verkauf
@@ -339,8 +317,8 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
     }
 
     /**
-     * letzte Checkbox-Auswahl wiederherstellen (bei Start des Moduls und bei
-     * Tab-Wechsel)
+     * Letzte Checkbox-Auswahl wiederherstellen (bei Start des Moduls und bei
+     * Tab-Wechsel).
      */
     void initSelection() {
         selPan.setRGR(OpRgaf.iniOpRgAf.getIncRG());
@@ -368,7 +346,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                     doAllesAufNull();
                     return;
                 }
-                if (cmd.equals("suchen")) {
+                if ("suchen".equals(cmd)) {
                     new SwingWorker<Void, Void>() {
                         @Override
                         protected Void doInBackground() throws Exception {
@@ -383,15 +361,14 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                         }
 
                     }.execute();
-
                 }
-                if (cmd.equals("mahnungstarten")) {
+                if ("mahnungstarten".equals(cmd)) {
                     doMahnungStarten();
                 }
-                if (cmd.equals("vorheriger")) {
+                if ("vorheriger".equals(cmd)) {
                     doVorheriger();
                 }
-                if (cmd.equals("naechster")) {
+                if ("naechster".equals(cmd)) {
                     doNaechster();
                 }
             }
@@ -409,7 +386,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
             tab.setRowSelectionInterval(row + 1, row + 1);
         } else {
             JOptionPane.showMessageDialog(null, "Sie sind bereits am Tabellenende angelangt");
-            return;
         }
     }
 
@@ -423,7 +399,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
             tab.setRowSelectionInterval(row - 1, row - 1);
         } else {
             JOptionPane.showMessageDialog(null, "Sie sind bereits am Teballenanfang angelangt");
-            return;
         }
     }
 
@@ -443,8 +418,8 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         mahnParameter.put("<Mrbetrag>", rtfs[6].getText().trim());
         mahnParameter.put("<Mroffen>", rtfs[7].getText().trim());
         mahnParameter.put("<Mheute>", DatFunk.sHeute());
-        mahnParameter.put("<Mmahndat1>", (rtfs[8].getText().trim().length() == 10 ? rtfs[8].getText().trim() : ""));
-        mahnParameter.put("<Mmahndat2>", (rtfs[9].getText().trim().length() == 10 ? rtfs[9].getText().trim() : ""));
+        mahnParameter.put("<Mmahndat1>", rtfs[8].getText().trim().length() == 10 ? rtfs[8].getText().trim() : "");
+        mahnParameter.put("<Mmahndat2>", rtfs[9].getText().trim().length() == 10 ? rtfs[9].getText().trim() : "");
 
         String datei = OpRgaf.iniOpRgAf.getFormNb(aktuelleMahnstufe);
         try {
@@ -455,7 +430,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                 JOptionPane.showMessageDialog(null,
                         "Kann den OpenOffice-Writer nicht starten 'textDocument' ist bereits null");
             }
-
         } catch (Exception ex) {
             logger.debug("Mahnung kann nicht gedruckt werden mit Vorlage:" + datei, ex);
             JOptionPane.showMessageDialog(null, "Fehler im OpenOffice-System, Mahnung kann nicht gedruckt werden");
@@ -471,15 +445,15 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         switch (aktuelleMahnstufe) {
         case 1:
             cmd = "update rgaffaktura set rmahndat1='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where id='"
-                    + Integer.toString(id) + "' LIMIT 1";
+                    + id + "' LIMIT 1";
             break;
         case 2:
             cmd = "update rgaffaktura set rmahndat2='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where id='"
-                    + Integer.toString(id) + "' LIMIT 1";
+                    + id + "' LIMIT 1";
             break;
         case 3:
             cmd = "update rgaffaktura set rahndat3='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where id='"
-                    + Integer.toString(id) + "' LIMIT 1";
+                    + id + "' LIMIT 1";
             break;
 
         }
@@ -507,7 +481,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
     private void doAllesAufNull() {
         for (int i = 0; i < 11; i++) {
             if (rtfs[i] != null) {
-                if (rtfs[i].getRtaType().equals("DATUM")) {
+                if ("DATUM".equals(rtfs[i].getRtaType())) {
                     rtfs[i].setText("  .  .    ");
                 } else {
                     rtfs[i].setText("");
@@ -535,19 +509,19 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         String vergleichsdatum = "";
         switch (aktuelleMahnstufe) {
         case 1:
-            vergleichsdatum = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sHeute(), (frist1 * -1)));
+            vergleichsdatum = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sHeute(), frist1 * -1));
             cmd = stmtString + " where (rdatum <='" + vergleichsdatum + "' AND rdatum >='" + nichtvorDatum
                     + "' AND rmahndat1 IS NULL " + testArt() + ")";
             starteSuche(cmd);
             break;
         case 2:
-            vergleichsdatum = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sHeute(), (frist2 * -1)));
+            vergleichsdatum = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sHeute(), frist2 * -1));
             cmd = stmtString + " where (rmahndat1 <='" + vergleichsdatum + "' AND rdatum >='" + nichtvorDatum
                     + "' AND rmahndat2 IS NULL " + testArt() + ")";
             starteSuche(cmd);
             break;
         case 3:
-            vergleichsdatum = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sHeute(), (frist3 * -1)));
+            vergleichsdatum = DatFunk.sDatInSQL(DatFunk.sDatPlusTage(DatFunk.sHeute(), frist3 * -1));
             cmd = "select * from rliste where (rmahndat2 <='" + vergleichsdatum + "' AND rdatum >='" + nichtvorDatum
                     + "' AND mahndat3 IS NULL " + testArt() + ")";
             starteSuche(cmd);
@@ -561,18 +535,18 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
             tmpStr = " rnr like 'RGR-%'";
         }
         if (OpRgaf.iniOpRgAf.getIncAR()) {
-            if (tmpStr.length() > 0) {
+            if (!tmpStr.isEmpty()) {
                 tmpStr = tmpStr + " or ";
             }
             tmpStr = tmpStr + " rnr like 'AFR-%'";
         }
         if (OpRgaf.iniOpRgAf.getIncVK()) {
-            if (tmpStr.length() > 0) {
+            if (!tmpStr.isEmpty()) {
                 tmpStr = tmpStr + " or ";
             }
             tmpStr = tmpStr + " rnr like 'VR-%'";
         }
-        if (tmpStr.length() > 0) {
+        if (!tmpStr.isEmpty()) {
             tmpStr = " and (" + tmpStr + ")";
         } else {
             tmpStr = "and rnr like 'dummy'"; // nix gewählt -> nix anzeigen
@@ -667,13 +641,9 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                 }
             }
         }
-
     }
 
     private class MyMahnungenTableModel extends DefaultTableModel {
-        /**
-        *
-        */
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -714,12 +684,9 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
             }
             return false;
         }
-
     }
 
-    /*******************************/
-
-    private class MahnungListSelectionHandler implements ListSelectionListener { // Zeile in Rechnungsliste gewählt
+    private class MahnungListSelectionHandler implements ListSelectionListener { /** Zeile in Rechnungsliste gewählt. */
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -740,7 +707,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                     }
                 }
             }
-
         }
     }
 
@@ -767,7 +733,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
     }
 
     private void doFakturaGedoense(String rnr, Vector<Vector<String>> vecx) {
-        if (vecx.size() <= 0) {
+        if (vecx.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Rechnungsdaten können nicht ermittelt werden");
             return;
         }
@@ -782,25 +748,19 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         rtfs[7].setText(dcf.format(Double.parseDouble(vecx.get(0).get(9))));
 
         String test = vecx.get(0).get(10);
-        if (test == null) {
-            rtfs[8].setText("  .  .    ");
-        } else if (test.toString().trim().length() != 10) {
+        if ((test == null) || (test.toString().trim().length() != 10)) {
             rtfs[8].setText("  .  .    ");
         } else {
             rtfs[8].setText(DatFunk.sDatInDeutsch(test.toString()));
         }
 
         test = vecx.get(0).get(11);
-        if (test == null) {
-            rtfs[9].setText("  .  .    ");
-        } else if (test.toString().trim().length() != 10) {
+        if ((test == null) || (test.toString().trim().length() != 10)) {
             rtfs[9].setText("  .  .    ");
         } else {
             rtfs[9].setText(DatFunk.sDatInDeutsch(test.toString()));
         }
     }
-
-    /*******************************/
 
     private void starteMahnDruck(String url) {
         IDocumentService documentService = null;
@@ -852,15 +812,11 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
                     break;
                 }
             }
-            /*****************/
 
             if (!schonersetzt) {
                 OOTools.loescheLeerenPlatzhalter(textDocument, placeholders[i]);
             }
 
-            /*****************/
         }
-
     }
-
 }

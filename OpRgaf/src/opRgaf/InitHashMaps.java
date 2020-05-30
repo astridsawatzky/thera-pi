@@ -11,14 +11,12 @@ import CommonTools.DatFunk;
 import CommonTools.StringTools;
 
 class InitHashMaps {
- 
-    private static HashMap<String, String> hmAdrRDaten = null;
-    static HashMap<String, String> hmAdrPDaten = null;
-    static HashMap<String, String> hmAdrAFRDaten = null;
+    private static HashMap<String, String> hmAdrRDaten;
+    static HashMap<String, String> hmAdrPDaten;
+    static HashMap<String, String> hmAdrAFRDaten;
 
-    /********************/
     public InitHashMaps() {
-        hmAdrAFRDaten = new HashMap<String, String>();
+        hmAdrAFRDaten = new HashMap<>();
         List<String> lAdrAFRDaten = Arrays.asList(new String[] { "<AFRposition1>", "<AFRposition2>", "<AFRposition3>",
                 "<AFRposition4>", "<AFRpreis1>", "<AFRpreis2>", "<AFRpreis3>", "<AFRpreis4>", "<AFRgesamt>",
                 "<AFRnummer>", "<AFRkurz1>", "<AFRkurz2>", "<AFRkurz3>", "<AFRkurz4>", "<AFRlang1>", "<AFRlang2>",
@@ -26,10 +24,8 @@ class InitHashMaps {
         for (int i = 0; i < lAdrAFRDaten.size(); i++) {
             hmAdrAFRDaten.put(lAdrAFRDaten.get(i), "");
         }
-        /********************/
 
-        /********************/
-        hmAdrRDaten = new HashMap<String, String>();
+        hmAdrRDaten = new HashMap<>();
         List<String> lAdrRDaten = Arrays.asList(new String[] { "<Rpatid>", "<Rnummer>", "<Rdatum>", "<Rposition1>",
                 "<Rposition2>", "<Rposition3>", "<Rposition4>", "<Rpreis1>", "<Rpreis2>", "<Rpreis3>", "<Rpreis4>",
                 "<Rproz1>", "<Rproz2>", "<Rproz3>", "<Rproz4>", "<Rgesamt1>", "<Rgesamt2>", "<Rgesamt3>", "<Rgesamt4>",
@@ -41,17 +37,14 @@ class InitHashMaps {
         for (int i = 0; i < lAdrRDaten.size(); i++) {
             hmAdrRDaten.put(lAdrRDaten.get(i), "");
         }
-        /********************/
 
-        /********************/
-        hmAdrPDaten = new HashMap<String, String>();
+        hmAdrPDaten = new HashMap<>();
         List<String> lAdrPDaten = Arrays.asList(new String[] { "<Padr1>", "<Padr2>", "<Padr3>", "<Padr4>", "<Padr5>",
                 "<Pgeboren>", "<Panrede>", "<Pnname>", "<Pvname>", "<Pbanrede>", "<Ptelp>", "<Ptelg>", "<Ptelmob>",
                 "<Pfax>", "<Pemail>", "<Ptitel>", "<Pihrem>", "<Pihnen>", "<Pid>", "<Palter>", "<Pzigsten>" });
         for (int i = 0; i < lAdrPDaten.size(); i++) {
             hmAdrPDaten.put(lAdrPDaten.get(i), "");
         }
-
     }
 
     static void constructPatHMap(Vector<String> patDaten) {
@@ -62,18 +55,15 @@ class InitHashMaps {
             //// System.out.println(lang);
             // hmAdrPDaten.put("<Padr1>", patDaten.get(0));
             String anrede = StringTools.EGross(patDaten.get(0));
-            if (anrede.toUpperCase()
-                      .equals("HERR")) {
+            if ("HERR".equals(anrede.toUpperCase())) {
                 isherr = true;
             }
             String titel = StringTools.EGross(patDaten.get(1));
             String vorname = StringTools.EGross(patDaten.get(3));
             String nachname = StringTools.EGross(StringTools.EscapedDouble(patDaten.get(2)));
 
-            if (nachname.trim()
-                        .equals("")
-                    && vorname.trim()
-                              .equals("")) {
+            if ("".equals(nachname.trim())
+                    && "".equals(vorname.trim())) {
                 JOptionPane.showMessageDialog(null,
                         "Ausgewählter Patient hat weder Vor- noch Nachname!!!\n+Zifix 'luja");
                 return;
@@ -83,15 +73,15 @@ class InitHashMaps {
             String strasse = StringTools.EGross(patDaten.get(21));
             String plzort = patDaten.get(23) + " " + StringTools.EGross(patDaten.get(24));
             String geboren = DatFunk.sDatInDeutsch(patDaten.get(4));
-            String zeile1 = "";
-            String zeile2 = "";
-            String zeile3 = "";
+            String zeile1;
+            String zeile2;
+            String zeile3;
             String branrede = "";
-            int jahrheute = Integer.valueOf(DatFunk.sHeute()
+            int jahrheute = Integer.parseInt(DatFunk.sHeute()
                                                    .substring(6));
             int jahrgeboren = 0;
             try {
-                jahrgeboren = Integer.valueOf(geboren.substring(6));
+                jahrgeboren = Integer.parseInt(geboren.substring(6));
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null,
                         "Irgend eine Arschgeige hat einmal mehr kein Geburtstag eingegeben");
@@ -103,12 +93,12 @@ class InitHashMaps {
             }
             hmAdrPDaten.put("<Palter>", Integer.toString(ialter));
             if (ialter >= 20) {
-                hmAdrPDaten.put("<Pzigsten>", Integer.toString(ialter) + "-sten");
+                hmAdrPDaten.put("<Pzigsten>", ialter + "-sten");
             } else {
-                hmAdrPDaten.put("<Pzigsten>", Integer.toString(ialter) + "-ten");
+                hmAdrPDaten.put("<Pzigsten>", ialter + "-ten");
             }
 
-            zeile1 = (titel.length() > 0 ? titel + " " : "") + vorname + " " + nachname;
+            zeile1 = (!titel.isEmpty() ? titel + " " : "") + vorname + " " + nachname;
             zeile2 = strasse;
             zeile3 = plzort;
             if (titel.indexOf("med.") > 0) {
@@ -116,7 +106,7 @@ class InitHashMaps {
             }
             if (isherr) {
                 if (!iskind) {
-                    branrede = "Sehr geehrter Herr" + (titel.length() > 0 ? " " + titel : "") + " " + nachname;
+                    branrede = "Sehr geehrter Herr" + (!titel.isEmpty() ? " " + titel : "") + " " + nachname;
                     hmAdrPDaten.put("<Panrede>", anrede);
                     hmAdrPDaten.put("<Pihnen>", "Ihnen");
                     hmAdrPDaten.put("<Pihrem>", "Ihrem");
@@ -126,19 +116,16 @@ class InitHashMaps {
                     hmAdrPDaten.put("<Pihnen>", "Dir");
                     hmAdrPDaten.put("<Pihrem>", "Deinem");
                 }
-
+            } else if (!iskind) {
+                branrede = "Sehr geehrte Frau" + (!titel.isEmpty() ? " " + titel : "") + " " + nachname;
+                hmAdrPDaten.put("<Panrede>", anrede);
+                hmAdrPDaten.put("<Pihnen>", "Ihnen");
+                hmAdrPDaten.put("<Pihrem>", "Ihrem");
             } else {
-                if (!iskind) {
-                    branrede = "Sehr geehrte Frau" + (titel.length() > 0 ? " " + titel : "") + " " + nachname;
-                    hmAdrPDaten.put("<Panrede>", anrede);
-                    hmAdrPDaten.put("<Pihnen>", "Ihnen");
-                    hmAdrPDaten.put("<Pihrem>", "Ihrem");
-                } else {
-                    branrede = "Liebe " + vorname;
-                    hmAdrPDaten.put("<Panrede>", "");
-                    hmAdrPDaten.put("<Pihnen>", "Dir");
-                    hmAdrPDaten.put("<Pihrem>", "Deinem");
-                }
+                branrede = "Liebe " + vorname;
+                hmAdrPDaten.put("<Panrede>", "");
+                hmAdrPDaten.put("<Pihnen>", "Dir");
+                hmAdrPDaten.put("<Pihrem>", "Deinem");
             }
 
             hmAdrPDaten.put("<Padr1>", zeile1);
@@ -161,5 +148,4 @@ class InitHashMaps {
             JOptionPane.showMessageDialog(null, "Fehler beim zusammenstellen der Patienten HashMap");
         }
     }
-
 }

@@ -60,13 +60,9 @@ import office.OOService;
 import opRgaf.RehaIO.SocketClient;
 
 class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
-
-
     private static final long serialVersionUID = -7883557713071422132L;
 
-
-    private JRtaTextField suchen = null;
-
+    private JRtaTextField suchen;
 
     private JRtaTextField[] tfs = { null, null, null, null };
 
@@ -75,40 +71,30 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     private enum btIdx {
         ausbuchen,
         suchen,
-
-    };
-
+    }
 
     private int btAusbuchen = btIdx.ausbuchen.ordinal();
 
     private int btSuchen = btIdx.suchen.ordinal();
 
-    private JRtaComboBox combo = null;
+    private JRtaComboBox combo;
 
+    private KeyListener kl;
 
-    private KeyListener kl = null;
+    private ActionListener al;
 
-    private ActionListener al = null;
+    private MyOpRgafTableModel tabmod;
 
-
-    private MyOpRgafTableModel tabmod = null;
-
-    private JXTable tab = null;
+    private JXTable tab;
 
     private Component kopieButton;
 
-    private JRtaCheckBox bar = null;
-    private boolean barWasSelected = false;
-
-
-
-
+    private JRtaCheckBox bar;
+    private boolean barWasSelected;
 
     private DecimalFormat dcf = new DecimalFormat("###0.00");
 
-
-
-    private HashMap<String, String> hmRezgeb = new HashMap<String, String>();
+    private HashMap<String, String> hmRezgeb = new HashMap<>();
 
     private final String stmtString =
             "SELECT concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(t2.geboren,'%d.%m.%Y')),t1.rnr,t1.rdatum,t1.rgesamt,"
@@ -119,19 +105,13 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     + "UNION SELECT rnr,rdatum,rgesamt,roffen,rpbetrag,rbezdatum,rmahndat1,rmahndat2,reznr,id as id,pat_intern as pat_id "
                     + "FROM rgaffaktura ) t1 LEFT JOIN pat5 AS t2 ON (t1.pat_id = t2.pat_intern) LEFT JOIN kass_adr AS t3 ON ( t2.kassenid = t3.id )";
 
-
     private String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "bezahlt am", "1.Mahnung", "2.Mahnung", "Krankenkasse", "RezeptNr.", "id" };
 
     private String[] colnamen = { "nix", "rnr", "rdatum", "rgesamt", "roffen", "rpbetrag", "rbezdatum", "rmahndat1",
             "rmahndat2", "nix", "nix", "id" };
 
-
-
-    private class IdxCol { // Indices fuer sprechende Spaltenzugriffe
-
-
-
+    private class IdxCol { /** Indices fuer sprechende Spaltenzugriffe. */
 
         static final short Name = 0;
         static final short RNr = 1;
@@ -151,7 +131,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     private RgAfVkSelect selPan;
 
     OpRgafPanel(OpRgafTab xeltern) {
-        super();
         startKeyListener();
         startActionListener();
         setLayout(new BorderLayout());
@@ -162,7 +141,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                 setzeFocus();
             }
         });
-
     }
 
     void setzeFocus() {
@@ -223,11 +201,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         buts[btSuchen].setMnemonic(KeyEvent.VK_S);
         builder.add(buts[btSuchen], cc.xy(17, rowCnt));
 
-//**********************
-        while (!OpRgaf.DbOk) {
-
-        }
-        tabmod = new MyOpRgafTableModel();
+tabmod = new MyOpRgafTableModel();
         tabmod.setColumnIdentifiers(spalten);
         tab = new JXTable(tabmod);
         tab.setHorizontalScrollEnabled(true);
@@ -289,8 +263,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
         ++colCnt;
         bar = (JRtaCheckBox) builder.add(new JRtaCheckBox("bar in Kasse"), cc.xy(++colCnt, rowCnt));
-        if (OpRgaf.iniOpRgAf.getWohinBuchen()
-                            .equals("Kasse")) {
+        if ("Kasse".equals(OpRgaf.iniOpRgAf.getWohinBuchen())) {
             bar.setSelected(true);
         }
 
@@ -310,11 +283,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         return builder.getPanel();
     }
 
-
-
-    /**
-     * letzte Checkbox-Auswahl wiederherstellen
-     */
+    /** Letzte Checkbox-Auswahl wiederherstellen. */
     void initSelection() {
         selPan.setRGR(OpRgaf.iniOpRgAf.getIncRG());
         selPan.setAFR(OpRgaf.iniOpRgAf.getIncAR());
@@ -345,26 +314,20 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             public void keyPressed(KeyEvent arg0) {
                 if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
                     arg0.consume();
-                    if (((JComponent) arg0.getSource()).getName()
-                                                       .equals("suchen")) {
+                    if ("suchen".equals(((JComponent) arg0.getSource()).getName())) {
                         sucheEinleiten();
-                        return;
-                    } else if (((JComponent) arg0.getSource()).getName()
-                                                              .equals("offen")) {
+                    } else if ("offen".equals(((JComponent) arg0.getSource()).getName())) {
                         setzeFocus();
                     }
                 }
-
             }
 
             @Override
             public void keyReleased(KeyEvent arg0) {
-
             }
 
             @Override
             public void keyTyped(KeyEvent arg0) {
-
             }
 
         };
@@ -375,23 +338,21 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             @Override
             public void actionPerformed(ActionEvent arg0) {
                 String cmd = arg0.getActionCommand();
-                if (cmd.equals("ausbuchen")) {
+                if ("ausbuchen".equals(cmd)) {
                     tabmod.removeTableModelListener(getInstance());
                     doAusbuchen();
                     tabmod.addTableModelListener(getInstance());
                     setzeFocus();
                     return;
                 }
-                if (cmd.equals("kopie")) {
+                if ("kopie".equals(cmd)) {
                     doKopie();
                     setzeFocus();
                     return;
                 }
-                if (cmd.equals("suchen")) {
+                if ("suchen".equals(cmd)) {
                     sucheEinleiten();
-                    return;
                 }
-
             }
         };
     }
@@ -403,11 +364,9 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         final String rnr = tab.getValueAt(tab.getSelectedRow(), 1)
                               .toString();
         if (rnr.startsWith("AFR")) {
-
             new SwingWorker<Void, Void>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-
                     try {
                         // System.out.println("in Ausfallrechnung");
                         String id = tab.getValueAt(tab.getSelectedRow(), 11)
@@ -454,7 +413,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     tabmod.addTableModelListener(getInstance());
                     suchen.setEnabled(true);
                     buts[btAusbuchen].setEnabled(true);
-
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Fehler beim einlesen der Datensätze");
@@ -485,7 +443,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             return;
         }
 
-        if (nochoffen.equals(BigDecimal.valueOf(Double.parseDouble("0.0")))) {
+        if (nochoffen.compareTo(BigDecimal.valueOf(Double.parseDouble("0.0"))) == 0) {
             JOptionPane.showMessageDialog(null, "Diese Rechnung ist bereits auf bezahlt gesetzt");
             return;
         }
@@ -525,14 +483,14 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         if (rgaf_rechnum.startsWith("RGR-") || rgaf_rechnum.startsWith("AFR-")) { // aus rgaffaktura ausbuchen
             cmd = "update rgaffaktura set roffen='" + dcf.format(restbetrag)
                                                          .replace(",", ".")
-                    + "', rbezdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where id ='" + Integer.toString(id)
+                    + "', rbezdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where id ='" + id
                     + "' LIMIT 1";
         }
         if (rgaf_rechnum.startsWith("VR-")) { // aus verkliste ausbuchen
             cmd = "update verkliste set v_offen='" + dcf.format(restbetrag)
                                                         .replace(",", ".")
                     + "', v_bezahldatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where verklisteID ='"
-                    + Integer.toString(id) + "' LIMIT 1";
+                    + id + "' LIMIT 1";
         }
         SqlInfo.sqlAusfuehren(cmd);
         schreibeAbfrage();
@@ -558,10 +516,8 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     }
 
     private void doSuchen() {
-        if (suchen.getText()
-                  .trim()
-                  .equals("")) {
-
+        if ("".equals(suchen.getText()
+                  .trim())) {
             return;
         }
         int suchart = combo.getSelectedIndex();
@@ -574,12 +530,11 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         String searchStr = suchen.getText()
                                  .trim();
         String searchStrNumVal = searchStr.replace(",", ".");
-        if (tmpStr.length() > 0) {
+        if (!tmpStr.isEmpty()) {
             whereToSearch = whereToSearch + " ( " + tmpStr + " ) AND ";
         }
 
         try {
-
             switch (suchart) {
             case 0:
                 cmd = stmtString + " where rnr ='" + searchStr + "'";
@@ -632,7 +587,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             // ex.printStackTrace();
         }
 
-        if (!cmd.equals("")) {
+        if (!"".equals(cmd)) {
             buts[btAusbuchen].setEnabled(false);
             suchen.setEnabled(false);
             try {
@@ -646,7 +601,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             buts[btAusbuchen].setEnabled(true);
             setzeFocus();
         }
-
     }
 
     private String sucheStornierte(String whereToSearch) {
@@ -664,9 +618,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     }
 
     private class MyOpRgafTableModel extends DefaultTableModel {
-        /**
-        *
-        */
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -694,13 +645,11 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
         @Override
         public boolean isCellEditable(int row, int col) {
-
             if (col > 1 && col < 9) {
                 return true;
             }
             return false;
         }
-
     }
 
     private void starteSuche(String sstmt) {
@@ -716,7 +665,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             e.printStackTrace();
         }
         try {
-
             rs = stmt.executeQuery(sstmt);
             Vector<Object> vec = new Vector<Object>();
             int durchlauf = 0;
@@ -775,7 +723,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                 tab.setRowSelectionInterval(0, 0);
                 adjustColumns();
             }
-
         } catch (SQLException ev) {
             System.out.println("SQLException: " + ev.getMessage());
             System.out.println("SQLState: " + ev.getSQLState());
@@ -799,18 +746,14 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     }
 
     private void adjustColumns() {
-        /*
-         * ausgewaehlte Spalten dem Inhalt anpassen
-         */
+        /* ausgewaehlte Spalten dem Inhalt anpassen */
         int columns2adjust[] = { 0, 4, 7, 8, 10 }; // Name,Vorname,Geburtstag, Offen, 1.Mahnung, 2.Mahnung, RezeptNr.
         for (int col : columns2adjust) {
             tab.packColumn(col, 5);
         }
     }
 
-    /*****************************************************/
     private class OPListSelectionHandler implements ListSelectionListener {
-
         @Override
         public void valueChanged(ListSelectionEvent e) {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
@@ -859,7 +802,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     }
                 }
             }
-
         }
     }
 
@@ -873,11 +815,11 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             try {
                 int col = arg0.getColumn();
                 int row = arg0.getFirstRow();
-                String colname = colnamen[col].toString();
+                String colname = colnamen[col];
                 String value = "";
                 String id = Integer.toString((Integer) tabmod.getValueAt(row, 11));
                 if (tabmod.getColumnClass(col) == Boolean.class) {
-                    value = (tabmod.getValueAt(row, col) == Boolean.FALSE ? "F" : "T");
+                    value = tabmod.getValueAt(row, col) == Boolean.FALSE ? "F" : "T";
                 } else if (tabmod.getColumnClass(col) == Date.class) {
                     if (tabmod.getValueAt(row, col) == null) {
                         value = "1900-01-01";
@@ -889,13 +831,10 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                             if (value.equals("    -  -  ")) {
                                 value = null;
                             }
+                        } else if (test.equals("    -  -  ")) {
+                            value = null;
                         } else {
-                            if (test.equals("    -  -  ")) {
-                                value = null;
-                            } else {
-                                value = test;
-                            }
-
+                            value = test;
                         }
                     }
                 } else if (tabmod.getColumnClass(col) == Double.class) {
@@ -907,7 +846,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                 }
                 String rnr = (String) tabmod.getValueAt(row, 1);
                 if (rnr.startsWith("VR-")) { // test ob VR -> Änderung in 'verkliste' schreiben
-                    HashMap<String, String> hmMap2VerkListe = new HashMap<String, String>();
+                    HashMap<String, String> hmMap2VerkListe = new HashMap<>();
                     hmMap2VerkListe.put("rbezdatum", "v_bezahldatum");  // der Fluch der verbogenen Spaltennamen
                     hmMap2VerkListe.put("roffen", "v_offen");
                     hmMap2VerkListe.put("rgesamt", "v_betrag");
@@ -918,7 +857,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                         System.out.println(cmd);
                         SqlInfo.sqlAusfuehren(cmd);
                     } else {
-                        new SwingWorker<Void, Void>() { // andere 'rückgängig' machen (= Suche neu ausführen)
+                        new SwingWorker<Void, Void>() { /** Andere 'rückgängig' machen (= Suche neu ausführen). */
                             @Override // eleganter wäre nur das geänderte Feld neu einzulesen ...
                             protected Void doInBackground() throws Exception {
                                 try {
@@ -940,12 +879,10 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     tfs[0].setText(
                             dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen)));
                 }
-
             } catch (Exception ex) {
                 System.out.println(ex);
                 JOptionPane.showMessageDialog(null, "Fehler in der Dateneingabe");
             }
-            return;
         }
     }
 
@@ -982,33 +919,25 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",
                     Arrays.asList(new String[] {}));
             db = "verordn";
-
         }
-        String behandlungen = vecaktrez.get(0) + "*" + (!vecaktrez.get(1)
-                                                                  .trim()
-                                                                  .equals("") ? "" + vecaktrez.get(1) : "")
-                + (!vecaktrez.get(2)
-                             .trim()
-                             .equals("") ? "," + vecaktrez.get(2) : "")
-                + (!vecaktrez.get(3)
-                             .trim()
-                             .equals("") ? "," + vecaktrez.get(3) : "")
-                + (!vecaktrez.get(4)
-                             .trim()
-                             .equals("") ? "," + vecaktrez.get(4) : "")
-                + (!vecaktrez.get(5)
-                             .trim()
-                             .equals("") ? "," + vecaktrez.get(5) : "")
-                + (!vecaktrez.get(6)
-                             .trim()
-                             .equals("") ? "," + vecaktrez.get(6) : "");
+        String behandlungen = vecaktrez.get(0) + "*" + (!"".equals(vecaktrez.get(1)
+                                                                  .trim()) ? vecaktrez.get(1) : "")
+                + (!"".equals(vecaktrez.get(2)
+                             .trim()) ? "," + vecaktrez.get(2) : "")
+                + (!"".equals(vecaktrez.get(3)
+                             .trim()) ? "," + vecaktrez.get(3) : "")
+                + (!"".equals(vecaktrez.get(4)
+                             .trim()) ? "," + vecaktrez.get(4) : "")
+                + (!"".equals(vecaktrez.get(5)
+                             .trim()) ? "," + vecaktrez.get(5) : "")
+                + (!"".equals(vecaktrez.get(6)
+                             .trim()) ? "," + vecaktrez.get(6) : "");
 
         String cmd = "select abwadress,id from pat5 where pat_intern='" + pat_intern + "' LIMIT 1";
         Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
         String[] adressParams = null;
-        if (adrvec.get(0)
-                  .get(0)
-                  .equals("T")) {
+        if ("T".equals(adrvec.get(0)
+                  .get(0))) {
             adressParams = holeAbweichendeAdresse(adrvec.get(0)
                                                         .get(1));
         } else {
@@ -1042,14 +971,11 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         String url = OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/RezeptgebuehrRechnung.ott.Kopie.ott";
         try {
             officeStarten(url);
-        } catch (OfficeApplicationException e) {
-            e.printStackTrace();
-        } catch (NOAException e) {
+        } catch (OfficeApplicationException | NOAException e) {
             e.printStackTrace();
         } catch (TextException e) {
             e.printStackTrace();
         }
-
     }
 
     private String[] getAdressParams(String patid) {
@@ -1097,25 +1023,22 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     }
 
     private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException {
-        IDocumentService documentService = null;
+        IDocumentService documentService;
         //// System.out.println("Starte Datei -> "+url);
-
 
         documentService =   new OOService().getOfficeapplication().getDocumentService();
 
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
-        IDocument document = null;
+        IDocument document;
 
         document = documentService.loadDocument(url, docdescript);
         ITextDocument textDocument = (ITextDocument) document;
-        /**********************/
         // OOTools.druckerSetzen(textDocument,
         // SystemConfig.hmAbrechnung.get("hmgkvrechnungdrucker"));
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
-        ITextField[] placeholders = null;
+        ITextField[] placeholders;
 
         placeholders = textFieldService.getPlaceholderFields();
         String placeholderDisplayText = "";
@@ -1126,17 +1049,11 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             Set<Entry<String, String>> entries = hmRezgeb.entrySet();
             Iterator<Entry<String, String>> it = entries.iterator();
             while (it.hasNext()) {
-
                 Entry<String, String> entry = it.next();
                 if (((String) entry.getKey()).toLowerCase()
                                              .equals(placeholderDisplayText)) {
-                    try {
-
-                    } catch (RuntimeException ex) {
-                        // System.out.println("Fehler bei "+placeholderDisplayText);
-                    }
                     placeholders[i].getTextRange()
-                                   .setText(((String) entry.getValue()));
+                                   .setText((String) entry.getValue());
 
                     break;
                 }
@@ -1165,5 +1082,4 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         OpRgaf.iniOpRgAf.setIncVK(vkr);
         calcGesamtOffen();
     }
-
 }

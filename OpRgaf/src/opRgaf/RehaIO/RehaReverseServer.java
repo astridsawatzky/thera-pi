@@ -14,14 +14,11 @@ import io.RehaIOMessages;
 import opRgaf.OpRgaf;
 
 public class RehaReverseServer extends SwingWorker<Void, Void> {
-    public ServerSocket serv = null;
+    public ServerSocket serv;
 
     private StringBuffer sb = new StringBuffer();
 
-    private InputStream input = null;
-
-
-
+    private InputStream input;
 
     public RehaReverseServer(int x) {
         OpRgaf.xport = x;
@@ -38,12 +35,10 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
         } else if (op.split("#")[1].equals(RehaIOMessages.MUST_REZFIND)) {
             OpRgaf.thisClass.otab.sucheRezept(op.split("#")[2]);
         }
-
     }
 
     @Override
     protected Void doInBackground() throws Exception {
-
         while (OpRgaf.xport < 7050) {
             try {
                 serv = new ServerSocket(OpRgaf.xport);
@@ -70,7 +65,7 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
         }
         Socket client = null;
 
-        while (true) {
+        do {
             try {
                 client = serv.accept();
             } catch (SocketException se) {
@@ -92,17 +87,11 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
                 e.printStackTrace();
                 System.out.println("In Exception währen der while input.read()-Schleife");
             }
-            /***************************/
 
             if (sb.toString()
                   .startsWith("Reha#")) {
                 doReha(String.valueOf(sb.toString()));
             }
-        }
-
-
+        } while (true);
     }
-
-
-
 }
