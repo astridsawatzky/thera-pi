@@ -48,24 +48,31 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import office.OOService;
 
-public class AusfallRechnung extends JDialog implements WindowListener, ActionListener, KeyListener {
+class AusfallRechnung extends JDialog implements WindowListener, ActionListener, KeyListener {
     /**
      *
      */
     private static final long serialVersionUID = 1L;
 
-    public JRtaCheckBox[] leistung = { null, null, null, null, null };
+ 
+    private JRtaCheckBox[] leistung = { null, null, null, null, null };
 
     private AusfallRechnungHintergrund rgb;
     private JXPanel content;
-    public JButton uebernahme;
-    public JButton abbrechen;
-    public String afrNummer;
-    public String afrDatum;
-    Vector<String> vecaktrez = null;
-    Vector<String> patDaten = null;
+ 
+    private JButton uebernahme;
+ 
+    private JButton abbrechen;
+ 
+    private String afrNummer;
+ 
+    private String afrDatum;
+ 
+    private Vector<String> vecaktrez = null;
+ 
+    private Vector<String> patDaten = null;
 
-    public AusfallRechnung(Point pt, String pat_intern, String rez_nr, String rnummer, String rdatum) {
+    AusfallRechnung(Point pt, String pat_intern, String rez_nr, String rnummer, String rdatum) {
 
         super();
         afrNummer = rnummer;
@@ -348,7 +355,7 @@ public class AusfallRechnung extends JDialog implements WindowListener, ActionLi
         }
     }
 
-    public static void starteAusfallRechnung(String url) {
+    private static void starteAusfallRechnung(String url) {
         IDocumentService documentService ;
         
         try {

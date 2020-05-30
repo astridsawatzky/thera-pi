@@ -6,9 +6,12 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class SocketClient {
-    String nachricht = "";
-    Socket client = null;
-    int port = -1;
+ 
+    private String nachricht = "";
+ 
+ 
+    private Socket client = null;
+    private int port = -1;
 
     public void setzeRehaNachricht(int xport, String xnachricht) {
         this.nachricht = xnachricht;
@@ -16,7 +19,7 @@ public class SocketClient {
         run();
     }
 
-    public void run() {
+    private void run() {
         serverStarten();
     }
 

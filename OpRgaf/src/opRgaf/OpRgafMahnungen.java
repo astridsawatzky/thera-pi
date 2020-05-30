@@ -70,39 +70,55 @@ import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import office.OOService;
 
-public class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
-    Logger logger = LoggerFactory.getLogger(OpRgafMahnungen.class);
+class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
+ 
+    private Logger logger = LoggerFactory.getLogger(OpRgafMahnungen.class);
 
     /**
      *
      */
     private static final long serialVersionUID = 7011413450109922373L;
-    ActionListener al = null;
-    OpRgafTab eltern = null;
-    JXPanel content = null;
+ 
+    private ActionListener al = null;
+ 
+    private OpRgafTab eltern = null;
+ 
+    private JXPanel content = null;
 
-    ButtonGroup bgroup = new ButtonGroup();
+ 
+    private ButtonGroup bgroup = new ButtonGroup();
     ButtonGroup artgroup = new ButtonGroup();
-    JRtaRadioButton[] rbMahnart = { null, null, null, null };
-    JButton suchen = null;
+ 
+    private JRtaRadioButton[] rbMahnart = { null, null, null, null };
+ 
+    private JButton suchen = null;
     JButton kopie = null;
 
-    JRtaTextField[] rtfs = { null, null, null, null, null, null, null, null, null, null, null, null };
+ 
+    private JRtaTextField[] rtfs = { null, null, null, null, null, null, null, null, null, null, null, null };
     JRtaCheckBox cbMahnsperre = null;
-    int aktuelleMahnstufe = 1;
+ 
+    private int aktuelleMahnstufe = 1;
 
-    MyMahnungenTableModel tabmod = null;
-    JXTable tab = null;
+ 
+    private MyMahnungenTableModel tabmod = null;
+ 
+    private JXTable tab = null;
 
     File f = null;
-    Font fontfett = new Font("Tahoma", Font.BOLD, 10);
+ 
+    private Font fontfett = new Font("Tahoma", Font.BOLD, 10);
 
-    DecimalFormat dcf = new DecimalFormat("###0.00");
+ 
+    private DecimalFormat dcf = new DecimalFormat("###0.00");
 
-    HashMap<String, String> mahnParameter = new HashMap<String, String>();
-    ITextDocument textDocument;
+ 
+    private HashMap<String, String> mahnParameter = new HashMap<String, String>();
+ 
+    private ITextDocument textDocument;
 
-    final String stmtString =
+ 
+    private final String stmtString =
             // findet OP in RGR,AFR u. VKR (außer Rechnungsverkauf 'an Kasse')
             "SELECT concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(t2.geboren,'%d.%m.%Y')),t1.rnr,t1.rdatum,t1.rgesamt,"
                     + "t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t3.kassen_nam1,t1.reznr,t1.id,t1.pat_id "
@@ -115,14 +131,15 @@ public class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 //        "WHERE  ( t1.rnr like 'RGR-%'  OR t1.rnr like 'AFR-%'  OR t1.rnr like 'VR-%'  ) AND  t1.roffen >='1' ORDER by t1.id";
 
     int gefunden;
-    String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
+ 
+    private String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "Bezahldatum", "Mahndatum1", "Mahndatum2", "Krankenkasse", "RezeptNr.", "id" };
     String[] colnamen = { "nix", "rnr", "rdatum", "rgesamt", "roffen", "rpbetrag", "rbezdatum", "rmahndat1",
             "rmahndat2", "nix", "RezeptNr.", "id" };
 
     private RgAfVkSelect selPan;
 
-    public OpRgafMahnungen(OpRgafTab xeltern) {
+    OpRgafMahnungen(OpRgafTab xeltern) {
         super();
         this.eltern = xeltern;
         this.setLayout(new BorderLayout());
@@ -342,7 +359,7 @@ public class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
      * letzte Checkbox-Auswahl wiederherstellen (bei Start des Moduls und bei
      * Tab-Wechsel)
      */
-    public void initSelection() {
+    void initSelection() {
         selPan.setRGR(OpRgaf.iniOpRgAf.getIncRG());
         selPan.setAFR(OpRgaf.iniOpRgAf.getIncAR());
         selPan.setVKR(OpRgaf.iniOpRgAf.getIncVK());
@@ -670,7 +687,7 @@ public class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     }
 
-    class MyMahnungenTableModel extends DefaultTableModel {
+    private class MyMahnungenTableModel extends DefaultTableModel {
         /**
         *
         */
@@ -719,7 +736,7 @@ public class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     /*******************************/
 
-    class MahnungListSelectionHandler implements ListSelectionListener { // Zeile in Rechnungsliste gewählt
+    private class MahnungListSelectionHandler implements ListSelectionListener { // Zeile in Rechnungsliste gewählt
 
         @Override
         public void valueChanged(ListSelectionEvent e) {

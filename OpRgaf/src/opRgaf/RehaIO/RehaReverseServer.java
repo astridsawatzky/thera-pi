@@ -16,8 +16,10 @@ import opRgaf.OpRgaf;
 
 public class RehaReverseServer extends SwingWorker<Void, Void> {
     public ServerSocket serv = null;
-    StringBuffer sb = new StringBuffer();
-    InputStream input = null;
+ 
+    private StringBuffer sb = new StringBuffer();
+ 
+    private InputStream input = null;
     OutputStream output = null;
     // public int port = 6000;
     public static boolean OpRgafIsActive = false;

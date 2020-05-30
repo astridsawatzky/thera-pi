@@ -73,44 +73,58 @@ import ag.ion.noa.NOAException;
 import io.RehaIOMessages;
 import office.OOService;
 
-public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
+class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
 
 
     private static final long serialVersionUID = -7883557713071422132L;
 
-    JRtaTextField suchen = null;
+ 
+    private JRtaTextField suchen = null;
     JRtaTextField offen = null;
-    JRtaTextField[] tfs = { null, null, null, null };
-    JButton[] buts = { null, null, null };
+ 
+    private JRtaTextField[] tfs = { null, null, null, null };
+ 
+    private JButton[] buts = { null, null, null };
 
-    enum btIdx {
+    private enum btIdx {
         ausbuchen,
         suchen,
         dummy
     };
 
-    int btAusbuchen = btIdx.ausbuchen.ordinal();
-    int btSuchen = btIdx.suchen.ordinal();
-    JRtaComboBox combo = null;
+ 
+    private int btAusbuchen = btIdx.ausbuchen.ordinal();
+ 
+    private int btSuchen = btIdx.suchen.ordinal();
+ 
+    private JRtaComboBox combo = null;
     JXPanel content = null;
-    KeyListener kl = null;
-    ActionListener al = null;
+ 
+    private KeyListener kl = null;
+ 
+    private ActionListener al = null;
 
-    MyOpRgafTableModel tabmod = null;
-    JXTable tab = null;
-    Component kopieButton;
-    JRtaCheckBox bar = null;
+ 
+    private MyOpRgafTableModel tabmod = null;
+ 
+    private JXTable tab = null;
+ 
+    private Component kopieButton;
+ 
+    private JRtaCheckBox bar = null;
     private boolean barWasSelected = false;
 
     JButton kopie;
 
     BigDecimal gesamtOffen = BigDecimal.valueOf(Double.parseDouble("0.00"));
-    DecimalFormat dcf = new DecimalFormat("###0.00");
+ 
+    private DecimalFormat dcf = new DecimalFormat("###0.00");
 
     int ccount = -2;
 
     private HashMap<String, String> hmRezgeb = new HashMap<String, String>();
-    final String stmtString =
+ 
+    private final String stmtString =
             "SELECT concat(t2.n_name, ', ',t2.v_name,', ',DATE_FORMAT(t2.geboren,'%d.%m.%Y')),t1.rnr,t1.rdatum,t1.rgesamt,"
                     + "t1.roffen,t1.rpbetrag,t1.rbezdatum,t1.rmahndat1,t1.rmahndat2,t3.kassen_nam1,t1.reznr,t1.id,t1.pat_id "
                     + "FROM (SELECT v_nummer as rnr,v_datum as rdatum,v_betrag as rgesamt,v_offen as roffen,'' as rpbetrag,"
@@ -119,21 +133,29 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
                     + "UNION SELECT rnr,rdatum,rgesamt,roffen,rpbetrag,rbezdatum,rmahndat1,rmahndat2,reznr,id as id,pat_intern as pat_id "
                     + "FROM rgaffaktura ) t1 LEFT JOIN pat5 AS t2 ON (t1.pat_id = t2.pat_intern) LEFT JOIN kass_adr AS t3 ON ( t2.kassenid = t3.id )";
 
-    String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
+ 
+    private String[] spalten = { "Name,Vorname,Geburtstag", "Rechn.Nr.", "Rechn.Datum", "Gesamtbetrag", "Offen", "Bearb.Gebühr",
             "bezahlt am", "1.Mahnung", "2.Mahnung", "Krankenkasse", "RezeptNr.", "id" };
-    String[] colnamen = { "nix", "rnr", "rdatum", "rgesamt", "roffen", "rpbetrag", "rbezdatum", "rmahndat1",
+ 
+    private String[] colnamen = { "nix", "rnr", "rdatum", "rgesamt", "roffen", "rpbetrag", "rbezdatum", "rmahndat1",
             "rmahndat2", "nix", "nix", "id" };
-    OpRgafTab eltern = null;
+ 
+    private OpRgafTab eltern = null;
 
-    class IdxCol { // Indices fuer sprechende Spaltenzugriffe
+    private class IdxCol { // Indices fuer sprechende Spaltenzugriffe
+     
+     
+     
+     
         static final short Name = 0, RNr = 1, RDat = 2, GBetr = 3, Offen = 4, BGeb = 5, bez = 6, mahn1 = 7, mahn2 = 8,
+             
                 kk = 9, RezNr = 10, id = 11;
     }
 
     private OpShowGesamt sumPan;
     private RgAfVkSelect selPan;
 
-    public OpRgafPanel(OpRgafTab xeltern) {
+    OpRgafPanel(OpRgafTab xeltern) {
         super();
         this.eltern = xeltern;
         startKeyListener();
@@ -149,7 +171,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
     }
 
-    public void setzeFocus() {
+    void setzeFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -299,7 +321,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
     /**
      * letzte Checkbox-Auswahl wiederherstellen
      */
-    public void initSelection() {
+    void initSelection() {
         selPan.setRGR(OpRgaf.iniOpRgAf.getIncRG());
         selPan.setAFR(OpRgaf.iniOpRgAf.getIncAR());
         selPan.setVKR(OpRgaf.iniOpRgAf.getIncVK());
@@ -530,7 +552,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         sumPan.schreibeAnzRec();
     }
 
-    public void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
+    void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
         suchen.setText(rezept);
         combo.setSelectedItem("Rezeptnummer =");
         boolean useRGR = selPan.useRGR(); // Checkbox-Einstellung merken
@@ -649,7 +671,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         return tmp;
     }
 
-    class MyOpRgafTableModel extends DefaultTableModel {
+    private class MyOpRgafTableModel extends DefaultTableModel {
         /**
         *
         */
@@ -795,7 +817,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
     }
 
     /*****************************************************/
-    class OPListSelectionHandler implements ListSelectionListener {
+    private class OPListSelectionHandler implements ListSelectionListener {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -1038,7 +1060,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
 
     }
 
-    public String[] getAdressParams(String patid) {
+    private String[] getAdressParams(String patid) {
         // anr=17,titel=18,nname=0,vname=1,strasse=3,plz=4,ort=5,abwadress=19
         // "anrede,titel,nachname,vorname,strasse,plz,ort"
         String cmd = "select anrede,titel,n_name,v_name,strasse,plz,ort from pat5 where id='" + patid + "' LIMIT 1";
@@ -1060,7 +1082,7 @@ public class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_I
         return AdressTools.machePrivatAdresse(obj, true);
     }
 
-    public String[] holeAbweichendeAdresse(String patid) {
+    private String[] holeAbweichendeAdresse(String patid) {
         // "anrede,titel,nachname,vorname,strasse,plz,ort"
         String cmd = "select abwanrede,abwtitel,abwn_name,abwv_name,abwstrasse,abwplz,abwort from pat5 where id='"
                 + patid + "' LIMIT 1";

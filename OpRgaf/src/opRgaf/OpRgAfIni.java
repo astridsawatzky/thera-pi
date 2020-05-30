@@ -10,7 +10,8 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 
 public class OpRgAfIni {
-    public static HashMap<String, Object> mahnParam;
+ 
+    private static HashMap<String, Object> mahnParam;
     public HashMap getMahnParameter;
 
     // INIFile inif;
@@ -167,7 +168,7 @@ public class OpRgAfIni {
         vorauswahlSuchkriterium = value;
     }
 
-    public int getVorauswahl(int max) {
+    int getVorauswahl(int max) {
         if (valuesValid()) {
             return vorauswahlSuchkriterium < max ? vorauswahlSuchkriterium : 0;
         } else {
@@ -186,12 +187,12 @@ public class OpRgAfIni {
         return (String) mahnParam.get("inkasse");
     }
 
-    public String getFormNb(int lfdNb) {
+    String getFormNb(int lfdNb) {
         valuesValid();
         return (String) mahnParam.get("formular" + lfdNb);
     }
 
-    public int getFrist(int lfdNb) {
+    int getFrist(int lfdNb) {
         valuesValid();
         return (Integer) mahnParam.get("frist" + lfdNb);
     }
@@ -233,7 +234,7 @@ public class OpRgAfIni {
      * schreibt die zuletzt verwandten OpRgAf-Einstellungen (falls geändert) in die
      * oprgaf.ini
      */
-    public void saveLastSelection() {
+    void saveLastSelection() {
         INIFile inif = INITool.openIni(path2IniFile, iniFile);
         String section = "offenePosten";
         if (!settingsLocked) { // ini-Einträge dürfen aktualisiert werden
@@ -260,7 +261,7 @@ public class OpRgAfIni {
      * legt die Lock- und BarzahlungsEinstellungen in der oprgaf.ini mit
      * Defaultwerten an
      */
-    public void initCashSettings() {
+    private void initCashSettings() {
         INIFile inif = INITool.openIni(path2IniFile, iniFile);
         String section = "offenePosten";
         boolean saveChanges = false;

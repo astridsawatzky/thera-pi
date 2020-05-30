@@ -10,10 +10,11 @@ import javax.swing.JOptionPane;
 import CommonTools.DatFunk;
 import CommonTools.StringTools;
 
-public class InitHashMaps {
-    public static HashMap<String, String> hmAdrRDaten = null;
-    public static HashMap<String, String> hmAdrPDaten = null;
-    public static HashMap<String, String> hmAdrAFRDaten = null;
+class InitHashMaps {
+ 
+    private static HashMap<String, String> hmAdrRDaten = null;
+    static HashMap<String, String> hmAdrPDaten = null;
+    static HashMap<String, String> hmAdrAFRDaten = null;
 
     /********************/
     public InitHashMaps() {
@@ -53,7 +54,7 @@ public class InitHashMaps {
 
     }
 
-    public static void constructPatHMap(Vector<String> patDaten) {
+    static void constructPatHMap(Vector<String> patDaten) {
         boolean isherr = false;
         boolean iskind = false;
         try {

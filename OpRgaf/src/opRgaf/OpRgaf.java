@@ -34,10 +34,11 @@ public class OpRgaf implements WindowListener {
      */
 
 
-    public static boolean DbOk;
-    JFrame jFrame;
+    static boolean DbOk;
+ 
+    private JFrame jFrame;
     public static JFrame thisFrame = null;
-    public Connection conn;
+    Connection conn;
     public static OpRgaf thisClass;
 
     public static final IOfficeApplication officeapplication = null ;
@@ -47,10 +48,12 @@ public class OpRgaf implements WindowListener {
 
 
 
-    public static String aktIK = "510841109";
+    static String aktIK = "510841109";
 
-    public static HashMap<String, String> hmAbrechnung = new HashMap<String, String>();
-    public static HashMap<String, String> hmFirmenDaten = null;
+ 
+    private static HashMap<String, String> hmAbrechnung = new HashMap<String, String>();
+ 
+    private static HashMap<String, String> hmFirmenDaten = null;
     public static HashMap<String, String> hmAdrPDaten = new HashMap<String, String>();
 
     private static boolean testcase = false;
@@ -58,10 +61,12 @@ public class OpRgaf implements WindowListener {
 
     public static int xport = -1;
     public static boolean xportOk = false;
-    public RehaReverseServer rehaReverseServer = null;
-    public static int rehaReversePort = -1;
-    public SqlInfo sqlInfo;
-    public static OpRgAfIni iniOpRgAf;
+ 
+    private RehaReverseServer rehaReverseServer = null;
+    static int rehaReversePort = -1;
+ 
+    private SqlInfo sqlInfo;
+    static OpRgAfIni iniOpRgAf;
     static String proghome;
 
     public static void main(String[] args) {
@@ -312,7 +317,7 @@ public class OpRgaf implements WindowListener {
     public void windowOpened(WindowEvent arg0) {
     }
 
-    public static void AbrechnungParameter(String proghome) {
+    private static void AbrechnungParameter(String proghome) {
         hmAbrechnung.clear();
         /******** Heilmittelabrechnung ********/
         INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/abrechnung.ini");
@@ -350,7 +355,7 @@ public class OpRgaf implements WindowListener {
     }
 
     /***************************/
-    public static void FirmenDaten(String proghome) {
+    private static void FirmenDaten(String proghome) {
         String[] stitel = { "Ik", "Ikbezeichnung", "Firma1", "Firma2", "Anrede", "Nachname", "Vorname", "Strasse",
                 "Plz", "Ort", "Telefon", "Telefax", "Email", "Internet", "Bank", "Blz", "Kto", "Steuernummer", "Hrb",
                 "Logodatei", "Zusatz1", "Zusatz2", "Zusatz3", "Zusatz4", "Bundesland" };
@@ -361,7 +366,7 @@ public class OpRgaf implements WindowListener {
         }
     }
 
-    public static boolean isTestcase() {
+    static boolean isTestcase() {
         return testcase;
     }
 

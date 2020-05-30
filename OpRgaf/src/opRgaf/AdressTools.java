@@ -2,8 +2,8 @@ package opRgaf;
 
 import CommonTools.StringTools;
 
-public class AdressTools {
-    public static String[] machePrivatAdresse(Object[] oin, boolean egross) {
+class AdressTools {
+    static String[] machePrivatAdresse(Object[] oin, boolean egross) {
         // "anrede,titel,nachname,vorname,strasse,plz,ort"
         String[] str = { null, null, null, null, null, null, null };
         String anrede = (((String) oin[0]) == null ? "" : ((String) oin[0])).trim();

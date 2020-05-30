@@ -21,7 +21,7 @@ import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 public class OpRgafTab extends JXPanel implements ChangeListener {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6012301447745950357L;
 
@@ -31,10 +31,13 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
 
     JTabbedPane offenRgafTab = null;
     public JXTitledPanel jxTitel;
-    public JTabbedPane jtb;
-    public JXHeader jxh;
+
+    private JTabbedPane jtb;
+
+    private JXHeader jxh;
     OpRgafPanel opRgafPanel = null;
-    OpRgafMahnungen opRgafMahnungen = null;
+
+    private OpRgafMahnungen opRgafMahnungen = null;
 
     public OpRgafTab() {
         super();
@@ -126,7 +129,7 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
         jxh.setIcon(vecimg.get(sel));
     }
 
-    public void setFirstFocus() {
+    void setFirstFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
