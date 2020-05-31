@@ -19,6 +19,7 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - Variablenbelegung bei Taxierung #407
 - HMR Check Auswertung max pro Fall Korrigiert #406
 - OP Mahndatum lässt sich nicht löschen fixes #350
+- Tausender Trennzeichen in Offene Posten / Mahnwesen #387
 ## [1.1.6] - 2020-05-20
 ### added
 - Hygienepauschale in Rezept aufgenommen #383

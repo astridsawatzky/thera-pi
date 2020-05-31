@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -26,7 +25,7 @@ public class OpShowGesamt {
     private int records;
     private JPanel auswertung;
 
-    private NumberFormat dcf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
+    private NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
     public OpShowGesamt() {
         auswertung = new JPanel();
@@ -74,15 +73,8 @@ public class OpShowGesamt {
         return auswertung;
     }
 
-    /*
-     * public void schreibeGesamtOffen(String betrag){ valGesamtOffen.setText(
-     * betrag ); auswertung.validate(); }
-     *
-     * public void schreibeGesamtOffen(BigDecimal val){ valGesamtOffen.setText(
-     * dcf.format(val) ); auswertung.validate(); }
-     */
     public void schreibeGesamtOffen() {
-        valGesamtOffen.setText(dcf.format(gesamtOffen));
+        valGesamtOffen.setText(currencyFormat.format(gesamtOffen));
         auswertung.validate();
     }
 
@@ -127,7 +119,7 @@ public class OpShowGesamt {
     }
 
     public void schreibeSuchOffen() {
-        valSuchOffen.setText(dcf.format(suchOffen));
+        valSuchOffen.setText(currencyFormat.format(suchOffen));
         auswertung.validate();
     }
 
@@ -150,7 +142,7 @@ public class OpShowGesamt {
     }
 
     public void schreibeSuchGesamt() {
-        valSuchGesamt.setText(dcf.format(suchGesamt));
+        valSuchGesamt.setText(currencyFormat.format(suchGesamt));
         auswertung.validate();
     }
 
