@@ -67,8 +67,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     private JRtaTextField suchen;
 
-    private JRtaTextField[] tfs = { null, null, null, null };
-
     private JButton suchenBtn;
     private JButton ausbuchenBtn;
 
@@ -130,6 +128,8 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     private OpRgAfIni iniOpRgAf;
 
     private IK ik;
+
+    private JRtaTextField geldeingangTf;
 
     OpRgafPanel(OpRgafTab xeltern, OpRgaf opRgaf) {
         this.opRgaf = opRgaf;
@@ -258,12 +258,12 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         builder.addLabel("Geldeingang:", cc.xy(colCnt, rowCnt, CellConstraints.RIGHT, CellConstraints.TOP)); // 12,6
 
         ++colCnt;
-        tfs[0] = new JRtaTextField("F", true, "6.2", "");
-        tfs[0].setHorizontalAlignment(SwingConstants.RIGHT);
-        tfs[0].setText("0,00");
-        tfs[0].setName("offen");
-        tfs[0].addKeyListener(kl);
-        builder.add(tfs[0], cc.xy(++colCnt, rowCnt)); // 14,6
+        geldeingangTf = new JRtaTextField("F", true, "6.2", "");
+        geldeingangTf.setHorizontalAlignment(SwingConstants.RIGHT);
+        geldeingangTf.setText("0,00");
+        geldeingangTf.setName("offen");
+        geldeingangTf.addKeyListener(kl);
+        builder.add(geldeingangTf, cc.xy(++colCnt, rowCnt)); // 14,6
 
         ++colCnt;
         bar = (JRtaCheckBox) builder.add(new JRtaCheckBox("bar in Kasse"), cc.xy(++colCnt, rowCnt));
@@ -402,7 +402,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     }
 
     private void setzeBezahlBetrag(final int i) {
-        tfs[0].setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(i), IdxCol.Offen)));
+        geldeingangTf.setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(i), IdxCol.Offen)));
     }
 
     private void sucheEinleiten() {
@@ -438,7 +438,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         }
         BigDecimal nochoffen = BigDecimal.valueOf(
                 (Double) tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen));
-        BigDecimal eingang = BigDecimal.valueOf(Double.parseDouble(tfs[0].getText()
+        BigDecimal eingang = BigDecimal.valueOf(Double.parseDouble(geldeingangTf.getText()
                                                                          .replace(",", ".")));
         BigDecimal restbetrag = nochoffen.subtract(eingang);
 
@@ -498,7 +498,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         }
         SqlInfo.sqlAusfuehren(cmd);
         schreibeAbfrage();
-        tfs[0].setText("0,00");
+        geldeingangTf.setText("0,00");
     }
 
     private void schreibeAbfrage() {
@@ -883,7 +883,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                             + (value != null ? "'" + value + "'" : "null") + " where id='" + id + "' LIMIT 1";
                     // System.out.println(cmd);
                     SqlInfo.sqlAusfuehren(cmd);
-                    tfs[0].setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen)));
+                    geldeingangTf.setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen)));
                 }
             } catch (Exception ex) {
                 Logger logger = LoggerFactory.getLogger(OpRgafPanel.class);
