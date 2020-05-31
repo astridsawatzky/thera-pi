@@ -58,6 +58,7 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import io.RehaIOMessages;
+import mandant.IK;
 import office.OOService;
 import opRgaf.RehaIO.SocketClient;
 
@@ -132,7 +133,16 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     private OpShowGesamt sumPan;
     private RgAfVkSelect selPan;
 
-    OpRgafPanel(OpRgafTab xeltern) {
+    private OpRgaf opRgaf;
+
+    private OpRgAfIni iniOpRgAf;
+
+    private IK ik;
+
+    OpRgafPanel(OpRgafTab xeltern, OpRgaf opRgaf) {
+        this.opRgaf = opRgaf;
+        this.iniOpRgAf = opRgaf.iniOpRgAf;
+        this.ik = new IK(opRgaf.aktIK);
         startKeyListener();
         startActionListener();
         setLayout(new BorderLayout());
@@ -175,7 +185,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                 "Rezeptnummer =", "Rechnungsdatum =", "Rechnungsdatum >=", "Rechnungsdatum <=",
                 "Krankenkasse enthält" };
 
-        int vorauswahl = OpRgaf.iniOpRgAf.getVorauswahl(args.length);
+        int vorauswahl = iniOpRgAf.getVorauswahl(args.length);
         combo = new JRtaComboBox(args);
         combo.setSelectedIndex(vorauswahl);
         builder.add(combo, cc.xy(++colCnt, rowCnt)); // 4,2
@@ -265,7 +275,7 @@ tabmod = new MyOpRgafTableModel();
 
         ++colCnt;
         bar = (JRtaCheckBox) builder.add(new JRtaCheckBox("bar in Kasse"), cc.xy(++colCnt, rowCnt));
-        if ("Kasse".equals(OpRgaf.iniOpRgAf.getWohinBuchen())) {
+        if ("Kasse".equals(iniOpRgAf.getWohinBuchen())) {
             bar.setSelected(true);
         }
 
@@ -287,9 +297,9 @@ tabmod = new MyOpRgafTableModel();
 
     /** Letzte Checkbox-Auswahl wiederherstellen. */
     void initSelection() {
-        selPan.setRGR(OpRgaf.iniOpRgAf.getIncRG());
-        selPan.setAFR(OpRgaf.iniOpRgAf.getIncAR());
-        selPan.setVKR(OpRgaf.iniOpRgAf.getIncVK());
+        selPan.setRGR(iniOpRgAf.getIncRG());
+        selPan.setAFR(iniOpRgAf.getIncAR());
+        selPan.setVKR(iniOpRgAf.getIncVK());
         if (!selPan.useRGR() && !selPan.useAFR() && !selPan.useVKR()) {
             selPan.setRGR(Boolean.TRUE); // einer sollte immer ausgewählt sein
         }
@@ -380,7 +390,7 @@ tabmod = new MyOpRgafTableModel();
                         String rdatum = SqlInfo.holeEinzelFeld(
                                 "select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
                         AusfallRechnung ausfall = new AusfallRechnung(kopieButton.getLocationOnScreen(), pat_intern,
-                                rez_nr, rnr, rdatum);
+                                rez_nr, rnr, rdatum,OpRgafPanel.this.ik);
                         ausfall.setModal(true);
                         ausfall.setLocationRelativeTo(null);
                         ausfall.toFront();
@@ -522,7 +532,7 @@ tabmod = new MyOpRgafTableModel();
             return;
         }
         int suchart = combo.getSelectedIndex();
-        OpRgaf.iniOpRgAf.setVorauswahl(suchart); // Auswahl merken
+        iniOpRgAf.setVorauswahl(suchart); // Auswahl merken
         combo.getItemAt(combo.getSelectedIndex()).toString();
 
         String cmd = "";
@@ -660,7 +670,7 @@ tabmod = new MyOpRgafTableModel();
         ResultSet rs = null;
 
         try {
-            stmt = OpRgaf.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt = opRgaf.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -782,7 +792,7 @@ tabmod = new MyOpRgafTableModel();
                         // System.out.println("Satz "+i);
 
                         if (rnr.startsWith("VR-")) { // test ob VR -> bar ausbuchen enabled/disabled
-                            if (!OpRgaf.iniOpRgAf.getVrCashAllowed()) {
+                            if (!iniOpRgAf.getVrCashAllowed()) {
                                 bar.setEnabled(false);
                                 bar.setToolTipText("not allowed for VR (see System-Init)");
                                 if (bar.isSelected()) { // falls 'bar in Kasse' gewählt war -> merken
@@ -972,7 +982,7 @@ tabmod = new MyOpRgafTableModel();
                 SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
 
         // System.out.println(hmRezgeb);
-        String url = OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/RezeptgebuehrRechnung.ott.Kopie.ott";
+        String url = OpRgaf.proghome + "vorlagen/" + opRgaf.aktIK + "/RezeptgebuehrRechnung.ott.Kopie.ott";
         try {
             officeStarten(url);
         } catch (OfficeApplicationException | NOAException e) {
@@ -1071,19 +1081,19 @@ tabmod = new MyOpRgafTableModel();
 
     @Override
     public void useRGR(boolean rgr) {
-        OpRgaf.iniOpRgAf.setIncRG(rgr);
+        iniOpRgAf.setIncRG(rgr);
         calcGesamtOffen();
     }
 
     @Override
     public void useAFR(boolean afr) {
-        OpRgaf.iniOpRgAf.setIncAR(afr);
+        iniOpRgAf.setIncAR(afr);
         calcGesamtOffen();
     }
 
     @Override
     public void useVKR(boolean vkr) {
-        OpRgaf.iniOpRgAf.setIncVK(vkr);
+        iniOpRgAf.setIncVK(vkr);
         calcGesamtOffen();
     }
 }

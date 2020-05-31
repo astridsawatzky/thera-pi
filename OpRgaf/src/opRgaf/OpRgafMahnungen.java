@@ -104,9 +104,12 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     private RgAfVkSelect selPan;
 
-    OpRgafMahnungen(OpRgafTab xeltern) {
+    private OpRgaf opRgaf;
+
+    OpRgafMahnungen(OpRgafTab xeltern, OpRgaf opRgaf) {
         super();
         this.eltern = xeltern;
+        this.opRgaf = opRgaf;
         this.setLayout(new BorderLayout());
         activateActionListener();
         add(getContent(), BorderLayout.CENTER);
@@ -321,11 +324,11 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
      * Tab-Wechsel).
      */
     void initSelection() {
-        selPan.setRGR(OpRgaf.iniOpRgAf.getIncRG());
-        selPan.setAFR(OpRgaf.iniOpRgAf.getIncAR());
-        selPan.setVKR(OpRgaf.iniOpRgAf.getIncVK());
+        selPan.setRGR(opRgaf.iniOpRgAf.getIncRG());
+        selPan.setAFR(opRgaf.iniOpRgAf.getIncAR());
+        selPan.setVKR(opRgaf.iniOpRgAf.getIncVK());
         selPan.disableVKR(); // !! nur solange VR nicht korrekt behandelt werden !!
-        if (OpRgaf.iniOpRgAf.getIncVK()) {
+        if (opRgaf.iniOpRgAf.getIncVK()) {
             selPan.setVKR(Boolean.FALSE);
         }
         if (selPan.useRGR() || selPan.useAFR() || selPan.useVKR()) {
@@ -421,7 +424,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         mahnParameter.put("<Mmahndat1>", rtfs[8].getText().trim().length() == 10 ? rtfs[8].getText().trim() : "");
         mahnParameter.put("<Mmahndat2>", rtfs[9].getText().trim().length() == 10 ? rtfs[9].getText().trim() : "");
 
-        String datei = OpRgaf.iniOpRgAf.getFormNb(aktuelleMahnstufe);
+        String datei = opRgaf.iniOpRgAf.getFormNb(aktuelleMahnstufe);
         try {
             starteMahnDruck(datei);
             if (textDocument != null) {
@@ -496,9 +499,9 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     private void doSuchen() {
         String nichtvorDatum = eltern.getNotBefore();
-        int frist1 = OpRgaf.iniOpRgAf.getFrist(1);
-        int frist2 = OpRgaf.iniOpRgAf.getFrist(2);
-        int frist3 = OpRgaf.iniOpRgAf.getFrist(3);
+        int frist1 = opRgaf.iniOpRgAf.getFrist(1);
+        int frist2 = opRgaf.iniOpRgAf.getFrist(2);
+        int frist3 = opRgaf.iniOpRgAf.getFrist(3);
 
         if (frist1 < 0 || frist2 < 0 || frist3 < 0) {
             System.out.println("error Mahnparameter: Frist < 0");
@@ -531,16 +534,16 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     private String testArt() {
         String tmpStr = "";
-        if (OpRgaf.iniOpRgAf.getIncRG()) {
+        if (opRgaf.iniOpRgAf.getIncRG()) {
             tmpStr = " rnr like 'RGR-%'";
         }
-        if (OpRgaf.iniOpRgAf.getIncAR()) {
+        if (opRgaf.iniOpRgAf.getIncAR()) {
             if (!tmpStr.isEmpty()) {
                 tmpStr = tmpStr + " or ";
             }
             tmpStr = tmpStr + " rnr like 'AFR-%'";
         }
-        if (OpRgaf.iniOpRgAf.getIncVK()) {
+        if (opRgaf.iniOpRgAf.getIncVK()) {
             if (!tmpStr.isEmpty()) {
                 tmpStr = tmpStr + " or ";
             }
@@ -556,17 +559,17 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     @Override
     public void useRGR(boolean rgr) {
-        OpRgaf.iniOpRgAf.setIncRG(rgr);
+        opRgaf.iniOpRgAf.setIncRG(rgr);
     }
 
     @Override
     public void useAFR(boolean afr) {
-        OpRgaf.iniOpRgAf.setIncAR(afr);
+        opRgaf.iniOpRgAf.setIncAR(afr);
     }
 
     @Override
     public void useVKR(boolean vkr) {
-        OpRgaf.iniOpRgAf.setIncVK(vkr);
+        opRgaf.iniOpRgAf.setIncVK(vkr);
     }
 
     private void starteSuche(String sstmt) {
@@ -576,7 +579,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         ResultSet rs = null;
 
         try {
-            stmt = OpRgaf.thisClass.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt = opRgaf.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
 
             e.printStackTrace();
@@ -787,7 +790,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
             logger.error("loaddocument: " + url, e);
         }
         textDocument = (ITextDocument) document;
-        OOTools.druckerSetzen(textDocument, OpRgaf.iniOpRgAf.getDrucker());
+        OOTools.druckerSetzen(textDocument, opRgaf.iniOpRgAf.getDrucker());
 
         ITextFieldService textFieldService = textDocument.getTextFieldService();
         ITextField[] placeholders = null;

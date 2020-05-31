@@ -27,29 +27,27 @@ import opRgaf.RehaIO.SocketClient;
 import sql.DatenquellenFactory;
 
 public class OpRgaf implements WindowListener {
-    static boolean DbOk;
 
     private JFrame jFrame;
-    public static JFrame thisFrame;
+    private static JFrame thisFrame;
     Connection conn;
-    public static OpRgaf thisClass;
 
-            static String aktIK = "510841109";
+    String aktIK = "510841109";
 
-     private static HashMap<String, String> hmAbrechnung = new HashMap<>();
+    private static HashMap<String, String> hmAbrechnung = new HashMap<>();
 
     private static HashMap<String, String> hmFirmenDaten;
 
-    private static boolean testcase;
-    public OpRgafTab otab;
+
+    private OpRgafTab otab;
 
     public static int xport = -1;
 
-     private RehaReverseServer rehaReverseServer;
+    private RehaReverseServer rehaReverseServer;
     static int rehaReversePort = -1;
 
     private SqlInfo sqlInfo;
-    static OpRgAfIni iniOpRgAf;
+    OpRgAfIni iniOpRgAf;
     static String proghome;
 
     public static void main(String[] args) {
@@ -59,39 +57,44 @@ public class OpRgaf implements WindowListener {
                     "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
         } else {
             OpRgaf application = new OpRgaf();
-            application.getInstance();
-            application.getInstance().sqlInfo = new SqlInfo();
+            application.sqlInfo = new SqlInfo();
+
             proghome = Path.Instance.getProghome();
             if (!isTestcase()) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
                 inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-               String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-               String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+                String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
+                String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 try {
                     new OOService().start(officeNativePfad, officeProgrammPfad);
                 } catch (FileNotFoundException | OfficeApplicationException e) {
                     e.printStackTrace();
                 }
-                aktIK = args[1];
-
-                iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
-                AbrechnungParameter(proghome);
-                FirmenDaten(proghome);
+                application.aktIK = args[1];
+                try {
+                    application.sqlInfo.setConnection(new DatenquellenFactory(application.aktIK).createConnection());
+                } catch (SQLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                application.iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
+                application.AbrechnungParameter(proghome);
+                application.FirmenDaten(proghome);
                 if (args.length >= 3) {
                     rehaReversePort = Integer.parseInt(args[2]);
                 }
             } else {
-                iniOpRgAf = new OpRgAfIni(proghome, "ini/", aktIK, "oprgaf.ini");
-                AbrechnungParameter(proghome);
-                FirmenDaten(proghome);
+                application.iniOpRgAf = new OpRgAfIni(proghome, "ini/", application.aktIK, "oprgaf.ini");
+                application.AbrechnungParameter(proghome);
+                application.FirmenDaten(proghome);
             }
             if (isTestcase()) {
-                System.out.println(iniOpRgAf.getMahnParameter());
+                System.out.println(application.iniOpRgAf.getMahnParameter());
                 System.out.println("TestCase = " + isTestcase());
-                AbrechnungParameter(proghome);
-                FirmenDaten(proghome);
+                application.AbrechnungParameter(proghome);
+                application.FirmenDaten(proghome);
             }
 
             application.StarteDB();
@@ -103,10 +106,10 @@ public class OpRgaf implements WindowListener {
     public JFrame getJFrame() {
         try {
             UIManager.setLookAndFeel("com.jgoodies.looks.plastic.PlasticXPLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+                | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-        thisClass = this;
         jFrame = new JFrame() {
 
             private static final long serialVersionUID = 1L;
@@ -149,6 +152,7 @@ public class OpRgaf implements WindowListener {
 
         try {
             rehaReverseServer = new RehaReverseServer(7000);
+            rehaReverseServer.register(this);
         } catch (Exception ex) {
             rehaReverseServer = null;
         }
@@ -156,10 +160,10 @@ public class OpRgaf implements WindowListener {
         jFrame.addWindowListener(this);
         jFrame.setSize(1000, 675);
         jFrame.setTitle("Thera-Pi  Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen u. Mahnwesen  [IK: " + aktIK
-                + "] " + "[Server-IP: " + "dbIpAndName" + "]"); //FIXME: dpipandname
+                + "] " + "[Server-IP: " + "dbIpAndName" + "]"); // FIXME: dpipandname
         jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
-        otab = new OpRgafTab();
+        otab = new OpRgafTab(this);
         otab.setHeader(0);
         otab.setFirstFocus();
 
@@ -172,8 +176,7 @@ public class OpRgaf implements WindowListener {
         jFrame.setVisible(true);
         thisFrame = jFrame;
         try {
-            new SocketClient().setzeRehaNachricht(rehaReversePort,
-                    "AppName#OpRgaf#" + xport);
+            new SocketClient().setzeRehaNachricht(rehaReversePort, "AppName#OpRgaf#" + xport);
             new SocketClient().setzeRehaNachricht(rehaReversePort, "OpRgaf#" + RehaIOMessages.IS_STARTET);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Fehler in der Socketkommunikation");
@@ -188,23 +191,21 @@ public class OpRgaf implements WindowListener {
     }
 
     public OpRgaf getInstance() {
-        thisClass = this;
         return this;
     }
 
-        private void StarteDB() {
-        final OpRgaf obj = thisClass;
+    private boolean StarteDB() {
 
         try {
-            obj.conn = new DatenquellenFactory(aktIK).createConnection();
-            thisClass.sqlInfo.setConnection(obj.conn);
-            DbOk = true;
+            conn = new DatenquellenFactory(aktIK).createConnection();
+            sqlInfo.setConnection(conn);
             System.out.println("Datenbankkontakt hergestellt");
+            return true;
         } catch (final SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());
-            DbOk = false;
+            return false;
         }
     }
 
@@ -214,9 +215,9 @@ public class OpRgaf implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        if (thisClass.conn != null) {
+        if (conn != null) {
             try {
-                thisClass.conn.close();
+                conn.close();
                 System.out.println("Datenbankverbindung wurde geschlossen");
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -227,15 +228,15 @@ public class OpRgaf implements WindowListener {
     @Override
     public void windowClosing(WindowEvent arg0) {
         iniOpRgAf.saveLastSelection();
-        if (thisClass.conn != null) {
+        if (conn != null) {
             try {
-                thisClass.conn.close();
+                conn.close();
                 System.out.println("Datenbankverbindung wurde geschlossen");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        if (thisClass.rehaReverseServer != null) {
+        if (rehaReverseServer != null) {
             try {
                 new SocketClient().setzeRehaNachricht(rehaReversePort, "OpRgaf#" + RehaIOMessages.IS_FINISHED);
                 rehaReverseServer.serv.close();
@@ -262,7 +263,7 @@ public class OpRgaf implements WindowListener {
     public void windowOpened(WindowEvent arg0) {
     }
 
-    private static void AbrechnungParameter(String proghome) {
+    private void AbrechnungParameter(String proghome) {
         hmAbrechnung.clear();
         /* Heilmittelabrechnung */
         INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/abrechnung.ini");
@@ -299,7 +300,7 @@ public class OpRgaf implements WindowListener {
         hmAbrechnung.put("hmallinoffice", inif.getStringProperty("GemeinsameParameter", "InOfficeStarten"));
     }
 
-    private static void FirmenDaten(String proghome) {
+    private void FirmenDaten(String proghome) {
         String[] stitel = { "Ik", "Ikbezeichnung", "Firma1", "Firma2", "Anrede", "Nachname", "Vorname", "Strasse",
                 "Plz", "Ort", "Telefon", "Telefax", "Email", "Internet", "Bank", "Blz", "Kto", "Steuernummer", "Hrb",
                 "Logodatei", "Zusatz1", "Zusatz2", "Zusatz3", "Zusatz4", "Bundesland" };
@@ -311,6 +312,16 @@ public class OpRgaf implements WindowListener {
     }
 
     static boolean isTestcase() {
-        return testcase;
+        return false;
     }
+
+    public void show() {
+        thisFrame.setVisible(true);
+
     }
+
+    public void sucheRezept(String string) {
+        otab.sucheRezept(string);
+
+    }
+}

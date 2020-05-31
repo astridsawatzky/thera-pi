@@ -45,6 +45,7 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
+import mandant.IK;
 import office.OOService;
 
 class AusfallRechnung extends JDialog implements WindowListener, ActionListener, KeyListener {
@@ -65,11 +66,14 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
 
     private Vector<String> patDaten = null;
 
-    AusfallRechnung(Point pt, String pat_intern, String rez_nr, String rnummer, String rdatum) {
+    private String aktIK;
+
+    AusfallRechnung(Point pt, String pat_intern, String rez_nr, String rnummer, String rdatum, IK ik) {
 
         super();
         afrNummer = rnummer;
         afrDatum = rdatum;
+        aktIK = ik.digitString();
         setTitle("Kopie Ausfallrechnung erstellen");
 
         setSize(350, 270);
@@ -200,10 +204,11 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
                 .equals("uebernahme")) {
             macheAFRHmap();
             new SwingWorker<Void, Void>() {
+
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        String url = OpRgaf.proghome + "vorlagen/" + OpRgaf.aktIK + "/AusfallRechnung.ott.Kopie.ott";
+                        String url = OpRgaf.proghome + "vorlagen/" + AusfallRechnung.this.aktIK + "/AusfallRechnung.ott.Kopie.ott";
                         if(new File(url).exists()) {
                             starteAusfallRechnung(
                                     url);
@@ -440,10 +445,4 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
     }
 }
 
-class AusfallRechnungHintergrund extends JXPanel {
-    private static final long serialVersionUID = 1L;
 
-    public AusfallRechnungHintergrund() {
-        super();
-    }
-}

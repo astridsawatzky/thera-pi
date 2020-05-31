@@ -12,6 +12,7 @@ import org.jdesktop.swingworker.SwingWorker;
 
 import io.RehaIOMessages;
 import opRgaf.OpRgaf;
+import sql.DatenquellenFactory;
 
 public class RehaReverseServer extends SwingWorker<Void, Void> {
     public ServerSocket serv;
@@ -19,6 +20,8 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
     private StringBuffer sb = new StringBuffer();
 
     private InputStream input;
+
+    private OpRgaf opRgaf;
 
     public RehaReverseServer(int x) {
         OpRgaf.xport = x;
@@ -31,9 +34,9 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
 
     private void doReha(String op) {
         if (op.split("#")[1].equals(RehaIOMessages.MUST_GOTOFRONT)) {
-            OpRgaf.thisFrame.setVisible(true);
+            opRgaf.show();
         } else if (op.split("#")[1].equals(RehaIOMessages.MUST_REZFIND)) {
-            OpRgaf.thisClass.otab.sucheRezept(op.split("#")[2]);
+            opRgaf.sucheRezept(op.split("#")[2]);
         }
     }
 
@@ -88,5 +91,10 @@ public class RehaReverseServer extends SwingWorker<Void, Void> {
                 doReha(String.valueOf(sb.toString()));
             }
         } while (true);
+    }
+
+    public void register(OpRgaf opRgaf) {
+        this.opRgaf = opRgaf;
+
     }
 }

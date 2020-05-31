@@ -32,16 +32,19 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
 
     private OpRgafMahnungen opRgafMahnungen;
 
-    public OpRgafTab() {
+    private OpRgaf opRgaf;
+
+    public OpRgafTab(OpRgaf opRgaf) {
+        this.opRgaf = opRgaf;
         setOpaque(false);
         setLayout(new BorderLayout());
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
 
-        opRgafPanel = new OpRgafPanel(this);
+        opRgafPanel = new OpRgafPanel(this,opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
 
-        opRgafMahnungen = new OpRgafMahnungen(this);
+        opRgafMahnungen = new OpRgafMahnungen(this,opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
 
         jtb.addChangeListener(this);
