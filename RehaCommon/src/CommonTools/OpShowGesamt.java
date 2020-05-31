@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Font;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,7 +26,7 @@ public class OpShowGesamt {
     private int records;
     private JPanel auswertung;
 
-    private DecimalFormat dcf = new DecimalFormat("###0.00");
+    private NumberFormat dcf = NumberFormat.getCurrencyInstance(Locale.GERMANY);
 
     public OpShowGesamt() {
         auswertung = new JPanel();
@@ -37,8 +39,6 @@ public class OpShowGesamt {
                 "0dlu,p,3dlu,p,2dlu,p,2dlu,p,5dlu" // ywerte
         );
         PanelBuilder builder = new PanelBuilder(lay);
-        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
-        // mode
 
         builder.getPanel()
                .setOpaque(false);
@@ -46,7 +46,6 @@ public class OpShowGesamt {
 
         tmpLbl = builder.addLabel("Offene Posten gesamt:", cc.xy(2, 2, CellConstraints.RIGHT, CellConstraints.DEFAULT));
         tmpLbl.setToolTipText("Summe OP in ausgewählten Rechnungsarten");
-//		tmpLbl.setToolTipText("Summe OP in allen Rechnungsarten");
         valGesamtOffen = builder.addLabel("0,00", cc.xy(4, 2, CellConstraints.LEFT, CellConstraints.DEFAULT));
         valGesamtOffen.setForeground(Color.RED);
         Font f = valGesamtOffen.getFont();
