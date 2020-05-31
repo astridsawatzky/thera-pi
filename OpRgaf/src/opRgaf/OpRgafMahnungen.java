@@ -460,7 +460,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
             break;
 
         }
-        if (!OpRgaf.isTestcase()) {
+        if (!false) {
             SqlInfo.sqlAusfuehren(cmd);
         }
         TableTool.loescheRowAusModel(tab, row);

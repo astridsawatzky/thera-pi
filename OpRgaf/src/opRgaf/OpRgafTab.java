@@ -1,105 +1,49 @@
 package opRgaf;
 
 import java.awt.BorderLayout;
-import java.io.File;
-import java.util.Vector;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jdesktop.swingx.JXHeader;
 import org.jdesktop.swingx.JXPanel;
 
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
 /** TODO: only public because of RehaIO */
-public class OpRgafTab extends JXPanel implements ChangeListener {
+class OpRgafTab extends JXPanel implements ChangeListener {
     private static final long serialVersionUID = -6012301447745950357L;
-
-    private Vector<String> vectitel = new Vector<>();
-    private Vector<String> vecdescript = new Vector<>();
-    private Vector<ImageIcon> vecimg = new Vector<>();
 
     private JTabbedPane jtb;
 
-    private JXHeader jxh;
+    private Header jxh = new Header();;
     OpRgafPanel opRgafPanel;
 
     private OpRgafMahnungen opRgafMahnungen;
 
-    private OpRgaf opRgaf;
-
-    public OpRgafTab(OpRgaf opRgaf) {
-        this.opRgaf = opRgaf;
+    OpRgafTab(OpRgaf opRgaf) {
         setOpaque(false);
         setLayout(new BorderLayout());
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
 
-        opRgafPanel = new OpRgafPanel(this,opRgaf);
+        opRgafPanel = new OpRgafPanel(this, opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
 
-        opRgafMahnungen = new OpRgafMahnungen(this,opRgaf);
+        opRgafMahnungen = new OpRgafMahnungen(this, opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
 
         jtb.addChangeListener(this);
-        doHeader();
-        jxh = new JXHeader();
-        ((JLabel) jxh.getComponent(1)).setVerticalAlignment(JLabel.NORTH);
+
+        jtb.addChangeListener(jxh);
         add(jxh, BorderLayout.NORTH);
         add(jtb, BorderLayout.CENTER);
 
         jxh.validate();
         jtb.validate();
         validate();
-    }
-
-    public void setHeader(int header) {
-        jxh.setTitle(vectitel.get(header));
-        jxh.setDescription(vecdescript.get(header));
-        jxh.setIcon(vecimg.get(header));
-        jxh.validate();
-    }
-
-    private void doHeader() {
-        ImageIcon ico;
-        String ss = System.getProperty("user.dir") + File.separator + "icons" + File.separator + "Guldiner.png";
-        ico = new ImageIcon(ss);
-        vectitel.add("Bezahlte Rezeptgebühr- oder Ausfallrechnungen ausbuchen / Teilzahlungen buchen");
-        vecdescript.add(
-                "<html>Hier haben Sie die Möglichkeit Rechnungen nach verschiedenen Kriterien zu suchen.<br><br>"
-                        + "Wenn Sie die Rechnung, die Sie suchen, gefunden haben und die Rechnung <b>vollständig bezahlt</b> wurde,<br>"
-                        + "genügt es völlig über <b>Alt+A</b> den Vorgang <b>Ausbuchen</b> zu aktivieren.<br><br>"
-                        + "Wurde lediglich eine <b>Teilzahlung</b> geleistet, muß diese zuvor im Textfeld <b>Geldeingang</b> eingetragen werden.</html>");
-        vecimg.add(ico);
-
-        vectitel.add("Mahnwesen");
-        vecdescript.add("<html>Hier erzeugen Sie Mahnungen für noch nicht bezahlte Rechnungen.<br><br>"
-                + "Button <b>[suchen]</b> listet die Rechnungen der gewählten Kategorie, bei denen noch <br>"
-                + "ein Betrag offen ist und die in der eingestellten Mahnstufe noch nicht gemahnt wurden.</html>");
-        ss = System.getProperty("user.dir") + File.separator + "icons" + File.separator + "Mahnung.png";
-        ico = new ImageIcon(ss);
-        vecimg.add(ico);
-
-        vectitel.add("Manuell verschlüsseln");
-        vecdescript.add("....Hier können Sie Dateien manuell verschlüsseln\n" + "Weshalb auch immer....");
-        vecimg.add(ico);
-
-        vectitel.add("Test- und Experimentierpanel");
-        vecdescript.add("....Diese Seite ist bislang noch Bodo und Jürgen vorbehalten (leider).\n"
-                + "Hier werden die Funktionen die später Nebraska zu dem machen was Nebraske ist\n"
-                + "entwickelt und getestet");
-        vecimg.add(ico);
-        vectitel.add("Rezeptgebührrechungen / Ausfallrechnungen");
-        vecdescript.add("....Experimentierpanal von Bodo und Jürgen.\n"
-                + "Hier werden die Funktionen die später Nebraska zu dem machen was Nebraske ist\n"
-                + "entwickelt und getestet");
-        vecimg.add(ico);
     }
 
     @Override
@@ -117,9 +61,7 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
             }
         } catch (Exception ex) {
         }
-        jxh.setTitle(vectitel.get(sel));
-        jxh.setDescription(vecdescript.get(sel));
-        jxh.setIcon(vecimg.get(sel));
+
     }
 
     void setFirstFocus() {
@@ -141,7 +83,7 @@ public class OpRgafTab extends JXPanel implements ChangeListener {
         return "1995-01-01";
     }
 
-        public void sucheRezept(String rezept) {
+    void sucheRezept(String rezept) {
         opRgafPanel.sucheRezept(rezept);
     }
 }

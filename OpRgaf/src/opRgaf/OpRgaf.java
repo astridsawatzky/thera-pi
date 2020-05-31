@@ -52,7 +52,7 @@ public class OpRgaf implements WindowListener {
 
     public static void main(String[] args) {
         new Logging("oprgaf");
-        if (args.length <= 0 && !isTestcase()) {
+        if (args.length <= 0 && !false) {
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
         } else {
@@ -60,43 +60,29 @@ public class OpRgaf implements WindowListener {
             application.sqlInfo = new SqlInfo();
 
             proghome = Path.Instance.getProghome();
-            if (!isTestcase()) {
-                System.out.println("hole daten aus INI-Datei " + args[0]);
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+            System.out.println("hole daten aus INI-Datei " + args[0]);
+            INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
-                inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-                String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-                String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-                try {
-                    new OOService().start(officeNativePfad, officeProgrammPfad);
-                } catch (FileNotFoundException | OfficeApplicationException e) {
-                    e.printStackTrace();
-                }
-                application.aktIK = args[1];
-                try {
-                    application.sqlInfo.setConnection(new DatenquellenFactory(application.aktIK).createConnection());
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                application.iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
-                application.AbrechnungParameter(proghome);
-                application.FirmenDaten(proghome);
-                if (args.length >= 3) {
-                    rehaReversePort = Integer.parseInt(args[2]);
-                }
-            } else {
-                application.iniOpRgAf = new OpRgAfIni(proghome, "ini/", application.aktIK, "oprgaf.ini");
-                application.AbrechnungParameter(proghome);
-                application.FirmenDaten(proghome);
+            inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+            String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
+            String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+            try {
+                new OOService().start(officeNativePfad, officeProgrammPfad);
+            } catch (FileNotFoundException | OfficeApplicationException e) {
+                e.printStackTrace();
             }
-            if (isTestcase()) {
-                System.out.println(application.iniOpRgAf.getMahnParameter());
-                System.out.println("TestCase = " + isTestcase());
-                application.AbrechnungParameter(proghome);
-                application.FirmenDaten(proghome);
+            application.aktIK = args[1];
+            try {
+                application.sqlInfo.setConnection(new DatenquellenFactory(application.aktIK).createConnection());
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-
+            application.iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
+            application.AbrechnungParameter(proghome);
+            application.FirmenDaten(proghome);
+            if (args.length >= 3) {
+                rehaReversePort = Integer.parseInt(args[2]);
+            }
             application.StarteDB();
 
             application.getJFrame();
@@ -164,14 +150,13 @@ public class OpRgaf implements WindowListener {
         jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
         otab = new OpRgafTab(this);
-        otab.setHeader(0);
         otab.setFirstFocus();
 
         jFrame.getContentPane()
               .add(otab);
 
         jFrame.setIconImage(Toolkit.getDefaultToolkit()
-                                   .getImage(System.getProperty("user.dir") + File.separator + "icons" + File.separator
+                                   .getImage(Path.Instance.getProghome() + File.separator + "icons" + File.separator
                                            + "Guldiner_I.png"));
         jFrame.setVisible(true);
         thisFrame = jFrame;
@@ -309,10 +294,6 @@ public class OpRgaf implements WindowListener {
         for (int i = 0; i < stitel.length; i++) {
             hmFirmenDaten.put(stitel[i], inif.getStringProperty("Firma", stitel[i]));
         }
-    }
-
-    static boolean isTestcase() {
-        return false;
     }
 
     public void show() {

@@ -12,17 +12,17 @@ import CommonTools.Select3ChkBx;
  * @author McM
  *
  */
-public class RgAfVkSelect extends Select3ChkBx {
+class RgAfVkSelect extends Select3ChkBx {
     private RgAfVk_IfCallBack callBackObjekt = null;
 
     /**
      * @param ask beschreibt Zweck der Auswahl
      */
-    public RgAfVkSelect(String ask) {
+    RgAfVkSelect(String ask) {
         super(ask, "Rezeptgebührenrechnungen", "Ausfallrechnungen", "Verkaufsrechnungen");
     }
 
-    public boolean useRGR() {
+    boolean useRGR() {
         return (chkBxO.isSelected());
     }
 
@@ -30,7 +30,7 @@ public class RgAfVkSelect extends Select3ChkBx {
         chkBxO.setSelected(value);
     }
 
-    public boolean useAFR() {
+    boolean useAFR() {
         return (chkBxM.isSelected());
     }
 
@@ -38,7 +38,7 @@ public class RgAfVkSelect extends Select3ChkBx {
         chkBxM.setSelected(value);
     }
 
-    public boolean useVKR() {
+    boolean useVKR() {
         return (chkBxU.isSelected());
     }
 
@@ -46,13 +46,13 @@ public class RgAfVkSelect extends Select3ChkBx {
         chkBxU.setSelected(value);
     }
 
-    public void setRGR_AFR_VKR(boolean valueR, boolean valueA, boolean valueV) {
+    void setRGR_AFR_VKR(boolean valueR, boolean valueA, boolean valueV) {
         setRGR(valueR);
         setAFR(valueA);
         setVKR(valueV);
     }
 
-    public void disableVKR() {
+    void disableVKR() {
         chkBxU.setEnabled(false);
     }
 
@@ -110,7 +110,7 @@ public class RgAfVkSelect extends Select3ChkBx {
         return tmp;
     }
 
-    public String bills2search(String field) {
+    String bills2search(String field) {
         String suche = "";
         if (useRGR()) {
             suche = sqlAddOr(suche, field, "RGR-");

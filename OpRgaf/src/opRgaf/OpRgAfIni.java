@@ -10,7 +10,7 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 
 public class OpRgAfIni {
-    private static HashMap<String, Object> mahnParam;
+    private HashMap<String, Object>  mahnParam = new HashMap<>();
 
     /** INIFile inif;. */
     private String path2IniFile;
@@ -42,7 +42,7 @@ public class OpRgAfIni {
                 if (inif.getStringProperty(section, "lockSettings") != null) {
                     settingsLocked = inif.getBooleanProperty(section, "lockSettings");
                 }
-                mahnParam = new HashMap<>();
+
                 readLastSelectRgAfVk(inif);
                 OpCommon.readMahnParamCommon(inif, mahnParam);
                 readMahnParamRgAfVk(inif, mahnParam, path2TemplateFiles);

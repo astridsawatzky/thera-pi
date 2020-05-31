@@ -1,6 +1,6 @@
 package opRgaf;
 
-public interface RgAfVk_IfCallBack {
+interface RgAfVk_IfCallBack {
 
     /**
      * Callbackfunktionen, die bei Änderung der CheckBox-Auswahl in RgAfVkSelect
