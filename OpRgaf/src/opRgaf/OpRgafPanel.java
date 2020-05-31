@@ -142,12 +142,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         startActionListener();
         setLayout(new BorderLayout());
         add(getContent(), BorderLayout.CENTER);
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                setzeFocus();
-            }
-        });
+        setzeFocus();
     }
 
     void setzeFocus() {

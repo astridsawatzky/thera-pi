@@ -43,6 +43,7 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
+import environment.Path;
 import mandant.IK;
 import office.OOService;
 
@@ -206,7 +207,7 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        String url = OpRgaf.proghome + "vorlagen/" + AusfallRechnung.this.aktIK + "/AusfallRechnung.ott.Kopie.ott";
+                        String url = Path.Instance.getProghome() + "vorlagen/" + AusfallRechnung.this.aktIK + "/AusfallRechnung.ott.Kopie.ott";
                         if(new File(url).exists()) {
                             starteAusfallRechnung(
                                     url);

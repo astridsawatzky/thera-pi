@@ -36,9 +36,6 @@ public class OpRgaf implements WindowListener {
 
     private static HashMap<String, String> hmAbrechnung = new HashMap<>();
 
-    private static HashMap<String, String> hmFirmenDaten;
-
-
     private OpRgafTab otab;
 
     public static int xport = -1;
@@ -48,18 +45,16 @@ public class OpRgaf implements WindowListener {
 
     private SqlInfo sqlInfo;
     OpRgAfIni iniOpRgAf;
-    static String proghome;
 
     public static void main(String[] args) {
         new Logging("oprgaf");
         if (args.length <= 0 && !false) {
             JOptionPane.showMessageDialog(null,
-                    "Keine Datenbankparameter übergeben!\nReha-Statistik kann nicht gestartet werden");
+                    "Keine Datenbankparameter übergeben!\nReha-opRGaf kann nicht gestartet werden");
         } else {
             OpRgaf application = new OpRgaf();
             application.sqlInfo = new SqlInfo();
 
-            proghome = Path.Instance.getProghome();
             System.out.println("hole daten aus INI-Datei " + args[0]);
             INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
@@ -78,8 +73,8 @@ public class OpRgaf implements WindowListener {
                 e.printStackTrace();
             }
             application.iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
-            application.AbrechnungParameter(proghome);
-            application.FirmenDaten(proghome);
+            application.AbrechnungParameter();
+
             if (args.length >= 3) {
                 rehaReversePort = Integer.parseInt(args[2]);
             }
@@ -160,12 +155,7 @@ public class OpRgaf implements WindowListener {
                                            + "Guldiner_I.png"));
         jFrame.setVisible(true);
         thisFrame = jFrame;
-        try {
-            new SocketClient().setzeRehaNachricht(rehaReversePort, "AppName#OpRgaf#" + xport);
-            new SocketClient().setzeRehaNachricht(rehaReversePort, "OpRgaf#" + RehaIOMessages.IS_STARTET);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Fehler in der Socketkommunikation");
-        }
+        informRehaMainAboutStart();
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -173,6 +163,15 @@ public class OpRgaf implements WindowListener {
             }
         });
         return jFrame;
+    }
+
+    private void informRehaMainAboutStart() {
+        try {
+            new SocketClient().setzeRehaNachricht(rehaReversePort, "AppName#OpRgaf#" + xport);
+            new SocketClient().setzeRehaNachricht(rehaReversePort, "OpRgaf#" + RehaIOMessages.IS_STARTET);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Fehler in der Socketkommunikation");
+        }
     }
 
     public OpRgaf getInstance() {
@@ -248,10 +247,10 @@ public class OpRgaf implements WindowListener {
     public void windowOpened(WindowEvent arg0) {
     }
 
-    private void AbrechnungParameter(String proghome) {
+    private void AbrechnungParameter() {
         hmAbrechnung.clear();
         /* Heilmittelabrechnung */
-        INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/abrechnung.ini");
+        INIFile inif = new INIFile(Path.Instance.getProghome() + "ini/" + aktIK + "/abrechnung.ini");
         hmAbrechnung.put("hmgkvformular", inif.getStringProperty("HMGKVRechnung", "Rformular"));
         hmAbrechnung.put("hmgkvrechnungdrucker", inif.getStringProperty("HMGKVRechnung", "Rdrucker"));
         hmAbrechnung.put("hmgkvtaxierdrucker", inif.getStringProperty("HMGKVRechnung", "Tdrucker"));
@@ -285,16 +284,7 @@ public class OpRgaf implements WindowListener {
         hmAbrechnung.put("hmallinoffice", inif.getStringProperty("GemeinsameParameter", "InOfficeStarten"));
     }
 
-    private void FirmenDaten(String proghome) {
-        String[] stitel = { "Ik", "Ikbezeichnung", "Firma1", "Firma2", "Anrede", "Nachname", "Vorname", "Strasse",
-                "Plz", "Ort", "Telefon", "Telefax", "Email", "Internet", "Bank", "Blz", "Kto", "Steuernummer", "Hrb",
-                "Logodatei", "Zusatz1", "Zusatz2", "Zusatz3", "Zusatz4", "Bundesland" };
-        hmFirmenDaten = new HashMap<>();
-        INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/firmen.ini");
-        for (int i = 0; i < stitel.length; i++) {
-            hmFirmenDaten.put(stitel[i], inif.getStringProperty("Firma", stitel[i]));
-        }
-    }
+
 
     public void show() {
         thisFrame.setVisible(true);
