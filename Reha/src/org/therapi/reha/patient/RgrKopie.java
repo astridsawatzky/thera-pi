@@ -27,7 +27,7 @@ class RgrKopie {
                         long start = System.currentTimeMillis();
                         while (!RehaIOServer.rgAfIsActive) {
                             Thread.sleep(50);
-                            if ((System.currentTimeMillis() - start) > 5000) {
+                            if ((System.currentTimeMillis() - start) > 10000) {
                                 JOptionPane.showMessageDialog(null,
                                         "Kann den Suchenbefehl auf OpRgaf nicht absetzen");
                                 return null;
