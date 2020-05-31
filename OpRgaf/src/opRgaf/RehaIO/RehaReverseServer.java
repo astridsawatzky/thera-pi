@@ -12,7 +12,6 @@ import org.jdesktop.swingworker.SwingWorker;
 
 import io.RehaIOMessages;
 import opRgaf.OpRgaf;
-import sql.DatenquellenFactory;
 
 public class RehaReverseServer extends SwingWorker<Void, Void> {
     public ServerSocket serv;

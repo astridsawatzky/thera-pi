@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -57,10 +58,12 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
+import environment.Path;
 import io.RehaIOMessages;
 import mandant.IK;
 import office.OOService;
 import opRgaf.RehaIO.SocketClient;
+import sql.DatenquellenFactory;
 
 class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
     private static final long serialVersionUID = -7883557713071422132L;
@@ -123,7 +126,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     private OpShowGesamt sumPan;
     private RgAfVkSelect selPan;
 
-    private OpRgaf opRgaf;
 
     private OpRgAfIni iniOpRgAf;
 
@@ -131,8 +133,9 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     private JRtaTextField geldeingangTf;
 
+    private Logger logger =LoggerFactory.getLogger(OpRgafPanel.class);
+
     OpRgafPanel(OpRgafTab xeltern, OpRgaf opRgaf) {
-        this.opRgaf = opRgaf;
         this.iniOpRgAf = opRgaf.iniOpRgAf;
         this.ik = new IK(opRgaf.aktIK);
         startKeyListener();
@@ -660,16 +663,12 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     private void starteSuche(String sstmt) {
         tabmod.setRowCount(0);
         tab.validate();
-        Statement stmt = null;
-        ResultSet rs = null;
 
-        try {
-            stmt = opRgaf.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            rs = stmt.executeQuery(sstmt);
+        try(
+            Connection connection = new DatenquellenFactory(ik.digitString()).createConnection();
+            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery(sstmt);
+            )    {
             Vector<Object> vec = new Vector<Object>();
             int durchlauf = 0;
             sumPan.delSuchGesamt();
@@ -728,24 +727,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                 adjustColumns();
             }
         } catch (SQLException ev) {
-            System.out.println("SQLException: " + ev.getMessage());
-            System.out.println("SQLState: " + ev.getSQLState());
-            System.out.println("VendorError: " + ev.getErrorCode());
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
+           logger .error("Datenbankfehler bei der Suche", ev);
         }
     }
 
@@ -975,7 +957,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                 SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
 
         // System.out.println(hmRezgeb);
-        String url = OpRgaf.proghome + "vorlagen/" + opRgaf.aktIK + "/RezeptgebuehrRechnung.ott.Kopie.ott";
+        String url = Path.Instance.getProghome() + "vorlagen/" + ik.digitString() + "/RezeptgebuehrRechnung.ott.Kopie.ott";
         try {
             officeStarten(url);
         } catch (OfficeApplicationException | NOAException e) {
