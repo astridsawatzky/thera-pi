@@ -17,8 +17,10 @@ public class Money implements Comparable<Money>{
         value = geld.value;
     }
 
-    public Money(String string) {
-        this.value= new BigDecimal(string);
+    public Money(String value) {
+        if(value!=null) {
+            this.value= new BigDecimal(value);
+        }
 
     }
 

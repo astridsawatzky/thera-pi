@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import mandant.IK;
 import mandant.Mandant;
+import opRgaf.rezept.Money;
 import sql.DatenquellenFactory;
 
 public class RgafFakturaDto {
@@ -52,16 +53,16 @@ public class RgafFakturaDto {
                     ret.setPatIntern(rs.getString(field));
                     break;
                 case "RGESAMT":
-                    ret.setRGesamt(rs.getString(field));
+                    ret.setrGesamt(new Money(rs.getString(field)));
                     break;
                 case "ROFFEN":
-                    ret.setROffen(rs.getString(field));
+                    ret.setrOffen(new Money(rs.getString(field)));
                     break;
                 case "RGBETRAG":
-                    ret.setRGBetrag(rs.getString(field));
+                    ret.setrGBetrag(new Money(rs.getString(field)));
                     break;
                 case "RPBETRAG":
-                    ret.setRPBetrag(rs.getString(field));
+                    ret.setrPBetrag(new Money(rs.getString(field)));
                     break;
                 case "RDATUM":
                     ret.setrDatum(LocalDate.parse(rs.getString(field)));
@@ -87,16 +88,13 @@ public class RgafFakturaDto {
                 ;
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            logger.error("Couldn't retrieve dataset in rgaffaktura");
-            logger.error("Error: " + e.getLocalizedMessage());
-            e.printStackTrace();
+            logger.error("Couldn't retrieve dataset in rgaffaktura",e);
         }
 
         return ret;
     }
 
-    public void saveToDB(RgafFaktura rgaff) {
+    public boolean saveToDB(RgafFaktura rgaff) {
         String sql = "insert into " + dbName + " set " + "RNR='" + rgaff.getrNr() + "'," + "REZNR='" + rgaff.getRezNr()
                 + "'," + "PAT_INTERN='" + rgaff.getPatIntern() + "'," + "RGESAMT='" + rgaff.getrGesamt() + "',"
                 + "ROFFEN='" + rgaff.getrOffen() + "'," + "RGBETRAG='" + rgaff.getrGBetrag() + "'," + "RPBETRAG='"
@@ -105,11 +103,12 @@ public class RgafFakturaDto {
                 + rgaff.getrMahndat2() + "'," + "ID='" + rgaff.getId() + "'," + "IK='" + rgaff.getIk() + "'";
         try {
             Connection conn = new DatenquellenFactory(ik.digitString()).createConnection();
-            boolean rs = conn.createStatement()
+            return conn.createStatement()
                              .execute(sql);
         } catch (SQLException e) {
             logger.error("Could not save to RgafFaktura " + rgaff.toString() + " to Database", e);
         }
+        return false;
     }
 
 }

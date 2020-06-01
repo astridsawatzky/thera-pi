@@ -3,6 +3,7 @@ package opRgaf.basics;
 import java.time.LocalDate;
 
 import mandant.IK;
+import opRgaf.rezept.Money;
 
 public class RgafFaktura {
     String rNr;
@@ -20,7 +21,7 @@ public class RgafFaktura {
     IK ik;                  // This is the IK in the DB, not the current mandant.ik()!!
 
     public RgafFaktura() {
-        
+
     }
 
     public String getrNr() {
