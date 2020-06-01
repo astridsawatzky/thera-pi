@@ -1,7 +1,6 @@
 package opRgaf;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -72,6 +71,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     private JButton suchenBtn;
     private JButton ausbuchenBtn;
+    private JButton kopieButton;
 
     private JRtaComboBox combo;
 
@@ -83,7 +83,6 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     private JXTable tab;
 
-    private Component kopieButton;
 
     private JRtaCheckBox bar;
     private boolean barWasSelected;
@@ -126,14 +125,13 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
     private OpShowGesamt sumPan;
     private RgAfVkSelect selPan;
 
-
     private OpRgAfIni iniOpRgAf;
 
     private IK ik;
 
     private JRtaTextField geldeingangTf;
 
-    private Logger logger =LoggerFactory.getLogger(OpRgafPanel.class);
+    private Logger logger = LoggerFactory.getLogger(OpRgafPanel.class);
 
     OpRgafPanel(OpRgafTab xeltern, OpRgaf opRgaf) {
         this.iniOpRgAf = opRgaf.iniOpRgAf;
@@ -251,7 +249,8 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
         rowCnt += 2; // 6
         colCnt = 4;
-        kopieButton = builder.add(ButtonTools.macheButton("Rechnungskopie", "kopie", al), cc.xy(colCnt, rowCnt)); // 4,6
+        kopieButton = ButtonTools.macheButton("Rechnungskopie", "kopie", al);
+         builder.add(kopieButton, cc.xy(colCnt, rowCnt)); // 4,6
         colCnt = 11;
         builder.addLabel("Geldeingang:", cc.xy(colCnt, rowCnt, CellConstraints.RIGHT, CellConstraints.TOP)); // 12,6
 
@@ -269,7 +268,8 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             bar.setSelected(true);
         }
 
-        ausbuchenBtn = (JButton) builder.add(ButtonTools.macheButton("ausbuchen", "ausbuchen", al), cc.xy(17, 6));
+        ausbuchenBtn = ButtonTools.macheButton("ausbuchen", "ausbuchen", al);
+        builder.add(ausbuchenBtn, cc.xy(17, 6));
         ausbuchenBtn.setMnemonic(KeyEvent.VK_A);
 //**********************
 
@@ -437,7 +437,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         BigDecimal nochoffen = BigDecimal.valueOf(
                 (Double) tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen));
         BigDecimal eingang = BigDecimal.valueOf(Double.parseDouble(geldeingangTf.getText()
-                                                                         .replace(",", ".")));
+                                                                                .replace(",", ".")));
         BigDecimal restbetrag = nochoffen.subtract(eingang);
 
         if (row < 0) {
@@ -659,11 +659,10 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         tabmod.setRowCount(0);
         tab.validate();
 
-        try(
-            Connection connection = new DatenquellenFactory(ik.digitString()).createConnection();
-            Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = stmt.executeQuery(sstmt);
-            )    {
+        try (Connection connection = new DatenquellenFactory(ik.digitString()).createConnection();
+                Statement stmt = connection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery(sstmt);) {
             Vector<Object> vec = new Vector<Object>();
             int durchlauf = 0;
             sumPan.delSuchGesamt();
@@ -722,7 +721,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                 adjustColumns();
             }
         } catch (SQLException ev) {
-           logger .error("Datenbankfehler bei der Suche", ev);
+            logger.error("Datenbankfehler bei der Suche", ev);
         }
     }
 
@@ -904,106 +903,68 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     Arrays.asList(new String[] {}));
             db = "verordn";
         }
-        String behandlungen = vecaktrez.get(0) + "*" + (!"".equals(vecaktrez.get(1)
-                                                                            .trim()) ? vecaktrez.get(1) : "")
-                + (!"".equals(vecaktrez.get(2)
-                                       .trim()) ? "," + vecaktrez.get(2) : "")
-                + (!"".equals(vecaktrez.get(3)
-                                       .trim()) ? "," + vecaktrez.get(3) : "")
-                + (!"".equals(vecaktrez.get(4)
-                                       .trim()) ? "," + vecaktrez.get(4) : "")
-                + (!"".equals(vecaktrez.get(5)
-                                       .trim()) ? "," + vecaktrez.get(5) : "")
-                + (!"".equals(vecaktrez.get(6)
-                                       .trim()) ? "," + vecaktrez.get(6) : "");
+        if (vecaktrez != null) {
+            String behandlungen = vecaktrez.get(0) + "*" + (!"".equals(vecaktrez.get(1)
+                                                                                .trim()) ? vecaktrez.get(1) : "")
+                    + (!"".equals(vecaktrez.get(2)
+                                           .trim()) ? "," + vecaktrez.get(2) : "")
+                    + (!"".equals(vecaktrez.get(3)
+                                           .trim()) ? "," + vecaktrez.get(3) : "")
+                    + (!"".equals(vecaktrez.get(4)
+                                           .trim()) ? "," + vecaktrez.get(4) : "")
+                    + (!"".equals(vecaktrez.get(5)
+                                           .trim()) ? "," + vecaktrez.get(5) : "")
+                    + (!"".equals(vecaktrez.get(6)
+                                           .trim()) ? "," + vecaktrez.get(6) : "");
 
-        String cmd = "select abwadress,id from pat5 where pat_intern='" + pat_intern + "' LIMIT 1";
-        Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
-        String[] adressParams = null;
-        if ("T".equals(adrvec.get(0)
-                             .get(0))) {
-            adressParams = holeAbweichendeAdresse(adrvec.get(0)
-                                                        .get(1));
+            String cmd = "select abwadress,id from pat5 where pat_intern='" + pat_intern + "' LIMIT 1";
+            Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
+            String[] adressParams = null;
+            String patid = adrvec.get(0)
+                                 .get(1);
+            PatientenAdressen patientenAdressen = new PatientenAdressen(patid);
+            if ("T".equals(adrvec.get(0)
+                                 .get(0))) {
+                adressParams = patientenAdressen.holeAbweichendeAdresse(patid);
+            } else {
+                adressParams = patientenAdressen.getAdressParams(patid);
+            }
+
+            hmRezgeb.put("<rgreznum>", rez_nr);
+            hmRezgeb.put("<rgbehandlung>", behandlungen);
+            hmRezgeb.put("<rgdatum>", DatFunk.sDatInDeutsch(
+                    SqlInfo.holeEinzelFeld("select rez_datum from " + db + " where rez_nr='" + rez_nr + "' LIMIT 1")));
+            hmRezgeb.put("<rgbetrag>", rezgeb.replace(".", ","));
+            hmRezgeb.put("<rgpauschale>", pauschale.replace(".", ","));
+            hmRezgeb.put("<rggesamt>", gesamt.replace(".", ","));
+            hmRezgeb.put("<rganrede>", adressParams[0]);
+            hmRezgeb.put("<rgname>", adressParams[1]);
+            hmRezgeb.put("<rgstrasse>", adressParams[2]);
+            hmRezgeb.put("<rgort>", adressParams[3]);
+            hmRezgeb.put("<rgbanrede>", adressParams[4]);
+            hmRezgeb.put("<rgorigdatum>", DatFunk.sDatInDeutsch(rdatum));
+            hmRezgeb.put("<rgnr>", rgnr);
+
+            hmRezgeb.put("<rgpatnname>", StringTools.EGross(
+                    SqlInfo.holeEinzelFeld("select n_name from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
+            hmRezgeb.put("<rgpatvname>", StringTools.EGross(
+                    SqlInfo.holeEinzelFeld("select v_name from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
+            hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(
+                    SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
+
+            // System.out.println(hmRezgeb);
+            String url = Path.Instance.getProghome() + "vorlagen/" + ik.digitString()
+                    + "/RezeptgebuehrRechnung.ott.Kopie.ott";
+            try {
+                officeStarten(url);
+            } catch (OfficeApplicationException | NOAException e) {
+                e.printStackTrace();
+            } catch (TextException e) {
+                e.printStackTrace();
+            }
         } else {
-            adressParams = getAdressParams(adrvec.get(0)
-                                                 .get(1));
+            logger.error("das Rezept: " + rez_nr + " konnte nicht gefunden werden, daher kann keine Rechnungskopie erstellt werden. ");
         }
-
-        hmRezgeb.put("<rgreznum>", rez_nr);
-        hmRezgeb.put("<rgbehandlung>", behandlungen);
-        hmRezgeb.put("<rgdatum>", DatFunk.sDatInDeutsch(
-                SqlInfo.holeEinzelFeld("select rez_datum from " + db + " where rez_nr='" + rez_nr + "' LIMIT 1")));
-        hmRezgeb.put("<rgbetrag>", rezgeb.replace(".", ","));
-        hmRezgeb.put("<rgpauschale>", pauschale.replace(".", ","));
-        hmRezgeb.put("<rggesamt>", gesamt.replace(".", ","));
-        hmRezgeb.put("<rganrede>", adressParams[0]);
-        hmRezgeb.put("<rgname>", adressParams[1]);
-        hmRezgeb.put("<rgstrasse>", adressParams[2]);
-        hmRezgeb.put("<rgort>", adressParams[3]);
-        hmRezgeb.put("<rgbanrede>", adressParams[4]);
-        hmRezgeb.put("<rgorigdatum>", DatFunk.sDatInDeutsch(rdatum));
-        hmRezgeb.put("<rgnr>", rgnr);
-
-        hmRezgeb.put("<rgpatnname>", StringTools.EGross(
-                SqlInfo.holeEinzelFeld("select n_name from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
-        hmRezgeb.put("<rgpatvname>", StringTools.EGross(
-                SqlInfo.holeEinzelFeld("select v_name from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
-        hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(
-                SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
-
-        // System.out.println(hmRezgeb);
-        String url = Path.Instance.getProghome() + "vorlagen/" + ik.digitString() + "/RezeptgebuehrRechnung.ott.Kopie.ott";
-        try {
-            officeStarten(url);
-        } catch (OfficeApplicationException | NOAException e) {
-            e.printStackTrace();
-        } catch (TextException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String[] getAdressParams(String patid) {
-        // anr=17,titel=18,nname=0,vname=1,strasse=3,plz=4,ort=5,abwadress=19
-        // "anrede,titel,nachname,vorname,strasse,plz,ort"
-        String cmd = "select anrede,titel,n_name,v_name,strasse,plz,ort from pat5 where id='" + patid + "' LIMIT 1";
-        Vector<Vector<String>> abwvec = SqlInfo.holeFelder(cmd);
-        Object[] obj = { abwvec.get(0)
-                               .get(0),
-                abwvec.get(0)
-                      .get(1),
-                abwvec.get(0)
-                      .get(2),
-                abwvec.get(0)
-                      .get(3),
-                abwvec.get(0)
-                      .get(4),
-                abwvec.get(0)
-                      .get(5),
-                abwvec.get(0)
-                      .get(6) };
-        return AdressTools.machePrivatAdresse(obj, true);
-    }
-
-    private String[] holeAbweichendeAdresse(String patid) {
-        // "anrede,titel,nachname,vorname,strasse,plz,ort"
-        String cmd = "select abwanrede,abwtitel,abwn_name,abwv_name,abwstrasse,abwplz,abwort from pat5 where id='"
-                + patid + "' LIMIT 1";
-        Vector<Vector<String>> abwvec = SqlInfo.holeFelder(cmd);
-        Object[] obj = { abwvec.get(0)
-                               .get(0),
-                abwvec.get(0)
-                      .get(1),
-                abwvec.get(0)
-                      .get(2),
-                abwvec.get(0)
-                      .get(3),
-                abwvec.get(0)
-                      .get(4),
-                abwvec.get(0)
-                      .get(5),
-                abwvec.get(0)
-                      .get(6) };
-        return AdressTools.machePrivatAdresse(obj, true);
     }
 
     private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException {

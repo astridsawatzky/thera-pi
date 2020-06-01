@@ -5,6 +5,7 @@ import CommonTools.StringTools;
 class AdressTools {
     static String[] machePrivatAdresse(Object[] oin, boolean egross) {
         // "anrede,titel,nachname,vorname,strasse,plz,ort"
+
         String[] str = { null, null, null, null, null, null, null };
         String anrede = ((String) oin[0] == null ? "" : (String) oin[0]).trim();
         String titel = ((String) oin[1] == null ? "" : (String) oin[1]).trim();
