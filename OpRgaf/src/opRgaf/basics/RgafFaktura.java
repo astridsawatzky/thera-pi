@@ -17,10 +17,10 @@ public class RgafFaktura {
     LocalDate rMahndat1;
     LocalDate rMahndat2;
     int id;
-    IK ik;
+    IK ik;                  // This is the IK in the DB, not the current mandant.ik()!!
 
-    public RgafFaktura(IK Ik) {
-        ik = Ik;
+    public RgafFaktura() {
+        
     }
 
     public String getrNr() {
