@@ -5,6 +5,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +22,8 @@ public class RgafFakturaDto {
     private Logger logger = LoggerFactory.getLogger(RgafFakturaDto.class);
 
     private static final String dbName = "RgafFaktura";
+
+    private static final String SelectAllSql = "Select * from rgaffaktura";
     private Mandant mandant;
     private IK ik;
 
@@ -40,7 +46,6 @@ public class RgafFakturaDto {
             for (int o = 1; o <= meta.getColumnCount(); o++) {
                 String field = meta.getColumnLabel(o)
                                    .toUpperCase();
-                logger.debug("Checking: " + field + " in " + o);
                 switch (field) {
 
                 case "RNR":
@@ -65,16 +70,16 @@ public class RgafFakturaDto {
                     ret.setrPBetrag(new Money(rs.getString(field)));
                     break;
                 case "RDATUM":
-                    ret.setrDatum(LocalDate.parse(rs.getString(field)));
+                    ret.setrDatum(Optional.ofNullable(rs.getString(field)).map(LocalDate::parse).orElse(null));
                     break;
                 case "RBEZDATUM":
-                    ret.setrBezDatum(LocalDate.parse(rs.getString(field)));
+                    ret.setrBezDatum(Optional.ofNullable(rs.getString(field)).map(LocalDate::parse).orElse(null));
                     break;
                 case "RMAHNDAT1":
-                    ret.setrMahndat1(LocalDate.parse(rs.getString(field)));
+                    ret.setrMahndat1(Optional.ofNullable(rs.getString(field)).map(LocalDate::parse).orElse(null));
                     break;
                 case "RMAHNDAT2":
-                    ret.setrMahndat1(LocalDate.parse(rs.getString(field)));
+                    ret.setrMahndat1(Optional.ofNullable(rs.getString(field)).map(LocalDate::parse).orElse(null));
                     break;
                 case "ID":
                     ret.setId(rs.getInt(field));
@@ -109,6 +114,25 @@ public class RgafFakturaDto {
             logger.error("Could not save to RgafFaktura " + rgaff.toString() + " to Database", e);
         }
         return false;
+    }
+    public List<RgafFaktura> all() {
+
+        List<RgafFaktura> rgafFakturaListe = new LinkedList<RgafFaktura>();
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();) {
+            ResultSet rs = con.createStatement()
+                              .executeQuery(SelectAllSql);
+            while (rs.next()) {
+
+                rgafFakturaListe.add(ofResultset(rs));
+
+            }
+
+            return rgafFakturaListe;
+        } catch (SQLException e) {
+            logger.error("could not retrieve Mitarbeiter from Database", e);
+            return Collections.emptyList();
+        }
+
     }
 
 }
