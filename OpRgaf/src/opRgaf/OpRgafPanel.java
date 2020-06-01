@@ -133,9 +133,9 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     private Logger logger = LoggerFactory.getLogger(OpRgafPanel.class);
 
-    OpRgafPanel(OpRgafTab xeltern, OpRgaf opRgaf) {
+    OpRgafPanel(OpRgafTab xeltern, OpRgaf opRgaf, IK ik) {
         this.iniOpRgAf = opRgaf.iniOpRgAf;
-        this.ik = new IK(opRgaf.aktIK);
+        this.ik = ik;
         startKeyListener();
         startActionListener();
         setLayout(new BorderLayout());

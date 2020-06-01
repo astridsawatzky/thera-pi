@@ -154,10 +154,13 @@ final class MenuActionListener implements ActionListener {
                 return;
             }
             if (!RehaIOServer.rgAfIsActive) {
-            	String[] args = new String[] {Path.Instance.getProghome(),
-            			 Reha.getAktIK() , String.valueOf(Reha.xport)};
-                new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
-                        + Reha.getAktIK() + " " + Reha.xport);
+                String[] args = new String[] {Path.Instance.getProghome(),
+                         Reha.getAktIK() , String.valueOf(Reha.xport)};
+
+                OpRgaf.start(Path.Instance.getProghome() , Reha.getAktIK(), Reha.xport);
+
+//                new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome() + " "
+//                        + Reha.getAktIK() + " " + Reha.xport);
             } else {
                 new ReverseSocket().setzeRehaNachricht(RehaIOServer.rgAfreversePort,
                         "Reha#" + RehaIOMessages.MUST_GOTOFRONT);

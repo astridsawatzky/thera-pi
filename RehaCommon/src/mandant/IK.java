@@ -55,7 +55,7 @@ import org.slf4j.LoggerFactory;
  **/
 public class IK {
     private static final Pattern IK_FORMAT = Pattern.compile("\\d{9}");
-    private final String ik_ziffern;
+    public final String ik_ziffern;
     private final String wellFormed;
     private Logger logger = LoggerFactory.getLogger(IK.class);
 

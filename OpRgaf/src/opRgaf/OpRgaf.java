@@ -20,6 +20,7 @@ import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import environment.Path;
 import io.RehaIOMessages;
 import logging.Logging;
+import mandant.IK;
 import office.OOService;
 import opRgaf.RehaIO.RehaReverseServer;
 import opRgaf.RehaIO.SocketClient;
@@ -29,9 +30,9 @@ public class OpRgaf implements WindowListener {
 
     private JFrame jFrame;
     private static JFrame thisFrame;
-    Connection conn;
+ //   Connection conn;
 
-    String aktIK = "510841109";
+    IK aktIK ;
 
 
     private OpRgafTab otab;
@@ -43,6 +44,10 @@ public class OpRgaf implements WindowListener {
 
     private SqlInfo sqlInfo;
     OpRgAfIni iniOpRgAf;
+    public OpRgaf(IK aktik) {
+        sqlInfo = new SqlInfo();
+        aktIK = aktik;
+    }
 
     public static void main(String[] args) {
         new Logging("oprgaf");
@@ -50,35 +55,51 @@ public class OpRgaf implements WindowListener {
             JOptionPane.showMessageDialog(null,
                     "Keine Datenbankparameter übergeben!\nReha-opRGaf kann nicht gestartet werden");
         } else {
-            OpRgaf application = new OpRgaf();
-            application.sqlInfo = new SqlInfo();
 
             System.out.println("hole daten aus INI-Datei " + args[0]);
-            INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+            String proghome = args[0];
+            String aktik = args[1];
+            if (args.length>2 && args[2]!=null) {
 
-            inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
-            String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
-            String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
-            try {
-                new OOService().start(officeNativePfad, officeProgrammPfad);
-            } catch (FileNotFoundException | OfficeApplicationException e) {
-                e.printStackTrace();
+                start(proghome,  aktik, Integer .parseInt(args[2]));
+            }else {
+                extracted(proghome, aktik);
             }
-            application.aktIK = args[1];
-            try {
-                application.sqlInfo.setConnection(new DatenquellenFactory(application.aktIK).createConnection());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            application.iniOpRgAf = new OpRgAfIni(args[0], "ini/", args[1], "oprgaf.ini");
 
-            if (args.length >= 3) {
-                rehaReversePort = Integer.parseInt(args[2]);
-            }
-            application.StarteDB();
-
-            application.getJFrame();
         }
+    }
+
+    private static void extracted(String proghome, String aktik) {
+        start(proghome,  aktik, -1);
+    }
+
+    public static JFrame start(String proghome, String aktik, int reverseport) {
+        OpRgaf application = new OpRgaf(new IK(aktik));
+
+        INIFile inif = new INIFile(proghome + "ini/" + aktik + "/rehajava.ini");
+
+        inif = new INIFile(proghome+ "ini/" + aktik + "/rehajava.ini");
+        String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
+        String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
+        try {
+            new OOService().start(officeNativePfad, officeProgrammPfad);
+        } catch (FileNotFoundException | OfficeApplicationException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            application.sqlInfo.setConnection(new DatenquellenFactory(application.aktIK.digitString()).createConnection());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        application.iniOpRgAf = new OpRgAfIni(proghome, "ini/", aktik, "oprgaf.ini");
+
+        if (reverseport!=-1) {
+            rehaReversePort = reverseport;
+        }
+        application.StarteDB();
+
+       return  application.getJFrame();
     }
 
     public JFrame getJFrame() {
@@ -178,8 +199,7 @@ public class OpRgaf implements WindowListener {
     private boolean StarteDB() {
 
         try {
-            conn = new DatenquellenFactory(aktIK).createConnection();
-            sqlInfo.setConnection(conn);
+            sqlInfo.setConnection(new DatenquellenFactory(aktIK.digitString()).createConnection());
             System.out.println("Datenbankkontakt hergestellt");
             return true;
         } catch (final SQLException ex) {
@@ -196,27 +216,13 @@ public class OpRgaf implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent arg0) {
-        if (conn != null) {
-            try {
-                conn.close();
-                System.out.println("Datenbankverbindung wurde geschlossen");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
     @Override
     public void windowClosing(WindowEvent arg0) {
         iniOpRgAf.saveLastSelection();
-        if (conn != null) {
-            try {
-                conn.close();
-                System.out.println("Datenbankverbindung wurde geschlossen");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
+
         if (rehaReverseServer != null) {
             try {
                 new SocketClient().setzeRehaNachricht(rehaReversePort, "OpRgaf#" + RehaIOMessages.IS_FINISHED);

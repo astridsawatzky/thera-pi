@@ -12,6 +12,7 @@ import hauptFenster.RehaIOServer;
 import hauptFenster.ReverseSocket;
 import io.RehaIOMessages;
 import oOorgTools.OOTools;
+import opRgaf.OpRgaf;
 import systemEinstellungen.SystemConfig;
 
 class RgrKopie {
@@ -22,8 +23,7 @@ class RgrKopie {
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        new LadeProg(Path.Instance.getProghome() + "OpRgaf.jar" + " " + Path.Instance.getProghome()
-                                + " " + Reha.getAktIK() + " " + Reha.xport);
+                        OpRgaf.start(Path.Instance.getProghome() , Reha.getAktIK(), Reha.xport);
                         long start = System.currentTimeMillis();
                         while (!RehaIOServer.rgAfIsActive) {
                             Thread.sleep(50);

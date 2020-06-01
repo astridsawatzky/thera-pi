@@ -29,7 +29,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
 
-        opRgafPanel = new OpRgafPanel(this, opRgaf);
+        opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
 
         opRgafMahnungen = new OpRgafMahnungen(this, opRgaf);

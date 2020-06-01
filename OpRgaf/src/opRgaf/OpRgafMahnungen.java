@@ -53,6 +53,7 @@ import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import office.OOService;
+import sql.DatenquellenFactory;
 
 class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
     private Logger logger = LoggerFactory.getLogger(OpRgafMahnungen.class);
@@ -579,7 +580,7 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         ResultSet rs = null;
 
         try {
-            stmt = opRgaf.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            stmt = new DatenquellenFactory(opRgaf.aktIK.digitString()).createConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         } catch (SQLException e) {
 
             e.printStackTrace();
