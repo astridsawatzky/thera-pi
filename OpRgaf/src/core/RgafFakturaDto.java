@@ -1,4 +1,4 @@
-package opRgaf.basics;
+package core;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
