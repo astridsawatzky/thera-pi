@@ -17,6 +17,7 @@ public class OffenePosten {
     LocalDate mahnungZwei;
     String krankenKassenName;
     Rezeptnummer rezNummer;
+
     int tabellenId;
     int patid;
 

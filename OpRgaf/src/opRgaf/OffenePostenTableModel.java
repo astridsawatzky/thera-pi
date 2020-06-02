@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,14 @@ import opRgaf.rezept.Money;
 import opRgaf.rezept.Rezeptnummer;
 
 public class OffenePostenTableModel extends AbstractTableModel {
+
+    private static final class OffenePostenTableModelFilter extends RowFilter<OffenePostenTableModel, Integer> {
+        @Override
+        public boolean include(Entry<? extends OffenePostenTableModel, ? extends Integer> entry) {
+            String value = (String) entry.getValue(OffenePostenTableModel.KENNUNG);
+            return value.toLowerCase().contains("abd");
+        }
+    }
 
     private static final int KENNUNG = 0;
     private static final int RGNR = 1;
@@ -31,8 +41,26 @@ public class OffenePostenTableModel extends AbstractTableModel {
 
     private List<OffenePosten> opListe;
 
+    static RowFilter<OffenePostenTableModel, Integer> containsabd = new OffenePostenTableModelFilter();
+
     public OffenePostenTableModel(List<OffenePosten> opListe) {
+
         this.opListe = opListe;
+    }
+
+
+    /**
+     * @deprecated Use {@link #setFilter(RowFilter)} instead
+     */
+    TableRowSorter<OffenePostenTableModel> setfilter() {
+        return setFilter(containsabd);
+    }
+
+
+    TableRowSorter<OffenePostenTableModel> setFilter(RowFilter<OffenePostenTableModel, Integer> rowFilter) {
+        TableRowSorter<OffenePostenTableModel> sorter = new TableRowSorter<>(this);
+        sorter.setRowFilter(rowFilter);
+       return sorter;
 
     }
 
@@ -173,6 +201,37 @@ public class OffenePostenTableModel extends AbstractTableModel {
         }
 
         return super.getColumnClass(columnIndex);
+    }
+
+    @Override
+    public String getColumnName(int column) {
+        switch (column) {
+        case KENNUNG:
+            return "Name,Vorname,Geburtstag";
+        case RGNR:
+            return "Rechn-Nr.";
+        case RGDATUM:
+            return "Rechn-Datum";
+        case GESAMTBETRAG:
+            return "Gesamtbetrag";
+        case OFFEN:
+            return "offen";
+        case BEARBEITUNGSGEBUEHR:
+            return "Bearb.Gebühr";
+        case BEZAHLTAM:
+            return "bezahlt am";
+        case MAHNUNGEINS:
+            return "1. Mahnung";
+        case MAHNUNGZWEI:
+            return "2. Mahnung";
+        case KRANKENKASSENNAME:
+            return "Krankenkasse";
+        case REZNUMMER:
+            return "Rezeptnummer";
+        case TABELLENID:
+            return "id";
+        }
+        return super.getColumnName(column);
     }
 
     boolean addRow(OffenePosten op) {

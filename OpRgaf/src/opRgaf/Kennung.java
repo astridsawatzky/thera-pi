@@ -1,15 +1,16 @@
 package opRgaf;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import java.util.function.Function;
 
+import opRgaf.CommonTools.DateTimeFormatters;
 import specs.Contracts;
 
 public class Kennung {
-    private static final DateTimeFormatter ddMMyyyy = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    String name;
-    String vorname;
-    LocalDate geburtstag;
+    String name = "";
+    String vorname = "";
+    LocalDate geburtstag = null;
 
     public Kennung(String name, String vorname, LocalDate geburtstag) {
         super();
@@ -24,13 +25,23 @@ public class Kennung {
             Contracts.require(values.length == 3, "Eingabeformat: Nachname,Vorname,Geburtstag");
 
             name = values[0];
+            vorname = values[1];
+            Function<? super String, ? extends LocalDate> mapper = (t) -> {
+                return LocalDate.parse(t.trim(),DateTimeFormatters.ddMMYYYYmitPunkt);
+            };
+            geburtstag = Optional.ofNullable(values[2]).map(mapper).orElse(null);;
         }
 
     }
 
     @Override
     public String toString() {
-        return name.toUpperCase() + "," + vorname.toUpperCase() + "," + geburtstag.format(ddMMyyyy);
+        System.out.println(name);
+        System.out.println(vorname);
+        System.out.println(geburtstag);
+        return name + ","
+              + vorname + ","
+              + Optional.ofNullable(geburtstag).map(d->d.format(DateTimeFormatters.ddMMYYYYmitPunkt)).orElse(null);
     }
 
 }
