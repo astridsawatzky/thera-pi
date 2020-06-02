@@ -19,18 +19,18 @@ public class Kennung {
     }
 
     public Kennung(String aValue) {
-        String[] values = aValue.split(",");
-        Contracts.require(values.length==3, "Eingabeformat: Nachname,Vorname,Geburtstag");
-        
-        name= values[0];
-        
+        if (aValue != null) {
+            String[] values = aValue.split(",");
+            Contracts.require(values.length == 3, "Eingabeformat: Nachname,Vorname,Geburtstag");
+
+            name = values[0];
+        }
 
     }
 
     @Override
     public String toString() {
-        return name.toUpperCase() + "," + vorname.toUpperCase() + ","
-                + geburtstag.format(ddMMyyyy);
+        return name.toUpperCase() + "," + vorname.toUpperCase() + "," + geburtstag.format(ddMMyyyy);
     }
 
 }

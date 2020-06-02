@@ -18,5 +18,6 @@ public class OffenePosten {
     String krankenKassenName;
     Rezeptnummer rezNummer;
     int tabellenId;
+    int patid;
 
 }

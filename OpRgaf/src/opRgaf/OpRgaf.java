@@ -5,7 +5,6 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
@@ -30,7 +29,6 @@ public class OpRgaf implements WindowListener {
 
     private JFrame jFrame;
     private static JFrame thisFrame;
- //   Connection conn;
 
     IK aktIK ;
 
