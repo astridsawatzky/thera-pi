@@ -2,6 +2,7 @@ package opRgaf;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.RowFilter;
@@ -31,7 +32,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
     private static final int TABELLENID = 11;
     private static final Logger logger = LoggerFactory.getLogger(OffenePostenTableModel.class);
 
-    private List<OffenePosten> opListe;
+    private List<OffenePosten> opListe ;
 
 
 
@@ -43,12 +44,8 @@ public class OffenePostenTableModel extends AbstractTableModel {
     }
 
 
-    TableRowSorter<OffenePostenTableModel> setFilter(RowFilter<OffenePostenTableModel, Integer> rowFilter) {
-        TableRowSorter<OffenePostenTableModel> sorter = new TableRowSorter<>(this);
-        sorter.setRowFilter(rowFilter);
-       return sorter;
 
-    }
+  
 
     @Override
     public int getRowCount() {

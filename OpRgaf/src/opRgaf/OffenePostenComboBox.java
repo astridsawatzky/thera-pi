@@ -5,8 +5,8 @@ import javax.swing.RowFilter;
 
 final class OffenePostenComboBox extends JComboBox<CBModel> {
 
-    private static final RowFilter<OffenePostenTableModel, Integer> rgNrEnthaeltfilter = null;
-    private RowFilter<OffenePostenTableModel, Integer> rgNrGleichfilter;
+    private static final OffenePostenRowFilter rgNrEnthaeltfilter = null;
+    private OffenePostenRowFilter rgNrGleichfilter;
 
     public OffenePostenComboBox() {
         addItem(new CBModel("Rechnungsnummer =", rgNrGleichfilter));
@@ -17,13 +17,14 @@ final class OffenePostenComboBox extends JComboBox<CBModel> {
 }
 final class CBModel {
     String anzeigeText="";
-    RowFilter<OffenePostenTableModel,Integer> filter;
+    OffenePostenRowFilter filter;
 
-    public CBModel(String anzeige, RowFilter<OffenePostenTableModel, Integer> filter) {
+    public CBModel(String anzeige, OffenePostenRowFilter filter) {
         anzeigeText = anzeige;
         this.filter = filter;
     }
 
+  
     @Override
     public String toString() {
         // TODO Auto-generated method stub

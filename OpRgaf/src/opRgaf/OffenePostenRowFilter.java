@@ -6,6 +6,7 @@ import javax.swing.RowFilter.Entry;
 final class OffenePostenRowFilter extends RowFilter<OffenePostenTableModel, Integer> {
     @Override
     public boolean include(Entry<? extends OffenePostenTableModel, ? extends Integer> entry) {
+        System.out.println(getFiltertext());
         return ((String) entry.getValue(OffenePostenTableModel.KENNUNG)).toLowerCase().contains(getFiltertext());
     }
     private String filtertext = "abd";
