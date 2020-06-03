@@ -17,6 +17,8 @@ import mandant.IK;
 public class Gui {
 
     public static void main(String[] args) {
+
+
         JFrame frame = new JFrame();
 
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -34,11 +36,13 @@ public class Gui {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 System.out.println(e);
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
+                    if (selectedItem != null) {
+                        OffenePostenAbstractRowFilter filter = selectedItem.filter;
+                        opJTable.setFilter(filter);
 
-                CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
-                if (selectedItem != null) {
-                    OffenePostenRowFilter filter = selectedItem.filter;
-                    opJTable.setFilter(filter);
+                    }
                 }
             }
         });
@@ -64,7 +68,7 @@ public class Gui {
 
                        private void update(DocumentEvent e) {
 
-                           OffenePostenRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
+                           OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
                            if (filter != null) {
                                filter.setFiltertext(eingabeFeld.getText());
                                opJTable.sorter.sort();
@@ -82,5 +86,6 @@ public class Gui {
 
         frame.pack();
         frame.setVisible(true);
+        opComboBox.setSelectedIndex(1);
     }
 }

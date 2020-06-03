@@ -11,6 +11,7 @@ final class OffenePostenJTable extends JTable {
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         sorter  = new TableRowSorter<>((OffenePostenTableModel)getModel());
+        
     }
 
     void setFilter(RowFilter<OffenePostenTableModel, Integer> filter) {
@@ -18,6 +19,7 @@ final class OffenePostenJTable extends JTable {
             sorter.setRowFilter(filter);
 
         setRowSorter(sorter);
+        sorter.sort();
 
 
 

@@ -19,7 +19,8 @@ public class Money implements Comparable<Money>{
 
     public Money(String value) {
         if(value!=null) {
-            this.value= new BigDecimal(value);
+
+            this.value= new BigDecimal(value).setScale(2, RoundingMode.DOWN);
         }
 
     }

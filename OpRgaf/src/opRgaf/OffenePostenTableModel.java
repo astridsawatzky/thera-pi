@@ -2,12 +2,9 @@ package opRgaf;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableRowSorter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,16 +16,16 @@ import opRgaf.rezept.Rezeptnummer;
 public class OffenePostenTableModel extends AbstractTableModel {
 
     static final int KENNUNG = 0;
-    private static final int RGNR = 1;
-    private static final int RGDATUM = 2;
-    private static final int GESAMTBETRAG = 3;
-    private static final int OFFEN = 4;
+    static final int RGNR = 1;
+    static final int RGDATUM = 2;
+    static final int GESAMTBETRAG = 3;
+    static final int OFFEN = 4;
     private static final int BEARBEITUNGSGEBUEHR = 5;
     private static final int BEZAHLTAM = 6;
     private static final int MAHNUNGEINS = 7;
     private static final int MAHNUNGZWEI = 8;
-    private static final int KRANKENKASSENNAME = 9;
-    private static final int REZNUMMER = 10;
+    static final int KRANKENKASSENNAME = 9;
+    static final int REZNUMMER = 10;
     private static final int TABELLENID = 11;
     private static final Logger logger = LoggerFactory.getLogger(OffenePostenTableModel.class);
 
@@ -45,7 +42,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
 
 
 
-  
+
 
     @Override
     public int getRowCount() {
