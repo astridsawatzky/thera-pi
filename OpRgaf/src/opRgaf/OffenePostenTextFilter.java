@@ -8,9 +8,12 @@ final class OffenePostenTextFilter extends OffenePostenAbstractRowFilter {
         columnIndex = ColumnIdx;
     }
 
+
+
     @Override
-    public boolean include(Entry<? extends OffenePostenTableModel, ? extends Integer> entry) {
-        System.out.println(getFiltertext());
-        return ((String) entry.getValue(columnIndex)).toLowerCase().contains(getFiltertext().toLowerCase());
+    protected boolean validate(Object object) {
+        return ((String)object).toLowerCase().contains(getFiltertext().toLowerCase());
     }
+
+
 }

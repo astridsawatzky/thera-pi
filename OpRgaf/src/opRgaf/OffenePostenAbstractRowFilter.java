@@ -19,4 +19,11 @@ public abstract class OffenePostenAbstractRowFilter extends RowFilter<OffenePost
         this.filtertext = filtertext;
     }
 
+    @Override
+    public boolean include(Entry<? extends OffenePostenTableModel, ? extends Integer> entry) {
+        return validate( entry.getValue(columnIndex));
+
+    }
+
+    protected abstract boolean validate(Object object) ;
 }

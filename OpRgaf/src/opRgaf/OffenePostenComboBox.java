@@ -1,8 +1,14 @@
 package opRgaf;
 
-import javax.swing.JComboBox;
+import static opRgaf.OffenePostenTableModel.GESAMTBETRAG;
+import static opRgaf.OffenePostenTableModel.KENNUNG;
+import static opRgaf.OffenePostenTableModel.KRANKENKASSENNAME;
+import static opRgaf.OffenePostenTableModel.OFFEN;
+import static opRgaf.OffenePostenTableModel.REZNUMMER;
+import static opRgaf.OffenePostenTableModel.RGDATUM;
+import static opRgaf.OffenePostenTableModel.RGNR;
 
-import static opRgaf.OffenePostenTableModel.*;
+import javax.swing.JComboBox;
 final class OffenePostenComboBox extends JComboBox<CBModel> {
 
     private OffenePostenAbstractRowFilter rgNrGleichfilter;

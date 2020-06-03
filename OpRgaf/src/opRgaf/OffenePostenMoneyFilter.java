@@ -14,14 +14,15 @@ public class OffenePostenMoneyFilter extends OffenePostenAbstractRowFilter {
         columnIndex = offen;
     }
 
+
     @Override
-    public boolean include(Entry<? extends OffenePostenTableModel, ? extends Integer> entry) {
+    protected boolean validate(Object object) {
         if (getFiltertext().isEmpty()) {
             return true;
         } else {
             try {
                 Money find = new Money(getFiltertext().replace(",", "."));
-                Money value = (Money) entry.getValue(columnIndex);
+                Money value = (Money) object;
                 System.out.println(find + "==" + value);
                 return strategy. compare(value, find);
             } catch (Exception e) {
