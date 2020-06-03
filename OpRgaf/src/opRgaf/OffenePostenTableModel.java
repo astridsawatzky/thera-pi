@@ -17,15 +17,7 @@ import opRgaf.rezept.Rezeptnummer;
 
 public class OffenePostenTableModel extends AbstractTableModel {
 
-    private static final class OffenePostenTableModelFilter extends RowFilter<OffenePostenTableModel, Integer> {
-        @Override
-        public boolean include(Entry<? extends OffenePostenTableModel, ? extends Integer> entry) {
-            String value = (String) entry.getValue(OffenePostenTableModel.KENNUNG);
-            return value.toLowerCase().contains("abd");
-        }
-    }
-
-    private static final int KENNUNG = 0;
+    static final int KENNUNG = 0;
     private static final int RGNR = 1;
     private static final int RGDATUM = 2;
     private static final int GESAMTBETRAG = 3;
@@ -41,19 +33,13 @@ public class OffenePostenTableModel extends AbstractTableModel {
 
     private List<OffenePosten> opListe;
 
-    static RowFilter<OffenePostenTableModel, Integer> containsabd = new OffenePostenTableModelFilter();
+
+
+
 
     public OffenePostenTableModel(List<OffenePosten> opListe) {
 
         this.opListe = opListe;
-    }
-
-
-    /**
-     * @deprecated Use {@link #setFilter(RowFilter)} instead
-     */
-    TableRowSorter<OffenePostenTableModel> setfilter() {
-        return setFilter(containsabd);
     }
 
 
