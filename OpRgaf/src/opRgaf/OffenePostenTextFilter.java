@@ -1,11 +1,15 @@
 package opRgaf;
 
-final class OffenePostenTextFilter extends OffenePostenAbstractRowFilter {
+class OffenePostenTextFilter extends OffenePostenAbstractRowFilter {
 
 
 
     public OffenePostenTextFilter(int ColumnIdx) {
         columnIndex = ColumnIdx;
+    }
+    public OffenePostenTextFilter(int ColumnIdx,String text) {
+        columnIndex = ColumnIdx;
+        filtertext=text;
     }
 
 

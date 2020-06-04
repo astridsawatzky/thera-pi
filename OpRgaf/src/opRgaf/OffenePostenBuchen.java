@@ -21,15 +21,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -40,6 +32,7 @@ import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.jdesktop.swingx.sort.RowFilters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +58,7 @@ import office.OOService;
 import opRgaf.RehaIO.SocketClient;
 import sql.DatenquellenFactory;
 
-class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
+class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
     private static final long serialVersionUID = -7883557713071422132L;
 
     private JRtaTextField suchen;
@@ -134,9 +127,9 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
 
     private JRtaTextField geldeingangTf;
 
-    private Logger logger = LoggerFactory.getLogger(OpRgafPanel.class);
+    private Logger logger = LoggerFactory.getLogger(OffenePostenBuchen.class);
 
-    OpRgafPanel(OpRgafTab xeltern, OpRgaf opRgaf, IK ik) {
+    OffenePostenBuchen(OpRgafTab xeltern, OpRgaf opRgaf, IK ik) {
 
         this.iniOpRgAf = opRgaf.iniOpRgAf;
         this.ik = ik;
@@ -310,6 +303,10 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         }.execute();
     }
 
+    private OffenePostenBuchen getInstance() {
+        return this;
+    }
+
     private void startKeyListener() {
         kl = new KeyAdapter() {
             @Override
@@ -332,9 +329,9 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             public void actionPerformed(ActionEvent arg0) {
                 String cmd = arg0.getActionCommand();
                 if ("ausbuchen".equals(cmd)) {
-                    tabmod.removeTableModelListener(OpRgafPanel.this);
+                    tabmod.removeTableModelListener(getInstance());
                     doAusbuchen();
-                    tabmod.addTableModelListener(OpRgafPanel.this);
+                    tabmod.addTableModelListener(getInstance());
                     setzeFocus();
                     return;
                 }
@@ -371,7 +368,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                         String rdatum = SqlInfo.holeEinzelFeld(
                                 "select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
                         AusfallRechnung ausfall = new AusfallRechnung(kopieButton.getLocationOnScreen(), pat_intern,
-                                rez_nr, rnr, rdatum, OpRgafPanel.this.ik);
+                                rez_nr, rnr, rdatum, OffenePostenBuchen.this.ik);
                         ausfall.setModal(true);
                         ausfall.setLocationRelativeTo(null);
                         ausfall.toFront();
@@ -400,10 +397,10 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             protected Void doInBackground() throws Exception {
                 try {
                     setzeFocus();
-                    tabmod.removeTableModelListener(OpRgafPanel.this);
+                    tabmod.removeTableModelListener(getInstance());
                     doSuchen();
                     schreibeAbfrage();
-                    tabmod.addTableModelListener(OpRgafPanel.this);
+                    tabmod.addTableModelListener(getInstance());
                     suchen.setEnabled(true);
                     ausbuchenBtn.setEnabled(true);
                 } catch (Exception ex) {
@@ -853,6 +850,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     geldeingangTf.setText(dcf.format(tabmod.getValueAt(tab.convertRowIndexToModel(row), IdxCol.Offen)));
                 }
             } catch (Exception ex) {
+                Logger logger = LoggerFactory.getLogger(OffenePostenBuchen.class);
                 logger.error("Fehler ind der Dateneingabe", ex);
                 JOptionPane.showMessageDialog(null, "Fehler in der Dateneingabe");
             }

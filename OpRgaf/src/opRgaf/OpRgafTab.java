@@ -32,7 +32,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
 
-        opRgafMahnungen = new OpRgafMahnungen(this, opRgaf);
+        opRgafMahnungen = new OpRgafMahnungen(opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
 
         jtb.addChangeListener(this);
@@ -72,15 +72,6 @@ class OpRgafTab extends JXPanel implements ChangeListener {
                 opRgafPanel.setzeFocus();
             }
         });
-    }
-
-    public String getNotBefore() {
-        try {
-            return "2010-03-01";
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Fehler beim Bezug des Startdatums, nehme 01.01.1995");
-        }
-        return "1995-01-01";
     }
 
     void sucheRezept(String rezept) {

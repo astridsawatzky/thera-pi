@@ -3,11 +3,13 @@ package opRgaf;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.WindowConstants;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -17,7 +19,6 @@ import mandant.IK;
 public class Gui {
 
     public static void main(String[] args) {
-
 
         JFrame frame = new JFrame();
 
@@ -41,6 +42,7 @@ public class Gui {
                     if (selectedItem != null) {
                         OffenePostenAbstractRowFilter filter = selectedItem.filter;
                         opJTable.setFilter(filter);
+                        opJTable.sorter.sort();
 
                     }
                 }
@@ -84,6 +86,49 @@ public class Gui {
         frame.getContentPane()
              .add(new JScrollPane(opJTable), BorderLayout.SOUTH);
 
+        OffenePostenCHKBX select3ChkBx = new OffenePostenCHKBX("suche in  ", "Rezeptgebührenrechnungen",
+                "Ausfallrechnungen", "Verkaufsrechnungen");
+
+        OffenePostenSchaltbarerTextFilter rgrTypefilter = new OffenePostenSchaltbarerTextFilter(OffenePostenTableModel.RGNR ,"rgr",true) ;
+        OffenePostenSchaltbarerTextFilter afrTypefilter = new OffenePostenSchaltbarerTextFilter(OffenePostenTableModel.RGNR ,"afr",false) ;
+        OffenePostenSchaltbarerTextFilter vrTypefilter = new OffenePostenSchaltbarerTextFilter(OffenePostenTableModel.RGNR ,"vr",false) ;
+
+
+        List<OffenePostenSchaltbarerTextFilter> filters = Arrays.asList(rgrTypefilter , afrTypefilter,vrTypefilter);
+        opJTable.setTypeFilter(RowFilter.orFilter(filters) );
+
+
+        select3ChkBx.addOListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(e);
+                rgrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
+                opJTable.sorter.sort();
+
+            }
+        });
+        select3ChkBx.addMListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(e);
+                afrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
+                opJTable.sorter.sort();
+            }
+        });
+        select3ChkBx.addUListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(e);
+                vrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
+                opJTable.sorter.sort();
+            }
+        });
+
+        frame.getContentPane()
+             .add(select3ChkBx.getPanel(), BorderLayout.WEST);
         frame.pack();
         frame.setVisible(true);
         opComboBox.setSelectedIndex(1);

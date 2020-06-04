@@ -62,8 +62,6 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     private ActionListener al;
 
-    private OpRgafTab eltern;
-
     private JXPanel content;
 
     private ButtonGroup bgroup = new ButtonGroup();
@@ -107,9 +105,8 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
 
     private OpRgaf opRgaf;
 
-    OpRgafMahnungen(OpRgafTab xeltern, OpRgaf opRgaf) {
+    OpRgafMahnungen( OpRgaf opRgaf) {
         super();
-        this.eltern = xeltern;
         this.opRgaf = opRgaf;
         this.setLayout(new BorderLayout());
         activateActionListener();
@@ -498,8 +495,8 @@ class OpRgafMahnungen extends JXPanel implements RgAfVk_IfCallBack {
         tab.repaint();
     }
 
+    private final static  String nichtvorDatum = "2010-03-01";
     private void doSuchen() {
-        String nichtvorDatum = eltern.getNotBefore();
         int frist1 = opRgaf.iniOpRgAf.getFrist(1);
         int frist2 = opRgaf.iniOpRgAf.getFrist(2);
         int frist3 = opRgaf.iniOpRgAf.getFrist(3);

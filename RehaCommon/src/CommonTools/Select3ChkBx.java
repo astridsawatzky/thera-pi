@@ -52,8 +52,7 @@ public abstract class Select3ChkBx implements ItemListener {
         chkBxM = (JRtaCheckBox) builder.add(chkBxM, cc.xy(4, 2));
         chkBxU = (JRtaCheckBox) builder.add(chkBxU, cc.xy(4, 3));
 
-        chkBxO.addItemListener(this); // Listener registrieren (setzt 'implements ... ItemListener' in class
-                                      // definition voraus)
+        chkBxO.addItemListener(this);
         chkBxM.addItemListener(this);
         chkBxU.addItemListener(this);
 

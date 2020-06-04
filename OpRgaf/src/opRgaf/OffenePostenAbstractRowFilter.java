@@ -5,7 +5,7 @@ import javax.swing.RowFilter;
 public abstract class OffenePostenAbstractRowFilter extends RowFilter<OffenePostenTableModel, Integer> {
 
     protected int columnIndex;
-    private String filtertext = "";
+    protected String filtertext = "";
 
     public OffenePostenAbstractRowFilter() {
         super();

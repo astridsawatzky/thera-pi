@@ -11,10 +11,8 @@ import static opRgaf.OffenePostenTableModel.RGNR;
 import javax.swing.JComboBox;
 final class OffenePostenComboBox extends JComboBox<CBModel> {
 
-    private OffenePostenAbstractRowFilter rgNrGleichfilter;
 
     public OffenePostenComboBox() {
-        addItem(new CBModel("Rechnungsnummer =", rgNrGleichfilter));
         addItem(new CBModel("Rechnungsnummer enth\u00e4lt", new OffenePostenTextFilter(RGNR)));
         addItem(new CBModel("REchnungsbetrag", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.gleich)));
         addItem(new CBModel("REchnungsbetrag >=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.groesserOderGleich)));
@@ -32,6 +30,8 @@ final class OffenePostenComboBox extends JComboBox<CBModel> {
         addItem(new CBModel("Rezeptnummer enth\u00e4lt", new OffenePostenTextFilter(REZNUMMER)));
         addItem(new CBModel("Name enthält", new OffenePostenTextFilter(KENNUNG)));
         addItem(new CBModel("Krankenkasse enthält", new OffenePostenTextFilter(KRANKENKASSENNAME)));
+
+        selectedItemChanged();
     }
 }
 final class CBModel {
