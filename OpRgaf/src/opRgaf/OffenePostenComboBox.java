@@ -30,8 +30,7 @@ final class OffenePostenComboBox extends JComboBox<CBModel> {
         addItem(new CBModel("Rezeptnummer enth\u00e4lt", new OffenePostenTextFilter(REZNUMMER)));
         addItem(new CBModel("Name enthält", new OffenePostenTextFilter(KENNUNG)));
         addItem(new CBModel("Krankenkasse enthält", new OffenePostenTextFilter(KRANKENKASSENNAME)));
-
-        selectedItemChanged();
+        setSelectedIndex(-1);
     }
 }
 final class CBModel {

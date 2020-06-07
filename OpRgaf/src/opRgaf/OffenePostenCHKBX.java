@@ -14,6 +14,7 @@ final class OffenePostenCHKBX extends Select3ChkBx {
 
     }
 
+
     @Override
     public void itemStateChanged(ItemEvent e) {
         // keine selbstgespräche
@@ -35,6 +36,14 @@ final class OffenePostenCHKBX extends Select3ChkBx {
     }
     void addUListener(ItemListener listener) {
         chkBxU.addItemListener(listener);
+
+    }
+
+
+    public void initSelection(boolean incRG, boolean incAR, boolean incVK) {
+        chkBxO.setSelected(incRG);
+        chkBxM.setSelected(incAR);
+        chkBxU.setSelected(incVK);
 
     }
 }

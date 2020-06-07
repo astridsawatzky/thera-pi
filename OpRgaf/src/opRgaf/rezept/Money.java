@@ -6,9 +6,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 
-public class Money implements Comparable<Money>{
+public class Money implements Comparable<Money> {
     private BigDecimal value = new BigDecimal(".00");
-    private static final NumberFormat df= twoDecimalsRoundingDown();
+    private static final NumberFormat df = twoDecimalsRoundingDown();
+    public static final Money ZERO = new Money();
 
     public Money() {
     }
@@ -18,15 +19,15 @@ public class Money implements Comparable<Money>{
     }
 
     public Money(String value) {
-        if(value!=null) {
+        if (value != null) {
 
-            this.value= new BigDecimal(value).setScale(2, RoundingMode.DOWN);
+            this.value = new BigDecimal(value).setScale(2, RoundingMode.DOWN);
         }
 
     }
 
-    Money(double value){
-        this.value= new BigDecimal(df.format(value));
+    Money(double value) {
+        this.value = new BigDecimal(df.format(value));
     }
 
     private static NumberFormat twoDecimalsRoundingDown() {
@@ -34,7 +35,7 @@ public class Money implements Comparable<Money>{
         DecimalFormatSymbols dezimalPunkt = DecimalFormatSymbols.getInstance();
         dezimalPunkt.setDecimalSeparator('.');
 
-        NumberFormat df = new DecimalFormat("###0.##",dezimalPunkt);
+        NumberFormat df = new DecimalFormat("###0.##", dezimalPunkt);
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
 
@@ -43,17 +44,22 @@ public class Money implements Comparable<Money>{
         return df;
     }
 
-
     public Money add(Money other) {
         Money m = new Money();
         m.value = this.value.add(other.value);
         return m;
     }
 
+    public String toPlainString() {
+        return value.toPlainString();
+
+    }
+
     @Override
     public String toString() {
         return value.toString();
     }
+
     @Override
     public int compareTo(Money o) {
 
@@ -86,7 +92,7 @@ public class Money implements Comparable<Money>{
     }
 
     public boolean isMoreThan(Money other) {
-        return value.compareTo(other.value) >0 ;
+        return value.compareTo(other.value) > 0;
     }
 
     public boolean isLessThan(Money other) {
@@ -96,6 +102,5 @@ public class Money implements Comparable<Money>{
     public boolean hasSameValue(Money other) {
         return value.compareTo(other.value) == 0;
     }
-
 
 }

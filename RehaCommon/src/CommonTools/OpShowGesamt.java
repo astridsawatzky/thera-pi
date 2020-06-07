@@ -19,8 +19,8 @@ public class OpShowGesamt {
     private JLabel valSuchOffen;
     private JLabel valSuchGesamt;
     private JLabel valAnzahlSaetze;
-    private BigDecimal gesamtOffen;
-    private BigDecimal suchOffen;
+    private BigDecimal gesamtOffen = BigDecimal.ZERO;
+    private BigDecimal suchOffen= BigDecimal.ZERO;
     private BigDecimal suchGesamt;
     private int records;
     private JPanel auswertung;
@@ -119,7 +119,12 @@ public class OpShowGesamt {
     }
 
     public void schreibeSuchOffen() {
-        valSuchOffen.setText(currencyFormat.format(suchOffen));
+        try {
+            valSuchOffen.setText(currencyFormat.format(suchOffen));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         auswertung.validate();
     }
 
@@ -142,7 +147,12 @@ public class OpShowGesamt {
     }
 
     public void schreibeSuchGesamt() {
-        valSuchGesamt.setText(currencyFormat.format(suchGesamt));
+        try {
+            valSuchGesamt.setText(currencyFormat.format(suchGesamt));
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         auswertung.validate();
     }
 

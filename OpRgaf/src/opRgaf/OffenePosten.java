@@ -8,9 +8,16 @@ import opRgaf.rezept.Rezeptnummer;
 public class OffenePosten {
     Kennung kennung;
     String rgNr;
+    Type type =Type.andere;
+    public OffenePosten.Type getRGType() {
+        return type;
+    }
     LocalDate rgDatum;
     Money gesamtBetrag;
     Money offen;
+    public Money getOffen() {
+        return offen;
+    }
     Money bearbeitungsGebuehr;
     LocalDate bezahltAm;
     LocalDate mahnungEins;
@@ -20,5 +27,12 @@ public class OffenePosten {
 
     int tabellenId;
     int patid;
+boolean isStorniert;
 
+    enum Type{
+        RGR,
+        AFR,
+        VR,
+        andere
+    }
 }

@@ -32,6 +32,31 @@ public class Gui {
              .setLayout(new BorderLayout());
         JTextField eingabeFeld = new JTextField();
         OffenePostenComboBox opComboBox = new OffenePostenComboBox();
+
+
+        verküpfen(opJTable, eingabeFeld, opComboBox);
+        frame.getContentPane()
+             .add(opComboBox, BorderLayout.NORTH);
+        frame.getContentPane()
+             .add(eingabeFeld, BorderLayout.CENTER);
+
+        frame.getContentPane()
+             .add(new JScrollPane(opJTable), BorderLayout.SOUTH);
+
+        OffenePostenCHKBX select3ChkBx = new OffenePostenCHKBX("suche in  ", "Rezeptgebührenrechnungen",
+                "Ausfallrechnungen", "Verkaufsrechnungen");
+
+        verknuepfe(opJTable, select3ChkBx);
+
+        frame.getContentPane()
+             .add(select3ChkBx.getPanel(), BorderLayout.WEST);
+        frame.pack();
+        frame.setVisible(true);
+        opComboBox.setSelectedIndex(1);
+    }
+
+    private static void verküpfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
+            OffenePostenComboBox opComboBox) {
         opComboBox.addItemListener(new ItemListener() {
 
             @Override
@@ -48,7 +73,6 @@ public class Gui {
                 }
             }
         });
-
         eingabeFeld.getDocument()
                    .addDocumentListener(new DocumentListener() {
 
@@ -78,17 +102,9 @@ public class Gui {
 
                        }
                    });
-        frame.getContentPane()
-             .add(opComboBox, BorderLayout.NORTH);
-        frame.getContentPane()
-             .add(eingabeFeld, BorderLayout.CENTER);
+    }
 
-        frame.getContentPane()
-             .add(new JScrollPane(opJTable), BorderLayout.SOUTH);
-
-        OffenePostenCHKBX select3ChkBx = new OffenePostenCHKBX("suche in  ", "Rezeptgebührenrechnungen",
-                "Ausfallrechnungen", "Verkaufsrechnungen");
-
+    private static void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
         OffenePostenSchaltbarerTextFilter rgrTypefilter = new OffenePostenSchaltbarerTextFilter(OffenePostenTableModel.RGNR ,"rgr",true) ;
         OffenePostenSchaltbarerTextFilter afrTypefilter = new OffenePostenSchaltbarerTextFilter(OffenePostenTableModel.RGNR ,"afr",false) ;
         OffenePostenSchaltbarerTextFilter vrTypefilter = new OffenePostenSchaltbarerTextFilter(OffenePostenTableModel.RGNR ,"vr",false) ;
@@ -126,11 +142,5 @@ public class Gui {
                 opJTable.sorter.sort();
             }
         });
-
-        frame.getContentPane()
-             .add(select3ChkBx.getPanel(), BorderLayout.WEST);
-        frame.pack();
-        frame.setVisible(true);
-        opComboBox.setSelectedIndex(1);
     }
 }

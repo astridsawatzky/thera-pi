@@ -21,12 +21,12 @@ public class OffenePostenTableModel extends AbstractTableModel {
     static final int GESAMTBETRAG = 3;
     static final int OFFEN = 4;
     private static final int BEARBEITUNGSGEBUEHR = 5;
-    private static final int BEZAHLTAM = 6;
+    static final int BEZAHLTAM = 6;
     private static final int MAHNUNGEINS = 7;
     private static final int MAHNUNGZWEI = 8;
     static final int KRANKENKASSENNAME = 9;
     static final int REZNUMMER = 10;
-    private static final int TABELLENID = 11;
+    static final int TABELLENID = 11;
     private static final Logger logger = LoggerFactory.getLogger(OffenePostenTableModel.class);
 
     private List<OffenePosten> opListe ;
@@ -41,6 +41,14 @@ public class OffenePostenTableModel extends AbstractTableModel {
     }
 
 
+    @Override
+    public boolean isCellEditable(int row, int col) {
+        //TODO describe and change
+        if (col > 1 && col < 9) {
+            return true;
+        }
+        return false;
+    }
 
 
 

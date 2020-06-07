@@ -436,7 +436,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
             return;
         }
 
-        if (nochoffen.compareTo(BigDecimal.valueOf(Double.parseDouble("0.0"))) == 0) {
+        if (nochoffen.compareTo(BigDecimal.ZERO) == 0) {
             JOptionPane.showMessageDialog(null, "Diese Rechnung ist bereits auf bezahlt gesetzt");
             return;
         }
