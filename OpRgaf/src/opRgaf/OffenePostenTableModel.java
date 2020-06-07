@@ -230,4 +230,8 @@ public class OffenePostenTableModel extends AbstractTableModel {
         return opListe.remove(index);
     }
 
+    OffenePosten getValue (int rowIndex) {
+        return opListe.get(rowIndex);
+    }
+
 }

@@ -29,7 +29,6 @@ public class OffenePostenDatumFilter extends OffenePostenAbstractRowFilter {
         } else {
             try {
                 LocalDate find = LocalDate.parse(getFiltertext(), DateTimeFormatters.dMYYYYmitPunkt);
-                System.out.println(find + "==" + object);
                 return strategy.compare(value, find);
             } catch (Exception e) {
                 logger.error("mist", e);

@@ -68,7 +68,17 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
 
     private String aktIK;
 
+    /**
+     * @deprecated Use {@link #AusfallRechnung(String,String,String,String,IK)} instead
+     */
     AusfallRechnung(Point pt, String pat_intern, String rez_nr, String rnummer, String rdatum, IK ik) {
+        this(pat_intern, rez_nr, rnummer, rdatum, ik);
+    }
+
+
+
+
+    AusfallRechnung(String pat_intern, String rez_nr, String rnummer, String rdatum, IK ik) {
 
         super();
         afrNummer = rnummer;
@@ -105,6 +115,8 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
         pack();
 
     }
+
+
 
     private JPanel getGebuehren() { // 1 2 3 4 5 6 7
         FormLayout lay = new FormLayout("10dlu,fill:0:grow(0.50),right:80dlu,10dlu,80dlu,fill:0:grow(0.50),10dlu",

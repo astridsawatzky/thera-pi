@@ -23,7 +23,6 @@ public class OffenePostenMoneyFilter extends OffenePostenAbstractRowFilter {
             try {
                 Money find = new Money(getFiltertext().replace(",", "."));
                 Money value = (Money) object;
-                System.out.println(find + "==" + value);
                 return strategy. compare(value, find);
             } catch (Exception e) {
                 return false;

@@ -370,8 +370,8 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                                 "select pat_intern from rgaffaktura where id='" + id + "' LIMIT 1");
                         String rdatum = SqlInfo.holeEinzelFeld(
                                 "select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
-                        AusfallRechnung ausfall = new AusfallRechnung(kopieButton.getLocationOnScreen(), pat_intern,
-                                rez_nr, rnr, rdatum, OpRgafPanel.this.ik);
+                        AusfallRechnung ausfall = new AusfallRechnung(pat_intern, rez_nr,
+                                rnr, rdatum, OpRgafPanel.this.ik);
                         ausfall.setModal(true);
                         ausfall.setLocationRelativeTo(null);
                         ausfall.toFront();

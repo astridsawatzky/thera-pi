@@ -36,10 +36,7 @@ public class Kennung {
 
     @Override
     public String toString() {
-        System.out.println(name);
-        System.out.println(vorname);
-        System.out.println(geburtstag);
-        return name + ","
+          return name + ","
               + vorname + ","
               + Optional.ofNullable(geburtstag).map(d->d.format(DateTimeFormatters.ddMMYYYYmitPunkt)).orElse(null);
     }

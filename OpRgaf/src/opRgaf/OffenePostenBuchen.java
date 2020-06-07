@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -133,6 +134,10 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
     private List<OffenePosten> opListe;
 
+    private ActionListener kopierenListener = e -> {
+        //if not set do nothing but don't NPE
+    };
+
     private static void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
 
         List<OffenePostenSchaltbarerTextFilter> filters = Arrays.asList(rgrTypefilter, afrTypefilter, vrTypefilter);
@@ -142,7 +147,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 rgrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
 
@@ -152,7 +156,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 afrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
             }
@@ -161,7 +164,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 vrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
             }
@@ -267,7 +269,8 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
         rowCnt += 2; // 6
         colCnt = 4;
-        kopieButton = ButtonTools.macheButton("Rechnungskopie", "kopie", al);
+        kopieButton = new JButton("Rechnungskopie");
+kopieButton.addActionListener(e-> kopieren());
         builder.add(kopieButton, cc.xy(colCnt, rowCnt)); // 4,6
         colCnt = 11;
         builder.addLabel("Geldeingang:", cc.xy(colCnt, rowCnt, CellConstraints.RIGHT, CellConstraints.TOP)); // 12,6
@@ -301,6 +304,18 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
         sumPan.setValGesamtOffen(calcGesamtOffen(opListe));
 
         return builder.getPanel();
+    }
+
+    private List<OffenePosten> kopieren() {
+        int [] selections = tab.getSelectedRows();
+        List<OffenePosten> opl = new LinkedList<>();
+        for (int i : selections) {
+            opl.add(modelNeu.getValue(tab.convertRowIndexToModel(i)));
+
+        }
+        ActionEvent e = new ActionEvent(opl, ActionEvent.ACTION_PERFORMED, "kopieren");
+        kopierenListener.actionPerformed(e );
+        return opl;
     }
 
     private Object merken() {
@@ -394,7 +409,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        // System.out.println("in Ausfallrechnung");
                         String id = tab.getValueAt(tab.getSelectedRow(), 11)
                                        .toString();
                         String rez_nr = SqlInfo.holeEinzelFeld(
@@ -403,8 +417,8 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
                                 "select pat_intern from rgaffaktura where id='" + id + "' LIMIT 1");
                         String rdatum = SqlInfo.holeEinzelFeld(
                                 "select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
-                        AusfallRechnung ausfall = new AusfallRechnung(kopieButton.getLocationOnScreen(), pat_intern,
-                                rez_nr, rnr, rdatum, OffenePostenBuchen.this.ik);
+                        AusfallRechnung ausfall = new AusfallRechnung(pat_intern, rez_nr,
+                                rnr, rdatum, OffenePostenBuchen.this.ik);
                         ausfall.setModal(true);
                         ausfall.setLocationRelativeTo(null);
                         ausfall.toFront();
@@ -424,8 +438,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
     }
 
     private void setzeBezahlBetrag(final int i) {
-        geldeingangTf.setText(
-                dcf.format(modelNeu.getValueAt(tab.convertRowIndexToModel(i), OffenePostenTableModel.OFFEN)));
+        geldeingangTf.setText(( (Money)tab.getValueAt(i, OffenePostenTableModel.OFFEN)).toPlainString());
     }
 
 
@@ -572,7 +585,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
     @Override
     public void tableChanged(TableModelEvent arg0) {
         if (arg0.getType() == TableModelEvent.INSERT) {
-            System.out.println("Insert");
             return;
         }
         if (arg0.getType() == TableModelEvent.UPDATE) {
@@ -619,7 +631,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
                         String cmd = "update verkliste set " + hmMap2VerkListe.get(modelNeu.getColumnName(col)) + " ="
                                 + (value != null ? "'" + value + "'" : "null") + " where verklisteID='" + id
                                 + "' LIMIT 1";
-                        System.out.println(cmd);
                         SqlInfo.sqlAusfuehren(cmd);
                     } else {
                         new SwingWorker<Void, Void>() {
@@ -640,7 +651,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
                 } else {
                     String cmd = "update rgaffaktura set " + modelNeu.getColumnName(col) + "="
                             + (value != null ? "'" + value + "'" : "null") + " where id='" + id + "' LIMIT 1";
-                    // System.out.println(cmd);
                     SqlInfo.sqlAusfuehren(cmd);
                     geldeingangTf.setText(dcf.format(
                             modelNeu.getValueAt(tab.convertRowIndexToModel(row), OffenePostenTableModel.OFFEN)));
@@ -668,7 +678,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
         String rezgeb = SqlInfo.holeEinzelFeld("select rgbetrag from rgaffaktura where id='" + id + "' LIMIT 1");
         String pauschale = SqlInfo.holeEinzelFeld("select rpbetrag from rgaffaktura where id='" + id + "' LIMIT 1");
         String gesamt = SqlInfo.holeEinzelFeld("select rgesamt from rgaffaktura where id='" + id + "' LIMIT 1");
-        // System.out.println("Rezeptnummer = "+rez_nr);
         new InitHashMaps();
 
         String test = SqlInfo.holeEinzelFeld("select id from verordn where rez_nr = '" + rez_nr + "' LIMIT 1");
@@ -736,7 +745,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
             hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(
                     SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
 
-            // System.out.println(hmRezgeb);
             String url = Path.Instance.getProghome() + "vorlagen/" + ik.digitString()
                     + "/RezeptgebuehrRechnung.ott.Kopie.ott";
             try {
@@ -754,7 +762,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
     private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException {
         IDocumentService documentService;
-        //// System.out.println("Starte Datei -> "+url);
 
         documentService = new OOService().getOfficeapplication()
                                          .getDocumentService();
@@ -820,7 +827,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
                     if (selectedItem != null) {
@@ -862,4 +868,11 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
                        }
                    });
     }
+
+    public void addKopierenListener(ActionListener listener) {
+        kopierenListener=listener;
+
+    }
+
+
 }

@@ -12,6 +12,7 @@ public class Money implements Comparable<Money> {
     public static final Money ZERO = new Money();
 
     public Money() {
+
     }
 
     public Money(Money geld) {
@@ -29,6 +30,9 @@ public class Money implements Comparable<Money> {
     Money(double value) {
         this.value = new BigDecimal(df.format(value));
     }
+
+
+
 
     private static NumberFormat twoDecimalsRoundingDown() {
 
