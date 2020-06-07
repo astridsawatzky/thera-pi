@@ -328,7 +328,10 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
     private  Money calcFilteredOffen() {
         Money result = new Money();
         for (int i = 0; i < tab.getRowCount(); i++) {
-            result = result.add((Money) tab.getValueAt(tab.convertRowIndexToModel(i), OffenePostenTableModel.OFFEN));
+            Money offen = (Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN);
+            if(offen.isMoreThan(Money.ZERO)) {
+            result = result.add(offen);
+            }
             ;
         }
         return result;
@@ -339,7 +342,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
         for (int i = 0; i < tab.getRowCount(); i++) {
             result = result.add(
-                    (Money) tab.getValueAt(tab.convertRowIndexToModel(i), OffenePostenTableModel.GESAMTBETRAG));
+                    (Money) tab.getValueAt(i, OffenePostenTableModel.GESAMTBETRAG));
             ;
         }
         return result;
