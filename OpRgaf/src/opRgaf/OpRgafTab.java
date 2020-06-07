@@ -39,7 +39,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
         jtb.addChangeListener(jxh);
 
-        jtb.addTab("redo", new OffenePostenBuchen( opRgaf, opRgaf.aktIK));
+        jtb.addTab("redo", new OffenePostenBuchen( opRgaf, opRgaf.aktIK, new OffenePostenDTO(opRgaf.aktIK).all()));
         add(jxh, BorderLayout.NORTH);
         add(jtb, BorderLayout.CENTER);
 

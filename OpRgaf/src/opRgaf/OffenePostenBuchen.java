@@ -100,10 +100,13 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
     private Logger logger = LoggerFactory.getLogger(OffenePostenBuchen.class);
 
-    OffenePostenBuchen(OpRgaf opRgaf, IK ik) {
+
+
+    OffenePostenBuchen(OpRgaf opRgaf, IK ik, List<OffenePosten> offenePostenListe) {
 
         this.iniOpRgAf = opRgaf.iniOpRgAf;
         this.ik = ik;
+        opListe = offenePostenListe;
         startKeyListener();
         startActionListener();
         setLayout(new BorderLayout());
@@ -211,7 +214,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
         merkenBtn.setMnemonic(KeyEvent.VK_S);
 
         builder.add(merkenBtn, cc.xy(17, rowCnt));
-        opListe = new OffenePostenDTO(ik).all();
+
         modelNeu = new OffenePostenTableModel(opListe);
         tab = new OffenePostenJTable(modelNeu);
         verknuepfe(tab, selPan);
