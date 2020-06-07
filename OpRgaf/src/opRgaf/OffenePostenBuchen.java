@@ -192,8 +192,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
         ++colCnt;
         suchen = new JRtaTextField("nix", true);
-        suchen.setName("suchen");
-        suchen.addKeyListener(kl);
+
         builder.add(suchen, cc.xy(++colCnt, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 8,2
 
         // Auswahl RGR/AFR/Verkauf
@@ -354,9 +353,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
             public void keyPressed(KeyEvent arg0) {
                 if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
                     arg0.consume();
-                    if ("suchen".equals(((JComponent) arg0.getSource()).getName())) {
-                        sucheEinleiten();
-                    } else if ("offen".equals(((JComponent) arg0.getSource()).getName())) {
+                    if ("offen".equals(((JComponent) arg0.getSource()).getName())) {
                         setzeFocus();
                     }
                 }
@@ -431,29 +428,8 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
                 dcf.format(modelNeu.getValueAt(tab.convertRowIndexToModel(i), OffenePostenTableModel.OFFEN)));
     }
 
-    private void sucheEinleiten() {
-        new SwingWorker<Void, Void>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-                try {
-                    setzeFocus();
-                    modelNeu.removeTableModelListener(OffenePostenBuchen.this);
-                    doSuchen();
-                    modelNeu.addTableModelListener(OffenePostenBuchen.this);
-                    suchen.setEnabled(true);
-                    ausbuchenBtn.setEnabled(true);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Fehler beim einlesen der Datensätze");
-                    setzeFocus();
-                    suchen.setEnabled(true);
-                    ausbuchenBtn.setEnabled(true);
-                }
-                setzeFocus();
-                return null;
-            }
-        }.execute();
-    }
+
+
 
     private void doAusbuchen() {
         int row = tab.getSelectedRow();
