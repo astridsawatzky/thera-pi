@@ -13,13 +13,9 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
-import java.util.Vector;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
@@ -46,21 +42,8 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import CommonTools.StringTools;
-import ag.ion.bion.officelayer.application.OfficeApplicationException;
-import ag.ion.bion.officelayer.document.DocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.document.IDocumentDescriptor;
-import ag.ion.bion.officelayer.document.IDocumentService;
-import ag.ion.bion.officelayer.text.ITextDocument;
-import ag.ion.bion.officelayer.text.ITextField;
-import ag.ion.bion.officelayer.text.ITextFieldService;
-import ag.ion.bion.officelayer.text.TextException;
-import ag.ion.noa.NOAException;
-import environment.Path;
 import io.RehaIOMessages;
 import mandant.IK;
-import office.OOService;
 import opRgaf.RehaIO.SocketClient;
 import opRgaf.rezept.Money;
 
@@ -88,14 +71,12 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
     private DecimalFormat dcf = new DecimalFormat("###0.00");
 
-    private HashMap<String, String> hmRezgeb = new HashMap<>();
 
     private OffenePostenSummenPanel sumPan;
     private OffenePostenCHKBX selPan;
 
     private OpRgAfIni iniOpRgAf;
 
-    private IK ik;
 
     private JRtaTextField geldeingangTf;
 
@@ -106,7 +87,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
     OffenePostenBuchen(OpRgaf opRgaf, IK ik, List<OffenePosten> offenePostenListe) {
 
         this.iniOpRgAf = opRgaf.iniOpRgAf;
-        this.ik = ik;
         opListe = offenePostenListe;
         startKeyListener();
         startActionListener();
@@ -388,54 +368,11 @@ kopieButton.addActionListener(e-> kopieren());
                     setzeFocus();
                     return;
                 }
-                if ("kopie".equals(cmd)) {
-                    doKopie();
-                    setzeFocus();
-                    return;
-                }
 
             }
         };
     }
 
-    private void doKopie() {
-        if (modelNeu.getRowCount() <= 0) {
-            return;
-        }
-        final String rnr = tab.getValueAt(tab.getSelectedRow(), 1)
-                              .toString();
-        if (rnr.startsWith("AFR")) {
-            new SwingWorker<Void, Void>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    try {
-                        String id = tab.getValueAt(tab.getSelectedRow(), 11)
-                                       .toString();
-                        String rez_nr = SqlInfo.holeEinzelFeld(
-                                "select reznr from rgaffaktura where id='" + id + "' LIMIT 1");
-                        String pat_intern = SqlInfo.holeEinzelFeld(
-                                "select pat_intern from rgaffaktura where id='" + id + "' LIMIT 1");
-                        String rdatum = SqlInfo.holeEinzelFeld(
-                                "select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
-                        AusfallRechnung ausfall = new AusfallRechnung(pat_intern, rez_nr,
-                                rnr, rdatum, OffenePostenBuchen.this.ik);
-                        ausfall.setModal(true);
-                        ausfall.setLocationRelativeTo(null);
-                        ausfall.toFront();
-                        ausfall.setVisible(true);
-                        ausfall = null;
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                    return null;
-                }
-            }.execute();
-            return;
-        }
-        if (rnr.startsWith("RGR")) {
-            doRezeptgebKopie();
-        }
-    }
 
     private void setzeBezahlBetrag(final int i) {
         geldeingangTf.setText(( (Money)tab.getValueAt(i, OffenePostenTableModel.OFFEN)).toPlainString());
@@ -663,145 +600,8 @@ kopieButton.addActionListener(e-> kopieren());
         }
     }
 
-    private void doRezeptgebKopie() {
-        if (modelNeu.getRowCount() <= 0) {
-            return;
-        }
-        String db = "";
-        String id = tab.getValueAt(tab.getSelectedRow(), 11)
-                       .toString();
-        String rgnr = tab.getValueAt(tab.getSelectedRow(), 1)
-                         .toString();
-        String rez_nr = SqlInfo.holeEinzelFeld("select reznr from rgaffaktura where id='" + id + "' LIMIT 1");
-        String pat_intern = SqlInfo.holeEinzelFeld("select pat_intern from rgaffaktura where id='" + id + "' LIMIT 1");
-        String rdatum = SqlInfo.holeEinzelFeld("select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
-        String rezgeb = SqlInfo.holeEinzelFeld("select rgbetrag from rgaffaktura where id='" + id + "' LIMIT 1");
-        String pauschale = SqlInfo.holeEinzelFeld("select rpbetrag from rgaffaktura where id='" + id + "' LIMIT 1");
-        String gesamt = SqlInfo.holeEinzelFeld("select rgesamt from rgaffaktura where id='" + id + "' LIMIT 1");
-        new InitHashMaps();
 
-        String test = SqlInfo.holeEinzelFeld("select id from verordn where rez_nr = '" + rez_nr + "' LIMIT 1");
-        Vector<String> vecaktrez = null;
-        if ("".equals(test)) {
-            test = SqlInfo.holeEinzelFeld("select id from lza where rez_nr = '" + rez_nr + "' LIMIT 1");
-            if (!"".equals(test)) {
-                vecaktrez = SqlInfo.holeSatz("lza",
-                        " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",
-                        Arrays.asList(new String[] {}));
-                db = "lza";
-            }
-        } else {
-            vecaktrez = SqlInfo.holeSatz("verordn",
-                    " anzahl1,kuerzel1,kuerzel2," + "kuerzel3,kuerzel4,kuerzel5,kuerzel6 ", "id='" + test + "'",
-                    Arrays.asList(new String[] {}));
-            db = "verordn";
-        }
-        if (vecaktrez != null) {
-            String behandlungen = vecaktrez.get(0) + "*" + (!"".equals(vecaktrez.get(1)
-                                                                                .trim()) ? vecaktrez.get(1) : "")
-                    + (!"".equals(vecaktrez.get(2)
-                                           .trim()) ? "," + vecaktrez.get(2) : "")
-                    + (!"".equals(vecaktrez.get(3)
-                                           .trim()) ? "," + vecaktrez.get(3) : "")
-                    + (!"".equals(vecaktrez.get(4)
-                                           .trim()) ? "," + vecaktrez.get(4) : "")
-                    + (!"".equals(vecaktrez.get(5)
-                                           .trim()) ? "," + vecaktrez.get(5) : "")
-                    + (!"".equals(vecaktrez.get(6)
-                                           .trim()) ? "," + vecaktrez.get(6) : "");
 
-            String cmd = "select abwadress,id from pat5 where pat_intern='" + pat_intern + "' LIMIT 1";
-            Vector<Vector<String>> adrvec = SqlInfo.holeFelder(cmd);
-            String[] adressParams = null;
-            String patid = adrvec.get(0)
-                                 .get(1);
-            PatientenAdressen patientenAdressen = new PatientenAdressen(patid);
-            if ("T".equals(adrvec.get(0)
-                                 .get(0))) {
-                adressParams = patientenAdressen.holeAbweichendeAdresse(patid);
-            } else {
-                adressParams = patientenAdressen.getAdressParams(patid);
-            }
-
-            hmRezgeb.put("<rgreznum>", rez_nr);
-            hmRezgeb.put("<rgbehandlung>", behandlungen);
-            hmRezgeb.put("<rgdatum>", DatFunk.sDatInDeutsch(
-                    SqlInfo.holeEinzelFeld("select rez_datum from " + db + " where rez_nr='" + rez_nr + "' LIMIT 1")));
-            hmRezgeb.put("<rgbetrag>", rezgeb.replace(".", ","));
-            hmRezgeb.put("<rgpauschale>", pauschale.replace(".", ","));
-            hmRezgeb.put("<rggesamt>", gesamt.replace(".", ","));
-            hmRezgeb.put("<rganrede>", adressParams[0]);
-            hmRezgeb.put("<rgname>", adressParams[1]);
-            hmRezgeb.put("<rgstrasse>", adressParams[2]);
-            hmRezgeb.put("<rgort>", adressParams[3]);
-            hmRezgeb.put("<rgbanrede>", adressParams[4]);
-            hmRezgeb.put("<rgorigdatum>", DatFunk.sDatInDeutsch(rdatum));
-            hmRezgeb.put("<rgnr>", rgnr);
-
-            hmRezgeb.put("<rgpatnname>", StringTools.EGross(
-                    SqlInfo.holeEinzelFeld("select n_name from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
-            hmRezgeb.put("<rgpatvname>", StringTools.EGross(
-                    SqlInfo.holeEinzelFeld("select v_name from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
-            hmRezgeb.put("<rgpatgeboren>", DatFunk.sDatInDeutsch(
-                    SqlInfo.holeEinzelFeld("select geboren from pat5 where pat_intern='" + pat_intern + "' LIMIT 1")));
-
-            String url = Path.Instance.getProghome() + "vorlagen/" + ik.digitString()
-                    + "/RezeptgebuehrRechnung.ott.Kopie.ott";
-            try {
-                officeStarten(url);
-            } catch (OfficeApplicationException | NOAException e) {
-                e.printStackTrace();
-            } catch (TextException e) {
-                e.printStackTrace();
-            }
-        } else {
-            logger.error("das Rezept: " + rez_nr
-                    + " konnte nicht gefunden werden, daher kann keine Rechnungskopie erstellt werden. ");
-        }
-    }
-
-    private void officeStarten(String url) throws OfficeApplicationException, NOAException, TextException {
-        IDocumentService documentService;
-
-        documentService = new OOService().getOfficeapplication()
-                                         .getDocumentService();
-
-        IDocumentDescriptor docdescript = new DocumentDescriptor();
-        docdescript.setHidden(true);
-        docdescript.setAsTemplate(true);
-        IDocument document;
-
-        document = documentService.loadDocument(url, docdescript);
-        ITextDocument textDocument = (ITextDocument) document;
-        // OOTools.druckerSetzen(textDocument,
-        // SystemConfig.hmAbrechnung.get("hmgkvrechnungdrucker"));
-        ITextFieldService textFieldService = textDocument.getTextFieldService();
-        ITextField[] placeholders;
-
-        placeholders = textFieldService.getPlaceholderFields();
-        String placeholderDisplayText = "";
-
-        for (int i = 0; i < placeholders.length; i++) {
-            placeholderDisplayText = placeholders[i].getDisplayText()
-                                                    .toLowerCase();
-            Set<Entry<String, String>> entries = hmRezgeb.entrySet();
-            Iterator<Entry<String, String>> it = entries.iterator();
-            while (it.hasNext()) {
-                Entry<String, String> entry = it.next();
-                if (((String) entry.getKey()).toLowerCase()
-                                             .equals(placeholderDisplayText)) {
-                    placeholders[i].getTextRange()
-                                   .setText((String) entry.getValue());
-
-                    break;
-                }
-            }
-        }
-        textDocument.getFrame()
-                    .getXFrame()
-                    .getContainerWindow()
-                    .setVisible(true);
-    }
 
     @Override
     public void useRGR(boolean rgr) {

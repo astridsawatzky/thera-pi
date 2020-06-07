@@ -7,11 +7,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
-import java.util.Map.Entry;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -25,7 +24,6 @@ import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 
 import CommonTools.DatFunk;
 import CommonTools.SqlInfo;
-import CommonTools.StringTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -41,6 +39,7 @@ import mandant.IK;
 import office.OOService;
 import opRgaf.CommonTools.DateTimeFormatters;
 import opRgaf.rezept.Money;
+import opRgaf.rezept.Rezeptnummer;
 
 /** TODO: only public because of RehaIO */
 class OpRgafTab extends JXPanel implements ChangeListener {
@@ -96,6 +95,38 @@ class OpRgafTab extends JXPanel implements ChangeListener {
     private void rechnungskopie(OffenePosten op) {
         System.out.println(op);
 
+        switch (op.type) {
+        case RGR:
+            rgrkopie(op);
+
+            break;
+        case AFR:
+            afrkopie(op);
+        default:
+            break;
+        }
+    }
+    private Void afrkopie(final OffenePosten op) {
+        try {
+            int id = op.tabellenId;
+            Rezeptnummer rez_nr = op.rezNummer;
+            String pat_intern = SqlInfo.holeEinzelFeld(
+                    "select pat_intern from rgaffaktura where id='" + id + "' LIMIT 1");
+            String rdatum = SqlInfo.holeEinzelFeld(
+                    "select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
+            AusfallRechnung ausfall = new AusfallRechnung(pat_intern, rez_nr.rezeptNummer(),
+                    op.rgNr, rdatum, ik);
+            ausfall.setModal(true);
+            ausfall.setLocationRelativeTo(null);
+            ausfall.toFront();
+            ausfall.setVisible(true);
+            ausfall = null;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    private void rgrkopie(OffenePosten op) {
         String ursprungstabelle = "";
         int id = op.tabellenId;
         String rgnr = op.rgNr;
