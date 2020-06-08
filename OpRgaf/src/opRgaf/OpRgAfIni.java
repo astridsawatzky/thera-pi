@@ -10,13 +10,16 @@ import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
 
 public class OpRgAfIni {
-    private HashMap<String, Object>  mahnParam = new HashMap<>();
+    private HashMap<String, Object> mahnParam = new HashMap<>();
 
     /** INIFile inif;. */
     private String path2IniFile;
     private String path2TemplateFiles;
     private String iniFile;
-    private boolean incRG, incAR, incVK, settingsLocked;
+    private boolean incRG;
+    private boolean incAR;
+    private boolean incVK;
+    private boolean settingsLocked;
     private int vorauswahlSuchkriterium = -1;
     private String progHome, aktIK;
     private boolean allowCashInSalesReceipt, allowCashSales, iniValuesValid;
@@ -66,7 +69,7 @@ public class OpRgAfIni {
     private void readLastSelectRgAfVk(INIFile inif) {
         String section = "offenePosten";
         if (inif.getStringProperty(section, "Rezeptgebuehren") != null) { // Eintraege in ini vorhanden
-                                                                          //  (alle oder keiner)
+                                                                          // (alle oder keiner)
             incRG = inif.getBooleanProperty(section, "Rezeptgebuehren");
             incAR = inif.getBooleanProperty(section, "Ausfallrechnungen");
             incVK = inif.getBooleanProperty(section, "Verkaeufe");
@@ -243,10 +246,10 @@ public class OpRgAfIni {
             inif.setIntegerProperty(section, "Suchkriterium", vorauswahlSuchkriterium, "zuletzt gesucht");
 
             if (inif.getStringProperty(section, "lockSettings") == null) { // Wert noch nicht vorhanden?
-        inif.setBooleanProperty(section, "lockSettings", false, "Aktualisieren der Eintraege gesperrt");
+                inif.setBooleanProperty(section, "lockSettings", false, "Aktualisieren der Eintraege gesperrt");
             }
             INITool.saveIni(inif);
-         }
+        }
     }
 
     /**

@@ -35,7 +35,6 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ButtonTools;
 import CommonTools.DatFunk;
 import CommonTools.DateTableCellEditor;
 import CommonTools.JCompTools;
@@ -44,10 +43,12 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import io.RehaIOMessages;
 import mandant.IK;
+import opRgaf.OffenePosten.Type;
 import opRgaf.RehaIO.SocketClient;
 import opRgaf.rezept.Money;
+import opRgaf.rezept.Rezeptnummer;
 
-class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
+class OffenePostenBuchen extends JXPanel implements TableModelListener {
     private static final long serialVersionUID = -7883557713071422132L;
 
     private JRtaTextField suchen;
@@ -60,8 +61,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
     private KeyListener kl;
 
-    private ActionListener al;
-
     private OffenePostenTableModel modelNeu;
 
     private OffenePostenJTable tab;
@@ -71,27 +70,22 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
     private DecimalFormat dcf = new DecimalFormat("###0.00");
 
-
     private OffenePostenSummenPanel sumPan;
     private OffenePostenCHKBX selPan;
 
     private OpRgAfIni iniOpRgAf;
 
-
     private JRtaTextField geldeingangTf;
 
     private Logger logger = LoggerFactory.getLogger(OffenePostenBuchen.class);
 
+    OffenePostenBuchen(OpRgAfIni iniOpRgAf, IK ik, List<OffenePosten> offenePostenListe) {
 
-
-    OffenePostenBuchen(OpRgaf opRgaf, IK ik, List<OffenePosten> offenePostenListe) {
-
-        this.iniOpRgAf = opRgaf.iniOpRgAf;
+        this.iniOpRgAf =iniOpRgAf;
         opListe = offenePostenListe;
         startKeyListener();
-        startActionListener();
         setLayout(new BorderLayout());
-        add(getContent(), BorderLayout.CENTER);
+        add(this.getContent(), BorderLayout.CENTER);
         setzeFocus();
         tab.sorter.sort();
     }
@@ -106,7 +100,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
     }
 
     static final OffenePostenSchaltbarerTextFilter rgrTypefilter = new OffenePostenSchaltbarerTextFilter(
-            OffenePostenTableModel.RGNR, "rgr", true);
+            OffenePostenTableModel.RGNR, "rgr", false);
     static final OffenePostenSchaltbarerTextFilter afrTypefilter = new OffenePostenSchaltbarerTextFilter(
             OffenePostenTableModel.RGNR, "afr", false);
     static final OffenePostenSchaltbarerTextFilter vrTypefilter = new OffenePostenSchaltbarerTextFilter(
@@ -115,10 +109,14 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
     private List<OffenePosten> opListe;
 
     private ActionListener kopierenListener = e -> {
-        //if not set do nothing but don't NPE
+        // if not set do nothing but don't NPE
     };
 
-    private static void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
+    private ActionListener ausbuchenListener = e -> {
+        // if not set do nothing but don't NPE
+    };;
+
+    private void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
 
         List<OffenePostenSchaltbarerTextFilter> filters = Arrays.asList(rgrTypefilter, afrTypefilter, vrTypefilter);
         opJTable.setTypeFilter(RowFilter.orFilter(filters));
@@ -129,7 +127,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
             public void itemStateChanged(ItemEvent e) {
                 rgrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
-
+                calcGesamtOffen(opListe);
             }
         });
         select3ChkBx.addMListener(new ItemListener() {
@@ -138,6 +136,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
             public void itemStateChanged(ItemEvent e) {
                 afrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
+                calcGesamtOffen(opListe);
             }
         });
         select3ChkBx.addUListener(new ItemListener() {
@@ -146,6 +145,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
             public void itemStateChanged(ItemEvent e) {
                 vrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
+                calcGesamtOffen(opListe);
             }
         });
     }
@@ -179,10 +179,8 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
         // Auswahl RGR/AFR/Verkauf
         colCnt += 2;
-        selPan = new OffenePostenCHKBX("suche in  ", "Rezeptgebührenrechnungen", "Ausfallrechnungen",
-                "Verkaufsrechnungen");
+        selPan = new OffenePostenCHKBX();
 
-        selPan.initSelection(iniOpRgAf.getIncRG(), iniOpRgAf.getIncAR(), iniOpRgAf.getIncVK());
 
         builder.add(selPan.getPanel(),
                 cc.xywh(++colCnt, rowCnt - 1, 5, 3, CellConstraints.LEFT, CellConstraints.DEFAULT)); // 10..15,1..3
@@ -198,8 +196,9 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
 
         modelNeu = new OffenePostenTableModel(opListe);
         tab = new OffenePostenJTable(modelNeu);
-        verknuepfe(tab, selPan);
+        verknuepfe( tab, selPan);
         verküpfen(tab, suchen, combo);
+        selPan.initSelection(iniOpRgAf.getIncRG(), iniOpRgAf.getIncAR(), iniOpRgAf.getIncVK());
         combo.setSelectedIndex(0);
         tab.sorter.sort();
         // tab.setHorizontalScrollEnabled(true);
@@ -250,7 +249,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener, RgAfVk_I
         rowCnt += 2; // 6
         colCnt = 4;
         kopieButton = new JButton("Rechnungskopie");
-kopieButton.addActionListener(e-> kopieren());
+        kopieButton.addActionListener(e -> kopieren());
         builder.add(kopieButton, cc.xy(colCnt, rowCnt)); // 4,6
         colCnt = 11;
         builder.addLabel("Geldeingang:", cc.xy(colCnt, rowCnt, CellConstraints.RIGHT, CellConstraints.TOP)); // 12,6
@@ -269,7 +268,8 @@ kopieButton.addActionListener(e-> kopieren());
             bar.setSelected(true);
         }
 
-        ausbuchenBtn = ButtonTools.macheButton("ausbuchen", "ausbuchen", al);
+        ausbuchenBtn = new JButton("ausbuchen");
+        ausbuchenBtn.addActionListener(e -> ausbuchen());
         builder.add(ausbuchenBtn, cc.xy(17, 6));
         ausbuchenBtn.setMnemonic(KeyEvent.VK_A);
 //**********************
@@ -286,15 +286,34 @@ kopieButton.addActionListener(e-> kopieren());
         return builder.getPanel();
     }
 
+    private List<OffenePosten> ausbuchen() {
+        List<OffenePosten> opl = selectedOffenePosten();
+        ActionEvent e = new ActionEvent(opl, ActionEvent.ACTION_PERFORMED, bar.isSelected() ? "bar" : "unbar");
+        ausbuchenListener.actionPerformed(e);
+
+        return opl;
+    }
+
+    public void datachanged() {
+        modelNeu.fireTableDataChanged();
+        sumPan.setValGesamtOffen(  calcGesamtOffen(opListe));
+
+    }
+
     private List<OffenePosten> kopieren() {
-        int [] selections = tab.getSelectedRows();
+        List<OffenePosten> opl = selectedOffenePosten();
+        ActionEvent e = new ActionEvent(opl, ActionEvent.ACTION_PERFORMED, "kopieren");
+        kopierenListener.actionPerformed(e);
+        return opl;
+    }
+
+    private List<OffenePosten> selectedOffenePosten() {
+        int[] selections = tab.getSelectedRows();
         List<OffenePosten> opl = new LinkedList<>();
         for (int i : selections) {
             opl.add(modelNeu.getValue(tab.convertRowIndexToModel(i)));
 
         }
-        ActionEvent e = new ActionEvent(opl, ActionEvent.ACTION_PERFORMED, "kopieren");
-        kopierenListener.actionPerformed(e );
         return opl;
     }
 
@@ -304,8 +323,6 @@ kopieButton.addActionListener(e-> kopieren());
         sumPan.setValSuchGesamt(calcFilteredRGSum());
         return null;
     }
-
-
 
     private Money calcGesamtOffen(List<OffenePosten> list) {
         Optional<Money> result = list.stream()
@@ -317,14 +334,13 @@ kopieButton.addActionListener(e-> kopieren());
 
     }
 
-
-
-    private  Money calcFilteredOffen() {
+    private Money calcFilteredOffen() {
         Money result = new Money();
         for (int i = 0; i < tab.getRowCount(); i++) {
             Money offen = (Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN);
-            if(offen.isMoreThan(Money.ZERO)) {
-            result = result.add(offen);
+            System.out.println(offen);
+            if (offen.isMoreThan(Money.ZERO)) {
+                result = result.add(offen);
             }
             ;
         }
@@ -335,8 +351,7 @@ kopieButton.addActionListener(e-> kopieren());
         Money result = new Money();
 
         for (int i = 0; i < tab.getRowCount(); i++) {
-            result = result.add(
-                    (Money) tab.getValueAt(i, OffenePostenTableModel.GESAMTBETRAG));
+            result = result.add((Money) tab.getValueAt(i, OffenePostenTableModel.GESAMTBETRAG));
             ;
         }
         return result;
@@ -356,94 +371,10 @@ kopieButton.addActionListener(e-> kopieren());
         };
     }
 
-    private void startActionListener() {
-        al = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                String cmd = arg0.getActionCommand();
-                if ("ausbuchen".equals(cmd)) {
-                    modelNeu.removeTableModelListener(OffenePostenBuchen.this);
-                    doAusbuchen();
-                    modelNeu.addTableModelListener(OffenePostenBuchen.this);
-                    setzeFocus();
-                    return;
-                }
-
-            }
-        };
-    }
 
 
     private void setzeBezahlBetrag(final int i) {
-        geldeingangTf.setText(( (Money)tab.getValueAt(i, OffenePostenTableModel.OFFEN)).toPlainString());
-    }
-
-
-
-
-    private void doAusbuchen() {
-        int row = tab.getSelectedRow();
-        if (row < 0) {
-            JOptionPane.showMessageDialog(null, "Keine Rechnung zum Ausbuchen ausgewählt");
-            return;
-        }
-        BigDecimal nochoffen = BigDecimal.valueOf(
-                (Double) modelNeu.getValueAt(tab.convertRowIndexToModel(row), OffenePostenTableModel.OFFEN));
-        BigDecimal eingang = BigDecimal.valueOf(Double.parseDouble(geldeingangTf.getText()
-                                                                                .replace(",", ".")));
-        BigDecimal restbetrag = nochoffen.subtract(eingang);
-
-
-        if (nochoffen.compareTo(BigDecimal.valueOf(Double.parseDouble("0.0"))) == 0) {
-            JOptionPane.showMessageDialog(null, "Diese Rechnung ist bereits auf bezahlt gesetzt");
-            return;
-        }
-
-        String cmd = "";
-        String rgaf_reznum = modelNeu.getValueAt(tab.convertRowIndexToModel(row), OffenePostenTableModel.REZNUMMER)
-                                     .toString();
-        String rgaf_rechnum = modelNeu.getValueAt(tab.convertRowIndexToModel(row), OffenePostenTableModel.RGNR)
-                                      .toString();
-
-        if (bar.isSelected()) {
-            String ktext = rgaf_rechnum + ","
-                    + modelNeu.getValueAt(tab.convertRowIndexToModel(row), OffenePostenTableModel.KENNUNG);
-            // Name, Vorname, Geburtstag (soweit 35 Zeichen reichen)
-            if (ktext.length() > 35) {
-                ktext = ktext.substring(0, 34);
-            }
-            cmd = "insert into kasse set einnahme='" + dcf.format(eingang)
-                                                          .replace(",", ".")
-                    + "', datum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "', ktext='" + ktext + "'," + "rez_nr='"
-                    + rgaf_reznum + "'";
-            SqlInfo.sqlAusfuehren(cmd);
-        }
-        modelNeu.setValueAt(new Date(), tab.convertRowIndexToModel(row), OffenePostenTableModel.BEZAHLTAM); // not your
-                                                                                                            // business
-        modelNeu.setValueAt(restbetrag.doubleValue(), tab.convertRowIndexToModel(row), OffenePostenTableModel.OFFEN);
-
-        if (rgaf_rechnum.startsWith("RGR-")) { // Rezept bezahlt setzen
-            SqlInfo.sqlAusfuehren(
-                    "update verordn set zzstatus='1', rez_bez='T' where rez_nr = '" + rgaf_reznum + "' LIMIT 1"); // zz:
-                                                                                                                  // 1-ok
-            SqlInfo.sqlAusfuehren(
-                    "update lza set zzstatus='1', rez_bez='T' where rez_nr = '" + rgaf_reznum + "' LIMIT 1");
-        }
-
-        int id = (Integer) modelNeu.getValueAt(tab.convertRowIndexToModel(row), OffenePostenTableModel.TABELLENID);
-        if (rgaf_rechnum.startsWith("RGR-") || rgaf_rechnum.startsWith("AFR-")) { // aus rgaffaktura ausbuchen
-            cmd = "update rgaffaktura set roffen='" + dcf.format(restbetrag)
-                                                         .replace(",", ".")
-                    + "', rbezdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where id ='" + id + "' LIMIT 1";
-        }
-        if (rgaf_rechnum.startsWith("VR-")) { // aus verkliste ausbuchen
-            cmd = "update verkliste set v_offen='" + dcf.format(restbetrag)
-                                                        .replace(",", ".")
-                    + "', v_bezahldatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "' where verklisteID ='" + id
-                    + "' LIMIT 1";
-        }
-        SqlInfo.sqlAusfuehren(cmd);
-        geldeingangTf.setText("0,00");
+        geldeingangTf.setText(((Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN)).toPlainString());
     }
 
     void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
@@ -470,32 +401,28 @@ kopieButton.addActionListener(e-> kopieren());
     private class OPListSelectionHandler implements ListSelectionListener {
         @Override
         public void valueChanged(ListSelectionEvent e) {
-            ListSelectionModel lsm = (ListSelectionModel) e.getSource();
-            boolean isAdjusting = e.getValueIsAdjusting();
-            if (isAdjusting) {
+            if (e.getValueIsAdjusting()) {
                 return;
             }
-            if (lsm.isSelectionEmpty()) {
 
-            } else {
+            ListSelectionModel lsm = (ListSelectionModel) e.getSource();
+
+            if (!lsm.isSelectionEmpty()) {
+                OffenePosten leadOP = modelNeu.getValue(tab.convertRowIndexToModel(lsm.getLeadSelectionIndex()));;
+                String rez_nr =  leadOP.rezNummer.rezeptNummer();
+
+                int pat_intern = leadOP.patid;
+                new SocketClient().setzeRehaNachricht(OpRgaf.rehaReversePort,
+                        "OpRgaf#" + RehaIOMessages.MUST_PATANDREZFIND + "#" + pat_intern + "#" + rez_nr);
                 int minIndex = lsm.getMinSelectionIndex();
                 int maxIndex = lsm.getMaxSelectionIndex();
                 for (int i = minIndex; i <= maxIndex; i++) {
                     if (lsm.isSelectedIndex(i)) {
                         setzeBezahlBetrag(i);
-                        String id = tab.getValueAt(i, 11)
-                                       .toString();
-                        String rnr = tab.getValueAt(i, 1)
-                                        .toString();
-                        String rez_nr = SqlInfo.holeEinzelFeld(
-                                "select reznr from rgaffaktura where id='" + id + "' LIMIT 1");
-                        String pat_intern = SqlInfo.holeEinzelFeld(
-                                "select pat_intern from rgaffaktura where id='" + id + "' LIMIT 1");
-                        new SocketClient().setzeRehaNachricht(OpRgaf.rehaReversePort,
-                                "OpRgaf#" + RehaIOMessages.MUST_PATANDREZFIND + "#" + pat_intern + "#" + rez_nr);
-                        // System.out.println("Satz "+i);
+                        OffenePosten op = modelNeu.getValue(tab.convertRowIndexToModel(i));
 
-                        if (rnr.startsWith("VR-")) { // test ob VR -> bar ausbuchen enabled/disabled
+
+                        if (op.type== Type.VR) { // test ob VR -> bar ausbuchen enabled/disabled
                             if (!iniOpRgAf.getVrCashAllowed()) {
                                 bar.setEnabled(false);
                                 bar.setToolTipText("not allowed for VR (see System-Init)");
@@ -600,26 +527,23 @@ kopieButton.addActionListener(e-> kopieren());
         }
     }
 
-
-
-
-    @Override
-    public void useRGR(boolean rgr) {
-        iniOpRgAf.setIncRG(rgr);
-        calcGesamtOffen(opListe);
-    }
-
-    @Override
-    public void useAFR(boolean afr) {
-        iniOpRgAf.setIncAR(afr);
-        calcGesamtOffen(opListe);
-    }
-
-    @Override
-    public void useVKR(boolean vkr) {
-        iniOpRgAf.setIncVK(vkr);
-        calcGesamtOffen(opListe);
-    }
+//    @Override
+//    public void useRGR(boolean rgr) {
+//        iniOpRgAf.setIncRG(rgr);
+//        calcGesamtOffen(opListe);
+//    }
+//
+//    @Override
+//    public void useAFR(boolean afr) {
+//        iniOpRgAf.setIncAR(afr);
+//        calcGesamtOffen(opListe);
+//    }
+//
+//    @Override
+//    public void useVKR(boolean vkr) {
+//        iniOpRgAf.setIncVK(vkr);
+//        calcGesamtOffen(opListe);
+//    }
 
     private static void verküpfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
@@ -670,9 +594,13 @@ kopieButton.addActionListener(e-> kopieren());
     }
 
     public void addKopierenListener(ActionListener listener) {
-        kopierenListener=listener;
+        kopierenListener = listener;
 
     }
 
+    public void addAusbuchenListener(ActionListener listener) {
+        ausbuchenListener = listener;
+
+    }
 
 }

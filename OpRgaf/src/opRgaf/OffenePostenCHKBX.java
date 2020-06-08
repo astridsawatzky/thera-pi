@@ -8,9 +8,10 @@ import javax.swing.JPanel;
 import CommonTools.Select3ChkBx;
 
 final class OffenePostenCHKBX extends Select3ChkBx {
-    OffenePostenCHKBX(String ask, String chkBxOLabel, String chkBxMLabel, String chkBxULabel) {
-        super(ask, chkBxOLabel, chkBxMLabel, chkBxULabel);
-        chkBxO.setSelected(true);
+    OffenePostenCHKBX() {
+        super("suche in  ", "Rezeptgebührenrechnungen", "Ausfallrechnungen",
+                "Verkaufsrechnungen");
+
 
     }
 

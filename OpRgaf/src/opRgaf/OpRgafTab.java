@@ -2,8 +2,10 @@ package opRgaf;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -37,6 +40,7 @@ import ag.ion.noa.NOAException;
 import environment.Path;
 import mandant.IK;
 import office.OOService;
+import opRgaf.OffenePosten.Type;
 import opRgaf.CommonTools.DateTimeFormatters;
 import opRgaf.rezept.Money;
 import opRgaf.rezept.Rezeptnummer;
@@ -73,7 +77,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
         jtb.addChangeListener(jxh);
 
-        OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf, opRgaf.aktIK,
+        OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK,
                 new OffenePostenDTO(opRgaf.aktIK).all());
         ActionListener kopierenListener = e -> {
             List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
@@ -82,6 +86,23 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             }
         };
         offenePostenBuchen.addKopierenListener(kopierenListener);
+        ActionListener ausbuchenlistener = e -> {
+            List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
+            if (opToCopy.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Keine Rechnung zum Ausbuchen ausgewählt");
+            } else {
+                for (OffenePosten offenePosten : opToCopy) {
+                    if (offenePosten.offen.hasSameValue(Money.ZERO)) {
+                        JOptionPane.showMessageDialog(null,
+                                "Rechnung " + offenePosten.rgNr + " ist bereits auf bezahlt gesetzt");
+                    } else {
+                        komplettAusbuchen(offenePosten, "bar".equals(e.getActionCommand()));
+                    }
+                }
+                offenePostenBuchen.datachanged();
+            }
+        };
+        offenePostenBuchen.addAusbuchenListener(ausbuchenlistener);
         jtb.addTab("redo", offenePostenBuchen);
 
         add(jxh, BorderLayout.NORTH);
@@ -90,6 +111,50 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         jxh.validate();
         jtb.validate();
         validate();
+    }
+
+    private void komplettAusbuchen(OffenePosten op, boolean bar) {
+
+        Money eingang = op.offen;
+
+        Money restbetrag = Money.ZERO;
+
+        if (bar) {
+            String ktext = op.kennung.name + "," + op.rezNummer.rezeptNummer();
+            if (ktext.length() > 35) {
+                ktext = ktext.substring(0, 34);
+            }
+            String barkassesql = "insert into kasse set einnahme='" + eingang.toPlainString()
+                                                                             .replace(",", ".")
+                    + "', datum='" + LocalDate.now() + "', ktext='" + ktext + "'," + "rez_nr='"
+                    + op.rezNummer.rezeptNummer() + "', PAT_INTERN='" + op.patid + "'";
+            SqlInfo.sqlAusfuehren(barkassesql);
+        }
+
+        String rgafakturaSql = null;
+
+        if (op.type == Type.RGR) { // aus rgaffaktura ausbuchen
+            rezeptBezahltSetzen(op.rezNummer.rezeptNummer());
+            rgafakturaSql = "update rgaffaktura set roffen='" + restbetrag.toPlainString() + "', rbezdatum='"
+                    + LocalDate.now() + "' where id ='" + op.tabellenId + "'";
+        } else if (op.type == Type.AFR) { // aus rgaffaktura ausbuchen
+            rgafakturaSql = "update rgaffaktura set roffen='" + restbetrag.toPlainString() + "', rbezdatum='"
+                    + LocalDate.now() + "' where id ='" + op.tabellenId + "'";
+        } else if (op.type == Type.VR) { // aus verkliste ausbuchen
+            rgafakturaSql = "update verkliste set v_offen='" + restbetrag.toPlainString() + "', v_bezahldatum='"
+                    + LocalDate.now() + "' where verklisteID ='" + op.tabellenId + "'";
+        }
+        System.out.println(rgafakturaSql);
+        SqlInfo.sqlAusfuehren(rgafakturaSql);
+        op.offen = restbetrag;
+
+    }
+
+    private void rezeptBezahltSetzen(String rgaf_reznum) {
+        SqlInfo.sqlAusfuehren(
+                "update verordn set zzstatus='1', rez_bez='T' where rez_nr = '" + rgaf_reznum + "' LIMIT 1"); // zz:
+                                                                                                              // 1-ok
+        SqlInfo.sqlAusfuehren("update lza set zzstatus='1', rez_bez='T' where rez_nr = '" + rgaf_reznum + "' LIMIT 1");
     }
 
     private void rechnungskopie(OffenePosten op) {
@@ -106,16 +171,15 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             break;
         }
     }
+
     private Void afrkopie(final OffenePosten op) {
         try {
             int id = op.tabellenId;
             Rezeptnummer rez_nr = op.rezNummer;
             String pat_intern = SqlInfo.holeEinzelFeld(
                     "select pat_intern from rgaffaktura where id='" + id + "' LIMIT 1");
-            String rdatum = SqlInfo.holeEinzelFeld(
-                    "select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
-            AusfallRechnung ausfall = new AusfallRechnung(pat_intern, rez_nr.rezeptNummer(),
-                    op.rgNr, rdatum, ik);
+            String rdatum = SqlInfo.holeEinzelFeld("select rdatum from rgaffaktura where id='" + id + "' LIMIT 1");
+            AusfallRechnung ausfall = new AusfallRechnung(pat_intern, rez_nr.rezeptNummer(), op.rgNr, rdatum, ik);
             ausfall.setModal(true);
             ausfall.setLocationRelativeTo(null);
             ausfall.toFront();
@@ -126,6 +190,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         }
         return null;
     }
+
     private void rgrkopie(OffenePosten op) {
         String ursprungstabelle = "";
         int id = op.tabellenId;
@@ -137,8 +202,6 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         Money pauschale = op.bearbeitungsGebuehr;
         Money gesamt = op.gesamtBetrag;
         new InitHashMaps();
-
-
 
         String test = SqlInfo.holeEinzelFeld("select id from verordn where rez_nr = '" + rez_nr + "' LIMIT 1");
         Vector<String> vecaktrez = null;
@@ -185,13 +248,14 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             HashMap<String, String> hmRezgeb = new HashMap<>();
             hmRezgeb.put("<rgreznum>", rez_nr);
             hmRezgeb.put("<rgbehandlung>", behandlungen);
-            hmRezgeb.put("<rgdatum>", DatFunk.sDatInDeutsch(
-                    SqlInfo.holeEinzelFeld("select rez_datum from " + ursprungstabelle + " where rez_nr='" + rez_nr + "' LIMIT 1")));
+            hmRezgeb.put("<rgdatum>", DatFunk.sDatInDeutsch(SqlInfo.holeEinzelFeld(
+                    "select rez_datum from " + ursprungstabelle + " where rez_nr='" + rez_nr + "' LIMIT 1")));
             hmRezgeb.put("<rgbetrag>", op.rgBetrag.toPlainString()
-                                             .replace(".", ","));
+                                                  .replace(".", ","));
             hmRezgeb.put("<rgpauschale>", pauschale.toPlainString()
                                                    .replace(".", ","));
-            hmRezgeb.put("<rggesamt>", gesamt.toPlainString().replace(".", ","));
+            hmRezgeb.put("<rggesamt>", gesamt.toPlainString()
+                                             .replace(".", ","));
             hmRezgeb.put("<rganrede>", adressParams[0]);
             hmRezgeb.put("<rgname>", adressParams[1]);
             hmRezgeb.put("<rgstrasse>", adressParams[2]);

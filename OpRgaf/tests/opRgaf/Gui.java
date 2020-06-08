@@ -43,8 +43,7 @@ public class Gui {
         frame.getContentPane()
              .add(new JScrollPane(opJTable), BorderLayout.SOUTH);
 
-        OffenePostenCHKBX select3ChkBx = new OffenePostenCHKBX("suche in  ", "Rezeptgebührenrechnungen",
-                "Ausfallrechnungen", "Verkaufsrechnungen");
+        OffenePostenCHKBX select3ChkBx = new OffenePostenCHKBX();
 
         verknuepfe(opJTable, select3ChkBx);
 
