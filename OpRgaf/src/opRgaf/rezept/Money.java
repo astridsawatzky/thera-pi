@@ -16,18 +16,18 @@ public class Money implements Comparable<Money> {
     }
 
     public Money(Money geld) {
-        value = geld.value;
+        value = geld.getValue();
     }
 
     public Money(String value) {
         if (value != null) {
-
+            
             this.value = new BigDecimal(value).setScale(2, RoundingMode.DOWN);
         }
 
     }
 
-    Money(double value) {
+    public Money(double value) {
         this.value = new BigDecimal(df.format(value));
     }
 
@@ -50,31 +50,31 @@ public class Money implements Comparable<Money> {
 
     public Money add(Money other) {
         Money m = new Money();
-        m.value = this.value.add(other.value);
+        m.value = this.getValue().add(other.getValue());
         return m;
     }
 
     public String toPlainString() {
-        return value.toPlainString();
+        return getValue().toPlainString();
 
     }
 
     @Override
     public String toString() {
-        return value.toString();
+        return getValue().toString();
     }
 
     @Override
     public int compareTo(Money o) {
 
-        return this.value.compareTo(o.value);
+        return this.getValue().compareTo(o.getValue());
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        result = prime * result + ((getValue() == null) ? 0 : getValue().hashCode());
         return result;
     }
 
@@ -87,24 +87,28 @@ public class Money implements Comparable<Money> {
         if (getClass() != obj.getClass())
             return false;
         Money other = (Money) obj;
-        if (value == null) {
-            if (other.value != null)
+        if (getValue() == null) {
+            if (other.getValue() != null)
                 return false;
-        } else if (!value.equals(other.value))
+        } else if (!getValue().equals(other.getValue()))
             return false;
         return true;
     }
 
     public boolean isMoreThan(Money other) {
-        return value.compareTo(other.value) > 0;
+        return getValue().compareTo(other.getValue()) > 0;
     }
 
     public boolean isLessThan(Money other) {
-        return value.compareTo(other.value) < 0;
+        return getValue().compareTo(other.getValue()) < 0;
     }
 
     public boolean hasSameValue(Money other) {
-        return value.compareTo(other.value) == 0;
+        return getValue().compareTo(other.getValue()) == 0;
+    }
+
+    public BigDecimal getValue() {
+        return value;
     }
 
 }

@@ -20,10 +20,10 @@ public class OffenePostenTableModel extends AbstractTableModel {
     static final int RGDATUM = 2;
     static final int GESAMTBETRAG = 3;
     static final int OFFEN = 4;
-    private static final int BEARBEITUNGSGEBUEHR = 5;
+    static final int BEARBEITUNGSGEBUEHR = 5;
     static final int BEZAHLTAM = 6;
-    private static final int MAHNUNGEINS = 7;
-    private static final int MAHNUNGZWEI = 8;
+    static final int MAHNUNGEINS = 7;
+     static final int MAHNUNGZWEI = 8;
     static final int KRANKENKASSENNAME = 9;
     static final int REZNUMMER = 10;
     static final int TABELLENID = 11;
@@ -44,10 +44,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
     @Override
     public boolean isCellEditable(int row, int col) {
         //TODO describe and change
-        if (col > 1 && col < 9) {
-            return true;
-        }
-        return false;
+        return col > 1 && col < 9;
     }
 
 
@@ -112,13 +109,13 @@ public class OffenePostenTableModel extends AbstractTableModel {
             op.rgDatum = evaluateForLocalDate(aValue);
             break;
         case GESAMTBETRAG:
-            op.gesamtBetrag = evaluateForMoney((String) aValue);
+            op.gesamtBetrag = (Money) aValue;
             break;
         case OFFEN:
-            op.offen = evaluateForMoney((String) aValue);
+            op.offen =  (Money) aValue;
             break;
         case BEARBEITUNGSGEBUEHR:
-            op.bearbeitungsGebuehr = evaluateForMoney((String) aValue);
+            op.bearbeitungsGebuehr =  (Money) aValue;
             break;
         case BEZAHLTAM:
             op.bezahltAm = evaluateForLocalDate(aValue);
@@ -141,17 +138,10 @@ public class OffenePostenTableModel extends AbstractTableModel {
         default:
             logger.error("unknown column request column no= " + columnIndex);
         }
+        fireTableCellUpdated(rowIndex, columnIndex);
     }
 
-    private Money evaluateForMoney(String aValue) {
-        try {
-            return new Money(aValue);
-        } catch (Exception e) {
-            return new Money();
-        }
-    }
-
-    private LocalDate evaluateForLocalDate(Object aValue) {
+       private LocalDate evaluateForLocalDate(Object aValue) {
         try {
             return LocalDate.parse((CharSequence) aValue, DateTimeFormatters.ddMMYYYYmitPunkt);
         } catch (DateTimeParseException e) {
@@ -222,13 +212,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
         return super.getColumnName(column);
     }
 
-    boolean addRow(OffenePosten op) {
-        return opListe.add(op);
-    }
 
-    OffenePosten removeRow(int index) {
-        return opListe.remove(index);
-    }
 
     OffenePosten getValue (int rowIndex) {
         return opListe.get(rowIndex);

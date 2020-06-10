@@ -37,9 +37,12 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.DatFunk;
 import CommonTools.DateTableCellEditor;
+import CommonTools.DblCellEditor;
+import CommonTools.DoubleTableCellRenderer;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
+import CommonTools.MitteRenderer;
 import CommonTools.SqlInfo;
 import io.RehaIOMessages;
 import mandant.IK;
@@ -114,7 +117,9 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
     private ActionListener ausbuchenListener = e -> {
         // if not set do nothing but don't NPE
-    };;
+    };
+
+    private ActionListener paymentUpdateListener;;
 
     private void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
 
@@ -195,6 +200,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         builder.add(merkenBtn, cc.xy(17, rowCnt));
 
         modelNeu = new OffenePostenTableModel(opListe);
+        modelNeu.addTableModelListener(this);
         tab = new OffenePostenJTable(modelNeu);
         verknuepfe( tab, selPan);
         verküpfen(tab, suchen, combo);
@@ -203,42 +209,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         tab.sorter.sort();
         // tab.setHorizontalScrollEnabled(true);
 
-        DateTableCellEditor tble = new DateTableCellEditor();
-//TODO:CellRenderer
-        // tab.getColumn(1)
 
-//           .setCellRenderer(new MitteRenderer());
-//
-//        tab.getColumn(2)
-//           .setCellEditor(tble);
-//
-//        tab.getColumn(3)
-//           .setCellRenderer(new DoubleTableCellRenderer());
-//        tab.getColumn(3)
-//           .setCellEditor(new DblCellEditor());
-//
-//        tab.getColumn(4)
-//           .setCellRenderer(new DoubleTableCellRenderer());
-//        tab.getColumn(4)
-//           .setCellEditor(new DblCellEditor());
-//
-//        tab.getColumn(5)
-//           .setCellRenderer(new DoubleTableCellRenderer());
-//        tab.getColumn(5)
-//           .setCellEditor(new DblCellEditor());
-//
-//        tab.getColumn(6)
-//           .setCellEditor(tble);
-//        tab.getColumn(7)
-//           .setCellEditor(tble);
-//        tab.getColumn(8)
-//           .setCellEditor(tble);
-//        tab.getColumn(10)
-//           .setMinWidth(80);
-//        tab.getColumn(11)
-//           .setMaxWidth(50);
-        tab.getSelectionModel()
-           .addListSelectionListener(new OPListSelectionHandler());
         // tab.setHighlighters(HighlighterFactory.createSimpleStriping(HighlighterFactory.CLASSIC_LINE_PRINTER));
 
         JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
@@ -452,98 +423,16 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
             return;
         }
         if (arg0.getType() == TableModelEvent.UPDATE) {
-            try {
-                int col = arg0.getColumn();
-                int row = arg0.getFirstRow();
-                String value = "";
-                String id = Integer.toString((Integer) modelNeu.getValueAt(row, 11));
-                if (modelNeu.getColumnClass(col) == Boolean.class) {
-                    value = modelNeu.getValueAt(row, col) == Boolean.FALSE ? "F" : "T";
-                } else if (modelNeu.getColumnClass(col) == Date.class) {
-                    if (modelNeu.getValueAt(row, col) == null) {
-                        value = "1900-01-01";
-                    } else {
-                        String test = modelNeu.getValueAt(row, col)
-                                              .toString();
-                        if (".  .".equals(test.trim())) {
-                            value = null;
-                        } else if (test.contains(".")) {
-                            value = DatFunk.sDatInSQL(test);
-                            if (value.equals("    -  -  ")) {
-                                value = null;
-                            }
-                        } else if (test.equals("    -  -  ")) {
-                            value = null;
-                        } else {
-                            value = test;
-                        }
-                    }
-                } else if (modelNeu.getColumnClass(col) == Double.class) {
-                    value = dcf.format(modelNeu.getValueAt(row, col))
-                               .replace(",", ".");
-                } else if (modelNeu.getColumnClass(col) == String.class) {
-                    value = modelNeu.getValueAt(row, col)
-                                    .toString();
-                }
-                String rnr = (String) modelNeu.getValueAt(row, 1);
-                if (rnr.startsWith("VR-")) { // test ob VR -> Änderung in 'verkliste' schreiben
-                    HashMap<String, String> hmMap2VerkListe = new HashMap<>();
-                    hmMap2VerkListe.put("rbezdatum", "v_bezahldatum"); // der Fluch der verbogenen Spaltennamen
-                    hmMap2VerkListe.put("roffen", "v_offen");
-                    hmMap2VerkListe.put("rgesamt", "v_betrag");
-                    if (hmMap2VerkListe.containsKey(modelNeu.getColumnName(col))) { // Ändern dieser Spalte ist erlaubt
-                        String cmd = "update verkliste set " + hmMap2VerkListe.get(modelNeu.getColumnName(col)) + " ="
-                                + (value != null ? "'" + value + "'" : "null") + " where verklisteID='" + id
-                                + "' LIMIT 1";
-                        SqlInfo.sqlAusfuehren(cmd);
-                    } else {
-                        new SwingWorker<Void, Void>() {
-                            /** Andere 'rückgängig' machen (= Suche neu ausführen). */
-                            @Override // eleganter wäre nur das geänderte Feld neu einzulesen ...
-                            protected Void doInBackground() throws Exception {
-                                try {
-                                    doSuchen();
-                                } catch (Exception ex) {
-                                    ex.printStackTrace();
-                                }
-                                return null;
-                            }
-                        }.execute();
 
-                        JOptionPane.showMessageDialog(null, "Diese Änderung ist in Verkaufsrechnungen nicht möglich!");
-                    }
-                } else {
-                    String cmd = "update rgaffaktura set " + modelNeu.getColumnName(col) + "="
-                            + (value != null ? "'" + value + "'" : "null") + " where id='" + id + "' LIMIT 1";
-                    SqlInfo.sqlAusfuehren(cmd);
-                    geldeingangTf.setText(dcf.format(
-                            modelNeu.getValueAt(tab.convertRowIndexToModel(row), OffenePostenTableModel.OFFEN)));
-                }
-            } catch (Exception ex) {
-                Logger logger = LoggerFactory.getLogger(OffenePostenBuchen.class);
-                logger.error("Fehler ind der Dateneingabe", ex);
-                JOptionPane.showMessageDialog(null, "Fehler in der Dateneingabe");
-            }
+                int row = arg0.getFirstRow();
+
+                OffenePosten op = modelNeu.getValue(row);
+                ActionEvent payment = new ActionEvent(op, ActionEvent.ACTION_PERFORMED, "bezahlen");
+                paymentUpdateListener.actionPerformed(payment);
         }
     }
 
-//    @Override
-//    public void useRGR(boolean rgr) {
-//        iniOpRgAf.setIncRG(rgr);
-//        calcGesamtOffen(opListe);
-//    }
-//
-//    @Override
-//    public void useAFR(boolean afr) {
-//        iniOpRgAf.setIncAR(afr);
-//        calcGesamtOffen(opListe);
-//    }
-//
-//    @Override
-//    public void useVKR(boolean vkr) {
-//        iniOpRgAf.setIncVK(vkr);
-//        calcGesamtOffen(opListe);
-//    }
+
 
     private static void verküpfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
@@ -600,6 +489,11 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
     public void addAusbuchenListener(ActionListener listener) {
         ausbuchenListener = listener;
+
+    }
+
+    public void addPaymentUpdateListener(ActionListener paymentListener) {
+        paymentUpdateListener = paymentListener;
 
     }
 

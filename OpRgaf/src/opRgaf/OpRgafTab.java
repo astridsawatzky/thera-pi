@@ -1,6 +1,7 @@
 package opRgaf;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -87,11 +88,11 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         };
         offenePostenBuchen.addKopierenListener(kopierenListener);
         ActionListener ausbuchenlistener = e -> {
-            List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
-            if (opToCopy.isEmpty()) {
+            List<OffenePosten> opToPay = (List<OffenePosten>) e.getSource();
+            if (opToPay.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Keine Rechnung zum Ausbuchen ausgewählt");
             } else {
-                for (OffenePosten offenePosten : opToCopy) {
+                for (OffenePosten offenePosten : opToPay) {
                     if (offenePosten.offen.hasSameValue(Money.ZERO)) {
                         JOptionPane.showMessageDialog(null,
                                 "Rechnung " + offenePosten.rgNr + " ist bereits auf bezahlt gesetzt");
@@ -103,6 +104,16 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             }
         };
         offenePostenBuchen.addAusbuchenListener(ausbuchenlistener);
+        ActionListener paymentListener = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                   OffenePosten op = (OffenePosten) e.getSource();
+                   new OffenePostenDTO(ik).updatePayment(op);
+
+            }
+        };
+        offenePostenBuchen.addPaymentUpdateListener(paymentListener );
         jtb.addTab("redo", offenePostenBuchen);
 
         add(jxh, BorderLayout.NORTH);

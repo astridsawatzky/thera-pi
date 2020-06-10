@@ -27,7 +27,7 @@ public class Kennung {
             name = values[0];
             vorname = values[1];
             Function<? super String, ? extends LocalDate> mapper = (t) -> {
-                return LocalDate.parse(t.trim(),DateTimeFormatters.ddMMYYYYmitPunkt);
+                return LocalDate.parse(t.trim(),DateTimeFormatters.dMYYYYmitPunkt);
             };
             geburtstag = Optional.ofNullable(values[2]).map(mapper).orElse(null);;
         }
