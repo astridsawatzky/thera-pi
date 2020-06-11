@@ -46,13 +46,13 @@ public class Bericht1Dto {
                     ret.setArztNum(rs.getString(field));
                     break;
                 case "ERSTELLDAT":
-                    ret.setErstellDat(rs.getLocalDate(field));
+                    ret.setErstellDat(rs.getDate(field) == null ? null : rs.getDate(field).toLocalDate());
                     break;
                 case "VERSANDART":
                     ret.setVersandArt(rs.getString(field));
                     break;
                 case "VERSANDDAT":
-                    ret.setVersandDat(rs.getLocalDate(field));
+                    ret.setVersandDat(rs.getDate(field) == null ? null : rs.getDate(field).toLocalDate());
                     break;
                 case "BERTYP":
                     ret.setBerTyp(rs.getString(field));
@@ -79,7 +79,7 @@ public class Bericht1Dto {
                     ret.setVerfasser(rs.getString(field));
                     break;
                 case "REZ_DATUM":
-                    ret.setRezDatum(rs.getLocalDate(field));
+                    ret.setRezDatum(rs.getDate(field) == null ? null : rs.getDate(field).toLocalDate());
                     break;
                 default:
                     logger.error("Unhandled field in bericht1 found: " + meta.getColumnLabel(o) + " at pos: " + o);
