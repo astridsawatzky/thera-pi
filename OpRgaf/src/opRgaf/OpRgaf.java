@@ -172,12 +172,7 @@ public class OpRgaf implements WindowListener {
         jFrame.setVisible(true);
         thisFrame = jFrame;
         informRehaMainAboutStart();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                otab.opRgafPanel.setzeFocus();
-            }
-        });
+
         return jFrame;
     }
 
