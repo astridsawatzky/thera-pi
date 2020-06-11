@@ -38,6 +38,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
     public OffenePostenTableModel(List<OffenePosten> opListe) {
 
         this.opListe = opListe;
+
     }
 
 
@@ -217,5 +218,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
     OffenePosten getValue (int rowIndex) {
         return opListe.get(rowIndex);
     }
+
+
 
 }

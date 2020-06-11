@@ -1,7 +1,6 @@
 package opRgaf;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -124,7 +123,6 @@ public class OffenePostenDTO {
         try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();
                 Statement stmt = con.createStatement()) {
             stmt.executeUpdate(updateRGRSQL, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
 
         } catch (SQLException e) {
             logger.error("coud not save OffenPosten " + op, e);
@@ -134,10 +132,6 @@ public class OffenePostenDTO {
 
     }
 
-    private Integer einklammern(int invalue) {
-
-        return invalue == 0 ? null : Integer.valueOf(invalue);
-    }
 
     private String einklammern(String value) {
         return value == null ? null : "'" + value + "'";
@@ -172,12 +166,11 @@ public class OffenePostenDTO {
                                         .append(" where id = ")
                                         .append(op.tabellenId)
                                         .toString();
-        System.out.println(sql);
         return sql;
     }
 
     private boolean updateVr(OffenePosten op) {
-        // TODO Auto-generated method stub
+        //TODO use this
         return false;
     }
 

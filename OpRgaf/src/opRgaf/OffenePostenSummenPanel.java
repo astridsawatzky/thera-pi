@@ -3,7 +3,6 @@ package opRgaf;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -16,16 +15,11 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import opRgaf.rezept.Money;
 
-public class OffenePostenSummenPanel
-{
+public class OffenePostenSummenPanel {
     private JLabel valGesamtOffen;
     private JLabel valSuchOffen;
     private JLabel valSuchGesamt;
     private JLabel valAnzahlSaetze;
-    private BigDecimal gesamtOffen = BigDecimal.ZERO;
-    private BigDecimal suchOffen= BigDecimal.ZERO;
-    private BigDecimal suchGesamt;
-    private int records;
     private JPanel auswertung;
 
     private NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY);
@@ -68,7 +62,9 @@ public class OffenePostenSummenPanel
                 cc.xy(5, 4, CellConstraints.RIGHT, CellConstraints.DEFAULT));
         valAnzahlSaetze = builder.addLabel("0", cc.xy(7, 4, CellConstraints.LEFT, CellConstraints.DEFAULT));
         valAnzahlSaetze.setForeground(Color.BLUE);
-
+        setValGesamtOffen(Money.ZERO);
+        setValSuchGesamt(Money.ZERO);
+        setValSuchOffen(Money.ZERO);
         auswertung.add(builder.getPanel());
     }
 
@@ -77,24 +73,19 @@ public class OffenePostenSummenPanel
     }
 
     public void setValGesamtOffen(Money money) {
-        this.valGesamtOffen.setText(money.toPlainString());
+        this.valGesamtOffen.setText(currencyFormat.format(money.getValue()));
     }
 
     public void setValSuchOffen(Money money) {
-        this.valSuchOffen.setText(money.toPlainString());
+        this.valSuchOffen.setText(currencyFormat.format(money.getValue()));
     }
 
     public void setValSuchGesamt(Money money) {
-        this.valSuchGesamt .setText(money.toPlainString());
+        this.valSuchGesamt.setText(currencyFormat.format(money.getValue()));
     }
 
     public void setValAnzahlSaetze(int anzahl) {
         this.valAnzahlSaetze.setText(String.valueOf(anzahl));
     }
-
-
-
-
-
 
 }

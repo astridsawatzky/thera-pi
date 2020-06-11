@@ -24,6 +24,7 @@ final class OffenePostenJTable extends JTable {
     private static final DateTableCellEditor DATE_CELL_EDITOR = new DateTableCellEditor();
     private static final MitteRenderer MITTE_RENDERER = new MitteRenderer();
     private static final MoneyCellRenderer MONEY_RENDERER = new MoneyCellRenderer();
+    private static final DateRenderer DATE_RENDERER = new DateRenderer();
     private static final TableCellEditor MONEY_CELL_EDITOR = new MoneyCellEditor();
 
     private final class Everythingisfine extends RowFilter<OffenePostenTableModel, Integer> {
@@ -42,6 +43,7 @@ final class OffenePostenJTable extends JTable {
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
         sorter = new TableRowSorter<>((OffenePostenTableModel) getModel());
+
     }
 
     void setFilter(RowFilter<OffenePostenTableModel, Integer> filter) {
@@ -77,6 +79,15 @@ final class OffenePostenJTable extends JTable {
             return MONEY_RENDERER;
         case BEARBEITUNGSGEBUEHR:
             return MONEY_RENDERER;
+        case RGDATUM:
+            return DATE_RENDERER;
+        case BEZAHLTAM:
+            return DATE_RENDERER;
+        case MAHNUNGEINS:
+            return DATE_RENDERER;
+        case MAHNUNGZWEI:
+            return DATE_RENDERER;
+
         default:
             return super.getCellRenderer(row, column);
         }

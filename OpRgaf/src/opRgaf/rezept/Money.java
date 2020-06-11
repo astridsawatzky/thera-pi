@@ -20,8 +20,8 @@ public class Money implements Comparable<Money> {
     }
 
     public Money(String value) {
-        if (value != null) {
-            
+        if (value != null && !value.isEmpty()) {
+
             this.value = new BigDecimal(value).setScale(2, RoundingMode.DOWN);
         }
 
@@ -30,9 +30,6 @@ public class Money implements Comparable<Money> {
     public Money(double value) {
         this.value = new BigDecimal(df.format(value));
     }
-
-
-
 
     private static NumberFormat twoDecimalsRoundingDown() {
 
@@ -50,7 +47,14 @@ public class Money implements Comparable<Money> {
 
     public Money add(Money other) {
         Money m = new Money();
-        m.value = this.getValue().add(other.getValue());
+        m.value = this.getValue()
+                      .add(other.getValue());
+        return m;
+    }
+
+    public Money minus(Money eingang) {
+        Money m = new Money();
+        m.value = value.subtract(eingang.value);
         return m;
     }
 
@@ -67,7 +71,8 @@ public class Money implements Comparable<Money> {
     @Override
     public int compareTo(Money o) {
 
-        return this.getValue().compareTo(o.getValue());
+        return this.getValue()
+                   .compareTo(o.getValue());
     }
 
     @Override

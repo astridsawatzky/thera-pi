@@ -3,10 +3,8 @@ package opRgaf;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -104,6 +102,19 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             }
         };
         offenePostenBuchen.addAusbuchenListener(ausbuchenlistener);
+
+        ActionListener teilzahlen = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+               Payment zahlung  = (Payment) e.getSource();
+                    teilAusbuchen(zahlung.op,  "bar".equals(e.getActionCommand()), zahlung.betrag);
+                    offenePostenBuchen.datachanged();
+                }
+
+        };
+
+        offenePostenBuchen.addTeilzahlenListener(teilzahlen);
         ActionListener paymentListener = new ActionListener() {
 
             @Override
@@ -128,7 +139,12 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
         Money eingang = op.offen;
 
-        Money restbetrag = Money.ZERO;
+        teilAusbuchen(op, bar, eingang);
+
+    }
+
+    private void teilAusbuchen(OffenePosten op, boolean bar, Money eingang) {
+        Money restbetrag = op.offen.minus(eingang);
 
         if (bar) {
             String ktext = op.kennung.name + "," + op.rezNummer.rezeptNummer();
@@ -158,7 +174,6 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         System.out.println(rgafakturaSql);
         SqlInfo.sqlAusfuehren(rgafakturaSql);
         op.offen = restbetrag;
-
     }
 
     private void rezeptBezahltSetzen(String rgaf_reznum) {

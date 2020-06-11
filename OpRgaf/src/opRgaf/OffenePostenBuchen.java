@@ -8,11 +8,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -26,7 +22,6 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,21 +30,14 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.DatFunk;
-import CommonTools.DateTableCellEditor;
-import CommonTools.DblCellEditor;
-import CommonTools.DoubleTableCellRenderer;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
-import CommonTools.MitteRenderer;
-import CommonTools.SqlInfo;
 import io.RehaIOMessages;
 import mandant.IK;
 import opRgaf.OffenePosten.Type;
 import opRgaf.RehaIO.SocketClient;
 import opRgaf.rezept.Money;
-import opRgaf.rezept.Rezeptnummer;
 
 class OffenePostenBuchen extends JXPanel implements TableModelListener {
     private static final long serialVersionUID = -7883557713071422132L;
@@ -71,7 +59,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
     private JRtaCheckBox bar;
     private boolean barWasSelected;
 
-    private DecimalFormat dcf = new DecimalFormat("###0.00");
 
     private OffenePostenSummenPanel sumPan;
     private OffenePostenCHKBX selPan;
@@ -84,11 +71,12 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
     OffenePostenBuchen(OpRgAfIni iniOpRgAf, IK ik, List<OffenePosten> offenePostenListe) {
 
-        this.iniOpRgAf =iniOpRgAf;
+        this.iniOpRgAf = iniOpRgAf;
         opListe = offenePostenListe;
         startKeyListener();
         setLayout(new BorderLayout());
         add(this.getContent(), BorderLayout.CENTER);
+
         setzeFocus();
         tab.sorter.sort();
     }
@@ -119,7 +107,13 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         // if not set do nothing but don't NPE
     };
 
-    private ActionListener paymentUpdateListener;;
+    private ActionListener paymentUpdateListener = e -> {
+        // if not set do nothing but don't NPE
+    };
+
+    private ActionListener teilzahlenListener = e -> {
+        // if not set do nothing but don't NPE
+    };
 
     private void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
 
@@ -186,7 +180,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         colCnt += 2;
         selPan = new OffenePostenCHKBX();
 
-
         builder.add(selPan.getPanel(),
                 cc.xywh(++colCnt, rowCnt - 1, 5, 3, CellConstraints.LEFT, CellConstraints.DEFAULT)); // 10..15,1..3
         // Ende Auswahl
@@ -202,15 +195,16 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         modelNeu = new OffenePostenTableModel(opListe);
         modelNeu.addTableModelListener(this);
         tab = new OffenePostenJTable(modelNeu);
-        verknuepfe( tab, selPan);
+        verknuepfe(tab, selPan);
         verküpfen(tab, suchen, combo);
+        tab.getSelectionModel()
+           .addListSelectionListener(new OPListSelectionHandler());
+        ;
         selPan.initSelection(iniOpRgAf.getIncRG(), iniOpRgAf.getIncAR(), iniOpRgAf.getIncVK());
         combo.setSelectedIndex(0);
         tab.sorter.sort();
-        // tab.setHorizontalScrollEnabled(true);
 
 
-        // tab.setHighlighters(HighlighterFactory.createSimpleStriping(HighlighterFactory.CLASSIC_LINE_PRINTER));
 
         JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
         rowCnt += 2;
@@ -258,16 +252,28 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
     }
 
     private List<OffenePosten> ausbuchen() {
+
         List<OffenePosten> opl = selectedOffenePosten();
-        ActionEvent e = new ActionEvent(opl, ActionEvent.ACTION_PERFORMED, bar.isSelected() ? "bar" : "unbar");
-        ausbuchenListener.actionPerformed(e);
+        Money eingang = new Money(geldeingangTf.getText());
+        if (opl.size() == 1) {
+            if (!opl.get(0).offen.hasSameValue(eingang)) {
+                Payment paid = new Payment(opl.get(0), eingang);
+                ActionEvent e = new ActionEvent(paid, ActionEvent.ACTION_PERFORMED, bar.isSelected() ? "bar" : "unbar");
+                teilzahlenListener.actionPerformed(e);
+            }
+
+        } else {
+            ActionEvent e = new ActionEvent(opl, ActionEvent.ACTION_PERFORMED, bar.isSelected() ? "bar" : "unbar");
+            ausbuchenListener.actionPerformed(e);
+        }
 
         return opl;
     }
 
     public void datachanged() {
         modelNeu.fireTableDataChanged();
-        sumPan.setValGesamtOffen(  calcGesamtOffen(opListe));
+
+        sumPan.setValGesamtOffen(calcGesamtOffen(opListe));
 
     }
 
@@ -309,7 +315,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         Money result = new Money();
         for (int i = 0; i < tab.getRowCount(); i++) {
             Money offen = (Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN);
-            System.out.println(offen);
             if (offen.isMoreThan(Money.ZERO)) {
                 result = result.add(offen);
             }
@@ -342,8 +347,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         };
     }
 
-
-
     private void setzeBezahlBetrag(final int i) {
         geldeingangTf.setText(((Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN)).toPlainString());
     }
@@ -361,13 +364,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         tab.sorter.sort();
     }
 
-    private void adjustColumns() {
-        /* ausgewaehlte Spalten dem Inhalt anpassen */
-        int columns2adjust[] = { 0, 4, 7, 8, 10 }; // Name,Vorname,Geburtstag, Offen, 1.Mahnung, 2.Mahnung, RezeptNr.
-        for (int col : columns2adjust) {
-//            tab.packColumn(col, 5);
-        }
-    }
 
     private class OPListSelectionHandler implements ListSelectionListener {
         @Override
@@ -379,8 +375,9 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
             ListSelectionModel lsm = (ListSelectionModel) e.getSource();
 
             if (!lsm.isSelectionEmpty()) {
-                OffenePosten leadOP = modelNeu.getValue(tab.convertRowIndexToModel(lsm.getLeadSelectionIndex()));;
-                String rez_nr =  leadOP.rezNummer.rezeptNummer();
+                OffenePosten leadOP = modelNeu.getValue(tab.convertRowIndexToModel(lsm.getLeadSelectionIndex()));
+                ;
+                String rez_nr = leadOP.rezNummer.rezeptNummer();
 
                 int pat_intern = leadOP.patid;
                 new SocketClient().setzeRehaNachricht(OpRgaf.rehaReversePort,
@@ -392,8 +389,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
                         setzeBezahlBetrag(i);
                         OffenePosten op = modelNeu.getValue(tab.convertRowIndexToModel(i));
 
-
-                        if (op.type== Type.VR) { // test ob VR -> bar ausbuchen enabled/disabled
+                        if (op.type == Type.VR) { // test ob VR -> bar ausbuchen enabled/disabled
                             if (!iniOpRgAf.getVrCashAllowed()) {
                                 bar.setEnabled(false);
                                 bar.setToolTipText("not allowed for VR (see System-Init)");
@@ -424,15 +420,13 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         }
         if (arg0.getType() == TableModelEvent.UPDATE) {
 
-                int row = arg0.getFirstRow();
+            int row = arg0.getFirstRow();
 
-                OffenePosten op = modelNeu.getValue(row);
-                ActionEvent payment = new ActionEvent(op, ActionEvent.ACTION_PERFORMED, "bezahlen");
-                paymentUpdateListener.actionPerformed(payment);
+            OffenePosten op = modelNeu.getValue(row);
+            ActionEvent payment = new ActionEvent(op, ActionEvent.ACTION_PERFORMED, "bezahlen");
+            paymentUpdateListener.actionPerformed(payment);
         }
     }
-
-
 
     private static void verküpfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
@@ -489,6 +483,11 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
     public void addAusbuchenListener(ActionListener listener) {
         ausbuchenListener = listener;
+
+    }
+
+    public void addTeilzahlenListener(ActionListener listener) {
+        teilzahlenListener = listener;
 
     }
 
