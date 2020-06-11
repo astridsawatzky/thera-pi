@@ -51,7 +51,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
     private JTabbedPane jtb;
 
     private Header jxh = new Header();;
-    OpRgafPanel opRgafPanel;
+    OffenePostenBuchen opRgafPanel;
 
     private OpRgafMahnungen opRgafMahnungen;
 
@@ -65,19 +65,15 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         setLayout(new BorderLayout());
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
+// altes Panel
+//        opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
+//        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
 
-        opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
-        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
 
-        opRgafMahnungen = new OpRgafMahnungen(opRgaf);
-        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
-
-        jtb.addChangeListener(this);
-
-        jtb.addChangeListener(jxh);
 
         OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK,
                 new OffenePostenDTO(opRgaf.aktIK).all());
+        opRgafPanel = offenePostenBuchen;
         ActionListener kopierenListener = e -> {
             List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
             for (OffenePosten offenePosten : opToCopy) {
@@ -125,8 +121,13 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             }
         };
         offenePostenBuchen.addPaymentUpdateListener(paymentListener );
-        jtb.addTab("redo", offenePostenBuchen);
+        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", offenePostenBuchen);
+        opRgafMahnungen = new OpRgafMahnungen(opRgaf);
+        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
 
+        jtb.addChangeListener(this);
+
+        jtb.addChangeListener(jxh);
         add(jxh, BorderLayout.NORTH);
         add(jtb, BorderLayout.CENTER);
 
@@ -361,7 +362,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         try {
             switch (sel) {
             case 0:
-                opRgafPanel.initSelection();
+              //  opRgafPanel.initSelection();
                 break;
             case 1:
                 opRgafMahnungen.initSelection();
