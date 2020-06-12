@@ -1,4 +1,4 @@
-package opRgaf.Berichte;
+package org.therapi.reha.patient.Berichte;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
