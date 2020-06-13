@@ -43,11 +43,11 @@ import systemEinstellungen.SystemConfig;
 public class TherapieBerichte extends JXPanel implements ListSelectionListener, TableModelListener,
         TableColumnModelExtListener, PropertyChangeListener, ActionListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 8769450467144413530L;
     /**
-     * 
+     *
      */
     // private static final long serialVersionUID = 1L;
     // public static TherapieBerichte aktBericht;
@@ -343,8 +343,9 @@ public class TherapieBerichte extends JXPanel implements ListSelectionListener, 
          * //System.out.println("Aufruf aus Fenser Nr. = ---------->"+3);
          * //System.out.println("Tabellenreihe = ------------------>"+row);
          */
+        String xdiag = splitdiag2.length > 0 ? splitdiag2[0]:"";
         ArztBericht ab = new ArztBericht(null, "arztberichterstellen", false, splitrez[2], bid, 3, xverfasser,
-                splitdiag2[0], row);
+                xdiag, row);
         ab.setModal(true);
         ab.setLocationRelativeTo(null);
         ab.setVisible(true);
@@ -442,9 +443,9 @@ public class TherapieBerichte extends JXPanel implements ListSelectionListener, 
     }
 
     /**************
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     @Override
     public void valueChanged(ListSelectionEvent arg0) {
@@ -514,7 +515,7 @@ public class TherapieBerichte extends JXPanel implements ListSelectionListener, 
 
     class MyBerichtTableModel extends DefaultTableModel {
         /**
-        * 
+        *
         */
         private static final long serialVersionUID = 1L;
 
