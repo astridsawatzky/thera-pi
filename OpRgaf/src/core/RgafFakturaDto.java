@@ -129,7 +129,7 @@ public class RgafFakturaDto {
 
             return rgafFakturaListe;
         } catch (SQLException e) {
-            logger.error("could not retrieve Mitarbeiter from Database", e);
+            logger.error("could not retrieve OffenePosten from Database", e);
             return Collections.emptyList();
         }
 
