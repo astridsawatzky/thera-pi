@@ -868,8 +868,7 @@ public class SuchenDialog extends JXDialog implements RehaTPEventListener {
             setCursor(Cursors.wartenCursor);
             Vector<Vector<String>> extErgebnis = null;
 
-            eingabe = jTextField.getText()
-                                .trim();
+            eingabe = jTextField.getText();
             while (eingabe.contains("  ")) {
                 eingabe = eingabe.replace("  ", " ");
             }
