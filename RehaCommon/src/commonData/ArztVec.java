@@ -1,5 +1,6 @@
 package commonData;
 
+import java.util.Optional;
 import java.util.Vector;
 
 import CommonTools.SqlInfo;
@@ -81,10 +82,10 @@ public class ArztVec {
         this.vec_arzt.set(index, Integer.valueOf(data).toString());
     }
     private String getStringAt(int index){
-        return this.vec_arzt.get(index).trim();
+        return Optional.ofNullable(vec_arzt.get(index)).orElse("").trim();
     }
     private void setStringAt(int index, String data) {
-        this.vec_arzt.set(index, data.trim());
+        this.vec_arzt.set(index, Optional.ofNullable(data).orElse("").trim());
     }
 
 
