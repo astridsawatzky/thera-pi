@@ -1,5 +1,6 @@
 package commonData;
 
+import java.util.Optional;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
@@ -51,7 +52,7 @@ public class Rezeptvector {
     }
 
     private boolean getBoolAt(int index) {
-        return this.vec_rezept.get(index)
+        return Optional.ofNullable(vec_rezept.get(index)).orElse("")
                               .trim()
                               .equals("T");
     }
@@ -83,12 +84,12 @@ public class Rezeptvector {
     }
 
     private String getStringAt(int index) {
-        return this.vec_rezept.get(index)
+        return Optional.ofNullable(vec_rezept.get(index)).orElse("")
                               .trim();
     }
 
     private void setStringAt(int index, String data) {
-        this.vec_rezept.set(index, data.trim());
+        this.vec_rezept.set(index, Optional.ofNullable(data).orElse("").trim());
     }
 
     /*
@@ -155,9 +156,9 @@ public class Rezeptvector {
 
     /**
      * Gibt Anzahl der Behandlungen für den angefragten Index zurück.
-     * 
+     *
      * @param index zu ermittelnde Position im Rezept(1..4)
-     * 
+     *
      * @return Anzahl der Behandlungen
      */
     public int getAnzBeh(int index) {
@@ -186,9 +187,9 @@ public class Rezeptvector {
 
     /**
      * Gibt Preislisten-ID der HM-Position des angefragten Index zurück.
-     * 
+     *
      * @param index zu ermittelnde Position im Rezept(1..4)
-     * 
+     *
      * @return ID der verordneten Behandlung in der Preisliste
      */
     public String getArtDBehandl(int index) {
@@ -257,9 +258,9 @@ public class Rezeptvector {
 
     /**
      * Gibt Preis der Behandlung für den angefragten Index zurück.
-     * 
+     *
      * @param index zu ermittelnde Position im Rezept(1..4)
-     * 
+     *
      * @return Preis der Behandlung
      */
     private String getPreis(int index) {
@@ -446,9 +447,9 @@ public class Rezeptvector {
 
     /**
      * Gibt HM-Pos der Behandlung für den angefragten Index zurück.
-     * 
+     *
      * @param index zu ermittelnde Position im Rezept(1..4)
-     * 
+     *
      * @return HM-Pos der Behandlung
      */
     public String getHmPos(int index) {
@@ -538,7 +539,7 @@ public class Rezeptvector {
 
     /**
      * prüft, ob Hausbesuch voll abrechenbar ist.
-     * 
+     *
      * @return Flag; TRUE, wenn Hausbesuch voll abrechenbar ist.
      */
     public boolean getHbVoll() {
@@ -574,9 +575,9 @@ public class Rezeptvector {
 
     /**
      * Gibt HM-Kuerzel für den angefragten Index zurück.
-     * 
+     *
      * @param index zu ermittelnde Position im Rezept(1..4)
-     * 
+     *
      * @return HM-Kuerzel
      */
     public String getHMkurz(int index) {
