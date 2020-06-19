@@ -65,7 +65,7 @@ public class PatientMultiFunctionPanel extends JXPanel {
         patientHauptPanel.multiTab.addTab(patientHauptPanel.tabTitel[2] + " - 0", patientHauptPanel.berichte);
         patientHauptPanel.multiTab.setMnemonicAt(2, KeyEvent.VK_T);
 
-        patientHauptPanel.dokumentation = new Dokumentation();
+        patientHauptPanel.dokumentation = new DokumentationPanel();
         patientHauptPanel.multiTab.addTab(patientHauptPanel.tabTitel[3] + " - 0", patientHauptPanel.dokumentation);
         patientHauptPanel.multiTab.setMnemonicAt(3, KeyEvent.VK_D);
 

@@ -2290,12 +2290,12 @@ public class Reha implements RehaEventListener {
             logger.info("testeVoTableStruc: nix zu tun in Tabelle " + tableName + ".");
         }
     }
-    
+
     static void testeVoTables() {
         testeVoTableStruc ("lza");
         testeVoTableStruc ("verordn");
     }
-    
+
     ActionListener actionListener = new MenuActionListener(this);
 
     public void activateWebCam() {

@@ -121,7 +121,7 @@ import uk.co.mmscomputing.device.twain.TwainIOMetadata;
 import uk.co.mmscomputing.device.twain.TwainImageLayout;
 import uk.co.mmscomputing.device.twain.TwainSource;
 
-public class Dokumentation extends JXPanel
+public class DokumentationPanel extends JXPanel
         implements ActionListener, TableModelListener, PropertyChangeListener, ScannerListener {
     /**
      *
@@ -181,7 +181,7 @@ public class Dokumentation extends JXPanel
     // public JRtaTextField annika = null;
     Scanner scanner;
 
-    public Dokumentation() {
+    public DokumentationPanel() {
         super();
         // doku = this;
         scanaktiv = (SystemConfig.hmDokuScanner.get("aktivieren")
@@ -612,7 +612,7 @@ public class Dokumentation extends JXPanel
 ////////////////////////////
 //////////////////////////// Holt Doku aus der Doku-Datenbank
 ////////////////////////////
-    private Dokumentation getInstance() {
+    private DokumentationPanel getInstance() {
         return this;
     }
 
@@ -2683,10 +2683,10 @@ class OoListener implements IDocumentListener {
     private boolean geaendert = false;
     private boolean neu = false;
     public boolean warschoninsave = false;
-    private Dokumentation eltern;
+    private DokumentationPanel eltern;
     IDocument document;
 
-    public OoListener(IOfficeApplication officeAplication, String xdatei, String xid, Dokumentation xeltern) {
+    public OoListener(IOfficeApplication officeAplication, String xdatei, String xid, DokumentationPanel xeltern) {
         this.officeAplication = officeAplication;
         datei = xdatei;
         geaendert = false;

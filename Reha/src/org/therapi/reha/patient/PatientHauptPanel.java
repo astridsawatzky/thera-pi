@@ -85,7 +85,7 @@ public class PatientHauptPanel extends JXPanel {
     public AktuelleRezepte aktRezept = null;
     public Historie historie = null;
     public TherapieBerichte berichte = null;
-    public Dokumentation dokumentation = null;
+    public DokumentationPanel dokumentation = null;
     public Gutachten gutachten = null;
     public String[] tabTitel = { "aktuelle Rezepte", "Rezept-Historie", "Therapieberichte", "Dokumentation",
             "Gutachten", "Arzt & KK", "Plandaten" };
