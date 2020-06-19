@@ -90,11 +90,6 @@ import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
-import ag.ion.bion.officelayer.application.IOfficeApplication;
-import ag.ion.bion.officelayer.document.IDocument;
-import ag.ion.bion.officelayer.event.IDocumentEvent;
-import ag.ion.bion.officelayer.event.IDocumentListener;
-import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import dialoge.ToolsDialog;
@@ -639,12 +634,12 @@ public class DokumentationPanel extends JXPanel
                                   .endsWith("odt")) {
                             ITextDocument itext = new OOTools().starteWriterMitDatei(xdatei);
                             itext.addDocumentListener(
-                                    new OoListener(Reha.officeapplication, xdatei, xid, getInstance()));
+                                    new ChangeDokumentOoListener(Reha.officeapplication, xdatei, xid, getInstance()));
                         } else if (xdatei.toLowerCase()
                                          .endsWith("ods")) {
                             ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(xdatei);
                             ispread.addDocumentListener(
-                                    new OoListener(Reha.officeapplication, xdatei, xid, getInstance()));
+                                    new ChangeDokumentOoListener(Reha.officeapplication, xdatei, xid, getInstance()));
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();
@@ -2166,14 +2161,14 @@ public class DokumentationPanel extends JXPanel
             boolean neu) throws Exception {
         Statement stmt = null;
         PreparedStatement ps = null;
-        
+
         try {
             stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             String select = "Insert into doku1 set dokuid = ? , datum = ?, dokutitel = ?,"
                     + "benutzer = ?, pat_intern = ?, format = ?," + "dokutext = ?, dokublob = ? , groesse = ? ";
             ps = (PreparedStatement) Reha.instance.conn.prepareStatement(select);
-           
+
             ps.setInt(1, dokuid);
             ps.setString(2, str[0]);
             ps.setString(3, str[1]);
@@ -2224,7 +2219,7 @@ public class DokumentationPanel extends JXPanel
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
                 ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
-                itext.addDocumentListener(new OoListener(Reha.officeapplication, dest, "", this));
+                itext.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
@@ -2236,7 +2231,7 @@ public class DokumentationPanel extends JXPanel
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
                 ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);
-                ispread.addDocumentListener(new OoListener(Reha.officeapplication, dest, "", this));
+                ispread.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2252,7 +2247,7 @@ public class DokumentationPanel extends JXPanel
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
                 ITextDocument itext = new OOTools().starteWriterMitDatei(dest);
                 OOTools.erstzeNurPlatzhalter(itext);
-                itext.addDocumentListener(new OoListener(Reha.officeapplication, dest, "", this));
+                itext.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
             } catch (IOException e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Fehler kann neues WriterDokument nicht erzeugen");
@@ -2266,7 +2261,7 @@ public class DokumentationPanel extends JXPanel
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
                 ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(dest);
-                ispread.addDocumentListener(new OoListener(Reha.officeapplication, dest, "", this));
+                ispread.addDocumentListener(new NewDokumentOOListener(Reha.officeapplication, dest, "", this));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -2671,281 +2666,6 @@ class MyDokuTermTableModel extends DefaultTableModel {
         } else {
             return false;
         }
-    }
-
-}
-
-class OoListener implements IDocumentListener {
-
-    public IOfficeApplication officeAplication = null;
-    private String datei;
-    private String id;
-    private boolean geaendert = false;
-    private boolean neu = false;
-    public boolean warschoninsave = false;
-    private DokumentationPanel eltern;
-    IDocument document;
-
-    public OoListener(IOfficeApplication officeAplication, String xdatei, String xid, DokumentationPanel xeltern) {
-        this.officeAplication = officeAplication;
-        datei = xdatei;
-        geaendert = false;
-        id = xid;
-        eltern = xeltern;
-        if (xid.equals("")) {
-            neu = true;
-        } else {
-            neu = false;
-        }
-    }
-
-    @Override
-    public void onAlphaCharInput(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onFocus(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onInsertDone(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onInsertStart(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onLoad(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onLoadDone(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onLoadFinished(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onModifyChanged(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onMouseOut(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onMouseOver(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onNew(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onNonAlphaCharInput(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onSave(IDocumentEvent arg0) {
-        //// System.out.println("onSave");
-
-    }
-
-    @Override
-    public void onSaveAs(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onSaveAsDone(IDocumentEvent arg0) {
-
-    }
-
-    @Override
-    public void onSaveDone(IDocumentEvent arg0) {
-
-        //// System.out.println("Savedone");
-        IDocument doc = arg0.getDocument();
-        if (doc == null) {
-            return;
-        }
-        String file = arg0.getDocument()
-                          .getPersistenceService()
-                          .getLocation()
-                          .getPath();
-        file = file.substring(1)
-                   .replace("%20", " ");
-        if (datei.equals(file)) {
-            geaendert = true;
-        }
-    }
-
-    private void doUebertragen(String file) {
-
-    }
-
-    @Override
-    public void onSaveFinished(IDocumentEvent arg0) {
-
-        //// System.out.println("SaveFinisched");
-
-    }
-
-    @Override
-    public void onUnload(IDocumentEvent arg0) {
-        try {
-
-            IDocument doc = arg0.getDocument();
-            if (doc == null) {
-                // System.out.println(geaendert+" - "+datei+" - "+neu+" doc = null ");
-                return;
-            }
-
-            String file = arg0.getDocument()
-                              .getPersistenceService()
-                              .getLocation()
-                              .getPath();
-            file = file.substring(1)
-                       .replace("%20", " ");
-            // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
-            if (geaendert && datei.equals(file) && (!neu)) {
-                try {
-                    final String xfile = file;
-                    final int xid = Integer.parseInt(id);
-                    // final IDocumentEvent xarg0 = arg0;
-                    Thread.sleep(50);
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            try {
-                                String nurDatei = datei.substring(datei.replace("\\", "/")
-                                                                       .lastIndexOf("/")
-                                        + 1);
-                                int frage = JOptionPane.showConfirmDialog(null, "Die Dokumentationsdatei --> "
-                                        + nurDatei
-                                        + " <-- wurde geändert\n\nWollen Sie die geänderte Fassung in die Patienten-Dokumentation übernehmen?",
-                                        "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
-                                if (frage == JOptionPane.YES_OPTION) {
-                                    geaendert = false;
-                                    try {
-                                        Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
-                                        eltern.speichernOoDocs(xid, -1, xfile, -1, null, neu);
-                                    } catch (Exception e) {
-
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                            }
-                        }
-                    }.start();
-                    arg0.getDocument()
-                        .removeDocumentListener(this);
-                    warschoninsave = true;
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            } else if (datei.equals(file) && !geaendert) {
-                // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
-                arg0.getDocument()
-                    .removeDocumentListener(this);
-                // System.out.println("Listener entfernt - Datei nicht geändert"+file);
-                warschoninsave = true;
-            } else if (neu) {
-                // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
-                new Thread() {
-                    @Override
-                    public void run() {
-                        String nurDatei = datei.substring(datei.replace("\\", "/")
-                                                               .lastIndexOf("/")
-                                + 1);
-                        int frage = JOptionPane.showConfirmDialog(null, "Die Dokumentationsdatei --> " + nurDatei
-                                + " <-- wurde geändert\n\nWollen Sie die geänderte Fassung in die Patienten-Dokumentation übernehmen?",
-                                "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
-                        if (frage == JOptionPane.YES_OPTION) {
-                            geaendert = false;
-                            try {
-                                Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
-                                int nummer = SqlInfo.erzeugeNummer("doku");
-                                eltern.speichernOoDocs(nummer, -1, datei, -1, null, neu);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-
-                        }
-                    }
-                }.start();
-                arg0.getDocument()
-                    .removeDocumentListener(this);
-            } else {
-                // System.out.println("else");
-                // System.out.println("Datei equals(file) = "+datei.equals(file));
-                // System.out.println("Datei = "+datei);
-                // System.out.println("File = "+file);
-                // System.out.println("geändert = "+geaendert);
-                arg0.getDocument()
-                    .removeDocumentListener(this);
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public void disposing(IEvent arg0) {
-        /*
-         * if(!warschoninsave){ try { IDocument doc = this.document; if(doc == null){
-         * //System.out.println("doc=null"); return; } String file =
-         * doc.getLocationURL().toString().replaceAll("file:/", ""); if(geaendert &&
-         * datei.equals(file)){ final String xfile = file; final int xid =
-         * Integer.parseInt(id);
-         *
-         * Thread.sleep(50); new Thread(){ public void run(){ int frage =
-         * JOptionPane.showConfirmDialog(null, "Die Dokumentationsdatei "
-         * +xfile+" wurde geändert\n\nWollen Sie die geänderte Fassung in die Patienten-Dokumentation übernehmen?"
-         * , "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION); if(frage ==
-         * JOptionPane.YES_OPTION){ geaendert = false; try {
-         * Reha.instance.patpanel.dokumentation.setCursor(Reha.instance.wartenCursor);
-         * Dokumentation.speichernOoDocs(xid, -1, xfile, -1, null, neu); } catch
-         * (Exception e) {
-         *
-         * e.printStackTrace(); }
-         *
-         * }
-         *
-         * //Reha.officeapplication.getDesktopService().removeDocumentListener(this);
-         * //System.out.println("Listener entfernt - Datei geändert "+xfile); }
-         * }.start(); doc.removeDocumentListener(this); }else if(datei.equals(file) &&
-         * !geaendert){ doc.removeDocumentListener(this);
-         * //System.out.println("Listener entfernt - Datei nicht geändert"+file); }
-         * warschoninsave = true;
-         *
-         * } catch (ag.ion.bion.officelayer.document.DocumentException e) {
-         * e.printStackTrace(); } catch (NumberFormatException e) { e.printStackTrace();
-         * } catch (Exception e) { e.printStackTrace(); }
-         *
-         * }else{ //System.out.println("warschoninsave = "+warschoninsave); }
-         */
-
     }
 
 }
