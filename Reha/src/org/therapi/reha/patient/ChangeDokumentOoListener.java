@@ -34,7 +34,7 @@ final class ChangeDokumentOoListener extends OoListener {
             file = file.substring(1)
                        .replace("%20", " ");
             // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
-            if (geaendert && datei.equals(file) ) {
+            if (geaendert) {
                 try {
                     final String xfile = file;
                     final int xid = Integer.parseInt(id);
@@ -73,7 +73,7 @@ final class ChangeDokumentOoListener extends OoListener {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-            } else if (datei.equals(file) && !geaendert) {
+            } else if ( !geaendert) {
                 // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
                 arg0.getDocument()
                     .removeDocumentListener(this);
