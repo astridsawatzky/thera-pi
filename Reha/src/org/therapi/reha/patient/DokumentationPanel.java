@@ -83,6 +83,8 @@ import com.lowagie.text.pdf.PdfCopy;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
 import com.mysql.jdbc.PreparedStatement;
+import com.sun.star.lib.uno.Proxy;
+import com.sun.star.text.XTextDocument;
 
 import CommonTools.Colors;
 import CommonTools.DatFunk;
@@ -90,6 +92,8 @@ import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
+import ag.ion.bion.officelayer.event.IDocumentModifyListener;
+import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import dialoge.ToolsDialog;
@@ -635,6 +639,23 @@ public class DokumentationPanel extends JXPanel
                             ITextDocument itext = new OOTools().starteWriterMitDatei(xdatei);
                             itext.addDocumentListener(
                                     new ChangeDokumentOoListener(Reha.officeapplication, xdatei, xid, getInstance()));
+
+                            itext.addDocumentModifyListener(new IDocumentModifyListener() {
+
+                                @Override
+                                public void disposing(IEvent var1) {
+                                    System.out.println("disposing " + var1);
+
+
+                                }
+
+                                @Override
+                                public void reactOnUnspecificEvent(IEvent var1) {
+                                    System.out.println(var1);
+                                   XTextDocument o = (XTextDocument) (var1.getSourceObject());
+                                   System.out.println(o.getClass());
+                                }
+                            });
                         } else if (xdatei.toLowerCase()
                                          .endsWith("ods")) {
                             ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(xdatei);
