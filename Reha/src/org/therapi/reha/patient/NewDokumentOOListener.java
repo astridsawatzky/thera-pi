@@ -32,7 +32,7 @@ final class NewDokumentOOListener extends OoListener {
                               .getPath();
             file = file.substring(1)
                        .replace("%20", " ");
-            if (datei.equals(file) && !geaendert) {
+            if ( !geaendert) {
                 // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
                 arg0.getDocument()
                     .removeDocumentListener(this);

@@ -640,22 +640,7 @@ public class DokumentationPanel extends JXPanel
                             itext.addDocumentListener(
                                     new ChangeDokumentOoListener(Reha.officeapplication, xdatei, xid, getInstance()));
 
-                            itext.addDocumentModifyListener(new IDocumentModifyListener() {
-
-                                @Override
-                                public void disposing(IEvent var1) {
-                                    System.out.println("disposing " + var1);
-
-
-                                }
-
-                                @Override
-                                public void reactOnUnspecificEvent(IEvent var1) {
-                                    System.out.println(var1);
-                                   XTextDocument o = (XTextDocument) (var1.getSourceObject());
-                                   System.out.println(o.getClass());
-                                }
-                            });
+              
                         } else if (xdatei.toLowerCase()
                                          .endsWith("ods")) {
                             ISpreadsheetDocument ispread = new OOTools().starteCalcMitDatei(xdatei);
