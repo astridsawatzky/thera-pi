@@ -1,40 +1,41 @@
 package CommonTools.ini;
 
-import java.io.File;
 import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.ini4j.Ini;
+import java.util.Arrays;
 
 import CommonTools.SqlInfo;
 
 public class INITool {
-    static List<String> inisInDb = new LinkedList<>();
+    static String[]  dbInis = new String[] { "nix" };
 
-    public static int anzahlInisInDB() {
-        return inisInDb.size();
+    public static void setDBInis(String[] xdbini) {
+        dbInis = xdbini;
+    }
+
+    public static String[] getDBInis() {
+        return dbInis;
     }
 
     public static void init(String pfad) {
         INIFile file = new INIFile(pfad + "inicontrol.ini");
-
         try {
-            Ini inicontrol = new Ini(new File(pfad + "inicontrol.ini"));
             int anzahl = file.getIntegerProperty("INIinDB", "INIAnzahl");
-
-            inisInDb.addAll(inicontrol.get("INIinDB")
-                                      .values());
-            inisInDb.remove(String.valueOf(anzahl));
-             inisInDb.subList(anzahl, inisInDb.size()).clear();;
+            if (anzahl == 0) {
+                dbInis = new String[] { "nix" };
+            } else {
+                dbInis = new String[anzahl];
+                for (int i = 0; i < dbInis.length; i++) {
+                    dbInis[i] = String.valueOf(file.getStringProperty("INIinDB", "DBIni" + Integer.toString(i + 1)));
+                }
+            }
         } catch (Exception ex) {
-            ex.printStackTrace();
+            dbInis = new String[] { "nix" };
         }
     }
 
     /**
-     * Liefert INIFile Objekt mit aktuell verwandter ini, unabhaengig ob die eine
-     * lokale Datei oder in der DB abgelegt ist.
+     * liefert INIFile Objekt mit aktuell verwandter ini, unabhaengig ob die eine
+     * lokale Datei oder in der DB abgelegt ist
      *
      * @param path      Pfad zu lokaler ini
      * @param iniToOpen Name der ini-Datei
@@ -43,7 +44,8 @@ public class INITool {
     public static INIFile openIni(String path, String iniToOpen) {
         INIFile inif = null;
         try {
-            if (inisInDb.contains(iniToOpen)) {
+            if (Arrays.asList(dbInis)
+                      .contains(iniToOpen)) {
                 InputStream stream = SqlInfo.liesIniAusTabelle(iniToOpen);
                 inif = new INIFile(stream, iniToOpen);
             } else {
@@ -56,8 +58,8 @@ public class INITool {
     }
 
     /**
-     * Liefert INIFile Objekt mit lokaler ini-Datei, falls die ini in der DB
-     * abgelegt ist, sonst null.
+     * liefert INIFile Objekt mit lokaler ini-Datei, falls die ini in der DB
+     * abgelegt ist, sonst null
      *
      * @param path      Pfad zu lokaler ini
      * @param iniToOpen Name der ini-Datei
@@ -66,7 +68,8 @@ public class INITool {
     public static INIFile openIniFallback(String path, String iniToOpen) {
         INIFile inif = null;
         try {
-            if (inisInDb.contains(iniToOpen)) {
+            if (Arrays.asList(dbInis)
+                      .contains(iniToOpen)) {
                 inif = new INIFile(path + iniToOpen);
             }
         } catch (Exception ex) {
@@ -75,10 +78,12 @@ public class INITool {
         return inif;
     }
 
+    /************************/
     public static boolean saveIni(INIFile iniToSave) {
         boolean ret = false;
         try {
-            if (inisInDb.contains(iniToSave.getFileName())) {
+            if (Arrays.asList(dbInis)
+                      .contains(iniToSave.getFileName())) {
                 SqlInfo.schreibeIniInTabelle(iniToSave.getFileName(), iniToSave.saveToStringBuffer()
                                                                                .toString()
                                                                                .getBytes());
@@ -93,5 +98,9 @@ public class INITool {
             ex.printStackTrace();
         }
         return ret;
+    }
+
+    public static int anzahlInisInDB() {
+        return dbInis.length;
     }
 }
