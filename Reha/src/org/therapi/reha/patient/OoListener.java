@@ -10,28 +10,25 @@ abstract class OoListener implements IDocumentListener {
 
     public IOfficeApplication officeAplication = null;
     protected String datei;
-    protected String id;
     protected boolean geaendert = false;
-    protected boolean neu = false;
     public boolean warschoninsave = false;
     protected DokumentationPanel eltern;
     IDocument document;
 
-    public OoListener(IOfficeApplication officeAplication, String xdatei, String xid, DokumentationPanel xeltern) {
+
+
+    public OoListener(IOfficeApplication officeAplication, String xdatei, DokumentationPanel xeltern) {
         this.officeAplication = officeAplication;
         datei = xdatei;
         geaendert = false;
-        id = xid;
         eltern = xeltern;
-        if (xid.equals("")) {
-            neu = true;
-        } else {
-            neu = false;
-        }
+
     }
 
     @Override
     public void onAlphaCharInput(IDocumentEvent arg0) {
+
+
 
     }
 
@@ -108,7 +105,7 @@ abstract class OoListener implements IDocumentListener {
 
     @Override
     public void onSaveDone(IDocumentEvent arg0) {
-
+        System.out.println(arg0.getDocument().getInitialProperties());
         //// System.out.println("Savedone");
         IDocument doc = arg0.getDocument();
         if (doc == null) {
