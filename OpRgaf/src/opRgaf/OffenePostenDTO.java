@@ -17,6 +17,7 @@ import opRgaf.OffenePosten.Type;
 import opRgaf.CommonTools.DateTimeFormatters;
 import opRgaf.rezept.Money;
 import opRgaf.rezept.Rezeptnummer;
+import specs.ContractException;
 import sql.DatenquellenFactory;
 
 public class OffenePostenDTO {
@@ -38,7 +39,13 @@ public class OffenePostenDTO {
 
     private OffenePosten ofResultset(ResultSet rs) throws SQLException {
         OffenePosten ret = new OffenePosten();
+        try{
         ret.kennung = new Kennung(rs.getString("kennung"));
+        } catch (ContractException specs) {
+            logger.error("Contract not met", specs);
+            ret.kennung = new Kennung(rs.getString("kennung"), "", null);
+
+        }
         ret.rgNr = rs.getString("rnr");
         ret.isStorniert = ret.rgNr != null && ret.rgNr.toLowerCase()
                                                       .contains("storno");

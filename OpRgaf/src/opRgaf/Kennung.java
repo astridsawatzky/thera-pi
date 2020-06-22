@@ -22,7 +22,7 @@ public class Kennung {
     public Kennung(String aValue) {
         if (aValue != null) {
             String[] values = aValue.split(",");
-            Contracts.require(values.length == 3, "Eingabeformat: Nachname,Vorname,Geburtstag");
+            Contracts.require(values.length == 3, "Eingabeformat: Nachname,Vorname,Geburtstag but got " + aValue);
 
             name = values[0];
             vorname = values[1];
