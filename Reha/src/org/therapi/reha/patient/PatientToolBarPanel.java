@@ -50,11 +50,6 @@ public class PatientToolBarPanel extends JXPanel {
                      .indexOf("Patienten-ID");
     }
 
-    public int getVnNnIdx() {
-        return Arrays.asList(kriterium)
-                     .indexOf("Vorname Nachname");
-    }
-
     public int getTelIdx() {
         return Arrays.asList(kriterium)
                      .indexOf("Telefon");
