@@ -4,53 +4,70 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class Verkauf {
-    private double betrag7 = 0, betrag19 = 0, betragBrutto = 0, rabatt = 0;
+    private static final int mwStVoll = 19;
+    private static final int mwStVermindert = 7;
+    private double summeMwStVermindert = 0;
+    private double summeMwStVoll = 0;
+    private double  betragBrutto = 0;
+    private double  rabatt = 0;
     // private Date datum;
-    private ArrayList<ArtikelVerkauf> artikel;
+    private ArrayList<ArtikelVerkauf> artikelVerkaufList;
     DecimalFormat df = new DecimalFormat("0.00");
 
     public Verkauf() {
-        this.artikel = new ArrayList<ArtikelVerkauf>();
+        this.artikelVerkaufList = new ArrayList<ArtikelVerkauf>();
     }
 
-    public void fügeArtikelHinzu(ArtikelVerkauf position) {
-        this.artikel.add(position);
-        position.setPosition(this.artikel.lastIndexOf(position));
-        this.betragBrutto += position.getAnzahl() * position.getPreis();
-        if (position.getMwst() == 7) {
-            this.betrag7 += (position.getPreis() - (position.getPreis() / 1.07)) * position.getAnzahl();
-        } else if (position.getMwst() == 19) {
-            this.betrag19 += (position.getPreis() - (position.getPreis() / 1.19)) * position.getAnzahl();
-        }
+    public void fuegeArtikelHinzu(ArtikelVerkauf posten) {
+        this.artikelVerkaufList.add(posten);
+        posten.setPosition(this.artikelVerkaufList.lastIndexOf(posten));
+
+        aktualisiereSummen();
+
     }
 
     public void gewaehreRabatt(Double rabatt) {
-        this.betragBrutto = this.betragBrutto / (1 - (this.rabatt / 100));
-        this.betrag7 = this.betrag7 / (1 - (this.rabatt / 100));
-        this.betrag19 = this.betrag19 / (1 - (this.rabatt / 100));
         this.rabatt = rabatt;
+        aktualisiereSummen();
+    }
+
+    private void rabattiereWerte() {
         this.betragBrutto = this.betragBrutto * (1 - (this.rabatt / 100));
-        this.betrag7 = this.betrag7 * (1 - (this.rabatt / 100));
-        this.betrag19 = this.betrag19 * (1 - (this.rabatt / 100));
+        this.summeMwStVermindert = this.summeMwStVermindert * (1 - (this.rabatt / 100));
+        this.summeMwStVoll = this.summeMwStVoll * (1 - (this.rabatt / 100));
     }
 
     public void loescheArtikel(int n) {
-        ArtikelVerkauf position = this.artikel.get(n);
-        this.betragBrutto -= position.getPreis() * position.getAnzahl();
-        if (position.getMwst() == 7) {
-            this.betrag7 -= position.getPreis() * 0.07 * position.getAnzahl();
-        } else if (position.getMwst() == 19) {
-            this.betrag19 -= position.getPreis() * 0.19 * position.getAnzahl();
+
+        this.artikelVerkaufList.remove(n);
+
+        aktualisiereSummen();
+    }
+    private void aktualisiereSummen() {
+        summeMwStVermindert=0;
+        summeMwStVoll=0;
+        betragBrutto=0;
+        for (ArtikelVerkauf artikelVerkauf : artikelVerkaufList) {
+            double gesamtPositionsBrutto = artikelVerkauf.getPreis() * artikelVerkauf.getAnzahl() ;
+            betragBrutto += gesamtPositionsBrutto;
+            if(artikelVerkauf.hatVolleMwSt()) {
+                summeMwStVoll+= gesamtPositionsBrutto * mwStVoll / 100d;
+            } else if (artikelVerkauf.hatVerminderteMwSt()) {
+                summeMwStVermindert += gesamtPositionsBrutto * mwStVermindert /100d;
+            }
+
         }
-        this.artikel.remove(position);
+        rabattiereWerte();
+
     }
 
+
     public double getBetrag7() {
-        return this.betrag7;
+        return this.summeMwStVermindert;
     }
 
     public double getBetrag19() {
-        return this.betrag19;
+        return this.summeMwStVoll;
     }
 
     public double getBetragBrutto() {
@@ -62,12 +79,12 @@ public class Verkauf {
     }
 
     public int getAnzahlPositionen() {
-        return artikel.size();
+        return artikelVerkaufList.size();
     }
 
     public String[][] liefereTabDaten() {
-        ArtikelVerkauf[] positionen = new ArtikelVerkauf[this.artikel.size()];
-        positionen = this.artikel.toArray(positionen);
+        ArtikelVerkauf[] positionen = new ArtikelVerkauf[this.artikelVerkaufList.size()];
+        positionen = this.artikelVerkaufList.toArray(positionen);
         String[][] returns = new String[positionen.length][8];
         for (int i = 0; i < positionen.length; i++) {
             returns[i][0] = String.valueOf(positionen[i].getEan());
@@ -84,20 +101,18 @@ public class Verkauf {
     }
 
     public ArtikelVerkauf[] liefereArtikel() {
-        ArtikelVerkauf[] positionen = new ArtikelVerkauf[this.artikel.size()];
-        positionen = this.artikel.toArray(positionen);
-        return positionen;
+        return  this.artikelVerkaufList.toArray(new ArtikelVerkauf[0]);
     }
 
     public void fuehreVerkaufdurch(int patid, String vnummer) {
-        for (int n = 0; n < artikel.size(); n++) {
-            artikel.get(n)
-                   .verkaufeArtikel(0, vnummer, 0d, patid);
+        for (Artikel artikelVerkauf : artikelVerkaufList) {
+            artikelVerkauf.verkaufeArtikel(0, vnummer, 0d, patid);
         }
+
     }
 
     public ArtikelVerkauf lieferePosition(int i) {
-        ArtikelVerkauf a = this.artikel.get(i);
+        ArtikelVerkauf a = this.artikelVerkaufList.get(i);
         this.loescheArtikel(i);
         return a;
     }

@@ -322,7 +322,7 @@ public class VerkaufGUI extends JXPanel {
                         / Double.parseDouble(edits[1].getText()
                                                      .replace(",", ".")));
 
-                verkauf.fügeArtikelHinzu(aktuellerArtikel);
+                verkauf.fuegeArtikelHinzu(aktuellerArtikel);
                 aktuellerArtikel = null;
 
                 edits[6].setText(df.format(verkauf.getBetragBrutto()));
@@ -500,7 +500,7 @@ public class VerkaufGUI extends JXPanel {
             public void keyReleased(KeyEvent arg0) {
                 if (arg0.getKeyCode() == KeyEvent.VK_F9) {
                     edits[0].requestFocus();
-                    verkauf.fügeArtikelHinzu(aktuellerArtikel);
+                    verkauf.fuegeArtikelHinzu(aktuellerArtikel);
                     aktuellerArtikel = null;
                     setzeFelderzurueck();
                     edits[6].setText(df.format(verkauf.getBetragBrutto()));

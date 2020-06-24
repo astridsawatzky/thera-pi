@@ -162,6 +162,14 @@ public class Artikel {
         this.update();
     }
 
+    protected boolean hatVolleMwSt() {
+        return getMwst() == 19;
+    }
+
+    protected boolean hatVerminderteMwSt() {
+        return getMwst() == 7;
+    }
+
     public static void loescheArtikel(int id) {
         String sql = "DELETE FROM verkartikel WHERE verkartikelID = " + id;
         SqlInfo.sqlAusfuehren(sql);
