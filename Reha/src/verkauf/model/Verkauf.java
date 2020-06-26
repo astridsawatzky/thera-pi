@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import verkauf.MwSTSatz;
 
 public class Verkauf {
-    private static final MwSTSatz frist = MwSTSatz.now();
+    private static final MwSTSatz satz = MwSTSatz.now();
     private double summeMwStVermindert = 0;
     private double summeMwStVoll = 0;
     private double  betragBrutto = 0;
@@ -52,9 +52,9 @@ public class Verkauf {
             double gesamtPositionsBrutto = artikelVerkauf.getPreis() * artikelVerkauf.getAnzahl() ;
             betragBrutto += gesamtPositionsBrutto;
             if(artikelVerkauf.hatVolleMwSt()) {
-                summeMwStVoll+= gesamtPositionsBrutto * frist.vollerSatz() / 100d;
+                summeMwStVoll+= gesamtPositionsBrutto * satz.vollerSatz() / 100d;
             } else if (artikelVerkauf.hatVerminderteMwSt()) {
-                summeMwStVermindert += gesamtPositionsBrutto * frist.verminderterSatz() /100d;
+                summeMwStVermindert += gesamtPositionsBrutto * satz.verminderterSatz() /100d;
             }
 
         }
@@ -94,7 +94,7 @@ public class Verkauf {
             returns[i][3] = df.format(positionen[i].getAnzahl());
             returns[i][4] = df.format(positionen[i].getRabatt());
             returns[i][5] = df.format(positionen[i].getPreis() * positionen[i].getAnzahl());
-            returns[i][6] = df.format(positionen[i].getMwst());
+            returns[i][6] = df.format(positionen[i].hatVolleMwSt()?satz.vollerSatz():satz.verminderterSatz());
             returns[i][7] = String.valueOf(positionen[i].getPosition());
         }
 

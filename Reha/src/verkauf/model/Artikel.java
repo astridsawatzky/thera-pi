@@ -95,6 +95,7 @@ public class Artikel {
     }
 
     public double getMwst() {
+
         return mwst;
     }
 
@@ -162,7 +163,7 @@ public class Artikel {
         this.update();
     }
 
-    protected boolean hatVolleMwSt() {
+    public boolean hatVolleMwSt() {
         return getMwst() == 19;
     }
 

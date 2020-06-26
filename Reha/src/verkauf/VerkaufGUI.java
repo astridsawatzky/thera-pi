@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -102,7 +101,7 @@ public class VerkaufGUI extends JXPanel {
 
     private Logger logger = LoggerFactory.getLogger(VerkaufGUI.class);
 
-    private MwSTSatz mwstFrist = MwSTSatz.now();
+    private MwSTSatz satz = MwSTSatz.now();
 
     public VerkaufGUI(VerkaufTab owner) {
         super();
@@ -256,11 +255,11 @@ public class VerkaufGUI extends JXPanel {
        JLabel summeLbl = new JLabel("Summe:");
         pan.add(summeLbl, cc.xy(12, 8));
         JLabel MwStVermindert = new JLabel("MwSt. "
-                + mwstFrist.verminderterSatz()
+                + satz.verminderterSatz()
                 + "%:");
         pan.add(MwStVermindert, cc.xy(12, 10));
         JLabel MwStVoll = new JLabel("MwSt. "
-                + mwstFrist.vollerSatz()
+                + satz.vollerSatz()
                 + "%");
         pan.add(MwStVoll, cc.xy(12, 12));
 
@@ -946,7 +945,7 @@ public class VerkaufGUI extends JXPanel {
                     tabelle.getCell(m, n + 1)
                            .getTextService()
                            .getText()
-                           .setText(new DecimalFormat("0").format(positionen[n].getMwst()));
+                           .setText(new DecimalFormat("0").format(positionen[n].hatVolleMwSt()?satz.vollerSatz():satz.verminderterSatz()));
                 } else if (spaltenname.equals("Anzahl")) {
                     tabelle.getCell(m, n + 1)
                            .getTextService()
