@@ -76,12 +76,15 @@ public class VerkaufGUI extends JXPanel {
     JRtaTextField[] edits = { null, null, null, null, null, null, null, null, null };
     JRtaRadioButton[] rbuts = { null, null, null };
     ButtonGroup group = new ButtonGroup();
-    JButton[] buts = { null, null, null, null, null, null }; // neu, Bar, Rechnung, delete, edit, Formulare
+    /** neu, Bar, Rechnung, delete, edit, Formulare**/
+    JButton[] buts = { null, null, null, null, null, null };
     public JXTable vktab = null;
     public DefaultTableModel vkmod = new DefaultTableModel();
     JScrollPane jscr = null;
     int lastcol = 7;
     JLabel einheitAnzahlLabel = null;
+    /** 0="Artikel-ID", 1="Beschreibung", 2="Einzel-Preis", 3="Anzahl", 4="Rabatt",
+     5="Gesamt-Preis", 6="MwSt.", 7="id" **/
     String[] column = { "Artikel-ID", "Beschreibung", "Einzel-Preis", "Anzahl", "Rabatt", "Gesamt-Preis", "MwSt.", "" };
 
     ArtikelVerkauf aktuellerArtikel = null;
@@ -142,7 +145,6 @@ public class VerkaufGUI extends JXPanel {
     private JXPanel getContent1() {
         JXPanel pan = new JXPanel();
         pan.setOpaque(false);
-        JLabel lab = null;
         /**************/
         // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17
         String xwerte = "5dlu, 55dlu, 5dlu, 55dlu, 5dlu, 55dlu, 5dlu, 55dlu:g, 5dlu, 55dlu, 5dlu, 55dlu, 5dlu, 78dlu, 5dlu";
@@ -153,18 +155,16 @@ public class VerkaufGUI extends JXPanel {
         pan.setLayout(lay);
 
         /****** Legende ********/
-        lab = new JLabel("Artikel-ID");
-        lab.setIcon(SystemConfig.hmSysIcons.get("kleinehilfe"));
-        lab.addMouseListener(this.owner.ml);
-        pan.add(lab, cc.xy(2, 2));
-        lab = new JLabel("Beschreibung");
-        pan.add(lab, cc.xyw(8, 2, 3));
+        JLabel artikelidLbl = new JLabel("Artikel-ID");
+        artikelidLbl.setIcon(SystemConfig.hmSysIcons.get("kleinehilfe"));
+        artikelidLbl.addMouseListener(this.owner.ml);
+        pan.add(artikelidLbl, cc.xy(2, 2));
+        pan.add(new JLabel("Beschreibung"), cc.xyw(8, 2, 3));
         einheitAnzahlLabel = new JLabel("Anzahl / Einheit");
         pan.add(einheitAnzahlLabel, cc.xy(4, 2));
-        lab = new JLabel("Gesamtpreis");
-        pan.add(lab, cc.xy(12, 2));
-        lab = new JLabel("Rabatt");
-        pan.add(lab, cc.xy(6, 2));
+        pan.add(new JLabel("Gesamtpreis"), cc.xy(12, 2));
+        JLabel rabatt = new JLabel("Rabatt");
+        pan.add(rabatt, cc.xy(6, 2));
 
         /****** Edits und 2 Button ********/
         pan.add((edits[0] = new JRtaTextField("nix", true)), cc.xy(2, 4));
@@ -249,12 +249,12 @@ public class VerkaufGUI extends JXPanel {
         pan.add(jscr, cc.xyw(2, 6, 13, CellConstraints.FILL, CellConstraints.FILL));
 
         /****** Summe / Steuer / Rabatt ********/
-        lab = new JLabel("Summe:");
-        pan.add(lab, cc.xy(12, 8));
-        lab = new JLabel("MwSt. 7%:");
-        pan.add(lab, cc.xy(12, 10));
-        lab = new JLabel("MwSt. 19%");
-        pan.add(lab, cc.xy(12, 12));
+       JLabel summeLbl = new JLabel("Summe:");
+        pan.add(summeLbl, cc.xy(12, 8));
+        JLabel MwStVermindert = new JLabel("MwSt. 7%:");
+        pan.add(MwStVermindert, cc.xy(12, 10));
+        JLabel MwStVoll = new JLabel("MwSt. 19%");
+        pan.add(MwStVoll, cc.xy(12, 12));
 
         pan.add((edits[6] = new JRtaTextField("FL", true, "6.2", "RECHTS")), cc.xy(14, 8));
         edits[6].setEditable(false);
@@ -299,8 +299,8 @@ public class VerkaufGUI extends JXPanel {
         buts[5].setBorderPainted(false);
         buts[3].setMnemonic(KeyEvent.VK_F);
 
-        lab = new JLabel("              Vorlage:");
-        pan.add(lab, cc.xy(8, 10));
+        MwStVoll = new JLabel("              Vorlage:");
+        pan.add(MwStVoll, cc.xy(8, 10));
         selectStandardForm();
         pan.add(custFormName, cc.xyw(9, 10, 2));
 
