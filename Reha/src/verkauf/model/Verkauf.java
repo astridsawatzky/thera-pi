@@ -3,9 +3,10 @@ package verkauf.model;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import verkauf.MwSTSatz;
+
 public class Verkauf {
-    private static final int mwStVoll = 19;
-    private static final int mwStVermindert = 7;
+    private static final MwSTSatz frist = MwSTSatz.now();
     private double summeMwStVermindert = 0;
     private double summeMwStVoll = 0;
     private double  betragBrutto = 0;
@@ -51,9 +52,9 @@ public class Verkauf {
             double gesamtPositionsBrutto = artikelVerkauf.getPreis() * artikelVerkauf.getAnzahl() ;
             betragBrutto += gesamtPositionsBrutto;
             if(artikelVerkauf.hatVolleMwSt()) {
-                summeMwStVoll+= gesamtPositionsBrutto * mwStVoll / 100d;
+                summeMwStVoll+= gesamtPositionsBrutto * frist.vollerSatz() / 100d;
             } else if (artikelVerkauf.hatVerminderteMwSt()) {
-                summeMwStVermindert += gesamtPositionsBrutto * mwStVermindert /100d;
+                summeMwStVermindert += gesamtPositionsBrutto * frist.verminderterSatz() /100d;
             }
 
         }

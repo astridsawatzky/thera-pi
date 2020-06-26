@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -101,8 +102,11 @@ public class VerkaufGUI extends JXPanel {
 
     private Logger logger = LoggerFactory.getLogger(VerkaufGUI.class);
 
+    private MwSTSatz mwstFrist = MwSTSatz.now();
+
     public VerkaufGUI(VerkaufTab owner) {
         super();
+
         this.owner = owner;
         this.activateListener();
         this.setLayout(new BorderLayout());
@@ -251,9 +255,13 @@ public class VerkaufGUI extends JXPanel {
         /****** Summe / Steuer / Rabatt ********/
        JLabel summeLbl = new JLabel("Summe:");
         pan.add(summeLbl, cc.xy(12, 8));
-        JLabel MwStVermindert = new JLabel("MwSt. 7%:");
+        JLabel MwStVermindert = new JLabel("MwSt. "
+                + mwstFrist.verminderterSatz()
+                + "%:");
         pan.add(MwStVermindert, cc.xy(12, 10));
-        JLabel MwStVoll = new JLabel("MwSt. 19%");
+        JLabel MwStVoll = new JLabel("MwSt. "
+                + mwstFrist.vollerSatz()
+                + "%");
         pan.add(MwStVoll, cc.xy(12, 12));
 
         pan.add((edits[6] = new JRtaTextField("FL", true, "6.2", "RECHTS")), cc.xy(14, 8));
