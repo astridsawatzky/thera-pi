@@ -14,6 +14,10 @@ public class Artikel {
     public int lieferantenID, id;
     private String beschreibung, einheit, ean;
 
+    //@VisibleForTesting
+     Artikel() {
+    }
+
     public Artikel(String ean, String beschreibung, String einheit, double preis, double mwst, double lagerstand,
             double ek, int lieferantenID) {
         this.preis = preis;
@@ -117,7 +121,18 @@ public class Artikel {
     }
 
     public void setMwst(double mwst) {
-        this.mwst = mwst;
+        //XXX: ugly
+        int value = (int) mwst;
+        switch(value) {
+        case 16:
+            value=19;
+            break;
+        case 5:
+            value= 7;
+            break;
+        }
+
+        this.mwst = value;
         this.update();
     }
 
