@@ -945,7 +945,7 @@ public class VerkaufGUI extends JXPanel {
                     tabelle.getCell(m, n + 1)
                            .getTextService()
                            .getText()
-                           .setText(new DecimalFormat("0").format(positionen[n].hatVolleMwSt()?satz.vollerSatz():satz.verminderterSatz()));
+                           .setText( MwSTSatz.now( positionen[n].getMwst())+"");
                 } else if (spaltenname.equals("Anzahl")) {
                     tabelle.getCell(m, n + 1)
                            .getTextService()
@@ -973,10 +973,10 @@ public class VerkaufGUI extends JXPanel {
                            .setText(df.format(positionen[n].getRabatt()));
                 } else if (spaltenname.equals("Bemerkung")) {
                     String inhalt = "";
-                    if (positionen[n].getMwst() == 7) {
+                    if (positionen[n].getMwst() == MwSt.vermindert) {
                         inhalt += "+ ";
                     }
-                    if (positionen[n].getMwst() == 19) {
+                    if (positionen[n].getMwst() == MwSt.voll) {
                         inhalt += "* ";
                     }
                     if (positionen[n].getRabatt() != 0) {
@@ -991,7 +991,7 @@ public class VerkaufGUI extends JXPanel {
                     tabelle.getCell(m, n + 1)
                            .getTextService()
                            .getText()
-                           .setText(df.format(positionen[n].getPreis() / (1 + (positionen[n].getMwst()))) + " €");
+                           .setText(df.format(positionen[n].getPreis() / (1 + (MwSTSatz.now( positionen[n].getMwst())))) + " €");
                 }
             }
         }

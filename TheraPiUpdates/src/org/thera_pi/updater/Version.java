@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Version implements Comparable<Version> {
 
-    public static final String aktuelleVersion = "2020-05-20-DB=";
+    public static final String aktuelleVersion = "2020-06-27-DB=";
     public final int major;
     public final int minor;
     public final int revision;
@@ -13,7 +13,7 @@ public class Version implements Comparable<Version> {
     public Version() {
         major = 1;
         minor = 1;
-        revision = 6;
+        revision = 7;
     }
 
     Version(int major, int minor, int revision) {

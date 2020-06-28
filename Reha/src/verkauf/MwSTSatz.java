@@ -18,7 +18,6 @@ public class MwSTSatz {
 
     }
 
-
     public static MwSTSatz now() {
         return of(LocalDate.now());
 
@@ -62,6 +61,22 @@ public class MwSTSatz {
         }
         throw new RuntimeException("Das kann nicht passieren");
 
+    }
+
+    public static int now(MwSt satz) {
+        switch (satz) {
+        case frei:
+            return 0;
+        case vermindert:
+            return now().verminderterSatz();
+        case voll:
+            return now().vollerSatz();
+        default:
+            // make compiler happy, this should never happen
+            LOGGER.error("MwSt unknown " + satz);
+            return -1;
+
+        }
     }
 
 }

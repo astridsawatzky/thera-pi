@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import verkauf.MwSTSatz;
+import verkauf.MwSt;
 
 public class Verkauf {
     private static final MwSTSatz satz = MwSTSatz.now();
@@ -51,9 +52,9 @@ public class Verkauf {
         for (ArtikelVerkauf artikelVerkauf : artikelVerkaufList) {
             double gesamtPositionsBrutto = artikelVerkauf.getPreis() * artikelVerkauf.getAnzahl() ;
             betragBrutto += gesamtPositionsBrutto;
-            if(artikelVerkauf.hatVolleMwSt()) {
+            if(artikelVerkauf.getMwst() == MwSt.voll) {
                 summeMwStVoll+= gesamtPositionsBrutto * satz.vollerSatz() / 100d;
-            } else if (artikelVerkauf.hatVerminderteMwSt()) {
+            } else if (artikelVerkauf.getMwst() == MwSt.vermindert) {
                 summeMwStVermindert += gesamtPositionsBrutto * satz.verminderterSatz() /100d;
             }
 
@@ -94,7 +95,7 @@ public class Verkauf {
             returns[i][3] = df.format(positionen[i].getAnzahl());
             returns[i][4] = df.format(positionen[i].getRabatt());
             returns[i][5] = df.format(positionen[i].getPreis() * positionen[i].getAnzahl());
-            returns[i][6] = df.format(positionen[i].hatVolleMwSt()?satz.vollerSatz():satz.verminderterSatz());
+            returns[i][6] = df.format( MwSTSatz.now( positionen[i].getMwst()) );
             returns[i][7] = String.valueOf(positionen[i].getPosition());
         }
 
