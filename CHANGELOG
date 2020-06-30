@@ -6,6 +6,28 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 ## unveröffentlicht
+
+### added
+- Grossstelltastenwarnung beim Login #392
+- log Programm- und Javaversion on Startup #403
+- Geburtsdatumcheck bei Patientenanlage #27
+
+### changed
+- Aufnahme der Versionsnummer in die untere linke Ecke #410
+
+### fixed
+- VerkaufstabellenUpdate wird auch durchgeführt #273
+- Variablenbelegung bei Taxierung #407
+- HMR Check Auswertung max pro Fall Korrigiert #406
+- OP Mahndatum lässt sich nicht löschen fixes #350
+- Tausender Trennzeichen in Offene Posten / Mahnwesen #387
+- OP-RGR-AFR-VR läßt sich in 1.1.4 und 1.1.5 nicht starten #358
+
+
+## [1.1.7] - 2020-06-28
+### added 
+- Mehrwertsteueranpassung aufgrund von Corona in Verkaufsmodul
+
 ## [1.1.6] - 2020-05-20
 ### added
 - Hygienepauschale in Rezept aufgenommen #383
