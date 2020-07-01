@@ -53,14 +53,19 @@ public class Verkauf {
             double gesamtPositionsBrutto = artikelVerkauf.getPreis() * artikelVerkauf.getAnzahl() ;
             betragBrutto += gesamtPositionsBrutto;
             if(artikelVerkauf.getMwst() == MwSt.voll) {
-                summeMwStVoll+= gesamtPositionsBrutto * satz.vollerSatz() / 100d;
+                summeMwStVoll+= enthalteneMwSt(gesamtPositionsBrutto, satz.vollerSatz());
             } else if (artikelVerkauf.getMwst() == MwSt.vermindert) {
-                summeMwStVermindert += gesamtPositionsBrutto * satz.verminderterSatz() /100d;
+                summeMwStVermindert += enthalteneMwSt(gesamtPositionsBrutto ,satz.verminderterSatz());
             }
 
         }
         rabattiereWerte();
 
+    }
+
+     double enthalteneMwSt(double gesamtPositionsBrutto, int prozentSatz) {
+
+        return gesamtPositionsBrutto *prozentSatz/(100+    prozentSatz);
     }
 
 
