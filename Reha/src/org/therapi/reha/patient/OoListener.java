@@ -105,8 +105,6 @@ abstract class OoListener implements IDocumentListener {
 
     @Override
     public void onSaveDone(IDocumentEvent arg0) {
-        System.out.println(arg0.getDocument().getInitialProperties());
-        //// System.out.println("Savedone");
         IDocument doc = arg0.getDocument();
         if (doc == null) {
             return;
@@ -117,9 +115,8 @@ abstract class OoListener implements IDocumentListener {
                           .getPath();
         file = file.substring(1)
                    .replace("%20", " ");
-        if (datei.equals(file)) {
+
             geaendert = true;
-        }
     }
 
     private void doUebertragen(String file) {

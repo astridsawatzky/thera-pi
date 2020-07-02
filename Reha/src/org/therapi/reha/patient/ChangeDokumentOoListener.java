@@ -33,7 +33,6 @@ final class ChangeDokumentOoListener extends OoListener {
                               .getPath();
             file = file.substring(1)
                        .replace("%20", " ");
-            // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
             if (geaendert) {
                 try {
                     final String xfile = file;
