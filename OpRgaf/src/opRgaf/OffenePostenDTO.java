@@ -95,7 +95,7 @@ public class OffenePostenDTO {
         }
     }
 
-    public List<OffenePosten> all() {
+    public List<OffenePosten> all() throws SQLException {
 
         List<OffenePosten> rgafFakturaListe = new LinkedList<OffenePosten>();
         try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();) {
@@ -108,9 +108,6 @@ public class OffenePostenDTO {
             }
 
             return rgafFakturaListe;
-        } catch (SQLException e) {
-            logger.error("could not retrieve OffenePosten from Database", e);
-            return Collections.emptyList();
         }
 
     }

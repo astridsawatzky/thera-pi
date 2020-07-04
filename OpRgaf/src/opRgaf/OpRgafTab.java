@@ -3,8 +3,10 @@ package opRgaf;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -71,8 +73,15 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
 
 
+        List<OffenePosten> all;
+        try {
+            all = new OffenePostenDTO(opRgaf.aktIK).all();
+        } catch (SQLException e1) {
+           all = Collections.emptyList();
+            JOptionPane.showMessageDialog(this, "Fehler beim Bezug der offenen Posten", "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
+        }
         OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK,
-                new OffenePostenDTO(opRgaf.aktIK).all());
+                all);
         opRgafPanel = offenePostenBuchen;
         ActionListener kopierenListener = e -> {
             List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
