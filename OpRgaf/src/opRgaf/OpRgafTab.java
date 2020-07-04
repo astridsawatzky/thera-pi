@@ -78,7 +78,8 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             all = new OffenePostenDTO(opRgaf.aktIK).all();
         } catch (SQLException e1) {
            all = Collections.emptyList();
-            JOptionPane.showMessageDialog(this, "Fehler beim Bezug der offenen Posten", "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
+           logger.error("bezug der offenen posten",e1.getErrorCode());
+            JOptionPane.showMessageDialog(this, "Fehler beim Bezug der offenen Posten\n" + e1.getMessage(), "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
         }
         OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK,
                 all);

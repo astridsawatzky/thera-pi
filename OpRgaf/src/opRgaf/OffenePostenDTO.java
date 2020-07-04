@@ -1,10 +1,11 @@
 package opRgaf;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collections;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -50,8 +51,16 @@ public class OffenePostenDTO {
         ret.isStorniert = ret.rgNr != null && ret.rgNr.toLowerCase()
                                                       .contains("storno");
         ret.type = selectType(rs.getString("rnr"));
-        ret.rgDatum = rs.getDate("rDatum")
-                        .toLocalDate();
+
+
+        LocalDate rdatum;
+        try {
+            rdatum = Date.valueOf(rs.getString("rDatum"))
+            .toLocalDate();
+        } catch (SQLException e) {
+            rdatum = null;
+        }
+        ret.rgDatum =  rdatum;
         ret.gesamtBetrag = Optional.ofNullable(rs.getString("rgesamt"))
                                    .map(Money::new)
                                    .orElse(new Money());

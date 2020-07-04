@@ -3,6 +3,7 @@ package opRgaf;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import mandant.IK;
 
 public class Gui {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         JFrame frame = new JFrame();
 
@@ -34,7 +35,7 @@ public class Gui {
         OffenePostenComboBox opComboBox = new OffenePostenComboBox();
 
 
-        verküpfen(opJTable, eingabeFeld, opComboBox);
+        verknuepfen(opJTable, eingabeFeld, opComboBox);
         frame.getContentPane()
              .add(opComboBox, BorderLayout.NORTH);
         frame.getContentPane()
@@ -54,7 +55,7 @@ public class Gui {
         opComboBox.setSelectedIndex(1);
     }
 
-    private static void verküpfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
+    private static void verknuepfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
         opComboBox.addItemListener(new ItemListener() {
 
