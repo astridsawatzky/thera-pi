@@ -56,7 +56,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.looks.windows.WindowsTabbedPaneUI;
 import com.mysql.jdbc.PreparedStatement;
-import com.sun.media.ui.MessageBox;
 
 import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
@@ -1418,7 +1417,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
                     if(inhalt.replace(".","").isEmpty()) {
 
                     } else {
-                        if (!textField.getValue().equals(inhalt)) {
+                        if (!inhalt.equals(textField.getValue())) {
 
                             LocalDate birthday = LocalDate.parse(inhalt,DateTimeFormatter.ofPattern("dd.MM.yyyy"));
                             long age = ChronoUnit.YEARS.between(birthday, LocalDate.now());
