@@ -5,6 +5,11 @@ public class ArtikelVerkauf extends Artikel {
     int position;
     double preis, rabatt = 0, anzahl = 1;
     String beschreibung;
+    //@VisibleForTesting
+    public ArtikelVerkauf() {
+    }
+
+
 
     public ArtikelVerkauf(String ean) {
         super(ean);

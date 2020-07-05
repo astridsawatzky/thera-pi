@@ -23,7 +23,6 @@ final class ChangeDokumentOoListener extends OoListener {
 
             IDocument doc = arg0.getDocument();
             if (doc == null) {
-                // System.out.println(geaendert+" - "+datei+" - "+neu+" doc = null ");
                 return;
             }
 
@@ -33,12 +32,11 @@ final class ChangeDokumentOoListener extends OoListener {
                               .getPath();
             file = file.substring(1)
                        .replace("%20", " ");
+
             if (geaendert) {
                 try {
                     final String xfile = file;
                     final int xid = Integer.parseInt(id);
-                    // final IDocumentEvent xarg0 = arg0;
-                    Thread.sleep(50);
                     new Thread() {
                         @Override
                         public void run() {
@@ -73,17 +71,10 @@ final class ChangeDokumentOoListener extends OoListener {
                     ex.printStackTrace();
                 }
             } else if ( !geaendert) {
-                // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
                 arg0.getDocument()
                     .removeDocumentListener(this);
-                // System.out.println("Listener entfernt - Datei nicht geändert"+file);
                 warschoninsave = true;
             } else {
-                // System.out.println("else");
-                // System.out.println("Datei equals(file) = "+datei.equals(file));
-                // System.out.println("Datei = "+datei);
-                // System.out.println("File = "+file);
-                // System.out.println("geändert = "+geaendert);
                 arg0.getDocument()
                     .removeDocumentListener(this);
             }

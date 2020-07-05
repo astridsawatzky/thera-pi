@@ -6,6 +6,7 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 ## unveröffentlicht
+
 ### added
 - Grossstelltastenwarnung beim Login #392
 - log Programm- und Javaversion on Startup #403
@@ -22,10 +23,13 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - Tausender Trennzeichen in Offene Posten / Mahnwesen #387
 - OP-RGR-AFR-VR läßt sich in 1.1.4 und 1.1.5 nicht starten #358
 
+## [1.1.8] - 2020-07-01
+### fixed
+- Mehrwertsteuerberechnung in Verkaufsmodul fehlerhaft
+
 ## [1.1.7] - 2020-06-28
 ### added 
 - Mehrwertsteueranpassung aufgrund von Corona in Verkaufsmodul
-
 
 ## [1.1.6] - 2020-05-20
 ### added

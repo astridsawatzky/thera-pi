@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Formatter;
+import java.util.Locale;
 
 import javax.swing.JComboBox;
 import javax.swing.SwingUtilities;
@@ -37,9 +40,15 @@ public class ArtikelDialog extends RehaSmartDialog {
 
     private JXButton speichern = new JXButton("speichern");
 
-    private JRtaTextField textArtikelID, textBeschreibung, textPreis, textEinkaufspreis, textLagerstand;
+    private JRtaTextField textArtikelID;
+    private JRtaTextField textBeschreibung;
+    private JRtaTextField  textPreis;
+    private JRtaTextField  textEinkaufspreis;
+    private JRtaTextField  textLagerstand;
 
-    private JComboBox comboLieferant, comboEinheit, comboMwst;
+    private JComboBox comboLieferant;
+    private JComboBox comboEinheit;
+    private JComboBox comboMwst;
 
     private ActionListener al;
 
@@ -51,7 +60,8 @@ public class ArtikelDialog extends RehaSmartDialog {
 
     private Artikel artikel;
 
-    private String[] mwstSaetze = { "0,00", "7,00", "19,00" };
+    MwSTSatz satz = MwSTSatz.now();
+   private String[] mwstSaetze = { "0,00",satz.verminderterSatz() +",00",  satz.vollerSatz() +",00" };
 
     INIFile inif;
 
@@ -292,7 +302,7 @@ public class ArtikelDialog extends RehaSmartDialog {
         }
         this.comboEinheit.setSelectedItem(this.artikel.getEinheit());
         // System.out.println("MWST = "+this.artikel.getMwst());
-        this.comboMwst.setSelectedItem(df.format(this.artikel.getMwst()));
+        this.comboMwst.setSelectedItem(df.format(MwSTSatz.now( artikel.getMwst())));
 
     }
 

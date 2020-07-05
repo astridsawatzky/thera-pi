@@ -5,20 +5,29 @@ import java.util.Vector;
 
 import CommonTools.SqlInfo;
 import hauptFenster.Reha;
+import verkauf.MwSTSatz;
+import verkauf.MwSt;
 
 public class Artikel {
     private double preis;
-    private double mwst;
     private double einkaufspreis;
     private double lagerstand;
     public int lieferantenID, id;
     private String beschreibung, einheit, ean;
 
+    private MwSt myMwSt;
+
+    //@VisibleForTesting
+     Artikel() {
+    }
+
     public Artikel(String ean, String beschreibung, String einheit, double preis, double mwst, double lagerstand,
             double ek, int lieferantenID) {
         this.preis = preis;
         this.einheit = einheit;
-        this.mwst = mwst;
+        myMwSt = MwSt.of(mwst);
+
+        setMwst( mwst);
         this.lagerstand = lagerstand;
         this.ean = ean;
         this.beschreibung = beschreibung;
@@ -27,7 +36,7 @@ public class Artikel {
 
         SqlInfo.sqlAusfuehren(
                 "INSERT INTO verkartikel (ean, beschreibung, preis, mwst, lagerstand, einheit, verklieferantID, einkaufspreis) "
-                        + "VALUES('" + this.ean + "', '" + this.beschreibung + "', '" + this.preis + "', '" + this.mwst
+                        + "VALUES('" + this.ean + "', '" + this.beschreibung + "', '" + this.preis + "', '" + this.myMwSt.convertToDB()
                         + "', '" + this.lagerstand + "', '" + this.einheit + "', '" + this.lieferantenID + "', '"
                         + this.einkaufspreis + "'  );");
     }
@@ -43,7 +52,7 @@ public class Artikel {
         if (!datensatz.isEmpty()) {
             this.beschreibung = datensatz.get(0);
             this.preis = Double.parseDouble(datensatz.get(1));
-            this.mwst = Double.parseDouble(datensatz.get(2));
+            this.myMwSt = MwSt.of(Double.parseDouble(datensatz.get(2)));
             this.lagerstand = Double.parseDouble(datensatz.get(3));
             this.einheit = datensatz.get(4);
             this.einkaufspreis = Double.parseDouble(datensatz.get(5));
@@ -63,7 +72,7 @@ public class Artikel {
         if (!datensatz.isEmpty()) {
             this.beschreibung = datensatz.get(0);
             this.preis = Double.parseDouble(datensatz.get(1));
-            this.mwst = Double.parseDouble(datensatz.get(2));
+            this.myMwSt = MwSt.of( Double.parseDouble(datensatz.get(2)));
             this.lagerstand = Double.parseDouble(datensatz.get(3));
             this.einheit = datensatz.get(4);
             this.einkaufspreis = Double.parseDouble(datensatz.get(5));
@@ -77,13 +86,13 @@ public class Artikel {
         this.update();
         String sql = "INSERT INTO verkfaktura (verkfakturaID, v_nummer, art_id, art_beschreibung, art_einzelpreis, art_mwst, anzahl, pat_id, ik) "
                 + "VALUES (NULL, '" + vnummer + "', '" + this.id + "', '" + this.getBeschreibung() + "', '" + vpreis
-                + "', '" + this.mwst + "', '" + anzahl + "', '" + patid + "', '" + Reha.getAktIK() + "')";
+                + "', '" + MwSTSatz.now( this.myMwSt)+ "', '" + anzahl + "', '" + patid + "', '" + Reha.getAktIK() + "')";
         SqlInfo.sqlAusfuehren(sql);
     }
 
     void update() {
         String sql = "UPDATE verkartikel SET beschreibung = '" + this.beschreibung + "', preis = '" + this.preis + "',"
-                + "mwst = '" + this.mwst + "' , lagerstand = '" + this.lagerstand + "', einkaufspreis = '"
+                + "mwst = '" + this.myMwSt.convertToDB() + "' , lagerstand = '" + this.lagerstand + "', einkaufspreis = '"
                 + this.einkaufspreis + "'" + ", verklieferantID = '" + this.lieferantenID + "', ean = '" + this.ean
                 + "'  WHERE verkartikelID = " + this.id + " LIMIT 1;";
         // System.out.println(sql);
@@ -94,8 +103,9 @@ public class Artikel {
         return preis;
     }
 
-    public double getMwst() {
-        return mwst;
+    public MwSt getMwst() {
+
+        return myMwSt;
     }
 
     public double getLagerstand() {
@@ -116,7 +126,8 @@ public class Artikel {
     }
 
     public void setMwst(double mwst) {
-        this.mwst = mwst;
+        this.myMwSt = MwSt.of(mwst);
+
         this.update();
     }
 
@@ -177,22 +188,22 @@ public class Artikel {
         Vector<Vector<String>> daten = new Vector<Vector<String>>();
         // System.out.println(artikelIDs.size());
         while (!artikelIDs.isEmpty()) {
-            Vector<String> artikel = new Vector<String>();
             Artikel a = new Artikel(Integer.parseInt(artikelIDs.get(0)));
             artikelIDs.remove(0);
-            artikel.add(String.valueOf(a.getEan()));
-            artikel.add(String.valueOf(a.getBeschreibung()));
-            artikel.add(df.format(a.getPreis()));
-            artikel.add(df.format(a.getEinkaufspreis()));
-            artikel.add(df.format(a.getMwst()));
+            Vector<String> artikelVector = new Vector<String>();
+            artikelVector.add(String.valueOf(a.getEan()));
+            artikelVector.add(String.valueOf(a.getBeschreibung()));
+            artikelVector.add(df.format(a.getPreis()));
+            artikelVector.add(df.format(a.getEinkaufspreis()));
+            artikelVector.add(df.format(MwSTSatz.now( a.getMwst())));
             if (a.getLieferant() != -1) {
-                artikel.add(new Lieferant(a.getLieferant()).toString());
+                artikelVector.add(new Lieferant(a.getLieferant()).toString());
             } else {
-                artikel.add("");
+                artikelVector.add("");
             }
-            artikel.add(df.format(a.getLagerstand()));
-            artikel.add(String.valueOf(a.id));
-            daten.add(artikel);
+            artikelVector.add(df.format(a.getLagerstand()));
+            artikelVector.add(String.valueOf(a.id));
+            daten.add(artikelVector);
         }
         return daten;
     }

@@ -22,24 +22,15 @@ final class NewDokumentOOListener extends OoListener {
 
             IDocument doc = arg0.getDocument();
             if (doc == null) {
-                // System.out.println(geaendert+" - "+datei+" - "+neu+" doc = null ");
                 return;
             }
 
-            String file = arg0.getDocument()
-                              .getPersistenceService()
-                              .getLocation()
-                              .getPath();
-            file = file.substring(1)
-                       .replace("%20", " ");
+
             if ( !geaendert) {
-                // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
                 arg0.getDocument()
                     .removeDocumentListener(this);
-                // System.out.println("Listener entfernt - Datei nicht geändert"+file);
                 warschoninsave = true;
             } else {
-                // System.out.println(geaendert+" - "+datei+" - "+file+" - "+neu);
                 new Thread() {
                     @Override
                     public void run() {

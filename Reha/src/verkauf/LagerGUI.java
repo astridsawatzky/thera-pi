@@ -180,7 +180,7 @@ public class LagerGUI extends JXPanel {
                         lgmod.setValueAt(a.getBeschreibung(), n, 1);
                         lgmod.setValueAt(df.format(a.getPreis()), n, 2);
                         lgmod.setValueAt(df.format(a.getEinkaufspreis()), n, 3);
-                        lgmod.setValueAt(df.format(a.getMwst()), n, 4);
+                        lgmod.setValueAt(df.format(MwSTSatz.now( a.getMwst())), n, 4);
                         lgmod.setValueAt(new Lieferant(a.getLieferant()).toString(), n, 5);
                         lgmod.setValueAt(df.format(a.getLagerstand()), n, 6);
                         lgmod.setValueAt(String.valueOf(a.id), n, lgmod.getColumnCount() - 1);
