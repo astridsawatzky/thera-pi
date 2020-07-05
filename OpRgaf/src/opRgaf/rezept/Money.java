@@ -109,6 +109,9 @@ public class Money implements Comparable<Money> {
     }
 
     public boolean hasSameValue(Money other) {
+        if (other == null) {
+            return false;
+        }
         return getValue().compareTo(other.getValue()) == 0;
     }
 

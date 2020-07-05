@@ -71,18 +71,16 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 //        opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
 //        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
 
-
-
         List<OffenePosten> all;
         try {
             all = new OffenePostenDTO(opRgaf.aktIK).all();
         } catch (SQLException e1) {
-           all = Collections.emptyList();
-           logger.error("bezug der offenen posten",e1.getErrorCode());
-            JOptionPane.showMessageDialog(this, "Fehler beim Bezug der offenen Posten\n" + e1.getMessage(), "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
+            all = Collections.emptyList();
+            logger.error("bezug der offenen posten", e1.getErrorCode());
+            JOptionPane.showMessageDialog(this, "Fehler beim Bezug der offenen Posten\n" + e1.getMessage(),
+                    "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
         }
-        OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK,
-                all);
+        OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK, all);
         opRgafPanel = offenePostenBuchen;
         ActionListener kopierenListener = e -> {
             List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
@@ -113,10 +111,10 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-               Payment zahlung  = (Payment) e.getSource();
-                    teilAusbuchen(zahlung.op,  "bar".equals(e.getActionCommand()), zahlung.betrag);
-                    offenePostenBuchen.datachanged();
-                }
+                Payment zahlung = (Payment) e.getSource();
+                teilAusbuchen(zahlung.op, "bar".equals(e.getActionCommand()), zahlung.betrag);
+                offenePostenBuchen.datachanged();
+            }
 
         };
 
@@ -125,12 +123,12 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                   OffenePosten op = (OffenePosten) e.getSource();
-                   new OffenePostenDTO(ik).updatePayment(op);
+                OffenePosten op = (OffenePosten) e.getSource();
+                new OffenePostenDTO(ik).updatePayment(op);
 
             }
         };
-        offenePostenBuchen.addPaymentUpdateListener(paymentListener );
+        offenePostenBuchen.addPaymentUpdateListener(paymentListener);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", offenePostenBuchen);
         opRgafMahnungen = new OpRgafMahnungen(opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
@@ -155,6 +153,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
     }
 
     private void teilAusbuchen(OffenePosten op, boolean bar, Money eingang) {
+        System.out.println("Eingang" + eingang);
         Money restbetrag = op.offen.minus(eingang);
 
         if (bar) {
@@ -372,7 +371,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         try {
             switch (sel) {
             case 0:
-              //  opRgafPanel.initSelection();
+                // opRgafPanel.initSelection();
                 break;
             case 1:
                 opRgafMahnungen.initSelection();

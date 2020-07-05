@@ -9,7 +9,6 @@ import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -61,13 +60,13 @@ public class OpRgaf implements WindowListener {
 
                 start(proghome,  aktik, Integer .parseInt(args[2]));
             }else {
-                extracted(proghome, aktik);
+                start(proghome, aktik);
             }
 
         }
     }
 
-    private static void extracted(String proghome, String aktik) {
+    private static void start(String proghome, String aktik) {
         start(proghome,  aktik, -1);
     }
 

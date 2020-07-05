@@ -64,8 +64,7 @@ public class MoneyCellEditor extends DefaultCellEditor {
             return Money.ZERO;
         }
 
-        return new Money(str.replace(".", "")
-                            .replace(",", "."));
+        return new Money(str);
 
     }
 

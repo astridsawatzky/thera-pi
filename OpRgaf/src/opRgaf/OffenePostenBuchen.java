@@ -8,9 +8,13 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -21,6 +25,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
+import javax.swing.text.DefaultFormatterFactory;
 
 import org.jdesktop.swingx.JXPanel;
 import org.slf4j.Logger;
@@ -38,6 +43,7 @@ import mandant.IK;
 import opRgaf.OffenePosten.Type;
 import opRgaf.RehaIO.SocketClient;
 import opRgaf.rezept.Money;
+import opRgaf.rezept.MoneyFormatter;
 
 class OffenePostenBuchen extends JXPanel implements TableModelListener {
     private static final long serialVersionUID = -7883557713071422132L;
@@ -59,13 +65,12 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
     private JRtaCheckBox bar;
     private boolean barWasSelected;
 
-
     private OffenePostenSummenPanel sumPan;
     private OffenePostenCHKBX selPan;
 
     private OpRgAfIni iniOpRgAf;
 
-    private JRtaTextField geldeingangTf;
+    private JFormattedTextField geldeingangTf;
 
     private Logger logger = LoggerFactory.getLogger(OffenePostenBuchen.class);
 
@@ -204,8 +209,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         combo.setSelectedIndex(0);
         tab.sorter.sort();
 
-
-
         JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
         rowCnt += 2;
         builder.add(jscr, cc.xyw(2, rowCnt, 17)); // 2,4
@@ -220,9 +223,9 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         builder.addLabel("Geldeingang:", cc.xy(colCnt, rowCnt, CellConstraints.RIGHT, CellConstraints.TOP)); // 12,6
 
         ++colCnt;
-        geldeingangTf = new JRtaTextField("F", true, "6.2", "");
+        geldeingangTf = new JFormattedTextField(new DefaultFormatterFactory(new MoneyFormatter(), new MoneyFormatter(), new MoneyFormatter()),new Money());
+
         geldeingangTf.setHorizontalAlignment(SwingConstants.RIGHT);
-        geldeingangTf.setText("0,00");
         geldeingangTf.setName("offen");
         geldeingangTf.addKeyListener(kl);
         builder.add(geldeingangTf, cc.xy(++colCnt, rowCnt)); // 14,6
@@ -254,12 +257,22 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
     private List<OffenePosten> ausbuchen() {
 
         List<OffenePosten> opl = selectedOffenePosten();
-        Money eingang = new Money(geldeingangTf.getText());
+        Money eingang;
+        try {
+
+            eingang = (Money) geldeingangTf.getValue();
+        } catch (Exception e1) {
+            logger.error("Fehler beim Ausbuchen",e1);
+            eingang = new Money();
+        }
         if (opl.size() == 1) {
             if (!opl.get(0).offen.hasSameValue(eingang)) {
                 Payment paid = new Payment(opl.get(0), eingang);
                 ActionEvent e = new ActionEvent(paid, ActionEvent.ACTION_PERFORMED, bar.isSelected() ? "bar" : "unbar");
                 teilzahlenListener.actionPerformed(e);
+            } else {
+                ActionEvent e = new ActionEvent(opl, ActionEvent.ACTION_PERFORMED, bar.isSelected() ? "bar" : "unbar");
+                ausbuchenListener.actionPerformed(e);
             }
 
         } else {
@@ -348,7 +361,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
     }
 
     private void setzeBezahlBetrag(final int i) {
-        geldeingangTf.setText(((Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN)).toPlainString());
+        geldeingangTf.setValue((Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN));
     }
 
     void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
@@ -363,7 +376,6 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
         tab.sorter.sort();
     }
-
 
     private class OPListSelectionHandler implements ListSelectionListener {
         @Override
