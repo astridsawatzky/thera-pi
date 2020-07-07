@@ -21,7 +21,6 @@ public class MoneyCellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(final JTable table, final Object value, boolean isSelected,
             boolean hasFocus, int row, int column) {
-        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
         if (value instanceof Money) {
             setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -32,5 +31,8 @@ public class MoneyCellRenderer extends DefaultTableCellRenderer {
         return this;
 
     }
+    
+    
+    
 
 }
