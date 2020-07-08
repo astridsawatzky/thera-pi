@@ -14,22 +14,19 @@ final class OffenePostenComboBox extends JComboBox<CBModel> {
 
     public OffenePostenComboBox() {
         addItem(new CBModel("Rechnungsnummer enth\u00e4lt", new OffenePostenTextFilter(RGNR)));
-        addItem(new CBModel("REchnungsbetrag", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.gleich)));
-        addItem(new CBModel("REchnungsbetrag >=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.groesserOderGleich)));
-        addItem(new CBModel("REchnungsbetrag <=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.kleinerOderGleich)));
-        addItem(new CBModel("REchnungsdatum", new OffenePostenDatumFilter(RGDATUM,Strategy.gleich)));
-        addItem(new CBModel("REchnungsdatum >=", new OffenePostenDatumFilter(RGDATUM,Strategy.groesserOderGleich)));
-        addItem(new CBModel("REchnungsdatum <=", new OffenePostenDatumFilter(RGDATUM,Strategy.kleinerOderGleich)));
+        addItem(new CBModel("Rechnungsdatum =", new OffenePostenDatumFilter(RGDATUM,Strategy.gleich)));
+        addItem(new CBModel("Rechnungsdatum >=", new OffenePostenDatumFilter(RGDATUM,Strategy.groesserOderGleich)));
+        addItem(new CBModel("Rechnungsdatum <=", new OffenePostenDatumFilter(RGDATUM,Strategy.kleinerOderGleich)));
 
-        addItem(new CBModel("offen", new OffenePostenMoneyFilter(OFFEN,Strategy.gleich)));
+        addItem(new CBModel("offen =", new OffenePostenMoneyFilter(OFFEN,Strategy.gleich)));
         addItem(new CBModel("offen >=", new OffenePostenMoneyFilter(OFFEN,Strategy.groesserOderGleich)));
         addItem(new CBModel("offen <=", new OffenePostenMoneyFilter(OFFEN,Strategy.kleinerOderGleich)));
-        addItem(new CBModel("REchnungsbetrag", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.gleich)));
-        addItem(new CBModel("REchnungsbetrag >=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.groesserOderGleich)));
-        addItem(new CBModel("REchnungsbetrag <=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.kleinerOderGleich)));
+        addItem(new CBModel("Rechnungsbetrag", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.gleich)));
+        addItem(new CBModel("Rechnungsbetrag >=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.groesserOderGleich)));
+        addItem(new CBModel("Rechnungsbetrag <=", new OffenePostenMoneyFilter(GESAMTBETRAG,Strategy.kleinerOderGleich)));
         addItem(new CBModel("Rezeptnummer enth\u00e4lt", new OffenePostenTextFilter(REZNUMMER)));
-        addItem(new CBModel("Name enthält", new OffenePostenTextFilter(KENNUNG)));
-        addItem(new CBModel("Krankenkasse enthält", new OffenePostenTextFilter(KRANKENKASSENNAME)));
+        addItem(new CBModel("Name enth\u00e4lt", new OffenePostenTextFilter(KENNUNG)));
+        addItem(new CBModel("Krankenkasse enth\u00e4lt", new OffenePostenTextFilter(KRANKENKASSENNAME)));
         setSelectedIndex(-1);
     }
 }
