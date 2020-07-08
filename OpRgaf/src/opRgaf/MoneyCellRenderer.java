@@ -1,5 +1,6 @@
 package opRgaf;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -8,6 +9,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import opRgaf.rezept.Money;
+import sun.swing.DefaultLookup;
 
 public class MoneyCellRenderer extends DefaultTableCellRenderer {
 
@@ -28,11 +30,16 @@ public class MoneyCellRenderer extends DefaultTableCellRenderer {
 
             setText(currencyFormat.format(moneyValue.getValue()));
         }
+        if (isSelected) {
+            super.setForeground(table.getSelectionForeground());
+            super.setBackground(table.getSelectionBackground());
+        } else {
+
+            super.setForeground(table.getForeground());
+            super.setBackground(table.getBackground());
+        }
         return this;
 
     }
-    
-    
-    
 
 }

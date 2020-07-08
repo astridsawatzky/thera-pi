@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import javax.swing.JTable;
 import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
@@ -21,11 +22,11 @@ import CommonTools.DateTableCellEditor;
 import CommonTools.MitteRenderer;
 
 final class OffenePostenJTable extends JTable {
-    private static final DateTableCellEditor DATE_CELL_EDITOR = new DateTableCellEditor();
-    private static final MitteRenderer MITTE_RENDERER = new MitteRenderer();
-    private static final MoneyCellRenderer MONEY_RENDERER = new MoneyCellRenderer();
-    private static final DateRenderer DATE_RENDERER = new DateRenderer();
-    private static final TableCellEditor MONEY_CELL_EDITOR = new MoneyCellEditor();
+    private final DateTableCellEditor DATE_CELL_EDITOR = new DateTableCellEditor();
+    private final MitteRenderer MITTE_RENDERER = new MitteRenderer();
+    private final DefaultTableCellRenderer MONEY_RENDERER = new MoneyCellRenderer();
+    private final DateRenderer DATE_RENDERER = new DateRenderer();
+    private final TableCellEditor MONEY_CELL_EDITOR = new MoneyCellEditor();
 
     private final class Everythingisfine extends RowFilter<OffenePostenTableModel, Integer> {
         @Override
@@ -41,7 +42,7 @@ final class OffenePostenJTable extends JTable {
     OffenePostenJTable(OffenePostenTableModel dm) {
         super(dm);
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-
+        putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         sorter = new TableRowSorter<>((OffenePostenTableModel) getModel());
 
     }

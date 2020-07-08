@@ -40,8 +40,8 @@ public class OffenePostenDTO {
 
     private OffenePosten ofResultset(ResultSet rs) throws SQLException {
         OffenePosten ret = new OffenePosten();
-        try{
-        ret.kennung = new Kennung(rs.getString("kennung"));
+        try {
+            ret.kennung = new Kennung(rs.getString("kennung"));
         } catch (ContractException specs) {
             logger.error("Contract not met", specs);
             ret.kennung = new Kennung(rs.getString("kennung"), "", null);
@@ -52,15 +52,14 @@ public class OffenePostenDTO {
                                                       .contains("storno");
         ret.type = selectType(rs.getString("rnr"));
 
-
         LocalDate rdatum;
         try {
             rdatum = Date.valueOf(rs.getString("rDatum"))
-            .toLocalDate();
+                         .toLocalDate();
         } catch (SQLException e) {
             rdatum = null;
         }
-        ret.rgDatum =  rdatum;
+        ret.rgDatum = rdatum;
         ret.gesamtBetrag = Optional.ofNullable(rs.getString("rgesamt"))
                                    .map(Money::new)
                                    .orElse(new Money());
@@ -145,12 +144,11 @@ public class OffenePostenDTO {
 
     }
 
-
     private String einklammern(String value) {
         return value == null ? null : "'" + value + "'";
     }
 
-     String generatePayment(OffenePosten op) {
+    String generatePayment(OffenePosten op) {
 
         String sql = new StringBuilder().append("UPDATE rgaffaktura")
                                         .append(" SET rgesamt= ")
@@ -162,20 +160,24 @@ public class OffenePostenDTO {
                                         .append(" , rpbetrag =")
                                         .append(op.bearbeitungsGebuehr)
                                         .append(" , rdatum = ")
-                                        .append(einklammern(
-                                                op.rgDatum.format(DateTimeFormatters.yyyyMMddmitBindestrich)))
+                                        .append(einklammern(op.rgDatum != null
+                                                ? op.rgDatum.format(DateTimeFormatters.yyyyMMddmitBindestrich)
+                                                : null))
 
                                         .append(" , rbezdatum = ")
-                                        .append(einklammern(op.bezahltAm != null?
-                                                op.bezahltAm.format(DateTimeFormatters.yyyyMMddmitBindestrich):null))
+                                        .append(einklammern(op.bezahltAm != null
+                                                ? op.bezahltAm.format(DateTimeFormatters.yyyyMMddmitBindestrich)
+                                                : null))
 
                                         .append(" , rmahndat1 = ")
-                                        .append(einklammern(op.mahnungEins != null?
-                                                op.mahnungEins.format(DateTimeFormatters.yyyyMMddmitBindestrich): null) )
+                                        .append(einklammern(op.mahnungEins != null
+                                                ? op.mahnungEins.format(DateTimeFormatters.yyyyMMddmitBindestrich)
+                                                : null))
 
                                         .append(" , rmahndat2 = ")
-                                        .append(einklammern(op.mahnungZwei != null?
-                                                op.mahnungZwei.format(DateTimeFormatters.yyyyMMddmitBindestrich):null))
+                                        .append(einklammern(op.mahnungZwei != null
+                                                ? op.mahnungZwei.format(DateTimeFormatters.yyyyMMddmitBindestrich)
+                                                : null))
                                         .append(" where id = ")
                                         .append(op.tabellenId)
                                         .toString();
@@ -183,7 +185,7 @@ public class OffenePostenDTO {
     }
 
     private boolean updateVr(OffenePosten op) {
-        //TODO use this
+        // TODO use this
         return false;
     }
 

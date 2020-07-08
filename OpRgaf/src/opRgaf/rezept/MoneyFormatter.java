@@ -19,21 +19,26 @@ public class MoneyFormatter extends DefaultFormatter {
 
     public String valueToString(Object object) throws ParseException {
         Money m;
+        System.out.println(object);
         if (object == null) {
             m = Money.ZERO;
         } else {
             m = (Money) object;
         }
-        return NUMBER_INSTANCE.format(m.getValue()
-                                       .doubleValue());
+        return NUMBER_INSTANCE.format(m.getValue());
     }
 
     public Object stringToValue(String string) throws ParseException {
         try {
-            return new Money(NUMBER_INSTANCE.parse(string)
-                                            .doubleValue());
-        } catch (Exception e) {
+            if (string.matches(".+\\.\\d{2}$")) {
+                return new Money(Double.parseDouble(string));
+            } else {
 
+                Money money = new Money(NUMBER_INSTANCE.parse(string)
+                                                       .doubleValue());
+                return money;
+            }
+        } catch (Exception e) {
             return Money.ZERO;
         }
     }
