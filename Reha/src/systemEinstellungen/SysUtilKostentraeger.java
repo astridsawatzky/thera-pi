@@ -3,10 +3,6 @@ package systemEinstellungen;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -48,11 +44,7 @@ import environment.Path;
 import hauptFenster.Reha;
 import sqlTools.PLServerAuslesen;
 
-public class SysUtilKostentraeger extends JXPanel implements KeyListener {
-
-    /**
-     * 
-     */
+public class SysUtilKostentraeger extends JXPanel {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LoggerFactory.getLogger(SysUtilKostentraeger.class);
             
@@ -69,17 +61,21 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener {
     Vector<String> vKassenTest = new Vector<String>();
     Vector<Vector<String>> vDummyTest = new Vector<Vector<String>>();
 
+    // @VisibleForTesting
+    SysUtilKostentraeger(String s) {
+        if (!"Testing".equals(s)) {
+            logger.error("Are you sure you want this constructor?");
+        }
+    }
+    
     public SysUtilKostentraeger() {
         super(new BorderLayout());
-        // System.out.println("Aufruf SysUtilKostentraeger");
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
-        /****/
         setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
-        /****/
+
         JLabelRenderer = new KtreagerTblRenderer();
         add(getVorlagenSeite());
-        /*
-        */
+
         return;
     }
 
@@ -150,45 +146,6 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener {
         builder.add(but[1], cc.xy(1, 12));
         return builder.getPanel();
     }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    /*
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String cmd = e.getActionCommand();
-        if (cmd.equals("serverkontakt")) {
-            /*
-             * try{ starteSession("",""); } catch (IOException e1) { e1.printStackTrace(); }
-             * /
-            actionServerKontakt();
-            return;
-        }
-        if (cmd.equals("abholen")) {
-
-            /*
-             * if( row >= 0){ try { holeKtraeger((String)ktrmod.getValueAt(row, 2),null); }
-             * catch (IOException e1) { e1.printStackTrace(); } }
-             * /
-            actionAbholen();
-            return;
-        }
-
-    }
-    */
 
     // Actions
     /**
@@ -270,6 +227,7 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener {
             setFlags();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Kein Kontakt zum Preislisten-/Kostentr\u00e4gerserver");
+            logger.error("Problems with server(-content?): ", ex);
         }
     }
 
@@ -331,49 +289,61 @@ public class SysUtilKostentraeger extends JXPanel implements KeyListener {
         }
     }
 
-    private boolean dateiNameCheck(String dateiNameGKV, String dateiNameIni) {
+    /**
+     * Is there an update?
+     * @param dateiNameGKV
+     * @param dateiNameIni
+     * @return
+     */
+    //@VisibleForTesting
+    boolean dateiNameCheck(String dateiNameGKV, String dateiNameIni) {
         String abJahrGKV = dateiNameGKV.substring(6, 8); // Stelle 7-8
         String abJahrIni = dateiNameIni.substring(6, 8); // Stelle 7-8
         String abMonatGKV = dateiNameGKV.substring(4, 6); // Stelle 5-6
         String abMonatIni = dateiNameIni.substring(4, 6); // Stelle 5-6
+        int versionGKV = Integer.parseInt(dateiNameGKV.substring(11));
+        int versionIni = Integer.parseInt(dateiNameIni.substring(11));
+        logger.debug("GKV-version: " +versionGKV);
+        logger.debug("Ini-version: " +versionIni);
         if (Integer.parseInt(abJahrGKV) > Integer.parseInt(abJahrIni))
             return true;
-        if (abMonatIni.substring(0)
-                      .equals("Q")) {
-            if (abMonatIni.substring(1)
-                          .equals("1")) {
-                abMonatIni = "01";
-            } else if (abMonatIni.substring(1)
-                                 .equals("1")) {
-                abMonatIni = "04";
-            } else if (abMonatIni.substring(1)
-                                 .equals("1")) {
-                abMonatIni = "07";
-            } else {
-                abMonatIni = "10";
-            }
+        int iAbMonatIni=1;
+        int iAbMonatGKV=1;
+        if ("Q".equals(abMonatIni.substring(0,1))) {
+            iAbMonatIni = 1+(Integer.parseInt(abMonatIni.substring(1))-1)*3;  // 4.Quartal = 1 + (4-1) * (12/4)
+        } else {
+            iAbMonatIni = Integer.parseInt(abMonatGKV);
         }
-        if (abMonatGKV.substring(0)
-                      .equals("Q")) {
-            if (abMonatGKV.substring(1)
-                          .equals("1")) {
-                abMonatGKV = "01";
-            } else if (abMonatGKV.substring(1)
-                                 .equals("1")) {
-                abMonatGKV = "04";
-            } else if (abMonatGKV.substring(1)
-                                 .equals("1")) {
-                abMonatGKV = "07";
-            } else {
-                abMonatGKV = "10";
-            }
+        if ("Q".equals(abMonatGKV.substring(0,1))) {
+            iAbMonatGKV = 1+(Integer.parseInt(abMonatGKV.substring(1))-1)*3;  // 4.Quartal = 1 + (4-1) * (12/4)
+        } else {
+            iAbMonatGKV = Integer.parseInt(abMonatGKV);
         }
+        logger.debug("GKV Monat: " + iAbMonatGKV);
+        logger.debug("Ini Monat: " + iAbMonatIni);
+        if (Integer.parseInt(abJahrGKV) == Integer.parseInt(abJahrIni)) {
+            if( iAbMonatGKV > iAbMonatIni )
+                return true;
+            if (iAbMonatGKV == iAbMonatIni
+                    && versionGKV >versionIni)
+                return true;
+        }
+        
+        /*
+         * ??
+         * Das wurde eingangs schon geprueft:
         if (Integer.parseInt(abJahrGKV) > Integer.parseInt(abJahrIni))
             return true;
+         * selbes Jahr, ok
         else if ((Integer.parseInt(abJahrGKV) == Integer.parseInt(abJahrIni)) && (Integer.parseInt(
+         * ABER: Dateiname z.Bsp. AO05Q120.ke0 orig. release 1.Q 2020, AO05Q1.ke1 1. Update im 1.Quartal
+         * Pruefung unten ergibt, AO05Q2.ke0(gkv) aber false falls AO05Q1.ke1(ini) vorhanden...
                 dateiNameGKV.substring(11, 12)) > Integer.parseInt(dateiNameGKV.substring(11, 12))))
             return true;
-
+         * Wo bleibt der Monat? - Ok, Monat wurde nie richtig geprueft... (monat.substring(0) ist z.Bsp. "Q3", nicht "Q")
+         * 
+         */
+        
         return false;
     }
 
