@@ -186,7 +186,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         // Ende Auswahl
 
         merkenBtn = new JButton("merken");
-        merkenBtn.setToolTipText("hält die suchergebnisse in der Anzeige fest");
+        merkenBtn.setToolTipText("h\u00e4lt die Suchergebnisse in der Anzeige fest");
         merkenBtn.addActionListener(e -> merken());
 
         merkenBtn.setMnemonic(KeyEvent.VK_S);
