@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -166,41 +167,44 @@ public class SysUtilKostentraeger extends JXPanel {
      * (one file/db-set per click)
      */
     private void actionAbholen() {
-        final int row = ktrtbl.getSelectedRow();
-        if (row >= 0) {
+        final int[] rows = ktrtbl.getSelectedRows();
+        
+        if (rows.length>= 0) {                  // Ich glaub' ich kann gar keine Zeile abwaehlen...
             new SwingWorker<Void, Void>() {
 
                 @Override
                 protected Void doInBackground() throws Exception {
                     try {
-                        vKassenTest.clear();
-                        Vector<Vector<String>> vec = null;
-                        if (cbGetFromGKV.isSelected()) {
-                            plServer = new PLServerAuslesen();
-                            vec = PLServerAuslesen.holeFelder(
-                                    "select kttext from ktdateien where id = '" + ktrtbl.getValueAt(row, 4).toString()
-                                        + "' LIMIT 1");
-                            plServer.schliessePLConnection();
-                        }
-                        holeKtraeger(ktrtbl.getValueAt(row, 2).toString(),
-                                     (vec == null ? null : vec.get(0).get(0)));
-                        if (vKassenTest.size() > 0) {
-                            int frage = JOptionPane.showConfirmDialog(null, "<html>Sie haben <b>"
-                                    + Integer.toString(vKassenTest.size())
-                                    + " Krankenkassen</b> in Ihrem eigenen Kassenstamm<br>"
-                                    + "die in der eingelesenen Kostentr\u00e4gerdatei enthalten sind."
-                                    + "<br>M\u00f6glicherweise sind eine oder mehrere Kassen "
-                                    + "<b>von \u00c4nderungen betroffen!</b><br>"
-                                    + "<br>Wollen Sie Ihre Kassen jetzt auf \u00c4nderungen hin pr\u00fcfen lassen?"
-                                    + "<br><br></html>",
-                                    "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
-                            if (frage == JOptionPane.YES_OPTION) {
-                                doKassenTest();
+                        for (int row : rows) {
+                            vKassenTest.clear();
+                            Vector<Vector<String>> vec = null;
+                            if (cbGetFromGKV.isSelected()) {
+                                plServer = new PLServerAuslesen();
+                                vec = PLServerAuslesen.holeFelder(
+                                        "select kttext from ktdateien where id = '" + ktrtbl.getValueAt(row, 4).toString()
+                                            + "' LIMIT 1");
+                                plServer.schliessePLConnection();
                             }
-
+                            holeKtraeger(ktrtbl.getValueAt(row, 2).toString(),
+                                         (vec == null ? null : vec.get(0).get(0)));
+                            if (vKassenTest.size() > 0) {
+                                int frage = JOptionPane.showConfirmDialog(null, "<html>Sie haben <b>"
+                                        + Integer.toString(vKassenTest.size())
+                                        + " Krankenkassen</b> in Ihrem eigenen Kassenstamm<br>"
+                                        + "die in der eingelesenen Kostentr\u00e4gerdatei enthalten sind."
+                                        + "<br>M\u00f6glicherweise sind eine oder mehrere Kassen "
+                                        + "<b>von \u00c4nderungen betroffen!</b><br>"
+                                        + "<br>Wollen Sie Ihre Kassen jetzt auf \u00c4nderungen hin pr\u00fcfen lassen?"
+                                        + "<br><br></html>",
+                                        "Wichtige Benutzeranfrage", JOptionPane.YES_NO_OPTION);
+                                if (frage == JOptionPane.YES_OPTION) {
+                                    doKassenTest();
+                                }
+    
+                            }
                         }
                         JOptionPane.showMessageDialog(null,
-                                "<html><b>Feddisch mit dem Abgleich der Kassen</b></html>");
+                                    "<html><b>Feddisch mit dem Abgleich der Kassen</b></html>");
                     } catch (Exception ex) {
                         ex.printStackTrace();
                         JOptionPane.showMessageDialog(null,
@@ -369,6 +373,7 @@ public class SysUtilKostentraeger extends JXPanel {
         boolean start = false;
         boolean gestartet = false;
         if (inhalt == null) {
+            logger.debug("Es wird versucht die KTraegerdatei " + dateiAufServer + " vom GKV-Server zu holen.");
             // String urltext =
             // "http://www.gkv-datenaustausch.de/media/dokumente/leistungserbringer_1/sonstige_leistungserbringer/kostentraegerdateien_1/"+datei;
             String urltext = "https://www.gkv-datenaustausch.de/media/dokumente/leistungserbringer_1/sonstige_leistungserbringer/kostentraegerdateien_1/"
@@ -379,15 +384,15 @@ public class SysUtilKostentraeger extends JXPanel {
             URLConnection conn = url.openConnection();
             // conn.connect();
             // logger.debug("Content encoding of gkv-datenaustausch: " + conn.getContentEncoding() + " of type: " + conn.getContentType());
-            int lang = 0, gesamt;
+            int gesamt;
             // Der daemliche gkv-server liefert keinen content-type header (bei Datei-download?) - raten wir mal:
             BufferedReader inS = new BufferedReader(new InputStreamReader(conn.getInputStream(), "ISO-8859-15"));
             gesamt = conn.getContentLength();
-            JOptionPane.showMessageDialog(null, "L\u00e4nge des Contents = " + gesamt);
+            // JOptionPane.showMessageDialog(null, "L\u00e4nge des Contents = " + gesamt);
             // System.out.println("L\u00e4nge des Contents = "+conn.getContentLength());
 
-            int index;
-
+            progress.setMaximum(gesamt - 1);
+            progress.setValue(0);
             while ((text = inS.readLine()) != null) {
                 if (text.startsWith("IDK+")) {
                     gestartet = true;
@@ -405,12 +410,13 @@ public class SysUtilKostentraeger extends JXPanel {
                     gestartet = false;
                     continue;
                 }
-                lang += text.length();
+                progress.setValue(text.length());
             }
             inS.close();
 
         } else {
             // JOptionPane.showMessageDialog(null, "L\u00e4nge des Contents = "+inhalt.length());
+            logger.debug("Es werden die KTraegerinfos vom PLS verarbeitet.");
 
             String[] text = inhalt.split("\n");
             progress.setMaximum(text.length - 1);
@@ -508,7 +514,9 @@ public class SysUtilKostentraeger extends JXPanel {
         inif.setStringProperty("KTraegerDateien", "KTDatei" + kANr, datei.toString(), null);
         INITool.saveIni(inif);
         // progress.setValue(0);
-        JOptionPane.showMessageDialog(null, "Kostentr\u00e4gerdatei erfolgreich verarbeitet");
+        JOptionPane.showMessageDialog(null, "<HTML><center>Kostentr\u00e4gerdatei<BR/><B>" 
+                                                + datei.toString()
+                                                + "</B><BR/>erfolgreich verarbeitet</center><HTML>");
         try {
             Thread.sleep(150);
         } catch (InterruptedException e) {
