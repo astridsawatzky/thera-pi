@@ -46,7 +46,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
     private JRtaTextField suchen;
 
-    private JButton merkenBtn;
+
     private JButton ausbuchenBtn;
     private JButton kopieButton;
 
@@ -71,6 +71,18 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
     private Logger logger = LoggerFactory.getLogger(OffenePostenBuchen.class);
 
     OffenePostenBuchen(OpRgAfIni iniOpRgAf, IK ik, List<OffenePosten> offenePostenListe) {
+        InputMap inputmap = getInputMap(WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_F12, 0);
+        inputmap.put(keyStroke, keyStroke.toString());
+        getActionMap().put(keyStroke.toString(),
+
+                new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        ausbuchen();
+
+                    }
+                });
 
         this.iniOpRgAf = iniOpRgAf;
         opListe = offenePostenListe;
@@ -184,12 +196,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         builder.add(selPan.getPanel(),
                 cc.xywh(++colCnt, rowCnt - 1, 5, 3, CellConstraints.LEFT, CellConstraints.DEFAULT)); // 10..15,1..3
         // Ende Auswahl
-
-        merkenBtn = new JButton("merken");
-        merkenBtn.setToolTipText("h\u00e4lt die Suchergebnisse in der Anzeige fest");
-        merkenBtn.addActionListener(e -> merken());
-
-        merkenBtn.setMnemonic(KeyEvent.VK_S);
+         JButton merkenBtn = createMerkenButton();
 
         builder.add(merkenBtn, cc.xy(17, rowCnt));
 
@@ -219,7 +226,9 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         builder.addLabel("Geldeingang:", cc.xy(colCnt, rowCnt, CellConstraints.RIGHT, CellConstraints.TOP)); // 12,6
 
         ++colCnt;
-        geldeingangTf = new JFormattedTextField(new DefaultFormatterFactory(new MoneyFormatter(), new MoneyFormatter(), new MoneyFormatter()),new Money());
+        geldeingangTf = new JFormattedTextField(
+                new DefaultFormatterFactory(new MoneyFormatter(), new MoneyFormatter(), new MoneyFormatter()),
+                new Money());
 
         geldeingangTf.setHorizontalAlignment(SwingConstants.RIGHT);
         geldeingangTf.setName("offen");
@@ -250,6 +259,15 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         return builder.getPanel();
     }
 
+    private JButton createMerkenButton() {
+        JButton merkenBtn = new JButton("merken");
+        merkenBtn.setToolTipText("h\u00e4lt die Suchergebnisse in der Anzeige fest");
+        merkenBtn.addActionListener(e -> merken());
+
+        merkenBtn.setMnemonic(KeyEvent.VK_S);
+        return merkenBtn;
+    }
+
     private List<OffenePosten> ausbuchen() {
 
         List<OffenePosten> opl = selectedOffenePosten();
@@ -258,7 +276,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
             eingang = (Money) geldeingangTf.getValue();
         } catch (Exception e1) {
-            logger.error("Fehler beim Ausbuchen",e1);
+            logger.error("Fehler beim Ausbuchen", e1);
             eingang = new Money();
         }
         if (opl.size() == 1) {

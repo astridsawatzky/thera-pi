@@ -5,6 +5,9 @@ enum Strategy {
     gleich {
         @Override
         boolean compare(Comparable first, Comparable second) {
+            if (first == null) {
+                return second == null;
+            }
             return first.compareTo(second) == 0;
         }
     },
