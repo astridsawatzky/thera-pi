@@ -5,12 +5,13 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
-## unveröffentlicht
+## [1.1.9] - 2020-07-17
 
 ### added
 - Grossstelltastenwarnung beim Login #392
 - log Programm- und Javaversion on Startup #403
 - Geburtsdatumcheck bei Patientenanlage #27
+
 
 ### changed
 - Aufnahme der Versionsnummer in die untere linke Ecke #410
@@ -19,9 +20,10 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - VerkaufstabellenUpdate wird auch durchgeführt #273
 - Variablenbelegung bei Taxierung #407
 - HMR Check Auswertung max pro Fall Korrigiert #406
-- OP Mahndatum lässt sich nicht löschen fixes #350
+- OP Mahndatum lässt sich nicht löschen #350
 - Tausender Trennzeichen in Offene Posten / Mahnwesen #387
 - OP-RGR-AFR-VR läßt sich in 1.1.4 und 1.1.5 nicht starten #358
+- 1.1.6 Änderung an Doku wird nicht übernommen #411
 
 ## [1.1.8] - 2020-07-01
 ### fixed
