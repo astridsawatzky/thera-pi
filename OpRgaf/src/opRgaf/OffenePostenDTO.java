@@ -111,7 +111,11 @@ public class OffenePostenDTO {
                               .executeQuery(selectall);
             while (rs.next()) {
 
-                rgafFakturaListe.add(ofResultset(rs));
+                try {
+                    rgafFakturaListe.add(ofResultset(rs));
+                } catch (SQLException e) {
+                   logger.error("Fehler beim Einlesen der offenen Posten bei ID: " + rs.getString("id"), e);
+                }
 
             }
 
