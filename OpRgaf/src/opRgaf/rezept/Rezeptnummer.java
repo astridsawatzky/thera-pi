@@ -4,6 +4,9 @@
 package opRgaf.rezept;
 
 import java.util.Objects;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import core.Disziplin;
 
@@ -15,6 +18,7 @@ public class Rezeptnummer {
 
     private Disziplin disziplin;
     private int rezeptZiffern;
+    private String stornoVermerk ="";
 
     public Rezeptnummer() {
         disziplin = Disziplin.INV;
@@ -26,20 +30,22 @@ public class Rezeptnummer {
      *
      * @param rezNr
      */
-    public Rezeptnummer(String rezNr) {
-        // TODO: handle malformed rezNr
-        // - disziplin can't be found - set INV?
-        // - parseInt screws up
-        disziplin = Disziplin.INV;
-        if ( rezNr == null || rezNr == "" )
-            return;
-        String diszi2check = rezNr.replaceAll("[0-9]", "");
-        disziplin = ofShort(diszi2check);
-        String rezNrDigits = rezNr.replaceAll("[a-zA-Z]", "");
 
-        this.rezeptZiffern = Integer.parseInt(rezNrDigits);
+    public Rezeptnummer(String rezNr) {
+        if ( rezNr == null || rezNr == "" ) {
+            return;
+        }
+        Pattern pattern = Pattern.compile("(\\p{L}+)(\\p{Nd}+)(\\p{L}*)");
+        Matcher matcher = pattern.matcher(rezNr);
+        matcher.matches();
+        disziplin = ofShort(matcher.group(1));
+        rezeptZiffern=Integer.parseInt(matcher.group(2));
+        stornoVermerk = Optional.ofNullable(matcher.group(3)).orElse("");
     }
 
+    boolean isStorniert() {
+        return !"".equals(stornoVermerk);
+    }
 
     public static Disziplin ofShort(String value) {
         try {
@@ -66,8 +72,13 @@ public class Rezeptnummer {
         return rezeptZiffern;
     }
 
+    /** combines disziplin and ziffern into one string.
+     * ignores stornovermerk.
+     *
+     * Caller must make sure to handle Disziplinen INV und COMMON.
+     * @return disziplin + rezeptziffern
+     */
     public String rezeptNummer() {
-        // TODO: if diszi == (COMMON || INV) => boing!
         return disziplin + Integer.toString(rezeptZiffern);
     }
     @Override
@@ -90,6 +101,18 @@ public class Rezeptnummer {
             return false;
         Rezeptnummer other = (Rezeptnummer) obj;
         return disziplin == other.disziplin && rezeptZiffern == other.rezeptZiffern;
+    }
+
+    /** stornierung von rechnungen wurde bislang dadurch erreicht,
+     * dass an die rezeptnummern ein 'S' mit einer moeglichen Bemerkung angefuegt wurde.
+     *
+     * @return
+     */
+    public String stornoVermerk() {
+        if(isStorniert()) {
+            return stornoVermerk.substring(1);
+        }
+        return stornoVermerk;
     }
 
 

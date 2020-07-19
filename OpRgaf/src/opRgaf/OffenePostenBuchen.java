@@ -191,7 +191,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
         JToggleButton offenOnly = new JToggleButton("offene");
         builder.add(offenOnly, cc.xy(9, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 9,2
-        offenOnly.setToolTipText("wenn gedr\u00fcckt, wird in allen Rechnungen gesucht, sonst nur in offenen Rechnungen" );
+        offenOnly.setToolTipText("wenn gedr\u00fcckt,\nwird in allen Rechnungen gesucht,\nsonst nur in offenen Rechnungen" );
 
         // Auswahl RGR/AFR/Verkauf
         colCnt += 2;
