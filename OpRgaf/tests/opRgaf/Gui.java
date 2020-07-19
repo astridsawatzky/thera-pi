@@ -66,7 +66,7 @@ public class Gui {
                     CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
                     if (selectedItem != null) {
                         OffenePostenAbstractRowFilter filter = selectedItem.filter;
-                        opJTable.setFilter(filter);
+                        opJTable.setContentFilter(filter);
                         opJTable.sorter.sort();
 
                     }

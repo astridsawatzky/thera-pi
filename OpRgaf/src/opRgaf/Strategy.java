@@ -37,6 +37,12 @@ enum Strategy {
         boolean compare(Comparable first, Comparable second) {
             return first.compareTo(second) >= 0;
         }
+    },
+    ungleich {
+        @Override
+        boolean compare(Comparable first, Comparable second) {
+            return first.compareTo(second) != 0;
+        }
     };
 
     abstract boolean compare(Comparable first, Comparable second);

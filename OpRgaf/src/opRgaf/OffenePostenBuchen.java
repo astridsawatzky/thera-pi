@@ -189,6 +189,10 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
         builder.add(suchen, cc.xy(++colCnt, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 8,2
 
+        JToggleButton offenOnly = new JToggleButton("offene");
+        builder.add(offenOnly, cc.xy(9, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 9,2
+        offenOnly.setToolTipText("wenn gedr\u00fcckt, wird in allen Rechnungen gesucht, sonst nur in offenen Rechnungen" );
+
         // Auswahl RGR/AFR/Verkauf
         colCnt += 2;
         selPan = new OffenePostenCHKBX();
@@ -203,8 +207,24 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         modelNeu = new OffenePostenTableModel(opListe);
         modelNeu.addTableModelListener(this);
         tab = new OffenePostenJTable(modelNeu);
+        offenOnly.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean isSelected = offenOnly.isSelected();
+                if(isSelected) {
+                    tab.disableOffenFilter();
+                    offenOnly.setText("alle");
+                } else {
+                    offenOnly.setText("offene");
+                    tab.enableOffenFilter();
+                }
+
+
+            }
+        });
         verknuepfe(tab, selPan);
-        verküpfen(tab, suchen, combo);
+        verknuepfen(tab, suchen, combo);
         tab.getSelectionModel()
            .addListSelectionListener(new OPListSelectionHandler());
         ;
@@ -454,7 +474,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         }
     }
 
-    private static void verküpfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
+    private static void verknuepfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
             OffenePostenComboBox opComboBox) {
         opComboBox.addItemListener(new ItemListener() {
 
@@ -464,7 +484,10 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
                     CBModel selectedItem = (CBModel) opComboBox.getSelectedItem();
                     if (selectedItem != null) {
                         OffenePostenAbstractRowFilter filter = selectedItem.filter;
-                        opJTable.setFilter(filter);
+                        opJTable.setContentFilter(filter);
+                        if (filter != null) {
+                            filter.setFiltertext(eingabeFeld.getText());
+                        }
                         opJTable.sorter.sort();
 
                     }
@@ -492,13 +515,18 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
                        private void update(DocumentEvent e) {
 
-                           OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
+                           updateTableView(opJTable, eingabeFeld, opComboBox);
+
+                       }
+
+                    private void updateTableView(OffenePostenJTable opJTable, JTextField eingabeFeld,
+                            OffenePostenComboBox opComboBox) {
+                        OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
                            if (filter != null) {
                                filter.setFiltertext(eingabeFeld.getText());
                                opJTable.sorter.sort();
                            }
-
-                       }
+                    }
                    });
     }
 
