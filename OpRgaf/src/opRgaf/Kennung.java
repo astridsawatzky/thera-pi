@@ -11,12 +11,14 @@ public class Kennung {
     String name = "";
     String vorname = "";
     LocalDate geburtstag = null;
+    private boolean isEmpty=true;
 
     public Kennung(String name, String vorname, LocalDate geburtstag) {
         super();
         this.name = name;
         this.vorname = vorname;
         this.geburtstag = geburtstag;
+        isEmpty =false;
     }
 
     public Kennung(String aValue) {
@@ -30,15 +32,24 @@ public class Kennung {
                 return LocalDate.parse(t.trim(),DateTimeFormatters.dMYYYYmitPunkt);
             };
             geburtstag = Optional.ofNullable(values[2]).map(mapper).orElse(null);;
+            isEmpty = false;
+        } else {
+            isEmpty =true;
         }
 
     }
 
     @Override
     public String toString() {
-          return name + ","
+        if (isEmpty) {
+            return "";
+        } else {
+
+
+
+        return name + ","
               + vorname + ","
               + Optional.ofNullable(geburtstag).map(d->d.format(DateTimeFormatters.ddMMYYYYmitPunkt)).orElse(null);
-    }
+    }}
 
 }
