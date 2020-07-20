@@ -9,6 +9,8 @@ import static opRgaf.OffenePostenTableModel.OFFEN;
 import static opRgaf.OffenePostenTableModel.RGDATUM;
 import static opRgaf.OffenePostenTableModel.RGNR;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,7 +41,8 @@ final class OffenePostenJTable extends JTable {
     TableRowSorter<OffenePostenTableModel> sorter;
     private RowFilter<OffenePostenTableModel, Integer> contentfilter = new Everythingisfine();
     private RowFilter<OffenePostenTableModel, Integer> typefilter = new Everythingisfine();
-    private RowFilter<OffenePostenTableModel, Integer> isOffenFilter = new OffenePostenSchaltbarerZeroFilter(OffenePostenTableModel.OFFEN);
+    private RowFilter<OffenePostenTableModel, Integer> isOffenFilter = new OffenePostenSchaltbarerZeroFilter(
+            OffenePostenTableModel.OFFEN);
 
     OffenePostenJTable(OffenePostenTableModel dm) {
         super(dm);
@@ -49,16 +52,13 @@ final class OffenePostenJTable extends JTable {
 
     }
 
-
     void setIstOffenFilter(RowFilter<OffenePostenTableModel, Integer> filter) {
 
-
-
-        List<RowFilter<OffenePostenTableModel, Integer>> newFilterList = Arrays.asList(filter,contentfilter, typefilter);
+        List<RowFilter<OffenePostenTableModel, Integer>> newFilterList = Arrays.asList(filter, contentfilter,
+                typefilter);
         setTableFilterList(newFilterList);
 
     }
-
 
     private void setTableFilterList(List<RowFilter<OffenePostenTableModel, Integer>> newFilterList) {
         sorter.setRowFilter(RowFilter.andFilter(newFilterList));
@@ -67,12 +67,12 @@ final class OffenePostenJTable extends JTable {
         sorter.sort();
     }
 
-
     void setContentFilter(RowFilter<OffenePostenTableModel, Integer> filter) {
 
         contentfilter = filter;
 
-        List<RowFilter<OffenePostenTableModel, Integer>> newFilterList = Arrays.asList(isOffenFilter, filter, typefilter);
+        List<RowFilter<OffenePostenTableModel, Integer>> newFilterList = Arrays.asList(isOffenFilter, filter,
+                typefilter);
         setTableFilterList(newFilterList);
 
     }
@@ -81,7 +81,8 @@ final class OffenePostenJTable extends JTable {
 
         typefilter = filter;
 
-        List<RowFilter<OffenePostenTableModel, Integer>> newFilterList = Arrays.asList(isOffenFilter,contentfilter, filter);
+        List<RowFilter<OffenePostenTableModel, Integer>> newFilterList = Arrays.asList(isOffenFilter, contentfilter,
+                filter);
         setTableFilterList(newFilterList);
     }
 
@@ -137,16 +138,28 @@ final class OffenePostenJTable extends JTable {
 
     }
 
-
     public void enableOffenFilter() {
         setIstOffenFilter(isOffenFilter);
 
     }
 
-
     public void disableOffenFilter() {
         setIstOffenFilter(new Everythingisfine());
 
+    }
+
+    @Override
+    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+        Component c = super.prepareRenderer(renderer, row, column);
+
+
+
+        if (!isRowSelected(row)) {
+            OffenePosten op = ((OffenePostenTableModel) getModel()).getValue(convertRowIndexToModel(row));
+            c.setBackground(op.isStorniert ? Color.LIGHT_GRAY : getBackground());
+        }
+
+        return c;
     }
 
 }
