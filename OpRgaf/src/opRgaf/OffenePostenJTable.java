@@ -1,5 +1,5 @@
 package opRgaf;
-
+import static opRgaf.OffenePostenTableModel.KENNUNG;
 import static opRgaf.OffenePostenTableModel.BEARBEITUNGSGEBUEHR;
 import static opRgaf.OffenePostenTableModel.BEZAHLTAM;
 import static opRgaf.OffenePostenTableModel.GESAMTBETRAG;
@@ -46,6 +46,7 @@ final class OffenePostenJTable extends JTable {
 
     OffenePostenJTable(OffenePostenTableModel dm) {
         super(dm);
+        getColumnModel().getColumn(KENNUNG).setPreferredWidth(160);
         setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
         sorter = new TableRowSorter<>((OffenePostenTableModel) getModel());

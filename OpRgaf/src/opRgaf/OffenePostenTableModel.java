@@ -38,6 +38,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
     public OffenePostenTableModel(List<OffenePosten> opListe) {
 
         this.opListe = opListe;
+        
 
     }
 
