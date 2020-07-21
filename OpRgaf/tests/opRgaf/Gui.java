@@ -32,7 +32,7 @@ public class Gui {
         frame.getContentPane()
              .setLayout(new BorderLayout());
         JTextField eingabeFeld = new JTextField();
-        OffenePostenComboBox opComboBox = new OffenePostenComboBox();
+        OffenePostenComboBox opComboBox = new OffenePostenComboBox(1);
 
 
         verknuepfen(opJTable, eingabeFeld, opComboBox);
@@ -52,7 +52,6 @@ public class Gui {
              .add(select3ChkBx.getPanel(), BorderLayout.WEST);
         frame.pack();
         frame.setVisible(true);
-        opComboBox.setSelectedIndex(1);
     }
 
     private static void verknuepfen(OffenePostenJTable opJTable, JTextField eingabeFeld,
