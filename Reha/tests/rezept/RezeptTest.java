@@ -2,7 +2,6 @@ package rezept;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import CommonTools.SqlInfo;
@@ -34,8 +35,17 @@ public class RezeptTest {
         }
 
     }
+    @AfterClass
+    public static void closeconnection(){
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            // don't care just die.
+        }
 
-    @Test
+    }
+
+    @Test @Ignore
     public void rezFieldsToDbFieldsTest() {
         String stmt = "describe verordn";
 
@@ -44,8 +54,7 @@ public class RezeptTest {
                                .executeQuery(stmt);
             while (rs.next()) {
                 try {
-                    Field field = Rezept.class.getDeclaredField(rs.getString(1));
-                    // System.out.println("Found field " + field + " from DB in Rezepte.");
+                    Rezept.class.getDeclaredField(rs.getString(1));
                 } catch (NoSuchFieldException e) {
                     fail("DB field " + rs.getString(1) + " is not in Rezept-fields");
                 }
@@ -62,8 +71,6 @@ public class RezeptTest {
     public void reztoolsTest() throws Exception {
         List<Rezept> rez = new RezeptDto(ik).allfromVerordn();
         SqlInfo sqlinf = new SqlInfo();
-        // Connection conn = new
-        // DatenquellenFactory(ik.digitString()).createConnection();
         sqlinf.setConnection(conn);
         SystemPreislisten.ladepreise("Ergo", ik.digitString());
         rez = rez.parallelStream()
@@ -82,8 +89,6 @@ public class RezeptTest {
     @Test
     public void reztoolER1Test() throws Exception {
         SqlInfo sqlinf = new SqlInfo();
-        // Connection conn = new
-        // DatenquellenFactory(ik.digitString()).createConnection();
         sqlinf.setConnection(conn);
         SystemPreislisten.ladepreise("Ergo", ik.digitString());
         Optional<Rezept> rez = new RezeptDto(ik).byRezeptNr("ER1");
