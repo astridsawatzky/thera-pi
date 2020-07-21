@@ -46,11 +46,10 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
     private JRtaTextField suchen;
 
-
     private JButton ausbuchenBtn;
     private JButton kopieButton;
 
-    private OffenePostenComboBox combo;
+    private OffenePostenComboBox suchkriterienCombo;
 
     private KeyListener kl;
 
@@ -178,8 +177,16 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
         builder.addLabel("Suchkriterium", cc.xy(colCnt++, rowCnt)); // 2,2
 
-        combo = new OffenePostenComboBox();
-        builder.add(combo, cc.xy(++colCnt, rowCnt)); // 4,2
+        suchkriterienCombo = new OffenePostenComboBox(iniOpRgAf.getVorauswahlSuchkriterium());
+        suchkriterienCombo.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                iniOpRgAf.setVorauswahl(suchkriterienCombo.getSelectedIndex());
+
+            }
+        });
+        builder.add(suchkriterienCombo, cc.xy(++colCnt, rowCnt)); // 4,2
 
         ++colCnt;
         builder.addLabel("finde:", cc.xy(++colCnt, rowCnt)); // 6,2
@@ -191,7 +198,8 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
         JToggleButton offenOnly = new JToggleButton("offene");
         builder.add(offenOnly, cc.xy(9, rowCnt, CellConstraints.FILL, CellConstraints.DEFAULT)); // 9,2
-        offenOnly.setToolTipText("wenn gedr\u00fcckt,\nwird in allen Rechnungen gesucht,\nsonst nur in offenen Rechnungen" );
+        offenOnly.setToolTipText(
+                "wenn gedr\u00fcckt,\nwird in allen Rechnungen gesucht,\nsonst nur in offenen Rechnungen");
 
         // Auswahl RGR/AFR/Verkauf
         colCnt += 2;
@@ -200,7 +208,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         builder.add(selPan.getPanel(),
                 cc.xywh(++colCnt, rowCnt - 1, 5, 3, CellConstraints.LEFT, CellConstraints.DEFAULT)); // 10..15,1..3
         // Ende Auswahl
-         JButton merkenBtn = createMerkenButton();
+        JButton merkenBtn = createMerkenButton();
 
         builder.add(merkenBtn, cc.xy(17, rowCnt));
 
@@ -212,7 +220,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 boolean isSelected = offenOnly.isSelected();
-                if(isSelected) {
+                if (isSelected) {
                     tab.disableOffenFilter();
                     offenOnly.setText("alle");
                 } else {
@@ -220,16 +228,42 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
                     tab.enableOffenFilter();
                 }
 
-
             }
         });
         verknuepfe(tab, selPan);
-        verknuepfen(tab, suchen, combo);
+        verknuepfen(tab, suchen, suchkriterienCombo);
         tab.getSelectionModel()
            .addListSelectionListener(new OPListSelectionHandler());
         ;
         selPan.initSelection(iniOpRgAf.getIncRG(), iniOpRgAf.getIncAR(), iniOpRgAf.getIncVK());
-        combo.setSelectedIndex(0);
+
+        selPan.addOListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(e);
+                iniOpRgAf.setIncRG(e.getStateChange() == ItemEvent.SELECTED);
+
+            }
+        });
+        selPan.addMListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                System.out.println(e);
+                iniOpRgAf.setIncVK(e.getStateChange() == ItemEvent.SELECTED);
+
+            }
+        });
+        selPan.addUListener(new ItemListener() {
+
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+
+                System.out.println(e);
+                iniOpRgAf.setIncVK(e.getStateChange() == ItemEvent.SELECTED);
+            }
+        });
         tab.sorter.sort();
 
         JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
@@ -400,7 +434,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
     void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
         suchen.setText(rezept);
-        combo.setSelectedItem("Rezeptnummer =");
+        suchkriterienCombo.setSelectedItem("Rezeptnummer =");
 
         doSuchen();
 
@@ -519,14 +553,14 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
 
                        }
 
-                    private void updateTableView(OffenePostenJTable opJTable, JTextField eingabeFeld,
-                            OffenePostenComboBox opComboBox) {
-                        OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
+                       private void updateTableView(OffenePostenJTable opJTable, JTextField eingabeFeld,
+                               OffenePostenComboBox opComboBox) {
+                           OffenePostenAbstractRowFilter filter = ((CBModel) opComboBox.getSelectedItem()).filter;
                            if (filter != null) {
                                filter.setFiltertext(eingabeFeld.getText());
                                opJTable.sorter.sort();
                            }
-                    }
+                       }
                    });
     }
 

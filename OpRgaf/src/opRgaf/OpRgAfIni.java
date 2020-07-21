@@ -168,7 +168,7 @@ public class OpRgAfIni {
 
     int getVorauswahl(int max) {
         if (valuesValid()) {
-            return vorauswahlSuchkriterium < max ? vorauswahlSuchkriterium : 0;
+            return getVorauswahlSuchkriterium() < max ? getVorauswahlSuchkriterium() : 0;
         } else {
             // System.out.println("OpRgaf getVorauswahl: " + 0 +"(Abbruch ini-read)");
             return 0;
@@ -238,12 +238,12 @@ public class OpRgAfIni {
         if (!settingsLocked && (incRG != inif.getBooleanProperty(section, "Rezeptgebuehren")
                 || incAR != inif.getBooleanProperty(section, "Ausfallrechnungen")
                 || incVK != inif.getBooleanProperty(section, "Verkaeufe")
-                || vorauswahlSuchkriterium != inif.getIntegerProperty(section, "Suchkriterium"))) {
+                || getVorauswahlSuchkriterium() != inif.getIntegerProperty(section, "Suchkriterium"))) {
             inif.setBooleanProperty(section, "Rezeptgebuehren", incRG, "offenePosten RgAfVk beruecksichtigt");
             inif.setBooleanProperty(section, "Ausfallrechnungen", incAR, null);
             inif.setBooleanProperty(section, "Verkaeufe", incVK, null);
 
-            inif.setIntegerProperty(section, "Suchkriterium", vorauswahlSuchkriterium, "zuletzt gesucht");
+            inif.setIntegerProperty(section, "Suchkriterium", getVorauswahlSuchkriterium(), "zuletzt gesucht");
 
             if (inif.getStringProperty(section, "lockSettings") == null) { // Wert noch nicht vorhanden?
                 inif.setBooleanProperty(section, "lockSettings", false, "Aktualisieren der Eintraege gesperrt");
@@ -326,5 +326,9 @@ public class OpRgAfIni {
     private void writeSalesRhg(INIFile inif) {
         inif.setBooleanProperty("offenePosten", "erlaubeVRinBarkasse", allowCashInSalesReceipt,
                 "Verkaufsrechnungen duerfen in Barkasse gebucht werden");
+    }
+
+    public int getVorauswahlSuchkriterium() {
+        return vorauswahlSuchkriterium;
     }
 }
