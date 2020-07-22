@@ -70,11 +70,11 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
 // altes Panel
-       Feature featureOPRGAF = new Feature("OPRGAFrewrite");
-    if (!featureOPRGAF.isEnabled()) {
-        opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
-        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", (Component) opRgafPanel);
-       }
+        Feature featureOPRGAF = new Feature("OPRGAFrewrite");
+        if (!featureOPRGAF.isEnabled()) {
+            opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
+            jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", (Component) opRgafPanel);
+        }
         List<OffenePosten> all;
         try {
             all = new OffenePostenDTO(opRgaf.aktIK).all();
@@ -85,57 +85,57 @@ class OpRgafTab extends JXPanel implements ChangeListener {
                     "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
         }
         if (featureOPRGAF.isEnabled()) {
-        OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK, all);
-        opRgafPanel = offenePostenBuchen;
-        ActionListener kopierenListener = e -> {
-            List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
-            for (OffenePosten offenePosten : opToCopy) {
-                rechnungskopie(offenePosten);
-            }
-        };
-        offenePostenBuchen.addKopierenListener(kopierenListener);
-        ActionListener ausbuchenlistener = e -> {
-            List<OffenePosten> opToPay = (List<OffenePosten>) e.getSource();
-            if (opToPay.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Keine Rechnung zum Ausbuchen ausgewählt");
-            } else {
-                for (OffenePosten offenePosten : opToPay) {
-                    if (offenePosten.offen.hasSameValue(Money.ZERO)) {
-                        JOptionPane.showMessageDialog(null,
-                                "Rechnung " + offenePosten.rgNr + " ist bereits auf bezahlt gesetzt");
-                    } else {
-                        komplettAusbuchen(offenePosten, "bar".equals(e.getActionCommand()));
-                    }
+            OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK, all);
+            opRgafPanel = offenePostenBuchen;
+            ActionListener kopierenListener = e -> {
+                List<OffenePosten> opToCopy = (List<OffenePosten>) e.getSource();
+                for (OffenePosten offenePosten : opToCopy) {
+                    rechnungskopie(offenePosten);
                 }
-                offenePostenBuchen.datachanged();
-            }
-        };
-        offenePostenBuchen.addAusbuchenListener(ausbuchenlistener);
+            };
+            offenePostenBuchen.addKopierenListener(kopierenListener);
+            ActionListener ausbuchenlistener = e -> {
+                List<OffenePosten> opToPay = (List<OffenePosten>) e.getSource();
+                if (opToPay.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Keine Rechnung zum Ausbuchen ausgewählt");
+                } else {
+                    for (OffenePosten offenePosten : opToPay) {
+                        if (offenePosten.offen.hasSameValue(Money.ZERO)) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Rechnung " + offenePosten.rgNr + " ist bereits auf bezahlt gesetzt");
+                        } else {
+                            komplettAusbuchen(offenePosten, "bar".equals(e.getActionCommand()));
+                        }
+                    }
+                    offenePostenBuchen.datachanged();
+                }
+            };
+            offenePostenBuchen.addAusbuchenListener(ausbuchenlistener);
 
-        ActionListener teilzahlen = new ActionListener() {
+            ActionListener teilzahlen = new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Payment zahlung = (Payment) e.getSource();
-                teilAusbuchen(zahlung.op, "bar".equals(e.getActionCommand()), zahlung.betrag);
-                offenePostenBuchen.datachanged();
-            }
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Payment zahlung = (Payment) e.getSource();
+                    teilAusbuchen(zahlung.op, "bar".equals(e.getActionCommand()), zahlung.betrag);
+                    offenePostenBuchen.datachanged();
+                }
 
-        };
+            };
 
-        offenePostenBuchen.addTeilzahlenListener(teilzahlen);
-        ActionListener paymentListener = new ActionListener() {
+            offenePostenBuchen.addTeilzahlenListener(teilzahlen);
+            ActionListener paymentListener = new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                OffenePosten op = (OffenePosten) e.getSource();
-                new OffenePostenDTO(ik).updatePayment(op);
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    OffenePosten op = (OffenePosten) e.getSource();
+                    new OffenePostenDTO(ik).updatePayment(op);
 
-            }
-        };
-        offenePostenBuchen.addPaymentUpdateListener(paymentListener);
+                }
+            };
+            offenePostenBuchen.addPaymentUpdateListener(paymentListener);
 
-        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", offenePostenBuchen);
+            jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", offenePostenBuchen);
         }
         opRgafMahnungen = new OpRgafMahnungen(opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
@@ -177,7 +177,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
         String rgafakturaSql = null;
 
-        op.bezahltAm= LocalDate.now();
+        op.bezahltAm = LocalDate.now();
         if (op.type == Type.RGR) { // aus rgaffaktura ausbuchen
             rezeptBezahltSetzen(op.rezNummer.rezeptNummer());
             rgafakturaSql = "update rgaffaktura set roffen='" + restbetrag.toPlainString() + "', rbezdatum='"
