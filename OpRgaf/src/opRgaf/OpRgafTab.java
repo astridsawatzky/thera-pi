@@ -1,6 +1,7 @@
 package opRgaf;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -38,6 +39,7 @@ import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
+import core.Feature;
 import environment.Path;
 import mandant.IK;
 import office.OOService;
@@ -53,7 +55,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
     private JTabbedPane jtb;
 
     private Header jxh = new Header();;
-    OffenePostenBuchen opRgafPanel;
+    OPRGAFGui opRgafPanel;
 
     private OpRgafMahnungen opRgafMahnungen;
 
@@ -68,9 +70,11 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
 // altes Panel
-//        opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
-//        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", opRgafPanel);
-
+       Feature featureOPRGAF = new Feature("OPRGAFrewrite");
+    if (!featureOPRGAF.isEnabled()) {
+        opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
+        jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", (Component) opRgafPanel);
+       }
         List<OffenePosten> all;
         try {
             all = new OffenePostenDTO(opRgaf.aktIK).all();
@@ -80,6 +84,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             JOptionPane.showMessageDialog(this, "Fehler beim Bezug der offenen Posten\n" + e1.getMessage(),
                     "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
         }
+        if (featureOPRGAF.isEnabled()) {
         OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK, all);
         opRgafPanel = offenePostenBuchen;
         ActionListener kopierenListener = e -> {
@@ -129,7 +134,9 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             }
         };
         offenePostenBuchen.addPaymentUpdateListener(paymentListener);
+
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", offenePostenBuchen);
+        }
         opRgafMahnungen = new OpRgafMahnungen(opRgaf);
         jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen Mahnungen", opRgafMahnungen);
 
@@ -170,17 +177,19 @@ class OpRgafTab extends JXPanel implements ChangeListener {
 
         String rgafakturaSql = null;
 
+        op.bezahltAm= LocalDate.now();
         if (op.type == Type.RGR) { // aus rgaffaktura ausbuchen
             rezeptBezahltSetzen(op.rezNummer.rezeptNummer());
             rgafakturaSql = "update rgaffaktura set roffen='" + restbetrag.toPlainString() + "', rbezdatum='"
-                    + LocalDate.now() + "' where id ='" + op.tabellenId + "'";
+                    + op.bezahltAm + "' where id ='" + op.tabellenId + "'";
         } else if (op.type == Type.AFR) { // aus rgaffaktura ausbuchen
             rgafakturaSql = "update rgaffaktura set roffen='" + restbetrag.toPlainString() + "', rbezdatum='"
-                    + LocalDate.now() + "' where id ='" + op.tabellenId + "'";
+                    + op.bezahltAm + "' where id ='" + op.tabellenId + "'";
         } else if (op.type == Type.VR) { // aus verkliste ausbuchen
             rgafakturaSql = "update verkliste set v_offen='" + restbetrag.toPlainString() + "', v_bezahldatum='"
-                    + LocalDate.now() + "' where verklisteID ='" + op.tabellenId + "'";
+                    + op.bezahltAm + "' where verklisteID ='" + op.tabellenId + "'";
         }
+
         System.out.println(rgafakturaSql);
         SqlInfo.sqlAusfuehren(rgafakturaSql);
         op.offen = restbetrag;

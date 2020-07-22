@@ -65,7 +65,7 @@ import office.OOService;
 import opRgaf.RehaIO.SocketClient;
 import sql.DatenquellenFactory;
 
-class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack {
+class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBack, OPRGAFGui {
     private static final long serialVersionUID = -7883557713071422132L;
 
     private JRtaTextField suchen;
@@ -147,7 +147,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         setzeFocus();
     }
 
-    void setzeFocus() {
+    public void setzeFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -497,7 +497,7 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
         sumPan.schreibeAnzRec();
     }
 
-    void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
+    public void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
         suchen.setText(rezept);
         combo.setSelectedItem("Rezeptnummer =");
         boolean useRGR = selPan.useRGR(); // Checkbox-Einstellung merken
@@ -678,7 +678,11 @@ class OpRgafPanel extends JXPanel implements TableModelListener, RgAfVk_IfCallBa
                     } else if (rsMetaData.getColumnClassName(i)
                                          .toString()
                                          .equals("java.sql.Date")) {
-                        vec.add(rs.getDate(i));
+                        try {
+                            vec.add(rs.getDate(i));
+                        } catch (SQLException e) {
+                            vec.add(null);
+                        }
                     } else if (rsMetaData.getColumnClassName(i)
                                          .toString()
                                          .equals("java.lang.Integer")) {

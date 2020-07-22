@@ -41,7 +41,7 @@ import opRgaf.RehaIO.SocketClient;
 import opRgaf.rezept.Money;
 import opRgaf.rezept.MoneyFormatter;
 
-class OffenePostenBuchen extends JXPanel implements TableModelListener {
+class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener {
     private static final long serialVersionUID = -7883557713071422132L;
 
     private JRtaTextField suchen;
@@ -93,7 +93,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         tab.sorter.sort();
     }
 
-    void setzeFocus() {
+    public void setzeFocus() {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -432,7 +432,7 @@ class OffenePostenBuchen extends JXPanel implements TableModelListener {
         geldeingangTf.setValue((Money) tab.getValueAt(i, OffenePostenTableModel.OFFEN));
     }
 
-    void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
+    public void sucheRezept(String rezept) { // Einstieg für RehaReverseServer (z.B. RGR-Kopie aus Historie)
         suchen.setText(rezept);
         suchkriterienCombo.setSelectedItem("Rezeptnummer =");
 

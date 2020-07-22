@@ -1,4 +1,4 @@
-package hauptFenster;
+package core;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -24,7 +24,7 @@ public class Feature {
         features.remove(this);
     }
 
-    boolean isEnabled() {
+    public boolean isEnabled() {
         return features.contains(this);
     }
 
