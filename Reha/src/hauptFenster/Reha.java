@@ -76,6 +76,7 @@ import anmeldungUmsatz.Umsaetze;
 import arztFenster.ArztPanel;
 import barKasse.Barkasse;
 import benutzerVerwaltung.BenutzerRechte;
+import core.Feature;
 import dialoge.RehaSmartDialog;
 import dta301.Dta301;
 import entlassBerichte.EBerichtPanel;
@@ -328,6 +329,7 @@ public class Reha implements RehaEventListener {
             mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK" + DefaultMandant),
                     inif.getStringProperty("TheraPiMandanten", "MAND-NAME" + DefaultMandant));
         }
+       
         new Reha(mainMandant).startWithMandantSet();
 
     }
@@ -343,7 +345,7 @@ public class Reha implements RehaEventListener {
         logger.info("Java Version:     " +System.getProperty("java.version"));
         aktIK = mandant().ikDigitString();
         aktMandant = mandant().name();
-
+        Feature.init(mandant);
         DueUpdates du = new DueUpdates(new DatenquellenFactory(aktIK));
         du.init();
         du.execute();
