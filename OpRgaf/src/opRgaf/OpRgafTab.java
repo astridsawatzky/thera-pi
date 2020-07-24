@@ -69,9 +69,9 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         setLayout(new BorderLayout());
         jtb = new JTabbedPane();
         jtb.setUI(new WindowsTabbedPaneUI());
-// altes Panel
         Feature featureOPRGAF = new Feature("OPRGAFrewrite");
         if (!featureOPRGAF.isEnabled()) {
+            logger.info("using old OpRgAf");
             opRgafPanel = new OpRgafPanel(this, opRgaf, opRgaf.aktIK);
             jtb.addTab("Rezeptgebühr-/Ausfall-/Verkaufsrechnungen ausbuchen", (Component) opRgafPanel);
         }
@@ -85,6 +85,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
                     "Da ist was schief gelaufen", JOptionPane.ERROR_MESSAGE);
         }
         if (featureOPRGAF.isEnabled()) {
+            logger.info("using new OpRgAf");
             OffenePostenBuchen offenePostenBuchen = new OffenePostenBuchen(opRgaf.iniOpRgAf, opRgaf.aktIK, all);
             opRgafPanel = offenePostenBuchen;
             ActionListener kopierenListener = e -> {

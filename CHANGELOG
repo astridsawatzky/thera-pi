@@ -5,12 +5,13 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
-## [1.1.9] - 2020-07-17
+## [1.1.9] - 2020-07-24
 
 ### added
 - Grossstelltastenwarnung beim Login #392
 - log Programm- und Javaversion on Startup #403
 - Geburtsdatumcheck bei Patientenanlage #27
+- feature toggle steuerbar mit IK/ini/.features Datei
 
 
 ### changed
