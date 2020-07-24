@@ -8,9 +8,12 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.text.DefaultFormatterFactory;
 
+import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.JXPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,6 +131,8 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         // if not set do nothing but don't NPE
     };
 
+    private LocalDate aktuellesBuchungsDatum=LocalDate.now();
+
     private void verknuepfe(OffenePostenJTable opJTable, OffenePostenCHKBX select3ChkBx) {
 
         List<OffenePostenSchaltbarerTextFilter> filters = Arrays.asList(rgrTypefilter, afrTypefilter, vrTypefilter);
@@ -163,9 +169,20 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
     private JPanel getContent() {
         // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19
-        String xwerte = "10dlu,50dlu,2dlu,90dlu,10dlu,p,2dlu,70dlu:g,40dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,10dlu,p";
+        String xwerte = "10dlu,50dlu,2dlu,90dlu,10dlu,p,2dlu,70dlu:g,40dlu,5dlu,50dlu,5dlu,50dlu,5dlu,50dlu,5dlu,60dlu,10dlu,p";
         // 1 2 3 4 5 6 7 8 9 10 11
-        String ywerte = "15dlu,p,15dlu,160dlu:g,8dlu,p,10dlu,2dlu,p,8dlu,0dlu";
+        String reihe1 = "15dlu";
+        String reihe2 = "p";
+        String reihe3 = "15dlu";
+        String reihe4 = "160dlu:g";
+        String reihe5 = "p";
+        String reihe6 = "p";
+        String reihe7 = "10dlu";
+        String reihe8 = "2dlu";
+        String reihe9 = "p";
+        String reihe10 = "8dlu";
+        String reihe11 = "0dlu";
+        String ywerte = reihe1 + "," + reihe2 + "," + reihe3 + "," + reihe4 + "," + reihe5 + "," + reihe6 + "," + reihe7 + "," + reihe8 + "," + reihe9 + "," + reihe10 + "," + reihe11;
         FormLayout lay = new FormLayout(xwerte, ywerte);
         PanelBuilder builder = new PanelBuilder(lay);
 
@@ -241,7 +258,6 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 iniOpRgAf.setIncRG(e.getStateChange() == ItemEvent.SELECTED);
 
             }
@@ -250,8 +266,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
-                iniOpRgAf.setIncVK(e.getStateChange() == ItemEvent.SELECTED);
+                iniOpRgAf.setIncAR(e.getStateChange() == ItemEvent.SELECTED);
 
             }
         });
@@ -260,7 +275,6 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
             @Override
             public void itemStateChanged(ItemEvent e) {
 
-                System.out.println(e);
                 iniOpRgAf.setIncVK(e.getStateChange() == ItemEvent.SELECTED);
             }
         });
@@ -269,7 +283,6 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         JScrollPane jscr = JCompTools.getTransparentScrollPane(tab);
         rowCnt += 2;
         builder.add(jscr, cc.xyw(2, rowCnt, 17)); // 2,4
-//**********************
 
         rowCnt += 2; // 6
         colCnt = 4;
@@ -299,6 +312,19 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         ausbuchenBtn.addActionListener(e -> ausbuchen());
         builder.add(ausbuchenBtn, cc.xy(17, 6));
         ausbuchenBtn.setMnemonic(KeyEvent.VK_A);
+        java.util.Date selected = new java.util.Date();
+        JXDatePicker buchungsDatum = new JXDatePicker(selected ,Locale.GERMAN);
+        builder.add(buchungsDatum,cc.xy(17,5));
+
+        buchungsDatum.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setAktuellesBuchungsDatum(buchungsDatum.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+            }
+
+        });
 //**********************
 
         rowCnt += 2;
@@ -313,6 +339,9 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
         return builder.getPanel();
     }
 
+    private void setAktuellesBuchungsDatum(LocalDate localDate) {
+        this.aktuellesBuchungsDatum = localDate;
+    }
     private JButton createMerkenButton() {
         JButton merkenBtn = new JButton("merken");
         merkenBtn.setToolTipText("h\u00e4lt die Suchergebnisse in der Anzeige fest");
@@ -333,6 +362,7 @@ class OffenePostenBuchen extends JXPanel implements OPRGAFGui,TableModelListener
             logger.error("Fehler beim Ausbuchen", e1);
             eingang = new Money();
         }
+        opl.forEach((o)-> o.bezahltAm = aktuellesBuchungsDatum);
         if (opl.size() == 1) {
             if (!opl.get(0).offen.hasSameValue(eingang)) {
                 Payment paid = new Payment(opl.get(0), eingang);

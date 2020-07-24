@@ -48,7 +48,7 @@ import sqlTools.PLServerAuslesen;
 public class SysUtilKostentraeger extends JXPanel {
     private static final long serialVersionUID = 1L;
     private static final Logger logger = LoggerFactory.getLogger(SysUtilKostentraeger.class);
-            
+
     JXTable ktrtbl = null;
     MyKtraegerModel ktrmod = null;
     JButton[] but = { null, null, null, null };
@@ -68,7 +68,7 @@ public class SysUtilKostentraeger extends JXPanel {
             logger.error("Are you sure you want this constructor?");
         }
     }
-    
+
     public SysUtilKostentraeger() {
         super(new BorderLayout());
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
@@ -168,7 +168,7 @@ public class SysUtilKostentraeger extends JXPanel {
      */
     private void actionAbholen() {
         final int[] rows = ktrtbl.getSelectedRows();
-        
+
         if (rows.length>= 0) {                  // Ich glaub' ich kann gar keine Zeile abwaehlen...
             new SwingWorker<Void, Void>() {
 
@@ -200,7 +200,7 @@ public class SysUtilKostentraeger extends JXPanel {
                                 if (frage == JOptionPane.YES_OPTION) {
                                     doKassenTest();
                                 }
-    
+
                             }
                         }
                         JOptionPane.showMessageDialog(null,
@@ -216,7 +216,7 @@ public class SysUtilKostentraeger extends JXPanel {
             }.execute();
         }
     }
-    
+
     private void startePLSession() {
         try {
             plServer = new PLServerAuslesen();
@@ -307,8 +307,6 @@ public class SysUtilKostentraeger extends JXPanel {
         String abMonatIni = dateiNameIni.substring(4, 6); // Stelle 5-6
         int versionGKV = Integer.parseInt(dateiNameGKV.substring(11));
         int versionIni = Integer.parseInt(dateiNameIni.substring(11));
-        logger.debug("GKV-version: " +versionGKV);
-        logger.debug("Ini-version: " +versionIni);
         if (Integer.parseInt(abJahrGKV) > Integer.parseInt(abJahrIni))
             return true;
         int iAbMonatIni=1;
@@ -323,8 +321,6 @@ public class SysUtilKostentraeger extends JXPanel {
         } else {
             iAbMonatGKV = Integer.parseInt(abMonatGKV);
         }
-        logger.debug("GKV Monat: " + iAbMonatGKV);
-        logger.debug("Ini Monat: " + iAbMonatIni);
         if (Integer.parseInt(abJahrGKV) == Integer.parseInt(abJahrIni)) {
             if( iAbMonatGKV > iAbMonatIni )
                 return true;
@@ -332,7 +328,7 @@ public class SysUtilKostentraeger extends JXPanel {
                     && versionGKV >versionIni)
                 return true;
         }
-        
+
         /*
          * ??
          * Das wurde eingangs schon geprueft:
@@ -345,9 +341,9 @@ public class SysUtilKostentraeger extends JXPanel {
                 dateiNameGKV.substring(11, 12)) > Integer.parseInt(dateiNameGKV.substring(11, 12))))
             return true;
          * Wo bleibt der Monat? - Ok, Monat wurde nie richtig geprueft... (monat.substring(0) ist z.Bsp. "Q3", nicht "Q")
-         * 
+         *
          */
-        
+
         return false;
     }
 
@@ -514,7 +510,7 @@ public class SysUtilKostentraeger extends JXPanel {
         inif.setStringProperty("KTraegerDateien", "KTDatei" + kANr, datei.toString(), null);
         INITool.saveIni(inif);
         // progress.setValue(0);
-        JOptionPane.showMessageDialog(null, "<HTML><center>Kostentr\u00e4gerdatei<BR/><B>" 
+        JOptionPane.showMessageDialog(null, "<HTML><center>Kostentr\u00e4gerdatei<BR/><B>"
                                                 + datei.toString()
                                                 + "</B><BR/>erfolgreich verarbeitet</center><HTML>");
         try {
@@ -708,8 +704,8 @@ public class SysUtilKostentraeger extends JXPanel {
 
     class KtreagerTblRenderer extends JLabel implements TableCellRenderer {
         /**
-        	 * 
-        	 */
+             *
+             */
         private static final long serialVersionUID = 1L;
 
         public KtreagerTblRenderer() {

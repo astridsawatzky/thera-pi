@@ -164,6 +164,7 @@ class OpRgafTab extends JXPanel implements ChangeListener {
         System.out.println("Eingang" + eingang);
         Money restbetrag = op.offen.minus(eingang);
 
+        op.bezahltAm = LocalDate.now();
         if (bar) {
             String ktext = op.kennung.name + "," + op.rezNummer.rezeptNummer();
             if (ktext.length() > 35) {
@@ -171,14 +172,13 @@ class OpRgafTab extends JXPanel implements ChangeListener {
             }
             String barkassesql = "insert into kasse set einnahme='" + eingang.toPlainString()
                                                                              .replace(",", ".")
-                    + "', datum='" + LocalDate.now() + "', ktext='" + ktext + "'," + "rez_nr='"
+                    + "', datum='" +  op.bezahltAm + "', ktext='" + ktext + "'," + "rez_nr='"
                     + op.rezNummer.rezeptNummer() + "', PAT_INTERN='" + op.patid + "'";
             SqlInfo.sqlAusfuehren(barkassesql);
         }
 
         String rgafakturaSql = null;
 
-        op.bezahltAm = LocalDate.now();
         if (op.type == Type.RGR) { // aus rgaffaktura ausbuchen
             rezeptBezahltSetzen(op.rezNummer.rezeptNummer());
             rgafakturaSql = "update rgaffaktura set roffen='" + restbetrag.toPlainString() + "', rbezdatum='"
