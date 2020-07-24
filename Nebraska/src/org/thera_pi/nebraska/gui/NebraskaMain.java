@@ -17,6 +17,7 @@ import CommonTools.ini.INITool;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
 import crypt.Verschluesseln;
+import environment.Path;
 
 public class NebraskaMain {
     public static IOfficeApplication officeapplication;
@@ -53,14 +54,12 @@ public class NebraskaMain {
         }
         progHome = System.getProperty("user.dir");
         String INI_FILE = "";
-        if (System.getProperty("os.name")
-                  .contains("Windows")) {
+
+        if (Path.Instance.isWindows()) {
             INI_FILE = progHome + File.separator + "nebraska_windows.conf";
-        } else if (System.getProperty("os.name")
-                         .contains("Linux")) {
+        } else if (Path.Instance.isLinux()) {
             INI_FILE = progHome + File.separator + "nebraska_linux.conf";
-        } else if (System.getProperty("os.name")
-                         .contains("String für MaxOSX????")) {
+        } else if (Path.Instance.isMac()) {
             INI_FILE = progHome + File.separator + "nebraska_mac.conf";
         }
         Verschluesseln man = Verschluesseln.getInstance();
@@ -76,7 +75,6 @@ public class NebraskaMain {
             }
             INIFile ini = new INIFile(INI_FILE);
             int anzahl = ini.getIntegerProperty("KeyStores", "KeyStoreAnzahl");
-            Vector<String> dummy = new Vector<String>();
             boolean speichern = false;
             for (int i = 0; i < anzahl; i++) {
                 try {
@@ -94,14 +92,13 @@ public class NebraskaMain {
 
                     }
 
-                    dummy.clear();
-                    dummy.trimToSize();
+                    Vector<String> dummy = new Vector<String>();
                     dummy.add(ini.getStringProperty("KeyStores", "KeyStoreFile" + Integer.toString(i + 1)));
                     dummy.add(man.decrypt(ini.getStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1))));
                     dummy.add(ini.getStringProperty("KeyStores", "KeyStoreAlias" + Integer.toString(i + 1)));
                     dummy.add(
                             man.decrypt(ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1))));
-                    keyStoreParameter.add((Vector<String>) dummy.clone());
+                    keyStoreParameter.add( dummy);
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
@@ -116,7 +113,6 @@ public class NebraskaMain {
             try {
                 INIFile ini = new INIFile(INI_FILE);
                 int anzahl = ini.getIntegerProperty("KeyStores", "KeyStoreAnzahl");
-                Vector<String> dummy = new Vector<String>();
                 boolean speichern = false;
                 for (int i = 0; i < anzahl; i++) {
 
@@ -131,14 +127,13 @@ public class NebraskaMain {
                         speichern = true;
                     }
 
-                    dummy.clear();
-                    dummy.trimToSize();
+                    Vector<String> dummy = new Vector<String>();
                     dummy.add(ini.getStringProperty("KeyStores", "KeyStoreFile" + Integer.toString(i + 1)));
                     dummy.add(man.decrypt(ini.getStringProperty("KeyStores", "KeyStorePw" + Integer.toString(i + 1))));
                     dummy.add(ini.getStringProperty("KeyStores", "KeyStoreAlias" + Integer.toString(i + 1)));
                     dummy.add(
                             man.decrypt(ini.getStringProperty("KeyStores", "KeyStoreKeyPw" + Integer.toString(i + 1))));
-                    keyStoreParameter.add((Vector<String>) dummy.clone());
+                    keyStoreParameter.add( dummy);
                 }
                 if (speichern) {
                     ini.save();

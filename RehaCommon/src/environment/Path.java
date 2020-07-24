@@ -38,6 +38,10 @@ public enum Path {
         return currentOS.is(OS.WIN);
     }
 
+    public boolean isMac() {
+        return currentOS.is(OS.MAC);
+    }
+
     private void setProghome(String proghome) {
         this.proghome = proghome;
     }
@@ -49,7 +53,7 @@ public enum Path {
         Optional<String> therapihome = Optional.ofNullable(System.getenv(THERAPIHOME));
         if (therapihome.isPresent()) {
             String envHome = therapihome.get();
-            
+
             if (!envHome.endsWith(File.separator)) {
                 envHome += File.separator;
             }
@@ -63,7 +67,7 @@ public enum Path {
         }
         logger.info("Programmverzeichnis = " + getProghome());
     }
-  
+
     private boolean iniExistsInUserDir() {
         String userdir = System.getProperty("user.dir");
         // if userenvironment has correct structure take that
