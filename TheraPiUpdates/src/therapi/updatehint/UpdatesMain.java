@@ -14,6 +14,7 @@ import com.sun.javafx.application.PlatformImpl;
 import javafx.stage.Stage;
 
 public class UpdatesMain implements Runnable {
+   private static final Logger logger = LoggerFactory.getLogger(UpdatesMain.class);
     @Override
     public void run() {
         try {
@@ -28,7 +29,6 @@ public class UpdatesMain implements Runnable {
             List<File> updatefiles = new VersionsSieb(new Version()).select(new HTTPRepository().filesList());
 
             if (updatefiles.isEmpty()) {
-                Logger logger = LoggerFactory.getLogger(UpdatesMain.class);
                 logger.debug("No Updates found for Version: " + new Version().number());
             } else {
                 Main.updatefiles = updatefiles;
