@@ -5,6 +5,16 @@ Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
+
+## unveroeffentlicht
+
+### fixed
+
+-- Updater respektiert settings in tpupdatesneu.ini fixes #462
+   Es wird automatisch auf Updates geprüft, wenn:
+   tpudaterneu.ini fehlt  
+   in tpupdaterneu.ini der Eintrag UpdateChecken auf einen der TheraPi Wahrheitswerte gesetzt wird.
+
 ## [1.1.9] - 2020-07-24
 
 ### added
@@ -12,7 +22,6 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - log Programm- und Javaversion on Startup #403
 - Geburtsdatumcheck bei Patientenanlage #27
 - feature toggle steuerbar mit IK/ini/.features Datei
-
 
 ### changed
 - Aufnahme der Versionsnummer in die untere linke Ecke #410
@@ -41,6 +50,7 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - Gitlab: Quelle wird automatisch compiliert, getestet und Artefakte erstellt.
 - Konvention Testdatenbank IK = 123456789
 - Feature Toggle ermöglicht das Schalten von neuen Features im Hauptbaum
+- Reaktivierung der automatischen UpdateSuche
 
 ### changed
 - RehaHMK/src/rehaHMKPanels/RehaHMKPanel2.java no longer uses deprecated sun.image.jpeg lib und kompiliert jetzt auch mit openJDK

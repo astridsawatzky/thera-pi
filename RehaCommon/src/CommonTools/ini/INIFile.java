@@ -183,7 +183,7 @@ public final class INIFile {
             if (objProp != null) {
                 strVal = objProp.getPropValue()
                                 .toUpperCase();
-                if (strVal.equals("YES") || strVal.equals("TRUE") || strVal.equals("1")) {
+                if (booleanValueOf(strVal)) {
                     blnRet = true;
                 }
 
@@ -191,6 +191,11 @@ public final class INIFile {
 
         }
         return Boolean.valueOf(blnRet);
+    }
+
+    public static boolean booleanValueOf(String strVal) {
+        strVal = strVal.toUpperCase();
+        return "YES".equals(strVal) || "TRUE".equals(strVal) || "1".equals(strVal);
     }
 
     /**

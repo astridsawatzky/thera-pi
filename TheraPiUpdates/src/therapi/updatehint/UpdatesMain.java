@@ -24,14 +24,16 @@ public class UpdatesMain implements Runnable {
     }
 
     public static void main(String[] args) {
-        List<File> updatefiles = new VersionsSieb(new Version()).select(new HTTPRepository().filesList());
+        if (Main.isEnabled()) {
+            List<File> updatefiles = new VersionsSieb(new Version()).select(new HTTPRepository().filesList());
 
-        if (updatefiles.isEmpty()) {
-            Logger logger = LoggerFactory.getLogger(UpdatesMain.class);
-            logger.debug("No Updates found for Version: " + new Version().number());
-        } else {
-            Main.updatefiles = updatefiles;
-            PlatformImpl.startup(new UpdatesMain());
+            if (updatefiles.isEmpty()) {
+                Logger logger = LoggerFactory.getLogger(UpdatesMain.class);
+                logger.debug("No Updates found for Version: " + new Version().number());
+            } else {
+                Main.updatefiles = updatefiles;
+                PlatformImpl.startup(new UpdatesMain());
+            }
         }
     }
 }
