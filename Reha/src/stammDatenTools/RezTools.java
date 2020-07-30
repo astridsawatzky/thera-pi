@@ -1,5 +1,6 @@
 package stammDatenTools;
 
+import java.awt.HeadlessException;
 import java.awt.Point;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -32,7 +33,7 @@ import terminKalender.TermineErfassen;
 import wecker.AePlayWave;
 
 public class RezTools {
-    
+
     public static final int REZEPT_IST_JETZ_VOLL = 0;
     public static final int REZEPT_IST_BEREITS_VOLL = 1;
     public static final int REZEPT_HAT_LUFT = 2;
@@ -41,7 +42,7 @@ public class RezTools {
     public static final int DIALOG_ABBRUCH = -1;
     public static final int DIALOG_OK = 0;
     public static int DIALOG_WERT = 0;
-    
+
     private static Logger logger = LoggerFactory.getLogger(RezTools.class);
 
     public static boolean mitJahresWechsel(String datum) {
@@ -261,19 +262,23 @@ public class RezTools {
         Disziplinen diszis = new Disziplinen();
         final int VORRANGIG = 0, EXTRAOK = 1;
         boolean[] bret = { false, false };
-        Vector<String> vec = SqlInfo.holeFelder("select vorrangig,extraok from kuerzel where kuerzel='"
-                + kuerzel + "' and disziplin ='" + rezClass + "' LIMIT 1").get(0);
-        if (vec.size() <= 0) {
-            String msg = "Achtung!\n\n" + "Ihre Kürzelzuordnung in den Preislisten ist nicht korrekt!!!!!\n"
-                    + "Kürzel: " + kuerzel + "\n" + "Disziplin: " + diszis.getDisziKurzFromRK(rezClass) + "\n\n"
-                    + "Für die ausgewählte Diziplin ist das angegebene Kürzel nicht in der Kürzeltabelle vermerkt!";
-            JOptionPane.showMessageDialog(null, msg);
-            return null;
+        try {
+            Vector<String> vec = SqlInfo.holeFelder("select vorrangig,extraok from kuerzel where kuerzel='"
+                    + kuerzel + "' and disziplin ='" + rezClass + "' LIMIT 1").get(0);
+            if (vec.size() <= 0) {
+                String msg = "Achtung!\n\n" + "Ihre Kürzelzuordnung in den Preislisten ist nicht korrekt!!!!!\n"
+                        + "Kürzel: " + kuerzel + "\n" + "Disziplin: " + diszis.getDisziKurzFromRK(rezClass) + "\n\n"
+                        + "Für die ausgewählte Diziplin ist das angegebene Kürzel nicht in der Kürzeltabelle vermerkt!";
+                JOptionPane.showMessageDialog(null, msg);
+                return null;
+            }
+            bret[0] = vec.get(VORRANGIG)
+                    .equals("T");
+            bret[1] = vec.get(EXTRAOK)
+                    .equals("T");
+        } catch (Exception e) {
+            logger.error("could not retrieve is vorrangig for " + kuerzel +  " " + rezClass , e);
         }
-        bret[0] = vec.get(VORRANGIG)
-                .equals("T");
-        bret[1] = vec.get(EXTRAOK)
-                .equals("T");
         return bret;
     }
 
@@ -488,7 +493,7 @@ public class RezTools {
         String diszi = RezTools.getDisziplinFromRezNr(reznr);
         String preisgruppe = SqlInfo.holeEinzelFeld(
                 "select preisgruppe from verordn where rez_nr='" + reznr + "' LIMIT 1");
-                
+
         Vector<Vector<Vector<String>>> vector = null;
         try {
             vector = SystemPreislisten.hmPreise.get(diszi);
@@ -497,7 +502,7 @@ public class RezTools {
             logger.error("Keine SystemPreislisten eingelesen? Error: " + e.getLocalizedMessage());
             // e.printStackTrace();
         }
-        
+
         if (vector == null) {
             System.out.println("baeh");  // Boo! If inner Vector was NULL, it can still be wrapped & outer Vec != NULL
         }
