@@ -19,7 +19,6 @@ public class MoneyFormatter extends DefaultFormatter {
 
     public String valueToString(Object object) throws ParseException {
         Money m;
-        System.out.println(object);
         if (object == null) {
             m = Money.ZERO;
         } else {

@@ -302,8 +302,6 @@ class AusfallRechnung extends JDialog implements WindowListener, ActionListener,
                 inpos = LeistungTools.getLeistungRaw(sart, spos, preisgruppe);
                 InitHashMaps.hmAdrAFRDaten.put(maplang, String.valueOf(inpos[0]));
                 InitHashMaps.hmAdrAFRDaten.put(mapkurz, String.valueOf(inpos[1]));
-                //// System.out.println(inpos[0]);
-                //// System.out.println(inpos[1]);
 
             } else {
                 spos = vecaktrez.get(8 + i);

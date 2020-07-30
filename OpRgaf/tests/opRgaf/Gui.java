@@ -117,7 +117,6 @@ public class Gui {
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 rgrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
 
@@ -127,7 +126,6 @@ public class Gui {
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 afrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
             }
@@ -136,7 +134,6 @@ public class Gui {
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-                System.out.println(e);
                 vrTypefilter.set(e.getStateChange() == ItemEvent.SELECTED);
                 opJTable.sorter.sort();
             }

@@ -38,7 +38,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
     public OffenePostenTableModel(List<OffenePosten> opListe) {
 
         this.opListe = opListe;
-        
+
 
     }
 
@@ -135,7 +135,7 @@ public class OffenePostenTableModel extends AbstractTableModel {
             op.rezNummer = new Rezeptnummer((String) aValue);
             break;
         case TABELLENID:
-            logger.error("Im Leben nicht!!11!!");
+            logger.error("TabellenID must not be set from outside");
             break;
         default:
             logger.error("unknown column request column no= " + columnIndex);
