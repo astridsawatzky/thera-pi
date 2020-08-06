@@ -34,7 +34,6 @@ import hauptFenster.Reha;
 import socketClients.SMSClient;
 import stammDatenTools.RezTools;
 import systemEinstellungen.config.Datenbank;
-import terminKalender.KollegenListe;
 
 public class SystemConfig {
 
@@ -218,7 +217,7 @@ public class SystemConfig {
     public static boolean fullSizePwDialog = false;
 
     public static Vector<Vector<String>> vUserTasks = new Vector<Vector<String>>();
-    private Logger logger = LoggerFactory.getLogger(SystemConfig.class);
+    private static final Logger logger = LoggerFactory.getLogger(SystemConfig.class);
 
     public SystemConfig() {
 
@@ -323,16 +322,12 @@ public class SystemConfig {
                                     while (netInter.hasMoreElements()) {
                                         NetworkInterface ni = netInter.nextElement();
                                         if (ni != null) {
-                                            // System.out.println( "NetworkInterface " + n++ + ": " +
-                                            // ni.getDisplayName() );
 
                                             for (InetAddress iaddress : Collections.list(ni.getInetAddresses())) {
                                                 loopback = iaddress.isLoopbackAddress();
                                                 sitelocal = iaddress.isSiteLocalAddress();
                                                 reachable = InetAddress.getByName(iaddress.getHostAddress())
                                                                        .isReachable(2000);
-                                                // System.out.println(iaddress.getHostAddress()+": "+loopback+" -
-                                                // "+sitelocal+" - "+reachable);
                                                 if (!loopback && sitelocal && reachable) {
                                                     dieseCallbackIP = iaddress.getHostAddress();
                                                     if (dieseCallbackIP.toString()
@@ -340,7 +335,7 @@ public class SystemConfig {
                                                                                       .substring(0, hmSMS.get("IP")
                                                                                                          .lastIndexOf(
                                                                                                                  ".")))) {
-                                                        System.out.println("Callback-IP: " + dieseCallbackIP);
+                                                        logger.info("Callback-IP: " + dieseCallbackIP);
                                                         return;
                                                     }
                                                 }
@@ -367,16 +362,16 @@ public class SystemConfig {
                             }
                         }.start();
 
-                        System.out.println(hmSMS);
+                        logger.info(hmSMS.toString());
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 } else {
-                    System.out.println("Dienste Autodialer/SMS nicht verfügbar");
+                    logger.info("Dienste Autodialer/SMS nicht verfügbar");
                 }
 
             } else {
-                System.out.println("SmartPhone-Service ist nicht installiert");
+                logger.info("SmartPhone-Service ist nicht installiert");
             }
             /********************************************************/
         } catch (Exception ex) {
@@ -480,11 +475,9 @@ public class SystemConfig {
             TKSettings.KalenderHintergrund = new Color(Integer.parseInt(ss[0]), Integer.parseInt(ss[1]), Integer.parseInt(ss[2]));
             TKSettings.KalenderAlpha = new Float(
                     String.valueOf(termkalini.getStringProperty("Kalender", "KalenderHintergrundAlpha")));
-            //// System.out.println("Anzal Kollegen = "+AnzahlKollegen);
             oTerminListe = new TerminListe().init();
             Reha.instance.setzeInitStand("Gruppendefinition einlesen");
             GruppenLesen();
-            // oGruppen = new GruppenEinlesen().init();
             try {
                 termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
                 TKSettings.KalenderLangesMenue = (termkalini.getStringProperty("Kalender", "LangesMenue")
@@ -726,7 +719,6 @@ public class SystemConfig {
                     "Fehler bei der Verarbeitung der icalendar.ini, Mehode:ICalSettingns!\nFehlertext: "
                             + ex.getMessage());
         }
-        // System.out.println(hmIcalSettings);
     }
 
     private void Verzeichnisse() {
@@ -754,7 +746,6 @@ public class SystemConfig {
             if (colini == null) {
                 colini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "color.ini");
             }
-            //// System.out.println("In TK-Farben");
             int anz = Integer.valueOf(String.valueOf(colini.getStringProperty("Terminkalender", "FarbenAnzahl")));
             vSysColsNamen = new Vector<String>();
             vSysColsBedeut = new Vector<String>();
@@ -796,7 +787,6 @@ public class SystemConfig {
                 // Anzahl der Sets
                 colv = new Vector<Color[]>();
                 for (int j = 0; j < anz; j++) {
-                    //// System.out.println("Bei i="+i+" / und j="+j);
                     String[] farb = String.valueOf(colini.getStringProperty(vSysDefNamen.get(i), vSysColsNamen.get(j)))
                                           .split(",");
                     Color[] farbe = new Color[2];
@@ -891,18 +881,6 @@ public class SystemConfig {
                 typen[2] = dbtini.getStringProperty("Datenbanktypen", "Typ" + (i + 1) + "Port");
                 DBTypen.add(typen.clone());
             }
-            /*
-             * System.out.println(
-             * "*******************Mandanten-Konfiguration*****************************");
-             * //Testen welches IK gerade aktiv ist und dessen DB-Verbindung speichern.
-             * //dann alle IK's durchlaufen und überprüfen ob über die selbe DB-Verbindung
-             * zugegriffen wird. //sofern ja, in einem Vector ik, name, und DB-Parameter
-             * merken. for(int i = 0; i < Mandanten.size();i++){
-             * System.out.println(Mandanten.get(i)[0]+" - "+Mandanten.get(i)[1]);
-             * System.out.println(hmDBMandant.get(Mandanten.get(i)[1])); }
-             * System.out.println(
-             * "**********************************************************************");
-             */
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
@@ -960,8 +938,6 @@ public class SystemConfig {
         } else if (wert instanceof java.lang.Integer) {
             inidatei.setIntegerProperty(gruppe, element, (Integer) wert, hinweis);
         }
-        // System.out.println(inidatei.getFileName()+" - Gruppe="+gruppe+" /
-        // Element="+element+" / Wert="+wert );
         INITool.saveIni(inidatei);
     }
 
@@ -1091,8 +1067,6 @@ public class SystemConfig {
                                 + ex.getMessage());
             }
         }
-        // System.out.println("Fensterkonfig="+hmContainer);
-        // System.out.println("INI's wurden updated="+mustupdate);
     }
 
     public static void PatientLesen() {
@@ -1202,7 +1176,7 @@ public class SystemConfig {
             if (mustsave) {
                 INITool.saveIni(inif);
             }
-            System.out.println("RsFtOhneKalender = " + RsFtOhneKalender);
+            logger.info("RsFtOhneKalender = " + RsFtOhneKalender);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
                     "Fehler bei der Verarbeitung der geraete.ini, Mehode:GeraeteInit!\nFehlertext: " + ex.getMessage());
@@ -1232,16 +1206,15 @@ public class SystemConfig {
         try {
             INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rezept.ini");
             boolean mustsave = false;
-            int args;
             // public static String[] rezeptKlassen = null;
             initRezeptKlasse = inif.getStringProperty("RezeptKlassen", "InitKlasse");
-            args = Integer.parseInt(inif.getStringProperty("RezeptKlassen", "KlassenAnzahl"));
-            rezeptKlassen = new String[args];
+            int rezeptKlassenAnzahl = Integer.parseInt(inif.getStringProperty("RezeptKlassen", "KlassenAnzahl"));
+            rezeptKlassen = new String[rezeptKlassenAnzahl];
             rezeptKlassenAktiv = new Vector<Vector<String>>();
 
             int aktiv;
-            Vector<String> vec = new Vector<String>();
-            for (int i = 0; i < args; i++) {
+            for (int i = 0; i < rezeptKlassenAnzahl; i++) {
+                Vector<String> vec = new Vector<String>();
                 try {
                     rezeptKlassen[i] = inif.getStringProperty("RezeptKlassen", "Klasse" + Integer.valueOf(i + 1)
                                                                                                  .toString());
@@ -1255,14 +1228,12 @@ public class SystemConfig {
                         vec.add(String.valueOf(rezeptKlassen[i]));
                         vec.add(inif.getStringProperty("RezeptKlassen", "KlasseKurz" + Integer.valueOf(i + 1)
                                                                                               .toString()));
-                        rezeptKlassenAktiv.add((Vector<String>) vec.clone());
+                        rezeptKlassenAktiv.add( vec);
                     }
                 } catch (Exception ex) {
-                    System.out.println("Fehler bei Rezeptklasse " + i);
-                    ex.printStackTrace();
+                    logger.info("Fehler bei Rezeptklasse " + i,ex);
                 }
             }
-            // System.out.println(rezeptKlassenAktiv);
             rezGebDrucker = inif.getStringProperty("DruckOptionen", "RezGebDrucker");
             rezGebVorlageNeu = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/"
                     + inif.getStringProperty("Vorlagen", "RezGebVorlageNeu");
@@ -1272,11 +1243,11 @@ public class SystemConfig {
                     + inif.getStringProperty("Vorlagen", "RezGebVorlageHB");
             rezGebDirektDruck = (inif.getIntegerProperty("DruckOptionen", "DirektDruck") <= 0 ? false : true);
             rezBarcodeDrucker = inif.getStringProperty("DruckOptionen", "BarCodeDrucker");
-            args = inif.getIntegerProperty("BarcodeForm", "BarcodeFormAnzahl");
-            if (args > 0) {
-                rezBarCodName = new String[args];
+            rezeptKlassenAnzahl = inif.getIntegerProperty("BarcodeForm", "BarcodeFormAnzahl");
+            if (rezeptKlassenAnzahl > 0) {
+                rezBarCodName = new String[rezeptKlassenAnzahl];
                 rezBarCodForm = new Vector<String>();
-                for (int i = 0; i < args; i++) {
+                for (int i = 0; i < rezeptKlassenAnzahl; i++) {
                     rezBarCodName[i] = inif.getStringProperty("BarcodeForm", "FormName" + (i + 1));
                     rezBarCodForm.add(inif.getStringProperty("BarcodeForm", "FormVorlage" + (i + 1)));
                 }
@@ -1328,16 +1299,12 @@ public class SystemConfig {
                     hmHmPraefix.put(hmPraefixArt[i], hmPraefixZahl[i]);
                     hmHmPosIndex.put(hmPraefixArt[i], hmIndexZahl[i]);
                 }
-                // System.out.println("Aus Direktzuweisung\n"+hmHmPraefix);
-                // System.out.println("Aus Direktzuweisung\n"+hmHmPosIndex);
                 mustsave = true;
             } else {
                 for (int i = 0; i < hmPraefixArt.length; i++) {
                     hmHmPraefix.put(hmPraefixArt[i], inif.getStringProperty("HMRPraefix", hmPraefixArt[i]));
                     hmHmPosIndex.put(hmPraefixArt[i], inif.getStringProperty("HMRPosindex", hmPraefixArt[i]));
                 }
-                // System.out.println("Aus INI-Datei\n"+hmHmPraefix);
-                // System.out.println("Aus INI-Datei\n"+hmHmPosIndex);
             }
             if (mustsave) {
                 INITool.saveIni(inif);
@@ -1364,16 +1331,11 @@ public class SystemConfig {
                 int lang2 = inif.getIntegerProperty("Textbausteine", prop);
                 String prop2 = RezTools.getDisziplinFromRezNr(rezeptKlassenAktiv.get(i)
                                                                                .get(1));
-                // System.out.println("****************************"+prop);
-                // System.out.println("****************************"+prop2);
-                // String gelenk;
                 for (int i2 = 0; i2 < lang2; i2++) {
-                    // vec.add( inif.getStringProperty("Textbausteine", prop2+(i2+1)) );
                     vec.add(inif.getStringProperty(prop2, "Thema" + (i2 + 1)));
                 }
                 hmTherapBausteine.put(prop2, (Vector<String>) vec.clone());
             }
-            // System.out.println(hmTherapBausteine);
             for (int i = 0; i < 4; i++) {
                 berichttitel[i] = inif.getStringProperty("Bericht", "Block" + (i + 1));
             }
@@ -1498,10 +1460,6 @@ public class SystemConfig {
             if (inif.getStringProperty("Bedienung", "WerkzeugaufrufButtonZeigen") != null) // Prüfung auf Existenz
                 hmPatientenWerkzeugDlgIni.put("ToolsDlgShowButton",
                         inif.getIntegerProperty("Bedienung", "WerkzeugaufrufButtonZeigen") == 1 ? true : false);
-            // System.out.println("Default1 =
-            // "+hmPatientenWerkzeugDlgIni.get("ToolsDlgClickCount"));
-
-            // Lemmi 20110116: Abfrage Abbruch bei Rezeptänderungen mit Warnung
             hmRezeptDlgIni.put("RezAendAbbruchWarn", false);
             if (inif.getStringProperty("Rezept", "RezeptAenderungAbbruchWarnung") != null) // Prüfung auf Existenz
                 hmRezeptDlgIni.put("RezAendAbbruchWarn",
@@ -1850,7 +1808,7 @@ public class SystemConfig {
         }
         String sask = inif.getStringProperty("GemeinsameParameter", "FragenVorEmail");
         if (sask == null) {
-            System.out.println("Erstelle Parameter 'FrageVorEmail'");
+            logger.info("Erstelle Parameter 'FrageVorEmail'");
             inif.setStringProperty("GemeinsameParameter", "FragenVorEmail", "1", null);
             mustsave = true;
         }
@@ -1878,7 +1836,7 @@ public class SystemConfig {
         /* } */
         sask = inif.getStringProperty("GKVTaxierung", "AnzahlVorlagen");
         if (sask == null) {
-            System.out.println("Erstelle Parameter 'AnzahlVorlagen'");
+            logger.info("Erstelle Parameter 'AnzahlVorlagen'");
             inif.setStringProperty("GKVTaxierung", "AnzahlVorlagen", "0", null);
             inif.setStringProperty("GKVTaxierung", "Vorlage1", "", null);
             mustsave = true;
@@ -1951,8 +1909,8 @@ public class SystemConfig {
                 hmAbrechnung.put("hmkeystoreusecertof", "Owner nicht vorhanden");
                 hmAbrechnung.put("hmkeystorealias", "Alias nicht vorhanden");
             }
-            System.out.println("Alias=" + hmAbrechnung.get("hmkeystorealias"));
-            System.out.println("Owner=" + hmAbrechnung.get("hmkeystoreusecertof"));
+            logger.info("Alias=" + hmAbrechnung.get("hmkeystorealias"));
+            logger.info("Owner=" + hmAbrechnung.get("hmkeystoreusecertof"));
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null,
                     "Zertifikatsdatenbank nicht vorhanden oder fehlerhaft.\nAbrechnung nach § 302 kann nicht durchgeführt werden.");
@@ -1961,7 +1919,6 @@ public class SystemConfig {
             SystemConfig.certState = SystemConfig.certNotFound;
             ex.printStackTrace();
         }
-        // System.out.println("Keystore-Passwort = "+hmAbrechnung.get("hmkeystorepw"));
     }
 
     public static void AktiviereLog() {
@@ -2093,12 +2050,9 @@ public class SystemConfig {
     static int testIntIni(INIFile ini2use, String iniSect, String iniKey) {
         int xscale = 0;
         try {
-            // System.out.println("try " + ini2use.getFileName() + " for "+ iniKey);
             xscale = ini2use.getIntegerProperty(iniSect, iniKey);
         } catch (Exception ex) {
-            // System.out.println("key " + iniKey + " not found in "+
-            // ini2use.getFileName());
-            // ex.printStackTrace();
+            //ignore
         }
         return xscale;
     }
@@ -2107,20 +2061,7 @@ public class SystemConfig {
         vFeiertage = SqlInfo.holeFeld(
                 "select datsql from feiertage where jahr >= '" + aktJahr + "' AND " + "buland <> ''");
     }
-    /*
-     * public static void compTest(){ Vector<Vector> vec = new Vector<Vector>();
-     * Vector<String> ve2 = new Vector<String>(); ve2.add("Zundermann");
-     * ve2.add("0"); vec.add((Vector)ve2.clone()); ve2.clear(); ve2.add("Maier");
-     * ve2.add("1"); vec.add((Vector)ve2.clone()); ve2.clear(); ve2.add("Ammann");
-     * ve2.add("2"); vec.add((Vector)ve2.clone()); Comparator<Vector> comparator =
-     * new Comparator<Vector>() {
-     *
-     * @Override public int compare(Vector o1, Vector o2) { String s1 =
-     * (String)o1.get(0); String s2 = (String)o2.get(0); return s1.compareTo(s2); }
-     * }; Collections.sort(vec,comparator);
-     *
-     * }
-     */
+
 
     /*******************************************************************************/
     public static boolean searchExtended() {

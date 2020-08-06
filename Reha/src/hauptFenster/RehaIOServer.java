@@ -11,12 +11,16 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import events.PatStammEvent;
 import events.PatStammEventClass;
 import gui.Cursors;
 import io.RehaIOMessages;
 
 public class RehaIOServer extends SwingWorker<Void, Void> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RehaIOServer.class);
     public ServerSocket serv = null;
     StringBuffer sb = new StringBuffer();
     InputStream input = null;
@@ -53,11 +57,11 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * RehaSql
-     * 
-     * 
+     *
+     *
      */
     private void doRehaSql(String op) {
         if (op.split("#")[1].equals(RehaIOMessages.IS_STARTET)) {
@@ -83,11 +87,11 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * OffenePosten
-     * 
-     * 
+     *
+     *
      */
     private void doOffenePosten(String op) {
         if (op.split("#")[1].equals(RehaIOMessages.IS_STARTET)) {
@@ -107,11 +111,11 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * WorkFlow
-     * 
-     * 
+     *
+     *
      */
 
     private void doWorkFlow(String op) {
@@ -128,11 +132,11 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * OpRgaf
-     * 
-     * 
+     *
+     *
      */
 
     private void doOpRgaf(String op) {
@@ -153,11 +157,11 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * 301-er
-     * 
-     * 
+     *
+     *
      */
     private void doReha301(String op) {
         if (op.split("#")[1].equals(RehaIOMessages.IS_STARTET)) {
@@ -189,11 +193,11 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * RehaMail
-     * 
-     * 
+     *
+     *
      */
     private void doRehaMail(String op) {
         if (op.split("#")[1].equals(RehaIOMessages.IS_STARTET)) {
@@ -219,11 +223,11 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /**********
-     * 
-     * 
+     *
+     *
      * RehaHMK
-     * 
-     * 
+     *
+     *
      */
     private void doRehaHMK(String op) {
         if (op.split("#")[1].equals(RehaIOMessages.IS_STARTET)) {
@@ -250,36 +254,36 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
     }
 
     /*************
-     * 
-     * 
-     * 
+     *
+     *
+     *
      * ReversePort-Handling
-     * 
-     * 
+     *
+     *
      ******************/
     private void doReversePort(String op) {
 //		new SocketClient().setzeRehaNachricht(rehaPort, "AppName#"+"Reha301#"+Integer.toString(Reha301.xport));
         if (op.split("#")[1].equals("Reha301")) {
             reha301reversePort = Integer.parseInt(op.split("#")[2]);
-            System.out.println("Port fuer den 301-er Manager = " + op.split("#")[2]);
+            LOGGER.info("Port fuer den 301-er Manager = " + op.split("#")[2]);
         } else if (op.split("#")[1].equals("WorkFlow")) {
             rehaWorkFlowreversePort = Integer.parseInt(op.split("#")[2]);
-            System.out.println("Port fuer den Work-Flow Manager = " + op.split("#")[2]);
+            LOGGER.info("Port fuer den Work-Flow Manager = " + op.split("#")[2]);
         } else if (op.split("#")[1].equals("OpRgaf")) {
             rgAfreversePort = Integer.parseInt(op.split("#")[2]);
-            System.out.println("Port fuer OpRgaf Modul = " + op.split("#")[2]);
+            LOGGER.info("Port fuer OpRgaf Modul = " + op.split("#")[2]);
         } else if (op.split("#")[1].equals("OffenePosten")) {
             offenePostenreversePort = Integer.parseInt(op.split("#")[2]);
-            System.out.println("Port fuer OffenePosten Modul = " + op.split("#")[2]);
+            LOGGER.info("Port fuer OffenePosten Modul = " + op.split("#")[2]);
         } else if (op.split("#")[1].equals("RehaSql")) {
             rehaSqlreversePort = Integer.parseInt(op.split("#")[2]);
-            System.out.println("Port fuer RehaSql = " + op.split("#")[2]);
+            LOGGER.info("Port fuer RehaSql = " + op.split("#")[2]);
         } else if (op.split("#")[1].equals("RehaMail")) {
             rehaMailreversePort = Integer.parseInt(op.split("#")[2]);
-            System.out.println("Port fuer RehaMail = " + op.split("#")[2]);
+            LOGGER.info("Port fuer RehaMail = " + op.split("#")[2]);
         } else if (op.split("#")[1].equals("RehaHMK")) {
             rehaHMKreversePort = Integer.parseInt(op.split("#")[2]);
-            System.out.println("Port fuer RehaHMK = " + op.split("#")[2]);
+            LOGGER.info("Port fuer RehaHMK = " + op.split("#")[2]);
         }
     }
 
@@ -292,17 +296,17 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
                 serv = new ServerSocket(Reha.xport);
                 break;
             } catch (Exception e) {
-                // System.out.println("In Exception währen der Portsuche - 1");
+                // LOGGER.info("In Exception währen der Portsuche - 1");
                 if (serv != null) {
                     try {
                         serv.close();
                     } catch (IOException e1) {
-                        // System.out.println("In Exception währen der Portsuche - 2");
+                        // LOGGER.info("In Exception währen der Portsuche - 2");
                         e1.printStackTrace();
                     }
                     serv = null;
                 }
-                // System.out.println("Port: "+Reha.xport+" bereits belegt");
+                // LOGGER.info("Port: "+Reha.xport+" bereits belegt");
                 Reha.xport++;
             }
         }
@@ -312,7 +316,7 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
             serv = null;
             return null;
         }
-        System.out.println("IO-SocketServer installiert auf Port: " + Reha.xport);
+        LOGGER.info("IO-SocketServer installiert auf Port: " + Reha.xport);
         Socket client = null;
         while (true) {
             try {
@@ -332,7 +336,7 @@ public class RehaIOServer extends SwingWorker<Void, Void> {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                // System.out.println("In Exception währen der while input.read()-Schleife");
+                // LOGGER.info("In Exception währen der while input.read()-Schleife");
             }
             /***************************/
             if (sb.toString()
