@@ -460,7 +460,7 @@ public class SystemConfig {
         try {
             INIFile termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "terminkalender.ini");
-           BehandlerSets.behandlerSetsLaden(termkalini);
+           BehandlerSets.laden(termkalini);
             TKSettings.KalenderUmfang[0] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderStart"));
             TKSettings.KalenderUmfang[1] = String.valueOf(termkalini.getStringProperty("Kalender", "KalenderEnde"));
             TKSettings.KalenderMilli[0] = ZeitFunk.MinutenSeitMitternacht(TKSettings.KalenderUmfang[0]);

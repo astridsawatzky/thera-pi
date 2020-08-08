@@ -45,6 +45,7 @@ import hauptFenster.Reha;
 import mandant.IK;
 import mitarbeiter.Mitarbeiter;
 import mitarbeiter.MitarbeiterDto;
+import opRgaf.CommonTools.DateTimeFormatters;
 import terminKalender.KollegenListe;
 
 class Swingma {
@@ -554,7 +555,7 @@ class SysUtilKalenderBenutzer extends JXPanel {
         if (".  .".equals(text)) {
             return null;
         }
-        return LocalDate.parse(text);
+        return LocalDate.parse(text, DateTimeFormatters.dMYYYYmitPunkt);
     }
 
     private double evaluateArbeitstunden() {

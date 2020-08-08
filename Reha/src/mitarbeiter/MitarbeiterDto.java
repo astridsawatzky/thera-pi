@@ -1,6 +1,7 @@
 package mitarbeiter;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -27,8 +28,6 @@ public class MitarbeiterDto {
     public MitarbeiterDto(IK ik) {
         this.ik = ik;
     }
-
-
 
     public List<Mitarbeiter> all() {
 
@@ -99,9 +98,11 @@ public class MitarbeiterDto {
         ma.ort = rs.getString("ORT");
         ma.telefon1 = rs.getString("TELEFON1");
         ma.telfon2 = rs.getString("TELFON2");
+
         ma.geboren = rs.getDate("GEBOREN") == null ? null
                 : rs.getDate("GEBOREN")
                     .toLocalDate();
+
         ma.matchcode = Optional.ofNullable(rs.getString("matchcode"))
                                .orElse("");
         ma.ztext = rs.getString("ZTEXT");
@@ -144,10 +145,13 @@ public class MitarbeiterDto {
 
         try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();
                 Statement stmt = con.createStatement()) {
-            stmt.executeUpdate(sql,Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs =  stmt.getGeneratedKeys();
+            stmt.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
+            ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
-                ma.id=  rs.getInt(1);
+                ma.id = rs.getInt(1);
+            }
+            if (rs.getWarnings() != null) {
+                logger.debug(String.valueOf(rs.getWarnings()));
             }
         } catch (SQLException e) {
             logger.error("coud not save Mitarbeiter " + ma, e);
@@ -158,8 +162,7 @@ public class MitarbeiterDto {
     }
 
     void save(List<Mitarbeiter> mitarbeiterListe) {
-        mitarbeiterListe.get(1)
-                        .setNicht_zeig(!mitarbeiterListe.get(1).nicht_zeig);
+
         Map<Boolean, List<Mitarbeiter>> mitarbeiterparts = mitarbeiterListe.stream()
                                                                            .filter(m -> m.isdirty)
                                                                            .collect(Collectors.partitioningBy(
@@ -266,7 +269,7 @@ public class MitarbeiterDto {
                                         .append(", TELFON2 = ")
                                         .append(einklammern(ma.telfon2))
                                         .append(", GEBOREN = ")
-                                        .append(ma.geboren)
+                                        .append(einklammern(Date.valueOf(ma.geboren)))
                                         .append(", matchcode = ")
                                         .append(einklammern(ma.matchcode))
                                         .append(", ZTEXT = ")
@@ -291,6 +294,10 @@ public class MitarbeiterDto {
         return sql;
     }
 
+    private String einklammern(Date value) {
+        return value == null ? null : "'" + String.valueOf(value) + "'";
+    }
+
     private Integer einklammern(int invalue) {
 
         return invalue == 0 ? null : Integer.valueOf(invalue);
@@ -300,24 +307,22 @@ public class MitarbeiterDto {
         return value == null ? null : "'" + value + "'";
     }
 
-
-
     public int findgap() {
-      String sql = "SELECT  ko.KALZEILE + 1 as gap , mi.KALZEILE  FROM    kollegen2 ko LEFT JOIN  kollegen2 mi on ko.KALZEILE+1=mi.KALZEILE WHERE mi.KALZEILE IS  NULL  order by gap;";
-      try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();) {
-          ResultSet rs = con.createStatement()
-                            .executeQuery(sql);
-          while (rs.next()) {
+        String sql = "SELECT  ko.KALZEILE + 1 as gap , mi.KALZEILE  FROM    kollegen2 ko LEFT JOIN  kollegen2 mi on ko.KALZEILE+1=mi.KALZEILE WHERE mi.KALZEILE IS  NULL  order by gap;";
+        try (Connection con = new DatenquellenFactory(ik.digitString()).createConnection();) {
+            ResultSet rs = con.createStatement()
+                              .executeQuery(sql);
+            while (rs.next()) {
 
-             return  rs.getInt("gap");
+                return rs.getInt("gap");
 
-          }
+            }
 
-      } catch (SQLException e) {
-          logger.error("could not retrieve kalenzeilengap from Database", e);
+        } catch (SQLException e) {
+            logger.error("could not retrieve kalenzeilengap from Database", e);
 
-      }
-      return 0;
+        }
+        return 0;
     }
 
 }

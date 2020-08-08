@@ -43,7 +43,7 @@ public class Datenquelle {
         dataSource = new MysqlConnectionPoolDataSource();
         // If enabled, serverside sql_mode='' is ignored clientside.
         dataSource.setJdbcCompliantTruncation(false);
-        dataSource.setUrl(ini.get(DATEN_BANK, "DBKontakt1"));
+        dataSource.setUrl(ini.get(DATEN_BANK, "DBKontakt1")+"?zeroDateTimeBehavior=convertToNull");
         dataSource.setUser(ini.get(DATEN_BANK, "DBBenutzer1"));
         String pw = DECODER.decrypt(ini.get(DATEN_BANK, "DBPasswort1"));
         dataSource.setPassword(pw);
