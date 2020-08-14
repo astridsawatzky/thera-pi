@@ -2,79 +2,92 @@ package abrechnung;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Vector;
 
 import CommonTools.JRtaComboBox;
 import systemEinstellungen.SystemConfig;
 
+/**
+ * Diziplinen in unterschiedlichen Darstellungen:
+ * z.B. Physiotherapie
+ * kurz = KG
+ * mittel = Physio
+ * lang = Physio-Rezept
+ *
+ *
+ */
+
 public class Disziplinen {
-    private String[] typeOfVerordnung;
-    private ArrayList<String> diszis;
-    private String[] rezeptKlassen;
-    private String[] hmCodePrefix;
+    private static final List<String> DISZIS_OHNE_REHA_LANG = Collections.unmodifiableList(new ArrayList<>(Arrays.asList("Physio-Rezept", "Massage/Lymphdrainage-Rezept",
+            "Ergotherapie-Rezept", "Logopädie-Rezept", "Podologie-Rezept")));
+    private static final List<String> DISZIS_NUR_REHA_LANG = Collections.unmodifiableList(Arrays.asList("Rehasport-Rezept", "Funktionstraining-Rezept"));
+    private static final List<String> diszisMittel= Collections.unmodifiableList(new ArrayList<>(Arrays.asList("Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain")));   // aus AktuelleRezepte
+    private static final String[] diszisKurz = new String [] {"KG","MA","ER","LO","PO","RS","FT"};     // aus AbrechnungGKV (!)
+    private static final String[] hmCodePrefix = new String [] {"2","1","5","3","7","8",""};              // passende Prefixe nach HMpositionsnummernverzeichnis
+    private ArrayList<String> aktiveDiszisLang = new ArrayList<>();
+    private String[] aktiveDiszisKurz;
     private JRtaComboBox cmbDiszi;
-    private ArrayList<String> listTypeOfVO;
-    private String[] typeOfActiveVerordnung;
-    private String[] aktiveRezeptKlassen;
     private JRtaComboBox cmbDisziActive;
-    private ArrayList<String> listActiveTypeOfVO;
+    private ArrayList<String> activeDiszisLang;
+
 
     /**
-     * verwaltet die enthaltenen Heilmittelsparten
+     * Verwaltet die enthaltenen Heilmittelsparten.
+     * @deprecated Use {@link #Disziplinen(Vector<Vector<String>>,String,boolean)} instead
      */
     public Disziplinen() {
+        this(SystemConfig.rezeptKlassenAktiv, SystemConfig.initRezeptKlasse, SystemConfig.mitRs);
+    }
+
+    /**
+     * Verwaltet die enthaltenen Heilmittelsparten.
+     * @param rezeptKlassenAktivVector Vector der aktiven Disziplinen
+     * @param initRezeptKlasse die vorausgewaehlte HMSparte in Comboboxen, if null or empty String the first in the list is chosen.
+     * @param mitRS include RS and FT
+     */
+    Disziplinen(Vector<Vector<String>> rezeptKlassenAktivVector, String initRezeptKlasse, boolean mitRS) {
         // kleiner Überblick über das real existierende Chaos
         // aus HMRCheck
         //      String diszis[] =    {"2", "1", "5", "3", "8", "7"};    // auch in SysUtilTarifgruppen
         //      String diszikurz[] = {"KG","MA","ER","LO","RH","PO"};   // <- gibt es keine RH-Rezepte (? s.u.)
-        
+
         // aus SysUtilTarifgruppen          // <- McM: das ist die umfangreichste - als Basis nehmen?
-        //      tabName = new String[]    {"kgtarif","matarif","ertarif","lotarif","rhtarif","potarif","rstarif","fttarif"}; 
+        //      tabName = new String[]    {"kgtarif","matarif","ertarif","lotarif","rhtarif","potarif","rstarif","fttarif"};
         //      dummydiszi = new String[] {"Physio","Massage","Ergo","Logo","Reha","Podo","Rsport","Ftrain"};
 
         // aus Rezeptneuanlage (+REHA-Verordnung, -Rehasport-Rezept, -Funktionstraining-Rezept)
         // String[] idiszi = {"Physio-Rezept","Massage/Lymphdrainage-Rezept","Ergotherapie-Rezept","Logopädie-Rezept","REHA-Verordnung","Podologie-Rezept"};
 
-        diszis = new ArrayList<String>(Arrays.asList("Physio","Massage","Ergo","Logo","Podo","Rsport","Ftrain"));   // aus AktuelleRezepte
-        rezeptKlassen = new String [] {"KG","MA","ER","LO","PO","RS","FT"};     // aus AbrechnungGKV (!)
-        hmCodePrefix = new String [] {"2","1","5","3","7","8",""};              // passende Prefixe nach HMpositionsnummernverzeichnis
-                                                                                // McM: wird "8" auch für "RH" u. "FT" verwandt?
 
-        // erst eine Arraylist mit Auswahleinträgen erzeugen (<- die kann 'wachsen'; ein
-        // Array nicht), ...
-        // verwendet in AbrechnungGKV(!) McM: d.h. Reha-Verordnungen werden nicht
-        // elektron. abgerechnet?
-        listTypeOfVO = new ArrayList<String>(Arrays.asList("Physio-Rezept", "Massage/Lymphdrainage-Rezept",
-                "Ergotherapie-Rezept", "Logopädie-Rezept", "Podologie-Rezept"));
-        if (SystemConfig.mitRs) {
-            listTypeOfVO.addAll(Arrays.asList("Rehasport-Rezept", "Funktionstraining-Rezept"));
+
+        aktiveDiszisLang.addAll( DISZIS_OHNE_REHA_LANG);
+        if (mitRS) {
+            aktiveDiszisLang.addAll(DISZIS_NUR_REHA_LANG);
         }
-        typeOfVerordnung = new String[listTypeOfVO.size()]; // ... daraus das Array fuer die ComboBox erstellen ...
-        listTypeOfVO.toArray(typeOfVerordnung); // ... und fuellen
-        this.cmbDiszi = new JRtaComboBox(typeOfVerordnung);
-        String initVal = SystemConfig.initRezeptKlasse;
-        if (initVal == null || initVal.isEmpty()) {
-            initVal = SystemConfig.rezeptKlassenAktiv.get(0)
-                                                     .get(0);
-        }
+        String initVal = initRezeptKlasse;
+
         if (initVal==null || initVal.isEmpty()) {
-            initVal = listTypeOfVO.get(0);
+            initVal = aktiveDiszisLang.get(0);
         }
+        this.cmbDiszi = new JRtaComboBox(aktiveDiszisLang.toArray(new String[aktiveDiszisLang.size()]));
         cmbDiszi.setSelectedItem(initVal); // default setzen
 
         // weitere ComboBox mit nur den aktiven Rezeptklassen erzeugen
-        listActiveTypeOfVO = new ArrayList<String>();
-        int aktiveKlassen = SystemConfig.rezeptKlassenAktiv.size();
-        aktiveRezeptKlassen = new String[aktiveKlassen];
-        for (int i = 0; i < aktiveKlassen; i++) {
-            listActiveTypeOfVO.add(SystemConfig.rezeptKlassenAktiv.get(i)
+        activeDiszisLang = new ArrayList<>();
+        ArrayList<String> listAktiveRezeptKlassen = new ArrayList<>();
+
+      for(      Vector<String> rezeptKlasse : rezeptKlassenAktivVector) {
+            activeDiszisLang.add(rezeptKlasse
                                                                   .get(0));
-            aktiveRezeptKlassen[i] = SystemConfig.rezeptKlassenAktiv.get(i)
-                                                                    .get(1);
+            listAktiveRezeptKlassen.add( rezeptKlasse
+                                                                    .get(1));
         }
-        typeOfActiveVerordnung = new String[aktiveKlassen];
-        listActiveTypeOfVO.toArray(typeOfActiveVerordnung);
-        this.cmbDisziActive = new JRtaComboBox(typeOfActiveVerordnung);
-        cmbDisziActive.setSelectedItem(SystemConfig.initRezeptKlasse);
+
+          aktiveDiszisKurz = listAktiveRezeptKlassen.toArray(new String[listAktiveRezeptKlassen.size()]);
+        this.cmbDisziActive = new JRtaComboBox( activeDiszisLang.toArray(new String[activeDiszisLang.size()]));
+        cmbDisziActive.setSelectedItem(initVal);
     }
 
     public JRtaComboBox getComboBox() {
@@ -82,73 +95,56 @@ public class Disziplinen {
     }
 
     public String getCurrDisziKurz() {
-        if (diszis.size() >= cmbDiszi.getSelectedIndex()) {
-            return diszis.get(cmbDiszi.getSelectedIndex());
+        if (diszisMittel.size() >= cmbDiszi.getSelectedIndex()) {
+            return diszisMittel.get(cmbDiszi.getSelectedIndex());
         } else {
-            System.out.println("getCurrDiszi err: size " + diszis.size() + " vs idx " + cmbDiszi.getSelectedIndex());
-            return diszis.get(0); // use default ("Physio")
+            System.out.println("getCurrDiszi err: size " + diszisMittel.size() + " vs idx " + cmbDiszi.getSelectedIndex());
+            return diszisMittel.get(0); // use default ("Physio")
         }
     }
 
     public int getCurrDisziIdx() {
-        return this.getIndex(getCurrDisziKurz());
+        return getIndex(getCurrDisziKurz());
     }
 
     public void setCurrTypeOfVO(String currTypeOfVO) {
         this.cmbDiszi.setSelectedItem(currTypeOfVO);
     }
 
-    /**
-     * liefert die aktuell ausgewählte Rezeptklasse
-     */
+    /** Liefert die aktuell ausgewählte Rezeptklasse. */
     public String getCurrRezClass() {
-        if (rezeptKlassen.length >= cmbDiszi.getSelectedIndex()) {
-            return rezeptKlassen[cmbDiszi.getSelectedIndex()];
+        if (diszisKurz.length >= cmbDiszi.getSelectedIndex()) {
+            return diszisKurz[cmbDiszi.getSelectedIndex()];
         } else {
-            System.out.println("getCurrDiszi err: size " + diszis.size() + " vs idx " + cmbDiszi.getSelectedIndex());
-            return rezeptKlassen[0]; // use default ("KG")
+            System.out.println("getCurrDiszi err: size " + diszisMittel.size() + " vs idx " + cmbDiszi.getSelectedIndex());
+            return diszisKurz[0]; // use default ("KG")
         }
     }
-    
-    public boolean currIsPhysio() {
-        return this.getCurrDisziKurz().equals("Physio");
-    }
-    public boolean currIsMassage() {
-        return this.getCurrDisziKurz().equals("Massage");
-    }
-    public boolean currIsErgo() {
-        return this.getCurrDisziKurz().equals("Ergo");
-    }
-    public boolean currIsLogo() {
-        return this.getCurrDisziKurz().equals("Logo");
-    }
+
+
     public boolean currIsPodo() {
-        return this.getCurrDisziKurz().equals("Podo");
+        return "Podo".equals(getCurrDisziKurz());
     }
     public boolean currIsRsport() {
-        return this.getCurrDisziKurz().equals("Rsport");
+        return "Rsport".equals(getCurrDisziKurz());
     }
     public boolean currIsFtrain() {
-        return this.getCurrDisziKurz().equals("Ftrain");
+        return "Ftrain".equals(getCurrDisziKurz());
     }
 
     /**
-     * liefert Index der als Kurzbezeichnung (z.B. "Physio") uebergebenen Disziplin
+     * Liefert Index der als Kurzbezeichnung (z.B. "Physio") uebergebenen Disziplin
      */
     public int getIndex(String Disziplin) {
-        return diszis.indexOf(Disziplin);
+        return diszisMittel.indexOf(Disziplin);
     }
 
-    /**
-     * liefert String-Feld der aktiven Rezeptklassen (z.B. [KG, PO])
-     */
+    /** Liefert String-Feld der aktiven Rezeptklassen (z.B. [KG, PO]) */
     public String[] getActiveRK() {
-        return this.aktiveRezeptKlassen;
+        return this.aktiveDiszisKurz;
     }
 
-    /**
-     * liefert ComboBox, die Verordnungen der aktiven HM-Sparten auflistet
-     */
+    /** Liefert ComboBox, die Verordnungen der aktiven HM-Sparten auflistet. */
     public JRtaComboBox getComboBoxActiveRK() {
         return this.cmbDisziActive;
     }
@@ -162,56 +158,46 @@ public class Disziplinen {
         this.cmbDisziActive.setSelectedItem(currTypeOfVO);
     }
 
-    /**
-     * liefert numer. Prefix des HM-Codes fuer die uebergebene Disziplin
-     */
+    /** Liefert numer. Prefix des HM-Codes fuer die uebergebene Disziplin */
     public String getPrefix(int Disziplin) {
         return hmCodePrefix[Disziplin];
     }
 
     /**
-     * liefert den Rezeptklasse-Prefix (z.B. "KG") fuer die uebergebene Disziplin
+     * Liefert den Rezeptklasse-Prefix (z.B. "KG") fuer die uebergebene Disziplin
      */
     public String getRezClass(int Disziplin) {
-        return rezeptKlassen[Disziplin];
+        return diszisKurz[Disziplin];
     }
 
     /**
-     * liefert Kurzbezeichnung (z.B. "Physio") der uebergebenen Disziplin
-     */
-    public String getDisziKurz(int Disziplin) {
-        return diszis.get(Disziplin);
-    }
-
-    /**
-     * liefert Kurzbezeichnung (z.B. "Physio") zur uebergebenen Rezeptklasse (z.B. "KG")
+     * Liefert Kurzbezeichnung (z.B. "Physio") zur uebergebenen Rezeptklasse (z.B. "KG")
      */
     public String getDisziKurzFromRK(String rk) {
-        ArrayList<String> rKl = new ArrayList<String>(Arrays.asList(rezeptKlassen));
-        return getDisziKurz(rKl.indexOf(rk));
+        ArrayList<String> rKl = new ArrayList<>(Arrays.asList(diszisKurz));
+        return diszisMittel.get(rKl.indexOf(rk));
     }
 
     /**
-     * liefert Kurzbezeichnung (z.B. "Physio") zum uebergebenen VO-Typ (z.B. "Physio-Rezept")
+     * Liefert Kurzbezeichnung (z.B. "Physio") zum uebergebenen VO-Typ (z.B. "Physio-Rezept")
      */
     public String getDisziKurzFromTypeOfVO(String typeOfVO) {
-        for (int i = 0; i < listTypeOfVO.size(); i++) {
-            if (typeOfVO.equalsIgnoreCase(listTypeOfVO.get(i))) {
-                return diszis.get(i);
+        for (int i = 0; i < aktiveDiszisLang.size(); i++) {
+            if (typeOfVO.equalsIgnoreCase(aktiveDiszisLang.get(i))) {
+                return diszisMittel.get(i);
             }
         }
-        System.out.println("getDiszi err: not found: " + typeOfVO + " set " + diszis.get(0) + " as default");
-        return diszis.get(0); // use default ("Physio")
+        System.out.println("getDiszi err: not found: " + typeOfVO + " set " + diszisMittel.get(0) + " as default");
+        return diszisMittel.get(0); // use default ("Physio")
     }
 
     public String getRezClass(String typeOfVO) {
-        for (int i = 0; i < listTypeOfVO.size(); i++) {
-            if (typeOfVO.equalsIgnoreCase(listTypeOfVO.get(i))) {
-                return rezeptKlassen[i];
+        for (int i = 0; i < aktiveDiszisLang.size(); i++) {
+            if (typeOfVO.equalsIgnoreCase(aktiveDiszisLang.get(i))) {
+                return diszisKurz[i];
             }
         }
-        System.out.println("getRezClass err: not found: " + typeOfVO + " set " + rezeptKlassen[0] + " as default");
-        return rezeptKlassen[0]; // use default ("KG")
+        System.out.println("getRezClass err: not found: " + typeOfVO + " set " + diszisKurz[0] + " as default");
+        return diszisKurz[0]; // use default ("KG")
     }
-
 }

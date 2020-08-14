@@ -33,6 +33,7 @@ public class BehandlerSets {
     }
 
     public static void behandlerSetsLaden(INIFile termkalini) {
+        alleBehandlersets().clear();
         try {
             int lesen = Integer.parseInt(String.valueOf(termkalini.getStringProperty("Kalender", "AnzahlSets")));
             for (int i = 1; i < (lesen + 1); i++) {

@@ -5,19 +5,17 @@ import java.util.List;
 
 public class BehandlerSet{
 
-    private static final class BehandlerSetExtension extends BehandlerSet {
 
-        public BehandlerSetExtension() {
-            for( int i = 0 ; i<7;i++) {
-                members.add("./.");
-            }
-            setName("./.");
+    public static final BehandlerSet EMPTY = new BehandlerSet(7);
 
+    private BehandlerSet(int laenge) {
+        for( int i = 0 ; i<laenge;i++) {
+            members.add("./.");
         }
-
+        setName("./.");
     }
-    public static final BehandlerSet EMPTY = new BehandlerSetExtension();
-
+    public BehandlerSet() {
+    }
     @Override
     public String toString() {
         return "BehandlerSet [name=" + name + ", members=" + members + ", index=" + index + "]";
