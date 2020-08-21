@@ -9,11 +9,11 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 ## unveroeffentlicht
 
 ### fixed
-
--- Updater respektiert settings in tpupdatesneu.ini fixes #462
-   Es wird automatisch auf Updates geprüft, wenn:
-   tpudaterneu.ini fehlt  
-   in tpupdaterneu.ini der Eintrag UpdateChecken auf einen der TheraPi Wahrheitswerte gesetzt wird.
+- Neue Kalenderbenutzer werden nicht gespeichert, Änderungen bei bestehenden Kalenderbenutzern ebenso #467 
+- Updater respektiert settings in tpupdatesneu.ini fixes #462
+  Es wird automatisch auf Updates geprüft, wenn:
+  tpudaterneu.ini fehlt  
+  in tpupdaterneu.ini der Eintrag UpdateChecken auf einen der TheraPi Wahrheitswerte gesetzt wird.
 
 ## [1.1.9] - 2020-07-24
 
