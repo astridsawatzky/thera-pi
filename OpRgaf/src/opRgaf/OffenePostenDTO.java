@@ -56,7 +56,7 @@ public class OffenePostenDTO {
         try {
             rdatum = Date.valueOf(rs.getString("rDatum"))
                          .toLocalDate();
-        } catch (SQLException e) {
+        } catch (Exception e) {
             rdatum = null;
         }
         ret.rgDatum = rdatum;
@@ -113,7 +113,7 @@ public class OffenePostenDTO {
 
                 try {
                     rgafFakturaListe.add(ofResultset(rs));
-                } catch (SQLException e) {
+                } catch (Exception e) {
                    logger.error("Fehler beim Einlesen der offenen Posten bei ID: " + rs.getString("id"), e);
                 }
 
