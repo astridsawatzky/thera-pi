@@ -1331,7 +1331,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 }
             }
         }
-        
+
         if (aktRezept.getUseHygPausch()) {
             Disziplinen diszi = new Disziplinen();
             int currIdx = diszi.getIndex(this.aktDisziplin);
@@ -1425,7 +1425,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         abrfallAnhaengen(xnode.getChildCount() - 1, ynode, ynode.abr.datum, position,
                 Double.parseDouble("1.00"), zuZahlFrei);
     }
-    
+
     private void addTherapieBericht(String berichtsposition) {
         zurLetztenBehHinzufuegen(berichtsposition, false);
     }
@@ -4640,7 +4640,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         edibuf.insert(0, vec_posanzahl.toString() + "\n");
         edibuf.insert(0, vec_pospos.toString() + "\n");
         edibuf.insert(0, kopfzeile);
-        logger.debug(edibuf.toString());
+
         return ret;
     }
 
