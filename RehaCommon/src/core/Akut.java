@@ -1,4 +1,4 @@
-package org.therapi.reha.patient.neu;
+package core;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -10,7 +10,7 @@ private boolean akutPat;
 public final  LocalDate seit;
 public final  LocalDate bis;
 
-    Akut(boolean akutPat, LocalDate akutSeit , LocalDate akutBis) {
+    public Akut(boolean akutPat, LocalDate akutSeit , LocalDate akutBis) {
         seit = akutSeit;
         bis = akutBis;
         this.akutPat = akutPat;

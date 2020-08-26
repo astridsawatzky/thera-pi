@@ -1,4 +1,4 @@
-package org.therapi.reha.patient.neu;
+package org.therapi.reha.patient;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,6 +12,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.Adresse;
+import core.Arzt;
+import core.LANR;
 import mandant.IK;
 import sql.DatenquellenFactory;
 
@@ -39,45 +42,45 @@ public class ArztDto {
 
     public Arzt toArzt() {
         Arzt arzt = new Arzt();
-        arzt.anrede = anrede;
-        arzt.titel = titel;
-        arzt.nachname = nachname;
-        arzt.vorname = vorname;
-        arzt.praxis = new Adresse("", strasse, plz, ort);
-        arzt.facharzt = facharzt;
-        arzt.telefon = telefon;
-        arzt.fax = fax;
-        arzt.matchcode = matchcode;
-        arzt.arztnummer = new LANR(arztnum);
-        arzt.klinik = klinik;
-        arzt.mtext = mtext;
-        arzt.email1 = email1;
-        arzt.email2 = email2;
-        arzt.id = id;
-        arzt.bsnr = bsnR;
+        arzt.setAnrede(anrede);
+        arzt.setTitel(titel);
+        arzt.setNachname(nachname);
+        arzt.setVorname(vorname);
+        arzt.setPraxis(new Adresse("", strasse, plz, ort));
+        arzt.setFacharzt(facharzt);
+        arzt.setTelefon(telefon);
+        arzt.setFax(fax);
+        arzt.setMatchcode(matchcode);
+        arzt.setArztnummer(new LANR(arztnum));
+        arzt.setKlinik(klinik);
+        arzt.setMtext(mtext);
+        arzt.setEmail1(email1);
+        arzt.setEmail2(email2);
+        arzt.setId(id);
+        arzt.setBsnr(bsnR);
         return arzt;
     }
 
     public ArztDto(Arzt arzt) {
 
-        anrede = arzt.anrede;
-        titel = arzt.titel;
-        nachname = arzt.nachname;
-        vorname = arzt.vorname;
-        strasse = arzt.praxis.strasse;
-        plz = arzt.praxis.plz;
-        ort = arzt.praxis.ort;
-        facharzt = arzt.facharzt;
-        telefon = arzt.telefon;
-        fax = arzt.fax;
-        matchcode = arzt.matchcode;
-        arztnum = arzt.arztnummer.lanr;
-        klinik = arzt.klinik;
-        mtext = arzt.mtext;
-        email1 = arzt.email1;
-        email2 = arzt.email2;
-        id = arzt.id;
-        bsnR = arzt.bsnr;
+        anrede = arzt.getAnrede();
+        titel = arzt.getTitel();
+        nachname = arzt.getNachname();
+        vorname = arzt.getVorname();
+        strasse = arzt.getPraxis().strasse;
+        plz = arzt.getPraxis().plz;
+        ort = arzt.getPraxis().ort;
+        facharzt = arzt.getFacharzt();
+        telefon = arzt.getTelefon();
+        fax = arzt.getFax();
+        matchcode = arzt.getMatchcode();
+        arztnum = arzt.getArztnummer().lanr;
+        klinik = arzt.getKlinik();
+        mtext = arzt.getMtext();
+        email1 = arzt.getEmail1();
+        email2 = arzt.getEmail2();
+        id = arzt.getId();
+        bsnR = arzt.getBsnr();
 
     }
 

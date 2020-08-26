@@ -1,4 +1,4 @@
-package org.therapi.reha.patient.neu;
+package org.therapi.reha.patient;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,7 +10,11 @@ import java.util.Optional;
 
 import org.junit.Ignore;
 import org.junit.Test;
+import org.therapi.reha.patient.PatientDTO;
+import org.therapi.reha.patient.PatientMapper;
 
+import core.Adresse;
+import core.Patient;
 import mandant.IK;
 import sql.DatenquellenFactory;
 

@@ -1,4 +1,4 @@
-package org.therapi.reha.patient.neu;
+package org.therapi.reha.patient;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
