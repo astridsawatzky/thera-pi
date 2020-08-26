@@ -1,4 +1,4 @@
-package org.therapi.reha.patient.neu;
+package org.therapi.reha.patient;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import core.Krankenkasse;
 import mandant.IK;
 import sql.DatenquellenFactory;
 
@@ -115,8 +116,8 @@ public class KrankenkasseDto {
     private static Krankenkasse of(KrankenkasseDto dto) {
 
         Krankenkasse kk = new Krankenkasse(dto.IK_KASSE);
-kk.name= dto.kassen_nam1;
-kk.id= dto.id;
+kk.setName(dto.kassen_nam1);
+kk.setId(dto.id);
 
 
 //dto. KUERZEL       = dto. KUERZEL                   ;

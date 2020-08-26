@@ -1,11 +1,13 @@
-package org.therapi.reha.patient.neu;
+package org.therapi.reha.patient;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.therapi.reha.patient.neu.*;
 
+import core.*;
 import mandant.IK;
 
 public class PatientMapper {
@@ -152,22 +154,22 @@ public class PatientMapper {
             patientdto.abwOrt = abWeichendeAdresse.ort;
         }
         Krankenversicherung krankenversicherung = pat.kv;
-        if(krankenversicherung.kk.isPresent()){
+        if(krankenversicherung.getKk().isPresent()){
 
 
-        patientdto.kasse = krankenversicherung.kk.get().name;
-        patientdto.kvNummer = krankenversicherung.kk.get().ik.digitString();
-        patientdto.kassenid = String.valueOf(krankenversicherung.kk.get().id);
+        patientdto.kasse = krankenversicherung.getKk().get().getName();
+        patientdto.kvNummer = krankenversicherung.getKk().get().getIk().digitString();
+        patientdto.kassenid = String.valueOf(krankenversicherung.getKk().get().getId());
         }
 
 
-        patientdto.kvStatus = krankenversicherung.status;
-        patientdto.vNummer = krankenversicherung.versicherungsnummer;
-        if (krankenversicherung.befreit.isPresent()) {
-            Befreiung befreiung = krankenversicherung.befreit.get();
+        patientdto.kvStatus = krankenversicherung.getStatus();
+        patientdto.vNummer = krankenversicherung.getVersicherungsnummer();
+        if (krankenversicherung.getBefreit().isPresent()) {
+            Befreiung befreiung = krankenversicherung.getBefreit().get();
             patientdto.befreit = befreiung.istbefreit(LocalDate.now());
-            patientdto.befDat = befreiung.bis;
-            patientdto.befAb = befreiung.von;
+            patientdto.befDat = befreiung.getBis();
+            patientdto.befAb = befreiung.getVon();
         }
         patientdto.klinik = pat.klinik;
 
@@ -189,16 +191,16 @@ public class PatientMapper {
         patientdto.ort = pat.wohnadresse.ort;
         if (pat.hauptarzt.isPresent()) {
             Arzt hauptArzt = pat.hauptarzt.get();
-            patientdto.arzt = hauptArzt.nachname;
-            patientdto.arztNum = hauptArzt.arztnummer.lanr;
+            patientdto.arzt = hauptArzt.getNachname();
+            patientdto.arztNum = hauptArzt.getArztnummer().lanr;
 
 
-            patientdto.atel = hauptArzt.telefon;
+            patientdto.atel = hauptArzt.getTelefon();
 
 
-            patientdto.afax = hauptArzt.fax;
-            patientdto.emailA = hauptArzt.email1;
-            patientdto.arztid = String.valueOf(hauptArzt.id);
+            patientdto.afax = hauptArzt.getFax();
+            patientdto.emailA = hauptArzt.getEmail1();
+            patientdto.arztid = String.valueOf(hauptArzt.getId());
         }
         patientdto.patIntern = pat.patIntern;
 
@@ -207,8 +209,8 @@ public class PatientMapper {
         patientdto.akutPat = pat.akut.isAkut();
         patientdto.akutDat = pat.akut.seit;
         patientdto.akutBeh = pat.akutBeh;
-        patientdto.termine1 = pat.daten.moeglicheTermine1;
-        patientdto.termine2 = pat.daten.moeglicheTermine2;
+        patientdto.termine1 = pat.daten.getMoeglicheTermine1();
+        patientdto.termine2 = pat.daten.getMoeglicheTermine2();
         patientdto.vipPat = pat.vip_Pat;
         patientdto.erJanein = pat.er_Janein;
         patientdto.erDat = pat.er_Dat;
@@ -228,7 +230,7 @@ public class PatientMapper {
         patientdto.ber3 = pat.ber3;
         patientdto.ber4 = pat.ber4;
         if(pat.behandler.isPresent()) {
-            patientdto.therapeut = pat.behandler.get().matchcode;
+            patientdto.therapeut = pat.behandler.get().getMatchcode();
         }
         patientdto.merk6 = pat.merkmale.sechs();
         patientdto.merk5 = pat.merkmale.fuenf();

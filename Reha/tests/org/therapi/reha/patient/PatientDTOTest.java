@@ -1,10 +1,11 @@
-package org.therapi.reha.patient.neu;
+package org.therapi.reha.patient;
 
 import static org.junit.Assert.*;
 
 import java.util.Optional;
 
 import org.junit.Test;
+import org.therapi.reha.patient.PatientDTO;
 
 public class PatientDTOTest {
 

@@ -1,4 +1,4 @@
-package org.therapi.reha.patient.neu;
+package core;
 
 import java.time.LocalDate;
 import java.util.Collections;
