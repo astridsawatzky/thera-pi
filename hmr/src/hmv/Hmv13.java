@@ -1,5 +1,9 @@
 package hmv;
 
+import java.awt.Toolkit;
+import java.util.EnumSet;
+
+import core.Disziplin;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -7,11 +11,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
+import javafx.scene.layout.Background;
+import mandant.IK;
+import static core.Disziplin.*;
 
 public class Hmv13 {
 
@@ -20,7 +23,7 @@ public class Hmv13 {
     private ObjectProperty<Zuzahlung> zuzahlungProperty = new SimpleObjectProperty<>();
 
     @FXML
-    TextField kostentraeger;
+    ComboBox kostentraeger;
 
     @FXML
     TextField name;
@@ -36,14 +39,27 @@ public class Hmv13 {
     @FXML
     TextField versichertenNummer;
     @FXML
-    TextField versichertenStatus;
+    ChoiceBox versichertenStatus;
 
     @FXML
     TextField betriebsstaettenNr;
     @FXML
-    TextField lebenslangeArztNr;
+    ComboBox lebenslangeArztNr;
     @FXML
     DatePicker rezeptDatum;
+
+    @FXML
+    TextField erfasser;
+    @FXML
+    RadioButton kg;
+    @FXML
+    RadioButton et;
+    @FXML
+    RadioButton er;
+    @FXML
+    RadioButton lo;
+    @FXML
+    RadioButton po;
 
     @FXML
 
@@ -67,22 +83,22 @@ public class Hmv13 {
     TextArea leitsymptomatik;
 
     @FXML
-    TextField hm_1;
+    ChoiceBox hm_1;
     @FXML
     TextField hm_einheiten_1;
 
     @FXML
-    TextField hm_2;
+    ChoiceBox hm_2;
     @FXML
     TextField hm_einheiten_2;
 
     @FXML
-    TextField hm_3;
+    ChoiceBox hm_3;
     @FXML
     TextField hm_einheiten_3;
 
     @FXML
-    TextField hm_ergaenzend;
+    ChoiceBox hm_ergaenzend;
     @FXML
     TextField hm_einheiten_ergaenzend;
 
@@ -91,11 +107,17 @@ public class Hmv13 {
 
     @FXML
     ToggleGroup hausbesuch;
-SimpleBooleanProperty hb = new SimpleBooleanProperty();
-
+    // TODO:: dritte option
+    SimpleBooleanProperty hb = new SimpleBooleanProperty();
 
     @FXML
     TextField therapieFrequenz;
+
+    @FXML
+    TextField dauer;
+
+    @FXML
+    ColorPicker kalenderfarbe;
 
     @FXML
     CheckBox dringlicherBedarf;
@@ -105,24 +127,137 @@ SimpleBooleanProperty hb = new SimpleBooleanProperty();
     TextArea therapieZiele;
 
     @FXML
-    TextField ik_Erbringer;
+    Label ik_Erbringer;
+    private Context context;
 
+    public Hmv13(Context context) {
+        this.context = context;
+    }
 
     @FXML
     public void initialize() {
 
+        ik_Erbringer.setText(context.mandant.ikDigitString());
+        erfasser.setText(context.user.anmeldename);
+        enableNeededDisciplines();
+        selectFirstDisciplin();
+
         zuzahlung.getToggles()
                  .forEach(t -> t.setUserData(Zuzahlung.valueOf(((Node) t).getId()
-                                                           .toUpperCase())));
+                                                                         .toUpperCase())));
         new ToggleGroupBinding<Zuzahlung>(zuzahlung, zuzahlungProperty);
-        hb.bindBidirectional(hausbesuch.getToggles().get(0).selectedProperty());
+        hb.bindBidirectional(hausbesuch.getToggles()
+                                       .get(0)
+                                       .selectedProperty());
         dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
-       
+
+    }
+
+    private void selectFirstDisciplin() {
+        switch (context.disziplinen.iterator().next()) {
+        case KG:
+            kg.setSelected(true);
+            break;
+        case PO:
+            po.setSelected(true);
+            break;
+        case LO:
+            lo.setSelected(true);
+            break;
+        case ER:
+            er.setSelected(true);
+            break;
+        case ET:
+            et.setSelected(true);
+            break;
+
+        default:
+            // egal
+            break;
+        }
+    }
+
+    private void enableNeededDisciplines() {
+        for (Disziplin disziplin : context.disziplinen) {
+            switch (disziplin) {
+            case KG:
+                kg.setDisable(false);
+                break;
+            case PO:
+                po.setDisable(false);
+                break;
+            case LO:
+                lo.setDisable(false);
+                break;
+            case ER:
+                er.setDisable(false);
+                break;
+            case ET:
+                et.setDisable(false);
+                break;
+
+            default:
+                // egal
+                break;
+            }
+
+        }
     }
 
     @FXML
     private void setnewbefreiung() {
         hb.set(true);
+
+    }
+
+    @FXML
+    private void speichern() {
+        markierungenAufheben();
+        if (pruefenUndMarkierungenSetzen()) {
+            speicherAnfrage();
+        } else {
+            beep();
+
+        }
+
+    }
+
+    private void beep() {
+        Toolkit.getDefaultToolkit()
+               .beep();
+
+    }
+
+    private void speicherAnfrage() {
+        // TODO Auto-generated method stub
+
+    }
+
+    private boolean pruefenUndMarkierungenSetzen() {
+        return mustnotbeempty(leitsymptomatik);
+    }
+
+    private boolean mustnotbeempty(Node node) {
+        return !((TextArea) node).getText()
+                                 .isEmpty();
+
+    }
+
+    private void markierungenAufheben() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @FXML
+
+    private void abbrechen() {
+
+    }
+
+    @FXML
+
+    private void hmrcheck() {
+        // TODO Auto-generated method stub
 
     }
 

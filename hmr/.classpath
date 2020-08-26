@@ -23,5 +23,16 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/RehaCommon"/>
+	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/testfx-core-4.0.16-alpha.jar">
+		<attributes>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/Libraries/lib/jna_junit/testfx-junit-4.0.15-alpha.jar">
+		<attributes>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
