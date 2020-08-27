@@ -24,7 +24,7 @@ public class Patient {
     public Emailadresse email;
     public Akut akut =new Akut(false,null, null);
     public PlanDaten daten = new PlanDaten("", "");
-    public Krankenversicherung kv = new Krankenversicherung(Optional.empty(), null,null, Optional.empty());
+    public Krankenversicherung kv = new Krankenversicherung(Optional.empty(), null,VersichertenStatus.VERSICHERTER, Optional.empty());
     public Optional<Kollege> behandler = Optional.empty();
     public Optional<Arzt> hauptarzt = Optional.empty();
     public String abwAnrede;
@@ -137,6 +137,14 @@ public class Patient {
                 + numfrei2 + ", abschluss=" + abschluss + ", datfrei=" + datfrei2 + ", charfrei2=" + charfrei2
                 + ", behDauer=" + behDauer + ", ber1=" + ber1 + ", ber2=" + ber2 + ", ber3=" + ber3 + ", ber4=" + ber4
                 + ", jahrfrei=" + jahrfrei + "]";
+    }
+
+    public boolean hatBefreiung() {
+        if(kv.befreit.isPresent()) {
+            Befreiung befreiung = kv.befreit.get();
+            return befreiung.istbefreit(LocalDate.now());
+        }
+        return false;
     }
 
 }

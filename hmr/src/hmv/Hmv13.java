@@ -1,20 +1,19 @@
 package hmv;
 
 import java.awt.Toolkit;
-import java.util.EnumSet;
+import java.util.Optional;
 
 import core.Disziplin;
+import core.Krankenkasse;
+import core.VersichertenStatus;
+import core.Zuzahlung;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import mandant.IK;
-import static core.Disziplin.*;
+import javafx.util.StringConverter;
 
 public class Hmv13 {
 
@@ -23,7 +22,7 @@ public class Hmv13 {
     private ObjectProperty<Zuzahlung> zuzahlungProperty = new SimpleObjectProperty<>();
 
     @FXML
-    ComboBox kostentraeger;
+    ComboBox<String> kostentraeger;
 
     @FXML
     TextField name;
@@ -39,7 +38,7 @@ public class Hmv13 {
     @FXML
     TextField versichertenNummer;
     @FXML
-    ChoiceBox versichertenStatus;
+    ChoiceBox<VersichertenStatus> versichertenStatus;
 
     @FXML
     TextField betriebsstaettenNr;
@@ -136,12 +135,6 @@ public class Hmv13 {
 
     @FXML
     public void initialize() {
-
-        ik_Erbringer.setText(context.mandant.ikDigitString());
-        erfasser.setText(context.user.anmeldename);
-        enableNeededDisciplines();
-        selectFirstDisciplin();
-
         zuzahlung.getToggles()
                  .forEach(t -> t.setUserData(Zuzahlung.valueOf(((Node) t).getId()
                                                                          .toUpperCase())));
@@ -151,10 +144,53 @@ public class Hmv13 {
                                        .selectedProperty());
         dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
 
+        versichertenStatus.setConverter(new StringConverter<VersichertenStatus>() {
+
+            @Override
+            public String toString(VersichertenStatus status) {
+
+                return status.getNummer() + " " + status;
+            }
+
+            @Override
+            public VersichertenStatus fromString(String string) {
+                return null;
+            }
+        });
+        versichertenStatus.getItems()
+                          .setAll(VersichertenStatus.values());
+        versichertenStatus.setValue(context.patient.kv.getStatus());
+
+        ik_Erbringer.setText(context.mandant.ikDigitString());
+        erfasser.setText(context.user.anmeldename);
+        enableNeededDisciplines();
+        selectFirstDisciplin();
+        name.setText(context.patient.nachname);
+        vorname.setText(context.patient.vorname);
+        geboren.setValue(context.patient.geburtstag);
+
+        Optional<Krankenkasse> kk = context.patient.kv.getKk();
+        String kostentraegerik = "";
+        if (kk.isPresent()) {
+            kostentraegerik = kk.get()
+                                .getIk()
+                                .digitString();
+            kostentraeger.setValue(kk.get()
+                                     .getName());
+        }
+        kostentraegerKennung.setText(kostentraegerik);
+        versichertenNummer.setText(context.patient.kv.getVersicherungsnummer());
+
+        if (context.patient.hatBefreiung()) {
+
+            zuzahlungProperty.set(Zuzahlung.BEFREIT);
+        }
+
     }
 
     private void selectFirstDisciplin() {
-        switch (context.disziplinen.iterator().next()) {
+        switch (context.disziplinen.iterator()
+                                   .next()) {
         case KG:
             kg.setSelected(true);
             break;
@@ -219,13 +255,11 @@ public class Hmv13 {
             beep();
 
         }
-
     }
 
     private void beep() {
         Toolkit.getDefaultToolkit()
                .beep();
-
     }
 
     private void speicherAnfrage() {

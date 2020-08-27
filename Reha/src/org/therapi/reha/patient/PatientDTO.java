@@ -33,7 +33,7 @@ public class PatientDTO {
      String abwOrt="";
      String kasse;
      String kvNummer;
-     String kvStatus;
+     int kvStatus;
      String vNummer;
      String klinik;
      String telefonp;
@@ -109,7 +109,7 @@ public class PatientDTO {
         patient.abwOrt = rs.getString("abwOrt");
         patient.kasse = rs.getString("kasse");
         patient.kvNummer = rs.getString("kv_Nummer");
-        patient.kvStatus = rs.getString("kv_Status");
+        patient.kvStatus = rs.getInt("kv_Status");
         patient.vNummer = rs.getString("v_Nummer");
         patient.klinik = rs.getString("klinik");
         patient.telefonp = rs.getString("telefonp");

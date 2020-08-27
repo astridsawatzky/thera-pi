@@ -31,7 +31,7 @@
     </RadioButton>
     <RadioButton fx:id="pflichtig" contentDisplay="BOTTOM" layoutX="9.0" layoutY="68.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="29.0" text="RadioButton" toggleGroup="$zuzahlung" />
     <RadioButton fx:id="unfallfolgen" contentDisplay="BOTTOM" layoutX="9.0" layoutY="105.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="29.0" text="RadioButton" toggleGroup="$zuzahlung" />
-    <RadioButton fx:id="bg" contentDisplay="BOTTOM" layoutX="10.0" layoutY="154.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="29.0" text="RadioButton" toggleGroup="$zuzahlung" />
+    <RadioButton fx:id="bvg" contentDisplay="BOTTOM" layoutX="10.0" layoutY="154.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="29.0" text="RadioButton" toggleGroup="$zuzahlung" />
 
     <RadioButton layoutX="308.0" layoutY="305.0" mnemonicParsing="false">
       <toggleGroup>
