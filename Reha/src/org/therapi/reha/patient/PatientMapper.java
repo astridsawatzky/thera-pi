@@ -5,7 +5,8 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.therapi.reha.patient.neu.*;
+
+import com.sun.star.lang.IllegalArgumentException;
 
 import core.*;
 import mandant.IK;
@@ -77,10 +78,10 @@ public class PatientMapper {
 
 
 
-            patient. kv = new Krankenversicherung(kk,dto.vNummer,dto.kvStatus,befreiung);
-        } catch (Exception e1) {
+            patient. kv = new Krankenversicherung(kk,dto.vNummer, VersichertenStatus.of(dto.kvStatus),befreiung);
+        } catch (IllegalArgumentException e1) {
 
-            patient.kv = new Krankenversicherung(Optional.empty(), dto.vNummer,dto.kvStatus, befreiung);
+            patient.kv = new Krankenversicherung(Optional.empty(), dto.vNummer,VersichertenStatus.INVALID, befreiung);
             logger.error("KV konnte nicht angelegt werden ",e1);
         }
 
@@ -163,7 +164,7 @@ public class PatientMapper {
         }
 
 
-        patientdto.kvStatus = krankenversicherung.getStatus();
+        patientdto.kvStatus = krankenversicherung.getStatus().getNummer();
         patientdto.vNummer = krankenversicherung.getVersicherungsnummer();
         if (krankenversicherung.getBefreit().isPresent()) {
             Befreiung befreiung = krankenversicherung.getBefreit().get();

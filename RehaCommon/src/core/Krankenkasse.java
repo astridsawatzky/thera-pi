@@ -1,12 +1,17 @@
 package core;
 
-import java.sql.ResultSet;
-
 import mandant.IK;
 
 public class Krankenkasse {
     public Krankenkasse(String kassenid) {
         ik= new IK(kassenid);
+    }
+
+
+    public Krankenkasse(String string, String name) {
+        this(string);
+        this.name = name;
+
     }
 
 

@@ -6,27 +6,29 @@ import java.util.Optional;
 public class Krankenversicherung {
     Optional<Befreiung> befreit =Optional.empty();
     Optional<Krankenkasse> kk;
-    String status;
+    VersichertenStatus status;
 
     String versicherungsnummer;
-    public Krankenversicherung(Optional<Krankenkasse> kk, String versicherungsnummer, String status, Befreiung befreit) {
+    public Krankenversicherung(Optional<Krankenkasse> krankenkasse, String versicherungsnummer, VersichertenStatus status, Befreiung befreit) {
        this(
-        kk,versicherungsnummer,status,Optional.ofNullable(befreit) );
+        krankenkasse,versicherungsnummer,status,Optional.ofNullable(befreit) );
     }
-    public Krankenversicherung(Optional<Krankenkasse> kk, String versicherungsnummer, String status,
+    public Krankenversicherung(Optional<Krankenkasse> krankenkasse, String versicherungsnummer, VersichertenStatus status,
             Optional<Befreiung> befreit) {
-        this.kk = kk;
+        this.kk = krankenkasse;
         this.versicherungsnummer = versicherungsnummer;
         this.status = status;
         this.befreit = befreit;
     }
+
+
     public Optional<Befreiung> getBefreit() {
         return befreit;
     }
     public Optional<Krankenkasse> getKk() {
         return kk;
     }
-    public String getStatus() {
+    public VersichertenStatus getStatus() {
         return status;
     }
     public String getVersicherungsnummer() {

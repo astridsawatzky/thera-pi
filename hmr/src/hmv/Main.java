@@ -1,8 +1,16 @@
 package hmv;
 
+import java.time.LocalDate;
 import java.util.EnumSet;
+import java.util.Optional;
 
+import core.Adresse;
+import core.Befreiung;
 import core.Disziplin;
+import core.Krankenkasse;
+import core.Krankenversicherung;
+import core.Patient;
+import core.VersichertenStatus;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,8 +24,15 @@ public class Main extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("HMV13.fxml"));
             EnumSet<Disziplin> disziplinen = EnumSet.of(Disziplin.ER, Disziplin.KG);
-            Context context = new Context(new Mandant("123456789", "test"), new User("bob"), disziplinen);
+            Patient patient = new Patient(new Adresse("", "hohle gasse 5", "12345", "Baumburg"));
+            patient.nachname = "Lant";
+            patient.vorname="Simon";
+            patient.kv = new Krankenversicherung(Optional.of(new Krankenkasse("999999999", "donotpay")), "0815", VersichertenStatus.RENTNER, new Befreiung(LocalDate.of(2020 , 1,1),LocalDate.of(2020 , 12,31)));
+            patient.geburtstag = LocalDate.of(1904, 2, 29);
+
+            Context context = new Context(new Mandant("123456789", "test"), new User("bob"), disziplinen, patient);
             loader.setController(new Hmv13(context));
+
 
             double scaleFactor = 1;
             Scene scene = new Scene(loader.load(), 630 * scaleFactor, 900 * scaleFactor);
