@@ -376,7 +376,9 @@ public class RezeptGebuehrRechnung extends JXDialog
                 }
             }
         }
+        ITextTable textTable = null;
         textTable = textDocument.getTextTableService().getTextTable("Tabelle1");
+        int aktuellePosition = 0;
         int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
 
         aktuellePosition++;
