@@ -1323,6 +1323,10 @@ public class RezTools {
                 SystemConfig.hmAdrRDaten.put("<Rposition" + (i + 1) + ">",
                         Reha.instance.patpanel.vecaktrez.get(48 + i));
 
+                String id = Reha.instance.patpanel.vecaktrez.get(8 + i);
+                SystemConfig.hmAdrRDaten.put("<Rlangtext" + (i + 1) + ">",
+                		RezTools.getLangtextFromID(id, "", SystemPreislisten.hmPreise.get(xdiszi).get(xpreisgr)));
+
                 SystemConfig.hmAdrRDaten.put("<Rpreis" + (i + 1) + ">", dfx.format(preise[i]));
 
                 einzelpreis = preise[i].divide(BigDecimal.valueOf(new Double(10.000)));
