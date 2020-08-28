@@ -43,6 +43,7 @@ import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
+import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
 import ag.ion.bion.officelayer.text.TextException;
@@ -374,6 +375,26 @@ public class RezeptGebuehrRechnung extends JXDialog
                     break;
                 }
             }
+        }
+        textTable = textDocument.getTextTableService().getTextTable("Tabelle1");
+        int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
+
+        aktuellePosition++;
+        for (int i = 0; i < anzpos; i++) {
+            textTable.getCell(0, aktuellePosition)
+                     .getTextService()
+                     .getText()
+                     .setText(hmRezgeb.get("<rglangtext"+ String.valueOf(aktuellePosition) +">"));
+            textTable.getCell(1, aktuellePosition)
+                     .getTextService()
+                     .getText()
+                     .setText(hmRezgeb.get("<rganzahl"+ String.valueOf(aktuellePosition) +">"));
+            textTable.getCell(2, aktuellePosition)
+                     .getTextService()
+                     .getText()
+                     .setText(hmRezgeb.get("<rggesamt"+ String.valueOf(aktuellePosition) +">"));     
+            textTable.addRow(1);
+            aktuellePosition++;
         }
         if (SystemConfig.hmAbrechnung.get("hmallinoffice")
                                      .equals("1")) {

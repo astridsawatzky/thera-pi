@@ -3090,6 +3090,18 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             String aktAnzBehandlg = currVO.getAnzBehS(i);
             if ((hmKurz != null) && hmKurz.length() > 0) {
                 behandl += ((behandl.length() > 0) ? ", " : "") + aktAnzBehandlg + " * " + hmKurz;
+
+                hmRezgeb.put("<rgposition"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rposition"+ String.valueOf(i) +">"));
+                hmRezgeb.put("<rglangtext"+ String.valueOf(i) + ">", SystemConfig.hmAdrRDaten.get("<Rlangtext"+ String.valueOf(i) +">"));
+                hmRezgeb.put("<rganzahl"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Ranzahl"+ String.valueOf(i) +">"));
+                hmRezgeb.put("<rgpreis"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rpreis"+ String.valueOf(i) +">"));
+                hmRezgeb.put("<rgproz"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rproz"+ String.valueOf(i) +">"));
+                hmRezgeb.put("<rggesamt"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rgesamt"+ String.valueOf(i) +">"));
+                
+                hmRezgeb.put("<rglangtext"+ String.valueOf(i+1) + ">", "Rezeptgebühr");
+                hmRezgeb.put("<rganzahl"+ String.valueOf(i+1) + ">",  "1");
+                hmRezgeb.put("<rggesamt"+ String.valueOf(i+1) + ">", SystemConfig.hmAdrRDaten.get("<Rpauschale>"));
+                hmRezgeb.put("<rganzpos>", String.valueOf(i+1));  
             }
         }
 
