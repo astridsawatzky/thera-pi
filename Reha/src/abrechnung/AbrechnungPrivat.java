@@ -782,17 +782,22 @@ public class AbrechnungPrivat extends JXDialog
 
         /*************************************************/
         // Änderungen in Preis
+        Integer aktanzahl = (Integer) RezTools.holeTermineAnzahlUndLetzter(Reha.instance.patpanel.vecaktrez.get(34))[0];
         if (!Reha.instance.patpanel.vecaktrez.get(8)
                                              .equals("0")) {
+            anzahl = Reha.instance.patpanel.vecaktrez.get(3);
+            if (Integer.parseInt(anzahl) > 1) {
+            	anzahl = Integer.toString(aktanzahl);
+            }
+        	
             originalPos.add(Reha.instance.patpanel.vecaktrez.get(48));
             originalId.add(Reha.instance.patpanel.vecaktrez.get(8));
-            originalAnzahl.add(Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(3)));
+            originalAnzahl.add(Integer.parseInt(anzahl));
             originalLangtext.add(RezTools.getLangtextFromID(Reha.instance.patpanel.vecaktrez.get(8), "", preisliste)
                                          .replace("30Min.", "")
                                          .replace("45Min.", ""));
 
             pos = RezTools.getKurzformFromID(Reha.instance.patpanel.vecaktrez.get(8), preisliste);
-            anzahl = Reha.instance.patpanel.vecaktrez.get(3);
             if (preisanwenden[0]) {
                 preis = RezTools.getPreisAltFromID(Reha.instance.patpanel.vecaktrez.get(8), "", preisliste);
             } else {
@@ -812,15 +817,20 @@ public class AbrechnungPrivat extends JXDialog
         /***********************************/
         if (!Reha.instance.patpanel.vecaktrez.get(9)
                                              .equals("0")) {
+            anzahl = Reha.instance.patpanel.vecaktrez.get(4);
+            if (Integer.parseInt(anzahl) > 1) {
+            	anzahl = Integer.toString(aktanzahl);
+            }
+            
             originalPos.add(Reha.instance.patpanel.vecaktrez.get(49));
             originalId.add(Reha.instance.patpanel.vecaktrez.get(9));
-            originalAnzahl.add(Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(4)));
+            originalAnzahl.add(Integer.parseInt(anzahl));
             originalLangtext.add(RezTools.getLangtextFromID(Reha.instance.patpanel.vecaktrez.get(9), "", preisliste)
                                          .replace("30Min.", "")
                                          .replace("45Min.", ""));
 
             pos = RezTools.getKurzformFromID(Reha.instance.patpanel.vecaktrez.get(9), preisliste);
-            anzahl = Reha.instance.patpanel.vecaktrez.get(4);
+
             if (preisanwenden[0]) {
                 preis = RezTools.getPreisAltFromID(Reha.instance.patpanel.vecaktrez.get(9), "", preisliste);
             } else {
@@ -839,15 +849,20 @@ public class AbrechnungPrivat extends JXDialog
         /***********************************/
         if (!Reha.instance.patpanel.vecaktrez.get(10)
                                              .equals("0")) {
+            anzahl = Reha.instance.patpanel.vecaktrez.get(5);
+            if (Integer.parseInt(anzahl) > 1) {
+            	anzahl = Integer.toString(aktanzahl);
+            }
+            
             originalPos.add(Reha.instance.patpanel.vecaktrez.get(50));
             originalId.add(Reha.instance.patpanel.vecaktrez.get(10));
-            originalAnzahl.add(Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(5)));
+            originalAnzahl.add(Integer.parseInt(anzahl));
             originalLangtext.add(RezTools.getLangtextFromID(Reha.instance.patpanel.vecaktrez.get(10), "", preisliste)
                                          .replace("30Min.", "")
                                          .replace("45Min.", ""));
 
             pos = RezTools.getKurzformFromID(Reha.instance.patpanel.vecaktrez.get(10), preisliste);
-            anzahl = Reha.instance.patpanel.vecaktrez.get(5);
+
             if (preisanwenden[0]) {
                 preis = RezTools.getPreisAltFromID(Reha.instance.patpanel.vecaktrez.get(10), "", preisliste);
             } else {
@@ -867,15 +882,20 @@ public class AbrechnungPrivat extends JXDialog
         /***********************************/
         if (!Reha.instance.patpanel.vecaktrez.get(11)
                                              .equals("0")) {
+            anzahl = Reha.instance.patpanel.vecaktrez.get(6);
+            if (Integer.parseInt(anzahl) > 1) {
+            	anzahl = Integer.toString(aktanzahl);
+            }
+            
             originalPos.add(Reha.instance.patpanel.vecaktrez.get(51));
             originalId.add(Reha.instance.patpanel.vecaktrez.get(11));
-            originalAnzahl.add(Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(6)));
+            originalAnzahl.add(Integer.parseInt(anzahl));
             originalLangtext.add(RezTools.getLangtextFromID(Reha.instance.patpanel.vecaktrez.get(11), "", preisliste)
                                          .replace("30Min.", "")
                                          .replace("45Min.", ""));
 
             pos = RezTools.getKurzformFromID(Reha.instance.patpanel.vecaktrez.get(11), preisliste);
-            anzahl = Reha.instance.patpanel.vecaktrez.get(6);
+
             if (preisanwenden[0]) {
                 preis = RezTools.getPreisAltFromID(Reha.instance.patpanel.vecaktrez.get(11), "", preisliste);
             } else {
@@ -925,8 +945,8 @@ public class AbrechnungPrivat extends JXDialog
         // System.out.println("Hausbesuch Einzeln = "+this.hbEinzeln);
 
         /*********** Hausbesuch voll abrechnen ******/
-        int hbanzahl = Integer.parseInt(Reha.instance.patpanel.vecaktrez.get(64));
-
+        int hbanzahl = (Integer) RezTools.holeTermineAnzahlUndLetzter(Reha.instance.patpanel.vecaktrez.get(34))[0];
+        
         if (this.hbEinzeln) {
             String preis = "";
             String pos = SystemPreislisten.hmHBRegeln.get(disziplin)
