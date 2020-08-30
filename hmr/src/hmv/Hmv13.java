@@ -1,6 +1,7 @@
 package hmv;
 
 import java.awt.Toolkit;
+import java.time.LocalDate;
 import java.util.Optional;
 
 import core.Disziplin;
@@ -181,7 +182,7 @@ public class Hmv13 {
         kostentraegerKennung.setText(kostentraegerik);
         versichertenNummer.setText(context.patient.kv.getVersicherungsnummer());
 
-        if (context.patient.hatBefreiung()) {
+        if (context.patient.hatBefreiung(LocalDate.now())) {
 
             zuzahlungProperty.set(Zuzahlung.BEFREIT);
         }
