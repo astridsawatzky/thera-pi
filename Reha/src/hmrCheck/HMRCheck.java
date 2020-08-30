@@ -636,9 +636,16 @@ public class HMRCheck {
                                                                                        .get(TERMINE));
                             }
 
+                            tagedifferenz = DatFunk.TageDifferenz(enddatum_alt, startdatum_neu);
+                            if (tagedifferenz > therapiepause) { // Therapiepause ueberschritten?
+                                if (chkIsErstVO(currRezVoArt)) {
+                                    return true;
+                                } else {
+                                    return shouldBeErstVO(currRezVoArt, pauseText(currRez, tagedifferenz));
+                                }
+                            }
 
                             gesamt = gesamt + aktanzahl;
-
                             if (gesamt > maxprofall) {
                                 fehlertext.add("<br><b><font color='#ff0000'>Höchstverordnungsmenge ist überschritten -> "
                                         + Integer.toString(gesamt) + " Behandlungen"
@@ -649,26 +656,16 @@ public class HMRCheck {
                                 return false;
                             }
 
-                            tagedifferenz = DatFunk.TageDifferenz(enddatum_alt, startdatum_neu);
                             vorgaengerVoArt = testvec.get(idxVorg)
                                                      .get(REZEPTART);
+                            String vorgaengerVoNr = testvec.get(idxVorg)
+                                                           .get(REZ_NR);
 
-
-                            if (tagedifferenz > therapiepause) { // Therapiepause ueberschritten
-                                if (chkIsErstVO(currRezVoArt)) {
-                                    return true;
-                                } else {
-                                    return shouldBeErstVO(currRezVoArt, pauseText(currRez, tagedifferenz));
-                                }
-                            } else {
-                                String vorgaengerVoNr = testvec.get(idxVorg)
-                                                               .get(REZ_NR);
-                                if (chkIsErstVO(vorgaengerVoArt)) {
-                                    return chkIf2ErstVO(currRezVoArt, vorgaengerVoNr);
-                                }
-                                if (chkIsAdR(vorgaengerVoArt)) {
-                                    return chkIf2AdrVO(currRezVoArt, vorgaengerVoNr);
-                                }
+                            if (chkIsErstVO(vorgaengerVoArt)) {
+                                return chkIf2ErstVO(currRezVoArt, vorgaengerVoNr);
+                            }
+                            if (chkIsAdR(vorgaengerVoArt)) {
+                                return chkIf2AdrVO(currRezVoArt, vorgaengerVoNr);
                             }
 
                             i = --idxVorg; // Index anpassen, falls Neurezept oder Rezepte uebersprungen wurden
