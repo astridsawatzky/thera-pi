@@ -8,16 +8,21 @@ import java.awt.Dimension;
 import java.awt.FocusTraversalPolicy;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.ParseException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.swing.*;
@@ -179,14 +184,7 @@ class SysUtilKalenderBenutzer extends JXPanel {
 
         exportBt = new JButton("export");
         exportBt.setPreferredSize(new Dimension(70, 20));
-        exportBt.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                listeDrucken();
-
-            }
-        });
+        exportBt.addActionListener(e -> listeDrucken());
         exportBt.setActionCommand("liste");
         exportBt.addKeyListener(keyadapter);
         builder.addLabel("Benutzer auswählen", cc.xy(1, 1));
@@ -206,9 +204,44 @@ class SysUtilKalenderBenutzer extends JXPanel {
 
         builder.addLabel("geboren", cc.xy(7, 3));
 
-        geboren = new JFormattedTextField(newDateMask());
+        geboren = new JTextField();
         geboren.setDisabledTextColor(Color.red);
-        builder.add(geboren, cc.xy(9, 3));
+        geboren.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusLost(FocusEvent e) {
+               geboren.setText( extracted(geboren.getText()));
+
+            }
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+            private String extracted(String teststring) {
+                String pattern = "(\\d{1,2})\\.(\\d{1,2})\\.(\\d{1,4})";
+                Pattern r = Pattern.compile(pattern);
+
+                Matcher m = r.matcher(teststring);
+                if (m.find()) {
+                    int day = Integer.valueOf(m.group(1));
+                    System.out.println(day);
+                    int month = Integer.valueOf(m.group(2));
+                    int year =Integer.valueOf( m.group(3));
+                    if(year <= LocalDate.now().getYear() % 100) {
+                        year += 2000;
+                    } else if (year <100) {
+                        year += 1900;
+                    }
+                    return LocalDate.of(year, month, day).format(DateTimeFormatters.ddMMYYYYmitPunkt);
+                } else
+                    return teststring;
+
+            }
+        });
+
+        builder.add(geboren, cc.xyw(8, 3,2));
 
         builder.addLabel("Stra\u00dfe", cc.xy(7, 5));
         strasse = new JTextField();
@@ -555,7 +588,13 @@ class SysUtilKalenderBenutzer extends JXPanel {
         if (".  .".equals(text)) {
             return null;
         }
-        return LocalDate.parse(text, DateTimeFormatters.dMYYYYmitPunkt);
+
+        try {
+            return LocalDate.parse(text, DateTimeFormatters.ddMMYYYYmitPunkt);
+        } catch (DateTimeException e) {
+            logger.error("beim parsen des geburtsdatums: " +e.getMessage());
+            return null;
+        }
     }
 
     private double evaluateArbeitstunden() {
@@ -698,7 +737,7 @@ class SysUtilKalenderBenutzer extends JXPanel {
         }
     };
 
-    private JFormattedTextField geboren;
+    private JTextField geboren;
 
     private JTextField strasse;
 
