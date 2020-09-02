@@ -5,10 +5,12 @@ import java.util.EnumSet;
 import java.util.Optional;
 
 import core.Adresse;
+import core.Arzt;
 import core.Befreiung;
 import core.Disziplin;
 import core.Krankenkasse;
 import core.Krankenversicherung;
+import core.LANR;
 import core.Patient;
 import core.VersichertenStatus;
 import javafx.application.Application;
@@ -29,6 +31,16 @@ public class Main extends Application {
             patient.vorname="Simon";
             patient.kv = new Krankenversicherung(Optional.of(new Krankenkasse("999999999", "donotpay")), "0815", VersichertenStatus.RENTNER, new Befreiung(LocalDate.of(2020 , 1,1),LocalDate.of(2020 , 12,31)));
             patient.geburtstag = LocalDate.of(1904, 2, 29);
+
+           Arzt arzt = new Arzt();
+           arzt.setAnrede("meister");
+           arzt.setNachname("Eisenbart");
+           arzt.setArztnummer(new LANR("234567890"));
+           arzt.setBsnr("000001000");
+
+
+           patient.hauptarzt = Optional.of(arzt);
+
 
             Context context = new Context(new Mandant("123456789", "test"), new User("bob"), disziplinen, patient);
             loader.setController(new Hmv13(context));
