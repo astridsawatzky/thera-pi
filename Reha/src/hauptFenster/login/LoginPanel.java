@@ -66,7 +66,7 @@ public class LoginPanel extends JPanel {
                         + "Abhängig vom Ihrem Passwort, haben Sie Zugang zu allen Programmteilen "
                         + "die für Sie persönlich freigeschaltet wurden.\n"
                         + "Noch kein Passwort? Dann geben Sie bitte das Universalpasswort ein. \n\n"
-                        + "Hinweis--> Nach 3-maliger Falscheingabe wird der Administrator per Email über den fehlgeschlagenen Login-Versuch informiert.",
+                       ,
                 imageIcon);
         add(header, BorderLayout.NORTH);
 
