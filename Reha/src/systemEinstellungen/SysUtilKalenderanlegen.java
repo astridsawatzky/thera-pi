@@ -60,51 +60,50 @@ import hauptFenster.Reha;
 
 public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, ActionListener {
 
-    JButton btnNeuJahr = null;
-    JButton btnFeiertagImport = null;
-    JButton knopf3 = null;
-    JButton knopf4 = null;
-    JButton knopf5 = null;
-    JButton knopf6 = null;
+    private JButton btnNeuJahr = null;
+    private JButton btnFeiertagImport = null;
+    private JButton knopf3 = null;
+    private JButton knopf4 = null;
+    private JButton knopf5 = null;
+    private JButton knopf6 = null;
     static JXLabel KalMake = null;
-    static JXLabel lblFeierTag = null;
-    static int anzahlLastDate = -1;
+    private static JXLabel lblFeierTag = null;
+    private static int anzahlLastDate = -1;
 
-    static String repairDateStart = "";
-    static String repairDateEnd = "";
+    private static String repairDateStart = "";
+    private static String repairDateEnd = "";
 
-    JCheckBox AZPlan = null;
+    private JCheckBox AZPlan = null;
 
-    JScrollPane listscr = null;
-    JLabel Datum = null;
-    static JProgressBar Fortschritt = null;
-    static JProgressBar Fortschritt2 = null;
+    private JScrollPane listscr = null;
+
+    private static JProgressBar Fortschritt = null;
+    private static JProgressBar Fortschritt2 = null;
     static boolean dblaeuft = false;
     static int progress = 0;
 
-    JComboBox<String> cmbNetz = null;
-    JComboBox BuLand = null;
-    static JComboBox<Integer> FJahr = null;
+    private JComboBox<String> cmbNetz = null;
+    private JComboBox<String> BuLand = null;
+    private static JComboBox<Integer> FJahr = null;
 
-    static int speed = 100;
+    private static int speed = 100;
 
-    JXTable FreiTage = null;
+    private JXTable FreiTage = null;
 
     static JXLabel KalBis = null;
 
-    FeiertagTableModel ftm = null;
+    private FeiertagTableModel ftm = null;
 
-    static String bisDatum = null;
     static int kalTage;
     static Vector<Object> vecMasken = new Vector<Object>();
-    Vector vecLeer = new Vector();
+
     public static boolean jahrOk = false;
 
     // static Vector<Object> aMaskenDaten = new Vector<Object>();
 
-    String[] laender = { "BW", "BY", "BE", "BB", "HB", "HH", "HE", "MV", "NI", "NW", "RP", "SL", "SN", "ST", "SH",
+    private String[] laender = { "BW", "BY", "BE", "BB", "HB", "HH", "HE", "MV", "NI", "NW", "RP", "SL", "SN", "ST", "SH",
             "TH" };
-    String[] netz = { "DSL", "LAN" };
+
 
     SysUtilKalenderanlegen() {
         super(new GridLayout(1, 1));
@@ -137,15 +136,9 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
         return;
     }
 
-    private String setNewRange(boolean begin, String datum) {
-        Object ret = null;
-        if (begin) {
-            ret = JOptionPane.showInputDialog(null, "<html>Geben Sie bitte das neue <b>Startdatum</b> ein: </html>",
-                    datum);
-        } else {
-            ret = JOptionPane.showInputDialog(null, "<html>Geben Sie bitte das neue <b>Endedatum</b> ein: </html>",
-                    datum);
-        }
+    private String askUserForRange(String datumString, String datum) {
+        Object ret = JOptionPane.showInputDialog(null, "<html>Geben Sie bitte das neue <b>" + datumString + "</b> ein: </html>",
+                datum) ;
         if (ret == null) {
             return datum;
         }
@@ -197,11 +190,13 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 
         KalBis = new JXLabel("");
         KalBis.setName("KalBis");
+
+
         KalBis.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    repairDateStart = setNewRange(true, repairDateStart);
+                    repairDateStart = askUserForRange("Startdatum", repairDateStart);
                 }
             }
         });
@@ -211,10 +206,9 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    repairDateEnd = setNewRange(false, repairDateEnd);
+                    repairDateEnd = askUserForRange("Enddatum",repairDateEnd);
                 }
             }
-
 
         });
 
@@ -235,7 +229,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
         CellConstraints cc = new CellConstraints();
 
         builder.addSeparator("0. Voreinstellung", cc.xyw(1, 1, 4));
-        cmbNetz = new JComboBox(netz);
+         cmbNetz = new JComboBox<>(new String[] { "DSL", "LAN" });
         cmbNetz.setActionCommand("netz");
         cmbNetz.addActionListener(this);
         builder.addLabel("Art der Netzwerkverbindung", cc.xyw(2, 3, 2));
@@ -289,8 +283,8 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
 
         FJahr = new JComboBox<>();
         LocalDate ld = LocalDate.now();
-        for (int year  = ld.getYear() -1; year <= ld.getYear() +5 ;year++) {
-        FJahr.addItem(year);
+        for (int year = ld.getYear() - 1; year <= ld.getYear() + 5; year++) {
+            FJahr.addItem(year);
         }
         FJahr.setSelectedIndex(0);
         FJahr.setActionCommand("jahr");
@@ -381,7 +375,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        starteSession((String) BuLand.getSelectedItem(),  FJahr.getItemAt(FJahr.getSelectedIndex()));
+                        starteSession((String) BuLand.getSelectedItem(), FJahr.getItemAt(FJahr.getSelectedIndex()));
                         lblFeierTag.setText(
                                 "Feiertagsliste für das Jahr -> " + FJahr.getSelectedItem() + " <- eintragen.");
                     }
@@ -496,8 +490,7 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
             @Override
             public void run() {
                 if (FJahr != null) {
-                    lblFeierTag.setText(
-                            "Feiertagsliste für das Jahr -> " + FJahr.getSelectedItem() + " <- eintragen.");
+                    lblFeierTag.setText("Feiertagsliste für das Jahr -> " + FJahr.getSelectedItem() + " <- eintragen.");
                     doSucheNachFeiertagen();
                 }
             }
@@ -736,7 +729,8 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
             }
         }
 
-        kalTage = Year.of(Integer.valueOf(KalMake.getText())).length() ;
+        kalTage = Year.of(Integer.valueOf(KalMake.getText()))
+                      .length();
         Fortschritt.setMinimum(1);
         Fortschritt.setMaximum(kalTage * 99);
         Fortschritt.setStringPainted(true);
@@ -809,7 +803,6 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
                     "Der Kalender wurde korrekt angelegt, frohes Schaffen und gute Geschäfte.");
         }
 
-
     }
 
     private String macheStatement(String sqldat, ArrayList list, String sBehandler, boolean mitmaske) {
@@ -846,44 +839,6 @@ public class SysUtilKalenderanlegen extends JXPanel implements KeyListener, Acti
             String tend = TKSettings.KalenderUmfang[1];
             String tdauer = new Long(TKSettings.KalenderMilli[1] - TKSettings.KalenderMilli[0]).toString();
             sret = "Insert into flexkc set ";
-            sret = sret + "T1='', N1='@FREI', TS1='" + tstart + "', TD1='" + tdauer + "', TE1='" + tend + "',";
-            sret = sret + "BELEGT='1', DATUM='" + sqldat + "' , BEHANDLER='" + sBehandler + "'";
-        }
-        return sret;
-    }
-
-    private String macheStatement2(String sqldat, ArrayList list, String sBehandler, boolean mitmaske) {
-        String sret = "";
-        int i, j;
-        int bloecke = Integer.valueOf((String) ((Vector) list.get(5)).get(0));
-        String nummer;
-        if (mitmaske) {
-            for (i = 0; i < bloecke; i++) {
-                if (((String) ((Vector) list.get(1)).get(i)).contains("\\")) {
-                    String replace = ((String) ((Vector) list.get(1)).get(i));
-                    String[] split = { null, null };
-                    split = replace.split("\\\\");
-                    nummer = split[0] + "\\\\" + split[1];
-
-                } else {
-                    nummer = ((String) ((Vector) list.get(1)).get(i));
-                }
-
-                sret = sret + "T" + (i + 1) + "='" + ((Vector) list.get(0)).get(i) + "', ";
-                sret = sret + "N" + (i + 1) + "='" + nummer + "', ";
-                sret = sret + "TS" + (i + 1) + "='" + ((Vector) list.get(2)).get(i) + "', ";
-                sret = sret + "TD" + (i + 1) + "='" + ((Vector) list.get(3)).get(i) + "', ";
-                sret = sret + "TE" + (i + 1) + "='" + ((Vector) list.get(4)).get(i) + "', ";
-            }
-            sret = sret + "BELEGT='" + Integer.valueOf(bloecke)
-                                              .toString()
-                    + "', DATUM='" + sqldat + "' , BEHANDLER='" + sBehandler + "'";
-        } else {
-            //
-            String tstart = TKSettings.KalenderUmfang[0];
-            String tend = TKSettings.KalenderUmfang[1];
-            String tdauer = new Long(TKSettings.KalenderMilli[1] - TKSettings.KalenderMilli[0]).toString();
-            // sret = "Insert into flexkc set ";
             sret = sret + "T1='', N1='@FREI', TS1='" + tstart + "', TD1='" + tdauer + "', TE1='" + tend + "',";
             sret = sret + "BELEGT='1', DATUM='" + sqldat + "' , BEHANDLER='" + sBehandler + "'";
         }
@@ -961,8 +916,7 @@ class FeiertagTableModel extends DefaultTableModel {
 /***********************************/
 class HoleMaxDatum extends Thread {
 
-    String statement;
-    boolean geklappt = false;
+    private String statement;
 
     public void setzeStatement(String statement) {
         this.statement = statement;
@@ -1006,7 +960,6 @@ class HoleMaxDatum extends Thread {
     }
 
 }
-
 
 class HoleMasken {
     private static Logger logger = LoggerFactory.getLogger(HoleMasken.class);
@@ -1105,7 +1058,7 @@ class TesteKalender {
 /******************************/
 
 class ProgressVerarbeiten extends SwingWorker<Void, JComponent> {
-    JProgressBar jpb = null;
+    private JProgressBar jpb = null;
 
     ProgressVerarbeiten(JComponent laufbalken) {
         jpb = (JProgressBar) laufbalken;
@@ -1129,10 +1082,7 @@ class ProgressVerarbeiten extends SwingWorker<Void, JComponent> {
 }
 
 class SchreibeNeuenKalender extends Thread {
-    Statement stmt = null;
-    ResultSet rs = null;
-    String statement;
-    boolean geklappt = false;
+    private String statement;
 
     public void setzeStatement(String statement) {
         this.statement = statement;
@@ -1141,38 +1091,16 @@ class SchreibeNeuenKalender extends Thread {
 
     @Override
     public synchronized void run() {
-        // Vector treadVect = new Vector();
-        try {
-            stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            try {
-                geklappt = stmt.execute(this.statement);
-
-            } catch (SQLException ev) {
-                // System.out.println("SQLException: " + ev.getMessage());
-                // System.out.println("SQLState: " + ev.getSQLState());
-                // System.out.println("VendorError: " + ev.getErrorCode());
-            }
+        try (Statement stmt = Reha.instance.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,
+                ResultSet.CONCUR_UPDATABLE);) {
+            stmt.execute(this.statement);
 
         } catch (SQLException ex) {
-            // System.out.println("von stmt -SQLState: " + ex.getSQLState());
+            Logger logger = LoggerFactory.getLogger(SysUtilKalenderanlegen.class);
+            logger.error("sqlfehler beim Anlegen des kalenders", ex);
         }
 
-        finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    rs = null;
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException sqlEx) { // ignore }
-                    stmt = null;
-                }
-            }
-        }
+
     }
 
 }
