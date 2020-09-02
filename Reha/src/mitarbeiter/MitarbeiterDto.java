@@ -207,7 +207,7 @@ public class MitarbeiterDto {
     }
 
     private String generateInsertSQL(Mitarbeiter ma) {
-        String sqlStart = "INSERT INTO Kollegen2 ( ANREDE, VORNAME , NACHNAME, STRASSE , PLZ , ORT , TELEFON1 , TELFON2, GEBOREN , matchcode , ZTEXT , KAL_TEIL , PERS_NR , ASTUNDEN, NICHT_ZEIG , ABTEILUNG , DEFTAKT , KALZEILE ) VALUES (";
+        String sqlStart = "INSERT INTO kollegen2 ( ANREDE, VORNAME , NACHNAME, STRASSE , PLZ , ORT , TELEFON1 , TELFON2, GEBOREN , matchcode , ZTEXT , KAL_TEIL , PERS_NR , ASTUNDEN, NICHT_ZEIG , ABTEILUNG , DEFTAKT , KALZEILE ) VALUES (";
         String sql = new StringBuilder().append(sqlStart)
                                         .append(einklammern(ma.anrede))
                                         .append(",")
@@ -251,7 +251,7 @@ public class MitarbeiterDto {
     }
 
     private String generateUpdateSQL(Mitarbeiter ma) {
-        String sql = new StringBuilder().append("UPDATE Kollegen2")
+        String sql = new StringBuilder().append("UPDATE kollegen2")
                                         .append(" SET ANREDE = ")
                                         .append(einklammern(ma.anrede))
                                         .append(", VORNAME = ")
