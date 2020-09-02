@@ -4,7 +4,15 @@ Alle nennenswerten Änderungen werden in dieser Datei dokumentiert.
 Das Format orientiert sich an [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
+## unveroeffentlicht
 
+### added
+- detailierte Rechnung bei Eigenanteil
+
+### fixed
+- Feiertage konnten nur bis 2020 ausgelesen werden #481
+- BG / Privatrezepte rechnnen nur die geleisteten Einheiten ab #230
+- HMR Check max pro Fall
 
 ## [1.1.10] - 2020-09-01
 
