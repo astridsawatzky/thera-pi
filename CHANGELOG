@@ -6,7 +6,7 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 
-## unveroeffentlicht
+## [1.1.10] - 2020-09-01
 
 ### fixed
 - Neue Kalenderbenutzer werden nicht gespeichert, Änderungen bei bestehenden Kalenderbenutzern ebenso #467 
