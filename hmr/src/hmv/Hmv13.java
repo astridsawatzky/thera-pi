@@ -4,6 +4,7 @@ import java.awt.Toolkit;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import core.Arzt;
 import core.Disziplin;
 import core.Krankenkasse;
 import core.VersichertenStatus;
@@ -44,7 +45,7 @@ public class Hmv13 {
     @FXML
     TextField betriebsstaettenNr;
     @FXML
-    ComboBox lebenslangeArztNr;
+    ComboBox<String> lebenslangeArztNr;
     @FXML
     DatePicker rezeptDatum;
 
@@ -185,6 +186,12 @@ public class Hmv13 {
         if (context.patient.hatBefreiung(LocalDate.now())) {
 
             zuzahlungProperty.set(Zuzahlung.BEFREIT);
+        }
+
+        Optional<Arzt> optarzt = context.patient.hauptarzt;
+        if (optarzt.isPresent()) {
+          lebenslangeArztNr.setValue(optarzt.get().getArztnummer().lanr);
+          betriebsstaettenNr.setText(optarzt.get().getBsnr());
         }
 
     }
