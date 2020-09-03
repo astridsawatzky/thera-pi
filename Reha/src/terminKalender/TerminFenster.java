@@ -248,7 +248,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
 
         this.aktuellerTag = DatFunk.sHeute();
         if (this.aktAnsicht == Ansicht.MASKE) {
-            String stmtmaske = "select from masken where behandler = '00BEHANDLER' ORDER BY art";
+            String stmtmaske = "select * from masken where behandler = '00BEHANDLER' ORDER BY art";
             maskenStatement(stmtmaske);
         } else {
             String sstmt = ansichtStatement(this.aktuellerTag, ansicht);
