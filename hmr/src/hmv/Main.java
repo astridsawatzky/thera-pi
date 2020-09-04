@@ -28,23 +28,19 @@ public class Main extends Application {
             EnumSet<Disziplin> disziplinen = EnumSet.of(Disziplin.ER, Disziplin.KG);
             Patient patient = new Patient(new Adresse("", "hohle gasse 5", "12345", "Baumburg"));
             patient.nachname = "Lant";
-            patient.vorname="Simon";
-            patient.kv = new Krankenversicherung(Optional.of(new Krankenkasse("999999999", "donotpay")), "0815", VersichertenStatus.RENTNER, new Befreiung(LocalDate.of(2020 , 1,1),LocalDate.of(2020 , 12,31)));
+            patient.vorname = "Simon";
+            patient.kv = new Krankenversicherung(Optional.of(new Krankenkasse("999999999", "donotpay")), "0815",
+                    VersichertenStatus.RENTNER, new Befreiung(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
             patient.geburtstag = LocalDate.of(1904, 2, 29);
 
-           Arzt arzt = new Arzt();
-           arzt.setAnrede("meister");
-           arzt.setNachname("Eisenbart");
-           arzt.setArztnummer(new LANR("234567890"));
-           arzt.setBsnr("000001000");
+            Arzt eisenbart = new ArztFactory().withNachname("Eisenbart")
+                                              .withArztnummer(new LANR("081500000"))
+                                              .build();
 
-
-           patient.hauptarzt = Optional.of(arzt);
-
+            patient.hauptarzt = Optional.of(eisenbart);
 
             Context context = new Context(new Mandant("123456789", "test"), new User("bob"), disziplinen, patient);
             loader.setController(new Hmv13(context));
-
 
             double scaleFactor = 1;
             Scene scene = new Scene(loader.load(), 630 * scaleFactor, 900 * scaleFactor);
