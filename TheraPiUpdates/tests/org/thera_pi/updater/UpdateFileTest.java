@@ -31,5 +31,11 @@ public class UpdateFileTest {
         UpdateFile ufile = new UpdateFile(file );
         assertEquals(new Version(1,0,0),ufile.from);
         assertEquals(new Version(1,1,5),ufile.to);
+
+        File file1_1_10 = new File("TheraPi_1_1_10.exe");
+        UpdateFile ufile_1_1_10 = new UpdateFile(file1_1_10);
+        assertTrue(ufile_1_1_10.isFull());
+        assertEquals(new Version(1,0,0),ufile_1_1_10.from);
+        assertEquals(new Version(1,1,10),ufile_1_1_10.to);
     }
 }

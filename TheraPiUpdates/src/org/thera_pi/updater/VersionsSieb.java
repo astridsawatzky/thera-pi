@@ -1,12 +1,10 @@
 package org.thera_pi.updater;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -51,6 +49,7 @@ public class VersionsSieb implements DateiSieb {
 
             UpdateFile resultFile = result.get(false)
                                           .stream()
+                                          .filter(uf -> uf.to.equals(biggestFull.to))
                                           .filter(uf -> uf.from.equals(version))
                                           .findAny()
                                           .orElse(biggestFull);

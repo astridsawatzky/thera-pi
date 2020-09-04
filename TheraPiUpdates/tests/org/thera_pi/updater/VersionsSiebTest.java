@@ -36,6 +36,16 @@ public void testName() throws Exception {
     List<File> list234 = new LinkedList<>();
     assertEquals( list234,  sieb234.select(list));
 
+    list.add(new File("TheraPi_1_1_8_1_1_9.exe"));
+    list.add(new File("TheraPi_1_1_9_1_1_10.exe"));
+    list.add(new File("TheraPi_1_1_10.exe"));
+    VersionsSieb sieb118 = new VersionsSieb(new Version(1,1,8));
+    List<File> list118 = new LinkedList<>();
+
+    list118.add(new File("therapi_1_1_10.exe"));
+
+
+    assertEquals( list118,  sieb118.select(list));
 
 }
 

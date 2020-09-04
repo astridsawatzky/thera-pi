@@ -9,12 +9,14 @@ public class UpdateFile {
     Version from;
     Version to;
     private boolean full;
+
     public boolean isFull() {
         return full;
     }
 
-    public static final Pattern inc = Pattern.compile("therapi_([\\d]+_[\\d]+_[\\d]+)_([\\d]+_[\\d]+_[\\d]+).[zip|exe]");
-    public static final Pattern ful = Pattern.compile("therapi_([\\d]+_[\\d]+_[\\d]+).[zip|exe]");
+    public static final Pattern inc = Pattern.compile(
+            "therapi_([\\d]+_[\\d]+_[\\d]+)_([\\d]+_[\\d]+_[\\d]+).(zip|exe)");
+    public static final Pattern ful = Pattern.compile("therapi_([\\d]+_[\\d]+_[\\d]+)\\.(zip|exe)");
 
     public UpdateFile(File file) {
         this.file = file;
@@ -24,9 +26,19 @@ public class UpdateFile {
 
     void extractVersions() {
 
-        Matcher incremental = inc.matcher(file.getName().toLowerCase());
-        Matcher full = ful.matcher(file.getName().toLowerCase());
-        if (incremental.find()) {
+        Matcher incremental = inc.matcher(file.getName()
+                                              .toLowerCase());
+        Matcher full = ful.matcher(file.getName()
+                                       .toLowerCase());
+        if (full.find()) {
+            this.full = true;
+            String[] toSplit = full.group(1)
+                                   .split("_");
+            from = new Version(1, 0, 0);
+            to = new Version(Integer.parseInt(toSplit[0]), Integer.parseInt(toSplit[1]), Integer.parseInt(toSplit[2]));
+        }
+
+        else if (incremental.find()) {
 
             String[] fromsplit = incremental.group(1)
                                             .split("_");
@@ -35,15 +47,7 @@ public class UpdateFile {
             String[] toSplit = incremental.group(2)
                                           .split("_");
             to = new Version(Integer.parseInt(toSplit[0]), Integer.parseInt(toSplit[1]), Integer.parseInt(toSplit[2]));
-        } else if (full.find()) {
-            this.full = true;
-            String[] toSplit = full.group(1)
-                                          .split("_");
-            from = new Version(1,0,0);
-            to = new Version(Integer.parseInt(toSplit[0]), Integer.parseInt(toSplit[1]), Integer.parseInt(toSplit[2]));
-        }
-
-        else {
+        } else {
             throw new IllegalArgumentException(file.getName());
         }
     }
@@ -52,6 +56,5 @@ public class UpdateFile {
     public String toString() {
         return "UpdateFile [file=" + file + ", from=" + from + ", to=" + to + "]";
     }
-
 
 }
