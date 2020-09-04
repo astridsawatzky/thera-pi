@@ -109,7 +109,7 @@ public class Hmv13 {
     @FXML
     ToggleGroup hausbesuch;
     // TODO:: dritte option
-    SimpleBooleanProperty hb = new SimpleBooleanProperty();
+    ObjectProperty<Hausbesuch> hb = new SimpleObjectProperty<>();
 
     @FXML
     TextField therapieFrequenz;
@@ -140,10 +140,12 @@ public class Hmv13 {
         zuzahlung.getToggles()
                  .forEach(t -> t.setUserData(Zuzahlung.valueOf(((Node) t).getId()
                                                                          .toUpperCase())));
+        hausbesuch.getToggles()
+        .forEach(t -> t.setUserData(Hausbesuch.valueOf(((Node) t).getId()
+                                                                .toUpperCase())));
         new ToggleGroupBinding<Zuzahlung>(zuzahlung, zuzahlungProperty);
-        hb.bindBidirectional(hausbesuch.getToggles()
-                                       .get(0)
-                                       .selectedProperty());
+        new ToggleGroupBinding<Hausbesuch>(hausbesuch, hb);
+
         dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
 
         versichertenStatus.setConverter(new StringConverter<VersichertenStatus>() {
@@ -250,7 +252,7 @@ public class Hmv13 {
 
     @FXML
     private void setnewbefreiung() {
-        hb.set(true);
+
 
     }
 
