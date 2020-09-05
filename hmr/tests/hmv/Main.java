@@ -35,6 +35,7 @@ public class Main extends Application {
 
             Arzt eisenbart = new ArztFactory().withNachname("Eisenbart")
                                               .withArztnummer(new LANR("081500000"))
+                                              .withBsnr("000008150")
                                               .build();
 
             patient.hauptarzt = Optional.of(eisenbart);
