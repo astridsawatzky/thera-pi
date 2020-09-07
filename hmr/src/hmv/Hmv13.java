@@ -1,6 +1,8 @@
 package hmv;
 
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -16,8 +18,24 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
+import specs.Contracts;
 
 public class Hmv13 {
+
+    ActionListener speichernListener = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // do nothing, just don't blow up!
+
+        }
+    };
+
+    public void setSpeichernListener(ActionListener speichernListener) {
+        Contracts.require(speichernListener != null, "actionlistener must not be null");
+
+        this.speichernListener = speichernListener;
+    }
 
     @FXML
     ToggleGroup zuzahlung;
@@ -141,8 +159,8 @@ public class Hmv13 {
                  .forEach(t -> t.setUserData(Zuzahlung.valueOf(((Node) t).getId()
                                                                          .toUpperCase())));
         hausbesuch.getToggles()
-        .forEach(t -> t.setUserData(Hausbesuch.valueOf(((Node) t).getId()
-                                                                .toUpperCase())));
+                  .forEach(t -> t.setUserData(Hausbesuch.valueOf(((Node) t).getId()
+                                                                           .toUpperCase())));
         new ToggleGroupBinding<Zuzahlung>(zuzahlung, zuzahlungProperty);
         new ToggleGroupBinding<Hausbesuch>(hausbesuch, hb);
 
@@ -192,8 +210,10 @@ public class Hmv13 {
 
         Optional<Arzt> optarzt = context.patient.hauptarzt;
         if (optarzt.isPresent()) {
-          lebenslangeArztNr.setValue(optarzt.get().getArztnummer().lanr);
-          betriebsstaettenNr.setText(optarzt.get().getBsnr());
+            lebenslangeArztNr.setValue(optarzt.get()
+                                              .getArztnummer().lanr);
+            betriebsstaettenNr.setText(optarzt.get()
+                                              .getBsnr());
         }
 
     }
@@ -253,18 +273,17 @@ public class Hmv13 {
     @FXML
     private void setnewbefreiung() {
 
-
     }
 
     @FXML
     private void speichern() {
-        markierungenAufheben();
-        if (pruefenUndMarkierungenSetzen()) {
-            speicherAnfrage();
-        } else {
-            beep();
 
-        }
+        markierungenAufheben();
+        boolean allesOK = pruefenUndMarkierungenSetzen();
+
+        String command = String.valueOf(allesOK);
+        ActionEvent speichernEvent = new ActionEvent(this,ActionEvent.ACTION_PERFORMED, command );
+        speichernListener.actionPerformed(speichernEvent);
     }
 
     private void beep() {
@@ -272,10 +291,7 @@ public class Hmv13 {
                .beep();
     }
 
-    private void speicherAnfrage() {
-        // TODO Auto-generated method stub
 
-    }
 
     private boolean pruefenUndMarkierungenSetzen() {
         return mustnotbeempty(leitsymptomatik);
@@ -304,5 +320,7 @@ public class Hmv13 {
         // TODO Auto-generated method stub
 
     }
+
+
 
 }
