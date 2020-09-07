@@ -31,7 +31,7 @@ public enum VersichertenStatus {
                 return status;
         }
 
-        throw new IllegalArgumentException("unbekannte status Ziffer" + ziffer);
+        throw new IllegalArgumentException("unbekannte status Ziffer " + ziffer);
     }
 
 }
