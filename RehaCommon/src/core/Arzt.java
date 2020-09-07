@@ -1,7 +1,12 @@
 package core;
 
 import java.util.Objects;
-
+/**
+Die Betriebsstaettennummer ist neunstellig. Die ersten beiden Ziffern stellen den
+KV-Landes- oder Bezirksstellenschlüssel gemaess Anlage 1 zu dieser Richtlinie
+dar. Die Ziffern drei bis neun werden von der KV vergeben. Dabei sind die Ziffern
+drei bis sieben so zu wählen, dass anhand der ersten sieben Stellen die Betriebsstaette eindeutig zu identifizieren ist.
+**/
 public class Arzt {
 
     private int id;
@@ -150,9 +155,4 @@ public class Arzt {
     }
 
 }
-/**
-Die Betriebsstättennummer ist neunstellig. Die ersten beiden Ziffern stellen den
-KV-Landes- oder Bezirksstellenschlüssel gemäß Anlage 1 zu dieser Richtlinie
-dar. Die Ziffern drei bis neun werden von der KV vergeben. Dabei sind die Ziffern
-drei bis sieben so zu wählen, dass anhand der ersten sieben Stellen die Betriebsstätte eindeutig zu identifizieren ist.
-**/
+
