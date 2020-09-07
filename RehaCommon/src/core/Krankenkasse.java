@@ -3,25 +3,25 @@ package core;
 import mandant.IK;
 
 public class Krankenkasse {
-	
-	// zwei (nun drei) konstruktor methoden die auch noch gleich heißen... 
-	// eventuell Namen aendern zu KrankenkasseIK( String kassenid) und KrankenkasseName(String string, String name)?
-	
-    public Krankenkasse(String kassenid) {
-        ik= new IK(kassenid);
+
+    IK ik;
+    String name;
+    int id=-1;
+
+
+    public Krankenkasse(String kassenik) {
+        ik= new IK(kassenik);
     }
 
 
-    public Krankenkasse(String string, String name) {
-        this(string);
+    public Krankenkasse(String kassenik, String name) {
+        this(kassenik);
         this.name = name;
 
     }
 
 
-    IK ik;
-    String name;
-    int id;
+
     public IK getIk() {
         return ik;
     }
@@ -41,18 +41,8 @@ public class Krankenkasse {
         this.id = id;
     }
 
-    
-    /*
-	 * Folgender Absatz von Methoden für die KrankenkasseFactory Klasse 
-	 * inserted for /hmr/src/hmv/KrankenkasseFactory.java by Marvin
-	 */
-    
-    // Fragwürdig ob nicht lieber eine der anderen beiden Methoden genutzt werden sollte...
-    // zur Nutzung von .withXYZ methoden jedoch eingebaut
-    public Krankenkasse() {
-    	// TODO Auto-generated constructor stub
-    }
-    
-    
+
+
+
 
 }
