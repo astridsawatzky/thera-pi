@@ -321,6 +321,10 @@ public class Hmv13 {
 
     }
 
+    void schliessen() {
+        // TODO Auto-generated method stub
+
+    }
 
 
 }

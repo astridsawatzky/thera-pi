@@ -1,6 +1,5 @@
 package hmv;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.EnumSet;
@@ -17,9 +16,6 @@ import core.VersichertenStatus;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
 import mandant.IK;
@@ -68,56 +64,21 @@ public class Main extends Application {
         launch(args);
     }
 
-    ActionListener al = new ActionListener() {
+    ActionListener al = new HMVSpeichernListener(new HmvSaver() {
 
         @Override
-        public void actionPerformed(ActionEvent e) {
-            boolean basstScho = Boolean.valueOf(e.getActionCommand());
-            Hmv13 hmv = (Hmv13) e.getSource();
-            if (basstScho) {
-                echtspeichern(hmv);
-                schliessen(hmv);
-            } else {
-                benutzerfragenwastun(hmv);
-            }
-
+        public boolean save(Hmv13 hmv) {
+            // TODO Auto-generated method stub entwurf
+            return false;
         }
+    }, new HmvSaver() {
 
-        private void benutzerfragenwastun(Hmv13 hmv) {
-            Alert alert = new Alert(AlertType.CONFIRMATION, " Als Entwurf speichern", ButtonType.YES, ButtonType.NO,
-                    ButtonType.CANCEL);
-            ButtonType ergebnis = alert.showAndWait().orElse(ButtonType.CANCEL);
-
-            if (ergebnis == ButtonType.YES) {
-                entwurfspeichern(hmv);
-                schliessen(hmv);
-            } else if (ergebnis == ButtonType.NO) {
-                schliessen(hmv);
-            }
-
+        @Override
+        public boolean save(Hmv13 hmv) {
+            // TODO Auto-generated method stub in echt
+            return false;
         }
-
-        private void entwurfspeichern(Hmv13 hmv) {
-            // TODO Auto-generated method stub
-
-        }
-
-        private void echtspeichern(Hmv13 hmv) {
-            speichern(hmv);
-            schliessen(hmv);
-
-        }
-
-        private void schliessen(Hmv13 hmv) {
-            // TODO Auto-generated method stub
-
-        }
-
-        private void speichern(Hmv13 hmv) {
-            // TODO Auto-generated method stub
-
-        }
-    };
+    });
     /**
      *
      * if (allesOK) { speicherAnfrage(); } else {
