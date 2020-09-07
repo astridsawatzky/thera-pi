@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
+import mandant.IK;
 import mandant.Mandant;
 
 public class Main extends Application {
@@ -29,8 +30,14 @@ public class Main extends Application {
             Patient patient = new Patient(new Adresse("", "hohle gasse 5", "12345", "Baumburg"));
             patient.nachname = "Lant";
             patient.vorname = "Simon";
-            patient.kv = new Krankenversicherung(Optional.of(new Krankenkasse("999999999", "donotpay")), "0815",
-                    VersichertenStatus.RENTNER, new Befreiung(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31)));
+            Krankenkasse kk = new KrankenkasseFactory().withIk(new IK("999999999"))
+                                                       .withName("donotpay")
+                                                       .build();
+            Befreiung befreit = new Befreiung(LocalDate.of(2020, 1, 1), LocalDate.of(2020, 12, 31));
+
+            patient.kv = new Krankenversicherung(Optional.of(kk), "0815", VersichertenStatus.RENTNER,
+                    befreit);
+
             patient.geburtstag = LocalDate.of(1904, 2, 29);
 
             Arzt eisenbart = new ArztFactory().withNachname("Eisenbart")
