@@ -4,11 +4,13 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.EnumSet;
 import java.util.Optional;
 
 import core.Arzt;
 import core.Disziplin;
 import core.Krankenkasse;
+import core.Patient;
 import core.VersichertenStatus;
 import core.Zuzahlung;
 import javafx.beans.property.ObjectProperty;
@@ -102,22 +104,22 @@ public class Hmv13 {
     TextArea leitsymptomatik;
 
     @FXML
-    ChoiceBox hm_1;
+    ChoiceBox<Heilmittel> hm_1;
     @FXML
     TextField hm_einheiten_1;
 
     @FXML
-    ChoiceBox hm_2;
+    ChoiceBox<Heilmittel> hm_2;
     @FXML
     TextField hm_einheiten_2;
 
     @FXML
-    ChoiceBox hm_3;
+    ChoiceBox<Heilmittel> hm_3;
     @FXML
     TextField hm_einheiten_3;
 
     @FXML
-    ChoiceBox hm_ergaenzend;
+    ChoiceBox<Heilmittel> hm_ergaenzend;
     @FXML
     TextField hm_einheiten_ergaenzend;
 
@@ -148,9 +150,13 @@ public class Hmv13 {
     @FXML
     Label ik_Erbringer;
     private Context context;
+    private Hmv hmv;
+    private EnumSet<Disziplin> moeglicheDisziplinen;
 
-    public Hmv13(Context context) {
+    public Hmv13(Hmv neueHmv, Context context, EnumSet<Disziplin> disziplinen) {
+        this.hmv = neueHmv;
         this.context = context;
+        moeglicheDisziplinen = disziplinen;
     }
 
     @FXML
@@ -181,17 +187,25 @@ public class Hmv13 {
         });
         versichertenStatus.getItems()
                           .setAll(VersichertenStatus.values());
-        versichertenStatus.setValue(context.patient.kv.getStatus());
+        Patient patient = hmv.patient;
+        versichertenStatus.setValue(patient.kv.getStatus());
 
-        ik_Erbringer.setText(context.mandant.ikDigitString());
-        erfasser.setText(context.user.anmeldename);
+        ik_Erbringer.setText(hmv.mandant.ikDigitString());
+        erfasser.setText(hmv.angelegtvon.anmeldename);
         enableNeededDisciplines();
-        selectFirstDisciplin();
-        name.setText(context.patient.nachname);
-        vorname.setText(context.patient.vorname);
-        geboren.setValue(context.patient.geburtstag);
 
-        Optional<Krankenkasse> kk = context.patient.kv.getKk();
+        if(hmv.disziplin ==null) {
+
+            selectFirstDisziplin();
+        } else {
+            selectDisziplin(hmv.disziplin);
+        }
+
+        name.setText(patient.nachname);
+        vorname.setText(patient.vorname);
+        geboren.setValue(patient.geburtstag);
+
+        Optional<Krankenkasse> kk = hmv.kv.getKk();
         String kostentraegerik = "";
         if (kk.isPresent()) {
             kostentraegerik = kk.get()
@@ -201,14 +215,14 @@ public class Hmv13 {
                                      .getName());
         }
         kostentraegerKennung.setText(kostentraegerik);
-        versichertenNummer.setText(context.patient.kv.getVersicherungsnummer());
+        versichertenNummer.setText(hmv.kv.getVersicherungsnummer());
 
-        if (context.patient.hatBefreiung(LocalDate.now())) {
+        if (patient.hatBefreiung(LocalDate.now())) {
 
             zuzahlungProperty.set(Zuzahlung.BEFREIT);
         }
 
-        Optional<Arzt> optarzt = context.patient.hauptarzt;
+        Optional<Arzt> optarzt = patient.hauptarzt;
         if (optarzt.isPresent()) {
             lebenslangeArztNr.setValue(optarzt.get()
                                               .getArztnummer().lanr);
@@ -218,9 +232,15 @@ public class Hmv13 {
 
     }
 
-    private void selectFirstDisciplin() {
-        switch (context.disziplinen.iterator()
-                                   .next()) {
+
+
+    private void selectFirstDisziplin() {
+        selectDisziplin(moeglicheDisziplinen.iterator()
+                                           .next());
+    }
+
+    private void selectDisziplin(Disziplin disziplin) {
+        switch (disziplin) {
         case KG:
             kg.setSelected(true);
             break;
@@ -282,14 +302,12 @@ public class Hmv13 {
         boolean allesOK = pruefenUndMarkierungenSetzen();
 
         String command = String.valueOf(allesOK);
-        ActionEvent speichernEvent = new ActionEvent(this,ActionEvent.ACTION_PERFORMED, command );
+
+
+        ActionEvent speichernEvent = new ActionEvent(hmv, ActionEvent.ACTION_PERFORMED, command );
         speichernListener.actionPerformed(speichernEvent);
     }
 
-    private void beep() {
-        Toolkit.getDefaultToolkit()
-               .beep();
-    }
 
 
 
@@ -321,10 +339,7 @@ public class Hmv13 {
 
     }
 
-    void schliessen() {
-        // TODO Auto-generated method stub
 
-    }
 
 
 }

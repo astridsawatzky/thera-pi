@@ -1,60 +1,71 @@
 package hmv;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Closeable;
+import java.io.IOException;
 
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 final class HMVSpeichernListener implements ActionListener {
 
     private HmvSaver entwurf;
     private HmvSaver inEcht;
+    private Closeable closeMe;
 
 
-    public HMVSpeichernListener(HmvSaver entwurf, HmvSaver inEcht) {
+    public HMVSpeichernListener(HmvSaver entwurf, HmvSaver inEcht, Closeable closeMe) {
         this.entwurf = entwurf;
         this.inEcht = inEcht;
+        this.closeMe = closeMe;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         boolean basstScho = Boolean.valueOf(e.getActionCommand());
-        Hmv13 hmv = (Hmv13) e.getSource();
-        Node source = (Node)hmv.dauer;
+        Hmv hmv = (Hmv) e.getSource();
         if (basstScho) {
             speichern(hmv);
-            schliessen(source);
+            schliessen(closeMe);
         } else {
-            benutzerfragenwastun(hmv,source);
+            beep();
+            benutzerfragenwastun(hmv,closeMe);
+        }
+
+    }
+    private void beep() {
+        Toolkit.getDefaultToolkit()
+               .beep();
+    }
+
+    private void schliessen(Closeable closeMe2) {
+        try {
+            closeMe2.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
     }
 
-    private void schliessen(Node source) {
-        Stage stage  = (Stage) source.getScene().getWindow();
-        stage.close();
-
-    }
-
-    private void benutzerfragenwastun(Hmv13 hmv , Node node) {
+    private void benutzerfragenwastun(Hmv hmv , Closeable closeMe2) {
         Alert alert = new Alert(AlertType.CONFIRMATION, " Als Entwurf speichern", ButtonType.YES, ButtonType.NO,
                 ButtonType.CANCEL);
         ButtonType ergebnis = alert.showAndWait().orElse(ButtonType.CANCEL);
 
         if (ergebnis == ButtonType.YES) {
             entwurfspeichern(hmv);
-            schliessen(node);
+            schliessen(closeMe2);
         } else if (ergebnis == ButtonType.NO) {
-            schliessen(node);
+            schliessen(closeMe2);
         }
 
     }
 
-    private void entwurfspeichern(Hmv13 hmv) {
+    private void entwurfspeichern(Hmv hmv) {
 
         entwurf.save(hmv);
 
@@ -62,7 +73,7 @@ final class HMVSpeichernListener implements ActionListener {
     }
 
 
-    private void speichern(Hmv13 hmv) {
+    private void speichern(Hmv hmv) {
         inEcht.save(hmv);
 
     }
