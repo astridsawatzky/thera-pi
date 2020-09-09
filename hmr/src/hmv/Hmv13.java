@@ -152,6 +152,7 @@ public class Hmv13 {
     private Context context;
     private Hmv hmv;
     private EnumSet<Disziplin> moeglicheDisziplinen;
+    private ObjectProperty<Disziplin> diszi = new SimpleObjectProperty<>();
 
     public Hmv13(Hmv neueHmv, Context context, EnumSet<Disziplin> disziplinen) {
         this.hmv = neueHmv;
@@ -167,8 +168,12 @@ public class Hmv13 {
         hausbesuch.getToggles()
                   .forEach(t -> t.setUserData(Hausbesuch.valueOf(((Node) t).getId()
                                                                            .toUpperCase())));
+        disziplin.getToggles()
+                 .forEach(t -> t.setUserData(Disziplin.valueOf(((Node) t).getId()
+                                                                         .toUpperCase())));
         new ToggleGroupBinding<Zuzahlung>(zuzahlung, zuzahlungProperty);
         new ToggleGroupBinding<Hausbesuch>(hausbesuch, hb);
+        new ToggleGroupBinding<Disziplin>(disziplin, diszi);
 
         dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
 
@@ -194,11 +199,11 @@ public class Hmv13 {
         erfasser.setText(hmv.angelegtvon.anmeldename);
         enableNeededDisciplines();
 
-        if(hmv.disziplin ==null) {
+        if (hmv.disziplin == null) {
 
             selectFirstDisziplin();
         } else {
-            selectDisziplin(hmv.disziplin);
+            diszi.set(hmv.disziplin);
         }
 
         name.setText(patient.nachname);
@@ -230,13 +235,13 @@ public class Hmv13 {
                                               .getBsnr());
         }
 
+        rezeptDatum.setValue(hmv.ausstellungsdatum);
+
     }
-
-
 
     private void selectFirstDisziplin() {
         selectDisziplin(moeglicheDisziplinen.iterator()
-                                           .next());
+                                            .next());
     }
 
     private void selectDisziplin(Disziplin disziplin) {
@@ -303,13 +308,9 @@ public class Hmv13 {
 
         String command = String.valueOf(allesOK);
 
-
-        ActionEvent speichernEvent = new ActionEvent(hmv, ActionEvent.ACTION_PERFORMED, command );
+        ActionEvent speichernEvent = new ActionEvent(hmv, ActionEvent.ACTION_PERFORMED, command);
         speichernListener.actionPerformed(speichernEvent);
     }
-
-
-
 
     private boolean pruefenUndMarkierungenSetzen() {
         return mustnotbeempty(leitsymptomatik);
@@ -339,13 +340,12 @@ public class Hmv13 {
 
     }
 
-  Hmv toHmv() {
-      Hmv hmvOut = new Hmv(context);
-      hmvOut.disziplin = Disziplin.valueOf(disziplin.getSelectedToggle().getUserData().toString());
-    return hmvOut;
+    Hmv toHmv() {
+        Hmv hmvOut = new Hmv(context);
+        hmvOut.disziplin = diszi.get();
+        hmvOut.ausstellungsdatum = rezeptDatum.getValue();
+        return hmvOut;
 
-
-}
-
+    }
 
 }
