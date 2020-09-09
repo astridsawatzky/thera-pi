@@ -1,17 +1,21 @@
 package hmv;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.util.EnumSet;
 import java.util.Optional;
 
 import core.Adresse;
 import core.Arzt;
 import core.Befreiung;
+import core.Disziplin;
 import core.Krankenkasse;
 import core.Krankenversicherung;
 import core.LANR;
 import core.Patient;
 import core.VersichertenStatus;
 import mandant.IK;
+import mandant.Mandant;
 
 public class CoreTestDataFactory {
 
@@ -37,6 +41,23 @@ public class CoreTestDataFactory {
 
         patient.hauptarzt = Optional.of(CoreTestDataFactory.createArztEisenbart());
         return patient;
+    }
+
+
+    public static Context createContext() {
+        EnumSet<Disziplin> disziplinen = EnumSet.of(Disziplin.ER, Disziplin.KG);
+        return new Context(new Mandant("123456789", "testmandant"), new User("bob"), disziplinen, createPatientSimonLant());
+    }
+
+    static  Hmv createHmv(Context context) {
+        Hmv hmvorig = new Hmv(context);
+        hmvorig.ausstellungsdatum = LocalDate.now();
+        hmvorig.maxBisStart = Period.ofDays(13);
+    
+        hmvorig.diag = new Diagnose();
+        hmvorig.beh = new Behandlung();
+        hmvorig.disziplin = Disziplin.ER;
+        return hmvorig;
     }
 
 

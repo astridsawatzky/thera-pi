@@ -94,7 +94,7 @@ public class Hmv13 {
     @FXML
     TextArea icd10Code_Text;
 
-    // this might be a combobox (wrong name )
+    // this might be a combobox
     @FXML
     TextField diagnoseGruppe;
 
@@ -339,7 +339,13 @@ public class Hmv13 {
 
     }
 
+  Hmv toHmv() {
+      Hmv hmvOut = new Hmv(context);
+      hmvOut.disziplin = Disziplin.valueOf(disziplin.getSelectedToggle().getUserData().toString());
+    return hmvOut;
 
+
+}
 
 
 }
