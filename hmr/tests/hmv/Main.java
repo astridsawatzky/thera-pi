@@ -26,25 +26,21 @@ public class Main extends Application implements Closeable{
             Context context = new Context(new Mandant("123456789", "test"), new User("bob"), disziplinen, patient);
             Hmv neueHmv = CoreTestDataFactory.createHmv(context);
             Hmv13 controller = new Hmv13(neueHmv, context,context.disziplinen);
-            startHMV13(primaryStage, loader, controller);
+            loader.setController(controller);
+            
+            double scaleFactor = 1;
+            Scene scene = new Scene(loader.load(), 630 * scaleFactor, 900 * scaleFactor);
+            Scale scale = new Scale(scaleFactor, scaleFactor, 0, 0);
+            scene.getRoot()
+                 .getTransforms()
+                 .add(scale);
+            primaryStage.setResizable(true);
+            primaryStage.setScene(scene);
             controller.setSpeichernListener(al);
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    static void startHMV13(Stage primaryStage, FXMLLoader loader, Hmv13 controller) throws IOException {
-        loader.setController(controller);
-
-        double scaleFactor = 1;
-        Scene scene = new Scene(loader.load(), 630 * scaleFactor, 900 * scaleFactor);
-        Scale scale = new Scale(scaleFactor, scaleFactor, 0, 0);
-        scene.getRoot()
-             .getTransforms()
-             .add(scale);
-        primaryStage.setResizable(true);
-        primaryStage.setScene(scene);
     }
 
     public static void main(String[] args) {
