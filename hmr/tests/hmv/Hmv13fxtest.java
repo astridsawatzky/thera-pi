@@ -1,23 +1,18 @@
 package hmv;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.EnumSet;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
-import core.Disziplin;
-import core.Patient;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Scale;
 import javafx.stage.Stage;
-import mandant.Mandant;
 
 public class Hmv13fxtest extends ApplicationTest implements Closeable {
     Context context = CoreTestDataFactory.createContext();
@@ -27,6 +22,9 @@ public class Hmv13fxtest extends ApplicationTest implements Closeable {
     @Override
     public void start(Stage primaryStage) throws Exception {
         hmv13 = new Hmv13(hmvorig, context, context.disziplinen);
+
+
+
         FXMLLoader loader = new FXMLLoader(hmv13.getClass()
                                                 .getResource("HMV13.fxml"));
         loader.setController(hmv13);
@@ -61,13 +59,12 @@ public class Hmv13fxtest extends ApplicationTest implements Closeable {
     public void testName() throws Exception {
         Object hmvfromgui = hmv13.toHmv();
         assertNotSame(hmvorig, hmvfromgui);
-
         assertEquals(hmvorig.toString(), hmvfromgui.toString());
     }
 
     @Override
     public void close() throws IOException {
-        // TODO Auto-generated method stub
+        // it is taken care of by TestFx
 
     }
 
