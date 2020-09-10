@@ -1,7 +1,6 @@
 package hmv;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Objects;
 
 import core.Arzt;
@@ -22,12 +21,12 @@ public class Hmv {
 
     //HMV
     LocalDate ausstellungsdatum;
-    Period maxBisStart;
 
     Diagnose diag;
 
 
     Behandlung beh;
+    public Boolean dringlich;
 
 
 
@@ -50,15 +49,15 @@ public class Hmv {
     @Override
     public String toString() {
         return "Hmv [angelegtvon=" + angelegtvon + ", mandant=" + mandant + ", disziplin=" + disziplin + ", patient="
-                + patient + ", arzt=" + arzt + ", kv=" + kv + ", ausstellungsdatum=" + ausstellungsdatum
-                + ", maxBisStart=" + maxBisStart + ", diag=" + diag + ", beh=" + beh + "]";
+                + patient + ", arzt=" + arzt + ", kv=" + kv + ", ausstellungsdatum=" + ausstellungsdatum + ", diag="
+                + diag + ", beh=" + beh + ", dringlich=" + dringlich + "]";
     }
 
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(angelegtvon, arzt, ausstellungsdatum, beh, diag, disziplin, kv, mandant, maxBisStart,
+        return Objects.hash(angelegtvon, arzt, ausstellungsdatum, beh, diag, disziplin, dringlich, kv, mandant,
                 patient);
     }
 
@@ -73,9 +72,9 @@ public class Hmv {
         Hmv other = (Hmv) obj;
         return Objects.equals(angelegtvon, other.angelegtvon) && Objects.equals(arzt, other.arzt)
                 && Objects.equals(ausstellungsdatum, other.ausstellungsdatum) && Objects.equals(beh, other.beh)
-                && Objects.equals(diag, other.diag) && disziplin == other.disziplin && Objects.equals(kv, other.kv)
-                && Objects.equals(mandant, other.mandant) && Objects.equals(maxBisStart, other.maxBisStart)
-                && Objects.equals(patient, other.patient);
+                && Objects.equals(diag, other.diag) && disziplin == other.disziplin
+                && Objects.equals(dringlich, other.dringlich) && Objects.equals(kv, other.kv)
+                && Objects.equals(mandant, other.mandant) && Objects.equals(patient, other.patient);
     }
 
 

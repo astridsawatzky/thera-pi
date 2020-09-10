@@ -1,6 +1,5 @@
 package hmv;
 
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -16,6 +15,7 @@ import core.Zuzahlung;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -153,6 +153,7 @@ public class Hmv13 {
     private Hmv hmv;
     private EnumSet<Disziplin> moeglicheDisziplinen;
     private ObjectProperty<Disziplin> diszi = new SimpleObjectProperty<>();
+    private ObjectProperty<String> symptomatik = new SimpleObjectProperty<>();
 
     public Hmv13(Hmv neueHmv, Context context, EnumSet<Disziplin> disziplinen) {
         this.hmv = neueHmv;
@@ -171,10 +172,13 @@ public class Hmv13 {
         disziplin.getToggles()
                  .forEach(t -> t.setUserData(Disziplin.valueOf(((Node) t).getId()
                                                                          .toUpperCase())));
+        leitsymptomatik_kuerzel.getToggles()
+                               .forEach(t -> t.setUserData(((Node) t).getId()
+                                                                     .toUpperCase()));
         new ToggleGroupBinding<Zuzahlung>(zuzahlung, zuzahlungProperty);
         new ToggleGroupBinding<Hausbesuch>(hausbesuch, hb);
         new ToggleGroupBinding<Disziplin>(disziplin, diszi);
-
+        new ToggleGroupBinding<String>(leitsymptomatik_kuerzel, symptomatik);
         dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
 
         versichertenStatus.setConverter(new StringConverter<VersichertenStatus>() {
@@ -236,6 +240,14 @@ public class Hmv13 {
         }
 
         rezeptDatum.setValue(hmv.ausstellungsdatum);
+        dringlich.setValue(hmv.dringlich);
+
+        diagnoseGruppe.setText(hmv.diag.diagnosegruppe);
+        icd10Code_1.setText(hmv.diag.icd10_1.schluessel);
+        icd10Code_2.setText(hmv.diag.icd10_2.schluessel);
+        symptomatik.setValue(hmv.diag.leitsymptomatik.kennung);
+        leitsymptomatik.setText(hmv.diag.leitsymptomatik.text);
+
 
     }
 
@@ -344,6 +356,12 @@ public class Hmv13 {
         Hmv hmvOut = new Hmv(context);
         hmvOut.disziplin = diszi.get();
         hmvOut.ausstellungsdatum = rezeptDatum.getValue();
+        hmvOut.dringlich = dringlicherBedarf.isSelected();
+        hmvOut.diag = new Diagnose(new Icd10(icd10Code_1.getText()), new Icd10(icd10Code_2.getText()),
+                diagnoseGruppe.getText(), new Leitsymptomatik(String.valueOf(leitsymptomatik_kuerzel.getSelectedToggle()
+                                                                                                    .getUserData()),
+                        leitsymptomatik.getText()));
+        hmvOut.beh = new Behandlung();
         return hmvOut;
 
     }
