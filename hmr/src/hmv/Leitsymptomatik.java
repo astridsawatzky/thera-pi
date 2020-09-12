@@ -12,12 +12,14 @@ public class Leitsymptomatik {
 
 
 
-    public Leitsymptomatik(String kennung, String text2) {
+    public Leitsymptomatik(String kennung, String langtext) {
         Contracts.require(kennung != null, "kennung must not be null");
+        Contracts.require(langtext != null, "langtext must not be null");
         this.kennung = kennung.toUpperCase();
+        this.text = langtext;
     }
-    String kennung ;// [a-c|x]
-    String text;
+   final String kennung ;// [a-c|x]
+   final String text;
     @Override
     public int hashCode() {
         return Objects.hash(kennung, text);
@@ -29,7 +31,7 @@ public class Leitsymptomatik {
         if (!(obj instanceof Leitsymptomatik))
             return false;
         Leitsymptomatik other = (Leitsymptomatik) obj;
-        return kennung.equalsIgnoreCase(other.kennung) && Objects.equals(text, other.text);
+        return Objects.equals(kennung, other.kennung) && Objects.equals(text, other.text);
     }
     @Override
     public String toString() {

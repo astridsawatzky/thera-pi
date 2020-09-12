@@ -15,7 +15,6 @@ import core.Zuzahlung;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -163,22 +162,18 @@ public class Hmv13 {
 
     @FXML
     public void initialize() {
-        zuzahlung.getToggles()
-                 .forEach(t -> t.setUserData(Zuzahlung.valueOf(((Node) t).getId()
-                                                                         .toUpperCase())));
-        hausbesuch.getToggles()
-                  .forEach(t -> t.setUserData(Hausbesuch.valueOf(((Node) t).getId()
-                                                                           .toUpperCase())));
-        disziplin.getToggles()
-                 .forEach(t -> t.setUserData(Disziplin.valueOf(((Node) t).getId()
-                                                                         .toUpperCase())));
-        leitsymptomatik_kuerzel.getToggles()
-                               .forEach(t -> t.setUserData(((Node) t).getId()
-                                                                     .toUpperCase()));
+
+        rezeptDatum.setConverter(new SixNumbersConverter(rezeptDatum.getConverter()));
+
+        setUserDataToId(zuzahlung, Zuzahlung.class);
         new ToggleGroupBinding<Zuzahlung>(zuzahlung, zuzahlungProperty);
+        setUserDataToId(hausbesuch, Hausbesuch.class);
         new ToggleGroupBinding<Hausbesuch>(hausbesuch, hb);
+        setUserDataToId(disziplin, Disziplin.class);
         new ToggleGroupBinding<Disziplin>(disziplin, diszi);
+        setUserDataToId(leitsymptomatik_kuerzel);
         new ToggleGroupBinding<String>(leitsymptomatik_kuerzel, symptomatik);
+
         dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
 
         versichertenStatus.setConverter(new StringConverter<VersichertenStatus>() {
@@ -248,7 +243,18 @@ public class Hmv13 {
         symptomatik.setValue(hmv.diag.leitsymptomatik.kennung);
         leitsymptomatik.setText(hmv.diag.leitsymptomatik.text);
 
+    }
 
+    private void setUserDataToId(ToggleGroup toggleGroup) {
+        toggleGroup.getToggles()
+                   .forEach(t -> t.setUserData(((Node) t).getId()
+                                                         .toUpperCase()));
+    }
+
+    private <T extends Enum<T>> void setUserDataToId(ToggleGroup toggleGroup, Class<T> class1) {
+        toggleGroup.getToggles()
+                   .forEach(t -> t.setUserData(Enum.valueOf(class1, ((Node) t).getId()
+                                                                              .toUpperCase())));
     }
 
     private void selectFirstDisziplin() {
@@ -329,8 +335,8 @@ public class Hmv13 {
     }
 
     private boolean mustnotbeempty(Node node) {
-        return !((TextArea) node).getText()
-                                 .isEmpty();
+        return !(((TextArea) node).getText()
+                                  .isEmpty());
 
     }
 

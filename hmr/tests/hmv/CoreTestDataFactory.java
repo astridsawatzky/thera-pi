@@ -54,7 +54,7 @@ public class CoreTestDataFactory {
         hmvorig.ausstellungsdatum = LocalDate.now();
         hmvorig.dringlich = Boolean.TRUE;
 
-        hmvorig.diag = new Diagnose(new Icd10("43.1"), new Icd10("69"),"ab5",new Leitsymptomatik(Leitsymptomatik.A,"besonders gaga"));
+        hmvorig.diag = new Diagnose(new Icd10("43.1"), new Icd10("69"),"ab5",new Leitsymptomatik(Leitsymptomatik.X,"besonders gaga"));
         hmvorig.beh = new Behandlung();
         hmvorig.disziplin = Disziplin.ER;
         return hmvorig;
