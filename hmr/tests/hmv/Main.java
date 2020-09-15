@@ -27,7 +27,7 @@ public class Main extends Application implements Closeable{
             Hmv neueHmv = CoreTestDataFactory.createHmv(context);
             Hmv13 controller = new Hmv13(neueHmv, context,context.disziplinen);
             loader.setController(controller);
-            
+
             double scaleFactor = 1;
             Scene scene = new Scene(loader.load(), 630 * scaleFactor, 900 * scaleFactor);
             Scale scale = new Scale(scaleFactor, scaleFactor, 0, 0);
@@ -51,17 +51,16 @@ public class Main extends Application implements Closeable{
 
         @Override
         public boolean save(Hmv hmv) {
-            // TODO Auto-generated method stub entwurf
+            System.out.println("speicher entwurf" + hmv);
             return false;
         }
     }, new HmvSaver() {
 
         @Override
         public boolean save(Hmv hmv) {
-            // TODO Auto-generated method stub in echt
+            System.out.println("speicher in echt" + hmv);
             return false;
-        }
-    },this);
+        }},this);
 
     private Stage stage;
 

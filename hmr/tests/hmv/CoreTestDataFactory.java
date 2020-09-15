@@ -51,7 +51,7 @@ public class CoreTestDataFactory {
 
     static  Hmv createHmv(Context context) {
         Hmv hmvorig = new Hmv(context);
-        hmvorig.ausstellungsdatum = LocalDate.now();
+        hmvorig.ausstellungsdatum = LocalDate.of(2020,05,25);
         hmvorig.dringlich = Boolean.TRUE;
 
         hmvorig.diag = new Diagnose(new Icd10("43.1"), new Icd10("69"),"ab5",new Leitsymptomatik(Leitsymptomatik.X,"besonders gaga"));

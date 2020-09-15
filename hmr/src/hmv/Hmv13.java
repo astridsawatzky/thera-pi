@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Optional;
 
 import core.Arzt;
@@ -127,7 +128,6 @@ public class Hmv13 {
 
     @FXML
     ToggleGroup hausbesuch;
-    // TODO:: dritte option
     ObjectProperty<Hausbesuch> hb = new SimpleObjectProperty<>();
 
     @FXML
@@ -150,7 +150,7 @@ public class Hmv13 {
     Label ik_Erbringer;
     private Context context;
     private Hmv hmv;
-    private EnumSet<Disziplin> moeglicheDisziplinen;
+    private EnumSet<Disziplin> moeglicheDisziplinen = EnumSet.noneOf(Disziplin.class);
     private ObjectProperty<Disziplin> diszi = new SimpleObjectProperty<>();
     private ObjectProperty<String> symptomatik = new SimpleObjectProperty<>();
 
@@ -163,51 +163,39 @@ public class Hmv13 {
     @FXML
     public void initialize() {
 
-        rezeptDatum.setConverter(new SixNumbersConverter(rezeptDatum.getConverter()));
+        initGui();
+        setData();
 
-        setUserDataToId(zuzahlung, Zuzahlung.class);
-        new ToggleGroupBinding<Zuzahlung>(zuzahlung, zuzahlungProperty);
-        setUserDataToId(hausbesuch, Hausbesuch.class);
-        new ToggleGroupBinding<Hausbesuch>(hausbesuch, hb);
-        setUserDataToId(disziplin, Disziplin.class);
-        new ToggleGroupBinding<Disziplin>(disziplin, diszi);
-        setUserDataToId(leitsymptomatik_kuerzel);
-        new ToggleGroupBinding<String>(leitsymptomatik_kuerzel, symptomatik);
+    }
 
-        dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
+    private void setData() {
 
-        versichertenStatus.setConverter(new StringConverter<VersichertenStatus>() {
-
-            @Override
-            public String toString(VersichertenStatus status) {
-
-                return status.getNummer() + " " + status;
-            }
-
-            @Override
-            public VersichertenStatus fromString(String string) {
-                return null;
-            }
-        });
-        versichertenStatus.getItems()
-                          .setAll(VersichertenStatus.values());
+        
         Patient patient = hmv.patient;
-        versichertenStatus.setValue(patient.kv.getStatus());
-
-        ik_Erbringer.setText(hmv.mandant.ikDigitString());
-        erfasser.setText(hmv.angelegtvon.anmeldename);
-        enableNeededDisciplines();
-
-        if (hmv.disziplin == null) {
-
-            selectFirstDisziplin();
-        } else {
-            diszi.set(hmv.disziplin);
-        }
-
         name.setText(patient.nachname);
         vorname.setText(patient.vorname);
         geboren.setValue(patient.geburtstag);
+
+      
+        
+        versichertenStatus.setValue(patient.kv.getStatus());
+        
+        
+        ik_Erbringer.setText(hmv.mandant.ikDigitString());
+        enableNeededDisciplines(context);
+
+        Iterator<Disziplin> iterator = moeglicheDisziplinen.iterator();
+        if(iterator.hasNext()) {
+            diszi.set(iterator
+                    .next());
+        }
+
+
+        erfasser.setText(hmv.angelegtvon.anmeldename);
+        if (hmv.disziplin != null) {
+            diszi.set(hmv.disziplin);
+        }
+
 
         Optional<Krankenkasse> kk = hmv.kv.getKk();
         String kostentraegerik = "";
@@ -242,7 +230,47 @@ public class Hmv13 {
         icd10Code_2.setText(hmv.diag.icd10_2.schluessel);
         symptomatik.setValue(hmv.diag.leitsymptomatik.kennung);
         leitsymptomatik.setText(hmv.diag.leitsymptomatik.text);
+    }
 
+    private void initGui() {
+        rezeptDatum.setConverter(new SixNumbersConverter(rezeptDatum.getConverter()));
+
+        bindTogglegroup(zuzahlung, zuzahlungProperty, Zuzahlung.class);
+        bindTogglegroup(hausbesuch, hb, Hausbesuch.class);
+        bindTogglegroup(disziplin, diszi, Disziplin.class);
+        bindTogglegroup(leitsymptomatik_kuerzel, symptomatik);
+
+        dringlich.bindBidirectional(dringlicherBedarf.selectedProperty());
+
+        versichertenStatus.setConverter(new StringConverter<VersichertenStatus>() {
+
+            @Override
+            public String toString(VersichertenStatus status) {
+
+                return status.getNummer() + " " + status;
+            }
+
+            @Override
+            public VersichertenStatus fromString(String string) {
+                return null;
+            }
+        });
+
+
+
+        versichertenStatus.getItems()
+                          .setAll(VersichertenStatus.values());
+    }
+
+    private <T extends Enum<T>> void bindTogglegroup(ToggleGroup toggleGroup, ObjectProperty<T> objectProperty,
+            Class<T> enume) {
+        setUserDataToId(toggleGroup, enume);
+        new ToggleGroupBinding<T>(toggleGroup, objectProperty);
+    }
+
+    private <T> void bindTogglegroup(ToggleGroup toggleGroup, ObjectProperty<T> objectProperty) {
+        setUserDataToId(toggleGroup);
+        new ToggleGroupBinding<T>(toggleGroup, objectProperty);
     }
 
     private void setUserDataToId(ToggleGroup toggleGroup) {
@@ -257,36 +285,7 @@ public class Hmv13 {
                                                                               .toUpperCase())));
     }
 
-    private void selectFirstDisziplin() {
-        selectDisziplin(moeglicheDisziplinen.iterator()
-                                            .next());
-    }
-
-    private void selectDisziplin(Disziplin disziplin) {
-        switch (disziplin) {
-        case KG:
-            kg.setSelected(true);
-            break;
-        case PO:
-            po.setSelected(true);
-            break;
-        case LO:
-            lo.setSelected(true);
-            break;
-        case ER:
-            er.setSelected(true);
-            break;
-        case ET:
-            et.setSelected(true);
-            break;
-
-        default:
-            // egal
-            break;
-        }
-    }
-
-    private void enableNeededDisciplines() {
+    private void enableNeededDisciplines(Context context) {
         for (Disziplin disziplin : context.disziplinen) {
             switch (disziplin) {
             case KG:
