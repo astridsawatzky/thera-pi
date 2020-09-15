@@ -7,13 +7,16 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 ## unveroeffentlicht
 
 ### added
-- detailierte Rechnung bei Eigenanteil
+- detailierte Rechnung bei Eigenanteil #141
 
 ### fixed
 - Feiertage konnten nur bis 2020 ausgelesen werden #481
-- BG / Privatrezepte rechnnen nur die geleisteten Einheiten ab #230
-- HMR Check max pro Fall
-
+- BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
+- HMR Check max pro Fall korrigiert #406
+- Hinweis auf Mail an Admin bei mehrmaligen fehlerhaften Loginversuchen entfernt #478
+- Updater überspringen von Versionenn nun möglich.  #486
+  z.B. Version 1.1.6 holt sich Update 1.1.10
+  
 ## [1.1.10] - 2020-09-01
 
 ### fixed
@@ -22,6 +25,7 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
   Es wird automatisch auf Updates geprüft, wenn:
   tpudaterneu.ini fehlt  
   in tpupdaterneu.ini der Eintrag UpdateChecken auf einen der TheraPi Wahrheitswerte gesetzt wird.
+- Patientenstammdaten Geburtsdatum Eingabe verkürzte Eingabe möglich dd.mm.yy  #482
 
 ## [1.1.9] - 2020-07-24
 
