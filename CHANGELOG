@@ -14,7 +14,7 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 - BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
 - HMR Check max pro Fall korrigiert #406
 - Hinweis auf Mail an Admin bei mehrmaligen fehlerhaften Loginversuchen entfernt #478
-- Updater überspringen von Versionenn nun möglich.  #486
+- Updater überspringen von Versionen nun möglich.  #486
   z.B. Version 1.1.6 holt sich Update 1.1.10
   
 ## [1.1.10] - 2020-09-01
