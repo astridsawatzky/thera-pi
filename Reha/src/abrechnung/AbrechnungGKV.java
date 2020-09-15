@@ -290,7 +290,6 @@ public class AbrechnungGKV extends JXPanel {
         CellConstraints cc = new CellConstraints();
         pb.getPanel()
           .setBackground(Color.WHITE);
-        // pb.add(getIVPanel(),cc.xy(2,1));
         pb.addLabel("Heilmittel auswählen", cc.xy(2, 2));
 
         cmbDiszi.setActionCommand("einlesen");
@@ -322,7 +321,7 @@ public class AbrechnungGKV extends JXPanel {
 
         }.execute();
 
-        htmlPane = new JEditorPane(/* initialURL */);
+        htmlPane = new JEditorPane();
         htmlPane.setContentType("text/html");
         htmlPane.setEditable(false);
         htmlPane.setOpaque(false);
@@ -401,7 +400,6 @@ public class AbrechnungGKV extends JXPanel {
                     @Override
                     public void run() {
                         try {
-                            // System.out.println("rechne Kasse neu");
                             treeKasse.clearSelection();
                             treeKasse.setSelectionInterval(xindex, xindex);
                         } catch (Exception ex) {
@@ -902,8 +900,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             int pgr = -1;
             if (!node.knotenObjekt.preisgruppe.trim()
                                               .equals("")) {
-                //// System.out.println("Aktuelle Disziplin = "+getDiszis()+" / Aktuelle
-                //// Preisgruppe = "+pgr);
                 pgr = Integer.parseInt(node.knotenObjekt.preisgruppe.trim());
                 zuzahlModusDefault = (SystemPreislisten.hmZuzahlModus.get(disziSelect.getCurrDisziKurz())
                                                                      .get(pgr - 1) == 1 ? true : false);
@@ -912,8 +908,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                 JOptionPane.showMessageDialog(null,
                         "Achtung Preisgruppe kann nicht ermittelt werden!\nBitte dieses Rezept nicht abrechnen!");
             }
-            //// System.out.println("Preisguppe = "+Integer.toString(pgr)+"\nZuhahlmodus =
-            //// "+(zuzahlModusDefault ? "Normal" : "Bayrisch"));
         } else { // Knoten ist ein Kassenknoten
             abrRez.setRechtsAufNull();
             aktuellerKnoten = node;
@@ -927,8 +921,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                         }
                     }
                 }
-                ////// System.out.println("Pfad zu Parent = "+new
-                ////// TreePath(aktuellerKnoten.getParent()).toString());
             } else {
                 aktuellerKassenKnoten = null;
             }
@@ -953,7 +945,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
     }
 
     public String getAbrechnungKasse() {
-        //// System.out.println(((JXTTreeNode)aktuellerKnoten).knotenObjekt.ktraeger);
         return aktuellerKnoten.knotenObjekt.ktraeger;
     }
 
@@ -1031,7 +1022,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             JOptionPane.showMessageDialog(null, "Kassenumsatz für Rezept + " + rez_nr
                     + " kann nicht abgeholt werden. Modul holeUmsatz() (Edifact)");
         }
-        ////// System.out.println(buf.toString());
         String[] zeilen = buf.toString()
                              .split("\n");
         String[] positionen = zeilen[0].split(":");
@@ -1435,8 +1425,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             String sender = SystemConfig.hmEmailExtern.get("SenderAdresse");
             String secure = SystemConfig.hmEmailExtern.get("SmtpSecure");
             String useport = SystemConfig.hmEmailExtern.get("SmtpPort");
-            // String recipient =
-            // "m.schuchmann@rta.de"+","+SystemConfig.hmEmailExtern.get("SenderAdresse");
             String recipient = ik_email + "," + SystemConfig.hmEmailExtern.get("SenderAdresse");
             String text = "";
             boolean authx = (authent.equals("0") ? false : true);
@@ -1452,12 +1440,10 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             attachments.add(aufDat);
             EmailSendenExtern oMail = new EmailSendenExtern();
             try {
-                //// System.out.println("Starte Emailversand.....");
                 oMail.sendMail(smtphost, benutzer, pass1, sender, recipient,
                         zertifikatVon.replace("IK", "")/* Reha.aktIK */, text, attachments, authx, bestaetigen, secure,
                         useport);
                 oMail = null;
-                //// System.out.println("Emailversand beendet.....");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1481,11 +1467,10 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             for (int i = (lang - 1); i >= 0; i--) {
                 node = (JXTTreeNode) aktuellerKassenKnoten.getChildAt(i);
                 if (node.knotenObjekt.fertig) {
-                    ////// System.out.println("Lösche KindKnoten an "+i);
                     treeModelKasse.removeNodeFromParent(node);
                 }
             }
-            removeKassenNode(this.aktuellerKassenKnoten);
+            removeKassenNode(AbrechnungGKV.aktuellerKassenKnoten);
             treeKasse.validate();
             this.treeKasse.repaint();
         } catch (Exception ex) {
@@ -1503,7 +1488,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
             }
 
             Vector<String> feldNamen = SqlInfo.holeFeldNamen("verordn", true, Arrays.asList(new String[] { "id" }));
-            //// System.out.println(feldNamen);
 
             rechnungBuf.setLength(0);
             rechnungBuf.trimToSize();
@@ -1544,9 +1528,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                         }
                     }
                 }
-                ////// System.out.println(historieBuf.toString());
-                ////// System.out.println("Übertrage Rezept "+abgerechneteRezepte.get(i2)+" in
-                ////// Langzeitarchiv = Historie");
 
                 SqlInfo.sqlAusfuehren(historieBuf.toString());
 
@@ -1557,15 +1538,12 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                  *
                  */
 
-                // SqlInfo.sqlAusfuehren("delete from lza where
-                // rez_nr='"+abgerechneteRezepte.get(i2)+"' LIMIT 1");
                 String delrez = String.valueOf(abgerechneteRezepte.get(i2));
                 SqlInfo.sqlAusfuehren("delete from fertige where rez_nr='" + delrez + "' LIMIT 1");
                 SqlInfo.sqlAusfuehren("delete from verordn where rez_nr='" + delrez + "' LIMIT 1");
                 SqlInfo.sqlAusfuehren("delete from volle where rez_nr='" + delrez + "'");
                 if (aktiverPatient.equals(abgerechnetePatienten.get(i2))) {
                     posteAktualisierung(aktiverPatient.toString());
-                    // Reha.instance.patpanel.aktRezept.setzeKarteiLasche();
                 }
 
             }
@@ -1662,11 +1640,9 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
     /***************************************************************/
 
     private void macheKopfDaten() {
-        // aktRechnung = Integer.toString(SqlInfo.erzeugeNummer("rnr"));
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // hmAnnahme = holeAdresseAnnahmestelle();
                 if (!annahmeAdresseOk) {
                     long zeit = System.currentTimeMillis();
                     while (!annahmeAdresseOk) {
@@ -1705,7 +1681,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                 return null;
             }
         }.execute();
-        ////// System.out.println(aktEsol + " - "+aktDfue);
         String sgruppe = null;
         if (this.aktDisziplin.equals("Rsport")) {
             sgruppe = "H";
@@ -1723,11 +1698,10 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                 + "S" + getEdiMonat();
         unbBuf.append(abrDateiName + plus);
         unbBuf.append("2" + EOL);
-        // unbBuf.append(aktDfue+plus+"B"+plus+"SL"+Reha.aktIK.substring(2,8)+"S"+getEdiMonat()+plus+"2"+EOL);
 
         unbBuf.append("UNH+00001+SLGA:" + SlgaVersion + ":0:0" + EOL);
         unbBuf.append("FKT+01" + plus + plus + Reha.getAktIK() + plus + ik_kostent + plus + ik_kasse + plus
-                + zertifikatVon.replace("IK", "")/* Reha.aktIK */ + EOL);
+                + zertifikatVon.replace("IK", "") + EOL);
         unbBuf.append("REC" + plus + aktRechnung + ":0" + plus + getEdiDatumFromDeutsch(DatFunk.sHeute()) + plus
                 + (lOwnCert ? "1" : "2") + EOL);
         unbBuf.append("UST" + plus + SystemConfig.hmFirmenDaten.get("Steuernummer") + plus + "J" + EOL);
@@ -1854,10 +1828,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
         Date date = new Date();
         String[] datesplit = date.toString()
                                  .split(" ");
-        ////// System.out.println(date.toString());
         if (mitsekunden) {
-            ////// System.out.println("Zeit mit
-            ////// Sekunden"+datesplit[3].substring(0,2)+datesplit[3].substring(3,5)+datesplit[3].substring(6,8));
             return datesplit[3].substring(0, 2) + datesplit[3].substring(3, 5) + datesplit[3].substring(6, 8);
         }
         return datesplit[3].substring(0, 2) + datesplit[3].substring(3, 5);
@@ -1928,15 +1899,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
         if (abgerechneteRezepte.size() > 0) {
             /************** Hier den offenen Posten anlegen ***************/
             abrDlg.setzeLabel("Offene Posten anlegen für Rechnung Nr.: " + aktRechnung);
-            //// System.out.println(" abgerechnete Rezepte = "+abgerechneteRezepte);
-            //// System.out.println("abgerechnete Patienten = "+abgerechnetePatienten);
-            //// System.out.println("abger. Bruttovolumen = "+preis00[1]);
-            //// System.out.println(" abger. Rezeptanteil = "+preis00[2]);
-            //// System.out.println(" abger. Nettovolumen = "+preis00[0]);
-            //// System.out.println("Name der abger. Kasse = "+name_kostent);
-            //// System.out.println(" IK-Kostenträger = "+ik_kostent);
-            //// System.out.println(" Disziplin = "+disziSelect.getCurrRezClass());
-            //// System.out.println(" Rechnung Nr. = "+aktRechnung);
             if (Reha.vollbetrieb) {
                 anlegenOP();
             }
@@ -1973,7 +1935,6 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
     /***************************************************************/
 
     private void analysierenEdifact(String edifact, String rez_num) {
-        ////// System.out.println(edifact);
         Vector<String> position = new Vector<String>();
         Vector<BigDecimal> anzahl = new Vector<BigDecimal>();
         Vector<BigDecimal> preis = new Vector<BigDecimal>();
@@ -2011,14 +1972,8 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                             rezgeb.add(BigDecimal.valueOf(Double.valueOf(dummy)));
                             einzelzuzahlung.add(BigDecimal.valueOf(Double.valueOf(dummy)));
                         } else {
-                            /*
-                             * System.out.println("Dummy = "+dummy);
-                             * System.out.println("Muliplikator = "+bdAnzahl);
-                             */
-                            // Herr Lehmann: nächste Zeile muß freigeschaltet werden für Einzelkilometer
                             rezgeb.add(BigDecimal.valueOf(Double.valueOf(dummy))
                                                  .multiply(bdAnzahl));
-                            // Herr Lehmann: nächste Zeile muß freigeschaltet werden für Einzelkilometer
                             einzelzuzahlung.add(BigDecimal.valueOf(Double.valueOf(dummy))
                                                           .multiply(bdAnzahl));
                         }
@@ -2056,16 +2011,9 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                                 zuzahlUmstellung = true;
                             }
                         } else {
-                            // Herr Lehmann: nächste Zeile muß freigeschaltet werden für Einzelkilometer
-                            /*
-                             * System.out.println("Dummy = "+dummy);
-                             * System.out.println("Muliplikator (falsch) = "+anzahl.get(pos));
-                             * System.out.println("Muliplikator (richtig) = "+bdAnzahl);
-                             */
                             rezgeb.set(pos, rezgeb.get(pos)
                                                   .add(BigDecimal.valueOf(Double.valueOf(dummy))
                                                                  .multiply(bdAnzahl)));
-                            // Herr Lehmann: nächste Zeile muß freigeschaltet werden für Einzelkilometer
                             if (!BigDecimal.valueOf(Double.valueOf(dummy))
                                            .multiply(bdAnzahl)
                                            .equals(einzelzuzahlung.get(pos))) {
@@ -2073,16 +2021,11 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                             }
                         }
                     } else {
-                        // System.out.println("Keine Zuzahlung Dummy = ");
-                        // System.out.println("Keine Zuzahlung Muliplikator = "+anzahl.get(pos));
                         rezgeb.set(pos, rezgeb.get(pos)
                                               .add(BigDecimal.valueOf(Double.valueOf("0.00"))));
                         if (!BigDecimal.valueOf(Double.valueOf("0.00"))
                                        .equals(einzelzuzahlung.get(pos))) {
-                            ////// System.out.println("Einzelzuzahlung = "+einzelzuzahlung.get(pos));
-                            ////// System.out.println("Vergleichswert = 0.00 ");
                             zuzahlUmstellung = true;
-                            // System.out.println("Umstellung der Zuzahlung = "+zuzahlUmstellung);
                         }
                     }
                 }
@@ -2306,20 +2249,15 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
          */
         private static final long serialVersionUID = 2195590211796817012L;
 
-        public boolean enabled = false;
         private KnotenObjekt knotenObjekt = null;
 
         public JXTTreeNode(KnotenObjekt obj, boolean enabled) {
             super();
-            this.enabled = enabled;
             this.knotenObjekt = obj;
             if (obj != null) {
                 this.setUserObject(obj);
             }
         }
-        /*
-         * public boolean isEnabled() { return enabled; }
-         */
 
         public KnotenObjekt getObject() {
             return knotenObjekt;

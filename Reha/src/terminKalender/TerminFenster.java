@@ -414,7 +414,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
                 cb = new JXPanel(new BorderLayout());
                 cb.setBorder(dropShadow);
                 cb.setBackground(TKSettings.KalenderHintergrund);
-                oCombo[i] = new JComboBox();
+                oCombo[i] = new JComboBox<>();
                 oCombo[i].setName("Combo" + i);
                 cb.add(oCombo[i], BorderLayout.CENTER);
                 cb.addMouseListener(new comboToolTip(i));
@@ -1750,12 +1750,7 @@ public class TerminFenster implements RehaTPEventListener, ActionListener, DropT
             Normalanzeige.setToolTipText("Strg-N");
             Normalanzeige.setIcon(SystemConfig.hmSysIcons.get("day"));
             Normalanzeige.setRolloverEnabled(true);
-            Normalanzeige.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    setNormalanzeige();
-                }
-            });
+            Normalanzeige.addActionListener(e -> setNormalanzeige());
         }
         return Normalanzeige;
     }
