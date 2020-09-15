@@ -68,7 +68,6 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private final class Icd10Listener extends MouseAdapter {
         @Override
         public void mouseClicked(MouseEvent e) {
-            System.out.println("gotcha");
             super.mouseClicked(e);
         }
 
@@ -208,7 +207,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
     private ArztVec verordnenderArzt = null;
     private Disziplinen diszis = null;
 
-    public RezNeuanlage(Vector<String> vec, boolean neu, Connection connection) { 
+    public RezNeuanlage(Vector<String> vec, boolean neu, Connection connection) {
         super();
         try {
             this.neu = neu;
@@ -219,7 +218,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             diszis = new Disziplinen();
 
             if (vec.size() > 0 && this.neu) {
-                aktuelleDisziplin = RezTools.getDisziplinFromRezNr(vec.get(1)); 
+                aktuelleDisziplin = RezTools.getDisziplinFromRezNr(vec.get(1));
             }
 
             setName("RezeptNeuanlage");
@@ -545,7 +544,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             /********************/
 
             if (myRezept.isEmpty()) {
-                jcmb[cRKLASSE].setSelectedItem(SystemConfig.initRezeptKlasse);                    
+                jcmb[cRKLASSE].setSelectedItem(SystemConfig.initRezeptKlasse);
             } else {
                 String rezClassInVO = myRezept.getRezClass();
                 for (int i = 0; i < strRezepklassenAktiv.length; i++) {
@@ -704,7 +703,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
             }
             allowShortCut((Component) jcb[cHygienePausch], "hygPausch");
             jpan.add(jcb[cHygienePausch], cc.xy(7, 15));
-            
+
             jpan.addSeparator("Verordnete Heilmittel", cc.xyw(1, 17, 7));
 
             jtf[cANZ1].setName("anzahl1");
@@ -1822,7 +1821,7 @@ public class RezNeuanlage extends JXPanel implements ActionListener, KeyListener
                 thisRezept.setKtraeger(Reha.instance.patpanel.patDaten.get(68));
             }
         }
-        
+
         initRezeptAll(thisRezept);
 
         thisRezept.setRezNb("");
