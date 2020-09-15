@@ -16,9 +16,6 @@ import com.jgoodies.forms.layout.FormLayout;
 import systemEinstellungen.SystemConfig;
 
 public class AbrechnungDlg extends JDialog {
-    /**
-     * 
-     */
     private static final long serialVersionUID = -2903001967749371315L;
     private JLabel textlab;
     private JLabel bildlab;

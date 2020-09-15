@@ -2103,29 +2103,7 @@ TreeSelectionListener treeSelectionListener = new TreeSelectionListener() {
                         anzahl, abrtage, einzelpreis, preis, rezgeb,
                         (splits[6].split("=")[1].equals("10,00") ? true : false));
             }
-            /*
-             * ////System.out.println("         Rezept Nr. ="
-             * +abrechnungRezepte+" ********Abrechnungsposition Anfang********");
-             * ////System.out.println("               Name = "+splits[9].split("=")[1]);
-             * ////System.out.println("             Status = "+splits[10].split("=")[1]);
-             * ////System.out.println("          RezeptNr. = "+splits[2].split("=")[1]);
-             * ////System.out.println("  Positionen Vector = "+position);
-             * ////System.out.println("      Anzahl Vector = "+anzahl);
-             * ////System.out.println("    Abr.tage Vector = "+abrtage);
-             * ////System.out.println(" Einzelpreis Vector = "+einzelpreis);
-             * ////System.out.println(" Kummulierte Preise = "+preis);
-             * ////System.out.println(" Kummulierte Zuzahl.= "+rezgeb);
-             * ////System.out.println(" Zuzahlungen einzel = "+einzelzuzahlung);
-             * ////System.out.println("      mit Pauschale = "+(splits[6].split("=")[1].
-             * equals("10,00") ? true : false));
-             * ////System.out.println("mit Preisumstellung = "+preisUmstellung);
-             * ////System.out.println("  mit Zuzahlwechsel = "+zuzahlUmstellung);
-             * ////System.out.println("bislang abgerechnet = "+abgerechneteRezepte);
-             * ////System.out.println("   Rechnungsadresse = "+hmAnnahme);
-             * ////System.out.println("Rezept Nr. ="
-             * +abrechnungRezepte+" ********Abrechnungsposition Ende********");
-             */
-            ///////////////// Hier die Sätze in der Rechnungsdatei anlegen///////////////
+
             if (Reha.vollbetrieb) {
                 schreibeInRechnungDB(splits, position, anzahl, abrtage, einzelpreis, preis, rezgeb, preisUmstellung,
                         zuzahlUmstellung);

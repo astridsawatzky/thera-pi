@@ -120,42 +120,6 @@ public class AbrechnungDrucken {
         BigDecimal gesamtNetto = new BigDecimal(Double.valueOf("0.00"));
 
         textTable.addRow(positionen + 2 + (eltern.getTageDrucken() ? 1 : 0));
-        /*
-         * if(rezepte > 1 && eltern.getTageDrucken()){
-         * 
-         * for(int x = aktuellePosition+1; x < (aktuellePosition+1)+positionen;x++){
-         * XTextTableCursor cursor =
-         * textTable.getXTextTable().createCursorByCellName(textTable.getCell(0,x).
-         * getName().getName().intern());
-         * cursor.gotoCellByName(textTable.getCell(0,x).getName().getName().intern(),
-         * false); cursor.splitRange((short)1,false); ITextTableCell cell =
-         * (ITextTableCell)
-         * textTable.getCell(textTable.getCell(0,0).getName().getName().intern());
-         * ITextTableCellProperties props = cell.getProperties();
-         * 
-         * XPropertySet xpropset = props.getXPropertySet(); Property[] prop =
-         * xpropset.getPropertySetInfo().getProperties(); for(int i = 0; i <
-         * prop.length;i++){ System.out.println(prop[i].Name);
-         * System.out.println(prop[i].Attributes); } XTextTable xttl =
-         * textTable.getXTextTable() ;
-         * 
-         * 
-         * 
-         * 
-         * //System.out.println("Value für Width = "+xpropset.getPropertyValue("Width"))
-         * ; //OOTools.setOneCellWidth(textTable.getCell(0,x),
-         * (short)Integer.parseInt(xpropset.getPropertyValue("Width").toString()));
-         * OOTools.setOneCellProperty(textTable.getCell(0,x),false,false,false,0x00,8.f)
-         * ;
-         * OOTools.setOneCellProperty(textTable.getCell(1,x),false,false,false,0x00,8.f)
-         * ;
-         * 
-         * }
-         * 
-         * //XCell xcell =
-         * textTable.getXTextTable().getCellByName(origincell[0].getName().getName().
-         * intern()); }
-         */
         ITextTableCell[] tcells = null;
 
         tcells = textTable.getRow(aktuellePosition + 1)
@@ -254,9 +218,8 @@ public class AbrechnungDrucken {
                     7.f);
             OOTools.setOneCellProperty(textTable.getCell(1, aktuellePosition + (i + 2)), false, false, false, 0x00,
                     7.f);
-            // setOneCellProperty(textTable.getCell(1,aktuellePosition+(i+2)));
 
-            XTextTableCursor cursor = OOTools.doMergeCellsInTextTabel(textTable.getXTextTable(),
+            OOTools.doMergeCellsInTextTabel(textTable.getXTextTable(),
                     textTable.getCell(0, aktuellePosition + (i + 2))
                              .getName()
                              .getName()
@@ -302,8 +265,6 @@ public class AbrechnungDrucken {
             XPropertySet xprops = props.getXPropertySet();
             xprops.setPropertyValue("TopBorderDistance", 0);
             xprops.setPropertyValue("BottomBorderDistance", 0);
-            // xprops.setPropertyValue("LeftBorderDistance", 0);
-            // xprops.setPropertyValue("RightBorderDistance", 0);
             tcells[i2].getCharacterProperties()
                       .setFontSize(8.f);
             tcells[i2].getCharacterProperties()
@@ -323,18 +284,7 @@ public class AbrechnungDrucken {
 
     }
 
-    private void setOneCellProperty(ITextTableCell cell) throws Exception {
-        ITextTableCellProperties props = cell.getProperties();
-        XPropertySet xprops = props.getXPropertySet();
-        cell.getCharacterProperties()
-            .setFontItalic(false);
-        cell.getCharacterProperties()
-            .setFontBold(false);
-    }
 
-    public void druckeRechnung(int anzahl) {
-
-    }
 
     public void starteDokument(String url) throws Exception {
         IDocumentService documentService = null;
