@@ -31,6 +31,7 @@ import hauptFenster.RehaIOServer;
 import hauptFenster.ReverseSocket;
 import io.RehaIOMessages;
 import rechteTools.Rechte;
+import rehaInternalFrame.JPatientInternal;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 import terminKalender.iCalRehaExporter;
@@ -121,8 +122,7 @@ public class PatientToolBarLogic {
         }
         if (!patientHauptPanel.getInternal()
                               .getActive()) {
-            patientHauptPanel.getInternal()
-                             .setSpecialActive(true);
+            JPatientInternal r = patientHauptPanel.getInternal();
         }
     }
 

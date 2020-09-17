@@ -56,13 +56,7 @@ import systemTools.ListenerTools;
 
 public class JRehaInternal extends JInternalFrame implements ActionListener, ComponentListener, KeyListener,
         MouseListener, MouseMotionListener, InternalFrameListener, AncestorListener {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1404891339833332337L;
-    /**
-     * 
-     */
     public String titel;
     public JTextField tf = null;
     public boolean isActive;
@@ -201,9 +195,6 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
         this.isActive = active;
     }
 
-    public void setSpecialActive(boolean active) {
-    }
-
     public String getTitel() {
         return this.titel;
     }
@@ -211,7 +202,6 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
     @Override
     public void setTitle(String titel) {
         this.titel = titel;
-        this.title = titel;
         this.repaint();
     }
 
@@ -246,7 +236,6 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
     }
 
     public void setTitel(String titel) {
-        this.titel = titel;
         this.title = titel;
         this.repaint();
     }
@@ -583,22 +572,16 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
 
     private void testeWechsel() {
         int vorher = 0, nachher = 0;
-//		for(int i = 0;i<1;i++){
         if (this.desktop == 0) {
             vorher = 0;
             nachher = 1;
-//			break;
         } else {
             vorher = 1;
             nachher = 0;
-//			break;
         }
-//		}
         this.removeInternalFrameListener(this);
 
         this.setVisible(false);
-        //// System.out.println("Layer vor dem Wechsel"
-        //// +Reha.instance.desktops[vorher].getLayer(this));
         Reha.instance.desktops[vorher].remove(this);
         Reha.instance.desktops[vorher].updateUI();
         Reha.instance.desktops[vorher].repaint();
@@ -622,13 +605,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
         }
 
         frameAktivieren(this.getName());
-        //// System.out.println("Layer nach dem Wechsel"
-        //// +Reha.instance.desktops[nachher].getLayer(this));
-        /*
-         * try { setSelected(true); } catch (PropertyVetoException e) {
-         * 
-         * e.printStackTrace(); }
-         */
+
     }
 
     @Override
@@ -636,31 +613,25 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
 
         String comm = arg0.getActionCommand();
 
-        for (int i = 0; i < 1; i++) {
-            if (comm.equals("stetsgross")) {
-                this.stetsgross = true;
-                break;
-            }
-            if (comm.equals("stetslassen")) {
-                this.stetsgross = false;
-                break;
-            }
-            if (comm.equals("anpassen")) {
-                sizeAnpassen();
-                break;
-            }
-            if (comm.equals("verschieben")) {
-                testeWechsel();
-                break;
-            }
-            if (comm.equals("icon")) {
-                gruenGedrueckt();
-                break;
-            }
-            if (comm.equals("schliessen")) {
-                rotGedrueckt();
-                break;
-            }
+        switch (comm) {
+        case "stetsgross":
+            this.stetsgross = true;
+            break;
+        case "stetslassen":
+            this.stetsgross = false;
+            break;
+        case "anpassen":
+            sizeAnpassen();
+            break;
+        case "verschieben":
+            testeWechsel();
+            break;
+        case "icon":
+            gruenGedrueckt();
+            break;
+        case "schliessen":
+            rotGedrueckt();
+            break;
         }
 
     }
@@ -688,35 +659,20 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
         int deskaktiv = this.desktop;
         int deskinaktiv = (deskaktiv == 0 ? 1 : 0);
         JInternalFrame[] frm = Reha.instance.desktops[deskaktiv].getAllFrames();
-        //// System.out.println("Anzahl Fenster auf Desktop "+deskaktiv+" =
-        //// "+frm.length);
 
         for (int i = 0; i < frm.length; i++) {
-            if (((JRehaInternal) frm[i]).getName()
-                                        .equals(xname)) {
-                //// System.out.println("In den Vordergrund "+xname);
-                // ((JRehaInternal)frm[i]).fireInternalFrameEvent(25554);
-            } else {
-                //// System.out.println("In den Hintergrund "+xname);
-                //// System.out.println("In den Hintergrund
-                //// "+((JRehaInternal)frm[i]).getName());
-                ((JRehaInternal) frm[i]).fireInternalFrameEvent(25555);
-                // ((JRehaInternal)frm[i]).validateTree();
+            if (!((JRehaInternal) frm[i]).getName()
+                                         .equals(xname)) {
+                ((JRehaInternal) frm[i]).fireInternalFrameEvent(InternalFrameEvent.INTERNAL_FRAME_LAST);
             }
         }
 
         JInternalFrame[] frmin = Reha.instance.desktops[deskinaktiv].getAllFrames();
-        //// System.out.println("Anzahl Fenster auf Desktop "+deskinaktiv+" =
-        //// "+frmin.length);
         for (int i = 0; i < frmin.length; i++) {
 
             if (!((JRehaInternal) frmin[i]).getName()
                                            .equals(xname)) {
-                //// System.out.println("Inaktiver Desktop Hintergrund ->
-                //// "+((JRehaInternal)frmin[i]).getName());
-                ((JRehaInternal) frmin[i]).fireInternalFrameEvent(25555);
-                // ((JRehaInternal)frmin[i]).validateTree();
-                // ((JRehaInternal)frmin[i]).repaint();
+                ((JRehaInternal) frmin[i]).fireInternalFrameEvent(InternalFrameEvent.INTERNAL_FRAME_LAST);
             }
         }
 
@@ -724,16 +680,9 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
 
 }
 
-/********
- * Neuer Title
- * 
- * @author admin
- *
- */
-
 class RehaInternal extends BasicInternalFrameTitlePane {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 8563410987754087430L;
     String titel = null;
@@ -741,8 +690,6 @@ class RehaInternal extends BasicInternalFrameTitlePane {
     Image img2 = null;
     Image img3 = null;
     int pp = 0;
-    CustomPinPanel jb1 = null;
-    CustomPinPanel jb2 = null;
     Paint gp1 = null;
     Paint gp2 = null;
 
@@ -761,26 +708,19 @@ class RehaInternal extends BasicInternalFrameTitlePane {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getButton() == MouseEvent.BUTTON3) {
                     ((JRehaInternal) getParent()).showPopUp(evt);
-                    ((JRehaInternal) getParent()).feuereEvent(25554);
+                    ((JRehaInternal) getParent()).feuereEvent(InternalFrameEvent.INTERNAL_FRAME_ACTIVATED);
                 }
                 if (evt.getButton() == MouseEvent.BUTTON1) {
-                    ((JRehaInternal) getParent()).feuereEvent(25554);
+                    ((JRehaInternal) getParent()).feuereEvent(InternalFrameEvent.INTERNAL_FRAME_ACTIVATED);
                 }
 
             }
         });
         setPreferredSize(new Dimension(0, 25));
         setLayout(new FlowLayout(FlowLayout.RIGHT));
+        add(new CustomPinPanel(CustomPinPanel.GRUEN));
 
-        jb1 = new CustomPinPanel("", null, 1);
-        jb1.setName("GRUEN");
-        jb1.setVisible(true);
-        add(jb1);
-
-        jb2 = new CustomPinPanel("", null, 1);
-        jb2.setName("ROT");
-        jb2.setVisible(true);
-        add(jb2);
+        add(new CustomPinPanel(CustomPinPanel.ROT));
 
     }
 
@@ -833,47 +773,41 @@ class RehaInternal extends BasicInternalFrameTitlePane {
 /*********************************************************/
 class CustomPinPanel extends JButton {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 9078107053879258413L;
 
-    CustomPinPanel(String titel, ImageIcon img, int position) {
-        super(titel);
+    public static final String GRUEN = "GRUEN";
+    public static final String ROT = "ROT";
+    public CustomPinPanel(String name) {
+        super("");
+        setName(name);
         setBorder(null);
         setOpaque(false);
-        if (img != null) {
-            setIcon(img);
-        }
         setPreferredSize(new Dimension(15, 15));
-        addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent evt) {
-                //// System.out.println("Action ausgel�st von:
-                //// "+((JComponent)evt.getSource()).getName());
-                if (((JComponent) evt.getSource()).getName()
-                                                  .equals("GRUEN")) {
-                    ((JRehaInternal) getParent().getParent()).gruenGedrueckt();
-                    ((JRehaInternal) getParent().getParent()).isIcon = true;
-                }
-                if (((JComponent) evt.getSource()).getName()
-                                                  .equals("ROT")) {
-                    if (!((JRehaInternal) getParent().getParent()).doNotClose) {
-                        ((JRehaInternal) getParent().getParent()).rotGedrueckt();
-                    }
-
-                }
-
-            }
-        });
+        switch (name) {
+        case GRUEN:
+            addActionListener(e -> gruenAction());
+            break;
+        case ROT:
+            addActionListener(e -> rotAction());
+            break;
+        default:
+            // doNothing
+            break;
+        }
+        setVisible(true);
     }
 
-    @Override
-    public void paintComponent(Graphics g) {
-
-        Graphics2D g2d = (Graphics2D) g;
-        // g2d.drawImage(getToolkit().getImage("C:/RehaVerwaltung/icons/red.png"),0 ,20,
-        // this);
-        // g2d.drawImage(getToolkit().getImage("C:/RehaVerwaltung/icons/red.png"),40
-        // ,20, this);
+    void rotAction() {
+        if (!((JRehaInternal) getParent().getParent()).doNotClose) {
+            ((JRehaInternal) getParent().getParent()).rotGedrueckt();
+        }
     }
+
+    void gruenAction() {
+        ((JRehaInternal) getParent().getParent()).gruenGedrueckt();
+        ((JRehaInternal) getParent().getParent()).isIcon = true;
+    }
+
 }

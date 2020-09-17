@@ -60,14 +60,8 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
 public class AbrechnungReha extends JXPanel {
-    /**
-     *
-     */
     private static final long serialVersionUID = -7029656388659186476L;
 
-    /**
-     *
-     */
     JRehaabrechnungInternal internal = null;
     JXPanel content;
     JLabel patLabel = null;
@@ -551,12 +545,10 @@ public class AbrechnungReha extends JXPanel {
                 }
                 if (cmd.contains("korrektur")) {
                     doKorrektur();
-                    // allesAusschalten();
                 }
                 if (cmd.contains("drucken")) {
                     aktuellePosition = 0;
                     doRehaAbrechnung();
-                    // allesAusschalten();
                 }
                 if (cmd.contains("anschrift")) {
                     doAnschrift();
@@ -618,17 +610,12 @@ public class AbrechnungReha extends JXPanel {
     }
 
     private void doAnschrift() {
-        // KassenAuswahl(JXFrame owner, String name,String[]
-        // suchegleichnach,JRtaTextField[] elterntf,String kassennum){
         JRtaTextField[] tfs = { null, null, null };
         tfs[0] = new JRtaTextField("nix", false);
         tfs[1] = new JRtaTextField("nix", false);
         tfs[2] = new JRtaTextField("nix", false);
         tfs[1].setText(anschriftID);
 
-        // System.out.println(tfs[1].getText());
-        // this.suchkrit = suchegleichnach[0];
-        // this.suchid = suchegleichnach[1];
 
         String[] suchegleichnach = { null, null };
         suchegleichnach[0] = "";
@@ -725,7 +712,6 @@ public class AbrechnungReha extends JXPanel {
                                     .toString()
                                     .trim();
                     objvec.add(obj.clone());
-                    // System.out.println(obj[0]+" - "+obj[1]+" - "+obj[2]);
                 }
             }
             if (objvec.size() <= 0) {
@@ -743,8 +729,6 @@ public class AbrechnungReha extends JXPanel {
                         "Dieser Fall wurde nicht als DTA-301 Fall angelegt\nund kann deshalb auch nicht nach 301 abgerechnet werden!");
                 return true;
             }
-            // System.out.println("Gesamtbetrag = "+dcf.format(gesamtPreis.doubleValue()) );
-            // System.out.println("ID von dta301 = "+id );
             RVMeldung301 meldung = new RVMeldung301(11, id, 1);
             meldung.doRechnung(tagevec.get(0), tagevec.get(tagevec.size() - 1), objvec,
                     dcf.format(gesamtPreis.doubleValue()), Integer.parseInt(aktRechnung));
@@ -762,7 +746,6 @@ public class AbrechnungReha extends JXPanel {
         SqlInfo.transferRowToAnotherDB("verordn", "lza", "rez_nr", delrez, true, Arrays.asList(new String[] { "id" }));
         SqlInfo.sqlAusfuehren("delete from verordn where rez_nr='" + delrez + "'");
         String aktiverPatient = "";
-        // System.out.println("delete from volle where rez_nr='"+delrez+"'");
         SqlInfo.sqlAusfuehren("delete from volle where rez_nr='" + delrez + "'");
         JComponent patient = AktiveFenster.getFensterAlle("PatientenVerwaltung");
         if (patient != null) {
@@ -866,20 +849,15 @@ public class AbrechnungReha extends JXPanel {
 
         starteDokument(Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/" + this.druckFormular,
                 this.druckDrucker);
-        // System.out.println("Dokument gestartet");
         starteErsetzen(hmRechnung);
-        // System.out.println("suche ersetzen abeschlossen");
         startePositionen(vecposrechnung, gesamtPreis);
-        // System.out.println("Positionen gesetzt");
         starteDrucken(this.druckExemplare);
-        // System.out.println("Druck gestartet");
     }
 
     private void doFaktura() {
         String cmdKopf = "insert into faktura set ";
 
         for (int i = 0; i < vecposrechnung.size(); i++) {
-            //// System.out.println("In RechnungFaktura "+hmRechnung);
             rechnungBuf.setLength(0);
             rechnungBuf.trimToSize();
             rechnungBuf.append(cmdKopf);
@@ -1038,9 +1016,6 @@ public class AbrechnungReha extends JXPanel {
                 hmRechnung.put("<pri4>", padressDaten[3]);
                 hmRechnung.put("<pri5>", padressDaten[4] + ",");
             } else {
-                // kassvec = SqlInfo.holeFelder("select
-                // kassen_nam1,kassen_nam2,strasse,plz,ort,ik_papier,ik_ktraeger from kass_adr
-                // where id='"+kassenid+"' LIMIT 1");
                 hmRechnung.put("<pri1>", rechnungvec.get(0)
                                                     .get(0));
                 hmRechnung.put("<pri2>", rechnungvec.get(0)
@@ -1070,7 +1045,6 @@ public class AbrechnungReha extends JXPanel {
                     + ", geb.am: " + DatFunk.sDatInDeutsch(patvec.get(0)
                                                                  .get(2)));
             /*******************************/
-            // int testik = 0;
             if (jcmb[0].getSelectedItem()
                        .toString()
                        .toUpperCase()
@@ -1139,9 +1113,6 @@ public class AbrechnungReha extends JXPanel {
             hmRechnung.put("<pri8>", this.druckIk);
             hmRechnung.put("<pri10>", SystemConfig.hmAdrRDaten.get("<Rerstdat>"));
             hmRechnung.put("<pri11>", SystemConfig.hmAdrRDaten.get("<Rletztdat>"));
-            // hier erster und letzter Tag einbauen
-            // JOptionPane.showMessageDialog(null,"Verwende IK "+this.druckIk+" in
-            // Testvariante = "+Integer.toString(testik));
             /*******************************/
 
             vecposrechnung.clear();
@@ -1188,8 +1159,6 @@ public class AbrechnungReha extends JXPanel {
      * Nachfolgend die OO.writer - Funktionen
      **************************/
     public synchronized void starteDokument(String url, String drucker) {
-        // System.out.println("URL="+url);
-        // System.out.println("Drucker="+drucker);
         IDocumentService documentService = null;
         try {
             documentService = Reha.officeapplication.getDocumentService();
@@ -1338,24 +1307,19 @@ public class AbrechnungReha extends JXPanel {
                 }
             });
         } else {
-            // System.out.println("Vor PrintProperties");
             PrintProperties printprop = new PrintProperties((short) exemplare);
             try {
-                // System.out.println("Vor print(printprop)");
                 textDocument.getPrintService()
                             .print(printprop);
-                // System.out.println("Vor textDocument.close()");
                 while (textDocument.getPrintService()
                                    .isActivePrinterBusy()) {
                     Thread.sleep(50);
                 }
                 Thread.sleep(150);
                 textDocument.close();
-                // System.out.println("Nach textDocument.close()");
             } catch (DocumentException e1) {
                 e1.printStackTrace();
             } catch (InterruptedException e) {
-                // ignore
                 e.printStackTrace();
             } catch (NOAException e) {
                 e.printStackTrace();

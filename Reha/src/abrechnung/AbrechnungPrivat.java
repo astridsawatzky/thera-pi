@@ -88,9 +88,7 @@ public class AbrechnungPrivat extends JXDialog
     private JLabel[] labs = { null, null, null, null, null, null, null };
     private JLabel adr1 = null;
     private JLabel adr2 = null;
-    // private JRtaTextField[] tfs = {null,null,null,null,null};
     private JButton[] but = { null, null, null };
-    // private HashMap<String,String> hmRezgeb = null;
     DecimalFormat dcf = new DecimalFormat("#########0.00");
     ButtonGroup bg = new ButtonGroup();
     String rgnrNummer;
@@ -124,7 +122,6 @@ public class AbrechnungPrivat extends JXDialog
     ITextDocument textDocument = null;
     int aktuellePosition = 0;
     int patKilometer = 0;
-    // AbrechnungDlg abrDlg = null;
 
     StringBuffer writeBuf = new StringBuffer();
     StringBuffer rechnungBuf = new StringBuffer();
@@ -142,15 +139,6 @@ public class AbrechnungPrivat extends JXDialog
         super(owner, (JComponent) Reha.getThisFrame()
                                       .getGlassPane());
         final int ipg = preisgruppe - 1;
-        /*
-         * new SwingWorker<Void,Void>(){
-         * 
-         * @Override protected Void doInBackground() throws Exception {
-         * //System.out.println("Preisgruppe = "+ipg); disziplin =
-         * RezTools.putRezNrGetDisziplin(Reha.instance.patpanel.vecaktrez.get(1));
-         * preisliste = SystemPreislisten.hmPreise.get(disziplin).get(ipg); preisok =
-         * true; return null; } }.execute();
-         */
         disziplin = RezTools.getDisziplinFromRezNr(Reha.instance.patpanel.vecaktrez.get(1));
         preisliste = SystemPreislisten.hmPreise.get(disziplin)
                                                .get(ipg);
@@ -174,7 +162,6 @@ public class AbrechnungPrivat extends JXDialog
         this.pinPanel.setName("Privatrechnung");
         this.jtp.setRightDecoration(this.pinPanel);
         this.setContentPane(jtp);
-        // this.setModal(true);
         this.setResizable(false);
         this.rtp = new RehaTPEventClass();
         this.rtp.addRehaTPEventListener(this);
@@ -210,7 +197,6 @@ public class AbrechnungPrivat extends JXDialog
 
         lab = new JLabel("Preisgruppe wählen:");
         pan.add(lab, cc.xy(3, 6));
-        // jcmb = new JRtaComboBox(SystemConfig.vPreisGruppen);
 
         jcmb = new JRtaComboBox(SystemPreislisten.hmPreisGruppen.get(
                 StringTools.getDisziplin(Reha.instance.patpanel.vecaktrez.get(1))));
@@ -238,11 +224,6 @@ public class AbrechnungPrivat extends JXDialog
         if (!Reha.instance.patpanel.vecaktrez.get(8)
                                              .equals("0")) {
             labs[0] = new JLabel();
-            /*
-             * labs[0] = new JLabel(Reha.instance.patpanel.vecaktrez.get(3)+" * "+
-             * RezTools.getKurzformFromID(Reha.instance.patpanel.vecaktrez.get(8),
-             * preisliste));
-             */
             labs[0].setForeground(Color.BLUE);
             pan.add(labs[0], cc.xy(3, 14));
 
@@ -327,9 +308,6 @@ public class AbrechnungPrivat extends JXDialog
         posteAktualisierung(Reha.instance.patpanel.patDaten.get(29));
         FensterSchliessen("dieses");
     }
-    /*
-     * private AbrechnungPrivat getInstance(){ return this; }
-     */
 
     private void posteAktualisierung(String patid) {
         final String xpatid = patid;
@@ -569,7 +547,6 @@ public class AbrechnungPrivat extends JXDialog
             writeBuf.append("rdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "',");
             writeBuf.append("ik='" + Reha.getAktIK() + "'");
             SqlInfo.sqlAusfuehren(writeBuf.toString());
-            //// System.out.println(writeBuf.toString());
         }
     }
 
@@ -637,9 +614,6 @@ public class AbrechnungPrivat extends JXDialog
     }
 
     private void doNeuerTarif() {
-        // System.out.println("Disziplin = "+this.disziplin);
-        // System.out.println("AktGruppe = "+this.aktGruppe);
-        // System.out.println("stelle neuen Tarif ein....");
 
         String pos = "";
         String preis = "";
