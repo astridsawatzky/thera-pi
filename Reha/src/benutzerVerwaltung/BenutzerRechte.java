@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -56,12 +57,13 @@ import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;
 import rehaInternalFrame.JBenutzerInternal;
+import sql.DatenquellenFactory;
 import systemEinstellungen.SystemConfig;
 import systemTools.ButtonTools;
 
 public class BenutzerRechte extends JXPanel {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6231533201163780445L;
     HashMap<String, String[]> rechteMap = new HashMap<String, String[]>();
@@ -718,7 +720,12 @@ public class BenutzerRechte extends JXPanel {
                     + Integer.toString(id) + "' LIMIT 1";
             SqlInfo.sqlAusfuehren(cmd);
         }
-        Benutzer.benutzerLaden();
+        try {
+            Benutzer.benutzerLaden(new DatenquellenFactory(Reha.getAktIK()));
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         jcmb.removeActionListener(al);
         jcmb.setDataVectorWithStartElement(Benutzer.pKollegen, 0, 1, "./.");
         jcmb.addActionListener(al);
@@ -846,7 +853,7 @@ public class BenutzerRechte extends JXPanel {
         }
         /*
          * public boolean isEnabled() { return enabled; }
-         * 
+         *
          * public Rechte getObject(){ return rechte; }
          */
     }
@@ -983,12 +990,12 @@ public class BenutzerRechte extends JXPanel {
 
     class MyRechteComboBox extends AbstractCellEditor implements TableCellEditor {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = -1394804970777323591L;
         // This is the component that will handle the editing of the cell value
         /**
-         * 
+         *
          */
         public JComboBox component = null;
 
@@ -1031,7 +1038,7 @@ public class BenutzerRechte extends JXPanel {
 
     class RechteComboBoxRenderer extends JLabel implements ListCellRenderer {
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1773401769072883430L;
 

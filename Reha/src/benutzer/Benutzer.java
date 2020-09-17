@@ -1,5 +1,6 @@
 package benutzer;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,21 +12,25 @@ import javax.swing.JOptionPane;
 
 import crypt.Verschluesseln;
 import hauptFenster.Reha;
+import sql.DatenquellenFactory;
 
 public class Benutzer {
 
     public static Vector<Vector<String>> pKollegen = new Vector<>();
 
-    /** * Ende Klasse. */
-    
-    public static void benutzerLaden() {
-        Reha obj = Reha.instance;
-    
+    /**
+     * * Ende Klasse.
+     *
+     * @throws SQLException
+     */
+
+    public static void benutzerLaden(DatenquellenFactory factory) throws SQLException {
+        Connection conn = factory.createConnection();
         if (!pKollegen.isEmpty()) {
             pKollegen.clear();
         }
-    
-        try (Statement stmt = obj.conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+
+        try (Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 ResultSet rehaLoginRs = stmt.executeQuery("SELECT * from rehalogin")) {
             Vector<String> aKollegen = new Vector<>();
             String test = "";

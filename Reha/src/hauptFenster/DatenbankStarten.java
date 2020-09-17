@@ -15,8 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thera_pi.updater.Version;
 
-import com.sun.star.uno.Exception;
-
 import CommonTools.DatFunk;
 import CommonTools.ExUndHop;
 import CommonTools.FileTools;
@@ -25,6 +23,7 @@ import CommonTools.RehaEvent;
 import CommonTools.SqlInfo;
 import benutzer.Benutzer;
 import geraeteInit.BarCodeScanner;
+import sql.DatenquellenFactory;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.config.Datenbank;
 import terminKalender.KollegenListe;
@@ -57,11 +56,7 @@ final class DatenbankStarten implements Runnable {
                 Class.forName(datenbank. treiber())
                 .newInstance();
             }
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         try {
@@ -123,15 +118,13 @@ final class DatenbankStarten implements Runnable {
                 Thread.sleep(500);
             } catch (InterruptedException e1) {
 
-                e1.printStackTrace();
+               //continue
 
             }
 
             if (Reha.nachladenDB == JOptionPane.YES_OPTION) {
                 new Thread(new DbNachladen()).start();
             } else {
-                // new FireRehaError(this,"Datenbankfehler",new String[] {"Fehlertext:","Die
-                // Datenbank kann nicht gestartet werden"});
                 new SocketClient().setzeInitStand(
                         "Fehler!!!! Datenbank kann nicht gestartet werden - Thera-Pi wird beendet");
 
@@ -187,7 +180,7 @@ final class DatenbankStarten implements Runnable {
 
                 Reha.sysConf.SystemInit(3);
 
-                Benutzer.benutzerLaden();
+                Benutzer.benutzerLaden(new DatenquellenFactory(Reha.getAktIK()));
                 new SocketClient().setzeInitStand("Systemparameter ok");
 
                 new SocketClient().setzeInitStand("Native Interface ok");
@@ -250,7 +243,6 @@ final class DatenbankStarten implements Runnable {
 
                 SystemConfig.TherapBausteinInit();
 
-                // SystemConfig.compTest();
 
                 new SocketClient().setzeInitStand("Fremdprogramme überprüfen");
 
@@ -266,10 +258,8 @@ final class DatenbankStarten implements Runnable {
                 if (SystemConfig.sBarcodeAktiv.equals("1")) {
                     try {
                         Reha.barcodeScanner = new BarCodeScanner(SystemConfig.sBarcodeCom);
-                    } catch (Exception e) {
-                        //// System.out.println("Barcode-Scanner konnte nicht installiert werden");
                     } catch (java.lang.Exception e) {
-                        e.printStackTrace();
+                        logger.error("something bad happened here", e);
                     }
                 }
                 new SocketClient().setzeInitStand("Firmendaten einlesen");
@@ -314,10 +304,8 @@ final class DatenbankStarten implements Runnable {
                     Reha.instance.activateWebCam();
                 }
 
-            } catch (InterruptedException e1) {
-                e1.printStackTrace();
-            } catch (NullPointerException e2) {
-                e2.printStackTrace();
+            }  catch (SQLException | InterruptedException e1) {
+               logger.error("Something bad happens here", e1);
             }
         } else {
             new SwingWorker<Void, Void>() {
