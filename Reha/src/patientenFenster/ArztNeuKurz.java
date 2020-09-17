@@ -33,7 +33,7 @@ import systemEinstellungen.SystemConfig;
 
 public class ArztNeuKurz extends JXPanel implements ActionListener, KeyListener, FocusListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -8412450784730057738L;
     public JRtaTextField tfs[] = { null, null, null, null, null, null, null, null, null, null, null, null, null, null,
@@ -258,9 +258,9 @@ public class ArztNeuKurz extends JXPanel implements ActionListener, KeyListener,
                                 "Also der Name des Arztes sollte wenigstens angegeben werden!");
                         return null;
                     }
-                    int iid;
                     tfs[13].setText((String) arztgruppe.getSelectedItem());
-                    tfs[14].setText(Integer.toString(iid = SqlInfo.holeId("arzt", "nachname")));
+                    int iid= SqlInfo.holeId("arzt", "nachname");
+                    tfs[14].setText(Integer.toString(iid ));
                     String stmt = "update arzt set ";
                     for (int i = 0; i < 14; i++) {
                         stmt = stmt + (i == 0 ? "" : ", ") + tfs[i].getName() + "='" + tfs[i].getText() + "'";

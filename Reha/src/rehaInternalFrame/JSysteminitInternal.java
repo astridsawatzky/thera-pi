@@ -14,7 +14,7 @@ import hauptFenster.Reha;
 
 public class JSysteminitInternal extends JRehaInternal implements RehaEventListener {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 2954740941589766855L;
     RehaEventClass rEvent = null;
@@ -23,11 +23,6 @@ public class JSysteminitInternal extends JRehaInternal implements RehaEventListe
         super(titel, img, desktop);
         rEvent = new RehaEventClass();
         rEvent.addRehaEventListener(this);
-    }
-
-    @Override
-    public void internalFrameClosing(InternalFrameEvent arg0) {
-        // System.out.println("Internal-SystemInit in schliessen***************");
     }
 
     @Override

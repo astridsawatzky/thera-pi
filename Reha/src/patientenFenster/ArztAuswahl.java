@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -28,6 +29,8 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -44,9 +47,7 @@ import events.RehaTPEventClass;
 import hauptFenster.Reha;
 
 public class ArztAuswahl extends RehaSmartDialog {
-    /**
-    	 * 
-    	 */
+
     private static final long serialVersionUID = -3341922213135473923L;
     public JFormattedTextField tf = null;
     String suchkrit = "";
@@ -67,15 +68,12 @@ public class ArztAuswahl extends RehaSmartDialog {
     private ArztVec myArzt = null;
     final int cNachname = 0, cVorname = 1, cStrasse = 2, cOrt = 3, cArztnum = 4, cBs = 5, cId = 6;
 
-    /*************/
-//PinPanel pinPanel;
     private RehaTPEventClass rtp = null;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArztAuswahl.class);;
 
-    /************/
 
     public ArztAuswahl(JXFrame owner, String name, String[] suchegleichnach, JRtaTextField[] elterntf, String arzt) {
         super(owner, name);
-        // setSize(430,300);
         setSize(550, 350);
         this.suchkrit = suchegleichnach[0].split(" - ")[0];
         this.suchid = suchegleichnach[1];
@@ -83,7 +81,6 @@ public class ArztAuswahl extends RehaSmartDialog {
         this.arztbisher = arzt.split(" - ")[0];
         super.getSmartTitledPanel().setTitleForeground(Color.WHITE);
         super.getSmartTitledPanel().setTitle("Arzt auswählen");
-        /**********************/
         this.setName("ArztKurz");
 
         pinPanel = new PinPanel();
@@ -95,14 +92,11 @@ public class ArztAuswahl extends RehaSmartDialog {
         rtp.addRehaTPEventListener(this);
         myArzt = new ArztVec();
         if (suchid.length() > 0) {
-            myArzt.init(suchid);            
+            myArzt.init(suchid);
         } else {
             myArzt.createEmptyVec();
         }
 
-        /**************************/
-        // ((JXPanel)super.getSmartTitledPanel().getContentContainer()).setBackgroundPainter(new
-        // CompoundPainter(mp));;;
         grundPanel = new JXPanel(new BorderLayout());
 
         grundPanel.setBackgroundPainter(Reha.instance.compoundPainter.get("ArztAuswahl"));
@@ -149,13 +143,12 @@ public class ArztAuswahl extends RehaSmartDialog {
                         pinPanel = null;
                         this.dispose();
                         super.dispose();
-                        // System.out.println("****************Arztkurz -> Listener
-                        // entfernt**************");
                     }
                 }
             }
         } catch (NullPointerException ne) {
-            // System.out.println("In PatNeuanlage" +evt);
+
+            LOGGER.error("something bad happens here",ne);
         }
     }
 
@@ -192,7 +185,6 @@ public class ArztAuswahl extends RehaSmartDialog {
                 neuAnlageArzt();
             }
         });
-        /************************/
         neupan.add(neuarzt, cc2.xy(1, 1));
         suchearzt = new JButton("suchen");
         suchearzt.setToolTipText("suche Arzt");
@@ -234,7 +226,6 @@ public class ArztAuswahl extends RehaSmartDialog {
         neupan.add(abbrechenarzt, cc2.xy(7, 1));
         neupan.validate();
         jpan.add(neupan, cc.xyw(6, 2, 2));
-        /************************/
         arztwahlmod = new MyArztWahlModel();
         String[] column = { "Name", "Vorname", "Strasse", "Ort", "LANR", "BSNR", "" };
         arztwahlmod.setColumnIdentifiers(column);
@@ -364,8 +355,6 @@ public class ArztAuswahl extends RehaSmartDialog {
             if (rtp != null) {
                 rtp.removeRehaTPEventListener(this);
                 rtp = null;
-                // System.out.println("****************Arztkurz -> Listener
-                // entfernt**************");
                 pinPanel = null;
             }
             this.dispose();
@@ -439,17 +428,11 @@ public class ArztAuswahl extends RehaSmartDialog {
             rtp.removeRehaTPEventListener(this);
             rtp = null;
             pinPanel = null;
-            // System.out.println("****************Arztkurz -> Listener
-            // entfernt**************");
         }
         dispose();
     }
 
-    /************************************************************/
     class ArztWahlAction extends AbstractAction {
-        /**
-         * 
-         */
         private static final long serialVersionUID = -6371294487538741375L;
 
         @Override
@@ -515,9 +498,6 @@ public class ArztAuswahl extends RehaSmartDialog {
 }
 
 class MyArztWahlModel extends DefaultTableModel {
-    /**
-    * 
-    */
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -536,10 +516,7 @@ class MyArztWahlModel extends DefaultTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        String theData = (String) ((Vector<?>) getDataVector().get(rowIndex)).get(columnIndex);
-        Object result = null;
-        result = theData;
-        return result;
+        return ((List<?>) getDataVector().get(rowIndex)).get(columnIndex);
     }
 
 }
