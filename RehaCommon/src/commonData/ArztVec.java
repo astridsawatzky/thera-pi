@@ -46,7 +46,7 @@ public class ArztVec {
         this.vecvec_aerzte = SqlInfo.holeFelder(cmd);
         if(this.vecvec_aerzte.size()<=0){
             // RezeptVektor ist leer
-            this.vec_arzt = null;
+            this.vec_arzt = new Vector<String>();
             return Boolean.FALSE;
         }
         setTo1stVec_arzt(this.vecvec_aerzte);
@@ -273,12 +273,13 @@ public class ArztVec {
         cmd.append("bsnr='" + getBSNR() + "'");
         if (getId() < 0) {
             cmd.insert(0, "insert into arzt set "); // insert new
+            SqlInfo.sqlAusfuehren(cmd.toString());
+            int tmp = Integer.valueOf(SqlInfo.holeEinzelFeld(new String ("select max(id) from arzt")));
+            setId(tmp);
         } else {
             cmd.insert(0, "update arzt set ");  // update existing
             cmd.append(" where id = " + getId());
+            SqlInfo.sqlAusfuehren(cmd.toString());
         }
-        SqlInfo.sqlAusfuehren(cmd.toString());
-        int tmp = Integer.valueOf(SqlInfo.holeEinzelFeld(new String ("select max(id) from arzt")));
-        setId(tmp);
     }
 }
