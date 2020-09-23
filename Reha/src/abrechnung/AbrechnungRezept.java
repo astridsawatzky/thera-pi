@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -2866,7 +2867,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
             }
             buchen = false;
         }
-        HashMap<String, String> hmRezgeb = new HashMap<String, String>();
+        Map<String,String> hmRezgeb = new HashMap<>();
         int rueckgabe = -1;
         String behandl = "";
         for (int i = 0; i < vec_poskuerzel.size(); i++) {

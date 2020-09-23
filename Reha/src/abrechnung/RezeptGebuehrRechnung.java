@@ -13,9 +13,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -29,6 +28,9 @@ import org.jdesktop.swingx.JXDialog;
 import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTitledPanel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.therapi.reha.patient.AktuelleRezepte;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -39,13 +41,12 @@ import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
-import ag.ion.bion.officelayer.document.IDocument;
 import ag.ion.bion.officelayer.document.IDocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocumentService;
 import ag.ion.bion.officelayer.text.ITextDocument;
-import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.ITextField;
 import ag.ion.bion.officelayer.text.ITextFieldService;
+import ag.ion.bion.officelayer.text.ITextTable;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
 import ag.ion.noa.internal.printing.PrintProperties;
@@ -63,7 +64,7 @@ import systemEinstellungen.SystemConfig;
 
 public class RezeptGebuehrRechnung extends JXDialog
         implements FocusListener, ActionListener, MouseListener, KeyListener, RehaTPEventListener {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(RezeptGebuehrRechnung.class);
     private static final long serialVersionUID = 7491942845791659861L;
     private JXTitledPanel jtp = null;
     private MouseAdapter mymouse = null;
@@ -71,22 +72,19 @@ public class RezeptGebuehrRechnung extends JXDialog
     private JXPanel content = null;
     private RehaTPEventClass rtp = null;
 
-    private int rueckgabe;
     private JRtaTextField[] tfs = { null, null, null, null, null };
-    private JButton[] but = { null, null };
-    private HashMap<String, String> hmRezgeb = null;
+    private Map<String,String> hmRezgeb = null;
     DecimalFormat dcf = new DecimalFormat("#########0.00");
     String rgnrNummer;
     boolean buchen;
 
-    public RezeptGebuehrRechnung(JXFrame owner, String titel, int rueckgabe, HashMap<String, String> hmRezgeb,
+    public RezeptGebuehrRechnung(JXFrame owner, String titel, int rueckgabe,Map<String,String> hmRezgeb,
             boolean auchbuchen) {
         super(owner, (JComponent) Reha.getThisFrame()
                                       .getGlassPane());
         this.setUndecorated(true);
         this.setName("RezgebDlg");
-        this.rueckgabe = rueckgabe;
-        this.hmRezgeb = hmRezgeb;
+        this.hmRezgeb =  hmRezgeb;
         this.buchen = auchbuchen;
         this.jtp = new JXTitledPanel();
         this.jtp.setName("RezgebDlg");
@@ -223,18 +221,18 @@ public class RezeptGebuehrRechnung extends JXDialog
                 "5dlu,fill:0:grow(0.5),p,fill:0:grow(0.5),5dlu");
         pan.setLayout(lay);
         CellConstraints cc = new CellConstraints();
-        pan.add((but[0] = macheBut("Ok", "ok")), cc.xy(3, 3));
-        but[0].addKeyListener(this);
-        pan.add((but[1] = macheBut("abbrechen", "abbrechen")), cc.xy(5, 3));
-        but[1].addKeyListener(this);
+        JButton okButton = macheBut("Ok", "ok", e -> doRgRechnungPrepare());
+        pan.add(okButton, cc.xy(3, 3));
+        JButton abbrechenButton = macheBut("abbrechen", "abbrechen", e -> fensterSchliessen("dieses"));
+        pan.add((abbrechenButton), cc.xy(5, 3));
         return pan;
     }
 
-    private JButton macheBut(String titel, String cmd) {
+    private JButton macheBut(String titel, String cmd, ActionListener listener) {
         JButton but = new JButton(titel);
         but.setName(cmd);
         but.setActionCommand(cmd);
-        but.addActionListener(this);
+        but.addActionListener(listener);
         return but;
     }
 
@@ -270,11 +268,11 @@ public class RezeptGebuehrRechnung extends JXDialog
         }
         if (this.buchen) {
             buchungStarten();
-            org.therapi.reha.patient.AktuelleRezepte.setZuzahlImageActRow(ZZStat.ZUZAHLRGR, hmRezgeb.get("<rgreznum>"));
+            AktuelleRezepte.setZuzahlImageActRow(ZZStat.ZUZAHLRGR, hmRezgeb.get("<rgreznum>"));
         } else {
             buchungUpdaten();
         }
-        FensterSchliessen("dieses");
+        fensterSchliessen("dieses");
     }
 
     private void buchungStarten() {
@@ -332,101 +330,89 @@ public class RezeptGebuehrRechnung extends JXDialog
         IDocumentService documentService = null;
         Reha.getThisFrame()
             .setCursor(Cursors.wartenCursor);
-        if (!Reha.officeapplication.isActive()) {
-            Reha.starteOfficeApplication();
-        }
+
 
         documentService = Reha.officeapplication.getDocumentService();
 
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
-        IDocument document = null;
-
-        document = documentService.loadDocument(url, docdescript);
-        ITextDocument textDocument = (ITextDocument) document;
+        final ITextDocument textDocument = (ITextDocument) documentService.loadDocument(url, docdescript);
         /**********************/
         OOTools.druckerSetzen(textDocument, SystemConfig.hmAbrechnung.get("hmgkvrechnungdrucker"));
         /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
-        ITextField[] placeholders = null;
-
-        placeholders = textFieldService.getPlaceholderFields();
+        ITextField[] placeholders = textFieldService.getPlaceholderFields();
         String placeholderDisplayText = "";
 
-        for (int i = 0; i < placeholders.length; i++) {
-            placeholderDisplayText = placeholders[i].getDisplayText()
-                                                    .toLowerCase();
-            Set<?> entries = hmRezgeb.entrySet();
-            Iterator<?> it = entries.iterator();
-            while (it.hasNext()) {
+        Map<String, String> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        map.putAll(hmRezgeb);
 
-                Map.Entry entry = (Map.Entry) it.next();
-                if (((String) entry.getKey()).toLowerCase()
-                                             .equals(placeholderDisplayText)) {
-                    try {
 
-                    } catch (com.sun.star.uno.RuntimeException ex) {
-                        // System.out.println("Fehler bei "+placeholderDisplayText);
-                    }
-                    placeholders[i].getTextRange()
-                                   .setText(((String) entry.getValue()));
 
-                    break;
-                }
-            }
+        for (ITextField placeHolder : placeholders) {
+            placeholderDisplayText = placeHolder.getDisplayText()
+                                                .toLowerCase();
+            placeHolder.getTextRange()
+                       .setText(map.get(placeholderDisplayText));
         }
         try {
-            ITextTable textTable = null;
-            textTable = textDocument.getTextTableService().getTextTable("Tabelle-RGR");
-            int aktuellePosition = 0;
-            int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
+            ITextTable[] textTables = textDocument.getTextTableService()
+                                                  .getTextTables();
+            for (ITextTable iTextTable : textTables) {
+                if ("Tabelle-RGR".equals(iTextTable.getName())) {
 
-            aktuellePosition++;
-            for (int i = 0; i < anzpos; i++) {
-                textTable.getCell(0, aktuellePosition)
-                         .getTextService()
-                         .getText()
-                        .setText(hmRezgeb.get("<rglangtext"+ String.valueOf(aktuellePosition) +">"));
-                textTable.getCell(1, aktuellePosition)
-                         .getTextService()
-                         .getText()
-                        .setText(hmRezgeb.get("<rganzahl"+ String.valueOf(aktuellePosition) +">"));
-                textTable.getCell(2, aktuellePosition)
-                         .getTextService()
-                         .getText()
-                        .setText(hmRezgeb.get("<rggesamt"+ String.valueOf(aktuellePosition) +">"));     
-                textTable.addRow(1);
-                aktuellePosition++;
+                    ITextTable textTable = textDocument.getTextTableService()
+                                                       .getTextTable("Tabelle-RGR");
+                    int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
+                    for (int position = 1; position <= anzpos; position++) {
+                        setCellText(textTable, position, "rglangtext");
+                        setCellText(textTable, position, "rganzahl");
+                        setCellText(textTable, position, "rggesamt");
+
+                        textTable.addRow(1);
+                    }
+
+                }
             }
         } catch (Exception e) {
-        	System.out.println("Tabelle-RGR nicht in RezeptgebuehrRechnung.ott vorhanden");
+
+            LOGGER.error("Fehler in DetailTabelle: ", e);
         }
-        if (SystemConfig.hmAbrechnung.get("hmallinoffice")
-                                     .equals("1")) {
+        boolean immerInOfficeOeffnen = "1".equals(SystemConfig.hmAbrechnung.get("hmallinoffice"));
+        if (immerInOfficeOeffnen) {
             textDocument.getFrame()
                         .getXFrame()
                         .getContainerWindow()
                         .setVisible(true);
         } else {
-            int exemplare = 2;
-            try {
-                exemplare = Integer.parseInt(SystemConfig.hmAbrechnung.get("rgrdruckanzahl"));
-            } catch (Exception ex) {
-                exemplare = 2;
-            }
-            PrintProperties printprop = new PrintProperties((short) /* 2 */ exemplare, null);
+            PrintProperties printprop = new PrintProperties(anzahlKopien());
             textDocument.getPrintService()
                         .print(printprop);
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+            if (textDocument.isOpen()) {
+                textDocument.close();
             }
-            textDocument.close();
-            textDocument = null;
         }
 
+    }
+
+    private void setCellText(ITextTable textTable, int position, String string) throws TextException {
+        textTable.getCell(0, position)
+                 .getTextService()
+                 .getText()
+                 .setText(hmRezgeb.get("<"
+                         + string + String.valueOf(position) + ">"));
+    }
+
+    private short anzahlKopien() {
+        String anzahlKopien = SystemConfig.hmAbrechnung.get("rgrdruckanzahl");
+        int exemplare = 2;
+        if (anzahlKopien != null) {
+
+            exemplare = Integer.parseInt(anzahlKopien);
+        }
+        return (short) exemplare;
     }
 
     @Override
@@ -443,10 +429,8 @@ public class RezeptGebuehrRechnung extends JXDialog
     public void actionPerformed(ActionEvent arg0) {
         String cmd = arg0.getActionCommand();
         if (cmd.equals("abbrechen")) {
-            this.rueckgabe = -1;
-            FensterSchliessen("dieses");
+            fensterSchliessen("dieses");
         } else {
-            this.rueckgabe = 0;
             doRgRechnungPrepare();
         }
 
@@ -480,20 +464,17 @@ public class RezeptGebuehrRechnung extends JXDialog
     @Override
     public void keyPressed(KeyEvent arg0) {
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            this.rueckgabe = -1;
-            FensterSchliessen("dieses");
+            fensterSchliessen("dieses");
             return;
         }
         if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
             if (((JComponent) arg0.getSource()) instanceof JButton) {
                 if (((JComponent) arg0.getSource()).getName()
                                                    .equals("abbrechen")) {
-                    this.rueckgabe = -1;
-                    FensterSchliessen("dieses");
+                    fensterSchliessen("dieses");
                     return;
                 } else if (((JComponent) arg0.getSource()).getName()
                                                           .equals("ok")) {
-                    this.rueckgabe = 0;
                     doRgRechnungPrepare();
                 }
             }
@@ -512,19 +493,14 @@ public class RezeptGebuehrRechnung extends JXDialog
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
-        FensterSchliessen("dieses");
+        fensterSchliessen("dieses");
 
     }
 
-    public void FensterSchliessen(String welches) {
+    public void fensterSchliessen(String welches) {
         this.jtp.removeMouseListener(this.mymouse);
         this.jtp.removeMouseMotionListener(this.mymouse);
         this.content.removeKeyListener(this);
-        for (int i = 0; i < 2; i++) {
-            but[i].removeActionListener(this);
-            but[i].removeKeyListener(this);
-            but[i] = null;
-        }
         this.mymouse = null;
         if (this.rtp != null) {
             this.rtp.removeRehaTPEventListener(this);

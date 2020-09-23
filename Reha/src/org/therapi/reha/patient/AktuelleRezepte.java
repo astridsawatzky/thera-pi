@@ -27,19 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -3074,7 +3062,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
 
         }
 
-        HashMap<String, String> hmRezgeb = new HashMap<String, String>();
+        Map<String, String> hmRezgeb = new HashMap<>();
         int rueckgabe = -1;
         int i;
         String behandl = "";
@@ -3097,11 +3085,11 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 hmRezgeb.put("<rgpreis"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rpreis"+ String.valueOf(i) +">"));
                 hmRezgeb.put("<rgproz"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rproz"+ String.valueOf(i) +">"));
                 hmRezgeb.put("<rggesamt"+ String.valueOf(i) + ">",  SystemConfig.hmAdrRDaten.get("<Rgesamt"+ String.valueOf(i) +">"));
-                
+
                 hmRezgeb.put("<rglangtext"+ String.valueOf(i+1) + ">", "Rezeptgebühr");
                 hmRezgeb.put("<rganzahl"+ String.valueOf(i+1) + ">",  "1");
                 hmRezgeb.put("<rggesamt"+ String.valueOf(i+1) + ">", SystemConfig.hmAdrRDaten.get("<Rpauschale>"));
-                hmRezgeb.put("<rganzpos>", String.valueOf(i+1));  
+                hmRezgeb.put("<rganzpos>", String.valueOf(i+1));
             }
         }
 
