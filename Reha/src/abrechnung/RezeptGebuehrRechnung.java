@@ -376,27 +376,31 @@ public class RezeptGebuehrRechnung extends JXDialog
                 }
             }
         }
-        ITextTable textTable = null;
-        textTable = textDocument.getTextTableService().getTextTable("Tabelle1");
-        int aktuellePosition = 0;
-        int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
+        try {
+            ITextTable textTable = null;
+            textTable = textDocument.getTextTableService().getTextTable("Tabelle-RGR");
+            int aktuellePosition = 0;
+            int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
 
-        aktuellePosition++;
-        for (int i = 0; i < anzpos; i++) {
-            textTable.getCell(0, aktuellePosition)
-                     .getTextService()
-                     .getText()
-                     .setText(hmRezgeb.get("<rglangtext"+ String.valueOf(aktuellePosition) +">"));
-            textTable.getCell(1, aktuellePosition)
-                     .getTextService()
-                     .getText()
-                     .setText(hmRezgeb.get("<rganzahl"+ String.valueOf(aktuellePosition) +">"));
-            textTable.getCell(2, aktuellePosition)
-                     .getTextService()
-                     .getText()
-                     .setText(hmRezgeb.get("<rggesamt"+ String.valueOf(aktuellePosition) +">"));     
-            textTable.addRow(1);
             aktuellePosition++;
+            for (int i = 0; i < anzpos; i++) {
+                textTable.getCell(0, aktuellePosition)
+                         .getTextService()
+                         .getText()
+                        .setText(hmRezgeb.get("<rglangtext"+ String.valueOf(aktuellePosition) +">"));
+                textTable.getCell(1, aktuellePosition)
+                         .getTextService()
+                         .getText()
+                        .setText(hmRezgeb.get("<rganzahl"+ String.valueOf(aktuellePosition) +">"));
+                textTable.getCell(2, aktuellePosition)
+                         .getTextService()
+                         .getText()
+                        .setText(hmRezgeb.get("<rggesamt"+ String.valueOf(aktuellePosition) +">"));     
+                textTable.addRow(1);
+                aktuellePosition++;
+            }
+        } catch (Exception e) {
+        	System.out.println("Tabelle-RGR nicht in RezeptgebuehrRechnung.ott vorhanden");
         }
         if (SystemConfig.hmAbrechnung.get("hmallinoffice")
                                      .equals("1")) {
