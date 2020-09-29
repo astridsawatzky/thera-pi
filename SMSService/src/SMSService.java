@@ -9,6 +9,7 @@ import org.smslib.TimeoutException;
 import org.smslib.modem.SerialModemGateway;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 
 public class SMSService {
 
@@ -27,7 +28,7 @@ public class SMSService {
         if (args.length > 0) {
             String IK = args[0];
             String msg = args[args.length - 1];
-            INIFile sms = new INIFile(homedir + "\\ini\\" + IK + "\\sms.INI");
+            Settings sms = new INIFile(homedir + "\\ini\\" + IK + "\\sms.INI");
             SMSService smsService = new SMSService(sms.getStringProperty("Modem", "Com"),
                     sms.getStringProperty("Modem", "Hersteller"), sms.getStringProperty("Modem", "Typ"),
                     sms.getIntegerProperty("Modem", "Baudrate"));
@@ -37,14 +38,14 @@ public class SMSService {
             }
             close();
         } else {
-            INIFile mand = new INIFile(homedir + "\\ini\\mandanten.ini");
+            Settings mand = new INIFile(homedir + "\\ini\\mandanten.ini");
             Object[] possibilities = new Object[mand.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten")];
             for (int n = 1; n <= possibilities.length; n++) {
                 possibilities[n - 1] = mand.getStringProperty("TheraPiMandanten", "MAND-IK" + n);
             }
             String IK = (String) JOptionPane.showInputDialog(null, "Bitte IK w�hlen:", "IK w�hlen",
                     JOptionPane.PLAIN_MESSAGE, null, possibilities, null);
-            INIFile sms = new INIFile(homedir + "\\ini\\" + IK + "\\sms.INI");
+            Settings sms = new INIFile(homedir + "\\ini\\" + IK + "\\sms.INI");
             SMSService smsService = new SMSService(sms.getStringProperty("Modem", "Com"),
                     sms.getStringProperty("Modem", "Hersteller"), sms.getStringProperty("Modem", "Typ"),
                     sms.getIntegerProperty("Modem", "Baudrate"));

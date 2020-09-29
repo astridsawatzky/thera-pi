@@ -23,8 +23,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;
@@ -63,7 +63,7 @@ public class ArtikelDialog extends RehaSmartDialog {
     MwSTSatz satz = MwSTSatz.now();
    private String[] mwstSaetze = { "0,00",satz.verminderterSatz() +",00",  satz.vollerSatz() +",00" };
 
-    INIFile inif;
+    Settings inif;
 
     DecimalFormat df = new DecimalFormat("0.00");
 

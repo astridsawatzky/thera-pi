@@ -56,6 +56,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import reha301.Tools.OOTools;
 import reha301.Tools.RezTools;
 import reha301.Tools.SystemPreislisten;
@@ -684,7 +685,7 @@ public class Reha301Auswerten extends JXPanel {
     private Object[] testeDTAIni(String ktraeger, String diaggruppe) {
         Object[] retobject = { -1, null, null, null, null, null, null };
         //// System.out.println(ktraeger+" - "+diaggruppe);
-        INIFile ini = new INIFile(Reha301.progHome + "ini/" + Reha301.aktIK + "/dta301.ini");
+        Settings ini = new INIFile(Reha301.progHome + "ini/" + Reha301.aktIK + "/dta301.ini");
 
         String gruppe = ini.getStringProperty("RehaGruppen", diaggruppe);
         if (gruppe == null) {

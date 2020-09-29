@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import hauptFenster.Reha;
 import krankenKasse.KassenFormulare;
 
@@ -19,7 +19,7 @@ public class Formulare {
     private boolean listIsValid = false;
     private JRtaTextField formularid = new JRtaTextField("NIX", false);
     private KassenFormulare kf = null;
-    INIFile myInif = null;
+    Settings myInif = null;
     private String nbOfEntriesLabel = "FormulareAnzahl";
     private String entryTextLabel = "FormularText";
     private String entryNameLabel = "FormularName";
@@ -36,8 +36,8 @@ public class Formulare {
         }
     }
 
-    public void holeFormulare(INIFile inif) {
-        final INIFile tmpInif = inif;
+    public void holeFormulare(Settings inif) {
+        final Settings tmpInif = inif;
         listIsValid = false;
         new SwingWorker<Void, Void>() {
             @Override

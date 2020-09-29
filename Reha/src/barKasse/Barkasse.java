@@ -31,8 +31,8 @@ import CommonTools.OOTools;
 import CommonTools.RgVkPrSelect;
 import CommonTools.RgVkPr_IfCallBack;
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -510,7 +510,7 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
      * keine Einstellung vorhanden, wird ein Default gesetzt
      */
     private void readLastSelection() {
-        INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "bedienung.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "bedienung.ini");
         if (inif.getStringProperty("BarKasse", "Rezeptgebuehren") != null) { // Eintraege in ini vorhanden
             incRG = inif.getBooleanProperty("BarKasse", "Rezeptgebuehren");
             incVerk = inif.getBooleanProperty("BarKasse", "Verkaeufe");
@@ -542,7 +542,7 @@ public class Barkasse extends JXPanel implements RgVkPr_IfCallBack {
     private void saveLastSelection() {
         if (!settingsLocked) { // ini-Eintraege duerfen aktualisiert werden
             readLastSelection();
-            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "bedienung.ini");
             if ((selPan.useRGR() != incRG) || (selPan.useVKR() != incVerk) || (selPan.usePR() != incPR)) {
                 inif.setBooleanProperty("BarKasse", "Rezeptgebuehren", selPan.useRGR(),

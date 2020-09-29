@@ -26,8 +26,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 import environment.Path;
 import hauptFenster.Reha;
@@ -303,7 +303,7 @@ public class SysUtilDBdaten extends JXPanel implements KeyListener, ActionListen
             JOptionPane.showMessageDialog(null, stext);
         }
 
-        INIFile dbini = INITool.openIni(Path.Instance.getProghome() + "ini/" + siniverz + "/", "rehajava.ini");
+        Settings dbini = INITool.openIni(Path.Instance.getProghome() + "ini/" + siniverz + "/", "rehajava.ini");
         dbini.setStringProperty("DatenBank", "DBType1", ss1, null);
         dbini.setStringProperty("DatenBank", "DBTreiber1", ss2, null);
         dbini.setStringProperty("DatenBank", "DBServer1", ss3, null);

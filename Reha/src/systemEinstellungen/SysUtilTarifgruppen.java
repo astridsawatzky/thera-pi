@@ -44,8 +44,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import jxTableTools.DateTableCellEditor;
@@ -526,7 +526,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
     private void doSpeichern() {
         // String wert = "";
         try {
-            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "preisgruppen.ini");
 
             // int lang = SystemConfig.vPreisGruppen.size();
@@ -934,7 +934,7 @@ public class SysUtilTarifgruppen extends JXPanel implements KeyListener, ActionL
 
     private void setzeIniEintraege(int position, String commonname) {
         try {
-            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "preisgruppen.ini");
             inif.setIntegerProperty("PreisGruppen_Common", "AnzahlPreisGruppen", position, null);
             inif.setStringProperty("PreisGruppen_Common", "PGName" + Integer.toString(position), commonname, null);

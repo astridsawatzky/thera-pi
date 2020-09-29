@@ -4,8 +4,8 @@ import java.util.Vector;
 
 import CommonTools.DatFunk;
 import CommonTools.ZeitFunk;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 
@@ -16,7 +16,7 @@ public class GruppenEinlesen {
     public Vector<Long[]> gruppenGueltig;
     public Vector<Vector<Object>> gruppeAlle = new Vector<Vector<Object>>();
     public int anzahl;
-    private INIFile ini;
+    private Settings ini;
 
     public GruppenEinlesen init() {
         ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "gruppen.ini");

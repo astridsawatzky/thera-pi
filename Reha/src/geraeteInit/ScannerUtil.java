@@ -28,8 +28,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -277,7 +277,7 @@ public class ScannerUtil extends RehaSmartDialog implements ActionListener {
     private void doSpeichernScanner() {
         String item = "";
         if (jcbscan[1].isSelected()) {
-            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "geraete.ini");
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "geraete.ini");
 
             item = (String) jcmbscan[0].getSelectedItem();
             SystemConfig.sDokuScanner = item;

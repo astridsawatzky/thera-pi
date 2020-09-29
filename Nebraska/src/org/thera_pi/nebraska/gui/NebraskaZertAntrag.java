@@ -54,6 +54,7 @@ import com.lowagie.text.pdf.PdfStamper;
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 
 public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener, ActionListener {
 
@@ -608,7 +609,7 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
             therapidir = pfad.substring(0, pfad.lastIndexOf("/"));
             therapidir = therapidir.substring(0, therapidir.lastIndexOf("/"));
             System.out.println("TherapiDir = " + therapidir);
-            INIFile inif = new INIFile(pfad);
+            Settings inif = new INIFile(pfad);
             int mandantenAnzahl = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
             if (mandantenAnzahl == 1) {
                 ik = inif.getStringProperty("TheraPiMandanten", "MAND-IK" + Integer.toString(mandantenAnzahl));
@@ -673,7 +674,7 @@ public class NebraskaZertAntrag extends JXPanel implements ListSelectionListener
     }
 
     private void mandantLesen(String ikPfad) {
-        INIFile inif = new INIFile(ikPfad);
+        Settings inif = new INIFile(ikPfad);
         System.out.println(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Ik")));
         tf[0].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Ik")));
         tf[1].setText(ersetzteUnerlaubtes(inif.getStringProperty("Firma", "Firma1")));

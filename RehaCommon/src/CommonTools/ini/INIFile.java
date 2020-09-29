@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0
  * @since 1.0
  */
-public final class INIFile {
+public final class INIFile implements Settings {
     /** Variable to hold the ini file name and full path */
     private String mstrFile;
 
@@ -71,7 +71,7 @@ public final class INIFile {
             loadFile();
     }
 
-    INIFile(InputStream istream, String pstrPathAndName) {
+    public INIFile(InputStream istream, String pstrPathAndName) {
         if (!new File(pstrPathAndName).exists()) {
             LOGGER.debug("loading from Stream:" + pstrPathAndName);
         }
@@ -91,10 +91,12 @@ public final class INIFile {
      *
      * @return the INI file name.
      */
+    @Override
     public String getFileName() {
         return this.mstrFile;
     }
 
+    @Override
     public InputStream getInputStream() {
         return this.streamin;
     }
@@ -106,6 +108,7 @@ public final class INIFile {
      * @param pstrProp    the property to be retrieved.
      * @return the string property value.
      */
+    @Override
     public String getStringProperty(String pstrSection, String pstrProp) {
         String strRet = null;
         INIProperty objProp = null;
@@ -137,6 +140,7 @@ public final class INIFile {
      * @param pstrProp    the property to be retrieved.
      * @return the boolean value
      */
+    @Override
     public Boolean getBooleanProperty(String pstrSection, String pstrProp) {
         boolean blnRet = false;
         String strVal = null;
@@ -171,6 +175,7 @@ public final class INIFile {
      * @param pstrProp    the property to be retrieved.
      * @return the integer property value.
      */
+    @Override
     public Integer getIntegerProperty(String pstrSection, String pstrProp) {
         Integer intRet = null;
         String strVal = null;
@@ -203,6 +208,7 @@ public final class INIFile {
      * @param pstrProp    the property to be retrieved.
      * @return the long property value.
      */
+    @Override
     public Long getLongProperty(String pstrSection, String pstrProp) {
         Long lngRet = null;
         String strVal = null;
@@ -243,6 +249,7 @@ public final class INIFile {
      * @param pstrSection  the section name
      * @param pstrComments the comments.
      */
+    @Override
     public void addSection(String pstrSection, String pstrComments) {
         INISection objSec = null;
 
@@ -262,6 +269,7 @@ public final class INIFile {
      * @pstrVal the string value to be persisted
      */
 
+    @Override
     public void renameSection(String pstrSection, String newpstrSection, String pstrComments) {
         INISection objSec = null;
 
@@ -282,6 +290,7 @@ public final class INIFile {
      * @param pstrProp    the property to be set.
      * @pstrVal the string value to be persisted
      */
+    @Override
     public void setStringProperty(String pstrSection, String pstrProp, String pstrVal, String pstrComments) {
         INISection objSec = null;
 
@@ -300,6 +309,7 @@ public final class INIFile {
      * @param pstrProp    the property to be set.
      * @param pblnVal     the boolean value to be persisted
      */
+    @Override
     public void setBooleanProperty(String pstrSection, String pstrProp, boolean pblnVal, String pstrComments) {
         INISection objSec = null;
 
@@ -321,6 +331,7 @@ public final class INIFile {
      * @param pstrProp    the property to be set.
      * @param pintVal     the int property to be persisted.
      */
+    @Override
     public void setIntegerProperty(String pstrSection, String pstrProp, int pintVal, String pstrComments) {
         INISection objSec = null;
 
@@ -346,6 +357,7 @@ public final class INIFile {
      * @param pstrDtFmt the format string
      * @throws IllegalArgumentException if the if the given pattern is invalid
      */
+    @Override
     public void setDateFormat(String pstrDtFmt) throws IllegalArgumentException {
         if (!checkDateTimeFormat(pstrDtFmt))
             throw new IllegalArgumentException("The specified date pattern is invalid!");
@@ -357,6 +369,7 @@ public final class INIFile {
      * @param pstrTSFmt the format string
      * @throws IllegalArgumentException if the if the given pattern is invalid
      */
+    @Override
     public void setTimeStampFormat(String pstrTSFmt) {
         if (!checkDateTimeFormat(pstrTSFmt))
             throw new IllegalArgumentException("The specified timestamp pattern is invalid!");
@@ -365,6 +378,7 @@ public final class INIFile {
     /*------------------------------------------------------------------------------
      * Public methods
     ------------------------------------------------------------------------------*/
+    @Override
     public int getTotalSections() {
         return this.mhmapSections.size();
     }
@@ -374,6 +388,7 @@ public final class INIFile {
      *
      * @return the string array of section names
      */
+    @Override
     public String[] getAllSectionNames() {
         int iCntr = 0;
         Iterator<String> iter = null;
@@ -407,6 +422,7 @@ public final class INIFile {
      *
      * @param pstrSection the name of the section to be removed.
      */
+    @Override
     public void removeSection(String pstrSection) {
         if (this.mhmapSections.containsKey(pstrSection))
             this.mhmapSections.remove(pstrSection);
@@ -416,6 +432,7 @@ public final class INIFile {
      * Flush changes back to the disk file. If the disk file does not exists then
      * creates the new one.
      */
+    @Override
     public synchronized boolean save() {
         boolean blnRet = false;
         File objFile = null;
@@ -458,6 +475,7 @@ public final class INIFile {
         return blnRet;
     }
 
+    @Override
     public synchronized StringBuffer saveToStringBuffer() {
 
         String strName = null;
@@ -808,7 +826,7 @@ public final class INIFile {
      * @param pstrArgs the command line arguments array if any.
      */
     public static void main(String[] pstrArgs) {
-        INIFile objINI = null;
+        Settings objINI = null;
         String strFile = null;
 
         if (pstrArgs.length == 0)

@@ -19,8 +19,8 @@ import CommonTools.DatFunk;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 
 public class OffenepostenEinstellungen extends JXPanel {
 
@@ -146,7 +146,7 @@ public class OffenepostenEinstellungen extends JXPanel {
         if (!(anfrage == JOptionPane.YES_OPTION)) {
             return;
         }
-        INIFile inif = INITool.openIni(OffenePosten.progHome + "ini/" + OffenePosten.aktIK + "/", "offeneposten.ini");
+        Settings inif = INITool.openIni(OffenePosten.progHome + "ini/" + OffenePosten.aktIK + "/", "offeneposten.ini");
 
         int iwert = Integer.parseInt((tfs[0].getText()
                                             .equals("") ? "31" : tfs[0].getText()));

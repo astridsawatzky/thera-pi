@@ -68,8 +68,8 @@ import CommonTools.FileTools;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;
@@ -728,7 +728,7 @@ public class KassenPanel extends JXPanel implements PropertyChangeListener, Tabl
             @Override
             protected Void doInBackground() throws Exception {
 
-                INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                         "kasse.ini");
                 int forms = inif.getIntegerProperty("Formulare", "KassenFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {

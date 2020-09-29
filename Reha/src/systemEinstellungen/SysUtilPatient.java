@@ -36,8 +36,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
@@ -106,7 +106,7 @@ public class SysUtilPatient extends JXPanel
         }
 
         vorlagen.readFromIni();
-        INIFile inif = vorlagen.getInif();
+        Settings inif = vorlagen.getInif();
 
         for (int i = 0; i < 6; i++) {
             krit[i].setText(SystemConfig.vPatMerker.get(i));
@@ -271,7 +271,7 @@ public class SysUtilPatient extends JXPanel
     private void doSpeichern() {
         try {
             String wert = "";
-            INIFile inif = vorlagen.getInif();
+            Settings inif = vorlagen.getInif();
 
             wert = (unten.isSelected() ? "1" : "0");
             SystemConfig.hmContainer.put("Patient", Integer.valueOf(wert));

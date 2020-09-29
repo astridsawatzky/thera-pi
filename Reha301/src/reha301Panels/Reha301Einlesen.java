@@ -39,6 +39,7 @@ import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 import reha301.Reha301;
 import reha301.Reha301Tab;
@@ -1569,7 +1570,7 @@ public class Reha301Einlesen {
         }
 
         String inipath = Reha301.progHome + "nebraska_windows.conf";
-        INIFile file = new INIFile(inipath);
+        Settings file = new INIFile(inipath);
         int anzahl = file.getIntegerProperty("KeyStores", "KeyStoreAnzahl");
         //// System.out.println("\n\n\nAnzahl Keystores = "+anzahl);
         String kstorefile = null;

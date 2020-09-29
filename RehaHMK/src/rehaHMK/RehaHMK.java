@@ -3,6 +3,7 @@ package rehaHMK;
 import CommonTools.Colors;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import rehaHMK.RehaIO.RehaReverseServer;
 import rehaHMK.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -105,7 +106,7 @@ public class RehaHMK implements WindowListener {
     if (args.length > 0 || testcase) {
       if (!testcase) {
         System.out.println("hole daten aus INI-Datei " + args[0]);
-        INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+        Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
         officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
         officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
@@ -113,7 +114,7 @@ public class RehaHMK implements WindowListener {
         proghome = Path.Instance.getProghome();
         aktIK = args[1];
         
-        INIFile hmrinif = new INIFile(proghome + "ini/" + RehaHMK.aktIK + "/hmrmodul.ini");
+        Settings hmrinif = new INIFile(proghome + "ini/" + RehaHMK.aktIK + "/hmrmodul.ini");
         hmkURL = hmrinif.getStringProperty("HMRModul", "HMKUrl");
         
         if (args.length >= 3)
@@ -202,7 +203,7 @@ public class RehaHMK implements WindowListener {
   }
   
     public static void ArztGruppenInit() {
-        INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/arzt.ini");
+        Settings inif = new INIFile(proghome + "ini/" + aktIK + "/arzt.ini");
         int ags;
         if ((ags = inif.getIntegerProperty("ArztGruppen", "AnzahlGruppen")
                        .intValue()) > 0) {
@@ -215,7 +216,7 @@ public class RehaHMK implements WindowListener {
   
   public static void fuelleReferenz() {
     String[] diszis = { "Physio", "Massage", "Ergo", "Logo", "Podo" };  // <- ToDo: umstellen!
-    INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/pgreferenz.ini");
+    Settings inif = new INIFile(proghome + "ini/" + aktIK + "/pgreferenz.ini");
     for (int i = 0; i < diszis.length; i++)
       pgReferenz.put(diszis[i], inif.getIntegerProperty("HMR_ReferenzPreisGruppe", diszis[i])); 
     icons.put("browser", new ImageIcon(proghome + "icons/internet-web-browser.png"));

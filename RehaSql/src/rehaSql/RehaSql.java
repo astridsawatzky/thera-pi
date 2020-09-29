@@ -23,6 +23,7 @@ import org.jdesktop.swingworker.SwingWorker;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import rehaSql.RehaIO.RehaReverseServer;
 import rehaSql.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -90,7 +91,7 @@ public class RehaSql implements WindowListener {
     private static void start(final String path, final String aktik, RehaSql application) {
         System.out.println("hole daten aus INI-Datei " + path);
 
-        INIFile inif = new INIFile(path + "ini/" + aktik + "/rehajava.ini");
+        Settings inif = new INIFile(path + "ini/" + aktik + "/rehajava.ini");
 
         officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
         officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");

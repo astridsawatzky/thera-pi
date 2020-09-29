@@ -10,7 +10,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 
 public class OpCommon {
 
@@ -18,7 +18,7 @@ public class OpCommon {
      * liest allgemeine Mahnparameter aus einer ini-Datei (gültig für OP u. RgAfVk)
      * ist keine Einstellung vorhanden, werden hier die Defaults gesetzt
      */
-    public static void readMahnParamCommon(INIFile inif, HashMap<String, Object> hmMahnPar) {
+    public static void readMahnParamCommon(Settings inif, HashMap<String, Object> hmMahnPar) {
         if (inif.getIntegerProperty("General", "TageBisMahnung1") != null) { // Eintrag in ini vorhanden?
             hmMahnPar.put("frist1", (Integer) inif.getIntegerProperty("General", "TageBisMahnung1"));
         } else {
@@ -70,7 +70,7 @@ public class OpCommon {
      * für OP u. RgAfVk) ist keine Einstellung vorhanden, werden hier die Defaults
      * gesetzt
      */
-    public static void addFormNb(INIFile inif, String section, String entry, String defaultName, int lfdNb,
+    public static void addFormNb(Settings inif, String section, String entry, String defaultName, int lfdNb,
             HashMap<String, Object> hmMahnPar, String path2Templates) {
         String forms = inif.getStringProperty(section, entry + lfdNb);
         if (forms != null) {

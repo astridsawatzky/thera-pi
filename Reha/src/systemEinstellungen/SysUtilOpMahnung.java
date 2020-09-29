@@ -23,8 +23,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaCheckBoxR;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import opRgaf.OpRgAfIni;
@@ -227,7 +227,7 @@ public class SysUtilOpMahnung extends JXPanel implements ActionListener, ItemLis
     }
 
     private void readFromIni() { // noch umstellen auf iniOP-Klasse! (analog iniOpRgAf)
-        INIFile iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+        Settings iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                 "offeneposten.ini");
         OpRgAfIni iniOpRgAf = new OpRgAfIni(Path.Instance.getProghome(), "ini/", Reha.getAktIK(), "oprgaf.ini");
 
@@ -249,7 +249,7 @@ public class SysUtilOpMahnung extends JXPanel implements ActionListener, ItemLis
         boolean saveChanges = false;
 
         try {
-            INIFile iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings iniOP = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "offeneposten.ini");
 
             if (enableOP2BarKasse != iniOP.getBooleanProperty(section, "erlaubeBarzahlung")) {

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Vector;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import rehaStatistik.RehaStatistik;
 
 public class SystemPreislisten {
@@ -51,7 +52,7 @@ public class SystemPreislisten {
             return;
         }
 
-        INIFile inif = new INIFile(RehaStatistik.proghome + "ini/" + RehaStatistik.aktIK + "/preisgruppen.ini");
+        Settings inif = new INIFile(RehaStatistik.proghome + "ini/" + RehaStatistik.aktIK + "/preisgruppen.ini");
         int tarife = inif.getIntegerProperty("PreisGruppen_" + diszis[treffer], "AnzahlPreisGruppen");
 
         Comparator<Vector<String>> comparator = new Comparator<Vector<String>>() {
@@ -281,31 +282,31 @@ public class SystemPreislisten {
      * @param dummy
      * @return
      */
-    public static void getPreisGruppen(INIFile f, String disziplin, int tarife) {
+    public static void getPreisGruppen(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("PreisGruppen_" + disziplin, "PGName" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getPreisBereich(INIFile f, String disziplin, int tarife) {
+    public static void getPreisBereich(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("PreisGruppen_" + disziplin, "PGBereich" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getZuzahlRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getZuzahlRegeln(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             intdummy.add(f.getIntegerProperty("ZuzahlRegeln_" + disziplin, "ZuzahlRegel" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getHMRAbrechnung(INIFile f, String disziplin, int tarife) {
+    public static void getHMRAbrechnung(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             intdummy.add(f.getIntegerProperty("HMRAbrechnung_" + disziplin, "HMRAbrechnung" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getHBRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getHBRegeln(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             Vector<String> hbdummy_1 = new Vector<String>();
             hbdummy_1.clear();
@@ -318,19 +319,19 @@ public class SystemPreislisten {
         }
     }
 
-    public static void getNeuePreiseRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getNeuePreiseRegeln(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             intdummy.add(f.getIntegerProperty("PreisRegeln_" + disziplin, "PreisRegel" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getNeuePreiseAb(INIFile f, String disziplin, int tarife) {
+    public static void getNeuePreiseAb(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("PreisRegeln_" + disziplin, "PreisAb" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getBerichtRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getBerichtRegeln(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("BerichtRegeln_" + disziplin, "Bericht" + Integer.toString(i + 1)));
         }

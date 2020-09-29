@@ -53,6 +53,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 
 public class NebraskaRequestDlg extends JDialog {
@@ -247,7 +248,7 @@ public class NebraskaRequestDlg extends JDialog {
     }
 
     private void erstelleConfig(String configfile) {
-        INIFile ifile = new INIFile(configfile);
+        Settings ifile = new INIFile(configfile);
         boolean neuerEintrag = false;
         int eintragBei = -1;
         if (NebraskaMain.keyStoreParameter.size() <= 0) {

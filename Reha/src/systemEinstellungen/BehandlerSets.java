@@ -9,8 +9,8 @@ import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 
@@ -26,13 +26,13 @@ public class BehandlerSets {
 
 
 
-    public static void laden(INIFile termkalini) {
+    public static void laden(Settings termkalini) {
 
         behandlersets= new ArrayList<>();
         behandlerSetsLaden(termkalini);
     }
 
-    public static void behandlerSetsLaden(INIFile termkalini) {
+    public static void behandlerSetsLaden(Settings termkalini) {
         alleBehandlersets().clear();
         try {
             int lesen = Integer.parseInt(String.valueOf(termkalini.getStringProperty("Kalender", "AnzahlSets")));
@@ -56,7 +56,7 @@ public class BehandlerSets {
     }
 
     static void behandlerSetsLaden() {
-        INIFile termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+        Settings termkalini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                 "terminkalender.ini");
         behandlerSetsLaden(termkalini);
 

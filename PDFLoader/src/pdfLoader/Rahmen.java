@@ -8,6 +8,7 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 
 public class Rahmen extends JApplet {
@@ -33,7 +34,7 @@ public class Rahmen extends JApplet {
 
         if (args.length > 0) {
             System.out.println("hole daten aus INI-Datei " + args[5]);
-            INIFile inif = new INIFile(args[5]);
+            Settings inif = new INIFile(args[5]);
             dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
             dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
             String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
@@ -59,7 +60,7 @@ public class Rahmen extends JApplet {
                 e.printStackTrace();
             }
         }
-        INIFile file = new INIFile(args[3]);
+        Settings file = new INIFile(args[3]);
         reader = file.getStringProperty("FestProg", "FestProgPfad1");
         patid = args[4];
         // thisClass.jFrame.setCursor(new Cursor(Cursor.WAIT_CURSOR));

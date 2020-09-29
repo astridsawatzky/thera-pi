@@ -12,6 +12,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 import logging.Logging;
 import sqlTools.SystemEinstellungen;
@@ -67,7 +68,7 @@ public class textbaus implements WindowListener {
         if (args.length > 0) {
             System.out.println("Starte mit Startparameter 1 = " + args[0]);
             System.out.println("Starte mit Startparameter 2 = " + args[1]);
-            INIFile ini = new INIFile(args[0]);
+            Settings ini = new INIFile(args[0]);
             dbIpAndName = ini.getStringProperty("DatenBank", "DBKontakt1");
             dbUser = ini.getStringProperty("DatenBank", "DBBenutzer1");
             String pw = ini.getStringProperty("DatenBank", "DBPasswort1");

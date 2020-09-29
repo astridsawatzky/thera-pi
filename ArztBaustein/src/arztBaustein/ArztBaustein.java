@@ -16,6 +16,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingx.JXFrame;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import logging.Logging;
@@ -47,7 +48,7 @@ public class ArztBaustein {
 
         if (args.length > 0) {
             System.out.println("hole daten aus INI-Datei " + proghome);
-            INIFile ini = new INIFile(proghome + "ini/" + ik.digitString() + "/rehajava.ini");
+            Settings ini = new INIFile(proghome + "ini/" + ik.digitString() + "/rehajava.ini");
 
             OpenOfficePfad = ini.getStringProperty("OpenOffice.org", "OfficePfad");
             OpenOfficeNativePfad = ini.getStringProperty("OpenOffice.org", "OfficeNativePfad");

@@ -37,6 +37,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import environment.Path;
 import sql.DatenquellenFactory;
 
@@ -464,7 +465,7 @@ public class UpdatePanel extends JXPanel {
 
     // ************************************************************************
     private static void updateCheck(String xupdatefile) {
-        INIFile inif = new INIFile(PROGHOME + "ini/mandanten.ini");
+        Settings inif = new INIFile(PROGHOME + "ini/mandanten.ini");
         int anzahlMandanten = inif.getIntegerProperty(SECTION_THERA_PI_MANDANTEN, "AnzahlMandanten");
         for (int i = 0; i < anzahlMandanten; i++) {
             String[] mand = { null, null };

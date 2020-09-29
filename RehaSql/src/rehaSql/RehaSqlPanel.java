@@ -57,8 +57,8 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaComboBox;
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import rehaSql.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -372,7 +372,7 @@ public class RehaSqlPanel extends JXPanel implements ListSelectionListener, Tabl
         }
         try {
             String iniFile = (RehaSql.isReadOnly() ? "sqlmodulro.ini" : "sqlmodul.ini");
-            INIFile inif = INITool.openIni(RehaSql.progHome + "ini/" + RehaSql.aktIK + "/", iniFile);
+            Settings inif = INITool.openIni(RehaSql.progHome + "ini/" + RehaSql.aktIK + "/", iniFile);
             Vector<String> vecstmts = new Vector<String>();
             int anzahl = inif.getIntegerProperty("SqlStatements", "StatementsAnzahl");
             for (int i = 0; i < anzahl; i++) {

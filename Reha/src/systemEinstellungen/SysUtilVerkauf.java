@@ -26,8 +26,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 
@@ -51,7 +51,7 @@ public class SysUtilVerkauf extends JXPanel implements SysInitCommon_If {
 
     private JRtaTextField rechnungVorlage, bonVorlage, rechnungExemplare, bonSeitenlaenge;
 
-    private INIFile inif;
+    private Settings inif;
 
     private ActionListener al;
 

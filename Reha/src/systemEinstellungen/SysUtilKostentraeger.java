@@ -39,8 +39,8 @@ import CommonTools.DatFunk;
 import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBoxR;
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import sqlTools.PLServerAuslesen;
@@ -53,7 +53,7 @@ public class SysUtilKostentraeger extends JXPanel {
     MyKtraegerModel ktrmod = null;
     JButton[] but = { null, null, null, null };
     JRtaCheckBoxR cbGetFromGKV;
-    INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "ktraeger.ini");
+    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "ktraeger.ini");
     private TableCellRenderer JLabelRenderer = null; // = new DefaultTableRenderer(new MappedValue(StringValues.EMPTY,
                                                      // IconValues.ICON), JLabel.CENTER);
     PLServerAuslesen plServer = null;

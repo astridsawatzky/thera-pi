@@ -73,6 +73,7 @@ import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import rehaHMK.RehaIO.SocketClient;
 import rehaHMK.Tools.ArztTools;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -140,7 +141,7 @@ public class RehaHMKPanel2 extends JXPanel implements ScannerListener {
     JRtaComboBox scanformat = null;
     JRtaCheckBox scandialog = null;
     boolean scannerok = false;
-    INIFile inifile = null;
+    Settings inifile = null;
     ActionListener al = null;
     IDocument document = null;
     ITextDocument textDocument = null;

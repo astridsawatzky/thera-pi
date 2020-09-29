@@ -65,8 +65,8 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -1924,7 +1924,7 @@ public class PatNeuanlage extends JXPanel implements RehaTPEventListener, Action
             @Override
             protected Void doInBackground() throws Exception {
                 try {
-                    INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                             "arzt.ini");
                     int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
                     for (int i = 1; i <= forms; i++) {

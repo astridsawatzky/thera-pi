@@ -67,6 +67,7 @@ import CommonTools.RehaEventListener;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import abrechnung.AbrechnungGKV;
 import abrechnung.AbrechnungReha;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -324,7 +325,7 @@ public class Reha implements RehaEventListener {
             String[] split = parameter[0].split("@");
             mainMandant = new Mandant(split[0], split[1]);
         } else {
-            INIFile inif = new INIFile(Path.Instance.getProghome() + "ini/mandanten.ini");
+            Settings inif = new INIFile(Path.Instance.getProghome() + "ini/mandanten.ini");
             int DefaultMandant = inif.getIntegerProperty("TheraPiMandanten", "DefaultMandant");
             mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK" + DefaultMandant),
                     inif.getStringProperty("TheraPiMandanten", "MAND-NAME" + DefaultMandant));
@@ -531,7 +532,7 @@ public class Reha implements RehaEventListener {
 
     private void saveAktuelleFensterAnordnung() {
         try {
-            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "rehajava.ini");
             SystemConfig.UpdateIni(inif, "HauptFenster", "Divider1", jSplitLR.getDividerLocation(), null);
             SystemConfig.UpdateIni(inif, "HauptFenster", "Divider2", jSplitRechtsOU.getDividerLocation(), null);

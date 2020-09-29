@@ -14,6 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
 import crypt.Verschluesseln;
@@ -73,7 +74,7 @@ public class NebraskaMain {
             if (frage != JOptionPane.YES_OPTION) {
                 System.exit(0);
             }
-            INIFile ini = new INIFile(INI_FILE);
+            Settings ini = new INIFile(INI_FILE);
             int anzahl = ini.getIntegerProperty("KeyStores", "KeyStoreAnzahl");
             boolean speichern = false;
             for (int i = 0; i < anzahl; i++) {
@@ -111,7 +112,7 @@ public class NebraskaMain {
             // ini.save();
         } else {
             try {
-                INIFile ini = new INIFile(INI_FILE);
+                Settings ini = new INIFile(INI_FILE);
                 int anzahl = ini.getIntegerProperty("KeyStores", "KeyStoreAnzahl");
                 boolean speichern = false;
                 for (int i = 0; i < anzahl; i++) {

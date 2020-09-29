@@ -33,8 +33,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JCompTools;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import gui.Cursors;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
@@ -47,7 +47,7 @@ public class SysUtilVorlagen extends JXPanel implements ActionListener, SysInitC
     private String vorlagenPfad = null;
     private String iniPfad = null;
     private String iniName = null;
-    private INIFile inif = null;
+    private Settings inif = null;
     private boolean formOK = true;
     private String nbOfEntriesLabel = null;
     private String entryTextLabel = null;
@@ -110,7 +110,7 @@ public class SysUtilVorlagen extends JXPanel implements ActionListener, SysInitC
         this.iniName = iniName;
     }
 
-    public INIFile getInif() {
+    public Settings getInif() {
         if (inif == null) {
             if ((iniPfad == null) || (iniName == null)) {
                 System.out.println("SysUtilVorlagen: inifile not set");
@@ -120,7 +120,7 @@ public class SysUtilVorlagen extends JXPanel implements ActionListener, SysInitC
         return inif;
     }
 
-    private void setInif(INIFile inif) {
+    private void setInif(Settings inif) {
         this.inif = inif;
     }
 

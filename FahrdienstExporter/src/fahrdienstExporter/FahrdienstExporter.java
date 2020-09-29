@@ -15,6 +15,7 @@ import com.hexiong.jdbf.JDBField;
 
 import CommonTools.DatFunk;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import logging.Logging;
 
 public class FahrdienstExporter {
@@ -36,7 +37,7 @@ public class FahrdienstExporter {
                                     .format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
         String fertigDateiName = "FPSort" + datum + ".dbf";
         if (args.length > 0) {
-            INIFile file = new INIFile(args[0]);
+            Settings file = new INIFile(args[0]);
             rohdatei = file.getStringProperty("Verzeichnisse", "Fahrdienstrohdatei") + "FPSort.txt";
             fertigdatei = file.getStringProperty("Verzeichnisse", "Fahrdienstliste") + fertigDateiName;
         } else {

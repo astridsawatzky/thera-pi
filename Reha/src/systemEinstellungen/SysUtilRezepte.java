@@ -36,8 +36,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 
@@ -105,7 +105,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
 
     private void fuelleMitWerten() {
         int aktiv;
-        INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rezept.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "rezept.ini");
         if (SystemConfig.mitRs) {
             for (int i = 0; i < 8; i++) {
                 aktiv = inif.getIntegerProperty("RezeptKlassen", "KlasseAktiv" + Integer.valueOf(i + 1)
@@ -383,7 +383,7 @@ public class SysUtilRezepte extends JXPanel implements KeyListener, ActionListen
             // INIFile inif =
             // INITool.openIni(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/",
             // "rezept.ini");
-            INIFile inif = vorlagen.getInif();
+            Settings inif = vorlagen.getInif();
             inif.setStringProperty("RezeptKlassen", "InitKlasse", (String) voreinstellung.getSelectedItem(), null);
             /*
              * if (!SystemConfig.mitRs) { for (int i = 0; i < 6; i++) { iwert =

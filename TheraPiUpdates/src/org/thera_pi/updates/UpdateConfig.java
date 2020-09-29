@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 import environment.Path;
 
@@ -39,7 +40,7 @@ public class UpdateConfig {
 
         File f = new File(proghome + "ini/tpupdateneu.ini");
         if (f.exists()) {
-            INIFile ini = new INIFile(proghome + "/ini/tpupdateneu.ini");
+            Settings ini = new INIFile(proghome + "/ini/tpupdateneu.ini");
 
             Verschluesseln man = Verschluesseln.getInstance(NONRTASPEZIALSCHLUESSEL);
             updateHost = man.decrypt(ini.getStringProperty(SECTION_THERA_PI_UPDATES, "UpdateFTP"));
@@ -49,7 +50,7 @@ public class UpdateConfig {
             developerMode = ("1".equals(ini.getStringProperty(SECTION_THERA_PI_UPDATES, "UpdateEntwickler")));
             useActiveMode = ("1".equals(ini.getStringProperty(SECTION_THERA_PI_UPDATES, "UseFtpActiveMode")));
         } else {
-            INIFile ini = new INIFile(proghome + "/ini/tpupdate.ini");
+            Settings ini = new INIFile(proghome + "/ini/tpupdate.ini");
             LOG.debug(ini.getFileName());
 
             updateHost = ini.getStringProperty(SECTION_THERA_PI_UPDATES, "UpdateFTP");

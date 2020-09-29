@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 
 public class SystemEinstellungen {
     static String[] disziplinen = { "Physio", "Massage", "Ergo", "Logo", "Reha", "Podo" };
@@ -11,7 +12,7 @@ public class SystemEinstellungen {
     public static HashMap<String, Vector<String>> hmOberbegriff = new HashMap<String, Vector<String>>();
 
     public static void ladeGelenke(String[] args) {
-        INIFile inif = null;
+        Settings inif = null;
         if (args.length <= 0) {
             inif = new INIFile("C:/RehaVerwaltung/ini/510841109/thbericht.ini");
         } else {

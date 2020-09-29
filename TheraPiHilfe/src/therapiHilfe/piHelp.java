@@ -30,6 +30,7 @@ import org.jdesktop.swingworker.SwingWorker;
 import org.jdesktop.swingx.JXFrame;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
@@ -73,7 +74,7 @@ public class piHelp implements WindowListener, WindowStateListener, ComponentLis
         /************ Für die Entwicklung dieses Teil benutzen ********/
         // INIFile inif = new INIFile(piHelp.proghome+"pihelp.ini");
 
-        INIFile inif = new INIFile(piHelp.proghome + "ini/pihelp.ini");
+        Settings inif = new INIFile(piHelp.proghome + "ini/pihelp.ini");
         tempvz = new String(inif.getStringProperty("piHelp", "TempVZ"));
 
         OpenOfficePfad = new String(inif.getStringProperty("piHelp", "OOPfad"));

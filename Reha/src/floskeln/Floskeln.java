@@ -28,8 +28,8 @@ import org.jdesktop.swingx.JXTitledPanel;
 import org.therapi.reha.patient.PatientMemoPanel;
 
 import CommonTools.JCompTools;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import dialoge.DragWin;
 import dialoge.PinPanel;
 import environment.Path;
@@ -130,7 +130,7 @@ public class Floskeln extends JXDialog
     }
 
     private void fuellen() {
-        INIFile ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "floskeln.ini");
+        Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "floskeln.ini");
         int floskeln = Integer.parseInt(ini.getStringProperty("Floskeln", "FloskelAnzahl"));
         Vector<String> vec = new Vector<String>();
         for (int i = 0; i < floskeln; i++) {

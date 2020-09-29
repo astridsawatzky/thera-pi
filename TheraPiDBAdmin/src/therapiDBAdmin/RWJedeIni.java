@@ -1,9 +1,10 @@
 package therapiDBAdmin;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 
 public class RWJedeIni {
-    private static INIFile ini = null;
+    private static Settings ini = null;
 
     public static void schreibeIniDatei(String iniDatei, String gruppe, String element, String wert) {
         ini = new INIFile(iniDatei);

@@ -51,6 +51,7 @@ import org.therapi.reha.patient.AktuelleRezepte;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import environment.Path;
 import events.PatStammEvent;
@@ -682,7 +683,7 @@ public class LinkeTaskPane extends JXPanel {
             return false;
         }
         try {
-            INIFile utask = new INIFile(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/usertask.ini");
+            Settings utask = new INIFile(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/usertask.ini");
             int tasks = Integer.parseInt(utask.getStringProperty("UserTasks", "AnzahlUserTasks"));
             if (tasks == 0) {
                 return false;

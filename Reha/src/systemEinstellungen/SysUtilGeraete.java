@@ -28,8 +28,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import ocf.OcKVK;
@@ -343,7 +343,7 @@ public class SysUtilGeraete extends JXPanel implements KeyListener, ActionListen
     }
 
     private void doSpeichern() {
-        INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "geraete.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "geraete.ini");
 
         SystemConfig.sReaderAktiv = (kvkakt.isSelected() ? "1" : "0");
         inif.setStringProperty("KartenLeser", "KartenLeserAktivieren", SystemConfig.sReaderAktiv, null);

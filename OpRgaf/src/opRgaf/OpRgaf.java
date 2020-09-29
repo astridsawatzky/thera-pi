@@ -14,6 +14,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import environment.Path;
 import io.RehaIOMessages;
@@ -73,7 +74,7 @@ public class OpRgaf implements WindowListener {
     public static JFrame start(String proghome, String aktik, int reverseport) {
         OpRgaf application = new OpRgaf(new IK(aktik));
 
-        INIFile inif = new INIFile(proghome + "ini/" + aktik + "/rehajava.ini");
+        Settings inif = new INIFile(proghome + "ini/" + aktik + "/rehajava.ini");
 
         inif = new INIFile(proghome+ "ini/" + aktik + "/rehajava.ini");
         String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");

@@ -16,6 +16,7 @@ import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import rehaStatistik.Tools.SystemPreislisten;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
@@ -61,7 +62,7 @@ public class RehaStatistik implements WindowListener {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 proghome = args[0];
                 aktIK = args[1];
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");

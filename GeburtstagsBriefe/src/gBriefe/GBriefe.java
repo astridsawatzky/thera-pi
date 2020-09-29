@@ -31,6 +31,7 @@ import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
@@ -92,7 +93,7 @@ public class GBriefe implements WindowStateListener, WindowListener, ComponentLi
 
             e1.printStackTrace();
         }
-        INIFile inif = null;
+        Settings inif = null;
 
 
         /**************************/

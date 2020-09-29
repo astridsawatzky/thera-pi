@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import core.Disziplin;
 import environment.Path;
 import hauptFenster.Reha;
@@ -57,13 +57,13 @@ public class SystemPreislisten {
 
     }
 
-    static INIFile fristenini = null;
+    static Settings fristenini = null;
 
     public static void ladepreise(String disziplin, String aktIK) {
 
-        INIFile fristeninilocal = null;
+        Settings fristeninilocal = null;
 
-        INIFile inif = null;
+        Settings inif = null;
         if (Disziplin.ofMedium(disziplin) == Disziplin.INV) {
             return;
         }
@@ -82,7 +82,7 @@ public class SystemPreislisten {
 
     }
 
-    private static void ladepreise(String disziplin, INIFile fristeninilocal, INIFile inif, int tarife) {
+    private static void ladepreise(String disziplin, Settings fristeninilocal, Settings inif, int tarife) {
 
         Disziplin diszi = Disziplin.ofMedium(disziplin);
 
@@ -212,7 +212,7 @@ public class SystemPreislisten {
         }
     }
 
-    private static void ladepreise(INIFile fristeninilocal, INIFile inif, int tarife, String key) {
+    private static void ladepreise(Settings fristeninilocal, Settings inif, int tarife, String key) {
         dummy.clear();
         getPreisGruppen(inif, key, tarife);
         hmPreisGruppen.put(key, (Vector<String>) dummy.clone());
@@ -259,19 +259,19 @@ public class SystemPreislisten {
      * @param dummy
      * @return
      */
-    public static void getPreisGruppen(INIFile f, String disziplin, int tarife) {
+    public static void getPreisGruppen(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("PreisGruppen_" + disziplin, "PGName" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getPreisBereich(INIFile f, String disziplin, int tarife) {
+    public static void getPreisBereich(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("PreisGruppen_" + disziplin, "PGBereich" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getPreisBesonderheit(INIFile f, String disziplin, int tarife) {
+    public static void getPreisBesonderheit(Settings f, String disziplin, int tarife) {
         boolean mustsave = false;
         for (int i = 0; i < tarife; i++) {
             if ((f.getStringProperty("PreisGruppen_" + disziplin,
@@ -287,7 +287,7 @@ public class SystemPreislisten {
         }
     }
 
-    public static void getZuzahlRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getZuzahlRegeln(Settings f, String disziplin, int tarife) {
         boolean mustsave = false;
         String sdummy;
         for (int i = 0; i < tarife; i++) {
@@ -305,13 +305,13 @@ public class SystemPreislisten {
         }
     }
 
-    public static void getHMRAbrechnung(INIFile f, String disziplin, int tarife) { // $302-Abrechnung Ja/nein
+    public static void getHMRAbrechnung(Settings f, String disziplin, int tarife) { // $302-Abrechnung Ja/nein
         for (int i = 0; i < tarife; i++) {
             intdummy.add(f.getIntegerProperty("HMRAbrechnung_" + disziplin, "HMRAbrechnung" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getHBRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getHBRegeln(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             hbdummy_1.clear();
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBPosVoll" + (i + 1)));
@@ -324,19 +324,19 @@ public class SystemPreislisten {
         hbdummy_1.clear();
     }
 
-    public static void getNeuePreiseRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getNeuePreiseRegeln(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             intdummy.add(f.getIntegerProperty("PreisRegeln_" + disziplin, "PreisRegel" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getNeuePreiseAb(INIFile f, String disziplin, int tarife) {
+    public static void getNeuePreiseAb(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("PreisRegeln_" + disziplin, "PreisAb" + Integer.toString(i + 1)));
         }
     }
 
-    public static void getBerichtRegeln(INIFile f, String disziplin, int tarife) {
+    public static void getBerichtRegeln(Settings f, String disziplin, int tarife) {
         for (int i = 0; i < tarife; i++) {
             dummy.add(f.getStringProperty("BerichtRegeln_" + disziplin, "Bericht" + Integer.toString(i + 1)));
         }
@@ -406,7 +406,7 @@ public class SystemPreislisten {
     /**
      * @param fristenini TODO
      *******************************/
-    private static void doFristen(String disziplin, int anzahl, INIFile fristenini) {
+    private static void doFristen(String disziplin, int anzahl, Settings fristenini) {
         odummy.clear();
         Vector<Object> xdummy = new Vector<Object>();
         for (int i = 0; i < anzahl; i++) {
@@ -472,8 +472,8 @@ public class SystemPreislisten {
      * @param fristenini TODO
      * @return
      */
-    private static Object fristenTesten(String kategorie, String item, boolean retint, INIFile fristenini) {
-        INIFile fristenini2 = fristenini;
+    private static Object fristenTesten(String kategorie, String item, boolean retint, Settings fristenini) {
+        Settings fristenini2 = fristenini;
         if (fristenini2.getIntegerProperty(kategorie, item) == null) {
             System.out.println(
                     "SytemPreislisten: erstelle Parameter für Kategorie=" + kategorie + " Preisgruppe=" + item);

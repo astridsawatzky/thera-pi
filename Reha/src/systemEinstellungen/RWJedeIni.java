@@ -1,10 +1,10 @@
 package systemEinstellungen;
 
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 
 public class RWJedeIni {
-    private static INIFile ini = null;
+    private static Settings ini = null;
 
     public static void schreibeIniDatei(String pfad, String iniDatei, String gruppe, String element, String wert) {
         ini = INITool.openIni(pfad, iniDatei);

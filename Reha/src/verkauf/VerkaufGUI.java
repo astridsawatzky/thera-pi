@@ -42,8 +42,8 @@ import CommonTools.JRtaTextField;
 import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.IDocument;
@@ -91,7 +91,7 @@ public class VerkaufGUI extends JXPanel {
     WechselgeldDialog wDialog = null;
     verkauf.model.Verkauf verkauf = null;
     DecimalFormat df = null;
-    INIFile settings = null;
+    Settings settings = null;
     VerkaufTab owner;
     boolean debug = false;
     Formulare forms = null;

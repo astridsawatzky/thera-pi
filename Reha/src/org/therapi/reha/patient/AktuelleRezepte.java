@@ -60,8 +60,8 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import Suchen.ICDrahmen;
 import abrechnung.AbrechnungPrivat;
 import abrechnung.AbrechnungRezept;
@@ -1440,7 +1440,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                         "rezept.ini");
                 int forms = inif.getIntegerProperty("Formulare", "RezeptFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {

@@ -37,8 +37,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
@@ -364,7 +364,7 @@ public class SysUtilArzt extends JXPanel implements KeyListener, ActionListener,
     private void doSpeichern() {
         try {
             String wert = "";
-            INIFile inif = vorlagen.getInif();
+            Settings inif = vorlagen.getInif();
             if (inif == null) { // sollte nie vorkommen
                 INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "arzt.ini");
             }

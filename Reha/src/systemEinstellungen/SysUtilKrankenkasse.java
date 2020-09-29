@@ -30,8 +30,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import gui.Cursors;
 import hauptFenster.Reha;
@@ -362,7 +362,7 @@ public class SysUtilKrankenkasse extends JXPanel implements KeyListener, ActionL
     private void doSpeichern() {
         String wert = "";
 //      INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kasse.ini");
-        INIFile inif = vorlagen.getInif();
+        Settings inif = vorlagen.getInif();
         // System.out.println(Path.Instance.getProghome()+"ini/"+Reha.getAktIK()+"/kasse.ini");
 
         wert = (unten.isSelected() ? "1" : "0");

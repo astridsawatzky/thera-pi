@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 import logging.Logging;
 
@@ -65,7 +66,7 @@ public class LVArahmen implements WindowListener {
         thisClass = this;
         if (args.length > 0) {
             System.out.println("hole daten aus INI-Datei " + args[0]);
-            INIFile inif = new INIFile(args[0]);
+            Settings inif = new INIFile(args[0]);
             dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
             dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
             String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
@@ -88,7 +89,7 @@ public class LVArahmen implements WindowListener {
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jFrame.setLocationRelativeTo(null);
 
-        INIFile file = new INIFile(args[2]);
+        Settings file = new INIFile(args[2]);
         reader = file.getStringProperty("FestProg", "FestProgPfad1");
 
         jFrame.getContentPane()

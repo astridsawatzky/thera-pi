@@ -28,8 +28,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import terminKalender.KollegenListe;
@@ -207,7 +207,7 @@ public class SysUtilAnsichtsOptionen extends JXPanel implements KeyListener, Act
     private void speichernHandeln() {
         try {
             String wert;
-            INIFile ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
+            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "kalender.ini");
 
             wert = (unten.isSelected() ? "1" : "0");
             SystemConfig.hmContainer.put("Kalender", Integer.valueOf(wert));

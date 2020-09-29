@@ -32,8 +32,8 @@ import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;
@@ -494,7 +494,7 @@ public class PatientHauptLogic {
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
-                INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                         "patient.ini");
                 int forms = inif.getIntegerProperty("Formulare", "PatientFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {

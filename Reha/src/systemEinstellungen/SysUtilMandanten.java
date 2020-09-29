@@ -38,8 +38,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import hilfsFenster.NeuerMandant;
@@ -496,7 +496,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
     private void loeschenRegeln() {
         int aktman = mandant.getSelectedIndex();
         SystemConfig.Mandanten.remove(aktman);
-        INIFile ifile = INITool.openIni(Path.Instance.getProghome() + "ini/", "mandanten.ini");
+        Settings ifile = INITool.openIni(Path.Instance.getProghome() + "ini/", "mandanten.ini");
         ifile.setIntegerProperty("TheraPiMandanten", "AuswahlImmerZeigen", 1, null);
         ifile.setIntegerProperty("TheraPiMandanten", "DefaultMandant", 1, null);
         SystemConfig.AuswahlImmerZeigen = 1;
@@ -540,7 +540,7 @@ public class SysUtilMandanten extends JXPanel implements KeyListener, ActionList
         macheVerzeichnis("keystore", neuik);
         macheVerzeichnis("urlaub", neuik);
 
-        INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/", "mandanten.ini");
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/", "mandanten.ini");
         int AnzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten") + 1;
         // int AnzahlMandanten = mandant.getItemCount()+1;
         inif.setStringProperty("TheraPiMandanten", "AnzahlMandanten", Integer.valueOf(AnzahlMandanten)
@@ -758,7 +758,7 @@ class MandantEinlesen extends SwingWorker<Integer, Void> {
     protected Integer doInBackground() throws Exception {
 
         // int man = this.mandant;
-        INIFile ifile = INITool.openIni(
+        Settings ifile = INITool.openIni(
                 Path.Instance.getProghome() + "ini/" + SystemConfig.Mandanten.get(this.mandant)[0] + "/", "firmen.ini");
 
         String[] stitel = { "Ik", "Ikbezeichnung", "Firma1", "Firma2", "Anrede", "Nachname", "Vorname", "Strasse",
@@ -795,7 +795,7 @@ class MandantSpeichern extends SwingWorker<Integer, Void> {
     protected Integer doInBackground() throws Exception {
         try {
 
-            INIFile ifile = INITool.openIni(
+            Settings ifile = INITool.openIni(
                     Path.Instance.getProghome() + "ini/" + SystemConfig.Mandanten.get(this.mandant)[0] + "/",
                     "firmen.ini");
             String[] stitel = { "Ik", "Ikbezeichnung", "Firma1", "Firma2", "Anrede", "Nachname", "Vorname", "Strasse",

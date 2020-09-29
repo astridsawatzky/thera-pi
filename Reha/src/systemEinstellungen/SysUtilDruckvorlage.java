@@ -35,8 +35,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
 import ag.ion.bion.officelayer.document.DocumentException;
@@ -444,7 +444,7 @@ public class SysUtilDruckvorlage extends JXPanel implements KeyListener, ActionL
         }
         try {
 
-            INIFile ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "terminliste.ini");
             ini.setStringProperty("TerminListe1", "AnzahlTabellen", Integer.valueOf(test1)
                                                                            .toString(),

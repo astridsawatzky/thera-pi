@@ -11,8 +11,8 @@ import org.jdesktop.swingx.JXFrame;
 
 import com.sun.star.uno.Exception;
 
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import egk.EgkReader;
 import environment.Path;
 import oOorgTools.OOTools;
@@ -45,7 +45,7 @@ final class ErsterLogin implements Runnable {
                     .setExtendedState(JXFrame.MAXIMIZED_BOTH);
                 Reha.getThisFrame()
                     .setVisible(true);
-                INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                         "rehajava.ini");
                 if (inif.getIntegerProperty("HauptFenster", "Divider1") != null) {
                     Reha.instance.jSplitLR.setDividerLocation(

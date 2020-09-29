@@ -25,8 +25,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 import terminKalender.TerminFenster;
@@ -197,7 +197,7 @@ public class SysUtilKalenderfarben extends JXPanel implements ActionListener {
                 defName = "UserFarben";
             }
 
-            INIFile ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", colorini);
+            Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", colorini);
 
             for (int i = 0; i < lang; i++) {
                 hg = ((Color) FarbTab.getValueAt(i, 2));

@@ -17,6 +17,7 @@ import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import crypt.Verschluesseln;
@@ -72,7 +73,7 @@ public class RehaKassenbuch implements WindowListener {
         if (args.length > 0 || testcase) {
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");

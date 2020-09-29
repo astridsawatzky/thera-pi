@@ -42,6 +42,7 @@ import CommonTools.JCompTools;
 import CommonTools.JRtaCheckBox;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import sql.DatenquellenFactory;
 
 public class ProcessPanel extends JXPanel {
@@ -206,8 +207,8 @@ public class ProcessPanel extends JXPanel {
     private void startAction() {
         Connection dbConnection = null;
         setTextArea("Starte Logbuch!");
-        INIFile dummyini = null;
-        INIFile inicontrol = null;
+        Settings dummyini = null;
+        Settings inicontrol = null;
         String kopf = "INIinDB";
         String sanzahl = "INIAnzahl";
         int anzahl = 0;

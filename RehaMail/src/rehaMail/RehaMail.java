@@ -31,6 +31,7 @@ import org.jdesktop.swingworker.SwingWorker;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import rehaMail.RehaIO.RehaReverseServer;
 import rehaMail.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -137,7 +138,7 @@ public class RehaMail implements WindowListener {
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
                 INITool.init(args[0] + "ini/" + args[1] + "/");
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");

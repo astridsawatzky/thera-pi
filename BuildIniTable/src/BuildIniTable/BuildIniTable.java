@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import environment.Path;
 
 /**
@@ -93,7 +94,7 @@ public class BuildIniTable {
         pfadzurmandini = mandantTesten();
 
         pfadzurini = pfadzurmandini.replace("mandanten.ini", "");
-        INIFile ini = new INIFile(pfadzurmandini);
+        Settings ini = new INIFile(pfadzurmandini);
         anzahlmandanten = Integer.parseInt(ini.getStringProperty("TheraPiMandanten", "AnzahlMandanten"));
         for (int i = 0; i < anzahlmandanten; i++) {
             mandantIkvec.add(ini.getStringProperty("TheraPiMandanten", "MAND-IK" + (i + 1)));

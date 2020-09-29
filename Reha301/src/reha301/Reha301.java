@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import io.RehaIOMessages;
@@ -93,13 +94,13 @@ public class Reha301 implements WindowListener {
         if (args.length > 0 || testcase) {
             if (!testcase) {
                 // System.out.println("hole daten aus INI-Datei "+args[0]);
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
                 officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
                 progHome = args[0];
                 aktIK = args[1];
-                INIFile ini301 = new INIFile(args[0] + "ini/" + args[1] + "/dta301.ini");
+                Settings ini301 = new INIFile(args[0] + "ini/" + args[1] + "/dta301.ini");
                 inbox = ini301.getStringProperty("DatenPfade301", "inbox");
                 outbox = ini301.getStringProperty("DatenPfade301", "outbox");
                 if (args.length == 3) {

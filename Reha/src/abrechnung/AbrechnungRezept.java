@@ -101,8 +101,8 @@ import CommonTools.JRtaComboBox;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
 import CommonTools.StringTools;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.text.TextException;
 import ag.ion.noa.NOAException;
@@ -306,7 +306,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 if (SystemConfig.hmAbrechnung.get("keepTTSize")
                                              .equals("1")) { // TageTreeSize Werte in ini gespeichert (McM)
                     int maxBehTage = Integer.parseInt(SystemConfig.hmAbrechnung.get("maxBehTage"));
-                    INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                    Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                             "abrechnung.ini");
                     String section = "HMGKVRechnung";
                     for (int i = 1; i <= maxBehTage; i++) {
@@ -4449,7 +4449,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
         if (!SystemConfig.hmAbrechnung.get("TTSizeLocked")
                                       .equals("1")) {
             boolean mustsave = false;
-            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "abrechnung.ini");
             String section = "HMGKVRechnung";
             for (Entry<Integer, Integer> e : tts.getHmTageTreeSize()

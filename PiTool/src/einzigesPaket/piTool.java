@@ -76,6 +76,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.mysql.jdbc.PreparedStatement;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 import environment.Path;
 import logging.Logging;
@@ -981,7 +982,7 @@ public class piTool implements MouseListener, ActionListener, WindowListener, Ch
         } else {
             System.out.println("Ihre pitool.ini befindet sich im richtigen Verzeichnis--> " + datei);
         }
-       final INIFile piToolini = new INIFile(datei);
+       final Settings piToolini = new INIFile(datei);
         piTool.app.dbConnection = new String(piToolini.getStringProperty("DatenBank", "DBTreiber"));
         piTool.app.dbParameter = new String(piToolini.getStringProperty("DatenBank", "DBKontakt"));
         String pw = new String(piToolini.getStringProperty("EmailExtern", "Password"));
@@ -1330,7 +1331,7 @@ class passwortEncrypt extends JDialog {
         } else {
             System.out.println("Ihre pitool.ini befindet sich im richtigen Verzeichnis--> " + datei);
         }
-        INIFile ini = new INIFile(datei);
+        Settings ini = new INIFile(datei);
         ini.setStringProperty(gruppe, "Password", encrypted, null);
         ini.save();
         this.setVisible(false);

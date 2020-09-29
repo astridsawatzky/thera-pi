@@ -2,8 +2,8 @@ package systemEinstellungen.config;
 
 import javax.swing.JOptionPane;
 
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import crypt.Verschluesseln;
 
 public class Datenbank {
@@ -30,7 +30,7 @@ public class Datenbank {
         return contact.typ;
     }
 
-    public void datenbankEinstellungeneinlesen(INIFile inifile) {
+    public void datenbankEinstellungeneinlesen(Settings inifile) {
 
         contact.treiber = inifile.getStringProperty("DatenBank", "DBTreiber1");
         contact.jdbcDB = inifile.getStringProperty("DatenBank", "DBKontakt1");
@@ -42,7 +42,7 @@ public class Datenbank {
 
     }
 
-    protected String processPassword(INIFile inifile, String pw) {
+    protected String processPassword(Settings inifile, String pw) {
         String decryptedPassword;
         if (pw == null) {
             decryptedPassword = "";

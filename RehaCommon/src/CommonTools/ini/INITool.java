@@ -17,7 +17,7 @@ public class INITool {
     }
 
     public static void init(String pfad) {
-        INIFile file = new INIFile(pfad + "inicontrol.ini");
+        Settings file = new INIFile(pfad + "inicontrol.ini");
         try {
             int anzahl = file.getIntegerProperty("INIinDB", "INIAnzahl");
             if (anzahl == 0) {
@@ -41,8 +41,8 @@ public class INITool {
      * @param iniToOpen Name der ini-Datei
      * @return INIFile Objekt
      */
-    public static INIFile openIni(String path, String iniToOpen) {
-        INIFile inif = null;
+    public static Settings openIni(String path, String iniToOpen) {
+        Settings inif = null;
         try {
             if (Arrays.asList(dbInis)
                       .contains(iniToOpen)) {
@@ -65,8 +65,8 @@ public class INITool {
      * @param iniToOpen Name der ini-Datei
      * @return INIFile Objekt
      */
-    public static INIFile openIniFallback(String path, String iniToOpen) {
-        INIFile inif = null;
+    public static Settings openIniFallback(String path, String iniToOpen) {
+        Settings inif = null;
         try {
             if (Arrays.asList(dbInis)
                       .contains(iniToOpen)) {
@@ -79,7 +79,7 @@ public class INITool {
     }
 
     /************************/
-    public static boolean saveIni(INIFile iniToSave) {
+    public static boolean saveIni(Settings iniToSave) {
         boolean ret = false;
         try {
             if (Arrays.asList(dbInis)

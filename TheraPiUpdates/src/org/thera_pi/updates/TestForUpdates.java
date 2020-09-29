@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import environment.Path;
 
 public class TestForUpdates {
@@ -91,7 +92,7 @@ public class TestForUpdates {
     /************************************************************************/
     private void updateCheck(String xupdatefile) {
 
-        INIFile inif = new INIFile(Path.Instance.getProghome() + "ini/mandanten.ini");
+        Settings inif = new INIFile(Path.Instance.getProghome() + "ini/mandanten.ini");
         try {
             int anzahlMandanten = inif.getIntegerProperty("TheraPiMandanten", "AnzahlMandanten");
             for (int i = 0; i < anzahlMandanten; i++) {

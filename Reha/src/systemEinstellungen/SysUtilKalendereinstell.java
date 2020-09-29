@@ -25,8 +25,8 @@ import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ExUndHop;
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 
@@ -177,7 +177,7 @@ public class SysUtilKalendereinstell extends JXPanel implements ActionListener, 
                         "Die Funktion Kalenderzeiten verändern, wird während der Softwarentwicklung nicht aufgerufen!");
             }
             try {
-                INIFile ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings ini = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                         "terminkalender.ini");
                 ini.setStringProperty("Kalender", "KalenderBarcode", (scan.isSelected() ? "1" : "0"), null);
                 INITool.saveIni(ini);

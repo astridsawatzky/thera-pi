@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 
 import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 
@@ -28,8 +29,8 @@ public class ImageRepository {
             "verkaufArtikel", "verkaufLieferant", "verkaufTuten", "patnachrichten", "ocr", "BarKasse" };
 
     public static void SystemIconsInit() {
-        INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "icons.ini");
-        INIFile iniFallBack = INITool.openIniFallback(Path.Instance.getProghome() + "defaults/ini/", "icons.ini"); // lokale
+        Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/", "icons.ini");
+        Settings iniFallBack = INITool.openIniFallback(Path.Instance.getProghome() + "defaults/ini/", "icons.ini"); // lokale
                                                                                                                    // ini
                                                                                                                    // (falls
                                                                                                                    // aktive
@@ -38,7 +39,7 @@ public class ImageRepository {
                                                                                                                    // DB
                                                                                                                    // abgelegt
                                                                                                                    // ist)
-        INIFile iniDefault = new INIFile(Path.Instance.getProghome() + "defaults/ini/icons.ini"); // ini im
+        Settings iniDefault = new INIFile(Path.Instance.getProghome() + "defaults/ini/icons.ini"); // ini im
                                                                                                   // defaults-Pfad, die
                                                                                                   // ist immer da
 
@@ -46,7 +47,7 @@ public class ImageRepository {
         int xscale = 0;
         int yscale = 0;
         for (int i = 0; i < bilder.length; i++) {
-            INIFile use_ini = inif;
+            Settings use_ini = inif;
             xscale = SystemConfig.testIntIni(use_ini, "Icons", bilder[i] + "ScaleX");
             if (xscale == 0) { // nicht in ini; nur '-1' u. Werte >0 sind 'Treffer'
                 if (iniFallBack != null) { // aktive ini liegt in der DB

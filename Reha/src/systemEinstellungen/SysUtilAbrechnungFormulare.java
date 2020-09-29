@@ -10,17 +10,20 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.List;
 
 import javax.print.PrintService;
 import javax.print.PrintServiceLookup;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
+import javax.swing.event.ListDataListener;
 
 import org.jdesktop.swingx.JXPanel;
 
@@ -32,47 +35,38 @@ import CommonTools.JRtaCheckBox;
 import CommonTools.JRtaComboBox;
 import CommonTools.JRtaRadioButton;
 import CommonTools.JRtaTextField;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import environment.Path;
 import hauptFenster.Reha;
 
-public class SysUtilAbrechnungFormulare extends JXPanel
+class SysUtilAbrechnungFormulare extends JXPanel
         implements KeyListener, ActionListener, ItemListener, SysInitCommon_If {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
-    PrintService[] services = null;
-    String[] drucker = null;
-    JRtaComboBox[] jcmb = { null, null, null, null, null, null, null };
-    JButton[] but = { null, null, null, null, null };
-    JRtaTextField[] tf = { null, null, null, null };
-    JRtaRadioButton[] rbut = { null, null, null, null, null, null, null, null };
-    JRtaCheckBox cbemail = null;
-    JRtaCheckBox ChkUseTmplPrinter = null;
-    String[] exemplare = { "0", "1", "2", "3", "4", "5" };
-    ButtonGroup bg = new ButtonGroup();
-    ButtonGroup bg2 = new ButtonGroup();
-    ButtonGroup bg3 = new ButtonGroup();
-    ButtonGroup bg4 = new ButtonGroup();
 
-    boolean enableTaxPrinterSelect = true, usePrinterFromTemplate = false;
+
+    private JRtaComboBox[] jcmb = { null, null, null, null, null, null, null };
+    private JButton[] but = { null, null, null, null, null };
+    private JRtaTextField[] tf = { null, null, null, null };
+    private JRtaRadioButton[] rbut = { null, null, null, null, null, null, null, null };
+    private JRtaCheckBox cbemail;
+    private JRtaCheckBox ChkUseTmplPrinter;
+    private String[] exemplare = { "0", "1", "2", "3", "4", "5" };
+    private ButtonGroup bg = new ButtonGroup();
+    private ButtonGroup bg2 = new ButtonGroup();
+
+
+
+    private boolean enableTaxPrinterSelect = true, usePrinterFromTemplate;
 
     public SysUtilAbrechnungFormulare() {
         super(new BorderLayout());
-        this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
-        /****/
+        setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
         setBackgroundPainter(Reha.instance.compoundPainter.get("SystemInit"));
         initFields();
-        services = PrintServiceLookup.lookupPrintServices(null, null);
-        drucker = new String[services.length];
 
-        for (int i = 0; i < services.length; i++) {
-            drucker[i] = services[i].getName();
-        }
 
-        /****/
+
         new SwingWorker<Void, Void>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -91,9 +85,8 @@ public class SysUtilAbrechnungFormulare extends JXPanel
         jscr.setViewportView(getVorlagenSeite());
         jscr.validate();
         add(jscr, BorderLayout.CENTER);
-        // add(getKnopfPanel(),BorderLayout.SOUTH);
         AbbruchOderSpeichern footer = new AbbruchOderSpeichern(this);
-        this.add(footer.getPanel(), BorderLayout.SOUTH);
+        add(footer.getPanel(), BorderLayout.SOUTH);
 
         new SwingWorker<Void, Void>() {
             @Override
@@ -103,8 +96,17 @@ public class SysUtilAbrechnungFormulare extends JXPanel
                 return null;
             }
         }.execute();
+    }
 
-        return;
+    private String[] availablePrinternames() {
+        PrintService[] services = PrintServiceLookup.lookupPrintServices(null, null);
+
+          String[] drucker = new String[services.length];
+        for (int i = 0; i < services.length; i++) {
+            drucker[i] = services[i].getName();
+        }
+
+        return drucker;
     }
 
     private void initFields() {
@@ -114,25 +116,24 @@ public class SysUtilAbrechnungFormulare extends JXPanel
 
     private void setFields() {
         ChkUseTmplPrinter.setSelected(usePrinterFromTemplate);
-        enableTaxPrinterSelect = (usePrinterFromTemplate == Boolean.TRUE ? false : true);
+        enableTaxPrinterSelect = !usePrinterFromTemplate;
         jcmb[1].setEnabled(enableTaxPrinterSelect);
-        // ChkOP2BarKasse.showLocked(enableTaxPrinterSelect,usePrinterFromTemplate);
     }
 
-    /**************
-     * Beginn der Methode für die Objekterstellung und -platzierung
-     *********/
+    /** Beginn der Methode für die Objekterstellung und -platzierung. */
     private JPanel getVorlagenSeite() {
-        FormLayout lay = new FormLayout("right:max(80dlu;p), 20dlu, 120dlu, 4dlu, 40dlu", // , 4dlu, 40dlu, 4dlu,
+        String columnspecs = "right:max(80dlu;p), 20dlu, 120dlu, 4dlu, 40dlu";
+        // 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21.
+        // 22. 23. 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
+        // 47 48 49
+        String rowspecs = "p, 10dlu, p, 3dlu, p, 8dlu, p, 3dlu, p,  3dlu, p, 2dlu, p, 3dlu, p, 10dlu"
+                + ", p, 10dlu, p, 3dlu, p, 3dlu, p, 10dlu, p,  10dlu, p,  3dlu , p, 3dlu, p, 10dlu, p,10dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 10dlu, p, 10dlu, p, 2dlu, p, 2dlu, p";
+        FormLayout lay = new FormLayout(columnspecs, // , 4dlu, 40dlu, 4dlu,
                                                                                           // 40dlu",
-                // 1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21.
-                // 22. 23. 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46
-                // 47 48 49
-                "p, 10dlu, p, 3dlu, p, 8dlu, p, 3dlu, p,  3dlu, p, 2dlu, p, 3dlu, p, 10dlu, p, 10dlu, p, 3dlu, p, 3dlu, p, 10dlu, p,  10dlu, p,  3dlu , p, 3dlu, p, 10dlu, p,10dlu, p, 2dlu, p, 2dlu, p, 2dlu, p, 10dlu, p, 10dlu, p, 2dlu, p, 2dlu, p");
+               
+                rowspecs);
 
         PanelBuilder builder = new PanelBuilder(lay);
-        // PanelBuilder builder = new PanelBuilder(lay, new FormDebugPanel()); // debug
-        // mode
         builder.setDefaultDialogBorder();
         builder.getPanel()
                .setOpaque(false);
@@ -140,7 +141,7 @@ public class SysUtilAbrechnungFormulare extends JXPanel
         int rowCnt = 1;
         builder.addSeparator("Heilmittelabrechnung GKV", cc.xyw(1, rowCnt++, 5)); // 1,1
         builder.addLabel("Drucker für Taxierung", cc.xy(1, ++rowCnt)); // 1,3
-        jcmb[1] = new JRtaComboBox(drucker);
+        jcmb[1] = new JRtaComboBox(availablePrinternames());
         builder.add(jcmb[1], cc.xyw(3, rowCnt++, 3)); // 3,3
 
         builder.add(ChkUseTmplPrinter, cc.xyw(3, ++rowCnt, 3)); // 3,5
@@ -152,10 +153,11 @@ public class SysUtilAbrechnungFormulare extends JXPanel
         tf[0] = new JRtaTextField("nix", false);
         // tf[0].setEditable(false);
         builder.add(tf[0], cc.xy(3, rowCnt));
-        builder.add((but[0] = macheBut("auswaehlen", "gkvrechnwahl")), cc.xy(5, rowCnt++));
+        builder.add(but[0] = macheBut("auswaehlen", "gkvrechnwahl"), cc.xy(5, rowCnt++));
 
         builder.addLabel("Rechnungsdrucker", cc.xy(1, ++rowCnt));
-        jcmb[0] = new JRtaComboBox(drucker);
+        jcmb[0] = new JRtaComboBox(availablePrinternames());
+
         builder.add(jcmb[0], cc.xyw(3, rowCnt++, 3));
 
         builder.addLabel("folgende Ausdrucke erstellen", cc.xy(1, ++rowCnt));
@@ -172,19 +174,19 @@ public class SysUtilAbrechnungFormulare extends JXPanel
         jcmb[2] = new JRtaComboBox(exemplare);
         builder.add(jcmb[2], cc.xy(5, rowCnt++));
 
-        /********************************************/
+
+
 
         builder.addSeparator("Heilmittelabrechnung Privatpatienten", cc.xyw(1, ++rowCnt, 5));
         rowCnt++;
 
         builder.addLabel("Rechnungsformular", cc.xy(1, ++rowCnt));
         tf[1] = new JRtaTextField("nix", false);
-        // tf[0].setEditable(false);
         builder.add(tf[1], cc.xy(3, rowCnt));
-        builder.add((but[1] = macheBut("auswaehlen", "prirechnwahl")), cc.xy(5, rowCnt++));
+        builder.add(but[1] = macheBut("auswaehlen", "prirechnwahl"), cc.xy(5, rowCnt++));
 
         builder.addLabel("Rechnungsdrucker", cc.xy(1, ++rowCnt));
-        jcmb[3] = new JRtaComboBox(drucker);
+        jcmb[3] = new JRtaComboBox(availablePrinternames());
         builder.add(jcmb[3], cc.xyw(3, rowCnt++, 3));
 
         builder.addLabel("Rechnungsexemplare", cc.xy(1, ++rowCnt));
@@ -198,15 +200,19 @@ public class SysUtilAbrechnungFormulare extends JXPanel
         tf[2] = new JRtaTextField("nix", false);
         // tf[0].setEditable(false);
         builder.add(tf[2], cc.xy(3, rowCnt));
-        builder.add((but[2] = macheBut("auswaehlen", "bgerechnwahl")), cc.xy(5, rowCnt++));
+        builder.add(but[2] = macheBut("auswaehlen", "bgerechnwahl"), cc.xy(5, rowCnt++));
 
         builder.addLabel("Rechnungsdrucker", cc.xy(1, ++rowCnt));
-        jcmb[5] = new JRtaComboBox(drucker);
+        jcmb[5] = new JRtaComboBox(availablePrinternames());
         builder.add(jcmb[5], cc.xyw(3, rowCnt++, 3));
 
         builder.addLabel("Rechnungsexemplare", cc.xy(1, ++rowCnt));
         jcmb[6] = new JRtaComboBox(exemplare);
         builder.add(jcmb[6], cc.xy(5, rowCnt++));
+
+
+
+
 
         builder.addSeparator("Gemeinsame Einstellungen", cc.xyw(1, ++rowCnt, 5));
         rowCnt++;
@@ -224,29 +230,10 @@ public class SysUtilAbrechnungFormulare extends JXPanel
         builder.add(cbemail = new JRtaCheckBox("immer fragen"), cc.xyw(3, rowCnt, 3));
         cbemail.setOpaque(false);
 
-        // setFields();
         return builder.getPanel();
     }
 
-    /*
-     * private JPanel getKnopfPanel(){
-     * 
-     * 
-     * but[3] = macheBut("abbrechen", "abbrechen"); but[4] = macheBut("speichern",
-     * "speichern"); // 1. 2. 3. 4. 5. 6. 7. 8. 9. FormLayout jpanlay = new
-     * FormLayout("right:max(120dlu;p), 80dlu, 40dlu, 4dlu, 40dlu", // 1. 2. 3. 4.
-     * 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. // 22. 23.
-     * "p, 10dlu, p");
-     * 
-     * PanelBuilder jpan = new PanelBuilder(jpanlay); jpan.getPanel()
-     * .setOpaque(false); CellConstraints jpancc = new CellConstraints();
-     * 
-     * jpan.addSeparator("", jpancc.xyw(1, 1, 5)); jpan.add(but[3], jpancc.xy(3,
-     * 3)); jpan.add(but[4], jpancc.xy(5, 3));
-     * jpan.addLabel("Änderungen übernehmen?", jpancc.xy(1, 3));
-     * 
-     * return jpan.getPanel(); }
-     */
+
     private JButton macheBut(String titel, String cmd) {
         JButton but = new JButton(titel);
         but.setActionCommand(cmd);
@@ -263,107 +250,100 @@ public class SysUtilAbrechnungFormulare extends JXPanel
 
     @Override
     public void keyPressed(KeyEvent e) {
-
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         String cmd = e.getActionCommand();
-        if (cmd.equals("gkvrechnwahl")) {
+        if ("gkvrechnwahl".equals(cmd)) {
             doWaehlen(tf[0]);
             return;
         }
-        if (cmd.equals("prirechnwahl")) {
+        if ("prirechnwahl".equals(cmd)) {
             doWaehlen(tf[1]);
             return;
         }
-        if (cmd.equals("bgerechnwahl")) {
+        if ("bgerechnwahl".equals(cmd)) {
             doWaehlen(tf[2]);
             return;
         }
-        if (cmd.equals("nurbegleitzettel")) {
+        if ("nurbegleitzettel".equals(cmd)) {
             jcmb[2].setSelectedIndex(0);
             jcmb[2].setEnabled(false);
             return;
         }
-        if (cmd.equals("beides")) {
+        if ("beides".equals(cmd)) {
             jcmb[2].setEnabled(true);
             return;
         }
-        if (cmd.equals("abbrechen")) {
+        if ("abbrechen".equals(cmd)) {
             SystemInit.abbrechen();
-            // SystemUtil.thisClass.parameterScroll.requestFocus();
             return;
         }
-        if (cmd.equals("speichern")) {
+        if ("speichern".equals(cmd)) {
             doSpeichern();
-            return;
         }
     }
 
-    private void doEinstellungen() { // <- s. readFromIni() in SysUtilOpMahnung
-        /** GKV **/
+    private void doEinstellungen() {
         tf[0].setText(SystemConfig.hmAbrechnung.get("hmgkvformular"));
         jcmb[0].setSelectedItem(SystemConfig.hmAbrechnung.get("hmgkvrechnungdrucker"));
         jcmb[1].setSelectedItem(SystemConfig.hmAbrechnung.get("hmgkvtaxierdrucker"));
         String wert = SystemConfig.hmAbrechnung.get("hmgkvrauchdrucken");
-        if (wert.equals("1")) {
+        if ("1".equals(wert)) {
             rbut[1].setSelected(true);
         } else {
             rbut[0].setSelected(true);
         }
         jcmb[2].setSelectedItem(SystemConfig.hmAbrechnung.get("hmgkvrexemplare"));
-        /*** PRI ****/
+        /* PRI */
         tf[1].setText(SystemConfig.hmAbrechnung.get("hmpriformular"));
         jcmb[3].setSelectedItem(SystemConfig.hmAbrechnung.get("hmpridrucker"));
         jcmb[4].setSelectedItem(SystemConfig.hmAbrechnung.get("hmpriexemplare"));
-        /*** BGE ****/
+        /* BGE */
         tf[2].setText(SystemConfig.hmAbrechnung.get("hmbgeformular"));
         jcmb[5].setSelectedItem(SystemConfig.hmAbrechnung.get("hmbgedrucker"));
         jcmb[6].setSelectedItem(SystemConfig.hmAbrechnung.get("hmbgeexemplare"));
         wert = SystemConfig.hmAbrechnung.get("hmallinoffice");
-        if (wert.equals("1")) {
+        if ("1".equals(wert)) {
             rbut[3].setSelected(true);
         } else {
             rbut[2].setSelected(true);
         }
         wert = SystemConfig.hmAbrechnung.get("hmaskforemail");
-        cbemail.setSelected(wert.equals("1") ? true : false);
-        if (wert.equals("1")) {
+        cbemail.setSelected("1".equals(wert));
+        if ("1".equals(wert)) {
             cbemail.setSelected(true);
         } else {
             cbemail.setSelected(false);
         }
         wert = SystemConfig.hmAbrechnung.get("hmusePrinterFromTemplate");
-        usePrinterFromTemplate = (wert.equals("1") ? true : false);
+        usePrinterFromTemplate = "1".equals(wert);
     }
 
     private void doSpeichern() {
         try {
-            String wert = "";
-            INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+            String wert;
+            Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                     "abrechnung.ini");
             inif.setStringProperty("HMGKVRechnung", "Rformular", tf[0].getText()
                                                                       .trim(),
                     null);
             inif.setStringProperty("HMGKVRechnung", "Rdrucker", ((String) jcmb[0].getSelectedItem()).trim(), null);
             inif.setStringProperty("HMGKVRechnung", "Tdrucker", ((String) jcmb[1].getSelectedItem()).trim(), null);
-            wert = (rbut[1].isSelected() ? "1" : "0");
-            // inif.setStringProperty("HMGKVRechnung", "Begleitzettel","1" , null);
+            wert = rbut[1].isSelected() ? "1" : "0";
             inif.setStringProperty("HMGKVRechnung", "Rauchdrucken", wert, null);
             inif.setStringProperty("HMGKVRechnung", "Rexemplare", (String) jcmb[2].getSelectedItem(), null);
             inif.setStringProperty("HMGKVRechnung", "usePrinterFromTemplate",
-                    (usePrinterFromTemplate == true ? "1" : "0"), null);
+                    usePrinterFromTemplate ? "1" : "0", null);
 
             inif.setStringProperty("HMPRIRechnung", "Pformular", tf[1].getText()
                                                                       .trim(),
@@ -376,9 +356,9 @@ public class SysUtilAbrechnungFormulare extends JXPanel
                     null);
             inif.setStringProperty("HMBGERechnung", "Bdrucker", ((String) jcmb[5].getSelectedItem()).trim(), null);
             inif.setStringProperty("HMBGERechnung", "Bexemplare", (String) jcmb[6].getSelectedItem(), null);
-            wert = (rbut[3].isSelected() ? "1" : "0");
+            wert = rbut[3].isSelected() ? "1" : "0";
             inif.setStringProperty("GemeinsameParameter", "InOfficeStarten", wert, null);
-            wert = (cbemail.isSelected() ? "1" : "0");
+            wert = cbemail.isSelected() ? "1" : "0";
             inif.setStringProperty("GemeinsameParameter", "FragenVorEmail", wert, null);
             // useTmplPrinter speichern
             INITool.saveIni(inif);
@@ -401,7 +381,6 @@ public class SysUtilAbrechnungFormulare extends JXPanel
     }
 
     private String dateiDialog() {
-
         final JFileChooser chooser = new JFileChooser("Verzeichnis wählen");
         chooser.setDialogType(JFileChooser.OPEN_DIALOG);
         chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -412,45 +391,35 @@ public class SysUtilAbrechnungFormulare extends JXPanel
         chooser.addPropertyChangeListener(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent e) {
-                if (e.getPropertyName()
-                     .equals(JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)
-                        || e.getPropertyName()
-                            .equals(JFileChooser.DIRECTORY_CHANGED_PROPERTY)) {
-                    // final File f = (File) e.getNewValue();
+                if (JFileChooser.SELECTED_FILE_CHANGED_PROPERTY.equals(e.getPropertyName())
+                        || JFileChooser.DIRECTORY_CHANGED_PROPERTY.equals(e.getPropertyName())) {
                 }
             }
         });
         chooser.setVisible(true);
-        // thisClass.setCursor(Reha.instance.normalCursor);
         final int result = chooser.showOpenDialog(null);
         chooser.setVisible(false);
         if (result == JFileChooser.APPROVE_OPTION) {
             File inputVerzFile = chooser.getSelectedFile();
-            // String inputVerzStr = inputVerzFile.getPath();
 
-            // System.out.println("Eingabepfad:" + inputVerzStr);
-            if (inputVerzFile.getName()
-                             .trim()
-                             .equals("")) {
+            if ("".equals(inputVerzFile.getName()
+                             .trim())) {
                 return "";
-                // vorlagenname.setText(SystemConfig.oTerminListe.NameTemplate);
             } else {
                 return inputVerzFile.getName()
                                     .trim();
-                // vorlagenname.setText(inputVerzFile.getName().trim());
             }
         } else {
             return "";
         }
-
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
         Object source = e.getItemSelectable();
         if (source == ChkUseTmplPrinter) {
-            usePrinterFromTemplate = (e.getStateChange() == ItemEvent.SELECTED ? true : false);
-            SystemConfig.hmAbrechnung.put("hmusePrinterFromTemplate", (usePrinterFromTemplate ? "1" : "0"));
+            usePrinterFromTemplate = e.getStateChange() == ItemEvent.SELECTED;
+            SystemConfig.hmAbrechnung.put("hmusePrinterFromTemplate", usePrinterFromTemplate ? "1" : "0");
         }
         setFields();
         validate();
@@ -459,7 +428,6 @@ public class SysUtilAbrechnungFormulare extends JXPanel
     @Override
     public void Abbruch() {
         SystemInit.abbrechen();
-
     }
 
     @Override
@@ -469,12 +437,9 @@ public class SysUtilAbrechnungFormulare extends JXPanel
 
     @Override
     public void AddEntry(int instanceNb) {
-
     }
 
     @Override
     public void RemoveEntry(int instanceNb) {
-
     }
-
 }

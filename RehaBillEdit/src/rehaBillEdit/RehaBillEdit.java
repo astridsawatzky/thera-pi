@@ -17,6 +17,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.application.OfficeApplicationRuntime;
@@ -77,7 +78,7 @@ public class RehaBillEdit implements WindowListener {
         if (args.length > 0 || testcase) {
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
                 dbIpAndName = inif.getStringProperty("DatenBank", "DBKontakt1");
                 dbUser = inif.getStringProperty("DatenBank", "DBBenutzer1");
                 String pw = inif.getStringProperty("DatenBank", "DBPasswort1");
@@ -306,7 +307,7 @@ public class RehaBillEdit implements WindowListener {
                 "Plz", "Ort", "Telefon", "Telefax", "Email", "Internet", "Bank", "Blz", "Kto", "Steuernummer", "Hrb",
                 "Logodatei", "Zusatz1", "Zusatz2", "Zusatz3", "Zusatz4", "Bundesland" };
         hmFirmenDaten = new HashMap<String, String>();
-        INIFile inif = new INIFile(proghome + "ini/" + RehaBillEdit.aktIK + "/firmen.ini");
+        Settings inif = new INIFile(proghome + "ini/" + RehaBillEdit.aktIK + "/firmen.ini");
         for (int i = 0; i < stitel.length; i++) {
             hmFirmenDaten.put(stitel[i], inif.getStringProperty("Firma", stitel[i]));
         }
@@ -315,7 +316,7 @@ public class RehaBillEdit implements WindowListener {
     public static void AbrechnungParameter(String proghome) {
         hmAbrechnung.clear();
         /******** Heilmittelabrechnung ********/
-        INIFile inif = new INIFile(proghome + "ini/" + aktIK + "/abrechnung.ini");
+        Settings inif = new INIFile(proghome + "ini/" + aktIK + "/abrechnung.ini");
         hmAbrechnung.put("hmgkvformular", inif.getStringProperty("HMGKVRechnung", "Rformular"));
         hmAbrechnung.put("hmgkvrechnungdrucker", inif.getStringProperty("HMGKVRechnung", "Rdrucker"));
         hmAbrechnung.put("hmgkvtaxierdrucker", inif.getStringProperty("HMGKVRechnung", "Tdrucker"));

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import environment.Path;
 
 public class SystemConfig {
@@ -24,7 +25,7 @@ public class SystemConfig {
     }
 
     public static void InetSeitenEinlesen() {
-        INIFile inif = new INIFile( Path.Instance.getProghome()+ "ini/rehabrowser.ini");
+        Settings inif = new INIFile( Path.Instance.getProghome()+ "ini/rehabrowser.ini");
         int seitenanzahl = inif.getIntegerProperty("RehaBrowser", "SeitenAnzahl");
         InetSeiten = new Vector<ArrayList<String>>();
         ArrayList<String> seite = null;

@@ -17,6 +17,7 @@ import org.jdesktop.swingworker.SwingWorker;
 
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
@@ -64,13 +65,13 @@ public class RehaUrlaub implements WindowListener {
             if (args.length > 0 || testcase) {
                 if (!testcase) {
                     System.out.println("hole daten aus INI-Datei " + args[0]);
-                    INIFile rehjavaini = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+                    Settings rehjavaini = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
 
                     officeProgrammPfad = rehjavaini.getStringProperty("OpenOffice.org", "OfficePfad");
                     officeNativePfad = rehjavaini.getStringProperty("OpenOffice.org", "OfficeNativePfad");
 
-                    INIFile abrechnungini = new INIFile(args[0] + "ini/" + args[1] + "/abrechnung.ini");
+                    Settings abrechnungini = new INIFile(args[0] + "ini/" + args[1] + "/abrechnung.ini");
                     String rechnung = abrechnungini.getStringProperty("HMPRIRechnung", "Pformular");
                     rechnung = rechnung.replace(".ott", "");
                     rechnung = rechnung + "Kopie.ott";

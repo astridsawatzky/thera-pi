@@ -52,8 +52,8 @@ import CommonTools.ExUndHop;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
-import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import dialoge.PinPanel;
 import dialoge.RehaSmartDialog;
 import environment.Path;
@@ -620,7 +620,7 @@ public class ArztPanel extends JXPanel implements PropertyChangeListener, TableM
             @Override
             protected Void doInBackground() throws Exception {
 
-                INIFile inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
+                Settings inif = INITool.openIni(Path.Instance.getProghome() + "ini/" + Reha.getAktIK() + "/",
                         "arzt.ini");
                 int forms = inif.getIntegerProperty("Formulare", "ArztFormulareAnzahl");
                 for (int i = 1; i <= forms; i++) {

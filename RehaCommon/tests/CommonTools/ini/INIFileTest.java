@@ -37,13 +37,13 @@ public class INIFileTest {
 
     @Test
     public void testGetFileName() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        Settings myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
         assertEquals(TEST_RESOURCES_INIFILE_INI, myIniFile.getFileName());
     }
 
     @Test
     public void testGetStringProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        Settings myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
         assertEquals("thisissimple", myIniFile.getStringProperty("Strings", "simpleString"));
         assertEquals("spaces in String", myIniFile.getStringProperty("Strings", "spacyString"));
 
@@ -51,7 +51,7 @@ public class INIFileTest {
 
     @Test
     public void testGetBooleanProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        Settings myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
         assertFalse("Non existing value is returned as FALSE",
                 myIniFile.getBooleanProperty("Verzeichnisse", "Fahrdienstrohdatei")
                          .booleanValue());
@@ -71,7 +71,7 @@ public class INIFileTest {
 
     @Test
     public void testIntegerProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        Settings myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
         assertEquals(Integer.valueOf(1), myIniFile.getIntegerProperty(INTEGER_SECTION, "one"));
         assertEquals(Integer.valueOf(2), myIniFile.getIntegerProperty(INTEGER_SECTION, "two"));
         assertEquals(Integer.valueOf(-2134), myIniFile.getIntegerProperty(INTEGER_SECTION, "negativ"));
@@ -92,7 +92,7 @@ public class INIFileTest {
 
     @Test
     public void testSetBooleanProperty() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        Settings myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
 
         myIniFile.setBooleanProperty(DOUBLE_SECTION, "wahr", true, null);
         myIniFile.setBooleanProperty(DOUBLE_SECTION, "falsch", false, null);
@@ -119,13 +119,13 @@ public class INIFileTest {
 
     @Test
     public void testGetTotalSections() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        Settings myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
         assertEquals(Current_Section_count, myIniFile.getTotalSections());
     }
 
     @Test
     public void testGetAllSectionNames() {
-        INIFile myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
+        Settings myIniFile = new INIFile(TEST_RESOURCES_INIFILE_INI);
         String[] names = { "Strings", "Bools", "Integer", "Longs", "Doubles", "Dates" };
         assertArrayEquals(names, myIniFile.getAllSectionNames());
     }
@@ -134,7 +134,7 @@ public class INIFileTest {
 
     @Test
     public void testGetProperties() {
-        INIFile expected = new INIFile(null);
+        Settings expected = new INIFile(null);
         expected.addSection(BOOL_SECTION, null);
         expected.setStringProperty(BOOL_SECTION, "right", "true", null);
         expected.setStringProperty(BOOL_SECTION, "wrong", "false", null);
@@ -153,7 +153,7 @@ public class INIFileTest {
 
     @Test
     public void testRemoveSection() {
-        INIFile iniFile = new INIFile("");
+        Settings iniFile = new INIFile("");
         iniFile.addSection(LONG_SECTION, null);
         iniFile.addSection(BOOL_SECTION, null);
 
@@ -176,7 +176,7 @@ public class INIFileTest {
             newFile.delete();
         }
         assertFalse(newFile.exists());
-        INIFile myIniFile = new INIFile(path);
+        Settings myIniFile = new INIFile(path);
         myIniFile.save();
         assertFalse("empty File not written", newFile.exists());
         myIniFile.setStringProperty("Section", "property", "Propertyval", "comment");
@@ -188,7 +188,7 @@ public class INIFileTest {
 
     @Test
     public void testRenameSection() {
-        INIFile iniFile = new INIFile("");
+        Settings iniFile = new INIFile("");
         iniFile.addSection(LONG_SECTION, null);
         assertTrue(Arrays.asList(iniFile.getAllSectionNames())
                          .contains(LONG_SECTION));

@@ -29,6 +29,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
 import CommonTools.ini.INIFile;
+import CommonTools.ini.Settings;
 import environment.Path;
 
 public class TheraPiUpdates extends WindowAdapter {
@@ -179,7 +180,7 @@ public class TheraPiUpdates extends WindowAdapter {
             TheraPiUpdates.showpwdlg = true;
         } else {
             try {
-                INIFile inif = new INIFile(PROGHOME + LIB_SIG_JAR);
+                Settings inif = new INIFile(PROGHOME + LIB_SIG_JAR);
 
                 String macAdr = inif.getStringProperty("Updates", "1");
                 this.email = inif.getStringProperty("Updates", "2");

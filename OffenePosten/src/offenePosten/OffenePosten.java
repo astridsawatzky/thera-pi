@@ -22,6 +22,7 @@ import CommonTools.OpCommon;
 import CommonTools.SqlInfo;
 import CommonTools.ini.INIFile;
 import CommonTools.ini.INITool;
+import CommonTools.ini.Settings;
 import offenePosten.RehaIO.RehaReverseServer;
 import offenePosten.RehaIO.SocketClient;
 import ag.ion.bion.officelayer.application.IOfficeApplication;
@@ -87,7 +88,7 @@ public class OffenePosten implements WindowListener {
         if (args.length > 0 || testcase) {
             if (!testcase) {
                 System.out.println("hole daten aus INI-Datei " + args[0]);
-                INIFile inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
+                Settings inif = new INIFile(args[0] + "ini/" + args[1] + "/rehajava.ini");
 
                 String officeProgrammPfad = inif.getStringProperty("OpenOffice.org", "OfficePfad");
                 String officeNativePfad = inif.getStringProperty("OpenOffice.org", "OfficeNativePfad");
@@ -114,7 +115,7 @@ public class OffenePosten implements WindowListener {
                             Thread.sleep(30);
                         }
                         iniFile = "offeneposten.ini";
-                        INIFile oinif = INITool.openIni(path2IniFile, iniFile);
+                        Settings oinif = INITool.openIni(path2IniFile, iniFile);
                         OpCommon.readMahnParamCommon(oinif, mahnParameter);
 
                         for (int i = 1; i <= 4; i++) {
@@ -371,7 +372,7 @@ public class OffenePosten implements WindowListener {
         hmAbrechnung.clear();
         /******** Heilmittelabrechnung ********/
 
-        INIFile inif = INITool.openIni(proghome + "ini/" + aktIK + "/", "abrechnung.ini");
+        Settings inif = INITool.openIni(proghome + "ini/" + aktIK + "/", "abrechnung.ini");
         hmAbrechnung.put("hmgkvformular", inif.getStringProperty("HMGKVRechnung", "Rformular"));
         hmAbrechnung.put("hmgkvrechnungdrucker", inif.getStringProperty("HMGKVRechnung", "Rdrucker"));
         hmAbrechnung.put("hmgkvtaxierdrucker", inif.getStringProperty("HMGKVRechnung", "Tdrucker"));
@@ -411,7 +412,7 @@ public class OffenePosten implements WindowListener {
                 "Plz", "Ort", "Telefon", "Telefax", "Email", "Internet", "Bank", "Blz", "Kto", "Steuernummer", "Hrb",
                 "Logodatei", "Zusatz1", "Zusatz2", "Zusatz3", "Zusatz4", "Bundesland" };
         hmFirmenDaten = new HashMap<String, String>();
-        INIFile inif = INITool.openIni(proghome + "ini/" + OffenePosten.aktIK + "/", "firmen.ini");
+        Settings inif = INITool.openIni(proghome + "ini/" + OffenePosten.aktIK + "/", "firmen.ini");
         for (int i = 0; i < stitel.length; i++) {
             hmFirmenDaten.put(stitel[i], inif.getStringProperty("Firma", stitel[i]));
         }
@@ -442,7 +443,7 @@ public class OffenePosten implements WindowListener {
         return vorauswahlSuchkriterium < max ? vorauswahlSuchkriterium : 0;
     }
 
-    private static void readBarAnKasse(INIFile inif) {
+    private static void readBarAnKasse(Settings inif) {
         erlaubeBarInKasse = false;
         if (inif.getStringProperty("offenePosten", "erlaubeBarzahlung") != null) {
             erlaubeBarInKasse = inif.getBooleanProperty("offenePosten", "erlaubeBarzahlung");
@@ -469,7 +470,7 @@ public class OffenePosten implements WindowListener {
      * liest die zuletzt verwandten (Such-)Einstellungen aus der ini-Datei ist keine
      * Einstellung vorhanden, werden hier die Defaults gesetzt
      */
-    private static void readLastSelection(INIFile inif) {
+    private static void readLastSelection(Settings inif) {
         String section = "offenePosten";
         if (inif.getStringProperty(section, "Suchkriterium") != null) { // Eintrag in ini vorhanden?
             setVorauswahl(inif.getIntegerProperty(section, "Suchkriterium"));
@@ -489,7 +490,7 @@ public class OffenePosten implements WindowListener {
      * ini-Datei
      */
     public void saveLastSelection() {
-        INIFile inif = INITool.openIni(path2IniFile, iniFile);
+        Settings inif = INITool.openIni(path2IniFile, iniFile);
         String section = "offenePosten", comment = null;
         boolean saveChanges = false;
         if (!settingsLocked) { // ini-Einträge dürfen aktualisiert werden
