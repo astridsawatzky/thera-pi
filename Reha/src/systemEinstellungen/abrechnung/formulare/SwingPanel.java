@@ -7,28 +7,36 @@ import java.util.Map;
 import javax.print.PrintService;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
 import org.jdesktop.swingx.JXTitledSeparator;
 
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
 public class SwingPanel {
 
+    private JCheckBox askbeforemail = new JCheckBox("vor dem Versand immer fragen");
     private JPanel mainPanel = new JPanel();
     GKVAbrechnungsParameter gKVAbrechnungsParameter;
 
-    final DetailPanel gkv;
-    final DetailPanel tax;
-    final DetailPanel rgr;
-    final DetailPanel bg;
-    final DetailPanel privat;
+    final DruckdetailPanel gkv;
+    final DruckdetailPanel tax;
+    final DruckdetailPanel rgr;
+    final DruckdetailPanel bg;
+    final DruckdetailPanel privat;
+    private JCheckBox   direktdruck = new JCheckBox("nicht in Office anzeigen, direkt an Drucker senden");
 
     public SwingPanel(Map<String, PrintService> availableprinters) {
-        gkv = new DetailPanel("Rechnungen", availableprinters);
-        tax = new DetailPanel("Taxieren", availableprinters);
-        rgr = new DetailPanel("Rezeptgebühren", availableprinters);
-        bg = new DetailPanel("Rechnungen", availableprinters);
-        privat = new DetailPanel("Rechnungen", availableprinters);
+        gkv = new DruckdetailPanel("Rechnungen", availableprinters);
+
+        tax = new DruckdetailPanel("Taxieren", availableprinters);
+        rgr = new DruckdetailPanel("Rchnungen", availableprinters);
+        bg = new DruckdetailPanel("Rechnungen", availableprinters);
+        privat = new DruckdetailPanel("Rechnungen", availableprinters);
 
         JPanel gkvPanel = new JPanel();
         gkvPanel.setLayout(new BoxLayout(gkvPanel, BoxLayout.Y_AXIS));
@@ -51,9 +59,29 @@ public class SwingPanel {
 
         mainPanel.add(new JXTitledSeparator("Gemeinsame Einstellungen"));
 
+
+
+
         // TODO: 2-3 knoeppfe.
         mainPanel.add(new JXTitledSeparator(""));
+        FormLayout layout = new FormLayout(DruckdetailPanel.colSpecs, " p, 3dlu, p, 3dlu, p, 3dlu, p, 10dlu");
+
+        PanelBuilder builder = new PanelBuilder(layout);
+
+        CellConstraints cc = new CellConstraints();
+        builder.addLabel("Druck",cc.xy(1, 1));
+
+        builder.add(direktdruck,cc.xyw(3, 1,4));
+
+        builder.addLabel("302 er Mail",cc.xy(1, 3));
+        builder.add(askbeforemail,cc.xyw(3, 3,4));
+
+
+        mainPanel.add(builder.getPanel());
+
         JPanel buttonPanel = new JPanel();
+        mainPanel.add(new JXTitledSeparator());
+
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
         buttonPanel.add(new Label("Änderungen übernehmen?"));
         buttonPanel.add(new JButton("wäck damöt"));
@@ -74,13 +102,20 @@ public class SwingPanel {
         gkv.setValues(gKVAbrechnungsParameter.gkv);
         tax.setValues(gKVAbrechnungsParameter.taxierung);
         bg.setValues(gKVAbrechnungsParameter.bg);
+        rgr.setValues(gKVAbrechnungsParameter.rgr);
         privat.setValues(gKVAbrechnungsParameter.privat);
 
     }
 
     public Component panel() {
-        // TODO Auto-generated method stub
         return mainPanel;
+    }
+
+    public GKVAbrechnungsParameter abrechnungparameter() {
+        boolean direktAusdruck =direktdruck.isSelected();
+        boolean askBefore302Mail =askbeforemail.isSelected();
+
+      return  new GKVAbrechnungsParameter(tax.formularparameter(), gkv.formularparameter(), privat.formularparameter(), bg.formularparameter(), rgr.formularparameter(), direktAusdruck, askBefore302Mail);
     }
 
 }

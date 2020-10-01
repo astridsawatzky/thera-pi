@@ -7,6 +7,7 @@ import java.awt.event.ItemListener;
 import java.util.Map;
 
 import javax.print.PrintService;
+import javax.print.PrintServiceLookup;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.jdesktop.swingx.combobox.MapComboBoxModel;
 
@@ -24,18 +26,18 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
-public class DetailPanel {
-    String colSpecs = "right:max(50dlu;p), 10dlu, 85dlu,right:35dlu, 4dlu, 50dlu";
+public class DruckdetailPanel {
+  static final  String colSpecs = "right:max(50dlu;p), 10dlu, 85dlu,right:35dlu, 4dlu, 50dlu";
     String rowSpecs = " p, 10dlu, p, 3dlu, p, 3dlu, p, 10dlu";
-    JComboBox<String> printerCmb = new JComboBox<String>() {
 
-    };
 
+    JComboBox<String> printerCmb = new JComboBox<String>();
     private JTextField formularName = new JTextField();
+    JTextField exemplare = new JTextField();
 
     JPanel panel = createPanel();
 
-    public DetailPanel(String title, Map<String, PrintService> printers) {
+    public DruckdetailPanel(String title, Map<String, PrintService> printers) {
         TitledBorder border = new TitledBorder(title);
         border.setTitleJustification(TitledBorder.CENTER);
         panel.setBorder(border);
@@ -45,7 +47,7 @@ public class DetailPanel {
 
         printerCmb.setRenderer(new DefaultListCellRenderer() {
             @Override
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
                     boolean cellHasFocus) {
                 Component comp = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (index != -1) {
@@ -74,12 +76,16 @@ public class DetailPanel {
 
     void setValues(FormularParameter params) {
 
-        printerCmb.setSelectedItem(params.getPrinter().getName());
+        formularName.setText(params.template());
+        printerCmb.setSelectedItem(params.printer().getName());
+        exemplare.setText(String.valueOf(params.numberOfPrintOuts()));
+
     }
 
     private static final JFileChooser chooser = new JFileChooser();
     static {
         chooser.setFileHidingEnabled(false);
+        chooser.addChoosableFileFilter(new FileNameExtensionFilter("Open/Libreoffice Vorlagen","odt","ott"));
     }
 
     private JPanel createPanel() {
@@ -101,7 +107,8 @@ public class DetailPanel {
         builder.add(printerCmb, cc.xyw(3, 5, 4));
 
         builder.addLabel("Exemplare", cc.xy(4, 7));
-        builder.add(new JTextField(), cc.xy(6, 7));
+
+        builder.add(exemplare, cc.xy(6, 7));
 
         return builder.getPanel();
     }
@@ -117,5 +124,13 @@ public class DetailPanel {
             System.out.println(chooser);
         }
         return null;
+    }
+    FormularParameter formularparameter() {
+
+        boolean printerEinstellungsAusVorlage = false;
+        String template = formularName.getText();
+        PrintService printer = (PrintService) printerCmb.getSelectedItem();
+        int numberOfPrintOuts =Integer.valueOf(exemplare.getText()) ;
+        return new FormularParameter(printerEinstellungsAusVorlage, template, printer, numberOfPrintOuts );
     }
 }

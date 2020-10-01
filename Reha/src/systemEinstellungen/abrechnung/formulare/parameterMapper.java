@@ -7,70 +7,75 @@ import javax.print.PrintService;
 import CommonTools.ini.Settings;
 
 public class parameterMapper {
-
     private static final int ANZAHL_TAXIERUNGSDRUCK = 1;
 
     GKVAbrechnungsParameter readSettings(Settings ini) {
-
         Map<String, PrintService> printers = Environment.printservices();
-        ;
-
         final String HMVGKVRchnung = "HMGKVRechnung";
-        boolean taxEinstellungAusDrucker = ini.getBooleanProperty(HMVGKVRchnung, "usePrinterFromTemplate");
 
-        String tdruckerName = ini.getStringProperty(HMVGKVRchnung, "Tdrucker");
-        PrintService taxPrinter = printers.getOrDefault(tdruckerName, new UnknownPrintService(tdruckerName));
+        FormularParameter taxierung = readTaxierung(ini, printers, HMVGKVRchnung);
+
+        GKVFormularParameter gkv = readGkvSettings(ini, printers, HMVGKVRchnung);
+
+        FormularParameter privat = readdprivatSetting(ini, printers);
+
+        FormularParameter bg = readBGESettings(ini, printers);
+
+        String rgrRechnungSection= "RGRRechnung";
+        String rgrPrinterName = ini.getStringProperty(rgrRechnungSection, "Rdrucker");
+        FormularParameter rgr = new FormularParameter(printers.getOrDefault(rgrPrinterName, new UnavailablePrintService(rgrPrinterName)), 1);
+
+        final String GEMEINSAME = "GemeinsameParameter";
+
+        boolean direktAusdruck = ini.getBooleanProperty(GEMEINSAME, "InOfficeStarten");
+        boolean askBefore302Mail = ini.getBooleanProperty(GEMEINSAME, "FragenVorEmail");
+
+        return new GKVAbrechnungsParameter(taxierung, gkv, privat, bg,rgr, direktAusdruck, askBefore302Mail);
+    }
+
+    private FormularParameter readBGESettings(Settings ini, Map<String, PrintService> printers) {
+        final String bgRechnungSection = "HMBGERechnung";
+        String bgFormular = ini.getStringProperty(bgRechnungSection, "Bformular");
+        String bgPrinterName = ini.getStringProperty(bgRechnungSection, "Bdrucker");
+        PrintService bgPrinter = printers.getOrDefault(bgPrinterName, new UnavailablePrintService(bgPrinterName));
+        int bgExemplare = ini.getIntegerProperty(bgRechnungSection, "Bexemplare");
+
+        FormularParameter bg = new FormularParameter(bgFormular, bgPrinter, bgExemplare);
+        return bg;
+    }
+
+    private FormularParameter readdprivatSetting(Settings ini, Map<String, PrintService> printers) {
+        final String privatRechnungSection = "HMPRIRechnung";
+        String privatFormular = ini.getStringProperty(privatRechnungSection, "Pformular");
+        String privatPrinterName = ini.getStringProperty(privatRechnungSection, "Pdrucker");
+        PrintService privatPrinter = printers.getOrDefault(privatPrinterName,
+                new UnavailablePrintService(privatPrinterName));
+        int privatExemplare = ini.getIntegerProperty(privatRechnungSection, "Pexemplare");
+        FormularParameter privat = new FormularParameter(privatFormular, privatPrinter, privatExemplare);
+        return privat;
+    }
+
+    private GKVFormularParameter readGkvSettings(Settings ini, Map<String, PrintService> printers,
+            final String section) {
+        String gkvdruckerName = ini.getStringProperty(section, "Rdrucker");
+        PrintService gkvPrinter = printers.getOrDefault(gkvdruckerName, new UnavailablePrintService(gkvdruckerName));
+
+        int gkvAnzahl = ini.getIntegerProperty(section, "Rexemplare");
+        String gkvTemplate = ini.getStringProperty(section, "Rformular");
+        boolean auchRechnung = ini.getBooleanProperty(section, "Rauchdrucken");
+        GKVFormularParameter gkv = new GKVFormularParameter(new FormularParameter(gkvTemplate, gkvPrinter, gkvAnzahl),
+                auchRechnung);
+        return gkv;
+    }
+
+    private FormularParameter readTaxierung(Settings ini, Map<String, PrintService> printers, final String section) {
+        boolean taxEinstellungAusDrucker = ini.getBooleanProperty(section, "usePrinterFromTemplate");
+
+        String tdruckerName = ini.getStringProperty(section, "Tdrucker");
+        PrintService taxPrinter = printers.getOrDefault(tdruckerName, new UnavailablePrintService(tdruckerName));
 
         FormularParameter taxierung = new FormularParameter(taxEinstellungAusDrucker, taxPrinter,
                 ANZAHL_TAXIERUNGSDRUCK);
-
-        String gkvdruckerName = ini.getStringProperty(HMVGKVRchnung, "Rdrucker");
-        PrintService gkvPrinter = printers.getOrDefault(gkvdruckerName, new UnknownPrintService(gkvdruckerName));
-
-        int gkvAnzahl = ini.getIntegerProperty(HMVGKVRchnung, "Rexemplare");
-        String gkvTemplate = ini.getStringProperty(HMVGKVRchnung, "Rformular");
-        boolean auchRechnung = ini.getBooleanProperty(HMVGKVRchnung, "Rauchdrucken");
-        GKVFormularParameter gkv = new GKVFormularParameter(new FormularParameter(gkvTemplate, gkvPrinter, gkvAnzahl),
-                auchRechnung);
-        ;
-        ;
-        FormularParameter privat = new FormularParameter(taxEinstellungAusDrucker, taxPrinter, ANZAHL_TAXIERUNGSDRUCK);
-        ;
-        FormularParameter bg = new FormularParameter(taxEinstellungAusDrucker, taxPrinter, ANZAHL_TAXIERUNGSDRUCK);
-        ;
-        final String GEMEINSAME = "GemeinsameParameter";
-        boolean direktAusdruck = ini.getBooleanProperty(GEMEINSAME, "InOfficeStarten");
-        boolean askBefore302Mail = ini.getBooleanProperty(GEMEINSAME, "FragenVorEmail");
-        GKVAbrechnungsParameter param = new GKVAbrechnungsParameter(taxierung, gkv, privat, bg, direktAusdruck,
-                askBefore302Mail);
-
-        return param;
-
+        return taxierung;
     }
-
 }
-/**
- *
- * tf[0].setText(SystemConfig.hmAbrechnung.get("hmgkvformular"));
- * jcmb[0].setSelectedItem(SystemConfig.hmAbrechnung.get("hmgkvrechnungdrucker"));
- * jcmb[1].setSelectedItem(SystemConfig.hmAbrechnung.get("hmgkvtaxierdrucker"));
- * String wert = SystemConfig.hmAbrechnung.get("hmgkvrauchdrucken"); if
- * ("1".equals(wert)) { rbut[1].setSelected(true); } else {
- * rbut[0].setSelected(true); }
- * jcmb[2].setSelectedItem(SystemConfig.hmAbrechnung.get("hmgkvrexemplare"));
- *
- * tf[1].setText(SystemConfig.hmAbrechnung.get("hmpriformular"));
- * jcmb[3].setSelectedItem(SystemConfig.hmAbrechnung.get("hmpridrucker"));
- * jcmb[4].setSelectedItem(SystemConfig.hmAbrechnung.get("hmpriexemplare"));
- * tf[2].setText(SystemConfig.hmAbrechnung.get("hmbgeformular"));
- * jcmb[5].setSelectedItem(SystemConfig.hmAbrechnung.get("hmbgedrucker"));
- * jcmb[6].setSelectedItem(SystemConfig.hmAbrechnung.get("hmbgeexemplare"));
- * wert = SystemConfig.hmAbrechnung.get("hmallinoffice"); if ("1".equals(wert))
- * { rbut[3].setSelected(true); } else { rbut[2].setSelected(true); } wert =
- * SystemConfig.hmAbrechnung.get("hmaskforemail");
- * cbemail.setSelected("1".equals(wert)); if ("1".equals(wert)) {
- * cbemail.setSelected(true); } else { cbemail.setSelected(false); } wert =
- * SystemConfig.hmAbrechnung.get("hmusePrinterFromTemplate");
- * usePrinterFromTemplate = "1".equals(wert);
- *
- */

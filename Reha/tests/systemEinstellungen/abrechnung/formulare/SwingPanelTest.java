@@ -1,9 +1,9 @@
 package systemEinstellungen.abrechnung.formulare;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 
-import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
 import javax.swing.JFrame;
 
 import CommonTools.ini.INIFile;
@@ -13,7 +13,7 @@ public class SwingPanelTest {
     public static void main(String[] args) {
 
 
-        INIFile setting = new INIFile(new ByteArrayInputStream(TestInis.initialString.getBytes()), "testgkvsetting");
+        INIFile setting = new INIFile(new ByteArrayInputStream(TestInis.abrechnungini.getBytes()), "testgkvsetting");
 
         GKVAbrechnungsParameter gKVAbrechnungsParameter = new parameterMapper().readSettings(setting);
 
@@ -27,6 +27,9 @@ public class SwingPanelTest {
 
         frame.pack();
         frame.setVisible(true);
+
+
+        assertEquals(gKVAbrechnungsParameter, panel.abrechnungparameter());
 
     }
 
