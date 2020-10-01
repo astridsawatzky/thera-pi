@@ -57,7 +57,7 @@ import systemTools.ListenerTools;
 public class JRehaInternal extends JInternalFrame implements ActionListener, ComponentListener, KeyListener,
         MouseListener, MouseMotionListener, InternalFrameListener, AncestorListener {
     private static final long serialVersionUID = 1404891339833332337L;
-    public String titel;
+  //  public String titel;
     public JTextField tf = null;
     public boolean isActive;
     public JXPanel thisContent;
@@ -76,7 +76,6 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
         super();
         this.setBackground(Color.WHITE);
         this.setTitle(titel);
-        this.titel = titel;
         this.desktop = desktop;
         this.setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         this.getContentPane()
@@ -157,8 +156,7 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
     }
 
     public void setzeTitel(String titel) {
-        this.titel = titel;
-        this.setTitle(this.titel);
+        this.setTitle(titel);
         repaint();
     }
 
@@ -196,12 +194,12 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
     }
 
     public String getTitel() {
-        return this.titel;
+        return this.title;
     }
 
     @Override
     public void setTitle(String titel) {
-        this.titel = titel;
+        this.title = titel;
         this.repaint();
     }
 
@@ -396,7 +394,6 @@ public class JRehaInternal extends JInternalFrame implements ActionListener, Com
                 evt.setDetails(getName(), "#ICONIFIED");
                 evt.setRehaEvent("REHAINTERNAL");
                 RehaEventClass.fireRehaEvent(evt);
-                titel = getTitle();
                 setActive(false);
                 repaint();
                 return null;
