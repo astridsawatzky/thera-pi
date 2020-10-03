@@ -33,7 +33,7 @@ public class PatientDTO {
      String abwOrt="";
      String kasse;
      String kvNummer;
-     int kvStatus;
+     int kvStatus =-1;
      String vNummer;
      String klinik;
      String telefonp;
@@ -109,7 +109,17 @@ public class PatientDTO {
         patient.abwOrt = rs.getString("abwOrt");
         patient.kasse = rs.getString("kasse");
         patient.kvNummer = rs.getString("kv_Nummer");
-        patient.kvStatus = rs.getInt("kv_Status");
+
+        int kvStatus;
+        try {
+            kvStatus = rs.getInt("kv_Status");
+        } catch (SQLException e) {
+           kvStatus = -1;
+           logger.error("kvstatus on  patient with id :" + rs.getString("id"));
+        }
+
+
+        patient.kvStatus =   kvStatus;
         patient.vNummer = rs.getString("v_Nummer");
         patient.klinik = rs.getString("klinik");
         patient.telefonp = rs.getString("telefonp");
