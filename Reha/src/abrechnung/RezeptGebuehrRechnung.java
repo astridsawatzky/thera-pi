@@ -366,9 +366,9 @@ public class RezeptGebuehrRechnung extends JXDialog
                                                        .getTextTable("Tabelle-RGR");
                     int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
                     for (int position = 1; position <= anzpos; position++) {
-                        setCellText(textTable, position, "rglangtext");
-                        setCellText(textTable, position, "rganzahl");
-                        setCellText(textTable, position, "rggesamt");
+                        setCellText(textTable,0, position, "rglangtext");
+                        setCellText(textTable,1, position , "rganzahl");
+                        setCellText(textTable,2, position, "rggesamt");
 
                         textTable.addRow(1);
                     }
@@ -385,6 +385,10 @@ public class RezeptGebuehrRechnung extends JXDialog
                         .getXFrame()
                         .getContainerWindow()
                         .setVisible(true);
+            textDocument.getFrame()
+            .getXFrame()
+            .getContainerWindow()
+            .setFocus();
         } else {
             PrintProperties printprop = new PrintProperties(anzahlKopien());
             textDocument.getPrintService()
@@ -397,8 +401,8 @@ public class RezeptGebuehrRechnung extends JXDialog
 
     }
 
-    private void setCellText(ITextTable textTable, int position, String string) throws TextException {
-        textTable.getCell(0, position)
+    private void setCellText(ITextTable textTable, int column  , int position, String string) throws TextException {
+        textTable.getCell(column, position)
                  .getTextService()
                  .getText()
                  .setText(hmRezgeb.get("<"
