@@ -36,6 +36,7 @@ import com.sun.star.uno.UnoRuntime;
 
 import CommonTools.DatFunk;
 import CommonTools.JRtaTextField;
+import CommonTools.OOTools;
 import CommonTools.SqlInfo;
 import ag.ion.bion.officelayer.application.OfficeApplicationException;
 import ag.ion.bion.officelayer.document.DocumentDescriptor;
@@ -46,7 +47,7 @@ import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.noa.NOAException;
 import gui.Cursors;
 import hauptFenster.Reha;
-import oOorgTools.OOTools;
+import office.OOService;
 import rehaInternalFrame.JUmsaetzeInternal;
 import stammDatenTools.RezTools;
 import systemTools.ButtonTools;
@@ -499,18 +500,17 @@ public class Umsaetze extends JXPanel {
 
     private int testeKalenderUser() {
         int lang = KollegenListe.size();
-        Vector<Object> vec = new Vector<Object>();
         kalUsers.clear();
         kalUsers.trimToSize();
         for (int i = 0; i < lang; i++) {
             if (!KollegenListe.getMatchcode(i)
                                .trim()
                                .equals("./.")) {
-                vec.clear();
+                Vector<Object> vec = new Vector<Object>();
                 vec.add(KollegenListe.getMatchcode(i));
                 vec.add(KollegenListe.getDBZeile(i));
 
-                kalUsers.add((Vector<Object>) vec.clone());
+                kalUsers.add( vec);
             }
         }
         return kalUsers.size();
@@ -524,11 +524,10 @@ public class Umsaetze extends JXPanel {
         progress1.setMinimum(0);
         progress1.setMaximum(lang - 1);
         progress1.setValue(0);
-        Vector<Vector<String>> vec = new Vector<Vector<String>>();
         allDates.clear();
         allDates.trimToSize();
         for (int i = 0; i < lang; i++) {
-            vec.clear();
+            Vector<Vector<String>> vec = new Vector<Vector<String>>();
             aktion1.setText("Hole Daten von Kalenderbenutzer: " + kalUsers.get(i)
                                                                           .get(0));
             progress1.setValue(i);
@@ -537,7 +536,7 @@ public class Umsaetze extends JXPanel {
             vec = SqlInfo.holeFelder("select * from flexkc where datum >='" + datum_von + "' AND datum <='" + datum_bis
                     + "' AND " + "behandler ='" + (behandler < 10 ? "0" + Integer.toString(behandler) + "BEHANDLER'"
                             : Integer.toString(behandler) + "BEHANDLER'"));
-            allDates.add((Vector) vec.clone());
+            allDates.add( vec);
         }
         progress1.setValue(lang);
         aktion1.setText("einlesen der Datenbank abgeschlossen");
@@ -607,11 +606,6 @@ public class Umsaetze extends JXPanel {
                                             }
                                         }
                                         setCursor(Cursors.cdefault);
-                                        // aktion1.setText(" ");
-                                        // progress1.setValue(0);
-                                        //// System.out.println("Daten wurden gesammelt von "+allDates.size()+"
-                                        // Behandlern");
-                                        //// System.out.println("Anzahl Tage analysiert "+allDates.get(0).size());
                                         return null;
                                     }
 
@@ -661,10 +655,10 @@ public class Umsaetze extends JXPanel {
      *****************************/
     private void starteCalc() throws OfficeApplicationException, NOAException, NoSuchElementException,
             WrappedTargetException, UnknownPropertyException, PropertyVetoException, IllegalArgumentException {
-        if (!Reha.officeapplication.isActive()) {
+        if (!new OOService().getOfficeapplication().isActive()) {
             Reha.starteOfficeApplication();
         }
-        IDocumentService documentService = Reha.officeapplication.getDocumentService();
+        IDocumentService documentService = new OOService().getOfficeapplication().getDocumentService();
         IDocumentDescriptor docdescript = new DocumentDescriptor();
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);

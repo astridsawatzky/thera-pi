@@ -385,10 +385,7 @@ public class RezeptGebuehrRechnung extends JXDialog
                         .getXFrame()
                         .getContainerWindow()
                         .setVisible(true);
-            textDocument.getFrame()
-            .getXFrame()
-            .getContainerWindow()
-            .setFocus();
+
         } else {
             PrintProperties printprop = new PrintProperties(anzahlKopien());
             textDocument.getPrintService()
