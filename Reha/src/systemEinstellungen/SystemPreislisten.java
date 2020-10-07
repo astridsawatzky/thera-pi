@@ -46,7 +46,6 @@ public class SystemPreislisten {
     private static Vector<String> dummy = new Vector<String>();
     private static Vector<Integer> intdummy = new Vector<Integer>();
     private static Vector<Vector<String>> hbdummy = new Vector<Vector<String>>();
-    private static Vector<String> hbdummy_1 = new Vector<String>();
 
     private static Vector<Integer> modusdummy = new Vector<Integer>();
     private static Vector<Object> odummy = new Vector<Object>();
@@ -74,8 +73,7 @@ public class SystemPreislisten {
             fristeninilocal = INITool.openIni(Path.Instance.getProghome() + "ini" + File.separator + aktIK + File.separator, "fristen.ini");
             fristenini = fristeninilocal;
         } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.error("Problems retrieving Preisgruppen and/or Fristen");
+            logger.error("Problems retrieving Preisgruppen and/or Fristen", ex);
         }
 
         ladepreise(disziplin, fristeninilocal, inif, tarife);
@@ -312,16 +310,17 @@ public class SystemPreislisten {
     }
 
     public static void getHBRegeln(Settings f, String disziplin, int tarife) {
+
         for (int i = 0; i < tarife; i++) {
+            Vector<String> hbdummy_1 = new Vector<String>();
             hbdummy_1.clear();
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBPosVoll" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBPosMit" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBKilometer" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBPauschal" + (i + 1)));
             hbdummy_1.add(f.getStringProperty("HBRegeln_" + disziplin, "HBHeimMitZuZahl" + (i + 1)));
-            hbdummy.add((Vector<String>) hbdummy_1.clone());
+            hbdummy.add( hbdummy_1);
         }
-        hbdummy_1.clear();
     }
 
     public static void getNeuePreiseRegeln(Settings f, String disziplin, int tarife) {
@@ -358,7 +357,6 @@ public class SystemPreislisten {
         dummy.clear();
         intdummy.clear();
         hbdummy.clear();
-        hbdummy_1.clear();
         hmFristen.clear();
         odummy.clear();
 
@@ -374,7 +372,6 @@ public class SystemPreislisten {
         dummy.trimToSize();
         intdummy.trimToSize();
         hbdummy.trimToSize();
-        hbdummy_1.trimToSize();
 
     }
 

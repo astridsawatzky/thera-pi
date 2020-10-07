@@ -39,6 +39,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -987,9 +988,8 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
     }
 
     public void aktualisiereVector(String rid) {
-        String[] strg = {};
         Reha.instance.patpanel.vecaktrez = (SqlInfo.holeSatz("verordn", " * ", "id = '" + rid + "'",
-                Arrays.asList(strg)));
+                Arrays.asList(new String[] {})));
         setRezeptDaten();
     }
 
@@ -2473,6 +2473,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             Point pt = aktrbut[3].getLocationOnScreen();
             pt.x = pt.x - 75;
             pt.y = pt.y + 30;
+
             AbrechnungPrivat abrechnungPrivat = new AbrechnungPrivat(Reha.getThisFrame(),
                     "Privat-/BG-/Nachsorge-Rechnung erstellen", -1, preisgruppe);
             abrechnungPrivat.setLocation(pt);
