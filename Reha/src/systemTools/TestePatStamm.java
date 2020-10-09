@@ -19,10 +19,6 @@ public class TestePatStamm {
         }
         if (!(Reha.instance.patpanel.patDaten == null)) {
             if (Reha.instance.patpanel.patDaten.size() > 0) {
-                //// System.out.println("gr��e der PatDaten =
-                //// "+PatGrundPanel.thisClass.patDaten.size());
-                //// System.out.println("gr��e der PatDaten =
-                //// "+PatGrundPanel.thisClass.patDaten);
                 return Reha.instance.patpanel.patDaten.get(67);
             }
         } else {

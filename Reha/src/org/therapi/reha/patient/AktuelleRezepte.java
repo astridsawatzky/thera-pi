@@ -2478,10 +2478,10 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             abrechnungPrivat.setModal(true);
             abrechnungPrivat.setVisible(true);
             int rueckgabe = abrechnungPrivat.rueckgabe;
-            abrechnungPrivat = null;
             if (rueckgabe == AbrechnungPrivat.KORREKTUR) {
                 neuanlageRezept(false, "", "");
             }
+            abrechnungPrivat = null;
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Funktion privatRechnung(), Exception = " + ex.getMessage());
             ex.printStackTrace();

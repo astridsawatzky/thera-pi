@@ -176,23 +176,23 @@ public class AbrechnungPrivat extends JXDialog  {
         this.preisgruppe = preisgruppe;
         setUndecorated(true);
         setName("Privatrechnung");
-        this.jtp = new JXTitledPanel();
-        this.jtp.setName("Privatrechnung");
-        this.mymouse = new DragWin(this);
-        this.jtp.addMouseListener(mymouse);
-        this.jtp.addMouseMotionListener(mymouse);
-        this.jtp.setContentContainer(getContent());
-        this.jtp.setTitleForeground(Color.WHITE);
-        this.jtp.setTitle(titel);
-        this.pinPanel = new PinPanel();
-        this.pinPanel.getGruen()
-                     .setVisible(false);
-        this.pinPanel.setName("Privatrechnung");
-        this.jtp.setRightDecoration(this.pinPanel);
+        jtp = new JXTitledPanel();
+        jtp.setName("Privatrechnung");
+        mymouse = new DragWin(this);
+        jtp.addMouseListener(mymouse);
+        jtp.addMouseMotionListener(mymouse);
+        jtp.setContentContainer(getContent());
+        jtp.setTitleForeground(Color.WHITE);
+        jtp.setTitle(titel);
+        pinPanel = new PinPanel();
+        pinPanel.getGruen()
+                .setVisible(false);
+        pinPanel.setName("Privatrechnung");
+        jtp.setRightDecoration(this.pinPanel);
         setContentPane(jtp);
         setResizable(false);
-        this.rtp = new RehaTPEventClass();
-        this.rtp.addRehaTPEventListener((e)->FensterSchliessen());
+        rtp = new RehaTPEventClass();
+        rtp.addRehaTPEventListener((e)->FensterSchliessen());
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
