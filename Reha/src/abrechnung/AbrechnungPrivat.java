@@ -4,13 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -71,7 +67,14 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
 public class AbrechnungPrivat extends JXDialog
-        implements FocusListener, ActionListener, MouseListener, KeyListener, RehaTPEventListener, ChangeListener {
+        implements  ActionListener,  KeyListener, RehaTPEventListener, ChangeListener {
+    
+    public static final int OK = 0;
+    public static final int ABBRECHEN = -1;
+    public static final int KORREKTUR = -2;
+
+    public int rueckgabe;
+
     private final String rezeptNummer;
 
     private static final long serialVersionUID = 1036517682792665034L;
@@ -81,10 +84,8 @@ public class AbrechnungPrivat extends JXDialog
     private PinPanel pinPanel;
     private JXPanel content;
     private RehaTPEventClass rtp;
-    public int rueckgabe;
     private int preisgruppe;
     private JRtaComboBox jcmb;
- //   private JRtaRadioButton[] jrb = { null, null };
     private JLabel[] labs = { null, null, null, null, null, null, null };
     private JLabel adr1;
     private JLabel adr2;
@@ -242,6 +243,9 @@ public class AbrechnungPrivat extends JXDialog
         pan.add(kostentraegerBtn, cc.xy(3, 12));
         bg.add(privatRechnungBtn);
         bg.add(kostentraegerBtn);
+
+
+
         if (preisgruppe == 4) {
             kostentraegerBtn.setSelected(true);
             regleBGE();
@@ -472,8 +476,8 @@ public class AbrechnungPrivat extends JXDialog
 
         String plz = "";
         String ort = "";
-        int hbpos = -1;
-        int wgpos = -1;
+        int hbpos = ABBRECHEN;
+        int wgpos = ABBRECHEN;
         int diff = originalPos.size() - originalId.size();
         if (diff == 2 && !preisanwenden[2]) {
             hbpos = originalId.size() + 1;
@@ -1268,8 +1272,8 @@ public class AbrechnungPrivat extends JXDialog
 
         /* Hausbesuch voll abrechnen */
         int hbanzahl = Integer.parseInt(vecaktrez.get(64));
-        int althb = -1;
-        int neuhb = -1;
+        int althb = ABBRECHEN;
+        int neuhb = ABBRECHEN;
         String preisAlt = "";
         String preisNeu = "";
 
@@ -1396,13 +1400,7 @@ public class AbrechnungPrivat extends JXDialog
     private void doKorrektur() {
     }
 
-    @Override
-    public void focusGained(FocusEvent arg0) {
-    }
 
-    @Override
-    public void focusLost(FocusEvent arg0) {
-    }
 
     private void regleBGE() {
         holeBGE();
@@ -1439,56 +1437,37 @@ public class AbrechnungPrivat extends JXDialog
             return;
         }
         if ("korrektur".equals(cmd)) {
-            this.rueckgabe = -2;
+            this.rueckgabe = KORREKTUR;
             // doKorrektur();
             FensterSchliessen("dieses");
             return;
         }
         if ("abbrechen".equals(cmd)) {
-            this.rueckgabe = -1;
+            this.rueckgabe = ABBRECHEN;
             FensterSchliessen("dieses");
         }
         if ("ok".equals(cmd)) {
-            this.rueckgabe = 0;
+            this.rueckgabe = OK;
             doRgRechnungPrepare();
         }
     }
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-    }
 
     @Override
     public void keyPressed(KeyEvent arg0) {
         if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            this.rueckgabe = -1;
+            this.rueckgabe = ABBRECHEN;
             FensterSchliessen("dieses");
             return;
         }
         if (arg0.getKeyCode() == KeyEvent.VK_ENTER && (JComponent) arg0.getSource() instanceof JButton) {
             if ("abbrechen".equals(((JComponent) arg0.getSource()).getName())) {
-                this.rueckgabe = -1;
+                this.rueckgabe = ABBRECHEN;
                 FensterSchliessen("dieses");
             } else if ("korrektur".equals(((JComponent) arg0.getSource()).getName())) {
                 doKorrektur();
             } else if ("ok".equals(((JComponent) arg0.getSource()).getName())) {
-                this.rueckgabe = 0;
+                this.rueckgabe = OK;
                 doRgRechnungPrepare();
             }
         }

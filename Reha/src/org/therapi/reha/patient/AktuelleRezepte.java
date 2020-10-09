@@ -39,7 +39,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
-import org.jdesktop.swingx.JXFrame;
 import org.jdesktop.swingx.JXPanel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -2224,7 +2223,6 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             /*********************/
             /********************************************************************************/
             dtblm.setValueAt(Reha.instance.patpanel.imgrezstatus[1], currow, 5); // Icon Rezepstatus -> abgeschlossen
-            doAbschliessen();
             String xcmd = "update verordn set abschluss='T' where id='" + Reha.instance.patpanel.vecaktrez.get(35)
                     + "' LIMIT 1";
             SqlInfo.sqlAusfuehren(xcmd);
@@ -2254,7 +2252,6 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             }
             // bereits abgeschlossen muß geöffnet werden
             dtblm.setValueAt(Reha.instance.patpanel.imgrezstatus[0], currow, 5);
-            doAufschliessen();
             String xcmd = "update verordn set abschluss='F' where id='" + Reha.instance.patpanel.vecaktrez.get(35)
                     + "' LIMIT 1";
             Reha.instance.patpanel.vecaktrez.set(62, "F");
@@ -2482,21 +2479,13 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
             abrechnungPrivat.setVisible(true);
             int rueckgabe = abrechnungPrivat.rueckgabe;
             abrechnungPrivat = null;
-            if (rueckgabe == -2) {
+            if (rueckgabe == AbrechnungPrivat.KORREKTUR) {
                 neuanlageRezept(false, "", "");
             }
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Funktion privatRechnung(), Exception = " + ex.getMessage());
             ex.printStackTrace();
         }
-
-    }
-
-    private void doAbschliessen() {
-
-    }
-
-    private void doAufschliessen() {
 
     }
 
