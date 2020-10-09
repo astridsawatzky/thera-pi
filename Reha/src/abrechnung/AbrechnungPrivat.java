@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
@@ -55,9 +56,7 @@ import dialoge.PinPanel;
 import environment.Path;
 import events.PatStammEvent;
 import events.PatStammEventClass;
-import events.RehaTPEvent;
 import events.RehaTPEventClass;
-import events.RehaTPEventListener;
 import hauptFenster.Reha;
 import jxTableTools.TableTool;
 import oOorgTools.OOTools;
@@ -66,9 +65,7 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
-public class AbrechnungPrivat extends JXDialog
-        implements  ActionListener,  KeyListener, RehaTPEventListener, ChangeListener {
-    
+public class AbrechnungPrivat extends JXDialog  {
     public static final int OK = 0;
     public static final int ABBRECHEN = -1;
     public static final int KORREKTUR = -2;
@@ -195,7 +192,7 @@ public class AbrechnungPrivat extends JXDialog
         setContentPane(jtp);
         setResizable(false);
         this.rtp = new RehaTPEventClass();
-        this.rtp.addRehaTPEventListener(this);
+        this.rtp.addRehaTPEventListener((e)->FensterSchliessen());
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -203,7 +200,7 @@ public class AbrechnungPrivat extends JXDialog
         content = new JXPanel(new BorderLayout());
         content.add(getFields(), BorderLayout.CENTER);
         content.add(getButtons(), BorderLayout.SOUTH);
-        content.addKeyListener(this);
+        content.addKeyListener(kl);
         return content;
     }
 
@@ -233,18 +230,16 @@ public class AbrechnungPrivat extends JXDialog
         jcmb.setSelectedIndex(this.preisgruppe - 1);
         this.aktGruppe = this.preisgruppe - 1;
         jcmb.setActionCommand("neuertarif");
-        jcmb.addActionListener(this);
+        jcmb.addActionListener(al);
         pan.add(jcmb, cc.xy(3, 8));
         privatRechnungBtn = new JRtaRadioButton("Formular für Privatrechnung verwenden");
-        privatRechnungBtn.addChangeListener(this);
+        privatRechnungBtn.addChangeListener(cl);
         pan.add(privatRechnungBtn, cc.xy(3, 10));
-        JRtaRadioButton kostentraegerBtn =  new JRtaRadioButton("Formular für Kostenträger Rechnung verwenden");
-        kostentraegerBtn.addChangeListener(this);
+        JRtaRadioButton kostentraegerBtn = new JRtaRadioButton("Formular für Kostenträger Rechnung verwenden");
+        kostentraegerBtn.addChangeListener(cl);
         pan.add(kostentraegerBtn, cc.xy(3, 12));
         bg.add(privatRechnungBtn);
         bg.add(kostentraegerBtn);
-
-
 
         if (preisgruppe == 4) {
             kostentraegerBtn.setSelected(true);
@@ -309,15 +304,15 @@ public class AbrechnungPrivat extends JXDialog
 
         JButton okBtn = macheBut("Ok", "ok");
         pan.add(okBtn, cc.xy(3, 3));
-        okBtn.addKeyListener(this);
+        okBtn.addKeyListener(kl);
 
         JButton korrekturBtn = macheBut("Korrektur", "korrektur");
         pan.add(korrekturBtn, cc.xy(5, 3));
-        korrekturBtn.addKeyListener(this);
+        korrekturBtn.addKeyListener(kl);
 
         JButton abbrechnenBtn = macheBut("abbrechen", "abbrechen");
         pan.add(abbrechnenBtn, cc.xy(7, 3));
-        abbrechnenBtn.addKeyListener(this);
+        abbrechnenBtn.addKeyListener(kl);
 
         return pan;
     }
@@ -326,7 +321,7 @@ public class AbrechnungPrivat extends JXDialog
         JButton but = new JButton(titel);
         but.setName(cmd);
         but.setActionCommand(cmd);
-        but.addActionListener(this);
+        but.addActionListener(al);
         return but;
     }
 
@@ -338,7 +333,7 @@ public class AbrechnungPrivat extends JXDialog
             doBGE();
         }
         posteAktualisierung(patDaten.get(29));
-        FensterSchliessen("dieses");
+        FensterSchliessen();
     }
 
     private void posteAktualisierung(String patid) {
@@ -1252,18 +1247,6 @@ public class AbrechnungPrivat extends JXDialog
                 }
             }
         }
-        /*
-         * if(hausBesuch){ analysiereHausbesuch(); }
-         *
-         * for(int i = 0; i < originalAnzahl.size();i++){ BigDecimal zeilengesamt =
-         * BigDecimal.valueOf(einzelPreis.get(i)).multiply(BigDecimal.valueOf(Double.
-         * valueOf(Integer.toString(originalAnzahl.get(i)))));
-         * zeilenGesamt.add(BigDecimal.valueOf(zeilengesamt.doubleValue()));
-         * rechnungGesamt =
-         * rechnungGesamt.add(BigDecimal.valueOf(zeilengesamt.doubleValue())); } try{
-         * labs[6].setText("Rezeptwert = "+dcf.format(rechnungGesamt.doubleValue())
-         * +" EUR"); }catch(Exception ex){ ex.printStackTrace(); }
-         */
     }
 
     private void analysiereHausbesuchMitSplitting() {
@@ -1272,8 +1255,8 @@ public class AbrechnungPrivat extends JXDialog
 
         /* Hausbesuch voll abrechnen */
         int hbanzahl = Integer.parseInt(vecaktrez.get(64));
-        int althb = ABBRECHEN;
-        int neuhb = ABBRECHEN;
+        int althb = -1;
+        int neuhb = -1;
         String preisAlt = "";
         String preisNeu = "";
 
@@ -1394,13 +1377,10 @@ public class AbrechnungPrivat extends JXDialog
                 }
             }
         }
-        /* Ende Originalroutine */
     }
 
     private void doKorrektur() {
     }
-
-
 
     private void regleBGE() {
         holeBGE();
@@ -1408,7 +1388,6 @@ public class AbrechnungPrivat extends JXDialog
                                         .trim()) ? " " : hmAdresse.get("<pri1>"));
         adr2.setText("".equals(hmAdresse.get("<pri2>")
                                         .trim()) ? " " : hmAdresse.get("<pri2>"));
-        // adr1.getParent().validate();
     }
 
     private void reglePrivat() {
@@ -1417,8 +1396,9 @@ public class AbrechnungPrivat extends JXDialog
                                         .trim()) ? " " : hmAdresse.get("<pri1>"));
         adr2.setText("".equals(hmAdresse.get("<pri2>")
                                         .trim()) ? " " : hmAdresse.get("<pri2>"));
-        // adr1.getParent().validate();
     }
+
+    ActionListener al = new ActionListener() {
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
@@ -1432,85 +1412,86 @@ public class AbrechnungPrivat extends JXDialog
             return;
         }
         if ("neuertarif".equals(cmd)) {
-            this.aktGruppe = jcmb.getSelectedIndex();
+            aktGruppe = jcmb.getSelectedIndex();
             doNeuerTarif();
             return;
         }
         if ("korrektur".equals(cmd)) {
-            this.rueckgabe = KORREKTUR;
+            rueckgabe = KORREKTUR;
             // doKorrektur();
-            FensterSchliessen("dieses");
+            FensterSchliessen();
             return;
         }
         if ("abbrechen".equals(cmd)) {
-            this.rueckgabe = ABBRECHEN;
-            FensterSchliessen("dieses");
+            rueckgabe = ABBRECHEN;
+            FensterSchliessen();
         }
         if ("ok".equals(cmd)) {
-            this.rueckgabe = OK;
+            rueckgabe = OK;
             doRgRechnungPrepare();
         }
-    }
+    }};
 
+    KeyListener kl = new KeyAdapter() {
 
-    @Override
-    public void keyPressed(KeyEvent arg0) {
-        if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            this.rueckgabe = ABBRECHEN;
-            FensterSchliessen("dieses");
-            return;
-        }
-        if (arg0.getKeyCode() == KeyEvent.VK_ENTER && (JComponent) arg0.getSource() instanceof JButton) {
-            if ("abbrechen".equals(((JComponent) arg0.getSource()).getName())) {
-                this.rueckgabe = ABBRECHEN;
-                FensterSchliessen("dieses");
-            } else if ("korrektur".equals(((JComponent) arg0.getSource()).getName())) {
-                doKorrektur();
-            } else if ("ok".equals(((JComponent) arg0.getSource()).getName())) {
-                this.rueckgabe = OK;
-                doRgRechnungPrepare();
+        @Override
+        public void keyPressed(KeyEvent arg0) {
+            if (arg0.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                rueckgabe = ABBRECHEN;
+                FensterSchliessen();
+                return;
+            }
+            if (arg0.getKeyCode() == KeyEvent.VK_ENTER && (JComponent) arg0.getSource() instanceof JButton) {
+                if ("abbrechen".equals(((JComponent) arg0.getSource()).getName())) {
+                    rueckgabe = ABBRECHEN;
+                    FensterSchliessen();
+                } else if ("korrektur".equals(((JComponent) arg0.getSource()).getName())) {
+                    doKorrektur();
+                } else if ("ok".equals(((JComponent) arg0.getSource()).getName())) {
+                    rueckgabe = OK;
+                    doRgRechnungPrepare();
+                }
             }
         }
-    }
 
-    @Override
-    public void keyReleased(KeyEvent arg0) {
-    }
+        @Override
+        public void keyReleased(KeyEvent arg0) {
+        }
 
-    @Override
-    public void keyTyped(KeyEvent arg0) {
-    }
+        @Override
+        public void keyTyped(KeyEvent arg0) {
+        }
+    };
 
-    @Override
-    public void rehaTPEventOccurred(RehaTPEvent evt) {
-        FensterSchliessen("dieses");
-    }
+//    @Override
+//    public void rehaTPEventOccurred(RehaTPEvent evt) {
+//        FensterSchliessen();
+//    }
 
-    private void FensterSchliessen(String welches) {
-        this.jtp.removeMouseListener(this.mymouse);
-        this.jtp.removeMouseMotionListener(this.mymouse);
-        this.jcmb.removeActionListener(this);
-        this.content.removeKeyListener(this);
-        this.originalPos.clear();
-        this.originalPos = null;
-        this.originalAnzahl.clear();
-        this.originalAnzahl = null;
-        this.einzelPreis.clear();
-        this.einzelPreis = null;
-        this.originalId.clear();
-        this.originalId = null;
-        this.originalLangtext.clear();
-        this.originalLangtext = null;
-        this.zeilenGesamt.clear();
-        this.zeilenGesamt = null;
-        this.rechnungGesamt = null;
-        this.hmAdresse.clear();
-        this.hmAdresse = null;
+    private void FensterSchliessen() {
+        jtp.removeMouseMotionListener(mymouse);
+        jcmb.removeActionListener(al);
+        content.removeKeyListener(kl);
+        originalPos.clear();
+        jtp.removeMouseListener(mymouse);
+        originalPos = null;
+        originalAnzahl.clear();
+        originalAnzahl = null;
+        einzelPreis.clear();
+        einzelPreis = null;
+        originalId.clear();
+        originalId = null;
+        originalLangtext.clear();
+        originalLangtext = null;
+        zeilenGesamt.clear();
+        zeilenGesamt = null;
+        rechnungGesamt = null;
+        hmAdresse.clear();
+        hmAdresse = null;
 
-        this.mymouse = null;
-        if (this.rtp != null) {
-            this.rtp.removeRehaTPEventListener(this);
-            this.rtp = null;
+        mymouse = null;
+        if (rtp != null) {
+            rtp = null;
         }
         this.pinPanel = null;
         setVisible(false);
@@ -1612,7 +1593,6 @@ public class AbrechnungPrivat extends JXDialog
     }
 
     private void startePositionen() throws TextException {
-
         aktuellePosition++;
         for (int i = 0; i < originalAnzahl.size(); i++) {
             textTable.getCell(0, aktuellePosition)
@@ -1656,16 +1636,18 @@ public class AbrechnungPrivat extends JXDialog
                 exemplare = Integer.parseInt(hmAbrechnung.get("hmbgeexemplare"));
             }
             OOTools.printAndClose(textDocument, exemplare);
-
         }
     }
 
-    @Override
-    public void stateChanged(ChangeEvent arg0) {
-        if (privatRechnungBtn.isSelected()) {
-            reglePrivat();
-        } else {
-            regleBGE();
+    ChangeListener cl = new ChangeListener() {
+
+        @Override
+        public void stateChanged(ChangeEvent arg0) {
+            if (privatRechnungBtn.isSelected()) {
+                reglePrivat();
+            } else {
+                regleBGE();
+            }
         }
-    }
+    };
 }
