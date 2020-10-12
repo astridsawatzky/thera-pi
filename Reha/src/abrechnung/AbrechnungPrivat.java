@@ -10,6 +10,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -65,7 +66,7 @@ import stammDatenTools.RezTools;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 
-public class AbrechnungPrivat extends JXDialog  {
+public class AbrechnungPrivat extends JXDialog {
     public static final int OK = 0;
     public static final int ABBRECHEN = -1;
     public static final int KORREKTUR = -2;
@@ -192,7 +193,7 @@ public class AbrechnungPrivat extends JXDialog  {
         setContentPane(jtp);
         setResizable(false);
         rtp = new RehaTPEventClass();
-        rtp.addRehaTPEventListener((e)->FensterSchliessen());
+        rtp.addRehaTPEventListener((e) -> FensterSchliessen());
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
@@ -673,15 +674,18 @@ public class AbrechnungPrivat extends JXDialog  {
     }
 
     private void doUebertrag() {
-//        String rez_nr = String.valueOf(rezeptNummer);
-//        SqlInfo.transferRowToAnotherDB("verordn", "lza", "rez_nr", rez_nr, true, Arrays.asList(new String[] { "id" }));
-//        if ("T".equals(vecaktrez.get(62)
-//                                                       .trim())) {
-//            SqlInfo.sqlAusfuehren("delete from fertige where rez_nr='" + rez_nr + "' LIMIT 1");
-//        }
-//        SqlInfo.sqlAusfuehren("delete from verordn where rez_nr='" + rez_nr + "'");
-//        Reha.instance.patpanel.historie.holeRezepte(patDaten.get(29), "");
-//        SqlInfo.sqlAusfuehren("delete from volle where rez_nr='" + rez_nr + "'");
+        String rez_nr = String.valueOf(rezeptNummer);
+        boolean wasSuccessfullyMoved = SqlInfo.transferRowToAnotherDB("verordn", "lza", "rez_nr", rez_nr, true,
+                Arrays.asList(new String[] { "id" }));
+        if (wasSuccessfullyMoved) {
+            if ("T".equals(vecaktrez.get(62)
+                                    .trim())) {
+                SqlInfo.sqlAusfuehren("delete from fertige where rez_nr='" + rez_nr + "' LIMIT 1");
+            }
+            SqlInfo.sqlAusfuehren("delete from verordn where rez_nr='" + rez_nr + "'");
+            Reha.instance.patpanel.historie.holeRezepte(patDaten.get(29), "");
+            SqlInfo.sqlAusfuehren("delete from volle where rez_nr='" + rez_nr + "'");
+        }
     }
 
     private void doTabelle() {
@@ -1400,37 +1404,38 @@ public class AbrechnungPrivat extends JXDialog  {
 
     ActionListener al = new ActionListener() {
 
-    @Override
-    public void actionPerformed(ActionEvent arg0) {
-        String cmd = arg0.getActionCommand();
-        if ("privatadresse".equals(cmd)) {
-            reglePrivat();
-            return;
+        @Override
+        public void actionPerformed(ActionEvent arg0) {
+            String cmd = arg0.getActionCommand();
+            if ("privatadresse".equals(cmd)) {
+                reglePrivat();
+                return;
+            }
+            if ("kassendresse".equals(cmd)) {
+                regleBGE();
+                return;
+            }
+            if ("neuertarif".equals(cmd)) {
+                aktGruppe = jcmb.getSelectedIndex();
+                doNeuerTarif();
+                return;
+            }
+            if ("korrektur".equals(cmd)) {
+                rueckgabe = KORREKTUR;
+                // doKorrektur();
+                FensterSchliessen();
+                return;
+            }
+            if ("abbrechen".equals(cmd)) {
+                rueckgabe = ABBRECHEN;
+                FensterSchliessen();
+            }
+            if ("ok".equals(cmd)) {
+                rueckgabe = OK;
+                doRgRechnungPrepare();
+            }
         }
-        if ("kassendresse".equals(cmd)) {
-            regleBGE();
-            return;
-        }
-        if ("neuertarif".equals(cmd)) {
-            aktGruppe = jcmb.getSelectedIndex();
-            doNeuerTarif();
-            return;
-        }
-        if ("korrektur".equals(cmd)) {
-            rueckgabe = KORREKTUR;
-            // doKorrektur();
-            FensterSchliessen();
-            return;
-        }
-        if ("abbrechen".equals(cmd)) {
-            rueckgabe = ABBRECHEN;
-            FensterSchliessen();
-        }
-        if ("ok".equals(cmd)) {
-            rueckgabe = OK;
-            doRgRechnungPrepare();
-        }
-    }};
+    };
 
     KeyListener kl = new KeyAdapter() {
 
