@@ -41,7 +41,7 @@ public class AbrechnungPrivatTest {
         new OOService().start(libPath, ooPath);
         AktuelleRezepte.tabaktrez = new JXTable();
         Data data = new Data(2, "1728", "ER1516", "260", "T");
-        data = HM0000;
+    //   data = HM0000;
 
         Vector<String> rezeptVector = (SqlInfo.holeSatz("verordn", " * ", "id = '" + data.rezeptDBId + "'",
                 Arrays.asList(new String[] {})));
@@ -62,7 +62,12 @@ public class AbrechnungPrivatTest {
 
         AbrechnungPrivat rg = new AbrechnungPrivat(frame, "privateabrechnung", rueckgabeIN, data.preisgruppe,
                 (JComponent) frame.getGlassPane(), data.rezeptNummer, preisliste, data.hatAbweichendeAdresse,
-                data.patDBId, rezeptVector, patientenDatenVector, "123456789", "HMRechnungPrivat.ott", hmAbrechnung);
+                data.patDBId, rezeptVector, patientenDatenVector, "123456789", "HMRechnungPrivat.ott", hmAbrechnung) {
+        protected void doUebertrag() {};
+
+        }
+
+                ;
 
         rg.setLocationRelativeTo(null);
         rg.pack();

@@ -1,6 +1,5 @@
 package stammDatenTools;
 
-import java.awt.HeadlessException;
 import java.awt.Point;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -25,6 +24,7 @@ import commonData.Rezeptvector;
 import core.Disziplin;
 import environment.Path;
 import hauptFenster.Reha;
+import rezept.RezeptDto;
 import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import terminKalender.BestaetigungsDaten;
@@ -232,12 +232,7 @@ public class RezTools {
                 ex.printStackTrace();
             }
         }
-        /*
-         * System.out.println("*************************************************");
-         * System.out.println(positionen); System.out.println(anzahl);
-         * System.out.println(vorrangig); System.out.println(einzelerlaubt);
-         * System.out.println("*************************************************");
-         */
+
         xvec.add((ArrayList<?>) positionen.clone());
         xvec.add((ArrayList<?>) anzahl.clone());
         xvec.add((ArrayList<?>) vorrangig.clone());
@@ -263,8 +258,9 @@ public class RezTools {
         final int VORRANGIG = 0, EXTRAOK = 1;
         boolean[] bret = { false, false };
         try {
-            Vector<String> vec = SqlInfo.holeFelder("select vorrangig,extraok from kuerzel where kuerzel='"
-                    + kuerzel + "' and disziplin ='" + rezClass + "' LIMIT 1").get(0);
+            Vector<String> vec = SqlInfo.holeFelder("select vorrangig,extraok from kuerzel where kuerzel='" + kuerzel
+                    + "' and disziplin ='" + rezClass + "' LIMIT 1")
+                                        .get(0);
             if (vec.size() <= 0) {
                 String msg = "Achtung!\n\n" + "Ihre Kürzelzuordnung in den Preislisten ist nicht korrekt!!!!!\n"
                         + "Kürzel: " + kuerzel + "\n" + "Disziplin: " + diszis.getDisziKurzFromRK(rezClass) + "\n\n"
@@ -273,11 +269,11 @@ public class RezTools {
                 return null;
             }
             bret[0] = vec.get(VORRANGIG)
-                    .equals("T");
+                         .equals("T");
             bret[1] = vec.get(EXTRAOK)
-                    .equals("T");
+                         .equals("T");
         } catch (Exception e) {
-            logger.error("could not retrieve is vorrangig for " + kuerzel +  " " + rezClass , e);
+            logger.error("could not retrieve is vorrangig for " + kuerzel + " " + rezClass, e);
         }
         return bret;
     }
@@ -337,7 +333,6 @@ public class RezTools {
     public static String holeErstenTermin(String xreznr, String termine) {
         try {
             Vector<String> xvec = null;
-            Vector<String> retvec = new Vector<String>();
             String terms = null;
             if (termine.equals("")) {
                 xvec = SqlInfo.holeSatz("verordn", "termine,pat_intern", "rez_nr='" + xreznr + "'",
@@ -368,7 +363,6 @@ public class RezTools {
     public static String holeLetztenTermin(String xreznr, String termine) {
         try {
             Vector<String> xvec = null;
-            Vector<String> retvec = new Vector<String>();
             String terms = null;
             if (termine.equals("")) {
                 xvec = SqlInfo.holeSatz("verordn", "termine,pat_intern", "rez_nr='" + xreznr + "'",
@@ -398,6 +392,8 @@ public class RezTools {
     }
 
     public static Vector<String> holeEinzelTermineAusRezept(String xreznr, String termine) {
+
+        RezeptDto dto = new RezeptDto(Reha.getMandant().ik());
         Vector<String> xvec = null;
         Vector<String> retvec = new Vector<String>();
         String terms = null;
@@ -504,7 +500,7 @@ public class RezTools {
         }
 
         if (vector == null) {
-            System.out.println("baeh");  // Boo! If inner Vector was NULL, it can still be wrapped & outer Vec != NULL
+            System.out.println("baeh"); // Boo! If inner Vector was NULL, it can still be wrapped & outer Vec != NULL
         }
         Vector<Vector<String>> preisvec = vector.get(Integer.parseInt(preisgruppe) - 1);
         String pos = RezTools.getPosFromID(id, preisgruppe, preisvec);
@@ -596,12 +592,15 @@ public class RezTools {
     /********************************************************************************/
 
     public static String getLangtextFromID(String id, String preisgruppe, Vector<Vector<String>> vec) {
-        int lang = vec.size(), i;
+        String ret = "kein Lantext vorhanden";
+        int lang = vec.size();
+        if (lang == 0 || vec.get(0) == null) {
+            return ret;
+        }
         int idpos = vec.get(0)
                        .size()
                 - 1;
-        String ret = "kein Lantext vorhanden";
-        for (i = 0; i < lang; i++) {
+        for (int i = 0; i < lang; i++) {
             if (vec.get(i)
                    .get(idpos)
                    .equals(id)) {
@@ -1325,7 +1324,8 @@ public class RezTools {
 
                 String id = Reha.instance.patpanel.vecaktrez.get(8 + i);
                 SystemConfig.hmAdrRDaten.put("<Rlangtext" + (i + 1) + ">",
-                		RezTools.getLangtextFromID(id, "", SystemPreislisten.hmPreise.get(xdiszi).get(xpreisgr)));
+                        RezTools.getLangtextFromID(id, "", SystemPreislisten.hmPreise.get(xdiszi)
+                                                                                     .get(xpreisgr)));
 
                 SystemConfig.hmAdrRDaten.put("<Rpreis" + (i + 1) + ">", dfx.format(preise[i]));
 
@@ -1719,11 +1719,10 @@ public class RezTools {
     }
 
     public static String getDisziplinFromRezNr(String reznr) {
-        String diszi = reznr.substring(0,2);
+        String diszi = reznr.substring(0, 2);
         return Disziplin.valueOf(diszi).medium;
 
     }
-
 
     public static Object[] ermittleHBwert(Vector<String> vec) {
         Object[] retobj = { null, null, null };
@@ -1830,7 +1829,7 @@ public class RezTools {
         }
 
         String disziplin = getDisziplinFromRezNr(vec.get(0)
-                                                   .get(1));
+                                                    .get(1));
         String pos = "";
         String preis = "";
         String pospauschale = "";
@@ -2366,7 +2365,8 @@ public class RezTools {
                 if (!kmgeld.equals("")) {// Wenn Kilometer abgerechnet werden k�nnen
                     // System.out.println("Es könnten Kilometer abgerechnet werden");
                     if (kmBesserAlsPauschale(kmpausch, kmgeld, Double.parseDouble(Integer.toString(zm.km)),
-                            zm.preisgruppe, RezTools.getDisziplinFromRezNr(SystemConfig.hmAdrRDaten.get("<Rnummer>")))) {
+                            zm.preisgruppe,
+                            RezTools.getDisziplinFromRezNr(SystemConfig.hmAdrRDaten.get("<Rnummer>")))) {
                         // Kilometerabrechnung besser als Pauschale
                         preis = PreisUeberPosition(kmgeld, zm.preisgruppe, SystemConfig.hmAdrRDaten.get("<Rnummer>")
                                                                                                    .substring(0, 2),

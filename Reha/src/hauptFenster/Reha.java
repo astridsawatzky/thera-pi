@@ -283,6 +283,10 @@ public class Reha implements RehaEventListener {
 
     private final static Mandant nullMandant = new Mandant("000000000", "Übungs-Mandant");
     private Mandant mandant;
+    public Mandant getMandant() {
+        return mandant;
+    }
+
     private static String aktIK = nullMandant.ikDigitString();
     private static String aktMandant = nullMandant.name();
 
@@ -330,7 +334,7 @@ public class Reha implements RehaEventListener {
             mainMandant = new Mandant(inif.getStringProperty("TheraPiMandanten", "MAND-IK" + DefaultMandant),
                     inif.getStringProperty("TheraPiMandanten", "MAND-NAME" + DefaultMandant));
         }
-       
+
         new Reha(mainMandant).startWithMandantSet();
 
     }

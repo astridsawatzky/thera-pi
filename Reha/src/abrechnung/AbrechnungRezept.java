@@ -2867,7 +2867,6 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
             }
             buchen = false;
         }
-        Map<String,String> hmRezgeb = new HashMap<>();
         int rueckgabe = -1;
         String behandl = "";
         for (int i = 0; i < vec_poskuerzel.size(); i++) {
@@ -2889,6 +2888,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
             adressParams = getAdressParams(adrvec.get(0)
                                                  .get(1));
         }
+        Map<String,String> hmRezgeb = new HashMap<>();
         hmRezgeb.put("<rgreznum>", aktRezNum.getText());
         hmRezgeb.put("<rgbehandlung>", behandl);
         hmRezgeb.put("<rgdatum>", DatFunk.sDatInDeutsch(aktRezept.getRezeptDatum()));

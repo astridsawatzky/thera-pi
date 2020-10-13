@@ -673,7 +673,7 @@ public class AbrechnungPrivat extends JXDialog {
         SqlInfo.sqlAusfuehren(rechnungBuf.toString());
     }
 
-    private void doUebertrag() {
+    protected void doUebertrag() {
         String rez_nr = String.valueOf(rezeptNummer);
         boolean wasSuccessfullyMoved = SqlInfo.transferRowToAnotherDB("verordn", "lza", "rez_nr", rez_nr, true,
                 Arrays.asList(new String[] { "id" }));
