@@ -12,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
@@ -66,24 +65,24 @@ public class RezeptGebuehrRechnung extends JXDialog
         implements FocusListener, ActionListener, MouseListener, KeyListener, RehaTPEventListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(RezeptGebuehrRechnung.class);
     private static final long serialVersionUID = 7491942845791659861L;
-    private JXTitledPanel jtp = null;
-    private MouseAdapter mymouse = null;
-    private PinPanel pinPanel = null;
-    private JXPanel content = null;
-    private RehaTPEventClass rtp = null;
+    private JXTitledPanel jtp;
+    private MouseAdapter mymouse;
+    private PinPanel pinPanel;
+    private JXPanel content;
+    private RehaTPEventClass rtp;
 
     private JRtaTextField[] tfs = { null, null, null, null, null };
-    private Map<String,String> hmRezgeb = null;
-    DecimalFormat dcf = new DecimalFormat("#########0.00");
-    String rgnrNummer;
-    boolean buchen;
+    private Map<String,String> hmRezgeb;
+    private DecimalFormat dcf = new DecimalFormat("#########0.00");
+    
+    private boolean buchen;
 
     public RezeptGebuehrRechnung(JXFrame owner, String titel, int rueckgabe,Map<String,String> hmRezgeb,
             boolean auchbuchen) {
         super(owner, (JComponent) Reha.getThisFrame()
                                       .getGlassPane());
-        this.setUndecorated(true);
-        this.setName("RezgebDlg");
+        setUndecorated(true);
+        setName("RezgebDlg");
         this.hmRezgeb =  hmRezgeb;
         this.buchen = auchbuchen;
         this.jtp = new JXTitledPanel();
@@ -99,12 +98,12 @@ public class RezeptGebuehrRechnung extends JXDialog
                      .setVisible(false);
         this.pinPanel.setName("RezgebDlg");
         this.jtp.setRightDecoration(this.pinPanel);
-        this.setContentPane(jtp);
-        this.setModal(true);
-        this.setResizable(false);
+        setContentPane(jtp);
+        setModal(true);
+        setResizable(false);
         this.rtp = new RehaTPEventClass();
         this.rtp.addRehaTPEventListener(this);
-        this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -113,7 +112,6 @@ public class RezeptGebuehrRechnung extends JXDialog
                 } else {
                     setzeFelderOhneBuchung();
                 }
-
             }
         });
         SwingUtilities.invokeLater(new Runnable() {
@@ -122,7 +120,6 @@ public class RezeptGebuehrRechnung extends JXDialog
                 setzeFocus();
             }
         });
-
     }
 
     private void setzeFocus() {
@@ -147,7 +144,7 @@ public class RezeptGebuehrRechnung extends JXDialog
             String cmd = "select reznr,rdatum,rgbetrag,rpbetrag from rgaffaktura where reznr='"
                     + hmRezgeb.get("<rgreznum>") + "' and rnr like 'RGR-%' LIMIT 1";
             Vector<Vector<String>> vec = SqlInfo.holeFelder(cmd);
-            if (vec.size() <= 0) {
+            if (vec.isEmpty()) {
                 JOptionPane.showMessageDialog(null,
                         "Diese Rezeptgebührrechnung ist nicht in der Tabelle rgaffaktura erfaßt");
                 return;
@@ -224,7 +221,7 @@ public class RezeptGebuehrRechnung extends JXDialog
         JButton okButton = macheBut("Ok", "ok", e -> doRgRechnungPrepare());
         pan.add(okButton, cc.xy(3, 3));
         JButton abbrechenButton = macheBut("abbrechen", "abbrechen", e -> fensterSchliessen("dieses"));
-        pan.add((abbrechenButton), cc.xy(5, 3));
+        pan.add(abbrechenButton, cc.xy(5, 3));
         return pan;
     }
 
@@ -247,7 +244,7 @@ public class RezeptGebuehrRechnung extends JXDialog
         hmRezgeb.put("<rgpauschale>", dcf.format(Double.parseDouble(tfs[3].getText()
                                                                           .replace(",", "."))));
         if (this.buchen) {
-            hmRezgeb.put("<rgnr>", "RGR-" + Integer.toString(SqlInfo.erzeugeNummer("rgrnr")));
+            hmRezgeb.put("<rgnr>", "RGR-" + SqlInfo.erzeugeNummer("rgrnr"));
         } else {
             hmRezgeb.put("<rgnr>", SqlInfo.holeEinzelFeld("select rnr from rgaffaktura where reznr='"
                     + hmRezgeb.get("<rgreznum>") + "' and rnr like 'RGR-%' LIMIT 1"));
@@ -257,13 +254,7 @@ public class RezeptGebuehrRechnung extends JXDialog
         String url = Path.Instance.getProghome() + "vorlagen/" + Reha.getAktIK() + "/RezeptgebuehrRechnung.ott";
         try {
             officeStarten(url);
-        } catch (OfficeApplicationException e) {
-            e.printStackTrace();
-        } catch (NOAException e) {
-            e.printStackTrace();
-        } catch (TextException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
+        } catch (OfficeApplicationException | NOAException | TextException | DocumentException e) {
             e.printStackTrace();
         }
         if (this.buchen) {
@@ -276,61 +267,87 @@ public class RezeptGebuehrRechnung extends JXDialog
     }
 
     private void buchungStarten() {
-
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("insert into rgaffaktura set ");
-        buf.append("rnr='" + hmRezgeb.get("<rgnr>") + "', ");
-        buf.append("reznr='" + hmRezgeb.get("<rgreznum>") + "', ");
-        buf.append("pat_intern='" + hmRezgeb.get("<rgpatintern>") + "', ");
-        buf.append("rgesamt='" + hmRezgeb.get("<rggesamt>")
-                                         .replace(",", ".")
-                + "', ");
-        buf.append("roffen='" + hmRezgeb.get("<rggesamt>")
-                                        .replace(",", ".")
-                + "', ");
-        buf.append("rgbetrag='" + hmRezgeb.get("<rgbetrag>")
-                                          .replace(",", ".")
-                + "', ");
-        buf.append("rpbetrag='" + hmRezgeb.get("<rgpauschale>")
-                                          .replace(",", ".")
-                + "', ");
-        buf.append("rdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "',");
-        buf.append("ik='" + Reha.getAktIK() + "'");
+        buf.append("rnr='")
+               .append(hmRezgeb.get("<rgnr>"))
+               .append("', ");
+        buf.append("reznr='")
+               .append(hmRezgeb.get("<rgreznum>"))
+               .append("', ");
+        buf.append("pat_intern='")
+               .append(hmRezgeb.get("<rgpatintern>"))
+               .append("', ");
+        buf.append("rgesamt='")
+               .append(hmRezgeb.get("<rggesamt>")
+                                             .replace(",", "."))
+               .append("', ");
+        buf.append("roffen='")
+               .append(hmRezgeb.get("<rggesamt>")
+                                            .replace(",", "."))
+               .append("', ");
+        buf.append("rgbetrag='")
+               .append(hmRezgeb.get("<rgbetrag>")
+                                              .replace(",", "."))
+               .append("', ");
+        buf.append("rpbetrag='")
+               .append(hmRezgeb.get("<rgpauschale>")
+                                              .replace(",", "."))
+               .append("', ");
+        buf.append("rdatum='")
+               .append(DatFunk.sDatInSQL(DatFunk.sHeute()))
+               .append("',");
+        buf.append("ik='")
+               .append(Reha.getAktIK())
+               .append("'");
         SqlInfo.sqlAusfuehren(buf.toString());
-
     }
 
     private void buchungUpdaten() {
-        // Lemmi Doku: Schreibt die RGR-Buchung in die Datei "rgaffaktura"
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         buf.append("update rgaffaktura set ");
-        buf.append("rnr='" + hmRezgeb.get("<rgnr>") + "', ");
-        buf.append("reznr='" + hmRezgeb.get("<rgreznum>") + "', ");
-        buf.append("pat_intern='" + hmRezgeb.get("<rgpatintern>") + "', ");
-        buf.append("rgesamt='" + hmRezgeb.get("<rggesamt>")
-                                         .replace(",", ".")
-                + "', ");
-        buf.append("roffen='" + hmRezgeb.get("<rggesamt>")
-                                        .replace(",", ".")
-                + "', ");
-        buf.append("rgbetrag='" + hmRezgeb.get("<rgbetrag>")
-                                          .replace(",", ".")
-                + "', ");
-        buf.append("rpbetrag='" + hmRezgeb.get("<rgpauschale>")
-                                          .replace(",", ".")
-                + "', ");
-        buf.append("rdatum='" + DatFunk.sDatInSQL(DatFunk.sHeute()) + "',");
-        buf.append("ik='" + Reha.getAktIK() + "'");
-        buf.append(" where rnr='" + hmRezgeb.get("<rgnr>") + "' LIMIT 1");
+        buf.append("rnr='")
+               .append(hmRezgeb.get("<rgnr>"))
+               .append("', ");
+        buf.append("reznr='")
+               .append(hmRezgeb.get("<rgreznum>"))
+               .append("', ");
+        buf.append("pat_intern='")
+               .append(hmRezgeb.get("<rgpatintern>"))
+               .append("', ");
+        buf.append("rgesamt='")
+               .append(hmRezgeb.get("<rggesamt>")
+                                             .replace(",", "."))
+               .append("', ");
+        buf.append("roffen='")
+               .append(hmRezgeb.get("<rggesamt>")
+                                            .replace(",", "."))
+               .append("', ");
+        buf.append("rgbetrag='")
+               .append(hmRezgeb.get("<rgbetrag>")
+                                              .replace(",", "."))
+               .append("', ");
+        buf.append("rpbetrag='")
+               .append(hmRezgeb.get("<rgpauschale>")
+                                              .replace(",", "."))
+               .append("', ");
+        buf.append("rdatum='")
+               .append(DatFunk.sDatInSQL(DatFunk.sHeute()))
+               .append("',");
+        buf.append("ik='")
+               .append(Reha.getAktIK())
+               .append("'");
+        buf.append(" where rnr='")
+               .append(hmRezgeb.get("<rgnr>"))
+               .append("' LIMIT 1");
         SqlInfo.sqlAusfuehren(buf.toString());
     }
 
     private synchronized void officeStarten(String url)
             throws OfficeApplicationException, NOAException, TextException, DocumentException {
-        IDocumentService documentService = null;
+        IDocumentService documentService;
         Reha.getThisFrame()
             .setCursor(Cursors.wartenCursor);
-
 
         documentService = Reha.officeapplication.getDocumentService();
 
@@ -338,17 +355,13 @@ public class RezeptGebuehrRechnung extends JXDialog
         docdescript.setHidden(true);
         docdescript.setAsTemplate(true);
         final ITextDocument textDocument = (ITextDocument) documentService.loadDocument(url, docdescript);
-        /**********************/
         OOTools.druckerSetzen(textDocument, SystemConfig.hmAbrechnung.get("hmgkvrechnungdrucker"));
-        /**********************/
         ITextFieldService textFieldService = textDocument.getTextFieldService();
         ITextField[] placeholders = textFieldService.getPlaceholderFields();
         String placeholderDisplayText = "";
 
         Map<String, String> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         map.putAll(hmRezgeb);
-
-
 
         for (ITextField placeHolder : placeholders) {
             placeholderDisplayText = placeHolder.getDisplayText()
@@ -361,7 +374,6 @@ public class RezeptGebuehrRechnung extends JXDialog
                                                   .getTextTables();
             for (ITextTable iTextTable : textTables) {
                 if ("Tabelle-RGR".equals(iTextTable.getName())) {
-
                     ITextTable textTable = textDocument.getTextTableService()
                                                        .getTextTable("Tabelle-RGR");
                     int anzpos = Integer.parseInt(hmRezgeb.get("<rganzpos>"));
@@ -372,11 +384,9 @@ public class RezeptGebuehrRechnung extends JXDialog
 
                         textTable.addRow(1);
                     }
-
                 }
             }
         } catch (Exception e) {
-
             LOGGER.error("Fehler in DetailTabelle: ", e);
         }
         boolean immerInOfficeOeffnen = "1".equals(SystemConfig.hmAbrechnung.get("hmallinoffice"));
@@ -385,7 +395,6 @@ public class RezeptGebuehrRechnung extends JXDialog
                         .getXFrame()
                         .getContainerWindow()
                         .setVisible(true);
-
         } else {
             PrintProperties printprop = new PrintProperties(anzahlKopien());
             textDocument.getPrintService()
@@ -395,7 +404,6 @@ public class RezeptGebuehrRechnung extends JXDialog
                 textDocument.close();
             }
         }
-
     }
 
     private void setCellText(ITextTable textTable, int column  , int position, String string) throws TextException {
@@ -403,14 +411,13 @@ public class RezeptGebuehrRechnung extends JXDialog
                  .getTextService()
                  .getText()
                  .setText(hmRezgeb.get("<"
-                         + string + String.valueOf(position) + ">"));
+                         + string + position + ">"));
     }
 
     private short anzahlKopien() {
         String anzahlKopien = SystemConfig.hmAbrechnung.get("rgrdruckanzahl");
         int exemplare = 2;
         if (anzahlKopien != null) {
-
             exemplare = Integer.parseInt(anzahlKopien);
         }
         return (short) exemplare;
@@ -418,48 +425,40 @@ public class RezeptGebuehrRechnung extends JXDialog
 
     @Override
     public void focusGained(FocusEvent arg0) {
-
     }
 
     @Override
     public void focusLost(FocusEvent arg0) {
-
     }
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
         String cmd = arg0.getActionCommand();
-        if (cmd.equals("abbrechen")) {
+        if ("abbrechen".equals(cmd)) {
             fensterSchliessen("dieses");
         } else {
             doRgRechnungPrepare();
         }
-
     }
 
     @Override
     public void mouseClicked(MouseEvent arg0) {
-
     }
 
     @Override
     public void mouseEntered(MouseEvent arg0) {
-
     }
 
     @Override
     public void mouseExited(MouseEvent arg0) {
-
     }
 
     @Override
     public void mousePressed(MouseEvent arg0) {
-
     }
 
     @Override
     public void mouseReleased(MouseEvent arg0) {
-
     }
 
     @Override
@@ -468,37 +467,29 @@ public class RezeptGebuehrRechnung extends JXDialog
             fensterSchliessen("dieses");
             return;
         }
-        if (arg0.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (((JComponent) arg0.getSource()) instanceof JButton) {
-                if (((JComponent) arg0.getSource()).getName()
-                                                   .equals("abbrechen")) {
-                    fensterSchliessen("dieses");
-                    return;
-                } else if (((JComponent) arg0.getSource()).getName()
-                                                          .equals("ok")) {
-                    doRgRechnungPrepare();
-                }
+        if (arg0.getKeyCode() == KeyEvent.VK_ENTER && (JComponent) arg0.getSource() instanceof JButton) {
+            if ("abbrechen".equals(((JComponent) arg0.getSource()).getName())) {
+                fensterSchliessen("dieses");
+            } else if ("ok".equals(((JComponent) arg0.getSource()).getName())) {
+                doRgRechnungPrepare();
             }
         }
     }
 
     @Override
     public void keyReleased(KeyEvent arg0) {
-
     }
 
     @Override
     public void keyTyped(KeyEvent arg0) {
-
     }
 
     @Override
     public void rehaTPEventOccurred(RehaTPEvent evt) {
         fensterSchliessen("dieses");
-
     }
 
-    public void fensterSchliessen(String welches) {
+    private void fensterSchliessen(String welches) {
         this.jtp.removeMouseListener(this.mymouse);
         this.jtp.removeMouseMotionListener(this.mymouse);
         this.content.removeKeyListener(this);
@@ -509,7 +500,6 @@ public class RezeptGebuehrRechnung extends JXDialog
         }
         this.pinPanel = null;
         setVisible(false);
-        this.dispose();
+        dispose();
     }
-
 }
