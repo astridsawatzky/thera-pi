@@ -6,14 +6,13 @@ public enum Disziplin {
     KG("Physio", "Physio-Rezept", "2"),
     MA("Massage", "Massage/Lymphdrainage-Rezept", "1"),
     ER("Ergo", "Ergotherapie-Rezept", "5"),
-    LO("Logo", "Logop\u00e4die-Rezept", "3"),
+    LO("Logo", "Logopädie-Rezept", "3"),
     PO("Podo", "Podologie-Rezept", "7"),
     RS("Rsport", "Rehasport-Rezept", "8"),
     FT("Ftrain", "Funktionstraining-Rezept", ""),
     RH("Reha","Reha",""),
     COMMON("Common","Common","") ,
-    INV("invalid", "invalid", ""),
-    ET("Essen", "Ern\u00e4hrungstherapie", "?");
+    INV("invalid", "invalid", "");
 
     public final String medium;
     public final String lang;
@@ -34,7 +33,19 @@ public enum Disziplin {
                 return d;
             }
         }
+
         return INV;
+    }
+
+    /*
+     * valueOF cannot be overridden. Use this, if IAE is not tolerable.
+     */
+    public static Disziplin ofShort(String value) {
+        try {
+            return Disziplin.valueOf(value);
+        } catch (Exception e) {
+            return INV;
+        }
     }
 
     /**
@@ -48,4 +59,9 @@ public enum Disziplin {
     public EnumSet<Disziplin> ohneReha() { // NO_UCD (unused code)
         return EnumSet.of(KG, MA, ER, LO, PO);
     }
+
+
+
+
+
 }

@@ -55,7 +55,19 @@ import org.slf4j.LoggerFactory;
  **/
 public class IK {
     private static final Pattern IK_FORMAT = Pattern.compile("\\d{9}");
-    public final String ik_ziffern;
+    public static final IK INVALIDIK = new IK("INVALID") {
+
+        @Override void logIfInvalid(String ik) {
+
+        }
+
+        @Override
+                    public boolean isValid() {
+
+                        return false;
+                    }
+    };
+    private final String ik_ziffern;
     private final String wellFormed;
     private Logger logger = LoggerFactory.getLogger(IK.class);
 
@@ -64,13 +76,18 @@ public class IK {
      * @param ik ein 9-stelliger String der ausschliesslich aus Ziffern besteht.
      */
     public IK(String ik) {
+
+        logIfInvalid(ik);
+        this.ik_ziffern = ik;
+        this.wellFormed = "IK" + ik;
+
+    }
+
+    void logIfInvalid(String ik) {
         if (!IK_FORMAT.matcher(ik)
                       .matches()) {
             logger.error(ik + " is not a valid IK");
         }
-        this.ik_ziffern = ik;
-        this.wellFormed = "IK" + ik;
-
     }
 
     public String digitString() {
