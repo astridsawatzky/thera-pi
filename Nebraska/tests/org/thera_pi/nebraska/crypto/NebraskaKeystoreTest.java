@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class NebraskaKeystoreTest {
@@ -33,6 +34,7 @@ public class NebraskaKeystoreTest {
                 institutionName, personName);
     }
 
+    @Ignore
     @Test
     public void testGenerateKeyPair()
             throws NebraskaCryptoException, NebraskaFileException, NebraskaNotInitializedException {
@@ -61,6 +63,7 @@ public class NebraskaKeystoreTest {
 //        assertEquals("", md5Hash.toString());
     }
 
+    @Ignore
     @Test
     public void testGetPublicKeyMD5()
             throws NebraskaCryptoException, NebraskaFileException, NebraskaNotInitializedException {
