@@ -3121,7 +3121,9 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
         hmRezgeb.put("<rgpatgeboren>", SystemConfig.hmAdrPDaten.get("<Pgeboren>"));
 
         RezeptGebuehrRechnung rgeb = new RezeptGebuehrRechnung(Reha.getThisFrame(), "Nachberechnung Rezeptgebühren",
-                rueckgabe, hmRezgeb, buchen);
+                rueckgabe, hmRezgeb, buchen, Reha.getThisFrame()
+                                                      .getGlassPane());
+        rgeb.start();
         rgeb.setSize(new Dimension(250, 300));
         rgeb.setLocation(location.x - 50, location.y - 50);
         rgeb.pack();

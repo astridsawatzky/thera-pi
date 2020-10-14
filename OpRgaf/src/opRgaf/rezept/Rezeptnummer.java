@@ -19,9 +19,11 @@ public class Rezeptnummer {
     private Disziplin disziplin;
     private int rezeptZiffern;
     private String stornoVermerk ="";
+    private final String origString;
 
     public Rezeptnummer() {
         disziplin = Disziplin.INV;
+        origString="";
     }
 
     /**
@@ -32,15 +34,17 @@ public class Rezeptnummer {
      */
 
     public Rezeptnummer(String rezNr) {
+        this.origString = rezNr;
         if ( rezNr == null || rezNr == "" ) {
             return;
         }
         Pattern pattern = Pattern.compile("(\\p{L}+)(\\p{Nd}+)(\\p{L}*)");
         Matcher matcher = pattern.matcher(rezNr);
-        matcher.matches();
-        disziplin = ofShort(matcher.group(1));
-        rezeptZiffern=Integer.parseInt(matcher.group(2));
-        stornoVermerk = Optional.ofNullable(matcher.group(3)).orElse("");
+        if(matcher.matches()) {
+            disziplin = ofShort(matcher.group(1));
+            rezeptZiffern=Integer.parseInt(matcher.group(2));
+            stornoVermerk = Optional.ofNullable(matcher.group(3)).orElse("");
+        }
     }
 
     boolean isStorniert() {
@@ -59,7 +63,7 @@ public class Rezeptnummer {
     // constructor only passing in INT -> take from sysconfig def. diszi or set inv?
 
     public Rezeptnummer(Disziplin disziplin, int rezeptZiffern) {
-        // super();
+        this.origString="";
         this.disziplin = disziplin;
         this.rezeptZiffern = rezeptZiffern;
     }

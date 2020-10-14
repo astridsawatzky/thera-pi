@@ -81,7 +81,7 @@ public class Behandlung implements Comparable<Behandlung> {
         return heilmittel;
     }
 
-     static List<Behandlung> ofDbString(String termine){
+     public static List<Behandlung> ofDbString(String termine){
         List<Behandlung> liste = new LinkedList<>();
         String[] zeilen = termine.split("\n");
         for (String fromDB : zeilen) {
