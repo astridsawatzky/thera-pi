@@ -6,12 +6,17 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 ## unveroeffentlicht
 
+### fixed
+- BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
+
+
+## [1.1.11] - 2020-10-18
+
 ### added
 - detailierte Rechnung bei Eigenanteil #141
 
 ### fixed
 - Feiertage konnten nur bis 2020 ausgelesen werden #481
-- BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
 - HMR Check max pro Fall korrigiert #406
 - Hinweis auf Mail an Admin bei mehrmaligen fehlerhaften Loginversuchen entfernt #478
 - Updater überspringen von Versionen nun möglich.  #486
