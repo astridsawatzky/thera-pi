@@ -36,13 +36,14 @@ public class AbrechnungPrivatTest {
     public static void main(String[] args) throws SQLException, FileNotFoundException, OfficeApplicationException {
         String aktik = "123456789";
         JXFrame frame = new JXFrame();
+
         new SqlInfo().setConnection(new DatenquellenFactory(aktik).createConnection());
 
         new OOService().start(libPath, ooPath);
         AktuelleRezepte.tabaktrez = new JXTable();
-        Data data = new Data(2, "1728", "ER1516", "260", "T");
+        Data data1 = new Data(2, "1728", "ER1516", "260", "T");
     //   data = HM0000;
-
+        Data data = new Data(10, "1704", "ER1411", "30", "T");
         Vector<String> rezeptVector = (SqlInfo.holeSatz("verordn", " * ", "id = '" + data.rezeptDBId + "'",
                 Arrays.asList(new String[] {})));
 
