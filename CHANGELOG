@@ -6,6 +6,8 @@ die Nummern #XXX beziehen sich auf die Ticketnummer im Gitlab
 Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 ## unveroeffentlicht
 
+- HMR2020 Formulare
+
 ### fixed
 - BG / Privatrezepte rechnen nur die geleisteten Einheiten ab #230
 
@@ -14,8 +16,11 @@ Datumsformat ist jjjj-mm-tt, also Jahr-Monat-Tag
 
 ### added
 - detailierte Rechnung bei Eigenanteil #141
+- Interface Setting als Ersatz fuer den Verweis auf INIFile
+
 
 ### fixed
+
 - Feiertage konnten nur bis 2020 ausgelesen werden #481
 - HMR Check max pro Fall korrigiert #406
 - Hinweis auf Mail an Admin bei mehrmaligen fehlerhaften Loginversuchen entfernt #478
