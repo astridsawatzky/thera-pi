@@ -10,11 +10,13 @@ import hauptFenster.Reha;
 
 final class ChangeDokumentOoListener extends OoListener {
     protected String id;
+    private DokumentationPanel eltern;
 
     ChangeDokumentOoListener(IOfficeApplication officeAplication, String xdatei, String xid,
             DokumentationPanel xeltern) {
-        super(officeAplication, xdatei, xeltern);
+        super(officeAplication, xdatei);
         id=xid;
+        this.eltern = xeltern;
     }
 
     @Override
@@ -52,7 +54,7 @@ final class ChangeDokumentOoListener extends OoListener {
                                     geaendert = false;
                                     try {
                                         Reha.instance.patpanel.dokumentation.setCursor(Cursors.wartenCursor);
-                                        eltern.speichernOoDocs(xid, -1, xfile, -1, null, false);
+                                       eltern.speichernOoDocs(xid, -1, xfile, -1, null, false);
                                     } catch (Exception e) {
 
                                         e.printStackTrace();

@@ -13,56 +13,47 @@ public class Rezeptvector {
     private Vector<String> vec_rezept;
 
     public Rezeptvector() {
-        vecvec_rezepte = new Vector<Vector<String>>();
-        vec_rezept = new Vector<String>();
+        vecvec_rezepte = new Vector<>();
+        vec_rezept = new Vector<>();
     }
 
     public boolean init(String rezNr) {
         String cmd = "select * from verordn where rez_nr='" + rezNr.trim() + "' LIMIT 1";
         this.vecvec_rezepte = SqlInfo.holeFelder(cmd);
-        if (this.vecvec_rezepte.size() <= 0) {
+        if (this.vecvec_rezepte.isEmpty()) {
             System.out.println("RezeptVektor ist leer");
             this.vec_rezept = null;
-            return Boolean.FALSE;
+            return false;
         }
-        setTo1stVec_rez(this.vecvec_rezepte);
-        return Boolean.TRUE;
+        this.vec_rezept = this.vecvec_rezepte.get(0);
+        return true;
     }
 
     public boolean createEmptyVec() {
         try {
             String cmd = "describe verordn";
-            this.vecvec_rezepte = SqlInfo.holeFelder(cmd);
-            for (int i = 0; i < this.vecvec_rezepte.size(); i++) {
+            Vector<Vector<String>> spaltennamen = SqlInfo.holeFelder(cmd);
+            for (int i = 0; i < spaltennamen.size(); i++) {
                 this.vec_rezept.add(i, "");
             }
-            return Boolean.TRUE;
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return Boolean.FALSE;
+            return false;
         }
     }
 
-    public Rezeptvector getInstance() {
-        return this;
-    }
-
-    private void setTo1stVec_rez(Vector<Vector<String>> vecvec_rez) {
-        this.vec_rezept = this.vecvec_rezepte.get(0);
-    }
-
     private boolean getBoolAt(int index) {
-        return Optional.ofNullable(vec_rezept.get(index)).orElse("")
-                              .trim()
-                              .equals("T");
+        return "T".equals(Optional.ofNullable(vec_rezept.get(index)).orElse("")
+                              .trim());
     }
 
     private void setBoolAt(int index, boolean data) {
-        this.vec_rezept.set(index, (Boolean.valueOf(data) ? "T" : "F"));
+        this.vec_rezept.set(index, data ? "T" : "F");
     }
 
     private void setBoolAt(int index, String data) {
-        if (data.equalsIgnoreCase("F") || data.equalsIgnoreCase("T")) {
+        if ("F".equalsIgnoreCase(data) || "T".equalsIgnoreCase(data)) {
             this.vec_rezept.set(index, data.toUpperCase());
         } else {
             System.out.println("Fehler setBoolAt(String) idx: " + index + " val: " + data);
@@ -92,18 +83,10 @@ public class Rezeptvector {
         this.vec_rezept.set(index, Optional.ofNullable(data).orElse("").trim());
     }
 
-    /*
-     * Kompatibilitätsmodus
-     */
-    public void setVecVec_rez(Vector<Vector<String>> vecvec_rez) {
-        this.vecvec_rezepte = vecvec_rez;
-        setTo1stVec_rez(this.vecvec_rezepte);
-    }
-
     public Vector<Vector<String>> getVecVec_rez() {
         return this.vecvec_rezepte;
     }
-    // Kompatibilitätsmodus Ende
+    /** Kompatibilitätsmodus Ende. */
 
     public Vector<String> getVec_rez() {
         return vec_rezept;
@@ -113,16 +96,12 @@ public class Rezeptvector {
         this.vec_rezept = vec_rez;
     }
 
-    public int getVecSize() {
+    private int getVecSize() {
         return vec_rezept.size();
     }
 
     public boolean isEmpty() {
-        if (getVecSize() <= 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return getVecSize() <= 0;
     }
 
     public String getPatIntern() {
@@ -320,6 +299,7 @@ public class Rezeptvector {
     }
 
     public void setTermine(String termine) {
+        System.out.println(termine);
         setStringAt(34, termine);
     }
 
@@ -409,7 +389,7 @@ public class Rezeptvector {
     }
 
     public void setHausbesuch(boolean data) {
-        setStringAt(43, (data ? "T" : "F"));
+        setStringAt(43, data ? "T" : "F");
     }
 
     public String getIndiSchluessel() {
@@ -493,7 +473,7 @@ public class Rezeptvector {
     }
 
     public void setArztBericht(boolean data) {
-        setStringAt(55, (data ? "T" : "F"));
+        setStringAt(55, data ? "T" : "F");
     }
 
     public String getLastEdDate() {
@@ -513,7 +493,7 @@ public class Rezeptvector {
                                .toString());
     }
 
-    public String getvorJahrFrei() {
+    private String getvorJahrFrei() {
         return getStringAt(59);
     }
 
@@ -538,7 +518,7 @@ public class Rezeptvector {
     }
 
     /**
-     * prüft, ob Hausbesuch voll abrechenbar ist.
+     * Prüft, ob Hausbesuch voll abrechenbar ist.
      *
      * @return Flag; TRUE, wenn Hausbesuch voll abrechenbar ist.
      */
@@ -615,7 +595,7 @@ public class Rezeptvector {
         return getStringAt(73);
     }
     public void setUseHygPausch(boolean data) {
-        setStringAt(73, (data ? "T" : "F"));
+        setStringAt(73, data ? "T" : "F");
     }
     public void setNewRezNb(String rezClass) {
         int reznr = SqlInfo.erzeugeNummer(rezClass.toLowerCase());
@@ -623,76 +603,178 @@ public class Rezeptvector {
             JOptionPane.showMessageDialog(null, "Schwerwiegender Fehler beim Bezug einer neuen Rezeptnummer!");
             return;
         }
-        this.setRezNb(rezClass.toUpperCase() + Integer.valueOf(reznr)
-                                                      .toString());
+        setRezNb(rezClass.toUpperCase() + Integer.valueOf(reznr));
 
         int rezidneu = SqlInfo.holeId("verordn", "diagnose");
-        this.setId(rezidneu);
+        setId(rezidneu);
     }
 
     public void writeRez2DB() {
-        StringBuffer cmd = new StringBuffer("update verordn set ");
-        cmd.append("pat_intern='" + getPatIntern() + "', ");
-        cmd.append("rez_nr='" + getRezNb() + "', ");
-        cmd.append("rez_datum='" + getRezeptDatum() + "', ");
+        StringBuilder cmd = new StringBuilder("update verordn set ");
+        cmd.append("pat_intern='")
+               .append(getPatIntern())
+               .append("', ");
+        cmd.append("rez_nr='")
+               .append(getRezNb())
+               .append("', ");
+        cmd.append("rez_datum='")
+               .append(getRezeptDatum())
+               .append("', ");
         for (int i = 1; i < 5; i++) {
             String idx = Integer.valueOf(i)
                                 .toString();
-            cmd.append("anzahl" + idx + "='" + getAnzBehS(i) + "', ");
-            cmd.append("art_dbeh" + idx + "='" + getArtDBehandl(i) + "', ");
-            cmd.append("preise" + idx + "='" + getPreis(i) + "', ");
-            cmd.append("pos" + idx + "='" + getHmPos(i) + "', ");
-            cmd.append("kuerzel" + idx + "='" + getHMkurz(i) + "', ");
+            cmd.append("anzahl")
+                   .append(idx)
+                   .append("='")
+                   .append(getAnzBehS(i))
+                   .append("', ");
+            cmd.append("art_dbeh")
+                   .append(idx)
+                   .append("='")
+                   .append(getArtDBehandl(i))
+                   .append("', ");
+            cmd.append("preise")
+                   .append(idx)
+                   .append("='")
+                   .append(getPreis(i))
+                   .append("', ");
+            cmd.append("pos")
+                   .append(idx)
+                   .append("='")
+                   .append(getHmPos(i))
+                   .append("', ");
+            cmd.append("kuerzel")
+                   .append(idx)
+                   .append("='")
+                   .append(getHMkurz(i))
+                   .append("', ");
         }
         for (int i = 5; i < 7; i++) {
             String idx = Integer.valueOf(i)
                                 .toString();
-            cmd.append("kuerzel" + idx + "='" + getHMkurz(i) + "', ");
+            cmd.append("kuerzel")
+                   .append(idx)
+                   .append("='")
+                   .append(getHMkurz(i))
+                   .append("', ");
         }
-        cmd.append("anzahlkm='" + getKm() + "', ");
-        cmd.append("befr='" + getBefreitS() + "', ");
+        cmd.append("anzahlkm='")
+               .append(getKm())
+               .append("', ");
+        cmd.append("befr='")
+               .append(getBefreitS())
+               .append("', ");
         // rez_geb
-        cmd.append("rez_bez='" + getGebuehrBezahltS() + "', ");
-        cmd.append("arzt='" + getArzt() + "', ");
-        cmd.append("arztid='" + getArztId() + "', ");
+        cmd.append("rez_bez='")
+               .append(getGebuehrBezahltS())
+               .append("', ");
+        cmd.append("arzt='")
+               .append(getArzt())
+               .append("', ");
+        cmd.append("arztid='")
+               .append(getArztId())
+               .append("', ");
         // aerzte
-        cmd.append("datum='" + getAngelegtDatum() + "', ");
-        cmd.append("diagnose='" + getDiagn() + "', ");
-        cmd.append("heimbewohn='" + getHeimbewS() + "', ");
+        cmd.append("datum='")
+               .append(getAngelegtDatum())
+               .append("', ");
+        cmd.append("diagnose='")
+               .append(getDiagn())
+               .append("', ");
+        cmd.append("heimbewohn='")
+               .append(getHeimbewS())
+               .append("', ");
         // veraenderd, veraendera
-        cmd.append("rezeptart='" + getRezArt() + "', ");
+        cmd.append("rezeptart='")
+               .append(getRezArt())
+               .append("', ");
         // logfrei1, logfrei2, numfrei1, numfrei2, charfrei1, charfrei2, termine, id
-        cmd.append("ktraeger='" + getKtrName() + "', ");
-        cmd.append("kid='" + getKtraeger() + "', ");
-        cmd.append("patid='" + getPatIdS() + "', ");
-        cmd.append("zzstatus='" + getZzStat() + "', ");
-        cmd.append("lastdate='" + getLastDate() + "', ");
-        cmd.append("preisgruppe='" + getPreisgruppe() + "', ");
-        cmd.append("begruendadr='" + getBegrAdRS() + "', ");
-        cmd.append("hausbes='" + getHausbesuchS() + "', ");
-        cmd.append("indikatschl='" + getIndiSchluessel() + "', ");
-        cmd.append("angelegtvon='" + getAngelegtVon() + "', ");
-        cmd.append("barcodeform='" + getBarcodeform() + "', ");
-        cmd.append("dauer='" + getDauer() + "', ");
-        cmd.append("frequenz='" + getFrequenz() + "', ");
-        cmd.append("lastedit='" + getLastEdit() + "', ");
+        cmd.append("ktraeger='")
+               .append(getKtrName())
+               .append("', ");
+        cmd.append("kid='")
+               .append(getKtraeger())
+               .append("', ");
+        cmd.append("patid='")
+               .append(getPatIdS())
+               .append("', ");
+        cmd.append("zzstatus='")
+               .append(getZzStat())
+               .append("', ");
+        cmd.append("lastdate='")
+               .append(getLastDate())
+               .append("', ");
+        cmd.append("preisgruppe='")
+               .append(getPreisgruppe())
+               .append("', ");
+        cmd.append("begruendadr='")
+               .append(getBegrAdRS())
+               .append("', ");
+        cmd.append("hausbes='")
+               .append(getHausbesuchS())
+               .append("', ");
+        cmd.append("indikatschl='")
+               .append(getIndiSchluessel())
+               .append("', ");
+        cmd.append("angelegtvon='")
+               .append(getAngelegtVon())
+               .append("', ");
+        cmd.append("barcodeform='")
+               .append(getBarcodeform())
+               .append("', ");
+        cmd.append("dauer='")
+               .append(getDauer())
+               .append("', ");
+        cmd.append("frequenz='")
+               .append(getFrequenz())
+               .append("', ");
+        cmd.append("lastedit='")
+               .append(getLastEdit())
+               .append("', ");
         // berid
-        cmd.append("arztbericht='" + getArztberichtS() + "', ");
-        cmd.append("lasteddate='" + getLastEdDate() + "', ");
-        cmd.append("farbcode='" + getFarbCode() + "', ");
+        cmd.append("arztbericht='")
+               .append(getArztberichtS())
+               .append("', ");
+        cmd.append("lasteddate='")
+               .append(getLastEdDate())
+               .append("', ");
+        cmd.append("farbcode='")
+               .append(getFarbCode())
+               .append("', ");
         // rsplit
-        cmd.append("jahrfrei='" + getvorJahrFrei() + "', ");
-        cmd.append("unter18='" + getUnter18S() + "', ");
-        cmd.append("hbvoll='" + getHbVollS() + "', ");
+        cmd.append("jahrfrei='")
+               .append(getvorJahrFrei())
+               .append("', ");
+        cmd.append("unter18='")
+               .append(getUnter18S())
+               .append("', ");
+        cmd.append("hbvoll='")
+               .append(getHbVollS())
+               .append("', ");
         // abschluss
-        cmd.append("zzregel='" + getZzRegel() + "', ");
-        cmd.append("anzahlhb='" + getAnzHB() + "', ");
-        cmd.append("icd10='" + getICD10() + "', ");
-        cmd.append("icd10_2='" + getICD10_2() + "', ");
-        cmd.append("pauschale='" + getUseHygPauschS() + "' ");
+        cmd.append("zzregel='")
+               .append(getZzRegel())
+               .append("', ");
+        cmd.append("anzahlhb='")
+               .append(getAnzHB())
+               .append("', ");
+        cmd.append("icd10='")
+               .append(getICD10())
+               .append("', ");
+        cmd.append("icd10_2='")
+               .append(getICD10_2())
+               .append("', ");
+        cmd.append("pauschale='")
+               .append(getUseHygPauschS())
+               .append("' ");
 
-        cmd.append(" where id='" + getId() + "' LIMIT 1");
+        cmd.append(" where id='")
+               .append(getId())
+               .append("' LIMIT 1");
         SqlInfo.sqlAusfuehren(cmd.toString());
     }
 
+    public Vector<String> getAktuellesRezept() {
+        return vec_rezept;
+    }
 }

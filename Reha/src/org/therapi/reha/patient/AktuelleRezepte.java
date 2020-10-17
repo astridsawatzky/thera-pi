@@ -1575,7 +1575,7 @@ public class AktuelleRezepte extends JXPanel implements ListSelectionListener, T
                 if (!Rechte.hatRecht(Rechte.Rezept_anlegen, true)) {
                     return;
                 }
-                if (Reha.instance.patpanel.autoPatid <= 0) {
+                if (Reha.instance.patpanel.dbPatid <= 0) {
                     JOptionPane.showMessageDialog(null, "Oh Herr laß halten...\n\n"
                             + "....und für welchen Patienten wollen Sie ein neues Rezept anlegen....");
                     return;

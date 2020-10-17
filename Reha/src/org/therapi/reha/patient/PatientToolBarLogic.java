@@ -31,7 +31,6 @@ import hauptFenster.RehaIOServer;
 import hauptFenster.ReverseSocket;
 import io.RehaIOMessages;
 import rechteTools.Rechte;
-import rehaInternalFrame.JPatientInternal;
 import systemEinstellungen.SystemConfig;
 import systemTools.IconListRenderer;
 import terminKalender.iCalRehaExporter;
@@ -40,7 +39,7 @@ public class PatientToolBarLogic {
     PatientHauptPanel patientHauptPanel = null;
     PatientToolBarPanel patientToolBarPanel = null;
 
-    public PatientToolBarLogic(PatientHauptPanel patientHauptPanel, PatientToolBarPanel patientTbPanel) {
+    public PatientToolBarLogic(PatientHauptPanel patientHauptPanel, PatientToolBarPanel patientTbPanel, PatientHauptLogic logic) {
         this.patientHauptPanel = patientHauptPanel;
         this.patientToolBarPanel = patientTbPanel;
     }
@@ -50,7 +49,7 @@ public class PatientToolBarLogic {
             if (((JComponent) arg0.getSource()).getName()
                                                .equals("Suchen")) {
                 if (patientHauptPanel.inMemo > -1) {
-                    Reha.instance.patpanel.pmemo[patientHauptPanel.inMemo].requestFocus();
+                    Reha.instance.patpanel.patMemoPanel.getPmemo()[patientHauptPanel.inMemo].requestFocus();
                     return;
                 }
                 patientHauptPanel.starteSuche();
@@ -65,7 +64,7 @@ public class PatientToolBarLogic {
             if (name != null) {
                 if (name.equals("suchenach")) {
                     patientHauptPanel.patientLogic.starteSuche();
-                } else if (name.equals("Suchkriterium") && patientHauptPanel.patToolBarPanel.getSucheOhneEingabe(patientHauptPanel.jcom.getSelectedIndex())) {
+                } else if (name.equals("Suchkriterium") && patientHauptPanel.patToolBarPanel.getSucheOhneEingabe(patientHauptPanel.patToolBarPanel.suchKrteriumCbBox.getSelectedIndex())) {
                     patientHauptPanel.patientLogic.starteSuche();
                 }
             }
@@ -118,11 +117,11 @@ public class PatientToolBarLogic {
         if (((JComponent) e.getSource()).getName()
                                         .equals("suchenach")
                 && patientHauptPanel.inMemo > -1) {
-            Reha.instance.patpanel.pmemo[patientHauptPanel.inMemo].requestFocus();
+            Reha.instance.patpanel.patMemoPanel.getPmemo()[patientHauptPanel.inMemo].requestFocus();
         }
         if (!patientHauptPanel.getInternal()
                               .getActive()) {
-            JPatientInternal r = patientHauptPanel.getInternal();
+            patientHauptPanel.getInternal();
         }
     }
 
@@ -143,7 +142,6 @@ public class PatientToolBarLogic {
         if (cmd.equals("formulare")) {
             patientHauptPanel.getLogic()
                              .patStarteFormulare();
-            // patientHauptPanel.getLogic().setzeFocus();
         }
         if (cmd.equals("email")) {
             patientHauptPanel.getLogic()
@@ -156,25 +154,30 @@ public class PatientToolBarLogic {
         }
         if (cmd.equals("werkzeuge")) {
             new ToolsDlgPatient("", patientHauptPanel.jbut[4].getLocationOnScreen());
-            // patientHauptPanel.getLogic().setzeFocus();
         }
         if (cmd.equals("comboBoxChanged")) {
-            int selIdx = patientHauptPanel.jcom.getSelectedIndex();
+            int selIdx = patientHauptPanel.patToolBarPanel.suchKrteriumCbBox.getSelectedIndex();
             if (patientHauptPanel.patToolBarPanel.getSucheOhneEingabe(selIdx)) {
-                // Eingabe sperren
-                patientHauptPanel.tfsuchen.setBackground(Color.lightGray);
-                patientHauptPanel.tfsuchen.setForeground(Color.red);
-                patientHauptPanel.tfsuchen.setOpaque(true);
-                patientHauptPanel.tfsuchen.setEditable(false);
+                suchfeldDeaktivieren();
             } else {
-                // Eingabe freigeben
-                patientHauptPanel.tfsuchen.setForeground(Color.gray);
-                patientHauptPanel.tfsuchen.setOpaque(false);
-                patientHauptPanel.tfsuchen.setEditable(true);
+                suchfeldAktivieren();
             }
             String txt = patientHauptPanel.patToolBarPanel.getToolTipText(selIdx);
             patientHauptPanel.tfsuchen.setToolTipText(txt);
         }
+    }
+
+    private void suchfeldAktivieren() {
+        patientHauptPanel.tfsuchen.setForeground(Color.gray);
+        patientHauptPanel.tfsuchen.setOpaque(false);
+        patientHauptPanel.tfsuchen.setEditable(true);
+    }
+
+    private void suchfeldDeaktivieren() {
+        patientHauptPanel.tfsuchen.setBackground(Color.lightGray);
+        patientHauptPanel.tfsuchen.setForeground(Color.red);
+        patientHauptPanel.tfsuchen.setOpaque(true);
+        patientHauptPanel.tfsuchen.setEditable(false);
     }
 
     public void doPatNachricht() {
@@ -183,7 +186,7 @@ public class PatientToolBarLogic {
             public void run() {
                 try {
                     // hier Pat_intern und Rezeptnummer ermitteln
-                    if (patientHauptPanel.aktPatID.equals("")) {
+                    if ("".equals(patientHauptPanel.aktPatID)) {
                         return;
                     }
                     String spat_intern = patientHauptPanel.patDaten.get(29);
@@ -368,7 +371,7 @@ public class PatientToolBarLogic {
             icons.put("Zusatz-Info zum aktuellen Patient (Alt+I)", SystemConfig.hmSysIcons.get("info"));
             icons.put("Rehaplandatei -> iCalendar per Email", SystemConfig.hmSysIcons.get("email"));
             // create a list with some test data
-            JList list = new JList(new Object[] { "Patientenbezogene Nachricht erstellen",
+            JList<String> list = new JList<>(new String[] { "Patientenbezogene Nachricht erstellen",
                     "(e)Mail für Patient erstellen (Alt+M)", "SMS für Patient erstellen (Alt+S)",
                     "Zusatz-Info zum aktuellen Patient (Alt+I)", "Rehaplandatei -> iCalendar per Email" });
             list.setCellRenderer(new IconListRenderer(icons));

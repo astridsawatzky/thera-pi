@@ -11,9 +11,12 @@ import hauptFenster.Reha;
 
 final class NewDokumentOOListener extends OoListener {
 
+    private DokumentationPanel eltern;
+
     NewDokumentOOListener(IOfficeApplication officeAplication, String xdatei, String xid,
             DokumentationPanel xeltern) {
-        super(officeAplication, xdatei, xeltern);
+        super(officeAplication, xdatei);
+        this.eltern = xeltern;
     }
 
     @Override

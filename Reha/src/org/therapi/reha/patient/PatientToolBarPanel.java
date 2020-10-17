@@ -4,6 +4,7 @@ package org.therapi.reha.patient;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.dnd.DropTargetAdapter;
 import java.awt.dnd.DropTargetDragEvent;
 import java.awt.dnd.DropTargetDropEvent;
 import java.awt.dnd.DropTargetEvent;
@@ -27,7 +28,7 @@ import systemEinstellungen.SystemConfig;
 
 public class PatientToolBarPanel extends JXPanel {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 8491959397526727602L;
     PatientHauptPanel patientHauptPanel = null;
@@ -36,14 +37,15 @@ public class PatientToolBarPanel extends JXPanel {
     private String kriterium[] = { "Nachname Vorname", "Telefon", "Notizen", "Patienten-ID",
             "volle, nicht abgeschlossene Rezepte", "abgebrochene Rezepte (> 21 Tage inaktiv)", "Patienten mit aktuellen Rezepten" };
 
-    private String toolTipTexte[] = { 
-            "<html>Sucheingabe (Anfangsbuchstaben von):<br><br>Nachname[Leerzeichen]Vorname<br>&nbsp;&nbsp;oder<br>Nachname<br>&nbsp;&nbsp;oder<br>[Leerzeichen]Vorname</html>", 
-            "enthaltene Ziffernfolge eingeben", 
-            "enthaltene Buchstabenfolge eingeben", 
+    private String toolTipTexte[] = {
+            "<html>Sucheingabe (Anfangsbuchstaben von):<br><br>Nachname[Leerzeichen]Vorname<br>&nbsp;&nbsp;oder<br>Nachname<br>&nbsp;&nbsp;oder<br>[Leerzeichen]Vorname</html>",
+            "enthaltene Ziffernfolge eingeben",
+            "enthaltene Buchstabenfolge eingeben",
             "ID eingeben",
-            "kein Filter m\u00f6glich", 
-            "kein Filter m\u00f6glich", 
+            "kein Filter m\u00f6glich",
+            "kein Filter m\u00f6glich",
             "kein Filter m\u00f6glich" };
+    public JComboBox suchKrteriumCbBox;
 
     public String getKritAsString(int idx) {
         return kriterium[idx];
@@ -99,13 +101,12 @@ public class PatientToolBarPanel extends JXPanel {
     }
 
 
-    public PatientToolBarPanel(PatientHauptPanel patHauptPanel) {
+    public PatientToolBarPanel(PatientHauptPanel patHauptPanel, PatientHauptLogic patientHauptLogic) {
         super();
         setOpaque(false);
         this.patientHauptPanel = patHauptPanel;
-        patToolLogic = new PatientToolBarLogic(patHauptPanel, this);
+        patToolLogic = new PatientToolBarLogic(patHauptPanel, this,patientHauptLogic);
         setBorder(BorderFactory.createLineBorder(Color.WHITE));
-        // setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         FormLayout lay = new FormLayout(
                 "3dlu,right:max(35dlu;p),3dlu,p,45dlu,fill:0:grow(0.10),0dlu ,right:max(39dlu;p),3dlu, p,45dlu,7dlu," +
                 // 2-teSpalte (13) 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28
@@ -117,20 +118,17 @@ public class PatientToolBarPanel extends JXPanel {
         JLabel lbl = new JLabel("Kriterium:");
         add(lbl, cc.xy(2, 2));
 
-        // Lemmi 20101212: Erweitert um "Nur Patienten mit aktuellen Rezepten"
-        patientHauptPanel.jcom = new JComboBox(kriterium);
+        suchKrteriumCbBox = new JComboBox(kriterium);
 
-        // Lemmi 20101212: Die letzte benutzte Suchart aus der INI-Datei holen und
-        // wieder setzen
          int suchart = SystemConfig.hmPatientenSuchenDlgIni.get("suchart");
-        patientHauptPanel.jcom.setSelectedIndex(suchart);
+        suchKrteriumCbBox.setSelectedIndex(suchart);
         String toolTipText = getToolTipText(suchart);
 
-        patientHauptPanel.jcom.setBackground(new Color(247, 209, 176));
-        add(patientHauptPanel.jcom, cc.xyw(4, 2, 8));
-        patientHauptPanel.jcom.addActionListener(patientHauptPanel.toolBarAction);
-        patientHauptPanel.jcom.addKeyListener(patientHauptPanel.toolBarKeys);
-        patientHauptPanel.jcom.setName("Suchkriterium");
+        suchKrteriumCbBox.setBackground(new Color(247, 209, 176));
+        add(suchKrteriumCbBox, cc.xyw(4, 2, 8));
+        suchKrteriumCbBox.addActionListener(patientHauptPanel.toolBarAction);
+        suchKrteriumCbBox.addKeyListener(patientHauptPanel.toolBarKeys);
+        suchKrteriumCbBox.setName("Suchkriterium");
 
         sucheLabel = new JLabel("finde Pat. -->");
         sucheLabel.setName("Suchen");
@@ -138,7 +136,7 @@ public class PatientToolBarPanel extends JXPanel {
         sucheLabel.addMouseListener(patientHauptPanel.toolBarMouse);
         sucheLabel.addFocusListener(patientHauptPanel.toolBarFocus);
 
-        patientHauptPanel.dropTargetListener = new DropTargetListener() {
+        patientHauptPanel.dropTargetListener = new DropTargetAdapter() {
             @Override
             public void dragEnter(DropTargetDragEvent e) {
                 if (!patientHauptPanel.tfsuchen.getText()
@@ -147,20 +145,11 @@ public class PatientToolBarPanel extends JXPanel {
                 }
             }
 
-            @Override
-            public void dragExit(DropTargetEvent e) {
-            }
-
-            @Override
-            public void dragOver(DropTargetDragEvent e) {
-            }
 
             @Override
             public void drop(DropTargetDropEvent e) {
-                // String mitgebracht = "";
                 try {
                     patientHauptPanel.patientLogic.starteSuche();
-                    // System.out.println("erhalte Drop = "+mitgebracht);
                 } catch (Throwable t) {
                     t.printStackTrace();
                     System.out.println("Fehler***************1********");
@@ -168,23 +157,16 @@ public class PatientToolBarPanel extends JXPanel {
                 e.dropComplete(true);
             }
 
-            @Override
-            public void dropActionChanged(DropTargetDragEvent e) {
-                System.out.println(e);
-            }
         };
-        // sucheLabel.setDropTarget(dndt);
         add(sucheLabel, cc.xy(13, 2));
         patientHauptPanel.tfsuchen = new JFormattedTextField();
         patientHauptPanel.tfsuchen.setFont(new Font("Tahoma", Font.BOLD, 11));
-        // patientHauptPanel.tfsuchen.setBackground(Colors.PiOrange.alpha(0.15f));
         patientHauptPanel.tfsuchen.setOpaque(false);
         patientHauptPanel.tfsuchen.setForeground(new Color(136, 136, 136));
         patientHauptPanel.tfsuchen.setName("suchenach");
         patientHauptPanel.tfsuchen.addKeyListener(patientHauptPanel.toolBarKeys);
         patientHauptPanel.tfsuchen.addFocusListener(patientHauptPanel.toolBarFocus);
         patientHauptPanel.tfsuchen.setToolTipText(toolTipText);
-        // patientHauptPanel.tfsuchen.setDropTarget(dndt);
         try {
             patientHauptPanel.tfsuchen.getDropTarget()
                                       .addDropTargetListener(patientHauptPanel.dropTargetListener);

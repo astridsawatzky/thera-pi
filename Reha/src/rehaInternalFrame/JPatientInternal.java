@@ -83,10 +83,7 @@ public class JPatientInternal extends JRehaInternal implements FocusListener, Re
             //// System.out.println("Internal-Pat-Frame in geschlossen***************");
             Reha.instance.aktiviereNaechsten(this.desktop);
             Reha.instance.patpanel.allesAufraeumen();
-            if (Reha.instance.patpanel.getInternal() != null) {
-                Reha.instance.patpanel.setInternalToNull();
-                Reha.instance.patpanel = null;
-            }
+          
             /*
              * if(Reha.instance.patpanel.jry != null){ Reha.instance.patpanel.jry = null;
              * Reha.instance.patpanel = null; }

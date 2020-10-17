@@ -3,29 +3,11 @@ package org.therapi.reha.patient;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.dnd.DropTargetListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.Connection;
 import java.util.Vector;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 
 import org.jdesktop.swingx.JXPanel;
 
@@ -35,6 +17,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import CommonTools.JCompTools;
 import CommonTools.JRtaTextField;
 import CommonTools.SqlInfo;
+import CommonTools.StringTools;
 import dialoge.InfoDialogRGAFoffen;
 import events.PatStammEvent;
 import events.PatStammEventClass;
@@ -57,45 +40,42 @@ public class PatientHauptPanel extends JXPanel {
     PatientHauptLogic patientLogic = null;
 
     // SuchenFenster
-    public Object sucheComponent = null;
+    Object sucheComponent = null;
 
     // ToolBar-Controls & Listener
-    public JButton[] jbut = { null, null, null, null, null };
-    public JFormattedTextField tfsuchen;
-    public JComboBox jcom;
-    public ActionListener toolBarAction;
-    public MouseListener toolBarMouse;
-    public KeyListener toolBarKeys;
-    public FocusListener toolBarFocus;
-    public DropTargetListener dropTargetListener;
+    JButton[] jbut = { null, null, null, null, null };
+    JFormattedTextField tfsuchen;
+    ActionListener toolBarAction;
+    MouseListener toolBarMouse;
+    KeyListener toolBarKeys;
+    FocusListener toolBarFocus;
+    DropTargetListener dropTargetListener;
 
     // StammDaten-Controls & Listener
-    public JPatTextField[] ptfield = new JPatTextField[15];
-    public KeyListener stammDatenKeys;
+    JPatTextField[] ptfield = new JPatTextField[15];
+
 
     // MemoPanel-Controls & Listener
-    public JTabbedPane memotab = null;
-    public JButton[] memobut = { null, null, null, null, null, null };
-    public JTextArea[] pmemo = { null, null };
-    public ActionListener memoAction = null;
-    public int inMemo = -1;
+    JTabbedPane memotab = null;
+
+    ActionListener memoAction;
+    int inMemo = -1;
 
     // MultiFunctionPanel-Controls & Listener
     JTabbedPane multiTab = null;
     public AktuelleRezepte aktRezept = null;
     public Historie historie = null;
-    public TherapieBerichte berichte = null;
-    public DokumentationPanel dokumentation = null;
+    TherapieBerichte berichte = null;
+    DokumentationPanel dokumentation = null;
     public Gutachten gutachten = null;
-    public String[] tabTitel = { "aktuelle Rezepte", "Rezept-Historie", "Therapieberichte", "Dokumentation",
+    String[] tabTitel = { "aktuelle Rezepte", "Rezept-Historie", "Therapieberichte", "Dokumentation",
             "Gutachten", "Arzt & KK", "Plandaten" };
-    public JLabel[] rezlabs =  new JLabel[15];
 
-    // Labels: 0-, 1-, 2-'angelegt von', 3-ktraeger, 4-Arzt, 5-Rezeptart, 6-BegrAdR, 7-TBericht
-    public JTextArea rezdiag = null;
 
-    public ImageIcon[] imgzuzahl =  new ImageIcon[4];
-    public ImageIcon[] imgrezstatus = new ImageIcon[2];
+    JTextArea rezdiag = null;
+
+    ImageIcon[] imgzuzahl = new ImageIcon[4];
+    ImageIcon[] imgrezstatus = new ImageIcon[2];
     public Vector<String> patDaten = new Vector<String>();
     public Vector<String> vecaktrez = null;
     public Vector<String> vecakthistor = null;
@@ -107,27 +87,27 @@ public class PatientHauptPanel extends JXPanel {
     // Instanz-Variable für die einzelnen Panels
     public PatientToolBarPanel patToolBarPanel = null;
     private PatientStammDatenPanel stammDatenPanel = null;
-    private PatientMemoPanel patMemoPanel = null;
+    PatientMemoPanel patMemoPanel = null;
     private PatientMultiFunctionPanel patMultiFunctionPanel = null;
 
     // Gemeinsam genutzte Variable
-    public Font font = new Font("Courier New", Font.BOLD, 13);
-    public Font fehler = new Font("Courier", Font.ITALIC, 13);
+    Font font = new Font("Courier New", Font.BOLD, 13);
+
     public String aktPatID = "";
-    public int autoPatid = -1;
+    int dbPatid = -1;
     public int aid = -1;
     public int kid = -1;
-    public boolean patDatenOk = false;
-    public boolean rezDatenOk = false;
-    public boolean historOk = false;
-    public boolean berichtOk = false;
-    public boolean dokuOk = false;
-    public boolean gutachtenOk = false;
+    boolean patDatenOk = false;
+
+
+
+
+
 
     // Bezug zum unterliegenden JInternalFrame
     JPatientInternal patientInternal = null;
 
-    InfoDialogRGAFoffen infoDlg = null;
+    private InfoDialogRGAFoffen infoDlg = null;
 
     public PatientHauptPanel(String name, JPatientInternal internal, Connection connection) {
         super();
@@ -150,6 +130,7 @@ public class PatientHauptPanel extends JXPanel {
         setLayout(lay);
 
         add(getToolBarPatient(), cc.xyw(1, 2, 3));
+        aktRezept = new AktuelleRezepte(this, connection);
         add(constructSplitPaneLR(connection), cc.xyw(1, 3, 3));
         setVisible(true);
         setzeFocus();
@@ -186,6 +167,7 @@ public class PatientHauptPanel extends JXPanel {
     }
 
     private UIFSplitPane constructSplitPaneOU(Connection connection) {
+
         UIFSplitPane jSplitRechtsOU = UIFSplitPane.createStrippedSplitPane(JSplitPane.VERTICAL_SPLIT, getMemosPatient(),
                 getMultiFunctionTab(connection));
         jSplitRechtsOU.setOpaque(false);
@@ -216,6 +198,7 @@ public class PatientHauptPanel extends JXPanel {
     }
 
     private synchronized JScrollPane getMultiFunctionTab(Connection connection) {
+
         patMultiFunctionPanel = new PatientMultiFunctionPanel(this, connection);
         JScrollPane jscr = JCompTools.getTransparentScrollPane(patMultiFunctionPanel);
         jscr.validate();
@@ -223,7 +206,7 @@ public class PatientHauptPanel extends JXPanel {
     }
 
     private synchronized JXPanel getToolBarPatient() {
-        patToolBarPanel = new PatientToolBarPanel(this);
+        patToolBarPanel = new PatientToolBarPanel(this,patientLogic);
         return patToolBarPanel;
 
     }
@@ -249,7 +232,7 @@ public class PatientHauptPanel extends JXPanel {
         return patToolBarPanel;
     }
 
-    public void starteSuche() {
+    void starteSuche() {
         patientLogic.starteSuche();
     }
 
@@ -282,12 +265,9 @@ public class PatientHauptPanel extends JXPanel {
                                .reactOnAction(arg0);
             }
         };
-        memoAction = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                patMemoPanel.doMemoAction(arg0);
-            }
-        };
+        if (dbPatid != -1) {
+            memoAction = (e) -> patMemoPanel.doMemoAction(e);
+        }
 
     }
 
@@ -298,43 +278,28 @@ public class PatientHauptPanel extends JXPanel {
      */
     private void createKeyListeners() {
         // PateintToolBar
-        toolBarKeys = new KeyListener() {
+        toolBarKeys = new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 patToolBarPanel.getLogic()
                                .reactOnKeyPressed(e);
             }
 
-            @Override
-            public void keyReleased(KeyEvent arg0) {
-            }
 
-            @Override
-            public void keyTyped(KeyEvent arg0) {
-            }
         };
     }
 
     private void createFocusListeners() {
-        toolBarFocus = new FocusListener() {
+        toolBarFocus = new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
                 patToolBarPanel.getLogic()
                                .reactOnFocusGained(e);
             }
-
-            @Override
-            public void focusLost(FocusEvent e) {
-            }
-
         };
     }
 
-    /****************************************************/
-    /**
-     * Installiert die MouseListeners für alle drei Panels
-     *
-     */
+
 
     private void createMouseListeners() {
         toolBarMouse = new MouseAdapter() {
@@ -344,7 +309,6 @@ public class PatientHauptPanel extends JXPanel {
                                .reactOnMouseClicked(arg0);
             }
         };
-
 
     }
 
@@ -363,13 +327,17 @@ public class PatientHauptPanel extends JXPanel {
         this.ptp.removePatStammEventListener(patientStammEventListener);
         ptp = null;
         patientLogic.fireAufraeumen();
+        if (getInternal() != null) {
+            setInternalToNull();
+
+        }
     }
 
     public void setzeFocus() {
         patientLogic.setzeFocus();
     }
 
-    public void holeWichtigeInfos(String xpatint) {
+    void holeWichtigeInfos(String xpatint) {
         String stmt = "select t1.rdatum,t1.rnr,t1.roffen,t1.pat_intern from rgaffaktura as t1 "
                 + "join pat5 as t2 on (t1.pat_intern=t2.pat_intern) " + "where t1.roffen > '0' and t1.pat_intern = '"
                 + xpatint + "' and NOT t1.rnr like 'sto%'" + "order by t1.rdatum";
@@ -400,15 +368,35 @@ public class PatientHauptPanel extends JXPanel {
     void allesAufNull() {
 
         aktPatID = "";
-        autoPatid = -1;
+        dbPatid = -1;
         getStammDaten().htmlPane.setText("");
         aktRezept.setzeRezeptPanelAufNull(true);
         historie.setzeHistoriePanelAufNull(true);
         berichte.setzeBerichtPanelAufNull(true);
         dokumentation.setzeDokuPanelAufNull(true);
         gutachten.setzeGutachtenPanelAufNull(true);
-        pmemo[0].setText("");
-        pmemo[1].setText("");
+        patMemoPanel.memoPanelAufNull();
+    }
+
+
+
+    void setPatdaten(Vector<String> patDaten) {
+        if (patDaten.size() >= 71) {
+            patMemoPanel.getPmemo()[0].setText(patDaten.get(65));
+
+            patMemoPanel.getPmemo()[1].setText(patDaten.get(64));
+
+            dbPatid = Integer.parseInt(patDaten.get(66));
+            aid = StringTools.ZahlTest(patDaten.get(67));
+            kid = StringTools.ZahlTest(patDaten.get(68));
+            patDatenOk = true;
+            getStammDaten().parseHTML(true);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Fehler beim Einlesen der Patientendaten");
+            patDatenOk = false;
+            getStammDaten().parseHTML(false);
+        }
     }
 }
 

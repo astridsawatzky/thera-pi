@@ -1,9 +1,9 @@
-package org.therapi.reha.patient.Berichte;
+package org.therapi.reha.patient.therapieberichtpanel;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Bericht1 {
+public class TherapieBericht {
     String patIntern;
     int berichtId;
     String arztNum;
@@ -142,7 +142,7 @@ public class Bericht1 {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Bericht1 other = (Bericht1) obj;
+        TherapieBericht other = (TherapieBericht) obj;
         return Objects.equals(arztNum, other.arztNum) && Objects.equals(berBeso, other.berBeso)
                 && Objects.equals(berProg, other.berProg) && Objects.equals(berStand, other.berStand)
                 && Objects.equals(berTyp, other.berTyp) && Objects.equals(berVors, other.berVors)

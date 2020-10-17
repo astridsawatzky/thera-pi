@@ -297,8 +297,8 @@ public class AusfallRechnung extends RehaSmartDialog implements ActionListener {
         StringBuffer sb = new StringBuffer();
         sb.append(DatFunk.sHeute() + " - unentschuldigt oder zu spät abgesagt - Rechnung!! - Rechnung-Nr.: "
                 + SystemConfig.hmAdrAFRDaten.get("<AFRnummer>") + " - erstellt von: " + Reha.aktUser + "\n");
-        sb.append(Reha.instance.patpanel.pmemo[1].getText());
-        Reha.instance.patpanel.pmemo[1].setText(sb.toString());
+        sb.append(Reha.instance.patpanel.patMemoPanel.getPmemo()[1].getText());
+        Reha.instance.patpanel.patMemoPanel.getPmemo()[1].setText(sb.toString());
         String cmd = "update pat5 set pat_text='" + sb.toString() + "' where pat_intern = '"
                 + Reha.instance.patpanel.aktPatID + "'";
         SqlInfo.sqlAusfuehren(cmd);

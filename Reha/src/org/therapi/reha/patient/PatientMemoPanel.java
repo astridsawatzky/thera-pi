@@ -34,12 +34,13 @@ import systemEinstellungen.SystemConfig;
 public class PatientMemoPanel extends JXPanel {
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1894163619378832811L;
     PatientHauptPanel patientHauptPanel = null;
     MouseListener ml = null;
-
+    JButton[] memobut = { null, null, null, null, null, null };
+    JTextArea[] pmemo = { null, null };
     public PatientMemoPanel(PatientHauptPanel patHauptPanel) {
         super();
         setLayout(new BorderLayout());
@@ -58,12 +59,12 @@ public class PatientMemoPanel extends JXPanel {
             // Variable im Text
             if (text.indexOf("^") >= 0) {
                 String newtext = testeAufPlatzhalter(text);
-                String oldtext = patientHauptPanel.pmemo[patientHauptPanel.inMemo].getText();
-                patientHauptPanel.pmemo[patientHauptPanel.inMemo].setText(newtext + "\n" + oldtext);
+                String oldtext = getPmemo()[patientHauptPanel.inMemo].getText();
+                getPmemo()[patientHauptPanel.inMemo].setText(newtext + "\n" + oldtext);
                 caretAufNull();
             } else {
-                String oldtext = patientHauptPanel.pmemo[patientHauptPanel.inMemo].getText();
-                patientHauptPanel.pmemo[patientHauptPanel.inMemo].setText(text + "\n" + oldtext);
+                String oldtext = getPmemo()[patientHauptPanel.inMemo].getText();
+                getPmemo()[patientHauptPanel.inMemo].setText(text + "\n" + oldtext);
                 caretAufNull();
             }
         }
@@ -75,7 +76,7 @@ public class PatientMemoPanel extends JXPanel {
             public void run() {
                 // patientHauptPanel.pmemo[patientHauptPanel.inMemo].setSelectionStart(0);
                 // patientHauptPanel.pmemo[patientHauptPanel.inMemo].setSelectionEnd(0);
-                patientHauptPanel.pmemo[patientHauptPanel.inMemo].setCaretPosition(0);
+                getPmemo()[patientHauptPanel.inMemo].setCaretPosition(0);
             }
         });
     }
@@ -112,13 +113,13 @@ public class PatientMemoPanel extends JXPanel {
                         /*
                          * if( ((String)ret).trim().length()==10 && ((String)ret).trim().indexOf(".")
                          * ==2 && ((String)ret).trim().lastIndexOf(".") == 5 ) {
-                         * 
-                         * 
+                         *
+                         *
                          * try{ ret = terminKalender.DatFunk.sDatInSQL((String)ret); }catch(Exception
                          * ex){
                          * JOptionPane.showMessageDialog(null,"Fehler in der Konvertierung des Datums");
                          * }
-                         * 
+                         *
                          * }
                          */
                         sret = stext.replace(dummy, ((String) ret).trim());
@@ -152,7 +153,7 @@ public class PatientMemoPanel extends JXPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 if (e.getButton() == 3
-                        && ((patientHauptPanel.pmemo[0].isEditable()) || (patientHauptPanel.pmemo[1].isEditable()))) {
+                        && ((getPmemo()[0].isEditable()) || (getPmemo()[1].isEditable()))) {
                     // new Floskeln( (patientHauptPanel.pmemo[0].isEditable() ? 0 : 1), e );
                     Floskeln fl = new Floskeln(Reha.getThisFrame(), "Floskeln", getInstance());
                     fl.setBounds(200, 200, 200, 200);
@@ -180,98 +181,96 @@ public class PatientMemoPanel extends JXPanel {
             }
 
         };
-        patientHauptPanel.pmemo[0].addMouseListener(ml);
-        patientHauptPanel.pmemo[1].addMouseListener(ml);
+        getPmemo()[0].addMouseListener(ml);
+        getPmemo()[1].addMouseListener(ml);
     }
 
     public void fireAufraeumen() {
-        for (int i = 0; i < patientHauptPanel.memobut.length; i++) {
-            patientHauptPanel.memobut[i].removeActionListener(patientHauptPanel.memoAction);
+        for (int i = 0; i < memobut.length; i++) {
+            memobut[i].removeActionListener(patientHauptPanel.memoAction);
         }
-        patientHauptPanel.pmemo[0].removeMouseListener(ml);
-        patientHauptPanel.pmemo[1].removeMouseListener(ml);
+        getPmemo()[0].removeMouseListener(ml);
+        getPmemo()[1].removeMouseListener(ml);
         ml = null;
         patientHauptPanel.memoAction = null;
     }
 
     public void doMemoAction(ActionEvent arg0) {
-        if (patientHauptPanel.autoPatid == -1) {
-            return;
-        }
+
         String sc = arg0.getActionCommand();
         if (sc.equals("kedit")) {
             patientHauptPanel.inMemo = 0;
-            patientHauptPanel.memobut[0].setEnabled(false);
-            patientHauptPanel.memobut[1].setEnabled(true);
-            patientHauptPanel.memobut[2].setEnabled(true);
-            patientHauptPanel.pmemo[0].setForeground(Color.RED);
-            patientHauptPanel.pmemo[0].setEditable(true);
-            patientHauptPanel.pmemo[0].setCaretPosition(0);
-            patientHauptPanel.memobut[3].setEnabled(false);
+            memobut[0].setEnabled(false);
+            memobut[1].setEnabled(true);
+            memobut[2].setEnabled(true);
+            getPmemo()[0].setForeground(Color.RED);
+            getPmemo()[0].setEditable(true);
+            getPmemo()[0].setCaretPosition(0);
+            memobut[3].setEnabled(false);
             return;
         }
         if (sc.equals("kedit2")) {
             patientHauptPanel.inMemo = 1;
-            patientHauptPanel.memobut[3].setEnabled(false);
-            patientHauptPanel.memobut[4].setEnabled(true);
-            patientHauptPanel.memobut[5].setEnabled(true);
-            patientHauptPanel.pmemo[1].setForeground(Color.RED);
-            patientHauptPanel.pmemo[1].setEditable(true);
-            patientHauptPanel.pmemo[1].setCaretPosition(0);
-            patientHauptPanel.memobut[0].setEnabled(false);
+            memobut[3].setEnabled(false);
+            memobut[4].setEnabled(true);
+            memobut[5].setEnabled(true);
+            getPmemo()[1].setForeground(Color.RED);
+            getPmemo()[1].setEditable(true);
+            getPmemo()[1].setCaretPosition(0);
+            memobut[0].setEnabled(false);
             return;
         }
         if (sc.equals("ksave")) {
-            patientHauptPanel.memobut[0].setEnabled(true);
-            patientHauptPanel.memobut[1].setEnabled(false);
-            patientHauptPanel.memobut[2].setEnabled(false);
-            patientHauptPanel.pmemo[0].setForeground(Color.BLUE);
-            patientHauptPanel.pmemo[0].setEditable(false);
-            patientHauptPanel.memobut[3].setEnabled(true);
-            String cmd = "update pat5 set anamnese='" + StringTools.Escaped(Reha.instance.patpanel.pmemo[0].getText())
-                    + "' where id='" + Reha.instance.patpanel.autoPatid + "'";
+            memobut[0].setEnabled(true);
+            memobut[1].setEnabled(false);
+            memobut[2].setEnabled(false);
+            getPmemo()[0].setForeground(Color.BLUE);
+            getPmemo()[0].setEditable(false);
+            memobut[3].setEnabled(true);
+            String cmd = "update pat5 set anamnese='" + StringTools.Escaped(getPmemo()[0].getText())
+                    + "' where id='" + patientHauptPanel.dbPatid + "'";
             new ExUndHop().setzeStatement(cmd);
             patientHauptPanel.inMemo = -1;
             return;
         }
         if (sc.equals("ksave2")) {
-            patientHauptPanel.memobut[3].setEnabled(true);
-            patientHauptPanel.memobut[4].setEnabled(false);
-            patientHauptPanel.memobut[5].setEnabled(false);
-            patientHauptPanel.pmemo[1].setForeground(Color.BLUE);
-            patientHauptPanel.pmemo[1].setEditable(false);
-            patientHauptPanel.memobut[0].setEnabled(true);
-            String cmd = "update pat5 set pat_text='" + StringTools.Escaped(Reha.instance.patpanel.pmemo[1].getText())
-                    + "' where id='" + Reha.instance.patpanel.autoPatid + "'";
+            memobut[3].setEnabled(true);
+            memobut[4].setEnabled(false);
+            memobut[5].setEnabled(false);
+            getPmemo()[1].setForeground(Color.BLUE);
+            getPmemo()[1].setEditable(false);
+            memobut[0].setEnabled(true);
+            String cmd = "update pat5 set pat_text='" + StringTools.Escaped(getPmemo()[1].getText())
+                    + "' where id='" + patientHauptPanel.dbPatid + "'";
             new ExUndHop().setzeStatement(cmd);
             patientHauptPanel.inMemo = -1;
             return;
         }
         if (sc.equals("kbreak")) {
-            patientHauptPanel.memobut[0].setEnabled(true);
-            patientHauptPanel.memobut[1].setEnabled(false);
-            patientHauptPanel.memobut[2].setEnabled(false);
-            patientHauptPanel.pmemo[0].setForeground(Color.BLUE);
-            patientHauptPanel.pmemo[0].setEditable(false);
-            patientHauptPanel.memobut[3].setEnabled(true);
-            patientHauptPanel.pmemo[0].setText(SqlInfo.holeSatz("pat5", "anamnese",
-                    "id='" + patientHauptPanel.autoPatid + "'", Arrays.asList(new String[] {}))
+            memobut[0].setEnabled(true);
+            memobut[1].setEnabled(false);
+            memobut[2].setEnabled(false);
+            getPmemo()[0].setForeground(Color.BLUE);
+            getPmemo()[0].setEditable(false);
+            memobut[3].setEnabled(true);
+            getPmemo()[0].setText(SqlInfo.holeSatz("pat5", "anamnese",
+                    "id='" + patientHauptPanel.dbPatid + "'", Arrays.asList(new String[] {}))
                                                       .get(0));
-            patientHauptPanel.pmemo[0].setCaretPosition(0);
+            getPmemo()[0].setCaretPosition(0);
             patientHauptPanel.inMemo = -1;
             return;
         }
         if (sc.equals("kbreak2")) {
-            patientHauptPanel.memobut[3].setEnabled(true);
-            patientHauptPanel.memobut[4].setEnabled(false);
-            patientHauptPanel.memobut[5].setEnabled(false);
-            patientHauptPanel.pmemo[1].setForeground(Color.BLUE);
-            patientHauptPanel.pmemo[1].setEditable(false);
-            patientHauptPanel.memobut[0].setEnabled(true);
-            patientHauptPanel.pmemo[1].setText(SqlInfo.holeSatz("pat5", "pat_text",
-                    "id='" + patientHauptPanel.autoPatid + "'", Arrays.asList(new String[] {}))
+            memobut[3].setEnabled(true);
+            memobut[4].setEnabled(false);
+            memobut[5].setEnabled(false);
+            getPmemo()[1].setForeground(Color.BLUE);
+            getPmemo()[1].setEditable(false);
+            memobut[0].setEnabled(true);
+            getPmemo()[1].setText(SqlInfo.holeSatz("pat5", "pat_text",
+                    "id='" + patientHauptPanel.dbPatid + "'", Arrays.asList(new String[] {}))
                                                       .get(0));
-            patientHauptPanel.pmemo[1].setCaretPosition(0);
+            getPmemo()[1].setCaretPosition(0);
             patientHauptPanel.inMemo = -1;
             return;
         }
@@ -281,9 +280,6 @@ public class PatientMemoPanel extends JXPanel {
     private JXPanel getMemoPanel() {
         JXPanel mittelinksunten = new JXPanel(new BorderLayout());
         mittelinksunten.setOpaque(false);
-
-//		mittelinksunten.addFocusListener(eltern.getFocusListener());
-
         mittelinksunten.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 
         JToolBar jtoolb = new JToolBar();
@@ -291,42 +287,42 @@ public class PatientMemoPanel extends JXPanel {
         jtoolb.setBorder(null);
         jtoolb.setBorderPainted(false);
         jtoolb.setRollover(true);
-        patientHauptPanel.memobut[0] = new JButton();
-        patientHauptPanel.memobut[0].setIcon(SystemConfig.hmSysIcons.get("edit"));
-        patientHauptPanel.memobut[0].setToolTipText("Langtext editieren");
-        patientHauptPanel.memobut[0].setActionCommand("kedit");
-        patientHauptPanel.memobut[0].addActionListener(patientHauptPanel.memoAction);
-        jtoolb.add(patientHauptPanel.memobut[0]);
-        patientHauptPanel.memobut[1] = new JButton();
-        patientHauptPanel.memobut[1].setIcon(SystemConfig.hmSysIcons.get("save"));
-        patientHauptPanel.memobut[1].setToolTipText("Langtext speichern");
-        patientHauptPanel.memobut[1].setActionCommand("ksave");
-        patientHauptPanel.memobut[1].addActionListener(patientHauptPanel.memoAction);
-        patientHauptPanel.memobut[1].setEnabled(false);
-        jtoolb.add(patientHauptPanel.memobut[1]);
+        this.memobut[0] = new JButton();
+        this.memobut[0].setIcon(SystemConfig.hmSysIcons.get("edit"));
+        this.memobut[0].setToolTipText("Langtext editieren");
+        this.memobut[0].setActionCommand("kedit");
+        this.memobut[0].addActionListener(patientHauptPanel.memoAction);
+        jtoolb.add(this.memobut[0]);
+        this.memobut[1] = new JButton();
+        this.memobut[1].setIcon(SystemConfig.hmSysIcons.get("save"));
+        this.memobut[1].setToolTipText("Langtext speichern");
+        this.memobut[1].setActionCommand("ksave");
+        this.memobut[1].addActionListener(patientHauptPanel.memoAction);
+        this.memobut[1].setEnabled(false);
+        jtoolb.add(this.memobut[1]);
         jtoolb.addSeparator(new Dimension(40, 0));
-        patientHauptPanel.memobut[2] = new JButton();
-        patientHauptPanel.memobut[2].setIcon(SystemConfig.hmSysIcons.get("stop"));
-        patientHauptPanel.memobut[2].setToolTipText("Langtext bearbeiten abbrechen");
-        patientHauptPanel.memobut[2].setActionCommand("kbreak");
-        patientHauptPanel.memobut[2].addActionListener(patientHauptPanel.memoAction);
-        patientHauptPanel.memobut[2].setEnabled(false);
-        jtoolb.add(patientHauptPanel.memobut[2]);
+        this.memobut[2] = new JButton();
+        this.memobut[2].setIcon(SystemConfig.hmSysIcons.get("stop"));
+        this.memobut[2].setToolTipText("Langtext bearbeiten abbrechen");
+        this.memobut[2].setActionCommand("kbreak");
+        this.memobut[2].addActionListener(patientHauptPanel.memoAction);
+        this.memobut[2].setEnabled(false);
+        jtoolb.add(this.memobut[2]);
 
         patientHauptPanel.memotab = new JTabbedPane();
         patientHauptPanel.memotab.setUI(new WindowsTabbedPaneUI());
         patientHauptPanel.memotab.setOpaque(false);
         patientHauptPanel.memotab.setBorder(null);
 
-        patientHauptPanel.pmemo[0] = new JTextArea();
-        patientHauptPanel.pmemo[0].setFont(new Font("Courier", Font.PLAIN, 11));
-        patientHauptPanel.pmemo[0].setLineWrap(true);
-        patientHauptPanel.pmemo[0].setName("notitzen");
-        patientHauptPanel.pmemo[0].setWrapStyleWord(true);
-        patientHauptPanel.pmemo[0].setEditable(false);
-        patientHauptPanel.pmemo[0].setBackground(Color.WHITE);
-        patientHauptPanel.pmemo[0].setForeground(Color.BLUE);
-        JScrollPane span = JCompTools.getTransparentScrollPane(patientHauptPanel.pmemo[0]);
+        getPmemo()[0] = new JTextArea();
+        getPmemo()[0].setFont(new Font("Courier", Font.PLAIN, 11));
+        getPmemo()[0].setLineWrap(true);
+        getPmemo()[0].setName("notitzen");
+        getPmemo()[0].setWrapStyleWord(true);
+        getPmemo()[0].setEditable(false);
+        getPmemo()[0].setBackground(Color.WHITE);
+        getPmemo()[0].setForeground(Color.BLUE);
+        JScrollPane span = JCompTools.getTransparentScrollPane(getPmemo()[0]);
         // span.setBackground(Color.WHITE);
         span.validate();
         JXPanel jpan = JCompTools.getEmptyJXPanel(new BorderLayout());
@@ -345,38 +341,38 @@ public class PatientMemoPanel extends JXPanel {
         jtoolb2.setBorder(null);
         jtoolb2.setBorderPainted(false);
         jtoolb2.setRollover(true);
-        patientHauptPanel.memobut[3] = new JButton();
-        patientHauptPanel.memobut[3].setIcon(SystemConfig.hmSysIcons.get("edit"));
-        patientHauptPanel.memobut[3].setToolTipText("Langtext editieren");
-        patientHauptPanel.memobut[3].setActionCommand("kedit2");
-        patientHauptPanel.memobut[3].addActionListener(patientHauptPanel.memoAction);
-        jtoolb2.add(patientHauptPanel.memobut[3]);
-        patientHauptPanel.memobut[4] = new JButton();
-        patientHauptPanel.memobut[4].setIcon(SystemConfig.hmSysIcons.get("save"));
+        this.memobut[3] = new JButton();
+        this.memobut[3].setIcon(SystemConfig.hmSysIcons.get("edit"));
+        this.memobut[3].setToolTipText("Langtext editieren");
+        this.memobut[3].setActionCommand("kedit2");
+        this.memobut[3].addActionListener(patientHauptPanel.memoAction);
+        jtoolb2.add(this.memobut[3]);
+        this.memobut[4] = new JButton();
+        this.memobut[4].setIcon(SystemConfig.hmSysIcons.get("save"));
 
-        patientHauptPanel.memobut[4].setToolTipText("Langtext speichern");
-        patientHauptPanel.memobut[4].setActionCommand("ksave2");
-        patientHauptPanel.memobut[4].addActionListener(patientHauptPanel.memoAction);
-        patientHauptPanel.memobut[4].setEnabled(false);
-        jtoolb2.add(patientHauptPanel.memobut[4]);
+        this.memobut[4].setToolTipText("Langtext speichern");
+        this.memobut[4].setActionCommand("ksave2");
+        this.memobut[4].addActionListener(patientHauptPanel.memoAction);
+        this.memobut[4].setEnabled(false);
+        jtoolb2.add(this.memobut[4]);
         jtoolb2.addSeparator(new Dimension(40, 0));
-        patientHauptPanel.memobut[5] = new JButton();
-        patientHauptPanel.memobut[5].setIcon(SystemConfig.hmSysIcons.get("stop"));
-        patientHauptPanel.memobut[5].setToolTipText("Langtext bearbeiten abbrechen");
-        patientHauptPanel.memobut[5].setActionCommand("kbreak2");
-        patientHauptPanel.memobut[5].addActionListener(patientHauptPanel.memoAction);
-        patientHauptPanel.memobut[5].setEnabled(false);
-        jtoolb2.add(patientHauptPanel.memobut[5]);
+        this.memobut[5] = new JButton();
+        this.memobut[5].setIcon(SystemConfig.hmSysIcons.get("stop"));
+        this.memobut[5].setToolTipText("Langtext bearbeiten abbrechen");
+        this.memobut[5].setActionCommand("kbreak2");
+        this.memobut[5].addActionListener(patientHauptPanel.memoAction);
+        this.memobut[5].setEnabled(false);
+        jtoolb2.add(this.memobut[5]);
 
-        patientHauptPanel.pmemo[1] = new JTextArea();
-        patientHauptPanel.pmemo[1].setFont(new Font("Courier", Font.PLAIN, 11));
-        patientHauptPanel.pmemo[1].setLineWrap(true);
-        patientHauptPanel.pmemo[1].setName("notitzen");
-        patientHauptPanel.pmemo[1].setWrapStyleWord(true);
-        patientHauptPanel.pmemo[1].setEditable(false);
-        patientHauptPanel.pmemo[1].setBackground(Color.WHITE);
-        patientHauptPanel.pmemo[1].setForeground(Color.BLUE);
-        span = JCompTools.getTransparentScrollPane(patientHauptPanel.pmemo[1]);
+        getPmemo()[1] = new JTextArea();
+        getPmemo()[1].setFont(new Font("Courier", Font.PLAIN, 11));
+        getPmemo()[1].setLineWrap(true);
+        getPmemo()[1].setName("notitzen");
+        getPmemo()[1].setWrapStyleWord(true);
+        getPmemo()[1].setEditable(false);
+        getPmemo()[1].setBackground(Color.WHITE);
+        getPmemo()[1].setForeground(Color.BLUE);
+        span = JCompTools.getTransparentScrollPane(getPmemo()[1]);
         span.setBackground(Color.WHITE);
         span.validate();
         jpan = JCompTools.getEmptyJXPanel(new BorderLayout());
@@ -399,8 +395,15 @@ public class PatientMemoPanel extends JXPanel {
         return mittelinksunten;
 
     }
-    /********************************************************************************/
 
-    /********************************************************************************/
+    public JTextArea[] getPmemo() {
+        return pmemo;
+    }
+
+    void memoPanelAufNull() {
+        getPmemo()[0].setText("");
+        getPmemo()[1].setText("");
+    }
+
 
 }

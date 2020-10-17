@@ -43,25 +43,42 @@ import systemEinstellungen.SystemConfig;
 import systemEinstellungen.SystemPreislisten;
 import terminKalender.TerminFenster;
 
-public class RezeptDaten extends JXPanel implements ActionListener {
+class RezeptDaten extends JXPanel implements ActionListener {
+    private static final String FOLGEV_AUSSERHALB_D_R = "Folgev. außerhalb d.R.";
+    private static final String FOLGEVERORDNUNG = "Folgeverordnung";
+    private static final String ERSTVERORDNUNG = "Erstverordnung";
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -6994295488322966514L;
-    public JRtaTextField reznum = null;
-    public JRtaTextField draghandler = null;
-    public ImageIcon hbimg = null;
-    public ImageIcon hbimg2 = null;
-    public Vector<String> vecaktrez = null;
-    public static boolean feddisch = false;
+    private JRtaTextField reznum = null;
+    private JRtaTextField draghandler = null;
+    private ImageIcon hbimg = null;
+    private ImageIcon hbimg2 = null;
+
+    static boolean feddisch = false;
     private JPopupMenu jPopupMenu = null;
 
     private JMenuItem copyToBunker = null;
     private JRtaLabel hblab = null;
 
-    public String[] rezart = { "Erstverordnung", "Folgeverordnung", "Folgev. außerhalb d.R." };
+    private String[] rezart = { ERSTVERORDNUNG, FOLGEVERORDNUNG, FOLGEV_AUSSERHALB_D_R };
 
-    public RezeptDaten(PatientHauptPanel eltern) {
+    private JLabel angelegtLbl;
+    private JLabel kostentraegerLbl;
+    private JLabel arztLbl;
+    private JLabel verordnungsArtLbl;
+    private JLabel begruendungLbl;
+    private JLabel arztBerichtLbl;
+    private JLabel behandlung1Lbl;
+    private JLabel frequenzLbl;
+    private JLabel behandlung2Lbl;
+    private JLabel behandlung3Lbl;
+    private JLabel behandlung4Lbl;
+    private JLabel indikationLbl;
+    private JLabel dauerLbl;
+
+    RezeptDaten(PatientHauptPanel eltern) {
         super();
         this.setOpaque(false);
         setBorder(null);
@@ -98,7 +115,7 @@ public class RezeptDaten extends JXPanel implements ActionListener {
 
     }
 
-    public void setRezeptDaten(String reznummer, String sid) {
+    void setRezeptDaten(String reznummer, String sid) {
         RezeptDaten.feddisch = false;
         boolean reha = false;
         ArztVec verordnenderArzt = new ArztVec();
@@ -107,18 +124,18 @@ public class RezeptDaten extends JXPanel implements ActionListener {
         try {
             dieseVO.setVec_rez(Reha.instance.patpanel.vecaktrez);
             verordnenderArzt.init(dieseVO.getArztId());
-            
+
             String diszi = RezTools.getDisziplinFromRezNr(dieseVO.getRezClass());
             int prgruppe = 0;
             try {
-                prgruppe = Integer.parseInt(dieseVO.getPreisgruppe())-1;
+                prgruppe = Integer.parseInt(dieseVO.getPreisgruppe()) - 1;
             } catch (Exception ex) {
             }
 
             String stest = StringTools.NullTest(dieseVO.getHausbesuchS());
             String einzeln = StringTools.NullTest(dieseVO.getHbVollS());
             if (stest.equals("T")) {
-                hblab.setText(StringTools.NullTest(dieseVO.getAnzHBS())+" *");
+                hblab.setText(StringTools.NullTest(dieseVO.getAnzHBS()) + " *");
                 hblab.setIcon((einzeln.equals("T") ? hbimg : hbimg2));
                 hblab.setAlternateText(
                         "<html>" + (einzeln.equals("T")
@@ -139,53 +156,53 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                 hblab.setIcon(null);
             }
 
-            Reha.instance.patpanel.rezlabs[2].setText("angelegt von: "+dieseVO.getAngelegtVon());
-            if(StringTools.ZahlTest( dieseVO.getKtraeger()) >= 0 ){
-                Reha.instance.patpanel.rezlabs[3].setForeground(Color.BLACK);
+            angelegtLbl.setText("angelegt von: " + dieseVO.getAngelegtVon());
+            if (StringTools.ZahlTest(dieseVO.getKtraeger()) >= 0) {
+                kostentraegerLbl.setForeground(Color.BLACK);
             } else {
-                Reha.instance.patpanel.rezlabs[3].setForeground(Color.RED);
+                kostentraegerLbl.setForeground(Color.RED);
             }
-            Reha.instance.patpanel.rezlabs[3].setText(StringTools.NullTest(dieseVO.getKtrName()));
+            kostentraegerLbl.setText(StringTools.NullTest(dieseVO.getKtrName()));
 
-            if(StringTools.ZahlTest( dieseVO.getArztId()) >= 0 ){
-                Reha.instance.patpanel.rezlabs[4].setForeground(Color.BLACK);
+            if (StringTools.ZahlTest(dieseVO.getArztId()) >= 0) {
+                arztLbl.setForeground(Color.BLACK);
             } else {
-                Reha.instance.patpanel.rezlabs[4].setForeground(Color.RED);
+                arztLbl.setForeground(Color.RED);
             }
-            Reha.instance.patpanel.rezlabs[4].setText(StringTools.NullTest(verordnenderArzt.getNNameLanr()));
+            arztLbl.setText(StringTools.NullTest(verordnenderArzt.getNNameLanr()));
 
             int test = dieseVO.getRezArt();
             if (test >= 0) {
-                Reha.instance.patpanel.rezlabs[5].setText(rezart[test]);
+                verordnungsArtLbl.setText(rezart[test]);
                 if (test == 2) {
                     stest = StringTools.NullTest(dieseVO.getBegrAdRS());
                     if (stest.equals("T")) {
-                        Reha.instance.patpanel.rezlabs[6].setForeground(Color.BLACK);
-                        Reha.instance.patpanel.rezlabs[6].setText("Begründung o.k.");
+                        begruendungLbl.setForeground(Color.BLACK);
+                        begruendungLbl.setText("Begründung o.k.");
                     } else {
-                        Reha.instance.patpanel.rezlabs[6].setForeground(Color.RED);
-                        Reha.instance.patpanel.rezlabs[6].setText("Begründung fehlt");
+                        begruendungLbl.setForeground(Color.RED);
+                        begruendungLbl.setText("Begründung fehlt");
                     }
                 } else {
-                    Reha.instance.patpanel.rezlabs[6].setText(" ");
+                    begruendungLbl.setText(" ");
                 }
             } else {
-                Reha.instance.patpanel.rezlabs[5].setText(" ");
-                Reha.instance.patpanel.rezlabs[6].setText(" ");
+                verordnungsArtLbl.setText(" ");
+                begruendungLbl.setText(" ");
             }
             stest = StringTools.NullTest(dieseVO.getArztberichtS());
             if (stest.equals("T")) {
                 test = StringTools.ZahlTest(dieseVO.getArztBerichtID());
                 if (test >= 0) {
-                    Reha.instance.patpanel.rezlabs[7].setForeground(Color.BLACK);
-                    Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
+                    arztBerichtLbl.setForeground(Color.BLACK);
+                    arztBerichtLbl.setText("Therapiebericht o.k.");
                 } else {
-                    Reha.instance.patpanel.rezlabs[7].setForeground(Color.RED);
-                    Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht fehlt");
+                    arztBerichtLbl.setForeground(Color.RED);
+                    arztBerichtLbl.setText("Therapiebericht fehlt");
                 }
 
             } else {
-                Reha.instance.patpanel.rezlabs[7].setText(" ");
+                arztBerichtLbl.setText(" ");
             }
             Vector<Vector<String>> preisvec = null;
 
@@ -215,7 +232,8 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                     }
                 }
             });
-            reha = dieseVO.getRezNb().startsWith("RH");
+            reha = dieseVO.getRezNb()
+                          .startsWith("RH");
             stest = StringTools.NullTest(dieseVO.getFrequenz());
             final int INDEX_HEILMITTEL_1 = 1;
             final int INDEX_HEILMITTEL_2 = 2;
@@ -223,47 +241,47 @@ public class RezeptDaten extends JXPanel implements ActionListener {
             final int INDEX_HEILMITTEL_4 = 4;
 
             String anzeigeHMPosition1 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_1);
-            Reha.instance.patpanel.rezlabs[8].setText(anzeigeHMPosition1);
+            behandlung1Lbl.setText(anzeigeHMPosition1);
 
             if (stest.equals("")) {
-                Reha.instance.patpanel.rezlabs[9].setForeground(Color.RED);
-                Reha.instance.patpanel.rezlabs[9].setText(stest + "??? / Wo.");
+                frequenzLbl.setForeground(Color.RED);
+                frequenzLbl.setText(stest + "??? / Wo.");
             } else {
-                Reha.instance.patpanel.rezlabs[9].setForeground(Color.BLACK);
-                Reha.instance.patpanel.rezlabs[9].setText(stest + " / Wo.");
+                frequenzLbl.setForeground(Color.BLACK);
+                frequenzLbl.setText(stest + " / Wo.");
             }
 
             String anzeigeHMPosition2 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_2);
-            Reha.instance.patpanel.rezlabs[10].setText(anzeigeHMPosition2);
+            behandlung2Lbl.setText(anzeigeHMPosition2);
             String anzeigeHMPosition3 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_3);
-            Reha.instance.patpanel.rezlabs[11].setText(anzeigeHMPosition3);
+            behandlung3Lbl.setText(anzeigeHMPosition3);
             String anzeigeHMPosition4 = showHM(dieseVO, preisvec, INDEX_HEILMITTEL_4);
-            Reha.instance.patpanel.rezlabs[12].setText(anzeigeHMPosition4);
+            behandlung4Lbl.setText(anzeigeHMPosition4);
 
             stest = StringTools.NullTest(dieseVO.getIndiSchluessel());
             if ((stest.equals("") || stest.equals("kein IndiSchl."))) {
                 if (!reha) {
-                    Reha.instance.patpanel.rezlabs[13].setForeground(Color.RED);
-                    Reha.instance.patpanel.rezlabs[13].setText("??? " + stest);
+                    indikationLbl.setForeground(Color.RED);
+                    indikationLbl.setText("??? " + stest);
                 } else {
-                    Reha.instance.patpanel.rezlabs[13].setText("");
+                    indikationLbl.setText("");
                 }
             } else {
                 if (!reha) {
-                    Reha.instance.patpanel.rezlabs[13].setForeground(Color.BLACK);
-                    Reha.instance.patpanel.rezlabs[13].setText(stest);
+                    indikationLbl.setForeground(Color.BLACK);
+                    indikationLbl.setText(stest);
                 } else {
-                    Reha.instance.patpanel.rezlabs[13].setText("");
+                    indikationLbl.setText("");
                 }
             }
 
             stest = StringTools.NullTest(dieseVO.getDauer());
             if (stest.equals("")) {
-                Reha.instance.patpanel.rezlabs[14].setForeground(Color.RED);
-                Reha.instance.patpanel.rezlabs[14].setText("??? Min.");
+                dauerLbl.setForeground(Color.RED);
+                dauerLbl.setText("??? Min.");
             } else {
-                Reha.instance.patpanel.rezlabs[14].setForeground(Color.BLACK);
-                Reha.instance.patpanel.rezlabs[14].setText(stest + " Min.");
+                dauerLbl.setForeground(Color.BLACK);
+                dauerLbl.setText(stest + " Min.");
             }
 
             stest = StringTools.NullTest(dieseVO.getICD10())
@@ -271,7 +289,7 @@ public class RezeptDaten extends JXPanel implements ActionListener {
             if (stest.length() > 0) {
                 stest = "1.ICD-10: " + stest;
                 String stestIcd2 = StringTools.NullTest(dieseVO.getICD10_2())
-                                           .trim();
+                                              .trim();
                 stest = stest + (stestIcd2.length() > 0 ? "  -  2.ICD-10: " + stestIcd2 : "");
                 Reha.instance.patpanel.rezdiag.setText(stest + "\n" + StringTools.NullTest(dieseVO.getDiagn()));
             } else {
@@ -285,12 +303,7 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                 zzbild = 0;
                 ex.printStackTrace();
             }
-            int row = AktuelleRezepte.tabaktrez.getSelectedRow();
-            if (row >= 0) {
-                if (AktuelleRezepte.dtblm.getValueAt(row, 1) != Reha.instance.patpanel.imgzuzahl[zzbild]) {
-                    org.therapi.reha.patient.AktuelleRezepte.setZuzahlImage(zzbild);
-                }
-            }
+            setzeZuzahlungsbild(zzbild);
 
             try {
                 RezTools.constructVirginHMap();
@@ -308,31 +321,40 @@ public class RezeptDaten extends JXPanel implements ActionListener {
 
     }
 
+    private void setzeZuzahlungsbild(int zzbild) {
+        int row = AktuelleRezepte.tabaktrez.getSelectedRow();
+        if (row >= 0) {
+            if (AktuelleRezepte.dtblm.getValueAt(row, 1) != Reha.instance.patpanel.imgzuzahl[zzbild]) {
+                org.therapi.reha.patient.AktuelleRezepte.setZuzahlImage(zzbild);
+            }
+        }
+    }
+
     /**
-     * @param dieseVO - Rezept-record
+     * @param dieseVO  - Rezept-record
      * @param preisvec - Preisliste
-     * @param idxHM - Index des HM im Rezept
+     * @param idxHM    - Index des HM im Rezept
      * @return String 'anz * kuerzel (HM-Position)' oder Platzhalter '----'
      */
     private String showHM(Rezeptvector dieseVO, Vector<Vector<String>> preisvec, int idxHM) {
         String retVal = "----";
         // indices for preisvec/priceListEntry access
         final int KUERZEL = 1;
-        final int ID = 9; 
-        
+        final int ID = 9;
+
         if (!dieseVO.getHmPos(idxHM)
                     .equals("")) {
             int idOfPricelistEntry = StringTools.ZahlTest(dieseVO.getArtDBehandl(idxHM));
-            
+
             if (idOfPricelistEntry > 0) {
                 for (int i = 0; i < preisvec.size(); i++) {
                     String priceListEntry[] = new String[preisvec.get(i)
                                                                  .size()];
-                    preisvec.get(i).toArray(priceListEntry);
+                    preisvec.get(i)
+                            .toArray(priceListEntry);
                     int thisID = Integer.valueOf(priceListEntry[ID]);
                     if (thisID == idOfPricelistEntry) {
-                        retVal = StringTools.NullTest(dieseVO.getAnzBehS(idxHM)) + "  *  "
-                                + priceListEntry[KUERZEL];
+                        retVal = StringTools.NullTest(dieseVO.getAnzBehS(idxHM)) + "  *  " + priceListEntry[KUERZEL];
                         if (!dieseVO.getRezNb()
                                     .startsWith("RH")) {
                             retVal = retVal + " (" + dieseVO.getHmPos(idxHM) + ")";
@@ -344,11 +366,11 @@ public class RezeptDaten extends JXPanel implements ActionListener {
         return retVal;
     }
 
-    public JScrollPane getDatenPanel(PatientHauptPanel eltern) {
+    private JScrollPane getDatenPanel(PatientHauptPanel eltern) {
         JScrollPane jscr = null;
         FormLayout lay = new FormLayout("fill:0:grow(0.33),2px,fill:0:grow(0.33),2px,fill:0:grow(0.33)",
-                //      1.Sep                2.Sep                              3.Sep
-                //1  2  3  4   5  6   7  8   9 10   11 12 13  14 15  16  17 18  19 20  21 22  23 24    25
+                // 1.Sep 2.Sep 3.Sep
+                // 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
                 "p,1dlu,p,1dlu,p,1dlu,p,1dlu,p,1dlu,p,1dlu,p,1dlu,p, 1dlu,p,1dlu,p,1dlu,p,1dlu,p,38dlu,1px");
         CellConstraints cc = new CellConstraints();
         PanelBuilder jpan = new PanelBuilder(lay);
@@ -376,10 +398,10 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                             + "-" + Reha.instance.patpanel.patDaten.get(2) + ","
                             + Reha.instance.patpanel.patDaten.get(3) + "°" + String.valueOf(reznum.getText())
                             + (farbcode > 0 ? (String) SystemConfig.vSysColsCode.get(farbcode) : "") + "°"
-                            + Reha.instance.patpanel.rezlabs[14].getText());
+                            + dauerLbl.getText());
                     JComponent c = draghandler;
                     TransferHandler th = c.getTransferHandler();
-                    th.exportAsDrag(c, e, TransferHandler.COPY); // TransferHandler.COPY
+                    th.exportAsDrag(c, e, TransferHandler.COPY);
                     if (Path.Instance.isLinux()) {
                         Reha.dragDropComponent = draghandler;
                     }
@@ -396,49 +418,49 @@ public class RezeptDaten extends JXPanel implements ActionListener {
         hblab.setName("hausbesuch");
         hblab.setIcon(hbimg);
 
-        eltern.rezlabs[2] = new JLabel(" ");
-        eltern.rezlabs[2].setName("angelegt");
+        angelegtLbl = new JLabel(" ");
+        angelegtLbl.setName("angelegt");
 
-        eltern.rezlabs[3] = new JLabel(" ");
-        eltern.rezlabs[3].setName("kostentraeger");
+        kostentraegerLbl = new JLabel(" ");
+        kostentraegerLbl.setName("kostentraeger");
 
-        eltern.rezlabs[4] = new JLabel(" ");
-        eltern.rezlabs[4].setName("arzt");
+        arztLbl = new JLabel(" ");
+        arztLbl.setName("arzt");
 
-        eltern.rezlabs[5] = new JLabel(" ");
-        eltern.rezlabs[5].setName("verornungsart");
+        verordnungsArtLbl = new JLabel(" ");
+        verordnungsArtLbl.setName("verornungsart");
 
-        eltern.rezlabs[6] = new JLabel(" ");
-        eltern.rezlabs[6].setName("begruendung");
-        eltern.rezlabs[6].setForeground(Color.RED);
+        begruendungLbl = new JLabel(" ");
+        begruendungLbl.setName("begruendung");
+        begruendungLbl.setForeground(Color.RED);
 
-        eltern.rezlabs[7] = new JLabel(" ");
-        eltern.rezlabs[7].setName("arztbericht");
+        arztBerichtLbl = new JLabel(" ");
+        arztBerichtLbl.setName("arztbericht");
 
-        eltern.rezlabs[8] = new JLabel("");
-        eltern.rezlabs[8].setName("behandlung1");
-        eltern.rezlabs[8].setFont(fontbehandlung);
-        eltern.rezlabs[9] = new JLabel(" ");
-        eltern.rezlabs[9].setName("frequenz");
-        eltern.rezlabs[9].setFont(fontbehandlung);
+        behandlung1Lbl = new JLabel("");
+        behandlung1Lbl.setName("behandlung1");
+        behandlung1Lbl.setFont(fontbehandlung);
+        frequenzLbl = new JLabel(" ");
+        frequenzLbl.setName("frequenz");
+        frequenzLbl.setFont(fontbehandlung);
 
-        eltern.rezlabs[10] = new JLabel(" ");
-        eltern.rezlabs[10].setName("behandlung2");
-        eltern.rezlabs[10].setFont(fontbehandlung);
-        eltern.rezlabs[11] = new JLabel(" ");
-        eltern.rezlabs[11].setName("behandlung3");
-        eltern.rezlabs[11].setFont(fontbehandlung);
-        eltern.rezlabs[12] = new JLabel(" ");
-        eltern.rezlabs[12].setName("behandlung4");
-        eltern.rezlabs[12].setFont(fontbehandlung);
+        behandlung2Lbl = new JLabel(" ");
+        behandlung2Lbl.setName("behandlung2");
+        behandlung2Lbl.setFont(fontbehandlung);
+        behandlung3Lbl = new JLabel(" ");
+        behandlung3Lbl.setName("behandlung3");
+        behandlung3Lbl.setFont(fontbehandlung);
+        behandlung4Lbl = new JLabel(" ");
+        behandlung4Lbl.setName("behandlung4");
+        behandlung4Lbl.setFont(fontbehandlung);
 
-        eltern.rezlabs[13] = new JLabel(" ");
-        eltern.rezlabs[13].setName("indikation");
-        eltern.rezlabs[13].setFont(fontbehandlung);
+        indikationLbl = new JLabel(" ");
+        indikationLbl.setName("indikation");
+        indikationLbl.setFont(fontbehandlung);
 
-        eltern.rezlabs[14] = new JLabel(" ");
-        eltern.rezlabs[14].setName("Dauer");
-        eltern.rezlabs[14].setFont(fontbehandlung);
+        dauerLbl = new JLabel(" ");
+        dauerLbl.setName("Dauer");
+        dauerLbl.setFont(fontbehandlung);
 
         eltern.rezdiag = new JTextArea("");
         eltern.rezdiag.setOpaque(false);
@@ -453,29 +475,29 @@ public class RezeptDaten extends JXPanel implements ActionListener {
 
         jpan.add(hblab, cc.xy(3, 1));
 
-        jpan.add(eltern.rezlabs[2], cc.xy(5, 1));
+        jpan.add(angelegtLbl, cc.xy(5, 1));
 
         jpan.addSeparator("", cc.xyw(1, 3, 5));
 
-        jpan.add(eltern.rezlabs[3], cc.xy(1, 5));
-        jpan.add(eltern.rezlabs[4], cc.xy(5, 5));
+        jpan.add(kostentraegerLbl, cc.xy(1, 5));
+        jpan.add(arztLbl, cc.xy(5, 5));
 
-        jpan.add(eltern.rezlabs[5], cc.xy(1, 7));
-        jpan.add(eltern.rezlabs[6], cc.xy(3, 7));
-        jpan.add(eltern.rezlabs[7], cc.xy(5, 7));
+        jpan.add(verordnungsArtLbl, cc.xy(1, 7));
+        jpan.add(begruendungLbl, cc.xy(3, 7));
+        jpan.add(arztBerichtLbl, cc.xy(5, 7));
 
         jpan.addSeparator("", cc.xyw(1, 9, 5));
 
-        jpan.add(eltern.rezlabs[8], cc.xy(1, 11));
-        jpan.add(eltern.rezlabs[9], cc.xy(3, 11));
-        jpan.add(eltern.rezlabs[14], cc.xy(5, 11));
-        jpan.add(eltern.rezlabs[10], cc.xy(1, 13));
-        jpan.add(eltern.rezlabs[11], cc.xy(1, 15));
-        jpan.add(eltern.rezlabs[12], cc.xy(1, 17));
+        jpan.add(behandlung1Lbl, cc.xy(1, 11));
+        jpan.add(frequenzLbl, cc.xy(3, 11));
+        jpan.add(dauerLbl, cc.xy(5, 11));
+        jpan.add(behandlung2Lbl, cc.xy(1, 13));
+        jpan.add(behandlung3Lbl, cc.xy(1, 15));
+        jpan.add(behandlung4Lbl, cc.xy(1, 17));
 
         jpan.addSeparator("", cc.xyw(1, 19, 5));
 
-        jpan.add(eltern.rezlabs[13], cc.xy(1, 21));
+        jpan.add(indikationLbl, cc.xy(1, 21));
         JXPanel diagpan = new JXPanel(new BorderLayout());
         diagpan.setOpaque(false);
         JScrollPane jscrdiag = JCompTools.getTransparentScrollPane(eltern.rezdiag);
@@ -526,7 +548,7 @@ public class RezeptDaten extends JXPanel implements ActionListener {
                                                              .substring(0, 1)
                     + "-" + Reha.instance.patpanel.patDaten.get(2) + "," + Reha.instance.patpanel.patDaten.get(3) + "°"
                     + reznum.getText() + (farbcode > 0 ? (String) SystemConfig.vSysColsCode.get(farbcode) : "") + "°"
-                    + Reha.instance.patpanel.rezlabs[14].getText();
+                    + dauerLbl.getText();
             Reha.instance.copyLabel.setText(String.valueOf(dragText));
             Reha.instance.bunker.setText("TERMDATEXT" + "°" + String.valueOf(dragText));
             String[] daten = { (Reha.instance.patpanel.patDaten.get(0)
@@ -545,5 +567,9 @@ public class RezeptDaten extends JXPanel implements ActionListener {
             }
         }
 
+    }
+
+    public JLabel getTherapieBerichtlabel() {
+        return arztBerichtLbl;
     }
 }

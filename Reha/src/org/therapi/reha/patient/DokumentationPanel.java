@@ -1,17 +1,6 @@
 package org.therapi.reha.patient;
 
-import java.awt.AlphaComposite;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -40,21 +29,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JToolBar;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
@@ -83,8 +58,6 @@ import com.lowagie.text.pdf.PdfCopy;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfWriter;
 import com.mysql.jdbc.PreparedStatement;
-import com.sun.star.lib.uno.Proxy;
-import com.sun.star.text.XTextDocument;
 
 import CommonTools.Colors;
 import CommonTools.DatFunk;
@@ -92,8 +65,6 @@ import CommonTools.ExUndHop;
 import CommonTools.FileTools;
 import CommonTools.JCompTools;
 import CommonTools.SqlInfo;
-import ag.ion.bion.officelayer.event.IDocumentModifyListener;
-import ag.ion.bion.officelayer.event.IEvent;
 import ag.ion.bion.officelayer.spreadsheet.ISpreadsheetDocument;
 import ag.ion.bion.officelayer.text.ITextDocument;
 import dialoge.ToolsDialog;
@@ -128,22 +99,14 @@ public class DokumentationPanel extends JXPanel
      *
      */
     private static final long serialVersionUID = 1L;
-    // public static Dokumentation doku = null;
     JXPanel leerPanel = null;
-    // JXPanel vollPanel = null;
     JXPanel vollPanel = null;
     JXPanel wechselPanel = null;
     public JLabel anzahlDokus = null;
-    // public JLabel anzahlRezepte= null;
     public String aktPanel = "";
     public JXTable tabdokus = null;
     public MyDoku2TableModel dtblm;
     public TableCellEditor tbl = null;
-    // public boolean rezneugefunden = false;
-    // public boolean neuDlgOffen = false;
-    // public String[] indphysio = null;
-    // public String[] indergo = null;
-    // public String[] indlogo = null;
     public JXPanel jpan1 = null;
     public JButton[] dokubut = { null, null, null, null, null, null };
     public JButton[] pmbut = { null, null, null, null, null };
@@ -179,12 +142,10 @@ public class DokumentationPanel extends JXPanel
     public ImageIcon oowriterplus;
     public ImageIcon oocalcplus;
 
-    // public JRtaTextField annika = null;
     Scanner scanner;
 
     public DokumentationPanel() {
         super();
-        // doku = this;
         scanaktiv = (SystemConfig.hmDokuScanner.get("aktivieren")
                                                .trim()
                                                .equals("1") ? true : false);
@@ -645,7 +606,6 @@ public class DokumentationPanel extends JXPanel
 
                         } else if (xdatei.toLowerCase()
                                          .endsWith("ods")) {
-                            RehaOOTools r = new RehaOOTools();
                             ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(xdatei);
                             ispread.addDocumentListener(
                                     new ChangeDokumentOoListener(new OOService().getOfficeapplication(), xdatei, xid, getInstance()));
@@ -2239,7 +2199,6 @@ public class DokumentationPanel extends JXPanel
 
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
-                RehaOOTools r = new RehaOOTools();
                 ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(dest);
                 ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
 
@@ -2270,7 +2229,6 @@ public class DokumentationPanel extends JXPanel
                     + Reha.instance.patpanel.aktPatID + testName(value) + ".ods";
             try {
                 FileTools.copyFile(new File(src), new File(dest), 8192, true);
-                RehaOOTools r = new RehaOOTools();
                 ISpreadsheetDocument ispread = OOTools.starteCalcMitDatei(dest);
                 ispread.addDocumentListener(new NewDokumentOOListener(new OOService().getOfficeapplication(), dest, "", this));
 

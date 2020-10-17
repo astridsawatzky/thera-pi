@@ -15,9 +15,6 @@ import hauptFenster.Reha;
 
 public class PatientMultiFunctionPanel extends JXPanel {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = -1284209871875228012L;
     PatientHauptPanel patientHauptPanel = null;
 
@@ -40,19 +37,18 @@ public class PatientMultiFunctionPanel extends JXPanel {
 
         patientHauptPanel.multiTab = new JTabbedPane();
 
-        // patientHauptPanel.multiTab.addFocusListener(eltern.getFocusListener());
 
         try {
             patientHauptPanel.multiTab.setUI(new WindowsTabbedPaneUI());
         } catch (Exception ex) {
-            // Kein KarstenLentzsch LAF
+
         }
 
         JXPanel tabpan = new JXPanel(new BorderLayout());
         tabpan.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         tabpan.setOpaque(true);
         tabpan.setBackgroundPainter(Reha.instance.compoundPainter.get("getTabs2"));
-        patientHauptPanel.aktRezept = new AktuelleRezepte(patientHauptPanel, connection);
+        
         tabpan.add(patientHauptPanel.aktRezept);
         patientHauptPanel.multiTab.addTab(patientHauptPanel.tabTitel[0] + " - 0", tabpan);
         patientHauptPanel.multiTab.setMnemonicAt(0, KeyEvent.VK_A);

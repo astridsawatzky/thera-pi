@@ -3,7 +3,7 @@ package org.therapi.reha.patient.Berichte;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public class Bericht2 {
+public class Gutachten {
 
     String patIntern;
     int berichtId;
@@ -191,7 +191,7 @@ public class Bericht2 {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        Bericht2 other = (Bericht2) obj;
+        Gutachten other = (Gutachten) obj;
         return Objects.equals(abteilung, other.abteilung) && Objects.equals(aigr, other.aigr)
                 && Objects.equals(arbfae, other.arbfae) && Objects.equals(arzt1, other.arzt1)
                 && Objects.equals(arzt2, other.arzt2) && Objects.equals(arzt3, other.arzt3)

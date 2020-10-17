@@ -10,14 +10,12 @@ abstract class OoListener extends DocumentAdapter {
     protected String datei;
     protected boolean geaendert;
     public boolean warschoninsave;
-    protected DokumentationPanel eltern;
     IDocument document;
 
-    public OoListener(IOfficeApplication officeAplication, String xdatei, DokumentationPanel xeltern) {
+    public OoListener(IOfficeApplication officeAplication, String xdatei) {
         this.officeAplication = officeAplication;
         datei = xdatei;
         geaendert = false;
-        eltern = xeltern;
     }
 
     @Override

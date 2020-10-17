@@ -1193,7 +1193,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
         vec_rez_valid = Boolean.FALSE; // ungültig bis neu belegt
         sucheRezept(rez_nr);
-        if (aktRezept.getVecSize() <= 0) {
+        if (aktRezept.isEmpty()) {
             return;
         }
         int barcodeform = 0;
@@ -2067,13 +2067,11 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
                 for (int i = 0; i < anzahlbehandlungen; i++) {
                     abrfall[i] = RezTools.getKurzformFromID( // alt (weg, wenn neu ok)
-                            aktRezept.getVecVec_rez()
-                                     .get(0)
+                            aktRezept.getAktuellesRezept()
                                      .get(i + 8),
                             preisvec)
                                          .toString();
-                    id[i] = aktRezept.getVecVec_rez()
-                                     .get(0)
+                    id[i] = aktRezept.getAktuellesRezept()
                                      .get(i + 8)
                                      .toString();
 
@@ -3261,8 +3259,8 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
     private static class JXTTreeTableNode extends DefaultMutableTreeTableNode {
 
-        private boolean enabled = false;
-        private AbrFall abr = null;
+        private boolean enabled;
+        private AbrFall abr;
 
         public JXTTreeTableNode(String name, AbrFall abr, boolean enabled) {
             super(name);
@@ -3299,8 +3297,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
             final ActionEvent arg0X = arg0;
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    if (aktRow < 0 || aktRezept.getVec_rez()
-                                               .size() <= 0) {
+                    if (aktRow < 0 || aktRezept.isEmpty()) {
                         return;
                     }
                     setEinzelPreis((String) ((JRtaComboBox) arg0X.getSource()).getValueAt(0),
@@ -3538,8 +3535,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
                 zaehler++;
             }
         }
-        aktRezept.getVecVec_rez()
-                 .get(0)
+        aktRezept.getAktuellesRezept()
                  .set(34, alletage);
         /****** Entscheidender Funktionsaufruf ****************************/
         ermittleAbrechnungsfall(false);
@@ -4378,7 +4374,7 @@ public class AbrechnungRezept extends JXPanel implements HyperlinkListener, Acti
 
         aktRezept.init(rez_nr.trim());
 
-        if (aktRezept.getVecSize() <= 0) {
+        if (aktRezept.isEmpty()) {
             System.out.println("AbrechnungRezept->sucheRezept:  Abbruch vec_rez.size = 0");
             System.out.println("RezeptVektor = " + aktRezept.getVec_rez());
             vec_rez_valid = true;

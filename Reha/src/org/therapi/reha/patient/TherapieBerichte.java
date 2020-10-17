@@ -307,9 +307,7 @@ public class TherapieBerichte extends JXPanel implements ListSelectionListener, 
         int anzber = tabbericht.getRowCount();
         Reha.instance.patpanel.getTab()
                               .setTitleAt(2, macheHtmlTitel(anzber, "Therapieberichte"));
-        if (anzber > 0) {
-        } else {
-        }
+
 
     }
 

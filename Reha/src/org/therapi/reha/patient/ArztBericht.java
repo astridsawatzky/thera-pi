@@ -498,7 +498,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener {
         verfasser = new JComboBox();
         /*
          * new SwingWorker<Void,Void>(){
-         * 
+         *
          * @Override protected Void doInBackground() throws Exception {
          */
         int lang = KollegenListe.vKKollegen.size();
@@ -512,7 +512,7 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener {
         }
         /*
          * return null; }
-         * 
+         *
          * }.execute();
          */
         pb.add(verfasser, cc.xy(2, 36));
@@ -743,8 +743,8 @@ public class ArztBericht extends RehaSmartDialog implements ActionListener {
         this.berichtid = berichtnr;
         if (this.aufrufvon == 0) {
             Reha.instance.patpanel.vecaktrez.set(54, Integer.toString(berichtnr));
-            Reha.instance.patpanel.rezlabs[7].setForeground(Color.BLACK);
-            Reha.instance.patpanel.rezlabs[7].setText("Therapiebericht o.k.");
+            Reha.instance.patpanel.aktRezept.rezDatenPanel.getTherapieBerichtlabel().setForeground(Color.BLACK);
+            Reha.instance.patpanel.aktRezept.rezDatenPanel.getTherapieBerichtlabel().setText("Therapiebericht o.k.");
         } else if (this.aufrufvon == 1) {
             Reha.instance.patpanel.historie.jpan1.rezlabs[7].setForeground(Color.BLACK);
             Reha.instance.patpanel.historie.jpan1.rezlabs[7].setText("Therapiebericht o.k.");
